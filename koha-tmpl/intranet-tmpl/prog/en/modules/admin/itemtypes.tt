@@ -125,6 +125,25 @@ Item types administration
   [% END %]
       <li>
           <label for="description" class="required">Description: </label><input type="text" id="description" name="description" size="48" value="[% description |html %]" required="required" /> <span class="required">Required</span></li>
+      <li>
+          <span class="label">Search category</span>
+          <select id="searchcategory" name="searchcategory">
+          <option value="">None</option>
+                [% FOREACH cat IN searchcategory %]
+                    [% IF ( cat.selected ) %]
+                        <option value="[% cat.authorised_value %]" selected="selected">
+                            [% cat.lib %]
+                        </option>
+                    [% ELSE %]
+                        <option value="[% cat.authorised_value %]" >
+                            [% cat.lib %]
+                        </option>
+                    [% END %]
+                [% END %]
+          </select>
+          (Options are defined as the authorized values for the DOCTYPECAT category)
+      </li>
+
      [% IF ( noItemTypeImages ) %]
 	 <li><span class="label">Image: </span>Item type images are disabled. To enable them, turn off the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=noItemTypeImages">noItemTypeImages system preference</a></li></ol>
 	 [% ELSE %]</ol>
@@ -179,6 +198,15 @@ Item types administration
 </div>
 [% END %]
 <ol>
+      <li>
+          <label for="hideinopac">Hide in OPAC: </label>
+          [% IF ( hideinopac ) %]
+              <input type="checkbox" id="hideinopac" name="hideinopac" checked="checked" value="1" />
+          [% ELSE %]
+              <input type="checkbox" id="hideinopac" name="hideinopac" value="1" />
+          [% END %]
+          (if checked, items of this type will be hidden as filters in OPAC's advanced search)
+      </li>
       <li>
           <label for="notforloan">Not for loan: </label>   [% IF ( notforloan ) %]
                 <input type="checkbox" id="notforloan" name="notforloan" checked="checked" value="1" />
@@ -276,7 +304,9 @@ Item types administration
     [% UNLESS ( noItemTypeImages ) %]<th>Image</th>[% END %]
     <th>Code</th>
     <th>Description</th>
+    <th>Search category</th>
     <th>Not for loan</th>
+    <th>Hide in OPAC</th>
     <th>Charge</th>
     <th>Checkin message</th>
     <th>Actions</th>
@@ -290,7 +320,9 @@ Item types administration
       </a>
     </td>
     <td>[% loo.description %]</td>
+    <td>[% loo.searchcategory %]</td>
     <td>[% IF ( loo.notforloan ) %]Yes[% ELSE %]&nbsp;[% END %]</td>
+    <td>[% IF ( loo.hideinopac ) %]Yes[% ELSE %]&nbsp;[% END %]</td>
     <td>
     [% UNLESS ( loo.notforloan ) %]
       [% loo.rentalcharge %]

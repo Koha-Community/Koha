@@ -29,9 +29,9 @@ use Koha::Cache;
 use Koha::DateUtils qw(dt_from_string);
 use DateTime::Format::MySQL;
 use Business::ISBN;
-use autouse 'Data::Dumper' => qw(Dumper);
+use autouse 'Data::cselectall_arrayref' => qw(Dumper);
 use DBI qw(:sql_types);
-
+ use Data::Dumper;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK $DEBUG);
 
 BEGIN {
@@ -43,6 +43,7 @@ BEGIN {
 		&subfield_is_koha_internal_p
 		&GetPrinters &GetPrinter
 		&GetItemTypes &getitemtypeinfo
+                &GetItemTypesCategorized &GetItemTypesByCategory
 		&GetSupportName &GetSupportList
 		&get_itemtypeinfos_of
 		&getframeworks &getframeworkinfo
@@ -272,6 +273,60 @@ sub GetItemTypes {
     } else {
         return $sth->fetchall_arrayref({});
     }
+}
+
+=head2 GetItemTypesCategorized
+
+    $categories = GetItemTypesCategorized();
+
+Returns a hashref containing search categories.
+A search category will be put in the hash if at least one of its itemtypes is visible in OPAC.
+The categories must be part of Authorized Values (DOCTYPECAT)
+
+=cut
+
+sub GetItemTypesCategorized {
+    my $dbh   = C4::Context->dbh;
+    # Order is important, so that partially hidden (some items are not visible in OPAC) search
+    # categories will be visible. hideinopac=0 must be last.
+    my $query = q|
+        SELECT itemtype, description, imageurl, hideinopac, 0 as 'iscat' FROM itemtypes WHERE ISNULL(searchcategory) or length(searchcategory) = 0
+        UNION
+        SELECT DISTINCT searchcategory AS `itemtype`,
+                        authorised_values.lib_opac AS description,
+                        authorised_values.imageurl AS imageurl,
+                        hideinopac, 1 as 'iscat'
+        FROM itemtypes
+        LEFT JOIN authorised_values ON searchcategory = authorised_value
+        WHERE searchcategory > '' and hideinopac=1
+        UNION
+        SELECT DISTINCT searchcategory AS `itemtype`,
+                        authorised_values.lib_opac AS description,
+                        authorised_values.imageurl AS imageurl,
+                        hideinopac, 1 as 'iscat'
+        FROM itemtypes
+        LEFT JOIN authorised_values ON searchcategory = authorised_value
+        WHERE searchcategory > '' and hideinopac=0
+        |;
+return ($dbh->selectall_hashref($query,'itemtype'));
+}
+
+=head2 GetItemTypesByCategory
+
+    @results = GetItemTypesByCategory( $searchcategory );
+
+Returns the itemtype code of all itemtypes included in a searchcategory.
+
+=cut
+
+sub GetItemTypesByCategory {
+    my ($category) = @_;
+    my $count = 0;
+    my @results;
+    my $dbh = C4::Context->dbh;
+    my $query = qq|SELECT itemtype FROM itemtypes WHERE searchcategory=?|;
+    my $tmp=$dbh->selectcol_arrayref($query,undef,$category);
+    return @$tmp;
 }
 
 sub get_itemtypeinfos_of {

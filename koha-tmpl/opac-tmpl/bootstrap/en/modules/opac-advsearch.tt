@@ -133,9 +133,25 @@
                                     <legend>Limit to any of the following:</legend>
                                     <div class="row-fluid">
                                         [% FOREACH itemtypeloo IN advsearchloo.code_loop %]
-                                            <div class="span3"><input type="checkbox" id="[% itemtypeloo.ccl FILTER remove(',') %]-[% itemtypeloo.number %]" name="limit" value="mc-[% itemtypeloo.ccl %]:[% itemtypeloo.code %]"/><label for="[% itemtypeloo.ccl FILTER remove(',') %]-[% itemtypeloo.number %]">[% UNLESS ( noItemTypeImages ) %][% IF ( itemtypeloo.imageurl ) %]<img src="[% itemtypeloo.imageurl %]" alt="[% itemtypeloo.description %]" />[% END %]&nbsp;[% END %]
-                                            [% itemtypeloo.description %]</label></div>
+                                            [% IF ((!itemtypeloo.searchcategory) AND (itemtypeloo.cat == 0)) OR (itemtypeloo.cat == 1) %]
+                                                <div class="span3">
+                                                    <input type="checkbox"
+                                                        id="[% itemtypeloo.ccl FILTER remove(',') %]-[% itemtypeloo.number %]"
+                                                        name="[% IF ( itemtypeloo.cat == 1 ) %]searchcat[% ELSE %]limit[% END %]"
+                                                        value="[% IF ( itemtypeloo.cat == 1 ) %][% itemtypeloo.code %][% ELSE %]mc-[% itemtypeloo.ccl %]:[% itemtypeloo.code %][% END %]"
+                                                    />
+                                                    <label for="[% itemtypeloo.ccl FILTER remove(',') %]-[% itemtypeloo.number %]">
+                                                        [% UNLESS ( noItemTypeImages ) %]
+                                                            [% IF ( itemtypeloo.imageurl ) %]
+                                                                <img border="0" src="[% itemtypeloo.imageurl %]" alt="[% itemtypeloo.description %]" />
+                                                            [% END %]
+                                                            &nbsp;
+                                                        [% END %]
+                                                        [% itemtypeloo.description %]
+                                                    </label>
+                                                </div>
                                             [% IF ( loop.last ) %]</div>[% ELSE %][% UNLESS ( loop.count % 4 ) %]</div><div class="row-fluid">[% END %][% END %]
+                                            [% END %]
                                         [% END %]
                                 </fieldset>
                             </div> <!-- / #advsearch-[% advsearchloo.advanced_search_type %] -->

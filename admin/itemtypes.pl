@@ -111,6 +111,8 @@ if ( $op eq 'add_form' ) {
         $remote_image = $data->{imageurl};
     }
 
+    my $searchcategory = GetAuthorisedValues("DOCTYPECAT", $data->{'searchcategory'});
+
     $template->param(
         itemtype        => $itemtype,
         description     => $data->{'description'},
@@ -124,6 +126,8 @@ if ( $op eq 'add_form' ) {
         imagesets       => $imagesets,
         remote_image    => $remote_image,
         sip_media_type  => $data->{sip_media_type},
+        hideinopac      => $data->{'hideinopac'},
+        searchcategory  => $searchcategory,
     );
 
     # END $OP eq ADD_FORM
@@ -148,6 +152,8 @@ elsif ( $op eq 'add_validate' ) {
                  , checkinmsg = ?
                  , checkinmsgtype = ?
                  , sip_media_type = ?
+                 , hideinopac = ?
+                 , searchcategory = ?
             WHERE itemtype = ?
         ';
         my $sth = $dbh->prepare($query2);
@@ -166,15 +172,17 @@ elsif ( $op eq 'add_validate' ) {
             $input->param('checkinmsg'),
             $input->param('checkinmsgtype'),
             $sip_media_type,
+            $input->param('hideinopac') ? 1 : 0,
+            $input->param('searchcategory'),
             $input->param('itemtype')
         );
     }
     elsif ( not $already_exists and not $is_a_modif ) {
         my $query = "
             INSERT INTO itemtypes
-                (itemtype,description,rentalcharge, notforloan, imageurl, summary, checkinmsg, checkinmsgtype, sip_media_type)
+                (itemtype,description,rentalcharge, notforloan, imageurl, summary, checkinmsg, checkinmsgtype, sip_media_type, hideinopac, searchcategory)
             VALUES
-                (?,?,?,?,?,?,?,?,?);
+                (?,?,?,?,?,?,?,?,?,?,?);
             ";
         my $sth = $dbh->prepare($query);
 		my $image = $input->param('image');
@@ -190,6 +198,8 @@ elsif ( $op eq 'add_validate' ) {
             $input->param('checkinmsg'),
             $input->param('checkinmsgtype'),
             $sip_media_type,
+            $input->param('hideinopac') ? 1 : 0,
+            $input->param('searchcategory'),
         );
     }
     else {

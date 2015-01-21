@@ -84,7 +84,7 @@ my ($template,$borrowernumber,$cookie);
 my $template_name;
 my $template_type = 'basic';
 my @params = $cgi->param("limit");
-
+my @searchCategories = $cgi->param('searchcat');
 
 my $format = $cgi->param("format") || '';
 my $build_grouped_results = C4::Context->preference('OPACGroupResults');
@@ -210,7 +210,7 @@ my $languages_limit_loop = getLanguages($lang, 1);
 $template->param(search_languages_loop => $languages_limit_loop,);
 
 # load the Type stuff
-my $itemtypes = GetItemTypes;
+my $itemtypes = GetItemTypesCategorized;
 # the index parameter is different for item-level itemtypes
 my $itype_or_itemtype = (C4::Context->preference("item-level_itypes"))?'itype':'itemtype';
 my @advancedsearchesloop;
@@ -244,8 +244,13 @@ foreach my $advanced_srch_type (@advanced_search_types) {
                 code => $thisitemtype,
                 description => $itemtypes->{$thisitemtype}->{'description'},
                 imageurl=> getitemtypeimagelocation( 'opac', $itemtypes->{$thisitemtype}->{'imageurl'} ),
+                cat => $itemtypes->{$thisitemtype}->{'iscat'},
+                hideinopac => $itemtypes->{$thisitemtype}->{'hideinopac'},
+                searchcategory => $itemtypes->{$thisitemtype}->{'searchcategory'},
             );
-	    push @itypesloop, \%row;
+            if ( !$itemtypes->{$thisitemtype}->{'hideinopac'} ) {
+                push @itypesloop, \%row;
+            }
 	}
         my %search_code = (  advanced_search_type => $advanced_srch_type,
                              code_loop => \@itypesloop );
@@ -263,6 +268,7 @@ foreach my $advanced_srch_type (@advanced_search_types) {
 				ccl => $advanced_srch_type,
                 code => $thisitemtype->{authorised_value},
                 description => $thisitemtype->{'lib_opac'} || $thisitemtype->{'lib'},
+                searchcategory => $itemtypes->{$thisitemtype}->{'searchcategory'},
                 imageurl => getitemtypeimagelocation( 'opac', $thisitemtype->{'imageurl'} ),
                 );
 		push @authvalueloop, \%row;
@@ -449,6 +455,19 @@ my @nolimits = $cgi->param('nolimit');
 @nolimits = map { uri_unescape($_) } @nolimits;
 my %is_nolimit = map { $_ => 1 } @nolimits;
 @limits = grep { not $is_nolimit{$_} } @limits;
+
+if (@searchCategories > 0) {
+    my @tabcat;
+    foreach my $typecategory (@searchCategories) {
+        push (@tabcat, GetItemTypesByCategory($typecategory));
+    }
+
+    foreach my $itemtypeInCategory (@tabcat) {
+        push (@limits, "mc-$itype_or_itemtype,phr:".$itemtypeInCategory);
+    }
+}
+
+@limits = map { uri_unescape($_) } @limits;
 
 if($params->{'multibranchlimit'}) {
     my $multibranch = '('.join( " or ", map { "branch: $_ " } @{ GetBranchesInCategory( $params->{'multibranchlimit'} ) } ).')';

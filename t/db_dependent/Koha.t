@@ -7,12 +7,13 @@ use strict;
 use warnings;
 use C4::Context;
 use Koha::DateUtils qw(dt_from_string);
+use Data::Dumper;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 use DateTime::Format::MySQL;
 
 BEGIN {
-    use_ok('C4::Koha', qw( :DEFAULT GetDailyQuote ));
+    use_ok('C4::Koha', qw( :DEFAULT GetDailyQuote GetItemTypesByCategory GetItemTypesCategorized));
     use_ok('C4::Members');
 }
 
@@ -312,4 +313,45 @@ subtest 'GetFrameworksLoop() tests' => sub {
     );
 };
 
+subtest 'GetItemTypesByCategory GetItemTypesCategorized test' => sub{
+    plan tests => 7;
+
+    my $insertGroup = AddAuthorisedValue('DOCTYPECAT', 'Qwertyware');
+    ok($insertGroup, "Create group Qwertyware");
+
+    my $query = "INSERT into itemtypes (itemtype, description, searchcategory, hideinopac) values (?,?,?,?)";
+    my $insertSth = C4::Context->dbh->prepare($query);
+    $insertSth->execute('BKghjklo1', 'One type of book', '', 0);
+    $insertSth->execute('BKghjklo2', 'Another type of book', 'Qwertyware', 0);
+    $insertSth->execute('BKghjklo3', 'Yet another type of book', 'Qwertyware', 0);
+
+    # Azertyware should not exist.
+    my @results = GetItemTypesByCategory('Azertyware');
+    is(scalar @results, 0, 'GetItemTypesByCategory: Invalid category returns nothing');
+
+    @results = GetItemTypesByCategory('Qwertyware');
+    my @expected = ( 'BKghjklo2', 'BKghjklo3' );
+    is_deeply(\@results,\@expected,'GetItemTypesByCategory: valid category returns itemtypes');
+
+    # add more data since GetItemTypesCategorized's search is more subtle
+    $insertGroup = AddAuthorisedValue('DOCTYPECAT', 'Veryheavybook');
+    $insertSth->execute('BKghjklo4', 'Another hidden book', 'Veryheavybook', 1);
+
+    my $hrCat = GetItemTypesCategorized();
+    ok(exists $hrCat->{Qwertyware}, 'GetItemTypesCategorized: fully visible category exists');
+    ok($hrCat->{Veryheavybook} &&
+       $hrCat->{Veryheavybook}->{hideinopac}==1, 'GetItemTypesCategorized: non-visible category hidden' );
+
+    $insertSth->execute('BKghjklo5', 'An hidden book', 'Qwertyware', 1);
+    $hrCat = GetItemTypesCategorized();
+    ok(exists $hrCat->{Qwertyware}, 'GetItemTypesCategorized: partially visible category exists');
+
+    my @only = ( 'BKghjklo1', 'BKghjklo2', 'BKghjklo3', 'BKghjklo4', 'BKghjklo5', 'Qwertyware', 'Veryheavybook' );
+    @results = ();
+    foreach my $key (@only) {
+        push @results, $key if exists $hrCat->{$key};
+    }
+    @expected = ( 'BKghjklo1', 'Qwertyware', 'Veryheavybook' );
+    is_deeply(\@results,\@expected, 'GetItemTypesCategorized: grouped and ungrouped items returned as expected.');
+};
 $dbh->rollback();
