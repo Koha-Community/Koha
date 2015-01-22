@@ -525,7 +525,13 @@
                                             <tr>
                                         [% END %]
                                             <td class="title">
-                                                <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% RESERVE.biblionumber %]">[% RESERVE.reserves_title %] [% FOREACH subtitl IN RESERVE.subtitle %] [% subtitl.subfield %][% END %]</a>
+                                                <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% RESERVE.biblionumber %]">
+                                                    [% RESERVE.reserves_title %]
+                                                    [% FOREACH subtitl IN RESERVE.subtitle %]
+                                                        [% subtitl.subfield %]
+                                                    [% END %]
+                                                    [% RESERVE.enumchron %]
+                                                </a>
                                                 [% RESERVE.author %]
                                             </td>
                                             <td class="reservedate">

@@ -311,6 +311,7 @@ foreach my $res (@reserves) {
         $res->{'holdingbranch'} =
           $branches->{ $item->{'holdingbranch'} }->{'branchname'};
         $res->{'branch'} = $branches->{ $res->{'branchcode'} }->{'branchname'};
+        $res->{'enumchron'} = $item->{'enumchron'} if $item->{'enumchron'};
         # get document reserve status
         my $biblioData = GetBiblioData($res->{'biblionumber'});
         $res->{'waiting_title'} = $biblioData->{'title'};
