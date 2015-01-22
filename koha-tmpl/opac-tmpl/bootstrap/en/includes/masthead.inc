@@ -19,7 +19,7 @@
                         [% IF ( Koha.Preference( 'opacbookbag' ) == 1 ) %]
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" id="cartmenulink" data-toggle="dropdown" role="button">
-                                    <i id="carticon" class="icon-shopping-cart icon-white"></i> <span class="cartlabel">Cart</span> <span id="basketcount"></span>
+                                    <i id="carticon" class="icon-shopping-cart icon-white"></i> <span class="cartlabel">Cart</span> <span id="basketcount"></span> <b class="caret"></b>
                                 </a>
                                 <ul aria-labelledby="cartmenulink" role="menu" class="dropdown-menu">
                                     <li role="presentation">
