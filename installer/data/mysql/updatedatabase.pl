@@ -9779,6 +9779,20 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.19.00.XXX";
+if(CheckVersion($DBversion)) {
+    $dbh->do(q{
+        ALTER TABLE biblioitems MODIFY COLUMN marcxml longtext
+    });
+
+    $dbh->do(q{
+        ALTER TABLE deletedbiblioitems MODIFY COLUMN marcxml longtext
+    });
+
+    print "Upgrade to $DBversion done (Bug 13523 - Remove NOT NULL restriction on field marcxml due to mysql STRICT_TRANS_TABLES)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
