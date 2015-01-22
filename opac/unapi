@@ -198,8 +198,8 @@ sub get_transformer {
     my $marcflavour = uc(C4::Context->preference('marcflavour'));
     return unless $format_to_stylesheet_map->{$marcflavour}->{$format};
 
-    my $xslt_file = C4::Context->config('intrahtdocs') .
-                    "/prog/en/xslt/" .
+    my $xslt_file = C4::Context->config('intranetdir') .
+                    "/koha-tmpl/intranet-tmpl/prog/en/xslt/" .
                     $format_to_stylesheet_map->{$marcflavour}->{$format};
 
     my $parser = XML::LibXML->new();

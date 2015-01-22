@@ -174,13 +174,6 @@ SKIP:
 
                 skip "C4::Koha can't \'GetDailyQuote\'!", 3 unless can_ok('C4::Koha','GetDailyQuote');
 
-# Fill the quote table with the default needed and a spare
-$dbh->do("DELETE FROM quotes WHERE id=3 OR id=25;");
-my $sql = "INSERT INTO quotes (id,source,text,timestamp) VALUES
-(25,'Richard Nixon','When the President does it, that means that it is not illegal.','0000-00-00 00:00:00'),
-(3,'Abraham Lincoln','Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.','0000-00-00 00:00:00');";
-$dbh->do($sql);
-
                 my $expected_quote = {
                     id          => 3,
                     source      => 'Abraham Lincoln',

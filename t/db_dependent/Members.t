@@ -18,7 +18,6 @@
 use Modern::Perl;
 
 use Test::More tests => 34;
-use Test::MockModule;
 use Data::Dumper;
 use C4::Context;
 

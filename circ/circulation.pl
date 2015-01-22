@@ -183,6 +183,9 @@ my $message;
 if ($findborrower) {
     my $borrowers = Search($findborrower, 'cardnumber') || [];
     if (C4::Context->preference("AddPatronLists")) {
+        $template->param(
+            "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
+        );
         if (C4::Context->preference("AddPatronLists")=~/code/){
             my $categories = GetBorrowercategoryList;
             $categories->[0]->{'first'} = 1;
@@ -362,33 +365,8 @@ if ($borrowernumber) {
     $template->param(
         holds_count => Koha::Database->new()->schema()->resultset('Reserve')
           ->count( { borrowernumber => $borrowernumber } ) );
-    my @borrowerreserv = GetReservesFromBorrowernumber($borrowernumber);
 
-    my @WaitingReserveLoop;
-    foreach my $num_res (@borrowerreserv) {
-        if ( $num_res->{'found'} && $num_res->{'found'} eq 'W' ) {
-            my $getiteminfo  = GetBiblioFromItemNumber( $num_res->{'itemnumber'} );
-            my $itemtypeinfo = getitemtypeinfo( (C4::Context->preference('item-level_itypes')) ? $getiteminfo->{'itype'} : $getiteminfo->{'itemtype'} );
-            my %getWaitingReserveInfo;
-            $getWaitingReserveInfo{title} = $getiteminfo->{'title'};
-            $getWaitingReserveInfo{biblionumber} =
-              $getiteminfo->{'biblionumber'};
-            $getWaitingReserveInfo{itemtype} = $itemtypeinfo->{'description'};
-            $getWaitingReserveInfo{author}   = $getiteminfo->{'author'};
-            $getWaitingReserveInfo{itemcallnumber} =
-              $getiteminfo->{'itemcallnumber'};
-            $getWaitingReserveInfo{reservedate} =
-              format_date( $num_res->{'reservedate'} );
-            $getWaitingReserveInfo{waitingat} =
-              GetBranchName( $num_res->{'branchcode'} );
-            $getWaitingReserveInfo{waitinghere} = 1
-              if $num_res->{'branchcode'} eq $branch;
-            push( @WaitingReserveLoop, \%getWaitingReserveInfo );
-        }
-    }
-    $template->param( WaitingReserveLoop => \@WaitingReserveLoop );
-    $template->param( adultborrower => 1 )
-      if ( $borrower->{'category_type'} eq 'A' );
+    $template->param( adultborrower => 1 ) if ( $borrower->{'category_type'} eq 'A' );
 }
 
 my @values;
@@ -597,6 +575,8 @@ $template->param(
     SpecifyDueDate            => $duedatespec_allow,
     CircAutocompl             => C4::Context->preference("CircAutocompl"),
     AllowRenewalLimitOverride => C4::Context->preference("AllowRenewalLimitOverride"),
+    export_remove_fields      => C4::Context->preference("ExportRemoveFields"),
+    export_with_csv_profile   => C4::Context->preference("ExportWithCsvProfile"),
     canned_bor_notes_loop     => $canned_notes,
     debarments                => GetDebarments({ borrowernumber => $borrowernumber }),
 );

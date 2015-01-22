@@ -1,24 +1,9 @@
 #!/usr/bin/perl
-
-# This file is part of Koha.
-#
-# Koha is free software; you can redistribute it and/or modify it
-# under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 3 of the License, or
-# (at your option) any later version.
-#
-# Koha is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
-
-use Modern::Perl;
+use strict;
+use warnings;
 
 use C4::Context;
-use Test::More tests => 18;
+use Test::More tests => 16;
 use Test::MockModule;
 use DBD::Mock;
 
@@ -89,13 +74,5 @@ eval {
 };
 ok($@ eq '', 'NormalizeISBN does not throw exception when parsing invalid ISBN (bug 12243)');
 
-eval {
-    $isbn = C4::Koha::NormalizeISBN({ isbn => '979-10-90085-00-8', format => 'ISBN-10', strip_hyphens => 1 });
-};
-ok($@ eq '', 'NormalizeISBN does not throw exception when converting to ISBN10 an ISBN starting with 979 (bug 13167)');
-ok(!defined $isbn, 'NormalizeISBN returns undef when converting to ISBN10 an ISBN starting with 979 (bug 13167)');
-
 @isbns = GetVariationsOfISBNs('abc');
 is(scalar(@isbns), 0, 'zero variations returned of invalid ISBN');
-
-1;

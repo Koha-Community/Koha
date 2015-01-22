@@ -423,9 +423,8 @@ sub draw_label_text {
         else {
             if ($field_data) {
                 $field_data =~ s/\/$//g;       # Here we will strip out all trailing '/' in fields other than the call number...
-                # Escaping the parens was causing odd output, see bug 13124
-                # $field_data =~ s/\(/\\\(/g;    # Escape '(' and ')' for the pdf object stream...
-                # $field_data =~ s/\)/\\\)/g;
+                $field_data =~ s/\(/\\\(/g;    # Escape '(' and ')' for the pdf object stream...
+                $field_data =~ s/\)/\\\)/g;
             }
             eval{$Text::Wrap::columns = $self->{'text_wrap_cols'};};
             my @line = split(/\n/ ,wrap('', '', $field_data));

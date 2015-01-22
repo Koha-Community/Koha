@@ -119,6 +119,7 @@
             <thead>
               <tr>
                 <th>Summary</th>
+                <th>Publisher</th>
                 <th>Library</th>
                 <th class="gste">Actual cost tax exc.</th>
                 <th class="gsti">Actual cost tax inc.</th>
@@ -133,18 +134,18 @@
             <tbody>
               [% FOREACH order IN orders_loop %]
                 <tr>
-                  <td>
-                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber %]">[% order.title %]</a>
+                  <td><p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber %]">[% order.title %]</a>
                     [% IF ( order.author ) %]
                       <br /><em>by</em> [% order.author %]
                     [% END %]
+                  </p></td>
+                  <td>
                     [% IF ( order.publishercode ) %]
-                      <br/>[% order.publishercode %]
-                        [% IF order.publicationyear > 0 %]
+                      <p>[% order.publishercode %]
+                        [% IF ( order.publicationyear ) %]
                           - [% order.publicationyear %]
-                        [% ELSIF ( order.copyrightdate > 0) %]
-                          - [% order.copyrightdate %]
                         [% END %]
+                      </p>
                     [% END %]
                   </td>
                   <td><p>[% order.branchcode %]</p></td>
@@ -162,7 +163,7 @@
             <tfoot>
               [% FOR tf IN foot_loop %]
                 <tr>
-                    <th colspan='2'>Total (GST [% tf.gstgsti %] %)</th>
+                    <th colspan='3'>Total (GST [% tf.gstgsti %] %)</th>
                     <th class="gste"/><th class="gsti"/>
                     <th>[% tf.quantity %]</th>
                     <th class="gste">[% tf.totalgste %]</th>
@@ -173,7 +174,7 @@
                 </tr>
               [% END %]
               <tr>
-                <th colspan='2'>Total ([% currency %])</th>
+                <th colspan='3'>Total ([% currency %])</th>
                 <th class="gste"/><th class="gsti"/>
                 <th>[% total_quantity %]</th>
                 <th class="gste">[% total_gste %]</th>
@@ -183,7 +184,7 @@
                 <th>&nbsp;</th>
               </tr>
               <tr>
-                <th colspan="2">Total + Shipment cost ([% currency %])</th>
+                <th colspan="3">Total + Shipment cost ([% currency %])</th>
                 <th class="gste"></th>
                 <th class="gsti"></th>
                 <th>[% total_quantity %]</th>

@@ -159,13 +159,8 @@ sub enqueue {
     my ($class, $letter, $borrower, $transport) = @_;
     my $metadata   = _metadata($letter);
     my $to_address = _to_address($borrower, $transport);
-
-    # Same as render_metadata
-    my $format ||= sub { $_[0] || "" };
-    my $body = join('', map { $format->($_) } @{$metadata->{body}});
-    $letter->{content} = $metadata->{header} . $body . $metadata->{footer};
-
     $letter->{metadata} = Dump($metadata);
+    #carp "enqueuing... to $to_address";
     C4::Letters::EnqueueLetter({
         letter                 => $letter,
         borrowernumber         => $borrower->{borrowernumber},

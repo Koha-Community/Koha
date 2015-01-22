@@ -138,7 +138,6 @@ my ($tyear, $tmonth, $tday) = split( /-/, $today_iso );
 $today_days = Date_to_Days( $tyear, $tmonth, $tday );
 
 for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
-    next if $data->[$i]->{'itemlost'};
     my $datedue;
     my $datedue_days;
     eval {

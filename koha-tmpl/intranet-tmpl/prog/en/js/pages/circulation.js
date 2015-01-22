@@ -41,10 +41,11 @@ $(document).ready(function() {
         minute: 59
     });
     $("#export_submit").on("click",function(){
-        var output_format = $("#output_format").val();
-        export_checkouts(output_format);
+        var export_format = $("#export_formats").val();
+        export_checkouts(export_format);
         return false;
     });
+
 });
 
 function export_checkouts(format) {
@@ -69,7 +70,7 @@ function export_checkouts(format) {
         $("#dont_export_item").val(1);
     }
 
-    document.getElementById("output_format").value = format;
+    document.getElementById("export_format").value = format;
     document.issues.submit();
 }
 

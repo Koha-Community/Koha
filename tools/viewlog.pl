@@ -171,29 +171,6 @@ if ($do_it) {
         output_html_with_http_headers $input, $cookie, $template->output;
     } else {
         # Printing to a csv file
-        my $content = q{};
-        my $delimiter = C4::Context->preference('delimiter') || ',';
-        if (@data) {
-            my $csv = Text::CSV::Encoded->new( { encoding_out => 'utf8', sep_char => $delimiter } );
-            $csv or die "Text::CSV::Encoded->new FAILED: " . Text::CSV::Encoded->error_diag();
-
-            # First line with heading
-            # Exporting bd id seems useless
-            my @headings = grep { $_ ne 'action_id' } sort keys %{$data[0]};
-            if ( $csv->combine(@headings) ) {
-                $content .= $csv->string() . "\n";
-            }
-
-            # Lines of logs
-            foreach my $line (@data) {
-                my @cells = map { $line->{$_} } @headings;
-                if ( $csv->combine(@cells) ) {
-                    $content .= $csv->string() . "\n";
-                }
-            }
-        }
-
-        # Output
         print $input->header(
             -type       => 'text/csv',
             -attachment => "$basename.csv",

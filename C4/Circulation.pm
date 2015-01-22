@@ -1258,9 +1258,9 @@ sub AddIssue {
         $sth->execute(
             $borrower->{'borrowernumber'},      # borrowernumber
             $item->{'itemnumber'},              # itemnumber
-            $issuedate->strftime('%Y-%m-%d %H:%M:%S'), # issuedate
-            $datedue->strftime('%Y-%m-%d %H:%M:%S'),   # date_due
-            C4::Context->userenv->{'branch'},   # branchcode
+            $issuedate->strftime('%Y-%m-%d %H:%M:00'), # issuedate
+            $datedue->strftime('%Y-%m-%d %H:%M:00'),   # date_due
+            C4::Context->userenv->{'branch'}    # branchcode
         );
         if ( C4::Context->preference('ReturnToShelvingCart') ) { ## ReturnToShelvingCart is on, anything issued should be taken off the cart.
           CartToShelf( $item->{'itemnumber'} );
@@ -1709,7 +1709,7 @@ patron who last borrowed the book.
 =cut
 
 sub AddReturn {
-    my ( $barcode, $branch, $exemptfine, $dropbox, $return_date, $dropboxdate ) = @_;
+    my ( $barcode, $branch, $exemptfine, $dropbox, $return_date ) = @_;
 
     if ($branch and not GetBranchDetail($branch)) {
         warn "AddReturn error: branch '$branch' not found.  Reverting to " . C4::Context->userenv->{'branch'};
@@ -1792,7 +1792,7 @@ sub AddReturn {
             # FIXME: check issuedate > returndate, factoring in holidays
             #$circControlBranch = _GetCircControlBranch($item,$borrower) unless ( $item->{'issuedate'} eq C4::Dates->today('iso') );;
             $circControlBranch = _GetCircControlBranch($item,$borrower);
-            $issue->{'overdue'} = DateTime->compare($issue->{'date_due'}, $dropboxdate ) == -1 ? 1 : 0;
+            $issue->{'overdue'} = DateTime->compare($issue->{'date_due'}, $today ) == -1 ? 1 : 0;
         }
 
         if ($borrowernumber) {
@@ -1890,7 +1890,6 @@ sub AddReturn {
         
         if ( $issue->{overdue} && $issue->{date_due} ) {
         # fix fine days
-            $today = $dropboxdate if $dropbox;
             my ($debardate,$reminder) = _debar_user_on_return( $borrower, $item, $issue->{date_due}, $today );
             if ($reminder){
                 $messages->{'PrevDebarred'} = $debardate;

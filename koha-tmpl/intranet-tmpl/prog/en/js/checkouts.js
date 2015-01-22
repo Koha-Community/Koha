@@ -151,53 +151,32 @@ $(document).ready(function() {
                     } else {
                         return "<strong>" + PREVIOUS_CHECKOUTS + "</strong>";
                     }
-                },
-                {
-                    "mDataProp": "date_due",
-                    "bVisible": false,
-                },
-                {
-                    "iDataSort": 1, // Sort on hidden unformatted date due column
-                    "mDataProp": function( oObj ) {
-                        var due = oObj.date_due_formatted;
-
-                        if ( oObj.date_due_overdue ) {
-                            due = "<span class='overdue'>" + due + "</span>";
-                        }
-
-                        if ( oObj.lost ) {
-                            due += "<span class='lost'>" + oObj.lost + "</span>";
-                        }
-
-                        if ( oObj.damaged ) {
-                            due += "<span class='dmg'>" + oObj.damaged + "</span>";
-                        }
-
-                        return due;
+                }
+            },
+            {
+                "mDataProp": "date_due",
+                "bVisible": false,
+            },
+            {
+                "iDataSort": 1, // Sort on hidden unformatted date due column
+                "mDataProp": function( oObj ) {
+                    if ( oObj.date_due_overdue ) {
+                        return "<span class='overdue'>" + oObj.date_due_formatted + "</span>";
+                    } else {
+                        return oObj.date_due_formatted;
                     }
-                },
-                { "mDataProp": "itemtype_description" },
-                { "mDataProp": "issuedate_formatted" },
-                { "mDataProp": "branchname" },
-                { "mDataProp": "itemcallnumber" },
-                {
-                    "mDataProp": function ( oObj ) {
-                        if ( ! oObj.charge ) oObj.charge = 0;
-                        return parseFloat(oObj.charge).toFixed(2);
-                    }
-                },
-                {
-                    "mDataProp": function ( oObj ) {
-                        if ( ! oObj.price ) oObj.price = 0;
-                        return parseFloat(oObj.price).toFixed(2);
-                    }
-                },
-                {
-                    "bSortable": false,
-                    "mDataProp": function ( oObj ) {
-                        var content = "";
-                        var span_style = "";
-                        var span_class = "";
+                }
+            },
+            {
+                "mDataProp": function ( oObj ) {
+                    title = "<span class='strong'><a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber="
+                          + oObj.biblionumber
+                          + "'>"
+                          + oObj.title;
+
+                    $.each(oObj.subtitle, function( index, value ) {
+                              title += " " + value.subfield;
+                    });
 
                     title += "</a></span>";
 

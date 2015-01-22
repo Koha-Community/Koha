@@ -43,7 +43,7 @@ my $op       = $query->param("op")       || '';
 my $filename = $query->param("filename") || 'koha.mrc';
 my $dbh      = C4::Context->dbh;
 my $marcflavour = C4::Context->preference("marcflavour");
-my $format = $query->param("format") || $query->param("output_format") || 'iso2709';
+my $format = $query->param("format") || 'iso2709';
 
 # Checks if the script is called from commandline
 my $commandline = not defined $ENV{GATEWAY_INTERFACE};

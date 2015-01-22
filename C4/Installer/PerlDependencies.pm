@@ -192,7 +192,7 @@ our $PERL_DEPS = {
     'PDF::Reuse' => {
         'usage'    => 'Core',
         'required' => '1',
-        'min_ver'  => '0.36'
+        'min_ver'  => '0.33'
     },
     'Text::PDF' => {
         'usage'    => 'Core',

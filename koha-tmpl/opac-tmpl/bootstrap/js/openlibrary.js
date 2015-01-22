@@ -49,7 +49,7 @@ KOHA.OpenLibrary = {
                     if (is_opacdetail) {
                         img.src = book.cover.medium;
                         $(this).empty().append(img);
-                        $(this).append('<div class="results_summary">' + '<a href="' + book.url + '">' + OL_PREVIEW + '</a></div>');
+                        $(this).append('<div class="results_summary">' + '<a href="' + book.url + '">Preview</a></div>');
                     } else {
                         img.src = book.cover.medium;
                         img.height = '110';

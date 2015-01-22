@@ -95,8 +95,6 @@ if ($filename) {
 my $counted = 0;
 my $overdues = Getoverdues();
 for my $overdue ( @{$overdues} ) {
-    next if $overdue->{itemlost};
-
     if ( !defined $overdue->{borrowernumber} ) {
         carp
 "ERROR in Getoverdues : issues.borrowernumber IS NULL.  Repair 'issues' table now!  Skipping record.\n";
