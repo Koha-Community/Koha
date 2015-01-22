@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-09-23 19:14-0300\n"
+"POT-Creation-Date: 2015-01-20 05:12-0300\n"
 "PO-Revision-Date: 2012-08-15 06:32+0200\n"
 "Last-Translator: Andi <andi@opensuse-id.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -565,9 +565,9 @@ msgstr "%s %s%s%sKoha daring%s Katalog &rsaquo; Denda dan biaya anda %s "
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
 #. %8$s:  BLOCK cssinclude 
 #. %9$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:1
 #: opac-tmpl/bootstrap/en/modules/opac-registration-invalid.tt:1
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:1
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:1
 #, fuzzy, c-format
 msgid "%s %s %s%s%sKoha online%s catalog %s %s%s "
 msgstr "%s %s%s%sKoha daring%s katalog %s "
@@ -1155,11 +1155,11 @@ msgstr "%s%s%s%sKoha daring%s Katalog &rsaquo; Komentar Terbaru %s "
 #, fuzzy, c-format
 msgid ""
 "%s %s(Earlier heading) %s(Later heading) %s(Acronym) %s(Musical composition) "
-"%s(Broader heading) %s(Narrower heading) %s(Immediate parent body) %s %s"
-"(%s)%s %s "
+"%s(Broader heading) %s(Narrower heading) %s(Immediate parent body) %s "
+"%s(%s)%s %s "
 msgstr ""
-"%s %s(Tajuk utama sebelumnya) %s(Tajuk utama setelahnya) %s(Akronim) %s"
-"(Komposisi musik) %s(Tajuk utama umum) %s(Tajuk utama khusus) %s(%s) %s "
+"%s %s(Tajuk utama sebelumnya) %s(Tajuk utama setelahnya) %s(Akronim) "
+"%s(Komposisi musik) %s(Tajuk utama umum) %s(Tajuk utama khusus) %s(%s) %s "
 
 #. %1$s:  collectiontitle 
 #. %2$s:  IF ( collectionissn ) 
@@ -1806,20 +1806,22 @@ msgstr "Kode pos:"
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('B_address') && hidden.defined('B_address2') && "
-"hidden.defined('B_city') && hidden.defined('B_state') && hidden.defined"
-"('B_zipcode') && hidden.defined('B_county') && hidden.defined('B_phone') && "
-"hidden.defined('B_email') && hidden.defined('contactnote') %%] "
+"hidden.defined('B_city') && hidden.defined('B_state') && hidden."
+"defined('B_zipcode') && hidden.defined('B_county') && hidden."
+"defined('B_phone') && hidden.defined('B_email') && hidden."
+"defined('contactnote') %%] "
 msgstr ""
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:587
 #, c-format
 msgid ""
-"%s [%% UNLESS hidden.defined('altcontactsurname') && hidden.defined"
-"('altcontactfirstname') && hidden.defined('altcontactaddress1') && hidden."
-"defined('altcontactaddress2') && hidden.defined('altcontactaddress3') && "
-"hidden.defined('altcontactstate') && hidden.defined('altcontactzipcode') && "
-"hidden.defined('altcontactcountry') && hidden.defined('altcontactphone') %%] "
+"%s [%% UNLESS hidden.defined('altcontactsurname') && hidden."
+"defined('altcontactfirstname') && hidden.defined('altcontactaddress1') && "
+"hidden.defined('altcontactaddress2') && hidden.defined('altcontactaddress3') "
+"&& hidden.defined('altcontactstate') && hidden.defined('altcontactzipcode') "
+"&& hidden.defined('altcontactcountry') && hidden.defined('altcontactphone') "
+"%%] "
 msgstr ""
 
 #. %1$s:  END 
@@ -1827,8 +1829,8 @@ msgstr ""
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
-"hidden.defined('mobile') && hidden.defined('email') && hidden.defined"
-"('emailpro') && hidden.defined('fax') %%] "
+"hidden.defined('mobile') && hidden.defined('email') && hidden."
+"defined('emailpro') && hidden.defined('fax') %%] "
 msgstr ""
 
 #. %1$s:  END # /UNLESS fields hidden 
@@ -1836,8 +1838,9 @@ msgstr ""
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('streetnumber') && hidden.defined('address') && "
-"hidden.defined('address2') && hidden.defined('city') && hidden.defined"
-"('state') && hidden.defined('zipcode') && hidden.defined('country') %%] "
+"hidden.defined('address2') && hidden.defined('city') && hidden."
+"defined('state') && hidden.defined('zipcode') && hidden.defined('country') "
+"%%] "
 msgstr ""
 
 #. %1$s:  END # / defined 'branchcode' 
@@ -1845,8 +1848,9 @@ msgstr ""
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden."
-"defined('firstname') && hidden.defined('dateofbirth') && hidden.defined"
-"('initials') && hidden.defined('othernames') && hidden.defined('sex') %%] "
+"defined('firstname') && hidden.defined('dateofbirth') && hidden."
+"defined('initials') && hidden.defined('othernames') && hidden.defined('sex') "
+"%%] "
 msgstr ""
 
 #. %1$s:  BLOCK showreference 
@@ -1894,10 +1898,10 @@ msgid "%s biblios"
 msgstr "%s biblios"
 
 #. For the first occurrence,
-#. %1$s:  IF ( SEARCH_RESULT.author ) 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:314
+#. %1$s:  IF ( review.author ) 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:359
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:314
 #, c-format
 msgid "%s by "
 msgstr ""
@@ -1930,8 +1934,8 @@ msgstr "lebih dari "
 
 #. For the first occurrence,
 #. %1$s:  count 
-#: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:48
+#: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:46
 #, c-format
 msgid "%s records"
 msgstr "%s Catatan-catatan"
@@ -2035,12 +2039,12 @@ msgstr "%s%s dengan komentar "
 #. %6$s:  INCLUDE 'doc-head-close.inc' 
 #. %7$s:  BLOCK cssinclude 
 #. %8$s:  END 
-#: opac-tmpl/bootstrap/en/modules/errors/403.tt:1
-#: opac-tmpl/bootstrap/en/modules/errors/404.tt:1
-#: opac-tmpl/bootstrap/en/modules/errors/401.tt:1
-#: opac-tmpl/bootstrap/en/modules/errors/402.tt:1
-#: opac-tmpl/bootstrap/en/modules/errors/500.tt:1
 #: opac-tmpl/bootstrap/en/modules/errors/400.tt:1
+#: opac-tmpl/bootstrap/en/modules/errors/402.tt:1
+#: opac-tmpl/bootstrap/en/modules/errors/401.tt:1
+#: opac-tmpl/bootstrap/en/modules/errors/404.tt:1
+#: opac-tmpl/bootstrap/en/modules/errors/500.tt:1
+#: opac-tmpl/bootstrap/en/modules/errors/403.tt:1
 #, fuzzy, c-format
 msgid "%s%s%s%sKoha online%s catalog &rsaquo; An error has occurred %s %s%s "
 msgstr ""
@@ -2310,8 +2314,8 @@ msgstr "Publik"
 #, fuzzy, c-format
 msgid ""
 "%sRequested %sChecked by the library %sAccepted by the library %sOrdered by "
-"the library %sSuggestion declined %sAvailable in the library %s %s %s %s"
-"(%s)%s "
+"the library %sSuggestion declined %sAvailable in the library %s %s %s "
+"%s(%s)%s "
 msgstr ""
 "%sDipesan%s %sDipinjam oleh Pustakawan%s %sDiterima oleh Pustakawan%s "
 "%sDipesan oleh Pustakawan%s %sSaran yang ditolak %s %sTersedia di "
@@ -3113,10 +3117,10 @@ msgstr "(Gunakan OPAC sebagai penggantinya)"
 msgid "(Use SRU instead)"
 msgstr "(Gunakan SRU sebagai penggantinya)"
 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:439
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:403
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:159
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:491
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:403
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:439
 #, c-format
 msgid "(done)"
 msgstr ""
@@ -3127,9 +3131,9 @@ msgid "(filtered from _MAX_ total entries)"
 msgstr "(tersaring from _MAX_ total entries)"
 
 #. For the first occurrence,
-#. %1$s:  SEARCH_RESULT.timestamp 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:336
+#. %1$s:  GROUP_RESULT.timestamp 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:198
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:336
 #, c-format
 msgid "(modified on %s)"
 msgstr "(diubah pada %s)"
@@ -3150,23 +3154,23 @@ msgstr "(Pencarian yang berkaitan: %s%s%s)"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:25
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:27
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:507
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:509
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:459
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:461
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:507
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:509
 #, c-format
 msgid "(remove)"
 msgstr "(hapus)"
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:405
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:558
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:405
 #, c-format
 msgid "(su"
 msgstr "(su"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:266
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:217
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:383
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:266
 #, c-format
 msgid "+and+(bib-level:a+or+bib-level:b)"
 msgstr "+and+(bib-level:a+or+bib-level:b)"
@@ -3220,8 +3224,8 @@ msgstr ""
 "secara daring. Mohon bayar denda anda jika anda ingin memperpanjang waktu "
 "peminjaman buku anda."
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:21
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:26
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:21
 #, c-format
 msgid ",complete-subfield"
 msgstr ",subbagian yang sudah lengkap"
@@ -3274,64 +3278,64 @@ msgstr "...atau..."
 msgid ".png"
 msgstr ".png"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:580
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1053
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:107
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:128
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:148
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:426
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:580
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1053
 #, fuzzy, c-format
 msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 msgstr "/cgi-bin/koha/opac-detail.pl?biblionumber="
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:257
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:196
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:44
+#: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:167
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:753
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:405
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:257
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:44
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:289
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:423
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:753
-#: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:167
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:196
 #, c-format
 msgid "/cgi-bin/koha/opac-detail.pl?biblionumber="
 msgstr "/cgi-bin/koha/opac-detail.pl?biblionumber="
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:179
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:555
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:402
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:536
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:587
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:208
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:555
-#: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:179
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q="
 msgstr "/cgi-bin/koha/opac-search.pl?q="
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:251
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:417
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:301
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:747
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:844
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:901
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:964
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:251
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:417
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=Control-number:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=Control-number:"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:269
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:220
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:386
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:269
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=Host-item:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=Host-item:"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:173
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:552
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:247
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:331
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:98
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:119
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:139
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:202
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:247
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:331
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:552
-#: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:173
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=an:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
@@ -3341,10 +3345,10 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
 msgid "/cgi-bin/koha/opac-search.pl?q=an:\""
 msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:337
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:101
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:122
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:142
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:337
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=au:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
@@ -3354,10 +3358,10 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
 msgid "/cgi-bin/koha/opac-search.pl?q=au:\""
 msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:217
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:383
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:266
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:283
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:217
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:383
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=rcn:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=rcn:"
@@ -3369,8 +3373,8 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=rcn:"
 msgid "/cgi-bin/koha/opac-search.pl?q=se,phr:\""
 msgstr "/cgi-bin/koha/opac-search.pl?q=se,phr:\""
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:411
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:564
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:411
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=su"
 msgstr "/cgi-bin/koha/opac-search.pl?q=su"
@@ -3380,24 +3384,24 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=su"
 msgid "/cgi-bin/koha/opac-search.pl?q=su:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=su:"
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:262
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:428
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:286
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:304
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:758
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:847
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:906
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:969
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:262
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:428
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=ti,phr:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=ti,phr:"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:601
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:604
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:957
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:960
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:992
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:995
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:601
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:604
 #, fuzzy, c-format
 msgid "/cgi-bin/koha/tracklinks.pl?uri="
 msgstr "/cgi-bin/koha/opac-search.pl?q="
@@ -3424,8 +3428,8 @@ msgstr "10 judul"
 msgid "100 titles"
 msgstr "100 judul"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:446
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:153
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:446
 #, c-format
 msgid "100,110,111,700,710,711"
 msgstr "100,110,111,700,710,711"
@@ -3571,12 +3575,12 @@ msgstr "; Jenis materi visual: "
 msgid "; Type periodikum: "
 msgstr "; Jenis periodikum: "
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:601
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:604
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:957
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:960
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:992
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:995
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:601
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:604
 #, fuzzy, c-format
 msgid ";biblionumber="
 msgstr "[% biblionumber |url %]"
@@ -3615,8 +3619,8 @@ msgstr "Sebuah catatan yang cocok dengan barcode "
 msgid "A specific item"
 msgstr "Sebuah salinan khusus "
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:404
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:557
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:404
 #, c-format
 msgid "AND "
 msgstr "AND "
@@ -3651,8 +3655,8 @@ msgstr "Diserap sebagian:"
 msgid "Absorbed:"
 msgstr "Diserap:"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:290
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:803
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:290
 #, c-format
 msgid "Abstract: "
 msgstr "Abstraksi: "
@@ -3662,8 +3666,8 @@ msgstr "Abstraksi: "
 msgid "Abstracts/summaries"
 msgstr "Abstraksi/ikhtisar:"
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:140
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:30
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:140
 #, c-format
 msgid "Access denied"
 msgstr "Akses ditolak"
@@ -3692,12 +3696,12 @@ msgid "Acquisition date: Oldest to newest"
 msgstr "Tanggal pemindahan kepemilikan: Terlama ke paling baru"
 
 #. INPUT type=submit name=tagsel_button
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:158
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:490
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:56
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:402
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:259
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:438
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:56
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:402
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:158
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:490
 msgid "Add"
 msgstr "Tambah"
 
@@ -3713,8 +3717,8 @@ msgstr "Tambah %s barang ke %s"
 msgid "Add another field"
 msgstr "Tambah bidang lain"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:486
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:434
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:486
 #, fuzzy, c-format
 msgid "Add tag"
 msgstr "Tambah ke troli"
@@ -3740,9 +3744,9 @@ msgstr "Tambah ke sebuah lis"
 msgid "Add to a new list:"
 msgstr "Tambah ke sebuah lis baru:"
 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:461
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:509
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:461
 #, c-format
 msgid "Add to cart"
 msgstr "Tambah ke troli"
@@ -3758,7 +3762,7 @@ msgid "Add to list: "
 msgstr "Tambah ke lis: "
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:27
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 #, c-format
 msgid "Add to your cart"
 msgstr "Tambah ke troli anda"
@@ -3840,10 +3844,10 @@ msgstr "Semua koleksi"
 msgid "All item types"
 msgstr "Semua jenis barang"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:207
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:18
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:113
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:207
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:199
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:113
 #, c-format
 msgid "All libraries"
 msgstr "Semua perpustakaan"
@@ -3886,12 +3890,12 @@ msgstr "Jumlah"
 msgid "Amount outstanding"
 msgstr "Jumlah yang berlebihan"
 
-#: opac-tmpl/bootstrap/en/modules/errors/403.tt:27
-#: opac-tmpl/bootstrap/en/modules/errors/404.tt:27
-#: opac-tmpl/bootstrap/en/modules/errors/401.tt:27
-#: opac-tmpl/bootstrap/en/modules/errors/402.tt:27
-#: opac-tmpl/bootstrap/en/modules/errors/500.tt:27
 #: opac-tmpl/bootstrap/en/modules/errors/400.tt:27
+#: opac-tmpl/bootstrap/en/modules/errors/402.tt:27
+#: opac-tmpl/bootstrap/en/modules/errors/401.tt:27
+#: opac-tmpl/bootstrap/en/modules/errors/404.tt:27
+#: opac-tmpl/bootstrap/en/modules/errors/500.tt:27
+#: opac-tmpl/bootstrap/en/modules/errors/403.tt:27
 #, c-format
 msgid "An error has occurred"
 msgstr "Sebuah kesalahan telah terjadi"
@@ -3906,9 +3910,9 @@ msgstr "Sebuah kesalahan terjadi saat mencoba memproses permintaan anda."
 msgid "An invitation to share list "
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:262
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:213
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:379
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:262
 #, c-format
 msgid "Analytics: "
 msgstr "Analitik: "
@@ -4071,18 +4075,18 @@ msgstr "Apakah anda yakin ingin menghapus daftar ini?"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:179
 msgid "Are you sure you want to delete your search history?"
 msgstr "Apakah anda yakin ingin menghapus jejak hasil pencarian anda?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid "Are you sure you want to empty your cart?"
 msgstr "Apakah anda yakin ingin mengosongkan troli anda?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid "Are you sure you want to remove the selected items?"
 msgstr "Apakah anda yakin ingin menghapus barang yang dipilih?"
 
@@ -4115,8 +4119,8 @@ msgstr "Apakah anda yakin ingin membatalkan pemesanan pinjam ini?"
 msgid "Are you sure you want to suspend all holds?"
 msgstr "Apakah anda yakin ingin membatalkan pemesanan pinjam ini?"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:543
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:80
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:543
 #, c-format
 msgid "Article"
 msgstr "Artikel"
@@ -4193,17 +4197,18 @@ msgstr ""
 "Autentikasi keabsahan log masuk seorang pengguna dan memberikan "
 "pengidentifikasi kepada patron."
 
+#. OPTGROUP
+#: opac-tmpl/bootstrap/en/includes/resort_form.inc:14
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:156
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:158
-#: opac-tmpl/bootstrap/en/includes/resort_form.inc:14
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:64
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:78
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:243
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:202
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:204
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:545
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:547
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:774
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:64
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:243
 #, c-format
 msgid "Author"
 msgstr "Penulis"
@@ -4246,8 +4251,8 @@ msgstr "Penulis"
 #. %13$s:  END 
 #. %14$s:  END 
 #. %15$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:40
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:45
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:40
 #, fuzzy, c-format
 msgid "Author(s): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 msgstr "Penulis: %s%s%s%s%s; %s%s%s%s%s%s%s; %s%s%s%s%s "
@@ -4258,11 +4263,11 @@ msgid "Author:"
 msgstr "Penulis:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:250
+#: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:39
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:12
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:32
-#: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:39
-#: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:13
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:13
+#: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:13
 #, fuzzy, c-format
 msgid "Authority search"
 msgstr "Otoritas hasil pencarian"
@@ -4297,14 +4302,16 @@ msgstr "Penulis"
 msgid "Availability "
 msgstr "Ketersediaan: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:353
+#. For the first occurrence,
+#. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:353
 #, c-format
 msgid "Availability:"
 msgstr "Ketersediaan:"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:103
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1031
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:103
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:774
 #, c-format
 msgid "Availability: "
@@ -4355,10 +4362,10 @@ msgstr "Penghargaan: "
 msgid "BE CAREFUL"
 msgstr "BERHATI-HATI"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:45
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:49
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:54
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:59
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:45
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:49
 #, c-format
 msgid "BK"
 msgstr "BK"
@@ -4385,8 +4392,8 @@ msgstr "Kembali ke hasil"
 msgid "Back to the results search list"
 msgstr "Kembali ke lis hasill pencarian"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:97
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:265
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:97
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:133
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:375
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1139
@@ -4564,11 +4571,11 @@ msgstr "Blu-ray-plate"
 msgid "Bok"
 msgstr "Bok"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:541
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:546
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:73
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:83
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:98
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:541
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:546
 #, c-format
 msgid "Book"
 msgstr "Buku"
@@ -4593,8 +4600,8 @@ msgstr "brailye atau skrip Bulan"
 msgid "Brief display"
 msgstr "Tampilan ringkas"
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:51
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:34
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:51
 #, c-format
 msgid "Brief history"
 msgstr "Sejarah singkat"
@@ -4641,8 +4648,8 @@ msgstr "CD audio"
 msgid "CD software"
 msgstr "CD perangkat lunak"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:51
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:61
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:51
 #, c-format
 msgid "CF"
 msgstr "CF"
@@ -4675,9 +4682,9 @@ msgstr "No. Panggil"
 msgid "Call Number"
 msgstr "Nomor Panggil"
 
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:63
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:376
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:63
 #, c-format
 msgid "Call no."
 msgstr "No. panggil"
@@ -4686,16 +4693,16 @@ msgstr "No. panggil"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:179
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:183
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:185
-#: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:53
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:58
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:60
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:270
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1132
+#: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:214
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:216
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:555
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:557
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:776
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:58
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:60
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1132
 #, c-format
 msgid "Call number"
 msgstr "Nomor panggil"
@@ -4712,9 +4719,9 @@ msgstr "Nomor panggil (0-9 ke A-Z)"
 msgid "Call number (Z-A to 9-0)"
 msgstr "Nomor panggil (0-9 ke A-Z)"
 
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:124
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:220
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:444
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:124
 #, fuzzy, c-format
 msgid "Call number:"
 msgstr "Nomor panggil"
@@ -4728,28 +4735,28 @@ msgid "Call number: %s"
 msgstr "Nomor panggil"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:289
-#: opac-tmpl/bootstrap/en/modules/opac-review.tt:50
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:121
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:610
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:629
-#: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:61
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:57
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:157
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:274
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:132
-#: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:44
+#: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:25
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:39
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:260
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:591
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:593
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:796
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:97
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:57
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:610
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:629
+#: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:61
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:157
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:274
+#: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:34
+#: opac-tmpl/bootstrap/en/modules/opac-review.tt:50
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:63
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:89
-#: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:25
-#: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:34
+#: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:44
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:132
 #, c-format
 msgid "Cancel"
 msgstr "Batal"
@@ -4869,8 +4876,8 @@ msgstr "Peminjaman%s, pengembalian%s atau pembaruan sebuah barang: "
 msgid "Check-in date:"
 msgstr "Memperbarui barang"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:202
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1106
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:202
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:833
 #, c-format
 msgid "Checked out ("
@@ -4915,8 +4922,8 @@ msgstr "Klasifikasi: "
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.classification 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:118
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:126
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:118
 #, fuzzy, c-format
 msgid "Classification: %s "
 msgstr "Klasifikasi: %s "
@@ -4928,10 +4935,10 @@ msgstr "Hapus"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:35
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:815
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:246
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:35
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
 #, c-format
 msgid "Clear all"
 msgstr "Hapus semua"
@@ -4957,10 +4964,10 @@ msgstr ""
 msgid "Click here if you're not %s %s"
 msgstr "jika anda tidak %s %s)"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:428
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:626
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:981
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1016
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:626
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:428
 #, c-format
 msgid "Click here to access online"
 msgstr "Klik di sini untuk mengakses daring"
@@ -5074,8 +5081,8 @@ msgstr "Koleksi: "
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.seriestitle 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:84
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:76
 #, fuzzy, c-format
 msgid "Collection: %s "
 msgstr "Koleksi: %s "
@@ -5104,8 +5111,8 @@ msgstr "Komentar oleh %s %s"
 msgid "Comment by %s %s %s"
 msgstr "Komentar oleh %s %s %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:37
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:33
+#: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:37
 #, c-format
 msgid "Comment:"
 msgstr "Komentar:"
@@ -5209,14 +5216,14 @@ msgstr "Lanjut di bagian:"
 msgid "Continues:"
 msgstr "Lanjut:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:542
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:76
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:542
 #, c-format
 msgid "Continuing Resource"
 msgstr "Melanjutkan Sumber Daya"
 
-#: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:54
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:261
+#: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:54
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1135
 #, fuzzy, c-format
 msgid "Copy number"
@@ -5240,8 +5247,8 @@ msgstr "Tanggal Hak Cipta:"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.copyrightdate 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:88
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:96
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:88
 #, fuzzy, c-format
 msgid "Copyright year: %s "
 msgstr "Tahun hak cipta: %s "
@@ -5262,7 +5269,7 @@ msgid "Corporate Author (Secondary)"
 msgstr "Perusahaan Pembuat (Sekunder)"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:203
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:208
 msgid ""
 "Could not login, perhaps your Persona email does not match your Koha one"
 msgstr ""
@@ -5382,8 +5389,8 @@ msgstr "Video DVD / Diska video"
 msgid "Daily"
 msgstr "Harian"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:223
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1125
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:223
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:855
 #, c-format
 msgid "Damaged ("
@@ -5394,6 +5401,7 @@ msgstr "Rusak ("
 msgid "Database"
 msgstr "basis data"
 
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:64
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:33
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:799
@@ -5401,7 +5409,6 @@ msgstr "basis data"
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:147
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:64
 #, c-format
 msgid "Date"
 msgstr "Tanggal"
@@ -5439,8 +5446,8 @@ msgstr "Tanggal ditambahkan"
 msgid "Date received"
 msgstr "Tanggal diterima"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:347
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:76
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:347
 #, c-format
 msgid "Date:"
 msgstr "Tanggal:"
@@ -5498,11 +5505,12 @@ msgstr ""
 "Medefinisikan bentuk metadata di mana catatan dikembalikan, nilai yang "
 "memungkinkan: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:118
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:136
+#. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:661
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:733
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:246
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:118
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:136
 #, c-format
 msgid "Delete"
 msgstr "Hapus"
@@ -5594,9 +5602,9 @@ msgstr ""
 msgid "Description"
 msgstr "Penjelasan"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:195
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:397
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:402
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:195
 #, c-format
 msgid "Description: "
 msgstr "Penjelasan: "
@@ -5608,8 +5616,8 @@ msgstr "Perincian"
 
 #. For the first occurrence,
 #. %1$s:  bibliotitle 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:17
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:12
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:17
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:12
 #, fuzzy, c-format
 msgid "Details for %s"
@@ -5636,8 +5644,8 @@ msgstr "Dewey: "
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.dewey 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:112
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:120
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:112
 #, fuzzy, c-format
 msgid "Dewey: %s "
 msgstr "Dewey: %s "
@@ -5741,8 +5749,8 @@ msgid "Don't have a password yet?"
 msgstr "Belum memiliki sebuah kata sandi?"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:284
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:79
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:62
 #, fuzzy, c-format
 msgid "Don't have an account? "
 msgstr "Belum memiliki sebuah kata sandi? "
@@ -5849,12 +5857,11 @@ msgstr ""
 "KESALAHAN: Anda tidak memiliki hak akses yang memadai untuk aksi tersebut di "
 "lis %s."
 
-#. For the first occurrence,
-#. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-review.tt:61
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:875
+#. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:650
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:724
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:875
+#: opac-tmpl/bootstrap/en/modules/opac-review.tt:61
 #, c-format
 msgid "Edit"
 msgstr "Sunting"
@@ -5885,9 +5892,9 @@ msgstr "Penjelasan Edisi"
 msgid "Edition statement:"
 msgstr "Penjelasan Edisi:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:513
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:370
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:375
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:513
 #, c-format
 msgid "Edition: "
 msgstr "Edisi: "
@@ -5936,9 +5943,9 @@ msgstr "Elever på ungdomstrinnet;"
 msgid "Email"
 msgstr "Surel"
 
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:31
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:54
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:34
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:31
 #, c-format
 msgid "Email address:"
 msgstr "Alamat surel:"
@@ -6045,12 +6052,12 @@ msgid "Error searching OverDrive collection."
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid "Error! Illegal parameter"
 msgstr "Kesalahan! Parameter tidak sah"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid "Error! The add_tag operation failed on"
 msgstr "Kesalahan! Operasi add_tag gagal pada"
 
@@ -6060,7 +6067,7 @@ msgid "Error! You cannot add an empty comment. Please add content or cancel."
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid "Error! You cannot delete the tag"
 msgstr "Kesalahan! Anda tidak dapat menghapus tag"
 
@@ -6073,7 +6080,7 @@ msgstr ""
 "ditambahkan. Mohon mencoba kembali dengan bentuk teks yang biasa."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid ""
 "Error! Your tag was entirely markup code. It was NOT added. Please try again "
 "with plain text."
@@ -6081,15 +6088,15 @@ msgstr ""
 "Kesalahan! Seluruh tag anda adalah kode markup. Hal tersebut TIDAK "
 "ditambahkan. Mohon mencoba kembali dengan bentuk teks yang biasa."
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:108
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:35
 #: opac-tmpl/bootstrap/en/modules/search/results.tt:41
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:108
 #, c-format
 msgid "Error:"
 msgstr "Kesalahan:"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid "Errors: "
 msgstr "Kesalahan-kesalahan: "
 
@@ -6454,8 +6461,8 @@ msgstr "Potret mosaik"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
 #, fuzzy
 msgid "Found"
 msgstr "Suara"
@@ -6492,8 +6499,8 @@ msgstr "Formulir: "
 msgid "Full heading"
 msgstr "Tajuk lengkap"
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:35
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:52
 #, c-format
 msgid "Full history"
 msgstr "Riwayat lengkap"
@@ -6616,12 +6623,12 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:200
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:226
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:136
-#: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:138
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:69
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:42
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:130
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:24
+#: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:138
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:130
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:69
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:136
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:33
 #, c-format
 msgid "Go"
@@ -6734,8 +6741,8 @@ msgstr "Halo, %s "
 msgid "Help"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:12
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:11
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:12
 #, fuzzy, c-format
 msgid "Hi,"
 msgstr "Hai,"
@@ -6752,8 +6759,8 @@ msgid "Hide window"
 msgstr "Sembunyikan jendela"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:33
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:131
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:144
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:131
 #, c-format
 msgid "Highlight"
 msgstr "Soroti"
@@ -6813,8 +6820,8 @@ msgstr "Pesan pinjam:"
 msgid "Holdings note: "
 msgstr "Catatan pesan pinjam: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:653
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:387
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:653
 #, c-format
 msgid "Holdings:"
 msgstr "Pesan pinjam:"
@@ -6845,54 +6852,54 @@ msgstr "Menunggu pesan pinjam"
 msgid "Hologram"
 msgstr "Hologram"
 
-#: opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:10
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:15
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:16
-#: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:11
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:11
-#: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:16
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:12
-#: opac-tmpl/bootstrap/en/modules/opac-blocked.tt:10
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:13
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:27
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:13
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:11
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:30
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:14
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:15
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:11
-#: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:20
-#: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:38
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:14
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:12
-#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:14
-#: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:11
-#: opac-tmpl/bootstrap/en/modules/errors/403.tt:10
-#: opac-tmpl/bootstrap/en/modules/errors/404.tt:10
-#: opac-tmpl/bootstrap/en/modules/errors/401.tt:10
-#: opac-tmpl/bootstrap/en/modules/errors/402.tt:10
-#: opac-tmpl/bootstrap/en/modules/errors/500.tt:10
-#: opac-tmpl/bootstrap/en/modules/errors/400.tt:10
-#: opac-tmpl/bootstrap/en/modules/opac-registration-email-sent.tt:12
-#: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:40
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:39
-#: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:19
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:11
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:17
-#: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:13
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:12
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:14
+#: opac-tmpl/bootstrap/en/modules/opac-blocked.tt:10
+#: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:20
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:11
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:20
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:39
+#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:14
+#: opac-tmpl/bootstrap/en/modules/svc/suggestion.tt:12
+#: opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:10
 #: opac-tmpl/bootstrap/en/modules/opac-registration-invalid.tt:12
+#: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:38
+#: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:16
+#: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:40
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:16
+#: opac-tmpl/bootstrap/en/modules/errors/400.tt:10
+#: opac-tmpl/bootstrap/en/modules/errors/402.tt:10
+#: opac-tmpl/bootstrap/en/modules/errors/401.tt:10
+#: opac-tmpl/bootstrap/en/modules/errors/404.tt:10
+#: opac-tmpl/bootstrap/en/modules/errors/500.tt:10
+#: opac-tmpl/bootstrap/en/modules/errors/403.tt:10
+#: opac-tmpl/bootstrap/en/modules/opac-registration-email-sent.tt:12
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:13
+#: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:11
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:47
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:10
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:12
-#: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:11
-#: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:12
-#: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:14
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:47
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:15
-#: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:12
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:13
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:14
+#: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:19
+#: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:11
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:11
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:14
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:39
+#: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:11
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:39
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:12
+#: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:13
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:20
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:12
-#: opac-tmpl/bootstrap/en/modules/svc/suggestion.tt:12
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:27
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:15
+#: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:12
+#: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:12
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:30
+#: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:14
 #, c-format
 msgid "Home"
 msgstr ""
@@ -6942,16 +6949,16 @@ msgstr "Alamat IP di mana permintaan pengguna akhir ditempatkan"
 
 #: opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:11
 #: opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:21
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:101
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:24
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:101
 #, c-format
 msgid "ISBD view"
 msgstr "Tampilan ISBD"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:166
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:168
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:95
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:85
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:95
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:84
 #, c-format
 msgid "ISBN"
@@ -6968,9 +6975,9 @@ msgstr "ISBN %s"
 msgid "ISBN:"
 msgstr "ISBN:"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:419
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:330
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:194
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:419
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:213
 #, c-format
 msgid "ISBN: "
@@ -7002,9 +7009,9 @@ msgstr "ISSN"
 msgid "ISSN:"
 msgstr "ISSN:"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:431
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:340
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:212
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:431
 #, c-format
 msgid "ISSN: "
 msgstr "ISSN: "
@@ -7106,14 +7113,14 @@ msgstr "Pengahapusan langsung"
 #. For the first occurrence,
 #. %1$s:  OPACBaseURL 
 #. %2$s:  BIBLIO_RESULT.biblionumber 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:136
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:144
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:136
 #, fuzzy, c-format
 msgid "In online catalog: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:237
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1137
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:237
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:869
 #, c-format
 msgid "In transit ("
@@ -7128,16 +7135,16 @@ msgid "In transit from %s to %s since %s"
 msgstr "Dalam perjalan dari %s, ke %s, sejak %s"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:25
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:507
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:459
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:507
 #, c-format
 msgid "In your cart"
 msgstr "Di dalam troli anda"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:730
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:234
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:400
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:730
 #, c-format
 msgid "In: "
 msgstr "Di dalam: "
@@ -7228,19 +7235,19 @@ msgstr ""
 msgid "Item holds"
 msgstr "Pesan pinjam"
 
-#: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:50
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:263
+#: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:50
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:130
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:374
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1129
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:62
 #, c-format
 msgid "Item type"
 msgstr "Jenis barang"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:207
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:121
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:44
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:207
 #, c-format
 msgid "Item type:"
 msgstr "Jenis barang:"
@@ -7261,33 +7268,35 @@ msgstr "Jenis barang"
 msgid "Items available at:"
 msgstr "Salinan tersedia di:"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:140
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1050
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:140
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:781
 #, fuzzy, c-format
 msgid "Items available for loan: "
 msgstr "Salinan tersedia untuk dipinjamkan: "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:177
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1082
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:177
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:813
 #, fuzzy, c-format
 msgid "Items available for reference: "
 msgstr "Salinan tersedia untuk referensi: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:355
+#. For the first occurrence,
+#. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:355
 #, fuzzy, c-format
 msgid "Items available:"
 msgstr "Barang yang tidak tersedia:"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid "Items in your cart: "
 msgstr "Barang di dalam troli anda: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:141
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:149
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:141
 #, c-format
 msgid "Items: "
 msgstr "Barang: "
@@ -7384,8 +7393,8 @@ msgstr "Direktori"
 msgid "Keyword"
 msgstr "Kata kunci"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:547
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:84
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:547
 #, c-format
 msgid "Kit"
 msgstr "Kotak"
@@ -7412,8 +7421,8 @@ msgid "Koha Wiki"
 msgstr "Koha Wiki"
 
 #: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:3
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:5
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:4
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:5
 msgid "Koha [% Version %]"
 msgstr "Koha [% Versi %]"
 
@@ -7469,8 +7478,8 @@ msgstr "LCCN:"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.lccn 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:124
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:132
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:124
 #, fuzzy, c-format
 msgid "LCCN: %s "
 msgstr "LCCN: %s "
@@ -7614,8 +7623,8 @@ msgstr "Sumberdaya Daring: "
 msgid "LinkedIn"
 msgstr "Membagi lewat LinkedIn"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:143
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:66
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:143
 #, c-format
 msgid "Links"
 msgstr "Tautan"
@@ -7641,8 +7650,8 @@ msgstr ""
 msgid "List name"
 msgstr "Nama lis"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:762
+#: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:74
 #, c-format
 msgid "List name:"
@@ -7719,20 +7728,20 @@ msgstr "Lokasi"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:288
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:60
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:283
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:18
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:98
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:77
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:685
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:697
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:77
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:60
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:283
 #, c-format
 msgid "Log in"
 msgstr "Log masuk"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:497
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:409
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:445
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:409
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:497
 #, c-format
 msgid "Log in to add tags."
 msgstr "Log masuk untuk menambah tag"
@@ -7750,15 +7759,15 @@ msgstr "untuk melihat tag anda yang telah disimpan. %s%s"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:76
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:78
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:276
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:37
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:919
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:277
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:37
 #, c-format
 msgid "Log in to your account"
 msgstr "Log masuk ke akun anda"
 
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:73
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:56
 #, c-format
 msgid "Log in to your account:"
 msgstr "Log masuk ke akun anda:"
@@ -7774,9 +7783,9 @@ msgid "Login"
 msgstr "Log masuk"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:282
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:57
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:278
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:74
 #, c-format
 msgid "Login:"
 msgstr "Log masuk:"
@@ -7798,8 +7807,8 @@ msgstr ""
 msgid "LookupPatron"
 msgstr "LookupPatron"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:216
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1119
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:216
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:848
 #, c-format
 msgid "Lost ("
@@ -7862,10 +7871,10 @@ msgid "MARC View"
 msgstr "Tampilan MARC"
 
 #: opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:21
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:100
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:23
-#: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:35
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:100
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:35
+#: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:35
 #, c-format
 msgid "MARC view"
 msgstr "Tampilan MARC"
@@ -7957,20 +7966,20 @@ msgstr "PESAN 8:"
 msgid "MESSAGE 9:"
 msgstr "PESAN 9:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:52
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:62
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:52
 #, c-format
 msgid "MP"
 msgstr "MP"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:54
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:64
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:54
 #, c-format
 msgid "MU"
 msgstr "MU"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:50
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:60
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:50
 #, c-format
 msgid "MX"
 msgstr "MX"
@@ -8000,10 +8009,10 @@ msgstr "Penulis Utama"
 msgid "Main address"
 msgstr "Alamat milis:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:531
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:535
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:264
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:266
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:531
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:535
 #, c-format
 msgid "Make a "
 msgstr "Membuat sebuah "
@@ -8033,9 +8042,9 @@ msgstr "Dikelola oleh"
 msgid "Manuskripter"
 msgstr "Naskah"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:550
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:87
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:99
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:550
 #, c-format
 msgid "Map"
 msgstr "Peta"
@@ -8057,8 +8066,8 @@ msgstr "Cari"
 msgid "Match:"
 msgstr "Maret:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:536
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:174
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:536
 #, fuzzy, c-format
 msgid "Material type: "
 msgstr "Jenis material: "
@@ -8091,8 +8100,8 @@ msgstr "Memoar"
 msgid "Merged with ... to form ..."
 msgstr "Bergabung dengan ... untuk membentuk ..."
 
-#: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:13
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:14
+#: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:13
 #, c-format
 msgid "Message sent"
 msgstr "Pesan terkirim"
@@ -8166,13 +8175,11 @@ msgstr "Model"
 msgid "Modify"
 msgstr "Memodifikasi"
 
-#. For the first occurrence,
-#. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/calendar.inc:1
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:45
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:55
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:39
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:49
+#: opac-tmpl/bootstrap/en/includes/calendar.inc:1
 #, c-format
 msgid "Mon"
 msgstr "Sen"
@@ -8234,8 +8241,8 @@ msgstr "Lihat judul paling populer"
 msgid "Mus"
 msgstr "Kita"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:554
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:89
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:554
 #, c-format
 msgid "Music"
 msgstr "Musik"
@@ -8340,11 +8347,11 @@ msgid "New comment on %s %s, %s%s"
 msgstr "Komentar baru pada %s %s, %s%s"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:58
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:158
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:482
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:624
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:694
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
 #, c-format
 msgid "New list"
 msgstr "Lis baru"
@@ -8360,16 +8367,16 @@ msgstr "Kata sandi baru:"
 msgid "New purchase suggestion"
 msgstr "Saran pembelian baru"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:488
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:400
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:257
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:436
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:400
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:488
 #, c-format
 msgid "New tag(s), separated by a comma:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:156
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:54
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:156
 #, c-format
 msgid "New tag:"
 msgstr "Tag baru:"
@@ -8379,13 +8386,11 @@ msgstr "Tag baru:"
 msgid "Newspaper"
 msgstr "Koran"
 
-#. For the first occurrence,
-#. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/calendar.inc:1
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:69
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1048
+#: opac-tmpl/bootstrap/en/includes/calendar.inc:1
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1048
 #, c-format
 msgid "Next"
 msgstr "Berikutnya"
@@ -8418,40 +8423,38 @@ msgstr "Tidak"
 msgid "No available items."
 msgstr "Barang tidak tersedia"
 
-#. For the first occurrence,
-#. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:95
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:162
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:170
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:179
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:188
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:31
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:44
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:53
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:60
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:236
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:248
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:256
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:264
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:273
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:99
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:166
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:174
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:184
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:193
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:77
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:85
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:93
+#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:299
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:315
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:323
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:332
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:156
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:164
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:172
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:395
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:403
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:411
-#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:119
-#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:135
-#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:943
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:299
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:315
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:323
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:332
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:77
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:85
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:93
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:236
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:248
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:256
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:264
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:273
 #, c-format
 msgid "No cover image available"
 msgstr "Gambar jilid tidak tersedia"
@@ -8467,18 +8470,18 @@ msgid "No entries to show"
 msgstr "Tidak ada entri untuk ditampilkan"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid "No item was added to your cart"
 msgstr "Tidak ada barang yang ditambahkan ke troli anda"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid "No item was selected"
 msgstr "Tidak ada barang yang dipilih"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:135
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1045
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:135
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:776
 #, fuzzy, c-format
 msgid "No items available "
@@ -8489,16 +8492,16 @@ msgstr "Barang yang tidak tersedia:"
 msgid "No items available."
 msgstr "Barang yang tidak tersedia:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:383
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:216
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:383
 #, c-format
 msgid "No items available:"
 msgstr "Barang yang tidak tersedia:"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:66
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:68
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:144
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:176
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:144
 #, c-format
 msgid "No limit"
 msgstr "Tidak ada batas"
@@ -8559,13 +8562,13 @@ msgid "No results found!"
 msgstr "Tidak ada hasil yang ditemukan!"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 #, fuzzy
 msgid "No suggestion was selected"
 msgstr "Tidak ada barang yang dipilih"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid "No tag was specified."
 msgstr "Tidak ada tag yang ditentukan"
 
@@ -8589,21 +8592,21 @@ msgstr "Rekaman bukan-musik"
 msgid "None"
 msgstr "Tidak ada"
 
+#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:32
 #: opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:21
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:50
-#: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:32
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:99
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:22
-#: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:32
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:99
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:32
+#: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:32
 #, c-format
 msgid "Normal view"
 msgstr "Tampilan normal"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:531
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:534
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:264
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:266
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:531
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:534
 #, c-format
 msgid "Not finding what you're looking for?"
 msgstr "Tidak menemukan apa yang anda cari?"
@@ -8624,8 +8627,8 @@ msgstr "Tidak dalam pemesanan"
 msgid "Not what you expected? Check for "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:801
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:156
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:801
 #, c-format
 msgid "Note"
 msgstr "Catatan"
@@ -8650,7 +8653,7 @@ msgid "Note: Your comment must be approved by a librarian. "
 msgstr "Catatan: Komentar anda harus disetujui oleh seorang pustakawan. "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid "Note: you can only delete your own tags."
 msgstr "Catatan: anda hanya dapat menghapus tag milik anda sendiri."
 
@@ -8665,7 +8668,7 @@ msgstr ""
 "anda memiliki kode markah yang telah dihapus. "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid ""
 "Note: you can only tag an item with a given term once. Check 'My Tags' to "
 "see your current tags."
@@ -8688,28 +8691,28 @@ msgstr ""
 "menambahkan konten atau membatalkan. %s"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid ""
 "Note: your tag contained markup code that was removed. The tag was added as "
 msgstr ""
 "Catatan: tag anda memiliki kode markah yang telah dihapus. Tag tersebut "
 "telah ditambahkan sebagai "
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:76
-#: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:83
+#: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:57
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:150
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1137
-#: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:43
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:111
+#: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:43
 #, c-format
 msgid "Notes"
 msgstr "Catatan"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.notes 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:94
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:102
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:94
 #, fuzzy, c-format
 msgid "Notes : %s "
 msgstr "Catatan : %s "
@@ -8773,8 +8776,8 @@ msgid "Numeriske data"
 msgstr "Data numerik"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:85
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:39
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:85
 msgid "OK"
 msgstr "OK"
 
@@ -8793,15 +8796,15 @@ msgstr ""
 msgid "October"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:244
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1143
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:244
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:875
 #, c-format
 msgid "On hold ("
 msgstr "Sedang dipinjam ("
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:230
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1131
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:230
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:862
 #, c-format
 msgid "On order ("
@@ -8930,10 +8933,10 @@ msgstr "Nama lainnya:"
 msgid "Other holdings ( %s )"
 msgstr "Pesan pinjam ( %s )"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:922
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:928
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:470
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:475
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:922
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:928
 #, c-format
 msgid "Other title: "
 msgstr "Judul lainnya: "
@@ -8972,8 +8975,8 @@ msgstr "Terlambat "
 msgid "Oversiktsverker innenfor et emne"
 msgstr "Ulasan pekerjaan dari sebuah topik"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:55
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:65
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:55
 #, c-format
 msgid "PR"
 msgstr "PR"
@@ -9016,9 +9019,9 @@ msgid "Password updated"
 msgstr "Kata sandi sudah diperbarui"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:283
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:58
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:280
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:75
 #, c-format
 msgid "Password:"
 msgstr "Kata sandi:"
@@ -9150,18 +9153,18 @@ msgstr "Pesan pinjam"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:6
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:9
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:90
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:475
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:478
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:365
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:232
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:235
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:45
-#: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:422
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:425
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:815
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:45
+#: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:475
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:478
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:90
 #, c-format
 msgid "Place hold"
 msgstr "Pesan pinjam"
@@ -9278,8 +9281,8 @@ msgstr ""
 "tetap dijaga oleh pustakawan tidak bergantung dari pilihan privasi yang anda "
 "pilih."
 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:16
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:16
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:16
 #, c-format
 msgid ""
 "Please note that the attached file is a MARC bibliographic records file "
@@ -9382,10 +9385,16 @@ msgstr "Prasekolah; "
 msgid "Prev"
 msgstr "Sebelumnya"
 
+#. SCRIPT
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:174
+#, fuzzy
+msgid "Preview"
+msgstr "tinjauan "
+
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:16
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1040
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1040
 #, c-format
 msgid "Previous"
 msgstr "Sebelumnya"
@@ -9517,9 +9526,9 @@ msgstr "Tanggal Penerbitan/Hak Cipta: Terbaru ke paling lama"
 msgid "Publication/Copyright date: Oldest to newest"
 msgstr "Tanggal Penerbitan/Hak Cipta: Terlama ke paling baru"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:323
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:368
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:323
 #, c-format
 msgid "Publication:"
 msgstr "Terbitan:"
@@ -9545,14 +9554,14 @@ msgstr "Diterbitkan oleh:"
 #. %8$s:  IF BIBLIO_RESULT.size 
 #. %9$s:  BIBLIO_RESULT.size 
 #. %10$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:69
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:61
 #, fuzzy, c-format
 msgid "Published by: %s %s in %s %s %s , %s %s %s , %s %s "
 msgstr "Diterbitkan oleh: %s%s in %s%s%s, %s%s%s, %s%s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:82
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:111
 #, c-format
 msgid "Publisher"
@@ -9568,10 +9577,10 @@ msgstr "Lokasi penerbit"
 msgid "Publisher:"
 msgstr "Penerbit:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:885
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:890
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:323
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:328
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:885
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:890
 #, c-format
 msgid "Publisher: "
 msgstr "Penerbit: "
@@ -9656,24 +9665,24 @@ msgstr "Catatan tidak ditemukan"
 msgid "Referanseverk"
 msgstr "Referensi bekerja"
 
+#: opac-tmpl/bootstrap/en/includes/opac-facets.inc:3
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:3
 #: opac-tmpl/bootstrap/en/includes/search/facets.inc:3
-#: opac-tmpl/bootstrap/en/includes/opac-facets.inc:3
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:26
 #, c-format
 msgid "Refine your search"
 msgstr "Persempit pencarian anda"
 
+#: opac-tmpl/bootstrap/en/modules/opac-registration-invalid.tt:13
 #: opac-tmpl/bootstrap/en/modules/opac-registration-email-sent.tt:13
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:25
-#: opac-tmpl/bootstrap/en/modules/opac-registration-invalid.tt:13
 #, c-format
 msgid "Register a new account"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:284
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:79
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:62
 #, fuzzy, c-format
 msgid "Register here."
 msgstr "Registrasi"
@@ -9870,13 +9879,13 @@ msgstr "Hasil %s untu %s dari %s"
 
 #. For the first occurrence,
 #. %1$s:  IF ( query_desc ) 
-#. %2$s:  query_desc | html
+#. %2$s:  query_desc | html 
 #. %3$s:  END 
 #. %4$s:  IF ( limit_desc ) 
 #. %5$s:  limit_desc | html 
 #. %6$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:30
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:23
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:30
 #, fuzzy, c-format
 msgid "Results of search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s Mencari %sterhadap '%s'%s%s&nbsp;dengan batasan:&nbsp;'%s'%s"
@@ -9908,12 +9917,12 @@ msgstr "Kembalikan barang ini"
 msgid "Return to account summary"
 msgstr "Kembali ke Ringkasan Akun"
 
-#: opac-tmpl/bootstrap/en/modules/errors/403.tt:33
-#: opac-tmpl/bootstrap/en/modules/errors/404.tt:33
-#: opac-tmpl/bootstrap/en/modules/errors/401.tt:34
-#: opac-tmpl/bootstrap/en/modules/errors/402.tt:33
-#: opac-tmpl/bootstrap/en/modules/errors/500.tt:33
 #: opac-tmpl/bootstrap/en/modules/errors/400.tt:33
+#: opac-tmpl/bootstrap/en/modules/errors/402.tt:33
+#: opac-tmpl/bootstrap/en/modules/errors/401.tt:34
+#: opac-tmpl/bootstrap/en/modules/errors/404.tt:33
+#: opac-tmpl/bootstrap/en/modules/errors/500.tt:33
+#: opac-tmpl/bootstrap/en/modules/errors/403.tt:33
 #, fuzzy, c-format
 msgid "Return to the "
 msgstr "Kembalikan barang ini "
@@ -10016,8 +10025,8 @@ msgstr "SMS"
 msgid "SMS number:"
 msgstr "Nomor SMS:"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:42
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:51
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:42
 #, c-format
 msgid "ST"
 msgstr "ST"
@@ -10059,11 +10068,10 @@ msgstr "Setel"
 msgid "Saturday"
 msgstr ""
 
-#. For the first occurrence,
-#. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:589
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:795
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:88
@@ -10127,8 +10135,8 @@ msgstr "Pindai index:"
 msgid "Scope and content: "
 msgstr "Cakupan dan konten: "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:552
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:91
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:552
 #, c-format
 msgid "Score"
 msgstr "Nilai"
@@ -10172,11 +10180,11 @@ msgid "Search for this title in:"
 msgstr "Cari judul ini di:"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:317
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:187
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:50
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:89
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:362
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:89
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:317
 msgid "Search for works by this author"
 msgstr "Cari pekerjaan oleh penulis ini"
 
@@ -10221,8 +10229,8 @@ msgstr "SearchCourseReserves "
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
 msgid "Searching OverDrive..."
 msgstr ""
 
@@ -10243,14 +10251,14 @@ msgstr "bagian"
 
 #. IMG
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:58
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:271
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:91
+#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:141
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:330
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:170
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:409
-#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:141
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:88
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:330
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:91
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:271
 msgid "See Baker & Taylor"
 msgstr "Lihat Tukang Roti dan Penjahit"
 
@@ -10300,10 +10308,10 @@ msgstr "Pilih sebuah salinan tertentu:"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:34
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:815
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:246
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:34
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
 #, c-format
 msgid "Select all"
 msgstr "Pilih semua"
@@ -10324,13 +10332,11 @@ msgstr "Pilih judul ke:"
 msgid "Select the term(s) to search"
 msgstr "Pilih judul ke:"
 
-#. For the first occurrence,
-#. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:38
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:316
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:248
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:815
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:38
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:316
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
 #, c-format
 msgid "Select titles to: "
 msgstr "Pilih judul ke: "
@@ -10361,10 +10367,10 @@ msgid "Semiweekly"
 msgstr "Dua kali seminggu"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:60
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:25
-#: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:43
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:38
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:25
+#: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:60
+#: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:43
 #, c-format
 msgid "Send"
 msgstr "Kirim"
@@ -10418,8 +10424,8 @@ msgstr "Jenis serial"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.serial 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:106
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:114
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:106
 #, fuzzy, c-format
 msgid "Serial: %s "
 msgstr "Serial: %s "
@@ -10429,11 +10435,11 @@ msgstr "Serial: %s "
 msgid "Serials"
 msgstr "Serial"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:77
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:229
+#: opac-tmpl/bootstrap/en/includes/opac-facets.inc:25
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:171
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:173
-#: opac-tmpl/bootstrap/en/includes/opac-facets.inc:25
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:229
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:77
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:81
 #, c-format
 msgid "Series"
@@ -10459,9 +10465,9 @@ msgstr "Judul serial"
 msgid "Series:"
 msgstr "Serial:"
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:180
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:187
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:194
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:180
 #, c-format
 msgid "Series: "
 msgstr "Serial: "
@@ -10471,8 +10477,8 @@ msgstr "Serial: "
 msgid "Session lost"
 msgstr "Sesi telah hilang"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:538
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:70
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:538
 #, c-format
 msgid "Set"
 msgstr "Setel"
@@ -10493,8 +10499,8 @@ msgstr "Setel: "
 msgid "Settings updated"
 msgstr "Pengaturan telah dimutakhirkan"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1084
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:665
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1084
 #, c-format
 msgid "Share"
 msgstr "Membagi"
@@ -10555,9 +10561,9 @@ msgstr "Show _MENU_ entries"
 msgid "Show all items"
 msgstr "Tampilkan semua barang"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:272
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:223
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:389
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:272
 #, c-format
 msgid "Show analytics"
 msgstr "Tampilkan analisis"
@@ -10630,8 +10636,8 @@ msgstr "Tampilkan 50 barang terakhir"
 msgid "Sign in with your Email"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:68
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:85
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:68
 #, c-format
 msgid "Sign in with your email"
 msgstr ""
@@ -10717,7 +10723,7 @@ msgid "Sorry, plain view is temporarily unavailable"
 msgstr "Mohon maaf, untuk sementara tampilan biasa sedang tidak tersedia"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid "Sorry, tags are not enabled on this system."
 msgstr "Mohon maaf, tag tidak diaktifkan di sistem ini."
 
@@ -10793,8 +10799,8 @@ msgstr "Urut lis ini berdasarkan: "
 msgid "Sorting: "
 msgstr "pelaporan "
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:553
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:90
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:553
 #, c-format
 msgid "Sound"
 msgstr "Suara"
@@ -10869,18 +10875,18 @@ msgstr "Statistik"
 msgid "Statistikker"
 msgstr "Statistik"
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:55
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:79
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:159
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:501
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:800
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:159
 #, c-format
 msgid "Status"
 msgstr "Status"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:555
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:207
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:555
 #, fuzzy, c-format
 msgid "Status:"
 msgstr "Status"
@@ -10934,11 +10940,11 @@ msgstr "Rencana Studi SDU"
 msgid "Su"
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:392
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:161
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:163
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:392
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:79
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:46
 #, c-format
 msgid "Subject"
 msgstr "Subyek"
@@ -11018,20 +11024,20 @@ msgstr "Subyek: "
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.subject 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:82
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:82
 #, fuzzy, c-format
 msgid "Subject: %s "
 msgstr "Subyek: %s "
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:73
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:151
+#: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:69
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:79
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:753
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:151
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:185
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:289
-#: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:69
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:753
 #, c-format
 msgid "Submit"
 msgstr "Kirim"
@@ -11042,8 +11048,8 @@ msgid "Submit and close this window"
 msgstr "Kirim dan tutup jendela ini"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:121
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
 msgid "Submit changes"
 msgstr "Kirim perubahan"
 
@@ -11226,10 +11232,9 @@ msgstr "TOC"
 msgid "Table of contents provided by Syndetics"
 msgstr "Daftar isi yang disediakan oleh Syndetics"
 
-#. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:153
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:254
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:48
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:153
 #, c-format
 msgid "Tag"
 msgstr "Tag"
@@ -11249,10 +11254,10 @@ msgstr "Awan tag"
 msgid "Tag status here."
 msgstr "Tag status di sini."
 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:441
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:405
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:161
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:493
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:405
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:441
 #, c-format
 msgid "Tag status here. "
 msgstr "Tag status di sini. "
@@ -11269,7 +11274,7 @@ msgstr "Tag:"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid "Tags added: "
 msgstr "Tag-tag yang ditambahkan: "
 
@@ -11279,8 +11284,8 @@ msgstr "Tag-tag yang ditambahkan: "
 msgid "Tags from this library:"
 msgstr "Tag-tag dari perpustakaan ini:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:431
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:407
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:431
 #, c-format
 msgid "Tags:"
 msgstr "Tag:"
@@ -11542,19 +11547,19 @@ msgid "The first subscription was started on %s"
 msgstr "Langganan pertama pada %s"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 #, fuzzy
 msgid "The item has been added to your cart"
 msgstr "Barang ini telah ditambahkan ke troli anda"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 #, fuzzy
 msgid "The item has been removed from your cart"
 msgstr "Barang ini telah dihapus dari troli anda"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 #, fuzzy
 msgid "The item is already in your cart"
 msgstr "Barang ini sudah ada di troli anda"
@@ -11703,8 +11708,8 @@ msgstr ""
 msgid "This card has been declared lost. %s "
 msgstr "Kartu ini telah ditandai hilang. %s "
 
-#: opac-tmpl/bootstrap/en/modules/errors/402.tt:30
 #: opac-tmpl/bootstrap/en/modules/errors/400.tt:30
+#: opac-tmpl/bootstrap/en/modules/errors/402.tt:30
 #, c-format
 msgid "This error means that the Koha is pointed an invalid link."
 msgstr ""
@@ -11852,26 +11857,27 @@ msgstr ""
 msgid "Tidsskrift"
 msgstr "Jurnal"
 
+#. OPTGROUP
+#: opac-tmpl/bootstrap/en/includes/resort_form.inc:60
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:151
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:153
-#: opac-tmpl/bootstrap/en/includes/resort_form.inc:60
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:57
-#: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:49
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:53
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:118
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:76
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:127
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:331
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:373
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:494
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:242
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
+#: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:208
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:210
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:540
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:542
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:773
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:61
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:242
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:127
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:331
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:373
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:494
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:57
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:118
 #, c-format
 msgid "Title"
 msgstr "Judul"
@@ -11898,14 +11904,14 @@ msgstr "Catatan judul"
 msgid "Title phrase"
 msgstr "Frasa judul"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:939
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:493
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:939
 #, c-format
 msgid "Title translated: "
 msgstr "Judul yang diterjemahkan: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:127
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:37
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:127
 #, c-format
 msgid "Title:"
 msgstr "Judul:"
@@ -11926,13 +11932,13 @@ msgid "To make changes to your record please contact the library."
 msgstr ""
 "Untuk membuat perubahan terhadap catatan anda mohon hubungi perpustakaan."
 
-#: opac-tmpl/bootstrap/en/modules/errors/403.tt:31
-#: opac-tmpl/bootstrap/en/modules/errors/404.tt:31
-#: opac-tmpl/bootstrap/en/modules/errors/401.tt:32
-#: opac-tmpl/bootstrap/en/modules/errors/402.tt:31
-#: opac-tmpl/bootstrap/en/modules/errors/500.tt:31
-#: opac-tmpl/bootstrap/en/modules/errors/400.tt:31
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:114
+#: opac-tmpl/bootstrap/en/modules/errors/400.tt:31
+#: opac-tmpl/bootstrap/en/modules/errors/402.tt:31
+#: opac-tmpl/bootstrap/en/modules/errors/401.tt:32
+#: opac-tmpl/bootstrap/en/modules/errors/404.tt:31
+#: opac-tmpl/bootstrap/en/modules/errors/500.tt:31
+#: opac-tmpl/bootstrap/en/modules/errors/403.tt:31
 #, c-format
 msgid "To report this error, you can "
 msgstr "Untuk melaporkan galat ini, anda dapat "
@@ -12068,8 +12074,8 @@ msgstr "URL(s)"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.url |url 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:129
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:137
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:129
 #, fuzzy, c-format
 msgid "URL: %s "
 msgstr "URL : %s "
@@ -12083,7 +12089,7 @@ msgid "Ukjent;"
 msgstr "Diketahui;"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid "Unable to add one or more tags."
 msgstr "Tidak dapat menambah satu atau lebih tag."
 
@@ -12108,8 +12114,8 @@ msgid "Ungdom over 12 år;"
 msgstr "Mengajar remaja lebih dari 12 tahun;"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:32
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:130
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:143
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:130
 #, c-format
 msgid "Unhighlight"
 msgstr "Tidak disorot"
@@ -12121,8 +12127,8 @@ msgstr "Judul terpadu"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.unititle 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:100
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:108
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:100
 #, fuzzy, c-format
 msgid "Unified title: %s "
 msgstr "Judul terpadu: %s "
@@ -12189,8 +12195,8 @@ msgstr "Gunakan menu batang untuk menelusuri bagian lain dari Koha."
 msgid "Used for/see from:"
 msgstr "Digunakan untuk/lihat dari:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:47
+#: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:46
 #, c-format
 msgid "Used in "
 msgstr "Digunakan pada "
@@ -12237,8 +12243,8 @@ msgstr "Tampilan"
 msgid "VHS tape / Videocassette"
 msgstr "Pita VHS / kaset video"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:53
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:63
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:53
 #, c-format
 msgid "VM"
 msgstr "VM"
@@ -12289,9 +12295,6 @@ msgid "View all"
 msgstr "[Lihat semuanya]"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:297
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:300
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:302
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:174
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:177
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:179
@@ -12304,10 +12307,13 @@ msgstr "[Lihat semuanya]"
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:71
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:76
-#: opac-tmpl/bootstrap/en/modules/search/results.tt:88
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:341
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:344
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:346
+#: opac-tmpl/bootstrap/en/modules/search/results.tt:88
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:297
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:300
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:302
 msgid "View details for this title"
 msgstr "Lihat perincian judul ini"
 
@@ -12384,7 +12390,7 @@ msgid "Waiting (%s)"
 msgstr "Menunggu"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid "Warning: Cannot be undone. Please confirm once again"
 msgstr ""
 
@@ -12443,8 +12449,8 @@ msgstr ""
 msgid "Weekly"
 msgstr "Mingguan"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:82
 #: opac-tmpl/bootstrap/en/includes/masthead-sco.inc:15
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:82
 #, c-format
 msgid "Welcome, "
 msgstr "Selamat datang, "
@@ -12476,14 +12482,14 @@ msgstr "Dengan judul yang telah dipilih "
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:316
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:815
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:316
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
 msgid "With selected titles: "
 msgstr "Dengan judul yang telah dipilih "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:209
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1113
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:209
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:841
 #, c-format
 msgid "Withdrawn ("
@@ -12499,6 +12505,11 @@ msgstr "Tanpa periodisitas"
 msgid "Wk"
 msgstr ""
 
+#. SCRIPT
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:311
+msgid "Would you like to print a receipt?"
+msgstr ""
+
 #. %1$s:  bor_messages_loo.message_date | $KohaDates 
 #. %2$s:  bor_messages_loo.branchname 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:35
@@ -12506,10 +12517,10 @@ msgstr ""
 msgid "Written on %s by %s"
 msgstr "Ditulis pada %s oleh %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:244
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:550
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:552
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:775
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:244
 #, c-format
 msgid "Year"
 msgstr "Tahun"
@@ -12668,7 +12679,7 @@ msgid "You may "
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid "You must be logged in to add tags."
 msgstr "Anda harus log masuk untuk menambah tag."
 
@@ -12781,7 +12792,7 @@ msgid "Your cart "
 msgstr "Troli anda "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid "Your cart is currently empty"
 msgstr "Troli anda saat ini kosong"
 
@@ -13081,10 +13092,10 @@ msgstr "[Pilihan lebih banyak]"
 msgid "[New search]"
 msgstr "[Pencarian baru]"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:114
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:414
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:611
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:648
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:114
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:414
 #, c-format
 msgid "_blank"
 msgstr "_blank"
@@ -13094,10 +13105,6 @@ msgstr "_blank"
 msgid "a an the"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:246
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:533
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:583
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:412
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:233
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:244
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:742
@@ -13105,24 +13112,28 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:851
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:896
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:958
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:246
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:533
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:583
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:412
 #, c-format
 msgid "a_t"
 msgstr "a_t"
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:301
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:368
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:381
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:516
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:920
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:931
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:301
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:371
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:766
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:368
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:381
 #, c-format
 msgid "ab"
 msgstr "ab"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:447
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:154
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:447
 #, c-format
 msgid "abc"
 msgstr "abc"
@@ -13158,8 +13169,8 @@ msgstr "abcd"
 msgid "abcdjpvxyz"
 msgstr "abcdjpvxyz"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1202
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1078
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1202
 #, fuzzy, c-format
 msgid "abcdn"
 msgstr "abcd"
@@ -13170,15 +13181,15 @@ msgstr "abcd"
 msgid "abcdvxyz"
 msgstr "abcdvxyz"
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:318
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:395
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:408
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:318
 #, c-format
 msgid "abceg"
 msgstr "abceg"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:883
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:321
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:883
 #, c-format
 msgid "abcg"
 msgstr "abcg"
@@ -13188,8 +13199,8 @@ msgstr "abcg"
 msgid "abchnp"
 msgstr "abchnp"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1189
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1065
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1189
 #, c-format
 msgid "abcq"
 msgstr ""
@@ -13204,14 +13215,14 @@ msgstr "abcu"
 msgid "abh"
 msgstr "abh"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:400
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:118
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:400
 #, c-format
 msgid "abhfgknps"
 msgstr "abhfgknps"
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:356
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:468
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:356
 #, c-format
 msgid "abhfgnp"
 msgstr "abhfgnp"
@@ -13237,10 +13248,10 @@ msgstr "akun, %s mohon "
 msgid "acdef"
 msgstr "acdeq"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1089
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1213
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:122
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:475
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1213
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1089
 #, c-format
 msgid "acdeq"
 msgstr "acdeq"
@@ -13266,7 +13277,7 @@ msgid "already exists!"
 msgstr "Sudah ada!"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid "already in your cart"
 msgstr "Sudah ada di troli anda"
 
@@ -13366,11 +13377,11 @@ msgstr "Rekan penulis"
 msgid "autobiography"
 msgstr "autobiografi"
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:186
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:200
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:185
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:201
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:216
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:186
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:200
 #, c-format
 msgid "av"
 msgstr "av"
@@ -13409,9 +13420,9 @@ msgstr "peringkat rata-rata: %s (%s suara)"
 msgid "az"
 msgstr "az"
 
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:889
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:131
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:483
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:889
 #, c-format
 msgid "bc"
 msgstr "bc"
@@ -13434,8 +13445,9 @@ msgstr "bib"
 msgid "bib_id"
 msgstr "bib_id"
 
-#: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:88
+#. IMG
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:598
+#: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:88
 #, c-format
 msgid "bibliography"
 msgstr "bibliografi"
@@ -13486,14 +13498,14 @@ msgstr "bristol board"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1262
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1262
 #, fuzzy
 msgid "by"
 msgstr "oleh"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:452
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:162
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:452
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:107
 #: opac-tmpl/bootstrap/en/modules/search/results.tt:88
 #, c-format
@@ -13530,12 +13542,12 @@ msgstr "Kartun atau komik strip"
 msgid "catalog "
 msgstr "katalog "
 
-#: opac-tmpl/bootstrap/en/modules/errors/403.tt:33
-#: opac-tmpl/bootstrap/en/modules/errors/404.tt:33
-#: opac-tmpl/bootstrap/en/modules/errors/401.tt:34
-#: opac-tmpl/bootstrap/en/modules/errors/402.tt:33
-#: opac-tmpl/bootstrap/en/modules/errors/500.tt:33
 #: opac-tmpl/bootstrap/en/modules/errors/400.tt:33
+#: opac-tmpl/bootstrap/en/modules/errors/402.tt:33
+#: opac-tmpl/bootstrap/en/modules/errors/401.tt:34
+#: opac-tmpl/bootstrap/en/modules/errors/404.tt:33
+#: opac-tmpl/bootstrap/en/modules/errors/500.tt:33
+#: opac-tmpl/bootstrap/en/modules/errors/403.tt:33
 #, fuzzy, c-format
 msgid "catalog home page"
 msgstr "katalog"
@@ -13556,8 +13568,8 @@ msgstr "cdn"
 msgid "celestial globe"
 msgstr "langit dunia"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:907
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:353
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:907
 #, c-format
 msgid "cg"
 msgstr "cg"
@@ -13688,21 +13700,21 @@ msgstr "Penulis kedua"
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:259
 msgid ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft.au="
-"[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
-"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT.size %]"
-"&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft.place=[% "
+"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
+"au=[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
+"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT.size "
+"%]&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft.place=[% "
 "BIBLIO_RESULT.place %]&rft.pub=[% BIBLIO_RESULT.publisher |url %]&rft."
-"edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT.series %]"
-"&rft.genre="
+"edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT.series "
+"%]&rft.genre="
 msgstr ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft.au="
-"[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
-"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT.size %]"
-"&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft.place=[% "
+"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
+"au=[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
+"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT.size "
+"%]&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft.place=[% "
 "BIBLIO_RESULT.place %]&rft.pub=[% BIBLIO_RESULT.publisher |url %]&rft."
-"edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT.series %]"
-"&rft.genre="
+"edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT.series "
+"%]&rft.genre="
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:324
 #, c-format
@@ -13786,8 +13798,8 @@ msgstr "direktori "
 msgid "discography "
 msgstr "diskografi "
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:176
 #: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:144
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:176
 #, c-format
 msgid "display:block; "
 msgstr "tampilan:blok; "
@@ -13820,8 +13832,9 @@ msgstr "drama"
 msgid "drama "
 msgstr "drama "
 
-#: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:180
+#. IMG
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:274
+#: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:180
 #, c-format
 msgid "drawing"
 msgstr "menggambar"
@@ -13846,13 +13859,13 @@ msgstr "elektronik "
 msgid "electronic ressource"
 msgstr "Elektroniske ressurser"
 
-#: opac-tmpl/bootstrap/en/modules/errors/403.tt:32
-#: opac-tmpl/bootstrap/en/modules/errors/404.tt:32
-#: opac-tmpl/bootstrap/en/modules/errors/401.tt:33
-#: opac-tmpl/bootstrap/en/modules/errors/402.tt:32
-#: opac-tmpl/bootstrap/en/modules/errors/500.tt:32
-#: opac-tmpl/bootstrap/en/modules/errors/400.tt:32
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:114
+#: opac-tmpl/bootstrap/en/modules/errors/400.tt:32
+#: opac-tmpl/bootstrap/en/modules/errors/402.tt:32
+#: opac-tmpl/bootstrap/en/modules/errors/401.tt:33
+#: opac-tmpl/bootstrap/en/modules/errors/404.tt:32
+#: opac-tmpl/bootstrap/en/modules/errors/500.tt:32
+#: opac-tmpl/bootstrap/en/modules/errors/403.tt:32
 #, c-format
 msgid "email the Koha Administrator"
 msgstr "kirim surel  kepada Adminstrator Koha"
@@ -13893,18 +13906,18 @@ msgstr "faksimil"
 msgid "festschrift "
 msgstr "kumpulan artikel "
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1098
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1105
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:602
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:609
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:495
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:502
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1098
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1105
 #, c-format
 msgid "fghkdlmor"
 msgstr "fghkdlmor"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:427
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:143
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:427
 #, c-format
 msgid "fgknps"
 msgstr "fgknps"
@@ -14253,7 +14266,7 @@ msgid "item"
 msgstr "barang"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:107
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid "item(s) added to your cart"
 msgstr "barang ditambahkan ke troli anda"
 
@@ -14313,8 +14326,9 @@ msgstr "koha:biblionumber:{marc:datafield[@tag=999]/marc:subfield[@code='c']}"
 msgid "kom"
 msgstr "adalah"
 
-#: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:22
+#. IMG
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:364
+#: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:22
 #, c-format
 msgid "large print"
 msgstr "cetakan besar"
@@ -14538,8 +14552,9 @@ msgstr "multimedia"
 msgid "multiple/other literary forms"
 msgstr "beberapa/yang lain menyala. bentuk"
 
-#: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:72
+#. IMG
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:554
+#: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:72
 #, c-format
 msgid "music"
 msgstr "musik"
@@ -14728,8 +14743,9 @@ msgstr "yang lain"
 msgid "out of"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:181
+#. IMG
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:280
+#: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:181
 #, c-format
 msgid "painting"
 msgstr "lukisan"
@@ -14812,8 +14828,9 @@ msgstr "pickup_expiry_date"
 msgid "pickup_location"
 msgstr "pickup_location"
 
-#: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:185
+#. IMG
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:292
+#: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:185
 #, c-format
 msgid "picture"
 msgstr "gambar"
@@ -14910,10 +14927,10 @@ msgstr "buku teks terprogram"
 msgid "project description"
 msgstr "deskripsi proyek"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:531
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:535
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:264
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:266
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:531
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:535
 #, c-format
 msgid "purchase suggestion"
 msgstr "saran pembelian"
@@ -15022,14 +15039,14 @@ msgstr "results_summary description"
 msgid "results_summary edition"
 msgstr "results_summary edition"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:921
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:469
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:921
 #, c-format
 msgid "results_summary other_title"
 msgstr "results_summary other_title"
 
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:884
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:322
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:884
 #, c-format
 msgid "results_summary publisher"
 msgstr "results_summary publisher"
@@ -15064,9 +15081,9 @@ msgstr "tinjauan "
 msgid "roll "
 msgstr "gulungan "
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:173
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:79
 #: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:140
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:79
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslimUtils.xsl:173
 #, c-format
 msgid "rtl"
 msgstr "rtl"
@@ -15359,8 +15376,9 @@ msgstr "gambar teknik"
 msgid "technical drawing "
 msgstr "gambar teknik "
 
-#: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:103
+#. IMG
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:646
+#: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:103
 #, c-format
 msgid "technical report"
 msgstr "laporan teknik"
@@ -15377,10 +15395,10 @@ msgstr "teks pada pengikat looseleaf "
 
 #. META http-equiv=Content-Type
 #: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:2
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:4
+#: opac-tmpl/bootstrap/en/modules/opac-showmarc.tt:3
 #: opac-tmpl/bootstrap/en/modules/sco/printslip.tt:3
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:3
-#: opac-tmpl/bootstrap/en/modules/opac-showmarc.tt:3
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:4
 msgid "text/html; charset=utf-8"
 msgstr "text/html; charset=utf-8"
 
@@ -15630,8 +15648,8 @@ msgstr "proyeksi visual"
 msgid "votes"
 msgstr "Catatan"
 
-#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:418
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:571
+#: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:418
 #, c-format
 msgid "vxyz"
 msgstr "vxyz"
@@ -15692,12 +15710,12 @@ msgstr "[% biblionumber |url %]"
 msgid "wood"
 msgstr "kayu"
 
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:619
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:972
+#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1007
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:446
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:119
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:419
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:972
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1007
-#: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:619
 #, c-format
 msgid "y3z"
 msgstr "y3z"

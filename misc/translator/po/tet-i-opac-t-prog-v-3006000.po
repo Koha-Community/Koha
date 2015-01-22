@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-07-15 22:17-0300\n"
-"PO-Revision-Date: 2014-07-16 05:06+0000\n"
+"POT-Creation-Date: 2014-11-20 12:30-0300\n"
+"PO-Revision-Date: 2014-11-11 04:22+0000\n"
 "Last-Translator: kaz <karenmyers1@hotmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: tet\n"
@@ -14,8 +14,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1405487169.0\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1415679744.000000\n"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:110
 #, c-format
@@ -382,7 +382,7 @@ msgstr "%s %s %s Labele empresta %s"
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:1
 #, c-format
 msgid "%s %s %s%s%s%sKoha %s &rsaquo; Self checkout "
-msgstr "%s %s %s%s%s%sKoha %s &rsaquo; Auto Empresta "
+msgstr "%s %s %s%s%s%sKoha %s &rsaquo; Auto empresta "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE AuthorisedValues 
@@ -499,9 +499,9 @@ msgstr "%s %s %s%s%s%sKoha online%s katalogu &rsaquo; Ita nia multa %s "
 #. %5$s:  ELSE 
 #. %6$s:  END 
 #. %7$s:  INCLUDE 'doc-head-close.inc' 
-#: opac-tmpl/prog/en/modules/opac-registration-confirmation.tt:1
 #: opac-tmpl/prog/en/modules/opac-registration-invalid.tt:1
 #: opac-tmpl/prog/en/modules/opac-main.tt:1
+#: opac-tmpl/prog/en/modules/opac-registration-confirmation.tt:1
 #, c-format
 msgid "%s %s %s%s%sKoha online%s catalog %s "
 msgstr "%s %s %s%s%sKoha online%s katalogu %s "
@@ -759,7 +759,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-tags.tt:90
 #, c-format
 msgid "%s %s tag%stags%s successfully added."
-msgstr "%s %s tag%stags%s konsege aumenta tiona."
+msgstr "%s %s etiketa%setiketa%s konsege aumenta tiona."
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -1003,15 +1003,15 @@ msgid "%s %s%s%sKoha online%s catalog &rsaquo; OverDrive search for '%s' %s "
 msgstr "%s %s%s%sKoha online%s katalogu &rsaquo; Peskiza OverDrive ba '%s' %s "
 
 #. For the first occurrence,
-#. %1$s:  borrower.firstname 
-#. %2$s:  borrower.surname 
+#. %1$s:  firstname 
+#. %2$s:  surname 
+#: opac-tmpl/prog/en/modules/opac-readingrecord.tt:28
+#: opac-tmpl/prog/en/modules/opac-messaging.tt:29
 #: opac-tmpl/prog/en/modules/opac-memberentry-update-submitted.tt:15
+#: opac-tmpl/prog/en/modules/opac-privacy.tt:13
 #: opac-tmpl/prog/en/modules/opac-account.tt:17
 #: opac-tmpl/prog/en/modules/opac-passwd.tt:13
-#: opac-tmpl/prog/en/modules/opac-messaging.tt:29
-#: opac-tmpl/prog/en/modules/opac-privacy.tt:13
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:46
-#: opac-tmpl/prog/en/modules/opac-readingrecord.tt:28
 #, c-format
 msgid "%s %s's account"
 msgstr "%s %s'nia konta"
@@ -1085,8 +1085,8 @@ msgstr "%s %sAvizu: janela ne'e sei taka iha segundu 5%s "
 msgid ""
 "%s %sPayment,thanks %sPayment,thanks (cash via SIP2) %sPayment,thanks (VISA "
 "via SIP2) %sPayment,thanks (credit card via SIP2) %sNew Card %sFine "
-"%sAccount management fee %sSundry %sLost Item %sWriteoff %s%s %s %s, %s%s %s"
-"(%s)%s "
+"%sAccount management fee %sSundry %sLost Item %sWriteoff %s%s %s %s, %s%s "
+"%s(%s)%s "
 msgstr ""
 "%s %sPagamentu,obrigadu %sPagamentu,obrigadu (osan husi SIP2) %sPagamentu,"
 "obrigadu (VISA husi SIP2) %sPagamentu,obrigadu (credit card via SIP2) "
@@ -1263,8 +1263,8 @@ msgstr "%s Data moris:"
 
 #. For the first occurrence,
 #. %1$s:  IF ( koha_spsuggest ) 
-#: opac-tmpl/prog/en/modules/opac-results.tt:364
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:102
+#: opac-tmpl/prog/en/modules/opac-results.tt:364
 #, c-format
 msgid "%s Did you mean: "
 msgstr "%s Ita dehan hanesan ne'e: "
@@ -1591,30 +1591,34 @@ msgstr "%s Kodigu zip:"
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('B_address') && hidden.defined('B_address2') && "
-"hidden.defined('B_city') && hidden.defined('B_state') && hidden.defined"
-"('B_zipcode') && hidden.defined('B_county') && hidden.defined('B_phone') && "
-"hidden.defined('B_email') && hidden.defined('contactnote') %%] "
+"hidden.defined('B_city') && hidden.defined('B_state') && hidden."
+"defined('B_zipcode') && hidden.defined('B_county') && hidden."
+"defined('B_phone') && hidden.defined('B_email') && hidden."
+"defined('contactnote') %%] "
 msgstr ""
 "%s [%% UNLESS hidden.defined('B_address') && hidden.defined('B_address2') && "
-"hidden.defined('B_city') && hidden.defined('B_state') && hidden.defined"
-"('B_zipcode') && hidden.defined('B_county') && hidden.defined('B_phone') && "
-"hidden.defined('B_email') && hidden.defined('contactnote') %%] "
+"hidden.defined('B_city') && hidden.defined('B_state') && hidden."
+"defined('B_zipcode') && hidden.defined('B_county') && hidden."
+"defined('B_phone') && hidden.defined('B_email') && hidden."
+"defined('contactnote') %%] "
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:595
 #, c-format
 msgid ""
-"%s [%% UNLESS hidden.defined('altcontactsurname') && hidden.defined"
-"('altcontactfirstname') && hidden.defined('altcontactaddress1') && hidden."
-"defined('altcontactaddress2') && hidden.defined('altcontactaddress3') && "
-"hidden.defined('altcontactstate') && hidden.defined('altcontactzipcode') && "
-"hidden.defined('altcontactcountry') && hidden.defined('altcontactphone') %%] "
+"%s [%% UNLESS hidden.defined('altcontactsurname') && hidden."
+"defined('altcontactfirstname') && hidden.defined('altcontactaddress1') && "
+"hidden.defined('altcontactaddress2') && hidden.defined('altcontactaddress3') "
+"&& hidden.defined('altcontactstate') && hidden.defined('altcontactzipcode') "
+"&& hidden.defined('altcontactcountry') && hidden.defined('altcontactphone') "
+"%%] "
 msgstr ""
-"%s [%% UNLESS hidden.defined('altcontactsurname') && hidden.defined"
-"('altcontactfirstname') && hidden.defined('altcontactaddress1') && hidden."
-"defined('altcontactaddress2') && hidden.defined('altcontactaddress3') && "
-"hidden.defined('altcontactstate') && hidden.defined('altcontactzipcode') && "
-"hidden.defined('altcontactcountry') && hidden.defined('altcontactphone') %%] "
+"%s [%% UNLESS hidden.defined('altcontactsurname') && hidden."
+"defined('altcontactfirstname') && hidden.defined('altcontactaddress1') && "
+"hidden.defined('altcontactaddress2') && hidden.defined('altcontactaddress3') "
+"&& hidden.defined('altcontactstate') && hidden.defined('altcontactzipcode') "
+"&& hidden.defined('altcontactcountry') && hidden.defined('altcontactphone') "
+"%%] "
 
 #. %1$s:  END 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:62
@@ -1627,12 +1631,12 @@ msgstr "%s [%% UNLESS hidden.defined('branchcode') %%] "
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
-"hidden.defined('mobile') && hidden.defined('email') && hidden.defined"
-"('emailpro') && hidden.defined('fax') %%] "
+"hidden.defined('mobile') && hidden.defined('email') && hidden."
+"defined('emailpro') && hidden.defined('fax') %%] "
 msgstr ""
 "%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
-"hidden.defined('mobile') && hidden.defined('email') && hidden.defined"
-"('emailpro') && hidden.defined('fax') %%] "
+"hidden.defined('mobile') && hidden.defined('email') && hidden."
+"defined('emailpro') && hidden.defined('fax') %%] "
 
 #. %1$s:  BLOCK showreference 
 #. %2$s:  SET authidurl = '/cgi-bin/koha/opac-authoritiesdetail.pl?authid=' 
@@ -1706,8 +1710,8 @@ msgstr "%s liu duke "
 
 #. For the first occurrence,
 #. %1$s:  count 
-#: opac-tmpl/prog/en/modules/opac-auth-MARCdetail.tt:43
 #: opac-tmpl/prog/en/modules/opac-auth-detail.tt:47
+#: opac-tmpl/prog/en/modules/opac-auth-MARCdetail.tt:43
 #, c-format
 msgid "%s records"
 msgstr "%s rejistu sira"
@@ -1820,7 +1824,7 @@ msgstr "%s%s kopia sira%sKopia sira%s%s ( %s )%s"
 #: opac-tmpl/prog/en/modules/opac-tags.tt:93
 #, c-format
 msgid "%s%s tag%stags%s successfully deleted."
-msgstr "%s%s tag%stags%s konsege hamoos tiona."
+msgstr "%s%s etiketa%setiketa%s konsege hamoos tiona."
 
 #. %1$s:  END 
 #. %2$s:  IF ( BORROWER_INF.debarredcomment ) 
@@ -1836,12 +1840,12 @@ msgstr "%s%s ho komentariu "
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #. %6$s:  INCLUDE 'doc-head-close.inc' 
-#: opac-tmpl/prog/en/modules/errors/403.tt:1
-#: opac-tmpl/prog/en/modules/errors/404.tt:1
-#: opac-tmpl/prog/en/modules/errors/401.tt:1
-#: opac-tmpl/prog/en/modules/errors/402.tt:1
-#: opac-tmpl/prog/en/modules/errors/500.tt:1
 #: opac-tmpl/prog/en/modules/errors/400.tt:1
+#: opac-tmpl/prog/en/modules/errors/402.tt:1
+#: opac-tmpl/prog/en/modules/errors/401.tt:1
+#: opac-tmpl/prog/en/modules/errors/404.tt:1
+#: opac-tmpl/prog/en/modules/errors/500.tt:1
+#: opac-tmpl/prog/en/modules/errors/403.tt:1
 #, c-format
 msgid "%s%s%s%sKoha online%s catalog &rsaquo; An error has occurred %s "
 msgstr "%s%s%s%sKoha Online%s katalogu &rsaquo; Sala akontese %s "
@@ -2214,8 +2218,8 @@ msgstr ""
 #, c-format
 msgid ""
 "%sRequested %sChecked by the library %sAccepted by the library %sOrdered by "
-"the library %sSuggestion declined %sAvailable in the library %s %s %s %s"
-"(%s)%s "
+"the library %sSuggestion declined %sAvailable in the library %s %s %s "
+"%s(%s)%s "
 msgstr ""
 "%sHusu tiona %sBiblioteka verifika tiona %sBiblioteka simu tiona "
 "%sBiblioteka hameno tiona %sBiblioteka la simu ona sujesaun ne'e "
@@ -2289,10 +2293,10 @@ msgid "%sa list:%s"
 msgstr "%sa lista:%s"
 
 #. For the first occurrence,
-#. %1$s:  IF ( SEARCH_RESULT.author ) 
-#: opac-tmpl/prog/en/modules/opac-results.tt:541
+#. %1$s:  IF ( review.author ) 
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:33
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:447
+#: opac-tmpl/prog/en/modules/opac-results.tt:541
 #, c-format
 msgid "%sby "
 msgstr "%shusi "
@@ -2374,8 +2378,8 @@ msgstr "&#8674; Ita nia konfigarasaun mensajen"
 msgid "&laquo; Previous"
 msgstr "&laquo; Anterior"
 
-#: opac-tmpl/prog/en/includes/page-numbers.inc:3
 #: opac-tmpl/prog/en/includes/search/page-numbers.inc:4
+#: opac-tmpl/prog/en/includes/page-numbers.inc:3
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:99
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:101
 #, c-format
@@ -3111,10 +3115,10 @@ msgstr "(Uza OPAC envés)"
 msgid "(Use SRU instead)"
 msgstr "(Uza SRU envés)"
 
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:487
+#: opac-tmpl/prog/en/modules/opac-detail.tt:845
 #: opac-tmpl/prog/en/modules/opac-results.tt:479
 #: opac-tmpl/prog/en/modules/opac-results.tt:688
-#: opac-tmpl/prog/en/modules/opac-detail.tt:845
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:487
 #, c-format
 msgid "(done)"
 msgstr "(kompletu)"
@@ -3125,9 +3129,9 @@ msgid "(filtered from _MAX_ total entries)"
 msgstr "(filtered from _MAX_ total entries)"
 
 #. For the first occurrence,
-#. %1$s:  SEARCH_RESULT.timestamp 
-#: opac-tmpl/prog/en/modules/opac-results.tt:551
+#. %1$s:  GROUP_RESULT.timestamp 
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:244
+#: opac-tmpl/prog/en/modules/opac-results.tt:551
 #, c-format
 msgid "(modified on %s)"
 msgstr "(modifika ona iha %s)"
@@ -3148,23 +3152,23 @@ msgstr "(peskiza relevante: %s%s%s)"
 
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:25
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:27
-#: opac-tmpl/prog/en/modules/opac-results.tt:701
-#: opac-tmpl/prog/en/modules/opac-results.tt:703
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:520
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:522
+#: opac-tmpl/prog/en/modules/opac-results.tt:701
+#: opac-tmpl/prog/en/modules/opac-results.tt:703
 #, c-format
 msgid "(remove)"
 msgstr "(hamoos)"
 
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:405
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:558
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:405
 #, c-format
 msgid "(su"
 msgstr "(su"
 
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:266
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:217
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:383
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:266
 #, c-format
 msgid "+and+(bib-level:a+or+bib-level:b)"
 msgstr "+and+(bib-level:a+or+bib-level:b)"
@@ -3214,8 +3218,8 @@ msgstr ""
 ", labele hafoun prazu empresta livru online. Favor selu ona ita nia multa "
 "molok empresta fali."
 
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:21
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:26
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:21
 #, c-format
 msgid ",complete-subfield"
 msgstr ",complete-subfield"
@@ -3266,64 +3270,64 @@ msgstr "...ka..."
 msgid ".png"
 msgstr ".png"
 
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:580
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:1053
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:107
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:128
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:148
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:426
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:580
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:1053
 #, c-format
 msgid "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 msgstr "/cgi-bin/koha/opac-authoritiesdetail.pl?authid="
 
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:257
-#: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:196
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:44
+#: opac-tmpl/prog/en/xslt/MARC21slimUtils.xsl:167
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:753
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:405
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:257
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:44
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:289
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:423
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:753
-#: opac-tmpl/prog/en/xslt/MARC21slimUtils.xsl:167
+#: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:196
 #, c-format
 msgid "/cgi-bin/koha/opac-detail.pl?biblionumber="
 msgstr "/cgi-bin/koha/opac-detail.pl?biblionumber="
 
+#: opac-tmpl/prog/en/xslt/MARC21slimUtils.xsl:179
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:555
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:402
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:536
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:587
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:208
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:555
-#: opac-tmpl/prog/en/xslt/MARC21slimUtils.xsl:179
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q="
 msgstr "/cgi-bin/koha/opac-search.pl?q="
 
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:251
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:417
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:301
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:747
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:844
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:901
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:964
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:251
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:417
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=Control-number:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=Control-number:"
 
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:269
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:220
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:386
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:269
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=Host-item:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=Host-item:"
 
+#: opac-tmpl/prog/en/xslt/MARC21slimUtils.xsl:173
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:552
+#: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:247
+#: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:331
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:98
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:119
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:139
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:202
-#: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:247
-#: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:331
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:552
-#: opac-tmpl/prog/en/xslt/MARC21slimUtils.xsl:173
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=an:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
@@ -3333,10 +3337,10 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
 msgid "/cgi-bin/koha/opac-search.pl?q=an:\""
 msgstr "/cgi-bin/koha/opac-search.pl?q=an:\""
 
+#: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:337
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:101
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:122
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:142
-#: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:337
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=au:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
@@ -3346,10 +3350,10 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
 msgid "/cgi-bin/koha/opac-search.pl?q=au:\""
 msgstr "/cgi-bin/koha/opac-search.pl?q=au:\""
 
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:217
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:383
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:266
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:283
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:217
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:383
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=rcn:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=rcn:"
@@ -3361,8 +3365,8 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=rcn:"
 msgid "/cgi-bin/koha/opac-search.pl?q=se,phr:\""
 msgstr "/cgi-bin/koha/opac-search.pl?q=se,phr:\""
 
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:411
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:564
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:411
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=su"
 msgstr "/cgi-bin/koha/opac-search.pl?q=su"
@@ -3372,24 +3376,24 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=su"
 msgid "/cgi-bin/koha/opac-search.pl?q=su:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=su:"
 
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:262
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:428
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:286
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:304
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:758
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:847
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:906
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:969
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:262
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:428
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=ti,phr:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=ti,phr:"
 
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:601
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:604
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:957
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:960
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:992
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:995
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:601
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:604
 #, c-format
 msgid "/cgi-bin/koha/tracklinks.pl?uri="
 msgstr "/cgi-bin/koha/tracklinks.pl?uri="
@@ -3416,8 +3420,8 @@ msgstr "titulu 10"
 msgid "100 titles"
 msgstr "titulu 100"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:446
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:153
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:446
 #, c-format
 msgid "100,110,111,700,710,711"
 msgstr "100,110,111,700,710,711"
@@ -3560,12 +3564,12 @@ msgstr "; Visual material nia tipu: "
 msgid "; Type periodikum: "
 msgstr "; Tipu periodikum: "
 
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:601
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:604
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:957
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:960
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:992
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:995
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:601
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:604
 #, c-format
 msgid ";biblionumber="
 msgstr ";biblionumber="
@@ -3606,8 +3610,8 @@ msgstr "Rejistu ida ho barcode "
 msgid "A specific item"
 msgstr "Item espesifiku"
 
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:404
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:557
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:404
 #, c-format
 msgid "AND "
 msgstr "NO "
@@ -3642,8 +3646,8 @@ msgstr "Absorve ona iha parte:"
 msgid "Absorbed:"
 msgstr "Absorve ona:"
 
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:290
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:803
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:290
 #, c-format
 msgid "Abstract: "
 msgstr "Rezumu: "
@@ -3681,21 +3685,21 @@ msgstr "Data simu tiona: Foun liu ba tuan liu"
 msgid "Acquisition date: Oldest to newest"
 msgstr "Data simu tiona: Tuan liu ba foun liu"
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:666
-#: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:478
+#: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
+#: opac-tmpl/prog/en/modules/opac-results.tt:666
 #, c-format
 msgid "Actions:"
 msgstr "Asaun:"
 
 #. INPUT type=submit name=tagsel_button
-#: opac-tmpl/prog/en/modules/opac-results.tt:478
-#: opac-tmpl/prog/en/modules/opac-results.tt:687
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:406
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:486
 #: opac-tmpl/prog/en/modules/opac-basket.tt:181
 #: opac-tmpl/prog/en/modules/opac-detail.tt:840
 #: opac-tmpl/prog/en/modules/opac-detail.tt:844
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:406
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:486
+#: opac-tmpl/prog/en/modules/opac-results.tt:478
+#: opac-tmpl/prog/en/modules/opac-results.tt:687
 #, c-format
 msgid "Add"
 msgstr "Aumenta"
@@ -3712,11 +3716,11 @@ msgstr "Aumenta %s item sira ba %s"
 msgid "Add another field"
 msgstr "Aumenta kampu foun"
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:683
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:482
+#: opac-tmpl/prog/en/modules/opac-results.tt:683
 #, c-format
 msgid "Add tag"
-msgstr "Aumenta tag"
+msgstr "Aumenta etiketa"
 
 #. %1$s:  IF ( singleshelf ) 
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:16
@@ -3734,11 +3738,9 @@ msgstr "Aumenta ba lista ida"
 msgid "Add to a new list:"
 msgstr "Aumenta ba lista foun:"
 
-#. For the first occurrence,
-#. SCRIPT
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:522
 #: opac-tmpl/prog/en/modules/opac-results.tt:22
 #: opac-tmpl/prog/en/modules/opac-results.tt:703
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:522
 #, c-format
 msgid "Add to cart"
 msgstr "Aumenta ba karriñu"
@@ -3814,7 +3816,7 @@ msgstr "Peskiza avansada"
 #: opac-tmpl/prog/en/modules/opac-tags.tt:66
 #, c-format
 msgid "All Tags"
-msgstr "Tags Hotu"
+msgstr "Etiketa Hotu"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:28
 #: opac-tmpl/prog/en/modules/opac-topissues.tt:120
@@ -3828,10 +3830,10 @@ msgstr "Kolesaun sira hotu"
 msgid "All item types"
 msgstr "Tipu item hotu"
 
-#: opac-tmpl/prog/en/includes/masthead.inc:89
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:18
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:108
+#: opac-tmpl/prog/en/includes/masthead.inc:89
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:300
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:108
 #, c-format
 msgid "All libraries"
 msgstr "Biblioteka hotu"
@@ -3873,12 +3875,12 @@ msgstr "Hira"
 msgid "Amount outstanding"
 msgstr "Folin hira tenke selu"
 
-#: opac-tmpl/prog/en/modules/errors/403.tt:12
-#: opac-tmpl/prog/en/modules/errors/404.tt:12
-#: opac-tmpl/prog/en/modules/errors/401.tt:12
-#: opac-tmpl/prog/en/modules/errors/402.tt:12
-#: opac-tmpl/prog/en/modules/errors/500.tt:12
 #: opac-tmpl/prog/en/modules/errors/400.tt:12
+#: opac-tmpl/prog/en/modules/errors/402.tt:12
+#: opac-tmpl/prog/en/modules/errors/401.tt:12
+#: opac-tmpl/prog/en/modules/errors/404.tt:12
+#: opac-tmpl/prog/en/modules/errors/500.tt:12
+#: opac-tmpl/prog/en/modules/errors/403.tt:12
 #, c-format
 msgid "An error has occurred"
 msgstr "Sala akontese"
@@ -3893,9 +3895,9 @@ msgstr "Sala akontese durante prosesu nia laran."
 msgid "An invitation to share list "
 msgstr "Konvite ida atu fahe lista "
 
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:262
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:213
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:379
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:262
 #, c-format
 msgid "Analytics: "
 msgstr "Analytics: "
@@ -4010,8 +4012,8 @@ msgstr "Kualkér konteúdu"
 msgid "Any format"
 msgstr "Kualkér formatu"
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:399
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:137
+#: opac-tmpl/prog/en/modules/opac-results.tt:399
 #, c-format
 msgid "Any phrase"
 msgstr "Kualkér fraze"
@@ -4026,8 +4028,8 @@ msgstr "Kualkér regularidade"
 msgid "Any type"
 msgstr "Kualkér tipu"
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:398
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:136
+#: opac-tmpl/prog/en/modules/opac-results.tt:398
 #, c-format
 msgid "Any word"
 msgstr "Kualkér liafuan"
@@ -4099,8 +4101,8 @@ msgstr "Ita hakarak husik rezervasaun ne'ebe para lai ka lae?"
 msgid "Are you sure you want to suspend all holds?"
 msgstr "Ita hakarak para lai ita nia rezerva ne'e ka lae?"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:543
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:80
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:543
 #, c-format
 msgid "Article"
 msgstr "Artigu"
@@ -4175,17 +4177,18 @@ msgstr ""
 "Autentika uzador nia login kredensiais no hatudu identifikador ba kliente "
 "ne'e."
 
+#. OPTGROUP
+#: opac-tmpl/prog/en/includes/resort_form.inc:12
 #: opac-tmpl/prog/en/includes/masthead.inc:50
 #: opac-tmpl/prog/en/includes/masthead.inc:52
-#: opac-tmpl/prog/en/includes/resort_form.inc:12
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:96
-#: opac-tmpl/prog/en/modules/opac-results.tt:402
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:140
-#: opac-tmpl/prog/en/modules/opac-basket.tt:351
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:328
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:330
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:585
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:793
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:96
+#: opac-tmpl/prog/en/modules/opac-basket.tt:351
+#: opac-tmpl/prog/en/modules/opac-results.tt:402
 #, c-format
 msgid "Author"
 msgstr "Autor"
@@ -4228,8 +4231,8 @@ msgstr "Autor(s)"
 #. %13$s:  END 
 #. %14$s:  END 
 #. %15$s:  END 
-#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:40
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:45
+#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:40
 #, c-format
 msgid "Author(s): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 msgstr "Autor(s): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
@@ -4270,14 +4273,16 @@ msgstr "Autor sira"
 msgid "Availability"
 msgstr "Disponiblidade"
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:561
+#. For the first occurrence,
+#. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
+#: opac-tmpl/prog/en/modules/opac-results.tt:561
 #, c-format
 msgid "Availability:"
 msgstr "Disponiblidade:"
 
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:103
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1031
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:103
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:774
 #, c-format
 msgid "Availability: "
@@ -4333,10 +4338,10 @@ msgstr "KUIDADU"
 msgid "BIBTEX"
 msgstr "BIBTEX"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:45
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:49
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:54
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:59
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:45
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:49
 #, c-format
 msgid "BK"
 msgstr "BK"
@@ -4347,10 +4352,10 @@ msgstr "BK"
 msgid "BT: %s"
 msgstr "BT: %s"
 
-#: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:16
-#: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:27
 #: opac-tmpl/prog/en/modules/opac-downloadshelf.tt:34
 #: opac-tmpl/prog/en/modules/opac-downloadshelf.tt:41
+#: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:16
+#: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:27
 #, c-format
 msgid "Back to lists"
 msgstr "Fila ba lista sira"
@@ -4365,8 +4370,8 @@ msgstr "Fila ba rezultadu"
 msgid "Back to the results search list"
 msgstr "Fila ba lista rezultadu peskiza"
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:130
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:480
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:130
 #: opac-tmpl/prog/en/modules/opac-user.tt:170
 #: opac-tmpl/prog/en/modules/opac-user.tt:336
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1516
@@ -4533,11 +4538,11 @@ msgstr "Blu-ray-plate"
 msgid "Bok"
 msgstr "Livru"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:541
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:546
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:73
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:83
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:98
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:541
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:546
 #, c-format
 msgid "Book"
 msgstr "Livru ida"
@@ -4562,8 +4567,8 @@ msgstr "Braile ka Moon Script"
 msgid "Brief display"
 msgstr "Hatudu badak"
 
-#: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:168
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:17
+#: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:168
 #, c-format
 msgid "Brief history"
 msgstr "Istoria badak"
@@ -4604,8 +4609,8 @@ msgstr "CD audio"
 msgid "CD software"
 msgstr "CD software"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:51
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:61
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:51
 #, c-format
 msgid "CF"
 msgstr "CF"
@@ -4638,9 +4643,9 @@ msgstr "Kota."
 msgid "Call Number"
 msgstr "Kota"
 
+#: opac-tmpl/prog/en/modules/opac-readingrecord.tt:61
 #: opac-tmpl/prog/en/modules/opac-user.tt:337
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:269
-#: opac-tmpl/prog/en/modules/opac-readingrecord.tt:61
 #, c-format
 msgid "Call no."
 msgstr "Kota."
@@ -4649,15 +4654,15 @@ msgstr "Kota."
 #: opac-tmpl/prog/en/includes/masthead.inc:73
 #: opac-tmpl/prog/en/includes/masthead.inc:77
 #: opac-tmpl/prog/en/includes/masthead.inc:79
-#: opac-tmpl/prog/en/modules/opac-course-details.tt:45
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:90
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:92
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:485
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1509
+#: opac-tmpl/prog/en/modules/opac-course-details.tt:45
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:340
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:342
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:587
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:795
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:90
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:92
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1509
 #, c-format
 msgid "Call number"
 msgstr "Kota"
@@ -4682,24 +4687,24 @@ msgstr "Kota (Z-A ba 9-0)"
 msgid "Callnumber: %s"
 msgstr "Kota: %s"
 
-#: opac-tmpl/prog/en/modules/opac-review.tt:76
-#: opac-tmpl/prog/en/modules/opac-passwd.tt:37
 #: opac-tmpl/prog/en/modules/opac-messaging.tt:150
-#: opac-tmpl/prog/en/modules/opac-user.tt:474
-#: opac-tmpl/prog/en/modules/opac-shareshelf.tt:39
-#: opac-tmpl/prog/en/modules/opac-basket.tt:182
-#: opac-tmpl/prog/en/modules/opac-detail.tt:626
-#: opac-tmpl/prog/en/modules/opac-detail.tt:733
-#: opac-tmpl/prog/en/modules/sco/sco-main.tt:209
-#: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:44
 #: opac-tmpl/prog/en/modules/opac-sendbasketform.tt:33
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:407
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:608
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:815
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:128
+#: opac-tmpl/prog/en/modules/opac-basket.tt:182
+#: opac-tmpl/prog/en/modules/opac-passwd.tt:37
+#: opac-tmpl/prog/en/modules/opac-user.tt:474
+#: opac-tmpl/prog/en/modules/opac-shareshelf.tt:39
+#: opac-tmpl/prog/en/modules/opac-detail.tt:626
+#: opac-tmpl/prog/en/modules/opac-detail.tt:733
+#: opac-tmpl/prog/en/modules/opac-review.tt:76
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:42
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:51
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:72
+#: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:44
+#: opac-tmpl/prog/en/modules/sco/sco-main.tt:209
 #, c-format
 msgid "Cancel"
 msgstr "Kansela"
@@ -4811,8 +4816,8 @@ msgstr "Empresta%s, devolve%s ka hafoun item ida: "
 msgid "Checked out"
 msgstr "Fo empresta ona"
 
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:202
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1106
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:202
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:833
 #, c-format
 msgid "Checked out ("
@@ -4841,8 +4846,8 @@ msgstr "Klasifikasaun: "
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.classification 
-#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:118
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:126
+#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:118
 #, c-format
 msgid "Classification: %s "
 msgstr "Klasifikasaun: %s "
@@ -4854,10 +4859,10 @@ msgstr "Hamoos"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/prog/en/modules/opac-results.tt:22
-#: opac-tmpl/prog/en/modules/opac-basket.tt:162
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:6
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:9
+#: opac-tmpl/prog/en/modules/opac-basket.tt:162
+#: opac-tmpl/prog/en/modules/opac-results.tt:22
 #, c-format
 msgid "Clear all"
 msgstr "Hamoos hotu"
@@ -4877,10 +4882,10 @@ msgstr "Hamoos data"
 msgid "Click here"
 msgstr "Klik iha-ne'e"
 
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:428
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:626
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:981
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1016
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:626
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:428
 #, c-format
 msgid "Click here to access online"
 msgstr "Klik iha-ne'e atu asesu online"
@@ -4939,11 +4944,9 @@ msgstr "Taka"
 msgid "Close shelf browser"
 msgstr "Taka haree estante"
 
-#. For the first occurrence,
-#. SCRIPT
-#: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:3
 #: opac-tmpl/prog/en/modules/opac-downloadcart.tt:28
 #: opac-tmpl/prog/en/modules/opac-downloadshelf.tt:3
+#: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:3
 #, c-format
 msgid "Close this window"
 msgstr "Taka janela ne'e"
@@ -4992,8 +4995,8 @@ msgstr "Kolesaun: "
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.seriestitle 
-#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:76
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:84
+#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:76
 #, c-format
 msgid "Collection: %s "
 msgstr "Kolesaun: %s "
@@ -5022,8 +5025,8 @@ msgstr "Komentariu husi %s %s"
 msgid "Comment by %s %s %s"
 msgstr "Komentariu husi %s %s %s"
 
-#: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:38
 #: opac-tmpl/prog/en/modules/opac-sendbasketform.tt:27
+#: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:38
 #, c-format
 msgid "Comment:"
 msgstr "Komentariu:"
@@ -5121,14 +5124,14 @@ msgstr "Kontinua iha parte:"
 msgid "Continues:"
 msgstr "Kontinua:"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:542
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:76
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:542
 #, c-format
 msgid "Continuing Resource"
 msgstr "Rekursu Kontinua hela"
 
-#: opac-tmpl/prog/en/modules/opac-course-details.tt:46
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:476
+#: opac-tmpl/prog/en/modules/opac-course-details.tt:46
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1512
 #, c-format
 msgid "Copy number"
@@ -5152,8 +5155,8 @@ msgstr "Data kopirraite:"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.copyrightdate 
-#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:88
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:96
+#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:88
 #, c-format
 msgid "Copyright year: %s "
 msgstr "Tinan kopiraite: %s "
@@ -5179,8 +5182,8 @@ msgid ""
 "Could not login, perhaps your Persona email does not match your Koha one"
 msgstr "Labele login, karik ita nia email la hanesan Koha nian"
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:422
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:160
+#: opac-tmpl/prog/en/modules/opac-results.tt:422
 #, c-format
 msgid "Count"
 msgstr "Konta"
@@ -5283,8 +5286,8 @@ msgstr "DVD vídeo / Videodisc"
 msgid "Daily"
 msgstr "Loroloron"
 
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:223
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1125
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:223
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:855
 #, c-format
 msgid "Damaged ("
@@ -5295,6 +5298,7 @@ msgstr "Estraga ona ("
 msgid "Database"
 msgstr "Baze de dadus"
 
+#: opac-tmpl/prog/en/modules/opac-readingrecord.tt:62
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:190
 #: opac-tmpl/prog/en/modules/opac-account.tt:24
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1204
@@ -5302,7 +5306,6 @@ msgstr "Baze de dadus"
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:90
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:126
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:154
-#: opac-tmpl/prog/en/modules/opac-readingrecord.tt:62
 #, c-format
 msgid "Date"
 msgstr "Data"
@@ -5323,8 +5326,8 @@ msgstr "Data atu fo fali"
 msgid "Date received"
 msgstr "Data simu ona"
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:558
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:49
+#: opac-tmpl/prog/en/modules/opac-results.tt:558
 #, c-format
 msgid "Date:"
 msgstr "Data:"
@@ -5379,11 +5382,12 @@ msgid ""
 "values: "
 msgstr "Define esquema metadata ne'ebe rejistu ne'e hatudu, valor posivel: "
 
-#: opac-tmpl/prog/en/modules/opac-tags.tt:101
-#: opac-tmpl/prog/en/modules/opac-tags.tt:110
+#. INPUT type=submit
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:678
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:754
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:9
+#: opac-tmpl/prog/en/modules/opac-tags.tt:101
+#: opac-tmpl/prog/en/modules/opac-tags.tt:110
 #, c-format
 msgid "Delete"
 msgstr "Hamoos"
@@ -5469,9 +5473,9 @@ msgstr "Descendente"
 msgid "Description"
 msgstr "Deskrisaun"
 
-#: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:195
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:397
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:402
+#: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:195
 #, c-format
 msgid "Description: "
 msgstr "Deskrisaun: "
@@ -5493,8 +5497,8 @@ msgstr "Dewey: "
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.dewey 
-#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:112
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:120
+#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:112
 #, c-format
 msgid "Dewey: %s "
 msgstr "Dewey: %s "
@@ -5713,12 +5717,11 @@ msgstr ""
 msgid "ERROR: You do not have adequate permission for that action on list %s."
 msgstr "ERROR: Ita la iha permisaun ba asaun ne'e iha lista %s."
 
-#. For the first occurrence,
-#. SCRIPT
-#: opac-tmpl/prog/en/modules/opac-review.tt:7
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1282
+#. INPUT type=submit
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:667
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:745
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1282
+#: opac-tmpl/prog/en/modules/opac-review.tt:7
 #, c-format
 msgid "Edit"
 msgstr "Edita"
@@ -5738,9 +5741,9 @@ msgstr "Deklarasaun Edisaun"
 msgid "Edition statement:"
 msgstr "Deklarasaun edisaun:"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:513
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:370
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:375
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:513
 #, c-format
 msgid "Edition: "
 msgstr "Edisaun: "
@@ -5789,9 +5792,9 @@ msgstr "Elever pa ungdomstrinnet;"
 msgid "Email"
 msgstr "Email"
 
+#: opac-tmpl/prog/en/modules/opac-sendbasketform.tt:23
 #: opac-tmpl/prog/en/modules/opac-shareshelf.tt:33
 #: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:34
-#: opac-tmpl/prog/en/modules/opac-sendbasketform.tt:23
 #, c-format
 msgid "Email address:"
 msgstr "Email:"
@@ -5902,7 +5905,7 @@ msgstr "Sala! Operasaun add_tag la konsege"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid "Error! You cannot delete the tag"
-msgstr "Sala! Labele hamoos tag ne'e"
+msgstr "Sala! Labele hamoos etiketa ne'e"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -5910,12 +5913,12 @@ msgid ""
 "Error! Your tag was entirely markup code. It was NOT added. Please try again "
 "with plain text."
 msgstr ""
-"Sala! Ita nia tag mak kodigu markup deit. Ida ne'e LABELE aumenta. Favor "
+"Sala! Ita nia etiketa mak kodigu markup deit. Ida ne'e LABELE aumenta. Favor "
 "koko fali ho testu simples deit."
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:378
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:116
 #: opac-tmpl/prog/en/modules/search/results.tt:38
+#: opac-tmpl/prog/en/modules/opac-results.tt:378
 #, c-format
 msgid "Error:"
 msgstr "Sala:"
@@ -6261,8 +6264,8 @@ msgstr "Fotomosaikk"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/prog/en/modules/opac-results.tt:22
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
+#: opac-tmpl/prog/en/modules/opac-results.tt:22
 msgid "Found"
 msgstr "Hetan tiona"
 
@@ -6297,8 +6300,8 @@ msgstr "Husi: "
 msgid "Full heading"
 msgstr "Kapsaun kompletu"
 
-#: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:169
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:18
+#: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:169
 #, c-format
 msgid "Full history"
 msgstr "Istoria kompletu"
@@ -6399,14 +6402,14 @@ msgstr ""
 "Given a set of bibliographic or item identifiers, returns a list with "
 "availability of the items associated with the identifiers."
 
-#. INPUT type=submit
-#: opac-tmpl/prog/en/includes/masthead.inc:121
+#. INPUT type=submit name=save
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:70
-#: opac-tmpl/prog/en/modules/opac-results.tt:456
-#: opac-tmpl/prog/en/modules/opac-results-grouped.tt:196
-#: opac-tmpl/prog/en/modules/search/results.tt:66
+#: opac-tmpl/prog/en/includes/masthead.inc:121
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:43
 #: opac-tmpl/prog/en/modules/opac-downloadcart.tt:24
+#: opac-tmpl/prog/en/modules/opac-results-grouped.tt:196
+#: opac-tmpl/prog/en/modules/search/results.tt:66
+#: opac-tmpl/prog/en/modules/opac-results.tt:456
 #: opac-tmpl/prog/en/modules/opac-downloadshelf.tt:31
 msgid "Go"
 msgstr "Ba"
@@ -6517,8 +6520,8 @@ msgstr "Kapsaun hatuun"
 msgid "Hello, %s "
 msgstr "Bondia, %s "
 
-#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:12
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:11
+#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:12
 #, c-format
 msgid "Hi,"
 msgstr "Hi,"
@@ -6534,8 +6537,8 @@ msgid "Hide window"
 msgstr "Suba janela"
 
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:33
-#: opac-tmpl/prog/en/modules/opac-results.tt:463
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:200
+#: opac-tmpl/prog/en/modules/opac-results.tt:463
 #, c-format
 msgid "Highlight"
 msgstr "Highlight"
@@ -6587,8 +6590,8 @@ msgstr "Kopia sira"
 msgid "Holdings note: "
 msgstr "Nota kona ba kopia sira: "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1065
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:459
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1065
 #, c-format
 msgid "Holdings:"
 msgstr "Kopia sira:"
@@ -6649,18 +6652,18 @@ msgid "IP address where the end user request is being placed"
 msgstr "IP nia numeru ne'ebe pedidu uzador mak ba"
 
 #: opac-tmpl/prog/en/modules/opac-ISBDdetail.tt:38
-#: opac-tmpl/prog/en/modules/opac-detail.tt:576
 #: opac-tmpl/prog/en/modules/opac-MARCdetail.tt:77
+#: opac-tmpl/prog/en/modules/opac-detail.tt:576
 #, c-format
 msgid "ISBD view"
 msgstr "Vista ISBD"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:60
 #: opac-tmpl/prog/en/includes/masthead.inc:62
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:128
-#: opac-tmpl/prog/en/modules/opac-results.tt:409
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:147
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:128
 #: opac-tmpl/prog/en/modules/opac-basket.tt:208
+#: opac-tmpl/prog/en/modules/opac-results.tt:409
 #, c-format
 msgid "ISBN"
 msgstr "ISBN"
@@ -6676,9 +6679,9 @@ msgstr "ISBN %s"
 msgid "ISBN:"
 msgstr "ISBN:"
 
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:419
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:330
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:194
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:419
 #: opac-tmpl/prog/en/modules/opac-detail.tt:673
 #, c-format
 msgid "ISBN: "
@@ -6700,8 +6703,8 @@ msgstr "ISBN %s "
 msgid "ISBN: %s %s %s; %s %s "
 msgstr "ISBN: %s %s %s; %s %s "
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:410
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:148
+#: opac-tmpl/prog/en/modules/opac-results.tt:410
 #, c-format
 msgid "ISSN"
 msgstr "ISSN"
@@ -6711,9 +6714,9 @@ msgstr "ISSN"
 msgid "ISSN:"
 msgstr "ISSN:"
 
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:431
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:340
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:212
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:431
 #, c-format
 msgid "ISSN: "
 msgstr "ISSN: "
@@ -6809,14 +6812,14 @@ msgstr "Hamoos kedas"
 #. For the first occurrence,
 #. %1$s:  OPACBaseURL 
 #. %2$s:  BIBLIO_RESULT.biblionumber 
-#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:136
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:144
+#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:136
 #, c-format
 msgid "In online catalog: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 msgstr "Iha katalogu online: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:237
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1137
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:237
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:869
 #, c-format
 msgid "In transit ("
@@ -6832,15 +6835,15 @@ msgstr "Iha tránzitu husi %s, ba %s, dezde %s"
 
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:25
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
-#: opac-tmpl/prog/en/modules/opac-results.tt:701
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:520
+#: opac-tmpl/prog/en/modules/opac-results.tt:701
 #, c-format
 msgid "In your cart"
 msgstr "Iha ita nia karriñu"
 
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:730
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:234
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:400
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:730
 #, c-format
 msgid "In: "
 msgstr "Iha: "
@@ -6850,8 +6853,8 @@ msgstr "Iha: "
 msgid "Incomplete contents:"
 msgstr "Kontuedu la kompletu:"
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:396
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:134
+#: opac-tmpl/prog/en/modules/opac-results.tt:396
 #, c-format
 msgid "Indexed in:"
 msgstr "Indise ona iha:"
@@ -6931,12 +6934,12 @@ msgstr "Prioridade ba rezervasaun iha forma"
 msgid "Item holds"
 msgstr "Item nia rezerva"
 
-#: opac-tmpl/prog/en/modules/opac-course-details.tt:42
+#: opac-tmpl/prog/en/modules/opac-readingrecord.tt:60
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:478
+#: opac-tmpl/prog/en/modules/opac-course-details.tt:42
 #: opac-tmpl/prog/en/modules/opac-user.tt:169
 #: opac-tmpl/prog/en/modules/opac-user.tt:335
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1506
-#: opac-tmpl/prog/en/modules/opac-readingrecord.tt:60
 #, c-format
 msgid "Item type"
 msgstr "Tipu item"
@@ -6962,22 +6965,24 @@ msgstr "Tipu item"
 msgid "Items available at:"
 msgstr "Kopia sira disponivel iha:"
 
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:140
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1050
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:140
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:781
 #, c-format
 msgid "Items available for loan: "
 msgstr "Kopia sira ne'ebe disponivel atu empresta: "
 
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:177
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1082
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:177
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:813
 #, c-format
 msgid "Items available for reference: "
 msgstr "Kopia sira ne'ebe disponivel ba referensia: "
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:563
+#. For the first occurrence,
+#. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
+#: opac-tmpl/prog/en/modules/opac-results.tt:563
 #, c-format
 msgid "Items available:"
 msgstr "Item sira disponivel:"
@@ -6987,8 +6992,8 @@ msgstr "Item sira disponivel:"
 msgid "Items in your cart: "
 msgstr "Items iha ona ita nia karriñu: "
 
-#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:141
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:149
+#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:141
 #, c-format
 msgid "Items: "
 msgstr "Items: "
@@ -7083,8 +7088,8 @@ msgstr "Kataloguer"
 msgid "Keyword"
 msgstr "Liafuan xave"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:547
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:84
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:547
 #, c-format
 msgid "Kit"
 msgstr "Kít"
@@ -7111,8 +7116,8 @@ msgid "Koha Wiki"
 msgstr "Koha Wiki"
 
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:3
-#: opac-tmpl/prog/en/modules/sco/sco-main.tt:5
 #: opac-tmpl/prog/en/modules/sco/help.tt:3
+#: opac-tmpl/prog/en/modules/sco/sco-main.tt:5
 msgid "Koha [% Version %]"
 msgstr "Koha [% Versaun %]"
 
@@ -7168,8 +7173,8 @@ msgstr "LCCN:"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.lccn 
-#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:124
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:132
+#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:124
 #, c-format
 msgid "LCCN: %s "
 msgstr "LCCN: %s "
@@ -7307,8 +7312,8 @@ msgstr "Ligasaun ba rekursu "
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: opac-tmpl/prog/en/modules/opac-user.tt:179
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tt:64
+#: opac-tmpl/prog/en/modules/opac-user.tt:179
 #, c-format
 msgid "Links"
 msgstr "Ligasaun"
@@ -7334,8 +7339,8 @@ msgstr "Labele kria lista. %s(Labele uza konta administrador database nian.)%s"
 msgid "List name"
 msgstr "Lista nia naran"
 
-#: opac-tmpl/prog/en/modules/opac-shareshelf.tt:32
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:781
+#: opac-tmpl/prog/en/modules/opac-shareshelf.tt:32
 #, c-format
 msgid "List name:"
 msgstr "Lista nia naran:"
@@ -7414,9 +7419,9 @@ msgid "Locations"
 msgstr "Fatin"
 
 #. INPUT type=submit
-#: opac-tmpl/prog/en/modules/opac-registration-confirmation.tt:48
 #: opac-tmpl/prog/en/modules/opac-auth.tt:87
 #: opac-tmpl/prog/en/modules/opac-main.tt:59
+#: opac-tmpl/prog/en/modules/opac-registration-confirmation.tt:48
 msgid "Log In"
 msgstr "Log In"
 
@@ -7425,19 +7430,19 @@ msgstr "Log In"
 msgid "Log In to Your Account"
 msgstr "Log In ba Ita-nia Konta"
 
-#: opac-tmpl/prog/en/modules/opac-tags.tt:73
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:703
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:717
+#: opac-tmpl/prog/en/modules/opac-tags.tt:73
 #, c-format
 msgid "Log in"
 msgstr "Log in"
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:693
-#: opac-tmpl/prog/en/modules/opac-detail.tt:851
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:493
+#: opac-tmpl/prog/en/modules/opac-detail.tt:851
+#: opac-tmpl/prog/en/modules/opac-results.tt:693
 #, c-format
 msgid "Log in to add tags."
-msgstr "Log in atu aumenta tags."
+msgstr "Log in atu aumenta etiketa."
 
 #: opac-tmpl/prog/en/includes/masthead.inc:184
 #, c-format
@@ -7450,8 +7455,8 @@ msgstr "Log in hodi kria ita-nia lista"
 msgid "Log in to your account"
 msgstr "Log in ba ita-nia konta"
 
-#: opac-tmpl/prog/en/modules/opac-registration-confirmation.tt:40
 #: opac-tmpl/prog/en/modules/opac-main.tt:54
+#: opac-tmpl/prog/en/modules/opac-registration-confirmation.tt:40
 #, c-format
 msgid "Log in to your account:"
 msgstr "Log in ba ita-nia konta:"
@@ -7466,8 +7471,8 @@ msgstr "Logging in ba katalogu la lao."
 msgid "Login"
 msgstr "Login"
 
-#: opac-tmpl/prog/en/modules/opac-registration-confirmation.tt:43
 #: opac-tmpl/prog/en/modules/opac-main.tt:56
+#: opac-tmpl/prog/en/modules/opac-registration-confirmation.tt:43
 #, c-format
 msgid "Login:"
 msgstr "Login:"
@@ -7487,8 +7492,8 @@ msgstr ""
 msgid "LookupPatron"
 msgstr "LookupPatron"
 
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:216
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1119
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:216
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:848
 #, c-format
 msgid "Lost ("
@@ -7566,10 +7571,10 @@ msgid "MARC View"
 msgstr "Vista MARC"
 
 #: opac-tmpl/prog/en/modules/opac-ISBDdetail.tt:38
-#: opac-tmpl/prog/en/modules/opac-detail.tt:576
 #: opac-tmpl/prog/en/modules/opac-MARCdetail.tt:76
-#: opac-tmpl/prog/en/modules/opac-auth-MARCdetail.tt:34
+#: opac-tmpl/prog/en/modules/opac-detail.tt:576
 #: opac-tmpl/prog/en/modules/opac-auth-detail.tt:36
+#: opac-tmpl/prog/en/modules/opac-auth-MARCdetail.tt:34
 #, c-format
 msgid "MARC view"
 msgstr "Vista MARC"
@@ -7661,20 +7666,20 @@ msgstr "MENSAJEN 9:"
 msgid "MODS (XML)"
 msgstr "MODS (XML)"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:52
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:62
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:52
 #, c-format
 msgid "MP"
 msgstr "MP"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:54
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:64
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:54
 #, c-format
 msgid "MU"
 msgstr "MU"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:50
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:60
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:50
 #, c-format
 msgid "MX"
 msgstr "MX"
@@ -7704,8 +7709,8 @@ msgstr "Autor Prinsipal"
 msgid "Main address"
 msgstr "Enderesu prinsipál"
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:755
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:306
+#: opac-tmpl/prog/en/modules/opac-results.tt:755
 #, c-format
 msgid "Make a "
 msgstr "Halo "
@@ -7730,9 +7735,9 @@ msgstr "Jerir husi"
 msgid "Manuskripter"
 msgstr "Manuskripter"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:550
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:87
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:99
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:550
 #, c-format
 msgid "Map"
 msgstr "Mapa"
@@ -7752,8 +7757,8 @@ msgstr "Marsu"
 msgid "Match:"
 msgstr "Han-malu:"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:536
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:174
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:536
 #, c-format
 msgid "Material type: "
 msgstr "Tipu material: "
@@ -7785,8 +7790,8 @@ msgstr "Memoarer"
 msgid "Merged with ... to form ..."
 msgstr "Tau hamutuk ho ... atu forma ..."
 
-#: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:14
 #: opac-tmpl/prog/en/modules/opac-sendbasketform.tt:8
+#: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:14
 #, c-format
 msgid "Message sent"
 msgstr "Mensagen haruka tiona"
@@ -7859,13 +7864,11 @@ msgstr "Modell"
 msgid "Modify"
 msgstr "Modifika"
 
-#. For the first occurrence,
-#. SCRIPT
-#: opac-tmpl/prog/en/includes/calendar.inc:1
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:45
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:55
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:39
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:49
+#: opac-tmpl/prog/en/includes/calendar.inc:1
 #, c-format
 msgid "Mon"
 msgstr "Mon"
@@ -7922,8 +7925,8 @@ msgstr "Popular liu"
 msgid "Mus"
 msgstr "Muz"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:554
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:89
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:554
 #, c-format
 msgid "Music"
 msgstr "Muzika"
@@ -7964,7 +7967,7 @@ msgstr "Musikktrykk og lydopptak"
 #: opac-tmpl/prog/en/modules/opac-tags.tt:99
 #, c-format
 msgid "My Tags"
-msgstr "Hau nia Tags"
+msgstr "Hau nia Etiketa"
 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:229
 #, c-format
@@ -8021,11 +8024,9 @@ msgstr ""
 msgid "New comment on %s %s, %s%s"
 msgstr "Komentariu foun kona-ba %s %s, %s%s"
 
-#. For the first occurrence,
-#. SCRIPT
-#: opac-tmpl/prog/en/modules/opac-results.tt:22
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:639
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:715
+#: opac-tmpl/prog/en/modules/opac-results.tt:22
 #, c-format
 msgid "New list"
 msgstr "Lista foun"
@@ -8041,42 +8042,40 @@ msgstr "Password foun:"
 msgid "New purchase suggestion"
 msgstr "Sujestaun ida atu sosa material foun"
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:685
 #: opac-tmpl/prog/en/modules/opac-detail.tt:842
+#: opac-tmpl/prog/en/modules/opac-results.tt:685
 #, c-format
 msgid "New tag(s), separated by a comma:"
-msgstr "Tag(s), foun ketak husi vírgula:"
+msgstr "Etiketa(s), foun ketak husi vírgula:"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:484
 #, c-format
 msgid "New tag(s):"
-msgstr "Tag foun(s):"
+msgstr "Etiketa foun(s):"
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:476
-#: opac-tmpl/prog/en/modules/opac-basket.tt:179
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:404
+#: opac-tmpl/prog/en/modules/opac-basket.tt:179
+#: opac-tmpl/prog/en/modules/opac-results.tt:476
 #, c-format
 msgid "New tag:"
-msgstr "Tag foun:"
+msgstr "Etiketa foun:"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:131
 #, c-format
 msgid "Newspaper"
 msgstr "Jornal"
 
-#. For the first occurrence,
-#. SCRIPT
-#: opac-tmpl/prog/en/includes/calendar.inc:1
 #: opac-tmpl/prog/en/includes/shelfbrowser.inc:70
 #: opac-tmpl/prog/en/includes/datatables.inc:2
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1433
+#: opac-tmpl/prog/en/includes/calendar.inc:1
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1433
 #, c-format
 msgid "Next"
 msgstr "Tuirmai"
 
-#: opac-tmpl/prog/en/includes/page-numbers.inc:6
 #: opac-tmpl/prog/en/includes/search/page-numbers.inc:14
+#: opac-tmpl/prog/en/includes/page-numbers.inc:6
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:105
 #, c-format
 msgid "Next &gt;&gt;"
@@ -8103,41 +8102,39 @@ msgstr "Lae"
 msgid "No available items."
 msgstr "La iha item disponivel."
 
-#. For the first occurrence,
-#. SCRIPT
+#: opac-tmpl/prog/en/includes/shelfbrowser.inc:31
+#: opac-tmpl/prog/en/includes/shelfbrowser.inc:44
+#: opac-tmpl/prog/en/includes/shelfbrowser.inc:53
+#: opac-tmpl/prog/en/includes/shelfbrowser.inc:60
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:40
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:47
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:109
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:117
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:126
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:134
-#: opac-tmpl/prog/en/includes/shelfbrowser.inc:31
-#: opac-tmpl/prog/en/includes/shelfbrowser.inc:44
-#: opac-tmpl/prog/en/includes/shelfbrowser.inc:53
-#: opac-tmpl/prog/en/includes/shelfbrowser.inc:60
-#: opac-tmpl/prog/en/modules/opac-results.tt:710
-#: opac-tmpl/prog/en/modules/opac-results.tt:721
-#: opac-tmpl/prog/en/modules/opac-results.tt:726
-#: opac-tmpl/prog/en/modules/opac-results.tt:727
-#: opac-tmpl/prog/en/modules/opac-results.tt:729
+#: opac-tmpl/prog/en/modules/opac-readingrecord.tt:76
+#: opac-tmpl/prog/en/modules/opac-readingrecord.tt:84
+#: opac-tmpl/prog/en/modules/opac-readingrecord.tt:92
+#: opac-tmpl/prog/en/modules/opac-showreviews.tt:83
+#: opac-tmpl/prog/en/modules/opac-showreviews.tt:90
+#: opac-tmpl/prog/en/modules/opac-showreviews.tt:92
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:532
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:539
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:540
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:542
 #: opac-tmpl/prog/en/modules/opac-user.tt:196
 #: opac-tmpl/prog/en/modules/opac-user.tt:198
 #: opac-tmpl/prog/en/modules/opac-user.tt:200
 #: opac-tmpl/prog/en/modules/opac-user.tt:351
 #: opac-tmpl/prog/en/modules/opac-user.tt:353
 #: opac-tmpl/prog/en/modules/opac-user.tt:355
-#: opac-tmpl/prog/en/modules/opac-showreviews.tt:83
-#: opac-tmpl/prog/en/modules/opac-showreviews.tt:90
-#: opac-tmpl/prog/en/modules/opac-showreviews.tt:92
 #: opac-tmpl/prog/en/modules/opac-detail.tt:563
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1340
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:532
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:539
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:540
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:542
-#: opac-tmpl/prog/en/modules/opac-readingrecord.tt:76
-#: opac-tmpl/prog/en/modules/opac-readingrecord.tt:84
-#: opac-tmpl/prog/en/modules/opac-readingrecord.tt:92
+#: opac-tmpl/prog/en/modules/opac-results.tt:710
+#: opac-tmpl/prog/en/modules/opac-results.tt:721
+#: opac-tmpl/prog/en/modules/opac-results.tt:726
+#: opac-tmpl/prog/en/modules/opac-results.tt:727
+#: opac-tmpl/prog/en/modules/opac-results.tt:729
 #, c-format
 msgid "No cover image available"
 msgstr "Livru oan nia imajen la disponivel"
@@ -8163,8 +8160,8 @@ msgstr "La aumenta item ida ba ita nia karriñu"
 msgid "No item was selected"
 msgstr "La hili item ida"
 
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:135
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1045
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:135
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:776
 #, c-format
 msgid "No items available "
@@ -8175,15 +8172,15 @@ msgstr "Item la disponivel "
 msgid "No items available."
 msgstr "Item la disponivel."
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:586
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:260
+#: opac-tmpl/prog/en/modules/opac-results.tt:586
 #, c-format
 msgid "No items available:"
 msgstr "Item la disponivel:"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:40
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:132
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:204
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:132
 #, c-format
 msgid "No limit"
 msgstr "Limite la iha"
@@ -8241,12 +8238,12 @@ msgstr "La hetan rezultadu!"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid "No tag was specified."
-msgstr "La espesifika tag ida."
+msgstr "La espesifika etiketa ida."
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:833
 #, c-format
 msgid "No tags from this library for this title."
-msgstr "La iha tag ida ba titulu ne'e husi biblioteka ida ne'e."
+msgstr "La iha etiketa ida ba titulu ne'e husi biblioteka ida ne'e."
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:235
 #, c-format
@@ -8263,19 +8260,19 @@ msgstr "Gravasaun naun-musika"
 msgid "None"
 msgstr "La iha"
 
+#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:16
 #: opac-tmpl/prog/en/modules/opac-ISBDdetail.tt:38
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:167
-#: opac-tmpl/prog/en/modules/opac-serial-issues.tt:16
-#: opac-tmpl/prog/en/modules/opac-detail.tt:576
 #: opac-tmpl/prog/en/modules/opac-MARCdetail.tt:74
-#: opac-tmpl/prog/en/modules/opac-auth-MARCdetail.tt:34
+#: opac-tmpl/prog/en/modules/opac-detail.tt:576
 #: opac-tmpl/prog/en/modules/opac-auth-detail.tt:36
+#: opac-tmpl/prog/en/modules/opac-auth-MARCdetail.tt:34
 #, c-format
 msgid "Normal view"
 msgstr "Vista normal"
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:755
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:306
+#: opac-tmpl/prog/en/modules/opac-results.tt:755
 #, c-format
 msgid "Not finding what you're looking for?"
 msgstr "Labele hetan livru ida?"
@@ -8296,8 +8293,8 @@ msgstr "La iha rezerva"
 msgid "Not what you expected? Check for "
 msgstr "Ita hanoin ne'e sala? Verifika ba "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1206
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:178
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1206
 #, c-format
 msgid "Note"
 msgstr "Nota"
@@ -8319,7 +8316,7 @@ msgstr "Avisu: Ita nia komentariu tenke simu aprovasaun husi bibliotekariu. "
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid "Note: you can only delete your own tags."
-msgstr "Avizu: ita bele hamoos ita nia tags deit."
+msgstr "Avizu: ita bele hamoos ita nia etiketa deit."
 
 #. %1$s:  ELSIF ( ERROR.scrubbed ) 
 #: opac-tmpl/prog/en/modules/opac-tags.tt:56
@@ -8328,8 +8325,8 @@ msgid ""
 "Note: you can only delete your own tags. %sNote: your tag contained markup "
 "code that was removed. "
 msgstr ""
-"Avisu: ita bele hamoos tag ita nian deit. %sNota: ita nia tag iha kodigu "
-"markup ne'ebe hasai tiona. "
+"Avisu: ita bele hamoos etiketa ita nian deit. %sNota: ita nia etiketa iha "
+"kodigu markup ne'ebe hasai tiona. "
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
@@ -8337,34 +8334,34 @@ msgid ""
 "Note: you can only tag an item with a given term once. Check 'My Tags' to "
 "see your current tags."
 msgstr ""
-"Nota: ita bele tag item ida ho termus dala ida deit. Verifika iha 'My Tags' "
-"atu haree ita nia tags daudaun."
+"Nota: ita bele etiketa item ida ho termus dala ida deit. Verifika iha 'Hau "
+"nia Etiketa' atu haree ita nia etiketa agora daudaun."
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid ""
 "Note: your tag contained markup code that was removed. The tag was added as "
 msgstr ""
-"Avisu: ita nia tag iha kodigu markup ne'ebe hasai tiona. Tag ne'e aumenta "
-"hanesan "
+"Avisu: ita nia etiketa iha kodigu markup ne'ebe hasai tiona. Etiketa ne'e "
+"aumenta hanesan "
 
-#: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:192
-#: opac-tmpl/prog/en/modules/opac-course-details.tt:49
-#: opac-tmpl/prog/en/modules/opac-results.tt:407
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:145
-#: opac-tmpl/prog/en/modules/opac-user.tt:401
+#: opac-tmpl/prog/en/modules/opac-course-details.tt:49
+#: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:192
 #: opac-tmpl/prog/en/modules/opac-basket.tt:272
+#: opac-tmpl/prog/en/modules/opac-user.tt:401
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1514
-#: opac-tmpl/prog/en/modules/opac-course-reserves.tt:38
 #: opac-tmpl/prog/en/modules/opac-auth-detail.tt:95
+#: opac-tmpl/prog/en/modules/opac-results.tt:407
+#: opac-tmpl/prog/en/modules/opac-course-reserves.tt:38
 #, c-format
 msgid "Notes"
 msgstr "Nota sira"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.notes 
-#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:94
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:102
+#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:94
 #, c-format
 msgid "Notes : %s "
 msgstr "Nota : %s "
@@ -8424,8 +8421,8 @@ msgid "Numeriske data"
 msgstr "Numeriske data"
 
 #. INPUT type=submit
-#: opac-tmpl/prog/en/modules/opac-tags.tt:71
 #: opac-tmpl/prog/en/modules/opac-tags_subject.tt:21
+#: opac-tmpl/prog/en/modules/opac-tags.tt:71
 msgid "OK"
 msgstr "OK"
 
@@ -8444,15 +8441,15 @@ msgstr "Out"
 msgid "October"
 msgstr "Outobru"
 
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:244
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1143
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:244
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:875
 #, c-format
 msgid "On hold ("
 msgstr "Iha rezerva ona ("
 
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:230
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1131
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:230
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:862
 #, c-format
 msgid "On order ("
@@ -8587,10 +8584,10 @@ msgstr "Forma seluk:"
 msgid "Other holdings ( %s )"
 msgstr "Kopia seluk ( %s )"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:922
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:928
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:470
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:475
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:922
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:928
 #, c-format
 msgid "Other title: "
 msgstr "Titulu seluk: "
@@ -8626,8 +8623,8 @@ msgstr "Livru sira tarde "
 msgid "Oversiktsverker innenfor et emne"
 msgstr "Oversiktsverker innenfor et emne"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:55
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:65
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:55
 #, c-format
 msgid "PR"
 msgstr "PR"
@@ -8669,9 +8666,9 @@ msgstr "Password"
 msgid "Password updated"
 msgstr "Password atualiza ona"
 
+#: opac-tmpl/prog/en/modules/opac-main.tt:57
 #: opac-tmpl/prog/en/modules/opac-registration-confirmation.tt:44
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:317
-#: opac-tmpl/prog/en/modules/opac-main.tt:57
 #, c-format
 msgid "Password:"
 msgstr "Password:"
@@ -8800,18 +8797,18 @@ msgstr "Hatuur rezerva ba: "
 
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:6
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:9
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:87
-#: opac-tmpl/prog/en/modules/opac-results.tt:22
-#: opac-tmpl/prog/en/modules/opac-results.tt:671
-#: opac-tmpl/prog/en/modules/opac-results.tt:674
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:561
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:277
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:280
-#: opac-tmpl/prog/en/modules/opac-basket.tt:171
-#: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:6
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:501
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:504
+#: opac-tmpl/prog/en/modules/opac-basket.tt:171
+#: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
+#: opac-tmpl/prog/en/modules/opac-results.tt:22
+#: opac-tmpl/prog/en/modules/opac-results.tt:671
+#: opac-tmpl/prog/en/modules/opac-results.tt:674
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:87
 #, c-format
 msgid "Place hold"
 msgstr "Hatuur rezerva"
@@ -8928,8 +8925,8 @@ msgstr ""
 "Favor nota katak informasaun kona-ba livru ruma ne'ebe empresta hela tenke "
 "rai hela iha biblioteka."
 
-#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:16
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:16
+#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:16
 #, c-format
 msgid ""
 "Please note that the attached file is a MARC bibliographic records file "
@@ -9032,8 +9029,8 @@ msgstr "Anterior"
 
 #: opac-tmpl/prog/en/includes/shelfbrowser.inc:16
 #: opac-tmpl/prog/en/includes/datatables.inc:2
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1425
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1425
 #, c-format
 msgid "Previous"
 msgstr "Anterior"
@@ -9169,9 +9166,9 @@ msgstr "Data Publikasaun/Kopirraite: Foun liu ba tuan liu"
 msgid "Publication/Copyright date: Oldest to newest"
 msgstr "Data Publikasaun/Kopirraite: Tuan liu ba foun liu"
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:545
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:37
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:452
+#: opac-tmpl/prog/en/modules/opac-results.tt:545
 #, c-format
 msgid "Publication:"
 msgstr "Publikasaun:"
@@ -9197,16 +9194,16 @@ msgstr "Publika ona husi :"
 #. %8$s:  IF BIBLIO_RESULT.size 
 #. %9$s:  BIBLIO_RESULT.size 
 #. %10$s:  END 
-#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:61
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:69
+#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:61
 #, c-format
 msgid "Published by: %s %s in %s %s %s , %s %s %s , %s %s "
 msgstr "Publikasaun husi: %s %s in %s %s %s , %s %s %s , %s %s "
 
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:112
-#: opac-tmpl/prog/en/modules/opac-results.tt:406
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:144
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:112
 #: opac-tmpl/prog/en/modules/opac-basket.tt:235
+#: opac-tmpl/prog/en/modules/opac-results.tt:406
 #, c-format
 msgid "Publisher"
 msgstr "Editór"
@@ -9221,10 +9218,10 @@ msgstr "Fatin editór nian"
 msgid "Publisher:"
 msgstr "Editór:"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:885
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:890
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:323
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:328
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:885
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:890
 #, c-format
 msgid "Publisher: "
 msgstr "Editór: "
@@ -9313,9 +9310,9 @@ msgstr "La hetan rejistu"
 msgid "Referanseverk"
 msgstr "Referanseverk"
 
+#: opac-tmpl/prog/en/includes/opac-facets.inc:4
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:2
 #: opac-tmpl/prog/en/includes/search/facets.inc:3
-#: opac-tmpl/prog/en/includes/opac-facets.inc:4
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:252
 #, c-format
 msgid "Refine your search"
@@ -9638,8 +9635,8 @@ msgstr "SMS"
 msgid "SMS number:"
 msgstr "Numeru SMS:"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:42
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:51
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:42
 #, c-format
 msgid "ST"
 msgstr "ST"
@@ -9679,11 +9676,10 @@ msgstr "Sab"
 msgid "Saturday"
 msgstr "Sabadu"
 
-#. For the first occurrence,
-#. SCRIPT
-#: opac-tmpl/prog/en/modules/opac-results.tt:22
+#. INPUT type=submit
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:608
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:814
+#: opac-tmpl/prog/en/modules/opac-results.tt:22
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:42
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:51
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:72
@@ -9731,14 +9727,14 @@ msgstr ""
 "empresta ona haree iha lista livru. Butaun Hatama tenke klika deit se Ita "
 "hatama barcode ho liman."
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:390
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:128
+#: opac-tmpl/prog/en/modules/opac-results.tt:390
 #, c-format
 msgid "Scan index for: "
 msgstr "Scan indeks ba: "
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:386
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:124
+#: opac-tmpl/prog/en/modules/opac-results.tt:386
 #, c-format
 msgid "Scan index:"
 msgstr "Scan indeks:"
@@ -9748,8 +9744,8 @@ msgstr "Scan indeks:"
 msgid "Scope and content: "
 msgstr "Eskopu no konteúdu: "
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:552
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:91
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:552
 #, c-format
 msgid "Score"
 msgstr "Partitura"
@@ -9757,6 +9753,7 @@ msgstr "Partitura"
 #. INPUT type=submit name=do
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:147
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:335
+#: opac-tmpl/prog/en/modules/opac-suggestions.tt:160
 #: opac-tmpl/prog/en/modules/opac-detail.tt:628
 #: opac-tmpl/prog/en/modules/opac-detail.tt:735
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:63
@@ -9764,7 +9761,6 @@ msgstr "Partitura"
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:127
 #: opac-tmpl/prog/en/modules/opac-search-history.tt:155
 #: opac-tmpl/prog/en/modules/opac-course-reserves.tt:24
-#: opac-tmpl/prog/en/modules/opac-suggestions.tt:160
 #, c-format
 msgid "Search"
 msgstr "Peskiza"
@@ -9795,11 +9791,11 @@ msgid "Search for this title in:"
 msgstr "Peskiza ba titulu ida ne'e iha:"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-results.tt:542
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:236
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:34
-#: opac-tmpl/prog/en/modules/search/results.tt:86
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:448
+#: opac-tmpl/prog/en/modules/search/results.tt:86
+#: opac-tmpl/prog/en/modules/opac-results.tt:542
 msgid "Search for works by this author"
 msgstr "Peskiza ba livru husi autor ne'e"
 
@@ -9842,8 +9838,8 @@ msgstr "SearchCourseReserves "
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/prog/en/modules/opac-results.tt:22
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
+#: opac-tmpl/prog/en/modules/opac-results.tt:22
 msgid "Searching OverDrive..."
 msgstr "Peskiza hela OverDrive..."
 
@@ -9864,13 +9860,13 @@ msgstr "Seksaun:"
 
 #. IMG
 #: opac-tmpl/prog/en/includes/shelfbrowser.inc:58
-#: opac-tmpl/prog/en/modules/opac-results.tt:729
+#: opac-tmpl/prog/en/modules/opac-readingrecord.tt:90
+#: opac-tmpl/prog/en/modules/opac-showreviews.tt:92
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:542
 #: opac-tmpl/prog/en/modules/opac-user.tt:200
 #: opac-tmpl/prog/en/modules/opac-user.tt:355
-#: opac-tmpl/prog/en/modules/opac-showreviews.tt:92
 #: opac-tmpl/prog/en/modules/opac-detail.tt:567
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:542
-#: opac-tmpl/prog/en/modules/opac-readingrecord.tt:90
+#: opac-tmpl/prog/en/modules/opac-results.tt:729
 msgid "See Baker & Taylor"
 msgstr "Haree Baker & Taylor"
 
@@ -9919,10 +9915,10 @@ msgstr "Hili kopia espesifiku:"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/prog/en/modules/opac-results.tt:22
-#: opac-tmpl/prog/en/modules/opac-basket.tt:161
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:6
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:9
+#: opac-tmpl/prog/en/modules/opac-basket.tt:161
+#: opac-tmpl/prog/en/modules/opac-results.tt:22
 #, c-format
 msgid "Select all"
 msgstr "Hili hotu"
@@ -9953,10 +9949,10 @@ msgstr "Hili item(s) atu peskiza ona :"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/prog/en/modules/opac-basket.tt:33
-#: opac-tmpl/prog/en/modules/opac-basket.tt:165
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:6
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:395
+#: opac-tmpl/prog/en/modules/opac-basket.tt:33
+#: opac-tmpl/prog/en/modules/opac-basket.tt:165
 #, c-format
 msgid "Select titles to: "
 msgstr "Hili titulu hodi: "
@@ -9992,10 +9988,10 @@ msgid "Semiweekly"
 msgstr "Semana ida dala rua"
 
 #. INPUT type=submit
-#: opac-tmpl/prog/en/modules/opac-shareshelf.tt:38
-#: opac-tmpl/prog/en/modules/opac-basket.tt:150
-#: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:44
 #: opac-tmpl/prog/en/modules/opac-sendbasketform.tt:33
+#: opac-tmpl/prog/en/modules/opac-basket.tt:150
+#: opac-tmpl/prog/en/modules/opac-shareshelf.tt:38
+#: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:44
 #, c-format
 msgid "Send"
 msgstr "Haruka"
@@ -10048,8 +10044,8 @@ msgstr "Tipu periódiku"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.serial 
-#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:106
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:114
+#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:106
 #, c-format
 msgid "Serial: %s "
 msgstr "Periódiku: %s "
@@ -10059,19 +10055,19 @@ msgstr "Periódiku: %s "
 msgid "Serials"
 msgstr "Periódiku sira"
 
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:77
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:229
+#: opac-tmpl/prog/en/includes/opac-facets.inc:17
 #: opac-tmpl/prog/en/includes/masthead.inc:65
 #: opac-tmpl/prog/en/includes/masthead.inc:67
-#: opac-tmpl/prog/en/includes/opac-facets.inc:17
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:229
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:77
-#: opac-tmpl/prog/en/modules/opac-results.tt:405
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:143
+#: opac-tmpl/prog/en/modules/opac-results.tt:405
 #, c-format
 msgid "Series"
 msgstr "Serie sira"
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:408
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:146
+#: opac-tmpl/prog/en/modules/opac-results.tt:408
 #, c-format
 msgid "Series Title"
 msgstr "Titulu Serie"
@@ -10091,9 +10087,9 @@ msgstr "Titulu serie"
 msgid "Series:"
 msgstr "Serie sira:"
 
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:180
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:187
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:194
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:180
 #, c-format
 msgid "Series: "
 msgstr "Serie sira: "
@@ -10103,8 +10099,8 @@ msgstr "Serie sira: "
 msgid "Session lost"
 msgstr "Sesaun lakon"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:538
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:70
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:538
 #, c-format
 msgid "Set"
 msgstr "Hatuur"
@@ -10125,9 +10121,10 @@ msgstr "Hatuur: "
 msgid "Settings updated"
 msgstr "Konfigurasaun atualiza tiona"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tt:1468
+#. INPUT type=submit
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:382
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:685
+#: opac-tmpl/prog/en/modules/opac-detail.tt:1468
 #, c-format
 msgid "Share"
 msgstr "Fahe"
@@ -10178,9 +10175,9 @@ msgstr "Show _MENU_ entries"
 msgid "Show all items"
 msgstr "Hatudu item hotu"
 
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:272
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:223
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:389
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:272
 #, c-format
 msgid "Show analytics"
 msgstr "Hatudu analytics"
@@ -10345,7 +10342,7 @@ msgstr "Deskulpa, vista simples ne'e la disponivel agora ne'e"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid "Sorry, tags are not enabled on this system."
-msgstr "Deskulpa, tags la lao iha sistema ida ne'e."
+msgstr "Deskulpa, etiketa la lao iha sistema ida ne'e."
 
 #: opac-tmpl/prog/en/modules/opac-auth.tt:54
 #, c-format
@@ -10417,8 +10414,8 @@ msgstr "Organiza lista ida ne'e tuir: "
 msgid "Sorting: "
 msgstr "Organiza hela: "
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:553
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:90
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:553
 #, c-format
 msgid "Sound"
 msgstr "Son"
@@ -10493,12 +10490,12 @@ msgstr "Estatistika sira"
 msgid "Statistikker"
 msgstr "Statistikker"
 
-#: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:195
 #: opac-tmpl/prog/en/modules/opac-course-details.tt:47
+#: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:195
+#: opac-tmpl/prog/en/modules/opac-suggestions.tt:181
 #: opac-tmpl/prog/en/modules/opac-user.tt:408
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1205
 #: opac-tmpl/prog/en/modules/opac-detail.tt:1513
-#: opac-tmpl/prog/en/modules/opac-suggestions.tt:181
 #, c-format
 msgid "Status"
 msgstr "Estatus"
@@ -10552,12 +10549,12 @@ msgstr "Studieplansje"
 msgid "Su"
 msgstr "Do"
 
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:392
 #: opac-tmpl/prog/en/includes/masthead.inc:55
 #: opac-tmpl/prog/en/includes/masthead.inc:57
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:392
+#: opac-tmpl/prog/en/modules/opac-results-grouped.tt:141
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:78
 #: opac-tmpl/prog/en/modules/opac-results.tt:403
-#: opac-tmpl/prog/en/modules/opac-results-grouped.tt:141
 #, c-format
 msgid "Subject"
 msgstr "Asuntu"
@@ -10608,8 +10605,8 @@ msgstr "Kategoria Asuntu"
 msgid "Subject cloud"
 msgstr "Kalohan asuntu"
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:404
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:142
+#: opac-tmpl/prog/en/modules/opac-results.tt:404
 #, c-format
 msgid "Subject phrase"
 msgstr "Fraze asuntu"
@@ -10637,20 +10634,20 @@ msgstr "Asuntu: "
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.subject 
-#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:82
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:90
+#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:82
 #, c-format
 msgid "Subject: %s "
 msgstr "Asuntu: %s "
 
 #. INPUT type=submit
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:45
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:138
+#: opac-tmpl/prog/en/modules/opac-privacy.tt:56
 #: opac-tmpl/prog/en/modules/opac-authorities-home.tt:48
+#: opac-tmpl/prog/en/modules/opac-memberentry.tt:761
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:138
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:252
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:326
-#: opac-tmpl/prog/en/modules/opac-privacy.tt:56
-#: opac-tmpl/prog/en/modules/opac-memberentry.tt:761
 msgid "Submit"
 msgstr "Hatama"
 
@@ -10721,9 +10718,9 @@ msgid "Subscription from: %s to:%s %s %s now (current)%s"
 msgstr "Asinatura husi %s ba:%s %s %s agora (daudaun)%s"
 
 #. For the first occurrence,
-#. %1$s:  bibliotitle 
-#: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:165
+#. %1$s:  subscription_LOO.bibliotitle 
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:23
+#: opac-tmpl/prog/en/modules/opac-full-serial-issues.tt:165
 #, c-format
 msgid "Subscription information for %s"
 msgstr "Informasaun asinatura ba %s"
@@ -10838,54 +10835,53 @@ msgstr "TOC"
 msgid "Table of contents provided by Syndetics"
 msgstr "Tabela de kontuedu fornese husi Syndetics"
 
-#. INPUT type=submit
-#: opac-tmpl/prog/en/modules/opac-results.tt:473
-#: opac-tmpl/prog/en/modules/opac-basket.tt:173
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:401
+#: opac-tmpl/prog/en/modules/opac-basket.tt:173
+#: opac-tmpl/prog/en/modules/opac-results.tt:473
 #, c-format
 msgid "Tag"
-msgstr "Tag"
+msgstr "Etiketa"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:978
 #, c-format
 msgid "Tag browser"
-msgstr "Tag browser"
+msgstr "Etiketa browser"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:138
 #, c-format
 msgid "Tag cloud"
-msgstr "Kalohan tag"
+msgstr "Kalohan etiketa"
 
 #: opac-tmpl/prog/en/modules/opac-basket.tt:372
 #, c-format
 msgid "Tag status here."
-msgstr "Estatus tag iha-ne'e."
+msgstr "Estatus etiketa iha-ne'e."
 
+#: opac-tmpl/prog/en/modules/opac-shelves.tt:489
+#: opac-tmpl/prog/en/modules/opac-detail.tt:847
 #: opac-tmpl/prog/en/modules/opac-results.tt:481
 #: opac-tmpl/prog/en/modules/opac-results.tt:690
-#: opac-tmpl/prog/en/modules/opac-detail.tt:847
-#: opac-tmpl/prog/en/modules/opac-shelves.tt:489
 #, c-format
 msgid "Tag status here. "
-msgstr "Estatus tag iha-ne'e. "
+msgstr "Estatus etiketa iha-ne'e. "
 
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid "Tags added: "
-msgstr "Tags aumenta tiona: "
+msgstr "Etiketa aumenta tiona: "
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:829
 #: opac-tmpl/prog/en/modules/opac-detail.tt:833
 #, c-format
 msgid "Tags from this library:"
-msgstr "Tags husi biblioteka ne'e:"
+msgstr "Etiketa husi biblioteka ne'e:"
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:630
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:469
+#: opac-tmpl/prog/en/modules/opac-results.tt:630
 #, c-format
 msgid "Tags:"
-msgstr "Tags:"
+msgstr "Etiketa:"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:276
 #, c-format
@@ -10965,8 +10961,8 @@ msgstr "Tekst"
 msgid "Term"
 msgstr "Termu"
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:421
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:159
+#: opac-tmpl/prog/en/modules/opac-results.tt:421
 #, c-format
 msgid "Term/Phrase"
 msgstr "Termu/Fraze"
@@ -11182,8 +11178,8 @@ msgid ""
 "The tag was added as &quot;%s&quot;. %sNote: your tag was entirely markup "
 "code. It was NOT added. "
 msgstr ""
-"Tag ne'e aumenta nudar &quot;%s&quot;. %sNota: ita nia tag mak kodigu "
-"markup. LA aumenta. "
+"Etiketa ne'e aumenta nudar &quot;%s&quot;. %sNota: ita nia etiketa mak "
+"kodigu markup. LA aumenta. "
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:238
 #, c-format
@@ -11225,9 +11221,9 @@ msgid ""
 "this system. %sERROR: illegal parameter %s %sERROR: You must log in to "
 "complete that action. %sERROR: You cannot delete the tag %s. "
 msgstr ""
-"Iha problema ho operasaun ne'e: %sDeskulpa, taga la lao iha sistema ne'e. "
+"Iha problema ho operasaun ne'e: %sDeskulpa, etiketa la lao iha sistema ne'e. "
 "%sSALA: ilegal parameter %s %sSALA: Ita tenke login atu kompleta asaun ne'e. "
-"%sSALA: Ita labele hamoos tag ne'e %s. "
+"%sSALA: Ita labele hamoos etiketa ne'e %s. "
 
 #: opac-tmpl/prog/en/modules/opac-passwd.tt:16
 #, c-format
@@ -11269,8 +11265,8 @@ msgstr ""
 msgid "This card has been declared lost. %s "
 msgstr "Kartaun ne'e lakon ona. %s "
 
-#: opac-tmpl/prog/en/modules/errors/402.tt:15
 #: opac-tmpl/prog/en/modules/errors/400.tt:15
+#: opac-tmpl/prog/en/modules/errors/402.tt:15
 #, c-format
 msgid "This error means that the Koha is pointed an invalid link."
 msgstr "Sala ida ne'e signifika katak Koha nia ligasaun invalidu."
@@ -11423,26 +11419,27 @@ msgstr "Kinta"
 msgid "Tidsskrift"
 msgstr "Tidsskrift"
 
+#. OPTGROUP
+#: opac-tmpl/prog/en/includes/resort_form.inc:58
 #: opac-tmpl/prog/en/includes/masthead.inc:45
 #: opac-tmpl/prog/en/includes/masthead.inc:47
-#: opac-tmpl/prog/en/includes/resort_form.inc:58
-#: opac-tmpl/prog/en/modules/opac-topissues.tt:66
-#: opac-tmpl/prog/en/modules/opac-course-details.tt:41
-#: opac-tmpl/prog/en/modules/opac-advsearch.tt:85
-#: opac-tmpl/prog/en/modules/opac-results.tt:400
-#: opac-tmpl/prog/en/modules/opac-tags.tt:101
+#: opac-tmpl/prog/en/modules/opac-readingrecord.tt:59
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:138
-#: opac-tmpl/prog/en/modules/opac-user.tt:167
-#: opac-tmpl/prog/en/modules/opac-user.tt:305
-#: opac-tmpl/prog/en/modules/opac-user.tt:334
-#: opac-tmpl/prog/en/modules/opac-user.tt:398
-#: opac-tmpl/prog/en/modules/opac-basket.tt:350
-#: opac-tmpl/prog/en/modules/sco/sco-main.tt:269
+#: opac-tmpl/prog/en/modules/opac-course-details.tt:41
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:334
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:336
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:584
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:792
-#: opac-tmpl/prog/en/modules/opac-readingrecord.tt:59
+#: opac-tmpl/prog/en/modules/opac-advsearch.tt:85
+#: opac-tmpl/prog/en/modules/opac-basket.tt:350
+#: opac-tmpl/prog/en/modules/opac-user.tt:167
+#: opac-tmpl/prog/en/modules/opac-user.tt:305
+#: opac-tmpl/prog/en/modules/opac-user.tt:334
+#: opac-tmpl/prog/en/modules/opac-user.tt:398
+#: opac-tmpl/prog/en/modules/opac-results.tt:400
+#: opac-tmpl/prog/en/modules/opac-topissues.tt:66
+#: opac-tmpl/prog/en/modules/sco/sco-main.tt:269
+#: opac-tmpl/prog/en/modules/opac-tags.tt:101
 #, c-format
 msgid "Title"
 msgstr "Titulu"
@@ -11464,14 +11461,14 @@ msgstr "Titulu (Z-A)"
 msgid "Title notes"
 msgstr "Nota konaba titulu"
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:401
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:139
+#: opac-tmpl/prog/en/modules/opac-results.tt:401
 #, c-format
 msgid "Title phrase"
 msgstr "Fraze titulu"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:939
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:493
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:939
 #, c-format
 msgid "Title translated: "
 msgstr "Titulu tradus tiona: "
@@ -11496,13 +11493,13 @@ msgstr "Titulu"
 msgid "To make changes to your record please contact the library."
 msgstr "Atu troka ita nia rejistu lai favor kontakta staf biblioteka."
 
-#: opac-tmpl/prog/en/modules/errors/403.tt:16
-#: opac-tmpl/prog/en/modules/errors/404.tt:16
-#: opac-tmpl/prog/en/modules/errors/401.tt:17
-#: opac-tmpl/prog/en/modules/errors/402.tt:16
-#: opac-tmpl/prog/en/modules/errors/500.tt:16
-#: opac-tmpl/prog/en/modules/errors/400.tt:16
 #: opac-tmpl/prog/en/modules/opac-auth.tt:106
+#: opac-tmpl/prog/en/modules/errors/400.tt:16
+#: opac-tmpl/prog/en/modules/errors/402.tt:16
+#: opac-tmpl/prog/en/modules/errors/401.tt:17
+#: opac-tmpl/prog/en/modules/errors/404.tt:16
+#: opac-tmpl/prog/en/modules/errors/500.tt:16
+#: opac-tmpl/prog/en/modules/errors/403.tt:16
 #, c-format
 msgid "To report this error, you can "
 msgstr "Atu fo hatene kona-ba sala ne'e, ita bele "
@@ -11635,8 +11632,8 @@ msgstr "URL(s)"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.url |url 
-#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:129
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:137
+#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:129
 #, c-format
 msgid "URL: %s "
 msgstr "URL: %s "
@@ -11652,7 +11649,7 @@ msgstr "Ukjent;"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid "Unable to add one or more tags."
-msgstr "La konsege atu aumenta tag ida ka liu."
+msgstr "La konsege atu aumenta etiketa ida ka liu."
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:528
 #, c-format
@@ -11675,8 +11672,8 @@ msgid "Ungdom over 12 år;"
 msgstr "Ungdom over 12 år;"
 
 #: opac-tmpl/prog/en/includes/opac-detail-sidebar.inc:32
-#: opac-tmpl/prog/en/modules/opac-results.tt:462
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:199
+#: opac-tmpl/prog/en/modules/opac-results.tt:462
 #, c-format
 msgid "Unhighlight"
 msgstr "Unhighlight"
@@ -11688,8 +11685,8 @@ msgstr "Titulu unifikadu"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.unititle 
-#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:100
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:108
+#: opac-tmpl/prog/en/modules/opac-sendbasket.tt:100
 #, c-format
 msgid "Unified title: %s "
 msgstr "Titulu unifikadu: %s "
@@ -11740,13 +11737,13 @@ msgstr "Atualizasaun de website"
 msgid "Use the \"Confirm\" button below to confirm deletion. "
 msgstr "Klik butaun \"Konfirma\" atu konfirma hamoos. "
 
-#: opac-tmpl/prog/en/modules/errors/403.tt:18
-#: opac-tmpl/prog/en/modules/errors/404.tt:18
-#: opac-tmpl/prog/en/modules/errors/401.tt:19
-#: opac-tmpl/prog/en/modules/errors/402.tt:18
-#: opac-tmpl/prog/en/modules/errors/500.tt:18
-#: opac-tmpl/prog/en/modules/errors/400.tt:18
 #: opac-tmpl/prog/en/modules/opac-auth.tt:108
+#: opac-tmpl/prog/en/modules/errors/400.tt:18
+#: opac-tmpl/prog/en/modules/errors/402.tt:18
+#: opac-tmpl/prog/en/modules/errors/401.tt:19
+#: opac-tmpl/prog/en/modules/errors/404.tt:18
+#: opac-tmpl/prog/en/modules/errors/500.tt:18
+#: opac-tmpl/prog/en/modules/errors/403.tt:18
 #, c-format
 msgid "Use top menu bar to navigate to another part of Koha."
 msgstr "Uza menu bar iha leten atu navigatu ba parte seluk iha Koha."
@@ -11756,8 +11753,8 @@ msgstr "Uza menu bar iha leten atu navigatu ba parte seluk iha Koha."
 msgid "Used for/see from:"
 msgstr "Uza ba/haree husi:"
 
-#: opac-tmpl/prog/en/modules/opac-auth-MARCdetail.tt:43
 #: opac-tmpl/prog/en/modules/opac-auth-detail.tt:47
+#: opac-tmpl/prog/en/modules/opac-auth-MARCdetail.tt:43
 #, c-format
 msgid "Used in "
 msgstr "Uza ona iha "
@@ -11807,8 +11804,8 @@ msgstr "Utstilling"
 msgid "VHS tape / Videocassette"
 msgstr "VHS fita / Videocasette"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:53
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:63
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:53
 #, c-format
 msgid "VM"
 msgstr "VM"
@@ -11849,9 +11846,6 @@ msgid "Videospole"
 msgstr "Videospole"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-results.tt:535
-#: opac-tmpl/prog/en/modules/opac-results.tt:537
-#: opac-tmpl/prog/en/modules/opac-results.tt:538
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:226
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:228
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:229
@@ -11864,10 +11858,13 @@ msgstr "Videospole"
 #: opac-tmpl/prog/en/modules/opac-imageviewer.tt:55
 #: opac-tmpl/prog/en/modules/opac-imageviewer.tt:57
 #: opac-tmpl/prog/en/modules/opac-imageviewer.tt:58
-#: opac-tmpl/prog/en/modules/search/results.tt:85
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:441
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:443
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:444
+#: opac-tmpl/prog/en/modules/search/results.tt:85
+#: opac-tmpl/prog/en/modules/opac-results.tt:535
+#: opac-tmpl/prog/en/modules/opac-results.tt:537
+#: opac-tmpl/prog/en/modules/opac-results.tt:538
 msgid "View details for this title"
 msgstr "Haree detalle sira kona-ba títulu ida ne'e"
 
@@ -12020,13 +12017,13 @@ msgstr "Items ne'ebe hili ona: "
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/prog/en/modules/opac-basket.tt:33
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:6
+#: opac-tmpl/prog/en/modules/opac-basket.tt:33
 msgid "With selected titles: "
 msgstr "Ho titulu ne'ebe hili tiona: "
 
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:209
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1113
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:209
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:841
 #, c-format
 msgid "Withdrawn ("
@@ -12049,9 +12046,9 @@ msgstr "Se"
 msgid "Written on %s by %s"
 msgstr "Hakerek ona ba %s husi %s"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tt:352
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:586
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:794
+#: opac-tmpl/prog/en/modules/opac-basket.tt:352
 #, c-format
 msgid "Year"
 msgstr "Tinan"
@@ -12199,7 +12196,7 @@ msgstr "Ita bele "
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:58
 msgid "You must be logged in to add tags."
-msgstr "Tenke log in atu aumenta tags."
+msgstr "Tenke log in atu aumenta etiketa."
 
 #. For the first occurrence,
 #. SCRIPT
@@ -12454,8 +12451,8 @@ msgstr ""
 "END %] Katalogu Komentariu foin daudauk"
 
 #. LINK
-#: opac-tmpl/prog/en/modules/opac-results.tt:13
 #: opac-tmpl/prog/en/modules/search/results.tt:9
+#: opac-tmpl/prog/en/modules/opac-results.tt:13
 msgid "[% LibraryName |html %] Search RSS Feed"
 msgstr "[% LibraryName |html %] Buka RSS Feed"
 
@@ -12546,23 +12543,27 @@ msgstr ""
 #, c-format
 msgid ""
 "[%% UNLESS hidden.defined('streetnumber') && hidden.defined('address') && "
-"hidden.defined('address2') && hidden.defined('city') && hidden.defined"
-"('state') && hidden.defined('zipcode') && hidden.defined('country') %%] "
+"hidden.defined('address2') && hidden.defined('city') && hidden."
+"defined('state') && hidden.defined('zipcode') && hidden.defined('country') "
+"%%] "
 msgstr ""
 "[%% UNLESS hidden.defined('streetnumber') && hidden.defined('address') && "
-"hidden.defined('address2') && hidden.defined('city') && hidden.defined"
-"('state') && hidden.defined('zipcode') && hidden.defined('country') %%] "
+"hidden.defined('address2') && hidden.defined('city') && hidden."
+"defined('state') && hidden.defined('zipcode') && hidden.defined('country') "
+"%%] "
 
 #: opac-tmpl/prog/en/modules/opac-memberentry.tt:101
 #, c-format
 msgid ""
 "[%% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden."
-"defined('firstname') && hidden.defined('dateofbirth') && hidden.defined"
-"('initials') && hidden.defined('othernames') && hidden.defined('sex') %%] "
+"defined('firstname') && hidden.defined('dateofbirth') && hidden."
+"defined('initials') && hidden.defined('othernames') && hidden.defined('sex') "
+"%%] "
 msgstr ""
 "[%% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden."
-"defined('firstname') && hidden.defined('dateofbirth') && hidden.defined"
-"('initials') && hidden.defined('othernames') && hidden.defined('sex') %%] "
+"defined('firstname') && hidden.defined('dateofbirth') && hidden."
+"defined('initials') && hidden.defined('othernames') && hidden.defined('sex') "
+"%%] "
 
 #: opac-tmpl/prog/en/includes/masthead.inc:181
 #, c-format
@@ -12597,10 +12598,10 @@ msgstr "[Haree Hotu]"
 msgid "[View all]"
 msgstr "[Haree hotu]"
 
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:114
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:414
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:611
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:648
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:114
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:414
 #, c-format
 msgid "_blank"
 msgstr "_mamuk"
@@ -12610,10 +12611,6 @@ msgstr "_mamuk"
 msgid "a an the"
 msgstr "a an the"
 
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:246
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:533
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:583
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:412
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:233
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:244
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:742
@@ -12621,24 +12618,28 @@ msgstr "a an the"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:851
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:896
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:958
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:246
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:533
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:583
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:412
 #, c-format
 msgid "a_t"
 msgstr "a_t"
 
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:301
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:368
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:381
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:516
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:920
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:931
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:301
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:371
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:766
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:368
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:381
 #, c-format
 msgid "ab"
 msgstr "ab"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:447
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:154
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:447
 #, c-format
 msgid "abc"
 msgstr "abc"
@@ -12680,15 +12681,15 @@ msgstr "abcdjpvxyz"
 msgid "abcdvxyz"
 msgstr "abcdvxyz"
 
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:318
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:395
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:408
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:318
 #, c-format
 msgid "abceg"
 msgstr "abceg"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:883
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:321
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:883
 #, c-format
 msgid "abcg"
 msgstr "abcg"
@@ -12698,8 +12699,8 @@ msgstr "abcg"
 msgid "abchnp"
 msgstr "abchnp"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1189
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:1065
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1189
 #, c-format
 msgid "abcq"
 msgstr "abcq"
@@ -12714,14 +12715,14 @@ msgstr "abcu"
 msgid "abh"
 msgstr "abh"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:400
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:118
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:400
 #, c-format
 msgid "abhfgknps"
 msgstr "abhfgknps"
 
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:356
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:468
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:356
 #, c-format
 msgid "abhfgnp"
 msgstr "abhfgnp"
@@ -12747,10 +12748,10 @@ msgstr "konta, %s faz favor "
 msgid "acdef"
 msgstr "acdef"
 
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:1097
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1216
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:122
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:475
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1216
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:1097
 #, c-format
 msgid "acdeq"
 msgstr "acdeq"
@@ -12881,11 +12882,11 @@ msgstr "autor"
 msgid "autobiography"
 msgstr "autobiografia"
 
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:186
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:200
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:185
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:201
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:216
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:186
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:200
 #, c-format
 msgid "av"
 msgstr "av"
@@ -12923,9 +12924,9 @@ msgstr "avaliasaun média: %s (%s vota)"
 msgid "az"
 msgstr "az"
 
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:889
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:131
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:483
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:889
 #, c-format
 msgid "bc"
 msgstr "bc"
@@ -12947,8 +12948,9 @@ msgstr "bib"
 msgid "bib_id"
 msgstr "bib_id"
 
-#: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:88
+#. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:598
+#: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:88
 #, c-format
 msgid "bibliography"
 msgstr "bibliografia"
@@ -12999,13 +13001,13 @@ msgstr "kabelak bristol"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/prog/en/modules/opac-detail.tt:45
 #: opac-tmpl/prog/en/modules/opac-overdrive-search.tt:7
+#: opac-tmpl/prog/en/modules/opac-detail.tt:45
 msgid "by"
 msgstr "husi"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:452
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:162
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:452
 #: opac-tmpl/prog/en/modules/opac-detail.tt:582
 #: opac-tmpl/prog/en/modules/search/results.tt:85
 #, c-format
@@ -13047,10 +13049,10 @@ msgstr "katalogu "
 msgid "catalogue"
 msgstr "katalogu"
 
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:1090
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1209
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:115
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:468
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1209
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:1090
 #, c-format
 msgid "cdn"
 msgstr "cdn"
@@ -13060,8 +13062,8 @@ msgstr "cdn"
 msgid "celestial globe"
 msgstr "globu selestial"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:907
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:353
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:907
 #, c-format
 msgid "cg"
 msgstr "cg"
@@ -13192,21 +13194,21 @@ msgstr "korporate_autor_segundu"
 #: opac-tmpl/prog/en/modules/opac-basket.tt:204
 #: opac-tmpl/prog/en/modules/opac-basket.tt:370
 msgid ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft.au="
-"[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
-"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT.size %]"
-"&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft.place=[% "
+"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
+"au=[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
+"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT.size "
+"%]&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft.place=[% "
 "BIBLIO_RESULT.place %]&rft.pub=[% BIBLIO_RESULT.publisher |url %]&rft."
-"edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT.series %]"
-"&rft.genre="
+"edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT.series "
+"%]&rft.genre="
 msgstr ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft.au="
-"[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
-"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT.size %]"
-"&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft.place=[% "
+"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
+"au=[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
+"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT.size "
+"%]&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft.place=[% "
 "BIBLIO_RESULT.place %]&rft.pub=[% BIBLIO_RESULT.publisher |url %]&rft."
-"edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT.series %]"
-"&rft.genre="
+"edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT.series "
+"%]&rft.genre="
 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:6
 #, c-format
@@ -13293,8 +13295,8 @@ msgstr "diretoriu "
 msgid "discography "
 msgstr "diskografia "
 
-#: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:176
 #: opac-tmpl/prog/en/xslt/MARC21slimUtils.xsl:144
+#: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:176
 #, c-format
 msgid "display:block; "
 msgstr "display:block; "
@@ -13327,8 +13329,9 @@ msgstr "drama"
 msgid "drama "
 msgstr "drama "
 
-#: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:179
+#. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:274
+#: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:179
 #, c-format
 msgid "drawing"
 msgstr "dezeñu"
@@ -13353,13 +13356,13 @@ msgstr "eletroniku "
 msgid "electronic ressource"
 msgstr "rekursu elektronik"
 
-#: opac-tmpl/prog/en/modules/errors/403.tt:17
-#: opac-tmpl/prog/en/modules/errors/404.tt:17
-#: opac-tmpl/prog/en/modules/errors/401.tt:18
-#: opac-tmpl/prog/en/modules/errors/402.tt:17
-#: opac-tmpl/prog/en/modules/errors/500.tt:17
-#: opac-tmpl/prog/en/modules/errors/400.tt:17
 #: opac-tmpl/prog/en/modules/opac-auth.tt:107
+#: opac-tmpl/prog/en/modules/errors/400.tt:17
+#: opac-tmpl/prog/en/modules/errors/402.tt:17
+#: opac-tmpl/prog/en/modules/errors/401.tt:18
+#: opac-tmpl/prog/en/modules/errors/404.tt:17
+#: opac-tmpl/prog/en/modules/errors/500.tt:17
+#: opac-tmpl/prog/en/modules/errors/403.tt:17
 #, c-format
 msgid "email the Koha Administrator"
 msgstr "email ba Administrador Koha"
@@ -13400,18 +13403,18 @@ msgstr "faksimile"
 msgid "festschrift "
 msgstr "festschrift "
 
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:1106
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:1113
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:602
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:609
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:495
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:502
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:1106
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:1113
 #, c-format
 msgid "fghkdlmor"
 msgstr "fghkdlmor"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:427
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:143
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:427
 #, c-format
 msgid "fgknps"
 msgstr "fgknps"
@@ -13820,8 +13823,9 @@ msgstr "koha:biblionumber:{marc:datafield[@tag=999]/marc:subfield[@code='c']}"
 msgid "kom"
 msgstr "kom"
 
-#: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:22
+#. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:364
+#: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:22
 #, c-format
 msgid "large print"
 msgstr "testu boot"
@@ -14045,8 +14049,9 @@ msgstr "multimedia"
 msgid "multiple/other literary forms"
 msgstr "multiplu/formatu literatura seluk"
 
-#: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:72
+#. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:554
+#: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:72
 #, c-format
 msgid "music"
 msgstr "muzika"
@@ -14099,7 +14104,7 @@ msgstr "hau nia rezumu"
 #: opac-tmpl/prog/en/includes/usermenu.inc:10
 #, c-format
 msgid "my tags"
-msgstr "hau nia tag sira"
+msgstr "hau nia etiketa"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:618
 #: opac-tmpl/prog/en/modules/ilsdi.tt:649
@@ -14280,8 +14285,9 @@ msgstr "selu-seluk"
 msgid "out of"
 msgstr "husi"
 
-#: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:180
+#. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:280
+#: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:180
 #, c-format
 msgid "painting"
 msgstr "pintura"
@@ -14364,8 +14370,9 @@ msgstr "pickup_expiry_data"
 msgid "pickup_location"
 msgstr "pickup_location"
 
-#: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:184
+#. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:292
+#: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:184
 #, c-format
 msgid "picture"
 msgstr "pintura"
@@ -14462,8 +14469,8 @@ msgstr "livru programadu"
 msgid "project description"
 msgstr "deskrisaun projetu"
 
-#: opac-tmpl/prog/en/modules/opac-results.tt:755
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:306
+#: opac-tmpl/prog/en/modules/opac-results.tt:755
 #, c-format
 msgid "purchase suggestion"
 msgstr "sujestaun ida atu sosa material foun"
@@ -14570,14 +14577,14 @@ msgstr "results_summary description"
 msgid "results_summary edition"
 msgstr "results_summary edition"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:921
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:469
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:921
 #, c-format
 msgid "results_summary other_title"
 msgstr "results_summary other_title"
 
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:884
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:322
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:884
 #, c-format
 msgid "results_summary publisher"
 msgstr "results_summary publisher"
@@ -14612,9 +14619,9 @@ msgstr "komentariu "
 msgid "roll "
 msgstr "rolu "
 
-#: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:173
-#: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:79
 #: opac-tmpl/prog/en/xslt/MARC21slimUtils.xsl:140
+#: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:79
+#: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:173
 #, c-format
 msgid "rtl"
 msgstr "rtl"
@@ -14878,7 +14885,7 @@ msgstr "tátil, la ho sistema eskrita "
 #: opac-tmpl/prog/en/modules/opac-tags.tt:69
 #, c-format
 msgid "tags%s from other users%s. "
-msgstr "tags%s husi ema seluk%s. "
+msgstr "etiketa%s husi ema seluk%s. "
 
 #. INPUT type=submit name=tagsel_button
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:406
@@ -14911,8 +14918,9 @@ msgstr "dezeñu tekniku"
 msgid "technical drawing "
 msgstr "dezeñu tekniku "
 
-#: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:103
+#. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:646
+#: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:103
 #, c-format
 msgid "technical report"
 msgstr "relatoriu tekniku"
@@ -14929,10 +14937,10 @@ msgstr "testu iha pasta-argola "
 
 #. META http-equiv=Content-Type
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:2
-#: opac-tmpl/prog/en/modules/sco/sco-main.tt:4
+#: opac-tmpl/prog/en/modules/opac-showmarc.tt:3
 #: opac-tmpl/prog/en/modules/sco/printslip.tt:3
 #: opac-tmpl/prog/en/modules/sco/help.tt:2
-#: opac-tmpl/prog/en/modules/opac-showmarc.tt:3
+#: opac-tmpl/prog/en/modules/sco/sco-main.tt:4
 msgid "text/html; charset=utf-8"
 msgstr "text/html; charset=utf-8"
 
@@ -15022,7 +15030,7 @@ msgstr "atu hato'o komentariu ida."
 #: opac-tmpl/prog/en/modules/opac-tags.tt:73
 #, c-format
 msgid "to see your own saved tags. %s%s"
-msgstr "atu haree ita nia tags grava tiona. %s%s"
+msgstr "atu haree ita nia etiketa grava tiona. %s%s"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:231
 #: opac-tmpl/prog/en/modules/opac-user.tt:132
@@ -15183,8 +15191,8 @@ msgstr "material visual"
 msgid "visual projection"
 msgstr "projesaun visual"
 
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:418
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:571
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:418
 #, c-format
 msgid "vxyz"
 msgstr "vxyz"
@@ -15244,12 +15252,12 @@ msgstr "ho sistema auto empresta "
 msgid "wood"
 msgstr "ai"
 
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:619
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:972
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1007
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:446
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:119
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:419
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:972
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1007
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:619
 #, c-format
 msgid "y3z"
 msgstr "y3z"
