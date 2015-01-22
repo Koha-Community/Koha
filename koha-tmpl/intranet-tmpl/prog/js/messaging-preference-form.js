@@ -47,4 +47,35 @@ $(document).ready(function(){
                 });
         });
     }
+
+    // At load time, we want digest disabled if no digest using transport is enabled
+    $("#memberentry_messaging_prefs .email").each(function(){
+        var rowid = $(this).attr("id");
+        id = Number(rowid.replace("email",""));
+        if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") ) {
+            $("#digest"+id).attr("disabled", false);
+        } else {
+            $("#digest"+id).attr("disabled", true).prop("checked",false);
+        }
+    });
+
+    // If user clears all digest using transports for a notice, disable digest checkbox
+    $(".email").click(function(){
+        var rowid = $(this).attr("id");
+        id = Number(rowid.replace("email",""));
+        if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") ) {
+            $("#digest"+id).attr("disabled", false);
+        } else {
+            $("#digest"+id).attr("disabled", true);
+        }
+    });
+    $(".sms").click(function(){
+        var rowid = $(this).attr("id");
+        id = Number(rowid.replace("sms",""));
+        if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") ) {
+            $("#digest"+id).attr("disabled", false);
+        } else {
+            $("#digest"+id).attr("disabled", true).prop("checked",false);
+        }
+    });
 });
