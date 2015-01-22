@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-12-15 10:50-0300\n"
+"POT-Creation-Date: 2015-01-19 16:38-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,6 +94,14 @@ msgstr ""
 msgid ""
 "'Add multiple items' will ask how many items and will then add that number "
 "of items adding +1 to the barcode so each barcode is unique"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:26
+#, c-format
+msgid ""
+"'Additional SRU options': You can enter additional options of the external "
+"server here, like sru_version=1.1 or schema=marc21, etc. Note that these "
+"options are server dependent."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/koha-news.tt:15
@@ -185,6 +193,14 @@ msgid ""
 "and working with items."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:18
+#, c-format
+msgid ""
+"'Database' is the name of the database for Z39.50 targets. For SRU targets "
+"enter the path name part of the URL (the local part following domain and "
+"port). See also example below."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/admin/auth_subfields_structure.tt:26
 #, c-format
 msgid ""
@@ -200,7 +216,7 @@ msgid ""
 "you're picking"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:27
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:23
 #, c-format
 msgid "'Encoding' tells the system how to read special characters."
 msgstr ""
@@ -264,9 +280,11 @@ msgid ""
 "seventeen of which are implemented. They are the following: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:17
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:16
 #, c-format
-msgid "'Hostname' will be the address to the Z39.50 target."
+msgid ""
+"'Hostname' will be the address to the Z39.50 target. For a SRU target, only "
+"enter the domain name here. (See example below.)"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:27
@@ -393,7 +411,7 @@ msgid ""
 "an ISBN, as well as the collection list for the editor."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:18
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:17
 #, c-format
 msgid ""
 "'Port' tells Koha what port to listen on to get results from this target."
@@ -429,10 +447,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:21
 #, c-format
 msgid ""
-"'Rank' lets you enter where in the list you'd like this target to appear. "
+"'Rank' lets you enter where in the list you'd like this target to appear. If "
+"this is left blank the targets will be in alphabetical order."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:29
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:25
 #, c-format
 msgid ""
 "'Record type' lets you define if this is a bibliographic or an authority "
@@ -466,6 +485,16 @@ msgstr ""
 msgid "'Required match checks' - ??"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:27
+#, c-format
+msgid ""
+"'SRU Search field mapping': Click on Modify to add or update the mapping "
+"from the available fields on the Koha search form to the specific server "
+"dependent index names. For instance, a SRU server could use 'cql.anywhere' "
+"for the Any field on the Koha form. If you do not enter an index name for a "
+"specific search field, the whole record will be searched."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:40
 #, c-format
 msgid ""
@@ -489,6 +518,13 @@ msgid ""
 "data\"."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:15
+#, c-format
+msgid ""
+"'Server name' should be populated with a name that will help you identify "
+"the source (such as the library name)."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:80
 #, c-format
 msgid ""
@@ -510,7 +546,7 @@ msgid ""
 "is used for setting up renewal alerts"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:26
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:22
 #, c-format
 msgid "'Syntax' is the MARC flavor you use."
 msgstr ""
@@ -529,7 +565,7 @@ msgid ""
 "interface."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:28
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:24
 #, c-format
 msgid ""
 "'Timeout' is helpful for targets that take a long while. You can set the "
@@ -558,18 +594,18 @@ msgid ""
 "or editing an item."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:28
+#, c-format
+msgid ""
+"'XSLT file(s)': You can enter here one or more (comma-separated) XSLT file "
+"names that you want to apply on the search results."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:42
 #, c-format
 msgid ""
 "'YES_NO' is a generic authorized value field that can be used anywhere you "
 "need a simple yes/no pull down menu."
-msgstr ""
-
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:16
-#, c-format
-msgid ""
-"'Z39.50 server' should be populated with a name that will help you identify "
-"the source (such as the library name)."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/auth_subfields_structure.tt:51
@@ -592,7 +628,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:90
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:61
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:95
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:73
@@ -607,7 +643,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgets.tt:34
 #: intranet-tmpl/prog/en/modules/help/admin/didyoumean.tt:20
 #: intranet-tmpl/prog/en/modules/help/admin/systempreferences.tt:11
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:36
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:35
 #: intranet-tmpl/prog/en/modules/help/admin/transport-cost-matrix.tt:13
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:50
 #: intranet-tmpl/prog/en/modules/help/admin/checkmarc.tt:9
@@ -659,6 +695,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/circ/renew.tt:11
 #: intranet-tmpl/prog/en/modules/help/catalogue/moredetail.tt:21
 #: intranet-tmpl/prog/en/modules/help/catalogue/issuehistory.tt:9
+#: intranet-tmpl/prog/en/modules/help/catalogue/search-history.tt:9
 #: intranet-tmpl/prog/en/modules/help/catalogue/detail.tt:7
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:81
 #: intranet-tmpl/prog/en/modules/help/reserve/request.tt:63
@@ -693,7 +730,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/members/readingrec.tt:11
 #: intranet-tmpl/prog/en/modules/help/members/members-update.tt:11
 #: intranet-tmpl/prog/en/modules/help/members/members-home.tt:53
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:70
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:68
 #: intranet-tmpl/prog/en/modules/help/acqui/lateorders.tt:19
 #: intranet-tmpl/prog/en/modules/help/acqui/uncertainprice.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:19
@@ -750,7 +787,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/tools/cleanborrowers.tt:24
 #: intranet-tmpl/prog/en/modules/help/tools/manage-marc-import.tt:43
 #: intranet-tmpl/prog/en/modules/help/tools/holidays.tt:68
-#: intranet-tmpl/prog/en/modules/help/about.tt:37
+#: intranet-tmpl/prog/en/modules/help/about.tt:38
 #: intranet-tmpl/prog/en/modules/help/reviews/reviewswaiting.tt:13
 #, c-format
 msgid "(online)."
@@ -1154,7 +1191,7 @@ msgid ""
 "A layout is used to define the fields you want to appear on your labels."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:21
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:20
 #, c-format
 msgid "A list can also be created from the catalog search results"
 msgstr ""
@@ -1188,23 +1225,11 @@ msgid ""
 "items as received by the home branch."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:16
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:31
-#, c-format
-msgid "A open list can be seen and managed by everybody"
-msgstr ""
-
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:86
 #, c-format
 msgid ""
 "A patron image can be added by browsing for the image on your machine from "
 "the 'Manage Patron Image' section "
-msgstr ""
-
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:14
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:29
-#, c-format
-msgid "A private list is managed by you and can be seen only by you"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:23
@@ -1240,12 +1265,6 @@ msgid ""
 "aligned the same on each label, you need to set up a profile for each "
 "printer to make up for the differences in printing styles, such as the "
 "shifting of text to the left, right, top or bottom."
-msgstr ""
-
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:15
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:30
-#, c-format
-msgid "A public list can be seen by everybody, but managed only by you"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:13
@@ -1295,7 +1314,7 @@ msgid ""
 "website."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:46
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:44
 #, c-format
 msgid ""
 "A title can also be added to a list by selecting titles on the search "
@@ -1571,7 +1590,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:11
 #, c-format
-msgid "Add a Z39.50 Target"
+msgid "Add a Z39.50/SRU Target"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:9
@@ -1609,7 +1628,7 @@ msgstr ""
 msgid "Add patrons"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:40
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:38
 #, c-format
 msgid "Add to a list"
 msgstr ""
@@ -2175,6 +2194,11 @@ msgstr ""
 msgid "Answer:"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:68
+#, c-format
+msgid "Any"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/mainpage.tt:25
 #, c-format
 msgid ""
@@ -2280,6 +2304,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:17
 #, c-format
 msgid "Audience"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:69
+#, c-format
+msgid "Author"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/authorities/detail.tt:3
@@ -2731,7 +2760,7 @@ msgstr ""
 msgid "CSV profiles"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:38
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:79
 #, c-format
 msgid "CUYAHOGA COUNTY PUBLIC webcat.cuyahoga.lib.oh.us:210 INNOPAC"
 msgstr ""
@@ -2816,6 +2845,13 @@ msgid ""
 "pages"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:20
+#, c-format
+msgid ""
+"Check 'Preselected (searched by default)' if you want this target to always "
+"be selected by default."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:37
 #, c-format
 msgid ""
@@ -2853,13 +2889,6 @@ msgstr ""
 msgid "Check out and check in items"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:20
-#, c-format
-msgid ""
-"Check the 'Checked' box if you want this target to always be selected by "
-"default."
-msgstr ""
-
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:46
 #, c-format
 msgid ""
@@ -2895,7 +2924,7 @@ msgid ""
 "values of this attribute. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:24
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:23
 #, c-format
 msgid "Check the box to the left of the titles you want to add to the new list"
 msgstr ""
@@ -3043,7 +3072,7 @@ msgstr ""
 msgid "Choose 'if'"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:25
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:24
 #, c-format
 msgid "Choose [New list] from the 'Add to:' pull down menu "
 msgstr ""
@@ -3753,7 +3782,7 @@ msgstr ""
 msgid "Clicking on repeatable events will offer slightly different options "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:52
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:50
 #, c-format
 msgid "Clicking on the 'List name' will show the contents of the list"
 msgstr ""
@@ -3989,11 +4018,6 @@ msgstr ""
 msgid "Creating Patron File"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:23
-#, c-format
-msgid "Creators:"
-msgstr ""
-
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:144
 #, c-format
 msgid "CreditXXX "
@@ -4050,6 +4074,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:149
 #, c-format
 msgid "DUEDGST "
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:60
+#, c-format
+msgid "Database"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:38
@@ -4130,6 +4159,37 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:7
 #, c-format
 msgid "Defining a mapping"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:36
+#, c-format
+msgid "Del952.xsl: Remove items (MARC21/NORMARC)"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:37
+#, c-format
+msgid "Del995.xsl: Remove items (UNIMARC)"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:50
+#, c-format
+msgid "Del9LinksExcept952.xsl, Del952.xsl"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:38
+#, c-format
+msgid ""
+"Del9LinksExcept952.xsl: Remove $9 links. Skip item fields (MARC21/NORMARC)."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:51
+#, c-format
+msgid "Del9LinksExcept995.xsl, Del995.xsl"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:39
+#, c-format
+msgid "Del9LinksExcept995.xsl: Remove $9 links. Skip item fields (UNIMARC)."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:12
@@ -4494,7 +4554,12 @@ msgstr ""
 msgid "Email: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:24
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:62
+#, c-format
+msgid "Encoding"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:23
 #, c-format
 msgid "Enhanced Content:"
 msgstr ""
@@ -4759,6 +4824,11 @@ msgid ""
 "Every time you create a new numbering pattern in serials you can save it for "
 "later use. These patterns are accessible via the Manage numbering patterns "
 "page."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:42
+#, c-format
+msgid "Example"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:30
@@ -5368,7 +5438,7 @@ msgstr ""
 msgid "From here, you can edit or remove the items that you have added."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:44
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:42
 #, c-format
 msgid ""
 "From the List page you can add titles by scanning barcodes into the box at "
@@ -5448,16 +5518,17 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/merge.tt:7
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:58
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:56
 #, c-format
 msgid ""
 "From the list, check the two items you want to merge. If you choose more "
 "than or fewer than 2, you will be presented with an error"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:14
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:13
 #, c-format
-msgid "From the main Z39.50 page, click 'New Z39.50 Server' "
+msgid ""
+"From the main Z39.50/SRU page, click 'New Z39.50 Server' or 'New SRU server'."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/course_reserves/course.tt:7
@@ -5673,6 +5744,13 @@ msgid ""
 "and create new ones."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/catalogue/search-history.tt:7
+#, c-format
+msgid ""
+"From this page you will see your bibliographic search history and your "
+"authority search history."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/authorities/merge.tt:5
 #, c-format
 msgid "From this screen you can choose to merge two authority records."
@@ -5700,7 +5778,7 @@ msgstr ""
 msgid "Future developments will include additional keyword assigned fields."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:39
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:80
 #, c-format
 msgid "GREATER SUDBURY PUBLIC 216.223.90.51:210 INNOPAC"
 msgstr ""
@@ -5813,12 +5891,12 @@ msgstr ""
 msgid "Guided report wizard"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:40
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:81
 #, c-format
 msgid "HALIFAX PUBLIC catalogue.halifaxpubliclibraries.ca:210 horizon"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:41
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:82
 #, c-format
 msgid "HALTON HILLS PUBLIC cat.hhpl.on.ca:210 halton_hills"
 msgstr ""
@@ -5844,11 +5922,6 @@ msgid ""
 "Here you can define how a set will be build (what records will belong to "
 "this set) by defining mappings. Mappings are a list of conditions on record "
 "content. A record only need to match one condition to belong to the set."
-msgstr ""
-
-#: intranet-tmpl/prog/en/modules/help/about.tt:33
-#, c-format
-msgid "History"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:13
@@ -5910,6 +5983,11 @@ msgstr ""
 msgid "Holidays calendar"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:58
+#, c-format
+msgid "Host"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:13
 #, c-format
 msgid "However the subtitle for DVDs appears in 245$p"
@@ -5920,7 +5998,7 @@ msgstr ""
 msgid "I can log in, what is next?"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:25
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:24
 #, c-format
 msgid "I18N/L10N:"
 msgstr ""
@@ -5935,6 +6013,16 @@ msgstr ""
 msgid ""
 "IMPORTANT: Many preferences interact with each other. Turning on one system "
 "preference may require that others are also set."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:67
+#, c-format
+msgid "ISBN"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:70
+#, c-format
+msgid "ISSN"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:270
@@ -6338,11 +6426,6 @@ msgstr ""
 msgid ""
 "If this is an annual holiday closing choose 'Holiday repeated yearly on the "
 "same date'"
-msgstr ""
-
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:23
-#, c-format
-msgid "If this is left blank the targets will be in alphabetical order."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/mainpage.tt:4
@@ -6926,6 +7009,14 @@ msgid ""
 "then you will not have the option to put an end date on the hold suspension"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/catalogue/search-history.tt:5
+#, c-format
+msgid ""
+"If you have your EnableSearchHistory preference set to keep your search "
+"history then you can access this information by clicking on your username in "
+"the top right of the staff client and choosing 'Search history'."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:21
 #, c-format
 msgid ""
@@ -7037,6 +7128,14 @@ msgid ""
 "library"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:56
+#, c-format
+msgid ""
+"If you want to enter the Library of Congress SRU server, you should at least "
+"use the following information. The full URL http://lx2.loc.gov:210/LCDB must "
+"be entered as follows:"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/cataloguing/moveitem.tt:11
 #, c-format
 msgid ""
@@ -7049,6 +7148,13 @@ msgstr ""
 msgid ""
 "If you want to place a hold on multiple items, simply check the boxes to the "
 "left of them and click the arrow to the right of the 'Place Hold' button."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:43
+#, c-format
+msgid ""
+"If you want to remove both holdings data and $9 links when importing, you "
+"can use:"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/acqui/z3950_search.tt:5
@@ -7228,7 +7334,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:59
 #, c-format
 msgid ""
-"If you're allowing renewals you can control how long the renewal loan peiod "
+"If you're allowing renewals you can control how long the renewal loan period "
 "will be (in the units you have chosen) in the 'Renewal period' box"
 msgstr ""
 
@@ -7528,7 +7634,7 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/merge.tt:19
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:68
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:66
 #, c-format
 msgid ""
 "Important: It is important to rebuild your zebra index immediately after "
@@ -7606,7 +7712,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Important: The 'password' value should be stored in plain text, and will be "
-"converted to a md5 hash (which is an encrypted version of the password)."
+"converted to a Bcrypt hash (which is an encrypted version of the password)."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:99
@@ -8270,8 +8376,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:7
 #, c-format
 msgid ""
-"Koha comes with a default list of Z39.50 targets set up that you can add to, "
-"edit or delete"
+"Koha comes with a default list of Z39.50/SRU targets set up that you can add "
+"to, edit or delete."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/export.tt:5
@@ -8310,14 +8416,14 @@ msgid ""
 "for instance, 'Lost.'"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/about.tt:21
+#: intranet-tmpl/prog/en/modules/help/about.tt:22
 #, c-format
 msgid ""
 "Koha is developed and supported by a large number of developers around the "
 "world. Thanks to all the developers and libraries who support Koha"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/about.tt:25
+#: intranet-tmpl/prog/en/modules/help/about.tt:26
 #, c-format
 msgid ""
 "Koha is free software; you can redistribute it and/or modify it under the "
@@ -8362,7 +8468,7 @@ msgstr ""
 msgid "Koha reports library"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/about.tt:19
+#: intranet-tmpl/prog/en/modules/help/about.tt:20
 #, c-format
 msgid "Koha team"
 msgstr ""
@@ -8437,29 +8543,34 @@ msgstr ""
 msgid "LCC"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:57
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:60
+#, c-format
+msgid "LCDB"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:98
 #, c-format
 msgid ""
 "LIBRARIESAUSTRALIA AUTHORITIES z3950-test.librariesaustralia.nla.gov.au:210 "
 "AuthTraining Userid: ANLEZ / Password: z39.50"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:58
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:99
 #, c-format
 msgid "LIBRARY OF CONGRESS NAME AUTHORITIES lx2.loc.gov:210 NAF"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:59
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:100
 #, c-format
 msgid "LIBRARY OF CONGRESS SUBJECT AUTHORITIES lx2.loc.gov:210 SAF"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:42
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:83
 #, c-format
 msgid "LIBRARY OF CONGRESS lx2.loc.gov: 210 LCDB"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:43
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:84
 #, c-format
 msgid "LONDON PUBLIC LIBRARY catalogue.londonpubliclibrary.ca:210 INNOPAC"
 msgstr ""
@@ -8564,7 +8675,7 @@ msgid ""
 "the pull down at the top of the page"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/about.tt:23
+#: intranet-tmpl/prog/en/modules/help/about.tt:24
 #, c-format
 msgid "Licenses"
 msgstr ""
@@ -8630,7 +8741,7 @@ msgstr ""
 msgid "Local Use System Preferences"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:26
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:25
 #, c-format
 msgid "Local Use:"
 msgstr ""
@@ -8647,7 +8758,7 @@ msgstr ""
 msgid "Log viewer"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:27
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:26
 #, c-format
 msgid "Logs:"
 msgstr ""
@@ -8662,7 +8773,7 @@ msgstr ""
 msgid "M = Sundry"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:44
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:85
 #, c-format
 msgid "MANITOBA PUBLIC library.gov.mb.ca:210 horizon"
 msgstr ""
@@ -8707,7 +8818,17 @@ msgstr ""
 msgid "MARC import"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:45
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:50
+#, c-format
+msgid "MARC21/NORMARC"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:61
+#, c-format
+msgid "MARC21/USMARC"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:86
 #, c-format
 msgid "MILTON PL cat.mpl.on.ca:210 horizon"
 msgstr ""
@@ -8878,7 +8999,7 @@ msgstr ""
 msgid "Merge authorities"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:54
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:52
 #, c-format
 msgid "Merging Bibliographic Records Via Lists"
 msgstr ""
@@ -9004,7 +9125,7 @@ msgstr ""
 msgid "N = New card"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:46
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:87
 #, c-format
 msgid "NATIONAL LIBRARY OF WALES cat.llgc.org.uk:210 default"
 msgstr ""
@@ -9023,7 +9144,7 @@ msgid ""
 "the item"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:27
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:26
 #, c-format
 msgid "Name the list and choose what type of list this is "
 msgstr ""
@@ -9215,6 +9336,13 @@ msgstr ""
 msgid "Note"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/about.tt:14
+#, c-format
+msgid ""
+"Note that the version number between parentheses following the module name "
+"is the required version; the installed version is in the next column."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:57
 #: intranet-tmpl/prog/en/modules/help/acqui/lateorders.tt:9
 #: intranet-tmpl/prog/en/modules/help/acqui/lateorders.tt:15
@@ -9294,7 +9422,7 @@ msgstr ""
 msgid "OPAC &gt; Login &gt; my messaging"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:28
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:27
 #, c-format
 msgid "OPAC:"
 msgstr ""
@@ -9537,7 +9665,7 @@ msgstr ""
 msgid "Once the item is checked out it will appear below the patron's info."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:38
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:36
 #, c-format
 msgid ""
 "Once the list is saved it will accessible from the Lists page and from the "
@@ -9610,7 +9738,7 @@ msgid ""
 "record will be deleted."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:66
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:64
 #, c-format
 msgid ""
 "Once you have completed your selections click the 'merge' button. The "
@@ -9726,7 +9854,7 @@ msgid ""
 "merge."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:60
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:58
 #, c-format
 msgid ""
 "Once you have selected the records you want to merge, click the 'Merge "
@@ -10256,7 +10384,7 @@ msgstr ""
 msgid "Patrons within the staff category will have access to the staff client."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:29
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:28
 #, c-format
 msgid "Patrons:"
 msgstr ""
@@ -10381,6 +10509,11 @@ msgstr ""
 msgid "Plugins"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:59
+#, c-format
+msgid "Port"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tools/quotes-upload.tt:19
 #, c-format
 msgid "Pre-save Editing"
@@ -10399,6 +10532,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:38
 #, c-format
 msgid "Printing Receipts"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:14
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:28
+#, c-format
+msgid "Private list: Is managed by you and can be seen only by you"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:30
@@ -10435,6 +10574,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:47
 #, c-format
 msgid "Provide a description so you can identify this action later"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:15
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:29
+#, c-format
+msgid "Public list: Can be seen by everybody, but managed only by you"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:65
@@ -10741,6 +10886,11 @@ msgstr ""
 msgid "SHARE_INVITE "
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:55
+#, c-format
+msgid "SRU example"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:29
 #, c-format
 msgid "Salutation is populated by the BorrowersTitles system preference"
@@ -10805,6 +10955,11 @@ msgstr ""
 msgid "Search for the item you would like to catalog "
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/catalogue/search-history.tt:3
+#, c-format
+msgid "Search history"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:35
 #, c-format
 msgid "Search index: Control-number"
@@ -10832,7 +10987,7 @@ msgstr ""
 msgid "Searching Subtypes on the Staff Client"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:30
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:29
 #, c-format
 msgid "Searching:"
 msgstr ""
@@ -11142,7 +11297,7 @@ msgstr ""
 msgid "See the full documentation for Library Transfer Limits in the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:70
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:68
 #, c-format
 msgid "See the full documentation for Lists in the "
 msgstr ""
@@ -11325,6 +11480,11 @@ msgstr ""
 msgid "See the full documentation for Routing Lists in the "
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/catalogue/search-history.tt:9
+#, c-format
+msgid "See the full documentation for Search History in the "
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:81
 #, c-format
 msgid "See the full documentation for Searching in the "
@@ -11363,7 +11523,7 @@ msgid "See the full documentation for Setting your Library in the "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/systempreferences.tt:11
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:36
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:35
 #, c-format
 msgid "See the full documentation for System Preferences in the "
 msgstr ""
@@ -11415,9 +11575,9 @@ msgstr ""
 msgid "See the full documentation for Vendor Contracts in the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:61
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #, c-format
-msgid "See the full documentation for Z39.50 Servers in the "
+msgid "See the full documentation for Z39.50/SRU Servers in the "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/course_reserves/course.tt:17
@@ -11440,7 +11600,7 @@ msgstr ""
 msgid "See the full documentation for system Administration in the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/about.tt:37
+#: intranet-tmpl/prog/en/modules/help/about.tt:38
 #, c-format
 msgid "See the full documentation for the About page in the "
 msgstr ""
@@ -11457,7 +11617,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/reports/manager.tt:11
 #, c-format
-msgid "See the full documentation for the Catalog by Item Type report in the "
+msgid "See the full documentation for the Catalog by Item type report in the "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/didyoumean.tt:20
@@ -11650,7 +11810,7 @@ msgid "Serial Numbering Patterns"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/serials/serials-home.tt:3
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:31
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:30
 #, c-format
 msgid "Serials"
 msgstr ""
@@ -11718,7 +11878,7 @@ msgid "Setup"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/merge.tt:13
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:64
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:62
 #, c-format
 msgid ""
 "Should you try to add a field that is not repeatable two times (like "
@@ -11851,7 +12011,7 @@ msgstr ""
 msgid "Staff Client &gt; Patron Record &gt; Notices"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:32
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:31
 #, c-format
 msgid "Staff Client:"
 msgstr ""
@@ -11864,6 +12024,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:448
 #, c-format
 msgid "Stage MARC records into the reservoir"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:72
+#, c-format
+msgid "Standard ID"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:12
@@ -11982,6 +12147,11 @@ msgstr ""
 msgid "Subfields: a"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:71
+#, c-format
+msgid "Subject"
+msgstr ""
+
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/help/edithelp.tt:36
 msgid "Submit"
@@ -12004,14 +12174,20 @@ msgid ""
 "record or by visiting the Serials module and clicking 'New Subscription'"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:52
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:93
 #, c-format
 msgid "Suggested Authority Z39.50 Targets"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:34
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:75
 #, c-format
 msgid "Suggested Bibliographic Z39.50 Targets"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:46
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:61
+#, c-format
+msgid "Syntax"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:3
@@ -12019,7 +12195,7 @@ msgstr ""
 msgid "System Preferences"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/about.tt:15
+#: intranet-tmpl/prog/en/modules/help/about.tt:16
 #, c-format
 msgid "System information"
 msgstr ""
@@ -12060,7 +12236,7 @@ msgid ""
 "run a report to gather the statistics from this card"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:47
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:88
 #, c-format
 msgid "TORONTO PUBLIC symphony.torontopubliclibrary.ca:2200 unicorn"
 msgstr ""
@@ -12070,7 +12246,7 @@ msgstr ""
 msgid "TRANSFERSLIP "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:48
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:89
 #, c-format
 msgid "TRI-UNI 129.97.129.194:7090 voyager"
 msgstr ""
@@ -12804,7 +12980,7 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/merge.tt:5
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:56
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:54
 #, c-format
 msgid ""
 "The easiest way to merge together duplicate bibliographic records is to add "
@@ -12891,14 +13067,14 @@ msgstr ""
 msgid "The following item(s) is/are currently overdue:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:36
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:77
 #, c-format
 msgid ""
 "The following targets have been used successfully by other Koha libraries "
 "(in the Americas):"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:54
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:95
 #, c-format
 msgid ""
 "The following targets have been used successfully by other Koha libraries:"
@@ -13884,7 +14060,7 @@ msgid ""
 "date string."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/about.tt:31
+#: intranet-tmpl/prog/en/modules/help/about.tt:32
 #, c-format
 msgid "This tab lists all of the languages that Koha has been translated to."
 msgstr ""
@@ -13898,19 +14074,19 @@ msgid ""
 "installed."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/about.tt:35
+#: intranet-tmpl/prog/en/modules/help/about.tt:36
 #, c-format
 msgid "This tab provides a summary of Koha's release and development history."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/about.tt:27
+#: intranet-tmpl/prog/en/modules/help/about.tt:28
 #, c-format
 msgid ""
 "This tab shows the information related to any and all licenses associated "
 "with Koha."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/about.tt:17
+#: intranet-tmpl/prog/en/modules/help/about.tt:18
 #, c-format
 msgid ""
 "This tab will provide you with warnings if you are using system preferences "
@@ -14055,6 +14231,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/tools/scheduler.tt:11
 #, c-format
 msgid "Time should be entered as hh:mm (2 digit hour, 2 digit minute)"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/about.tt:34
+#, c-format
+msgid "Timeline"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:24
@@ -14226,6 +14407,11 @@ msgid ""
 "literally looks for \"\" (empty string) as the value for the field."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:66
+#, c-format
+msgid "Title"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:9
 #, c-format
 msgid "To add a CSV Profile"
@@ -14380,7 +14566,7 @@ msgid ""
 "the list name."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:42
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:40
 #, c-format
 msgid ""
 "To add titles to an existing list click on the list name from the page of "
@@ -14613,6 +14799,14 @@ msgid ""
 "custom groups."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:64
+#, c-format
+msgid ""
+"To further refine your searches, you could add the following index names to "
+"the SRU search field mappings. To do this, edit the server and click the "
+"Modify button next to this field."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/circ/view_holdsqueue.tt:7
 #, c-format
 msgid ""
@@ -14830,7 +15024,7 @@ msgstr ""
 msgid "To see all of the titles this tag was added to simply click on the term"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:50
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:48
 #, c-format
 msgid "To see the contents of a list, visit the Lists page on the staff client"
 msgstr ""
@@ -14998,7 +15192,7 @@ msgstr ""
 msgid "Transfers to receive"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/about.tt:29
+#: intranet-tmpl/prog/en/modules/help/about.tt:30
 #, c-format
 msgid "Translations"
 msgstr ""
@@ -15011,6 +15205,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/tools/scheduler.tt:22
 #, c-format
 msgid "Troubleshooting"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:51
+#, c-format
+msgid "UNIMARC"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/acqui/uncertainprice.tt:3
@@ -15189,6 +15388,11 @@ msgstr ""
 msgid "Using CSV Profiles"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:31
+#, c-format
+msgid "Using XSLT file(s) to transform the imported records"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:11
 #, c-format
 msgid ""
@@ -15294,7 +15498,7 @@ msgid ""
 "when viewing the bibliographic record in the OPAC."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:90
 #, c-format
 msgid "VANCOUVER PUBLIC LIBRARY z3950.vpl.ca:210 Horizon"
 msgstr ""
@@ -15339,7 +15543,7 @@ msgstr ""
 msgid "Viewing Messages"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:48
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:46
 #, c-format
 msgid "Viewing lists"
 msgstr ""
@@ -15387,7 +15591,7 @@ msgstr ""
 msgid "W = Writeoff"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:33
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:32
 #, c-format
 msgid "Web Services:"
 msgstr ""
@@ -15541,6 +15745,14 @@ msgstr ""
 msgid ""
 "When orders are received invoices are generated. Invoices can be searched by "
 "clicking on 'Invoices' in the left of the Acquisitions page."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:32
+#, c-format
+msgid ""
+"When retrieving records from external targets you may wish to automate some "
+"changes to those records. XSLT's allow you to do this. Koha ships with some "
+"sample XSLT files ready for use."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/suggestion/suggestion.tt:21
@@ -15795,6 +16007,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:17
 #, c-format
 msgid "XML - Included as an alternate export format"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:47
+#, c-format
+msgid "XSLT configuration"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/classsources.tt:25
@@ -16284,7 +16501,7 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/merge.tt:11
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:62
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:60
 #, c-format
 msgid ""
 "You will be presented with the MARC for both of the records (each accessible "
@@ -16459,19 +16676,20 @@ msgid ""
 "they gave for accepting or rejecting it (found under 'Status')."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:3
-#, c-format
-msgid "Z39.50 Servers"
-msgstr ""
-
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:5
 #, c-format
 msgid ""
-"Z39.50 is a client–server protocol for searching and retrieving information "
-"from remote computer databases, in short it's a tool used for copy "
-"cataloging. Using Koha you can connect to any Z39.50 target that is publicly "
-"available or that you have the log in information to and copy both "
-"bibliographic and/or authority records from that source."
+"Z39.50 and SRU are client–server protocols for searching and retrieving "
+"information from remote computer databases, in short tools used for copy "
+"cataloging. Using Koha you can connect to any Z39.50/SRU target that is "
+"publicly available or that you have the log in information to and copy both "
+"bibliographic and/or authority records from that source. (Note that not all "
+"SRU targets will offer bibliographic information in MARC format.)"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:3
+#, c-format
+msgid "Z39.50/SRU Servers"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/picture-upload.tt:14
@@ -16564,6 +16782,21 @@ msgstr ""
 msgid "batch_upload_patron_images "
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:67
+#, c-format
+msgid "bath.isbn"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:70
+#, c-format
+msgid "bath.issn"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:72
+#, c-format
+msgid "bath.standardIdentifier"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tools/quotes.tt:21
 #, c-format
 msgid "be filled in in order to save the new quote."
@@ -16648,6 +16881,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:242
 #, c-format
 msgid "contracts_manage "
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:68
+#, c-format
+msgid "cql.anywhere"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:471
@@ -16770,17 +17008,32 @@ msgstr ""
 msgid "ctype:z Treaties"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:28
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:27
 #, c-format
 msgid ""
 "customize the OPAC and OPAC functions (aside from the Enhanced Content "
 "preferences)."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:32
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:31
 #, c-format
 msgid ""
 "customize the staff client by editing the stylesheet and navigation menu."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:69
+#, c-format
+msgid "dc.author"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:71
+#, c-format
+msgid "dc.subject"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:66
+#, c-format
+msgid "dc.title"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/classsources.tt:10
@@ -16909,12 +17162,12 @@ msgid ""
 "timeout."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:31
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:30
 #, c-format
 msgid "holds all preferences related to managing serial subscriptions."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:30
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:29
 #, c-format
 msgid ""
 "holds preference related to advanced search functions such as removing stop "
@@ -16933,7 +17186,7 @@ msgid ""
 "suggestions and local taxes."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:25
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:24
 #, c-format
 msgid ""
 "holds preferences related to internationalization and localization such as "
@@ -16946,7 +17199,7 @@ msgid ""
 "holds preferences that control circulation functions such as holds and fines."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:29
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:28
 #, c-format
 msgid ""
 "holds preferences that control how your system handles patron functions. "
@@ -16961,7 +17214,7 @@ msgid ""
 "choose your MARC flavor, set up Z39.50 and barcoding."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:24
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:23
 #, c-format
 msgid ""
 "holds preferences that will add content from outside sources to your OPAC "
@@ -17010,7 +17263,7 @@ msgstr ""
 msgid "in the manual (online)."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:33
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:32
 #, c-format
 msgid "includes preferences related to services like OAI-PMH."
 msgstr ""
@@ -17115,6 +17368,11 @@ msgstr ""
 msgid "localuse "
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:58
+#, c-format
+msgid "lx2.loc.gov"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:160
 #, c-format
 msgid "manage_circ_rules "
@@ -17150,7 +17408,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:90
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
-#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:61
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:95
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:73
@@ -17165,7 +17423,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgets.tt:34
 #: intranet-tmpl/prog/en/modules/help/admin/didyoumean.tt:20
 #: intranet-tmpl/prog/en/modules/help/admin/systempreferences.tt:11
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:36
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:35
 #: intranet-tmpl/prog/en/modules/help/admin/transport-cost-matrix.tt:13
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:50
 #: intranet-tmpl/prog/en/modules/help/admin/checkmarc.tt:9
@@ -17216,6 +17474,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/circ/renew.tt:11
 #: intranet-tmpl/prog/en/modules/help/catalogue/moredetail.tt:21
 #: intranet-tmpl/prog/en/modules/help/catalogue/issuehistory.tt:9
+#: intranet-tmpl/prog/en/modules/help/catalogue/search-history.tt:9
 #: intranet-tmpl/prog/en/modules/help/catalogue/detail.tt:7
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:81
 #: intranet-tmpl/prog/en/modules/help/reserve/request.tt:63
@@ -17250,7 +17509,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/members/readingrec.tt:11
 #: intranet-tmpl/prog/en/modules/help/members/members-update.tt:11
 #: intranet-tmpl/prog/en/modules/help/members/members-home.tt:53
-#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:70
+#: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:68
 #: intranet-tmpl/prog/en/modules/help/acqui/lateorders.tt:19
 #: intranet-tmpl/prog/en/modules/help/acqui/uncertainprice.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:19
@@ -17307,7 +17566,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/tools/cleanborrowers.tt:24
 #: intranet-tmpl/prog/en/modules/help/tools/manage-marc-import.tt:43
 #: intranet-tmpl/prog/en/modules/help/tools/holidays.tt:68
-#: intranet-tmpl/prog/en/modules/help/about.tt:37
+#: intranet-tmpl/prog/en/modules/help/about.tt:38
 #: intranet-tmpl/prog/en/modules/help/reviews/reviewswaiting.tt:13
 #, c-format
 msgid "manual"
@@ -17577,12 +17836,7 @@ msgid ""
 "using, or distributing the record"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:23
-#, c-format
-msgid "this tab contains preferences related to modules that create objects."
-msgstr ""
-
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:26
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:25
 #, c-format
 msgid ""
 "this tab will usually be empty unless your library has a preference just for "
@@ -17599,7 +17853,7 @@ msgstr ""
 msgid "tools "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:27
+#: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:26
 #, c-format
 msgid "turn on/off logging functionality in your system."
 msgstr ""
@@ -17612,6 +17866,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:452
 #, c-format
 msgid "upload_local_cover_images "
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:62
+#, c-format
+msgid "utf8"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:17

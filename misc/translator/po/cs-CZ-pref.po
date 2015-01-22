@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-23 08:15+0200\n"
-"PO-Revision-Date: 2014-12-17 13:59+0000\n"
+"PO-Revision-Date: 2015-01-20 11:29+0000\n"
 "Last-Translator: Josef <josef.moravec@knihovna-uo.cz>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: cs\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1418824772.000000\n"
+"X-POOTLE-MTIME: 1421753341.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -359,12 +359,44 @@ msgid "admin.pref#UsageStatsLibraryType# The library type"
 msgstr "Typ knihovny"
 
 # Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# academic"
+msgstr "akademická"
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# corporate"
+msgstr "firemní"
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# government"
+msgstr "státní správy / samosprávy"
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# private"
+msgstr "soukromá"
+
+# Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryType# public"
 msgstr "veřejná"
 
 # Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStatsLibraryType# university"
-msgstr "akademická"
+msgid "admin.pref#UsageStatsLibraryType# religious organization"
+msgstr "náboženské organizace"
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# research"
+msgstr "vědecká"
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# school"
+msgstr "školní"
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# society or association"
+msgstr "spolková, sdružení nebo asociace"
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# subscription"
+msgstr "předplatitelská / nezávislá knihovna"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryType# will be shown on the <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
@@ -1440,15 +1472,15 @@ msgstr "Když je prázdné pole pro čárový kód během žádosti o výpůjčk
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# clear the screen"
-msgstr "vymažte obrazovku"
+msgstr "vymazat obrazovku"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# open a print quick slip window"
-msgstr "otevři vyskakovací okno tiskárny"
+msgstr "tisknout dnešní výpůjčky (quick slip)"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# open a print slip window"
-msgstr "otevřít standardní tisk výpůjček"
+msgstr "tisknout všechny výpůjčky"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutocompl# Don't try"
@@ -1777,9 +1809,7 @@ msgstr "Nepovolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACAllowHoldDateInFuture# patrons to place holds that don't enter the waiting list until a certain future date. (AllowHoldDateInFuture must also be enabled)."
-msgstr ""
-"čtenářům vytvářet rezervaci s počátečním datem platnosti v budoucnu. ("
-"parametr AllowHoldDateInFuture musí být povolen)."
+msgstr "čtenářům vytvářet rezervaci s počátečním datem platnosti v budoucnu. (parametr AllowHoldDateInFuture musí být povolen)."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# Allow"
@@ -3439,10 +3469,7 @@ msgstr "Zobrazovat"
 
 # OPAC > Appearance
 msgid "opac.pref#AuthorisedValueImages# images for <a href=\"/cgi-bin/koha/admin/authorised_values.pl\">authorized values</a> (such as lost statuses and locations) in search results and item detail pages on the OPAC."
-msgstr ""
-"obrázky pro <a href=\"/cgi-bin/koha/admin/authorised_values.pl\">ověřené "
-"hodnoty</a> (jako status ztracené nebo lokace) ve výsledcích vyhledávání "
-"nebo v detailech výtisku na OPACu."
+msgstr "obrázky pro <a href=\"/cgi-bin/koha/admin/authorised_values.pl\">ověřené hodnoty</a> (jako status ztracené nebo lokace) ve výsledcích vyhledávání nebo v detailech výtisku na OPACu."
 
 # OPAC > Appearance
 msgid "opac.pref#BiblioDefaultView# By default, show bib records"
@@ -4266,9 +4293,7 @@ msgstr "čtenáři knihovny registrovat svůj účet pomocí OPACu."
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
-msgstr ""
-"Zobrazit následující doplňující pokyny pro čtenáře, který se při "
-"předregeistraci pomocí on-line katalogu. (HTML je povoleno):"
+msgstr "Zobrazit následující doplňující pokyny pro čtenáře, který se při předregeistraci pomocí on-line katalogu. (HTML je povoleno):"
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# (separate columns with |)"
@@ -5371,16 +5396,16 @@ msgid "serials.pref#RoutingListNote# Include following note on all routing lists
 msgstr "Vložit ke všem distribučním seznamům následující poznámku:"
 
 # Serials
-msgid "serials.pref#RoutingSerials# Add"
-msgstr "Přidej"
+msgid "serials.pref#RoutingSerials# Don't use"
+msgstr "Nepoužívat"
 
 # Serials
-msgid "serials.pref#RoutingSerials# Don't add"
-msgstr "Nepřidej"
+msgid "serials.pref#RoutingSerials# Use"
+msgstr "Používat"
 
 # Serials
-msgid "serials.pref#RoutingSerials# received serials to the routing list."
-msgstr "došlá čísla periodik na distribuční seznam."
+msgid "serials.pref#RoutingSerials# the routing list feature in the serials module."
+msgstr "funkci distribučních seznamů v modulu Periodika."
 
 # Serials
 msgid "serials.pref#StaffSerialIssueDisplayCount# Show the"
