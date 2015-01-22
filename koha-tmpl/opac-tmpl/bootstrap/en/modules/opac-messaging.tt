@@ -89,9 +89,9 @@
                                                 [% IF ( messaging_preference.transport_sms ) %]
                                                     <td class="selectcol">
                                                         [% IF ( messaging_preference.transports_sms ) %]
-                                                        <input type="checkbox" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" checked="checked" />
+                                                        <input type="checkbox" class="sms" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" checked="checked" />
                                                         [% ELSE %]
-                                                            <input type="checkbox" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" />
+                                                            <input type="checkbox" class="sms" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" />
                                                         [% END %]
                                                     </td>
                                                 [% ELSE %]
@@ -103,11 +103,13 @@
                                                     <td class="selectcol">
                                                         [% IF ( messaging_preference.transports_phone ) %]
                                                             <input type="checkbox"
+                                                                   class="phone"
                                                                    id="phone[% messaging_preference.message_attribute_id | html %]"
                                                                    name="[% messaging_preference.message_attribute_id | html %]"
                                                                    value="phone" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
                                                         [% ELSE %]
                                                             <input type="checkbox"
+                                                                   class="phone"
                                                                    id="phone[% messaging_preference.message_attribute_id | html %]"
                                                                    name="[% messaging_preference.message_attribute_id | html %]"
                                                                    value="phone" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
@@ -122,11 +124,13 @@
                                                 <td class="selectcol">
                                                 [% IF ( messaging_preference.transports_itiva ) %]
                                                 <input type="checkbox"
+                                                            class="itiva"
                                                             id="itiva[% messaging_preference.message_attribute_id | html %]"
                                                             name="[% messaging_preference.message_attribute_id | html %]"
                                                             value="itiva" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
                                                 [% ELSE %]
                                                 <input type="checkbox"
+                                                            class="itiva"
                                                             id="itiva[% messaging_preference.message_attribute_id | html %]"
                                                             name="[% messaging_preference.message_attribute_id | html %]"
                                                             value="itiva" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
@@ -140,9 +144,9 @@
                                             [% IF ( messaging_preference.transport_email ) %]
                                                 <td class="selectcol">
                                                     [% IF ( messaging_preference.transports_email ) %]
-                                                        <input type="checkbox" id="email[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="email" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
+                                                        <input type="checkbox" class="email" id="email[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="email" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
                                                     [% ELSE %]
-                                                        <input type="checkbox" id="email[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="email" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
+                                                        <input type="checkbox" class="email" id="email[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="email" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
                                                     [% END %]
                                                 </td>
                                             [% ELSE %]
@@ -255,6 +259,37 @@
                 }
             });
             $("#info_digests").tooltip();
+
+            // At load time, we want digest disabled if no digest using transport is enabled
+            $(".email").each(function(){
+                var rowid = $(this).attr("id");
+                id = Number(rowid.replace("email",""));
+                if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") ) {
+                    $("#digest"+id).attr("disabled", false);
+                } else {
+                    $("#digest"+id).attr("disabled", true);
+                }
+            });
+
+            // If user clears all digest using transports for a notice, disable digest checkbox
+            $(".email").click(function(){
+                var rowid = $(this).attr("id");
+                id = Number(rowid.replace("email",""));
+                if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") ) {
+                    $("#digest"+id).attr("disabled", false);
+                } else {
+                    $("#digest"+id).attr("disabled", true).prop("checked",false);
+                }
+            });
+            $(".sms").click(function(){
+                var rowid = $(this).attr("id");
+                id = Number(rowid.replace("sms",""));
+                if ( $("#email"+id).prop("checked") || $("#sms"+id).prop("checked") ) {
+                    $("#digest"+id).attr("disabled", false);
+                } else {
+                    $("#digest"+id).attr("disabled", true).prop("checked",false);
+                }
+            });
         });
 
         function normalizeSMS(value){

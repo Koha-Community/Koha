@@ -56,24 +56,24 @@
                  <input type="checkbox"
                  id="sms[% messaging_preference.message_attribute_id | html %]"
                  name="[% messaging_preference.message_attribute_id | html %]"
-                 value="sms" checked="checked" disabled="disabled" />
+                 value="sms" class="sms" checked="checked" disabled="disabled" />
               [% ELSE %]
                  <input type="checkbox"
                  id="sms[% messaging_preference.message_attribute_id | html %]"
                  name="[% messaging_preference.message_attribute_id | html %]"
-                 value="sms" disabled="disabled" />
+                 value="sms" class="sms" disabled="disabled" />
               [% END %]
           [% ELSE %]
               [% IF ( messaging_preference.transports_sms ) %]
                  <input type="checkbox"
                  id="sms[% messaging_preference.message_attribute_id | html %]"
                  name="[% messaging_preference.message_attribute_id | html %]"
-                 value="sms" checked="checked" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
+                 value="sms" checked="checked" class="sms active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
               [% ELSE %]
                  <input type="checkbox"
                  id="sms[% messaging_preference.message_attribute_id | html %]"
                  name="[% messaging_preference.message_attribute_id | html %]"
-                 value="sms" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
+                 value="sms" class="sms active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
               [% END %]
           [% END %]
           </td>
@@ -155,24 +155,24 @@
                 <input type="checkbox"
                    id="email[% messaging_preference.message_attribute_id | html %]"
                    name="[% messaging_preference.message_attribute_id | html %]"
-                   value="email" checked="checked" disabled="disabled" />
+                   value="email" class="email" checked="checked" disabled="disabled" />
               [% ELSE %]
                 <input type="checkbox"
                    id="email[% messaging_preference.message_attribute_id | html %]"
                    name="[% messaging_preference.message_attribute_id | html %]"
-                   value="email" disabled="disabled" />
+                   value="email" class="email" disabled="disabled" />
               [% END %]
           [% ELSE %]
               [% IF ( messaging_preference.transports_email ) %]
             <input type="checkbox"
                  id="email[% messaging_preference.message_attribute_id | html %]"
                  name="[% messaging_preference.message_attribute_id | html %]"
-                 value="email" checked="checked" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
+                 value="email" checked="checked" class="email active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
               [% ELSE %]
             <input type="checkbox"
                  id="email[% messaging_preference.message_attribute_id | html %]"
                  name="[% messaging_preference.message_attribute_id | html %]"
-                 value="email" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
+                 value="email" class="email active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
               [% END %]
           [% END %]
       </td>
@@ -187,24 +187,24 @@
                 <input type="checkbox"
                      id="digest[% messaging_preference.message_attribute_id | html %]"
                      value="[% messaging_preference.message_attribute_id | html %]"
-                     name="digest" checked="checked" disabled="disabled" />
+                     name="digest" class="digest" checked="checked" disabled="disabled" />
               [% ELSE %]
                 <input type="checkbox"
                      id="digest[% messaging_preference.message_attribute_id | html %]"
                      value="[% messaging_preference.message_attribute_id | html %]"
-                     name="digest" disabled="disabled" />
+                     name="digest" class="digest" disabled="disabled" />
               [% END %]
           [% ELSE %]
               [% IF ( messaging_preference.digest ) %]
                 <input type="checkbox"
                      id="digest[% messaging_preference.message_attribute_id | html %]"
                      value="[% messaging_preference.message_attribute_id | html %]"
-                     name="digest" checked="checked" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
+                     name="digest" checked="checked" class="digest active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
               [% ELSE %]
                 <input type="checkbox"
                      id="digest[% messaging_preference.message_attribute_id | html %]"
                      value="[% messaging_preference.message_attribute_id | html %]"
-                     name="digest" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
+                     name="digest" class="digest active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
               [% END %]
           [% END %]
       </td>
