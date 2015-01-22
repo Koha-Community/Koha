@@ -63,11 +63,8 @@ $(document).ready(function() {
                 content = "";
                 if ( data.returned ) {
                     content = CIRCULATION_RETURNED;
-                    $(id).parent().parent().addClass('ok');
-                    $('#date_due_' + data.itemnumber).html(_("Returned"));
                 } else {
                     content = CIRCULATION_NOT_RETURNED;
-                    $(id).parent().parent().addClass('warn');
                 }
 
                 $(id).replaceWith( content );
@@ -95,7 +92,6 @@ $(document).ready(function() {
                 var content = "";
                 if ( data.renew_okay ) {
                     content = CIRCULATION_RENEWED_DUE + " " + data.date_due;
-                    $('#date_due_' + data.itemnumber).replaceWith( data.date_due );
                 } else {
                     content = CIRCULATION_RENEW_FAILED + " ";
                     if ( data.error == "no_checkout" ) {
@@ -114,11 +110,6 @@ $(document).ready(function() {
                 $(id).replaceWith( content );
             }, "json")
         });
-
-        // Refocus on barcode field if it exists
-        if ( $("#barcode").length ) {
-            $("#barcode").focus();
-        }
 
         // Prevent form submit
         return false;
@@ -139,17 +130,17 @@ $(document).ready(function() {
     var drawn = 0;
     issuesTable = $("#issues-table").dataTable({
         "oLanguage": {
-            "sProcessing": MSG_DT_LOADING_RECORDS,
+            "sEmptyTable" : MSG_DT_LOADING_RECORDS,
         },
         "bAutoWidth": false,
-        "sDom": "rt",
+        "sDom": "<'row-fluid'<'span6'><'span6'>r>t<'row-fluid'>t",
         "aoColumns": [
             {
                 "mDataProp": function( oObj ) {
                     if ( oObj.issued_today ) {
-                        return "1" + oObj.timestamp;
+                        return "0";
                     } else {
-                        return "0" + oObj.date_due;
+                        return "100";
                     }
                 }
             },
@@ -169,23 +160,10 @@ $(document).ready(function() {
             {
                 "iDataSort": 1, // Sort on hidden unformatted date due column
                 "mDataProp": function( oObj ) {
-                        var due = oObj.date_due_formatted;
-
-                        if ( oObj.date_due_overdue ) {
-                            due = "<span class='overdue'>" + due + "</span>";
-                        }
-
-                        if ( oObj.lost ) {
-                            due += "<span class='lost'>" + oObj.lost + "</span>";
-                         }
-
-                        if ( oObj.damaged ) {
-                            due += "<span class='dmg'>" + oObj.damaged + "</span>";
-                        }
-
-                        due = "<span id='date_due_" + oObj.itemnumber + "' class='date_due'>" + due + "</span>";
-
-                        return due;
+                    if ( oObj.date_due_overdue ) {
+                        return "<span class='overdue'>" + oObj.date_due_formatted + "</span>";
+                    } else {
+                        return oObj.date_due_formatted;
                     }
                 }
             },
@@ -228,7 +206,7 @@ $(document).ready(function() {
                     return title;
                 }
             },
-            { "mDataProp": "itemtype_description" },
+            { "mDataProp": "itemtype" },
             { "mDataProp": "issuedate_formatted" },
             { "mDataProp": "branchname" },
             { "mDataProp": "itemcallnumber" },
@@ -257,7 +235,7 @@ $(document).ready(function() {
                     if ( oObj.can_renew ) {
                         // Do nothing
                     } else if ( oObj.can_renew_error == "on_reserve" ) {
-                        content += "<span class='renewals-disabled-no-override'>"
+                        content += "<span class='renewals-disabled'>"
                                 + "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + ON_HOLD + "</a>"
                                 + "</span>";
 
@@ -290,28 +268,17 @@ $(document).ready(function() {
                             +  "<input type='checkbox' class='renew' id='renew_" + oObj.itemnumber + "' name='renew' value='" + oObj.itemnumber +"'/>"
                             +  "</span>";
 
-                        var can_force_renew = ( oObj.onsite_checkout == 0 ) && ( oObj.can_renew_error != "on_reserve" );
-                        var can_renew = ( oObj.renewals_remaining > 0  && !oObj.can_renew_error );
-                        if ( oObj.onsite_checkout == 0 ) {
-                            if ( can_renew || can_force_renew ) {
-                                content += "<span class='" + span_class + "' style='" + span_style + "'>"
-                                        +  "<input type='checkbox' ";
-                                if ( oObj.date_due_overdue && can_renew ) {
-                                    content += "checked='checked' ";
-                                }
-                                content += "class='renew' id='renew_" + oObj.itemnumber + "' name='renew' value='" + oObj.itemnumber +"'/>"
-                                        +  "</span>";
-
-                                content += "<span class='renewals'>("
-                                        + RENEWALS_REMAINING.format( oObj.renewals_remaining, oObj.renewals_allowed )
-                                        + ")</span>";
-                            }
-                        }
-
-                        content += "</span>";
-
-                        return content;
+                    if ( oObj.renewals_remaining ) {
+                        content += "<span class='renewals'>("
+                                + RENEWALS_REMAINING.format( oObj.renewals_remaining, oObj.renewals_allowed )
+                                + ")</span>";
                     }
+
+                    content += "</span>";
+
+
+                    return content;
+                }
             },
             {
                 "bSortable": false,
@@ -388,7 +355,7 @@ $(document).ready(function() {
         if ( ! relativesIssuesTable ) {
             relativesIssuesTable = $("#relatives-issues-table").dataTable({
                 "bAutoWidth": false,
-                "sDom": "rt",
+                "sDom": "<'row-fluid'<'span6'><'span6'>r>t<'row-fluid'>t",
                 "aaSorting": [],
                 "aoColumns": [
                     {

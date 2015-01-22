@@ -5,7 +5,7 @@ $(document).ready(function() {
         if ( ! holdsTable ) {
             holdsTable = $("#holds-table").dataTable({
                 "bAutoWidth": false,
-                "sDom": "rt",
+                "sDom": "<'row-fluid'<'span6'><'span6'>r>t<'row-fluid'>t",
                 "aoColumns": [
                     {
                         "mDataProp": "reservedate_formatted"

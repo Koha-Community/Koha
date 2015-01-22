@@ -25,8 +25,8 @@ use JSON qw(to_json);
 
 use C4::Auth qw(check_cookie_auth);
 use C4::Biblio qw(GetMarcBiblio GetFrameworkCode GetRecordValue );
-use C4::Circulation qw(GetIssuingCharges CanBookBeRenewed GetRenewCount GetSoonestRenewDate);
-use C4::Koha qw(GetAuthorisedValueByCode);
+use C4::Circulation
+  qw(GetIssuingCharges CanBookBeRenewed GetRenewCount GetSoonestRenewDate);
 use C4::Context;
 
 use Koha::DateUtils;
@@ -46,12 +46,9 @@ my @sort_columns = qw/date_due title itype issuedate branchcode itemcallnumber/;
 my @borrowernumber   = $input->param('borrowernumber');
 my $offset           = $input->param('iDisplayStart');
 my $results_per_page = $input->param('iDisplayLength') || -1;
-
-my $sorting_column = $input->param('iSortCol_0') || q{};
-$sorting_column = ( $sorting_column && $sort_columns[$sorting_column] ) ? $sort_columns[$sorting_column] : 'issuedate';
-
-my $sorting_direction = $input->param('sSortDir_0') || q{};
-$sorting_direction = $sorting_direction eq 'asc' ? 'asc' : 'desc';
+my $sorting_column   = $sort_columns[ $input->param('iSortCol_0') ]
+  || 'issuedate';
+my $sorting_direction = $input->param('sSortDir_0') eq 'asc' ? 'asc' : 'desc';
 
 $results_per_page = undef if ( $results_per_page == -1 );
 
@@ -64,7 +61,6 @@ my $sql = '
         issuedate,
         date_due,
         date_due < now() as date_due_overdue,
-        issues.timestamp,
 
         biblionumber,
         biblio.title,
@@ -79,18 +75,13 @@ my $sql = '
         issues.branchcode,
         branchname,
 
-        items.itype,
-        itemtype_item.description AS itype_description,
-        biblioitems.itemtype,
-        itemtype_bib.description AS itemtype_description,
+        itype,
+        itemtype,
 
         borrowernumber,
         surname,
         firstname,
         cardnumber,
-
-        itemlost,
-        damaged,
 
         DATEDIFF( issuedate, CURRENT_DATE() ) AS not_issued_today
     FROM issues
@@ -99,8 +90,6 @@ my $sql = '
         LEFT JOIN biblioitems USING ( biblionumber )
         LEFT JOIN borrowers USING ( borrowernumber )
         LEFT JOIN branches ON ( issues.branchcode = branches.branchcode )
-        LEFT JOIN itemtypes itemtype_bib ON ( biblioitems.itemtype = itemtype_bib.itemtype )
-        LEFT JOIN itemtypes itemtype_item ON ( items.itype = itemtype_item.itemtype )
     WHERE borrowernumber
 ';
 
@@ -128,7 +117,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
     my ( $can_renew, $can_renew_error ) =
       CanBookBeRenewed( $c->{borrowernumber}, $c->{itemnumber} );
     my $can_renew_date =
-      $can_renew_error && $can_renew_error eq 'too_soon'
+      $can_renew_error eq 'too_soon'
       ? output_pref(
         {
             dt => GetSoonestRenewDate( $c->{borrowernumber}, $c->{itemnumber} ),
@@ -146,7 +135,6 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         author     => $c->{author},
         barcode    => $c->{barcode},
         itemtype   => $item_level_itypes ? $c->{itype} : $c->{itemtype},
-        itemtype_description => $item_level_itypes ? $c->{itype_description} : $c->{itemtype_description},
         itemnotes  => $c->{itemnotes},
         branchcode => $c->{branchcode},
         branchname => $c->{branchname},
@@ -162,7 +150,6 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         issuedate           => $c->{issuedate},
         date_due            => $c->{date_due},
         date_due_overdue    => $c->{date_due_overdue} ? JSON::true : JSON::false,
-        timestamp           => $c->{timestamp},
         renewals_count      => $renewals_count,
         renewals_allowed    => $renewals_allowed,
         renewals_remaining  => $renewals_remaining,
@@ -183,8 +170,6 @@ while ( my $c = $sth->fetchrow_hashref() ) {
             GetMarcBiblio( $c->{biblionumber} ),
             GetFrameworkCode( $c->{biblionumber} )
         ),
-        lost => $c->{itemlost} ? GetAuthorisedValueByCode( 'LOST', $c->{itemlost} ) : undef,
-        damaged => $c->{damaged} ? GetAuthorisedValueByCode( 'DAMAGED', $c->{damaged} ) : undef,
         borrower => {
             surname    => $c->{surname},
             firstname  => $c->{firstname},
