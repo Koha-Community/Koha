@@ -15,7 +15,7 @@
 	<h1>Authority search results</h1>
 	<div id="pages">
 			[% IF ( displayprev ) %]
-				<a href="opac-authorities-home.pl?startfrom=[% startfromprev %]&amp;[% FOREACH searchdat IN searchdata %][% searchdat.term %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode %]&amp;orderby=[% orderby %]">
+				<a href="opac-authorities-home.pl?startfrom=[% startfromprev %]&amp;[% FOREACH searchdat IN searchdata %][% searchdat.term %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode %]&amp;orderby=[% orderby | html%]">
 					&lt;&lt;
 				</a>
 			[% END %]
@@ -23,11 +23,11 @@
 				[% IF ( number.highlight ) %]
 					<span class="current">[% number.number %]</span>
 				[% ELSE %]
-					<a href="opac-authorities-home.pl?startfrom=[% number.startfrom %]&amp;[% FOREACH searchdat IN number.searchdata %][% searchdat.term %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode %]&amp;orderby=[% orderby %]">[% number.number %]</a>
+					<a href="opac-authorities-home.pl?startfrom=[% number.startfrom %]&amp;[% FOREACH searchdat IN number.searchdata %][% searchdat.term %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode %]&amp;orderby=[% orderby |html %]">[% number.number %]</a>
 				[% END %]
 			[% END %]
 			[% IF ( displaynext ) %]
-				<a href="opac-authorities-home.pl?startfrom=[% startfromnext %]&amp;[% FOREACH searchdat IN searchdata %][% searchdat.term %]=[% searchdat.val |url %]&amp;[% END %]&amp;resultsperpage=[% resultsperpage %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode %]&amp;orderby=[% orderby %]">&gt;&gt;</a>
+				<a href="opac-authorities-home.pl?startfrom=[% startfromnext %]&amp;[% FOREACH searchdat IN searchdata %][% searchdat.term %]=[% searchdat.val |url %]&amp;[% END %]&amp;resultsperpage=[% resultsperpage %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode %]&amp;orderby=[% orderby |html%]">&gt;&gt;</a>
 				[% END %]
 		</div>
 		<div id="results">
