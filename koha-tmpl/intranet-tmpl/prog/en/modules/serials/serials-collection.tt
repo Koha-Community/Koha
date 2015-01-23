@@ -1,19 +1,20 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Serials &rsaquo; Serial collection information for [% bibliotitle %]</title>
+<title>Koha &rsaquo; Serials &rsaquo; Serial collection information for [% bibliotitle | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="ser_serials-collection" class="ser">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Serial collection information for  <i>[% bibliotitle %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Serial collection information for  <i>[% bibliotitle | html %]</i></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -26,9 +27,9 @@
 [% UNLESS ( popup ) %]
 	[% INCLUDE 'serials-toolbar.inc' %]
 
-	<h1>Serial collection information for  <i>[% bibliotitle %]</i>
-        [% IF location %] ([% AuthorisedValues.GetByCode( 'LOC', location ) %]) [% END %]
-		[% IF ( callnumber ) %]callnumber: [% callnumber %][% END %]</h1>
+	<h1>Serial collection information for  <i>[% bibliotitle | html %]</i>
+        [% IF location %] ([% AuthorisedValues.GetByCode( 'LOC', location ) | html %]) [% END %]
+		[% IF ( callnumber ) %]callnumber: [% callnumber | html %][% END %]</h1>
 [% END %]
 
 [% IF ( subscriptions ) %]
@@ -49,12 +50,12 @@
 </tr>
 [% FOREACH subscription IN subscriptions %]
     <tr>
-        <td><a href="subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]"># [% subscription.subscriptionid %]</a> </td>
-        <td>[% subscription.frequency.description %]</td>
-        <td>[% subscription.numberpattern.label %]</td>
-        <td>[% IF subscription.branchcode %][% Branches.GetName( subscription.branchcode ) %][% END %]</td>
-        <td> [% subscription.callnumber %]</td>
-        <td> [% subscription.notes %]
+        <td><a href="subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | html %]"># [% subscription.subscriptionid | html %]</a> </td>
+        <td>[% subscription.frequency.description | html %]</td>
+        <td>[% subscription.numberpattern.label | html %]</td>
+        <td>[% IF subscription.branchcode %][% Branches.GetName( subscription.branchcode ) | html %][% END %]</td>
+        <td> [% subscription.callnumber | html %]</td>
+        <td> [% subscription.notes | html %]
             [% UNLESS subscription.closed %]
                 [% IF ( subscription.subscriptionexpired ) %]
                     <br /><span class="problem"> Subscription expired</span>
@@ -67,14 +68,14 @@
         [% UNLESS subscription.closed %]
             [% IF ( routing && CAN_user_serials_routing ) %]
                 [% IF ( subscription.hasRouting ) %]
-                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]"><i class="fa fa-pencil"></i> Edit routing list</a>
+                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid | html %]"><i class="fa fa-pencil"></i> Edit routing list</a>
                 [% ELSE %]
-                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=new"><i class="fa fa-plus"></i> Create routing list</a>
+                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid | html %]&amp;op=new"><i class="fa fa-plus"></i> Create routing list</a>
                 [% END %]
             [% END %]
-            [% IF ( subscription.abouttoexpire ) %]<a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscription.subscriptionid %]" onclick="popup([% subscription.subscriptionid %]); return false;"><i class="fa fa-refresh"></i> Renew</a>
+            [% IF ( subscription.abouttoexpire ) %]<a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscription.subscriptionid | html %]" onclick="popup([% subscription.subscriptionid | html %]); return false;"><i class="fa fa-refresh"></i> Renew</a>
             [% ELSE %]
-                [% IF ( subscription.subscriptionexpired ) %]<a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscription.subscriptionid %]" onclick="popup([% subscription.subscriptionid %]); return false;"><i class="fa fa-refresh"></i> Renew</a>
+                [% IF ( subscription.subscriptionexpired ) %]<a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscription.subscriptionid | html %]" onclick="popup([% subscription.subscriptionid | html %]); return false;"><i class="fa fa-refresh"></i> Renew</a>
                 [% ELSE %]
                     &nbsp;
                 [% END %]
@@ -87,7 +88,7 @@
 [% END %]
 [% IF ( subscr ) %]
 [% IF ( subscriptioncount > 1 ) %]
-<tr ><td colspan="8">  <a href="serials-collection.pl?biblionumber=[% biblionumber %]">See any subscription attached to this biblio</a></td>
+<tr ><td colspan="8">  <a href="serials-collection.pl?biblionumber=[% biblionumber | html %]">See any subscription attached to this biblio</a></td>
 </tr>
 [% END %]
 [% END %]
@@ -103,19 +104,19 @@
             [% IF year.year == 'manage' %]
                 <li><a href="#subscription-year-manage">Manage</a></li>
             [% ELSE %]
-                <li><a href="#subscription-year-[% year.year %]">[% year.year %]</a></li>
+                <li><a href="#subscription-year-[% year.year | html %]">[% year.year | html %]</a></li>
             [% END %]
         [% END %]
     [% END %]
 </ul>
 
  [% FOREACH year IN years %]
-<div id="subscription-year-[% year.year %]">
+<div id="subscription-year-[% year.year | html %]">
     [% IF ( CAN_user_serials_receive_serials ) %]
         <p>
             <div class="btn-group"><input type="submit" value="Edit serials" class="btn btn-default btn-sm" /></div>
             [% UNLESS subscription.closed %]
-                <div class="btn-group"><input type="button" value="Generate next" onclick="javascription:generateNext([% subscriptionidlist %])" class="btn btn-default btn-sm" /></div>
+                <div class="btn-group"><input type="button" value="Generate next" onclick="javascription:generateNext([% subscriptionidlist | html %])" class="btn btn-default btn-sm" /></div>
                 [% IF ( subscriptions.size == 1 and !serialsadditems ) %]&nbsp;
                     <div class="btn-group"><input type="button" value="Multi receiving" href="#multi_receiving" class="btn btn-default btn-sm" data-toggle="modal"></div>
                 [% END %]
@@ -123,10 +124,10 @@
         </p>
     [% END %]
       <span class="checkall">
-        <a class="CheckAll" href="#" onclick="CheckAll('subscription-year-[% year.year %]'); return false;">Select all</a>
+        <a class="CheckAll" href="#" onclick="CheckAll('subscription-year-[% year.year | html %]'); return false;">Select all</a>
       </span> |
       <span class="clearall">
-        <a class="CheckNone" href="#" onclick="CheckNone('subscription-year-[% year.year %]'); return false;">Clear all</a>
+        <a class="CheckNone" href="#" onclick="CheckNone('subscription-year-[% year.year | html %]'); return false;">Clear all</a>
       </span>
         <table class="subscription-year-table">
           <thead>
@@ -161,22 +162,22 @@
                     disabled
                   [% ELSE %]
                     [% IF ( serial.subscriptionexpired ) %]
-                    <input type="checkbox" name="serialid" value="[% serial.serialid %]" disabled="disabled" />
+                    <input type="checkbox" name="serialid" value="[% serial.serialid | html %]" disabled="disabled" />
                     [% ELSE %]
                       [% IF ( serial.checked ) %]
-                    <input type="checkbox" class="checkboxed" name="serialid" checked="checked" value="[% serial.serialid %]" />
+                    <input type="checkbox" class="checkboxed" name="serialid" checked="checked" value="[% serial.serialid | html %]" />
                       [% ELSE %]
-                    <input type="checkbox" class="checkboxed" name="serialid" value="[% serial.serialid %]" />
+                    <input type="checkbox" class="checkboxed" name="serialid" value="[% serial.serialid | html %]" />
                       [% END %]
                     [% END %]
                   [% END %]
                 </td>
             [% END %]
 [% IF ( subscriptions.size > 1 ) %]
-                 <td><a href="serials-collection.pl?subscriptionid=[% serial.subscriptionid %]">[% serial.subscriptionid %]</a></td>
+                 <td><a href="serials-collection.pl?subscriptionid=[% serial.subscriptionid | html %]">[% serial.subscriptionid | html %]</a></td>
 [% END %]
                 <td>
-                    <span title="[% serial.publisheddate %]">
+                    <span title="[% serial.publisheddate | html %]">
                       [% IF serial.publisheddate %]
                         [% serial.publisheddate | $KohaDates %]
                       [% ELSE %]
@@ -186,13 +187,13 @@
                 </td>
                 <td>
                    [% IF serial.publisheddatetext %]
-                      <span title="[% serial.publisheddatetext %]">
-                        [% serial.publisheddatetext %]
+                      <span title="[% serial.publisheddatetext | html %]">
+                        [% serial.publisheddatetext | html %]
                       </span>
                    [% END %]
                 </td>
                 <td>
-                    <span title="[% serial.planneddate %]">
+                    <span title="[% serial.planneddate | html %]">
                       [% IF serial.planneddate %]
                         [% serial.planneddate | $KohaDates %]
                       [% ELSE %]
@@ -202,23 +203,23 @@
                 </td>
                 <td>
                     [% IF ( matches = serial.serialseq.match('(.*)Spring(.*)') ) %]
-                        [% matches.0 %]Spring[% matches.1 %]
+                        [% matches.0 | html %]Spring[% matches.1 | html %]
                     [% ELSIF ( matches = serial.serialseq.match('(.*)Summer(.*)') ) %]
-                        [% matches.0 %]Summer[% matches.1 %]
+                        [% matches.0 | html %]Summer[% matches.1 | html %]
                     [% ELSIF ( matches = serial.serialseq.match('(.*)Fall(.*)') ) %]
-                        [% matches.0 %]Fall[% matches.1 %]
+                        [% matches.0 | html %]Fall[% matches.1 | html %]
                     [% ELSIF ( matches = serial.serialseq.match('(.*)Winter(.*)') ) %]
-                        [% matches.0 %]Winter[% matches.1 %]
+                        [% matches.0 | html %]Winter[% matches.1 | html %]
                     [% ELSIF ( matches = prediction.number.match('(.*)Spr(.*)') ) %]
-                        [% matches.0 %]Spr[% matches.1 %]
+                        [% matches.0 | html %]Spr[% matches.1 | html %]
                     [% ELSIF ( matches = prediction.number.match('(.*)Sum(.*)') ) %]
-                        [% matches.0 %]Sum[% matches.1 %]
+                        [% matches.0 | html %]Sum[% matches.1 | html %]
                     [% ELSIF ( matches = prediction.number.match('(.*)Fal(.*)') ) %]
-                        [% matches.0 %]Fal[% matches.1 %]
+                        [% matches.0 | html %]Fal[% matches.1 | html %]
                     [% ELSIF ( matches = prediction.number.match('(.*)Win(.*)') ) %]
-                        [% matches.0 %]Win[% matches.1 %]
+                        [% matches.0 | html %]Win[% matches.1 | html %]
                     [% ELSE %]
-                        [% serial.serialseq %]
+                        [% serial.serialseq | html %]
                     [% END %]
                 </td>
                 <td>
@@ -236,14 +237,14 @@
                     [% IF ( serial.status8 ) %]Stopped[% END %]
                 </td>
                 <td>
-                    [% serial.notes %]
+                    [% serial.notes | html %]
                 </td>
                 <td>
-                    [% Branches.GetName( serial.branchcode ) %]
+                    [% Branches.GetName( serial.branchcode ) | html %]
                 </td>
                 [% IF ( routing ) %]
                 <td class="actions">
-                    <a href="" onclick="print_slip([% serial.subscriptionid |html %], '[% serial.serialseq.replace("'", "\\'") |html %] ([% serial.publisheddate | $KohaDates %])'); return false" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Print list</a>
+                    <a href="" onclick="print_slip([% serial.subscriptionid | html %], '[% serial.serialseq.replace("'", "\\'") | html %] ([% serial.publisheddate | $KohaDates %])'); return false" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Print list</a>
                 </td>
                 [% END %]
             </tr>
@@ -252,7 +253,7 @@
       </table>
     </div>
     [% END %]
-  <input type="hidden" name="subscriptionid" value="[% subscriptionidlist %]" />
+  <input type="hidden" name="subscriptionid" value="[% subscriptionidlist | html %]" />
 
 </div>
 </form>
@@ -269,13 +270,13 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
-        var subscriptionid = "[% subscriptionid %]";
+        var subscriptionid = "[% subscriptionid | html %]";
         var MSG_CLOSE_SUBSCRIPTION = _("Are you sure you want to close this subscription?");
         var MSG_REOPEN_SUBSCRIPTION = _("Are you sure you want to reopen this subscription?");
         var CONFIRM_DELETE_SUBSCRIPTION = _("Are you sure you want to delete this subscription?");
     </script>
-    [% Asset.js("js/serials-toolbar.js") %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
+    [% Asset.js("js/serials-toolbar.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
 
     <script type="text/javascript">
 

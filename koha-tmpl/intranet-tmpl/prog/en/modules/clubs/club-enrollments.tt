@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Branches %]
@@ -6,7 +7,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Patron clubs &rsaquo; Club enrollments</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="club_enrollments" class="clubs">
@@ -18,7 +19,7 @@
    <div id="bd">
         <div id="yui-main">
             <div class="yui-b">
-                <h1>Club enrollments for <i>[% club.name %]</i></h1>
+                <h1>Club enrollments for <i>[% club.name | html %]</i></h1>
 
                 <table id="enrollments-table">
                     <thead>
@@ -33,10 +34,10 @@
                             [% SET p = e.patron %]
                             <tr>
                                 <td>
-                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% p.id %]">[% p.surname %], [% p.firstname %]</a>
+                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% p.id | html %]">[% p.surname | html %], [% p.firstname | html %]</a>
                                 </td>
                                 <td>
-                                    [% p.cardnumber %]
+                                    [% p.cardnumber | html %]
                                 </td>
                             </tr>
                         [% END %]
@@ -52,7 +53,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     <script type="text/javascript">
         $(document).ready(function() {
             eTable = $('#enrollments-table').dataTable($.extend(true, {}, dataTablesDefaults, {

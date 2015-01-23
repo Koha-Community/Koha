@@ -1,15 +1,15 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  An error has occurred</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;  An error has occurred</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
-<body id="error[% errno %]" class="error">
+<body id="error[% errno | html %]" class="error">
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
         <ul class="breadcrumb">
             <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="#">Error [% errno %]</a></li>
+            <li><a href="#">Error [% errno | html %]</a></li>
         </ul>
 
         <div class="container-fluid">
@@ -24,9 +24,9 @@
                 [% ELSE %]
                     <div class="span12">
                 [% END %]
-                    <div id="errormsg[% errno %]">
+                    <div id="errormsg[% errno | html %]">
                         <h3>Sorry, the requested page is not available</h3>
-                        <h4>Error [% errno %]</h4>
+                        <h4>Error [% errno | html %]</h4>
                         <h3>This message can have the following reason(s):</h3>
                         <ul>
                             [% IF ( errno == 400 ) %]
@@ -67,9 +67,9 @@
                         <h3>Report issues and broken links</h3>
                         <ul>
                             <li>To report this error, please contact the Koha Administrator.
-                                    <a href="mailto:[% admin %]">Send email</a>.</li>
+                                    <a href="mailto:[% admin | html %]">Send email</a>.</li>
                         </ul>
-                    </div> <!-- / #errormsg[% errno %] -->
+                    </div> <!-- / #errormsg[% errno | html %] -->
                 </div> <!-- / .span10/12 -->
             </div> <!-- / .row-fluid -->
         </div> <!-- / .container-fluid -->

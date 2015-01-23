@@ -1,6 +1,6 @@
 [% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>Koha &rsaquo; Tools &rsaquo; Patron card creator &rsaquo; Profiles &rsaquo; [% IF ( profile_id ) %]Edit ([% profile_id %])[% ELSE %]New[% END%]</title>
+    <title>Koha &rsaquo; Tools &rsaquo; Patron card creator &rsaquo; Profiles &rsaquo; [% IF ( profile_id ) %]Edit ([% profile_id | html %])[% ELSE %]New[% END%]</title>
     [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -12,7 +12,7 @@
         <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
         <a href="/cgi-bin/koha/patroncards/home.pl">Patron card creator</a> &rsaquo;
         <a href="/cgi-bin/koha/patroncards/manage.pl?card_element=profile">Profiles</a> &rsaquo;
-        [% IF ( profile_id ) %]Edit ([% profile_id %])[% ELSE %]New[% END%]
+        [% IF ( profile_id ) %]Edit ([% profile_id | html %])[% ELSE %]New[% END%]
     </div>
     <div id="doc3" class="yui-t2">
         <div id="bd">
@@ -25,30 +25,30 @@
                         </div>
                     </div>
                         <div class="yui-g">
-                            <h3>[% IF (profile_id) %]Edit[% ELSE %]Create[% END%] printer profile[% IF (profile_id) %] ([% profile_id %])[% END %]</h3>
+                            <h3>[% IF (profile_id) %]Edit[% ELSE %]Create[% END%] printer profile[% IF (profile_id) %] ([% profile_id | html %])[% END %]</h3>
                                 <div class="yui-g first">
                                     <form name="input" action="/cgi-bin/koha/patroncards/edit-profile.pl" method="get">
                                     <fieldset class="rows"><legend>Profile settings</legend>
                                         <ol>
                                             <li>
                                                 [% IF ( profile_id ) %]
-                                                 <span class="label">Printer name:</span>[% printer_name %]
-                                                <input type="hidden" name="printer_name" value="[% printer_name %]" />
+                                                 <span class="label">Printer name:</span>[% printer_name | html %]
+                                                <input type="hidden" name="printer_name" value="[% printer_name | html %]" />
                                                 [% ELSE %]
                                                 <label for="printer_name">Printer name:</label><input type="text"  size="20" name="printer_name" id="printer_name" />
                                                 [% END %]
                                             </li>
                                             <li>
                                                 [% IF ( profile_id ) %]
-                                                <span class="label">Paper bin:</span> [% paper_bin %]
-                                                <input type="hidden" name="paper_bin" value="[% paper_bin %]" />
+                                                <span class="label">Paper bin:</span> [% paper_bin | html %]
+                                                <input type="hidden" name="paper_bin" value="[% paper_bin | html %]" />
                                                 [% ELSE %]
                                                 <label for="paper_bin">Paper bin:</label><input type="text"  size="20" name="paper_bin" id="paper_bin" />
                                                 [% END %]
                                             </li>
                                             <li>
                                                 [% IF ( label_template ) %]
-                                                 <label for="template_name">Template name:</label> [% label_template %]
+                                                 <label for="template_name">Template name:</label> [% label_template | html %]
                                                 [% ELSE %]
                                                  <span class="label">Template name:</span> Profile unassigned
                                                 [% END %]
@@ -58,11 +58,11 @@
                                                 <select id="units" name="units">
                                                     [% FOREACH unit IN units %]
                                                     [% IF ( unit.selected ) %]
-                                                    <option value="[% unit.type %]" selected="selected">
+                                                    <option value="[% unit.type | html %]" selected="selected">
                                                     [% ELSE %]
-                                                    <option value="[% unit.type %]">
+                                                    <option value="[% unit.type | html %]">
                                                     [% END %]
-                                                    [% unit.desc %]
+                                                    [% unit.desc | html %]
                                                     </option>
                                                     [% END %]
                                                 </select>
@@ -73,10 +73,10 @@
                                         <fieldset class="rows"><legend>Offset:</legend>
                                         <ol>
                                             <li>
-                                                <label for="offset_horz">Horizontal: </label><input type="text"  size="4" name="offset_horz" id="offset_horz" value="[% offset_horz %]" />
+                                                <label for="offset_horz">Horizontal: </label><input type="text"  size="4" name="offset_horz" id="offset_horz" value="[% offset_horz | html %]" />
                                             </li>
                                             <li>
-                                                <label for="offset_vert">Vertical: </label><input type="text" size="4" name="offset_vert" id="offset_vert" value="[% offset_vert %]" />
+                                                <label for="offset_vert">Vertical: </label><input type="text" size="4" name="offset_vert" id="offset_vert" value="[% offset_vert | html %]" />
                                             </li>
                                          </ol>
                                         </fieldset>
@@ -84,10 +84,10 @@
                                         <fieldset class="rows"><legend>Creep:</legend>
                                         <ol>
                                             <li>
-                                                <label for="creep_horz">Horizontal: </label><input type="text"  size="4" name="creep_horz" id="creep_horz" value="[% creep_horz %]" />
+                                                <label for="creep_horz">Horizontal: </label><input type="text"  size="4" name="creep_horz" id="creep_horz" value="[% creep_horz | html %]" />
                                             </li>
                                             <li>
-                                                <label for="creep_vert">Vertical: </label><input type="text" size="4" name="creep_vert" id="creep_vert" value="[% creep_vert %]" />
+                                                <label for="creep_vert">Vertical: </label><input type="text" size="4" name="creep_vert" id="creep_vert" value="[% creep_vert | html %]" />
                                             </li>
                                         </ol>
                                     </fieldset>
@@ -95,7 +95,7 @@
                                         <input type="submit" value="Save" />
                                         <a href="/cgi-bin/koha/patroncards/manage.pl?card_element=profile" class="cancel">Cancel</a>
                                         <input type="hidden" name="op" value="save" />
-                                        <input type="hidden" name="profile_id" value="[% profile_id %]" />
+                                        <input type="hidden" name="profile_id" value="[% profile_id | html %]" />
                                     </fieldset>
                     </form>
                                 </div>

@@ -1,8 +1,9 @@
+[% USE raw %]
 [% USE Koha %]
 [% USE KohaDates %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Tags</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Tags</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
     <style>
@@ -56,15 +57,15 @@
                                     [% IF ( ERROR.tagsdisabled ) %]
                                         Sorry, tags are not enabled on this system.
                                     [% ELSIF ( ERROR.badparam ) %]
-                                        ERROR: illegal parameter [% ERROR.badparam %]
+                                        ERROR: illegal parameter [% ERROR.badparam | html %]
                                     [% ELSIF ( ERROR.login ) %]
                                         ERROR: You must log in to complete that action.
                                     [% ELSIF ( ERROR.failed_delete ) %]
-                                        ERROR: You cannot delete the tag [% ERROR.failed_delete %].
+                                        ERROR: You cannot delete the tag [% ERROR.failed_delete | html %].
                                         <br />Note: you can only delete your own tags.
                                     [% ELSIF ( ERROR.scrubbed ) %]
                                         Note: your tag contained markup code that was removed.
-                                        <br />The tag was added as &quot;[% ERROR.scrubbed %]&quot;.
+                                        <br />The tag was added as &quot;[% ERROR.scrubbed | html %]&quot;.
                                     [% ELSIF ( ERROR.scrubbed_all_bad ) %]
                                         Note: your tag was entirely markup code.  It was NOT added.
                                         <br />Please try again with plain text.
@@ -85,7 +86,7 @@
                                     [% END %]:
                                 </label>
                                 <div class="input-append">
-                                    <input type="text" name="limit" style="text-align: right;" maxlength="4" size="4" value="[% limit or "100" %]" />
+                                    <input type="text" name="limit" style="text-align: right;" maxlength="4" size="4" value="[% limit or "100" | html %]" />
                                     <input type="submit" value="OK" class="btn" />
                                 </div>
                                 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
@@ -106,19 +107,19 @@
                         [% IF ( TAGLOOP ) %]
                             <div id="tagcloud">
                                 [% FOREACH TAGLOO IN TAGLOOP %]
-                                    <span class="tag tagweight[% TAGLOO.stratum %]" id="tag[% loop.count %]" style="display:inline;">
-                                    <a href="/cgi-bin/koha/opac-search.pl?tag=[% TAGLOO.term |url %]&amp;q=[% TAGLOO.term |url %]">[% TAGLOO.term |html %]</a>
-                                    <span class="tagweight">[% TAGLOO.weight_total %]</span>
+                                    <span class="tag tagweight[% TAGLOO.stratum | html %]" id="tag[% loop.count | html %]" style="display:inline;">
+                                    <a href="/cgi-bin/koha/opac-search.pl?tag=[% TAGLOO.term |url %]&amp;q=[% TAGLOO.term |url %]">[% TAGLOO.term | html %]</a>
+                                    <span class="tagweight">[% TAGLOO.weight_total | html %]</span>
                                     </span>
                                 [% END %]
                             </div>
                         [% END # / TAGLOOP%]
                         [% IF ( add_op ) %]
                             [% IF ( added_count ) %]
-                                <div class="dialog message">[% added_count %] [% IF ( added_count == 1 ) %]tag[% ELSE %]tags[% END %] successfully added.</div>
+                                <div class="dialog message">[% added_count | html %] [% IF ( added_count == 1 ) %]tag[% ELSE %]tags[% END %] successfully added.</div>
                             [% END %]
                             [% IF ( deleted_count ) %]
-                            <div class="dialog message">[% deleted_count %] [% IF ( deleted_count == 1 ) %]tag[% ELSE %]tags[% END %] successfully deleted.</div>
+                            <div class="dialog message">[% deleted_count | html %] [% IF ( deleted_count == 1 ) %]tag[% ELSE %]tags[% END %] successfully deleted.</div>
                             [% END %]
                         [% END # /add_op %]
 
@@ -131,36 +132,36 @@
                                     [% FOREACH MY_TAG IN MY_TAGS %]
                                         <tr>
                                             <td>
-                                                <input type="checkbox" name="del[% MY_TAG.tag_id %]" value="del[% MY_TAG.tag_id %]">
+                                                <input type="checkbox" name="del[% MY_TAG.tag_id | html %]" value="del[% MY_TAG.tag_id | html %]">
                                             </td>
                                             <td class="tagterm">
                                                 <span class="tdlabel">Tag:</span>
                                                 [% IF MY_TAG.approved == 1 %]
-                                                    <a href="/cgi-bin/koha/opac-search.pl?tag=[% MY_TAG.term |url %]&amp;q=[% MY_TAG.term |url %]">[% MY_TAG.term |html %]</a>
+                                                    <a href="/cgi-bin/koha/opac-search.pl?tag=[% MY_TAG.term |url %]&amp;q=[% MY_TAG.term |url %]">[% MY_TAG.term | html %]</a>
                                                 [% ELSE %]
-                                                    [% MY_TAG.term |html %] (not approved)
+                                                    [% MY_TAG.term | html %] (not approved)
                                                 [% END %]
                                             </td>
                                             <td>
                                                 [% IF ( MY_TAG.XSLTBloc ) %]
-                                                    [% MY_TAG.XSLTBloc %]
+                                                    [% MY_TAG.XSLTBloc | $raw %]
                                                 [% ELSE %]
                                                     <span class="tdlabel">Title:</span>
-                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% MY_TAG.biblionumber %]">
-                                                        [% MY_TAG.title |html %]
+                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% MY_TAG.biblionumber | html %]">
+                                                        [% MY_TAG.title | html %]
                                                         [% IF ( MY_TAG.subtitle ) %]
                                                             [% FOREACH subtitle IN MY_TAG.subtitle %]
-                                                                [% subtitle.subfield |html %]
+                                                                [% subtitle.subfield | html %]
                                                             [% END %]
                                                         [% END %]
                                                     </a>
                                                     [% IF ( MY_TAG.author ) %]
-                                                        by [% MY_TAG.author %]
+                                                        by [% MY_TAG.author | html %]
                                                     [% END %]
                                                 [% END # /IF MY_TAG.XSLTBloc %]
                                             </td>
                                             <td>
-                                                <span title="[% MY_TAG.date_created %]">
+                                                <span title="[% MY_TAG.date_created | html %]">
                                                     <span class="tdlabel">Date added:</span>
                                                     [% MY_TAG.date_created | $KohaDates %]
                                                 </span>

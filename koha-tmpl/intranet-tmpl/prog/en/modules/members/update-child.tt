@@ -1,9 +1,10 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Choose adult category</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="pat_update-child" class="pat">
@@ -28,17 +29,17 @@
                         [% FOREACH patron_category IN patron_categories %]
                             <tr>
                                 <td>
-                                    <input type="radio" id="catcode[% patron_category.categorycode %]" name="catcode" value="[% patron_category.categorycode %]" />
+                                    <input type="radio" id="catcode[% patron_category.categorycode | html %]" name="catcode" value="[% patron_category.categorycode | html %]" />
                                 </td>
-                                <td>[% patron_category.categorycode  %]</td>
-                                <td><label for="catcode[% patron_category.categorycode %]"><strong>[% patron_category.description %]</strong></label></td>
+                                <td>[% patron_category.categorycode | html %]</td>
+                                <td><label for="catcode[% patron_category.categorycode | html %]"><strong>[% patron_category.description | html %]</strong></label></td>
                             </tr>
                         [% END %]
                     </tbody>
                 </table>
                 <input type="hidden" name="op" value="update" />
-                <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
-                <input type="hidden" name="cattype" value="[% cattype %]" />
+                <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
+                <input type="hidden" name="cattype" value="[% cattype | html %]" />
                 <fieldset class="action">
                     <input class="submit" type="submit" value="Submit" />
                     <a href="#" class="cancel close">Cancel</a>
@@ -66,12 +67,12 @@
     </script>
     [% IF ( SUCCESS ) %]
         <script type="text/javascript">
-            self.opener.location.href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]';
+            self.opener.location.href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | html %]';
             window.close();
         </script>
     [% END %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' popup_window=1 %]

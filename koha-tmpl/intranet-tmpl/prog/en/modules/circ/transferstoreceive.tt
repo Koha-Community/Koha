@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
@@ -6,7 +7,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Transfers to receive</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="circ_transferstoreceive" class="circ">
@@ -25,12 +26,12 @@
         <h1>Transfers made to your library as of [% show_date | $KohaDates %]</h1>
 	[% IF ( branchesloop ) %]
         <p>Your library is the destination for the following transfer(s)</p>
-		[% IF ( latetransfers ) %]<p>Transfers are <span class="error">considered late</span> after [% TransfersMaxDaysWarning %] days.</p>[% END %]
+		[% IF ( latetransfers ) %]<p>Transfers are <span class="error">considered late</span> after [% TransfersMaxDaysWarning | html %] days.</p>[% END %]
         <div id="resultlist">
         [% FOREACH branchesloo IN branchesloop %]
             [% IF ( branchesloo.branchcode ) %]
-            <table style="width: 100%" id="transferst[% branchesloo.branchcode %]">
-            <caption>Coming from [% branchesloo.branchname %]</caption>
+            <table style="width: 100%" id="transferst[% branchesloo.branchcode | html %]">
+            <caption>Coming from [% branchesloo.branchname | html %]</caption>
             <thead><tr>
                 <th class="title-string">Date of transfer</th>
                 <th class="anti-the">Title</th>
@@ -45,31 +46,31 @@
                 [% ELSE %]
                 <tr>
                 [% END %]
-                    <td><p><span title="[% reser.datetransfer %]">[% reser.datetransfer | $KohaDates %]</span></p> [% IF ( reser.messcompa ) %]<span class="error">Transfer is [% reser.diff %] days late</span>[% END %]</td>
+                    <td><p><span title="[% reser.datetransfer | html %]">[% reser.datetransfer | $KohaDates %]</span></p> [% IF ( reser.messcompa ) %]<span class="error">Transfer is [% reser.diff | html %] days late</span>[% END %]</td>
                     <td>
-                        [% INCLUDE 'biblio-default-view.inc' biblionumber = reser.biblionumber %][% reser.title |html %] [% IF ( reser.subtitle ) %] [% FOREACH subtitl IN reser.subtitle %][% subtitl.subfield %][% END %][% END %]</a> [% IF ( reser.author ) %]by [% reser.author %][% END %]
-                            [% IF ( reser.itemtype ) %] (<b>[% reser.itemtype %]</b>)[% END %]
-                            <br />Barcode: [% reser.barcode %]
+                        [% INCLUDE 'biblio-default-view.inc' biblionumber = reser.biblionumber %][% reser.title | html %] [% IF ( reser.subtitle ) %] [% FOREACH subtitl IN reser.subtitle %][% subtitl.subfield | html %][% END %][% END %]</a> [% IF ( reser.author ) %]by [% reser.author | html %][% END %]
+                            [% IF ( reser.itemtype ) %] (<b>[% reser.itemtype | html %]</b>)[% END %]
+                            <br />Barcode: [% reser.barcode | html %]
                     </td>
                     <td>[% IF ( reser.patron ) %]
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reser.patron.borrowernumber %]">
-                            [% reser.patron.surname %][%IF ( reser.patron.firstname ) %], [% reser.patron.firstname %][% END %]
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reser.patron.borrowernumber | html %]">
+                            [% reser.patron.surname | html %][%IF ( reser.patron.firstname ) %], [% reser.patron.firstname | html %][% END %]
                         </a>
-                        [% IF ( reser.patron.phone ) %]<br />[% reser.patron.phone %][% END %]
+                        [% IF ( reser.patron.phone ) %]<br />[% reser.patron.phone | html %][% END %]
                             [% IF ( reser.patron.first_valid_email_address ) %]
                                 <br />
                                 [% BLOCK subject %]Hold:[% END %]
-                                <a href="mailto:[% reser.patron.first_valid_email_address %]?subject=[% INCLUDE subject %] [% reser.title |html %]">
-                                    [% reser.patron.first_valid_email_address %]
+                                <a href="mailto:[% reser.patron.first_valid_email_address | html %]?subject=[% INCLUDE subject %] [% reser.title | html %]">
+                                    [% reser.patron.first_valid_email_address | html %]
                                 </a>
                             [% END %]
                         [% ELSE %]
                         <p>None</p>
                     [% END %]
                     </td>
-                    <td>[% IF reser.homebranch %][% Branches.GetName( reser.homebranch ) %][% END %]</td>
-                    <td>[% reser.itemcallnumber %]</td>
-                    <td class="actions"><a href="/cgi-bin/koha/circ/returns.pl?itemnumber=[% reser.itemnumber %]&amp;canceltransfer=1&amp;dest=ttr" class="btn btn-default btn-xs"><i class="fa fa-times"></i> Cancel transfer</a></td>
+                    <td>[% IF reser.homebranch %][% Branches.GetName( reser.homebranch ) | html %][% END %]</td>
+                    <td>[% reser.itemcallnumber | html %]</td>
+                    <td class="actions"><a href="/cgi-bin/koha/circ/returns.pl?itemnumber=[% reser.itemnumber | html %]&amp;canceltransfer=1&amp;dest=ttr" class="btn btn-default btn-xs"><i class="fa fa-times"></i> Cancel transfer</a></td>
                 </tr>
             [% END %]</tbody>
             </table>
@@ -95,7 +96,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             [% FOREACH branchesloo IN branchesloop %]
-            $("#transferst[% branchesloo.branchcode %]").dataTable($.extend(true, {}, dataTablesDefaults, {
+            $("#transferst[% branchesloo.branchcode | html %]").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [
                     { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
                     { "sType": "anti-the", "aTargets" : [ "anti-the" ] },

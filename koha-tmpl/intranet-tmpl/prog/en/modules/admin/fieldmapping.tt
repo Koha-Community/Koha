@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -14,7 +15,7 @@
 		<div class="yui-b">
             <h2>Keyword to MARC mapping</h2>
             [% UNLESS ( fields.count ) %]
-                <div class="dialog message"><p>There are no mappings for the [% IF framework.frameworktext %]<em>[% framework.frameworktext |html %]</em>[% ELSE %]default[% END %] framework. </p></div>
+                <div class="dialog message"><p>There are no mappings for the [% IF framework.frameworktext %]<em>[% framework.frameworktext | html %]</em>[% ELSE %]default[% END %] framework. </p></div>
             [% END %]
 			<form method="get" action="/cgi-bin/koha/admin/fieldmapping.pl" id="selectframework">
 				<label for="framework">Framework:</label>
@@ -22,9 +23,9 @@
                     <option value="">Default</option>
                 [% FOREACH f IN frameworks %]
                     [% IF f.frameworkcode == framework.frameworkcode %]
-                    <option selected="selected" value="[% f.frameworkcode %]">[% f.frameworktext |html %]</option>
+                    <option selected="selected" value="[% f.frameworkcode | html %]">[% f.frameworktext | html %]</option>
                     [% ELSE %]
-                    <option value="[% f.frameworkcode %]">[% f.frameworktext |html %]</option>
+                    <option value="[% f.frameworkcode | html %]">[% f.frameworktext | html %]</option>
                     [% END %]
                 [% END %]
                 </select>
@@ -33,7 +34,7 @@
 
 
 			<form method="post" action="" id="addfield">
-                <input type="hidden" name="framework" value="[% framework.frameworkcode %]" />
+                <input type="hidden" name="framework" value="[% framework.frameworkcode | html %]" />
 				<fieldset class="rows">
 				<legend>Add a mapping</legend>
 				<ol>
@@ -49,7 +50,7 @@
 
                 [% IF ( fields.count ) %]
                     <table>
-                    <caption>Mappings for the [% IF framework.frameworktext %]<em>[% framework.frameworktext %]</em>[% ELSE %]default[% END %] framework</caption>
+                    <caption>Mappings for the [% IF framework.frameworktext %]<em>[% framework.frameworktext | html %]</em>[% ELSE %]default[% END %] framework</caption>
 									<tr>
 										<th>Field</th>
                                         <th>MARC field</th>
@@ -58,10 +59,10 @@
 									</tr>
 									[% FOREACH field IN fields %]
 									<tr>
-                                        <td>[% field.field |html %]</td>
-										<td>[% field.fieldcode %]</td>
-										<td>[% field.subfieldcode %]</td>
-                                        <td><a class="btn btn-default btn-xs" href="?op=delete&amp;id=[% field.id %]&amp;framework=[% field.frameworkcode %]"><i class="fa fa-trash"></i> Delete</a></td>
+                                        <td>[% field.field | html %]</td>
+										<td>[% field.fieldcode | html %]</td>
+										<td>[% field.subfieldcode | html %]</td>
+                                        <td><a class="btn btn-default btn-xs" href="?op=delete&amp;id=[% field.id | html %]&amp;framework=[% field.frameworkcode | html %]"><i class="fa fa-trash"></i> Delete</a></td>
 									</tr>
 									[% END %]
 								</table>[% END %]
@@ -75,7 +76,7 @@
 	</div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
     <script type="text/javascript">
         $(document).ready(function() {
             $('#selectframework').find("input:submit").hide();

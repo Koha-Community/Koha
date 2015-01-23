@@ -1,10 +1,11 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE ItemTypes %]
 [% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Batches &rsaquo; [% IF batch_id %]Edit ([% batch_id %])[% ELSE %]New[% END %]</title>
+    <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Batches &rsaquo; [% IF batch_id %]Edit ([% batch_id | html %])[% ELSE %]New[% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
-    [% Asset.css("css/datatables.css") %]
+    [% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="labels_label-edit-batch" class="tools labels" onload="dofocus();">
@@ -16,7 +17,7 @@
         <a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a> &rsaquo;
         <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=batch">Batches</a> &rsaquo;
         [% IF batch_id %]
-            Edit ([% batch_id %])
+            Edit ([% batch_id | html %])
         [% ELSE %]
             New
         [% END %]
@@ -32,17 +33,17 @@
                             [% BLOCK xlate_errtype %]
                             [%    SWITCH errtype %]
                             [%       CASE 'ITEM_NOT_REMOVED' %]
-                            <span>Item(s) not removed from batch [% batch_id %].</span>
+                            <span>Item(s) not removed from batch [% batch_id | html %].</span>
                             [%       CASE 'BATCH_NOT_DELETED' %]
-                            <span>Batch [% batch_id %] was not deleted.</span>
+                            <span>Batch [% batch_id | html %] was not deleted.</span>
                             [%       CASE 'ITEM_NOT_ADDED' %]
-                            <span>Item(s) not added to batch [% batch_id %].</span>
+                            <span>Item(s) not added to batch [% batch_id | html %].</span>
                             [%       CASE 'BRANCH_NOT_SET' %]
                             <span>Library is not set, please set your library before adding items to a batch.</span>
                             [%       CASE 'BATCH_NOT_DEDUP' %]
-                            <span>Batch [% batch_id %] not fully de-duplicated.</span>
+                            <span>Batch [% batch_id | html %] not fully de-duplicated.</span>
                             [%       CASE %]
-                            <span>Unknown error type [% errtype %].</span>
+                            <span>Unknown error type [% errtype | html %].</span>
                             [%    END %]
                             [% END %]
                             <div class="dialog alert">
@@ -50,18 +51,18 @@
                             </div>
                         [% ELSIF ( duplicate_message ) %]
                             <div class="dialog message">
-                                <strong>Duplicate item(s) removed from batch number [% batch_id %]: [% duplicate_count %]</strong>
+                                <strong>Duplicate item(s) removed from batch number [% batch_id | html %]: [% duplicate_count | html %]</strong>
                             </div>
                         [% END %]
 
                         <div id="manage-label-batches">
-                            <div class="hint">Current library: [% LoginBranchname %]</div>
+                            <div class="hint">Current library: [% LoginBranchname | html %]</div>
                             <form name="add_by_number" action="/cgi-bin/koha/labels/label-edit-batch.pl" method="post">
                                 <div>
                                     <fieldset class="rows" style="border-bottom: 0px; border: 0px;">
                                     <ol><li>
                                         <input type="hidden" name="op" value="add" />
-                                        <input type="hidden" name="batch_id" value="[% batch_id %]" />
+                                        <input type="hidden" name="batch_id" value="[% batch_id | html %]" />
                                     </li>
                                     <li>
                                         <input type="radio" name="number_type" id="barcode_enter" value="barcode" checked />
@@ -89,7 +90,7 @@
                             </div>
                             [% IF ( table_loop ) %]
                                 <form name="items" class="checkboxed">
-                                    <h2>Items in batch number [% batch_id %]</h2>
+                                    <h2>Items in batch number [% batch_id | html %]</h2>
                                     <table id="batcht">
                                         [% FOREACH table_loo IN table_loop %]
                                             [% IF ( table_loo.header_fields ) %]
@@ -110,7 +111,7 @@
                                                                 [% CASE "Select" -%]
                                                                     <th>Select</th>
                                                                 [% CASE %]
-                                                                    <th>[% header_field.field_label %]</th>
+                                                                    <th>[% header_field.field_label | html %]</th>
                                                             [% END -%]
                                                         [% END %]
                                                     </tr>
@@ -122,15 +123,15 @@
                                                             [% IF ( text_field.select_field ) %]
                                                                 <td>
                                                                     <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/labels/label-edit-batch.pl?op=remove&amp;batch_id=[% batch_id |url %]&amp;label_id=[% text_field.field_value |url %]"><i class="fa fa-trash"></i> Delete</a>
-                                                                    <a class="btn btn-default btn-xs export" href="#" data-batch-id="[% batch_id %]" data-label-id="[% text_field.field_value |html %]"><i class="fa fa-share-square-o"></i> Export</a>
+                                                                    <a class="btn btn-default btn-xs export" href="#" data-batch-id="[% batch_id | html %]" data-label-id="[% text_field.field_value | html %]"><i class="fa fa-share-square-o"></i> Export</a>
                                                                 </td>
-                                                                <td><input type="checkbox" name="action" value="[% text_field.field_value %]"></td>
+                                                                <td><input type="checkbox" name="action" value="[% text_field.field_value | html %]"></td>
                                                             [% ELSE %]
                                                                 <td>
                                                                     [% IF ( text_field.field_name == '_item_type_tbl' ) %]
-                                                                        [% ItemTypes.GetDescription( text_field.field_value ) %]
+                                                                        [% ItemTypes.GetDescription( text_field.field_value ) | html %]
                                                                     [% ELSE %]
-                                                                        [% text_field.field_value %]
+                                                                        [% text_field.field_value | html %]
                                                                     [% END %]
                                                                 </td>
                                                             [% END %]
@@ -159,15 +160,15 @@
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'greybox.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script>
         function DeleteConfirm() {
-            var msg = _("Are you sure you want to delete batch %s?").format("[% batch_id %]");
+            var msg = _("Are you sure you want to delete batch %s?").format("[% batch_id | html %]");
             var answer = confirm(msg);
             if (answer) {
-                window.location = "/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=batch&amp;element_id=[% batch_id %]";
+                window.location = "/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=batch&amp;element_id=[% batch_id | html %]";
             }
             else {
                 return; // abort delete
@@ -207,7 +208,7 @@
             }
             var answer = confirm(msg);
             if (answer) {
-                window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=remove&amp;batch_id=[% batch_id %]&amp;" + getstr;
+                window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=remove&amp;batch_id=[% batch_id | html %]&amp;" + getstr;
             } else {
                 return; // abort delete
             }
@@ -215,7 +216,7 @@
         function Add() {
             var number_list = document.getElementById("number_list");
             if (number_list.value == '') {
-                window.open("/cgi-bin/koha/labels/label-item-search.pl?batch_id=[% batch_id %]&amp;type=labels",'FindABibIndex','width=875,height=400,toolbar=no,scrollbars=yes');
+                window.open("/cgi-bin/koha/labels/label-item-search.pl?batch_id=[% batch_id | html %]&amp;type=labels",'FindABibIndex','width=875,height=400,toolbar=no,scrollbars=yes');
             } else {
                 document.forms["add_by_number"].submit();
             }
@@ -227,7 +228,7 @@
         }
 
         function DeDuplicate() {
-            window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=de_duplicate&amp;batch_id=[% batch_id %]";
+            window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=de_duplicate&amp;batch_id=[% batch_id | html %]";
         }
 
         function Xport(mode) {
@@ -251,9 +252,9 @@
                     alert(_("Please select at least one label to export."));
                     return;     // no batch selected
                 }
-                return GB_showCenter(_("Export labels"), "/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id %]&" + getstr, 400, 800);
+                return GB_showCenter(_("Export labels"), "/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id | html %]&" + getstr, 400, 800);
             } else if (mode == 'batch') {
-                return GB_showCenter(_("Export labels"), "/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id %]", 400, 800);
+                return GB_showCenter(_("Export labels"), "/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id | html %]", 400, 800);
             } else {
                 // some pass-thru error trapping just in case...
             }

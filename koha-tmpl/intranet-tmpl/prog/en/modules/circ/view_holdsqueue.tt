@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
@@ -11,7 +12,7 @@
 <title>Koha &rsaquo; Circulation &rsaquo; Holds queue</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style type="text/css"> p { margin-top: 0; }</style>
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="circ_view_holdsqueue" class="circ">
@@ -35,8 +36,8 @@
 
 [% IF ( run_report ) %]
     [% IF ( total ) %]
-        <div class="results">[% total %] items found for
-            [% IF ( branchlimit ) %][% Branches.GetName( branchlimit ) %][% ELSE %]All libraries[% END %]
+        <div class="results">[% total | html %] items found for
+            [% IF ( branchlimit ) %][% Branches.GetName( branchlimit ) | html %][% ELSE %]All libraries[% END %]
         </div>
     [% ELSE %]
         <div class="dialog message">No items found.</div>
@@ -118,37 +119,37 @@
      <tbody>[% FOREACH itemsloo IN itemsloop %]
         <tr>
             <td class="hq-title">
-                <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itemsloo.biblionumber %]"><strong>[% itemsloo.title | html %]</strong> [% FOREACH s IN itemsloo.subtitle %] [% s %][% END %]</a></p>
+                <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itemsloo.biblionumber | html %]"><strong>[% itemsloo.title | html %]</strong> [% FOREACH s IN itemsloo.subtitle %] [% s | html %][% END %]</a></p>
                 <p>
-                    <div class="hq-biblionumber content_hidden">[% itemsloo.biblionumber %]</div>
-                    <div class="hq-author">[% itemsloo.author %]</div>
+                    <div class="hq-biblionumber content_hidden">[% itemsloo.biblionumber | html %]</div>
+                    <div class="hq-author">[% itemsloo.author | html %]</div>
                     <div class="hq-pubdata">
-                        [% IF ( itemsloo.publishercode ) %][% itemsloo.publishercode %][% END %]
+                        [% IF ( itemsloo.publishercode ) %][% itemsloo.publishercode | html %][% END %]
 
                         [% IF ( itemsloo.publicationyear ) %]
-                            , [% itemsloo.publicationyear %]
+                            , [% itemsloo.publicationyear | html %]
                         [% ELSIF ( itemsloo.copyrightdate ) %]
-                            , [% itemsloo.copyrightdate %]
+                            , [% itemsloo.copyrightdate | html %]
                         [% END %]
 
-                        [% IF ( itemsloo.pages ) %]: [% itemsloo.pages %] [% END %]
+                        [% IF ( itemsloo.pages ) %]: [% itemsloo.pages | html %] [% END %]
 
-                        [% IF ( itemsloo.item('size') ) %][% itemsloo.item('size') %][% END %]
+                        [% IF ( itemsloo.item('size') ) %][% itemsloo.item('size') | html %][% END %]
 
-                        [% IF ( itemsloo.isbn ) %]ISBN: [% itemsloo.isbn %][% END %]
+                        [% IF ( itemsloo.isbn ) %]ISBN: [% itemsloo.isbn | html %][% END %]
                     </div>
                 </p>
             </td>
-            <td class="hq-collection">[% AuthorisedValues.GetByCode( 'CCODE', itemsloo.ccode ) %]</td>
-            <td class="hq-itemtype">[% ItemTypes.GetDescription( itemsloo.itype ) %]</td>
-            <td class="hq-callnumber">[% IF ( itemsloo.location ) %]<em>[% AuthorisedValues.GetByCode( 'LOC', itemsloo.location ) %]</em> [% END %][% itemsloo.itemcallnumber %]</td>
-            <td class="hq-copynumber">[% itemsloo.copynumber %]</td>
-            <td class="hq-enumchron">[% itemsloo.enumchron %]</td>
+            <td class="hq-collection">[% AuthorisedValues.GetByCode( 'CCODE', itemsloo.ccode ) | html %]</td>
+            <td class="hq-itemtype">[% ItemTypes.GetDescription( itemsloo.itype ) | html %]</td>
+            <td class="hq-callnumber">[% IF ( itemsloo.location ) %]<em>[% AuthorisedValues.GetByCode( 'LOC', itemsloo.location ) | html %]</em> [% END %][% itemsloo.itemcallnumber | html %]</td>
+            <td class="hq-copynumber">[% itemsloo.copynumber | html %]</td>
+            <td class="hq-enumchron">[% itemsloo.enumchron | html %]</td>
             <td class="hq-barcode">
                 [% IF ( itemsloo.item_level_request ) %]
-                    <em>Only item:</em> <strong>[% itemsloo.barcode %]</strong>
+                    <em>Only item:</em> <strong>[% itemsloo.barcode | html %]</strong>
                 [% ELSE %]
-                    <strong>[% itemsloo.barcode %]</strong> <em>or any available</em>
+                    <strong>[% itemsloo.barcode | html %]</strong> <em>or any available</em>
                 [% END %]
             </td>
             <td class="hq-patron">
@@ -156,12 +157,12 @@
                   [% INCLUDE 'patron-title.inc' patron=itemsloo.patron hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]
               </p>
               [% UNLESS Koha.Preference('HidePatronName') %]
-                 <p>[% itemsloo.patron.phone %]</p>
+                 <p>[% itemsloo.patron.phone | html %]</p>
               [% END %]
             </td>
-            <td class="hq-sendto">[% Branches.GetName( itemsloo.pickbranch ) %]</td>
-            <td class="hq-date"><span title="[% itemsloo.reservedate %]">[% itemsloo.reservedate | $KohaDates %]</span></td>
-            <td class="hq-notes">[% itemsloo.notes %]</td>
+            <td class="hq-sendto">[% Branches.GetName( itemsloo.pickbranch ) | html %]</td>
+            <td class="hq-date"><span title="[% itemsloo.reservedate | html %]">[% itemsloo.reservedate | $KohaDates %]</span></td>
+            <td class="hq-notes">[% itemsloo.notes | html %]</td>
         </tr>
     [% END %]</tbody>
     </table>
@@ -215,7 +216,7 @@
             };
             $('#holdst thead input').on('change keyup keydown', filterColumn);
 
-            var columns_settings = [% ColumnsSettings.GetColumns('circ', 'view_holdsqueue', 'holds-table', 'json') %];
+            var columns_settings = [% ColumnsSettings.GetColumns('circ', 'view_holdsqueue', 'holds-table', 'json').raw %];
             var holdst = KohaTable("holdst", {
                 "aaSorting": [[ 3, "asc" ]],
                 "aoColumns": [

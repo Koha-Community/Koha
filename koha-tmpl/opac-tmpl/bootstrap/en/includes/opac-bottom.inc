@@ -1,3 +1,4 @@
+[% USE raw %]
 [%- USE KohaPlugins -%]
 [% USE Asset %]
 [% UNLESS ( is_popup ) %]
@@ -7,7 +8,7 @@
             <div class="row-fluid">
                 <div class="span12">
                     <div id="opaccredits" class="noprint">
-                        [% opaccredits %]
+                        [% opaccredits | $raw %]
                     </div>
                 </div>
             </div>
@@ -44,14 +45,14 @@
                                 [% IF ( languages_loo.group_enabled ) %]
                                     [% IF ( languages_loo.plural ) %]
                                         <li class="dropdown">
-                                            <a data-toggle="dropdown" class="dropdown-toggle sublangs" id="show[% languages_loo.rfc4646_subtag %]" href="#">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %] <b class="caret"></b></a>
-                                                <ul id="sub[% languages_loo.rfc4646_subtag %]" class="dropdown-menu">
+                                            <a data-toggle="dropdown" class="dropdown-toggle sublangs" id="show[% languages_loo.rfc4646_subtag | html %]" href="#">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description | html %][% ELSE %][% languages_loo.rfc4646_subtag | html %][% END %] <b class="caret"></b></a>
+                                                <ul id="sub[% languages_loo.rfc4646_subtag | html %]" class="dropdown-menu">
                                                     [% FOREACH sublanguages_loo IN languages_loo.sublanguages_loop %]
                                                         [% IF ( sublanguages_loo.enabled ) %]
                                                             [% IF ( sublanguages_loo.sublanguage_current ) %]
-                                                                <li> <p>[% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %] ([% sublanguages_loo.rfc4646_subtag %])</p></li>
+                                                                <li> <p>[% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %] ([% sublanguages_loo.rfc4646_subtag | html %])</p></li>
                                                             [% ELSE %]
-                                                                <li><a href="/cgi-bin/koha/opac-changelanguage.pl?language=[% sublanguages_loo.rfc4646_subtag %]"> [% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %] ([% sublanguages_loo.rfc4646_subtag %])</a></li>
+                                                                <li><a href="/cgi-bin/koha/opac-changelanguage.pl?language=[% sublanguages_loo.rfc4646_subtag | html %]"> [% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %] ([% sublanguages_loo.rfc4646_subtag | html %])</a></li>
                                                             [% END %]
                                                         [% END # / IF sublanguages_loo.enabled %]
                                                     [% END # / FOREACH sublanguages_loo %]
@@ -60,9 +61,9 @@
                                     [% ELSE %]
                                         [% IF ( languages_loo.group_enabled ) %]
                                             [% IF ( languages_loo.current ) %]
-                                                <li class="active"><p class="navbar-text">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]</p></li>
+                                                <li class="active"><p class="navbar-text">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description | html %][% ELSE %][% languages_loo.rfc4646_subtag | html %][% END %]</p></li>
                                             [% ELSE %]
-                                                <li><a href="/cgi-bin/koha/opac-changelanguage.pl?language=[% languages_loo.rfc4646_subtag %]">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]</a></li>
+                                                <li><a href="/cgi-bin/koha/opac-changelanguage.pl?language=[% languages_loo.rfc4646_subtag | html %]">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description | html %][% ELSE %][% languages_loo.rfc4646_subtag | html %][% END %]</a></li>
                                             [% END %]
                                         [% END # / IF languages_loo.current %]
                                     [% END # / IF ( languages_loo.plural ) %]
@@ -79,24 +80,24 @@
 
 
 <!-- JavaScript includes -->
-[% Asset.js("lib/jquery/jquery.js") %]
-[% Asset.js("lib/jquery/jquery-ui.js") %]
+[% Asset.js("lib/jquery/jquery.js") | $raw %]
+[% Asset.js("lib/jquery/jquery-ui.js") | $raw %]
 <script>
 // Resolve name collision between jQuery UI and Twitter Bootstrap
 $.widget.bridge('uitooltip', $.ui.tooltip);
 </script>
-[% Asset.js("lib/bootstrap/js/bootstrap.min.js") %]
-[% Asset.js("js/global.js") %]
+[% Asset.js("lib/bootstrap/js/bootstrap.min.js") | $raw %]
+[% Asset.js("js/global.js") | $raw %]
 <script>
     Modernizr.load([
         // Test need for polyfill
         {
             test: window.matchMedia,
-            nope: "[% Asset.url('lib/media.match.min.js') %]"
+            nope: "[% Asset.url('lib/media.match.min.js') | $raw %]"
         },
         // and then load enquire
-        "[% Asset.url('lib/enquire.min.js') %]",
-        "[% Asset.url('js/script.js') %]",
+        "[% Asset.url('lib/enquire.min.js') | $raw %]",
+        "[% Asset.url('js/script.js') | $raw %]",
     ]);
 
     // Fix for datepicker in a modal
@@ -107,13 +108,13 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         var NO_AMAZON_IMAGE = _("No cover image available");
     //]]>
 </script>
-[% Asset.js("js/amazonimages.js") %]
+[% Asset.js("js/amazonimages.js") | $raw %]
 [% END %]
 
-[% Asset.js("lib/emoji-picker/js/config.js") %]
-[% Asset.js("lib/emoji-picker/js/util.js") %]
-[% Asset.js("lib/emoji-picker/js/jquery.emojiarea.js") %]
-[% Asset.js("lib/emoji-picker/js/emoji-picker.js") %]
+[% Asset.js("lib/emoji-picker/js/config.js") | $raw %]
+[% Asset.js("lib/emoji-picker/js/util.js") | $raw %]
+[% Asset.js("lib/emoji-picker/js/jquery.emojiarea.js") | $raw %]
+[% Asset.js("lib/emoji-picker/js/emoji-picker.js") | $raw %]
 
 <script>
     //<![CDATA[
@@ -179,16 +180,16 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 </script>
 
 [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
-    [% Asset.js("js/basket.js") %]
+    [% Asset.js("js/basket.js") | $raw %]
 [% ELSIF ( Koha.Preference( 'virtualshelves' ) == 1 ) %]
-    [% Asset.js("js/basket.js") %]
+    [% Asset.js("js/basket.js") | $raw %]
 [% ELSE %]
     <script>var readCookie;</script>
 [% END %]
 
-[% IF Koha.Preference( 'opacuserlogin' ) == 1 %][% IF Koha.Preference( 'TagsEnabled' ) == 1 %][% Asset.js("js/tags.js") %][% END %][% ELSE %][% END %]
+[% IF Koha.Preference( 'opacuserlogin' ) == 1 %][% IF Koha.Preference( 'TagsEnabled' ) == 1 %][% Asset.js("js/tags.js") | $raw %][% END %][% ELSE %][% END %]
 [% IF ( GoogleJackets ) %]
-    [% Asset.js("js/google-jackets.js") %]
+    [% Asset.js("js/google-jackets.js") | $raw %]
     <script>
         //<![CDATA[
         var NO_GOOGLE_JACKET = _("No cover image available");
@@ -196,7 +197,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
     </script>
 [% END %]
 [% IF ( Koha.Preference('Coce') && Koha.Preference('CoceProviders') ) %]
-    [% Asset.js("js/coce.js") %]
+    [% Asset.js("js/coce.js") | $raw %]
     <script>
         //<![CDATA[
         var NO_COCE_JACKET = _("No cover image available");
@@ -205,7 +206,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 [% END %]
 
 [% IF OpenLibraryCovers || OpenLibrarySearch %]
-    [% Asset.js("js/openlibrary.js") %]
+    [% Asset.js("js/openlibrary.js") | $raw %]
     <script>
     //<![CDATA[
     var NO_OL_JACKET = _("No cover image available");
@@ -215,7 +216,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 [% END %]
 
 [% IF OPACLocalCoverImages %]
-    [% Asset.js("js/localcovers.js") %]
+    [% Asset.js("js/localcovers.js") | $raw %]
     <script>
     //<![CDATA[
     var NO_LOCAL_JACKET = _("No cover image available");
@@ -224,7 +225,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 [% END %]
 
 [% IF ( BakerTaylorEnabled ) %]
-    [% Asset.js("js/bakertaylorimages.js") %]
+    [% Asset.js("js/bakertaylorimages.js") | $raw %]
     <script>
         //<![CDATA[
         var NO_BAKERTAYLOR_IMAGE = _("No cover image available");
@@ -236,7 +237,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 [% END %]
 [% IF ( GoogleIndicTransliteration ) %]
     <script src="https://www.google.com/jsapi"></script>
-    [% Asset.js("js/googleindictransliteration.js") %]
+    [% Asset.js("js/googleindictransliteration.js") | $raw %]
 [% END %]
 
 [% IF Koha.Preference( 'OpacNewsLibrarySelect' ) %]
@@ -247,7 +248,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 </script>
 [% END %]
 
-[% Asset.js("lib/jquery/plugins/jquery.cookie.min.js") %]
+[% Asset.js("lib/jquery/plugins/jquery.cookie.min.js") | $raw %]
 <script>
 $(document).ready(function() {
     if($('#searchsubmit').length) {
@@ -261,7 +262,7 @@ $(document).ready(function() {
 
     window.emojiPicker = new EmojiPicker({
       emojiable_selector: '[data-emojiable=true]',
-      assetsPath: '[% interface %]/lib/emoji-picker/img/',
+      assetsPath: '[% interface | html %]/lib/emoji-picker/img/',
       popupButtonClasses: 'fa fa-smile-o'
     });
     window.emojiPicker.discover();
@@ -271,7 +272,7 @@ $(document).ready(function() {
 [% IF ( OPACUserJS ) %]
     <script>
         //<![CDATA[
-        [% OPACUserJS %]
+        [% OPACUserJS | $raw %]
         //]]>
     </script>
 [% END %]
@@ -280,11 +281,11 @@ $(document).ready(function() {
     [% IF ( SCOUserJS ) %]
         <script>
             //<![CDATA[
-            [% SCOUserJS %]
+            [% SCOUserJS | $raw %]
             //]]>
         </script>
     [% END %]
 [% END %]
-[% KohaPlugins.get_plugins_opac_js %]
+[% KohaPlugins.get_plugins_opac_js | html %]
 </body>
 </html>

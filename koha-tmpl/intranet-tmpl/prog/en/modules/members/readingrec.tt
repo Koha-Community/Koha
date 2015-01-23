@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Koha %]
@@ -7,7 +8,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Circulation History for [% INCLUDE 'patron-title.inc' no_html = 1 %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="pat_readingrec" class="pat">
@@ -33,7 +34,7 @@
 [% ELSIF ( !loop_reading ) %]
     <div class="dialog message">This patron has no circulation history.</div>
 [% ELSE %]
-<form action="/cgi-bin/koha/members/readingrec.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber %]" /></form>
+<form action="/cgi-bin/koha/members/readingrec.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" /></form>
 
 
 <div id="tabs" class="toptabs">
@@ -63,42 +64,42 @@
       [% FOREACH issue IN loop_reading %]
         [% IF  issue.returndate  %]<tr>[% ELSE %]<tr class="onissue">[% END %]
           <td style="display:none;">
-            [% IF issue.onsite_checkout %][% issuetype = 'onsite_checkout' %]
-            [% ELSE %][% issuetype = 'standard_checkout' %]
+            [% IF issue.onsite_checkout %][% issuetype = 'onsite_checkout' | html %]
+            [% ELSE %][% issuetype = 'standard_checkout' | html %]
             [% END %]
-            [% issuetype %]
+            [% issuetype | html %]
           </td>
           <td>
-            <span title="[% issue.issuestimestamp %]">[% issue.issuestimestamp | $KohaDates with_hours => 1 %]</span>
+            <span title="[% issue.issuestimestamp | html %]">[% issue.issuestimestamp | $KohaDates with_hours => 1 | html %]</span>
           </td>
-          <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% issue.biblionumber %]">[% issue.title |html %]</a></td>
+          <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% issue.biblionumber | html %]">[% issue.title | html %]</a></td>
 
-          <td>[% issue.author %]</td>
+          <td>[% issue.author | html %]</td>
 
           <td>
             [% IF issue.classification %]
-                [% issue.classification %]
+                [% issue.classification | html %]
             [% ELSE %]
-                [% issue.itemcallnumber %]
+                [% issue.itemcallnumber | html %]
             [% END %]
           </td>
 
-          <td>[% issue.barcode %]</td>
-          <td>[% issue.renewals %]</td>
+          <td>[% issue.barcode | html %]</td>
+          <td>[% issue.renewals | html %]</td>
           <td>
-            <span title="[% issue.issuedate %]">[% issue.issuedate |$KohaDates with_hours => 1 %]</span>
+            <span title="[% issue.issuedate | html %]">[% issue.issuedate |$KohaDates with_hours => 1 | html %]</span>
           </td>
-          <td>[% Branches.GetName( issue.branchcode ) %]</td>
+          <td>[% Branches.GetName( issue.branchcode ) | html %]</td>
           <td>
             [% IF issue.date_due %]
-                <span title="[% issue.date_due %]">[% issue.date_due |$KohaDates with_hours => 1 %]</span>
+                <span title="[% issue.date_due | html %]">[% issue.date_due |$KohaDates with_hours => 1 | html %]</span>
             [% ELSE %]
                 <span title="0000-00-00"></span>
             [% END %]
           </td>
           <td>
             [% IF  issue.returndate %]
-              <span title="[% issue.returndate %]">[% issue.returndate |$KohaDates with_hours => 1 %]</span>
+              <span title="[% issue.returndate | html %]">[% issue.returndate |$KohaDates with_hours => 1 | html %]</span>
             [% ELSE %]
               <span title="Checked out"><small>Checked out</small></span>
             [% END %]
@@ -120,7 +121,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript" id="js">
         $(document).ready(function() {

@@ -37,32 +37,32 @@
                         [% CASE '10' %] Sort2
                         [% CASE %] Unknown filter
                     [% END %]
-                    : [% loopfilte.filter %]
+                    : [% loopfilte.filter | html %]
                 </p>
 			[% END %]
 		[% END %]
 
 		<table>
 			<tr >
-				<th>[% mainloo.line %] / [% mainloo.column %]</th>
+				<th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
 				[% FOREACH loopco IN mainloo.loopcol %]
-					<th>[% loopco.coltitle %]</th>
+					<th>[% loopco.coltitle | html %]</th>
 				[% END %]
 				<th>TOTAL</th>
 			</tr>
 				[% FOREACH loopro IN mainloo.looprow %]
 					<tr>
 						[% IF ( loopro.hilighted ) %]<td class="hilighted">[% ELSE %]<td>[% END %]
-						[% loopro.rowtitle %]</td>
+						[% loopro.rowtitle | html %]</td>
 						[% FOREACH loopcel IN loopro.loopcell %]
 							[% IF ( loopcel.hilighted ) %]<td>[% ELSE %]<td>[% END %]
-								[% IF ( loopcel.value ) %][% loopcel.value %]
+								[% IF ( loopcel.value ) %][% loopcel.value | html %]
 								[% ELSE %] &nbsp;
 								[% END %]
 							</td>
 						[% END %]
 						[% IF ( loopro.hilighted ) %]<td>[% ELSE %]<td>[% END %]
-							[% loopro.totalrow %]
+							[% loopro.totalrow | html %]
 						</td>
 					</tr>
 				[% END %]
@@ -70,10 +70,10 @@
 					<th>TOTAL</th>
 					[% FOREACH loopfoote IN mainloo.loopfooter %]
 						<th>
-							[% loopfoote.totalcol %]
+							[% loopfoote.totalcol | html %]
 						</th>
 					[% END %]
-					<th>[% mainloo.total %]</th>
+					<th>[% mainloo.total | html %]</th>
 				</tr>
 		</table>
 	[% END %]
@@ -143,7 +143,7 @@
                     <select name="Filter">
                         <option value="">All vendors</option>
                         [% FOREACH bookseller IN booksellers %]
-                            <option value="[% bookseller.name %]">[% bookseller.name %]</option>
+                            <option value="[% bookseller.name | html %]">[% bookseller.name | html %]</option>
                         [% END %]
                     </select>
                 </td>
@@ -156,7 +156,7 @@
                     <select name="Filter">
                         <option value="" selected="selected">All libraries</option>
                         [% FOREACH branch IN branches %]
-                            <option value="[% branch.branchcode %]">[% branch.branchname %]</option>
+                            <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
                         [% END %]
                     </select>
                 </td>
@@ -164,7 +164,7 @@
             <tr>
                 <td>
                     [% IF ccode_label %]
-                        [% ccode_label %]
+                        [% ccode_label | html %]
                     [% ELSE %]
                         Collection
                     [% END %]
@@ -176,7 +176,7 @@
                         <select name="Filter">
                             <option value="" selected="selected">All</option>
                             [% FOREACH ccode_av IN ccode_avlist %]
-                                <option value="[% ccode_av.value %]">[% ccode_av.lib %]</option>
+                                <option value="[% ccode_av.value | html %]">[% ccode_av.lib | html %]</option>
                             [% END %]
                         </select>
                     [% ELSE %]
@@ -192,7 +192,7 @@
                     <select name="Filter" size="1" id="itemtypes">
                         <option value="">All item types</option>
                         [% FOREACH itemtype IN itemtypes %]
-                        <option value="[% itemtype.itemtype %]">[% itemtype.translated_description %]</option>
+                        <option value="[% itemtype.itemtype | html %]">[% itemtype.translated_description | html %]</option>
                         [% END %]
                     </select>
                 </td>
@@ -206,7 +206,7 @@
                     <select name="Filter" size="1" id="budget">
                         <option value="">All funds</option>
                         [% FOREACH value IN Budgets.values %]
-                        <option value="[% value %]">[% Budgets.labels.$value %]</option>
+                        <option value="[% value | html %]">[% Budgets.labels.$value | html %]</option>
                         [% END %]
                     </select>
                 </td>
@@ -221,7 +221,7 @@
                         <select name="Filter" size="1" id="sort1">
                             <option value="">All</option>
                             [% FOREACH value IN Sort1.values %]
-                            <option value="[% value %]">[% Sort1.labels.$value %]</option>
+                            <option value="[% value | html %]">[% Sort1.labels.$value | html %]</option>
                             [% END %]
                         </select>
                     </td>
@@ -236,7 +236,7 @@
                         <select name="Filter" size="1" id="sort2">
                             <option value="">All</option>
                             [% FOREACH value IN Sort2.values %]
-                            <option value="[% value %]">[% Sort2.labels.$value %]</option>
+                            <option value="[% value | html %]">[% Sort2.labels.$value | html %]</option>
                             [% END %]
                         </select>
                     </td>
@@ -283,9 +283,9 @@
             <select name="sep" id="sep" size="1">
             [% FOREACH value IN CGIsepChoice.values.sort() %]
               [% IF ( value == CGIsepChoice.default ) %]
-                <option value="[% value %]" selected="selected">[% value %]</option>
+                <option value="[% value | html %]" selected="selected">[% value | html %]</option>
               [% ELSE %]
-                <option value="[% value %]">[% value %]</option>
+                <option value="[% value | html %]">[% value | html %]</option>
               [% END %]
             [% END %]
             </select>
@@ -295,7 +295,7 @@
 
 	<fieldset class="action">
 	<input type="submit" value="Submit" />
-	<input type="hidden" name="report_name" value="[% report_name %]" />
+	<input type="hidden" name="report_name" value="[% report_name | html %]" />
 	<input type="hidden" name="do_it" value="1" />
 	</fieldset>
 	</form>

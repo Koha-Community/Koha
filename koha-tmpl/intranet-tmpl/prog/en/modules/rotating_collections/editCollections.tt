@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -5,7 +6,7 @@
     [%- IF ( action == "new" ) %]
         Add a new collection
     [% ELSE %]
-        Edit collection [% editColTitle %]
+        Edit collection [% editColTitle | html %]
     [% END -%]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -18,7 +19,7 @@
     [%- IF ( action == "new" ) %]
         Add a new collection
     [% ELSE %]
-        <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% editColId %]">Collection <i>[% editColTitle %]</i></a> &rsaquo; Edit
+        <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% editColId | html %]">Collection <i>[% editColTitle | html %]</i></a> &rsaquo; Edit
     [% END -%]
 </div>
 
@@ -30,12 +31,12 @@
               [% IF ( previousActionCreate ) %]
                 [% IF ( createSuccess ) %]
                     <div class="dialog message">
-                        <p>Collection <i>[% createdTitle %]</i> added successfully</p>
+                        <p>Collection <i>[% createdTitle | html %]</i> added successfully</p>
                         <p><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Return to rotating collections home</a></p>
                     </div>
                 [% ELSE %]
                   <div class="dialog alert">
-                    <p>Collection <i>[% createdTitle %]</i> failed to be added</p>
+                    <p>Collection <i>[% createdTitle | html %]</i> failed to be added</p>
                     <p>
                         [% IF failureMessage == "NO_TITLE" %]
                             No title entered.
@@ -44,7 +45,7 @@
                         [% ELSIF failureMessage == "NO_DESCRIPTION" %]
                             No description entered.
                         [% ELSE %]
-                            [% failureMessage %]
+                            [% failureMessage | html %]
                         [% END %]
                     </p>
                   </div>
@@ -65,19 +66,19 @@
               [% IF ( previousActionUpdate ) %]
                 [% IF ( updateSuccess ) %]
                   <div class="dialog message">
-                      <p>Collection <i>[% updatedTitle %]</i> updated successfully</p>
+                      <p>Collection <i>[% updatedTitle | html %]</i> updated successfully</p>
                       <p><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Return to rotating collections home</a></p>
                   </div>
                 [% ELSE %]
                   <div class="dialog alert">
-                    <p>Collection <i>[% updatedTitle %]</i> failed to be updated</p>
+                    <p>Collection <i>[% updatedTitle | html %]</i> failed to be updated</p>
                     <p>
                         [% IF failureMessage == "NO_ID" %]
                             No collection id given.
                         [% ELSIF failureMessage == "DUPLICATE_TITLE" %]
                             Title already in use.
                         [% ELSE %]
-                            [% failureMessage %]
+                            [% failureMessage | html %]
                         [% END %]
                     </p>
                 </div>
@@ -88,7 +89,7 @@
 
                 [% IF action == "new" || action == "edit" %]
                     [% IF ( previousActionEdit ) %]
-                      <h1>Edit collection <i>[% editColTitle %]</i></h1>
+                      <h1>Edit collection <i>[% editColTitle | html %]</i></h1>
                     [% ELSE %]
                       <h1>Add new collection</h1>
                     [% END %]
@@ -96,7 +97,7 @@
                     <form action="editCollections.pl" method="post" class="validated">
                         [% IF ( previousActionEdit ) %]
                             <input type="hidden" name="action" value="update" />
-                            <input type="hidden" name="colId" value="[% editColId %]" />
+                            <input type="hidden" name="colId" value="[% editColId | html %]" />
                         [% ELSE %]
                             <input type="hidden" name="action" value="create" />
                         [% END %]
@@ -106,7 +107,7 @@
                                 <li>
                                     <label class="required" for="title">Title: </label>
                                     [% IF ( editColTitle ) %]
-                                        <input type="text" name="title" value="[% editColTitle %]" required="required" />
+                                        <input type="text" name="title" value="[% editColTitle | html %]" required="required" />
                                         <span class="required">Required</span>
                                     [% ELSE %]
                                         <input type="text" name="title" required="required" />
@@ -116,7 +117,7 @@
                                 <li>
                                     <label for="description">Description: </label>
                                     [% IF (editColDescription ) %]
-                                        <input type="text" size="50" name="description" value="[% editColDescription %]" />
+                                        <input type="text" size="50" name="description" value="[% editColDescription | html %]" />
                                     [% ELSE %]
                                         <input type="text" size="50" name="description" />
                                     [% END %]
@@ -138,8 +139,8 @@
     </div> <!-- /#bd -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
-    [% Asset.js("js/rotating-collections.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
+    [% Asset.js("js/rotating-collections.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

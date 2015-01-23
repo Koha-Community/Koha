@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
 [% USE Categories %]
@@ -38,7 +39,7 @@
         [% CASE 'Virtualshelfcontent'   %]list items
         [% CASE 'Virtualshelfshare'     %]list shares
         [% CASE 'Virtualshelve'         %]lists
-        [% CASE %][% rs %]
+        [% CASE %][% rs | html %]
     [% END %]
 [% END %]
 
@@ -69,19 +70,19 @@
                             <tbody>
                                 [% FOREACH p IN patrons %]
                                     <tr>
-                                        <td><input class='keeper' type='radio' name='keeper' value='[% p.id %]' /></td>
+                                        <td><input class='keeper' type='radio' name='keeper' value='[% p.id | html %]' /></td>
                                         <td>[% p.cardnumber | html %]</td>
                                         <td>[% INCLUDE 'patron-title.inc' patron = p %]</td>
                                         <td>[% p.dateofbirth | $KohaDates %]</td>
-                                        <td>[% Categories.GetName( p.categorycode ) %] ([% p.categorycode %])</td>
-                                        <td>[% Branches.GetName( p.branchcode ) %]</td>
+                                        <td>[% Categories.GetName( p.categorycode ) | html %] ([% p.categorycode | html %])</td>
+                                        <td>[% Branches.GetName( p.branchcode ) | html %]</td>
                                         <td>[% p.dateexpiry | $KohaDates %]</td>
                                 [% END %]
                             </tbody>
                         </table>
 
                         [% FOREACH p IN patrons %]
-                            <input type="hidden" name="id" value="[% p.id %]" />
+                            <input type="hidden" name="id" value="[% p.id | html %]" />
                         [% END %]
 
                         <p/>
@@ -98,13 +99,13 @@
                     [% IF error == 'INVALID_KEEPER' %]
                         <div class="dialog alert">Merge failed! The patron to keep was invalid.</div>
                     [% ELSE %]
-                        <div class="dialog alert">Merge failed! The following error was reported: [% error %].</div>
+                        <div class="dialog alert">Merge failed! The following error was reported: [% error | html %].</div>
                     [% END %]
                 [% ELSIF !results.merged.keys.size %]
                     <div class="dialog alert">No valid patrons to merge were found.</div>
                 [% ELSE %]
                     <p>
-                        Patron records merged into <a href="moremember.pl?borrowernumber=[% keeper.id %]">[% INCLUDE 'patron-title.inc' patron = keeper %]</a>
+                        Patron records merged into <a href="moremember.pl?borrowernumber=[% keeper.id | html %]">[% INCLUDE 'patron-title.inc' patron = keeper %]</a>
                     </p>
 
                     [% FOREACH pair IN results.merged.pairs %]
@@ -117,7 +118,7 @@
                             [% SET count = r.value %]
                             [% IF count %]
                                 <p>
-                                    <span>[% count %] [% PROCESS display_names rs = name %] transferred.</span>
+                                    <span>[% count | html %] [% PROCESS display_names rs = name %] transferred.</span>
                                     [% IF name == 'Reserve' %]
                                         <strong>It is advisable to check for and resolve duplicate holds due to merging.</strong>
                                     [% END %]
@@ -128,7 +129,7 @@
                 [% END %]
 
                 [% UNLESS error %]
-                    <a class="btn btn-default btn-sm" href="moremember.pl?borrowernumber=[% keeper.id %]">View patron record</a>
+                    <a class="btn btn-default btn-sm" href="moremember.pl?borrowernumber=[% keeper.id | html %]">View patron record</a>
                 [% END %]
             [% END %]
         </div>
@@ -136,7 +137,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
 
     <script>
     $(document).ready(function() {

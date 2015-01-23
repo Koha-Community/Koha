@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
 
-        <div id="loading"> <img src="[% interface %]/[% theme %]/img/spinner-small.gif" alt="" /> Loading </div>
+        <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
 
             </div>
         </div>
@@ -31,15 +31,15 @@
                 [% ELSE %]
                 var new_line = "
                 [%- FOREACH SUBFIELD_LOO IN SUBFIELD_LOOP -%]‡
-                    [%- SUBFIELD_LOO.marc_subfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r    ') -%]
+                    [%- SUBFIELD_LOO.marc_subfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r    ') | html -%]
                     [%- FOREACH marc_value IN SUBFIELD_LOO.marc_values -%]
-                        [%- marc_value |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') -%]
+                        [%- marc_value |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html -%]
                     [%- END -%]
-                [%- END -%]‡9[% authid %]";
+                [%- END -%]‡9[% authid | html %]";
                 [% END %]
-                RancorReplaceField( new_line, "[% indicator1 %]", "[% indicator2 %]" );
+                RancorReplaceField( new_line, "[% indicator1 | html %]", "[% indicator2 | html %]" );
             [% ELSE %]
-            var index_start = "[% index %]";
+            var index_start = "[% index | html %]";
             var whichfield;
             try {
                 whichfield = opener.opener.document.getElementById(index_start);
@@ -65,7 +65,7 @@
                 // Try to add as many clones as needed
                 try {
                     for(var i=0; i<nb-subfields.length; i++) {
-                        window.opener.opener.CloneSubfield(subfields[0].getAttribute('id'),'[% advancedMARCEditor %]');
+                        window.opener.opener.CloneSubfield(subfields[0].getAttribute('id'),'[% advancedMARCEditor | html %]');
                     }
                 }
                 catch(err) {
@@ -108,18 +108,18 @@
             [% UNLESS ( clear ) %]
                 [% FOREACH SUBFIELD_LOO IN SUBFIELD_LOOP %]
                     SetSubfieldValues(
-                        "[% tag_number |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %][% SUBFIELD_LOO.marc_subfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"
+                        "[% tag_number |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %][% SUBFIELD_LOO.marc_subfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]"
                     [% FOREACH marc_value IN SUBFIELD_LOO.marc_values %]
-                        ,"[% marc_value |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"
+                        ,"[% marc_value |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]"
                     [% END %]
                     );
                 [% END %]
                 var indicators = field_start.getElementsByClassName('indicator flat');
                 [% IF update_ind1 %]
-                    indicators[0].value="[% indicator1 %]";
+                    indicators[0].value="[% indicator1 | html %]";
                 [% END %]
                 [% IF update_ind2 %]
-                    indicators[1].value="[% indicator2 %]";
+                    indicators[1].value="[% indicator2 | html %]";
                 [% END %]
             [% END %]
 
@@ -136,7 +136,7 @@
                     if (subfield){subfield.value="" ;}
                 [% ELSE %]
                     if(code.value=='9'){
-                        subfield.value = "[% authid |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                        subfield.value = "[% authid |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
                         break;
                     }
                 [% END %]

@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
@@ -5,7 +6,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Notices[% IF ( add_form or copy_form ) %][% IF ( modify ) %] &rsaquo; Modify notice[% ELSE %] &rsaquo; Add notice[% END %][% END %][% IF ( add_validate or copy_validate) %] &rsaquo; Notice added[% END %][% IF ( delete_confirm ) %] &rsaquo; Confirm deletion[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 <style type="text/css">#preview_template .modal-dialog { width : 80%; } .spinner { display: none; } @media (max-width: 767px) { #preview_template { margin: 0; width : auto; } }</style>
 </head>
 
@@ -23,7 +24,7 @@
         <h3 id="preview_template_label">Preview notice template</h3>
     </div>
     <div class="modal-body">
-        <div id="loading"> <img src="[% interface %]/[% theme %]/img/spinner-small.gif" alt="" /> Loading </div>
+        <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
     </div>
     <div class="modal-footer">
         <!-- TODO <a href="#" class="btn btn-default" id="preview_template_button" role="button" data-toggle="modal">Convert using the Template Toolkit syntax</a>-->
@@ -67,10 +68,10 @@
         <p>You searched for <b>[% searchfield | html %]</b></p>
 		[% END %]
 		[% IF ( letter && !independant_branch) %]
-            [% select_for_copy = BLOCK %]
+            [% select_for_copy = BLOCK | html %]
             <select name="branchcode">
                 [% FOREACH l IN Branches.all() %]
-                <option value="[% l.branchcode %]">Copy to [% l.branchname %]</option>
+                <option value="[% l.branchcode | html %]">Copy to [% l.branchname | html %]</option>
                 [% END %]
             </select>
             [% END %]
@@ -89,23 +90,23 @@
             </thead>
             <tbody>
               [% FOREACH lette IN letter %]
-                [% can_edit = lette.branchcode || !independant_branch %]
+                [% can_edit = lette.branchcode || !independant_branch | html %]
                 <tr>
-                  <td>[% IF lette.branchname %][% lette.branchname %][% ELSE %](All libraries)[% END %]</td>
-                  <td>[% lette.module %]</td>
-                  <td>[% lette.code %]</td>
-                  <td>[% lette.name %]</td>
+                  <td>[% IF lette.branchname %][% lette.branchname | html %][% ELSE %](All libraries)[% END %]</td>
+                  <td>[% lette.module | html %]</td>
+                  <td>[% lette.code | html %]</td>
+                  <td>[% lette.name | html %]</td>
                   <td class="actions">
                     [% IF !independant_branch || !lette.branchcode %]
                       <form method="post" action="/cgi-bin/koha/tools/letter.pl">
                         <input type="hidden" name="op" value="copy_form" />
-                        <input type="hidden" name="oldbranchcode" value="[% lette.branchcode %]" />
-                        <input type="hidden" name="module" value="[% lette.module %]" />
-                        <input type="hidden" name="code" value="[% lette.code %]" />
+                        <input type="hidden" name="oldbranchcode" value="[% lette.branchcode | html %]" />
+                        <input type="hidden" name="module" value="[% lette.module | html %]" />
+                        <input type="hidden" name="code" value="[% lette.code | html %]" />
                         [% IF independant_branch %]
-                          <input type="hidden" name="branchcode" value="[% independant_branch %]" />
+                          <input type="hidden" name="branchcode" value="[% independant_branch | html %]" />
                         [% ELSE %]
-                          [% select_for_copy %]
+                          [% select_for_copy | $raw %]
                         [% END %]
                         <button class="btn btn-default btn-xs"><i class="fa fa-clone"></i> Copy</button>
                       </form>
@@ -113,10 +114,10 @@
                   </td>
                   <td class="actions">
                     [% IF can_edit %]
-                      <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;branchcode=[% lette.branchcode %]&amp;module=[% lette.module %]&amp;code=[% lette.code %]"><i class="fa fa-pencil"></i> Edit</a>
+                      <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;branchcode=[% lette.branchcode | html %]&amp;module=[% lette.module | html %]&amp;code=[% lette.code | html %]"><i class="fa fa-pencil"></i> Edit</a>
                     [% END %]
                     [% IF !lette.protected && can_edit %]
-                      <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/letter.pl?op=delete_confirm&amp;branchcode=[%lette.branchcode %]&amp;module=[% lette.module %]&amp;code=[% lette.code %]"><i class="fa fa-trash"></i> Delete</a>
+                      <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/letter.pl?op=delete_confirm&amp;branchcode=[% lette.branchcode | html %]&amp;module=[% lette.module | html %]&amp;code=[% lette.code | html %]"><i class="fa fa-trash"></i> Delete</a>
                     [% END %]
                   </td>
                 </tr>
@@ -165,10 +166,10 @@
 		<input type="hidden" name="add" value="1" />
 		[% END %]
 		<fieldset class="rows">
-            <input type="hidden" name="oldbranchcode" value="[% oldbranchcode %]" />
+            <input type="hidden" name="oldbranchcode" value="[% oldbranchcode | html %]" />
             <ol>
             [% IF independant_branch %]
-                <input type="hidden" name="branchcode" value="[% independant_branch %]" />
+                <input type="hidden" name="branchcode" value="[% independant_branch | html %]" />
             [% ELSE %]
             <li>
 
@@ -180,9 +181,9 @@
                     </select>
                 [% ELSE %]
                     <span class="label">Library:</span>
-                    <input type="hidden" id="branch" name="branchcode" value="[% branchcode %]" />
+                    <input type="hidden" id="branch" name="branchcode" value="[% branchcode | html %]" />
                     [% IF ( branchcode ) %]
-                       [% Branches.GetName( branchcode ) %]
+                       [% Branches.GetName( branchcode ) | html %]
                     [% ELSE %]
                         All libraries
                     [% END %]
@@ -191,7 +192,7 @@
             [% END %]
 			<li>
 				<label for="module">Koha module:</label>
-				<input type="hidden" name="oldmodule" value="[% module %]" />
+				<input type="hidden" name="oldmodule" value="[% module | html %]" />
                 [% IF adding  %]
                   <select name="module" id="newmodule">
                 [% ELSE %]
@@ -256,13 +257,13 @@
                   <span class="required">Required</span>
               [% ELSE %]
                   <span class="label">Code:</span>
-                  <input type="hidden" id="code" name="code" value="[% code %]" />
-                  [% code %]
+                  <input type="hidden" id="code" name="code" value="[% code | html %]" />
+                  [% code | html %]
               [% END %]
             </li>
             <li>
               <label for="name" class="required">Name:</label>
-              <input type="text" id="name" name="name" size="60" value="[% letter_name %]" required="required" />
+              <input type="text" id="name" name="name" size="60" value="[% letter_name | html %]" required="required" />
               <span class="required">Required</span>
             </li>
             [% IF code and preview_is_available%]
@@ -290,9 +291,9 @@
                     [% FOR language IN languages %]
                         [% FOR sublanguage IN language.sublanguages_loop %]
                             [% IF language.plural %]
-                                <li><a href="#lang_[% sublanguage.rfc4646_subtag %]">[% sublanguage.native_description %] [% sublanguage.region_description %] ([% sublanguage.rfc4646_subtag %])</a></li>
+                                <li><a href="#lang_[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])</a></li>
                             [% ELSE %]
-                                <li><a href="#lang_[% sublanguage.rfc4646_subtag %]">[% sublanguage.native_description %] ([% sublanguage.rfc4646_subtag %])</a></li>
+                                <li><a href="#lang_[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] ([% sublanguage.rfc4646_subtag | html %])</a></li>
                             [% END %]
                         [% END %]
                     [% END %]
@@ -300,7 +301,7 @@
         [% END %]
 
         [% FOREACH lang IN letters.keys %]
-            <div id="lang_[% lang %]">
+            <div id="lang_[% lang | html %]">
         <div class="transport-types" style="clear:both">
         [% FOR mtt IN letters.$lang.templates.keys.sort %]
             [% SET letter = letters.$lang.templates.$mtt %]
@@ -317,56 +318,56 @@
                 [% CASE 'phone' %]
                   Phone
                 [% CASE %]
-                  [% letter.message_transport_type %]
+                  [% letter.message_transport_type | html %]
                 [% END %]
             </h3>
             [% IF letter.message_transport_type == "sms" and not Koha.Preference("SMSSendDriver") %]
-              <fieldset class="rows mtt" id="[% letter.message_transport_type %]_[% lang %]" disabled="disabled">
+              <fieldset class="rows mtt" id="[% letter.message_transport_type | html %]_[% lang | html %]" disabled="disabled">
                 <div class="dialog message">You should enable the SMSSendDriver preference to use the SMS templates.</div>
             [% ELSIF letter.message_transport_type == "phone" and not Koha.Preference("TalkingTechItivaPhoneNotification") %]
-              <fieldset class="rows mtt" id="[% letter.message_transport_type %]_[% lang %]" disabled="disabled">
+              <fieldset class="rows mtt" id="[% letter.message_transport_type | html %]_[% lang | html %]" disabled="disabled">
                 <div class="dialog message">You should enable the TalkingTechItivaPhoneNotification preference to use the phone templates.</div>
             [% ELSE %]
-              <fieldset class="rows mtt" id="[% letter.message_transport_type %]_[% lang %]">
+              <fieldset class="rows mtt" id="[% letter.message_transport_type | html %]_[% lang | html %]">
             [% END %]
               <ol>
                 <li>
-                  <input type="hidden" name="message_transport_type" value="[% letter.message_transport_type %]" />
-                  <input type="hidden" name="lang" value="[% lang %]" />
-                  <label for="is_html_[% letter.message_transport_type %]_[% lang %]">HTML message:</label>
+                  <input type="hidden" name="message_transport_type" value="[% letter.message_transport_type | html %]" />
+                  <input type="hidden" name="lang" value="[% lang | html %]" />
+                  <label for="is_html_[% letter.message_transport_type | html %]_[% lang | html %]">HTML message:</label>
                   [% IF letter.is_html %]
-                    <input type="checkbox" name="is_html_[% letter.message_transport_type %]" id="is_html_[% letter.message_transport_type %]_[% lang %]" value="1" checked="checked" />
+                    <input type="checkbox" name="is_html_[% letter.message_transport_type | html %]" id="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" value="1" checked="checked" />
                   [% ELSE %]
-                    <input type="checkbox" name="is_html_[% letter.message_transport_type %]" id="is_html_[% letter.message_transport_type %]_[% lang %]" value="1" />
+                    <input type="checkbox" name="is_html_[% letter.message_transport_type | html %]" id="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" value="1" />
                   [% END %]
                 </li>
                 <li>
-                  <label for="title_[% letter.message_transport_type %]_[% lang %]">Message subject:</label><input type="text" id="title_[% letter.message_transport_type %]_[% lang %]" name="title" size="60" value="[% letter.title %]" />
+                  <label for="title_[% letter.message_transport_type | html %]_[% lang | html %]">Message subject:</label><input type="text" id="title_[% letter.message_transport_type | html %]_[% lang | html %]" name="title" size="60" value="[% letter.title | html %]" />
                 </li>
                 <li>
-                  <label for="SQLfieldname_[% letter.message_transport_type %]_[% lang %]">Message body:</label>
+                  <label for="SQLfieldname_[% letter.message_transport_type | html %]_[% lang | html %]">Message body:</label>
                   [% IF letter.message_transport_type == 'sms' %]
-                    <span class="sms_counter" id="sms_counter_[% lang %]">[% IF letter.content && letter.content.length > 0 %][% letter.content.length %][% ELSE %]0[% END %]/160 characters</span>
+                    <span class="sms_counter" id="sms_counter_[% lang | html %]">[% IF letter.content && letter.content.length > 0 %][% letter.content.length | html %][% ELSE %]0[% END %]/160 characters</span>
                   [% END %]
                   <table>
                     <tr>
                       <td>
-                        <select name="SQLfieldname" id="SQLfieldname_[% letter.message_transport_type %]_[% lang %]" multiple="multiple" size="9">
+                        <select name="SQLfieldname" id="SQLfieldname_[% letter.message_transport_type | html %]_[% lang | html %]" multiple="multiple" size="9">
                           [% FOREACH SQLfieldname IN SQLfieldnames %]
-                            <option value="[% SQLfieldname.value %]">[% SQLfieldname.text %]</option>
+                            <option value="[% SQLfieldname.value | html %]">[% SQLfieldname.text | html %]</option>
                           [% END %]
                         </select>
                       </td>
                         <td class="actions">
-                            <button type="button" data-containerid="[% letter.message_transport_type %]_[% lang %]" class="btn btn-default btn-sm insert">Insert <i class="fa fa-long-arrow-right"></i></button>
+                            <button type="button" data-containerid="[% letter.message_transport_type | html %]_[% lang | html %]" class="btn btn-default btn-sm insert">Insert <i class="fa fa-long-arrow-right"></i></button>
                         </td>
-                      <td><textarea name="content" data-lang="[% lang %]" class="content_[% letter.message_transport_type %]" id="content_[% letter.message_transport_type %]_[% lang %]" cols="80" rows="15">[% letter.content | html %]</textarea></td>
+                      <td><textarea name="content" data-lang="[% lang | html %]" class="content_[% letter.message_transport_type | html %]" id="content_[% letter.message_transport_type | html %]_[% lang | html %]" cols="80" rows="15">[% letter.content | html %]</textarea></td>
                     </tr>
                   </table>
                 </li>
                 [% IF preview_is_available %]
                     <li>
-                        <a href="/cgi-bin/koha/svc/letters/preview" class="preview_template btn btn-default btn-xs" title="Preview this notice template" data-mtt="[% letter.message_transport_type %]" data-lang="[% lang %]"><i class="fa fa-eye"></i> Preview</a>
+                        <a href="/cgi-bin/koha/svc/letters/preview" class="preview_template btn btn-default btn-xs" title="Preview this notice template" data-mtt="[% letter.message_transport_type | html %]" data-lang="[% lang | html %]"><i class="fa fa-eye"></i> Preview</a>
                     </li>
                 [% END %]
               </ol>
@@ -382,13 +383,13 @@
         [% IF code.search('DGST') %] <span class="overdue">Warning, this is a template for a Digest, as such, any references to branch data ( e.g. branches.branchname ) will refer to the borrower's home branch.</span> [% END %]
 
         <input type="hidden" id="redirect" name="redirect" value="" />
-        <input type="hidden" name="searchfield" value="[% searchfield %]" />
+        <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
     </form>
 [% END %]
 
 [% IF ( add_validate or copy_validate) %]
 	Data recorded
-	<form action="[% action %]" method="post">
+	<form action="[% action | html %]" method="post">
 	<input type="submit" value="OK" />
 	</form>
 [% END %]
@@ -406,21 +407,21 @@
             </tr>
             </thead>
             <tr>
-                <td>[% IF letter.branchcode %][% Branches.GetName( letter.branchcode ) %][% ELSE %](All libraries)[% END %]</td>
-                <td>[% letter.module %]</td>
-                <td>[% letter.code %]</td>
-                <td>[% letter.name %]</td>
+                <td>[% IF letter.branchcode %][% Branches.GetName( letter.branchcode ) | html %][% ELSE %](All libraries)[% END %]</td>
+                <td>[% letter.module | html %]</td>
+                <td>[% letter.code | html %]</td>
+                <td>[% letter.name | html %]</td>
             </tr>
         </table>
-            <form action="[% action %]" method="post">
+            <form action="[% action | html %]" method="post">
             <input type="hidden" name="op" value="delete_confirmed">
-            <input type="hidden" name="branchcode" value="[% letter.branchcode %]" />
-            <input type="hidden" name="code" value="[% letter.code %]" />
-            <input type="hidden" name="module" value="[% letter.module %]" />
+            <input type="hidden" name="branchcode" value="[% letter.branchcode | html %]" />
+            <input type="hidden" name="code" value="[% letter.code | html %]" />
+            <input type="hidden" name="module" value="[% letter.module | html %]" />
             <button type="submit" class="approve"><i class="fa fa-check"></i> Yes, delete</button>
         </form>
 
-        <form action="[% action %]" method="get">
+        <form action="[% action | html %]" method="get">
             <button type="submit" class="deny"><i class="fa fa-times"></i> No, do not delete</button>
         </form>
     </div>
@@ -428,7 +429,7 @@
 
 [% IF ( delete_confirmed ) %]
 	Data deleted
-	<form action="[% action %]" method="post">
+	<form action="[% action | html %]" method="post">
 	<input type="submit" value="OK" />
 	</form>
 [% END %]
@@ -443,26 +444,26 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") %]
-    [% Asset.js("lib/jquery/plugins/jquery.insertatcaret.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/jquery.insertatcaret.js") | $raw %]
     <script>
-        var no_op_set = '[% no_op_set %]';
-        var interface = '[% interface %]';
-        var theme = '[% theme %]';
-        var add_form = '[% add_form %]';
-        var copy_form = '[% copy_form %]';
-        var code = '[% code %]';
-        var new_lettercode = '[% new_lettercode %]';
-        var new_branchcode = '[% new_branchcode %]';
+        var no_op_set = '[% no_op_set | html %]';
+        var interface = '[% interface | html %]';
+        var theme = '[% theme | html %]';
+        var add_form = '[% add_form | html %]';
+        var copy_form = '[% copy_form | html %]';
+        var code = '[% code | html %]';
+        var new_lettercode = '[% new_lettercode | html %]';
+        var new_branchcode = '[% new_branchcode | html %]';
         var MSG_CODE_EXISTS = _("A default letter with the code '%s' already exists.");
         var MSG_CODE_EXISTS_FOR_LIBRARY = _("A letter with the code '%s' already exists for '%s'.");
         var MSG_EMPTY_TITLE_AND_CONTENT = _("Please specify title and content for %s");
         var MSG_EMPTY_TEMPLATES = _("Please fill at least one template.");
         var MSG_LOADING = _("Loading");
      </script>
-    [% Asset.js("js/letter.js") %]
+    [% Asset.js("js/letter.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

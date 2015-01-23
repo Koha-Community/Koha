@@ -1,22 +1,23 @@
-[% Asset.js("lib/codemirror/codemirror-compressed.js") %]
-[% Asset.js("lib/filesaver.js") %]
-[% Asset.js("lib/koha/cateditor/marc-mode.js") %]
-[% Asset.js("lib/require.js") %]
+[% USE raw %]
+[% Asset.js("lib/codemirror/codemirror-compressed.js") | $raw %]
+[% Asset.js("lib/filesaver.js") | $raw %]
+[% Asset.js("lib/koha/cateditor/marc-mode.js") | $raw %]
+[% Asset.js("lib/require.js") | $raw %]
 <script>
     var authInfo = {
         [%- FOREACH authtag = authtags -%]
-            [% authtag.tagfield %]: {
-                subfield: '[% authtag.tagsubfield %]',
-                authtypecode: '[% authtag.authtypecode %]',
+            [% authtag.tagfield | html %]: {
+                subfield: '[% authtag.tagsubfield | html %]',
+                authtypecode: '[% authtag.authtypecode | html %]',
                 },
         [%- END -%]
     };
 require.config( {
-    baseUrl: '[% interface %]/lib/koha/cateditor/',
+    baseUrl: '[% interface | html %]/lib/koha/cateditor/',
     config: {
         resources: {
-            marcflavour: '[% marcflavour %]',
-            themelang: '[% themelang %]',
+            marcflavour: '[% marcflavour | html %]',
+            themelang: '[% themelang | html %]',
         },
     },
     waitSeconds: 30,
@@ -38,10 +39,10 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             checked: false,
         },
         [%- FOREACH server = z3950_servers -%]
-            [% server.id %]: {
-                name: '[% server.servername %]',
-                recordtype: '[% server.recordtype %]',
-                checked: [% server.checked ? 'true' : 'false' %],
+            [% server.id | html %]: {
+                name: '[% server.servername | html %]',
+                recordtype: '[% server.recordtype | html %]',
+                checked: [% server.checked ? 'true' : 'false' | html %],
             },
         [%- END -%]
     };
@@ -620,7 +621,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             $( sel ).on( event, function (e) {
                 e.preventDefault();
                 handler( e, Preferences.user[pref] );
-                Preferences.Save( [% logged_in_user.borrowernumber %] );
+                Preferences.Save( [% logged_in_user.borrowernumber | html %] );
                 showPreference(pref);
             } );
         }
@@ -645,7 +646,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 $( document ).on( 'change', 'input.search-toggle-server', function() {
                     var server_id = $( this ).closest('li').data('server-id');
                     Preferences.user.selected_search_targets[server_id] = this.checked;
-                    Preferences.Save( [% logged_in_user.borrowernumber %] );
+                    Preferences.Save( [% logged_in_user.borrowernumber | html %] );
                 } );
                 break;
         }
@@ -683,7 +684,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             delete Preferences.user.macros[name];
         }
 
-        Preferences.Save( [% logged_in_user.borrowernumber %] );
+        Preferences.Save( [% logged_in_user.borrowernumber | html %] );
     }
 
     function showSavedMacros( macros ) {
@@ -980,7 +981,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         $( '#switch-editor' ).click( function() {
             if ( !confirm( _("Any changes will not be saved. Continue?") ) ) return;
 
-            $.cookie( 'catalogue_editor_[% logged_in_user.borrowernumber %]', 'basic', { expires: 365, path: '/' } );
+            $.cookie( 'catalogue_editor_[% logged_in_user.borrowernumber | html %]', 'basic', { expires: 365, path: '/' } );
 
             if ( state.backend == 'catalog' ) {
                 window.location = '/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=' + state.recordID;
@@ -1093,7 +1094,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         };
 
         // Start editor
-        Preferences.Load( [% logged_in_user.borrowernumber || 0 %] );
+        Preferences.Load( [% logged_in_user.borrowernumber || 0 | html %] );
         displayPreferences(editor);
         makeAuthorisedValueWidgets( '' );
         Search.Init( {
@@ -1112,8 +1113,8 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             } );
         }
 
-        if ( "[% auth_forwarded_hash %]" ) {
-            document.location.hash = "[% auth_forwarded_hash %]";
+        if ( "[% auth_forwarded_hash | html %]" ) {
+            document.location.hash = "[% auth_forwarded_hash | html %]";
         }
 
         if ( !document.location.hash || !openRecord( document.location.hash.slice(1), editor, finishCb ) ) {

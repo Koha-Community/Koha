@@ -8,7 +8,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]"><i>[% title |html %]</i></a> &rsaquo; Preview routing list</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid | html %]"><i>[% title | html %]</i></a> &rsaquo; Preview routing list</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -16,21 +16,21 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h2>Preview routing list for <i>[% title |html %]</i></h2>
+<h2>Preview routing list for <i>[% title | html %]</i></h2>
 
 <form method="post" action="routing-preview.pl">
-<input type="hidden" id="subscriptionid" name="subscriptionid" value="[% subscriptionid %]" />
-    <input type="hidden" id="issue_escaped" name="issue_escaped" value="[% issue_escaped %]" />
+<input type="hidden" id="subscriptionid" name="subscriptionid" value="[% subscriptionid | html %]" />
+    <input type="hidden" id="issue_escaped" name="issue_escaped" value="[% issue_escaped | html %]" />
 <fieldset class="rows">
 	<ol>
-		<li><span class="label">Issue:</span>[% issue %]</li>
+		<li><span class="label">Issue:</span>[% issue | html %]</li>
 		<li><span class="label">List member:</span><table style="clear:none;margin:0;">
         <tr><th>Name</th></tr>
 [% FOREACH memberloo IN memberloop %]
-        <tr><td>[% memberloo.surname %], [% memberloo.firstname %]</td></tr>
+        <tr><td>[% memberloo.surname | html %], [% memberloo.firstname | html %]</td></tr>
 [% END %]
         </table></li>
-		<li><span class="label">Notes:</span>[% routingnotes %]</li>
+		<li><span class="label">Notes:</span>[% routingnotes | html %]</li>
 	</ol>
 </fieldset>
 

@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
@@ -10,7 +11,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Account for [% INCLUDE 'patron-title.inc' no_html = 1 %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="pat_borraccount" class="pat">
@@ -25,15 +26,15 @@
 	<div id="yui-main">
 	<div class="yui-b">
 [% INCLUDE 'members-toolbar.inc' %]
-<form action="/cgi-bin/koha/members/boraccount.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber %]" /></form>
+<form action="/cgi-bin/koha/members/boraccount.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" /></form>
 
 <!-- The manual invoice and credit buttons -->
 <div class="statictabs">
 <ul>
-    <li class="active"><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber %]">Account</a></li>
-    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber %]" >Pay fines</a></li>
-    <li><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber %]" >Create manual invoice</a></li>
-    <li><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber %]" >Create manual credit</a></li>
+    <li class="active"><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | html %]">Account</a></li>
+    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]" >Pay fines</a></li>
+    <li><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | html %]" >Create manual invoice</a></li>
+    <li><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | html %]" >Create manual credit</a></li>
 </ul>
 <div class="tabs-container">
 <!-- The table with the account items -->
@@ -58,30 +59,30 @@
   [% FOREACH account IN accounts %]
 
    <tr>
-   <td><span title="[% account.date %]">[% account.date |$KohaDates %]</span></td>
+   <td><span title="[% account.date | html %]">[% account.date |$KohaDates %]</span></td>
       <td>
         [% INCLUDE 'accounttype.inc' accountline => account %]
-        [%- IF account.payment_type %], [% AuthorisedValues.GetByCode('PAYMENT_TYPE', account.payment_type) %][% END %]
-        [%- IF account.description %], [% account.description %][% END %]
-        &nbsp;[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber %]&amp;itemnumber=[% account.itemnumber %]">[% account.item.biblio.title |html %]</a>[% END %]</td>
-      <td>[% IF account.itemnumber %][% Branches.GetName( account.item.homebranch ) %][% END %]</td>
+        [%- IF account.payment_type %], [% AuthorisedValues.GetByCode('PAYMENT_TYPE', account.payment_type) | html %][% END %]
+        [%- IF account.description %], [% account.description | html %][% END %]
+        &nbsp;[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber | html %]&amp;itemnumber=[% account.itemnumber | html %]">[% account.item.biblio.title | html %]</a>[% END %]</td>
+      <td>[% IF account.itemnumber %][% Branches.GetName( account.item.homebranch ) | html %][% END %]</td>
       <td>[% account.note | html_line_break %]</td>
-      [% IF ( account.amountcredit ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amount | $Price %]</td>
-      [% IF ( account.amountoutstandingcredit ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amountoutstanding | $Price %]</td>
+      [% IF ( account.amountcredit ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amount | $Price | html %]</td>
+      [% IF ( account.amountoutstandingcredit ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amountoutstanding | $Price | html %]</td>
       <td class="actions">
         [% IF ( account.payment ) %]
-          <a target="_blank" href="printfeercpt.pl?action=print&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Print</a>
+          <a target="_blank" href="printfeercpt.pl?action=print&amp;accountlines_id=[% account.accountlines_id | html %]&amp;borrowernumber=[% account.borrowernumber | html %]" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Print</a>
         [% ELSE %]
-          <a target="_blank" href="printinvoice.pl?action=print&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Print</a>
+          <a target="_blank" href="printinvoice.pl?action=print&amp;accountlines_id=[% account.accountlines_id | html %]&amp;borrowernumber=[% account.borrowernumber | html %]" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Print</a>
         [% END %]
-        <a href="accountline-details.pl?accountlines_id=[% account.accountlines_id %]" class="btn btn-default btn-xs"><i class="fa fa-list"></i> Details</a>
+        <a href="accountline-details.pl?accountlines_id=[% account.accountlines_id | html %]" class="btn btn-default btn-xs"><i class="fa fa-list"></i> Details</a>
         [% IF ( reverse_col) %]
           [% IF ( account.payment || account.amount < 0 ) %]
                 [% IF account.payment %]
-                    <a href="boraccount.pl?action=reverse&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-default btn-xs"><i class="fa fa-undo"></i> Reverse</a>
+                    <a href="boraccount.pl?action=reverse&amp;accountlines_id=[% account.accountlines_id | html %]&amp;borrowernumber=[% account.borrowernumber | html %]" class="btn btn-default btn-xs"><i class="fa fa-undo"></i> Reverse</a>
                 [% END %]
                 [% IF account.amount < 0 %]
-                    <a href="boraccount.pl?action=void&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-default btn-xs void"><i class="fa fa-ban"></i> Void</a>
+                    <a href="boraccount.pl?action=void&amp;accountlines_id=[% account.accountlines_id | html %]&amp;borrowernumber=[% account.borrowernumber | html %]" class="btn btn-default btn-xs void"><i class="fa fa-ban"></i> Void</a>
                 [% END %]
           [% ELSE %]
             &nbsp;
@@ -95,9 +96,9 @@
   <tr>
     <td colspan="5">Total due</td>
     [% IF ( totalcredit ) %]
-        <td class="credit" style="text-align: right;">[% total | $Price %]</td>
+        <td class="credit" style="text-align: right;">[% total | $Price | html %]</td>
     [% ELSE %]
-       <td class="debit"style="text-align: right;">[% total | $Price %]</td>
+       <td class="debit"style="text-align: right;">[% total | $Price | html %]</td>
     [% END %]
     <td></td>
   </tr>
@@ -117,12 +118,12 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
     <script type="text/javascript">
         $(document).ready(function() {
             var txtActivefilter = _("Filter paid transactions");
             var txtInactivefilter = _("Show all transactions");
-            var columns_settings = [% ColumnsSettings.GetColumns('members', 'fines', 'account-fines', 'json') %];
+            var columns_settings = [% ColumnsSettings.GetColumns('members', 'fines', 'account-fines', 'json').raw %];
             var table_account_fines = KohaTable("table_account_fines", {
                 "sPaginationType": "four_button",
                 'aaSorting': [[0, 'desc']],

@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -9,7 +10,7 @@
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="admin_authtypes" class="admin">
@@ -33,7 +34,7 @@
 	  <div class="yui-b">
 
 [% FOR m IN messages %]
-    <div class="dialog [% m.type %]">
+    <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
             An error occurred when updating this authority type. Perhaps it already exists.
@@ -48,7 +49,7 @@
         [% CASE 'success_on_delete' %]
             Authority type deleted successfully.
         [% CASE %]
-            [% m.code %]
+            [% m.code | html %]
         [% END %]
     </div>
 [% END %]
@@ -71,7 +72,7 @@
                             <span class="label">Authority type</span>
                             <input type="hidden" name="op" value="add_validate" />
                             <input type="hidden" name="checked" value="0" />
-                            <input type="hidden" name="authtypecode" value="[% authority_type.authtypecode %]" />[% authority_type.authtypecode %]
+                            <input type="hidden" name="authtypecode" value="[% authority_type.authtypecode | html %]" />[% authority_type.authtypecode | html %]
                     [% ELSE %]
                             <label for="authtypecode" class="required">Authority type: </label>
                             <input id="authtypecode" type="text" class="required" required="required" name="authtypecode" size="10" maxlength="10" />
@@ -80,17 +81,17 @@
                 </li>
                 <li>
                     <label for="authtypetext" class="required">Description: </label>
-                    <input type="text" id="authtypetext" name="authtypetext" size="40" maxlength="80" value="[% authority_type.authtypetext |html %]" class="required" required="required" />
+                    <input type="text" id="authtypetext" name="authtypetext" size="40" maxlength="80" value="[% authority_type.authtypetext | html %]" class="required" required="required" />
                     <span class="required">Required</span>
                 </li>
                 <li>
                     <label for="summary">Summary: </label>
-                    <textarea id="summary" name="summary" cols="55" rows="7">[% authority_type.summary %]</textarea>
+                    <textarea id="summary" name="summary" cols="55" rows="7">[% authority_type.summary | html %]</textarea>
                 </li>
                 <li>
                     <p class="tip">Note: for 'Authority field to copy', enter the authority field that should be copied from the authority record to the bibliographic record. E.g., in MARC21, field 100 in the authority record should be copied to field 100 in the bibliographic record</p>
                     <label for="auth_tag_to_report">Authority field to copy: </label>
-                    <input type="text" id="auth_tag_to_report" name="auth_tag_to_report" size="5" maxlength="3" value="[% authority_type.auth_tag_to_report %]" />
+                    <input type="text" id="auth_tag_to_report" name="auth_tag_to_report" size="5" maxlength="3" value="[% authority_type.auth_tag_to_report | html %]" />
                     <input type="hidden" name="op" value="add_validate" />
                     [% IF authority_type.authtypecode.defined %]
                         <input type="hidden" name="is_a_modif" value="1" />
@@ -109,13 +110,13 @@
     <div class="dialog alert">
         [% IF authorities_using_it %]
             <h3>This authority type cannot be deleted</h3>
-            <p>This record is used <strong>[% authorities_using_it %]</strong> times</p>
+            <p>This record is used <strong>[% authorities_using_it | html %]</strong> times</p>
             <a class="cancel" href="/cgi-bin/koha/admin/authtypes.pl">Back to the list</a>
         [% ELSE %]
-            <h3>Confirm deletion of authority structure definition for <span class="ex">'[% authority_type.authtypetext %]' ([% authority_type.authtypecode %])</span></h3>
+            <h3>Confirm deletion of authority structure definition for <span class="ex">'[% authority_type.authtypetext | html %]' ([% authority_type.authtypecode | html %])</span></h3>
             <form action="/cgi-bin/koha/admin/authtypes.pl" method="post">
                 <input type="hidden" name="op" value="delete_confirmed" />
-                <input type="hidden" name="authtypecode" value="[% authority_type.authtypecode %]" />
+                <input type="hidden" name="authtypecode" value="[% authority_type.authtypecode | html %]" />
                 <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
             </form>
             <form action="/cgi-bin/koha/admin/authtypes.pl" method="get">
@@ -145,18 +146,18 @@
         <tbody>
         [% FOREACH authority_type IN authority_types %]
             <tr>
-                <td>[% authority_type.authtypecode %]</td>
-                <td>[% authority_type.authtypetext |html %]</td>
-                <td>[% authority_type.summary |html %]</td>
-                <td>[% authority_type.auth_tag_to_report %]</td>
+                <td>[% authority_type.authtypecode | html %]</td>
+                <td>[% authority_type.authtypetext | html %]</td>
+                <td>[% authority_type.summary | html %]</td>
+                <td>[% authority_type.auth_tag_to_report | html %]</td>
                 <td>
                   <div class="dropdown">
-                    <a class="btn btn-default btn-xs dropdown-toggle" id="authtypeactions[% authority_type.authtypecode %]" role="button" data-toggle="dropdown" href="#">
+                    <a class="btn btn-default btn-xs dropdown-toggle" id="authtypeactions[% authority_type.authtypecode | html %]" role="button" data-toggle="dropdown" href="#">
                       Actions <b class="caret"></b></a>
-                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="authtypeactions[% authority_type.authtypecode %]">
-                      <li><a href="auth_tag_structure.pl?authtypecode=[% authority_type.authtypecode %]" class="button parameters"><i class="fa fa-eye"></i> MARC structure</a></li>
-                      <li><a href="/cgi-bin/koha/admin/authtypes.pl?op=add_form&amp;authtypecode=[% authority_type.authtypecode |html %]"><i class="fa fa-pencil"></i> Edit</a></li>
-                      [% IF authority_type.authtypecode %]<li><a href="/cgi-bin/koha/admin/authtypes.pl?op=delete_confirm&amp;authtypecode=[% authority_type.authtypecode |html %]"><i class="fa fa-trash"></i> Delete</a></li>[% END %]
+                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="authtypeactions[% authority_type.authtypecode | html %]">
+                      <li><a href="auth_tag_structure.pl?authtypecode=[% authority_type.authtypecode | html %]" class="button parameters"><i class="fa fa-eye"></i> MARC structure</a></li>
+                      <li><a href="/cgi-bin/koha/admin/authtypes.pl?op=add_form&amp;authtypecode=[% authority_type.authtypecode | html %]"><i class="fa fa-pencil"></i> Edit</a></li>
+                      [% IF authority_type.authtypecode %]<li><a href="/cgi-bin/koha/admin/authtypes.pl?op=delete_confirm&amp;authtypecode=[% authority_type.authtypecode | html %]"><i class="fa fa-trash"></i> Delete</a></li>[% END %]
                     </ul>
                   </div>
                 </td>
@@ -175,7 +176,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
     <script type="text/javascript">
         $(document).ready(function() {
             $("#authtypes").dataTable($.extend(true, {}, dataTablesDefaults, {

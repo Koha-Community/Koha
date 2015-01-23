@@ -1,34 +1,34 @@
 [% USE KohaDates # XML declaration should have no white space before it %]<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-     <title><![CDATA[[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] Catalog Recent Comments]]></title>
-     <link>[% OPACBaseURL %]/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2</link>
-     <description><![CDATA[ The most recent comments from [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] Catalog. Comments can be made by logged in users and are moderated by library staff.]]></description>
-     <atom:link href="[% OPACBaseURL %]/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2" rel="self" type="application/rss+xml" />
-     <lastBuildDate>[% timestamp %]</lastBuildDate>
+     <title><![CDATA[[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] Catalog Recent Comments]]></title>
+     <link>[% OPACBaseURL | html %]/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2</link>
+     <description><![CDATA[ The most recent comments from [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] Catalog. Comments can be made by logged in users and are moderated by library staff.]]></description>
+     <atom:link href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2" rel="self" type="application/rss+xml" />
+     <lastBuildDate>[% timestamp | html %]</lastBuildDate>
 	 [% FOREACH review IN reviews %]
      <item>
-       <title>New comment on [% review.title |html %] [% FOREACH subtitl IN review.subtitle %], [% subtitl.subfield |html %][% END %]</title>
-       <link>[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber %]#comments</link>
+       <title>New comment on [% review.title | html %] [% FOREACH subtitl IN review.subtitle %], [% subtitl.subfield | html %][% END %]</title>
+       <link>[% OPACBaseURL | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber | html %]#comments</link>
        <description><![CDATA[
-[% IF ( OPACAmazonCoverImages ) %][% IF ( review.normalized_isbn ) %]<img src="https://images-na.ssl-images-amazon.com/images/P/[% review.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" />[% END %][% END %]
+[% IF ( OPACAmazonCoverImages ) %][% IF ( review.normalized_isbn ) %]<img src="https://images-na.ssl-images-amazon.com/images/P/[% review.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="" />[% END %][% END %]
 
-[% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( review.content_identifier_exists ) %]<img src="https://secure.syndetics.com/index.aspx?isbn=[% review.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% review.normalized_upc %]&amp;oclc=[% review.normalized_oclc %]" alt="" />
+[% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( review.content_identifier_exists ) %]<img src="https://secure.syndetics.com/index.aspx?isbn=[% review.normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% review.normalized_upc | html %]&amp;oclc=[% review.normalized_oclc | html %]" alt="" />
 [% END %][% END %][% END %]
 
-[% bt_id = ( review.normalized_upc || review.normalized_isbn ) %]
-[% IF ( BakerTaylorEnabled && bt_id ) %]<a href="https://[% BakerTaylorBookstoreURL |html %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" /></a>[% END %]
-	   [% IF ( review.author ) %]<p>By [% review.author |html %].</p> [% END %]
-	   <p>[% IF ( review.place ) %][% review.place |html %] [% END %][% IF ( review.publishercode ) %][% review.publishercode |html %][% END %][% IF ( review.publicationyear ) %] [% review.publicationyear |html %]
-                    [% ELSE %][% IF ( review.copyrightdate ) %] [% review.copyrightdate |html %][% END %][% END %]
-                        [% IF ( review.pages ) %]. [% review.pages |html %][% END %]
-                        [% IF ( review.notes ) %], [% review.notes |html %][% END %]
-                        [% IF ( review.size ) %] [% review.size |html %]. [% END %]
-                        [% IF ( review.isbn ) %] [% review.isbn |html %][% END %] </p>
-<p>[% IF ( review.borrowernumber && ShowReviewer ) %][% review.firstname %] [% review.surname %] commented[% ELSE %]Comment[% END %] on [% review.datereviewed | $KohaDates %]: [% review.review |html %]</p>
+[% bt_id = ( review.normalized_upc || review.normalized_isbn ) | html %]
+[% IF ( BakerTaylorEnabled && bt_id ) %]<a href="https://[% BakerTaylorBookstoreURL | html %][% bt_id | html %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>[% END %]
+        [% IF ( review.author ) %]<p>By [% review.author | html %].</p> [% END %]
+        <p>[% IF ( review.place ) %][% review.place | html %] [% END %][% IF ( review.publishercode ) %][% review.publishercode | html %][% END %][% IF ( review.publicationyear ) %] [% review.publicationyear | html %]
+                    [% ELSE %][% IF ( review.copyrightdate ) %] [% review.copyrightdate | html %][% END %][% END %]
+                        [% IF ( review.pages ) %]. [% review.pages | html %][% END %]
+                        [% IF ( review.notes ) %], [% review.notes | html %][% END %]
+                        [% IF ( review.size ) %] [% review.size | html %]. [% END %]
+                        [% IF ( review.isbn ) %] [% review.isbn | html %][% END %] </p>
+<p>[% IF ( review.borrowernumber && ShowReviewer ) %][% review.firstname | html %] [% review.surname | html %] commented[% ELSE %]Comment[% END %] on [% review.datereviewed | $KohaDates %]: [% review.review | html %]</p>
 						]]></description>
-       <guid>[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber %]&amp;reviewid=[% review.reviewid %]</guid>
-       <pubDate>[% review.timestamp %]</pubDate>
+       <guid>[% OPACBaseURL | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber | html %]&amp;reviewid=[% review.reviewid | html %]</guid>
+       <pubDate>[% review.timestamp | html %]</pubDate>
      </item>
 	 [% END %]
    </channel>

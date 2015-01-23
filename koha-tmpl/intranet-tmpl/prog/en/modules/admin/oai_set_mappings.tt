@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -9,7 +10,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a> &rsaquo; <a href="/cgi-bin/koha/admin/oai_set_mappings.pl?id=[% id %]">OAI set mappings</a></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a> &rsaquo; <a href="/cgi-bin/koha/admin/oai_set_mappings.pl?id=[% id | html %]">OAI set mappings</a></div>
 
 <div id="doc3" class="yui-t2">
 
@@ -22,7 +23,7 @@
           <p><a href="/cgi-bin/koha/admin/oai_sets.pl">Return to sets management</a></p>
         </div>
       [% END %]
-      <h1>Mappings for set '[% setName |html %]' ([% setSpec |html %])</h1>
+      <h1>Mappings for set '[% setName | html %]' ([% setSpec | html %])</h1>
       [% UNLESS ( mappings ) %]
         <div class="dialog alert"><p><strong>Warning:</strong> No mappings have been defined for this set</p></div>
       [% END %]
@@ -42,8 +43,8 @@
             [% IF ( mappings ) %]
               [% FOREACH mapping IN mappings %]
                 <tr>
-                  <td><input type="text" name="marcfield" size="3" value="[% mapping.marcfield %]" /></td>
-                  <td style="text-align:center"><input type="text" name="marcsubfield" size="1" value="[% mapping.marcsubfield %]" /></td>
+                  <td><input type="text" name="marcfield" size="3" value="[% mapping.marcfield | html %]" /></td>
+                  <td style="text-align:center"><input type="text" name="marcsubfield" size="1" value="[% mapping.marcsubfield | html %]" /></td>
                   <td><select name=operator>
                       [% IF mapping.operator == 'equal' %]
                         <option value="equal" selected="selected">is equal to</option>
@@ -53,7 +54,7 @@
                         <option value="notequal" selected="selected">not equal to</option>
                       [% END %]
                       </select></td>
-                  <td><input type="text" name="marcvalue" value="[% mapping.marcvalue %]" /></td>
+                  <td><input type="text" name="marcvalue" value="[% mapping.marcvalue | html %]" /></td>
                   <td style="text-align:center">
                     [% IF ( loop.last ) %]
                       <input type="button" id="ORbutton" value="OR" title="Add another condition" />
@@ -79,7 +80,7 @@
             [% END %]
           </tbody>
         </table>
-        <input type="hidden" name="id" value="[% id %]" />
+        <input type="hidden" name="id" value="[% id | html %]" />
         <input type="hidden" name="op" value="save" />
         <fieldset class="action">
             <input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/oai_sets.pl">Cancel</a>
@@ -94,7 +95,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
     <script type="text/javascript">
         $(document).ready(function() {
             $("#mappingform").submit(function(){

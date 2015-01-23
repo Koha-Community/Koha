@@ -1,5 +1,6 @@
+[% USE raw %]
 [% USE Asset %]
-[% Asset.js("lib/jquery/plugins/jquery.dataTables.min.js") %]
+[% Asset.js("lib/jquery/plugins/jquery.dataTables.min.js") | $raw %]
 <script>
 //<![CDATA[
     var MSG_DT_FIRST = _("First");
@@ -18,4 +19,4 @@
     var CONFIG_EXCLUDE_ARTICLES_FROM_SORT = _("a an the");
 //]]>
 </script>
-[% Asset.js("js/datatables.js") %]
+[% Asset.js("js/datatables.js") | $raw %]

@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% SET footerjs = 1 %]
@@ -11,7 +12,7 @@
   [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="ser_add_fields" class="ser">
@@ -72,15 +73,15 @@
         <tbody>
           [% FOR field IN fields %]
             <tr>
-              <td>[% field.name %]</td>
-              <td>[% field.authorised_value_category %]</td>
-              <td>[% field.marcfield %]</td>
+              <td>[% field.name | html %]</td>
+              <td>[% field.authorised_value_category | html %]</td>
+              <td>[% field.marcfield | html %]</td>
               <td>
                 [% IF field.searchable %]Yes[% ELSE %]No[% END %]
               </td>
               <td class="actions">
-                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/add_fields.pl?op=add_form&amp;field_id=[% field.id %]"><i class="fa fa-pencil"></i> Edit</a>
-                <a class="confirmdelete btn btn-default btn-xs" href="/cgi-bin/koha/serials/add_fields.pl?op=delete&amp;field_id=[% field.id %]"><i class="fa fa-trash"></i> Delete</a>
+                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/add_fields.pl?op=add_form&amp;field_id=[% field.id | html %]"><i class="fa fa-pencil"></i> Edit</a>
+                <a class="confirmdelete btn btn-default btn-xs" href="/cgi-bin/koha/serials/add_fields.pl?op=delete&amp;field_id=[% field.id | html %]"><i class="fa fa-trash"></i> Delete</a>
               </td>
             </tr>
           [% END %]
@@ -112,7 +113,7 @@
           </li>
           <li>
             <label for="marcfield">Marc field: </label>
-            <input type="text" name="marcfield" id="marcfield" value="[% field.marcfield| html %]" />
+            <input type="text" name="marcfield" id="marcfield" value="[% field.marcfield | html %]" />
           </li>
           <li>
             <label for="searchable">Searchable: </label>
@@ -126,7 +127,7 @@
       </fieldset>
       <fieldset class="action">
         [% IF field %]
-          <input type="hidden" name="field_id" value="[% field.id %]" />
+          <input type="hidden" name="field_id" value="[% field.id | html %]" />
         [% END %]
         <input type="hidden" name="op" value="add" />
         <input type="submit" value="Save" />

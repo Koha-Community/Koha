@@ -1,8 +1,8 @@
 [%- IF patron.category.category_type == 'I' -%]
-    [% patron.surname %][% IF patron.othernames %] ([% patron.othernames %]) [%- END -%]
+    [% patron.surname | html %][% IF patron.othernames %] ([% patron.othernames | html %]) [%- END -%]
 [%- ELSE -%]
     [%- IF patron.title -%]
-        <span class="patron-title">[% patron.title %]</span>
+        <span class="patron-title">[% patron.title | html %]</span>
     [%- END -%]
-    [% patron.firstname %] [% patron.surname %]
+    [% patron.firstname | html %] [% patron.surname | html %]
 [%- END -%]

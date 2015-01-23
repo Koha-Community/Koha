@@ -22,40 +22,40 @@
 <div id="macles" class="toptabs numbered">
     [% IF ( BIGLOOP ) %]<ul>
     [% FOREACH BIGLOO IN BIGLOOP %]
-        <li><a href="#tab[% BIGLOO.number %]XX">[% BIGLOO.number %]</a></li>
+        <li><a href="#tab[% BIGLOO.number | html %]XX">[% BIGLOO.number | html %]</a></li>
     [% END %]
     </ul>[% END %]
     <!-- RESET PAGINATION -->
     [% FOREACH BIGLOO IN BIGLOOP %]
     [% IF ( BIGLOO.number ) %]
-        <div id="tab[% BIGLOO.number %]XX">
+        <div id="tab[% BIGLOO.number | html %]XX">
     [% ELSE %]
-        <div id="tab[% BIGLOO.number %]XX">
+        <div id="tab[% BIGLOO.number | html %]XX">
     [% END %]
-            <h2> [% BIGLOO.hdr_tab %]</h2>
+            <h2> [% BIGLOO.hdr_tab | html %]</h2>
             <a href="#" class="button" onclick="add_macles('630');">Envoyer</a>
             <!-- <input type="submit" class="button" value="Envoyer" /> -->
             <a class="button" href="" onclick="load_macles(630);">R&eacute;initialiser</a>
-            <a class="button" href="javascript:uncheck_tab([% BIGLOO.number %])">d&eacute;selectionner onglet</a>
+            <a class="button" href="javascript:uncheck_tab([% BIGLOO.number | html %])">d&eacute;selectionner onglet</a>
             <input type="reset" class="button" value="déselectionner tout" />
             [% IF ( BIGLOO.Table ) %]
             <table>
                 <tr>
                 <th>Espace\Temps</th>
                 [% FOREACH col_hd IN BIGLOO.col_hdr %]
-                    <th scope="col" id="[% col_hd.colvalue %]">  [% col_hd.collib |html %] <br /><input type="checkbox" name="[% col_hd.colvalue %]" onclick="check_col('[% col_hd.colvalue %]')" />
+                    <th scope="col" id="[% col_hd.colvalue | html %]">  [% col_hd.collib | html %] <br /><input type="checkbox" name="[% col_hd.colvalue | html %]" onclick="check_col('[% col_hd.colvalue | html %]')" />
                     </th>
                 [% END %]
                 </tr>
                 [% FOREACH line IN BIGLOO.lines %]
                 <tr>
-                    <th scope="row" id="[% line.rowvalue %]">  [% line.rowlib |html %] <br /><input type="checkbox" name="[% line.rowvalue %]" onclick="check_row('[% line.rowvalue %]')" />
+                    <th scope="row" id="[% line.rowvalue | html %]">  [% line.rowlib | html %] <br /><input type="checkbox" name="[% line.rowvalue | html %]" onclick="check_row('[% line.rowvalue | html %]')" />
                     </th>
                     [% FOREACH cell IN line.cells %]
-                    <td headers="[% cell.rowvalue %] [% cell.colvalue %]">
-                    [% BLOCK spantitle %][% FOREACH lib IN cell.libs %][% lib.lib |html %] - [% END %][% END %]
+                    <td headers="[% cell.rowvalue | html %] [% cell.colvalue | html %]">
+                    [% BLOCK spantitle %][% FOREACH lib IN cell.libs %][% lib.lib | html %] - [% END %][% END %]
                     <span title="[% INCLUDE spantitle %]">
-                    [% cell.celvalue %] <br /><input type="checkbox" name="[% cell.celvalue %]" value="[% cell.celvalue %]" />
+                    [% cell.celvalue | html %] <br /><input type="checkbox" name="[% cell.celvalue | html %]" value="[% cell.celvalue | html %]" />
                     </span>
                     </td>
                     [% END %]
@@ -66,21 +66,21 @@
             [% IF ( BIGLOO.Lists ) %]
             <h2>s&eacute;lection au moyen d'une liste de descripteurs</h2>
             [% FOREACH List IN BIGLOO.Lists %]
-                <h3>[% List.lib %]</h3>
+                <h3>[% List.lib | html %]</h3>
                 [% FOREACH liblis IN List.liblist %]
-                <a href="#[% liblis.listvalue %]" onclick="check_multiple([% liblis.listvalue %])"> [% liblis.listlib |html %]</a><br />
+                <a href="#[% liblis.listvalue | html %]" onclick="check_multiple([% liblis.listvalue | html %])"> [% liblis.listlib | html %]</a><br />
                 [% END %]
             [% END %]
             [% END %]
             [% UNLESS ( BIGLOO.Table ) %]
             <!-- Listes simples :Onglets 0 et 9-->
             [% FOREACH line IN BIGLOO.lines %]
-                <h3>[% line.rowvalue |html %]&nbsp;-&nbsp;[% line.rowlib |html %]&nbsp;<input type="checkbox" name="[% line.rowvalue %]" onclick="check_row('[% line.rowvalue %]')" /></h3>
+                <h3>[% line.rowvalue | html %]&nbsp;-&nbsp;[% line.rowlib | html %]&nbsp;<input type="checkbox" name="[% line.rowvalue | html %]" onclick="check_row('[% line.rowvalue | html %]')" /></h3>
                 [% FOREACH cell IN line.cells %]
-                <p>[% cell.celvalue |html %]&nbsp;-&nbsp;[% FOREACH lib IN cell.libs %]
-                        [% lib.lib |html %] &nbsp;
+                <p>[% cell.celvalue | html %]&nbsp;-&nbsp;[% FOREACH lib IN cell.libs %]
+                        [% lib.lib | html %] &nbsp;
                     [% END %]
-                    <input type="checkbox" name="[% cell.celvalue %]" value="[% cell.celvalue %]" />
+                    <input type="checkbox" name="[% cell.celvalue | html %]" value="[% cell.celvalue | html %]" />
                 </p>
                 [% END %]
             [% END %]
@@ -131,10 +131,10 @@ function add_macles(myvalue)
       mycountMACLESgen++;
     }
   }
-  if (mycountMACLESgen==1){opener.document.f.[% index %].value = tab[0];
+  if (mycountMACLESgen==1){opener.document.f.[% index | html %].value = tab[0];
   } else {
     var mytags=opener.document.getElementsByTagName("input");
-    var index_string="[% index %]";
+    var index_string="[% index | html %]";
     index_string=index_string.substr(0,index_string.lastIndexOf("_"));  
     index_string=index_string.substr(0,index_string.lastIndexOf("_"));
     index_string=index_string+".*";    
@@ -228,7 +228,7 @@ function check_row(row)
 function load_macles()
 {
   document.forms.f_pop.reset;
-  var mystart="[% index %]";
+  var mystart="[% index | html %]";
   mystart=mystart.substr(0,mystart.lastIndexOf("_"));  
   mystart=mystart.substr(0,mystart.lastIndexOf("_"));
   mystart=mystart+".*";    

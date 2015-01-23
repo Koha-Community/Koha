@@ -1,10 +1,11 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Quote editor</title>
     [% INCLUDE 'doc-head-close.inc' %]
-    [% Asset.css("css/quotes.css") %]
-    [% Asset.css("css/datatables.css") %]
+    [% Asset.css("css/quotes.css") | $raw %]
+    [% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="tools_quotes" class="tools">
@@ -62,10 +63,10 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/dataTables.fnReloadAjax.js") %]
-    [% Asset.js("lib/jquery/plugins/jquery.jeditable.mini.js") %]
+    [% Asset.js("lib/jquery/plugins/dataTables.fnReloadAjax.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/jquery.jeditable.mini.js") | $raw %]
     <script type="text/javascript">
         var oTable; /* oTable needs to be global */
         var sEmptyTable = _("No quotes available. Please use the 'Add quote' button to add a quote."); /* override the default message in datatables.inc */

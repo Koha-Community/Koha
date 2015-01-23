@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% SET footerjs = 1 %]
@@ -8,12 +9,12 @@
     <title>Koha &rsaquo; Tools &rsaquo; Upload</title>
 [% END %]
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 
 [% BLOCK plugin_pars %]
     [% IF plugin %]
         <input type="hidden" name="plugin" value="1" />
-        <input type="hidden" name="index" value="[% index %]" />
+        <input type="hidden" name="index" value="[% index | html %]" />
     [% END %]
 [% END %]
 
@@ -55,7 +56,7 @@
                     <option value=""></option>
                 [% END %]
                 [% FOREACH cat IN uploadcategories %]
-                    <option value="[% cat.code %]">[% cat.name %]</option>
+                    <option value="[% cat.code | html %]">[% cat.name | html %]</option>
                 [% END %]
                 </select>
             </li>
@@ -165,21 +166,21 @@
     <tbody>
     [% FOREACH record IN uploads %]
     <tr>
-        <td>[% record.filename %]</td>
-        <td>[% record.filesize %]</td>
-        <td>[% record.hashvalue %]</td>
-        <td>[% record.uploadcategorycode %]</td>
+        <td>[% record.filename | html %]</td>
+        <td>[% record.filesize | html %]</td>
+        <td>[% record.hashvalue | html %]</td>
+        <td>[% record.uploadcategorycode | html %]</td>
         [% IF !plugin %]
             <td>[% IF record.public %]Yes[% ELSE %]No[% END %]</td>
             <td>[% IF record.permanent %]No[% ELSE %]Yes[% END %]</td>
         [% END %]
         <td class="actions">
             [% IF plugin %]
-                <button class="btn btn-default btn-xs choose_entry" data-record-hashvalue="[% record.hashvalue %]"><i class="fa fa-plus"></i> Choose</button>
+                <button class="btn btn-default btn-xs choose_entry" data-record-hashvalue="[% record.hashvalue | html %]"><i class="fa fa-plus"></i> Choose</button>
             [% END %]
-            <button class="btn btn-default btn-xs download_entry" data-record-id="[% record.id %]"><i class="fa fa-download"></i> Download</button>
+            <button class="btn btn-default btn-xs download_entry" data-record-id="[% record.id | html %]"><i class="fa fa-download"></i> Download</button>
             [% IF record.owner == owner || CAN_user_tools_upload_manage %]
-                <button class="btn btn-default btn-xs delete_entry" data-record-id="[% record.id %]"><i class="fa fa-trash"></i> Delete</button>
+                <button class="btn btn-default btn-xs delete_entry" data-record-id="[% record.id | html %]"><i class="fa fa-trash"></i> Delete</button>
             [% END %]
         </td>
    </tr>
@@ -191,7 +192,7 @@
 <style type="text/css">
     #fileuploadstatus,#fileuploadfailed { display : none; }
     #fileuploadstatus { margin:.4em; }
-    #fileuploadprogress { width:150px;height:10px;border:1px solid #666;background:url('[% interface %]/[% theme %]/img/progress.png') -300px 0px no-repeat; }
+    #fileuploadprogress { width:150px;height:10px;border:1px solid #666;background:url('[% interface | html %]/[% theme | html %]/img/progress.png') -300px 0px no-repeat; }
 </style>
 
 
@@ -247,9 +248,9 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("js/file-upload.js") %]
+    [% Asset.js("js/file-upload.js") | $raw %]
     <script type="text/javascript">
         function StartUpload() {
             if( $('#fileToUpload').prop('files').length == 0 ) return;
@@ -363,15 +364,15 @@
         }
         function ClearField() {
             [% IF plugin %]
-                $(window.opener.document).find('#[% index %]').val( '' );
+                $(window.opener.document).find('#[% index | html %]').val( '' );
             [% END %]
         }
         function Choose(hashval) {
-            var res = '[% Koha.Preference('OPACBaseURL') %]';
+            var res = '[% Koha.Preference('OPACBaseURL') | html %]';
             res = res.replace( /\/$/, '');
             res = res + '/cgi-bin/koha/opac-retrieve-file.pl?id=' + hashval;
             [% IF index %]
-                $(window.opener.document).find('#[% index %]').val( res );
+                $(window.opener.document).find('#[% index | html %]').val( res );
             [% END %]
             window.close();
         }
@@ -383,7 +384,7 @@
                 "sPaginationType": "four_button"
             }));
             [% IF msg %]
-                ShowAlerts( [% msg %] );
+                ShowAlerts( [% msg | html %] );
             [% END %]
             $("#fileuploadcancel").hide();
             $("#public_cb").click(function() {

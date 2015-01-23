@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Price %]
 [% SET footerjs = 1 %]
@@ -9,7 +10,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>[% IF ( get_orders ) %] &rsaquo; <a href="/cgi-bin/koha/reports/orders_by_fund.pl">Orders by fund</a> &rsaquo; Results[% ELSE %] &rsaquo; Orders by fund[% END %]</div>
 
 <div id="doc3" class="yui-t2">
@@ -18,14 +19,14 @@
         <div id="yui-main">
         <div class="yui-b">
 
-[% IF ( current_budget_name ) %]<h1>Orders for fund '[% current_budget_name %]'</h1>
+[% IF ( current_budget_name ) %]<h1>Orders for fund '[% current_budget_name | html %]'</h1>
 [% ELSE %]<h1>Orders by fund</h1>
 [% END %]
 
 [% IF ( get_orders ) %]
     <div class="results">
         [% IF ( total ) %]
-            Orders found: [% total %]
+            Orders found: [% total | html %]
         [% ELSE %]
             No order found
         [% END %]
@@ -57,26 +58,26 @@
             [% UNLESS ( loop.odd ) %]<tr class="highlight">
             [% ELSE %] <tr>
             [% END %]
-            <td>[% ordersloo.budget_name |html %]</td>
-            <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% ordersloo.basketno %]"> [% ordersloo.basketno |html %]</a></td>
-            <td>[% ordersloo.basketname |html %]</td>
-            <td>[% ordersloo.authorisedbyname %]</td>
-            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ordersloo.biblionumber %]"> [% ordersloo.title |html %]</a></td>
-            <td>[% ordersloo.currency %]</td>
-            <td>[% ordersloo.listprice | $Price %]</td>
-            <td>[% ordersloo.rrp | $Price %]</td>
-            <td>[% ordersloo.ecost | $Price %]</td>
-            <td>[% ordersloo.quantity %]</td>
-            <td>[% ordersloo.total_rrp | $Price %]</td>
-            <td>[% ordersloo.total_ecost | $Price %]</td>
-            <td>[% ordersloo.entrydate %]</td>
-            <td>[% ordersloo.datereceived %]</td>
-            <td>[% ordersloo.order_internalnote |html %]</td>
-            <td>[% ordersloo.order_vendornote |html %]</td>
+            <td>[% ordersloo.budget_name | html %]</td>
+            <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% ordersloo.basketno | html %]"> [% ordersloo.basketno | html %]</a></td>
+            <td>[% ordersloo.basketname | html %]</td>
+            <td>[% ordersloo.authorisedbyname | html %]</td>
+            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ordersloo.biblionumber | html %]"> [% ordersloo.title | html %]</a></td>
+            <td>[% ordersloo.currency | html %]</td>
+            <td>[% ordersloo.listprice | $Price | html %]</td>
+            <td>[% ordersloo.rrp | $Price | html %]</td>
+            <td>[% ordersloo.ecost | $Price | html %]</td>
+            <td>[% ordersloo.quantity | html %]</td>
+            <td>[% ordersloo.total_rrp | $Price | html %]</td>
+            <td>[% ordersloo.total_ecost | $Price | html %]</td>
+            <td>[% ordersloo.entrydate | html %]</td>
+            <td>[% ordersloo.datereceived | html %]</td>
+            <td>[% ordersloo.order_internalnote | html %]</td>
+            <td>[% ordersloo.order_vendornote | html %]</td>
             </tr>
         [% END %]
         </tbody>
-        <tfoot><tr><th>TOTAL</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>[% total_quantity  %]</th><th>[% total_rrp | $Price %]</th><th>[% total_ecost | $Price %]</th><th></th><th></th><th></th><th></th></tr></tfoot>
+        <tfoot><tr><th>TOTAL</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>[% total_quantity | html %]</th><th>[% total_rrp | $Price | html %]</th><th>[% total_ecost | $Price | html %]</th><th></th><th></th><th></th><th></th></tr></tfoot>
         </table>
     [% END %]
     [% ELSE %]
@@ -89,12 +90,12 @@
             <option value="activebudgets">All active funds</option>
         [% FOREACH budgetsloo IN budgetsloop %]
             [% IF ( budgetsloo.selected ) %]
-                <option value="[% budgetsloo.value %]" selected="selected">
+                <option value="[% budgetsloo.value | html %]" selected="selected">
             [% ELSE %]
-                [% bdgclass=budgetsloo.active? "": "b_inactive" %]
-                    <option class="[% bdgclass %]" value="[% budgetsloo.value %]">
+                [% bdgclass=budgetsloo.active? "": "b_inactive" | html %]
+                    <option class="[% bdgclass | html %]" value="[% budgetsloo.value | html %]">
             [% END %]
-            [% budgetsloo.description %] [% IF !budgetsloo.active %](inactive)[% END %]
+            [% budgetsloo.description | html %] [% IF !budgetsloo.active %](inactive)[% END %]
             </option>
         [% END %]
         </select>
@@ -113,18 +114,18 @@
                 <label class="inline" for="MIME">Into an application </label>
                 <select id='MIME' name='MIME' size='1'>
                 [% FOREACH outputFormatloo IN outputFormatloop %]
-                    <option value="[% outputFormatloo %]">[% outputFormatloo %]</option>
+                    <option value="[% outputFormatloo | html %]">[% outputFormatloo | html %]</option>
                 [% END %]
                 </select>
                 <select id='sep' name='sep' size='1'>
                 [% FOREACH delimiterloo IN delimiterloop %]
                     [% IF delimiterloo == delimiterPreference %]
-                        <option value="[% delimiterloo %]">[% delimiterloo %]</option>
+                        <option value="[% delimiterloo | html %]">[% delimiterloo | html %]</option>
                     [% END %]
                 [% END %]
                 [% FOREACH delimiterloo IN delimiterloop %]
                     [% IF delimiterloo != delimiterPreference %]
-                        <option value="[% delimiterloo %]">[% delimiterloo %]</option>
+                        <option value="[% delimiterloo | html %]">[% delimiterloo | html %]</option>
                     [% END %]
                 [% END %]
                 </select>

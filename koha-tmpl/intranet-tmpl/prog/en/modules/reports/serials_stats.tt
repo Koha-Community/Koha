@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Branches %]
@@ -8,7 +9,7 @@
 <style type="text/css">
 	.sql {display: none;}
 </style>
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="rep_serials_stats" class="rep">
@@ -40,13 +41,13 @@
 		<tbody>
 			<tr>
 				[% FOREACH data IN datas %]
-                    <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% data.aqbooksellerid %]">[% data.name %]</a></td>
-                    <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% data.subscriptionid %]">[% data.title |html %]</a></td>
-					<td>[% data.subscriptionid %]</td>
-                    <td>[% Branches.GetName( data.branchcode ) %]</td>
-					<td>[% data.callnumber %]</td>
-                    <td><span title="[% data.startdate %]">[% data.startdate | $KohaDates %]</span></td>
-                    <td><span title="[% data.enddate %]">[% data.enddate | $KohaDates %]</span></td>
+                    <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% data.aqbooksellerid | html %]">[% data.name | html %]</a></td>
+                    <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% data.subscriptionid | html %]">[% data.title | html %]</a></td>
+					<td>[% data.subscriptionid | html %]</td>
+                    <td>[% Branches.GetName( data.branchcode ) | html %]</td>
+					<td>[% data.callnumber | html %]</td>
+                    <td><span title="[% data.startdate | html %]">[% data.startdate | $KohaDates %]</span></td>
+                    <td><span title="[% data.enddate | html %]">[% data.enddate | $KohaDates %]</span></td>
                     <td>
                         [% IF data.closed %]
                             Closed
@@ -73,7 +74,7 @@
 				<select name="bookseller" id="bookseller">
                     <option value="">Any vendor</option>
     				[% FOREACH bookseller IN booksellers %]
-						<option value="[% bookseller.aqbooksellerid %]">[% bookseller.name %]</option>
+						<option value="[% bookseller.aqbooksellerid | html %]">[% bookseller.name | html %]</option>
 					[% END %]
 			    </select>
 			</li><li>
@@ -106,15 +107,15 @@
             <label class="inline" for="MIME">Into an application:</label>
             <select name="MIME" id="MIME" size="1">
             [% FOREACH value IN CGIextChoice %]
-                <option value="[% value %]">[% value %]</option>
+                <option value="[% value | html %]">[% value | html %]</option>
             [% END %]
             </select>
             <select name="sep" id="sep" size="1">
             [% FOREACH value IN CGIsepChoice.values.sort() %]
               [% IF ( value == CGIsepChoice.default ) %]
-                <option value="[% value %]" selected="selected">[% value %]</option>
+                <option value="[% value | html %]" selected="selected">[% value | html %]</option>
               [% ELSE %]
-                <option value="[% value %]">[% value %]</option>
+                <option value="[% value | html %]">[% value | html %]</option>
               [% END %]
             [% END %]
             </select>
@@ -124,7 +125,7 @@
 
 	<fieldset class="action">
 	<input type="submit" value="Submit" />
-	<input type="hidden" name="report_name" value="[% report_name %]" />
+	<input type="hidden" name="report_name" value="[% report_name | html %]" />
 	<input type="hidden" name="do_it" value="1" />
 	</fieldset>
 	</form>

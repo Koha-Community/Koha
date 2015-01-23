@@ -12,17 +12,17 @@
 		<h2>Search on</h2>
 		<p>
 			<label for="category">Name or ISSN: </label>
-			[% category %]
+			[% category | html %]
 		</p>
 		<p>
 			<label for="index">Search value: </label>
-			<input type="text" name="value" value="[% value %]" />
-			<input type="hidden" name="authtypecode" value="[% category %]" />
+			<input type="text" name="value" value="[% value | html %]" />
+			<input type="hidden" name="authtypecode" value="[% category | html %]" />
 			<input type="hidden" name="marclist" value="" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="hidden" id="index" name="index" value="[% index %]" />
+			<input type="hidden" id="index" name="index" value="[% index | html %]" />
 		</p>
 		<p>
 			<input type="submit" value="Start search" class="submit" />

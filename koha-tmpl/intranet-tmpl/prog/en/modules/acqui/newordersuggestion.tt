@@ -1,8 +1,9 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Add order from a suggestion</title>
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -10,7 +11,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'suggestions-add-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Basket [% basketno %]</a> &rsaquo; Add order from a suggestion</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% name | html %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | html %]">Basket [% basketno | html %]</a> &rsaquo; Add order from a suggestion</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -34,30 +35,30 @@
         <tbody>
         [% FOREACH suggestions_loo IN suggestions_loop %]
             <tr>
-                <td>[% suggestions_loo.managedby %]</td>
+                <td>[% suggestions_loo.managedby | html %]</td>
                 <td>
-                    <p>[% suggestions_loo.title |html %] - [% suggestions_loo.author %]</p>
+                    <p>[% suggestions_loo.title | html %] - [% suggestions_loo.author | html %]</p>
                     <p>
-                        [% IF ( suggestions_loo.copyrightdate ) %]&copy; [% suggestions_loo.copyrightdate %] [% END %]
-                        [% IF ( suggestions_loo.volumedesc ) %]volume: <i>[% suggestions_loo.volumedesc %]</i> [% END %]
-                        [% IF ( suggestions_loo.isbn ) %]ISBN: <i>[% suggestions_loo.isbn %]</i> [% END %]
-                        [% IF ( suggestions_loo.publishercode ) %]<br />published by: [% suggestions_loo.publishercode %] [% END %]
-                        [% IF ( suggestions_loo.publicationyear ) %] in <i>[% suggestions_loo.publicationyear %]</i> [% END %]
-                        [% IF ( suggestions_loo.place ) %] in <i>[% suggestions_loo.place %]</i> [% END %]
-                        [% IF ( suggestions_loo.note ) %]<p><i>([% suggestions_loo.note %])</i></p> [% END %]
+                        [% IF ( suggestions_loo.copyrightdate ) %]&copy; [% suggestions_loo.copyrightdate | html %] [% END %]
+                        [% IF ( suggestions_loo.volumedesc ) %]volume: <i>[% suggestions_loo.volumedesc | html %]</i> [% END %]
+                        [% IF ( suggestions_loo.isbn ) %]ISBN: <i>[% suggestions_loo.isbn | html %]</i> [% END %]
+                        [% IF ( suggestions_loo.publishercode ) %]<br />published by: [% suggestions_loo.publishercode | html %] [% END %]
+                        [% IF ( suggestions_loo.publicationyear ) %] in <i>[% suggestions_loo.publicationyear | html %]</i> [% END %]
+                        [% IF ( suggestions_loo.place ) %] in <i>[% suggestions_loo.place | html %]</i> [% END %]
+                        [% IF ( suggestions_loo.note ) %]<p><i>([% suggestions_loo.note | html %])</i></p> [% END %]
                     </p>
                 </td>
                 <td>
-                    [% suggestions_loo.surnamesuggestedby %][% IF ( suggestions_loo.firstnamesuggestedby ) %],[% END %] [% suggestions_loo.firstnamesuggestedby %]
+                    [% suggestions_loo.surnamesuggestedby | html %][% IF ( suggestions_loo.firstnamesuggestedby ) %],[% END %] [% suggestions_loo.firstnamesuggestedby | html %]
                 </td>
                 <td>
-                    [% suggestions_loo.surnamemanagedby %][% IF ( suggestions_loo.firstnamemanagedby ) %],[% END %] [% suggestions_loo.firstnamemanagedby %]
+                    [% suggestions_loo.surnamemanagedby | html %][% IF ( suggestions_loo.firstnamemanagedby ) %],[% END %] [% suggestions_loo.firstnamemanagedby | html %]
                 </td>
                 <td class="actions">
                     [% IF ( suggestions_loo.biblionumber ) %]
-                        <a href="neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;suggestionid=[% suggestions_loo.suggestionid %]&amp;biblio=[% suggestions_loo.biblionumber %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Order</a>
+                        <a href="neworderempty.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]&amp;suggestionid=[% suggestions_loo.suggestionid | html %]&amp;biblio=[% suggestions_loo.biblionumber | html %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Order</a>
                     [% ELSE %]
-                        <a href="neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;suggestionid=[% suggestions_loo.suggestionid %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Order</a>
+                        <a href="neworderempty.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]&amp;suggestionid=[% suggestions_loo.suggestionid | html %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Order</a>
                     [% END %]
                 </td>
             </tr>
@@ -75,7 +76,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/acquisitions-menu.js") %]
+    [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
     $(document).ready(function() {
@@ -88,7 +89,7 @@
         }));
         $("#show_only_mine").on('click', function(e){
             e.preventDefault();
-            suggestionst.fnFilter('^[% loggedinuser %]$', 0, true);
+            suggestionst.fnFilter('^[% loggedinuser | html %]$', 0, true);
         });
         $("#show_all").on('click', function(e){
             e.preventDefault();

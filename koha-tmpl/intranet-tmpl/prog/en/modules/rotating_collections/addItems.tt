@@ -1,7 +1,8 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; Rotating collections &rsaquo; Collection [% colTitle %] &rsquo; Add or remove items</title>
+<title>Koha &rsaquo; Tools &rsaquo; Rotating collections &rsaquo; Collection [% colTitle | html %] &rsquo; Add or remove items</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -9,7 +10,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a> &rsaquo; <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% colId %]">Collection <i>[% colTitle %]</i></a> &rsaquo; Add or remove items</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a> &rsaquo; <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% colId | html %]">Collection <i>[% colTitle | html %]</i></a> &rsaquo; Add or remove items</div>
 
 <div id="doc3" class="yui-t2">
     <div id="bd">
@@ -23,14 +24,14 @@
                 </div>
               [% ELSE %]
               [% INCLUDE 'rotating-collections-toolbar.inc' %]
-              <h1>Collection <i>[% colTitle %]</i></h1>
+              <h1>Collection <i>[% colTitle | html %]</i></h1>
 
               [% IF ( previousActionAdd ) %]
                 [% IF ( addSuccess ) %]
-                  <div class="dialog message">Item with barcode '[% barcode %]' added successfully</div>
+                  <div class="dialog message">Item with barcode '[% barcode | html %]' added successfully</div>
                 [% ELSE %]
                   <div class="dialog alert">
-                    <p>Failed to add item with barcode <i>[% barcode %]</i>:
+                    <p>Failed to add item with barcode <i>[% barcode | html %]</i>:
                     <p>
                         [% IF failureMessage == "NO_ITEM" %]
                             No item with matching barcode found
@@ -39,7 +40,7 @@
                         [% ELSIF failureMessage == "IN_COLLECTION" %]
                             Item is already in this collection
                         [% ELSE %]
-                            [% failureMessage %]
+                            [% failureMessage | html %]
                         [% END %]
                     </p>
                 </div>
@@ -48,17 +49,17 @@
 
               [% IF ( previousActionRemove ) %]
                 [% IF ( removeSuccess ) %]
-                  <div class="dialog message">Item with barcode <i>[% barcode %]</i> removed successfully</div>
+                  <div class="dialog message">Item with barcode <i>[% barcode | html %]</i> removed successfully</div>
                 [% ELSE %]
                   <div class="dialog alert">
-                    Failed to remove item with barcode <i>[% barcode %]</i>:
+                    Failed to remove item with barcode <i>[% barcode | html %]</i>:
                     <p>
                         [% IF failureMessage == "NO_ITEM" %]
                             No item with matching barcode found
                         [% ELSIF failureMessage == "NOT_IN_COLLECTION" %]
                             Item is not in this collection
                         [% ELSE %]
-                            [% failureMessage %]
+                            [% failureMessage | html %]
                         [% END %]
                     </p>
                 </div>
@@ -81,7 +82,7 @@
                             </li>
                         </ol>
                         <p>
-                            <input type="hidden" id="colId" name="colId" value="[% colId %]" />
+                            <input type="hidden" id="colId" name="colId" value="[% colId | html %]" />
                             <input type="hidden" name="action" value="addItem" />
                             <input type="submit" value="Submit" />
                         </p>
@@ -91,7 +92,7 @@
               </div>
 
               <div>
-                <h2>Items in <i>[% colTitle %]</i></h2>
+                <h2>Items in <i>[% colTitle | html %]</i></h2>
                 [% IF ( collectionItemsLoop ) %]
                   <table>
                     <tr>
@@ -102,10 +103,10 @@
                     </tr>
                     [% FOREACH collectionItemsLoo IN collectionItemsLoop %]
                       <tr>
-                        <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = collectionItemsLoo.biblionumber %][% collectionItemsLoo.title |html %]</a></td>
-                        <td>[% collectionItemsLoo.itemcallnumber %]</td>
-                        <td>[% collectionItemsLoo.barcode %]</td>
-                        <td><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% colId %]&amp;barcode=[% collectionItemsLoo.barcode %]&amp;removeItem=1&amp;action=addItem">Remove</a></td>
+                        <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = collectionItemsLoo.biblionumber %][% collectionItemsLoo.title | html %]</a></td>
+                        <td>[% collectionItemsLoo.itemcallnumber | html %]</td>
+                        <td>[% collectionItemsLoo.barcode | html %]</td>
+                        <td><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% colId | html %]&amp;barcode=[% collectionItemsLoo.barcode | html %]&amp;removeItem=1&amp;action=addItem">Remove</a></td>
                       </tr>
                     [% END %]
                   </table>
@@ -122,8 +123,8 @@
     </div> <!-- /#bd -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
-    [% Asset.js("js/rotating-collections.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
+    [% Asset.js("js/rotating-collections.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

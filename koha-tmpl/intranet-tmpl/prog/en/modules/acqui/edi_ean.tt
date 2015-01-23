@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Acquisitions &rsaquo; Basket ([% basketno %])</title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; Basket ([% basketno | html %])</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 </head>
@@ -7,7 +7,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Basket ([% basketno %])</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Basket ([% basketno | html %])</div>
 
 <div class="main container-fluid">
     <div class="row">
@@ -20,10 +20,10 @@
          <p>Select ordering library account: </p>
          <select id="ean" name="ean">
              [% FOREACH eanacct IN eans %]
-             <option value="[% eanacct.ean %]">[% eanacct.branch.branchname %] ([% eanacct.ean %]) [% IF eanacct.description %][[% eanacct.description %]][% END %]</option>
+             <option value="[% eanacct.ean | html %]">[% eanacct.branch.branchname | html %] ([% eanacct.ean | html %]) [% IF eanacct.description %][[% eanacct.description | html %]][% END %]</option>
              [% END %]
         </select>
-        <input type="hidden" id="basketno" value="[% basketno %]" name="basketno" />
+        <input type="hidden" id="basketno" value="[% basketno | html %]" name="basketno" />
         <input type="hidden" value="ediorder" name="op" />
         <p>
             <input type="submit" value="Send EDI order" />

@@ -1,19 +1,20 @@
+[% USE raw %]
 [% BLOCK pagination %]
     <nav>
         [% IF ( displayprev || displaynext ) %]
             <ul class="pagination">
                 [% IF ( displayprev ) %]
-                    <li><a class="nav" href="label-item-search.pl?startfrom=[% startfromprev %]&amp;ccl_query=[% ccl_query %]&amp;resultsperpage=[% resultsperpage %]&amp;op=do_search&amp;batch_id=[% batch_id %]"><i class="fa fa-arrow-left"></i> Previous</a></li>
+                    <li><a class="nav" href="label-item-search.pl?startfrom=[% startfromprev | html %]&amp;ccl_query=[% ccl_query | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]"><i class="fa fa-arrow-left"></i> Previous</a></li>
                 [% END %]
                 [% FOREACH number IN numbers %]
                     [% IF ( startfrom == number.startfrom ) %]
-                        <li class="active"><span>[% number.number %]</span></a></li>
+                        <li class="active"><span>[% number.number | html %]</span></a></li>
                     [% ELSE %]
-                        <li><a class="nav" href="label-item-search.pl?startfrom=[% number.startfrom %]&amp;ccl_query=[% ccl_query %]&amp;resultsperpage=[% resultsperpage %]&amp;op=do_search&amp;batch_id=[% batch_id %]">[% number.number %]</a></li>
+                        <li><a class="nav" href="label-item-search.pl?startfrom=[% number.startfrom | html %]&amp;ccl_query=[% ccl_query | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]">[% number.number | html %]</a></li>
                     [% END %]
                 [% END %]
                 [% IF ( displaynext ) %]
-                    <li><a class="nav" href="label-item-search.pl?startfrom=[% startfromnext %]&amp;ccl_query=[% ccl_query %]&amp;resultsperpage=[% resultsperpage %]&amp;op=do_search&amp;batch_id=[% batch_id %]">Next <i class="fa fa-arrow-right"></i></a></li>
+                    <li><a class="nav" href="label-item-search.pl?startfrom=[% startfromnext | html %]&amp;ccl_query=[% ccl_query | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;op=do_search&amp;batch_id=[% batch_id | html %]">Next <i class="fa fa-arrow-right"></i></a></li>
                 [% END %]
             </ul>
         [% END %]
@@ -32,7 +33,7 @@
         <div class="results">
             [% PROCESS pagination %]
                 [% IF ( results ) %]
-                <strong>Results [% from %] through [% to %] [% IF ( total ) %] of [% total %][% END %]</strong>
+                <strong>Results [% from | html %] through [% to | html %] [% IF ( total ) %] of [% total | html %][% END %]</strong>
                 [% ELSE %]
                 No results found
                 [% END %]
@@ -45,12 +46,12 @@
                 <div><a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a> <a id="CheckNone" href="#"><i class="fa fa-remove"></i> Clear all</a></div>
 
                 <div id="label-search-results">
-                <input type="hidden" name="ccl_query" value="[% ccl_query %]" />
+                <input type="hidden" name="ccl_query" value="[% ccl_query | html %]" />
             [% FOREACH result_se IN result_set %]
             <div style="border-bottom:1px solid #CCC;padding:1em 0;">
-                    <h4>[% result_se.title |html %]</h4>
-                            <p>[% IF ( result_se.author ) %]by [% result_se.author %][% END %]
-                            [[% result_se.itemtype %]], [% IF ( result_se.publishercode ) %][% result_se.publishercode %] [% END %][% IF ( result_se.place ) %][% result_se.place %] [% END %][% IF ( result_se.copyrightdate ) %][% result_se.copyrightdate %], [% END %][% IF ( result_se.pages ) %][% result_se.pages %][% END %][% IF ( result_se.isbn ) %], <b>ISBN: </b>[% result_se.isbn %][% END %][% IF ( result_se.notes ) %],<br />[% result_se.notes %][% END %]</p>
+                    <h4>[% result_se.title | html %]</h4>
+                            <p>[% IF ( result_se.author ) %]by [% result_se.author | html %][% END %]
+                            [[% result_se.itemtype | html %]], [% IF ( result_se.publishercode ) %][% result_se.publishercode | html %] [% END %][% IF ( result_se.place ) %][% result_se.place | html %] [% END %][% IF ( result_se.copyrightdate ) %][% result_se.copyrightdate | html %], [% END %][% IF ( result_se.pages ) %][% result_se.pages | html %][% END %][% IF ( result_se.isbn ) %], <b>ISBN: </b>[% result_se.isbn | html %][% END %][% IF ( result_se.notes ) %],<br />[% result_se.notes | html %][% END %]</p>
 
                     <table>
                     [% FOREACH item_tabl IN result_se.item_table %]
@@ -70,7 +71,7 @@
                                         [% CASE "Select" -%]
                                             <th>Select</th>
                                         [% CASE %]
-                                            <th>[% header_field.field_label %]</th>
+                                            <th>[% header_field.field_label | html %]</th>
                                     [% END -%]
                                 [% END %]
                             </tr>
@@ -79,13 +80,13 @@
                     <tr>
                     [% FOREACH text_field IN item_tabl.text_fields %]
                     [% IF ( text_field.select_field ) %]
-                        <td><input type="checkbox" name="action" value="[% text_field.field_value %]"></td>
+                        <td><input type="checkbox" name="action" value="[% text_field.field_value | html %]"></td>
                     [% ELSIF ( text_field.link_field ) %]
                         <td>
-                            <a class="btn btn-default btn-xs select_item" data-item-number="[% text_field.field_value %]" data-batch-id="[% batch_id %]" data-field-type="[% text_field.type %]"><i class="fa fa-plus"></i> Add</a>
+                            <a class="btn btn-default btn-xs select_item" data-item-number="[% text_field.field_value | html %]" data-batch-id="[% batch_id | html %]" data-field-type="[% text_field.type | html %]"><i class="fa fa-plus"></i> Add</a>
                         </td>
                     [% ELSE %]
-                        <td>[% text_field.field_value %]</td>
+                        <td>[% text_field.field_value | html %]</td>
                     [% END %]
                     [% END %]
                     </tr>
@@ -102,7 +103,7 @@
     </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
     <script>
         $(document).ready(function(){
             $("#toolbar").fixFloat();
@@ -115,7 +116,7 @@
                 $("input[type='checkbox']").prop("checked",false);
             });
             $("#add_items").on("click",function(){
-                add_item('checked',[% batch_id %],'[% type %]');
+                add_item('checked',[% batch_id | html %],'[% type | html %]');
             });
             $(".select_item").on("click",function(e){
                 e.preventDefault();

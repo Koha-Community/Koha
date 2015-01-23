@@ -1,34 +1,35 @@
+[% USE raw %]
 <ol>
   [% FOREACH iteminfo IN iteminformation %]
     [% IF ( iteminfo.hidden ) %]
-       <li style="[% iteminfo.hidden %];">
+       <li style="[% iteminfo.hidden | html %];">
     [% ELSE %]
         <li>
     [% END %]
-      <div class="subfield_line" id="subfield[% iteminfo.serialid %][% iteminfo.countitems %][% iteminfo.subfield %][% iteminfo.random %]">
+      <div class="subfield_line" id="subfield[% iteminfo.serialid | html %][% iteminfo.countitems | html %][% iteminfo.subfield | html %][% iteminfo.random | html %]">
         [% IF (iteminfo.mandatory) %]
-            <label class="required">[% iteminfo.subfield %] - [% iteminfo.marc_lib %]</label>
+            <label class="required">[% iteminfo.subfield | html %] - [% iteminfo.marc_lib | $raw %]</label>
         [% ELSE %]
-            <label>[% iteminfo.subfield %] - [% iteminfo.marc_lib %]</label>
+            <label>[% iteminfo.subfield | html %] - [% iteminfo.marc_lib | $raw %]</label>
         [% END %]
         [% IF ( iteminfo.marc_value.type == 'select' ) %]
         <select name="field_value" size="1">
         [% FOREACH value IN iteminfo.marc_value.values %]
           [% IF ( value == iteminfo.marc_value.default ) %]
-            <option value="[% value %]" selected="selected">[% iteminfo.marc_value.labels.$value %]</option>
+            <option value="[% value | html %]" selected="selected">[% iteminfo.marc_value.labels.$value | html %]</option>
           [% ELSE %]
-            <option value="[% value %]">[% iteminfo.marc_value.labels.$value %]</option>
+            <option value="[% value | html %]">[% iteminfo.marc_value.labels.$value | html %]</option>
           [% END %]
         [% END %]
         </select>
         [% ELSE %]
-        [% iteminfo.marc_value %]
+        [% iteminfo.marc_value | $raw %]
         [% END %]
         <input type="hidden" name="itemid" value="1" />
-        <input type="hidden" name="kohafield" value="[% iteminfo.kohafield %]" />
-        <input type="hidden" name="tag" value="[% iteminfo.tag %]" />
-        <input type="hidden" name="subfield" value="[% iteminfo.subfield %]" />
-        <input type="hidden" name="mandatory" value="[% iteminfo.mandatory %]" />
+        <input type="hidden" name="kohafield" value="[% iteminfo.kohafield | html %]" />
+        <input type="hidden" name="tag" value="[% iteminfo.tag | html %]" />
+        <input type="hidden" name="subfield" value="[% iteminfo.subfield | html %]" />
+        <input type="hidden" name="mandatory" value="[% iteminfo.mandatory | html %]" />
         [% IF (iteminfo.mandatory) %] <span class="required">Required</span>[% END %]
       </div>
     </li>

@@ -5,7 +5,7 @@
 <body id="catalog_linkitem" class="catalog">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; Link a host item to <i>[% bibliotitle |html %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; Link a host item to <i>[% bibliotitle | html %]</i></div>
 
 <div class="container-fluid">
     <div class="row">
@@ -18,14 +18,14 @@
     </div>
     <form action="/cgi-bin/koha/catalogue/MARCdetail.pl" method="post">
 	<input type="submit" value="OK" />
-	<input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+	<input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
     </form>
 [% ELSE %]
     [% IF ( success ) %]
-    <div class="dialog message">The item has successfully been linked to <i>[% bibliotitle |html %]</i>.</div>
+    <div class="dialog message">The item has successfully been linked to <i>[% bibliotitle | html %]</i>.</div>
 	<form action="/cgi-bin/koha/catalogue/MARCdetail.pl" method="post">
 	    <input type="submit" value="OK" />
-	    <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+	    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
 	</form>
     [% ELSE %]
 	[% IF ( missingparameter ) %]
@@ -37,17 +37,17 @@
 		    <input type="text" name="biblionumber" id="biblionumber" class="focus" size="14" /> 
 	    </fieldset>
 	    [% ELSE %]
-	    <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber %]" />
+	    <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber | html %]" />
 	    [% END %]
 
     	    [% IF ( missingbarcode ) %]
 	    <fieldset id="barcode_fieldset">
-		<label for="barcode_fieldset">Select the host item to link[% IF ( bibliotitle ) %] to <i>[% bibliotitle |html %]</i>[% END %]</label>
+        <label for="barcode_fieldset">Select the host item to link[% IF ( bibliotitle ) %] to <i>[% bibliotitle | html %]</i>[% END %]</label>
 		    <div class="hint">Enter item barcode:</div>
 		    <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" /> 
 	    </fieldset>
 	    [% ELSE %]
-	    <input type="hidden" name="barcode" id="barcode" value="[% barcode %]" />
+	    <input type="hidden" name="barcode" id="barcode" value="[% barcode | html %]" />
 	    [% END %]
 
 	    <input type="submit" value="Select" />

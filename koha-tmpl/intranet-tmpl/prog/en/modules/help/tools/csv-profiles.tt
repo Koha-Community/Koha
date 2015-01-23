@@ -108,36 +108,36 @@
 }
 </pre>
 <p>The indicators can be accessible using the 'indicator' key.</p>
-<p>Example: [% fields.245.0.indicator.1 %] is the indicator 1 for the first 245 field.</p>
+<p>Example: [% fields.245.0.indicator.1 | html %] is the indicator 1 for the first 245 field.</p>
 
 <p>Some examples:</p>
 <ul>
   <li>Display all 245$a and 245$c into the same column:
     <p>
     [% FOREACH field IN fields.245 %]
-        [% field.a.join(' ') %] [% field.c.join(' ') %]
+        [% field.a.join(' ') | html %] [% field.c.join(' ') | html %]
     [% END %]
     </p>
   </li>
   <li>Display 650$a if indicator 2 for 650 is set
     <p>
-    Subject=[% FOREACH field IN fields.650 %][% IF field.indicator.2 %][% field.a.0 %][% END %][% END %]
+    Subject=[% FOREACH field IN fields.650 %][% IF field.indicator.2 %][% field.a.0 | html %][% END %][% END %]
     </p>
   </li>
   <li>Display the language from the control field 008
     <p>
-    Language=[% fields.008.0.substr( 28, 3 ) %]
+    Language=[% fields.008.0.substr( 28, 3 ) | html %]
     </p>
   </li>
   <li>Display the first subfield a for first field 245 if indicator 1 for field 100 is set
     <p>
-    Title=[% IF fields.100.0.indicator.1 %][% fields.245.0.a.0 %][% END %]
+    Title=[% IF fields.100.0.indicator.1 %][% fields.245.0.a.0 | html %][% END %]
     </p>
   </li>
 </ul>
 <p>Note that the authorized values won't be replaced by their descriptions.</p>
 [- TAGS default -]
 
-<p><strong>See the full documentation for CSV Profiles in the <a href="http://koha-community.org/manual/[% helpVersion %]/en/html/tools.html#csv-profiles">manual</a> (online).</strong></p>
+<p><strong>See the full documentation for CSV Profiles in the <a href="http://koha-community.org/manual/[% helpVersion | html %]/en/html/tools.html#csv-profiles">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]

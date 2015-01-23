@@ -4,35 +4,35 @@
  xmlns="http://purl.org/rss/1.0/"
  xmlns:dc="http://purl.org/dc/elements/1.1/"
 >
-  <channel rdf:about="[% CHANNELLINK %]">
-    <title>[% CHANNELTITLE %]</title>
-    <link>[% CHANNELLINK %]</link>
-    <description>[% CHANNELDESC %]</description>
-    <language>[% CHANNELLANG %]</language>
-    <lastBuildDate>[% CHANNELLASTBUILD %]</lastBuildDate>
-     <image rdf:about="[% IMAGEURL %]">
-      <title>[% IMAGETITLE %]</title>
-      <url>[% IMAGEURL %]</url>
-      <link>[% IMAGELINK %]</link>
+  <channel rdf:about="[% CHANNELLINK | html %]">
+    <title>[% CHANNELTITLE | html %]</title>
+    <link>[% CHANNELLINK | html %]</link>
+    <description>[% CHANNELDESC | html %]</description>
+    <language>[% CHANNELLANG | html %]</language>
+    <lastBuildDate>[% CHANNELLASTBUILD | html %]</lastBuildDate>
+     <image rdf:about="[% IMAGEURL | html %]">
+      <title>[% IMAGETITLE | html %]</title>
+      <url>[% IMAGEURL | html %]</url>
+      <link>[% IMAGELINK | html %]</link>
      </image>
     <items>
       <rdf:Seq>
       [% FOREACH i IN ITEMS %]
-        <rdf:li resource="[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% ibiblionumber %]"/>
+        <rdf:li resource="[% OPACBaseURL | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% ibiblionumber | html %]"/>
       [% END %]
       </rdf:Seq>
     </items>
 </channel>
 
   [% FOREACH i IN ITEMS %]
-  <item rdf:about="[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">
-  <title>[% i.TITLE %][% IF i.AUTHOR %] by [% i.AUTHOR %][% END %]</title>
-  <link>[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]</link>
-<description><![CDATA[[% TITLE %][% IF i.AUTHOR %] by [% i.AUTHOR %][% END %]
-<br>[% place %] [% i.publishercode %] [% i.publicationyear %]
-<br>[% pages %] [% i.illus %] [% i.size %]
-[% IF i.notes %]<br><br>[% i.notes %][% END %]<br>
-<a href="[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.biblionumber %]">View Details</a> | <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-reserve.pl?biblionumber=[% i.biblionumber %]">Reserve this Item</a>[% IF i.author %] | <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?marclist=biblio.author&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=[% i.author %]&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search">More by this Author</a>[% END %]
+  <item rdf:about="[% OPACBaseURL | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]">
+  <title>[% i.TITLE | html %][% IF i.AUTHOR %] by [% i.AUTHOR | html %][% END %]</title>
+  <link>[% OPACBaseURL | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]</link>
+<description><![CDATA[[% TITLE | html %][% IF i.AUTHOR %] by [% i.AUTHOR | html %][% END %]
+<br>[% place | html %] [% i.publishercode | html %] [% i.publicationyear | html %]
+<br>[% pages | html %] [% i.illus | html %] [% i.size | html %]
+[% IF i.notes %]<br><br>[% i.notes | html %][% END %]<br>
+<a href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.biblionumber | html %]">View Details</a> | <a href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-reserve.pl?biblionumber=[% i.biblionumber | html %]">Reserve this Item</a>[% IF i.author %] | <a href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-search.pl?marclist=biblio.author&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=[% i.author | html %]&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search">More by this Author</a>[% END %]
 ]]></description>
  </item>
 [% END %]

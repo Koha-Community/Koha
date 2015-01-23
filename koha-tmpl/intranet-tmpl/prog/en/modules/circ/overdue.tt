@@ -1,11 +1,12 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [%- USE Branches -%]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Circulation &rsaquo; Items overdue as of [% todaysdate %]</title>
+<title>Koha &rsaquo; Circulation &rsaquo; Items overdue as of [% todaysdate | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 <style type="text/css">
     .sql {display:none;}
 </style>
@@ -15,7 +16,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Overdues as of [% todaysdate %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Overdues as of [% todaysdate | html %]</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -30,17 +31,17 @@
 
 [% IF ( overdueloop ) %]
 
-  <h2>[% nnoverdue %] [% IF ( noverdue_is_plural ) %]Items[% ELSE %]Item[% END %] overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%;">(Filtered. <a href="/cgi-bin/koha/circ/overdue.pl">Reset filter</a>)</span>[% END %]</h2>
+  <h2>[% nnoverdue | html %] [% IF ( noverdue_is_plural ) %]Items[% ELSE %]Item[% END %] overdue as of [% todaysdate | html %][% IF ( isfiltered ) %] <span style="font-size:70%;">(Filtered. <a href="/cgi-bin/koha/circ/overdue.pl">Reset filter</a>)</span>[% END %]</h2>
 
   <p>
     [% IF ( isfiltered ) %]
-      <a href="overdue.pl?op=csv&amp;[% csv_param_string |html %]">Download file of displayed overdues</a>
+      <a href="overdue.pl?op=csv&amp;[% csv_param_string | html %]">Download file of displayed overdues</a>
     [% ELSE %]
       <a href="overdue.pl?op=csv">Download file of all overdues</a>
     [% END %]
   </p>
 
-  <div class="sql"><pre>[% sql |html %]</pre></div>
+  <div class="sql"><pre>[% sql | html %]</pre></div>
   <div class="searchresults">
     <table id="overduest">
       <thead>
@@ -58,18 +59,18 @@
       <tbody>
       [% FOREACH overdueloo IN overdueloop %]
         <tr>
-          <td><span title="[% overdueloo.duedate %]">[% overdueloo.duedate | $KohaDates %]</span></td>
+          <td><span title="[% overdueloo.duedate | html %]">[% overdueloo.duedate | $KohaDates %]</span></td>
           <td>
             [% INCLUDE 'patron-title.inc' patron=overdueloo.patron hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]
             [% IF logged_in_user.can_see_patron_infos( overdueloo.patron ) %]
-                [% IF ( overdueloo.email ) %][<a href="mailto:[% overdueloo.email %]?subject=[% INCLUDE subject %] [% overdueloo.title |html %]">email</a>][% END %]
-                [% IF ( overdueloo.phone ) %]([% overdueloo.phone %])[% ELSIF ( overdueloo.mobile ) %]([% overdueloo.mobile %])[% ELSIF ( overdueloo.phonepro ) %]([% overdueloo.phonepro %])[% END %]</td>
+                [% IF ( overdueloo.email ) %][<a href="mailto:[% overdueloo.email | html %]?subject=[% INCLUDE subject %] [% overdueloo.title | html %]">email</a>][% END %]
+                [% IF ( overdueloo.phone ) %]([% overdueloo.phone | html %])[% ELSIF ( overdueloo.mobile ) %]([% overdueloo.mobile | html %])[% ELSIF ( overdueloo.phonepro ) %]([% overdueloo.phonepro | html %])[% END %]</td>
             [% END %]
-          <td>[% IF overdueloo.branchcode %][% Branches.GetName( overdueloo.branchcode ) %][% END %]</td>
-          <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = overdueloo.biblionumber %][% overdueloo.title |html %]  [% overdueloo.subtitle %]</a> [% IF ( overdueloo.author ) %], by [% overdueloo.author %][% END %][% IF ( overdueloo.enumchron ) %], [% overdueloo.enumchron %][% END %]</td>
-          <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% overdueloo.biblionumber %]&amp;itemnumber=[% overdueloo.itemnum %]#item[% overdueloo.itemnum %]">[% overdueloo.barcode %]</a></td>
-          <td>[% overdueloo.itemcallnumber %]</td>
-          <td>[% overdueloo.replacementprice %]</td>
+          <td>[% IF overdueloo.branchcode %][% Branches.GetName( overdueloo.branchcode ) | html %][% END %]</td>
+          <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = overdueloo.biblionumber %][% overdueloo.title | html %]  [% overdueloo.subtitle | html %]</a> [% IF ( overdueloo.author ) %], by [% overdueloo.author | html %][% END %][% IF ( overdueloo.enumchron ) %], [% overdueloo.enumchron | html %][% END %]</td>
+          <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% overdueloo.biblionumber | html %]&amp;itemnumber=[% overdueloo.itemnum | html %]#item[% overdueloo.itemnum | html %]">[% overdueloo.barcode | html %]</a></td>
+          <td>[% overdueloo.itemcallnumber | html %]</td>
+          <td>[% overdueloo.replacementprice | html %]</td>
         </tr>
       [% END %]
       </tbody>
@@ -105,10 +106,10 @@
     </li>
     </ol></fieldset>
     <ol>
-    <li><label>Name or cardnumber:</label><input type="text" name="borname" value="[% borname |html %]" /></li>
+    <li><label>Name or cardnumber:</label><input type="text" name="borname" value="[% borname | html %]" /></li>
     <li><label>Patron category:</label><select name="borcat" id="borcat"><option value="">Any</option>
       [% FOREACH borcatloo IN borcatloop %]
-        [% IF ( borcatloo.selected ) %]<option value="[% borcatloo.value |html %]" selected="selected">[% borcatloo.catname %]</option>[% ELSE %]<option value="[% borcatloo.value |html %]">[% borcatloo.catname %]</option>[% END %]
+        [% IF ( borcatloo.selected ) %]<option value="[% borcatloo.value | html %]" selected="selected">[% borcatloo.catname | html %]</option>[% ELSE %]<option value="[% borcatloo.value | html %]">[% borcatloo.catname | html %]</option>[% END %]
       [% END %]
       </select>
     </li>
@@ -126,16 +127,16 @@
 	[% FOREACH patron_attr_filter_loo IN patron_attr_filter_loop %]
 		<!-- domid cgivalue ismany isclone ordinal code description repeatable authorised_value_category -->
 		<li>
-			<label>[% patron_attr_filter_loo.description %]:</label>
+			<label>[% patron_attr_filter_loo.description | html %]:</label>
             [% IF ( patron_attr_filter_loo.authorised_value_category ) %]
-                <script type="text/javascript" x-code="[% patron_attr_filter_loo.code |html %]">create_auto_completion_responder([% patron_attr_filter_loo.domid %],"[% patron_attr_filter_loo.code |html %]");</script>
-				<span id="pattrodue-getready-[% patron_attr_filter_loo.domid %]">
+                <script type="text/javascript" x-code="[% patron_attr_filter_loo.code | html %]">create_auto_completion_responder([% patron_attr_filter_loo.domid | html %],"[% patron_attr_filter_loo.code | html %]");</script>
+				<span id="pattrodue-getready-[% patron_attr_filter_loo.domid | html %]">
 						<div class="pattrodue-autocomplete">
-							<input autocomplete="off" id="pattrodue-input-[% patron_attr_filter_loo.domid %]" name="patron_attr_filter_[% patron_attr_filter_loo.code |html %]" value="[% patron_attr_filter_loo.cgivalue |html %]"  class="pattrodue-input" type="text" />
+                            <input autocomplete="off" id="pattrodue-input-[% patron_attr_filter_loo.domid | html %]" name="patron_attr_filter_[% patron_attr_filter_loo.code | html %]" value="[% patron_attr_filter_loo.cgivalue | html %]"  class="pattrodue-input" type="text" />
 						</div>
 				</span>
 			[% ELSE %]
-				<input type="text" name="patron_attr_filter_[% patron_attr_filter_loo.code |html %]" value="[% patron_attr_filter_loo.cgivalue |html %]"/>
+                <input type="text" name="patron_attr_filter_[% patron_attr_filter_loo.code | html %]" value="[% patron_attr_filter_loo.cgivalue | html %]"/>
 			[% END %]
 			[% IF ( patron_attr_filter_loo.repeatable ) %]
                 <a href="#" onclick="clone_parent(this); return false;">Add</a>
@@ -152,8 +153,8 @@
 
     <li><label>Item type:</label><select name="itemtype" id="itemtype"><option value="">Any</option>
       [% FOREACH itemtypeloo IN itemtypeloop %][% IF ( itemtypeloo.selected ) %]
-        <option value="[% itemtypeloo.value |html %]" selected="selected">[% itemtypeloo.itemtypename %]</option>[% ELSE %]
-        <option value="[% itemtypeloo.value |html %]">[% itemtypeloo.itemtypename %]</option>[% END %]
+        <option value="[% itemtypeloo.value | html %]" selected="selected">[% itemtypeloo.itemtypename | html %]</option>[% ELSE %]
+        <option value="[% itemtypeloo.value | html %]">[% itemtypeloo.itemtypename | html %]</option>[% END %]
       [% END %]
       </select>
     </li>

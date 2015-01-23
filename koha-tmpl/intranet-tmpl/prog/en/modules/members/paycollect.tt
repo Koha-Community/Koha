@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
@@ -5,7 +6,7 @@
 [% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Patrons &rsaquo; Collect fine payment for  [% patron.firstname %] [% patron.surname %]</title>
+<title>Koha &rsaquo; Patrons &rsaquo; Collect fine payment for  [% patron.firstname | html %] [% patron.surname | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -15,7 +16,7 @@
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a> &rsaquo;
-    <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber %]">Pay fines for [% patron.firstname %] [% patron.surname %]</a> &rsaquo;
+    <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]">Pay fines for [% patron.firstname | html %] [% patron.surname | html %]</a> &rsaquo;
     [% IF    ( pay_individual )      %]Pay an individual fine
     [% ELSIF ( writeoff_individual ) %]Write off an individual fine
     [% ELSE %]
@@ -40,16 +41,16 @@
 <div class="statictabs">
 <ul>
     <li>
-    <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber %]">Account</a>
+    <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | html %]">Account</a>
     </li>
     <li class="active">
-    <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber %]" >Pay fines</a>
+    <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]" >Pay fines</a>
     </li>
     <li>
-    <a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber %]" >Create manual invoice</a>
+    <a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | html %]" >Create manual invoice</a>
     </li>
     <li>
-    <a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber %]" >Create manual credit</a>
+    <a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | html %]" >Create manual credit</a>
     </li>
 </ul>
 <div class="tabs-container">
@@ -61,20 +62,20 @@
 
 [% IF ( pay_individual ) %]
     <form name="payindivfine" id="payindivfine" method="post" action="/cgi-bin/koha/members/paycollect.pl">
-    <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
-    <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber %]" />
-    <input type="hidden" name="pay_individual" id="pay_individual" value="[% pay_individual %]" />
-    <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber %]" />
-    <input type="hidden" name="description" id="description" value="[% description %]" />
-    <input type="hidden" name="accounttype" id="accounttype" value="[% accounttype %]" />
-    <input type="hidden" name="amount" id="amount" value="[% amount %]" />
-    <input type="hidden" name="amountoutstanding" id="amountoutstanding" value="[% amountoutstanding %]" />
-    <input type="hidden" name="accountlines_id" id="accountlines_id" value="[% accountlines_id %]" />
-    <input type="hidden" name="title" id="title" value="[% title %]" />
+    <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
+    <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
+    <input type="hidden" name="pay_individual" id="pay_individual" value="[% pay_individual | html %]" />
+    <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber | html %]" />
+    <input type="hidden" name="description" id="description" value="[% description | html %]" />
+    <input type="hidden" name="accounttype" id="accounttype" value="[% accounttype | html %]" />
+    <input type="hidden" name="amount" id="amount" value="[% amount | html %]" />
+    <input type="hidden" name="amountoutstanding" id="amountoutstanding" value="[% amountoutstanding | html %]" />
+    <input type="hidden" name="accountlines_id" id="accountlines_id" value="[% accountlines_id | html %]" />
+    <input type="hidden" name="title" id="title" value="[% title | html %]" />
 
 <fieldset class="rows">
     <legend>Pay an individual fine</legend>
-    <input type="hidden" name="payment_note" id="payment_note" value="[% payment_note %]" />
+    <input type="hidden" name="payment_note" id="payment_note" value="[% payment_note | html %]" />
     <table>
     <thead><tr>
             <th>Description</th>
@@ -87,9 +88,9 @@
     </tfoot>
     <tbody><tr>
             <td>
-                [% individual_description %]
+                [% individual_description | html %]
             </td>
-            <td>[% accounttype %]</td>
+            <td>[% accounttype | html %]</td>
             <td class="debit">[% amount | format('%.2f') %]</td>
             <td class="debit">[% amountoutstanding | format('%.2f') %]</td>
         </tr></tbody>
@@ -100,7 +101,7 @@
     <li>
         <label for="paid">Collect from patron: </label>
             <!-- default to paying all -->
-        <input name="paid" id="paid" value="[% amountoutstanding %]" />
+        <input name="paid" id="paid" value="[% amountoutstanding | html %]" />
     </li>
     [% SET payment_types = AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
     [% IF payment_types %]
@@ -109,7 +110,7 @@
             <select name="payment_type" id="payment_type">
                 <option value=""></option>
                 [% FOREACH pt IN payment_types %]
-                    <option value="[% pt.authorised_value %]">[% pt.lib %]</option>
+                    <option value="[% pt.authorised_value | html %]">[% pt.lib | html %]</option>
                 [% END %]
             </select>
         </li>
@@ -118,23 +119,23 @@
 </fieldset>
 
     <div class="action"><input type="submit" name="submitbutton" value="Confirm" />
-        <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber %]">Cancel</a></div>
+        <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a></div>
     </form>
 [% ELSIF ( writeoff_individual ) %]
     <form name="woindivfine" id="woindivfine" action="/cgi-bin/koha/members/pay.pl" method="post" >
-    <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
+    <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
     <fieldset class="rows">
     <legend>Write off an individual fine</legend>
-    <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber %]" />
-    <input type="hidden" name="pay_individual" id="pay_individual" value="[% pay_individual %]" />
-    <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber %]" />
-    <input type="hidden" name="description" id="description" value="[% description %]" />
-    <input type="hidden" name="accounttype" id="accounttype" value="[% accounttype %]" />
-    <input type="hidden" name="amount" id="amount" value="[% amount %]" />
-    <input type="hidden" name="accountlines_id" id="accountlines_id" value="[% accountlines_id %]" />
-    <input type="hidden" name="title" id="title" value="[% title %]" />
-    <input type="hidden" name="payment_note" id="payment_note" value="[% payment_note %]" />
-    <input type="hidden" name="amountoutstanding" id="amountoutstanding" value="[% amountoutstanding %]" />
+    <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
+    <input type="hidden" name="pay_individual" id="pay_individual" value="[% pay_individual | html %]" />
+    <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber | html %]" />
+    <input type="hidden" name="description" id="description" value="[% description | html %]" />
+    <input type="hidden" name="accounttype" id="accounttype" value="[% accounttype | html %]" />
+    <input type="hidden" name="amount" id="amount" value="[% amount | html %]" />
+    <input type="hidden" name="accountlines_id" id="accountlines_id" value="[% accountlines_id | html %]" />
+    <input type="hidden" name="title" id="title" value="[% title | html %]" />
+    <input type="hidden" name="payment_note" id="payment_note" value="[% payment_note | html %]" />
+    <input type="hidden" name="amountoutstanding" id="amountoutstanding" value="[% amountoutstanding | html %]" />
     <input type="hidden" name="confirm_writeoff" id="confirm_writeoff" value="1" />
     <table>
     <thead><tr>
@@ -145,8 +146,8 @@
         </tr></thead>
     <tfoot><td colspan="3">Total amount outstanding:</td><td>[% amountoutstanding | format('%.2f') %]</td></tfoot>
     <tbody><tr>
-            <td>[% description %] [% title %]</td>
-            <td>[% accounttype %]</td>
+            <td>[% description | html %] [% title | html %]</td>
+            <td>[% accounttype | html %]</td>
             <td class="debit">[% amount | format('%.2f') %]</td>
             <td class="debit">[% amountoutstanding | format('%.2f') %]</td>
         </tr></tbody>
@@ -156,23 +157,23 @@
                 <li>
                     <label for="paid">Writeoff amount: </label>
                     <!-- default to writing off all -->
-                    <input name="amountwrittenoff" id="amountwrittenoff" value="[% amountoutstanding | $Price on_editing => 1 %]" />
+                    <input name="amountwrittenoff" id="amountwrittenoff" value="[% amountoutstanding | $Price on_editing => 1 | html %]" />
                 </li>
             </ol>
         </fieldset>
         <div class="action">
             <input type="submit" value="Write off this charge" />
-            <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber %]">Cancel</a>
+            <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>
         </div>
     </form>
 [% ELSE %]
 
     <form name="payfine" id="payfine" method="post" action="/cgi-bin/koha/members/paycollect.pl">
-    <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
-    <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber %]" />
-    <input type="hidden" name="selected_accts" id="selected_accts" value="[% selected_accts %]" />
-    <input type="hidden" name="total" id="total" value="[% total %]" />
-    <input type="hidden" name="type" value="[% type %]" />
+    <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
+    <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
+    <input type="hidden" name="selected_accts" id="selected_accts" value="[% selected_accts | html %]" />
+    <input type="hidden" name="total" id="total" value="[% total | html %]" />
+    <input type="hidden" name="type" value="[% type | html %]" />
 
     <fieldset class="rows">
     [% IF ( selected_accts ) %]
@@ -206,20 +207,20 @@
             <select name="payment_type" id="payment_type">
                 <option value=""></option>
                 [% FOREACH pt IN payment_types %]
-                    <option value="[% pt.authorised_value %]">[% pt.lib %]</option>
+                    <option value="[% pt.authorised_value | html %]">[% pt.lib | html %]</option>
                 [% END %]
             </select>
         </li>
     [% END %]
     <li>
         <label for="selected_accts_notes">Note: </label>
-        <textarea name="selected_accts_notes" id="selected_accts_notes">[% selected_accts_notes %]</textarea>
+        <textarea name="selected_accts_notes" id="selected_accts_notes">[% selected_accts_notes | html %]</textarea>
     </li>
     </ol>
     </fieldset>
     <div class="action">
         <input type="submit" name="submitbutton" value="Confirm" />
-        <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber %]">Cancel</a>
+        <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>
     </div>
     </form>
 [% END %]
@@ -234,7 +235,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
     <script type= "text/javascript">
         $(document).ready(function() {
             $('#payindivfine, #payfine').preventDoubleFormSubmit();

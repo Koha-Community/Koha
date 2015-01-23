@@ -1,11 +1,11 @@
 [% USE Koha %]
 <div class="gradient">
-<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin Cities Resident Search Box -->
+<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></h1><!-- Begin Cities Resident Search Box -->
 <div id="header_search">
 	<div id="city_search" class="residentsearch">
     <p class="tip">City search:</p>
-	<form action="[% script_name %]" method="post">
-        <input class="head-searchbox" type="text" name="city_name" value="[% searchfield %]" size="40" />
+	<form action="[% script_name | html %]" method="post">
+        <input class="head-searchbox" type="text" name="city_name" value="[% searchfield | html %]" size="40" />
 		<input type="submit" name="submit" value="OK" class="submit" />
 	</form>
 	</div>

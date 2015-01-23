@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -21,7 +22,7 @@
     <div class="yui-b">
 
 [% FOR m IN messages %]
-    <div class="dialog [% m.type %]">
+    <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
             An error occurred when updating this CSV profile. Perhaps it already exists.
@@ -38,7 +39,7 @@
         [% CASE 'already_exists' %]
             This CSV profile already exists.
         [% CASE %]
-            [% m.code %]
+            [% m.code | html %]
         [% END %]
     </div>
 [% END %]
@@ -106,11 +107,11 @@
 
     <form action="/cgi-bin/koha/tools/csv-profiles.pl" class="validated" method="post">
         <input type="hidden" name="op" value="add_validate" />
-        <input type="hidden" name="export_format_id" value="[% csv_profile.export_format_id %]" />
+        <input type="hidden" name="export_format_id" value="[% csv_profile.export_format_id | html %]" />
         <fieldset class="rows">
             <ol>
                 [% IF csv_profile %]
-                    <li><span class="label">Profile ID: </span>[% csv_profile.export_format_id %]</li>
+                    <li><span class="label">Profile ID: </span>[% csv_profile.export_format_id | html %]</li>
                 [% END %]
                 <li>
                     <label for="profile" class="required">Profile name: </label>
@@ -122,9 +123,9 @@
                     <select id="type" name="type">
                         [% FOREACH type IN [ 'marc' 'sql'] %]
                         [% IF csv_profile.type == type %]
-                            <option value="[% type %]" selected="selected">[% PROCESS type_description type_code = type %]</option>
+                            <option value="[% type | html %]" selected="selected">[% PROCESS type_description type_code = type %]</option>
                         [% ELSE %]
-                            <option value="[% type %]">[% PROCESS type_description type_code = type %]</option>
+                            <option value="[% type | html %]">[% PROCESS type_description type_code = type %]</option>
                         [% END %]
                         [% END %]
                     </select>
@@ -135,9 +136,9 @@
                     <select id="used_for_sql" name="used_for_sql">
                         [% FOREACH used_for IN [ 'late_issues' 'export_basket' 'export_lost_items' ] %]
                         [% IF csv_profile.used_for == used_for %]
-                            <option value="[% used_for %]" selected="selected">[% PROCESS used_for_description used_for_code = used_for %]</option>
+                            <option value="[% used_for | html %]" selected="selected">[% PROCESS used_for_description used_for_code = used_for %]</option>
                         [% ELSE %]
-                            <option value="[% used_for %]">[% PROCESS used_for_description used_for_code = used_for %]</option>
+                            <option value="[% used_for | html %]">[% PROCESS used_for_description used_for_code = used_for %]</option>
                         [% END %]
                         [% END %]
                     </select>
@@ -147,9 +148,9 @@
                     <select id="used_for_marc" name="used_for_marc">
                         [% FOREACH used_for IN [ 'export_records' ] %]
                         [% IF csv_profile.used_for == used_for %]
-                            <option value="[% used_for %]" selected="selected">[% PROCESS used_for_description used_for_code = used_for %]</option>
+                            <option value="[% used_for | html %]" selected="selected">[% PROCESS used_for_description used_for_code = used_for %]</option>
                         [% ELSE %]
-                            <option value="[% used_for %]">[% PROCESS used_for_description used_for_code = used_for %]</option>
+                            <option value="[% used_for | html %]">[% PROCESS used_for_description used_for_code = used_for %]</option>
                         [% END %]
                         [% END %]
                     </select>
@@ -182,9 +183,9 @@
                     <select name="encoding" id="encoding">
                         [% FOREACH encoding IN encodings %]
                             [% IF csv_profile.encoding == encoding OR NOT csv_profile AND encoding == 'utf8' %]
-                                <option selected="selected">[% encoding %]</option>
+                                <option selected="selected">[% encoding | html %]</option>
                             [% ELSE %]
-                                <option>[% encoding %]</option>
+                                <option>[% encoding | html %]</option>
                             [% END %]
                         [% END %]
                     </select>
@@ -192,7 +193,7 @@
 
                 <li class="marc_specific">
                     <label for="marc_content" class="required">Profile MARC fields: </label>
-                    <textarea cols="50" rows="2" name="marc_content" id="marc_content">[% csv_profile.content %]</textarea>
+                    <textarea cols="50" rows="2" name="marc_content" id="marc_content">[% csv_profile.content | html %]</textarea>
                     <span class="required">Required</span>
                     <p>You have to define which fields or subfields you want to export, separated by pipes.</p>
                     <p>You can also use your own headers (instead of the ones from Koha) by prefixing the field number with an header, followed by the equal sign.</p>
@@ -202,7 +203,7 @@
 
                 <li class="sql_specific">
                     <label for="late_issues_content" class="required">Profile SQL fields: </label>
-                    <textarea cols="50" rows="2" name="sql_content" id="sql_content">[% csv_profile.content %]</textarea>
+                    <textarea cols="50" rows="2" name="sql_content" id="sql_content">[% csv_profile.content | html %]</textarea>
                     <p>You have to define which fields you want to export, separated by pipes.</p>
                     <p>You can also use your own headers (instead of the ones from Koha) by prefixing the field name with an header, followed by the equal sign.</p>
                     <p>Example: Name=subscription.name|Title=subscription.title|Issue number=serial.serialseq</p>
@@ -224,7 +225,7 @@
             <h3>Delete CSV Profile "[% csv_profile.profile | html %]?"</h3>
             <form action="/cgi-bin/koha/tools/csv-profiles.pl" method="post">
                 <input type="hidden" name="op" value="delete_confirmed" />
-                <input type="hidden" name="export_format_id" value="[% csv_profile.export_format_id %]" />
+                <input type="hidden" name="export_format_id" value="[% csv_profile.export_format_id | html %]" />
                 <input type="submit" class="approve" value="Yes, delete" />
             </form>
             <form action="/cgi-bin/koha/tools/csv-profiles.pl" method="get">
@@ -259,16 +260,16 @@
             <tbody>
                 [% FOREACH csv_profile IN csv_profiles %]
                 <tr>
-                    <td>[% csv_profile.export_format_id %]</td>
-                    <td>[% csv_profile.profile |html %]</td>
-                    <td>[% csv_profile.description |html %]</td>
-                    <td>[% csv_profile.content |html %]</td>
-                    <td>[% csv_profile.csv_separator %]</td>
+                    <td>[% csv_profile.export_format_id | html %]</td>
+                    <td>[% csv_profile.profile | html %]</td>
+                    <td>[% csv_profile.description | html %]</td>
+                    <td>[% csv_profile.content | html %]</td>
+                    <td>[% csv_profile.csv_separator | html %]</td>
                     <td>[% PROCESS type_description type_code = csv_profile.type %]</td>
                     <td>[% PROCESS used_for_description used_for_code = csv_profile.used_for %]</td>
                     <td class="actions">
-                        <a href="/cgi-bin/koha/tools/csv-profiles.pl?op=add_form&amp;export_format_id=[% csv_profile.export_format_id %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                        <a href="/cgi-bin/koha/tools/csv-profiles.pl?op=delete_confirm&amp;export_format_id=[% csv_profile.export_format_id %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
+                        <a href="/cgi-bin/koha/tools/csv-profiles.pl?op=add_form&amp;export_format_id=[% csv_profile.export_format_id | html %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+                        <a href="/cgi-bin/koha/tools/csv-profiles.pl?op=delete_confirm&amp;export_format_id=[% csv_profile.export_format_id | html %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
                     </td>
                 </tr>
                 [% END %]
@@ -287,7 +288,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     <script type="text/javascript">
         function reloadPage(p) {
             var id = p.value;

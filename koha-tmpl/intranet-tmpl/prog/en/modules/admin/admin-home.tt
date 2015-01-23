@@ -23,7 +23,7 @@
                     <h4><a href="/cgi-bin/koha/admin/preferences.pl">Global system preferences</a></h4>
                     <p>Manage global system preferences like MARC flavor, date format, administrator email, and templates.</p>
                     <input type="hidden" name="op" value="search" />
-                    <input type="text" name="searchfield" value="[% searchfield %]" />
+                    <input type="text" name="searchfield" value="[% searchfield | html %]" />
                     <input type="submit" name="ok" class="submit" value="Search" />
                 </fieldset>
                 </form>

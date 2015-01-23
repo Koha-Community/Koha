@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -11,13 +12,13 @@
 [% END %]
 
 <title>Koha &rsaquo; Administration &rsaquo; Z39.50/SRU servers
-[% IF op == 'edit' %] &rsaquo; Modify [% PROCESS ServerType %] server [% server.servername %][% END %]
+[% IF op == 'edit' %] &rsaquo; Modify [% PROCESS ServerType %] server [% server.servername | html %][% END %]
 [% IF op ==  'add' %] &rsaquo; New [% PROCESS ServerType %] server[% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 [% IF op == 'list' %]
-    [% Asset.css("css/datatables.css") %]
+    [% Asset.css("css/datatables.css") | $raw %]
 [% END %]
 
 </head>
@@ -28,7 +29,7 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
 <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50/SRU servers</a>
-[% IF op == 'edit' %]&rsaquo; Modify [% PROCESS ServerType %] server [% server.servername %][% END %]
+[% IF op == 'edit' %]&rsaquo; Modify [% PROCESS ServerType %] server [% server.servername | html %][% END %]
 [% IF op ==  'add' %]&rsaquo; New [% PROCESS ServerType %] server[% END %]
 </div>
 
@@ -38,22 +39,22 @@
 <div class="yui-b">
 
 [% IF msg_deleted %]
-    <div class="dialog alert">Z39.50/SRU server deleted ([% msg_add %])</div>
+    <div class="dialog alert">Z39.50/SRU server deleted ([% msg_add | html %])</div>
 [% ELSIF msg_updated %]
-    <div class="dialog message">Z39.50/SRU server updated ([% msg_add %])</div>
+    <div class="dialog message">Z39.50/SRU server updated ([% msg_add | html %])</div>
 [% ELSIF msg_added %]
-    <div class="dialog message">Z39.50/SRU server added ([% msg_add %])</div>
+    <div class="dialog message">Z39.50/SRU server added ([% msg_add | html %])</div>
 [% ELSIF msg_notfound %]
-    <div class="dialog alert">Error: Server with id [% msg_add %] not found</div>
+    <div class="dialog alert">Error: Server with id [% msg_add | html %] not found</div>
 [% END %]
 
 [% IF ( add_form ) %]
-    <form action="[% script_name %]" name="Aform" method="post" id="serverentry">
+    <form action="[% script_name | html %]" name="Aform" method="post" id="serverentry">
         <input type="hidden" name="op" value="add_validated" />
-        <input type="hidden" name="servertype" value="[% server.servertype||type||'zed' %]"/>
+        <input type="hidden" name="servertype" value="[% server.servertype||type||'zed' | html %]"/>
         [% IF op == 'edit' %]
             <h1>Modify [% PROCESS ServerType %] server</h1>
-            <input type="hidden" name="id" value="[% server.id %]" />
+            <input type="hidden" name="id" value="[% server.id | html %]" />
         [% ELSE %]
             <h1>New [% PROCESS ServerType %] server</h1>
         [% END %]
@@ -63,18 +64,18 @@
             <input type="text" name="servername" id="servername" size="65" maxlength="100" value="[% server.servername | html %]" required="required" /> <span class="required">Required</span>
         </li>
 
-        <li><label for="host" class="required">Hostname: </label> <input type="text" name="host" id="host" size="30" value="[% server.host %]" required="required" /> <span class="required">Required</span>
+        <li><label for="host" class="required">Hostname: </label> <input type="text" name="host" id="host" size="30" value="[% server.host | html %]" required="required" /> <span class="required">Required</span>
             [% IF (server.servertype||type) == 'sru' %]
                 <div class="hint">Includes the domain part, but the path part of the URL should go into Database.</div>
             [% END %]
         </li>
-        <li><label for="port" class="required">Port: </label> <input type="text" name="port" id="port" size="5" value="[% server.port %]" required="required" /> <span class="required">Required</span>
+        <li><label for="port" class="required">Port: </label> <input type="text" name="port" id="port" size="5" value="[% server.port | html %]" required="required" /> <span class="required">Required</span>
         </li>
-        <li><label for="db" class="required">Database: </label> <input type="text" name="db" id="db" value="[% server.db %]" required="required" /> <span class="required">Required</span>
+        <li><label for="db" class="required">Database: </label> <input type="text" name="db" id="db" value="[% server.db | html %]" required="required" /> <span class="required">Required</span>
         </li>
-        <li><label for="userid">Userid: </label> <input type="text" name="userid" id="userid" value="[% server.userid %]" />
+        <li><label for="userid">Userid: </label> <input type="text" name="userid" id="userid" value="[% server.userid | html %]" />
         </li>
-        <li><label for="password">Password: </label> <input type="text" name="password" id="password" value="[% server.password %]" />
+        <li><label for="password">Password: </label> <input type="text" name="password" id="password" value="[% server.password | html %]" />
         </li>
         <li><label for="checked">Preselected (searched by default): </label>
         [% IF ( server.checked ) %]
@@ -83,7 +84,7 @@
             <input type="checkbox" name="checked" id="checked" value="1" />
         [% END %]
         </li>
-        <li><label for="rank">Rank (display order): </label> <input type="text" name="rank" id="rank" size="4" value="[% server.rank %]" />
+        <li><label for="rank">Rank (display order): </label> <input type="text" name="rank" id="rank" size="4" value="[% server.rank | html %]" />
         </li>
 
         <li><label for="syntax">Syntax (z3950 can send<br /> records in various format. Choose one): </label>
@@ -110,13 +111,13 @@
         <li><label for="encoding">Encoding (z3950 can send<br /> records in various encodings. Choose one): </label>
         <select name="encoding" id="encoding">
             [% FOREACH enc IN [ 'utf8' 'EUC-KR' 'ISO_5426' 'ISO_6937' 'ISO_8859-1' 'MARC-8' ] %]
-                <option value="[% enc %]">[% enc %]</option>
+                <option value="[% enc | html %]">[% enc | html %]</option>
             [% END %]
         </select>
         </li>
 
         <li><label for="timeout">Timeout (0 its like not set): </label>
-        <input type="text" name="timeout" id="timeout" size="4" value="[% server.timeout %]" /> seconds
+        <input type="text" name="timeout" id="timeout" size="4" value="[% server.timeout | html %]" /> seconds
         </li>
         <li><label for="recordtype">Record type: </label>
         <select name="recordtype" id="recordtype">
@@ -127,18 +128,18 @@
         [% IF (server.servertype||type) == 'sru' %]
         <li>
         <label for="sru_options">Additional SRU options: </label>
-        <input type="text" name="sru_options" id="sru_options" size="50" value="[% server.sru_options %]"/>
+        <input type="text" name="sru_options" id="sru_options" size="50" value="[% server.sru_options | html %]"/>
         <div class="hint">Separate options by commas. Example: sru=get,sru_version=1.1. See also http://www.indexdata.com/yaz/doc/zoom.html.</div>
         </li>
         <li>
         <label for="sru_fields">SRU Search fields mapping: </label>
-        <input type="hidden" name="sru_fields" id="sru_fields" value="[% FILTER html %][% server.sru_fields %][% END %]" />
-            <input type="text" name="show_sru_fields" id="show_sru_fields" size="100" value="[% FILTER html %][% server.sru_fields %][% END %]" disabled="disabled" /> <input type="button" id="modify_sru_fields" value="Modify" />
+        <input type="hidden" name="sru_fields" id="sru_fields" value="[% server.sru_fields | html %]" />
+            <input type="text" name="show_sru_fields" id="show_sru_fields" size="100" value="[% server.sru_fields | html %]" disabled="disabled" /> <input type="button" id="modify_sru_fields" value="Modify" />
         </li>
         [% END %]
         <li>
         <label for="add_xslt">XSLT File(s) for transforming results: </label>
-        <input type="text" name="add_xslt" id="add_xslt" size="100" value="[% server.add_xslt %]"/>
+        <input type="text" name="add_xslt" id="add_xslt" size="100" value="[% server.add_xslt | html %]"/>
         <div class="hint">Separate multiple filenames by commas.</div>
         </li>
 
@@ -156,9 +157,9 @@
     </div>
     <h3>Z39.50/SRU servers administration</h3>
     [% IF id %]
-        You searched for record [% id %]
+        You searched for record [% id | html %]
     [% ELSIF searchfield %]
-        You searched for [% searchfield |html %]
+        You searched for [% searchfield | html %]
     [% END %]
     <table id="serverst">
         <thead><tr><th>Target</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Preselected</th><th>Rank</th><th>Syntax</th><th>Encoding</th><th>Timeout</th><th>Record type</th><th></th>
@@ -166,8 +167,8 @@
         <tbody>
         [% FOREACH loo IN loop %]
             <tr>
-            <td><a href="/cgi-bin/koha/admin/z3950servers.pl?op=edit&amp;id=[% loo.id %]">[% loo.servername %]</a></td><td>[% loo.host %]:[% loo.port %]</td><td>[% loo.db %]</td><td>[% loo.userid %]</td><td>[% IF loo.password %]########[% END %]</td><td>[% IF ( loo.checked ) %]Yes[% ELSE %]No[% END %]</td><td>[% loo.rank %]</td>
-            <td>[% loo.syntax %]</td><td>[% loo.encoding %]</td><td>[% loo.timeout %]</td>
+            <td><a href="/cgi-bin/koha/admin/z3950servers.pl?op=edit&amp;id=[% loo.id | html %]">[% loo.servername | html %]</a></td><td>[% loo.host | html %]:[% loo.port | html %]</td><td>[% loo.db | html %]</td><td>[% loo.userid | html %]</td><td>[% IF loo.password %]########[% END %]</td><td>[% IF ( loo.checked ) %]Yes[% ELSE %]No[% END %]</td><td>[% loo.rank | html %]</td>
+            <td>[% loo.syntax | html %]</td><td>[% loo.encoding | html %]</td><td>[% loo.timeout | html %]</td>
             <td>[% IF ( loo.recordtype == 'biblio' )  %]
                 <span>Bibliographic</span>
                 [% ELSIF ( loo.recordtype == 'authority' ) %]
@@ -176,13 +177,13 @@
             </td>
             <td>
                 <div class="dropdown">
-                    <a class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id %]" role="button" data-toggle="dropdown" href="#">
+                    <a class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-toggle="dropdown" href="#">
                         Actions <b class="caret"></b>
                     </a>
-                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id %]">
-                        <li><a href="/cgi-bin/koha/admin/z3950servers.pl?op=edit&amp;id=[% loo.id %]"><i class="fa fa-pencil"></i> Edit</a></li>
-                        <li><a href="/cgi-bin/koha/admin/z3950servers.pl?op=add&amp;id=[% loo.id %]"><i class="fa fa-copy"></i> Copy</a></li>
-                        <li><a href="/cgi-bin/koha/admin/z3950servers.pl?op=delete_confirmed&amp;id=[% loo.id %]" class="delete" data-servername="[% loo.servername %]"><i class="fa fa-trash"></i> Delete</a></li>
+                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
+                        <li><a href="/cgi-bin/koha/admin/z3950servers.pl?op=edit&amp;id=[% loo.id | html %]"><i class="fa fa-pencil"></i> Edit</a></li>
+                        <li><a href="/cgi-bin/koha/admin/z3950servers.pl?op=add&amp;id=[% loo.id | html %]"><i class="fa fa-copy"></i> Copy</a></li>
+                        <li><a href="/cgi-bin/koha/admin/z3950servers.pl?op=delete_confirmed&amp;id=[% loo.id | html %]" class="delete" data-servername="[% loo.servername | html %]"><i class="fa fa-trash"></i> Delete</a></li>
                     </ul>
                 </div>
             </td>
@@ -200,7 +201,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
     [% IF op == 'list' %]
         [% INCLUDE 'datatables.inc' %]
     [% END %]
@@ -210,9 +211,9 @@
             $(document).ready(function(){
                 // Update selects for syntax, encoding and recordtype
                 [% IF server %]
-                    $("#syntax").val('[% server.syntax %]');
-                    $("#encoding").val('[% server.encoding %]');
-                    $("#recordtype").val('[% server.recordtype %]');
+                    $("#syntax").val('[% server.syntax | html %]');
+                    $("#encoding").val('[% server.encoding | html %]');
+                    $("#recordtype").val('[% server.recordtype | html %]');
                 [% END %]
                 $( "#serverentry" ).validate({
                     rules: {

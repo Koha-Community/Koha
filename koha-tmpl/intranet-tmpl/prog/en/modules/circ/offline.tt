@@ -1,13 +1,14 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 <!DOCTYPE html>
 [% IF (AllowOfflineCirculation) %]
 [% SET manifestattr = 'manifest="/cgi-bin/koha/circ/offline-mf.pl"' %]
 [% END %]
-[% IF ( bidi && AllowOfflineCirculation ) %]<html lang="[% lang %]" dir="[% bidi %]" manifest="/cgi-bin/koha/circ/offline-mf.pl">
-[% ELSIF ( bidi ) %]<html lang="[% lang %]" dir="[% bidi %]">
-[% ELSIF ( AllowOfflineCirculation ) %]<html lang="[% lang %]" manifest="/cgi-bin/koha/circ/offline-mf.pl">
-[% ELSE %]<html lang="[% lang %]">[% END %]
+[% IF ( bidi && AllowOfflineCirculation ) %]<html lang="[% lang | html %]" dir="[% bidi | html %]" manifest="/cgi-bin/koha/circ/offline-mf.pl">
+[% ELSIF ( bidi ) %]<html lang="[% lang | html %]" dir="[% bidi | html %]">
+[% ELSIF ( AllowOfflineCirculation ) %]<html lang="[% lang | html %]" manifest="/cgi-bin/koha/circ/offline-mf.pl">
+[% ELSE %]<html lang="[% lang | html %]">[% END %]
 <head>
 <title>Koha &rsaquo; Circulation</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -26,8 +27,8 @@
 
     <div id="bd">
         <div id="yui-main">
-            <audio id="alert_sound" src="[% interface %]/prog/sound/critical.ogg" preload="auto"></audio>
-            <audio id="success_sound" src="[% interface %]/prog/sound/beep.ogg" preload="auto"></audio>
+            <audio id="alert_sound" src="[% interface | html %]/prog/sound/critical.ogg" preload="auto"></audio>
+            <audio id="success_sound" src="[% interface | html %]/prog/sound/beep.ogg" preload="auto"></audio>
 
             <div id="alerts" class="yui-b">
             </div>
@@ -130,7 +131,7 @@
 
                             <div class="date-select">
                                 <div class="hint">Specify due date [% INCLUDE 'date-format.inc' %]: </div>
-                                <input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec %]" />
+                                <input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec | html %]" />
                                 <label for="stickyduedate"> Remember for session:</label>
                                 <input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" checked="checked" />
                                 <input type="button" class="action" id="cleardate" value="Clear" name="cleardate" onclick="this.checked = false; this.form.duedatespec.value = ''; this.form.stickyduedate.checked = false; this.form.barcode.focus(); return false;" />
@@ -217,9 +218,9 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.indexeddb.js") %]
-    [% Asset.js("js/offlinecirc.js") %]
-    [% Asset.js("lib/jquery/plugins/jquery-ui-timepicker-addon.min.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.indexeddb.js") | $raw %]
+    [% Asset.js("js/offlinecirc.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/jquery-ui-timepicker-addon.min.js") | $raw %]
     [% INCLUDE 'timepicker.inc' %]
     <script type="text/javascript">
         var ALERT_SUCCESSFUL_CHECKIN = _("Checked in item.");
@@ -308,8 +309,8 @@
         }
 
         function synchronize() {
-            kohadb.saveSetting("userid", "[% loggedinusername %]");
-            kohadb.saveSetting("branchcode", "[% LoginBranchcode %]");
+            kohadb.saveSetting("userid", "[% loggedinusername | html %]");
+            kohadb.saveSetting("branchcode", "[% LoginBranchcode | html %]");
             showSyncInfo();
             [% UNLESS (AllowOfflineCirculation) %]
                 reloadRecords();
@@ -545,7 +546,7 @@
                 if (new Date(patron.dateexpiry) < new Date()) {
                     alerts.push(ALERT_PATRON_EXPIRED.format($.datepicker.formatDate(dateformat, new Date(patron.dateexpiry))));
                 }
-                if (parseInt(patron.fine) > [% maxoutstanding %]) {
+                if (parseInt(patron.fine) > [% maxoutstanding | html %]) {
                     alerts.push(ALERT_PATRON_FINE_OVER_LIMIT.format(patron.fine));
                 } else if (parseInt(patron.fine) > 0) {
                     alerts.push(ALERT_PATRON_FINE.format(patron.fine));

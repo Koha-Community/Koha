@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Branches %]
 <div id="header" class="navbar navbar-default">
     <div class="container-fluid">
@@ -16,7 +17,7 @@
                     <a href="#" id="cartmenulink">Cart<span id="basketcount"></span></a>
                 </li>
             [% END %]
-            [% IntranetNav %]
+            [% IntranetNav | $raw %]
             <li class="dropdown">
                 <a href="/cgi-bin/koha/mainpage.pl" class="dropdown-toggle" data-toggle="dropdown">More <b class="caret"></b></a>
                 <ul class="dropdown-menu dropdown-menu-right">
@@ -58,19 +59,19 @@
                         <i class="fa fa-user"></i>
                     </span>
                     <span id="logged-in-info-full">
-                        <span class="loggedinusername">[% loggedinusername %]</span>
+                        <span class="loggedinusername">[% loggedinusername | html %]</span>
                         <span class="separator">|</span>
                         [% IF ( AutoLocation ) %]
                             <brand>
-                                [% LoginBranchname %]
+                                [% LoginBranchname | html %]
                             </brand>
                         [% ELSE %]
                             <strong>
                                 [% IF ( LoginBranchname == 'NO_LIBRARY_SET' ) %]
                                     NO LIBRARY SET
                                 [% ELSE %]
-                                    <span class="logged-in-branch-name">[% LoginBranchname %]</span>
-                                    <span class="logged-in-branch-code content_hidden">[% Branches.GetLoggedInBranchcode %]</span>
+                                    <span class="logged-in-branch-name">[% LoginBranchname | html %]</span>
+                                    <span class="logged-in-branch-code content_hidden">[% Branches.GetLoggedInBranchcode | html %]</span>
                                 [% END %]
                             </strong>
                         [% END %]
@@ -81,20 +82,20 @@
 
                     <li class="loggedin-menu-label">
                         Logged in as:<br />
-                        <span class="loggedinusername">[% loggedinusername %]</span>
+                        <span class="loggedinusername">[% loggedinusername | html %]</span>
                     </li>
                     <li class="loggedin-menu-label">
                         [% IF ( AutoLocation ) %]
                             <brand>
-                                [% LoginBranchname %]
+                                [% LoginBranchname | html %]
                             </brand>
                         [% ELSE %]
                             [% IF ( LoginBranchname == 'NO_LIBRARY_SET' ) %]
                                 NO LIBRARY SET
                             [% ELSE %]
                                 Location: <br />
-                                <span class="logged-in-branch-name">[% LoginBranchname %]</span>
-                                <span class="logged-in-branch-code content_hidden">[% Branches.GetLoggedInBranchcode %]</span>
+                                <span class="logged-in-branch-name">[% LoginBranchname | html %]</span>
+                                <span class="logged-in-branch-code content_hidden">[% Branches.GetLoggedInBranchcode | html %]</span>
                             [% END %]
                         [% END %]
                     </li>
@@ -118,10 +119,10 @@
                     [% END %]
                     [% IF loggedinusernumber %]
                         <li class ="toplinks-myaccount">
-                            <a class="toplinks" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loggedinusernumber %]">My account</a>
+                            <a class="toplinks" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loggedinusernumber | html %]">My account</a>
                         </li>
                         <li class="toplinks-mycheckouts">
-                            <a class="toplinks" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% loggedinusernumber %]">My checkouts</a>
+                            <a class="toplinks" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% loggedinusernumber | html %]">My checkouts</a>
                         </li>
                     [% END %]
                     <li>

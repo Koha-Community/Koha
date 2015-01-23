@@ -1,13 +1,13 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Error [% errno %]</title>
+<title>Koha &rsaquo; Error [% errno | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
-<body id="err_[% errno %]" class="err">
+<body id="err_[% errno | html %]" class="err">
 
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Error [% errno %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Error [% errno | html %]</div>
 
 <div id="doc" class="yui-t7">
 
@@ -15,7 +15,7 @@
         <div id="yui-main">
         <div class="yui-b"><div class="yui-g">
     <h1>An error has occurred!</h1>
-    <h2><em>Error [% errno %]</em></h2>
+    <h2><em>Error [% errno | html %]</em></h2>
         <h3>This message may have been caused by any of the following reasons:</h3>
         <ul style="padding-bottom: 0.5em;">
             <li>You made use of an external link to an item that is no longer available</li>
@@ -26,7 +26,7 @@
         <h3>What's next?</h3>
         <ul style="margin-bottom: 1em; padding-bottom: 1em; border-bottom: 1px solid #CCC;">
             <li>Use top menu bar to navigate to another part of Koha.</li>
-            <li>To report a broken link or any other issue, please contact the Koha Administrator. <a href="mailto:[% admin %]">Send email</a></li>
+            <li>To report a broken link or any other issue, please contact the Koha Administrator. <a href="mailto:[% admin | html %]">Send email</a></li>
     </ul>
 </div>
 

@@ -3,13 +3,13 @@
 <script type="text/javascript">
     var pwd_title = "";
     var pattern_title = "";
-    var new_password_node_name = "[% new_password %]";
+    var new_password_node_name = "[% new_password | html %]";
     [% IF Koha.Preference('RequireStrongPassword') %]
-        pwd_title = _("Password must contain at least %s characters, including UPPERCASE, lowercase and numbers").format([% minPasswordLength %]);
-        pattern_regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{[% minPasswordLength %],}/;
+        pwd_title = _("Password must contain at least %s characters, including UPPERCASE, lowercase and numbers").format([% minPasswordLength | html %]);
+        pattern_regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{[% minPasswordLength | html %],}/;
     [% ELSIF minPasswordLength %]
-        pwd_title = _("Password must contain at least %s characters").format([% minPasswordLength %]);
-        pattern_regex = /.{[% minPasswordLength %],}/;
+        pwd_title = _("Password must contain at least %s characters").format([% minPasswordLength | html %]);
+        pattern_regex = /.{[% minPasswordLength | html %],}/;
     [% END %]
     jQuery.validator.addMethod("password_strong", function(value, element){
         return this.optional(element) || value == '****' || pattern_regex.test(value);

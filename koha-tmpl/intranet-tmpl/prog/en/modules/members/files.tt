@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Branches %]
@@ -44,11 +45,11 @@
                     <tbody>
                         [% FOREACH f IN files %]
                             <tr>
-                                 <td><a href="?borrowernumber=[% patron.borrowernumber %]&amp;op=download&amp;file_id=[% f.file_id %]">[% f.file_name %]</a></td>
-                                 <td>[% f.file_type %]</td>
-                                 <td>[% f.file_description %]</td>
+                                 <td><a href="?borrowernumber=[% patron.borrowernumber | html %]&amp;op=download&amp;file_id=[% f.file_id | html %]">[% f.file_name | html %]</a></td>
+                                 <td>[% f.file_type | html %]</td>
+                                 <td>[% f.file_description | html %]</td>
                                  <td>[% f.date_uploaded | $KohaDates %]</td>
-                                 [% IF CAN_user_borrowers_edit_borrowers %]<td><a class="btn btn-default btn-xs confirmdelete" href="?borrowernumber=[% patron.borrowernumber %]&amp;op=delete&amp;file_id=[% f.file_id %]"><i class="fa fa-trash"></i> Delete</a></td>[% END %]
+                                 [% IF CAN_user_borrowers_edit_borrowers %]<td><a class="btn btn-default btn-xs confirmdelete" href="?borrowernumber=[% patron.borrowernumber | html %]&amp;op=delete&amp;file_id=[% f.file_id | html %]"><i class="fa fa-trash"></i> Delete</a></td>[% END %]
                             </tr>
                         [% END %]
                     </tbody>
@@ -64,7 +65,7 @@
                         <legend>Upload new file</legend>
                         <ol>
                         <li><input type="hidden" name="op" value="upload" />
-                        <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
+                        <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                         <input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
 
                         <label for="description">Description:</label>
@@ -87,7 +88,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
     <script type="text/javascript">
         $(document).ready(function(){
             $(".confirmdelete").on("click", function(){

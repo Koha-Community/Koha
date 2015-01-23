@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your search IDREF for ppn [% unimarc3 %]</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your search IDREF for ppn [% unimarc3 | html %]</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
@@ -23,7 +23,7 @@
   [% ELSE %]
     [% FOREACH role IN content %]
       <div>
-        <h2 class="role" title="Click to expand this role">[% role.role_name %] ([% role.count %])</h2>
+        <h2 class="role" title="Click to expand this role">[% role.role_name | html %] ([% role.count | html %])</h2>
           <div class="docs">
             <table>
               <thead>
@@ -36,9 +36,9 @@
               <tbody>
                 [% FOREACH doc IN role.docs %]
                   <tr>
-                    <td>[% doc.citation %]</td>
-                    <td><a href="/cgi-bin/koha/opac-search.pl?q=ident:[% doc.ppn %]" target="_blank">Koha</a></td>
-                    <td><a href="http://www.sudoc.fr/[% doc.ppn %]" target="_blank" rel="noreferrer">Sudoc</a></td>
+                    <td>[% doc.citation | html %]</td>
+                    <td><a href="/cgi-bin/koha/opac-search.pl?q=ident:[% doc.ppn | html %]" target="_blank">Koha</a></td>
+                    <td><a href="http://www.sudoc.fr/[% doc.ppn | html %]" target="_blank" rel="noreferrer">Sudoc</a></td>
                   </tr>
                 [% END %]
               </tbody>

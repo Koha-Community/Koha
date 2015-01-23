@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- TEMPLATE FILE: [% template.name.split('/').last %] -->
+<!-- TEMPLATE FILE: [% template.name.split('/').last | html %] -->
 
 [% USE Koha %]
 [% IF Koha.Preference('DumpTemplateVarsOpac') %]
@@ -9,7 +9,7 @@
         <!--
         [% FILTER replace('<!--', '<!- -') %]
             [% FILTER replace('-->', '- ->') %]
-                [% Dumper.dump( Stash.stash() ) %]
+                [% Dumper.dump( Stash.stash() ) | html %]
             [% END %]
         [% END %]
         -->
@@ -21,5 +21,5 @@
     [% END %]
 [% END %]
 
-[% IF ( bidi ) %]<html lang="[% lang %]" dir="[% bidi %]" class="no-js">[% ELSE %]<html lang="[% lang %]" class="no-js">[% END %]
+[% IF ( bidi ) %]<html lang="[% lang | html %]" dir="[% bidi | html %]" class="no-js">[% ELSE %]<html lang="[% lang | html %]" class="no-js">[% END %]
 <head>

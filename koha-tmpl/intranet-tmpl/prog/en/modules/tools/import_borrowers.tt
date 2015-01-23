@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
@@ -29,14 +30,14 @@
 [% IF ( uploadborrowers ) %]
     <h5>Import results :</h5>
     <ul>
-        <li>[% imported %] imported records [% IF ( lastimported ) %](last was [% lastimported %])[% END %]</li>
+        <li>[% imported | html %] imported records [% IF ( lastimported ) %](last was [% lastimported | html %])[% END %]</li>
         [% IF imported and patronlistname %]
-            <li>Patronlist with imported patrons: [% patronlistname %]</li>
+            <li>Patronlist with imported patrons: [% patronlistname | html %]</li>
         [% END %]
-        <li>[% overwritten %] overwritten [% IF ( lastoverwritten ) %](last was [% lastoverwritten %])[% END %]</li>
-        <li>[% alreadyindb %] not imported because already in borrowers table and overwrite disabled [% IF ( lastalreadyindb ) %](last was [% lastalreadyindb %])[% END %]</li>
-        <li>[% invalid %] not imported because they are not in the expected format [% IF ( lastinvalid ) %](last was [% lastinvalid %])[% END %]</li>
-        <li>[% total %] records parsed</li>
+        <li>[% overwritten | html %] overwritten [% IF ( lastoverwritten ) %](last was [% lastoverwritten | html %])[% END %]</li>
+        <li>[% alreadyindb | html %] not imported because already in borrowers table and overwrite disabled [% IF ( lastalreadyindb ) %](last was [% lastalreadyindb | html %])[% END %]</li>
+        <li>[% invalid | html %] not imported because they are not in the expected format [% IF ( lastinvalid ) %](last was [% lastinvalid | html %])[% END %]</li>
+        <li>[% total | html %] records parsed</li>
         <li><a href="/cgi-bin/koha/tools/tools-home.pl">Back to Tools</a></li>
     </ul>
 
@@ -49,15 +50,15 @@
                     [% FOREACH f IN feedback %]
                         <li>
                             [% IF ( f.filename ) %]
-                                Parsing upload file <span class="filename">[% f.filename %]</span>
+                                Parsing upload file <span class="filename">[% f.filename | html %]</span>
                             [% ELSIF ( f.backend ) %]
-                                Upload parsed using [% f.backend %]
+                                Upload parsed using [% f.backend | html %]
                             [% ELSIF ( f.headerrow ) %]
-                                These fields found: [% f.value %]
+                                These fields found: [% f.value | html %]
                             [% ELSIF ( f.already_in_db ) %]
-                                Patron already in database: [% f.value %]
+                                Patron already in database: [% f.value | html %]
                             [% ELSE %]
-                                [% f.name %] : [% f.value %]
+                                [% f.name | html %] : [% f.value | html %]
                             [% END %]
                         </li>
                     [% END %]
@@ -76,40 +77,40 @@
 
                     [% FOREACH missing_critical IN e.missing_criticals %]
                         <li class="line_error">
-                            Line <span class="linenumber">[% missing_critical.line %]</span>
+                            Line <span class="linenumber">[% missing_critical.line | html %]</span>
 
                             [% IF ( missing_critical.badparse ) %]
                                 could not be parsed!
                             [% ELSIF ( missing_critical.bad_date ) %]
-                                has &quot;[% missing_critical.key %]&quot; in unrecognized format: &quot;[% missing_critical.value %]&quot;
+                                has &quot;[% missing_critical.key | html %]&quot; in unrecognized format: &quot;[% missing_critical.value | html %]&quot;
                             [% ELSE %]
-                                Critical field &quot;[% missing_critical.key %]&quot;
+                                Critical field &quot;[% missing_critical.key | html %]&quot;
 
                                 [% IF ( missing_critical.branch_map ) %]
-                                    has unrecognized value &quot;[% missing_critical.value %]&quot;
+                                    has unrecognized value &quot;[% missing_critical.value | html %]&quot;
                                 [% ELSIF ( missing_critical.category_map ) %]
-                                    has unrecognized value &quot;[% missing_critical.value %]&quot;
+                                    has unrecognized value &quot;[% missing_critical.value | html %]&quot;
                                 [% ELSE %]
                                     missing
                                 [% END %]
 
-                                (borrowernumber: [% missing_critical.borrowernumber %]; surname: [% missing_critical.surname %]).
+                                (borrowernumber: [% missing_critical.borrowernumber | html %]; surname: [% missing_critical.surname | html %]).
                             [% END %]
 
                             <br/>
-                            <code>[% missing_critical.lineraw %]</code>
+                            <code>[% missing_critical.lineraw | html %]</code>
                         </li>
                     [% END %]
 
                     [% IF e.invalid_cardnumber %]
                         <li class="line_error">
-                            Cardnumber [% e.cardnumber %] is not a valid cardnumber
-                            [% IF e.borrowernumber %] (for patron with borrowernumber [% e.borrowernumber %])[% END %]
+                            Cardnumber [% e.cardnumber | html %] is not a valid cardnumber
+                            [% IF e.borrowernumber %] (for patron with borrowernumber [% e.borrowernumber | html %])[% END %]
                         </li>
                     [% END %]
                     [% IF e.duplicate_userid %]
                         <li class="line_error">
-                            Userid [% e.userid %] is already used by another patron.
+                            Userid [% e.userid | html %] is already used by another patron.
                         </li>
                     [% END %]
                 [% END %]
@@ -122,7 +123,7 @@
         <li>If a cardnumber exists in the table, you can choose whether to ignore the new one or overwrite the old one.</li>
     </ul>
 
-    <form method="post" action="[% SCRIPT_NAME %]" enctype="multipart/form-data">
+    <form method="post" action="[% SCRIPT_NAME | html %]" enctype="multipart/form-data">
         <fieldset class="rows">
             <legend>Import into the borrowers table</legend>
 
@@ -148,7 +149,7 @@
                         <option value="cardnumber">Cardnumber</option>
                         <option value="userid">Username</option>
                         [% FOREACH matchpoint IN matchpoints %]
-                            <option value="[% matchpoint.code %]">[% matchpoint.description %]</option>
+                            <option value="[% matchpoint.code | html %]">[% matchpoint.description | html %]</option>
                         [% END %]
                     </select>
                 </li>
@@ -164,31 +165,31 @@
                     [% SWITCH borrower_field.field %]
                     [% CASE 'branchcode' %]
                         <li>
-                            <label class="description" for="branchcode">[% borrower_field.description %]: </label>
+                            <label class="description" for="branchcode">[% borrower_field.description | html %]: </label>
                             <select id="branchcode" name="branchcode">
                                 <option value="" selected="selected"></option>
                                 [% FOREACH library IN Branches.all() %]
-                                    <option value="[% library.branchcode %]">[% library.branchname %]</option>
+                                    <option value="[% library.branchcode | html %]">[% library.branchname | html %]</option>
                                 [% END %]
                             </select>
-                            <span class="field_hint">[% borrower_field.field %]</span>
+                            <span class="field_hint">[% borrower_field.field | html %]</span>
                         </li>
                     [% CASE 'categorycode' %]
                         <li>
-                            <label class="description" for="categorycode">[% borrower_field.description %]: </label>
+                            <label class="description" for="categorycode">[% borrower_field.description | html %]: </label>
                             <select id="categorycode" name="categorycode">
                                 <option value="" selected="selected"></option>
                                 [% FOREACH category IN categories %]
-                                    <option value="[% category.categorycode %]">[% category.description %]</option>
+                                    <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
                                 [% END %]
                             </select>
-                            <span class="field_hint">[% borrower_field.field %]</span>
+                            <span class="field_hint">[% borrower_field.field | html %]</span>
                         </li>
                     [% CASE %]
                         <li>
-                            <label class="description" for="[% borrower_field.field %]">[% borrower_field.description %]: </label>
-                            <input id="[% borrower_field.field %]" name="[% borrower_field.field %]" />
-                            <span class="field_hint">[% borrower_field.field %]</span>
+                            <label class="description" for="[% borrower_field.field | html %]">[% borrower_field.description | html %]: </label>
+                            <input id="[% borrower_field.field | html %]" name="[% borrower_field.field | html %]" />
+                            <span class="field_hint">[% borrower_field.field | html %]</span>
                         </li>
                     [% END %]
                 [% END %]
@@ -235,7 +236,7 @@
         [% END %]
 
         <fieldset class="action">
-            <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
+            <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
             <input type="submit" value="Import" />
         </fieldset>
     </form>
@@ -254,7 +255,7 @@
             OR choose which fields you want to supply from the following list:
             <ul>
                 <li>
-                    [% FOREACH columnkey IN borrower_fields %]'[% columnkey.field %]', [% END %]
+                    [% FOREACH columnkey IN borrower_fields %]'[% columnkey.field | html %]', [% END %]
                 </li>
             </ul>
         </li>
@@ -290,9 +291,9 @@ you can supply dates in ISO format (e.g., '2010-10-28').
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
     <script type="text/javascript">
         $(document).ready(function() {
             [%# Make date fields have the datepicker %]

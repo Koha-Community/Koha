@@ -41,7 +41,7 @@
             };
 
             $('form').submit(function() {
-                var field = opener.document.getElementById("[% index %]");
+                var field = opener.document.getElementById("[% index | html %]");
                 field.value = $('#findvalue').val();
 
                 window.close();

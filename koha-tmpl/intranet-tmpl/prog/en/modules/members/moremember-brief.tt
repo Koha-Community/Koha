@@ -12,14 +12,14 @@
 
             <div class="col-xs-12">
 	<h3>[% UNLESS ( I ) %]
-   [% title %] [% firstname %] [% END %] [% surname %] ([% cardnumber %])</h3>
+   [% title | html %] [% firstname | html %] [% END %] [% surname | html %] ([% cardnumber | html %])</h3>
             </div>
         </div>
         <div class="row">
             <div class="col-xs-6">
                 <div id="patron-information">
 
-     [% UNLESS ( I ) %][% IF ( othernames ) %]&ldquo;[% othernames %]&rdquo;[% END %]
+     [% UNLESS ( I ) %][% IF ( othernames ) %]&ldquo;[% othernames | html %]&rdquo;[% END %]
         <div class = "address">
             <ul>
                 [% IF Koha.Preference( 'AddressFormat' ) %]
@@ -31,24 +31,24 @@
         </div>
 	<div class="rows">
 		<ol>
-            [% IF ( phone ) %]<li><span class="label">Primary phone: </span>[% phone %]</li>[% END %]
-            [% IF ( phonepro ) %]<li><span class="label">Secondary phone: </span>[% phonepro %]</li>[% END %]
-            [% IF ( mobile ) %]<li><span class="label">Other phone: </span>[% mobile %]</li>[% END %]
-            [% IF ( fax ) %]<li><span class="label">Fax: </span>[% fax %]</li>[% END %]
-            [% IF ( email ) %]<li class="email"><span class="label">Primary email:</span><a href="mailto:[% email %]">[% email %]</a></li>[% END %]
-            [% IF ( emailpro ) %]<li class="email"><span class="label">Secondary email: </span><a href="mailto:[% emailpro %]">[% emailpro %]</a></li>[% END %]
+            [% IF ( phone ) %]<li><span class="label">Primary phone: </span>[% phone | html %]</li>[% END %]
+            [% IF ( phonepro ) %]<li><span class="label">Secondary phone: </span>[% phonepro | html %]</li>[% END %]
+            [% IF ( mobile ) %]<li><span class="label">Other phone: </span>[% mobile | html %]</li>[% END %]
+            [% IF ( fax ) %]<li><span class="label">Fax: </span>[% fax | html %]</li>[% END %]
+            [% IF ( email ) %]<li class="email"><span class="label">Primary email:</span><a href="mailto:[% email | html %]">[% email | html %]</a></li>[% END %]
+            [% IF ( emailpro ) %]<li class="email"><span class="label">Secondary email: </span><a href="mailto:[% emailpro | html %]">[% emailpro | html %]</a></li>[% END %]
             [% UNLESS ( I ) %]
-                [% IF ( inititals ) %]<li><span class="label">Initials: </span>[% initials %]</li>[% END %]
+                [% IF ( inititals ) %]<li><span class="label">Initials: </span>[% initials | html %]</li>[% END %]
                 [% IF ( dateofbirth ) %]<li><span class="label">Date of birth:</span>[% dateofbirth | $KohaDates %]</li>[% END %]
-                [% IF ( sex ) %]<li><span class="label">Gender:</span>[% IF ( sex == 'F' ) %]Female[% ELSIF ( sex == 'M' ) %]Male[% ELSE %][% sex %][% END %]</li>[% END %][% END %]
+                [% IF ( sex ) %]<li><span class="label">Gender:</span>[% IF ( sex == 'F' ) %]Female[% ELSIF ( sex == 'M' ) %]Male[% ELSE %][% sex | html %][% END %]</li>[% END %][% END %]
             [% END %]
     [% IF ( isguarantee ) %]
         [% IF ( guaranteeloop ) %]
-            <li><span class="label">Guarantees:</span><ul>[% FOREACH guaranteeloo IN guaranteeloop %]<li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guaranteeloo.borrowernumber %]">[% guaranteeloo.name %]  </a></li>[% END %]</ul></li>
+            <li><span class="label">Guarantees:</span><ul>[% FOREACH guaranteeloo IN guaranteeloop %]<li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guaranteeloo.borrowernumber | html %]">[% guaranteeloo.name | html %]  </a></li>[% END %]</ul></li>
         [% END %]
     [% ELSE %]
         [% IF ( guarantor.borrowernumber ) %]
-            <li><span class="label">Guarantor:</span><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber %]">[% guarantor.surname %], [% guarantor.firstname %]</a></li>
+            <li><span class="label">Guarantor:</span><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber | html %]">[% guarantor.surname | html %], [% guarantor.firstname | html %]</a></li>
         [% END %]
     [% END %]
 	</ol>
@@ -61,9 +61,9 @@
 	<h3>Library use</h3>
 	<div class="rows">
 	<ol>
-    <li><span class="label">Card number: </span>[% cardnumber %]</li>
-	<li><span class="label">Borrowernumber: </span> [% borrowernumber %]</li>
-    <li><span class="label">Category: </span>[% categoryname %] ([% categorycode %])</li>
+    <li><span class="label">Card number: </span>[% cardnumber | html %]</li>
+	<li><span class="label">Borrowernumber: </span> [% borrowernumber | html %]</li>
+    <li><span class="label">Category: </span>[% categoryname | html %] ([% categorycode | html %])</li>
     <li><span class="label">Registration date: </span>[% dateenrolled | $KohaDates %]</li>
     <li><span class="label">Expiration date: </span>
     [% IF ( was_renewed ) %]
@@ -72,10 +72,10 @@
             [% dateexpiry | $KohaDates %]
     [% END %]
     </li>
-    <li><span class="label">Library: </span>[% branchname %]</li>
+    <li><span class="label">Library: </span>[% branchname | html %]</li>
 
-    [% IF ( sort1 ) %]<li><span class="label">Sort field 1:</span>[% lib1 %]</li>[% END %]
-    [% IF ( sort2 ) %]<li><span class="label">Sort field 2:</span>[% lib2 %]</li>[% END %]
+    [% IF ( sort1 ) %]<li><span class="label">Sort field 1:</span>[% lib1 | html %]</li>[% END %]
+    [% IF ( sort2 ) %]<li><span class="label">Sort field 2:</span>[% lib2 | html %]</li>[% END %]
 	</ol>
 	</div>
 	</div>

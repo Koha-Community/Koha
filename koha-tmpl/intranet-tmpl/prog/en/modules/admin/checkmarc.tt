@@ -1,8 +1,9 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; MARC check
-[% IF ( total ) %] :[% total %] errors found[% ELSE %] : Configuration OK![% END %]</title>
+[% IF ( total ) %] :[% total | html %] errors found[% ELSE %] : Configuration OK![% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="admin_checkmarc" class="admin">
@@ -10,7 +11,7 @@
 [% INCLUDE 'prefs-admin-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; MARC check
-[% IF ( total ) %]: [% total %] errors found[% ELSE %] : Configuration OK![% END %]</div>
+[% IF ( total ) %]: [% total | html %] errors found[% ELSE %] : Configuration OK![% END %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -55,7 +56,7 @@
     [% IF ( itemtags ) %]
         <tr>
             <td>Item tag</td>
-            <td>There is more than 1 MARC tag related to items tab (10) : [% itemtags %]</td>
+            <td>There is more than 1 MARC tag related to items tab (10) : [% itemtags | html %]</td>
         </tr>
     [% ELSE %]
         <tr>
@@ -170,14 +171,14 @@
                     </tr>
                     [% FOREACH tab_inf IN tab_info %]
                         <tr>
-                            <td>[% tab_inf.frameworkcode %]</td>
+                            <td>[% tab_inf.frameworkcode | html %]</td>
                             [% IF ( tab_inf.frameworkcode ) %]
-                                <td>[% tab_inf.frameworktext %]</td>
+                                <td>[% tab_inf.frameworktext | html %]</td>
                             [% ELSE %]
                                 <td>Default framework</td>
                             [% END %]
-                            <td>[% tab_inf.tagfield %]</td>
-                            <td>[% tab_inf.tabs %]</td>
+                            <td>[% tab_inf.tagfield | html %]</td>
+                            <td>[% tab_inf.tabs | html %]</td>
                         </tr>
                     [% END %]
                 </table>
@@ -204,15 +205,15 @@
                     </tr>
                     [% FOREACH authtypecode_inf IN authtypecode_info %]
                         <tr>
-                            <td>[% authtypecode_inf.frameworkcode %]</td>
+                            <td>[% authtypecode_inf.frameworkcode | html %]</td>
                             [% IF ( authtypecode_inf.frameworkcode ) %]
-                                <td>[% authtypecode_inf.frameworktext %]</td>
+                                <td>[% authtypecode_inf.frameworktext | html %]</td>
                             [% ELSE %]
                                 <td>Default framework</td>
                             [% END %]
-                            <td>[% authtypecode_inf.tagfield %]</td>
-                            <td>[% authtypecode_inf.tagsubfield %]</td>
-                            <td>[% authtypecode_inf.authtypecode %]</td>
+                            <td>[% authtypecode_inf.tagfield | html %]</td>
+                            <td>[% authtypecode_inf.tagsubfield | html %]</td>
+                            <td>[% authtypecode_inf.authtypecode | html %]</td>
                         </tr>
                     [% END %]
                 </table>
@@ -238,14 +239,14 @@
                     </tr>
                     [% FOREACH mapped_perm_loc IN mapped_permanent_location %]
                         <tr>
-                            <td>[% mapped_perm_loc.frameworkcode %]</td>
+                            <td>[% mapped_perm_loc.frameworkcode | html %]</td>
                             [% IF ( mapped_perm_loc.frameworkcode ) %]
-                                <td>[% mapped_perm_loc.frameworktext %]</td>
+                                <td>[% mapped_perm_loc.frameworktext | html %]</td>
                             [% ELSE %]
                                 <td>Default framework</td>
                             [% END %]
-                            <td>[% mapped_perm_loc.tagfield %]</td>
-                            <td>[% mapped_perm_loc.tagsubfield %]</td>
+                            <td>[% mapped_perm_loc.tagfield | html %]</td>
+                            <td>[% mapped_perm_loc.tagsubfield | html %]</td>
                         </tr>
                     [% END %]
                 </table>
@@ -262,7 +263,7 @@
 [% IF ( total ) %]
     <tr>
         <td>TOTAL</td>
-        <td>You have [% total %] error(s) in your MARC configuration. Please fix them before using Koha</td>
+        <td>You have [% total | html %] error(s) in your MARC configuration. Please fix them before using Koha</td>
     </tr>
 </table>
 [% ELSE %]
@@ -280,6 +281,6 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

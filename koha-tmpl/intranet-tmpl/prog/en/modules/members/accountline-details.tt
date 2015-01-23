@@ -11,7 +11,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber %]">Account for [% INCLUDE 'patron-title.inc' %]</a> &rsaquo; Details for account line [% accountline.id %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | html %]">Account for [% INCLUDE 'patron-title.inc' %]</a> &rsaquo; Details for account line [% accountline.id | html %]</div>
 
 <div id="doc3" class="yui-t2">
 <div id="bd">
@@ -38,21 +38,21 @@
                     <tbody>
                         <tr>
                             <td>
-                                <span title="[% accountline.date %]">[% accountline.date |$KohaDates %]</span>
+                                <span title="[% accountline.date | html %]">[% accountline.date |$KohaDates %]</span>
                             </td>
                             <td>
                                 [%- INCLUDE 'accounttype.inc' account => accountline -%]
                                 [%- IF accountline.payment_type -%]
-                                    , [% AuthorisedValues.GetByCode('PAYMENT_TYPE', accountline.payment_type) %]
+                                    , [% AuthorisedValues.GetByCode('PAYMENT_TYPE', accountline.payment_type) | html %]
                                 [%- END =%]
                                 [%- IF accountline.description -%]
-                                    , [% accountline.description %]
+                                    , [% accountline.description | html %]
                                 [%- END -%]
 
                                 &nbsp;
                                 [% IF ( accountline.itemnumber ) %]
                                     [% SET biblio = accountline.item.biblio %]
-                                    <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio.biblionumber %]&amp;itemnumber=[% accountline.itemnumber %]">[% biblio.title |html %]</a>
+                                    <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio.biblionumber | html %]&amp;itemnumber=[% accountline.itemnumber | html %]">[% biblio.title | html %]</a>
                                 [% END %]
                             </td>
 
@@ -61,11 +61,11 @@
                             </td>
 
                             <td>
-                                [% accountline.amount | $Price %]
+                                [% accountline.amount | $Price | html %]
                             </td>
 
                             <td>
-                                [% accountline.amountoutstanding | $Price %]
+                                [% accountline.amountoutstanding | $Price | html %]
                             </td>
                         </tr>
                     </tbody>
@@ -106,16 +106,16 @@
                                 [% IF offset_accountline %]
                                     <tr>
                                         <td>[% offset_accountline.date | $KohaDates %]</td>
-                                        <td>[% offset_accountline.timestamp | $KohaDates with_hours => 1 %]</td>
-                                        <td>[% offset_accountline.amount | $Price %]</td>
-                                        <td>[% offset_accountline.amountoutstanding | $Price %]</td>
+                                        <td>[% offset_accountline.timestamp | $KohaDates with_hours => 1 | html %]</td>
+                                        <td>[% offset_accountline.amount | $Price | html %]</td>
+                                        <td>[% offset_accountline.amountoutstanding | $Price | html %]</td>
                                         <td>[% INCLUDE 'accounttype.inc' account => offset_accountline %]</td>
-                                        <td>[% offset_accountline.note %]</td>
-                                        <td>[% IF offset_accountline.manager_id %]<a href="moremember.pl?borrowernumber=[% offset_accountline.manager_id %]">[% offset_accountline.manager_id %]</a>[% END %]</td>
-                                        <td>[% ao.created_on | $KohaDates with_hours => 1 %]</td>
-                                        <td>[% ao.amount | $Price %]</td>
+                                        <td>[% offset_accountline.note | html %]</td>
+                                        <td>[% IF offset_accountline.manager_id %]<a href="moremember.pl?borrowernumber=[% offset_accountline.manager_id | html %]">[% offset_accountline.manager_id | html %]</a>[% END %]</td>
+                                        <td>[% ao.created_on | $KohaDates with_hours => 1 | html %]</td>
+                                        <td>[% ao.amount | $Price | html %]</td>
                                         <td>[% INCLUDE 'account_offset_type.inc' account_offset => ao %]</td>
-                                        <td><a href="accountline-details.pl?accountlines_id=[% offset_accountline.id %]" class="btn btn-default btn-xs"><i class="fa fa-list"></i> Details</a></td>
+                                        <td><a href="accountline-details.pl?accountlines_id=[% offset_accountline.id | html %]" class="btn btn-default btn-xs"><i class="fa fa-list"></i> Details</a></td>
                                     </tr>
                                 [% END %]
                             [% END %]

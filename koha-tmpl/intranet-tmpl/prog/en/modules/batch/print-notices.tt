@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-    <title>Print Notices for [% today %]</title>
+    <title>Print Notices for [% today | html %]</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style type="text/css">
         <!-- 
@@ -12,13 +12,13 @@
         -->
     </style>
     [% IF ( stylesheet ) %]
-    <link rel="stylesheet" type="text/css" href="[% stylesheet %]">
+    <link rel="stylesheet" type="text/css" href="[% stylesheet | html %]">
     [% END %]
 </head>
 <body id="batch_print-notices" class="batch">
     [% FOREACH message IN messages %]
     <div class="message">
-        <pre>[% message.content %]</pre>
+        <pre>[% message.content | html %]</pre>
     </div>
     [% END %]
 </body>

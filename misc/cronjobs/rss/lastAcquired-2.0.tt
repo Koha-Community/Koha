@@ -1,31 +1,31 @@
 <?xml version="1.0"?>
 <rss version="2.0">
     <channel>
-        <title>[% CHANNELTITLE %]</title>
-        <link>[% CHANNELLINK %]</link>
-        <description>[% CHANNELDESC %]</description>
-        <language>[% CHANNELLANG %]</language>
-        <lastBuildDate>[% CHANNELLASTBUILD %]</lastBuildDate>
+        <title>[% CHANNELTITLE | html %]</title>
+        <link>[% CHANNELLINK | html %]</link>
+        <description>[% CHANNELDESC | html %]</description>
+        <language>[% CHANNELLANG | html %]</language>
+        <lastBuildDate>[% CHANNELLASTBUILD | html %]</lastBuildDate>
         <docs>http://blogs.law.harvard.edu/tech/rss</docs>
         <generator>Koha</generator>
         <image>
-            <title>[% IMAGETITLE %]</title>
-            <url>[% IMAGEURL %]</url>
-            <link>[% IMAGELINK %]</link>
-            <width>[% IMAGEWIDTH %]</width>
-            <height>[% IMAGEHEIGHT %]</height>
-            <description>[% IMAGEDESCRIPTION %]</description>
+            <title>[% IMAGETITLE | html %]</title>
+            <url>[% IMAGEURL | html %]</url>
+            <link>[% IMAGELINK | html %]</link>
+            <width>[% IMAGEWIDTH | html %]</width>
+            <height>[% IMAGEHEIGHT | html %]</height>
+            <description>[% IMAGEDESCRIPTION | html %]</description>
         </image>
 
 [% FOREACH i IN ITEMS %]
  <item>
-  <title>[% i.TITLE %][% IF i.AUTHOR %] by [% i.AUTHOR %][% END %]</title>
-  <link>[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.biblionumber %]</link>
-<description><![CDATA[[% i.TITLE %][% IF i.AUTHOR %] by [%  i.AUTHOR %][% END %]
-<br>[% IF i.publishercode %][% i.place %] [%  i.publishercode %] [%  publicationyear %]<br>[% END %]
-[% IF i.pages %][% i.pages %][% i.illus %][% i.size %][% END %]
-[% IF i.notes %]<p>[% i.notes %]</p>[% END %]<br>
-<a href="[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.biblionumber %]">View Details</a> | <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-reserve.pl?biblionumber=[% i.biblionumber %]">Reserve this Item</a>[% IF i.author %] | <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?marclist=biblio.author&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=[% i.author %]&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search">More by this Author</a>[% END %]
+  <title>[% i.TITLE | html %][% IF i.AUTHOR %] by [% i.AUTHOR | html %][% END %]</title>
+  <link>[% OPACBaseURL | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.biblionumber | html %]</link>
+<description><![CDATA[[% i.TITLE | html %][% IF i.AUTHOR %] by [% i.AUTHOR | html %][% END %]
+<br>[% IF i.publishercode %][% i.place | html %] [% i.publishercode | html %] [% publicationyear | html %]<br>[% END %]
+[% IF i.pages %][% i.pages | html %][% i.illus | html %][% i.size | html %][% END %]
+[% IF i.notes %]<p>[% i.notes | html %]</p>[% END %]<br>
+<a href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.biblionumber | html %]">View Details</a> | <a href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-reserve.pl?biblionumber=[% i.biblionumber | html %]">Reserve this Item</a>[% IF i.author %] | <a href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-search.pl?marclist=biblio.author&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=[% i.author | html %]&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search">More by this Author</a>[% END %]
 ]]></description>
  </item>
 [% END %]

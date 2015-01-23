@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -48,7 +49,7 @@
                 <ol>
                     <li>
                         <label class="required" for="list-name">Name:</label>
-                        <input id="list-name" name="name" type="text" class="required" required="required" value="[% list.name %]" />
+                        <input id="list-name" name="name" type="text" class="required" required="required" value="[% list.name | html %]" />
                     </li>
 
                     <li>
@@ -61,14 +62,14 @@
                     </li>
 
                     <li>
-                        <span class="label">Owner: </span>[% loggedinusername %]
+                        <span class="label">Owner: </span>[% loggedinusername | html %]
                     </li>
                 </ol>
 
             </fieldset>
 
             <fieldset class="action">
-                <input type="hidden" name="patron_list_id" value="[% list.patron_list_id %]" />
+                <input type="hidden" name="patron_list_id" value="[% list.patron_list_id | html %]" />
                 <input type="submit" value="Save" />
                 <a href="lists.pl" class="cancel">Cancel</a>
             </fieldset>
@@ -77,7 +78,7 @@
         </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

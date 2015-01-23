@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Please confirm your registration</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Please confirm your registration</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -29,7 +29,7 @@
                         <div id="confirmation-pending" class="alert alert-info">
                             <h1>Please confirm your registration</h1>
 
-                            <p>A confirmation email will be sent shortly to the email address <strong>[% email %]</strong>.</p>
+                            <p>A confirmation email will be sent shortly to the email address <strong>[% email | html %]</strong>.</p>
 
                             <p>Your account will not be activated until you follow the link provided in the confirmation email.</p>
                         </div>

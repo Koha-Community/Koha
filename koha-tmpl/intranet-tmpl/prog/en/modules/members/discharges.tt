@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
 [% USE KohaDates %]
@@ -5,7 +6,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Pending discharge requests</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 <body id="pat_discharges" class="pat">
 [% INCLUDE 'header.inc' %]
@@ -32,10 +33,10 @@
           <tbody>
             [% FOREACH d IN pending_discharges %]
               <tr>
-                <td><a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% d.borrower.borrowernumber %]">[% d.borrower.surname %], [% d.borrower.firstname %]</a></td>
-                <td>[% d.borrower.branchcode.branchname %]</td>
-                <td><span title="[% d.needed %]">[% d.needed | $KohaDates %]</span></td>
-                <td><a class="btn btn-xs btn-default" href="/cgi-bin/koha/members/discharges.pl?op=allow&borrowernumber=[% d.borrower.borrowernumber %]"><i class="fa fa-check"></i> Allow</a></td>
+                <td><a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% d.borrower.borrowernumber | html %]">[% d.borrower.surname | html %], [% d.borrower.firstname | html %]</a></td>
+                <td>[% d.borrower.branchcode.branchname | html %]</td>
+                <td><span title="[% d.needed | html %]">[% d.needed | $KohaDates %]</span></td>
+                <td><a class="btn btn-xs btn-default" href="/cgi-bin/koha/members/discharges.pl?op=allow&borrowernumber=[% d.borrower.borrowernumber | html %]"><i class="fa fa-check"></i> Allow</a></td>
               </tr>
             [% END %]
           </tbody>
@@ -52,7 +53,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
 
     [% INCLUDE 'datatables.inc' %]
     <script>

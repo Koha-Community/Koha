@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE AuthorisedValues %]
@@ -6,16 +7,16 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Item types [% IF op == 'add_form' %]&rsaquo;
   [% IF ( itemtype ) %]
-Modify item type '[% itemtype.itemtype %]'
+Modify item type '[% itemtype.itemtype | html %]'
   [% ELSE %]
 Add item type
   [% END %]
 [% END %]
 [% IF op == 'delete_confirm' %]&rsaquo;
   [% IF ( total ) %]
-Cannot delete item type '[% itemtype.itemtype %]'
+Cannot delete item type '[% itemtype.itemtype | html %]'
   [% ELSE %]
-Delete item type '[% itemtype.itemtype %]'?
+Delete item type '[% itemtype.itemtype | html %]'?
   [% END %]
 [% END %]
 [% IF op == 'delete_confirmed' %]&rsaquo;
@@ -23,7 +24,7 @@ Data deleted
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 <style type="text/css">
 	fieldset.rows div.toptabs li { clear:none;margin-right:.5em;padding-bottom:0;width:auto; }
   fieldset.rows div.toptabs .ui-tabs-nav li.ui-tabs-active {background-color : #F4F8F9; }
@@ -38,16 +39,16 @@ Data deleted
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF op == 'add_form' %]
   [% IF itemtype %]
-<a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a> &rsaquo; Modify item type '[% itemtype.itemtype %]'
+<a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a> &rsaquo; Modify item type '[% itemtype.itemtype | html %]'
   [% ELSE %]
 <a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a> &rsaquo; Add item type
   [% END %]
 [% END %]
 [% IF op == 'delete_confirm' %]
   [% IF total %]
-<a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a> &rsaquo; Cannot delete item type '[% itemtype.itemtype %]'
+<a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a> &rsaquo; Cannot delete item type '[% itemtype.itemtype | html %]'
   [% ELSE %]
-<a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a> &rsaquo; Delete item type '[% itemtype.itemtype %]'?
+<a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a> &rsaquo; Delete item type '[% itemtype.itemtype | html %]'?
   [% END %]
 [% END %]
 [% IF op == 'delete_confirmed' %]
@@ -69,7 +70,7 @@ Item types administration
 </div>[% END %]
 
 [% FOREACH m IN messages %]
-    <div class="dialog [% m.type %]">
+    <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
             An error occurred when updating this item type. Perhaps the value already exists.
@@ -88,7 +89,7 @@ Item types administration
         [% CASE 'cannot_be_deleted' %]
             Cannot delete this item type. <p><strong>This record is in use</strong>. Deletion is not possible.</p>
         [% CASE %]
-            [% m.code %]
+            [% m.code | html %]
         [% END %]
     </div>
 [% END %]
@@ -107,8 +108,8 @@ Item types administration
                 [% IF itemtype %]
                     <li>
                         <input type="hidden" name="is_a_modif" value="1" />
-                        <span class="label">Item type: </span> <input type="hidden" name="itemtype" value="[% itemtype.itemtype %]" />
-                        [% itemtype.itemtype %]
+                        <span class="label">Item type: </span> <input type="hidden" name="itemtype" value="[% itemtype.itemtype | html %]" />
+                        [% itemtype.itemtype | html %]
                     </li>
                 [% ELSE %]
                     <li>
@@ -118,9 +119,9 @@ Item types administration
                 [% END %]
                 <li>
                     <label for="description" class="required">Description: </label>
-                    <input type="text" id="description" name="description" size="48" value="[% itemtype.description |html %]" required="required" /> <span class="required">Required</span>
+                    <input type="text" id="description" name="description" size="48" value="[% itemtype.description | html %]" required="required" /> <span class="required">Required</span>
                     [% IF can_be_translated %]
-                        <a href="/cgi-bin/koha/admin/localization.pl?entity=itemtypes&code=[% itemtype.itemtype %]" title="Translate item type [% itemtype.itemtype %]" rel="gb_page_center[600,500]"><i class="fa fa-pencil"></i> Translate into other languages</a>
+                        <a href="/cgi-bin/koha/admin/localization.pl?entity=itemtypes&code=[% itemtype.itemtype | html %]" title="Translate item type [% itemtype.itemtype | html %]" rel="gb_page_center[600,500]"><i class="fa fa-pencil"></i> Translate into other languages</a>
                     [% END %]
                 </li>
                 <li>
@@ -129,12 +130,12 @@ Item types administration
                     <option value="">None</option>
                         [% FOREACH cat IN searchcategory %]
                             [% IF cat.authorised_value == itemtype.searchcategory %]
-                                <option value="[% cat.authorised_value %]" selected="selected">
-                                    [% cat.lib %]
+                                <option value="[% cat.authorised_value | html %]" selected="selected">
+                                    [% cat.lib | html %]
                                 </option>
                             [% ELSE %]
-                                <option value="[% cat.authorised_value %]" >
-                                    [% cat.lib %]
+                                <option value="[% cat.authorised_value | html %]" >
+                                    [% cat.lib | html %]
                                 </option>
                             [% END %]
                         [% END %]
@@ -158,7 +159,7 @@ Item types administration
                             [% ELSE %]
                                 <li>
                             [% END %]
-                            <a href="#[% imageset.imagesetname %]">[% imageset.imagesetname %]</a>
+                            <a href="#[% imageset.imagesetname | html %]">[% imageset.imagesetname | html %]</a>
                             </li>
                         [% END %]
                         [% IF itemtype.image_location('intranet').match('^http') %]<li class="ui-tabs-active">[% ELSE %]<li>[% END %]<a href="#remote">Remote image</a></li>
@@ -171,18 +172,18 @@ Item types administration
                     </div>
 
                     [% FOREACH imageset IN imagesets %]
-                        <div id="[% imageset.imagesetname %]">
+                        <div id="[% imageset.imagesetname | html %]">
                             <ul>
                                 [% FOREACH image IN imageset.images %]
                                     <li style="float: none; display: inline-block; clear : none; width: auto;">
                                         <label>
                                             [% IF image.StaffImageUrl %]
-                                                <img src="[% image.StaffImageUrl %]" alt="[% image.StaffImageUrl %]" title="[% image.StaffImageUrl %]" />
+                                                <img src="[% image.StaffImageUrl | html %]" alt="[% image.StaffImageUrl | html %]" title="[% image.StaffImageUrl | html %]" />
                                             [% END %]
                                             [% IF image.checked %]
-                                                <input type="radio" name="image" value="[% image.KohaImage %]" checked="checked" />
+                                                <input type="radio" name="image" value="[% image.KohaImage | html %]" checked="checked" />
                                             [% ELSIF image.KohaImage %] <!-- to delete the radio button if there is no image after -->
-                                                <input type="radio" name="image" value="[% image.KohaImage %]" />
+                                                <input type="radio" name="image" value="[% image.KohaImage | html %]" />
                                             [% END %]
                                         </label>
                                     </li>
@@ -201,9 +202,9 @@ Item types administration
                                 [% ELSE %]
                                     <input type="radio" id="remote_image_check" name="image" value="remoteImage" />
                                 [% END %]
-                                <input type="text" name="remoteImage" size="48" maxlength="200" value="[% itemtype.imageurl %]" onmousedown="document.getElementById('remote_image_check').checked = true;" />
+                                <input type="text" name="remoteImage" size="48" maxlength="200" value="[% itemtype.imageurl | html %]" onmousedown="document.getElementById('remote_image_check').checked = true;" />
                                 [% IF itemtype.imageurl %]
-                                    <img src="[% itemtype.imageurl %]" alt="" />
+                                    <img src="[% itemtype.imageurl | html %]" alt="" />
                                 [% END %]
                             </li>
                         </ul>
@@ -232,19 +233,19 @@ Item types administration
                 </li>
                 <li>
                     <label for="rentalcharge">Rental charge: </label>
-                    <input type="text" id="rentalcharge" name="rentalcharge" size="10" value="[% itemtype.rentalcharge %]" />
+                    <input type="text" id="rentalcharge" name="rentalcharge" size="10" value="[% itemtype.rentalcharge | html %]" />
                 </li>
                 <li>
                     <label for="defaultreplacecost">Default replacement cost: </label>
-                    <input type="text" id="defaultreplacecost" name="defaultreplacecost" size="10" value="[% itemtype.defaultreplacecost %]" />
+                    <input type="text" id="defaultreplacecost" name="defaultreplacecost" size="10" value="[% itemtype.defaultreplacecost | html %]" />
                 </li>
                 <li>
                     <label for="processfee">Processing fee (when lost): </label>
-                    <input type="text" id="processfee" name="processfee" size="10" value="[% itemtype.processfee %]" />
+                    <input type="text" id="processfee" name="processfee" size="10" value="[% itemtype.processfee | html %]" />
                 </li>
                 <li>
                     <label for="checkinmsg">Checkin message: </label>
-                    <textarea id="checkinmsg" name="checkinmsg" cols="55" rows="5">[% itemtype.checkinmsg %]</textarea>
+                    <textarea id="checkinmsg" name="checkinmsg" cols="55" rows="5">[% itemtype.checkinmsg | html %]</textarea>
                 </li>
                 <li>
                     <label for="checkinmsgtype">Checkin message type: </label>
@@ -267,16 +268,16 @@ Item types administration
                         <option value=""></option>
                         [% FOREACH a IN AuthorisedValues.Get('SIP_MEDIA_TYPE') %]
                             [% IF a.authorised_value == itemtype.sip_media_type %]
-                                <option value="[% a.authorised_value %]" selected="selected">[% a.lib %]</option>
+                                <option value="[% a.authorised_value | html %]" selected="selected">[% a.lib | html %]</option>
                             [% ELSE %]
-                                <option value="[% a.authorised_value %]">[% a.lib %]</option>
+                                <option value="[% a.authorised_value | html %]">[% a.lib | html %]</option>
                             [% END %]
                         [% END %]
                     </select>
                 </li>
                 <li>
                     <label for="summary">Summary: </label>
-                   <textarea id="summary" name="summary" cols="55" rows="5">[% itemtype.summary %]</textarea>
+                   <textarea id="summary" name="summary" cols="55" rows="5">[% itemtype.summary | html %]</textarea>
                     <p>Enter a summary that will overwrite the default one in search results lists. Example, for a website itemtype : </p>
                     <p><b>&lt;a href="[856u]"&gt;open site&lt;/a&gt;</b> will show the link just below the title</p>
                 </li>
@@ -292,26 +293,26 @@ Item types administration
 
 [% IF op == 'delete_confirm' %]
     <div class="dialog alert">
-        <h3>Delete item type '[% itemtype.itemtype %]'?</h3>
+        <h3>Delete item type '[% itemtype.itemtype | html %]'?</h3>
         <table>
             <tr>
                 <th scope="row">Item type</th>
-                <td>[% itemtype.itemtype %]</td>
+                <td>[% itemtype.itemtype | html %]</td>
             </tr>
-            <tr><th scope="row">Description</th><td>[% itemtype.translated_description %]</td></tr>
+            <tr><th scope="row">Description</th><td>[% itemtype.translated_description | html %]</td></tr>
             [% UNLESS Koha.Preference('noItemTypeImages') %]
                 <tr>
                     <th scope="row">Image</th>
                     <td>
                         [% SET image_location = itemtype.image_location('intranet') %]
-                        [% IF image_location %]<img src="[% image_location %]" alt="" />[% END %]
+                        [% IF image_location %]<img src="[% image_location | html %]" alt="" />[% END %]
                     </td>
                 </tr>
             [% END %]
-            <tr><th scope="row">Rental charge</th><td>[% itemtype.rentalcharge | $Price %]</td></tr>
+            <tr><th scope="row">Rental charge</th><td>[% itemtype.rentalcharge | $Price | html %]</td></tr>
         </table>
         <form action="/cgi-bin/koha/admin/itemtypes.pl" method="post">
-            <input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="itemtype" value="[% itemtype.itemtype %]" />
+            <input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="itemtype" value="[% itemtype.itemtype | html %]" />
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this item type</button>
         </form>
         <form action="/cgi-bin/koha/admin/itemtypes.pl" method="post">
@@ -342,43 +343,43 @@ Item types administration
                 [% UNLESS Koha.Preference('noItemTypeImages') %]
                     <td>
                         [% SET image_location = itemtype.image_location('intranet') %]
-                        [% IF image_location %]<img src="[% image_location %]" alt="" />[% ELSE %]&nbsp;[% END %]
+                        [% IF image_location %]<img src="[% image_location | html %]" alt="" />[% ELSE %]&nbsp;[% END %]
                     </td>
                 [% END %]
             <td>
-              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype |html %]">
-                [% itemtype.itemtype %]
+              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype | html %]">
+                [% itemtype.itemtype | html %]
               </a>
             </td>
             <td>
                 [% IF itemtype.translated_descriptions.size %]
-                    [% itemtype.description %] (default)<br/>
+                    [% itemtype.description | html %] (default)<br/>
                     [% FOR description IN itemtype.translated_descriptions %]
                         [% IF description.translation == itemtype.translated_description %]
-                            <b>[% description.translation %]</b>
+                            <b>[% description.translation | html %]</b>
                         [% ELSE %]
-                            [% description.translation %] ([% description.lang %])
+                            [% description.translation | html %] ([% description.lang | html %])
                         [% END %]
                         <br/>
                     [% END %]
                 [% ELSE %]
-                    [% itemtype.description |html %]
+                    [% itemtype.description | html %]
                 [% END %]
             </td>
-            <td>[% itemtype.searchcategory %]</td>
+            <td>[% itemtype.searchcategory | html %]</td>
             <td>[% IF ( itemtype.notforloan ) %]Yes[% ELSE %]&nbsp;[% END %]</td>
             <td>[% IF ( itemtype.hideinopac ) %]Yes[% ELSE %]&nbsp;[% END %]</td>
             <td>
             [% UNLESS ( itemtype.notforloan ) %]
-              [% itemtype.rentalcharge | $Price %]
+              [% itemtype.rentalcharge | $Price | html %]
             [% END %]
             </td>
-            <td>[% itemtype.defaultreplacecost | $Price %]</td>
-            <td>[% itemtype.processfee | $Price %]</td>
-            <td>[% itemtype.checkinmsg | html | html_line_break %]</td>
+            <td>[% itemtype.defaultreplacecost | $Price | html %]</td>
+            <td>[% itemtype.processfee | $Price | html %]</td>
+            <td>[% itemtype.checkinmsg | html_line_break %]</td>
             <td class="actions">
-              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype |html %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=delete_confirm&amp;itemtype=[% itemtype.itemtype |html %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
+              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype | html %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=delete_confirm&amp;itemtype=[% itemtype.itemtype | html %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
             </td>
           </tr>
           [% END %]
@@ -396,7 +397,7 @@ Item types administration
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'greybox.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">

@@ -2,28 +2,28 @@
 [% SET AuthorisedValuesCategories = AuthorisedValues.GetCategories %]
 
 <h3>
-    Enroll in <i>[% club.name %]</i>
+    Enroll in <i>[% club.name | html %]</i>
 </h3>
 
 <div class="container">
     <form id="patron-enrollment-form">
-        <input type="hidden" name="id" value="[% club.id %]" />
-        <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+        <input type="hidden" name="id" value="[% club.id | html %]" />
+        <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
         <fieldset class="rows">
             <ol>
                 [% FOREACH f IN club.club_template.club_template_enrollment_fields %]
                     <li>
-                        <label>[% f.name %]</label>
+                        <label>[% f.name | html %]</label>
                         [% IF f.authorised_value_category %]
-                            <select name="[% f.id %]">
+                            <select name="[% f.id | html %]">
                                 [% FOREACH a IN AuthorisedValues.Get( f.authorised_value_category ) %]
-                                    <option value="[% a.authorised_value %]">[% a.lib %]</option>
+                                    <option value="[% a.authorised_value | html %]">[% a.lib | html %]</option>
                                 [% END %]
                             </select>
                         [% ELSE %]
-                            <input type="text" name="[% f.id %]" />
+                            <input type="text" name="[% f.id | html %]" />
                         [% END %]
-                        <span class="hint">[% f.description %]</span>
+                        <span class="hint">[% f.description | html %]</span>
                     </li>
                 [% END %]
 
@@ -45,7 +45,7 @@ function addEnrollment() {
         data: $( "#patron-enrollment-form" ).serialize(),
         success: function( data ) {
             if ( data.success ) {
-                $('#clubs-tab').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber %]&id=[% club.id %]', function() {
+                $('#clubs-tab').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber | html %]&id=[% club.id | html %]', function() {
                     $("body").css("cursor", "default");
                 });
             } else {
@@ -59,7 +59,7 @@ function addEnrollment() {
 
 function showClubs() {
     $("body").css("cursor", "progress");
-    $('#clubs-tab').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber %]&id=[% club.id %]', function() {
+    $('#clubs-tab').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber | html %]&id=[% club.id | html %]', function() {
         $("body").css("cursor", "default");
     });
 }

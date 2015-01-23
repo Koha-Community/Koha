@@ -9,7 +9,7 @@
                 <ol>
                     <li>
                         <span class="label">Creation date: </span>
-                        [% order.entrydate %]
+                        [% order.entrydate | html %]
                     </li>
                     <li>
                         <span class="label">Ordered by: </span>
@@ -17,11 +17,11 @@
                     </li>
                     <li>
                         <span class="label">Claims count: </span>
-                        [% order.claims_count %]
+                        [% order.claims_count | html %]
                     </li>
                     <li>
                         <span class="label">Last claim date: </span>
-                        [% order.claimed_date %]
+                        [% order.claimed_date | html %]
                     </li>
             </ol>
           </fieldset>

@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Add to your list</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Add to your list</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -12,14 +12,14 @@
                         [% IF ( authorized ) %]
                             [% UNLESS ( newshelf ) %]
                                 [% IF ( multiple ) %]
-                                    <h1>Add [% total %] items to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>: [% ELSE %]a list:[% END %]</h1>
+                                    <h1>Add [% total | html %] items to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>: [% ELSE %]a list:[% END %]</h1>
                                 [% ELSE %]
                                     <h1>Add to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>[% ELSE %]a list:[% END %]</h1>
                                 [% END %]
                                 <ul>
                                     [% FOREACH biblio IN biblios %]
-                                        <li> <span class="title">[% biblio.title |html %]</span>
-                                            [% IF ( biblio.author ) %]<span class="author"> [% biblio.author %] </span>[% END %]
+                                        <li> <span class="title">[% biblio.title | html %]</span>
+                                            [% IF ( biblio.author ) %]<span class="author"> [% biblio.author | html %] </span>[% END %]
                                         </li>
                                     [% END %]
                                 </ul>
@@ -30,22 +30,22 @@
                                             <label for="shelfnumber">Add to list:</label> <select name="shelfnumber" id="shelfnumber">
                                                 [% IF private_shelves.count %]<optgroup label="Private lists">
                                                     [% FOREACH private_shelf IN private_shelves %]
-                                                    <option value="[% private_shelf.shelfnumber %]">[% private_shelf.shelfname | html%]</option>
+                                                    <option value="[% private_shelf.shelfnumber | html %]">[% private_shelf.shelfname | html %]</option>
                                                     [% END %]
                                                 </optgroup>[% END %]
                                                 [% IF private_shelves_shared_with_me.count %]<optgroup label="Private lists shared with me">
                                                     [% FOREACH private_shelf IN private_shelves_shared_with_me %]
-                                                    <option value="[% private_shelf.shelfnumber %]">[% private_shelf.shelfname | html%]</option>
+                                                    <option value="[% private_shelf.shelfnumber | html %]">[% private_shelf.shelfname | html %]</option>
                                                     [% END %]
                                                 </optgroup>[% END %]
                                                 [% IF public_shelves.count %]<optgroup label="Public lists">
                                                     [% FOREACH public_shelf IN public_shelves %]
-                                                    <option value="[% public_shelf.shelfnumber %]">[% public_shelf.shelfname |html%]</option>
+                                                    <option value="[% public_shelf.shelfnumber | html %]">[% public_shelf.shelfname | html %]</option>
                                                     [% END %]
                                                 </optgroup>[% END %]
                                             </select>
                                             [% FOREACH biblio IN biblios %]
-                                                <input type="hidden" name="biblionumber" value="[% biblio.biblionumber %]" />
+                                                <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />
                                             [% END %]
                                             <input type="hidden" name="modifyshelfcontents" value="1" />
                                         </fieldset>
@@ -59,9 +59,9 @@
                                     [% IF ( singleshelf ) %]
                                         <form name="f1" action="/cgi-bin/koha/opac-addbybiblionumber.pl" method="post">
                                             [% FOREACH biblio IN biblios %]
-                                                <input type="hidden" name="biblionumber" value="[% biblio.biblionumber %]">
+                                                <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]">
                                             [% END %]
-                                            <input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />
+                                            <input type="hidden" name="shelfnumber" value="[% shelfnumber | html %]" />
                                             <input type="hidden" name="modifyshelfcontents" value="1" /></fieldset>
                                             <fieldset class="action">
                                                 <input type="submit" value="Save" class="btn" />
@@ -87,7 +87,7 @@
                                             </select>
                                     </fieldset>
                                     [% FOREACH biblio IN biblios %]
-                                        <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html%]" />
+                                        <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />
                                     [% END %]
                                     <fieldset class="action">
                                         <input type="hidden" name="sortfield" value="title" />

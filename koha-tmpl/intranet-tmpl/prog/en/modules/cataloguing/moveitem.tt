@@ -1,11 +1,11 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Attach an item to [% bibliotitle |html %]</title>
+<title>Attach an item to [% bibliotitle | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="catalog_moveitem" class="catalog">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; Attach an item to <i>[% bibliotitle |html %][% IF ( itemsloo.subtitle ) %][% itemsloo.subtitle %][% END %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; Attach an item to <i>[% bibliotitle | html %][% IF ( itemsloo.subtitle ) %][% itemsloo.subtitle | html %][% END %]</i></div>
 <div id="doc" class="yui-t7">
 
 [% BLOCK actions %]
@@ -22,11 +22,11 @@
 
 [% BLOCK fail %]
         <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
-                                <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+                                <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                         </form>
-                                <form method="get" action="/cgi-bin/koha/cataloguing/moveitem.pl?biblionumber=[% biblionumber %]">
+                                <form method="get" action="/cgi-bin/koha/cataloguing/moveitem.pl?biblionumber=[% biblionumber | html %]">
         <button type="submit" class="new"><i class="fa fa-fw fa-plus"></i> Try again with a different barcode</button>
-                                <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+                                <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                         </form>
 [% END %]
 
@@ -48,15 +48,15 @@
 
 	[% ELSE %]
 	    [% IF ( success ) %]
-			<div class="dialog message">The item has successfully been attached to [% INCLUDE 'biblio-default-view.inc' %]<i>[% bibliotitle |html %]</i></a>.
+            <div class="dialog message">The item has successfully been attached to [% INCLUDE 'biblio-default-view.inc' %]<i>[% bibliotitle | html %]</i></a>.
 			<p>
 			[% INCLUDE actions %]
                     <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
-                                <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+                                <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                         </form>
-                                <form method="get" action="/cgi-bin/koha/cataloguing/moveitem.pl?biblionumber=[% biblionumber %]"/>
+                                <form method="get" action="/cgi-bin/koha/cataloguing/moveitem.pl?biblionumber=[% biblionumber | html %]"/>
                     <button type="submit" class="new"><i class="fa fa-fw fa-plus"></i> Attach another item</button>
-                                <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+                                <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                         </form>
 	                </p>
 			</div>
@@ -71,11 +71,11 @@
 		    <fieldset class="action"><input type="submit" value="Submit" /></fieldset>
 	    </fieldset>
 	    [% ELSE %]
-	    <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber %]" />
+	    <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber | html %]" />
 	    [% END %]
 
 		[% IF ( missingbarcode ) %]
-		<h3>Attach an item[% IF ( bibliotitle ) %] to <i>[% bibliotitle |html %]</i>[% END %]</h3>
+        <h3>Attach an item[% IF ( bibliotitle ) %] to <i>[% bibliotitle | html %]</i>[% END %]</h3>
 	    <fieldset id="barcode_fieldset">
 		<label for="barcode">Enter the barcode of the item to attach:</label>
 		    <p class="hint">The item you select will be moved to the target record.</p>
@@ -83,7 +83,7 @@
 		    <fieldset class="action"><input type="submit" value="Submit" /></fieldset>
 	    </fieldset>
 	    [% ELSE %]
-	    <input type="hidden" name="barcode" id="barcode" value="[% barcode %]" />
+	    <input type="hidden" name="barcode" id="barcode" value="[% barcode | html %]" />
 	    [% END %]
 
 	</form>

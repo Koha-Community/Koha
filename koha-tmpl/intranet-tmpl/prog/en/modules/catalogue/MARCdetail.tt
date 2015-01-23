@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -20,14 +21,14 @@
   [% IF ( unknownbiblionumber ) %]
     Unknown record
   [% ELSE %]
-    MARC Details for <i>[% bibliotitle |html %]</i>
+    MARC Details for <i>[% bibliotitle | html %]</i>
   [% END %]
 </div>
 
 <div id="doc3" class="yui-t2">
 
 [% IF ( unknownbiblionumber ) %]
-  <div class="dialog message">The record you requested does not exist ([% biblionumber %]).</div>
+  <div class="dialog message">The record you requested does not exist ([% biblionumber | html %]).</div>
 [% ELSE %]
    <div id="bd">
 	<div id="yui-main">
@@ -35,7 +36,7 @@
 [% INCLUDE 'cat-toolbar.inc' %]
 
 [% UNLESS ( popup ) %]
-    <h1>MARC biblio : [% biblionumber %]  ( [% bibliotitle |html %] )</h1>
+    <h1>MARC biblio : [% biblionumber | html %]  ( [% bibliotitle | html %] )</h1>
 
 
 [% END %]
@@ -44,29 +45,29 @@
                             <option value="">Default</option>
                             [% FOREACH framework IN frameworks %]
                                 [% IF framework.frameworkcode == frameworkcode %]
-                                    <option value="[% framework.frameworkcode %]" selected="selected">[% framework.frameworktext %]</option>
+                                    <option value="[% framework.frameworkcode | html %]" selected="selected">[% framework.frameworktext | html %]</option>
                                 [% ELSE %]
-                                    <option value="[% framework.frameworkcode %]">[% framework.frameworktext %]</option>
+                                    <option value="[% framework.frameworkcode | html %]">[% framework.frameworktext | html %]</option>
                                 [% END %]
                             [% END %]
             </select> </b></p>
 [% IF ( ocoins ) %]
 <!-- COinS / OpenURL -->
-<span class="Z3988" title="[% ocoins %]"></span>
+<span class="Z3988" title="[% ocoins | html %]"></span>
 [% END %]
 
 
 [% BLOCK show_tab_html %]
-    <div id="[% tab_id %]">
+    <div id="[% tab_id | html %]">
         [% FOREACH tab0X IN tab_data %]
             [% IF ( tab0X.tag ) %]
                 <div class="tag">
                 <div class="tag_title">
-                    <span class="tag_num">[% tab0X.tag %]</span>
+                    <span class="tag_num">[% tab0X.tag | html %]</span>
             [% IF ( tab0X.tag_ind ) %]
-                <span class="tag_ind1">[% tab0X.tag_ind.substr(0, 1) %]</span><span class="tag_ind2">[% tab0X.tag_ind.substr(1, 1) %]</span>
+                <span class="tag_ind1">[% tab0X.tag_ind.substr(0, 1) | html %]</span><span class="tag_ind2">[% tab0X.tag_ind.substr(1, 1) | html %]</span>
             [% END %]
-                    [% IF (tab0X.tag_desc) %]<span class="dashwrapper"> -</span> <span class="tag_desc">[% tab0X.tag_desc %]</span>[% END %]
+                    [% IF (tab0X.tag_desc) %]<span class="dashwrapper"> -</span> <span class="tag_desc">[% tab0X.tag_desc | html %]</span>[% END %]
                 </div>
             [% ELSE %]
                 <div class="tag">
@@ -74,16 +75,16 @@
             [% FOREACH subfiel IN tab0X.subfield %]
                 <p class="subfield_line">
                     <span class="subfield-label">&nbsp;
-                    [% UNLESS ( subfiel.hide_marc ) %]<span class="subfield-code">[% subfiel.marc_subfield %]</span>[% END %]
-                    <span class="desc" title="[% subfiel.long_desc %]">[% subfiel.short_desc %]</span></span>
-                    [% IF ( subfiel.is_url ) %]<a href="[% subfiel.marc_value %]">[% subfiel.marc_value |html %]</a>[% ELSE %][% subfiel.marc_value |html %][% END %]
+                    [% UNLESS ( subfiel.hide_marc ) %]<span class="subfield-code">[% subfiel.marc_subfield | html %]</span>[% END %]
+                    <span class="desc" title="[% subfiel.long_desc | html %]">[% subfiel.short_desc | html %]</span></span>
+                    [% IF ( subfiel.is_url ) %]<a href="[% subfiel.marc_value | html %]">[% subfiel.marc_value | html %]</a>[% ELSE %][% subfiel.marc_value | html %][% END %]
                     [% IF ( subfiel.link ) %]
-                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;idx=[% subfiel.link %],phr&amp;type=intranet&amp;q=[% subfiel.marc_value |url %]">
-                            <img src="[% interface %]/[% theme %]/img/filefind.png" height="15" title="Search on [% subfiel.marc_value |html %]" alt="Search on [% subfiel.marc_value |html %]" />
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;idx=[% subfiel.link | html %],phr&amp;type=intranet&amp;q=[% subfiel.marc_value |url %]">
+                            <img src="[% interface | html %]/[% theme | html %]/img/filefind.png" height="15" title="Search on [% subfiel.marc_value | html %]" alt="Search on [% subfiel.marc_value | html %]" />
                         </a>
                     [% END %]
                     [% IF ( subfiel.authority ) %]
-                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority %]" class="button">Auth</a>
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority | html %]" class="button">Auth</a>
                     [% END %]
                 </p>
             [% END %]
@@ -154,13 +155,13 @@
         <table>
                 <tr>
                     [% FOREACH header IN item_header_loop %]
-                        <th>[% header %]</th>
+                        <th>[% header | html %]</th>
                     [% END %]
                 </tr>
                 [% FOREACH item IN item_loop %]
                     <tr>
                         [% FOREACH sf_code IN item_subfield_codes %]
-                            <td>[% item.$sf_code %]</td>
+                            <td>[% item.$sf_code | $raw %]</td>
                         [% END %]
                     </tr>
                 [% END %]
@@ -178,11 +179,11 @@
 </div>
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
-    [% Asset.js("js/catalog.js") %]
+    [% Asset.js("js/catalog.js") | $raw %]
     [% INCLUDE 'browser-strings.inc' %]
-    [% Asset.js("js/browser.js") %]
+    [% Asset.js("js/browser.js") | $raw %]
     <script type="text/javascript">
-        var browser = KOHA.browser('[% searchid %]', parseInt('[% biblionumber %]', 10));
+        var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
         browser.show();
 
          $(document).ready(function() {
@@ -194,7 +195,7 @@
 
         function Changefwk(FwkList) {
             var fwk = FwkList.options[FwkList.selectedIndex].value;
-            window.location = "MARCdetail.pl?biblionumber=[% biblionumber %]&frameworkcode="+fwk;
+            window.location = "MARCdetail.pl?biblionumber=[% biblionumber | html %]&frameworkcode="+fwk;
         }
     </script>
 [% END %]

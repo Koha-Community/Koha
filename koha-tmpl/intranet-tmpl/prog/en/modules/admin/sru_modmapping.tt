@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -17,23 +18,23 @@
                         <ol>
                             <li>
                                 <label for="title">Title: </label>
-                                <input id="title" type="text" value="[% mapping.title %]" />
+                                <input id="title" type="text" value="[% mapping.title | html %]" />
                             </li>
                             <li>
                                 <label for="isbn">ISBN: </label>
-                                <input id="isbn" type="text" value="[% mapping.isbn %]" />
+                                <input id="isbn" type="text" value="[% mapping.isbn | html %]" />
                             </li>
                             <li>
                                 <label for="lccall">LC call number: </label>
-                                <input id="lccall" type="text" value="[% mapping.lccall %]" />
+                                <input id="lccall" type="text" value="[% mapping.lccall | html %]" />
                             </li>
                             <li>
                                 <label for="controlnumber">Control number: </label>
-                                <input id="controlnumber" type="text" value="[% mapping.controlnumber %]" />
+                                <input id="controlnumber" type="text" value="[% mapping.controlnumber | html %]" />
                             </li>
                             <li>
                                 <label for="srchany">Any: </label>
-                                <input id="srchany" type="text" value="[% mapping.srchany %]" />
+                                <input id="srchany" type="text" value="[% mapping.srchany | html %]" />
                             </li>
                         </ol>
                     </div>
@@ -41,23 +42,23 @@
                         <ol>
                             <li>
                                 <label for="author">Author: </label>
-                                <input id="author" type="text" value="[% mapping.author %]" />
+                                <input id="author" type="text" value="[% mapping.author | html %]" />
                             </li>
                             <li>
                                 <label for="issn">ISSN: </label>
-                                <input id="issn" type="text" value="[% mapping.issn %]" />
+                                <input id="issn" type="text" value="[% mapping.issn | html %]" />
                             </li>
                             <li>
                                 <label for="subject">Subject: </label>
-                                <input id="subject" type="text" value="[% mapping.subject %]" />
+                                <input id="subject" type="text" value="[% mapping.subject | html %]" />
                             </li>
                             <li>
                                 <label for="dewey">Dewey: </label>
-                                <input id="dewey" type="text" value="[% mapping.dewey %]" />
+                                <input id="dewey" type="text" value="[% mapping.dewey | html %]" />
                             </li>
                             <li>
                                 <label for="stdid">Standard ID: </label>
-                                <input id="stdid" type="text" value="[% mapping.stdid %]" />
+                                <input id="stdid" type="text" value="[% mapping.stdid | html %]" />
                             </li>
                         </ol>
                     </div>
@@ -72,7 +73,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
     <script type="text/javascript">
         $(document).ready(function() {
             $("#form01").submit(function(event) {

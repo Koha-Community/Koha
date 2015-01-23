@@ -12,9 +12,9 @@
 [% UNLESS count %]
     <h2>Your search returned no results.</h2>
 [% ELSIF ( supplier.length < 1 ) %]
-    <h2>Vendor search: [% count %] result(s) found</h2>
+    <h2>Vendor search: [% count | html %] result(s) found</h2>
 [% ELSE %]
-    <h2>Vendor search: [% count %] result(s) found for '[% supplier %]'</h2>
+    <h2>Vendor search: [% count | html %] result(s) found for '[% supplier | html %]'</h2>
 [% END %]
 
 [% IF ( loop_suppliers ) %]
@@ -25,8 +25,8 @@
 	</tr>
 	[% FOREACH loop_supplier IN loop_suppliers %]
         <tr>
-            <td>[% loop_supplier.name |html %]</td>
-            <td><a class="btn btn-default btn-xs select_vendor" href="#" data-vendorid="[% loop_supplier.aqbooksellerid %]" data-vendorname="[% loop_supplier.name |html%]">Choose</a></td>
+            <td>[% loop_supplier.name | html %]</td>
+            <td><a class="btn btn-default btn-xs select_vendor" href="#" data-vendorid="[% loop_supplier.aqbooksellerid | html %]" data-vendorname="[% loop_supplier.name | html %]">Choose</a></td>
 		</tr>
 	[% END %]
 </table>

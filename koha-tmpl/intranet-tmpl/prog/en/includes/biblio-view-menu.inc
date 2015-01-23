@@ -25,13 +25,13 @@
     [% IF ( moredetailview ) %]<li class="active">[% ELSE %]<li>[% END %]
     <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio_object_id | url  %]">Items</a></li>
     [% IF ( CAN_user_reserveforothers ) %]
-    [% IF ( holdsview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblio_object_id | url  %]">Holds ([% Biblio.HoldsCount( biblio_object_id ) %])</a></li>
+    [% IF ( holdsview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblio_object_id | url  %]">Holds ([% Biblio.HoldsCount( biblio_object_id ) | html %])</a></li>
     [% END %]
     [% IF ( EasyAnalyticalRecords ) %][% IF ( analyze ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio_object_id | url  %]&amp;analyze=1">Analytics</a></li>[% END %]
 
     [% IF Koha.Preference('ArticleRequests') %]
         [% IF ( article_requests_view ) %]<li class="active">[% ELSE %]<li>[% END %]
-        <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% IF ( object ) %][% object %][% ELSE %][% biblionumber %][% END %]">Article requests ([% Biblio.ArticleRequestsActiveCount( biblio_object_id ) %])</a></li>
+        <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% IF ( object ) %][% object | html %][% ELSE %][% biblionumber | html %][% END %]">Article requests ([% Biblio.ArticleRequestsActiveCount( biblio_object_id ) | html %])</a></li>
     [% END %]
 
     [% IF ( subscriptionsnumber ) %]<li><a href="/cgi-bin/koha/serials/serials-search.pl?searched=1&amp;biblionumber=[% biblio_object_id | url  %]">Subscription(s)</a></li>[% END %]
@@ -42,4 +42,3 @@
 [% IF ( CAN_user_tools_view_system_logs ) %][% IF ( logview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&amp;modules=CATALOGUING&amp;action=MODIFY&amp;object=[% biblio_object_id | url  %]">Modification log</a> </li>[% END %]
 </ul>
 </div>
-

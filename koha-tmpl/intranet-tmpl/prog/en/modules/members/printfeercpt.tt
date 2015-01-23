@@ -1,12 +1,13 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Print receipt for [% patron.cardnumber %]</title>
+<title>Print receipt for [% patron.cardnumber | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/printreceiptinvoice.css") %]
+[% Asset.css("css/printreceiptinvoice.css") | $raw %]
 [% INCLUDE 'blocking_errors.inc' %]
 </head>
 
@@ -18,7 +19,7 @@
 [% IF ( LibraryName ) %]
  <tr>
     <th colspan=4 class="centerednames">
-		<h3>[% LibraryName %]</h3>
+		<h3>[% LibraryName | html %]</h3>
 	</th>
  </tr>
 [% END %]
@@ -29,13 +30,13 @@
  </tr>
  <tr>
     <th colspan=4 class="centerednames">
-        <h2>[% Branches.GetName( patron.branchcode ) %]</h2>
+        <h2>[% Branches.GetName( patron.branchcode ) | html %]</h2>
 	</th>
  </tr>
  <tr>
     <th colspan=4 >
-        Received with thanks from  [% patron.firstname %] [% patron.surname %] <br />
-        Card number : [% patron.cardnumber %]<br />
+        Received with thanks from  [% patron.firstname | html %] [% patron.surname | html %] <br />
+        Card number : [% patron.cardnumber | html %]<br />
 	</th>
  </tr>
   <tr>
@@ -60,19 +61,19 @@
           [% CASE 'M' %]Sundry
           [% CASE 'L' %]Lost Item
           [% CASE 'W' %]Writeoff
-          [% CASE %][% account.accounttype %]
+          [% CASE %][% account.accounttype | html %]
         [%- END -%]
-        [%- IF account.description %], [% account.description %][% END %]
+        [%- IF account.description %], [% account.description | html %][% END %]
       </td>
-      <td>[% account.note %]</td>
-      [% IF ( account.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amount %]</td>
+      <td>[% account.note | html %]</td>
+      [% IF ( account.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amount | html %]</td>
     </tr>
 
   [% END %]
 <tfoot>
   <tr>
     <td colspan="3">Total outstanding dues as on date : </td>
-    [% IF ( totalcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% total %]</td>
+    [% IF ( totalcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% total | html %]</td>
   </tr>
   </tfoot>
 </table>

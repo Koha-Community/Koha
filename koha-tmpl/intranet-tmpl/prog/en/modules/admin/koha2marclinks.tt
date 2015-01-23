@@ -1,9 +1,10 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Koha to MARC mapping</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="admin_koha2marclinks" class="admin">
@@ -23,7 +24,7 @@
 <form action="/cgi-bin/koha/admin/koha2marclinks.pl" method="post" id="koha2marc">
 
 [% IF error_add %]
-    <div class="dialog alert">Failed to add mapping for [% error_info %]</div>
+    <div class="dialog alert">Failed to add mapping for [% error_info | html %]</div>
 [% END %]
 
 <table id="kohafields">
@@ -37,14 +38,14 @@
 <tbody>
 [% FOREACH loo IN loop %]
 <tr>
-    <td>[% loo.kohafield %]</td>
-    <td>[% loo.tagfield %]</td>
-    <td>[% loo.tagsubfield %]</td>
-    <td>[% loo.liblibrarian %]</td>
+    <td>[% loo.kohafield | html %]</td>
+    <td>[% loo.tagfield | html %]</td>
+    <td>[% loo.tagsubfield | html %]</td>
+    <td>[% loo.liblibrarian | html %]</td>
     <td class="actions">
         [% IF !loo.readonly %]
-            <a onclick="AddFld('[% loo.kohafield %]');" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Add</a>
-            [% IF loo.tagfield %] <a onclick="RemFld('[% loo.tagfield %]','[% loo.tagsubfield %]');" class="btn btn-default btn-xs"><i class="fa fa-remove"></i> Remove</a> [% END %]
+            <a onclick="AddFld('[% loo.kohafield | html %]');" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Add</a>
+            [% IF loo.tagfield %] <a onclick="RemFld('[% loo.tagfield | html %]','[% loo.tagsubfield | html %]');" class="btn btn-default btn-xs"><i class="fa fa-remove"></i> Remove</a> [% END %]
         [% END %]
     </td>
     </td>
@@ -69,7 +70,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
     <script type="text/javascript">
         function AddFld(kohafield) {
             var fieldstr = prompt( _("Adding a mapping for: %s.").format(kohafield) + "\n" + _("Please enter field tag and subfield code, separated by a comma. (For control fields: add '@' as subfield code.)\nThe change will be applied immediately.") );

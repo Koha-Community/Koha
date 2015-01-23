@@ -1,8 +1,9 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Advanced search</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Advanced search</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -33,7 +34,7 @@
                                             </select>
                                         [% END %]
                                     [% ELSE %]
-                                        <label for="search-field_[% loop.index %]">
+                                        <label for="search-field_[% loop.index | html %]">
                                             [% IF loop.index == 0 %]
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             [% ELSE %]
@@ -41,8 +42,8 @@
                                             [% END %]
                                         </label>
                                     [% END %]
-                                    [% IF ( expanded_options ) %][% left_content %][% END %]
-                                    <select name="idx" id="search-field_[% loop.index %]">
+                                    [% IF ( expanded_options ) %][% left_content | html %][% END %]
+                                    <select name="idx" id="search-field_[% loop.index | html %]">
                                         <option value="kw">Keyword</option>
                                         <option value="su,wrdl">Subject</option>
                                         [% IF ( expanded_options ) %]
@@ -118,8 +119,8 @@
                     <div id="advsearches" class="toptabs">
                         <ul>
                             [% FOREACH advsearchloo IN advancedsearchesloop %]
-                                <li id="advsearch-tab-[% advsearchloo.advanced_search_type %]">
-                                <a href="#advsearch-[% advsearchloo.advanced_search_type %]">
+                                <li id="advsearch-tab-[% advsearchloo.advanced_search_type | html %]">
+                                <a href="#advsearch-[% advsearchloo.advanced_search_type | html %]">
                                [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]Item type
                                [% ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) %]Collection
                                [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]Shelving location
@@ -130,7 +131,7 @@
                         </ul>
 
                         [% FOREACH advsearchloo IN advancedsearchesloop %]
-                            <div id="advsearch-[% advsearchloo.advanced_search_type %]" class="advsearch">
+                            <div id="advsearch-[% advsearchloo.advanced_search_type | html %]" class="advsearch">
                                 <fieldset>
                                     <legend>Limit to any of the following:</legend>
                                     <div class="row-fluid">
@@ -138,25 +139,25 @@
                                             [% IF (advsearchloo.advanced_search_type != 'itemtypes') OR (((!itemtypeloo.searchcategory) AND (itemtypeloo.cat == 0)) OR (itemtypeloo.cat == 1)) %]
                                                 <div class="span3">
                                                     <input type="checkbox"
-                                                        id="[% itemtypeloo.ccl FILTER remove(',') %]-[% itemtypeloo.number %]"
+                                                        id="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]"
                                                         name="[% IF ( itemtypeloo.cat == 1 ) %]searchcat[% ELSE %]limit[% END %]"
-                                                        value="[% IF ( itemtypeloo.cat == 1 ) %][% itemtypeloo.code %][% ELSE %]mc-[% itemtypeloo.ccl %]:[% itemtypeloo.code %][% END %]"
+                                                        value="[% IF ( itemtypeloo.cat == 1 ) %][% itemtypeloo.code | html %][% ELSE %]mc-[% itemtypeloo.ccl | html %]:[% itemtypeloo.code | html %][% END %]"
                                                     />
-                                                    <label for="[% itemtypeloo.ccl FILTER remove(',') %]-[% itemtypeloo.number %]">
+                                                    <label for="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]">
                                                         [% UNLESS ( noItemTypeImages ) %]
                                                             [% IF ( itemtypeloo.imageurl ) %]
-                                                                <img src="[% itemtypeloo.imageurl %]" alt="[% itemtypeloo.description %]" />
+                                                                <img src="[% itemtypeloo.imageurl | html %]" alt="[% itemtypeloo.description | html %]" />
                                                             [% END %]
                                                             &nbsp;
                                                         [% END %]
-                                                        [% itemtypeloo.description %]
+                                                        [% itemtypeloo.description | html %]
                                                     </label>
                                                 </div>
                                             [% IF ( loop.last ) %]</div>[% ELSE %][% UNLESS ( loop.count % 4 ) %]</div><div class="row-fluid">[% END %][% END %]
                                             [% END %]
                                         [% END %]
                                 </fieldset>
-                            </div> <!-- / #advsearch-[% advsearchloo.advanced_search_type %] -->
+                            </div> <!-- / #advsearch-[% advsearchloo.advanced_search_type | html %] -->
                         [% END # / FOREACH advancedsearchesloop %]
                     </div> <!-- / #advsearches -->
                 </div> <!-- / .span12 -->
@@ -192,9 +193,9 @@
                                         <option value="">No limit</option>
                                             [% FOREACH search_languages_loo IN search_languages_loop %]
                                                 [% IF ( search_languages_loo.selected ) %]
-                                                    <option value="ln,rtrn:[% search_languages_loo.iso639_2_code %]" selected="selected">[% search_languages_loo.language_description %]</option>
+                                                    <option value="ln,rtrn:[% search_languages_loo.iso639_2_code | html %]" selected="selected">[% search_languages_loo.language_description | html %]</option>
                                                 [% ELSE %]
-                                                    <option value="ln,rtrn:[% search_languages_loo.iso639_2_code %]">[% search_languages_loo.language_description %]</option>
+                                                    <option value="ln,rtrn:[% search_languages_loo.iso639_2_code | html %]">[% search_languages_loo.language_description | html %]</option>
                                                 [% END %]
                                             [% END %]
                                     </select>
@@ -218,9 +219,9 @@
                                     <option value="">All libraries</option>
                                     [% FOREACH BranchesLoo IN Branches.all( selected => opac_name ) %]
                                         [% IF BranchesLoo.selected %]
-                                            <option value="branch:[% BranchesLoo.branchcode %]" selected="selected">[% BranchesLoo.branchname %]</option>
+                                            <option value="branch:[% BranchesLoo.branchcode | html %]" selected="selected">[% BranchesLoo.branchname | html %]</option>
                                         [% ELSE %]
-                                            <option value="branch:[% BranchesLoo.branchcode %]">[% BranchesLoo.branchname %]</option>
+                                            <option value="branch:[% BranchesLoo.branchcode | html %]">[% BranchesLoo.branchname | html %]</option>
                                         [% END %]
                                     [% END %]
                                     </select>
@@ -230,7 +231,7 @@
                                         <select name="multibranchlimit" id="categoryloop">
                                             <option value=""> -- none -- </option>
                                             [% FOREACH sg IN search_groups %]
-                                                <option value="[% sg.id %]">[% sg.title %]</option>
+                                                <option value="[% sg.id | html %]">[% sg.title | html %]</option>
                                             [% END %]
                                         </select>
                                     [% END %]
@@ -397,8 +398,8 @@
 [% END %]
 
 [% BLOCK jsinclude %]
-[% Asset.js("lib/jquery/plugins/jquery.deserialize.min.js") %]
-[% Asset.js("lib/jquery/plugins/jquery.cookie.min.js") %]
+[% Asset.js("lib/jquery/plugins/jquery.deserialize.min.js") | $raw %]
+[% Asset.js("lib/jquery/plugins/jquery.cookie.min.js") | $raw %]
 <script>//<![CDATA[
 $(document).ready(function() {
     $('#advsearches').tabs();
@@ -437,7 +438,7 @@ $(document).ready(function() {
         jQuery.cookie("form_serialized_limits", form_serialized_limits,{ path: '/'});
         [% IF ( expanded_options ) %]
         var numPar = $("#booleansearch fieldset p").size();
-        if (numPar > [% search_boxes_count %]){
+        if (numPar > [% search_boxes_count | html %]){
             jQuery.cookie("num_paragraph", numPar,{ path: '/'});
         }else{
             jQuery.removeCookie("num_paragraph", { path: '/'});

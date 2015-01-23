@@ -4,13 +4,13 @@
 [% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-    <title>Summary for [% patron.firstname %] [% patron.surname %] ([% patron.cardnumber %])</title>
+    <title>Summary for [% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])</title>
     [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="pat_moremember-print" class="pat">
     <div id="main">
-        <h3><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% patron.cardnumber %]">Account summary: [% patron.firstname %] [% patron.surname %] ([% patron.cardnumber %])</a></h3>
+        <h3><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% patron.cardnumber | html %]">Account summary: [% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])</a></h3>
 
         <ul>
             [% IF Koha.Preference( 'AddressFormat' ) %]
@@ -18,15 +18,15 @@
             [% ELSE %]
                 [% INCLUDE 'member-display-address-style-us.inc' %]
             [% END %]
-            <li>[% IF ( patron.phone ) %][% patron.phone %][% ELSE %](no phone number on file)[% END %]</li>
-            <li>[% IF ( patron.email ) %][% patron.email %][% ELSE %](no primary email on file)[% END %]</li>
+            <li>[% IF ( patron.phone ) %][% patron.phone | html %][% ELSE %](no phone number on file)[% END %]</li>
+            <li>[% IF ( patron.email ) %][% patron.email | html %][% ELSE %](no primary email on file)[% END %]</li>
             [% IF ( patron.emailpro ) %]
-                <li>[% patron.emailpro %]</li>
+                <li>[% patron.emailpro | html %]</li>
             [% END %]
             <li>Registration date: [% patron.dateenrolled | $KohaDates %]</li>
             <li>Expiration date: [% patron.dateexpiry | $KohaDates %]</li>
-            <li>Library: [% Branches.GetName( patron.branchcode ) %]</li>
-            <li>Category: [% patron.category.description %]</li>
+            <li>Library: [% Branches.GetName( patron.branchcode ) | html %]</li>
+            <li>Category: [% patron.category.description | html %]</li>
         </ul>
 
         [% IF ( issues ) %]
@@ -47,24 +47,24 @@
                 [% FOREACH issue IN issues %]
                     [% IF ( issue.overdue ) %]<tr class="overdue">[% ELSE %]<tr>[% END %]
                         <td>
-                            [% issue.title |html %]
-                            <a href="/cgi-bin/koha/catalogue/detail.pl?item=[% issue.itemnumber %]&amp;biblionumber=[% issue.biblionumber %]&amp;bi=[% issue.biblioitemnumber %]"></a>
+                            [% issue.title | html %]
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?item=[% issue.itemnumber | html %]&amp;biblionumber=[% issue.biblionumber | html %]&amp;bi=[% issue.biblioitemnumber | html %]"></a>
                         </td>
-                        <td>[% issue.author %]</td>
-                        <td>[% issue.itemcallnumber %]</td>
-                        <td>[% issue.itemtype_description %]</td>
-                        <td>[% issue.date_due | $KohaDates as_due_date => 1 %]</td>
-                        <td>[% issue.barcode %]</td>
-                        <td>[% issue.charge %]</td>
-                        <td>[% issue.replacementprice %]</td>
+                        <td>[% issue.author | html %]</td>
+                        <td>[% issue.itemcallnumber | html %]</td>
+                        <td>[% issue.itemtype_description | html %]</td>
+                        <td>[% issue.date_due | $KohaDates as_due_date => 1 | html %]</td>
+                        <td>[% issue.barcode | html %]</td>
+                        <td>[% issue.charge | html %]</td>
+                        <td>[% issue.replacementprice | html %]</td>
                         <td>[% IF ( issue.overdue ) %]Overdue![% ELSE %]&nbsp;[% END %]</td>
                     </tr>
                 [% END %]
 
             <tr>
                 <td colspan="6" style="text-align: right; font-weight:bold;">Totals:</td>
-                <td>[% totaldue %]</td>
-                <td>[% totalprice %]</td>
+                <td>[% totaldue | html %]</td>
+                <td>[% totalprice | html %]</td>
                 <td colspan="3">&nbsp;</td>
             </tr>
         </table>
@@ -83,11 +83,11 @@
 
             [% FOREACH reserve IN reserves %]
                 <tr>
-                    <td>[% reserve.title %]</td>
-                    <td>[% reserve.author %]</td>
+                    <td>[% reserve.title | html %]</td>
+                    <td>[% reserve.author | html %]</td>
                     <td>[% reserve.reservedate | $KohaDates %]</td>
                     <td>[% reserve.expirationdate | $KohaDates %]</td>
-                    <td>[% reserve.waiting_at %]</td>
+                    <td>[% reserve.waiting_at | html %]</td>
                 </tr>
             [% END %]
         </table>
@@ -105,20 +105,20 @@
             [% FOREACH account IN accounts %]
                 <tr>
                     <td>
-                        [% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber %]&amp;itemnumber=[% account.itemnumber %]">[% END %]
-                        [% account.description %]&nbsp;[% IF account.itemnumber AND account.accounttype != 'F' AND account.accounttype != 'FU' %] [% account.item.biblio.title |html %][% END %]
+                        [% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber | html %]&amp;itemnumber=[% account.itemnumber | html %]">[% END %]
+                        [% account.description | html %]&nbsp;[% IF account.itemnumber AND account.accounttype != 'F' AND account.accounttype != 'FU' %] [% account.item.biblio.title | html %][% END %]
                         [% IF ( account.itemnumber ) %]</a>[% END %]
                     </td>
                     <td>[% account.date | $KohaDates %]</td>
-                    <td style="text-align:right;">[% account.amount | $Price %]</td>
-                    <td style="text-align:right;">[% account.amountoutstanding | $Price %]</td>
+                    <td style="text-align:right;">[% account.amount | $Price | html %]</td>
+                    <td style="text-align:right;">[% account.amountoutstanding | $Price | html %]</td>
                 </tr>
             [% END %]
 
             <tfoot>
                 <tr>
                     <td colspan="3">Total due</td>
-                    <td colspan="2" style="text-align:right;">[% totaldue | $Price %]</td>
+                    <td colspan="2" style="text-align:right;">[% totaldue | $Price | html %]</td>
                 </tr>
             </tfoot>
         </table>

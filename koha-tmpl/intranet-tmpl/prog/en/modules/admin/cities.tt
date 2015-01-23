@@ -1,9 +1,10 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; [% IF op =='add_form' %]Cities &rsaquo; [% IF city.cityid %] Modify city[% ELSE %] New city[% END %][% ELSE %][% IF op == 'delete_confirm' %]Cities &rsaquo; Confirm deletion of city[% ELSE %] Cities[% END %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="admin_cities" class="admin">
@@ -28,7 +29,7 @@
     <div class="yui-b">
 
 [% FOR m IN messages %]
-    <div class="dialog [% m.type %]">
+    <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
             An error occurred when updating this city. Perhaps it already exists.
@@ -45,7 +46,7 @@
         [% CASE 'already_exists' %]
             This city already exists.
         [% CASE %]
-            [% m.code %]
+            [% m.code | html %]
         [% END %]
     </div>
 [% END %]
@@ -59,28 +60,28 @@
 
     <form action="/cgi-bin/koha/admin/cities.pl" name="Aform" method="post" class="validated">
         <input type="hidden" name="op" value="add_validate" />
-        <input type="hidden" name="cityid" value="[% city.cityid %]" />
+        <input type="hidden" name="cityid" value="[% city.cityid | html %]" />
 
         <fieldset class="rows">
             <ol>
                 [% IF city %]
-                    <li><span class="label">City ID: </span>[% city.cityid %]</li>
+                    <li><span class="label">City ID: </span>[% city.cityid | html %]</li>
                 [% END %]
                 <li>
                     <label for="city_name" class="required">City: </label>
-                    <input type="text" name="city_name" id="city_name" size="80" maxlength="100" value="[% city.city_name |html %]" required="required" class="required" /> <span class="required">Required</span>
+                    <input type="text" name="city_name" id="city_name" size="80" maxlength="100" value="[% city.city_name | html %]" required="required" class="required" /> <span class="required">Required</span>
                 </li>
                 <li>
                     <label for="city_state">State: </label>
-                    <input type="text" name="city_state" id="city_state" size="80" maxlength="100" value="[% city.city_state |html %]" />
+                    <input type="text" name="city_state" id="city_state" size="80" maxlength="100" value="[% city.city_state | html %]" />
                 </li>
                 <li>
                     <label for="city_zipcode" class="required">ZIP/Postal code: </label>
-                    <input type="text" name="city_zipcode" id="city_zipcode" size="20" maxlength="20" value="[% city.city_zipcode %]" required="required" class="required" /> <span class="required">Required</span>
+                    <input type="text" name="city_zipcode" id="city_zipcode" size="20" maxlength="20" value="[% city.city_zipcode | html %]" required="required" class="required" /> <span class="required">Required</span>
                 </li>
                 <li>
                     <label for="city_country">Country: </label>
-                    <input type="text" name="city_country" id="city_country" size="80" maxlength="100" value="[% city.city_country |html %]" />
+                    <input type="text" name="city_country" id="city_country" size="80" maxlength="100" value="[% city.city_country | html %]" />
                 </li>
             </ol>
         </fieldset>
@@ -94,27 +95,27 @@
 
 [% IF op == 'delete_confirm' %]
     <div class="dialog alert">
-        <h3>Delete city "[% city.city_name %]?"</h3>
+        <h3>Delete city "[% city.city_name | html %]?"</h3>
         <table>
             <tr><th>City id</th>
-                <td>[% city.cityid %]</td>
+                <td>[% city.cityid | html %]</td>
             </tr>
             <tr><th>City</th>
-                <td>[% city.city_name %]</td>
+                <td>[% city.city_name | html %]</td>
             </tr>
             <tr><th>State</th>
-                <td>[% city.city_state %]</td>
+                <td>[% city.city_state | html %]</td>
             </tr>
             <tr><th>ZIP/Postal code</th>
-                <td>[% city.city_zipcode %]</td>
+                <td>[% city.city_zipcode | html %]</td>
             </tr>
             <tr><th>Country</th>
-                <td>[% city.city_country %]</td>
+                <td>[% city.city_country | html %]</td>
             </tr>
         </table>
         <form action="/cgi-bin/koha/admin/cities.pl" method="post">
             <input type="hidden" name="op" value="delete_confirmed" />
-            <input type="hidden" name="cityid" value="[% city.cityid %]" />
+            <input type="hidden" name="cityid" value="[% city.cityid | html %]" />
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
         </form>
         <form action="/cgi-bin/koha/admin/cities.pl" method="get">
@@ -131,7 +132,7 @@
 
     <h2>Cities</h2>
     [% IF searchfield %]
-        Searching: [% searchfield |html %]
+        Searching: [% searchfield | html %]
     [% END %]
 
     [% IF cities.count %]
@@ -147,14 +148,14 @@
             <tbody>
                 [% FOREACH city IN cities %]
                 <tr>
-                    <td>[% city.cityid %]</td>
-                    <td>[% city.city_name %]</td>
-                    <td>[% city.city_state %]</td>
-                    <td>[% city.city_zipcode %]</td>
-                    <td>[% city.city_country %]</td>
+                    <td>[% city.cityid | html %]</td>
+                    <td>[% city.city_name | html %]</td>
+                    <td>[% city.city_state | html %]</td>
+                    <td>[% city.city_zipcode | html %]</td>
+                    <td>[% city.city_country | html %]</td>
                     <td class="actions">
-                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/cities.pl?op=add_form&amp;cityid=[% city.cityid %]"><i class="fa fa-pencil"></i> Edit</a>
-                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/cities.pl?op=delete_confirm&amp;cityid=[% city.cityid %]"><i class="fa fa-trash"></i> Delete</a>
+                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/cities.pl?op=add_form&amp;cityid=[% city.cityid | html %]"><i class="fa fa-pencil"></i> Edit</a>
+                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/cities.pl?op=delete_confirm&amp;cityid=[% city.cityid | html %]"><i class="fa fa-trash"></i> Delete</a>
                     </td>
                 </tr>
                 [% END %]
@@ -175,7 +176,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
         $(document).ready(function() {

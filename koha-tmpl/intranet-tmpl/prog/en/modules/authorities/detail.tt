@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% PROCESS 'authorities.inc' %]
@@ -6,7 +7,7 @@
     [% IF ( unknownauthid ) %]
       Unknown authority record
     [% ELSE %]
-      Details for authority #[% authid %] ([% authtypetext %])
+      Details for authority #[% authid | html %] ([% authtypetext | html %])
     [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -19,7 +20,7 @@
     [% IF ( unknownauthid ) %]
       Unknown authority record
     [% ELSE %]
-      Details for authority #[% authid %] ([% authtypetext %])
+      Details for authority #[% authid | html %] ([% authtypetext | html %])
     [% END %]
 </div>
 
@@ -37,13 +38,13 @@
 
 
 [% IF ( unknownauthid ) %]
-    <div class="dialog message">The authority record you requested does not exist ([% errauthid %]).</div>
+    <div class="dialog message">The authority record you requested does not exist ([% errauthid | html %]).</div>
 [% ELSE %]
-<h1>Authority #[% authid %] ([% authtypetext %])</h1>
+<h1>Authority #[% authid | html %] ([% authtypetext | html %])</h1>
 
 <div id="action">
     [% IF count %]
-        Used in <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;q=an=[% authid %]">[% count %] record(s)</a>
+        Used in <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;q=an=[% authid | html %]">[% count | html %] record(s)</a>
     [% ELSE %]
         This authority is not used in any records.
     [% END %]
@@ -53,18 +54,18 @@
     <ul>
         [% FOREACH BIG_LOO IN BIG_LOOP %]
             <li>
-                <a href="#tab[% BIG_LOO.number %]XX">[% BIG_LOO.number %]</a>
+                <a href="#tab[% BIG_LOO.number | html %]XX">[% BIG_LOO.number | html %]</a>
             </li>
         [% END %]
     </ul>
 
 [% FOREACH BIG_LOO IN BIG_LOOP %]
-    <div id="tab[% BIG_LOO.number %]XX">
+    <div id="tab[% BIG_LOO.number | html %]XX">
     [% FOREACH innerloo IN BIG_LOO.innerloop %]
         [% IF ( innerloo.tag ) %]
             <div class="tag">
             <div class="tag_title">
-                [% innerloo.tag %]
+                [% innerloo.tag | html %]
             </div>
         [% ELSE %]
             <div class="tag">
@@ -72,16 +73,16 @@
         [% FOREACH subfiel IN innerloo.subfield %]
             <p>
                 <label class="labelsubfield">&nbsp;
-                [% UNLESS ( subfiel.hide_marc ) %]<b>[% subfiel.marc_subfield %]</b>[% END %]
-                <span title="[% subfiel.long_desc %]">[% subfiel.short_desc %]</span></label>
-                [% subfiel.marc_value %]
+                [% UNLESS ( subfiel.hide_marc ) %]<b>[% subfiel.marc_subfield | html %]</b>[% END %]
+                <span title="[% subfiel.long_desc | html %]">[% subfiel.short_desc | html %]</span></label>
+                [% subfiel.marc_value | html %]
                 [% IF ( subfiel.link ) %]
-                    <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=[% subfiel.link %]&amp;operator==&amp;type=intranet&amp;value=[% subfiel.marc_value |url %]">
-                        <img src="[% interface %]/[% theme %]/images/filefind.png" height="15" title="Search on [% subfiel.marc_value %]">
+                    <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=[% subfiel.link | html %]&amp;operator==&amp;type=intranet&amp;value=[% subfiel.marc_value |url %]">
+                        <img src="[% interface | html %]/[% theme | html %]/images/filefind.png" height="15" title="Search on [% subfiel.marc_value | html %]">
                     </a>
                 [% END %]
                 [% IF ( subfiel.authority ) %]
-                    <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority %]" class="button">Auth</a>
+                    <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority | html %]" class="button">Auth</a>
                 [% END %]
             </p>
         [% END %]
@@ -97,7 +98,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'authorities_js.inc' %]
     [% IF ( displayhierarchy ) %]
-        [% Asset.js("lib/jquery/plugins/jquery.jstree.js") %]
+        [% Asset.js("lib/jquery/plugins/jquery.jstree.js") | $raw %]
     [% END %]
     <script type="text/javascript">
         $(document).ready(function() {

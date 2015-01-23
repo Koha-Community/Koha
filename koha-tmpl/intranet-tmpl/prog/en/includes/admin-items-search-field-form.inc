@@ -3,8 +3,8 @@
   <li>
       [% IF field %]
           <span class="label">Name: </span>
-          [% field.name |html %]
-          <input type="hidden" name="name" value="[% field.name %]">
+          [% field.name | html %]
+          <input type="hidden" name="name" value="[% field.name | html %]">
       [% ELSE %]
           <label class="required" for="name">Name: </label>
           <input type="text" name="name" id="name" class="required" required="required" />
@@ -14,7 +14,7 @@
   <li>
     <label class="required" for="label">Label: </label>
     [% IF field %]
-        <input type="text" name="label" id="label" value="[% field.label |html %]" class="required" required="required" />
+        <input type="text" name="label" id="label" value="[% field.label | html %]" class="required" required="required" />
     [% ELSE %]
         <input type="text" name="label" id="label" class="required" required="required" />
     [% END %]
@@ -25,9 +25,9 @@
     <select id="tagfield" name="tagfield" class="required" required="required">
       [% FOREACH tagfield IN ['001'..'999'] %]
         [% IF field && field.tagfield == tagfield %]
-          <option value="[% tagfield %]" selected="selected">[% tagfield %]</option>
+          <option value="[% tagfield | html %]" selected="selected">[% tagfield | html %]</option>
         [% ELSE %]
-          <option value="[% tagfield %]">[% tagfield %]</option>
+          <option value="[% tagfield | html %]">[% tagfield | html %]</option>
         [% END %]
       [% END %]
     </select>
@@ -36,13 +36,13 @@
   <li>
     <label for="tagsubfield">MARC subfield: </label>
     <select id="tagsubfield" name="tagsubfield">
-      [% codes = [''] %]
-      [% codes = codes.merge([0..9], ['a'..'z']) %]
+      [% codes = [''] | html %]
+      [% codes = codes.merge([0..9], ['a'..'z']) | html %]
       [% FOREACH tagsubfield IN codes %]
         [% IF field && field.tagsubfield == tagsubfield %]
-          <option value="[% tagsubfield %]" selected="selected">[% tagsubfield %]</option>
+          <option value="[% tagsubfield | html %]" selected="selected">[% tagsubfield | html %]</option>
         [% ELSE %]
-          <option value="[% tagsubfield %]">[% tagsubfield %]</option>
+          <option value="[% tagsubfield | html %]">[% tagsubfield | html %]</option>
         [% END %]
       [% END %]
     </select>

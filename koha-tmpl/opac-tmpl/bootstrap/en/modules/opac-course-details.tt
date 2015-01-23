@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
@@ -5,10 +6,10 @@
 [% USE ItemTypes %]
 [% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Course reserves for [% course.course_name %]</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Course reserves for [% course.course_name | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
-    [% Asset.css("css/datatables.css") %]
+    [% Asset.css("css/datatables.css") | $raw %]
 [% END %]
 
 </head>
@@ -19,30 +20,30 @@
     <ul class="breadcrumb">
         <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
         <li><a href="/cgi-bin/koha/opac-course-reserves.pl">Course reserves</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="#">Course reserves for <i>[% course.course_name %]</i></a></li>
+        <li><a href="#">Course reserves for <i>[% course.course_name | html %]</i></a></li>
     </ul>
 
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="span12">
 
-                <h2>Course reserves for <i>[% course.course_name %]</i></h2>
+                <h2>Course reserves for <i>[% course.course_name | html %]</i></h2>
                 <div class="rows">
                     <ol>
-                        [% IF ( course.term ) %]<li><span class="label">Term:</span> [% AuthorisedValues.GetByCode( 'TERM', course.term ) %]</li>[% END %]
-                        <li><span class="label">Department:</span> [% AuthorisedValues.GetByCode( 'DEPARTMENT', course.department ) %]</li>
-                        [% IF ( course.course_number ) %]<li><span class="label">Course number:</span> [% course.course_number %]</li>[% END %]
-                        [% IF ( course.section ) %]<li><span class="label">Section:</span> [% course.section %]</li>[% END %]
+                        [% IF ( course.term ) %]<li><span class="label">Term:</span> [% AuthorisedValues.GetByCode( 'TERM', course.term ) | html %]</li>[% END %]
+                        <li><span class="label">Department:</span> [% AuthorisedValues.GetByCode( 'DEPARTMENT', course.department ) | html %]</li>
+                        [% IF ( course.course_number ) %]<li><span class="label">Course number:</span> [% course.course_number | html %]</li>[% END %]
+                        [% IF ( course.section ) %]<li><span class="label">Section:</span> [% course.section | html %]</li>[% END %]
                         [% IF ( course.instructors ) %]
                             <li><span class="label">Instructors:</span>
                                 <ul>
                                     [% FOREACH i IN course.instructors %]
-                                        <li><div class="instructor">[% i.firstname %] [% i.surname %]</div></li>
+                                        <li><div class="instructor">[% i.firstname | html %] [% i.surname | html %]</div></li>
                                     [% END %]
                                 </ul>
                             </li>
                         [% END %]
-                        [% IF ( course.public_note ) %]<li><span class="label">Notes:</span> [% course.public_note %]</li>[% END %]
+                        [% IF ( course.public_note ) %]<li><span class="label">Notes:</span> [% course.public_note | html %]</li>[% END %]
                     </ol>
                 </div>
 
@@ -67,25 +68,25 @@
                         <tbody>
                             [% FOREACH cr IN course_reserves %]
                                 <tr>
-                                    <td><a href="opac-detail.pl?biblionumber=[% cr.biblio.biblionumber %]">[% cr.biblio.title %]</a></td>
-                                    <td>[% cr.biblio.author %]</td>
-                                    <td>[% ItemTypes.GetDescription( cr.item.itype ) %]</td>
-                                    <td>[% Branches.GetName( cr.item.holdingbranch ) %] <br/> <i>[% AuthorisedValues.GetByCode( 'LOC', cr.item.location ) %]</i></td>
-                                    <td>[% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) %]</td>
-                                    <td>[% cr.item.itemcallnumber %]</td>
-                                    <td>[% cr.item.copynumber %]</td>
+                                    <td><a href="opac-detail.pl?biblionumber=[% cr.biblio.biblionumber | html %]">[% cr.biblio.title | html %]</a></td>
+                                    <td>[% cr.biblio.author | html %]</td>
+                                    <td>[% ItemTypes.GetDescription( cr.item.itype ) | html %]</td>
+                                    <td>[% Branches.GetName( cr.item.holdingbranch ) | html %] <br/> <i>[% AuthorisedValues.GetByCode( 'LOC', cr.item.location ) | html %]</i></td>
+                                    <td>[% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) | html %]</td>
+                                    <td>[% cr.item.itemcallnumber | html %]</td>
+                                    <td>[% cr.item.copynumber | html %]</td>
                                     <td>[% INCLUDE 'item-status.inc' item=cr.item issue=cr.issue %]</td>
-                                    <td><span title="[% cr.issue.date_due %]">[% cr.issue.date_due | $KohaDates as_due_date => 1 %]</span></td>
+                                    <td><span title="[% cr.issue.date_due | html %]">[% cr.issue.date_due | $KohaDates as_due_date => 1 | html %]</span></td>
                                     <td>[% IF ( cr.public_note ) %]
-                                            [% cr.public_note %]
+                                            [% cr.public_note | html %]
                                         [% ELSIF ( cr.item.itemnotes ) %]
-                                            [% cr.item.itemnotes %]
+                                            [% cr.item.itemnotes | html %]
                                         [% END %]
                                     </td>
                                     <td>[% IF (cr.item.uri) %]
-                                            <a href="[% cr.item.uri %]">Item URI</a>
+                                            <a href="[% cr.item.uri | html %]">Item URI</a>
                                         [% ELSIF (cr.biblioitem.url) %]
-                                            <a href="[% cr.biblioitem.url %]">Record URL</a>
+                                            <a href="[% cr.biblioitem.url | html %]">Record URL</a>
                                         [% END %]
                                     </td>
                                 </tr>

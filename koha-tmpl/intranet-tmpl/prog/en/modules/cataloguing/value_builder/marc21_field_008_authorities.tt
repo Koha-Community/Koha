@@ -8,11 +8,11 @@
 <h3> 008 Fixed-length data elements</h3>
 <form name="f_pop" onsubmit="report()" action="">
 <input type="hidden" name="plugin_name" value="marc21_field_008_authorities.pl" />
-<input name="f1" value="[% f1 %]" type="hidden" />
+<input name="f1" value="[% f1 | html %]" type="hidden" />
 <table>
 	<tr>
 		<td>00-05- Date entered on file</td>
-		<td>[% f1 %]</td>
+		<td>[% f1 | html %]</td>
 	</tr>
 	<tr>
 		<td><label for="f6">06- Direct or indirect geographic subdivision</label></td>
@@ -719,7 +719,7 @@
     <script type="text/javascript">
         function report() {
             var doc   = opener.document;
-            var field = doc.getElementById("[% index %]");
+            var field = doc.getElementById("[% index | html %]");
 
             field.value =
             document.f_pop.f1.value +

@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -46,22 +47,22 @@
     <tbody>[% FOREACH review IN reviews %]
     <tr>
         <td>
-            [% IF ( review.borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% review.borrowernumber %]">[% review.patron.surname %], [% review.patron.firstname %]</a>[% ELSE %](deleted patron)[% END %]
+            [% IF ( review.borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% review.borrowernumber | html %]">[% review.patron.surname | html %], [% review.patron.firstname | html %]</a>[% ELSE %](deleted patron)[% END %]
         </td>
         <td>
-            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% review.biblionumber %]">[% review.bibliotitle %]</a>
+            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% review.biblionumber | html %]">[% review.bibliotitle | html %]</a>
         </td>
         <td>
-            [% review.review |html %]
+            [% review.review | html %]
         </td>
         <td>
-            [% IF ( status ) %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=unapprove&amp;reviewid=[% review.reviewid %]" class="btn btn-default btn-xs"><i class="fa fa-remove"></i> Unapprove</a>[% ELSE %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=approve&amp;reviewid=[% review.reviewid %]" class="btn btn-default btn-xs"><i class="fa fa-check"></i> Approve</a>[% END %]
-            <a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=delete&amp;reviewid=[% review.reviewid %]" class="btn btn-default btn-xs"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
+            [% IF ( status ) %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=unapprove&amp;reviewid=[% review.reviewid | html %]" class="btn btn-default btn-xs"><i class="fa fa-remove"></i> Unapprove</a>[% ELSE %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=approve&amp;reviewid=[% review.reviewid | html %]" class="btn btn-default btn-xs"><i class="fa fa-check"></i> Approve</a>[% END %]
+            <a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=delete&amp;reviewid=[% review.reviewid | html %]" class="btn btn-default btn-xs"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
         </td>
     </tr>
     [% END %]</tbody>
 </table>
- <div class="pages">[% pagination_bar %]</div>
+ <div class="pages">[% pagination_bar | $raw %]</div>
 [% ELSE %]
 [% IF ( status ) %]<p><b>No comments have been approved.</b></p>[% ELSE %]<p><b>No comments to moderate.</b></p>[% END %]
 [% END %]
@@ -76,7 +77,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -1,5 +1,5 @@
 <div class="gradient">
-<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1>
+<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></h1>
 <!-- Begin Authorities Resident Search Box -->
 <div id="header_search" class="residentsearch">
     <div id="mainmain_heading" class="residentsearch">
@@ -11,9 +11,9 @@
         [% IF (marcflavour == 'UNIMARC' ) %]<option value="">All authority types</option>[% END %]
         [% FOREACH authority_type IN authority_types %]
             [% IF authority_type.authtypecode == authtypecode %]
-            <option value="[% authority_type.authtypecode%]" selected="selected">[% authority_type.authtypetext %]</option>
+            <option value="[% authority_type.authtypecode | html %]" selected="selected">[% authority_type.authtypetext | html %]</option>
             [% ELSE %]
-            <option value="[% authority_type.authtypecode %]">[% authority_type.authtypetext %]</option>
+            <option value="[% authority_type.authtypecode | html %]">[% authority_type.authtypetext | html %]</option>
             [% END %]
         [% END %]
         </select>
@@ -37,7 +37,7 @@
             <option value="is">is exactly</option>
             [% END %]
         </select>
-        <input id="value_mainentry" type="text" name="value" value="[% value | html%]" class="head-searchbox" />
+        <input id="value_mainentry" type="text" name="value" value="[% value | html %]" class="head-searchbox" />
         <select name="orderby">
             [% IF ( orderby == 'HeadingAsc' ) %]
             <option value="HeadingAsc" selected="selected">Heading A-Z</option>
@@ -67,9 +67,9 @@
         [% IF (marcflavour == 'UNIMARC' ) %]<option value="">All authority types</option>[% END %]
         [% FOREACH authority_type IN authority_types %]
             [% IF authority_type.authtypecode == authtypecode %]
-            <option value="[% authority_type.authtypecode %]" selected="selected">[% authority_type.authtypetext %]</option>
+            <option value="[% authority_type.authtypecode | html %]" selected="selected">[% authority_type.authtypetext | html %]</option>
             [% ELSE %]
-            <option value="[% authority_type.authtypecode %]">[% authority_type.authtypetext %]</option>
+            <option value="[% authority_type.authtypecode | html %]">[% authority_type.authtypetext | html %]</option>
             [% END %]
         [% END %]
         </select>
@@ -93,7 +93,7 @@
             <option value="is">is exactly</option>
             [% END %]
         </select>
-        <input id="value_mainentry" type="text" name="value" value="[% value | html%]" class="head-searchbox" />
+        <input id="value_mainentry" type="text" name="value" value="[% value | html %]" class="head-searchbox" />
         <select name="orderby">
             [% IF ( orderby == 'HeadingAsc' ) %]
             <option value="HeadingAsc" selected="selected">Heading A-Z</option>
@@ -123,9 +123,9 @@
         [% IF (marcflavour == 'UNIMARC' ) %]<option value="">All authority types</option>[% END %]
         [% FOREACH authority_type IN authority_types %]
             [% IF authority_type.authtypecode == authtypecode %]
-            <option value="[% authority_type.authtypecode %]" selected="selected">[% authority_type.authtypetext %]</option>
+            <option value="[% authority_type.authtypecode | html %]" selected="selected">[% authority_type.authtypetext | html %]</option>
             [% ELSE %]
-            <option value="[% authority_type.authtypecode %]">[% authority_type.authtypetext %]</option>
+            <option value="[% authority_type.authtypecode | html %]">[% authority_type.authtypetext | html %]</option>
             [% END %]
         [% END %]
         </select>
@@ -177,9 +177,9 @@
         [% IF (marcflavour == 'UNIMARC' ) %]<option value="">All authority types</option>[% END %]
         [% FOREACH authority_type IN authority_types %]
             [% IF authority_type.authtypecode == authtypecode %]
-            <option value="[% authority_type.authtypecode %]" selected="selected">[% authority_type.authtypetext %]</option>
+            <option value="[% authority_type.authtypecode | html %]" selected="selected">[% authority_type.authtypetext | html %]</option>
             [% ELSE %]
-            <option value="[% authority_type.authtypecode %]">[% authority_type.authtypetext %]</option>
+            <option value="[% authority_type.authtypecode | html %]">[% authority_type.authtypetext | html %]</option>
             [% END %]
         [% END %]
         </select>

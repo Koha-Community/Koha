@@ -1,14 +1,15 @@
+[% USE raw %]
 [% USE Asset %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo;
-[% IF ( add_form ) %][% IF ( searchfield ) %] Printers &rsaquo; Modify printer '[% searchfield %]'[% ELSE %] Printers &rsaquo; New printer[% END %][% END %]
+[% IF ( add_form ) %][% IF ( searchfield ) %] Printers &rsaquo; Modify printer '[% searchfield | html %]'[% ELSE %] Printers &rsaquo; New printer[% END %][% END %]
 [% IF ( add_validate ) %] Printers &rsaquo; Printer added[% END %]
-[% IF ( delete_confirm ) %] Printers &rsaquo; Confirm deletion of printer '[% searchfield %]'[% END %]
+[% IF ( delete_confirm ) %] Printers &rsaquo; Confirm deletion of printer '[% searchfield | html %]'[% END %]
 [% IF ( delete_confirmed ) %] Printers &rsaquo; Printer deleted[% END %]
 [% IF ( else ) %]Printers[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( loop ) %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
@@ -29,9 +30,9 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %][% IF ( searchfield ) %] <a href="/cgi-bin/koha/admin/printers.pl">Printers</a> &rsaquo; Modify printer '[% searchfield %]'[% ELSE %] <a href="/cgi-bin/koha/admin/printers.pl">Printers</a> &rsaquo; New printer[% END %][% END %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %][% IF ( searchfield ) %] <a href="/cgi-bin/koha/admin/printers.pl">Printers</a> &rsaquo; Modify printer '[% searchfield | html %]'[% ELSE %] <a href="/cgi-bin/koha/admin/printers.pl">Printers</a> &rsaquo; New printer[% END %][% END %]
 [% IF ( add_validate ) %] <a href="/cgi-bin/koha/admin/printers.pl">Printers</a> &rsaquo; Printer added[% END %]
-[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/printers.pl">Printers</a> &rsaquo; Confirm deletion of printer '[% searchfield %]'[% END %]
+[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/printers.pl">Printers</a> &rsaquo; Confirm deletion of printer '[% searchfield | html %]'[% END %]
 [% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/printers.pl">Printers</a> &rsaquo; Printer deleted[% END %]
 [% IF ( else ) %]Printers[% END %]</div>
 
@@ -48,7 +49,7 @@
 	[% ELSE %]
 		<h1>New printer</h1>
 	[% END %]
-        <form action="[% script_name %]" name="Aform" method="post" class="validated">
+        <form action="[% script_name | html %]" name="Aform" method="post" class="validated">
         <input type="hidden" name="op" value="add_validate" />
 	[% IF ( searchfield ) %]
 		<input type="hidden" name="add" value="0" />
@@ -59,7 +60,7 @@
 <ol>	[% IF ( searchfield ) %]
 		<li>
             <span class="label">Printer name: </span>
-				<input type="hidden" name="printername" id="" value="[% searchfield %]" />[% searchfield %]
+				<input type="hidden" name="printername" id="" value="[% searchfield | html %]" />[% searchfield | html %]
 		</li>
 	[% ELSE %]
 		<li>
@@ -70,12 +71,12 @@
 	[% END %]
         	<li>
             <label for="printqueue" class="required">Queue: </label>
-            <input type="text" name="printqueue" id="printqueue" size="20" maxlength="20" value="[% printqueue %]"  class="required" required="required" />
+            <input type="text" name="printqueue" id="printqueue" size="20" maxlength="20" value="[% printqueue | html %]"  class="required" required="required" />
             <span class="required">Required</span>
 		</li>
         	<li>
 			<label for="printtype">Type: </label>
-            <input type="text" name="printtype" id="printtype" size="20" maxlength="20" value="[% printtype %]" />
+            <input type="text" name="printtype" id="printtype" size="20" maxlength="20" value="[% printtype | html %]" />
 		</li></ol>
         </fieldset>
         <fieldset class="action"><input type="submit" value="Submit" /> <a class="cancel" href="/cgi-bin/koha/admin/printers.pl">Cancel</a></fieldset>
@@ -85,30 +86,30 @@
 
 [% IF ( add_validate ) %]
 <h3>Printer added</h3>
-<form action="[% script_name %]" method="post">
+<form action="[% script_name | html %]" method="post">
        <fieldset class="action"> <input type="submit" value="OK" /></fieldset>
 </form>
 [% END %]
 
 [% IF ( delete_confirm ) %]
     <div class="dialog alert">
-        <h3>Confirm deletion of printer <em>[% searchfield %]</em></h3>
+        <h3>Confirm deletion of printer <em>[% searchfield | html %]</em></h3>
 
         <table>
             <tr>
-                <th scope="row">Printer: </th><td>[% searchfield %]</td>
+                <th scope="row">Printer: </th><td>[% searchfield | html %]</td>
             </tr>
             <tr>
-                <th scope="row">Queue: </th><td>[% printqueue %]</td>
+                <th scope="row">Queue: </th><td>[% printqueue | html %]</td>
             </tr>
             <tr>
-                <th scope="row">Type: </th><td>[% printtype %]</td>
+                <th scope="row">Type: </th><td>[% printtype | html %]</td>
             </tr>
         </table>
 
-        <form action="[% script_name %]" method="post">
+        <form action="[% script_name | html %]" method="post">
             <input type="hidden" name="op" value="delete_confirmed" />
-            <input type="hidden" name="searchfield" value="[% searchfield %]" />
+            <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
         </form>
         <form action="/cgi-bin/koha/admin/printers.pl" method="get">
@@ -120,7 +121,7 @@
 [% IF ( delete_confirmed ) %]
     <div class="dialog message">
         <h3>Printer deleted</h3>
-        <form action="[% script_name %]" method="post">
+        <form action="[% script_name | html %]" method="post">
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
         </form>
     </div>
@@ -135,7 +136,7 @@
 
 <h2>Printers</h2>
 	[% IF ( searchfield ) %]
-		You searched for [% searchfield %]</span>
+		You searched for [% searchfield | html %]</span>
 	[% END %]
 
 [% IF ( loop ) %]
@@ -151,10 +152,10 @@
         <tbody>
 		[% FOREACH loo IN loop %]
         <tr>
-			<td>[% loo.printername %]</td>
-			<td>[% loo.printqueue %]</td>
-			<td>[% loo.printtype %]</td>
-            <td class="actions"><a class="btn btn-default btn-xs" href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.printername |uri %]"><i class="fa fa-pencil"></i> Edit</a> <a class="btn btn-default btn-xs" href="[% loo.script_name %]?op=delete_confirm&amp;searchfield=[% loo.printername |uri %]"><i class="fa fa-trash"></i> Delete</a></td>
+			<td>[% loo.printername | html %]</td>
+			<td>[% loo.printqueue | html %]</td>
+			<td>[% loo.printtype | html %]</td>
+            <td class="actions"><a class="btn btn-default btn-xs" href="[% loo.script_name | html %]?op=add_form&amp;searchfield=[% loo.printername |uri %]"><i class="fa fa-pencil"></i> Edit</a> <a class="btn btn-default btn-xs" href="[% loo.script_name | html %]?op=delete_confirm&amp;searchfield=[% loo.printername |uri %]"><i class="fa fa-trash"></i> Delete</a></td>
 		</tr>
 		[% END %]
         </tbody>

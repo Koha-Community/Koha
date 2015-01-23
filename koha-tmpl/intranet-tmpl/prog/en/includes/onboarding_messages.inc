@@ -32,6 +32,6 @@
             <div class="alert alert-danger">The patron has not been created the entered password was too weak, must contain at least one uppercase, and lower case letter and one number</div>
         [% CASE 'ERROR_password_has_whitespaces' %]
             <div class="alert alert-danger">The patron has not been created the entered password contained whitespaces</div>
-        [% CASE %][% message %]
+        [% CASE %][% message | html %]
     [% END %]
 [% END %]

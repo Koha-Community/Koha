@@ -1,9 +1,9 @@
 [%# First line will be summary, second line will be description. Avoid indenting. Var newline added to avoid translating problems. -%]
-[%- newline="\n" -%]
+[%- newline="\n" | html -%]
 [%- IF overdue == 1 -%]
-[% title %] is overdue
-[%- newline -%]Your copy of [% title %] (barcode [% barcode %]) is overdue
+[% title | html %] is overdue
+[%- newline | html -%]Your copy of [% title | html %] (barcode [% barcode | html %]) is overdue
 [%- ELSE -%]
-[% title %] is due
-[%- newline -%]Your copy of [% title %] (barcode [% barcode %]) is due back at the library today
+[% title | html %] is due
+[%- newline | html -%]Your copy of [% title | html %] (barcode [% barcode | html %]) is due back at the library today
 [%- END -%]

@@ -1,10 +1,11 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Library checkin and transfer policy</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 <style type="text/css">td { text-align: center; } .sorted { min-width: 50%; }</style>
 </head>
 
@@ -20,7 +21,7 @@
      <div id="yui-main">
     <div class="yui-b">
 
-<h1>Library [% branchcode %] - [% Branches.GetName( branchcode ) %] Checkin and transfer policy</h1>
+<h1>Library [% branchcode | html %] - [% Branches.GetName( branchcode ) | html %] Checkin and transfer policy</h1>
     <form method="get" action="/cgi-bin/koha/admin/branch_transfer_limits.pl" id="selectlibrary">
         <label for="branchselect">Select a library :</label>
         <select name="branchcode" id="branchselect">
@@ -34,17 +35,17 @@
 
   <div id="transferlimit_tabs" class="toptabs">
 	<ul class="ui-tabs-nav">
-      [% FOREACH codes_loo IN codes_loop %]<li><a href="#[% codes_loo.code %]set">[% codes_loo.code %]</a></li>[% END %]
+      [% FOREACH codes_loo IN codes_loop %]<li><a href="#[% codes_loo.code | html %]set">[% codes_loo.code | html %]</a></li>[% END %]
 	</ul>
 
 		<form method="post" action="branch_transfer_limits.pl">
 
 	[% FOREACH codes_loo IN codes_loop %]
-	<div id="[% codes_loo.code %]set">
-		<h4>Policy for [% codes_loo.limit_phrase %]: [% codes_loo.code %]</h4>
-    <p><a id="CheckAll[% codes_loo.code %]table" class="checkall" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="UncheckAll[% codes_loo.code %]table" class="uncheckall" href="#"><i class="fa fa-remove"></i> Clear all</a></p>
+	<div id="[% codes_loo.code | html %]set">
+		<h4>Policy for [% codes_loo.limit_phrase | html %]: [% codes_loo.code | html %]</h4>
+    <p><a id="CheckAll[% codes_loo.code | html %]table" class="checkall" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="UncheckAll[% codes_loo.code | html %]table" class="uncheckall" href="#"><i class="fa fa-remove"></i> Clear all</a></p>
 	
-		<table id="[% codes_loo.code %]table" class="sorted">
+		<table id="[% codes_loo.code | html %]table" class="sorted">
 			<thead>
 				<tr>
 				    <th>Library</th>
@@ -55,12 +56,12 @@
 			<tbody>
 					[% FOREACH to_branch_loo IN codes_loo.to_branch_loop %]
                         <tr>
-                            <td><label style="min-width:400px;" for="[% to_branch_loo.code %][% to_branch_loo.toBranch %]row">[% to_branch_loo.toBranch %] - [% Branches.GetName( to_branch_loo.toBranch ) %]</label></td>
+                            <td><label style="min-width:400px;" for="[% to_branch_loo.code | html %][% to_branch_loo.toBranch | html %]row">[% to_branch_loo.toBranch | html %] - [% Branches.GetName( to_branch_loo.toBranch ) | html %]</label></td>
 							<td>
 							[% IF ( to_branch_loo.isChecked ) %]
-								<input type="checkbox" id="[% to_branch_loo.code %][% to_branch_loo.toBranch %]row" name="[% to_branch_loo.code %]_[% to_branch_loo.toBranch %]" checked="checked" />
+								<input type="checkbox" id="[% to_branch_loo.code | html %][% to_branch_loo.toBranch | html %]row" name="[% to_branch_loo.code | html %]_[% to_branch_loo.toBranch | html %]" checked="checked" />
 							[% ELSE %]
-								<input type="checkbox" id="[% to_branch_loo.code %][% to_branch_loo.toBranch %]row" name="[% to_branch_loo.code %]_[% to_branch_loo.toBranch %]" />
+								<input type="checkbox" id="[% to_branch_loo.code | html %][% to_branch_loo.toBranch | html %]row" name="[% to_branch_loo.code | html %]_[% to_branch_loo.toBranch | html %]" />
 							[% END %]
 							</td>
 						</tr>
@@ -72,7 +73,7 @@
 		
 		<fieldset class="action">
 		    <input type="hidden" name="updateLimits" value="1" />
-		    <input type="hidden" name="branchcode" value="[% branchcode %]" />
+		    <input type="hidden" name="branchcode" value="[% branchcode | html %]" />
 		    <input type="submit" value="Save" /> 
 		    <a class="cancel" href="/cgi-bin/koha/admin/admin-home.pl">Cancel</a>
 		</fieldset>
@@ -86,9 +87,9 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script type="text/javascript">
         $(document).ready(function(){
             $("#CheckAll").click(function(){ $("#transferlimit_tabs").checkCheckboxes(); return false; });

@@ -1,11 +1,12 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Quote uploader</title>
     [% INCLUDE 'doc-head-close.inc' %]
-    [% Asset.css("css/uploader.css") %]
-    [% Asset.css("css/quotes.css") %]
-    [% Asset.css("css/datatables.css") %]
+    [% Asset.css("css/uploader.css") | $raw %]
+    [% Asset.css("css/quotes.css") | $raw %]
+    [% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="tools_quotes" class="tools">
@@ -74,9 +75,9 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.jeditable.mini.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.jeditable.mini.js") | $raw %]
     <script type="text/javascript">
         var oTable; //DataTable object
         $(document).ready(function() {

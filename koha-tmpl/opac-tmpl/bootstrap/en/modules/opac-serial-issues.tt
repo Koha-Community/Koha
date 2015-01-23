@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Issues for a subscription</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Issues for a subscription</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -10,7 +10,7 @@
     <div class="main">
         <ul class="breadcrumb">
             <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]">Details for [% bibliotitle %]</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]">Details for [% bibliotitle | html %]</a> <span class="divider">&rsaquo;</span></li>
             <li><a href="#">Issues for a subscription</a></li>
         </ul>
 
@@ -33,14 +33,14 @@
                                 <a id="Normalview" href="opac-detail.pl?biblionumber=[% biblionumber | html %]" class="button">Normal view</a>
                             </span>
                             <span class="view"><span id="Briefhistory">Brief history</span></span>
-                            <span class="view"><a id="Fullhistory" href="opac-serial-issues.pl?selectview=full&amp;biblionumber=[% biblionumber | html%]" class="button">Full history</a></span>
+                            <span class="view"><a id="Fullhistory" href="opac-serial-issues.pl?selectview=full&amp;biblionumber=[% biblionumber | html %]" class="button">Full history</a></span>
                         </div>
                         <form method="post" name="f">
                             [% FOREACH subscription_LOO IN subscription_LOOP %]
-                                <div id="subscriptionline[% subscription_LOO.subscriptionid %]" style="border-bottom:1px solid #EEE;">
-                                    <h3>Subscription information for [% subscription_LOO.bibliotitle %]</h3>
+                                <div id="subscriptionline[% subscription_LOO.subscriptionid | html %]" style="border-bottom:1px solid #EEE;">
+                                    <h3>Subscription information for [% subscription_LOO.bibliotitle | html %]</h3>
                                     <p>
-                                        The current subscription began on [% subscription_LOO.startdate %] and is issued
+                                        The current subscription began on [% subscription_LOO.startdate | html %] and is issued
                                         [% IF ( subscription_LOO.periodicity1 ) %]
                                                 twice per day
                                         [% END %]
@@ -103,45 +103,45 @@
                                         [% END %]
 
                                         for
-                                            [% IF ( subscription_LOO.numberlength ) %][% subscription_LOO.numberlength %] issues[% END %]
-                                            [% IF ( subscription_LOO.weeklength ) %][% subscription_LOO.weeklength %] weeks[% END %]
-                                            [% IF ( subscription_LOO.monthlength ) %][% subscription_LOO.monthlength %] months[% END %]
+                                            [% IF ( subscription_LOO.numberlength ) %][% subscription_LOO.numberlength | html %] issues[% END %]
+                                            [% IF ( subscription_LOO.weeklength ) %][% subscription_LOO.weeklength | html %] weeks[% END %]
+                                            [% IF ( subscription_LOO.monthlength ) %][% subscription_LOO.monthlength | html %] months[% END %]
                                     </p>
-                                    <p>The first subscription was started on  [% subscription_LOO.histstartdate %]</p>
+                                    <p>The first subscription was started on  [% subscription_LOO.histstartdate | html %]</p>
                                     [% IF ( subscription_LOO.histenddate ) %]
-                                        <p>The subscription expired on [% subscription_LOO.histenddate %]</p>
+                                        <p>The subscription expired on [% subscription_LOO.histenddate | html %]</p>
                                     [% END %]
 
-                                    <h4>[% subscription_LOO.branchname %]</h4>
+                                    <h4>[% subscription_LOO.branchname | html %]</h4>
 
                                     [% IF ( subscription_LOO.notes ) %]
-                                        <p>[% subscription_LOO.notes FILTER html_line_break %]</p>
+                                        <p>[% subscription_LOO.notes FILTER html_line_break | html %]</p>
                                     [% END %]
 
                                     [% IF ( subscription_LOO.recievedlist ) %]
                                         <h5>Available issues</h5>
-                                            <p>[% subscription_LOO.recievedlist %]</p>
+                                            <p>[% subscription_LOO.recievedlist | html %]</p>
                                     [% END %]
 
                                     [% IF ( subscription_LOO.missinglist ) %]
                                         <h5>Unavailable issues</h5>
-                                        <p>[% subscription_LOO.missinglist %]</p>
+                                        <p>[% subscription_LOO.missinglist | html %]</p>
                                     [% END %]
 
                                     [% IF ( subscription_LOO.opacnote ) %]
                                         <h5>Issues summary</h5>
                                         <p>
-                                            [% subscription_LOO.opacnote FILTER html_line_break %]
+                                            [% subscription_LOO.opacnote FILTER html_line_break | html %]
                                         </p>
                                     [% END %]
                                     [% IF ( subscription_LOO.letter ) %]
                                         [% IF ( loggedinusername ) %]
                                             [% IF ( subscription_LOO.hasalert ) %]
-                                                You have subscribed to email notification on new issues <a href="opac-alert-subscribe.pl?op=cancel&amp;subscriptionid=[% subscription_LOO.subscriptionid %]&amp;referer=serial&amp;biblionumber=[% subscription_LOO.biblionumber %]" class="btn" title="Cancel email notification">
+                                                You have subscribed to email notification on new issues <a href="opac-alert-subscribe.pl?op=cancel&amp;subscriptionid=[% subscription_LOO.subscriptionid | html %]&amp;referer=serial&amp;biblionumber=[% subscription_LOO.biblionumber | html %]" class="btn" title="Cancel email notification">
                                                     Cancel email notification
                                                 </a>
                                             [% ELSE %]
-                                                <a href="opac-alert-subscribe.pl?subscriptionid=[% subscription_LOO.subscriptionid %]&amp;referer=serial&amp;biblionumber=[% subscription_LOO.biblionumber %]" class="btn" title="Subscribe to email notification on new issues">
+                                                <a href="opac-alert-subscribe.pl?subscriptionid=[% subscription_LOO.subscriptionid | html %]&amp;referer=serial&amp;biblionumber=[% subscription_LOO.biblionumber | html %]" class="btn" title="Subscribe to email notification on new issues">
                                                     Subscribe to email notification on new issues
                                                 </a>
                                             [% END %]

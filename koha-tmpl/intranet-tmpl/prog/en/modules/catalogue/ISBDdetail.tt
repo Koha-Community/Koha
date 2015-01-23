@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -26,7 +27,7 @@
 <div id="doc3" class="yui-t2">
 
 [% IF ( unknownbiblionumber ) %]
-  <div class="dialog message">The record you requested does not exist ([% biblionumber %]).</div>
+  <div class="dialog message">The record you requested does not exist ([% biblionumber | html %]).</div>
 [% ELSE %]
    <div id="bd">
       <div id="yui-main">
@@ -34,10 +35,10 @@
 	[% INCLUDE 'cat-toolbar.inc' %]
     [% IF ( ocoins ) %]
     <!-- COinS / OpenURL -->
-    <span class="Z3988" title="[% ocoins %]"></span>
+    <span class="Z3988" title="[% ocoins | html %]"></span>
     [% END %]
 	  <div id="catalogue_ISBDdetail">
-		  [% ISBD %]
+          [% ISBD | $raw %]
 	  </div>
 	</div>
       </div>
@@ -49,11 +50,11 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
-    [% Asset.js("js/catalog.js") %]
+    [% Asset.js("js/catalog.js") | $raw %]
     [% INCLUDE 'browser-strings.inc' %]
-    [% Asset.js("js/browser.js") %]
+    [% Asset.js("js/browser.js") | $raw %]
     <script type="text/javascript">
-        var browser = KOHA.browser('[% searchid %]', parseInt('[% biblionumber %]', 10));
+        var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
         browser.show();
     </script>
 [% END %]

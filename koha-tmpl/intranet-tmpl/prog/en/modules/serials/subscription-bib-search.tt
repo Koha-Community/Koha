@@ -24,8 +24,8 @@
             <select name="itemtypelimit" id="itemtypelimit">
                 <option value="">All</option>
                 [%- FOREACH itemtypeloo IN itemtypeloop %]
-                <option value="[% itemtypeloo.code %]">
-                    [% itemtypeloo.description |html %]
+                <option value="[% itemtypeloo.code | html %]">
+                    [% itemtypeloo.description | html %]
                 </option>
                 [%- END %]
             </select>
@@ -36,8 +36,8 @@
             <select name="ccodelimit" id="ccodelimit">
                 <option value="">All</option>
                 [%- FOREACH ccodeloo IN ccodeloop %]
-                <option value="[% ccodeloo.code %]">
-                    [% ccodeloo.description |html %]
+                <option value="[% ccodeloo.code | html %]">
+                    [% ccodeloo.description | html %]
                 </option>
                 [%- END %]
             </select>

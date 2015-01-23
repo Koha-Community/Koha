@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
@@ -62,7 +63,7 @@
 [% CASE 'altcontactphone'     %]<span>Alternate contact: Phone</span>
 [% CASE 'smsalertnumber'      %]<span>SMS alert number</span>
 [% CASE 'extended_attributes' %]<span>Additional attributes and identifiers</span>
-[% CASE %][% field %]
+[% CASE %][% field | html %]
 [% END %]
 [% END %]
 
@@ -80,9 +81,9 @@
 
 [% BLOCK display_attribute %]
     [% IF type.authorised_value_category %]
-        [% AuthorisedValues.GetByCode(type.authorised_value_category,attr.attribute) %]
+        [% AuthorisedValues.GetByCode(type.authorised_value_category,attr.attribute) | html %]
     [% ELSE %]
-        [% attr.attribute %]
+        [% attr.attribute | html %]
     [% END %]
 [% END %]
 
@@ -98,18 +99,18 @@
                     <div id="pending_updates">
                             [% FOREACH pm IN PendingModifications %]
                                 [% SET borrowernumber = pm.borrowernumber %]
-                                <h3><a href="#panel_modify_[% pm.borrowernumber %]">[% borrowers.$borrowernumber.surname %][% IF ( borrowers.$borrowernumber.firstname ) %], [% borrowers.$borrowernumber.firstname %][% END %] - [% Categories.GetName( borrowers.$borrowernumber.categorycode ) %] ([% Branches.GetName( borrowers.$borrowernumber.branchcode ) %]) ([% borrowers.$borrowernumber.cardnumber %]) - Requested on [% pm.timestamp | $KohaDates with_hours = 1 %]</a></h3>
-                                <div id="panel_modify_[% pm.borrowernumber %]">
+                                <h3><a href="#panel_modify_[% pm.borrowernumber | html %]">[% borrowers.$borrowernumber.surname | html %][% IF ( borrowers.$borrowernumber.firstname ) %], [% borrowers.$borrowernumber.firstname | html %][% END %] - [% Categories.GetName( borrowers.$borrowernumber.categorycode ) | html %] ([% Branches.GetName( borrowers.$borrowernumber.branchcode ) | html %]) ([% borrowers.$borrowernumber.cardnumber | html %]) - Requested on [% pm.timestamp | $KohaDates with_hours = 1 | html %]</a></h3>
+                                <div id="panel_modify_[% pm.borrowernumber | html %]">
                                     <div style="background-color:#E6F0F2;padding:.5em;margin:.3em 0;">
-                                        <input type="radio" id="approve_modify_[% pm.borrowernumber %]" name="modify_[% pm.borrowernumber %]" value="approve" />
-                                        <label for="approve_modify_[% pm.borrowernumber %]">Approve</label>
+                                        <input type="radio" id="approve_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="approve" />
+                                        <label for="approve_modify_[% pm.borrowernumber | html %]">Approve</label>
 
-                                        <input type="radio" id="deny_modify_[% pm.borrowernumber %]" name="modify_[% pm.borrowernumber %]" value="deny" />
-                                        <label for="deny_modify_[% pm.borrowernumber %]">Deny</label>
+                                        <input type="radio" id="deny_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="deny" />
+                                        <label for="deny_modify_[% pm.borrowernumber | html %]">Deny</label>
 
-                                        <input type="radio" id="ignore_modify_[% pm.borrowernumber %]" name="modify_[% pm.borrowernumber %]" value="ignore" checked="checked"/>
-                                        <label for="ignore_modify_[% pm.borrowernumber %]">Ignore</label>
-                                        | <a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% pm.borrowernumber %]" >Patron details</a>
+                                        <input type="radio" id="ignore_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="ignore" checked="checked"/>
+                                        <label for="ignore_modify_[% pm.borrowernumber | html %]">Ignore</label>
+                                        | <a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% pm.borrowernumber | html %]" >Patron details</a>
                                     </div>
                                   [% IF !pm.extended_attributes and pm.size > 3 or pm.extended_attributes and pm.size > 4 %]
                                   [%# timestamp+verification_token+borrowernumber=3 %]
@@ -131,11 +132,11 @@
                                                                 <td>[% borrowers.$borrowernumber.$key | $KohaDates %]</td>
                                                                 <td>[% pm.$key | $KohaDates %]</td>
                                                             [% ELSIF key == 'branchcode' %]
-                                                                <td>[% Branches.GetName( borrowers.$borrowernumber.$key )  %]</td>
-                                                                <td>[% Branches.GetName( pm.$key ) %]</td>
+                                                                <td>[% Branches.GetName( borrowers.$borrowernumber.$key ) | html %]</td>
+                                                                <td>[% Branches.GetName( pm.$key ) | html %]</td>
                                                             [% ELSE %]
-                                                                <td>[% borrowers.$borrowernumber.$key %]</td>
-                                                                <td>[% pm.$key %]</td>
+                                                                <td>[% borrowers.$borrowernumber.$key | html %]</td>
+                                                                <td>[% pm.$key | html %]</td>
                                                             [% END %]
                                                         </tr>
                                                     [% END %]
@@ -155,7 +156,7 @@
                                             </tr>
                                           [% FOREACH attribute_group IN borrowers.$borrowernumber.modified_attributes %]
                                             <tr>
-                                                <td>[% attribute_group.type.description %]</td>
+                                                <td>[% attribute_group.type.description | html %]</td>
                                                 <td>[% PROCESS display_extended_attributes attrs=attribute_group.before type=attribute_group.type %]</td>
                                                 <td>[% PROCESS display_extended_attributes attrs=attribute_group.after type=attribute_group.type %]</td>
                                             </tr>
@@ -167,8 +168,8 @@
                                     <div class="dialog message" style="margin-top:.8em">
                                         <h4>Patron's address in doubt</h4>
                                         <p>The <strong>Gone no address</strong> flag is set for this patron. If this modification request resolves the issue, please unset the flag.</p>
-                                        <input type="checkbox" id="unset_gna_[% pm.borrowernumber %]" name="unset_gna_[% pm.borrowernumber %]" value="unset_gna_[% pm.borrowernumber %]"/>
-                                        <label for="unset_gna_[% pm.borrowernumber %]">Unset Gone no address for this patron</label>
+                                        <input type="checkbox" id="unset_gna_[% pm.borrowernumber | html %]" name="unset_gna_[% pm.borrowernumber | html %]" value="unset_gna_[% pm.borrowernumber | html %]"/>
+                                        <label for="unset_gna_[% pm.borrowernumber | html %]">Unset Gone no address for this patron</label>
                                     </div>
                                   [% END %]
                                 </div>
@@ -188,7 +189,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
     <script type="text/javascript">
         $(function() {
             $( "#pending_updates" ).accordion();

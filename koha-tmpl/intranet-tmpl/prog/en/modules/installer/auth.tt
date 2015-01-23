@@ -34,13 +34,13 @@
                 [% END %]
 
                 [% IF ( loginprompt ) %]
-                    <h2>Welcome to the Koha [%- Koha.Version.release -%] web installer</h2>
+                    <h2>Welcome to the Koha [%- Koha.Version.release | html -%] web installer</h2>
 
                     <p>Before we begin, please verify you have the correct credentials to continue. Please log in with the username and password given to you by your systems administrator and located in your <code>koha-conf.xml</code> configuration file.</p>
 
-                    <form action="[% url %]" method="post" id="mainform">
+                    <form action="[% url | html %]" method="post" id="mainform">
                         [% FOREACH INPUT IN INPUTS %]
-                            <input type="hidden" name="[% INPUT.name |html %]" value="[% INPUT.value |html %]" />
+                            <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />
                         [% END %]
 
                         <fieldset>
@@ -48,7 +48,7 @@
 
                             <div class="form-group">
                                 <label>Username:</label>
-                                <input type="text" class="form-control" name="userid" id="userid" value="[% userid %]" size="20" tabindex="1" />
+                                <input type="text" class="form-control" name="userid" id="userid" value="[% userid | html %]" size="20" tabindex="1" />
                             </div>
                             <div class="form-group">
                                 <label>Password:</label>

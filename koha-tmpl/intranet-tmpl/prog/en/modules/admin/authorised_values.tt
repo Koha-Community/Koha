@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -10,7 +11,7 @@
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 
 <style type="text/css">
 	fieldset.rows div.toptabs li { clear:none;margin-right:.5em;padding-bottom:0;width:auto; }
@@ -60,25 +61,25 @@
             </li>
         <li>
             <label for="authorised_value">Authorized value: </label>
-            [% IF ( action_modify ) %]<input type="hidden" id="id" name="id" value="[% id %]" />[% END %]
+            [% IF ( action_modify ) %]<input type="hidden" id="id" name="id" value="[% id | html %]" />[% END %]
             <input type="text" id="authorised_value" name="authorised_value" value="[% authorised_value | html %]" maxlength="80" class="focus" />
         </li>
         <li>
             <label for="lib">Description: </label>
-            <input type="text" name="lib" id="lib" value="[% lib %]" maxlength="200" />
+            <input type="text" name="lib" id="lib" value="[% lib | html %]" maxlength="200" />
         </li>
 	<li>
             <label for="lib_opac">Description (OPAC): </label>
-            <input type="text" name="lib_opac" id="lib_opac" value="[% lib_opac %]" maxlength="200" />
+            <input type="text" name="lib_opac" id="lib_opac" value="[% lib_opac | html %]" maxlength="200" />
         </li>
         <li><label for="branches">Libraries limitation: </label>
             <select id="branches" name="branches" multiple size="10">
                 <option value="">All libraries</option>
                 [% FOREACH branch IN branches_loop %]
                   [% IF ( branch.selected ) %]
-                    <option selected="selected" value="[% branch.branchcode %]">[% branch.branchname |html %]</option>
+                    <option selected="selected" value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
                   [% ELSE %]
-                    <option value="[% branch.branchcode %]">[% branch.branchname |html %]</option>
+                    <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
                   [% END %]
                 [% END %]
             </select>
@@ -91,7 +92,7 @@
 			<ul>
                   <li><a href="#none">None</a></li>
 				  [% FOREACH imageset IN imagesets %]
-                        [% IF ( imageset.imagesetactive ) %]<li class="ui-tabs-active">[% ELSE %]<li>[% END %]<a href="#[% imageset.imagesetname %]">[% imageset.imagesetname %]</a></li>
+                        [% IF ( imageset.imagesetactive ) %]<li class="ui-tabs-active">[% ELSE %]<li>[% END %]<a href="#[% imageset.imagesetname | html %]">[% imageset.imagesetname | html %]</a></li>
 				  [% END %]
 			</ul>
   <div id="none"><ul>
@@ -99,18 +100,18 @@
   </ul>
   <br class="clear" /></div>
   [% FOREACH imageset IN imagesets %]
-  <div id="[% imageset.imagesetname %]"><ul>
+  <div id="[% imageset.imagesetname | html %]"><ul>
   [% FOREACH image IN imageset.images %]
 			<li style="float: none; display: inline-block; clear : none; width: auto;">
             <label> [% IF ( image.StaffImageUrl ) %]
-              <img src="[% image.StaffImageUrl %]" alt="[% image.StaffImageUrl %]" title="[% image.StaffImageUrl %]" />
+              <img src="[% image.StaffImageUrl | html %]" alt="[% image.StaffImageUrl | html %]" title="[% image.StaffImageUrl | html %]" />
         [% ELSE %]
         [% END %]
     [% IF ( image.checked ) %]
-              <input type="radio" name="imageurl" value="[% image.KohaImage %]" checked="checked" />
+              <input type="radio" name="imageurl" value="[% image.KohaImage | html %]" checked="checked" />
     [% ELSE %]
               [% IF ( image.KohaImage ) %] <!-- to delete the radio button if there is no image after -->
-              <input type="radio" name="imageurl" value="[% image.KohaImage %]" />
+              <input type="radio" name="imageurl" value="[% image.KohaImage | html %]" />
               [% END %]
     [% END %]
             </label>
@@ -122,7 +123,7 @@
   </div>
         [% END %]
         </fieldset>
-       <fieldset class="action"> <input type="hidden" name="id" value="[% id %]" />
+       <fieldset class="action"> <input type="hidden" name="id" value="[% id | html %]" />
         <input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=[% category | url %]">Cancel</a></fieldset>
     </form>
 [% END %]
@@ -131,7 +132,7 @@
 [% IF op == 'list' %]
 
 <div id="toolbar" class="btn-toolbar">
-    <a id="addauth" class="btn btn-default btn-sm" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% category | url %]"><i class="fa fa-plus"> </i> New authorized value for [% category |html %]</a>
+    <a id="addauth" class="btn btn-default btn-sm" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% category | url %]"><i class="fa fa-plus"> </i> New authorized value for [% category | html %]</a>
     <a id="addcat" class="btn btn-default btn-sm" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form"><i class="fa fa-plus"> </i> New category</a>
 </div>
 
@@ -139,7 +140,7 @@
 <div class="note"><i class="fa fa-exclamation"></i> <strong>NOTE:</strong> If you change an authorized value code, existing records using it won't be updated. Changes to value descriptions will show immediately.</div>
 
 [% FOR m IN messages %]
-    <div class="dialog [% m.type %]">
+    <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
             An error occurred when updating this authorized value. Perhaps the value already exists.
@@ -164,7 +165,7 @@
         [% CASE 'invalid_category_name' %]
             The authorized value category 'branches', 'itemtypes' and 'cn_source' are used internally by Koha and are not valid.
         [% CASE %]
-            [% m.code %]
+            [% m.code | html %]
         [% END %]
     </div>
 [% END %]
@@ -174,9 +175,9 @@
   <select name="searchfield" id="searchfield" size="1">
   [% FOR c IN categories %]
     [% IF c == searchfield %]
-      <option value="[% c %]" selected="selected">[% c |html %]</option>
+      <option value="[% c | html %]" selected="selected">[% c | html %]</option>
     [% ELSE %]
-      <option value="[% c %]">[% c |html %]</option>
+      <option value="[% c | html %]">[% c | html %]</option>
     [% END %]
   [% END %]
   <input type="submit" value="Submit" />
@@ -217,7 +218,7 @@
  [% IF ( category == 'NOT_LOAN' ) %]
     <p>Statuses to describe why an item is not for loan</p>
  [% END %]
-<h3>Authorized values for category [% category |html %]:</h3>
+<h3>Authorized values for category [% category | html %]:</h3>
 
 [% IF ( loop ) %]<div id="pagertable_authorized_values">
 </div>[% END %]
@@ -239,31 +240,31 @@
 <tr>
 [% END %]
 	<td>[% loo.authorised_value | html %]</td>
-    <td>[% loo.lib |html %]</td>
-    <td>[% loo.lib_opac |html %]</td>
-	<td>[% IF ( loo.imageurl ) %]<img src="[% loo.imageurl %]" alt=""/>[% ELSE %]&nbsp;[% END %]</td>
+    <td>[% loo.lib | html %]</td>
+    <td>[% loo.lib_opac | html %]</td>
+	<td>[% IF ( loo.imageurl ) %]<img src="[% loo.imageurl | html %]" alt=""/>[% ELSE %]&nbsp;[% END %]</td>
     <td>
         [% IF loo.branches.size > 0 %]
-            [% branches_str = "" %]
+            [% branches_str = "" | html %]
             [% FOREACH branch IN loo.branches %]
-                [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" %]
+                [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" | html %]
             [% END %]
-            <span href="#" title="[% branches_str %]">
+            <span href="#" title="[% branches_str | html %]">
                 [% IF loo.branches.size > 1 %]
-                    [% loo.branches.size %] branches limitations
+                    [% loo.branches.size | html %] branches limitations
                 [% ELSE %]
-                    [% loo.branches.size %] branch limitation
+                    [% loo.branches.size | html %] branch limitation
                 [% END %]
         [% ELSE %]
             No limitation
         [% END %]
     </td>
-    <td class="actions"><a href="/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;id=[% loo.id %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-    <a class="delete btn btn-default btn-xs" href="/cgi-bin/koha/admin/authorised_values.pl?op=delete&amp;searchfield=[% searchfield | url %]&amp;id=[% loo.id %]"><i class="fa fa-trash"></i> Delete</a></td>
+    <td class="actions"><a href="/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;id=[% loo.id | html %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+    <a class="delete btn btn-default btn-xs" href="/cgi-bin/koha/admin/authorised_values.pl?op=delete&amp;searchfield=[% searchfield | url %]&amp;id=[% loo.id | html %]"><i class="fa fa-trash"></i> Delete</a></td>
 </tr>
 [% END %]
 </tbody></table>[% ELSE %]
-<div class="dialog message">There are no authorized values defined for [% category |html %]</div>
+<div class="dialog message">There are no authorized values defined for [% category | html %]</div>
 [% END %]
 
 [% IF ( isprevpage ) %]
@@ -282,7 +283,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
         $(document).ready(function() {

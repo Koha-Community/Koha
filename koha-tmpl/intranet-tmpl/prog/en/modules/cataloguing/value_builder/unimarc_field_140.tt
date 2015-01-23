@@ -1726,10 +1726,10 @@
 
 [% MACRO jsinclude BLOCK %]
     <script type="text/javascript">
-        var dateformat = "[% Koha.Preference('dateformat') %]";
+        var dateformat = "[% Koha.Preference('dateformat') | html %]";
         function report() {
             var doc = opener.document;
-            var field = doc.getElementById("[% index %]");
+            var field = doc.getElementById("[% index | html %]");
             field.value =  document.f_pop.f1.value+document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value+document.f_pop.f5.value+document.f_pop.f6.value+document.f_pop.f7.value+document.f_pop.f8.value+document.f_pop.f9.value+document.f_pop.f10.value+document.f_pop.f11.value+document.f_pop.f12.value+document.f_pop.f13.value+document.f_pop.f14.value+document.f_pop.f15.value+document.f_pop.f16.value+document.f_pop.f17.value+document.f_pop.f18.value+document.f_pop.f19.value+document.f_pop.f20.value+document.f_pop.f21.value;
             self.close();
             return false;

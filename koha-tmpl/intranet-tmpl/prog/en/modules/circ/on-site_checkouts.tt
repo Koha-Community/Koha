@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
@@ -7,7 +8,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Pending on-site checkouts</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="circ_stats" class="circ">
@@ -33,21 +34,21 @@
                 <tr>
                   <td>
                     [% IF item.is_overdue %]<span class="overdue">[% END %]
-                    <span title="[% item.date_due %]">[% item.date_due | $KohaDates %]</span>
+                    <span title="[% item.date_due | html %]">[% item.date_due | $KohaDates %]</span>
                     [% IF item.is_overdue %]</span>[% END %]
                   </td>
                   <td>
-                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.borrowernumber %]">[%item.firstname %] [% item.surname %]</a>
+                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.borrowernumber | html %]">[% item.firstname | html %] [% item.surname | html %]</a>
                   </td>
                   <td>
-                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber %]"><strong>[% item.title |html %]</strong></a>[% IF ( item.author ) %], by [% item.author %][% END %][% IF ( item.itemnotes ) %]- <span class="circ-hlt">[% item.itemnotes %]</span>[% END %]
+                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | html %]"><strong>[% item.title | html %]</strong></a>[% IF ( item.author ) %], by [% item.author | html %][% END %][% IF ( item.itemnotes ) %]- <span class="circ-hlt">[% item.itemnotes | html %]</span>[% END %]
                   </td>
-                  <td>[% item.itemcallnumber %]</td>
+                  <td>[% item.itemcallnumber | html %]</td>
                   <td>
-                    <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% item.biblionumber %]&amp;itemnumber=[% item.itemnumber %]#item[% item.itemnumber %]">[% item.barcode %]</a>
+                    <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% item.biblionumber | html %]&amp;itemnumber=[% item.itemnumber | html %]#item[% item.itemnumber | html %]">[% item.barcode | html %]</a>
                   </td>
-                  <td>[% Branches.GetName(item.branchcode) %]</td>
-                  <td>[% AuthorisedValues.GetByCode( 'LOC', item.location )%]</td>
+                  <td>[% Branches.GetName(item.branchcode) | html %]</td>
+                  <td>[% AuthorisedValues.GetByCode( 'LOC', item.location ) | html %]</td>
                 </tr>
               [% END %]
             </tbody>

@@ -7,7 +7,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; Add reserves for <i><a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id %]">[% course.course_name %]</a></i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; Add reserves for <i><a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | html %]">[% course.course_name | html %]</a></i></div>
 
 <div class="main container-fluid">
     <div class="row">
@@ -15,14 +15,14 @@
 
         [% IF ERROR_ITEM_NOT_FOUND %]
             [% IF UNKNOWN_BARCODE %]
-                <div class="dialog alert">No item found with barcode [% UNKNOWN_BARCODE %]</div>
+                <div class="dialog alert">No item found with barcode [% UNKNOWN_BARCODE | html %]</div>
             [% ELSE %]
                  <div class="dialog alert">No item found</div>
             [% END %]
         [% END %]
 
         <form method="post" action="/cgi-bin/koha/course_reserves/add_items.pl">
-            <input type="hidden" name="course_id" value="[% course.course_id %]" />
+            <input type="hidden" name="course_id" value="[% course.course_id | html %]" />
             <input type="hidden" name="action" value="lookup" />
 
             <fieldset class="rows">
@@ -38,7 +38,7 @@
             <fieldset class="action">
                 <input type="submit" value="Submit" class="submit" />
 
-                <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id %]" class="cancel">Cancel</a>
+                <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | html %]" class="cancel">Cancel</a>
             </fieldset>
         </form>
     </div>

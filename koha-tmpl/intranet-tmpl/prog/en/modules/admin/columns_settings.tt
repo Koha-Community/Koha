@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% SET panel_id = 0 %]
@@ -5,12 +6,12 @@
 <div class="pagelist">
   <form method="post" action="/cgi-bin/koha/admin/columns_settings.pl">
     <input type="hidden" name="action" value="save" />
-    <input type="hidden" name="module" value="[% modulename %]" />
-    <input type="hidden" name="panel" value="[% panel_id %]" />
+    <input type="hidden" name="module" value="[% modulename | html %]" />
+    <input type="hidden" name="panel" value="[% panel_id | html %]" />
     [% SET panel_id = panel_id + 1 %]
     [% IF module.keys and module.keys.size > 0 %]
       [% FOR pagename IN module.keys %]
-        <h5>[% pagename %]</h5>
+        <h5>[% pagename | html %]</h5>
         [% SET tables = module %]
         [% IF tables.$pagename.keys and tables.$pagename.keys.size > 0 %]
           [% FOR tablename IN tables.$pagename.keys.sort %]
@@ -24,7 +25,7 @@
                 [% ELSIF pagename == 'additem' AND tablename == 'itemst' %]
                   Items Editor
                 [% END %]
-                (id=[% tablename %])
+                (id=[% tablename | html %])
               </caption>
               <thead><tr><th>Column name</th><th>Is hidden by default</th><th>Cannot be toggled</th></tr></thead>
               <tbody>
@@ -32,40 +33,40 @@
                 [% SET value = pagename _ '#' _ tablename _ '#' _ column.columnname %]
                 <tr>
                   <td>
-                    [% column.columnname %]
-                    <input type="hidden" name="columnid" value="[% value %]" />
+                    [% column.columnname | html %]
+                    <input type="hidden" name="columnid" value="[% value | html %]" />
                   </td>
                   <td>
                     [% IF column.is_hidden %]
                       [% IF column.cannot_be_modified %]
-                        <input type="checkbox" name="[% value %]_hidden" value="1" checked="checked" disabled="disabled" />
-                        <input type="hidden" name="[% value %]_hidden" value="1" />
+                        <input type="checkbox" name="[% value | html %]_hidden" value="1" checked="checked" disabled="disabled" />
+                        <input type="hidden" name="[% value | html %]_hidden" value="1" />
                       [% ELSE %]
-                        <input type="checkbox" name="[% value %]_hidden" value="1" checked="checked" />
+                        <input type="checkbox" name="[% value | html %]_hidden" value="1" checked="checked" />
                       [% END %]
                     [% ELSE %]
                       [% IF column.cannot_be_modified %]
-                        <input type="checkbox" name="[% value %]_hidden" value="1" disabled="disabled" />
-                        <input type="hidden" name="[% value %]_hidden" value="0" />
+                        <input type="checkbox" name="[% value | html %]_hidden" value="1" disabled="disabled" />
+                        <input type="hidden" name="[% value | html %]_hidden" value="0" />
                       [% ELSE %]
-                        <input type="checkbox" name="[% value %]_hidden" value="1" />
+                        <input type="checkbox" name="[% value | html %]_hidden" value="1" />
                       [% END %]
                     [% END %]
                   </td>
                   <td>
                     [% IF column.cannot_be_toggled %]
                       [% IF column.cannot_be_modified %]
-                        <input type="checkbox" name="[% value %]_cannot_be_toggled" value="1" checked="checked" disabled="disabled" />
-                        <input type="hidden" name="[% value %]_cannot_be_toggled" value="1" />
+                        <input type="checkbox" name="[% value | html %]_cannot_be_toggled" value="1" checked="checked" disabled="disabled" />
+                        <input type="hidden" name="[% value | html %]_cannot_be_toggled" value="1" />
                       [% ELSE %]
-                        <input type="checkbox" name="[% value %]_cannot_be_toggled" value="1" checked="checked" />
+                        <input type="checkbox" name="[% value | html %]_cannot_be_toggled" value="1" checked="checked" />
                       [% END %]
                     [% ELSE %]
                       [% IF column.cannot_be_modified %]
-                        <input type="checkbox" name="[% value %]_cannot_be_toggled" value="1" disabled="disabled" />
-                        <input type="hidden" name="[% value %]_cannot_be_toggled" value="0" />
+                        <input type="checkbox" name="[% value | html %]_cannot_be_toggled" value="1" disabled="disabled" />
+                        <input type="hidden" name="[% value | html %]_cannot_be_toggled" value="0" />
                       [% ELSE %]
-                        <input type="checkbox" name="[% value %]_cannot_be_toggled" value="1" />
+                        <input type="checkbox" name="[% value | html %]_cannot_be_toggled" value="1" />
                       [% END %]
                     [% END %]
                   </td>
@@ -166,7 +167,7 @@
   </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
     <script type="text/javascript">
         $(document).ready( function() {
             var accordion = $( "#modules" ).accordion({
@@ -175,7 +176,7 @@
                 header: "h3",
               [%- IF panel -%]
                 [%# we were asked to show a specific panel, usually on update %]
-                active: [%- panel -%]
+                active: [%- panel | html -%]
               [%- ELSE -%]
                 active: false
               [%- END -%]

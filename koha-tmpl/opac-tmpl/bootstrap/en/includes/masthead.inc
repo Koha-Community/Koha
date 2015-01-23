@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Koha %]
 [% USE Branches %]
 [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
@@ -9,7 +10,7 @@
                     <h1 id="logo">
                         <a class="brand" href="/cgi-bin/koha/opac-main.pl">
                             [% IF ( LibraryNameTitle ) %]
-                                [% LibraryNameTitle %]
+                                [% LibraryNameTitle | html %]
                             [% ELSE %]
                                 Koha online
                             [% END %]
@@ -42,9 +43,9 @@
                                     <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=2" tabindex="-1" role="menuitem"><strong>Public lists</strong></a></li>
                                     [% SET number_of_public_shelves = 0 %]
                                     [% FOREACH s IN some_public_shelves %]
-                                        <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber %]&amp;sortfield=[% s.sortfield %]" tabindex="-1" role="menuitem">[% s.shelfname |html %]</a></li>
+                                        <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber | html %]&amp;sortfield=[% s.sortfield | html %]" tabindex="-1" role="menuitem">[% s.shelfname | html %]</a></li>
                                         [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
-                                        [% IF number_of_public_shelves >= 10 %][% LAST %][% END %]
+                                        [% IF number_of_public_shelves >= 10 %][% LAST | html %][% END %]
                                     [% END %]
                                     [% IF some_public_shelves > 10 %]
                                         <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=2" tabindex="-1" role="menuitem" class="listmenulink">View All</a></li>
@@ -59,9 +60,9 @@
                                         [% IF some_private_shelves.count %]
                                             [% SET number_of_private_shelves = 0 %]
                                             [% FOREACH s IN some_private_shelves %]
-                                                <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber %]&amp;sortfield=[% s.sortfield %]" tabindex="-1" role="menuitem">[% s.shelfname |html %]</a></li>
+                                                <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber | html %]&amp;sortfield=[% s.sortfield | html %]" tabindex="-1" role="menuitem">[% s.shelfname | html %]</a></li>
                                                 [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
-                                                [% IF number_of_private_shelves >= 10 %][% LAST %][% END %]
+                                                [% IF number_of_private_shelves >= 10 %][% LAST | html %][% END %]
                                             [% END %]
                                             [% IF some_private_shelves > 10 %]
                                                 <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=1" tabindex="-1" role="menuitem" class="listmenulink">View All</a></li>
@@ -103,7 +104,7 @@
                                         [% END %]
                                     [% END %]
                                     [% IF ( loggedinusername ) %]
-                                        <li><p class="members navbar-text">Welcome, <a class="login-link" href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername" data-borrowernumber="[% logged_in_user.borrowernumber %]" data-branchcode="[% logged_in_user.branchcode %]" >[% INCLUDE 'patron-title.inc' patron = logged_in_user no_html = 1 %]</span></a></p></li>
+                                        <li><p class="members navbar-text">Welcome, <a class="login-link" href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername" data-borrowernumber="[% logged_in_user.borrowernumber | html %]" data-branchcode="[% logged_in_user.branchcode | html %]" >[% INCLUDE 'patron-title.inc' patron = logged_in_user no_html = 1 %]</span></a></p></li>
                                         <li class="divider-vertical"></li>
                                     [% END %]
                                 [% END %]
@@ -129,7 +130,7 @@
             <div class="container-fluid">
                 <div class="row-fluid">
                     <div id="opacheader">
-                        [% opacheader %]
+                        [% opacheader | $raw %]
                     </div>
                 </div>
             </div>
@@ -152,7 +153,7 @@
                                 <label for="masthead_search"> Search
                                     [% UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]
                                         [% IF ( mylibraryfirst ) %]
-                                            (in [% Branches.GetName( mylibraryfirst ) %] only)
+                                            (in [% Branches.GetName( mylibraryfirst ) | html %] only)
                                         [% END %]
                                     [% END %]
                                 </label>
@@ -207,7 +208,7 @@
                                     <div class="input-append nolibrarypulldown">
                                 [% END %]
                                 [% IF ( ms_value ) %]
-                                    <input type="text" title="Type search term" class="transl1" id = "translControl1" name="q" value="[% ms_value |html %]" /><span id="translControl"></span>
+                                    <input type="text" title="Type search term" class="transl1" id = "translControl1" name="q" value="[% ms_value | html %]" /><span id="translControl"></span>
                                 [% ELSE %]
                                     <input type="text" title="Type search term" class="transl1" id = "translControl1" name="q" /><span id="translControl"></span>
                                 [% END # /ms_value %]
@@ -226,9 +227,9 @@
 
                                             [% FOREACH library IN Branches.all( selected => opac_name ) %]
                                                 [% IF library.selected %]
-                                                    <option selected="selected" value="branch:[% library.branchcode %]">[% library.branchname %]</option>
+                                                    <option selected="selected" value="branch:[% library.branchcode | html %]">[% library.branchname | html %]</option>
                                                 [% ELSE %]
-                                                    <option value="branch:[% library.branchcode %]">[% library.branchname %]</option>
+                                                    <option value="branch:[% library.branchcode | html %]">[% library.branchname | html %]</option>
                                                 [% END %]
                                             [% END %]
 
@@ -237,9 +238,9 @@
                                                 <optgroup label="Groups">
                                                     [% FOREACH lsg IN LibrarySearchGroups %]
                                                         [% IF lsg.id == opac_name %]
-                                                            <option selected="selected" value="multibranchlimit-[% lsg.id %]">[% lsg.title %]</option>
+                                                            <option selected="selected" value="multibranchlimit-[% lsg.id | html %]">[% lsg.title | html %]</option>
                                                         [% ELSE %]
-                                                            <option value="multibranchlimit-[% lsg.id %]">[% lsg.title %]</option>
+                                                            <option value="multibranchlimit-[% lsg.id | html %]">[% lsg.title | html %]</option>
                                                         [% END # / bc.selected %]
                                                     [% END %]
                                                 </optgroup>
@@ -250,18 +251,18 @@
                                 [% ELSE %]
                                     [% IF ( opac_limit_override ) %]
                                         [% IF ( opac_search_limit ) %]
-                                            <input name="limit" value="[% opac_search_limit %]" type="hidden" />
+                                            <input name="limit" value="[% opac_search_limit | html %]" type="hidden" />
                                         [% END %]
                                     [% ELSE %]
                                         [% IF ( mylibraryfirst ) %]
-                                            <input name="limit" value="branch:[% mylibraryfirst %]" type="hidden" />
+                                            <input name="limit" value="branch:[% mylibraryfirst | html %]" type="hidden" />
                                         [% END %]
                                     [% END # / opac_limit_override %]
                                 [% END # / OpacAddMastheadLibraryPulldown %]
 
                             </form>
                         [% ELSE # / Koha.Preference('OpacCustomSearch') == '' %]
-                            [% Koha.Preference('OpacCustomSearch') %]
+                            [% Koha.Preference('OpacCustomSearch') | $raw %]
                         [% END # / Koha.Preference('OpacCustomSearch') == '' %]
                         </div> <!-- / .mastheadsearch -->
                     [% END # / UNLESS advsearch %]
@@ -311,7 +312,7 @@
                         </div>
                     [% ELSE %]
                         <h4>Shibboleth login</h4>
-                        <p>If you have a Shibboleth account, please <a href="[% shibbolethLoginUrl %]">click here to login</a>.</p>
+                        <p>If you have a Shibboleth account, please <a href="[% shibbolethLoginUrl | html %]">click here to login</a>.</p>
                         <h4>Local Login</h4>
                     [% END %]
                 [% END %]
@@ -321,7 +322,7 @@
                     <label for="mpassword">Password:</label><input type="password" id="mpassword" name="password" />
                     [% IF Koha.Preference( 'OpacLoginInstructions' ) %]
                         <div id="nologininstructions-modal" class="nologininstructions">
-                            [% Koha.Preference( 'OpacLoginInstructions' ) %]
+                            [% Koha.Preference( 'OpacLoginInstructions' ) | $raw %]
                         </div>
                     [% END %]
                     [% IF Koha.Preference('OpacPasswordChange') && Koha.Preference('OpacResetPassword') %]

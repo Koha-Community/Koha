@@ -1,13 +1,13 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Serials &rsaquo; [% title |html %] &rsaquo; [% IF ( op ) %]Create routing list[% ELSE %]Edit routing list[% END %]</title>
+<title>Koha &rsaquo; Serials &rsaquo; [% title | html %] &rsaquo; [% IF ( op ) %]Create routing list[% ELSE %]Edit routing list[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="ser_routing" class="ser">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]"><i>[% title |html %]</i></a> &rsaquo; [% IF ( op ) %]Create routing list[% ELSE %]Edit routing list[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid | html %]"><i>[% title | html %]</i></a> &rsaquo; [% IF ( op ) %]Create routing list[% ELSE %]Edit routing list[% END %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -17,22 +17,22 @@
 
 
 [% IF ( op ) %]
-<h1>Create routing list for <i>[% title |html %]</i></h1>
+<h1>Create routing list for <i>[% title | html %]</i></h1>
 [% ELSE %]
-<h1>Edit routing list for <i>[% title |html %]</i></h1>
+<h1>Edit routing list for <i>[% title | html %]</i></h1>
 [% END %]
 
 <form method="post" action="routing.pl">
 <input type="hidden" name="op" value="save" />
-<input type="hidden" name="subscriptionid" value="[% subscriptionid %]" />
+<input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
 <fieldset class="rows">
 	<ol>
 		<li><label for="date_selected">Issue: </label>
 <select name="date_selected" id="date_selected">
 [% FOREACH date IN dates %]
-[% IF ( date.selected ) %]<option value="[% date.serialseq %] ([% date.publisheddate %])" selected="selected">[% date.serialseq %] ([% date.publisheddate %])</option>[% ELSE %]<option value="[% date.serialseq %] ([% date.publisheddate %])">[% date.serialseq %] ([% date.publisheddate %])</option>[% END %]
+[% IF ( date.selected ) %]<option value="[% date.serialseq | html %] ([% date.publisheddate | html %])" selected="selected">[% date.serialseq | html %] ([% date.publisheddate | html %])</option>[% ELSE %]<option value="[% date.serialseq | html %] ([% date.publisheddate | html %])">[% date.serialseq | html %] ([% date.publisheddate | html %])</option>[% END %]
 [% END %]
-</select> [% issue %]</li>
+</select> [% issue | html %]</li>
 
 <li>
     <span class="label">Recipients:</span>
@@ -44,20 +44,20 @@
             </tr>
             [% USE m_loop = iterator(memberloop) %]
             [% FOREACH member IN m_loop %]
-            <tr><td>[% member.name %]</td>
+            <tr><td>[% member.name | html %]</td>
                 <td>
-                    <select name="itemrank" class="itemrank" data-subscriptionid="[% subscriptionid %]" data-routingid="[% member.routingid %]">
-                    [% rankings = [1 .. m_loop.size] %]
+                    <select name="itemrank" class="itemrank" data-subscriptionid="[% subscriptionid | html %]" data-routingid="[% member.routingid | html %]">
+                    [% rankings = [1 .. m_loop.size] | html %]
                     [% FOREACH r IN rankings %]
                         [% IF r == member.ranking %]
-                          <option selected="selected" value="[% r %]">[% r %]</option>
+                          <option selected="selected" value="[% r | html %]">[% r | html %]</option>
                         [% ELSE %]
-                          <option value="[% r %]">[% r %]</option>
+                          <option value="[% r | html %]">[% r | html %]</option>
                         [% END %]
                     [% END %]
                     </select>
                 </td>
-                <td><a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/routing.pl?routingid=[% member.routingid %]&amp;subscriptionid=[% subscriptionid %]&amp;op=delete"><i class="fa fa-trash"></i> Delete</a></td>
+                <td><a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/routing.pl?routingid=[% member.routingid | html %]&amp;subscriptionid=[% subscriptionid | html %]&amp;op=delete"><i class="fa fa-trash"></i> Delete</a></td>
             </tr>
             [% END %]
         </table>
@@ -66,12 +66,12 @@
     <p style="margin-left:10em;">
         <a href="#" id="add_recipients"><i class="fa fa-plus"></i> Add recipients</a>
         [% IF memberloop %]
-            <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscriptionid %]&amp;op=delete"><i class="fa fa-trash"></i> Delete all</a>
+            <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscriptionid | html %]&amp;op=delete"><i class="fa fa-trash"></i> Delete all</a>
         [% END %]
     </p>
 </li>
 
-	<li><label for="notes">Notes:</label><textarea name="notes" id="notes" rows="3" cols="50">[% routingnotes %]</textarea></li>
+	<li><label for="notes">Notes:</label><textarea name="notes" id="notes" rows="3" cols="50">[% routingnotes | html %]</textarea></li>
 	</ol>
 
 </fieldset>
@@ -114,7 +114,7 @@
         }
 
         function add_user(borrowernumber) {
-            var myurl = "routing.pl?subscriptionid="+[% subscriptionid %]+"&borrowernumber="+borrowernumber+"&op=add";
+            var myurl = "routing.pl?subscriptionid="+[% subscriptionid | html %]+"&borrowernumber="+borrowernumber+"&op=add";
             window.location.href = myurl;
         }
     </script>

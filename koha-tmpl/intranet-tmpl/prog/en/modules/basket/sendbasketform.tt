@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Sending your cart</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Sending your cart</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body style="padding: 1em;" id="cart_sendbasketform" class="cart">
@@ -7,7 +7,7 @@
 
 	[% IF ( SENT ) %]
         <h3>Message sent</h3>
-        <p>The cart was sent to: [% email_add |html %]</p>
+        <p>The cart was sent to: [% email_add | html %]</p>
 		<p><a class="focus close" href="#">Close window</a></p>
 	[% END %]
 	[% IF ( error ) %]
@@ -31,8 +31,8 @@
     </ol>
     </fieldset>
     <fieldset class="action"> <input type="submit" value="Send" /> <a class="cancel close" href="#">Cancel</a> </fieldset>
-    <input type="hidden" name="bib_list" value="[% bib_list %]" />
-    <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
+    <input type="hidden" name="bib_list" value="[% bib_list | html %]" />
+    <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
 </form>
 
 [% END %]</div>

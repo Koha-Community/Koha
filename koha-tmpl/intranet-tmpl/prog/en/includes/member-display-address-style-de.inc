@@ -4,13 +4,13 @@
         [% IF patron.streettype %]
             [% SET roadtype_desc = AuthorisedValues.GetByCode('ROADTYPE', patron.streettype) %]
         [% END %]
-        <li class="patronaddress1">[% patron.address %][%IF roadtype_desc %] [% roadtype_desc %][% END %][% IF patron.streetnumber %] [% patron.streetnumber %][% END %]</li>
+        <li class="patronaddress1">[% patron.address | html %][%IF roadtype_desc %] [% roadtype_desc | html %][% END %][% IF patron.streetnumber %] [% patron.streetnumber | html %][% END %]</li>
     [% END %]
     [% IF ( patron.address2 ) %]
-        <li class="patronaddress2">[% patron.address2 %]</li>
+        <li class="patronaddress2">[% patron.address2 | html %]</li>
     [% END %]
 [% END %]
 [% IF ( patron.city ) %]<li class="patroncity">
-    [%IF ( patron.zipcode ) %][% patron.zipcode %] [% END %][% patron.city %][% IF ( patron.state ) %]</br>[% patron.state %][% END %]
-    [% IF ( patron.country ) %]<br />[% patron.country %][% END %]</li>
+    [%IF ( patron.zipcode ) %][% patron.zipcode | html %] [% END %][% patron.city | html %][% IF ( patron.state ) %]</br>[% patron.state | html %][% END %]
+    [% IF ( patron.country ) %]<br />[% patron.country | html %][% END %]</li>
 [% END %]

@@ -1,10 +1,11 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Invoices</title>
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 
 </head>
@@ -44,27 +45,27 @@
             </thead>
             <tbody>
               [% FOREACH invoice IN invoices %]
-                <tr data-invoiceid="[% invoice.invoiceid %]" data-booksellerid="[% invoice.booksellerid %]" data-shipmentdate="[% invoice.shipmentdate | $KohaDates %]" data-billingdate="[% invoice.billingdate | $KohaDates %]" data-shipmentcost="[% invoice.shipmentcost %]" data-shipment_budgetid="[% invoice.shipmentcost_budgetid %]" data-closedate="[% invoice.closedate | $KohaDates %]">
-                  <td>[% invoice.is_linked_to_subscriptions %]</td>
-                  <td><input type="checkbox" class="select-invoice" value="[% invoice.invoiceid %]" /></td>
-                  <td><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoice.invoiceid %]">[% invoice.invoicenumber %]</a></td>
-                  <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% invoice.booksellerid %]">[% invoice.suppliername %]</a></td>
+                <tr data-invoiceid="[% invoice.invoiceid | html %]" data-booksellerid="[% invoice.booksellerid | html %]" data-shipmentdate="[% invoice.shipmentdate | $KohaDates %]" data-billingdate="[% invoice.billingdate | $KohaDates %]" data-shipmentcost="[% invoice.shipmentcost | html %]" data-shipment_budgetid="[% invoice.shipmentcost_budgetid | html %]" data-closedate="[% invoice.closedate | $KohaDates %]">
+                  <td>[% invoice.is_linked_to_subscriptions | html %]</td>
+                  <td><input type="checkbox" class="select-invoice" value="[% invoice.invoiceid | html %]" /></td>
+                  <td><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoice.invoiceid | html %]">[% invoice.invoicenumber | html %]</a></td>
+                  <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% invoice.booksellerid | html %]">[% invoice.suppliername | html %]</a></td>
                   <td>
                     [% IF invoice.shipmentdate %]
-                      <span title="[% invoice.shipmentdate %]">[% invoice.shipmentdate | $KohaDates %]</span>
+                      <span title="[% invoice.shipmentdate | html %]">[% invoice.shipmentdate | $KohaDates %]</span>
                     [% ELSE %]
                       <span title="0000-00-00"></span>
                     [% END %]
                   </td>
                   <td>
                     [% IF invoice.billingdate %]
-                      <span title="[% invoice.billingdate %]">[% invoice.billingdate | $KohaDates %]</span>
+                      <span title="[% invoice.billingdate | html %]">[% invoice.billingdate | $KohaDates %]</span>
                     [% ELSE %]
                       <span title="0000-00-00"></span>
                     [% END %]
                   </td>
-                  <td>[% invoice.receivedbiblios %]</td>
-                  <td>[% invoice.receiveditems %]</td>
+                  <td>[% invoice.receivedbiblios | html %]</td>
+                  <td>[% invoice.receiveditems | html %]</td>
                   <td>
                     [% IF invoice.closedate %]
                       Closed on [% invoice.closedate | $KohaDates %]
@@ -75,18 +76,18 @@
                   <td>
 
                       <div class="dropdown dropup">
-                          <a class="btn btn-default btn-xs dropdown-toggle" id="invoiceactions[% invoice.invoiceid %]" role="button" data-toggle="dropdown" href="#">
+                          <a class="btn btn-default btn-xs dropdown-toggle" id="invoiceactions[% invoice.invoiceid | html %]" role="button" data-toggle="dropdown" href="#">
                              Actions <b class="caret"></b>
                           </a>
-                          <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="invoiceactions[% invoice.invoiceid %]">
-                              <li><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoice.invoiceid %]"><i class="fa fa-search"></i> Details</a></li>
+                          <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="invoiceactions[% invoice.invoiceid | html %]">
+                              <li><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoice.invoiceid | html %]"><i class="fa fa-search"></i> Details</a></li>
                             [% IF invoice.closedate %]
-                                <li><a href="invoice.pl?op=reopen&amp;invoiceid=[% invoice.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% booksellerid %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]"><i class="fa fa-refresh"></i> Reopen</a></li>
+                                <li><a href="invoice.pl?op=reopen&amp;invoiceid=[% invoice.invoiceid | html %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber | html %]%26supplier=[% booksellerid | html %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn | html %]%26title=[% title | html %]%26author=[% author | html %]%26publisher=[% publisher | html %]%26publicationyear=[% publicationyear | html %]%26branch=[% branch | html %]"><i class="fa fa-refresh"></i> Reopen</a></li>
                             [% ELSE %]
-                                <li><a href="invoice.pl?op=close&amp;invoiceid=[% invoice.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% booksellerid %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]"><i class="fa fa-times-circle"></i> Close</a></li>
+                                <li><a href="invoice.pl?op=close&amp;invoiceid=[% invoice.invoiceid | html %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber | html %]%26supplier=[% booksellerid | html %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn | html %]%26title=[% title | html %]%26author=[% author | html %]%26publisher=[% publisher | html %]%26publicationyear=[% publicationyear | html %]%26branch=[% branch | html %]"><i class="fa fa-times-circle"></i> Close</a></li>
                             [% END %]
                             [% UNLESS invoice.receivedbiblios || invoice.receiveditems %]
-                                <li><a href="invoice.pl?op=delete&amp;invoiceid=[% invoice.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% booksellerid %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]" class="delete_invoice"><i class="fa fa-trash"></i> Delete</a></li>
+                                <li><a href="invoice.pl?op=delete&amp;invoiceid=[% invoice.invoiceid | html %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber | html %]%26supplier=[% booksellerid | html %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn | html %]%26title=[% title | html %]%26author=[% author | html %]%26publisher=[% publisher | html %]%26publicationyear=[% publicationyear | html %]%26branch=[% branch | html %]" class="delete_invoice"><i class="fa fa-trash"></i> Delete</a></li>
                             [% END %]
                           </ul>
                       </div>
@@ -122,7 +123,7 @@
                             <select id="merge_shipment_budgetid" name="shipment_budget_id">
                                 <option value="">No fund</option>
                               [% FOREACH budget IN budgets_loop %]
-                                  <option value="[% budget.budget_id %]">[% budget.budget_name %]
+                                  <option value="[% budget.budget_id | html %]">[% budget.budget_name | html %]
                                   </option>
                               [% END %]
                             </select></li>
@@ -140,10 +141,10 @@
           <p>Search was:
             <ul>
               [% IF ( invoicenumber ) %]
-                <li>Invoice no.: [% invoicenumber |html %]</li>
+                <li>Invoice no.: [% invoicenumber | html %]</li>
               [% END %]
               [% IF booksellerid %]
-                <li>Vendor: [% suppliername %]</li>
+                <li>Vendor: [% suppliername | html %]</li>
               [% END %]
               [% IF shipmentdatefrom %]
                 <li>Shipment date:
@@ -178,22 +179,22 @@
                 [% END %]
               [% END %]
               [% IF ( isbneanissn ) %]
-                <li>ISBN/EAN/ISSN: [% isbneanissn |html %]</li>
+                <li>ISBN/EAN/ISSN: [% isbneanissn | html %]</li>
               [% END %]
               [% IF ( title ) %]
-                <li>Title: [% title |html %]</li>
+                <li>Title: [% title | html %]</li>
               [% END %]
               [% IF ( author ) %]
-                <li>Author: [% author |html %]</li>
+                <li>Author: [% author | html %]</li>
               [% END %]
               [% IF ( publisher ) %]
-                <li>Publisher: [% publisher |html %]</li>
+                <li>Publisher: [% publisher | html %]</li>
               [% END %]
               [% IF ( publicationyear ) %]
-                <li>Publication year: [% publicationyear |html %]</li>
+                <li>Publication year: [% publicationyear | html %]</li>
               [% END %]
               [% IF ( branch ) %]
-                <li>Library: [% Branches.GetName( branch ) %]</li>
+                <li>Library: [% Branches.GetName( branch ) | html %]</li>
               [% END %]
             </ul>
           </p>
@@ -212,7 +213,7 @@
         <ol>
           <li>
             <label for="invoicenumber">Invoice no:</label>
-            <input type="text" id="invoicenumber" name="invoicenumber" value="[% invoicenumber |html %]" class="focus" />
+            <input type="text" id="invoicenumber" name="invoicenumber" value="[% invoicenumber | html %]" class="focus" />
           </li>
           <li>
             <label for="supplier">Vendor:</label>
@@ -220,9 +221,9 @@
               <option value="">All</option>
               [% FOREACH supplier IN suppliers_loop %]
                 [% IF ( supplier.selected ) %]
-                  <option selected="selected" value="[% supplier.booksellerid %]">[% supplier.suppliername %]</option>
+                  <option selected="selected" value="[% supplier.booksellerid | html %]">[% supplier.suppliername | html %]</option>
                 [% ELSE %]
-                  <option value="[% supplier.booksellerid %]">[% supplier.suppliername %]</option>
+                  <option value="[% supplier.booksellerid | html %]">[% supplier.suppliername | html %]</option>
                 [% END %]
               [% END %]
             </select>
@@ -259,23 +260,23 @@
           </li>
           <li>
             <label for="isbneanissn">ISBN / EAN / ISSN:</label>
-            <input type="text" id="isbneanissn" name="isbneanissn" value="[% isbneanissn |html %]" />
+            <input type="text" id="isbneanissn" name="isbneanissn" value="[% isbneanissn | html %]" />
           </li>
           <li>
             <label for="title">Title:</label>
-            <input type="text" id="title" name="title" value="[% title |html %]" />
+            <input type="text" id="title" name="title" value="[% title | html %]" />
           </li>
           <li>
             <label for="author">Author:</label>
-            <input type="text" id="author" name="author" value="[% author |html %]" />
+            <input type="text" id="author" name="author" value="[% author | html %]" />
           </li>
           <li>
             <label for="publisher">Publisher:</label>
-            <input type="text" id="publisher" name="publisher" value="[% publisher |html %]" />
+            <input type="text" id="publisher" name="publisher" value="[% publisher | html %]" />
           </li>
           <li>
             <label for="publicationyear">Publication year:</label>
-            <input type="text" id="publicationyear" name="publicationyear" value="[% publicationyear |html %]" />
+            <input type="text" id="publicationyear" name="publicationyear" value="[% publicationyear | html %]" />
           </li>
           <li>
             <label for="branch">Library:</label>
@@ -298,7 +299,7 @@
 </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/acquisitions-menu.js") %]
+    [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
     <script>

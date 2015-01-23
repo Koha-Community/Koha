@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Koha %]
@@ -9,7 +10,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Holds history for [% INCLUDE 'patron-title.inc' no_html = 1 %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="pat_holdshistory" class="pat">
@@ -53,28 +54,28 @@
       </thead>
       <tbody>
       [% FOREACH hold IN holds %]
-          <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% hold.biblio.biblionumber %]">[% hold.biblio.title |html %]</a></td>
-          <td>[% hold.biblio.author %]</td>
-          <td>[% hold.item.barcode %]</td>
-          <td>[% Branches.GetName( hold.branchcode ) %]</td>
-          <td><span title="[% hold.reservedate %]">[% hold.reservedate | $KohaDates %]</span></td>
+          <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% hold.biblio.biblionumber | html %]">[% hold.biblio.title | html %]</a></td>
+          <td>[% hold.biblio.author | html %]</td>
+          <td>[% hold.item.barcode | html %]</td>
+          <td>[% Branches.GetName( hold.branchcode ) | html %]</td>
+          <td><span title="[% hold.reservedate | html %]">[% hold.reservedate | $KohaDates %]</span></td>
           <td>
               [% IF hold.expirationdate %]
-                  <span title="[% hold.expirationdate %]">[% hold.expirationdate | $KohaDates %]</span>
+                  <span title="[% hold.expirationdate | html %]">[% hold.expirationdate | $KohaDates %]</span>
               [% ELSE %]
                   <span title="0000-00-00"></span>
               [% END %]
           </td>
           <td>
               [% IF hold.waitingdate %]
-                  <span title="[% hold.waitingdate %]">[% hold.waitingdate | $KohaDates %]</span>
+                  <span title="[% hold.waitingdate | html %]">[% hold.waitingdate | $KohaDates %]</span>
               [% ELSE %]
                   <span title="0000-00-00"></span>
               [% END %]
           </td>
           <td>
               [% IF hold.cancellationdate %]
-                  <span title="[% hold.cancellationdate %]">[% hold.cancellationdate | $KohaDates %]</span>
+                  <span title="[% hold.cancellationdate | html %]">[% hold.cancellationdate | $KohaDates %]</span>
               [% ELSE %]
                   <span title="0000-00-00"></span>
               [% END %]
@@ -82,7 +83,7 @@
           [% IF show_itemtype_column %]
             <td>
               [% IF hold.itemtype %]
-                  [% ItemTypes.GetDescription( hold.itemtype ) %]
+                  [% ItemTypes.GetDescription( hold.itemtype ) | html %]
               [% ELSE %]
                   <span>Any item type</span>
               [% END %]
@@ -120,7 +121,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
     <script type="text/javascript" id="js">
         $(document).ready(function() {
             var columns_settings = [% ColumnsSettings.GetColumns('members', 'holdshistory', 'holdshistory-table', 'json') %];

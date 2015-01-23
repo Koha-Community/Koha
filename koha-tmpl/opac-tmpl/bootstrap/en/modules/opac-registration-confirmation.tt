@@ -1,6 +1,7 @@
+[% USE raw %]
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -38,7 +39,7 @@
 
                             <p id="patron-userid-p">
                                 <span id="patron-userid-label">Username:</span>
-                                <span id="patron-userid">[% borrower.userid %]</span>
+                                <span id="patron-userid">[% borrower.userid | html %]</span>
                             </p>
                             <p id="patron-password-p">
                                 <span id="patron-password-label">Password:</span>
@@ -48,14 +49,14 @@
                             [% IF borrower.cardnumber %]
                                 <p id="patron-cardnumber-p">
                                     <span id="patron-cardnumber-label">Card number:</span>
-                                    <span id="patron-cardnumber">[% borrower.cardnumber %]</span>
+                                    <span id="patron-cardnumber">[% borrower.cardnumber | html %]</span>
                                 </p>
                             [% END %]
 
                             <p id="patron-instructions">For your convenience, the login box on this page has been pre-filled with this data. Please log in[% IF OpacPasswordChange %] and change your password[% END %].</p>
                         [% END %]
 
-                        <div id="PatronSelfRegistrationAdditionalInstructions">[% PatronSelfRegistrationAdditionalInstructions %]</div>
+                        <div id="PatronSelfRegistrationAdditionalInstructions">[% PatronSelfRegistrationAdditionalInstructions | $raw %]</div>
                     </div>
 
                 </div> <!-- / .span7/9 -->
@@ -72,7 +73,7 @@
                                                     <legend>Log in to your account:</legend>
                                                     <label for="userid">Login:</label>
                                                     [% IF Koha.Preference('PatronSelfRegistrationPrefillForm') %]
-                                                        <input type="text" id="userid" size="10" name="userid" value="[% borrower.userid %]" />
+                                                        <input type="text" id="userid" size="10" name="userid" value="[% borrower.userid | html %]" />
                                                     [% ELSE %]
                                                         <input type="text" id="userid" size="10" name="userid" value="" />
                                                     [% END %]
@@ -94,7 +95,7 @@
                             [% END # /opacuserlogin %]
                             [% IF ( OpacNavRight ) %]
                                 <div id="opacnavright">
-                                    [% OpacNavRight %]
+                                    [% OpacNavRight | $raw %]
                                 </div>
                             [% END # /OpacNavRight %]
                         </div> <!-- / .span3 -->

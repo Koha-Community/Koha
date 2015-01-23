@@ -1,22 +1,22 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Serials &rsaquo; Alert subscribers for [% bibliotitle %]</title>
+<title>Koha &rsaquo; Serials &rsaquo; Alert subscribers for [% bibliotitle | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="ser_viewalerts" class="ser">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Alert subscribers for <i>[% bibliotitle %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Alert subscribers for <i>[% bibliotitle | html %]</i></div>
 
 <div id="doc3" class="yui-t2">
     <div id="bd">
     <div id="yui-main">
     <div class="yui-b">
 
-<h1>Alert subscribers for <i>[% bibliotitle %]</i></h1>
+<h1>Alert subscribers for <i>[% bibliotitle | html %]</i></h1>
 
 <p>
-    <span class="label">Subscription:</span> <a href="subscription-detail.pl?subscriptionid=[% subscriptionid %]">[% bibliotitle %] #[% subscriptionid %]</a>
+    <span class="label">Subscription:</span> <a href="subscription-detail.pl?subscriptionid=[% subscriptionid | html %]">[% bibliotitle | html %] #[% subscriptionid | html %]</a>
 </p>
 
 [% IF subscribers.count %]
@@ -27,7 +27,7 @@
         [% FOREACH subscriber IN subscribers %]
         <tr>
             <td>
-                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% subscriber.borrowernumber %]">[% INCLUDE 'patron-title.inc' patron=subscriber %]</a>
+                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% subscriber.borrowernumber | html %]">[% INCLUDE 'patron-title.inc' patron=subscriber %]</a>
             </td>
         </tr>
         [% END %]

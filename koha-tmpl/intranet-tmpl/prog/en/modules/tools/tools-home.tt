@@ -24,7 +24,7 @@
     [% END %]
 
 [% IF ( CAN_user_tools_moderate_comments ) %]
-    <dt><a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments</a> [% IF ( pendingcomments ) %]<span class="number_box"><a href="/cgi-bin/koha/reviews/reviewswaiting.pl">[% pendingcomments %]</a></span>[% END %]</dt>
+    <dt><a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments</a> [% IF ( pendingcomments ) %]<span class="number_box"><a href="/cgi-bin/koha/reviews/reviewswaiting.pl">[% pendingcomments | html %]</a></span>[% END %]</dt>
 	<dd>Moderate patron comments. </dd>
     [% END %]
     
@@ -59,7 +59,7 @@
     [% END %]
 
     [% IF ( CAN_user_tools_moderate_tags ) %]
-    <dt><a href="/cgi-bin/koha/tags/review.pl">Tags</a> [% IF ( pendingtags ) %]<span class="number_box"><a href="/cgi-bin/koha/tags/review.pl">[% pendingtags %]</a></span>[% END %]</dt>
+    <dt><a href="/cgi-bin/koha/tags/review.pl">Tags</a> [% IF ( pendingtags ) %]<span class="number_box"><a href="/cgi-bin/koha/tags/review.pl">[% pendingtags | html %]</a></span>[% END %]</dt>
 	<dd>Moderate patron tags</dd>
     [% END %]
 

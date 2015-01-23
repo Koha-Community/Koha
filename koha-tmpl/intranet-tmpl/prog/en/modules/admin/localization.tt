@@ -1,23 +1,24 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Localization</title>
 [% INCLUDE 'doc-head-close.inc' popup => 1 %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="admin_localization" class="admin">
 <div id="main">
 <form id="add_translation" method="post">
-    <input type="hidden" name="entity" value="[% entity %]" />
-    <input type="hidden" name="code" value="[% code %]" />
+    <input type="hidden" name="entity" value="[% entity | html %]" />
+    <input type="hidden" name="code" value="[% code | html %]" />
     Lang: <select name="lang">
         [% FOR language IN languages %]
             [% FOR sublanguage IN language.sublanguages_loop %]
                 [% IF language.plural %]
-                    <option value="[% sublanguage.rfc4646_subtag %]">[% sublanguage.native_description %] [% sublanguage.region_description %] ([% sublanguage.rfc4646_subtag %])</option>
+                    <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
                 [% ELSE %]
-                    <option value="[% sublanguage.rfc4646_subtag %]">[% sublanguage.native_description %] ([% sublanguage.rfc4646_subtag %])</option>
+                    <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
                 [% END %]
             [% END %]
         [% END %]
@@ -39,12 +40,12 @@
     </thead>
     <tbody>
         [% FOR t IN translations %]
-        <tr id="row_id_[% t.id %]" data-id="[% t.id %]">
-            <td>[% t.id %]</td>
-            <td>[% t.entity %]</td>
-            <td>[% t.code %]</td>
-            <td class="lang">[% t.lang %]</td>
-            <td class="translation" contenteditable="true">[% t.translation %]</td>
+        <tr id="row_id_[% t.id | html %]" data-id="[% t.id | html %]">
+            <td>[% t.id | html %]</td>
+            <td>[% t.entity | html %]</td>
+            <td>[% t.code | html %]</td>
+            <td class="lang">[% t.lang | html %]</td>
+            <td class="translation" contenteditable="true">[% t.translation | html %]</td>
             <td class="actions"><a href="#" class="delete"><i class="fa fa-trash"></i> Delete</a></td>
         </tr>
         [% END %]
@@ -155,10 +156,10 @@
                 [% FOR sublanguage IN language.sublanguages_loop %]
                     var option;
                     [% IF language.plural %]
-                        option = $('<option value="[% sublanguage.rfc4646_subtag %]">[% sublanguage.native_description %] [% sublanguage.region_description %] ([% sublanguage.rfc4646_subtag %])</option>');
+                        option = $('<option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>');
                         $(languages_select).append(option);
                     [% ELSE %]
-                        option = $('<option value="[% sublanguage.rfc4646_subtag %]">[% sublanguage.native_description %] ([% sublanguage.rfc4646_subtag %])</option>');
+                        option = $('<option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>');
                     [% END %]
                     $(languages_select).append(option);
                 [% END %]

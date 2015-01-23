@@ -1,10 +1,11 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
 [% USE AuthorisedValues %]
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;
 [% IF ( op_add ) %]Enter a new purchase suggestion[% END %]
 [% IF ( op_else ) %]Purchase Suggestions[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -32,7 +33,7 @@
                         [% IF ( op_add ) %]
                             [% IF ( Koha.Preference('MaxOpenSuggestions') != '' && patrons_pending_suggestions_count >= Koha.Preference('MaxOpenSuggestions') ) %]
                                     <h1 class="TooManySuggestions">You cannot place any more suggestions</h1>
-                                    <h2 class="TooManySuggestionsText">You have reached your limit of suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') %]). Once the library has processed those suggestions you will be able to place more.</h2>
+                                    <h2 class="TooManySuggestionsText">You have reached your limit of suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') | html %]). Once the library has processed those suggestions you will be able to place more.</h2>
                             [% ELSE %]
                             <h1>Enter a new purchase suggestion</h1>
 
@@ -70,7 +71,7 @@
                                                 <select name="patronreason" id="patronreason">
                                                     <option value="">-- Choose --</option>
                                                     [% FOREACH patron_reason_loo IN patron_reason_loop %]
-                                                        <option value="[% patron_reason_loo.authorised_value %]">[% patron_reason_loo.lib %]</option>
+                                                        <option value="[% patron_reason_loo.authorised_value | html %]">[% patron_reason_loo.lib | html %]</option>
                                                     [% END %]
                                                 </select>
                                             </li>
@@ -88,7 +89,7 @@
                                     </ol>
                                 </fieldset>
                                 <fieldset class="action">
-                                    <input type="hidden" name="suggested_by_anyone" value="[% suggested_by_anyone %]" />
+                                    <input type="hidden" name="suggested_by_anyone" value="[% suggested_by_anyone | html %]" />
                                     <input type="hidden" name="op" value="add_confirm" />
                                     <input type="submit" class="btn" value="Submit your suggestion" /> <a class="action" href="/cgi-bin/koha/opac-suggestions.pl">Cancel</a>
                                 </fieldset>
@@ -109,16 +110,16 @@
                                 [% END %]
                             </h1>
                             [% FOR m IN messages %]
-                                <div class="alert alert-[% m.type %]">
+                                <div class="alert alert-[% m.type | html %]">
                                     [% SWITCH m.code %]
                                     [% CASE 'too_many' %]
-                                        The suggestion has not been added. You have reached your limit of suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') %]). Once the library has processed those suggestions you will be able to place more.
+                                        The suggestion has not been added. You have reached your limit of suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') | html %]). Once the library has processed those suggestions you will be able to place more.
                                     [% CASE 'already_exists' %]
                                         The suggestion has not been added. A suggestion with this title already exists.
                                     [% CASE 'success_on_inserted' %]
                                         Your suggestion has been submitted.
                                     [% CASE %]
-                                        [% m.code %]
+                                        [% m.code | html %]
                                     [% END %]
                                 </div>
                             [% END %]
@@ -129,7 +130,7 @@
                                 <form action="/cgi-bin/koha/opac-suggestions.pl" class="form-inline" method="get">
                                     <fieldset>
                                         <label for="title">Search for:</label>
-                                        <input type="text" name="title" id="title" value="[% title |html %]" />
+                                        <input type="text" name="title" id="title" value="[% title | html %]" />
                                         [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]
                                             [% IF loggedinusername %]
                                                 <label for="suggested_by_anyone">Suggested by:</label>
@@ -154,7 +155,7 @@
                                     [% IF ( loggedinusername || ( Koha.Preference( 'AnonSuggestions' ) == 1 ) ) %]
                                         <div id="toolbar" class="toolbar clearfix">
                                         [% IF ( Koha.Preference('MaxOpenSuggestions') != '' && patrons_pending_suggestions_count >= Koha.Preference('MaxOpenSuggestions') ) %]
-                                                <p class="TooManySuggestionsText">You have reached your limit of suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') %]).</br>Once the library has processed those suggestions you will be able to place more.</p>
+                                                <p class="TooManySuggestionsText">You have reached your limit of suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') | html %]).</br>Once the library has processed those suggestions you will be able to place more.</p>
                                         [% ELSE %]
                                                 <a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a>
                                         [% END %]
@@ -187,18 +188,18 @@
                                                     [% IF ( loggedinusername ) %]
                                                         <td>
                                                             [% IF ( suggestions_loo.showcheckbox ) %]
-                                                                <input type="checkbox" class="cb" name="delete_field" value="[% suggestions_loo.suggestionid %]" />
+                                                                <input type="checkbox" class="cb" name="delete_field" value="[% suggestions_loo.suggestionid | html %]" />
                                                             [% END %]
                                                         </td>
                                                     [% END %]
                                                     <td>
-                                                        <p><strong>[% suggestions_loo.title |html %]</strong></p>
-                                                            <p>[% IF ( suggestions_loo.author ) %][% suggestions_loo.author |html %],[% END %]
-                                                                [% IF ( suggestions_loo.copyrightdate ) %] - [% suggestions_loo.copyrightdate |html %],[% END %]
-                                                                [% IF ( suggestions_loo.publishercode ) %] - [% suggestions_loo.publishercode |html %][% END %]
-                                                                [% IF ( suggestions_loo.place ) %]([% suggestions_loo.place |html %])[% END %]
-                                                                [% IF ( suggestions_loo.collectiontitle ) %] , [% suggestions_loo.collectiontitle |html %][% END %]
-                                                                [% IF ( suggestions_loo.itemtype ) %] - [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestions_loo.itemtype, 1 ) %][% END %]
+                                                        <p><strong>[% suggestions_loo.title | html %]</strong></p>
+                                                            <p>[% IF ( suggestions_loo.author ) %][% suggestions_loo.author | html %],[% END %]
+                                                                [% IF ( suggestions_loo.copyrightdate ) %] - [% suggestions_loo.copyrightdate | html %],[% END %]
+                                                                [% IF ( suggestions_loo.publishercode ) %] - [% suggestions_loo.publishercode | html %][% END %]
+                                                                [% IF ( suggestions_loo.place ) %]([% suggestions_loo.place | html %])[% END %]
+                                                                [% IF ( suggestions_loo.collectiontitle ) %] , [% suggestions_loo.collectiontitle | html %][% END %]
+                                                                [% IF ( suggestions_loo.itemtype ) %] - [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestions_loo.itemtype, 1 ) | html %][% END %]
                                                         </p>
                                                     </td>
                                                     <td>
@@ -207,14 +208,14 @@
                                                     <td>
                                                         [% IF ( suggestions_loo.note ) %]
                                                             <span class="tdlabel">Note: </span>
-                                                            [% suggestions_loo.note |html %]
+                                                            [% suggestions_loo.note | html %]
                                                         [% END %]
                                                     </td>
                                                     [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]
                                                         <td>
                                                             [% IF ( suggestions_loo.branchcodesuggestedby ) %]
                                                                 <span class="tdlabel">Suggested for:</span>
-                                                                [% suggestions_loo.branchcodesuggestedby %]
+                                                                [% suggestions_loo.branchcodesuggestedby | html %]
                                                             [% END %]
                                                         </td>
                                                     [% END %]
@@ -222,8 +223,8 @@
                                                     <td>
                                                         [% IF ( suggestions_loo.surnamemanagedby ) %]
                                                             <span class="tdlabel">Managed by:</span>
-                                                            [% suggestions_loo.surnamemanagedby %]
-                                                            [% IF ( suggestions_loo.firstnamemanagedby ) %]    , [% suggestions_loo.firstnamemanagedby %]
+                                                            [% suggestions_loo.surnamemanagedby | html %]
+                                                            [% IF ( suggestions_loo.firstnamemanagedby ) %]    , [% suggestions_loo.firstnamemanagedby | html %]
                                                             [% END %]
                                                         [% END %]
                                                     </td>
@@ -236,8 +237,8 @@
                                                         [% ELSIF ( suggestions_loo.ORDERED ) %]Ordered by the library
                                                         [% ELSIF ( suggestions_loo.REJECTED ) %]Suggestion declined
                                                         [% ELSIF ( suggestions_loo.AVAILABLE ) %]Available in the library
-                                                        [% ELSE %] [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) %] [% END %]
-                                                        [% IF ( suggestions_loo.reason ) %]([% suggestions_loo.reason |html %])[% END %]
+                                                        [% ELSE %] [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) | html %] [% END %]
+                                                        [% IF ( suggestions_loo.reason ) %]([% suggestions_loo.reason | html %])[% END %]
                                                     </td>
                                                 </tr>
                                             [% END # / FOREACH suggestions_loo %]
@@ -274,7 +275,7 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
+[% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
 [% INCLUDE 'datatables.inc' %]
 <script>
     //<![CDATA[
@@ -340,7 +341,7 @@
         [% END %]
         [% IF ( op_add && mandatoryfields ) %]
         {
-            var FldsRequired = [[% mandatoryfields %]];
+            var FldsRequired = [[% mandatoryfields | html %]];
             for (var i = 0; i < FldsRequired.length; i++) {
                 var rq_input = $('#' + FldsRequired[i]);
                 if (rq_input.length != 1) continue;

@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE AuthorisedValues %]
@@ -10,7 +11,7 @@
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="pat_statistics" class="pat">
@@ -49,7 +50,7 @@
                             [% CASE 'holdingbranch' %]
                                 Holding library
                             [% CASE %]
-                                [% cn %]
+                                [% cn | html %]
                             [% END %]
                           </th>
                       [% END %]
@@ -64,18 +65,18 @@
                     [% FOREACH r IN datas %]
                         <tr>
                             [% FOREACH c IN r %]
-                                <td>[% c %]</td>
+                                <td>[% c | html %]</td>
                             [% END %]
                         </tr>
                     [% END %]
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="[% column_names.size %]">TOTAL</td>
-                        <td>[% count_total_precedent_state %]</td>
-                        <td>[% count_total_issues %]</td>
-                        <td>[% count_total_issues_returned %]</td>
-                        <td>[% count_total_actual_state %]</td>
+                        <td colspan="[% column_names.size | html %]">TOTAL</td>
+                        <td>[% count_total_precedent_state | html %]</td>
+                        <td>[% count_total_issues | html %]</td>
+                        <td>[% count_total_issues_returned | html %]</td>
+                        <td>[% count_total_actual_state | html %]</td>
                     </tr>
                 </tfoot>
                 </table>
@@ -91,7 +92,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
         $(document).ready(function() {

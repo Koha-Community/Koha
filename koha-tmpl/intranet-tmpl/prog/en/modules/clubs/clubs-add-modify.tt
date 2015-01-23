@@ -6,9 +6,9 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Patron clubs &rsaquo;
     [% IF club %]
-        Modify club [% club.name %]
+        Modify club [% club.name | html %]
     [% ELSE %]
-        Create a new [% club_template.name %] club
+        Create a new [% club_template.name | html %] club
     [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -19,9 +19,9 @@
 [% INCLUDE 'cat-search.inc' %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="clubs.pl">Patron clubs</a> &rsaquo;
     [% IF club %]
-        Modify club <i>[% club.name %]</i>
+        Modify club <i>[% club.name | html %]</i>
     [% ELSE %]
-        Create a new <i>[% club_template.name %]</i> club
+        Create a new <i>[% club_template.name | html %]</i> club
     [% END %]
 </div>
 
@@ -30,29 +30,29 @@
         <div class="col-md-8 col-md-offset-2">
 
             <form method="post" class="validated">
-                <input type="hidden" name="id" value="[% club.id %]" />
-                <input type="hidden" name="club_template_id" value="[% club_template.id %]" />
+                <input type="hidden" name="id" value="[% club.id | html %]" />
+                <input type="hidden" name="club_template_id" value="[% club_template.id | html %]" />
 
                 <fieldset class="rows">
 
                     <legend>
                         [% IF club %]
-                            Modify club <i>[% club.name %]</i>
+                            Modify club <i>[% club.name | html %]</i>
                         [% ELSE %]
-                            Create a new <i>[% club_template.name %]</i> club
+                            Create a new <i>[% club_template.name | html %]</i> club
                         [% END %]
                     </legend>
 
                     <ol>
                         <li>
                             <label class="required" for="club-name">Name:</label>
-                            <input id="club-name" name="name" type="text" value="[% club.name %]" required="required"/>
+                            <input id="club-name" name="name" type="text" value="[% club.name | html %]" required="required"/>
                             <span class="required">Required</span>
                         </li>
 
                         <li>
                             <label for="club-template-name">Description:</label>
-                            <input id="club-template-name" name="description" type="text" value="[% club.description %]" size="40" />
+                            <input id="club-template-name" name="description" type="text" value="[% club.description | html %]" size="40" />
                         </li>
 
                         <li>
@@ -76,39 +76,39 @@
                         [% IF club %]
                             [% FOREACH f IN club.club_fields %]
                                 <li>
-                                    <input type="hidden" name="club_template_field_id" value="[% f.club_template_field.id %]" />
-                                    <input type="hidden" name="club_field_id" value="[% f.id %]" />
+                                    <input type="hidden" name="club_template_field_id" value="[% f.club_template_field.id | html %]" />
+                                    <input type="hidden" name="club_field_id" value="[% f.id | html %]" />
 
-                                    <label for="club_field_[% f.club_template_field_id %]">[% f.club_template_field.name %]</label>
+                                    <label for="club_field_[% f.club_template_field_id | html %]">[% f.club_template_field.name | html %]</label>
                                     [% IF f.club_template_field.authorised_value_category %]
-                                        <select name="club_field" id="club_field_[% f.club_template_field_id %]">
+                                        <select name="club_field" id="club_field_[% f.club_template_field_id | html %]">
                                             [% FOREACH a IN AuthorisedValues.Get( f.club_template_field.authorised_value_category ) %]
                                                 [% IF a.authorised_value == f.value %]
-                                                    <option value="[% a.authorised_value %]" selected="selected">[% a.lib %]</option>
+                                                    <option value="[% a.authorised_value | html %]" selected="selected">[% a.lib | html %]</option>
                                                 [% ELSE %]
-                                                    <option value="[% a.authorised_value %]">[% a.lib %]</option>
+                                                    <option value="[% a.authorised_value | html %]">[% a.lib | html %]</option>
                                                 [% END %]
                                             [% END %]
                                         </select>
                                     [% ELSE %]
-                                        <input type="text" name="club_field" id="club_field_[% f.club_template_field_id %]" value="[% f.value %]" size="40" />
+                                        <input type="text" name="club_field" id="club_field_[% f.club_template_field_id | html %]" value="[% f.value | html %]" size="40" />
                                     [% END %]
                                 </li>
                             [% END %]
                         [% ELSE %]
                             [% FOREACH f IN club_template.club_template_fields %]
                                 <li>
-                                    <input type="hidden" name="club_template_field_id" value="[% f.id %]" />
+                                    <input type="hidden" name="club_template_field_id" value="[% f.id | html %]" />
 
-                                    <label for="club_template_field_[% f.id %]">[% f.name %]</label>
+                                    <label for="club_template_field_[% f.id | html %]">[% f.name | html %]</label>
                                     [% IF f.authorised_value_category %]
-                                        <select name="club_field" id="club_template_field_[% f.id %]">
+                                        <select name="club_field" id="club_template_field_[% f.id | html %]">
                                             [% FOREACH a IN AuthorisedValues.Get( f.authorised_value_category ) %]
-                                                <option value="[% a.authorised_value %]">[% a.lib %]</option>
+                                                <option value="[% a.authorised_value | html %]">[% a.lib | html %]</option>
                                             [% END %]
                                         </select>
                                     [% ELSE %]
-                                        <input type="text" name="club_field" id="club_template_field_[% f.id %]" size="40" />
+                                        <input type="text" name="club_field" id="club_template_field_[% f.id | html %]" size="40" />
                                     [% END %]
                                 </li>
                             [% END %]

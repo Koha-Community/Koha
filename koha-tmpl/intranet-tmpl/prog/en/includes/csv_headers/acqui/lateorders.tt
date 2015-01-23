@@ -1,4 +1,4 @@
 [%- USE Koha -%]
 [%- SET delimiter = Koha.Preference( 'delimiter' ) || ',' -%]
 
-[%- BLOCK -%]ORDER DATE[%- delimiter -%]ESTIMATED DELIVERY DATE[%- delimiter -%]VENDOR[%- delimiter -%]INFORMATION[%- delimiter -%]TOTAL COST[%- delimiter -%]BASKET[%- delimiter -%]CLAIMS COUNT[%- delimiter -%]CLAIMED DATE[%- END -%]
+[%- BLOCK -%]ORDER DATE[%- delimiter | html -%]ESTIMATED DELIVERY DATE[%- delimiter | html -%]VENDOR[%- delimiter | html -%]INFORMATION[%- delimiter | html -%]TOTAL COST[%- delimiter | html -%]BASKET[%- delimiter | html -%]CLAIMS COUNT[%- delimiter | html -%]CLAIMED DATE[%- END -%]

@@ -1,3 +1,4 @@
+[% USE raw %]
 [% SET footerjs = 1 %]
 [% PROCESS 'authorities-search-results.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -20,10 +21,10 @@
 
 <div id="merge_in_progress"></div>
 [% IF ( total ) %]
-<div class="pages">[% pagination_bar %]</div>
+<div class="pages">[% pagination_bar | $raw %]</div>
 
 <p id="authorities_searchresultlist_current_page_info">
-  Results [% from %] to [% to %] of [% total %]
+  Results [% from | html %] to [% to | html %] of [% total | html %]
 </p>
 
 <div id="authorities_searchresultlist_results">
@@ -38,13 +39,13 @@
         [% END %]
       </tr>
     [% FOREACH resul IN result %]
-    <tr data-authid="[% resul.authid %]">
+    <tr data-authid="[% resul.authid | html %]">
       <td>[% PROCESS authresult summary=resul.summary %]</td>
-      <td><a href="detail.pl?authid=[% resul.authid %]">Details</a></td>
+      <td><a href="detail.pl?authid=[% resul.authid | html %]">Details</a></td>
     [% UNLESS ( resul.isEDITORS ) %]
       <td>
       [% IF resul.used > 0 %]
-          <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;idx=an,phr&amp;q=[% resul.authid %]" class="button">[% resul.used %] record(s)</a>
+          <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;idx=an,phr&amp;q=[% resul.authid | html %]" class="button">[% resul.used | html %] record(s)</a>
       [% ELSE %]
           0 records
       [% END %]
@@ -53,13 +54,13 @@
     [% IF ( CAN_user_editauthorities ) %]
       <td>
       <div class="dropdown">
-        <a class="btn btn-default btn-xs dropdown-toggle" id="authactions[% resul.authid %]" role="button" data-toggle="dropdown" href="#">
+        <a class="btn btn-default btn-xs dropdown-toggle" id="authactions[% resul.authid | html %]" role="button" data-toggle="dropdown" href="#">
         Actions <b class="caret"></b></a>
-        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="authactions[% resul.authid %]">
-          <li><a href="/cgi-bin/koha/authorities/authorities.pl?authid=[% resul.authid %]"><i class="fa fa-pencil"></i> Edit</a></li>
+        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="authactions[% resul.authid | html %]">
+          <li><a href="/cgi-bin/koha/authorities/authorities.pl?authid=[% resul.authid | html %]"><i class="fa fa-pencil"></i> Edit</a></li>
           <li><a class="merge_auth" href="#merge"><i class="fa fa-compress"></i> Merge</a></li>
           [% UNLESS ( resul.used ) %]
-            <li><a onclick='return confirm_deletion("[% resul.authid %]")'><i class="fa fa-trash"></i> Delete</a></li>
+            <li><a onclick='return confirm_deletion("[% resul.authid | html %]")'><i class="fa fa-trash"></i> Delete</a></li>
           [% END %]
         </ul>
       </div>
@@ -70,7 +71,7 @@
   </table>
 </div>
 
-<div class="pages">[% pagination_bar %]</div>
+<div class="pages">[% pagination_bar | $raw %]</div>
 
 [% ELSE %]
   No results found

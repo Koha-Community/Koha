@@ -28,36 +28,36 @@
             <p>Filtered on:</p>
 			[% FOREACH loopfilte IN mainloo.loopfilter %]
 				<p>
-					[% loopfilte.crit %] = [% loopfilte.filter %]
+					[% loopfilte.crit | html %] = [% loopfilte.filter | html %]
 				</p>
 			[% END %]
 		[% END %]
 		<table>
 			<tr>
-				<th>[% mainloo.line %] / [% mainloo.column %]</th>
+				<th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
 				[% FOREACH loopco IN mainloo.loopcol %]
-					<th>[% IF ( loopco.coltitle_display ) %][% loopco.coltitle_display %][% ELSE %][% loopco.coltitle %][% END %]
+					<th>[% IF ( loopco.coltitle_display ) %][% loopco.coltitle_display | html %][% ELSE %][% loopco.coltitle | html %][% END %]
 					</th>
 				[% END %]
 				<th>TOTAL</th>
 			</tr>
 				[% FOREACH loopro IN mainloo.looprow %]
                     <tr>
-						<td>[% IF ( loopro.rowtitle_display ) %][% loopro.rowtitle_display %][% ELSE %][% loopro.rowtitle %][% END %]
+						<td>[% IF ( loopro.rowtitle_display ) %][% loopro.rowtitle_display | html %][% ELSE %][% loopro.rowtitle | html %][% END %]
 						</td>
 						[% FOREACH loopcel IN loopro.loopcell %]
-						<td>[% IF ( loopcel.value ) %][% loopcel.value %][% ELSE %]&nbsp;[% END %]
+						<td>[% IF ( loopcel.value ) %][% loopcel.value | html %][% ELSE %]&nbsp;[% END %]
 						</td>
 						[% END %]
-						<td>[% loopro.totalrow %]</td>
+						<td>[% loopro.totalrow | html %]</td>
 					</tr>
 				[% END %]
 				<tr>
 					<th>TOTAL</th>
 					[% FOREACH loopfoote IN mainloo.loopfooter %]
-						<th>[% loopfoote.totalcol %]</th>
+						<th>[% loopfoote.totalcol | html %]</th>
 					[% END %]
-					<th>[% mainloo.total %]</th>
+					<th>[% mainloo.total | html %]</th>
 				</tr>
 		</table>
 	[% END %]
@@ -83,7 +83,7 @@
                 <select name="Filter"  size="1" id="catcode">
                     <option value=""></option>
                     [% FOREACH patron_category IN patron_categories %]
-                        <option value="[% patron_category.categorycode %]">[% patron_category.description %]</option>
+                        <option value="[% patron_category.categorycode | html %]">[% patron_category.description | html %]</option>
                     [% END %]
                 </select>
             </td>
@@ -112,7 +112,7 @@
 			<td><select name="Filter"  size="1" id="zipcode">
 				<option value=""> </option>
 				[% FOREACH ZIP_LOO IN ZIP_LOOP %]
-				<option value="[% ZIP_LOO.zipcode %]">[% ZIP_LOO.zipcode %]</option>
+				<option value="[% ZIP_LOO.zipcode | html %]">[% ZIP_LOO.zipcode | html %]</option>
 				[% END %]
 				</select>
 			</td>
@@ -144,7 +144,7 @@
                 <select name="Filter"  size="1" id="branch">
                 <option value=""></option>
                 [% FOREACH l IN Branches.all( unfiltered => 1 ) %]
-                    <option value="[% l.branchcode %]">[% l.branchcode %] - [% l.branchname || 'UNKNOWN' %]</option>
+                    <option value="[% l.branchcode | html %]">[% l.branchcode | html %] - [% l.branchname || 'UNKNOWN' | html %]</option>
                 [% END %]
                 </select>
 			</td>
@@ -178,7 +178,7 @@
 					<select id="sort1" size="1" name="Filter">
 					<option value=""/>
 					[% FOREACH SORT1_LOO IN SORT1_LOOP %]
-						<option value="[% SORT1_LOO.authorized_value %]">[% SORT1_LOO.lib %]</option>
+						<option value="[% SORT1_LOO.authorized_value | html %]">[% SORT1_LOO.lib | html %]</option>
 					[% END %]
 					</select>
 				</td>
@@ -195,7 +195,7 @@
 					<select id="sort2" size="1" name="Filter">
 					<option value=""/>
 					[% FOREACH SORT2_LOO IN SORT2_LOOP %]
-						<option value="[% SORT2_LOO.value %]">[% SORT2_LOO.value %]</option>
+						<option value="[% SORT2_LOO.value | html %]">[% SORT2_LOO.value | html %]</option>
 					[% END %]
 					</select>
 				</td>
@@ -210,37 +210,37 @@
             [% FOREACH pa_loo IN patron_attributes %]
                 [% IF (pa_loo.class) %]
                     <tr>
-                        <th>[% pa_loo.class %] ([% pa_loo.lib %])</th>
+                        <th>[% pa_loo.class | html %] ([% pa_loo.lib | html %])</th>
                         <th colspan="3"></th>
                     </tr>
                 [% END %]
             [% FOREACH patron_attribute IN pa_loo.items %]
-                <tr data-category_code="[% patron_attribute.category_code %]">
+                <tr data-category_code="[% patron_attribute.category_code | html %]">
                     <td>
-                        [% patron_attribute.code %]
-                        ([% patron_attribute.description %])
+                        [% patron_attribute.code | html %]
+                        ([% patron_attribute.description | html %])
                     </td>
                     <td>
                         <input type="radio" name="Line"
-                            value="patron_attr.[% patron_attribute.code %]" />
+                            value="patron_attr.[% patron_attribute.code | html %]" />
                     </td>
                     <td>
                         <input type="radio" name="Column"
-                            value="patron_attr.[% patron_attribute.code %]" />
+                            value="patron_attr.[% patron_attribute.code | html %]" />
                     </td>
                     <td>
                         [% IF ( patron_attribute.use_dropdown ) %]
-                            <select name="Filter_patron_attr.[% patron_attribute.code %]"  >
+                            <select name="Filter_patron_attr.[% patron_attribute.code | html %]"  >
                                 <option value="" />
                                 [% FOREACH auth_val_loo IN patron_attribute.auth_val_loop %]
-                                    <option value="[% auth_val_loo.authorised_value %]" >
-                                        [% auth_val_loo.lib %]
+                                    <option value="[% auth_val_loo.authorised_value | html %]" >
+                                        [% auth_val_loo.lib | html %]
                                     </option>
                                 [% END %]
                             </select>
                         [% ELSE %]
                             <input type="text" maxlength="64"
-                                   name="Filter_patron_attr.[% patron_attribute.code %]" />
+                                   name="Filter_patron_attr.[% patron_attribute.code | html %]" />
                         [% END %]
                     </td>
                 </tr>
@@ -264,15 +264,15 @@
             <label class="inline" for="MIME">Into an application:</label>
             <select name="MIME" id="MIME" size="1">
             [% FOREACH value IN CGIextChoice %]
-                <option value="[% value %]">[% value %]</option>
+                <option value="[% value | html %]">[% value | html %]</option>
             [% END %]
             </select>
             <select name="sep" id="sep" size="1">
             [% FOREACH value IN CGIsepChoice.values.sort() %]
               [% IF ( value == CGIsepChoice.default ) %]
-                <option value="[% value %]" selected="selected">[% value %]</option>
+                <option value="[% value | html %]" selected="selected">[% value | html %]</option>
               [% ELSE %]
-                <option value="[% value %]">[% value %]</option>
+                <option value="[% value | html %]">[% value | html %]</option>
               [% END %]
             [% END %]
             </select>
@@ -282,7 +282,7 @@
 
 	<fieldset class="action">
 	<input type="submit" value="Submit" />
-	<input type="hidden" name="report_name" value="[% report_name %]" />
+	<input type="hidden" name="report_name" value="[% report_name | html %]" />
 	<input type="hidden" name="do_it" value="1" />
 	</fieldset>
 	</form>

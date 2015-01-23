@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
@@ -92,7 +93,7 @@ table.grid td.default {
 </div>
 </div>
 
-<h2>Circulation alerts for [% Branches.GetName( branch ) || 'Default' %]</h2>
+<h2>Circulation alerts for [% Branches.GetName( branch ) || 'Default' | html %]</h2>
 <p>Click on the grid to toggle the settings.</p>
 
 <div id="alerttabs" class="toptabs">
@@ -108,16 +109,16 @@ table.grid td.default {
 <tr>
   <th>&nbsp;</th>
   [% FOREACH item_type IN item_types %]
-  <th>[% item_type.description %]</th>
+  <th>[% item_type.description | html %]</th>
   [% END %]
 </tr>
 </thead>
 <tbody>
 [% FOREACH grid_checkou IN grid_checkout %]
 <tr>
-  <th>[% grid_checkou.description %]</th>
+  <th>[% grid_checkou.description | html %]</th>
   [% FOREACH item IN grid_checkou.items %]
-  <td class="[% item.class %]" id="[% item.id %]">[% item.text %]</td>
+  <td class="[% item.class | html %]" id="[% item.id | html %]">[% item.text | html %]</td>
   [% END %]
 </tr>
 [% END %]
@@ -132,16 +133,16 @@ table.grid td.default {
 <tr>
   <th>&nbsp;</th>
   [% FOREACH item_type IN item_types %]
-  <th>[% item_type.description %]</th>
+  <th>[% item_type.description | html %]</th>
   [% END %]
 </tr>
 </thead>
 <tbody>
 [% FOREACH grid_checki IN grid_checkin %]
 <tr>
-  <th>[% grid_checki.description %]</th>
+  <th>[% grid_checki.description | html %]</th>
   [% FOREACH item IN grid_checki.items %]
-  <td class="[% item.class %]" id="[% item.id %]">[% item.text %]</td>
+  <td class="[% item.class | html %]" id="[% item.id | html %]">[% item.text | html %]</td>
   [% END %]
 </tr>
 [% END %]
@@ -159,9 +160,9 @@ table.grid td.default {
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
     <script type="text/javascript">
-        var $branch = "[% branch %]";
+        var $branch = "[% branch | html %]";
         $(function(){
             $('#alerttabs').tabs();
 

@@ -1,7 +1,8 @@
+[% USE raw %]
 [% USE Koha %]
 [% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;   Your Interlibrary loan requests</title>[% INCLUDE 'doc-head-close.inc' %]
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;   Your Interlibrary loan requests</title>[% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-illrequests' bodyclass='scrollto' %]
@@ -58,9 +59,9 @@
                         [% INCLUDE messages %]
                         <div>
                             <p>
-                                [% Koha.Preference('ILLModuleCopyrightClearance') %]
+                                [% Koha.Preference('ILLModuleCopyrightClearance') | $raw %]
                             </p>
-                            <a href="?method=create&stage=copyrightclearance&backend=[% whole.value.backend %]"
+                            <a href="?method=create&stage=copyrightclearance&backend=[% whole.value.backend | html %]"
                                class="btn btn-sm btn-default"><i class="fa fa-check"></i> Yes</a>
                             <a href="/cgi-bin/koha/opac-illrequests.pl"
                                class="btn btn-sm btn-default"><i class="fa fa-times"></i> No</a>
@@ -73,7 +74,7 @@
                                     <label for="backend">Provider:</label>
                                     <select name="backend">
                                         [% FOREACH backend IN backends %]
-                                            <option value="[% backend %]">[% backend %]</option>
+                                            <option value="[% backend | html %]">[% backend | html %]</option>
                                         [% END %]
                                     </select>
                                 </fieldset>
@@ -97,11 +98,11 @@
                                 </button>
                                 <ul id="backend-dropdown-options" class="dropdown-menu nojs" aria-labelledby="ill-backend-dropdown">
                                     [% FOREACH backend IN backends %]
-                                        <li><a href="/cgi-bin/koha/opac-illrequests.pl?method=create&amp;backend=[% backend %]">[% backend %]</a></li>
+                                        <li><a href="/cgi-bin/koha/opac-illrequests.pl?method=create&amp;backend=[% backend | html %]">[% backend | html %]</a></li>
                                     [% END %]
                                 </ul>
                         [% ELSE %]
-                            <a id="ill-new" class="btn btn-default" href="/cgi-bin/koha/opac-illrequests.pl?method=create&amp;backend=[% backends.0 %]">
+                            <a id="ill-new" class="btn btn-default" href="/cgi-bin/koha/opac-illrequests.pl?method=create&amp;backend=[% backends.0 | html %]">
                                 <i class="fa fa-plus"></i> Create a new request
                             </a>
                         [% END %]
@@ -122,17 +123,17 @@
                         </thead>
                         <tbody>
                             [% FOREACH request IN requests %]
-                                [% status = request.status %]
+                                [% status = request.status | html %]
                                 <tr>
-                                    <td>[% request.metadata.Author || 'N/A' %]</td>
-                                    <td>[% request.metadata.Title || 'N/A' %]</td>
-                                    <td>[% request.backend %]</td>
-                                    <td>[% request.medium %]</td>
-                                    <td>[% request.capabilities.$status.name %]</td>
-                                    <td>[% request.placed %]</td>
-                                    <td>[% request.updated %]</td>
+                                    <td>[% request.metadata.Author || 'N/A' | html %]</td>
+                                    <td>[% request.metadata.Title || 'N/A' | html %]</td>
+                                    <td>[% request.backend | html %]</td>
+                                    <td>[% request.medium | html %]</td>
+                                    <td>[% request.capabilities.$status.name | html %]</td>
+                                    <td>[% request.placed | html %]</td>
+                                    <td>[% request.updated | html %]</td>
                                     <td>
-                                        <a href="/cgi-bin/koha/opac-illrequests.pl?method=view&amp;illrequest_id=[% request.id %]" class="btn btn-default btn-small pull-right">View</a>
+                                        <a href="/cgi-bin/koha/opac-illrequests.pl?method=view&amp;illrequest_id=[% request.id | html %]" class="btn btn-default btn-small pull-right">View</a>
                                     </td>
                                 </tr>
                             [% END %]
@@ -141,40 +142,40 @@
                 [% ELSIF method == 'view' %]
                     <h2>View Interlibrary loan request</h2>
                     [% INCLUDE messages %]
-                    [% status = request.status %]
+                    [% status = request.status | html %]
                     <form method="post" action="?method=update" id="illrequestupdate-form" novalidate="novalidate">
                             <fieldset class="rows">
                                 <legend id="library_legend">Details from library</legend>
                                 <ol>
                                     <li>
                                         <label for="backend">Requested from:</label>
-                                        [% request.backend %]
+                                        [% request.backend | html %]
                                     </li>
                                     [% IF request.biblio_id %]
                                         <li>
                                             <label for="biblio">Requested item:</label>
-                                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% request.biblio_id %]">Click here to view</a>
+                                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% request.biblio_id | html %]">Click here to view</a>
                                         </li>
                                     [% END %]
                                     <li>
                                         <label for="branchcode">Collection library:</label>
-                                        [% Branches.GetName(request.branchcode) %]
+                                        [% Branches.GetName(request.branchcode) | html %]
                                     </li>
                                     <li>
                                         <label for="status">Status:</label>
-                                        [% request.capabilities.$status.name %]
+                                        [% request.capabilities.$status.name | html %]
                                     </li>
                                     <li>
                                         <label for="medium">Request type:</label>
-                                        [% request.medium %]
+                                        [% request.medium | html %]
                                     </li>
                                     <li>
                                         <label for="placed">Request placed:</label>
-                                        [% request.placed %]
+                                        [% request.placed | html %]
                                     </li>
                                     <li>
                                         <label for="updated">Last updated:</label>
-                                        [% request.updated %]
+                                        [% request.updated | html %]
                                     </li>
                                     <li>
                                         <label for="notesopac">Notes:</label>
@@ -187,20 +188,20 @@
                                 </ol>
                             </fieldset>
                             <div class="rows">
-                                <legend id="backend_legend">Details from [% request.backend %]</legend>
+                                <legend id="backend_legend">Details from [% request.backend | html %]</legend>
                                 [% FOREACH meta IN request.metadata %]
-                                    <div class="requestattr-[% meta.key %]">
-                                        <span class="label">[% meta.key %]:</span>
-                                        [% meta.value || 'N/A' %]
+                                    <div class="requestattr-[% meta.key | html %]">
+                                        <span class="label">[% meta.key | html %]:</span>
+                                        [% meta.value || 'N/A' | html %]
                                     </div>
                                 [% END %]
                             </div>
                             <fieldset class="action illrequest-actions">
-                                <input type="hidden" name="illrequest_id" value="[% request.illrequest_id %]">
+                                <input type="hidden" name="illrequest_id" value="[% request.illrequest_id | html %]">
                                 <input type="hidden" name="method" value="update">
                                 [% IF !request.completed %]
                                     [% IF request.status == "NEW" %]
-                                        <a class="cancel-illrequest btn btn-danger" href="/cgi-bin/koha/opac-illrequests.pl?method=cancreq&amp;illrequest_id=[% request.illrequest_id %]">Request cancellation</a>
+                                        <a class="cancel-illrequest btn btn-danger" href="/cgi-bin/koha/opac-illrequests.pl?method=cancreq&amp;illrequest_id=[% request.illrequest_id | html %]">Request cancellation</a>
                                     [% END %]
                                     <input type="submit" class="update-illrequest btn btn-default" value="Submit modifications">
                                 [% END %]

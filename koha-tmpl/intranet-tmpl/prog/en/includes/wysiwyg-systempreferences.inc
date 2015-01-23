@@ -1,6 +1,7 @@
+[% USE raw %]
 [% USE Asset %]
 [% #Enable tinymce for system preferences %]
-[% Asset.js("lib/tiny_mce/tiny_mce.js") %]
+[% Asset.js("lib/tiny_mce/tiny_mce.js") | $raw %]
 <script>
 
 [%# Save TinyMCE content and trigger an event on the original element %]
@@ -10,7 +11,7 @@ function wysiwyg_change (ed){
     $(original_textarea).trigger("input");
 }
 
-tinyMCE.baseURL = "[% interface %]/lib/tiny_mce";
+tinyMCE.baseURL = "[% interface | html %]/lib/tiny_mce";
 tinyMCE.init({
     setup : function(ed) {
         ed.onInit.add(function(editor){
@@ -44,7 +45,7 @@ tinyMCE.init({
     mode : "specific_textareas",
     editor_selector : "mce",
     theme : "advanced",
-    content_css : "[% interface %]/[% theme %]/css/tinymce.css",
+    content_css : "[% interface | html %]/[% theme | html %]/css/tinymce.css",
     plugins : "table,save,advhr,advlink,contextmenu,advimage",
     theme_advanced_buttons1 : "bold,italic,|,cut,copy,paste,|,justifyleft,justifycenter,justifyright,justifyfull,|,formatselect,|,image,link,unlink,anchor,cleanup,help,code,advhr,",
     theme_advanced_buttons2 : "tablecontrols,|,bullist,numlist,|,outdent,indent,|,undo,redo,|,removeformat,|,visualaid,|,sub,sup,|,charmap|,forecolor,backcolor",

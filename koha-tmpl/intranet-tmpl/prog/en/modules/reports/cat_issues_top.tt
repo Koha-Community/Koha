@@ -20,18 +20,18 @@
 [% IF ( do_it ) %]
 
 	[% FOREACH mainloo IN mainloop %]
-        <h1>Top [% mainloo.limit %] Most-circulated items</h1>
+        <h1>Top [% mainloo.limit | html %] Most-circulated items</h1>
 		[% IF ( mainloo.loopfilter ) %]
             <p>Filtered on:</p>
 			[% FOREACH loopfilte IN mainloo.loopfilter %]
-                    <p>[% IF ( loopfilte.err ) %]  [% END %] [% loopfilte.crit %] =[% loopfilte.filter |html %][% IF ( loopfilte.err ) %]  [% END %]</p>
+                    <p>[% IF ( loopfilte.err ) %]  [% END %] [% loopfilte.crit | html %] =[% loopfilte.filter | html %][% IF ( loopfilte.err ) %]  [% END %]</p>
 			[% END %]
 		[% END %]
 		
 		<table>
 <tr>				<th>Rank/Biblioitemnumbers</th>
 				[% FOREACH loopco IN mainloo.loopcol %]
-					<th colspan="2">[% loopco.coltitle %]</th>
+					<th colspan="2">[% loopco.coltitle | html %]</th>
 				[% END %]</tr>
         <tr>
 				<th>&nbsp;</th>
@@ -42,7 +42,7 @@
 			  </tr>
 				[% FOREACH loopro IN mainloo.looprow %]
                     <tr>
-						<td>[% loopro.rowtitle %]</td>
+						<td>[% loopro.rowtitle | html %]</td>
 						[% FOREACH loopcel IN loopro.loopcell %]
 							<td>
 
@@ -55,11 +55,11 @@
 	<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopcel.reference |url %]">
  [% END %]
  [% END %]                                        
-								[% IF ( loopcel.value ) %][% loopcel.value %][% END %]
+								[% IF ( loopcel.value ) %][% loopcel.value | html %][% END %]
 								[% IF ( loopcel.reference ) %]</a>[% END %]
 							</td>
 							<td>
-								[% IF ( loopcel.count ) %][% loopcel.count %][% END %]
+								[% IF ( loopcel.count ) %][% loopcel.count | html %][% END %]
 							</td>
 						[% END %]
 					</tr>
@@ -86,7 +86,7 @@
       <li> 
         <label for="documenttype">Item type: </label><select name="Filter" id="documenttype"><option value="" > Any item type</option>
     [% FOREACH itemtype IN itemtypes %]
-        <option value="[% itemtype.itemtype %]" >[% itemtype.translated_description %] </option>
+        <option value="[% itemtype.itemtype | html %]" >[% itemtype.translated_description | html %] </option>
      [% END %] 
     </select>
       </li>
@@ -96,21 +96,21 @@
       <li>
         <label for="ccode">Collection: </label><select name="Filter" id="ccode"><option value="" > Any collection</option>
     [% FOREACH ccodeloo IN ccodeloop %]
-        <option value="[% ccodeloo.value %]" >[% ccodeloo.description %] </option>
+        <option value="[% ccodeloo.value | html %]" >[% ccodeloo.description | html %] </option>
      [% END %]
     </select>
       </li>
       <li>
         <label for="shelvingloc">Shelving location: </label><select name="Filter" id="shelvingloc"><option value="" > Any shelving location</option>
     [% FOREACH shelvinglocloo IN shelvinglocloop %]
-        <option value="[% shelvinglocloo.value %]" >[% shelvinglocloo.description %] </option>
+        <option value="[% shelvinglocloo.value | html %]" >[% shelvinglocloo.description | html %] </option>
      [% END %]
     </select>
       </li>
       <li>
         <label for="patroncategory">Patron category: </label><select name="Filter" id="patroncategory"><option value="" > Any category code</option>
     [% FOREACH patron_category IN patron_categories %]
-        <option value="[% patron_category.categorycode %]" >[% patron_category.description %] </option>
+        <option value="[% patron_category.categorycode | html %]" >[% patron_category.description | html %] </option>
      [% END %]
     </select>
         </li>
@@ -157,15 +157,15 @@
             <label class="inline" for="MIME">Into an application:</label>
             <select name="MIME" id="MIME" size="1">
             [% FOREACH value IN CGIextChoice %]
-                <option value="[% value %]">[% value %]</option>
+                <option value="[% value | html %]">[% value | html %]</option>
             [% END %]
             </select>
             <select name="sep" id="sep" size="1">
             [% FOREACH value IN CGIsepChoice.values.sort() %]
               [% IF ( value == CGIsepChoice.default ) %]
-                <option value="[% value %]" selected="selected">[% value %]</option>
+                <option value="[% value | html %]" selected="selected">[% value | html %]</option>
               [% ELSE %]
-                <option value="[% value %]">[% value %]</option>
+                <option value="[% value | html %]">[% value | html %]</option>
               [% END %]
             [% END %]
             </select>
@@ -175,7 +175,7 @@
 
 	<fieldset class="action">
 	<input type="submit" value="Submit" />
-	<input type="hidden" name="report_name" value="[% report_name %]" />
+	<input type="hidden" name="report_name" value="[% report_name | html %]" />
 	<input type="hidden" name="do_it" value="1" />
 	</fieldset>
 	</form>

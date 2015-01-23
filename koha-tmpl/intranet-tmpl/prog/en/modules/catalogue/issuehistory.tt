@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
@@ -5,9 +6,9 @@
 [% USE ColumnsSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Catalog &rsaquo; Checkout history for [% biblio.title |html %]</title>
+<title>Koha &rsaquo; Catalog &rsaquo; Checkout history for [% biblio.title | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="catalog_issuehistory" class="catalog">
@@ -15,7 +16,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Checkout history for <i>[% biblio.title |html %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Checkout history for <i>[% biblio.title | html %]</i></div>
 
 <div id="doc3" class="yui-t2">
 
@@ -23,14 +24,14 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h1>Checkout history for [% biblio.title |html %]</h1>
-[% IF biblio.author %]<h3>by [% biblio.author %]</h3>[% END %]
+<h1>Checkout history for [% biblio.title | html %]</h1>
+[% IF biblio.author %]<h3>by [% biblio.author | html %]</h3>[% END %]
 
 [% SET show_patron_column = Koha.Preference('intranetreadinghistory') AND CAN_user_circulate_circulate_remaining_permissions %]
 
 <div class="searchresults">
     [% IF checkouts %]
-        <h4>Checked out [% checkouts.size %] times</h4>
+        <h4>Checked out [% checkouts.size | html %] times</h4>
         <table id="table_issues">
             <thead><tr>
             [% IF show_patron_column %]
@@ -51,33 +52,33 @@
                 [% END %]
                 <td>
                     [% IF checkout.item.barcode %] [%# FIXME This test is not mandatory I think %]
-                        <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% checkout.item.biblionumber %]&amp;itemnumber=[% checkout.item.itemnumber %]">[% checkout.item.barcode %]</a>
+                        <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% checkout.item.biblionumber | html %]&amp;itemnumber=[% checkout.item.itemnumber | html %]">[% checkout.item.barcode | html %]</a>
                     [% ELSE %]
                         &nbsp;
                     [% END %]</td>
                 <td>[% IF checkout.branchcode %]
-                        [% Branches.GetName( checkout.branchcode ) %]
+                        [% Branches.GetName( checkout.branchcode ) | html %]
                     [% ELSE %]
                         &nbsp;
                     [% END %]</td>
                 <td>[% IF checkout.renewals %]
-                        Yes[% IF checkout.lastreneweddate %], <small>last on: [% checkout.lastreneweddate |$KohaDates with_hours => 1  %]</small>
+                        Yes[% IF checkout.lastreneweddate %], <small>last on: [% checkout.lastreneweddate |$KohaDates with_hours => 1 | html %]</small>
                             [% END %]
                     [% ELSE %]
                         No
                     [% END %]</td>
                 <td>[% IF checkout.issuedate %]
-                        <span title="[% checkout.issuedate %]">[% checkout.issuedate |$KohaDates with_hours => 1  %]</span>
+                        <span title="[% checkout.issuedate | html %]">[% checkout.issuedate |$KohaDates with_hours => 1 | html %]</span>
                     [% ELSE %]
                         <span title="0000-00-00"></span>
                     [% END %]</td>
                 <td>[% IF checkout.date_due %]
-                        <span title="[% checkout.date_due %]">[% checkout.date_due |$KohaDates with_hours => 1  %]</span>
+                        <span title="[% checkout.date_due | html %]">[% checkout.date_due |$KohaDates with_hours => 1 | html %]</span>
                     [% ELSE %]
                         <span title="0000-00-00"></span>
                     [% END %]</td>
                 <td>[% IF checkout.returndate %]
-                        <span title="[% checkout.returndate %]">[% checkout.returndate |$KohaDates with_hours => 1  %]</span>
+                        <span title="[% checkout.returndate | html %]">[% checkout.returndate |$KohaDates with_hours => 1 | html %]</span>
                     [% ELSE %]
                         <span title="Checked out"><small>Checked out</small></span>
                     [% END %]</td>
@@ -87,7 +88,7 @@
 		</table>
     [% ELSE %]
         <div class="dialog message"><p>
-        <b>[% biblio.title |html %][% IF biblio.author %], by [% biblio.author %][% END %]</b> has never been checked out.</p></div>
+        <b>[% biblio.title | html %][% IF biblio.author %], by [% biblio.author | html %][% END %]</b> has never been checked out.</p></div>
 
     [% END %]
 </div>

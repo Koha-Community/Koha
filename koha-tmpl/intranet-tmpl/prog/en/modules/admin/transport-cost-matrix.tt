@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
@@ -33,7 +34,7 @@
         <h4>There were problems with your submission</h4>
         <ul>
             [% FOR e IN errors %]
-                <li>Invalid value for [% e %]</li>
+                <li>Invalid value for [% e | html %]</li>
             [% END %]
         </ul>
     </div>[% END %]
@@ -51,26 +52,26 @@
                     <tr>
                         <th>From \ To</th>
                         [% FOR b IN Branches.all() %]
-                        <th>[% b.branchname %]</th>
+                        <th>[% b.branchname | html %]</th>
                         [% END %]
                     </tr>
                 [% FOR bf IN branchfromloop %]
                     <tr>
-                        <th>[% bf.name %]</th>
+                        <th>[% bf.name | html %]</th>
                     [% FOR bt IN bf.branchtoloop %]
                         <td>
                         [% IF bt.skip %]
                             &nbsp;
                         [% ELSE %]
                             [% IF bt.disabled %]
-                            <div id="celldiv_[% bt.id %]" class="disabled-transfer">
+                            <div id="celldiv_[% bt.id | html %]" class="disabled-transfer">
                             [% ELSE %]
-                            <div id="celldiv_[% bt.id %]">
+                            <div id="celldiv_[% bt.id | html %]">
                             [% END %]
-                            <div class="enable_cost_input" data-cost-id="[% bt.id %]">[% bt.disabled ? '&nbsp;' : bt.value %]</div>
-                            <input type="hidden" name="cost_[% bt.id %]" value="[% bt.value %]" />
+                            <div class="enable_cost_input" data-cost-id="[% bt.id | html %]">[% bt.disabled ? '&nbsp;' : bt.value | html %]</div>
+                            <input type="hidden" name="cost_[% bt.id | html %]" value="[% bt.value | html %]" />
                             [% IF bt.disabled %]
-                            <input type="hidden" name="disable_[% bt.id %]" value="1" />
+                            <input type="hidden" name="disable_[% bt.id | html %]" value="1" />
                             [% END %]
                             </div>
                         [% END %]
@@ -92,7 +93,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
     <script type="text/javascript">
         function check_transport_cost(e) {
             var val = e.value;

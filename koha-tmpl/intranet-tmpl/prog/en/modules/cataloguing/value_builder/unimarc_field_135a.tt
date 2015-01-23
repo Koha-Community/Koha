@@ -61,10 +61,10 @@
 
 [% MACRO jsinclude BLOCK %]
     <script type="text/javascript">
-        var dateformat = "[% Koha.Preference('dateformat') %]";
+        var dateformat = "[% Koha.Preference('dateformat') | html %]";
         function report() {
             var doc   = opener.document;
-            var field = doc.getElementById("[% index %]");
+            var field = doc.getElementById("[% index | html %]");
 
             field.value =  document.f_pop.f1.value;
             window.close();

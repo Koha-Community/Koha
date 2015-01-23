@@ -2,8 +2,8 @@
 <script type="text/javascript">
 //<![CDATA[
 
-var debug    = "[% debug %]";
-var dformat  = "[% dateformat %]";
+var debug    = "[% debug | html %]";
+var dformat  = "[% dateformat | html %]";
 var sentmsg = 0;
 if (debug > 1) {alert("dateformat: " + dformat + "\ndebug is on (level " + debug + ")");}
 var MSG_PLEASE_ENTER_A_VALID_DATE = (_("Please enter a valid date (should match %s)."));
@@ -12,7 +12,7 @@ function is_valid_date(date) {
     // An empty string is considered as a valid date for convenient reasons.
     if ( date === '' ) return 1;
 
-    var dateformat = dateformat_str = '[% Koha.Preference('dateformat') %]';
+    var dateformat = dateformat_str = '[% Koha.Preference('dateformat') | html %]';
     if ( dateformat == 'us' ) {
         if ( date.search(/^\d{2}\/\d{2}\/\d{4}($|\s)/) == -1 ) return 0;
         dateformat = 'mm/dd/yy';
@@ -50,7 +50,7 @@ function get_dateformat_str(dateformat) {
 
 function validate_date (dateText, inst) {
     if ( !is_valid_date(dateText) ) {
-        var dateformat_str = get_dateformat_str( '[% Koha.Preference('dateformat') %]' );
+        var dateformat_str = get_dateformat_str( '[% Koha.Preference('dateformat') | html %]' );
         alert(MSG_PLEASE_ENTER_A_VALID_DATE.format(dateformat_str));
         $('#'+inst.id).val('');
     }
@@ -118,7 +118,7 @@ jQuery(function($){
         dayNamesMin: [_("Su"),_("Mo"),_("Tu"),_("We"),_("Th"),_("Fr"),_("Sa")],
         weekHeader: _("Wk"),
         dateFormat: "[% IF ( dateformat == "us" ) %]mm/dd/yy[% ELSIF ( dateformat == "metric" ) %]dd/mm/yy[% ELSIF ( dateformat == "dmydot" ) %]dd.mm.yy[% ELSE %]yy-mm-dd[% END %]",
-        firstDay: [% Koha.Preference('CalendarFirstDayOfWeek') %],
+        firstDay: [% Koha.Preference('CalendarFirstDayOfWeek') | html %],
         isRTL: [% IF ( bidi ) %]true[% ELSE %]false[% END %],
         showMonthAfterYear: false,
         yearSuffix: ''};
@@ -131,7 +131,7 @@ $.datepicker.setDefaults({
         showOn: "both",
         changeMonth: true,
         changeYear: true,
-        buttonImage: '[% interface %]/[% theme %]/img/famfamfam/silk/calendar.png',
+        buttonImage: '[% interface | html %]/[% theme | html %]/img/famfamfam/silk/calendar.png',
         buttonImageOnly: true,
         showButtonPanel: true,
         showOtherMonths: true,

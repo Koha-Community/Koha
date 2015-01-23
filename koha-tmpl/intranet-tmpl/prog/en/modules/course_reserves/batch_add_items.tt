@@ -11,7 +11,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; Add reserves for <i><a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id %]">[% course.course_name %]</a></i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; Add reserves for <i><a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | html %]">[% course.course_name | html %]</a></i></div>
 
 <div class="main container-fluid">
     <div class="row">
@@ -22,7 +22,7 @@
 
         [% IF action == 'display_form' %]
             <form method="post" action="/cgi-bin/koha/course_reserves/batch_add_items.pl">
-                <input type="hidden" name="course_id" value="[% course.course_id %]" />
+                <input type="hidden" name="course_id" value="[% course.course_id | html %]" />
                 <input type="hidden" name="action" value="add" />
 
                 <fieldset class="rows">
@@ -39,7 +39,7 @@
                                 <option value="">LEAVE UNCHANGED</option>
 
                                 [% FOREACH it IN ItemTypes.Get() %]
-                                    <option value="[% it.itemtype %]">[% it.description %]</option>
+                                    <option value="[% it.itemtype | html %]">[% it.description | html %]</option>
                                 [% END %]
                             </select>
                         </li>
@@ -50,7 +50,7 @@
                             <select id="ccode" name="ccode">
                                 <option value="">LEAVE UNCHANGED</option>
                                 [% FOREACH c IN AuthorisedValues.Get('CCODE') %]
-                                    <option value="[% c.authorised_value %]">[% c.lib %]</option>
+                                    <option value="[% c.authorised_value | html %]">[% c.lib | html %]</option>
                                 [% END %]
                             </select>
                         </li>
@@ -60,7 +60,7 @@
                             <select id="location" name="location">
                                 <option value="">LEAVE UNCHANGED</option>
                                 [% FOREACH s IN AuthorisedValues.Get('LOC') %]
-                                    <option value="[% s.authorised_value %]">[% s.lib %]</option>
+                                    <option value="[% s.authorised_value | html %]">[% s.lib | html %]</option>
                                 [% END %]
                             </select>
                         </li>
@@ -70,19 +70,19 @@
                             <select id="holdingbranch" name="holdingbranch">
                                 <option value="">LEAVE UNCHANGED</option>
                                 [% FOREACH b IN Branches.all() %]
-                                    <option value="[% b.branchcode %]">[% b.branchname %]</option>
+                                    <option value="[% b.branchcode | html %]">[% b.branchname | html %]</option>
                                 [% END %]
                             </select>
                         </li>
 
                         <li>
                             <label for="staff_note">Staff note:</label>
-                            <textarea name="staff_note" id="staff_note">[% course_reserve.staff_note %]</textarea>
+                            <textarea name="staff_note" id="staff_note">[% course_reserve.staff_note | html %]</textarea>
                         </li>
 
                         <li>
                             <label for="public_note">Public note:</label>
-                            <textarea name="public_note" id="public_note">[% course_reserve.public_note %]</textarea>
+                            <textarea name="public_note" id="public_note">[% course_reserve.public_note | html %]</textarea>
                         </li>
                     </ol>
                 </fieldset>
@@ -94,7 +94,7 @@
                 <fieldset class="action">
                     <input type="submit" value="Submit" class="submit" />
 
-                    <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id %]" class="cancel">Cancel</a>
+                    <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | html %]" class="cancel">Cancel</a>
                 </fieldset>
             </form>
         [% END %]
@@ -107,7 +107,7 @@
                 <p>The following items were added or updated:</p>
                 <ul>
                     [% FOREACH i IN items_added %]
-                        <li>[% i.biblio.title %] ( [% i.barcode %] )</li>
+                        <li>[% i.biblio.title | html %] ( [% i.barcode | html %] )</li>
                     [% END %]
                 </ul>
             [% ELSE %]
@@ -120,13 +120,13 @@
                 <p>The following invalid barcodes were skipped:</p>
                 <ul>
                     [% FOREACH b IN invalid_barcodes %]
-                        <li>[% b %]</li>
+                        <li>[% b | html %]</li>
                     [% END %]
                 </ul>
             [% END %]
 
             <p>
-                <a class='btn btn-default' href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course_id %]">View course</a>
+                <a class='btn btn-default' href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course_id | html %]">View course</a>
             </p>
         [% END %]
     </div>

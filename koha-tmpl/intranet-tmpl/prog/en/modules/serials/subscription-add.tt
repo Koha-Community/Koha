@@ -1,9 +1,10 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Serials &rsaquo; [% IF ( modify ) %][% bibliotitle |html %] &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]</title>
+<title>Koha &rsaquo; Serials &rsaquo; [% IF ( modify ) %][% bibliotitle | html %] &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style type="text/css">
 fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
@@ -17,20 +18,20 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; [% IF ( modify ) %]<a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]"><i>[% bibliotitle |html %]</i></a> &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; [% IF ( modify ) %]<a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid | html %]"><i>[% bibliotitle | html %]</i></a> &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]</div>
 
 <div class="main container-fluid">
     <div class="row">
 
-            <h1>[% IF ( modify ) %] Modify subscription for <i>[% bibliotitle |html %]</i>[% ELSE %]Add a new subscription[% END %] (<span id="page_number">1/2</span>)</h1>
+            <h1>[% IF ( modify ) %] Modify subscription for <i>[% bibliotitle | html %]</i>[% ELSE %]Add a new subscription[% END %] (<span id="page_number">1/2</span>)</h1>
             <form method="post" id="subscription_add_form" name="f" action="/cgi-bin/koha/serials/subscription-add.pl" class="validated">
                 [% IF ( modify ) %]
                     <input type="hidden" name="op" value="modsubscription" />
-                    <input type="hidden" name="subscriptionid" value="[% subscriptionid %]" />
+                    <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
                 [% ELSE %]
                         <input type="hidden" name="op" value="addsubscription" />
                 [% END %]
-                <input type="hidden" name="user" value="[% loggedinusername %]" />
+                <input type="hidden" name="user" value="[% loggedinusername | html %]" />
                 <input type="hidden" name="irreg_check" value="0" />
 
                 <div id="page_1">
@@ -39,20 +40,20 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                             <legend>Subscription details</legend>
                             <ol>
                                 [% IF ( subscriptionid ) %]
-                                    <li><span class="label">Subscription #</span> [% subscriptionid %]</li>
+                                    <li><span class="label">Subscription #</span> [% subscriptionid | html %]</li>
                                 [% END %]
                                 <li>
                                     <label for="aqbooksellerid">Vendor: </label>
-                                    <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="[% aqbooksellerid %]" size="8" /> (<input type="text" name="aqbooksellername" id="aqbooksellername" value="[% aqbooksellername %]" disabled="disabled" readonly="readonly" />) <a href="#" id="vendor_search"><i class="fa fa-search"></i> Search for a vendor</a>
+                                    <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="[% aqbooksellerid | html %]" size="8" /> (<input type="text" name="aqbooksellername" id="aqbooksellername" value="[% aqbooksellername | html %]" disabled="disabled" readonly="readonly" />) <a href="#" id="vendor_search"><i class="fa fa-search"></i> Search for a vendor</a>
                                 </li>
                                 <li>
                                     <label for="biblionumber" class="required" title="Subscriptions must be associated with a bibliographic record">Record:</label>
-                                    <input type="text" name="biblionumber" id="biblionumber" value="[% bibnum %]" size="8" />
-                                    (<input type="text" name="title" value="[% bibliotitle %]" disabled="disabled" readonly="readonly" />) <span class="required" title="Subscriptions must be associated with a bibliographic record">Required</span>
+                                    <input type="text" name="biblionumber" id="biblionumber" value="[% bibnum | html %]" size="8" />
+                                    (<input type="text" name="title" value="[% bibliotitle | html %]" disabled="disabled" readonly="readonly" />) <span class="required" title="Subscriptions must be associated with a bibliographic record">Required</span>
                                     <div class="inputnote"> <a href="#" id="record_search"><i class="fa fa-search"></i> Search for record</a>
                                         [% IF ( CAN_user_editcatalogue ) %]
                                             [% IF ( modify ) %]
-                                            | <a href="#" id="biblio_add_edit" data-biblionumber="[% bibnum %]"><i class="fa fa-pencil"></i> Edit record</a>
+                                            | <a href="#" id="biblio_add_edit" data-biblionumber="[% bibnum | html %]"><i class="fa fa-pencil"></i> Edit record</a>
                                             [% ELSE %]
                                             | <a href="#" id="biblio_add_edit"><i class="fa fa-plus"></i> Create record</a>
                                             [% END %]
@@ -100,7 +101,7 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                 </li>
                                 <li>
                                     <label for="callnumber">Call number:</label>
-                                    <input type="text" name="callnumber" id="callnumber" value="[% callnumber %]" size="20" />
+                                    <input type="text" name="callnumber" id="callnumber" value="[% callnumber | html %]" size="20" />
                                 </li>
                                 <li>
                                     <label for="branchcode">Library:</label>
@@ -117,11 +118,11 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                 </li>
                                 <li>
                                     <label for="notes">Public note:</label>
-                                    <textarea name="notes" id="notes" cols="30" rows="2">[% notes %]</textarea>
+                                    <textarea name="notes" id="notes" cols="30" rows="2">[% notes | html %]</textarea>
                                 </li>
                                 <li>
                                     <label for="internalnotes">Nonpublic note:</label>
-                                    <textarea name="internalnotes" id="internalnotes" cols="30" rows="2">[% internalnotes %]</textarea>
+                                    <textarea name="internalnotes" id="internalnotes" cols="30" rows="2">[% internalnotes | html %]</textarea>
                                 </li>
                                 <li>
                                     [% IF ( letterloop ) %]
@@ -130,9 +131,9 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                             <option value="">None</option>
                                             [% FOREACH letterloo IN letterloop %]
                                                 [% IF ( letterloo.selected ) %]
-                                                    <option value="[% letterloo.value %]" selected="selected">[% letterloo.lettername %]</option>
+                                                    <option value="[% letterloo.value | html %]" selected="selected">[% letterloo.lettername | html %]</option>
                                                 [% ELSE %]
-                                                    <option value="[% letterloo.value %]">[% letterloo.lettername %]</option>
+                                                    <option value="[% letterloo.value | html %]">[% letterloo.lettername | html %]</option>
                                                 [% END %]
                                             [% END %]
                                         </select>
@@ -148,9 +149,9 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                         <option value="">None</option>
                                         [% FOREACH locations_loo IN locations_loop %]
                                             [% IF locations_loo.authorised_value == location %]
-                                                <option value="[% locations_loo.authorised_value %]" selected="selected">[% locations_loo.lib %]</option>
+                                                <option value="[% locations_loo.authorised_value | html %]" selected="selected">[% locations_loo.lib | html %]</option>
                                             [% ELSE %]
-                                                <option value="[% locations_loo.authorised_value %]">[% locations_loo.lib %]</option>
+                                                <option value="[% locations_loo.authorised_value | html %]">[% locations_loo.lib | html %]</option>
                                             [% END %]
                                         [% END %]
                                     </select>
@@ -161,9 +162,9 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                         <option value=""></option>
                                         [% FOREACH type IN typeloop %]
                                             [% IF ( type.selected ) %]
-                                                <option value="[% type.code %]" selected="selected">[% type.value %]</option>
+                                                <option value="[% type.code | html %]" selected="selected">[% type.value | html %]</option>
                                             [% ELSE %]
-                                                <option value="[% type.code %]">[% type.value %]</option>
+                                                <option value="[% type.code | html %]">[% type.value | html %]</option>
                                             [% END %]
                                         [% END %]
                                     </select>
@@ -175,9 +176,9 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                             <option value=""></option>
                                         [% FOREACH previous IN previoustypeloop %]
                                             [% IF ( previous.selected ) %]
-                                                <option value="[% previous.code %]" selected="selected">[% previous.value %]</option>
+                                                <option value="[% previous.code | html %]" selected="selected">[% previous.value | html %]</option>
                                             [% ELSE %]
-                                                <option value="[% previous.code %]">[% previous.value %]</option>
+                                                <option value="[% previous.code | html %]">[% previous.value | html %]</option>
                                             [% END %]
                                         [% END %]
                                     </select>
@@ -185,15 +186,15 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                 [% END %]
                                     <li>
                                     <label for="graceperiod">Grace period:</label>
-                                    <input type="text" name="graceperiod" id="graceperiod" value="[% graceperiod %]" size="5"/> day(s)
+                                    <input type="text" name="graceperiod" id="graceperiod" value="[% graceperiod | html %]" size="5"/> day(s)
                                 </li>
                                 <li>
                                      <label class="widelabel" for="staffdisplaycount">Number of issues to display to staff: </label>
-                                     <input type="text" name="staffdisplaycount" id="staffdisplaycount" value="[% staffdisplaycount %]" size="4"/>
+                                     <input type="text" name="staffdisplaycount" id="staffdisplaycount" value="[% staffdisplaycount | html %]" size="4"/>
                                  </li>
                                  <li>
                                     <label class="widelabel" for="opacdisplaycount">Number of issues to display to the public: </label>
-                                    <input type="text" name="opacdisplaycount" id="opacdisplaycount" value="[% opacdisplaycount %]" size="4"/>
+                                    <input type="text" name="opacdisplaycount" id="opacdisplaycount" value="[% opacdisplaycount | html %]" size="4"/>
                                 </li>
                             </ol>
                         </fieldset>
@@ -230,11 +231,11 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                             <option value="">-- please choose --</option>
                                             [% FOREACH frequency IN frequencies %]
                                                 [% IF (frequency.selected) %]
-                                                    <option value="[% frequency.id %]" selected="selected">
+                                                    <option value="[% frequency.id | html %]" selected="selected">
                                                 [% ELSE %]
-                                                    <option value="[% frequency.id %]">
+                                                    <option value="[% frequency.id | html %]">
                                                 [% END %]
-                                                    [% frequency.label %]
+                                                    [% frequency.label | html %]
                                                 </option>
                                             [% END %]
                                         </select>
@@ -265,12 +266,12 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                                             <option value="months">
                                                         [% END %]
                                                         months
-                                                    [% CASE %][% st %]
+                                                    [% CASE %][% st | html %]
                                                 [% END %]
                                                 </option>
                                             [% END %]
                                         </select>
-                                        <input type="text" name="sublength" id="sublength" value="[% sublength %]" size="3" /> (enter amount in numerals)
+                                        <input type="text" name="sublength" id="sublength" value="[% sublength | html %]" size="3" /> (enter amount in numerals)
                                         <input type="hidden" name="issuelengthcount">
                                     </li>
                                     <li>
@@ -287,11 +288,11 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                             <option value="">-- please choose --</option>
                                             [% FOREACH numberpattern IN numberpatterns %]
                                                 [% IF (numberpattern.selected) %]
-                                                    <option value="[% numberpattern.id %]" selected="selected">
+                                                    <option value="[% numberpattern.id | html %]" selected="selected">
                                                 [% ELSE %]
-                                                    <option value="[% numberpattern.id %]">
+                                                    <option value="[% numberpattern.id | html %]">
                                                 [% END %]
-                                                    [% numberpattern.label %]
+                                                    [% numberpattern.label | html %]
                                                 </option>
                                             [% END %]
                                         </select>
@@ -302,9 +303,9 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                             <option value=""></option>
                                             [% FOREACH l IN locales %]
                                                 [% IF l.language == locale %]
-                                                    <option value="[% l.language %]" selected="selected">[% l.description %]</option>
+                                                    <option value="[% l.language | html %]" selected="selected">[% l.description | html %]</option>
                                                 [% ELSE %]
-                                                    <option value="[% l.language %]">[% l.description %]</option>
+                                                    <option value="[% l.language | html %]">[% l.description | html %]</option>
                                                 [% END %]
                                             [% END %]
                                         </select>
@@ -329,15 +330,15 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                                         Begins with
                                                       [% END %]
                                                     </td>
-                                                    <td id="beginsX"><input type="text" id="lastvaluetemp1" name="lastvaluetemp1" value="[% lastvalue1 %]" /></td>
-                                                    <td id="beginsY"><input type="text" id="lastvaluetemp2" name="lastvaluetemp2" value="[% lastvalue2 %]" /></td>
-                                                    <td id="beginsZ"><input type="text" id="lastvaluetemp3" name="lastvaluetemp3" value="[% lastvalue3 %]" /></td>
+                                                    <td id="beginsX"><input type="text" id="lastvaluetemp1" name="lastvaluetemp1" value="[% lastvalue1 | html %]" /></td>
+                                                    <td id="beginsY"><input type="text" id="lastvaluetemp2" name="lastvaluetemp2" value="[% lastvalue2 | html %]" /></td>
+                                                    <td id="beginsZ"><input type="text" id="lastvaluetemp3" name="lastvaluetemp3" value="[% lastvalue3 | html %]" /></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Inner counter</td>
-                                                    <td id="innerX"><input type="text" id="innerlooptemp1" name="innerlooptemp1" value="[% innerloop1 %]" /></td>
-                                                    <td id="innerY"><input type="text" id="innerlooptemp2" name="innerlooptemp2" value="[% innerloop2 %]" /></td>
-                                                    <td id="innerZ"><input type="text" id="innerlooptemp3" name="innerlooptemp3" value="[% innerloop3 %]" /></td>
+                                                    <td id="innerX"><input type="text" id="innerlooptemp1" name="innerlooptemp1" value="[% innerloop1 | html %]" /></td>
+                                                    <td id="innerY"><input type="text" id="innerlooptemp2" name="innerlooptemp2" value="[% innerloop2 | html %]" /></td>
+                                                    <td id="innerZ"><input type="text" id="innerlooptemp3" name="innerlooptemp3" value="[% innerloop3 | html %]" /></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -353,7 +354,7 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                       </li>
                                       <li>
                                         <label for="numberingmethod">Numbering formula:</label>
-                                        <input readonly="readonly" type="text" name="numberingmethod" id="numberingmethod" size="50" value="[% numberingmethod %]" />
+                                        <input readonly="readonly" type="text" name="numberingmethod" id="numberingmethod" size="50" value="[% numberingmethod | html %]" />
                                       </li>
                                         <table id="advancedpredictionpatternt">
                                             <thead>
@@ -412,7 +413,7 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                                 </tr>
                                                 <tr>
                                                     [% BLOCK numbering_select %]
-                                                        <select disabled="disabled" id="[% name %]" name="[% name %]">
+                                                        <select disabled="disabled" id="[% name | html %]" name="[% name | html %]">
                                                             <option value=""></option>
                                                             <option value="dayname">Name of day</option>
                                                             <option value="dayabrv">Name of day (abbreviated)</option>
@@ -443,23 +444,23 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                   <ol>
                                     [% FOR field IN additional_fields_for_subscription %]
                                       <li>
-                                        <label for="additional_field_[% field.id %]"> [% field.name %]: </label>
+                                        <label for="additional_field_[% field.id | html %]"> [% field.name | html %]: </label>
                                         [% IF field.authorised_value_choices %]
-                                          <select name="additional_field_[% field.id %]" id="additional_field_[% field.id %]">
+                                          <select name="additional_field_[% field.id | html %]" id="additional_field_[% field.id | html %]">
                                             [% FOREACH av IN field.authorised_value_choices %]
                                               [% IF av.authorised_value == additional_fields.${field.name} %]
-                                                <option value="[% av.authorised_value %]" selected="selected">[% av.lib %]</option>
+                                                <option value="[% av.authorised_value | html %]" selected="selected">[% av.lib | html %]</option>
                                               [% ELSE %]
-                                                <option value="[% av.authorised_value %]">[% av.lib %]</option>
+                                                <option value="[% av.authorised_value | html %]">[% av.lib | html %]</option>
                                               [% END %]
                                             [% END %]
-                                          </select> (Authorised values for [% field.authorised_value_category %])
+                                          </select> (Authorised values for [% field.authorised_value_category | html %])
                                         [% ELSE %]
                                           [% IF field.marcfield %]
-                                            <input type="text" value="[% additional_fields.${field.name} %]" id="additional_field_[% field.id %]" name="additional_field_[% field.id %]" readonly="readonly" />
-                                            This value will be filled with the [% field.marcfield %] subfield of the selected biblio.
+                                            <input type="text" value="[% additional_fields.${field.name} | html %]" id="additional_field_[% field.id | html %]" name="additional_field_[% field.id | html %]" readonly="readonly" />
+                                            This value will be filled with the [% field.marcfield | html %] subfield of the selected biblio.
                                           [% ELSE %]
-                                            <input type="text" value="[% additional_fields.${field.name} %]" id="additional_field_[% field.id %]" name="additional_field_[% field.id %]" />
+                                            <input type="text" value="[% additional_fields.${field.name} | html %]" id="additional_field_[% field.id | html %]" name="additional_field_[% field.id | html %]" />
                                           [% END %]
                                         [% END %]
                                       </li>
@@ -486,12 +487,12 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     <script type="text/javascript">
-        var subscriptionid = "[% subscriptionid %]";
-        var irregularity = "[% irregularity %]";
-        var more_than_one_serial = "[% more_than_one_serial %]";
+        var subscriptionid = "[% subscriptionid | html %]";
+        var irregularity = "[% irregularity | html %]";
+        var more_than_one_serial = "[% more_than_one_serial | html %]";
         var tags = [];
         [% FOREACH field IN dont_export_field_loop %]
-            tags.push("[% field.fieldid %]");
+            tags.push("[% field.fieldid | html %]");
         [% END %]
         var MSG_LINK_TO_VENDOR = _("If you wish to claim late or missing issues you must link this subscription to a vendor. Click OK to ignore or Cancel to return and enter a vendor");
         var MSG_LINK_BIBLIO = _("You must choose or create a bibliographic record");
@@ -509,8 +510,8 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
         var MSG_PUB_DATE_UNDEFINED = _("First publication date is not defined");
         var MSG_NEXT_ISSUE_UNDEFINED = _("Next issue publication date is not defined");
     </script>
-    [% Asset.js("js/subscription-add.js") %]
-    [% Asset.js("js/showpredictionpattern.js") %]
+    [% Asset.js("js/subscription-add.js") | $raw %]
+    [% Asset.js("js/showpredictionpattern.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

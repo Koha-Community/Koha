@@ -20,5 +20,5 @@
     [% CASE 'WO' %]Writeoff
     [% CASE 'C' %]Credit
     [% CASE 'CR' %]Credit
-    [% CASE %][% account.accounttype %]
+    [% CASE %][% account.accounttype | html %]
 [%- END -%]

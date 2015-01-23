@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
@@ -19,7 +20,7 @@
     <div id="yui-main">
     <div class="yui-b">
 
-        <h1>Defining [% IF ( branch ) %]overdue actions for [% Branches.GetName( branch ) %][% ELSE %]default overdue actions[% END %]</h1>
+        <h1>Defining [% IF ( branch ) %]overdue actions for [% Branches.GetName( branch ) | html %][% ELSE %]default overdue actions[% END %]</h1>
         <div class="help">
             <p>Delay is the number of days after a checkout is due before an action is triggered. </p>
             <p>If you want Koha to trigger an action (send a letter or restrict a member), a delay value is required.</p>
@@ -39,13 +40,13 @@
                 <p>The following errors were found. Please correct them and submit again:</p>
                 <ul>
                 [% IF ( ERRORDELAY ) %]
-                    <li>Delay [% ERRORDELAY %] for [% BORERR %] patron category has some unexpected characters. There should be only numerical characters. </li>
+                    <li>Delay [% ERRORDELAY | html %] for [% BORERR | html %] patron category has some unexpected characters. There should be only numerical characters. </li>
                 [% END %]
                 [% IF ( ERRORUSELESSDELAY ) %]
-                    <li>No letter or restriction action specified for delay [% ERRORUSELESSDELAY %] for [% BORERR %] patron category.  If a delay is supplied, either a letter, restrict action, or both should be specified.</li>
+                    <li>No letter or restriction action specified for delay [% ERRORUSELESSDELAY | html %] for [% BORERR | html %] patron category.  If a delay is supplied, either a letter, restrict action, or both should be specified.</li>
                 [% END %]
                 [% IF ( ERRORORDER ) %]
-                    <li>The first notice's delay should be less than the second, which should be less than the third for the <strong>[% BORERR %]</strong> patron category </li>
+                    <li>The first notice's delay should be less than the second, which should be less than the third for the <strong>[% BORERR | html %]</strong> patron category </li>
                 [% END %]
                 </ul>
             </div>
@@ -53,18 +54,18 @@
             [% IF ( table ) %]
             <form method="post" action="/cgi-bin/koha/tools/overduerules.pl">
                 <input type="hidden" name="op" value="save" />
-                <input type="hidden" name="branch" value="[% branch %]" />
-                <h3>Rules for overdue actions: [% IF ( branch ) %][% Branches.GetName( branch ) %][% ELSE %] default library [% END %]</h3>
+                <input type="hidden" name="branch" value="[% branch | html %]" />
+                <h3>Rules for overdue actions: [% IF ( branch ) %][% Branches.GetName( branch ) | html %][% ELSE %] default library [% END %]</h3>
                     [% IF ( datasaved ) %]<div class="dialog message">Changes saved.</div> [% END %]
 
   <div id="rulestabs" class="toptabs">
     <ul class="ui-tabs-nav">
       [% FOR tab IN tabs %]
-          <li><a href="#[% tab.id %]" class="tab [% tab.id %]" data-number="[% tab.number %]"></a></li>
+          <li><a href="#[% tab.id | html %]" class="tab [% tab.id | html %]" data-number="[% tab.number | html %]"></a></li>
       [% END %]
     </ul>
     [% FOR tab IN tabs %]
-      <div id="[% tab.id %]">
+      <div id="[% tab.id | html %]">
         <table>
           <thead>
             <tr>
@@ -86,7 +87,7 @@
                   [% CASE 'phone' %]
                     Phone
                   [% CASE %]
-                    [% mtt %]
+                    [% mtt | html %]
                   [% END %]
                 </th>
               [% END %]
@@ -95,40 +96,40 @@
           <tbody>
           [% FOREACH value IN tab.values %]
             <tr>
-              <th scope="row">[% value.line %]</th>
+              <th scope="row">[% value.line | html %]</th>
               <td>
-              <input type="number" min="1" name="delay[% tab.number %]-[% value.overduename %]" value="[% value.delay %]" />
+              <input type="number" min="1" name="delay[% tab.number | html %]-[% value.overduename | html %]" value="[% value.delay | html %]" />
               </td>
               <td>
-                <select name="letter[% tab.number %]-[% value.overduename %]">
+                <select name="letter[% tab.number | html %]-[% value.overduename | html %]">
                   <option value="">No notice</option>
                   [% FOREACH letter IN letters %]
                     [% IF letter.code == value.selected_lettercode %]
-                      <option value="[% letter.code %]" selected="selected">[% letter.name %]</option>
+                      <option value="[% letter.code | html %]" selected="selected">[% letter.name | html %]</option>
                     [% ELSE %]
-                      <option value="[% letter.code %]">[% letter.name %]</option>
+                      <option value="[% letter.code | html %]">[% letter.name | html %]</option>
                     [% END %]
                   [% END %]
                 </select>
               </td>
               <td>
               [% IF ( value.debarred ) %]
-                <input type="checkbox" name="debarred[% tab.number %]-[% value.overduename %]" checked="checked" value="1" />
+                <input type="checkbox" name="debarred[% tab.number | html %]-[% value.overduename | html %]" checked="checked" value="1" />
               [% ELSE %]
-                <input type="checkbox" name="debarred[% tab.number %]-[% value.overduename %]" value="1" />
+                <input type="checkbox" name="debarred[% tab.number | html %]-[% value.overduename | html %]" value="1" />
               [% END %]
               </td>
               [% FOREACH mtt IN value.message_transport_types %]
                 <td>
                   [% IF mtt.selected %]
-                    <input type="checkbox" name="mtt[% tab.number %]-[% value.overduename %]" value="[% mtt.value %]" checked="checked" />
+                    <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" checked="checked" />
                   [% ELSE %]
                     [% IF mtt.value == "sms" and not Koha.Preference("SMSSendDriver") %]
-                      <input type="checkbox" name="mtt[% tab.number %]-[% value.overduename %]" value="[% mtt.value %]" disabled="disabled" />
+                      <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" disabled="disabled" />
                     [% ELSIF mtt.value == "phone" and not Koha.Preference("TalkingTechItivaPhoneNotification") %]
-                      <input type="checkbox" name="mtt[% tab.number %]-[% value.overduename %]" value="[% mtt.value %]" disabled="disabled" />
+                      <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" disabled="disabled" />
                     [% ELSE %]
-                      <input type="checkbox" name="mtt[% tab.number %]-[% value.overduename %]" value="[% mtt.value %]" />
+                      <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" />
                     [% END %]
                   [% END %]
                 </td>
@@ -157,7 +158,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     <script type="text/javascript">
         var tab_map = { "1" : _("First"), "2" : _("Second"), "3" : _("Third")};
         $(document).ready(function() {

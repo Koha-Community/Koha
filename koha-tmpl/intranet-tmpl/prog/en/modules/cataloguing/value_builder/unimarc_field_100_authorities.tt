@@ -10,7 +10,7 @@
 <table>
     <tr>
         <td><label for="f1">Date entered on file</label></td>
-        <td><input type="text" name="f1" id="f1" maxlength="8" size="9" value="[% f1 %]" /></td>
+        <td><input type="text" name="f1" id="f1" maxlength="8" size="9" value="[% f1 | html %]" /></td>
     </tr>
     <tr>
         <td><label for="f2">States of authority heading code</label></td>
@@ -37,7 +37,7 @@
 
     <tr>
     <td><label for="f3">Language of cataloguing (mandatory)</label></td>
-    <td><input type="text" name="f3" id="f3" maxlength="3" size="4" value="[% f3 %]" /></td>
+    <td><input type="text" name="f3" id="f3" maxlength="3" size="4" value="[% f3 | html %]" /></td>
     </tr>
 
     <tr>
@@ -225,7 +225,7 @@ languages and obsolete typography)</option>
     <tr>
         <td><label for="f7">Additional character sets</label></td>
         <td>
-            <input type="text" name="f7" id="f7" maxlength="4" size="5" value="[% f7 %]" />
+            <input type="text" name="f7" id="f7" maxlength="4" size="5" value="[% f7 | html %]" />
         </td>
     </tr>
 
@@ -355,7 +355,7 @@ languages and obsolete typography)</option>
     <script type="text/javascript">
         function report() {
             var doc   = opener.document;
-            var field = doc.getElementById("[% index %]");
+            var field = doc.getElementById("[% index | html %]");
 
             document.f_pop.f1.value=document.f_pop.f1.value+'        ';
             document.f_pop.f3.value=document.f_pop.f3.value+'   ';

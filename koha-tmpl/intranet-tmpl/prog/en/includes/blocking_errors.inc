@@ -7,9 +7,9 @@
         <div class="dialog message">This bibliographic record does not exist.</div>
     [% CASE 'unknown_item' %]
         <div class="dialog message">This item does not exist.</div>
-    [% CASE %][% blocking_error %]
+    [% CASE %][% blocking_error | html %]
     [% END %]
 
     [% INCLUDE 'intranet-bottom.inc' %]
-    [% STOP %] [%# Will stop gracefully without processing any more of the template document.%]
+    [% STOP | html %] [%# Will stop gracefully without processing any more of the template document.%]
 [% END %]

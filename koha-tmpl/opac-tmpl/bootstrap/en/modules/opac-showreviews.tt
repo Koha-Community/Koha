@@ -2,10 +2,10 @@
 [% USE KohaDates %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Recent comments</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Recent comments</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
-<link rel="alternate" type="application/rss+xml" title="[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog recent comments" href="[% OPACBaseURL %]/cgi-bin/koha/opac-showreviews.pl?format=rss" />
+<link rel="alternate" type="application/rss+xml" title="[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog recent comments" href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-showreviews.pl?format=rss" />
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-showreviews' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
@@ -29,7 +29,7 @@
                     <div class="span12">
                 [% END %]
                    <div id="showreviews" class="searchresults maincontent">
-                        <h3>Recent comments <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-showreviews.pl?format=rss" class="rsssearchlink"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png" alt="Subscribe to recent comments" title="Subscribe to recent comments" border="0" class="rsssearchicon"/></a></h3>
+                        <h3>Recent comments <a href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-showreviews.pl?format=rss" class="rsssearchlink"><img src="[% interface | html %]/[% theme | html %]/images/feed-icon-16x16.png" alt="Subscribe to recent comments" title="Subscribe to recent comments" border="0" class="rsssearchicon"/></a></h3>
                         <table class="table table-striped">
                             [% FOREACH review IN reviews %]
                                 <tr>
@@ -44,47 +44,47 @@
                                                     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber |url %]#comments" title="View details for this title">
                                                 [% END %]
                                             [% END %]
-                                            [% IF ( review.title ) %][% review.title %][% ELSE %]No title[% END %]
-                                            [% FOREACH subtitl IN review.subtitle %] [% subtitl.subfield |html %][% END %]
+                                            [% IF ( review.title ) %][% review.title | html %][% ELSE %]No title[% END %]
+                                            [% FOREACH subtitl IN review.subtitle %] [% subtitl.subfield | html %][% END %]
                                             </a>
                                             [% IF ( review.author ) %]
-                                                by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% review.author |url %]" title="Search for works by this author" class="author">[% review.author %]</a>
+                                                by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% review.author |url %]" title="Search for works by this author" class="author">[% review.author | html %]</a>
                                             [% END %]
                                         </p>
                                         <p>
                                             <span class="results_summary">
                                                 <span class="label">Publication:</span>
-                                                [% IF ( review.place ) %][% review.place %] [% END %]
-                                                [% IF ( review.publishercode ) %][% review.publishercode %][% END %]
+                                                [% IF ( review.place ) %][% review.place | html %] [% END %]
+                                                [% IF ( review.publishercode ) %][% review.publishercode | html %][% END %]
                                                 [% IF ( review.publicationyear ) %]
-                                                    [% review.publicationyear %]
+                                                    [% review.publicationyear | html %]
                                                 [% ELSE %]
                                                     [% IF ( review.copyrightdate ) %]
-                                                        [% review.copyrightdate %]
+                                                        [% review.copyrightdate | html %]
                                                     [% END %]
                                                 [% END %]
-                                                [% IF ( review.pages ) %]. [% review.pages %][% END %]
-                                                [% IF ( review.notes ) %], [% review.notes %][% END %]
-                                                [% IF ( review.size ) %] [% review.size %][% END %]
+                                                [% IF ( review.pages ) %]. [% review.pages | html %][% END %]
+                                                [% IF ( review.notes ) %], [% review.notes | html %][% END %]
+                                                [% IF ( review.size ) %] [% review.size | html %][% END %]
                                             </span>
                                             [% IF ( review.summary ) %]
                                                 <span class="result_summary">
-                                                    [% review.summary %]
+                                                    [% review.summary | html %]
                                                 </span>
                                             [% END %]
                                             [% IF ( review.copyrightdate ) %]
                                                 <span class="results_summary">
                                                     <span class="label">Date:</span>
-                                                    [% review.copyrightdate %]</span>
+                                                    [% review.copyrightdate | html %]</span>
                                             [% END %]
                                         </p>
 
                                         <p class="commentline[% IF ( review.your_comment ) %] yours[% END %]">
                                             [% IF ( review.avatarurl ) %]
-                                                <img class="avatar" src="[% review.avatarurl %]" height="40" width="40" alt="" />
+                                                <img class="avatar" src="[% review.avatarurl | html %]" height="40" width="40" alt="" />
                                             [% END %]
                                             [% FILTER html_break %]
-                                                [% review.review |html %]
+                                                [% review.review | html %]
                                             [% END %]
                                         <span style="font-size:87%;font-color:#CCC;">
                                         [% IF review.your_comment %]
@@ -94,15 +94,15 @@
                                             Added [% review.datereviewed | $KohaDates %] by
                                             [% SWITCH ShowReviewer %]
                                             [% CASE 'full' %]
-                                                [% review.borrtitle %] [% review.firstname %] [% review.surname %]
+                                                [% review.borrtitle | html %] [% review.firstname | html %] [% review.surname | html %]
                                             [% CASE 'first' %]
-                                                [% review.firstname %]
+                                                [% review.firstname | html %]
                                             [% CASE 'surname' %]
-                                                [% review.surname %]
+                                                [% review.surname | html %]
                                             [% CASE 'firstandinitial' %]
-                                                [% review.firstname %] [% review.surname|truncate(2,'.') %]
+                                                [% review.firstname | html %] [% review.surname|truncate(2,'.') | html %]
                                             [% CASE 'username' %]
-                                                [% review.userid %]
+                                                [% review.userid | html %]
                                             [% END %]
                                         [% END %][% END %]</span></p>
                                     </td>
@@ -119,28 +119,28 @@
 
                                         [% IF ( OPACAmazonCoverImages ) %]
                                             [% IF ( review.normalized_isbn ) %]
-                                                <img src="https://images-na.ssl-images-amazon.com/images/P/[% review.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" />
+                                                <img src="https://images-na.ssl-images-amazon.com/images/P/[% review.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" />
                                             [% ELSE %]
                                                 <span class="no-image">No cover image available</span>
                                             [% END %]
                                         [% END %]
 
                                         [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
-                                            <img src="https://secure.syndetics.com/index.aspx?isbn=[% review.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% review.normalized_upc %]&amp;oclc=[% review.normalized_oclc %]" alt="" class="thumbnail" />
+                                            <img src="https://secure.syndetics.com/index.aspx?isbn=[% review.normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% review.normalized_upc | html %]&amp;oclc=[% review.normalized_oclc | html %]" alt="" class="thumbnail" />
                                         [% END %]
 
                                         [% IF ( GoogleJackets ) %]
                                             [% IF ( review.normalized_isbn ) %]
-                                                <div title="[% review.biblionumber |url %]" class="[% review.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>
+                                                <div title="[% review.biblionumber |url %]" class="[% review.normalized_isbn | html %]" id="gbs-thumbnail[% loop.count | html %]"></div>
                                             [% ELSE %]
                                                 <span class="no-image">No cover image available</span>
                                             [% END %]
                                         [% END %]
                                             </a>
-                                        [% bt_id = ( review.normalized_upc || review.normalized_isbn ) %]
+                                        [% bt_id = ( review.normalized_upc || review.normalized_isbn ) | html %]
                                         [% IF ( BakerTaylorEnabled ) %]
                                             [% IF ( bt_id ) %]
-                                                <a href="https://[% review.BakerTaylorBookstoreURL |html %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% review.BakerTaylorImageURL |html %][% bt_id %]" /></a>
+                                                <a href="https://[% review.BakerTaylorBookstoreURL | html %][% bt_id | html %]"><img alt="See Baker &amp; Taylor" src="[% review.BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
                                             [% ELSE %]
                                                 <span class="no-image">No cover image available</span>
                                             [% END %]
@@ -154,21 +154,21 @@
                             <div class="pages">
                                 <!-- Row of numbers corresponding to showreviews result pages -->
                                 [% IF ( previous_page_offset ) %]
-                                    <a class="nav" href="/cgi-bin/koha/opac-showreviews.pl?offset=[% previous_page_offset %]&count=[% results_per_page %]">&lt;&lt; Previous</a>
+                                    <a class="nav" href="/cgi-bin/koha/opac-showreviews.pl?offset=[% previous_page_offset | html %]&count=[% results_per_page | html %]">&lt;&lt; Previous</a>
                                 [% ELSE %]
                                     [% IF ( previous_page_first ) %]
-                                        <a class="nav" href="/cgi-bin/koha/opac-showreviews.pl?offset=0&count=[% results_per_page %]">&lt;&lt; Previous</a>
+                                        <a class="nav" href="/cgi-bin/koha/opac-showreviews.pl?offset=0&count=[% results_per_page | html %]">&lt;&lt; Previous</a>
                                     [% END %]
                                 [% END %]
                                 [% FOREACH PAGE_NUMBER IN PAGE_NUMBERS %]
                                     [% IF ( PAGE_NUMBER.highlight ) %]
-                                        <span class="currentPage">[% PAGE_NUMBER.pg %]</span>
+                                        <span class="currentPage">[% PAGE_NUMBER.pg | html %]</span>
                                     [% ELSE %]
-                                        <a class="nav" href="/cgi-bin/koha/opac-showreviews.pl?offset=[% PAGE_NUMBER.offset %]&count=[% results_per_page %]">[% PAGE_NUMBER.pg %]</a>
+                                        <a class="nav" href="/cgi-bin/koha/opac-showreviews.pl?offset=[% PAGE_NUMBER.offset | html %]&count=[% results_per_page | html %]">[% PAGE_NUMBER.pg | html %]</a>
                                     [% END %]
                                 [% END %]
                                 [% IF ( next_page_offset ) %]
-                                    <a class="nav" href="/cgi-bin/koha/opac-showreviews.pl?offset=[% next_page_offset %]&count=[% results_per_page %]">Next &gt;&gt;</a>
+                                    <a class="nav" href="/cgi-bin/koha/opac-showreviews.pl?offset=[% next_page_offset | html %]&count=[% results_per_page | html %]">Next &gt;&gt;</a>
                                 [% END %]
                             </div>
                         [% END # / IF PAGE_NUMBERS %]

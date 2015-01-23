@@ -1,9 +1,10 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Invoice &rsaquo; Files</title>
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -11,7 +12,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/invoices.pl">Invoices</a> &rsaquo; <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoiceid %]">[% invoicenumber %]</a> &rsaquo; Files</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/invoices.pl">Invoices</a> &rsaquo; <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoiceid | html %]">[% invoicenumber | html %]</a> &rsaquo; Files</div>
 
 <div class="main container-fluid">
     <div class="row">
@@ -19,7 +20,7 @@
             <main>
 
       <h2>Files for invoice: [% invoicenumber | html %]</h2>
-      <p><b>Vendor: </b><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% suppliername %]</a></p>
+      <p><b>Vendor: </b><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% suppliername | html %]</a></p>
       <br />
       [% IF errors %]
         <div class="dialog alert">
@@ -44,15 +45,15 @@
               <tbody>
                 [% FOREACH f IN files %]
                   <tr>
-                      <td><a href="?invoiceid=[% invoiceid %]&amp;op=download&amp;view=1&amp;file_id=[% f.file_id %]">[% f.file_name | html %]</a></td>
+                      <td><a href="?invoiceid=[% invoiceid | html %]&amp;op=download&amp;view=1&amp;file_id=[% f.file_id | html %]">[% f.file_name | html %]</a></td>
                       <td>[% f.file_type | html %]</td>
                       <td>[% f.file_description | html %]</td>
                       <td class="title-string">
-                        <span title="[% f.date_uploaded %]">[% f.date_uploaded | $KohaDates %]</span>
+                        <span title="[% f.date_uploaded | html %]">[% f.date_uploaded | $KohaDates %]</span>
                       </td>
-                      <td>[% f.file_size %]</td>
-                      <td><a class="delete_file" href="?invoiceid=[% invoiceid %]&amp;op=delete&amp;file_id=[% f.file_id %]">Delete</a></td>
-                      <td><a href="?invoiceid=[% invoiceid %]&amp;op=download&amp;file_id=[% f.file_id %]">Download</a></td>
+                      <td>[% f.file_size | html %]</td>
+                      <td><a class="delete_file" href="?invoiceid=[% invoiceid | html %]&amp;op=delete&amp;file_id=[% f.file_id | html %]">Delete</a></td>
+                      <td><a href="?invoiceid=[% invoiceid | html %]&amp;op=download&amp;file_id=[% f.file_id | html %]">Download</a></td>
                   </tr>
                 [% END %]
               </tbody>
@@ -69,7 +70,7 @@
                   <legend>Upload New File</legend>
                   <ol>
                       <li><input type="hidden" name="op" value="upload" />
-                      <input type="hidden" name="invoiceid" value="[% invoiceid %]" />
+                      <input type="hidden" name="invoiceid" value="[% invoiceid | html %]" />
                       <label for="description">Description:</label>
                       <input name="description" id="description" type="text" /></li>
                       <li><label for="uploadfile">File:</label><input name="uploadfile" type="file" id="uploadfile" /></li>
@@ -89,7 +90,7 @@
 </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/acquisitions-menu.js") %]
+    [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function() {

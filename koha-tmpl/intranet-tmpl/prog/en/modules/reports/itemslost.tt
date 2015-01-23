@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
@@ -8,7 +9,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Lost items</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="rep_itemslost" class="rep">
@@ -29,7 +30,7 @@
 
 <div class="results">
     [% IF items.count%]
-        [% items.count %] lost items found
+        [% items.count | html %] lost items found
     [% ELSE %]
         No lost items found
     [% END %]
@@ -46,8 +47,8 @@
                     Using the following CSV profile:
                     <select name="csv_profile_id" id="csv_profile_id">
                         [% FOREACH csv_profile IN csv_profiles %]
-                            <option value="[% csv_profile.export_format_id %]">
-                                [% csv_profile.profile %]
+                            <option value="[% csv_profile.export_format_id | html %]">
+                                [% csv_profile.profile | html %]
                             </option>
                         [% END %]
                     </select>
@@ -93,28 +94,28 @@
                     <tr>
                         [% IF csv_profiles.count %]
                             <td style="text-align:center;vertical-align:middle">
-                                <input type="checkbox" value="[% item.itemnumber %]" name="itemnumber" />
+                                <input type="checkbox" value="[% item.itemnumber | html %]" name="itemnumber" />
                             </td>
                         [% END %]
                         <td>
-                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber %]" title="[% item.itemnotes %]">[% item.biblio.title |html %]</a>
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | html %]" title="[% item.itemnotes | html %]">[% item.biblio.title | html %]</a>
                         </td>
-                        <td>[% item.biblio.author %]</td>
-                        <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost ) %]
-                        <td><span title="[% item.itemlost_on %]">[% item.itemlost_on | $KohaDates %]</span></td>
+                        <td>[% item.biblio.author | html %]</td>
+                        <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost ) | html %]
+                        <td><span title="[% item.itemlost_on | html %]">[% item.itemlost_on | $KohaDates %]</span></td>
                         <td>
-                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% item.biblionumber %]" title="[% item.itemnotes %]">[% item.barcode %]</a>
+                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% item.biblionumber | html %]" title="[% item.itemnotes | html %]">[% item.barcode | html %]</a>
                         </td>
-                        <td>[% item.itemcallnumber %]</td>
-                        <td><span title="[% item.datelastseen %]">[% item.datelastseen | $KohaDates %]</span></td>
-                        <td>[% item.price %]</td>
-                        <td>[% item.replacementprice %]</td>
-                        <td>[% Branches.GetName(item.homebranch) %]</td>
-                        <td>[% ItemTypes.GetDescription(item.effective_itemtype) %]</td>
-                        <td>[% Branches.GetName(item.holdingbranch) %]</td>
-                        <td>[% AuthorisedValues.GetByCode( 'LOC', item.location )%]</td>
-                        <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) %]
-                        <td>[% item.itemnotes %]</td>
+                        <td>[% item.itemcallnumber | html %]</td>
+                        <td><span title="[% item.datelastseen | html %]">[% item.datelastseen | $KohaDates %]</span></td>
+                        <td>[% item.price | html %]</td>
+                        <td>[% item.replacementprice | html %]</td>
+                        <td>[% Branches.GetName(item.homebranch) | html %]</td>
+                        <td>[% ItemTypes.GetDescription(item.effective_itemtype) | html %]</td>
+                        <td>[% Branches.GetName(item.holdingbranch) | html %]</td>
+                        <td>[% AuthorisedValues.GetByCode( 'LOC', item.location ) | html %]</td>
+                        <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) | html %]
+                        <td>[% item.itemnotes | html %]</td>
                     </tr>
                 [% END %]
             </tbody>
@@ -134,7 +135,7 @@
     <li><label for="itemtypesfilter">Item type: </label><select name="itemtypesfilter" id="itemtypesfilter">
                 <option value="">All</option>
                 [% FOREACH itemtype IN itemtypes %]
-                    <option value="[% itemtype.itemtype  %]">[% itemtype.translated_description %]</option>
+                    <option value="[% itemtype.itemtype | html %]">[% itemtype.translated_description | html %]</option>
                 [% END %]
             </select></li>
 
@@ -144,9 +145,9 @@
             <option value="">All</option>
             [% FOREACH l IN AuthorisedValues.GetDescriptionsByKohaField( kohafield => 'items.itemlost') %]
                 [% IF l.authorised_value == lostfilter %]
-                    <option value="[% l.authorised_value %]" selected="selected">[% l.lib %]</option>
+                    <option value="[% l.authorised_value | html %]" selected="selected">[% l.lib | html %]</option>
                 [% ELSE %]
-                    <option value="[% l.authorised_value %]">[% l.lib %]</option>
+                    <option value="[% l.authorised_value | html %]">[% l.lib | html %]</option>
                 [% END %]
             [% END %]
         </select>
@@ -158,9 +159,9 @@
             <option value="">All</option>
             [% FOREACH n IN AuthorisedValues.GetDescriptionsByKohaField( kohafield => 'items.notforloan') %]
                 [% IF n.authorised_value == notforloanfilter %]
-                    <option value="[% n.authorised_value %]" selected="selected">[% n.lib %]</option>
+                    <option value="[% n.authorised_value | html %]" selected="selected">[% n.lib | html %]</option>
                 [% ELSE %]
-                    <option value="[% n.authorised_value %]">[% n.lib %]</option>
+                    <option value="[% n.authorised_value | html %]">[% n.lib | html %]</option>
                 [% END %]
             [% END %]
         </select>
@@ -182,13 +183,13 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
     [% INCLUDE 'columns_settings.inc' %]
-    [% Asset.js("js/table_filters.js") %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
+    [% Asset.js("js/table_filters.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script type='text/javascript'>
         $(document).ready(function() {
-            var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'lostitems', 'lostitems-table', 'json' ) %];
+            var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'lostitems', 'lostitems-table', 'json' ).raw %];
             var lostitems_table = KohaTable("lostitems-table", {
                 "dom": 'B<"clearfix">t',
                 "aaSorting": [],

@@ -1,10 +1,11 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
 [% USE AuthorisedValues %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Serials &rsaquo; Details for subscription #[% subscriptionid %]</title>
+<title>Koha &rsaquo; Serials &rsaquo; Details for subscription #[% subscriptionid | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -12,7 +13,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Details for subscription #[% subscriptionid %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Details for subscription #[% subscriptionid | html %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -21,10 +22,10 @@
 	<div class="yui-b">
 	[% INCLUDE 'serials-toolbar.inc' %]
 
-    <h1>Subscription for [% bibliotitle%] [% IF closed %](closed)[% END %]</h1>
+    <h1>Subscription for [% bibliotitle | html %] [% IF closed %](closed)[% END %]</h1>
     [% IF ( abouttoexpire ) %]
       [% UNLESS closed %]
-        <div class="dialog message">Subscription will expire [% enddate %]. <a href="#" id="renewsub">Renew this subscription</a>.</div>
+        <div class="dialog message">Subscription will expire [% enddate | html %]. <a href="#" id="renewsub">Renew this subscription</a>.</div>
       [% END %]
     [% END %]
     [% IF ( NEEDSCONFIRMATION ) %]
@@ -37,13 +38,13 @@
 			[% IF ( LINKEDITEMS ) %] <li>The subscription has linked items<br /> Those items won't be deleted</li> [% END %]
 			</ul>
 			<form method="post" action="/cgi-bin/koha/serials/subscription-detail.pl">
-			<input type="hidden" name="subscriptionid" value="[% subscriptionid %]" />
+			<input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
 			<input type="hidden" name="issueconfirmed" value="1" />
 			<input type="hidden" name="op" value="del" />
             <button type="submit" class="approve" accesskey="y"><i class="fa fa-fw fa-check"></i> Yes, delete (Y)</button>
 			</form>
 			<form method="get" action="/cgi-bin/koha/serials/subscription-detail.pl">
-			<input type="hidden" name="subscriptionid" value="[% subscriptionid %]" />
+			<input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
             <button type="submit" class="deny" accesskey="n"><i class="fa fa-fw fa-remove"></i> No, don't delete (N)</button>
 			</form>
 
@@ -63,17 +64,17 @@
     <div class="yui-u first">
     <div class="rows">
 		<ol>
-		<li><span class="label">Subscription ID: </span>[% subscriptionid %]</li>
-        <li><span class="label">Librarian identity:</span> [% librarian %]</li>
-        <li><span class="label">Vendor:</span> <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% aqbooksellerid %]">[% aqbooksellername |html %]</a></li>
-        <li><span class="label">Biblio:</span>  <a href="/cgi-bin/koha/catalogue/[% default_bib_view %].pl?biblionumber=[% bibnum %]">[% bibliotitle %]</a> <i>([% bibnum %])</i></li>
+		<li><span class="label">Subscription ID: </span>[% subscriptionid | html %]</li>
+        <li><span class="label">Librarian identity:</span> [% librarian | html %]</li>
+        <li><span class="label">Vendor:</span> <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% aqbooksellerid | html %]">[% aqbooksellername | html %]</a></li>
+        <li><span class="label">Biblio:</span>  <a href="/cgi-bin/koha/catalogue/[% default_bib_view | html %].pl?biblionumber=[% bibnum | html %]">[% bibliotitle | html %]</a> <i>([% bibnum | html %])</i></li>
         [% IF ( OPACBaseURL ) %]
             <li>
                 <span class="label">OPAC view:</span>
-                <a id="view-subscription-in-opac" target="_blank" href="[% Koha.Preference('OPACBaseURL') %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">Open in new window.</a>
+                <a id="view-subscription-in-opac" target="_blank" href="[% Koha.Preference('OPACBaseURL') | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]">Open in new window.</a>
             </li>
         [% END %]
-[% IF ( branchcode ) %]<li><span class="label">Library:</span> [% Branches.GetName( branchcode ) %]</li>[% END %]
+[% IF ( branchcode ) %]<li><span class="label">Library:</span> [% Branches.GetName( branchcode ) | html %]</li>[% END %]
         [% IF ( serialsadditems ) %]
             <li><span class="label">Items:</span> Serial receipt creates an item record.</li>
         [% ELSE %]
@@ -87,21 +88,21 @@
                 Serial number is kept when an irregularity is found.
             [% END %]
         </li>
-        <li><span class="label">Grace period:</span> [% graceperiod %]</li>
+        <li><span class="label">Grace period:</span> [% graceperiod | html %]</li>
         </ol>
     </div>
     </div>
     <div class="yui-u">
     <div class="rows">
         <ol>
-        [% IF ( location ) %]<li><span class="label">Location:</span> [% location %]</li>[% END %]
-        [% IF ( callnumber ) %]<li><span class="label">Call number:</span> [% callnumber |html %]</li>[% END %]
-		[% IF ( staffdisplaycount ) %]<li><span class="label">Number of issues to display to staff:</span>[% staffdisplaycount %]</li>[% END %]
-        [% IF ( opacdisplaycount ) %]<li><span class="label">Number of issues to display in OPAC:</span>[% opacdisplaycount %]</li>[% END %]
+        [% IF ( location ) %]<li><span class="label">Location:</span> [% location | html %]</li>[% END %]
+        [% IF ( callnumber ) %]<li><span class="label">Call number:</span> [% callnumber | html %]</li>[% END %]
+		[% IF ( staffdisplaycount ) %]<li><span class="label">Number of issues to display to staff:</span>[% staffdisplaycount | html %]</li>[% END %]
+        [% IF ( opacdisplaycount ) %]<li><span class="label">Number of issues to display in OPAC:</span>[% opacdisplaycount | html %]</li>[% END %]
         [% IF ( letter ) %]
             <li>
-                <span class="label">Patron notification:</span> [% letter %]
-                (<a href="/cgi-bin/koha/serials/viewalerts.pl?subscriptionid=[% subscriptionid %]">subscribers</a>)
+                <span class="label">Patron notification:</span> [% letter | html %]
+                (<a href="/cgi-bin/koha/serials/viewalerts.pl?subscriptionid=[% subscriptionid | html %]">subscribers</a>)
             </li>
         [% END %]
         [% IF ( hasRouting ) %]<li><span class="label">Routing:</span> yes</li>[% END %]
@@ -118,11 +119,11 @@
           <ol>
             [% FOR field IN additional_fields_for_subscription %]
               <li>
-                <span class="label">[% field.name %]:</span>
+                <span class="label">[% field.name | html %]:</span>
                 [% IF field.authorised_value_category %]
-                  [% AuthorisedValues.GetByCode( field.authorised_value_category, additional_fields.${field.name} ) %]
+                  [% AuthorisedValues.GetByCode( field.authorised_value_category, additional_fields.${field.name} ) | html %]
                 [% ELSE %]
-                  [% additional_fields.${field.name} %]
+                  [% additional_fields.${field.name} | html %]
                 [% END %]
               </li>
             [% END %]
@@ -137,64 +138,64 @@
     <div class="yui-g">
     <div class="rows">
         <ol>
-            <li><span class="label">Beginning date:</span> [% startdate %]
+            <li><span class="label">Beginning date:</span> [% startdate | html %]
             </li>
             <li><span class="label">Frequency:</span>
-                [% frequency.description %]
+                [% frequency.description | html %]
             </li>
             <li>
               <span class="label">Manual history: </span>
                 [% IF ( manualhistory ) %]
-                    Enabled <a href="/cgi-bin/koha/serials/subscription-history.pl?subscriptionid=[% subscriptionid %]">Edit history</a>
+                    Enabled <a href="/cgi-bin/koha/serials/subscription-history.pl?subscriptionid=[% subscriptionid | html %]">Edit history</a>
                 [% ELSE %]
                     Disabled
                 [% END %]
             </li>
             <li><span class="label">Number pattern:</span>
-                [% numberpattern.label %]
+                [% numberpattern.label | html %]
             </li>
             <li><table>
             <tr>
                 <td>Starting with:</td>
                 [% IF (has_X) %]
-                    <td align="center">[% lastvalue1 %]</td>
+                    <td align="center">[% lastvalue1 | html %]</td>
                 [% END %]
                 [% IF (has_Y) %]
-                    <td align="center">[% lastvalue2 %]</td>
+                    <td align="center">[% lastvalue2 | html %]</td>
                 [% END %]
                 [% IF (has_Z) %]
-                    <td align="center">[% lastvalue3 %]</td>
+                    <td align="center">[% lastvalue3 | html %]</td>
                 [% END %]
             </tr>
             <tr>
                 <td>Rollover:</td>
                 [% IF (has_X) %]
-                    <td align="center">[% numberpattern.whenmorethan1 %]</td>
+                    <td align="center">[% numberpattern.whenmorethan1 | html %]</td>
                 [% END %]
                 [% IF (has_Y) %]
-                    <td align="center">[% numberpattern.whenmorethan2 %]</td>
+                    <td align="center">[% numberpattern.whenmorethan2 | html %]</td>
                 [% END %]
                 [% IF (has_Z) %]
-                    <td align="center">[% numberpattern.whenmorethan3 %]</td>
+                    <td align="center">[% numberpattern.whenmorethan3 | html %]</td>
                 [% END %]
             </tr>
             </table></li>
             [% IF ( irregular_issues ) %]
-            <li><span class="label">Irregularity:</span> [% irregular_issues %] issues
+            <li><span class="label">Irregularity:</span> [% irregular_issues | html %] issues
             </li>
             [% END %]
-            <li><span class="label">First arrival:</span> [% firstacquidate %]
+            <li><span class="label">First arrival:</span> [% firstacquidate | html %]
             </li>
-        [% IF ( numberlength ) %]<li><span class="label">Number of issues:</span> [% numberlength %]</li>[% END %]
-        [% IF ( weeklength ) %]<li><span class="label">Number of weeks:</span> [% weeklength %]</li>[% END %]
-        [% IF ( monthlength ) %]<li><span class="label">Number of months:</span> [% monthlength %]</li>[% END %]
+        [% IF ( numberlength ) %]<li><span class="label">Number of issues:</span> [% numberlength | html %]</li>[% END %]
+        [% IF ( weeklength ) %]<li><span class="label">Number of weeks:</span> [% weeklength | html %]</li>[% END %]
+        [% IF ( monthlength ) %]<li><span class="label">Number of months:</span> [% monthlength | html %]</li>[% END %]
         </ol>
     </div>
     </div>
     </div>
     <div id="subscription_numbering" style="display:none;">
         <h3>Numbering calculation</h3>
-        <p><label>Numbering formula:</label> [% numberingmethod %]</p>
+        <p><label>Numbering formula:</label> [% numberingmethod | html %]</p>
         <table>
             <tr>
                 <th>&nbsp;</th>
@@ -205,51 +206,51 @@
                 <tr>
                     <td>Add</td>
                     <td>
-                        [% add1 %]
+                        [% add1 | html %]
                     </td>
                     <td>
-                        [% add2 %]
+                        [% add2 | html %]
                     </td>
                     <td>
-                        [% add3 %]
+                        [% add3 | html %]
                     </td>
                 </tr>
                 <tr>
                     <td>once every</td>
-                    <td>[% every1 %]</td>
-                    <td>[% every2 %]</td>
-                    <td>[% every3 %]</td>
+                    <td>[% every1 | html %]</td>
+                    <td>[% every2 | html %]</td>
+                    <td>[% every3 | html %]</td>
                 </tr>
                 <tr>
                     <td>When more than</td>
-                    <td>[% whenmorethan1 %] [% IF ( innerloop1 ) %]<br />
-                        <i>(is [% innerloop1 %])</i>[% END %]</td>
-                    <td>[% whenmorethan2 %] [% IF ( innerloop2 ) %]<br />
-                        <i>(is [% innerloop2 %])</i>[% END %]</td>
-                    <td>[% whenmorethan3 %] [% IF ( innerloop3 ) %]<br />
-                        <i>(is [% innerloop3 %])</i>[% END %]</td>
+                    <td>[% whenmorethan1 | html %] [% IF ( innerloop1 ) %]<br />
+                        <i>(is [% innerloop1 | html %])</i>[% END %]</td>
+                    <td>[% whenmorethan2 | html %] [% IF ( innerloop2 ) %]<br />
+                        <i>(is [% innerloop2 | html %])</i>[% END %]</td>
+                    <td>[% whenmorethan3 | html %] [% IF ( innerloop3 ) %]<br />
+                        <i>(is [% innerloop3 | html %])</i>[% END %]</td>
                 </tr>
                 <tr>
                     <td>Set back to</td>
-                    <td>[% setto1 %]</td>
-                    <td>[% setto2 %]</td>
-                    <td>[% setto3 %]</td>
+                    <td>[% setto1 | html %]</td>
+                    <td>[% setto2 | html %]</td>
+                    <td>[% setto3 | html %]</td>
                 </tr>
                 <tr>
                     <td>
                             Inner counter
                     </td>
-                    <td>[% innerloop1 %]</td>
-                    <td>[% innerloop2 %]</td>
-                    <td>[% innerloop3 %]</td>
+                    <td>[% innerloop1 | html %]</td>
+                    <td>[% innerloop2 | html %]</td>
+                    <td>[% innerloop3 | html %]</td>
                 </tr>
                 <tr>
                     <td>
                             Last value
                     </td>
-                    <td>[% lastvalue1 %]</td>
-                    <td>[% lastvalue2 %]</td>
-                    <td>[% lastvalue3 %]</td>
+                    <td>[% lastvalue1 | html %]</td>
+                    <td>[% lastvalue2 | html %]</td>
+                    <td>[% lastvalue3 | html %]</td>
                 </tr>
             </table>
     </div>
@@ -265,24 +266,24 @@
         [% FOREACH serialslis IN serialslist %]
             <tr>
                 <td>
-                    [% serialslis.serialseq %]
+                    [% serialslis.serialseq | html %]
                 </td>
                 <td>
                     [% IF serialslis.planneddate %]
-                      [% serialslis.planneddate %]
+                      [% serialslis.planneddate | html %]
                     [% ELSE %]
                       Unknown
                     [% END %]
                 </td>
                 <td>
                     [% IF serialslis.publisheddate %]
-                      [% serialslis.publisheddate %]
+                      [% serialslis.publisheddate | html %]
                     [% ELSE %]
                       Unknown
                     [% END %]
                 </td>
                 <td>
-                    [% serialslis.publisheddatetext %]
+                    [% serialslis.publisheddatetext | html %]
                 </td>
                 <td>
                     [% IF ( serialslis.status1 ) %]Expected[% END %]
@@ -298,7 +299,7 @@
                     [% IF ( serialslis.status7 ) %]
                       Claimed
                       [% IF ( serialslis.claimdate ) %]
-                        [% serialslis.claimdate %]
+                        [% serialslis.claimdate | html %]
                       [% END %]
                     [% END %]
                     [% IF ( serialslis.status8 ) %]Stopped[% END %]
@@ -311,16 +312,16 @@
     <div class="yui-g">
     <div class="rows">
         <ol>
-            <li><span class="label">Start date:</span> [% startdate %] </li>
-            <li><span class="label">End date:</span> [% enddate %]</li>
-            <li><span class="label">History start date:</span> [% histstartdate %] </li>
-            <li><span class="label">History end date:</span> [% histenddate %]</li>
-            <li><span class="label">Received issues:</span>[% recievedlist %]</li>
-            <li><span class="label">Missing issues:</span>[% missinglist %]</li>
-            <li><span class="label">Nonpublic note:</span>[% internalnotes FILTER html_line_break |html %]</li>
-            <li><span class="label">Public note:</span>[% notes FILTER html_line_break |html %]</li>
-            <li><span class="label">History staff note:</span>[% librariannote FILTER html_line_break %]</li>
-            <li><span class="label">History OPAC note:</span>[% opacnote FILTER html_line_break %]</li>
+            <li><span class="label">Start date:</span> [% startdate | html %] </li>
+            <li><span class="label">End date:</span> [% enddate | html %]</li>
+            <li><span class="label">History start date:</span> [% histstartdate | html %] </li>
+            <li><span class="label">History end date:</span> [% histenddate | html %]</li>
+            <li><span class="label">Received issues:</span>[% recievedlist | html %]</li>
+            <li><span class="label">Missing issues:</span>[% missinglist | html %]</li>
+            <li><span class="label">Nonpublic note:</span>[% internalnotes FILTER html_line_break | html %]</li>
+            <li><span class="label">Public note:</span>[% notes FILTER html_line_break | html %]</li>
+            <li><span class="label">History staff note:</span>[% librariannote FILTER html_line_break | html %]</li>
+            <li><span class="label">History OPAC note:</span>[% opacnote FILTER html_line_break | html %]</li>
         </ol>
     </div>
     </div>
@@ -337,23 +338,23 @@
                 <tbody>
                     <tr>
                         <td>Ordered amount</td>
-                        <td>[% value_tax_excluded_ordered %]</td>
-                        <td>[% value_tax_included_ordered %]</td>
-                        <td>[% budget_name_ordered %]</td>
+                        <td>[% value_tax_excluded_ordered | html %]</td>
+                        <td>[% value_tax_included_ordered | html %]</td>
+                        <td>[% budget_name_ordered | html %]</td>
                         <td>
                             [% IF ( ordered_exists ) %]
-                                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">See basket information</a>
+                                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | html %]">See basket information</a>
                             [% END %]
                         </td>
                     </tr>
                     <tr>
                         <td>Spent amount</td>
-                        <td>[% value_tax_excluded_spent %]</td>
-                        <td>[% value_tax_included_spent %]</td>
-                        <td>[% budget_name_spent %]</td>
+                        <td>[% value_tax_excluded_spent | html %]</td>
+                        <td>[% value_tax_included_spent | html %]</td>
+                        <td>[% budget_name_spent | html %]</td>
                         <td>
                             [% IF ( spent_exists ) %]
-                                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoiceid %]">See invoice information</a>
+                                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoiceid | html %]">See invoice information</a>
                             [% END %]
                         </td>
                     </tr>
@@ -374,12 +375,12 @@
 
 [% MACRO jsinclude BLOCK %]
     <script type="text/javascript">
-        var subscriptionid = "[% subscriptionid %]";
+        var subscriptionid = "[% subscriptionid | html %]";
         var MSG_CLOSE_SUBSCRIPTION = _("Are you sure you want to close this subscription?");
         var MSG_REOPEN_SUBSCRIPTION = _("Are you sure you want to reopen this subscription?");
         var CONFIRM_DELETE_SUBSCRIPTION = _("Are you sure you want to delete this subscription?");
     </script>
-    [% Asset.js("js/serials-toolbar.js") %]
+    [% Asset.js("js/serials-toolbar.js") | $raw %]
     <script type="text/javascript">
         // the english words used in display purposes
         var text = new Array(_("Number"),_("Volume"),_("Issue"),_("Month"),_("Week"),_("Starting with:"),_("Rollover at:"),_("Choose Hemisphere:"),_("Northern"),_("Southern",
@@ -387,7 +388,7 @@
         $(document).ready(function() {
             $("#subscription_description").tabs();
             $("#renewsub").click(function(){
-                popup([% subscriptionid %]);
+                popup([% subscriptionid | html %]);
                 return false;
             })
         });

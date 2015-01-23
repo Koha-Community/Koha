@@ -5,15 +5,15 @@
     <div class="btn-group"><a href="#" id="createnew" class="btn btn-default btn-sm"><i class="fa fa-plus"></i> Create new authority</a></div>
 </div>
 <form name="f" method="get" action="auth_finder.pl">
-            <input type="hidden" name="source" value="[% source %]" />
+            <input type="hidden" name="source" value="[% source | html %]" />
             <input type="hidden" name="op" value="do_search" />
             <input type="hidden" name="type" value="intranet" />
-            <input type="hidden" name="index" value="[% index %]" />
+            <input type="hidden" name="index" value="[% index | html %]" />
                 <fieldset class="rows"><legend>Search options</legend>
                 <ol><li>
                     <span class="label">Authority type: </span>
-                    [% authtypecode %]
-                    <input type="hidden" name="authtypecode" value="[% authtypecode %]" />
+                    [% authtypecode | html %]
+                    <input type="hidden" name="authtypecode" value="[% authtypecode | html %]" />
                 </li>
                 <li>
                     <label for="mainmainentry">Search main heading ($a only): </label>
@@ -37,7 +37,7 @@
                         <option value="is">is exactly</option>
                         [% END %]
                     </select>
-                    <input id="value_mainstr" style="width:400px;" type="text" name="value_mainstr" value="[% value_mainstr |html %]" />
+                    <input id="value_mainstr" style="width:400px;" type="text" name="value_mainstr" value="[% value_mainstr | html %]" />
                     <div id="yvaluecontainermainmainentry"></div>
                 </li>
 
@@ -63,7 +63,7 @@
                         <option value="is">is exactly</option>
                         [% END %]
                     </select>
-                    <input id="value_main" style="width:400px;" type="text" name="value_main" value="[% value_main |html %]" />
+                    <input id="value_main" style="width:400px;" type="text" name="value_main" value="[% value_main | html %]" />
                     <div id="yvaluecontainermainentry"></div>
                 </li>
                 <li>
@@ -88,7 +88,7 @@
                         <option value="is">is exactly</option>
                         [% END %]
                     </select>
-                    <input type="text" name="value_match" value="[% value_match |html %]" />
+                    <input type="text" name="value_match" value="[% value_match | html %]" />
                 </li>
                 <li>
                     <label for="marclistanywhere">Search entire record: </label>
@@ -112,7 +112,7 @@
                         <option value="is">is exactly</option>
                         [% END %]
                     </select>
-                    <input id="value_any" style="width:400px;" type="text" name="value_any" value="[% value_any |html %]" />
+                    <input id="value_any" style="width:400px;" type="text" name="value_any" value="[% value_any | html %]" />
                     <div id="yvaluecontainermarclist"></div>
                 </li>
         <li>
@@ -141,7 +141,7 @@
             <li>
                 <label for="relationship">Special relationship: </label>
                 <select name="relationship" id="relationship">
-                    [% selected=relationship %]
+                    [% selected=relationship | html %]
                     [% PROCESS selectoptionopen value='' %]None specified</option>
                     [% PROCESS selectoptionopen value='a' %]a - Earlier heading</option>
                     [% PROCESS selectoptionopen value='b' %]b - Later heading</option>

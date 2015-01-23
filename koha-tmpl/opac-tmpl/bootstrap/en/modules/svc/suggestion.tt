@@ -34,7 +34,7 @@
     <div>
         <span class="suggestionlabel">Did you mean:</span>
         [% FOREACH suggestion IN suggestions %]
-            <span class="searchsuggestion"><a href="/cgi-bin/koha/opac-search.pl?q=[% suggestion.search |uri %]">[% suggestion.label |html %]</a></span>
+            <span class="searchsuggestion"><a href="/cgi-bin/koha/opac-search.pl?q=[% suggestion.search |uri %]">[% suggestion.label | html %]</a></span>
         [% END %]
     </div>
 [% ELSE %]

@@ -1,15 +1,16 @@
+[% USE raw %]
 [% USE Asset %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; Editor</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/cateditor.css") %]
-[% Asset.css("css/datatables.css") %]
-[% Asset.css("lib/codemirror/codemirror.css") %]
-[% Asset.css("css/humanmsg.css") %]
-[% Asset.js("js/cataloging.js") %]
-[% Asset.js("lib/jquery/plugins/humanmsg.js") %]
+[% Asset.css("css/cateditor.css") | $raw %]
+[% Asset.css("css/datatables.css") | $raw %]
+[% Asset.css("lib/codemirror/codemirror.css") | $raw %]
+[% Asset.css("css/humanmsg.css") | $raw %]
+[% Asset.js("js/cataloging.js") | $raw %]
+[% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
 [% IF ( bidi ) %]
-   [% Asset.css("css/right-to-left.css") %]
+   [% Asset.css("css/right-to-left.css") | $raw %]
 [% END %]
 </head>
 <body id="cat_addbiblio" class="cat">

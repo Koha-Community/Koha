@@ -1,9 +1,10 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>Koha &rsaquo; Tools &rsaquo; Patron card creator &rsaquo; Batches &rsaquo; [% IF batch_id %]Edit ([% batch_id %])[% ELSE %]New[% END %]</title>
+    <title>Koha &rsaquo; Tools &rsaquo; Patron card creator &rsaquo; Batches &rsaquo; [% IF batch_id %]Edit ([% batch_id | html %])[% ELSE %]New[% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
-    [% Asset.css("css/datatables.css") %]
+    [% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="pcard_edit-batch" class="tools pcard">
@@ -15,7 +16,7 @@
         <a href="/cgi-bin/koha/patroncards/home.pl">Patron card creator</a> &rsaquo;
         <a href="/cgi-bin/koha/patroncards/manage.pl?card_element=batch">Batches</a> &rsaquo;
         [% IF batch_id %]
-            Edit ([% batch_id %])
+            Edit ([% batch_id | html %])
         [% ELSE %]
             New
         [% END %]
@@ -33,19 +34,19 @@
 
                 [% IF ( duplicate_message ) %]
                     <div class="dialog message">
-                        <strong>Duplicate patrons removed from batch number [% batch_id %]: [% duplicate_count %]</strong>
+                        <strong>Duplicate patrons removed from batch number [% batch_id | html %]: [% duplicate_count | html %]</strong>
                     </div>
                 [% END %]
 
                     [% INCLUDE 'patroncards-errors.inc' %]
                     <div id="manage-patroncard-batches">
-                        <div class="hint">Current library: [% LoginBranchname %]</div>
+                        <div class="hint">Current library: [% LoginBranchname | html %]</div>
                             <form name="add_by_bor_num" action="/cgi-bin/koha/patroncards/edit-batch.pl" method="post">
                                 <div>
                                     <fieldset class="rows" style="border-bottom: 0px; border: 0px;">
                                     <ol><li>
                                     <input type="hidden" name="op" value="add" />
-                                    <input type="hidden" name="batch_id" value="[% batch_id %]" />
+                                    <input type="hidden" name="batch_id" value="[% batch_id | html %]" />
                                     <label for="bor_num_list">Add by borrowernumber(s):
                                         <br /> <span class="hint">One borrowernumber per line.</span>
                                     </label>
@@ -64,7 +65,7 @@
                             </div>
                             [% IF ( table_loop ) %]
                             <form name="items" class="checkboxed">
-                                <h2>Patrons in batch number [% batch_id %]</h2>
+                                <h2>Patrons in batch number [% batch_id | html %]</h2>
                                 <table id="batcht">
                                     [% FOREACH table_loo IN table_loop %]
                                         [% IF ( table_loo.header_fields ) %]
@@ -81,7 +82,7 @@
                                                             [% CASE "Select" -%]
                                                                 <th>Select</th>
                                                             [% CASE %]
-                                                                <th>[% header_field.field_label %]</th>
+                                                                <th>[% header_field.field_label | html %]</th>
                                                         [% END -%]
                                                     [% END %]
                                                 </tr>
@@ -92,12 +93,12 @@
                                                 [% FOREACH text_field IN table_loo.text_fields %]
                                                     [% IF ( text_field.select_field ) %]
                                                         <td>
-                                                            <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/patroncards/edit-batch.pl?op=remove&amp;batch_id=[% batch_id %]&amp;label_id=[% text_field.field_value %]"><i class="fa fa-trash"></i> Delete</a>
-                                                            <a class="btn btn-default btn-xs export" href="#" data-batch-id="[% batch_id %]" data-label-id="[% text_field.field_value %]"><i class="fa fa-share-square-o"></i> Export</a>
+                                                            <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/patroncards/edit-batch.pl?op=remove&amp;batch_id=[% batch_id | html %]&amp;label_id=[% text_field.field_value | html %]"><i class="fa fa-trash"></i> Delete</a>
+                                                            <a class="btn btn-default btn-xs export" href="#" data-batch-id="[% batch_id | html %]" data-label-id="[% text_field.field_value | html %]"><i class="fa fa-share-square-o"></i> Export</a>
                                                         </td>
-                                                        <td><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>
+                                                        <td><input type="checkbox" name="action" value="[% text_field.field_value | html %]" /></td>
                                                     [% ELSE %]
-                                                        <td>[% text_field.field_value %]</td>
+                                                        <td>[% text_field.field_value | html %]</td>
                                                     [% END %]
                                                 [% END %]
                                             </tr>
@@ -129,10 +130,10 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         function DeleteConfirm() {
-            var msg = _("Are you sure you want to delete batch %s?").format("[% batch_id %]");
+            var msg = _("Are you sure you want to delete batch %s?").format("[% batch_id | html %]");
             var answer = confirm(msg);
             if (answer) {
-                window.location = "/cgi-bin/koha/patroncards/manage.pl?op=delete&amp;card_element=batch&amp;element_id=[% batch_id %]";
+                window.location = "/cgi-bin/koha/patroncards/manage.pl?op=delete&amp;card_element=batch&amp;element_id=[% batch_id | html %]";
             } else {
                 return; // abort delete
             }
@@ -157,7 +158,7 @@
             }
             var answer = confirm(msg);
             if (answer) {
-                window.location = "/cgi-bin/koha/patroncards/edit-batch.pl?op=remove&amp;batch_id=[% batch_id %]&amp;" + getstr;
+                window.location = "/cgi-bin/koha/patroncards/edit-batch.pl?op=remove&amp;batch_id=[% batch_id | html %]&amp;" + getstr;
             } else {
                 return; // abort delete
             }
@@ -179,7 +180,7 @@
         }
 
         function DeDuplicate() {
-            window.location = "/cgi-bin/koha/patroncards/edit-batch.pl?op=de_duplicate&amp;batch_id=[% batch_id %]";
+            window.location = "/cgi-bin/koha/patroncards/edit-batch.pl?op=de_duplicate&amp;batch_id=[% batch_id | html %]";
         };
         function Xport(mode) {
             if (mode == 'label') {
@@ -201,9 +202,9 @@
                     alert(_("Please select at least one card to export."));
                     return;     // no batch selected
                 }
-                return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id %]&" + getstr, 400, 800);
+                return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id | html %]&" + getstr, 400, 800);
             } else if (mode == 'batch') {
-                return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id %]", 400, 800);
+                return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id | html %]", 400, 800);
             } else {
                 // some pass-thru error trapping just in case...
             }

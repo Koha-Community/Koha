@@ -1,5 +1,5 @@
 [% BLOCK selectoptionopen %]
-    [% IF value == selected %]<option value='[% value %]' selected='selected'>
-    [% ELSE %]<option value='[% value %]'>
+    [% IF value == selected %]<option value='[% value | html %]' selected='selected'>
+    [% ELSE %]<option value='[% value | html %]'>
     [% END %]
 [% END %]

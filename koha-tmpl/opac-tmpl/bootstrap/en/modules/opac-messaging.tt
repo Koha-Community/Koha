@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your messaging settings</title>
+<title>[% IF ( LibraryNameTitle ) %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your messaging settings</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -54,12 +54,12 @@
                                               [% ELSIF ( messaging_preference.Item_Checkout ) %]Item checkout
                                               [% ELSE %]Unknown [% END %]</td>
                                         [% IF ( messaging_preference.takes_days ) %]
-                                            <td><select class="input-mini" name="[% messaging_preference.message_attribute_id %]-DAYS">
+                                            <td><select class="input-mini" name="[% messaging_preference.message_attribute_id | html %]-DAYS">
                                             [% FOREACH select_day IN messaging_preference.select_days %]
                                                 [% IF ( select_day.selected ) %]
-                                                    <option value="[% select_day.day %]" selected="selected">[% select_day.day %]</option>
+                                                    <option value="[% select_day.day | html %]" selected="selected">[% select_day.day | html %]</option>
                                                 [% ELSE %]
-                                                    <option value="[% select_day.day %]">[% select_day.day %]</option>
+                                                    <option value="[% select_day.day | html %]">[% select_day.day | html %]</option>
                                                 [% END %]
                                             [% END %]
                                             </select></td>
@@ -70,9 +70,9 @@
                                             [% IF ( messaging_preference.transport_sms ) %]
                                                 <td>
                                                     [% IF ( messaging_preference.transports_sms ) %]
-                                                      <input type="checkbox" id="sms[% messaging_preference.message_attribute_id %]" name="[% messaging_preference.message_attribute_id %]" value="sms" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id %].checked=false;" />
+                                                      <input type="checkbox" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
                                                     [% ELSE %]
-                                                        <input type="checkbox" id="sms[% messaging_preference.message_attribute_id %]" name="[% messaging_preference.message_attribute_id %]" value="sms" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id %].checked=false;" />
+                                                        <input type="checkbox" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
                                                     [% END %]
                                                 </td>
                                             [% ELSE %]
@@ -84,14 +84,14 @@
                                             <td>
                                               [% IF ( messaging_preference.transports_phone ) %]
                                               <input type="checkbox"
-                                                         id="phone[% messaging_preference.message_attribute_id %]"
-                                                         name="[% messaging_preference.message_attribute_id %]"
-                                                         value="phone" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id %].checked=false;" />
+                                                         id="phone[% messaging_preference.message_attribute_id | html %]"
+                                                         name="[% messaging_preference.message_attribute_id | html %]"
+                                                         value="phone" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
                                               [% ELSE %]
                                               <input type="checkbox"
-                                                         id="phone[% messaging_preference.message_attribute_id %]"
-                                                         name="[% messaging_preference.message_attribute_id %]"
-                                                         value="phone" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id %].checked=false;" />
+                                                         id="phone[% messaging_preference.message_attribute_id | html %]"
+                                                         name="[% messaging_preference.message_attribute_id | html %]"
+                                                         value="phone" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
                                               [% END %]
                                             </td>
                                             [% ELSE %]
@@ -102,9 +102,9 @@
                                         [% IF ( messaging_preference.transport_email ) %]
                                             <td>
                                                 [% IF ( messaging_preference.transports_email ) %]
-                                                    <input type="checkbox" id="email[% messaging_preference.message_attribute_id %]" name="[% messaging_preference.message_attribute_id %]" value="email" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id %].checked=false;" />
+                                                    <input type="checkbox" id="email[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="email" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
                                                 [% ELSE %]
-                                                    <input type="checkbox" id="email[% messaging_preference.message_attribute_id %]" name="[% messaging_preference.message_attribute_id %]" value="email" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id %].checked=false;" />
+                                                    <input type="checkbox" id="email[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="email" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
                                                 [% END %]
                                             </td>
                                         [% ELSE %]
@@ -114,16 +114,16 @@
                                         [% IF ( messaging_preference.has_digest ) %]
                                             <td>
                                                 [% IF ( messaging_preference.digest ) %]
-                                                    <input type="checkbox" id="digest[% messaging_preference.message_attribute_id %]" value="[% messaging_preference.message_attribute_id %]" name="digest" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id %].checked=false;" />
+                                                    <input type="checkbox" id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
                                                 [% ELSE %]
-                                                    <input type="checkbox" id="digest[% messaging_preference.message_attribute_id %]" value="[% messaging_preference.message_attribute_id %]" name="digest" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id %].checked=false;" />
+                                                    <input type="checkbox" id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
                                                 [% END %]
                                             </td>
                                         [% ELSE %]
                                         <td>-</td>
                                         [% END %]
 
-                                        <td><input type="checkbox" class="none" id="none[% messaging_preference.message_attribute_id %]" /></td>
+                                        <td><input type="checkbox" class="none" id="none[% messaging_preference.message_attribute_id | html %]" /></td>
                                     </tr>
                                 [% END # / FOREACH messaging_preferences%]
                             </tbody>
@@ -133,7 +133,7 @@
                             [% IF ( SMSSendDriver ) %]
                                 <ol><li><label>Notice:</label>Some charges for text messages may be incurred when using this service. Please check with your mobile service provider if you have questions.</li></ol>
                                 <ol><li>
-                                    <label for="SMSnumber">SMS number:</label> <input type="text" id="SMSnumber" name="SMSnumber" value="[% SMSnumber %]" />
+                                    <label for="SMSnumber">SMS number:</label> <input type="text" id="SMSnumber" name="SMSnumber" value="[% SMSnumber | html %]" />
                                     <i>Please enter numbers only. <b>(123) 456-7890</b> would be entered as <b>1234567890</b>.</i>
                                 </li></ol>
                             [% END %]
@@ -145,9 +145,9 @@
                                         <option value="">Unknown</option>
                                         [% FOREACH s IN sms_providers %]
                                             [% IF s.id == sms_provider_id %]
-                                                <option value="[% s.id %]" selected="selected">[% s.name %]</option>
+                                                <option value="[% s.id | html %]" selected="selected">[% s.name | html %]</option>
                                             [% ELSE %]
-                                                <option value="[% s.id %]">[% s.name %]</option>
+                                                <option value="[% s.id | html %]">[% s.name | html %]</option>
                                             [% END %]
                                         [% END %]
                                     </select>

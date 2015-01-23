@@ -1,12 +1,13 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Funds[% IF op == 'add_form' %] &rsaquo; [% IF ( budget_id ) %]Modify fund[% IF ( budget_name ) %] '[% budget_name %]'[% END %][% ELSE %]Add fund [% END %][% END %]</title>
-[% Asset.css("css/datatables.css") %]
-[% Asset.css("lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css") %]
+<title>Koha &rsaquo; Administration &rsaquo; Funds[% IF op == 'add_form' %] &rsaquo; [% IF ( budget_id ) %]Modify fund[% IF ( budget_name ) %] '[% budget_name | html %]'[% END %][% ELSE %]Add fund [% END %][% END %]</title>
+[% Asset.css("css/datatables.css") | $raw %]
+[% Asset.css("lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -15,9 +16,9 @@
 [% INCLUDE 'budgets-admin-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-    <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo; [% IF op == 'list' %][% IF budget_period_id %]Funds for '[% budget_period_description %]'[% ELSE %]All funds[% END %][% END %]
+    <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo; [% IF op == 'list' %][% IF budget_period_id %]Funds for '[% budget_period_description | html %]'[% ELSE %]All funds[% END %][% END %]
     [% IF op == 'add_form' %]
-      <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id %]">Funds</a> &rsaquo; [% IF ( budget_id ) %]Modify fund[% IF ( budget_name ) %] '[% budget_name %]'[% END %][% ELSE %]Add fund[% END %]
+      <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | html %]">Funds</a> &rsaquo; [% IF ( budget_id ) %]Modify fund[% IF ( budget_name ) %] '[% budget_name | html %]'[% END %][% ELSE %]Add fund[% END %]
     [% END %]
     [% IF op == 'delete_confirm' %]
       <a href="/cgi-bin/koha/admin/aqbudgets.pl">Funds</a> &rsaquo; Delete fund?
@@ -42,7 +43,7 @@
 
 <h1>
   [% IF budget_period_id %]
-    Funds for '[% budget_period_description %]'
+    Funds for '[% budget_period_description | html %]'
   [% ELSE %]
     All funds
   [% END %]
@@ -81,61 +82,61 @@
     <tr>
     <th></th>
     <th></th>
-    <th colspan="2" style="text-align: left;" nowrap="nowrap">Period allocated [% IF budget_period_total %][% budget_period_total | $Price %][% END %]  </th>
-    <th nowrap="nowrap" class="data"> [% period_alloc_total | $Price %]</th>
+    <th colspan="2" style="text-align: left;" nowrap="nowrap">Period allocated [% IF budget_period_total %][% budget_period_total | $Price | html %][% END %]  </th>
+    <th nowrap="nowrap" class="data"> [% period_alloc_total | $Price | html %]</th>
     <th></th>
-    <th class="data">[% ordered_total | $Price %]</th>
+    <th class="data">[% ordered_total | $Price | html %]</th>
     <th></th>
-    <th class="data">[% spent_total | $Price %]</th>
+    <th class="data">[% spent_total | $Price | html %]</th>
     <th></th>
-    <th class="data">[% available_total | $Price %]</th>
+    <th class="data">[% available_total | $Price | html %]</th>
     <th></th>
     </tr>
     </tfoot>
     <tbody>
     [% FOREACH budget IN budgets %]
     [% IF budget.budget_parent_id %]
-      <tr data-tt-id="[% budget.budget_id %]" data-tt-parent-id="[% budget.budget_parent_id %]">
+      <tr data-tt-id="[% budget.budget_id | html %]" data-tt-parent-id="[% budget.budget_parent_id | html %]">
     [% ELSE %]
-      <tr data-tt-id="[% budget.budget_id %]">
+      <tr data-tt-id="[% budget.budget_id | html %]">
     [% END %]
-    <td>[% budget.budget_period_active %]</td>
-    <td>Budget [% budget.budget_period_description %] [id=[% budget.budget_period_id %]][% UNLESS budget.budget_period_active %] (inactive)[% END %]</td>
-    <td>[% budget.budget_code %]</td>
-    <td>[% budget.budget_name %]</td>
+    <td>[% budget.budget_period_active | html %]</td>
+    <td>Budget [% budget.budget_period_description | html %] [id=[% budget.budget_period_id | html %]][% UNLESS budget.budget_period_active %] (inactive)[% END %]</td>
+    <td>[% budget.budget_code | html %]</td>
+    <td>[% budget.budget_name | html %]</td>
     <td class="data">
       [% IF budget.budget_parent_id %]
-        <span class="child_fund_amount">[% budget.budget_amount | $Price %]</span>
+        <span class="child_fund_amount">[% budget.budget_amount | $Price | html %]</span>
       [% ELSE %]
-        <span class="total_amount">[% budget.budget_amount | $Price %]</span>
+        <span class="total_amount">[% budget.budget_amount | $Price | html %]</span>
       [% END %]
     </td>
     <td class="data">
       [% IF budget.budget_parent_id %]
-        <span class="child_fund_amount">[% budget.budget_ordered | $Price %]</span>
+        <span class="child_fund_amount">[% budget.budget_ordered | $Price | html %]</span>
       [% ELSE %]
-        <span class="total_amount">[% budget.budget_ordered | $Price %]</span>
+        <span class="total_amount">[% budget.budget_ordered | $Price | html %]</span>
       [% END %]
     </td>
     <td class="data">
       [% IF budget.budget_parent_id %]
-        <span class="child_fund_amount">[% budget.total_ordered | $Price %]</span>
+        <span class="child_fund_amount">[% budget.total_ordered | $Price | html %]</span>
       [% ELSE %]
-        <span class="total_amount">[% budget.total_ordered | $Price %]</span>
+        <span class="total_amount">[% budget.total_ordered | $Price | html %]</span>
       [% END %]
     </td>
     <td class="data">
       [% IF budget.budget_parent_id %]
-        <span class="child_fund_amount">[% budget.budget_spent | $Price %]</span>
+        <span class="child_fund_amount">[% budget.budget_spent | $Price | html %]</span>
       [% ELSE %]
-        <span class="total_amount">[% budget.budget_spent | $Price %]</span>
+        <span class="total_amount">[% budget.budget_spent | $Price | html %]</span>
       [% END %]
     </td>
     <td class="data">
       [% IF budget.budget_parent_id %]
-        <span class="child_fund_amount">[% budget.total_spent | $Price %]</span>
+        <span class="child_fund_amount">[% budget.total_spent | $Price | html %]</span>
       [% ELSE %]
-        <span class="total_amount">[% budget.total_spent | $Price %]</span>
+        <span class="total_amount">[% budget.total_spent | $Price | html %]</span>
       [% END %]
     </td>
 
@@ -158,7 +159,7 @@
                 <span class="totalamount">
             [% END %]
         [% END %]
-            [% value | $Price %]
+            [% value | $Price | html %]
         </span>
     [% END %]
     <td class="data">
@@ -172,17 +173,17 @@
     [% ELSE %]
         <td>
             <div class="dropdown dropup">
-                <a class="btn btn-default btn-xs dropdown-toggle" id="budgetactions[% budget.budget_id %]_[% budget.budget_period_id %]" role="button" data-toggle="dropdown" href="#">
+                <a class="btn btn-default btn-xs dropdown-toggle" id="budgetactions[% budget.budget_id | html %]_[% budget.budget_period_id | html %]" role="button" data-toggle="dropdown" href="#">
                    Actions <b class="caret"></b>
                 </a>
-                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="budgetactions[% budget.budget_id %]_[% budget.budget_period_id %]">
-                    <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget.budget_id %]&amp;budget_period_id=[% budget.budget_period_id %]"><i class="fa fa-pencil"></i> Edit</a></li>
+                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="budgetactions[% budget.budget_id | html %]_[% budget.budget_period_id | html %]">
+                    <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget.budget_id | html %]&amp;budget_period_id=[% budget.budget_period_id | html %]"><i class="fa fa-pencil"></i> Edit</a></li>
                     [% IF budget.budget_has_children %]
                         <li class="disabled"><a href="#" class="deletefund-disabled" data-toggle="tooltip" data-placement="left" title="This fund has children"><i class="fa fa-trash"></i> Delete</a></li>
                     [% ELSE %]
-                        <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=delete_confirm&amp;budget_id=[% budget.budget_id %]&amp;budget_period_id=[% budget.budget_period_id %]"><i class="fa fa-trash"></i> Delete</a></li>
+                        <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=delete_confirm&amp;budget_id=[% budget.budget_id | html %]&amp;budget_period_id=[% budget.budget_period_id | html %]"><i class="fa fa-trash"></i> Delete</a></li>
                     [% END %]
-                    <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_parent_id=[% budget.budget_id %]&amp;budget_period_id=[% budget.budget_period_id %]"><i class="fa fa-plus"></i> Add child fund</a></li>
+                    <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_parent_id=[% budget.budget_id | html %]&amp;budget_period_id=[% budget.budget_period_id | html %]"><i class="fa fa-plus"></i> Add child fund</a></li>
                 </ul>
             </div>
         </td>
@@ -205,7 +206,7 @@
     <fieldset class="rows">
     <legend>[% IF ( budget_id ) %]Modify[% ELSE %]Add[% END %] Fund
     [% IF ( budget_period_description ) %]
-        [% budget_name %] for Budget '[% budget_period_description %]'
+        [% budget_name | html %] for Budget '[% budget_period_description | html %]'
     [% END %]
     </legend>
 
@@ -215,35 +216,35 @@
     [% IF ( budget_parent_id ) %]
     <li>
         <span class="label">Fund parent: </span>
-        [% budget_parent_name %]
-        [% budget_parent_id %] - [% budget_parent_name %]
-        <input type="hidden" name="budget_parent_id" value="[% budget_parent_id %]" />
+        [% budget_parent_name | html %]
+        [% budget_parent_id | html %] - [% budget_parent_name | html %]
+        <input type="hidden" name="budget_parent_id" value="[% budget_parent_id | html %]" />
     </li>
     [% END %]
     <li>
     <label class="required"  for="budget_code">Fund code: </label>
-    <input type="text" name="budget_code" id="budget_code" value="[% budget_code %]" size="30" />
+    <input type="text" name="budget_code" id="budget_code" value="[% budget_code | html %]" size="30" />
     </li>
 
     <li>
     <label class="required" for="budget_name">Fund name: </label>
-    <input type="text" name="budget_name" id="budget_name" value="[% budget_name %]" size="60" />
+    <input type="text" name="budget_name" id="budget_name" value="[% budget_name | html %]" size="60" />
     </li>
 
     <li>
     <label style="white-space: nowrap;" for="budget_amount" class="required">Amount: </label>
-    <input type="text" name="budget_amount" id="budget_amount" value="[% budget_amount | $Price on_editing => 1 %]" size="8" />
+    <input type="text" name="budget_amount" id="budget_amount" value="[% budget_amount | $Price on_editing => 1 | html %]" size="8" />
     </li>
 
     <li>
       <label for="budget_encumb">Warning at (%): </label>
-      <input type="text" name="budget_encumb" id="budget_encumb" value="[% budget_encumb %]" size="10" />
+      <input type="text" name="budget_encumb" id="budget_encumb" value="[% budget_encumb | html %]" size="10" />
       <span class="hint">0 to disable</span>
     </li>
 
     <li>
       <label for="budget_expend">Warning at (amount): </label>
-      <input type="text" name="budget_expend" id="budget_expend" value="[% budget_expend | $Price on_editing => 1 %]" size="10" />
+      <input type="text" name="budget_expend" id="budget_expend" value="[% budget_expend | $Price on_editing => 1 | html %]" size="10" />
       <span class="hint">0 to disable</span>
     </li>
 
@@ -251,8 +252,8 @@
         <span class="label">Owner: </span>
         [% IF  budget_owner %]
             <span  id="budget_owner_name">
-                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% budget_owner.borrowernumber %]">
-                    [% budget_owner.firstname %] [% budget_owner.surname %]
+                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% budget_owner.borrowernumber | html %]">
+                    [% budget_owner.firstname | html %] [% budget_owner.surname | html %]
                 </a> |
             </span>
         [% ELSE %]
@@ -261,7 +262,7 @@
         <a id="edit_owner" class="new_window" href="#"><i class="fa fa-search"></i> Select owner</a>
         <a id="remove_owner" href="#"><i class="fa fa-trash"></i> Remove owner</a>
         <input type="hidden" name="budget_owner_id" id="budget_owner_id"
-            value="[% budget_owner.borrowernumber %]" />
+            value="[% budget_owner.borrowernumber | html %]" />
     </li>
 
 
@@ -279,16 +280,16 @@
         <span class="label">Users:</span>
         <ul style="float:left;" id="budget_users">
             [% FOREACH user IN budget_users %]
-                <li id="user_[% user.borrowernumber %]">
-                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% user.borrowernumber %]">
-                        [% user.firstname %] [% user.surname %]
+                <li id="user_[% user.borrowernumber | html %]">
+                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% user.borrowernumber | html %]">
+                        [% user.firstname | html %] [% user.surname | html %]
                     </a>
-                    &bull; <a href="#" class="del_user" data-borrowernumber="[% user.borrowernumber %]"><i class="fa fa-trash"></i> Remove</a>
+                    &bull; <a href="#" class="del_user" data-borrowernumber="[% user.borrowernumber | html %]"><i class="fa fa-trash"></i> Remove</a>
                 </li>
             [% END %]
             <li><a href="#" id="add_user_button"><i class="fa fa-plus"></i> Add users</a></li>
         </ul>
-        <input type="hidden" name="budget_users_ids" id="budget_users_id" value="[% budget_users_ids %]" />
+        <input type="hidden" name="budget_users_ids" id="budget_users_id" value="[% budget_users_ids | html %]" />
     </li>
     <li>
     <label for="budget_branchcode">Library: </label>
@@ -337,7 +338,7 @@
 
     <li>
     <label for="budget_notes">Notes: </label>
-    <textarea name="budget_notes" id="budget_notes"  cols="80" rows="6">[% budget_notes %]</textarea>
+    <textarea name="budget_notes" id="budget_notes"  cols="80" rows="6">[% budget_notes | html %]</textarea>
     </li>
 
     <li>
@@ -357,13 +358,13 @@
     </ol>
 
     [% IF ( budget_id ) %]
-        <input type="hidden" name="budget_id" value="[% budget_id %]" />
+        <input type="hidden" name="budget_id" value="[% budget_id | html %]" />
     [% END %]
     </fieldset>
 
     <fieldset class="action">
         <input type="submit" value="Submit" /> <a class="cancel" href="/cgi-bin/koha/admin/aqbudgets.pl">Cancel</a>
-        <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
+        <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
     </fieldset>
 </form>
 
@@ -371,19 +372,19 @@
 
 [% IF op == 'delete_confirm' %]
     <div class="dialog alert">
-        <h3>Delete fund [% budget_name %]?</h3>
+        <h3>Delete fund [% budget_name | html %]?</h3>
         If you delete this fund, all orders linked to this fund will be deleted!
         <table>
             <tr>
             <th scope="row">Fund amount:</th>
-            <td>[% budget_amount | $Price %]</td>
+            <td>[% budget_amount | $Price | html %]</td>
             </tr>
         </table>
 
         <form action="/cgi-bin/koha/admin/aqbudgets.pl" method="post">
             <input type="hidden" name="op" value="delete_confirmed" />
-            <input type="hidden" name="budget_id" value="[% budget_id %]" />
-            <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
+            <input type="hidden" name="budget_id" value="[% budget_id | html %]" />
+            <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this fund</button>
         </form>
         <form action="/cgi-bin/koha/admin/aqbudgets.pl" method="get">
@@ -425,9 +426,9 @@
               <option value="">All budgets</option>
               [% FOR period IN periods %]
                 [% IF budget_period_id && period.budget_period_id == budget_period_id %]
-                  <option value="[% period.budget_period_id %]" selected="selected">[% period.budget_period_description %]</option>
+                  <option value="[% period.budget_period_id | html %]" selected="selected">[% period.budget_period_description | html %]</option>
                 [% ELSE %]
-                  <option value="[% period.budget_period_id %]">[% period.budget_period_description %]</option>
+                  <option value="[% period.budget_period_id | html %]">[% period.budget_period_description | html %]</option>
                 [% END %]
               [% END %]
             </select>
@@ -443,14 +444,14 @@
 </div>
 </div>
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/acq.js") %]
+    [% Asset.js("js/acq.js") | $raw %]
     <script type="text/javascript">
         var MSG_BUDGET_PARENT_ALLOCATION = "- " + _("Fund amount exceeds parent allocation") + "\n";
         var MSG_BUDGET_PERIOD_ALLOCATION = "- " + _("Fund amount exceeds period allocation") + "\n";
         var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") + "\n";
     </script>
 
-    [% Asset.js("js/acq.js") %]
+    [% Asset.js("js/acq.js") | $raw %]
     [% IF op == 'add_form' %]
         <script type="text/javascript">
         //<![CDATA[
@@ -609,7 +610,7 @@
         </script>
     [% ELSIF op == 'list' %]
         [% INCLUDE 'datatables.inc' %]
-        [% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") %]
+        [% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") | $raw %]
 
         <script type="text/javascript">
         //<![CDATA[

@@ -1,15 +1,16 @@
+[% USE raw %]
 [% USE To %]
 [% USE Branches %]
 [% USE KohaDates %]
 {
-    "sEcho": [% sEcho %],
-    "iTotalRecords": [% iTotalRecords %],
-    "iTotalDisplayRecords": [% iTotalDisplayRecords %],
+    "sEcho": [% sEcho | html %],
+    "iTotalRecords": [% iTotalRecords | html %],
+    "iTotalDisplayRecords": [% iTotalDisplayRecords | html %],
     "aaData": [
         [% FOREACH data IN aaData %]
             {
                 "dt_cardnumber":
-                    "[% data.cardnumber |html %]",
+                    "[% data.cardnumber | html %]",
                 "dt_name":
                     "[% INCLUDE 'patron-title.inc' borrowernumber = data.borrowernumber category_type = data.category_type firstname = data.firstname surname = data.surname othernames = data.othernames cardnumber = data.cardnumber invert_name = 1%]",
                 "dt_dateofbirth":
@@ -17,7 +18,7 @@
                 "dt_address":
                     "[% INCLUDE escape_address data=data %]",
                 "dt_action":
-                    "<a href=\"#\" class=\"btn btn-default btn-xs select_user\" data-borrowernumber=\"[% data.borrowernumber %]\">Select</a><input type=\"hidden\" id=\"borrower_data[% data.borrowernumber %]\" name=\"borrower_data[% data.borrowernumber %]\" value=\"[% To.json(data) | html %]\" />"
+                    "<a href=\"#\" class=\"btn btn-default btn-xs select_user\" data-borrowernumber=\"[% data.borrowernumber | html %]\">Select</a><input type=\"hidden\" id=\"borrower_data[% data.borrowernumber | html %]\" name=\"borrower_data[% data.borrowernumber | html %]\" value=\"[% To.json(data) | html %]\" />"
             }[% UNLESS loop.last %],[% END %]
         [% END %]
     ]
@@ -31,5 +32,5 @@
 [%~ IF data.zipcode %][% SET address = address _ data.zipcode _ ' ' %][% END %]
 [%~ IF data.country %][% SET address = address _ data.country _ ' ' %][% END %]
 [%~ SET address = address _ Branches.GetName( data.branchcode ) %]
-[%~ To.json( address ) ~%]
+[%~ To.json( address ).raw ~%]
 [% END %]

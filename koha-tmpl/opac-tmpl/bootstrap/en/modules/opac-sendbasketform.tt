@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Sending your cart</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Sending your cart</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -34,8 +34,8 @@
                                     <input type="text" id="email_add" name="email_add" size="43" class="focus" />
                                     <label for="comment">Comment:</label>
                                     <textarea id="comment" name="comment" rows="4" cols="40"></textarea>
-                                    <input type="hidden" name="bib_list" value="[% bib_list %]" />
-                                    <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
+                                    <input type="hidden" name="bib_list" value="[% bib_list | html %]" />
+                                    <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
                                 </fieldset>
                                 [% IF Koha.Preference('RequestOnOpac') || Koha.Preference('OpacRenewalAllowed') %]<p id="donotrequestbymail">Please do not use this mail to request or renew books.</p>[% END %]
                                 <fieldset class="action">

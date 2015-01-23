@@ -34,13 +34,13 @@
                             [% IF ( installer_languages_loop ) %]
                                 [% FOREACH installer_languages_loo IN installer_languages_loop %]
                                     [% IF ( installer_languages_loo.plural ) %]
-                                        <optgroup label="[% installer_languages_loo.language %]">
+                                        <optgroup label="[% installer_languages_loo.language | html %]">
                                             [% FOREACH sublanguages_loo IN installer_languages_loo.sublanguages_loop %]
-                                                <option value="[% sublanguages_loo.rfc4646_subtag %]">[% IF ( sublanguages_loo.native_description ) %][% sublanguages_loo.native_description %][% ELSE %][% sublanguages_loo.rfc4646_subtag %][% END %]</option>
+                                                <option value="[% sublanguages_loo.rfc4646_subtag | html %]">[% IF ( sublanguages_loo.native_description ) %][% sublanguages_loo.native_description | html %][% ELSE %][% sublanguages_loo.rfc4646_subtag | html %][% END %]</option>
                                             [% END %]
                                         </optgroup>
                                     [% ELSE %]
-                                        <option value="[% installer_languages_loo.rfc4646_subtag %]">[% IF ( installer_languages_loo.native_description ) %][% installer_languages_loo.native_description %][% ELSE %][% installer_languages_loo.rfc4646_subtag %][% END %]</option>
+                                        <option value="[% installer_languages_loo.rfc4646_subtag | html %]">[% IF ( installer_languages_loo.native_description ) %][% installer_languages_loo.native_description | html %][% ELSE %][% installer_languages_loo.rfc4646_subtag | html %][% END %]</option>
                                     [% END %]
                                 [% END %]
                             [% END %]
@@ -57,9 +57,9 @@
                         <p>Some Perl modules are missing. <span class="label label-danger">Important: </span>Required modules must be installed before you may continue.<br />
                         <ul>
                             [% FOREACH missing_module IN missing_modules %]
-                                <li><strong>[% missing_module.name %]</strong> [% IF ( missing_module.require ) %]<span class="label label-danger">Required</span>[% END %]
-                                    <br /> Version: [% missing_module.version %]
-                                    <br /> Usage: [% missing_module.usage %]
+                                <li><strong>[% missing_module.name | html %]</strong> [% IF ( missing_module.require ) %]<span class="label label-danger">Required</span>[% END %]
+                                    <br /> Version: [% missing_module.version | html %]
+                                    <br /> Usage: [% missing_module.usage | html %]
                                 </li>
                             [% END %]
                         </ul>

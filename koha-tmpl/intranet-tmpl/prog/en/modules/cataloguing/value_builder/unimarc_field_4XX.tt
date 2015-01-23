@@ -15,8 +15,8 @@
 	
 			<p>
 				<input type="hidden" name="plugin_name" value="unimarc_field_4XX.pl" />
-				<input type="hidden" name="index" value="[% index %]" /> 
-				<input type="hidden" name="result" value="unimarc field 4 [% index %]" />
+				<input type="hidden" name="index" value="[% index | html %]" /> 
+				<input type="hidden" name="result" value="unimarc field 4 [% index | html %]" />
 				<input type="hidden" name="op" value="do_search" />
 				<label class="label100" for="searchbox">Any word</label>
 				<input type="text" name="search" id="searchbox" size="35" /><br />
@@ -24,7 +24,7 @@
 				<select name="itype" id="itypeloop">
                 <option value="">All item types</option>
 				[% FOREACH itypeloo IN itypeloop %]
-                <option value="[% itypeloo.itemtype %]">[% itypeloo.description |html %]</option>
+                <option value="[% itypeloo.itemtype | html %]">[% itypeloo.description | html %]</option>
 				[% END %]
 				</select>
 			</p>
@@ -40,17 +40,17 @@
 
 		<h2>Search results</h2>
 		<div id="UNIMARC_Field_4XX_resultnumber">
-            <p>[% IF ( displayprev ) %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;startfrom=[% startfromprev %]&amp;search=[% search |uri %]&amp;resultsperpage=[% resultsperpage %]&amp;type=intranet&amp;op=do_search">&lt;&lt; Previous</a>[% END %]
+            <p>[% IF ( displayprev ) %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index | html %]&amp;startfrom=[% startfromprev | html %]&amp;search=[% search |uri %]&amp;resultsperpage=[% resultsperpage | html %]&amp;type=intranet&amp;op=do_search">&lt;&lt; Previous</a>[% END %]
 				[% FOREACH number IN numbers %]
-                                [% IF ( number.highlight ) %] <span class="highlight">[% number.number %]</span>
-                                [% ELSE %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;startfrom=[% number.startfrom %]&amp;search=[% number.search |uri %]&amp;resultsperpage=[% number.resultsperpage %]&amp;type=intranet&amp;op=do_search">[% number.number %]</a>
+                                [% IF ( number.highlight ) %] <span class="highlight">[% number.number | html %]</span>
+                                [% ELSE %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index | html %]&amp;startfrom=[% number.startfrom | html %]&amp;search=[% number.search |uri %]&amp;resultsperpage=[% number.resultsperpage | html %]&amp;type=intranet&amp;op=do_search">[% number.number | html %]</a>
                                 [% END %]
                                 [% END %]
                                 [% IF ( displaynext ) %]
-                                  <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;startfrom=[% startfromnext %]&amp;search=[% search |uri %]&amp;resultsperpage=[% resultsperpage %]&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a>
+                                  <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index | html %]&amp;startfrom=[% startfromnext | html %]&amp;search=[% search |uri %]&amp;resultsperpage=[% resultsperpage | html %]&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a>
                                 [% END %]</p>
 			<p class="resultcount">
-                          [% IF ( total ) %]Results [% from %] to [% to %] of [% total %]
+                          [% IF ( total ) %]Results [% from | html %] to [% to | html %] of [% total | html %]
                           [% ELSE %]No results found
                           [% END %]</p></div>
 		<div id="resultlist">
@@ -67,30 +67,30 @@
                                     [% IF ( resul.even ) %]<td class="hilighted">
                                     [% ELSE %]<td>[% END %]
                                                             [% IF ( resul.MARC_ON ) %]
-                                                                    <a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.title |html %]</a>
+                                                                    <a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.title | html %]</a>
                                                             [% ELSE %]
-                                                                    <a class="transparent resultlist" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.fulltitle |html %]</a>[% END %]
-                                                    <p>[% resul.author |html %]
-                                                    [% IF ( resul.publishercode ) %]- [% resul.publishercode |html %][% END %]
-                                                    [% IF ( resul.place ) %] ; [% resul.place |html %][% END %]
-                                                    [% IF ( resul.pages ) %] - [% resul.pages |html %][% END %]
-                                                    [% IF ( resul.notes ) %] : [% resul.notes |html %][% END %]
-                                                    [% IF ( resul.item('size') ) %] ; [% resul.item('size') |html %][% END %]
+                                                                    <a class="transparent resultlist" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.fulltitle | html %]</a>[% END %]
+                                                    <p>[% resul.author | html %]
+                                                    [% IF ( resul.publishercode ) %]- [% resul.publishercode | html %][% END %]
+                                                    [% IF ( resul.place ) %] ; [% resul.place | html %][% END %]
+                                                    [% IF ( resul.pages ) %] - [% resul.pages | html %][% END %]
+                                                    [% IF ( resul.notes ) %] : [% resul.notes | html %][% END %]
+                                                    [% IF ( resul.item('size') ) %] ; [% resul.item('size') | html %][% END %]
                                             </p>
 					</td>
                     [% IF ( resul.even ) %]<td align="center" class="hilighted">
                     [% ELSE %]<td align="center">[% END %]
-                        [% resul.totitem |html %]
+                        [% resul.totitem | html %]
 					</td>
                     [% IF ( resul.even ) %]<td class="hilighted">
                     [% ELSE %]<td>[% END %]
-                        [% resul.CN |html %]
+                        [% resul.CN | html %]
 					</td>
 					<td>
                       [% IF ( resul.biblionumber ) %]
-                          <a href="#" class="btn btn-default btn-xs redirect_link" data-url="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;biblionumber=[% resul.biblionumber %]&amp;type=intranet&amp;op=fillinput">Choose</a>
+                          <a href="#" class="btn btn-default btn-xs redirect_link" data-url="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index | html %]&amp;biblionumber=[% resul.biblionumber | html %]&amp;type=intranet&amp;op=fillinput">Choose</a>
                       [% ELSE %]
-                          <a href="#" class="btn btn-default btn-xs redirect_link" data-url="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;type=intranet&amp;op=fillinput">Clear field</a>
+                          <a href="#" class="btn btn-default btn-xs redirect_link" data-url="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index | html %]&amp;type=intranet&amp;op=fillinput">Clear field</a>
                       [% END %]
 					</td>
 				</tr>
@@ -101,7 +101,7 @@
 		<div id="resultnumber">
 			<p>
 				[% IF ( displayprev ) %]
-                <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;amp;index=[% index %]&amp;amp;startfrom=[% startfromprev %]&amp;amp;search=[% search |uri %]&amp;amp;resultsperpage=[% resultsperpage %]&amp;amp;type=intranet&amp;amp;op=do_search">
+                <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;amp;index=[% index | html %]&amp;amp;startfrom=[% startfromprev | html %]&amp;amp;search=[% search |uri %]&amp;amp;resultsperpage=[% resultsperpage | html %]&amp;amp;type=intranet&amp;amp;op=do_search">
 					&lt;&lt; Previous
 				</a>
 				[% END %]
@@ -109,17 +109,17 @@
 				[% FOREACH number IN numbers %]
 					[% IF ( number.highlight ) %]
 						<span class="highlight">
-							[% number.number %]
+							[% number.number | html %]
 						</span>
 					[% ELSE %]
-                        <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;startfrom=[% number.startfrom %]&amp;search=[% number.search |uri %]&amp;resultsperpage=[% number.resultsperpage %]&amp;type=intranet&amp;op=do_search">
-							[% number.number %]
+                        <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index | html %]&amp;startfrom=[% number.startfrom | html %]&amp;search=[% number.search |uri %]&amp;resultsperpage=[% number.resultsperpage | html %]&amp;type=intranet&amp;op=do_search">
+							[% number.number | html %]
 						</a>
 					[% END %]
 				[% END %]
 
 				[% IF ( displaynext ) %]
-                <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;startfrom=[% startfromnext %]&amp;search=[% search |uri %]&amp;resultsperpage=[% resultsperpage %]&amp;type=intranet&amp;op=do_search">
+                <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index | html %]&amp;startfrom=[% startfromnext | html %]&amp;search=[% search |uri %]&amp;resultsperpage=[% resultsperpage | html %]&amp;type=intranet&amp;op=do_search">
 					Next&gt;&gt;
 				</a>
 				[% END %]
@@ -147,7 +147,7 @@
     [% IF ( fillinput ) %]
         <script>
             function go() {
-                var index_start = "[% index %]";
+                var index_start = "[% index | html %]";
                 var whichfield;
                 try {
                     whichfield = opener.opener.document.getElementById(index_start);
@@ -166,55 +166,55 @@
                         var subfield = subfields[i+1];
 
                         if(code.value == '9'){
-                                subfield.value = "[% subfield_value_9 |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                                subfield.value = "[% subfield_value_9 |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
                         }
                         if(code.value == '0'){
-                                subfield.value = "[% subfield_value_0 |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                                subfield.value = "[% subfield_value_0 |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
                         }
                         if(code.value == 'a'){
-                                subfield.value = "[% subfield_value_a |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                                subfield.value = "[% subfield_value_a |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
                         }
                         if(code.value == 'c'){
-                                subfield.value = "[% subfield_value_c |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                                subfield.value = "[% subfield_value_c |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
                         }
                         if(code.value == 'd'){
-                                subfield.value = "[% subfield_value_d |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                                subfield.value = "[% subfield_value_d |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
                         }
                         if(code.value == 'e'){
-                                subfield.value = "[% subfield_value_e |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                                subfield.value = "[% subfield_value_e |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
                         }
                         if(code.value == 'h'){
-                                subfield.value = "[% subfield_value_h |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                                subfield.value = "[% subfield_value_h |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
                         }
                         if(code.value == 'i'){
-                                subfield.value = "[% subfield_value_i |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                                subfield.value = "[% subfield_value_i |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
                         }
                         if(code.value == 'l'){
-                                subfield.value = "[% subfield_value_l |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                                subfield.value = "[% subfield_value_l |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
                         }
                         if(code.value == 'n'){
-                                subfield.value = "[% subfield_value_n |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                                subfield.value = "[% subfield_value_n |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
                         }
                         if(code.value == 'o'){
-                                subfield.value = "[% subfield_value_o |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                                subfield.value = "[% subfield_value_o |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
                         }
                         if(code.value == 'p'){
-                                subfield.value = "[% subfield_value_p |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                                subfield.value = "[% subfield_value_p |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
                         }
                         if(code.value == 't'){
-                                subfield.value = "[% subfield_value_t |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                                subfield.value = "[% subfield_value_t |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
                         }
                         if(code.value == 'u'){
-                                subfield.value = "[% subfield_value_u |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                                subfield.value = "[% subfield_value_u |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
                         }
                         if(code.value == 'v'){
-                                subfield.value = "[% subfield_value_v |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                                subfield.value = "[% subfield_value_v |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
                         }
                         if(code.value == 'x'){
-                                subfield.value = "[% subfield_value_x |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                                subfield.value = "[% subfield_value_x |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
                         }
                         if(code.value == 'y'){
-                                subfield.value = "[% subfield_value_y |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                                subfield.value = "[% subfield_value_y |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
                         }
                     }
                 }

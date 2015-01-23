@@ -51,7 +51,7 @@
 
 [% IF ( subscriptions_loop ) %]
 <p>
-    <b>[% numsubscription %]</b> subscription(s)
+    <b>[% numsubscription | html %]</b> subscription(s)
         [% IF ( title ) %]
         with title matching <span class="title">[% title | html %]</class>
         [% IF ( issn ) %]and [% END %]
@@ -86,33 +86,33 @@
     [% FOREACH subscriptions_loo IN subscriptions_loop %]
         <tr>
             <td style="text-align:center;vertical-align:middle">
-                <input type="checkbox" value="[% subscriptions_loo.subscriptionid %]" name="subscriptionid" />
+                <input type="checkbox" value="[% subscriptions_loo.subscriptionid | html %]" name="subscriptionid" />
             </td>
             <td>
-                [% subscriptions_loo.issn %]
+                [% subscriptions_loo.issn | html %]
             </td>
             <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptions_loo.subscriptionid |url %]">[% IF ( subscriptions_loo.title ) %]
-                    [% subscriptions_loo.title |html %]
+                    [% subscriptions_loo.title | html %]
                 [% ELSE %]
                     |
                 [% END %]
                 </a>
             </td>
             [% IF can_change_library %]<td>
-                [% Branches.GetName( subscriptions_loo.branchcode ) %]
+                [% Branches.GetName( subscriptions_loo.branchcode ) | html %]
             </td>[% END %]
             <td>
-                [% subscriptions_loo.notes %]
+                [% subscriptions_loo.notes | html %]
             </td>
             <td>
-                [% subscriptions_loo.internalnotes %]
+                [% subscriptions_loo.internalnotes | html %]
             </td>
             <td>
                 [% subscriptions_loo.expirationdate | $KohaDates %]
             </td>
             <td class="actions">
-                <a href="/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptions_loo.subscriptionid %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                <a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscriptions_loo.subscriptionid %]" data-subscriptionid="[% subscriptions_loo.subscriptionid %]" class="btn btn-default btn-xs renew_subscription"><i class="fa fa-refresh"></i> Renew</a>
+                <a href="/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptions_loo.subscriptionid | html %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+                <a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscriptions_loo.subscriptionid | html %]" data-subscriptionid="[% subscriptions_loo.subscriptionid | html %]" class="btn btn-default btn-xs renew_subscription"><i class="fa fa-refresh"></i> Renew</a>
             </td>
         </tr>
     [% END %]

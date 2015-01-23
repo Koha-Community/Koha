@@ -1,37 +1,37 @@
 [% BLOCK sourcetab %]
-    <div id="tabrecord[% record.recordid %]">
+    <div id="tabrecord[% record.recordid | html %]">
         <div class="record">
-            <ul id="ulrecord[% record.recordid %]">
+            <ul id="ulrecord[% record.recordid | html %]">
                 [% FOREACH field IN record.display %]
                   [% IF field.tag != biblionumbertag %]
-                    <li id="k[% field.key %]">
+                    <li id="k[% field.key | html %]">
                         [% IF (tabrecord.reference) %]
-                            <input type="checkbox" checked="checked" class="fieldpick" id="rec_[% record.recordid %]_[% field.key %]" />
+                            <input type="checkbox" checked="checked" class="fieldpick" id="rec_[% record.recordid | html %]_[% field.key | html %]" />
                         [% ELSE %]
-                            <input type="checkbox" class="fieldpick" id="rec_[% record.recordid %]_[% field.key %]" />
+                            <input type="checkbox" class="fieldpick" id="rec_[% record.recordid | html %]_[% field.key | html %]" />
                         [% END %]
-                        <label for="rec_[% record.recordid %]_[% field.key %]"><span class="field">[% field.tag %]</span></label>
+                        <label for="rec_[% record.recordid | html %]_[% field.key | html %]"><span class="field">[% field.tag | html %]</span></label>
 
-                        <input type="hidden" name="tag_[% field.tag %]_indicator1_[% field.key %]" value="[% field.indicator1 %]" />
-                        <input type="hidden" name="tag_[% field.tag %]_indicator2_[% field.key %]" value="[% field.indicator2 %]" />
+                        <input type="hidden" name="tag_[% field.tag | html %]_indicator1_[% field.key | html %]" value="[% field.indicator1 | html %]" />
+                        <input type="hidden" name="tag_[% field.tag | html %]_indicator2_[% field.key | html %]" value="[% field.indicator2 | html %]" />
                         [% IF ( field.value ) %]
-                            / [% field.value %]
-                            <input type="hidden" name="tag_[% field.tag %]_code_00_[% field.key %]" value="00" />
-                            <input type="hidden" name="tag_[% field.tag %]_subfield_00_[% field.key %]" value="[% field.value %]" />
+                            / [% field.value | html %]
+                            <input type="hidden" name="tag_[% field.tag | html %]_code_00_[% field.key | html %]" value="00" />
+                            <input type="hidden" name="tag_[% field.tag | html %]_subfield_00_[% field.key | html %]" value="[% field.value | html %]" />
                         [% END %]
 
                         [% IF ( field.subfield.size ) %]
                             <ul>
                                 [% FOREACH subfield IN field.subfield %]
-                                    <li id="k[% subfield.subkey %]">
+                                    <li id="k[% subfield.subkey | html %]">
                                         [% IF (tabrecord.reference) %]
-                                            <input type="checkbox" checked="checked" class="subfieldpick" id="rec_[% record.recordid %]_[% subfield.subkey %]" />
+                                            <input type="checkbox" checked="checked" class="subfieldpick" id="rec_[% record.recordid | html %]_[% subfield.subkey | html %]" />
                                         [% ELSE %]
-                                            <input type="checkbox" class="subfieldpick" id="rec_[% record.recordid %]_[% subfield.subkey %]" />
+                                            <input type="checkbox" class="subfieldpick" id="rec_[% record.recordid | html %]_[% subfield.subkey | html %]" />
                                         [% END %]
-                                        <label for="rec_[% record.recordid %]_[% subfield.subkey %]"><span class="subfield">[% subfield.subtag %]</span> / [% subfield.value %]</label>
-                                        <input type="hidden" name="tag_[% field.tag %]_code_[% subfield.subtag %]_[% field.key %]_[% subfield.subkey %]" value="[% subfield.subtag %]" />
-                                        <input type="hidden" name="tag_[% field.tag %]_subfield_[% subfield.subtag %]_[% subfield.key %]_[% subfield.subkey %]" value="[% subfield.value |html%]" />
+                                        <label for="rec_[% record.recordid | html %]_[% subfield.subkey | html %]"><span class="subfield">[% subfield.subtag | html %]</span> / [% subfield.value | html %]</label>
+                                        <input type="hidden" name="tag_[% field.tag | html %]_code_[% subfield.subtag | html %]_[% field.key | html %]_[% subfield.subkey | html %]" value="[% subfield.subtag | html %]" />
+                                        <input type="hidden" name="tag_[% field.tag | html %]_subfield_[% subfield.subtag | html %]_[% subfield.key | html %]_[% subfield.subkey | html %]" value="[% subfield.value | html %]" />
                                     </li>
                                 [% END %]
                             </ul>
@@ -50,8 +50,8 @@
     <ul>
         [% FOREACH record IN sourcerecords %]
             <li>
-                <a href="#tabrecord[% record.recordid %]">
-                    [% record.recordid %]
+                <a href="#tabrecord[% record.recordid | html %]">
+                    [% record.recordid | html %]
                     [% IF record.reference %](ref)[% END %]
                 </a>
             </li>

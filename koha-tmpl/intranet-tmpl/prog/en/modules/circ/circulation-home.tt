@@ -119,7 +119,7 @@
         </div>
         <div class="row" id="intranet-circulation-home-html">
             <div class="col-md-12">
-                [% Koha.Preference('IntranetCirculationHomeHTML') %]
+                [% Koha.Preference('IntranetCirculationHomeHTML') | html %]
             </div>
         </div>
         <div class="row" id="offline-circulation">
@@ -134,7 +134,7 @@
                     </div>
                     <div class="col-sm-5 col-md-3">
                     <p><a href="https://github.com/bywatersolutions/koha-offline-circulation/releases"><i class="fa fa-window-maximize"></i> Get desktop application</a></p>
-                    <p><a href="https://addons.mozilla.org/[% lang %]/firefox/addon/koct/"><i class="fa fa-firefox"></i> Get Firefox add-on</a></p>
+                    <p><a href="https://addons.mozilla.org/[% lang | html %]/firefox/addon/koct/"><i class="fa fa-firefox"></i> Get Firefox add-on</a></p>
                     </div>
             </div>
         </div>

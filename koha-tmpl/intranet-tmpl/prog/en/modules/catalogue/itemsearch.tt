@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE JSON.Escape %]
 
@@ -31,24 +32,24 @@
 
 [% BLOCK form_field_select %]
   <div class="form-field form-field-select">
-    <label class="form-field-label" for="[% name %]">[% INCLUDE form_label label=name %]</label>
-    <select id="[% name %]_op" name="[% name %]_op">
+    <label class="form-field-label" for="[% name | html %]">[% INCLUDE form_label label=name %]</label>
+    <select id="[% name | html %]_op" name="[% name | html %]_op">
       <option value="=">is</option>
       <option value="!=" >is not</option>
     </select>
-    <select id="[% name %]" name="[% name %]" multiple="multiple" size="[% options.size < 4 ? options.size + 1 : 4 %]">
+    <select id="[% name | html %]" name="[% name | html %]" multiple="multiple" size="[% options.size < 4 ? options.size + 1 : 4 | html %]">
       <option value="" selected="selected">
         [% IF (empty_option) %][% INCLUDE form_label label=empty_option %][% ELSE %]<span>All</span>[% END %]
       </option>
       [% FOREACH option IN options %]
-        <option value="[% option.value %]">[% option.label %]</option>
+        <option value="[% option.value | html %]">[% option.label | html %]</option>
       [% END %]
     </select>
   </div>
 [% END %]
 
 [% BLOCK form_field_select_option %]
-  <option value="[% value %]">[% INCLUDE form_label label=value %]</option>
+  <option value="[% value | html %]">[% INCLUDE form_label label=value %]</option>
 [% END %]
 
 [% BLOCK form_field_select_text %]
@@ -71,11 +72,11 @@
       [% IF items_search_fields.size %]
         <optgroup label="Custom search fields">
           [% FOREACH field IN items_search_fields %]
-            [% marcfield = field.tagfield %]
+            [% marcfield = field.tagfield | html %]
             [% IF field.tagsubfield %]
-              [% marcfield = marcfield _ '$' _ field.tagsubfield %]
+              [% marcfield = marcfield _ '$' _ field.tagsubfield | html %]
             [% END %]
-            <option value="marc:[% marcfield %]" data-authorised-values-category="[% field.authorised_values_category %]">[% field.label %] ([% marcfield %])</option>
+            <option value="marc:[% marcfield | html %]" data-authorised-values-category="[% field.authorised_values_category | html %]">[% field.label | html %] ([% marcfield | html %])</option>
           [% END %]
         </optgroup>
       [% END %]
@@ -88,12 +89,12 @@
 [% BLOCK form_field_radio_yes_no %]
   <div class="form-field">
     <label class="form-field-label">[% INCLUDE form_label label=name %]:</label>
-    <input type="radio" name="[% name %]" id="[% name %]_indifferent" value="" checked="checked"/>
-    <label for="[% name %]_indifferent">Ignore</label>
-    <input type="radio" name="[% name %]" id="[% name %]_yes" value="yes" />
-    <label for="[% name %]_yes">Yes</label>
-    <input type="radio" name="[% name %]" id="[% name %]_no" value="no" />
-    <label for="[% name %]_no">No</label>
+    <input type="radio" name="[% name | html %]" id="[% name | html %]_indifferent" value="" checked="checked"/>
+    <label for="[% name | html %]_indifferent">Ignore</label>
+    <input type="radio" name="[% name | html %]" id="[% name | html %]_yes" value="yes" />
+    <label for="[% name | html %]_yes">Yes</label>
+    <input type="radio" name="[% name | html %]" id="[% name | html %]_no" value="no" />
+    <label for="[% name | html %]_no">No</label>
   </div>
 [% END %]
 
@@ -103,8 +104,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
   <title>Koha &rsaquo; Catalog &rsaquo; Item search</title>
   [% INCLUDE 'doc-head-close.inc' %]
-  [% Asset.css("css/itemsearchform.css") %]
-  [% Asset.css("css/datatables.css") %]
+  [% Asset.css("css/itemsearchform.css") | $raw %]
+  [% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="catalog_itemsearch" class="catalog">
@@ -205,10 +206,10 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") %]
-    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
     <script type="text/javascript">
-        var authorised_values = [% authorised_values_json %];
+        var authorised_values = [% authorised_values_json | html %];
 
         function loadAuthorisedValuesSelect(select) {
             var selected = select.find('option:selected');
@@ -374,22 +375,22 @@
                     { 'type': 'text' },
                     { 'type': 'text' },
                     [% IF ccodes.size %]
-                        { 'type': 'select', 'values': [% ccodes.json %] },
+                        { 'type': 'select', 'values': [% ccodes.json | html %] },
                     [% ELSE %]
                         null,
                     [% END %]
                     { 'type': 'text' },
                     { 'type': 'text' },
-                    { 'type': 'select', 'values': [% branches.json %] },
-                    { 'type': 'select', 'values': [% branches.json %] },
+                    { 'type': 'select', 'values': [% branches.json | html %] },
+                    { 'type': 'select', 'values': [% branches.json | html %] },
                     [% IF locations.size %]
-                        { 'type': 'select', 'values': [% locations.json %] },
+                        { 'type': 'select', 'values': [% locations.json | html %] },
                     [% ELSE %]
                         null,
                     [% END %]
                     { 'type': 'text' },
                     [% IF notforloans.size %]
-                        { 'type': 'select', 'values': [% notforloans.json %] },
+                        { 'type': 'select', 'values': [% notforloans.json | html %] },
                     [% ELSE %]
                         null,
                     [% END %]

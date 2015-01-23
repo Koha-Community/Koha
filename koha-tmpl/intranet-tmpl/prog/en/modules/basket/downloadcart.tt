@@ -17,14 +17,14 @@
 	    <option value="ris">RIS</option>
 	    <option value="bibtex">BibTex</option>
 	    [% FOREACH csv_profile IN csv_profiles %]
-	    <option value="[% csv_profile.export_format_id %]">CSV - [% csv_profile.profile %]</option>
+	    <option value="[% csv_profile.export_format_id | html %]">CSV - [% csv_profile.profile | html %]</option>
 	    [% END %]
 
 	</select></li>
 	</ol>
 	</fieldset>
 	<fieldset class="action">
-	<input type="hidden" name="bib_list" value="[% bib_list %]" />
+	<input type="hidden" name="bib_list" value="[% bib_list | html %]" />
 	<input type="submit" name="save" value="Save" /> <a class="cancel close" href="#">Cancel</a>
 	</fieldset>
     </form>

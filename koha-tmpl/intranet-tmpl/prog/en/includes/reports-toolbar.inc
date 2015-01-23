@@ -14,7 +14,7 @@
         [% IF ( CAN_user_reports_create_reports ) %]
             [% UNLESS ( editsql ) # Do not show edit button on edit page %]
                 <div class="btn-group">
-                    <a id="editreport" class="btn btn-default btn-sm" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id %]&amp;phase=Edit%20SQL">
+                    <a id="editreport" class="btn btn-default btn-sm" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&amp;phase=Edit%20SQL">
                         <i class="fa fa-pencil"></i> Edit
                     </a>
                 </div>
@@ -28,7 +28,7 @@
 
         [% IF ( CAN_user_reports_delete_reports ) %]
             <div class="btn-group">
-                <a class="delete btn btn-default btn-sm" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id %]&phase=Delete%20Saved">
+                <a class="delete btn btn-default btn-sm" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&phase=Delete%20Saved">
                     <i class="fa fa-trash"></i> Delete
                 </a>
             </div>
@@ -36,12 +36,12 @@
 
         [% UNLESS ( errors ) # Unless there are errors saving a report %]
             <div class="btn-group">
-                <a id="runreport" class="btn btn-default btn-sm" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id %]&amp;phase=Run%20this%20report">
+                <a id="runreport" class="btn btn-default btn-sm" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&amp;phase=Run%20this%20report">
                     <i class="fa fa-play"></i> Run report
                 </a>
             </div>
             <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="/cgi-bin/koha/tools/scheduler.pl?id=[% id %]">
+                <a class="btn btn-default btn-sm" href="/cgi-bin/koha/tools/scheduler.pl?id=[% id | html %]">
                     <i class="fa fa-clock-o"></i> Schedule
                 </a>
             </div>
@@ -57,9 +57,9 @@
             <div class="btn-group">
                 <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" id="format"><i class="fa fa-upload"></i> Download <span class="caret"></span></button>
                 <ul class="dropdown-menu">
-                    <li><a id="csv" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=csv&amp;report_id=[% id %]&amp;reportname=[% name |uri %][% PROCESS params %]">[% PROCESS 'delimiter_text.inc' %]</a></li>
-                    <li><a id="tab" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=tab&amp;report_id=[% id %]&amp;reportname=[% name |uri %][% PROCESS params %]">Tab separated text</a></li>
-                    <li><a id="ods" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=ods&amp;report_id=[% id %]&amp;reportname=[% name |uri %][% PROCESS params %]">Open Document Spreadsheet</a></li>
+                    <li><a id="csv" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=csv&amp;report_id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">[% PROCESS 'delimiter_text.inc' %]</a></li>
+                    <li><a id="tab" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=tab&amp;report_id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">Tab separated text</a></li>
+                    <li><a id="ods" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=ods&amp;report_id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">Open Document Spreadsheet</a></li>
                 </ul>
             </div>
             <div class="btn-group">

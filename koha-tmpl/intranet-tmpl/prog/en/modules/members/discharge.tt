@@ -1,10 +1,11 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Patrons &rsaquo; [% UNLESS blocking_error  %]Discharge for [% patron.firstname %] [% patron.surname %] ([% patron.cardnumber %])[% END %]</title>
+<title>Koha &rsaquo; Patrons &rsaquo; [% UNLESS blocking_error  %]Discharge for [% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="discharge" class="discharge">
@@ -14,7 +15,7 @@
 <div id="breadcrumbs">
          <a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
-&rsaquo; [% UNLESS blocking_error  %]Discharge for [% patron.firstname %] [% patron.surname %] ([% patron.cardnumber %])[% END %]
+&rsaquo; [% UNLESS blocking_error  %]Discharge for [% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])[% END %]
 </div>
 
 <div id="doc3" class="yui-t1">
@@ -24,7 +25,7 @@
 <div class="yui-g">
 <h3>Discharge</h3>
 [% FOR message IN messages %]
-    <div class="dialog [% message.type %]">
+    <div class="dialog [% message.type | html %]">
     [% IF message.code == "unable_to_generate_pdf" %]
         An error occurs when generating the pdf file.
         Please contact the administrator to resolve this problem.
@@ -39,7 +40,7 @@
     [% END %]
     <form method="post">
         <input type="submit" value="Generate discharge" name="discharge" />
-        <input type="hidden" value="[% patron.borrowernumber %]" name="borrowernumber" />
+        <input type="hidden" value="[% patron.borrowernumber | html %]" name="borrowernumber" />
     </form>
 [% END %]
 
@@ -55,8 +56,8 @@
         <tbody>
             [% FOR d IN validated_discharges %]
                 <tr>
-                    <td>[% d.needed | $KohaDates with_hours = 1 %]</td>
-                    <td>[% d.validated | $KohaDates with_hours = 1 %]</td>
+                    <td>[% d.needed | $KohaDates with_hours = 1 | html %]</td>
+                    <td>[% d.validated | $KohaDates with_hours = 1 | html %]</td>
                 </tr>
             [% END %]
         </tbody>
@@ -75,7 +76,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

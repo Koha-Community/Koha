@@ -11,9 +11,9 @@
             <h3>Search for a vendor to transfer to</h3>
               <div class="transferinfo">
                 <ul>
-                  <li><span class="label">From vendor: </span>[% booksellerfromname %]</li>
-                  <li><span class="label">Basket: </span>[% basketfromname %]</li>
-                  <li><span class="label">Order: </span>[% ordernumber %]</li>
+                  <li><span class="label">From vendor: </span>[% booksellerfromname | html %]</li>
+                  <li><span class="label">Basket: </span>[% basketfromname | html %]</li>
+                  <li><span class="label">Order: </span>[% ordernumber | html %]</li>
                 </ul>
               </div>
         [% ELSE %]
@@ -23,10 +23,10 @@
             <fieldset>
             <input type="hidden" name="op" value="do_search" />
             [% IF ( ordernumber ) %]
-                <input type="hidden" name="ordernumber" value="[% ordernumber %]" />
+                <input type="hidden" name="ordernumber" value="[% ordernumber | html %]" />
             [% END %]
             [% IF ( bookselleridfrom ) %]
-                <input type="hidden" name="bookselleridfrom" value="[% bookselleridfrom %]" />
+                <input type="hidden" name="bookselleridfrom" value="[% bookselleridfrom | html %]" />
             [% END %]
             <label for="query">Vendor:</label>
             <input type="text" id="query" name="query" />
@@ -34,7 +34,7 @@
             </fieldset>
         </form>
         [% IF ( show_baskets ) %]
-            <h3>Baskets for [% booksellertoname %]</h3>
+            <h3>Baskets for [% booksellertoname | html %]</h3>
             [% IF ( basketsloop ) %]
                 <table>
                     <thead>
@@ -48,10 +48,10 @@
                     <tbody>
                         [% FOREACH basket IN basketsloop %]
                           <tr>
-                            <td>[% basket.basketname %] (#[% basket.basketno %])</td>
-                            <td>[% basket.createdby %]</td>
+                            <td>[% basket.basketname | html %] (#[% basket.basketno | html %])</td>
+                            <td>[% basket.createdby | html %]</td>
                             <td>[% basket.creationdate | $KohaDates %]</td>
-                            <td><a class="btn btn-default btn-xs confirm_transfer" href="transferorder.pl?basketno=[% basket.basketno %]&ordernumber=[% ordernumber %]">Choose</a>
+                            <td><a class="btn btn-default btn-xs confirm_transfer" href="transferorder.pl?basketno=[% basket.basketno | html %]&ordernumber=[% ordernumber | html %]">Choose</a>
                           </tr>
                         [% END %]
                     </tbody>
@@ -61,7 +61,7 @@
             [% END %]
         [% END %]
         [% IF ( ordersloop ) %]
-            <h3>Orders for [% booksellerfromname %]</h3>
+            <h3>Orders for [% booksellerfromname | html %]</h3>
             <table>
                 <thead>
                     <tr>
@@ -73,19 +73,19 @@
                 <tbody>
                     [% FOREACH ordersloo IN ordersloop %]
                       <tr>
-                        <td><a href="neworderempty.pl?ordernumber=[% ordersloo.ordernumber %]">[% ordersloo.ordernumber %]</a></td>
+                        <td><a href="neworderempty.pl?ordernumber=[% ordersloo.ordernumber | html %]">[% ordersloo.ordernumber | html %]</a></td>
                         <td>
-                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ordersloo.biblionumber %]">[% ordersloo.title |html %]</a>
-                            [% IF ( ordersloo.author ) %] by [% ordersloo.author %][% END %]
-                            [% IF ( ordersloo.isbn ) %] &ndash; [% ordersloo.isbn %][% END %]
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ordersloo.biblionumber | html %]">[% ordersloo.title | html %]</a>
+                            [% IF ( ordersloo.author ) %] by [% ordersloo.author | html %][% END %]
+                            [% IF ( ordersloo.isbn ) %] &ndash; [% ordersloo.isbn | html %][% END %]
                             [% IF ( ordersloo.publishercode ) %]
-                                <br />Publisher: [% ordersloo.publishercode %]
-                                [%- IF    ( ordersloo.publicationyear > 0) -%], [% ordersloo.publicationyear %]
-                                [%- ELSIF ( ordersloo.copyrightdate   > 0) -%] [% ordersloo.copyrightdate %]
+                                <br />Publisher: [% ordersloo.publishercode | html %]
+                                [%- IF    ( ordersloo.publicationyear > 0) -%], [% ordersloo.publicationyear | html %]
+                                [%- ELSIF ( ordersloo.copyrightdate   > 0) -%] [% ordersloo.copyrightdate | html %]
                                 [% END %]
                             [% END %]
                         </td>
-                        <td><a class="btn btn-default btn-xs" href="transferorder.pl?bookselleridfrom=[% ordersloo.bookselleridfrom %]&ordernumber=[% ordersloo.ordernumber %]">Transfer</a></td>
+                        <td><a class="btn btn-default btn-xs" href="transferorder.pl?bookselleridfrom=[% ordersloo.bookselleridfrom | html %]&ordernumber=[% ordersloo.ordernumber | html %]">Transfer</a></td>
                       </tr>
                     [% END %]
                 </tbody>
@@ -108,8 +108,8 @@
                     <tbody>
                         [% FOREACH bookseller IN booksellersloop %]
                           <tr>
-                            <td>[% bookseller.name %]</td>
-                            <td><a class="btn btn-default btn-xs" href="transferorder.pl?[% IF (bookselleridfrom) %]bookselleridto[% ELSE %]bookselleridfrom[% END %]=[% bookseller.id %][% IF (ordernumber) %]&ordernumber=[% ordernumber %][% END %]">Choose</a></td>
+                            <td>[% bookseller.name | html %]</td>
+                            <td><a class="btn btn-default btn-xs" href="transferorder.pl?[% IF (bookselleridfrom) %]bookselleridto[% ELSE %]bookselleridfrom[% END %]=[% bookseller.id | html %][% IF (ordernumber) %]&ordernumber=[% ordernumber | html %][% END %]">Choose</a></td>
                           </tr>
                         [% END %]
                     </tbody>

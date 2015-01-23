@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -25,7 +26,7 @@
     <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
     [% IF ( template_name ) %]
         <a href="/cgi-bin/koha/tools/marc_modification_templates.pl">MARC modification templates</a>
-        &rsaquo; [% template_name %]
+        &rsaquo; [% template_name | html %]
     [% ELSE %]
         MARC modification templates
     [% END %]
@@ -53,7 +54,7 @@
 
                 [% IF ( template_id == '' ) %]
 
-                    <h2>MARC modification templates [% template_id %]</h2>
+                    <h2>MARC modification templates [% template_id | html %]</h2>
 
                     <table id="templatest">
                         <thead>
@@ -65,11 +66,11 @@
                         <tbody>
                             [% FOREACH TemplatesLoo IN TemplatesLoop %]
                                 <tr>
-                                    <td>[% TemplatesLoo.name %]</td>
+                                    <td>[% TemplatesLoo.name | html %]</td>
                                     <td class="actions">
-                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/marc_modification_templates.pl?template_id=[% TemplatesLoo.template_id %]&amp;op=select_template" ><i class="fa fa-fw fa-pencil"></i> Edit actions</a>
-                                        <a class="btn btn-default btn-xs duplicate_template" href="#" data-toggle="modal" data-template_id="[% TemplatesLoo.template_id %]" data-target="#createTemplate"><i class="fa fa-fw fa-copy"></i> Duplicate</a>
-                                        <a class="btn btn-default btn-xs delete_template" href="/cgi-bin/koha/tools/marc_modification_templates.pl?template_id=[% TemplatesLoo.template_id %]&amp;op=delete_template"><i class="fa fa-fw fa-trash"></i> Delete</a>
+                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/marc_modification_templates.pl?template_id=[% TemplatesLoo.template_id | html %]&amp;op=select_template" ><i class="fa fa-fw fa-pencil"></i> Edit actions</a>
+                                        <a class="btn btn-default btn-xs duplicate_template" href="#" data-toggle="modal" data-template_id="[% TemplatesLoo.template_id | html %]" data-target="#createTemplate"><i class="fa fa-fw fa-copy"></i> Duplicate</a>
+                                        <a class="btn btn-default btn-xs delete_template" href="/cgi-bin/koha/tools/marc_modification_templates.pl?template_id=[% TemplatesLoo.template_id | html %]&amp;op=delete_template"><i class="fa fa-fw fa-trash"></i> Delete</a>
                                     </td>
                                 </tr>
                             [% END %]
@@ -78,7 +79,7 @@
 
                 [% ELSE %]
 
-                    <h2>Actions for <i>[% template_name %]</i></h2>
+                    <h2>Actions for <i>[% template_name | html %]</i></h2>
 
                     [% IF ( ActionsLoop ) %]
 
@@ -97,24 +98,24 @@
                                 [% FOREACH ActionsLoo IN ActionsLoop %]
                                     <tr>
                                         <td class="actions">
-                                            <a title="Move action up" href="marc_modification_templates.pl?op=move_action&amp;where=up&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
+                                            <a title="Move action up" href="marc_modification_templates.pl?op=move_action&amp;where=up&amp;template_id=[% ActionsLoo.template_id | html %]&amp;mmta_id=[% ActionsLoo.mmta_id | html %]">
                                                 <i class="fa fa-arrow-up fa-lg order-control"></i>
                                             </a>
 
-                                            <a title="Move action to top" href="marc_modification_templates.pl?op=move_action&amp;where=top&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
+                                            <a title="Move action to top" href="marc_modification_templates.pl?op=move_action&amp;where=top&amp;template_id=[% ActionsLoo.template_id | html %]&amp;mmta_id=[% ActionsLoo.mmta_id | html %]">
                                                 <i class="fa fa-arrow-up fa-lg overline order-control"></i>
                                             </a>
 
-                                            <a title="Move action to bottom" href="marc_modification_templates.pl?op=move_action&amp;where=bottom&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
+                                            <a title="Move action to bottom" href="marc_modification_templates.pl?op=move_action&amp;where=bottom&amp;template_id=[% ActionsLoo.template_id | html %]&amp;mmta_id=[% ActionsLoo.mmta_id | html %]">
                                                 <i class="fa fa-arrow-down fa-lg underline order-control"></i>
                                             </a>
 
-                                            <a title="Move action down" href="marc_modification_templates.pl?op=move_action&amp;where=down&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
+                                            <a title="Move action down" href="marc_modification_templates.pl?op=move_action&amp;where=down&amp;template_id=[% ActionsLoo.template_id | html %]&amp;mmta_id=[% ActionsLoo.mmta_id | html %]">
                                                 <i class="fa fa-arrow-down fa-lg order-control"></i>
                                             </a>
                                         </td>
 
-                                        <td>[% ActionsLoo.ordering %]</td>
+                                        <td>[% ActionsLoo.ordering | html %]</td>
                                         <td>
                                             [% IF ( ActionsLoo.action_delete_field ) %] Delete [% END %]
                                             [% IF ( ActionsLoo.action_add_field ) %] Add new [% END %]
@@ -131,17 +132,17 @@
 
                                             field
 
-                                            [% ActionsLoo.from_field %][% IF ( ActionsLoo.from_subfield ) %]$[% ActionsLoo.from_subfield %][% END %]
+                                            [% ActionsLoo.from_field | html %][% IF ( ActionsLoo.from_subfield ) %]$[% ActionsLoo.from_subfield | html %][% END %]
 
                                             [% IF ( ActionsLoo.field_value ) %]
-                                                with value <i>[% ActionsLoo.field_value %]</i>
+                                                with value <i>[% ActionsLoo.field_value | html %]</i>
                                             [% END %]
 
                                             [% IF ( ActionsLoo.to_field ) %]
-                                                to [% ActionsLoo.to_field %][% IF ( ActionsLoo.to_subfield ) %]$[% ActionsLoo.to_subfield %][% END %]
+                                                to [% ActionsLoo.to_field | html %][% IF ( ActionsLoo.to_subfield ) %]$[% ActionsLoo.to_subfield | html %][% END %]
 
                                                 [% IF ( ActionsLoo.to_regex_search ) %]
-                                                     using RegEx s<strong>/[% ActionsLoo.to_regex_search %]/[% ActionsLoo.to_regex_replace %]/[% ActionsLoo.to_regex_modifiers %]</strong>
+                                                     using RegEx s<strong>/[% ActionsLoo.to_regex_search | html %]/[% ActionsLoo.to_regex_replace | html %]/[% ActionsLoo.to_regex_modifiers | html %]</strong>
                                                 [% END %]
                                             [% END %]
 
@@ -149,7 +150,7 @@
                                                 [% IF ( ActionsLoo.conditional_if ) %] if [% END %]
                                                 [% IF ( ActionsLoo.conditional_unless ) %] unless [% END %]
 
-                                                [% ActionsLoo.conditional_field %][% IF ( ActionsLoo.conditional_subfield ) %]$[% ActionsLoo.conditional_subfield %][% END %]
+                                                [% ActionsLoo.conditional_field | html %][% IF ( ActionsLoo.conditional_subfield ) %]$[% ActionsLoo.conditional_subfield | html %][% END %]
 
                                                 [% IF ( ActionsLoo.conditional_comparison_exists ) %] exists [% END %]
                                                 [% IF ( ActionsLoo.conditional_comparison_not_exists ) %] does not exist [% END %]
@@ -157,36 +158,36 @@
                                                 [% IF ( ActionsLoo.conditional_comparison_not_equals ) %] does not match [% END %]
 
                                                 [% IF ( ActionsLoo.conditional_regex ) %] RegEx m/[% END %]
-                                                <strong>[% ActionsLoo.conditional_value %]</strong>
+                                                <strong>[% ActionsLoo.conditional_value | html %]</strong>
                                                 [% IF ( ActionsLoo.conditional_regex ) %]/[% END %]
                                             [% END %]
                                         </td>
-                                        <td>[% ActionsLoo.description %]</td>
+                                        <td>[% ActionsLoo.description | html %]</td>
                                         <td>
                                             <a class="btn btn-default btn-xs" href="#modaction" onclick='editAction(
-                                                            "[% ActionsLoo.mmta_id |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                            "[% ActionsLoo.ordering |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                            "[% ActionsLoo.action |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                            "[% ActionsLoo.field_number |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                            "[% ActionsLoo.from_field |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                            "[% ActionsLoo.from_subfield |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                            "[% ActionsLoo.field_value |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                            "[% ActionsLoo.to_field |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                            "[% ActionsLoo.to_subfield |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                            "[% ActionsLoo.to_regex_search |replace('\\\\', '\\\\') |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                            "[% ActionsLoo.to_regex_replace |replace('\\\\', '\\\\') |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                            "[% ActionsLoo.to_regex_modifiers |replace('\\\\', '\\\\') |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                            "[% ActionsLoo.conditional |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                            "[% ActionsLoo.conditional_field |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                            "[% ActionsLoo.conditional_subfield |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                            "[% ActionsLoo.conditional_comparison |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                            "[% ActionsLoo.conditional_value |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                            "[% ActionsLoo.conditional_regex |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                            "[% ActionsLoo.description |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"
+                                                            "[% ActionsLoo.mmta_id |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
+                                                            "[% ActionsLoo.ordering |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
+                                                            "[% ActionsLoo.action |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
+                                                            "[% ActionsLoo.field_number |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
+                                                            "[% ActionsLoo.from_field |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
+                                                            "[% ActionsLoo.from_subfield |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
+                                                            "[% ActionsLoo.field_value |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
+                                                            "[% ActionsLoo.to_field |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
+                                                            "[% ActionsLoo.to_subfield |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
+                                                            "[% ActionsLoo.to_regex_search |replace('\\\\', '\\\\') |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
+                                                            "[% ActionsLoo.to_regex_replace |replace('\\\\', '\\\\') |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
+                                                            "[% ActionsLoo.to_regex_modifiers |replace('\\\\', '\\\\') |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
+                                                            "[% ActionsLoo.conditional |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
+                                                            "[% ActionsLoo.conditional_field |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
+                                                            "[% ActionsLoo.conditional_subfield |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
+                                                            "[% ActionsLoo.conditional_comparison |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
+                                                            "[% ActionsLoo.conditional_value |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
+                                                            "[% ActionsLoo.conditional_regex |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
+                                                            "[% ActionsLoo.description |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]"
                                                         );updateAllEvery();'><i class="fa fa-pencil"></i> Edit</a>
                                         </td>
                                         <td>
-                                            <a class="btn btn-default btn-xs" href="marc_modification_templates.pl?template_id=[% ActionsLoo.template_id %]&op=delete_action&mmta_id=[% ActionsLoo.mmta_id %]" onclick="return confirmDeleteAction();"><i class="fa fa-trash"></i> Delete</a>
+                                            <a class="btn btn-default btn-xs" href="marc_modification_templates.pl?template_id=[% ActionsLoo.template_id | html %]&op=delete_action&mmta_id=[% ActionsLoo.mmta_id | html %]" onclick="return confirmDeleteAction();"><i class="fa fa-trash"></i> Delete</a>
                                         </td>
                                     </tr>
                                 [% END # /FOREACH ActionsLoo %]
@@ -270,7 +271,7 @@
                                 </span>
                             </span>
 
-                            <input type="hidden" name="template_id" value="[% template_id %]" />
+                            <input type="hidden" name="template_id" value="[% template_id | html %]" />
                             <input type="hidden" name="mmta_id" id="mmta_id" />
                             <input type="hidden" name="op" value="add_action" />
 
@@ -314,7 +315,7 @@
                                 <select name="template_id" id="duplicate_a_template">
                                     <option value=""> -- None --</option>
                                     [% FOREACH TemplatesLoo IN TemplatesLoop %]
-                                        <option value="[% TemplatesLoo.template_id %]"> [% TemplatesLoo.name %]</option>
+                                        <option value="[% TemplatesLoo.template_id | html %]"> [% TemplatesLoo.name | html %]</option>
                                     [% END %]
                                 </select>
                                 <input type="hidden" name="duplicate_current_template" id="duplicate_current_template" />
@@ -338,7 +339,7 @@
   </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     <script type="text/javascript">
         var MSG_MMT_SUBFIELDS_MATCH = _("Both subfield values should be filled or empty.");
         var MSG_MMT_DESTINATION_REQUIRED = _("The destination should be filled.");
@@ -353,7 +354,7 @@
         var MSG_MMT_EDIT_ACTION = _("Edit action %s");
         var MSG_MMT_UPDATE_ACTION = _("Update action");
     </script>
-    [% Asset.js("js/marc_modification_templates.js") %]
+    [% Asset.js("js/marc_modification_templates.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

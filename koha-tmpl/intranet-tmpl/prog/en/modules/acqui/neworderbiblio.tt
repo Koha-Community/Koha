@@ -1,8 +1,9 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Search existing records</title>
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -10,7 +11,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Basket [% basketno %]</a> &rsaquo; Search existing records</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% name | html %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | html %]">Basket [% basketno | html %]</a> &rsaquo; Search existing records</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -22,17 +23,17 @@
 
 
 [% IF ( total ) %]
-<b>[% total %] results found </b> 
-<div class="pages">[% pagination_bar %]</div>
+<b>[% total | html %] results found </b> 
+<div class="pages">[% pagination_bar | $raw %]</div>
 [% ELSE %]
 <h3> No results found</h3>
 <p>
-    No results match your search for <span style="font-weight: bold;">&ldquo;[% query %]&rdquo;</span> in [% LibraryName %]
+    No results match your search for <span style="font-weight: bold;">&ldquo;[% query | html %]&rdquo;</span> in [% LibraryName | html %]
 </p>
 [% END %]
 
 [% IF ( query_error ) %]
-    <div class="dialog alert"><p><strong>Error:</strong> [% query_error %]</p></div>
+    <div class="dialog alert"><p><strong>Error:</strong> [% query_error | html %]</p></div>
 [% END %]
 
 [% IF ( total ) %]
@@ -51,27 +52,27 @@
       [% FOREACH biblio IN resultsloop %]
         <tr>
             <td>
-                <p><span class="title"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber %]">[% biblio.title | html %]</a></span>
-                [% FOREACH subtitle IN biblio.subtitles %] <span class="subtitle">[% subtitle.subfield %]</span>[% END %]
-                [% IF ( biblio.author ) %]  by <span class="author">[% biblio.author %]</span>,[% END %]</p>
-                <p>[% IF ( biblio.isbn ) %] [% biblio.isbn %][% END %]
-                [% IF ( biblio.pages ) %] - [% biblio.pages %][% END %]
-                [% IF ( biblio.notes ) %] : [% biblio.notes %][% END %]
-                [% IF ( biblio.size ) %] ; [% biblio.size %][% END %]
+                <p><span class="title"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | html %]">[% biblio.title | html %]</a></span>
+                [% FOREACH subtitle IN biblio.subtitles %] <span class="subtitle">[% subtitle.subfield | html %]</span>[% END %]
+                [% IF ( biblio.author ) %]  by <span class="author">[% biblio.author | html %]</span>,[% END %]</p>
+                <p>[% IF ( biblio.isbn ) %] [% biblio.isbn | html %][% END %]
+                [% IF ( biblio.pages ) %] - [% biblio.pages | html %][% END %]
+                [% IF ( biblio.notes ) %] : [% biblio.notes | html %][% END %]
+                [% IF ( biblio.size ) %] ; [% biblio.size | html %][% END %]
                 </p>
             </td>
             <td>
-                [% biblio.publishercode %]
-                [% IF ( biblio.place ) %] ; [% biblio.place %][% END %]
+                [% biblio.publishercode | html %]
+                [% IF ( biblio.place ) %] ; [% biblio.place | html %][% END %]
             </td>
             <td>
-                [% biblio.copyrightdate %]
+                [% biblio.copyrightdate | html %]
             </td>
         <td>
-        <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblio.biblionumber %]&amp;viewas=html" class="previewMARC">View MARC</a>
+        <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblio.biblionumber | html %]&amp;viewas=html" class="previewMARC">View MARC</a>
         </td>
             <td>
-            <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;biblionumber=[% biblio.biblionumber %]" title="Order this one">
+            <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]&amp;biblionumber=[% biblio.biblionumber | html %]" title="Order this one">
                 Order
             </a>
             </td>
@@ -87,7 +88,7 @@
             <h3 id="marcPreviewLabel">MARC preview</h3>
         </div>
         <div class="modal-body">
-            <div id="loading"> <img src="[% interface %]/[% theme %]/img/spinner-small.gif" alt="" /> Loading </div>
+            <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -108,7 +109,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/acquisitions-menu.js") %]
+    [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
          $(document).ready(function() {
@@ -129,7 +130,7 @@
             });
             $("#marcPreview").on("hidden", function(){
                 $("#marcPreviewLabel").html("");
-                $("#marcPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+                $("#marcPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
             });
          });
     </script>

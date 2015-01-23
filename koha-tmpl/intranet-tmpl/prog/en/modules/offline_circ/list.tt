@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
     [% INCLUDE "doc-head-open.inc" %]
@@ -35,9 +36,9 @@
 		        </thead>
 		        <tbody>
 		            [% FOREACH operation IN pending_operations %]
-		                <tr class="oc-[% operation.action %]">
-		                    <td><input type="checkbox" name="operationid" value="[% operation.operationid %]" /></td>
-			                <td>[% operation.timestamp %]</td>
+		                <tr class="oc-[% operation.action | html %]">
+		                    <td><input type="checkbox" name="operationid" value="[% operation.operationid | html %]" /></td>
+			                <td>[% operation.timestamp | html %]</td>
                             <td>
                                 [% SWITCH ( operation.action ) -%]
                                     [%   CASE "issue" -%]
@@ -47,26 +48,26 @@
                                     [%   CASE "payment" -%]
                                         Payment
                                     [%   CASE # default case -%]
-                                        [% operation.action %]
+                                        [% operation.action | html %]
                                 [% END -%]
                             </td>
 			                <td>
                                 [% IF ( operation.biblionumber ) %]
-			                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% operation.biblionumber %]" title="[% operation.bibliotitle %]">[% operation.barcode %]</a>
+			                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% operation.biblionumber | html %]" title="[% operation.bibliotitle | html %]">[% operation.barcode | html %]</a>
 			                    [% ELSE %]
-			                        <span class="error">[% operation.barcode %]</span>
+			                        <span class="error">[% operation.barcode | html %]</span>
 			                    [% END %]
 			                </td>
 			                <td>
 			                [% IF ( operation.actionissue || operation.actionpayment) %]
 		                        [% IF ( operation.borrowernumber ) %]
-		                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% operation.borrowernumber %]" title="[% operation.borrower %]">[% operation.cardnumber %]</a>
+		                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% operation.borrowernumber | html %]" title="[% operation.borrower | html %]">[% operation.cardnumber | html %]</a>
 		                        [% ELSE %]
-		                            <span class="error">[% operation.cardnumber %]</span>
+		                            <span class="error">[% operation.cardnumber | html %]</span>
 		                        [% END %]
 			                [% END %]
 			                </td>
-                                        <td>[% operation.amount %]</td>
+                                        <td>[% operation.amount | html %]</td>
 		                </tr>
 		            [% END %]
 		        </tbody>
@@ -88,7 +89,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script type="text/javascript">
         $(document).ready(function() {
 

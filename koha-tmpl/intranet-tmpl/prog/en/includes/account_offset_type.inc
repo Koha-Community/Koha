@@ -6,5 +6,5 @@
     [% CASE 'Lost Item Return' %]Lost item returned
     [% CASE 'Writeoff' %]Writeoff
     [% CASE 'Void Payment' %]Void payment
-    [% CASE %][% account_offset.type %]
+    [% CASE %][% account_offset.type | html %]
 [%- END -%]

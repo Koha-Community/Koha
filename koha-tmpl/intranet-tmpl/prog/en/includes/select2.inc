@@ -1,7 +1,8 @@
+[% USE raw %]
 [% USE Asset %]
-<script src="[% interface %]/lib/select2/js/select2.min.js"></script>
-[% Asset.css("lib/select2/css/select2.min.css") %]
-[% Asset.css("css/select2.css") %]
+<script src="[% interface | html %]/lib/select2/js/select2.min.js"></script>
+[% Asset.css("lib/select2/css/select2.min.css") | $raw %]
+[% Asset.css("css/select2.css") | $raw %]
 <script>
   jQuery.extend($.fn.select2.defaults, {
     allowClear: true,

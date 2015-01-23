@@ -1,9 +1,10 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Acquisitions &rsaquo; Receive shipment from vendor [% name %]</title>
-[% Asset.css("css/datatables.css") %]
+<title>Koha &rsaquo; Acquisitions &rsaquo; Receive shipment from vendor [% name | html %]</title>
+[% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -11,7 +12,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>  &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name %]</a> &rsaquo; Receive shipment from vendor [% name %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>  &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% name | html %]</a> &rsaquo; Receive shipment from vendor [% name | html %]</div>
 
 [% IF ( count ) %]<div id="doc3" class="yui-t2">[% ELSE %]<div id="doc" class="yui-t7">[% END %]
    
@@ -24,7 +25,7 @@
         <p>An error has occurred. Invoice cannot be created.</p>
     </div>
 [% END %]
-<h1>Receive shipment from vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name %]</a></h1>
+<h1>Receive shipment from vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% name | html %]</a></h1>
 
     [% IF duplicate_invoices %]
     <div id="parcels_duplicate_invoice" class="dialog alert">
@@ -34,20 +35,20 @@
             <tbody>
                 [% FOREACH invoice IN duplicate_invoices %]
                     <tr>
-                        <td>[% invoice.invoicenumber %]</td>
+                        <td>[% invoice.invoicenumber | html %]</td>
                         <td>[% invoice.shipmentdate | $KohaDates %]</td>
-                        <td><a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoice.invoiceid %]">Receive</a></td>
+                        <td><a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoice.invoiceid | html %]">Receive</a></td>
                     </tr>
                 [% END %]
             </tbody>
         </table>
         <form method="get" action="parcels.pl">
-            <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+            <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
             <input type="hidden" name="op" value="confirm" />
-            <input type="hidden" name="invoice" value="[% invoicenumber %]" />
+            <input type="hidden" name="invoice" value="[% invoicenumber | html %]" />
             <input type="hidden" name="shipmentdate" value="[% shipmentdate | $KohaDates %]" />
-            <input type="hidden" name="shipmentcost" value="[% shipmentcost %]" />
-            <input type="hidden" name="shipmentcost_budgetid" value="[% shipmentcost_budgetid %]" />
+            <input type="hidden" name="shipmentcost" value="[% shipmentcost | html %]" />
+            <input type="hidden" name="shipmentcost_budgetid" value="[% shipmentcost_budgetid | html %]" />
             <input type="submit" class="button" value="Create new invoice anyway" />
         </form>
     </div>
@@ -55,7 +56,7 @@
 
 
 [% IF ( count ) %]
-<p> [% count %] shipments</p>
+<p> [% count | html %] shipments</p>
 <div id="resultlist">
 <!-- Search Results Table -->
 
@@ -75,26 +76,26 @@
     [% FOREACH searchresult IN searchresults %]
         <tr>
             <td>
-                [% searchresult.number %]
+                [% searchresult.number | html %]
             </td>
             <td>
-                <span title="[% searchresult.datereceived %]">[% searchresult.datereceived | $KohaDates %]</span>
+                <span title="[% searchresult.datereceived | html %]">[% searchresult.datereceived | $KohaDates %]</span>
             </td>
             <td>
                 [% IF ( searchresult.code ) %]
-                    <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% searchresult.invoiceid %]">[% searchresult.code |html %]</a>
+                    <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% searchresult.invoiceid | html %]">[% searchresult.code | html %]</a>
                 [% ELSE %]
                     <abbr title="not available">n/a</abbr>
                 [% END %]
             </td>
             <td>
-                [% searchresult.reccount %]
+                [% searchresult.reccount | html %]
             </td>
             <td>
-                [% searchresult.bibcount %]
+                [% searchresult.bibcount | html %]
             </td>
             <td>
-                [% searchresult.itemcount %]
+                [% searchresult.itemcount | html %]
             </td>
         </tr>
     [% END %]
@@ -104,17 +105,17 @@
 <div id="resultnumber">
 <!-- Row of numbers corresponding to search result pages -->
 [% IF ( displayprev ) %]
-    <a href="parcels.pl?booksellerid=[% booksellerid %]&amp;startfrom=[% prevstartfrom %][% IF ( datefrom ) %]&amp;datefrom=[% datefrom %][% END %][% IF ( dateto ) %]&amp;dateto=[% dateto %][% END %][% IF ( code ) %]&amp;filter=[% code %][% END %][% IF ( orderby ) %]&amp;orderby=[% orderby %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage %][% END %]&amp;type=intra">&lt;&lt; Previous</a>
+    <a href="parcels.pl?booksellerid=[% booksellerid | html %]&amp;startfrom=[% prevstartfrom | html %][% IF ( datefrom ) %]&amp;datefrom=[% datefrom | html %][% END %][% IF ( dateto ) %]&amp;dateto=[% dateto | html %][% END %][% IF ( code ) %]&amp;filter=[% code | html %][% END %][% IF ( orderby ) %]&amp;orderby=[% orderby | html %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage | html %][% END %]&amp;type=intra">&lt;&lt; Previous</a>
 [% END %]
 [% FOREACH number IN numbers %]
     [% IF ( number.highlight ) %]
-    <span class="current">[% number.number %]</span>
+    <span class="current">[% number.number | html %]</span>
     [% ELSE %]
-    <a href="parcels.pl?booksellerid=[% booksellerid %]&amp;startfrom=[% number.startfrom %][% IF ( number.datefrom ) %]&amp;datefrom=[% number.datefrom %][% END %][% IF ( number.dateto ) %]&amp;dateto=[% number.dateto %][% END %][% IF ( number.code ) %]&amp;filter=[% number.code %][% END %][% IF ( number.orderby ) %]&amp;orderby=[% number.orderby %][% END %][% IF ( number.resultsperpage ) %]&amp;resultsperpage=[% number.resultsperpage %][% END %]&amp;type=intra">[% number.number %]</a>
+    <a href="parcels.pl?booksellerid=[% booksellerid | html %]&amp;startfrom=[% number.startfrom | html %][% IF ( number.datefrom ) %]&amp;datefrom=[% number.datefrom | html %][% END %][% IF ( number.dateto ) %]&amp;dateto=[% number.dateto | html %][% END %][% IF ( number.code ) %]&amp;filter=[% number.code | html %][% END %][% IF ( number.orderby ) %]&amp;orderby=[% number.orderby | html %][% END %][% IF ( number.resultsperpage ) %]&amp;resultsperpage=[% number.resultsperpage | html %][% END %]&amp;type=intra">[% number.number | html %]</a>
     [% END %]
 [% END %]
 [% IF ( displaynext ) %]
-    <a href="parcels.pl?booksellerid=[% booksellerid %]&amp;startfrom=[% nextstartfrom %][% IF ( datefrom ) %]&amp;datefrom=[% datefrom %][% END %][% IF ( dateto ) %]&amp;dateto=[% dateto %][% END %][% IF ( code ) %]&amp;filter=[% code %][% END %][% IF ( orderby ) %]&amp;orderby=[% orderby %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage %][% END %]&amp;type=intra">Next &gt;&gt;</a>
+    <a href="parcels.pl?booksellerid=[% booksellerid | html %]&amp;startfrom=[% nextstartfrom | html %][% IF ( datefrom ) %]&amp;datefrom=[% datefrom | html %][% END %][% IF ( dateto ) %]&amp;dateto=[% dateto | html %][% END %][% IF ( code ) %]&amp;filter=[% code | html %][% END %][% IF ( orderby ) %]&amp;orderby=[% orderby | html %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage | html %][% END %]&amp;type=intra">Next &gt;&gt;</a>
 [% END %]
 </div>
 </div>
@@ -126,7 +127,7 @@
     <legend>Receive a new shipment</legend>
        <ol> <li>
             <label for="invoice" class="required">Vendor invoice:</label>
-            <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+            <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
             <input type="hidden" name="op" value="new" />
             <input type="text" size="20" id="invoice" name="invoice" class="focus required" required="required" />
         </li>
@@ -156,9 +157,9 @@
                 <option value="">No fund</option>
                 [% FOREACH budget IN budgets %]
                     [% IF ( budget.b_active ) %]
-                        <option value="[% budget.b_id %]">[% budget.b_txt %]</option>
+                        <option value="[% budget.b_id | html %]">[% budget.b_txt | html %]</option>
                     [% ELSE %]
-                        <option value="[% budget.b_id %]" class="b_inactive">[% budget.b_txt %] (inactive)</option>
+                        <option value="[% budget.b_id | html %]" class="b_inactive">[% budget.b_txt | html %] (inactive)</option>
                     [% END %]
                 [% END %]
             </select>
@@ -168,7 +169,7 @@
         </li>
 		</ol>
     </fieldset>
-            <fieldset class="action"><input type="submit" class="button" value="Next" /> <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">Cancel</a></fieldset>
+            <fieldset class="action"><input type="submit" class="button" value="Next" /> <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">Cancel</a></fieldset>
         </form>
     </div>
 </div>
@@ -178,10 +179,10 @@
     <fieldset class="brief">
 	<h4>Filter</h4>
         <ol>
-            <li> <input type="hidden" name="booksellerid" value="[% booksellerid %]" /></li>
-            <li><label for="filter">Invoice number:</label><input type="text" size="20" name="filter" value="[% filter %]" id="filter" /></li>
-            <li><label for="datefrom">From:</label><input type="text" size="9" id="datefrom" name="datefrom" value="[% datefrom %]" class="datepicker" /><br />
-                <label for="dateto">To:</label><input type="text" size="9" id="dateto" name="dateto" value="[% dateto %]" class="datepicker" /></li>
+            <li> <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" /></li>
+            <li><label for="filter">Invoice number:</label><input type="text" size="20" name="filter" value="[% filter | html %]" id="filter" /></li>
+            <li><label for="datefrom">From:</label><input type="text" size="9" id="datefrom" name="datefrom" value="[% datefrom | html %]" class="datepicker" /><br />
+                <label for="dateto">To:</label><input type="text" size="9" id="dateto" name="dateto" value="[% dateto | html %]" class="datepicker" /></li>
             <li><label for="orderby">Sort by :</label><select name="orderby" id="orderby">
                 <option value="invoicenumber">Invoice number</option>
                 <option value="shipmentdate">Shipment date</option>
@@ -195,14 +196,14 @@
                 <option value="100">100</option>
                 </select></li>
         </ol>
-	<fieldset class="action"><input type="submit" class="button" value="Filter" /> <a href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% booksellerid %]">Clear</a></fieldset>
+	<fieldset class="action"><input type="submit" class="button" value="Filter" /> <a href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% booksellerid | html %]">Clear</a></fieldset>
 	</fieldset>
 </form>[% END %]
 </div>
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/acquisitions-menu.js") %]
+    [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">

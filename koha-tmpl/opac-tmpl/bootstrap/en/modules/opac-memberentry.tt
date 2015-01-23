@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE Categories %]
@@ -8,7 +9,7 @@
 [% SET userupdateview = 1 %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; [% IF action == 'edit' %]Update your personal details[% ELSE %]Register a new account[% END %]</title>
+    <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; [% IF action == 'edit' %]Update your personal details[% ELSE %]Register a new account[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -67,7 +68,7 @@
                                 [% IF field == "B_email" %]<li>Alternate address information: <a href="#borrower_B_email">email address</a></li>[% END %]
                                 [% IF field == "password_match" %]<li>Passwords do not match! <a href="#password">password</a></li>[% END %]
                                 [% IF field == "password_too_short" %]
-                                    <li>Password must be at least [% minPasswordLength %] characters long.</li>
+                                    <li>Password must be at least [% minPasswordLength | html %] characters long.</li>
                                 [% END %]
                                 [% IF field == "password_too_weak" %]
                                     <li>Password must contain at least one digit, one lowercase and one uppercase.</li>
@@ -118,14 +119,14 @@
                                     <span id="update_privacy_guarantor_checkouts_message" class="alert" style="display:none"></span>
                                 </span>
                                 <span class="hint">
-                                    Your guarantor is <i>[% guarantor.firstname %] [% guarantor.surname %]</i>
+                                    Your guarantor is <i>[% guarantor.firstname | html %] [% guarantor.surname | html %]</i>
                                 </span>
                             </li>
                         </ol>
                     </fieldset>
                 [% END %]
                 [% IF ( extended_unique_id_failed_code ) %]
-                    <div class="alert" id="extended_unique_id_failed"><a href="#patron-attr-start-[% extended_unique_id_failed_code %]">[% extended_unique_id_failed_description _ ': ' %]</a> Value is already in use ([% extended_unique_id_failed_value %])</div>
+                    <div class="alert" id="extended_unique_id_failed"><a href="#patron-attr-start-[% extended_unique_id_failed_code | html %]">[% extended_unique_id_failed_description _ ': ' | html %]</a> Value is already in use ([% extended_unique_id_failed_value | html %])</div>
                 [% END %]
 
                 <form method="post" action="/cgi-bin/koha/opac-memberentry.pl" id="memberentry-form" autocomplete="off">
@@ -144,22 +145,22 @@
                                         <label for="borrower_cardnumber">Library card number:</label>
                                     [% END %]
                                     [% IF borrower && !(cardnumber_wrong_length || cardnumber_already_exists) %]
-                                        [% borrower.cardnumber %]
+                                        [% borrower.cardnumber | html %]
                                     [% ELSE %]
                                         [% IF minlength_cardnumber == maxlength_cardnumber %]
-                                            <input type="text" id="borrower_cardnumber" name="borrower_cardnumber" size="20" value="[% borrower.cardnumber %]" minlength="[% minlength_cardnumber %]" maxlength="[% maxlength_cardnumber %]" />
+                                            <input type="text" id="borrower_cardnumber" name="borrower_cardnumber" size="20" value="[% borrower.cardnumber | html %]" minlength="[% minlength_cardnumber | html %]" maxlength="[% maxlength_cardnumber | html %]" />
                                             [% IF ( mandatory.defined('cardnumber') ) %]<span class="required">Required</span>[% END %]
-                                            <div class="hint">Card number must be exactly [% minlength_cardnumber %] characters.</div>
+                                            <div class="hint">Card number must be exactly [% minlength_cardnumber | html %] characters.</div>
                                         [% ELSIF minlength_cardnumber && maxlength_cardnumber %]
-                                            <input type="text" id="borrower_cardnumber" name="borrower_cardnumber" size="20" value="[% borrower.cardnumber %]" minlength="[% minlength_cardnumber %]" maxlength="[% maxlength_cardnumber %]" />
+                                            <input type="text" id="borrower_cardnumber" name="borrower_cardnumber" size="20" value="[% borrower.cardnumber | html %]" minlength="[% minlength_cardnumber | html %]" maxlength="[% maxlength_cardnumber | html %]" />
                                             [% IF ( mandatory.defined('cardnumber') ) %]<span class="required">Required</span>[% END %]
-                                            <div class="hint">Card number must be between [% minlength_cardnumber %] and [% maxlength_cardnumber %] characters.</div>
+                                            <div class="hint">Card number must be between [% minlength_cardnumber | html %] and [% maxlength_cardnumber | html %] characters.</div>
                                         [% ELSIF maxlength_cardnumber %]
-                                            <input type="text" id="borrower_cardnumber" name="borrower_cardnumber" size="20" value="[% borrower.cardnumber %]" maxlength="[% maxlength_cardnumber %]" />
+                                            <input type="text" id="borrower_cardnumber" name="borrower_cardnumber" size="20" value="[% borrower.cardnumber | html %]" maxlength="[% maxlength_cardnumber | html %]" />
                                             [% IF ( mandatory.defined('cardnumber') ) %]<span class="required">Required</span>[% END %]
-                                            <div class="hint">Card number can be up to [% maxlength_cardnumber %] characters.</div>
+                                            <div class="hint">Card number can be up to [% maxlength_cardnumber | html %] characters.</div>
                                         [% ELSE %]
-                                            <input type="text" id="borrower_cardnumber" name="borrower_cardnumber" size="20" value="[% borrower.cardnumber %]" />
+                                            <input type="text" id="borrower_cardnumber" name="borrower_cardnumber" size="20" value="[% borrower.cardnumber | html %]" />
                                             [% IF ( mandatory.defined('cardnumber') ) %]<span class="required">Required</span>[% END %]
                                             <div class="hint">There is no minimum or maximum character length.</div>
                                         [% END %]
@@ -170,7 +171,7 @@
                                 [% UNLESS hidden.defined('dateexpiry') %]
                                 <li>
                                     <label>Expiration date:</label>
-                                    [% borrower.dateexpiry | $KohaDates  %]
+                                    [% borrower.dateexpiry | $KohaDates | html %]
                                 </li>
                                 [% END %]
 
@@ -185,9 +186,9 @@
                                         <select id="borrower_branchcode" name="borrower_branchcode">
                                             [% FOREACH l IN libraries %]
                                                 [% IF l.branchcode == borrower.branchcode %]
-                                                    <option value="[% l.branchcode | html %]" selected="selected">[% l.branchname %]</option>
+                                                    <option value="[% l.branchcode | html %]" selected="selected">[% l.branchname | html %]</option>
                                                 [% ELSE %]
-                                                    <option value="[% l.branchcode | html %]">[% l.branchname %]</option>
+                                                    <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
                                                 [% END %]
                                             [% END %]
                                         </select>
@@ -200,15 +201,15 @@
                                         Category:</label>
 
                                         [% IF borrower %]
-                                            [% Categories.GetName( borrower.categorycode ) %]
-                                            <input type="hidden" name="borrower_categorycode" value="[% borrower.categorycode %]" />
+                                            [% Categories.GetName( borrower.categorycode ) | html %]
+                                            <input type="hidden" name="borrower_categorycode" value="[% borrower.categorycode | html %]" />
                                         [% ELSE %]
                                             <select id="borrower_categorycode" name="borrower_categorycode">
                                                 [% FOREACH c IN Categories.all() %]
                                                     [% IF c.categorycode == Koha.Preference('PatronSelfRegistrationDefaultCategory') %]
-                                                        <option value="[% c.categorycode %]" selected="selected">[% c.description %]</option>
+                                                        <option value="[% c.categorycode | html %]" selected="selected">[% c.description | html %]</option>
                                                     [% ELSE %]
-                                                        <option value="[% c.categorycode %]">[% c.description %]</option>
+                                                        <option value="[% c.categorycode | html %]">[% c.description | html %]</option>
                                                     [% END %]
                                                 [% END %]
                                             </select>
@@ -243,9 +244,9 @@
                                                 <option value=""></option>
                                                 [% FOREACH mt IN Koha.Preference('BorrowersTitles').split('\|') %]
                                                     [% IF mt == borrower.title %]
-                                                        <option value="[% mt %]" selected="selected">[% mt %]</option>
+                                                        <option value="[% mt | html %]" selected="selected">[% mt | html %]</option>
                                                     [% ELSE %]
-                                                        <option value="[% mt %]">[% mt %]</option>
+                                                        <option value="[% mt | html %]">[% mt | html %]</option>
                                                     [% END %]
                                                 [% END %]
                                             </select>
@@ -260,7 +261,7 @@
                                                 <label for="borrower_surname">Surname:</label>
                                             [% END %]
 
-                                            <input type="text" id="borrower_surname" name="borrower_surname" value="[% borrower.surname %]" />
+                                            <input type="text" id="borrower_surname" name="borrower_surname" value="[% borrower.surname | html %]" />
                                             [% IF mandatory.defined('surname') %]<span class="required">Required</span>[% END %]
                                         </li>
                                     [% END %]
@@ -273,7 +274,7 @@
                                                 <label for="borrower_firstname">First name:</label>
                                             [% END %]
 
-                                            <input type="text" id="borrower_firstname" name="borrower_firstname" value="[% borrower.firstname %]" />
+                                            <input type="text" id="borrower_firstname" name="borrower_firstname" value="[% borrower.firstname | html %]" />
                                             [% IF mandatory.defined('firstname') %]<span class="required">Required</span>[% END %]
                                         </li>
                                     [% END %]
@@ -306,7 +307,7 @@
                                                 <label for="borrower_initials">Initials:</label>
                                             [% END %]
 
-                                            <input type="text" id="borrower_initials" name="borrower_initials" value="[% borrower.initials %]" />
+                                            <input type="text" id="borrower_initials" name="borrower_initials" value="[% borrower.initials | html %]" />
                                             [% IF mandatory.defined('initials') %]<span class="required">Required</span>[% END %]
                                         </li>
                                     [% END %]
@@ -319,7 +320,7 @@
                                                 <label for="borrower_othernames">Other names:</label>
                                             [% END %]
 
-                                            <input type="text" id="borrower_othernames" name="borrower_othernames" value="[% borrower.othernames %]" />
+                                            <input type="text" id="borrower_othernames" name="borrower_othernames" value="[% borrower.othernames | html %]" />
                                             [% IF mandatory.defined('othernames') %]<span class="required">Required</span>[% END %]
                                         </li>
                                     [% END %]
@@ -377,7 +378,7 @@
                                         <label for="borrower_streetnumber">Street number:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_streetnumber" name="borrower_streetnumber" value="[% borrower.streetnumber %]" />
+                                    <input type="text" id="borrower_streetnumber" name="borrower_streetnumber" value="[% borrower.streetnumber | html %]" />
                                     [% IF mandatory.defined('streetnumber') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -390,7 +391,7 @@
                                         <label for="borrower_address">Address:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_address" name="borrower_address" value="[% borrower.address %]" />
+                                    <input type="text" id="borrower_address" name="borrower_address" value="[% borrower.address | html %]" />
                                     [% IF mandatory.defined('address') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -403,7 +404,7 @@
                                         <label for="borrower_address2">Address 2:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_address2" name="borrower_address2" value="[% borrower.address2 %]" />
+                                    <input type="text" id="borrower_address2" name="borrower_address2" value="[% borrower.address2 | html %]" />
                                     [% IF mandatory.defined('address2') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -416,7 +417,7 @@
                                         <label for="borrower_city">City:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_city" name="borrower_city" value="[% borrower.city %]" />
+                                    <input type="text" id="borrower_city" name="borrower_city" value="[% borrower.city | html %]" />
                                     [% IF mandatory.defined('city') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -429,7 +430,7 @@
                                         <label for="borrower_state">State:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_state" name="borrower_state" value="[% borrower.state %]" />
+                                    <input type="text" id="borrower_state" name="borrower_state" value="[% borrower.state | html %]" />
                                     [% IF mandatory.defined('state') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -442,7 +443,7 @@
                                         <label for="borrower_zipcode">ZIP/Postal code:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_zipcode" name="borrower_zipcode" value="[% borrower.zipcode %]" />
+                                    <input type="text" id="borrower_zipcode" name="borrower_zipcode" value="[% borrower.zipcode | html %]" />
                                     [% IF mandatory.defined('zipcode') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -455,7 +456,7 @@
                                         <label for="borrower_country">Country:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_country" name="borrower_country" value="[% borrower.country %]" />
+                                    <input type="text" id="borrower_country" name="borrower_country" value="[% borrower.country | html %]" />
                                     [% IF mandatory.defined('country') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -478,7 +479,7 @@
                                         <label for="borrower_phone">Primary phone:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_phone" name="borrower_phone" value="[% borrower.phone %]" />
+                                    <input type="text" id="borrower_phone" name="borrower_phone" value="[% borrower.phone | html %]" />
                                     [% IF mandatory.defined('phone') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -491,7 +492,7 @@
                                         <label for="borrower_phonepro">Secondary phone:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_phonepro" name="borrower_phonepro" value="[% borrower.phonepro %]" />
+                                    <input type="text" id="borrower_phonepro" name="borrower_phonepro" value="[% borrower.phonepro | html %]" />
                                     [% IF mandatory.defined('phonepro') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -504,7 +505,7 @@
                                         <label for="borrower_mobile">Other phone:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_mobile" name="borrower_mobile" value="[% borrower.mobile %]" />
+                                    <input type="text" id="borrower_mobile" name="borrower_mobile" value="[% borrower.mobile | html %]" />
                                     [% IF mandatory.defined('mobile') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -517,7 +518,7 @@
                                         <label for="borrower_email">Primary email:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_email" name="borrower_email" value="[% borrower.email %]" />
+                                    <input type="text" id="borrower_email" name="borrower_email" value="[% borrower.email | html %]" />
                                     [% IF mandatory.defined('email') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -530,7 +531,7 @@
                                         <label for="borrower_emailpro">Secondary email:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_emailpro" name="borrower_emailpro" value="[% borrower.emailpro %]" />
+                                    <input type="text" id="borrower_emailpro" name="borrower_emailpro" value="[% borrower.emailpro | html %]" />
                                     [% IF mandatory.defined('emailpro') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -543,7 +544,7 @@
                                         <label for="borrower_fax">Fax:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_fax" name="borrower_fax" value="[% borrower.fax %]" />
+                                    <input type="text" id="borrower_fax" name="borrower_fax" value="[% borrower.fax | html %]" />
                                     [% IF mandatory.defined('fax') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -565,7 +566,7 @@
                                         <label for="borrower_B_address">Address:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_B_address" name="borrower_B_address" value="[% borrower.B_address %]" />
+                                    <input type="text" id="borrower_B_address" name="borrower_B_address" value="[% borrower.B_address | html %]" />
                                     [% IF mandatory.defined('B_address') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -578,7 +579,7 @@
                                         <label for="borrower_B_address2">Address 2:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_B_address2" name="borrower_B_address2" value="[% borrower.B_address2 %]" />
+                                    <input type="text" id="borrower_B_address2" name="borrower_B_address2" value="[% borrower.B_address2 | html %]" />
                                     [% IF mandatory.defined('B_address2') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -591,7 +592,7 @@
                                         <label for="borrower_B_city">City:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_B_city" name="borrower_B_city" value="[% borrower.B_city %]" />
+                                    <input type="text" id="borrower_B_city" name="borrower_B_city" value="[% borrower.B_city | html %]" />
                                     [% IF mandatory.defined('B_city') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -604,7 +605,7 @@
                                         <label for="borrower_B_state">State:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_B_state" name="borrower_B_state" value="[% borrower.B_state %]" />
+                                    <input type="text" id="borrower_B_state" name="borrower_B_state" value="[% borrower.B_state | html %]" />
                                     [% IF mandatory.defined('B_state') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -617,7 +618,7 @@
                                         <label for="borrower_B_zipcode">ZIP/Postal code:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_B_zipcode" name="borrower_B_zipcode" value="[% borrower.B_zipcode %]" />
+                                    <input type="text" id="borrower_B_zipcode" name="borrower_B_zipcode" value="[% borrower.B_zipcode | html %]" />
                                     [% IF mandatory.defined('B_zipcode') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -630,7 +631,7 @@
                                         <label for="borrower_B_country">Country:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_B_country" name="borrower_B_country" value="[% borrower.B_country %]" />
+                                    <input type="text" id="borrower_B_country" name="borrower_B_country" value="[% borrower.B_country | html %]" />
                                     [% IF mandatory.defined('B_country') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -643,7 +644,7 @@
                                         <label for="borrower_B_phone">Phone:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_B_phone" name="borrower_B_phone" value="[% borrower.B_phone %]" />
+                                    <input type="text" id="borrower_B_phone" name="borrower_B_phone" value="[% borrower.B_phone | html %]" />
                                     [% IF mandatory.defined('B_phone') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -656,7 +657,7 @@
                                         <label for="borrower_B_email">Email:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_B_email" name="borrower_B_email" value="[% borrower.B_email %]" />
+                                    <input type="text" id="borrower_B_email" name="borrower_B_email" value="[% borrower.B_email | html %]" />
                                     [% IF mandatory.defined('B_email') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -669,7 +670,7 @@
                                         <label for="borrower_contactnote">Contact note:</label>
                                     [% END %]
 
-                                    <textarea id="borrower_contactnote" name="borrower_contactnote" cols="30" rows="2">[% borrower.contactnote %]</textarea>
+                                    <textarea id="borrower_contactnote" name="borrower_contactnote" cols="30" rows="2">[% borrower.contactnote | html %]</textarea>
                                     [% IF mandatory.defined('contactnote') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -692,7 +693,7 @@
                                         <label for="borrower_altcontactsurname">Surname:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_altcontactsurname" name="borrower_altcontactsurname" value="[% borrower.altcontactsurname %]" />
+                                    <input type="text" id="borrower_altcontactsurname" name="borrower_altcontactsurname" value="[% borrower.altcontactsurname | html %]" />
                                     [% IF mandatory.defined('altcontactsurname') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -705,7 +706,7 @@
                                         <label for="borrower_altcontactfirstname">First name:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_altcontactfirstname" name="borrower_altcontactfirstname" value="[% borrower.altcontactfirstname %]" />
+                                    <input type="text" id="borrower_altcontactfirstname" name="borrower_altcontactfirstname" value="[% borrower.altcontactfirstname | html %]" />
                                     [% IF mandatory.defined('altcontactfirstname') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -718,7 +719,7 @@
                                         <label for="borrower_altcontactaddress1">Address:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_altcontactaddress1" name="borrower_altcontactaddress1" value="[% borrower.altcontactaddress1 %]" />
+                                    <input type="text" id="borrower_altcontactaddress1" name="borrower_altcontactaddress1" value="[% borrower.altcontactaddress1 | html %]" />
                                     [% IF mandatory.defined('altcontactaddress1') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -731,7 +732,7 @@
                                         <label for="borrower_altcontactaddress2">Address 2:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_altcontactaddress2" name="borrower_altcontactaddress2" value="[% borrower.altcontactaddress2 %]" />
+                                    <input type="text" id="borrower_altcontactaddress2" name="borrower_altcontactaddress2" value="[% borrower.altcontactaddress2 | html %]" />
                                     [% IF mandatory.defined('altcontactaddress2') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -744,7 +745,7 @@
                                         <label for="borrower_altcontactaddress3">City:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_altcontactaddress3" name="borrower_altcontactaddress3" value="[% borrower.altcontactaddress3 %]" />
+                                    <input type="text" id="borrower_altcontactaddress3" name="borrower_altcontactaddress3" value="[% borrower.altcontactaddress3 | html %]" />
                                     [% IF mandatory.defined('altcontactaddress3') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -757,7 +758,7 @@
                                         <label for="borrower_altcontactstate">State:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_altcontactstate" name="borrower_altcontactstate" value="[% borrower.altcontactstate %]" />
+                                    <input type="text" id="borrower_altcontactstate" name="borrower_altcontactstate" value="[% borrower.altcontactstate | html %]" />
                                     [% IF mandatory.defined('altcontactstate') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -770,7 +771,7 @@
                                         <label for="borrower_altcontactzipcode">ZIP/Postal code:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_altcontactzipcode" name="borrower_altcontactzipcode" value="[% borrower.altcontactzipcode %]" />
+                                    <input type="text" id="borrower_altcontactzipcode" name="borrower_altcontactzipcode" value="[% borrower.altcontactzipcode | html %]" />
                                     [% IF mandatory.defined('altcontactzipcode') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -783,7 +784,7 @@
                                         <label for="borrower_altcontactcountry">Country:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_altcontactcountry" name="borrower_altcontactcountry" value="[% borrower.altcontactcountry %]" />
+                                    <input type="text" id="borrower_altcontactcountry" name="borrower_altcontactcountry" value="[% borrower.altcontactcountry | html %]" />
                                     [% IF mandatory.defined('altcontactcountry') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -796,7 +797,7 @@
                                         <label for="borrower_altcontactphone">Phone:</label>
                                     [% END %]
 
-                                    <input type="text" id="borrower_altcontactphone" name="borrower_altcontactphone" value="[% borrower.altcontactphone %]" />
+                                    <input type="text" id="borrower_altcontactphone" name="borrower_altcontactphone" value="[% borrower.altcontactphone | html %]" />
                                     [% IF mandatory.defined('altcontactphone') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
@@ -808,7 +809,7 @@
                     <fieldset class="rows" id="memberentry_password">
                         <legend id="contact_legend">Password</legend>
                         <div class="alert alert-info">
-                            <p>Your password must be at least [% Koha.Preference('minPasswordLength') %] characters long.</p>
+                            <p>Your password must be at least [% Koha.Preference('minPasswordLength') | html %] characters long.</p>
                             [% UNLESS mandatory.defined('password') %]
                                 <div>If you do not enter a password a system generated password will be created.</div>
                             [% END %]
@@ -841,8 +842,8 @@
                 [% IF ( Koha.Preference('ExtendedPatronAttributes') && patron_attribute_classes.size && !Koha.Preference('PatronSelfRegistrationVerifyByEmail') ) %]
                     [% FOREACH pa_class IN patron_attribute_classes %]
                         [% IF pa_class.class %]
-                            <fieldset id="aai_[% pa_loo.class %]" class="rows patron-attributes">
-                            <legend>[% pa_class.lib %]</legend>
+                            <fieldset id="aai_[% pa_loo.class | html %]" class="rows patron-attributes">
+                            <legend>[% pa_class.lib | html %]</legend>
                         [% ELSE %]
                             <fieldset class="rows patron-attributes">
                             <legend>Additional information</legend>
@@ -850,29 +851,29 @@
                         <ol class="attributes_table">
                             [% FOREACH pa IN pa_class.items %]
                                 [% FOREACH pa_value IN pa.values %]
-                                    [% IF loop.first %]<a name="patron-attr-start-[% pa.type.code %]"></a>[% END %]
+                                    [% IF loop.first %]<a name="patron-attr-start-[% pa.type.code | html %]"></a>[% END %]
                                     [% form_id = 'patron-attr-' _ Math.int( Math.rand(1000000) ) %]
-                                    <li data-category_code="[% pa.type.category_code %]">
-                                        <label for="[% form_id %]">[% pa.type.description %]: </label>
+                                    <li data-category_code="[% pa.type.category_code | html %]">
+                                        <label for="[% form_id | html %]">[% pa.type.description | html %]: </label>
                                         [% IF pa.type.opac_editable %]
-                                            <input type="hidden" name="patron_attribute_code" value="[% pa.type.code |html %]" />
+                                            <input type="hidden" name="patron_attribute_code" value="[% pa.type.code | html %]" />
                                             [% IF ( pa.type.authorised_value_category ) %]
-                                                <select id="[% form_id %]" name="patron_attribute_value">
+                                                <select id="[% form_id | html %]" name="patron_attribute_value">
                                                     <option value=""></option>
                                                     [% FOREACH auth_val IN AuthorisedValues.Get( pa.type.authorised_value_category, 1 ) %]
                                                         [% IF ( auth_val.authorised_value == pa_value ) %]
-                                                            <option value="[% auth_val.authorised_value %]" selected="selected">
-                                                                [% auth_val.lib %]
+                                                            <option value="[% auth_val.authorised_value | html %]" selected="selected">
+                                                                [% auth_val.lib | html %]
                                                             </option>
                                                         [% ELSE %]
-                                                            <option value="[% auth_val.authorised_value %]" >
-                                                                [% auth_val.lib %]
+                                                            <option value="[% auth_val.authorised_value | html %]" >
+                                                                [% auth_val.lib | html %]
                                                             </option>
                                                         [% END %]
                                                     [% END %]
                                                 </select>
                                             [% ELSE %]
-                                                <textarea rows="2" cols="30" id="[% form_id %]" name="patron_attribute_value">[% pa_value %]</textarea>
+                                                <textarea rows="2" cols="30" id="[% form_id | html %]" name="patron_attribute_value">[% pa_value | html %]</textarea>
                                             [% END %]
                                             <a href="#" class="clear-attribute">Clear</a>
                                             [% IF ( pa.type.repeatable ) %]
@@ -901,9 +902,9 @@
                                 <label for="captcha" class="required">Verification:</label>
 
                                 <input type="text" name="captcha" id="captcha" />
-                                <input type="hidden" name="captcha_digest" value="[% captcha_digest %]" />
+                                <input type="hidden" name="captcha_digest" value="[% captcha_digest | html %]" />
 
-                                <span class="hint">Please type the following characters into the preceding box: <strong>[% captcha %]</strong></span>
+                                <span class="hint">Please type the following characters into the preceding box: <strong>[% captcha | html %]</strong></span>
                             </li>
                         </ol>
                     </fieldset>
@@ -913,7 +914,7 @@
                     [% IF OPACPatronDetails %]
                         <fieldset class="action">
                             <input type="hidden" name="action" value="update" />
-                            <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
+                            <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
                             <input type="submit" class="btn" value="Submit update request" />
                         </fieldset>
                     [% END %]
@@ -934,7 +935,7 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-    [% Asset.js("lib/jquery/plugins/jquery.validate.min.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.validate.min.js") | $raw %]
     [% PROCESS 'password_check.inc' %]
     [% PROCESS 'add_password_check' new_password => 'borrower_password' %]
     <script>

@@ -1,9 +1,10 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Acquisitions &rsaquo; Basket [% basketno %] &rsaquo; [% IF ( ordernumber ) %]Modify order details (line #[% ordernumber %])[% ELSE %]New order[% END %]</title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; Basket [% basketno | html %] &rsaquo; [% IF ( ordernumber ) %]Modify order details (line #[% ordernumber | html %])[% ELSE %]New order[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -12,7 +13,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Basket [% basketno %]</a> &rsaquo; [% IF ( ordernumber ) %]Modify order details (line #[% ordernumber %])[% ELSE %]New order[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% name | html %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | html %]">Basket [% basketno | html %]</a> &rsaquo; [% IF ( ordernumber ) %]Modify order details (line #[% ordernumber | html %])[% ELSE %]New order[% END %]</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -35,13 +36,13 @@
     <fieldset class="rows">
         <legend>Basket details</legend>
         <ol>
-        [% IF ( basketnote ) %]<li><span class="label">Internal note:</span> [% basketnote %]</li>[% END %]
-        [% IF ( basketbooksellernote ) %]<li><span class="label">Vendor note:</span> [% basketbooksellernote %]</li>[% END %]
+        [% IF ( basketnote ) %]<li><span class="label">Internal note:</span> [% basketnote | html %]</li>[% END %]
+        [% IF ( basketbooksellernote ) %]<li><span class="label">Vendor note:</span> [% basketbooksellernote | html %]</li>[% END %]
         [% IF ( basketcontractno ) %]
-            <li><span class="label">Contract number: </span>[% basketcontractno %]</li>
-            <li><span class="label">Contract name:</span> <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% basketcontractno %]">[% basketcontractname %]</a></li>
+            <li><span class="label">Contract number: </span>[% basketcontractno | html %]</li>
+            <li><span class="label">Contract name:</span> <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% basketcontractno | html %]">[% basketcontractname | html %]</a></li>
         [% END %]
-        [% IF ( authorisedbyname ) %]<li><span class="label">Managed by:</span>  [% authorisedbyname %]</li>[% END %]
+        [% IF ( authorisedbyname ) %]<li><span class="label">Managed by:</span>  [% authorisedbyname | html %]</li>[% END %]
         [% IF ( creationdate ) %]<li><span class="label">Open on:</span>  [% creationdate | $KohaDates %]</li>[% END %]
         [% IF ( closedate ) %]
         <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post">
@@ -50,15 +51,15 @@
             <li>Basketgroup: <select id="basketgroupid" name="basketgroupid">
                 [% FOREACH basketgroup IN basketgroups %]
                     [% IF ( basketgroup.default ) %]
-                    <option value="[% basketgroup.id %]" selected="selected">[% basketgroup.name %]</option>
+                    <option value="[% basketgroup.id | html %]" selected="selected">[% basketgroup.name | html %]</option>
                     [% ELSE %]
-                    <option value="[% basketgroup.id %]">[% basketgroup.name %]</option>
+                    <option value="[% basketgroup.id | html %]">[% basketgroup.name | html %]</option>
                     [% END %]
                 [% END %]
                 </select>
-                <input type="hidden" id="basketno" value="[% basketno %]" name="basketno" />
+                <input type="hidden" id="basketno" value="[% basketno | html %]" name="basketno" />
                 <input type="hidden" value="mod_basket" name="op" />
-                <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+                <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
             </li>
             <fieldset class="action"><input type="submit" value="Change basketgroup" /></fieldset>
         [% END %]
@@ -79,13 +80,13 @@
                 <div style="float:left">
                     <ul id="users_names" style="padding-left:0">
                       [% FOREACH user IN users %]
-                        <li id="user_[% user.borrowernumber %]">
-                            [% user.firstname %] [% user.surname %]
-                            [<a onclick="del_user([% user.borrowernumber %]);" style="cursor:pointer">Delete user</a>]
+                        <li id="user_[% user.borrowernumber | html %]">
+                            [% user.firstname | html %] [% user.surname | html %]
+                            [<a onclick="del_user([% user.borrowernumber | html %]);" style="cursor:pointer">Delete user</a>]
                         </li>
                       [% END %]
                     </ul>
-                    <input type="hidden" id="users_ids" name="users_ids" value="[% users_ids %]" />
+                    <input type="hidden" id="users_ids" name="users_ids" value="[% users_ids | html %]" />
                     <input type="hidden" id="op" name="op" value="mod_users" />
                     <input type="button" id="add_user" onclick="UserSearchPopup();" value="Add user" />
                 </div>
@@ -97,100 +98,100 @@
         <legend>
             Catalog details
             [% IF ( biblionumber ) %]
-                <span><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber %]"> Edit record</a></span>
+                <span><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber | html %]"> Edit record</a></span>
             [% END %]
         </legend>
         [% UNLESS ( existing ) %]
         <input type="hidden" name="existing" value="no" />
         [% END %]
-        <input type="hidden" name="ordernumber" value="[% ordernumber %]" />
-        <input type="hidden" name="basketno" value="[% basketno %]" />
-        <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
-        <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
-        <input type="hidden" name="listinc" id="listinc" value="[% listincgst %]" />
-        <input type="hidden" name="invoiceincgst" id="invoiceincgst" value="[% invoiceincgst %]" />
-        <input type="hidden" name="suggestionid" value="[% suggestionid %]" />
-        <input type="hidden" name="import_batch_id" value="[% import_batch_id %]" />
+        <input type="hidden" name="ordernumber" value="[% ordernumber | html %]" />
+        <input type="hidden" name="basketno" value="[% basketno | html %]" />
+        <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
+        <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+        <input type="hidden" name="listinc" id="listinc" value="[% listincgst | html %]" />
+        <input type="hidden" name="invoiceincgst" id="invoiceincgst" value="[% invoiceincgst | html %]" />
+        <input type="hidden" name="suggestionid" value="[% suggestionid | html %]" />
+        <input type="hidden" name="import_batch_id" value="[% import_batch_id | html %]" />
 
         [% FOREACH c IN currencies %]
-            <input type="hidden" id="currency_rate_[% c.currency %]"  name="[% c.currency %]" value="[% c.rate %]" />
+            <input type="hidden" id="currency_rate_[% c.currency | html %]"  name="[% c.currency | html %]" value="[% c.rate | html %]" />
         [% END %]
 
         [% IF NOT Koha.Preference('UseACQFrameworkForBiblioRecords') OR NoACQframework %]
             <ol><li>
                 [% IF ( biblionumber ) %]
                 <span class="label">Title</span>
-                    <input type="hidden" name="title" value="[% title |html %]" /> <span class="title">[% title |html %]</span>
+                    <input type="hidden" name="title" value="[% title | html %]" /> <span class="title">[% title | html %]</span>
                 [% ELSE %]
                 <label for="entertitle">Title: </label>
-                    <input type="text" id="entertitle" size="50" name="title" value="[% title |html %]" class="focus" required="required" />
+                    <input type="text" id="entertitle" size="50" name="title" value="[% title | html %]" class="focus" required="required" />
                     <span class="required">Required</span>
                 [% END %]
             </li>
             <li>
                 [% IF ( biblionumber ) %]
                 <span class="label">Author: </span>
-                    <input type="hidden" name="author" id="author" value="[% author %]" />[% author %]
+                    <input type="hidden" name="author" id="author" value="[% author | html %]" />[% author | html %]
                 [% ELSE %]
                 <label for="author">Author: </label>
-                    <input type="text" size="50" name="author" id="author" value="[% author %]" />
+                    <input type="text" size="50" name="author" id="author" value="[% author | html %]" />
                 [% END %]
             </li>
             <li>
                 [% IF ( biblionumber ) %]
                 <span class="label">Publisher: </span>
-                    <input type="hidden" name="publishercode" id="publishercode" value="[% publishercode %]" />[% publishercode %]
+                    <input type="hidden" name="publishercode" id="publishercode" value="[% publishercode | html %]" />[% publishercode | html %]
                 [% ELSE %]
                 <label for="publishercode"> Publisher: </label>
-                    <input type="text" size="50" name="publishercode" id="publishercode" value="[% publishercode %]" />
+                    <input type="text" size="50" name="publishercode" id="publishercode" value="[% publishercode | html %]" />
                 [% END %]
             </li>
             <li>
                 [% IF ( biblionumber ) %]
                 <span class="label">Edition: </span>
-                    <input type="hidden" name="editionstatement" id="editionstatement" value="[% editionstatement %]" />[% editionstatement %]
+                    <input type="hidden" name="editionstatement" id="editionstatement" value="[% editionstatement | html %]" />[% editionstatement | html %]
 
                 [% ELSE %]
                 <label for="editionstatement">Edition: </label>
-                    <input type="text" size="20" name="editionstatement" id="editionstatement" value="[% editionstatement %]" />
+                    <input type="text" size="20" name="editionstatement" id="editionstatement" value="[% editionstatement | html %]" />
                 [% END %]
             </li>
             <li>
                 [% IF ( biblionumber ) %]
                 <span class="label">Publication year: </span>
-                    <input type="hidden" name="publicationyear" id="publicationyear" value="[% publicationyear %]" />[% publicationyear %]
+                    <input type="hidden" name="publicationyear" id="publicationyear" value="[% publicationyear | html %]" />[% publicationyear | html %]
                 [% ELSE %]
                 <label for="publicationyear">Publication year: </label>
-                    <input type="text" size="10" name="publicationyear" id="publicationyear" value="[% publicationyear %]" />
+                    <input type="text" size="10" name="publicationyear" id="publicationyear" value="[% publicationyear | html %]" />
                 [% END %]
             </li>
             <li>
                 [% IF ( biblionumber ) %]
                 <span class="label">ISBN: </span>
-                    <input type="hidden" name="isbn" id="ISBN" value="[% isbn %]" />[% isbn %]
+                    <input type="hidden" name="isbn" id="ISBN" value="[% isbn | html %]" />[% isbn | html %]
                 [% ELSE %]
                 <label for="ISBN">ISBN: </label>
-                    <input type="text" size="50" name="isbn" id="ISBN" value="[% isbn %]" />
+                    <input type="text" size="50" name="isbn" id="ISBN" value="[% isbn | html %]" />
                 [% END %]
             </li>
             [% IF (UNIMARC) %]
             <li>
                 [% IF ( biblionumber ) %]
                 <span class="label">EAN: </span>
-                    <input type="hidden" name="ean" id="EAN" value="[% ean %]" />[% ean %]
+                    <input type="hidden" name="ean" id="EAN" value="[% ean | html %]" />[% ean | html %]
                 [% ELSE %]
                 <label for="EAN">EAN: </label>
-                    <input type="text" size="20" name="ean" id="EAN" value="[% ean %]" />
+                    <input type="text" size="20" name="ean" id="EAN" value="[% ean | html %]" />
                 [% END %]
             </li>
             [% END %]
             <li>
                 [% IF ( biblionumber ) %]
                 <span class="label">Series: </span>
-                    <input type="hidden" name="series" id="series" value="[% seriestitle %]" />[% seriestitle %]
+                    <input type="hidden" name="series" id="series" value="[% seriestitle | html %]" />[% seriestitle | html %]
                 [% ELSE %]
                 <label for="series">Series: </label>
-                    <input type="text" size="50" name="series" id="series" value="[% seriestitle %]" />
+                    <input type="text" size="50" name="series" id="series" value="[% seriestitle | html %]" />
                 [% END %]
             </li>
                 [% UNLESS ( biblionumber ) %]
@@ -199,7 +200,7 @@
                     <span class="label">Item type:</span>
                     <select name="itemtype" style="width:12em;">
                     [% FOREACH itemtype IN itemtypeloop %]
-                        <option value="[% itemtype.itemtype %]">[% itemtype.description %]</option>
+                        <option value="[% itemtype.itemtype | html %]">[% itemtype.description | html %]</option>
                     [% END %]
                     </select>
                 </li>
@@ -213,8 +214,8 @@
                     [% FOREACH field IN catalog_details %]
                         <li>
                             <div class="subfield_line">
-                                <label>[% field.lib %] ([% field.tag %][% field.subfield %])</label>
-                                [% field.value %]
+                                <label>[% field.lib | html %] ([% field.tag | html %][% field.subfield | html %])</label>
+                                [% field.value | html %]
                             </div>
                         </li>
                     [% END %]
@@ -239,7 +240,7 @@
         <ol>
           <li>
             <span class="label">Suggested by: </span>
-            [% surnamesuggestedby %][% IF ( firstnamesuggestedby ) %], [% firstnamesuggestedby %][% END %] (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% suggestionid %]&amp;op=show">suggestion #[% suggestionid %]</a>)
+            [% surnamesuggestedby | html %][% IF ( firstnamesuggestedby ) %], [% firstnamesuggestedby | html %][% END %] (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% suggestionid | html %]&amp;op=show">suggestion #[% suggestionid | html %]</a>)
           </li>
         </ol>
         </fieldset>
@@ -284,13 +285,13 @@
           [% END %]
 
           [% UNLESS Koha.Preference('autoBarcode') == 'OFF' %]
-              <div class="dialog message">The autoBarcode system preference is set to [% Koha.Preference('autoBarcode') %] and items with blank barcodes will have barcodes generated upon save to database</div>
+              <div class="dialog message">The autoBarcode system preference is set to [% Koha.Preference('autoBarcode') | html %] and items with blank barcodes will have barcodes generated upon save to database</div>
           [% END %]
 
           <div id="outeritemblock"></div>
 
       </fieldset>
-      [% END %][%# UNLESS subscriptionid %]
+      [% END %][%# | html UNLESS subscriptionid %]
     [% END %][%# IF (AcqCreateItemOrdering) %]
     <fieldset class="rows">
         <legend>Accounting details</legend>
@@ -298,7 +299,7 @@
             <li>
                 [% IF ( close ) %]
                     <span class="label required">Quantity: </span>
-                    <input type="hidden" name="quantity" value="[% quantity %]" />[% quantity %]
+                    <input type="hidden" name="quantity" value="[% quantity | html %]" />[% quantity | html %]
                 [% ELSE %]
                     <label class="required" for="quantity">Quantity: </label>
                     [% IF (AcqCreateItemOrdering) %]
@@ -311,7 +312,7 @@
                         [% IF subscriptionid || basket.is_standing %]
                             <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="1" />
                         [% ELSE %]
-                            <input type="text" size="20" id="quantity" name="quantity" value="[% quantityrec %]" onchange="updateCosts();" />
+                            <input type="text" size="20" id="quantity" name="quantity" value="[% quantityrec | html %]" onchange="updateCosts();" />
                         [% END %]
                     [% END %]
                     <span class="required">Required</span>
@@ -322,34 +323,34 @@
             <li>
                 [% IF ( close ) %]
             <span class="label required">Fund: </span>
-                    <input type="hidden" name="budget_id" id="budget_id" value="[% budget_id %]" />[% Budget_name %]
+                    <input type="hidden" name="budget_id" id="budget_id" value="[% budget_id | html %]" />[% Budget_name | html %]
                 [% ELSE %]
                 <label class="required" for="budget_id">Fund: </label>
-                [% active_count = 0 %]
+                [% active_count = 0 | html %]
                 [% IF !ordernumber %]
                     [% FOREACH budget_loo IN budget_loop %]
-                        [% active_count= active_count + budget_loo.b_active %]
+                        [% active_count= active_count + budget_loo.b_active | html %]
                     [% END %]
                 [% END %]
                 <select id="budget_id" size="1" name="budget_id">
                     <option value="">Select a fund</option>
                 [% FOREACH budget_loo IN budget_loop %]
                     [% IF ( budget_loo.b_sel ) %]
-                        [% active_count = 0 #select no other fund %]
-                        <option value="[% budget_loo.b_id %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat %]"
-                                style="padding-left:[% budget_loo.b_level %]em;"
+                        [% active_count = 0 #select no other fund | html %]
+                        <option value="[% budget_loo.b_id | html %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]"
+                                style="padding-left:[% budget_loo.b_level | html %]em;"
                         >
                     [% ELSIF active_count==1 && budget_loo.b_active %]
-                        <option value="[% budget_loo.b_id %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat %]"
-                                style="padding-left:[% budget_loo.b_level %]em;"
+                        <option value="[% budget_loo.b_id | html %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]"
+                                style="padding-left:[% budget_loo.b_level | html %]em;"
                         >
                     [% ELSE %]
-                        [% bdgclass=budget_loo.b_active? "": "b_inactive" %]
-                        <option value="[% budget_loo.b_id %]" class="[% bdgclass %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat %]"
-                                style="padding-left:[% budget_loo.b_level %]em;"
+                        [% bdgclass=budget_loo.b_active? "": "b_inactive" | html %]
+                        <option value="[% budget_loo.b_id | html %]" class="[% bdgclass | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]"
+                                style="padding-left:[% budget_loo.b_level | html %]em;"
                         >
                     [% END %]
-                    [% budget_loo.b_txt %][% IF !budget_loo.b_active %] (inactive)[% END %]
+                    [% budget_loo.b_txt | html %][% IF !budget_loo.b_active %] (inactive)[% END %]
                     </option>
                 [% END %]
                 </select>
@@ -361,15 +362,15 @@
 		<li>
                 [% IF ( close ) %]
 			<span class="label">Currency: </span>
-            <input type="hidden" name="currency" id="currency" value="[% currency %]" />[% currency %]
+            <input type="hidden" name="currency" id="currency" value="[% currency | html %]" />[% currency | html %]
                 [% ELSE %]
 			<label for="currency">Currency:</label>
             <select name="currency" id="currency" onchange="updateCosts();">
                 [% FOREACH c IN currencies %]
                     [% IF ordernumber and c.currency == currency or not ordernumber and c.currency == vendor_currency %]
-                        <option value="[% c.currency %]" selected="selected">[% c.currency %]</option>
+                        <option value="[% c.currency | html %]" selected="selected">[% c.currency | html %]</option>
                     [% ELSIF not c.archived %]
-                        <option value="[% c.currency %]">[% c.currency %]</option>
+                        <option value="[% c.currency | html %]">[% c.currency | html %]</option>
                     [% END %]
                 [% END %]
             </select>
@@ -378,10 +379,10 @@
             <li>
                 [% IF ( close ) %]
                     <span class="label">Vendor price: </span>
-                    <input type="hidden" name="listprice" id="listprice" value="[% listprice %]" />[% listprice %] [% IF (listincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
+                    <input type="hidden" name="listprice" id="listprice" value="[% listprice | html %]" />[% listprice | html %] [% IF (listincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
                 [% ELSE %]
                 <label for="listprice">Vendor price: </label>
-                    <input type="text" size="20" name="listprice" id="listprice" value="[% listprice %]" onchange="updateCosts()" /> [% IF (listincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
+                    <input type="text" size="20" name="listprice" id="listprice" value="[% listprice | html %]" onchange="updateCosts()" /> [% IF (listincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
                 [% END %]
             </li>
             [% UNLESS ( close ) %]
@@ -398,15 +399,15 @@
                 <li>
                     [% IF ( close ) %]
                         <span class="label">Tax rate: </span>
-                        <input type="hidden" name="tax_rate" id="tax_rate" value="[% tax_rate %]" />[% tax_rate %]%
+                        <input type="hidden" name="tax_rate" id="tax_rate" value="[% tax_rate | html %]" />[% tax_rate | html %]%
                     [% ELSE %]
                         <label for="tax_rate">Tax rate: </label>
                         <select name="tax_rate" id="tax_rate" onchange="updateCosts();">
                         [% FOREACH gst IN gst_values %]
                           [% IF ( gst.option == tax_rate ) %]
-                            <option value="[% gst.option %]" selected="selected">[% gst.option * 100 %]%</option>
+                            <option value="[% gst.option | html %]" selected="selected">[% gst.option * 100 | html %]%</option>
                           [% ELSE %]
-                            <option value="[% gst.option %]">[% gst.option * 100 %]%</option>
+                            <option value="[% gst.option | html %]">[% gst.option * 100 | html %]%</option>
                           [% END %]
                         [% END %]
                         </select>
@@ -419,71 +420,71 @@
                 <label for="discount">Discount: </label>
                 [% IF ( close ) %]
                     [% IF ( orderdiscount ) %]
-                        <input type="hidden" name="discount" id="discount" value="[% orderdiscount %]" />[% orderdiscount_2dp %]%
+                        <input type="hidden" name="discount" id="discount" value="[% orderdiscount | html %]" />[% orderdiscount_2dp | html %]%
                     [% ELSE %]
-                        <input type="hidden" name="discount" id="discount" value="[% discount %]" />[% discount_2dp %]%
+                        <input type="hidden" name="discount" id="discount" value="[% discount | html %]" />[% discount_2dp | html %]%
                     [% END %]
                 [% ELSE %]
                     [% IF ( orderdiscount ) %]
-                        <input type="text" size="6" name="discount" id="discount" value="[% orderdiscount %]" onchange="updateCosts();" />%
+                        <input type="text" size="6" name="discount" id="discount" value="[% orderdiscount | html %]" onchange="updateCosts();" />%
                     [% ELSE %]
-                        <input type="text" size="6" name="discount" id="discount" value="[% discount %]" onchange="updateCosts();" />%
+                        <input type="text" size="6" name="discount" id="discount" value="[% discount | html %]" onchange="updateCosts();" />%
                     [% END %]
                 [% END %]
             </li>
             <li>
                 [% IF ( close ) %]
                     <span class="label">Replacement cost: </span>
-                    <input type="hidden" name="rrp" id="rrp" value="[% rrp %]" />[% rrp %]  (adjusted for [% cur_active %], [% IF (listincgst == 1) %]tax inc.[% ELSE %]tax exc.[% END %])
+                    <input type="hidden" name="rrp" id="rrp" value="[% rrp | html %]" />[% rrp | html %]  (adjusted for [% cur_active | html %], [% IF (listincgst == 1) %]tax inc.[% ELSE %]tax exc.[% END %])
                 [% ELSE %]
                     <label for="rrp">Replacement cost: </label>
-                    <input type="text" size="20" name="rrp" id="rrp" value="[% rrp %]" /> (adjusted for [% cur_active %], [% IF (listincgst == 1) %]tax inc.[% ELSE %]tax exc.[% END %])
+                    <input type="text" size="20" name="rrp" id="rrp" value="[% rrp | html %]" /> (adjusted for [% cur_active | html %], [% IF (listincgst == 1) %]tax inc.[% ELSE %]tax exc.[% END %])
                 [% END %]
             </li>
             <li>
                 <label for="ecost">Budgeted cost: </label>
-                <input type="text" size="20" name="ecost" id="ecost" value="[% ecost %]" readonly="readonly"  /> [% IF (listincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
+                <input type="text" size="20" name="ecost" id="ecost" value="[% ecost | html %]" readonly="readonly"  /> [% IF (listincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
             </li>
             <li>
                 <label for="total">Total: </label>
-                <input type="text" id="total" size="20" name="total" value="[% total %]" readonly="readonly" /> (budgeted cost * quantity)
+                <input type="text" id="total" size="20" name="total" value="[% total | html %]" readonly="readonly" /> (budgeted cost * quantity)
             </li>
             <li>
                 [% IF ( close ) %]
                     <label for="unitprice">Actual cost: </label>
-                    <input type="text" id="unitprice" size="20" name="unitprice" value="[% unitprice %]" readonly="readonly" /> [% IF (invoiceincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
+                    <input type="text" id="unitprice" size="20" name="unitprice" value="[% unitprice | html %]" readonly="readonly" /> [% IF (invoiceincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
                 [% ELSE %]
                     <label for="unitprice">Actual cost: </label>
-                    <input type="text" id="unitprice" size="20" name="unitprice" value="[% unitprice %]" /> [% IF (invoiceincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
+                    <input type="text" id="unitprice" size="20" name="unitprice" value="[% unitprice | html %]" /> [% IF (invoiceincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
                 [% END %]
             </li>
             <li>
                 <label for="order_internalnote">Internal note: </label>
-                <textarea id="order_internalnote" cols="30" rows="3" name="order_internalnote" >[% IF ( order_internalnote ) %][% order_internalnote %][% END %]</textarea>
+                <textarea id="order_internalnote" cols="30" rows="3" name="order_internalnote" >[% IF ( order_internalnote ) %][% order_internalnote | html %][% END %]</textarea>
             </li>
             <li>
                 <label for="order_vendornote">Vendor note: </label>
-                <textarea id="order_vendornote" cols="30" rows="3" name="order_vendornote" >[% IF ( order_vendornote ) %][% order_vendornote %][% END %]</textarea>
+                <textarea id="order_vendornote" cols="30" rows="3" name="order_vendornote" >[% IF ( order_vendornote ) %][% order_vendornote | html %][% END %]</textarea>
             </li>
             <li><div class="hint">The 2 following fields are available for your own usage. They can be useful for statistical purposes</div>
                 <label for="sort1">Statistic 1: </label>
-                <input id="sort1" type="text" id="sort1" size="20" name="sort1" value="[% sort1 %]" />
+                <input id="sort1" type="text" id="sort1" size="20" name="sort1" value="[% sort1 | html %]" />
             <li>
                 <label for="sort2">Statistic 2: </label>
-                <input id="sort2" type="text" id="sort2" size="20" name="sort2" value="[% sort2 %]" />
+                <input id="sort2" type="text" id="sort2" size="20" name="sort2" value="[% sort2 | html %]" />
             </li>
         </ol>
     </fieldset>
     <fieldset class="action">
-        <input type="hidden" name="subscriptionid" value="[% subscriptionid %]" />
+        <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
         <input type="submit" value="Save" />
         [% IF (suggestionid) %]
-            <a class="cancel" href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Cancel</a>
+            <a class="cancel" href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]">Cancel</a>
         [% ELSE %]
             [% IF subscriptionid %]
-                <a class="cancel" href="/cgi-bin/koha/acqui/newordersubscription.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Cancel</a>
+                <a class="cancel" href="/cgi-bin/koha/acqui/newordersubscription.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]">Cancel</a>
             [% ELSE %]
-                <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Cancel</a>
+                <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | html %]">Cancel</a>
             [% END %]
         [% END %]
     </fieldset>
@@ -516,12 +517,12 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/acquisitions-menu.js") %]
-    [% Asset.js("js/acq.js") %]
+    [% Asset.js("js/acquisitions-menu.js") | $raw %]
+    [% Asset.js("js/acq.js") | $raw %]
     [% INCLUDE 'additem.js.inc' %]
-    [% Asset.js("js/additem.js") %]
-    [% Asset.js("js/cataloging.js") %]
-    [% Asset.js("js/prevent_submit.js") %]
+    [% Asset.js("js/additem.js") | $raw %]
+    [% Asset.js("js/cataloging.js") | $raw %]
+    [% Asset.js("js/prevent_submit.js") | $raw %]
     <script type="text/javascript">
         actTotal = "";
 
@@ -592,7 +593,7 @@
             }
 
             [% IF (AcqCreateItemOrdering) %]
-                if(check_additem('[% UniqueItemFields %]') == false) {
+                if(check_additem('[% UniqueItemFields | html %]') == false) {
                     alert(_("Duplicate values detected. Please correct the errors and resubmit.") );
                     if(tobedeleted) {
                         $(lastitemblock).appendTo('#outeritemblock');
@@ -604,7 +605,7 @@
 
         $(document).ready(function(){
             [% IF AcqCreateItemOrdering and not basket.is_standing %]
-                cloneItemBlock(0, '[% UniqueItemFields %]');
+                cloneItemBlock(0, '[% UniqueItemFields | html %]');
             [% END %]
 
             [% IF ( suggestionid ) %]updateCosts();[% END %]
@@ -617,14 +618,14 @@
                 [% IF ( acqcreate ) %]
                     $('#quantity').blur(function(){
                         // if user decreases the quantity
-                        if($(this).val() < [% quantityrec %]){
+                        if($(this).val() < [% quantityrec | html %]){
                             alert(_("You have deleted item(s) in the order, don't forget to delete it(them) in the catalog"));
                             return true;
                         } else {
                             // if user increases the quantity
                             alert(_("You can't add a new item, please create a new order line"));
                             // and we replace the original value
-                            $(this).val([% quantityrec %])
+                            $(this).val([% quantityrec | html %])
                             updateCosts(); // blur is invoked after change which updated values
                             return false;
                         }
@@ -703,7 +704,7 @@
 [% INCLUDE 'intranet-bottom.inc' %]
 
 [% BLOCK display_subfield %]
-    <label>[% field.lib %] ([% field.tag %][% field.subfield %])</label>
+    <label>[% field.lib | html %] ([% field.tag | html %][% field.subfield | html %])</label>
     [% IF field.authorised_value %]
         [% SWITCH field.authorised_value %]
         [% CASE 'branches' %]
@@ -730,14 +731,14 @@
         [% END %]
     [% ELSE %]
         [% IF field.mandatory %]
-        <input type="text" name="bib_field_value" value="[% field.value %]" required="required" size="50" />
+        <input type="text" name="bib_field_value" value="[% field.value | html %]" required="required" size="50" />
         [% ELSE %]
-        <input type="text" name="bib_field_value" value="[% field.value %]" size="50" />
+        <input type="text" name="bib_field_value" value="[% field.value | html %]" size="50" />
         [% END %]
 
     [% END %]
-    <input type="hidden" name="bib_kohafield" value="[% field.kohafield %]" />
-    <input type="hidden" name="bib_tag" value="[% field.tag %]" />
-    <input type="hidden" name="bib_subfield" value="[% field.subfield %]" />
+    <input type="hidden" name="bib_kohafield" value="[% field.kohafield | html %]" />
+    <input type="hidden" name="bib_tag" value="[% field.tag | html %]" />
+    <input type="hidden" name="bib_subfield" value="[% field.subfield | html %]" />
     [% IF field.mandatory %] <span class="required">Required</span>[% END %]
 [% END %]

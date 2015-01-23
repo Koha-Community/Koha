@@ -10,30 +10,30 @@
 </head>
 
 [% BLOCK actions %]
-    <div id="[% menuid %]" class="dropdown">
+    <div id="[% menuid | html %]" class="dropdown">
         <a class="btn btn-default btn-xs dropdown-toggle ar-actions" role="button" data-toggle="dropdown" href="#">
             Actions <b class="caret"></b>
         </a>
 
-        <ul class="dropdown-menu [% pull_right %]" role="menu" aria-labelledby="[% aria_menu %]">
+        <ul class="dropdown-menu [% pull_right | html %]" role="menu" aria-labelledby="[% aria_menu | html %]">
             <li>
-                <a class="ar-process-request" href="#" onclick="HandleMulti( Process, [% id_arg %], $(this) ); return false;">
+                <a class="ar-process-request" href="#" onclick="HandleMulti( Process, [% id_arg | html %], $(this) ); return false;">
                     <i class="fa fa-cog"></i>
                     Process request
                 </a>
 
-                <a class="ar-complete-request" href="#" onclick="HandleMulti( Complete, [% id_arg %], $(this) ); return false;">
+                <a class="ar-complete-request" href="#" onclick="HandleMulti( Complete, [% id_arg | html %], $(this) ); return false;">
                     <i class="fa fa-check-circle"></i>
                     Complete request
                 </a>
 
-                <a class="ar-cancel-request" href="#" onclick="HandleMulti( Cancel, [% id_arg %], $(this) ); return false;">
+                <a class="ar-cancel-request" href="#" onclick="HandleMulti( Cancel, [% id_arg | html %], $(this) ); return false;">
                     <i class="fa fa-minus-circle"></i>
                     Cancel request
                 </a>
 
                 [% IF id_arg %][%# TODO: Does not work with multi-select %]
-                <a class="ar-print-request" href="#" onclick="HandleMulti( PrintSlip, [% id_arg %], $(this) ); return false;">
+                <a class="ar-print-request" href="#" onclick="HandleMulti( PrintSlip, [% id_arg | html %], $(this) ); return false;">
                     <i class="fa fa-print"></i>
                     Print slip
                 </a>
@@ -66,9 +66,9 @@
                         <option value="">All libraries</option>
                         [% FOREACH b IN Branches.all( only_from_group => 1 ) %]
                             [% IF b.branchcode == branchcode %]
-                                <option value="[% b.branchcode %]" selected="selected">[% b.branchname %]</option>
+                                <option value="[% b.branchcode | html %]" selected="selected">[% b.branchname | html %]</option>
                             [% ELSE %]
-                                <option value="[% b.branchcode %]">[% b.branchname %]</option>
+                                <option value="[% b.branchcode | html %]">[% b.branchname | html %]</option>
                             [% END %]
                         [% END %]
                     </select>
@@ -81,13 +81,13 @@
                     <ul>
                         <li>
                             <a href="#article-requests-pending">
-                                Pending (<span id="ar_pending_count">[% article_requests_pending.count %]</span>)
+                                Pending (<span id="ar_pending_count">[% article_requests_pending.count | html %]</span>)
                             </a>
                         </li>
 
                         <li>
                             <a href="#article-requests-processing">
-                                Processing (<span id="ar_processing_count">[% article_requests_processing.count %]</span>)
+                                Processing (<span id="ar_processing_count">[% article_requests_processing.count | html %]</span>)
                             </a>
                         </li>
                     </ul>
@@ -125,71 +125,71 @@
 
                                 [% FOREACH ar IN article_requests_pending %]
                                     <tr class="ar-row ar-pending">
-                                        <td><input type="checkbox" reqid="[% ar.id %]"/></td>
+                                        <td><input type="checkbox" reqid="[% ar.id | html %]"/></td>
                                         <td class="ar-title">
                                             <p>
-                                                <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% ar.biblionumber %]">
+                                                <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% ar.biblionumber | html %]">
                                                     <strong>[% ar.biblio.title | html %]</strong>
-                                                    [% FOREACH s IN itemsloo.subtitle %] [% s %][% END %]
+                                                    [% FOREACH s IN itemsloo.subtitle %] [% s | html %][% END %]
                                                 </a>
                                             </p>
 
                                             <p>
-                                                <div class="ar-biblionumber content_hidden">[% ar.biblionumber %]</div>
-                                                <div class="ar-author">[% ar.biblio.author %]</div>
+                                                <div class="ar-biblionumber content_hidden">[% ar.biblionumber | html %]</div>
+                                                <div class="ar-author">[% ar.biblio.author | html %]</div>
                                                 <div class="ar-pubdata">
-                                                    [% ar.biblio.biblioitem.publishercode %]
+                                                    [% ar.biblio.biblioitem.publishercode | html %]
 
                                                     [% IF ar.biblio.biblioitem.publicationyear %]
-                                                        [% ar.biblio.biblioitem.publicationyear %]
+                                                        [% ar.biblio.biblioitem.publicationyear | html %]
                                                     [% ELSIF ar.biblio.copyrightdate %]
-                                                        [% ar.biblio.copyrightdate %]
+                                                        [% ar.biblio.copyrightdate | html %]
                                                     [% END %]
 
                                                     [% IF ar.biblio.biblioitem.pages %]
-                                                        : [% ar.biblio.biblioitem.pages %]
+                                                        : [% ar.biblio.biblioitem.pages | html %]
                                                     [% END %]
 
-                                                    [%  r.biblio.biblioitem.size %]
+                                                    [% r.biblio.biblioitem.size | html %]
 
                                                     [% IF ar.biblio.biblioitem.isbn %]
-                                                        ISBN: [% ar.biblio.biblioitem.isbn %]
+                                                        ISBN: [% ar.biblio.biblioitem.isbn | html %]
                                                     [% END %]
                                                 </div>
                                             </p>
                                         </td>
                                         <td class="ar-request">
-                                            [% IF ar.title %]        <p><strong>Title:</strong>        [% ar.title %]        </p> [% END %]
-                                            [% IF ar.author %]       <p><strong>Author:</strong>       [% ar.author %]       </p> [% END %]
-                                            [% IF ar.volume %]       <p><strong>Volume:</strong>       [% ar.volume %]       </p> [% END %]
-                                            [% IF ar.issue %]        <p><strong>Issue:</strong>        [% ar.issue %]        </p> [% END %]
-                                            [% IF ar.date %]         <p><strong>Date:</strong>         [% ar.date %]         </p> [% END %]
-                                            [% IF ar.pages %]        <p><strong>Pages:</strong>        [% ar.pages %]        </p> [% END %]
-                                            [% IF ar.chapters %]     <p><strong>Chapters:</strong>     [% ar.chapters %]     </p> [% END %]
-                                            [% IF ar.patron_notes %] <p><strong>Patron notes:</strong> [% ar.patron_notes %] </p> [% END %]
+                                            [% IF ar.title %]        <p><strong>Title:</strong>        [% ar.title | html %]        </p> [% END %]
+                                            [% IF ar.author %]       <p><strong>Author:</strong>       [% ar.author | html %]       </p> [% END %]
+                                            [% IF ar.volume %]       <p><strong>Volume:</strong>       [% ar.volume | html %]       </p> [% END %]
+                                            [% IF ar.issue %]        <p><strong>Issue:</strong>        [% ar.issue | html %]        </p> [% END %]
+                                            [% IF ar.date %]         <p><strong>Date:</strong>         [% ar.date | html %]         </p> [% END %]
+                                            [% IF ar.pages %]        <p><strong>Pages:</strong>        [% ar.pages | html %]        </p> [% END %]
+                                            [% IF ar.chapters %]     <p><strong>Chapters:</strong>     [% ar.chapters | html %]     </p> [% END %]
+                                            [% IF ar.patron_notes %] <p><strong>Patron notes:</strong> [% ar.patron_notes | html %] </p> [% END %]
                                         </td>
-                                        <td class="ar-collection">[% AuthorisedValues.GetByCode( 'CCODE', ar.item.ccode ) %]</td>
-                                        <td class="ar-itemtype">[% ItemTypes.GetDescription( ar.item.effective_itemtype ) %]</td>
+                                        <td class="ar-collection">[% AuthorisedValues.GetByCode( 'CCODE', ar.item.ccode ) | html %]</td>
+                                        <td class="ar-itemtype">[% ItemTypes.GetDescription( ar.item.effective_itemtype ) | html %]</td>
                                         <td class="ar-callnumber">
                                             [% IF ar.item.location %]
-                                                <em>[% AuthorisedValues.GetByCode( 'LOC', ar.item.location ) %]</em>
+                                                <em>[% AuthorisedValues.GetByCode( 'LOC', ar.item.location ) | html %]</em>
                                             [% END %]
 
-                                            [% ar.item.itemcallnumber %]
+                                            [% ar.item.itemcallnumber | html %]
                                         </td>
-                                        <td class="ar-copynumber">[% ar.item.copynumber %]</td>
-                                        <td class="ar-enumchron">[% ar.item.enumchron %]</td>
-                                        <td class="ar-barcode">[% ar.item.barcode %]</td>
+                                        <td class="ar-copynumber">[% ar.item.copynumber | html %]</td>
+                                        <td class="ar-enumchron">[% ar.item.enumchron | html %]</td>
+                                        <td class="ar-barcode">[% ar.item.barcode | html %]</td>
                                         <td class="ar-patron">
                                             <p>
-                                                <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% ar.borrower.cardnumber %]">
-                                                    [% ar.borrower.surname %][% IF ar.borrower.firstname %], [% ar.borrower.firstname %][% END %] ([% ar.borrower.cardnumber %])
+                                                <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% ar.borrower.cardnumber | html %]">
+                                                    [% ar.borrower.surname | html %][% IF ar.borrower.firstname %], [% ar.borrower.firstname | html %][% END %] ([% ar.borrower.cardnumber | html %])
                                                 </a>
                                             </p>
 
-                                            <p>[% ar.borrower.phone %]</p>
+                                            <p>[% ar.borrower.phone | html %]</p>
                                         </td>
-                                        <td class="ar-date"><span title="[% ar.created_on %]">[% ar.created_on | $KohaDates %]</span></td>
+                                        <td class="ar-date"><span title="[% ar.created_on | html %]">[% ar.created_on | $KohaDates %]</span></td>
                                         <td class="ar-actions">
                                         <div class="dropdown">
                                             [% PROCESS actions menuid = "row" _ ar.id id_arg=ar.id pull_right='pull-right' aria_menu='ar-actions' %]
@@ -233,71 +233,71 @@
 
                                 [% FOREACH ar IN article_requests_processing %]
                                     <tr class="ar-row ar-processing">
-                                        <td><input type="checkbox" reqid="[% ar.id %]"/></td>
+                                        <td><input type="checkbox" reqid="[% ar.id | html %]"/></td>
                                         <td class="ar-title">
                                             <p>
-                                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ar.biblionumber %]">
+                                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ar.biblionumber | html %]">
                                                     <strong>[% ar.biblio.title | html %]</strong>
-                                                    [% FOREACH s IN itemsloo.subtitle %] [% s %][% END %]
+                                                    [% FOREACH s IN itemsloo.subtitle %] [% s | html %][% END %]
                                                 </a>
                                             </p>
 
                                             <p>
-                                                <div class="ar-biblionumber content_hidden">[% ar.biblionumber %]</div>
-                                                <div class="ar-author">[% ar.biblio.author %]</div>
+                                                <div class="ar-biblionumber content_hidden">[% ar.biblionumber | html %]</div>
+                                                <div class="ar-author">[% ar.biblio.author | html %]</div>
                                                 <div class="ar-pubdata">
-                                                    [% ar.biblio.biblioitem.publishercode %]
+                                                    [% ar.biblio.biblioitem.publishercode | html %]
 
                                                     [% IF ar.biblio.biblioitem.publicationyear %]
-                                                        [% ar.biblio.biblioitem.publicationyear %]
+                                                        [% ar.biblio.biblioitem.publicationyear | html %]
                                                     [% ELSIF ar.biblio.copyrightdate %]
-                                                        [% ar.biblio.copyrightdate %]
+                                                        [% ar.biblio.copyrightdate | html %]
                                                     [% END %]
 
                                                     [% IF ar.biblio.biblioitem.pages %]
-                                                        : [% ar.biblio.biblioitem.pages %]
+                                                        : [% ar.biblio.biblioitem.pages | html %]
                                                     [% END %]
 
-                                                    [%  r.biblio.biblioitem.size %]
+                                                    [% r.biblio.biblioitem.size | html %]
 
                                                     [% IF ar.biblio.biblioitem.isbn %]
-                                                        ISBN: [% ar.biblio.biblioitem.isbn %]
+                                                        ISBN: [% ar.biblio.biblioitem.isbn | html %]
                                                     [% END %]
                                                 </div>
                                             </p>
                                         </td>
                                         <td class="ar-request">
-                                            [% IF ar.title %]        <p><strong>Title:</strong>        [% ar.title %]        </p> [% END %]
-                                            [% IF ar.author %]       <p><strong>Author:</strong>       [% ar.author %]       </p> [% END %]
-                                            [% IF ar.volume %]       <p><strong>Volume:</strong>       [% ar.volume %]       </p> [% END %]
-                                            [% IF ar.issue %]        <p><strong>Issue:</strong>        [% ar.issue %]        </p> [% END %]
-                                            [% IF ar.date %]         <p><strong>Date:</strong>         [% ar.date %]         </p> [% END %]
-                                            [% IF ar.pages %]        <p><strong>Pages:</strong>        [% ar.pages %]        </p> [% END %]
-                                            [% IF ar.chapters %]     <p><strong>Chapters:</strong>     [% ar.chapters %]     </p> [% END %]
-                                            [% IF ar.patron_notes %] <p><strong>Patron notes:</strong> [% ar.patron_notes %] </p> [% END %]
+                                            [% IF ar.title %]        <p><strong>Title:</strong>        [% ar.title | html %]        </p> [% END %]
+                                            [% IF ar.author %]       <p><strong>Author:</strong>       [% ar.author | html %]       </p> [% END %]
+                                            [% IF ar.volume %]       <p><strong>Volume:</strong>       [% ar.volume | html %]       </p> [% END %]
+                                            [% IF ar.issue %]        <p><strong>Issue:</strong>        [% ar.issue | html %]        </p> [% END %]
+                                            [% IF ar.date %]         <p><strong>Date:</strong>         [% ar.date | html %]         </p> [% END %]
+                                            [% IF ar.pages %]        <p><strong>Pages:</strong>        [% ar.pages | html %]        </p> [% END %]
+                                            [% IF ar.chapters %]     <p><strong>Chapters:</strong>     [% ar.chapters | html %]     </p> [% END %]
+                                            [% IF ar.patron_notes %] <p><strong>Patron notes:</strong> [% ar.patron_notes | html %] </p> [% END %]
                                         </td>
-                                        <td class="ar-collection">[% AuthorisedValues.GetByCode( 'CCODE', ar.item.ccode ) %]</td>
-                                        <td class="ar-itemtype">[% ItemTypes.GetDescription( ar.item.effective_itemtype ) %]</td>
+                                        <td class="ar-collection">[% AuthorisedValues.GetByCode( 'CCODE', ar.item.ccode ) | html %]</td>
+                                        <td class="ar-itemtype">[% ItemTypes.GetDescription( ar.item.effective_itemtype ) | html %]</td>
                                         <td class="ar-callnumber">
                                             [% IF ar.item.location %]
-                                                <em>[% AuthorisedValues.GetByCode( 'LOC', ar.item.location ) %]</em>
+                                                <em>[% AuthorisedValues.GetByCode( 'LOC', ar.item.location ) | html %]</em>
                                             [% END %]
 
-                                            [% ar.item.itemcallnumber %]
+                                            [% ar.item.itemcallnumber | html %]
                                         </td>
-                                        <td class="ar-copynumber">[% ar.item.copynumber %]</td>
-                                        <td class="ar-enumchron">[% ar.item.enumchron %]</td>
-                                        <td class="ar-barcode">[% ar.item.barcode %]</td>
+                                        <td class="ar-copynumber">[% ar.item.copynumber | html %]</td>
+                                        <td class="ar-enumchron">[% ar.item.enumchron | html %]</td>
+                                        <td class="ar-barcode">[% ar.item.barcode | html %]</td>
                                         <td class="ar-patron">
                                             <p>
-                                                <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% ar.borrower.cardnumber %]">
-                                                    [% ar.borrower.surname %][% IF ar.borrower.firstname %], [% ar.borrower.firstname %][% END %] ([% ar.borrower.cardnumber %])
+                                                <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% ar.borrower.cardnumber | html %]">
+                                                    [% ar.borrower.surname | html %][% IF ar.borrower.firstname %], [% ar.borrower.firstname | html %][% END %] ([% ar.borrower.cardnumber | html %])
                                                 </a>
                                             </p>
 
-                                            <p>[% ar.borrower.phone %]</p>
+                                            <p>[% ar.borrower.phone | html %]</p>
                                         </td>
-                                        <td class="ar-date"><span title="[% ar.created_on %]">[% ar.created_on | $KohaDates %]</span></td>
+                                        <td class="ar-date"><span title="[% ar.created_on | html %]">[% ar.created_on | $KohaDates %]</span></td>
                                         <td class="ar-actions">
                                         <div class="dropdown">
                                             [% PROCESS actions menuid="table_" _ ar.id id_arg=ar.id pull_right='pull-right' aria_menu='ar-actions' %]
@@ -398,7 +398,7 @@
                 return;
             }
 
-            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/spinner-small.gif"/>').find('div.dropdown').hide();
+            a.closest('td').prepend('<img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif"/>').find('div.dropdown').hide();
             $.ajax({
                 type: "POST",
                 url: '/cgi-bin/koha/svc/article_request',
@@ -421,7 +421,7 @@
             table_row.find('.ar-process-request').remove();
             table_row.find('input[type="checkbox"]').prop('checked', false);
 
-            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/spinner-small.gif"/>').find('div.dropdown').hide();
+            a.closest('td').prepend('<img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif"/>').find('div.dropdown').hide();
             $.ajax({
                 type: "POST",
                 url: '/cgi-bin/koha/svc/article_request',
@@ -441,7 +441,7 @@
         }
 
         function Complete( id, a ) {
-            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/spinner-small.gif"/>').find('div.dropdown').hide();
+            a.closest('td').prepend('<img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif"/>').find('div.dropdown').hide();
             $.ajax({
                 type: "POST",
                 url: '/cgi-bin/koha/svc/article_request',

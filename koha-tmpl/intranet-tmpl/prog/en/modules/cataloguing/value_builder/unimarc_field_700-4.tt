@@ -52,11 +52,11 @@
         function report() {
             x = document.f_pop.f1.value.split(' - ');
             var doc   = opener.document;
-            var field = doc.getElementById("[% index %]");
+            var field = doc.getElementById("[% index | html %]");
 
             field.value =  x[0];
-            if ([% index2 %] > 0) {
-                opener.document.f.field_value[[% index2 %]].value= x[1];
+            if ([% index2 | html %] > 0) {
+                opener.document.f.field_value[[% index2 | html %]].value= x[1];
             }
             self.close();
             return false;

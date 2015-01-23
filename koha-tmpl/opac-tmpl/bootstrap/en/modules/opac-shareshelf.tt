@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Share a list</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Share a list</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -51,7 +51,7 @@
         <fieldset class="rows">
             <ol>
             <input type="hidden" name="op" value="conf_invite"/>
-            <input type="hidden" name="shelfnumber" value="[% shelfnumber %]"/>
+            <input type="hidden" name="shelfnumber" value="[% shelfnumber | html %]"/>
             <li><label for="name">List name:</label> [% shelfname | html %]</li>
             <li>
                 <label for="invite_address">Email address:</label>
@@ -69,10 +69,10 @@
     [% ELSIF op=='conf_invite' %]
         <div id="conf_invite">
         [% IF approvedaddress %]
-        <p>An invitation to share list <i>[% shelfname | html %]</i> will be sent shortly to [% approvedaddress %].</p>
+        <p>An invitation to share list <i>[% shelfname | html %]</i> will be sent shortly to [% approvedaddress | html %].</p>
         [% END %]
         [% IF failaddress %]
-            <p>Something went wrong while processing the following addresses. Please check them. These are: [% failaddress %]</p>
+            <p>Something went wrong while processing the following addresses. Please check them. These are: [% failaddress | html %]</p>
         [% END %]
         [% IF approvedaddress %]
         <p>You will receive an email notification if someone accepts your share within two weeks.</p>

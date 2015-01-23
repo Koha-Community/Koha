@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
 [% USE Koha %]
@@ -6,8 +7,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; ILL requests  &rsaquo;</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
+[% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
     //<![CDATA[
@@ -310,7 +311,7 @@
                     <!-- Dispatch on Status -->
                     <p>We encountered an error:</p>
                     <p>
-                      <pre>[% whole.message %] ([% whole.status %])</pre>
+                      <pre>[% whole.message | html %] ([% whole.status | html %])</pre>
                     </p>
                 [% END %]
 
@@ -319,9 +320,9 @@
                     [% IF whole.stage == 'copyrightclearance' %]
                         <div>
                             <p>
-                                [% Koha.Preference('ILLModuleCopyrightClearance') %]
+                                [% Koha.Preference('ILLModuleCopyrightClearance') | $raw %]
                             </p>
-                            <a href="?method=create&stage=copyrightclearance&backend=[% whole.value.backend %]"
+                            <a href="?method=create&stage=copyrightclearance&backend=[% whole.value.backend | html %]"
                                class="btn btn-sm btn-default btn-group"><i class="fa fa-check">Yes</i></a>
                             <a href="/cgi-bin/koha/ill/ill-requests.pl"
                                class="btn btn-sm btn-default btn-group"><i class="fa fa-times">No</i></a>
@@ -371,7 +372,7 @@
                                         <label for="partners" class="required">Select partner libraries:</label>
                                         <select size="5" multiple="true" id="partners" name="partners" required="required">
                                             [% FOREACH partner IN whole.value.partners %]
-                                                <option value=[% partner.email %]>
+                                                <option value=[% partner.email | html %]>
                                                     [% partner.branchcode _ " - " _ partner.surname %]
                                                 </option>
                                             [% END %]
@@ -380,20 +381,20 @@
                                     </li>
                                     <li>
                                         <label for="subject" class="required">Subject Line</label>
-                                        <input type="text" name="subject" id="subject" type="text" value="[% whole.value.draft.subject %]" required="required" />
+                                        <input type="text" name="subject" id="subject" type="text" value="[% whole.value.draft.subject | html %]" required="required" />
                                     </li>
                                     <li>
                                         <label for="body" class="required">Email text:</label>
-                                        <textarea name="body" id="body" rows="20" cols="80" required="required">[% whole.value.draft.body %]</textarea>
+                                        <textarea name="body" id="body" rows="20" cols="80" required="required">[% whole.value.draft.body | html %]</textarea>
                                     </li>
                                 </ol>
                                 <input type="hidden" value="generic_confirm" name="method">
                                 <input type="hidden" value="draft" name="stage">
-                                <input type="hidden" value="[% request.illrequest_id %]" name="illrequest_id">
+                                <input type="hidden" value="[% request.illrequest_id | html %]" name="illrequest_id">
                             </fieldset>
                             <fieldset class="action">
                                 <input type="submit" class="btn btn-default" value="Send email"/>
-                                <span><a href="[% ill_url %]" title="Return to request details">Cancel</a></span>
+                                <span><a href="[% ill_url | html %]" title="Return to request details">Cancel</a></span>
                             </fieldset>
                         </form>
                     [% ELSE %]
@@ -401,7 +402,7 @@
                             <legend>Interlibrary loan request details</legend>
                             <p>No partners have been defined yet. Please create appropriate patron records (by default ILLLIBS category).</p>
                             <p>Be sure to provide email addresses for these patrons.</p>
-                            <p><span><a href="[% ill_url %]" title="Return to request details">Cancel</a></span></p>
+                            <p><span><a href="[% ill_url | html %]" title="Return to request details">Cancel</a></span></p>
                         </fieldset>
                     [% END %]
                 <!-- generic_confirm ends here -->
@@ -413,11 +414,11 @@
                             <ol>
                                 <li class="borrowernumber">
                                     <label for="borrowernumber">Patron ID:</label>
-                                    <input name="borrowernumber" id="borrowernumber" type="text" value="[% request.borrowernumber %]">
+                                    <input name="borrowernumber" id="borrowernumber" type="text" value="[% request.borrowernumber | html %]">
                                 </li>
                                 <li class="biblio_id">
                                     <label for="biblio_id" class="biblio_id">Biblio ID:</label>
-                                    <input name="biblio_id" id="biblio_id" type="text" value="[% request.biblio_id %]">
+                                    <input name="biblio_id" id="biblio_id" type="text" value="[% request.biblio_id | html %]">
                                 </li>
                                 <li class="branchcode">
                                     <label for="library" class="branchcode">Library:</label>
@@ -427,28 +428,28 @@
                                 </li>
                                 <li class="status">
                                     <label class="status">Status:</label>
-                                    [% stat = request.status %]
-                                    [% request.capabilities.$stat.name %]
+                                    [% stat = request.status | html %]
+                                    [% request.capabilities.$stat.name | html %]
                                 </li>
                                 <li class="updated">
                                     <label class="updated">Last updated:</label>
-                                    [% request.updated | $KohaDates with_hours => 1 %]
+                                    [% request.updated | $KohaDates with_hours => 1 | html %]
                                 </li>
                                 <li class="medium">
                                     <label class="medium">Request type:</label>
-                                    [% request.medium %]
+                                    [% request.medium | html %]
                                 </li>
                                 <li class="cost">
                                     <label class="cost">Cost:</label>
-                                    [% request.cost || 'N/A' %]
+                                    [% request.cost || 'N/A' | html %]
                                 </li>
                                 <li class="req_id">
                                     <label class="req_id">Request number:</label>
-                                    [% request.id_prefix _ request.illrequest_id %]
+                                    [% request.id_prefix _ request.illrequest_id | html %]
                                 </li>
                                 <li class="notesstaff">
                                     <label for="notesstaff" class="notesstaff">Staff notes:</label>
-                                    <textarea name="notesstaff" id="notesstaff" rows="5">[% request.notesstaff %]</textarea>
+                                    <textarea name="notesstaff" id="notesstaff" rows="5">[% request.notesstaff | html %]</textarea>
                                 </li>
                                 <li class="notesopac">
                                     <label for="notesopac" class="notesopac">Opac notes:</label>
@@ -459,9 +460,9 @@
                         <fieldset class="action">
                             <input type="hidden" value="edit_action" name="method">
                             <input type="hidden" value="form" name="stage">
-                            <input type="hidden" value="[% request.illrequest_id %]" name="illrequest_id">
+                            <input type="hidden" value="[% request.illrequest_id | html %]" name="illrequest_id">
                             <input type="submit" value="Submit">
-                            <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=[% request.id %]">Cancel</a>
+                            <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=[% request.id | html %]">Cancel</a>
                         </fieldset>
                     </form>
 
@@ -472,27 +473,27 @@
                         <form action="/cgi-bin/koha/ill/ill-requests.pl" method="post">
                             <input type="hidden" name="method" value="delete" />
                             <input type="hidden" name="confirmed" value="1" />
-                            <input type="hidden" name="illrequest_id" value="[% request.id %]" />
+                            <input type="hidden" name="illrequest_id" value="[% request.id | html %]" />
                             <button type="submit" class="btn btn-default btn-sm approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
                         </form>
-                        <a class="btn btn-default btn-sm deny" href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=[% request.id %]"><i class="fa fa-fw fa-remove"></i>No, do not delete</a>
+                        <a class="btn btn-default btn-sm deny" href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=[% request.id | html %]"><i class="fa fa-fw fa-remove"></i>No, do not delete</a>
                     </div>
 
                 [% ELSIF query_type == 'illview' %]
-                    [% actions = request.available_actions %]
-                    [% capabilities = request.capabilities %]
-                    [% req_status = request.status %]
+                    [% actions = request.available_actions | html %]
+                    [% capabilities = request.capabilities | html %]
+                    [% req_status = request.status | html %]
                     <h1>Manage ILL request</h1>
                     <div id="toolbar" class="btn-toolbar">
-                        <a title="Edit request" id="ill-toolbar-btn-edit-action" class="btn btn-sm btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=edit_action&amp;illrequest_id=[% request.illrequest_id %]">
+                        <a title="Edit request" id="ill-toolbar-btn-edit-action" class="btn btn-sm btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=edit_action&amp;illrequest_id=[% request.illrequest_id | html %]">
                         <span class="fa fa-pencil"></span>
                         Edit request
                         </a>
                         [% FOREACH action IN actions %]
                             [% IF action.method != 0 %]
-                                <a title="[% action.ui_method_name %]" id="ill-toolbar-btn-[% action.id | lower %]" class="btn btn-sm btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=[% action.method %]&amp;illrequest_id=[% request.illrequest_id %]">
-                                <span class="fa [% action.ui_method_icon %]"></span>
-                                [% action.ui_method_name %]
+                                <a title="[% action.ui_method_name | html %]" id="ill-toolbar-btn-[% action.id | lower | html %]" class="btn btn-sm btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=[% action.method | html %]&amp;illrequest_id=[% request.illrequest_id | html %]">
+                                <span class="fa [% action.ui_method_icon | html %]"></span>
+                                [% action.ui_method_name | html %]
                                 </a>
                             [% END %]
                         [% END %]
@@ -510,47 +511,47 @@
                             <div class="rows">
                                 <div class="orderid">
                                     <span class="label orderid">Order ID:</span>
-                                    [% request.orderid || "N/A" %]
+                                    [% request.orderid || "N/A" | html %]
                                 </div>
                                 <div class="borrowernumber">
                                     <span class="label borrowernumber">Patron:</span>
                                     [% borrowerlink = "/cgi-bin/koha/members/moremember.pl" _ "?borrowernumber=" _ request.patron.borrowernumber %]
-                                    <a href="[% borrowerlink %]" title="View borrower details">
-                                    [% request.patron.firstname _ " " _ request.patron.surname _ " [" _ request.patron.cardnumber _ "]" %]
+                                    <a href="[% borrowerlink | html %]" title="View borrower details">
+                                    [% request.patron.firstname _ " " _ request.patron.surname _ " [" _ request.patron.cardnumber _ "]" | html %]
                                     </a>
                                 </div>
 
                                 <div class="biblio_id">
                                     <span class="label biblio_id">Biblio ID:</span>
-                                    [% request.biblio_id || "N/A" %]
+                                    [% request.biblio_id || "N/A" | html %]
                                 </div>
                                 <div class="branchcode">
                                     <span class="label branchcode">Library:</span>
-                                    [% Branches.GetName(request.branchcode) %]
+                                    [% Branches.GetName(request.branchcode) | html %]
                                 </div>
                                 <div class="status">
                                     <span class="label status">Status:</span>
-                                    [% capabilities.$req_status.name %]
+                                    [% capabilities.$req_status.name | html %]
                                 </div>
                                 <div class="updated">
                                     <span class="label updated">Last updated:</span>
-                                    [% request.updated | $KohaDates with_hours => 1 %]
+                                    [% request.updated | $KohaDates with_hours => 1 | html %]
                                 </div>
                                 <div class="medium">
                                     <span class="label medium">Request type:</span>
-                                    [% request.medium %]
+                                    [% request.medium | html %]
                                 </div>
                                 <div class="cost">
                                     <span class="label cost">Cost:</span>
-                                    [% request.cost || "N/A" %]
+                                    [% request.cost || "N/A" | html %]
                                 </div>
                                 <div class="req_id">
                                     <span class="label req_id">Request number:</span>
-                                    [% request.id_prefix _ request.illrequest_id %]
+                                    [% request.id_prefix _ request.illrequest_id | html %]
                                 </div>
                                 <div class="notesstaff">
                                     <span class="label notes_staff">Staff notes:</span>
-                                    <pre>[% request.notesstaff %]</pre>
+                                    <pre>[% request.notesstaff | html %]</pre>
                                 </div>
                                 <div class="notesopac">
                                     <span class="label notes_opac">Notes:</span>
@@ -558,11 +559,11 @@
                                 </div>
                             </div>
                             <div class="rows">
-                                <h4>Details from supplier ([% request.backend %])</h4>
+                                <h4>Details from supplier ([% request.backend | html %])</h4>
                                 [% FOREACH meta IN request.metadata %]
-                                    <div class="requestmeta-[% meta.key %]">
-                                        <span class="label">[% meta.key %]:</span>
-                                        [% meta.value %]
+                                    <div class="requestmeta-[% meta.key | html %]">
+                                        <span class="label">[% meta.key | html %]:</span>
+                                        [% meta.value | html %]
                                     </div>
                                 [% END %]
                             </div>
@@ -579,9 +580,9 @@
                                 <div class="modal-body">
                                     <div id="requestattributes">
                                         [% FOREACH attr IN request.illrequestattributes %]
-                                        <div class="requestattr-[% attr.type %]">
-                                            <span class="label">[% attr.type %]:</span>
-                                            [% attr.value %]
+                                        <div class="requestattr-[% attr.type | html %]">
+                                            <span class="label">[% attr.type | html %]:</span>
+                                            [% attr.value | html %]
                                         </div>
                                             [% END %]
                                     </div>

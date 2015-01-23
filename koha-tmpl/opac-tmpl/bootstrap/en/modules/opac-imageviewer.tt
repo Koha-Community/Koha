@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Images for: [% biblio.title |html %]</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Images for: [% biblio.title | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
     <style>
@@ -47,7 +47,7 @@
                     [% ELSE %]
                         <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber |url %]">
                     [% END %]
-                [% END %][% biblio.title %]</a> <span class="divider">&rsaquo;</span>
+                [% END %][% biblio.title | html %]</a> <span class="divider">&rsaquo;</span>
             </li>
             <li><a href="#">Images</a></li>
         </ul>
@@ -75,7 +75,7 @@
                                     [% ELSE %]
                                         <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber |url %]" title="View details for this title">
                                     [% END %]
-                                [% END %][% biblio.title %]</a> [% biblio.author %]
+                                [% END %][% biblio.title | html %]</a> [% biblio.author | html %]
                             </h1>
                         </div> <!-- / .span9 -->
                     </div> <!-- / .row-fluid -->
@@ -94,11 +94,11 @@
                                 <div id="thumbnails">
                                     [% FOREACH img IN images %]
                                         [% IF img %]
-                                            <a href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblionumber | url %]&amp;imagenumber=[% img %]" onclick="showCover([% img %]); return false;">
+                                            <a href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblionumber | url %]&amp;imagenumber=[% img | html %]" onclick="showCover([% img | html %]); return false;">
                                             [% IF ( imagenumber == img ) %]
-                                                <img class="thumbnail selected" id="[% img %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% img %]&amp;thumbnail=1" alt="Thumbnail"/>
+                                                <img class="thumbnail selected" id="[% img | html %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% img | html %]&amp;thumbnail=1" alt="Thumbnail"/>
                                             [% ELSE %]
-                                                <img class="thumbnail" id="[% img %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% img %]&amp;thumbnail=1" alt="Thumbnail"/>
+                                                <img class="thumbnail" id="[% img | html %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% img | html %]&amp;thumbnail=1" alt="Thumbnail"/>
                                             [% END %]
                                             </a>
                                         [% END %]
@@ -119,7 +119,7 @@
 <script>
     //<![CDATA[
         $(document).ready(function(){
-            $("#largeCoverImg").attr("src","[% interface %]/[% theme %]/images/loading.gif");
+            $("#largeCoverImg").attr("src","[% interface | html %]/[% theme | html %]/images/loading.gif");
             showCover([% imagenumber | html %]);
         });
 

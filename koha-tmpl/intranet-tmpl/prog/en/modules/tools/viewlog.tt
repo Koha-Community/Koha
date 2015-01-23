@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE AuthorisedValues %]
@@ -33,7 +34,7 @@
 [%        CASE 'SYSTEMPREFERENCE' %]System prefs
 [%        CASE 'CRONJOBS' %]Cron jobs
 [%        CASE 'REPORTS'      %]Reports
-[%        CASE %][% module %]
+[%        CASE %][% module | html %]
 [%    END %]
 [% END %]
 
@@ -53,7 +54,7 @@
 [%        CASE 'ADDCIRCMESSAGE' %]Add circulation message
 [%        CASE 'DELCIRCMESSAGE' %]Delete circulation message
 [%        CASE 'Run'    %]Run
-[%        CASE %][% action %]
+[%        CASE %][% action | html %]
 [%    END %]
 [% END %]
 
@@ -63,7 +64,7 @@
 [%        CASE 'OPAC'        %]OPAC
 [%        CASE 'SIP'         %]SIP
 [%        CASE 'COMMANDLINE' %]Command-line
-[%        CASE %][% log_interface %]
+[%        CASE %][% log_interface | html %]
 [%    END %]
 [% END %]
 
@@ -84,7 +85,7 @@
 				<h1>Browse system logs</h1>
 				<form method="post" action="/cgi-bin/koha/tools/viewlog.pl">
 					[% IF ( do_it ) %]
-						<input type="hidden" name="do_it" value="[% do_it %]" />
+						<input type="hidden" name="do_it" value="[% do_it | html %]" />
 					[% END %]
                     <input type="hidden" name="src" value="[% src | html %]" />
 					<fieldset class="rows">
@@ -103,9 +104,9 @@
                                     [% END %]
                                     [% FOREACH modx IN [ 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'CIRCULATION' 'LETTER' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS' ] %]
                                         [% IF modules.grep(modx).size %]
-                                            <option value="[% modx %]" selected="selected">[% PROCESS translate_log_module module=modx %]</option>
+                                            <option value="[% modx | html %]" selected="selected">[% PROCESS translate_log_module module=modx %]</option>
                                         [% ELSE %]
-                                            <option value="[% modx %]">[% PROCESS translate_log_module module=modx %]</option>
+                                            <option value="[% modx | html %]">[% PROCESS translate_log_module module=modx %]</option>
                                         [% END %]
                                     [% END %]
                                 </select>
@@ -121,9 +122,9 @@
 
                                     [% FOREACH actx IN [ 'ADD' 'DELETE' 'MODIFY' 'ISSUE' 'RETURN' 'RENEW' 'CREATE' 'CANCEL' 'SUSPEND' 'RESUME' 'ADDCIRCMESSAGE' 'DELCIRCMESSAGE' 'CHANGE PASS' 'Run' ] %]
                                         [% IF actions.grep(actx).size %]
-                                            <option value="[% actx %]" selected="selected">[% PROCESS translate_log_action action=actx %]</option>
+                                            <option value="[% actx | html %]" selected="selected">[% PROCESS translate_log_action action=actx %]</option>
                                         [% ELSE %]
-                                                <option value="[% actx %]">[% PROCESS translate_log_action action=actx %]</option>
+                                                <option value="[% actx | html %]">[% PROCESS translate_log_action action=actx %]</option>
                                         [% END %]
                                     [% END %]
                                 </select>
@@ -147,9 +148,9 @@
 
                                     [% FOREACH interf IN [ 'INTRANET' 'OPAC' 'SIP' 'COMMANDLINE' ] %]
                                         [% IF interfaces.grep(interf).size %]
-                                            <option value="[% interf %]" selected="selected">[% PROCESS translate_log_interface log_interface=interf %]</option>
+                                            <option value="[% interf | html %]" selected="selected">[% PROCESS translate_log_interface log_interface=interf %]</option>
                                         [% ELSE %]
-                                            <option value="[% interf %]">[% PROCESS translate_log_interface log_interface=interf %]</option>
+                                            <option value="[% interf | html %]">[% PROCESS translate_log_interface log_interface=interf %]</option>
                                         [% END %]
                                     [% END %]
                                 </select>
@@ -177,10 +178,10 @@
 								<input type="text" name="basename" id="basename" value="Export" />
 								<!--
 									<label for="MIME" class="inline">Into an application:</label>
-									[% CGIextChoice %]
-									[% CGIsepChoice %]
+									[% CGIextChoice | html %]
+									[% CGIsepChoice | html %]
 								-->
-								<input type="hidden" name="report_name" value="[% report_name %]" />
+								<input type="hidden" name="report_name" value="[% report_name | html %]" />
 							</li>
 						</ol>
 					</fieldset>
@@ -192,7 +193,7 @@
                 [% END %]
                 [% IF ( do_it ) %]
                     [% IF ( total ) %]
-                        <h4>[% total %] lines found.</h4>
+                        <h4>[% total | html %] lines found.</h4>
                         <table>
                             <thead>
                                 <tr>
@@ -208,12 +209,12 @@
                             <tbody>
                             [% FOREACH loopro IN looprow %]
                                 <tr>
-                                    <td>[% loopro.timestamp %]</td>
+                                    <td>[% loopro.timestamp | html %]</td>
                                     <td>
                                         [% IF loopro.librarian %]
-                                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.librarian.borrowernumber %]" title="display detail for this librarian."> [% IF ( loopro.librarian.firstname ) || ( loopro.librarian.surname ) %][% loopro.librarian.firstname %] [% loopro.librarian.surname %] ([% loopro.librarian.borrowernumber %]) [% ELSE %][% loopro.librarian.borrowernumber %][% END %]</a>
+                                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.librarian.borrowernumber | html %]" title="display detail for this librarian."> [% IF ( loopro.librarian.firstname ) || ( loopro.librarian.surname ) %][% loopro.librarian.firstname | html %] [% loopro.librarian.surname | html %] ([% loopro.librarian.borrowernumber | html %]) [% ELSE %][% loopro.librarian.borrowernumber | html %][% END %]</a>
                                         [% ELSE %]
-                                            [% loopro.user %]
+                                            [% loopro.user | html %]
                                         [% END %]
                                     </td>
                                     <td>[% PROCESS translate_log_module module=loopro.module %]</td>
@@ -221,27 +222,27 @@
                                     <td>
                                         [% IF ( loopro.module == 'MEMBERS' ) || ( loopro.module == 'CIRCULATION' ) || ( loopro.module == 'FINES' ) %]
                                             [% IF loopro.patron %]
-                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.object %]" title="Display member details."> [% IF ( loopro.object ) %][% IF ( loopro.patron.firstname ) || ( loopro.patron.surname ) %][% loopro.patron.firstname %] [% loopro.patron.surname %] ([% loopro.object %]) [% ELSE %]Member [% loopro.object %][% END %][% END %] </a>
+                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.object | html %]" title="Display member details."> [% IF ( loopro.object ) %][% IF ( loopro.patron.firstname ) || ( loopro.patron.surname ) %][% loopro.patron.firstname | html %] [% loopro.patron.surname | html %] ([% loopro.object | html %]) [% ELSE %]Member [% loopro.object | html %][% END %][% END %] </a>
                                             [% ELSE %]
-                                                [% loopro.object %]
+                                                [% loopro.object | html %]
                                             [% END %]
                                         [% ELSE %]
                                                 [% IF ( loopro.module == 'CATALOGUING' ) %]
                                                     [% IF ( loopro.info.substr(0, 4) == 'item' ) %]
-                                                        <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.object %]&amp;biblionumber=[% loopro.biblionumber %]&amp;bi=[% loopro.biblioitemnumber %]#item[% loopro.object %]">Item [% loopro.object %]</a>
+                                                        <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.object | html %]&amp;biblionumber=[% loopro.biblionumber | html %]&amp;bi=[% loopro.biblioitemnumber | html %]#item[% loopro.object | html %]">Item [% loopro.object | html %]</a>
                                                     [% ELSIF ( loopro.info.substr(0, 6) == 'biblio' ) %]
-                                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.object %]" title="Display detail for this biblio">Biblio [% loopro.object %]</a>
+                                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.object | html %]" title="Display detail for this biblio">Biblio [% loopro.object | html %]</a>
                                                     [% ELSE %]
-                                                        [% loopro.object %]
+                                                        [% loopro.object | html %]
                                                     [% END %]
                                                 [% ELSE %]
                                                     [% IF ( loopro.module == 'SERIAL' ) %]
-                                                        <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% loopro.object %]">Subscription [% loopro.object %] </a>
+                                                        <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% loopro.object | html %]">Subscription [% loopro.object | html %] </a>
                                                     [% ELSE %]
                                                         [% IF ( loopro.module == 'AUTHORITIES' ) %]
-                                                            <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% loopro.object %]" title="Display detail for this authority">Authority [% loopro.object %]</a>
+                                                            <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% loopro.object | html %]" title="Display detail for this authority">Authority [% loopro.object | html %]</a>
                                                         [% ELSE %]
-                                                            [% loopro.object %]
+                                                            [% loopro.object | html %]
                                                         [% END %]
                                                     [% END %]
                                                 [% END %]
@@ -249,9 +250,9 @@
                                     </td>
                                     <td>
                                         [% IF ( loopro.module == 'CIRCULATION' ) %]
-                                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% loopro.info %]&amp;biblionumber=[% loopro.biblionumber %]&amp;bi=[% loopro.biblioitemnumber %]#item[% loopro.info %]" title="Display detail for this item">Item [% loopro.barcode |html %]</a>
+                                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% loopro.info | html %]&amp;biblionumber=[% loopro.biblionumber | html %]&amp;bi=[% loopro.biblioitemnumber | html %]#item[% loopro.info | html %]" title="Display detail for this item">Item [% loopro.barcode | html %]</a>
                                         [% ELSE %]
-                                            [% loopro.info |html %]
+                                            [% loopro.info | html %]
                                         [% END %]
                                     </td>
                                     <td>[% PROCESS translate_log_interface log_interface=loopro.interface %]</td>
@@ -289,7 +290,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

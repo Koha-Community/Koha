@@ -1,3 +1,4 @@
+[% USE raw %]
 [% SET footerjs = 1 %]
 [% BLOCK translate_label_types %]
 [%  SWITCH type %]
@@ -9,7 +10,7 @@
 [%  END %]
 [% END %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Layouts &rsaquo; [% IF ( layout_id ) %]Edit ([% layout_id %])[% ELSE %]New[% END %]</title>
+    <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Layouts &rsaquo; [% IF ( layout_id ) %]Edit ([% layout_id | html %])[% ELSE %]New[% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -28,7 +29,7 @@
         <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
         <a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a> &rsaquo;
         <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=layout">Layouts</a> &rsaquo;
-        [% IF ( layout_id ) %]Edit ([% layout_id %])[% ELSE %]New[% END %]
+        [% IF ( layout_id ) %]Edit ([% layout_id | html %])[% ELSE %]New[% END %]
     </div>
 
     <div class="main container-fluid">
@@ -44,16 +45,16 @@
                             <ol>
                                 <li>
                                     <label for="layout_name">Layout name: </label>
-                                    <input type="text" name="layout_name" id="layout_name" size="20" value="[% layout_name %]" />
+                                    <input type="text" name="layout_name" id="layout_name" size="20" value="[% layout_name | html %]" />
                                 </li>
                                 <li>
                                     <label for="barcode_type">Choose barcode type (encoding): </label>
                                     <select name="barcode_type" id="barcode_type">
                                     [% FOREACH barcode_type IN barcode_types %]
                                     [% IF ( barcode_type.selected ) %]
-                                    <option value="[% barcode_type.type %]" selected="selected">[% barcode_type.name %]</option>
+                                    <option value="[% barcode_type.type | html %]" selected="selected">[% barcode_type.name | html %]</option>
                                     [% ELSE %]
-                                    <option value="[% barcode_type.type %]">[% barcode_type.name %]</option>
+                                    <option value="[% barcode_type.type | html %]">[% barcode_type.name | html %]</option>
                                     [% END %]
                                     [% END %]
                                     </select>
@@ -63,9 +64,9 @@
                                     <select name="printing_type" id="printing_type">
                                     [% FOREACH label_type IN label_types %]
                                     [% IF ( label_type.selected ) %]
-                                    <option value="[% label_type.type %]" selected="selected">[% PROCESS translate_label_types type=label_type.type %]</option>
+                                    <option value="[% label_type.type | html %]" selected="selected">[% PROCESS translate_label_types type=label_type.type %]</option>
                                     [% ELSE %]
-                                    <option value="[% label_type.type %]">[% PROCESS translate_label_types type=label_type.type %]</option>
+                                    <option value="[% label_type.type | html %]">[% PROCESS translate_label_types type=label_type.type %]</option>
                                     [% END %]
                                     [% END %]
                                     </select>
@@ -82,16 +83,16 @@
 												<div id="layout_table">
                                                     <p>
                                             [% FOREACH text_field IN fields %]
-                                                        <select name="[% text_field.field_name %]" id="[% text_field.field_name |url %]">
+                                                        <select name="[% text_field.field_name | html %]" id="[% text_field.field_name |url %]">
                                                             <option value=""></option>
                                                             [% FOREACH orde IN [1..field_count] %]
                                                                 [% IF ( orde == text_field.order ) %]
-                                                            <option value="[% orde %]" selected="1">[% orde %]</option>
+                                                            <option value="[% orde | html %]" selected="1">[% orde | html %]</option>
                                                                 [% ELSE %]
-                                                            <option value="[% orde %]">[% orde %]</option>
+                                                            <option value="[% orde | html %]">[% orde | html %]</option>
                                                                 [% END %]
                                                             [% END %]
-                                                        </select>&nbsp;<label for="[% text_field.field_name |url %]">[% text_field.field_label %]</label>
+                                                        </select>&nbsp;<label for="[% text_field.field_name |url %]">[% text_field.field_label | html %]</label>
 
                                                         &nbsp;&nbsp;
 
@@ -106,7 +107,7 @@
                                             [% END %]
                                            <li> <fieldset id="layout_string" class="brief">
                                                 <label for="format_string">Data fields</label>
-                                                <input type="text" name="format_string" id="format_string" size="80" value="[% format_string |html %]" />
+                                                <input type="text" name="format_string" id="format_string" size="80" value="[% format_string | html %]" />
                                                 <div class="hint">
                                                     <p>Enter a comma separated list of fields to print.  You may include any <em>Koha field</em> or MARC subfield.</p>
                                                     <p>See online help for advanced options</p>
@@ -138,9 +139,9 @@
                                     <select name="text_justify" id="text_justify">
                                         [% FOREACH text_justification_type IN text_justification_types %]
                                         [% IF ( text_justification_type.selected ) %]
-                                        <option value="[% text_justification_type.type %]" selected="selected">[% PROCESS translate_justification_types type=text_justification_type.type %]</option>
+                                        <option value="[% text_justification_type.type | html %]" selected="selected">[% PROCESS translate_justification_types type=text_justification_type.type %]</option>
                                         [% ELSE %]
-                                        <option value="[% text_justification_type.type %]">[% PROCESS translate_justification_types type=text_justification_type.type %]</option>
+                                        <option value="[% text_justification_type.type | html %]">[% PROCESS translate_justification_types type=text_justification_type.type %]</option>
                                         [% END %]
                                         [% END %]
                                     </select>
@@ -150,16 +151,16 @@
                                     <select name="font" id="font">
                                         [% FOREACH font_type IN font_types %]
                                         [% IF ( font_type.selected ) %]
-                                        <option value="[% font_type.type %]" selected="selected">[% font_type.name %]</option>
+                                        <option value="[% font_type.type | html %]" selected="selected">[% font_type.name | html %]</option>
                                         [% ELSE %]
-                                        <option value="[% font_type.type %]">[% font_type.name %]</option>
+                                        <option value="[% font_type.type | html %]">[% font_type.name | html %]</option>
                                         [% END %]
                                         [% END %]
                                     </select>
                                 </li>
                                 <li>
                                     <label for="font_size">Font size: </label>
-                                    <input type="text" name="font_size" id="font_size" size="2" value="[% font_size |html %]" />
+                                    <input type="text" name="font_size" id="font_size" size="2" value="[% font_size | html %]" />
                                 </li>
                                 <li>
                                     <label for="oblique_title">Oblique title: </label>
@@ -175,7 +176,7 @@
                             <input type="submit" value="Save" />
                             <a class="cancel" href="/cgi-bin/koha/labels/label-manage.pl?label_element=layout">Cancel</a>
                             <input type="hidden" name="op" value="save" />
-                            <input type="hidden" name="layout_id" value="[% layout_id %]" />
+                            <input type="hidden" name="layout_id" value="[% layout_id | html %]" />
                         </fieldset>
                     </form>
             </main>
@@ -189,7 +190,7 @@
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     <script>
         $(document).ready(function() {
             $("input[name='layout_choice']").change( function() { layout_method() } );

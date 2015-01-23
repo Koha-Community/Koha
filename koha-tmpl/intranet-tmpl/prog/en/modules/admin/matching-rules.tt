@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -10,7 +11,7 @@
   [% END %]
 [% END %]
 [% IF ( delete_matching_rule_form ) %]
-  &rsaquo; Confirm deletion of record matching rule &quot;[% code %]&quot;
+  &rsaquo; Confirm deletion of record matching rule &quot;[% code | html %]&quot;
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -22,7 +23,7 @@
 [%        CASE 'upper_case'     %]Uppercase
 [%        CASE 'lower_case'     %]Lowercase
 [%        CASE 'legacy_default' %]Legacy default
-[%        CASE %][% norm %]
+[%        CASE %][% norm | html %]
 [%    END %]
 [% END %]
 
@@ -30,9 +31,9 @@
 [%# PARAMS: selected_norm %]
 [%    FOREACH norm IN valid_norms %]
 [%        IF ( norm == selected_norm ) %]
-        <option value="[% norm %]" selected="selected">[% PROCESS norms_text norm=norm %]</option>
+        <option value="[% norm | html %]" selected="selected">[% PROCESS norms_text norm=norm %]</option>
 [%        ELSE %]
-        <option value="[% norm %]">[% PROCESS norms_text norm=norm %]</option>
+        <option value="[% norm | html %]">[% PROCESS norms_text norm=norm %]</option>
 [%        END %]
 [%    END %]
 [% END %]
@@ -41,9 +42,9 @@
 [%# PARAMS: selected_norm, id, name %]
 [%    UNLESS valid_norms.grep(selected_norm).size %]
 [%#       Fallback to 'none' %]
-[%        selected_norm = 'none' %]
+[% selected_norm = 'none' | html %]
 [%    END %]
-    <select id="[% id %]" name="[% name %]">
+    <select id="[% id | html %]" name="[% name | html %]">
 [%    PROCESS norms_options selected_norm=selected_norm %]
     </select>
 [% END %]
@@ -69,7 +70,7 @@
   [% END %]
 [% END %]
 [% IF ( delete_matching_rule_form ) %]
-  &rsaquo; Confirm deletion of record matching rule &quot;[% code %]&quot;
+  &rsaquo; Confirm deletion of record matching rule &quot;[% code | html %]&quot;
 [% END %]
 </div>
 
@@ -85,16 +86,16 @@
   [% ELSE %]
 <h2>Add record matching rule</h2>
   [% END %]
-<form action="[% script_name %]" name="Aform" method="post">
-  <input type="hidden" name="op" value="[% confirm_op %]" />
+<form action="[% script_name | html %]" name="Aform" method="post">
+  <input type="hidden" name="op" value="[% confirm_op | html %]" />
   <fieldset class="rows">
     <ol>
       <li>
           [% IF ( edit_matching_rule ) %]
 		  <span class="label">Matching rule code: </span>
-            <input type="hidden" name="matcher_id" value="[% matcher_id %]" />
-            <input type="hidden" name="code" value="[% code %]" />
-            [% code %]
+            <input type="hidden" name="matcher_id" value="[% matcher_id | html %]" />
+            <input type="hidden" name="code" value="[% code | html %]" />
+            [% code | html %]
           [% ELSE %]
 		  <label for="code" class="required">Matching rule code: </label>
             <input type="text" id="code" name="code"  size="10" maxlength="10" /> <span class="required">Required</span>
@@ -102,11 +103,11 @@
        </li>
        <li><label for="description" class="required">Description: </label>
            <input type="text" id="description" name="description" size="50" maxlength="250" 
-                  value="[% description |html %]" /> <span class="required">Required</span>
+                  value="[% description | html %]" /> <span class="required">Required</span>
        </li>
        <li><label for="threshold" class="required">Match threshold: </label>
            <input type="text" id="threshold" name="threshold" size="5" maxlength="5" 
-                  value="[% threshold |html %]" /> <span class="required">Required</span>
+                  value="[% threshold | html %]" /> <span class="required">Required</span>
        </li>
        <li><label for="record_type" class="required">Record type: </label>
            <select id="record_type" name="record_type">
@@ -129,60 +130,60 @@
   [% ELSE %]<p id="addMatchPoint" style="display:none;"><a href="#" class="button" onclick="InsertMatchpoint('mp_1', 'mp_template'); return false;">Add match point</a></p>[% END %]
   [% IF ( edit_matching_rule ) %]
   [% FOREACH matchpoint IN matchpoints %]
-  <div id="mp_[% matchpoint.mp_num %]" class="matchgroup">
+  <div id="mp_[% matchpoint.mp_num | html %]" class="matchgroup">
   <fieldset class="rows">
-    <legend>Match point [% matchpoint.mp_num %] | <a href="#" class="button" onclick="InsertMatchpoint('mp_[% matchpoint.mp_num %]', 'mp_template'); return false;">Add match point</a> | <a href="#" class="button" onclick="DeleteMatchpoint(this); return false;">Remove this match point</a></legend>
+    <legend>Match point [% matchpoint.mp_num | html %] | <a href="#" class="button" onclick="InsertMatchpoint('mp_[% matchpoint.mp_num | html %]', 'mp_template'); return false;">Add match point</a> | <a href="#" class="button" onclick="DeleteMatchpoint(this); return false;">Remove this match point</a></legend>
     <ol>
       <li>
-        <label for="mp_[% matchpoint.mp_num %]_search_index">Search index: </label>
-        <input type ="text" id="mp_[% matchpoint.mp_num %]_search_index" 
-               name="mp_[% matchpoint.mp_num %]_search_index" size="20" 
-               value="[% matchpoint.index |html %]"
+        <label for="mp_[% matchpoint.mp_num | html %]_search_index">Search index: </label>
+        <input type ="text" id="mp_[% matchpoint.mp_num | html %]_search_index" 
+               name="mp_[% matchpoint.mp_num | html %]_search_index" size="20" 
+               value="[% matchpoint.index | html %]"
           maxlength="30" />
       </li>
       <li>
-        <label for="mp_[% matchpoint.mp_num %]_score">Score: </label>
-        <input type ="text" id="mp_[% matchpoint.mp_num %]_score" 
-               name="mp_[% matchpoint.mp_num %]_score" size="5"
-               value="[% matchpoint.score |html %]" 
+        <label for="mp_[% matchpoint.mp_num | html %]_score">Score: </label>
+        <input type ="text" id="mp_[% matchpoint.mp_num | html %]_score" 
+               name="mp_[% matchpoint.mp_num | html %]_score" size="5"
+               value="[% matchpoint.score | html %]"
                maxlength="5" />
       </li>
       </ol>
       [% FOREACH component IN matchpoint.components %]
-      <fieldset class="rows" id="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]">
+      <fieldset class="rows" id="mp_[% matchpoint.mp_num | html %]_c_[% component.comp_num | html %]">
       <legend>Matchpoint components</legend>
         <ol>
           <li>
-            <label for="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_tag">Tag: </label>
-            <input type="text" id="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_tag" 
-                   name="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_tag" 
-                   value="[% component.tag |html %]"
+            <label for="mp_[% matchpoint.mp_num | html %]_c_[% component.comp_num | html %]_tag">Tag: </label>
+            <input type="text" id="mp_[% matchpoint.mp_num | html %]_c_[% component.comp_num | html %]_tag" 
+                   name="mp_[% matchpoint.mp_num | html %]_c_[% component.comp_num | html %]_tag" 
+                   value="[% component.tag | html %]"
                    size="3" maxlength="3" />
           </li>
           <li>
-            <label for="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_subfields">Subfields: </label>
-            <input type="text" id="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_subfields" 
-                   name="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_subfields" 
-                   value="[% component.subfields |html %]"
+            <label for="mp_[% matchpoint.mp_num | html %]_c_[% component.comp_num | html %]_subfields">Subfields: </label>
+            <input type="text" id="mp_[% matchpoint.mp_num | html %]_c_[% component.comp_num | html %]_subfields" 
+                   name="mp_[% matchpoint.mp_num | html %]_c_[% component.comp_num | html %]_subfields" 
+                   value="[% component.subfields | html %]"
                    size="10" maxlength="40" />
           </li>
           <li>
-            <label for="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_offset">Offset: </label>
-            <input type="text" id="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_offset" 
-                   name="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_offset" 
-                   value="[% component.offset |html %]"
+            <label for="mp_[% matchpoint.mp_num | html %]_c_[% component.comp_num | html %]_offset">Offset: </label>
+            <input type="text" id="mp_[% matchpoint.mp_num | html %]_c_[% component.comp_num | html %]_offset" 
+                   name="mp_[% matchpoint.mp_num | html %]_c_[% component.comp_num | html %]_offset" 
+                   value="[% component.offset | html %]"
                    size="5" maxlength="5" />
           </li>
           <li>
-            <label for="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_length">Length: </label>
-            <input type="text" id="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_length" 
-                   name="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_length" 
-                   value="[% component.length |html %]"
+            <label for="mp_[% matchpoint.mp_num | html %]_c_[% component.comp_num | html %]_length">Length: </label>
+            <input type="text" id="mp_[% matchpoint.mp_num | html %]_c_[% component.comp_num | html %]_length" 
+                   name="mp_[% matchpoint.mp_num | html %]_c_[% component.comp_num | html %]_length" 
+                   value="[% component.length | html %]"
                    size="5" maxlength="5" />
           </li>
               [% FOREACH norm IN component.norms %]
-              <li id="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_n_[% norm.norm_num %]">
-                <label for="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_n__[% norm.norm_num %]_norm">Normalization rule: </label>
+              <li id="mp_[% matchpoint.mp_num | html %]_c_[% component.comp_num | html %]_n_[% norm.norm_num | html %]">
+                <label for="mp_[% matchpoint.mp_num | html %]_c_[% component.comp_num | html %]_n__[% norm.norm_num | html %]_norm">Normalization rule: </label>
                 [%# Note: Following directive in one line, otherwise we have translatabiltiy problems %]
                 [% PROCESS norms_select selected_norm=norm.norm id="mp_${norm.mp_num}_c_${component.comp_num}_n__${norm.norm_num}_norm" name="mp_${matchpoint.mp_num}_c_${component.comp_num}_n_${norm.norm_num}_norm" %]
               </li>
@@ -250,45 +251,45 @@
   [% ELSE %]<p id="addMatchCheck" style="display:none;"><a href="#" class="button" onclick="InsertMatchcheck('mc_1', 'mc_template'); return false;">Add match check</a></p>[% END %]
   [% IF ( edit_matching_rule ) %]
   [% FOREACH matchcheck IN matchchecks %]
-  <div id="mc_[% matchcheck.mc_num %]" class="matchgroup">
+  <div id="mc_[% matchcheck.mc_num | html %]" class="matchgroup">
   <fieldset class="rows">
-    <legend>Match check [% matchcheck.mc_num %]<a href="#" class="button" onclick="InsertMatchcheck('mc_[% matchcheck.mc_num %]', 'mc_template'); return false;">Add match check</a> | <a href="#" class="button" onclick="DeleteMatchcheck(this); return false;">Remove this match check</a></legend>
-    <input type="hidden" id="mc_[% matchcheck.mc_num %]_id" name="mc_[% matchcheck.mc_num %]_id" value="1" />
+    <legend>Match check [% matchcheck.mc_num | html %]<a href="#" class="button" onclick="InsertMatchcheck('mc_[% matchcheck.mc_num | html %]', 'mc_template'); return false;">Add match check</a> | <a href="#" class="button" onclick="DeleteMatchcheck(this); return false;">Remove this match check</a></legend>
+    <input type="hidden" id="mc_[% matchcheck.mc_num | html %]_id" name="mc_[% matchcheck.mc_num | html %]_id" value="1" />
       [% FOREACH src_component IN matchcheck.src_components %]
-      <fieldset class="rows" id="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]">
+      <fieldset class="rows" id="mc_[% src_component.mc_num | html %]_src_c_[% src_component.comp_num | html %]">
         <legend>Source (incoming) record check field</legend>
         <ol>
           <li>
-            <label for="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_tag">Tag: </label>
-            <input type="text" id="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_tag" 
-                   name="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_tag" 
-                   value="[% src_component.tag |html %]"
+            <label for="mc_[% src_component.mc_num | html %]_src_c_[% src_component.comp_num | html %]_tag">Tag: </label>
+            <input type="text" id="mc_[% matchcheck.mc_num | html %]_src_c_[% src_component.comp_num | html %]_tag" 
+                   name="mc_[% matchcheck.mc_num | html %]_src_c_[% src_component.comp_num | html %]_tag" 
+                   value="[% src_component.tag | html %]"
                    size="3" maxlength="3" />
           </li>
           <li>
-            <label for="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_subfields">Subfields: </label>
-            <input type="text" id="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_subfields" 
-                   name="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_subfields" 
-                   value="[% src_component.subfields |html %]"
+            <label for="mc_[% matchcheck.mc_num | html %]_src_c_[% src_component.comp_num | html %]_subfields">Subfields: </label>
+            <input type="text" id="mc_[% matchcheck.mc_num | html %]_src_c_[% src_component.comp_num | html %]_subfields" 
+                   name="mc_[% matchcheck.mc_num | html %]_src_c_[% src_component.comp_num | html %]_subfields" 
+                   value="[% src_component.subfields | html %]"
                    size="10" maxlength="40" />
           </li>
           <li>
-            <label for="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_offset">Offset: </label>
-            <input type="text" id="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_offset" 
-                   name="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_offset" 
-                   value="[% src_component.offset |html %]"
+            <label for="mc_[% matchcheck.mc_num | html %]_src_c_[% src_component.comp_num | html %]_offset">Offset: </label>
+            <input type="text" id="mc_[% matchcheck.mc_num | html %]_src_c_[% src_component.comp_num | html %]_offset" 
+                   name="mc_[% matchcheck.mc_num | html %]_src_c_[% src_component.comp_num | html %]_offset" 
+                   value="[% src_component.offset | html %]"
                    size="5" maxlength="5" />
           </li>
           <li>
-            <label for="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_length">Length: </label>
-            <input type="text" id="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_length" 
-                   name="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_length" 
-                   value="[% src_component.length |html %]"
+            <label for="mc_[% matchcheck.mc_num | html %]_src_c_[% src_component.comp_num | html %]_length">Length: </label>
+            <input type="text" id="mc_[% matchcheck.mc_num | html %]_src_c_[% src_component.comp_num | html %]_length" 
+                   name="mc_[% matchcheck.mc_num | html %]_src_c_[% src_component.comp_num | html %]_length" 
+                   value="[% src_component.length | html %]"
                    size="5" maxlength="5" />
           </li>
           [% FOREACH norm IN src_component.norms %]
-            <li id="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_n_[% norm.norm_num %]">
-              <label for="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_n_[% norm.norm_num %]_norm">Normalization rule: </label>
+            <li id="mc_[% matchcheck.mc_num | html %]_src_c_[% src_component.comp_num | html %]_n_[% norm.norm_num | html %]">
+              <label for="mc_[% matchcheck.mc_num | html %]_src_c_[% src_component.comp_num | html %]_n_[% norm.norm_num | html %]_norm">Normalization rule: </label>
                 [%# Note: Following directive in one line, otherwise we have translatabiltiy problems %]
                 [% PROCESS norms_select selected_norm=norm.norm id="mc_${matchcheck.mc_num}_src_c_${src_component.comp_num}_n_${norm.norm_num}_norm" name="mc_${matchcheck.mc_num}_src_c_${src_component.comp_num}_n_${norm.norm_num}_norm" %]
             </li>
@@ -297,40 +298,40 @@
       </fieldset>
       [% END %]
       [% FOREACH tgt_component IN matchcheck.tgt_components %]
-      <fieldset class="rows" id="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]">
+      <fieldset class="rows" id="mc_[% matchcheck.mc_num | html %]_tgt_c_[% tgt_component.comp_num | html %]">
         <legend>Target (database) record check field</legend>
         <ol>
           <li>
-            <label for="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_tag">Tag: </label>
-            <input type="text" id="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_tag" 
-                   name="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_tag" 
-                   value="[% tgt_component.tag |html %]"
+            <label for="mc_[% matchcheck.mc_num | html %]_tgt_c_[% tgt_component.comp_num | html %]_tag">Tag: </label>
+            <input type="text" id="mc_[% matchcheck.mc_num | html %]_tgt_c_[% tgt_component.comp_num | html %]_tag" 
+                   name="mc_[% matchcheck.mc_num | html %]_tgt_c_[% tgt_component.comp_num | html %]_tag" 
+                   value="[% tgt_component.tag | html %]"
                    size="3" maxlength="3" />
           </li>
           <li>
-            <label for="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_subfields">Subfields: </label>
-            <input type="text" id="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_subfields" 
-                   name="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_subfields" 
-                   value="[% tgt_component.subfields |html %]"
+            <label for="mc_[% matchcheck.mc_num | html %]_tgt_c_[% tgt_component.comp_num | html %]_subfields">Subfields: </label>
+            <input type="text" id="mc_[% matchcheck.mc_num | html %]_tgt_c_[% tgt_component.comp_num | html %]_subfields" 
+                   name="mc_[% matchcheck.mc_num | html %]_tgt_c_[% tgt_component.comp_num | html %]_subfields" 
+                   value="[% tgt_component.subfields | html %]"
                    size="10" maxlength="40" />
           </li>
           <li>
-            <label for="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_offset">Offset: </label>
-            <input type="text" id="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_offset" 
-                   name="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_offset" 
-                   value="[% tgt_component.offset |html %]"
+            <label for="mc_[% matchcheck.mc_num | html %]_tgt_c_[% tgt_component.comp_num | html %]_offset">Offset: </label>
+            <input type="text" id="mc_[% matchcheck.mc_num | html %]_tgt_c_[% tgt_component.comp_num | html %]_offset" 
+                   name="mc_[% matchcheck.mc_num | html %]_tgt_c_[% tgt_component.comp_num | html %]_offset" 
+                   value="[% tgt_component.offset | html %]"
                    size="5" maxlength="5" />
           </li>
           <li>
-            <label for="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_length">Length: </label>
-            <input type="text" id="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_length" 
-                   name="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_length" 
-                   value="[% tgt_component.length |html %]"
+            <label for="mc_[% matchcheck.mc_num | html %]_tgt_c_[% tgt_component.comp_num | html %]_length">Length: </label>
+            <input type="text" id="mc_[% matchcheck.mc_num | html %]_tgt_c_[% tgt_component.comp_num | html %]_length" 
+                   name="mc_[% matchcheck.mc_num | html %]_tgt_c_[% tgt_component.comp_num | html %]_length" 
+                   value="[% tgt_component.length | html %]"
                    size="5" maxlength="5" />
           </li>
           [% FOREACH norm IN tgt_component.norms %]
-            <li id="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_n_[% norm.norm_num %]">
-              <label for="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_n_[% norm.norm_num %]_norm">Normalization rule: </label>
+            <li id="mc_[% matchcheck.mc_num | html %]_tgt_c_[% tgt_component.comp_num | html %]_n_[% norm.norm_num | html %]">
+              <label for="mc_[% matchcheck.mc_num | html %]_tgt_c_[% tgt_component.comp_num | html %]_n_[% norm.norm_num | html %]_norm">Normalization rule: </label>
                 [%# Note: Following directive in one line, otherwise we have translatabiltiy problems %]
                 [% PROCESS norms_select selected_norm=norm.norm id="mc_${matchcheck.mc_num}_tgt_c_${tgt_component.comp_num}_n_${norm.norm_num}_norm" name="mc_${matchcheck.mc_num}_tgt_c_${tgt_component.comp_num}_n_${norm.norm_num}_norm" %]
             </li>
@@ -418,13 +419,13 @@
 
 [% IF ( delete_matching_rule_form ) %]
     <div class="dialog alert">
-        <h3>Confirm deletion of record matching rule <span class="ex">'[% code %]' ([% description %])</span>?</h3>
-        <form action="[% script_name %]" name="Aform" method="post">
-            <input type="hidden" name="op" value="[% confirm_op %]" />
-            <input type="hidden" name="matcher_id" value="[% matcher_id %]" />
+        <h3>Confirm deletion of record matching rule <span class="ex">'[% code | html %]' ([% description | html %])</span>?</h3>
+        <form action="[% script_name | html %]" name="Aform" method="post">
+            <input type="hidden" name="op" value="[% confirm_op | html %]" />
+            <input type="hidden" name="matcher_id" value="[% matcher_id | html %]" />
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete record matching rule</button>
         </form>
-        <form action="[% script_name %]" method="get">
+        <form action="[% script_name | html %]" method="get">
             <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
         </form>
     </div>
@@ -433,18 +434,18 @@
 [% IF ( display_list ) %]
 
 <div id="toolbar" class="btn-toolbar">
-    <a class="btn btn-default btn-sm" id="newrule" href="[% script_name %]?op=add_matching_rule"><i class="fa fa-plus"></i> New record matching rule</a>
+    <a class="btn btn-default btn-sm" id="newrule" href="[% script_name | html %]?op=add_matching_rule"><i class="fa fa-plus"></i> New record matching rule</a>
 </div>
 
 <h2>Record matching rules</h2>
 [% IF ( added_matching_rule ) %]
-<div class="dialog message">Added record matching rule &quot;[% added_matching_rule %]&quot;</div>
+<div class="dialog message">Added record matching rule &quot;[% added_matching_rule | html %]&quot;</div>
 [% END %]
 [% IF ( edited_matching_rule ) %]
-<div class="dialog message">Modified record matching rule &quot;[% edited_matching_rule %]&quot;</div>
+<div class="dialog message">Modified record matching rule &quot;[% edited_matching_rule | html %]&quot;</div>
 [% END %]
 [% IF ( deleted_matching_rule ) %]
-<div class="dialog message">Deleted record matching rule &quot;[% deleted_matching_rule %]&quot;</div>
+<div class="dialog message">Deleted record matching rule &quot;[% deleted_matching_rule | html %]&quot;</div>
 [% END %]
 [% IF ( available_matching_rules ) %]<table>
   <tr>
@@ -455,18 +456,18 @@
   </tr>
   [% FOREACH available_matching_rule IN available_matching_rules %]
   <tr>
-    <td>[% available_matching_rule.matcher_id %]</td>
-    <td>[% available_matching_rule.code %]</td>
-    <td>[% available_matching_rule.description |html %]</td>
+    <td>[% available_matching_rule.matcher_id | html %]</td>
+    <td>[% available_matching_rule.code | html %]</td>
+    <td>[% available_matching_rule.description | html %]</td>
     <td class="actions">
-      <a class="btn btn-default btn-xs" href="[% available_matching_rule.script_name %]?op=edit_matching_rule&amp;matcher_id=[% available_matching_rule.matcher_id |html %]"><i class="fa fa-pencil"></i> Edit</a>
-      <a class="btn btn-default btn-xs" href="[% available_matching_rule.script_name %]?op=delete_matching_rule&amp;matcher_id=[% available_matching_rule.matcher_id |html %]"><i class="fa fa-trash"></i> Delete</a>
+      <a class="btn btn-default btn-xs" href="[% available_matching_rule.script_name | html %]?op=edit_matching_rule&amp;matcher_id=[% available_matching_rule.matcher_id | html %]"><i class="fa fa-pencil"></i> Edit</a>
+      <a class="btn btn-default btn-xs" href="[% available_matching_rule.script_name | html %]?op=delete_matching_rule&amp;matcher_id=[% available_matching_rule.matcher_id | html %]"><i class="fa fa-trash"></i> Delete</a>
     </td>
   </tr>
   [% END %]
 </table>[% ELSE %]<p>There are no saved matching rules.</p>[% END %]
 
-<div class="pages">[% pagination_bar %]</div>
+<div class="pages">[% pagination_bar | $raw %]</div>
 
 [% END %]
  [% IF ( matching_rule_form ) %]
@@ -580,10 +581,10 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
     <script type="text/javascript">
-        var maxMatchPoint = [% max_matchpoint %];
-        var maxMatchCheck = [% max_matchcheck %];
+        var maxMatchPoint = [% max_matchpoint | html %];
+        var maxMatchCheck = [% max_matchcheck | html %];
 
         function InsertMatchpoint(loc, index) {
             var original= $("#"+index);

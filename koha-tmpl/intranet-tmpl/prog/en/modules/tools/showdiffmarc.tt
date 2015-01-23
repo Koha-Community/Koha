@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -16,7 +17,7 @@
 [% INCLUDE 'header.inc' %]
 
 <div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/tools/manage-marc-import.pl">Manage staged MARC records</a> &rsaquo; <a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% batchid %]">Batch [% batchid %]</a> &rsaquo; Compare matched records
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/tools/manage-marc-import.pl">Manage staged MARC records</a> &rsaquo; <a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% batchid | html %]">Batch [% batchid | html %]</a> &rsaquo; Compare matched records
 </div>
 
 <div id="doc3">
@@ -25,31 +26,31 @@
             <h1>Original</h1>
             [% IF ( ERROR_FORMATTED1 ) %]
                 <div class="dialog alert">
-                    <p>The biblionumber <em>[% BIBLIONUMBER %]</em> doesn't match any existing record.</p>
+                    <p>The biblionumber <em>[% BIBLIONUMBER | html %]</em> doesn't match any existing record.</p>
                 </div>
             [% ELSE %]
-                <h2>[% BIBLIOTITLE %]</h2>
-                <pre>[% MARC_FORMATTED1 %]</pre>
+                <h2>[% BIBLIOTITLE | html %]</h2>
+                <pre>[% MARC_FORMATTED1 | html %]</pre>
             [% END %]
         </div>
         <div id="col2" class="yui-u">
             <h1>Imported</h1>
             [% IF ( ERROR_FORMATTED2 ) %]
                 <div class="dialog alert">
-                    <p>The import id number <em>[% IMPORTID %]</em> doesn't match any existing record.</p>
+                    <p>The import id number <em>[% IMPORTID | html %]</em> doesn't match any existing record.</p>
                 </div>
             [% ELSE %]
-                <h2>[% IMPORTTITLE %]</h2>
-                <pre>[% MARC_FORMATTED2 %] </pre>
+                <h2>[% IMPORTTITLE | html %]</h2>
+                <pre>[% MARC_FORMATTED2 | html %] </pre>
             [% END %]
         </div>
     </div>
 
-<p><a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% batchid %]">Return to staged MARC batch [% batchid %]</a></p>
+<p><a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% batchid | html %]">Return to staged MARC batch [% batchid | html %]</a></p>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
-    [% Asset.js("lib/jsdiff/jsdiff.min.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
+    [% Asset.js("lib/jsdiff/jsdiff.min.js") | $raw %]
     <script type="text/javascript">
         $(document).ready(function(){
           var diff1 = $("#col1 pre").text();

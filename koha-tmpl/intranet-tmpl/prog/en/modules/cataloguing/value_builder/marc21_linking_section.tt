@@ -19,8 +19,8 @@
 
                      <p>
                             <input type="hidden" name="plugin_name" value="marc21_linking_section.pl" />
-                           <input type="hidden" name="index" value="[% index %]" />
-                               <input type="hidden" name="result" value="marc12 field 7 [% index %]" />
+                           <input type="hidden" name="index" value="[% index | html %]" />
+                               <input type="hidden" name="result" value="marc12 field 7 [% index | html %]" />
                                <input type="hidden" name="op" value="do_search" />
                             <label class="label100" for="searchbox">Any word</label>
                                <input type="text" name="search" id="searchbox" size="35" /><br />
@@ -28,7 +28,7 @@
                                <select name="itype" id="itypeloop">
                            <option value="" selected="selected">All Item Types</option>
                                [% FOREACH itypeloo IN itypeloop %]
-                             <option value="[% itypeloo.itemtype %]">[% itypeloo.description %]</option>
+                             <option value="[% itypeloo.itemtype | html %]">[% itypeloo.description | html %]</option>
                               [% END %]
                               </select>
                       </p>
@@ -44,17 +44,17 @@
 
            <h2>Search results</h2>
                 <div id="MARC21_Linking_section__resultnumber">
-                        <p>[% IF ( displayprev ) %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index %]&amp;startfrom=[% startfromprev %]&amp;search=[% search %]&amp;resultsperpage=[% resultsperpage %]&amp;type=intranet&amp;op=do_search">&lt;&lt; Previous</a>[% END %]
+                        <p>[% IF ( displayprev ) %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% startfromprev | html %]&amp;search=[% search | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;type=intranet&amp;op=do_search">&lt;&lt; Previous</a>[% END %]
                               [% FOREACH number IN numbers %]
-                                [% IF ( number.highlight ) %] <span class="highlight">[% number.number %]</span>
-                                [% ELSE %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index %]&amp;startfrom=[% number.startfrom %]&amp;search=[% number.search |url %]&amp;resultsperpage=[% number.resultsperpage %]&amp;type=intranet&amp;op=do_search">[% number.number %]</a>
+                                [% IF ( number.highlight ) %] <span class="highlight">[% number.number | html %]</span>
+                                [% ELSE %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% number.startfrom | html %]&amp;search=[% number.search |url %]&amp;resultsperpage=[% number.resultsperpage | html %]&amp;type=intranet&amp;op=do_search">[% number.number | html %]</a>
                                 [% END %]
                                 [% END %]
                                 [% IF ( displaynext ) %]
-                                  <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index %]&amp;startfrom=[% startfromnext %]&amp;search=[% search %]&amp;resultsperpage=[% resultsperpage %]&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a>
+                                  <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% startfromnext | html %]&amp;search=[% search | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a>
                                 [% END %]</p>
                   <p class="resultcount">
-                          [% IF ( total ) %]Results [% from %] to [% to %] of [% total %]
+                          [% IF ( total ) %]Results [% from | html %] to [% to | html %] of [% total | html %]
                           [% ELSE %]No results found
                           [% END %]</p></div>
             <div id="resultlist">
@@ -69,24 +69,24 @@
                                     [% IF ( resul.even ) %]<td class="hilighted">
                                     [% ELSE %]<td>[% END %]
                                                             [% IF ( resul.MARC_ON ) %]
-                                                                    <a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.title |html %]</a>
+                                                                    <a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.title | html %]</a>
                                                             [% ELSE %]
-                                                                    <a class="transparent resultlist" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.title |html %]</a>
+                                                                    <a class="transparent resultlist" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.title | html %]</a>
                                                             [% END %]
-                                                    <p>[% resul.author %]
-                                                    [% IF ( resul.publishercode ) %]- [% resul.publishercode %][% END %]
-                                                    [% IF ( resul.place ) %] ; [% resul.place %][% END %]
-                                                    [% IF ( resul.pages ) %] - [% resul.pages %][% END %]
-                                                    [% IF ( resul.notes ) %] : [% resul.notes %][% END %]
-                                                    [% IF ( resul.size ) %] ; [% resul.size %][% END %]
+                                                    <p>[% resul.author | html %]
+                                                    [% IF ( resul.publishercode ) %]- [% resul.publishercode | html %][% END %]
+                                                    [% IF ( resul.place ) %] ; [% resul.place | html %][% END %]
+                                                    [% IF ( resul.pages ) %] - [% resul.pages | html %][% END %]
+                                                    [% IF ( resul.notes ) %] : [% resul.notes | html %][% END %]
+                                                    [% IF ( resul.size ) %] ; [% resul.size | html %][% END %]
                                             </p>
                                   </td>
 
                                  <td>
                       [% IF ( resul.biblionumber ) %]
-                                             <a href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index %]&amp;biblionumber=[% resul.biblionumber %]&amp;type=intranet&amp;op=fillinput')">Choose</a>
+                                             <a href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;biblionumber=[% resul.biblionumber | html %]&amp;type=intranet&amp;op=fillinput')">Choose</a>
                       [% ELSE %]
-                                             <a href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index %]&amp;type=intranet&amp;op=fillinput')">Clear field</a>
+                                             <a href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;type=intranet&amp;op=fillinput')">Clear field</a>
                       [% END %]
                                    </td>
                           </tr>
@@ -97,7 +97,7 @@
          <div id="resultnumber">
                         <p>
                             [% IF ( displayprev ) %]
-                               <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;amp;index=[% index %]&amp;amp;startfrom=[% startfromprev %]&amp;amp;search=[% search |url %]&amp;amp;resultsperpage=[% resultsperpage %]&amp;amp;type=intranet&amp;amp;op=do_search">
+                               <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;amp;index=[% index | html %]&amp;amp;startfrom=[% startfromprev | html %]&amp;amp;search=[% search |url %]&amp;amp;resultsperpage=[% resultsperpage | html %]&amp;amp;type=intranet&amp;amp;op=do_search">
                                      &lt;&lt; Previous
                               </a>
                            [% END %]
@@ -105,17 +105,17 @@
                              [% FOREACH number IN numbers %]
                                         [% IF ( number.highlight ) %]
                                           <span class="highlight">
-                                                       [% number.number %]
+                                                       [% number.number | html %]
                                             </span>
                                         [% ELSE %]
-                                             <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index %]&amp;startfrom=[% number.startfrom %]&amp;search=[% number.search %]&amp;resultsperpage=[% number.resultsperpage %]&amp;type=intranet&amp;op=do_search">
-                                                 [% number.number %]
+                                             <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% number.startfrom | html %]&amp;search=[% number.search | html %]&amp;resultsperpage=[% number.resultsperpage | html %]&amp;type=intranet&amp;op=do_search">
+                                                 [% number.number | html %]
                                             </a>
                                    [% END %]
                               [% END %]
 
                              [% IF ( displaynext ) %]
-                               <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index %]&amp;startfrom=[% startfromnext %]&amp;search=[% search %]&amp;resultsperpage=[% resultsperpage %]&amp;type=intranet&amp;op=do_search">
+                               <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% startfromnext | html %]&amp;search=[% search | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;type=intranet&amp;op=do_search">
                                   Next&gt;&gt;
                            </a>
                            [% END %]
@@ -130,7 +130,7 @@
         <script type="text/javascript">
             function go() {
 
-                var index_start = "[% index %]";
+                var index_start = "[% index | html %]";
                 var whichfield;
                 try {
                     whichfield = opener.opener.document.getElementById(index_start);
@@ -149,52 +149,52 @@
                         var subfield = subfields[i + 1];
 
                         if (code.value == '9') {
-                            subfield.value = "[% subfield_value_9 %]";
+                            subfield.value = "[% subfield_value_9 | html %]";
                         }
                         if (code.value == '0') {
-                            subfield.value = "[% subfield_value_0 %]";
+                            subfield.value = "[% subfield_value_0 | html %]";
                         }
                         if (code.value == 'a') {
-                            subfield.value = "[% subfield_value_a %]";
+                            subfield.value = "[% subfield_value_a | html %]";
                         }
                         if (code.value == 'c') {
-                            subfield.value = "[% subfield_value_c %]";
+                            subfield.value = "[% subfield_value_c | html %]";
                         }
                         if (code.value == 'd') {
-                            subfield.value = "[% subfield_value_d %]";
+                            subfield.value = "[% subfield_value_d | html %]";
                         }
                         if (code.value == 'e') {
-                            subfield.value = "[% subfield_value_e %]";
+                            subfield.value = "[% subfield_value_e | html %]";
                         }
                         if (code.value == 'h') {
-                            subfield.value = "[% subfield_value_h %]";
+                            subfield.value = "[% subfield_value_h | html %]";
                         }
                         if (code.value == 'i') {
-                            subfield.value = "[% subfield_value_i %]";
+                            subfield.value = "[% subfield_value_i | html %]";
                         }
                         if (code.value == 'p') {
-                            subfield.value = "[% subfield_value_p %]";
+                            subfield.value = "[% subfield_value_p | html %]";
                         }
                         if (code.value == 't') {
-                            subfield.value = "[% subfield_value_t %]";
+                            subfield.value = "[% subfield_value_t | html %]";
                         }
                         if (code.value == 'u') {
-                            subfield.value = "[% subfield_value_u %]";
+                            subfield.value = "[% subfield_value_u | html %]";
                         }
                         if (code.value == 'v') {
-                            subfield.value = "[% subfield_value_v %]";
+                            subfield.value = "[% subfield_value_v | html %]";
                         }
                         if (code.value == 'w') {
-                            subfield.value = "[% subfield_value_w %]";
+                            subfield.value = "[% subfield_value_w | html %]";
                         }
                         if (code.value == 'x') {
-                            subfield.value = "[% subfield_value_x %]";
+                            subfield.value = "[% subfield_value_x | html %]";
                         }
                         if (code.value == 'y') {
-                            subfield.value = "[% subfield_value_y %]";
+                            subfield.value = "[% subfield_value_y | html %]";
                         }
                         if (code.value == 'z') {
-                            subfield.value = "[% subfield_value_z %]";
+                            subfield.value = "[% subfield_value_z | html %]";
                         }
                     }
                 }

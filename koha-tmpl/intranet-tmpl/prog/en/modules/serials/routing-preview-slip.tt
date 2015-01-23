@@ -12,10 +12,10 @@
 
 <table>
     <tr>
-        <td colspan="2"><h3>[% libraryname %]</h3></td>
+        <td colspan="2"><h3>[% libraryname | html %]</h3></td>
     </tr>
     <tr>
-        <td colspan="2"><b>Title:</b> [% title |html %]<br />[% issue %]</td>
+        <td colspan="2"><b>Title:</b> [% title | html %]<br />[% issue | html %]</td>
     </tr>
     <tr>
         <td><b>Name</b></td>
@@ -23,15 +23,15 @@
     </tr>
     [% FOREACH memberloo IN memberloop %]
     <tr>
-        <td>[% memberloo.name %]</td>
+        <td>[% memberloo.name | html %]</td>
         <td>&nbsp;</td>
     </tr>
     [% END %]
 </table>
 
 <div id="routingnotes">
-    <p id="generalroutingnote">[% generalroutingnote %]</p>
-    <p id="routingnote">[% routingnotes %]</p>
+    <p id="generalroutingnote">[% generalroutingnote | html %]</p>
+    <p id="routingnote">[% routingnotes | html %]</p>
 </div>
 
     <div id="closewindow" class="noprint"><a class="btn btn-default btn-default" id="print_slip" href="#"><i class="fa fa-print"></i> Print</a> <a class="btn btn-default btn-default close" href="#">Close</a></div>

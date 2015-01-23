@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -53,8 +54,8 @@
 <form action="/cgi-bin/koha/admin/edi_ean_accounts.pl" name="Eanform" method="post">
   <input type="hidden" name="op" value="save" />
   [% IF ean %]
-      <input type="hidden" name="oldbranchcode" value="[% ean.branch.branchcode %]" />
-      <input type="hidden" name="id" value="[% ean.id %]" />
+      <input type="hidden" name="oldbranchcode" value="[% ean.branch.branchcode | html %]" />
+      <input type="hidden" name="id" value="[% ean.id | html %]" />
   [% END %]
 
   <fieldset class="rows">
@@ -72,32 +73,32 @@
              <select name="branchcode" id="branchcode">
                 [% FOREACH branch IN branches %]
                     [% IF branch.branchcode == ean.branch.branchcode %]
-                       <option value="[% branch.branchcode %]" selected="selected">[% branch.branchname %]</option>
+                       <option value="[% branch.branchcode | html %]" selected="selected">[% branch.branchname | html %]</option>
                     [% ELSE %]
-                       <option value="[% branch.branchcode %]">[% branch.branchname %]</option>
+                       <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
                     [% END %]
                 [% END %]
               </select>
           </li>
           <li>
              <label for="description">Description: </label>
-             <input type="text" name="description" id="description" size="30" maxlength="128" value="[% ean.description %]" />
+             <input type="text" name="description" id="description" size="30" maxlength="128" value="[% ean.description | html %]" />
           </li>
           <li>
              <label for="ean">EAN: </label>
-             <input type="text" name="ean" id="ean" size="20" maxlength="15" value="[% ean.ean %]" />
+             <input type="text" name="ean" id="ean" size="20" maxlength="15" value="[% ean.ean | html %]" />
           </li>
           <li>
              <label for="id_code_qualifier">Qualifier: </label>
              <select name="id_code_qualifier" id="id_code_qualifier">
                  [% FOREACH qualifier IN code_qualifiers %]
                     [% IF qualifier.code == ean.id_code_qualifier %]
-                       <option value="[% qualifier.code %]" selected="selected">
-                           [% qualifier.description %] ([% qualifier.code %])
+                       <option value="[% qualifier.code | html %]" selected="selected">
+                           [% qualifier.description | html %] ([% qualifier.code | html %])
                        </option>
                     [% ELSE %]
-                       <option value="[% qualifier.code %]">
-                          [% qualifier.description %] ([% qualifier.code %])
+                       <option value="[% qualifier.code | html %]">
+                          [% qualifier.description | html %] ([% qualifier.code | html %])
                        </option>
                     [% END %]
                  [% END %]
@@ -115,10 +116,10 @@
 
 [% IF delete_confirm %]
 <div class="dialog alert">
-<h3>Delete EAN [% ean.ean %] for [% ean.branch.branchname %]?</h3>
+<h3>Delete EAN [% ean.ean | html %] for [% ean.branch.branchname | html %]?</h3>
 <form action="/cgi-bin/koha/admin/edi_ean_accounts.pl" method="post">
     <input type="hidden" name="op" value="delete_confirmed" />
-    <input type="hidden" name="id" value="[% ean.id %]" />
+    <input type="hidden" name="id" value="[% ean.id | html %]" />
     <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
 </form>
 <form action="/cgi-bin/koha/admin/edi_ean_accounts.pl" method="get">
@@ -140,19 +141,19 @@
         </tr>
         [% FOREACH ean IN eans %]
             <tr>
-                <td>[% ean.branch.branchname %]</td>
-                <td>[% ean.description %]</td>
-                <td>[% ean.ean %]</td>
+                <td>[% ean.branch.branchname | html %]</td>
+                <td>[% ean.description | html %]</td>
+                <td>[% ean.ean | html %]</td>
                 <td>
                  [% FOREACH qualifier IN code_qualifiers %]
                     [% IF qualifier.code == ean.id_code_qualifier %]
-                        [% qualifier.description %] ([% qualifier.code %])
+                        [% qualifier.description | html %] ([% qualifier.code | html %])
                     [% END %]
                  [% END %]
                 </td>
                 <td class="actions">
-                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=ean_form&id=[% ean.id %]"><i class="fa fa-pencil"></i> Edit</a>
-                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=delete_confirm&id=[% ean.id %]"><i class="fa fa-trash"></i> Delete</a>
+                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=ean_form&id=[% ean.id | html %]"><i class="fa fa-pencil"></i> Edit</a>
+                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=delete_confirm&id=[% ean.id | html %]"><i class="fa fa-trash"></i> Delete</a>
                 </td>
             </tr>
         [% END %]
@@ -172,6 +173,6 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

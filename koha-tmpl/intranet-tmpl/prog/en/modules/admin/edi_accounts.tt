@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -53,7 +54,7 @@
 <form action="/cgi-bin/koha/admin/edi_accounts.pl" name="Actform" method="post">
   <input type="hidden" name="op" value="save" />
   [% IF account %]
-  <input type="hidden" name="id" value="[% account.id %]" />
+  <input type="hidden" name="id" value="[% account.id | html %]" />
   [% END %]
   <fieldset class="rows">
   <legend>
@@ -70,9 +71,9 @@
      <select name="vendor_id" id="vendor_id">
      [% FOREACH vendor IN vendors %]
        [% IF account.vendor_id == vendor.id %]
-          <option value="[% vendor.id %]" selected="selected">[% vendor.name %]</option>
+          <option value="[% vendor.id | html %]" selected="selected">[% vendor.name | html %]</option>
        [% ELSE %]
-          <option value="[% vendor.id %]">[% vendor.name %]</option>
+          <option value="[% vendor.id | html %]">[% vendor.name | html %]</option>
        [% END %]
      [% END %]
      </select>
@@ -84,9 +85,9 @@
         <option value="">Do not use plugin</option>
         [% FOREACH plugin IN plugins %]
             [% IF account.plugin == plugin.class %]
-                <option value="[% plugin.class %]" selected="selected">[% plugin.metadata.name %]</option>
+                <option value="[% plugin.class | html %]" selected="selected">[% plugin.metadata.name | html %]</option>
             [% ELSE %]
-                <option value="[% plugin.class %]">[% plugin.metadata.name %]</option>
+                <option value="[% plugin.class | html %]">[% plugin.metadata.name | html %]</option>
             [% END %]
         [% END %]
      </select>
@@ -96,42 +97,42 @@
   [% END %]
   <li>
      <label for="description">Description: </label>
-     <input type="text" name="description" id="description" size="20" value="[% account.description %]" />
+     <input type="text" name="description" id="description" size="20" value="[% account.description | html %]" />
   </li>
   <li>
-     [% transport_types = [ 'FTP', 'SFTP', 'FILE' ] %]
+     [% transport_types = [ 'FTP', 'SFTP', 'FILE' ] | html %]
      <label for="transport">Transport: </label>
      <select name="transport" title="valid types of transport are FTP and SFTP"
       id="transport">
       [% FOREACH transport_type IN transport_types %]
            [% IF transport_type == account.transport %]
-              <option value="[% transport_type %]" selected="selected">[% transport_type %]</option>
+              <option value="[% transport_type | html %]" selected="selected">[% transport_type | html %]</option>
            [% ELSE %]
-              <option value="[% transport_type %]">[% transport_type %]</option>
+              <option value="[% transport_type | html %]">[% transport_type | html %]</option>
            [% END %]
        [% END %]
      </select>
   </li>
   <li>
      <label for="host">Remote host: </label>
-     <input type="text" name="host" id="host" size="20" maxlength="40" value="[% account.host %]" />
+     <input type="text" name="host" id="host" size="20" maxlength="40" value="[% account.host | html %]" />
   </li>
   <li>
      <label for="username">Username: </label>
-     <input type="text" name="username" id="username" size="20" maxlength="40" value="[% account.username %]" />
+     <input type="text" name="username" id="username" size="20" maxlength="40" value="[% account.username | html %]" />
   </li>
   <li>
      <label for="password">Password: </label>
-     <input type="text" name="password" id="password" size="20" maxlength="40" value="[% account.password %]" />
+     <input type="text" name="password" id="password" size="20" maxlength="40" value="[% account.password | html %]" />
   </li>
   <li>
      <label for="download_directory">Download directory: </label>
-     <input type="text" name="download_directory" id="download_directory" size="20" value="[% account.download_directory %]" />
+     <input type="text" name="download_directory" id="download_directory" size="20" value="[% account.download_directory | html %]" />
         <div class="hint">The download directory specifies the directory on the ftp site from which quotes and invoices are downloaded.</div>
   </li>
   <li>
      <label for="upload_directory">Upload directory: </label>
-     <input type="text" name="upload_directory" id="upload_directory" size="20" value="[% account.upload_directory %]" />
+     <input type="text" name="upload_directory" id="upload_directory" size="20" value="[% account.upload_directory | html %]" />
         <div class="hint">The upload directory specifies the directory on the ftp site to which orders are uploaded.</div>
   </li>
   <li>
@@ -139,12 +140,12 @@
      <select name="id_code_qualifier" id="id_code_qualifier">
      [% FOREACH qualifier IN code_qualifiers %]
         [% IF qualifier.code == account.id_code_qualifier %]
-           <option value="[% qualifier.code %]" selected="selected">
-               [% qualifier.description %] ([% qualifier.code %])
+           <option value="[% qualifier.code | html %]" selected="selected">
+               [% qualifier.description | html %] ([% qualifier.code | html %])
            </option>
         [% ELSE %]
-           <option value="[% qualifier.code %]">
-              [% qualifier.description %] ([% qualifier.code %])
+           <option value="[% qualifier.code | html %]">
+              [% qualifier.description | html %] ([% qualifier.code | html %])
            </option>
         [% END %]
      [% END %]
@@ -152,46 +153,46 @@
   </li>
   <li>
      <label for="san">SAN: </label>
-     <input type="text" name="san" id="san" size="20" maxlength="20" value="[% account.san %]" />
+     <input type="text" name="san" id="san" size="20" maxlength="20" value="[% account.san | html %]" />
   </li>
   <li>
      <label for="quotes_enabled">Quotes enabled: </label>
       [% IF account.quotes_enabled %]
-     <input type="checkbox" name="quotes_enabled" id="quotes_enabled" value="[% account.quotes_enabled %]" checked="checked" />
+     <input type="checkbox" name="quotes_enabled" id="quotes_enabled" value="[% account.quotes_enabled | html %]" checked="checked" />
       [% ELSE %]
-     <input type="checkbox" name="quotes_enabled" id="quotes_enabled" value="[% account.quotes_enabled %]" />
+     <input type="checkbox" name="quotes_enabled" id="quotes_enabled" value="[% account.quotes_enabled | html %]" />
       [% END %]
   </li>
   <li>
      <label for="orders_enabled">Orders enabled: </label>
 [% IF account.orders_enabled %]
-     <input type="checkbox" name="orders_enabled" id="orders_enabled" value="[% account.orders_enabled %]" checked="checked" />
+     <input type="checkbox" name="orders_enabled" id="orders_enabled" value="[% account.orders_enabled | html %]" checked="checked" />
 [% ELSE %]
-     <input type="checkbox" name="orders_enabled" id="orders_enabled" value="[% account.orders_enabled %]" />
+     <input type="checkbox" name="orders_enabled" id="orders_enabled" value="[% account.orders_enabled | html %]" />
 [% END %]
   </li>
   <li>
      <label for="invoices_enabled">Invoices enabled: </label>
 [% IF account.invoices_enabled %]
-     <input type="checkbox" name="invoices_enabled" id="invoices_enabled" value="[% account.invoices_enabled %]" checked="checked" />
+     <input type="checkbox" name="invoices_enabled" id="invoices_enabled" value="[% account.invoices_enabled | html %]" checked="checked" />
 [% ELSE %]
-     <input type="checkbox" name="invoices_enabled" id="invoices_enabled" value="[% account.invoices_enabled %]" />
+     <input type="checkbox" name="invoices_enabled" id="invoices_enabled" value="[% account.invoices_enabled | html %]" />
 [% END %]
   </li>
   <li>
      <label for="responses_enabled">Responses enabled: </label>
 [% IF account.responses_enabled %]
-     <input type="checkbox" name="responses_enabled" id="responses_enabled" value="[% account.responses_enabled %]" checked="checked" />
+     <input type="checkbox" name="responses_enabled" id="responses_enabled" value="[% account.responses_enabled | html %]" checked="checked" />
 [% ELSE %]
-     <input type="checkbox" name="responses_enabled" id="responses_enabled" value="[% account.responses_enabled %]" />
+     <input type="checkbox" name="responses_enabled" id="responses_enabled" value="[% account.responses_enabled | html %]" />
 [% END %]
   </li>
   <li>
      <label for="auto_orders">Automatic ordering: </label>
 [% IF account.auto_orders %]
-     <input type="checkbox" name="auto_orders" id="auto_orders" value="[% account.auto_orders %]" checked="checked" />
+     <input type="checkbox" name="auto_orders" id="auto_orders" value="[% account.auto_orders | html %]" checked="checked" />
 [% ELSE %]
-     <input type="checkbox" name="auto_orders" id="auto_orders" value="[% account.auto_orders %]" />
+     <input type="checkbox" name="auto_orders" id="auto_orders" value="[% account.auto_orders | html %]" />
 [% END %]
     <div class="hint">
         With automatic ordering quotes generate orders without staff intervention.
@@ -213,22 +214,22 @@
 <table>
     <tr>
     <th>Vendor</th>
-    <td>[% account.vendor.name %]</td>
+    <td>[% account.vendor.name | html %]</td>
     </tr>
     <tr>
     <th>Description</th>
-    <td>[% account.description %]</td>
+    <td>[% account.description | html %]</td>
     </tr>
     <tr>
     <th>SAN</th>
-    <td>[% account.san %]</td>
+    <td>[% account.san | html %]</td>
     </tr>
 </table>
 <form action="/cgi-bin/koha/admin/edi_accounts.pl" method="post">
     <table>
     </table>
     <input type="hidden" name="op" value="delete_confirmed" />
-    <input type="hidden" name="id" value="[% account.id %]" />
+    <input type="hidden" name="id" value="[% account.id | html %]" />
     <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
 </form>
 <form action="/cgi-bin/koha/admin/edi_accounts.pl" method="get">
@@ -262,24 +263,24 @@
     </tr>
     [% FOREACH account IN ediaccounts %]
     <tr>
-      <td>[% account.id %]</td>
-      <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% account.vendor_id %]">[% account.vendor.name %]</a></td>
-      <td>[% account.description %]</td>
-      <td>[% account.transport %]</td>
-      <td>[% account.host %]</td>
-      <td>[% account.username %]</td>
+      <td>[% account.id | html %]</td>
+      <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% account.vendor_id | html %]">[% account.vendor.name | html %]</a></td>
+      <td>[% account.description | html %]</td>
+      <td>[% account.transport | html %]</td>
+      <td>[% account.host | html %]</td>
+      <td>[% account.username | html %]</td>
       <td>[% IF account.password %]*****[% END %]</td>
-      <td>[% account.download_directory %]</td>
-      <td>[% account.upload_directory %]</td>
+      <td>[% account.download_directory | html %]</td>
+      <td>[% account.upload_directory | html %]</td>
       <td>
          [% FOREACH qualifier IN code_qualifiers %]
             [% IF qualifier.code == account.id_code_qualifier %]
-                   [% qualifier.description %]
+                   [% qualifier.description | html %]
             [% END %]
          [% END %]
-         ([% account.id_code_qualifier %])
+         ([% account.id_code_qualifier | html %])
      </td>
-      <td>[% account.san %]</td>
+      <td>[% account.san | html %]</td>
       [% IF account.quotes_enabled %]
          <td>Y</td>
       [% ELSE %]
@@ -306,7 +307,7 @@
          <td>N</td>
       [% END %]
       <td class="actions">
-          <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_accounts.pl?op=acct_form&id=[% account.id %]"><i class="fa fa-pencil"></i> Edit</a> <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_accounts.pl?op=delete_confirm&id=[% account.id %]"><i class="fa fa-trash"></i> Delete</a>
+          <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_accounts.pl?op=acct_form&id=[% account.id | html %]"><i class="fa fa-pencil"></i> Edit</a> <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_accounts.pl?op=delete_confirm&id=[% account.id | html %]"><i class="fa fa-trash"></i> Delete</a>
       </td>
     </tr>
     [% END %]
@@ -326,6 +327,6 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

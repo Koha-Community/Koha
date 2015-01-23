@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
@@ -36,9 +37,9 @@
             <option value="*">All libraries</option>
         [% FOREACH branch IN Branches.all( selected => current_branch ) %]
           [% IF branch.selected %]
-            <option value="[% branch.branchcode %]" selected="selected">[% branch.branchname %]</option>
+            <option value="[% branch.branchcode | html %]" selected="selected">[% branch.branchname | html %]</option>
           [% ELSE %]
-            <option value="[% branch.branchcode %]">[% branch.branchname %]</option>
+            <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
           [% END %]
         [% END %]
         </select>
@@ -46,10 +47,10 @@
   [% IF current_branch == '*' %]
     <h1>Batch patron deletion/anonymization</h1>
   [% ELSE %]
-    <h1>Batch patron deletion/anonymization for [% Branches.GetName( current_branch ) %]</h1>
+    <h1>Batch patron deletion/anonymization for [% Branches.GetName( current_branch ) | html %]</h1>
   [% END %]
 [% ELSE %]
-    <h1>Batch patron deletion/anonymization for [% Branches.GetName( Branches.GetLoggedInBranchcode ) %]</h1>
+    <h1>Batch patron deletion/anonymization for [% Branches.GetName( Branches.GetLoggedInBranchcode ) | html %]</h1>
 [% END %]
 
 [% IF step == 1 %]
@@ -89,7 +90,7 @@
                         <option value="" selected="selected">Any</option>
                         [% FOREACH bc IN borrower_categorycodes %]
                             [% UNLESS bc.category_type == 'S' %]
-                                <option value="[% bc.categorycode %]">[% bc.description %]</option>
+                                <option value="[% bc.categorycode | html %]">[% bc.description | html %]</option>
                             [% END %]
                         [% END %]
                     </select>
@@ -100,7 +101,7 @@
                     <select id="patron_list_id" name="patron_list_id">
                         <option value=""></option>
                         [% FOREACH pl IN patron_lists %]
-                            <option value="[% pl.patron_list_id %]">[% pl.name %]</option>
+                            <option value="[% pl.patron_list_id | html %]">[% pl.name | html %]</option>
                         [% END %]
                     </select>
                 </li>
@@ -125,7 +126,7 @@
 
             <!-- hidden here -->
             <input type="hidden" name="step" value="2" />
-            <input type="hidden" name="branch" value="[% current_branch %]" />
+            <input type="hidden" name="branch" value="[% current_branch | html %]" />
             </fieldset>
             <fieldset class="action"><input type="submit" value="Next &gt;&gt;" /></fieldset>
     </form>
@@ -140,8 +141,8 @@
     <fieldset>
         <legend>Warnings</legend>
         <ul>
-            <li>[% patrons_to_delete.size || 0 %] patrons will be deleted</li>
-            <li>[% patrons_to_anonymize.count || 0 %] patron's checkout histories will be anonymized</li>
+            <li>[% patrons_to_delete.size || 0 | html %] patrons will be deleted</li>
+            <li>[% patrons_to_anonymize.count || 0 | html %] patron's checkout histories will be anonymized</li>
         </ul>
 
         <br />
@@ -155,12 +156,12 @@
 
                 <br /><input id="testrun" type="radio" name="radio" value="testrun" checked="checked" />
                 <label for="testrun">Do not remove any patrons (test run)</label>
-                <input type="hidden" name="do_delete" value="[% patrons_to_delete.size %]" /></fieldset>
+                <input type="hidden" name="do_delete" value="[% patrons_to_delete.size | html %]" /></fieldset>
 
             [% END %]
             [% IF patrons_to_anonymize.count %]
-                Checkout history for [% patrons_to_anonymize.count %] patrons will be anonymized
-                <input type="hidden" name="do_anonym" value="[% patrons_to_anonymize.count %]" />
+                Checkout history for [% patrons_to_anonymize.count | html %] patrons will be anonymized
+                <input type="hidden" name="do_anonym" value="[% patrons_to_anonymize.count | html %]" />
             [% END %]
 
             <input type="hidden" name="step" value="3" />
@@ -170,9 +171,9 @@
             [% IF Koha.Preference('TrackLastPatronActivity') %]
                 <input type="hidden" name="borrower_lastseen" value="[% borrower_lastseen | $KohaDates %]" />
             [% END %]
-            <input type="hidden" name="borrower_categorycode" value="[% borrower_categorycode %]" />
-            <input type="hidden" name="patron_list_id" value="[% patron_list_id %]" />
-            <input type="hidden" name="branch" value="[% current_branch %]" />
+            <input type="hidden" name="borrower_categorycode" value="[% borrower_categorycode | html %]" />
+            <input type="hidden" name="patron_list_id" value="[% patron_list_id | html %]" />
+            <input type="hidden" name="branch" value="[% current_branch | html %]" />
     </fieldset>
     <fieldset class="action"><input type="submit" value="Finish" /> <a class="cancel" href="/cgi-bin/koha/tools/cleanborrowers.pl">Cancel</a></fieldset>
         </form>
@@ -185,21 +186,21 @@
 
     <div id="step3">
         [% IF ( testrun ) %]
-            <h4>[% TotalDel %] patrons would have been removed (if it wasn't a test run)</h4>
+            <h4>[% TotalDel | html %] patrons would have been removed (if it wasn't a test run)</h4>
             <h4>No patron records have been actually removed</h4>
         [% ELSE %]
             [% IF ( do_delete ) %]
                 [% IF ( trash ) %]
-                    <h4>[% TotalDel %] patrons have been successfully moved to trash</h4>
+                    <h4>[% TotalDel | html %] patrons have been successfully moved to trash</h4>
                 [% ELSE %]
-                    <h4>[% TotalDel %] patrons have been successfully deleted</h4>
+                    <h4>[% TotalDel | html %] patrons have been successfully deleted</h4>
                 [% END %]
             [% ELSE %]
                 <h4>No patron records have been removed</h4>
             [% END %]
         [% END %]
         [% IF do_anonym %]
-            <h4>All checkouts ([% do_anonym %]) older than [% last_issue_date | $KohaDates %] have been anonymized</h4>
+            <h4>All checkouts ([% do_anonym | html %]) older than [% last_issue_date | $KohaDates %] have been anonymized</h4>
         [% ELSE %]
             <h4>No patron records have been anonymized</h4>
         [% END %]
@@ -216,7 +217,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     <script type="text/javascript">
         $(document).ready(function(){

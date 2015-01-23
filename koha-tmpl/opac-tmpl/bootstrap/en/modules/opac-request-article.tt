@@ -2,7 +2,7 @@
 [% USE Branches %]
 [% USE ItemTypes %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Request article</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Request article</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -24,11 +24,11 @@
             [% IF article_request_type == 'bib_only' %]  [% SET mandatory_fields = Koha.Preference('ArticleRequestsMandatoryFieldsRecordOnly') %] [% END %]
             [% IF article_request_type == 'item_only' %] [% SET mandatory_fields = Koha.Preference('ArticleRequestsMandatoryFieldsItemOnly') %]   [% END %]
 
-            <h3>Place article request for [% biblio.title %]</h3>
+            <h3>Place article request for [% biblio.title | html %]</h3>
 
             <form id="place-article-request" method="post" action="/cgi-bin/koha/opac-request-article.pl">
                 <input type="hidden" name="action" value="create" />
-                <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblio.biblionumber %]" />
+                <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblio.biblionumber | html %]" />
 
                 <fieldset class="rows">
                     <ul>
@@ -105,9 +105,9 @@
                             <select name="branchcode" id="branchcode">
                                 [% FOREACH b IN Branches.all %]
                                     [% IF b.branchcode == Branches.GetLoggedInBranchcode %]
-                                        <option value="[% b.branchcode %]" selected="selected">[% b.branchname %]</option>
+                                        <option value="[% b.branchcode | html %]" selected="selected">[% b.branchname | html %]</option>
                                     [% ELSE %]
-                                        <option value="[% b.branchcode %]">[% b.branchname %]</option>
+                                        <option value="[% b.branchcode | html %]">[% b.branchname | html %]</option>
                                     [% END %]
                                 [% END %]
                             </select>
@@ -136,25 +136,25 @@
                                         <td>
                                             [% IF article_request_type == 'item_only' && !checked %]
                                                 [% SET checked = 1 %]
-                                                <input type="radio" name="itemnumber" value="[% item.itemnumber %]" checked="checked" />
+                                                <input type="radio" name="itemnumber" value="[% item.itemnumber | html %]" checked="checked" />
                                             [% ELSE %]
-                                                <input type="radio" name="itemnumber" value="[% item.itemnumber %]" />
+                                                <input type="radio" name="itemnumber" value="[% item.itemnumber | html %]" />
                                             [% END %]
                                         </td>
                                         <td>
-                                            [% ItemTypes.GetDescription( item.itype ) %]
+                                            [% ItemTypes.GetDescription( item.itype ) | html %]
                                         </td>
                                         <td>
-                                            [% item.barcode %]
+                                            [% item.barcode | html %]
                                         </td>
                                         <td>
-                                            [% Branches.GetName( item.homebranch ) %]
+                                            [% Branches.GetName( item.homebranch ) | html %]
                                         </td>
                                         <td>
-                                            [% item.itemcallnumber %]
+                                            [% item.itemcallnumber | html %]
                                         </td>
                                         <td>
-                                            [% item.enumchron %]
+                                            [% item.enumchron | html %]
                                         </td>
                                     </tr>
                                 [% END %]
@@ -200,7 +200,7 @@
                 }
             [% END %]
 
-            var mandatory_fields = "[% mandatory_fields %]";
+            var mandatory_fields = "[% mandatory_fields | html %]";
             var m = new Array();
             if ( mandatory_fields ) m = mandatory_fields.split(",");
             var f = new Array();

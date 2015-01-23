@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -29,7 +30,7 @@
 <fieldset class="rows">
 <legend>Task scheduler</legend><ol>
 <li><span class="label">Current server time is:</span>
-[% time %]</li>
+[% time | html %]</li>
 <li><label for="starttime">Time:</label>
 <input type="text" name="starttime" id="starttime" value="" maxlength="5" size="5" /></li>
 <li><label for="startdate">Date: </label> <input type="text" size="10" id="startdate" name="startdate" value="" />
@@ -39,9 +40,9 @@
 <select name="report" id="report">
 [% FOREACH savedreport IN savedreports %]
     [% IF ( savedreport.selected ) %]
-        <option value="[% savedreport.id %]" selected="selected">[% savedreport.report_name %]</option>
+        <option value="[% savedreport.id | html %]" selected="selected">[% savedreport.report_name | html %]</option>
     [% ELSE %]
-        <option value="[% savedreport.id %]">[% savedreport.report_name %]</option>
+        <option value="[% savedreport.id | html %]">[% savedreport.report_name | html %]</option>
     [% END %]
 [% END %]
 </select>
@@ -74,11 +75,11 @@
 <input type="hidden" name="mode" value="job_change" />
 
 <tr>
-<td>[% JOB.TIME %]</td>
-<td>[% JOB.TAG %]</td>
+<td>[% JOB.TIME | html %]</td>
+<td>[% JOB.TAG | html %]</td>
 <td><input type="submit" name="delete" value="Delete" /></td>
 </tr>
-<input type="hidden" name="jobid" value="[% JOB.JOBID %]" />
+<input type="hidden" name="jobid" value="[% JOB.JOBID | html %]" />
 </form>
 [% END %]
 </table>[% END %]
@@ -94,7 +95,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     <script type="text/javascript">
         $(document).ready(function(){

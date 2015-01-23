@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your privacy management</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your privacy management</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -84,7 +84,7 @@
                                                 [% END %]
                                             </select>
                                             <span class="hint">
-                                                Your guarantor is <i>[% borrower.guarantor.firstname %] [% borrower.guarantor.surname %]</i>
+                                                Your guarantor is <i>[% borrower.guarantor.firstname | html %] [% borrower.guarantor.surname | html %]</i>
                                             </span>
                                         </div>
                                     [% END %]

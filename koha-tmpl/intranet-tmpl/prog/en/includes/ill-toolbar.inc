@@ -9,12 +9,12 @@
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="ill-backend-dropdown">
                     [% FOREACH backend IN backends %]
-                        <li><a href="/cgi-bin/koha/ill/ill-requests.pl?method=create&amp;backend=[% backend %]">[% backend %]</a></li>
+                        <li><a href="/cgi-bin/koha/ill/ill-requests.pl?method=create&amp;backend=[% backend | html %]">[% backend | html %]</a></li>
                     [% END %]
                 </ul>
             </div>
           [% ELSE %]
-            <a id="ill-new" class="btn btn-sm btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=create&amp;backend=[% backends.0 %]">
+            <a id="ill-new" class="btn btn-sm btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=create&amp;backend=[% backends.0 | html %]">
                 <i class="fa fa-plus"></i> New ILL request
             </a>
           [% END %]

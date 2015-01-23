@@ -13,11 +13,11 @@
       <webMaster></webMaster>
       [% FOREACH message_lis IN message_list %]
       <item>
-        <title>[% message_lis.subject |html %]</title>
-        <link>[% message_lis.title |html %]</link>
-        <description>[% message_lis.content |html %]</description>
-        <pubDate>[% message_lis.time_queued |html %]</pubDate>
-        <guid>[% message_lis.title |html %]</guid>
+        <title>[% message_lis.subject | html %]</title>
+        <link>[% message_lis.title | html %]</link>
+        <description>[% message_lis.content | html %]</description>
+        <pubDate>[% message_lis.time_queued | html %]</pubDate>
+        <guid>[% message_lis.title | html %]</guid>
       </item>
       [% END %]
    </channel>

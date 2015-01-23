@@ -1,9 +1,10 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( booksellername ) %]Orders with uncertain prices for vendor [% booksellername %][% ELSE %]Orders with uncertain prices[% END %]</title>
-[% Asset.css("css/datatables.css") %]
+<title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( booksellername ) %]Orders with uncertain prices for vendor [% booksellername | html %][% ELSE %]Orders with uncertain prices[% END %]</title>
+[% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -11,7 +12,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; [% IF ( booksellername ) %]<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername %]</a> &rsaquo; Uncertain prices for vendor [% booksellername %][% ELSE %]Uncertain prices[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; [% IF ( booksellername ) %]<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a> &rsaquo; Uncertain prices for vendor [% booksellername | html %][% ELSE %]Uncertain prices[% END %]</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -22,43 +23,43 @@
 [% INCLUDE 'acquisitions-toolbar.inc' %]
         [% IF ( validate ) %]
             [% SET metacontent = '0; url=' _  scriptname  _ '?booksellerid=' _  booksellerid %]
-            <META HTTP-EQUIV=Refresh CONTENT="[% metacontent %]">
+            <META HTTP-EQUIV=Refresh CONTENT="[% metacontent | html %]">
         [% ELSE %]
         [% IF ( booksellername ) %]
-            <h1>Orders with uncertain prices for vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername %]</a></h1>
+            <h1>Orders with uncertain prices for vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a></h1>
             <h2>Contact information</h2>
             <p><strong>Address: </strong>
-                [% booksellerpostal %]
-                [% bookselleraddress1 %]
-                [% bookselleraddress2 %]
-                [% bookselleraddress3 %]
-                [% bookselleraddress4 %]
-                <a href="[% booksellerurl %]">[% booksellerurl %]</a>
+                [% booksellerpostal | html %]
+                [% bookselleraddress1 | html %]
+                [% bookselleraddress2 | html %]
+                [% bookselleraddress3 | html %]
+                [% bookselleraddress4 | html %]
+                <a href="[% booksellerurl | html %]">[% booksellerurl | html %]</a>
             </p>
             <p><strong>Phone: </strong>
-                [% booksellerphone %] / Fax:
-                [% booksellerfax %]</p>
+                [% booksellerphone | html %] / Fax:
+                [% booksellerfax | html %]</p>
             <dl>
                 [% FOREACH contact IN contacts %]
                     <dt><strong>Contact: </strong></dt>
-                    <dd>[% contact.name %]
-                        [% contact.position %]
-                        [% contact.phone %]
-                        [% contact.altphone %]
-                        [% contact.email %]
-                        [% contact.notes %]
+                    <dd>[% contact.name | html %]
+                        [% contact.position | html %]
+                        [% contact.phone | html %]
+                        [% contact.altphone | html %]
+                        [% contact.email | html %]
+                        [% contact.notes | html %]
                     </dd>
                 [% END %]
             </dl>
             [% IF ( booksellernotes ) %]
             <p><strong>Notes: </strong>
-                [% booksellernotes %]</p>
+                [% booksellernotes | html %]</p>
             [% END %]
         [% END %]
 
         <h2>Orders with uncertain prices</h2>
-        <form action="[% scriptname %]" method="post">
-        <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+        <form action="[% scriptname | html %]" method="post">
+        <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
         <label for="owner">Orders from:</label>
         <select id="owner" name="owner">
             [% IF ( owner ) %]
@@ -71,8 +72,8 @@
         </select>
         <input type="submit" value="Filter" />
         </form>
-        <form action="[% scriptname %]" method="post" id="uncertainprices">
-        <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+        <form action="[% scriptname | html %]" method="post" id="uncertainprices">
+        <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
         <input type="hidden" name="op" value="validate" />
         <table id="uncertainpricet">
         <thead>
@@ -89,38 +90,38 @@
 	    [% FOREACH uncertainpriceorder IN uncertainpriceorders %]
 	    <tr>
         <td>
-            [% uncertainpriceorder.basketname %]
+            [% uncertainpriceorder.basketname | html %]
         </td>
 	    <td>
-            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% uncertainpriceorder.biblionumber %]">[% uncertainpriceorder.title |html %]</a>
-            [% IF ( uncertainpriceorder.author ) %] <em>by</em> [% uncertainpriceorder.author %][% END %]
+            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% uncertainpriceorder.biblionumber | html %]">[% uncertainpriceorder.title | html %]</a>
+            [% IF ( uncertainpriceorder.author ) %] <em>by</em> [% uncertainpriceorder.author | html %][% END %]
             [% IF ( uncertainpriceorder.publishercode ) %]
-                <br /><em>Publisher:</em> [% uncertainpriceorder.publishercode %]
-                [%- IF    ( uncertainpriceorder.publicationyear ) -%], [% uncertainpriceorder.publicationyear %]
-                [%- ELSIF ( uncertainpriceorder.copyrightdate ) -%] [% uncertainpriceorder.copyrightdate %]
+                <br /><em>Publisher:</em> [% uncertainpriceorder.publishercode | html %]
+                [%- IF    ( uncertainpriceorder.publicationyear ) -%], [% uncertainpriceorder.publicationyear | html %]
+                [%- ELSIF ( uncertainpriceorder.copyrightdate ) -%] [% uncertainpriceorder.copyrightdate | html %]
                 [% END %]
             [% END %]
-            [% IF ( uncertainpriceorder.isbn ) %]<br />[% uncertainpriceorder.isbn %][% END %]
+            [% IF ( uncertainpriceorder.isbn ) %]<br />[% uncertainpriceorder.isbn | html %][% END %]
             <br />
-            <a href="neworderempty.pl?ordernumber=[% uncertainpriceorder.ordernumber %]&amp;booksellerid=[% booksellerid %]&amp;basketno=[% uncertainpriceorder.basketno %]">
+            <a href="neworderempty.pl?ordernumber=[% uncertainpriceorder.ordernumber | html %]&amp;booksellerid=[% booksellerid | html %]&amp;basketno=[% uncertainpriceorder.basketno | html %]">
                 Edit
             </a>
         </td>
         <td>
-            [% uncertainpriceorder.firstname %] [% uncertainpriceorder.surname %]
+            [% uncertainpriceorder.firstname | html %] [% uncertainpriceorder.surname | html %]
         </td>
 	    <td>
-	        <input type="checkbox" name="uncertainprice[% uncertainpriceorder.ordernumber %]" value="1" checked="checked" />
+	        <input type="checkbox" name="uncertainprice[% uncertainpriceorder.ordernumber | html %]" value="1" checked="checked" />
 	    </td>
 	    <td>
-            <input class="check_uncertain" data-ordernumber="[% uncertainpriceorder.ordernumber %]" type="text" size="10" name="price[% uncertainpriceorder.ordernumber %]" value="[% uncertainpriceorder.listprice %]" />
+            <input class="check_uncertain" data-ordernumber="[% uncertainpriceorder.ordernumber | html %]" type="text" size="10" name="price[% uncertainpriceorder.ordernumber | html %]" value="[% uncertainpriceorder.listprice | html %]" />
 	    </td>
 	    <td>
         [% IF basket.effective_create_items == 'ordering' %]
-            [% uncertainpriceorder.quantity %]
-            <input type="hidden" name="qty[% uncertainpriceorder.ordernumber %]" value="[% uncertainpriceorder.quantity %]" />
+            [% uncertainpriceorder.quantity | html %]
+            <input type="hidden" name="qty[% uncertainpriceorder.ordernumber | html %]" value="[% uncertainpriceorder.quantity | html %]" />
         [% ELSE %]
-            <input class="check_uncertain" data-ordernumber="[% uncertainpriceorder.ordernumber %]" type="text" size="10" name="qty[% uncertainpriceorder.ordernumber %]" value="[% uncertainpriceorder.quantity %]" />
+            <input class="check_uncertain" data-ordernumber="[% uncertainpriceorder.ordernumber | html %]" type="text" size="10" name="qty[% uncertainpriceorder.ordernumber | html %]" value="[% uncertainpriceorder.quantity | html %]" />
         [% END %]
 	    </td>
 	    </tr>
@@ -139,7 +140,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/acquisitions-menu.js") %]
+    [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
         $(document).ready(function() {
@@ -157,7 +158,7 @@
         });
         var MSG_INVALIDPRICE = _("ERROR: Price is not a valid number, please check the price and try again!");
     </script>
-    [% Asset.js("js/acq.js") %]
+    [% Asset.js("js/acq.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

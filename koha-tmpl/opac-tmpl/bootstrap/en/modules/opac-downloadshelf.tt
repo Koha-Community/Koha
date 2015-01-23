@@ -1,7 +1,7 @@
 [% USE Koha %]
 [% IF ( fullpage ) %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Download list [% shelf.shelfname | html %]</title>[% INCLUDE 'doc-head-close.inc' %]
+    <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Download list [% shelf.shelfname | html %]</title>[% INCLUDE 'doc-head-close.inc' %]
     [% BLOCK cssinclude %][% END %]
     </head>
     [% INCLUDE 'bodytag.inc' bodyid='opac-downloadlist' %]
@@ -57,7 +57,7 @@
                                             <option value="isbd">ISBD</option>
                                             <option value="iso2709">MARC</option>
                                             [% FOREACH csv_profile IN csv_profiles %]
-                                            <option value="[% csv_profile.export_format_id |html %]">CSV - [% csv_profile.profile |html %]</option>
+                                            <option value="[% csv_profile.export_format_id | html %]">CSV - [% csv_profile.profile | html %]</option>
                                             [% END %]
                                         </select>
                                         <span class="required">Required</span>

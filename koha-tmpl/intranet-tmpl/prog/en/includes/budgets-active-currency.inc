@@ -1,6 +1,6 @@
 [% IF ( currency ) %]
     [% IF ( not hide ) %]
-        <p><b>Currency = [% currency %]</b></p>
+        <p><b>Currency = [% currency | html %]</b></p>
     [% END %]
 [% ELSE %]
     <div class="dialog alert">

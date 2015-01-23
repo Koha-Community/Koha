@@ -1,19 +1,20 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; [% IF ( add_form ) %] System preferences &rsaquo; [% IF ( modify ) %]Modify system preference '[% searchfield %]'[% ELSE %]Add a system preference[% END %][% END %][% IF ( add_validate ) %] System preferences &rsaquo; Data added[% END %]
-[% IF ( delete_confirm ) %] System preferences &rsaquo; [% searchfield %] &rsaquo; Confirm deletion of parameter '[% searchfield %]'[% END %][% IF ( delete_confirmed ) %] System preferences &rsaquo; Parameter deleted[% END %][% IF ( else ) %]System preferences[% END %]</title>
+<title>Koha &rsaquo; Administration &rsaquo; [% IF ( add_form ) %] System preferences &rsaquo; [% IF ( modify ) %]Modify system preference '[% searchfield | html %]'[% ELSE %]Add a system preference[% END %][% END %][% IF ( add_validate ) %] System preferences &rsaquo; Data added[% END %]
+[% IF ( delete_confirm ) %] System preferences &rsaquo; [% searchfield | html %] &rsaquo; Confirm deletion of parameter '[% searchfield | html %]'[% END %][% IF ( delete_confirmed ) %] System preferences &rsaquo; Parameter deleted[% END %][% IF ( else ) %]System preferences[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="admin_systempreferences" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a> &rsaquo; [% IF ( modify ) %]Modify system preference '[% searchfield %]'[% ELSE %]Add a system preference[% END %][% END %][% IF ( add_validate ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a> &rsaquo; Data added[% END %]
-[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a> &rsaquo; <a href="/cgi-bin/koha/admin/systempreferences.pl?op=add_form&amp;searchfield=[% searchfield %]">[% searchfield %]</a> &rsaquo; Confirm deletion of parameter '[% searchfield %]'[% END %][% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a> &rsaquo; Parameter deleted[% END %][% IF ( else ) %]System preferences[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a> &rsaquo; [% IF ( modify ) %]Modify system preference '[% searchfield | html %]'[% ELSE %]Add a system preference[% END %][% END %][% IF ( add_validate ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a> &rsaquo; Data added[% END %]
+[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a> &rsaquo; <a href="/cgi-bin/koha/admin/systempreferences.pl?op=add_form&amp;searchfield=[% searchfield | html %]">[% searchfield | html %]</a> &rsaquo; Confirm deletion of parameter '[% searchfield | html %]'[% END %][% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a> &rsaquo; Parameter deleted[% END %][% IF ( else ) %]System preferences[% END %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -23,36 +24,36 @@
 
 [% IF ( add_form ) %]
         [% IF ( type_upload ) %]
-            <form action="[% script_name %]" name="Aform" method="post" enctype="multipart/form-data">
+            <form action="[% script_name | html %]" name="Aform" method="post" enctype="multipart/form-data">
         [% ELSE %]
-            <form action="[% script_name %]" name="Aform" method="post">
+            <form action="[% script_name | html %]" name="Aform" method="post">
         [% END %]
         <fieldset class="rows"><legend>
         [% IF ( modify ) %]Modify
         [% ELSE %]Add
         [% END %] a system preference</legend><ol>
-            <li><label for="explanation">Explanation: </label><input type="text" name="explanation" id="explanation" size="60" value="[% explanation |html %]" /><input type="hidden" name="op" value="add_validate" /></li>
-            <li>[% IF ( searchfield ) %]<span class="label">Variable: </span>[% searchfield %]<input type="hidden" name="variable" value="[% searchfield %]" />
+            <li><label for="explanation">Explanation: </label><input type="text" name="explanation" id="explanation" size="60" value="[% explanation | html %]" /><input type="hidden" name="op" value="add_validate" /></li>
+            <li>[% IF ( searchfield ) %]<span class="label">Variable: </span>[% searchfield | html %]<input type="hidden" name="variable" value="[% searchfield | html %]" />
             [% ELSE %]<label for="variable">Variable: </label><input type="text" name="variable" id="variable" size="60" />[% END %]</li>
             <li><label for="value">Value: </label>
                 [% IF ( type_free ) %]
-                    <textarea id="value" name="value" cols="[% fieldlength %]">[% value |html %]</textarea>
+                    <textarea id="value" name="value" cols="[% fieldlength | html %]">[% value | html %]</textarea>
                 [% ELSIF ( type_upload ) %]
                     <input type="file" name="value" />
                 [% ELSIF ( type_textarea || type_htmlarea ) %]
                     [% IF ( type_htmlarea ) && ( Koha.Preference('UseWYSIWYGinSystemPreferences') ) %]
-                        <textarea class="mce" name="value" id="value" rows="[% rows %]" cols="[% cols %]">[% value |html %]</textarea>
+                        <textarea class="mce" name="value" id="value" rows="[% rows | html %]" cols="[% cols | html %]">[% value | html %]</textarea>
                     [% ELSE %]
-                    <textarea name="value" id="value" rows="[% rows %]" cols="[% cols %]">[% value |html %]</textarea>
+                    <textarea name="value" id="value" rows="[% rows | html %]" cols="[% cols | html %]">[% value | html %]</textarea>
                     [% END %]
                 [% ELSIF ( type_choice ) %]
                     <select name="value" id="value">
                         [% FOREACH option IN options %]
                             [% IF ( option.selected ) %]
-                                <option value="[% option.option %]" selected="selected">
+                                <option value="[% option.option | html %]" selected="selected">
                             [% ELSE %]
-                                <option value="[% option.option %]">
-                            [% END %][% option.option %]</option>
+                                <option value="[% option.option | html %]">
+                            [% END %][% option.option | html %]</option>
                         [% END %]
                     </select>
                 [% END %]
@@ -62,23 +63,23 @@
         [% FOREACH languages_loo IN languages_loop %]
         <tr><td>
             [% IF ( languages_loo.plural ) %]
-            [% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]
+            [% IF ( languages_loo.native_description ) %][% languages_loo.native_description | html %][% ELSE %][% languages_loo.rfc4646_subtag | html %][% END %]
             [% FOREACH sublanguages_loo IN languages_loo.sublanguages_loop %]<table><tr><td>
                 [% IF ( sublanguages_loo.sublanguage_current ) %]
-                    <label for="[% sublanguages_loo.rfc4646_subtag %]">[% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %]([% sublanguages_loo.rfc4646_subtag %])
+                    <label for="[% sublanguages_loo.rfc4646_subtag | html %]">[% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %]([% sublanguages_loo.rfc4646_subtag | html %])
                     [% IF ( sublanguages_loo.enabled ) %]
-                        <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" />
+                        <input value="[% sublanguages_loo.rfc4646_subtag | html %]" name="value" id="[% sublanguages_loo.rfc4646_subtag | html %]" type="checkbox" checked="checked" />
                     [% ELSE %]
-                        <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" />
+                        <input value="[% sublanguages_loo.rfc4646_subtag | html %]" name="value" id="[% sublanguages_loo.rfc4646_subtag | html %]" type="checkbox" />
                     [% END %]
                     </label>
 
                 [% ELSE %]
-                    <label for="[% sublanguages_loo.rfc4646_subtag %]">[% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %]([% sublanguages_loo.rfc4646_subtag %])
+                    <label for="[% sublanguages_loo.rfc4646_subtag | html %]">[% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %]([% sublanguages_loo.rfc4646_subtag | html %])
                     [% IF ( sublanguages_loo.enabled ) %]
-                        <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" />
+                        <input value="[% sublanguages_loo.rfc4646_subtag | html %]" name="value" id="[% sublanguages_loo.rfc4646_subtag | html %]" type="checkbox" checked="checked" />
                     [% ELSE %]
-                        <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" />
+                        <input value="[% sublanguages_loo.rfc4646_subtag | html %]" name="value" id="[% sublanguages_loo.rfc4646_subtag | html %]" type="checkbox" />
                     [% END %]
                     </label>
                 [% END %]</td></tr></table>
@@ -86,19 +87,19 @@
 
             [% ELSE %]
                 [% IF ( languages_loo.current ) %]
-            <label for="[% languages_loo.rfc4646_subtag %]">[% languages_loo.native_description %]([% languages_loo.rfc4646_subtag %])
+            <label for="[% languages_loo.rfc4646_subtag | html %]">[% languages_loo.native_description | html %]([% languages_loo.rfc4646_subtag | html %])
                 [% IF ( languages_loo.group_enabled ) %]
-                    <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="[% languages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" />
+                    <input value="[% languages_loo.rfc4646_subtag | html %]" name="value" id="[% languages_loo.rfc4646_subtag | html %]" type="checkbox" checked="checked" />
                 [% ELSE %]
-                    <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="[% languages_loo.rfc4646_subtag %]" type="checkbox" />
+                    <input value="[% languages_loo.rfc4646_subtag | html %]" name="value" id="[% languages_loo.rfc4646_subtag | html %]" type="checkbox" />
                 [% END %]
                     </label>
                 [% ELSE %]
-            <label for="[% languages_loo.rfc4646_subtag %]">[% languages_loo.native_description %]([% languages_loo.rfc4646_subtag %])
+            <label for="[% languages_loo.rfc4646_subtag | html %]">[% languages_loo.native_description | html %]([% languages_loo.rfc4646_subtag | html %])
                 [% IF ( languages_loo.group_enabled ) %]
-                    <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="[% languages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" />
+                    <input value="[% languages_loo.rfc4646_subtag | html %]" name="value" id="[% languages_loo.rfc4646_subtag | html %]" type="checkbox" checked="checked" />
                 [% ELSE %]
-                    <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="[% languages_loo.rfc4646_subtag %]" type="checkbox" />
+                    <input value="[% languages_loo.rfc4646_subtag | html %]" name="value" id="[% languages_loo.rfc4646_subtag | html %]" type="checkbox" />
                 [% END %]
                     </label>
                 [% END %]
@@ -124,7 +125,7 @@
         </ol></fieldset>
         <fieldset class="action"><input type="submit" value="Save" /> 
           [% IF ( return_tab ) %]
-            <a class="cancel" href="/cgi-bin/koha/admin/systempreferences.pl?tab=[% return_tab %]">Cancel</a>
+            <a class="cancel" href="/cgi-bin/koha/admin/systempreferences.pl?tab=[% return_tab | html %]">Cancel</a>
           [% ELSE %]
             <a class="cancel" href="/cgi-bin/koha/admin/systempreferences.pl">Cancel</a>
           [% END %]
@@ -194,7 +195,7 @@
         </select>
         <li><label for="prefoptions">Variable options:</label>
         <div class="hint">(a choice list for choice (separated by |) or cols|rows for texarea)</div>
-        <input type="text" name="prefoptions" id="prefoptions" value="[% prefoptions %]" size="60" maxlength="80" /></li>
+        <input type="text" name="prefoptions" id="prefoptions" value="[% prefoptions | html %]" size="60" maxlength="80" /></li>
         </ol>
         </fieldset>
         </form>
@@ -203,32 +204,32 @@
     [% IF ( add_validate ) %]
         <h3>Data recorded</h3>
         
-        <form action="[% script_name %]" method="post">
+        <form action="[% script_name | html %]" method="post">
         <input type="submit" value="OK" />
         </form>
     [% END %]
     
     [% IF ( delete_confirm ) %]
     <table>
-        <caption>Confirm deletion of [% searchfield %]?</caption>
+        <caption>Confirm deletion of [% searchfield | html %]?</caption>
         <tr>
             <th>Variable name:</th>
-            <td>[% searchfield %]</td>
+            <td>[% searchfield | html %]</td>
         </tr>
         <tr><th>Value: </th><td>
-        [% Tvalue %]
+        [% Tvalue | html %]
         </td></tr></table>
-        <form class="inline" action="[% script_name %]" method="post">
+        <form class="inline" action="[% script_name | html %]" method="post">
         <input type="hidden" name="op" value="delete_confirmed" />
-        <input type="hidden" name="searchfield" value="[% searchfield %]" />
-        <input type="hidden" name="Tvalue" value="[% Tvalue %]" />
+        <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
+        <input type="hidden" name="Tvalue" value="[% Tvalue | html %]" />
         <input type="submit"  value="Yes, delete" /></form>
-        <form class="inline" action="[% script_name %]" method="post"><input type="submit" value="No, do not delete" /></form>
+        <form class="inline" action="[% script_name | html %]" method="post"><input type="submit" value="No, do not delete" /></form>
     [% END %]
     
     [% IF ( delete_confirmed ) %]
         <h3>Data deleted</h3>
-        <form action="[% script_name %]" method="post">
+        <form action="[% script_name | html %]" method="post">
             <input type="submit" value="Back to System Preferences" />
         </form>
     [% END %]
@@ -236,7 +237,7 @@
     [% IF ( else ) %]
 
     <div id="toolbar" class="btn-toolbar">
-        <a class="btn btn-default btn-sm" id="newstopword" href="[% script_name %]?op=add_form"><i class="fa fa-plus"></i> New preference</a>
+        <a class="btn btn-default btn-sm" id="newstopword" href="[% script_name | html %]?op=add_form"><i class="fa fa-plus"></i> New preference</a>
     </div>
 
     [% IF ( tab != 'local_use' ) %]
@@ -255,7 +256,7 @@
     <tbody>[% FOREACH loo IN loop %]
         <tr>
 
-        <td><strong><a href="[% loo.edit %]">[% loo.variable %]</a></strong></td><td> [% loo.explanation |html %]</td>
+        <td><strong><a href="[% loo.edit | html %]">[% loo.variable | html %]</a></strong></td><td> [% loo.explanation | html %]</td>
         [% IF ( loo.oneline ) %]
         <td class="single-line">
         [% ELSE %]
@@ -267,27 +268,27 @@
             <form action="/cgi-bin/koha/admin/systempreferences.pl" method="post">
         [% END %]
                 [% IF ( loo.type_free ) %]
-                <input type="text" name="value" size="[% loo.fieldlength %]" value="[% loo.value |html %]" />
+                <input type="text" name="value" size="[% loo.fieldlength | html %]" value="[% loo.value | html %]" />
                 [% END %]
                 [% IF ( loo.type_upload ) %]
-                <input type="file" name="value" value="[% loo.value |html %]" />
+                <input type="file" name="value" value="[% loo.value | html %]" />
                 [% END %]
                 [% IF ( loo.type_textarea ) || ( loo.type_htmlarea ) %]
                     [% IF ( loo.type_htmlarea ) && ( Koha.Preference('UseWYSIWYGinSystemPreferences') ) %]
-                        <textarea class="mce" name="value" rows="[% loo.rows %]" cols="[% loo.cols %]">[% loo.value |html %]</textarea>
+                        <textarea class="mce" name="value" rows="[% loo.rows | html %]" cols="[% loo.cols | html %]">[% loo.value | html %]</textarea>
                     [% ELSE %]
                         <a class="expand-textarea" style="display: none" href="#">Click to edit</a>
-                        <textarea name="value" rows="[% loo.rows %]" cols="[% loo.cols %]">[% loo.value |html %]</textarea>
+                        <textarea name="value" rows="[% loo.rows | html %]" cols="[% loo.cols | html %]">[% loo.value | html %]</textarea>
                     [% END %]
                 [% END %]
                 [% IF ( loo.type_choice ) %]
                 <select name="value">
                     [% FOREACH option IN loo.options %]
                         [% IF ( option.selected ) %]
-                            <option value="[% option.option %]" selected="selected">
+                            <option value="[% option.option | html %]" selected="selected">
                         [% ELSE %]
-                            <option value="[% option.option %]">
-                        [% END %][% option.option %]</option>
+                            <option value="[% option.option | html %]">
+                        [% END %][% option.option | html %]</option>
                     [% END %]
                 </select>
                 [% END %]
@@ -297,23 +298,23 @@
                 [% FOREACH languages_loo IN loo.languages_loop %]
                 <tr><td>
                     [% IF ( languages_loo.plural ) %]
-                    [% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]
+                    [% IF ( languages_loo.native_description ) %][% languages_loo.native_description | html %][% ELSE %][% languages_loo.rfc4646_subtag | html %][% END %]
                     [% FOREACH sublanguages_loo IN languages_loo.sublanguages_loop %]<table><tr><td>
                         [% IF ( sublanguages_loo.sublanguage_current ) %]
-                            <label for="[% sublanguages_loo.rfc4646_subtag %]">[% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %]([% sublanguages_loo.rfc4646_subtag %])
+                            <label for="[% sublanguages_loo.rfc4646_subtag | html %]">[% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %]([% sublanguages_loo.rfc4646_subtag | html %])
                             [% IF ( sublanguages_loo.enabled ) %]
-                                <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" />
+                                <input value="[% sublanguages_loo.rfc4646_subtag | html %]" name="value" id="[% sublanguages_loo.rfc4646_subtag | html %]" type="checkbox" checked="checked" />
                             [% ELSE %]
-                                <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" />
+                                <input value="[% sublanguages_loo.rfc4646_subtag | html %]" name="value" id="[% sublanguages_loo.rfc4646_subtag | html %]" type="checkbox" />
                             [% END %]
                             </label>
 
                         [% ELSE %]
-                            <label for="[% sublanguages_loo.rfc4646_subtag %]">[% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %]([% sublanguages_loo.rfc4646_subtag %])
+                            <label for="[% sublanguages_loo.rfc4646_subtag | html %]">[% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %]([% sublanguages_loo.rfc4646_subtag | html %])
                             [% IF ( sublanguages_loo.enabled ) %]
-                                <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" />
+                                <input value="[% sublanguages_loo.rfc4646_subtag | html %]" name="value" id="[% sublanguages_loo.rfc4646_subtag | html %]" type="checkbox" checked="checked" />
                             [% ELSE %]
-                                <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" />
+                                <input value="[% sublanguages_loo.rfc4646_subtag | html %]" name="value" id="[% sublanguages_loo.rfc4646_subtag | html %]" type="checkbox" />
                             [% END %]
                             </label>
                         [% END %]</td></tr></table>
@@ -321,19 +322,19 @@
 
                     [% ELSE %]
                         [% IF ( languages_loo.current ) %]
-                    <label for="[% languages_loo.rfc4646_subtag %]">[% languages_loo.native_description %]([% languages_loo.rfc4646_subtag %])
+                    <label for="[% languages_loo.rfc4646_subtag | html %]">[% languages_loo.native_description | html %]([% languages_loo.rfc4646_subtag | html %])
                         [% IF ( languages_loo.group_enabled ) %]
-                            <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="opac[% languages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" />
+                            <input value="[% languages_loo.rfc4646_subtag | html %]" name="value" id="opac[% languages_loo.rfc4646_subtag | html %]" type="checkbox" checked="checked" />
                         [% ELSE %]
-                            <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="opac[% languages_loo.rfc4646_subtag %]" type="checkbox" />
+                            <input value="[% languages_loo.rfc4646_subtag | html %]" name="value" id="opac[% languages_loo.rfc4646_subtag | html %]" type="checkbox" />
                         [% END %]
                             </label>
                         [% ELSE %]
-                    <label for="[% languages_loo.rfc4646_subtag %]">[% languages_loo.native_description %]([% languages_loo.rfc4646_subtag %])
+                    <label for="[% languages_loo.rfc4646_subtag | html %]">[% languages_loo.native_description | html %]([% languages_loo.rfc4646_subtag | html %])
                         [% IF ( languages_loo.group_enabled ) %]
-                            <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="opac[% languages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" />
+                            <input value="[% languages_loo.rfc4646_subtag | html %]" name="value" id="opac[% languages_loo.rfc4646_subtag | html %]" type="checkbox" checked="checked" />
                         [% ELSE %]
-                            <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="opac[% languages_loo.rfc4646_subtag %]" type="checkbox" />
+                            <input value="[% languages_loo.rfc4646_subtag | html %]" name="value" id="opac[% languages_loo.rfc4646_subtag | html %]" type="checkbox" />
                         [% END %]
                             </label>
                         [% END %]
@@ -356,15 +357,15 @@
                     <label for="value-no" class="yesno">OFF</label>
                 [% END %]
                 <input type="hidden" name="op" value="add_validate" />
-                <input type="hidden" name="variable" value="[% loo.variable %]" />
-                <input type="hidden" name="prefoptions" value="[% loo.prefoptions |html %]" />
-                <input type="hidden" name="preftype" value="[% loo.type %]" />
-                <input type="hidden" name="explanation" value="[% loo.explanation |html %]" />
+                <input type="hidden" name="variable" value="[% loo.variable | html %]" />
+                <input type="hidden" name="prefoptions" value="[% loo.prefoptions | html %]" />
+                <input type="hidden" name="preftype" value="[% loo.type | html %]" />
+                <input type="hidden" name="explanation" value="[% loo.explanation | html %]" />
                 <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Save</button>
             </form>
         </td>
 
-        <td class="actions"><a class="btn btn-default btn-xs" href="[% loo.edit %]"><i class="fa fa-pencil"></i> Edit</a> <a class="btn btn-default btn-xs" href="[% loo.delete %]"><i class="fa fa-trash"></i> Delete</a></td>
+        <td class="actions"><a class="btn btn-default btn-xs" href="[% loo.edit | html %]"><i class="fa fa-pencil"></i> Edit</a> <a class="btn btn-default btn-xs" href="[% loo.delete | html %]"><i class="fa fa-trash"></i> Delete</a></td>
     </tr>
     [% END %]</tbody>
     </table>

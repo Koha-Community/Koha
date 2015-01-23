@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
@@ -5,9 +6,9 @@
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Serials [% biblionumber %]</title>
+<title>Koha &rsaquo; Serials [% biblionumber | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 <style type="text/css">input.dt-filter { width : 100%; font-size : 85%; }</style>
 </head>
 
@@ -17,13 +18,13 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; [% IF ( done_searched ) %]<a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Search results[% ELSE %]Serials [% END %] </div>
 
-[% url_params = [] %]
+[% url_params = [] | html %]
 [% FOREACH param IN CGI.params.pairs %]
-    [% escaped_value = BLOCK %][% param.value | uri %][% END %]
-    [% url_params.push(param.key _ '=' _ escaped_value) %]
+    [% escaped_value = BLOCK | html %][% param.value | uri %][% END %]
+    [% url_params.push(param.key _ '=' _ escaped_value) | html %]
 [% END %]
 [% SET referrer = '/cgi-bin/koha/serials/serials-search.pl?' %]
-[% referrer = BLOCK %][% referrer | url %][% url_params.join("&amp;") |uri %][% END %]
+[% referrer = BLOCK | html %][% referrer | url %][% url_params.join("&amp;") |uri %][% END %]
 [% SET edit_action_link = '/cgi-bin/koha/serials/subscription-batchedit.pl?referrer=' _ referrer %]
 
 [% BLOCK subscriptions_table %]
@@ -36,9 +37,9 @@
     [% END %]
     [% IF CAN_user_serials_edit_subscription %]
         <div class="actions">
-            <a class="select-all" href="#" data-tab="[% tab %]"><i class="fa fa-check"></i> Select all</a>
+            <a class="select-all" href="#" data-tab="[% tab | html %]"><i class="fa fa-check"></i> Select all</a>
             |
-            <a class="clear-all" href="#" data-tab="[% tab %]"><i class="fa fa-remove"></i> Clear all</a>
+            <a class="clear-all" href="#" data-tab="[% tab | html %]"><i class="fa fa-remove"></i> Clear all</a>
             <span class="itemselection_actions">
                 | Actions:
                 <a class="itemselection_action_modify"><i class="fa fa-pencil"></i> Edit selected serials</a>
@@ -59,7 +60,7 @@
                 <th class="title-string">Expiration date</th>
             [% END %]
             [% FOR field IN additional_fields_for_subscription %]
-              <th>[% field.name %]</th>
+              <th>[% field.name | html %]</th>
             [% END %]
             <th class="NoSort">Actions</th>
         </tr>
@@ -77,7 +78,7 @@
               <td><input type="text" class="dt-filter" data-column_num="6" placeholder="Search expiration date" /></td>
           [% END %]
           [% FOR field IN additional_fields_for_subscription %]
-            <td><input type="text" class="dt-filter" data-column_num="[% loop.count + 6 %]" placeholder="Search [% field.name %]" /></td>
+            <td><input type="text" class="dt-filter" data-column_num="[% loop.count + 6 | html %]" placeholder="Search [% field.name | html %]" /></td>
           [% END %]
           <td></td>
         </tr>
@@ -88,33 +89,33 @@
           <tr>
             <td>
                 [% UNLESS subscription.cannotedit %]
-                    <input type="checkbox" name="subscriptionid" value="[% subscription.subscriptionid %]" />
+                    <input type="checkbox" name="subscriptionid" value="[% subscription.subscriptionid | html %]" />
                 [% ELSE %]
-                    <input type="checkbox" name="subscriptionid" value="[% subscription.subscriptionid %]" disabled="disabled" title="You cannot edit this subscription" />
+                    <input type="checkbox" name="subscriptionid" value="[% subscription.subscriptionid | html %]" disabled="disabled" title="You cannot edit this subscription" />
                 [% END %]
             </td>
             <td>
-            [% IF ( subscription.issn ) %][% subscription.issn %]
+            [% IF ( subscription.issn ) %][% subscription.issn | html %]
             [% END %]
             </td>
-            <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]" class="button" title="subscription detail">[% subscription.title |html %]</a>
+            <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | html %]" class="button" title="subscription detail">[% subscription.title | html %]</a>
             </td>
-            <td>[% IF ( subscription.publicnotes ) %][% subscription.publicnotes %][% END %]
-            [% IF ( subscription.internalnotes ) %]([% subscription.internalnotes %])[% END %]
-            </td>
-            <td>
-              [% IF ( subscription.branchcode ) %][% Branches.GetName( subscription.branchcode ) %][% END %]
+            <td>[% IF ( subscription.publicnotes ) %][% subscription.publicnotes | html %][% END %]
+            [% IF ( subscription.internalnotes ) %]([% subscription.internalnotes | html %])[% END %]
             </td>
             <td>
-              [% IF ( subscription.location ) %][% AuthorisedValues.GetByCode( 'LOC', subscription.location ) %][% END %]
+              [% IF ( subscription.branchcode ) %][% Branches.GetName( subscription.branchcode ) | html %][% END %]
             </td>
             <td>
-              [% IF ( subscription.callnumber ) %][% subscription.callnumber %][% END %]
+              [% IF ( subscription.location ) %][% AuthorisedValues.GetByCode( 'LOC', subscription.location ) | html %][% END %]
+            </td>
+            <td>
+              [% IF ( subscription.callnumber ) %][% subscription.callnumber | html %][% END %]
             </td>
             [% UNLESS closed %]
                 <td>
                     [% IF ( subscription.enddate ) %]
-                        <span title="[% subscription.enddate %]">[% subscription.enddate | $KohaDates %]</span>
+                        <span title="[% subscription.enddate | html %]">[% subscription.enddate | $KohaDates %]</span>
                     [% ELSE %]
                         <span title="0000-00-00"></span>
                     [% END %]
@@ -123,30 +124,30 @@
 
             [% FOR field IN additional_fields_for_subscription %]
               [% IF field.authorised_value_category %]
-                <td>[% AuthorisedValues.GetByCode( field.authorised_value_category, subscription.additional_fields.${field.name} ) %]</td>
+                <td>[% AuthorisedValues.GetByCode( field.authorised_value_category, subscription.additional_fields.${field.name} ) | html %]</td>
               [% ELSE %]
-                <td>[% subscription.additional_fields.${field.name} %]</td>
+                <td>[% subscription.additional_fields.${field.name} | html %]</td>
               [% END %]
             [% END %]
 
             <td>
                 <div class="dropdown">
                     [% IF closed %]
-                        <a class="btn btn-default btn-xs dropdown-toggle" id="closedsubactions[% subscription.subscriptionid %]" role="button" data-toggle="dropdown" href="#">
+                        <a class="btn btn-default btn-xs dropdown-toggle" id="closedsubactions[% subscription.subscriptionid | html %]" role="button" data-toggle="dropdown" href="#">
                            Actions <b class="caret"></b>
                         </a>
-                        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="closedsubactions[% subscription.subscriptionid %]">
+                        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="closedsubactions[% subscription.subscriptionid | html %]">
 
                             [% IF ( routing && CAN_user_serials_routing ) %]
                                 [% UNLESS ( subscription.cannotedit ) %]
                                     <li>
-                                        <a href="/cgi-bin/koha/serials/serials-search.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=reopen&amp;routing=[% subscription.routing %]&amp;searched=1&amp;title_filter=[% title_filter | uri %]&amp;ISSN_filter=[% ISSN_filter | uri %]&amp;EAN_filter=[% EAN_filter | uri %]&amp;published_filter=[% publisher_filter | uri %]&amp;bookseller_filter=[% bookseller_filter | uri %]&amp;branch_filter=[% branch_filter | uri %]" id="reopensub"> <i class="fa fa-repeat"></i> Reopen</a>
+                                        <a href="/cgi-bin/koha/serials/serials-search.pl?subscriptionid=[% subscription.subscriptionid | html %]&amp;op=reopen&amp;routing=[% subscription.routing | html %]&amp;searched=1&amp;title_filter=[% title_filter | uri %]&amp;ISSN_filter=[% ISSN_filter | uri %]&amp;EAN_filter=[% EAN_filter | uri %]&amp;published_filter=[% publisher_filter | uri %]&amp;bookseller_filter=[% bookseller_filter | uri %]&amp;branch_filter=[% branch_filter | uri %]" id="reopensub"> <i class="fa fa-repeat"></i> Reopen</a>
                                     </li>
                                 [% END %]
                             [% END # IF ( routing && CAN_user_serials_routing ) %]
 
                             <li>
-                                <a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]"><i class="fa fa-list-alt"></i> Issue history</a>
+                                <a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid | html %]"><i class="fa fa-list-alt"></i> Issue history</a>
                             </li>
 
                         </ul>
@@ -155,32 +156,32 @@
                             [% IF ( CAN_user_serials_receive_serials ) %]
                                 [%# There should be no space between these two buttons, it would render badly %]
                                 <a class="btn btn-default btn-xs" role="button"
-                                   href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=[% subscription.subscriptionid %]&amp;serstatus=1,3,7"><i
+                                   href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=[% subscription.subscriptionid | html %]&amp;serstatus=1,3,7"><i
                                    class="fa fa-inbox"></i> Serial receive</a><a
-                                   class="btn btn-default btn-xs dropdown-toggle" id="subactions[% subscription.subscriptionid %]" role="button"
+                                   class="btn btn-default btn-xs dropdown-toggle" id="subactions[% subscription.subscriptionid | html %]" role="button"
                                    data-toggle="dropdown" href="#"><b class="caret"></b></a>
                             [% ELSE %]
-                                <a class="btn btn-default btn-xs dropdown-toggle" id="subactions[% subscription.subscriptionid %]" role="button" data-toggle="dropdown" href="#">Actions <b class="caret"></b></a>
+                                <a class="btn btn-default btn-xs dropdown-toggle" id="subactions[% subscription.subscriptionid | html %]" role="button" data-toggle="dropdown" href="#">Actions <b class="caret"></b></a>
                             [% END %]
-                        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="subactions[% subscription.subscriptionid %]">
+                        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="subactions[% subscription.subscriptionid | html %]">
 
                             [% IF ( routing && CAN_user_serials_routing ) %]
                                 [% IF ( subscription.cannotedit ) %]
                                 [% ELSE %]
                                     [% IF ( subscription.routingedit ) %]
                                         <li>
-                                            <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]"><i class="fa fa-pencil"></i> Edit routing list ([% subscription.routingedit %])</a>
+                                            <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid | html %]"><i class="fa fa-pencil"></i> Edit routing list ([% subscription.routingedit | html %])</a>
                                         </li>
                                     [% ELSE %]
                                         <li>
-                                            <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=new"> <i class="fa fa-plus"></i> New routing list</a>
+                                            <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid | html %]&amp;op=new"> <i class="fa fa-plus"></i> New routing list</a>
                                         </li>
                                     [% END %]
                                 [% END %]
                             [% END # IF ( routing && CAN_user_serials_routing ) %]
 
                             <li>
-                                <a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]"><i class="fa fa-list-alt"></i> Issue history</a>
+                                <a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid | html %]"><i class="fa fa-list-alt"></i> Issue history</a>
                             </li>
                         </ul>
                         </div>
@@ -203,7 +204,7 @@
       [% INCLUDE 'serials-toolbar.inc' %]
 
       [% IF ( done_searched ) %]
-        <h2>Serials subscriptions ([% total %] found)</h2>
+        <h2>Serials subscriptions ([% total | html %] found)</h2>
       [% ELSE %]
         <h2>Serials subscriptions search</h2>
       [% END %]
@@ -258,16 +259,16 @@
                 </li>
                 [% FOR field IN additional_fields_for_subscription %]
                   <li>
-                    <label for="additional_field_[% field.id %]"> [% field.name %]: </label>
+                    <label for="additional_field_[% field.id | html %]"> [% field.name | html %]: </label>
                     [% IF field.authorised_value_choices %]
-                      <select id="additional_field_[% field.id %]" name="additional_field_[% field.id %]_filter">
+                      <select id="additional_field_[% field.id | html %]" name="additional_field_[% field.id | html %]_filter">
                         <option value="">All</option>
                         [% FOREACH av IN field.authorised_value_choices %]
-                          <option value="[% av.authorised_value %]">[% av.lib %]</option>
+                          <option value="[% av.authorised_value | html %]">[% av.lib | html %]</option>
                         [% END %]
                       </select>
                     [% ELSE %]
-                      <input id="additional_field_[% field.id %]" type="text" value="[% additional_fields.${field.name} %]" name="additional_field_[% field.id %]_filter" />
+                      <input id="additional_field_[% field.id | html %]" type="text" value="[% additional_fields.${field.name} | html %]" name="additional_field_[% field.id | html %]_filter" />
                     [% END %]
                   </li>
                 [% END %]
@@ -284,8 +285,8 @@
         [% IF ( total ) %]
           <div id="serialstabs" class="toptabs" style="clear:both;">
             <ul class="ui-tabs-nav">
-              <li><a href="#opened">Open ([% openedsubscriptions.size || 0 %])</a></li>
-              <li><a href="#closed">Closed ([% closedsubscriptions.size || 0 %])</a></li>
+              <li><a href="#opened">Open ([% openedsubscriptions.size || 0 | html %])</a></li>
+              <li><a href="#closed">Closed ([% closedsubscriptions.size || 0 | html %])</a></li>
             </ul>
             <div id="opened">
               [% IF openedsubscriptions %]
@@ -368,20 +369,20 @@
 
                 [% FOR field IN additional_fields_for_subscription %]
                   <li>
-                    <label for="additional_field_[% field.id %]ID"> [% field.name %]: </label>
+                    <label for="additional_field_[% field.id | html %]ID"> [% field.name | html %]: </label>
                     [% IF field.authorised_value_choices %]
-                      <select id="additional_field_[% field.id %]" name="additional_field_[% field.id %]_filter">
+                      <select id="additional_field_[% field.id | html %]" name="additional_field_[% field.id | html %]_filter">
                         <option value="">All</option>
                         [% FOREACH av IN field.authorised_value_choices %]
                           [% IF av.authorised_value == additional_field_filters.${field.name}.value %]
-                            <option value="[% av.authorised_value %]" selected="selected">[% av.lib %]</option>
+                            <option value="[% av.authorised_value | html %]" selected="selected">[% av.lib | html %]</option>
                           [% ELSE %]
-                            <option value="[% av.authorised_value %]">[% av.lib %]</option>
+                            <option value="[% av.authorised_value | html %]">[% av.lib | html %]</option>
                           [% END %]
                         [% END %]
                       </select>
                     [% ELSE %]
-                      <input id="additional_field_[% field.id %]" type="text" value="[% additional_field_filters.${field.name}.value %]" name="additional_field_[% field.id %]_filter" />
+                      <input id="additional_field_[% field.id | html %]" type="text" value="[% additional_field_filters.${field.name}.value | html %]" name="additional_field_[% field.id | html %]_filter" />
                     [% END %]
                   </li>
                 [% END %]
@@ -401,12 +402,12 @@
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
-        var subscriptionid = "[% subscriptionid %]";
+        var subscriptionid = "[% subscriptionid | html %]";
         var MSG_CLOSE_SUBSCRIPTION = _("Are you sure you want to close this subscription?");
         var MSG_REOPEN_SUBSCRIPTION = _("Are you sure you want to reopen this subscription?");
         var CONFIRM_DELETE_SUBSCRIPTION = _("Are you sure you want to delete this subscription?");
     </script>
-    [% Asset.js("js/serials-toolbar.js") %]
+    [% Asset.js("js/serials-toolbar.js") | $raw %]
     <script type="text/javascript">
 
             function itemSelectionBuildEditLink(div) {
@@ -415,7 +416,7 @@
                     subscription_ids.push($(this).val());
                 });
                 if (subscription_ids.length > 0) {
-                    var url = "[% edit_action_link %]";
+                    var url = "[% edit_action_link | html %]";
                     url += '&subscriptionid=' + subscription_ids.join('&subscriptionid=');
                     $('a.itemselection_action_modify').attr('href', url);
                 } else {

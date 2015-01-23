@@ -17,7 +17,7 @@
 <div>
     <form method="get" action="cn_browser.pl">
     <label for="searchcn">Search call number:</label>
-    <input type="text" id="cn_browser_input" name="q" value="[% q %]" />
+    <input type="text" id="cn_browser_input" name="q" value="[% q | html %]" />
     <input id="cn_browser_submit" type="submit" value="Search" />
     </form>
 </div>
@@ -32,16 +32,16 @@
     <tbody>
 [% FOREACH cn_loo IN cn_loop %]
     <tr>
-    <td style="background:[% cn_loo.background %];">[% cn_loo.itemcallnumber %]</td>
-    <td style="background:[% cn_loo.background %];">
-        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cn_loo.biblionumber %]">
-            [% cn_loo.title %] [% cn_loo.subtitle %] [% cn_loo.subtitle2 %]
+    <td style="background:[% cn_loo.background | html %];">[% cn_loo.itemcallnumber | html %]</td>
+    <td style="background:[% cn_loo.background | html %];">
+        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cn_loo.biblionumber | html %]">
+            [% cn_loo.title | html %] [% cn_loo.subtitle | html %] [% cn_loo.subtitle2 | html %]
             [% IF ( cn_loo.author ) %]
-                <span>by</span> [% cn_loo.author %]
+                <span>by</span> [% cn_loo.author | html %]
             [% END %]
         </a>
     </td>
-    <td style="background:[% cn_loo.background %];">[% cn_loo.branchname %]</td>
+    <td style="background:[% cn_loo.background | html %];">[% cn_loo.branchname | html %]</td>
     </tr>
 [% END %]
     </tbody>

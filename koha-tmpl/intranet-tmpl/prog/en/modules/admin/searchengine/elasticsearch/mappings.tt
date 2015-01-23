@@ -1,8 +1,9 @@
+[% USE raw %]
 [% USE Asset %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Search engine configuration</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.js("lib/jquery/plugins/jquery.tablednd.js") %]
+[% Asset.js("lib/jquery/plugins/jquery.tablednd.js") | $raw %]
 <script type="text/javascript">
     function clean_line( line ) {
         $(line).find('input[type="text"]').val("");
@@ -72,17 +73,17 @@ a.add, a.delete {
     <div class="yui-b">
 
     [% FOR m IN messages %]
-      <div class="dialog [% m.type %]">
+      <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
-          An error occurred when updating mappings ([% m.message %]).
+          An error occurred when updating mappings ([% m.message | html %]).
         [% CASE 'error_on_delete' %]
           An error occurred when deleting the existing mappings. Nothing has been changed!
-          (search field [% m.values.field_name %] with mapping [% m.values.marc_field %].)
+          (search field [% m.values.field_name | html %] with mapping [% m.values.marc_field | html %].)
         [% CASE 'success_on_update' %]
           Mapping updated successfully.
         [% CASE %]
-          [% m.code %]
+          [% m.code | html %]
         [% END %]
       </div>
     [% END %]
@@ -98,9 +99,9 @@ a.add, a.delete {
             [% FOREACH e IN errors %]
                 <li>
                     [% IF ( e.type == "malformed_mapping" ) %]
-                        The value "[% e.value %]" is not supported for mappings
+                        The value "[% e.value | html %]" is not supported for mappings
                     [% ELSIF ( e.type == "no_mapping" ) %]
-                        There is no mapping for the index [% e.value %]
+                        There is no mapping for the index [% e.value | html %]
                     [% END %]
                 </li>
             [% END %]
@@ -133,9 +134,9 @@ a.add, a.delete {
                   [% FOREACH search_field IN all_search_fields %]
                     <tr>
                       <td>
-                        <input type="text" name="search_field_name" value="[% search_field.name %]" />
+                        <input type="text" name="search_field_name" value="[% search_field.name | html %]" />
                       </td>
-                      <td><input type="text" name="search_field_label" value="[% search_field.label %]" />
+                      <td><input type="text" name="search_field_label" value="[% search_field.label | html %]" />
                       <td>
                         <select name="search_field_type">
                           <option value=""></option>
@@ -182,8 +183,8 @@ a.add, a.delete {
               </table>
             </div>
             [% FOREACH index IN indexes %]
-                <div id="mapping_[% index.index_name %]">
-                    <table class="mappings" data-index_name="[% index.index_name%]">
+                <div id="mapping_[% index.index_name | html %]">
+                    <table class="mappings" data-index_name="[% index.index_name | html %]">
                       <thead>
                         <tr class="nodrag nodrop">
                           <th>Search field</th>
@@ -198,9 +199,9 @@ a.add, a.delete {
                         [% FOREACH mapping IN index.mappings %]
                           <tr>
                             <td>
-                              <input type="hidden" name="mapping_index_name" value="[% index.index_name %]" />
-                              <input type="hidden" name="mapping_search_field_name" value="[% mapping.search_field_name %]">
-                              [% mapping.search_field_label %]
+                              <input type="hidden" name="mapping_index_name" value="[% index.index_name | html %]" />
+                              <input type="hidden" name="mapping_search_field_name" value="[% mapping.search_field_name | html %]">
+                              [% mapping.search_field_label | html %]
                             </td>
                             <td>
                               <select name="mapping_sort">
@@ -244,7 +245,7 @@ a.add, a.delete {
                               </select>
                             </td>
                             <td>
-                                <input name="mapping_marc_field" type="text" value="[% mapping.marc_field %]" />
+                                <input name="mapping_marc_field" type="text" value="[% mapping.marc_field | html %]" />
                             </td>
                             <td><a class="btn btn-default btn-xs delete" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a></td>
                           </tr>
@@ -253,10 +254,10 @@ a.add, a.delete {
                       <tfoot>
                         <tr class="nodrag nodrop">
                           <td>
-                            <input data-id="mapping_index_name" type="hidden" value="[% index.index_name %]" />
+                            <input data-id="mapping_index_name" type="hidden" value="[% index.index_name | html %]" />
                             <select data-id="mapping_search_field_name">
                              [% FOREACH f IN all_search_fields %]
-                               <option value="[% f.name %]">[% f.name %]</option>
+                               <option value="[% f.name | html %]">[% f.name | html %]</option>
                              [% END %]
                             </select>
                           </td>

@@ -1,22 +1,23 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Search for vendor [% supplier %]</title>
+<title>Koha &rsaquo; Search for vendor [% supplier | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style type="text/css">
 #vendors td{
 	vertical-align: top;
 }
 </style>
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="acq_booksellers" class="acq">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Search for vendor <em>[% supplier |html %]</em> </div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Search for vendor <em>[% supplier | html %]</em> </div>
 
 <div class="main container-fluid">
     <div class="row">
@@ -28,9 +29,9 @@
     [% UNLESS count %]
         <h1>Your search returned no results.</h1>
     [% ELSIF ( supplier.length < 1 ) %]
-        <h1>Vendor search: [% count %] results found</h1>
+        <h1>Vendor search: [% count | html %] results found</h1>
     [% ELSE %]
-        <h1>Vendor search: [% count %] results found for '[% supplier %]'</h1>
+        <h1>Vendor search: [% count | html %] results found for '[% supplier | html %]'</h1>
     [% END %]
 [% END %]
 [% IF ( loop_suppliers.size ) %]
@@ -38,15 +39,15 @@
         <p>Choose a vendor in the list to jump directly to the right place.
         <select id="supplierlist">
             [% FOREACH supplier1 IN loop_suppliers %]
-                <option value="[% supplier1.booksellerid %]">[% supplier1.name %]</option>
+                <option value="[% supplier1.booksellerid | html %]">[% supplier1.name | html %]</option>
             [% END %]
         </select>
         </p>
     [% END %]
     [% IF ( allbaskets ) %]
-        <a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier %]&amp;booksellerid=[% booksellerid %]">Show active baskets only</a>
+        <a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier | html %]&amp;booksellerid=[% booksellerid | html %]">Show active baskets only</a>
     [% ELSE %]
-        <a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier %]&amp;booksellerid=[% booksellerid %]&amp;allbaskets=1">Show all baskets</a>
+        <a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier | html %]&amp;booksellerid=[% booksellerid | html %]&amp;allbaskets=1">Show all baskets</a>
     [% END %]
     [% UNLESS booksellerid %]
         | <a href="#" id="show_active_vendors">Show active vendors only</a><a href="#" id="show_all_vendors">Show all vendors</a>
@@ -60,21 +61,21 @@
             [% END %]
                 <span class="suppliername">
                     [% IF (supplier.name) %]
-                        <a name="[% supplier.booksellerid %]" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% supplier.booksellerid %]">[% supplier.name |html %]</a>
+                        <a name="[% supplier.booksellerid | html %]" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% supplier.booksellerid | html %]">[% supplier.name | html %]</a>
                     [% ELSE %]
-                        <a name="[% supplier.booksellerid %]" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% supplier.booksellerid %]">NO NAME</a>
+                        <a name="[% supplier.booksellerid | html %]" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% supplier.booksellerid | html %]">NO NAME</a>
                     [% END %]
                 </span>
                 <span class="action">
                     [% IF ( CAN_user_acquisition_order_manage ) %]
                         [% IF ( supplier.active ) %]
-                            <a class="btn btn-default btn-sm" href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% supplier.booksellerid %]&amp;op=add_form"><i class="fa fa-plus"></i> New basket</a>
+                            <a class="btn btn-default btn-sm" href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% supplier.booksellerid | html %]&amp;op=add_form"><i class="fa fa-plus"></i> New basket</a>
                         [% ELSE %]
                             (inactive)
                         [% END %]
                     [% END %]
                         [% IF ( supplier.loop_basket.size ) %]
-                    <a class="btn btn-default btn-sm" href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% supplier.booksellerid %]"><i class="fa fa-inbox"></i> Receive shipment</a>
+                    <a class="btn btn-default btn-sm" href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% supplier.booksellerid | html %]"><i class="fa fa-inbox"></i> Receive shipment</a>
                         [% END %]
                 </span>
                 <div class="baskets">
@@ -101,54 +102,54 @@
                                     [% ELSE %]
                                         <tr>
                                     [% END %]
-                                        <td>[% basket.basketno %]</td>
-                                        <td>[% basket.basketname |html %]</td>
+                                        <td>[% basket.basketno | html %]</td>
+                                        <td>[% basket.basketname | html %]</td>
                                         <td>
-                                            <span title="[% basket.total_items %]">[% basket.total_items %]
+                                            <span title="[% basket.total_items | html %]">[% basket.total_items | html %]
                                                 [% IF basket.total_items_cancelled %]
-                                                    ([% basket.total_items_cancelled %] cancelled)
+                                                    ([% basket.total_items_cancelled | html %] cancelled)
                                                 [% END %]
                                             </span>
                                         </td>
                                         <td>
-                                            <span title="[% basket.total_biblios %]">[% basket.total_biblios %]
+                                            <span title="[% basket.total_biblios | html %]">[% basket.total_biblios | html %]
                                                 [% IF basket.total_biblios_cancelled %]
-                                                    ([% basket.total_biblios_cancelled %] cancelled)
+                                                    ([% basket.total_biblios_cancelled | html %] cancelled)
                                                 [% END %]
                                             </span>
                                         </td>
-                                        <td>[% basket.expected_items %]</td>
+                                        <td>[% basket.expected_items | html %]</td>
                                         <td>
                                             [% IF basket.authorisedby %]
-                                                [% basket.authorisedby.firstname %]
-                                                [% basket.authorisedby.surname %]
+                                                [% basket.authorisedby.firstname | html %]
+                                                [% basket.authorisedby.surname | html %]
                                             [% END %]
                                         </td>
-                                        <td><span title="[% basket.creationdate %]">[% basket.creationdate | $KohaDates %]</span></td>
+                                        <td><span title="[% basket.creationdate | html %]">[% basket.creationdate | $KohaDates %]</span></td>
                                         <td>
                                           [% IF basket.basketgroup %]
-                                            [% basketgroup = basket.basketgroup %]
+                                            [% basketgroup = basket.basketgroup | html %]
                                             [% IF basketgroup.closed %]
-                                              [% basketgroup.name %] (closed)
+                                              [% basketgroup.name | html %] (closed)
                                             [% ELSE %]
-                                              <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% basket.booksellerid %]&amp;basketgroupid=[% basketgroup.id %]">[% basketgroup.name %]</a>
+                                              <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% basket.booksellerid | html %]&amp;basketgroupid=[% basketgroup.id | html %]">[% basketgroup.name | html %]</a>
                                             [% END %]
                                           [% END %]
                                         </td>
                                         <td>
                                             [% IF ( basket.closedate ) %]
-                                                <span title="[% basket.closedate %]">[% basket.closedate | $KohaDates %]</span>
+                                                <span title="[% basket.closedate | html %]">[% basket.closedate | $KohaDates %]</span>
                                             [% ELSE %]
                                                 <span title="9999-99-99"></span>
                                             [% END %]
                                         </td>
                                         <td class="actions">
-                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]"><i class="fa fa-eye"></i> View</a>
+                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | html %]"><i class="fa fa-eye"></i> View</a>
 
                                             [% IF not basket.closedate and supplier.active %]
-                                                <a class="btn btn-default btn-xs" id="addtoBasketLabel[% basket.basketno %]" href="#addtoBasket[% basket.basketno %]" role="button" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a>
+                                                <a class="btn btn-default btn-xs" id="addtoBasketLabel[% basket.basketno | html %]" href="#addtoBasket[% basket.basketno | html %]" role="button" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a>
                                                 <!-- Modal -->
-                                                <div id="addtoBasket[% basket.basketno %]" class="modal" tabindex="-1" role="dialog" aria-labelledby="addtoBasketLabel[% basket.basketno %]" aria-hidden="true" data-basketno="[% basket.basketname %]">
+                                                <div id="addtoBasket[% basket.basketno | html %]" class="modal" tabindex="-1" role="dialog" aria-labelledby="addtoBasketLabel[% basket.basketno | html %]" aria-hidden="true" data-basketno="[% basket.basketname | html %]">
                                                     <div class="modal-dialog">
                                                     <div class="modal-content">
                                                     <div class="modal-body">
@@ -188,7 +189,7 @@
 </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/acquisitions-menu.js") %]
+    [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function() {

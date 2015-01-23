@@ -8,7 +8,7 @@
                 <label for="altcontactsurname">
                 [% END %]
                 Surname:</label>
-                    <input type="text" name="altcontactsurname" id="altcontactsurname" value="[% patron.altcontactsurname %]" />
+                    <input type="text" name="altcontactsurname" id="altcontactsurname" value="[% patron.altcontactsurname | html %]" />
                 [% IF ( mandatoryaltcontactsurname ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
@@ -20,7 +20,7 @@
                 <label for="altcontactfirstname">
                 [% END %]
                 First name:</label>
-                    <input type="text" name="altcontactfirstname" id="altcontactfirstname" value="[% patron.altcontactfirstname %]" />
+                    <input type="text" name="altcontactfirstname" id="altcontactfirstname" value="[% patron.altcontactfirstname | html %]" />
                 [% IF ( mandatoryaltcontactfirstname ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
@@ -32,7 +32,7 @@
                 <label for="altcontactaddress1">
                 [% END %]
                 Address:</label>
-                    <input type="text" name="altcontactaddress1" id="altcontactaddress1" value="[% patron.altcontactaddress1 %]" size="40" />
+                    <input type="text" name="altcontactaddress1" id="altcontactaddress1" value="[% patron.altcontactaddress1 | html %]" size="40" />
                 [% IF ( mandatoryaltcontactaddress1 ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
@@ -44,7 +44,7 @@
                 <label for="altcontactaddress2">
                 [% END %]
                 Address 2:</label>
-                <input type="text" name="altcontactaddress2" id="altcontactaddress2" value="[% patron.altcontactaddress2 %]" size="40" />
+                <input type="text" name="altcontactaddress2" id="altcontactaddress2" value="[% patron.altcontactaddress2 | html %]" size="40" />
                 [% IF ( mandatoryaltcontactaddress2 ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
@@ -56,7 +56,7 @@
                 <label for="altcontactaddress3">
                 [% END %]
                 City:</label>
-                <input type="text" name="altcontactaddress3" id="altcontactaddress3" value="[% patron.altcontactaddress3 %]" size="20" />
+                <input type="text" name="altcontactaddress3" id="altcontactaddress3" value="[% patron.altcontactaddress3 | html %]" size="20" />
                 [% IF ( mandatoryaltcontactaddress3 ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
@@ -68,7 +68,7 @@
                 <label for="altcontactstate">
                 [% END %]
                 State:</label>
-                <input type="text" name="altcontactstate" id="altcontactstate" value="[% patron.altcontactstate %]" size="20" />
+                <input type="text" name="altcontactstate" id="altcontactstate" value="[% patron.altcontactstate | html %]" size="20" />
                 [% IF ( mandatoryaltcontactstate ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
@@ -80,7 +80,7 @@
                 <label for="altcontactzipcode">
                 [% END %]
                 ZIP/Postal code:</label>
-                    <input type="text" name="altcontactzipcode" id="altcontactzipcode" value="[% patron.altcontactzipcode %]" size="5" />
+                    <input type="text" name="altcontactzipcode" id="altcontactzipcode" value="[% patron.altcontactzipcode | html %]" size="5" />
                 [% IF ( mandatoryaltcontactzipcode ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
@@ -92,7 +92,7 @@
                 <label for="altcontactcountry">
                 [% END %]
                 Country:</label>
-                    <input type="text" name="altcontactcountry" id="altcontactcountry" value="[% patron.altcontactcountry %]" size="20" />
+                    <input type="text" name="altcontactcountry" id="altcontactcountry" value="[% patron.altcontactcountry | html %]" size="20" />
                 [% IF ( mandatoryaltcontactcountry ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
@@ -104,7 +104,7 @@
                 <label for="altcontactphone">
                 [% END %]
                 Phone:</label>
-                    <input type="text" name="altcontactphone" id="altcontactphone" value="[% patron.altcontactphone %]" />
+                    <input type="text" name="altcontactphone" id="altcontactphone" value="[% patron.altcontactphone | html %]" />
                 [% IF ( mandatoryaltcontactphone ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]

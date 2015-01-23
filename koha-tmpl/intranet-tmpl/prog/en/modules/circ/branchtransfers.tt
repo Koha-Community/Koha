@@ -21,26 +21,26 @@
     <table>
         <caption>
             [% IF ( reserved ) %]
-                Reserve found for [% name %] (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowernumber %]</a>).
+                Reserve found for [% name | html %] (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | html %]">[% borrowernumber | html %]</a>).
             [% END %]
             [% IF ( waiting ) %]
-                Item is marked waiting at [% branchname %] for [% name %] (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowernumber %]</a>).
+                Item is marked waiting at [% branchname | html %] for [% name | html %] (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | html %]">[% borrowernumber | html %]</a>).
             [% END %]
         </caption>
         <tr>
             <th>
-                [% IF ( reserved ) %]Set reserve to waiting and transfer book to [% branchname %]: [% END %]
+                [% IF ( reserved ) %]Set reserve to waiting and transfer book to [% branchname | html %]: [% END %]
                 [% IF ( waiting ) %]Cancel reservation and then attempt transfer: [% END %]
             </th>
             <td>
                 <form method="post" name="mainform" id="mainform" action="branchtransfers.pl">
                     [% FOREACH trsfitemloo IN trsfitemloop %]
-                        <input type="hidden" name="bc-[% trsfitemloo.counter %]" value="[% trsfitemloo.barcode %]" />
-                        <input type="hidden" name="fb-[% trsfitemloo.counter %]" value="[% trsfitemloo.frombrcd %]" />
-                        <input type="hidden" name="tb-[% trsfitemloo.counter %]" value="[% trsfitemloo.tobrcd %]" />
+                        <input type="hidden" name="bc-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.barcode | html %]" />
+                        <input type="hidden" name="fb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.frombrcd | html %]" />
+                        <input type="hidden" name="tb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.tobrcd | html %]" />
                     [% END %]
-                    <input type="hidden" name="itemnumber" value="[% itemnumber %]" />
-                    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                    <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
+                    <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
                     [% IF ( waiting ) %]
                         <input type="hidden" name="barcode" value="[% barcode | html %]" />
                         <input type="hidden" name="request" value="KillWaiting" />
@@ -59,13 +59,13 @@
                     <td>
                         <form method="post" name="mainform" id="mainform" action="branchtransfers.pl">
                             [% FOREACH trsfitemloo IN trsfitemloop %]
-                                <input type="hidden" name="bc-[% trsfitemloo.counter %]" value="[% trsfitemloo.barcode %]" />
-                                <input type="hidden" name="fb-[% trsfitemloo.counter %]" value="[% trsfitemloo.frombrcd %]" />
-                                <input type="hidden" name="tb-[% trsfitemloo.counter %]" value="[% trsfitemloo.tobrcd %]" />
+                                <input type="hidden" name="bc-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.barcode | html %]" />
+                                <input type="hidden" name="fb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.frombrcd | html %]" />
+                                <input type="hidden" name="tb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.tobrcd | html %]" />
                             [% END %]
-                            <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
-                            <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
-                            <input type="hidden" name="tobranchcd" value="[% tobranchcd %]" />
+                            <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                            <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
+                            <input type="hidden" name="tobranchcd" value="[% tobranchcd | html %]" />
                             <input type="hidden" name="barcode" value="[% barcode | html %]" />
                             <input type="hidden" name="request" value="KillReserved" />
                             <input type="submit" value="Cancel" />
@@ -77,12 +77,12 @@
                     <th>Ignore and return to transfers: </th>
                         <td>
                             <form method="post" name="mainform" id="mainform" action="branchtransfers.pl" />
-                                <input type="hidden" name="tobranchcd" value="[% tobranchcd %]" />
+                                <input type="hidden" name="tobranchcd" value="[% tobranchcd | html %]" />
                                 <input type="hidden" name="barcode" />
                                 [% FOREACH trsfitemloo IN trsfitemloop %]
-                                    <input type="hidden" name="bc-[% trsfitemloo.counter %]" value="[% trsfitemloo.barcode %]" />
-                                    <input type="hidden" name="fb-[% trsfitemloo.counter %]" value="[% trsfitemloo.frombrcd %]" />
-                                    <input type="hidden" name="tb-[% trsfitemloo.counter %]" value="[% trsfitemloo.tobrcd %]" />
+                                    <input type="hidden" name="bc-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.barcode | html %]" />
+                                    <input type="hidden" name="fb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.frombrcd | html %]" />
+                                    <input type="hidden" name="tb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.tobrcd | html %]" />
                                 [% END %]
                                 <input type="submit" value="Ignore" />
                             </form>
@@ -98,7 +98,7 @@
                              <li>Reserve cancelled</li>
                          [% END %]
                          [% IF ( setwaiting ) %]
-                             <li>Item should now be waiting at library: [% reqbrchname %]</li>
+                             <li>Item should now be waiting at library: [% reqbrchname | html %]</li>
                          [% END %]
                          </ul>
                     </div>
@@ -112,17 +112,17 @@
                                   <li>No Item with barcode: [% errmsgloo.msg | html %]</li>
                               [% END %]
                               [% IF ( errmsgloo.errispermanent ) %]
-                                  <li>Please return item to home library: [% Branches.GetName( errmsgloo.msg ) %]</li>
+                                  <li>Please return item to home library: [% Branches.GetName( errmsgloo.msg ) | html %]</li>
                               [% END %]
                               [% IF ( errmsgloo.errnotallowed ) %]
                                   <li>Transfer is not allowed for:
                                       <ol>
                                           [% IF ( Koha.Preference('BranchTransferLimitsType') == 'itemtype' ) %]
-                                              <li>Item type: <b>[% ItemTypes.GetDescription( errmsgloo.code ) %]</b></li>
+                                              <li>Item type: <b>[% ItemTypes.GetDescription( errmsgloo.code ) | html %]</b></li>
                                           [% ELSE %]
-                                              <li>Collection code: <b>[% AuthorisedValues.GetByCode( 'CCODE', errmsgloo.code ) %]</b></li>
+                                              <li>Collection code: <b>[% AuthorisedValues.GetByCode( 'CCODE', errmsgloo.code ) | html %]</b></li>
                                           [% END %]
-                                          <li>Destination library: <b>[% Branches.GetName( errmsgloo.tbr ) %]</b></li>
+                                          <li>Destination library: <b>[% Branches.GetName( errmsgloo.tbr ) | html %]</b></li>
                                       </ol>
                                   </li>
                               [% END %]
@@ -130,9 +130,9 @@
                                   <li>Item is already at destination library.</li>
                               [% END %]
                               [% IF ( errmsgloo.errwasreturned ) %]
-                                  <li>Item was on loan to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% errmsgloo.patron.borrowernumber %]">
-                                  [% errmsgloo.patron.firstname %] [% errmsgloo.patron.surname %]
-                                  ([% errmsgloo.patron.cardnumber %])</a> and has been returned.</li>
+                                  <li>Item was on loan to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% errmsgloo.patron.borrowernumber | html %]">
+                                  [% errmsgloo.patron.firstname | html %] [% errmsgloo.patron.surname | html %]
+                                  ([% errmsgloo.patron.cardnumber | html %])</a> and has been returned.</li>
                               [% END %]
                           [% END %]
                           </ul>
@@ -156,11 +156,11 @@
             </li>
 			</ol>
         </fieldset>
-        <input type="hidden" name="tobranchcd" value="[% tobrancd %]" />
+        <input type="hidden" name="tobranchcd" value="[% tobrancd | html %]" />
         [% FOREACH trsfitemloo IN trsfitemloop %]
-            <input type="hidden" name="bc-[% trsfitemloo.counter %]" value="[% trsfitemloo.barcode %]" />
-            <input type="hidden" name="fb-[% trsfitemloo.counter %]" value="[% trsfitemloo.frombrcd %]" />
-            <input type="hidden" name="tb-[% trsfitemloo.counter %]" value="[% trsfitemloo.tobrcd %]" />
+            <input type="hidden" name="bc-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.barcode | html %]" />
+            <input type="hidden" name="fb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.frombrcd | html %]" />
+            <input type="hidden" name="tb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.tobrcd | html %]" />
         [% END %]
     </form>
 </div>
@@ -181,14 +181,14 @@
             </tr>
             [% FOREACH trsfitemloo IN trsfitemloop %]
                 <tr>
-                    <td class="tf-title"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% trsfitemloo.biblionumber %]">[% trsfitemloo.title |html %]</a></td>
-                    <td class="tf-author">[% trsfitemloo.author %]</td>
-                    <td class="tf-barcode"><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% trsfitemloo.biblionumber %]&amp;itemnumber=[% trsfitemloo.itemnumber %]#item[% trsfitemloo.itemnumber %]">[% trsfitemloo.barcode %]</a></td>
-                    <td class="tf-location">[% trsfitemloo.location %]</td>
-                    <td class="tf-itemcallnumber">[% trsfitemloo.itemcallnumber %]</td>
-                    <td class="tf-itemtype">[% ItemTypes.GetDescription( trsfitemloo.itemtype ) %]</td>
-                    <td class="tf-ccode">[% AuthorisedValues.GetByCode( 'CCODE', trsfitemloo.ccode ) %]</td>
-                    <td class="tf-destination">[% Branches.GetName( trsfitemloo.tobrcd ) %]</td>
+                    <td class="tf-title"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% trsfitemloo.biblionumber | html %]">[% trsfitemloo.title | html %]</a></td>
+                    <td class="tf-author">[% trsfitemloo.author | html %]</td>
+                    <td class="tf-barcode"><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% trsfitemloo.biblionumber | html %]&amp;itemnumber=[% trsfitemloo.itemnumber | html %]#item[% trsfitemloo.itemnumber | html %]">[% trsfitemloo.barcode | html %]</a></td>
+                    <td class="tf-location">[% trsfitemloo.location | html %]</td>
+                    <td class="tf-itemcallnumber">[% trsfitemloo.itemcallnumber | html %]</td>
+                    <td class="tf-itemtype">[% ItemTypes.GetDescription( trsfitemloo.itemtype ) | html %]</td>
+                    <td class="tf-ccode">[% AuthorisedValues.GetByCode( 'CCODE', trsfitemloo.ccode ) | html %]</td>
+                    <td class="tf-destination">[% Branches.GetName( trsfitemloo.tobrcd ) | html %]</td>
                 </tr>
             [% END %]
         </table>

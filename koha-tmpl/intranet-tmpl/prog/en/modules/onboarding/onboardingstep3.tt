@@ -4,7 +4,7 @@
 [% INCLUDE 'installer-doc-head-close.inc' %]
 [% INCLUDE 'validator-strings.inc' %]
 [% INCLUDE 'installer-strings.inc' %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/onboarding.js"></script>
+<script type="text/javascript" src="[% interface | html %]/[% theme | html %]/js/onboarding.js"></script>
 </head>
 
 <body id="installer" class="installer">
@@ -27,12 +27,12 @@
                         <ol>
                             <li>
                                 <label for="surname" class="required">Surname: </label>
-                                <input type="text" id="surname" name="surname" value="[% surname |html %]" class="required" required="required" />
+                                <input type="text" id="surname" name="surname" value="[% surname | html %]" class="required" required="required" />
                                 <span class="required">Required</span>
                             </li>
                             <li>
                                 <label for="firstname" class="required">First name: </label>
-                                <input  type="text" name="firstname" id="firstname" size="20" value="[% firstname |html %]" class="required" required="required">
+                                <input  type="text" name="firstname" id="firstname" size="20" value="[% firstname | html %]" class="required" required="required">
                                 <span class="required">Required</span>
                             </li>
                         </ol>
@@ -53,7 +53,7 @@
                                 <label for="libraries" class="required"> Library: </label>
                                 <select name="libraries" size="1" id="libraries">
                                     [% FOREACH library IN libraries %]
-                                        <option value="[% library.branchcode %]"> [% library.branchname %] </option>
+                                        <option value="[% library.branchcode | html %]"> [% library.branchname | html %] </option>
                                     [% END %]
                                 </select>
                                 <span class="required"> Required</span>
@@ -62,7 +62,7 @@
                                 <label for="categorycode_entry" class="required"> Patron category</label>
                                 <select id="categorycode_entry" name="categorycode_entry">
                                     [% FOREACH category IN categories %]
-                                        <option value = "[% category.categorycode %]">[%category.description %]</option>
+                                        <option value = "[% category.categorycode | html %]">[% category.description | html %]</option>
                                     [% END %]
                                 </select>
                                 <span class="required">Required</span><br><br>
@@ -83,12 +83,12 @@
                         <ol>
                             <li>
                                 <label for="userid" class="required">Username: </label>
-                                <input type="text" name="userid" id ="userid" size="20" value="[% userid |html %]" class="required" required="required" />
+                                <input type="text" name="userid" id ="userid" size="20" value="[% userid | html %]" class="required" required="required" />
                                 <span class="required">Required</span>
                             </li>
                             <li>
                                 <label for="password" class="required">Password: </label>
-                                <input type="password" name="password" id="password" size="20" value="[% member.password |html %]" class="required" required="required">
+                                <input type="password" name="password" id="password" size="20" value="[% member.password | html %]" class="required" required="required">
                                 <span class="required">Required</span>
                             </li>
                             <li>

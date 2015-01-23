@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -24,7 +25,7 @@
 [% IF ( uploadimage ) %]
 <p>Image upload results :</p>
 <ul>
-    <li>[% total %] images found</li>
+    <li>[% total | html %] images found</li>
     [% IF ( error ) %]
     <div class="dialog alert">
     [% IF ( error == 'UZIPFAIL' ) %]<p><b>Failed to unzip archive.<br />Please ensure you are uploading a valid zip file and try again.</b></p>
@@ -36,7 +37,7 @@
     </div>
     </li>
     [% END %]
-    <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]">View final record</a></li>
+    <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | html %]">View final record</a></li>
 	<li><a href="/cgi-bin/koha/tools/tools-home.pl">Back</a></li>
 </ul>
 <hr />
@@ -86,7 +87,7 @@
         <label for="image">Image file</label>
       </li>
       <li class="radio">
-        [% IF ( filetype == 'image' ) %]<span id="bibnum">[% ELSE %]<span id="bibnum" style="display: none">[% END %]<label for="biblionumber">Enter cover biblionumber: </label><input type="text" id="biblionumber" name="biblionumber" value="[% biblionumber %]" size="15" /></span>
+        [% IF ( filetype == 'image' ) %]<span id="bibnum">[% ELSE %]<span id="bibnum" style="display: none">[% END %]<label for="biblionumber">Enter cover biblionumber: </label><input type="text" id="biblionumber" name="biblionumber" value="[% biblionumber | html %]" size="15" /></span>
       </li>
     </ol>
   </fieldset>
@@ -110,9 +111,9 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
-    [% Asset.js("js/background-job-progressbar.js") %]
-    [% Asset.js("js/file-upload.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
+    [% Asset.js("js/background-job-progressbar.js") | $raw %]
+    [% Asset.js("js/file-upload.js") | $raw %]
     <script type="text/javascript">
         function StartUpload() {
             if( $('#fileToUpload').prop('files').length == 0 ) return;

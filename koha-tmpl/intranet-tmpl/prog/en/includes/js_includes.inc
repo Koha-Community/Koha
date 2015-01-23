@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE AudioAlerts %]
 [%# Prevent XFS attacks -%]
@@ -12,23 +13,23 @@
     </script>
 [% END %]
 
-[% Asset.js("lib/jquery/jquery-2.2.3.min.js") %]
-[% Asset.js("lib/jquery/jquery-migrate-1.3.0.min.js") %]
-[% Asset.js("lib/jquery/jquery-ui-1.11.4.min.js") %]
-[% Asset.js("lib/shortcut/shortcut.js") %]
-[% Asset.js("lib/jquery/plugins/jquery.cookie.min.js") %]
-[% Asset.js("lib/jquery/plugins/jquery.highlight-3.js") %]
-[% Asset.js("lib/bootstrap/bootstrap.min.js") %]
-[% Asset.js("lib/jquery/plugins/jquery.validate.min.js") %]
+[% Asset.js("lib/jquery/jquery-2.2.3.min.js") | $raw %]
+[% Asset.js("lib/jquery/jquery-migrate-1.3.0.min.js") | $raw %]
+[% Asset.js("lib/jquery/jquery-ui-1.11.4.min.js") | $raw %]
+[% Asset.js("lib/shortcut/shortcut.js") | $raw %]
+[% Asset.js("lib/jquery/plugins/jquery.cookie.min.js") | $raw %]
+[% Asset.js("lib/jquery/plugins/jquery.highlight-3.js") | $raw %]
+[% Asset.js("lib/bootstrap/bootstrap.min.js") | $raw %]
+[% Asset.js("lib/jquery/plugins/jquery.validate.min.js") | $raw %]
 <!-- koha core js -->
-[% Asset.js("js/staff-global.js") %]
-[% Asset.js("js/commons.js") %]
+[% Asset.js("js/staff-global.js") | $raw %]
+[% Asset.js("js/commons.js") | $raw %]
 
 [% INCLUDE 'validator-strings.inc' %]
 [% IF ( IntranetUserJS ) %]
     <script type="text/javascript">
     //<![CDATA[
-    [% IntranetUserJS %]
+    [% IntranetUserJS | html %]
     //]]>
     </script>
 [% END %]
@@ -53,11 +54,11 @@
     //]]>
     </script>
 
-    [% Asset.js("js/basket.js") %]
+    [% Asset.js("js/basket.js") | $raw %]
 [% END %]
 
 [% IF LocalCoverImages %]
-    [% Asset.js("js/localcovers.js") %]
+    [% Asset.js("js/localcovers.js") | $raw %]
     <script type="text/javascript">
         //<![CDATA[
             var NO_LOCAL_JACKET = _("No cover image available");
@@ -68,8 +69,8 @@
 [% IF Koha.Preference('AudioAlerts') || AudioAlertsPage %]
     <script type="text/javascript">
         //<![CDATA[
-            var AUDIO_ALERT_PATH = '[% interface %]/[% theme %]/sound/';
-            var AUDIO_ALERTS = JSON.parse( '[% AudioAlerts.AudioAlerts | replace( "'", "\\'" ) | replace( '"', '\\"' ) %]' );
+            var AUDIO_ALERT_PATH = '[% interface | html %]/[% theme | html %]/sound/';
+            var AUDIO_ALERTS = JSON.parse( '[% AudioAlerts.AudioAlerts | replace( "'", "\\'" ) | replace( '"', '\\"' ) | html %]' );
         //]]>
 
         $( document ).ready(function() {

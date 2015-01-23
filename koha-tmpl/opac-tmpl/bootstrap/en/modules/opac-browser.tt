@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Browse our catalog</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Browse our catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -26,13 +26,13 @@
                     [% IF ( have_hierarchy ) %]
                         <ul>
                             <li>
-                                [% description %] <a href="opac-browser.pl">Top level</a>
+                                [% description | html %] <a href="opac-browser.pl">Top level</a>
                             </li>
                             <li style="list-style-type: none;">
                                 <ul>
                                     [% FOREACH HIERARCHY_LOO IN HIERARCHY_LOOP %]
                                         <li>
-                                            <a href="opac-browser.pl?level=[% HIERARCHY_LOO.level %]&amp;filter=[% HIERARCHY_LOO.classification |uri %]">[% HIERARCHY_LOO.description |html %]</a>
+                                            <a href="opac-browser.pl?level=[% HIERARCHY_LOO.level | html %]&amp;filter=[% HIERARCHY_LOO.classification |uri %]">[% HIERARCHY_LOO.description | html %]</a>
                                         </li>
                                         <li style="list-style-type: none;">
                                     [% END %]
@@ -43,12 +43,12 @@
                                                     <td>
                                                         <p>
                                                             [% IF ( LEVEL_LOO.endnode ) %]
-                                                                <a href="opac-search.pl?q=Dewey-classification:[% LEVEL_LOO.classification |uri %]">[% LEVEL_LOO.description |html %]</a>
+                                                                <a href="opac-search.pl?q=Dewey-classification:[% LEVEL_LOO.classification |uri %]">[% LEVEL_LOO.description | html %]</a>
                                                             [% ELSE %]
-                                                                <a href="opac-browser.pl?level=[% LEVEL_LOO.level %]&amp;filter=[% LEVEL_LOO.classification |uri %]">[% LEVEL_LOO.description |html %]</a>
+                                                                <a href="opac-browser.pl?level=[% LEVEL_LOO.level | html %]&amp;filter=[% LEVEL_LOO.classification |uri %]">[% LEVEL_LOO.description | html %]</a>
                                                             [% END %]
                                                         </p>
-                                                        <p style="font-size:0.75em"><i>([% LEVEL_LOO.number %] biblios)</i></p>
+                                                        <p style="font-size:0.75em"><i>([% LEVEL_LOO.number | html %] biblios)</i></p>
                                                     </td>
                                                 [% IF ( LEVEL_LOO.count3 ) %]</tr><tr>[% END %]
                                                 [% END %]

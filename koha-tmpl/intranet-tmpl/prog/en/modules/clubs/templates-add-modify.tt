@@ -3,7 +3,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Patron clubs &rsaquo;
     [% IF club_template %]
-        Modify club template [% club_template.name %]
+        Modify club template [% club_template.name | html %]
     [% ELSE %]
         Create a new club template
     [% END %]
@@ -22,7 +22,7 @@
 [% INCLUDE 'cat-search.inc' %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="clubs.pl">Patron clubs</a> &rsaquo;
     [% IF club_template %]
-        Modify club template <i>[% club_template.name %]</i>
+        Modify club template <i>[% club_template.name | html %]</i>
     [% ELSE %]
         Create a new club template
     [% END %]
@@ -33,11 +33,11 @@
         <div class="col-md-8 col-md-offset-2">
 
             <form method="post" class="validated">
-                <input type="hidden" name="id" value="[% club_template.id %]" />
+                <input type="hidden" name="id" value="[% club_template.id | html %]" />
 
                 <h2>
                     [% IF club_template %]
-                        Modify club template <i>[% club_template.name %]</i>
+                        Modify club template <i>[% club_template.name | html %]</i>
                     [% ELSE %]
                         Create a new club template
                     [% END %]
@@ -48,13 +48,13 @@
                     <ol>
                         <li>
                             <label class="required" for="name">Name:</label>
-                            <input id="club-template-name" name="name" type="text" value="[% club_template.name %]" required="required"/>
+                            <input id="club-template-name" name="name" type="text" value="[% club_template.name | html %]" required="required"/>
                             <span class="required">Required</span>
                         </li>
 
                         <li>
                             <label for="club-template-description">Description:</label>
-                            <input id="club-template-description" name="description" type="text" value="[% club_template.description %]" />
+                            <input id="club-template-description" name="description" type="text" value="[% club_template.description | html %]" />
                         </li>
 
                         <li>
@@ -96,28 +96,28 @@
                         [% FOREACH f IN club_template.club_template_fields %]
                             <div class="club-field">
                                 <ol class="clearfix">
-                                    <input type="hidden" name="club_template_field_id" value="[% f.id %]" />
+                                    <input type="hidden" name="club_template_field_id" value="[% f.id | html %]" />
                                     <li>
-                                        <label for="field-name-[% f.id %]">Name:</label>
-                                        <input name="club_template_field_name" id="field-name-[% f.id %]" value="[% f.name %]" />
+                                        <label for="field-name-[% f.id | html %]">Name:</label>
+                                        <input name="club_template_field_name" id="field-name-[% f.id | html %]" value="[% f.name | html %]" />
                                     </li>
 
                                     <li>
-                                        <label for="field-description-[% f.id %]">Description:</label>
-                                        <input name="club_template_field_description" id="field-description-[% f.id %]" value="[% f.description %]" />
+                                        <label for="field-description-[% f.id | html %]">Description:</label>
+                                        <input name="club_template_field_description" id="field-description-[% f.id | html %]" value="[% f.description | html %]" />
                                     </li>
 
                                     <li>
-                                        <label for="field-authorised-value-category-[% f.id %]">Authorised value category:</label>
-                                        <select name="club_template_field_authorised_value_category" id="field-authorised-value-category-[% f.id %]">
+                                        <label for="field-authorised-value-category-[% f.id | html %]">Authorised value category:</label>
+                                        <select name="club_template_field_authorised_value_category" id="field-authorised-value-category-[% f.id | html %]">
                                             <option value=""></option>
                                             [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => f.authorised_value_category) %]
                                         </select>
                                     </li>
 
                                     <li>
-                                        <label for="field-delete-[% f.id %]">Delete field:</label>
-                                        <input type="checkbox" name="club_template_field_delete" id="field-delete-[% f.id %]" value="[% f.id %]" />
+                                        <label for="field-delete-[% f.id | html %]">Delete field:</label>
+                                        <input type="checkbox" name="club_template_field_delete" id="field-delete-[% f.id | html %]" value="[% f.id | html %]" />
                                     </li>
                                 </ol>
                             </div>
@@ -142,27 +142,27 @@
                                         <strong>Enrollment field</strong>
                                     </li>
                                     <li>
-                                        <input type="hidden" name="club_template_enrollment_field_id" value="[% f.id %]" />
-                                        <label for="enrollment-field-name-[% f.id %]">Name:</label>
-                                        <input name="club_template_enrollment_field_name" id="enrollment-field-name-[% f.id %]" value="[% f.name %]" size="40" />
+                                        <input type="hidden" name="club_template_enrollment_field_id" value="[% f.id | html %]" />
+                                        <label for="enrollment-field-name-[% f.id | html %]">Name:</label>
+                                        <input name="club_template_enrollment_field_name" id="enrollment-field-name-[% f.id | html %]" value="[% f.name | html %]" size="40" />
                                     </li>
 
                                     <li>
-                                        <label for="enrollment-field-description-[% f.id %]">Description:</label>
-                                        <input name="club_template_enrollment_field_description" id="enrollment-field-description-[% f.id %]" value="[% f.description %]" size="40" />
+                                        <label for="enrollment-field-description-[% f.id | html %]">Description:</label>
+                                        <input name="club_template_enrollment_field_description" id="enrollment-field-description-[% f.id | html %]" value="[% f.description | html %]" size="40" />
                                     </li>
 
                                     <li>
-                                        <label for="enrollment-field-authorised-value-category-[% f.id %]">Authorised value category:</label>
-                                        <select name="club_template_enrollment_field_authorised_value_category" id="enrollment-field-authorised-value-category-[% f.id %]">
+                                        <label for="enrollment-field-authorised-value-category-[% f.id | html %]">Authorised value category:</label>
+                                        <select name="club_template_enrollment_field_authorised_value_category" id="enrollment-field-authorised-value-category-[% f.id | html %]">
                                             <option value=""></option>
                                             [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => f.authorised_value_category) %]
                                         </select>
                                     </li>
 
                                     <li>
-                                        <label for="enrollment-field-delete-[% f.id %]">Delete field:</label>
-                                        <input type="checkbox" name="club_template_enrollment_field_delete" id="enrollment-field-delete-[% f.id %]" value="[% f.id %]" />
+                                        <label for="enrollment-field-delete-[% f.id | html %]">Delete field:</label>
+                                        <input type="checkbox" name="club_template_enrollment_field_delete" id="enrollment-field-delete-[% f.id | html %]" value="[% f.id | html %]" />
                                     </li>
                                 </ol>
                             </div>
@@ -176,7 +176,7 @@
                 </fieldset>
 
                 <fieldset class="action">
-                    <input type="hidden" name="id" value="[% club_template.id %]" />
+                    <input type="hidden" name="id" value="[% club_template.id | html %]" />
                     <input type="submit" value="Save" />
                     <a href="clubs.pl" class="cancel">Cancel</a>
                 </fieldset>

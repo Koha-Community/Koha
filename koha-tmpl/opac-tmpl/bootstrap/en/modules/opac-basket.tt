@@ -1,10 +1,11 @@
+[% USE raw %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Asset %]
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && TagsEnabled && TagsInputOnList ) %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your cart</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your cart</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]<style type="text/css">.item-status, .dt-buttons { display: inline; } @media print { body { height: 99%; } }</style>[% END %]
 </head>
@@ -65,19 +66,19 @@
                             <form action="opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form" class="checkboxed">
                                 [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
                                     <h3>
-                                                <input type="checkbox" class="cb" value="[% BIBLIO_RESULT.biblionumber %]" name="bib[% BIBLIO_RESULT.biblionumber %]" id="bib[% BIBLIO_RESULT.biblionumber %]">
-                                                [% BIBLIO_RESULT.title |html %]
-                                                [% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %] [% subtitl.subfield |html %] [% END %][% END %]
-                                                [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author |html %][% END %]
+                                                <input type="checkbox" class="cb" value="[% BIBLIO_RESULT.biblionumber | html %]" name="bib[% BIBLIO_RESULT.biblionumber | html %]" id="bib[% BIBLIO_RESULT.biblionumber | html %]">
+                                                [% BIBLIO_RESULT.title | html %]
+                                                [% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %] [% subtitl.subfield | html %] [% END %][% END %]
+                                                [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author | html %][% END %]
                                     </h3>
                                     <!-- COinS / Openurl -->
-                                    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition %]&amp;rft.series=[% BIBLIO_RESULT.series %]&amp;rft.genre="></span>
+                                    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author | html %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear | html %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') | html %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place | html %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition | html %]&amp;rft.series=[% BIBLIO_RESULT.series | html %]&amp;rft.genre="></span>
 
                                     <table class="table">
                                         [% IF ( BIBLIO_RESULT.isbn ) %]
                                             <tr>
                                                 <th scope="row">ISBN</th>
-                                                <td>[% BIBLIO_RESULT.isbn %]</td>
+                                                <td>[% BIBLIO_RESULT.isbn | html %]</td>
                                             </tr>
                                         [% END %]
 
@@ -86,13 +87,13 @@
                                             <th scope="row">Author(s)</th>
                                             <td>
                                                [% IF ( BIBLIO_RESULT.author ) %]
-                                                   <p>[% BIBLIO_RESULT.author %]</p>
+                                                   <p>[% BIBLIO_RESULT.author | html %]</p>
                                                [% END %]
                                                [% IF ( BIBLIO_RESULT.MARCAUTHORS ) %]
                                                    [% FOREACH MARCAUTHOR IN BIBLIO_RESULT.MARCAUTHORS %]
                                                    <p> [% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %]
-                                                          [% MARCAUTHOR_SUBFIELDS_LOO.separator %]
-                                                              [% MARCAUTHOR_SUBFIELDS_LOO.value %]
+                                                          [% MARCAUTHOR_SUBFIELDS_LOO.separator | html %]
+                                                              [% MARCAUTHOR_SUBFIELDS_LOO.value | html %]
                                                        [% END %]
                                                    </p>
                                                    [% END %]
@@ -104,7 +105,7 @@
                                         [% IF ( BIBLIO_RESULT.publishercode ) %]
                                             <tr>
                                                 <th scope="row">Publisher</th>
-                                                <td>[% BIBLIO_RESULT.place %] [% BIBLIO_RESULT.publishercode %] [% BIBLIO_RESULT.publicationyear %]
+                                                <td>[% BIBLIO_RESULT.place | html %] [% BIBLIO_RESULT.publishercode | html %] [% BIBLIO_RESULT.publicationyear | html %]
                                                 </td>
                                             </tr>
                                         [% END %]
@@ -112,14 +113,14 @@
                                         [% IF ( BIBLIO_RESULT.pages ) %]
                                             <tr>
                                                 <th scope="row">Details</th>
-                                                <td>[% BIBLIO_RESULT.pages %] [% BIBLIO_RESULT.illus %] [% BIBLIO_RESULT.item('size') %]</td>
+                                                <td>[% BIBLIO_RESULT.pages | html %] [% BIBLIO_RESULT.illus | html %] [% BIBLIO_RESULT.item('size') | html %]</td>
                                             </tr>
                                         [% END %]
 
                                         [% IF ( BIBLIO_RESULT.seriestitle ) %]
                                         <tr>
                                             <th scope="row">Collection</th>
-                                            <td> [% BIBLIO_RESULT.seriestitle %]</td>
+                                            <td> [% BIBLIO_RESULT.seriestitle | html %]</td>
                                         </tr>
                                         [% END %]
 
@@ -128,7 +129,7 @@
                                             <th scope="row">Subject(s)</th>
                                             <td>[% FOREACH MARCSUBJCT IN BIBLIO_RESULT.MARCSUBJCTS %]
                                                    <p> [% FOREACH MARCSUBJECT_SUBFIELDS_LOO IN MARCSUBJCT.MARCSUBJECT_SUBFIELDS_LOOP %]
-                                                        [% MARCSUBJECT_SUBFIELDS_LOO.separator %][% MARCSUBJECT_SUBFIELDS_LOO.value %][% END %]
+                                                        [% MARCSUBJECT_SUBFIELDS_LOO.separator | html %][% MARCSUBJECT_SUBFIELDS_LOO.value | html %][% END %]
                                                    </p>
                                                 [% END %]</td>
                                         </tr>
@@ -136,7 +137,7 @@
 
                                         [% IF ( BIBLIO_RESULT.copyrightdate ) %]
                                             <tr><th scope="row">Copyright</th>
-                                                <td> [% BIBLIO_RESULT.copyrightdate %]</td>
+                                                <td> [% BIBLIO_RESULT.copyrightdate | html %]</td>
                                             </tr>
                                         [% END %]
 
@@ -147,9 +148,9 @@
                                                 [% FOREACH MARCNOTE IN BIBLIO_RESULT.MARCNOTES %]
                                                     <p>
                                                     [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
-                                                        - <a href="[% MARCNOTE.marcnote %]">[% MARCNOTE.marcnote %]</a>
+                                                        - <a href="[% MARCNOTE.marcnote | html %]">[% MARCNOTE.marcnote | html %]</a>
                                                     [% ELSE %]
-                                                        - [% MARCNOTE.marcnote %]
+                                                        - [% MARCNOTE.marcnote | html %]
                                                     [% END %]
                                                     </p>
                                                 [% END %]
@@ -160,35 +161,35 @@
                                         [% IF ( BIBLIO_RESULT.unititle ) %]
                                             <tr>
                                                 <th scope="row">Unified title</th>
-                                                <td> [% BIBLIO_RESULT.unititle %]</td>
+                                                <td> [% BIBLIO_RESULT.unititle | html %]</td>
                                             </tr>
                                         [% END %]
 
                                         [% IF ( BIBLIO_RESULT.serial ) %]
                                             <tr>
                                                 <th scope="row">Serial</th>
-                                                <td>[% BIBLIO_RESULT.serial %]</td>
+                                                <td>[% BIBLIO_RESULT.serial | html %]</td>
                                             </tr>
                                         [% END %]
 
                                         [% IF ( BIBLIO_RESULT.dewey ) %]
                                             <tr>
                                                 <th scope="row">Dewey</th>
-                                                <td>[% BIBLIO_RESULT.dewey %]</td>
+                                                <td>[% BIBLIO_RESULT.dewey | html %]</td>
                                             </tr>
                                         [% END %]
 
                                         [% IF ( BIBLIO_RESULT.classification ) %]
                                             <tr>
                                                 <th scope="row">Classification</th>
-                                                <td> [% BIBLIO_RESULT.classification %]</td>
+                                                <td> [% BIBLIO_RESULT.classification | html %]</td>
                                             </tr>
                                         [% END %]
 
                                         [% IF ( BIBLIO_RESULT.lccn ) %]
                                             <tr>
                                                 <th scope="row">LCCN</th>
-                                                <td> [% BIBLIO_RESULT.lccn %]</td>
+                                                <td> [% BIBLIO_RESULT.lccn | html %]</td>
                                             </tr>
                                         [% END %]
 
@@ -197,15 +198,15 @@
                                                 <th scope="row">URL(s)</th>
                                                 <td>
                                                    [% FOREACH MARCurl IN BIBLIO_RESULT.MARCURLS %]
-                                                        [% IF MARCurl.part %]<p>[% MARCurl.part %]</p>[% END %]
+                                                        [% IF MARCurl.part %]<p>[% MARCurl.part | html %]</p>[% END %]
 
                                                         [% IF OPACURLOpenInNewWindow %]
-                                                            <a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]" target="_blank" rel="noreferrer">[% MARCurl.linktext %]</a>
+                                                            <a href="[% MARCurl.MARCURL | html %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">[% MARCurl.linktext | html %]</a>
                                                         [% ELSE %]
-                                                            <a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]">[% MARCurl.linktext %]</a>
+                                                            <a href="[% MARCurl.MARCURL | html %]" title="[% MARCurl.MARCURL | html %]">[% MARCurl.linktext | html %]</a>
                                                         [% END %]
 
-                                                        [% IF MARCurl.notes %][% FOREACH note IN MARCurl.notes %]<p>[% note.note %]</p>[% END %][% END %]
+                                                        [% IF MARCurl.notes %][% FOREACH note IN MARCurl.notes %]<p>[% note.note | html %]</p>[% END %][% END %]
                                                     [% END %]
                                                 </td>
                                             </tr>
@@ -218,9 +219,9 @@
                                                     <ul>
                                                         [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
                                                             <li>
-                                                                <strong>[% ITEM_RESULT.branchname %]</strong>[% IF ( ITEM_RESULT.location_opac ) %], [% ITEM_RESULT.location_opac %][% END %]
+                                                                <strong>[% ITEM_RESULT.branchname | html %]</strong>[% IF ( ITEM_RESULT.location_opac ) %], [% ITEM_RESULT.location_opac | html %][% END %]
                                                                 [% IF ( ITEM_RESULT.itemcallnumber ) %]
-                                                                    ([% ITEM_RESULT.itemcallnumber %])
+                                                                    ([% ITEM_RESULT.itemcallnumber | html %])
                                                                 [% END %]
                                                                 ([% INCLUDE 'item-status.inc' item = ITEM_RESULT %])
                                                             </li>
@@ -252,29 +253,29 @@
                                     [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
                                         <tr>
                                                 <td class="noprint">
-                                                <input type="checkbox" class="cb" value="[% BIBLIO_RESULT.biblionumber %]" name="bib[% BIBLIO_RESULT.biblionumber %]" id="bib[% BIBLIO_RESULT.biblionumber %]">
+                                                <input type="checkbox" class="cb" value="[% BIBLIO_RESULT.biblionumber | html %]" name="bib[% BIBLIO_RESULT.biblionumber | html %]" id="bib[% BIBLIO_RESULT.biblionumber | html %]">
                                                 </td>
                                             <td>
-                                                <a href="#" onclick="openBiblio('[% BIBLIO_RESULT.dest %]',[% BIBLIO_RESULT.biblionumber %])">[% BIBLIO_RESULT.title |html %][% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %][% subtitl.subfield |html %][% END %][% END %]</a>
+                                                <a href="#" onclick="openBiblio('[% BIBLIO_RESULT.dest | html %]',[% BIBLIO_RESULT.biblionumber | html %])">[% BIBLIO_RESULT.title | html %][% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %][% subtitl.subfield | html %][% END %][% END %]</a>
                                                 <!-- COinS / Openurl -->
-                                                <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition %]&amp;rft.series=[% BIBLIO_RESULT.series %]&amp;rft.genre="></span>
+                                                <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author | html %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear | html %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') | html %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place | html %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition | html %]&amp;rft.series=[% BIBLIO_RESULT.series | html %]&amp;rft.genre="></span>
                                                 [% IF ( TagsInputEnabled && loggedinusername ) %]
-                                                <span id="newtag[% BIBLIO_RESULT.biblionumber %]_status" class="tagstatus results_summary" style="display:none">Tag status here.</span>
+                                                <span id="newtag[% BIBLIO_RESULT.biblionumber | html %]_status" class="tagstatus results_summary" style="display:none">Tag status here.</span>
                                                 [% END %]
                                             </td>
-                                            <td>[% BIBLIO_RESULT.author %]</td>
+                                            <td>[% BIBLIO_RESULT.author | html %]</td>
                                             <td>
                                                 [% IF ( BIBLIO_RESULT.publicationyear ) %]
-                                                    [% BIBLIO_RESULT.publicationyear %]
+                                                    [% BIBLIO_RESULT.publicationyear | html %]
                                                 [% ELSE %]
-                                                    [% BIBLIO_RESULT.copyrightdate %]
+                                                    [% BIBLIO_RESULT.copyrightdate | html %]
                                                 [% END %]
                                             </td>
                                             <td>[% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %]<ul>[% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
                                                 <li>
-                                                    [% ITEM_RESULT.branchname %][% IF ( ITEM_RESULT.location_opac ) %], [% ITEM_RESULT.location_opac %][% END %]
+                                                    [% ITEM_RESULT.branchname | html %][% IF ( ITEM_RESULT.location_opac ) %], [% ITEM_RESULT.location_opac | html %][% END %]
                                                     [% IF ( ITEM_RESULT.itemcallnumber ) %]
-                                                        ([% ITEM_RESULT.itemcallnumber %])
+                                                        ([% ITEM_RESULT.itemcallnumber | html %])
                                                     [% END %]
                                                     ([% INCLUDE 'item-status.inc' item = ITEM_RESULT %])
                                                 </li>
@@ -300,7 +301,7 @@
 [% INCLUDE 'opac-bottom.inc' %]
 
 [% BLOCK jsinclude %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
         [% INCLUDE 'datatables.inc' %]
         <script>
             //<![CDATA[

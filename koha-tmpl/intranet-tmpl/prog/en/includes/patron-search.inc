@@ -2,12 +2,12 @@
 [% USE Branches %]
 [% USE Categories %]
 <div class="gradient">
-<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin Patrons Resident Search Box -->
+<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></h1><!-- Begin Patrons Resident Search Box -->
 <div id="header_search">
     <div id="patron_search" class="residentsearch">
     <p class="tip">Enter patron card number or partial name:</p>
     <form action="/cgi-bin/koha/members/member.pl" method="post">
-    <input id="searchmember" data-toggle="tooltip" size="25" class="head-searchbox focus" name="searchmember" type="text" value="[% searchmember %]"/>
+    <input id="searchmember" data-toggle="tooltip" size="25" class="head-searchbox focus" name="searchmember" type="text" value="[% searchmember | html %]"/>
     <input type="hidden" name="quicksearch" value="1" />
     <span class="filteraction" id="filteraction_off"> <a href="#">[-]</a></span>
     <span class="filteraction" id="filteraction_on"> <a href="#">[+]</a></span>
@@ -92,9 +92,9 @@
                 [% END %]
                 [% FOREACH b IN branches %]
                     [% IF b.selected %]
-                        <option value="[% b.branchcode %]" selected="selected">[% b.branchname %]</option>
+                        <option value="[% b.branchcode | html %]" selected="selected">[% b.branchname | html %]</option>
                     [% ELSE %]
-                        <option value="[% b.branchcode %]">[% b.branchname |html %]</option>
+                        <option value="[% b.branchcode | html %]">[% b.branchname | html %]</option>
                     [% END %]
                 [% END %]
             </select>
@@ -107,9 +107,9 @@
                 <option value="">Any</option>
                 [% FOREACH category IN categories %]
                     [% IF category.categorycode == categorycode_filter %]
-                        <option value="[% category.categorycode %]" selected="selected">[% category.description |html %]</option>
+                        <option value="[% category.categorycode | html %]" selected="selected">[% category.description | html %]</option>
                     [% ELSE %]
-                        <option value="[% category.categorycode %]">[% category.description |html %]</option>
+                        <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
                     [% END %]
                 [% END %]
             </select>

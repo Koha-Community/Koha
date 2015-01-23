@@ -1,9 +1,10 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; EDIFACT messages</title>
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 <style type="text/css">
 #EDI_modal { width : 80%; } @media (max-width: 767px) { #EDI_modal { margin: 0; width : auto; } }
@@ -44,33 +45,33 @@
 <tbody>
 [% FOREACH msg IN messages %]
 <tr>
-<td>[% msg.message_type %]</td>
-<td><span title="[% msg.transfer_date %]">[% msg.transfer_date | $KohaDates %]</span></td>
-<td>[% msg.status %]</td>
+<td>[% msg.message_type | html %]</td>
+<td><span title="[% msg.transfer_date | html %]">[% msg.transfer_date | $KohaDates %]</span></td>
+<td>[% msg.status | html %]</td>
 <td>
-    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% msg.vendor_id %]">
-        [% msg.vendor.name %]
+    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% msg.vendor_id | html %]">
+        [% msg.vendor.name | html %]
     </a>
 </td>
 <td>
 [% IF msg.message_type == 'QUOTE' || msg.message_type == 'ORDERS' %]
     [% IF msg.basketno %]
-    <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% msg.basketno.basketno %]">
-    Basket: [% msg.basketno.basketno %]
+    <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% msg.basketno.basketno | html %]">
+    Basket: [% msg.basketno.basketno | html %]
     </a>
     [% END %]
 [% ELSE %]
 <!-- Assuming invoices -->
-     <a href="/cgi-bin/koha/acqui/invoices.pl?message_id=[% msg.id %]">
+     <a href="/cgi-bin/koha/acqui/invoices.pl?message_id=[% msg.id | html %]">
       Invoices
      </a>
 [% END %]
 </td>
-<td>[% msg.filename %]</td>
+<td>[% msg.filename | html %]</td>
 
 <td class="actions">
-    <a class="btn btn-default btn-xs view_message" target="_blank" href="/cgi-bin/koha/acqui/edimsg.pl?id=[% msg.id %]"><i class="fa fa-search"></i> View message</a>
-    <a class="btn btn-default btn-xs delete_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=delete&amp;message_id=[% msg.id %]"><i class="fa fa-trash"></i> Delete</a>
+    <a class="btn btn-default btn-xs view_message" target="_blank" href="/cgi-bin/koha/acqui/edimsg.pl?id=[% msg.id | html %]"><i class="fa fa-search"></i> View message</a>
+    <a class="btn btn-default btn-xs delete_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=delete&amp;message_id=[% msg.id | html %]"><i class="fa fa-trash"></i> Delete</a>
 </td>
 </tr>
 [% END %]
@@ -87,7 +88,7 @@
         <h3 id="EDI_modal_label">EDIFACT message</h3>
     </div>
     <div class="modal-body">
-        <div id="loading"> <img src="[% interface %]/[% theme %]/img/spinner-small.gif" alt="" /> Loading </div>
+        <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
     </div>
     <div class="modal-footer">
         <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -113,7 +114,7 @@
 </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/acquisitions-menu.js") %]
+    [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function() {
@@ -140,7 +141,7 @@
                 EDIModal.modal("hide");
             });
             EDIModal.on("hidden", function(){
-                EDIModalBody.html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+                EDIModalBody.html("<div id=\"loading\"><img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
             });
             $(".delete_msg").on("click",function(){
                 return confirm(_("Are you sure you want to delete this message?"));

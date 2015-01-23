@@ -1,24 +1,24 @@
 [% USE To %]
 {
-    "sEcho": [% sEcho %],
-    "iTotalRecords": [% iTotalRecords %],
-    "iTotalDisplayRecords": [% iTotalDisplayRecords %],
+    "sEcho": [% sEcho | html %],
+    "iTotalRecords": [% iTotalRecords | html %],
+    "iTotalDisplayRecords": [% iTotalDisplayRecords | html %],
     "aaData": [
         [% FOREACH data IN aaData %]
             {
                 "dt_cardnumber":
-                    "[% data.cardnumber %]",
+                    "[% data.cardnumber | html %]",
                 "dt_name":
-                    "<span style='white-space:nowrap'><a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.borrowernumber %]'>[% INCLUDE 'patron-title.inc' borrowernumber = data.borrowernumber category_type = data.category_type firstname = To.json(data.firstname) surname = To.json(data.surname) othernames = To.json(data.othernames) cardnumber = data.cardnumber invert_name = 1%]</a></span>",
+                    "<span style='white-space:nowrap'><a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.borrowernumber | html %]'>[% INCLUDE 'patron-title.inc' borrowernumber = data.borrowernumber category_type = data.category_type firstname = To.json(data.firstname) surname = To.json(data.surname) othernames = To.json(data.othernames) cardnumber = data.cardnumber invert_name = 1%]</a></span>",
                 "dt_branch":
-                    "[% data.branchname |html %]",
+                    "[% data.branchname | html %]",
                 "dt_category":
-                    "[% data.category_description |html %] ([% data.category_type |html %])",
+                    "[% data.category_description | html %] ([% data.category_type | html %])",
                 "dt_action":
                     [%- IF selection_type == 'select' -%]
-                        "<a class=\"btn btn-default btn-xs select_user\" href=\"#\" data-borrowernumber=\"[% data.borrowernumber %]\" data-borrowerdata=\"[% To.json(data) | html %]\">Select</a><input type=\"hidden\" id=\"borrower_data[% data.borrowernumber %]\" name=\"borrower_data[% data.borrowernumber %]\" value=\"[% To.json(data) | html %]\" />"
+                        "<a class=\"btn btn-default btn-xs select_user\" href=\"#\" data-borrowernumber=\"[% data.borrowernumber | html %]\" data-borrowerdata=\"[% To.json(data) | html %]\">Select</a><input type=\"hidden\" id=\"borrower_data[% data.borrowernumber | html %]\" name=\"borrower_data[% data.borrowernumber | html %]\" value=\"[% To.json(data) | html %]\" />"
                     [%- ELSE -%]
-                        "<a href=\"#\" data-borrowernumber=\"[% data.borrowernumber %]\" data-firstname=\"[% data.firstname %]\" data-surname=\"[% data.surname %]\" class=\"btn btn-default btn-xs add_user\"><i class=\"fa fa-plus\"></i> Add</a>"
+                        "<a href=\"#\" data-borrowernumber=\"[% data.borrowernumber | html %]\" data-firstname=\"[% data.firstname | html %]\" data-surname=\"[% data.surname | html %]\" class=\"btn btn-default btn-xs add_user\"><i class=\"fa fa-plus\"></i> Add</a>"
                     [%- END -%]
             }[% UNLESS loop.last %],[% END %]
         [% END %]

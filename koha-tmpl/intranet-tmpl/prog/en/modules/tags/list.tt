@@ -1,9 +1,10 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Tags &rsaquo; [% IF ( do_it ) %]Review &rsaquo; [% ELSE %]Review tags[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 <style type="text/css">
 tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : transparent; }</style>
 </head>
@@ -12,14 +13,14 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/tags/review.pl">Tags</a> &rsaquo; Results for tag <i>[% tag %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/tags/review.pl">Tags</a> &rsaquo; Results for tag <i>[% tag | html %]</i></div>
 
 <div id="doc3" class="yui-t2">
  <div id="bd">
   <div id="yui-main">
   <div class="yui-b">
 [% IF ( titles ) %]
-<h3>Titles tagged with the term <i>[% tag %]</i></h3>
+<h3>Titles tagged with the term <i>[% tag | html %]</i></h3>
 <table id="itemst">
 	<thead><tr>
 	    <th>Title</th>
@@ -29,35 +30,35 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 
         [% FOREACH title IN titles %]
             <tr>
-            <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = title.biblionumber %][% title.title |html %][% FOREACH subtitl IN title.subtitle %] [% subtitl.subfield %][% END %]</a>
-            [% title.author %]
-            <p>[% IF ( title.publishercode ) %]- [% title.publishercode|html %]
-            [% IF ( title.place ) %] [% title.place %][% END %][% END %]
-            [% IF ( title.pages ) %] - [% title.pages %][% IF ( title.size ) %] [% title.size %]
+            <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = title.biblionumber %][% title.title | html %][% FOREACH subtitl IN title.subtitle %] [% subtitl.subfield | html %][% END %]</a>
+            [% title.author | html %]
+            <p>[% IF ( title.publishercode ) %]- [% title.publishercode | html %]
+            [% IF ( title.place ) %] [% title.place | html %][% END %][% END %]
+            [% IF ( title.pages ) %] - [% title.pages | html %][% IF ( title.size ) %] [% title.size | html %]
             [% END %]
             [% END %]</p>
             [% IF ( title.notes ) %]
-            <p>[% title.notes |html%]</p>[% END %]
+            <p>[% title.notes | html %]</p>[% END %]
             [% IF ( title.TagLoop ) %]<p style="font-size:90%"><strong>Tagged with:</strong> [% FOREACH TagLoo IN title.TagLoop %]
-            <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term %]">[% TagLoo.term |html %]</a> <span class="weight">([% TagLoo.weight_total %])</span>[% IF ( loop.last ) %][% ELSE %], [% END %]
+            <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term | html %]">[% TagLoo.term | html %]</a> <span class="weight">([% TagLoo.weight_total | html %])</span>[% IF ( loop.last ) %][% ELSE %], [% END %]
             [% END %]</p>
             [% END %]
             </td>
             <td>[% IF ( title.items ) %]<ul style="font-size:80%">[% FOREACH item IN title.items %]
                 <li>
-                    [% item.branchname %] [% item.location_description %]
+                    [% item.branchname | html %] [% item.location_description | html %]
                     [% IF ( item.itemcallnumber ) %]
-                        ([% item.itemcallnumber %])
+                        ([% item.itemcallnumber | html %])
                     [% END %]
                 </li>
                 [% END %]</ul>[% ELSE %]This record has no items.[% END %]
              </td>
-             <td><form method="post" action="/cgi-bin/koha/tags/list.pl"><input type="hidden" name="op" value="del" /><input type="hidden" name="tag" value="[% tag %]" /><input type="hidden" name="tag_id" value="[% title.tag_id %]" /><button type="submit" class="delete btn btn-default btn-sm"><i class="fa fa-trash"></i> Remove tag</button></form></td>
+             <td><form method="post" action="/cgi-bin/koha/tags/list.pl"><input type="hidden" name="op" value="del" /><input type="hidden" name="tag" value="[% tag | html %]" /><input type="hidden" name="tag_id" value="[% title.tag_id | html %]" /><button type="submit" class="delete btn btn-default btn-sm"><i class="fa fa-trash"></i> Remove tag</button></form></td>
             </tr>
         [% END %]
     </table>
 [% ELSE %]
-	<div class="dialog message">There are no titles tagged with the term <i>[% tag %]</i></div>
+	<div class="dialog message">There are no titles tagged with the term <i>[% tag | html %]</i></div>
 [% END %]
 </form>
  </div>

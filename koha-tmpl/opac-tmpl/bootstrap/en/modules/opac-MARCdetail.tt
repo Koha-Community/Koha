@@ -1,6 +1,7 @@
+[% USE raw %]
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  MARC details for record no. [% biblio.biblionumber %]</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;  MARC details for record no. [% biblio.biblionumber | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -9,7 +10,7 @@
 <div class="main">
     <ul class="breadcrumb">
         <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="#">MARC view: [% bibliotitle %]</a></li>
+        <li><a href="#">MARC view: [% bibliotitle | html %]</a></li>
     </ul>
 
     <div class="container-fluid">
@@ -20,114 +21,114 @@
                         <div id="catalogue_detail_biblio">
 
                             <div id="views">
-                                <span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber %]">Normal view</a></span>
+                                <span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | html %]">Normal view</a></span>
                                 <span class="view current-view"><span id="MARCview">MARC view</span></span>
-                                [% IF ( ISBD ) %]<span class="view"><a id="ISBDview"  href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblio.biblionumber %]">ISBD view</a></span>[% END %]
+                                [% IF ( ISBD ) %]<span class="view"><a id="ISBDview"  href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblio.biblionumber | html %]">ISBD view</a></span>[% END %]
                             </div>
-                            <h1 class="title">[% bibliotitle %] (Record no. [% biblio.biblionumber %])</h1>
+                            <h1 class="title">[% bibliotitle | html %] (Record no. [% biblio.biblionumber | html %])</h1>
 
                             [% IF ( OPACXSLTDetailsDisplay ) %]
-                                <div id="switchview_div">[ <a id="switchview" href="/cgi-bin/koha/opac-showmarc.pl?id=[% biblio.biblionumber %]&amp;viewas=html">view plain</a> ]</div>
+                                <div id="switchview_div">[ <a id="switchview" href="/cgi-bin/koha/opac-showmarc.pl?id=[% biblio.biblionumber | html %]&amp;viewas=html">view plain</a> ]</div>
                                 <div id="plainmarc"></div>
                             [% END %]
 
                             <div id="labeledmarc">
                                 <table id="marc" class="table table-bordered table-striped">
                                     [% FOREACH tab0X IN tab0XX %]
-                                    <tr><th colspan="2">[% tab0X.tag %]</th></tr>
+                                    <tr><th colspan="2">[% tab0X.tag | html %]</th></tr>
                                     [% FOREACH subfiel IN tab0X.subfield %]
                                             <tr>
-                                                <td>[% subfiel.marc_lib %]</td>
-                                                <td>[% subfiel.marc_value %]</td>
+                                                <td>[% subfiel.marc_lib | $raw %]</td>
+                                                <td>[% subfiel.marc_value | html %]</td>
                                             </tr>
                                         [% END %]
                                     [% END %]
                                     [% FOREACH tab1X IN tab1XX %]
-                                    <tr><th colspan="2">[% tab1X.tag %]</th></tr>
+                                    <tr><th colspan="2">[% tab1X.tag | html %]</th></tr>
                                     [% FOREACH subfiel IN tab1X.subfield %]
                                             <tr>
-                                                <td  >[% subfiel.marc_lib %]</td>
-                                                <td  >[% subfiel.marc_value %]</td>
+                                                <td  >[% subfiel.marc_lib | $raw %]</td>
+                                                <td  >[% subfiel.marc_value | html %]</td>
                                             </tr>
                                         [% END %]
                                     [% END %]
 
                                     [% FOREACH tab2X IN tab2XX %]
-                                    <tr><th colspan="2">[% tab2X.tag %]</th></tr>
+                                    <tr><th colspan="2">[% tab2X.tag | html %]</th></tr>
                                     [% FOREACH subfiel IN tab2X.subfield %]
                                             <tr>
-                                                <td>[% subfiel.marc_lib %]</td>
-                                                <td>[% subfiel.marc_value %]</td>
+                                                <td>[% subfiel.marc_lib | $raw %]</td>
+                                                <td>[% subfiel.marc_value | html %]</td>
                                             </tr>
                                         [% END %]
                                     [% END %]
 
                                     [% FOREACH tab3X IN tab3XX %]
-                                    <tr><th colspan="2">[% tab3X.tag %]</th></tr>
+                                    <tr><th colspan="2">[% tab3X.tag | html %]</th></tr>
                                     [% FOREACH subfiel IN tab3X.subfield %]
                                             <tr>
-                                                <td>[% subfiel.marc_lib %]</td>
-                                                <td>[% subfiel.marc_value %]</td>
+                                                <td>[% subfiel.marc_lib | $raw %]</td>
+                                                <td>[% subfiel.marc_value | html %]</td>
                                             </tr>
                                         [% END %]
                                     [% END %]
 
                                     [% FOREACH tab4X IN tab4XX %]
-                                    <tr><th colspan="2" >[% tab4X.tag %]</th></tr>
+                                    <tr><th colspan="2" >[% tab4X.tag | html %]</th></tr>
                                     [% FOREACH subfiel IN tab4X.subfield %]
                                             <tr>
-                                                <td>[% subfiel.marc_lib %]</td>
-                                                <td>[% subfiel.marc_value %]</td>
+                                                <td>[% subfiel.marc_lib | $raw %]</td>
+                                                <td>[% subfiel.marc_value | html %]</td>
                                             </tr>
                                         [% END %]
                                     [% END %]
 
                                     [% FOREACH tab5X IN tab5XX %]
-                                    <tr><th colspan="2">[% tab5X.tag %]</th></tr>
+                                    <tr><th colspan="2">[% tab5X.tag | html %]</th></tr>
                                     [% FOREACH subfiel IN tab5X.subfield %]
                                             <tr>
-                                                <td>[% subfiel.marc_lib %]</td>
-                                                <td>[% subfiel.marc_value %]</td>
+                                                <td>[% subfiel.marc_lib | $raw %]</td>
+                                                <td>[% subfiel.marc_value | html %]</td>
                                             </tr>
                                         [% END %]
                                     [% END %]
 
                                     [% FOREACH tab6X IN tab6XX %]
-                                    <tr><th colspan="2">[% tab6X.tag %]</th></tr>
+                                    <tr><th colspan="2">[% tab6X.tag | html %]</th></tr>
                                     [% FOREACH subfiel IN tab6X.subfield %]
                                             <tr>
-                                                <td>[% subfiel.marc_lib %]</td>
-                                                <td>[% subfiel.marc_value %]</td>
+                                                <td>[% subfiel.marc_lib | $raw %]</td>
+                                                <td>[% subfiel.marc_value | html %]</td>
                                             </tr>
                                         [% END %]
                                     [% END %]
 
                                     [% FOREACH tab7X IN tab7XX %]
-                                    <tr><th colspan="2">[% tab7X.tag %]</th></tr>
+                                    <tr><th colspan="2">[% tab7X.tag | html %]</th></tr>
                                     [% FOREACH subfiel IN tab7X.subfield %]
                                             <tr>
-                                                <td>[% subfiel.marc_lib %]</td>
-                                                <td>[% subfiel.marc_value %]</td>
+                                                <td>[% subfiel.marc_lib | $raw %]</td>
+                                                <td>[% subfiel.marc_value | html %]</td>
                                             </tr>
                                         [% END %]
                                     [% END %]
 
                                     [% FOREACH tab8X IN tab8XX %]
-                                    <tr><th colspan="2">[% tab8X.tag %]</th></tr>
+                                    <tr><th colspan="2">[% tab8X.tag | html %]</th></tr>
                                     [% FOREACH subfiel IN tab8X.subfield %]
                                             <tr>
-                                                <td>[% subfiel.marc_lib %]</td>
-                                                <td>[% subfiel.marc_value %]</td>
+                                                <td>[% subfiel.marc_lib | $raw %]</td>
+                                                <td>[% subfiel.marc_value | html %]</td>
                                             </tr>
                                         [% END %]
                                     [% END %]
 
                                     [% FOREACH tab9X IN tab9XX %]
-                                    <tr><th colspan="2">[% tab9X.tag %]</th></tr>
+                                    <tr><th colspan="2">[% tab9X.tag | html %]</th></tr>
                                     [% FOREACH subfiel IN tab9X.subfield %]
                                             <tr>
-                                                <td>[% subfiel.marc_lib %]</td>
-                                                <td>[% subfiel.marc_value %]</td>
+                                                <td>[% subfiel.marc_lib | $raw %]</td>
+                                                <td>[% subfiel.marc_value | html %]</td>
                                             </tr>
                                         [% END %]
                                     [% END %]
@@ -139,7 +140,7 @@
                                     <thead>
                                         <tr>
                                             [% FOREACH header IN item_header_loop %]
-                                                <th>[% header %]</th>
+                                                <th>[% header | html %]</th>
                                             [% END %]
                                         </tr>
                                     </thead>
@@ -147,7 +148,7 @@
                                         [% FOREACH item IN item_loop %]
                                             <tr>
                                                 [% FOREACH sf_code IN item_subfield_codes %]
-                                                    <td>[% item.$sf_code %]</td>
+                                                    <td>[% item.$sf_code | html %]</td>
                                                 [% END %]
                                             </tr>
                                         [% END %]
@@ -194,7 +195,7 @@ $(document).ready(function(){
             $(this).text(_("view labeled"));
             $("#labeledmarc").hide();
             if(!loaded){
-                $("#plainmarc").show().html("<div style=\"margin:1em;padding:1em;border:1px solid #EEE;font-size:150%;\"><img src=\"[% interface %]/[% theme %]/images/loading.gif\" /> "+_("Loading")+"...</div>").load("/cgi-bin/koha/opac-showmarc.pl","id=[% biblio.biblionumber %]&viewas=html");
+                $("#plainmarc").show().html("<div style=\"margin:1em;padding:1em;border:1px solid #EEE;font-size:150%;\"><img src=\"[% interface | html %]/[% theme | html %]/images/loading.gif\" /> "+_("Loading")+"...</div>").load("/cgi-bin/koha/opac-showmarc.pl","id=[% biblio.biblionumber | html %]&viewas=html");
                 loaded = 1;
             } else {
                 $("#plainmarc").show();

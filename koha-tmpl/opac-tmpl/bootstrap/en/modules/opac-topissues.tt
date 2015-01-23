@@ -3,7 +3,7 @@
 [% USE AuthorisedValues %]
 [% USE ItemTypes %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Most popular titles</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Most popular titles</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
     <style>
@@ -36,16 +36,16 @@
                         [% IF ( results ) %]
                             <table id="topissuest" class="table table-bordered table-striped">
                                 <caption>
-                                    The [% limit %] most checked-out
+                                    The [% limit | html %] most checked-out
                                     [% IF selected_itemtype %]
-                                        [% ItemTypes.GetDescription(selected_itemtype) %]
+                                        [% ItemTypes.GetDescription(selected_itemtype) | html %]
                                     [% END %]
                                     [% IF ( branch ) %]
                                     at
-                                    [% Branches.GetName( branch ) %]
+                                    [% Branches.GetName( branch ) | html %]
                                     [% END %]
                                     [% IF ( timeLimit != 999 ) %]
-                                    in the past [% timeLimit |html %] months
+                                    in the past [% timeLimitFinite | html %] months
                                     [% ELSE %] of all time[% END %]
                                 </caption>
                                 <thead>
@@ -59,28 +59,28 @@
                                 <tbody>
                                     [% FOREACH result IN results %]
                                         <tr>
-                                            <td><a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% result.biblionumber %]">[% result.title |html %]</a><p>[% result.author %]
-                                            [% IF ( result.publishercode ) %]- [% result.publishercode %][% END %]
-                                            [% IF ( result.place ) %][% result.place %][% END %]
+                                            <td><a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% result.biblionumber | html %]">[% result.title | html %]</a><p>[% result.author | html %]
+                                            [% IF ( result.publishercode ) %]- [% result.publishercode | html %][% END %]
+                                            [% IF ( result.place ) %][% result.place | html %][% END %]
                                             [% IF ( result.publicationyear ) %]
-                                                [% result.publicationyear %]
+                                                [% result.publicationyear | html %]
                                             [% ELSIF ( result.copyrightdate ) %]
-                                                [% result.copyrightdate %]
+                                                [% result.copyrightdate | html %]
                                             [% END %]
-                                            [% IF ( result.pages ) %] - [% result.pages %][% END %]
-                                            [% IF ( result.item('size') ) %][% result.item('size') %][% END %]</p>
+                                            [% IF ( result.pages ) %] - [% result.pages | html %][% END %]
+                                            [% IF ( result.item('size') ) %][% result.item('size') | html %][% END %]</p>
                                             </td>
                                             <td>
                                               [% IF Koha.Preference('AdvancedSearchTypes') == 'ccode' %]
                                                 <span class="tdlabel">Collection</span>
-                                                [% AuthorisedValues.GetByCode('ccode', result.ccode, 1) %]
+                                                [% AuthorisedValues.GetByCode('ccode', result.ccode, 1) | html %]
                                               [% ELSE %]
                                                 <span class="tdlabel">Item type</span>
-                                                [% ItemTypes.GetDescription(result.itemtype) %]
+                                                [% ItemTypes.GetDescription(result.itemtype) | html %]
                                               [% END %]
                                             </td>
-                                            <td><span class="tdlabel">Checkouts: </span> <span title="[% result.count %]">[% result.count %]</span></td>
-                                            [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]<td>[% IF Koha.Preference( 'RequestOnOpac' ) == 1 %][% UNLESS ( result.norequests ) %]<a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% result.biblionumber %]">Place hold</a>[% END %][% END %]</td>[% END %]
+                                            <td><span class="tdlabel">Checkouts: </span> <span title="[% result.count | html %]">[% result.count | html %]</span></td>
+                                            [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]<td>[% IF Koha.Preference( 'RequestOnOpac' ) == 1 %][% UNLESS ( result.norequests ) %]<a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% result.biblionumber | html %]">Place hold</a>[% END %][% END %]</td>[% END %]
                                             </tr>
                                     [% END %]
                                 </tbody>

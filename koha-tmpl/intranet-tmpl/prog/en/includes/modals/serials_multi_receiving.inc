@@ -18,7 +18,7 @@
                         <input type="hidden" name="op" value="gennext" />
 
                         [%# subscriptionidlist is used from serials-collection, subscriptionid is used from serils-edit %]
-                        <input type="hidden" name="subscriptionid" value="[% subscriptionidlist || subscriptionid %]" />
+                        <input type="hidden" name="subscriptionid" value="[% subscriptionidlist || subscriptionid | html %]" />
                     </fieldset>
                 </div>
 

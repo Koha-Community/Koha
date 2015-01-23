@@ -1,8 +1,8 @@
 [% USE Koha %]
 <script>
     //<![CDATA[
-        var debug    = "[% debug %]";
-        var dformat  = "[% dateformat %]";
+        var debug    = "[% debug | html %]";
+        var dformat  = "[% dateformat | html %]";
         var sentmsg = 0;
         if (debug > 1) {alert("dateformat: " + dformat + "\ndebug is on (level " + debug + ")");}
 
@@ -40,7 +40,7 @@
                 dayNamesMin: [_("Su"),_("Mo"),_("Tu"),_("We"),_("Th"),_("Fr"),_("Sa")],
                 weekHeader: _("Wk"),
                 dateFormat: '[% IF ( dateformat == "us" ) %]mm/dd/yy[% ELSIF ( dateformat == "metric" ) %]dd/mm/yy[% ELSIF ( dateformat == "dmydot" ) %]dd.mm.yy[% ELSE %]yy-mm-dd[% END %]',
-                firstDay: [% Koha.Preference('CalendarFirstDayOfWeek') %],
+                firstDay: [% Koha.Preference('CalendarFirstDayOfWeek') | html %],
                 isRTL: [% IF ( bidi ) %]true[% ELSE %]false[% END %],
                 showMonthAfterYear: false,
                 yearSuffix: ''};
@@ -53,7 +53,7 @@
                 showOn: "both",
                 changeMonth: true,
                 changeYear: true,
-                buttonImage: '[% interface %]/lib/famfamfam/silk/calendar.png',
+                buttonImage: '[% interface | html %]/lib/famfamfam/silk/calendar.png',
                 buttonImageOnly: true,
                 showButtonPanel: true,
                 showOtherMonths: true,

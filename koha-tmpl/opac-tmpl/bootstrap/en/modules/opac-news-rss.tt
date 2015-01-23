@@ -1,15 +1,16 @@
+[% USE raw %]
 <?xml version="1.0"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
    <channel>
-      <atom:link href="[% OPACBaseURL %]/cgi-bin/koha/opac-main.pl" rel="self" type="application/rss+xml" />
-      <title>News from [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]the library[% END %]</title>
-      <link>[% OPACBaseURL %]/cgi-bin/koha/opac-main.pl</link>
+      <atom:link href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-main.pl" rel="self" type="application/rss+xml" />
+      <title>News from [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]the library[% END %]</title>
+      <link>[% OPACBaseURL | html %]/cgi-bin/koha/opac-main.pl</link>
       <description></description>
       [% FOREACH newsitem IN koha_news %]
       <item>
-        <title>[% newsitem.title |html %]</title>
-        <description>[% newsitem.content |html %]</description>
-        <guid>[% OPACBaseURL %]/cgi-bin/koha/opac-main.pl#newsitem[% newsitem.idnew |html %]</guid>
+        <title>[% newsitem.title | html %]</title>
+        <description>[% newsitem.content | $raw %]</description>
+        <guid>[% OPACBaseURL | html %]/cgi-bin/koha/opac-main.pl#newsitem[% newsitem.idnew | html %]</guid>
       </item>
       [% END %]
    </channel>

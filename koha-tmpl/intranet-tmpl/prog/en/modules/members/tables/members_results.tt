@@ -1,48 +1,49 @@
+[% USE raw %]
 [% USE To %]
 [% USE AuthorisedValues %]
 [% USE KohaDates %]
 [% USE Price %]
 {
-    "sEcho": [% sEcho %],
-    "iTotalRecords": [% iTotalRecords %],
-    "iTotalDisplayRecords": [% iTotalDisplayRecords %],
+    "sEcho": [% sEcho | html %],
+    "iTotalRecords": [% iTotalRecords | html %],
+    "iTotalDisplayRecords": [% iTotalDisplayRecords | html %],
     "aaData": [
         [% FOREACH data IN aaData %]
             {
                 [% IF CAN_user_tools_manage_patron_lists %]
                 "dt_borrowernumber":
-                    "<input type='checkbox' class='selection' name='borrowernumber' value='[% data.borrowernumber %]' />",
+                    "<input type='checkbox' class='selection' name='borrowernumber' value='[% data.borrowernumber | html %]' />",
                 [% END %]
                 "dt_cardnumber":
                     "[% data.cardnumber | html %]",
                 "dt_name":
-                    "<span style='white-space:nowrap'><a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.borrowernumber %]'>[% INCLUDE 'patron-title.inc' borrowernumber = data.borrowernumber category_type = data.category_type firstname = To.json(data.firstname) surname = To.json(data.surname) othernames = To.json(data.othernames) invert_name = 1 %]</a><br />[% INCLUDE escape_address data = data %][% IF data.email %]<br/>Email: <a href='mailto:[% data.email | html %]'>[% data.email | html %]</a>[% END %]</span>",
+                    "<span style='white-space:nowrap'><a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.borrowernumber | html %]'>[% INCLUDE 'patron-title.inc' borrowernumber = data.borrowernumber category_type = data.category_type firstname = To.json(data.firstname) surname = To.json(data.surname) othernames = To.json(data.othernames) invert_name = 1 %]</a><br />[% INCLUDE escape_address data = data %][% IF data.email %]<br/>Email: <a href='mailto:[% data.email | html %]'>[% data.email | html %]</a>[% END %]</span>",
     "dt_dateofbirth":
         "[% data.dateofbirth | $KohaDates %]",
                 "dt_category":
-                    "[% data.category_description |html %] ([% data.category_type |html %])",
+                    "[% data.category_description | html %] ([% data.category_type | html %])",
                 "dt_branch":
-                    "[% data.branchname |html %]",
+                    "[% data.branchname | html %]",
                 "dt_dateexpiry":
-                    "[% data.dateexpiry %]",
+                    "[% data.dateexpiry | html %]",
                 "dt_od_checkouts":
-                    "[% IF data.overdues %]<span class='overdue'><strong>[% data.overdues %]</strong></span>[% ELSE %][% data.overdues %][% END %] / [% data.issues %]",
+                    "[% IF data.overdues %]<span class='overdue'><strong>[% data.overdues | html %]</strong></span>[% ELSE %][% data.overdues | html %][% END %] / [% data.issues | html %]",
                 "dt_fines":
-                    "<span style='text-align: right; display: block;'>[% IF data.fines < 0 %]<span class='credit'>[% data.fines | $Price %]</span> [% ELSIF data.fines > 0 %] <span class='debit'><strong>[% data.fines | $Price %]</strong></span> [% ELSE %] [% data.fines | $Price %] [% END %]</span>",
+                    "<span style='text-align: right; display: block;'>[% IF data.fines < 0 %]<span class='credit'>[% data.fines | $Price | html %]</span> [% ELSIF data.fines > 0 %] <span class='debit'><strong>[% data.fines | $Price | html %]</strong></span> [% ELSE %] [% data.fines | $Price | html %] [% END %]</span>",
                 "dt_borrowernotes":
-                    "[% data.borrowernotes.replace('\\\\' , '\\\\') |html |html_line_break |collapse %]",
+                    "[% data.borrowernotes.replace('\\\\' , '\\\\') |html_line_break |collapse %]",
                 "dt_action":
-                    "<a href='/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% data.borrowernumber %]' class='btn btn-default btn-xs'><i class='fa fa-pencil'></i> Edit</a>",
+                    "<a href='/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% data.borrowernumber | html %]' class='btn btn-default btn-xs'><i class='fa fa-pencil'></i> Edit</a>",
                 "borrowernumber":
-                    "[% data.borrowernumber %]"
+                    "[% data.borrowernumber | html %]"
             }[% UNLESS loop.last %],[% END %]
         [% END %]
     ]
 }
 [% BLOCK escape_address %]
 [%~ SET address = data.streetnumber _ ' ' %]
-[%~ IF data.streettype %][% address = address _ AuthorisedValues.GetByCode( 'ROADTYPE', data.streettype ) _ ' ' %][% END %]
-[%~ IF data.address %][% address = address _ data.address _ ' ' %][% END %]
-[%~ IF data.address2 %][% address = address _ data.address2 _ ' ' %][% END %]
-[%~ To.json( address ) ~%]
+[%~ IF data.streettype %][% address = address _ AuthorisedValues.GetByCode( 'ROADTYPE', data.streettype ) _ ' ' | html %][% END %]
+[%~ IF data.address %][% address = address _ data.address _ ' ' | html %][% END %]
+[%~ IF data.address2 %][% address = address _ data.address2 _ ' ' | html %][% END %]
+[%~ To.json( address ).raw ~%]
 [% END %]

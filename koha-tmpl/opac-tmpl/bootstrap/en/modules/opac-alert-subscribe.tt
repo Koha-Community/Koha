@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  [% IF ( typeissue ) %]Subscribe to a subscription alert [% ELSIF ( typeissuecancel ) %] Unsubscribe from a subscription alert [% END %]</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;  [% IF ( typeissue ) %]Subscribe to a subscription alert [% ELSIF ( typeissuecancel ) %] Unsubscribe from a subscription alert [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -10,7 +10,7 @@
     <div class="main">
         <ul class="breadcrumb">
             <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]">Details for [% bibliotitle %]</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]">Details for [% bibliotitle | html %]</a> <span class="divider">&rsaquo;</span></li>
             <li><a href="#">[% IF ( typeissue ) %]Subscribe to a subscription alert [% ELSIF ( typeissuecancel ) %] Unsubscribe from a subscription alert [% END %]</a></li>
         </ul>
 
@@ -22,10 +22,10 @@
                             <h1>Subscribe to a subscription alert</h1>
                             <form action="opac-alert-subscribe.pl" method="post">
                                 <p>Do you want to receive an email when a new issue for this subscription arrives?</p>
-                                <h4>[% bibliotitle %]</h4>
-                                [% IF ( notes ) %]<p>[% notes %]</p>[% END %]
-                                <input type="hidden" name="subscriptionid" value="[% subscriptionid %]">
-                                <input type="hidden" name="referer" value="[% referer %]">
+                                <h4>[% bibliotitle | html %]</h4>
+                                [% IF ( notes ) %]<p>[% notes | html %]</p>[% END %]
+                                <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]">
+                                <input type="hidden" name="referer" value="[% referer | html %]">
                                 <input type="hidden" name="biblionumber" value="[% biblionumber | html %]">
                                 <input type="hidden" name="op" value="alert_confirmed">
                                 <input type="submit" class="btn" value="Yes">
@@ -36,10 +36,10 @@
                             <h1>Unsubscribe from a subscription alert</h1>
                             <form action="opac-alert-subscribe.pl" method="post">
                                 <p>Please confirm that you do not want to receive email when a new issue arrives for this subscription.</p>
-                                <h4>[% bibliotitle %]</h4>
-                                [% IF ( notes ) %]<p>[% notes %]</p>[% END %]
-                                <input type="hidden" name="subscriptionid" value="[% subscriptionid %]">
-                                <input type="hidden" name="referer" value="[% referer %]">
+                                <h4>[% bibliotitle | html %]</h4>
+                                [% IF ( notes ) %]<p>[% notes | html %]</p>[% END %]
+                                <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]">
+                                <input type="hidden" name="referer" value="[% referer | html %]">
                                 <input type="hidden" name="biblionumber" value="[% biblionumber | html %]">
                                 <input type="hidden" name="op" value="cancel_confirmed">
                                 <input type="submit" value="Yes" class="btn">

@@ -1,10 +1,11 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE ItemTypes %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Spent</title>
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -12,7 +13,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Spent - [% fund_code %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Spent - [% fund_code | html %]</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -20,7 +21,7 @@
     <div id="yui-main">
         <div class="yui-b">
 
-<h1>Fund: [% fund_code %]</h1>
+<h1>Fund: [% fund_code | html %]</h1>
 <h2>Spent</h2>
 
 <table id="spent">
@@ -42,36 +43,36 @@
     [% FOREACH order IN spent %]
         <tr>
             <td class="cell">
-                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber %]">
-                    [% order.title %]
+                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | html %]">
+                    [% order.title | html %]
                 </a>
             </td>
             <td class="cell">
-                [% order.ordernumber %]
+                [% order.ordernumber | html %]
             </td>
             <td class="cell">
-                <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid %]">[% order.booksellerid %]</a>
+                <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid | html %]">[% order.booksellerid | html %]</a>
             </td>
             <td class="cell">
-                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid %]">[% order.invoicenumber %]</a>
+                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | html %]">[% order.invoicenumber | html %]</a>
             </td>
             <td class="cell">
-                [% ItemTypes.GetDescription( order.itype ) %]
+                [% ItemTypes.GetDescription( order.itype ) | html %]
             </td>
             <td class="cell">
-                [% order.quantityreceived %]
+                [% order.quantityreceived | html %]
             </td>
             <td class="cell">
-                [% order.unitprice %]
+                [% order.unitprice | html %]
             </td>
             <td class="cell">
-                <span title="[% order.entrydate %]">[% order.entrydate | $KohaDates %]</span>
+                <span title="[% order.entrydate | html %]">[% order.entrydate | $KohaDates %]</span>
             </td>
             <td class="cell">
-                <span title="[% order.datereceived %]">[% order.datereceived | $KohaDates %]</span>
+                <span title="[% order.datereceived | html %]">[% order.datereceived | $KohaDates %]</span>
             </td>
             <td class="data cell">
-                [% order.rowtotal %]
+                [% order.rowtotal | html %]
             </td>
         </tr>
     [% END %]
@@ -80,15 +81,15 @@
         [% IF shipmentcosts.size || ( adjustments && adjustments.count > 0 ) %]
             <tr valign="top">
                 <td colspan="9"> Sub total </td>
-                <td class="data"> [% subtotal %] </td>
+                <td class="data"> [% subtotal | html %] </td>
             </tr>
         [% END %]
         [% IF shipmentcosts.size %]
             [% FOREACH shipmentcost IN shipmentcosts %]
                 <tr>
                     <td></td>
-                    <td colspan="8">Shipping cost for invoice [% shipmentcost.invoicenumber %]</td>
-                    <td class="data total">[% shipmentcost.shipmentcost %]</td>
+                    <td colspan="8">Shipping cost for invoice [% shipmentcost.invoicenumber | html %]</td>
+                    <td class="data total">[% shipmentcost.shipmentcost | html %]</td>
                 </tr>
             [% END %]
         [% END %]
@@ -96,14 +97,14 @@
             [% FOREACH adjustment IN adjustments %]
                 <tr>
                     <td></td>
-                    <td colspan="8">Adjustment cost for invoice [% adjustment.invoiceid %]</td>
-                    <td class="data total">[% adjustment.adjustment %]</td>
+                    <td colspan="8">Adjustment cost for invoice [% adjustment.invoiceid | html %]</td>
+                    <td class="data total">[% adjustment.adjustment | html %]</td>
                 </tr>
             [% END %]
         [% END %]
         <tr>
             <td colspan="9">TOTAL</td>
-            <td class="data total">[% total %]</td>
+            <td class="data total">[% total | html %]</td>
         </tr>
     </tfoot>
 </table>
@@ -116,7 +117,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/acquisitions-menu.js") %]
+    [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
         $(document).ready(function() {

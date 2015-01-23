@@ -63,11 +63,11 @@
                         [% IF csv_profiles.size %]
                             <select name="csv_profile_id">
                                 [% FOREACH csv_profile IN csv_profiles %]
-                                    <option value="[% csv_profile.export_format_id %]">[% csv_profile.profile %]</option>
+                                    <option value="[% csv_profile.export_format_id | html %]">[% csv_profile.profile | html %]</option>
                                 [% END %]
                             </select>
                         [% END %]
-                       <label for="export_remove_fields">Don't export fields:</label> <input type="text" id="export_remove_fields" name="export_remove_fields" value="[% Koha.Preference('ExportRemoveFields') %]" title="Use for iso2709 exports" />
+                       <label for="export_remove_fields">Don't export fields:</label> <input type="text" id="export_remove_fields" name="export_remove_fields" value="[% Koha.Preference('ExportRemoveFields') | html %]" title="Use for iso2709 exports" />
                         <input type="hidden" name="op" value="export" />
                         <input type="hidden" id="output_format" name="output_format" value="iso2709" />
                         <input type="hidden" id="dont_export_item" name="dont_export_item" value="0" />

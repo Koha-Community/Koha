@@ -1,8 +1,34 @@
+[% USE raw %]
 [% USE Koha %]
 [% PROCESS 'opac-authorities.inc' %]
 [% PROCESS 'authorities-search-results.inc' %]
+[% BLOCK pagination %]
+    <div class="pagination">
+        <ul>
+            [% IF ( displayprev ) %]
+                <li>
+                    <a href="opac-authorities-home.pl?startfrom=[% startfromprev | html %]&amp;[% FOREACH searchdat IN searchdata %][% searchdat.term | html %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage | html %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode | html %]&amp;orderby=[% orderby | html %]">
+                        &laquo;
+                    </a>
+                </li>
+            [% END %]
+            [% FOREACH number IN numbers %]
+                [% IF ( number.highlight ) %]
+                    <li class="active"><a href="#">[% number.number | html %]</a></li>
+                [% ELSE %]
+                    <li><a href="opac-authorities-home.pl?startfrom=[% number.startfrom | html %]&amp;[% FOREACH searchdat IN number.searchdata %][% searchdat.term | html %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage | html %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode | html %]&amp;orderby=[% orderby | html %]">[% number.number | html %]</a></li>
+                [% END %]
+            [% END %]
+            [% IF ( displaynext ) %]
+                <li>
+                    <a href="opac-authorities-home.pl?startfrom=[% startfromnext | html %]&amp;[% FOREACH searchdat IN searchdata %][% searchdat.term | html %]=[% searchdat.val |url %]&amp;[% END %]&amp;resultsperpage=[% resultsperpage | html %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode | html %]&amp;orderby=[% orderby | html %]">&raquo;</a>
+                </li>
+            [% END %]
+        </ul>
+    </div> <!-- / #pages -->
+[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; [% IF ( total ) %]Authority search result[% ELSE %]No results found[% END %]</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; [% IF ( total ) %]Authority search result[% ELSE %]No results found[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -32,14 +58,14 @@
                         <h1>Authority search results</h1>
 
                         [% IF total %]
-                            <div class="pages">[% pagination_bar %]</div>
+                            <div class="pages">[% pagination_bar | $raw %]</div>
                         [% END %]
                         <div id="results">
                             [% IF ( total ) %]
                                 [% IF ( countfuzzy ) %]
-                                    <p><b>Showing [% resultcount %] of about [% total %] results</b></p>
+                                    <p><b>Showing [% resultcount | html %] of about [% total | html %] results</b></p>
                                 [% ELSE %]
-                                    <p><b>Results [% from %] to [% to %] of [% total %]</b></p>
+                                    <p><b>Results [% from | html %] to [% to | html %] of [% total | html %]</b></p>
                                 [% END %]
                             [% ELSE %]
                                 No results found.
@@ -62,11 +88,11 @@
                                         [% FOREACH resul IN result %]
                                             <tr>
                                                 <td>[% PROCESS authresult summary=resul.summary %]</td>
-                                                <td><a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% resul.authid %]">Details</a>
-                                                <td>[% resul.authtype %]</td>
+                                                <td><a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% resul.authid | html %]">Details</a>
+                                                <td>[% resul.authtype | html %]</td>
                                                 [% UNLESS ( resul.isEDITORS ) %]
                                                     <td>
-                                                         [% IF resul.used > 0 %]<a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;q=an=[% resul.authid %]">[% resul.used %] biblios</a>[% ELSE %]0 biblios[% END %]
+                                                         [% IF resul.used > 0 %]<a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;q=an=[% resul.authid | html %]">[% resul.used | html %] biblios</a>[% ELSE %]0 biblios[% END %]
                                                     </td>
                                                 [% END %]
                                             </tr>
@@ -75,7 +101,7 @@
                                 </table>
                             </div> <!-- / .searchresults -->
 
-                            <div class="pages">[% pagination_bar %]</div>
+                            <div class="pages">[% pagination_bar | $raw %]</div>
 
                         [% END # / IF total %]
                     </div> <!-- / #userauthsearchresults -->

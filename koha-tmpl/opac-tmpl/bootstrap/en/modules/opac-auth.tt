@@ -1,6 +1,7 @@
+[% USE raw %]
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;
 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
     Log in to your account
 [% ELSE %]
@@ -90,7 +91,7 @@
                                     </div>
                             [% ELSE %]
                                 <h4>Shibboleth Login</h4>
-                                <p><a href="[% shibbolethLoginUrl %]">If you have a Shibboleth account, please click here to log in.</a></p>
+                                <p><a href="[% shibbolethLoginUrl | html %]">If you have a Shibboleth account, please click here to log in.</a></p>
                             [% END %]
                             [% IF ( casAuthentication ) %]
                                 <h4>CAS login</h4>
@@ -105,14 +106,14 @@
                         [% IF ( casAuthentication ) %]
                             [% IF ( shibbolethAuthentication ) %]
                                 [% IF ( casServerUrl ) %]
-                                    <p><a href="[% casServerUrl %]">Please click here to log in.</a><p>
+                                    <p><a href="[% casServerUrl | html %]">Please click here to log in.</a><p>
                                 [% END %]
 
                                 [% IF ( casServersLoop ) %]
                                     <p>Please choose against which one you would like to authenticate: </p>
                                     <ul>
                                         [% FOREACH casServer IN casServersLoop %]
-                                            <li><a href="[% casServer.value %]">[% casServer.name %]</a></li>
+                                            <li><a href="[% casServer.value | html %]">[% casServer.name | html %]</a></li>
                                         [% END %]
                                     </ul>
                                 [% END %]
@@ -125,14 +126,14 @@
                                 [% END %]
 
                                 [% IF ( casServerUrl ) %]
-                                   <p><a href="[% casServerUrl %]">If you have a CAS account, please click here to log in.</a><p>
+                                   <p><a href="[% casServerUrl | html %]">If you have a CAS account, please click here to log in.</a><p>
                                 [% END %]
 
                                 [% IF ( casServersLoop ) %]
                                     <p>If you have a CAS account, please choose against which one you would like to authenticate:</p>
                                     <ul>
                                         [% FOREACH casServer IN casServersLoop %]
-                                        <li><a href="[% casServer.value %]">[% casServer.name %]</a></li>
+                                        <li><a href="[% casServer.value | html %]">[% casServer.name | html %]</a></li>
                                         [% END %]
                                     </ul>
                                 [% END %]
@@ -150,7 +151,7 @@
                         [% IF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]
                             [% IF ( invalidGoogleOpenIDConnectLogin ) %]
                                 <h4>Google login</h4>
-                                <p>Sorry, your Google login failed. <span class="error">[% invalidGoogleOpenIDConnectLogin %]</span></p>
+                                <p>Sorry, your Google login failed. <span class="error">[% invalidGoogleOpenIDConnectLogin | html %]</span></p>
                                 <p>Please note that the Google login will only work if you are using the e-mail address registered with this library.</p>
                                 <p>If you want to, you can try to <a href="/cgi-bin/koha/svc/auth/googleopenidconnect?reauthenticate=select_account">log in using a different account</a>
                             [% END %]
@@ -163,12 +164,12 @@
                         [% ELSIF SCI_login %]
                             <form action="/cgi-bin/koha/sci/sci-main.pl" name="auth" id="auth" method="post" autocomplete="off">
                         [% ELSE %]
-                            <form action="[% script_name %]" name="auth" id="auth" method="post" autocomplete="off">
+                            <form action="[% script_name | html %]" name="auth" id="auth" method="post" autocomplete="off">
                         [% END %]
                             <input type="hidden" name="koha_login_context" value="opac" />
                             <fieldset class="brief">
                             [% FOREACH INPUT IN INPUTS %]
-                                <input type="hidden" name="[% INPUT.name |html %]" value="[% INPUT.value |html %]" />
+                                <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />
                             [% END %]
                             <label for="userid">Login</label>
                             <input type="text"  size="25" id="userid"  name="userid" />
@@ -183,7 +184,7 @@
                             [% END %]
                             <div id="nologininstructions">
                             [% IF Koha.Preference('OpacLoginInstructions') %]
-                                [% Koha.Preference('OpacLoginInstructions') %]
+                                [% Koha.Preference('OpacLoginInstructions') | $raw %]
                             [% ELSE %]
                                 <h5>Don't have a password yet?</h5>
                                 <p>If you don't have a password yet, stop by the circulation desk the next time you're in the library. We'll happily set one up for you.</p>
@@ -200,7 +201,7 @@
                     [% ELSE %]
                         <h4>Logging on to the catalog has not been enabled by the library.</h4>
                         <ul>
-                            <li>To report this error, you can email the Koha Administrator.<a href="mailto:[% admin %]">Email</a></li>
+                            <li>To report this error, you can email the Koha Administrator.<a href="mailto:[% admin | html %]">Email</a></li>
                             <li>Use top menu bar to navigate to another part of Koha.</li>
                         </ul>
                     [% END # / IF opacuserlogin %]

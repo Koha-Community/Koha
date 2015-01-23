@@ -1,8 +1,9 @@
+[% USE raw %]
 [% USE Koha %]
 [% USE Branches %]
 [% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -62,24 +63,24 @@
                 [% SET newsdisp = ( Koha.Preference('NewsAuthorDisplay') ) %]
                 [% FOREACH koha_new IN koha_news %]
                     <div class="newsitem">
-                        <a name="newsitem[% koha_new.idnew %]"></a><h4 class="newsheader">[% koha_new.title %]</h4>
-                        <div class="newsbody">[% koha_new.content %]</div>
-                        <div class="newsfooter">(published on [% koha_new.newdate %][% IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) %] by <span class="newsauthor_title">[% koha_new.author_title %] </span>[% koha_new.author_firstname %] [% koha_new.author_surname %][% END %])</div>
+                        <a name="newsitem[% koha_new.idnew | html %]"></a><h4 class="newsheader">[% koha_new.title | html %]</h4>
+                        <div class="newsbody">[% koha_new.content | $raw %]</div>
+                        <div class="newsfooter">(published on [% koha_new.newdate | html %][% IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) %] by <span class="newsauthor_title">[% koha_new.author_title | html %] </span>[% koha_new.author_firstname | html %] [% koha_new.author_surname | html %][% END %])</div>
                     </div>
                 [% END %]
             </div>
             <div id="rssnews-container">
                 <!-- Logged in users have a branch code or it could be explicitly set -->
-                <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-news-rss.pl?branchcode=[% branchcode %]"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png"></a>
+                <a href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-news-rss.pl?branchcode=[% branchcode | html %]"><img src="[% interface | html %]/[% theme | html %]/images/feed-icon-16x16.png"></a>
                 [% IF Branches.all.size == 1 %]
                     [% IF branchcode %]
-                        RSS feed for [% Branches.GetName( branchcode ) %] library news.
+                        RSS feed for [% Branches.GetName( branchcode ) | html %] library news.
                     [% ELSE %]
                         RSS feed for library news.
                     [% END %]
                 [% ELSE %]
                     [% IF branchcode %]
-                        RSS feed for [% Branches.GetName( branchcode ) %] and system-wide library news.
+                        RSS feed for [% Branches.GetName( branchcode ) | html %] and system-wide library news.
                     [% ELSE %]
                         RSS feed for system-wide library news.
                     [% END %]
@@ -100,12 +101,12 @@
             <div id="daily-quote">
                 <h3>Quote of the day</h3>
                 <div>
-                    <span id="daily-quote-text">[% daily_quote.text %]</span><span id="daily-quote-sep"> ~ </span><span id="daily-quote-source">[% daily_quote.source %]</span>
+                    <span id="daily-quote-text">[% daily_quote.text | html %]</span><span id="daily-quote-sep"> ~ </span><span id="daily-quote-source">[% daily_quote.source | html %]</span>
                 </div>
             </div>
         [% END %]
 
-        [% IF ( OpacMainUserBlock ) %]<div id="opacmainuserblock">[% OpacMainUserBlock %]</div>[% END %]
+        [% IF ( OpacMainUserBlock ) %]<div id="opacmainuserblock">[% OpacMainUserBlock | $raw %]</div>[% END %]
         </div> <!-- / .span 7/9 -->
 
         [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) || OpacNavRight ) %]
@@ -125,7 +126,7 @@
                                         </fieldset>
                                         [% IF Koha.Preference( 'OpacLoginInstructions' ) %]
                                             <div id="nologininstructions-main" class="nologininstructions">
-                                                [% Koha.Preference( 'OpacLoginInstructions' ) %]
+                                                [% Koha.Preference( 'OpacLoginInstructions' ) | $raw %]
                                             </div>
                                         [% END %]
                                         [% IF Koha.Preference('OpacPasswordChange') && Koha.Preference('OpacResetPassword') %]
@@ -148,19 +149,19 @@
                                 <h3>Welcome, <a href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</span></a></h3>
                                 <ul id="user_summary_shortcuts">
                                     [% IF checkouts && checkouts > 0 %]
-                                        <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-checkouts"><span class="user_checkouts_count count_label">[% checkouts %]</span> checkout(s)</a></li>
+                                        <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-checkouts"><span class="user_checkouts_count count_label">[% checkouts | html %]</span> checkout(s)</a></li>
                                     [% END %]
                                     [% IF overdues && overdues > 0 %]
-                                        <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-overdues"><span class="user_overdues_count count_label">[% overdues %]</span> overdue(s)</a></li>
+                                        <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-overdues"><span class="user_overdues_count count_label">[% overdues | html %]</span> overdue(s)</a></li>
                                     [% END %]
                                     [% IF holds_pending && holds_pending > 0 %]
-                                        <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-holds"><span class="user_holds_pending_count count_label">[% holds_pending %]</span> hold(s) pending</a></li>
+                                        <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-holds"><span class="user_holds_pending_count count_label">[% holds_pending | html %]</span> hold(s) pending</a></li>
                                     [% END %]
                                     [% IF holds_waiting && holds_waiting > 0 %]
-                                        <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-holds"><span class="user_holds_waiting_count count_label">[% holds_waiting %]</span> hold(s) waiting</a></li>
+                                        <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-holds"><span class="user_holds_waiting_count count_label">[% holds_waiting | html %]</span> hold(s) waiting</a></li>
                                     [% END %]
                                     [% IF total_owing && total_owing > 0 %]
-                                        <li><a href="/cgi-bin/koha/opac-account.pl"><span class="user_fines_count count_label">[% total_owing | $Price with_symbol => 1 %]</span> due in fines and charges</a></li>
+                                        <li><a href="/cgi-bin/koha/opac-account.pl"><span class="user_fines_count count_label">[% total_owing | $Price with_symbol => 1 | html %]</span> due in fines and charges</a></li>
                                     [% END %]
                                 </ul>
                             </div>
@@ -169,7 +170,7 @@
                 [% END # /opacuserlogin %]
                 [% IF ( OpacNavRight ) %]
                     <div id="opacnavright">
-                        [% OpacNavRight %]
+                        [% OpacNavRight | $raw %]
                     </div>
                 [% END # /OpacNavRight %]
             </div> <!-- / .span3 -->

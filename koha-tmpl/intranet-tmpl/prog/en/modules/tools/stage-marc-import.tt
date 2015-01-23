@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -23,7 +24,7 @@
 [% IF ( uploadmarc ) %]
 <div id="toolbar" class="btn-toolbar">
         <a class="btn btn-default btn-sm" href="/cgi-bin/koha/tools/stage-marc-import.pl"><i class="fa fa-plus"></i> Stage MARC records</a>
-        <a class="btn btn-default btn-sm" href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% import_batch_id %]"><i class="fa fa-list-ul"></i> Manage staged records</a>
+        <a class="btn btn-default btn-sm" href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% import_batch_id | html %]"><i class="fa fa-list-ul"></i> Manage staged records</a>
 </div>
 [% END %]
 
@@ -37,12 +38,12 @@
     [% CASE 'auth' %]
         <li>Processing authority records</li>
     [% END %]
-	<li>[% total %]  records in file</li>
-	<li>[% import_errors %] records not staged because of MARC error</li>
-	<li>[% staged %] records staged</li>
+	<li>[% total | html %]  records in file</li>
+	<li>[% import_errors | html %] records not staged because of MARC error</li>
+	<li>[% staged | html %] records staged</li>
     [% IF ( checked_matches ) %]
-	<li>[% matched %] records with at least one match in catalog per matching rule 
-        &quot;[% matcher_code %]&quot;</li>
+	<li>[% matched | html %] records with at least one match in catalog per matching rule 
+        &quot;[% matcher_code | html %]&quot;</li>
     [% ELSE %]
         [% IF ( matcher_failed ) %]
           <li>Record matching failed -- unable to retrieve selected matching rule.</li>
@@ -51,10 +52,10 @@
         [% END %]
     [% END %]
     [% IF record_type == 'biblio' %]
-        <li>[% num_items %] item records found and staged</li>
+        <li>[% num_items | html %] item records found and staged</li>
     [% END %]
 	[% IF ( label_batch ) %]
-	  <li>New label batch created: # [% label_batch %] </li>
+	  <li>New label batch created: # [% label_batch | html %] </li>
     [% END %]
 </ul>
 [% ELSE %]
@@ -62,7 +63,7 @@
     <li>Select a MARC file to stage in the import reservoir.  It will be parsed, and each valid record staged for later import into the catalog.</li>
     <li>You can enter a name for this import. It may be useful, when creating a record, to remember where the suggested MARC data comes from!</li>
 </ul>
-<form method="post" action="[% SCRIPT_NAME %]" id="uploadfile" enctype="multipart/form-data">
+<form method="post" action="[% SCRIPT_NAME | html %]" id="uploadfile" enctype="multipart/form-data">
 <fieldset class="rows" id="uploadform">
 <legend>Stage records into the reservoir</legend>
 <ol>
@@ -88,7 +89,7 @@
     </div>
 </form>
 
-    <form method="post" id="processfile" action="[% SCRIPT_NAME %]" enctype="multipart/form-data">
+    <form method="post" id="processfile" action="[% SCRIPT_NAME | html %]" enctype="multipart/form-data">
 <fieldset class="rows">
         <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
         <input type="hidden" name="runinbackground" id="runinbackground" value="" />
@@ -122,7 +123,7 @@
             <option value='ISO2709'>MARC</option>
             <option value='MARCXML'>MARCXML</option>
             [% FOREACH p IN plugins %]
-                <option value="[% p.metadata.class %]">[% p.metadata.name %] ( other format via plugin)</option>
+                <option value="[% p.metadata.class | html %]">[% p.metadata.name | html %] ( other format via plugin)</option>
             [% END %]
         </select>
     </li>
@@ -137,7 +138,7 @@
           <select name="marc_modification_template_id" id="marc_modification_template_id">
             <option value="">Do not use.</option>
               [% FOREACH mmt IN MarcModificationTemplatesLoop %]
-                <option value="[% mmt.template_id %]">[% mmt.name %]</option>
+                <option value="[% mmt.template_id | html %]">[% mmt.name | html %]</option>
               [% END %]
           </select>
         </li>
@@ -151,7 +152,7 @@
     <select name="matcher" id="matcher">
        <option value="">Do not look for matching records</option> 
        [% FOREACH available_matcher IN available_matchers %]
-          <option value="[% available_matcher.matcher_id %]">[% available_matcher.code %] ([% available_matcher.description %])
+          <option value="[% available_matcher.matcher_id | html %]">[% available_matcher.code | html %] ([% available_matcher.description | html %])
           </option>
        [% END %]
     </select>
@@ -198,9 +199,9 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
-    [% Asset.js("js/background-job-progressbar.js") %]
-    [% Asset.js("js/file-upload.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
+    [% Asset.js("js/background-job-progressbar.js") | $raw %]
+    [% Asset.js("js/file-upload.js") | $raw %]
     <script type="text/javascript">
         var xhr;
         $(document).ready(function(){

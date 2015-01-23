@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Subject cloud</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Subject cloud</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -36,12 +36,12 @@
                                     <fieldset>
                                         <legend>Show</legend>
                                         <form class="form-inline" action="/cgi-bin/koha/opac-tags_subject.pl" method="post">
-                                            <p>up to <input type="text" name="number" value="[% number %]" size="4" maxlength="4" /> subjects <input type="submit" class="btn" value="OK" /></p>
+                                            <p>up to <input type="text" name="number" value="[% number | html %]" size="4" maxlength="4" /> subjects <input type="submit" class="btn" value="OK" /></p>
                                         </form>
                                     </fieldset>
 
                                     [% FOREACH LOO IN LOOP %]
-                                        <a href="/cgi-bin/koha/opac-search.pl?idx=su&amp;q=&quot;[% LOO.entry |html %]&quot;" style="font-size:[% LOO.weight %]px;">[% LOO.entry %]</a>
+                                        <a href="/cgi-bin/koha/opac-search.pl?idx=su&amp;q=&quot;[% LOO.entry | html %]&quot;" style="font-size:[% LOO.weight | html %]px;">[% LOO.entry | html %]</a>
                                     [% END %]
                                 [% ELSE %]
                                     <p>Note: This feature only available to French catalogs where ISBD subjects have been populated, and an index built by separate script.</p>

@@ -1,8 +1,9 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Serials [% biblionumber %]</title>
+<title>Koha &rsaquo; Serials [% biblionumber | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="ser_serials-home" class="ser">
@@ -24,9 +25,9 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/serials-toolbar.js") %]
+    [% Asset.js("js/serials-toolbar.js") | $raw %]
     <script type="text/javascript">
-        var subscriptionid = "[% subscriptionid %]";
+        var subscriptionid = "[% subscriptionid | html %]";
         var MSG_CLOSE_SUBSCRIPTION = _("Are you sure you want to close this subscription?");
         var MSG_REOPEN_SUBSCRIPTION = _("Are you sure you want to reopen this subscription?");
         var CONFIRM_DELETE_SUBSCRIPTION = _("Are you sure you want to delete this subscription?");

@@ -51,7 +51,7 @@
 			</select>
 		</td></tr>
 		<tr>		<td><label for="f3">Spectral bands : 01 to 99 = number of bands, xx = not applicable</label></td>
-		   <td><input type="text" name="f3" id="f3" maxlength="2" size="3" value="[% f3 %]" />
+		   <td><input type="text" name="f3" id="f3" maxlength="2" size="3" value="[% f3 | html %]" />
 		</td></tr>
 <tr>
 		<td><label for="f4">Quality of image</label></td>
@@ -254,7 +254,7 @@
 
             document.f_pop.f3.value=document.f_pop.f3.value.substring(0,2);
             var doc   = opener.document;
-                var field = doc.getElementById("[% index %]");
+                var field = doc.getElementById("[% index | html %]");
                 field.value =  document.f_pop.f1.value + document.f_pop.f2.value +document.f_pop.f3.value +document.f_pop.f4.value +document.f_pop.f5.value +document.f_pop.f6.value +document.f_pop.f7.value;
             self.close();
             return false;

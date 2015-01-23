@@ -1,17 +1,18 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha [% END %] &rsaquo; Self checkout &rsaquo; Print Receipt for [% borrowernumber %]</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha [% END %] &rsaquo; Self checkout &rsaquo; Print Receipt for [% borrowernumber | html %]</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="shortcut icon" href="[% IF ( OpacFavicon  ) %][% OpacFavicon  %][% ELSE %][% interface %]/[% theme %]/images/favicon.ico[% END %]" type="image/x-icon" />
-[% Asset.css("css/print.css") %]
+<link rel="shortcut icon" href="[% IF ( OpacFavicon  ) %][% OpacFavicon | html %][% ELSE %][% interface | html %]/[% theme | html %]/images/favicon.ico[% END %]" type="image/x-icon" />
+[% Asset.css("css/print.css") | $raw %]
 [% IF stylesheet %]
-<link rel="stylesheet" type="text/css" href="[% stylesheet %]" />
+<link rel="stylesheet" type="text/css" href="[% stylesheet | html %]" />
 [% END %]
 
 <!-- JavaScript includes -->
-[% Asset.js("lib/jquery/jquery.js") %]
-[% Asset.js("js/global.js") %]
+[% Asset.js("lib/jquery/jquery.js") | $raw %]
+[% Asset.js("js/global.js") | $raw %]
 
 [% INCLUDE 'slip-print.inc' %]
 
@@ -21,10 +22,10 @@
     <div id="receipt">
         [% IF plain %]
             <pre>
-                [% slip %]
+                [% slip | html %]
             </pre>
         [% ELSE %]
-            [% slip %]
+            [% slip | html %]
         [% END %]
 
     </div>

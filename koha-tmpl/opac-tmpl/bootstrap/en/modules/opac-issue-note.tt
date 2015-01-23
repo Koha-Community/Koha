@@ -2,7 +2,7 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your library home</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your library home</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -13,7 +13,7 @@
     <ul class="breadcrumb">
         <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
         <li><a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a><span class="divider">&rsaquo;</span></li>
-        <li><a href="#">Editing issue note for [% ISSUE.title %] - [% ISSUE.author %]</a></li>
+        <li><a href="#">Editing issue note for [% ISSUE.title | html %] - [% ISSUE.author | html %]</a></li>
     </ul>
 
     <div class="container-fluid">
@@ -25,17 +25,17 @@
             </div>
             <div class="span10">
                 <div id="issuenote" class="maincontent">
-                    <h3>Editing issue note for [% title %] [% author %]</h3>
+                    <h3>Editing issue note for [% title | html %] [% author | html %]</h3>
                         [% IF not(Koha.Preference("AllowCheckoutNotes")) %]
                             Issue notes have not been enabled. Please contact the library.
                         [% ELSE %]
                             <form id="issue-note" action="/cgi-bin/koha/opac-issue-note.pl" method="post">
                                 <fieldset>
                                     <label for="note" class="required">Note:</label>
-                                    <input type="text" name="note" value="[% note %]">
-                                    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]">
-                                    <input type="hidden" name="itemnumber" value="[% itemnumber %]">
-                                    <input type="hidden" name="issue_id" value="[% issue_id %]">
+                                    <input type="text" name="note" value="[% note | html %]">
+                                    <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]">
+                                    <input type="hidden" name="itemnumber" value="[% itemnumber | html %]">
+                                    <input type="hidden" name="issue_id" value="[% issue_id | html %]">
                                     <input type="hidden" name="action" value="issuenote">
                                 </fieldset>
                                 <fieldset class="action">

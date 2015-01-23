@@ -16,11 +16,11 @@
 <div id="bd">
   <div id="yui-main">
     <div class="yui-b">
-      <h1>Subscription history for [% title %]</h1>
+      <h1>Subscription history for [% title | html %]</h1>
         <div id="subscription_form_history">
           <form method="post" action="/cgi-bin/koha/serials/subscription-history.pl">
             <input type="hidden" name="op" value="mod" />
-            <input type="hidden" name="subscriptionid" value="[% subscriptionid %]" />
+            <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
             <p>Hint : you can update the serial history manually. This can be useful for an old subscription or to clean the existing history. Modify those fields with care, as future serial receive will continue to update them automatically.</p>
             <table>
               <tr>
@@ -39,19 +39,19 @@
               </tr>
               <tr>
                 <td>Received issues</td>
-                <td><textarea name="receivedlist" cols="60" rows="5">[% receivedlist %]</textarea></td>
+                <td><textarea name="receivedlist" cols="60" rows="5">[% receivedlist | html %]</textarea></td>
               </tr>
               <tr>
                 <td>Missing issues</td>
-                <td><textarea name="missinglist" cols="60" rows="5">[% missinglist %]</textarea></td>
+                <td><textarea name="missinglist" cols="60" rows="5">[% missinglist | html %]</textarea></td>
               </tr>
               <tr>
                 <td>Note for OPAC</td>
-                <td><textarea name="opacnote" cols="60" rows="5">[% opacnote %]</textarea></td>
+                <td><textarea name="opacnote" cols="60" rows="5">[% opacnote | html %]</textarea></td>
               </tr>
               <tr>
                 <td>Note for staff</td>
-                <td><textarea name="librariannote" cols="60" rows="5">[% librariannote %]</textarea></td>
+                <td><textarea name="librariannote" cols="60" rows="5">[% librariannote | html %]</textarea></td>
               </tr>
             </table>
             <input type="submit" value="Save subscription history"  />

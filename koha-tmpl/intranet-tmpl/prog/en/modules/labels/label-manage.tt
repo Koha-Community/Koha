@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% BLOCK translate_label_element %]
@@ -15,7 +16,7 @@
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; [% PROCESS translate_label_element element=label_element_title %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="labels_label-manage" class="tools labels">
@@ -37,14 +38,14 @@
 
                         [% IF ( error ) %]
                             <div class="dialog alert">
-                                <strong>WARNING:</strong> An error was encountered and the [% op %] operation for [% label_element %] [% element_id %] was not completed. Please have your system administrator check the error log for details.
+                                <strong>WARNING:</strong> An error was encountered and the [% op | html %] operation for [% label_element | html %] [% element_id | html %] was not completed. Please have your system administrator check the error log for details.
                             </div>
                         [% END %]
 
                         <div id="manage-label-layouts">
-                            <div class="hint">Current library: [% LoginBranchname %]</div>
+                            <div class="hint">Current library: [% LoginBranchname | html %]</div>
                             [% IF ( table_loop ) %]
-                            <form name="layouts" action="/cgi-bin/koha/label-manage.pl?label_element=[% label_element %]">
+                            <form name="layouts" action="/cgi-bin/koha/label-manage.pl?label_element=[% label_element | html %]">
                             [% IF    ( label_element == 'layout' ) %]
                             <h2>Currently available layouts</h2>
                             [% ELSIF ( label_element == 'template' ) %]
@@ -75,7 +76,7 @@
                                                     [% CASE 'Batch ID'        %]<th>Batch ID</th>
                                                     [% CASE 'Item Count'      %]<th>Item count</th>
                                                     [% CASE 'Fields to Print' %]<th>Fields to print</th>
-                                                    [% CASE                   %]<th>[% header_field.field_label %]</th>
+                                                    [% CASE                   %]<th>[% header_field.field_label | html %]</th>
                                                 [% END %]
                                             [% END %]
                                         </tr>
@@ -86,11 +87,11 @@
                                             [% IF ( text_field.select_field ) %]
                                                 <td class="actions">
                                                     <a class="btn btn-default btn-xs" href="/cgi-bin/koha/labels/label-edit-[% label_element |url %].pl?op=edit&amp;element_id=[% text_field.field_value |url %]"><i class="fa fa-edit"></i> Edit</a>
-                                                    <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=[% label_element %]&amp;element_id=[% text_field.field_value |url %]"><i class="fa fa-trash"></i> Delete</a>
+                                                    <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=[% label_element | html %]&amp;element_id=[% text_field.field_value |url %]"><i class="fa fa-trash"></i> Delete</a>
                                                 </td>
-                                                [% IF label_element == 'batch' %] <td><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>[% END %]
+                                                [% IF label_element == 'batch' %] <td><input type="checkbox" name="action" value="[% text_field.field_value | html %]" /></td>[% END %]
                                             [% ELSIF ( text_field.field_value ) %]
-                                                <td>[% text_field.field_value %]</td>
+                                                <td>[% text_field.field_value | html %]</td>
                                             [% ELSE %]
                                                 <td>&nbsp;</td>
                                             [% END %]
@@ -122,7 +123,7 @@
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'greybox.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script>
@@ -161,7 +162,7 @@
                     return(document.layouts.action[selected[0]].value);
                 }
                 else {
-                    alert(_("Please select only one %s to %s.").format("[% label_element %]", op));
+                    alert(_("Please select only one %s to %s.").format("[% label_element | html %]", op));
                     return (-1);
                 }
             }
@@ -170,7 +171,7 @@
                     return(document.layouts.action.value);
                 }
             };
-            alert(_("Please select a %s.").format("[% label_element %]"));
+            alert(_("Please select a %s.").format("[% label_element | html %]"));
             return (-1);
         }
         $(document).ready(function(){

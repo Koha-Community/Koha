@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE AuthorisedValues %]
@@ -7,7 +8,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Sent notices for [% INCLUDE 'patron-title.inc' no_html = 1 %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 <style type="text/css">
     .notice { display: none; }
     .notice-title { font-weight: bold; display: block; }
@@ -41,9 +42,9 @@
 	    [% FOREACH QUEUED_MESSAGE IN QUEUED_MESSAGES %]
 	    <tr>
 		<td>
-            <a class="notice-title" data-noticeid="[% QUEUED_MESSAGE.message_id %]" href="#">[% QUEUED_MESSAGE.subject %]</a>
-            <div id="notice[% QUEUED_MESSAGE.message_id %]" class="notice">
-                <iframe srcdoc="[% QUEUED_MESSAGE.content FILTER html_line_break FILTER html %]"></iframe>
+            <a class="notice-title" data-noticeid="[% QUEUED_MESSAGE.message_id | html %]" href="#">[% QUEUED_MESSAGE.subject | html %]</a>
+            <div id="notice[% QUEUED_MESSAGE.message_id | html %]" class="notice">
+                <iframe srcdoc="[% QUEUED_MESSAGE.content FILTER html_line_break | html %]"></iframe>
             </div>
         </td>
 		<td>
@@ -51,20 +52,20 @@
             [% ELSIF ( QUEUED_MESSAGE.message_transport_type == 'print' ) %]print
             [% ELSIF ( QUEUED_MESSAGE.message_transport_type == 'feed' ) %]feed
             [% ELSIF ( QUEUED_MESSAGE.message_transport_type == 'sms' ) %]sms
-            [% ELSE %][% QUEUED_MESSAGE.message_transport_type %][% END %]
+            [% ELSE %][% QUEUED_MESSAGE.message_transport_type | html %][% END %]
         </td>
 		<td>
             [% IF ( QUEUED_MESSAGE.status == 'sent' ) %]sent
             [% ELSIF ( QUEUED_MESSAGE.status == 'pending' ) %]pending
             [% ELSIF ( QUEUED_MESSAGE.status == 'failed' ) %]failed
             [% ELSIF ( QUEUED_MESSAGE.status == 'deleted' ) %]deleted
-            [% ELSE %][% QUEUED_MESSAGE.status %][% END %]
+            [% ELSE %][% QUEUED_MESSAGE.status | html %][% END %]
             [% IF ( QUEUED_MESSAGE.status != 'pending' ) %]
-            <div id="resend_notice[% QUEUED_MESSAGE.message_id %]"  class="notice">
-                <form action="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber %]" method="POST">
+            <div id="resend_notice[% QUEUED_MESSAGE.message_id | html %]"  class="notice">
+                <form action="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber | html %]" method="POST">
                     <input type="hidden" name="op" value="resend_notice" />
-                    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
-                    <input type="hidden" name="message_id" value="[% QUEUED_MESSAGE.message_id %]" />
+                    <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
+                    <input type="hidden" name="message_id" value="[% QUEUED_MESSAGE.message_id | html %]" />
                     <fieldset class="action">
                         <button class="btn btn-default btn-xs" type="submit">Resend</button>
                     </fieldset>
@@ -72,7 +73,7 @@
             </div>
             [% END %]
         </td>
-        <td><span title="[% QUEUED_MESSAGE.time_queued %]">[% QUEUED_MESSAGE.time_queued | $KohaDates with_hours => 1 %]</span></td>
+        <td><span title="[% QUEUED_MESSAGE.time_queued | html %]">[% QUEUED_MESSAGE.time_queued | $KohaDates with_hours => 1 | html %]</span></td>
 	    </tr>
 	    [% END %]
 	</tbody>
@@ -117,7 +118,7 @@
         });
     </script>
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

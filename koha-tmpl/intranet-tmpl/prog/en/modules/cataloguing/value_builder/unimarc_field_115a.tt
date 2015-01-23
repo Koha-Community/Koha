@@ -40,7 +40,7 @@
 
    <tr>
 			    <td><label for="f2">Length</label></td>
-			    <td><input type="text" name="f2" id="f2" maxlength="3" size="4" value="[% f2 %]" /></td>
+			    <td><input type="text" name="f2" id="f2" maxlength="3" size="4" value="[% f2 | html %]" /></td>
 
 	</tr>
 
@@ -1198,7 +1198,7 @@
             document.f_pop.f2.value=document.f_pop.f2.value.substring(0,3);
 
             var doc   = opener.document;
-            var field = doc.getElementById("[% index %]");
+            var field = doc.getElementById("[% index | html %]");
 
             field.value =  document.f_pop.f1.value +document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value+document.f_pop.f5.value+document.f_pop.f6.value+document.f_pop.f7.value+document.f_pop.f8.value+document.f_pop.f9.value+document.f_pop.f10.value+document.f_pop.f11.value+document.f_pop.f12.value+document.f_pop.f13.value+document.f_pop.f14.value+document.f_pop.f15.value+document.f_pop.f16.value+document.f_pop.f17.value+document.f_pop.f18.value;
             self.close();

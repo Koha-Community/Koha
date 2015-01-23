@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% SET footerjs = 1 %]
@@ -5,7 +6,7 @@
 <title>Koha &rsaquo; Course reserves</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="courses_course_reserves" class="course">
@@ -68,19 +69,19 @@
                         <tbody>
                             [% FOREACH c IN courses %]
                                 <tr>
-                                    <td><a href="course-details.pl?course_id=[% c.course_id %]">[% c.course_name %]</a></td>
-                                    <td>[% AuthorisedValues.GetByCode( 'DEPARTMENT', c.department ) %]</td>
-                                    <td>[% c.course_number %]</td>
-                                    <td>[% c.section %]</td>
-                                    <td>[% AuthorisedValues.GetByCode( 'TERM' c.term ) %]</td>
+                                    <td><a href="course-details.pl?course_id=[% c.course_id | html %]">[% c.course_name | html %]</a></td>
+                                    <td>[% AuthorisedValues.GetByCode( 'DEPARTMENT', c.department ) | html %]</td>
+                                    <td>[% c.course_number | html %]</td>
+                                    <td>[% c.section | html %]</td>
+                                    <td>[% AuthorisedValues.GetByCode( 'TERM' c.term ) | html %]</td>
                                     <td>
                                         [% FOREACH i IN c.instructors %]
-                                            <div class="instructor"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% i.borrowernumber %]">[% i.firstname %] [% i.surname %]</a></div>
+                                            <div class="instructor"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% i.borrowernumber | html %]">[% i.firstname | html %] [% i.surname | html %]</a></div>
                                         [% END %]
                                     </td>
-                                    <td>[% c.staff_note %]</td>
-                                    <td>[% c.public_note %]</td>
-                                    <td>[% c.students_count %]</td>
+                                    <td>[% c.staff_note | html %]</td>
+                                    <td>[% c.public_note | html %]</td>
+                                    <td>[% c.students_count | html %]</td>
                                     <td>
                                         [% IF c.enabled == 'yes' %]
                                             Yes

@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
@@ -7,12 +8,12 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% UNLESS ( multi_hold ) %]
-    <title>Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Place a hold on [% title |html %]</title>
+    <title>Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Place a hold on [% title | html %]</title>
 [% ELSE %]
     <title>Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Confirm holds</title>
 [% END %]
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="circ_request" class="catalog">
@@ -20,7 +21,7 @@
 [% INCLUDE 'circ-search.inc' %]
 
 [% UNLESS ( multi_hold ) %]
-    <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]">[% title |html %]</a> &rsaquo; Place a hold on [% title |html %]</div>
+    <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | html %]">[% title | html %]</a> &rsaquo; Place a hold on [% title | html %]</div>
 [% ELSE %]
     <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a> &rsaquo; Confirm holds</div>
 [% END %]
@@ -42,8 +43,8 @@
 
   [% IF ( messagetransfert ) %]
 		<div class="dialog message">
-				<h2>Hold found for ([% nextreservtitle %]), please transfer</h2>
-			<p>Hold placed by : <strong> [% nextreservsurname %] [% nextreservfirstname %]</strong> at : <strong> [% branchname %] </strong>, Please transfer this item.
+				<h2>Hold found for ([% nextreservtitle | html %]), please transfer</h2>
+			<p>Hold placed by : <strong> [% nextreservsurname | html %] [% nextreservfirstname | html %]</strong> at : <strong> [% branchname | html %] </strong>, Please transfer this item.
 			</p>
 			<form name="cancelReservewithtransfert" action="branchreserves.pl" method="post">
 				<input type="submit" class="button" />
@@ -52,7 +53,7 @@
   [% END %]
 
   [% UNLESS ( multi_hold ) %]
-    <h1>Place a hold on [% INCLUDE 'biblio-default-view.inc' %][% title |html %]</a></h1>
+    <h1>Place a hold on [% INCLUDE 'biblio-default-view.inc' %][% title | html %]</a></h1>
   [% ELSE %]
     <h1>Confirm holds</h1>
   [% END %]
@@ -61,7 +62,7 @@
     [% IF ( messageborrower ) %]
       <div class="dialog alert"><h3>Patron not found</h3><p>No patron with this name, please, try another</p> </div>
     [% END %]
-    <form  id="holds_patronsearch" action="request.pl?biblionumber=[% biblionumber %]" method="post">
+    <form  id="holds_patronsearch" action="request.pl?biblionumber=[% biblionumber | html %]" method="post">
         <fieldset id="circ_holds_selectborrower" class="brief">
 
         [% UNLESS borrowers %]
@@ -70,10 +71,10 @@
                 <input type="text" size="40" id="patron" class="focus" name="findborrower" />
                 <input type="submit" value="Search" />
             [% IF multi_hold %]
-                <input type="hidden" name="multi_hold" value="[% multi_hold %]"/>
-                <input type="hidden" name="biblionumbers" value="[% biblionumbers %]"/>
+                <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
+                <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
             [% ELSE %]
-                <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+                <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
             [% END %]
             </fieldset>
         [% ELSE %]
@@ -82,8 +83,8 @@
 
         [% END %]
         [% IF ( multi_hold ) %]
-            <input type="hidden" name="multi_hold" value="[% multi_hold %]"/>
-            <input type="hidden" name="biblionumbers" value="[% biblionumbers %]"/>
+            <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
+            <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
         [% END %]
     </form>
   [% ELSIF NOT noitems %]
@@ -95,29 +96,29 @@
       <h3>Cannot place hold</h3>
       <ul>
         [% IF ( exceeded_maxreserves ) %]
-          <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %] </a> can only place a maximum of [% maxreserves %] total holds.</li>
+          <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]">[% patron.firstname | html %] [% patron.surname | html %] </a> can only place a maximum of [% maxreserves | html %] total holds.</li>
         [% ELSIF ( exceeded_holds_per_record ) %]
-          <li><strong>Too many holds for this record: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %] </a> can only place a maximum of [% max_holds_for_record %] hold(s) on this record.</li>
+          <li><strong>Too many holds for this record: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]">[% patron.firstname | html %] [% patron.surname | html %] </a> can only place a maximum of [% max_holds_for_record | html %] hold(s) on this record.</li>
         [% ELSIF ( alreadypossession ) %]
-          <li> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %]</a> <strong>is already in possession</strong> of one item.</li>
+          <li> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]">[% patron.firstname | html %] [% patron.surname | html %]</a> <strong>is already in possession</strong> of one item.</li>
         [% ELSIF ( alreadyreserved ) %]
-          <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %]</a> <strong>already has a hold</strong> on this item.</li>
+          <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]">[% patron.firstname | html %] [% patron.surname | html %]</a> <strong>already has a hold</strong> on this item.</li>
         [% ELSIF ( ageRestricted ) %]
           <li><strong>Age restricted</strong></li>
         [% ELSIF ( none_available ) %]
           <li> <strong>No items are available</strong> to be placed on hold.</li>
         [% ELSIF ( maxreserves ) %]
-          <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %] </a> has too many holds.</li>
+          <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]">[% patron.firstname | html %] [% patron.surname | html %] </a> has too many holds.</li>
         [% END %]
       </ul>
     [% ELSE %]
         <h3>Cannot place hold on some items</h3>
         [% IF ( exceeded_maxreserves ) %]
-          <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %] </a> can place [% new_reserves_allowed %] of the requested [% new_reserves_count %] holds for a maximum of [% maxreserves %] total holds.</li>
+          <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]">[% patron.firstname | html %] [% patron.surname | html %] </a> can place [% new_reserves_allowed | html %] of the requested [% new_reserves_count | html %] holds for a maximum of [% maxreserves | html %] total holds.</li>
         [% ELSIF ( exceeded_holds_per_record ) %]
             [% FOREACH biblioloo IN biblioloop %]
                 [% IF (biblioloo.tooManyHoldsForThisRecord) %]
-                    <li><strong>Too many holds for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber %]"> [% biblioloo.title %]</a>: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %] </a> can only place a maximum of [% max_holds_for_record %] hold(s) on this record.</li>
+                    <li><strong>Too many holds for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber | html %]"> [% biblioloo.title | html %]</a>: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]">[% patron.firstname | html %] [% patron.surname | html %] </a> can only place a maximum of [% max_holds_for_record | html %] hold(s) on this record.</li>
                 [% END %]
             [% END %]
         [% END %]
@@ -129,19 +130,19 @@
 [% IF ( expiry || diffbranch || patron.is_debarred || ( amount_outstanding && Koha.Preference('maxoutstanding') && amount_outstanding > Koha.Preference('maxoutstanding') ) ) %]
 <div class="dialog message"><ul>
     [% IF ( expiry ) %]
-    <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %]</a>: <strong>Account has expired</strong></li>
+    <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]">[% patron.firstname | html %] [% patron.surname | html %]</a>: <strong>Account has expired</strong></li>
     [% END %]
 
     [% IF patron.is_debarred %]
-    <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]#reldebarments">[% patron.firstname %] [% patron.surname %]</a>: <strong>Patron has restrictions</strong></li>
+    <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]#reldebarments">[% patron.firstname | html %] [% patron.surname | html %]</a>: <strong>Patron has restrictions</strong></li>
     [% END %]
 
     [% IF amount_outstanding && Koha.Preference('maxoutstanding') && amount_outstanding > Koha.Preference('maxoutstanding') %]
-    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %]</a>: <strong>Patron has outstanding fines: [% amount_outstanding | format('%.2f') %]</strong></li>
+    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]">[% patron.firstname | html %] [% patron.surname | html %]</a>: <strong>Patron has outstanding fines: [% amount_outstanding | format('%.2f') %]</strong></li>
     [% END %]
 
     [% IF ( diffbranch ) %]
-    <li> <strong>Pickup library is different. </strong>Patron: <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %]</a> Patron's home library: ([% Branches.GetName(patron.branchcode) %] / [% patron.branchcode %] )</li>
+    <li> <strong>Pickup library is different. </strong>Patron: <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]">[% patron.firstname | html %] [% patron.surname | html %]</a> Patron's home library: ([% Branches.GetName(patron.branchcode) | html %] / [% patron.branchcode | html %] )</li>
     [% END %]
 
 </ul></div>
@@ -159,27 +160,27 @@
             <form action="placerequest.pl" method="post" onsubmit="return checkMultiHold();" name="form">
         [% END %]
 
-        <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
+        <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
         <input type="hidden" name="type" value="str8" />
 
         [% IF ( multi_hold ) %]
-            <input type="hidden" name="multi_hold" value="[% multi_hold %]"/>
-            <input type="hidden" name="biblionumbers" id="multi_hold_bibs" value="[% biblionumbers %]"/>
+            <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
+            <input type="hidden" name="biblionumbers" id="multi_hold_bibs" value="[% biblionumbers | html %]"/>
             <input type="hidden" name="bad_bibs" id="bad_bibs" value=""/>
             <input type="hidden" name="request" value="any"/>
             [% FOREACH biblioloo IN biblioloop %]
-              <input type="hidden" name="title_[% biblioloo.biblionumber %]" value="[% biblioloo.title |html %]"/>
-              <input type="hidden" name="rank_[% biblioloo.biblionumber %]" value="[% biblioloo.rank %]"/>
+              <input type="hidden" name="title_[% biblioloo.biblionumber | html %]" value="[% biblioloo.title | html %]"/>
+              <input type="hidden" name="rank_[% biblioloo.biblionumber | html %]" value="[% biblioloo.rank | html %]"/>
             [% END %]
         [% ELSE %]
-            <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
-            <input type="hidden" name="title" value="[% title |html %]" />
-            <input type="hidden" name="rank-request" value="[% fixedRank %]" />
+            <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+            <input type="hidden" name="title" value="[% title | html %]" />
+            <input type="hidden" name="rank-request" value="[% fixedRank | html %]" />
         [% END %]
 
        <ol> <li><span class="label">Patron:</span>
             [% IF ( patron.borrowernumber ) %]
-                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %] ([% patron.cardnumber %])</a>
+                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]">[% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])</a>
             [% ELSE %]
                 Not defined yet
             [% END %]
@@ -187,7 +188,7 @@
         [% UNLESS ( multi_hold ) %]
           <li>
               <span class="label">Estimated priority:</span>
-              <strong>[% fixedRank %]</strong>
+              <strong>[% fixedRank | html %]</strong>
           </li>
         [% END %]
         <li>
@@ -208,7 +209,7 @@
                     <select name="itemtype" size="1" id="itemtype">
                         <option value="">Any item type</option>
                         [%- FOREACH itemtype IN available_itemtypes %]
-                            <option value="[% itemtype %]">[% ItemTypes.GetDescription( itemtype ) %]</option>
+                            <option value="[% itemtype | html %]">[% ItemTypes.GetDescription( itemtype ) | html %]</option>
                         [%- END %]
                     </select>
                 </li>
@@ -239,14 +240,14 @@
                [% ELSE %]
                    <input type="checkbox" id="requestany" name="request" checked="checked" value="Any" />
                 [% END %]
-               <input type="hidden" name="biblioitem" value="[% biblioitemnumber %]" />
-               <input type="hidden" name="alreadyreserved" value="[% alreadyreserved %]" />
+               <input type="hidden" name="biblioitem" value="[% biblioitemnumber | html %]" />
+               <input type="hidden" name="alreadyreserved" value="[% alreadyreserved | html %]" />
           </li>
 
           [% IF remaining_holds_for_record > 1 %]
               <li>
                    <label for="holds_to_place_count">Holds to place (count)</label>
-                   <input type="number" name="holds_to_place_count" min="1" max="[% remaining_holds_for_record %]" step="1" value="1" />
+                   <input type="number" name="holds_to_place_count" min="1" max="[% remaining_holds_for_record | html %]" step="1" value="1" />
               </li>
             [% ELSE %]
                 <input type="hidden" name="holds_to_place_count" value="1" />
@@ -269,10 +270,10 @@
         [% FOREACH bibitemloo IN bibitemloop %]
           <ol>
             [% UNLESS ( item_level_itypes ) %]
-              <li><span class="label">Item type:</span> [% bibitemloo.description %]</li>
+              <li><span class="label">Item type:</span> [% bibitemloo.description | html %]</li>
             [% END %]
 
-            [% IF ( bibitemloo.publicationyear ) %]<li><span class="label">Publication year:</span> [% bibitemloo.publicationyear %]</li>[% END %]
+            [% IF ( bibitemloo.publicationyear ) %]<li><span class="label">Publication year:</span> [% bibitemloo.publicationyear | html %]</li>[% END %]
           </ol>
 
         <h2 style="padding: 0 1em;">
@@ -303,7 +304,7 @@
             [% SET selected = 0 %]
             [% FOREACH itemloo IN bibitemloo.itemloop %]
             [% UNLESS ( itemloo.hide ) %]
-                <tr class="[% itemloo.backgroundcolor %]">
+                <tr class="[% itemloo.backgroundcolor | html %]">
                     <td>
                 [% IF itemloo.force_hold_level == 'record' # Patron has placed a record level hold previously for this record %]
                     <span class="error">
@@ -311,9 +312,9 @@
                         Hold must be record level
                     </span>
                 [% ELSIF ( itemloo.available ) %]
-                    <input type="radio" name="checkitem" value="[% itemloo.itemnumber %]" />
+                    <input type="radio" name="checkitem" value="[% itemloo.itemnumber | html %]" />
                 [% ELSIF ( itemloo.override ) %]
-                    <input type="radio" name="checkitem" class="needsoverride" value="[% itemloo.itemnumber %]" />
+                    <input type="radio" name="checkitem" class="needsoverride" value="[% itemloo.itemnumber | html %]" />
                     <i class="fa fa-exclamation-triangle fa-lg" style="color:gold" alt="Requires override of hold policy"/></i>
                 [% ELSE %]
                     <span class="error">
@@ -334,7 +335,7 @@
                             [% ELSIF itemloo.not_holdable == 'itemAlreadyOnHold' %]
                                 Patron already has hold for this item
                             [% ELSE %]
-                                [% itemloo.not_holdable %]
+                                [% itemloo.not_holdable | html %]
                             [% END %]
                         [% END %]
                     </span>
@@ -343,40 +344,40 @@
                 [% IF ( item_level_itypes ) %]
                     <td>
                     [% UNLESS ( noItemTypeImages ) %]
-                        [% IF ( itemloo.imageurl ) %]<img src="[% itemloo.imageurl %]" alt="" /> <br /> [% END %]
+                        [% IF ( itemloo.imageurl ) %]<img src="[% itemloo.imageurl | html %]" alt="" /> <br /> [% END %]
                     [% END %]
-                        [% itemloo.itypename %]
+                        [% itemloo.itypename | html %]
                     </td>
                 [% END %]
 
                     <td>
-                        [% itemloo.barcode %]
+                        [% itemloo.barcode | html %]
                     </td>
                     <td>
-                        [% Branches.GetName( itemloo.homebranch ) %]
+                        [% Branches.GetName( itemloo.homebranch ) | html %]
                     </td>
                     <td>
-                        [% Branches.GetName( itemloo.holdingbranch ) %]
+                        [% Branches.GetName( itemloo.holdingbranch ) | html %]
                     </td>
                     <td>
-                        [% itemloo.itemcallnumber %]
+                        [% itemloo.itemcallnumber | html %]
                     </td>
                     <td>
-                        [% IF ( itemloo.copynumber ) %][% itemloo.copynumber %][% ELSE %]&nbsp;[% END %]
+                        [% IF ( itemloo.copynumber ) %][% itemloo.copynumber | html %][% ELSE %]&nbsp;[% END %]
                     </td>
                 [% IF itemdata_enumchron %]
                     <td>
-                        [% itemloo.enumchron %]
+                        [% itemloo.enumchron | html %]
                     </td>
                 [% END %]
                     <td>
                 [% IF ( itemloo.onloan ) %]
-                    <span title="[% itemloo.date_due %]" class="checkedout">Due [% itemloo.date_due | $KohaDates as_due_date => 1 %]</span>
+                    <span title="[% itemloo.date_due | html %]" class="checkedout">Due [% itemloo.date_due | $KohaDates as_due_date => 1 | html %]</span>
                 [% ELSE %]
                     <span title="0000-00-00">
                         [% IF ( itemloo.transfertwhen ) %]
-                            In transit from [% Branches.GetName( itemloo.transfertfrom ) %],
-                            to [% Branches.GetName( itemloo.transfertto ) %], since [% itemloo.transfertwhen %]
+                            In transit from [% Branches.GetName( itemloo.transfertfrom ) | html %],
+                            to [% Branches.GetName( itemloo.transfertto ) | html %], since [% itemloo.transfertwhen | html %]
                         [% END %]
                     </span>
                 [% END %]
@@ -385,7 +386,7 @@
                 [% END %]
 
                 [% IF ( itemloo.notforloan ) %]
-                   Not for loan ([% itemloo.notforloanvalue %])
+                   Not for loan ([% itemloo.notforloanvalue | html %])
                 [% END %]
 
                 [% IF ( itemloo.reservedate ) %]
@@ -393,9 +394,9 @@
                             Can't be cancelled when item is in transit
                     [% ELSE %]
                     [% IF ( itemloo.waitingdate ) %]Waiting[% ELSE %]On hold[% END %]
-                    [% IF ( itemloo.canreservefromotherbranches ) %]for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedFor.borrowernumber %]">[% itemloo.ReservedFor.firstname %] [% itemloo.ReservedFor.surname %]</a>[% END %] [% IF ( itemloo.waitingdate ) %]at[% ELSE %]expected at[% END %] [% Branches.GetName( itemloo.ExpectedAtLibrary ) %]
+                    [% IF ( itemloo.canreservefromotherbranches ) %]for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedFor.borrowernumber | html %]">[% itemloo.ReservedFor.firstname | html %] [% itemloo.ReservedFor.surname | html %]</a>[% END %] [% IF ( itemloo.waitingdate ) %]at[% ELSE %]expected at[% END %] [% Branches.GetName( itemloo.ExpectedAtLibrary ) | html %]
                     since
-                    [% IF ( itemloo.waitingdate ) %][% itemloo.waitingdate | $KohaDates %][% ELSE %][% IF ( itemloo.reservedate ) %][% itemloo.reservedate %][% END %][% END %]. <a class="info" href="modrequest.pl?CancelBiblioNumber=[% itemloo.biblionumber %]&amp;CancelBorrowerNumber=[% itemloo.ReservedFor.borrowernumber %]&amp;CancelItemnumber=[% itemloo.itemnumber %]"  onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);">Cancel hold</a>
+                    [% IF ( itemloo.waitingdate ) %][% itemloo.waitingdate | $KohaDates %][% ELSE %][% IF ( itemloo.reservedate ) %][% itemloo.reservedate | html %][% END %][% END %]. <a class="info" href="modrequest.pl?CancelBiblioNumber=[% itemloo.biblionumber | html %]&amp;CancelBorrowerNumber=[% itemloo.ReservedFor.borrowernumber | html %]&amp;CancelItemnumber=[% itemloo.itemnumber | html %]"  onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);">Cancel hold</a>
 
                     [% END %]
                 [% ELSE %]
@@ -418,7 +419,7 @@
         </table>
     [% IF ( bibitemloo.hiddencount ) %]
         <form>
-        <p class="hiddencount"><a href="request.pl?biblionumber=[% bibitemloo.biblionumber %]&amp;borrowernumber=[% bibitemloo.borrowernumber %]&amp;showallitems=1">Show all items ([% bibitemloo.hiddencount %] hidden)</a></p>
+        <p class="hiddencount"><a href="request.pl?biblionumber=[% bibitemloo.biblionumber | html %]&amp;borrowernumber=[% bibitemloo.borrowernumber | html %]&amp;showallitems=1">Show all items ([% bibitemloo.hiddencount | html %] hidden)</a></p>
         </form>
     [% END %] <!-- hiddencount -->
     [% END %] <!-- bibitemloop -->
@@ -442,23 +443,23 @@
         [% END %]
           <td>
             <ul>
-              <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber %]">[% biblioloo.title |html %]</a></li>
+              <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber | html %]">[% biblioloo.title | html %]</a></li>
               [% IF ( biblioloo.publicationyear ) %]
-                <li><span class="label">Publication year:</span> [% biblioloo.publicationyear %]</li>
+                <li><span class="label">Publication year:</span> [% biblioloo.publicationyear | html %]</li>
               [% END %]
             </ul>
             [% UNLESS ( biblioloo.warn ) %]
-              <span class="multi_hold_item" title="[% biblioloo.biblionumber %]"></span>
+              <span class="multi_hold_item" title="[% biblioloo.biblionumber | html %]"></span>
             [% ELSE %]
-              <span class="not_holdable" title="[% biblioloo.biblionumber %]"></span>
+              <span class="not_holdable" title="[% biblioloo.biblionumber | html %]"></span>
             [% END %]
           </td>
           [% UNLESS ( item_level_itypes ) %]
             <td>
-              <img src="[% biblioloo.imageurl %]" alt="[% biblioloo.itypename %]" title="[% biblioloo.itypename %]" />
+              <img src="[% biblioloo.imageurl | html %]" alt="[% biblioloo.itypename | html %]" title="[% biblioloo.itypename | html %]" />
             </td>
           [% END %]
-            <td>[% biblioloo.rank %]</td>
+            <td>[% biblioloo.rank | html %]</td>
           <td>
             [% IF ( biblioloo.alreadyres ) %]
               <ul>
@@ -469,7 +470,7 @@
             [% END %]
 
           [% IF ( biblioloo.alreadyres ) %]
-              <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %]</a> <strong>already has a hold</strong> on this item </li>
+              <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]">[% patron.firstname | html %] [% patron.surname | html %]</a> <strong>already has a hold</strong> on this item </li>
           [% END %]
           [% IF ( biblioloo.none_avail ) %]
               <li> <strong>No items are available</strong> to be placed on hold</li>
@@ -507,10 +508,10 @@
 
 [% UNLESS ( patron ) %]
 [% IF ( reserveloop ) %]
-<form name="T[% time %]" action="modrequest.pl" method="post">
+<form name="T[% time | html %]" action="modrequest.pl" method="post">
   [% IF ( multi_hold ) %]
     <input type = "hidden" name="multi_hold" value="1"/>
-    <input type = "hidden" name="biblionumbers" value="[% biblionumbers %]"/>
+    <input type = "hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
   [% END %]
 
 <fieldset class="rows left">
@@ -521,7 +522,7 @@
     [% IF ( biblioloo.reserveloop ) %]
     <table>
       [% IF ( multi_hold ) %]
-          <caption><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber %]">[% biblioloo.title |html %]</a></caption>
+          <caption><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber | html %]">[% biblioloo.title | html %]</a></caption>
       [% END %]
       <tr>
         [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
@@ -537,7 +538,7 @@
         <th>Pickup library</th>
         <th>Details</th>
         [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
-            <th><img src="[% interface %]/[% theme %]/img/go-bottom.png" alt="Toggle set to lowest priority" /></th>
+            <th><img src="[% interface | html %]/[% theme | html %]/img/go-bottom.png" alt="Toggle set to lowest priority" /></th>
         [% END %]
 	<th>&nbsp;</th>
     [% IF SuspendHoldsIntranet %]<th>&nbsp;</th><!-- Suspend Holds Column Header -->[% END %]
@@ -545,9 +546,9 @@
   [% FOREACH reserveloo IN biblioloo.reserveloop %]
         <tr>
         <td>
-          <input type="hidden" name="reserve_id" value="[% reserveloo.reserve_id %]" />
-          <input type="hidden" name="borrowernumber" value="[% reserveloo.borrowernumber %]" />
-          <input type="hidden" name="biblionumber" value="[% reserveloo.biblionumber %]" />
+          <input type="hidden" name="reserve_id" value="[% reserveloo.reserve_id | html %]" />
+          <input type="hidden" name="borrowernumber" value="[% reserveloo.borrowernumber | html %]" />
+          <input type="hidden" name="biblionumber" value="[% reserveloo.biblionumber | html %]" />
           <select name="rank-request">
               [% IF ( reserveloo.found ) %]
                   [% IF ( reserveloo.intransit ) %]
@@ -560,13 +561,13 @@
               [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
                   [% FOREACH optionloo IN reserveloo.optionloop %]
                       [% IF ( optionloo.selected ) %]
-                          <option value="[% optionloo.num %]" selected="selected">[% optionloo.num %]</option>
+                          <option value="[% optionloo.num | html %]" selected="selected">[% optionloo.num | html %]</option>
                       [% ELSE %]
-                          <option value="[% optionloo.num %]">[% optionloo.num %]</option>
+                          <option value="[% optionloo.num | html %]">[% optionloo.num | html %]</option>
                       [% END %]
                   [% END %]
               [% ELSIF !reserveloo.found %]
-                  <option value="[% reserveloo.priority %]" selected="selected">[% reserveloo.priority %]</option>
+                  <option value="[% reserveloo.priority | html %]" selected="selected">[% reserveloo.priority | html %]</option>
               [% END %]
               <option value="del">del</option>
           </select>
@@ -574,20 +575,20 @@
 
      [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
         <td style="white-space:nowrap;">
-            <a title="Move hold up" href="request.pl?action=move&amp;where=up&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;date=[% reserveloo.date %]">
-            <img src="[% interface %]/[% theme %]/img/go-up.png" alt="Go up" />
+            <a title="Move hold up" href="request.pl?action=move&amp;where=up&amp;borrowernumber=[% reserveloo.borrowernumber | html %]&amp;biblionumber=[% reserveloo.biblionumber | html %]&amp;reserve_id=[% reserveloo.reserve_id | html %]&amp;date=[% reserveloo.date | html %]">
+            <img src="[% interface | html %]/[% theme | html %]/img/go-up.png" alt="Go up" />
                 </a>
 
-                <a title="Move hold to top" href="request.pl?action=move&amp;where=top&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;date=[% reserveloo.date %]">
-                    <img src="[% interface %]/[% theme %]/img/go-top.png" alt="Go top" />
+                <a title="Move hold to top" href="request.pl?action=move&amp;where=top&amp;borrowernumber=[% reserveloo.borrowernumber | html %]&amp;biblionumber=[% reserveloo.biblionumber | html %]&amp;reserve_id=[% reserveloo.reserve_id | html %]&amp;date=[% reserveloo.date | html %]">
+                    <img src="[% interface | html %]/[% theme | html %]/img/go-top.png" alt="Go top" />
                 </a>
 
-                <a title="Move hold to bottom" href="request.pl?action=move&amp;where=bottom&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;date=[% reserveloo.date %]">
-                    <img src="[% interface %]/[% theme %]/img/go-bottom.png" alt="Go bottom" />
+                <a title="Move hold to bottom" href="request.pl?action=move&amp;where=bottom&amp;borrowernumber=[% reserveloo.borrowernumber | html %]&amp;biblionumber=[% reserveloo.biblionumber | html %]&amp;reserve_id=[% reserveloo.reserve_id | html %]&amp;date=[% reserveloo.date | html %]">
+                    <img src="[% interface | html %]/[% theme | html %]/img/go-bottom.png" alt="Go bottom" />
                 </a>
 
-                <a title="Move hold down" href="request.pl?action=move&amp;where=down&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;date=[% reserveloo.date %]">
-                    <img src="[% interface %]/[% theme %]/img/go-down.png" alt="Go down" />
+                <a title="Move hold down" href="request.pl?action=move&amp;where=down&amp;borrowernumber=[% reserveloo.borrowernumber | html %]&amp;biblionumber=[% reserveloo.biblionumber | html %]&amp;reserve_id=[% reserveloo.reserve_id | html %]&amp;date=[% reserveloo.date | html %]">
+                    <img src="[% interface | html %]/[% theme | html %]/img/go-down.png" alt="Go down" />
                 </a>
         </td>
     [% END %]
@@ -595,23 +596,23 @@
         <td>
           [% INCLUDE 'patron-title.inc' patron=reserveloo.patron hide_patron_infos_if_needed=1 %]
         </td>
-        <td>[% reserveloo.notes %]</td>
-        <td>[% reserveloo.date %]</td>
-        <td>[% reserveloo.expirationdate %]</td>
+        <td>[% reserveloo.notes | html %]</td>
+        <td>[% reserveloo.date | html %]</td>
+        <td>[% reserveloo.expirationdate | html %]</td>
         <td>
     [% IF ( reserveloo.found ) %]
     	[% IF ( reserveloo.atdestination ) %]
             [% IF ( reserveloo.found ) %]
-                Item waiting at <b> [% reserveloo.wbrname %]</b> <input type="hidden" name="pickup" value="[% reserveloo.wbrcode %]" /> since [% reserveloo.waiting_date | $KohaDates %]
+                Item waiting at <b> [% reserveloo.wbrname | html %]</b> <input type="hidden" name="pickup" value="[% reserveloo.wbrcode | html %]" /> since [% reserveloo.waiting_date | $KohaDates %]
             [% ELSE %]
-                Waiting to be pulled <input type="hidden" name="pickup" value="[% reserveloo.wbrcode %]" />
+                Waiting to be pulled <input type="hidden" name="pickup" value="[% reserveloo.wbrcode | html %]" />
             [% END %]
           [% ELSE %]
-            Item being transferred to <b> [% reserveloo.wbrname %]</b> <input type="hidden" name="pickup" value="[% reserveloo.wbrcode %]" />
+            Item being transferred to <b> [% reserveloo.wbrname | html %]</b> <input type="hidden" name="pickup" value="[% reserveloo.wbrcode | html %]" />
          [% END %]
     [% ELSE %]
         [% IF Koha.Preference('IndependentBranches') && Branches.all().size == 1 %]
-            [% Branches.GetName(reserveloo.branchcode) %] <input type="hidden" name="pickup" value="[% reserveloo.branchcode %]" />
+            [% Branches.GetName(reserveloo.branchcode) | html %] <input type="hidden" name="pickup" value="[% reserveloo.branchcode | html %]" />
         [% ELSE %]
             <select name="pickup">
                 [% PROCESS options_for_libraries libraries => Branches.all( selected => reserveloo.branchcode ) %]
@@ -621,10 +622,10 @@
         </td>
         <td>
     [% IF ( reserveloo.found ) %]
-          <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% reserveloo.biblionumber %]">
+          <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% reserveloo.biblionumber | html %]">
                 [% IF ( reserveloo.barcodenumber ) %]
-                    [% reserveloo.barcodenumber %]
-                    <input type="hidden" name="itemnumber" value="[% reserveloo.itemnumber %]" />
+                    [% reserveloo.barcodenumber | html %]
+                    <input type="hidden" name="itemnumber" value="[% reserveloo.itemnumber | html %]" />
                 [% ELSE %]
                     No barcode
                 [% END %]
@@ -632,10 +633,10 @@
     [% ELSE %]
             [% IF ( reserveloo.item_level_hold ) %]
                 <i>Only item
-                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% reserveloo.biblionumber %]">
+                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% reserveloo.biblionumber | html %]">
                      [% IF ( reserveloo.barcodenumber ) %]
-                         [% reserveloo.barcodenumber %]
-                        <input type="hidden" name="itemnumber" value="[% reserveloo.itemnumber %]" />
+                         [% reserveloo.barcodenumber | html %]
+                        <input type="hidden" name="itemnumber" value="[% reserveloo.itemnumber | html %]" />
                     [% ELSE %]
                         No barcode
                     [% END %]
@@ -643,7 +644,7 @@
                 </i>
             [% ELSE %]
                 [% IF reserveloo.itemtype %]
-                    <i>Next available [% ItemTypes.GetDescription( reserveloo.itemtype ) %] item</i>
+                    <i>Next available [% ItemTypes.GetDescription( reserveloo.itemtype ) | html %] item</i>
                 [% ELSE %]
                     <i>Next available</i>
                 [% END %]
@@ -654,33 +655,33 @@
 
     [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
 	<td>
-                <a title="Toggle lowest priority" href="request.pl?action=setLowestPriority&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;date=[% reserveloo.date %]">
+                <a title="Toggle lowest priority" href="request.pl?action=setLowestPriority&amp;borrowernumber=[% reserveloo.borrowernumber | html %]&amp;biblionumber=[% reserveloo.biblionumber | html %]&amp;reserve_id=[% reserveloo.reserve_id | html %]&amp;date=[% reserveloo.date | html %]">
 			[% IF ( reserveloo.lowestPriority ) %]
-                        <img src="[% interface %]/[% theme %]/img/go-bottom.png" alt="Unset lowest priority" />
+                        <img src="[% interface | html %]/[% theme | html %]/img/go-bottom.png" alt="Unset lowest priority" />
 		        [% ELSE %]
-                        <img src="[% interface %]/[% theme %]/img/go-down.png" alt="Set to lowest priority" />
+                        <img src="[% interface | html %]/[% theme | html %]/img/go-down.png" alt="Set to lowest priority" />
 		        [% END %]
 		</a>
 	</td>
     [% END %]
 
 	<td>
-        <a class="cancel-hold" title="Cancel hold" href="request.pl?action=cancel&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;date=[% reserveloo.date %]">
-                    <img src="[% interface %]/[% theme %]/img/x.png" alt="Cancel" />
+        <a class="cancel-hold" title="Cancel hold" href="request.pl?action=cancel&amp;borrowernumber=[% reserveloo.borrowernumber | html %]&amp;biblionumber=[% reserveloo.biblionumber | html %]&amp;reserve_id=[% reserveloo.reserve_id | html %]&amp;date=[% reserveloo.date | html %]">
+                    <img src="[% interface | html %]/[% theme | html %]/img/x.png" alt="Cancel" />
                 </a>
 	</td>
 
         [% IF SuspendHoldsIntranet %]
 	<td>
         [% UNLESS ( reserveloo.found ) %]
-            <input type="button" value="[% IF ( reserveloo.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]" onclick="window.location.href='request.pl?action=toggleSuspend&amp;reserve_id=[% reserveloo.reserve_id %]&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]&amp;suspend_until=' + $('#suspend_until_[% reserveloo.reserve_id %]').val()" />
+            <input type="button" value="[% IF ( reserveloo.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]" onclick="window.location.href='request.pl?action=toggleSuspend&amp;reserve_id=[% reserveloo.reserve_id | html %]&amp;borrowernumber=[% reserveloo.borrowernumber | html %]&amp;biblionumber=[% reserveloo.biblionumber | html %]&amp;date=[% reserveloo.date | html %]&amp;suspend_until=' + $('#suspend_until_[% reserveloo.reserve_id | html %]').val()" />
 
             [% IF AutoResumeSuspendedHolds %]
-                <label for="suspend_until_[% reserveloo.reserve_id %]">[% IF ( reserveloo.suspend ) %] on [% ELSE %] until [% END %]</label>
-                <input name="suspend_until" id="suspend_until_[% reserveloo.reserve_id %]" size="10" value="[% reserveloo.suspend_until | $KohaDates %]" class="datepicker suspend_until_datepicker" />
-                <a href='#' onclick="document.getElementById('suspend_until_[% reserveloo.reserve_id %]').value='';">Clear date</a>
+                <label for="suspend_until_[% reserveloo.reserve_id | html %]">[% IF ( reserveloo.suspend ) %] on [% ELSE %] until [% END %]</label>
+                <input name="suspend_until" id="suspend_until_[% reserveloo.reserve_id | html %]" size="10" value="[% reserveloo.suspend_until | $KohaDates %]" class="datepicker suspend_until_datepicker" />
+                <a href='#' onclick="document.getElementById('suspend_until_[% reserveloo.reserve_id | html %]').value='';">Clear date</a>
             [% ELSE %]
-                <input type="hidden" name="suspend_until" id="suspend_until_[% reserveloo.reserve_id %]" value=""/>
+                <input type="hidden" name="suspend_until" id="suspend_until_[% reserveloo.reserve_id | html %]" value=""/>
             [% END %]
 	[% ELSE %]
 		<input type="hidden" name="suspend_until" value="" />
@@ -716,14 +717,14 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
-    [% Asset.js("js/circ-patron-search-results.js") %]
+    [% Asset.js("js/circ-patron-search-results.js") | $raw %]
     <script>
         var MSG_CONFIRM_DELETE_HOLD   = _("Are you sure you want to cancel this hold?");
-        var patron_homebranch = "[% Branches.GetName( patron.branchcode ) |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+        var patron_homebranch = "[% Branches.GetName( patron.branchcode ) |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
         var override_items = {[% FOREACH bibitemloo IN bibitemloop %][% FOREACH itemloo IN bibitemloo.itemloop %][% IF ( itemloo.override ) %]
-        [% itemloo.itemnumber %]: {
-            homebranch: "[% Branches.GetName( itemloo.homebranch ) |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-            holdallowed: [% itemloo.holdallowed %]
+        [% itemloo.itemnumber | html %]: {
+            homebranch: "[% Branches.GetName( itemloo.homebranch ) |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
+            holdallowed: [% itemloo.holdallowed | html %]
             },
             [% END %][% END %][% END %]
         };

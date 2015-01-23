@@ -5,14 +5,14 @@
 <body id="lists_downloadshelf" class="lists" style="padding:1em;">
 
 [% FOR m IN messages %]
-    <div class="dialog [% m.type %]">
+    <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'unauthorized' %]
             You do not have permission to view this list.
         [% CASE 'does_not_exist' %]
             This list does not exist.
         [% CASE %]
-            [% m.code %]
+            [% m.code | html %]
         [% END %]
     </div>
 [% END %]
@@ -34,12 +34,12 @@
 	    <option value="ris">RIS</option>
 	    <option value="bibtex">BibTex</option>
 	    [% FOREACH csv_profile IN csv_profiles %]
-	    <option value="[% csv_profile.export_format_id %]">CSV - [% csv_profile.profile %]</option>
+	    <option value="[% csv_profile.export_format_id | html %]">CSV - [% csv_profile.profile | html %]</option>
 	    [% END %]
 	</select>
 	</li></ol>
 	</fieldset>
-	<fieldset class="action"><input type="hidden" name="shelfid" value="[% shelfid %]" />
+	<fieldset class="action"><input type="hidden" name="shelfid" value="[% shelfid | html %]" />
 	<input type="submit" name="save" value="Save" />  <a class="cancel close" href="#">Cancel</a>
 	</fieldset>
     </form>

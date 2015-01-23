@@ -23,29 +23,29 @@
 		[% IF ( mainloo.loopfilter ) %]
             <p>Filtered on:</p>
 			[% FOREACH loopfilte IN mainloo.loopfilter %]
-					<p>[% IF ( loopfilte.err ) %]  [% END %] [% loopfilte.crit %] =[% loopfilte.filter %][% IF ( loopfilte.err ) %]  [% END %]</p>
+					<p>[% IF ( loopfilte.err ) %]  [% END %] [% loopfilte.crit | html %] =[% loopfilte.filter | html %][% IF ( loopfilte.err ) %]  [% END %]</p>
 			[% END %]
 		[% END %]
 		
 		<table>
 			<tr>
-				<th>[% mainloo.line %] / [% mainloo.column %]</th>
+				<th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
 				[% FOREACH loopco IN mainloo.loopcol %]
-					<th>[% loopco.coltitle %]</th>
+					<th>[% loopco.coltitle | html %]</th>
 				[% END %]
 				<th>TOTAL</th>
 			</tr>
 				[% FOREACH loopro IN mainloo.looprow %]
 					<tr>
 						[% IF ( loopro.hilighted ) %]<td class="hilighted">[% ELSE %]<td>[% END %]
-						[% loopro.rowtitle %]</td>
+						[% loopro.rowtitle | html %]</td>
 						[% FOREACH loopcel IN loopro.loopcell %]
 							[% IF ( loopcel.hilighted ) %]<td class="hilighted">[% ELSE %]<td>[% END %]
-								[% IF ( loopcel.value ) %][% loopcel.value %][% END %]
+								[% IF ( loopcel.value ) %][% loopcel.value | html %][% END %]
 							</td>
 						[% END %]
 						[% IF ( loopro.hilighted ) %]<td>[% ELSE %]<td>[% END %]
-							[% loopro.totalrow %]
+							[% loopro.totalrow | html %]
 						</td>
 					</tr>
 				[% END %]
@@ -53,10 +53,10 @@
 					<th>TOTAL</th>
 					[% FOREACH loopfoote IN mainloo.loopfooter %]
 						<th>
-							[% loopfoote.totalcol %]
+							[% loopfoote.totalcol | html %]
 						</th>
 					[% END %]
-					<th>[% mainloo.total %]</th>
+					<th>[% mainloo.total | html %]</th>
 				</tr>
 		</table>
 	[% END %]
@@ -125,7 +125,7 @@
                     <select name="Filter" size="1" id="borcat">
                         <option value=""></option>
                         [% FOREACH patron_category IN patron_categories %]
-                            <option value="[%- patron_category.categorycode -%]">[%- patron_category.description-%]</option>
+                            <option value="[%- patron_category.categorycode | html -%]">[%- patron_category.description | html -%]</option>
                         [% END %]
                     </select>
                 </td>
@@ -138,7 +138,7 @@
                     <select name="Filter" size="1" id="itemtypes">
                         <option value=""></option>
                         [% FOREACH itemtype IN itemtypes %]
-                        <option value="[%- itemtype.itemtype -%]">[%- itemtype.translated_description -%]</option>
+                        <option value="[%- itemtype.itemtype | html -%]">[%- itemtype.translated_description | html -%]</option>
                         [% END %]
                     </select>
                 </td>
@@ -163,7 +163,7 @@
                         <select name="Filter" size="1" id="sort1">
                             <option value=""></option>
                             [%- FOREACH value IN Sort1.values %]
-                            <option value="[%- value -%]">[%- value -%]</option>
+                            <option value="[%- value | html -%]">[%- value | html -%]</option>
                             [%- END %]
                         </select>
                     </td>
@@ -178,7 +178,7 @@
                         <select name="Filter" size="1" id="sort2">
                             <option value=""></option>
                             [%- FOREACH value IN Sort2.values %]
-                            <option value="[%- value -%]">[%- value -%]</option>
+                            <option value="[%- value | html -%]">[%- value | html -%]</option>
                             [%- END %]
                         </select>
                     </td>
@@ -204,9 +204,9 @@
             <select name="sep" id="sep" size="1">
             [% FOREACH value IN CGIsepChoice.values.sort() %]
               [% IF ( value == CGIsepChoice.default ) %]
-                <option value="[% value %]" selected="selected">[% value %]</option>
+                <option value="[% value | html %]" selected="selected">[% value | html %]</option>
               [% ELSE %]
-                <option value="[% value %]">[% value %]</option>
+                <option value="[% value | html %]">[% value | html %]</option>
               [% END %]
             [% END %]
             </select>
@@ -216,7 +216,7 @@
 
 	<fieldset class="action">
 	<input type="hidden" name="Filter" value="" />
-	<input type="hidden" name="report_name" value="[% report_name %]" />
+	<input type="hidden" name="report_name" value="[% report_name | html %]" />
 	<input type="hidden" name="do_it" value="1" />
 	<input type="submit" value="Submit" />
 	</fieldset>

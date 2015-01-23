@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
@@ -5,7 +6,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patron search</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="common_patron_search" class="common">
@@ -18,14 +19,14 @@
                 <ol>
                     <li>
                         <label for="searchmember_filter">Search:</label>
-                        <input type="text" id="searchmember_filter" value="[% searchmember %]"/>
+                        <input type="text" id="searchmember_filter" value="[% searchmember | html %]"/>
                     </li>
                     <li>
                         <label for="categorycode_filter">Category:</label>
                         <select id="categorycode_filter">
                             <option value="">Any</option>
                             [% FOREACH category IN categories %]
-                                <option value="[% category.categorycode %]">[% category.description %]</option>
+                                <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
                             [% END %]
                         </select>
                     </li>
@@ -37,7 +38,7 @@
                                 <option value="">Any</option>
                             [% END %]
                             [% FOREACH l IN libraries %]
-                                <option value="[% l.branchcode %]">[% l.branchname %]</option>
+                                <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
                             [% END %]
                         </select>
                     </li>
@@ -55,7 +56,7 @@
         <div class="browse">
             Browse by last name:
             [% FOREACH letter IN alphabet.split(' ') %]
-                <a href="#" class="filterByLetter">[% letter %]</a>
+                <a href="#" class="filterByLetter">[% letter | html %]</a>
             [% END %]
         </div>
 
@@ -133,10 +134,10 @@
                         'value': 'branches.branchname'
                     },{
                         'name': 'template_path',
-                        'value': '[% json_template %]',
+                        'value': '[% json_template | html %]',
                     },{
                         'name': 'selection_type',
-                        'value': '[% selection_type %]',
+                        'value': '[% selection_type | html %]',
                     }
                     [% IF patrons_with_acq_perm_only %]
                     ,{
@@ -162,7 +163,7 @@
                         [% ELSIF column == 'address' %]
                             { 'mDataProp': 'dt_address', 'bSortable': false }
                         [% ELSE %]
-                            { 'mDataProp': 'dt_[% column %]' }
+                            { 'mDataProp': 'dt_[% column | html %]' }
                         [% END %]
                         [% UNLESS loop.last %],[% END %]
                     [% END %]
@@ -172,9 +173,9 @@
                     'bPaginate': false,
                 [% ELSE %]
                     'sPaginationType': 'full_numbers',
-                    "iDisplayLength": [% Koha.Preference('PatronsPerPage') %],
+                    "iDisplayLength": [% Koha.Preference('PatronsPerPage') | html %],
                 [% END %]
-                'aaSorting': [[[% aaSorting || 0 %], 'asc']],
+                'aaSorting': [[[% aaSorting || 0 | html %], 'asc']],
                 'bFilter': false,
                 'bProcessing': true,
             }));

@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% SET footerjs = 1 %]
@@ -11,7 +12,7 @@
   [% END %]
 [% END %]
 [% IF ( delete_attribute_type_form ) %]
-  &rsaquo; Confirm deletion of patron attribute type &quot;[% code |html %]&quot;
+  &rsaquo; Confirm deletion of patron attribute type &quot;[% code | html %]&quot;
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -30,7 +31,7 @@
   [% END %]
 [% END %]
 [% IF ( delete_attribute_type_form ) %]
-  &rsaquo; Confirm deletion of patron attribute type &quot;[% code |html %]&quot;
+  &rsaquo; Confirm deletion of patron attribute type &quot;[% code | html %]&quot;
 [% END %]
 </div>
 
@@ -51,19 +52,19 @@
 <h2>Add patron attribute type</h2>
   [% END %]
 [% IF ( duplicate_code_error ) %]
-<div class="dialog message">Could not add patron attribute type &quot;[% duplicate_code_error %]&quot; 
+<div class="dialog message">Could not add patron attribute type &quot;[% duplicate_code_error | html %]&quot; 
     &mdash; one with that code already exists.
 </div>
 [% END %]
-<form action="[% script_name %]" class="validated" method="post">
-  <input type="hidden" name="op" value="[% confirm_op %]" />
+<form action="[% script_name | html %]" class="validated" method="post">
+  <input type="hidden" name="op" value="[% confirm_op | html %]" />
   <fieldset class="rows">
     <ol>
       <li>
           [% IF ( edit_attribute_type ) %]
 		  <span class="label">Patron attribute type code: </span>
-            <input type="hidden" name="code" value="[% code |html %]" />
-            [% code |html %]
+            <input type="hidden" name="code" value="[% code | html %]" />
+            [% code | html %]
           [% ELSE %]
               <label for="code" class="required">Patron attribute type code: </label>
               <input type="text" id="code" name="code" required="required" class="required" size="10" maxlength="10" />
@@ -71,7 +72,7 @@
           [% END %]
        </li>
        <li><label for="description" class="required">Description: </label>
-           <input type="text" id="description" name="description" required="required" class="required" size="50" maxlength="250" value="[% description |html %]" />
+           <input type="text" id="description" name="description" required="required" class="required" size="50" maxlength="250" value="[% description | html %]" />
            <span class="required">Required</span>
        </li>
        <li><label for="repeatable">Repeatable: </label>
@@ -155,9 +156,9 @@
                 <option value="">All branches</option>
                 [% FOREACH branch IN branches_loop %]
                   [% IF ( branch.selected ) %]
-                    <option selected="selected" value="[% branch.branchcode %]">[% branch.branchname |html %]</option>
+                    <option selected="selected" value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
                   [% ELSE %]
-                    <option value="[% branch.branchcode %]">[% branch.branchname |html %]</option>
+                    <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
                   [% END %]
                 [% END %]
             </select>
@@ -169,7 +170,7 @@
             <select name="category_code" id="category">
                 <option value=""></option>
                 [% FOREACH cat IN categories %]
-                    [% IF ( cat.categorycode == category_code ) %]<option value="[% cat.categorycode %]" selected="selected">[% cat.description |html %]</option>[% ELSE %]<option value="[% cat.categorycode %]">[% cat.description |html %]</option>[% END %]
+                    [% IF ( cat.categorycode == category_code ) %]<option value="[% cat.categorycode | html %]" selected="selected">[% cat.description | html %]</option>[% ELSE %]<option value="[% cat.categorycode | html %]">[% cat.description | html %]</option>[% END %]
                 [% END %]
             </select>
             <span>Choose one to limit this attribute to one patron type. Please leave blank if you want these attributes to be available for all types of patrons.</span>
@@ -180,12 +181,12 @@
                 <option value=""></option>
                 [% FOREACH class IN classes_val_loop %]
                     [% IF class.authorised_value == category_class %]
-                        <option value="[% class.authorised_value %]" selected="selected">
-                            [% class.lib |html %]
+                        <option value="[% class.authorised_value | html %]" selected="selected">
+                            [% class.lib | html %]
                         </option>
                     [% ELSE %]
-                        <option value="[% class.authorised_value %]" >
-                            [% class.lib |html %]
+                        <option value="[% class.authorised_value | html %]" >
+                            [% class.lib | html %]
                         </option>
                     [% END %]
                 [% END %]
@@ -203,13 +204,13 @@
 
 [% IF ( delete_attribute_type_form ) %]
     <div class="dialog alert">
-        <h3>Confirm deletion of patron attribute type <span class="ex">'[% code |html %]' ([% description %])</span>?</h3>
-        <form action="[% script_name %]" name="Aform" method="post">
-            <input type="hidden" name="op" value="[% confirm_op %]" />
-            <input type="hidden" name="code" value="[% code |html %]" />
+        <h3>Confirm deletion of patron attribute type <span class="ex">'[% code | html %]' ([% description | html %])</span>?</h3>
+        <form action="[% script_name | html %]" name="Aform" method="post">
+            <input type="hidden" name="op" value="[% confirm_op | html %]" />
+            <input type="hidden" name="code" value="[% code | html %]" />
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete patron attribute type</button>
         </form>
-        <form action="[% script_name %]" method="get">
+        <form action="[% script_name | html %]" method="get">
             <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
         </form>
     </div>
@@ -218,31 +219,31 @@
 [% IF ( display_list ) %]
 
 <div id="toolbar" class="btn-toolbar">
-    <a class="btn btn-default btn-sm" id="newrule" href="[% script_name %]?op=add_attribute_type"><i class="fa fa-plus"></i> New patron attribute type</a>
+    <a class="btn btn-default btn-sm" id="newrule" href="[% script_name | html %]?op=add_attribute_type"><i class="fa fa-plus"></i> New patron attribute type</a>
 </div>
 
 <h2>Patron attribute types</h2>
 [% IF ( added_attribute_type ) %]
-<div class="dialog message">Added patron attribute type &quot;[% added_attribute_type %]&quot;</div>
+<div class="dialog message">Added patron attribute type &quot;[% added_attribute_type | html %]&quot;</div>
 [% END %]
 [% IF ( edited_attribute_type ) %]
-<div class="dialog message">Modified patron attribute type &quot;[% edited_attribute_type %]&quot;</div>
+<div class="dialog message">Modified patron attribute type &quot;[% edited_attribute_type | html %]&quot;</div>
 [% END %]
 [% IF ( deleted_attribute_type ) %]
-<div class="dialog message">Deleted patron attribute type &quot;[% deleted_attribute_type %]&quot;</div>
+<div class="dialog message">Deleted patron attribute type &quot;[% deleted_attribute_type | html %]&quot;</div>
 [% END %]
 [% IF ( ERROR_delete_in_use ) %]
-<div class="dialog message">Could not delete patron attribute type &quot;[% ERROR_delete_in_use %]&quot; 
-    &mdash; it is in use by [% ERROR_num_patrons %] patron records</div>
+<div class="dialog message">Could not delete patron attribute type &quot;[% ERROR_delete_in_use | html %]&quot; 
+    &mdash; it is in use by [% ERROR_num_patrons | html %] patron records</div>
 [% END %]
 [% IF ( ERROR_delete_not_found ) %]
-<div class="dialog message">Could not delete patron attribute type &quot;[% ERROR_delete_not_found %]&quot; 
+<div class="dialog message">Could not delete patron attribute type &quot;[% ERROR_delete_not_found | html %]&quot; 
     &mdash; it was already absent from the database.</div>
 [% END %]
 [% IF ( available_attribute_types ) %]
   [% FOREACH attribute IN available_attribute_types %]
     [% IF attribute.class %]
-        <h4>[% attribute.lib %]</h4>
+        <h4>[% attribute.lib | html %]</h4>
     [% END %]
     <table class="patron_attributes_types">
       <thead>
@@ -256,19 +257,19 @@
       <tbody>
         [% FOREACH item IN attribute.items %]
           <tr>
-            <td>[% item.code |html %]</td>
-            <td>[% item.description |html %]</td>
+            <td>[% item.code | html %]</td>
+            <td>[% item.description | html %]</td>
             <td>
                 [% IF ( item.branches && item.branches.size > 0 ) %]
-                    [% branches_str = "" %]
+                    [% branches_str = "" | html %]
                     [% FOREACH branch IN item.branches %]
-                        [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" %]
+                        [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" | html %]
                     [% END %]
-                    <span title="[% branches_str %]">
+                    <span title="[% branches_str | html %]">
                         [% IF item.branches.size > 1 %]
-                            [% item.branches.size %] branches limitations
+                            [% item.branches.size | html %] branches limitations
                         [% ELSE %]
-                            [% item.branches.size %] branch limitation
+                            [% item.branches.size | html %] branch limitation
                         [% END %]
                     </span>
                 [% ELSE %]
@@ -276,8 +277,8 @@
                 [% END %]
             </td>
             <td class="actions">
-              <a class="btn btn-default btn-xs" href="[% item.script_name %]?op=edit_attribute_type&amp;code=[% item.code |html %]"><i class="fa fa-pencil"></i> Edit</a>
-              <a class="btn btn-default btn-xs" href="[% item.script_name %]?op=delete_attribute_type&amp;code=[% item.code |html %]"><i class="fa fa-trash"></i> Delete</a>
+              <a class="btn btn-default btn-xs" href="[% item.script_name | html %]?op=edit_attribute_type&amp;code=[% item.code | html %]"><i class="fa fa-pencil"></i> Edit</a>
+              <a class="btn btn-default btn-xs" href="[% item.script_name | html %]?op=delete_attribute_type&amp;code=[% item.code | html %]"><i class="fa fa-trash"></i> Delete</a>
             </td>
           </tr>
         [% END %]
@@ -288,7 +289,7 @@
   <p>There are no saved patron attribute types.</p>
 [% END %]
 
-<div class="pages">[% pagination_bar %]</div>
+<div class="pages">[% pagination_bar | $raw %]</div>
 
 [% END %]
  
@@ -300,7 +301,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
     <script type="text/javascript">
         $(document).ready(function() {
             if ( $("#branches option:selected").length < 1 ) {

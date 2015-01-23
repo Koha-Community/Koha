@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
@@ -9,7 +10,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Holds to pull</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="circ_pendingreserves" class="circ">
@@ -25,7 +26,7 @@
     <div id="yui-main">
     <div class="yui-b">
         [% FOR m IN messages %]
-            <div class="dialog [% m.type %]">
+            <div class="dialog [% m.type | html %]">
                 [% SWITCH m.code %]
                 [% CASE 'letter_enqueued' %]
                     <span>The notice has been correctly enqueued.</span>
@@ -38,7 +39,7 @@
                 [% CASE 'hold_placed_at_biblio_level' %]
                     <span>The hold has been placed on biblio level. It is not possible to determine the item to mark as lost.</span>
                 [% CASE %]
-                    [% m.code %]
+                    [% m.code | html %]
                 [% END %]
             </div>
         [% END %]
@@ -70,15 +71,15 @@
         [% FOREACH reserveloo IN reserveloop %]
         <tr>
         [% IF ( reserveloo.borrowernumber ) %]
-            <td><p><b>[% reserveloo.pullcount %]</b></p></td>
-            <td>[% reserveloo.count %]</td>
-            <td>[% reserveloo.rcount %]</td>
-            <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserveloo.borrowernumber %]">[% reserveloo.firstname %] [%reserveloo.surname %]</a></td>
+            <td><p><b>[% reserveloo.pullcount | html %]</b></p></td>
+            <td>[% reserveloo.count | html %]</td>
+            <td>[% reserveloo.rcount | html %]</td>
+            <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserveloo.borrowernumber | html %]">[% reserveloo.firstname | html %] [% reserveloo.surname | html %]</a></td>
             <td>
             <p>
                 [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
-                [% reserveloo.title |html %] [% FOREACH s IN reserveloo.subtitle %] [% s %][% END %]</a></p>
-                [% IF ( reserveloo.author ) %]<p> by [% reserveloo.author %]</p>[% END %]
+                [% reserveloo.title | html %] [% FOREACH s IN reserveloo.subtitle %] [% s | html %][% END %]</a></p>
+                [% IF ( reserveloo.author ) %]<p> by [% reserveloo.author | html %]</p>[% END %]
             </td>
         [% ELSE %]
             <td>"</td>
@@ -89,31 +90,31 @@
         [% END %]
         <td>
             [% FOREACH holdingbranch IN reserveloo.holdingbranches %]
-                [% Branches.GetName ( holdingbranch ) %]
+                [% Branches.GetName ( holdingbranch ) | html %]
             [% END %]
         </td>
-        <td><p>[% reserveloo.itemcallnumber %]</p></td>
-        <td><p>[% reserveloo.copyno %]</p></td>
-        <td><p>[% reserveloo.enumchron %]</p></td>
+        <td><p>[% reserveloo.itemcallnumber | html %]</p></td>
+        <td><p>[% reserveloo.copyno | html %]</p></td>
+        <td><p>[% reserveloo.enumchron | html %]</p></td>
         <td>
         [% FOREACH itemType IN reserveloo.itemTypes %]
-            [% ItemTypes.GetDescription( itemType ) %]
+            [% ItemTypes.GetDescription( itemType ) | html %]
         [% END %]
         </td>
         <td>
         [% FOREACH loc IN reserveloo.locations %]
-            [% AuthorisedValues.GetByCode('LOC', loc) %]
+            [% AuthorisedValues.GetByCode('LOC', loc) | html %]
         [% END %]
         </td>
         <td>
-            <span title="[% reserveloo.reservedate %]">[% reserveloo.reservedate | $KohaDates %] in [% Branches.GetName ( reserveloo.branch ) %]</span>
+            <span title="[% reserveloo.reservedate | html %]">[% reserveloo.reservedate | $KohaDates %] in [% Branches.GetName ( reserveloo.branch ) | html %]</span>
         </td>
         <td>
             <form name="cancelReserve" action="/cgi-bin/koha/circ/pendingreserves.pl" method="post">
                 <input type="hidden" name="op" value="cancel_reserve" />
-                <input type="hidden" name="reserve_id" value="[% reserveloo.reserve_id %]" />
+                <input type="hidden" name="reserve_id" value="[% reserveloo.reserve_id | html %]" />
                 [% IF reserveloo.holdingbranch != reserveloo.homebranch %]
-                    <input type="submit" value="Cancel hold and return to : [% Branches.GetName( reserveloo.homebranch ) %]" />
+                    <input type="submit" value="Cancel hold and return to : [% Branches.GetName( reserveloo.homebranch ) | html %]" />
                 [% ELSE %]
                     <input type="submit" value="Cancel hold" />
                 [% END %]
@@ -122,7 +123,7 @@
         [% IF Koha.Preference('CanMarkHoldsToPullAsLost') != 'do_not_allow' %]
             [% IF reserveloo.itemnumber %]
                 <form name="cancelReserve" action="/cgi-bin/koha/circ/pendingreserves.pl" method="post">
-                    <input type="hidden" name="reserve_id" value="[% reserveloo.reserve_id %]" />
+                    <input type="hidden" name="reserve_id" value="[% reserveloo.reserve_id | html %]" />
                     [% IF Koha.Preference('CanMarkHoldsToPullAsLost') == 'allow' %]
                         <input type="hidden" name="op" value="mark_as_lost" />
                         <input type="submit" value="Mark item as lost" />
@@ -184,9 +185,9 @@
 </ol>
 
 [% IF ( HoldsToPullEndDate ) %]
-    <p><i>(Inclusive, default is [% HoldsToPullStartDate %] days ago to [% HoldsToPullEndDate %] days ahead. Set other date ranges as needed.)</i></p>
+    <p><i>(Inclusive, default is [% HoldsToPullStartDate | html %] days ago to [% HoldsToPullEndDate | html %] days ahead. Set other date ranges as needed.)</i></p>
 [% ELSE %]
-    <p><i>(Inclusive, default is [% HoldsToPullStartDate %] days ago to today. Set other date ranges as needed.)</i></p>
+    <p><i>(Inclusive, default is [% HoldsToPullStartDate | html %] days ago to today. Set other date ranges as needed.)</i></p>
 [% END %]
 
 <fieldset class="action"><input type="submit" name="run_report" value="Submit" class="submit"/></fieldset>
@@ -203,7 +204,7 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script type="text/javascript">
         $(document).ready(function() {
-          var columns_settings = [% ColumnsSettings.GetColumns('circ', 'holds', 'holds-to-pull', 'json') %];
+          var columns_settings = [% ColumnsSettings.GetColumns('circ', 'holds', 'holds-to-pull', 'json').raw %];
           var holdst = KohaTable("holdst", {
             "aoColumnDefs": [
                 { "sType": "anti-the", "aTargets" : [ "anti-the" ] },

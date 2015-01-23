@@ -197,7 +197,7 @@
     <tr>
                 <td><label for="f5">Specific reduction ratio</label></td>
                 <td><input type="text" name="f5" id="f5" maxlength="3" size="4" 
-value="[% f5 %]" /></td>
+value="[% f5 | html %]" /></td>
         </tr>
 
 	<tr>
@@ -330,12 +330,12 @@ value="[% f5 %]" /></td>
 
 [% MACRO jsinclude BLOCK %]
     <script type="text/javascript">
-        var dateformat = "[% Koha.Preference('dateformat') %]";
+        var dateformat = "[% Koha.Preference('dateformat') | html %]";
         function report() {
             document.f_pop.f5.value=document.f_pop.f5.value+'   ';
             document.f_pop.f5.value=document.f_pop.f5.value.substring(0,3);
             var doc   = opener.document;
-            var field = doc.getElementById("[% index %]");
+            var field = doc.getElementById("[% index | html %]");
             field.value =  document.f_pop.f1.value+document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value+document.f_pop.f5.value+document.f_pop.f6.value+document.f_pop.f7.value+document.f_pop.f8.value+document.f_pop.f9.value ;
             window.close();
             return false;

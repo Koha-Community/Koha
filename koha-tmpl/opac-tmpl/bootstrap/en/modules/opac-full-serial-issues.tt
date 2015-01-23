@@ -2,7 +2,7 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Full subscription history for [% bibliotitle %]</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Full subscription history for [% bibliotitle | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
     <style>
@@ -16,7 +16,7 @@
     <div class="main">
         <ul class="breadcrumb">
             <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]">Details for [% bibliotitle %]</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]">Details for [% bibliotitle | html %]</a> <span class="divider">&rsaquo;</span></li>
             <li><a href="#">Full subscription history</a></li>
         </ul>
 
@@ -46,7 +46,7 @@
                 <div class="span10">
                     <div id="fullserialissues" class="maincontent">
                         [% UNLESS ( popup ) %]
-                            <h2>Full subscription history for [% bibliotitle %]</h2>
+                            <h2>Full subscription history for [% bibliotitle | html %]</h2>
                             <div id="views">
                                 <span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]">Normal view</a></span>
                                 <span class="view"><a id="Briefhistory" href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=[% biblionumber | html %]&amp;selectview=small">Brief history</a></span>
@@ -58,16 +58,16 @@
                             <strong>Show year: </strong>
                             [% FOREACH year IN years %]
                                 [% IF ( year.year ) %]
-                                    <a class="tabsubs" href="#" onclick="showlayer([% year.year %]); return false;">[% year.year %]</a>
+                                    <a class="tabsubs" href="#" onclick="showlayer([% year.year | html %]); return false;">[% year.year | html %]</a>
                                 [% END %]
                             [% END %]
                         </div>
 
                         [% FOREACH year IN years %]
                             [% IF loop.first %]
-                                <div class="yeardata tabsub" id="show[% year.year %]" style="display:block">
+                                <div class="yeardata tabsub" id="show[% year.year | html %]" style="display:block">
                             [% ELSE %]
-                                <div class="yeardata tabsub" id="show[% year.year %]" style="display:none">
+                                <div class="yeardata tabsub" id="show[% year.year | html %]" style="display:none">
                             [% END %]
                                 <table class="subscriptionstclass table table-bordered table-striped">
                                     <thead>
@@ -86,9 +86,9 @@
                                             <tr>
                                                 <td>
                                                     [% IF ( serial.publisheddate ) %]
-                                                        <span title="[% serial.publisheddate %]">
+                                                        <span title="[% serial.publisheddate | html %]">
                                                             [% IF serial.publisheddatetext %]
-                                                                [% serial.publisheddatetext %]
+                                                                [% serial.publisheddatetext | html %]
                                                             [% ELSE %]
                                                                 [% serial.publisheddate | $KohaDates %]
                                                             [% END %]
@@ -97,16 +97,16 @@
                                                         &nbsp;
                                                     [% END %]
                                                 </td>
-                                                <td class="libraryfilterclass">[% Branches.GetName( serial.branchcode ) %]</td>
-                                                <td>[% serial.notes %]</td>
+                                                <td class="libraryfilterclass">[% Branches.GetName( serial.branchcode ) | html %]</td>
+                                                <td>[% serial.notes | html %]</td>
                                                 <td>
                                                     [% IF ( serial.status2 && serial.planneddate ) %]
-                                                        <span title="[% serial.planneddate %]">[% serial.planneddate | $KohaDates %]</span>
+                                                        <span title="[% serial.planneddate | html %]">[% serial.planneddate | $KohaDates %]</span>
                                                     [% ELSE %]
                                                         <span title="9999-12-31">&nbsp;</span>
                                                     [% END %]
                                                 </td>
-                                                <td>[% serial.serialseq %]</td>
+                                                <td>[% serial.serialseq | html %]</td>
                                                 <td>
                                                     [% IF ( serial.status1 ) %]Expected[% END %]
                                                     [% IF ( serial.status2 ) %]Arrived[% END %]
@@ -121,7 +121,7 @@
                                                     [% IF ( serial.status7 ) %]Claimed[% END %]
                                                     [% IF ( serial.status8 ) %]Stopped[% END %]
                                                 </td>
-                                                <td class="subscriptionidfilterclass">[% serial.subscriptionid %]</td>
+                                                <td class="subscriptionidfilterclass">[% serial.subscriptionid | html %]</td>
                                             </tr>
                                         [% END %]
                                     </tbody>
@@ -140,7 +140,7 @@
 <script>
     //<![CDATA[
         $(document).ready(function(){
-            showlayer([% yearmin %]);
+            showlayer([% yearmin | html %]);
             $("a.tabsubs:first").addClass("currentsubtab");
             $("#filterform").submit(function(){
                 filterByLibrary();

@@ -1,7 +1,7 @@
 {
-  "sEcho": [% sEcho %],
-  "iTotalRecords": [% total_rows %],
-  "iTotalDisplayRecords": [% total_rows %],
+  "sEcho": [% sEcho | html %],
+  "iTotalRecords": [% total_rows | html %],
+  "iTotalDisplayRecords": [% total_rows | html %],
   "aaData": [
   [%- FOREACH item IN results -%]
     [%- INCLUDE 'catalogue/itemsearch_item.json.inc' item = item -%]

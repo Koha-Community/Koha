@@ -1,19 +1,20 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE ColumnsSettings %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Cataloging &rsaquo; [% title |html %] [% IF ( author ) %] by [% author | html %][% END %] (Record #[% biblionumber %]) &rsaquo; Items</title>
-[% Asset.css("css/datatables.css") %]
+<title>Koha &rsaquo; Cataloging &rsaquo; [% title | html %] [% IF ( author ) %] by [% author | html %][% END %] (Record #[% biblionumber | html %]) &rsaquo; Items</title>
+[% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'datatables.inc' %]
-[% Asset.js("js/cataloging.js") %]
+[% Asset.js("js/cataloging.js") | $raw %]
 [% INCLUDE 'columns_settings.inc' %]
 [% INCLUDE 'browser-strings.inc' %]
-[% Asset.js("js/browser.js") %]
+[% Asset.js("js/browser.js") | $raw %]
 <script type="text/javascript">
 //<![CDATA[
-    var browser = KOHA.browser('[% searchid %]', parseInt('[% biblionumber %]', 10));
+    var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
     browser.show();
 
 $(document).ready(function(){
@@ -35,9 +36,9 @@ $(document).ready(function(){
                     var rowid = $(this).parent().attr("id");
                     num_rowid = rowid.replace("row","");
                     $(".linktools").remove();
-                    var edit_link = $('<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&frameworkcode=[% frameworkcode %]&biblionumber=[% biblionumber %]&itemnumber='+num_rowid+'&searchid=[% searchid %]#edititem"></a>');
+                    var edit_link = $('<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&frameworkcode=[% frameworkcode | html %]&biblionumber=[% biblionumber | html %]&itemnumber='+num_rowid+'&searchid=[% searchid | html %]#edititem"></a>');
                     $(edit_link).text(_("Edit item"));
-                    var delete_link = $('<a href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&frameworkcode=[% frameworkcode %]&biblionumber=[% biblionumber %]&itemnumber='+num_rowid+'&searchid=[% searchid %]"></a>');
+                    var delete_link = $('<a href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&frameworkcode=[% frameworkcode | html %]&biblionumber=[% biblionumber | html %]&itemnumber='+num_rowid+'&searchid=[% searchid | html %]"></a>');
                     $(delete_link).text(_("Delete item"));
                     $(delete_link).on('click', function(e) {
                         return confirm_deletion();
@@ -51,11 +52,11 @@ $(document).ready(function(){
 
     $("#addnewitem").click(function(){
         if ( confirm(_("Are you sure you want to add a new item? Any changes made on this page will be lost.")) ){
-            window.location.href = "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber %]";
+            window.location.href = "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber | html %]";
         }
     });
 
-    var columns_settings = [% ColumnsSettings.GetColumns( 'cataloguing', 'additem', 'itemst', 'json' ) %]
+    var columns_settings = [% ColumnsSettings.GetColumns( 'cataloguing', 'additem', 'itemst', 'json' ) | $raw %]
     // Skip the first column
     columns_settings.unshift( { cannot_be_toggled: "1" } );
 
@@ -130,7 +131,7 @@ function confirm_deletion() {
 
 //]]>
 </script>
-[% Asset.css("css/addbiblio.css") %]
+[% Asset.css("css/addbiblio.css") | $raw %]
 
 [% INCLUDE 'select2.inc' %]
 <script type="text/javascript">
@@ -140,7 +141,7 @@ function confirm_deletion() {
 </script>
 
 [% IF ( bidi ) %]
-   [% Asset.css("css/right-to-left.css") %]
+   [% Asset.css("css/right-to-left.css") | $raw %]
 [% END %]
 </head>
 <body id="cat_additem" class="cat">
@@ -150,8 +151,8 @@ function confirm_deletion() {
 <div id="breadcrumbs">
           <a href="/cgi-bin/koha/mainpage.pl">Home</a>
  &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>
- &rsaquo; Edit <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber %]">[% title |html %] [% IF ( author ) %] by [% author | html %][% END %] (Record #[% biblionumber %])</a>
- &rsaquo; <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber %]">Items</a>
+ &rsaquo; Edit <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber | html %]">[% title | html %] [% IF ( author ) %] by [% author | html %][% END %] (Record #[% biblionumber | html %])</a>
+ &rsaquo; <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber | html %]">Items</a>
 </div>
 
 <div id="doc3" class="yui-t7">
@@ -159,14 +160,14 @@ function confirm_deletion() {
    <div id="bd">
 	<div id="yui-main">
 
-<h1>Items for [% title |html %] [% IF ( author ) %] by [% author | html %][% END %] (Record #[% biblionumber %])</h1>
+<h1>Items for [% title | html %] [% IF ( author ) %] by [% author | html %][% END %] (Record #[% biblionumber | html %])</h1>
 
 [% IF ( barcode_not_unique ) %]<div class="dialog alert"><strong>Error saving item</strong>: Barcode must be unique.</div>[% END %]
 [% IF ( no_next_barcode ) %]<div class="dialog alert"><strong>Error saving items</strong>: Unable to automatically determine values for barcodes. No item has been inserted.</div>[% END %]
 [% IF ( book_on_loan ) %]<div class="dialog alert"><strong>Cannot delete</strong>: item is checked out.</div>[% END %]
 [% IF ( book_reserved ) %]<div class="dialogalert"><strong>Cannot delete</strong>: item has a waiting hold.</div>[% END %]
 [% IF ( not_same_branch ) %]<div class="dialog alert"><strong>Cannot delete</strong>: The items do not belong to your library.</div>[% END %]
-[% IF ( linked_analytics ) %]<div class="dialog alert"><strong>Cannot delete</strong>: item has linked <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]&amp;analyze=1">analytics.</a>.</div>[% END %]
+[% IF ( linked_analytics ) %]<div class="dialog alert"><strong>Cannot delete</strong>: item has linked <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | html %]&amp;analyze=1">analytics.</a>.</div>[% END %]
 
 <div id="cataloguing_additem_itemlist">
     [% IF ( item_loop ) %]
@@ -177,11 +178,11 @@ function confirm_deletion() {
                 <th>&nbsp;</th>
                 [% FOREACH item_header IN item_header_loop %]
                     [% IF item_header.column_name %]
-                        <th data-colname="[% item_header.column_name %]">
+                        <th data-colname="[% item_header.column_name | html %]">
                     [% ELSE %]
                         <th>
                     [% END %]
-                        [% item_header.header_value %]
+                        [% item_header.header_value | html %]
                     </th>
                 [% END %]
             </tr>
@@ -190,15 +191,15 @@ function confirm_deletion() {
                 [% FOREACH item_loo IN item_loop %]
                     [% IF ( item_loo.itemnumber == itemnumber) %]
                         [% IF item_loo.nomod %]
-                           <tr id="row[% item_loo.itemnumber %]" class="active">
+                           <tr id="row[% item_loo.itemnumber | html %]" class="active">
                         [% ELSE %]
-                            <tr id="row[% item_loo.itemnumber %]" class="active editable">
+                            <tr id="row[% item_loo.itemnumber | html %]" class="active editable">
                         [% END %]
                     [% ELSE %]
                         [% IF item_loo.nomod %]
-                           <tr id="row[% item_loo.itemnumber %]">
+                           <tr id="row[% item_loo.itemnumber | html %]">
                         [% ELSE %]
-                            <tr id="row[% item_loo.itemnumber %]" class="editable">
+                            <tr id="row[% item_loo.itemnumber | html %]" class="editable">
                         [% END %]
                     [% END %]
                     [% IF ( item_loo.nomod ) %]
@@ -206,32 +207,32 @@ function confirm_deletion() {
                     [% ELSE %]
                       <td>
                           <div class="dropdown">
-                          <a class="btn btn-default btn-xs dropdown-toggle" id="itemactions[% item_loo.itemnumber %]" role="button" data-toggle="dropdown" href="#">
+                          <a class="btn btn-default btn-xs dropdown-toggle" id="itemactions[% item_loo.itemnumber | html %]" role="button" data-toggle="dropdown" href="#">
                               Actions <b class="caret"></b>
                           </a>
-                          <ul class="dropdown-menu" role="menu" aria-labelledby="itemactions[% item_loo.itemnumber %]">
+                          <ul class="dropdown-menu" role="menu" aria-labelledby="itemactions[% item_loo.itemnumber | html %]">
 
                         [% IF ( item_loo.hostitemflag ) %]
-                              <li><a href="additem.pl?op=edititem&amp;biblionumber=[% item_loo.hostbiblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit in host</a> &nbsp; <a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delinkitem&amp;biblionumber=[% biblionumber %]&amp;hostitemnumber=[% item_loo.itemnumber %]&amp;searchid=[% searchid %]">Delink</a></li>
+                              <li><a href="additem.pl?op=edititem&amp;biblionumber=[% item_loo.hostbiblionumber | html %]&amp;itemnumber=[% item_loo.itemnumber | html %]#edititem">Edit in host</a> &nbsp; <a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delinkitem&amp;biblionumber=[% biblionumber | html %]&amp;hostitemnumber=[% item_loo.itemnumber | html %]&amp;searchid=[% searchid | html %]">Delink</a></li>
                         [% ELSE %]
-                              <li><a href="additem.pl?op=edititem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]&amp;searchid=[% searchid %]#edititem">Edit</a></li>
-                              <li><a href="additem.pl?op=dupeitem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]&amp;searchid=[% searchid %]#additema">Duplicate</a></li>
-                              <li class="print_label"><a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=add&amp;number_type=itemnumber&amp;number_list=[% item_loo.itemnumber %]" target="_blank" >Print Label</a></li>
+                              <li><a href="additem.pl?op=edititem&amp;biblionumber=[% biblionumber | html %]&amp;itemnumber=[% item_loo.itemnumber | html %]&amp;searchid=[% searchid | html %]#edititem">Edit</a></li>
+                              <li><a href="additem.pl?op=dupeitem&amp;biblionumber=[% biblionumber | html %]&amp;itemnumber=[% item_loo.itemnumber | html %]&amp;searchid=[% searchid | html %]#additema">Duplicate</a></li>
+                              <li class="print_label"><a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=add&amp;number_type=itemnumber&amp;number_list=[% item_loo.itemnumber | html %]" target="_blank" >Print Label</a></li>
                           [% IF ( item_loo.countanalytics ) %]
                               <li><a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&amp;q=% item_loo.itemnumber %]">View analytics</a></li>
                           [% ELSE %]
-                              <li><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]&amp;searchid=[% searchid %]" onclick="return confirm_deletion();">Delete</a></li>
+                              <li><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=[% biblionumber | html %]&amp;itemnumber=[% item_loo.itemnumber | html %]&amp;searchid=[% searchid | html %]" onclick="return confirm_deletion();">Delete</a></li>
                           [% END %]
                         [% END %]
                             [% IF ( OPACBaseURL ) %]
-                                <li class="view-in-opac"><a target="_blank" href="[% Koha.Preference('OPACBaseURL') %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">OPAC view</a></li>
+                                <li class="view-in-opac"><a target="_blank" href="[% Koha.Preference('OPACBaseURL') | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]">OPAC view</a></li>
                             [% END %]
                           </ul>
                           </div>
                       </td>
                     [% END %]
                 [% FOREACH item_valu IN item_loo.item_value %]
-                    <td>[% item_valu.field |html %]</td>
+                    <td>[% item_valu.field | html %]</td>
                 [% END %]
                 </tr>
                 [% END %]
@@ -247,83 +248,83 @@ function confirm_deletion() {
 <div class="yui-u">
 <div id="cataloguing_additem_newitem">
     <form id="f" method="post" action="/cgi-bin/koha/cataloguing/additem.pl" name="f">
-    <input type="hidden" name="op" value="[% op %]" />
+    <input type="hidden" name="op" value="[% op | html %]" />
     [% IF (popup) %]
         <input type="hidden" name="popup" value="1" />
     [% END %]
-    <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
     [% IF ( opisadd ) %]
         <h2 id="additema">Add item [% IF (circborrowernumber) %]<em>(fast cataloging)</em>[% END %]</h2>
     [% ELSE %]
-        <h2 id="edititem">Edit Item #[% itemnumber %][% IF ( barcode ) %] / Barcode [% barcode %][% END %]</h2>
+        <h2 id="edititem">Edit Item #[% itemnumber | html %][% IF ( barcode ) %] / Barcode [% barcode | html %][% END %]</h2>
     [% END %]
 	<fieldset class="rows">
 	<ol>
         [% FOREACH ite IN item %]
-               <li><div class="subfield_line" style="[% ite.visibility %]" id="subfield[% ite.tag %][% ite.subfield %][% ite.random %]">
+               <li><div class="subfield_line" style="[% ite.visibility | html %]" id="subfield[% ite.tag | html %][% ite.subfield | html %][% ite.random | html %]">
                 [% IF ( ite.mandatory ) %]
-               <label class="required">[% ite.subfield %] - [% ite.marc_lib %]</label>
+               <label class="required">[% ite.subfield | html %] - [% ite.marc_lib | $raw %]</label>
                [% ELSE %]
-               <label>[% ite.subfield %] - [% ite.marc_lib %]</label>
+               <label>[% ite.subfield | html %] - [% ite.marc_lib | $raw %]</label>
                [% END %]
 
                 [% SET mv = ite.marc_value %]
                 [% IF ( mv.type == 'hidden' ) %]
-                    <input type="hidden" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]">
+                    <input type="hidden" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]">
                 [% ELSIF ( mv.type == 'select' ) %]
                     [% IF ( mv.readonly ) %]
-                        <select name="field_value" id="[%- mv.id -%]" size="1" class="input_marceditor" readonly="readonly" disabled="disabled">
+                        <select name="field_value" id="[%- mv.id | html -%]" size="1" class="input_marceditor" readonly="readonly" disabled="disabled">
                     [% ELSE %]
-                        <select name="field_value" id="[%- mv.id -%]" size="1" class="input_marceditor">
+                        <select name="field_value" id="[%- mv.id | html -%]" size="1" class="input_marceditor">
                     [% END %]
                     [% FOREACH aval IN mv.values %]
                         [% IF aval == mv.default %]
-                        <option value="[%- aval -%]" selected="selected">[%- mv.labels.$aval -%]</option>
+                        <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
                         [% ELSE %]
-                        <option value="[%- aval -%]">[%- mv.labels.$aval -%]</option>
+                        <option value="[%- aval | html -%]">[%- mv.labels.$aval | html -%]</option>
                         [% END %]
                     [% END %]
                     </select>
                 [% ELSIF ( mv.type == 'text_auth' ) %]
                     [% IF mv.readonly %]
-                        <input type="text" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" readonly="readonly" />
+                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
                     [% ELSE %]
-                        <input type="text" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" />
+                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
                         [% SET dopop = "Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=\"${mv.authtypecode}\"&index=${mv.id}','${mv.id}')" %]
-                        <a href="#" class="buttonDot"  onclick="[%- dopop -%]; return false;" title="Tag editor">...</a>
+                        <a href="#" class="buttonDot"  onclick="[%- dopop | html -%]; return false;" title="Tag editor">...</a>
                     [% END %]
                 [% ELSIF ( mv.type == 'text_plugin' ) %]
                     [% IF mv.readonly %]
-                        <input type="text" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" readonly="readonly" />
+                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
                     [% ELSE %]
-                        <input type="text" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" />
+                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
                         [% IF ( mv.nopopup ) %]
-                            <a href="#" id="buttonDot_[%- mv.id -%]" class="[%- mv.class -%]" title="No popup">...</a>
+                            <a href="#" id="buttonDot_[%- mv.id | html -%]" class="[%- mv.class | html -%]" title="No popup">...</a>
                         [% ELSE  %]
-                            <a href="#" id="buttonDot_[%- mv.id -%]" class="[%- mv.class -%]" title="Tag editor">...</a>
+                            <a href="#" id="buttonDot_[%- mv.id | html -%]" class="[%- mv.class | html -%]" title="Tag editor">...</a>
                         [% END %]
-                        [%- mv.javascript -%]
+                        [%- mv.javascript.raw -%]
                     [% END %]
                 [% ELSIF ( mv.type == 'text' ) %]
                     [% IF mv.readonly %]
-                        <input type="text" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" readonly="readonly" />
+                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
                     [% ELSE %]
-                        <input type="text" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" />
+                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
                     [% END %]
                 [% ELSIF ( mv.type == 'textarea' ) %]
                     [% IF mv.readonly %]
-                        <textarea id="[%- mv.id -%]" name="field_value" class="input_marceditor" rows="5" cols="64" readonly="readonly" >[% mv.value %]</textarea>
+                        <textarea id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" rows="5" cols="64" readonly="readonly" >[% mv.value | html %]</textarea>
                     [% ELSE %]
-                        <textarea id="[%- mv.id -%]" name="field_value" class="input_marceditor" rows="5" cols="64" >[% mv.value %]</textarea>
+                        <textarea id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" rows="5" cols="64" >[% mv.value | html %]</textarea>
                     [% END %]
                 [% END %]
 
-                <input type="hidden" name="tag"       value="[% ite.tag %]" />
-                <input type="hidden" name="subfield"  value="[% ite.subfield %]" />
-                <input type="hidden" name="mandatory" value="[% ite.mandatory %]" />
+                <input type="hidden" name="tag"       value="[% ite.tag | html %]" />
+                <input type="hidden" name="subfield"  value="[% ite.subfield | html %]" />
+                <input type="hidden" name="mandatory" value="[% ite.mandatory | html %]" />
                 [% IF ( ite.repeatable ) %]
                     <a href="#" class="buttonPlus" onclick="CloneItemSubfield(this.parentNode); return false;">
-                        <img src="[% interface %]/[% theme %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
+                        <img src="[% interface | html %]/[% theme | html %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
                     </a>
                 [% END %]
                 [% IF ( ite.mandatory ) %] <span class="required">Required</span>[% END %]
@@ -333,7 +334,7 @@ function confirm_deletion() {
     </fieldset>
     <input type="hidden" name="indicator" value=" " />
     <input type="hidden" name="indicator" value=" " />
-    <input type="hidden" name="itemnumber" value="[% itemnumber %]" />
+    <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
 
 <fieldset class="action">    [% IF ( opisadd ) %]
     <input type="submit" name="phony_submit" value="phony_submit" id="phony_submit" style="display:none;" onclick="return false;" />
@@ -356,19 +357,19 @@ function confirm_deletion() {
     </fieldset>
 
     [% ELSE %]
-    <input type="hidden" name="tag" value="[% itemtagfield %]" />
-    <input type="hidden" name="subfield" value="[% itemtagsubfield %]" />
-    <input type="hidden" name="field_value" value="[% itemnumber %]" />
+    <input type="hidden" name="tag" value="[% itemtagfield | html %]" />
+    <input type="hidden" name="subfield" value="[% itemtagsubfield | html %]" />
+    <input type="hidden" name="field_value" value="[% itemnumber | html %]" />
     <input type="submit" value="Save changes" onclick="return Check(this.form)">
     <input type="button" id="addnewitem" value="Add a new item">
-    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]">Cancel</a>
+    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | html %]">Cancel</a>
     [% END %]</fieldset>
     
     [%# Fields for fast cataloging %]
-    <input type="hidden" name="circborrowernumber" value="[% circborrowernumber %]" />
-    <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
-    <input type="hidden" name="barcode" value="[% barcode %]" />
-    <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
+    <input type="hidden" name="circborrowernumber" value="[% circborrowernumber | html %]" />
+    <input type="hidden" name="stickyduedate" value="[% stickyduedate | html %]" />
+    <input type="hidden" name="barcode" value="[% barcode | html %]" />
+    <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
     [%# End fields for fast cataloging %]
 
 

@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
@@ -6,10 +7,10 @@
 [% SET ENABLE_OPAC_PAYMENTS = Koha.Preference('EnablePayPalOpacPayments') || plugins %]
 [% SET DISPLAY_PAYMENT_BLOCK = 0 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your fines and charges</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your fines and charges</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
-    [% Asset.css("css/datatables.css") %]
+    [% Asset.css("css/datatables.css") | $raw %]
 [% END %]
 </head>
 
@@ -36,12 +37,12 @@
                     [% IF message %]
                         <div class="alert alert-info">
                             [% IF message == 'valid_payment' %]
-                                <p>Your payment of $[% message_value %] has been processed successfully!</p>
+                                <p>Your payment of $[% message_value | html %] has been processed successfully!</p>
                             [% ELSIF message == 'duplicate_payment' %]
-                                <p>A payment with the transaction id '[% message_value %]' has already been posted to an account.</p>
+                                <p>A payment with the transaction id '[% message_value | html %]' has already been posted to an account.</p>
                                 <p>Please contact a librarian for details.</p>
                             [% ELSIF message == 'invalid_payment' %]
-                                <p>The transaction id '[% message_value %]' for this payment is invalid.</p>
+                                <p>The transaction id '[% message_value | html %]' for this payment is invalid.</p>
                                 <p>Please contact a librarian for details.</p>
                             [% END %]
                         </div>
@@ -61,7 +62,7 @@
                         </div>
                     [% ELSIF payment %]
                         <div class="alert alert-info">
-                            <p><strong>Payment applied:</strong> your payment of [% payment %] has been applied to your account</p>
+                            <p><strong>Payment applied:</strong> your payment of [% payment | html %] has been applied to your account</p>
                         </div>
                     [% END %]
 
@@ -87,8 +88,8 @@
                                 [%- ELSE -%]
                                     [%- SET COLSPAN = 3 -%]
                                 [%- END -%]
-                                <th class="sum" colspan="[% COLSPAN %]">Total due</th>
-                                <td class="sum">[% total | $Price %]</td>
+                                <th class="sum" colspan="[% COLSPAN | html %]">Total due</th>
+                                <td class="sum">[% total | $Price | html %]</td>
                             </tr>
                             </tfoot>
 
@@ -99,12 +100,12 @@
                                             <td>
                                                 [% IF ACCOUNT_LINE.amountoutstanding > 0 %]
                                                     [% SET DISPLAY_PAYMENT_BLOCK = 1 %]
-                                                    <input class="checkbox-pay pay-online hidden" name="accountline" type="checkbox" id="checkbox-pay-[% ACCOUNT_LINE.accountlines_id %]" value="[% ACCOUNT_LINE.accountlines_id %]">
-                                                    <input type="hidden" id="amount-[% ACCOUNT_LINE.accountlines_id %]" value="[% ACCOUNT_LINE.amountoutstanding %]" />
+                                                    <input class="checkbox-pay pay-online hidden" name="accountline" type="checkbox" id="checkbox-pay-[% ACCOUNT_LINE.accountlines_id | html %]" value="[% ACCOUNT_LINE.accountlines_id | html %]">
+                                                    <input type="hidden" id="amount-[% ACCOUNT_LINE.accountlines_id | html %]" value="[% ACCOUNT_LINE.amountoutstanding | html %]" />
                                                 [% END %]
                                             </td>
                                         [% END %]
-                                        <td><span title="[% ACCOUNT_LINE.date %]">[% ACCOUNT_LINE.date | $KohaDates %]</span></td>
+                                        <td><span title="[% ACCOUNT_LINE.date | html %]">[% ACCOUNT_LINE.date | $KohaDates %]</span></td>
                                         <td>
                                             [% SWITCH ACCOUNT_LINE.accounttype %]
                                             [% CASE 'Pay' %]Payment, thanks
@@ -127,14 +128,14 @@
                                             [% CASE 'WO' %]Writeoff
                                             [% CASE 'C' %]Credit
                                             [% CASE 'CR' %]Credit
-                                            [% CASE %][% ACCOUNT_LINE.accounttype %]
+                                            [% CASE %][% ACCOUNT_LINE.accounttype | html %]
                                           [%- END -%]
-                                          [%- IF ACCOUNT_LINE.payment_type %], [% AuthorisedValues.GetByCode('PAYMENT_TYPE', ACCOUNT_LINE.payment_type, 1) %][% END %]
-                                          [%- IF ACCOUNT_LINE.description %], [% ACCOUNT_LINE.description %][% END %]
-                                          [% IF ACCOUNT_LINE.title %]([% ACCOUNT_LINE.title %])[% END %]
+                                          [%- IF ACCOUNT_LINE.payment_type %], [% AuthorisedValues.GetByCode('PAYMENT_TYPE', ACCOUNT_LINE.payment_type, 1) | html %][% END %]
+                                          [%- IF ACCOUNT_LINE.description %], [% ACCOUNT_LINE.description | html %][% END %]
+                                          [% IF ACCOUNT_LINE.title %]([% ACCOUNT_LINE.title | html %])[% END %]
                                         </td>
-                                        [% IF ( ACCOUNT_LINE.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amount | $Price %]</td>
-                                        [% IF ( ACCOUNT_LINE.amountoutstandingcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amountoutstanding | $Price %]</td>
+                                        [% IF ( ACCOUNT_LINE.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amount | $Price | html %]</td>
+                                        [% IF ( ACCOUNT_LINE.amountoutstandingcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amountoutstanding | $Price | html %]</td>
                                     </tr>
                                 [% END %]
                             </tbody>
@@ -158,8 +159,8 @@
                                         [% FOREACH p IN plugins %]
                                             <div class="control-group">
                                                 <label class="radio">
-                                                    <input type="radio" name="payment_method" id="payment_method-[% p.class %]" value="[% p.class %]" checked="checked">
-                                                    [% p.get_metadata.name %]
+                                                    <input type="radio" name="payment_method" id="payment_method-[% p.class | html %]" value="[% p.class | html %]" checked="checked">
+                                                    [% p.get_metadata.name | html %]
                                                 </label>
                                             </div>
                                         [% END %]

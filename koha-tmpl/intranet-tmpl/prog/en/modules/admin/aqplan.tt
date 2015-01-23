@@ -1,10 +1,11 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Budgets &rsaquo; Funds &rsaquo; Planning for [% budget_period_description %] by [% authcat %]</title>
+<title>Koha &rsaquo; Administration &rsaquo; Budgets &rsaquo; Funds &rsaquo; Planning for [% budget_period_description | html %] by [% authcat | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style type="text/css">td.locked { background-image: url('[% interface %]/[% theme %]/img/locked.png'); padding-left : 20px; background-repeat: no-repeat; background-position: 5px 5px; } a.control { font-size:85%;text-decoration:none; }</style>
+<style type="text/css">td.locked { background-image: url('[% interface | html %]/[% theme | html %]/img/locked.png'); padding-left : 20px; background-repeat: no-repeat; background-position: 5px 5px; } a.control { font-size:85%;text-decoration:none; }</style>
 </head>
 
 <body id="admin_aqplan" class="admin">
@@ -15,8 +16,8 @@
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
     <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo; 
-    <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id %]">Funds</a> &rsaquo;
-    <a href="/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% budget_period_id %]">Planning</a> &rsaquo;
+    <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | html %]">Funds</a> &rsaquo;
+    <a href="/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% budget_period_id | html %]">Planning</a> &rsaquo;
 </div>
 
 <div id="doc3" class="yui-t2">
@@ -27,8 +28,8 @@
 [% INCLUDE 'budgets-admin-toolbar.inc' %]
 
 <form method="post" id="Aform" name="Aform"  action="/cgi-bin/koha/admin/aqplan.pl">
-<h3>Planning for [% budget_period_description %] by [% authcat %]</h3>
-<input type="hidden" name="authcat" value="[% authcat %]" />
+<h3>Planning for [% budget_period_description | html %] by [% authcat | html %]</h3>
+<input type="hidden" name="authcat" value="[% authcat | html %]" />
 <!-- Budget Lines -->
 
     [% IF ( budget_lines ) %]
@@ -43,7 +44,7 @@
     <p id="selections">
         <strong>Show/hide columns:</strong> <span class="selected"><input type="checkbox" checked="checked" id="showall"/><label for="showall">Show all columns</label></span> <span><input type="checkbox" id="hideall"/><label for="hideall">Hide all columns</label></span>
         [% FOREACH authvals_ro IN authvals_row %]
-            <span class="selected"><label><input type="checkbox" checked="checked" id="col[% authvals_ro.colnum %]">[% authvals_ro.code %]</label></span>
+            <span class="selected"><label><input type="checkbox" checked="checked" id="col[% authvals_ro.colnum | html %]">[% authvals_ro.code | html %]</label></span>
         [% END %]
     </p>
     <table id="plan">
@@ -54,12 +55,12 @@
 
     [% FOREACH authvals_ro IN authvals_row %]
          [% IF ( authvals_ro.display ) %]
-            <th id="col[% authvals_ro.code %]" class="[% authvals_ro.colnum %]">
+            <th id="col[% authvals_ro.code | html %]" class="[% authvals_ro.colnum | html %]">
         [% ELSE %]
-            <th id="col[% authvals_ro.code %]" style="display:none;" class="[% authvals_ro.colnum %]">
+            <th id="col[% authvals_ro.code | html %]" style="display:none;" class="[% authvals_ro.colnum | html %]">
         [% END %]
 
-    [% authvals_ro.code %]</th>
+    [% authvals_ro.code | html %]</th>
     [% END %]
 
     <th class="remaining">Fund remaining</th><th>&nbsp;</th>
@@ -74,31 +75,31 @@
         [% ELSE %]
             <td>
         [% END %]
-        <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget_line.budget_id %]&amp;budget_period_id=[% budget_period_id %]">[% budget_line.budget_name %]</a></td>
-        <td><span id="[% budget_line.budget_amount %]">[% budget_line.budget_amount | $Price %]&nbsp;</span>
+        <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget_line.budget_id | html %]&amp;budget_period_id=[% budget_period_id | html %]">[% budget_line.budget_name | html %]</a></td>
+        <td><span id="[% budget_line.budget_amount | html %]">[% budget_line.budget_amount | $Price | html %]&nbsp;</span>
 
 
         <!-- NEXT DIV ELEMENT IS USED BY JS FOR CALC-ING AUTO-FILL AND ESTIMATED AMOUNTS -->
-        <div style="display:none;" id="budget_tot_[% budget_line.budget_id %]">[% budget_line.budget_amount %]</div></td>
+        <div style="display:none;" id="budget_tot_[% budget_line.budget_id | html %]">[% budget_line.budget_amount | html %]</div></td>
 
         [% FOREACH line IN budget_line.lines %]
             [% IF ( line.display ) %]
-                <td class="[% line.colnum %]">
+                <td class="[% line.colnum | html %]">
             [% ELSE %]
-                <td style="display:none;" class="[% line.colnum %]">
+                <td style="display:none;" class="[% line.colnum | html %]">
             [% END %]
             <table class="invis">
                 <tr>
                     [% IF show_actual %]
-                        <td    >[% line.actual_amount %]</td>
+                        <td    >[% line.actual_amount | html %]</td>
                     [% END %]
                 <td>
 
                 [% IF ( line.budget_lock ) %]
-                    [% line.estimated_amount %]&nbsp;
-                    <input type="hidden" style="text-align: right;"  name="[% line.cell_name %]" value="[% line.estimated_amount %]"   />
+                    [% line.estimated_amount | html %]&nbsp;
+                    <input type="hidden" style="text-align: right;"  name="[% line.cell_name | html %]" value="[% line.estimated_amount | html %]"   />
                 [% ELSE %]
-                    <input type="text" style="text-align: right;  width:90%; " size="6" name="[% line.cell_name %]"  value="[% line.estimated_amount %]"  id="budget_[% line.budget_id %][% line.colnum %]" class="plan_entry_[% line.budget_id %]" onchange="calcTotalRow(this);" />
+                    <input type="text" style="text-align: right;  width:90%; " size="6" name="[% line.cell_name | html %]"  value="[% line.estimated_amount | html %]"  id="budget_[% line.budget_id | html %][% line.colnum | html %]" class="plan_entry_[% line.budget_id | html %]" onchange="calcTotalRow(this);" />
                 [% END %]
 
                 </td></tr>
@@ -117,18 +118,18 @@
             [% ELSE %]
                 <td>
             [% END %]
-                    [% budget_line.budget_act_remain %]
+                    [% budget_line.budget_act_remain | html %]
             </td>
         [% END %]
 
         [% IF ( budget_line.est_negative ) %]
-            <td style="color: red;" id="budget_est_[% budget_line.budget_id %]">
+            <td style="color: red;" id="budget_est_[% budget_line.budget_id | html %]">
         [% ELSIF ( budget_line.est_positive ) %]
-            <td style="color: green;" id="budget_est_[% budget_line.budget_id %]">
+            <td style="color: green;" id="budget_est_[% budget_line.budget_id | html %]">
         [% ELSE %]
-            <td id="budget_est_[% budget_line.budget_id %]">
+            <td id="budget_est_[% budget_line.budget_id | html %]">
         [% END %] 
-                [% budget_line.budget_est_remain | $Price %]&nbsp;
+                [% budget_line.budget_est_remain | $Price | html %]&nbsp;
             </td>
             </tr>
         </table>
@@ -136,7 +137,7 @@
 
         <td>
              [% UNLESS ( budget_line.budget_lock ) %]
-                    <input type="button"  onclick="autoFillRow('[% budget_line.budget_id %]')" value="Auto-fill row"/>
+                    <input type="button"  onclick="autoFillRow('[% budget_line.budget_id | html %]')" value="Auto-fill row"/>
             [% ELSE %]
              <div style="color:red;">not owned</div>
             [% END %]
@@ -146,7 +147,7 @@
     </tbody>
     </table>
 
-    <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
+    <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
     [% IF ( budget_period_locked ) %]
         <!-- <input STYLE="background: gray;"   type="submit" value="Save" disabled="disabled"/> -->
     [% ELSE %]
@@ -158,7 +159,7 @@
     [% FOREACH authvals_ro IN authvals_row %]
 
      [% UNLESS ( authvals_ro.display ) %]
-        <input type="hidden" value="[% authvals_ro.code %]"  name="hide_cols"/>
+        <input type="hidden" value="[% authvals_ro.code | html %]"  name="hide_cols"/>
      [% END %]
     [% END %]
 
@@ -179,7 +180,7 @@
 <div class="yui-b">
 
 <form method="post" action="/cgi-bin/koha/admin/aqplan.pl">
-    <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
+    <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
 <fieldset class="brief">
 <h4>Filter</h4>
 [% BLOCK planning_types %]
@@ -187,7 +188,7 @@
 [%     CASE 'MONTHS'    %]<span>by months</span>
 [%     CASE 'ITEMTYPES' %]<span>by item types</span>
 [%     CASE 'BRANCHES'  %]<span>by libraries</span>
-[%     CASE             %]<span>by [% type %]</span>
+[%     CASE             %]<span>by [% type | html %]</span>
 [%   END %]
 [% END %]
 <ol>
@@ -196,9 +197,9 @@
         <select name="authcat" id="authcat" size="1">
         [% FOREACH value IN authcat_dropbox.values %]
             [% IF ( value == authcat_dropbox.default ) %]
-            <option value="[% value %]" selected="selected">[% PROCESS planning_types type=value %]</option>
+            <option value="[% value | html %]" selected="selected">[% PROCESS planning_types type=value %]</option>
             [% ELSE %]
-            <option value="[% value %]">[% PROCESS planning_types type=value %]</option>
+            <option value="[% value | html %]">[% PROCESS planning_types type=value %]</option>
             [% END %]
         [% END %]
         </select>
@@ -233,7 +234,7 @@
     </ol>
     <fieldset class="action">
         <input type="submit" name="option_submit" value="Submit" />
-        <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
+        <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
     </fieldset>
 </fieldset>
 </form>
@@ -246,22 +247,22 @@
         <li><label class="inline" for="MIME">Into an application</label>
             <select name="MIME" id="MIME" size="1">
             [% FOREACH value IN CGIextChoice %]
-                <option value="[% value %]">[% value %]</option>
+                <option value="[% value | html %]">[% value | html %]</option>
             [% END %]
             </select>
             <select name="sep" id="sep" size="1">
             [% FOREACH value IN CGIsepChoice %]
-                <option value="[% value %]">[% value %]</option>
+                <option value="[% value | html %]">[% value | html %]</option>
             [% END %]
             </select>
         </li>
     </ol>
     <fieldset class="action">    <input type="submit" value="Submit"/>
-    <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
-    <input type="hidden" name="report_name" value="[% report_name %]" />
+    <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
+    <input type="hidden" name="report_name" value="[% report_name | html %]" />
     <input type="hidden" name="output" value="file" /></fieldset>
-    <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
-    <input type="hidden" name="authcat" value="[% authcat %]" />
+    <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
+    <input type="hidden" name="authcat" value="[% authcat | html %]" />
     </fieldset>
 </form>
 [% END %]
@@ -270,8 +271,8 @@
 </div>
 </div>
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
-    [% Asset.js("js/acq.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
+    [% Asset.js("js/acq.js") | $raw %]
     <script type="text/javascript">
     //<![CDATA[
         function Check(f) {

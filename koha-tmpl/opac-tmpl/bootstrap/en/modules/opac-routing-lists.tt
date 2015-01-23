@@ -1,11 +1,12 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your routing lists</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your routing lists</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
-    [% Asset.css("css/datatables.css") %]
+    [% Asset.css("css/datatables.css") | $raw %]
 [% END %]
 </head>
 
@@ -47,8 +48,8 @@
                             [% FOREACH routinglist IN routinglists %]
                                 [% IF ( titles_loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
                                     <td>
-                                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% routinglist.subscription.biblio.biblionumber %]">
-                                            [% routinglist.subscription.biblio.title %]
+                                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% routinglist.subscription.biblio.biblionumber | html %]">
+                                            [% routinglist.subscription.biblio.title | html %]
                                         </a>
                                     </td>
                                 </tr>

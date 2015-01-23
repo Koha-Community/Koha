@@ -8,14 +8,14 @@
 
 <h1>Search for items
 [% IF ( batch_id ) %]
-to add to Batch [% batch_id %]
+to add to Batch [% batch_id | html %]
 [% END %]
 </h1>
 
 <form name="f" method="post" action="/cgi-bin/koha/labels/label-item-search.pl">
 	<input type="hidden" name="op" value="do_search" />
-	<input type="hidden" name="batch_id" value="[% batch_id %]" />
-	<input type="hidden" name="type" value="[% type %]" />
+	<input type="hidden" name="batch_id" value="[% batch_id | html %]" />
+	<input type="hidden" name="type" value="[% type | html %]" />
 
 	<fieldset class="rows">
 <ol><li>
@@ -75,7 +75,7 @@ to add to Batch [% batch_id %]
         <option value="">Field-weighted, relevance ranked</option>
         [% FOREACH sort_by_loo IN sort_by_loop %]
 
-[% IF ( sort_by_loo.selected ) %]<option value="[% sort_by_loo.value %]" selected="selected">[% sort_by_loo.label %]</option>[% ELSE %]<option value="[% sort_by_loo.value %]">[% sort_by_loo.label %]</option>[% END %]
+[% IF ( sort_by_loo.selected ) %]<option value="[% sort_by_loo.value | html %]" selected="selected">[% sort_by_loo.label | html %]</option>[% ELSE %]<option value="[% sort_by_loo.value | html %]">[% sort_by_loo.label | html %]</option>[% END %]
 
         [% END %]
     </select>

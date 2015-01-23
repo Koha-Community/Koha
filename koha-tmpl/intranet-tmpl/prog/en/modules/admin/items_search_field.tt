@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% USE AuthorisedValues %]
@@ -12,14 +13,14 @@
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
     <a href="/cgi-bin/koha/admin/items_search_fields.pl">Item search fields</a> &rsaquo;
-    [% field.name |html %]
+    [% field.name | html %]
   </div>
 
   <div id="doc3" class="yui-t2">
     <div id="bd">
       <div id="yui-main">
         <div class="yui-b">
-          <h1>Item search field: [% field.label |html %]</h1>
+          <h1>Item search field: [% field.label | html %]</h1>
 
           <form action="/cgi-bin/koha/admin/items_search_field.pl" method="POST" class="validated">
             <fieldset class="rows">
@@ -42,7 +43,7 @@
     </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

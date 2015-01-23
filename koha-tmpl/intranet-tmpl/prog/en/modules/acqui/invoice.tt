@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
@@ -7,7 +8,7 @@
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Invoice</title>
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -15,7 +16,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/invoices.pl">Invoices</a> &rsaquo; <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoiceid %]">[% invoicenumber %]</a></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/invoices.pl">Invoices</a> &rsaquo; <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoiceid | html %]">[% invoicenumber | html %]</a></div>
 
 <div class="main container-fluid">
     <div class="row">
@@ -27,15 +28,15 @@
           <p>Invoice has been modified</p>
         </div>
       [% END %]
-      <h1>Invoice: [% invoicenumber %]</h1>
+      <h1>Invoice: [% invoicenumber | html %]</h1>
 
-      <p>Vendor: <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% suppliername %]</a></p>
+      <p>Vendor: <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% suppliername | html %]</a></p>
         <form action="/cgi-bin/koha/acqui/invoice.pl" method="post" class="validated">
         <fieldset class="rows">
             <ol>
             <li>
                 <label for="shipmentdate" class="required">Invoice number:</label>
-                <input type="text" id="invoicenumber" name="invoicenumber" value="[% invoicenumber %]" class="required" required="required"/>
+                <input type="text" id="invoicenumber" name="invoicenumber" value="[% invoicenumber | html %]" class="required" required="required"/>
                 <span class="required">Required</span>
             </li>
 
@@ -46,17 +47,17 @@
                     <input type="text" size="10" id="billingdate" name="billingdate" value="[% billingdate | $KohaDates %]" class="datepicker" /></li>
 
             <li><label for="shipmentcost">Shipping cost:</label>
-                    <input type="text" size="10" id="shipmentcost" name="shipmentcost" value="[% shipmentcost %]" /></li>
+                    <input type="text" size="10" id="shipmentcost" name="shipmentcost" value="[% shipmentcost | html %]" /></li>
             <li><label for="shipment_budget_id">Shipping fund:</label>
                     <select id="shipment_budget_id" name="shipment_budget_id">
                         <option value="">No fund</option>
                       [% FOREACH budget IN budgets_loop %]
                         [% IF ( budget.selected ) %]
-                          <option selected="selected" value="[% budget.budget_id %]">
+                          <option selected="selected" value="[% budget.budget_id | html %]">
                         [% ELSE %]
-                          <option value="[% budget.budget_id %]">
+                          <option value="[% budget.budget_id | html %]">
                         [% END %]
-                          [% budget.budget_name %]
+                          [% budget.budget_name | html %]
                         </option>
                       [% END %]
                     </select></li>
@@ -75,11 +76,11 @@
             [% END %]
             </ol>
           <input type="hidden" name="op" value="mod" />
-          <input type="hidden" name="invoiceid" value="[% invoiceid %]" />
+          <input type="hidden" name="invoiceid" value="[% invoiceid | html %]" />
             <fieldset class="action">
                 <input type="submit" value="Save" />
                 [% UNLESS orders_loop.size %]
-                <a href="invoice.pl?op=delete&invoiceid=[% invoiceid %]" id="delete">Delete</a>
+                <a href="invoice.pl?op=delete&invoiceid=[% invoiceid | html %]" id="delete">Delete</a>
                 [% END %]
             </fieldset>
         </fieldset>
@@ -91,7 +92,7 @@
 
           <form action="/cgi-bin/koha/acqui/invoice.pl" method="post" class="validated">
               <fieldset class="rows">
-                  <input type="hidden" name="invoiceid" value="[% invoiceid %]" />
+                  <input type="hidden" name="invoiceid" value="[% invoiceid | html %]" />
                   [% IF (adjustments && adjustments.count > 0) %]
                       <table id="invoice_adj_table">
                           <tr>
@@ -103,58 +104,58 @@
                              <th>Encumber while invoice open</th>
                              <th>&nbsp</th>
                           </tr>
-                          [% total_adj = 0 %]
+                          [% total_adj = 0 | html %]
                           [% FOREACH adjustment IN adjustments %]
-                              [% total_adj = total_adj + adjustment.adjustment %]
+                              [% total_adj = total_adj + adjustment.adjustment | html %]
                               <tr>
-                                  <td><input type="hidden" name="adjustment_id" value="[% adjustment.adjustment_id %]" />[% adjustment.adjustment_id %]</td>
-                                  <td><input type="text" name="adjustment" id="adjustment_[% adjustment.adjustment_id %]" value="[% adjustment.adjustment | $Price %]" /></td>
+                                  <td><input type="hidden" name="adjustment_id" value="[% adjustment.adjustment_id | html %]" />[% adjustment.adjustment_id | html %]</td>
+                                  <td><input type="text" name="adjustment" id="adjustment_[% adjustment.adjustment_id | html %]" value="[% adjustment.adjustment | $Price | html %]" /></td>
                                   <td>
-                                      [% reasons = AuthorisedValues.Get("ADJ_REASON") %]
+                                      [% reasons = AuthorisedValues.Get("ADJ_REASON") | html %]
                                       [% IF reasons.0 %]
-                                          <select id="reason_[% adjustment.adjustment_id %]" name="reason">
+                                          <select id="reason_[% adjustment.adjustment_id | html %]" name="reason">
                                               <option value="">No reason</option>
                                               [% FOREACH reason IN reasons %]
                                                   [% IF ( adjustment.reason == reason.authorised_value ) %]
-                                                      <option selected="selected" value="[% reason.authorised_value %]">
+                                                      <option selected="selected" value="[% reason.authorised_value | html %]">
                                                   [% ELSE %]
-                                                      <option value="[% reason.authorised_value %]">
+                                                      <option value="[% reason.authorised_value | html %]">
                                                   [% END %]
-                                                  [% reason.lib %]
+                                                  [% reason.lib | html %]
                                                   </option>
                                               [% END %]
                                           </select>
                                       [% ELSE %]
                                           <p title="Define values in authorised value category ADJ_REASON to enable">None</p>
-                                          <input type="hidden" name="reason" id="reason_[% adjustment.adjustment_id %]" value="" />
+                                          <input type="hidden" name="reason" id="reason_[% adjustment.adjustment_id | html %]" value="" />
                                   [% END %]
                                   </td>
-                                  <td><input type="text" name="note" id="note_new" value="[% adjustment.note %]"/></td>
+                                  <td><input type="text" name="note" id="note_new" value="[% adjustment.note | html %]"/></td>
                                   <td>
-                                      <select id="budget_id_[% adjustment.adjustment_id %]" name="budget_id">
+                                      <select id="budget_id_[% adjustment.adjustment_id | html %]" name="budget_id">
                                               <option value="">No fund</option>
                                           [% FOREACH budget IN budgets_loop %]
                                               [% IF ( budget.budget_id == adjustment.budget_id ) %]
-                                                  <option selected="selected" value="[% budget.budget_id %]">
+                                                  <option selected="selected" value="[% budget.budget_id | html %]">
                                               [% ELSE %]
-                                                  <option value="[% budget.budget_id %]">
+                                                  <option value="[% budget.budget_id | html %]">
                                               [% END %]
-                                              [% budget.budget_name %]
+                                              [% budget.budget_name | html %]
                                               </option>
                                           [% END %]
                                       </select>
                                   </td>
                                   [% IF adjustment.encumber_open %]
                                       <td>
-                                          <input type="checkbox" name="encumber_open" id="encumber_[% adjustment.adjustment_id %]"  value="[% adjustment.adjustment_id %]" checked/>
+                                          <input type="checkbox" name="encumber_open" id="encumber_[% adjustment.adjustment_id | html %]"  value="[% adjustment.adjustment_id | html %]" checked/>
                                       </td>
                                   [% ELSE %]
                                       <td>
-                                          <input type="checkbox" name="encumber_open" id="encumber_[% adjustment.adjustment_id %]"  value="[% adjustment.adjustment_id %]" />
+                                          <input type="checkbox" name="encumber_open" id="encumber_[% adjustment.adjustment_id | html %]"  value="[% adjustment.adjustment_id | html %]" />
                                       </td>
                                   [% END %]
                                   <td>
-                                     <a class="btn btn-default btn-xs delete_adjustment" href="/cgi-bin/koha/acqui/invoice.pl?op=del_adj&adjustment_id=[% adjustment.adjustment_id %]&invoiceid=[% invoiceid %]"><i class="fa fa-trash"></i> Delete</a>
+                                     <a class="btn btn-default btn-xs delete_adjustment" href="/cgi-bin/koha/acqui/invoice.pl?op=del_adj&adjustment_id=[% adjustment.adjustment_id | html %]&invoiceid=[% invoiceid | html %]"><i class="fa fa-trash"></i> Delete</a>
                                   </td>
                               </tr>
                           [% END %]
@@ -173,15 +174,15 @@
                                   <label for="adjustment_new">Amount: </label>
                                   <input type="text" name="adjustment" id="adjustment_new" />
                               </li>
-                              [% reasons = AuthorisedValues.Get("ADJ_REASON") %]
+                              [% reasons = AuthorisedValues.Get("ADJ_REASON") | html %]
                               [% IF reasons.0 %]
                                   <li>
-                                      <label for="reason_[% adjustment.adjustment_id %]">Reason: </label>
-                                      <select id="reason_[% adjustment.adjustment_id %]" name="reason">
+                                      <label for="reason_[% adjustment.adjustment_id | html %]">Reason: </label>
+                                      <select id="reason_[% adjustment.adjustment_id | html %]" name="reason">
                                           <option value="">No reason</option>
                                           [% FOREACH reason IN reasons %]
-                                              <option value="[% reason.authorised_value %]">
-                                                  [% reason.lib %]
+                                              <option value="[% reason.authorised_value | html %]">
+                                                  [% reason.lib | html %]
                                               </option>
                                           [% END %]
                                       </select>
@@ -202,8 +203,8 @@
                                   <select id="budget_id_new" name="budget_id">
                                       <option selected="selected" value="">No fund</option>
                                       [% FOREACH budget IN budgets_loop %]
-                                          <option value="[% budget.budget_id %]">
-                                          [% budget.budget_name %]
+                                          <option value="[% budget.budget_id | html %]">
+                                          [% budget.budget_name | html %]
                                           </option>
                                       [% END %]
                                   </select>
@@ -226,8 +227,8 @@
                   </fieldset>
               </form>
       <p>
-          <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid %]">Go to receipt page</a>
-          [% IF Koha.Preference('AcqEnableFiles') %]| <a href="/cgi-bin/koha/acqui/invoice-files.pl?invoiceid=[% invoiceid %]">Manage invoice files</a>[% END %]
+          <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | html %]">Go to receipt page</a>
+          [% IF Koha.Preference('AcqEnableFiles') %]| <a href="/cgi-bin/koha/acqui/invoice-files.pl?invoiceid=[% invoiceid | html %]">Manage invoice files</a>[% END %]
       </p>
       <h2>Invoice details</h2>
       <fieldset>
@@ -244,8 +245,8 @@
                 <th class="tax_excluded">Actual cost tax exc.</th>
                 <th class="tax_included">Actual cost tax inc.</th>
                 <th>Qty.</th>
-                <th class="tax_excluded">Total tax exc. ([% currency.symbol %])</th>
-                <th class="tax_included">Total tax inc. ([% currency.symbol %])</th>
+                <th class="tax_excluded">Total tax exc. ([% currency.symbol | html %])</th>
+                <th class="tax_included">Total tax inc. ([% currency.symbol | html %])</th>
                 <th>GST %</th>
                 <th>GST</th>
                 <th>Fund</th>
@@ -256,66 +257,66 @@
                 <tr>
                   <td>
                     [% IF order.biblionumber %]
-                      <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber %]">[% order.title |html %]</a>
+                      <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | html %]">[% order.title | html %]</a>
                       [% IF ( order.author ) %]
-                        <br /><em>by</em> [% order.author %]
+                        <br /><em>by</em> [% order.author | html %]
                       [% END %]
                     [% ELSE %]
                       <em>Deleted bibliographic record, can't find title</em>
                     [% END %]
-                    [% IF ( order.isbn ) %] &ndash; [% order.isbn %][% END %]
+                    [% IF ( order.isbn ) %] &ndash; [% order.isbn | html %][% END %]
                     [% IF ( order.publishercode ) %]
-                      <br/>[% order.publishercode %]
-                        [% IF order.publicationyear %], [% order.publicationyear %]
-                        [% ELSIF ( order.copyrightdate ) %][% order.copyrightdate %][% END %]
+                      <br/>[% order.publishercode | html %]
+                        [% IF order.publicationyear %], [% order.publicationyear | html %]
+                        [% ELSIF ( order.copyrightdate ) %][% order.copyrightdate | html %][% END %]
                     [% END %]
                   </td>
-                  <td><p>[% order.branchcode %]</p></td>
-                  <td class="number tax_excluded">[% order.unitprice_tax_excluded | $Price %]</td>
-                  <td class="number tax_included">[% order.unitprice_tax_included | $Price %]</td>
-                  <td class="number">[% order.quantity %]</td>
-                  <td class="number tax_excluded">[% order.total_tax_excluded | $Price %]</td>
-                  <td class="number tax_included">[% order.total_tax_included | $Price %]</td>
-                  <td class="number">[% order.tax_rate * 100 %]</td>
-                  <td class="number">[% order.tax_value | $Price %]</td>
-                  <td>[% order.budget_name %]</td>
+                  <td><p>[% order.branchcode | html %]</p></td>
+                  <td class="number tax_excluded">[% order.unitprice_tax_excluded | $Price | html %]</td>
+                  <td class="number tax_included">[% order.unitprice_tax_included | $Price | html %]</td>
+                  <td class="number">[% order.quantity | html %]</td>
+                  <td class="number tax_excluded">[% order.total_tax_excluded | $Price | html %]</td>
+                  <td class="number tax_included">[% order.total_tax_included | $Price | html %]</td>
+                  <td class="number">[% order.tax_rate * 100 | html %]</td>
+                  <td class="number">[% order.tax_value | $Price | html %]</td>
+                  <td>[% order.budget_name | html %]</td>
                 </tr>
               [% END %]
             </tbody>
             <tfoot>
               [% FOR tf IN foot_loop %]
                 <tr>
-                    <th colspan="2">Total (GST [% tf.tax_rate * 100 %] %)</th>
+                    <th colspan="2">Total (GST [% tf.tax_rate * 100 | html %] %)</th>
                     <th class="tax_excluded"></th>
                     <th class="tax_included"></th>
-                    <th>[% tf.quantity %]</th>
-                    <th class="tax_excluded">[% tf.total_tax_excluded | $Price %]</th>
-                    <th class="tax_included">[% tf.total_tax_included | $Price %]</th>
+                    <th>[% tf.quantity | html %]</th>
+                    <th class="tax_excluded">[% tf.total_tax_excluded | $Price | html %]</th>
+                    <th class="tax_included">[% tf.total_tax_included | $Price | html %]</th>
                     <th>&nbsp;</th>
-                    <th>[% tf.tax_value | $Price %]</th>
+                    <th>[% tf.tax_value | $Price | html %]</th>
                     <th>&nbsp;</th>
                 </tr>
               [% END %]
               <tr>
-                <th colspan="2">Total ([% currency.symbol %])</th>
+                <th colspan="2">Total ([% currency.symbol | html %])</th>
                 <th class="tax_excluded"></th>
                 <th class="tax_included"></th>
-                <th>[% total_quantity %]</th>
-                <th class="tax_excluded">[% total_tax_excluded | $Price %]</th>
-                <th class="tax_included">[% total_tax_included | $Price %]</th>
+                <th>[% total_quantity | html %]</th>
+                <th class="tax_excluded">[% total_tax_excluded | $Price | html %]</th>
+                <th class="tax_included">[% total_tax_included | $Price | html %]</th>
                 <th>&nbsp;</th>
-                <th>[% total_tax_value | $Price %]</th>
+                <th>[% total_tax_value | $Price | html %]</th>
                 <th>&nbsp;</th>
               </tr>
               <tr>
-                <th colspan="2">Total + Adjustments + Shipment cost ([% currency.symbol %])</th>
+                <th colspan="2">Total + Adjustments + Shipment cost ([% currency.symbol | html %])</th>
                 <th class="tax_excluded"></th>
                 <th class="tax_included"></th>
-                <th>[% total_quantity %]</th>
-                <th class="tax_excluded">[% total_tax_excluded_shipment + total_adj | $Price %]</th>
-                <th class="tax_included">[% total_tax_included_shipment | $Price %]</th>
+                <th>[% total_quantity | html %]</th>
+                <th class="tax_excluded">[% total_tax_excluded_shipment + total_adj | $Price | html %]</th>
+                <th class="tax_included">[% total_tax_included_shipment | $Price | html %]</th>
                 <th>&nbsp;</th>
-                <th>[% total_tax_value | $Price %]</th>
+                <th>[% total_tax_value | $Price | html %]</th>
                 <th>&nbsp;</th>
               </tr>
             </tfoot>
@@ -323,7 +324,7 @@
         [% ELSE %]
             <div class="dialog message"><p>No orders yet</p>
             [% IF adjustments && adjustments.count > 0 || shipmentcost && shipmentcost > 0 %]
-            <p>Adjustments plus shipping:[% total_adj + shipmentcost | $Price %]</p>
+            <p>Adjustments plus shipping:[% total_adj + shipmentcost | $Price | html %]</p>
             [% END %]
             </div>
         [% END %]
@@ -342,11 +343,11 @@
                 <tbody>
                 [% FOREACH f IN files %]
                     <tr>
-                         <td><a href="/cgi-bin/koha/acqui/invoice-files.pl?invoiceid=[% invoiceid %]&amp;op=download&amp;view=1&amp;file_id=[% f.file_id %]">[% f.file_name | html %]</a></td>
+                         <td><a href="/cgi-bin/koha/acqui/invoice-files.pl?invoiceid=[% invoiceid | html %]&amp;op=download&amp;view=1&amp;file_id=[% f.file_id | html %]">[% f.file_name | html %]</a></td>
                          <td>[% f.file_type | html %]</td>
                          <td>[% f.file_description | html %]</td>
                          <td class="title-string">
-                           <span title="[% f.date_uploaded %]">[% f.date_uploaded | $KohaDates %]</span>
+                           <span title="[% f.date_uploaded | html %]">[% f.date_uploaded | $KohaDates %]</span>
                          </td>
                     </tr>
                 [% END %]
@@ -365,7 +366,7 @@
 </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/acquisitions-menu.js") %]
+    [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script>

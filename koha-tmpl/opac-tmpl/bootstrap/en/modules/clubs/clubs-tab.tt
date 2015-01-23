@@ -17,12 +17,12 @@
         <tbody>
             [% FOREACH e IN enrollments %]
                 <tr>
-                    <td>[% e.club.name %]</td>
-                    <td>[% e.club.description %]</td>
+                    <td>[% e.club.name | html %]</td>
+                    <td>[% e.club.description | html %]</td>
                     <td>[% e.date_enrolled | $KohaDates %]</td>
                     <td>
                         [% IF e.club.club_template.is_enrollable_from_opac %]
-                            <button class="btn btn-xs btn-default" onclick="cancelEnrollment( [% e.id %] )">
+                            <button class="btn btn-xs btn-default" onclick="cancelEnrollment( [% e.id | html %] )">
                                 <i class="icon-remove"></i> Cancel enrollment
                             </button>
                         [% ELSE %]
@@ -51,11 +51,11 @@
         <tbody>
             [% FOREACH c IN clubs %]
                 <tr>
-                    <td>[% c.name %]</td>
-                    <td>[% c.description %]</td>
+                    <td>[% c.name | html %]</td>
+                    <td>[% c.description | html %]</td>
                     <td>
                         [% IF !c.club_template.is_email_required || ( c.club_template.is_email_required && borrower.first_valid_email_address ) %]
-                            <button class="btn btn-xs btn-default" onclick="loadEnrollmentForm([% c.id %])">
+                            <button class="btn btn-xs btn-default" onclick="loadEnrollmentForm([% c.id | html %])">
                                 <i class="icon-plus"></i> Enroll
                             </button>
                         [% ELSE %]
@@ -71,7 +71,7 @@
 <script>
 function loadEnrollmentForm( id ) {
     $("body").css("cursor", "progress");
-    $('#opac-user-clubs').load('/cgi-bin/koha/clubs/enroll.pl?borrowernumber=[% borrower.borrowernumber %]&id=' + id, function() {
+    $('#opac-user-clubs').load('/cgi-bin/koha/clubs/enroll.pl?borrowernumber=[% borrower.borrowernumber | html %]&id=' + id, function() {
         $("body").css("cursor", "default");
     });
 
@@ -86,7 +86,7 @@ function cancelEnrollment( id ) {
         data: { id: id },
         success: function( data ) {
             if ( data.success ) {
-                $('#opac-user-clubs').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% borrower.borrowernumber %]', function() {
+                $('#opac-user-clubs').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% borrower.borrowernumber | html %]', function() {
                     $("body").css("cursor", "default");
                 });
             } else {

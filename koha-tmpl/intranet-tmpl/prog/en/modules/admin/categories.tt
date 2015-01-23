@@ -1,14 +1,15 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Patron categories &rsaquo; [% IF op == 'add_form' %][% IF ( categorycode ) %]Modify category '[% categorycode |html %]'[% ELSE %]New category[% END %][% END %]
-[% IF op == 'delete_confirm' %][% IF ( patrons_in_category > 0 ) %]Cannot delete: category [% categorycode |html %] in use[% ELSE %]Confirm deletion of category '[% categorycode |html %]'[% END %][% END %]
+<title>Koha &rsaquo; Administration &rsaquo; Patron categories &rsaquo; [% IF op == 'add_form' %][% IF ( categorycode ) %]Modify category '[% categorycode | html %]'[% ELSE %]New category[% END %][% END %]
+[% IF op == 'delete_confirm' %][% IF ( patrons_in_category > 0 ) %]Cannot delete: category [% categorycode | html %] in use[% ELSE %]Confirm deletion of category '[% categorycode | html %]'[% END %][% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 <style type="text/css">#enrolmentmessage.hint { display : none; }</style>
 </head>
 
@@ -16,8 +17,8 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patrons-admin-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF op == 'add_form' %] <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a> &rsaquo; [% IF ( categorycode ) %]Modify category '[% categorycode |html %]'[% ELSE %]New category[% END %][% END %]
-[% IF op == 'delete_confirm' %] <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a> &rsaquo; [% IF ( patrons_in_category > 0 ) %]Cannot delete: Category [% categorycode |html %] in use[% ELSE %]Confirm deletion of category '[% categorycode |html %]'[% END %][% END %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF op == 'add_form' %] <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a> &rsaquo; [% IF ( categorycode ) %]Modify category '[% categorycode | html %]'[% ELSE %]New category[% END %][% END %]
+[% IF op == 'delete_confirm' %] <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a> &rsaquo; [% IF ( patrons_in_category > 0 ) %]Cannot delete: Category [% categorycode | html %] in use[% ELSE %]Confirm deletion of category '[% categorycode | html %]'[% END %][% END %]
 [% IF op == 'delete_confirmed' %] <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a> &rsaquo; Category deleted[% END %]
 [% IF op == 'list' %]Patron categories[% END %]</div>
 
@@ -27,7 +28,7 @@
     <div class="yui-b">
 
 [% FOR m IN messages %]
-    <div class="dialog [% m.type %]">
+    <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
             An error occurred when updating this patron category. Perhaps it already exists.
@@ -44,7 +45,7 @@
         [% CASE 'already_exists' %]
             This patron category already exists.
         [% CASE %]
-            [% m.code %]
+            [% m.code | html %]
         [% END %]
     </div>
 [% END %]
@@ -54,7 +55,7 @@
         <input type="hidden" name="op" value="add_validate" />
         <input type="hidden" name="checked" value="0" />
         [% IF category %]
-            <h1>Modify category [% categorycode |html %]</h1>
+            <h1>Modify category [% categorycode | html %]</h1>
         [% ELSE %]
             <h1>New category</h1>
         [% END %]
@@ -62,8 +63,8 @@
             <ol>
                 [% IF category %]
                     <li>
-                        <span class="label">Category code: </span>[% categorycode |html %]
-                        <input type="hidden" name="categorycode" value="[% category.categorycode |html %]" /><input type="hidden" name="is_a_modif" value="1" />
+                        <span class="label">Category code: </span>[% categorycode | html %]
+                        <input type="hidden" name="categorycode" value="[% category.categorycode | html %]" /><input type="hidden" name="is_a_modif" value="1" />
                     </li>
                 [% ELSE %]
                     <li>
@@ -74,7 +75,7 @@
                 [% END %]
                 <li>
                     <label for="description" class="required">Description: </label>
-                    <input type="text" name="description" id="description" size="40" maxlength="80" class="required" required="required" value="[% category.description |html %]" />
+                    <input type="text" name="description" id="description" size="40" maxlength="80" class="required" required="required" value="[% category.description | html %]" />
                     <span class="required">Required</span>
                 </li>
                 <li>
@@ -85,7 +86,7 @@
                             <li>
                                 <label for="enrolmentperiod" style="width:6em;">In months: </label>
                                 [% IF category.enrolmentperiod %]
-                                    <input type="text" class="enrollmentperiod" name="enrolmentperiod" id="enrolmentperiod" size="3" maxlength="3" value="[% category.enrolmentperiod %]" /> months
+                                    <input type="text" class="enrollmentperiod" name="enrolmentperiod" id="enrolmentperiod" size="3" maxlength="3" value="[% category.enrolmentperiod | html %]" /> months
                                [% ELSE %]
                                     <input type="text" class="enrollmentperiod" name="enrolmentperiod" id="enrolmentperiod" size="3" maxlength="3" value="" /> months
                                [% END %]
@@ -99,15 +100,15 @@
                 </li>
                 <li>
                     <label for="dateofbirthrequired">Age required: </label>
-                    <input type="text" name="dateofbirthrequired" id="dateofbirthrequired" value="[% category.dateofbirthrequired %]" size="3" maxlength="3" /> years
+                    <input type="text" name="dateofbirthrequired" id="dateofbirthrequired" value="[% category.dateofbirthrequired | html %]" size="3" maxlength="3" /> years
                 </li>
                 <li>
                     <label for="upperagelimit">Upperage limit: </label>
-                    <input type="text" name="upperagelimit" id="upperagelimit" size="3" maxlength="3" value="[% category.upperagelimit %]" /> years
+                    <input type="text" name="upperagelimit" id="upperagelimit" size="3" maxlength="3" value="[% category.upperagelimit | html %]" /> years
                 </li>
                 <li>
                     <label for="enrolmentfee">Enrollment fee: </label>
-                    <input type="text" name="enrolmentfee" id="enrolmentfee" size="6" value="[% category.enrolmentfee | $Price on_editing => 1 %]" />
+                    <input type="text" name="enrolmentfee" id="enrolmentfee" size="6" value="[% category.enrolmentfee | $Price on_editing => 1 | html %]" />
                 </li>
                 <li>
                     <label for="overduenoticerequired">Overdue notice required: </label>
@@ -135,7 +136,7 @@
                 </li>
                 <li>
                     <label for="reservefee">Hold fee: </label>
-                    <input type="text" name="reservefee" id="reservefee" size="6" value="[% category.reservefee | $Price on_editing => 1 %]" />
+                    <input type="text" name="reservefee" id="reservefee" size="6" value="[% category.reservefee | $Price on_editing => 1 | html %]" />
                 </li>
                 <li>
                     <label for="category_type" class="required">Category type: </label>
@@ -155,9 +156,9 @@
                         <option value="">All branches</option>
                         [% FOREACH branch IN branches_loop %]
                           [% IF branch.selected %]
-                            <option selected="selected" value="[% branch.branchcode %]">[% branch.branchname |html %]</option>
+                            <option selected="selected" value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
                           [% ELSE %]
-                            <option value="[% branch.branchcode %]">[% branch.branchname |html %]</option>
+                            <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
                           [% END %]
                         [% END %]
                     </select>
@@ -253,35 +254,35 @@
         <fieldset>
             <legend>
                 [% IF patrons_in_category > 0 %]
-                    Category [% categorycode |html %] is in use.  Deletion not possible!
+                    Category [% categorycode | html %] is in use.  Deletion not possible!
                 [% ELSE %]
-                    Confirm deletion of category [% categorycode |html %]
+                    Confirm deletion of category [% categorycode | html %]
                 [% END %]
             </legend>
 
             [% IF patrons_in_category > 0  %]
                 <div class="dialog alert">
-                    <strong>This category is used [% patrons_in_category %] times</strong>. Deletion not possible
+                    <strong>This category is used [% patrons_in_category | html %] times</strong>. Deletion not possible
                 </div>
             [% END %]
             <table>
-                <tr><th scope="row">Category code: </th><td>[% category.categorycode |html %]</td></tr>
-                <tr><th scope="row">Description: </th><td>[% category.description |html %]</td></tr>
+                <tr><th scope="row">Category code: </th><td>[% category.categorycode | html %]</td></tr>
+                <tr><th scope="row">Description: </th><td>[% category.description | html %]</td></tr>
                 <tr><th scope="row">Enrollment period: </th>
                     <td>
                         [% IF category.enrolmentperiod %]
-                            [% category.enrolmentperiod %] months
+                            [% category.enrolmentperiod | html %] months
                         [% ELSE %]
                             until [% category.enrolmentperioddate | $KohaDates %]
                         [% END %]
                     </td>
                 </tr>
-                <tr><th scope="row">Age required: </th><td>[% category.dateofbirthrequired %] years</td></tr>
-                <tr><th scope="row">Upperage limit: </th><td>[% category.upperagelimit %] years</td></tr>
-                <tr><th scope="row">Enrollment fee: </th><td>[% category.enrolmentfee | $Price %]</td></tr>
+                <tr><th scope="row">Age required: </th><td>[% category.dateofbirthrequired | html %] years</td></tr>
+                <tr><th scope="row">Upperage limit: </th><td>[% category.upperagelimit | html %] years</td></tr>
+                <tr><th scope="row">Enrollment fee: </th><td>[% category.enrolmentfee | $Price | html %]</td></tr>
                 <tr><th scope="row">Receives overdue notices: </th><td>[% IF category. overduenoticerequired %]Yes[% ELSE %]No[% END %]</td></tr>
                 <tr><th scope="row">Lost items in staff client</th><td>[% IF category.hidelostitems %]Hidden by default[% ELSE %]Shown[% END %]</td></tr>
-                <tr><th scope="row">Hold fee: </th><td>[% category.reservefee | $Price %]</td></tr>
+                <tr><th scope="row">Hold fee: </th><td>[% category.reservefee | $Price | html %]</td></tr>
 
                 [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]
                   <tr>
@@ -317,7 +318,7 @@
                     <input type="submit" value="OK" />
                 [% ELSE %]
                     <input type="hidden" name="op" value="delete_confirmed" />
-                    <input type="hidden" name="categorycode" value="[% categorycode |html %]" />
+                    <input type="hidden" name="categorycode" value="[% categorycode | html %]" />
                     <input type="submit" value="Delete this category" />
                     <a class="cancel" href="/cgi-bin/koha/admin/categories.pl">Cancel</a>
                 [% END %]
@@ -334,7 +335,7 @@
 
     <h2>Patron categories</h2>
     [% IF searchfield %]
-        You Searched for [% searchfield |html %]</span>
+        You Searched for [% searchfield | html %]</span>
     [% END %]
     [% IF categories%]
         <table id="table_categorie">
@@ -364,9 +365,9 @@
             <tbody>
                 [% FOREACH category IN categories %]
                     <tr>
-                        <td>[% category.categorycode |html %]</td>
+                        <td>[% category.categorycode | html %]</td>
                         <td>
-                            <a href="/cgi-bin/koha/admin/categories.pl?op=add_form&amp;categorycode=[% category.categorycode |uri %]">[% category.description |html %]</a>
+                            <a href="/cgi-bin/koha/admin/categories.pl?op=add_form&amp;categorycode=[% category.categorycode |uri %]">[% category.description | html %]</a>
                         </td>
                         <td>
                             [% SWITCH category.category_type %]
@@ -380,30 +381,30 @@
                         </td>
                         <td>
                             [% IF ( category.enrolmentperiod ) %]
-                                [% category.enrolmentperiod %] months
+                                [% category.enrolmentperiod | html %] months
                             [% ELSE %]
                                 until [% category.enrolmentperioddate | $KohaDates %]
                             [% END %]
                         </td>
                         [% IF (category.dateofbirthrequired) %]
-                            <td>[% category.dateofbirthrequired %] years</td>
+                            <td>[% category.dateofbirthrequired | html %] years</td>
                         [% ELSE %]
                             <td>-</td>
                         [% END %]
                         [% IF (category.upperagelimit) %]
-                            <td>[% category.upperagelimit %] years</td>
+                            <td>[% category.upperagelimit | html %] years</td>
                         [% ELSE %]
                             <td>-</td>
                         [% END %]
                         [% IF (category.enrolmentfee > 0) %]
-                            <td>[% category.enrolmentfee | $Price %]</td>
+                            <td>[% category.enrolmentfee | $Price | html %]</td>
                         [% ELSE %]
                             <td>-</td>
                         [% END %]
                         <td>[% IF ( category.overduenoticerequired ) %]Yes[% ELSE %]No[% END %]</td>
                         <td>[% IF ( category.hidelostitems ) %]Hidden[% ELSE %]Shown[% END %]</td>
                         [% IF (category.reservefee > 0) %]
-                            <td>[% category.reservefee | $Price %]</td>
+                            <td>[% category.reservefee | $Price | html %]</td>
                         [% ELSE %]
                             <td>-</td>
                         [% END %]
@@ -422,7 +423,7 @@
                                                 [% ELSIF ( prefs.Item_Checkout ) %]Item checkout
                                                 [% ELSE %]Unknown
                                                 [% END %]:
-                                                <strong>[% transport.transport %]</strong><br />
+                                                <strong>[% transport.transport | html %]</strong><br />
                                             [% ELSE %]None<br />[% END %]
                                         [% END %]
                                     [% END %]
@@ -434,15 +435,15 @@
                         <td>
                             [% SET branch_limitations = category.branch_limitations %]
                             [% IF branch_limitations.size > 0 %]
-                                [% branches_str = "" %]
+                                [% branches_str = "" | html %]
                                 [% FOREACH branch IN branch_limitations %]
-                                    [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" %]
+                                    [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" | html %]
                                 [% END %]
-                                <span title="[% branches_str %]">
+                                <span title="[% branches_str | html %]">
                                     [% IF branch_limitations.size > 1 %]
-                                        [% branch_limitations.size %] branches limitations
+                                        [% branch_limitations.size | html %] branches limitations
                                     [% ELSE %]
-                                        [% branch_limitations.size %] branch limitation
+                                        [% branch_limitations.size | html %] branch limitation
                                     [% END %]
                                 </span>
                             [% ELSE %]
@@ -492,14 +493,14 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
-    [% Asset.js("js/messaging-preference-form.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
+    [% Asset.js("js/messaging-preference-form.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
         var MSG_CATEGORYCODE_CHARS = _("Category code can only contain the following characters: letters, numbers, - and _.");
         var MSG_ONE_ENROLLMENTPERIOD = ("Please choose an enrollment period in months OR by date.");
     </script>
-    [% Asset.js("js/categories.js") %]
+    [% Asset.js("js/categories.js") | $raw %]
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

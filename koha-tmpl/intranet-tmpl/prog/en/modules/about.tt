@@ -33,29 +33,29 @@
 
         <table>
             <caption>Server information</caption>
-            <tr><th scope="row">Koha version: </th><td>[% kohaVersion |html %]</td></tr>
-            <tr><th scope="row">OS version ('uname -a'): </th><td>[% osVersion |html %]</td></tr>
-            <tr><th scope="row">Perl interpreter: </th><td>[% perlPath |html %]</td></tr>
-            <tr><th scope="row">Perl version: </th><td>[% perlVersion |html %]</td></tr>
+            <tr><th scope="row">Koha version: </th><td>[% kohaVersion | html %]</td></tr>
+            <tr><th scope="row">OS version ('uname -a'): </th><td>[% osVersion | html %]</td></tr>
+            <tr><th scope="row">Perl interpreter: </th><td>[% perlPath | html %]</td></tr>
+            <tr><th scope="row">Perl version: </th><td>[% perlVersion | html %]</td></tr>
             <tr><th scope="row">Perl @INC: </th><td>
                 [% FOREACH perlIncPat IN perlIncPath %]
-                    [% perlIncPat.perlinc |html %] <br />
+                    [% perlIncPat.perlinc | html %] <br />
                 [% END %]
             </td></tr>
-            <tr><th scope="row">MySQL version: </th><td>[% mysqlVersion |html %]</td></tr>
-            <tr><th scope="row">Apache version: </th><td>[% apacheVersion |html %]</td></tr>
+            <tr><th scope="row">MySQL version: </th><td>[% mysqlVersion | html %]</td></tr>
+            <tr><th scope="row">Apache version: </th><td>[% apacheVersion | html %]</td></tr>
           [% IF (is_psgi) %]
-            <tr><th scope="row">PSGI: </th><td>[% psgi_server |html %]</td></tr>
+            <tr><th scope="row">PSGI: </th><td>[% psgi_server | html %]</td></tr>
           [% END %]
           [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' %]
             <tr>
                 <th scope="row">Elasticsearch: </th>
             [% IF elasticsearch_fatal_config_error %]
-                <td><span class="status_warn">[% elasticsearch_fatal_config_error %]</span></td>
+                <td><span class="status_warn">[% elasticsearch_fatal_config_error | html %]</span></td>
             [% ELSE %]
                 <td>
                     Nodes:
-                    <span>[% elasticsearch_status.nodes.join(' / ') %]</span>
+                    <span>[% elasticsearch_status.nodes.join(' / ') | html %]</span>
                     |
                     Status:
                 [% IF elasticsearch_status.running %]
@@ -63,7 +63,7 @@
                     |
                     Indices:
                   [% FOREACH index IN elasticsearch_status.indexes %]
-                      [% index.index_name %] (count: <emph>[% index.count %]</emph>)[% UNLESS loop.last %], [% END %]
+                      [% index.index_name | html %] (count: <emph>[% index.count | html %]</emph>)[% UNLESS loop.last %], [% END %]
                   [% END %]
                 [% ELSE %]
                     <span class="status_warn">not running</span>
@@ -102,36 +102,36 @@
                             <span class="status_warn">Nowhere</span> Note that the right place to define the memcached config is in your $KOHA_CONF file. Currently you do not have a valid memcached configuration defined.
                     [% END %]
                   [% IF effective_caching_method != 'Cache::Memcached::Fast' %]
-                    | Effective caching method: [% effective_caching_method %]
+                    | Effective caching method: [% effective_caching_method | html %]
                   [% END %]
                 </td>
             </tr>
-            <tr><th scope="row">Zebra version: </th><td>[% zebraVersion |html %]</td></tr>
+            <tr><th scope="row">Zebra version: </th><td>[% zebraVersion | html %]</td></tr>
             [% IF (errZebraConnection == 10000) %]
             <tr><th scope="row"><b>Error</b> </th><td>Zebra server seems not to be available. Is it started?</td></tr>
             [% ELSIF (errZebraConnection) %]
-            <tr><th scope="row"><b>Warning</b> </th><td>Error message from Zebra: [% ( errZebraConnection ) %] </td></tr>
+            <tr><th scope="row"><b>Warning</b> </th><td>Error message from Zebra: [% ( errZebraConnection ) | html %] </td></tr>
             [% END %]
             <tr>
               <th scope="row">Date and time: </th>
-              <td>[% current_date_and_time | $KohaDates with_hours => 1 %]</td>
+              <td>[% current_date_and_time | $KohaDates with_hours => 1 | html %]</td>
             </tr>
             <tr>
-              [% timezone_config_class = (time_zone.config_invalid) ? 'status_warn' : '' %]
-              [% timezone_env_class    = (time_zone.env_invalid)    ? 'status_warn' : '' %]
+              [% timezone_config_class = (time_zone.config_invalid) ? 'status_warn' : '' | html %]
+              [% timezone_env_class    = (time_zone.env_invalid)    ? 'status_warn' : '' | html %]
               <th scope="row">Time zone: </th>
-              <td>Used: <span>[% time_zone.actual %]</span>
+              <td>Used: <span>[% time_zone.actual | html %]</span>
                           [% IF time_zone.actual_bad_tz_fallback %]
                              <span>(This is a fallback value due to a bad configuration)</span>
                           [% END %]
                            |
                   Config: [% IF time_zone.config != '' %]
-                            <span class="[% timezone_config_class %]">[% time_zone.config %]</span>
+                            <span class="[% timezone_config_class | html %]">[% time_zone.config | html %]</span>
                           [% ELSE %]
                             <span>Undefined</span>
                           [% END %] |
                   Environment (TZ):  [% IF time_zone.environment != '' %]
-                          <span class="[% timezone_env_class %]">[% time_zone.environment %]</span>
+                          <span class="[% timezone_env_class | html %]">[% time_zone.environment | html %]</span>
                         [% ELSE %]
                           <span>Undefined</span>
                         [% END %]
@@ -167,13 +167,13 @@
                     [% END %]
                     [% END %]
                     [% IF ( ro.name ) %]
-                    [% ro.name %] <span style="font-weight:normal; font-size:smaller"> ([%ro.reqversion %])</span>
+                    [% ro.name | html %] <span style="font-weight:normal; font-size:smaller"> ([% ro.reqversion | html %])</span>
                     [% END %]
                     </th>
                     [% IF ( ro.name == '' ) %]
                     <td>
                     [% ELSIF ( ro.version ) %]
-                    <td>[% ro.version %]
+                    <td>[% ro.version | html %]
                     [% ELSE %]
                     <td style="font-weight:bold">Not Installed [% END %]</td>
                     [% END %]
@@ -202,28 +202,28 @@
             <h3>Problems found</h3>
             [% IF ai_patrons %]
                 <h4>Patrons</h4>
-                <p>The following ids exist in both tables [% "borrowers" | $HtmlTags tag="strong" %] and [% "deletedborrowers" | $HtmlTags tag="strong" %]:</p>
-                <p>[% FOR p IN ai_patrons %][% p.borrowernumber %][% UNLESS loop.last %], [% END %][% END %]</p>
+                <p>The following ids exist in both tables [% "borrowers" | $HtmlTags tag="strong" | html %] and [% "deletedborrowers" | $HtmlTags tag="strong" | html %]:</p>
+                <p>[% FOR p IN ai_patrons %][% p.borrowernumber | html %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             [% IF ai_biblios %]
                 <h4>Biblios</h4>
-                <p>The following ids exist in both tables [% "biblio" | $HtmlTags tag="strong" %] and [% "deletedbiblio" | $HtmlTags tag="strong" %]:</p>
-                <p>[% FOR b IN ai_biblios %][% b.biblionumber %][% UNLESS loop.last %], [% END %][% END %]</p>
+                <p>The following ids exist in both tables [% "biblio" | $HtmlTags tag="strong" | html %] and [% "deletedbiblio" | $HtmlTags tag="strong" | html %]:</p>
+                <p>[% FOR b IN ai_biblios %][% b.biblionumber | html %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             [% IF ai_items %]
                 <h4>Items</h4>
-                <p>The following ids exist in both tables [% "items" | $HtmlTags tag="strong" %] and [% "deleteditems" | $HtmlTags tag="strong" %]:</p>
-                <p>[% FOR i IN ai_items %][% i.itemnumber %][% UNLESS loop.last %], [% END %][% END %]</p>
+                <p>The following ids exist in both tables [% "items" | $HtmlTags tag="strong" | html %] and [% "deleteditems" | $HtmlTags tag="strong" | html %]:</p>
+                <p>[% FOR i IN ai_items %][% i.itemnumber | html %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             [% IF ai_checkouts %]
                 <h4>Checkouts</h4>
-                <p>The following ids exist in both tables [% "issues" | $HtmlTags tag="strong" %] and [% "old_issues" | $HtmlTags tag="strong" %]:</p>
-                <p>[% FOR c IN ai_checkouts %][% c.issue_id %][% UNLESS loop.last %], [% END %][% END %]</p>
+                <p>The following ids exist in both tables [% "issues" | $HtmlTags tag="strong" | html %] and [% "old_issues" | $HtmlTags tag="strong" | html %]:</p>
+                <p>[% FOR c IN ai_checkouts %][% c.issue_id | html %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             [% IF ai_holds %]
                 <h4>Holds</h4>
-                <p>The following ids exist in both tables [% "holds" | $HtmlTags tag="strong" %] and [% "old_reserves" | $HtmlTags tag="strong" %]:</p>
-                <p>[% FOR h IN ai_holds %][% h.reserve_id %][% UNLESS loop.last %], [% END %][% END %]</p>
+                <p>The following ids exist in both tables [% "holds" | $HtmlTags tag="strong" | html %] and [% "old_reserves" | $HtmlTags tag="strong" | html %]:</p>
+                <p>[% FOR h IN ai_holds %][% h.reserve_id | html %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             <br/>
         [% END %]
@@ -248,16 +248,16 @@
                     <tr><th scope="row"><b>Warning</b> </th><td>No active currency is defined. Please go to <a href="/cgi-bin/koha/admin/currency.pl">Administration &gt; Currencies and exchange rates</a> and mark one currency as active.</td></tr>
                 [% END %]
                 [% IF warnStatisticsFieldsError %]
-                    <tr><th scope="row"><b>Warning</b> </th><td>System preference 'StatisticsFields' contains field names not belonging to the items database table: [% warnStatisticsFieldsError %] </td></tr>
+                    <tr><th scope="row"><b>Warning</b> </th><td>System preference 'StatisticsFields' contains field names not belonging to the items database table: [% warnStatisticsFieldsError | html %] </td></tr>
                 [% END %]
                 [% IF QueryParserError %]
                     <tr><th scope="row"><b>Warning</b> </th><td>
                         You have set UseQueryParser but there was a problem inititializing QueryParser.
                     [% IF QueryParserError.fallback %]
                         The 'queryparser_config' entry is missing in your configuration file.
-                        The following configuration file was used without success: [% QueryParserError.file %].
+                        The following configuration file was used without success: [% QueryParserError.file | html %].
                     [% ELSE %]
-                        The following configuration file was used without success: [% QueryParserError.file %].
+                        The following configuration file was used without success: [% QueryParserError.file | html %].
                     [% END %]
                         </td>
                     </tr>
@@ -291,7 +291,7 @@
                   [%END %]
                   [% IF ill_partner_code_doesnt_exist %]
                     <tr><th scope="row"><b>Warning</b> </th><td>
-                    The ILL module is enabled, but the configured 'partner_code' ([% ill_partner_code_doesnt_exist %]) is not defined on the system.
+                    The ILL module is enabled, but the configured 'partner_code' ([% ill_partner_code_doesnt_exist | html %]) is not defined on the system.
                     </td></tr>
                   [% END %]
                 [% END %]
@@ -375,7 +375,7 @@
                 <tr>
                     <th scope="row"><b>Warning</b></th>
                     <td>You have set UseQueryParser but the 'queryparser_config' entry is missing in your configuration
-                        file. [% config_entry.file %] is used as a fallback.
+                        file. [% config_entry.file | html %] is used as a fallback.
                     </td>
                 </tr>
                 [% ELSIF config_entry.error == 'use_zebra_facets_entry_missing' %]
@@ -419,7 +419,7 @@
                     <th scope="row"><b>Warning</b></th>
                     <td>You are missing the &lt;tmp_path&gt; entry in your koha-conf.xml file. Please
                         add it, pointing to the configured temporary directory for your Koha instance.
-                        The effective temporary directory is '[% config_entry.effective_tmp_dir %]'.
+                        The effective temporary directory is '[% config_entry.effective_tmp_dir | html %]'.
                     </td>
                 </tr>
                 [% END %]
@@ -1080,10 +1080,10 @@
         </tr>
         </thead>
         [% FOREACH tabl IN table2 %]
-            <tr class="[% loop.parity %]">
+            <tr class="[% loop.parity | html %]">
                 [% FOREACH ro IN tabl.row2 %]
-                     <td>[% ro.date %]</td>
-                     <td>[% ro.desc|html %]</td>
+                     <td>[% ro.date | html %]</td>
+                     <td>[% ro.desc | html %]</td>
                 [% END %]
             </tr>
         [% END %]

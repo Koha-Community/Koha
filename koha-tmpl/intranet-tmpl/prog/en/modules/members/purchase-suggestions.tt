@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE AuthorisedValues  %]
@@ -5,7 +6,7 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Purchase suggestions for [% INCLUDE 'patron-title.inc' no_html = 1 %]</title>
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -28,7 +29,7 @@
                 <h2>Purchase suggestions</h2>
 
                 <div id="toolbar" class="btn-toolbar">
-                    <a class="btn btn-default btn-sm" id="newsuggestion" href="/cgi-bin/koha/suggestion/suggestion.pl?op=add&amp;suggestedby=[% patron.borrowernumber %]&amp;redirect=purchase_suggestions&amp;borrowernumber=[% patron.borrowernumber %]"><i class="fa fa-plus"></i> New purchase suggestion</a>
+                    <a class="btn btn-default btn-sm" id="newsuggestion" href="/cgi-bin/koha/suggestion/suggestion.pl?op=add&amp;suggestedby=[% patron.borrowernumber | html %]&amp;redirect=purchase_suggestions&amp;borrowernumber=[% patron.borrowernumber | html %]"><i class="fa fa-plus"></i> New purchase suggestion</a>
                 </div>
 
                 [% IF suggestions %]
@@ -49,27 +50,27 @@
                                     <p>
                                         <strong>
                                             [% IF ( CAN_user_catalogue ) %]
-                                                <a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% s.suggestionid %]&amp;op=show">[% s.title |html %]</a>
+                                                <a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% s.suggestionid | html %]&amp;op=show">[% s.title | html %]</a>
                                             [% ELSE %]
-                                                [% s.title |html %]
+                                                [% s.title | html %]
                                             [% END %]
                                         </strong>
                                     </p>
                                     <p>
-                                        [% IF ( s.author ) %][% s.author %],[% END %]
-                                        [% IF ( s.copyrightdate ) %] - [% s.copyrightdate %],[% END %]
-                                        [% IF ( s.publishercode ) %] - [% s.publishercode %][% END %]
-                                        [% IF ( s.place ) %]([% s.place %])[% END %]
-                                        [% IF ( s.collectiontitle ) %] , [% s.collectiontitle %][% END %]
-                                        [% IF ( s.itemtype ) %] - [% s.itemtype %][% END %]
+                                        [% IF ( s.author ) %][% s.author | html %],[% END %]
+                                        [% IF ( s.copyrightdate ) %] - [% s.copyrightdate | html %],[% END %]
+                                        [% IF ( s.publishercode ) %] - [% s.publishercode | html %][% END %]
+                                        [% IF ( s.place ) %]([% s.place | html %])[% END %]
+                                        [% IF ( s.collectiontitle ) %] , [% s.collectiontitle | html %][% END %]
+                                        [% IF ( s.itemtype ) %] - [% s.itemtype | html %][% END %]
                                     </p>
                                 </td>
-                                <td>[% s.note %]
+                                <td>[% s.note | html %]
                                 <td>
                                     [% IF ( s.surnamemanagedby ) %]
-                                        [% s.surnamemanagedby %]
+                                        [% s.surnamemanagedby | html %]
                                         [% IF ( s.firstnamemanagedby ) %],[% END %]
-                                        [% s.firstnamemanagedby %]
+                                        [% s.firstnamemanagedby | html %]
                                     [% ELSE %]
                                         &nbsp;
                                     [% END %]
@@ -85,12 +86,12 @@
                                     [% CASE %]
                                         [% SET status_description = AuthorisedValues.GetByCode('SUGGEST_STATUS', s.STATUS) %]
                                         [% IF status_description %]
-                                            [% status_description %]
+                                            [% status_description | html %]
                                         [% ELSE %]
                                             <span>Unknown</span>
                                         [% END %]
                                     [% END %]
-                                    [% IF s.reason %]([% s.reason %])[% END %]
+                                    [% IF s.reason %]([% s.reason | html %])[% END %]
                                 </td>
                             </tr>
                         [% END %]
@@ -111,7 +112,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
         $(document).ready(function() {

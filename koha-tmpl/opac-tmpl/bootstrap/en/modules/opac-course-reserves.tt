@@ -1,12 +1,13 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE AuthorisedValues %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Courses</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Courses</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
-    [% Asset.css("css/datatables.css") %]
+    [% Asset.css("css/datatables.css") | $raw %]
 [% END %]
 
 </head>
@@ -41,17 +42,17 @@
                         <tbody>
                             [% FOREACH c IN courses %]
                                 <tr>
-                                    <td><a href="opac-course-details.pl?course_id=[% c.course_id %]">[% c.course_name %]</a></td>
-                                    <td>[% AuthorisedValues.GetByCode( 'DEPARTMENT', c.department, 1 ) %]</td>
-                                    <td>[% c.course_number %]</td>
-                                    <td>[% c.section %]</td>
-                                    <td>[% AuthorisedValues.GetByCode( 'TERM' c.term ) %]</td>
+                                    <td><a href="opac-course-details.pl?course_id=[% c.course_id | html %]">[% c.course_name | html %]</a></td>
+                                    <td>[% AuthorisedValues.GetByCode( 'DEPARTMENT', c.department, 1 ) | html %]</td>
+                                    <td>[% c.course_number | html %]</td>
+                                    <td>[% c.section | html %]</td>
+                                    <td>[% AuthorisedValues.GetByCode( 'TERM' c.term ) | html %]</td>
                                     <td>
                                       [% FOREACH i IN c.instructors %]
-                                          <div class="instructor"><span class"inst_surname">[% i.surname %]</span>[% IF i.firstname %]<span class="instr_separator">, </span><span class="instr_firstname">[% i.firstname %]</span>[% END %]</div>
+                                          <div class="instructor"><span class"inst_surname">[% i.surname | html %]</span>[% IF i.firstname %]<span class="instr_separator">, </span><span class="instr_firstname">[% i.firstname | html %]</span>[% END %]</div>
                                       [% END %]
                                     </td>
-                                    <td>[% c.public_note %]</td>
+                                    <td>[% c.public_note | html %]</td>
                             [% END %]
                         </tbody>
                     </table>

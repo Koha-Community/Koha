@@ -51,7 +51,7 @@
     [% IF ( summary.label ) %][% summary.label | html %]:[% END %]
     [% IF summary.summary %]
       <div class="authority-summary">
-        [% summary.summary %]
+        [% summary.summary | html %]
       </div>
     [% END %]
     [% UNLESS ( summary.summaryonly ) %]
@@ -89,7 +89,7 @@
               <div class="authres_otherscript">
               [% FOREACH other IN summary.otherscript %]
                 [% PROCESS language lang=other.lang | trim %]:
-                [% other.term %]
+                [% other.term | html %]
                 [% IF ! loop.last %] ; [% END %]
               [% END %]
               </div>
@@ -131,6 +131,6 @@
    [% CASE ['ara'] %]Arabic
    [% CASE ['gre'] %]Greek (modern)
    [% CASE ['grc'] %]Greek (to 1453)
-   [% CASE %][% lang %]
+   [% CASE %][% lang | html %]
   [% END %]
 [% END %]

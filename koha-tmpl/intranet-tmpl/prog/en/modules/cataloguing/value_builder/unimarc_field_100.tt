@@ -10,7 +10,7 @@
 <table>
     <tr>
         <td><label for="f1">Date entered on file</label></td>
-        <td><input type="text" name="f1" id="f1" maxlength="8" size="9" value="[% f1 %]" /></td>
+        <td><input type="text" name="f1" id="f1" maxlength="8" size="9" value="[% f1 | html %]" /></td>
     </tr>
     <tr>
         <td><label for="f2">Type of publication date: Publication dates 1 and 2</label></td>
@@ -100,11 +100,11 @@ year</option>
     </tr>
     <tr>
         <td><label for="f3">Publication date 1</label></td>
-        <td><input type="text" name="f3" id="f3" maxlength="4" size="5" value="[% f3 %]" /></td>
+        <td><input type="text" name="f3" id="f3" maxlength="4" size="5" value="[% f3 | html %]" /></td>
     </tr>
     <tr>
     <td><label for="f4">Publication Date 2</label></td>
-    <td><input type="text" name="f4" id="f4" maxlength="4" size="5" value="[% f4 %]" /></td>
+    <td><input type="text" name="f4" id="f4" maxlength="4" size="5" value="[% f4 | html %]" /></td>
     </tr>
     <tr>
         <td><label for="f5">Target audience code</label></td>
@@ -390,7 +390,7 @@ level)</option>
 
     <tr>
     <td><label for="f10">Language of cataloguing (mandatory)</label></td>
-    <td><input type="text" name="f10" id="f10" maxlength="3" size="4" value="[% f10 %]" /></td>
+    <td><input type="text" name="f10" id="f10" maxlength="3" size="4" value="[% f10 | html %]" /></td>
     </tr>
 
     <tr>
@@ -578,7 +578,7 @@ languages and obsolete typography)</option>
     <tr>
         <td><label for="f14">Additional character sets</label></td>
         <td>
-            <input type="text" name="f14" id="f14" maxlength="4" size="5" value="[% f14 %]" />
+            <input type="text" name="f14" id="f14" maxlength="4" size="5" value="[% f14 | html %]" />
         </td>
     </tr>
 
@@ -690,7 +690,7 @@ languages and obsolete typography)</option>
     <script type="text/javascript">
         function report() {
             var doc   = opener.document;
-            var field = doc.getElementById("[% index %]");
+            var field = doc.getElementById("[% index | html %]");
 
             document.f_pop.f1.value=document.f_pop.f1.value+'        ';
             document.f_pop.f3.value=document.f_pop.f3.value+'    ';

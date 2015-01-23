@@ -1,16 +1,17 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Price %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Delete patron [% patron.firstname %] [% patron.surname %]</title>
+<title>Koha &rsaquo; Delete patron [% patron.firstname | html %] [% patron.surname | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="pat_deletemem" class="pat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a> &rsaquo; Delete patron [% patron.firstname %] [% patron.surname %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a> &rsaquo; Delete patron [% patron.firstname | html %] [% patron.surname | html %]</div>
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
@@ -22,10 +23,10 @@
         <h3>Cannot delete patron</h3>
             <ul>
             [% IF ( ItemsOnIssues ) %]
-                <li>Patron has [% ItemsOnIssues %] item(s) checked out.</li>
+                <li>Patron has [% ItemsOnIssues | html %] item(s) checked out.</li>
             [% END %]
             [% IF ( charges ) %]
-                <li>Patron has [% charges | $Price %] in fines.</li>
+                <li>Patron has [% charges | $Price | html %] in fines.</li>
             [% END %]
             [% IF ( guarantees ) %]
                 <li>Patron's record has guaranteed accounts attached.</li>
@@ -35,15 +36,15 @@
     [% ELSIF op == 'delete_confirm' and patron %]
         [%# TODO add "patron does not exist" unless patron %]
         <div class="dialog alert">
-            <h3>Are you sure you want to delete the patron [% patron.firstname %] [% patron.surname %]? This cannot be undone.</h3>
+            <h3>Are you sure you want to delete the patron [% patron.firstname | html %] [% patron.surname | html %]? This cannot be undone.</h3>
             <form action="/cgi-bin/koha/members/deletemem.pl">
-                <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
-                <input type="hidden" name="member" value="[% patron.borrowernumber %]"/>
+                <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
+                <input type="hidden" name="member" value="[% patron.borrowernumber | html %]"/>
                 <input type="hidden" name="op" value="delete_confirmed" />
                 <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
             </form>
             <form action="/cgi-bin/koha/members/moremember.pl">
-                <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]"/>
+                <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]"/>
                 <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
             </form>
         </div>
@@ -64,7 +65,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

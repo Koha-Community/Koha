@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
@@ -10,9 +11,9 @@
         [% ELSIF ( opduplicate ) %]Duplicate
         [% ELSE %] Modify
         [% END %] patron
-        [% IF (firstname) %][% firstname %] [% END %]
-        [% IF (surname) %][% surname %] [% END %]
-        ([%IF categoryname %][% categoryname %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])
+        [% IF (firstname) %][% firstname | html %] [% END %]
+        [% IF (surname) %][% surname | html %] [% END %]
+        ([%IF categoryname %][% categoryname | html %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])
     [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -25,8 +26,8 @@
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
     [% UNLESS blocking_error %]
-    &rsaquo;[% IF (firstname || surname ) %] <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% IF (firstname) %][% firstname | html %] [% END %][% IF (surname) %][% surname | html %] [% END %]</a>  &rsaquo;[% END %]
-<strong>[% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron ([%IF ( categoryname ) %][% categoryname %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</strong>
+    &rsaquo;[% IF (firstname || surname ) %] <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | html %]">[% IF (firstname) %][% firstname | html %] [% END %][% IF (surname) %][% surname | html %] [% END %]</a>  &rsaquo;[% END %]
+<strong>[% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron ([%IF ( categoryname ) %][% categoryname | html %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</strong>
     [% END %]
 </div>
 [% IF ( opadd ) %]<div id="doc" class="yui-t7">[% ELSE %]<div id="doc3" class="yui-t2">[% END %]
@@ -39,7 +40,7 @@
         [% IF ( error_alert == "no_email" ) %]
             <div class="error">This member has no email</div>
         [% ELSE %]
-            <div class="error">[% error_alert %]</div>
+            <div class="error">[% error_alert | html %]</div>
         [% END %]
     [% END %]
     [% IF info_alert %]
@@ -49,7 +50,7 @@
     [% INCLUDE 'noadd-warnings.inc' %]
 
 	[% UNLESS ( no_add ) %]
-    <h1>[% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron [% IF (firstname) %][% firstname | html %] [% END %][% IF (surname) %][% surname | html %] [% END %]([%IF ( categoryname ) %][% categoryname %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</h1>
+    <h1>[% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron [% IF (firstname) %][% firstname | html %] [% END %][% IF (surname) %][% surname | html %] [% END %]([%IF ( categoryname ) %][% categoryname | html %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</h1>
 
     [% IF quickadd && opadd && !check_member %]
         <a href="#" class="toggle_quick_add"><i class="fa fa-plus-square"></i> Show full form</a>
@@ -59,7 +60,7 @@
 	[% IF ( check_member ) %]
 			<div class="dialog alert">
 				<h3>Duplicate patron record?</h3>
-                <p><a class="popup" href="#" onclick="Dopop('moremember.pl?print=brief&amp;borrowernumber=[% check_member %]');return false;" >View existing record</a></p>
+                <p><a class="popup" href="#" onclick="Dopop('moremember.pl?print=brief&amp;borrowernumber=[% check_member | html %]');return false;" >View existing record</a></p>
                 <button id="duplicate" type="submit" class="new"><i class="fa fa-pencil"></i> It is a duplicate.
                 Edit existing record</button>
 
@@ -83,7 +84,7 @@
             [% END %]
 			[% IF ( ERROR_age_limitations ) %]
             <li id="ERROR_age_limitations">Patron's age is incorrect for their category.
-                    Ages allowed are [% age_low %]-[% age_high %].</li>
+                    Ages allowed are [% age_low | html %]-[% age_high | html %].</li>
 			[% END %]
 			[% IF ( ERROR_branch ) %]
 				<li id="ERROR_branch">Library is invalid.</li>
@@ -98,7 +99,7 @@
 				<li id="ERROR_dateexpiry">Date of expiration is invalid.</li>
 			[% END %]
             [% IF ( ERROR_password_too_short ) %]
-                <li id="ERROR_short_password">Password must be at least [% minPasswordLength %] characters long.</li>
+                <li id="ERROR_short_password">Password must be at least [% minPasswordLength | html %] characters long.</li>
             [% END %]
             [% IF ( ERROR_password_too_weak ) %]
                 <li id="ERROR_weak_password">Password must contain at least one digit, one lowercase and one uppercase.</li>
@@ -110,7 +111,7 @@
 				<li id="ERROR_password_mismatch">Passwords do not match.</li>
 			[% END %]
             [% IF ( ERROR_extended_unique_id_failed ) %]
-                <li id="ERROR_extended_unique_id_failed"><strong>[% ERROR_extended_unique_id_failed_description %]:</strong> Attribute value "[% ERROR_extended_unique_id_failed_value %]" is already in use by another patron record.</li>
+                <li id="ERROR_extended_unique_id_failed"><strong>[% ERROR_extended_unique_id_failed_description | html %]:</strong> Attribute value "[% ERROR_extended_unique_id_failed_value | html %]" is already in use by another patron record.</li>
 			[% END %]
             [% IF ERROR_bad_email %]
                 <li id="ERROR_bad_email">The primary email is invalid.</li>
@@ -135,7 +136,7 @@
     [% IF opadd %]
         <a class="btn btn-default btn-sm" href="/cgi-bin/koha/members/member.pl" class="toggler save_entryform">
     [% ELSE %]
-        <a class="btn btn-default btn-sm" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
+        <a class="btn btn-default btn-sm" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | html %]">
     [% END %]
         <i class="fa fa-times"></i> Cancel
     </a>
@@ -144,18 +145,18 @@
 
 <form name="form" id="entryform"  action="/cgi-bin/koha/members/memberentry.pl" method="post" autocomplete="off" class="toggler" >
 [% UNLESS ( check_member ) %]
-    <input type="hidden" name="nodouble"  value="[% nodouble %]" />
+    <input type="hidden" name="nodouble"  value="[% nodouble | html %]" />
 [% END %]
 <!--    field always hidden in different form (1,2,3) -->
-<input type="hidden" name="BorrowerMandatoryField" value="[% BorrowerMandatoryField %]" />
-<input type="hidden" name="category_type" value="[% category_type %]" />
-<input type="hidden" name="updtype" value="[% updtype %]" />
-<input type="hidden" name="destination" value="[% destination %]" />
-<input type="hidden" name="check_member" value="[% check_member %]" />
-<input type="hidden" name="borrowernumber" value="[% borrowernumber UNLESS opduplicate %]" />
-<input type="hidden" name="nodouble"  value="[% nodouble UNLESS opduplicate %]" />
-<input type="hidden" name="csrf_token" value="[% csrf_token %]" />
-[% IF ( step ) %]<input type="hidden" name="step"  value="[% step %]" />[% END %]
+<input type="hidden" name="BorrowerMandatoryField" value="[% BorrowerMandatoryField | html %]" />
+<input type="hidden" name="category_type" value="[% category_type | html %]" />
+<input type="hidden" name="updtype" value="[% updtype | html %]" />
+<input type="hidden" name="destination" value="[% destination | html %]" />
+<input type="hidden" name="check_member" value="[% check_member | html %]" />
+<input type="hidden" name="borrowernumber" value="[% borrowernumber | html UNLESS opduplicate %]" />
+<input type="hidden" name="nodouble"  value="[% nodouble | html UNLESS opduplicate %]" />
+<input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
+[% IF ( step ) %]<input type="hidden" name="step"  value="[% step | html %]" />[% END %]
 [% IF ( opadd ) %]<input type="hidden" name="op" value="insert" />
 [% ELSIF ( opduplicate ) %]
 <input type="hidden" name="op" value="insert" />
@@ -164,7 +165,7 @@
 [% IF step == 4 || step == 5 || step == 6 || step == 2 || step == 1 || step == 7 %]
 [%# Only put the cardnumber if we arent showing it in the form later %]
 [% IF cardnumber %]
-<input type="hidden" name="cardnumber" value="[% cardnumber %]" />
+<input type="hidden" name="cardnumber" value="[% cardnumber | html %]" />
 [% END %]
 [% END %]
 [% END %]
@@ -188,9 +189,9 @@
                 <option value=""></option>
                 [% FOREACH t IN Koha.Preference('BorrowersTitles').split('\|') %]
                     [% IF btitle == t %]
-                        <option value="[% t %]" selected="selected">[% t %]</option>
+                        <option value="[% t | html %]" selected="selected">[% t | html %]</option>
                     [% ELSE %]
-                        <option value="[% t %]">[% t %]</option>
+                        <option value="[% t | html %]">[% t | html %]</option>
                     [% END %]
                 [% END %]
             </select>
@@ -216,9 +217,9 @@
         [% END %]
 
 		[% IF ( uppercasesurnames ) %]
-            <input style="text-transform:uppercase;" type="text" id="surname" name="surname" size="20"  value="[% surname %]" />
+            <input style="text-transform:uppercase;" type="text" id="surname" name="surname" size="20"  value="[% surname | html %]" />
 		[% ELSE %]
-            <input type="text" id="surname" name="surname" size="20"  value="[% surname %]" />
+            <input type="text" id="surname" name="surname" size="20"  value="[% surname | html %]" />
 		[% END %]
 		[% IF ( mandatorysurname ) %]<span class="required">Required</span>[% END %]
 		</li>
@@ -245,7 +246,7 @@
                 [% END %]
                 Date of birth: </label>
 
-                <input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="write_age();" value="[% dateofbirth UNLESS opduplicate %]" class="datepicker" />
+                <input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="write_age();" value="[% dateofbirth | html UNLESS opduplicate %]" class="datepicker" />
 
         [% IF ( mandatorydateofbirth ) %]<span class="required">Required</span>[% END %]
         [% IF ( ERROR_dateofbirth ) %]<span class="required">(Error)</span>[% END %]
@@ -312,9 +313,9 @@
 [% END # hide fieldset %]
 
 [% IF ( showguarantor ) %]
-    <input type="hidden" id="guarantorid" name="guarantorid"   value="[% guarantorid %]" />
+    <input type="hidden" id="guarantorid" name="guarantorid"   value="[% guarantorid | html %]" />
     [% UNLESS step_6 %]
-        <input type="hidden" name="branchcode" value="[% branchcode %]" />
+        <input type="hidden" name="branchcode" value="[% branchcode | html %]" />
     [% END %]
     <fieldset id="memberentry_guarantor" class="rows">
         <legend id="guarantor_lgd">Guarantor information</legend>
@@ -325,12 +326,12 @@
 	        [% ELSE %]
 	        <li id="contact-details" style="display: none">
 	        [% END %]
-	            <span class="label">Organization #:</span> [% IF ( guarantorid ) %] <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantorid %]" target="blank">[% guarantorid %]</a>[% END %]
+	            <span class="label">Organization #:</span> [% IF ( guarantorid ) %] <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantorid | html %]" target="blank">[% guarantorid | html %]</a>[% END %]
 	        </li>
 	        <li>
 	            <label for="contactname">Organization name: </label>
 	            [% IF ( guarantorid ) %]
-	            <span>[% contactname %]</span>
+	            <span>[% contactname | html %]</span>
 	            <input name="contactname" id="contactname" type="hidden" size="20" value="[% contactname | html %]" />
 	            [% ELSE %]
                     <input name="contactname" id="contactname" type="text" size="20" value="[% contactname | html %]" />
@@ -346,7 +347,7 @@
      <span class="label">Patron #:</span>
      [% IF guarantorid %]
         [% IF logged_in_user.can_see_patron_infos( guarantor ) %]
-            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantorid %]" target="blank">[% guarantorid | html %]</a>
+            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantorid | html %]" target="blank">[% guarantorid | html %]</a>
         [% ELSE %]
             [% guarantorid | html %]
         [% END %]
@@ -356,7 +357,7 @@
  <li>
      <label for="contactname">Surname: </label>
      [% IF ( guarantorid ) %]
-     <span>[% contactname %]</span>
+     <span>[% contactname | html %]</span>
      <input name="contactname" id="contactname" type="hidden" size="20" value="[% contactname | html %]" />
      [% ELSE %]
         <input name="contactname" id="contactname" type="text" size="20" value="[% contactname | html %]" />
@@ -367,7 +368,7 @@
  <li>
      <label for="contactfirstname">First name: </label>
      [% IF ( guarantorid ) %]
-     <span>[% contactfirstname %]</span>
+     <span>[% contactfirstname | html %]</span>
      <input name="contactfirstname" id="contactfirstname" type="hidden" size="20" value="[% contactfirstname | html %]" />
      [% ELSE %]
         <input name="contactfirstname" id="contactfirstname" type="text" size="20" value="[% contactfirstname | html %]" />
@@ -380,9 +381,9 @@
      <select name="relationship" id="relationship" >
          [% FOREACH relshiploo IN relshiploop %]
          [% IF ( relshiploo.selected ) %]
-         <option value="[% relshiploo.relationship %]" selected="selected" >[% relshiploo.relationship %]</option>
+         <option value="[% relshiploo.relationship | html %]" selected="selected" >[% relshiploo.relationship | html %]</option>
          [% ELSE %]
-         <option value="[% relshiploo.relationship %]">[% relshiploo.relationship %]</option>
+         <option value="[% relshiploo.relationship | html %]">[% relshiploo.relationship | html %]</option>
          [% END %]
          [% END %]
      </select>
@@ -419,11 +420,12 @@
 
 [% END %]
 [% UNLESS noaddress && noaddress2 && nocity && nostate && nozipcode && nocountry %]
-    [% IF Koha.Preference( 'AddressFormat' ) %]
-        [% INCLUDE "member-main-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
-    [% ELSE %]
-        [% INCLUDE 'member-main-address-style-us.inc' %]
-    [% END %]
+    [% SWITCH Koha.Preference( 'AddressFormat' ) %]
+        [% CASE 'de' %]
+            [% INCLUDE 'member-main-address-style-de.inc' %]
+        [% CASE # us %]
+            [% INCLUDE 'member-main-address-style-us.inc' %]
+     [% END %]
 [% END # nostreet && nocity etc group%]
 
 [% UNLESS nophone && nophonepro && nomobile && noemail && noemailpro && nofax %]
@@ -512,20 +514,23 @@
 [% IF ( step_6 ) %]
 
     [% UNLESS noB_address && noB_address2 && noB_city && noB_zipcode && noB_state && noB_country &&nocontactnote && noB_phone && noB_email %]
-        [% IF Koha.Preference( 'AddressFormat' ) %]
-            [% INCLUDE "member-alt-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
-        [% ELSE %]
+    [% SWITCH Koha.Preference( 'AddressFormat' ) %]
+        [% CASE 'de' %]
+            [% INCLUDE 'member-alt-address-style-de.inc' %]
+        [% CASE # us %]
             [% INCLUDE 'member-alt-address-style-us.inc' %]
-        [% END %]
+     [% END %]
+
     [% END # UNLESS noB_address && noB_city && noB_state && noB_phone && noB_email %]
 [% END %]
 [% IF ( step_2 ) %]
     [% UNLESS noaltcontactsurname && noaltcontactfirstname && noaltcontactaddress1 && noaltcontactaddress2 && noaltcontactaddress3 && noaltcontactstate && noaltcontactzipcode && noaltcontactcountry && noaltcontactphone %]
-        [% IF Koha.Preference( 'AddressFormat' ) %]
-            [% INCLUDE "member-alt-contact-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
-        [% ELSE %]
+    [% SWITCH Koha.Preference( 'AddressFormat' ) %]
+        [% CASE 'de' %]
+            [% INCLUDE 'member-alt-contact-style-de.inc' %]
+        [% CASE # us %]
             [% INCLUDE 'member-alt-contact-style-us.inc' %]
-        [% END %]
+     [% END %]
     [% END # UNLESS noaltcontactsurname && noaltcontactfirstname etc %]
 
 [% END %]
@@ -545,17 +550,17 @@
 
           <!-- NOTE: div.hint closing tag isn't on the same line -->
           [% IF minlength_cardnumber == maxlength_cardnumber %]
-                <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber | html %]" minlength="[% minlength_cardnumber %]" maxlength="[% maxlength_cardnumber %]" />
-                [% IF mandatorycardnumber %]<span class="required">Required</span>[% END %]<span id="cn_max" class="required">Card number must not be more than [% maxlength_cardnumber %] characters.</span>
-                <div class="hint">Card number must be exactly [% minlength_cardnumber %] characters.
+                <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber | html %]" minlength="[% minlength_cardnumber | html %]" maxlength="[% maxlength_cardnumber | html %]" />
+                [% IF mandatorycardnumber %]<span class="required">Required</span>[% END %]<span id="cn_max" class="required">Card number must not be more than [% maxlength_cardnumber | html %] characters.</span>
+                <div class="hint">Card number must be exactly [% minlength_cardnumber | html %] characters.
           [% ELSIF minlength_cardnumber && maxlength_cardnumber %]
-                <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber | html %]" minlength="[% minlength_cardnumber %]" maxlength="[% maxlength_cardnumber %]" />
-                [% IF mandatorycardnumber %]<span class="required">Required</span>[% END %]<span id="cn_max" class="required">Card number must not be more than [% maxlength_cardnumber %] characters.</span>
-                <div class="hint">Card number must be between [% minlength_cardnumber %] and [% maxlength_cardnumber %] characters.
+                <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber | html %]" minlength="[% minlength_cardnumber | html %]" maxlength="[% maxlength_cardnumber | html %]" />
+                [% IF mandatorycardnumber %]<span class="required">Required</span>[% END %]<span id="cn_max" class="required">Card number must not be more than [% maxlength_cardnumber | html %] characters.</span>
+                <div class="hint">Card number must be between [% minlength_cardnumber | html %] and [% maxlength_cardnumber | html %] characters.
           [% ELSIF maxlength_cardnumber %]
-                <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber | html %]" maxlength="[% maxlength_cardnumber %]" />
-                [% IF mandatorycardnumber %]<span class="required">Required</span>[% END %]<span id="cn_max" class="required">Card number must not be more than [% maxlength_cardnumber %] characters.</span>
-                <div class="hint">Card number can be up to [% maxlength_cardnumber %] characters.
+                <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber | html %]" maxlength="[% maxlength_cardnumber | html %]" />
+                [% IF mandatorycardnumber %]<span class="required">Required</span>[% END %]<span id="cn_max" class="required">Card number must not be more than [% maxlength_cardnumber | html %] characters.</span>
+                <div class="hint">Card number can be up to [% maxlength_cardnumber | html %] characters.
           [% ELSE %]
                 <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber | html %]" />
                 [% IF mandatorycardnumber %]<span class="required">Required</span>[% END %]
@@ -594,9 +599,9 @@
                     [% IF ( typeloo.typename_X ) %]<optgroup label="Statistical">[% END %]
                 [% END %]
                 [% IF ( categoryloo.categorycodeselected ) %]
-                    <option value="[% categoryloo.categorycode %]" selected="selected" data-typename="[% typeloo.typename %]">[% categoryloo.categoryname %]</option>
+                    <option value="[% categoryloo.categorycode | html %]" selected="selected" data-typename="[% typeloo.typename | html %]">[% categoryloo.categoryname | html %]</option>
                 [% ELSE %]
-                    <option value="[% categoryloo.categorycode %]" data-typename="[% typeloo.typename %]">[% categoryloo.categoryname %]</option>
+                    <option value="[% categoryloo.categorycode | html %]" data-typename="[% typeloo.typename | html %]">[% categoryloo.categoryname | html %]</option>
                 [% END %]
                 [% IF ( loop.last ) %]
                     </optgroup>
@@ -670,15 +675,15 @@
                     [% FOR sublanguage IN language.sublanguages_loop %]
                         [% IF language.plural %]
                             [% IF sublanguage.rfc4646_subtag == lang %]
-                                <option value="[% sublanguage.rfc4646_subtag %]" selected="selected">[% sublanguage.native_description %] [% sublanguage.region_description %] ([% sublanguage.rfc4646_subtag %])</option>
+                                <option value="[% sublanguage.rfc4646_subtag | html %]" selected="selected">[% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
                             [% ELSE %]
-                                <option value="[% sublanguage.rfc4646_subtag %]">[% sublanguage.native_description %] [% sublanguage.region_description %] ([% sublanguage.rfc4646_subtag %])</option>
+                                <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
                             [% END %]
                         [% ELSE %]
                             [% IF sublanguage.rfc4646_subtag == lang %]
-                                <option value="[% sublanguage.rfc4646_subtag %]" selected="selected">[% sublanguage.native_description %] ([% sublanguage.rfc4646_subtag %])</option>
+                                <option value="[% sublanguage.rfc4646_subtag | html %]" selected="selected">[% sublanguage.native_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
                             [% ELSE %]
-                                <option value="[% sublanguage.rfc4646_subtag %]">[% sublanguage.native_description %] ([% sublanguage.rfc4646_subtag %])</option>
+                                <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
                             [% END %]
                         [% END %]
                     [% END %]
@@ -700,9 +705,9 @@
 			[% END %]
 			Registration date: </label>
             [% IF ( dateformat == "metric" ) %]
-                <input type="text" id="from" name="dateenrolled"  maxlength="10" size="10" onchange="CheckDate(document.form.dateenrolled);check_manip_date('verify');" value="[% dateenrolled %]" class="datepickerfrom" />
+                <input type="text" id="from" name="dateenrolled"  maxlength="10" size="10" onchange="CheckDate(document.form.dateenrolled);check_manip_date('verify');" value="[% dateenrolled | html %]" class="datepickerfrom" />
             [% ELSE %]
-                <input type="text" id="from" name="dateenrolled"  maxlength="10" size="10" value="[% dateenrolled %]" class="datepickerfrom" />
+                <input type="text" id="from" name="dateenrolled"  maxlength="10" size="10" value="[% dateenrolled | html %]" class="datepickerfrom" />
             [% END %]
 		[% IF ( mandatorydateenrolled ) %]<span class="required">Required</span>[% END %]
 		[% IF ( ERROR_dateenrolled ) %]<span class="required">(Error)</span>[% END %]
@@ -722,15 +727,15 @@
 			Expiry date (leave blank for auto calc): </label>
             [% IF ( dateformat == "metric" ) %]
 				[% UNLESS ( opadd ) %]
-                    <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" value="[% dateexpiry UNLESS opduplicate %]" class="datepickerto" />
+                    <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" value="[% dateexpiry | html UNLESS opduplicate %]" class="datepickerto" />
 				[% ELSE %]
                     <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" class="datepickerto" />
 				[% END %]
 			[% ELSE %]
 				[% UNLESS ( opadd ) %]
-                <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry UNLESS opduplicate %]" class="datepickerto" />
+                <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry | html UNLESS opduplicate %]" class="datepickerto" />
 				[% ELSE %]
-                <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry %]" class="datepickerto" />
+                <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry | html %]" class="datepickerto" />
 				[% END %]
 			[% END %]
 		[% IF ( mandatorydateexpiry ) %]<span class="required">Required</span>[% END %]
@@ -783,13 +788,13 @@
 	[% IF ( opduplicate ) %]
 		<input type="text" id="userid" name="userid" size="20" disabled="disabled" />
 	[% ELSE %]
-		<input type="text" id="userid" name="userid" size="20" disabled="disabled" value="[% userid %]" />
+		<input type="text" id="userid" name="userid" size="20" disabled="disabled" value="[% userid | html %]" />
 	[% END %]
 [% ELSE %]
 	[% IF ( opduplicate ) %]
 		<input type="text" id="userid" name="userid" size="20" value="" />
 	[% ELSE %]
-		<input type="text" id="userid" name="userid" size="20" value="[% userid %]" />
+		<input type="text" id="userid" name="userid" size="20" value="[% userid | html %]" />
 	[% END %]
 [% END %]
 
@@ -812,13 +817,13 @@
 				[% IF ( opduplicate ) %]
 					<input type="password" id="password" name="password" size="20"  disabled="disabled" />
 				[% ELSE %]
-					<input type="password" id="password" name="password" size="20"  disabled="disabled" value="[% password %]" />
+					<input type="password" id="password" name="password" size="20"  disabled="disabled" value="[% password | html %]" />
 				[% END %]
 [% ELSE %]
 				[% IF ( opduplicate ) %]
 					<input type="password" id="password" name="password" size="20" />
 				[% ELSE %]
-					<input type="password" id="password" name="password" size="20" value="[% password %]" />
+					<input type="password" id="password" name="password" size="20" value="[% password | html %]" />
 				[% END %]
 [% END %]
 			[% ELSE %]
@@ -844,7 +849,7 @@
             [% IF ( ERROR_password_too_short ) %]<span class="required">Password is too short</span>[% END %]
             [% IF ( ERROR_password_too_weak ) %]<span class="required">Password is too weak</span>[% END %]
             [% IF ( ERROR_password_has_whitespaces ) %]<span class="required">Password has leading or trailing whitespaces</span>[% END %]
-            <div class="hint">Minimum password length: [% minPasswordLength %]</div>
+            <div class="hint">Minimum password length: [% minPasswordLength | html %]</div>
 		</li>
 		<li>
 			[% IF ( mandatorypassword ) %]
@@ -858,13 +863,13 @@
 				[% IF ( opduplicate ) %]
 					<input type="password" id="password2" name="password2" size="20"  disabled="disabled" />
 				[% ELSE %]
-					<input type="password" id="password2" name="password2" size="20"  disabled="disabled" value="[% password %]" />
+					<input type="password" id="password2" name="password2" size="20"  disabled="disabled" value="[% password | html %]" />
 				[% END %]
 [% ELSE %]
 				[% IF ( opduplicate ) %]
 					<input type="password" id="password2" name="password2" size="20" />
 				[% ELSE %]
-					<input type="password" id="password2" name="password2" size="20" value="[% password %]" />
+					<input type="password" id="password2" name="password2" size="20" value="[% password | html %]" />
 				[% END %]
 [% END %]
 			[% ELSE %]
@@ -897,23 +902,23 @@
             <legend id="account_flags_lgd">Patron account flags</legend>
 			<ol class="radio">
 			[% FOREACH flagloo IN flagloop %]
-				<li><label class="radio" for="yes[% flagloo.name %]">
+				<li><label class="radio" for="yes[% flagloo.name | html %]">
                 [% IF ( flagloo.key == 'gonenoaddress' ) %]Gone no address:[% END %]
                 [% IF ( flagloo.key == 'lost' ) %]Lost card:[% END %]
                 </label>
                 [% IF CAN_user_circulate_manage_restrictions %]
-                            <label for="yes[% flagloo.name %]">
+                            <label for="yes[% flagloo.name | html %]">
 				[% IF ( flagloo.yes ) %]
-				<input type="radio" id="yes[% flagloo.name %]" name="[% flagloo.name %]" value="1" checked="checked" />
+				<input type="radio" id="yes[% flagloo.name | html %]" name="[% flagloo.name | html %]" value="1" checked="checked" />
 				[% ELSE %]
-				<input type="radio" id="yes[% flagloo.name %]" name="[% flagloo.name %]" value="1" />
+				<input type="radio" id="yes[% flagloo.name | html %]" name="[% flagloo.name | html %]" value="1" />
 				[% END %]
                             Yes </label>
-                            <label for="no[% flagloo.name %]">
+                            <label for="no[% flagloo.name | html %]">
 				[% IF ( flagloo.no ) %]
-				<input type="radio" id="no[% flagloo.name %]" name="[% flagloo.name %]" value="0" checked="checked"/>
+				<input type="radio" id="no[% flagloo.name | html %]" name="[% flagloo.name | html %]" value="0" checked="checked"/>
 				[% ELSE %]
-				<input type="radio" id="no[% flagloo.name %]" name="[% flagloo.name %]" value="0" />
+				<input type="radio" id="no[% flagloo.name | html %]" name="[% flagloo.name | html %]" value="0" />
 				[% END %]
                             No </label>
                 [% ELSE %]
@@ -946,19 +951,19 @@
                         <tbody>
                             [% FOREACH d IN debarments %]
                                 <tr>
-                                    <td>[% d.type %]</td>
+                                    <td>[% d.type | html %]</td>
                                     <td>
                                     [% IF d.comment.search('OVERDUES_PROCESS') %]
-                                        Restriction added by overdues process [% d.comment.remove('OVERDUES_PROCESS ') %]
+                                        Restriction added by overdues process [% d.comment.remove('OVERDUES_PROCESS ') | $raw %]
                                     [% ELSE %]
-                                        [% d.comment %]
+                                        [% d.comment | $raw %]
                                     [% END %]
                                     </td>
                                     <td>[% IF d.expiration %] [% d.expiration | $KohaDates %] [% ELSE %] <i>Indefinite</i> [% END %]</td>
                                     <td>[% d.created | $KohaDates %]</td>
                                     [% IF CAN_user_borrowers_edit_borrowers && CAN_user_circulate_manage_restrictions %]
                                       <td>
-                                        <input type="checkbox" id="debarment_[% d.borrower_debarment_id %]" name="remove_debarment" value="[% d.borrower_debarment_id %]" />
+                                        <input type="checkbox" id="debarment_[% d.borrower_debarment_id | html %]" name="remove_debarment" value="[% d.borrower_debarment_id | html %]" />
                                       </td>
                                     [% END %]
                                 </tr>
@@ -1049,32 +1054,32 @@
     <input type="hidden" name="setting_extended_patron_attributes" value="1" />
     [% FOREACH pa_loo IN patron_attributes %]
         [% IF pa_loo.class %]
-            <fieldset id="aai_[% pa_loo.class %]">
-            <legend id="[% pa_loo.class %]_lgd">[% pa_loo.lib %]</legend>
+            <fieldset id="aai_[% pa_loo.class | html %]">
+            <legend id="[% pa_loo.class | html %]_lgd">[% pa_loo.lib | html %]</legend>
         [% END %]
         <ol class="attributes_table">
             [% FOREACH patron_attribute IN pa_loo.items %]
-                <li data-category_code="[% patron_attribute.category_code %]">
-                    <label for="[% patron_attribute.form_id %]">[% patron_attribute.description %]: </label>
+                <li data-category_code="[% patron_attribute.category_code | html %]">
+                    <label for="[% patron_attribute.form_id | html %]">[% patron_attribute.description | html %]: </label>
                         [% IF ( patron_attribute.use_dropdown ) %]
-                            <select id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]">
+                            <select id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]">
                                 <option value=""></option>
                                 [% FOREACH auth_val_loo IN patron_attribute.auth_val_loop %]
                                     [% IF auth_val_loo.authorised_value == patron_attribute.value %]
-                                        <option value="[% auth_val_loo.authorised_value %]" selected="selected">
-                                            [% auth_val_loo.lib %]
+                                        <option value="[% auth_val_loo.authorised_value | html %]" selected="selected">
+                                            [% auth_val_loo.lib | html %]
                                         </option>
                                     [% ELSE %]
-                                        <option value="[% auth_val_loo.authorised_value %]" >
-                                            [% auth_val_loo.lib %]
+                                        <option value="[% auth_val_loo.authorised_value | html %]" >
+                                            [% auth_val_loo.lib | html %]
                                         </option>
                                     [% END %]
                                 [% END %]
                             </select>
                         [% ELSE %]
-                            <textarea rows="2" cols="30" id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]">[% patron_attribute.value %]</textarea>
+                            <textarea rows="2" cols="30" id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]">[% patron_attribute.value | html %]</textarea>
                         [% END %]
-                        <input type="hidden" id="[% patron_attribute.form_id %]_code" name="[% patron_attribute.form_id %]_code" value="[% patron_attribute.code |html %]" />
+                        <input type="hidden" id="[% patron_attribute.form_id | html %]_code" name="[% patron_attribute.form_id | html %]_code" value="[% patron_attribute.code | html %]" />
                         <a href="#" onclick="clear_entry(this); return false;"><i class="fa fa-fw fa-trash"></i> Clear</a>
                         [% IF ( patron_attribute.repeatable ) %]
                         <a href="#" onclick="clone_entry(this); return false;"><i class="fa fa-fw fa-plus"></i> New</a>
@@ -1140,7 +1145,7 @@
     [% INCLUDE 'messaging-preference-form.inc' %]
     [% IF ( SMSSendDriver ) %]
         <p><label for="SMSnumber">SMS number:</label>
-            <input type="text" id="SMSnumber" name="SMSnumber" value="[% SMSnumber %]" />
+            <input type="text" id="SMSnumber" name="SMSnumber" value="[% SMSnumber | html %]" />
         </p>
         [% UNLESS nosms_provider_id %]
         <p>
@@ -1149,9 +1154,9 @@
                 <option value="">Unknown</option>
                 [% FOREACH s IN sms_providers %]
                     [% IF s.id == sms_provider_id %]
-                        <option value="[% s.id %]" selected="selected">[% s.name %]</option>
+                        <option value="[% s.id | html %]" selected="selected">[% s.name | html %]</option>
                     [% ELSE %]
-                        <option value="[% s.id %]">[% s.name %]</option>
+                        <option value="[% s.id | html %]">[% s.name | html %]</option>
                     [% END %]
                 [% END %]
             </select>
@@ -1181,10 +1186,10 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
     <script type="text/javascript">
         $(document).ready(function() {
 
@@ -1204,7 +1209,7 @@
                 })
 
             [% IF categorycode %]
-                update_category_code( "[% categorycode %]" );
+                update_category_code( "[% categorycode | html %]" );
             [% ELSE %]
                 if ( $("#categorycode_entry").length > 0 ){
                     var category_code = $("#categorycode_entry").find("option:selected").val();
@@ -1214,7 +1219,7 @@
         });
 
         function update_cardnumber_warning(size){
-            var max_len = [% maxlength_cardnumber %];
+            var max_len = [% maxlength_cardnumber | html %];
             if ( size >= max_len ) {
                 $("#cn_max").show();
             } else {
@@ -1280,7 +1285,7 @@
 
             $('#duplicate').on('click', function() {
                 $("input[name='op']").val('modify');
-                $("input[name='borrowernumber']").val('[% check_member %]');
+                $("input[name='borrowernumber']").val('[% check_member | html %]');
                 $("input[name='check_member']").val('');
                 $('#entryform').submit();
             });
@@ -1311,8 +1316,8 @@
             $(document).ready(function () {
 
                 $("#entryform,#saverecord").hide();
-                [% q_add_f = Koha.Preference('PatronQuickAddFields').split('\|') %]
-                var qaddfields = [[% FOREACH field IN q_add_f.unique %]"[% field %]",[% END %]];
+                [% q_add_f = Koha.Preference('PatronQuickAddFields').split('\|') | html %]
+                var qaddfields = [[% FOREACH field IN q_add_f.unique %]"[% field | html %]",[% END %]];
                 var skipped_fields = ["contactname","contactfirstname","relationship"]; //Guarantor form is pulled as a whole, ignore individual fields
                 $("#entryform label").each(function () {
                     var input_label = $(this).attr('for');
@@ -1341,8 +1346,8 @@
         [% END %]
 
     </script>
-    [% Asset.js("js/members.js") %]
-    [% Asset.js("js/messaging-preference-form.js") %]
+    [% Asset.js("js/members.js") | $raw %]
+    [% Asset.js("js/messaging-preference-form.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

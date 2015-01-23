@@ -1,9 +1,10 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha staff client</title>
-[% Asset.css("css/mainpage.css") %]
+[% Asset.css("css/mainpage.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="main_intranet-main" class="intranet-main">
@@ -20,12 +21,12 @@
                         <h3><span class="news_title">News</span></h3>
                         [% SET newsdisp = Koha.Preference('NewsAuthorDisplay') %]
                         [% FOREACH koha_new IN koha_news %]
-                            <div class="newsitem" id="news[% koha_new.idnew %]"><h4>[% koha_new.title %]</h4>
-                                <div class="newsbody">[% koha_new.content %]</div>
-                                <p class="newsfooter"> Posted on [% koha_new.newdate %][% IF( ( newsdisp == 'staff' || newsdisp == 'both' ) && koha_new.borrowernumber ) %] by <span class="newsauthor_title">[% koha_new.author_title %] </span>[% koha_new.author_firstname %] [% koha_new.author_surname %]<br />[% END %]
+                            <div class="newsitem" id="news[% koha_new.idnew | html %]"><h4>[% koha_new.title | html %]</h4>
+                                <div class="newsbody">[% koha_new.content | $raw %]</div>
+                                <p class="newsfooter"> Posted on [% koha_new.newdate | html %][% IF( ( newsdisp == 'staff' || newsdisp == 'both' ) && koha_new.borrowernumber ) %] by <span class="newsauthor_title">[% koha_new.author_title | html %] </span>[% koha_new.author_firstname | html %] [% koha_new.author_surname | html %]<br />[% END %]
                                     [% IF ( CAN_user_tools ) %]
-                                        <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=[% koha_new.idnew %]">Edit</a>
-                                         | <a class="news_delete" href="/cgi-bin/koha/tools/koha-news.pl?op=del&amp;ids=[% koha_new.idnew %]">Delete</a>
+                                        <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=[% koha_new.idnew | html %]">Edit</a>
+                                         | <a class="news_delete" href="/cgi-bin/koha/tools/koha-news.pl?op=del&amp;ids=[% koha_new.idnew | html %]">Delete</a>
                                          | <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form">New</a>
                                     [% END %]
                                 </p>
@@ -133,7 +134,7 @@
                                 <div class="pending-info" id="article_requests_pending">
 
                                     <a href="/cgi-bin/koha/circ/article-requests.pl">Article requests</a>:
-                                    <span class="pending-number-link">[% pending_article_requests %]</span>
+                                    <span class="pending-number-link">[% pending_article_requests | html %]</span>
                                 </div>
                                 [% END %]
 
@@ -141,21 +142,21 @@
                                 <div class="pending-info" id="suggestions_pending">
 
                                     <a href="/cgi-bin/koha/suggestion/suggestion.pl#ASKED">Suggestions pending approval</a>:
-                                    <span class="pending-number-link">[% pendingsuggestions %]</span>
+                                    <span class="pending-number-link">[% pendingsuggestions | html %]</span>
                                 </div>
                                 [% END %]
 
                                 [% IF ( CAN_user_tools_moderate_comments  && pendingcomments ) %]
                                 <div class="pending-info" id="comments_pending">
                                     <a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments pending approval</a>:
-                                    <span class="pending-number-link">[% pendingcomments %]</span>
+                                    <span class="pending-number-link">[% pendingcomments | html %]</span>
                                 </div>
                                 [% END %]
 
                                 [% IF ( CAN_user_tools_moderate_tags && pendingtags ) %]
                                 <div class="pending-info" id="tags_pending">
                                     <a href="/cgi-bin/koha/tags/review.pl">Tags pending approval</a>:
-                                    <span class="pending-number-link">[% pendingtags %]</span>
+                                    <span class="pending-number-link">[% pendingtags | html %]</span>
                                 </div>
                                 [% END %]
 
@@ -163,21 +164,21 @@
                                 [% IF ( CAN_user_borrowers_edit_borrowers && pending_borrower_modifications ) %]
                                 <div class="pending-info" id="patron_updates_pending">
                                     <a href="/cgi-bin/koha/members/members-update.pl">Patrons requesting modifications</a>:
-                                    <span class="pending-number-link">[% pending_borrower_modifications %]</span>
+                                    <span class="pending-number-link">[% pending_borrower_modifications | html %]</span>
                                 </div>
                                 [% END %]
 
                                 [% IF CAN_user_borrowers_edit_borrowers && pending_discharge_requests %]
                                 <div class="pending-info" id="patron_discharges_pending">
                                     <a href="/cgi-bin/koha/members/discharges.pl">Discharge requests pending</a>:
-                                    <span class="pending-number-link">[% pending_discharge_requests %]</span>
+                                    <span class="pending-number-link">[% pending_discharge_requests | html %]</span>
                                 </div>
                                 [% END %]
 
                                 [% IF Koha.Preference('AllowCheckoutNotes') && CAN_user_circulate_manage_checkout_notes && pending_checkout_notes.count %]
                                     <div class="pending-info" id="checkout_notes_pending">
                                         <a href="/cgi-bin/koha/circ/checkout-notes.pl">Checkout notes pending</a>:
-                                        <span class="pending-number-link">[% pending_checkout_notes.count %]</span>
+                                        <span class="pending-number-link">[% pending_checkout_notes.count | html %]</span>
                                     </div>
                                 [% END %]
 
@@ -193,7 +194,7 @@
                         <div class="col-sm-12">
                             <div id="area-userblock">
                                 <div class="user-info">
-                                    [% IntranetmainUserblock %]
+                                    [% IntranetmainUserblock | $raw %]
                                 </div>
                             </div>
                         </div>

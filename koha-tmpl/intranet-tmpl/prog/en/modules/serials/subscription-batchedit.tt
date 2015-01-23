@@ -46,15 +46,15 @@
                             <tbody>
                                 [% FOREACH subscription IN subscriptions %]
                                     <tr>
-                                        <td>[% subscription.biblio.biblioitem.issn %]</td>
-                                        <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]">[% subscription.biblio.title %] (#[% subscription.subscriptionid %])</a></td>
-                                        <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% subscription.vendor.id %]">[% subscription.vendor.name |html %]</a></td>
-                                        <td>[% AuthorisedValues.GetByCode('LOC', subscription.location) %]</td>
-                                        <td>[% Branches.GetName(subscription.branchcode) %]</td>
-                                        <td>[% ItemTypes.GetDescription( subscription.itemtype ) %]</td>
-                                        <td>[% subscription.notes %]</td>
-                                        <td>[% subscription.internalnotes %]</td>
-                                        <td>[% subscription.callnumber %]</td>
+                                        <td>[% subscription.biblio.biblioitem.issn | html %]</td>
+                                        <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | html %]">[% subscription.biblio.title | html %] (#[% subscription.subscriptionid | html %])</a></td>
+                                        <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% subscription.vendor.id | html %]">[% subscription.vendor.name | html %]</a></td>
+                                        <td>[% AuthorisedValues.GetByCode('LOC', subscription.location) | html %]</td>
+                                        <td>[% Branches.GetName(subscription.branchcode) | html %]</td>
+                                        <td>[% ItemTypes.GetDescription( subscription.itemtype ) | html %]</td>
+                                        <td>[% subscription.notes | html %]</td>
+                                        <td>[% subscription.internalnotes | html %]</td>
+                                        <td>[% subscription.callnumber | html %]</td>
                                         <td>
                                             [% IF subscription.serialsadditems %]
                                                 <span>Yes</span>
@@ -71,10 +71,10 @@
 
                     <form method="post">
                         [% FOREACH subscription IN subscriptions %]
-                            <input type="hidden" name="subscriptionid" value="[% subscription.subscriptionid %]"/>
+                            <input type="hidden" name="subscriptionid" value="[% subscription.subscriptionid | html %]"/>
                         [% END %]
                         [% IF referrer %]
-                            <input type="hidden" name="referrer" value="[% referrer %]"/>
+                            <input type="hidden" name="referrer" value="[% referrer | html %]"/>
                         [% END %]
                         <fieldset class="rows">
                             <ol>
@@ -83,7 +83,7 @@
                                     <select id="booksellerid" name="booksellerid">
                                         <option value="">No change</option>
                                         [% FOREACH bookseller IN booksellers %]
-                                            <option value="[% bookseller.id %]">[% bookseller.name %]</option>
+                                            <option value="[% bookseller.id | html %]">[% bookseller.name | html %]</option>
                                         [% END %]
                                     </select>
                                 </li>
@@ -92,7 +92,7 @@
                                     <select id="location" name="location">
                                         <option value="">No change</option>
                                         [% FOREACH av IN AuthorisedValues.Get('LOC') %]
-                                            <option value="[% av.authorised_value | html %]">[% av.lib %]</option>
+                                            <option value="[% av.authorised_value | html %]">[% av.lib | html %]</option>
                                         [% END %]
                                     </select>
                                 </li>
@@ -101,7 +101,7 @@
                                     <select id="branchcode" name="branchcode">
                                         <option value="">No change</option>
                                         [% FOREACH branch IN Branches.all %]
-                                            <option value="[% branch.branchcode | html %]">[% branch.branchname %]</option>
+                                            <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
                                         [% END %]
                                     </select>
                                 </li>
@@ -110,7 +110,7 @@
                                     <select id="itemtype" name="itemtype">
                                         <option value="">No change</option>
                                         [% FOREACH itemtype IN ItemTypes.Get() %]
-                                            <option value="[% itemtype.itemtype %]">[% itemtype.description %]</option>
+                                            <option value="[% itemtype.itemtype | html %]">[% itemtype.description | html %]</option>
                                         [% END %]
                                     </select>
                                 </li>
@@ -137,16 +137,16 @@
                                 </li>
                                 [% FOREACH field IN additional_fields %]
                                     <li>
-                                        <label for="field_[% field.id %]">[% field.name %]</label>
+                                        <label for="field_[% field.id | html %]">[% field.name | html %]</label>
                                         [% IF field.authorised_value_category %]
-                                            <select id="field_[% field.id %]" name="field_[% field.id %]">
+                                            <select id="field_[% field.id | html %]" name="field_[% field.id | html %]">
                                                 <option value="">No change</option>
                                                 [% FOREACH av IN AuthorisedValues.Get(field.authorised_value_category) %]
-                                                    <option value="[% av.authorised_value %]">[% av.lib %]</option>
+                                                    <option value="[% av.authorised_value | html %]">[% av.lib | html %]</option>
                                                 [% END %]
                                             </select>
                                         [% ELSE %]
-                                            <input id="field_[% field.id %]" name="field_[% field.id %]" placeholder="No change"/>
+                                            <input id="field_[% field.id | html %]" name="field_[% field.id | html %]" placeholder="No change"/>
                                         [% END %]
                                     </li>
                                 [% END %]
@@ -155,7 +155,7 @@
 
                         <fieldset class="action">
                             <button type="submit" name="batchedit" value="1">Save</button>
-                            <a class="cancel" href="[% referrer %]">Cancel</a>
+                            <a class="cancel" href="[% referrer | html %]">Cancel</a>
                         </fieldset>
                     </form>
                 </div>

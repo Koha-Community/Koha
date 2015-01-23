@@ -1,13 +1,14 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; System preferences</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
-[% Asset.css("css/preferences.css") %]
-[% Asset.css("lib/jquery/plugins/multiple-select/multiple-select.css") %]
-[% Asset.css("css/humanmsg.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
+[% Asset.css("css/preferences.css") | $raw %]
+[% Asset.css("lib/jquery/plugins/multiple-select/multiple-select.css") | $raw %]
+[% Asset.css("css/humanmsg.css") | $raw %]
 </head>
 <body id="admin_preferences" class="admin">
 [% INCLUDE 'header.inc' %]
@@ -24,28 +25,28 @@
     [% IF ( jump_not_found ) %]
     <h2>System preferences</h2>
     <div class="dialog alert">
-        Could not find a system preference named <code>[% jumpfield %]</code>.
+        Could not find a system preference named <code>[% jumpfield | html %]</code>.
     </div>
     [% END %]
     [% IF ( search_not_found ) %]
     <div class="dialog alert">
-        No system preferences matched your search for: <strong>[% searchfield |html %]</strong>
+        No system preferences matched your search for: <strong>[% searchfield | html %]</strong>
     </div>
     [% ELSIF searchfield %]
         <h1>You searched for: [% searchfield | html %]</h1>
     [% END %]
     [% FOREACH TAB IN TABS %]
     <div class="prefs-tab">
-    <h2>[% TAB.tab_title %] preferences</h2>
+    <h2>[% TAB.tab_title | html %] preferences</h2>
     <form action="/cgi-bin/koha/admin/preferences.pl" method="post">
-        [% UNLESS ( searchfield ) %]<div id="toolbar"><button class="save-all submit" type="submit">Save all [% TAB.tab_title %] preferences</button></div>[% END %]
+        [% UNLESS ( searchfield ) %]<div id="toolbar"><button class="save-all submit" type="submit">Save all [% TAB.tab_title | html %] preferences</button></div>[% END %]
         <input type="hidden" name="op" value="save" />
-        <input type="hidden" name="tab" value="[% TAB.tab_id %]" />
+        <input type="hidden" name="tab" value="[% TAB.tab_id | html %]" />
 
             [% FOREACH LINE IN TAB.LINES %]
             [% IF ( LINE.is_group_title ) %]
             [% UNLESS ( loop.first ) %]</tbody></table>[% END %]
-            <h3>[% LINE.title %]</h3>
+            <h3>[% LINE.title | html %]</h3>
             <table class="preferences">
             <thead><tr><th>Preference</th><th>Value</th></tr></thead>
             [% UNLESS ( loop.last ) %]<tbody>[% END %]
@@ -55,17 +56,17 @@
                 <td class="name-cell">
                     <code>
                         [% FOREACH NAME IN LINE.NAMES %]
-						<label for="pref_[% NAME.name %]">
+						<label for="pref_[% NAME.name | html %]">
 							[% IF ( NAME.jumped ) %]
-							<span class="term" id="jumped">[% NAME.name %]</span>
+							<span class="term" id="jumped">[% NAME.name | html %]</span>
                             [% ELSIF ( NAME.highlighted ) %]
-							<span class="term">[% NAME.name %]</span>
+							<span class="term">[% NAME.name | html %]</span>
 							[% ELSE %]
-							[% NAME.name %]
+							[% NAME.name | html %]
 							[% END %]
 
                             [% IF NAME.overridden %]
-                                <span class="overridden" title="The system preference [% NAME.name %] may have been overridden from this value by one or more virtual hosts.">
+                                <span class="overridden" title="The system preference [% NAME.name | html %] may have been overridden from this value by one or more virtual hosts.">
                                     [Overridden]
                                 </span>
                             [% END %]
@@ -77,31 +78,31 @@
                 <td><div>
                     [% FOREACH CHUNK IN LINE.CHUNKS %]
                     [% IF ( CHUNK.type_text ) %]
-                    [% CHUNK.contents %]
+                    [% CHUNK.contents | $raw %]
                     [% ELSIF ( CHUNK.type_input ) %]
-                    <input type="[%IF CHUNK.input_type %][% CHUNK.input_type %][% ELSE %]text[% END %]" name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% CHUNK.class or "short" %]" value="[% CHUNK.value| html %]" autocomplete="off" /> [% IF ( CHUNK.dateinput ) %]<span class="hint">[% INCLUDE 'date-format.inc' %]</span>[% END %]
+                    <input type="[%IF CHUNK.input_type %][% CHUNK.input_type | html %][% ELSE %]text[% END %]" name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "short" | html %]" value="[% CHUNK.value | html %]" autocomplete="off" /> [% IF ( CHUNK.dateinput ) %]<span class="hint">[% INCLUDE 'date-format.inc' %]</span>[% END %]
                     [% ELSIF ( CHUNK.type_select ) %]
-                    <select name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% CHUNK.class or "choice" %]">
+                    <select name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "choice" | html %]">
                         [% FOREACH CHOICE IN CHUNK.CHOICES.sort('value') %]
                         [% IF ( CHOICE.selected ) %]
-                        <option value="[% CHOICE.value %]" selected="selected">
+                        <option value="[% CHOICE.value | html %]" selected="selected">
                         [% ELSE %]
-                        <option value="[% CHOICE.value %]">
+                        <option value="[% CHOICE.value | html %]">
                         [% END %]
-                            [% CHOICE.text %]
+                            [% CHOICE.text | html %]
                         </option>
                         [% END %]
                     </select>
                     [% ELSIF ( CHUNK.type_multiple ) %]
-                    <select name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% CHUNK.class or "choice" %]" multiple="multiple">
-                        [% FOREACH CHOICE IN CHUNK.CHOICES %][% IF ( CHOICE.selected ) %]<option value="[% CHOICE.value %]" selected="selected">[% ELSE %]<option value="[% CHOICE.value %]">[% END %][% CHOICE.text %]</option>[% END %]
+                    <select name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "choice" | html %]" multiple="multiple">
+                        [% FOREACH CHOICE IN CHUNK.CHOICES %][% IF ( CHOICE.selected ) %]<option value="[% CHOICE.value | html %]" selected="selected">[% ELSE %]<option value="[% CHOICE.value | html %]">[% END %][% CHOICE.text | html %]</option>[% END %]
                     </select>
                     [% ELSIF ( CHUNK.type_textarea ) || ( CHUNK.type_htmlarea )%]
                         [% IF ( CHUNK.type_htmlarea ) && ( Koha.Preference('UseWYSIWYGinSystemPreferences') ) %]
-                        <textarea name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% CHUNK.class or "short" %] mce" rows="20" cols="60">[% CHUNK.value %]</textarea>
+                        <textarea name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "short" | html %] mce" rows="20" cols="60">[% CHUNK.value | html %]</textarea>
                         [% ELSE %]
                         <a class="expand-textarea" style="display: none" href="#">Click to Edit</a>
-                        <textarea name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% CHUNK.class or "short" %]" rows="10" cols="40">[% CHUNK.value %]</textarea>
+                        <textarea name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "short" | html %]" rows="10" cols="40">[% CHUNK.value | html %]</textarea>
                         <a class="collapse-textarea" style="display:none" href="#">Click to collapse</br></a>
                         [% END %]
                     [% ELSIF ( CHUNK.type_languages ) %]
@@ -110,25 +111,25 @@
                     <div>
                         [% IF ( language.plural ) %]
                         <dt>
-                            [% IF ( language.native_description ) %][% language.native_description %][% ELSE %][% language.rfc4646_subtag %][% END %]
+                            [% IF ( language.native_description ) %][% language.native_description | html %][% ELSE %][% language.rfc4646_subtag | html %][% END %]
                         </dt>
                         [% FOREACH sublanguages_loo IN language.sublanguages_loop %]
                         <dd>
-                            <label for="pref_[% CHUNK.name %]_[% sublanguages_loo.rfc4646_subtag %]">[% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %]([% sublanguages_loo.rfc4646_subtag %])</label>
+                            <label for="pref_[% CHUNK.name | html %]_[% sublanguages_loo.rfc4646_subtag | html %]">[% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %]([% sublanguages_loo.rfc4646_subtag | html %])</label>
                             [% IF ( sublanguages_loo.enabled ) %]
-                            <input value="[% sublanguages_loo.rfc4646_subtag %]" name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]_[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" class="preference preference-checkbox"/>
+                            <input value="[% sublanguages_loo.rfc4646_subtag | html %]" name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]_[% sublanguages_loo.rfc4646_subtag | html %]" type="checkbox" checked="checked" class="preference preference-checkbox"/>
                             [% ELSE %]
-                            <input value="[% sublanguages_loo.rfc4646_subtag %]" name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]_[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" class="preference preference-checkbox"/>
+                            <input value="[% sublanguages_loo.rfc4646_subtag | html %]" name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]_[% sublanguages_loo.rfc4646_subtag | html %]" type="checkbox" class="preference preference-checkbox"/>
                             [% END %]
                         </dd>
                         [% END %]
                         [% ELSE %]
                         <dt>
-                            <label for="pref_[% CHUNK.name %]_[% language.rfc4646_subtag %]">[% language.native_description %]([% language.rfc4646_subtag %])</label>
+                            <label for="pref_[% CHUNK.name | html %]_[% language.rfc4646_subtag | html %]">[% language.native_description | html %]([% language.rfc4646_subtag | html %])</label>
                             [% IF ( language.group_enabled ) %]
-                            <input value="[% language.rfc4646_subtag %]" name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]_[% language.rfc4646_subtag %]" type="checkbox" checked="checked" class="preference preference-checkbox"/>
+                            <input value="[% language.rfc4646_subtag | html %]" name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]_[% language.rfc4646_subtag | html %]" type="checkbox" checked="checked" class="preference preference-checkbox"/>
                             [% ELSE %]
-                            <input value="[% language.rfc4646_subtag %]" name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]_[% language.rfc4646_subtag %]" type="checkbox" class="preference preference-checkbox"/>
+                            <input value="[% language.rfc4646_subtag | html %]" name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]_[% language.rfc4646_subtag | html %]" type="checkbox" class="preference preference-checkbox"/>
                             [% END %]
                         </dt>
                         [% END %]
@@ -142,7 +143,7 @@
             [% IF ( loop.last ) %]</tbody></table>[% END %]
             [% END %]
         [% END %]
-        <fieldset class="action"><button class="save-all submit" type="submit">Save all [% TAB.tab_title %] preferences</button> <a href="/cgi-bin/koha/admin/preferences.pl" class="force_reload cancel">Cancel</a></fieldset>
+        <fieldset class="action"><button class="save-all submit" type="submit">Save all [% TAB.tab_title | html %] preferences</button> <a href="/cgi-bin/koha/admin/preferences.pl" class="force_reload cancel">Cancel</a></fieldset>
     </form>
     </div>
     [% END %]
@@ -155,8 +156,8 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") %]
-    [% Asset.js("lib/jquery/plugins/multiple-select/jquery.multiple.select.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/multiple-select/jquery.multiple.select.js") | $raw %]
     <script type="text/javascript">
         [% UNLESS ( searchfield ) %]$(document).ready(function(){
                 $('#toolbar').fixFloat();
@@ -176,7 +177,7 @@
             });
         });
         // This is here because of its dependence on template variables, everything else should go in js/pages/preferences.js - jpw
-        var to_highlight = "[% searchfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') |html %]";
+        var to_highlight = "[% searchfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
         var search_jumped = [% IF ( search_jumped ) %]true[% ELSE %]false[% END %];
         var MSG_NOTHING_TO_SAVE = _("Nothing to save");
         var MSG_SAVING = _("Saving...");
@@ -190,9 +191,9 @@
         var MSG_DATA_NOT_SAVED = _( "Error; your data might not have been saved" );
         var MSG_LOADING = _( "Loading..." );
     </script>
-    <script src="[% interface %]/lib/jquery/plugins/humanmsg.js" type="text/javascript"></script>
-    <script src="[% interface %]/[% theme %]/js/ajax.js" type="text/javascript"></script>
-    <script src="[% interface %]/[% theme %]/js/pages/preferences.js" type="text/javascript"></script>
+    <script src="[% interface | html %]/lib/jquery/plugins/humanmsg.js" type="text/javascript"></script>
+    <script src="[% interface | html %]/[% theme | html %]/js/ajax.js" type="text/javascript"></script>
+    <script src="[% interface | html %]/[% theme | html %]/js/pages/preferences.js" type="text/javascript"></script>
     [%# Add WYSIWYG editor for htmlarea system preferences %]
     [% INCLUDE 'wysiwyg-systempreferences.inc' %]
 [% END %]

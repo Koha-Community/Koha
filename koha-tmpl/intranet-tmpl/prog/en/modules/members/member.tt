@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE ColumnsSettings %]
@@ -7,7 +8,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons [% IF ( searching ) %]&rsaquo; Search results[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="pat_member" class="pat">
@@ -38,14 +39,14 @@
           <div class="browse">
             Browse by last name:
             [% FOREACH letter IN alphabet.split(' ') %]
-                <a href="#" class="filterByLetter">[% letter %]</a>
+                <a href="#" class="filterByLetter">[% letter | html %]</a>
             [% END %]
           </div>
 
           [% IF CAN_user_borrowers_edit_borrowers && pending_borrower_modifications %]
             <div class="pending-info" id="patron_updates_pending">
               <a href="/cgi-bin/koha/members/members-update.pl">Patrons requesting modifications</a>:
-              <span class="number_box"><a href="/cgi-bin/koha/members/members-update.pl">[% pending_borrower_modifications %]</a></span>
+              <span class="number_box"><a href="/cgi-bin/koha/members/members-update.pl">[% pending_borrower_modifications | html %]</a></span>
             </div>
           [% END %]
 
@@ -68,7 +69,7 @@
                               [% IF patron_lists %]
                                   <optgroup label="Patron lists:">
                                       [% FOREACH pl IN patron_lists %]
-                                          <option value="[% pl.patron_list_id %]">[% pl.name |html %]</option>
+                                          <option value="[% pl.patron_list_id | html %]">[% pl.name | html %]</option>
                                       [% END %]
                                   </optgroup>
                               [% END %]
@@ -125,7 +126,7 @@
           <ol>
             <li>
               <label for="searchmember_filter">Search:</label>
-              <input type="text" id="searchmember_filter" value="[% searchmember %]"/>
+              <input type="text" id="searchmember_filter" value="[% searchmember | html %]"/>
             </li>
             <li>
               <label for="searchfieldstype_filter">Search fields:</label>
@@ -201,9 +202,9 @@
                 <option value="">Any</option>
                 [% FOREACH cat IN categories %]
                   [% IF cat.categorycode == categorycode_filter %]
-                    <option selected="selected" value="[% cat.categorycode %]">[% cat.description |html %]</option>
+                    <option selected="selected" value="[% cat.categorycode | html %]">[% cat.description | html %]</option>
                   [% ELSE %]
-                    <option value="[% cat.categorycode %]">[% cat.description |html %]</option>
+                    <option value="[% cat.categorycode | html %]">[% cat.description | html %]</option>
                   [% END %]
                 [% END %]
               </select>
@@ -236,7 +237,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
     <script type="text/javascript">
         $(document).ready(function() {
             $('#merge-patrons').prop('disabled', true);
@@ -363,16 +364,16 @@
                 $("#searchmember_filter").val("[% searchmember | html %]");
             [% END %]
             [% IF searchfieldstype %]
-                $("searchfieldstype_filter").val("[% searchfieldstype %]");
+                $("searchfieldstype_filter").val("[% searchfieldstype | html %]");
             [% END %]
             [% IF searchtype %]
-                $("#searchtype_filter").val("[% searchtype %]");
+                $("#searchtype_filter").val("[% searchtype | html %]");
             [% END %]
             [% IF categorycode %]
-                $("#categorycode_filter").val("[% categorycode_filter %]");
+                $("#categorycode_filter").val("[% categorycode_filter | html %]");
             [% END %]
             [% IF branchcode %]
-                $("#branchcode_filter").val("[% branchcode_filter %]");
+                $("#branchcode_filter").val("[% branchcode_filter | html %]");
             [% END %]
 
             [% IF view != "show_results" %]
@@ -383,7 +384,7 @@
 
             // Build the aLengthMenu
             var aLengthMenu = [
-                [%PatronsPerPage %], 10, 20, 50, 100, -1
+                [% PatronsPerPage | html %], 10, 20, 50, 100, -1
             ];
             jQuery.unique(aLengthMenu);
             aLengthMenu.sort(function( a, b ){
@@ -406,7 +407,7 @@
             });
 
             // Apply DataTables on the results table
-            var columns_settings = [% ColumnsSettings.GetColumns( 'members', 'member', 'memberresultst', 'json' ) %];
+            var columns_settings = [% ColumnsSettings.GetColumns( 'members', 'member', 'memberresultst', 'json' ) | $raw %];
             [% UNLESS CAN_user_tools_manage_patron_lists %]
                 [%# Remove the first column if we do not display the checkbox %]
                 columns_settings.splice(0, 1);
@@ -498,7 +499,7 @@
                 [% END %]
                 "aLengthMenu": [aLengthMenu, aLengthMenuLabel],
                 'sPaginationType': 'full_numbers',
-                "iDisplayLength": [% PatronsPerPage %],
+                "iDisplayLength": [% PatronsPerPage | html %],
                 "bProcessing": true,
             }, columns_settings);
             update_searched();

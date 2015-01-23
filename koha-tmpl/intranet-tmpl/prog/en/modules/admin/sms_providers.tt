@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -37,14 +38,14 @@
                         <tbody>
                             [% FOREACH p IN providers %]
                                 <tr>
-                                    <td id="name_[% p.id %]">[% p.name %]</td>
-                                    <td id="domain_[% p.id %]">[% p.domain %]</td>
-                                    <td id="patrons_using_[% p.id %]">[% p.patrons_using %]</td>
+                                    <td id="name_[% p.id | html %]">[% p.name | html %]</td>
+                                    <td id="domain_[% p.id | html %]">[% p.domain | html %]</td>
+                                    <td id="patrons_using_[% p.id | html %]">[% p.patrons_using | html %]</td>
                                     <td class="actions">
-                                        <a class="btn btn-default btn-xs edit" href="#" id="edit_[% p.id %]" data-providerid="[% p.id %]">
+                                        <a class="btn btn-default btn-xs edit" href="#" id="edit_[% p.id | html %]" data-providerid="[% p.id | html %]">
                                             <i class="fa fa-pencil"></i> Edit
                                         </a>
-                                        <a class="btn btn-default btn-xs delete" href="#" data-providerid="[% p.id %]" data-patrons_using="[% p.patrons_using %]" id="delete_[% p.id %]">
+                                        <a class="btn btn-default btn-xs delete" href="#" data-providerid="[% p.id | html %]" data-patrons_using="[% p.patrons_using | html %]" id="delete_[% p.id | html %]">
                                             <i class="fa fa-trash"></i> Delete
                                         </a>
                                     </td>
@@ -97,13 +98,13 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
     <script type="text/javascript">
         var MSG_SMS_PATRONS_USING = _("Are you sure you want to delete %s? %s patron(s) are using it!");
         var MSG_SMS_DELETE_CONFIRM = _("Are you sure you want to delete %s?");
         var LABEL_SMS_ADD_PROVIDER = _("Add an SMS cellular provider");
         var LABEL_SMS_EDIT_PROVIDER = _("Edit provider %s");
     </script>
-    [% Asset.js("js/sms_providers.js") %]
+    [% Asset.js("js/sms_providers.js") | $raw %]
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

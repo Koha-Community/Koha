@@ -1,7 +1,8 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Catalog &rsaquo; Details for [% biblio.title |html %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]</title>
+<title>Koha &rsaquo; Catalog &rsaquo; Details for [% biblio.title | html %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield | html %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( LocalCoverImages == 1 ) %]
 <style type="text/css">
@@ -38,7 +39,7 @@ img.thumbnail {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Images for <i>[% biblio.title |html %]  [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Images for <i>[% biblio.title | html %]  [% FOREACH subtitl IN subtitle %] [% subtitl.subfield | html %][% END %]</i></div>
 
 <div id="doc3" class="yui-t1">
 
@@ -49,25 +50,25 @@ img.thumbnail {
 
 [% INCLUDE 'cat-toolbar.inc' %]
 
-<h3>Images for <i>[% biblio.title |html %]</i></h3>
-<h4>[% biblio.author %]</h4>
+<h3>Images for <i>[% biblio.title | html %]</i></h3>
+<h4>[% biblio.author | html %]</h4>
 
 [% IF ( LocalCoverImages == 1 ) %]
     [% IF ( images.size > 0 ) %]
         <div class="yui-u first">
         <div id="largeCover">
-            <img id="largeCoverImg" alt="" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% imagenumber %]" />
+            <img id="largeCoverImg" alt="" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% imagenumber | html %]" />
         </div></div>
 
         <div class="yui-u"><div id="thumbnails">
 
             [% FOREACH img IN images %]
                 [% IF img %]
-                <a class="show_cover" data-coverimg="[% img %]" href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber %]&amp;imagenumber=[% img %]">
+                <a class="show_cover" data-coverimg="[% img | html %]" href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | html %]&amp;imagenumber=[% img | html %]">
                     [% IF ( imagenumber == img ) %]
-                        <img class="thumbnail selected" id="[% img %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% img %]&amp;thumbnail=1" alt="Thumbnail" />
+                        <img class="thumbnail selected" id="[% img | html %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% img | html %]&amp;thumbnail=1" alt="Thumbnail" />
                     [% ELSE %]
-                        <img class="thumbnail" id="[% img %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% img %]&amp;thumbnail=1" alt="Thumbnail" />
+                        <img class="thumbnail" id="[% img | html %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% img | html %]&amp;thumbnail=1" alt="Thumbnail" />
                     [% END %]
                 </a>
                 [% END %]
@@ -91,10 +92,10 @@ img.thumbnail {
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
-    [% Asset.js("js/catalog.js") %]
+    [% Asset.js("js/catalog.js") | $raw %]
     <script type="text/javascript">
         $(document).ready(function(){
-            showCover([% imagenumber %]);
+            showCover([% imagenumber | html %]);
             $(".show_cover").on("click",function(e){
                 e.preventDefault();
                 var coverimg = $(this).data("coverimg");

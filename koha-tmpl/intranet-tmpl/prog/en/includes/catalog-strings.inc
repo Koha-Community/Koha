@@ -13,11 +13,11 @@
     var MSG_NO_ITEMS = _("This record has no items.");
 
     /* Some required variables from the template */
-    var biblionumber = [% biblionumber %];
-    var count = [% count %];
-    var holdcount = [% holdcount %];
-    var countorders = [% countorders %];
-    var countdeletedorders = [% countdeletedorders %];
+    var biblionumber = [% biblionumber | html %];
+    var count = [% count | html %];
+    var holdcount = [% holdcount | html %];
+    var countorders = [% countorders | html %];
+    var countdeletedorders = [% countdeletedorders | html %];
 
     /* provide Z3950 search points */
     function GetZ3950Terms(){

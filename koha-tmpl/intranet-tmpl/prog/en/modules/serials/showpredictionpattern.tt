@@ -42,23 +42,23 @@
       <tr>
         <td>
             [% IF ( matches = prediction.number.match('(.*)Spring(.*)') ) %]
-                [% matches.0 %]Spring[% matches.1 %]
+                [% matches.0 | html %]Spring[% matches.1 | html %]
             [% ELSIF ( matches = prediction.number.match('(.*)Summer(.*)') ) %]
-                [% matches.0 %]Summer[% matches.1 %]
+                [% matches.0 | html %]Summer[% matches.1 | html %]
             [% ELSIF ( matches = prediction.number.match('(.*)Fall(.*)') ) %]
-                [% matches.0 %]Fall[% matches.1 %]
+                [% matches.0 | html %]Fall[% matches.1 | html %]
             [% ELSIF ( matches = prediction.number.match('(.*)Winter(.*)') ) %]
-                [% matches.0 %]Winter[% matches.1 %]
+                [% matches.0 | html %]Winter[% matches.1 | html %]
             [% ELSIF ( matches = prediction.number.match('(.*)Spr(.*)') ) %]
-                [% matches.0 %]Spr[% matches.1 %]
+                [% matches.0 | html %]Spr[% matches.1 | html %]
             [% ELSIF ( matches = prediction.number.match('(.*)Sum(.*)') ) %]
-                [% matches.0 %]Sum[% matches.1 %]
+                [% matches.0 | html %]Sum[% matches.1 | html %]
             [% ELSIF ( matches = prediction.number.match('(.*)Fal(.*)') ) %]
-                [% matches.0 %]Fal[% matches.1 %]
+                [% matches.0 | html %]Fal[% matches.1 | html %]
             [% ELSIF ( matches = prediction.number.match('(.*)Win(.*)') ) %]
-                [% matches.0 %]Win[% matches.1 %]
+                [% matches.0 | html %]Win[% matches.1 | html %]
             [% ELSE %]
-                [% prediction.number %]
+                [% prediction.number | html %]
             [% END %]
         </td>
         <td>
@@ -72,9 +72,9 @@
          <td style="text-align:center">
          [% UNLESS (loop.first) %]
           [% IF (prediction.not_published) %]
-            <input type="checkbox" name="irregularity" value="[% prediction.issuenumber %]" data-dow="[% prediction.dow %]" checked="checked" />
+            <input type="checkbox" name="irregularity" value="[% prediction.issuenumber | html %]" data-dow="[% prediction.dow | html %]" checked="checked" />
           [% ELSE %]
-            <input type="checkbox" name="irregularity" value="[% prediction.issuenumber %]" data-dow="[% prediction.dow %]" />
+            <input type="checkbox" name="irregularity" value="[% prediction.issuenumber | html %]" data-dow="[% prediction.dow | html %]" />
           [% END %]
          </td>
          [% END %]

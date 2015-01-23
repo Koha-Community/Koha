@@ -6,22 +6,22 @@
 <rss version="0.91">
 
 <channel>
- <title>[% CHANNELTITLE %]</title>
- <link>[% CHANNELLINK %]</link>
- <description>[% CHANNELDESC %]</description>
- <language>[% CHANNELLANG %]</language>
- <lastBuildDate>[% CHANNELLASTBUILD %]</lastBuildDate>
+ <title>[% CHANNELTITLE | html %]</title>
+ <link>[% CHANNELLINK | html %]</link>
+ <description>[% CHANNELDESC | html %]</description>
+ <language>[% CHANNELLANG | html %]</language>
+ <lastBuildDate>[% CHANNELLASTBUILD | html %]</lastBuildDate>
 
  <image>
-  <title>[% IMAGETITLE %]</title>
-  <url>[% IMAGEURL %]</url>
-  <link>[% IMAGELINK %]</link>
+  <title>[% IMAGETITLE | html %]</title>
+  <url>[% IMAGEURL | html %]</url>
+  <link>[% IMAGELINK | html %]</link>
  </image>
 
 [% FOREACH i IN ITEMS %]
  <item>
-  <title>[% i.TITLE %], by [% i.AUTHOR %]</title>
-  <link>[% OPACBaseURL %]/cgi-bin/koha/opac-searchresults.pl?isbn=[% i.ISBN %]</link>
+  <title>[% i.TITLE | html %], by [% i.AUTHOR | html %]</title>
+  <link>[% OPACBaseURL | html %]/cgi-bin/koha/opac-searchresults.pl?isbn=[% i.ISBN | html %]</link>
 
  </item>
 [% END %]

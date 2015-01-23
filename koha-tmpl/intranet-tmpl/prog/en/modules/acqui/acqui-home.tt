@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Price %]
 [% USE Branches %]
@@ -5,8 +6,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
-[% Asset.css("lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
+[% Asset.css("lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css") | $raw %]
 </head>
 
 <body id="acq_acqui-home" class="acq">
@@ -54,7 +55,7 @@
     <div id="acqui_acqui_home_suggestions">
         <fieldset>
         <legend>Pending suggestions</legend>
-            <p>[% suggestions_count %] suggestions waiting. <a href="/cgi-bin/koha/suggestion/suggestion.pl#ASKED">Manage suggestions</a>.</p>
+            <p>[% suggestions_count | html %] suggestions waiting. <a href="/cgi-bin/koha/suggestion/suggestion.pl#ASKED">Manage suggestions</a>.</p>
         </fieldset>
     </div>
 </div>
@@ -64,7 +65,7 @@
 
 [% IF ( loop_budget ) %]
 
-            <h3>All available funds[% IF LoginBranchname %] for [% LoginBranchname %][% END %]</h3>
+            <h3>All available funds[% IF LoginBranchname %] for [% LoginBranchname | html %][% END %]</h3>
 
     <div id="BudgetsAndFunds">
     <table id="accounts">
@@ -103,58 +104,58 @@
         <tbody>
         [% FOREACH loop_budge IN loop_budget %]
             [% IF loop_budge.budget_parent_id %]
-                <tr data-tt-id="[% loop_budge.budget_id %]" data-tt-parent-id="[% loop_budge.budget_parent_id %]">
+                <tr data-tt-id="[% loop_budge.budget_id | html %]" data-tt-parent-id="[% loop_budge.budget_parent_id | html %]">
             [% ELSE %]
-                <tr data-tt-id="[% loop_budge.budget_id %]">
+                <tr data-tt-id="[% loop_budge.budget_id | html %]">
             [% END %]
 
-                <td>[% loop_budge.budget_period_active %]</td>
-                <td>Budget [% loop_budge.budget_period_description %] [id=[% loop_budge.budget_period_id %]][% UNLESS loop_budge.budget_period_active %] (inactive)[% END %]</td>
+                <td>[% loop_budge.budget_period_active | html %]</td>
+                <td>Budget [% loop_budge.budget_period_description | html %] [id=[% loop_budge.budget_period_id | html %]][% UNLESS loop_budge.budget_period_active %] (inactive)[% END %]</td>
                 <td>
                     [% IF ( CAN_user_acquisition_budget_manage ) %]
-                        <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% loop_budge.budget_period_id %]">[% loop_budge.budget_code %]</a>
+                        <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% loop_budge.budget_period_id | html %]">[% loop_budge.budget_code | html %]</a>
                     [% ELSE %]
-                        [% loop_budge.budget_code %]
+                        [% loop_budge.budget_code | html %]
                     [% END %]
                 </td>
-                <td>[% loop_budge.budget_name %]</td>
+                <td>[% loop_budge.budget_name | html %]</td>
                 <td>[% IF ( loop_budge.budget_owner ) %]
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loop_budge.budget_owner.borrowernumber %]">[% loop_budge.budget_owner.surname %], [% loop_budge.budget_owner.firstname %]</a>
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loop_budge.budget_owner.borrowernumber | html %]">[% loop_budge.budget_owner.surname | html %], [% loop_budge.budget_owner.firstname | html %]</a>
                     [% ELSE %]
                         &nbsp;
                     [% END %]
                 </td>
-                <td>[% Branches.GetName( loop_budge.budget_branchcode ) %]</td>
+                <td>[% Branches.GetName( loop_budge.budget_branchcode ) | html %]</td>
                 <td class="data">
                     [% IF loop_budge.budget_parent_id %]
-                        [% loop_budge.budget_amount | $Price %]
+                        [% loop_budge.budget_amount | $Price | html %]
                     [% ELSE %]
-                        <span class="total_amount">[% loop_budge.budget_amount | $Price %]</span>
+                        <span class="total_amount">[% loop_budge.budget_amount | $Price | html %]</span>
                     [% END %]
                 </td>
                 <td class="data">
-                    <a href="ordered.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">
+                    <a href="ordered.pl?fund=[% loop_budge.budget_id | html %]&amp;fund_code=[% loop_budge.budget_code | html %]">
                     [% IF loop_budge.budget_parent_id %]
-                        [% loop_budge.budget_ordered | $Price %]
+                        [% loop_budge.budget_ordered | $Price | html %]
                     [% ELSE %]
-                        <span class="total_amount">[% loop_budge.budget_ordered | $Price %]</span>
-                    [% END %]
-                    </a>
-                </td>
-                <td class="data">
-                    <a href="spent.pl?fund=[% loop_budge.budget_id %]&amp;fund_code=[% loop_budge.budget_code %]">
-                    [% IF loop_budge.budget_parent_id %]
-                        [% loop_budge.budget_spent | $Price %]
-                    [% ELSE %]
-                        <span class="total_amount">[% loop_budge.budget_spent | $Price %]</span>
+                        <span class="total_amount">[% loop_budge.budget_ordered | $Price | html %]</span>
                     [% END %]
                     </a>
                 </td>
                 <td class="data">
+                    <a href="spent.pl?fund=[% loop_budge.budget_id | html %]&amp;fund_code=[% loop_budge.budget_code | html %]">
                     [% IF loop_budge.budget_parent_id %]
-                        [% loop_budge.budget_avail | $Price %]
+                        [% loop_budge.budget_spent | $Price | html %]
                     [% ELSE %]
-                        <span class="total_amount">[% loop_budge.budget_avail | $Price %]</span>
+                        <span class="total_amount">[% loop_budge.budget_spent | $Price | html %]</span>
+                    [% END %]
+                    </a>
+                </td>
+                <td class="data">
+                    [% IF loop_budge.budget_parent_id %]
+                        [% loop_budge.budget_avail | $Price | html %]
+                    [% ELSE %]
+                        <span class="total_amount">[% loop_budge.budget_avail | $Price | html %]</span>
                     [% END %]
                 </td>
             </tr>
@@ -176,8 +177,8 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") %]
-    [% Asset.js("js/acquisitions-menu.js") %]
+    [% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") | $raw %]
+    [% Asset.js("js/acquisitions-menu.js") | $raw %]
     <script>
         dt_overwrite_html_sorting_localeCompare();
 

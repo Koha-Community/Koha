@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Discharge</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Discharge</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -24,7 +24,7 @@
                 <div id="discharge" class="maincontainer">
                     <h1>Discharge</h1>
                     [% FOR message IN messages %]
-                        <div class="dialog [% message.type %]">
+                        <div class="dialog [% message.type | html %]">
                         [% IF message.code == "unable_to_generate_pdf" %]
                             An error occurs when generating the pdf file.
                             Please contact the staff to resolve this problem.

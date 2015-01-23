@@ -1,21 +1,22 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
 [% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Basket grouping for [% booksellername |html %]</title>
-[% Asset.css("css/datatables.css") %]
+<title>Koha &rsaquo; Basket grouping for [% booksellername | html %]</title>
+[% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'datatables.inc' %]
-[% Asset.js("lib/yui/utilities/utilities.js") %]
-[% Asset.js("lib/yui/button/button-min.js") %]
-[% Asset.js("lib/yui/container/container_core-min.js") %]
-[% Asset.js("lib/yui/menu/menu-min.js") %]
-[% Asset.js("js/basketgroup.js") %]
+[% Asset.js("lib/yui/utilities/utilities.js") | $raw %]
+[% Asset.js("lib/yui/button/button-min.js") | $raw %]
+[% Asset.js("lib/yui/container/container_core-min.js") | $raw %]
+[% Asset.js("lib/yui/menu/menu-min.js") | $raw %]
+[% Asset.js("js/basketgroup.js") | $raw %]
 [% IF ( grouping ) %]
-[% Asset.js("lib/yui/yahoo-dom-event/yahoo-dom-event.js") %]
-[% Asset.js("lib/yui/animation/animation-min.js") %]
-[% Asset.js("lib/yui/dragdrop/dragdrop-min.js") %]
-[% Asset.js("lib/yui/element/element-min.js") %]
+[% Asset.js("lib/yui/yahoo-dom-event/yahoo-dom-event.js") | $raw %]
+[% Asset.js("lib/yui/animation/animation-min.js") | $raw %]
+[% Asset.js("lib/yui/dragdrop/dragdrop-min.js") | $raw %]
+[% Asset.js("lib/yui/element/element-min.js") | $raw %]
 <style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
@@ -129,9 +130,9 @@ function submitForm(form) {
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
 [% IF ( grouping ) %]
-    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername |html %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% booksellerid %]">Basket grouping</a> &rsaquo; Add basket group for [% booksellername |html %]</div>
+    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% booksellerid | html %]">Basket grouping</a> &rsaquo; Add basket group for [% booksellername | html %]</div>
 [% ELSE %]
-    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername |html %]</a> &rsaquo; Basket grouping</div>
+    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a> &rsaquo; Basket grouping</div>
 [% END %]
 
 
@@ -143,23 +144,23 @@ function submitForm(form) {
                 [% IF ( grouping ) %]
                     [% IF (closedbg) %]
                         <div id="toolbar" class="btn-toolbar">
-                            <div class="btn-group"><a href="[% script_name %]?op=reopen&amp;basketgroupid=[% basketgroupid %]&amp;booksellerid=[% booksellerid %]&amp;mode=singlebg" class="btn btn-default btn-sm" id="reopenbutton"><i class="fa fa-download"></i> Reopen this basket group</a></div>
-                            <div class="btn-group"><a href="[% script_name %]?op=export&amp;basketgroupid=[% basketgroupid %]&amp;booksellerid=[% booksellerid %]" class="btn btn-default btn-sm" id="exportbutton"><i class="fa fa-download"></i> Export this basket group as CSV</a></div>
-                            <div class="btn-group"><a href="[% script_name %]?op=print&amp;basketgroupid=[% basketgroupid %]&amp;booksellerid=[% booksellerid %]" class="btn btn-default btn-sm" id="printbutton"><i class="fa fa-download"></i> Print this basket group in PDF</a></div>
-                            <div class="btn-group"><a href="[% script_name %]?op=ediprint&amp;basketgroupid=[% basketgroupid %]&amp;booksellerid=[% booksellerid %]" class="btn btn-default btn-sm" id="printbutton"><i class="fa fa-download"></i> Generate EDIFACT order</a></div>
+                            <div class="btn-group"><a href="[% script_name | html %]?op=reopen&amp;basketgroupid=[% basketgroupid | html %]&amp;booksellerid=[% booksellerid | html %]&amp;mode=singlebg" class="btn btn-default btn-sm" id="reopenbutton"><i class="fa fa-download"></i> Reopen this basket group</a></div>
+                            <div class="btn-group"><a href="[% script_name | html %]?op=export&amp;basketgroupid=[% basketgroupid | html %]&amp;booksellerid=[% booksellerid | html %]" class="btn btn-default btn-sm" id="exportbutton"><i class="fa fa-download"></i> Export this basket group as CSV</a></div>
+                            <div class="btn-group"><a href="[% script_name | html %]?op=print&amp;basketgroupid=[% basketgroupid | html %]&amp;booksellerid=[% booksellerid | html %]" class="btn btn-default btn-sm" id="printbutton"><i class="fa fa-download"></i> Print this basket group in PDF</a></div>
+                            <div class="btn-group"><a href="[% script_name | html %]?op=ediprint&amp;basketgroupid=[% basketgroupid | html %]&amp;booksellerid=[% booksellerid | html %]" class="btn btn-default btn-sm" id="printbutton"><i class="fa fa-download"></i> Generate EDIFACT order</a></div>
                         </div>
                     [% END %]
                     [% IF (name && closedbg) %]
-                        <h1>Basket group [% name %] ([% basketgroupid %]) for <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername |html %]</a></h1>
+                        <h1>Basket group [% name | html %] ([% basketgroupid | html %]) for <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a></h1>
                     [% ELSIF (name) %]
-                        <h1>Edit basket group [% name %] ([% basketgroupid %]) for <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername |html %]</a></h1>
+                        <h1>Edit basket group [% name | html %] ([% basketgroupid | html %]) for <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a></h1>
                     [% ELSE %]
-                        <h1>Add basket group for <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername |html %]</a></h1>
+                        <h1>Add basket group for <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a></h1>
                     [% END %]
                     <div id="basketgroupcolumns" class="row">
                         [% UNLESS (closedbg) %]
                             <div class="col-xs-6 col-xs-push-6">
-                                <form action="[% scriptname %]" method="post" name="basketgroups" id="basketgroups">
+                                <form action="[% scriptname | html %]" method="post" name="basketgroups" id="basketgroups">
                                     <div id="groups">
                                         <fieldset class="brief">
                                             <div class="workarea_alt" >
@@ -167,16 +168,16 @@ function submitForm(form) {
                                                 <ul id="ungrouped" class="draglist_alt">
                                                     [% IF ( baskets ) %]
                                                         [% FOREACH basket IN baskets %]
-                                                            <li class="ungrouped" id="b-[% basket.basketno %]" >
-                                                                <a href="basket.pl?basketno=[% basket.basketno %]">
+                                                            <li class="ungrouped" id="b-[% basket.basketno | html %]" >
+                                                                <a href="basket.pl?basketno=[% basket.basketno | html %]">
                                                                     [% IF ( basket.basketname ) %]
-                                                                        [% basket.basketname %]
+                                                                        [% basket.basketname | html %]
                                                                     [% ELSE %]
-                                                                        No name, basketnumber: [% basket.basketno %]
+                                                                        No name, basketnumber: [% basket.basketno | html %]
                                                                     [% END %]
                                                                 </a>, <br />
-                                                                Total: [% basket.total | $Price %]
-                                                                <input type="hidden" class="basket" name="basket" value="[% basket.basketno %]" />
+                                                                Total: [% basket.total | $Price | html %]
+                                                                <input type="hidden" class="basket" name="basket" value="[% basket.basketno | html %]" />
                                                             </li>
                                                         [% END %]
                                                     [% END %]
@@ -198,10 +199,10 @@ function submitForm(form) {
                                         [% UNLESS (closedbg) %]
                                             <li>
                                                 <label for="basketgroupname">Basket group name:</label>
-                                                <input type="text" name="basketgroupname" id="basketgroupname" value="[% name %]" class="focus" />
+                                                <input type="text" name="basketgroupname" id="basketgroupname" value="[% name | html %]" class="focus" />
                                             </li>
                                         [% ELSE %]
-                                            <input type="hidden" name="basketgroupname" id="basketgroupname" value="[% name %]" />
+                                            <input type="hidden" name="basketgroupname" id="basketgroupname" value="[% name | html %]" />
                                         [% END %]
                                         <li>
                                             [% UNLESS (closedbg) %]
@@ -212,7 +213,7 @@ function submitForm(form) {
                                                 </select>
                                             [% ELSE %]
                                                 <span class="label">Billing place:</span>
-                                                <input name="billingplace" id="billingplace" type ="hidden" value="[% billingplace %]" />[% Branches.GetName( billingplace ) %]
+                                                <input name="billingplace" id="billingplace" type ="hidden" value="[% billingplace | html %]" />[% Branches.GetName( billingplace ) | html %]
                                             [% END %]
                                         </li>
                                         [% UNLESS (closedbg) %]
@@ -226,16 +227,16 @@ function submitForm(form) {
                                             <li><p>or</p></li>
                                             <li>
                                                 <label for="freedeliveryplace">Delivery place:</label>
-                                                <textarea cols="26" rows="3" name="freedeliveryplace" id="freedeliveryplace">[% freedeliveryplace %]</textarea>
+                                                <textarea cols="26" rows="3" name="freedeliveryplace" id="freedeliveryplace">[% freedeliveryplace | html %]</textarea>
                                             </li>
                                             [% ELSE %]
                                                 <li>
                                                     <span class="label">Delivery place:</span>
                                                     [% IF (freedeliveryplace) %]
-                                                        <input name="freedeliveryplace" id="freedeliveryplace" type ="hidden" value="[% freedeliveryplace %]" />[% freedeliveryplace %]
+                                                        <input name="freedeliveryplace" id="freedeliveryplace" type ="hidden" value="[% freedeliveryplace | html %]" />[% freedeliveryplace | html %]
                                                         <input name="deliveryplace" id="deliveryplace" type ="hidden" value="" />
                                                     [% ELSE %]
-                                                        <input name="deliveryplace" id="deliveryplace" type ="hidden" value="[% deliveryplace %]" />[% Branches.GetName( deliveryplace ) %]
+                                                        <input name="deliveryplace" id="deliveryplace" type ="hidden" value="[% deliveryplace | html %]" />[% Branches.GetName( deliveryplace ) | html %]
                                                         <input name="freedeliveryplace" id="freedeliveryplace" type ="hidden" value="" />
                                                     [% END %]
                                                 </li>
@@ -243,10 +244,10 @@ function submitForm(form) {
                                             <li>
                                                 [% UNLESS (closedbg) %]
                                                     <label for="deliverycomment">Delivery comment:</label>
-                                                    <textarea cols="26" rows="3" name="deliverycomment" id="deliverycomment">[% deliverycomment %]</textarea>
+                                                    <textarea cols="26" rows="3" name="deliverycomment" id="deliverycomment">[% deliverycomment | html %]</textarea>
                                                 [% ELSE %]
-                                                    <span class="label">Delivery comment:</span>[% deliverycomment %]
-                                                    <input name="deliverycomment" id="deliverycomment" type="hidden" value = "[% deliverycomment %]" />
+                                                    <span class="label">Delivery comment:</span>[% deliverycomment | html %]
+                                                    <input name="deliverycomment" id="deliverycomment" type="hidden" value = "[% deliverycomment | html %]" />
                                                 [% END %]
                                             </li>
                                             <li>
@@ -257,16 +258,16 @@ function submitForm(form) {
                                                     <ul>
                                                 [% END %]
                                                 [% FOREACH selectedbasket IN selectedbaskets %]
-                                                    <li class="grouped" id="b-[% selectedbasket.basketno %]" >
-                                                        <a href="basket.pl?basketno=[% selectedbasket.basketno %]">
+                                                    <li class="grouped" id="b-[% selectedbasket.basketno | html %]" >
+                                                        <a href="basket.pl?basketno=[% selectedbasket.basketno | html %]">
                                                             [% IF ( selectedbasket.basketname ) %]
-                                                                [% selectedbasket.basketname %]
+                                                                [% selectedbasket.basketname | html %]
                                                             [% ELSE %]
-                                                                No name, basketnumber: [% selectedbasket.basketno %]
+                                                                No name, basketnumber: [% selectedbasket.basketno | html %]
                                                             [% END %]
                                                         </a>, <br />
-                                                        Total: [% selectedbasket.total | $Price %]
-                                                        <input type="hidden" class="basket" name="basket" value="[% selectedbasket.basketno %]" />
+                                                        Total: [% selectedbasket.total | $Price | html %]
+                                                        <input type="hidden" class="basket" name="basket" value="[% selectedbasket.basketno | html %]" />
                                                     </li>
                                                 [% END %]
                                             </ul>
@@ -279,12 +280,12 @@ function submitForm(form) {
                                     </ol>
                                 </fieldset>
                                 [% UNLESS (closedbg) %]
-                                    <fieldset class="action"><input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+                                    <fieldset class="action"><input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                                         [% IF ( basketgroupid ) %]
-                                            <input type="hidden" name="basketgroupid" value="[% basketgroupid %]" />
+                                            <input type="hidden" name="basketgroupid" value="[% basketgroupid | html %]" />
                                         [% END %]
                                         <input type="hidden" name="op" value="attachbasket" />
-                                        <input type="submit" value="Save" /> <a href="/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% booksellerid %]" class="cancel">Cancel</a>
+                                        <input type="submit" value="Save" /> <a href="/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% booksellerid | html %]" class="cancel">Cancel</a>
                                     </fieldset>
                                 [% END %]
                             </form>
@@ -292,9 +293,9 @@ function submitForm(form) {
                     </div>
                 [% ELSE %]
                     <div id="toolbar" class="btn-toolbar">
-                        <div class="btn-group"><a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% booksellerid %]" class="btn btn-default btn-sm" id="newbasketgroup"><i class="fa fa-plus"></i> New basket group</a></div>
+                        <div class="btn-group"><a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% booksellerid | html %]" class="btn btn-default btn-sm" id="newbasketgroup"><i class="fa fa-plus"></i> New basket group</a></div>
                     </div>
-                    <h1>Basket grouping for <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername |html %]</a></h1>
+                    <h1>Basket grouping for <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a></h1>
                     <div id="basket_groups" class="toptabs">
                         <ul class="ui-tabs-nav">
                             [% UNLESS ( listclosed) %]<li class="ui-tabs-active"><a href="#opened">Open</a></li>
@@ -319,20 +320,20 @@ function submitForm(form) {
                                         [% UNLESS ( basketgroup.closed ) %]
                                             <tr>
                                                 <td>[% IF ( basketgroup.name ) %]
-                                                    [% basketgroup.name %]
+                                                    [% basketgroup.name | html %]
                                                     [% ELSE %]
-                                                        Basket group no. [% basketgroup.id %]
+                                                        Basket group no. [% basketgroup.id | html %]
                                                     [% END %]
                                                 </td>
-                                                <td>[% basketgroup.id %]</td>
-                                                <td>[% Branches.GetName( basketgroup.billingplace ) %]</td>
-                                                <td>[% IF (basketgroup.freedeliveryplace) %]Free delivery place[% ELSE %][% Branches.GetName( basketgroup.deliveryplace ) %][% END %]</td>
-                                                <td>[% basketgroup.basketsqty %]</td>
+                                                <td>[% basketgroup.id | html %]</td>
+                                                <td>[% Branches.GetName( basketgroup.billingplace ) | html %]</td>
+                                                <td>[% IF (basketgroup.freedeliveryplace) %]Free delivery place[% ELSE %][% Branches.GetName( basketgroup.deliveryplace ) | html %][% END %]</td>
+                                                <td>[% basketgroup.basketsqty | html %]</td>
                                                 <td>
-                                                    <input type="button" onclick="closeandprint('[% basketgroup.id %]');" value="Close and export as PDF" />
-                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="add" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Edit" /></form>
+                                                    <input type="button" onclick="closeandprint('[% basketgroup.id | html %]');" value="Close and export as PDF" />
+                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="add" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid | html %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="Edit" /></form>
                                                     [% UNLESS basketgroup.basketsqty %]
-                                                        <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="delete" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Delete" /></form>
+                                                        <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="delete" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid | html %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="Delete" /></form>
                                                     [% END %]
                                                 </td>
                                             </tr>
@@ -359,21 +360,21 @@ function submitForm(form) {
                                             <tr>
                                                 <td>
                                                     [% IF ( basketgroup.name ) %]
-                                                        [% basketgroup.name %]
+                                                        [% basketgroup.name | html %]
                                                         [% ELSE %]
-                                                            Basket group no. [% basketgroup.id %]
+                                                            Basket group no. [% basketgroup.id | html %]
                                                         [% END %]
                                                 </td>
-                                                <td>[% basketgroup.id %]</td>
-                                                <td>[% Branches.GetName( basketgroup.billingplace ) %]</td>
-                                                <td>[% IF (basketgroup.freedeliveryplace) %]Free delivery place[% ELSE %][% Branches.GetName( basketgroup.deliveryplace ) %][% END %]</td>
-                                                <td>[% basketgroup.basketsqty %]</td>
+                                                <td>[% basketgroup.id | html %]</td>
+                                                <td>[% Branches.GetName( basketgroup.billingplace ) | html %]</td>
+                                                <td>[% IF (basketgroup.freedeliveryplace) %]Free delivery place[% ELSE %][% Branches.GetName( basketgroup.deliveryplace ) | html %][% END %]</td>
+                                                <td>[% basketgroup.basketsqty | html %]</td>
                                                 <td>
-                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="add" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="View" /></form>
-                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="reopen" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Reopen" /></form>
-                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="print" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Export as PDF" /></form>
-                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="export" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Export as CSV" /></form>
-                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="ediprint" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Generate EDIFACT order" /></form>
+                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="add" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid | html %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="View" /></form>
+                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="reopen" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid | html %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="Reopen" /></form>
+                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="print" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="Export as PDF" /></form>
+                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="export" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="Export as CSV" /></form>
+                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="ediprint" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id | html %]" /><input type="submit" value="Generate EDIFACT order" /></form>
                                                 </td>
                                             </tr>
                                         [% END %]

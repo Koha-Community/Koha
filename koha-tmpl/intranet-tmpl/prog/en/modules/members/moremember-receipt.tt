@@ -1,33 +1,34 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Print Receipt for [% cardnumber %]</title>
+<title>Print Receipt for [% cardnumber | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% interface %]/[% theme %]/img/favicon.ico[% END %]" type="image/x-icon" />
-[% Asset.css("css/print.css") %]
+<link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon | html %][% ELSE %][% interface | html %]/[% theme | html %]/img/favicon.ico[% END %]" type="image/x-icon" />
+[% Asset.css("css/print.css") | $raw %]
 </head>
 
 <body id="pat_moremember-receipt" class="pat">
 
 <div id="receipt">
 
-<h3>[% LibraryName %]</h3>
-[% IF ( branchname ) %][% branchname %]<br />[% END %]
-Checked out to [% firstname %] [% surname %] <br />
-(<a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% cardnumber %]">[% cardnumber %]</a>)<br />
+<h3>[% LibraryName | html %]</h3>
+[% IF ( branchname ) %][% branchname | html %]<br />[% END %]
+Checked out to [% firstname | html %] [% surname | html %] <br />
+(<a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% cardnumber | html %]">[% cardnumber | html %]</a>)<br />
 
-[% todaysdate %]<br />
+[% todaysdate | html %]<br />
 
 [% IF ( quickslip ) %]
 <h4>Checked out today</h4>
 [% FOREACH issueloo IN issueloop %]
 [% IF ( issueloo.red ) %][% ELSE %]
 [% IF ( issueloo.today ) %]
-<p><a href="/cgi-bin/koha/catalogue/detail.pl?item=[% issueloo.itemnumber %]&amp;biblionumber=[% issueloo.biblionumber %]&amp;bi=[% issueloo.biblioitemnumber %]">[% issueloo.title |html %]</a><br />
-Barcode: [% issueloo.barcode %]<br />
-Date due: [% issueloo.date_due %]<br /></p>
+<p><a href="/cgi-bin/koha/catalogue/detail.pl?item=[% issueloo.itemnumber | html %]&amp;biblionumber=[% issueloo.biblionumber | html %]&amp;bi=[% issueloo.biblioitemnumber | html %]">[% issueloo.title | html %]</a><br />
+Barcode: [% issueloo.barcode | html %]<br />
+Date due: [% issueloo.date_due | html %]<br /></p>
     [% END %]
     [% END %]
     [% END %]
@@ -36,9 +37,9 @@ Date due: [% issueloo.date_due %]<br /></p>
 <h4>Checked out</h4>
 [% FOREACH issueloo IN issueloop %]
 [% IF ( issueloo.red ) %][% ELSE %]
-<p><a href="/cgi-bin/koha/catalogue/detail.pl?item=[% issueloo.itemnumber %]&amp;biblionumber=[% issueloo.biblionumber %]&amp;bi=[% issueloo.biblioitemnumber %]">[% issueloo.title |html %]</a><br />
-Barcode: [% issueloo.barcode %]<br />
-Date due: [% issueloo.date_due %]<br /></p>
+<p><a href="/cgi-bin/koha/catalogue/detail.pl?item=[% issueloo.itemnumber | html %]&amp;biblionumber=[% issueloo.biblionumber | html %]&amp;bi=[% issueloo.biblioitemnumber | html %]">[% issueloo.title | html %]</a><br />
+Barcode: [% issueloo.barcode | html %]<br />
+Date due: [% issueloo.date_due | html %]<br /></p>
     [% END %]
     [% END %]
 
@@ -50,9 +51,9 @@ Date due: [% issueloo.date_due %]<br /></p>
 <h4>Overdues</h4>
     [% FOREACH issueloo IN issueloop %]
     [% IF ( issueloo.red ) %]
-<p><a href="/cgi-bin/koha/catalogue/detail.pl?item=[% issueloo.itemnumber %]&amp;biblionumber=[% issueloo.biblionumber %]&amp;bi=[% issueloo.biblioitemnumber %]">[% issueloo.title |html %]</a><br />
-Barcode: [% issueloo.barcode %]<br />
-Date due: [% issueloo.date_due %]</p>
+<p><a href="/cgi-bin/koha/catalogue/detail.pl?item=[% issueloo.itemnumber | html %]&amp;biblionumber=[% issueloo.biblionumber | html %]&amp;bi=[% issueloo.biblioitemnumber | html %]">[% issueloo.title | html %]</a><br />
+Barcode: [% issueloo.barcode | html %]<br />
+Date due: [% issueloo.date_due | html %]</p>
 [% END %]
 [% END %]
 [% END %]
@@ -60,11 +61,11 @@ Date due: [% issueloo.date_due %]</p>
 
 [% IF ( koha_news_count ) %]
             <hr><h4 style="text-align: center; font-style:italic;">News</h4>
-                       <!-- [% koha_news_count %] recent news item(s) -->
+                       <!-- [% koha_news_count | html %] recent news item(s) -->
             [% FOREACH koha_new IN koha_news %]
-                    <div class="newsitem" id="news[% koha_new.idnew %]"><h5 style="margin-bottom: 1px; margin-top: 1px"><b>[% koha_new.title %]</b></h5>
-                                        <p style="margin-bottom: 1px; margin-top: 1px">[% koha_new.content %]</p>
-                                       <p class="newsfooter" style="font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px"> Posted on [% koha_new.newdate %]
+                    <div class="newsitem" id="news[% koha_new.idnew | html %]"><h5 style="margin-bottom: 1px; margin-top: 1px"><b>[% koha_new.title | html %]</b></h5>
+                                        <p style="margin-bottom: 1px; margin-top: 1px">[% koha_new.content | $raw %]</p>
+                                       <p class="newsfooter" style="font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px"> Posted on [% koha_new.newdate | html %]
 
 </p><hr /></div>
             [% END %]

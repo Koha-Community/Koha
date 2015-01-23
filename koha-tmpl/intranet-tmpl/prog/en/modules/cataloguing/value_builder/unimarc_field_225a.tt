@@ -13,9 +13,9 @@
                 <select name="f1" id="f1" size="1">
                 [% FOREACH value IN collection.values %]
                   [% IF ( value == collection.default ) %]
-                    <option value="[% value %]" selected="selected">[% value %]</option>
+                    <option value="[% value | html %]" selected="selected">[% value | html %]</option>
                   [% ELSE %]
-                    <option value="[% value %]">[% value %]</option>
+                    <option value="[% value | html %]">[% value | html %]</option>
                   [% END %]
                 [% END %]
                 </select>
@@ -31,7 +31,7 @@
     <script type="text/javascript">
         function report() {
             var doc   = opener.document;
-            var field = doc.getElementById("[% index %]");
+            var field = doc.getElementById("[% index | html %]");
             field.value = document.f_pop.f2.value || document.f_pop.f1.value;
             window.close();
             return false;

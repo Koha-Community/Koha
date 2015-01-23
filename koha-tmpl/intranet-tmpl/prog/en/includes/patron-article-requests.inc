@@ -22,12 +22,12 @@
             [% FOREACH ar IN patron.article_requests_current %]
                 <tr>
                     <td class="article-request-record-title">
-                        <a class="article-request-title" href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% ar.biblionumber %]">
-                            [% ar.biblio.title %]
-                            [% ar.item.enumchron %]
+                        <a class="article-request-title" href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% ar.biblionumber | html %]">
+                            [% ar.biblio.title | html %]
+                            [% ar.item.enumchron | html %]
                         </a>
-                        [% ar.biblio.author %]
-                        [% IF ar.itemnumber %] <i>(only [% ar.item.barcode %])</i>[% END %]
+                        [% ar.biblio.author | html %]
+                        [% IF ar.itemnumber %] <i>(only [% ar.item.barcode | html %])</i>[% END %]
                     </td>
 
                     <td class="article-request-created_on">
@@ -35,35 +35,35 @@
                     </td>
 
                     <td class="article-request-title">
-                        [% ar.title %]
+                        [% ar.title | html %]
                     </td>
 
                     <td class="article-request-author">
-                        [% ar.author %]
+                        [% ar.author | html %]
                     </td>
 
                     <td class="article-request-volume">
-                        [% ar.volume %]
+                        [% ar.volume | html %]
                     </td>
 
                     <td class="article-request-issue">
-                        [% ar.issue %]
+                        [% ar.issue | html %]
                     </td>
 
                     <td class="article-request-date">
-                        [% ar.date %]
+                        [% ar.date | html %]
                     </td>
 
                     <td class="article-request-pages">
-                        [% ar.pages %]
+                        [% ar.pages | html %]
                     </td>
 
                     <td class="article-request-chapters">
-                        [% ar.chapters %]
+                        [% ar.chapters | html %]
                     </td>
 
                     <td class="article-request-patron-notes">
-                        [% ar.patron_notes %]
+                        [% ar.patron_notes | html %]
                     </td>
 
                     <td class="article-request-status">
@@ -79,7 +79,7 @@
                     </td>
 
                     <td class="article-request-branchcode">
-                        [% ar.branch.branchname %]
+                        [% ar.branch.branchname | html %]
                     </td>
                 </tr>
             [% END %]

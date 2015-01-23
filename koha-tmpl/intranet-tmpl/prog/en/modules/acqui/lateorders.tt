@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Branches %]
@@ -5,7 +6,7 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Late orders</title>
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -20,7 +21,7 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-<h1>[% IF ( Supplier ) %][% Supplier %] : [% END %]Late orders</h1>
+<h1>[% IF ( Supplier ) %][% Supplier | html %] : [% END %]Late orders</h1>
 <div id="acqui_lateorders">
 
 [% IF error_claim %]
@@ -29,7 +30,7 @@
     [% ELSIF ( error_claim == "no_order_selected" ) %]
         <div class="error">No order selected</div>
     [% ELSE %]
-        <div class="error">[% error_claim %]</div>
+        <div class="error">[% error_claim | html %]</div>
     [% END %]
 [% END %]
 [% IF info_claim %]
@@ -38,12 +39,12 @@
 [% IF ( lateorders ) %]
 <form action="lateorders.pl" name="claim" method="post">
   <input type="hidden" name="op" value="send_alert" />
-  <input type="hidden" name="delay" value="[% delay | html%]" />
-  <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+  <input type="hidden" name="delay" value="[% delay | html %]" />
+  <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
 	[% IF ( letters ) %]
 	<p><label for="letter_code">Claim using notice: </label><select name="letter_code" id="letter_code">
 	  [% FOREACH letter IN letters %]
-		<option value="[% letter.code %]">[% letter.name %]</option>
+		<option value="[% letter.code | html %]">[% letter.name | html %]</option>
 	  [% END %]
 	  </select>
 	</p>
@@ -73,60 +74,60 @@
       [% FOREACH lateorder IN lateorders %]
         <tr>
             <td>
-                <input type="checkbox" value="[% lateorder.ordernumber %]" data-booksellerid="[% lateorder.supplierid %]" name="ordernumber">
+                <input type="checkbox" value="[% lateorder.ordernumber | html %]" data-booksellerid="[% lateorder.supplierid | html %]" name="ordernumber">
             </td>
             <td>
-                <span title="[% lateorder.orderdate %]">[% lateorder.orderdate | $KohaDates %] ([% lateorder.latesince %] days)</span>
+                <span title="[% lateorder.orderdate | html %]">[% lateorder.orderdate | $KohaDates %] ([% lateorder.latesince | html %] days)</span>
             </td>
             <td>
                 [% IF ( lateorder.estimateddeliverydate ) %]
-                    <span title="[% lateorder.estimateddeliverydate %]">[% lateorder.estimateddeliverydate | $KohaDates  %]</span>
+                    <span title="[% lateorder.estimateddeliverydate | html %]">[% lateorder.estimateddeliverydate | $KohaDates | html %]</span>
                 [% ELSE %]
                     <span title="0000-00-00"></span>
                 [% END %]
             </td>
             <td>
-                [% lateorder.supplier %]
-                ([% lateorder.supplierid %])
+                [% lateorder.supplier | html %]
+                ([% lateorder.supplierid | html %])
             </td>
             <td>
-                <b>[% lateorder.title |html %]</b>
-                   [% IF ( lateorder.author ) %]<br/><i>Author:</i> [% lateorder.author %][% END %]
+                <b>[% lateorder.title | html %]</b>
+                   [% IF ( lateorder.author ) %]<br/><i>Author:</i> [% lateorder.author | html %][% END %]
                    [% IF ( lateorder.publisher ) %]
-                        <br/><i>Published by:</i> [% lateorder.publisher %]
+                        <br/><i>Published by:</i> [% lateorder.publisher | html %]
                         [% IF ( lateorder.publicationyear ) %]
-                            <i> in </i>[% lateorder.publicationyear %]
+                            <i> in </i>[% lateorder.publicationyear | html %]
                         [% END %]
                    [% END %]
             </td>
             <td>
-                   [% lateorder.unitpricesupplier %]x[% lateorder.quantity %] = 
-                   [% lateorder.subtotal %]
+                   [% lateorder.unitpricesupplier | html %]x[% lateorder.quantity | html %] = 
+                   [% lateorder.subtotal | html %]
             </td>
             <td>
                 [% IF ( CAN_user_acquisition_order_manage ) %]
-                    <a href="basket.pl?basketno=[% lateorder.basketno %]" title="basket">[% lateorder.basketname %] ([% lateorder.basketno %])</a>
+                    <a href="basket.pl?basketno=[% lateorder.basketno | html %]" title="basket">[% lateorder.basketname | html %] ([% lateorder.basketno | html %])</a>
                 [% ELSE %]
-                    [% lateorder.basketname %] ([% lateorder.basketno %])
+                    [% lateorder.basketname | html %] ([% lateorder.basketno | html %])
                 [% END %]
             </td>
             <td>
                 [% IF ( lateorder.basketgroupid ) %]
                     [% IF ( CAN_user_acquisition_group_manage ) %]
-                        <a href="basketgroup.pl?op=add&booksellerid=[% lateorder.supplierid %]&basketgroupid=[% lateorder.basketgroupid %]" title="basketgroup">[% lateorder.basketgroupname %] ([% lateorder.basketgroupid %])</a>
+                        <a href="basketgroup.pl?op=add&booksellerid=[% lateorder.supplierid | html %]&basketgroupid=[% lateorder.basketgroupid | html %]" title="basketgroup">[% lateorder.basketgroupname | html %] ([% lateorder.basketgroupid | html %])</a>
                     [% ELSE %]
-                        [% lateorder.basketgroupname %] ([% lateorder.basketgroupid %])</a>
+                        [% lateorder.basketgroupname | html %] ([% lateorder.basketgroupid | html %])</a>
                     [% END %]
                 [% END %]
             </td>
-            <td>[% Branches.GetName( lateorder.branch ) %]
+            <td>[% Branches.GetName( lateorder.branch ) | html %]
             </td>
-            <td>[% lateorder.budget %]
+            <td>[% lateorder.budget | html %]
             </td>
-            <td>[% lateorder.claims_count %]</td>
+            <td>[% lateorder.claims_count | html %]</td>
             <td>
                 [% IF ( lateorder.claimed_date ) %]
-                    <span title="[% lateorder.claimed_date %]">[% lateorder.claimed_date | $KohaDates %]</span>
+                    <span title="[% lateorder.claimed_date | html %]">[% lateorder.claimed_date | $KohaDates %]</span>
                 [% ELSE %]
                     <span title="0000-00-00"></span>
                 [% END %]
@@ -137,7 +138,7 @@
       <tfoot>
         <tr>
             <th colspan="5">Total</th>
-            <th>[% total %]</th>
+            <th>[% total | html %]</th>
             <th colspan="6">&nbsp;</th>
         </tr>
       </tfoot>
@@ -166,13 +167,13 @@
 [% IF ( ERROR_LOO.delay_digits ) %]<p class="error">The number of days ([% ERROR_LOO.bad_delay | html %]) must be a number between 0 and 999.</p>[% END %]
 [% END %]
 <ol>
-    <li><label for="delay">Order date:</label><input size="3" maxlength="3" id="delay" type="text" name="delay" value="[% delay | html%]" /> days ago</li>
+    <li><label for="delay">Order date:</label><input size="3" maxlength="3" id="delay" type="text" name="delay" value="[% delay | html %]" /> days ago</li>
     <li><label for="from">Estimated delivery date from: </label>
-        <input type="text" size="10" id="from" name="estimateddeliverydatefrom" value="[% estimateddeliverydatefrom %]" class="datepickerfrom" />
+        <input type="text" size="10" id="from" name="estimateddeliverydatefrom" value="[% estimateddeliverydatefrom | html %]" class="datepickerfrom" />
         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
     <li><label for="to">To: </label>
-        <input type="text" size="10" id="to" name="estimateddeliverydateto" value="[% estimateddeliverydateto %]" class="datepickerto" />
+        <input type="text" size="10" id="to" name="estimateddeliverydateto" value="[% estimateddeliverydateto | html %]" class="datepickerto" />
         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
 
@@ -180,8 +181,8 @@
 		<select id="booksellerid" size="1" tabindex="" name="booksellerid">
             <option value=""></option>
 			[% FOREACH SUPPLIER_LOO IN SUPPLIER_LOOP %]
-                [% IF ( SUPPLIER_LOO.selected ) %]<option value="[% SUPPLIER_LOO.id %]" selected="selected">[% SUPPLIER_LOO.name %]</option>
-                [% ELSE %]<option value="[% SUPPLIER_LOO.id %]">[% SUPPLIER_LOO.name %]</option>[% END %]
+                [% IF ( SUPPLIER_LOO.selected ) %]<option value="[% SUPPLIER_LOO.id | html %]" selected="selected">[% SUPPLIER_LOO.name | html %]</option>
+                [% ELSE %]<option value="[% SUPPLIER_LOO.id | html %]">[% SUPPLIER_LOO.name | html %]</option>[% END %]
         	[% END %]
 		</select>
 </ol>
@@ -194,10 +195,10 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/acquisitions-menu.js") %]
+    [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     <script>
         var late_orderst;
@@ -213,7 +214,7 @@
 
         $(document).ready(function() {
 
-            var columns_settings = [% ColumnsSettings.GetColumns( 'acqui', 'lateorders', 'late_orders', 'json' ) %];
+            var columns_settings = [% ColumnsSettings.GetColumns( 'acqui', 'lateorders', 'late_orders', 'json' ) | $raw %];
             late_orderst = KohaTable("late_orders", {
                 "aoColumnDefs": [
                     { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },

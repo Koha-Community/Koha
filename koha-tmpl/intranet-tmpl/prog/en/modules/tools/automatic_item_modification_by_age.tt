@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -67,28 +68,28 @@
                 [% FOR rule IN rules %]
                   [% SET id = loop.count %]
                   <fieldset class="rule">
-                    <legend>Rule <span class="rulecount">[% loop.count %]</span> <a href="#" class="remove_rule"><i class="fa fa-trash"></i> Remove this rule</a></legend>
-                    <input type="hidden" name="unique_id" value="[% loop.count %]" /> <!-- FIXME on update, the unique_id should be filled -->
+                    <legend>Rule <span class="rulecount">[% loop.count | html %]</span> <a href="#" class="remove_rule"><i class="fa fa-trash"></i> Remove this rule</a></legend>
+                    <input type="hidden" name="unique_id" value="[% loop.count | html %]" /> <!-- FIXME on update, the unique_id should be filled -->
                     <div class="age">
                       <h5>Age in days</h5>
-                      <input class="age" type="number" value="[% rule.age %]" name="age_[% id %]" />
+                      <input class="age" type="number" value="[% rule.age | html %]" name="age_[% id | html %]" />
                     </div>
                     <div class="blocks">
                       <h5>Conditions</h5>
                       [% FOR condition IN rule.conditions %]
                         <div class="block">
-                          <select name="condition_field_[% id %]">
+                          <select name="condition_field_[% id | html %]">
                             <option value="">Choose a field name</option>
                             [% FOR field IN condition_fields %]
                               [% IF condition.field == field %]
-                                <option value="[% field %]" selected="selected">[% field %]</option>
+                                <option value="[% field | html %]" selected="selected">[% field | html %]</option>
                               [% ELSE %]
-                                <option value="[% field %]">[% field %]</option>
+                                <option value="[% field | html %]">[% field | html %]</option>
                               [% END %]
                             [% END %]
                           </select>
                           =
-                          <input type="text" value="[% condition.value %]" name="condition_value_[% id%]" />
+                          <input type="text" value="[% condition.value | html %]" name="condition_value_[% id | html %]" />
                           <a class="add_block" href="#"><i class="fa fa-plus"></i> Add a condition</a>
                           <a class="remove_block" href="#"><i class="fa fa-trash"></i> Remove condition</a>
                         </div>
@@ -98,18 +99,18 @@
                       <h5>Substitutions</h5>
                       [% FOR substitution IN rule.substitutions %]
                         <div class="block">
-                          <select class="required" required="required" name="substitution_field_[% id %]">
+                          <select class="required" required="required" name="substitution_field_[% id | html %]">
                             <option value="">Choose a field name</option>
                             [% FOR field IN substitution_fields %]
                               [% IF substitution.field == field %]
-                                <option value="[% field %]" selected="selected">[% field %]</option>
+                                <option value="[% field | html %]" selected="selected">[% field | html %]</option>
                               [% ELSE %]
-                                <option value="[% field %]">[% field %]</option>
+                                <option value="[% field | html %]">[% field | html %]</option>
                               [% END %]
                             [% END %]
                           </select>
                           =
-                          <input type="text" value="[% substitution.value %]" name="substitution_value_[% id %]" />
+                          <input type="text" value="[% substitution.value | html %]" name="substitution_value_[% id | html %]" />
                           <a class="add_block" href="#"><i class="fa fa-plus"></i> Add a substitution</a>
                           <a class="remove_block" href="#"><i class="fa fa-trash"></i> Remove substitution</a>
                           <span class="required">A field name is required</span>
@@ -140,7 +141,7 @@
                 <select name="condition_field">
                   <option value="">Choose a field name</option>
                   [% FOR field IN condition_fields %]
-                    <option value="[% field %]">[% field %]</option>
+                    <option value="[% field | html %]">[% field | html %]</option>
                   [% END %]
                 </select>
                 =
@@ -155,7 +156,7 @@
                 <select required="required" class="required" name="substitution_field">
                   <option value="">Choose a field name</option>
                   [% FOR field IN substitution_fields %]
-                    <option value="[% field %]">[% field %]</option>
+                    <option value="[% field | html %]">[% field | html %]</option>
                   [% END %]
                 </select>
                 =
@@ -182,7 +183,7 @@
                                 <tr>
                                     <td>
                                         [% IF rule.age.defined and rule.age.length > 0 %]
-                                            [% rule.age %] days
+                                            [% rule.age | html %] days
                                         [% ELSE %]
                                             There is no age for this rule.
                                         [% END %]
@@ -191,7 +192,7 @@
                                         [% FOR condition IN rule.conditions %]
                                             [% IF condition.field %]
                                                 <div class="block">
-                                                [% condition.field %] = [% condition.value %]
+                                                [% condition.field | html %] = [% condition.value | html %]
                                                 </div>
                                             [% ELSE %]
                                                 There is no condition for this rule.
@@ -201,7 +202,7 @@
                                     <td>
                                         [% FOR substitution IN rule.substitutions %]
                                             <div class="block">
-                                                [% substitution.field %] = [% substitution.value %]
+                                                [% substitution.field | html %] = [% substitution.value | html %]
                                             </div>
                                         [% END %]
                                     </td>
@@ -224,9 +225,9 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
-    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") %]
-    [% Asset.js("js/automatic_item_modification_by_age.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
+    [% Asset.js("js/automatic_item_modification_by_age.js") | $raw %]
     [% IF op == 'edit_form' %]
         <script type="text/javascript">
             $(document).ready(function() {

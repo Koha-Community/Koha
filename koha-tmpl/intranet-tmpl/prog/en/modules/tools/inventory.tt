@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Branches %]
@@ -5,7 +6,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Inventory</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="tools_inventory" class="tools">
@@ -20,16 +21,16 @@
     <div id="yui-main">
     <div class="yui-b">
     <h1>Inventory</h1>
-    [% IF (moddatecount) %]<div class="dialog message">[% moddatecount %] items modified : datelastseen set to [% date | $KohaDates %]</div>
-    <div class="dialog alert">Number of potential barcodes read: [% LinesRead %]</div>[% END %]
-    [% IF (errorfile) %]<div class="dialog alert">[% errorfile %] can't be opened</div>[% END %]
+    [% IF (moddatecount) %]<div class="dialog message">[% moddatecount | html %] items modified : datelastseen set to [% date | $KohaDates %]</div>
+    <div class="dialog alert">Number of potential barcodes read: [% LinesRead | html %]</div>[% END %]
+    [% IF (errorfile) %]<div class="dialog alert">[% errorfile | html %] can't be opened</div>[% END %]
     [% IF (err_length && err_length==1) %]<div class="dialog alert">There was 1 barcode that was too long.</div>[% END %]
-    [% IF (err_length && err_length>1) %]<div class="dialog alert">There were [% err_length %] barcodes that were too long.</div>[% END %]
+    [% IF (err_length && err_length>1) %]<div class="dialog alert">There were [% err_length | html %] barcodes that were too long.</div>[% END %]
     [% IF (err_data && err_data==1) %]<div class="dialog alert">There was 1 barcode that contained at least one unprintable character.</div>[% END %]
-    [% IF (err_data && err_data>1) %]<div class="dialog alert">There were [% err_data %] barcodes that contained at least one unprintable character.</div>[% END %]
+    [% IF (err_data && err_data>1) %]<div class="dialog alert">There were [% err_data | html %] barcodes that contained at least one unprintable character.</div>[% END %]
     [% FOREACH error IN errorloop %]
         <div class="dialog alert">
-            [% error.barcode %]
+            [% error.barcode | html %]
             [% IF (error.ERR_BARCODE) %]: barcode not found[% END %]
             [% IF (error.ERR_WTHDRAWN) %]: item withdrawn[% END %]
             [% IF (error.ERR_ONLOAN_RET) %]: item was on loan. It was returned before marked as seen[% END %]
@@ -68,18 +69,18 @@
                 <option value="">Filter location</option>
         [% FOREACH value IN authorised_values %]
             [% IF (value.selected) %]
-                <option value="[% value.authorised_value %]" selected="selected">[% value.lib %]</option>
+                <option value="[% value.authorised_value | html %]" selected="selected">[% value.lib | html %]</option>
             [% ELSE %]
-                <option value="[% value.authorised_value %]">[% value.lib %]</option>
+                <option value="[% value.authorised_value | html %]">[% value.lib | html %]</option>
             [% END %]
         [% END %]
         </select>        </li>
         [% END %]
         <li>
             <label for="minlocation">Item callnumber between: </label>
-                <input type="text" name="minlocation" id="minlocation" value="[% minlocation %]" /> (items.itemcallnumber)  </li>
+                <input type="text" name="minlocation" id="minlocation" value="[% minlocation | html %]" /> (items.itemcallnumber)  </li>
            <li><label for="maxlocation">...and: </label>
-                <input type="text" name="maxlocation" id="maxlocation" value="[% maxlocation %]" />
+                <input type="text" name="maxlocation" id="maxlocation" value="[% maxlocation | html %]" />
         </li>
     </ol>
     </fieldset>
@@ -91,19 +92,19 @@
                   [% FOREACH status IN statuses %]
                       [% IF (status.values) %]
                           <fieldset style="float: left; padding: 5px; margin: 5px;text-align:right">
-                              <legend>[% status.fieldname %]</legend>
-                              <ul id="statuses-[% fieldname %]" style="display: inline;">
+                              <legend>[% status.fieldname | html %]</legend>
+                              <ul id="statuses-[% fieldname | html %]" style="display: inline;">
                               [% FOREACH value IN status.values %]
                                   [% IF (value.lib) %]
                                     <li>
-                                    <label for="[% value.id %]">
+                                    <label for="[% value.id | html %]">
                                         [% IF value.authorised_value==0 %]
                                             For loan
                                         [% ELSE %]
-                                            [% value.lib %]
+                                            [% value.lib | html %]
                                         [% END %]
                                     </label>
-                                    <input type="checkbox" name="status-[% status.fieldname %]-[% value.authorised_value %]" id="[% value.authorised_value %]" />
+                                    <input type="checkbox" name="status-[% status.fieldname | html %]-[% value.authorised_value | html %]" id="[% value.authorised_value | html %]" />
                                     </li>
                                   [% END %]
                               [% END %]
@@ -149,11 +150,11 @@
     [% END %]
     [% IF (op) %]
     <form method="post" action="/cgi-bin/koha/tools/inventory.pl" class="checkboxed">
-    <input type="hidden" name="minlocation" value="[% minlocation %]" />
-    <input type="hidden" name="maxlocation" value="[% maxlocation %]" />
-    <input type="hidden" name="location" value="[% location %]" />
-    <input type="hidden" name="branchcode" value="[% branchcode %]" />
-    <input type="hidden" name="datelastseen" value="[% datelastseen %]" />
+    <input type="hidden" name="minlocation" value="[% minlocation | html %]" />
+    <input type="hidden" name="maxlocation" value="[% maxlocation | html %]" />
+    <input type="hidden" name="location" value="[% location | html %]" />
+    <input type="hidden" name="branchcode" value="[% branchcode | html %]" />
+    <input type="hidden" name="datelastseen" value="[% datelastseen | html %]" />
 
     [% UNLESS uploadedbarcodesflag %]
       <div><a href="#" class="checkall"><i class="fa fa-check"></i> Select all</a> <a href="#" class="clearall"><i class="fa fa-remove"></i> Clear all</a></div>
@@ -180,7 +181,7 @@
         <tr>
             [% UNLESS uploadedbarcodesflag %]
               <td>
-                <input type="checkbox" name="SEEN-[% result.itemnumber %]" value="1" />
+                <input type="checkbox" name="SEEN-[% result.itemnumber | html %]" value="1" />
               </td>
             [% END %]
             <td>
@@ -188,11 +189,11 @@
             </td>
             <td>[% result.itemcallnumber | html %]</td>
             <td>
-                [% Branches.GetName( result.homebranch ) %]
+                [% Branches.GetName( result.homebranch ) | html %]
                 <span class="shelvingloc">[% result.location | html %]</span>
             </td>
             <td>
-                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% result.biblionumber %]" class="openWin">[% result.title | html %]</a>
+                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% result.biblionumber | html %]" class="openWin">[% result.title | html %]</a>
                 [% IF ( result.author ) %]
                     by <span class="author">[% result.author | html %]</span>
                 [% END %]
@@ -210,7 +211,7 @@
             [% result.withdrawn | html %]
             </td>
             <td>
-            [% result.datelastseen | $KohaDates | html %]
+            [% result.datelastseen | $KohaDates %]
             </td>
             <td>
             [% FOREACH problem IN result.problems %]
@@ -250,10 +251,10 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script type="text/javascript">
         function checkForm() {
             if ( $('#uploadbarcodes').val() ) {

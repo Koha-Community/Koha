@@ -1,13 +1,14 @@
+[% USE raw %]
 [% USE Asset %]
 [% BLOCK csv_export %]
     <div class="btn-group">
-        <a id="exportbutton" class="btn btn-default btn-sm" href="[% script_name %]?op=export&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]"><i class="fa fa-download"></i> Export as CSV</a>
+        <a id="exportbutton" class="btn btn-default btn-sm" href="[% script_name | html %]?op=export&amp;basketno=[% basketno | html %]&amp;booksellerid=[% booksellerid | html %]"><i class="fa fa-download"></i> Export as CSV</a>
       <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
       <ul class="dropdown-menu" id="export-csv-menu">
           <li><a href="#">Default</a></li>
           [% IF csv_profiles %]
               [% FOR csv IN csv_profiles %]
-                <li><a href="#" data-value="[% csv.export_format_id %]">[% csv.profile %]</a></li>
+                <li><a href="#" data-value="[% csv.export_format_id | html %]">[% csv.profile | html %]</a></li>
               [% END %]
           [% END %]
        </ul>
@@ -19,8 +20,8 @@
 [% USE AuthorisedValues %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Acquisitions &rsaquo; [% UNLESS ( basketno ) %]New [% END %]Basket [% basketname|html %] ([% basketno |html %]) for [% booksellername|html %]</title>
-[% Asset.css("css/datatables.css") %]
+<title>Koha &rsaquo; Acquisitions &rsaquo; [% UNLESS ( basketno ) %]New [% END %]Basket [% basketname | html %] ([% basketno | html %]) for [% booksellername | html %]</title>
+[% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 <style type="text/css">
     .sortmsg {font-size: 80%;}
@@ -35,8 +36,8 @@
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
-    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername|html %]</a> &rsaquo;
-    [% UNLESS ( basketno ) %][% IF ( delete_confirmed ) %]Deleted [% ELSE %]New [% END %][% END %]Basket [% basketname|html %] [% IF ( basketno ) %]([% basketno |html %])[% END %] for [% booksellername|html %]
+    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a> &rsaquo;
+    [% UNLESS ( basketno ) %][% IF ( delete_confirmed ) %]Deleted [% ELSE %]New [% END %][% END %]Basket [% basketname | html %] [% IF ( basketno ) %]([% basketno | html %])[% END %] for [% booksellername | html %]
 </div>
 
 <div id="doc3" class="yui-t2">
@@ -57,32 +58,32 @@
                     [% IF active %]
                         <div class="btn-group"><a href="#addtoBasket" role="button" class="btn btn-default btn-sm" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a></div>
                     [% END %]
-                    <div class="btn-group"><a href="basketheader.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;op=add_form" class="btn btn-default btn-sm" id="basketheadbutton"><i class="fa fa-pencil"></i> Edit basket</a></div>
+                    <div class="btn-group"><a href="basketheader.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]&amp;op=add_form" class="btn btn-default btn-sm" id="basketheadbutton"><i class="fa fa-pencil"></i> Edit basket</a></div>
                     [%# FIXME This action should not be available for everyone %]
                     <div class="btn-group"><a href="#deleteBasketModal" role="button" class="btn btn-default btn-sm" data-toggle="modal" id="delbasketbutton"><i class="fa fa-trash"></i> Delete this basket</a></div>
                    [% IF ( unclosable ) %]
                     [% ELSIF ( uncertainprices ) %]
-                        <div class="btn-group"><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% booksellerid %]&amp;owner=1" class="btn btn-default btn-sm" id="uncertpricesbutton"><i class="fa fa-usd"></i> Uncertain prices</a></div>
+                        <div class="btn-group"><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% booksellerid | html %]&amp;owner=1" class="btn btn-default btn-sm" id="uncertpricesbutton"><i class="fa fa-usd"></i> Uncertain prices</a></div>
                         <div title="Can not close baskets that have items with uncertain prices in them." class="btn-group">
                             <a href="" class="btn btn-default btn-sm disabled" id="closebutton"><i class="fa fa-times-circle"></i> Close this basket</a>
                         </div>
                     [% ELSE %]
                         <div class="btn-group">
-                            <a href="/cgi-bin/koha/acqui/basket.pl?op=close&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" class="btn btn-default btn-sm" id="closebutton"><i class="fa fa-times-circle"></i> Close this basket</a>
+                            <a href="/cgi-bin/koha/acqui/basket.pl?op=close&amp;basketno=[% basketno | html %]&amp;booksellerid=[% booksellerid | html %]" class="btn btn-default btn-sm" id="closebutton"><i class="fa fa-times-circle"></i> Close this basket</a>
                         </div>
                     [% END %]
 
                     [% PROCESS csv_export %]
 
                         [% IF ediaccount %]
-                        <div class="btn-group"><a href="/cgi-bin/koha/acqui/edi_ean.pl?op=ediorder&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" class="btn btn-default btn-sm" id="ediorderbutton"><i class="fa fa-download"></i> Create EDIFACT order</a></div>
+                        <div class="btn-group"><a href="/cgi-bin/koha/acqui/edi_ean.pl?op=ediorder&amp;basketno=[% basketno | html %]&amp;booksellerid=[% booksellerid | html %]" class="btn btn-default btn-sm" id="ediorderbutton"><i class="fa fa-download"></i> Create EDIFACT order</a></div>
                         [% END %]
 
                         [% IF ( active && books_loop ) %]
                             <div class="btn-group">
                                 <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
                                     <input type="hidden" name="op" value="email" />
-                                    <input type="hidden" name="basketno" value="[% basketno %]" />
+                                    <input type="hidden" name="basketno" value="[% basketno | html %]" />
                                     <button type="submit" class="btn btn-default btn-sm" id="emailvendorbutton"><i class="fa fa-envelope"></i> E-mail order</button>
                                 </form>
                             </div>
@@ -106,8 +107,8 @@
                             <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
                             <form action="/cgi-bin/koha/acqui/basket.pl" method="get">
                                 <input type="hidden" name="op" value="delete_confirm" />
-                                <input type="hidden" name="basketno" value="[% basketno %]" />
-                                <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+                                <input type="hidden" name="basketno" value="[% basketno | html %]" />
+                                <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                                 <input type="hidden" name="delbiblio" value="0" />
                                 <button type="submit" class="btn btn-default btn-default">Delete basket</button>
                             </form>
@@ -124,16 +125,16 @@
                             <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
                             <form action="/cgi-bin/koha/acqui/basket.pl" method="get">
                                 <input type="hidden" name="op" value="delete_confirm" />
-                                <input type="hidden" name="basketno" value="[% basketno %]" />
-                                <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+                                <input type="hidden" name="basketno" value="[% basketno | html %]" />
+                                <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                                 <input type="hidden" name="delbiblio" value="0" />
                                 <button type="submit" class="btn btn-default btn-default">Delete basket and orders</button>
                             </form>
 
                             <form action="/cgi-bin/koha/acqui/basket.pl" method="get">
                                 <input type="hidden" name="op" value="delete_confirm" />
-                                <input type="hidden" name="basketno" value="[% basketno %]" />
-                                <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+                                <input type="hidden" name="basketno" value="[% basketno | html %]" />
+                                <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                                 <input type="hidden" name="delbiblio" value="1" />
                                 <button type="submit" class="btn btn-default btn-default">Delete basket, orders, and records</button>
                             </form>
@@ -170,11 +171,11 @@
                     <p><strong>The following records could not be deleted:</strong></p>
                     <ul>
                     [% FOREACH cannotdelbiblio IN cannotdelbiblios %]
-                        <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cannotdelbiblio.biblionumber %]">[% cannotdelbiblio.title |html %]</a> by [% cannotdelbiblio.author %]:
+                        <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cannotdelbiblio.biblionumber | html %]">[% cannotdelbiblio.title | html %]</a> by [% cannotdelbiblio.author | html %]:
                             <ul>
-                            [% IF (cannotdelbiblio.itemcount) %]<li>[% cannotdelbiblio.itemcount %] item(s) attached.</li>[% END %]
-                            [% IF (cannotdelbiblio.subscriptions) %]<li>[% cannotdelbiblio.subscriptions %] subscription(s) attached.</li>[% END %]
-                            [% IF (cannotdelbiblio.countbiblio) %]<li>[% cannotdelbiblio.countbiblio %] order(s) attached.</li>[% END %]
+                            [% IF (cannotdelbiblio.itemcount) %]<li>[% cannotdelbiblio.itemcount | html %] item(s) attached.</li>[% END %]
+                            [% IF (cannotdelbiblio.subscriptions) %]<li>[% cannotdelbiblio.subscriptions | html %] subscription(s) attached.</li>[% END %]
+                            [% IF (cannotdelbiblio.countbiblio) %]<li>[% cannotdelbiblio.countbiblio | html %] order(s) attached.</li>[% END %]
                             [% IF (cannotdelbiblio.othererror) %]<li>Unknown error.</li>[% END %]
                             </ul>
                         </li>
@@ -183,12 +184,12 @@
                 </div>
                 <a href="booksellers.pl">Click here to go back to booksellers page</a>
             [% ELSE %]
-                <a href="/cgi-bin/koha/acqui/booksellers.pl?booksellerid=[% booksellerid %]" class="btn btn-default btn-sm">Show baskets for vendor [% booksellername | html %]</a> <a href="/cgi-bin/koha/acqui/booksellers.pl" class="btn btn-default btn-sm">Show all active baskets</a>
+                <a href="/cgi-bin/koha/acqui/booksellers.pl?booksellerid=[% booksellerid | html %]" class="btn btn-default btn-sm">Show baskets for vendor [% booksellername | html %]</a> <a href="/cgi-bin/koha/acqui/booksellers.pl" class="btn btn-default btn-sm">Show all active baskets</a>
             [% END %]
         [% ELSE %]
 
         [% FOR m IN messages %]
-            <div class="dialog [% m.type %]">
+            <div class="dialog [% m.type | html %]">
                 [% SWITCH m.code %]
                 [% CASE 'no_email' %]
                     This vendor has no contact selected for sending orders to or is missing an e-mail address.
@@ -199,38 +200,38 @@
                 [% CASE 'email_sent' %]
                     Order e-mail was sent to the vendor.
                 [% CASE %]
-                    ERROR! - [% m.code %]
+                    ERROR! - [% m.code | html %]
                 [% END %]
             </div>
         [% END %]
-        <h1>[% UNLESS ( basketno ) %]New [% END %]Basket [% basketname|html %] ([% basketno |html %]) for <a href="supplier.pl?booksellerid=[% booksellerid %]">[% booksellername|html %]</a></h1>
+        <h1>[% UNLESS ( basketno ) %]New [% END %]Basket [% basketname | html %] ([% basketno | html %]) for <a href="supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a></h1>
         [% IF ( basketno ) %]
             <div id="acqui_basket_summary" class="yui-g">
                 <div class="rows">
                 <div class="yui-u first">
                 <ol>
-                [% IF ( basketnote ) %]<li><span class="label">Internal note:</span> [% basketnote |html %]</li>[% END %]
-                [% IF ( basketbooksellernote ) %]<li><span class="label">Vendor note:</span> [% basketbooksellernote |html %]</li>[% END %]
+                [% IF ( basketnote ) %]<li><span class="label">Internal note:</span> [% basketnote | html %]</li>[% END %]
+                [% IF ( basketbooksellernote ) %]<li><span class="label">Vendor note:</span> [% basketbooksellernote | html %]</li>[% END %]
                 [% IF ( basketcontractno ) %]
-                    <li><span class="label">Contract name:</span> <a href="../admin/aqcontract.pl?op=add_form&amp;contractnumber=[% basketcontractno %]&amp;booksellerid=[% booksellerid %]">[% basketcontractname %]</a></li>
+                    <li><span class="label">Contract name:</span> <a href="../admin/aqcontract.pl?op=add_form&amp;contractnumber=[% basketcontractno | html %]&amp;booksellerid=[% booksellerid | html %]">[% basketcontractname | html %]</a></li>
                 [% END %]
-                [% IF deliveryplace %]<li><span class="label">Delivery place:</span> [% Branches.GetName( deliveryplace ) %]</li>[% END %]
-                [% IF billingplace %]<li><span class="label">Billing place:</span> [% Branches.GetName( billingplace ) %]</li>[% END %]
-                [% IF ( authorisedbyname ) %]<li><span class="label">Created by:</span>  [% authorisedbyname %]</li>[% END %]
+                [% IF deliveryplace %]<li><span class="label">Delivery place:</span> [% Branches.GetName( deliveryplace ) | html %]</li>[% END %]
+                [% IF billingplace %]<li><span class="label">Billing place:</span> [% Branches.GetName( billingplace ) | html %]</li>[% END %]
+                [% IF ( authorisedbyname ) %]<li><span class="label">Created by:</span>  [% authorisedbyname | html %]</li>[% END %]
                 <li id="managedby">
                     <form action="" method="post">
                         <span class="label">Managed by:</span>
                         <div style="float:left">
                             <ul id="users_names" style="padding-left:0">
                               [% FOREACH user IN users %]
-                                <li id="user_[% user.borrowernumber %]">
-                                    [% user.firstname %] [% user.surname %]
-                                    <a href="#" data-borrowernumber="[% user.borrowernumber %]" class="del_user"><i class="fa fa-trash"></i> Delete user</a>
+                                <li id="user_[% user.borrowernumber | html %]">
+                                    [% user.firstname | html %] [% user.surname | html %]
+                                    <a href="#" data-borrowernumber="[% user.borrowernumber | html %]" class="del_user"><i class="fa fa-trash"></i> Delete user</a>
                                 </li>
                               [% END %]
                             </ul>
-                            <input type="hidden" id="basketno" name="basketno" value="[% basketno %]" />
-                            <input type="hidden" id="users_ids" name="users_ids" value="[% users_ids %]" />
+                            <input type="hidden" id="basketno" name="basketno" value="[% basketno | html %]" />
+                            <input type="hidden" id="users_ids" name="users_ids" value="[% users_ids | html %]" />
                             <input type="hidden" id="op" name="op" value="mod_users" />
                             <input type="button" id="add_user" value="Add user" />
                             <input type="submit" value="Save changes" />
@@ -240,7 +241,7 @@
                 <li id="branch">
                     <span class="label">Library:</span>
                     [% IF basketbranchcode %]
-                        [% Branches.GetName( basketbranchcode ) %]
+                        [% Branches.GetName( basketbranchcode ) | html %]
                     [% ELSE %]
                         No library
                     [% END %]
@@ -250,13 +251,13 @@
                                 <option value="">(no library)</option>
                                 [% FOREACH branch IN branches_loop %]
                                     [% IF (branch.selected) %]
-                                        <option selected="selected" value="[% branch.branchcode %]"> [% branch.branchname %]</option>
+                                        <option selected="selected" value="[% branch.branchcode | html %]"> [% branch.branchname | html %]</option>
                                     [% ELSE %]
-                                        <option value="[% branch.branchcode %]"> [% branch.branchname %]</option>
+                                        <option value="[% branch.branchcode | html %]"> [% branch.branchname | html %]</option>
                                     [% END %]
                                 [% END %]
                             </select>
-                            <input type="hidden" id="basketno" name="basketno" value="[% basketno %]" />
+                            <input type="hidden" id="basketno" name="basketno" value="[% basketno | html %]" />
                             <input type="hidden" id="op" name="op" value="mod_branch" />
                             <input type="submit" value="Change" />
                         </form>
@@ -264,7 +265,7 @@
                 </li>
                 [% IF ( creationdate ) %]<li><span class="label">Opened on:</span>  [% creationdate | $KohaDates %]</li>[% END %]
                 [% IF ( closedate ) %]<li><span class="label">Closed on:</span> [% closedate | $KohaDates %]</li>[% END %]
-                [% IF ( estimateddeliverydate ) %]<li><span class="label">Estimated delivery date:</span> [% estimateddeliverydate | $KohaDates  %]</li>[% END %]
+                [% IF ( estimateddeliverydate ) %]<li><span class="label">Estimated delivery date:</span> [% estimateddeliverydate | $KohaDates | html %]</li>[% END %]
                 <li><span class="label">Orders are standing:</span> [% IF is_standing %]Yes[% ELSE %]No[% END %]</li>
 
                 [% IF basket.create_items %]
@@ -293,13 +294,13 @@
                           [% END %]
                           [% IF basketgroup.closed %]
                               [% IF ( CAN_user_acquisition_group_manage ) %]
-                                  <a href="basketgroup.pl?op=add&booksellerid=[% booksellerid %]&basketgroupid=[% basketgroup.id %]" title="basketgroup">[% basketgroup.name %] (closed)</a>
+                                  <a href="basketgroup.pl?op=add&booksellerid=[% booksellerid | html %]&basketgroupid=[% basketgroup.id | html %]" title="basketgroup">[% basketgroup.name | html %] (closed)</a>
                               [% ELSE %]
-                                  [% basketgroup.name %] (closed)
+                                  [% basketgroup.name | html %] (closed)
                               [% END %]
                           [% ELSIF ( ! CAN_user_acquisition_group_manage ) %]
                             [%- IF basketgroup.id -%]
-                                [% basketgroup.name %]
+                                [% basketgroup.name | html %]
                             [%- ELSE -%]
                                 No group
                             [%- END -%]
@@ -308,25 +309,25 @@
                               <option value="">No group</option>
                               [% FOREACH bg IN basketgroups %]
                                 [% IF ( bg.default ) %]
-                                    <option value="[% bg.id %]" selected="selected">[% bg.name %]</option>
+                                    <option value="[% bg.id | html %]" selected="selected">[% bg.name | html %]</option>
                                 [% ELSE %]
                                   [% UNLESS bg.closed %]
-                                    <option value="[% bg.id %]">[% bg.name %]</option>
+                                    <option value="[% bg.id | html %]">[% bg.name | html %]</option>
                                   [% ELSE %]
-                                    <option value="[% bg.id %]" disabled="disabled">[% bg.name %] (closed)</option>
+                                    <option value="[% bg.id | html %]" disabled="disabled">[% bg.name | html %] (closed)</option>
                                   [% END %]
                                 [% END %]
                               [% END %]
                               <option value="new">Add new group</option>
                             </select>
-                            <input type="hidden" id="basketno" value="[% basketno %]" name="basketno" />
+                            <input type="hidden" id="basketno" value="[% basketno | html %]" name="basketno" />
                             <input type="hidden" value="mod_basket" name="op" />
-                            <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+                            <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                             <input type="submit" value="Change basket group" />
                           [% END %]
                         </li>
-                    [% IF basketgroup.deliveryplace %]<li><span class="label">Basket group delivery placename:</span> [% Branches.GetName( basketgroup.deliveryplace ) %]</li>[% END %]
-                    [% IF basketgroup.billingplace %]<li><span class="label">Basket group billing place:</span> [% Branches.GetName( basketgroup.billingplace ) %]</li>[% END %]
+                    [% IF basketgroup.deliveryplace %]<li><span class="label">Basket group delivery placename:</span> [% Branches.GetName( basketgroup.deliveryplace ) | html %]</li>[% END %]
+                    [% IF basketgroup.billingplace %]<li><span class="label">Basket group billing place:</span> [% Branches.GetName( basketgroup.billingplace ) | html %]</li>[% END %]
                         </ol>
                     [% IF ( CAN_user_acquisition_group_manage ) %]
                     </form>
@@ -338,7 +339,7 @@
         [% END %]
         [% IF ( duplinbatch ) %]<div class="dialog alert">
         <h4>Duplicate warning</h4>
-        <p>Some records have not been automatically added because they match an existing record in your catalog:<a href="/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=[% duplinbatch %]&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" title="Open in new window" target="_blank" class="popup" style="margin-left:10px">Display them</a></p>
+        <p>Some records have not been automatically added because they match an existing record in your catalog:<a href="/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=[% duplinbatch | html %]&amp;basketno=[% basketno | html %]&amp;booksellerid=[% booksellerid | html %]" title="Open in new window" target="_blank" class="popup" style="margin-left:10px">Display them</a></p>
         </div>[% END %]
 
         <div id="acqui_basket_content" class="yui-g">
@@ -358,8 +359,8 @@
                         <th class="tax_included">RRP tax inc.</th>
                         <th class="tax_included">ecost tax inc.</th>
                         <th>Qty.</th>
-                        <th class="tax_excluded">Total tax exc. ([% currency %])</th>
-                        <th class="tax_included">Total tax inc. ([% currency %])</th>
+                        <th class="tax_excluded">Total tax exc. ([% currency | html %])</th>
+                        <th class="tax_included">Total tax inc. ([% currency | html %])</th>
                         <th>GST %</th>
                         <th>GST</th>
                         <th>Fund</th>
@@ -376,16 +377,16 @@
                 [% FOREACH foot_loo IN book_foot_loop %]
                     <tr>
                         <th></th>
-                        <th>Total (GST [% foot_loo.tax_rate * 100 %])</th>
+                        <th>Total (GST [% foot_loo.tax_rate * 100 | html %])</th>
                         <th class="tax_excluded">&nbsp;</th>
                         <th class="tax_excluded">&nbsp;</th>
                         <th class="tax_included">&nbsp;</th>
                         <th class="tax_included">&nbsp;</th>
-                        <th>[% foot_loo.quantity %]</th>
-                        <th class="tax_excluded">[% foot_loo.total_tax_excluded | $Price%]</th>
-                        <th class="tax_included">[% foot_loo.total_tax_included | $Price %]</th>
+                        <th>[% foot_loo.quantity | html %]</th>
+                        <th class="tax_excluded">[% foot_loo.total_tax_excluded | $Price | html %]</th>
+                        <th class="tax_included">[% foot_loo.total_tax_included | $Price | html %]</th>
                         <th>&nbsp;</th>
-                        <th>[% foot_loo.tax_value | $Price %]</th>
+                        <th>[% foot_loo.tax_value | $Price | html %]</th>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
                         [% IF ( active ) %]
@@ -398,16 +399,16 @@
                 [% END %]
                 <tr>
                     <th></th>
-                    <th>Total ([% currency %])</th>
+                    <th>Total ([% currency | html %])</th>
                     <th class="tax_excluded">&nbsp;</th>
                     <th class="tax_excluded">&nbsp;</th>
                     <th class="tax_included">&nbsp;</th>
                     <th class="tax_included">&nbsp;</th>
-                    <th>[% total_quantity %]</th>
-                    <th class="tax_excluded">[% total_tax_excluded | $Price %]</th>
-                    <th class="tax_included">[% total_tax_included | $Price %]</th>
+                    <th>[% total_quantity | html %]</th>
+                    <th class="tax_excluded">[% total_tax_excluded | $Price | html %]</th>
+                    <th class="tax_included">[% total_tax_included | $Price | html %]</th>
                     <th>&nbsp;</th>
-                    <th>[% total_tax_value | $Price %]</th>
+                    <th>[% total_tax_value | $Price | html %]</th>
                     <th>&nbsp;</th>
                     <th>&nbsp;</th>
                     [% IF ( active ) %]
@@ -426,47 +427,47 @@
                         <tr>
                     [% END %]
                         <td>
-                            [% books_loo.ordernumber %]
+                            [% books_loo.ordernumber | html %]
                         </td>
                         <td>
                             <p>
                                 [% IF ( books_loo.order_received ) %] (rcvd)[% END %]
                                 [% IF books_loo.title %]
-                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% books_loo.biblionumber %]">[% books_loo.title |html %]</a>[% IF books_loo.author %] by [% books_loo.author %][% END %]
+                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% books_loo.biblionumber | html %]">[% books_loo.title | html %]</a>[% IF books_loo.author %] by [% books_loo.author | html %][% END %]
                                 [% ELSE %]
                                     <em>Deleted bibliographic record, can't find title</em><br />
                                 [% END %]
                                 <br />
-                                [% IF ( books_loo.isbn ) %] - [% books_loo.isbn %][% END %]
-                                [% IF ( books_loo.issn ) %] - [% books_loo.issn %][% END %]
-                                [% IF ( books_loo.publishercode ) %], [% books_loo.publishercode %][% END %]
-                                [% IF ( books_loo.publicationyear ) %], [% books_loo.publicationyear %]
-                                [% ELSIF ( books_loo.copyrightdate ) %] [% books_loo.copyrightdate %][% END %]
-                                [% IF ( books_loo.editionstatement ) %], [% books_loo.editionstatement %][% END %]
+                                [% IF ( books_loo.isbn ) %] - [% books_loo.isbn | html %][% END %]
+                                [% IF ( books_loo.issn ) %] - [% books_loo.issn | html %][% END %]
+                                [% IF ( books_loo.publishercode ) %], [% books_loo.publishercode | html %][% END %]
+                                [% IF ( books_loo.publicationyear ) %], [% books_loo.publicationyear | html %]
+                                [% ELSIF ( books_loo.copyrightdate ) %] [% books_loo.copyrightdate | html %][% END %]
+                                [% IF ( books_loo.editionstatement ) %], [% books_loo.editionstatement | html %][% END %]
                                 [% IF ( books_loo.suggestionid ) %]
                                     <br/>
-                                    Suggested by: [% books_loo.surnamesuggestedby %][% IF ( books_loo.firstnamesuggestedby ) %], [% books_loo.firstnamesuggestedby %] [% END %]
-                                    (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% books_loo.suggestionid %]&amp;op=show">suggestion #[% books_loo.suggestionid %]</a>)
+                                    Suggested by: [% books_loo.surnamesuggestedby | html %][% IF ( books_loo.firstnamesuggestedby ) %], [% books_loo.firstnamesuggestedby | html %] [% END %]
+                                    (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% books_loo.suggestionid | html %]&amp;op=show">suggestion #[% books_loo.suggestionid | html %]</a>)
                                 [% END %]
                             </p>
                                 [% IF ( books_loo.order_internalnote ) %]
-                                    <p class="ordernote"><strong>Internal note: </strong><span id="internal-note-[% books_loo.ordernumber %]">[% books_loo.order_internalnote|html %]</span> <a class="edit_note" data-ordernumber="[% books_loo.ordernumber %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]&type=internal" title="Edit internal note"><i class="fa fa-pencil"></i> Edit internal note</a></p>
+                                    <p class="ordernote"><strong>Internal note: </strong><span id="internal-note-[% books_loo.ordernumber | html %]">[% books_loo.order_internalnote | html %]</span> <a class="edit_note" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=internal" title="Edit internal note"><i class="fa fa-pencil"></i> Edit internal note</a></p>
                                 [% ELSE %]
-                                    <a class="edit_note" data-ordernumber="[% books_loo.ordernumber %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]&type=internal" title="Add internal note"><i class="fa fa-plus"></i> Add internal note</a>
+                                    <a class="edit_note" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=internal" title="Add internal note"><i class="fa fa-plus"></i> Add internal note</a>
                                 [% END %]
                                 [% IF ( books_loo.order_vendornote ) %]
-                                    <p class="ordernote"><strong>Vendor note: </strong> <span id="vendor-note-[% books_loo.ordernumber %]">[% books_loo.order_vendornote|html %]</span> <a class="edit_note" data-ordernumber="[% books_loo.ordernumber %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]&type=vendor" title="Edit vendor note"><i class="fa fa-pencil"></i> Edit vendor note</a></p>
+                                    <p class="ordernote"><strong>Vendor note: </strong> <span id="vendor-note-[% books_loo.ordernumber | html %]">[% books_loo.order_vendornote | html %]</span> <a class="edit_note" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=vendor" title="Edit vendor note"><i class="fa fa-pencil"></i> Edit vendor note</a></p>
                                 [% ELSE %]
-                                    <a class="edit_note" data-ordernumber="[% books_loo.ordernumber %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]&type=vendor" title="Add vendor note"><i class="fa fa-plus"></i> Add vendor note</a>
+                                    <a class="edit_note" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=vendor" title="Add vendor note"><i class="fa fa-plus"></i> Add vendor note</a>
                                 [% END %]
                             [% IF (books_loo.transferred_from) %]
-                              [% basket = books_loo.transferred_from.basket %]
-                              [% bookseller = books_loo.transferred_from.bookseller %]
-                              [% timestamp = books_loo.transferred_from.timestamp %]
+                              [% basket = books_loo.transferred_from.basket | html %]
+                              [% bookseller = books_loo.transferred_from.bookseller | html %]
+                              [% timestamp = books_loo.transferred_from.timestamp | html %]
                               <p>Transferred from basket:
-                                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]"> [% basket.basketname %]</a>
-                                (<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% bookseller.id %]">[% bookseller.name %]</a>)
-                                on <span title="[% timestamp | $KohaDates with_hours = 1 %]">
+                                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | html %]"> [% basket.basketname | html %]</a>
+                                (<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% bookseller.id | html %]">[% bookseller.name | html %]</a>)
+                                on <span title="[% timestamp | $KohaDates with_hours = 1 | html %]">
                                   [% timestamp | $KohaDates %]
                                 </span>
                               </p>
@@ -474,48 +475,48 @@
                         </td>
                         [% SET zero_regex = "^0{1,}\.?0{1,}[^1-9]" %] [%# 0 or 0.0 or 0.00 or 00 or 00.0 or 00.00 or 0.000 ... %]
                         [%# FIXME: use of a regexp is not ideal; bugs 9410 and 10929 suggest better way of handling this %]
-                        <td class="number tax_excluded [% IF books_loo.rrp_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.rrp_tax_excluded | $Price %]</td>
-                        <td class="number tax_excluded [% IF books_loo.ecost_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.ecost_tax_excluded | $Price%]</td>
-                        <td class="number tax_included [% IF books_loo.rrp_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.rrp_tax_included | $Price %]</td>
-                        <td class="number tax_included [% IF books_loo.ecost_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.ecost_tax_included | $Price %]</td>
-                        <td class="number [% IF books_loo.quantity.search(zero_regex) %]error[% END %]">[% books_loo.quantity %]</td>
-                        <td class="number tax_excluded [% IF books_loo.total_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.total_tax_excluded | $Price %]</td>
-                        <td class="number tax_included [% IF books_loo.total_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.total_tax_included | $Price %]</td>
-                        <td class="number">[% books_loo.tax_rate * 100 %]</td>
-                        <td class="number [% IF books_loo.tax_value.search(zero_regex) %]error[% END %]">[% books_loo.tax_value | $Price %]</td>
-                        <td>[% books_loo.budget_name %]</td>
-                        <td>[% books_loo.suppliers_report %]</td>
+                        <td class="number tax_excluded [% IF books_loo.rrp_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.rrp_tax_excluded | $Price | html %]</td>
+                        <td class="number tax_excluded [% IF books_loo.ecost_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.ecost_tax_excluded | $Price | html %]</td>
+                        <td class="number tax_included [% IF books_loo.rrp_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.rrp_tax_included | $Price | html %]</td>
+                        <td class="number tax_included [% IF books_loo.ecost_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.ecost_tax_included | $Price | html %]</td>
+                        <td class="number [% IF books_loo.quantity.search(zero_regex) %]error[% END %]">[% books_loo.quantity | html %]</td>
+                        <td class="number tax_excluded [% IF books_loo.total_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.total_tax_excluded | $Price | html %]</td>
+                        <td class="number tax_included [% IF books_loo.total_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.total_tax_included | $Price | html %]</td>
+                        <td class="number">[% books_loo.tax_rate * 100 | html %]</td>
+                        <td class="number [% IF books_loo.tax_value.search(zero_regex) %]error[% END %]">[% books_loo.tax_value | $Price | html %]</td>
+                        <td>[% books_loo.budget_name | html %]</td>
+                        <td>[% books_loo.suppliers_report | html %]</td>
                         [% IF ( active ) %]
                             [% UNLESS ( closedate ) %]
                             <td>
-                                <a href="neworderempty.pl?ordernumber=[% books_loo.ordernumber %]&amp;booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Modify</a>
+                                <a href="neworderempty.pl?ordernumber=[% books_loo.ordernumber | html %]&amp;booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]">Modify</a>
                                 [% UNLESS (books_loo.order_received) %]
                                     <br />
-                                    <a href="#" class="transfer_order" data-ordernumber="[% books_loo.ordernumber %]">Transfer</a>
+                                    <a href="#" class="transfer_order" data-ordernumber="[% books_loo.ordernumber | html %]">Transfer</a>
                                 [% END %]
                             </td>
                             <td>
                             [% IF ( books_loo.left_holds_on_order ) %]
-                            <span class="button" title="Can't cancel order, ([% books_loo.holds_on_order %]) holds are linked with this order cancel holds first">Can't cancel order</span><br>
+                            <span class="button" title="Can't cancel order, ([% books_loo.holds_on_order | html %]) holds are linked with this order cancel holds first">Can't cancel order</span><br>
                             [% ELSE %]
-                            <a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% books_loo.ordernumber %]&biblionumber=[% books_loo.biblionumber %]&basketno=[% basketno %]&referrer=/cgi-bin/koha/acqui/basket.pl%3Fbasketno=[% basketno %]" class="button">Cancel order</a><br>
+                            <a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% books_loo.ordernumber | html %]&biblionumber=[% books_loo.biblionumber | html %]&basketno=[% basketno | html %]&referrer=/cgi-bin/koha/acqui/basket.pl%3Fbasketno=[% basketno | html %]" class="button">Cancel order</a><br>
                             [% END %]
                             [% IF ( books_loo.can_del_bib ) %]
-                            <a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% books_loo.ordernumber %]&biblionumber=[% books_loo.biblionumber %]&basketno=[% basketno %]&del_biblio=1&referrer=/cgi-bin/koha/acqui/basket.pl%3Fbasketno=[% basketno %]" class="button">Cancel order and delete catalog record</a><br>
+                            <a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% books_loo.ordernumber | html %]&biblionumber=[% books_loo.biblionumber | html %]&basketno=[% basketno | html %]&del_biblio=1&referrer=/cgi-bin/koha/acqui/basket.pl%3Fbasketno=[% basketno | html %]" class="button">Cancel order and delete catalog record</a><br>
                             [% ELSE %]
                             <span class="button" title="Can't delete catalog record, see constraints below">Can't cancel order and delete catalog record</span><br>
                             [% END %]
                             [% IF ( books_loo.left_item ) %]
-                            <b title="Can't delete catalog record, because of [% books_loo.items %] existing hold(s)" >[% books_loo.items %] item(s) left</b><br>
+                            <b title="Can't delete catalog record, because of [% books_loo.items | html %] existing hold(s)" >[% books_loo.items | html %] item(s) left</b><br>
                             [% END %]
                             [% IF ( books_loo.left_biblio ) %]
-                            <b title="Can't delete catalog record, delete other orders linked to it first">[% books_loo.biblios %] order(s) left</b><br>
+                            <b title="Can't delete catalog record, delete other orders linked to it first">[% books_loo.biblios | html %] order(s) left</b><br>
                             [% END %]
                             [% IF ( books_loo.left_subscription ) %]
-                            <b title="Can't delete catalog record, delete subscriptions first">[% books_loo.subscriptions %] subscription(s) left</b><br>
+                            <b title="Can't delete catalog record, delete subscriptions first">[% books_loo.subscriptions | html %] subscription(s) left</b><br>
                             [% END %]
                             [% IF ( books_loo.left_holds ) %]
-                            <b title="Can't delete catalog record or order, cancel holds first">[% books_loo.holds %] hold(s) left</b>
+                            <b title="Can't delete catalog record or order, cancel holds first">[% books_loo.holds | html %] hold(s) left</b>
                             [% END %]
                             </td>
                             [% END %]
@@ -541,8 +542,8 @@
                   <th class="tax_included">RRP tax inc.</th>
                   <th class="tax_included">ecost tax inc.</th>
                   <th>Qty.</th>
-                  <th class="tax_excluded">Total tax exc. ([% currency %])</th>
-                  <th class="tax_included">Total tax inc. ([% currency %])</th>
+                  <th class="tax_excluded">Total tax exc. ([% currency | html %])</th>
+                  <th class="tax_included">Total tax inc. ([% currency | html %])</th>
                   <th>GST %</th>
                   <th>GST</th>
                   <th>Fund</th>
@@ -552,52 +553,52 @@
                 [% FOREACH order IN cancelledorders_loop %]
                   <tr style="color:grey">
                     <td>
-                        [% order.ordernumber %]
+                        [% order.ordernumber | html %]
                     </td>
                     <td>
                       <p>
                         [% IF ( order.order_received ) %] (rcvd)[% END %]
                         [% IF (order.title) %]
-                          [% order.title |html %][% IF order.author %] by [% order.author %][% END %]
+                          [% order.title | html %][% IF order.author %] by [% order.author | html %][% END %]
                         [% ELSE %]
                           <em>Deleted bibliographic record, can't find title</em>
                         [% END %]
                         <br />
-                        [% IF ( order.order_internalnote ) %] [% order.order_internalnote %][% END %]
-                        [% IF ( order.isbn ) %] - [% order.isbn %][% END %]
-                        [% IF ( order.issn ) %] - [% order.issn %][% END %]
-                        [% IF ( order.publishercode ) %], [% order.publishercode %][% END %]
-                        [% IF ( order.publicationyear ) %], [% order.publicationyear %]
-                        [% ELSIF ( order.copyrightdate ) %] [% order.copyrightdate %][% END %]
-                        [% IF ( books_loo.editionstatement ) %], [% books_loo.editionstatement %][% END %]
+                        [% IF ( order.order_internalnote ) %] [% order.order_internalnote | html %][% END %]
+                        [% IF ( order.isbn ) %] - [% order.isbn | html %][% END %]
+                        [% IF ( order.issn ) %] - [% order.issn | html %][% END %]
+                        [% IF ( order.publishercode ) %], [% order.publishercode | html %][% END %]
+                        [% IF ( order.publicationyear ) %], [% order.publicationyear | html %]
+                        [% ELSIF ( order.copyrightdate ) %] [% order.copyrightdate | html %][% END %]
+                        [% IF ( books_loo.editionstatement ) %], [% books_loo.editionstatement | html %][% END %]
                         [% IF ( order.cancellationreason ) %]
                           <br />
-                          Cancellation reason: [% AuthorisedValues.GetByCode( 'ORDER_CANCELLATION_REASON', order.cancellationreason ) %]
+                          Cancellation reason: [% AuthorisedValues.GetByCode( 'ORDER_CANCELLATION_REASON', order.cancellationreason ) | html %]
                         [% END %]
                       </p>
                       [% IF order.transferred_to %]
-                        [% basket = order.transferred_to.basket %]
-                        [% bookseller = order.transferred_to.bookseller %]
-                        [% timestamp = order.transferred_to.timestamp %]
+                        [% basket = order.transferred_to.basket | html %]
+                        [% bookseller = order.transferred_to.bookseller | html %]
+                        [% timestamp = order.transferred_to.timestamp | html %]
                         <p>Transferred to basket:
-                          <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]"> [% basket.basketname %]</a>
-                          (<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% bookseller.id %]">[% bookseller.name %]</a>)
-                          on <span title="[% timestamp | $KohaDates with_hours = 1%]">
+                          <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | html %]"> [% basket.basketname | html %]</a>
+                          (<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% bookseller.id | html %]">[% bookseller.name | html %]</a>)
+                          on <span title="[% timestamp | $KohaDates with_hours = 1 | html %]">
                             [% timestamp | $KohaDates %]
                           </span>
                         </p>
                       [% END %]
                     </td>
-                    <td class="number tax_excluded">[% order.rrp_tax_excluded | $Price %]</td>
-                    <td class="number tax_excluded">[% order.ecost_tax_excluded | $Price %]</td>
-                    <td class="number tax_included">[% order.rrp_tax_included | $Price %]</td>
-                    <td class="number tax_included">[% order.ecost_tax_included | $Price %]</td>
-                    <td class="number">[% order.quantity %]</td>
-                    <td class="number tax_excluded">[% order.total_tax_excluded | $Price %]</td>
-                    <td class="number tax_included">[% order.total_tax_included | $Price %]</td>
-                    <td class="number">[% order.tax_rate * 100 %]</td>
-                    <td class="number">[% order.tax_value | $Price %]</td>
-                    <td>[% order.budget_name %]
+                    <td class="number tax_excluded">[% order.rrp_tax_excluded | $Price | html %]</td>
+                    <td class="number tax_excluded">[% order.ecost_tax_excluded | $Price | html %]</td>
+                    <td class="number tax_included">[% order.rrp_tax_included | $Price | html %]</td>
+                    <td class="number tax_included">[% order.ecost_tax_included | $Price | html %]</td>
+                    <td class="number">[% order.quantity | html %]</td>
+                    <td class="number tax_excluded">[% order.total_tax_excluded | $Price | html %]</td>
+                    <td class="number tax_included">[% order.total_tax_included | $Price | html %]</td>
+                    <td class="number">[% order.tax_rate * 100 | html %]</td>
+                    <td class="number">[% order.tax_value | $Price | html %]</td>
+                    <td>[% order.budget_name | html %]
                   </tr>
                 [% END %]
               </tbody>
@@ -632,22 +633,22 @@
         <div id="closebasket_needsconfirmation" class="dialog alert">
 
         <form action="/cgi-bin/koha/acqui/basket.pl">
-            <h1>Are you sure you want to close basket [% basketname|html %]?</h1>
+            <h1>Are you sure you want to close basket [% basketname | html %]?</h1>
             [% IF ( CAN_user_acquisition_group_manage ) %]
             <p>
             <label for="createbasketgroup">Attach this basket to a new basket group with the same name</label>
             <input type="checkbox" id="createbasketgroup" name="createbasketgroup"/>
             </p>
             [% END %]
-            <input type="hidden" id="basketno" value="[% basketno %]" name="basketno" />
+            <input type="hidden" id="basketno" value="[% basketno | html %]" name="basketno" />
             <input type="hidden" value="close" name="op" />
-            <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+            <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
             <input type="hidden" name="confirm" value="1" />
-            <input type="hidden" name="basketgroupname" value="[% basketgroupname %]" />
+            <input type="hidden" name="basketgroupname" value="[% basketgroupname | html %]" />
             <button type="submit" class="approve" accesskey="y"><i class="fa fa-fw fa-check"></i> Yes, close (Y)</button>
         </form>
         <form action="/cgi-bin/koha/acqui/basket.pl" method="get">
-            <input type="hidden" name="basketno" value="[% basketno %]" />
+            <input type="hidden" name="basketno" value="[% basketno | html %]" />
             <button type="submit" class="deny" accesskey="n"><i class="fa fa-fw fa-remove"></i> No, don't close (N)</button>
         </form>
         </div>
@@ -656,23 +657,23 @@
         <div id="closebasket_needsconfirmation" class="dialog alert">
 
         <form action="/cgi-bin/koha/acqui/basket.pl">
-            <h1>Are you sure you want to generate an EDIFACT order and close basket [% basketname|html %]?</h1>
+            <h1>Are you sure you want to generate an EDIFACT order and close basket [% basketname | html %]?</h1>
             [% IF CAN_user_acquisition_group_manage %]
             <p>
             <label for="createbasketgroup">Attach this basket to a new basket group with the same name</label>
             <input type="checkbox" id="createbasketgroup" name="createbasketgroup"/>
             </p>
             [% END %]
-            <input type="hidden" id="basketno" value="[% basketno %]" name="basketno" />
+            <input type="hidden" id="basketno" value="[% basketno | html %]" name="basketno" />
             <input type="hidden" value="ediorder" name="op" />
-            <input type="hidden" name="ean" value="[% ean %]" />
-            <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+            <input type="hidden" name="ean" value="[% ean | html %]" />
+            <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
             <input type="hidden" name="confirm" value="1" />
-            <input type="hidden" name="basketgroupname" value="[% basketgroupname %]" />
+            <input type="hidden" name="basketgroupname" value="[% basketgroupname | html %]" />
             <button type="submit" class="approve" accesskey="Y"><i class="fa fa-fw fa-check"></i> Yes, close (Y)</button>
         </form>
         <form action="/cgi-bin/koha/acqui/basket.pl" method="get">
-            <input type="hidden" name="basketno" value="[% basketno %]" />
+            <input type="hidden" name="basketno" value="[% basketno | html %]" />
             <button type="submit" class="deny" accesskey="N"><i class="fa fa-fw fa-remove"></i> No, don't close (N)</button>
         </form>
         </div>
@@ -695,7 +696,7 @@
                     <h4 class="modal-title" id="noteEditorLabel">Order note</h4>
                 </div>
                 <div class="modal-body">
-                <textarea id="ordernotes" name="ordernotes" rows="3" cols="30" class="focus">[% ordernotes %]</textarea>
+                <textarea id="ordernotes" name="ordernotes" rows="3" cols="30" class="focus">[% ordernotes | html %]</textarea>
                 <input type="hidden" id="ordernumber" name="ordernumber" value="" />
                 <input type="hidden" name="op" value="save" />
                 <input type="hidden" id="type" name="type" value="" />
@@ -710,9 +711,9 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/acquisitions-menu.js") %]
+    [% Asset.js("js/acquisitions-menu.js") | $raw %]
 [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
     <script type="text/javascript">
         function updateColumnsVisibility(visible) {
             if ( visible ) {
@@ -791,7 +792,7 @@
             function confirm_ediorder() {
                 var is_confirmed = confirm(_("Are you sure you want to close this basket and generate an EDIFACT order?"));
                 if (is_confirmed) {
-                    window.location = "/cgi-bin/koha/acqui/basket.pl?op=edi_confirm&basketno=[% basketno |html %]";
+                    window.location = "/cgi-bin/koha/acqui/basket.pl?op=edi_confirm&basketno=[% basketno | html %]";
                 }
             }
         </script>
@@ -800,7 +801,7 @@
             $(document).ready(function(){
                 $("#basketgroupid").change(function(){
                     if($(this).val() == "new"){
-                        location.href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&booksellerid=[% booksellerid %]";
+                        location.href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&booksellerid=[% booksellerid | html %]";
                     }
                 });
             });
@@ -811,7 +812,7 @@
                     var skip = [% IF ( skip_confirm_reopen ) %] 1 [% ELSE %] 0 [% END %];
                     var is_confirmed = skip || confirm(_("Are you sure you want to reopen this basket?"));
                     if (is_confirmed) {
-                        window.location = "/cgi-bin/koha/acqui/basket.pl?op=reopen&basketno=[% basketno |html %]";
+                        window.location = "/cgi-bin/koha/acqui/basket.pl?op=reopen&basketno=[% basketno | html %]";
                     }
                 }
             </script>

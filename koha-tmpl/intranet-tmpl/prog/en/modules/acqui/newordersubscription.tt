@@ -1,11 +1,12 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Serials [% biblionumber %]</title>
-[% Asset.css("css/datatables.css") %]
+<title>Koha &rsaquo; Serials [% biblionumber | html %]</title>
+[% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -13,7 +14,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Basket [% basketno %]</a> &rsaquo; Add order from a subscription</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | html %]">Basket [% basketno | html %]</a> &rsaquo; Add order from a subscription</div>
 
 <div id="doc3" class="yui-t2">
     <div id="bd">
@@ -41,27 +42,27 @@
                         </thead>
                         <tbody>
                         [% FOREACH sub IN subs_loop %]
-                            <tr data-reneweddate="[% sub.reneweddate %]" >
-                                <td>[% sub.issn %]</td>
-                                <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% sub.subscriptionid %]" class="button" title="subscription detail">[% IF (sub.title) %][% sub.title |html %][% ELSE %]
+                            <tr data-reneweddate="[% sub.reneweddate | html %]" >
+                                <td>[% sub.issn | html %]</td>
+                                <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% sub.subscriptionid | html %]" class="button" title="subscription detail">[% IF (sub.title) %][% sub.title | html %][% ELSE %]
                                 ---
-                            [% END %][% IF (sub.unititle) %], [% sub.unititle %][% END %]</a>
+                            [% END %][% IF (sub.unititle) %], [% sub.unititle | html %][% END %]</a>
                                 </td>
-                                <td>[% IF (sub.publicnotes) %][% sub.publicnotes %][% END %]
-                                    [% IF (sub.internalnotes) %]([% sub.internalnotes %])[% END %]
-                                </td>
-                                <td>
-                                    [% IF (sub.vendorname) %][% sub.vendorname %][% END %]
+                                <td>[% IF (sub.publicnotes) %][% sub.publicnotes | html %][% END %]
+                                    [% IF (sub.internalnotes) %]([% sub.internalnotes | html %])[% END %]
                                 </td>
                                 <td>
-                                    [% IF (sub.branchcode) %][% Branches.GetName( sub.branchcode ) %][% END %]
+                                    [% IF (sub.vendorname) %][% sub.vendorname | html %][% END %]
                                 </td>
                                 <td>
-                                    [% IF (sub.callnumber) %][% sub.callnumber %][% END %]
+                                    [% IF (sub.branchcode) %][% Branches.GetName( sub.branchcode ) | html %][% END %]
+                                </td>
+                                <td>
+                                    [% IF (sub.callnumber) %][% sub.callnumber | html %][% END %]
                                 </td>
                                 <td>
                                     [% IF (sub.enddate) %]
-                                        <span title="[% sub.enddate %]">[% sub.enddate | $KohaDates %]</span>
+                                        <span title="[% sub.enddate | html %]">[% sub.enddate | $KohaDates %]</span>
                                     [% ELSE %]
                                         <span title="0000-00-00"></span>
                                     [% END %]
@@ -70,7 +71,7 @@
                                     [% IF (sub.alreadyOnOrder) %]
                                         Outstanding order (only one order per subscription is allowed)
                                     [% ELSIF not sub.aqbooksellerid || booksellerid == sub.aqbooksellerid%]
-                                        <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;biblionumber=[% sub.biblionumber %]&amp;from_subscriptionid=[% sub.subscriptionid %]" title="Order this one">
+                                        <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]&amp;biblionumber=[% sub.biblionumber | html %]&amp;from_subscriptionid=[% sub.subscriptionid | html %]" title="Order this one">
                                             Order
                                         </a>
                                     [% ELSE %]
@@ -97,7 +98,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/acquisitions-menu.js") %]
+    [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
         function updateRowsVisibility(show_only_renewed) {

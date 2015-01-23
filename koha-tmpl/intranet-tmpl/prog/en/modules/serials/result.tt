@@ -9,7 +9,7 @@
 <div class="main container-fluid">
 
 [% IF ( total ) %]
-<h1>Search results from [% from %] to [% to %] of [% total %]</h1>
+<h1>Search results from [% from | html %] to [% to | html %] of [% total | html %]</h1>
 <table>
     <tr>
        <th>Title</th>
@@ -21,28 +21,28 @@
     </tr>
     [% FOREACH resultsloo IN resultsloop %]
         <tr>
-            <td class="title">[% resultsloo.title |html %] [% resultsloo.subtitle |html %]
+            <td class="title">[% resultsloo.title | html %] [% resultsloo.subtitle | html %]
             </td>
             <td>
-                [% resultsloo.author |html %]
+                [% resultsloo.author | html %]
             </td>
             <td>
-                [% resultsloo.publishercode |html %]
+                [% resultsloo.publishercode | html %]
             </td>
             <td>
-                [% resultsloo.publicationyear |html %]
+                [% resultsloo.publicationyear | html %]
             </td>
             <td>
-                [% resultsloo.issn |html %]
+                [% resultsloo.issn | html %]
             </td>
-            <td><a class="btn btn-default btn-xs select_title" data-biblionumber="[% resultsloo.biblionumber %]" href="#" title="Choose this record">Choose</a></td>
+            <td><a class="btn btn-default btn-xs select_title" data-biblionumber="[% resultsloo.biblionumber | html %]" href="#" title="Choose this record">Choose</a></td>
         </tr>
     [% END %]
     </table>
 [% ELSE %]
 
     <div class="dialog message">
-        <p>No results found for <b>[% query %]</b></p>
+        <p>No results found for <b>[% query | html %]</b></p>
     </div>
 
 [% END %]

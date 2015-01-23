@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE AuthorisedValues %]
@@ -22,7 +23,7 @@
 
 <!-- Search Bar -->
 <p class="tip">Search subscriptions:</p>
-<form action="/cgi-bin/koha/serials/serials-search.pl" method="get">[% IF ( routing ) %]<input type="hidden" name="routing" value="[% routing %]" />[% END %]<input type="hidden" name="searched" value="1" /> <label for="ISSN_filter">ISSN:</label> <input type="text" size="10" maxlength="11" name="ISSN_filter" id="ISSN_filter" value="[% ISSN_filter %]" /> <label for="title_filter">Title:</label> <input type="text" size="20" maxlength="40" name="title_filter" id="title_filter" value="[% title_filter %]" /><input type="submit" value="Search" class="submit" />
+<form action="/cgi-bin/koha/serials/serials-search.pl" method="get">[% IF ( routing ) %]<input type="hidden" name="routing" value="[% routing | html %]" />[% END %]<input type="hidden" name="searched" value="1" /> <label for="ISSN_filter">ISSN:</label> <input type="text" size="10" maxlength="11" name="ISSN_filter" id="ISSN_filter" value="[% ISSN_filter | html %]" /> <label for="title_filter">Title:</label> <input type="text" size="20" maxlength="40" name="title_filter" id="title_filter" value="[% title_filter | html %]" /><input type="submit" value="Search" class="submit" />
 </form>
 <!-- Search Bar End -->
 
@@ -31,9 +32,9 @@
 [% UNLESS ( routinglists ) %]
 0 subscription routing lists
 [% ELSIF ( routinglists.count == 1 ) %]
-[% routinglists.count %] subscription routing list
+[% routinglists.count | html %] subscription routing list
 [% ELSE %]
-[% routinglists.count %] subscription routing lists
+[% routinglists.count | html %] subscription routing lists
 [% END %]
 </h1>
 
@@ -52,19 +53,19 @@
         [% FOREACH routinglist IN routinglists %]
             <tr>
                 <td>
-                    <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% routinglist.subscription.subscriptionid %]">
-                        [% routinglist.subscription.biblio.title %]
+                    <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% routinglist.subscription.subscriptionid | html %]">
+                        [% routinglist.subscription.biblio.title | html %]
                     </a>
                 </td>
                 <td>
-                    [% routinglist.ranking %]
+                    [% routinglist.ranking | html %]
                 </td>
                 <td>
-                    <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% routinglist.subscription.subscriptionid %]">
+                    <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% routinglist.subscription.subscriptionid | html %]">
                         Edit routing list
                     </a>
-                    <input type="hidden" name="biblionumber" value="[% routinglist.subscription.biblionumber %]" />
-                    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
+                    <input type="hidden" name="biblionumber" value="[% routinglist.subscription.biblionumber | html %]" />
+                    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                 </td>
             </tr>
             [% END %]
@@ -72,8 +73,8 @@
     </table>
 [% ELSE %]
     <p>Patron does not belong to any subscription routing lists.</p>
-    <input type="hidden" name="biblionumber" value="[% routinglist.subscription.biblionumber %]" />
-    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
+    <input type="hidden" name="biblionumber" value="[% routinglist.subscription.biblionumber | html %]" />
+    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
 [% END %]
 
 </div>
@@ -89,7 +90,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

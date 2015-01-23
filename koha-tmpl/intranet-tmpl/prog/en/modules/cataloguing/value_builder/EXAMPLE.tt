@@ -9,10 +9,10 @@
 <h1>EXAMPLE plugin</h1>
 <p>Hi, you are looking at the result of launching the EXAMPLE plugin.</p>
 <p>I received this from you:</p>
-<input type="text" id="received" value="[% result %]" disabled />
+<input type="text" id="received" value="[% result | html %]" disabled />
 <p/>
 <p>I will pass back what you type here, if you press OK.</p>
-<input type="text" id="return" value="[% result %]" />
+<input type="text" id="return" value="[% result | html %]" />
 <p>
     <input type="button" value="OK"  onclick="submitMyForm();" />
     <a href="#" class="cancel close">Cancel</a>
@@ -28,7 +28,7 @@
     // The following function just puts back the value of the input #return
     // into the caller's field, referenced by index. And closes the popup.
     function submitMyForm() {
-        $(window.opener.document).find('#[% index %]').val($('#return').val() );
+        $(window.opener.document).find('#[% index | html %]').val($('#return').val() );
         window.close();
     }
 //]]>

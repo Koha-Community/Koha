@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% BLOCK pluginlist %]
@@ -5,8 +6,8 @@
 [% FOREACH plugin IN plugins %]
     <div class="plugin">
         <div class="pluginname">
-            [% IF plugin.enabled %]<input type="checkbox" checked="checked" id="checkbox_[% type %][% plugin.name %]">[% ELSE %]<input type="checkbox" id="checkbox_[% type %][% plugin.name %]">[% END %]
-            <label class='pluginlabel' for="checkbox_[% type %][% plugin.name %]">[% plugin.name %]</label></div>
+            [% IF plugin.enabled %]<input type="checkbox" checked="checked" id="checkbox_[% type | html %][% plugin.name | html %]">[% ELSE %]<input type="checkbox" id="checkbox_[% type | html %][% plugin.name | html %]">[% END %]
+            <label class='pluginlabel' for="checkbox_[% type | html %][% plugin.name | html %]">[% plugin.name | html %]</label></div>
         <div class="plugindesc">
         [% SWITCH plugin.name %]
         [% CASE 'AuthorityFile' %]
@@ -69,7 +70,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
     <script type="text/javascript">
         $(document).ready(function() {
             $( ".pluginlist" ).sortable();

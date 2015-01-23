@@ -31,7 +31,7 @@
 				[% ELSIF ( loopfilte.sql ) %]<li class="sql">
 				[% ELSE %]<li>
 				[% END %]
-					[% loopfilte.crit %] [% loopfilte.filter %]
+					[% loopfilte.crit | html %] [% loopfilte.filter | html %]
 				</li>
             [% END %]
             </ul>
@@ -41,29 +41,29 @@
         
         <table> 
             <tr>
-                <th>[% mainloo.line %] / [% mainloo.column %]</th>
+                <th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
                 [% FOREACH loopco IN mainloo.loopcol %]
-                    <th>[% loopco.coltitle_display |html %]</th>
+                    <th>[% loopco.coltitle_display | html %]</th>
                 [% END %]
                 <th>TOTAL</th>
                 </tr>
                 [% FOREACH loopro IN mainloo.looprow %]
                     <tr>
-                        <td>[% loopro.rowtitle_display or "UNKNOWN VALUE" |html %]</td>
+                        <td>[% loopro.rowtitle_display or "UNKNOWN VALUE" | html %]</td>
                     [% FOREACH loopcel IN loopro.loopcell %]
 						<td align="center">
-						[% IF ( loopcel.url_complement ) %]<a href="reserves_stats.pl?output=[% loopcel.output %]&amp;[% loopcel.url_complement %]">[% loopcel.value %]</a>[% ELSE %][% loopcel.value %][% END %]
+						[% IF ( loopcel.url_complement ) %]<a href="reserves_stats.pl?output=[% loopcel.output | html %]&amp;[% loopcel.url_complement | html %]">[% loopcel.value | html %]</a>[% ELSE %][% loopcel.value | html %][% END %]
 						</td>
                     [% END %]
-						<td align="center">[% loopro.totalrow %]</td>
+						<td align="center">[% loopro.totalrow | html %]</td>
                     </tr>
                 [% END %]
             <tr>
                 <th>TOTAL</th>
                 [% FOREACH loopfoote IN mainloo.loopfooter %]
-                <th>[% loopfoote.totalcol %]</th>
+                <th>[% loopfoote.totalcol | html %]</th>
                 [% END %]
-                <th>[% mainloo.total %]</th>
+                <th>[% mainloo.total | html %]</th>
             </tr>
         </table>
     [% END %]
@@ -141,7 +141,7 @@
            <td><select name="filter_categorycode" id="borcat">
                <option value=""> </option>
                [% FOREACH categoryloo IN categoryloop %]
-                 <option value="[% categoryloo.categorycode %]">[% categoryloo.description %]</option>
+                 <option value="[% categoryloo.categorycode | html %]">[% categoryloo.description | html %]</option>
                [% END %]
                </select>
              </td> 
@@ -153,7 +153,7 @@
            <td><select name="filter_items.itype" id="itype">
                <option value=""> </option>
                [% FOREACH itemtype IN itemtypes %]
-                 <option value="[% itemtype.itemtype %]">[% itemtype.translated_description %]</option>
+                 <option value="[% itemtype.itemtype | html %]">[% itemtype.translated_description | html %]</option>
                [% END %]
                </select>
              </td> 
@@ -195,7 +195,7 @@
             <td><select name="filter_items.ccode" id="ccode">
                 <option value=""> </option>
                 [% FOREACH ccodeloo IN ccodeloop %]
-					[% IF ( ccodeloo.selected ) %] <option value="[% ccodeloo.code %]" selected="selected">[% ccodeloo.description %]</option>[% ELSE %]<option value="[% ccodeloo.code %]">[% ccodeloo.description %]</option>[% END %]
+					[% IF ( ccodeloo.selected ) %] <option value="[% ccodeloo.code | html %]" selected="selected">[% ccodeloo.description | html %]</option>[% ELSE %]<option value="[% ccodeloo.code | html %]">[% ccodeloo.description | html %]</option>[% END %]
                 [% END %]
                 </select>
             </td>
@@ -207,7 +207,7 @@
             <td><select name="filter_items.location" id="location">
                 <option value=""> </option>
                 [% FOREACH locationloo IN locationloop %]
-					[% IF ( locationloo.selected ) %]<option value="[% locationloo.code %]" selected="selected">[% locationloo.description %]</option>[% ELSE %]<option value="[% locationloo.code %]">[% locationloo.description %]</option>[% END %]
+					[% IF ( locationloo.selected ) %]<option value="[% locationloo.code | html %]" selected="selected">[% locationloo.description | html %]</option>[% ELSE %]<option value="[% locationloo.code | html %]">[% locationloo.description | html %]</option>[% END %]
 				[% END %]
                </select>
             </td> 
@@ -225,7 +225,7 @@
 			<td><select name="filter_borrowers.sort1" id="sort1">
                <option value=""> </option>
                [% FOREACH Bsort IN Bsort1 %]
-			   [% IF ( Bsort.selected ) %]<option value="[% Bsort.authorised_value %]" selected="selected">[% Bsort.lib %]</option>[% ELSE %]<option value="[% Bsort.authorised_value %]" >[% Bsort.lib %]</option>[% END %]
+			   [% IF ( Bsort.selected ) %]<option value="[% Bsort.authorised_value | html %]" selected="selected">[% Bsort.lib | html %]</option>[% ELSE %]<option value="[% Bsort.authorised_value | html %]" >[% Bsort.lib | html %]</option>[% END %]
                [% END %]
                </select>
             </td> 
@@ -238,7 +238,7 @@
            	<td><select name="filter_borrowers.sort2" id="sort2">
                <option value=""> </option>
                [% FOREACH Bsort IN Bsort2 %]
-			   [% IF ( Bsort.selected ) %]<option value="[% Bsort.authorised_value %]" selected="selected">[% Bsort.lib %]</option>[% ELSE %]<option value="[% Bsort.authorised_value %]" >[% Bsort.lib %]</option>[% END %]
+			   [% IF ( Bsort.selected ) %]<option value="[% Bsort.authorised_value | html %]" selected="selected">[% Bsort.lib | html %]</option>[% ELSE %]<option value="[% Bsort.authorised_value | html %]" >[% Bsort.lib | html %]</option>[% END %]
                [% END %]
                </select>
             </td> 
@@ -262,15 +262,15 @@
             <label class="inline" for="MIME">Into an application:</label>
             <select name="MIME" id="MIME" size="1">
             [% FOREACH value IN CGIextChoice %]
-                <option value="[% value %]">[% value %]</option>
+                <option value="[% value | html %]">[% value | html %]</option>
             [% END %]
             </select>
             <select name="sep" id="sep" size="1">
             [% FOREACH value IN CGIsepChoice.values.sort() %]
               [% IF ( value == CGIsepChoice.default ) %]
-                <option value="[% value %]" selected="selected">[% value %]</option>
+                <option value="[% value | html %]" selected="selected">[% value | html %]</option>
               [% ELSE %]
-                <option value="[% value %]">[% value %]</option>
+                <option value="[% value | html %]">[% value | html %]</option>
               [% END %]
             [% END %]
             </select>
@@ -280,7 +280,7 @@
 
 	<fieldset class="action">
 	<input type="submit" value="Submit" />
-	<input type="hidden" name="report_name" value="[% report_name %]" />
+	<input type="hidden" name="report_name" value="[% report_name | html %]" />
 	<input type="hidden" name="do_it" value="1" />
 	</fieldset>
 	</form>

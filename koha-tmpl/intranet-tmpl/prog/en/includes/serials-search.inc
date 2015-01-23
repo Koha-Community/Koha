@@ -1,12 +1,12 @@
 [% USE Koha %]
 <div class="gradient">
-  <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin Serials Resident Search Box -->
+  <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></h1><!-- Begin Serials Resident Search Box -->
   <div id="header_search">
     <div id="subscription_search" class="residentsearch">
     <p class="tip">Search subscriptions:</p>
     <form action="/cgi-bin/koha/serials/serials-search.pl" method="get">
       [% IF ( routing ) %]
-        <input type="hidden" name="routing" value="[% routing %]" />
+        <input type="hidden" name="routing" value="[% routing | html %]" />
       [% END %]
       <input type="hidden" name="searched" value="1" />
       <label for="ISSN_filter">ISSN:</label> <input type="text" size="10" maxlength="11" name="ISSN_filter" id="ISSN_filter" value="[% ISSN_filter | html %]" />

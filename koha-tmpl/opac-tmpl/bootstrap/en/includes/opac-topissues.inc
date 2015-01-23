@@ -25,7 +25,7 @@
                             </select></li>
                 [% END %]
 
-                [% AdvancedSearchTypes = Koha.Preference('AdvancedSearchTypes').split('\|') %]
+                [% AdvancedSearchTypes = Koha.Preference('AdvancedSearchTypes').split('\|') | html %]
                 [% IF AdvancedSearchTypes.grep('^itemtypes$').size %]
                     <li>
                         <label for="itemtype">Limit to: </label>
@@ -33,11 +33,11 @@
                             <option value="">All item types</option>
                             [% FOREACH itemtype IN ItemTypes.Get() %]
                                 [% IF itemtype.itemtype == selected_itemtype %]
-                                    <option value="[% itemtype.itemtype %]" selected="selected">
+                                    <option value="[% itemtype.itemtype | html %]" selected="selected">
                                 [% ELSE %]
-                                    <option value="[% itemtype.itemtype %]">
+                                    <option value="[% itemtype.itemtype | html %]">
                                 [% END %]
-                                    [% itemtype.translated_description %]
+                                    [% itemtype.translated_description | html %]
                                 </option>
                             [% END %]
                         </select>
@@ -51,11 +51,11 @@
                             <option value="">All collections</option>
                             [% FOREACH ccode IN AuthorisedValues.Get('CCODE', 1) %]
                                 [% IF ccode.authorised_value == selected_ccode %]
-                                    <option value="[% ccode.authorised_value %]" selected="selected">
+                                    <option value="[% ccode.authorised_value | html %]" selected="selected">
                                 [% ELSE %]
-                                    <option value="[% ccode.authorised_value %]">
+                                    <option value="[% ccode.authorised_value | html %]">
                                 [% END %]
-                                    [% ccode.lib %]
+                                    [% ccode.lib | html %]
                                 </option>
                             [% END %]
                         </select>

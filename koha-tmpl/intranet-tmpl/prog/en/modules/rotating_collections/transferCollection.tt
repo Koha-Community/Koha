@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
@@ -9,14 +10,14 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a> &rsaquo; <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% colId %]">Collection <i>[% colTitle %]</i></a> &rsaquo; Transfer collection</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a> &rsaquo; <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% colId | html %]">Collection <i>[% colTitle | html %]</i></a> &rsaquo; Transfer collection</div>
 
 <div id="doc3" class="yui-t2">
     <div id="bd">
         <div id="yui-main">
             <div class="yui-b">
 
-                <h1>Transfer collection <i>[% colTitle %]</i></h1>
+                <h1>Transfer collection <i>[% colTitle | html %]</i></h1>
 
                 [% IF ( transferSuccess ) %]
                     <div class="dialog message">
@@ -34,7 +35,7 @@
                 [% ELSE %]
                     <div>
                         <form action="transferCollection.pl" method="post">
-                            <input type="hidden" name="colId" value="[% colId %]" />
+                            <input type="hidden" name="colId" value="[% colId | html %]" />
                             <fieldset class="rows">
                                 <ol>
                                     <li>
@@ -60,8 +61,8 @@
     </div> <!-- /#bd -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
-    [% Asset.js("js/rotating-collections.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
+    [% Asset.js("js/rotating-collections.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

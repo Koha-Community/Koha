@@ -1,7 +1,8 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Change your password</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Change your password</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -34,7 +35,7 @@
                                 Passwords do not match.  Please re-type your new password.
                                 [% END %]
                                 [% IF password_too_short %]
-                                    Password must be at least [% minPasswordLength %] characters long.
+                                    Password must be at least [% minPasswordLength | html %] characters long.
                                 [% END %]
                                 [% IF password_too_weak %]
                                     Password must contain at least one digit, one lowercase and one uppercase.
@@ -55,7 +56,7 @@
 
                             <form action="/cgi-bin/koha/opac-passwd.pl" name="mainform" id="mainform" method="post" autocomplete="off">
                                 <fieldset>
-                                    [% UNLESS ( ShortPass ) %]<div class="alert alert-info">Your password must be at least [% minPasswordLength%] characters long.</div>[% END %]
+                                    [% UNLESS ( ShortPass ) %]<div class="alert alert-info">Your password must be at least [% minPasswordLength | html %] characters long.</div>[% END %]
                                     <label for="Oldkey">Current password:</label> <input type="password" id="Oldkey" size="25"  name="Oldkey" />
                                     <label for="Newkey">New password:</label> <input type="password" id="Newkey"  size="25"  name="Newkey" />
                                     <label for="Confirm">Re-type new password:</label> <input type="password"  id="Confirm" size="25" name="Confirm" />
@@ -73,7 +74,7 @@
                             Your password has been changed
                         </div>
                         <form action="/cgi-bin/koha/opac-user.pl" method="post" autocomplete="off">
-                            <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                            <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
                             <p><input type="submit" class="btn" value="Return to your record" /></p>
                         </form>
                     [% END # /IF password_updated %]
@@ -87,7 +88,7 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-    [% Asset.js("lib/jquery/plugins/jquery.validate.min.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.validate.min.js") | $raw %]
     [% PROCESS 'password_check.inc' %]
     [% PROCESS 'add_password_check' new_password => 'Newkey' %]
     <script>

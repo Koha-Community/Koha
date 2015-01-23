@@ -2,10 +2,10 @@
 	
 <h1>Online help</h1>
 
-<p>Sorry, there is no help available for this topic, please refer to the <a href="http://koha-community.org/manual/[% helpVersion %]/en/html/">Koha [% helpVersion %] manual</a> (online).</p>
+<p>Sorry, there is no help available for this topic, please refer to the <a href="http://koha-community.org/manual/[% helpVersion | html %]/en/html/">Koha [% helpVersion | html %] manual</a> (online).</p>
 
 <form action="/cgi-bin/koha/edithelp.pl" method="post">
-	<input type="hidden" name="referer" value="[% referer %]" />
+	<input type="hidden" name="referer" value="[% referer | html %]" />
 	<input type="hidden" name="type" value="addnew" />
 	<input type="submit" name="submit" class="submit" value="Add help" />
 </form>

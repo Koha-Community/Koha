@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Price %]
@@ -6,7 +7,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports [% IF ( do_it ) %]&rsaquo; Cash register statistics &rsaquo; Results[% ELSE %]&rsaquo; Cash register statistics[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="cash_register_stats" class="rep">
@@ -122,11 +123,11 @@
                         [% END %]
 
                         [% FOREACH manualinv IN manualinv_types %]
-                            [% value_manualinv = manualinv.authorised_value|truncate(5, '') %]
+                            [% value_manualinv = manualinv.authorised_value|truncate(5, '') | html %]
                             [% IF transaction_type == value_manualinv %]
-                            <option value="[% value_manualinv %]" selected="selected">[% manualinv.authorised_value %]</option>
+                            <option value="[% value_manualinv | html %]" selected="selected">[% manualinv.authorised_value | html %]</option>
                             [% ELSE %]
-                            <option value="[% value_manualinv %]">[% manualinv.authorised_value %]</option>
+                            <option value="[% value_manualinv | html %]">[% manualinv.authorised_value | html %]</option>
                             [% END %]
                         [% END %]
                     </select>
@@ -137,9 +138,9 @@
                         <option value="ALL">All</option>
                         [% FOREACH branchloo IN branchloop %]
                             [% IF ( branchloo.selected ) %]
-                            <option value="[% branchloo.branchcode %]" selected="selected">[% branchloo.branchname %]</option>
+                            <option value="[% branchloo.branchcode | html %]" selected="selected">[% branchloo.branchname | html %]</option>
                             [% ELSE %]
-                            <option value="[% branchloo.branchcode %]">[% branchloo.branchname %]</option>
+                            <option value="[% branchloo.branchcode | html %]">[% branchloo.branchname | html %]</option>
                             [% END %]
                         [% END %]
                     </select>
@@ -190,10 +191,10 @@
         </thead>
         [% FOREACH loopresul IN loopresult %]
             <tr>
-                <td>[% loopresul.mfirstname %] [% loopresul.msurname %]</td>
-                <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopresul.borrowernumber %]">[% loopresul.cardnumber %]</a></td>
-                <td>[% loopresul.bfirstname %] [% loopresul.bsurname %]</td>
-                <td>[% loopresul.branchname %]</td>
+                <td>[% loopresul.mfirstname | html %] [% loopresul.msurname | html %]</td>
+                <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopresul.borrowernumber | html %]">[% loopresul.cardnumber | html %]</a></td>
+                <td>[% loopresul.bfirstname | html %] [% loopresul.bsurname | html %]</td>
+                <td>[% loopresul.branchname | html %]</td>
                 <td>[% loopresul.date | $KohaDates %]</td>
                 <td>
                     [% IF loopresul.accounttype == "ACT" %]
@@ -218,26 +219,26 @@
                         <span>New card</span>
                     [% ELSE %]
                         [% FOREACH manualinv IN manualinv_types %]
-                            [% value_manualinv = manualinv.authorised_value|truncate(5, '') %]
+                            [% value_manualinv = manualinv.authorised_value|truncate(5, '') | html %]
                             [% IF loopresul.accounttype == value_manualinv %]
-                            <span>[% manualinv.authorised_value %]</span>
-                            [% LAST %]
+                            <span>[% manualinv.authorised_value | html %]</span>
+                            [% LAST | html %]
                             [% END %]
                         [% END %]
                     [% END %]
                 </td>
-                <td>[% loopresul.note %]</td>
-                <td style="text-align:right;">[% loopresul.amount | $Price %]</td>
-                <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopresul.biblionumber %]">[% loopresul.title %]</a></td>
-                <td>[% loopresul.barcode %]</td>
-                <td>[% ItemTypes.GetDescription(loopresul.itype) %]</td>
+                <td>[% loopresul.note | html %]</td>
+                <td style="text-align:right;">[% loopresul.amount | $Price | html %]</td>
+                <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopresul.biblionumber | html %]">[% loopresul.title | html %]</a></td>
+                <td>[% loopresul.barcode | html %]</td>
+                <td>[% ItemTypes.GetDescription(loopresul.itype) | html %]</td>
             </tr>
         [% END %]
         <tfoot>
         <tr>
             [% IF transaction_type == "ACT" %]
             <th colspan="7" style="text-align:right;">TOTAL</th>
-            <th style="text-align:right;">[% total  | $Price %]</th>
+            <th style="text-align:right;">[% total  | $Price | html %]</th>
             <th colspan="3">&nbsp;</th>
             [% END %]
         </tr>

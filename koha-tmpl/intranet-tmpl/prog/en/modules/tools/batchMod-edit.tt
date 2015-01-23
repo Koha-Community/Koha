@@ -1,20 +1,21 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Batch item modification</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.js("js/background-job-progressbar.js") %]
-[% Asset.js("js/cataloging.js") %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.js("js/background-job-progressbar.js") | $raw %]
+[% Asset.js("js/cataloging.js") | $raw %]
+[% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'datatables.inc' %]
-[% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
-[% Asset.js("js/pages/batchMod.js") %]
+[% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
+[% Asset.js("js/pages/batchMod.js") | $raw %]
 <script type="text/javascript">
 //<![CDATA[
 
 // Prepare array of all column headers, incrementing each index by
 // two to accommodate control and title columns
-var allColumns = new Array([% FOREACH item_header_loo IN item_header_loop %]'[% loop.count %]'[% UNLESS ( loop.last ) %],[% END %][% END %]);
+var allColumns = new Array([% FOREACH item_header_loo IN item_header_loop %]'[% loop.count | html %]'[% UNLESS ( loop.last ) %],[% END %][% END %]);
 for( x=0; x<allColumns.length; x++ ){
   allColumns[x] = Number(allColumns[x]) + 2;
 }
@@ -42,7 +43,7 @@ $(document).ready(function(){
 <style type="text/css">#selections { display: none; }</style>
 <![endif]-->
 <style type="text/css">input[type=checkbox]{ margin : 0 .5em; }</style>
-[% Asset.css("css/addbiblio.css") %]
+[% Asset.css("css/addbiblio.css") | $raw %]
 
 [% INCLUDE 'select2.inc' %]
 <script type="text/javascript">
@@ -70,15 +71,15 @@ $(document).ready(function(){
               <h1>Batch item modification results</h1>
               <div class="dialog message">
                 [% IF (modified_items) %]
-                  [% modified_items %] item(s) modified (with [% modified_fields %] field(s) modified).
+                  [% modified_items | html %] item(s) modified (with [% modified_fields | html %] field(s) modified).
                 [% ELSE %]
                   No items modified.
                 [% END %]
               <fieldset class="action">
                   [% IF src == 'CATALOGUING' # from catalogue/detail.pl > Edit items in a batch%]
-                      <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]">Return to the record</a>
+                      <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | html %]">Return to the record</a>
                   [% ELSIF src %]
-                      <a href="[% src %]">Return to where you were</a>
+                      <a href="[% src | html %]">Return to where you were</a>
                   [% ELSE %]
                       <a href="/cgi-bin/koha/tools/batchMod.pl">Return to batch item modification</a>
                   [% END %]
@@ -130,13 +131,13 @@ $(document).ready(function(){
 
 
 <form name="f" action="batchMod.pl" method="post">
-     <input type="hidden" name="op" value="[% op %]" />
+     <input type="hidden" name="op" value="[% op | html %]" />
      <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
      <input type="hidden" name="runinbackground" id="runinbackground" value="" />
      <input type="hidden" name="completedJobID" id="completedJobID" value="" />
-     <input type="hidden" name="src" id="src" value="[% src %]" />
+     <input type="hidden" name="src" id="src" value="[% src | html %]" />
      [% IF biblionumber %]
-        <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber %]" />
+        <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber | html %]" />
      [% END %]
 
 [% IF ( item_loop ) %]
@@ -149,7 +150,7 @@ $(document).ready(function(){
 
 <p id="selections"><strong>Show/hide columns:</strong> <span class="selected"><input type="checkbox" checked="checked" id="showall"/><label for="showall">Show all columns</label></span> <span><input type="checkbox" id="hideall"/><label for="hideall">Hide all columns</label></span> 
         [% FOREACH item_header_loo IN item_header_loop %]
-        <span class="selected"><input id="checkheader[% loop.count %]" type="checkbox" checked="checked" /> <label for="checkheader[% loop.count %]">[% item_header_loo.header_value %]</label> </span>
+        <span class="selected"><input id="checkheader[% loop.count | html %]" type="checkbox" checked="checked" /> <label for="checkheader[% loop.count | html %]">[% item_header_loo.header_value | html %]</label> </span>
         [% END %]
 </p>
         <table id="itemst">
@@ -158,7 +159,7 @@ $(document).ready(function(){
         <th>&nbsp;</th>
         <th class="anti-the">Title</th>
         [% FOREACH item_header_loo IN item_header_loop %]
-        <th> [% item_header_loo.header_value %] </th>
+        <th> [% item_header_loo.header_value | html %] </th>
         [% END %] 
     </tr>
       </thead>
@@ -169,13 +170,13 @@ $(document).ready(function(){
                   [% IF item_loo.nomod %]
                     <td class="error">Cannot edit</td>
                   [% ELSE %]
-                    <td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber %]" id="row[% item_loo.itemnumber %]" checked="checked" data-is-onloan="[% item_loo.onloan %]" /></td>
+                    <td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber | html %]" id="row[% item_loo.itemnumber | html %]" checked="checked" data-is-onloan="[% item_loo.onloan | html %]" /></td>
                   [% END %]
                 [% ELSE %]
                   <td>&nbsp;</td>
                 [% END %]
-                <td><label for="row[% item_loo.itemnumber %]"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item_loo.biblionumber %]">[% item_loo.title %]</a>[% IF ( item_loo.author ) %], by [% item_loo.author %][% END %]</label></td>
-                [% FOREACH item_valu IN item_loo.item_value %] <td>[% item_valu.field |html %]</td> 
+                <td><label for="row[% item_loo.itemnumber | html %]"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item_loo.biblionumber | html %]">[% item_loo.title | html %]</a>[% IF ( item_loo.author ) %], by [% item_loo.author | html %][% END %]</label></td>
+                [% FOREACH item_valu IN item_loo.item_value %] <td>[% item_valu.field | html %]</td>
         [% END %] </tr>
             [% END %]
       </tbody>
@@ -188,7 +189,7 @@ $(document).ready(function(){
     <ul>
     [% FOREACH simple_items_displa IN simple_items_display %]
   <li>
-      [% IF ( CAN_user_editcatalogue_edit_items ) %]<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% simple_items_displa.biblionumber %]&amp;itemnumber=[% simple_items_displa.itemnumber %]">[% simple_items_displa.barcode %]</a>[% ELSE %][% simple_items_displa.barcode %][% END %]
+      [% IF ( CAN_user_editcatalogue_edit_items ) %]<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% simple_items_displa.biblionumber | html %]&amp;itemnumber=[% simple_items_displa.itemnumber | html %]">[% simple_items_displa.barcode | html %]</a>[% ELSE %][% simple_items_displa.barcode | html %][% END %]
   </li>
     [% END %]
     </ul>
@@ -197,9 +198,9 @@ $(document).ready(function(){
 [% IF ( show ) %]
 
 [% IF ( too_many_items ) %]
-    <p>Too many items ([% too_many_items %]): You are not allowed to edit more than [% Koha.Preference('MaxItemsToProcessForBatchMod') %] items in a batch.</p>
+    <p>Too many items ([% too_many_items | html %]): You are not allowed to edit more than [% Koha.Preference('MaxItemsToProcessForBatchMod') | html %] items in a batch.</p>
     [% FOREACH itemnumber IN itemnumbers_array %]
-  <input type="hidden" name="itemnumber" value="[% itemnumber %]" />
+  <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
     [% END %]
 [% END %]<!-- /too_many_items -->
 
@@ -211,60 +212,61 @@ $(document).ready(function(){
   <ol>
         [% FOREACH ite IN item %]
           <li>
-            <div class="subfield_line" style="[% ite.visibility %]" id="subfield[% ite.tag %][% ite.subfield %][% ite.random %]">
+            <div class="subfield_line" style="[% ite.visibility | html %]" id="subfield[% ite.tag | html %][% ite.subfield | html %][% ite.random | html %]">
               [% SET mv = ite.marc_value %]
               [% IF ( ite.mandatory ) %]
-                <label class="required" for="[%- mv.id -%]">
+                <label class="required" for="[%- mv.id | html -%]">
               [% ELSE %]
-                <label for="[%- mv.id -%]">
+                <label for="[%- mv.id | html -%]">
               [% END %]
-                [% ite.subfield %] - [% ite.marc_lib %]
+                [% ite.subfield | html %] - [% ite.marc_lib | $raw %]
               </label>
 
               [% IF ( mv.type == 'select' ) -%]
-                <select name="[%- mv.name -%]" id="[%- mv.id -%]" size="1" tabindex="1" class="input_marceditor">
+                <select name="[%- mv.name | html -%]" id="[%- mv.id | html -%]" size="1" tabindex="1" class="input_marceditor">
                   [%- FOREACH aval IN mv.values %]
+              [% ite.subfield | html %] -
                     [% IF aval == mv.default %]
-                      <option value="[%- aval -%]" selected="selected">[%- mv.labels.$aval -%]</option>
+                      <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
                     [% ELSE %]
-                      <option value="[%- aval -%]">[%- mv.labels.$aval -%]</option>
+                      <option value="[%- aval | html -%]">[%- mv.labels.$aval | html -%]</option>
                     [% END %]
                   [%- END -%]
                 </select>
               [% ELSIF ( mv.type == 'text1' ) %]
-                <input type="text" tabindex="1" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value -%]" />
-                <a href="#" class="buttonDot" onclick="Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=[%- mv.authtypecode -%]&index=[%- mv.id -%]','[%- mv.id -%]'); return false;" title="Tag editor">...</a>
+                <input type="text" tabindex="1" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value | html -%]" />
+                <a href="#" class="buttonDot" onclick="Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=[%- mv.authtypecode | html -%]&index=[%- mv.id | html -%]','[%- mv.id | html -%]'); return false;" title="Tag editor">...</a>
               [% ELSIF ( mv.type == 'text2' ) %]
-                <input type="text" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value -%]" />
+                <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value | html -%]" />
                 [% IF mv.noclick %]
                   <a href="#" class="buttonDot disabled" title="No popup">...</a>
                 [% ELSE %]
-                  <a href="#" id="buttonDot_[% mv.id %]" class="buttonDot" title="Tag editor">...</a>
+                  <a href="#" id="buttonDot_[% mv.id | html %]" class="buttonDot" title="Tag editor">...</a>
                 [% END %]
-                [% mv.javascript %]
+                [% mv.javascript | $raw %]
               [% ELSIF ( mv.type == 'text' ) %]
-                <input type="text" tabindex="1" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value -%]" />
+                <input type="text" tabindex="1" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value | html -%]" />
               [% ELSIF ( mv.type == 'hidden' ) %]
-                <input type="hidden" tabindex="1" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value -%]" />
+                <input type="hidden" tabindex="1" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value | html -%]" />
               [% ELSIF ( mv.type == 'textarea' ) %]
-                <textarea tabindex="1" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="255">[%- mv.value -%]"</textarea>
+                <textarea tabindex="1" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255">[%- mv.value | html -%]"</textarea>
               [%- END -%]
 
               [% UNLESS ( ite.mandatory ) %]
-                <input type="checkbox" id="row[% ite.tag %][% ite.subfield %][% ite.random %]" title="Check to delete subfield [% ite.subfield %]" name="disable_input" value="[% ite.subfield %]" />
+                <input type="checkbox" id="row[% ite.tag | html %][% ite.subfield | html %][% ite.random | html %]" title="Check to delete subfield [% ite.subfield | html %]" name="disable_input" value="[% ite.subfield | html %]" />
               [% ELSE %]
                 <span class="required">Required</span>
               [% END %]
 
-              <input type="hidden" name="tag"       value="[% ite.tag %]" />
-              <input type="hidden" name="subfield"       value="[% ite.subfield %]" />
-              <input type="hidden" name="mandatory"       value="[% ite.mandatory %]" />
+              <input type="hidden" name="tag"       value="[% ite.tag | html %]" />
+              <input type="hidden" name="subfield"       value="[% ite.subfield | html %]" />
+              <input type="hidden" name="mandatory"       value="[% ite.mandatory | html %]" />
               [% IF ( ite.repeatable ) %]
                 <a href="#" class="buttonPlus" onclick="CloneItemSubfield(this.parentNode); return false;">
-                  <img src="[% interface %]/[% theme %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
+                  <img src="[% interface | html %]/[% theme | html %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
                 </a>
               [% END %]
-              <span class="hint" id="hint[% ite.tag %][% ite.subfield %][% ite.random %]"></span>
+              <span class="hint" id="hint[% ite.tag | html %][% ite.subfield | html %][% ite.random | html %]"></span>
             </div>
           </li>
         [% END %]
@@ -285,9 +287,9 @@ $(document).ready(function(){
 [% ELSE %] <!-- // show -->
 <fieldset class="action">
 [% IF src == 'CATALOGUING' # from catalogue/detail.pl > Edit items in a batch%]
-   <a class="btn btn-default" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]"><i class="fa fa-check-square-o"></i> Return to the record</a>
+   <a class="btn btn-default" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | html %]"><i class="fa fa-check-square-o"></i> Return to the record</a>
 [% ELSIF src %]
-   <a class="btn btn-default" href="[% src %]"><i class="fa fa-check-square-o"></i> Return to where you were</a>
+   <a class="btn btn-default" href="[% src | html %]"><i class="fa fa-check-square-o"></i> Return to where you were</a>
 [% ELSE %]
    <a class="btn btn-default" href="/cgi-bin/koha/tools/batchMod.pl"><i class="fa fa-check-square-o"></i> Return to batch item modification</a>
 [% END %]

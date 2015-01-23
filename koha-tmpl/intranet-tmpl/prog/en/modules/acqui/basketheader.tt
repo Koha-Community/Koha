@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
 [% USE Koha %]
@@ -5,8 +6,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo;
 [% IF ( add_form ) %]
-    [% IF ( basketno ) %]Edit basket '[% basketname %]'
-        [% ELSE %]Add a basket to [% booksellername %]
+    [% IF ( basketno ) %]Edit basket '[% basketname | html %]'
+        [% ELSE %]Add a basket to [% booksellername | html %]
     [% END %]
 [% END %]
 </title>
@@ -20,10 +21,10 @@
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
-    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername %]</a> &rsaquo;
+    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a> &rsaquo;
     [% IF ( add_form ) %]
-        [% IF ( basketno ) %]Edit basket '[% basketname |html %]'
-        [% ELSE %]Add a basket to [% booksellername %]
+        [% IF ( basketno ) %]Edit basket '[% basketname | html %]'
+        [% ELSE %]Add a basket to [% booksellername | html %]
         [% END %]
     [% END %]
 </div>
@@ -34,22 +35,22 @@
 
     [% IF ( add_form ) %]
         [% IF ( basketno ) %]
-            <h1>Edit basket [% basketname |html %]</h1>
-        [% ELSE %]<h1>Add a basket to [% booksellername %]</h1>
+            <h1>Edit basket [% basketname | html %]</h1>
+        [% ELSE %]<h1>Add a basket to [% booksellername | html %]</h1>
         [% END %]
-    <form name="Aform" action="[% script_name %]" method="post" class="validated">
-        <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+    <form name="Aform" action="[% script_name | html %]" method="post" class="validated">
+        <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
         <fieldset class="rows">
             <ol>
                 [% IF ( basketno ) %]
                     <li>
-                        <input type="hidden" name="basketno" value="[% basketno %]" />
+                        <input type="hidden" name="basketno" value="[% basketno | html %]" />
                         <input type="hidden" name="is_an_edit" value="1" />
                     </li>
                 [% END %]
                 <li>
                     <label for="basketname" class="required">Basket name: </label>
-                    <input type="text" name="basketname" id="basketname" size="40" maxlength="80" value="[% basketname %]" required="required" class="required" />
+                    <input type="text" name="basketname" id="basketname" size="40" maxlength="80" value="[% basketname | html %]" required="required" class="required" />
                     <span class="required">Required</span>
                 </li>
                 <li>
@@ -71,9 +72,9 @@
                     <select name="basketbooksellerid" id="basketbooksellerid">
                     [% FOREACH b IN booksellers %]
                         [% IF booksellerid == b.id %]
-                           <option value="[% b.id %]" selected="selected">[% b.name %]</option>
+                           <option value="[% b.id | html %]" selected="selected">[% b.name | html %]</option>
                         [% ELSE %]
-                           <option value="[% b.id %]">[% b.name %]</option>
+                           <option value="[% b.id | html %]">[% b.name | html %]</option>
                         [% END %]
                     [% END %]
             </select>
@@ -92,9 +93,9 @@
                             <option value=""></option>
                             [% FOREACH contractloo IN contractloop %]
                                 [% IF ( contractloo.selected ) %]
-                                    <option value="[% contractloo.contractnumber %]" selected="selected">[% contractloo.contractname %]</option>
+                                    <option value="[% contractloo.contractnumber | html %]" selected="selected">[% contractloo.contractname | html %]</option>
                                 [% ELSE %]
-                                     <option value="[% contractloo.contractnumber %]">[% contractloo.contractname %]</option>
+                                     <option value="[% contractloo.contractnumber | html %]">[% contractloo.contractname | html %]</option>
                                 [% END %]
                             [% END %]
                         </select>
@@ -130,9 +131,9 @@
             <input type="hidden" name="op" value="add_validate" />
             <input type="submit" value="Save" />
             [% IF ( basketno ) %]
-                <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Cancel</a>
+                <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | html %]">Cancel</a>
             [% ELSE %]
-                <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">Cancel</a>
+                <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">Cancel</a>
             [% END %]
         </fieldset>
     </form>
@@ -141,8 +142,8 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/acquisitions-menu.js") %]
-    [% Asset.js("js/acq.js") %]
+    [% Asset.js("js/acquisitions-menu.js") | $raw %]
+    [% Asset.js("js/acq.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

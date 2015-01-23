@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Koha %]
@@ -19,7 +20,7 @@
 <title>Koha &rsaquo; Reports &rsaquo; Guided reports wizard [%- IF ( saved1 ) -%]&rsaquo; Saved reports
 [%- ELSIF ( create ) -%]&rsaquo; Create from SQL
 [%- ELSIF ( showsql ) -%]&rsaquo; Saved reports &rsaquo; SQL view
-[%- ELSIF ( execute ) -%]&rsaquo; Saved reports &rsaquo; [% name %] Report
+[%- ELSIF ( execute ) -%]&rsaquo; Saved reports &rsaquo; [% name | html %] Report
 [%- ELSIF ( editsql ) -%]&rsaquo; Saved reports &rsaquo; Edit SQL report
 [%- END -%]
 [%- IF ( build1 ) -%]&rsaquo; Build a report, step 1 of 6: Choose a module
@@ -33,7 +34,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( saved1 ) %]
     [% Asset.css("css/reports.css") %]
-    [% Asset.css("css/datatables.css") %]
+    [% Asset.css("css/datatables.css") | $raw %]
 [% END %]
 </head>
 
@@ -49,7 +50,7 @@
 [% ELSIF ( create ) %]&rsaquo; Create from SQL
 [% ELSIF ( showsql ) %]&rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; SQL view
 [% ELSIF ( editsql ) %]&rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; Edit SQL report
-[% ELSIF ( execute ) %]&rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; <em>[% name %]</em> Report
+[% ELSIF ( execute ) %]&rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; <em>[% name | html %]</em> Report
 [% ELSIF ( build1 || build2 || build3 || build4 || build5 || build6 ) %]&rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build a report</a>
     [% IF ( build1 ) %]&rsaquo; Step 1 of 6: Choose a module
     [% ELSIF ( build2 ) %]&rsaquo; Step 2 of 6: Pick a report type
@@ -69,7 +70,7 @@
         <h3 id="update_sql_label">Update SQL</h3>
     </div>
     <div class="modal-body">
-        <div id="loading"> <img src="[% interface %]/[% theme %]/img/spinner-small.gif" alt="" /> Loading </div>
+        <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
     </div>
     <div class="modal-footer">
         <a href="#" class="btn btn-default" id="update_sql_button" role="button" data-toggle="modal">Update</a>
@@ -120,7 +121,7 @@ canned reports and writing custom SQL reports.</p>
 
 [% IF report_converted %]
     <div class="dialog message">
-        The report "[% report_converted %]" has been converted.
+        The report "[% report_converted | html %]" has been converted.
     </div>
 [% END %]
 
@@ -131,13 +132,13 @@ canned reports and writing custom SQL reports.</p>
     <p>Filtered by:
         <span class="filter">
             [% IF ( filters.date ) %]
-                <span class="filter_date"><strong>Date:</strong> [% filters.date %]</span>
+                <span class="filter_date"><strong>Date:</strong> [% filters.date | html %]</span>
             [% END %]
             [% IF ( filters.author ) %]
-                <span class="filter_author"><strong>Author:</strong> [% filters.author %]</span>
+                <span class="filter_author"><strong>Author:</strong> [% filters.author | html %]</span>
             [% END %]
             [% IF ( filters.keyword ) %]
-                <span class="filter_keyword"><strong>Keyword:</strong> [% filters.keyword %]</span>
+                <span class="filter_keyword"><strong>Keyword:</strong> [% filters.keyword | html %]</span>
             [% END %]
             <a class="clear_filter" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved&clear_filters=1"><i class="fa fa-remove"></i> Clear</a>
         </span>
@@ -148,7 +149,7 @@ canned reports and writing custom SQL reports.</p>
     <ul>
         <li><a href="#reports">All</a></li>
         [% FOREACH group IN groups_with_subgroups %]
-            <li><a id="[% group.id %]" href="#reports">[% group.name %]</a></li>
+            <li><a id="[% group.id | html %]" href="#reports">[% group.name | html %]</a></li>
         [% END %]
     </ul>
     <div id="reports">
@@ -195,25 +196,25 @@ canned reports and writing custom SQL reports.</p>
                     [% UNLESS ( loop.odd ) %]<tr class="odd">[% ELSE %]<tr>[% END %]
                         <td>
                             [% IF ( CAN_user_reports_delete_reports ) %] <!-- not break CSS -->
-                                <input type="checkbox" name="ids" value="[% savedreport.id %]" />
+                                <input type="checkbox" name="ids" value="[% savedreport.id | html %]" />
                             [% END %]
                         </td>
-                        <td><label for="ids">[% savedreport.id %]</label></td>
+                        <td><label for="ids">[% savedreport.id | html %]</label></td>
                         <td>
                             [% IF ( savedreport.report_name ) %]
-                                [% savedreport.report_name %]
+                                [% savedreport.report_name | html %]
                             [% ELSE %]
                                 [ no name ]
                             [% END %]
                         </td>
-                        <td>[% savedreport.type %]</td>
-                        <td>[% savedreport.groupname %]</td>
-                        <td>[% savedreport.subgroupname %]</td>
-                        <td>[% savedreport.notes %]</td>
-                        <td>[% savedreport.borrowersurname %][% IF ( savedreport.borrowerfirstname ) %], [% savedreport.borrowerfirstname %][% END %] ([% savedreport.borrowernumber %])</td>
-                        <td><span title="[% savedreport.date_created %]">[% savedreport.date_created | $KohaDates %]</span></td>
-                        <td><span title="[% savedreport.last_modified %]">[% savedreport.last_modified | $KohaDates with_hours => 1 %]</span></td>
-                        <td><span title="[% savedreport.last_run %]">[% savedreport.last_run | $KohaDates with_hours => 1 %]</span></td>
+                        <td>[% savedreport.type | html %]</td>
+                        <td>[% savedreport.groupname | html %]</td>
+                        <td>[% savedreport.subgroupname | html %]</td>
+                        <td>[% savedreport.notes | html %]</td>
+                        <td>[% savedreport.borrowersurname | html %][% IF ( savedreport.borrowerfirstname ) %], [% savedreport.borrowerfirstname | html %][% END %] ([% savedreport.borrowernumber | html %])</td>
+                        <td><span title="[% savedreport.date_created | html %]">[% savedreport.date_created | $KohaDates %]</span></td>
+                        <td><span title="[% savedreport.last_modified | html %]">[% savedreport.last_modified | $KohaDates with_hours => 1 | html %]</span></td>
+                        <td><span title="[% savedreport.last_run | html %]">[% savedreport.last_run | $KohaDates with_hours => 1 | html %]</span></td>
                         <td class="report_public">
                         [% IF (savedreport.public) %]
                             Yes
@@ -223,22 +224,22 @@ canned reports and writing custom SQL reports.</p>
                         </td>
                         <td class="report_json_url">
                         [% IF (savedreport.public) %]
-                            <a href="[% OPACBaseURL %]/cgi-bin/koha/svc/report?id=[% savedreport.id | uri %]">[% OPACBaseURL %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
+                            <a href="[% OPACBaseURL | html %]/cgi-bin/koha/svc/report?id=[% savedreport.id | uri %]">[% OPACBaseURL | html %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
                         [% ELSE %]
-                            <a href="/cgi-bin/koha/svc/report?id=[% savedreport.id | uri %]">[% Koha.Preference('staffClientBaseURL') %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
+                            <a href="/cgi-bin/koha/svc/report?id=[% savedreport.id | uri %]">[% Koha.Preference('staffClientBaseURL') | html %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
                         [% END %]
                         </td>
-                        <td>[% savedreport.cache_expiry %]</td>
+                        <td>[% savedreport.cache_expiry | html %]</td>
                         <td>
                             [% FOR result IN savedreport.results %]
-                                <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&amp;id=[% result.id %]">[% result.date_run %]</a>
+                                <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&amp;id=[% result.id | html %]">[% result.date_run | html %]</a>
                                 <br/>
                             [% END %]
                         </td>
                         <td>
                             [% IF savedreport.seems_obsolete %]
                                 This report seems obsolete, it uses biblioitems.marcxml field.
-                                <a href="/cgi-bin/koha/svc/convert_report?report_id=[% savedreport.id %]" data-report_id="[% savedreport.id %]" class="update_sql btn btn-default btn-xs" title="Update SQL"><i class="fa fa-eye"></i> Update SQL</a>
+                                <a href="/cgi-bin/koha/svc/convert_report?report_id=[% savedreport.id | html %]" data-report_id="[% savedreport.id | html %]" class="update_sql btn btn-default btn-xs" title="Update SQL"><i class="fa fa-eye"></i> Update SQL</a>
                             [% END %]
                         </td>
                         <td>
@@ -246,19 +247,19 @@ canned reports and writing custom SQL reports.</p>
                                 <div class="btn-group">
                                     [%# There should be no space between these two buttons, it would render badly %]
                                     <a class="btn btn-default btn-xs" role="button"
-                                       href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Run%20this%20report"><i
+                                       href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | html %]&amp;phase=Run%20this%20report"><i
                                        class="fa fa-play"></i> Run</a><a
-                                       class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id %]" role="button" data-toggle="dropdown"
+                                       class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-toggle="dropdown"
                                        href="#"><b class="caret"></b></a>
-                                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id %]">
-                                        <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Show%20SQL"><i class="fa fa-search"></i> Show</a></li>
+                                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
+                                        <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | html %]&amp;phase=Show%20SQL"><i class="fa fa-search"></i> Show</a></li>
                                         [% IF ( CAN_user_reports_create_reports ) %]
-                                            <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Edit%20SQL"><i class="fa fa-pencil"></i> Edit</a></li>
+                                            <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | html %]&amp;phase=Edit%20SQL"><i class="fa fa-pencil"></i> Edit</a></li>
                                             <li><a title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from SQL&amp;sql=[% savedreport.savedsql |uri %]&amp;reportname=[% savedreport.report_name |uri %]&amp;notes=[% savedreport.notes |uri %]"><i class="fa fa-copy"></i> Duplicate</a></li>
                                         [% END %]
-                                        <li><a href="/cgi-bin/koha/tools/scheduler.pl?id=[% savedreport.id %]"><i class="fa fa-clock-o"></i> Schedule</a></li>
+                                        <li><a href="/cgi-bin/koha/tools/scheduler.pl?id=[% savedreport.id | html %]"><i class="fa fa-clock-o"></i> Schedule</a></li>
                                         [% IF ( CAN_user_reports_delete_reports ) %]
-                                            <li><a class="confirmdelete" title="Delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Delete%20Saved"><i class="fa fa-trash"></i> Delete</a></li>
+                                            <li><a class="confirmdelete" title="Delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | html %]&amp;phase=Delete%20Saved"><i class="fa fa-trash"></i> Delete</a></li>
                                         [% END %]
                                     </ul>
                                 </div>
@@ -324,7 +325,7 @@ canned reports and writing custom SQL reports.</p>
     <label for="area">Choose: </label>
       <select name="area" id="area">
     [%- FOREACH area IN areas -%]
-      <option value="[% area %]">[%- PROCESS area_name area=area -%]</option>
+      <option value="[% area | html %]">[%- PROCESS area_name area=area -%]</option>
     [%- END -%]
       </select>
   </li>
@@ -334,7 +335,7 @@ canned reports and writing custom SQL reports.</p>
   <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0" selected="selected">No (default)</option> <option value="1">Yes</option> </select></li>
 [% END %]
 [% IF (usecache) %] <li>
-<label for="cache_expiry">Cache expiry:</label><input type="text" id="cache_expiry" name="cache_expiry" value="[% cache_expiry %]"></input>
+<label for="cache_expiry">Cache expiry:</label><input type="text" id="cache_expiry" name="cache_expiry" value="[% cache_expiry | html %]"></input>
 <select id="cache_expiry_units" name="cache_expiry_units">
 <option value="seconds">Seconds (default)</option>
 <option value="minutes">Minutes</option>
@@ -356,9 +357,9 @@ canned reports and writing custom SQL reports.</p>
 [% IF ( build2 ) %]
 <h1>Build a report</h1>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
-<input type="hidden" name="area" value="[% area %]" />
-<input type="hidden" name="public" value="[% public %]" />
-<input type="hidden" name="cache_expiry" value="[% cache_expiry %]" />
+<input type="hidden" name="area" value="[% area | html %]" />
+<input type="hidden" name="public" value="[% public | html %]" />
+<input type="hidden" name="cache_expiry" value="[% cache_expiry | html %]" />
 <fieldset class="rows"><legend>Step 2 of 6: Pick a report type</legend>
 <ol><li><label for="types">Choose: </label>
     <select id="types" name="types">
@@ -379,9 +380,9 @@ canned reports and writing custom SQL reports.</p>
 
 <!--- Summary and Matrix reports have not yet been implemented-->
 <!--<div class="yui-u">Summary:
-<img src="[% interface %]/[% theme %]/img/reports-summary-graphic.gif" /></div>
+<img src="[% interface | html %]/[% theme | html %]/img/reports-summary-graphic.gif" /></div>
 <div class="yui-u">Matrix:
-<img src="[% interface %]/[% theme %]/img/reports-matrix-graphic.gif" /></div>-->
+<img src="[% interface | html %]/[% theme | html %]/img/reports-matrix-graphic.gif" /></div>-->
 
 [% END %]
 
@@ -391,10 +392,10 @@ canned reports and writing custom SQL reports.</p>
 <p>Note: Be careful selecting when selecting columns. If your choice is too broad it could result in a very large report that will either not complete, or slow your system down.</p>
 
 <form id="column_submit" action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
-    <input type="hidden" name="area" value="[% area %]" />
-    <input type="hidden" name="type" value="[% type %]" />
-    <input type="hidden" name="public" value="[% public %]" />
-    <input type="hidden" name="cache_expiry" value="[% cache_expiry %]" />
+    <input type="hidden" name="area" value="[% area | html %]" />
+    <input type="hidden" name="type" value="[% type | html %]" />
+    <input type="hidden" name="public" value="[% public | html %]" />
+    <input type="hidden" name="cache_expiry" value="[% cache_expiry | html %]" />
     <fieldset>
 <div class="yui-g">
 <div class="yui-u first">	<div style="float: left;"><select id="availableColumns" name="oldcolumns2" multiple="multiple" size="25" style="min-width: 200px;height:300px;">
@@ -406,12 +407,12 @@ canned reports and writing custom SQL reports.</p>
 </optgroup>
 [% END %]
 
-<optgroup label="[% column.table %]">
+<optgroup label="[% column.table | html %]">
 [% ELSE %]
-<option value="[% column.name %]">
-[% IF ( column.description ) %][% column.description %] &nbsp; / &nbsp; [% column.name %]
+<option value="[% column.name | html %]">
+[% IF ( column.description ) %][% column.description | html %] &nbsp; / &nbsp; [% column.name | html %]
 [% ELSE %]
-[% column.name %]
+[% column.name | html %]
 [% END %]
 </option>
 [% END %]
@@ -441,46 +442,46 @@ canned reports and writing custom SQL reports.</p>
 [% IF ( build4 ) %]
 <h1>Build a report</h1>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" >
-    <input type="hidden" name="area" value="[% area %]" />
-    <input type="hidden" name="type" value="[% type %]" />
-    <input type="hidden" name="column" value="[% column %]" />
-    <input type="hidden" name="public" value="[% public %]" />
-    <input type="hidden" name="cache_expiry" value="[% cache_expiry %]" />
+    <input type="hidden" name="area" value="[% area | html %]" />
+    <input type="hidden" name="type" value="[% type | html %]" />
+    <input type="hidden" name="column" value="[% column | html %]" />
+    <input type="hidden" name="public" value="[% public | html %]" />
+    <input type="hidden" name="cache_expiry" value="[% cache_expiry | html %]" />
     <fieldset><legend>Step 4 of 6: Select criteria to limit on</legend>
     <table>
         [% FOREACH criteri IN criteria %]
         <tr>
         <td>
-            <input type="checkbox" name="criteria_column" id="[% criteri.name %]" value="[% criteri.name %]" /> 
-            <label for="[% criteri.name %]">[% criteri.description %] </label>
+            <input type="checkbox" name="criteria_column" id="[% criteri.name | html %]" value="[% criteri.name | html %]" /> 
+            <label for="[% criteri.name | html %]">[% criteri.description | html %] </label>
         </td>
         [% IF ( criteri.date ) %]
         <td>
-            <input type="text" size="10" id="[% criteri.name %]_value" name="[% criteri.name %]_value" value="" class="datepicker" />
+            <input type="text" size="10" id="[% criteri.name | html %]_value" name="[% criteri.name | html %]_value" value="" class="datepicker" />
 		<span class="hint">[% INCLUDE 'date-format.inc' %]</span>
         </td>
         </tr>
         [% ELSE %]
         [% IF ( criteri.textrange ) %]
             <td>from
-            <input type="text" size="10" id="[% criteri.from %]_value" name="[% criteri.from %]_value" value="" /> to 
-            <input type="text" size="10" id="[% criteri.to %]_value" name="[% criteri.to %]_value" value="" />
+            <input type="text" size="10" id="[% criteri.from | html %]_value" name="[% criteri.from | html %]_value" value="" /> to 
+            <input type="text" size="10" id="[% criteri.to | html %]_value" name="[% criteri.to | html %]_value" value="" />
             </td>
             </tr>
         [% ELSE %]
             [% IF ( criteri.daterange ) %]
             <td>from 
-            <input type="text" size="10" id="from_[% criteri.name %]_value" name="from_[% criteri.name %]_value" value="" class="datepickerfrom" />
+            <input type="text" size="10" id="from_[% criteri.name | html %]_value" name="from_[% criteri.name | html %]_value" value="" class="datepickerfrom" />
             to
-            <input type="text" size="10" id="to_[% criteri.name %]_value" name="to_[% criteri.name %]_value" value="" class="datepickerto" />
+            <input type="text" size="10" id="to_[% criteri.name | html %]_value" name="to_[% criteri.name | html %]_value" value="" class="datepickerto" />
 			<span class="hint">[% INCLUDE 'date-format.inc' %]</span>
             </td>
         </tr>
             [% ELSE %]
             <td>
-                <select name="[% criteri.name %]_value">
+                <select name="[% criteri.name | html %]_value">
                 [% FOREACH value IN criteri.values %]
-                <option value="[% value.availablevalues %]">[% IF ( value.default ) %]Default[% ELSE %][% value.display_value |html %][% END %]</option>
+                <option value="[% value.availablevalues | html %]">[% IF ( value.default ) %]Default[% ELSE %][% value.display_value | html %][% END %]</option>
                 [% END %]
                 </select>
             </td>
@@ -496,7 +497,7 @@ canned reports and writing custom SQL reports.</p>
 <fieldset><legend>Dictionary definitions</legend>
 <table>
 [% FOREACH definition IN definitions %]
-    <tr><td><input type="checkbox" name="definition" value="[% definition.id %]" /> [% definition.name %]</td></tr>
+    <tr><td><input type="checkbox" name="definition" value="[% definition.id | html %]" /> [% definition.name | html %]</td></tr>
 [% END %]
 </table>
 </fieldset>
@@ -513,20 +514,20 @@ canned reports and writing custom SQL reports.</p>
 <h1>Build a report</h1>
 <h3>Step 5 of 6: Pick which columns to total</h3>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
-<input type="hidden" name="area" value="[% area %]" />
-<input type="hidden" name="type" value="[% type %]" />
-<input type="hidden" name="column" value="[% column %]" />
-<input type="hidden" name="definition" value="[% definition %]" />
-<input type="hidden" name="criteria" value="[% criteriastring %]" />
-<input type="hidden" name="public" value="[% public %]" />
-<input type="hidden" name="cache_expiry" value="[% cache_expiry %]" />
+<input type="hidden" name="area" value="[% area | html %]" />
+<input type="hidden" name="type" value="[% type | html %]" />
+<input type="hidden" name="column" value="[% column | html %]" />
+<input type="hidden" name="definition" value="[% definition | html %]" />
+<input type="hidden" name="criteria" value="[% criteriastring | html %]" />
+<input type="hidden" name="public" value="[% public | html %]" />
+<input type="hidden" name="cache_expiry" value="[% cache_expiry | html %]" />
 <fieldset><table>
 [% FOREACH total_b IN total_by %]
-<tr><td><input type="checkbox" name="total_by" id="[% total_b.name %]" value="[% total_b.name %]" /> <label for="[% total_b.name %]">[% total_b.name %]</label></td>
-<td><select name="[% total_b.name %]_tvalue">
+<tr><td><input type="checkbox" name="total_by" id="[% total_b.name | html %]" value="[% total_b.name | html %]" /> <label for="[% total_b.name | html %]">[% total_b.name | html %]</label></td>
+<td><select name="[% total_b.name | html %]_tvalue">
 
 [% FOREACH selec IN total_b.select %]
-<option value="[% selec.value %]">[% selec.value %]</option>
+<option value="[% selec.value | html %]">[% selec.value | html %]</option>
 [% END %]
 </select>
 
@@ -545,20 +546,20 @@ canned reports and writing custom SQL reports.</p>
 <h1>Build a report</h1>
 <h3>Step 6 of 6: Choose how you want the report ordered</h3>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
-<input type="hidden" name="area" value="[% area %]" />
-<input type="hidden" name="type" value="[% type %]" />
-<input type="hidden" name="column" value="[% column %]" />
-<input type="hidden" name="criteria" value="[% criteriastring %]" />
-<input type="hidden" name="definition" value="[% definition %]" />
-<input type="hidden" name="totals" value="[% totals %]" />
-<input type="hidden" name="public" value="[% public %]" />
-<input type="hidden" name="cache_expiry" value="[% cache_expiry %]" />
+<input type="hidden" name="area" value="[% area | html %]" />
+<input type="hidden" name="type" value="[% type | html %]" />
+<input type="hidden" name="column" value="[% column | html %]" />
+<input type="hidden" name="criteria" value="[% criteriastring | html %]" />
+<input type="hidden" name="definition" value="[% definition | html %]" />
+<input type="hidden" name="totals" value="[% totals | html %]" />
+<input type="hidden" name="public" value="[% public | html %]" />
+<input type="hidden" name="cache_expiry" value="[% cache_expiry | html %]" />
 <fieldset><table>[% FOREACH order_b IN order_by %]
-<tr><td><input type="checkbox" id="[% order_b.name %]" name="order_by" value="[% order_b.name %]" /> <label for="[% order_b.name %]">[% order_b.name %]</label></td><td>
-<select name="[% order_b.name %]_ovalue">
+<tr><td><input type="checkbox" id="[% order_b.name | html %]" name="order_by" value="[% order_b.name | html %]" /> <label for="[% order_b.name | html %]">[% order_b.name | html %]</label></td><td>
+<select name="[% order_b.name | html %]_ovalue">
 
 [% FOREACH selec IN order_b.select %]
-<option value="[% selec.value %]">[% selec.value %]</option>
+<option value="[% selec.value | html %]">[% selec.value | html %]</option>
 [% END %]
 </select>
 </td></tr>
@@ -577,14 +578,14 @@ canned reports and writing custom SQL reports.</p>
 <h1>Confirm custom report</h1>
 <p>Your report will be generated with the following SQL statement.</p>
 <p> 
-[% sql |html %]
+[% sql | html %]
 </p>
 
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
-<input type="hidden" name="sql" value="[% sql %]" />
-<input type="hidden" name="type" value="[% type %]" />
-<input type="hidden" name="public" value="[% public %]" />
-<input type="hidden" name="cache_expiry" value="[% cache_expiry %]" />
+<input type="hidden" name="sql" value="[% sql | html %]" />
+<input type="hidden" name="type" value="[% type | html %]" />
+<input type="hidden" name="public" value="[% public | html %]" />
+<input type="hidden" name="cache_expiry" value="[% cache_expiry | html %]" />
 <p>You will need to save the report before you can execute it</p>
 <fieldset class="action"><input type="hidden" name="phase" value="Save" />  
 <input type="submit" name="submit" value="Save" />  </fieldset>
@@ -593,11 +594,11 @@ canned reports and writing custom SQL reports.</p>
 
 [% IF ( save ) %]
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" class="validated">
-<input type="hidden" name="sql" value="[% sql |html %]" />
-<input type="hidden" name="type" value="[% type %]" />
-<input type="hidden" name="area" value="[% area %]" />
-<input type="hidden" name="public" value="[% public %]" />
-<input type="hidden" name="cache_expiry" value="[% cache_expiry %]" />
+<input type="hidden" name="sql" value="[% sql | html %]" />
+<input type="hidden" name="type" value="[% type | html %]" />
+<input type="hidden" name="area" value="[% area | html %]" />
+<input type="hidden" name="public" value="[% public | html %]" />
+<input type="hidden" name="cache_expiry" value="[% cache_expiry | html %]" />
 <fieldset class="rows">
 <legend>Save your custom report</legend>
 <ol>
@@ -612,30 +613,30 @@ canned reports and writing custom SQL reports.</p>
 
 [% IF ( warn_authval_problem ) %]
     <div class="dialog alert">
-        <h3>Errors found when processing parameters for report: [% name %]</h3>
+        <h3>Errors found when processing parameters for report: [% name | html %]</h3>
         [% FOREACH problematic_authval IN problematic_authvals %]
             <p>
-            <strong>[% problematic_authval.name %]:</strong> The authorized value category (<strong>[% problematic_authval.authval %]</strong>)
+            <strong>[% problematic_authval.name | html %]:</strong> The authorized value category (<strong>[% problematic_authval.authval | html %]</strong>)
                 you selected does not exist.
             </p>
         [% END %]
         <!-- Save Anyway Form -->
         <form action='/cgi-bin/koha/reports/guided_reports.pl'>
         <!--Every parameter the user issued is provided as a hidden field for recovery-->
-            <input type='hidden' name='id' value='[% id %]' />
-            <input type='hidden' name='sql' value='[% sql %]' />
-            <input type='hidden' name='reportname' value='[% reportname %]' />
-            <input type='hidden' name='group' value='[% group %]' />
-            <input type='hidden' name='subgroup' value='[% subgroup %]' />
-            <input type='hidden' name='notes' value='[% notes %]' />
-            <input type='hidden' name='cache_expiry' value='[% cache_expiry %]' />
-            <input type='hidden' name='cache_expiry_units' value='[% cache_expiry_units %]' />
-            <input type='hidden' name='public' value='[% public %]' />
+            <input type='hidden' name='id' value='[% id | html %]' />
+            <input type='hidden' name='sql' value='[% sql | html %]' />
+            <input type='hidden' name='reportname' value='[% reportname | html %]' />
+            <input type='hidden' name='group' value='[% group | html %]' />
+            <input type='hidden' name='subgroup' value='[% subgroup | html %]' />
+            <input type='hidden' name='notes' value='[% notes | html %]' />
+            <input type='hidden' name='cache_expiry' value='[% cache_expiry | html %]' />
+            <input type='hidden' name='cache_expiry_units' value='[% cache_expiry_units | html %]' />
+            <input type='hidden' name='public' value='[% public | html %]' />
         [% IF ( phase_update) %]
             <input type='hidden' name='phase' value='Update SQL' />
             <button type="submit" name="save_anyway" value="Save anyway" class="approve"><i class="fa fa-fw fa-check"></i> Save anyway</button>
         [% ELSIF ( phase_save) %]
-            <input type='hidden' name='area' value='[% area %]' />
+            <input type='hidden' name='area' value='[% area | html %]' />
             <input type='hidden' name='phase' value='Save Report' />
             <button type="submit" name="save_anyway" value="Save anyway" class="approve"><i class="fa fa-fw fa-check"></i> Save anyway</button>
         [% END %]
@@ -649,14 +650,14 @@ canned reports and writing custom SQL reports.</p>
 
 [% IF ( enter_params ) %]
     <form action='/cgi-bin/koha/reports/guided_reports.pl'>
-        <input type='hidden' name='reports' value="[% reports %]" />
+        <input type='hidden' name='reports' value="[% reports | html %]" />
     [% IF ( auth_val_error ) %]
         <input type='hidden' name='phase' value='Edit SQL' />
         <div class="dialog alert">
-            <h3>Errors found when processing parameters for report: [% name %]</h3>
+            <h3>Errors found when processing parameters for report: [% name | html %]</h3>
             [% FOREACH auth_val_error IN auth_val_errors %]
                 <p>
-                    <strong>[% auth_val_error.entry %]:</strong> The authorized value category (<strong>[% auth_val_error.auth_val %]</strong>)
+                    <strong>[% auth_val_error.entry | html %]:</strong> The authorized value category (<strong>[% auth_val_error.auth_val | html %]</strong>)
                     you selected does not exist.
                 </p>
             [% END %]
@@ -664,23 +665,23 @@ canned reports and writing custom SQL reports.</p>
         <fieldset class="action"><input type="submit" value="Edit SQL" /></fieldset>
     [% ELSE %]
         <input type='hidden' name='phase' value='Run this report' />
-        <h1>Enter parameters for report [% name %]:</h1>
-        [% IF ( notes ) %]<p>[% notes %]</p>[% END %]
+        <h1>Enter parameters for report [% name | html %]:</h1>
+        [% IF ( notes ) %]<p>[% notes | html %]</p>[% END %]
         <fieldset class="rows">
             <ol>
             [% FOREACH sql_param IN sql_params %]
-                <input name="param_name" value="[% sql_param.name %]" type="hidden" />
+                <input name="param_name" value="[% sql_param.name | html %]" type="hidden" />
                 [% IF sql_param.input == 'date' %]
                     <li>
-                    <label for="date_[% sql_param_entry %][% loop.count %]">[% sql_param.entry %]:</label> <input id="date_[% sql_param_entry %][% loop.count %]" type="text" value="" size="10" name="sql_params" class="datepicker" />
+                    <label for="date_[% sql_param_entry | html %][% loop.count | html %]">[% sql_param.entry | html %]:</label> <input id="date_[% sql_param_entry | html %][% loop.count | html %]" type="text" value="" size="10" name="sql_params" class="datepicker" />
                     </li>
                 [% ELSIF ( sql_param.input == 'text' ) %]
-                    <li><label for="sql_params[% loop.count %]">[% sql_param.entry %]: </label><input id="sql_params[% loop.count %]" type="text" name="sql_params" /></li>
+                    <li><label for="sql_params[% loop.count | html %]">[% sql_param.entry | html %]: </label><input id="sql_params[% loop.count | html %]" type="text" name="sql_params" /></li>
                 [% ELSE %]
-                    <li><label for="sql_params_[% sql_param.labelid %]">[% sql_param.entry %]:</label>
-                        <select name="[%- sql_param.input.name -%]" tabindex="1"  size="1" id="[%- sql_param.input.id -%]">
+                    <li><label for="sql_params_[% sql_param.labelid | html %]">[% sql_param.entry | html %]:</label>
+                        <select name="[%- sql_param.input.name | html -%]" tabindex="1"  size="1" id="[%- sql_param.input.id | html -%]">
                         [% FOREACH value IN sql_param.input.values %]
-                            <option value="[%- value -%]">[%- sql_param.input.labels.$value -%]</option>
+                            <option value="[%- value | html -%]">[%- sql_param.input.labels.$value | html -%]</option>
                         [% END %]
                         </select>
                     </li>
@@ -694,34 +695,34 @@ canned reports and writing custom SQL reports.</p>
 [% END %]
 
 [% IF ( execute ) %]
-<h1>[% name %]</h1>
-[% IF ( notes ) %]<p><span class="label">Notes:</span> [% notes %]</p>[% END %]
-[% IF ( unlimited_total ) %]<p><span class="label">Total number of results:</span> [% unlimited_total %][% IF unlimited_total > limit %] ([% limit %] shown)[% END %].</p>[% END %]
-<div id="sql_output" style="display:none;"><span class="label">Report SQL:</span><pre>[% sql |html %]</pre></div>
+<h1>[% name | html %]</h1>
+[% IF ( notes ) %]<p><span class="label">Notes:</span> [% notes | html %]</p>[% END %]
+[% IF ( unlimited_total ) %]<p><span class="label">Total number of results:</span> [% unlimited_total | html %][% IF unlimited_total > limit %] ([% limit | html %] shown)[% END %].</p>[% END %]
+<div id="sql_output" style="display:none;"><span class="label">Report SQL:</span><pre>[% sql | html %]</pre></div>
 </br>
 
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get" id="limitselect">
     <input type="hidden" name="phase" value="Run this report"/>
-    <input type="hidden" name="reports" value="[% report_id %]"/>
+    <input type="hidden" name="reports" value="[% report_id | html %]"/>
 
     [% FOREACH p IN sql_params %]
-        <input type="hidden" name="sql_params" value="[% p %]"/>
+        <input type="hidden" name="sql_params" value="[% p | html %]"/>
     [% END %]
 
     <label for="limit">Rows per page: </label>
     <select name="limit" id="limit">
-        [% limits = [ 10, 20, 50, 100, 200, 300, 400, 500, 1000 ] %]
+        [% limits = [ 10, 20, 50, 100, 200, 300, 400, 500, 1000 ] | html %]
         [% FOREACH l IN limits %]
                 [% IF l == limit %]
-                    <option value="[% l %]" selected="selected">[% l %]</option>
+                    <option value="[% l | html %]" selected="selected">[% l | html %]</option>
                 [% ELSE %]
-                    <option value="[% l %]">[% l %]</option>
+                    <option value="[% l | html %]">[% l | html %]</option>
                 [% END %]
         [% END %]
     </select>
 </form>
 
-<div class="pages">[% pagination_bar %]</div>
+<div class="pages">[% pagination_bar | $raw %]</div>
 [% UNLESS ( errors ) %]
     <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="report_results">
         <input type="hidden" name="op" value="show" />
@@ -730,21 +731,21 @@ canned reports and writing custom SQL reports.</p>
                 [% FOREACH header_ro IN header_row %]
                     [% IF header_ro.cell == 'itemnumber' %]
                         <th>
-                            [% header_ro.cell %] <button type="submit" data-toggle="tooltip" title="Send visible items to batch modification" class="btn btn-xs btn-default send_to_item_mod"><i class="fa fa-pencil"></i> Batch modify</button>
+                            [% header_ro.cell | html %] <button type="submit" data-toggle="tooltip" title="Send visible items to batch modification" class="btn btn-xs btn-default send_to_item_mod"><i class="fa fa-pencil"></i> Batch modify</button>
                         </th>
                     [% ELSE %]
-                        <th>[% header_ro.cell %]</th>
+                        <th>[% header_ro.cell | html %]</th>
                     [% END %]
                 [% END %]
             </tr>
             [% FOREACH result IN results %]
                 <tr>
                     [% FOREACH cells IN result.cells %]
-                        [% place = loop.index %]
+                        [% place = loop.index | html %]
                         [% IF header_row.$place.cell == 'itemnumber' %]
                             <input type="hidden" name="[% header_row.$place.cell | html %]" value="[% cells.cell | html %]" />
                         [% END %]
-                        <td>[% cells.cell %]</td>
+                        <td>[% cells.cell | html %]</td>
                     [% END %]
                 </tr>
             [% END %]
@@ -775,7 +776,7 @@ $(document).ready(function() {
   <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0" selected="selected">No (default)</option> <option value="1">Yes</option> </select></li>
 [% END %]
 [% IF (usecache) %] <li>
-<label for="cache_expiry">Cache expiry:</label><input type="text" id="cache_expiry" name="cache_expiry" value="[% cache_expiry %]"></input>
+<label for="cache_expiry">Cache expiry:</label><input type="text" id="cache_expiry" name="cache_expiry" value="[% cache_expiry | html %]"></input>
 <select id="cache_expiry_units" name="cache_expiry_units">
 <option value="seconds" selected="selected">Seconds (default)</option>
 <option value="minutes">Minutes</option>
@@ -783,13 +784,13 @@ $(document).ready(function() {
 <option value="days">Days</option>
 </select>
 </li>[% END %]
-    <li><label for="notes">Notes:</label> <textarea id="notes" name="notes" cols="50" rows="2">[% notes %]</textarea></li>
+    <li><label for="notes">Notes:</label> <textarea id="notes" name="notes" cols="50" rows="2">[% notes | html %]</textarea></li>
 </ol>
 </fieldset>
 <fieldset class="rows">
 <legend>SQL:</legend>
 <div style="margin:1em;">
-<textarea id="sql" name="sql" class="required" required="required" cols="50" rows="10">[% sql %]</textarea> <span class="required">Required</span>
+<textarea id="sql" name="sql" class="required" required="required" cols="50" rows="10">[% sql | html %]</textarea> <span class="required">Required</span>
 </div>
 </fieldset>
 
@@ -801,13 +802,13 @@ $(document).ready(function() {
 
 [% IF saved_results %]
 <h1>Saved report results</h1>
-<h2>[% name %]</h2>
-<p>[% notes %]</p>
+<h2>[% name | html %]</h2>
+<p>[% notes | html %]</p>
 <table>
 [% FOREACH rows IN saved_results %]
 <tr>
 [% FOREACH col IN rows %]
-<td>[% col %]</td>
+<td>[% col | html %]</td>
 [% END %]
 <tr>
 [% END %]
@@ -816,10 +817,10 @@ $(document).ready(function() {
 
 [% IF ( showsql ) %]
 <fieldset class="rows">
-    <legend>[% reportname %]</legend>
+    <legend>[% reportname | html %]</legend>
     <ol>
-        [% IF ( notes ) %]<li><span class="label">Notes:</span> [% notes %]</li>[% ELSE %][% END %]
-        <li><textarea id="sql">[% sql %]</textarea></li>
+        [% IF ( notes ) %]<li><span class="label">Notes:</span> [% notes | html %]</li>[% ELSE %][% END %]
+        <li><textarea id="sql">[% sql | html %]</textarea></li>
     </ol>
 </fieldset>
 [% END %]
@@ -829,7 +830,7 @@ $(document).ready(function() {
 </br>
 <div id="report_updated">
     <div class="dialog message">
-        <p>Your report "[% reportname %]" has been saved</p>
+        <p>Your report "[% reportname | html %]" has been saved</p>
     </div>
 </div>
 [% END %]
@@ -838,7 +839,7 @@ $(document).ready(function() {
 [% IF ( editsql ) %]
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" class="validated">
 <input type="hidden" name="phase" value="Update SQL" />
-<input type="hidden" name="id" value="[% id %]"/>
+<input type="hidden" name="id" value="[% id | html %]"/>
 <fieldset class="rows">
 <legend>Edit SQL report</legend>
 <ol>
@@ -850,7 +851,7 @@ $(document).ready(function() {
   <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0" selected="selected">No (default)</option> <option value="1">Yes</option> </select></li>
 [% END %]
 [% IF (usecache) %] <li>
-<label for="cache_expiry">Cache expiry:</label><input type="text" id="cache_expiry" name="cache_expiry" value="[% cache_expiry %]"></input>
+<label for="cache_expiry">Cache expiry:</label><input type="text" id="cache_expiry" name="cache_expiry" value="[% cache_expiry | html %]"></input>
 <select id="cache_expiry_units" name="cache_expiry_units">
 <option value="seconds">Seconds (default)</option>
 <option value="minutes">Minutes</option>
@@ -858,14 +859,14 @@ $(document).ready(function() {
 <option value="days">Days</option>
 </select>
 </li>[% END %]
-<li><label for="notes">Notes:</label><textarea id="notes" name="notes" cols="50" rows="2">[% notes %]</textarea></li>
+<li><label for="notes">Notes:</label><textarea id="notes" name="notes" cols="50" rows="2">[% notes | html %]</textarea></li>
 </ol>
 </fieldset>
 
 <fieldset class="rows">
     <legend>SQL:</legend>
     <div style="margin:1em;">
-        <textarea id="sql" name="sql" class="required" required="required" cols="50" rows="10">[% sql %]</textarea> <span class="required">Required</span>
+        <textarea id="sql" name="sql" class="required" required="required" cols="50" rows="10">[% sql | html %]</textarea> <span class="required">Required</span>
     </div>
 </fieldset>
 
@@ -882,10 +883,10 @@ $(document).ready(function() {
 <div class="dialog alert">
 <b>The following error was encountered:</b><br />
 [% FOREACH error IN errors %]
-    [% IF ( error.sqlerr ) %]This report contains the SQL keyword <b>[% error.sqlerr %]</b>.
+    [% IF ( error.sqlerr ) %]This report contains the SQL keyword <b>[% error.sqlerr | html %]</b>.
     <br />Use of this keyword is not allowed in Koha reports due to security and data integrity risks. Only SELECT queries are allowed.
     <br />Please return to the &quot;Saved Reports&quot; screen and delete this report or retry creating a new one.
-    [% ELSIF ( error.queryerr ) %]The database returned the following error: <br />[% error.queryerr %]<br />Please check the log for further details.
+    [% ELSIF ( error.queryerr ) %]The database returned the following error: <br />[% error.queryerr | html %]<br />Please check the log for further details.
     [% ELSIF ( error.cache_expiry ) %]Please select a cache expiry less than 30 days.
     [% ELSE %]
     [% END %]
@@ -911,12 +912,12 @@ $(document).ready(function() {
   <fieldset class="brief">
   <h3>Filter</h3>
   <ol>
-    <li><label for="filter_date">Date:</label> <input type="text" id="filter_date" name="filter_date" size="10" value="[% filters.date %]" class="datepicker" />
+    <li><label for="filter_date">Date:</label> <input type="text" id="filter_date" name="filter_date" size="10" value="[% filters.date | html %]" class="datepicker" />
     <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 
     </li>
-    <li><label for="filter_author">Author:</label> <input type="text" id="filter_author" name="filter_author" value="[% filters.author %]" size="16" /></li>
-    <li><label for="filter_keyword">Keyword:</label> <input type="text" id="filter_keyword" name="filter_keyword" value="[% filters.keyword %]" size="16" /></li>
+    <li><label for="filter_author">Author:</label> <input type="text" id="filter_author" name="filter_author" value="[% filters.author | html %]" size="16" /></li>
+    <li><label for="filter_keyword">Keyword:</label> <input type="text" id="filter_keyword" name="filter_keyword" value="[% filters.keyword | html %]" size="16" /></li>
   </ol>
   </fieldset>
   <fieldset class="action">
@@ -942,11 +943,11 @@ $(document).ready(function() {
         var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this report? This cannot be undone.");
         var group_subgroups = {};
         [% FOREACH group IN groups_with_subgroups %]
-            var gid = "[% group.id %]"
+            var gid = "[% group.id | html %]"
             group_subgroups[gid] = new Array();
             [% FOREACH subgroup IN group.subgroups %]
-                var sgid = "[% subgroup.id %]";
-                var sgname = "[% subgroup.name %]";
+                var sgid = "[% subgroup.id | html %]";
+                var sgname = "[% subgroup.name | html %]";
                 group_subgroups[gid].push([sgid, sgname]);
             [% END %]
         [% END %]
@@ -970,7 +971,7 @@ $(document).ready(function() {
         $(document).ready(function(){
 
             $('[data-toggle="tooltip"]').tooltip();
-            var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'saved-sql', 'table_reports', 'json' ) %];
+            var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'saved-sql', 'table_reports', 'json' ).raw %];
 
             $('#limit').change(function() {
                 $('#limitselect').submit();
@@ -995,7 +996,7 @@ $(document).ready(function() {
 
             [% IF (saved1) %]
                 var rtable = KohaTable("table_reports", {
-                    'iDisplayLength': [% Koha.Preference('NumSavedReports') %],
+                    'iDisplayLength': [% Koha.Preference('NumSavedReports') | html %],
                     'bAutoWidth': false,
                     'sPaginationType': 'four_button',
                     'aaSorting': [[ 1, "asc" ]],
@@ -1091,7 +1092,7 @@ $(document).ready(function() {
 
                 $("#update_sql").on("hidden.bs.modal", function(){
                     $("#update_sql_label").html("");
-                    $("#update_sql .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+                    $("#update_sql .modal-body").html("<div id=\"loading\"><img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
                 });
             [% END %]
 
@@ -1199,11 +1200,11 @@ $(document).ready(function() {
             <option value="">(None)</option>
             [% FOREACH group IN groups_with_subgroups %]
                 [% IF (group.selected) %]
-                    <option value="[% group.id %]" selected="selected">
+                    <option value="[% group.id | html %]" selected="selected">
                 [% ELSE %]
-                    <option value="[% group.id %]">
+                    <option value="[% group.id | html %]">
                 [% END %]
-                    [% group.name %]
+                    [% group.name | html %]
                 </option>
             [% END %]
         </select>
@@ -1223,11 +1224,11 @@ $(document).ready(function() {
                 [% IF (group.selected) %]
                     [% FOREACH subgroup IN group.subgroups %]
                         [% IF (subgroup.selected) %]
-                            <option value="[% subgroup.id %]" selected="selected">
+                            <option value="[% subgroup.id | html %]" selected="selected">
                         [% ELSE %]
-                            <option value="[% subgroup.id %]">
+                            <option value="[% subgroup.id | html %]">
                         [% END %]
-                            [% subgroup.name %]
+                            [% subgroup.name | html %]
                         </option>
                     [% END %]
                 [% END %]

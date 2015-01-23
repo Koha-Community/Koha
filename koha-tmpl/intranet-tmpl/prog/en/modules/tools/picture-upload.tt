@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -34,8 +35,8 @@
             [% END %]
 	        <ul class="data">
 	            <li>Unpacking completed</li>
-                  <li>[% TOTAL %] directories scanned.</li>
-                    <li>[% HANDLED %] directories processed.</li>
+                  <li>[% TOTAL | html %] directories scanned.</li>
+                    <li>[% HANDLED | html %] directories processed.</li>
                 </ul>
 
                 [% FOREACH COUNT IN COUNTS %]
@@ -46,7 +47,7 @@
                             <tr><th>File name</th><th>Card number</th><th>Result</th></tr>
                         </thead>
                         <tbody>
-                        [% IF ( COUNT.TCOUNTS ) %]<li>[% COUNT.TCOUNTS %] image(s) moved into the database:</li>[% END %]
+                        [% IF ( COUNT.TCOUNTS ) %]<li>[% COUNT.TCOUNTS | html %] image(s) moved into the database:</li>[% END %]
                             [% FOREACH filename IN COUNT.filenames %]
                                 <tr>
                                 <td>[% filename.source | html %]</td>
@@ -60,7 +61,7 @@
                                         [% ELSIF ( filerror.CORERR ) %]<b>ERROR:</b> Image not imported because the image file is corrupted.
                                         [% ELSIF ( filerror.OPNERR ) %]<b>ERROR:</b> Image not imported because Koha was unable to open the image for reading.
                                         [% ELSIF ( filerror.OVRSIZ ) %]<b>ERROR:</b> Image not imported because the image file is too big (see online help for maximum size).
-                                        [% ELSIF ( filerror.CRDFIL ) %]<b>ERROR:</b> Image not imported ([% filerror.CRDFIL %] missing).
+                                        [% ELSIF ( filerror.CRDFIL ) %]<b>ERROR:</b> Image not imported ([% filerror.CRDFIL | html %] missing).
                                         [% ELSIF ( filerror.CARDNUMBER_DOES_NOT_EXIST ) %]<b>ERROR:</b> Image not imported because this patron does not exist in the database.
                                         [% ELSE %]<b>ERROR:</b> Image not imported because of an unknown error. Please refer to the error log for more details.
                                         [% END %]
@@ -75,7 +76,7 @@
                 [% END %]
 <ul>
                 [% IF ( borrowernumber ) %]
-                    <li><a id="member" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">Return to patron detail</a></li>
+                    <li><a id="member" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | html %]">Return to patron detail</a></li>
                 [% ELSE %]
                     <li><a id="uploadmore" href="/cgi-bin/koha/tools/picture-upload.pl">Upload more images</a></li>
                     <li><a id="doneupload" href="/cgi-bin/koha/tools/tools-home.pl">Return to tools</a></li>
@@ -90,11 +91,11 @@
                         [% IF ( ERROR.NOTZIP ) %]<li><b>The upload file does not appear to be a zip file.  The extension is not '.zip'.</b></li>
                         [% ELSIF ( ERROR.NOWRITETEMP ) %]<li><b>This script is not able to create/write to the necessary temporary directory.</b></li>
                         [% ELSIF ( ERROR.EMPTYUPLOAD ) %]<li><b>The upload file appears to be empty.</b></li>
-                        [% ELSIF ( ERROR.OPNLINK ) %]<li><b>Cannot open [% ERROR.OPNLINK %] to read.<br />Please verify that it exists.</b></li>
-                        [% ELSIF ( ERROR.OPNIMG ) %]<li><b>Cannot open [% ERROR.OPNIMG %] to read.<br />Please verify that it exists.</b></li>
+                        [% ELSIF ( ERROR.OPNLINK ) %]<li><b>Cannot open [% ERROR.OPNLINK | html %] to read.<br />Please verify that it exists.</b></li>
+                        [% ELSIF ( ERROR.OPNIMG ) %]<li><b>Cannot open [% ERROR.OPNIMG | html %] to read.<br />Please verify that it exists.</b></li>
                         [% ELSIF ( ERROR.DELERR ) %]<li><b>Unrecognized or missing field delimiter.<br />Please verify that you are using either a single quote or a tab.</b></li>
-                        [% ELSIF ( ERROR.UZIPFAIL ) %]<li><b>[% ERROR.UZIPFAIL %] failed to unpack.<br />Please verify the integrity of the ZIP file and retry.</b></li>
-                        [% ELSE %]<li><b>[% ERROR.CORERR %] An unknown error has occurred.<br />Please review the error log for more details.</b></li>[% END %]
+                        [% ELSIF ( ERROR.UZIPFAIL ) %]<li><b>[% ERROR.UZIPFAIL | html %] failed to unpack.<br />Please verify the integrity of the ZIP file and retry.</b></li>
+                        [% ELSE %]<li><b>[% ERROR.CORERR | html %] An unknown error has occurred.<br />Please review the error log for more details.</b></li>[% END %]
                     [% END %]
                 </div>
                 [% END %]
@@ -114,7 +115,7 @@
                                 <li id="cardnum" style="display: none">
                             [% END %]
                                 <label for="cardnumber">Enter patron cardnumber: </label>
-                                <input type="text" id="cardnumber" name="cardnumber" value="[% cardnumber %]" size="15" />
+                                <input type="text" id="cardnumber" name="cardnumber" value="[% cardnumber | html %]" size="15" />
                                 <span class="required">Required</span>
                             </li>
                             <li class="required">
@@ -125,7 +126,7 @@
                         </ol>
 	            </fieldset>
                     <fieldset class="action">
-                        <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
+                        <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
                         <input type="hidden" name="op" value="Upload" />
                         <input type="submit" value="Upload" class="submit" />
 						<a href="/cgi-bin/koha/tools/tools-home.pl" class="cancel">Cancel</a>
@@ -141,9 +142,9 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
     <script type="text/javascript">
         $(document).ready(function() {
             $("#zipfile").click(function(){

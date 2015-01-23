@@ -1,10 +1,11 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; [% Branches.GetName( branch ) %] calendar</title>
+<title>Koha &rsaquo; Tools &rsaquo; [% Branches.GetName( branch ) | html %] calendar</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 <style type="text/css"> .key { padding : 3px; white-space:nowrap; line-height:230%; }
 .ui-datepicker { font-size : 150%; }
 .ui-datepicker th, .ui-datepicker .ui-datepicker-title select { font-size : 80%; }
@@ -29,14 +30,14 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% Branches.GetName( branch ) %] calendar</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% Branches.GetName( branch ) | html %] calendar</div>
 
 <div id="doc3" class="yui-t1">
    
    <div id="bd">
     <div id="yui-main">
     <div class="yui-b">
-    <h2>[% Branches.GetName( branch ) %] calendar</h2>
+    <h2>[% Branches.GetName( branch ) | html %] calendar</h2>
     <div class="yui-g">
     <div class="yui-u first">
         <label for="branch">Define the holidays for:</label>
@@ -74,7 +75,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
             </li>
             <li class="dateinsert">
                 <b>To Date : </b>
-                <input type="text" id="datecancelrange" name="datecancelrange" size="20" value="[% datecancelrange %]" class="datepicker"/>
+                <input type="text" id="datecancelrange" name="datecancelrange" size="20" value="[% datecancelrange | html %]" class="datepicker"/>
             </li>
             <li><label for="showTitle">Title: </label><input type="text" name="showTitle" id="showTitle" size="35" /></li>
             <!-- showTitle is necessary for exception radio button to work properly -->
@@ -144,7 +145,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
             </li>
             <li class="dateinsert">
                 <b>To date: </b>
-                <input type="text" id="dateofrange" name="dateofrange" size="20" value="[% dateofrange %]" class="datepicker" />
+                <input type="text" id="dateofrange" name="dateofrange" size="20" value="[% dateofrange | html %]" class="datepicker" />
             </li>
             <li><label for="title">Title: </label><input type="text" name="newTitle" id="title" size="35" /></li>
             <li><label for="newDescription">Description:</label>
@@ -201,12 +202,12 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
 
 <div style="margin-top: 2em;">
 <form action="copy-holidays.pl" method="post">
-    <input type="hidden" name="from_branchcode" value="[% branch %]" />
+    <input type="hidden" name="from_branchcode" value="[% branch | html %]" />
   <label for="branchcode">Copy holidays to:</label>
   <select id="branchcode" name="branchcode">
     <option value=""></option>
     [% FOREACH l IN Branches.all() %]
-    <option value="[% l.branchcode %]">[% l.branchname %]</option>
+    <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
     [% END %]
   </select>
     <input type="submit" value="Copy" />
@@ -248,9 +249,9 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
 <tbody>
   [% FOREACH EXCEPTION_HOLIDAYS_LOO IN EXCEPTION_HOLIDAYS_LOOP %]
   <tr>
-  <td><a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch %]&amp;calendardate=[% EXCEPTION_HOLIDAYS_LOO.DATE %]"><span title="[% EXCEPTION_HOLIDAYS_LOO.DATE_SORT %]">[% EXCEPTION_HOLIDAYS_LOO.DATE %]</span></a></td>
-  <td>[% EXCEPTION_HOLIDAYS_LOO.TITLE |html %]</td>
-  <td>[% EXCEPTION_HOLIDAYS_LOO.DESCRIPTION |html %]</td>
+  <td><a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch | html %]&amp;calendardate=[% EXCEPTION_HOLIDAYS_LOO.DATE | html %]"><span title="[% EXCEPTION_HOLIDAYS_LOO.DATE_SORT | html %]">[% EXCEPTION_HOLIDAYS_LOO.DATE | html %]</span></a></td>
+  <td>[% EXCEPTION_HOLIDAYS_LOO.TITLE | html %]</td>
+  <td>[% EXCEPTION_HOLIDAYS_LOO.DESCRIPTION | html %]</td>
   </tr>
   [% END %] 
 </tbody>
@@ -270,10 +271,10 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
 <tbody>
   [% FOREACH WEEK_DAYS_LOO IN WEEK_DAYS_LOOP %]
   <tr>
-  <td>[% WEEK_DAYS_LOO.KEY %]</td>
+  <td>[% WEEK_DAYS_LOO.KEY | html %]</td>
   </td> 
-  <td>[% WEEK_DAYS_LOO.TITLE |html %]</td>
-  <td>[% WEEK_DAYS_LOO.DESCRIPTION |html %]</td>
+  <td>[% WEEK_DAYS_LOO.TITLE | html %]</td>
+  <td>[% WEEK_DAYS_LOO.DESCRIPTION | html %]</td>
   </tr>
   [% END %] 
 </tbody>
@@ -297,9 +298,9 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
 <tbody>
   [% FOREACH DAY_MONTH_HOLIDAYS_LOO IN DAY_MONTH_HOLIDAYS_LOOP %]
   <tr>
-  <td><span title="[% DAY_MONTH_HOLIDAYS_LOO.DATE_SORT %]">[% DAY_MONTH_HOLIDAYS_LOO.DATE %]</span></td>
-  <td>[% DAY_MONTH_HOLIDAYS_LOO.TITLE |html %]</td>
-  <td>[% DAY_MONTH_HOLIDAYS_LOO.DESCRIPTION |html %]</td>
+  <td><span title="[% DAY_MONTH_HOLIDAYS_LOO.DATE_SORT | html %]">[% DAY_MONTH_HOLIDAYS_LOO.DATE | html %]</span></td>
+  <td>[% DAY_MONTH_HOLIDAYS_LOO.TITLE | html %]</td>
+  <td>[% DAY_MONTH_HOLIDAYS_LOO.DESCRIPTION | html %]</td>
   </tr>
   [% END %] 
 </tbody>
@@ -319,9 +320,9 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
 <tbody>
     [% FOREACH HOLIDAYS_LOO IN HOLIDAYS_LOOP %]
 <tr>
-  <td><a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch %]&amp;calendardate=[% HOLIDAYS_LOO.DATE %]"><span title="[% HOLIDAYS_LOO.DATE_SORT %]">[% HOLIDAYS_LOO.DATE %]</span></a></td>
-  <td>[% HOLIDAYS_LOO.TITLE |html %]</td>
-  <td>[% HOLIDAYS_LOO.DESCRIPTION.replace('\\\r\\\n', '<br />') |html %]</td>
+  <td><a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch | html %]&amp;calendardate=[% HOLIDAYS_LOO.DATE | html %]"><span title="[% HOLIDAYS_LOO.DATE_SORT | html %]">[% HOLIDAYS_LOO.DATE | html %]</span></a></td>
+  <td>[% HOLIDAYS_LOO.TITLE | html %]</td>
+  <td>[% HOLIDAYS_LOO.DESCRIPTION.replace('\\\r\\\n', '<br />') | html %]</td>
 </tr>
   [% END %] 
 </tbody>
@@ -341,7 +342,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     <script type="text/javascript">
         var weekdays = new Array(_("Sundays"),_("Mondays"),_("Tuesdays"),_("Wednesdays"),_("Thursdays"),_("Fridays"),_("Saturdays"));
 
@@ -351,19 +352,19 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
         var holidates = new Array();
         var exception_holidays = new Array();
         var day_month_holidays = new Array();
-        var hola= "[% code %]";
+        var hola= "[% code | html %]";
         [% FOREACH WEEK_DAYS_LOO IN WEEK_DAYS_LOOP %]
-        week_days["[% WEEK_DAYS_LOO.KEY %]"] = {title:"[% WEEK_DAYS_LOO.TITLE | replace('"','\"') |html %]", description:"[% WEEK_DAYS_LOO.DESCRIPTION | replace('"','\"') |html %]"};
+        week_days["[% WEEK_DAYS_LOO.KEY | html %]"] = {title:"[% WEEK_DAYS_LOO.TITLE | replace('"','\"') | html %]", description:"[% WEEK_DAYS_LOO.DESCRIPTION | replace('"','\"') | html %]"};
         [% END %]
         [% FOREACH HOLIDAYS_LOO IN HOLIDAYS_LOOP %]
-        holidates.push("[% HOLIDAYS_LOO.KEY %]");
-        holidays["[% HOLIDAYS_LOO.KEY %]"] = {title:"[% HOLIDAYS_LOO.TITLE | replace('"','\"') |html %]", description:"[% HOLIDAYS_LOO.DESCRIPTION | replace('"','\"') |html %]"};
+        holidates.push("[% HOLIDAYS_LOO.KEY | html %]");
+        holidays["[% HOLIDAYS_LOO.KEY | html %]"] = {title:"[% HOLIDAYS_LOO.TITLE | replace('"','\"') | html %]", description:"[% HOLIDAYS_LOO.DESCRIPTION | replace('"','\"') | html %]"};
         [% END %]
         [% FOREACH EXCEPTION_HOLIDAYS_LOO IN EXCEPTION_HOLIDAYS_LOOP %]
-        exception_holidays["[% EXCEPTION_HOLIDAYS_LOO.KEY %]"] = {title:"[% EXCEPTION_HOLIDAYS_LOO.TITLE | replace('"','\"') |html %]", description:"[% EXCEPTION_HOLIDAYS_LOO.DESCRIPTION | replace('"','\"') |html %]"};
+        exception_holidays["[% EXCEPTION_HOLIDAYS_LOO.KEY | html %]"] = {title:"[% EXCEPTION_HOLIDAYS_LOO.TITLE | replace('"','\"') | html %]", description:"[% EXCEPTION_HOLIDAYS_LOO.DESCRIPTION | replace('"','\"') | html %]"};
         [% END %]
         [% FOREACH DAY_MONTH_HOLIDAYS_LOO IN DAY_MONTH_HOLIDAYS_LOOP %]
-        day_month_holidays["[% DAY_MONTH_HOLIDAYS_LOO.KEY %]"] = {title:"[% DAY_MONTH_HOLIDAYS_LOO.TITLE | replace('"','\"') |html %]", description:"[% DAY_MONTH_HOLIDAYS_LOO.DESCRIPTION | replace('"','\"') |html %]"};
+        day_month_holidays["[% DAY_MONTH_HOLIDAYS_LOO.KEY | html %]"] = {title:"[% DAY_MONTH_HOLIDAYS_LOO.TITLE | replace('"','\"') | html %]", description:"[% DAY_MONTH_HOLIDAYS_LOO.DESCRIPTION | replace('"','\"') | html %]"};
         [% END %]
 
         function holidayOperation(formObject, opType) {
@@ -435,7 +436,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
 
         function changeBranch () {
             var branch = $("#branch option:selected").val();
-            location.href='/cgi-bin/koha/tools/holidays.pl?branch=' + branch + '&calendardate=' + "[% calendardate %]";
+            location.href='/cgi-bin/koha/tools/holidays.pl?branch=' + branch + '&calendardate=' + "[% calendardate | html %]";
         }
 
         function Help() {
@@ -526,7 +527,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
             onSelect: function(dateText, inst) {
                 dateChanged($(this).datepicker("getDate"));
             },
-            defaultDate: new Date("[% keydate %]")
+            defaultDate: new Date("[% keydate | html %]")
             });
             $(".hidePanel").on("click",function(){
                 if( $(this).hasClass("showHoliday") ){

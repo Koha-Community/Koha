@@ -23,31 +23,31 @@
 		[% IF ( mainloo.loopfilter ) %]
             <p>Filtered on:</p>
 			[% FOREACH loopfilte IN mainloo.loopfilter %]
-					<p>[% loopfilte.crit %] =[% loopfilte.filter %]</p>
+					<p>[% loopfilte.crit | html %] =[% loopfilte.filter | html %]</p>
 			[% END %]
 		[% END %]
 		
 		<table>
 			<tr>
-				<th>[% mainloo.line %] / [% mainloo.column %]</th>
+				<th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
 				[% FOREACH loopco IN mainloo.loopcol %]
-					<th>[% loopco.coltitle %]</th>
+					<th>[% loopco.coltitle | html %]</th>
 				[% END %]
 				<th>TOTAL</th>
 			</tr>
 				[% FOREACH loopro IN mainloo.looprow %]
 					<tr>
 						[% IF ( loopro.hilighted ) %]<td class="hilighted">[% ELSE %]<td>[% END %]
-						[% loopro.rowtitle %]</td>
+						[% loopro.rowtitle | html %]</td>
 						[% FOREACH loopcel IN loopro.loopcell %]
 							[% IF ( loopcel.hilighted ) %]<td>[% ELSE %]<td>[% END %]
-								[% IF ( loopcel.value ) %][% loopcel.value %]
+								[% IF ( loopcel.value ) %][% loopcel.value | html %]
 								[% ELSE %]&nbsp;
 								[% END %]
 							</td>
 						[% END %]
 						[% IF ( loopro.hilighted ) %]<td>[% ELSE %]<td>[% END %]
-							[% loopro.totalrow %]
+							[% loopro.totalrow | html %]
 						</td>
 					</tr>
 				[% END %]
@@ -55,10 +55,10 @@
 					<th>TOTAL</th>
 					[% FOREACH loopfoote IN mainloo.loopfooter %]
 						<th>
-							[% loopfoote.totalcol %]
+							[% loopfoote.totalcol | html %]
 						</th>
 					[% END %]
-					<th>[% mainloo.total %]</th>
+					<th>[% mainloo.total | html %]</th>
 				</tr>
 		</table>
 	[% END %]
@@ -99,12 +99,12 @@
       </tr>
 			 <tr>
                 <td>Item type</td>
-				<td><input type="radio" name="Line" value="[% item_itype %]" /></td>
-				<td><input type="radio" name="Column" value="[% item_itype %]" /></td>
-				<td><select name="Filter" id="[% item_itype %]">
+				<td><input type="radio" name="Line" value="[% item_itype | html %]" /></td>
+				<td><input type="radio" name="Column" value="[% item_itype | html %]" /></td>
+				<td><select name="Filter" id="[% item_itype | html %]">
 					<option value=""> </option>
                     [% FOREACH itemtype IN itemtypes %]
-                        <option value="[% itemtype.itemtype %]">[% itemtype.translated_description %]</option>
+                        <option value="[% itemtype.itemtype | html %]">[% itemtype.translated_description | html %]</option>
                     [% END %]
 					</select>
 				</td>
@@ -138,7 +138,7 @@
 				<td><select name="Filter" id="location">
 					<option value=""> </option>
 					[% FOREACH locationloo IN locationloop %]
-					[% IF ( locationloo.selected ) %]<option value="[% locationloo.code %]" selected="selected">[% locationloo.description %]</option>[% ELSE %]<option value="[% locationloo.code %]">[% locationloo.description %]</option>[% END %]
+					[% IF ( locationloo.selected ) %]<option value="[% locationloo.code | html %]" selected="selected">[% locationloo.description | html %]</option>[% ELSE %]<option value="[% locationloo.code | html %]">[% locationloo.description | html %]</option>[% END %]
 					[% END %]
 					</select>
 				</td>
@@ -150,14 +150,14 @@
 				<td><select name="Filter" id="ccode">
 					<option value=""> </option>
 					[% FOREACH authval IN authvals %]
-					[% IF ( authval.selected ) %]<option value="[% authval.code %]" selected="selected">[% authval.description %]</option>[% ELSE %]<option value="[% authval.code %]">[% authval.description %]</option>[% END %]
+					[% IF ( authval.selected ) %]<option value="[% authval.code | html %]" selected="selected">[% authval.description | html %]</option>[% ELSE %]<option value="[% authval.code | html %]">[% authval.description | html %]</option>[% END %]
 					[% END %]
 					</select>
 				</td>
 			</tr>
             [% IF (notforloan) %]
                 <tr>
-                    <td>[% notforloan_label %]</td>
+                    <td>[% notforloan_label | html %]</td>
                     <td><input type="radio" name="Line"   value="items.notforloan" /></td>
                     <td><input type="radio" name="Column" value="items.notforloan" /></td>
                     <td>
@@ -165,8 +165,8 @@
                             <select name="Filter" id="notforloan">
                                 <option value="">&nbsp;</option>
                                 [% FOREACH av IN notforloan_avlist %]
-                                    <option value="[% av.authorised_value %]">
-                                        [% av.lib %]
+                                    <option value="[% av.authorised_value | html %]">
+                                        [% av.lib | html %]
                                     </option>
                                 [% END %]
                             </select>
@@ -182,7 +182,7 @@
             [% END %]
             [% IF (materials) %]
                 <tr>
-                    <td>[% materials_label %]</td>
+                    <td>[% materials_label | html %]</td>
                     <td><input type="radio" name="Line"   value="items.materials" /></td>
                     <td><input type="radio" name="Column" value="items.materials" /></td>
                     <td>
@@ -190,8 +190,8 @@
                             <select name="Filter" id="materials">
                                 <option value="">&nbsp;</option>
                                 [% FOREACH av IN materials_avlist %]
-                                    <option value="[% av.authorised_value %]">
-                                        [% av.lib %]
+                                    <option value="[% av.authorised_value | html %]">
+                                        [% av.lib | html %]
                                     </option>
                                 [% END %]
                             </select>
@@ -267,16 +267,16 @@
 			<label class="inline" for="MIME">Into an application: </label>
 			<select name="MIME" id="MIME">
 			[% FOREACH CGIextChoic IN CGIextChoice %]
-			<option value="[% CGIextChoic.type %]">[% CGIextChoic.type %]</option>
+			<option value="[% CGIextChoic.type | html %]">[% CGIextChoic.type | html %]</option>
 			[% END %]
 			</select>
 			<!-- <label class="inline" for="sep">Delimiter: </label> -->
             <select name="sep" id="sep" size="1">
             [% FOREACH value IN CGIsepChoice.values.sort() %]
               [% IF ( value == CGIsepChoice.default ) %]
-                <option value="[% value %]" selected="selected">[% value %]</option>
+                <option value="[% value | html %]" selected="selected">[% value | html %]</option>
               [% ELSE %]
-                <option value="[% value %]">[% value %]</option>
+                <option value="[% value | html %]">[% value | html %]</option>
               [% END %]
             [% END %]
             </select>
@@ -286,7 +286,7 @@
 
 	<fieldset class="action">
 	<input type="submit" value="Submit" />
-	<input type="hidden" name="report_name" value="[% report_name %]" />
+	<input type="hidden" name="report_name" value="[% report_name | html %]" />
 	<input type="hidden" name="do_it" value="1" />
 	</fieldset>
 	</form>

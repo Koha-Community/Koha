@@ -1,5 +1,5 @@
 <div class="gradient">
-<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin Acquisitions Resident Search Box -->
+<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></h1><!-- Begin Acquisitions Resident Search Box -->
 <div id="header_search">
 <div id="supplier_search" class="residentsearch">
 	<p class="tip">Search vendors:</p>
@@ -11,8 +11,8 @@
 	<p class="tip">Search orders:</p>
 	
 		<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
-        <label for="title">Title: </label> <input type="text" id="title" name="title" size="15" value="[% title %]" />
-        <label for="searchsupplier">Vendor:</label> <input type="text" id="searchsupplier" name="name" size="15" value="[% name|html %]" />
+        <label for="title">Title: </label> <input type="text" id="title" name="title" size="15" value="[% title | html %]" />
+        <label for="searchsupplier">Vendor:</label> <input type="text" id="searchsupplier" name="name" size="15" value="[% name | html %]" />
         <input type="hidden" id="do_search" name="do_search" value="do" />
         <span class="filteraction" id="filteraction_off" style="display:none"> <a href="#" class="toggle_element" data-element="#filters,.filteraction">[-]</a></span>
         <span class="filteraction" id="filteraction_on"> <a href="#" class="toggle_element" data-element="#filters,.filteraction">[+]</a></span>

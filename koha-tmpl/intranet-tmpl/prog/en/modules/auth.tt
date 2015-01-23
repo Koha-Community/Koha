@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Koha %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
@@ -18,7 +19,7 @@
 
 <div id="login">
 <h1><a href="http://koha-community.org">Koha</a></h1>
-[% IF (Koha.Preference('StaffLoginInstructions')) %]<div id="login_instructions">[% Koha.Preference('StaffLoginInstructions') %]</div>[% END %]
+[% IF (Koha.Preference('StaffLoginInstructions')) %]<div id="login_instructions">[% Koha.Preference('StaffLoginInstructions') | $raw %]</div>[% END %]
 [% IF ( nopermission ) %]
 <div id="login_error">
     <strong>Error:</strong>
@@ -42,20 +43,20 @@
 [% IF too_many_login_attempts %]
     <div id="login_error"><strong>Error: </strong>This account has been locked!</div>
     [% IF Koha.Preference('OpacResetPassword') && Koha.Preference('OpacBaseURL') %]
-        <a href="[% Koha.Preference('OpacBaseURL') %]/cgi-bin/koha/opac-password-recovery.pl">You must reset your password</a>.
+        <a href="[% Koha.Preference('OpacBaseURL') | html %]/cgi-bin/koha/opac-password-recovery.pl">You must reset your password</a>.
     [% END %]
 [% ELSIF invalid_username_or_password %]
 <div id="login_error"><strong>Error: </strong>Invalid username or password</div>
 [% END %]
 
 <!-- login prompt time-->
-<form action="[% script_name %]" method="post" name="loginform" id="loginform">
+<form action="[% script_name | html %]" method="post" name="loginform" id="loginform">
     <input type="hidden" name="koha_login_context" value="intranet" />
 [% FOREACH INPUT IN INPUTS %]
-    <input type="hidden" name="[% INPUT.name |html %]" value="[% INPUT.value |html %]" />
+    <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />
 [% END %]
 <p><label for="userid">Username:</label>
-<input type="text" name="userid" id="userid" class="input focus" value="[% userid %]" size="20" tabindex="1" />
+<input type="text" name="userid" id="userid" class="input focus" value="[% userid | html %]" size="20" tabindex="1" />
 </p>
 <p><label for="password">Password:</label>
 <input type="password" name="password" id="password" class="input" value="" size="20" tabindex="2" />
@@ -67,7 +68,7 @@
         <select name="branch" id="branch" class="input" tabindex="3">
             <option value="">My library</option>
             [% FOREACH l IN Branches.all( unfiltered => 1 ) %]
-                <option value="[% l.branchcode %]">[% l.branchname %]</option>
+                <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
             [% END %]
         </select>
     </p>
@@ -86,14 +87,14 @@
 [% END %]
 
 [% IF ( casServerUrl ) %]
-    <p><a href="[% casServerUrl %]">If you have a CAS account, please click here to login</a>.<p>
+    <p><a href="[% casServerUrl | html %]">If you have a CAS account, please click here to login</a>.<p>
 [% END %]
 
 [% IF ( casServersLoop ) %]
     <p>If you have a CAS account, please choose against which one you would like to authenticate:</p>
 <ul>
     [% FOREACH casServer IN casServersLoop %]
-        <li><a href="[% casServer.value %]">[% casServer.name %]</a></li>
+        <li><a href="[% casServer.value | html %]">[% casServer.name | html %]</a></li>
     [% END %]
 [% END %]
 [% END %]

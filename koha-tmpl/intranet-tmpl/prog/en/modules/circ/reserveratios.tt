@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
@@ -7,12 +8,12 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Hold ratios</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 <style type="text/css">
     .sql { display: none; }
     .ulined { text-decoration: underline; }
     .ratiolimit { color: blue; cursor: pointer; }
-    #holdst ul li {  list-style: outside url("[% interface %]/[% theme %]/img/item-bullet.gif") disc; }
+    #holdst ul li {  list-style: outside url("[% interface | html %]/[% theme | html %]/img/item-bullet.gif") disc; }
 </style>
 </head>
 
@@ -29,8 +30,8 @@
 <h1>Hold ratios to calculate items needed</h1>
    <h3>Calculated on [% todaysdate | $KohaDates %]. From [% from | $KohaDates %]
     to [% to | $KohaDates %]</h3>
-<p>These items have a hold ratio &ge; [% ratio %].</p>
-<div class="sql">[% sql %]</div>
+<p>These items have a hold ratio &ge; [% ratio | html %].</p>
+<div class="sql">[% sql | html %]</div>
 
 [% IF ( reserveloop ) %]
     <table id="holdst">
@@ -51,48 +52,48 @@
       <tbody>
       [% FOREACH reserveloo IN reserveloop %]
         <tr>
-            <td><p>[% reserveloo.reservecount %]</p></td>
-            <td><p>[% reserveloo.itemcount %]</p></td>
-            <td><p class="ratiolimit">[% reserveloo.thisratio %]</p></td>
-            <td> [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %][% reserveloo.title |html %] [% IF ( reserveloo.subtitle ) %][% FOREACH subtitl IN reserveloo.subtitle %][% subtitl.subfield %][% END %][% END %]</a>[% IF ( reserveloo.author ) %] by [% reserveloo.author %][% END %]
+            <td><p>[% reserveloo.reservecount | html %]</p></td>
+            <td><p>[% reserveloo.itemcount | html %]</p></td>
+            <td><p class="ratiolimit">[% reserveloo.thisratio | html %]</p></td>
+            <td> [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %][% reserveloo.title | html %] [% IF ( reserveloo.subtitle ) %][% FOREACH subtitl IN reserveloo.subtitle %][% subtitl.subfield | html %][% END %][% END %]</a>[% IF ( reserveloo.author ) %] by [% reserveloo.author | html %][% END %]
             </td>
             <td>
                   <ul>
                       [% FOREACH homebranch IN reserveloo.homebranch_list %]
-                          <li>[% Branches.GetName ( homebranch ) %]</li>
+                          <li>[% Branches.GetName ( homebranch ) | html %]</li>
                       [% END %]
                   </ul>
             </td>
             <td>
                   <ul>
                       [% FOREACH holdingbranch IN reserveloo.holdingbranch_list %]
-                          <li>[% Branches.GetName ( holdingbranch ) %]</li>
+                          <li>[% Branches.GetName ( holdingbranch ) | html %]</li>
                       [% END %]
                   </ul>
             </td>
             <td>
                   <ul>
                       [% FOREACH location IN reserveloo.location %]
-                          <li>[% AuthorisedValues.GetByCode( 'LOC', location )%]</li>
+                          <li>[% AuthorisedValues.GetByCode( 'LOC', location ) | html %]</li>
                       [% END %]
                   </ul>
             </td>
             <td>
                   <ul>
                       [% FOREACH itype IN reserveloo.itype %]
-                          <li>[% ItemTypes.GetDescription( itype ) %]</li>
+                          <li>[% ItemTypes.GetDescription( itype ) | html %]</li>
                       [% END %]
                   </ul>
             </td>
             <td>
                   <ul>
                       [% FOREACH listcall IN reserveloo.listcall %]
-                          <li>[% listcall %]</li>
+                          <li>[% listcall | html %]</li>
                       [% END %]
                   </ul>
             </td>
-            <td>[% IF ( reserveloo.thisratio_atleast1 ) %]<p>[% IF ( CAN_user_acquisition && basketno && booksellerid ) %]<!-- [% reserveloo.ratiocalc %] --><a href="/cgi-bin/koha/acqui/neworderempty.pl?biblionumber=[% reserveloo.biblionumber %]&amp;booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;rr_quantity_to_order=[% reserveloo.ratiocalc %]">[% END %]<b>[% reserveloo.ratiocalc %] to order</b>[% IF ( CAN_user_acquisition && basketno && booksellerid ) %]</a>[% END %]
-            [% IF ( reserveloo.pendingorders ) %]<br><b>[% reserveloo.pendingorders %] pending</b>[% END %]</p>[% END %]</td>
+            <td>[% IF ( reserveloo.thisratio_atleast1 ) %]<p>[% IF ( CAN_user_acquisition && basketno && booksellerid ) %]<!-- [% reserveloo.ratiocalc | html %] --><a href="/cgi-bin/koha/acqui/neworderempty.pl?biblionumber=[% reserveloo.biblionumber | html %]&amp;booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]&amp;rr_quantity_to_order=[% reserveloo.ratiocalc | html %]">[% END %]<b>[% reserveloo.ratiocalc | html %] to order</b>[% IF ( CAN_user_acquisition && basketno && booksellerid ) %]</a>[% END %]
+            [% IF ( reserveloo.pendingorders ) %]<br><b>[% reserveloo.pendingorders | html %] pending</b>[% END %]</p>[% END %]</td>
         </tr>
       [% END %]
       </tbody>
@@ -109,7 +110,7 @@
 <ol>
     <li>
         <label for="ratio">Hold ratio:</label>
-        <input type="text" size="5" id="ratio" name="ratio" value="[% ratio %]" />
+        <input type="text" size="5" id="ratio" name="ratio" value="[% ratio | html %]" />
     <li>
 
     <li>
@@ -136,8 +137,8 @@
 <fieldset class="action"><input type="submit" value="Go" class="submit"/></fieldset>
 </fieldset>
 [% IF ( CAN_user_acquisition && basketno && booksellerid ) %]
-<input type="hidden" name="booksellerid" value="[% booksellerid %]" />
-<input type="hidden" name="basketno" value="[% basketno %]" />
+<input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
+<input type="hidden" name="basketno" value="[% basketno | html %]" />
 [% END %]
 </form>
 

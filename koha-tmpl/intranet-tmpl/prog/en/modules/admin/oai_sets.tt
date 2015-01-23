@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -9,7 +10,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( op_new ) %]<a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a> &rsaquo; Add a new OAI set[% ELSIF ( op_mod ) %]<a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a> &rsaquo; Edit OAI set '[% spec |html %]'[% ELSE %] OAI sets configuration[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( op_new ) %]<a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a> &rsaquo; Add a new OAI set[% ELSIF ( op_mod ) %]<a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a> &rsaquo; Edit OAI set '[% spec | html %]'[% ELSE %] OAI sets configuration[% END %]</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -22,26 +23,26 @@
                 <h2>Add a new OAI set</h2>
                 <input type="hidden" name="op" value="savenew" />
             [% ELSIF ( op_mod ) %]
-                <h2>Edit OAI set '[% spec |html %]'</h2>
+                <h2>Edit OAI set '[% spec | html %]'</h2>
                     <input type="hidden" name="op" value="savemod" />
-                    <input type="hidden" name="id" value="[% id %]" />
+                    <input type="hidden" name="id" value="[% id | html %]" />
             [% END %]
                 <fieldset id="oaidetails" class="rows">
                     <ol>
                         <li>
                             <label for="spec" class="required">setSpec: </label>
-                            <input type="text" id="spec" name="spec" value="[% spec %]" required="required" class="required" />
+                            <input type="text" id="spec" name="spec" value="[% spec | html %]" required="required" class="required" />
                             <span class="required">Required</span>
                         </li>
                         <li>
                             <label for="name" class="required">setName: </label>
-                            <input type="text" id="name" name="name" value="[% name %]" required="required" class="required" />
+                            <input type="text" id="name" name="name" value="[% name | html %]" required="required" class="required" />
                             <span class="required">Required</span>
                         </li>
                         [% FOREACH desc IN descriptions %]
                             <li>
                                 <label>setDescription: </label>
-                                <textarea style="vertical-align:middle" rows="2" cols="30" name="description">[% desc.description %]</textarea>
+                                <textarea style="vertical-align:middle" rows="2" cols="30" name="description">[% desc.description | html %]</textarea>
                                 <a class="remove_description" href="#"><i class="fa fa-fw fa-trash"></i> Remove</a>
                             </li>
                         [% END %]
@@ -73,13 +74,13 @@
                 <tbody>
                     [% FOREACH set IN sets_loop %]
                         <tr>
-                            <td>[% set.spec |html %]</td>
-                            <td>[% set.name |html %]</td>
+                            <td>[% set.spec | html %]</td>
+                            <td>[% set.name | html %]</td>
                             <td>
                                 [% IF set.descriptions %]
                                     <ul>
                                         [% FOREACH desc IN set.descriptions %]
-                                            <li>[% desc.description |html %]</li>
+                                            <li>[% desc.description | html %]</li>
                                         [% END %]
                                     </ul>
                                 [% ELSE %]
@@ -88,12 +89,12 @@
                             </td>
                             <td>
                               <div class="dropdown">
-                                <a class="btn btn-default btn-xs dropdown-toggle" id="oaisetsactions[% set.id %]" role="button" data-toggle="dropdown" href="#">
+                                <a class="btn btn-default btn-xs dropdown-toggle" id="oaisetsactions[% set.id | html %]" role="button" data-toggle="dropdown" href="#">
                                   Actions <b class="caret"></b></a>
-                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="oaisetsactions[% set.id %]">
-                                  <li><a href="/cgi-bin/koha/admin/oai_sets.pl?op=mod&amp;id=[% set.id %]"><i class="fa fa-fw fa-pencil"></i> Edit</a></li>
-                                  <li><a class="delete_oai_set" href="/cgi-bin/koha/admin/oai_sets.pl?op=del&amp;id=[% set.id %]"><i class="fa fa-fw fa-trash"></i> Delete</a></li>
-                                  <li><a href="/cgi-bin/koha/admin/oai_set_mappings.pl?id=[% set.id %]"><i class="fa fa-fw fa-info"></i> Define mappings</a></li>
+                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="oaisetsactions[% set.id | html %]">
+                                  <li><a href="/cgi-bin/koha/admin/oai_sets.pl?op=mod&amp;id=[% set.id | html %]"><i class="fa fa-fw fa-pencil"></i> Edit</a></li>
+                                  <li><a class="delete_oai_set" href="/cgi-bin/koha/admin/oai_sets.pl?op=del&amp;id=[% set.id | html %]"><i class="fa fa-fw fa-trash"></i> Delete</a></li>
+                                  <li><a href="/cgi-bin/koha/admin/oai_set_mappings.pl?id=[% set.id | html %]"><i class="fa fa-fw fa-info"></i> Define mappings</a></li>
                                 </ul>
                               </div>
                             </td>
@@ -114,7 +115,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
     <script type="text/javascript">
         function newDescField() {
             $("#adddescription").before(

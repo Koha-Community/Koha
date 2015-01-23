@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE Biblio %]
@@ -25,7 +26,7 @@
 <div id="breadcrumbs">
          <a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
-&rsaquo; Search [% IF ( query_desc ) %]for '[% query_desc |html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %]
+&rsaquo; Search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %]
 </div>
 
 <div id="doc3" class="yui-t1">
@@ -43,7 +44,7 @@
             <ul style="list-style: none;">
             [% FOREACH SPELL_SUGGES IN SPELL_SUGGEST %]
             <li>
-                <a href="/cgi-bin/koha/catalogue/search.pl?q=[% SPELL_SUGGES.spsuggestion %]">[% SPELL_SUGGES.spsuggestion %]</a>
+                <a href="/cgi-bin/koha/catalogue/search.pl?q=[% SPELL_SUGGES.spsuggestion | html %]">[% SPELL_SUGGES.spsuggestion | html %]</a>
             </li>
             [% END %]
             </ul>
@@ -53,7 +54,7 @@
     [% IF ( total ) %]
 
         <h3>
-            [% total %] result(s) found [% IF ( query_desc ) %]for <span class="results_query_desc">'[% query_desc |html %]'</span>[% END %][% IF limit_desc  %]&nbsp;with limit(s): <span class="results_limit_desc">'[% limit_desc | html %]'</span>[% END %][% IF ( LibraryName ) %] in [% LibraryName %] Catalog[% END %].
+            [% total | html %] result(s) found [% IF ( query_desc ) %]for <span class="results_query_desc">'[% query_desc | html %]'</span>[% END %][% IF limit_desc  %]&nbsp;with limit(s): <span class="results_limit_desc">'[% limit_desc | html %]'</span>[% END %][% IF ( LibraryName ) %] in [% LibraryName | html %] Catalog[% END %].
         </h3>
 
         <div id="searchheader">
@@ -85,10 +86,10 @@
                             [% FOREACH s IN add_to_some_private_shelves %]
                                 [% IF shelfnumber != s.shelfnumber %]
                                     <li>
-                                        <a href="#" class="addtolist" data-shelfnumber="[% s.shelfnumber %]">[% s.shelfname |html %]</a>
+                                        <a href="#" class="addtolist" data-shelfnumber="[% s.shelfnumber | html %]">[% s.shelfname | html %]</a>
                                     </li>
                                     [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
-                                    [% IF number_of_private_shelves == 10 %][% LAST %][% END %]
+                                    [% IF number_of_private_shelves == 10 %][% LAST | html %][% END %]
                                 [% END %]
                             [% END %]
                         [% END %]
@@ -98,10 +99,10 @@
                             [% FOREACH s IN add_to_some_public_shelves %]
                                 [% IF shelfnumber != s.shelfnumber %]
                                     <li>
-                                        <a href="#" data-shelfnumber="[% s.shelfnumber %]" class="addtolist">[% s.shelfname |html %]</a>
+                                        <a href="#" data-shelfnumber="[% s.shelfnumber | html %]" class="addtolist">[% s.shelfname | html %]</a>
                                     </li>
                                     [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
-                                    [% IF number_of_public_shelves == 10 %][% LAST %][% END %]
+                                    [% IF number_of_public_shelves == 10 %][% LAST | html %][% END %]
                                 [% END %]
                             [% END %]
                         [% END %]
@@ -128,9 +129,9 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li><a href="#" class="placehold">Place hold</a></li>
-                            <li><a href="#" class="placeholdfor">Place hold for [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])</a></li>
+                            <li><a href="#" class="placeholdfor">Place hold for [% holdfor_firstname | html %] [% holdfor_surname | html %] ([% holdfor_cardnumber | html %])</a></li>
                             <li class="divider"></li>
-                            <li><a href="#" id="forgetholdfor">Forget  [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])</a></li>
+                            <li><a href="#" id="forgetholdfor">Forget  [% holdfor_firstname | html %] [% holdfor_surname | html %] ([% holdfor_cardnumber | html %])</a></li>
                         </ul>
                     </div>
                 [% ELSE %]
@@ -146,10 +147,10 @@
             [% IF ( searchdesc ) %]
                 [% BLOCK sort_search_query ~%]
                     [%~ FOREACH QUERY_INPUT IN QUERY_INPUTS ~%]
-                        &amp;[% QUERY_INPUT.input_name |html %]=[% QUERY_INPUT.input_value |html %]
+                        &amp;[% QUERY_INPUT.input_name | html %]=[% QUERY_INPUT.input_value | html %]
                     [%~ END ~%]
                     [%~ FOREACH LIMIT_INPUT IN LIMIT_INPUTS ~%]
-                        &amp;[% LIMIT_INPUT.input_name |html %]=[% LIMIT_INPUT.input_value |html %]
+                        &amp;[% LIMIT_INPUT.input_name | html %]=[% LIMIT_INPUT.input_value | html %]
                     [%~ END ~%]
                 [%~ END %]
             [% END %]
@@ -255,7 +256,7 @@
             <h3>No results found</h3>
         [% IF ( searchdesc ) %]
             <p>
-                No results match your search [% IF ( query_desc ) %]for <span style="font-weight: bold;">'[% query_desc |html %]'</span>[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s): <span style="font-weight: bold;">'[% limit_desc | html %]'</span>[% END %][% IF ( LibraryName ) %] in [% LibraryName %] Catalog[% END %].
+                No results match your search [% IF ( query_desc ) %]for <span style="font-weight: bold;">'[% query_desc | html %]'</span>[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s): <span style="font-weight: bold;">'[% limit_desc | html %]'</span>[% END %][% IF ( LibraryName ) %] in [% LibraryName | html %] Catalog[% END %].
             </p>
         [% ELSE %]
             <p>You did not specify any search criteria.</p>
@@ -264,7 +265,7 @@
     [% END %]
 
     [% IF ( query_error ) %]
-        <div class="dialog alert"><p><strong>Error:</strong> [% query_error %]</p></div>
+        <div class="dialog alert"><p><strong>Error:</strong> [% query_error | html %]</p></div>
     [% END %]
 
     <!-- Search Results Table -->
@@ -325,10 +326,10 @@
                 [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
                     <tr>
                         <td>
-                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=[% scan_index_to_use %]&amp;q=[% SEARCH_RESULT.scan_use |url %]&quot;[% SEARCH_RESULT.title %]&quot;">[% SEARCH_RESULT.title |html %]</a>
+                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=[% scan_index_to_use | html %]&amp;q=[% SEARCH_RESULT.scan_use |url %]&quot;[% SEARCH_RESULT.title | html %]&quot;">[% SEARCH_RESULT.title | html %]</a>
                         </td>
                         <td>
-                            [% SEARCH_RESULT.author %]
+                            [% SEARCH_RESULT.author | html %]
                         </td>
                     </tr>
                 [% END %]
@@ -342,10 +343,10 @@
                 <form action="/cgi-bin/koha/catalogue/search.pl" method="get" name="bookbag_form" id="bookbag_form">
                 [% IF ( searchdesc ) %]
                 [% FOREACH QUERY_INPUT IN QUERY_INPUTS %]
-                <input type="hidden" name="[% QUERY_INPUT.input_name |html %]" value="[% QUERY_INPUT.input_value |html %]"/>
+                <input type="hidden" name="[% QUERY_INPUT.input_name | html %]" value="[% QUERY_INPUT.input_value | html %]"/>
                 [% END %]
                 [% FOREACH LIMIT_INPUT IN LIMIT_INPUTS %]
-                <input type="hidden" name="[% LIMIT_INPUT.input_name |html %]" value="[% LIMIT_INPUT.input_value |html %]"/>
+                <input type="hidden" name="[% LIMIT_INPUT.input_name | html %]" value="[% LIMIT_INPUT.input_value | html %]"/>
                 [% END %]
                 [% END %]
 
@@ -363,16 +364,16 @@
                             [% IF ( AmazonCoverImages || LocalCoverImages ) %]
                                 <td>
                                     [% IF ( LocalCoverImages) %]
-                                        <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
-                                        <span title="[% SEARCH_RESULT.biblionumber |url %]" class="[% SEARCH_RESULT.biblionumber %]" id="local-thumbnail[% loop.count %]"></span>
+                                        <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage | html %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
+                                        <span title="[% SEARCH_RESULT.biblionumber |url %]" class="[% SEARCH_RESULT.biblionumber | html %]" id="local-thumbnail[% loop.count | html %]"></span>
                                         </a>
                                     [% END %]
                                     [% IF ( AmazonCoverImages ) %]
                                         [% IF ( SEARCH_RESULT.normalized_isbn ) %]
-                                            <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
-                                            <img src="https://images-na.ssl-images-amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" />
+                                            <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage | html %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
+                                            <img src="https://images-na.ssl-images-amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" />
                                         [% ELSIF ( !LocalCoverImages ) %]
-                                            <a class="p1 no-amazon-cover" href="/cgi-bin/koha/catalogue/[% DetailPage %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
+                                            <a class="p1 no-amazon-cover" href="/cgi-bin/koha/catalogue/[% DetailPage | html %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
                                             <img src="https://images-na.ssl-images-amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" class="thumbnail" />
                                         [% END %]
                                         </a>
@@ -380,58 +381,58 @@
                                 </td>
                             [% END %]
                             <td>
-                                <input type="checkbox" class="selection" id="bib[% SEARCH_RESULT.biblionumber %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber %]" style="display:none" />
+                                <input type="checkbox" class="selection" id="bib[% SEARCH_RESULT.biblionumber | html %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber | html %]" style="display:none" />
                             </td>
                             <td>
 
                                 [% UNLESS ( item_level_itypes ) %]
                                     <div class="result-biblio-itemtype">
                                         [% IF !noItemTypeImages && SEARCH_RESULT.imageurl %]
-                                            <img src="[% SEARCH_RESULT.imageurl %]" alt="[% SEARCH_RESULT.description %]" />
+                                            <img src="[% SEARCH_RESULT.imageurl | html %]" alt="[% SEARCH_RESULT.description | html %]" />
                                         [% END %]
-                                        [% SEARCH_RESULT.description %]
+                                        [% SEARCH_RESULT.description | html %]
                                     </div>
                                 [% END %]
 
 			    [% IF ( SEARCH_RESULT.XSLTResultsRecord ) %]
-                [% SEARCH_RESULT.result_number %].
-				[% SEARCH_RESULT.XSLTResultsRecord %]
+                [% SEARCH_RESULT.result_number | html %].
+                [% SEARCH_RESULT.XSLTResultsRecord | $raw %]
 			    [% ELSE %]
-                                <p>[% SEARCH_RESULT.result_number %].
-                                 [% biblionumber = SEARCH_RESULT.biblionumber %]
+                                <p>[% SEARCH_RESULT.result_number | html %].
+                                 [% biblionumber = SEARCH_RESULT.biblionumber | html %]
 
 				[% INCLUDE 'biblio-default-view.inc' %]
-                                            <b>[% IF ( SEARCH_RESULT.title ) %][% SEARCH_RESULT.title |html %][% ELSE %]No title[% END %]</b>
+                                            <b>[% IF ( SEARCH_RESULT.title ) %][% SEARCH_RESULT.title | html %][% ELSE %]No title[% END %]</b>
                                             </a>
-                                        [% FOREACH subtitl IN SEARCH_RESULT.subtitle %], [% subtitl.subfield %][% END %]
-                                        [% IF ( SEARCH_RESULT.seriestitle ) %][% SEARCH_RESULT.seriestitle %][% END %]
-                                        [% IF ( SEARCH_RESULT.volume ) %][% SEARCH_RESULT.volume %][% END %] [% IF ( SEARCH_RESULT.volumeddesc ) %], [% SEARCH_RESULT.volumeddesc %][% END %]
+                                        [% FOREACH subtitl IN SEARCH_RESULT.subtitle %], [% subtitl.subfield | html %][% END %]
+                                        [% IF ( SEARCH_RESULT.seriestitle ) %][% SEARCH_RESULT.seriestitle | html %][% END %]
+                                        [% IF ( SEARCH_RESULT.volume ) %][% SEARCH_RESULT.volume | html %][% END %] [% IF ( SEARCH_RESULT.volumeddesc ) %], [% SEARCH_RESULT.volumeddesc | html %][% END %]
                                 </p>
                                 [% IF ( SEARCH_RESULT.summary ) %]
                                         [% IF ( SEARCH_RESULT.author ) %]
-                                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=au&amp;q=[% SEARCH_RESULT.author |url %]" title="Search for this Author">[% SEARCH_RESULT.author %]</a>
+                                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=au&amp;q=[% SEARCH_RESULT.author |url %]" title="Search for this Author">[% SEARCH_RESULT.author | html %]</a>
                                         [% ELSE %]
                                             &nbsp;
                                         [% END %]
-                                    <p>[% SEARCH_RESULT.summary %]</p>
+                                    <p>[% SEARCH_RESULT.summary | html %]</p>
                                 [% ELSE %]
                                     <p>
                                         [% IF ( SEARCH_RESULT.author ) %]
-                                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=au&amp;q=[% SEARCH_RESULT.author |url %]" title="Search for this Author">[% SEARCH_RESULT.author %]</a>
+                                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=au&amp;q=[% SEARCH_RESULT.author |url %]" title="Search for this Author">[% SEARCH_RESULT.author | html %]</a>
                                         [% ELSE %]
                                             &nbsp;
                                         [% END %]
                                         Description:
-                                        <span class="results_imprint">[% IF ( SEARCH_RESULT.place ) %][% SEARCH_RESULT.place %] [% END %]
-                                        [% IF ( SEARCH_RESULT.publishercode ) %][% SEARCH_RESULT.publishercode %][% END %] [% IF ( SEARCH_RESULT.publicationyear ) %] [% SEARCH_RESULT.publicationyear %] [% ELSIF ( SEARCH_RESULT.copyrightdate ) %] [% SEARCH_RESULT.copyrightdate %][% END %]</span>
-										[% IF ( SEARCH_RESULT.edition ) %]<span class="results_edition">Edition: [% SEARCH_RESULT.edition %]</span>[% END %]
-                                        <span class="results_physicaldesc">[% IF ( SEARCH_RESULT.pages ) %]: [% SEARCH_RESULT.pages %][% END %]
-                                        [% IF ( SEARCH_RESULT.size ) %] ; [% SEARCH_RESULT.size %][% END %]</span> [% IF ( SEARCH_RESULT.isbn ) %]<span class="results_isbn">ISBN: [% SEARCH_RESULT.isbn | replace('\s\|', ', ')%]</span>[% END %]
-                                        <span class="results_itemtype">[% SEARCH_RESULT.description %]</span>
-                                        [% IF ( SEARCH_RESULT.timestamp ) %] <i>(modified on [% SEARCH_RESULT.timestamp %])</i>[% END %]
-                                        [% IF ( SEARCH_RESULT.cn_class ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% SEARCH_RESULT.cn_class |uri %]%22">[% SEARCH_RESULT.cn_class %]</a>][% END %]
+                                        <span class="results_imprint">[% IF ( SEARCH_RESULT.place ) %][% SEARCH_RESULT.place | html %] [% END %]
+                                        [% IF ( SEARCH_RESULT.publishercode ) %][% SEARCH_RESULT.publishercode | html %][% END %] [% IF ( SEARCH_RESULT.publicationyear ) %] [% SEARCH_RESULT.publicationyear | html %] [% ELSIF ( SEARCH_RESULT.copyrightdate ) %] [% SEARCH_RESULT.copyrightdate | html %][% END %]</span>
+										[% IF ( SEARCH_RESULT.edition ) %]<span class="results_edition">Edition: [% SEARCH_RESULT.edition | html %]</span>[% END %]
+                                        <span class="results_physicaldesc">[% IF ( SEARCH_RESULT.pages ) %]: [% SEARCH_RESULT.pages | html %][% END %]
+                                        [% IF ( SEARCH_RESULT.size ) %] ; [% SEARCH_RESULT.size | html %][% END %]</span> [% IF ( SEARCH_RESULT.isbn ) %]<span class="results_isbn">ISBN: [% SEARCH_RESULT.isbn | replace('\s\|', ', ') | html %]</span>[% END %]
+                                        <span class="results_itemtype">[% SEARCH_RESULT.description | html %]</span>
+                                        [% IF ( SEARCH_RESULT.timestamp ) %] <i>(modified on [% SEARCH_RESULT.timestamp | html %])</i>[% END %]
+                                        [% IF ( SEARCH_RESULT.cn_class ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% SEARCH_RESULT.cn_class |uri %]%22">[% SEARCH_RESULT.cn_class | html %]</a>][% END %]
                                     </p>
-                                    [% IF ( SEARCH_RESULT.searchhighlightblob ) %]<p class="searchhighlightblob">[% SEARCH_RESULT.searchhighlightblob %]</p>[% END %]
+                                    [% IF ( SEARCH_RESULT.searchhighlightblob ) %]<p class="searchhighlightblob">[% SEARCH_RESULT.searchhighlightblob | html %]</p>[% END %]
 
                                 [% END %]
                                 [% END %]
@@ -441,35 +442,35 @@
                                 <span class="noholdstext">No holds allowed</span>
                             [% ELSE %]
                                 [% IF CAN_user_reserveforothers_place_holds %]
-                                    <a id="reserve_[% SEARCH_RESULT.biblionumber %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Holds ([% Biblio.HoldsCount( SEARCH_RESULT.biblionumber ) %])</a>
-                                    [% IF ( holdfor ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]&amp;findborrower=[% holdfor_cardnumber %]">Place hold for [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])</a></span>[% END %]
+                                    <a id="reserve_[% SEARCH_RESULT.biblionumber | html %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]">Holds ([% Biblio.HoldsCount( SEARCH_RESULT.biblionumber ) | html %])</a>
+                                    [% IF ( holdfor ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]&amp;findborrower=[% holdfor_cardnumber | html %]">Place hold for [% holdfor_firstname | html %] [% holdfor_surname | html %] ([% holdfor_cardnumber | html %])</a></span>[% END %]
                                 [% ELSE %]
-                                    Holds ([% Biblio.HoldsCount( SEARCH_RESULT.biblionumber ) %])
+                                    Holds ([% Biblio.HoldsCount( SEARCH_RESULT.biblionumber ) | html %])
                                 [% END %]
                             [% END %]
 
                                 [% IF Koha.Preference('intranetbookbag') == 1 %]
                                     [% IF ( SEARCH_RESULT.incart ) %]
-                                        | <a class="addtocart" id="cart[% SEARCH_RESULT.biblionumber %]" href="#">In your cart</a> <a class="cartRemove" id="cartR[% SEARCH_RESULT.biblionumber %]" href="#">(remove)</a>
+                                        | <a class="addtocart" id="cart[% SEARCH_RESULT.biblionumber | html %]" href="#">In your cart</a> <a class="cartRemove" id="cartR[% SEARCH_RESULT.biblionumber | html %]" href="#">(remove)</a>
                                     [% ELSE %]
-                                        | <a class="addtocart" id="cart[% SEARCH_RESULT.biblionumber %]" href="#">Add to cart</a> <a style="display:none;" class="cartRemove" id="cartR[% SEARCH_RESULT.biblionumber %]" href="#">(remove)</a>
+                                        | <a class="addtocart" id="cart[% SEARCH_RESULT.biblionumber | html %]" href="#">Add to cart</a> <a style="display:none;" class="cartRemove" id="cartR[% SEARCH_RESULT.biblionumber | html %]" href="#">(remove)</a>
                                     [% END %]
                                 [% END # / IF intranetbookbag %]
 
                           [% IF Koha.Preference('ArticleRequests') %]
-                              | <a id="requst_article_[% SEARCH_RESULT.biblionumber %]" href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Request article</a>
+                              | <a id="requst_article_[% SEARCH_RESULT.biblionumber | html %]" href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]">Request article</a>
                           [% END %]
 
                           [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
-                          | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Edit record</a>
+                          | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]">Edit record</a>
                           [% END %]
                           [% IF ( CAN_user_editcatalogue_edit_items ) %]
-                          | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Edit items</a>
+                          | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]">Edit items</a>
                           [% END %]
 
                           [% IF ( OPACBaseURL ) %]
                               <span class="view-in-opac">
-                                | <a href="[% Koha.Preference('OPACBaseURL') %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]" target="_blank">OPAC view</a>
+                                | <a href="[% Koha.Preference('OPACBaseURL') | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]" target="_blank">OPAC view</a>
                               </span>
                           [% END %]
 
@@ -483,7 +484,7 @@
                                                 <span class="blocker inaccurate-item-statuses" title="Item statuses may be inaccurate. Please view the record details for accurate item statuses">
                                             [% END %]
 
-                                            [% SEARCH_RESULT.items_count %] [% IF ( SEARCH_RESULT.itemsplural ) %]items[% ELSE %]item[% END %][% IF ( SEARCH_RESULT.availablecount ) %], [% SEARCH_RESULT.availablecount %] available:[% ELSE %], None available[% END %]
+                                            [% SEARCH_RESULT.items_count | html %] [% IF ( SEARCH_RESULT.itemsplural ) %]items[% ELSE %]item[% END %][% IF ( SEARCH_RESULT.availablecount ) %], [% SEARCH_RESULT.availablecount | html %] available:[% ELSE %], None available[% END %]
 
                                             [% IF MaxSearchResultsItemsPerRecordStatusCheck && SEARCH_RESULT.items_count > MaxSearchResultsItemsPerRecordStatusCheck %]
                                                 </span>
@@ -496,16 +497,16 @@
 
                                         [% IF item_level_itypes && !noItemTypeImages && available_items_loo.imageurl %]
                                         <li style="list-style: none; list-style-type: none;">
-                                          <img src="[% available_items_loo.imageurl %]" title="[% available_items_loo.description %]" alt="[% available_items_loo.description %]" />
+                                          <img src="[% available_items_loo.imageurl | html %]" title="[% available_items_loo.description | html %]" alt="[% available_items_loo.description | html %]" />
                                         [% ELSE %]
                                         <li>
                                         [% END %]
-                                        [% IF ( available_items_loo.branchname ) %][% available_items_loo.branchname %][% END %]
-                                        [% IF ( available_items_loo.location ) %][% available_items_loo.location %][% END %]
-                                        [% IF ( available_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% available_items_loo.itemcallnumber |uri %]%22">[% available_items_loo.itemcallnumber %]</a>][% END %]
-                                        ([% available_items_loo.count %])
+                                        [% IF ( available_items_loo.branchname ) %][% available_items_loo.branchname | html %][% END %]
+                                        [% IF ( available_items_loo.location ) %][% available_items_loo.location | html %][% END %]
+                                        [% IF ( available_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% available_items_loo.itemcallnumber |uri %]%22">[% available_items_loo.itemcallnumber | html %]</a>][% END %]
+                                        ([% available_items_loo.count | html %])
                                         [% IF item_level_itypes && available_items_loo.description %]
-                                        <br/>[% available_items_loo.description %]
+                                        <br/>[% available_items_loo.description | html %]
                                         [% END %]
                                         </li>
                                     [% END %]
@@ -513,21 +514,21 @@
                                     [% END %]
 
                                    [% IF ( SEARCH_RESULT.onloancount ) %]
-                                   <span class="status">[% SEARCH_RESULT.onloancount %] on loan:</span>
+                                   <span class="status">[% SEARCH_RESULT.onloancount | html %] on loan:</span>
                                     <ul>
                                     [% FOREACH onloan_items_loo IN SEARCH_RESULT.onloan_items_loop %]
                                         [% IF item_level_itypes && !noItemTypeImages && onloan_items_loo.imageurl %]
                                         <li style="list-style: none; list-style-type: none;">
-                                          <img src="[% onloan_items_loo.imageurl %]" title="[% onloan_items_loo.description %]" alt="[% onloan_items_loo.description %]" />
+                                          <img src="[% onloan_items_loo.imageurl | html %]" title="[% onloan_items_loo.description | html %]" alt="[% onloan_items_loo.description | html %]" />
                                         [% ELSE %]
                                         <li>
                                         [% END %]
-                                        [% IF ( onloan_items_loo.branchname ) %][% onloan_items_loo.branchname %][% END %]
-                                        [% IF ( onloan_items_loo.location ) %][% onloan_items_loo.location %][% END %]
-                                        [% IF ( onloan_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% onloan_items_loo.itemcallnumber |uri %]%22">[% onloan_items_loo.itemcallnumber %]</a>][% END %]
-                                        ([% onloan_items_loo.count %][% IF ( onloan_items_loo.longoverdue ) %], [% onloan_items_loo.longoverdue %] long overdue[% END %]) date due: [% onloan_items_loo.due_date | $KohaDates %]
+                                        [% IF ( onloan_items_loo.branchname ) %][% onloan_items_loo.branchname | html %][% END %]
+                                        [% IF ( onloan_items_loo.location ) %][% onloan_items_loo.location | html %][% END %]
+                                        [% IF ( onloan_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% onloan_items_loo.itemcallnumber |uri %]%22">[% onloan_items_loo.itemcallnumber | html %]</a>][% END %]
+                                        ([% onloan_items_loo.count | html %][% IF ( onloan_items_loo.longoverdue ) %], [% onloan_items_loo.longoverdue | html %] long overdue[% END %]) date due: [% onloan_items_loo.due_date | $KohaDates %]
                                         [% IF item_level_itypes && onloan_items_loo.description %]
-                                        <br/>[% onloan_items_loo.description %]
+                                        <br/>[% onloan_items_loo.description | html %]
                                         [% END %]
                                         </li>
                                     [% END %]
@@ -535,27 +536,27 @@
                                     [% END %]
 
                                     [% IF ( SEARCH_RESULT.othercount ) %]
-                                    <span class="unavailable">[% SEARCH_RESULT.othercount %] unavailable:</span>
+                                    <span class="unavailable">[% SEARCH_RESULT.othercount | html %] unavailable:</span>
                                     <ul>
                                     [% FOREACH other_items_loo IN SEARCH_RESULT.other_items_loop %]
                                         [% IF item_level_itypes && !noItemTypeImages && other_items_loo.imageurl %]
                                         <li style="list-style: none; list-style-type: none;">
-                                          <img src="[% other_items_loo.imageurl %]" title="[% other_items_loo.description %]" alt="[% other_items_loo.description %]" />
+                                          <img src="[% other_items_loo.imageurl | html %]" title="[% other_items_loo.description | html %]" alt="[% other_items_loo.description | html %]" />
                                         [% ELSE %]
                                         <li>
                                         [% END %]
-                                        [% IF ( other_items_loo.branchname ) %][% other_items_loo.branchname %][% END %]
-                                        [% IF ( other_items_loo.location ) %][% other_items_loo.location %][% END %]
-                                        [% IF ( other_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% other_items_loo.itemcallnumber |uri %]%22">[% other_items_loo.itemcallnumber %]</a>][% END %]
-                                        [% IF ( other_items_loo.withdrawn ) %]([% AuthorisedValues.GetByCode( 'WITHDRAWN', other_items_loo.withdrawn ) %])[% END %]
-                                        [% IF ( other_items_loo.itemlost ) %]([% AuthorisedValues.GetByCode( 'LOST', other_items_loo.itemlost ) %])[% END %]
-                                        [% IF ( other_items_loo.damaged ) %]([% AuthorisedValues.GetByCode( 'DAMAGED', other_items_loo.damaged ) %])[% END %]
+                                        [% IF ( other_items_loo.branchname ) %][% other_items_loo.branchname | html %][% END %]
+                                        [% IF ( other_items_loo.location ) %][% other_items_loo.location | html %][% END %]
+                                        [% IF ( other_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% other_items_loo.itemcallnumber |uri %]%22">[% other_items_loo.itemcallnumber | html %]</a>][% END %]
+                                        [% IF ( other_items_loo.withdrawn ) %]([% AuthorisedValues.GetByCode( 'WITHDRAWN', other_items_loo.withdrawn ) | html %])[% END %]
+                                        [% IF ( other_items_loo.itemlost ) %]([% AuthorisedValues.GetByCode( 'LOST', other_items_loo.itemlost ) | html %])[% END %]
+                                        [% IF ( other_items_loo.damaged ) %]([% AuthorisedValues.GetByCode( 'DAMAGED', other_items_loo.damaged ) | html %])[% END %]
                                         [% IF ( other_items_loo.intransit ) %](In transit)[% END %]
                                         [% IF ( other_items_loo.onhold ) %](On hold)[% END %]
-                                        [% IF ( other_items_loo.notforloan ) %][% other_items_loo.notforloan %][% END %]
-                                        ([% other_items_loo.count %])
+                                        [% IF ( other_items_loo.notforloan ) %][% other_items_loo.notforloan | html %][% END %]
+                                        ([% other_items_loo.count | html %])
                                         [% IF item_level_itypes && other_items_loo.description %]
-                                        <br/>[% other_items_loo.description %]
+                                        <br/>[% other_items_loo.description | html %]
                                         [% END %]
                                         </li>
                                     [% END %]
@@ -566,7 +567,7 @@
                                     <strong id="altholdings_heading">Other holdings:</strong>
                                     <ul>
                                     [% FOREACH ALTERNATEHOLDING IN SEARCH_RESULT.ALTERNATEHOLDINGS %]
-                                    <li id="alternateholdings">[% ALTERNATEHOLDING.holding %]</li>
+                                    <li id="alternateholdings">[% ALTERNATEHOLDING.holding | html %]</li>
                                     [% END %]
                                     </ul>
                                     [% ELSE %]
@@ -591,9 +592,9 @@
 [% FOREACH outer_sup_results_loo IN outer_sup_results_loop %]
 <!-- <div class="yui-b"> -->
     [% IF ( outer_sup_results_loo.inner_sup_results_loop ) %]
-        [% outer_sup_results_loo.servername %]
+        [% outer_sup_results_loo.servername | html %]
         [% FOREACH inner_sup_results_loo IN outer_sup_results_loo.inner_sup_results_loop %]
-        <div><a href="/cgi-bin/koha/catalogue/search.pl?[% inner_sup_results_loo.query_cgi %][% inner_sup_results_loo.limit_cgi |html %][% inner_sup_results_loo.sort_by %][% inner_sup_results_loo.link %]">[% inner_sup_results_loo.title |html %]</a></div>
+        <div><a href="/cgi-bin/koha/catalogue/search.pl?[% inner_sup_results_loo.query_cgi | html %][% inner_sup_results_loo.limit_cgi | html %][% inner_sup_results_loo.sort_by | html %][% inner_sup_results_loo.link | html %]">[% inner_sup_results_loo.title | html %]</a></div>
         [% END %]
     [% END %]
 <!-- </div> -->
@@ -624,9 +625,9 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'browser-strings.inc' %]
-    [% Asset.js("js/browser.js") %]
-    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
+    [% Asset.js("js/browser.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script type="text/javascript">
         var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
         var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be placed on hold.");
@@ -732,19 +733,19 @@
             [% IF (SEARCH_RESULTS) %]
                 var newresults = [
                     [%- FOREACH result IN SEARCH_RESULTS -%]
-                        [%- result.biblionumber %],
+                        [%- result.biblionumber | html %],
                     [%- END -%]
                 ];
-                var browser = KOHA.browser('[% searchid %]', parseInt('[% biblionumber %]', 10));
-                browser.create([% SEARCH_RESULTS.first.result_number %], '[% query_cgi %]', '[% limit_cgi | uri %]','[% sort_cgi | uri %]',
-                       newresults, '[% total %]');
+                var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
+                browser.create([% SEARCH_RESULTS.first.result_number | html %], '[% query_cgi | html %]', '[% limit_cgi | uri %]','[% sort_cgi | uri %]',
+                       newresults, '[% total | html %]');
             [% END %]
 
             [% IF (gotoPage && gotoNumber) %]
                 [% IF (gotoNumber == 'first') %]
-                    window.location = '/cgi-bin/koha/catalogue/[% gotoPage %]?biblionumber=' + [% SEARCH_RESULTS.first.biblionumber %] + '&searchid=[% searchid %]';
+                    window.location = '/cgi-bin/koha/catalogue/[% gotoPage | html %]?biblionumber=' + [% SEARCH_RESULTS.first.biblionumber | html %] + '&searchid=[% searchid | html %]';
                 [% ELSIF (gotoNumber == 'last') %]
-                    window.location = '/cgi-bin/koha/catalogue/[% gotoPage %]?biblionumber=' + [% SEARCH_RESULTS.last.biblionumber %] + '&searchid=[% searchid %]';
+                    window.location = '/cgi-bin/koha/catalogue/[% gotoPage | html %]?biblionumber=' + [% SEARCH_RESULTS.last.biblionumber | html %] + '&searchid=[% searchid | html %]';
                 [% END %]
             [% END %]
 
@@ -811,7 +812,7 @@
                 var x;
                 for (x in q_array) {
                     q_array[x] = q_array[x].toLowerCase();
-                    var myStopwords = "[% Koha.Preference('NotHighlightedWords') %]".toLowerCase().split('|');
+                    var myStopwords = "[% Koha.Preference('NotHighlightedWords') | html %]".toLowerCase().split('|');
                     if ( (q_array[x].length > 0) && ($.inArray(q_array[x], myStopwords) == -1) ) {
                         toHighlight.highlight(q_array[x]);
                     }
@@ -868,8 +869,8 @@
         function browse_selection () {
             var bibnums = getContextBiblioNumbers();
             if ( bibnums && bibnums.length > 0 ) {
-                var browser = KOHA.browser('', parseInt('[% biblionumber %]', 10));
-                browser.create(1, '[% query_cgi %]', '[% limit_cgi | uri %]','[% sort_cgi | uri %]', bibnums, bibnums.length);
+                var browser = KOHA.browser('', parseInt('[% biblionumber | html %]', 10));
+                browser.create(1, '[% query_cgi | html %]', '[% limit_cgi | uri %]','[% sort_cgi | uri %]', bibnums, bibnums.length);
                 window.location = '/cgi-bin/koha/catalogue/detail.pl?biblionumber=' + bibnums[0] + '&searchid='+browser.searchid;
             } else {
                 alert(MSG_NO_ITEM_SELECTED);
@@ -897,7 +898,7 @@
         function PopupZ3950() {
             var strQuery = GetZ3950Terms();
             if(strQuery){
-                window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=[% biblionumber %]"+strQuery,"z3950search",'width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+                window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=[% biblionumber | html %]"+strQuery,"z3950search",'width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
             }
         }
         /* provide Z3950 search points */
@@ -915,7 +916,7 @@
         }
 
         function holdForPatron() {
-            $("#holdFor").val("[% holdfor_cardnumber %]");
+            $("#holdFor").val("[% holdfor_cardnumber | html %]");
             placeHold();
         }
     </script>

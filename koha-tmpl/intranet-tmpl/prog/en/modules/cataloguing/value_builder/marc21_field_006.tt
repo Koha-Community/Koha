@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -12,12 +13,12 @@
     <tr id="tr_result">
     </tr>
 </table>
-<h4 id="h4_result">&quot;[% result %]&quot;</h4>
+<h4 id="h4_result">&quot;[% result | html %]&quot;</h4>
 
 <form name="f_pop" id="f_pop" onsubmit="report()" action="">
 <input type="hidden" name="plugin_name" value="marc21_field_006.pl" />
-<input type="hidden" id="[% index %]" name="index" value="[% index %]" />
-<input type="hidden" id="result" name="result" value="[% result %]" />
+<input type="hidden" id="[% index | html %]" name="index" value="[% index | html %]" />
+<input type="hidden" id="result" name="result" value="[% result | html %]" />
 <table id="table_material_types">
     <tr id="tr_material_types">
         <td><label for="material_type" title="Select a type of material to specify the variable values">Type of material</label></td>
@@ -32,7 +33,7 @@
 </form>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/xmlControlfield.js") %]
+    [% Asset.js("js/xmlControlfield.js") | $raw %]
     <script type="text/javascript">
         var objXmlControlField;
         var tr_result;
@@ -40,14 +41,14 @@
 
         function loadXmlValues(){
             [% IF ( errorXml ) %]
-            alert("[% errorXml %]");
+            alert("[% errorXml | html %]");
             [% ELSE %]
             var form = document.f_pop;
             h4_result = document.getElementById("h4_result");
             tr_result = document.getElementById("tr_result");
-            objXmlControlField = new xmlControlField('[% tagfield %]', 'f_pop', document.getElementById('material_type'), document.getElementById('table_material_types'), 'h4_result', 'tr_result', '', '[% themelang %]', '[% marcflavour %]');
+            objXmlControlField = new xmlControlField('[% tagfield | html %]', 'f_pop', document.getElementById('material_type'), document.getElementById('table_material_types'), 'h4_result', 'tr_result', '', '[% themelang | html %]', '[% marcflavour | html %]');
             [% IF ( material_configuration ) %]
-            objXmlControlField.idMaterial = "[% material_configuration %]";
+            objXmlControlField.idMaterial = "[% material_configuration | html %]";
             [% END %]
             objXmlControlField.loadXmlValues();
             renderResult(tr_result, (form.result.value != "")?form.result.value:returnValueParam("result"));
@@ -64,7 +65,7 @@
 
         function report() {
             var doc   = opener.document;
-            var field = doc.getElementById("[% index %]");
+            var field = doc.getElementById("[% index | html %]");
             field.value = document.getElementById("result").value;
             self.close();
             return false;

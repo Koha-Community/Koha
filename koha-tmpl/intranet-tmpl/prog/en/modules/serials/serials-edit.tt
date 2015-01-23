@@ -1,10 +1,11 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Serials &rsaquo; Serial edition [% bibliotitle %]</title>
+<title>Koha &rsaquo; Serials &rsaquo; Serial edition [% bibliotitle | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.js("js/cataloging.js") %]
-[% Asset.js("js/prevent_submit.js") %]
+[% Asset.js("js/cataloging.js") | $raw %]
+[% Asset.js("js/prevent_submit.js") | $raw %]
 [% INCLUDE 'calendar.inc' %]
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
@@ -83,7 +84,7 @@ $(document).ready(function() {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Serial edition <i>[% bibliotitle %] [% IF ( callnumber ) %]([% callnumber %])[% END %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Serial edition <i>[% bibliotitle | html %] [% IF ( callnumber ) %]([% callnumber | html %])[% END %]</i></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -93,23 +94,23 @@ $(document).ready(function() {
 
     [% INCLUDE 'modals/serials_multi_receiving.inc' %]
 
-<h1>Serial edition <i>[% bibliotitle %]</i>
-    [% IF location %] ([% AuthorisedValues.GetByCode('LOC', location) %])[% END %]
-    [% IF ( callnumber ) %] callnumber: [% callnumber %][% END %]</h1>
-[% IF internalnotes %]<p>Nonpublic note: [% internalnotes %]</p>[% END %]
+<h1>Serial edition <i>[% bibliotitle | html %]</i>
+    [% IF location %] ([% AuthorisedValues.GetByCode('LOC', location) | html %])[% END %]
+    [% IF ( callnumber ) %] callnumber: [% callnumber | html %][% END %]</h1>
+[% IF internalnotes %]<p>Nonpublic note: [% internalnotes | html %]</p>[% END %]
 <form method="post" name="f" action="serials-edit.pl" id="serials_edit">
 
 [% IF ( Errors ) %]
 <div class="dialog alert">
 <ul>
-[% IF ( barcode_not_unique ) %]<li>Error: Barcode not unique for [% FOREACH errse IN errseq %]serialseq [% errse.serialseq %]<br/>[% END %]</li>[% END %]
+[% IF ( barcode_not_unique ) %]<li>Error: Barcode not unique for [% FOREACH errse IN errseq %]serialseq [% errse.serialseq | html %]<br/>[% END %]</li>[% END %]
 </ul>
 </div>
 [% END %]
 
     <input type="hidden" name="op" value="serialchangestatus" />
     [% FOREACH subscription IN subscriptions %]
-    <input type="hidden" name="subscriptionid" value="[% subscription.subscriptionid %]" />
+    <input type="hidden" name="subscriptionid" value="[% subscription.subscriptionid | html %]" />
     [% END %]
 	<table>
 	<tr>
@@ -123,30 +124,30 @@ $(document).ready(function() {
 [% FOREACH serialslis IN serialslist %]
     <tr>
         <td>
-            <input type="hidden" name="serialid" value="[% serialslis.serialid %]" />
-            <input type="hidden" name="biblionumber" value="[% serialslis.biblionumber %]" />
-            <input type="hidden" name="itemcount" value="[% serialslis.issuesatonce %]" />
-            <input type="hidden" name="user" value="[% serialslis.librarian %]" />
-            Issue <input type="text" name="serialseq" id="serialseq[% serialslis.serialid %]" value="[% serialslis.serialseq %]" size="20" maxlength="100" />
+            <input type="hidden" name="serialid" value="[% serialslis.serialid | html %]" />
+            <input type="hidden" name="biblionumber" value="[% serialslis.biblionumber | html %]" />
+            <input type="hidden" name="itemcount" value="[% serialslis.issuesatonce | html %]" />
+            <input type="hidden" name="user" value="[% serialslis.librarian | html %]" />
+            Issue <input type="text" name="serialseq" id="serialseq[% serialslis.serialid | html %]" value="[% serialslis.serialseq | html %]" size="20" maxlength="100" />
         </td>
         <td>
-            <input type="text" name="publisheddate" value="[% serialslis.publisheddate %]" size="10" maxlength="15" class="datepicker" />
+            <input type="text" name="publisheddate" value="[% serialslis.publisheddate | html %]" size="10" maxlength="15" class="datepicker" />
         </td>
         <td>
-            <input type="text" name="publisheddatetext" value="[% serialslis.publisheddatetext %]" size="10" maxlength="100" />
+            <input type="text" name="publisheddatetext" value="[% serialslis.publisheddatetext | html %]" size="10" maxlength="100" />
         </td>
         <td>
-            <input type="text" name="planneddate" value="[% serialslis.planneddate %]" size="10" maxlength="15" class="datepicker" />
+            <input type="text" name="planneddate" value="[% serialslis.planneddate | html %]" size="10" maxlength="15" class="datepicker" />
         </td>
         <td>
             [% IF ( serialslis.editdisable ) %]
-              <input type="hidden" name="status" id="status[% serialslis.serialid %]" value="[% serialslis.serstatus %]">
+              <input type="hidden" name="status" id="status[% serialslis.serialid | html %]" value="[% serialslis.serstatus | html %]">
               <select name="status" size="1"  disabled="disabled">
             [% ELSE %]
               [% IF ( serialslis.serialsadditems ) %]
-              <select name="status" size="1" id="status[% serialslis.serialid %]" onchange="if (this.value==2){unHideItems('items'+[% serialslis.subscriptionid %][% serialslis.serialid %],'label[% serialslis.subscriptionid %][% serialslis.serialid %]','[% serialslis.serialid %]'); changeDate(this, '[% serialslis.arriveddate %]')} else if (this.value==7){changeDate(this, '[% serialslis.arriveddate %]')} else { HideItems('items'+[% serialslis.subscriptionid %]+[% serialslis.serialid %],'label[% serialslis.subscriptionid %][% serialslis.serialid %]'); changeDate(this, '[% serialslis.planneddate %]')}" >
+              <select name="status" size="1" id="status[% serialslis.serialid | html %]" onchange="if (this.value==2){unHideItems('items'+[% serialslis.subscriptionid | html %][% serialslis.serialid | html %],'label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]','[% serialslis.serialid | html %]'); changeDate(this, '[% serialslis.arriveddate | html %]')} else if (this.value==7){changeDate(this, '[% serialslis.arriveddate | html %]')} else { HideItems('items'+[% serialslis.subscriptionid | html %]+[% serialslis.serialid | html %],'label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]'); changeDate(this, '[% serialslis.planneddate | html %]')}" >
                [% ELSE %]
-              <select name="status" size="1" id="status[% serialslis.serialid %]" onchange="if (this.value==2 || this.value==7){changeDate(this, '[% serialslis.arriveddate %]')} else {changeDate(this, '[% serialslis.planneddate %]')}" >
+              <select name="status" size="1" id="status[% serialslis.serialid | html %]" onchange="if (this.value==2 || this.value==7){changeDate(this, '[% serialslis.arriveddate | html %]')} else {changeDate(this, '[% serialslis.planneddate | html %]')}" >
                [% END %] 
             [% END %]
             [% IF ( serialslis.status1 ) %]
@@ -211,50 +212,50 @@ $(document).ready(function() {
 
         </td>
         <td>
-            <input type="text" name="notes" value="[% serialslis.sernotes %]" size="20" maxlength="255" />
+            <input type="text" name="notes" value="[% serialslis.sernotes | html %]" size="20" maxlength="255" />
         </td>
     </tr>
   [% UNLESS ( serialslis.subscriptionexpired ) %]
   [% IF ( serialslis.serialsadditems ) %]
           <tr>
           <td colspan="6">
-      <a id="label[% serialslis.subscriptionid %][% serialslis.serialid %]" style="color: grey; font-size: 80%; cursor: pointer;"  onclick="unHideItems('items[% serialslis.subscriptionid %][% serialslis.serialid %]','label[% serialslis.subscriptionid %][% serialslis.serialid %]',  '[% serialslis.serialid %]');setStatus([% serialslis.serialid %]);">
+      <a id="label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]" style="color: grey; font-size: 80%; cursor: pointer;"  onclick="unHideItems('items[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]','label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]',  '[% serialslis.serialid | html %]');setStatus([% serialslis.serialid | html %]);">
              Click to add item</a>
-        <fieldset class="rows" style="display:none;" id="items[% serialslis.subscriptionid %][% serialslis.serialid %]">
-        <legend><a style="cursor: pointer;"  onclick="HideItems('items[% serialslis.subscriptionid %][% serialslis.serialid %]','label[% serialslis.subscriptionid %][% serialslis.serialid %]')">
+        <fieldset class="rows" style="display:none;" id="items[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]">
+        <legend><a style="cursor: pointer;"  onclick="HideItems('items[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]','label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]')">
                 Item</a>
         </legend>
           <div class="cataloguing_additem_itemlist">
         [% FOREACH item IN serialslis.items %]
-        <div id="item[% item.serialid %][% item.countitems %]" class="items">
+        <div id="item[% item.serialid | html %][% item.countitems | html %]" class="items">
         <ol>[% FOREACH iteminformatio IN item.iteminformation %]<li>
-               <div class="subfield_line" style="[% iteminformatio.hidden %]" id="subfield[% item.serialid %][% item.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]">
+               <div class="subfield_line" style="[% iteminformatio.hidden | html %]" id="subfield[% item.serialid | html %][% item.countitems | html %][% iteminformatio.subfield | html %][% iteminformatio.random | html %]">
                 [% IF (iteminformatio.mandatory) %]
-                    <label class="required">[% iteminformatio.subfield %] - [% iteminformatio.marc_lib %]</label>
+                    <label class="required">[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | $raw %]</label>
                 [% ELSE %]
-                    <label>[% iteminformatio.subfield %] - [% iteminformatio.marc_lib %]</label>
+                    <label>[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | $raw %]</label>
                 [% END %]
                 [% IF ( iteminformatio.marc_value.type == 'select' ) %]
                   <select name="field_value" size="1">
                   [% FOREACH value IN iteminformatio.marc_value.values %]
                     [% IF ( value == iteminformatio.marc_value.default ) %]
-                      <option value="[% value %]" selected="selected">[% iteminformatio.marc_value.labels.$value %]</option>
+                      <option value="[% value | html %]" selected="selected">[% iteminformatio.marc_value.labels.$value | html %]</option>
                     [% ELSE %]
-                      <option value="[% value %]">[% iteminformatio.marc_value.labels.$value %]</option>
+                      <option value="[% value | html %]">[% iteminformatio.marc_value.labels.$value | html %]</option>
                     [% END %]
                   [% END %]
                   </select>
                 [% ELSE %]
-                [% iteminformatio.marc_value %]
+                [% iteminformatio.marc_value | $raw %]
                 [% END %]
-                <input type="hidden" name="itemid" value="[% item.itemid %]" />
-                <input type="hidden" name="kohafield" value="[% iteminformatio.kohafield %]" />
-                <input type="hidden" name="tag" value="[% iteminformatio.tag %]" />
-                <input type="hidden" name="subfield" value="[% iteminformatio.subfield %]" />
-                <input type="hidden" name="mandatory" value="[% iteminformatio.mandatory %]" />
+                <input type="hidden" name="itemid" value="[% item.itemid | html %]" />
+                <input type="hidden" name="kohafield" value="[% iteminformatio.kohafield | html %]" />
+                <input type="hidden" name="tag" value="[% iteminformatio.tag | html %]" />
+                <input type="hidden" name="subfield" value="[% iteminformatio.subfield | html %]" />
+                <input type="hidden" name="mandatory" value="[% iteminformatio.mandatory | html %]" />
                 [% IF ( iteminformatio.repeatable ) %]
                     <a href="#" class="buttonPlus" onclick="CloneItemSubfield(this.parentNode); return false;">
-                        <img src="[% interface %]/[% theme %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
+                        <img src="[% interface | html %]/[% theme | html %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
                     </a>
                 [% END %]
                 [% IF ( iteminformatio.mandatory ) %] <span class="required">Required</span>[% END %]
@@ -262,12 +263,12 @@ $(document).ready(function() {
         [% END %]</ol></div><!-- /iteminformation -->
         
         <input type="hidden" name="moditem" value="" /> 
-        <input type="hidden" name="tag" value="[% item.itemtagfield %]" />
-        <input type="hidden" name="subfield" value="[% item.itemtagsubfield %]" />
-        <input type="hidden" name="serial" value="[% item.serialid %]" />
-        <input type="hidden" name="bibnum" value="[% item.biblionumber %]" />
-        <input type="hidden" name="itemid" value="[% item.itemid %]" />
-        <input type="hidden" name="field_value" value="[% item.itemnumber %]" />
+        <input type="hidden" name="tag" value="[% item.itemtagfield | html %]" />
+        <input type="hidden" name="subfield" value="[% item.itemtagsubfield | html %]" />
+        <input type="hidden" name="serial" value="[% item.serialid | html %]" />
+        <input type="hidden" name="bibnum" value="[% item.biblionumber | html %]" />
+        <input type="hidden" name="itemid" value="[% item.itemid | html %]" />
+        <input type="hidden" name="field_value" value="[% item.itemnumber | html %]" />
         [% END %] <!-- /items -->
         </div>
         </fieldset>
@@ -281,22 +282,22 @@ $(document).ready(function() {
     <tr>
         <td>
             <input type="hidden" name="serialid" value="NEW" />
-            <input type="hidden" name="biblionumber" value="[% newserialloo.biblionumber %]" />
-            <input type="hidden" name="itemcount" value="[% newserialloo.issuesatonce %]" />
-            <input type="hidden" name="user" value="[% newserialloo.librarian %]" />
-            Supplemental issue <input type="text" name="serialseq" id="serialseq[% newserialloo.serialid %]" value="" size="20" maxlength="100" onchange="if (this.value!=''){unHideItems('items[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]', '[% newserialloo.serialid %]')} else {HideItems('items[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]')}" />
+            <input type="hidden" name="biblionumber" value="[% newserialloo.biblionumber | html %]" />
+            <input type="hidden" name="itemcount" value="[% newserialloo.issuesatonce | html %]" />
+            <input type="hidden" name="user" value="[% newserialloo.librarian | html %]" />
+            Supplemental issue <input type="text" name="serialseq" id="serialseq[% newserialloo.serialid | html %]" value="" size="20" maxlength="100" onchange="if (this.value!=''){unHideItems('items[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]','label[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]', '[% newserialloo.serialid | html %]')} else {HideItems('items[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]','label[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]')}" />
         </td>
         <td>
-            <input type="text" name="publisheddate" value="[% newserialloo.publisheddate %]" size="10" maxlength="15"  class="datepicker" />
+            <input type="text" name="publisheddate" value="[% newserialloo.publisheddate | html %]" size="10" maxlength="15"  class="datepicker" />
         </td>
         <td>
-            <input type="text" name="publisheddatetext" value="[% newserialloo.publisheddatetext %]" size="10" maxlength="100" />
+            <input type="text" name="publisheddatetext" value="[% newserialloo.publisheddatetext | html %]" size="10" maxlength="100" />
         </td>
         <td>
-            <input type="text" name="planneddate" value="[% newserialloo.planneddate %]" size="10" maxlength="15" class="datepicker" />
+            <input type="text" name="planneddate" value="[% newserialloo.planneddate | html %]" size="10" maxlength="15" class="datepicker" />
         </td>
         <td>
-            <select name="status" size="1" id="addstatus[% newserialloo.serialid %]" onchange="if (this.value==2){unHideItems('items'+'[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]','[% newserialloo.serialid %]'); changeDate(this, '[% newserialloo.arriveddate %]')} else if (this.value==7){changeDate(this, '[% newserialloo.arriveddate %]')} else { HideItems('items'+'[% newserialloo.subscriptionid %]'+[% newserialloo.serialid %],'label[% serialslis.subscriptionid %][% serialslis.serialid %]'); changeDate(this, '[% serialslis.planneddate %]')}" >
+            <select name="status" size="1" id="addstatus[% newserialloo.serialid | html %]" onchange="if (this.value==2){unHideItems('items'+'[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]','label[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]','[% newserialloo.serialid | html %]'); changeDate(this, '[% newserialloo.arriveddate | html %]')} else if (this.value==7){changeDate(this, '[% newserialloo.arriveddate | html %]')} else { HideItems('items'+'[% newserialloo.subscriptionid | html %]'+[% newserialloo.serialid | html %],'label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]'); changeDate(this, '[% serialslis.planneddate | html %]')}" >
 
                     <option value="">----</option>
                   [% IF ( newserialloo.status1 ) %]
@@ -365,42 +366,42 @@ $(document).ready(function() {
   [% IF ( newserialloo.serialsadditems ) %]
           <tr>
           <td colspan="6">
-      <a id="label[% newserialloo.subscriptionid %][% newserialloo.serialid %]" style="color: grey; font-size: 80%; cursor: pointer;"  onclick="unHideItems('items[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]', '[% newserialloo.serialid %]')">
+      <a id="label[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]" style="color: grey; font-size: 80%; cursor: pointer;"  onclick="unHideItems('items[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]','label[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]', '[% newserialloo.serialid | html %]')">
              Click to add item</a>
-        <fieldset  class="rows" style="display:none;" id="items[% newserialloo.subscriptionid %][% newserialloo.serialid %]">
-        <legend><a style="cursor: pointer;"  onclick="HideItems('items[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]')">
+        <fieldset  class="rows" style="display:none;" id="items[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]">
+        <legend><a style="cursor: pointer;"  onclick="HideItems('items[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]','label[% newserialloo.subscriptionid | html %][% newserialloo.serialid | html %]')">
                 Item</a>
         </legend>
           <div class="cataloguing_additem_itemlist">
-        <div id="item[% newserialloo.serialid %][% newserialloo.countitems %]" class="items">
+        <div id="item[% newserialloo.serialid | html %][% newserialloo.countitems | html %]" class="items">
         <ol>[% FOREACH iteminformatio IN newserialloo.iteminformation %]<li>
-               <div class="subfield_line" style="[% iteminformatio.hidden %]" id="subfield[% newserialloo.serialid %][% newserialloo.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]">
+               <div class="subfield_line" style="[% iteminformatio.hidden | html %]" id="subfield[% newserialloo.serialid | html %][% newserialloo.countitems | html %][% iteminformatio.subfield | html %][% iteminformatio.random | html %]">
                 [% IF (iteminformatio.mandatory) %]
-                    <label class="required">[% iteminformatio.subfield %] - [% iteminformatio.marc_lib %]</label>
+                    <label class="required">[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | $raw %]</label>
                 [% ELSE %]
-                    <label>[% iteminformatio.subfield %] - [% iteminformatio.marc_lib %]</label>
+                    <label>[% iteminformatio.subfield | html %] - [% iteminformatio.marc_lib | $raw %]</label>
                 [% END %]
                 [% IF ( iteminformatio.marc_value.type == 'select' ) %]
                   <select name="field_value" size="1">
                   [% FOREACH value IN iteminformatio.marc_value.values %]
                     [% IF ( value == iteminformatio.marc_value.default ) %]
-                      <option value="[% value %]" selected="selected">[% iteminformatio.marc_value.labels.$value %]</option>
+                      <option value="[% value | html %]" selected="selected">[% iteminformatio.marc_value.labels.$value | html %]</option>
                     [% ELSE %]
-                      <option value="[% value %]">[% iteminformatio.marc_value.labels.$value %]</option>
+                      <option value="[% value | html %]">[% iteminformatio.marc_value.labels.$value | html %]</option>
                     [% END %]
                   [% END %]
                   </select>
                 [% ELSE %]
-                [% iteminformatio.marc_value %]
+                [% iteminformatio.marc_value | $raw %]
                 [% END %]
-                <input type="hidden" name="itemid" value="[% newserialloo.itemid %]" />
-                <input type="hidden" name="kohafield" value="[% iteminformatio.kohafield %]" />
-                <input type="hidden" name="tag" value="[% iteminformatio.tag %]" />
-                <input type="hidden" name="subfield" value="[% iteminformatio.subfield %]" />
-                <input type="hidden" name="mandatory" value="[% iteminformatio.mandatory %]" />
+                <input type="hidden" name="itemid" value="[% newserialloo.itemid | html %]" />
+                <input type="hidden" name="kohafield" value="[% iteminformatio.kohafield | html %]" />
+                <input type="hidden" name="tag" value="[% iteminformatio.tag | html %]" />
+                <input type="hidden" name="subfield" value="[% iteminformatio.subfield | html %]" />
+                <input type="hidden" name="mandatory" value="[% iteminformatio.mandatory | html %]" />
                 [% IF ( iteminformatio.repeatable ) %]
                     <a href="#" class="buttonPlus" onclick="CloneItemSubfield(this.parentNode); return false;">
-                        <img src="[% interface %]/[% theme %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
+                        <img src="[% interface | html %]/[% theme | html %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
                     </a>
                 [% END %]
                 [% IF ( iteminformatio.mandatory ) %] <span class="required">Required</span>[% END %]
@@ -408,12 +409,12 @@ $(document).ready(function() {
        </li>[% END %]</ol>
         
         <input type="hidden" name="moditem" value="" /> 
-        <input type="hidden" name="tag" value="[% newserialloo.itemtagfield %]" />
-        <input type="hidden" name="subfield" value="[% newserialloo.itemtagsubfield %]" />
-        <input type="hidden" name="serial" value="[% newserialloo.serialid %]" />
-        <input type="hidden" name="bibnum" value="[% newserialloo.biblionumber %]" />
-        <input type="hidden" name="itemid" value="[% newserialloo.itemid %]" />
-        <input type="hidden" name="field_value" value="[% newserialloo.itemnumber %]" />
+        <input type="hidden" name="tag" value="[% newserialloo.itemtagfield | html %]" />
+        <input type="hidden" name="subfield" value="[% newserialloo.itemtagsubfield | html %]" />
+        <input type="hidden" name="serial" value="[% newserialloo.serialid | html %]" />
+        <input type="hidden" name="bibnum" value="[% newserialloo.biblionumber | html %]" />
+        <input type="hidden" name="itemid" value="[% newserialloo.itemid | html %]" />
+        <input type="hidden" name="field_value" value="[% newserialloo.itemnumber | html %]" />
         </div>
         </div>
         </fieldset>
@@ -440,15 +441,15 @@ $(document).ready(function() {
 [% INCLUDE 'serials-menu.inc' %]
 <ul>
     [% FOREACH subscription IN subscriptions %]
-        <li><a href="serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]" title="serial collection for [% subscription.bibliotitle %]">Serial collection #[% subscription.subscriptionid %]</a></li>
-        <li><a href="subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]" title="detail of the subscription">Subscription #[% subscription.subscriptionid %]</a></li>
+        <li><a href="serials-collection.pl?subscriptionid=[% subscription.subscriptionid | html %]" title="serial collection for [% subscription.bibliotitle | html %]">Serial collection #[% subscription.subscriptionid | html %]</a></li>
+        <li><a href="subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | html %]" title="detail of the subscription">Subscription #[% subscription.subscriptionid | html %]</a></li>
         [% IF ( subscription.abouttoexpire ) %]
           [% UNLESS subscription.closed %]
-            <li><a href="#" onclick="javascript:popup([% subscription.subscriptionid %])">Renew #[% subscription.subscriptionid %]</a></li>
+            <li><a href="#" onclick="javascript:popup([% subscription.subscriptionid | html %])">Renew #[% subscription.subscriptionid | html %]</a></li>
           [% END %]
         [% END %]
     [% END %]
-    <li><a href="/cgi-bin/koha/catalogue/[% default_bib_view %].pl?biblionumber=[% biblionumber %]" title="go to [% bibliotitle %]">Show biblio</a></li></ul>
+    <li><a href="/cgi-bin/koha/catalogue/[% default_bib_view | html %].pl?biblionumber=[% biblionumber | html %]" title="go to [% bibliotitle | html %]">Show biblio</a></li></ul>
 </div>
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]

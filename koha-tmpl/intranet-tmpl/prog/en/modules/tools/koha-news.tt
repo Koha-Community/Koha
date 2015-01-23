@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Branches %]
@@ -6,7 +7,7 @@
 <title>Koha &rsaquo; Tools &rsaquo; News</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( opac_news_count ) %]
-    [% Asset.css("css/datatables.css") %]
+    [% Asset.css("css/datatables.css") | $raw %]
 [% END %]
 </head>
 
@@ -33,17 +34,17 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
         <div class="dialog alert">Error: Required news title missing!</div>
     [% END %]
 <div id="toolbar" class="btn-toolbar">
-    <a class="btn btn-default btn-sm" id="newentry" href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;lang=[% lang %]"><i class="fa fa-plus"></i> New entry</a>
+    <a class="btn btn-default btn-sm" id="newentry" href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;lang=[% lang | html %]"><i class="fa fa-plus"></i> New entry</a>
 </div>
 [% END %]
 
 [% IF ( add_form ) %]
-    [% IF ( op == 'add' ) %][% default_lang = lang %]
-    [% ELSE %][% default_lang = new_detail.lang %]
+    [% IF ( op == 'add' ) %][% default_lang = lang | html %]
+    [% ELSE %][% default_lang = new_detail.lang | html %]
     [% END %]
         <form name="add_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl" >
-            <input type="hidden" name="op" value="[% op %]" />
-            <input type="hidden" name="id" value="[% id %]" />
+            <input type="hidden" name="op" value="[% op | html %]" />
+            <input type="hidden" name="id" value="[% id | html %]" />
 			<fieldset class="rows">
             <legend>OPAC and Koha news</legend>
            <ol> <li>
@@ -66,9 +67,9 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                 [% END %]
                 [% FOREACH lang_lis IN lang_list %]
                 [% IF ( lang_lis.language == default_lang ) %]
-                    <option value="[% lang_lis.language %]" selected="selected">OPAC ([% lang_lis.language %])</option>
+                    <option value="[% lang_lis.language | html %]" selected="selected">OPAC ([% lang_lis.language | html %])</option>
                 [% ELSE %]
-                    <option value="[% lang_lis.language %]"                    >OPAC ([% lang_lis.language %])</option>
+                    <option value="[% lang_lis.language | html %]"                    >OPAC ([% lang_lis.language | html %])</option>
                 [% END %]
                 [% END %]
             </select>
@@ -86,28 +87,28 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
             </li>
             <li>
                 <label for="title" class="required">Title: </label>
-                <input id="title" size="30" type="text" name="title" value="[% new_detail.title %]" required="required" class="required" /> <span class="required">Required</span>
+                <input id="title" size="30" type="text" name="title" value="[% new_detail.title | html %]" required="required" class="required" /> <span class="required">Required</span>
             </li>
             <li>
                 <label for="from">Publication date: </label>
-                <input id="from" type="text" name="timestamp" size="15" value="[% new_detail.timestamp %]" class="datepickerfrom" />
+                <input id="from" type="text" name="timestamp" size="15" value="[% new_detail.timestamp | html %]" class="datepickerfrom" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
             </li>
             <li>
                 <label for="to">Expiration date: </label>
-                <input id="to" type="text" name="expirationdate" size="15" value="[% new_detail.expirationdate %]" class="datepickerto" />
+                <input id="to" type="text" name="expirationdate" size="15" value="[% new_detail.expirationdate | html %]" class="datepickerto" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
             </li>
             <li>
                 <label for="number">Appear in position: </label>
                 [% IF ( new_detail.number ) %]
-                    <input id="number" size="3" name="number" type="text" value="[% new_detail.number %]" />
+                    <input id="number" size="3" name="number" type="text" value="[% new_detail.number | html %]" />
                 [% ELSE %]
                     <input id="number" size="3" name="number" type="text" />
                 [% END %]
             </li>
             <li><label for="content">News: </label>
-            <textarea name="content" id="content"  cols="75" rows="10">[% new_detail.content %]</textarea>
+            <textarea name="content" id="content"  cols="75" rows="10">[% new_detail.content | $raw %]</textarea>
             </li>
             </ol>
 			</fieldset>
@@ -136,9 +137,9 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
             [% END %]
                 [% FOREACH lang_lis IN lang_list %]
                 [% IF ( lang_lis.language == lang ) %]
-                    <option value="[% lang_lis.language %]" selected="selected">OPAC ([% lang_lis.language %])</option>
+                    <option value="[% lang_lis.language | html %]" selected="selected">OPAC ([% lang_lis.language | html %])</option>
                 [% ELSE %]
-                    <option value="[% lang_lis.language %]"         >OPAC ([% lang_lis.language %])</option>
+                    <option value="[% lang_lis.language | html %]"         >OPAC ([% lang_lis.language | html %])</option>
                 [% END %]
                 [% END %]
             </select>
@@ -176,7 +177,7 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                             <tr>
                             [% END %]
                             <td>
-                                <input type="checkbox" name="ids" value="[% opac_new.idnew %]" />
+                                <input type="checkbox" name="ids" value="[% opac_new.idnew | html %]" />
                             </td>
                             <td>[% SWITCH opac_new.lang %]
                                 [%   CASE "koha" %]
@@ -186,24 +187,24 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                                 [%   CASE "" %]
                                     All
                                 [%   CASE %]
-                                    OPAC ([% opac_new.lang %])
+                                    OPAC ([% opac_new.lang | html %])
                                 [% END %]
                              </td>
                             <td>[% IF ( opac_new.branchcode == "" ) -%]
                                 All libraries
-                                [% ELSE %][% opac_new.branchname %]
+                                [% ELSE %][% opac_new.branchname | html %]
                                 [% END %]</td>
-                            <td>[% opac_new.number %]</td>
-                            <td><span title="[% opac_new.newdate %]">[% opac_new.newdate | $KohaDates %]</span></td>
-                            <td><span title="[% opac_new.expirationdate %]">[% opac_new.expirationdate | $KohaDates %] [% IF ( opac_new.expired ) %](<span class="expired">expired</span>)[% END %]</span></td>
-                            <td>[% opac_new.title %]</td>
-                            <td>[% opac_new.author_title %] [% opac_new.author_firstname %] [% opac_new.author_surname %]</td>
+                            <td>[% opac_new.number | html %]</td>
+                            <td><span title="[% opac_new.newdate | html %]">[% opac_new.newdate | $KohaDates %]</span></td>
+                            <td><span title="[% opac_new.expirationdate | html %]">[% opac_new.expirationdate | $KohaDates %] [% IF ( opac_new.expired ) %](<span class="expired">expired</span>)[% END %]</span></td>
+                            <td>[% opac_new.title | html %]</td>
+                            <td>[% opac_new.author_title | html %] [% opac_new.author_firstname | html %] [% opac_new.author_surname | html %]</td>
                            <td>
-                                [% opac_new.content %]
+                                [% opac_new.content | $raw %]
                             </td>
                             <td class="actions">
-                                <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=[% opac_new.idnew %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                                <a href="/cgi-bin/koha/tools/koha-news.pl?op=del&amp;ids=[% opac_new.idnew %]" class="delete_news btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
+                                <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=[% opac_new.idnew | html %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+                                <a href="/cgi-bin/koha/tools/koha-news.pl?op=del&amp;ids=[% opac_new.idnew | html %]" class="delete_news btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
                             </td>
                         </tr>
                     [% END %]</tbody>
@@ -226,7 +227,7 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     [% IF ( opac_news_count ) %]
         [% INCLUDE 'datatables.inc' %]
         <script type="text/javascript">
@@ -266,15 +267,15 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
             });
         </script>
     [% END %]
-    [% Asset.js("lib/tiny_mce/tiny_mce.js") %]
+    [% Asset.js("lib/tiny_mce/tiny_mce.js") | $raw %]
     <script type="text/javascript">
-        tinyMCE.baseURL = "[% interface %]/lib/tiny_mce";
+        tinyMCE.baseURL = "[% interface | html %]/lib/tiny_mce";
         tinyMCE.init({
             mode : "textareas",
             theme : "advanced",
             convert_urls : false,
             relative_urls : false,
-            content_css : "[% interface %]/[% theme %]/css/tinymce.css",
+            content_css : "[% interface | html %]/[% theme | html %]/css/tinymce.css",
             plugins : "table,save,advhr,advlink,searchreplace,print,contextmenu",
             theme_advanced_buttons1 : "save,|,bold,italic,|,cut,copy,paste,|,search,replace,|,justifyleft,justifycenter,justifyright,justifyfull,|,formatselect,|,link,unlink,anchor,cleanup,help,code,advhr,|,print",
             theme_advanced_buttons2 : "tablecontrols,|,bullist,numlist,|,outdent,indent,|,undo,redo,|,removeformat,|,visualaid,|,sub,sup,|,charmap",

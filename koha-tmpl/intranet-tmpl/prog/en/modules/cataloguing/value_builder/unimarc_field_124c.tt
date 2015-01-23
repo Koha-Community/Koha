@@ -133,7 +133,7 @@
     <script type="text/javascript">
         function report() {
             var doc = opener.document;
-            var field = doc.getElementById("[% index %]");
+            var field = doc.getElementById("[% index | html %]");
             field.value = document.f_pop.f1.value;
             window.close();
             return false;

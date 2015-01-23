@@ -32,11 +32,11 @@
         [% IF (new) %]
           <h1>New frequency</h1>
         [% ELSE %]
-          <h1>Edit frequency: [% description %]</h1>
+          <h1>Edit frequency: [% description | html %]</h1>
         [% END %]
         <form action="/cgi-bin/koha/serials/subscription-frequencies.pl" id="add_frequency_form" method="post">
           [% IF (modify) %]
-            <input type="hidden" name="id" value="[% id %]" />
+            <input type="hidden" name="id" value="[% id | html %]" />
             <input type="hidden" name="op" value="savemod" />
           [% ELSE %]
             <input type="hidden" name="op" value="savenew" />
@@ -53,9 +53,9 @@
                   <option value="">None</option>
                   [% FOREACH unit IN units_loop %]
                     [% IF (unit.selected) %]
-                      <option selected="selected" value="[% unit.val %]">
+                      <option selected="selected" value="[% unit.val | html %]">
                     [% ELSE %]
-                      <option value="[% unit.val %]">
+                      <option value="[% unit.val | html %]">
                     [% END %]
                       [% PROCESS translate_frequnit frequnit=unit.val %]
                     </option>
@@ -68,7 +68,7 @@
                 [% IF (new) %]
                   <input type="text" id="issuesperunit" name="issuesperunit" value="1" size="3" />
                 [% ELSE %]
-                  <input type="text" id="issuesperunit" name="issuesperunit" value="[% issuesperunit %]" size="3" />
+                  <input type="text" id="issuesperunit" name="issuesperunit" value="[% issuesperunit | html %]" size="3" />
                 [% END %]
               </li>
               <li>
@@ -76,12 +76,12 @@
                 [% IF (new) %]
                   <input type="text" id="unitsperissue" name="unitsperissue" value="1" size="3" />
                 [% ELSE %]
-                  <input type="text" id="unitsperissue" name="unitsperissue" value="[% unitsperissue %]" size="3" />
+                  <input type="text" id="unitsperissue" name="unitsperissue" value="[% unitsperissue | html %]" size="3" />
                 [% END %]
               </li>
               <li>
                 <label for="displayorder">Display order: </label>
-                <input type="text" id="displayorder" name="displayorder" value="[% displayorder %]" size="3" />
+                <input type="text" id="displayorder" name="displayorder" value="[% displayorder | html %]" size="3" />
               </li>
             </ol>
           </fieldset>
@@ -100,14 +100,14 @@
         [% IF still_used %]
             <div class="dialog alert">
                 <p>
-                    This frequency is still used by [% subscriptions.size %]
+                    This frequency is still used by [% subscriptions.size | html %]
                     subscription(s). Do you still want to delete it?
                 </p>
                 <p><a href="#" id="show_blocking_subs">Show subscriptions</a></p>
                 <ul id="blocking_subs" style="display:none">
                     [% FOREACH sub IN subscriptions %]
                         <li style="list-style-type:none">
-                            <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% sub.subscriptionid %]">[% sub.title %]</a>
+                            <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% sub.subscriptionid | html %]">[% sub.title | html %]</a>
                         </li>
                     [% END %]
                 </ul>
@@ -115,7 +115,7 @@
                 <form action="/cgi-bin/koha/serials/subscription-frequencies.pl" method="get">
                     <input type="hidden" name="op" value="del" />
                     <input type="hidden" name="confirm" value="1" />
-                    <input type="hidden" name="frequencyid" value="[% frequencyid %]" />
+                    <input type="hidden" name="frequencyid" value="[% frequencyid | html %]" />
                     <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
                 </form>
                 <form action="/cgi-bin/koha/serials/subscription-frequencies.pl" method="get">
@@ -139,14 +139,14 @@
             <tbody>
               [% FOREACH frequency IN frequencies_loop %]
                 <tr>
-                  <td>[% frequency.description %]</td>
+                  <td>[% frequency.description | html %]</td>
                   <td>[% PROCESS translate_frequnit frequnit=frequency.unit %]</td>
-                  <td>[% frequency.issuesperunit %]</td>
-                  <td>[% frequency.unitsperissue %]</td>
-                  <td>[% frequency.displayorder %]</td>
+                  <td>[% frequency.issuesperunit | html %]</td>
+                  <td>[% frequency.unitsperissue | html %]</td>
+                  <td>[% frequency.displayorder | html %]</td>
                   <td class="actions">
-                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=modify&frequencyid=[% frequency.id %]"><i class="fa fa-pencil"></i> Edit</a>
-                    <a class="delete_frequency btn btn-default btn-xs" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=del&frequencyid=[% frequency.id %]"><i class="fa fa-trash"></i> Delete</a>
+                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=modify&frequencyid=[% frequency.id | html %]"><i class="fa fa-pencil"></i> Edit</a>
+                    <a class="delete_frequency btn btn-default btn-xs" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=del&frequencyid=[% frequency.id | html %]"><i class="fa fa-trash"></i> Delete</a>
                   </td>
                 </tr>
               [% END %]

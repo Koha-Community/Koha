@@ -1,3 +1,4 @@
+[% USE raw %]
 [% PROCESS 'authorities-search-results.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -13,10 +14,10 @@
             <input type="hidden" name="plugin_name" value="unimarc_field_210c.pl" />
             <input type="hidden" name="op" value="do_search" />
             <input type="hidden" name="type" value="intranet" />
-            <input type="hidden" name="nbstatements" value="[% nbstatements %]" />
-            <input type="hidden" name="index" value="[% index %]" />
+            <input type="hidden" name="nbstatements" value="[% nbstatements | html %]" />
+            <input type="hidden" name="index" value="[% index | html %]" />
             <input type="hidden" name="authtypecode" value="EDITORS" />
-            <input type="hidden" name="q" value="[% index %]" />
+            <input type="hidden" name="q" value="[% index | html %]" />
             <input type="hidden" name="marclist" value="all" />
             <input type="hidden" name="and_or" value="and" />
             <input type="hidden" name="excluding" value="" />
@@ -32,7 +33,7 @@
 			            <option value="start">starts with</option>
 			            <option value="is">is exactly</option>
 		        	</select>
-                    <input type="text" id="value" name="value" value="[% resultstring %]" />
+                    <input type="text" id="value" name="value" value="[% resultstring | html %]" />
                     </li>
                 </ol>
                 </fieldset>
@@ -43,11 +44,11 @@
             [% IF ( total ) %]
             <h3>Authority search results</h3>
             <div class="pages">
-                          [% pagination_bar %]      
+                          [% pagination_bar | $raw %]
                         </div>[% END %]
             <p>
                 [% IF ( total ) %]
-                    &nbsp;<b>Results [% from %] to [% to %] of [% total %]</b><br /><br />
+                    &nbsp;<b>Results [% from | html %] to [% to | html %] of [% total | html %]</b><br /><br />
                 [% ELSE %]
                     &nbsp; No results found<br />
                 [% END %]
@@ -63,10 +64,10 @@
                 [% FOREACH resul IN result %]
                     <tr>
                         <td>[% PROCESS authresult summary=resul.summary %]</td>
-                        <td>[% resul.used %] times</td>
+                        <td>[% resul.used | html %] times</td>
                         <td>
                 [% IF ( resul.to_report ) %]
-                            <a href="javascript:report('[% resul.to_report |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]')"><img alt="choose" src="[% interface %]/[% theme %]/images/arrow.gif" width="32" /></a>
+                            <a href="javascript:report('[% resul.to_report |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]')"><img alt="choose" src="[% interface | html %]/[% theme | html %]/images/arrow.gif" width="32" /></a>
                 [% END %]
                         </td>
                     </tr>
@@ -76,7 +77,7 @@
 [% END %]
 
             [% IF ( total ) %]<div class="pages">
-                          [% pagination_bar %]      
+                          [% pagination_bar | $raw %]
                         </div>
             [% END %]
 
@@ -84,7 +85,7 @@
     <script type="text/javascript">
         function report(summary){
             var doc   = opener.document;
-            var field = doc.getElementById('[% index %]');
+            var field = doc.getElementById('[% index | html %]');
 
             field.value = summary;
             self.close();

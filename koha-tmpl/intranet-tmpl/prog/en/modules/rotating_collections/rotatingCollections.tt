@@ -1,10 +1,11 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Rotating collections</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="rcoll_rotatingCollections" class="tools rcoll">
@@ -35,18 +36,18 @@
                             <tbody>
                             [% FOREACH collectionsLoo IN collectionsLoop %]
                                 <tr>
-                                    <td><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% collectionsLoo.colId %]">[% collectionsLoo.colTitle %]</a></td>
-                                    <td>[% collectionsLoo.colDesc %]</td>
-                                    <td>[% Branches.GetName( collectionsLoo.colBranchcode ) %]</td>
+                                    <td><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% collectionsLoo.colId | html %]">[% collectionsLoo.colTitle | html %]</a></td>
+                                    <td>[% collectionsLoo.colDesc | html %]</td>
+                                    <td>[% Branches.GetName( collectionsLoo.colBranchcode ) | html %]</td>
                                     <td>
                                     <div class="dropdown">
-                                        <a class="btn btn-default btn-xs" dropdown-toggle" id="collectionsactions[% collectionsLoo.colId %]" role="button" data-toggle="dropdown" href="#">
+                                        <a class="btn btn-default btn-xs" dropdown-toggle" id="collectionsactions[% collectionsLoo.colId | html %]" role="button" data-toggle="dropdown" href="#">
                                         Actions <b class="caret"></b></a>
-                                        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="collectionsactions[% collectionsLoo.colId %]">
-                                            <li><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% collectionsLoo.colId %]"><i class="fa fa-plus"></i> Add or remove items</a></li>
-                                            <li><a href="/cgi-bin/koha/rotating_collections/transferCollection.pl?colId=[% collectionsLoo.colId %]"><i class="fa fa-exchange"></i> Transfer</a></li>
-                                            <li><a href="/cgi-bin/koha/rotating_collections/editCollections.pl?action=edit&amp;colId=[% collectionsLoo.colId %]"><i class="fa fa-pencil"></i> Edit</a></li>
-                                            <li><a class="confirmdelete" href="/cgi-bin/koha/rotating_collections/editCollections.pl?action=delete&amp;colId=[% collectionsLoo.colId %]"><i class="fa fa-trash"></i> Delete</a></li>
+                                        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="collectionsactions[% collectionsLoo.colId | html %]">
+                                            <li><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% collectionsLoo.colId | html %]"><i class="fa fa-plus"></i> Add or remove items</a></li>
+                                            <li><a href="/cgi-bin/koha/rotating_collections/transferCollection.pl?colId=[% collectionsLoo.colId | html %]"><i class="fa fa-exchange"></i> Transfer</a></li>
+                                            <li><a href="/cgi-bin/koha/rotating_collections/editCollections.pl?action=edit&amp;colId=[% collectionsLoo.colId | html %]"><i class="fa fa-pencil"></i> Edit</a></li>
+                                            <li><a class="confirmdelete" href="/cgi-bin/koha/rotating_collections/editCollections.pl?action=delete&amp;colId=[% collectionsLoo.colId | html %]"><i class="fa fa-trash"></i> Delete</a></li>
                                         </ul>
                                     </div>
                                     </td>
@@ -68,8 +69,8 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("js/tools-menu.js") %]
-    [% Asset.js("js/rotating-collections.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
+    [% Asset.js("js/rotating-collections.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

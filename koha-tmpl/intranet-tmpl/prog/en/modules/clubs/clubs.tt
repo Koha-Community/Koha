@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Branches %]
@@ -7,7 +8,7 @@
 <title>Koha &rsaquo; Tools &rsaquo; Patron clubs</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="clubs_clubs" class="clubs">
@@ -24,17 +25,17 @@
                 [% IF club_template %]
                     <div class="dialog message">
                         [% IF stored == 'updated' %]
-                            <p>Club template <i>[% club_template.name %]</i> was updated.</p>
+                            <p>Club template <i>[% club_template.name | html %]</i> was updated.</p>
                         [% ELSE %]
-                            <p>Club template <i>[% club_template.name %]</i> was saved.</p>
+                            <p>Club template <i>[% club_template.name | html %]</i> was saved.</p>
                         [% END %]
                     </div>
                 [% ELSIF club %]
                     <div class="dialog message">
                         [% IF stored == 'updated' %]
-                            <p>Club <i>[% club.name %]</i> was updated.</p>
+                            <p>Club <i>[% club.name | html %]</i> was updated.</p>
                         [% ELSE %]
-                            <p>Club <i>[% club.name %]</i> was saved.</p>
+                            <p>Club <i>[% club.name | html %]</i> was saved.</p>
                         [% END %]
                     </div>
                 [% END %]
@@ -64,8 +65,8 @@
                         <tbody>
                             [% FOREACH t IN club_templates %]
                                 <tr>
-                                    <td>[% t.name %]</td>
-                                    <td>[% t.description %]</td>
+                                    <td>[% t.name | html %]</td>
+                                    <td>[% t.description | html %]</td>
                                     <td>
                                         [% IF t.is_enrollable_from_opac %]
                                             Yes
@@ -80,13 +81,13 @@
                                             No
                                         [% END %]
                                     </td>
-                                    <td>[% Branches.GetName( t.branchcode ) %]</td>
+                                    <td>[% Branches.GetName( t.branchcode ) | html %]</td>
                                     <td class="actions">
                                         [% IF CAN_user_clubs_edit_templates %]
-                                            <a class="btn btn-xs btn-default" style="white-space:nowrap"  href="/cgi-bin/koha/clubs/templates-add-modify.pl?id=[% t.id %]">
+                                            <a class="btn btn-xs btn-default" style="white-space:nowrap"  href="/cgi-bin/koha/clubs/templates-add-modify.pl?id=[% t.id | html %]">
                                                 <i class="fa fa-pencil"></i> Edit
                                             </a>
-                                            <a class="btn btn-xs btn-default" href="#" onclick='ConfirmDeleteTemplate([% t.id %], "[% t.name | html %]", $(this) ); return false;'>
+                                            <a class="btn btn-xs btn-default" href="#" onclick='ConfirmDeleteTemplate([% t.id | html %], "[% t.name | html %]", $(this) ); return false;'>
                                                 <i class="fa fa-trash"></i> Delete
                                             </a>
                                         [% END %]
@@ -111,7 +112,7 @@
                             [% END %]
                             <ul class="dropdown-menu">
                                 [% FOREACH t IN club_templates %]
-                                    <li><a href="/cgi-bin/koha/clubs/clubs-add-modify.pl?club_template_id=[% t.id %]">[% t.name %]</a></li>
+                                    <li><a href="/cgi-bin/koha/clubs/clubs-add-modify.pl?club_template_id=[% t.id | html %]">[% t.name | html %]</a></li>
                                 [% END %]
                             </ul>
                         </div>
@@ -137,9 +138,9 @@
                         <tbody>
                             [% FOREACH c IN clubs %]
                                 <tr>
-                                    <td>[% c.name %]</td>
-                                    <td>[% c.club_template.name %]</td>
-                                    <td>[% c.description %]</td>
+                                    <td>[% c.name | html %]</td>
+                                    <td>[% c.club_template.name | html %]</td>
+                                    <td>[% c.description | html %]</td>
                                     <td>
                                         [% IF c.club_template.is_enrollable_from_opac %]
                                             Yes
@@ -154,7 +155,7 @@
                                             No
                                         [% END %]
                                     </td>
-                                    <td>[% Branches.GetName( c.branchcode ) %]</td>
+                                    <td>[% Branches.GetName( c.branchcode ) | html %]</td>
                                     <td>
                                         [% IF c.date_start %]
                                             [% c.date_start | $KohaDates %]
@@ -166,35 +167,35 @@
                                         [% END %]
                                     </td>
                                     <td>
-                                        [% c.club_enrollments.count %]
+                                        [% c.club_enrollments.count | html %]
                                     </td>
                                     <td class="actions">
                                         <div class="dropdown">
-                                            <a class="btn btn-default btn-xs dropdown-toggle" id="clubactions[% c.id %]" role="button" data-toggle="dropdown" href="#">
+                                            <a class="btn btn-default btn-xs dropdown-toggle" id="clubactions[% c.id | html %]" role="button" data-toggle="dropdown" href="#">
                                                 Actions <b class="caret"></b>
                                             </a>
-                                            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="clubactions[% c.id %]">
+                                            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="clubactions[% c.id | html %]">
                                                 [% IF ( c.club_enrollments.count ) %]
                                                     <li>
-                                                        <a href="club-enrollments.pl?id=[% c.id %]">
+                                                        <a href="club-enrollments.pl?id=[% c.id | html %]">
                                                             <i class="fa fa-list-ul"></i> Enrollments
                                                         </a>
                                                     </li>
                                                 [% ELSE %]
                                                     <li class="disabled">
-                                                        <a href="club-enrollments.pl?id=[% c.id %]">
+                                                        <a href="club-enrollments.pl?id=[% c.id | html %]">
                                                             <i class="fa fa-list-ul"></i> Enrollments
                                                         </a>
                                                     </li>
                                                 [% END %]
                                                 [% IF CAN_user_clubs_edit_clubs %]
                                                     <li>
-                                                        <a href="clubs-add-modify.pl?id=[% c.id %]">
+                                                        <a href="clubs-add-modify.pl?id=[% c.id | html %]">
                                                             <i class="fa fa-pencil"></i> Edit
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" onclick='ConfirmDeleteClub([% c.id %], "[% c.name | html %]", $(this) ); return false;'>
+                                                        <a href="#" onclick='ConfirmDeleteClub([% c.id | html %], "[% c.name | html %]", $(this) ); return false;'>
                                                             <i class="fa fa-trash"></i> Delete
                                                         </a>
                                                     </li>
@@ -222,7 +223,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     <script type="text/javascript">
         $(document).ready(function() {
             tTable = $('#club-templates-table').dataTable($.extend(true, {}, dataTablesDefaults, {

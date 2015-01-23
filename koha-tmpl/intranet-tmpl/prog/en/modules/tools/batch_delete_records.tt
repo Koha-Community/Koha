@@ -1,10 +1,11 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% PROCESS 'authorities-search-results.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Batch record deletion</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="tools_batch_delete_records" class="tools">
@@ -31,26 +32,26 @@
       <div class="dialog error" style="margin:auto;">
     [% END %]
     [% IF message.code == 'biblio_not_exists' %]
-      The biblionumber [% message.biblionumber |html %] does not exist in the database.
+      The biblionumber [% message.biblionumber | html %] does not exist in the database.
     [% ELSIF message.code == 'authority_not_exists' %]
-      The authority id [% message.authid |html %] does not exist in the database.
+      The authority id [% message.authid | html %] does not exist in the database.
     [% ELSIF message.code == 'item_issued' %]
-      At least one item is checked out on bibliographic record [% message.biblionumber %].
+      At least one item is checked out on bibliographic record [% message.biblionumber | html %].
     [% ELSIF message.code == 'reserve_not_cancelled' %]
-      Bibliographic record [% message.biblionumber %] was not deleted. A hold could not be canceled (reserve_id [% message.reserve_id %]).
+      Bibliographic record [% message.biblionumber | html %] was not deleted. A hold could not be canceled (reserve_id [% message.reserve_id | html %]).
     [% ELSIF message.code == 'item_not_deleted' %]
-      The bibliographic record [% message.biblionumber %] was not deleted. An error was encountered when deleting an item (itemnumber [% message.itemnumber %]).
+      The bibliographic record [% message.biblionumber | html %] was not deleted. An error was encountered when deleting an item (itemnumber [% message.itemnumber | html %]).
     [% ELSIF message.code == 'biblio_not_deleted' %]
-      Bibliographic record [% message.biblionumber %] was not deleted. An error occurred.
+      Bibliographic record [% message.biblionumber | html %] was not deleted. An error occurred.
     [% ELSIF message.code == 'authority_not_deleted' %]
-      Authority record [% message.authid %] was not deleted. An error occurred.
+      Authority record [% message.authid | html %] was not deleted. An error occurred.
     [% ELSIF message.code == 'biblio_deleted' %]
-      Bibliographic record [% message.biblionumber %] has been deleted successfully.
+      Bibliographic record [% message.biblionumber | html %] has been deleted successfully.
     [% ELSIF message.code == 'authority_deleted' %]
-      Authority [% message.authid %] has been deleted successfully.
+      Authority [% message.authid | html %] has been deleted successfully.
     [% END %]
     [% IF message.error %]
-      (The error was: [% message.error%], see the Koha log file for more information).
+      (The error was: [% message.error | html %], see the Koha log file for more information).
     [% END %]
     </div>
   [% END %]
@@ -108,12 +109,12 @@
             <tbody>
               [% FOR biblio IN records %]
                 <tr>
-                  <td><input type="checkbox" name="record_id" id="record_id_[% biblio.biblionumber %]" value="[% biblio.biblionumber %]" data-items="[% biblio.itemnumbers.size %]" data-issues="[% biblio.issues_count %]" data-reserves="[% biblio.holds_count %]" /></td>
-                  <td><label for="record_id_[% biblio.biblionumber %]">[% biblio.biblionumber %]</label></td>
-                  <td>[% INCLUDE 'biblio-default-view.inc' biblionumber=biblio.biblionumber %][% biblio.title %][% IF ( biblio.subtitle ) %][% FOREACH subtitle IN biblio.subtitle %] [% subtitle.subfield |html %][% END %][% END %]</a></td>
-                  <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio.biblionumber %]">[% biblio.itemnumbers.size %]</a></td>
-                  <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblio.biblionumber %]">[% biblio.holds_count %]</a></td>
-                  <td><a href="/cgi-bin/koha/catalogue/issuehistory.pl?biblionumber=[% biblio.biblionumber %]">[% biblio.issues_count %]</a></td>
+                  <td><input type="checkbox" name="record_id" id="record_id_[% biblio.biblionumber | html %]" value="[% biblio.biblionumber | html %]" data-items="[% biblio.itemnumbers.size | html %]" data-issues="[% biblio.issues_count | html %]" data-reserves="[% biblio.holds_count | html %]" /></td>
+                  <td><label for="record_id_[% biblio.biblionumber | html %]">[% biblio.biblionumber | html %]</label></td>
+                  <td>[% INCLUDE 'biblio-default-view.inc' biblionumber=biblio.biblionumber %][% biblio.title | html %][% IF ( biblio.subtitle ) %][% FOREACH subtitle IN biblio.subtitle %] [% subtitle.subfield | html %][% END %][% END %]</a></td>
+                  <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio.biblionumber | html %]">[% biblio.itemnumbers.size | html %]</a></td>
+                  <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblio.biblionumber | html %]">[% biblio.holds_count | html %]</a></td>
+                  <td><a href="/cgi-bin/koha/catalogue/issuehistory.pl?biblionumber=[% biblio.biblionumber | html %]">[% biblio.issues_count | html %]</a></td>
                 </tr>
               [% END %]
             </tbody>
@@ -138,10 +139,10 @@
             <tbody>
               [% FOR authority IN records %]
                 <tr>
-                  <td><input type="checkbox" name="record_id" value="[% authority.authid %]" data-usage="[% authority.count_usage %]" /></td>
-                  <td><a href="/cgi-bin/koha/authorities/detail.pl?authid=[% authority.authid %]">[% authority.authid %]</a></td>
+                  <td><input type="checkbox" name="record_id" value="[% authority.authid | html %]" data-usage="[% authority.count_usage | html %]" /></td>
+                  <td><a href="/cgi-bin/koha/authorities/detail.pl?authid=[% authority.authid | html %]">[% authority.authid | html %]</a></td>
                   <td>[% PROCESS authresult summary=authority.summary %]</td>
-                  <td><a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;idx=an,phr&amp;q=[% authority.authid %]">[% authority.count_usage %] record(s)</a></td>
+                  <td><a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;idx=an,phr&amp;q=[% authority.authid | html %]">[% authority.count_usage | html %] record(s)</a></td>
                 </tr>
               [% END %]
             </tbody>
@@ -150,7 +151,7 @@
       [% END %]
         <fieldset class="action">
           <input type="hidden" name="op" value="delete" />
-          <input type="hidden" name="recordtype" value="[% recordtype %]" />
+          <input type="hidden" name="recordtype" value="[% recordtype | html %]" />
           <input type="submit" value="Delete selected records" class="button" />
           <a class="cancel" href="/cgi-bin/koha/tools/batch_delete_records.pl">Cancel</a>
         </fieldset>
@@ -164,7 +165,7 @@
     [% ELSIF report.total_success == 0 %]
       No record has been deleted. An error occurred.
     [% ELSE %]
-      [% report.total_success %] / [% report.total_records %] records have been deleted successfully but some errors occurred.
+      [% report.total_success | html %] / [% report.total_records | html %] records have been deleted successfully but some errors occurred.
     [% END %]
     <p><a href="/cgi-bin/koha/tools/batch_delete_records.pl" title="New batch record deletion">New batch record deletion</a></p>
   [% ELSE %]
@@ -178,9 +179,9 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script type="text/javascript">
         var MSG_CANNOT_BE_DELETED = _("This record cannot be deleted, at least one item is currently checked out.");
         $(document).ready(function() {

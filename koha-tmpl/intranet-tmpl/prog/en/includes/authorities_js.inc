@@ -34,22 +34,22 @@ function showMergingInProgress() {
 function confirm_deletion(id) {
     var is_confirmed = confirm(_("Are you sure you want to delete this authority?"));
     if( !id ){
-        id = "[% authid %]";
+        id = "[% authid | html %]";
     }
     if (is_confirmed) {
       window.location="authorities-home.pl?op=delete"
           + "&authid=" + id
           + "&type=intranet"
-          + "&authtypecode=[% authtypecode %]"
-          + "&marclist=[% marclist %]"
-          + "&and_or=[% and_or %]"
-          + "&excluding=[% excluding %]"
-          + "&operator=[% operator %]"
-          + "&orderby=[% orderby %]"
+          + "&authtypecode=[% authtypecode | html %]"
+          + "&marclist=[% marclist | html %]"
+          + "&and_or=[% and_or | html %]"
+          + "&excluding=[% excluding | html %]"
+          + "&operator=[% operator | html %]"
+          + "&orderby=[% orderby | html %]"
           + "&value=[% value |url %]"
-          + "&startfrom=[% startfrom %]"
-          + "&resultsperpage=[% resultsperpage %]"
-          + "&csrf_token=[% csrf_token %]";
+          + "&startfrom=[% startfrom | html %]"
+          + "&resultsperpage=[% resultsperpage | html %]"
+          + "&csrf_token=[% csrf_token | html %]";
     }
 }
 
@@ -72,10 +72,10 @@ $(document).ready(function () {
 
     $("#z3950_replace").click(function(e){
         e.preventDefault();
-        window.open("/cgi-bin/koha/cataloguing/z3950_auth_search.pl?authid=[% authid %]","z3950search",'width=800,height=500,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+        window.open("/cgi-bin/koha/cataloguing/z3950_auth_search.pl?authid=[% authid | html %]","z3950search",'width=800,height=500,location=yes,toolbar=no,scrollbars=yes,resize=yes');
     });
 
-    var searchType = '[% marclist %]';
+    var searchType = '[% marclist | html %]';
     if (searchType) {
         if ('mainentry' == searchType) {
             $("#header_search").tabs( "option", "selected", 0 );

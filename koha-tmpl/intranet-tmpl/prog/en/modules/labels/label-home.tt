@@ -1,10 +1,11 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Label creator</title>
     [% INCLUDE 'doc-head-close.inc' %]
     [% IF ( bidi ) %]
-    [% Asset.css("css/right-to-left.css") %]
+    [% Asset.css("css/right-to-left.css") | $raw %]
     [% END %]
 </head>
 <body id="labels_label-home" class="tools labels">
@@ -32,7 +33,7 @@
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

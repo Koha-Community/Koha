@@ -15,22 +15,22 @@
 [% ELSE %]
 
                 [% IF ( multiple ) %]
-            <h1>Add [% total %] items to [% IF ( singleshelf ) %]<em>[% shelfname | html%]</em>: [% ELSE %]a list:[% END %]</h1>
+            <h1>Add [% total | html %] items to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>: [% ELSE %]a list:[% END %]</h1>
                 [% ELSE %]
                         <h1>Add to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>[% ELSE %]a list:[% END %]</h1>
                 [% END %]
         <ul>
             [% FOREACH biblio IN biblios %]
-            <li> <span class="title">[% biblio.title |html %]</span>
-                [% IF ( biblio.author ) %]<span class="author"> [% biblio.author %] </span>[% END %]
+            <li> <span class="title">[% biblio.title | html %]</span>
+                [% IF ( biblio.author ) %]<span class="author"> [% biblio.author | html %] </span>[% END %]
             </li>
             [% END %]
                 </ul>
 
         <form name="f1" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl" method="post">
-                        [% FOREACH biblio IN biblios %] <input type="hidden" name="biblionumber" value="[% biblio.biblionumber %]" />[% END %]
+                        [% FOREACH biblio IN biblios %] <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />[% END %]
             <input type="hidden" name="confirmed" value="1" />
-            [% IF ( shelfnumber ) %]<input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />[% END %]
+            [% IF ( shelfnumber ) %]<input type="hidden" name="shelfnumber" value="[% shelfnumber | html %]" />[% END %]
 
 [% UNLESS ( shelfnumber ) %]
 
@@ -45,32 +45,32 @@
                 [% IF private_shelves.count %]
                     <optgroup label="Private lists">
                         [% FOREACH private_shelf IN private_shelves %]
-                            <option value="[% private_shelf.shelfnumber %]">[% private_shelf.shelfname | html%]</option>
+                            <option value="[% private_shelf.shelfnumber | html %]">[% private_shelf.shelfname | html %]</option>
                         [% END %]
                     </optgroup>
                 [% END %]
                 [% IF private_shelves_shared_with_me.count %]
                     <optgroup label="Private lists shared with me">
                         [% FOREACH private_shelf IN private_shelves_shared_with_me %]
-                            <option value="[% private_shelf.shelfnumber %]">[% private_shelf.shelfname | html%]</option>
+                            <option value="[% private_shelf.shelfnumber | html %]">[% private_shelf.shelfname | html %]</option>
                         [% END %]
                     </optgroup>
                 [% END %]
                 [% IF public_shelves.count %]
                     <optgroup label="Public lists">
                         [% FOREACH public_shelf IN public_shelves %]
-                            <option value="[% public_shelf.shelfnumber %]">[% public_shelf.shelfname | html%]</option>
+                            <option value="[% public_shelf.shelfnumber | html %]">[% public_shelf.shelfname | html %]</option>
                         [% END %]
                     </optgroup>
                 [% END %]
             </select>
         </li>
     </ol>
-    [% FOREACH biblio IN biblios %]<input type="hidden" name="biblionumber" value="[% biblio.biblionumber %]" />[% END %]
+    [% FOREACH biblio IN biblios %]<input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />[% END %]
     [% UNLESS ( biblionumbers ) %]
-      <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+      <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
     [% ELSE %]
-      <input type="hidden" name="biblionumbers" value="[% biblionumbers %]" />
+      <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]" />
     [% END %]
     </fieldset>
 
@@ -83,11 +83,11 @@
         <label for="newvirtualshelf">
         List name:
         </label>
-        [% FOREACH biblio IN biblios %]<input type="hidden" name="biblionumber" value="[% biblio.biblionumber %]" />[% END %]
+        [% FOREACH biblio IN biblios %]<input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />[% END %]
         [% UNLESS ( biblionumbers ) %]
-              <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber %]" />
+              <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber | html %]" />
         [% ELSE %]
-              <input type="hidden" name="biblionumbers" id="biblionumbers" value="[% biblionumbers %]" />
+              <input type="hidden" name="biblionumbers" id="biblionumbers" value="[% biblionumbers | html %]" />
         [% END %]
         <input type="text" name="newvirtualshelf" id="newvirtualshelf" size="40" />
         <input type="hidden" name="confirmed" value="1" />

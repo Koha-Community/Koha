@@ -13,12 +13,12 @@
 		<form name="f" method="get" action="../authorities/auth_finder.pl">
             <input type="hidden" name="op" value="do_search" />
             <input type="hidden" name="type" value="intranet" />
-            <input type="hidden" name="nbstatements" value="[% nbstatements %]" />
-            <input type="hidden" name="index" value="[% index %]" />
+            <input type="hidden" name="nbstatements" value="[% nbstatements | html %]" />
+            <input type="hidden" name="index" value="[% index | html %]" />
                 <fieldset class="rows"><ol><li>
                     <span class="label">Authority type</span>
-                    [% authtypecode %]
-                    <input type="hidden" name="authtypecode" value="[% authtypecode %]" />
+                    [% authtypecode | html %]
+                    <input type="hidden" name="authtypecode" value="[% authtypecode | html %]" />
                 </li>
                 <li>
                     <label for="mainmainentry">Main entry ($a only)</label>
@@ -30,7 +30,7 @@
                         <option value="start">starts with</option>
                         <option value="is">is exactly</option>
                     </select>
-                    <input type="text" name="value_mainstr" value="[% value_mainstr |html %]" />
+                    <input type="text" name="value_mainstr" value="[% value_mainstr | html %]" />
                 </li>
                 <li>
                     <label for="mainentry">Main entry</label>
@@ -42,7 +42,7 @@
                         <option value="start">starts with</option>
                         <option value="is">is exactly</option>
                     </select>
-                    <input type="text" name="value_main" value="[% value_main |html %]" />
+                    <input type="text" name="value_main" value="[% value_main | html %]" />
                 </li>
                 <li>
                     <label for="marclist">Anywhere</label>
@@ -54,7 +54,7 @@
                         <option value="start">starts with</option>
                         <option value="is">is exactly</option>
                     </select>
-                    <input type="text" name="value_any" value="[% value_any |html %]" />
+                    <input type="text" name="value_any" value="[% value_any | html %]" />
                 </li>
                 <li>
                     <label for="orderby">Sort by </label>

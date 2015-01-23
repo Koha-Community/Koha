@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -11,11 +12,11 @@
     [% IF ( edit_sort_rule ) %]Modify filing rule[% ELSE %]Add filing rule[% END %]
 [% END %]
 [% IF ( delete_class_source_form ) %]
-  &rsaquo; Confirm deletion of classification source [% class_source %]
+  &rsaquo; Confirm deletion of classification source [% class_source | html %]
 [% ELSIF ( delete_sort_rule_form ) %]
-  &rsaquo; Confirm deletion of filing rule [% sort_rule %]
+  &rsaquo; Confirm deletion of filing rule [% sort_rule | html %]
 [% ELSIF ( delete_sort_rule_impossible ) %]
-  &rsaquo; Cannot delete filing rule [% sort_rule %]
+  &rsaquo; Cannot delete filing rule [% sort_rule | html %]
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -36,11 +37,11 @@
 &rsaquo; [% IF ( edit_sort_rule ) %]Modify filing rule[% ELSE %]Add filing rule[% END %]
 [% END %]
 [% IF ( delete_class_source_form ) %]
-&rsaquo; Confirm deletion of classification source <span class="ex">'[% class_source %]'</span>
+&rsaquo; Confirm deletion of classification source <span class="ex">'[% class_source | html %]'</span>
 [% ELSIF ( delete_sort_rule_form ) %]
-&rsaquo; Confirm deletion of filing rule <span class="ex">'[% sort_rule %]'</span>
+&rsaquo; Confirm deletion of filing rule <span class="ex">'[% sort_rule | html %]'</span>
 [% ELSIF ( delete_sort_rule_impossible ) %]
-&rsaquo; Cannot delete filing rule <span class="ex">'[% sort_rule %]'</span>
+&rsaquo; Cannot delete filing rule <span class="ex">'[% sort_rule | html %]'</span>
 [% END %]
 </div>
 
@@ -55,15 +56,15 @@
   [% ELSE %]
 <h2>Add classification source</h2>
   [% END %]
-<form action="[% script_name %]" name="Aform" class="validated" method="post">
-  <input type="hidden" name="op" value="[% confirm_op %]" />
+<form action="[% script_name | html %]" name="Aform" class="validated" method="post">
+  <input type="hidden" name="op" value="[% confirm_op | html %]" />
   <fieldset class="rows">
     <ol>
       <li>
           [% IF ( edit_class_source ) %]
 		  <span class="label">Classification source code: </span>
-            <input type="hidden" name="class_source" value="[% class_source %]" />
-            [% class_source %]
+            <input type="hidden" name="class_source" value="[% class_source | html %]" />
+            [% class_source | html %]
           [% ELSE %]
               <label class="required" for="class_source">Classification source code: </label>
               <input class="required" required="required" type="text" id="class_source" name="class_source"  size="10" maxlength="10" />
@@ -71,7 +72,7 @@
           [% END %]
        </li>
        <li><label class="required" for="description">Description: </label>
-           <input class="required" required="required" type="text" id="description" name="description" size="50" maxlength="250" value="[% description |html %]" />
+           <input class="required" required="required" type="text" id="description" name="description" size="50" maxlength="250" value="[% description | html %]" />
            <span class="required">Required</span>
        </li>
        <li><label for="used">Source in use?</label>
@@ -82,9 +83,9 @@
            <select class="required" required="required" id="sort_rule" name="sort_rule">
            [% FOREACH rules_dropdow IN rules_dropdown %]
              [% IF ( rules_dropdow.selected ) %]
-             <option value="[% rules_dropdow.rule %]" selected="selected">[% rules_dropdow.description %] ([% rules_dropdow.rule %])</option>
+             <option value="[% rules_dropdow.rule | html %]" selected="selected">[% rules_dropdow.description | html %] ([% rules_dropdow.rule | html %])</option>
              [% ELSE %]
-             <option value="[% rules_dropdow.rule %]">[% rules_dropdow.description %] ([% rules_dropdow.rule %])</option>
+             <option value="[% rules_dropdow.rule | html %]">[% rules_dropdow.description | html %] ([% rules_dropdow.rule | html %])</option>
              [% END %]
            [% END %]
            </select>
@@ -105,15 +106,15 @@
   [% ELSE %]
 <h2>Add filing rule</h2>
   [% END %]
-<form action="[% script_name %]" name="Aform" class="validated" method="post">
-  <input type="hidden" name="op" value="[% confirm_op %]" />
+<form action="[% script_name | html %]" name="Aform" class="validated" method="post">
+  <input type="hidden" name="op" value="[% confirm_op | html %]" />
   <fieldset class="rows">
     <ol>
       <li>
           [% IF ( edit_sort_rule ) %]
 		  <span class="label">Filing rule code: </span>
-            <input type="hidden" name="sort_rule" value="[% sort_rule %]" />
-            [% sort_rule %]
+            <input type="hidden" name="sort_rule" value="[% sort_rule | html %]" />
+            [% sort_rule | html %]
           [% ELSE %]
               <label for="sort_rule" class="required">Filing rule code: </label>
               <input class="required" required="required" type="text" id="sort_rule" name="sort_rule"  size="10" maxlength="10" />
@@ -121,16 +122,16 @@
           [% END %]
        </li>
        <li><label for="description" class="required">Description: </label>
-           <input class="required" required="required" type="text" id="description" name="description" size="50" maxlength="250" value="[% description |html %]" />
+           <input class="required" required="required" type="text" id="description" name="description" size="50" maxlength="250" value="[% description | html %]" />
            <span class="required">Required</span>
        </li>
        <li><label for="sort_routine" class="required">Filing routine: </label>
            <select class="required" required="required" id="sort_routine" name="sort_routine">
            [% FOREACH routines_dropdow IN routines_dropdown %]
              [% IF ( routines_dropdow.selected ) %]
-             <option value="[% routines_dropdow.routine %]" selected="selected">[% routines_dropdow.routine %]</option>
+             <option value="[% routines_dropdow.routine | html %]" selected="selected">[% routines_dropdow.routine | html %]</option>
              [% ELSE %]
-             <option value="[% routines_dropdow.routine %]">[% routines_dropdow.routine %]</option>
+             <option value="[% routines_dropdow.routine | html %]">[% routines_dropdow.routine | html %]</option>
              [% END %]
            [% END %]
            </select>
@@ -147,13 +148,13 @@
 
 [% IF ( delete_class_source_form ) %]
     <div class="dialog alert">
-        <h3>Confirm deletion of classification source <span class="ex">'[% class_source %]'</span>?</h3>
-        <form action="[% script_name %]" name="Aform" method="post">
-            <input type="hidden" name="op" value="[% confirm_op %]" />
-            <input type="hidden" name="class_source" value="[% class_source %]" />
+        <h3>Confirm deletion of classification source <span class="ex">'[% class_source | html %]'</span>?</h3>
+        <form action="[% script_name | html %]" name="Aform" method="post">
+            <input type="hidden" name="op" value="[% confirm_op | html %]" />
+            <input type="hidden" name="class_source" value="[% class_source | html %]" />
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete classification source</button>
         </form>
-        <form action="[% script_name %]" method="get">
+        <form action="[% script_name | html %]" method="get">
             <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
         </form>
     </div>
@@ -161,24 +162,24 @@
 
 [% IF ( delete_sort_rule_form ) %]
     <div class="dialog alert">
-        <h3>Confirm deletion of filing rule <span class="ex">'[% sort_rule %]'</span>?</h3>
-        <form action="[% script_name %]" name="Aform" method="post">
-            <input type="hidden" name="op" value="[% confirm_op %]" />
-            <input type="hidden" name="sort_rule" value="[% sort_rule %]" />
+        <h3>Confirm deletion of filing rule <span class="ex">'[% sort_rule | html %]'</span>?</h3>
+        <form action="[% script_name | html %]" name="Aform" method="post">
+            <input type="hidden" name="op" value="[% confirm_op | html %]" />
+            <input type="hidden" name="sort_rule" value="[% sort_rule | html %]" />
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete filing rule</button>
         </form>
-        <form action="[% script_name %]" method="get">
+        <form action="[% script_name | html %]" method="get">
             <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
         </form>
     </div>
 [% END %]
 
 [% IF ( delete_sort_rule_impossible ) %]
-<div class="dialog alert"><h3>Cannot delete filing rule <span class="ex">'[% sort_rule %]'</span></h3>
-    <p>The filing rule [% sort_rule %] is used by at least one classification source.  Please
+<div class="dialog alert"><h3>Cannot delete filing rule <span class="ex">'[% sort_rule | html %]'</span></h3>
+    <p>The filing rule [% sort_rule | html %] is used by at least one classification source.  Please
     remove it from all classification source definitions before trying again.
     </p>
-    <form action="[% script_name %]" method="get">
+    <form action="[% script_name | html %]" method="get">
           <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
     </form>
 </div>
@@ -187,22 +188,22 @@
 [% IF ( display_lists ) %]
 
 <div id="toolbar" class="btn-toolbar">
-    <a class="btn btn-default btn-sm" id="newsource" href="[% script_name %]?op=add_source"><i class="fa fa-plus"></i> New classification source</a>
-    <a class="btn btn-default btn-sm" id="newrule" href="[% script_name %]?op=add_sort_rule"><i class="fa fa-plus"></i> New filing rule</a>
+    <a class="btn btn-default btn-sm" id="newsource" href="[% script_name | html %]?op=add_source"><i class="fa fa-plus"></i> New classification source</a>
+    <a class="btn btn-default btn-sm" id="newrule" href="[% script_name | html %]?op=add_sort_rule"><i class="fa fa-plus"></i> New filing rule</a>
 </div>
 
 <h2>Classification sources</h2>
 [% IF ( added_source ) %]
-<div class="dialog message">Added classification source [% added_source %]</div>
+<div class="dialog message">Added classification source [% added_source | html %]</div>
 [% END %]
 [% IF ( edited_source ) %]
-<div class="dialog message">Modified classification source [% edited_source %]</div>
+<div class="dialog message">Modified classification source [% edited_source | html %]</div>
 [% END %]
 [% IF ( deleted_source ) %]
-<div class="dialog message">Deleted classification source [% deleted_source %]</div>
+<div class="dialog message">Deleted classification source [% deleted_source | html %]</div>
 [% END %]
 [% IF ( failed_add_source ) %]
-<div class="dialog message">Failed to add classification source [% failed_add_source %]. Perhaps the code already exists?</div>
+<div class="dialog message">Failed to add classification source [% failed_add_source | html %]. Perhaps the code already exists?</div>
 [% END %]
 <table>
   <tr>
@@ -214,13 +215,13 @@
   </tr>
   [% FOREACH class_source IN class_sources %]
   <tr>
-    <td>[% class_source.code %]</td>
-    <td>[% class_source.description |html %]</td>
+    <td>[% class_source.code | html %]</td>
+    <td>[% class_source.description | html %]</td>
     <td>[% IF ( class_source.used ) %]Yes[% ELSE %]No[% END %]</td>
-    <td>[% class_source.sortrule %]</td>
+    <td>[% class_source.sortrule | html %]</td>
     <td class="actions">
-      <a class="btn btn-default btn-xs" href="[% class_source.script_name %]?op=edit_source&amp;class_source=[% class_source.code |html %]"><i class="fa fa-pencil"></i> Edit</a>
-      <a class="btn btn-default btn-xs" href="[% class_source.script_name %]?op=delete_source&amp;class_source=[% class_source.code |html %]"><i class="fa fa-trash"></i> Delete</a>
+      <a class="btn btn-default btn-xs" href="[% class_source.script_name | html %]?op=edit_source&amp;class_source=[% class_source.code | html %]"><i class="fa fa-pencil"></i> Edit</a>
+      <a class="btn btn-default btn-xs" href="[% class_source.script_name | html %]?op=delete_source&amp;class_source=[% class_source.code | html %]"><i class="fa fa-trash"></i> Delete</a>
     </td>
   </tr>
   [% END %]
@@ -228,16 +229,16 @@
 
 <h2>Classification filing rules</h2>
 [% IF ( added_rule ) %]
-<div class="dialog message">Added filing rule [% added_rule %]</div>
+<div class="dialog message">Added filing rule [% added_rule | html %]</div>
 [% END %]
 [% IF ( edited_rule ) %]
-<div class="dialog message">Modified filing rule [% edited_rule %]</div>
+<div class="dialog message">Modified filing rule [% edited_rule | html %]</div>
 [% END %]
 [% IF ( deleted_rule ) %]
-<div class="dialog message">Deleted filing rule [% deleted_rule %]</div>
+<div class="dialog message">Deleted filing rule [% deleted_rule | html %]</div>
 [% END %]
 [% IF ( failed_add_rule ) %]
-<div class="dialog message">Failed to add filing rule [% failed_add_rule %]. Perhaps the code already exists?</div>
+<div class="dialog message">Failed to add filing rule [% failed_add_rule | html %]. Perhaps the code already exists?</div>
 [% END %]
 <table>
   <tr>
@@ -248,12 +249,12 @@
   </tr>
   [% FOREACH class_sort_rule IN class_sort_rules %]
   <tr>
-    <td>[% class_sort_rule.rule %]</td>
-    <td>[% class_sort_rule.description |html %]</td>
-    <td>[% class_sort_rule.sort_routine %]</td>
+    <td>[% class_sort_rule.rule | html %]</td>
+    <td>[% class_sort_rule.description | html %]</td>
+    <td>[% class_sort_rule.sort_routine | html %]</td>
     <td class="actions">
-      <a class="btn btn-default btn-xs" href="[% class_sort_rule.script_name %]?op=edit_sort_rule&amp;sort_rule=[% class_sort_rule.rule |html %]"><i class="fa fa-pencil"></i> Edit</a>
-      <a class="btn btn-default btn-xs" href="[% class_sort_rule.script_name %]?op=delete_sort_rule&amp;sort_rule=[% class_sort_rule.rule |html %]"><i class="fa fa-trash"></i> Delete</a>
+      <a class="btn btn-default btn-xs" href="[% class_sort_rule.script_name | html %]?op=edit_sort_rule&amp;sort_rule=[% class_sort_rule.rule | html %]"><i class="fa fa-pencil"></i> Edit</a>
+      <a class="btn btn-default btn-xs" href="[% class_sort_rule.script_name | html %]?op=delete_sort_rule&amp;sort_rule=[% class_sort_rule.rule | html %]"><i class="fa fa-trash"></i> Delete</a>
     </td>
   </tr>
   [% END %]
@@ -269,6 +270,6 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

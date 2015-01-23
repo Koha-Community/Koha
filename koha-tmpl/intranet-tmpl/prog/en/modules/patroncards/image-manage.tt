@@ -56,8 +56,8 @@
                                 [% IF ( IMPORT_SUCCESSFUL ) %]
                                     <div class="dialog message">
                                     <h3>Image successfully uploaded</h3>
-                                    <ul><li>File: [% SOURCE_FILE %]</li>
-                                    <li>Image name: [% IMAGE_NAME %]</li></ul>
+                                    <ul><li>File: [% SOURCE_FILE | html %]</li>
+                                    <li>Image name: [% IMAGE_NAME | html %]</li></ul>
                                     </div>
                                 [% END %]
                             </fieldset>
@@ -87,7 +87,7 @@
                                         [% CASE " " %]
                                             <th>Delete</th>
                                         [% CASE %]
-                                           <th>[% header_field.field_label %]</th>
+                                           <th>[% header_field.field_label | html %]</th>
                                     [% END %]
                                     [% END %]
                                     </tr>
@@ -96,11 +96,11 @@
                                     [% FOREACH text_field IN TABL.text_fields %]
                                     [% IF ( text_field.select_field ) %]
                                         <td>
-                                            <a class="delete_image btn btn-default btn-xs" href="/cgi-bin/koha/patroncards/image-manage.pl?op=delete&image_id=[% text_field.field_value %]"><i class="fa fa-trash"></i> Delete</a>
+                                            <a class="delete_image btn btn-default btn-xs" href="/cgi-bin/koha/patroncards/image-manage.pl?op=delete&image_id=[% text_field.field_value | html %]"><i class="fa fa-trash"></i> Delete</a>
                                         </td>
-                                        <td align="center"><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>
+                                        <td align="center"><input type="checkbox" name="action" value="[% text_field.field_value | html %]" /></td>
                                     [% ELSIF ( text_field.field_value ) %]
-                                        <td>[% text_field.field_value %]</td>
+                                        <td>[% text_field.field_value | html %]</td>
                                     [% ELSE %]
                                         <td>&nbsp;</td>
                                     [% END %]

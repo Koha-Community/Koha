@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -30,7 +31,7 @@
 	<div id="doc3" class="yui-t2">
 
 	[% IF ( unknownbiblionumber ) %]
-	  <div class="dialog message">The record you requested does not exist ([% biblionumber %]).</div>
+	  <div class="dialog message">The record you requested does not exist ([% biblionumber | html %]).</div>
 	[% ELSE %]
 
 		<div id="bd">
@@ -40,16 +41,16 @@
 					[% INCLUDE 'cat-toolbar.inc' %]
 
 					[% UNLESS ( popup ) %]
-                        <h1>Labeled MARC biblio : [% biblionumber %]  ( [% bibliotitle | html %] )</h1>
+                        <h1>Labeled MARC biblio : [% biblionumber | html %]  ( [% bibliotitle | html %] )</h1>
 					[% END %]
                     <p><b>With framework:
                     <select name="Frameworks" id="Frameworks" size="1" onchange="Changefwk(this);">
                         <option value="">Default</option>
                         [% FOREACH framework IN frameworks %]
                         [% IF framework.frameworkcode == frameworkcode %]
-                            <option value="[% framework.frameworkcode %]" selected="selected">[% framework.frameworktext %]</option>
+                            <option value="[% framework.frameworkcode | html %]" selected="selected">[% framework.frameworktext | html %]</option>
                         [% ELSE %]
-                            <option value="[% framework.frameworkcode %]">[% framework.frameworktext %]</option>
+                            <option value="[% framework.frameworkcode | html %]">[% framework.frameworktext | html %]</option>
                         [% END %]
                         [% END %]
                     </select>
@@ -59,8 +60,8 @@
 						<table class="labeledmarc-table">
 							[% FOREACH marc_dat IN marc_data %]
 								<tr>
-									<td class="labeledmarc-label">[% marc_dat.label %]</td>
-									<td class="labeledmarc-value">[% marc_dat.value %]</td>
+									<td class="labeledmarc-label">[% marc_dat.label | html %]</td>
+									<td class="labeledmarc-value">[% marc_dat.value | html %]</td>
 								</tr>
 							[% END %]
 						</table>
@@ -77,12 +78,12 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
-    [% Asset.js("js/catalog.js") %]
+    [% Asset.js("js/catalog.js") | $raw %]
     [% INCLUDE 'browser-strings.inc' %]
-    [% Asset.js("js/browser.js") %]
+    [% Asset.js("js/browser.js") | $raw %]
     <script type="text/javascript">
     //<![CDATA[
-        var browser = KOHA.browser('[% searchid %]', parseInt('[% biblionumber %]', 10));
+        var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
         browser.show();
         $(document).ready(function() {
             $("#Frameworks").on("change",function(){
@@ -92,7 +93,7 @@
         function Changefwk(FwkList)
         {
             var fwk = FwkList.options[FwkList.selectedIndex].value;
-            window.location = "labeledMARCdetail.pl?biblionumber=[% biblionumber %]&frameworkcode="+fwk;
+            window.location = "labeledMARCdetail.pl?biblionumber=[% biblionumber | html %]&frameworkcode="+fwk;
         }
     //]]>
     </script>

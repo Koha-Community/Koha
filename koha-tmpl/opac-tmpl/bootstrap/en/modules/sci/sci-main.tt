@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [%# Includes %]
 [% USE Koha %]
@@ -19,29 +20,29 @@
 
 [% INCLUDE 'doc-head-open.inc' %]
 
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha [% END %] &rsaquo; Self check-in</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha [% END %] &rsaquo; Self check-in</title>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Koha [% Version %]" /> <!-- leave this for stats -->
+<meta name="generator" content="Koha [% Version | html %]" /> <!-- leave this for stats -->
 
 [% IF ( Koha.Preference('OpacFavicon') ) %]
-<link rel="shortcut icon" href="[% Koha.Preference('OpacFavicon') %]" type="image/x-icon" />
+<link rel="shortcut icon" href="[% Koha.Preference('OpacFavicon') | html %]" type="image/x-icon" />
 [% ELSE %]
-<link rel="shortcut icon" href="[% interface %]/[% theme %]/images/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="[% interface | html %]/[% theme | html %]/images/favicon.ico" type="image/x-icon" />
 [% END %]
-[% Asset.css("lib/bootstrap/css/bootstrap.min.css") %]
-[% Asset.css("lib/jquery/jquery-ui.css") %]
-[% Asset.css("lib/font-awesome/css/font-awesome.min.css") %]
-[% Asset.css("css/sci.css") %]
-[% IF ( Koha.Preference('OPACUserCSS') ) %]<style type="text/css">[% Koha.Preference('OPACUserCSS') %]</style>[% END %]
-[% IF ( Koha.Preference('SelfCheckInUserCSS') ) %]<style type="text/css">[% Koha.Preference('SelfCheckInUserCSS') %]</style>[% END %]
+[% Asset.css("lib/bootstrap/css/bootstrap.min.css") | $raw %]
+[% Asset.css("lib/jquery/jquery-ui.css") | $raw %]
+[% Asset.css("lib/font-awesome/css/font-awesome.min.css") | $raw %]
+[% Asset.css("css/sci.css") | $raw %]
+[% IF ( Koha.Preference('OPACUserCSS') ) %]<style type="text/css">[% Koha.Preference('OPACUserCSS') | $raw %]</style>[% END %]
+[% IF ( Koha.Preference('SelfCheckInUserCSS') ) %]<style type="text/css">[% Koha.Preference('SelfCheckInUserCSS') | $raw %]</style>[% END %]
 <!--[if lt IE 9]>
-    <script src="[% interface %]/[% theme %]/lib/respond.min.js"></script>
+    <script src="[% interface | html %]/[% theme | html %]/lib/respond.min.js"></script>
 <![endif]-->
 <script>
     function _(s) { return s } // dummy function for gettext
 </script>
-[% Asset.js("lib/modernizr.min.js") %]
+[% Asset.js("lib/modernizr.min.js") | $raw %]
 </head>
 <body id="sci_main" class="sci" onload="dofocus();" onunload="mungeHistory();">
 
@@ -50,7 +51,7 @@
     <div class="navbar navbar-inverse navbar-static-top">
         <div class="navbar-inner">
             <div class="container-fluid">
-                <a class="brand" href="/cgi-bin/koha/sci/sci-main.pl"><img src="[% interface %]/[% theme %]/images/koha-logo-navbar.png" alt=""></a>
+                <a class="brand" href="/cgi-bin/koha/sci/sci-main.pl"><img src="[% interface | html %]/[% theme | html %]/images/koha-logo-navbar.png" alt=""></a>
                 <div id="checkouthelp">
                     <ul class="nav pull-right">
                         <li><a href="/cgi-bin/koha/sci/sci-main.pl" class="helpModal-trigger" role="button" data-toggle="modal"><i class="icon help"></i> Help</a></li>
@@ -74,7 +75,7 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <div id="opacheader">
-                [% Koha.Preference( 'opacheader' ) %]
+                [% Koha.Preference( 'opacheader' ) | $raw %]
             </div>
         </div>
     </div>
@@ -84,7 +85,7 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div id="masthead">
-                    <h1>[% LibraryName %] Self check-in</h1>
+                    <h1>[% LibraryName | html %] Self check-in</h1>
                 [% IF ( nopermission ) %]
                     [%# This is what is displayed if user doesn't have permission %]
                     <div class="alert">
@@ -109,11 +110,11 @@
                                   </thead>
                                   <tbody>
                                 [% FOREACH success_line IN success %]
-                                    <tr><td>[% success_line.barcode %]</td><td>Checked in</td></tr>
+                                    <tr><td>[% success_line.barcode | html %]</td><td>Checked in</td></tr>
                                 [% END %]
                                 [% FOREACH error IN errors %]
                                     <tr>
-                                      <td>[% error.barcode %]</td>
+                                      <td>[% error.barcode | html %]</td>
                                       <td>Not checked in [% PROCESS error_message messages=error.messages %]</td>
                                     </tr>
                                 [% END %]
@@ -170,7 +171,7 @@
         </div> <!-- / .container-fluid -->
 
         [% IF ( Koha.Preference('SelfCheckInMainUserBlock') ) %]
-            <div id="SelfCheckInMainUserBlock">[% Koha.Preference('SelfCheckInMainUserBlock' ) %]</div>
+            <div id="SelfCheckInMainUserBlock">[% Koha.Preference('SelfCheckInMainUserBlock' ) | $raw %]</div>
         [% END %]
     </div> <!-- / .main -->
 
@@ -260,7 +261,7 @@
         function timerIncrement() {
             if ( $("#sci_finish_button").is(":visible") || $("#sci_refresh_button").is(":visible") ) {
                 idleTime = idleTime + 1;
-                idleTimeout = [% refresh_timeout %];
+                idleTimeout = [% refresh_timeout | html %];
                 if (idleTime >= idleTimeout ) {
                     location.href = '/cgi-bin/koha/sci/sci-main.pl';
                 }
@@ -268,5 +269,5 @@
         }
     </script>
 
-    [% IF ( Koha.Preference('SelfCheckInUserJS') ) %]<script>[% Koha.Preference('SelfCheckInUserJS') %]</script>[% END %]
+    [% IF ( Koha.Preference('SelfCheckInUserJS') ) %]<script>[% Koha.Preference('SelfCheckInUserJS') | $raw %]</script>[% END %]
 [% END %]

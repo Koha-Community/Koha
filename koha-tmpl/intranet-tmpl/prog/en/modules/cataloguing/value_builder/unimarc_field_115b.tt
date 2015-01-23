@@ -632,7 +632,7 @@
 
    		<tr>
                 <td>Film inspection date</td>
-                <td><label for="f10">Year</label> <input type="text" name="f10" id="f10" maxlength="4" size="5" value="[% f10 %]" /> <label for="f11">Month</label> <input type="text" name="f11" id="f11" maxlength="2" size="3" value="[% f11 %]" /></td>
+                <td><label for="f10">Year</label> <input type="text" name="f10" id="f10" maxlength="4" size="5" value="[% f10 | html %]" /> <label for="f11">Month</label> <input type="text" name="f11" id="f11" maxlength="2" size="3" value="[% f11 | html %]" /></td>
         </tr>
 	</table>
 <fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
@@ -647,7 +647,7 @@
                 document.f_pop.f11.value=document.f_pop.f11.value.substring(0,2);
 
             var doc   = opener.document;
-                var field = doc.getElementById("[% index %]");
+                var field = doc.getElementById("[% index | html %]");
                 field.value =  document.f_pop.f1.value +document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value+document.f_pop.f5.value+document.f_pop.f6.value+document.f_pop.f7.value+document.f_pop.f8.value+document.f_pop.f9.value+document.f_pop.f10.value+document.f_pop.f11.value;
             self.close();
             return false;

@@ -51,9 +51,9 @@
           <option value="">All</option>
         [% FOREACH area IN areas %]
           [%- IF ( area.selected ) -%]
-          <option value="[% area.id %]" selected="selected">[%- PROCESS area_name area=area.id -%]</option>
+          <option value="[% area.id | html %]" selected="selected">[%- PROCESS area_name area=area.id -%]</option>
           [%- ELSE -%]
-          <option value="[% area.id %]">[%- PROCESS area_name area=area.id -%]</option>
+          <option value="[% area.id | html %]">[%- PROCESS area_name area=area.id -%]</option>
           [%- END -%]
         [% END %]
         </select>
@@ -73,10 +73,10 @@
             <tr>
                 <td>[% definition.name | html %]</td>
                 <td>[% definition.description | html %]</td>
-                <td>[% definition.areaname %]</td>
-                <td>[% definition.saved_sql %]</td>
+                <td>[% definition.areaname | html %]</td>
+                <td>[% definition.saved_sql | html %]</td>
                 <td class="actions"><form method="post" action="/cgi-bin/koha/reports/dictionary.pl">
-                    <input type="hidden" name="id" value="[% definition.id %]" />
+                    <input type="hidden" name="id" value="[% definition.id | html %]" />
                     <input type="hidden" name="phase" value="Delete Definition" />
                     <button type="submit" name="submit" class="btn btn-default btn-xs" id="delete"><i class="fa fa-trash"></i> Delete</button>
                 </form></td>
@@ -119,7 +119,7 @@
         <input type="hidden" name="definition_description" value="[% definition_description | html %]" />
         <label for="area">Select table:</label><select name="area" id="area">
       [%- FOREACH area IN areas -%]
-        <option value="[%- area.id -%]">[%- PROCESS area_name area=area.id -%]</option>
+        <option value="[%- area.id | html -%]">[%- PROCESS area_name area=area.id -%]</option>
       [%- END -%]
         </select>
       </li>
@@ -134,7 +134,7 @@
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">      
 <fieldset class="rows">
 <legend>Step 3 of 5: Choose a column</legend>
-<input type="hidden" name="area" value="[% area %]" />
+<input type="hidden" name="area" value="[% area | html %]" />
 <input type="hidden" name="definition_name" value="[% definition_name | html %]" />
 <input type="hidden" name="definition_description" value="[% definition_description | html %]" />
 
@@ -146,12 +146,12 @@
 </optgroup>        
 [% END %]                                                         
 
-<optgroup label="[% column.table %]">              
+<optgroup label="[% column.table | html %]">              
 [% ELSE %]               
-<option value="[% column.name %]">
-[% IF ( column.description ) %][% column.description %]    
+<option value="[% column.name | html %]">
+[% IF ( column.description ) %][% column.description | html %]    
 [% ELSE %]               
-[% column.name %]                          
+[% column.name | html %]                          
 [% END %]              
 </option>      
 [% END %]              
@@ -170,39 +170,39 @@
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
 <fieldset class="rows">
 <legend>Step 4 of 5: Specify a value</legend>
-<input type="hidden" name="area" value="[% area %]" />
+<input type="hidden" name="area" value="[% area | html %]" />
 <input type="hidden" name="definition_name" value="[% definition_name | html %]" />
 <input type="hidden" name="definition_description" value="[% definition_description | html %]" />
-<input type="hidden" name="columnstring" value="[% columnstring %]" />
+<input type="hidden" name="columnstring" value="[% columnstring | html %]" />
 
 [% FOREACH column IN columns %]
-<input type="hidden" name="criteria_column" value="[% column.name %]" />
-<ol><li><span class="label">Column: </span> [% column.name %]</li>
+<input type="hidden" name="criteria_column" value="[% column.name | html %]" />
+<ol><li><span class="label">Column: </span> [% column.name | html %]</li>
 [% IF ( column.distinct ) %]
-    <li><label for="[% column.name %]_value">Choose: </label> <select id="[% column.name %]_value" name="[% column.name %]_value">
+    <li><label for="[% column.name | html %]_value">Choose: </label> <select id="[% column.name | html %]_value" name="[% column.name | html %]_value">
         [% FOREACH value IN column.values %]
-            <option value="[% value.availablevalues %]">[% value.availablevalues %]</option>
+            <option value="[% value.availablevalues | html %]">[% value.availablevalues | html %]</option>
         [% END %]
     </select></li>
 [% END %]
 [% IF ( column.date ) %]
     <li class="radio">
         <label for="all_dates">All dates</label>
-        <input type="radio" id="all_dates" name="[% column.name %]_date_type_value" value="all" checked="checked" />
+        <input type="radio" id="all_dates" name="[% column.name | html %]_date_type_value" value="all" checked="checked" />
         <label for="date_range">Date range</label>
-        <input type="radio" id="date_range" name="[% column.name %]_date_type_value" value="range" />
+        <input type="radio" id="date_range" name="[% column.name | html %]_date_type_value" value="range" />
     </li>
     <li class="radio">
         Start of date range
-        <input type="text" size="10" id="from" name="[% column.name %]_start_value" value="" class="datepickerfrom" />
+        <input type="text" size="10" id="from" name="[% column.name | html %]_start_value" value="" class="datepickerfrom" />
         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
         End of date range
-        <input type="text" size="10" id="to" name="[% column.name %]_end_value" value="" class="datepickerto" />
+        <input type="text" size="10" id="to" name="[% column.name | html %]_end_value" value="" class="datepickerto" />
         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
 [% END %]
 [% IF ( column.text ) %]
-	<li><label for="[% column.name %]_value">Search string matches: </label> <input type="text" size="13" name="[% column.name %]_value" /></li>
+	<li><label for="[% column.name | html %]_value">Search string matches: </label> <input type="text" size="13" name="[% column.name | html %]_value" /></li>
 [% END %]
 
 [% END %]
@@ -217,10 +217,10 @@
 
 [% IF ( step_5 ) %]
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
-<input type="hidden" name="area" value="[% area %]" />
+<input type="hidden" name="area" value="[% area | html %]" />
 <input type="hidden" name="definition_name" value="[% definition_name | html %]" />
 <input type="hidden" name="definition_description" value="[% definition_description | html %]" />
-<input type="hidden" name="columnstring" value="[% columnstring %]" />
+<input type="hidden" name="columnstring" value="[% columnstring | html %]" />
 
 <h3>Add new definition</h3>
 
@@ -245,8 +245,8 @@
         </tr>
       [%- FOREACH criteria_loo IN criteria_loop -%]
         <tr>
-          <td>[%- criteria_loo.name -%]</td>
-          <td>[%- criteria_loo.value -%]</td>
+          <td>[%- criteria_loo.name | html -%]</td>
+          <td>[%- criteria_loo.value | html -%]</td>
         </tr>
       [%- END -%]
       </table>
@@ -254,7 +254,7 @@
   </ol>
 </fieldset>
 
-<fieldset class="action"><input type="hidden" name="sql" value="[% query %]" />
+<fieldset class="action"><input type="hidden" name="sql" value="[% query | html %]" />
 <input type="hidden" name="phase" value="New Term step 6" />
 <input type="submit" name="submit" value="Save" />         </fieldset>
 

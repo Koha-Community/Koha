@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
@@ -33,7 +34,7 @@
           <div class="first">
 
             [% FOR m IN messages %]
-                <div class="dialog [% m.type %]">
+                <div class="dialog [% m.type | html %]">
                     [% SWITCH m.code %]
                     [% CASE 'error_on_profile_store' %]
                         An error occurred whilst updating this housebound profile.
@@ -48,7 +49,7 @@
                     [% CASE 'error_on_visit_create' %]
                         An error occurred whilst creating a new housebound visit.
                     [% CASE %]
-                        [% m.code %]
+                        [% m.code | html %]
                     [% END %]
                     Please try again later.
                 </div>
@@ -59,7 +60,7 @@
               <h4>Manage housebound profile</h4>
               <form id="editform" method="post" name="editform"
                     action="/cgi-bin/koha/members/housebound.pl">
-                <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
+                <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                 [% IF ( housebound_profile ) %]
                   <input type="hidden" name="method" value="updateconfirm" />
                 [% ELSE %]
@@ -132,9 +133,9 @@
                         <option value="">Select a frequency</option>
                         [% FOREACH frequency IN AuthorisedValues.GetAuthValueDropbox('HSBND_FREQ') %]
                           [% IF housebound_profile.frequency == frequency.authorised_value %]
-                            <option value="[% frequency.authorised_value %]" selected="selected">[% frequency.lib %]</option>
+                            <option value="[% frequency.authorised_value | html %]" selected="selected">[% frequency.lib | html %]</option>
                           [% ELSE %]
-                            <option value="[% frequency.authorised_value %]">[% frequency.lib %]</option>
+                            <option value="[% frequency.authorised_value | html %]">[% frequency.lib | html %]</option>
                           [% END %]
                         [% END %]
                       </select>
@@ -144,7 +145,7 @@
                       <label for="fav_itemtypes">Preferred materials:</label>
                       [% IF ( housebound_profile ) %]
                         <input id="fav_itemtypes" type="text" size="50" name="fav_itemtypes"
-                               value="[% housebound_profile.fav_itemtypes %]">
+                               value="[% housebound_profile.fav_itemtypes | html %]">
                       [% ELSE %]
                         <input id="fav_itemtypes" type="text" value="" size="50" name="fav_itemtypes">
                       [% END %]
@@ -153,7 +154,7 @@
                       <label for="fav_subjects">Subjects:</label>
                       [% IF ( housebound_profile ) %]
                         <input id="fav_subjects" type="text" size="50" name="fav_subjects"
-                               value="[% housebound_profile.fav_subjects %]">
+                               value="[% housebound_profile.fav_subjects | html %]">
                       [% ELSE %]
                         <input id="fav_subjects" type="text" value="" size="50" name="fav_subjects">
                       [% END %]
@@ -162,7 +163,7 @@
                       <label for="fav_authors">Authors:</label>
                       [% IF ( housebound_profile ) %]
                         <input id="fav_authors" type="text" size="50" name="fav_authors"
-                               value="[% housebound_profile.fav_authors %]">
+                               value="[% housebound_profile.fav_authors | html %]">
                       [% ELSE %]
                         <input id="fav_authors" type="text" value="" size="50" name="fav_authors">
                       [% END %]
@@ -171,7 +172,7 @@
                       <label for="referral">Referral:</label>
                       [% IF ( housebound_profile ) %]
                         <input id="referral" type="text" size="50" name="referral"
-                               value="[% housebound_profile.referral %]">
+                               value="[% housebound_profile.referral | html %]">
                       [% ELSE %]
                         <input id="referral" type="text" value="" size="50" name="referral">
                       [% END %]
@@ -180,7 +181,7 @@
                       <label for="notes">Notes:</label>
                       [% IF ( housebound_profile ) %]
                         <input id="notes" type="text" size="50" name="notes"
-                               value="[% housebound_profile.notes %]">
+                               value="[% housebound_profile.notes | html %]">
                       [% ELSE %]
                         <input id="notes" type="text" value="" size="50" name="notes">
                       [% END %]
@@ -190,7 +191,7 @@
                 <fieldset class="action">
                   <button type="submit" class="btn btn-default btn-sm"><i class="fa fa-save"></i> Save changes</button>
                   <a class="cancel btn btn-link btn-sm"
-                     href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% patron.borrowernumber %]">
+                     href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% patron.borrowernumber | html %]">
                     Cancel
                   </a>
                 </fieldset>
@@ -203,11 +204,11 @@
                     action="/cgi-bin/koha/members/housebound.pl">
                 [% IF ( visit ) %]
                   <input type="hidden" name="method" value="editvisitconfirm" />
-                  <input type="hidden" name="visit_id" value="[% visit.id %]" />
+                  <input type="hidden" name="visit_id" value="[% visit.id | html %]" />
                 [% ELSE %]
                   <input type="hidden" name="method" value="addvisitconfirm" />
                 [% END %]
-                <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
+                <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                 <fieldset class="rows" id="instance">
                   <legend>Delivery details</legend>
                   <ol>
@@ -266,18 +267,18 @@
                         [% IF ( visit ) %]
                           [% FOREACH chooser IN choosers %]
                             [% IF ( visit.chooser_brwnumber == chooser.borrowernumber ) %]
-                              <option value="[% chooser.borrowernumber %]" selected="selected">
+                              <option value="[% chooser.borrowernumber | html %]" selected="selected">
                                 [% INCLUDE 'patron-title.inc' patron = chooser invert_name = 0 %]
                               </option>
                             [% ELSE %]
-                              <option value="[% chooser.borrowernumber %]">
+                              <option value="[% chooser.borrowernumber | html %]">
                                 [% INCLUDE 'patron-title.inc' patron = chooser invert_name = 0 %]
                               </option>
                             [% END %]
                           [% END %]
                         [% ELSE %]
                           [% FOREACH chooser IN choosers %]
-                            <option value="[% chooser.borrowernumber %]">
+                            <option value="[% chooser.borrowernumber | html %]">
                                 [% INCLUDE 'patron-title.inc' patron = chooser invert_name = 0 %]
                             </option>
                           [% END %]
@@ -292,18 +293,18 @@
                         [% IF ( visit ) %]
                           [% FOREACH deliverer IN deliverers %]
                             [% IF ( visit.deliverer_brwnumber == deliverer.borrowernumber ) %]
-                              <option value="[% deliverer.borrowernumber %]" selected="selected">
+                              <option value="[% deliverer.borrowernumber | html %]" selected="selected">
                                 [% INCLUDE 'patron-title.inc' patron = deliverer invert_name = 0 %]
                               </option>
                             [% ELSE %]
-                              <option value="[% deliverer.borrowernumber %]">
+                              <option value="[% deliverer.borrowernumber | html %]">
                                 [% INCLUDE 'patron-title.inc' patron = deliverer invert_name = 0 %]
                               </option>
                             [% END %]
                           [% END %]
                         [% ELSE %]
                           [% FOREACH deliverer IN deliverers %]
-                            <option value="[% deliverer.borrowernumber %]">
+                            <option value="[% deliverer.borrowernumber | html %]">
                               [% INCLUDE 'patron-title.inc' patron = deliverer invert_name = 0 %]
                             </option>
                           [% END %]
@@ -316,7 +317,7 @@
                 <fieldset class="action">
                   <button type="submit" class="btn btn-default btn-sm"><i class="fa fa-save"></i> Save</button>
                   <a class="cancel"
-                     href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% patron.borrowernumber %]">
+                     href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% patron.borrowernumber | html %]">
                     Cancel
                   </a>
                 </fieldset>
@@ -328,7 +329,7 @@
                 <ol>
                   <li>
                     <span class="label" class="required"> Delivery day:</span>
-                    [% hpd = housebound_profile.day %]
+                    [% hpd = housebound_profile.day | html %]
                     [% IF hpd == 'any' %]
                       Any
                     [% ELSIF hpd == 'monday' %]
@@ -349,36 +350,36 @@
                   </li>
                   <li>
                     <span class="label" class="required">Frequency:</span>
-                    [% AuthorisedValues.GetByCode( 'HSBND_FREQ', housebound_profile.frequency, 0 ) || housebound_profile.frequency %]
+                    [% AuthorisedValues.GetByCode( 'HSBND_FREQ', housebound_profile.frequency, 0 ) || housebound_profile.frequency | html %]
                   </li>
                   <li>
                     <span class="label">Material:</span>
-                    [% housebound_profile.fav_itemtypes %]
+                    [% housebound_profile.fav_itemtypes | html %]
                   </li>
                   <li>
                     <span class="label">Subjects:</span>
-                    [% housebound_profile.fav_subjects %]
+                    [% housebound_profile.fav_subjects | html %]
                   </li>
                   <li>
                     <span class="label">Authors:</span>
-                    [% housebound_profile.fav_authors %]
+                    [% housebound_profile.fav_authors | html %]
                   </li>
                   <li>
                     <span class="label">Referral:</span>
-                    [% housebound_profile.referral %]
+                    [% housebound_profile.referral | html %]
                   </li>
                   <li>
                     <span class="label">Notes:</span>
-                    [% housebound_profile.notes %]
+                    [% housebound_profile.notes | html %]
                   </li>
                 </ol>
                 <div class="action">
-                  <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% patron.borrowernumber %]&method=update_or_create"><i class="fa fa-pencil"></i> Edit</a>
+                  <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% patron.borrowernumber | html %]&method=update_or_create"><i class="fa fa-pencil"></i> Edit</a>
                 </div>
               </div>
               <div>
                 <h3>Deliveries</h3>
-                [% housebound_visits = housebound_profile.housebound_visits %]
+                [% housebound_visits = housebound_profile.housebound_visits | html %]
                 [% IF  housebound_visits.size > 0 %]
                 <table border="0" width="100%" cellpadding="3" cellspacing="0">
                   <tr>
@@ -386,28 +387,28 @@
                   </tr>
                     [% FOREACH entry IN housebound_visits %]
                     <tr>
-                      <td>[% entry.id %]</td>
-                      <td>[% entry.appointment_date | $KohaDates %] ([% entry.day_segment %])</td>
+                      <td>[% entry.id | html %]</td>
+                      <td>[% entry.appointment_date | $KohaDates %] ([% entry.day_segment | html %])</td>
                       <td>
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% entry.chooser.borrowernumber %]">
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% entry.chooser.borrowernumber | html %]">
                           [% INCLUDE 'patron-title.inc' patron = entry.chooser invert_name = 0 %]
                         </a>
                       </td>
                       <td>
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% entry.deliverer.borrowernumber %]">
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% entry.deliverer.borrowernumber | html %]">
                           [% INCLUDE 'patron-title.inc' patron = entry.deliverer invert_name = 0 %]
                         </a>
                       </td>
                       <td class="actions">
-                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/housebound.pl?method=visit_update_or_create&visit_id=[% entry.id %]&borrowernumber=[% patron.borrowernumber %]"><i class="fa fa-pencil"></i> Edit</a>
-                        <a class="delete btn btn-default btn-xs" href="/cgi-bin/koha/members/housebound.pl?method=visit_delete&visit_id=[% entry.id %]&borrowernumber=[% patron.borrowernumber %]"><i class="fa fa-trash"></i> Delete</a>
+                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/housebound.pl?method=visit_update_or_create&visit_id=[% entry.id | html %]&borrowernumber=[% patron.borrowernumber | html %]"><i class="fa fa-pencil"></i> Edit</a>
+                        <a class="delete btn btn-default btn-xs" href="/cgi-bin/koha/members/housebound.pl?method=visit_delete&visit_id=[% entry.id | html %]&borrowernumber=[% patron.borrowernumber | html %]"><i class="fa fa-trash"></i> Delete</a>
                       </td>
                     </tr>
                     [% END %]
                 </table>
                 [% END %]
                 <div class="action">
-                  <a href="/cgi-bin/koha/members/housebound.pl?method=visit_update_or_create&borrowernumber=[% patron.borrowernumber %]"
+                  <a href="/cgi-bin/koha/members/housebound.pl?method=visit_update_or_create&borrowernumber=[% patron.borrowernumber | html %]"
                     class="btn btn-default btn-sm">
                     <i class="fa fa-plus"></i> Add a new delivery
                   </a>
@@ -436,7 +437,7 @@
         });
     </script>
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

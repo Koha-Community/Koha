@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
@@ -5,7 +6,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Serials &rsaquo; Claims</title>
     [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="ser_claims" class="ser">
@@ -28,7 +29,7 @@
         [% ELSIF error_claim == 'bad_or_missing_sender' %]
             <div class="dialog alert">Bad or missing sender address; check your branch email address or preference KohaAdminEmailAddress.</div>
         [% ELSE %]
-            <div class="dialog alert">[% error_claim %]</div>
+            <div class="dialog alert">[% error_claim | html %]</div>
         [% END %]
     [% END %]
     [% IF info_claim %]
@@ -47,12 +48,12 @@
 	    <select id="supplierid" name="supplierid">
 	        [% FOREACH suploo IN suploop %]
 	            [% IF ( suploo.selected ) %]
-	            <option value="[% suploo.id %]" selected="selected" >
+	            <option value="[% suploo.id | html %]" selected="selected" >
 	            [% ELSE %]
-	            <option value="[% suploo.id %]">
+	            <option value="[% suploo.id | html %]">
 	            [% END %]
-	                [% suploo.name %]
-	                ([% suploo.count %])
+	                [% suploo.name | html %]
+	                ([% suploo.count | html %])
 	            </option>
 	        [% END %]
 	    </select>
@@ -69,9 +70,9 @@
 	<ol>
 	<li>
         <label for="from">From:</label>
-        <input type="text" name="begindate" id="from" value="[% begindate %]" size="10" maxlength="10" class="datepickerfrom" />
+        <input type="text" name="begindate" id="from" value="[% begindate | html %]" size="10" maxlength="10" class="datepickerfrom" />
         <label for="to" style="float:none;">To:</label>
-        <input type="text" name="enddate" id="to" value="[% enddate %]" size="10" maxlength="10" class="datepickerto" />
+        <input type="text" name="enddate" id="to" value="[% enddate | html %]" size="10" maxlength="10" class="datepickerto" />
         <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
         <input id="filterByDate" type="button" value="OK" />
         <a href="#" id="clearfilter"><i class="fa fa-remove"></i> Clear filter</a>
@@ -96,7 +97,7 @@
                         <th>Claims count</th>
                         <th class="title-string">Claim date</th>
                         [% FOR field IN additional_fields_for_subscription %]
-                          <th>[% field.name %]</th>
+                          <th>[% field.name | html %]</th>
                         [% END %]
                     </tr>
                 </thead>
@@ -113,7 +114,7 @@
                     <td><input type="text" class="filter" data-column_num="8" placeholder="Search claim count" /></td>
                     <td><input type="text" class="filter" data-column_num="9" placeholder="Search claim date" /></td>
                     [% FOR field IN additional_fields_for_subscription %]
-                      <td><input type="text" class="filter" data-column_num="[% loop.count + 9 %]" placeholder="Search [% field.name %]" /></td>
+                      <td><input type="text" class="filter" data-column_num="[% loop.count + 9 | html %]" placeholder="Search [% field.name | html %]" /></td>
                     [% END %]
                   </tr>
                 </tfoot>
@@ -121,18 +122,18 @@
                     <tr>
                         <td>
                           [% UNLESS missingissue.cannot_claim %]
-                            <input type="checkbox" name="serialid" value="[% missingissue.serialid %]" />
+                            <input type="checkbox" name="serialid" value="[% missingissue.serialid | html %]" />
                           [% END %]
                         </td>
-                        <td>[% missingissue.name %]</td>
+                        <td>[% missingissue.name | html %]</td>
                         <td>
-                            <span class="branch-[% missingissue.branchcode %]">[% Branches.GetName( missingissue.branchcode ) %]</span>
+                            <span class="branch-[% missingissue.branchcode | html %]">[% Branches.GetName( missingissue.branchcode ) | html %]</span>
                         </td>
                         <td>
-                        <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% missingissue.subscriptionid %]">[% missingissue.title |html %]</a>
+                        <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% missingissue.subscriptionid | html %]">[% missingissue.title | html %]</a>
                         </td>
-                        <td>[% missingissue.issn %]</td>
-                        <td>[% missingissue.serialseq %]</td>
+                        <td>[% missingissue.issn | html %]</td>
+                        <td>[% missingissue.serialseq | html %]</td>
                         <td>
                             [% IF ( missingissue.status1 ) %]<span class="status-expected">Expected</span>[% END %]
                             [% IF ( missingissue.status3 ) %]<span class="status-late">Late</span>[% END %]
@@ -145,24 +146,24 @@
                         </td>
                         <td class="planneddate">
                             [% IF ( missingissue.planneddate ) %]
-                                <span title="[% missingissue.planneddateISO %]">[% missingissue.planneddate %]</span>
+                                <span title="[% missingissue.planneddateISO | html %]">[% missingissue.planneddate | html %]</span>
                             [% ELSE %]
                                 <span title="0000-00-00"></span>
                             [% END %]
                         </td>
-                        <td>[% missingissue.claims_count %]</td>
+                        <td>[% missingissue.claims_count | html %]</td>
                         <td>
                             [% IF ( missingissue.claimdate ) %]
-                                <span title="[% missingissue.claimdateISO %]">[% missingissue.claimdate %]</span>
+                                <span title="[% missingissue.claimdateISO | html %]">[% missingissue.claimdate | html %]</span>
                             [% ELSE %]
                                 <span title="0000-00-00"></span>
                             [% END %]
                         </td>
                         [% FOR field IN additional_fields_for_subscription %]
                           [% IF field.authorised_value_category %]
-                            <td>[% AuthorisedValues.GetByCode( field.authorised_value_category, missingissue.additional_fields.${field.name} ) %]</td>
+                            <td>[% AuthorisedValues.GetByCode( field.authorised_value_category, missingissue.additional_fields.${field.name} ) | html %]</td>
                           [% ELSE %]
-                            <td>[% missingissue.additional_fields.${field.name} %]</td>
+                            <td>[% missingissue.additional_fields.${field.name} | html %]</td>
                           [% END %]
                         [% END %]
                     </tr>
@@ -174,7 +175,7 @@
                 <label for="csv_code">Select CSV profile:</label>
                 <select id="csv_profile_for_export">
                   [% FOR csv IN csv_profiles %]
-                    <option value="[% csv.export_format_id %]">[% csv.profile %]</option>
+                    <option value="[% csv.export_format_id | html %]">[% csv.profile | html %]</option>
                    [% END %]
                 </select>
                 <span class="exportSelected"><a id="ExportSelected" href="/cgi-bin/koha/serials/claims.pl">Download selected claims</a></span>
@@ -185,11 +186,11 @@
                     <label for="letter_code">Select notice:</label>
                     <select name="letter_code" id="letter_code">
                         [% FOREACH letter IN letters %]
-                            <option value="[% letter.code %]">[% letter.name %]</option>
+                            <option value="[% letter.code | html %]">[% letter.name | html %]</option>
                         [% END %]
                     </select>
                     <input type="hidden" name="op" value="send_alert" />
-                    <input type="hidden" name="supplierid" value="[% supplierid %]" />
+                    <input type="hidden" name="supplierid" value="[% supplierid | html %]" />
                     <input type="submit" name="submit" class="button" value="Send notification" />
                 </fieldset>
             [% END %]

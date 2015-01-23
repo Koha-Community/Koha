@@ -1,11 +1,11 @@
 [% USE Koha %]
 <div class="gradient">
-<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1>
+<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></h1>
 <div id="header_search">
 	<div id="syspref_search" class="residentsearch">
 	<p class="tip">System preference search:</p>
 	    <form action="/cgi-bin/koha/admin/preferences.pl">
-        <input type="hidden" name="tab" value="[% last_tab %]" />
+        <input type="hidden" name="tab" value="[% last_tab | html %]" />
         <input type="hidden" name="op" value="search" />
         <input class="head-searchbox" type="text" size="40" name="searchfield" value="">
         <input type="submit" class="submit" value="Search" />

@@ -1,13 +1,14 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE ItemTypes %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Course reserves &rsaquo; Course details for [% course.course_name %]</title>
+<title>Koha &rsaquo; Course reserves &rsaquo; Course details for [% course.course_name | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="courses_course_details" class="course">
@@ -15,7 +16,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; Course details for <i>[% course.course_name %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; Course details for <i>[% course.course_name | html %]</i></div>
 
     <div class="main container-fluid">
         <div class="row">
@@ -24,29 +25,29 @@
             [% IF CAN_user_coursereserves_add_reserves OR CAN_user_coursereserves_manage_courses OR CAN_user_coursereserves_manage_courses %]
             <div id="toolbar">
                 [% IF CAN_user_coursereserves_add_reserves %]
-                    <a class="btn btn-default btn-sm" id="add_items" href="/cgi-bin/koha/course_reserves/add_items.pl?course_id=[% course.course_id %]"><i class="fa fa-plus"></i> Add reserves</a>
-                    <a class="btn btn-default btn-sm" id="add_items" href="/cgi-bin/koha/course_reserves/batch_add_items.pl?course_id=[% course.course_id %]"><i class="fa fa-plus"></i> Batch add reserves</a>
+                    <a class="btn btn-default btn-sm" id="add_items" href="/cgi-bin/koha/course_reserves/add_items.pl?course_id=[% course.course_id | html %]"><i class="fa fa-plus"></i> Add reserves</a>
+                    <a class="btn btn-default btn-sm" id="add_items" href="/cgi-bin/koha/course_reserves/batch_add_items.pl?course_id=[% course.course_id | html %]"><i class="fa fa-plus"></i> Batch add reserves</a>
                 [% END %]
                 [% IF ( CAN_user_coursereserves_manage_courses ) %]
-                    <a class="btn btn-default btn-sm" id="edit_course" href="/cgi-bin/koha/course_reserves/course.pl?course_id=[% course.course_id %]"><i class="fa fa-pencil"></i> Edit course</a>
+                    <a class="btn btn-default btn-sm" id="edit_course" href="/cgi-bin/koha/course_reserves/course.pl?course_id=[% course.course_id | html %]"><i class="fa fa-pencil"></i> Edit course</a>
                 [% END %]
                 [% IF ( CAN_user_coursereserves_manage_courses ) %]
-                    <a class="btn btn-default btn-sm" id="delete_course" href="/cgi-bin/koha/course_reserves/mod_course.pl?course_id=[% course.course_id %]&amp;action=del"><i class="fa fa-trash"></i> Delete course</a>
+                    <a class="btn btn-default btn-sm" id="delete_course" href="/cgi-bin/koha/course_reserves/mod_course.pl?course_id=[% course.course_id | html %]&amp;action=del"><i class="fa fa-trash"></i> Delete course</a>
                 [% END %]
             </div><!-- /toolbar -->
             [% END %]
 
             <div class="rows">
               <ol>
-                <li><span class="label">Course name</span> [% course.course_name %]</li>
-                <li><span class="label">Term</span> [% AuthorisedValues.GetByCode( 'TERM', course.term ) %]</li>
-                <li><span class="label">Department</span> [% AuthorisedValues.GetByCode( 'DEPARTMENT', course.department ) %]</li>
-                <li><span class="label">Course number</span> [% course.course_number %]</li>
-                <li><span class="label">Section</span> [% course.section %]</li>
-                <li><span class="label">Instructors</span> [% FOREACH i IN course.instructors %]<div class="instructor"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% i.borrowernumber %]">[% i.firstname %] [% i.surname %]</a></div>[% END %]</li>
-                <li><span class="label">Staff note</span> [% course.staff_note %]</li>
-                <li><span class="label">Public note</span> [% course.public_note %]</li>
-                <li><span class="label">Student count</span> [% course.students_count %]</li>
+                <li><span class="label">Course name</span> [% course.course_name | html %]</li>
+                <li><span class="label">Term</span> [% AuthorisedValues.GetByCode( 'TERM', course.term ) | html %]</li>
+                <li><span class="label">Department</span> [% AuthorisedValues.GetByCode( 'DEPARTMENT', course.department ) | html %]</li>
+                <li><span class="label">Course number</span> [% course.course_number | html %]</li>
+                <li><span class="label">Section</span> [% course.section | html %]</li>
+                <li><span class="label">Instructors</span> [% FOREACH i IN course.instructors %]<div class="instructor"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% i.borrowernumber | html %]">[% i.firstname | html %] [% i.surname | html %]</a></div>[% END %]</li>
+                <li><span class="label">Staff note</span> [% course.staff_note | html %]</li>
+                <li><span class="label">Public note</span> [% course.public_note | html %]</li>
+                <li><span class="label">Student count</span> [% course.students_count | html %]</li>
                 <li><span class="label">Status</span> [% IF course.enabled == 'yes' %]Active[% ELSE %]Inactive[% END %]</li>
               </ol>
             </div>
@@ -77,22 +78,22 @@
                 <tbody>
                     [% FOREACH cr IN course_reserves %]
                         <tr>
-                            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cr.biblio.biblionumber %]">[% cr.biblio.title %]</a></td>
-                            <td>[% cr.biblio.author %]</td>
-                            <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% cr.item.itemnumber %]&amp;biblionumber=[% cr.biblio.biblionumber %]&amp;bi=[% cr.biblioitem.biblioitemnumber %]">[% cr.item.barcode %]</a></td>
-                            <td>[% cr.item.itemcallnumber %]</td>
+                            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cr.biblio.biblionumber | html %]">[% cr.biblio.title | html %]</a></td>
+                            <td>[% cr.biblio.author | html %]</td>
+                            <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% cr.item.itemnumber | html %]&amp;biblionumber=[% cr.biblio.biblionumber | html %]&amp;bi=[% cr.biblioitem.biblioitemnumber | html %]">[% cr.item.barcode | html %]</a></td>
+                            <td>[% cr.item.itemcallnumber | html %]</td>
                             [% IF item_level_itypes %]
                             <td>
                                 [% IF cr.course_item.itype %]
                                     [% IF cr.course_item.enabled == 'yes' %]
-                                        [% ItemTypes.GetDescription( cr.item.itype ) %]
+                                        [% ItemTypes.GetDescription( cr.item.itype ) | html %]
                                     [% ELSE %]
-                                        [% ItemTypes.GetDescription( cr.course_item.itype ) %]
+                                        [% ItemTypes.GetDescription( cr.course_item.itype ) | html %]
                                     [% END %]
                                 [% ELSE %]
                                      <i>Unchanged</i>
                                      [% IF cr.item.itype %]
-                                         ([% ItemTypes.GetDescription( cr.item.itype ) %])
+                                         ([% ItemTypes.GetDescription( cr.item.itype ) | html %])
                                      [% END %]
                                 [% END %]
                             </td>
@@ -100,63 +101,63 @@
                             <td>
                                  [% IF cr.course_item.ccode %]
                                      [% IF cr.course_item.enabled == 'yes' %]
-                                          [% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) %]
+                                          [% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) | html %]
                                      [% ELSE %]
-                                         [% AuthorisedValues.GetByCode( 'CCODE', cr.course_item.ccode ) %]
+                                         [% AuthorisedValues.GetByCode( 'CCODE', cr.course_item.ccode ) | html %]
                                      [% END %]
                                  [% ELSE %]
                                      <i>Unchanged</i>
                                      [% IF cr.item.ccode %]
-                                         ([% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) %])
+                                         ([% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) | html %])
                                      [% END %]
                                  [% END %]
                             </td>
                             <td>
                                 [% IF cr.course_item.location %]
                                      [% IF cr.course_item.enabled == 'yes' %]
-                                         [% AuthorisedValues.GetByCode( 'LOC', cr.item.location ) %]
+                                         [% AuthorisedValues.GetByCode( 'LOC', cr.item.location ) | html %]
                                     [% ELSE %]
-                                        [% AuthorisedValues.GetByCode( 'LOC', cr.course_item.location ) %]
+                                        [% AuthorisedValues.GetByCode( 'LOC', cr.course_item.location ) | html %]
                                     [% END %]
                                 [% ELSE %]
                                     <i>Unchanged</i>
                                     [% IF cr.item.location %]
-                                        ([% AuthorisedValues.GetByCode( 'LOC', cr.item.location ) %])
+                                        ([% AuthorisedValues.GetByCode( 'LOC', cr.item.location ) | html %])
                                     [% END %]
                                 [% END %]
                             </td>
                             <td>
                                 [% IF cr.course_item.holdingbranch %]
                                     [% IF cr.course_item.enabled == 'yes' %]
-                                        [% Branches.GetName( cr.item.holdingbranch ) %]
+                                        [% Branches.GetName( cr.item.holdingbranch ) | html %]
                                     [% ELSE %]
-                                        [% Branches.GetName( cr.course_item.holdingbranch ) %]
+                                        [% Branches.GetName( cr.course_item.holdingbranch ) | html %]
                                     [% END %]
                                 [% ELSE %]
                                     <i>Unchanged</i>
                                     [% IF cr.item.holdingbranch %]
-                                        ([% Branches.GetName( cr.item.holdingbranch ) %])
+                                        ([% Branches.GetName( cr.item.holdingbranch ) | html %])
                                     [% END %]
                                 [% END %]
                             </td>
                             <td>[% IF (cr.staff_note) %]
-                                    [% cr.staff_note %]
+                                    [% cr.staff_note | html %]
                                 [% ELSIF (cr.item.itemnotes_nonpublic) %]
-                                    [% cr.item.itemnotes_nonpublic %]
+                                    [% cr.item.itemnotes_nonpublic | html %]
                                 [% END %]
                             </td>
                             <td>[% IF (cr.public_note) %]
-                                    [% cr.public_note %]
+                                    [% cr.public_note | html %]
                                 [% ELSIF (cr.item.itemnotes) %]
-                                    [% cr.item.itemnotes %]
+                                    [% cr.item.itemnotes | html %]
                                 [% END %]
                             </td>
 
                             <td>
                                 [% IF (cr.item.uri) %]
-                                    <a href="[% cr.item.uri %]">Item URI</a>
+                                    <a href="[% cr.item.uri | html %]">Item URI</a>
                                 [% ELSIF (cr.biblioitem.url) %]
-                                    <a href="[% cr.biblioitem.url %]">Record URL</a>
+                                    <a href="[% cr.biblioitem.url | html %]">Record URL</a>
                                 [% END %]
                             </td>
 
@@ -164,10 +165,10 @@
                                 [% FOREACH c IN cr.courses %]
                                     [% UNLESS cr.course_id == c.course_id %]
                                         <p>
-                                            <a href="course-details.pl?course_id=[% c.course_id %]">
-                                                [% c.course_name %]
-                                                [% IF c.section %] [% c.section %] [% END %]
-                                                [% IF c.term %] [% AuthorisedValues.GetByCode( 'TERM', c.term ) %] [% END %]
+                                            <a href="course-details.pl?course_id=[% c.course_id | html %]">
+                                                [% c.course_name | html %]
+                                                [% IF c.section %] [% c.section | html %] [% END %]
+                                                [% IF c.term %] [% AuthorisedValues.GetByCode( 'TERM', c.term ) | html %] [% END %]
                                             </a>
                                         </p>
                                     [% END %]
@@ -177,14 +178,14 @@
                             [% IF CAN_user_coursereserves_add_reserves || CAN_user_coursereserves_delete_reserves %]
                                 <td class="actions">
                                     [% IF CAN_user_coursereserves_add_reserves %]
-                                        <a class="btn btn-default btn-xs" href="add_items.pl?course_id=[% course.course_id %]&amp;itemnumber=[% cr.item.itemnumber %]&amp;action=lookup&amp;return=[% course.course_id %]"><i class="fa fa-pencil"></i> Edit</a>
+                                        <a class="btn btn-default btn-xs" href="add_items.pl?course_id=[% course.course_id | html %]&amp;itemnumber=[% cr.item.itemnumber | html %]&amp;action=lookup&amp;return=[% course.course_id | html %]"><i class="fa fa-pencil"></i> Edit</a>
                                     [% END %]
 
                                     [% IF CAN_user_coursereserves_delete_reserves %]
                                         [% IF cr.item.onloan %]
                                             <a class="btn btn-default btn-xs disabled checkedout delete_item" href="#" data-toggle="tooltip" data-placement="left" title="This item is checked out">
                                         [% ELSE %]
-                                            <a class="btn btn-default btn-xs delete_item" href="course-details.pl?course_id=[% course.course_id %]&amp;action=del_reserve&amp;cr_id=[% cr.cr_id %]">
+                                            <a class="btn btn-default btn-xs delete_item" href="course-details.pl?course_id=[% course.course_id | html %]&amp;action=del_reserve&amp;cr_id=[% cr.cr_id | html %]">
                                         [% END %]
                                         <i class="fa fa-trash"></i> Remove</a>
                                     [% END %]
@@ -218,9 +219,9 @@
             $("#delete_course").click(function(){
                 [% SET count = course_reserves.size || 0 %]
                 [% IF count == 1 %]
-                    return confirmDelete(_("Are you sure you want to delete this course? There is %s attached item.").format([% count %]) );
+                    return confirmDelete(_("Are you sure you want to delete this course? There is %s attached item.").format([% count | html %]) );
                 [% ELSIF count > 1 %]
-                    return confirmDelete(_("Are you sure you want to delete this course? There are %s attached items.").format([% count %]) );
+                    return confirmDelete(_("Are you sure you want to delete this course? There are %s attached items.").format([% count | html %]) );
                 [% ELSE %]
                     return confirmDelete(_("Are you sure you want to delete this course?"));
                 [% END %]

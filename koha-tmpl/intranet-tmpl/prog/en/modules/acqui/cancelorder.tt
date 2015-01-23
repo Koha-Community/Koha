@@ -9,8 +9,8 @@
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
-    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% basket.bookseller.id %]">[% basket.bookseller.name | html %]</a> &rsaquo;
-    <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]">Basket [% basket.basketname | html %] ([% basket.basketno %]) for [% basket.bookseller.name | html %]</a> &rsaquo;
+    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% basket.bookseller.id | html %]">[% basket.bookseller.name | html %]</a> &rsaquo;
+    <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | html %]">Basket [% basket.basketname | html %] ([% basket.basketno | html %]) for [% basket.bookseller.name | html %]</a> &rsaquo;
     Cancel order
 </div>
 
@@ -21,7 +21,7 @@
       [% UNLESS ( confirmcancel ) %]
       <form method="post" action="">
         <div class="dialog alert">
-          <h3>Are you sure you want to cancel this order ([% ordernumber %])</h3>
+          <h3>Are you sure you want to cancel this order ([% ordernumber | html %])</h3>
           <p>
             [% IF (del_biblio) %]
               Bibliographic record will be deleted too.
@@ -33,15 +33,15 @@
             [% PROCESS 'av-build-dropbox.inc' name="reason", category="ORDER_CANCELLATION_REASON" default="0" %]
           </p>
           <input type="hidden" name="action" value="confirmcancel" />
-          <input type="hidden" value="[% ordernumber %]" name="ordernumber" />
-          <input type="hidden" value="[% biblionumber %]" name="biblionumber" />
-          <input type="hidden" value="[% basket.basketno %]" name="basketno" />
-          <input type="hidden" value="[% referrer %]" name="referrer" />
+          <input type="hidden" value="[% ordernumber | html %]" name="ordernumber" />
+          <input type="hidden" value="[% biblionumber | html %]" name="biblionumber" />
+          <input type="hidden" value="[% basket.basketno | html %]" name="basketno" />
+          <input type="hidden" value="[% referrer | html %]" name="referrer" />
           [% IF (del_biblio) %]
             <input type="hidden" value="1" name="del_biblio" />
           [% END %]
           <button type="submit" class="approve" accesskey="y"><i class="fa fa-fw fa-check"></i> Yes, cancel (Y)</button>
-          <button class="deny" accesskey="n" onclick="window.location='[% referrer %]';return false;"><i class="fa fa-fw fa-remove"></i> No, don't cancel (N)</button>
+          <button class="deny" accesskey="n" onclick="window.location='[% referrer | html %]';return false;"><i class="fa fa-fw fa-remove"></i> No, don't cancel (N)</button>
         </div>
       </form>
       [% ELSE %]
@@ -58,7 +58,7 @@
                 <p>The order has been cancelled, although the record has not been deleted.</p>
                 [% END %]
         [% END %]
-                <p><a href="[% referrer %]">OK</a></p>
+                <p><a href="[% referrer | html %]">OK</a></p>
             </div>
       [% END %]
 

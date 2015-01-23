@@ -1,10 +1,11 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% PROCESS 'permissions.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Patrons &rsaquo; Set permissions for [% patron.surname %], [% patron.firstname %]</title>
-[% Asset.css("css/treeview/jquery.treeview.css") %]
+<title>Koha &rsaquo; Patrons &rsaquo; Set permissions for [% patron.surname | html %], [% patron.firstname | html %]</title>
+[% Asset.css("css/treeview/jquery.treeview.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -12,7 +13,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Set permissions for [% patron.surname %], [% patron.firstname %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Set permissions for [% patron.surname | html %], [% patron.firstname | html %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -22,10 +23,10 @@
 [% INCLUDE 'members-toolbar.inc' %]
 
 <form method="post" action="/cgi-bin/koha/members/member-flags.pl">
-    <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
-    <input type="hidden" name="member" id="borrowernumber" value="[% patron.borrowernumber %]" />
+    <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
+    <input type="hidden" name="member" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
     <input type="hidden" name="newflags" value="1" />
-    <h1>Set permissions for [% patron.surname %], [% patron.firstname %]</h1>
+    <h1>Set permissions for [% patron.surname | html %], [% patron.firstname | html %]</h1>
     <!-- <ul id="permissionstree"><li class="root">All privileges<ul> -->
     <ul id="permissionstree" class="treeview-grey">
         <!-- <li class="folder-close">One level down<ul> -->
@@ -37,30 +38,30 @@
         [% END %]
 			[% IF ( loo.checked ) %]
           [% IF disable_superlibrarian_privs && loo.bit == 0 %]
-              <input type="checkbox" disabled="disabled" class="flag parent superlib" id="flag-[% loo.bit %]_disabled" name="flag" value="[% loo.flag %]" checked="checked" title="The system preference ProtectSuperlibrarianPrivileges is enabled" />
-              <input type="hidden" id="flag-[% loo.bit %]" name="flag" value="[% loo.flag %]" >
+              <input type="checkbox" disabled="disabled" class="flag parent superlib" id="flag-[% loo.bit | html %]_disabled" name="flag" value="[% loo.flag | html %]" checked="checked" title="The system preference ProtectSuperlibrarianPrivileges is enabled" />
+              <input type="hidden" id="flag-[% loo.bit | html %]" name="flag" value="[% loo.flag | html %]" >
           [% ELSE %]
-              <input type="checkbox" class="flag parent" id="flag-[% loo.bit %]" name="flag" value="[% loo.flag %]" checked="checked" />
+              <input type="checkbox" class="flag parent" id="flag-[% loo.bit | html %]" name="flag" value="[% loo.flag | html %]" checked="checked" />
           [% END %]
 			[% ELSE %]
           [% IF disable_superlibrarian_privs && loo.bit == 0 %]
-              <input type="checkbox" disabled="disabled" class="flag parent" id="flag-[% loo.bit %]_disabled" name="flag" value="[% loo.flag %]" title="The system preference ProtectSuperlibrarianPrivileges is enabled" />
+              <input type="checkbox" disabled="disabled" class="flag parent" id="flag-[% loo.bit | html %]_disabled" name="flag" value="[% loo.flag | html %]" title="The system preference ProtectSuperlibrarianPrivileges is enabled" />
           [% ELSE %]
-              <input type="checkbox" class="flag parent" id="flag-[% loo.bit %]" name="flag" value="[% loo.flag %]" />
+              <input type="checkbox" class="flag parent" id="flag-[% loo.bit | html %]" name="flag" value="[% loo.flag | html %]" />
           [% END %]
 			[% END %]
-                <label class="permissioncode" for="flag-[% loo.bit %]">[% loo.flag %]</label>
+                <label class="permissioncode" for="flag-[% loo.bit | html %]">[% loo.flag | html %]</label>
                 <span class="permissiondesc">[% PROCESS main_permissions name=loo.flag %]</span>
             [% IF ( loo.sub_perm_loop ) %]
-                <ul id="flag-[% loo.bit %]-children">
+                <ul id="flag-[% loo.bit | html %]-children">
                     [% FOREACH sub_perm_loo IN loo.sub_perm_loop %]
                         <li>
 			            [% IF ( sub_perm_loo.checked ) %]
-                            <input type="checkbox" class="flag child" id="[% sub_perm_loo.id %]" name="flag" value="[% sub_perm_loo.perm %]" checked="checked" />
+                            <input type="checkbox" class="flag child" id="[% sub_perm_loo.id | html %]" name="flag" value="[% sub_perm_loo.perm | html %]" checked="checked" />
 			            [% ELSE %]
-                            <input type="checkbox" class="flag child" id="[% sub_perm_loo.id %]" name="flag" value="[% sub_perm_loo.perm %]" />
+                            <input type="checkbox" class="flag child" id="[% sub_perm_loo.id | html %]" name="flag" value="[% sub_perm_loo.perm | html %]" />
 			            [% END %]
-                    <label class="permissioncode" for="[% sub_perm_loo.id %]">[% sub_perm_loo.code %]</label>
+                    <label class="permissioncode" for="[% sub_perm_loo.id | html %]">[% sub_perm_loo.code | html %]</label>
                              <span class="permissiondesc">[% PROCESS sub_permissions name=sub_perm_loo.code %]</span>
                         </li>
                     [% END %]
@@ -74,7 +75,7 @@
     <!-- </ul></li></ul> -->
     </ul>
 
-<fieldset class="action"><input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">Cancel</a></fieldset>
+<fieldset class="action"><input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a></fieldset>
 
 </form>
 </div>
@@ -87,8 +88,8 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
-    [% Asset.js("lib/jquery/plugins/jquery.treeview.pack.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/jquery.treeview.pack.js") | $raw %]
     <!-- set up tree -->
     <script type="text/javascript">
         $(document).ready(function() {

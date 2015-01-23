@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
@@ -23,10 +24,10 @@
 <!-- The manual invoice and credit buttons -->
 <div class="statictabs">
 <ul>
-    <li><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber %]">Account</a></li>
-    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber %]" >Pay fines</a></li>
-    <li class="active"><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber %]" >Create manual invoice</a></li>
-    <li><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber %]" >Create manual credit</a></li>
+    <li><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | html %]">Account</a></li>
+    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]" >Pay fines</a></li>
+    <li class="active"><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | html %]" >Create manual invoice</a></li>
+    <li><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | html %]" >Create manual credit</a></li>
 </ul>
 <div class="tabs-container">
 
@@ -35,8 +36,8 @@
   ERROR an invalid itemnumber was entered, please hit back and try again
 [% END %]
 [% ELSE %]
-<form action="/cgi-bin/koha/members/maninvoice.pl" method="post" id="maninvoice"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber %]" />
-    <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
+<form action="/cgi-bin/koha/members/maninvoice.pl" method="post" id="maninvoice"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
+    <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
 	<fieldset class="rows">
 	<legend>Manual invoice</legend>
 	<ol>
@@ -49,7 +50,7 @@
           <option value="N">New card</option>
           <option value="M">Sundry</option>
           [% FOREACH invoice_types_loo IN invoice_types_loop %]
-            <option value="[% invoice_types_loo.authorised_value %]">[% invoice_types_loo.authorised_value %]</option>
+            <option value="[% invoice_types_loo.authorised_value | html %]">[% invoice_types_loo.authorised_value | html %]</option>
           [% END %]
         </select>
       </li>
@@ -58,7 +59,7 @@
     <li><label for="note">Note: </label><input type="text" name="note" size="50" id="note" /></li>
     <li><label for="amount">Amount: </label><input type="number" name="amount" id="amount" required="required" value="" step="any" min="0" /> Example: 5.00</li>
 	</ol></fieldset>
-<fieldset class="action"><input type="submit" name="add" value="Save" /> <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber %]">Cancel</a></fieldset>
+<fieldset class="action"><input type="submit" name="add" value="Save" /> <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a></fieldset>
 </form>
 
 [% END %]
@@ -74,11 +75,11 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
     <script type="text/javascript">
         var type_fees = {'L':'','F':'','A':'','N':'','M':''};
         [% FOREACH invoice_types_loo IN invoice_types_loop %]
-            type_fees['[% invoice_types_loo.authorised_value %]'] = "[% invoice_types_loo.lib %]";
+            type_fees['[% invoice_types_loo.authorised_value | html %]'] = "[% invoice_types_loo.lib | html %]";
         [% END %]
         $(document).ready(function(){
             $('#maninvoice').preventDoubleFormSubmit();

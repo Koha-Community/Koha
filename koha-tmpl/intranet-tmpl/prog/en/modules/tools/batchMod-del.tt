@@ -1,9 +1,10 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Batch item deletion</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 <!--[if IE]>
 <style type="text/css">#selections { display: none; }</style>
 <![endif]-->
@@ -73,13 +74,13 @@
 
 
 <form name="f" action="batchMod.pl" method="post">
-     <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber %]" />
-     <input type="hidden" name="op" value="[% op %]" />
+     <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber | html %]" />
+     <input type="hidden" name="op" value="[% op | html %]" />
      <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
      <input type="hidden" name="completedJobID" id="completedJobID" value="" />
-     <input type="hidden" name="src" id="src" value="[% src %]" />
+     <input type="hidden" name="src" id="src" value="[% src | html %]" />
      [% IF biblionumber %]
-        <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber %]" />
+        <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber | html %]" />
      [% END %]
 
 [% IF ( item_loop ) %]
@@ -88,7 +89,7 @@
 
     <p id="selections"><strong>Show/hide columns:</strong> <span class="selected"><input type="checkbox" checked="checked" id="showall"/><label for="showall">Show all columns</label></span> <span><input type="checkbox" id="hideall"/><label for="hideall">Hide all columns</label></span>
         [% FOREACH item_header_loo IN item_header_loop %]
-        <span class="selected"><input id="checkheader[% loop.count %]" type="checkbox" checked="checked" /> <label for="checkheader[% loop.count %]">[% item_header_loo.header_value %]</label> </span>
+        <span class="selected"><input id="checkheader[% loop.count | html %]" type="checkbox" checked="checked" /> <label for="checkheader[% loop.count | html %]">[% item_header_loo.header_value | html %]</label> </span>
         [% END %]
     </p>
 
@@ -98,14 +99,14 @@
                 [% IF ( show ) %]<th>&nbsp;</th>[% END %]
                 <th class="anti-the">Title</th>
                 [% FOREACH item_header_loo IN item_header_loop %]
-                <th> [% item_header_loo.header_value %] </th>
+                <th> [% item_header_loo.header_value | html %] </th>
                 [% END %]
             </tr>
             </thead>
             <tbody>
-            [% FOREACH item_loo IN item_loop %] <tr> [% IF ( show ) %][% IF ( item_loo.nomod ) %] <td class="error">Cannot edit</td>[% ELSE %]<td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber %]" id="row[% item_loo.itemnumber %]" checked="checked" /></td>[% END %][% END %]
-            <td><label for="row[% item_loo.itemnumber %]"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item_loo.biblionumber %]">[% item_loo.title %]</a>[% IF ( item_loo.author ) %], by [% item_loo.author %][% END %]</label></td>
-            [% FOREACH item_valu IN item_loo.item_value %] <td>[% item_valu.field |html %]</td>
+            [% FOREACH item_loo IN item_loop %] <tr> [% IF ( show ) %][% IF ( item_loo.nomod ) %] <td class="error">Cannot edit</td>[% ELSE %]<td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber | html %]" id="row[% item_loo.itemnumber | html %]" checked="checked" /></td>[% END %][% END %]
+            <td><label for="row[% item_loo.itemnumber | html %]"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item_loo.biblionumber | html %]">[% item_loo.title | html %]</a>[% IF ( item_loo.author ) %], by [% item_loo.author | html %][% END %]</label></td>
+            [% FOREACH item_valu IN item_loo.item_value %] <td>[% item_valu.field | html %]</td>
                     [% END %] </tr>
             [% END %]
             </tbody>
@@ -117,7 +118,7 @@
     <ul>
     [% FOREACH simple_items_displa IN simple_items_display %]
         <li>
-            <a href="[% simple_items_displa.itemnumber %]">[% simple_items_displa.barcode %]</a>
+            <a href="[% simple_items_displa.itemnumber | html %]">[% simple_items_displa.barcode | html %]</a>
         </li>
     [% END %]
     </ul>
@@ -127,15 +128,15 @@
 [% IF ( show ) %]
 
 [% IF ( too_many_items ) %]
-    <p>Too many items ([% too_many_items %]) to display individually.</p>
+    <p>Too many items ([% too_many_items | html %]) to display individually.</p>
     [% FOREACH itemnumber IN itemnumbers_array %]
-        <input type="hidden" name="itemnumber" value="[% itemnumber %]" />
+        <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
     [% END %]
 [% END %]
 
 [% IF ( itemresults ) %]
         <div id="cataloguing_additem_newitem">
-         <input type="hidden" name="op" value="[% op %]" />
+         <input type="hidden" name="op" value="[% op | html %]" />
          <p>This will delete [% IF ( too_many_items ) %]all the[% ELSE %]the selected[% END %] items.</p>
          <input type="hidden" name="del" value="1" />
          <fieldset class="action">
@@ -158,19 +159,19 @@
 
 [% IF ( action ) %]
     <div class="dialog message">
-            <p>[% deleted_items %] item(s) deleted.</p>
-            [% IF delete_records %] <p>[% deleted_records %] record(s) deleted.</p> [% END %]
+            <p>[% deleted_items | html %] item(s) deleted.</p>
+            [% IF delete_records %] <p>[% deleted_records | html %] record(s) deleted.</p> [% END %]
             [% IF src == 'CATALOGUING' # from catalogue/detail.pl > Delete items in a batch%]
-                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]">Return to the record</a>
+                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | html %]">Return to the record</a>
             [% ELSIF src %]
-                <a href="[% src %]">Return to where you were</a>
+                <a href="[% src | html %]">Return to where you were</a>
             [% ELSE %]
                 <a href="/cgi-bin/koha/tools/batchMod.pl?del=1">Return to batch item deletion</a>
             [% END %]
         </div>
     [% IF ( not_deleted_items ) %]
     <div style="width:55%;margin:auto;">
-        <p>[% not_deleted_items %] item(s) could not be deleted: [% FOREACH not_deleted_itemnumber IN not_deleted_itemnumbers %][% not_deleted_itemnumber.itemnumber %][% END %]</p>
+        <p>[% not_deleted_items | html %] item(s) could not be deleted: [% FOREACH not_deleted_itemnumber IN not_deleted_itemnumbers %][% not_deleted_itemnumber.itemnumber | html %][% END %]</p>
     [% IF ( not_deleted_loop ) %]
     <table id="itemst">
         <thead>
@@ -183,8 +184,8 @@
         <tbody>
             [% FOREACH not_deleted_loo IN not_deleted_loop %]
             <tr>
-                <td>[% not_deleted_loo.itemnumber %]</td>
-                <td>[% IF ( CAN_user_editcatalogue_edit_items ) %]<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% not_deleted_loo.biblionumber %]&amp;itemnumber=[% not_deleted_loo.itemnumber %]">[% not_deleted_loo.barcode %]</a>[% ELSE %][% not_deleted_loo.barcode %][% END %]</td>
+                <td>[% not_deleted_loo.itemnumber | html %]</td>
+                <td>[% IF ( CAN_user_editcatalogue_edit_items ) %]<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% not_deleted_loo.biblionumber | html %]&amp;itemnumber=[% not_deleted_loo.itemnumber | html %]">[% not_deleted_loo.barcode | html %]</a>[% ELSE %][% not_deleted_loo.barcode | html %][% END %]</td>
                 <td>[% IF ( not_deleted_loo.book_on_loan ) %]Item is checked out[% ELSIF ( not_deleted_loo.book_reserved ) %]Item has a waiting hold[% END %]</td>
             </tr>
             [% END %]
@@ -196,9 +197,9 @@
 
     <p>
         [% IF src == 'CATALOGUING' # from catalogue/detail.pl > Delete items in a batch%]
-           <a class="btn btn-default" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]"><i class="fa fa-check-square-o"></i> Return to the record</a>
+           <a class="btn btn-default" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | html %]"><i class="fa fa-check-square-o"></i> Return to the record</a>
         [% ELSIF src %]
-           <a class="btn btn-default" href="[% src %]"><i class="fa fa-check-square-o"></i> Return to where you were</a>
+           <a class="btn btn-default" href="[% src | html %]"><i class="fa fa-check-square-o"></i> Return to where you were</a>
         [% ELSE %]
            <a class="btn btn-default" href="/cgi-bin/koha/tools/batchMod.pl?del=1"><i class="fa fa-check-square-o"></i> Return to batch item deletion</a>
         [% END %]
@@ -207,14 +208,14 @@
     </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("js/pages/batchMod.js") %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
+    [% Asset.js("js/pages/batchMod.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script type="text/javascript">
         // Prepare array of all column headers, incrementing each index by
         // two to accommodate control and title columns
-        var allColumns = new Array([% FOREACH item_header_loo IN item_header_loop %]'[% loop.count %]'[% UNLESS ( loop.last ) %],[% END %][% END %]);
+        var allColumns = new Array([% FOREACH item_header_loo IN item_header_loop %]'[% loop.count | html %]'[% UNLESS ( loop.last ) %],[% END %][% END %]);
         for( x=0; x<allColumns.length; x++ ){
           allColumns[x] = Number(allColumns[x]) + 2;
         }

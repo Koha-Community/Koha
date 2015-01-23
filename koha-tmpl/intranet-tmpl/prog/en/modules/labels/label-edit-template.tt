@@ -1,6 +1,7 @@
+[% USE raw %]
 [% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Templates &rsaquo; [% IF ( template_id ) %]Edit ([% template_id %])[% ELSE %]New[% END %]</title>
+    <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Templates &rsaquo; [% IF ( template_id ) %]Edit ([% template_id | html %])[% ELSE %]New[% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -12,7 +13,7 @@
         <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
         <a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a> &rsaquo;
         <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=template">Templates</a> &rsaquo;
-        [% IF ( template_id ) %]Edit ([% template_id %])[% ELSE %]New[% END %]
+        [% IF ( template_id ) %]Edit ([% template_id | html %])[% ELSE %]New[% END %]
     </div>
 
     <div class="main container-fluid">
@@ -28,24 +29,24 @@
                             <fieldset class="rows">
                                 <ol>
                                     <li>
-                                        <span class="label">Template ID:</span>[% IF ( template_id ) %][% template_id %][% ELSE %]N/A[% END %]
+                                        <span class="label">Template ID:</span>[% IF ( template_id ) %][% template_id | html %][% ELSE %]N/A[% END %]
                                     </li>
                                     <li>
                                         <label for="template_code">Template code:</label>
-                                        <input type="text" size="30" maxlength="43" name="template_code" id="template_code" value="[% template_code %]" />
+                                        <input type="text" size="30" maxlength="43" name="template_code" id="template_code" value="[% template_code | html %]" />
                                     </li>
                                     <li>
                                         <label for="template_desc">Template description:</label>
-                                        <textarea cols="30" rows="3" id="template_desc" name="template_desc">[% template_desc %]</textarea>
+                                        <textarea cols="30" rows="3" id="template_desc" name="template_desc">[% template_desc | html %]</textarea>
                                     </li>
  									<li>
                                  <label for="units">Units:</label>
                                  <select id="units" name="units">
                                  [% FOREACH unit IN units %]
                                      [% IF ( unit.selected ) %]
-                                     <option value="[% unit.type %]" selected="selected">
+                                     <option value="[% unit.type | html %]" selected="selected">
                                      [% ELSE %]
-                                     <option value="[% unit.type %]">
+                                     <option value="[% unit.type | html %]">
                                      [% END %]
 
                                      [% SWITCH unit.type %]
@@ -66,19 +67,19 @@
                              </li>
                                     <li>
                                         <label for="page_height">Page height:</label>
-                                        <input type="text" size="4" name="page_height" id="page_height" value="[% page_height %]" />
+                                        <input type="text" size="4" name="page_height" id="page_height" value="[% page_height | html %]" />
                                     </li>
                                     <li>
                                         <label for="page_width">Page width:</label>
-                                        <input type="text" size="4" name="page_width" id="page_width" value="[% page_width %]" />
+                                        <input type="text" size="4" name="page_width" id="page_width" value="[% page_width | html %]" />
                                     </li>
                                     <li>
                                         <label for="label_width">Label width:</label>
-                                        <input type="text" size="4" name="label_width" id="label_width" value="[% label_width %]" />
+                                        <input type="text" size="4" name="label_width" id="label_width" value="[% label_width | html %]" />
                                     </li>
                                     <li>
                                         <label for="label_height">Label height:</label>
-                                        <input type="text" size="4" name="label_height" id="label_height" value="[% label_height %]" />
+                                        <input type="text" size="4" name="label_height" id="label_height" value="[% label_height | html %]" />
                                     </li>
 
                                 </ol>
@@ -88,35 +89,35 @@
                             <fieldset class="rows">
                                 <ol><li>
                                     <label for="top_margin">Top page margin:</label>
-                                    <input type="text" size="4" name="top_margin" id="top_margin" value="[% top_margin %]" />
+                                    <input type="text" size="4" name="top_margin" id="top_margin" value="[% top_margin | html %]" />
                                 </li>
                                 <li>
                                     <label for="left_margin">Left page margin:</label>
-                                    <input type="text" size="4" name="left_margin" id="left_margin" value="[% left_margin %]" />
+                                    <input type="text" size="4" name="left_margin" id="left_margin" value="[% left_margin | html %]" />
                                 </li>
                                     <li>
                                         <label for="top_text_margin">Top text margin:</label>
-                                        <input type="text" size="4" name="top_text_margin" id="top_text_margin" value="[% top_text_margin %]" />
+                                        <input type="text" size="4" name="top_text_margin" id="top_text_margin" value="[% top_text_margin | html %]" />
                                     </li>
                                     <li>
                                         <label for="left_text_margin">Left text margin:</label>
-                                        <input type="text" size="4" name="left_text_margin" id="left_text_margin" value="[% left_text_margin %]" />
+                                        <input type="text" size="4" name="left_text_margin" id="left_text_margin" value="[% left_text_margin | html %]" />
                                     </li>
                                     <li>
                                         <label for="cols">Number of columns:</label>
-                                        <input type="text" size="4" name="cols" id="cols" value="[% cols %]" />
+                                        <input type="text" size="4" name="cols" id="cols" value="[% cols | html %]" />
                                     </li>
                                     <li>
                                         <label for="rows">Number of rows:</label>
-                                        <input type="text" size="4" name="rows" id="rows" value="[% rows %]" />
+                                        <input type="text" size="4" name="rows" id="rows" value="[% rows | html %]" />
                                     </li>
                                     <li>
                                         <label for="col_gap">Gap between columns:</label>
-                                        <input type="text" size="4" name="col_gap" id="col_gap" value="[% col_gap %]" />
+                                        <input type="text" size="4" name="col_gap" id="col_gap" value="[% col_gap | html %]" />
                                     </li>
                                     <li>
                                         <label for="row_gap">Gap between rows:</label>
-                                        <input type="text" size="4" name="row_gap" id="row_gap" value="[% row_gap %]" />
+                                        <input type="text" size="4" name="row_gap" id="row_gap" value="[% row_gap | html %]" />
                                     </li>
 
                                     <li>
@@ -125,11 +126,11 @@
                                         <select id="profile_id" name="profile_id">
                                         [% FOREACH profile_lis IN profile_list %]
 [% IF ( profile_lis.selected ) %]
-<option value="[% profile_lis.profile_id %]" selected="selected">
+<option value="[% profile_lis.profile_id | html %]" selected="selected">
 [% ELSE %]
-<option value="[% profile_lis.profile_id %]">
+<option value="[% profile_lis.profile_id | html %]">
 [% END %]
-                                        [% profile_lis.printer_name %]/[% profile_lis.paper_bin %]
+                                        [% profile_lis.printer_name | html %]/[% profile_lis.paper_bin | html %]
                                         </option>
                                         [% END %]
                                         </select>
@@ -145,7 +146,7 @@
                             <input type="submit" class="submit" value="Save" /><a class="cancel" href="/cgi-bin/koha/labels/label-manage.pl?label_element=template">Cancel</a>
                             <input type="hidden" name="op" value="save" />
                             [% IF ( template_id ) %]
-                            <input type="hidden" name="template_id" value="[% template_id %]" />
+                            <input type="hidden" name="template_id" value="[% template_id | html %]" />
                             [% END %]
                         </fieldset>
                 </form>
@@ -161,7 +162,7 @@
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     <script>
         $(document).ready(function(){
             var selectedUnit = $("#units option:selected").attr("value");

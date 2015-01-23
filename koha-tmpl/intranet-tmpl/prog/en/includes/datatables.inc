@@ -1,12 +1,13 @@
+[% USE raw %]
 [% USE Asset %]
 [% INCLUDE 'format_price.inc' %]
-[% Asset.css("css/buttons.dataTables.min.css") %]
-[% Asset.js("lib/jquery/plugins/jquery.dataTables.min.js") %]
-[% Asset.js("lib/jquery/plugins/dataTables.buttons.min.js") %]
-[% Asset.js("lib/jquery/plugins/buttons.colVis.min.js") %]
-[% Asset.js("lib/jquery/plugins/jszip.min.js") %]
-[% Asset.js("lib/jquery/plugins/buttons.print.min.js") %]
-[% Asset.js("lib/jquery/plugins/buttons.html5.min.js") %]
+[% Asset.css("css/buttons.dataTables.min.css") | $raw %]
+[% Asset.js("lib/jquery/plugins/jquery.dataTables.min.js") | $raw %]
+[% Asset.js("lib/jquery/plugins/dataTables.buttons.min.js") | $raw %]
+[% Asset.js("lib/jquery/plugins/buttons.colVis.min.js") | $raw %]
+[% Asset.js("lib/jquery/plugins/jszip.min.js") | $raw %]
+[% Asset.js("lib/jquery/plugins/buttons.print.min.js") | $raw %]
+[% Asset.js("lib/jquery/plugins/buttons.html5.min.js") | $raw %]
 <script type="text/javascript">
 //<![CDATA[
     var MSG_DT_FIRST = _("First");
@@ -30,4 +31,4 @@
     var MSG_DT_COPY_SUCCESS_X = _("Copied %d rows to clipboard");
 //]]>
 </script>
-[% Asset.js("js/datatables.js") %]
+[% Asset.js("js/datatables.js") | $raw %]

@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Authority search</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Authority search</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -37,9 +37,9 @@
                                         <select name="authtypecode" id="authtypecode">
                                             [% FOREACH authority_type IN authority_types %]
                                                 [% IF authority_type.authtypecode == authtypecode %]
-                                                    <option value="[% authority_type.authtypecode%]" selected="selected">[% authority_type.authtypetext %]</option>
+                                                    <option value="[% authority_type.authtypecode | html %]" selected="selected">[% authority_type.authtypetext | html %]</option>
                                                 [% ELSE %]
-                                                    <option value="[% authority_type.authtypecode%]">[% authority_type.authtypetext %]</option>
+                                                    <option value="[% authority_type.authtypecode | html %]">[% authority_type.authtypetext | html %]</option>
                                                 [% END %]
                                             [% END %]
                                         </select>
@@ -54,7 +54,7 @@
                                     </li>
                                     <li>
                                         <label for="value">Term(s):</label>
-                                        <input type="text" name="value" id="value" value="[% value %]" />
+                                        <input type="text" name="value" id="value" value="[% value | html %]" />
                                     </li>
                                     <li>
                                         <label for="marclist">Where:</label>

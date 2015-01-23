@@ -1,8 +1,9 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% PROCESS 'opac-authorities.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Entry [% authtypetext %]</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Entry [% authtypetext | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -13,7 +14,7 @@
         <ul class="breadcrumb">
             <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
             <li><a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="#">Entry [% authtypetext %]</a></li>
+            <li><a href="#">Entry [% authtypetext | html %]</a></li>
         </ul>
 
         <div class="container-fluid">
@@ -31,7 +32,7 @@
                     <div id="userauthMARCdetails" class="maincontent">
                         <div id="views">
                             <span class="view">
-                                <a id="Normalview" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% authid %]">Normal view</a>
+                                <a id="Normalview" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% authid | html %]">Normal view</a>
                             </span>
                             <span class="view">
                                 <span id="MARCview">MARC view</span>
@@ -44,15 +45,15 @@
                             </div>
                         [% END %]
 
-                        <h1>Entry [% authtypetext %]</h1>
-                        <p><a href="opac-search.pl?type=opac&amp;q=[% authid %]&amp;idx=an,phr">Number of records used in: [% count %]</a></p>
+                        <h1>Entry [% authtypetext | html %]</h1>
+                        <p><a href="opac-search.pl?type=opac&amp;q=[% authid | html %]&amp;idx=an,phr">Number of records used in: [% count | html %]</a></p>
                             [% FOREACH Tag0X IN Tab0XX %]
-                                <p><b>[% Tag0X.tag %]</b></p>
+                                <p><b>[% Tag0X.tag | html %]</b></p>
                                 <ul>
                                 [% FOREACH subfiel IN Tag0X.subfield %]
-                                    <li><b>[% subfiel.marc_lib %]:</b>
-                                    [% IF subfiel.isurl %]<a href="[% subfiel.marc_value %]">[% subfiel.marc_value %]</a>
-                                    [% ELSE %][% subfiel.marc_value %][% END %]</li>
+                                    <li><b>[% subfiel.marc_lib | $raw %]:</b>
+                                    [% IF subfiel.isurl %]<a href="[% subfiel.marc_value | html %]">[% subfiel.marc_value | html %]</a>
+                                    [% ELSE %][% subfiel.marc_value | html %][% END %]</li>
                                 [% END %]
                                 </ul>
                             [% END %]
@@ -64,7 +65,7 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% Asset.js("lib/jquery/plugins/jquery.jstree.js") %]
+[% Asset.js("lib/jquery/plugins/jquery.jstree.js") | $raw %]
 <script>
     //<![CDATA[
         $(document).ready(function() {

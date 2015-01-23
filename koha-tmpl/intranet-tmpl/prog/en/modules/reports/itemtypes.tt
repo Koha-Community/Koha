@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
 [% USE ItemTypes %]
@@ -6,7 +7,7 @@
 <title>Koha &rsaquo; Reports &rsaquo; Catalog by item types</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( do_it ) %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 [% END %]
 </head>
 
@@ -24,7 +25,7 @@
 
 [% IF ( do_it ) %]
 [% FOREACH mainloo IN mainloop %]
-    <h1>Reports on item types [% IF branch %] held at [% Branches.GetName( branch ) %][% END %]</h1>
+    <h1>Reports on item types [% IF branch %] held at [% Branches.GetName( branch ) | html %][% END %]</h1>
 	<table id="itemtypest">
 		<thead>
 		<tr>
@@ -35,14 +36,14 @@
 		<tfoot>
 			<tr>
 				<th>TOTAL</th>
-				<th>[% mainloo.total %]</th>
+				<th>[% mainloo.total | html %]</th>
 			</tr>
 		</tfoot>
 		<tbody>
 			[% FOREACH loopitemtyp IN mainloo.loopitemtype %]
 				<tr>
-                    <td>[% ItemTypes.GetDescription( loopitemtyp.itemtype ) %]</td>
-					<td>[% loopitemtyp.count %]</td>
+                    <td>[% ItemTypes.GetDescription( loopitemtyp.itemtype ) | html %]</td>
+					<td>[% loopitemtyp.count | html %]</td>
 				</tr>
 			[% END %]
 		</tbody>
@@ -64,7 +65,7 @@
             </ol>
           </fieldset>
           <fieldset class="action"><input type="submit" value="Submit" />
-            <input type="hidden" name="report_name" value="[% report_name %]" />
+            <input type="hidden" name="report_name" value="[% report_name | html %]" />
             <input type="hidden" name="do_it" value="1" />
           </fieldset>
         </form>

@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
@@ -24,10 +25,10 @@
 	<div class="yui-b">
 
 [% FOR m IN messages %]
-    <div class="dialog [% m.type %]">
+    <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'invalid_mimetype' %]The file used does not have a valid format. Only csv and txt are allowed.
-        [% CASE %][% m.code %]
+        [% CASE %][% m.code | html %]
         [% END %]
     </div>
 [% END %]
@@ -66,7 +67,7 @@
             <select name="itemtype" id="itemtype">
                 <option value="">-- All --</option>
                 [% FOREACH itemtype IN itemtypes %]
-                    <option value="[% itemtype.itemtype %]">[% itemtype.translated_description %]</option>
+                    <option value="[% itemtype.itemtype | html %]">[% itemtype.translated_description | html %]</option>
                 [% END %]
             </select>
         </li>
@@ -96,11 +97,11 @@
         <ol>
             <li>
                     <label for="from">Start date:</label>
-                    <input type="text" size="10" id="from" name="start_accession" value="[% from %]" class="datepickerfrom" />
+                    <input type="text" size="10" id="from" name="start_accession" value="[% from | html %]" class="datepickerfrom" />
             </li>
             <li>
                 <label for="to">End date:</label>
-                <input size="10" id="to" name="end_accession" value="[% end_accession %]" type="text" class="datepickerto" />
+                <input size="10" id="to" name="end_accession" value="[% end_accession | html %]" type="text" class="datepickerto" />
             </li>
         </ol>
     </fieldset>
@@ -127,7 +128,7 @@
         </li>
         <li>
         <label for="export_remove_fields">Don't export fields:</label>
-        <input id="export_remove_fields" type="text" name="export_remove_fields" value="[% export_remove_fields %]" />
+        <input id="export_remove_fields" type="text" name="export_remove_fields" value="[% export_remove_fields | html %]" />
         separate by a blank. (e.g., 100a 200 606)
         </li></ol>
     </fieldset>
@@ -151,7 +152,7 @@
             <label for="bibs_csv_profile">CSV profile: </label>
             <select id="bibs_csv_profile" name="csv_profile_id">
                 [% FOR csv_profile IN csv_profiles %]
-                    <option value="[% csv_profile.export_format_id %]">[% csv_profile.profile %]</option>
+                    <option value="[% csv_profile.export_format_id | html %]">[% csv_profile.profile | html %]</option>
                 [% END %]
             </select>
         </li>
@@ -183,7 +184,7 @@
             <select name="authtype" id="authtype">
                 <option value="">-- All --</option>
                 [% FOREACH authority_type IN authority_types %]
-                    <option value="[% authority_type.authtypecode %]">[% authority_type.authtypetext %]</option>
+                    <option value="[% authority_type.authtypecode | html %]">[% authority_type.authtypetext | html %]</option>
                 [% END %]
             </select>
         </li>
@@ -236,7 +237,7 @@
     [% IF ( dbfiles && (dbfiles.size > 0) ) %]
         <ul>
         [% FOREACH dbfile IN dbfiles %]
-            <li><input type="radio" name="filename" value="[% dbfile %]">[% dbfile %]</input></li>
+            <li><input type="radio" name="filename" value="[% dbfile | html %]">[% dbfile | html %]</input></li>
         [% END %]
         </ul>
     [% ELSE %]
@@ -262,7 +263,7 @@
     [% IF ( conffiles && (conffiles.size > 0) ) %]
         <ul>
         [% FOREACH conffile IN conffiles %]
-            <li><input type="radio" name="filename" value="[% conffile %]">[% conffile %]</input></li>
+            <li><input type="radio" name="filename" value="[% conffile | html %]">[% conffile | html %]</input></li>
         [% END %]
         </ul>
     [% ELSE %]
@@ -289,7 +290,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     <script type="text/javascript">
         $(document).ready(function() {

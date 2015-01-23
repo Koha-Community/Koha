@@ -13,7 +13,7 @@
 [% INCLUDE 'installer-doc-head-close.inc' %]
 [% INCLUDE 'validator-strings.inc' %]
 [% INCLUDE 'installer-strings.inc' %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/onboarding.js"></script>
+<script type="text/javascript" src="[% interface | html %]/[% theme | html %]/js/onboarding.js"></script>
 </head>
 
 <body id="installer" class="installer">
@@ -35,13 +35,13 @@
                         <ol>
                             <li>
                                 <label for="categorycode" class="required">Category code: </label>
-                                <input type="text" pattern="[0-9A-Za-z]{1,10}" id="categorycode" name="categorycode" value="[% category.categorycode |html %]" size="10" maxlength="10" class="required" required="required" />
+                                <input type="text" pattern="[0-9A-Za-z]{1,10}" id="categorycode" name="categorycode" value="[% category.categorycode | html %]" size="10" maxlength="10" class="required" required="required" />
                                 <span class="required">Required</span>
                             </li>
 
                             <li>
                                 <label for="description" class="required">Description: </label>
-                                <input type="text" id="description" name="description" size="40" maxlength="80" class="required" required="required" value="[% category.description |html%]" />
+                                <input type="text" id="description" name="description" size="40" maxlength="80" class="required" required="required" value="[% category.description | html %]" />
                                 <span class="required">Required</span>
                             </li>
 
@@ -102,7 +102,7 @@
                                         <li>
                                             <label for="enrolmentperiod">In months: </label>
                                             [% IF category.enrolmentperiod %]
-                                                <input type="number" class="enrolmentperiod" name="enrolmentperiod" id="enrolmentperiod" min="0" size="3" value="[% category.enrolmentperiod %]" />
+                                                <input type="number" class="enrolmentperiod" name="enrolmentperiod" id="enrolmentperiod" min="0" size="3" value="[% category.enrolmentperiod | html %]" />
                                             [% ELSE %]
                                                 <input type="number" class="enrolmentperiod" name="enrolmentperiod" id="enrolmentperiod" min="0" size="3" value="" />
                                             [% END %]

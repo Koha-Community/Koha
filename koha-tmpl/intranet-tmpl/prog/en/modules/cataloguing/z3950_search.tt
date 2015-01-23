@@ -1,9 +1,10 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Z39.50/SRU search results</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 <style type="text/css">
 #dataPreview { width : 90%; top: 5%; } .modal-body { max-height: 380px; } .modal-header { padding: 0 14px; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }
 </style>
@@ -22,7 +23,7 @@
         <ol>
         <li><label for="isbn">ISBN: </label> <input type="text" id="isbn" name="isbn" value="[% isbn | html %]" class="focus" /></li>
         <li><label for="issn">ISSN: </label> <input type="text" id="issn" name="issn" value="[% issn | html %]" /></li>
-        <li><label for="title">Title: </label> <input type="text" id="title"  name="title" value="[% title |html %]" /></li>
+        <li><label for="title">Title: </label> <input type="text" id="title"  name="title" value="[% title | html %]" /></li>
         <li><label for="author">Author: </label> <input type="text" id="author" name="author" value="[% author | html %]" /></li>
         <li><label for="subject">Subject heading: </label> <input type="text" id="subject" name="subject" value="" /></li>
         <li><label for="srchany">Keyword (any): </label> <input type="text" id="srchany" name="srchany" value="" /></li>
@@ -42,11 +43,11 @@
     [% FOREACH serverloo IN serverloop %]
         <p> 
             [% IF ( serverloo.checked ) %]
-                <input type="checkbox" name="id" id="z3950_[% serverloo.id %]" value="[% serverloo.id %]" checked="checked" />
+                <input type="checkbox" name="id" id="z3950_[% serverloo.id | html %]" value="[% serverloo.id | html %]" checked="checked" />
             [% ELSE %]
-                <input type="checkbox" name="id" id="z3950_[% serverloo.id %]" value="[% serverloo.id %]" />
+                <input type="checkbox" name="id" id="z3950_[% serverloo.id | html %]" value="[% serverloo.id | html %]" />
             [% END %]
-            <label for="z3950_[% serverloo.id %]">[% serverloo.servername %]</label>
+            <label for="z3950_[% serverloo.id | html %]">[% serverloo.servername | html %]</label>
 
         </p>
     [% END %]
@@ -81,10 +82,10 @@
             <div class="dialog alert">
                 <ul>
                 [% FOREACH errcon IN errconn %]
-                    [% IF ( errcon.error == '10000' ) %]<li>Connection failed to [% errcon.server %]</li>
-                    [% ELSIF ( errcon.error == '10007' ) %]<li>Connection timeout to [% errcon.server %]</li>
-                    [% ELSIF errcon.error.match( '^XSLTH' ) %]<li>[% errcon.server %] record [% errcon.seq %]: [% PROCESS 'xslt-handler.inc' code=errcon.error %]</li>
-                    [% ELSE %]<li>[% errcon.server %] record [% errcon.seq %]: [% errcon.error %]</li>
+                    [% IF ( errcon.error == '10000' ) %]<li>Connection failed to [% errcon.server | html %]</li>
+                    [% ELSIF ( errcon.error == '10007' ) %]<li>Connection timeout to [% errcon.server | html %]</li>
+                    [% ELSIF errcon.error.match( '^XSLTH' ) %]<li>[% errcon.server | html %] record [% errcon.seq | html %]: [% PROCESS 'xslt-handler.inc' code=errcon.error %]</li>
+                    [% ELSE %]<li>[% errcon.server | html %] record [% errcon.seq | html %]: [% errcon.error | html %]</li>
                     [% END %]
                 [% END %]
                 </ul>
@@ -106,24 +107,24 @@
     <tbody>[% FOREACH breeding_loo IN breeding_loop %]
         [% IF ( breeding_loo.breedingid ) %]
 
-	    <tr id="row[% breeding_loo.breedingid %]">
-            <td>[% breeding_loo.server %]</td>
-            <td>[% breeding_loo.title |html %]</td>
-            <td>[% breeding_loo.author %]</td>
-            <td>[% breeding_loo.date %]</td>
-            <td>[% breeding_loo.edition %]</td>
-            <td>[% breeding_loo.isbn %]</td>
-            <td>[% breeding_loo.lccn %]</td>
+	    <tr id="row[% breeding_loo.breedingid | html %]">
+            <td>[% breeding_loo.server | html %]</td>
+            <td>[% breeding_loo.title | html %]</td>
+            <td>[% breeding_loo.author | html %]</td>
+            <td>[% breeding_loo.date | html %]</td>
+            <td>[% breeding_loo.edition | html %]</td>
+            <td>[% breeding_loo.isbn | html %]</td>
+            <td>[% breeding_loo.lccn | html %]</td>
 
             <td>
                 <div class="dropdown">
-                    <a class="btn btn-default btn-xs dropdown-toggle" id="cataloguesearchactions[% breeding_loo.breedingid %]" role="button" data-toggle="dropdown" href="#">
+                    <a class="btn btn-default btn-xs dropdown-toggle" id="cataloguesearchactions[% breeding_loo.breedingid | html %]" role="button" data-toggle="dropdown" href="#">
                       Actions <b class="caret"></b>
                     </a>
-                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="cataloguesearchactions[% breeding_loo.breedingid %]">
-                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" title="MARC" class="previewData"><i class="fa fa-eye"></i> MARC preview</a></li>
-                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid %]" title="Card" class="previewData"><i class="fa fa-eye"></i> Card preview</a></li>
-                        <li><a href="#" class="import_record" data-breedingid="[% breeding_loo.breedingid %]" data-biblionumber="[% breeding_loo.biblionumber %]" data-frameworkcode="[% frameworkcode | uri %]"><i class="fa fa-download"></i> Import</a></li>
+                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="cataloguesearchactions[% breeding_loo.breedingid | html %]">
+                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | html %]" title="MARC" class="previewData"><i class="fa fa-eye"></i> MARC preview</a></li>
+                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid | html %]" title="Card" class="previewData"><i class="fa fa-eye"></i> Card preview</a></li>
+                        <li><a href="#" class="import_record" data-breedingid="[% breeding_loo.breedingid | html %]" data-biblionumber="[% breeding_loo.biblionumber | html %]" data-frameworkcode="[% frameworkcode | uri %]"><i class="fa fa-download"></i> Import</a></li>
                     </ul>
                 </div>
             </td>
@@ -140,7 +141,7 @@
         <h3 id="dataPreviewLabel">Preview</h3>
     </div>
     <div class="modal-body">
-        <div id="loading"> <img src="[% interface %]/[% theme %]/img/spinner-small.gif" alt="" /> Loading </div>
+        <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
     </div>
     </div>
     </div>
@@ -149,7 +150,7 @@
 
     <form method="post" action="z3950_search.pl" id="page_form" name="page_form" class="checkboxed">
         <input type="hidden" name="op" id="op" value="do_search" />
-        <input type="hidden" name="current_page" id="current_page" value="[% current_page %]" />
+        <input type="hidden" name="current_page" id="current_page" value="[% current_page | html %]" />
         <input type="hidden" id="title"  name="title" value="[% title | html %]" />
         <input type="hidden" id="isbn" name="isbn" value="[% isbn | html %]" />
         <input type="hidden" id="lccall" name="lccall" value="[% lccall | html %]" />
@@ -163,17 +164,17 @@
         <input type="hidden" name="frameworkcode" value="[% frameworkcode | html %]" />
 
         [% FOREACH server IN servers %]
-        <input type="hidden" name="id" id="z3950_[% server.id %]" value="[% server.id %]" />
+        <input type="hidden" name="id" id="z3950_[% server.id | html %]" value="[% server.id | html %]" />
         [% END %]
 
         [% IF ( show_prevbutton ) %]
-            <input type="button" name="changepage_prev" value="Previous page" data-currentpage="[% current_page %]" />
+            <input type="button" name="changepage_prev" value="Previous page" data-currentpage="[% current_page | html %]" />
         [% END %]
-        Page [% current_page %] / [% total_pages %]
+        Page [% current_page | html %] / [% total_pages | html %]
         [% IF ( show_nextbutton ) %]
-            <input type="button" name="changepage_next" value="Next page" data-currentpage="[% current_page %]" />
+            <input type="button" name="changepage_next" value="Next page" data-currentpage="[% current_page | html %]" />
         [% END %]
-        <br />Go to page : <input id="goto_page" name="goto_page" value="[% current_page %]" size="4" /><input type="submit" name="changepage_goto" value="Go" />
+        <br />Go to page : <input id="goto_page" name="goto_page" value="[% current_page | html %]" size="4" /><input type="submit" name="changepage_goto" value="Go" />
     </form>
 
     [% ELSE %]
@@ -185,11 +186,11 @@
 
 </div>
 </div>
-[% IF ( numberpending ) %]<h3 align="center">Still [% numberpending %] servers to search</h3>[% END %]
+[% IF ( numberpending ) %]<h3 align="center">Still [% numberpending | html %] servers to search</h3>[% END %]
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
-    [% Asset.js("js/z3950_search.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
+    [% Asset.js("js/z3950_search.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
         $(document).ready(function(){

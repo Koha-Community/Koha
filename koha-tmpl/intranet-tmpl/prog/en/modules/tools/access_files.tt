@@ -1,9 +1,10 @@
+[% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Access files</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 <body id="tools_access_files" class="tools">
 [% INCLUDE 'header.inc' %]
@@ -33,9 +34,9 @@
             <tbody>
                 [% FOREACH file IN files_loop %]
                 <tr>
-                    <td><a href="/cgi-bin/koha/tools/access_files.pl?id=[% file.id |url %]">[% file.name %]</a></td>
-                    <td align="right">[% file.size %]</td>
-                    <td>[% file.date %]</td>
+                    <td><a href="/cgi-bin/koha/tools/access_files.pl?id=[% file.id |url %]">[% file.name | html %]</a></td>
+                    <td align="right">[% file.size | html %]</td>
+                    <td>[% file.date | html %]</td>
                 </tr>
                 [% END %]
             </tbody>
@@ -53,7 +54,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
     //<![CDATA[

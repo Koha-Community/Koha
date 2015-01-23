@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
@@ -31,11 +32,11 @@
             [% IF ( selected_count ) %]
                 <div class="dialog message">
                     [% IF ( action == 'seen' ) %]
-                        <span>[% selected_count %] note(s) marked as seen.</span>
+                        <span>[% selected_count | html %] note(s) marked as seen.</span>
                     [% ELSIF ( action == 'notseen' ) %]
-                        <span>[% selected_count %] note(s) marked as not seen.</span>
+                        <span>[% selected_count | html %] note(s) marked as not seen.</span>
                     [% ELSE %]
-                        <span>Failed to change the status of [% selected_count %] item(s).</span>
+                        <span>Failed to change the status of [% selected_count | html %] item(s).</span>
                     [% END %]
                 </div>
             [% END %]
@@ -70,23 +71,23 @@
                         <tbody>
                             [% FOREACH note IN notes %]
                                 <tr>
-                                    <td><input type="checkbox" name="issue_ids" value="[% note.issue_id %]"></td>
-                                    <td>[% note.item.biblio.title %] - [% note.item.biblio.author %] (<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% note.item.biblionumber %]">[% note.item.barcode %]</a>)</td>
+                                    <td><input type="checkbox" name="issue_ids" value="[% note.issue_id | html %]"></td>
+                                    <td>[% note.item.biblio.title | html %] - [% note.item.biblio.author | html %] (<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% note.item.biblionumber | html %]">[% note.item.barcode | html %]</a>)</td>
                                     <td>[% note.note | html %]</td>
-                                    <td><span title="[% note.notedate %]">[% note.notedate | $KohaDates %]</span></td>
+                                    <td><span title="[% note.notedate | html %]">[% note.notedate | $KohaDates %]</span></td>
                                     <td>[% INCLUDE 'patron-title.inc' patron => note.patron hide_patron_infos_if_needed=1 %]</td>
-                                    <td class="seen[% note.noteseen %]">
+                                    <td class="seen[% note.noteseen | html %]">
                                         [% IF ( note.noteseen == 0 ) %]
-                                            <span id="status_[% note.issue_id %]">Not seen</span>
+                                            <span id="status_[% note.issue_id | html %]">Not seen</span>
                                         [% ELSIF ( note.noteseen == 1 ) %]
-                                            <span id="status_[% note.issue_id %]">Seen</span>
+                                            <span id="status_[% note.issue_id | html %]">Seen</span>
                                         [% END %]
                                     </td>
                                     <td class="actions">
                                         [% IF ( note.noteseen == 1 ) %]
-                                            <button name="seen" data-issue_id="[% note.issue_id %]" class="seen btn btn-default btn-xs" disabled="disabled"><i class="fa fa-eye"></i> Mark seen</button> <button name="notseen" data-issue_id="[% note.issue_id %]" class="notseen btn btn-default btn-xs"><i class="fa fa-eye-slash"></i> Mark not seen</button>
+                                            <button name="seen" data-issue_id="[% note.issue_id | html %]" class="seen btn btn-default btn-xs" disabled="disabled"><i class="fa fa-eye"></i> Mark seen</button> <button name="notseen" data-issue_id="[% note.issue_id | html %]" class="notseen btn btn-default btn-xs"><i class="fa fa-eye-slash"></i> Mark not seen</button>
                                         [% ELSIF ( note.noteseen == 0 ) %]
-                                            <button name="seen" data-issue_id="[% note.issue_id %]" class="seen btn btn-default btn-xs"><i class="fa fa-eye"></i> Mark seen</button> <button name="notseen" data-issue_id="[% note.issue_id %]" class="notseen btn btn-default btn-xs" disabled="disabled"><i class="fa fa-eye-slash"></i> Mark not seen</button>
+                                            <button name="seen" data-issue_id="[% note.issue_id | html %]" class="seen btn btn-default btn-xs"><i class="fa fa-eye"></i> Mark seen</button> <button name="notseen" data-issue_id="[% note.issue_id | html %]" class="notseen btn btn-default btn-xs" disabled="disabled"><i class="fa fa-eye-slash"></i> Mark not seen</button>
                                         [% END %]
                                     </td>
                                 </tr>

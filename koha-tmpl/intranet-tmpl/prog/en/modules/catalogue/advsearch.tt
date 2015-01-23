@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
@@ -37,7 +38,7 @@
         </div>
         [% END %]
         <div class="btn-group">
-            <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear&expanded_options=[% expanded_options %]" class="btn btn-sm btn-link"><i class="fa fa-trash"></i> Clear fields</a>
+            <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear&expanded_options=[% expanded_options | html %]" class="btn btn-sm btn-link"><i class="fa fa-trash"></i> Clear fields</a>
         </div>
     </fieldset>
 </div>
@@ -50,7 +51,7 @@
 <fieldset>
         <legend>Select local databases</legend>
                 [% FOREACH local_servers_loo IN local_servers_loop %]
-[% IF ( local_servers_loo.checked ) %]<input type="checkbox" id="[% local_servers_loo.id %]" name="[% local_servers_loo.name %]" checked="checked" value="[% local_servers_loo.value %]" />[% ELSE %]<input type="checkbox" id="[% local_servers_loo.id %]" name="[% local_servers_loo.name %]" value="[% local_servers_loo.value %]" />[% END %]<label for="[% local_servers_loo.id %]"><img width="16" height="16" alt="[% local_servers_loo.id %]" src="[% themelang %]/img/[% local_servers_loo.icon %]" /> [% local_servers_loo.label %]</label>[% END %]
+[% IF ( local_servers_loo.checked ) %]<input type="checkbox" id="[% local_servers_loo.id | html %]" name="[% local_servers_loo.name | html %]" checked="checked" value="[% local_servers_loo.value | html %]" />[% ELSE %]<input type="checkbox" id="[% local_servers_loo.id | html %]" name="[% local_servers_loo.name | html %]" value="[% local_servers_loo.value | html %]" />[% END %]<label for="[% local_servers_loo.id | html %]"><img width="16" height="16" alt="[% local_servers_loo.id | html %]" src="[% themelang | html %]/img/[% local_servers_loo.icon | html %]" /> [% local_servers_loo.label | html %]</label>[% END %]
 </fieldset>
 <!-- /DATABASES -->
 [% END %]
@@ -60,8 +61,8 @@
 <fieldset id="databases">
     <legend>Select remote databases</legend>
                 [% FOREACH outer_servers_loo IN outer_servers_loop %]
-                [% IF ( outer_servers_loo.checked ) %]<input type="checkbox" id="[% outer_servers_loo.id %]" name="[% outer_servers_loo.name %]" checked="checked" value="[% outer_servers_loo.value %]" />[% ELSE %]<input type="checkbox" id="[% outer_servers_loo.id %]" name="[% outer_servers_loo.name %]" value="[% outer_servers_loo.value %]" />[% END %]
-<label for="[% outer_servers_loo.id %]"><img alt="[% outer_servers_loo.id %]" src="[% themelang %]/images/[% outer_servers_loo.icon %]" />[% outer_servers_loo.label %]</label>
+                [% IF ( outer_servers_loo.checked ) %]<input type="checkbox" id="[% outer_servers_loo.id | html %]" name="[% outer_servers_loo.name | html %]" checked="checked" value="[% outer_servers_loo.value | html %]" />[% ELSE %]<input type="checkbox" id="[% outer_servers_loo.id | html %]" name="[% outer_servers_loo.name | html %]" value="[% outer_servers_loo.value | html %]" />[% END %]
+<label for="[% outer_servers_loo.id | html %]"><img alt="[% outer_servers_loo.id | html %]" src="[% themelang | html %]/images/[% outer_servers_loo.icon | html %]" />[% outer_servers_loo.label | html %]</label>
                 [% END %]
     </fieldset>
 <!-- /REMOTE DATABASES -->
@@ -101,8 +102,8 @@
       <div id="advsearches" class="toptabs">
       <ul>
       [% FOREACH advsearchloo IN advancedsearchesloop %]
-        <li id="advsearch-tab-[% advsearchloo.advanced_search_type %]">
-           <a href="#advsearch-[% advsearchloo.advanced_search_type %]">
+        <li id="advsearch-tab-[% advsearchloo.advanced_search_type | html %]">
+           <a href="#advsearch-[% advsearchloo.advanced_search_type | html %]">
            [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]Item type
            [% ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) %]Collection
            [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]Shelving location
@@ -113,13 +114,13 @@
       [% END %]
       </ul>
     [% FOREACH advsearchloo IN advancedsearchesloop %]
-    <div id="advsearch-[% advsearchloo.advanced_search_type %]" class="advsearch">
+    <div id="advsearch-[% advsearchloo.advanced_search_type | html %]" class="advsearch">
     <h4>Limit to any of the following:</h4>
     <table>
         <tr>
     [% FOREACH itemtypeloo IN advsearchloo.code_loop %]
-        <td><input type="checkbox" id="[% itemtypeloo.ccl FILTER remove(',') %]-[% itemtypeloo.number %]" name="limit" value="mc-[% itemtypeloo.ccl %]:[% itemtypeloo.code %]"/><label for="[% itemtypeloo.ccl FILTER remove(',') %]-[% itemtypeloo.number %]">[% UNLESS ( noItemTypeImages ) %][% IF ( itemtypeloo.imageurl ) %]<img src="[% itemtypeloo.imageurl %]" alt="[% itemtypeloo.description %]" />[% END %]&nbsp;[% END %]
-        [% itemtypeloo.description %]</label></td>
+        <td><input type="checkbox" id="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]" name="limit" value="mc-[% itemtypeloo.ccl | html %]:[% itemtypeloo.code | html %]"/><label for="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]">[% UNLESS ( noItemTypeImages ) %][% IF ( itemtypeloo.imageurl ) %]<img src="[% itemtypeloo.imageurl | html %]" alt="[% itemtypeloo.description | html %]" />[% END %]&nbsp;[% END %]
+        [% itemtypeloo.description | html %]</label></td>
         [% IF ( loop.last ) %]</tr>[% ELSE %][% UNLESS ( loop.count % 5 ) %]</tr><tr>[% END %][% END %]
     [% END %]
     </table>
@@ -143,9 +144,9 @@
         <option value="">No limit</option>
 		[% FOREACH search_languages_loo IN search_languages_loop %]
 		[% IF ( search_languages_loo.selected ) %]
-		<option value="ln,rtrn:[% search_languages_loo.iso639_2_code %]" selected="selected">[% search_languages_loo.language_description %]</option>
+		<option value="ln,rtrn:[% search_languages_loo.iso639_2_code | html %]" selected="selected">[% search_languages_loo.language_description | html %]</option>
 		[% ELSE %]
-		<option value="ln,rtrn:[% search_languages_loo.iso639_2_code %]">[% search_languages_loo.language_description %]</option>
+		<option value="ln,rtrn:[% search_languages_loo.iso639_2_code | html %]">[% search_languages_loo.language_description | html %]</option>
 		[% END %]
 		
 		[% END %]
@@ -252,7 +253,7 @@
                     <option value=""> -- none -- </option>
                     [% FOREACH sg IN search_groups %]
                         [% UNLESS sg.branchcode %]
-                            <option value="[% sg.id %]">[% sg.title %]</option>
+                            <option value="[% sg.id | html %]">[% sg.title | html %]</option>
                         [% END %]
                     [% END %]
                 </select>
@@ -277,7 +278,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
     <script type="text/JavaScript">
         /**
          *  Function add_field();

@@ -1,7 +1,8 @@
+[% USE raw %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your checkout history</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your checkout history</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
     <style>ul.ui-tabs-nav li a, ul.ui-tabs-nav li span.a  { padding:0.6em 1em; }</style>
@@ -11,9 +12,9 @@
 [% INCLUDE 'masthead.inc' %]
 
 [% IF Koha.Preference('AmazonAssocTag') %]
-    [% AmazonAssocTag = '?tag=' _ Koha.Preference('AmazonAssocTag') %]
+    [% AmazonAssocTag = '?tag=' _ Koha.Preference('AmazonAssocTag') | html %]
 [% ELSE %]
-    [% AmazonAssocTag = '' %]
+    [% AmazonAssocTag = '' | html %]
 [% END %]
 
 <div class="main">
@@ -87,15 +88,15 @@
                                             [% FOREACH issue IN READING_RECORD %]
                                                 <tr>
                                                     <td style="display:none;">
-                                                      [% IF issue.onsite_checkout %][% issuetype = 'onsite_checkout' %]
-                                                      [% ELSE %][% issuetype = 'standard_checkout' %]
+                                                      [% IF issue.onsite_checkout %][% issuetype = 'onsite_checkout' | html %]
+                                                      [% ELSE %][% issuetype = 'standard_checkout' | html %]
                                                       [% END %]
-                                                      [% issuetype %]
+                                                      [% issuetype | html %]
                                                     </td>
                                                 <td>
                                                     [% IF  OPACAmazonCoverImages %]
                                                         [% IF  issue.normalized_isbn %]
-                                                            <a href="http://www.amazon.com/gp/reader/[% issue.normalized_isbn %][% AmazonAssocTag %]#reader-link"><img border="0" src="https://images-na.ssl-images-amazon.com/images/P/[% issue.normalized_isbn %].01.THUMBZZZ.jpg" alt="" class="item-thumbnail" /></a>
+                                                            <a href="http://www.amazon.com/gp/reader/[% issue.normalized_isbn | html %][% AmazonAssocTag | html %]#reader-link"><img border="0" src="https://images-na.ssl-images-amazon.com/images/P/[% issue.normalized_isbn | html %].01.THUMBZZZ.jpg" alt="" class="item-thumbnail" /></a>
                                                         [% ELSE %]
                                                              <span class="no-image">No cover image available</span>
                                                         [% END %]
@@ -103,57 +104,57 @@
 
                                                 [% IF GoogleJackets %]
                                                     [% IF  issue.normalized_isbn %]
-                                                        <div title="[% issue.biblionumber |url %]" class="[% issue.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>
+                                                        <div title="[% issue.biblionumber |url %]" class="[% issue.normalized_isbn | html %]" id="gbs-thumbnail[% loop.count | html %]"></div>
                                                     [% ELSE %]
                                                        <span class="no-image">No cover image available</span>
                                                     [% END %]
                                                 [% END %]
 
                                                 [% IF BakerTaylorEnabled %]
-                                                    [% bt_id = ( issue.normalized_upc || issue.normalized_isbn ) %]
+                                                    [% bt_id = ( issue.normalized_upc || issue.normalized_isbn ) | html %]
                                                     [% IF ( bt_id ) %]
-                                                       <a href="https://[% BakerTaylorBookstoreURL |html %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" /></a>
+                                                       <a href="https://[% BakerTaylorBookstoreURL | html %][% bt_id | html %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
                                                     [% ELSE %]
                                                        <span class="no-image">No cover image available</span>
                                                     [% END %]
                                                 [% END %]
 
                                                 [% IF SyndeticsEnabled && SyndeticsCoverImages %]
-                                                    <img src="https://secure.syndetics.com/index.aspx?isbn=[% issue.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% issue.normalized_upc %]&amp;oclc=[% issue.normalized_oclc %]" alt="" class="item-thumbnail" />
+                                                    <img src="https://secure.syndetics.com/index.aspx?isbn=[% issue.normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% issue.normalized_upc | html %]&amp;oclc=[% issue.normalized_oclc | html %]" alt="" class="item-thumbnail" />
                                                 [% END %]
                                                 </td>
                                                 <td>
                                                 [% IF  issue.BiblioDefaultViewmarc %]
-                                                     <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title |html %] [% IF  issue.subtitle  %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
+                                                     <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title | html %] [% IF  issue.subtitle  %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield | html %][% END %][% END %]</a>
                                                 [% ELSIF issue.BiblioDefaultViewisbd %]
-                                                     <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title |html %] [% IF issue.subtitle %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
+                                                     <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title | html %] [% IF issue.subtitle %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield | html %][% END %][% END %]</a>
                                                 [% ELSE %]
-                                                     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title |html %] [% IF issue.subtitle %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
+                                                     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title | html %] [% IF issue.subtitle %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield | html %][% END %][% END %]</a>
                                                 [% END %]
-                                                <span class="item-details">[% issue.author %]</span>
+                                                <span class="item-details">[% issue.author | html %]</span>
                                                 </td>
                                                 <td>
                                                 [% UNLESS ( noItemTypeImages ) %]
                                                     [% IF ( issue.imageurl ) %]
-                                                        <img src="[% issue.imageurl %]" alt="" />
+                                                        <img src="[% issue.imageurl | html %]" alt="" />
                                                     [% END %]
                                                 [% END %]
                                                 <span class="tdlabel">Item type:</span>
-                                                [% issue.translated_description %]</td>
+                                                [% issue.translated_description | html %]</td>
                                                 <td>
                                                 <span class="tdlabel">Call number:</span>
-                                                [% issue.itemcallnumber %]
+                                                [% issue.itemcallnumber | html %]
                                                 </td>
                                                 <td>
                                                     [% IF issue.returndate %]
                                                         <span class="tdlabel">Check-in date:</span>
-                                                        <span title="[% issue.returndate %]">[% issue.returndate | $KohaDates %]</span>
+                                                        <span title="[% issue.returndate | html %]">[% issue.returndate | $KohaDates %]</span>
                                                     [% ELSE %]
                                                         <span title="Checked out"><em>(Checked out)</em></span>
                                                     [% END %]
                                                 </td>
                                                 [% IF OPACMySummaryHTML %]
-                                                    <td>[% issue.MySummaryHTML %]</td>
+                                                    <td>[% issue.MySummaryHTML | $raw %]</td>
                                                 [% END %]
                                                 </tr>
                                             [% END # / FOREACH issue %]

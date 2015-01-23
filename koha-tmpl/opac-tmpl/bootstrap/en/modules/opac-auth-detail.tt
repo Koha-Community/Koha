@@ -1,8 +1,9 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% PROCESS 'opac-authorities.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Authority search &rsaquo; [% summary.mainentry %][% IF authtypetext %] ([% authtypetext %])[% END %]</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Authority search &rsaquo; [% summary.mainentry | html %][% IF authtypetext %] ([% authtypetext | html %])[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -13,7 +14,7 @@
         <ul class="breadcrumb">
             <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
             <li><a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="#">[% summary.mainentry %][% IF authtypetext %] ([% authtypetext %])[% END %]</a></li>
+            <li><a href="#">[% summary.mainentry | html %][% IF authtypetext %] ([% authtypetext | html %])[% END %]</a></li>
         </ul>
 
         <div class="container-fluid">
@@ -34,7 +35,7 @@
                                 <span id="Normalview">Normal view</span>
                             </span>
                             <span class="view">
-                                <a id="MARCview" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% authid %]&amp;marc=1">MARC view</a>
+                                <a id="MARCview" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% authid | html %]&amp;marc=1">MARC view</a>
                             </span>
                         </div>
 
@@ -44,17 +45,17 @@
                             </div>
                         [% END %]
 
-                        <h1>[% summary.mainentry %][% IF authtypetext %] ([% authtypetext %])[% END %]</h1>
+                        <h1>[% summary.mainentry | html %][% IF authtypetext %] ([% authtypetext | html %])[% END %]</h1>
 
                         <div class="usedin">
-                            [% IF count %]<a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;q=[% authid %]&amp;idx=an,phr">Number of records used in: [% count %]</a>[% ELSE %]This authority is not used in any records.[% END %]
+                            [% IF count %]<a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;q=[% authid | html %]&amp;idx=an,phr">Number of records used in: [% count | html %]</a>[% ELSE %]This authority is not used in any records.[% END %]
                         </div>
 
                         <div class="authstanza">
                             [% FOREACH authorize IN summary.authorized %]
-                                <div class="heading authorized auth[% seefro.field %]">
+                                <div class="heading authorized auth[% seefro.field | html %]">
                                     <span class="label">Preferred form: </span>
-                                    <span class="authorized">[% authorize.heading %]</span>
+                                    <span class="authorized">[% authorize.heading | html %]</span>
                                 </div>
                             [% END %]
                             [% PROCESS otherscript headings=summary.otherscript wantcategory='preferred' %]
@@ -65,7 +66,7 @@
                                 <div class="authstanzaheading">Used for/see from:</div>
                                 <ul class="seefrom">
                                     [% FOREACH seefro IN summary.seefrom %]
-                                        <li class="heading seefrom auth[% seefro.field %]">
+                                        <li class="heading seefrom auth[% seefro.field | html %]">
                                             [% IF seefro.type && seefro.type != 'seefrom' %]
                                                 <span class="label">[% PROCESS authtypelabel type=seefro.type | trim %]:</span>
                                             [% END %]
@@ -82,7 +83,7 @@
                                 <div class="authstanzaheading">See also:</div>
                                 <ul class="seelso">
                                     [% FOREACH seeals IN summary.seealso %]
-                                        <li class="heading seealso auth[% seeals.field %]">
+                                        <li class="heading seealso auth[% seeals.field | html %]">
                                             [% IF seeals.type && seeals.type != 'seealso' %]
                                                 <span class="label">[% PROCESS authtypelabel type=seeals.type | trim %]:</span>
                                             [% END %]
@@ -101,7 +102,7 @@
                                     [% FOREACH otherscrip IN summary.otherscript %]
                                         <li>
                                             [% PROCESS language lang=otherscrip.lang | trim %]:
-                                            <span class="otherscript">[% otherscrip.term %]</span>
+                                            <span class="otherscript">[% otherscrip.term | html %]</span>
                                         </li>
                                     [% END %]
                                 </ul>
@@ -115,7 +116,7 @@
                             <div id="descriptions">
                                 <div class="content_set">
                                     [% FOREACH note IN summary.notes %]
-                                        <p class="note auth[% note.field %]">[% note.note %]</p>
+                                        <p class="note auth[% note.field | html %]">[% note.note | html %]</p>
                                     [% END %]
                                 </div>
                             </div>
@@ -129,7 +130,7 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
 [% IF ( displayhierarchy ) %]
-    [% Asset.js("lib/jquery/plugins/jquery.jstree.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.jstree.js") | $raw %]
 [% END %]
 <script>
     //<![CDATA[

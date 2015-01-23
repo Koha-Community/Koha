@@ -54,7 +54,7 @@
 
 	<tr>
 		<td>00-05 Registreringsdato</td>
-		<td><input type="text" name="f1" maxlength="6" size="7" value="[% f1 %]" /></td>
+		<td><input type="text" name="f1" maxlength="6" size="7" value="[% f1 | html %]" /></td>
 	</tr>
 	<tr>
 		<!-- 06 Type of date / Publication status -->
@@ -117,20 +117,20 @@
 	<tr>
 		<td><label for="f710">07-10 Årstall 1</label></td>
 		<td>
-			<input type="text" name="f710" id="f710" size="4" maxlength="4" value="[% f710 %]"/>
+			<input type="text" name="f710" id="f710" size="4" maxlength="4" value="[% f710 | html %]"/>
 		</td>
 	</tr>
 	<tr>
     <td><label for="f1114">11-14 Årstall 2</label></td>
     <td>
-      <input type="text" name="f1114" id="f1114" size="4" maxlength="4" value="[% f1114 %]"/>
+      <input type="text" name="f1114" id="f1114" size="4" maxlength="4" value="[% f1114 | html %]"/>
 		</td>
   </tr>
 
 	<tr>
       <td><label for="f1517">15-17 Utgivelsesland</label> (Se <a href="http://www.nb.no/baser/landekoder/">NORMARC-koder for land</a>)</td>
       <td>
-              <input type="text" name="f1517" id="f1517" size="3"  maxlength="3" value="[% f1517 %]"/> <!-- Default is set by the DefaultLanguageField008 syspref -->
+              <input type="text" name="f1517" id="f1517" size="3"  maxlength="3" value="[% f1517 | html %]"/> <!-- Default is set by the DefaultLanguageField008 syspref -->
       </td>
         </tr>
 				
@@ -142,7 +142,7 @@
        <tr>
                 <td><label for="f3537">35-37 Språk</label> (Se <a href="http://www.nb.no/baser/sprakkoder/">NORMARC-koder for språk</a>)</td>
                 <td>
-                        <input type="text" name="f3537" id="f3537" size="4"  maxlength="4" value="[% f3537 %]"/>
+                        <input type="text" name="f3537" id="f3537" size="4"  maxlength="4" value="[% f3537 | html %]"/>
                 </td>
         </tr>
 	<tr>
@@ -4482,7 +4482,7 @@ function pad4(s) {
 
 function report() {
             var doc   = opener.document; 
-            var field = doc.getElementById("[% index %]");
+            var field = doc.getElementById("[% index | html %]");
             field.value = 
 			document.f_pop.f1.value+
 			document.f_pop.f6.value+

@@ -1,10 +1,11 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Tags &rsaquo; [% IF ( do_it ) %]Review &rsaquo; [% ELSE %]Review tags[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 <style type="text/css">
 .setlabel {width: 6em; font-family: courier; background-color:#E8E8E8;}
 .rejected { color: #CC0033; }
@@ -42,20 +43,20 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
   		[% IF ( op == 'approve' ) %]		Approved
   		[% ELSIF ( op == 'reject' ) %]	Rejected
   		[% ELSIF ( op == 'test' ) %]		Tested
-  		[% ELSE %]Unknown Operation ([% op %]) on
+  		[% ELSE %]Unknown Operation ([% op | html %]) on
   		[% END %]
-	[% op_count %] Term(s).
+	[% op_count | html %] Term(s).
   </div>
   [% END %]
   [% IF ( message_loop ) %]
   <div class="dialog alert" id="main_error">
     [% FOREACH message_loo IN message_loop %]
-        [% IF ( message_loo.date_from ) %]<strong>Error: </strong>"Date from" is not a legal value ("[% message_loo.date_from %]").
-        [% ELSIF ( message_loo.date_to ) %]<strong>Error: </strong>"Date to" is not a legal value ("[% message_loo.date_to %]").
-        [% ELSIF ( message_loo.failed_ok ) %]<strong>Error: </strong>Failed to approve term ([% message_loo.failed_ok %]).
-        [% ELSIF ( message_loo.failed_rej ) %]<strong>Error: </strong>Failed to reject term ([% message_loo.failed_rej %]).
-        [% ELSIF ( message_loo.approver ) %]No match for user ([% message_loo.approver %]). FILTER REQUIRES BORROWERNUMBER (not name).
-        [% ELSIF ( message_loo.approved_by ) %]<strong>Error: </strong>No match for borrowernumber ([% message_loo.approved_by %]).
+        [% IF ( message_loo.date_from ) %]<strong>Error: </strong>"Date from" is not a legal value ("[% message_loo.date_from | html %]").
+        [% ELSIF ( message_loo.date_to ) %]<strong>Error: </strong>"Date to" is not a legal value ("[% message_loo.date_to | html %]").
+        [% ELSIF ( message_loo.failed_ok ) %]<strong>Error: </strong>Failed to approve term ([% message_loo.failed_ok | html %]).
+        [% ELSIF ( message_loo.failed_rej ) %]<strong>Error: </strong>Failed to reject term ([% message_loo.failed_rej | html %]).
+        [% ELSIF ( message_loo.approver ) %]No match for user ([% message_loo.approver | html %]). FILTER REQUIRES BORROWERNUMBER (not name).
+        [% ELSIF ( message_loo.approved_by ) %]<strong>Error: </strong>No match for borrowernumber ([% message_loo.approved_by | html %]).
         [% ELSIF ( message_loo.op_zero ) %]<strong>Error: </strong> The root koha user in your KOHA_CONF file
             (default: kohaadmin) is not a valid tag moderator. These actions are logged
             by borrowernumber, so the moderator must exist in your borrowers table.
@@ -68,7 +69,7 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
   [% END %]
   [% IF ( pagination_bar ) %]
   <div class="pages" id="pagination_top">
-  	[% pagination_bar %]
+    [% pagination_bar | $raw %]
   </div>
   [% END %]
   [% IF ( tagloop ) %]
@@ -89,47 +90,47 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
     <tbody>
     [% FOREACH tagloo IN tagloop %]
         <tr>
-            <td class="count">[% offset + loop.count %]
+            <td class="count">[% offset + loop.count | html %]
             </td>
-                [% IF ( tagloo.approved == 0 ) %]<td><span><input type="checkbox" value="[% tagloo.term|html %]" name="tags" class="pending" /></span>
-                [% ELSE %]<td><span><input type="checkbox" value="[% tagloo.term|html %]" name="tags" /></span>[% END %]
+                [% IF ( tagloo.approved == 0 ) %]<td><span><input type="checkbox" value="[% tagloo.term | html %]" name="tags" class="pending" /></span>
+                [% ELSE %]<td><span><input type="checkbox" value="[% tagloo.term | html %]" name="tags" /></span>[% END %]
             </td>
             <td>
                 [% IF ( tagloo.approved == -1 ) %]
-                    <span class="rejected status[% offset + loop.count %]">Rejected</span>
+                    <span class="rejected status[% offset + loop.count | html %]">Rejected</span>
                 [% ELSIF ( tagloo.approved == 1 ) %]
-                    <span class="approved status[% offset + loop.count %]">Approved</span>
+                    <span class="approved status[% offset + loop.count | html %]">Approved</span>
                 [% ELSE %]
-                    <span class="pending status[% offset + loop.count %]">Pending</span>
+                    <span class="pending status[% offset + loop.count | html %]">Pending</span>
                 [% END %]
             </td>
-            <td><a href="/cgi-bin/koha/tags/list.pl?tag=[% tagloo.term|uri %]">[% tagloo.term|html %]</a>
+            <td><a href="/cgi-bin/koha/tags/list.pl?tag=[% tagloo.term|uri %]">[% tagloo.term | html %]</a>
             </td>
-            <td>[% tagloo.weight_total %]
+            <td>[% tagloo.weight_total | html %]
             </td>
             [% IF ( tagloo.approved ) %]
             <td class="actions"><span class="ajax_buttons" style="visibility:hidden">
                 [% IF ( tagloo.approved == -1 ) %]
-                    <button data-num="[% offset + loop.count %]" class="approval_btn ok btn btn-default btn-xs" type="submit" title="[% tagloo.term|html %]" value="Approve" name="approve"><i class="fa fa-check"></i> Approve</button>
-                    <button data-num="[% offset + loop.count %]" class="approval_btn rej btn btn-default btn-xs" disabled="disabled" type="submit" title="[% tagloo.term|html %]" value="Rejected" name="reject"><i class="fa fa-remove"></i> Rejected</button>
+                    <button data-num="[% offset + loop.count | html %]" class="approval_btn ok btn btn-default btn-xs" type="submit" title="[% tagloo.term | html %]" value="Approve" name="approve"><i class="fa fa-check"></i> Approve</button>
+                    <button data-num="[% offset + loop.count | html %]" class="approval_btn rej btn btn-default btn-xs" disabled="disabled" type="submit" title="[% tagloo.term | html %]" value="Rejected" name="reject"><i class="fa fa-remove"></i> Rejected</button>
                 [% ELSE %]
-                    <button data-num="[% offset + loop.count %]" class="approval_btn ok btn btn-default btn-xs"  disabled="disabled" type="submit" title="[% tagloo.term|html %]" value="Approved" name="approve"><i class="fa fa-check"></i> Approved</button>
-                    <button data-num="[% offset + loop.count %]" class="approval_btn rej btn btn-default btn-xs" type="submit" title="[% tagloo.term|html %]" value="Reject" name="reject"><i class="fa fa-remove"></i> Reject</button>
+                    <button data-num="[% offset + loop.count | html %]" class="approval_btn ok btn btn-default btn-xs"  disabled="disabled" type="submit" title="[% tagloo.term | html %]" value="Approved" name="approve"><i class="fa fa-check"></i> Approved</button>
+                    <button data-num="[% offset + loop.count | html %]" class="approval_btn rej btn btn-default btn-xs" type="submit" title="[% tagloo.term | html %]" value="Reject" name="reject"><i class="fa fa-remove"></i> Reject</button>
                 [% END %]
                 </span>
             </td>
-            <td>[% IF ( tagloo.approved_by_name ) %]<a href="/cgi-bin/koha/tags/review.pl?approved_by=[% tagloo.approved_by %]&amp;approved=all">[% tagloo.approved_by_name %]</a>[% ELSE %]&nbsp;[% END %]
+            <td>[% IF ( tagloo.approved_by_name ) %]<a href="/cgi-bin/koha/tags/review.pl?approved_by=[% tagloo.approved_by | html %]&amp;approved=all">[% tagloo.approved_by_name | html %]</a>[% ELSE %]&nbsp;[% END %]
             </td>
             [% ELSE %]
             <td class="actions"><span class="ajax_buttons" style="visibility:hidden">
-                <button data-num="[% offset + loop.count %]" class="approval_btn ok btn btn-default btn-xs"  type="submit" title="[% tagloo.term|html %]" value="Approve" name="approve"><i class="fa fa-check"></i> Approve</button>
-                <button data-num="[% offset + loop.count %]" class="approval_btn rej btn btn-default btn-xs" type="submit" title="[% tagloo.term|html %]" value="Reject" name="reject"><i class="fa fa-remove"></i> Reject</button>
+                <button data-num="[% offset + loop.count | html %]" class="approval_btn ok btn btn-default btn-xs"  type="submit" title="[% tagloo.term | html %]" value="Approve" name="approve"><i class="fa fa-check"></i> Approve</button>
+                <button data-num="[% offset + loop.count | html %]" class="approval_btn rej btn btn-default btn-xs" type="submit" title="[% tagloo.term | html %]" value="Reject" name="reject"><i class="fa fa-remove"></i> Reject</button>
                 </span>
             </td>
             [% UNLESS ( filter_approved_pending ) %]<td>&nbsp;</td>[% END %]
             [% END %]
             <td>
-                <span title="[% tagloo.date_approved %]">[% tagloo.date_approved | $KohaDates %]</span>
+                <span title="[% tagloo.date_approved | html %]">[% tagloo.date_approved | $KohaDates %]</span>
             </td>
         </tr>
     [% END %]
@@ -147,16 +148,16 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
   <h4>Terms summary</h4>
   <ul>
     <li><a href="/cgi-bin/koha/tags/review.pl?approved=1">Approved</a>:
-        <span id="terms_summary_approved_count">[% approved_count %]</span>
+        <span id="terms_summary_approved_count">[% approved_count | html %]</span>
         </li>
     <li><a href="/cgi-bin/koha/tags/review.pl?approved=-1">Rejected</a>:
-        <span id="terms_summary_rejected_count">[% rejected_count %]</span>
+        <span id="terms_summary_rejected_count">[% rejected_count | html %]</span>
     </li>
     <li><a href="/cgi-bin/koha/tags/review.pl?approved=0">Pending</a>:
-    <span id="terms_summary_unapproved_count">[% unapproved_count %]</span>
+    <span id="terms_summary_unapproved_count">[% unapproved_count | html %]</span>
     </li>
     <li><a href="/cgi-bin/koha/tags/review.pl?approved=all">Total</a>:
-        <span id="terms_summary_approved_total">[% approved_total %]</span>
+        <span id="terms_summary_approved_total">[% approved_total | html %]</span>
     </li>
   </ul>
   <span id="terms_summary_status">&nbsp;</span>
@@ -170,11 +171,11 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
    <div id="verdict">
 	[% IF ( test_term ) %]
 	[% IF ( verdict_ok ) %]
-		&quot;[% test_term %]&quot; is permitted.
+		&quot;[% test_term | html %]&quot; is permitted.
 	[% ELSIF ( verdict_rej ) %]
-		&quot;[% test_term %]&quot; is prohibited.
+		&quot;[% test_term | html %]&quot; is prohibited.
 	[% ELSIF ( verdict_indeterminate ) %]
-		&quot;[% test_term %]&quot; is neither permitted nor prohibited.
+		&quot;[% test_term | html %]&quot; is neither permitted nor prohibited.
 	[% END %]
 	[% END %]
    </div>
@@ -191,7 +192,7 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 <fieldset class="brief">
   <h4>Filters</h4>
 	<ol>
-	    <li><label for="tag">Term:</label> <input type="text" name="tag" id="tag" value="[% filter_tag %]" />
+	    <li><label for="tag">Term:</label> <input type="text" name="tag" id="tag" value="[% filter_tag | html %]" />
 	    </li>
 	    <li><label for="approved">Status:</label>
             <select name="approved" id="approved">
@@ -205,15 +206,15 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
             [% ELSE %]<option value="-1">rejected</option>[% END %]
 			</select>
 	    </li>
-	    <li><label for="approver">Reviewer:</label> <input type="text" name="approver" id="approver" value="[% filter_approver %]" />
+	    <li><label for="approver">Reviewer:</label> <input type="text" name="approver" id="approver" value="[% filter_approver | html %]" />
 	    </li>
 	    <li>
 			<label for="from">Date: from </label>
-            <input type="text" size="10" id="from" name="from" value="[% filter_date_approved_from %]" class="datepickerfrom" />
+            <input type="text" size="10" id="from" name="from" value="[% filter_date_approved_from | html %]" class="datepickerfrom" />
 			<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 
 			<label for="to">...to </label>
-            <input type="text" size="10" id="to" name="to" value="[% filter_date_approved_to %]" class="datepickerto" />
+            <input type="text" size="10" id="to" name="to" value="[% filter_date_approved_to | html %]" class="datepickerto" />
 			<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 	    </li>
   </ol>
@@ -226,8 +227,8 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
-    [% Asset.js("js/pages/tags-review.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
+    [% Asset.js("js/pages/tags-review.js") | $raw %]
     <script type="text/javascript">
         var MSG_AJAX_APPROVE_FAILED = _("AJAX failed to approve tag: %s");
         var MSG_AJAX_REJECTION_FAILED = _("AJAX failed to reject tag: %s");

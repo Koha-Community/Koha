@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Branches %]
@@ -35,10 +36,10 @@
                     <h3>Existing patrons</h3>
                     <ul>
                         [% FOREACH patron IN local_result %]
-                            <li>[% patron.firstname %] [% patron.surname %] [% patron.cardnumber %] |
-                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">Details</a> |
-                                <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&destination=circ&borrowernumber=[% patron.borrowernumber %]">Edit</a> |
-                                <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% patron.borrowernumber %]">Check out</a>
+                            <li>[% patron.firstname | html %] [% patron.surname | html %] [% patron.cardnumber | html %] |
+                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]">Details</a> |
+                                <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&destination=circ&borrowernumber=[% patron.borrowernumber | html %]">Edit</a> |
+                                <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% patron.borrowernumber | html %]">Check out</a>
                             </li>
                         [% END %]
                     </ul>
@@ -49,7 +50,7 @@
                     [% IF result.antall_poster_returnert == 0 %]
 
                         <div class="dialog alert">
-                            <p>No results found in the Norwegian national patron database. Message: "[% result.melding %]"</p>
+                            <p>No results found in the Norwegian national patron database. Message: "[% result.melding | html %]"</p>
                         </div>
 
                     [% ELSE %]
@@ -80,7 +81,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
-    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("js/members-menu.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
@@ -151,7 +152,7 @@
 <input type="hidden" name="m_land" value="[% p.m_land | html_entity %]" />
 <input type="hidden" name="m_sjekk" value="[% p.m_sjekk | html_entity %]" />
 <input type="hidden" name="m_gyldig_til" value="[% p.m_gyldig_til | html_entity %]" />
-<input type="hidden" name="pin" value="[% p.pin %]" />
+<input type="hidden" name="pin" value="[% p.pin | html %]" />
 <input type="hidden" name="passord" value="[% p.passord | html_entity %]" />
 <input type="hidden" name="feide" value="[% p.feide | html_entity %]" />
 <input type="hidden" name="folkeregsjekk_dato" value="[% p.folkeregsjekk_dato | html_entity %]" />
@@ -171,7 +172,7 @@
 as
 <select name="categorycode">
 [% FOREACH c IN categories %]
-    <option value="[% c.categorycode %]">[% c.description %]</option>
+    <option value="[% c.categorycode | html %]">[% c.description | html %]</option>
 [% END %]
 </select>
 </form>

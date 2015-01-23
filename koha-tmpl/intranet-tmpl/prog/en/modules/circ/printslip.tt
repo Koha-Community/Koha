@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -6,16 +7,16 @@
 [% ELSIF ( caller == 'transfer' ) %]
 <title>Koha &rsaquo; Circulation &rsaquo; Transfers print receipt</title>
 [% ELSIF ( caller == 'members' ) %]
-<title>Koha &rsaquo; Patrons &rsaquo; Print receipt for [% borrowernumber %]</title>
+<title>Koha &rsaquo; Patrons &rsaquo; Print receipt for [% borrowernumber | html %]</title>
 [% ELSIF ( title ) %][%# FIXME title is never defined %]
-<title>Koha &rsaquo; Patrons &rsaquo; [% title %]</title>
+<title>Koha &rsaquo; Patrons &rsaquo; [% title | html %]</title>
 [% END %]
 [% INCLUDE 'doc-head-close.inc' %]
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% interface %]/[% theme %]/img/favicon.ico[% END %]" type="image/x-icon" />
-[% Asset.css("css/print.css") %]
+<link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon | html %][% ELSE %][% interface | html %]/[% theme | html %]/img/favicon.ico[% END %]" type="image/x-icon" />
+[% Asset.css("css/print.css") | $raw %]
 [% IF ( Koha.Preference('SlipCSS') ) %]
-<link rel="stylesheet" type="text/css" href="[% Koha.Preference('SlipCSS') %]" />
+<link rel="stylesheet" type="text/css" href="[% Koha.Preference('SlipCSS') | $raw %]" />
 [% END %]
 
 [% INCLUDE 'slip-print.inc' #printThenClose %]
@@ -25,10 +26,10 @@
 
 [% IF plain %]
 <pre>
-[% IF ( slip ) %][% slip %][% ELSE %]No slip template found[% END %]
+[% IF ( slip ) %][% slip | html %][% ELSE %]No slip template found[% END %]
 </pre>
 [% ELSE %]
-[% IF ( slip ) %][% slip %][% ELSE %]No slip template found[% END %]
+[% IF ( slip ) %][% slip | $raw %][% ELSE %]No slip template found[% END %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

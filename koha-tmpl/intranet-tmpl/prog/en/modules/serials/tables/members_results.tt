@@ -1,19 +1,19 @@
 [% USE To %]
 {
-    "sEcho": [% sEcho %],
-    "iTotalRecords": [% iTotalRecords %],
-    "iTotalDisplayRecords": [% iTotalDisplayRecords %],
+    "sEcho": [% sEcho | html %],
+    "iTotalRecords": [% iTotalRecords | html %],
+    "iTotalDisplayRecords": [% iTotalDisplayRecords | html %],
     "aaData": [
         [% FOREACH data IN aaData %]
             {
                 "dt_cardnumber":
-                    "[% data.cardnumber %]",
+                    "[% data.cardnumber | html %]",
                 "dt_name":
-                    "<span style='white-space:nowrap'><a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.borrowernumber %]'>[% INCLUDE 'patron-title.inc' borrowernumber = data.borrowernumber category_type = data.category_type firstname = To.json(data.firstname) surname = To.json(data.surname) othernames = To.json(data.othernames) cardnumber = data.cardnumber invert_name = 1%]</a></span>",
+                    "<span style='white-space:nowrap'><a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.borrowernumber | html %]'>[% INCLUDE 'patron-title.inc' borrowernumber = data.borrowernumber category_type = data.category_type firstname = To.json(data.firstname) surname = To.json(data.surname) othernames = To.json(data.othernames) cardnumber = data.cardnumber invert_name = 1%]</a></span>",
                 "dt_branch":
-                    "[% data.branchname |html %]",
+                    "[% data.branchname | html %]",
                 "dt_action":
-                    "<a href=\"#\" class=\"add_user btn btn-default btn-xs\" data-borrowernumber=\"[% data.borrowernumber %]\" data-firstname=\"[% data.firstname %]\" data-surname=\"[% data.surname %]\">Add</a>"
+                    "<a href=\"#\" class=\"add_user btn btn-default btn-xs\" data-borrowernumber=\"[% data.borrowernumber | html %]\" data-firstname=\"[% data.firstname | html %]\" data-surname=\"[% data.surname | html %]\">Add</a>"
             }[% UNLESS loop.last %],[% END %]
         [% END %]
     ]

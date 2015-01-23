@@ -1,25 +1,26 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE AudioAlerts %]
 [% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha [% END %] &rsaquo; Self checkout </title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha [% END %] &rsaquo; Self checkout </title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Koha [% Version %]" /> <!-- leave this for stats -->
-<link rel="shortcut icon" href="[% IF ( Koha.Preference('OpacFavicon') ) %][% Koha.Preference('OpacFavicon') %][% ELSE %][% interface %]/[% theme %]/images/favicon.ico[% END %]" type="image/x-icon" />
-[% Asset.css("lib/bootstrap/css/bootstrap.min.css") %]
-[% Asset.css("lib/jquery/jquery-ui.css") %]
-[% Asset.css("css/sco.css") %]
-[% IF ( Koha.Preference('OPACUserCSS') ) %]<style>[% Koha.Preference('OPACUserCSS') %]</style>[% END %]
-[% IF ( Koha.Preference('SCOUserCSS') ) %]<style>[% Koha.Preference('SCOUserCSS') %]</style>[% END %]
+<meta name="generator" content="Koha [% Version | html %]" /> <!-- leave this for stats -->
+<link rel="shortcut icon" href="[% IF ( Koha.Preference('OpacFavicon') ) %][% Koha.Preference('OpacFavicon') | html %][% ELSE %][% interface | html %]/[% theme | html %]/images/favicon.ico[% END %]" type="image/x-icon" />
+[% Asset.css("lib/bootstrap/css/bootstrap.min.css") | $raw %]
+[% Asset.css("lib/jquery/jquery-ui.css") | $raw %]
+[% Asset.css("css/sco.css") | $raw %]
+[% IF ( Koha.Preference('OPACUserCSS') ) %]<style>[% Koha.Preference('OPACUserCSS') | $raw %]</style>[% END %]
+[% IF ( Koha.Preference('SCOUserCSS') ) %]<style>[% Koha.Preference('SCOUserCSS') | $raw %]</style>[% END %]
 <!--[if lt IE 9]>
-    <script src="[% interface %]/[% theme %]/lib/respond.min.js"></script>
+    <script src="[% interface | html %]/[% theme | html %]/lib/respond.min.js"></script>
 <![endif]-->
 <script>
     function _(s) { return s } // dummy function for gettext
 </script>
-[% Asset.js("lib/modernizr.min.js") %]
+[% Asset.js("lib/modernizr.min.js") | $raw %]
 </head>
 <body id="sco_main" class="sco" onload="dofocus();" onunload="mungeHistory();">
 [% INCLUDE 'masthead-sco.inc' %]
@@ -33,14 +34,14 @@
                     <div class="span12">
                 [% END %]
 
-                    <div id="masthead"><h1>[% LibraryName %] Self checkout system</h1></div>
+                    <div id="masthead"><h1>[% LibraryName | html %] Self checkout system</h1></div>
 
                     [% IF ( impossible ) %]<!-- We tried to issue, but failed. -->
                         <div class="alert">
                             <h3>Item cannot be checked out.</h3>
                             <p>Sorry, this item cannot be checked out at this station.</p>
                             [% IF ( title ) %]
-                                <p>Title: <em>[% title |html %]</em> </p>
+                                <p>Title: <em>[% title | html %]</em> </p>
                             [% END %]
 
                             <p>
@@ -55,7 +56,7 @@
                                 [% ELSIF ( circ_error_NOT_FOR_LOAN ) %]
                                     This item is not for loan.
                                 [% ELSIF ( circ_error_DEBT ) %]
-                                    You owe the library [% DEBT | $Price %] and cannot check out.
+                                    You owe the library [% DEBT | $Price | html %] and cannot check out.
                                 [% ELSIF ( circ_error_WTHDRAWN ) %]
                                     This item has been withdrawn from the collection.
                                 [% ELSIF ( circ_error_RESTRICTED ) %]
@@ -81,16 +82,16 @@
                             [% IF ( returnitem && Koha.Preference('AllowSelfCheckReturns') ) %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" class="inline" method="post">
                                     <input type="hidden" name="op" value="returnbook" />
-                                    <input type="hidden" name="patronid" value="[% patronid %]" />
-                                    <input type="hidden" name="barcode" value="[% barcode %]" />
+                                    <input type="hidden" name="patronid" value="[% patronid | html %]" />
+                                    <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <button type="submit" name="returnbook" class="btn"><i class="return"></i> Return this item</button>
                                 </form>
                             [% END %]
 
                             <form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" class="inline" method="post">
                                 <input type="hidden" name="op" value="" />
-                                <input type="hidden" name="patronid" value="[% patronid %]" />
-                                <input type="hidden" name="barcode" value="[% barcode %]" />
+                                <input type="hidden" name="patronid" value="[% patronid | html %]" />
+                                <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                 <input type="submit" name= "confirm" value="Return to account summary" class="btn back focus" />
                             </form>
                         </div> <!-- / .alert -->
@@ -105,8 +106,8 @@
                             [% IF ( renew && Koha.Preference('AllowSelfCheckReturns') ) %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
                                     <input type="hidden" name="op" value="returnbook" />
-                                    <input type="hidden" name="patronid" value="[% patronid %]" />
-                                    <input type="hidden" name="barcode" value="[% barcode %]" />
+                                    <input type="hidden" name="patronid" value="[% patronid | html %]" />
+                                    <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="confirmed" value="" />
                                     <button type="submit" name="returnbook" class="btn"><i class="icon return"></i> Return this item</button>
                                 </form>
@@ -115,16 +116,16 @@
                             [% UNLESS ( renew ) %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
                                     <input type="hidden" name="op" value="checkout" />
-                                    <input type="hidden" name="patronid" value="[% patronid %]" />
-                                    <input type="hidden" name="barcode" value="[% barcode %]" />
+                                    <input type="hidden" name="patronid" value="[% patronid | html %]" />
+                                    <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="confirmed" value="1" />
                                     <button type="submit" name="confirm" class="btn"><i class="icon renew"></i> Renew item</button>
                                   </form>
                             [% ELSE %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
                                     <input type="hidden" name="op" value="checkout" />
-                                    <input type="hidden" name="patronid" value="[% patronid %]" />
-                                    <input type="hidden" name="barcode" value="[% barcode %]" />
+                                    <input type="hidden" name="patronid" value="[% patronid | html %]" />
+                                    <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="confirmed" value="1" />
                                     <button type="submit" class="btn"><i class="icon renew"></i> Renew item</button>
                                 </form>
@@ -132,7 +133,7 @@
 
                             <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
                                 <input type="hidden" name="op" value="" />
-                                <input type="hidden" name="patronid" value="[% patronid %]" />
+                                <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                 <button type="submit" class="btn"><i class="icon cancel"></i> Cancel</button>
                             </form>
                         </div>
@@ -167,7 +168,7 @@
 
                         [% IF ( patronid ) %]
                             [% IF ( validuser ) %]
-                                <div class="alert alert-info">You are logged in as [% borrowername %].</div>
+                                <div class="alert alert-info">You are logged in as [% borrowername | html %].</div>
                                 [% INCLUDE 'opac-note.inc' %]
                                 [% IF patron_has_hold_fee %]
                                     <div class="alert">A hold fee was charged to your account for collecting this item.</div>
@@ -177,14 +178,14 @@
                             [% IF ( nouser ) %]
                                 <div class="alert">
                                     <h4>Sorry</h4>
-                                    <p>The userid <strong>[% patronid %]</strong> was not found in the database.  Please try again.</p>
+                                    <p>The userid <strong>[% patronid | html %]</strong> was not found in the database.  Please try again.</p>
                                 </div>
                             [% END %]
                         [% END # / IF patronid %]
 
                         [% IF ( validuser ) %]
                             <div id="newcheckout" class="sco_entry">
-                                <form id="scan_form" name="scan_form" method="post" action="/cgi-bin/koha/sco/sco-main.pl" onsubmit="return checkout_confirm('[% patronid %]');">
+                                <form id="scan_form" name="scan_form" method="post" action="/cgi-bin/koha/sco/sco-main.pl" onsubmit="return checkout_confirm('[% patronid | html %]');">
                                     <fieldset>
                                         <legend>Check out[% IF ( Koha.Preference('AllowSelfCheckReturns') ) %], return[% END %] or renew an item: </legend>
                                         <div class="input-append">
@@ -193,7 +194,7 @@
                                             <button type="submit" class="btn">Submit</button>
                                         </div>
                                         <input type="hidden" name="op" value="checkout" />
-                                        <input type="hidden" name="patronid" value="[% patronid %]" />
+                                        <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     </fieldset>
                                 </form>
 
@@ -206,7 +207,7 @@
                 </div> <!-- / .span12/12 -->
                 [% IF ( display_patron_image ) %]
                     <div class="span2">
-                        <img src="/cgi-bin/koha/sco/sco-patron-image.pl?borrowernumber=[% borrowernumber %]&csrf_token=[% csrf_token %]" alt="" />
+                        <img src="/cgi-bin/koha/sco/sco-patron-image.pl?borrowernumber=[% borrowernumber | html %]&csrf_token=[% csrf_token | html %]" alt="" />
                     </div>
                 [% END %]
             </div> <!-- / .row-fluid -->
@@ -218,7 +219,7 @@
                         <div id="borrowerdetails">
                             [% IF ( issues_count ) %]
                                 <table id="loanTable" class="table table-bordered table-striped">
-                                    <caption>Checkouts for [% borrowername %] <span class="count">([%   issues_count %] total)</span></caption>
+                                    <caption>Checkouts for [% borrowername | html %] <span class="count">([% issues_count | html %] total)</span></caption>
                                     <!-- ISSUES TABLE ROWS -->
                                     <thead>
                                         <tr>
@@ -235,26 +236,26 @@
                                     <tbody>
                                         [% FOREACH ISSUE IN ISSUES %]
                                             <tr>
-                                                <td>[% ISSUE.issuedate %]</td>
+                                                <td>[% ISSUE.issuedate | html %]</td>
                                                 <td>
                                                     [% UNLESS ( noitemlinks ) %]
-                                                        <a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.  biblionumber %]">[% ISSUE.title |html %]</a>
+                                                        <a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.  biblionumber | html %]">[% ISSUE.title | html %]</a>
                                                     [% ELSE %]
-                                                        <strong>[% ISSUE.title |html %]</strong>
+                                                        <strong>[% ISSUE.title | html %]</strong>
                                                     [% END %]
-                                                    <span class="item-details">[% ISSUE.author %]</span>
-                                                    ([% ISSUE.barcode %])
+                                                    <span class="item-details">[% ISSUE.author | html %]</span>
+                                                    ([% ISSUE.barcode | html %])
                                                 </td>
-                                                <td>[% ISSUE.itemcallnumber %]</td>
+                                                <td>[% ISSUE.itemcallnumber | html %]</td>
                                                 [% IF ( ISSUE.overdue ) %]
-                                                    <td class="overdue"><span title="[% ISSUE.date_due %]">[% ISSUE.date_due | $KohaDates as_due_date => 1 %]</span></td>
+                                                    <td class="overdue"><span title="[% ISSUE.date_due | html %]">[% ISSUE.date_due | $KohaDates as_due_date => 1 | html %]</span></td>
                                                 [% ELSE   %]
-                                                    <td><span title="[% ISSUE.date_due %]">[% ISSUE.date_due | $KohaDates as_due_date => 1 %]</span></td>
+                                                    <td><span title="[% ISSUE.date_due | html %]">[% ISSUE.date_due | $KohaDates as_due_date => 1 | html %]</span></td>
                                                 [% END %]
                                                 <td>
                                                     <form action="/cgi-bin/koha/sco/sco-main.pl" method="post">
-                                                        <input type="hidden" name="patronid" value="[% patronid %]" />
-                                                        <input type="hidden" name="barcode" value="[% ISSUE.barcode %]" />
+                                                        <input type="hidden" name="patronid" value="[% patronid | html %]" />
+                                                        <input type="hidden" name="barcode" value="[% ISSUE.barcode | html %]" />
                                                         [% IF ISSUE.can_be_renewed %]
                                                             <input type="hidden" name="op" value="checkout" />
                                                             <input type="hidden" name="confirmed" value="1" />
@@ -314,7 +315,7 @@
                                         [% END %]
 
                                         [% FOREACH INPUT IN INPUTS %]
-                                            <input type="hidden" name="[% INPUT.name |html %]" value="[% INPUT.value |html %]">
+                                            <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]">
                                         [% END %]
                                         <input type="hidden" name="op" value="login" />
                                     </fieldset>
@@ -322,7 +323,7 @@
                             </div> <!-- / .sco_entry -->
                         [% END # / IF validuser %]
                     [% END # / UNLESS ( hide_main %]
-                    [% IF ( Koha.Preference('SCOMainUserBlock' ) ) %]<div id="scomainuserblock">[% Koha.Preference('SCOMainUserBlock' ) %]</div>[% END %]
+                    [% IF ( Koha.Preference('SCOMainUserBlock' ) ) %]<div id="scomainuserblock">[% Koha.Preference('SCOMainUserBlock' ) | $raw %]</div>[% END %]
                 </div> <!-- / .span12 -->
             </div> <!-- / .row-fluid -->
         </div> <!-- / .container-fluid -->
@@ -344,7 +345,7 @@
         function sco_init() {
             mainTimeout = setTimeout(function() {
                 location.href = '/cgi-bin/koha/sco/sco-main.pl?op=logout';
-            }, [% SelfCheckTimeout %]);
+            }, [% SelfCheckTimeout | html %]);
         }
         function dofocus() {    // named function req'd for body onload event by some FF and IE7 security models
             // alert("dofocus called");
@@ -367,7 +368,7 @@
             return true;
         }
         [% IF Koha.Preference('AudioAlerts') %]
-            var AUDIO_ALERTS = JSON.parse( '[% AudioAlerts.AudioAlerts | replace( "'", "\\'" ) | replace( '"', '\\"' ) %]' );
+            var AUDIO_ALERTS = JSON.parse( '[% AudioAlerts.AudioAlerts | replace( "'", "\\'" ) | replace( '"', '\\"' ) | html %]' );
             $( document ).ready(function() {
                 if ( AUDIO_ALERTS ) {
                     for ( var k in AUDIO_ALERTS ) {
@@ -405,8 +406,8 @@
                 [% IF Koha.Preference('SelfCheckReceiptPrompt') %]
                     var confirmStart = Date.now();
                     if(confirm(_("Would you like to print a receipt?"))){
-                        if ( (Date.now() - confirmStart) < [% SelfCheckTimeout %] ) {
-                            window.open("/cgi-bin/koha/sco/printslip.pl?borrowernumber=[% borrowernumber %]&amp;print=qslip");
+                        if ( (Date.now() - confirmStart) < [% SelfCheckTimeout | html %] ) {
+                            window.open("/cgi-bin/koha/sco/printslip.pl?borrowernumber=[% borrowernumber | html %]&amp;print=qslip");
                         } else {
                             alert(_("Timeout while waiting for print confirmation"));
                         }
@@ -419,5 +420,5 @@
     //]]>
     </script>
 
-    [% IF ( Koha.Preference('SCOUserJS') ) %]<script>[% Koha.Preference('SCOUserJS') %]</script>[% END %]
+    [% IF ( Koha.Preference('SCOUserJS') ) %]<script>[% Koha.Preference('SCOUserJS') | $raw %]</script>[% END %]
 [% END %]

@@ -28,18 +28,18 @@
 Updated:<ul>
     [% FOREACH update IN updated %]
     [% IF ( update.updated_branch ) %]
-        <li>Library: [% update.old_branch or "?" %] &rArr; [% update.LoginBranchcode or "?" %]</li>
+        <li>Library: [% update.old_branch or "?" | html %] &rArr; [% update.LoginBranchcode or "?" | html %]</li>
     [% ELSIF ( update.updated_printer ) %]
-      <!-- FIXME:  <li>Printer: [% update.old_printer or "?" %] &rArr; [% update.new_printer or "?" %]</li> -->
+      <!-- FIXME:  <li>Printer: [% update.old_printer or "?" | html %] &rArr; [% update.new_printer or "?" | html %]</li> -->
     [% ELSE %]
         <li>ERROR - unknown</li>
     [% END %]
     [% END %]
     </ul>
-<form method="post" action="[% referer or "/cgi-bin/koha/circ/circulation.pl" |html %]">
+<form method="post" action="[% referer or "/cgi-bin/koha/circ/circulation.pl" %]">
     <div class="noshow">
         [% FOREACH recycle_loo IN recycle_loop %]
-        <input type="text" name="[% recycle_loo.param %]" value="[% recycle_loo.value |html %]" />
+        <input type="text" name="[% recycle_loo.param | html %]" value="[% recycle_loo.value | html %]" />
         [% END %]
     </div>
     <button type="submit">Continue</button>
@@ -65,9 +65,9 @@ Updated:<ul>
         <select name="printer" id="printer">
             [% FOREACH printerloo IN printerloop %]
                 [% IF ( printerloo.selected ) %]
-                    <option value="[% printerloo.value %]" selected="selected">[% printerloo.name %]</option>
+                    <option value="[% printerloo.value | html %]" selected="selected">[% printerloo.name | html %]</option>
                 [% ELSE %]
-                    <option value="[% printerloo.value %]">[% printerloo.name %]</option>
+                    <option value="[% printerloo.value | html %]">[% printerloo.name | html %]</option>
                 [% END %]
             [% END %]
         </select></li>
@@ -80,9 +80,9 @@ Updated:<ul>
 </fieldset>
 <div class="noshow">
     [% FOREACH recycle_loo IN recycle_loop %]
-    <input type="text" name="[% recycle_loo.param %]" value="[% recycle_loo.value |html %]" />
+    <input type="text" name="[% recycle_loo.param | html %]" value="[% recycle_loo.value | html %]" />
     [% END %]
-    <input type="hidden" name="oldreferer" value="[% referer or "/cgi-bin/koha/circ/circulation.pl" |html %]" />
+    <input type="hidden" name="oldreferer" value="[% referer or "/cgi-bin/koha/circ/circulation.pl" %]" />
 </div>
 </form>
 <!-- /updated -->

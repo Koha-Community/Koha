@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
@@ -19,7 +20,7 @@
     <div class="yui-b">
     <h1 class="parameters">
         [% IF humanbranch %]
-            Defining circulation and fine rules for "[% Branches.GetName( humanbranch ) %]"
+            Defining circulation and fine rules for "[% Branches.GetName( humanbranch ) | html %]"
         [% ELSE %]
             Defining circulation and fine rules for all libraries
         [% END %]
@@ -49,7 +50,7 @@
         [% IF ( definedbranch ) %]
             <form action="/cgi-bin/koha/admin/clone-rules.pl" method="post">
                 <label for="tobranch"><strong>Clone these rules to:</strong></label>
-                <input type="hidden" name="frombranch" value="[% current_branch %]" />
+                <input type="hidden" name="frombranch" value="[% current_branch | html %]" />
                 <select name="tobranch" id="tobranch">
                     [% PROCESS options_for_libraries libraries => Branches.all( unfiltered => 1 ) %]
                 </select>
@@ -59,7 +60,7 @@
 
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="add" />
-            <input type="hidden" name="branch" value="[% current_branch %]"/>
+            <input type="hidden" name="branch" value="[% current_branch | html %]"/>
             <table id="default-circulation-rules">
             <thead>
             <tr>
@@ -97,58 +98,58 @@
             </thead>
             <tbody>
 				[% FOREACH rule IN rules %]
-					<tr id="row_[% loop.count %]">
+					<tr id="row_[% loop.count | html %]">
 							<td>[% IF ( rule.default_humancategorycode ) %]
 									<em>All</em>
 								[% ELSE %]
-									[% rule.humancategorycode %]
+									[% rule.humancategorycode | html %]
 								[% END %]
 							</td>
                             <td>[% IF rule.default_translated_description %]
 									<em>All</em>
 								[% ELSE %]
-									[% rule.translated_description %]
+									[% rule.translated_description | html %]
 								[% END %]
 							</td>
                                                         <td class="actions">
                                                           <a href="#" class="editrule btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                                                          <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype %]&amp;categorycode=[% rule.categorycode %]&amp;branch=[% rule.current_branch %]"><i class="fa fa-trash"></i> Delete</a>
+                                                          <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype | html %]&amp;categorycode=[% rule.categorycode | html %]&amp;branch=[% rule.current_branch | html %]"><i class="fa fa-trash"></i> Delete</a>
                                                         </td>
 
 							<td>[% IF ( rule.unlimited_maxissueqty ) %]
 									<span>Unlimited</span>
 								[% ELSE %]
-									[% rule.maxissueqty %]
+									[% rule.maxissueqty | html %]
 								[% END %]
 							</td>
                             <td>[% IF rule.unlimited_maxonsiteissueqty %]
                                     <span>Unlimited</span>
                                 [% ELSE %]
-                                    [% rule.maxonsiteissueqty %]
+                                    [% rule.maxonsiteissueqty | html %]
                                 [% END %]
                             </td>
-							<td>[% rule.issuelength %]</td>
+							<td>[% rule.issuelength | html %]</td>
 							<td>
-							    [% rule.lengthunit %]
+							    [% rule.lengthunit | html %]
 							</td>
                             <td>
                               [% IF ( rule.hardduedate ) %]
                                 [% IF ( rule.hardduedatebefore ) %]
-                                  before [% rule.hardduedate %]
+                                  before [% rule.hardduedate | html %]
                                   <input type="hidden" name="hardduedatecomparebackup" value="-1" />
                                 [% ELSIF ( rule.hardduedateexact ) %]
-                                  on [% rule.hardduedate %]
+                                  on [% rule.hardduedate | html %]
                                   <input type="hidden" name="hardduedatecomparebackup" value="0" />
                                 [% ELSIF ( rule.hardduedateafter ) %]
-                                  after [% rule.hardduedate %]
+                                  after [% rule.hardduedate | html %]
                                   <input type="hidden" name="hardduedatecomparebackup" value="1" />
                                 [% END %]
                               [% ELSE %]
                                 <span>None defined</span>
                               [% END %]
                             </td>
-							<td>[% rule.fine %]</td>
-							<td>[% rule.chargeperiod %]</td>
+							<td>[% rule.fine | html %]</td>
+							<td>[% rule.chargeperiod | html %]</td>
                             <td>
                                 [% IF rule.chargeperiod_charge_at %]
                                     <span>Start of interval</span>
@@ -156,7 +157,7 @@
                                     <span>End of interval</span>
                                 [% END %]
                             </td>
-							<td>[% rule.firstremind %]</td>
+							<td>[% rule.firstremind | html %]</td>
                             <td>[% rule.overduefinescap FILTER format("%.2f") %]</td>
                             <td>
                                 [% IF rule.cap_fine_to_replacement_price %]
@@ -165,12 +166,12 @@
                                     <input type="checkbox" disabled="disabled" />
                                 [% END %]
                             </td>
-							<td>[% rule.finedays %]</td>
-                            <td>[% rule.maxsuspensiondays %]</td>
-                            <td>[% rule.suspension_chargeperiod %]</td>
-							<td>[% rule.renewalsallowed %]</td>
-                            <td>[% rule.renewalperiod %]</td>
-                            <td>[% rule.norenewalbefore %]</td>
+							<td>[% rule.finedays | html %]</td>
+                            <td>[% rule.maxsuspensiondays | html %]</td>
+                            <td>[% rule.suspension_chargeperiod | html %]</td>
+							<td>[% rule.renewalsallowed | html %]</td>
+                            <td>[% rule.renewalperiod | html %]</td>
+                            <td>[% rule.norenewalbefore | html %]</td>
                             <td>
                                 [% IF ( rule.auto_renew ) %]
                                     <span>Yes</span>
@@ -178,10 +179,10 @@
                                     <span>No</span>
                                 [% END %]
                             </td>
-                            <td>[% rule.no_auto_renewal_after %]</td>
-                            <td>[% rule.no_auto_renewal_after_hard_limit %]</td>
-							<td>[% rule.reservesallowed %]</td>
-                                                        <td>[% rule.holds_per_record %]</td>
+                            <td>[% rule.no_auto_renewal_after | html %]</td>
+                            <td>[% rule.no_auto_renewal_after_hard_limit | html %]</td>
+							<td>[% rule.reservesallowed | html %]</td>
+                                                        <td>[% rule.holds_per_record | html %]</td>
                                                         <td>
                                                             [% IF rule.onshelfholds == 1 %]
                                                                 <span>Yes</span>
@@ -211,10 +212,10 @@
                                                                 <span>Item only</span>
                                                             [% END %]
                                                         </td>
-							<td>[% rule.rentaldiscount %]</td>
+							<td>[% rule.rentaldiscount | html %]</td>
                                                         <td class="actions">
                                                           <a href="#" class="editrule btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                                                          <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype %]&amp;categorycode=[% rule.categorycode %]&amp;branch=[% rule.current_branch %]"><i class="fa fa-trash"></i> Delete</a>
+                                                          <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype | html %]&amp;categorycode=[% rule.categorycode | html %]&amp;branch=[% rule.current_branch | html %]"><i class="fa fa-trash"></i> Delete</a>
                                                         </td>
 
                 	</tr>
@@ -224,7 +225,7 @@
                         <select name="categorycode" id="categorycode">
                             <option value="*">All</option>
                         [% FOREACH patron_category IN patron_categories%]
-                            <option value="[% patron_category.categorycode %]">[% patron_category.description %]</option>
+                            <option value="[% patron_category.categorycode | html %]">[% patron_category.description | html %]</option>
                         [% END %]
                         </select>
                     </td>
@@ -232,12 +233,12 @@
                         <select name="itemtype" id="matrixitemtype" style="width:13em;">
                             <option value="*">All</option>
                         [% FOREACH itemtypeloo IN itemtypeloop %]
-                            <option value="[% itemtypeloo.itemtype %]">[% itemtypeloo.translated_description %]</option>
+                            <option value="[% itemtypeloo.itemtype | html %]">[% itemtypeloo.translated_description | html %]</option>
                         [% END %]
                         </select>
                     </td>
                     <td class="actions">
-                        <input type="hidden" name="branch" value="[% current_branch %]"/>
+                        <input type="hidden" name="branch" value="[% current_branch | html %]"/>
                         <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Save</button>
                         <button name="cancel" class="clear_edit btn btn-default btn-xs"><i class="fa fa-undo"></i> Clear</button>
                     </td>
@@ -256,7 +257,7 @@
                            <option value="0">Exactly on</option>
                            <option value="1">After</option>
                         </select>
-                        <input type="text" size="10" id="hardduedate" name="hardduedate" value="[% hardduedate %]" class="datepicker" />
+                        <input type="text" size="10" id="hardduedate" name="hardduedate" value="[% hardduedate | html %]" class="datepicker" />
                         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                     </td>
                     <td><input type="text" name="fine" id="fine" size="4" /></td>
@@ -284,7 +285,7 @@
                     </td>
                     <td><input type="text" name="no_auto_renewal_after" id="no_auto_renewal_after" size="3" /></td>
                     <td>
-                        <input type="text" size="10" name="no_auto_renewal_after_hard_limit" id="no_auto_renewal_after_hard_limit" value="[% no_auto_renewal_after_hard_limit %]" class="datepicker"/>
+                        <input type="text" size="10" name="no_auto_renewal_after_hard_limit" id="no_auto_renewal_after_hard_limit" value="[% no_auto_renewal_after_hard_limit | html %]" class="datepicker"/>
                         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                     </td>
                     <td><input type="text" name="reservesallowed" id="reservesallowed" size="2" /></td>
@@ -313,7 +314,7 @@
                     </td>
                     <td><input type="text" name="rentaldiscount" id="rentaldiscount" size="2" /></td>
                     <td class="actions">
-                        <input type="hidden" name="branch" value="[% current_branch %]"/>
+                        <input type="hidden" name="branch" value="[% current_branch | html %]"/>
                         <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Save</button>
                         <button name="cancel" class="clear_edit btn btn-default btn-xs"><i class="fa fa-undo"></i> Clear</button>
                     </td>
@@ -357,11 +358,11 @@
         </form>
     </div>
     <div id="defaults-for-this-library" class="container">
-    <h3>Default checkout, hold and return policy[% IF humanbranch %] for [% Branches.GetName( humanbranch ) %][% END %]</h3>
+    <h3>Default checkout, hold and return policy[% IF humanbranch %] for [% Branches.GetName( humanbranch ) | html %][% END %]</h3>
         <p>You can set a default maximum number of checkouts, hold policy and return policy that will be used if none is defined below for a particular item type or category.</p>
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="set-branch-defaults" />
-            <input type="hidden" name="branch" value="[% current_branch %]"/>
+            <input type="hidden" name="branch" value="[% current_branch | html %]"/>
             <table>
                 <tr>
                     <th>&nbsp;</th>
@@ -374,8 +375,8 @@
                 </tr>
                 <tr>
                     <td><em>Defaults[% UNLESS ( default_rules ) %] (not set)[% END %]</em></td>
-                    <td><input type="text" name="maxissueqty" size="3" value="[% default_maxissueqty %]"/></td>
-                    <td><input type="text" name="maxonsiteissueqty" size="3" value="[% default_maxonsiteissueqty %]"/></td>
+                    <td><input type="text" name="maxissueqty" size="3" value="[% default_maxissueqty | html %]"/></td>
+                    <td><input type="text" name="maxonsiteissueqty" size="3" value="[% default_maxonsiteissueqty | html %]"/></td>
                     <td>
                         <select name="holdallowed">
                             [% IF ( default_holdallowed_any ) %]
@@ -461,7 +462,7 @@
                     </td>
                     <td class="actions">
                         <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Save</button>
-                        <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=*&amp;branch=[% current_branch %]" id="unset"><i class="fa fa-undo"></i> Unset</a>
+                        <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=*&amp;branch=[% current_branch | html %]" id="unset"><i class="fa fa-undo"></i> Unset</a>
                     </td>
                 </tr>
             </table>
@@ -469,7 +470,7 @@
     </div>
     [% IF ( show_branch_cat_rule_form ) %]
     <div id="holds-policy-by-patron-category" class="container">
-    <h3>[% IF humanbranch %]Checkout limit by patron category for [% Branches.GetName( humanbranch ) %][% ELSE %]Default checkout limit by patron category[% END %]</h3>
+    <h3>[% IF humanbranch %]Checkout limit by patron category for [% Branches.GetName( humanbranch ) | html %][% ELSE %]Default checkout limit by patron category[% END %]</h3>
         <p>For this library, you can specify the maximum number of loans that
             a patron of a given category can make, regardless of the item type.
         </p>
@@ -478,7 +479,7 @@
         </p>
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="add-branch-cat" />
-            <input type="hidden" name="branch" value="[% current_branch %]"/>
+            <input type="hidden" name="branch" value="[% current_branch | html %]"/>
             <table>
                 <tr>
                     <th>Patron category</th>
@@ -495,24 +496,24 @@
                         <td>[% IF ( branch_cat_rule_loo.default_humancategorycode ) %]
                                 <em>Default</em>
                             [% ELSE %]
-                                [% branch_cat_rule_loo.humancategorycode %]
+                                [% branch_cat_rule_loo.humancategorycode | html %]
                             [% END %]
                         </td>
                         <td>[% IF ( branch_cat_rule_loo.unlimited_maxissueqty ) %]
                                 <span>Unlimited</span>
                             [% ELSE %]
-                                [% branch_cat_rule_loo.maxissueqty %]
+                                [% branch_cat_rule_loo.maxissueqty | html %]
                             [% END %]
                         </td>
                         <td>[% IF ( branch_cat_rule_loo.unlimited_maxonsiteissueqty ) %]
                                 <span>Unlimited</span>
                             [% ELSE %]
-                                [% branch_cat_rule_loo.maxonsiteissueqty %]
+                                [% branch_cat_rule_loo.maxonsiteissueqty | html %]
                             [% END %]
                         </td>
 
                         <td class="actions">
-                            <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=[% branch_cat_rule_loo.categorycode %]&amp;branch=[% current_branch %]"><i class="fa fa-trash"></i> Delete</a>
+                            <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=[% branch_cat_rule_loo.categorycode | html %]&amp;branch=[% current_branch | html %]"><i class="fa fa-trash"></i> Delete</a>
                         </td>
                     </tr>
                 [% END %]
@@ -520,7 +521,7 @@
                     <td>
                         <select name="categorycode">
                         [% FOREACH patron_category IN patron_categories%]
-                            <option value="[% patron_category.categorycode %]">[% patron_category.description %]</option>
+                            <option value="[% patron_category.categorycode | html %]">[% patron_category.description | html %]</option>
                         [% END %]
                         </select>
                     </td>
@@ -537,13 +538,13 @@
   [% IF current_branch == '*' %]
     <h3>Default lost item fee refund on return policy</h3>
   [% ELSE %]
-    <h3>Lost item fee refund on return policy for [% Branches.GetName(current_branch) %]</h3>
+    <h3>Lost item fee refund on return policy for [% Branches.GetName(current_branch) | html %]</h3>
   [% END %]
         <p>Specify the default policy for lost item fees on return.
         </p>
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="mod-refund-lost-item-fee-rule" />
-            <input type="hidden" name="branch" value="[% current_branch %]" />
+            <input type="hidden" name="branch" value="[% current_branch | html %]" />
             <table>
                 <tr>
                     <th>Refund lost item fee</th>
@@ -613,7 +614,7 @@
     </div>
 
     <div id="holds-policy-by-item-type" class="container">
-    <h3>[% IF humanbranch %]Holds policy by item type for [% Branches.GetName( humanbranch ) %][% ELSE %]Default holds policy by item type[% END %]</h3>
+    <h3>[% IF humanbranch %]Holds policy by item type for [% Branches.GetName( humanbranch ) | html %][% ELSE %]Default holds policy by item type[% END %]</h3>
         <p>
             For this library, you can edit rules for given itemtypes, regardless
             of the patron's category.
@@ -633,7 +634,7 @@
 
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="add-branch-item" />
-            <input type="hidden" name="branch" value="[% current_branch %]"/>
+            <input type="hidden" name="branch" value="[% current_branch | html %]"/>
             <table>
                 <tr>
                     <th>Item type</th>
@@ -651,7 +652,7 @@
                         <td>[% IF ( branch_item_rule_loo.default_translated_description ) %]
                                 <em>Default</em>
                             [% ELSE %]
-                                [% branch_item_rule_loo.translated_description %]
+                                [% branch_item_rule_loo.translated_description | html %]
                             [% END %]
                         </td>
                         <td>[% IF ( branch_item_rule_loo.holdallowed_any ) %]
@@ -681,7 +682,7 @@
                             [% END %]
                         </td>
                         <td class="actions">
-                            <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-item&amp;itemtype=[% branch_item_rule_loo.itemtype %]&amp;branch=[% current_branch %]"><i class="fa fa-trash"></i> Delete</a>
+                            <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-item&amp;itemtype=[% branch_item_rule_loo.itemtype | html %]&amp;branch=[% current_branch | html %]"><i class="fa fa-trash"></i> Delete</a>
                         </td>
                     </tr>
                 [% END %]
@@ -689,7 +690,7 @@
                     <td>
                         <select name="itemtype">
                         [% FOREACH itemtypeloo IN itemtypeloop %]
-                            <option value="[% itemtypeloo.itemtype %]">[% itemtypeloo.translated_description %]</option>
+                            <option value="[% itemtypeloo.itemtype | html %]">[% itemtypeloo.translated_description | html %]</option>
                         [% END %]
                         </select>
                     </td>
@@ -736,7 +737,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     <script type="text/javascript">
 

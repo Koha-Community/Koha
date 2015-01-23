@@ -1,6 +1,6 @@
 [% USE Koha %]
 <div class="gradient">
-<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin Notices Resident Search Box -->
+<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></h1><!-- Begin Notices Resident Search Box -->
 <div id="header_search">
 	<div id="notices_search" class="residentsearch">
     <p class="tip">Search existing notices:</p>

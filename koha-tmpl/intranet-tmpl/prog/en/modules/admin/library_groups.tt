@@ -1,10 +1,11 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaSpan %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Library groups</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css") %]
-[% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") %]
+[% Asset.css("lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css") | $raw %]
+[% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") | $raw %]
 <script type="text/javascript">
 //<![CDATA[
     $(document).ready(function() {
@@ -120,22 +121,22 @@
 [% IF added %]
     <div class="dialog message group-added">
         [% IF added.branchcode %]
-            [% added.library.branchname | $KohaSpan class = 'name' %] added to group.
+            [% added.library.branchname | $KohaSpan class = 'name' | html %] added to group.
         [% ELSE %]
-            Group [% added.title | $KohaSpan class = 'name' %] created.
+            Group [% added.title | $KohaSpan class = 'name' | html %] created.
         [% END %]
     </div>
 [% ELSIF deleted %]
     <div class="dialog message group-deleted">
         [% IF deleted.title %]
-            Group [% deleted.title | $KohaSpan class = 'name' %] has been deleted.
+            Group [% deleted.title | $KohaSpan class = 'name' | html %] has been deleted.
         [% ELSE %]
-            [% deleted.library | $KohaSpan class = 'name' %] has been removed from group.
+            [% deleted.library | $KohaSpan class = 'name' | html %] has been removed from group.
         [% END %]
     </div>
 [% ELSIF error_duplicate_title %]
     <div class="dialog alert error-duplicate-group-title">
-            A group with the title [% error_duplicate_title | $KohaSpan class = 'name' %] already exists.
+            A group with the title [% error_duplicate_title | $KohaSpan class = 'name' | html %] already exists.
     </div>
 [% END %]
 
@@ -317,19 +318,19 @@
 [% INCLUDE 'intranet-bottom.inc' %]
 
 [% BLOCK tree %]
-    <tr data-tt-id="[% group.id %]" data-tt-parent-id="[% group.parent_id %]">
+    <tr data-tt-id="[% group.id | html %]" data-tt-parent-id="[% group.parent_id | html %]">
         <td>
             [% IF group.branchcode %]
-                [% group.branchcode %]
+                [% group.branchcode | html %]
             [% ELSE %]
-                [% group.title %]
+                [% group.title | html %]
             [% END %]
         </td>
         <td>
             [% IF group.branchcode %]
-                [% group.library.branchname %]
+                [% group.library.branchname | html %]
             [% ELSE %]
-                [% group.description %]
+                [% group.description | html %]
             [% END %]
         </td>
         <td>
@@ -349,25 +350,25 @@
         </td>
         <td>
             [% IF group.branchcode %]
-                <button class="btn btn-default btn-sm remove-library" data-group-id="[% group.id %]" data-group-library="[% group.library.branchname %]" data-group-parent-title="[% group.parent.title %]" ><i class="fa fa-trash"></i> Remove from group</button>
+                <button class="btn btn-default btn-sm remove-library" data-group-id="[% group.id | html %]" data-group-library="[% group.library.branchname | html %]" data-group-parent-title="[% group.parent.title | html %]" ><i class="fa fa-trash"></i> Remove from group</button>
             [% ELSE %]
                 <div class="btn-group">
                     <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i> Actions <span class="caret"></span></button>
                     <ul class="dropdown-menu">
                         <li>
-                            <a id="add-group-[% group.id %]" href="#" class="add-group" data-group-id="[% group.id %]">
+                            <a id="add-group-[% group.id | html %]" href="#" class="add-group" data-group-id="[% group.id | html %]">
                                 <i class="fa fa-plus"></i> Add sub-group
                             </a>
                        </li>
 
                         <li>
-                            <a class="edit-group" id="edit-group-[% group.id %]" href="#" class="edit-group" data-group-id="[% group.id %]" data-group-parent-id="[% group.parent_id %]" data-group-title="[% group.title | html %]" data-group-description="[% group.description | html %]" data-group-ft_hide_patron_info="[% group.ft_hide_patron_info | html %]" data-group-ft_search_groups_opac="[% group.ft_search_groups_opac | html %]" data-group-ft_search_groups_staff="[% group.ft_search_groups_staff | html %]" >
+                            <a class="edit-group" id="edit-group-[% group.id | html %]" href="#" class="edit-group" data-group-id="[% group.id | html %]" data-group-parent-id="[% group.parent_id | html %]" data-group-title="[% group.title | html %]" data-group-description="[% group.description | html %]" data-group-ft_hide_patron_info="[% group.ft_hide_patron_info | html %]" data-group-ft_search_groups_opac="[% group.ft_search_groups_opac | html %]" data-group-ft_search_groups_staff="[% group.ft_search_groups_staff | html %]" >
                                 <i class="fa fa-pencil"></i> Edit
                             </a>
                        </li>
 
                         <li>
-                            <a class="delete-group" id="delete-group-[% group.id %]" href="#" class="delete-group" data-group-id="[% group.id %]" data-group-title="[% group.title | html %]">
+                            <a class="delete-group" id="delete-group-[% group.id | html %]" href="#" class="delete-group" data-group-id="[% group.id | html %]" data-group-title="[% group.title | html %]">
                                 <i class="fa fa-trash"></i> Delete
                             </a>
                        </li>
@@ -379,8 +380,8 @@
                     <ul class="dropdown-menu">
                         [% FOREACH library IN group.libraries_not_direct_children %]
                             <li>
-                                <a class="add-library" id="add-library-[% group.id %]" href="/cgi-bin/koha/admin/library_groups.pl?action=add&parent_id=[% group.id %]&branchcode=[% library.id %]">
-                                    [% library.branchname %]
+                                <a class="add-library" id="add-library-[% group.id | html %]" href="/cgi-bin/koha/admin/library_groups.pl?action=add&parent_id=[% group.id | html %]&branchcode=[% library.id | html %]">
+                                    [% library.branchname | html %]
                                 </a>
                            </li>
                         [% END %]

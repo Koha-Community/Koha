@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
@@ -52,7 +53,7 @@
                             [% ELSIF method == 'opac_online_payment' %]
                                 <div class="dialog message">No plugins that can process online payments via the public catalog are installed</div>
                             [% ELSE %]
-                                <div class="dialog message">Unknown plugin type <i>[% method %]</i></div>
+                                <div class="dialog message">Unknown plugin type <i>[% method | html %]</i></div>
                             [% END %]
                         [% END %]
                     [% ELSE %]
@@ -72,9 +73,9 @@
 
                             [% FOREACH plugin IN plugins %]
                                 <tr>
-                                    <td><strong>[% plugin.metadata.name %]</strong></td>
+                                    <td><strong>[% plugin.metadata.name | html %]</strong></td>
                                     <td>
-                                        [% plugin.metadata.description %]
+                                        [% plugin.metadata.description | html %]
 
                                         [% IF ( plugin.metadata.minimum_version && koha_version < plugin.metadata.minimum_version ) %]
                                             <div class="error">Warning: This report was written for a newer version of Koha. Run at your own risk.</div>
@@ -84,37 +85,37 @@
                                             <div class="error">Warning: This report was written for an older version of Koha. Run at your own risk.</div>
                                         [% END %]
                                     </td>
-                                    <td>[% plugin.metadata.author %]</td>
-                                    <td>[% plugin.metadata.version %]</td>
-                                    <td>[% plugin.metadata.minimum_version %]</td>
-                                    <td>[% plugin.metadata.maximum_version %]</td>
+                                    <td>[% plugin.metadata.author | html %]</td>
+                                    <td>[% plugin.metadata.version | html %]</td>
+                                    <td>[% plugin.metadata.minimum_version | html %]</td>
+                                    <td>[% plugin.metadata.maximum_version | html %]</td>
                                     <td>[% plugin.metadata.date_updated | $KohaDates %]</td>
                                     [% IF ( CAN_user_plugins_configure || CAN_user_plugins_manage || CAN_user_plugins_report || CAN_user_plugins_tool ) %]
                                         <td class="actions">
                                             <div class="dropdown">
-                                                <a class="btn btn-default btn-xs dropdown-toggle" id="pluginactions[% plugin.class %]" role="button" data-toggle="dropdown" href="#">
+                                                <a class="btn btn-default btn-xs dropdown-toggle" id="pluginactions[% plugin.class | html %]" role="button" data-toggle="dropdown" href="#">
                                                    Actions <b class="caret"></b>
                                                 </a>
-                                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="pluginactions[% plugin.class %]">
+                                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="pluginactions[% plugin.class | html %]">
                                                     [% IF ( CAN_user_plugins_report ) %]
                                                         [% IF plugin.can('report') %]
-                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class %]&method=report"><i class="fa fa-table"></i> Run report</a></li>
+                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | html %]&method=report"><i class="fa fa-table"></i> Run report</a></li>
                                                         [% END %]
                                                     [% END %]
 
                                                     [% IF ( CAN_user_plugins_tool ) %]
                                                         [% IF plugin.can('tool') %]
-                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class %]&method=tool"><i class="fa fa-wrench"></i> Run tool</a></li>
+                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | html %]&method=tool"><i class="fa fa-wrench"></i> Run tool</a></li>
                                                         [% END %]
                                                     [% END %]
 
                                                     [% IF ( CAN_user_plugins_configure ) %]
                                                         [% IF plugin.can('configure') %]
-                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class %]&method=configure"><i class="fa fa-cog"></i> Configure</a></li>
+                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | html %]&method=configure"><i class="fa fa-cog"></i> Configure</a></li>
                                                         [% END %]
                                                     [% END %]
                                                     [% IF ( CAN_user_plugins_manage ) %]
-                                                            <li><a class="uninstall_plugin" data-plugin-name="[% plugin.metadata.name %]" href="/cgi-bin/koha/plugins/plugins-uninstall.pl?class=[% plugin.class %]"><i class="fa fa-trash"></i> Uninstall</a></li>
+                                                            <li><a class="uninstall_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-uninstall.pl?class=[% plugin.class | html %]"><i class="fa fa-trash"></i> Uninstall</a></li>
                                                     [% END %]
                                                 </ul>
                                             </div>
@@ -133,7 +134,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     <script type="text/javascript">
         $(document).ready(function(){

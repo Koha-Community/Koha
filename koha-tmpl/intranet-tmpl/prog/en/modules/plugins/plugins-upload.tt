@@ -25,9 +25,9 @@
                         [% IF ( ERROR.NOTKPZ ) %]<li><b>The upload file does not appear to be a kpz file.  The extension is not '.kpz'.</b></li>
                         [% ELSIF ( ERROR.NOWRITETEMP ) %]<li><b>This script is not able to create/write to the necessary temporary directory.</b></li>
                         [% ELSIF ( ERROR.EMPTYUPLOAD ) %]<li><b>The upload file appears to be empty.</b></li>
-                        [% ELSIF ( ERROR.UZIPFAIL ) %]<li><b>[% ERROR.UZIPFAIL %] failed to unpack.<br />Please verify the integrity of the zip file and retry.</b></li>
+                        [% ELSIF ( ERROR.UZIPFAIL ) %]<li><b>[% ERROR.UZIPFAIL | html %] failed to unpack.<br />Please verify the integrity of the zip file and retry.</b></li>
                         [% ELSIF ( ERROR.NOWRITEPLUGINS ) %]<li><b>Cannot unpack file to the plugins directory.<br />Please verify that the Apache user can write to the plugins directory.</b></li>
-                        [% ELSE %]<li><b>[% ERROR.CORERR %] An unknown error has occurred.<br />Please review the error log for more details.</b></li>[% END %]
+                        [% ELSE %]<li><b>[% ERROR.CORERR | html %] An unknown error has occurred.<br />Please review the error log for more details.</b></li>[% END %]
                     [% END %]
                 </div>
                 [% END %]
