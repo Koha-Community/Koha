@@ -215,3 +215,26 @@ Cataloging:
                   yes: "do"
                   no: "don't"
             - attempt to match aggressively by trying all variations of the ISBNs in the imported record as a phrase in the ISBN fields of already cataloged records.  Note that this preference has no effect if UseQueryParser is on.
+    Exporting:
+        -
+            - Include following fields when exporting BibTeX,
+            - pref: BibtexExportAdditionalFields
+              type: textarea
+            - "Use one line per tag in the format BT_TAG: TAG$SUBFIELD ( e.g. lccn: 010$a )"
+            - "<br/>"
+            - "To specificy multiple marc tags/subfields as targets for a repeating BibTex tag, use the following format: BT_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. notes: [501$a, 505$g] )"
+            - "<br/>"
+            - "All values of repeating tags and subfields will be printed with the given BibTeX tag."
+            - "<br/>"
+            - "Use '@' ( with quotes ) as the BT_TAG to replace the bibtex record type with a field value of your choosing."
+        -
+            - Include following fields when exporting RIS,
+            - pref: RisExportAdditionalFields
+              type: textarea
+            - "Use one line per tag in the format RIS_TAG: TAG$SUBFIELD ( e.g. LC: 010$a )"
+            - "<br/>"
+            - "To specificy multiple marc tags/subfields as targets for a repeating RIS tag, use the following format: RIS_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. NT: [501$a, 505$g] )"
+            - "<br/>"
+            - "All values of repeating tags and subfields will be printed with the given RIS tag."
+            - "<br/>"
+            - "Use of TY ( record type ) as a key will <i>replace</i> the default TY with the field value of your choosing."

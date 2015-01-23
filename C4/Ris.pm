@@ -59,11 +59,13 @@ package C4::Ris;
 #
 #
 
-#use strict;
-#use warnings;
+use Modern::Perl;
 
 use List::MoreUtils qw/uniq/;
 use vars qw($VERSION @ISA @EXPORT);
+
+use C4::Biblio qw(GetMarcSubfieldStructureFromKohaField);
+use Koha::SimpleMARC qw(read_field);
 
 # set the version for version checking
 $VERSION = 3.07.00.049;
@@ -75,6 +77,11 @@ $VERSION = 3.07.00.049;
 @EXPORT = qw(
   &marc2ris
 );
+
+our $utf;
+our $intype;
+our $marcprint;
+our $protoyear;
 
 
 =head1 marc2bibtex - Convert from UNIMARC to RIS
@@ -101,25 +108,47 @@ sub marc2ris {
     close STDOUT;
     open STDOUT,'>', \$outvar;
 
+    ## First we should check the character encoding. This may be
+    ## MARC-8 or UTF-8. The former is indicated by a blank, the latter
+    ## by 'a' at position 09 (zero-based) of the leader
+    my $leader = $record->leader();
+    if ( $intype eq "marc21" ) {
+        if ( $leader =~ /^.{9}a/ ) {
+            print "<marc>---\r\n<marc>UTF-8 data\r\n" if $marcprint;
+            $utf = 1;
+        }
+        else {
+            print "<marc>---\r\n<marc>MARC-8 data\r\n" if $marcprint;
+        }
+    }
+    ## else: other MARC formats do not specify the character encoding
+    ## we assume it's *not* UTF-8
 
-	## First we should check the character encoding. This may be
-	## MARC-8 or UTF-8. The former is indicated by a blank, the latter
-	## by 'a' at position 09 (zero-based) of the leader
-	my $leader = $record->leader();
-	if ($intype eq "marc21") {
-	    if ($leader =~ /^.{9}a/) {
-		print "<marc>---\r\n<marc>UTF-8 data\r\n" if $marcprint;
-		$utf = 1;
-	    }
-	    else {
-		print "<marc>---\r\n<marc>MARC-8 data\r\n" if $marcprint;
-	    }
-	}
-	## else: other MARC formats do not specify the character encoding
-	## we assume it's *not* UTF-8
+    my $RisExportAdditionalFields = C4::Context->preference('RisExportAdditionalFields');
+    my $ris_additional_fields;
+    if ($RisExportAdditionalFields) {
+        $RisExportAdditionalFields = "$RisExportAdditionalFields\n\n";
+        $ris_additional_fields = eval { YAML::Load($RisExportAdditionalFields); };
+        if ($@) {
+            warn "Unable to parse RisExportAdditionalFields : $@";
+            $ris_additional_fields = undef;
+        }
+    }
 
-	## start RIS dataset
-	&print_typetag($leader);
+    ## start RIS dataset
+    if ( $ris_additional_fields && $ris_additional_fields->{TY} ) {
+        my ( $f, $sf ) = split( /\$/, $ris_additional_fields->{TY} );
+        my ( $type ) = read_field( { record => $record, field => $f, subfield => $sf, field_numbers => [1] } );
+        if ($type) {
+            print "TY  - $type\r\n";
+        }
+        else {
+            &print_typetag($leader);
+        }
+    }
+    else {
+        &print_typetag($leader);
+    }
 
 	## retrieve all author fields and collect them in a list
 	my @author_fields;
@@ -283,6 +312,25 @@ sub marc2ris {
     # 856u has the URI
     if ($record->field('856')) {
         print_uri($record->field('856'));
+    }
+
+    if ($ris_additional_fields) {
+        foreach my $ris_tag ( keys %$ris_additional_fields ) {
+            next if $ris_tag eq 'TY';
+
+            my @fields =
+              ref( $ris_additional_fields->{$ris_tag} ) eq 'ARRAY'
+              ? @{ $ris_additional_fields->{$ris_tag} }
+              : $ris_additional_fields->{$ris_tag};
+
+            for my $tag (@fields) {
+                my ( $f, $sf ) = split( /\$/, $tag );
+                my @values = read_field( { record => $record, field => $f, subfield => $sf } );
+                foreach my $v (@values) {
+                    print "$ris_tag  - $v\r\n";
+                }
+            }
+        }
     }
 
 	## end RIS dataset
@@ -497,6 +545,7 @@ sub print_title {
 	my $clean_title = $titlefield->subfield('a');
 
 	my $clean_subtitle = $titlefield->subfield('b');
+$clean_subtitle ||= q{};
 	$clean_title =~ s% *[/:;.]$%%;
 	$clean_subtitle =~ s%^ *(.*) *[/:;.]$%$1%;
 
@@ -777,7 +826,7 @@ sub get_keywords {
 	    }
 	    else {
 		## retrieve all available subfields
-		@kwsubfields = $kwfield->subfields();
+		my @kwsubfields = $kwfield->subfields();
 		
 		## loop over all available subfield tuples
         foreach my $kwtuple (@kwsubfields) {
@@ -891,9 +940,9 @@ sub pool_subx {
 
     ## loop over all notefields
     foreach my $notefield (@notefields) {
-	if ($notefield != undef) {
+	if (defined $notefield) {
 	    ## retrieve all available subfield tuples
-	    @notesubfields = $notefield->subfields();
+	    my @notesubfields = $notefield->subfields();
 
 	    ## loop over all subfield tuples
         foreach my $notetuple (@notesubfields) {
@@ -967,7 +1016,7 @@ sub charconv {
 	## return unaltered if already utf-8
 	return @_;
     }
-    elsif ($uniout eq "t") {
+    elsif (my $uniout eq "t") {
 	## convert to utf-8
 	return marc8_to_utf8("@_");
     }

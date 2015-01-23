@@ -35,6 +35,7 @@ use C4::XSLT ();
 use YAML; #marcrecords2csv
 use Template;
 use Text::CSV::Encoded; #marc2csv
+use Koha::SimpleMARC qw(read_field);
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -327,8 +328,8 @@ sub marc2endnote {
     }
 	my $fields = {
 		DB => C4::Context->preference("LibraryName"),
-		Title => $marc_rec_obj->title(),	
-		Author => $marc_rec_obj->author(),	
+		Title => $marc_rec_obj->title(),
+		Author => $marc_rec_obj->author(),
 		Publisher => $f710a,
 		City => $f260a,
 		Year => $marc_rec_obj->publication_date,
@@ -346,7 +347,7 @@ sub marc2endnote {
 	$template.="AB - Abstract\n" if $abstract;
 	my ($text, $errmsg) = $style->format($template, $fields);
 	return ($text);
-	
+
 }
 
 =head2 marc2csv - Convert several records from UNIMARC to CSV
@@ -640,7 +641,7 @@ sub changeEncoding {
 	my $error;
 	unless($flavour) {$flavour = C4::Context->preference("marcflavour")};
 	unless($to_encoding) {$to_encoding = "UTF-8"};
-	
+
 	# ISO-2709 Record (MARC21 or UNIMARC)
 	if (lc($format) =~ /^marc$/o) {
 		# if we're converting encoding of an ISO2709 file, we need to roundtrip through XML
@@ -651,7 +652,7 @@ sub changeEncoding {
 		unless ($error) {
 			($error,$newrecord) = marcxml2marc($marcxml,$to_encoding,$flavour);
 		}
-	
+
 	# MARCXML Record
 	} elsif (lc($format) =~ /^marcxml$/o) { # MARCXML Record
 		my $marc;
@@ -749,14 +750,60 @@ sub marc2bibtex {
         );
     }
 
-    $tex .= "\@book{";
+    my $BibtexExportAdditionalFields = C4::Context->preference('BibtexExportAdditionalFields');
+    my $additional_fields;
+    if ($BibtexExportAdditionalFields) {
+        $BibtexExportAdditionalFields = "$BibtexExportAdditionalFields\n\n";
+        $additional_fields = eval { YAML::Load($BibtexExportAdditionalFields); };
+        if ($@) {
+            warn "Unable to parse BibtexExportAdditionalFields : $@";
+            $additional_fields = undef;
+        }
+    }
+
+    if ( $additional_fields && $additional_fields->{'@'} ) {
+        my ( $f, $sf ) = split( /\$/, $additional_fields->{'@'} );
+        my ( $type ) = read_field( { record => $record, field => $f, subfield => $sf, field_numbers => [1] } );
+
+        if ($type) {
+            $tex .= '@' . $type . '{';
+        }
+        else {
+            $tex .= "\@book{";
+        }
+    }
+    else {
+        $tex .= "\@book{";
+    }
+
     my @elt;
     for ( my $i = 0 ; $i < scalar( @bh ) ; $i = $i + 2 ) {
         next unless $bh[$i+1];
         push @elt, qq|\t$bh[$i] = {$bh[$i+1]}|;
     }
     $tex .= join(",\n", $id, @elt);
-    $tex .= "\n}\n";
+    $tex .= "\n";
+
+    if ($additional_fields) {
+        foreach my $bibtex_tag ( keys %$additional_fields ) {
+            next if $bibtex_tag eq '@';
+
+            my @fields =
+              ref( $additional_fields->{$bibtex_tag} ) eq 'ARRAY'
+              ? @{ $additional_fields->{$bibtex_tag} }
+              : $additional_fields->{$bibtex_tag};
+
+            for my $tag (@fields) {
+                my ( $f, $sf ) = split( /\$/, $tag );
+                my @values = read_field( { record => $record, field => $f, subfield => $sf } );
+                foreach my $v (@values) {
+                    $tex .= qq(\t$bibtex_tag = {$v}\n);
+                }
+            }
+        }
+    }
+
+    $tex .= "}\n";
 
     return $tex;
 }
