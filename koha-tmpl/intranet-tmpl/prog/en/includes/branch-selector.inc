@@ -9,7 +9,12 @@ END %]
     <div class="branchgridrow">
     [% FOREACH branch IN branches %]
         <div class="branchgriditem">
-            <input id="branch_[% branch.value %]" type="checkbox" name="branch" value="[% branch.value %]"[% IF branch.selected || (selectall == 1) %] checked="checked" [% END %]/>
+            [% IF branch.selected || (selectall == 1) %]
+                <input id="branch_[% branch.value %]" type="checkbox" name="branch" value="[% branch.value %]" checked="checked" />
+            [% ELSE %]
+                <input id="branch_[% branch.value %]" type="checkbox" name="branch" value="[% branch.value %]" />
+            [% END %]
+
             <label for="branch_[% branch.value %]">[% branch.branchname %]</label>
         </div>
         [% IF loop.count() % 4 == 0 && !loop.last() %]
