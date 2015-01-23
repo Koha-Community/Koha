@@ -272,6 +272,7 @@ RECORD: while (  ) {
         # changed to warn so able to continue with one broken record
         if ( defined $error ) {
             warn "unable to search the database for duplicates : $error";
+            printlog( { id => $id || $originalid || $match, op => "match", status => "ERROR" } ) if ($logfile);
             next RECORD;
         }
         $debug && warn "$query $server : $totalhits";
