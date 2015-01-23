@@ -724,14 +724,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
 
 				<fieldset class="brief"><h4 class="local_collapse"><a href="#">Acquisition information</a></h4>
                     <ol><li><label for="budgetid"> Book fund:</label>
-                    <select name="budgetid" id="budgetid">
-                      <option value="__ANY__">Any</option>
-                      [% IF budgetid == '__NONE__' %]
-                          <option value="__NONE__" selected="selected">None</option>
-                      [% ELSE %]
-                          <option value="__NONE__">None</option>
-                      [% END %]
-                    [% FOREACH budgetid_loo IN budgetid_loop %]
+                    <select name="budgetid" id="budgetid"><option value="">Any</option>[% FOREACH budgetid_loo IN budgetid_loop %]
                         [% IF ( budgetid_loo.selected ) %] <option value="[% budgetid_loo.code %]" selected="selected">[% budgetid_loo.desc %]</option>[% ELSE %]<option value="[% budgetid_loo.code %]">[% budgetid_loo.desc %]</option>[% END %]
                         [% END %]
                     </select></li>
