@@ -822,6 +822,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '0.03',
     },
+    'Template::Stash::AutoEscaping' => {
+        'usage'    => 'Code',
+        'required' => '1',
+        'min_ver'  => '0.0303',
+    },
 };
 
 1;
