@@ -108,7 +108,7 @@ BEGIN {
         GetBorrowersWithEmail
 
         HasOverdues
-        GetOverdues
+        GetOverduesForPatron
     );
 
     #Modify data
@@ -2553,7 +2553,7 @@ WHERE borrowernumber = 0 AND DATEDIFF( NOW(), timestamp ) > ?|;
     return $cnt eq '0E0'? 0: $cnt;
 }
 
-sub GetOverdues {
+sub GetOverduesForPatron {
     my ( $borrowernumber ) = @_;
 
     my $sql = "

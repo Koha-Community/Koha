@@ -57,7 +57,7 @@ AddIssue( $borrower, '0101', DateTime->now->subtract( days =>  1 ) );
 AddIssue( $borrower, '0102', DateTime->now->subtract( days =>  5 ) );
 AddIssue( $borrower, '0103' );
 
-my $overdues = C4::Members::GetOverdues( $borrowernumber );
-is( @$overdues, 2, 'GetOverdues returns the correct number of elements' );
+my $overdues = C4::Members::GetOverduesForPatron( $borrowernumber );
+is( @$overdues, 2, 'GetOverduesForPatron returns the correct number of elements' );
 is( $overdues->[0]->{itemnumber}, $itemnumber1, 'First overdue is correct' );
 is( $overdues->[1]->{itemnumber}, $itemnumber2, 'Second overdue is correct' );

@@ -24,7 +24,7 @@ use CGI;
 use C4::Context;
 use C4::Auth;
 use C4::Output;
-use C4::Members qw(GetOverdues);
+use C4::Members qw(GetOverduesForPatron);
 use C4::Overdues qw(parse_overdues_letter);
 
 my $input = new CGI;
@@ -45,7 +45,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $borrowernumber = $input->param('borrowernumber');
 my $branchcode     = C4::Context->userenv->{'branch'};
 
-my $overdues = GetOverdues($borrowernumber);
+my $overdues = GetOverduesForPatron($borrowernumber);
 
 my $letter = parse_overdues_letter(
     {
