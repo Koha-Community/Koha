@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 65;
+use Test::More tests => 68;
 use Test::MockModule;
 use Test::Warn;
 
@@ -141,7 +141,7 @@ my $letters = C4::Letters::GetLetters();
 is( @$letters, 0, 'GetLetters returns the correct number of letters' );
 
 my $title = q|<<branches.branchname>> - <<status>>|;
-my $content = q|Dear <<borrowers.firstname>> <<borrowers.surname>>,
+my $content = q{Dear <<borrowers.firstname>> <<borrowers.surname>>,
 According to our current records, you have items that are overdue.Your library does not charge late fines, but please return or renew them at the branch below as soon as possible.
 
 <<branches.branchname>>
@@ -155,7 +155,7 @@ The following item(s) is/are currently <<status>>:
 Thank-you for your prompt attention to this matter.
 Don't forget your date of birth: <<borrowers.dateofbirth>>.
 Look at this wonderful biblio timestamp: <<biblio.timestamp>>.
-|;
+};
 
 $dbh->do( q|INSERT INTO letter(branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES ('CPL','my module','my code','my name',1,?,?,'email')|, undef, $title, $content );
 $letters = C4::Letters::GetLetters();
@@ -279,6 +279,7 @@ The following item(s) is/are currently $substitute->{status}:
 Thank-you for your prompt attention to this matter.
 Don't forget your date of birth: | . output_pref({ dt => $date, dateonly => 1 }) . q|.
 Look at this wonderful biblio timestamp: | . output_pref({ dt => $date }) . ".\n";
+
 is( $prepared_letter->{title}, $my_title_letter, 'GetPreparedLetter returns the title correctly' );
 is( $prepared_letter->{content}, $my_content_letter, 'GetPreparedLetter returns the content correctly' );
 
@@ -293,6 +294,39 @@ $prepared_letter = GetPreparedLetter((
 ));
 $my_content_letter = qq|This is a SMS for an $substitute->{status}|;
 is( $prepared_letter->{content}, $my_content_letter, 'GetPreparedLetter returns the content correctly' );
+
+$dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('test_date','TEST_DATE','Test dates','Test dates','This one only contains the date: <<biblio.timestamp | dateonly>>.');});
+$prepared_letter = GetPreparedLetter((
+    module                 => 'test_date',
+    branchcode             => '',
+    letter_code            => 'test_date',
+    tables                 => $tables,
+    substitute             => $substitute,
+    repeat                 => $repeat,
+));
+is( $prepared_letter->{content}, q|This one only contains the date: | . output_pref({ dt => $date, dateonly => 1 }) . q|.| );
+
+$dbh->do(q{UPDATE letter SET content = 'And also this one:<<timestamp | dateonly>>.' WHERE code = 'test_date';});
+$prepared_letter = GetPreparedLetter((
+    module                 => 'test_date',
+    branchcode             => '',
+    letter_code            => 'test_date',
+    tables                 => $tables,
+    substitute             => $substitute,
+    repeat                 => $repeat,
+));
+is( $prepared_letter->{content}, q|This one only contains the date: | . output_pref({ dt => $date, dateonly => 1 }) . q|.| );
+
+$dbh->do(q{UPDATE letter SET content = 'And also this one:<<timestamp|dateonly >>.' WHERE code = 'test_date';});
+$prepared_letter = GetPreparedLetter((
+    module                 => 'test_date',
+    branchcode             => '',
+    letter_code            => 'test_date',
+    tables                 => $tables,
+    substitute             => $substitute,
+    repeat                 => $repeat,
+));
+is( $prepared_letter->{content}, q|This one only contains the date: | . output_pref({ dt => $date, dateonly => 1 }) . q|.| );
 
 $dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('claimacquisition','TESTACQCLAIM','Acquisition Claim','Item Not Received','<<aqbooksellers.name>>|<<aqcontacts.name>>|<order>Ordernumber <<aqorders.ordernumber>> (<<biblio.title>>) (<<aqorders.quantity>> ordered)</order>');});
 

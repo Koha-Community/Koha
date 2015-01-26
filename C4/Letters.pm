@@ -819,14 +819,14 @@ sub _parseletter {
     }
 
     while ( my ($field, $val) = each %$values ) {
-        my $replacetablefield = "<<$table.$field>>";
-        my $replacefield = "<<$field>>";
         $val =~ s/\p{P}$// if $val && $table=~/biblio/;
             #BZ 9886: Assuming that we want to eliminate ISBD punctuation here
             #Therefore adding the test on biblio. This includes biblioitems,
             #but excludes items. Removed unneeded global and lookahead.
 
         $val = GetAuthorisedValueByCode ('ROADTYPE', $val, 0) if $table=~/^borrowers$/ && $field=~/^streettype$/;
+
+        # Dates replacement
         my $replacedby   = defined ($val) ? $val : '';
         if (    $replacedby
             and not $replacedby =~ m|0000-00-00|
@@ -835,19 +835,34 @@ sub _parseletter {
         {
             # If the value is XXXX-YY-ZZ[ AA:BB:CC] we assume it is a date
             my $dateonly = defined $1 ? 0 : 1; #$1 refers to the capture group wrapped in parentheses. In this case, that's the hours, minutes, seconds.
-            eval {
-                $replacedby = output_pref({ dt => dt_from_string( $replacedby ), dateonly => $dateonly });
-            };
-            warn "$replacedby seems to be a date but an error occurs on generating it ($@)" if $@;
+            my $re_dateonly_filter = qr{ $field( \s* \| \s* dateonly\s*)?>> }xms;
+
+            for my $letter_field ( qw( title content ) ) {
+                my $filter_string_used = q{};
+                if ( $letter->{ $letter_field } =~ $re_dateonly_filter ) {
+                    # We overwrite $dateonly if the filter exists and we have a time in the datetime
+                    $filter_string_used = $1 || q{};
+                    $dateonly = $1 unless $dateonly;
+                }
+                eval {
+                    $replacedby = output_pref({ dt => dt_from_string( $replacedby ), dateonly => $dateonly });
+                };
+
+                if ( $letter->{ $letter_field } ) {
+                    $letter->{ $letter_field } =~ s/\Q<<$table.$field$filter_string_used>>\E/$replacedby/g;
+                    $letter->{ $letter_field } =~ s/\Q<<$field$filter_string_used>>\E/$replacedby/g;
+                }
+            }
         }
-        ($letter->{title}  ) and do {
-            $letter->{title}   =~ s/$replacetablefield/$replacedby/g;
-            $letter->{title}   =~ s/$replacefield/$replacedby/g;
-        };
-        ($letter->{content}) and do {
-            $letter->{content} =~ s/$replacetablefield/$replacedby/g;
-            $letter->{content} =~ s/$replacefield/$replacedby/g;
-        };
+        # Other fields replacement
+        else {
+            for my $letter_field ( qw( title content ) ) {
+                if ( $letter->{ $letter_field } ) {
+                    $letter->{ $letter_field }   =~ s/<<$table.$field>>/$replacedby/g;
+                    $letter->{ $letter_field }   =~ s/<<$field>>/$replacedby/g;
+                }
+            }
+        }
     }
 
     if ($table eq 'borrowers' && $letter->{content}) {
