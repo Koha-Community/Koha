@@ -67,15 +67,28 @@ $(document).ready(function() {
 	</thead>
      <tbody>[% FOREACH itemsloo IN itemsloop %]
         <tr>
-            <td class="hq-title"><p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itemsloo.biblionumber %]"><strong>[% itemsloo.title |html %]</strong> [% IF ( itemsloo.subtitle ) %][% itemsloo.subtitle %][% END %]</a></p>
-                         <p><strong>[% itemsloo.author %]</strong>
-                       <div class="hq-pubdata">  [% IF ( itemsloo.publishercode ) %][% itemsloo.publishercode %][% END %]
-                                                                                 [% IF ( itemsloo.publicationyear ) %], [% itemsloo.publicationyear %]
-                                                                                 [% ELSIF ( itemsloo.copyrightdate ) %], [% itemsloo.copyrightdate %][% END %]
-                                         [% IF ( itemsloo.pages ) %]: [% itemsloo.pages %] [% END %]
-                                         [% IF ( itemsloo.item('size') ) %][% itemsloo.item('size') %][% END %] [% IF ( itemsloo.isbn ) %]ISBN: [% itemsloo.isbn %][% END %]</p>
-			</div>
-			</td>
+            <td class="hq-title">
+                <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itemsloo.biblionumber %]"><strong>[% itemsloo.title | html %]</strong> [% IF ( itemsloo.subtitle ) %][% itemsloo.subtitle %][% END %]</a></p>
+                <p>
+                    <div class="hq-biblionumber content_hidden">[% itemsloo.biblionumber %]</div>
+                    <div class="hq-author">[% itemsloo.author %]</div>
+                    <div class="hq-pubdata">
+                        [% IF ( itemsloo.publishercode ) %][% itemsloo.publishercode %][% END %]
+
+                        [% IF ( itemsloo.publicationyear ) %]
+                            , [% itemsloo.publicationyear %]
+                        [% ELSIF ( itemsloo.copyrightdate ) %]
+                            , [% itemsloo.copyrightdate %]
+                        [% END %]
+
+                        [% IF ( itemsloo.pages ) %]: [% itemsloo.pages %] [% END %]
+
+                        [% IF ( itemsloo.item('size') ) %][% itemsloo.item('size') %][% END %]
+
+                        [% IF ( itemsloo.isbn ) %]ISBN: [% itemsloo.isbn %][% END %]</p>
+                    </div>
+                </p>
+            </td>
             <td class="hq-collection">[% AuthorisedValues.GetByCode( 'CCODE', itemsloo.ccode ) %]</td>
             <td class="hq-itemtype">[% ItemTypes.GetDescription( itemsloo.itype ) %]</td>
             <td class="hq-callnumber">[% IF ( itemsloo.location ) %]<em>[% AuthorisedValues.GetByCode( 'LOC', itemsloo.location ) %]</em> [% END %][% itemsloo.itemcallnumber %]</td>
