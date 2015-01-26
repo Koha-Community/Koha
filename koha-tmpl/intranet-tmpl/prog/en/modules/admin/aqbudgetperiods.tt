@@ -1,5 +1,4 @@
 [% USE KohaDates %]
-[% USE format %]
 [% USE Price %]
 
 [%- BLOCK action_menu %]
@@ -360,7 +359,7 @@
         <!-- ############################## -->
         <label for="budget_period_total">Total amount: </label>
         <input type="text" id="budget_period_total" name="budget_period_total"
-        size="10" maxlength="80" value="[% budget_period_total %]" />
+        size="10" maxlength="80" value="[% budget_period_total | $Price on_editing => 1 %]" />
     </li>
 
     <li>
@@ -498,7 +497,7 @@
             [% IF r.orders_moved.size > 0 %]
               [% FOR order IN r.orders_moved %]
                 <tr>
-                  <td>[% r.budget.budget_name %] (id=[% r.budget.budget_id %]) Amount=[% r.budget.budget_amount | format ("%.2f") %][% IF r.unspent_moved %] ([% r.unspent_moved | format ("%.2f")%] remaining has been moved)[% END %]</td>
+                  <td>[% r.budget.budget_name %] (id=[% r.budget.budget_id %]) Amount=[% r.budget.budget_amount | $Price %][% IF r.unspent_moved %] ([% r.unspent_moved | $Price %] remaining has been moved)[% END %]</td>
                   <td>[% order.basketname %]</td>
                   <td>[% order.ordernumber %]</td>
                   <td>Moved!</td>
@@ -515,7 +514,7 @@
           [% ELSE %]
             [% IF r.error == 'budget_code_not_exists' %]
               <tr>
-                <td>[% r.budget.budget_id %] [% r.budget.budget_amount | format ("%.2f") %][% IF r.unspent_moved %] ([% r.unspent_moved | format ("%.2f") %] remaining has been moved)[% END %]</td>
+                <td>[% r.budget.budget_id %] [% r.budget.budget_amount | $Price %][% IF r.unspent_moved %] ([% r.unspent_moved | $Price %] remaining has been moved)[% END %]</td>
                 <td></td>
                 <td></td>
                 <td>This fund code does not exist in the destination budget.</td>

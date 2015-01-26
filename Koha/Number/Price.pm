@@ -44,6 +44,21 @@ sub format {
     return Number::Format->new(%$format_params)->format_price($self->value);
 }
 
+sub format_for_editing {
+    my ( $self, $params ) = @_;
+    return unless defined $self->value;
+
+    my $format_params = $self->_format_params( $params );
+    $format_params = {
+        %$format_params,
+        int_curr_symbol   => '',
+        mon_thousands_sep => '',
+        mon_decimal_point => '.',
+    };
+
+    return Number::Format->new(%$format_params)->format_price($self->value);
+}
+
 sub unformat {
     my ( $self, $params ) = @_;
     return unless defined $self->value;

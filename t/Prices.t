@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Test::More tests => 12;
+use Test::More tests => 16;
 use Test::MockModule;
 
 use t::lib::Mocks;
@@ -402,4 +402,11 @@ sub compare {
         Koha::Number::Price->new( $params->{expected} )->format,
 "configuration $params->{conf}: $params->{field} should be correctly calculated"
     );
+}
+
+# format_for_editing
+for my $currency_format ( qw( US FR ) ) {
+    t::lib::Mocks::mock_preference( 'CurrencyFormat', $currency_format );
+    is( Koha::Number::Price->new( 1234567 )->format_for_editing, '1234567.00', 'format_for_editing should return unformated integer part with 2 decimals' );
+    is( Koha::Number::Price->new( 1234567.89 )->format_for_editing, '1234567.89', 'format_for_editing should return unformated integer part with 2 decimals' );
 }

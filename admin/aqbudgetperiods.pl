@@ -46,7 +46,6 @@ script to administer the budget periods table
 
 use Modern::Perl;
 
-use Number::Format qw(format_price);
 use CGI qw ( -utf8 );
 use List::Util qw/min/;
 use Koha::DateUtils;
@@ -58,8 +57,6 @@ use C4::Output;
 use C4::Acquisition;
 use C4::Budgets;
 use C4::Debug;
-
-use Koha::Number::Price;
 
 my $dbh = C4::Context->dbh;
 
@@ -108,9 +105,6 @@ if ( $op eq 'add_form' ) {
 		my $budgetperiod_hash=GetBudgetPeriod($budget_period_id);
         # get dropboxes
 
-        $budgetperiod_hash->{budget_period_total} =
-          Koha::Number::Price->new( $budgetperiod_hash->{budget_period_total} )
-          ->format;
         $template->param(
 			%$budgetperiod_hash
         );
