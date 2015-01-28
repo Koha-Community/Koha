@@ -823,7 +823,8 @@ $is_a_modif = 0;
     
 if ($biblionumber) {
     $is_a_modif = 1;
-	$template->param( title => $record->title(), );
+    my $title = C4::Context->preference('marcflavour') eq "UNIMARC" ? $record->subfield('200', 'a') : $record->title;
+    $template->param( title => $title );
 
     # if it's a modif, retrieve bibli and biblioitem numbers for the future modification of old-DB.
     ( $biblionumbertagfield, $biblionumbertagsubfield ) =
@@ -912,8 +913,10 @@ if ( $op eq "addbiblio" ) {
             done         =>1,
             popup        =>1
           );
-          $template->param( title => $record->subfield('200',"a") ) if ($record ne "-1" && C4::Context->preference('marcflavour') =~/unimarc/i);
-          $template->param( title => $record->title() ) if ($record ne "-1" && C4::Context->preference('marcflavour') eq "usmarc");
+          if ( $record ne '-1' ) {
+              my $title = C4::Context->preference('marcflavour') eq "UNIMARC" ? $record->subfield('200', 'a') : $record->title;
+              $template->param( title => $title );
+          }
           $template->param(
             popup => $mode,
             itemtype => $frameworkcode,
@@ -983,7 +986,10 @@ elsif ( $op eq "delete" ) {
     );
 }
 
-$template->param( title => $record->title() ) if ( $record ne "-1" );
+if ( $record ne '-1' ) {
+    my $title = C4::Context->preference('marcflavour') eq "UNIMARC" ? $record->subfield('200', 'a') : $record->title;
+    $template->param( title => $title );
+}
 $template->param(
     popup => $mode,
     frameworkcode => $frameworkcode,
