@@ -2147,7 +2147,7 @@ sub searchResults {
                     #        should map transit status to record indexed in Zebra.
                     #
                     ($transfertwhen, $transfertfrom, $transfertto) = C4::Circulation::GetTransfers($item->{itemnumber});
-                    $reservestatus = C4::Reserves::GetReserveStatus( $item->{itemnumber}, $oldbiblio->{biblionumber} );
+                    $reservestatus = C4::Reserves::GetReserveStatus( $item->{itemnumber} );
                 }
 
                 # item is withdrawn, lost, damaged, not for loan, reserved or in transit
