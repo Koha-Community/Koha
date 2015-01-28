@@ -852,9 +852,9 @@ sub GetReservesForBranch {
 
 =head2 GetReserveStatus
 
-  $reservestatus = GetReserveStatus($itemnumber, $biblionumber);
+  $reservestatus = GetReserveStatus($itemnumber);
 
-Take an itemnumber or a biblionumber and return the status of the reserve places on it.
+Takes an itemnumber and returns the status of the reserve placed on it.
 If several reserves exist, the reserve with the lower priority is given.
 
 =cut
@@ -864,7 +864,7 @@ If several reserves exist, the reserve with the lower priority is given.
 ## multiple reserves for that bib can have the itemnumber set
 ## the sub is only used once in the codebase.
 sub GetReserveStatus {
-    my ($itemnumber, $biblionumber) = @_;
+    my ($itemnumber) = @_;
 
     my $dbh = C4::Context->dbh;
 
@@ -872,12 +872,6 @@ sub GetReserveStatus {
     if ( $itemnumber ) {
         $sth = $dbh->prepare("SELECT found, priority FROM reserves WHERE itemnumber = ? order by priority LIMIT 1");
         $sth->execute($itemnumber);
-        ($found, $priority) = $sth->fetchrow_array;
-    }
-
-    if ( $biblionumber and not defined $found and not defined $priority ) {
-        $sth = $dbh->prepare("SELECT found, priority FROM reserves WHERE biblionumber = ? order by priority LIMIT 1");
-        $sth->execute($biblionumber);
         ($found, $priority) = $sth->fetchrow_array;
     }
 
