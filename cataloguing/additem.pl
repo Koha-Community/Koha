@@ -811,7 +811,6 @@ foreach my $tag ( keys %{$tagslib}){
 @loop_data = sort {$a->{subfield} cmp $b->{subfield} } @loop_data;
 
 # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
-$template->param( title => $record->title() ) if ($record ne "-1");
 $template->param(
     biblionumber => $biblionumber,
     title        => $oldrecord->{title},
