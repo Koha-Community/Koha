@@ -1061,7 +1061,7 @@ sub GetOrders {
         |;
     $query .= $cancelled
       ? q|
-                aqorders_transfers.ordernumber_from AS transferred_to,
+                aqorders_transfers.ordernumber_to AS transferred_to,
                 aqorders_transfers.timestamp AS transferred_to_timestamp
     |
       : q|
