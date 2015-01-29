@@ -394,7 +394,7 @@ if ( $op eq "export" ) {
                                     }
                                 }
                                 else {
-                                    $record->delete_fields($field);
+                                    $record->delete_fields($record->field($field));
                                 }
                             }
                         }
