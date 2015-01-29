@@ -3,6 +3,7 @@
 <!DOCTYPE stylesheet [<!ENTITY nbsp "&#160;" >]>
 
 <!-- $Id: MARC21slim2DC.xsl,v 1.1 2003/01/06 08:20:27 adam Exp $ -->
+<!-- Edited: Bug 1807 [ENH] XSLT enhancements sponsored by bywater solutions 2015/01/19 WS wsalesky@gmail.com  -->
 <xsl:stylesheet version="1.0"
   xmlns:marc="http://www.loc.gov/MARC21/slim"
   xmlns:items="http://www.koha-community.org/items"
@@ -534,11 +535,12 @@
             <xsl:for-each select="marc:datafield[substring(@tag, 1, 1) = '6'][not(@tag=655)]">
             <a>
             <xsl:choose>
+            <!-- #1807 Strip unwanted parenthesis from subjects for searching -->
             <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
                 <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
             </xsl:when>
             <xsl:when test="$TraceSubjectSubdivisions='1'">
-                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:call-template name="subfieldSelect">
+                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:call-template name="subfieldSelectSubject">
                         <xsl:with-param name="codes">abcdfgklmnopqrstvxyz</xsl:with-param>
                         <xsl:with-param name="delimeter"> AND </xsl:with-param>
                         <xsl:with-param name="prefix">(su<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/></xsl:with-param>
@@ -546,8 +548,9 @@
                     </xsl:call-template>
                 </xsl:attribute>
             </xsl:when>
+            <!-- #1807 Strip unwanted parenthesis from subjects for searching -->
             <xsl:otherwise>
-               <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=su<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/><xsl:value-of select="marc:subfield[@code='a']"/><xsl:value-of select="$TracingQuotesRight"/></xsl:attribute>
+                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=su<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/><xsl:value-of select="translate(marc:subfield[@code='a'],'()','')"/><xsl:value-of select="$TracingQuotesRight"/></xsl:attribute>
             </xsl:otherwise>
             </xsl:choose>
             <xsl:call-template name="chopPunctuation">
@@ -1061,6 +1064,27 @@
         </xsl:for-each>
         </h5>
         </xsl:if>
+    </xsl:template>
+
+    <!-- #1807 Strip unwanted parenthesis from subjects for searching -->
+    <xsl:template name="subfieldSelectSubject">
+        <xsl:param name="codes"/>
+        <xsl:param name="delimeter"><xsl:text> </xsl:text></xsl:param>
+        <xsl:param name="subdivCodes"/>
+        <xsl:param name="subdivDelimiter"/>
+        <xsl:param name="prefix"/>
+        <xsl:param name="suffix"/>
+        <xsl:variable name="str">
+            <xsl:for-each select="marc:subfield">
+                <xsl:if test="contains($codes, @code)">
+                    <xsl:if test="contains($subdivCodes, @code)">
+                        <xsl:value-of select="$subdivDelimiter"/>
+                    </xsl:if>
+                    <xsl:value-of select="$prefix"/><xsl:value-of select="translate(text(),'()','')"/><xsl:value-of select="$suffix"/><xsl:value-of select="$delimeter"/>
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:value-of select="substring($str,1,string-length($str)-string-length($delimeter))"/>
     </xsl:template>
 
 </xsl:stylesheet>
