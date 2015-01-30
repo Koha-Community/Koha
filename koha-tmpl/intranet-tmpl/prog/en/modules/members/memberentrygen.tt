@@ -141,7 +141,7 @@
 		[% IF ( no_categories ) %]<p>There are <strong>no patron categories defined</strong>. [% IF ( CAN_user_parameters ) %]Please <a href="/cgi-bin/koha/admin/categorie.pl">add a patron category</a>.[% ELSE %]An administrator must define at least one patron category.</p>[% END %][% END %]</div>[% END %]
 
 	[% UNLESS ( no_add ) %]
-	<h1>[% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron [% IF (firstname) %][% firstname %] [% END %][% IF (surname) %][% surname %] [% END %]([%IF ( categoryname ) %][% categoryname %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</h1>
+    <h1>[% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron [% IF (firstname) %][% firstname %] [% END %][% IF (surname) %][% surname %] [% END %]([%IF ( categoryname ) %][% categoryname %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</h1>
   
 	[% IF ( check_member ) %]
 			<div class="dialog alert">
