@@ -37,6 +37,8 @@ use Carp;
 use C4::Context;
 use base qw(Class::Accessor);
 
+use vars qw($database);
+
 __PACKAGE__->mk_accessors(qw( ));
 
 # _new_schema
@@ -72,14 +74,14 @@ possibly C<&set_schema>.
 sub schema {
     my $self = shift;
     my $sth;
-    if ( defined( $self->{"schema"} ) && $self->{"schema"}->storage->connected() ) {
-        return $self->{"schema"};
+
+    if ( defined( $database->{schema} ) and $database->{schema}->storage->connected() ) {
+        return $database->{schema};
     }
 
     # No database handle or it died . Create one.
-    $self->{"schema"} = &_new_schema();
-
-    return $self->{"schema"};
+    $database->{schema} = &_new_schema();
+    return $database->{schema};
 }
 
 =head2 new_schema
@@ -127,8 +129,8 @@ sub set_schema {
     # We assume that $new_schema is all good: if the caller wants to
     # screw himself by passing an invalid handle, that's fine by
     # us.
-    push @{ $self->{"schema_stack"} }, $self->{"schema"};
-    $self->{"schema"} = $new_schema;
+    push @{ $database->{schema_stack} }, $database->{schema};
+    $database->{schema} = $new_schema;
 }
 
 =head2 restore_schema
@@ -143,14 +145,14 @@ C<$database-E<gt>set_schema>.
 sub restore_schema {
     my $self = shift;
 
-    if ( $#{ $self->{"schema_stack"} } < 0 ) {
+    if ( $#{ $database->{schema_stack} } < 0 ) {
 
         # Stack underflow
         die "SCHEMA stack underflow";
     }
 
     # Pop the old database handle and set it.
-    $self->{"schema"} = pop @{ $self->{"schema_stack"} };
+    $database->{schema} = pop @{ $database->{schema_stack} };
 
     # FIXME - If it is determined that restore_context should
     # return something, then this function should, too.

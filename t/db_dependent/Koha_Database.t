@@ -4,7 +4,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 10;
+use Test::More tests => 12;
 
 BEGIN {
     use_ok('Koha::Database');
@@ -18,7 +18,11 @@ ok( $schema = $database->schema(), 'Get a schema' );
 my $dbh;
 ok( $dbh = $schema->storage->dbh(), 'Get an old fashioned DBI dbh handle' );
 ok( $schema->storage->connected(), 'Check our db connection is active' );
-ok( $schema = $database->schema(), 'Try and get the same schema' );
+is( ref($schema), 'Koha::Schema', 'Koha::Database->new->schema should return a Koha::Schema' );
+my $another_schema = $database->schema();
+is( $another_schema->storage->_conn_pid, $schema->storage->_conn_pid, 'Getting another schema should return the same one, it has correctly been cached' );
+$another_schema = Koha::Database->new->schema();
+is( $another_schema->storage->_conn_pid, $schema->storage->_conn_pid, 'Getting another schema should return the same one, it has correctly been cached' );
 
 my $new_schema;
 ok( $new_schema = $database->new_schema(), 'Try to get a new schema' );
