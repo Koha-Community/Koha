@@ -21,7 +21,6 @@ use base qw(Class::Accessor);
 
 use C4::Context;
 use Carp;
-use Elasticsearch;
 use Koha::Database;
 use Modern::Perl;
 use Readonly;

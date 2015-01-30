@@ -50,6 +50,7 @@ for ( $searchengine ) {
         $searcher=Koha::SearchEngine::Zebra::Search->new();
     }
     when (/^Elasticsearch$/) {
+        # TODO refactor Koha::ES::Search into Koha::SE::ES::Search
         $searcher=Koha::ElasticSearch::Search->new({index => 'biblios'});
     }
 }

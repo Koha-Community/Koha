@@ -1,4 +1,4 @@
-package Koha::ElasticSearch::Search;
+package Koha::SearchEngine::ElasticSearch::Search;
 
 # Copyright 2014 Catalyst IT
 #
@@ -19,11 +19,11 @@ package Koha::ElasticSearch::Search;
 
 =head1 NAME
 
-Koha::ElasticSearch::Search - search functions for Elasticsearch
+Koha::SearchEngine::ElasticSearch::Search - search functions for Elasticsearch
 
 =head1 SYNOPSIS
 
-    my $searcher = Koha::ElasticSearch::Search->new();
+    my $searcher = Koha::SearchEngine::ElasticSearch::Search->new();
     my $builder = Koha::SearchEngine::Elasticsearch::QueryBuilder->new();
     my $query = $builder->build_query('perl');
     my $results = $searcher->search($query);
@@ -44,7 +44,7 @@ use Catmandu::Store::ElasticSearch;
 use Data::Dumper; #TODO remove
 use Carp qw(cluck);
 
-Koha::ElasticSearch::Search->mk_accessors(qw( store ));
+Koha::SearchEngine::ElasticSearch::Search->mk_accessors(qw( store ));
 
 =head2 search
 
