@@ -122,7 +122,7 @@ to be searched must have been indexed with an appropriate mapping as a
 "phrase" subfield.
 
 =cut
-
+# XXX this isn't really a browse query like we want in the end
 sub build_browse_query {
     my ( $self, $field, $query ) = @_;
 
@@ -223,6 +223,149 @@ sub build_query_compat {
         undef,  $query,     $simple_query, $query_cgi, $query_desc,
         $limit, $limit_cgi, $limit_desc,   undef,      undef
     );
+}
+
+=head2 build_authorites_query
+
+    my $query = $builder->build_authorities_query(\%search);
+
+This takes a nice description of an authority search and turns it into a black-box
+query that can then be passed to the appropriate searcher.
+
+The search description is a hashref that looks something like:
+
+    {
+        searches => [
+            {
+                where    => 'Heading',    # search the main entry
+                operator => 'exact',        # require an exact match
+                value    => 'frogs',        # the search string
+            },
+            {
+                where    => '',             # search all entries
+                operator => '',             # default keyword, right truncation
+                value    => 'pond',
+            },
+        ],
+        sort => {
+            field => 'Heading',
+            order => 'desc',
+        },
+        authtypecode => 'TOPIC_TERM',
+    }
+
+=cut
+
+sub build_authorities_query {
+    my ($self, $search) = @_;
+
+}
+
+
+=head2 build_authorities_query_compat
+
+    my ($query) =
+      $builder->build_authorities_query_compat( \@marclist, \@and_or,
+        \@excluding, \@operator, \@value, $authtypecode, $orderby );
+
+This builds a query for searching for authorities.
+
+Arguments:
+
+=over 4
+
+=item marclist
+
+An arrayref containing where the particular term should be searched for.
+Options are: mainmainentry, mainentry, match, match-heading, see-from, and
+thesaurus. If left blank, any field is used.
+
+=item and_or
+
+Totally ignored. It is never used in L<C4::AuthoritiesMarc::SearchAuthorities>.
+
+=item excluding
+
+Also ignored.
+
+=item operator
+
+What form of search to do. Options are: is (phrase, no trunction, whole field
+must match), = (number exact match), exact (same as 'is'?). If left blank,
+then word list, right truncted, anywhere is used.
+
+=item value
+
+The actual user-provided string value to search for.
+
+=authtypecode
+
+The authority type code to search within. If blank, then all will be searched.
+
+=orderby
+
+The order to sort the results by. Options are Relevance, HeadingAsc,
+HeadingDsc, AuthidAsc, AuthidDsc.
+
+=back
+
+marclist, operator, and value must be the same length, and the values at
+index /i/ all relate to each other.
+
+This returns a query, which is a black box object that can be passed to the
+appropriate search object.
+
+=cut
+
+sub build_authorities_query_compat {
+    my ( $self, $marclist, $and_or, $excluding, $operator, $value,
+        $authtypecode, $orderby )
+      = @_;
+
+    # This turns the old-style many-options argument form into a more
+    # extensible hash form that is understood by L<build_authorities_query>.
+    my @searches;
+
+    my %koha_to_index_name = (
+        mainmainentry   => 'Heading-Main',
+        mainentry       => 'Heading',
+        match           => 'Match',
+        'match-heading' => 'Match-heading',
+        'see-from'      => 'Match-heading-see-from',
+        thesaurus       => 'Subject-heading-thesaurus',
+        ''              => '',
+    );
+
+    # Make sure everything exists
+    foreach my $m (@$marclist) {
+        confess "Invalid marclist field provided: $m"
+          unless exists $koha_to_index_name{$m};
+    }
+    for ( my $i = 0 ; $i < @$value ; $i++ ) {
+        push @searches,
+          {
+            where    => $marclist->[$i],
+            operator => $operator->[$i],
+            value    => $value->[$i],
+          };
+    }
+
+    my %sort;
+    my $sort_field =
+        ( $orderby =~ /^Heading/ ) ? 'Heading'
+      : ( $orderby =~ /^Auth/ )    ? 'Local-Number'
+      :                              undef;
+    if ($sort_field) {
+        $sort_order = ( $orderby =~ /Asc$/ ) ? 'asc' : 'desc';
+        %sort = ( $orderby => $sort_order, );
+    }
+    %search = (
+        searches     => \@searches,
+        authtypecode => $authtypecode,
+    );
+    $search{sort} = \%sort if %sort;
+    my $query = $self->build_authorities_query( \%search );
+    return $query;
 }
 
 =head2 _convert_sort_fields
