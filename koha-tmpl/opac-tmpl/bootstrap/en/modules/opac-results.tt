@@ -41,7 +41,7 @@
                         <strong>No results found!</strong>
                         <p>
                             [% IF ( searchdesc ) %]
-                                No results found for that in [% LibraryName %] catalog. <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi | html | url %][% limit_cgi | html | url %]&amp;format=rss2" class="rsssearchlink"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" class="rsssearchicon"/></a>
+                                No results found for that in [% LibraryName %] catalog. <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi | html | url %]&amp;format=rss2" class="rsssearchlink noprint"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" class="rsssearchicon"/></a>
                             [% ELSE %]
                                 You did not specify any search criteria.
                             [% END %]
@@ -80,7 +80,7 @@
                                 [% END %]
                             ).
                         [% END %]
-                        <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html |url %][% limit_cgi |html | url %]&amp;count=[% countrss |html %]&amp;sort_by=acqdate_dsc&amp;format=rss2" class="rsssearchlink"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" class="rsssearchicon"/></a>
+                        <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi |html | url %]&amp;count=[% countrss |html %]&amp;sort_by=acqdate_dsc&amp;format=rss2" class="rsssearchlink noprint"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" class="rsssearchicon"/></a>
                     [% END # / IF total %]
                     </p>
                 [% END # / IF searchdesc %]
@@ -126,7 +126,7 @@
 
                                 <div id="toolbar" class="toolbar clearfix">
                                     [% IF ( OpacHighlightedWords ) %]
-                                        <div class="highlight_controls">
+                                        <div class="highlight_controls noprint">
                                             <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
                                             <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
                                         </div>
@@ -137,7 +137,7 @@
                                     </div>
                                 </div> <!-- / #toolbar -->
 
-                                <div id="selections-toolbar" class="toolbar">
+                                <div id="selections-toolbar" class="toolbar noprint">
                                     <!-- checkall, clearall are now needed for placehold -->
                                     <span class="checkall"></span>
                                     <span class="clearall"></span> <span class="sep">|</span>
@@ -468,7 +468,7 @@
                                                     </div> <!-- / .results_summary -->
                                                 [% END # / IF OpacStarRatings %]
 
-                                                <div class="actions-menu">
+                                                <div class="actions-menu noprint">
                                                         [% IF Koha.Preference( 'RequestOnOpac' ) == 1 %]
                                                             [% UNLESS ( SEARCH_RESULT.norequests ) %]
                                                                 [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && AllowOnShelfHolds ) %]
