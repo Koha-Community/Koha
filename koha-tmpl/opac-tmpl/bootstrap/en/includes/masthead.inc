@@ -1,6 +1,6 @@
 [% USE Koha %]
 <div id="wrap">
-    <div id="header-region">
+    <div id="header-region" class="noprint">
         <div class="navbar navbar-inverse navbar-static-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
