@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="span12">
-                    <div id="opaccredits">
+                    <div id="opaccredits" class="noprint">
                         [% opaccredits %]
                     </div>
                 </div>
@@ -15,7 +15,7 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="span12">
-                    <div id="koha_url" class="clearfix">
+                    <div id="koha_url" class="clearfix noprint">
                         <p>Powered by
                         [% IF template.name.match('opac-main.tt') %]
                             <a class="koha_url" href="http://koha-community.org">Koha</a>
@@ -33,7 +33,7 @@
     [% IF ( opaclanguagesdisplay ) %]
         [% IF ( languages_loop && opaclanguagesdisplay ) %]
             [% UNLESS ( one_language_enabled ) %]
-                <div id="changelanguage" class="navbar navbar-fixed-bottom navbar-static-bottom">
+                <div id="changelanguage" class="navbar navbar-fixed-bottom navbar-static-bottom noprint">
                     <div class="navbar-inner">
                         <ul id="i18nMenu" class="nav">
                             <li><p class="lang navbar-text"><strong>Languages:&nbsp;</strong></p></li>
