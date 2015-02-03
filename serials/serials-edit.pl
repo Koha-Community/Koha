@@ -154,6 +154,7 @@ foreach my $serialid (@serialids) {
             )
             || $serinfo->{'cannotedit'}
         );
+        $serinfo->{editdisable} = 0 if C4::Auth::haspermission( C4::Context->userenv->{id}, { serials => 'receive_serials' } );
         $serinfo->{editdisable} ||= ($serinfo->{status8} and $serinfo->{closed});
         push @serialdatalist, $serinfo;
         $processedserialid{$serialid} = 1;

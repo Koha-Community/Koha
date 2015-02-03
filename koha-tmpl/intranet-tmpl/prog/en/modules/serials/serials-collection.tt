@@ -223,7 +223,7 @@ $(document).ready(function() {
     [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
             [% IF ( CAN_user_serials_receive_serials ) %]
                 <td>
-                  [% IF ( serial.cannotedit ) %]
+                  [% UNLESS CAN_user_serials_receive_serials %]
                     disabled
                   [% ELSE %]
                     [% IF ( serial.subscriptionexpired ) %]
