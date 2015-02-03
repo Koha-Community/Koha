@@ -24,6 +24,8 @@ $scriptname -h
                           Default: $CHUNKSSIZE
     -d | --export-dir     Where rebuild_zebra.pl will export data
                           Default: $EXPORTDIR
+    -x | --exclude-export Do not export Biblios from Koha, but use the existing
+                          export-dir
     -L | --log-dir        Log directory
                           Default: $LOGDIR
     -r | --remove-logs    Clean log directory before start
@@ -110,6 +112,7 @@ OFFSET=0
 LENGTH=
 CHUNKSSIZE=10000
 EXPORTDIR=/tmp/rebuild/export
+EXCLUDEEXPORT=no
 LOGDIR=/tmp/rebuild/logs
 RMLOGS=no
 NOCONFIRM=no
@@ -139,6 +142,9 @@ while [ $1 ]; do
         -L | --log-dir )
             shift
             LOGDIR=$1
+            ;;
+        -x | --exclude-export )
+            EXCLUDEEXPORT=yes
             ;;
         -r | --remove-logs )
             RMLOGS=yes
@@ -235,6 +241,7 @@ echo "Start at offset: $OFFSET"
 echo "Total number of records to index: $LENGTH"
 echo "Initial chunk size: $CHUNKSSIZE"
 echo "Export directory: $EXPORTDIR"
+echo "Exclude re-exporting: $EXCLUDEEXPORT"
 echo "Log directory: $LOGDIR"
 echo "Remove logs before start? $RMLOGS"
 echo "Type of record: $TYPE"
@@ -274,9 +281,11 @@ if [ $RMLOGS = "yes" ]; then
     rm -f $LOGDIR/*.log
 fi
 
-REBUILDZEBRA_CMD="$REBUILDZEBRA $TYPESWITCH -v -x -k -d $EXPORTDIR --offset $OFFSET --length $LENGTH --skip-index"
-echo "\n$REBUILDZEBRA_CMD"
-$REBUILDZEBRA_CMD
+if [ $EXCLUDEEXPORT = "no" ]; then
+    REBUILDZEBRA_CMD="$REBUILDZEBRA $TYPESWITCH -v -x -k -d $EXPORTDIR --offset $OFFSET --length $LENGTH --skip-index"
+    echo "\n$REBUILDZEBRA_CMD"
+    $REBUILDZEBRA_CMD
+fi
 
 EXPORTFILE=
 case $TYPE in
