@@ -40,6 +40,7 @@ provides something that can be given to elasticsearch to get answers.
 =cut
 
 use base qw(Class::Accessor);
+use Carp;
 use List::MoreUtils qw/ each_array /;
 use Modern::Perl;
 use URI::Escape;
@@ -225,7 +226,7 @@ sub build_query_compat {
     );
 }
 
-=head2 build_authorites_query
+=head2 build_authorities_query
 
     my $query = $builder->build_authorities_query(\%search);
 
@@ -259,6 +260,27 @@ The search description is a hashref that looks something like:
 sub build_authorities_query {
     my ($self, $search) = @_;
 
+    # Start by making the query parts
+    my @query_parts;
+    my @filter_parts;
+    foreach my $s ( @{ $search->{searches} } ) {
+        my ($wh, $op, $val) = $s->{'where', 'operator', 'value'};
+        my ($q_type);
+        if ($op eq 'is' || $op eq '=') {
+            # look for something that matches completely
+            # note, '=' is about numerical vals. May need special handling.
+            push @filter_parts, { filter => { term => { $wh => $val }} };
+        } elsif ($op eq 'exact') {
+            # left and right truncation, otherwise an exact phrase
+            push @query_parts, { match_phrase => { $wh => $val }};
+        } else {
+            # regular wordlist stuff
+            # TODO truncation
+            push @query_parts, { match => { $wh => $val }};
+        }
+    }
+    # Merge the query and filter parts appropriately
+
 }
 
 
@@ -291,8 +313,8 @@ Also ignored.
 =item operator
 
 What form of search to do. Options are: is (phrase, no trunction, whole field
-must match), = (number exact match), exact (same as 'is'?). If left blank,
-then word list, right truncted, anywhere is used.
+must match), = (number exact match), exact (phrase, but with left and right
+truncation). If left blank, then word list, right truncted, anywhere is used.
 
 =item value
 
@@ -338,8 +360,7 @@ sub build_authorities_query_compat {
 
     # Make sure everything exists
     foreach my $m (@$marclist) {
-        confess "Invalid marclist field provided: $m"
-          unless exists $koha_to_index_name{$m};
+        confess "Invalid marclist field provided: $m" unless exists $koha_to_index_name{$m};
     }
     for ( my $i = 0 ; $i < @$value ; $i++ ) {
         push @searches,
@@ -356,10 +377,10 @@ sub build_authorities_query_compat {
       : ( $orderby =~ /^Auth/ )    ? 'Local-Number'
       :                              undef;
     if ($sort_field) {
-        $sort_order = ( $orderby =~ /Asc$/ ) ? 'asc' : 'desc';
+        my $sort_order = ( $orderby =~ /Asc$/ ) ? 'asc' : 'desc';
         %sort = ( $orderby => $sort_order, );
     }
-    %search = (
+    my %search = (
         searches     => \@searches,
         authtypecode => $authtypecode,
     );

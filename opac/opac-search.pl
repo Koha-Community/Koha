@@ -32,28 +32,14 @@ use List::MoreUtils q/any/;
 
 use Data::Dumper; # TODO remove
 
-use Koha::ElasticSearch::Search;
+use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
-use Koha::SearchEngine::Zebra::Search;
 
 my $searchengine = C4::Context->preference("SearchEngine");
 my ($builder, $searcher);
 #$searchengine = 'Zebra'; # XXX
-$builder = Koha::SearchEngine::QueryBuilder->new();
-for ( $searchengine ) {
-    when ( /^Solr$/ ) {
-        warn "We use Solr";
-        require 'opac/search.pl';
-        exit;
-    }
-    when ( /^Zebra$/ ) {
-        $searcher=Koha::SearchEngine::Zebra::Search->new();
-    }
-    when (/^Elasticsearch$/) {
-        # TODO refactor Koha::ES::Search into Koha::SE::ES::Search
-        $searcher=Koha::ElasticSearch::Search->new({index => 'biblios'});
-    }
-}
+$builder  = Koha::SearchEngine::QueryBuilder->new();
+$searcher = Koha::SearchEngine::Search->new({index => 'biblios'});
 
 use C4::Output;
 use C4::Auth qw(:DEFAULT get_session);

@@ -1,4 +1,4 @@
-package Koha::SearchEngine::ElasticSearch::Search;
+package Koha::SearchEngine::Elasticsearch::Search;
 
 # Copyright 2014 Catalyst IT
 #
@@ -44,7 +44,7 @@ use Catmandu::Store::ElasticSearch;
 use Data::Dumper; #TODO remove
 use Carp qw(cluck);
 
-Koha::SearchEngine::ElasticSearch::Search->mk_accessors(qw( store ));
+Koha::SearchEngine::Elasticsearch::Search->mk_accessors(qw( store ));
 
 =head2 search
 
