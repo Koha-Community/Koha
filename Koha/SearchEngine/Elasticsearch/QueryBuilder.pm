@@ -269,7 +269,7 @@ sub build_authorities_query {
         if ($op eq 'is' || $op eq '=') {
             # look for something that matches completely
             # note, '=' is about numerical vals. May need special handling.
-            push @filter_parts, { filter => { term => { $wh => $val }} };
+            push @filter_parts, { term => { $wh => $val }};
         } elsif ($op eq 'exact') {
             # left and right truncation, otherwise an exact phrase
             push @query_parts, { match_phrase => { $wh => $val }};
@@ -280,7 +280,16 @@ sub build_authorities_query {
         }
     }
     # Merge the query and filter parts appropriately
-
+    # 'should' behaves like 'or', if we want 'and', use 'must'
+    my $query_part = { bool => { should => \@query_parts } };
+    my $filter_part = { bool => { should => \@filter_parts }};
+    my $query;
+    if (@filter_parts) {
+        $query = { query => { filtered => { filter => $filter_part, query => $query_part }}};
+    } else {
+        $query = { query => $query_part };
+    }
+    return $query;
 }
 
 
