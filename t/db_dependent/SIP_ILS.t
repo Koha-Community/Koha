@@ -9,19 +9,17 @@ use warnings;
 use Test::More tests => 4;
 
 BEGIN {
-        use FindBin;
-        use lib "$FindBin::Bin/../../C4/SIP";
         use_ok('C4::SIP::ILS');
 };
 
-my $transaction = ILS::Transaction::RenewAll->new();
+my $transaction = C4::SIP::ILS::Transaction::RenewAll->new();
 
-$transaction->patron(my $patron = ILS::Patron->new(23529000120056));
+$transaction->patron(my $patron = C4::SIP::ILS::Patron->new(23529000120056));
 
 ok(defined $patron, "patron code: 23529000120056 is valid");
 
-my $transaction2 = ILS::Transaction::RenewAll->new();
-$transaction2->patron(my $patron2 = ILS::Patron->new("ABCDE12345"));
+my $transaction2 = C4::SIP::ILS::Transaction::RenewAll->new();
+$transaction2->patron(my $patron2 = C4::SIP::ILS::Patron->new("ABCDE12345"));
 
 #This test assumes that the patron code ABCDE12345 is invalid
 ok(!defined $patron2, "patron code: ABCDE12345 is invalid");
