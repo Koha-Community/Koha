@@ -176,7 +176,7 @@ $output = $engine->transform({
             xml => $xml_1,
             file => $xsltfile_4,
         });
-my $dom = XML::LibXML->load_xml(string => $output);
-my $result = $dom->find( '/just_a_tagname' );
+$dom = XML::LibXML->load_xml(string => $output);
+$result = $dom->find( '/just_a_tagname' );
 is ( $result->to_literal(), '', "As expected, no XSLT parameters/variables were added");
 #End of tests
