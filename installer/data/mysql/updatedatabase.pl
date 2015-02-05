@@ -9691,9 +9691,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-
-
-$DBversion = "3.17.00.XXX";
+$DBversion = "3.19.00.008";
 if ( CheckVersion($DBversion) ) {
     my $number_of_orders_not_linked = $dbh->selectcol_arrayref(q|
         SELECT COUNT(*)
