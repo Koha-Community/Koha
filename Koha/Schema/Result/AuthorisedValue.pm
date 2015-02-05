@@ -107,9 +107,24 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 items_search_fields
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-01-13 13:14:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/LKBdxi1YA7ggV78u9BlVA
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ItemsSearchField>
+
+=cut
+
+__PACKAGE__->has_many(
+  "items_search_fields",
+  "Koha::Schema::Result::ItemsSearchField",
+  { "foreign.authorised_values_category" => "self.category" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-02-05 15:20:11
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GS7UBpk66HAhBptwrpKR7Q
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

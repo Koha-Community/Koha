@@ -165,6 +165,7 @@ __PACKAGE__->table("aqorders");
 =head2 budget_id
 
   data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 0
 
 =head2 budgetgroup_id
@@ -294,7 +295,7 @@ __PACKAGE__->add_columns(
   "discount",
   { data_type => "float", is_nullable => 1, size => [6, 4] },
   "budget_id",
-  { data_type => "integer", is_nullable => 0 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "budgetgroup_id",
   { data_type => "integer", is_nullable => 0 },
   "budgetdate",
@@ -425,6 +426,21 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 budget
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Aqbudget>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "budget",
+  "Koha::Schema::Result::Aqbudget",
+  { budget_id => "budget_id" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
 =head2 invoiceid
 
 Type: belongs_to
@@ -466,8 +482,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-10-30 01:04:01
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:M+R6T+KIk4lqzdYjbYvg9w
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-02-05 15:20:11
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MfXZ8f2Md6X+C1fVU8TtOg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
