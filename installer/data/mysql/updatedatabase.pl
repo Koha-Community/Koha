@@ -9669,7 +9669,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.18.00.001";
+$DBversion = "3.19.00.007";
 if ( CheckVersion($DBversion) ) {
     my $orphan_budgets = $dbh->selectall_arrayref(q|
         SELECT budget_id, budget_name, budget_code
