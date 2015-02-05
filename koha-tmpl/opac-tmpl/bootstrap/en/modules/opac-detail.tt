@@ -1434,6 +1434,7 @@
 
         [% IF ( query_desc ) %][% IF ( OpacHighlightedWords ) %]var query_desc = "[% query_desc |replace("'", "\'") |replace('\n', '\\n') |replace('\r', '\\r') |html %]";
             q_array = query_desc.split(" ");
+            q_array = q_array.filter(function(n){ return n }); // Remove empty strings
             highlightOn();
             $("#highlight_toggle_on" ).hide().click(function() {highlightOn() ; return false;});
             $("#highlight_toggle_off").show().click(function() {highlightOff(); return false;});[% END %][% END %]
