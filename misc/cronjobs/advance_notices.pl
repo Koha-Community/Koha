@@ -240,8 +240,8 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
         
         if ( $borrower_preferences->{'wants_digest'} ) {
             # cache this one to process after we've run through all of the items.
-            $due_digest->{$upcoming->{borrowernumber}}{email} = $from_address;
-            $due_digest->{$upcoming->{borrowernumber}}{count}++;
+            $due_digest->{ $upcoming->{borrowernumber} }->{email} = $from_address;
+            $due_digest->{ $upcoming->{borrowernumber} }->{count}++;
         } else {
             my $biblio = C4::Biblio::GetBiblioFromItemNumber( $upcoming->{'itemnumber'} );
             my $letter_type = 'DUE';
@@ -274,8 +274,8 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
 
         if ( $borrower_preferences->{'wants_digest'} ) {
             # cache this one to process after we've run through all of the items.
-            $upcoming_digest->{$upcoming->{borrowernumber}}{email} = $from_address;
-            $upcoming_digest->{$upcoming->{borrowernumber}}{count}++;
+            $upcoming_digest->{ $upcoming->{borrowernumber} }->{email} = $from_address;
+            $upcoming_digest->{ $upcoming->{borrowernumber} }->{count}++;
         } else {
             my $biblio = C4::Biblio::GetBiblioFromItemNumber( $upcoming->{'itemnumber'} );
             my $letter_type = 'PREDUE';
