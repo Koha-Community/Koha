@@ -343,15 +343,11 @@ sub GetBasketAsCSV {
 
 =head3 GetBasketGroupAsCSV
 
-=over
-
-&GetBasketGroupAsCSV($basketgroupid);
+  &GetBasketGroupAsCSV($basketgroupid);
 
 Export a basket group as CSV
 
 $cgi parameter is needed for column name translation
-
-=back
 
 =cut
 
@@ -1077,6 +1073,7 @@ sub GetOrders {
 }
 
 #------------------------------------------------------------#
+
 =head3 GetOrdersByBiblionumber
 
   @orders = &GetOrdersByBiblionumber($biblionumber);
@@ -2360,13 +2357,9 @@ sub GetRecentAcqui {
 
 =head3 AddClaim
 
-=over
-
-&AddClaim($ordernumber);
+  &AddClaim($ordernumber);
 
 Add a claim for an order
-
-=back
 
 =cut
 
