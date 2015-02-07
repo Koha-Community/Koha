@@ -51,10 +51,6 @@ sub new {
         batch_stat      => 0,   # False if any data has changed and the db has not been updated
         @_,
     };
-    my $sth = C4::Context->dbh->prepare("SELECT MAX(batch_id) FROM creator_batches;");
-    $sth->execute();
-    my $batch_id = $sth->fetchrow_array;
-    $self->{'batch_id'} = ++$batch_id unless $self->{'batch_id'} != 0;      # this allows batch_id to be passed in for individual label printing
     bless ($self, $type);
     return $self;
 }
@@ -64,12 +60,18 @@ sub add_item {
     my $number = shift;
     ref($self) =~ m/C4::(.+)::.+$/;
     my $number_type = ($1 eq 'Patroncards' ? 'borrower_number' : 'item_number');
+    if ($self->{'batch_id'} == 0){ #if this is a new batch batch_id must be created
+        my $sth = C4::Context->dbh->prepare("SELECT MAX(batch_id) FROM creator_batches;");
+        $sth->execute();
+        my $batch_id = $sth->fetchrow_array;
+        $self->{'batch_id'}= ++$batch_id;
+    }
     my $query = "INSERT INTO creator_batches (batch_id, $number_type, branch_code, creator) VALUES (?,?,?,?);";
     my $sth = C4::Context->dbh->prepare($query);
 #    $sth->{'TraceLevel'} = 3;
     $sth->execute($self->{'batch_id'}, $number, $self->{'branch_code'}, $1);
     if ($sth->err) {
-        warn sprintf('Database returned the following error on attempted INSERT: %s', $sth->errstr);
+       warn sprintf('Database returned the following error on attempted INSERT: %s', $sth->errstr);
         return -1;
     }
     $query = "SELECT max(label_id) FROM creator_batches WHERE batch_id=? AND $number_type=? AND branch_code=?;";
