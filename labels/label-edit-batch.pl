@@ -95,6 +95,7 @@ elsif ($op eq 'add') {
         foreach my $item_number (@item_numbers) {
             $err = $batch->add_item($item_number);
         }
+        $batch_id = $batch->get_attr('batch_id') if $batch_id == 0; #update batch_id if we added to a new batch
         $errstr = "item(s) not added to batch $batch_id." if $err;
     }
     else {
