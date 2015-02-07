@@ -602,6 +602,8 @@ END_SQL
                 my $j = 0;
                 my $exceededPrintNoticesMaxLines = 0;
                 while ( my $item_info = $sth2->fetchrow_hashref() ) {
+                    next unless ( DateTime->compare( $date_to_run,  dt_from_string($item_info->{date_due})) ) == 1;
+
                     if ( C4::Context->preference('OverdueNoticeCalendar') ) {
                         my $calendar =
                           Koha::Calendar->new( branchcode => $branchcode );
