@@ -136,7 +136,7 @@ sub generate_subfield_form {
             $value =~ s/DD/$day/g;
         }
         
-        $subfield_data{visibility} = "display:none;" if (($subfieldlib->{hidden} > 4) || ($subfieldlib->{hidden} < -4));
+        $subfield_data{visibility} = "display:none;" if (($subfieldlib->{hidden} > 4) || ($subfieldlib->{hidden} <= -4));
         
         my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
         if (!$value && $subfieldlib->{kohafield} eq 'items.itemcallnumber' && $pref_itemcallnumber) {
@@ -231,7 +231,7 @@ sub generate_subfield_form {
                   }
             }
 
-            if ($subfieldlib->{'hidden'}) {
+            if ( $subfieldlib->{hidden} > 4 or $subfieldlib->{hidden} <= -4 ) {
                 $subfield_data{marc_value} = qq(<input type="hidden" $attributes /> $authorised_lib{$value});
             }
             else {
