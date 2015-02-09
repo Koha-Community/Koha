@@ -328,9 +328,10 @@ if ($op eq 'save' || $op eq 'insert'){
       }
     }
   }
-  # Check if the userid is unique. Userid might not always be present in the edited values list when editing certain sub-forms, so we need to dig for it a bit.
-  my $userid = $newdata{'userid'};
-  $userid = $borrower_data->{userid} unless $userid; #Get the userid straight from the DB
+  # Check if the 'userid' is unique. 'userid' might not always be present in
+  # the edited values list when editing certain sub-forms. Get it straight
+  # from the DB if absent.
+  my $userid = $newdata{ userid } // $borrower_data->{ userid };
   unless (Check_Userid($userid,$borrowernumber)) {
     push @errors, "ERROR_login_exist";
   }
