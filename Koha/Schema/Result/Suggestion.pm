@@ -165,6 +165,7 @@ __PACKAGE__->table("suggestions");
 =head2 budgetid
 
   data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 1
 
 =head2 branchcode
@@ -270,7 +271,7 @@ __PACKAGE__->add_columns(
   "patronreason",
   { data_type => "text", is_nullable => 1 },
   "budgetid",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "branchcode",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "collectiontitle",
@@ -299,9 +300,31 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("suggestionid");
 
+=head1 RELATIONS
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-18 13:01:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tMbXZ1id2ls57UMp5jicFA
+=head2 budgetid
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Aqbudget>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "budgetid",
+  "Koha::Schema::Result::Aqbudget",
+  { budget_id => "budgetid" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-02-09 15:51:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:k7YUEiU7g+VxpMsEuOiizg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
