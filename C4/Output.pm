@@ -32,7 +32,6 @@ use URI::Escape;
 
 use C4::Context;
 use C4::Dates qw(format_date);
-use C4::Budgets qw(GetCurrency);
 use C4::Templates;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
