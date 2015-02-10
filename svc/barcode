@@ -24,6 +24,43 @@ use GD::Barcode;
 
 use C4::Auth qw(check_cookie_auth);
 
+=head1 NAME
+
+    /cgi-bin/koha/svc/barcode
+
+=head1 SYNOPSIS
+
+This service generates a PNG barcode image for the requested barcode.
+
+=head2 PARAMETERS
+
+=over
+
+=item I<barcode>
+
+I<barcode> is the desired barcode. It should be called like:
+
+=item I<type>
+
+I<type> is the desired barcode type. Possible values are TODO. If ommited,
+it defaults to Code39.
+
+=back
+
+=head2 EXAMPLES
+
+=over
+
+=item /cgi-bin/koha/svc/barcode?barcode=123456789
+
+Returns a Code39 barcode image for barcode 123456789
+
+=item /cgi-bin/koha/svc/barcode?barcode=123456789&type=UPCE
+
+Returns a UPCE barcode image for barcode 123456789
+
+=cut
+
 my $input = new CGI;
 
 my ( $auth_status, $sessionID ) = check_cookie_auth( $input->cookie('CGISESSID'), { catalogue => '*' } );
@@ -36,6 +73,24 @@ binmode(STDOUT);
 
 my $type = $input->param('type') || 'Code39';
 my $barcode = $input->param('barcode');
+my $image;
 
-print header('image/png');
-print GD::Barcode->new( $type, $barcode )->plot()->png();
+eval {
+    $image = GD::Barcode->new( $type, $barcode )->plot()->png();
+};
+
+if ( $@ ) {
+    # problem creating image
+    print header( -status => 500 );
+} else {
+    print header('image/png');
+    print $image;
+}
+
+exit 0;
+
+=head1 AUTHOR
+
+Kyle M Hall <kyle@bywatersolutions.com>
+
+=cut
