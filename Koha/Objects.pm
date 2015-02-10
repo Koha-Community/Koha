@@ -80,6 +80,8 @@ my $object = Koha::Objects->find( { keypart1 => $keypart1, keypart2 => $keypart2
 sub find {
     my ( $self, $id ) = @_;
 
+    return unless $id;
+
     my $result = $self->_resultset()->find($id);
 
     my $object = $self->object_class()->_new_from_dbic( $result );

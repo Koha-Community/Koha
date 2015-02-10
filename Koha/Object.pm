@@ -106,7 +106,7 @@ Returns:
 sub store {
     my ($self) = @_;
 
-    return $self->_result()->update_or_insert() ? 1 : 0;
+    return $self->_result()->update_or_insert() ? $self : undef;
 }
 
 =head3 $object->in_storage();
@@ -190,7 +190,7 @@ sub set {
         }
     }
 
-    return $self->_result()->set_columns($properties) ? 1 : undef;
+    return $self->_result()->set_columns($properties) ? $self : undef;
 }
 
 =head3 $object->id();
