@@ -9836,8 +9836,8 @@ $DBversion = "3.19.00.XXX";
 if(CheckVersion($DBversion)) {
     $dbh->do(q{
         INSERT INTO authorised_values (category, authorised_value, lib) VALUES
-         ('ORDER_CANCELLATION_REASON', 0, 'No reason'),
-         ('ORDER_CANCELLATION_REASON', 1, 'Sold out'),
+         ('ORDER_CANCELLATION_REASON', 0, 'No reason provided'),
+         ('ORDER_CANCELLATION_REASON', 1, 'Out of stock'),
          ('ORDER_CANCELLATION_REASON', 2, 'Restocking')
     });
 
