@@ -99,4 +99,9 @@ INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MED
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MEDIA_TYPE', '009', 'Libro con CD');
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MEDIA_TYPE', '010', 'Libro con audiocassette');
 
+-- order cancellation reasons
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('ORDER_CANCELLATION_REASON', 0, 'No reason provided');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('ORDER_CANCELLATION_REASON', 1, 'Out of stock');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('ORDER_CANCELLATION_REASON', 2, 'Restocking');
+
 SET FOREIGN_KEY_CHECKS=1;
