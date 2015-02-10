@@ -119,7 +119,7 @@ BEGIN {
 
         &CheckReserves
         &CanBookBeReserved
-	&CanItemBeReserved
+        &CanItemBeReserved
         &CanReserveBeCanceledFromOpac
         &CancelReserve
         &CancelExpiredReserves
@@ -488,6 +488,7 @@ sub CanBookBeReserved{
          damaged,         if the Item is damaged.
          cannotReserveFromOtherBranches, if syspref 'canreservefromotherbranches' is OK.
          tooManyReserves, if the borrower has exceeded his maximum reserve amount.
+         notReservable,   if holds on this item are not allowed
 
 =cut
 
@@ -576,6 +577,21 @@ sub CanItemBeReserved{
     # we check if it's ok or not
     if( $reservecount >= $allowedreserves ){
         return 'tooManyReserves';
+    }
+
+    my $circ_control_branch = C4::Circulation::_GetCircControlBranch($item,
+        $borrower);
+    my $branchitemrule = C4::Circulation::GetBranchItemRule($circ_control_branch,
+        $item->{itype});
+
+    if ( $branchitemrule->{holdallowed} == 0 ) {
+        return 'notReservable';
+    }
+
+    if (   $branchitemrule->{holdallowed} == 1
+        && $borrower->{branchcode} ne $item->{homebranch} )
+    {
+          return 'cannotReserveFromOtherBranches';
     }
 
     # If reservecount is ok, we check item branch if IndependentBranches is ON

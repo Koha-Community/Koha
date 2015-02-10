@@ -526,16 +526,6 @@ foreach my $biblioNum (@biblionumbers) {
         my $branch = GetReservesControlBranch( $itemInfo, $borr );
 
         my $policy_holdallowed = !$itemLoopIter->{already_reserved};
-        if ($policy_holdallowed) {
-            if (my $branchitemrule = GetBranchItemRule( $branch, $itemInfo->{'itype'} )) {
-                $policy_holdallowed =
-                  ($branchitemrule->{'holdallowed'} == 2) ||
-                  ($branchitemrule->{'holdallowed'} == 1
-                      && $borr->{'branchcode'} eq $itemInfo->{'homebranch'});
-            } else {
-                $policy_holdallowed = 0; # No rule - not allowed
-            }
-        }
         $policy_holdallowed &&=
             IsAvailableForItemLevelRequest($itemInfo,$borr) &&
             CanItemBeReserved($borrowernumber,$itemNum) eq 'OK';

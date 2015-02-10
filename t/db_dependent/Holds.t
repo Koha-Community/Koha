@@ -6,7 +6,7 @@ use t::lib::Mocks;
 use C4::Context;
 use C4::Branch;
 
-use Test::More tests => 38;
+use Test::More tests => 41;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
@@ -328,6 +328,46 @@ ok(
     CanItemBeReserved( $borrowernumbers[0], $itemnumber) eq 'tooManyReserves',
     "cannot request item if policy that matches on bib-level item type forbids it (bug 9532)"
 );
+
+
+# Test branch item rules
+
+$dbh->do('DELETE FROM issuingrules');
+$dbh->do(
+    q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
+      VALUES (?, ?, ?, ?)},
+    {},
+    '*', '*', '*', 25
+);
+$dbh->do('DELETE FROM branch_item_rules');
+$dbh->do('DELETE FROM default_branch_circ_rules');
+$dbh->do('DELETE FROM default_branch_item_rules');
+$dbh->do('DELETE FROM default_circ_rules');
+$dbh->do(q{
+    INSERT INTO branch_item_rules (branchcode, itemtype, holdallowed, returnbranch)
+    VALUES (?, ?, ?, ?)
+}, {}, 'CPL', 'CANNOT', 0, 'homebranch');
+$dbh->do(q{
+    INSERT INTO branch_item_rules (branchcode, itemtype, holdallowed, returnbranch)
+    VALUES (?, ?, ?, ?)
+}, {}, 'CPL', 'CAN', 1, 'homebranch');
+($bibnum, $title, $bibitemnum) = create_helper_biblio('CANNOT');
+($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
+    { homebranch => 'CPL', holdingbranch => 'CPL', itype => 'CANNOT' } , $bibnum);
+is(CanItemBeReserved($borrowernumbers[0], $itemnumber), 'notReservable',
+    "CanItemBeReserved should returns 'notReservable'");
+
+($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
+    { homebranch => 'MPL', holdingbranch => 'CPL', itype => 'CAN' } , $bibnum);
+is(CanItemBeReserved($borrowernumbers[0], $itemnumber),
+    'cannotReserveFromOtherBranches',
+    "CanItemBeReserved should returns 'cannotReserveFromOtherBranches'");
+
+($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
+    { homebranch => 'CPL', holdingbranch => 'CPL', itype => 'CAN' } , $bibnum);
+is(CanItemBeReserved($borrowernumbers[0], $itemnumber), 'OK',
+    "CanItemBeReserved should returns 'OK'");
+
 
 # Test CancelExpiredReserves
 C4::Context->set_preference('ExpireReservesMaxPickUpDelay', 1);

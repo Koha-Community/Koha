@@ -417,19 +417,11 @@ foreach my $biblionumber (@biblionumbers) {
             my $branch = C4::Circulation::_GetCircControlBranch($item, $borrowerinfo);
 
             my $branchitemrule = GetBranchItemRule( $branch, $item->{'itype'} );
-            my $policy_holdallowed = 1;
 
             $item->{'holdallowed'} = $branchitemrule->{'holdallowed'};
 
-            if ( $branchitemrule->{'holdallowed'} == 0 ||
-                 ( $branchitemrule->{'holdallowed'} == 1 &&
-                     $borrowerinfo->{'branchcode'} ne $item->{'homebranch'} ) ) {
-                $policy_holdallowed = 0;
-            }
-            
             if (
-                   $policy_holdallowed
-                && !$item->{cantreserve}
+                   !$item->{cantreserve}
                 && IsAvailableForItemLevelRequest($item, $borrowerinfo)
                 && CanItemBeReserved(
                     $borrowerinfo->{borrowernumber}, $itemnumber
