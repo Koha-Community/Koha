@@ -704,3 +704,8 @@ INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MED
 -- Autres
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('WITHDRAWN','1','Pilon');
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('RESTRICTED','1','Exclu du prêt');
+
+-- order cancellation reasons
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('ORDER_CANCELLATION_REASON', 0, 'No reason provided');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('ORDER_CANCELLATION_REASON', 1, 'Out of stock');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('ORDER_CANCELLATION_REASON', 2, 'Restocking');
