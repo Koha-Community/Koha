@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use C4::Acquisition;
 use C4::Biblio;
 use C4::Budgets;
@@ -16,6 +16,10 @@ my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
+
+C4::Context->_new_userenv('xxx');
+C4::Context->set_userenv(42, 'ordercreator', '0042', 'Order', 'Creator', 'CPL',
+    0, 'ordercreator@example.com');
 
 my $bookseller = Koha::Acquisition::Bookseller->new(
     {
@@ -86,5 +90,6 @@ my $ordernumber = $order->ordernumber;
 $order = Koha::Acquisition::Orders->find( $ordernumber );
 is( $order->quantityreceived, 0, 'Koha::Acquisition::Order->insert set quantityreceivedto 0 if undef is given' );
 is( $order->entrydate, output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }), 'Koha::Acquisition::Order->store set entrydate to today' );
+is( $order->created_by, 42, 'Koha::Acquisition::Order->store set created_by to logged in user if not given' );
 
 $schema->storage->txn_rollback();
