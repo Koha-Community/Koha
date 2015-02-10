@@ -97,7 +97,7 @@ BEGIN {
     $VERSION = '3.07.00.049';
 }
 
-use DBI;
+use DBIx::Connector;
 use Encode;
 use ZOOM;
 use XML::Simple;
@@ -783,8 +783,13 @@ sub _new_dbh
     my $db_user   = $context->config("user");
     my $db_passwd = $context->config("pass");
     # MJR added or die here, as we can't work without dbh
-    my $dbh = DBI->connect("DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",
-    $db_user, $db_passwd, {'RaiseError' => $ENV{DEBUG}?1:0 }) or die $DBI::errstr;
+    my $dbh = DBIx::Connector->connect(
+        "dbi:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",
+        $db_user, $db_passwd,
+        {
+            'RaiseError' => $ENV{DEBUG} ? 1 : 0
+        }
+    );
 
     # Check for the existence of a systempreference table; if we don't have this, we don't
     # have a valid database and should not set RaiseError in order to allow the installer
