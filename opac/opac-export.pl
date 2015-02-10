@@ -79,6 +79,10 @@ elsif ($format =~ /marcstd/) {
     ($error,$marc) = marc2marc($marc, 'marcstd', C4::Context->preference('marcflavour'));
     $format = 'marcstd';
 }
+elsif ( $format =~ /isbd/ ) {
+    $marc   = GetISBDView($biblionumber, "opac");
+    $format = 'isbd';
+}
 else {
     $error= "Format $format is not supported.";
 }
@@ -96,6 +100,13 @@ else {
             -type => 'application/marc',
             -charset=>'ISO-2022',
             -attachment=>"bib-$biblionumber.$format");
+    }
+    elsif ( $format eq 'isbd' ) {
+        print $query->header(
+            -type       => 'text/plain',
+            -charset    => 'utf-8',
+            -attachment =>  "bib-$biblionumber.txt"
+        );
     }else{
         print $query->header(
             -type => 'application/octet-stream',

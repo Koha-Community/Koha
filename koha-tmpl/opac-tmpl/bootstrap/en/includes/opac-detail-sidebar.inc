@@ -50,6 +50,7 @@
                                             [% CASE 'marcstd' %]MARC (Unicode/UTF-8, Standard)
                                             [% CASE 'mods' %]MODS (XML)
                                             [% CASE 'ris' %]RIS
+                                            [% CASE 'isbd' %]ISBD
                                         [% END %]
                                     </a>
                                 </li>
