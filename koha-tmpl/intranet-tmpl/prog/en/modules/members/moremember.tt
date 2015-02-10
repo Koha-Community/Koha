@@ -228,7 +228,7 @@ function validate1(date) {
         [% END %]
     [% ELSE %]
         [% IF ( guarantorborrowernumber ) %]
-            <li><span class="label">Guarantor:</span><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantorborrowernumber %]">[% guarantorsurname %], [% guarantorfirstname %]</a></li>
+            <li><span class="label">Guarantor:</span><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantorborrowernumber %]">[% guarantorsurname %][%IF ( guarantorfirstname ) %], [% guarantorfirstname %] [% END %]</a></li>
         [% END %]
     [% END %]
 </ol>
