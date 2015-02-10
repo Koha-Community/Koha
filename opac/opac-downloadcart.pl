@@ -52,8 +52,10 @@ if ($bib_list && $format) {
 
     my @bibs = split( /\//, $bib_list );
 
-    my $marcflavour         = C4::Context->preference('marcflavour');
+    my $marcflavour = C4::Context->preference('marcflavour');
     my $output;
+    my $extension;
+    my $type;
 
     # CSV   
     if ($format =~ /^\d+$/) {
@@ -76,6 +78,11 @@ if ($bib_list && $format) {
             elsif ($format eq 'bibtex') {
                 $output .= marc2bibtex($record, $biblio);
             }
+            elsif ( $format eq 'isbd' ) {
+                $output   .= GetISBDView($biblio, "opac");
+                $extension = "txt";
+                $type      = "text/plain";
+            }
         }
     }
 
@@ -83,9 +90,10 @@ if ($bib_list && $format) {
     $format = "csv" if ($format =~ m/^\d+$/);
 
     print $query->header(
-	-type => 'application/octet-stream',
-	-'Content-Transfer-Encoding' => 'binary',
-	-attachment=>"cart.$format");
+                               -type => ($type) ? $type : 'application/octet-stream',
+        -'Content-Transfer-Encoding' => 'binary',
+                         -attachment => ($extension) ? "cart.$format.$extension" : "cart.$format"
+    );
     print $output;
 
 } else { 

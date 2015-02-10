@@ -57,6 +57,8 @@ if ( ShelfPossibleAction( (defined($borrowernumber) ? $borrowernumber : -1), $sh
         my ($items, $totitems)  = GetShelfContents($shelfid);
         my $marcflavour         = C4::Context->preference('marcflavour');
         my $output;
+        my $extension;
+        my $type;
 
        # CSV
         if ($format =~ /^\d+$/) {
@@ -83,6 +85,11 @@ if ( ShelfPossibleAction( (defined($borrowernumber) ? $borrowernumber : -1), $sh
                 elsif ($format eq 'bibtex') {
                     $output .= marc2bibtex($record, $biblionumber);
                 }
+                elsif ( $format eq 'isbd' ) {
+                    $output   .= GetISBDView($biblionumber, "opac");
+                    $extension = "txt";
+                    $type      = "text/plain";
+                }
             }
         }
 
@@ -90,9 +97,10 @@ if ( ShelfPossibleAction( (defined($borrowernumber) ? $borrowernumber : -1), $sh
         $format = "csv" if ($format =~ m/^\d+$/);
 
         print $query->header(
-    	-type => 'application/octet-stream',
-    	-'Content-Transfer-Encoding' => 'binary',
-    	-attachment=>"shelf.$format");
+                                   -type => ($type) ? $type : 'application/octet-stream',
+            -'Content-Transfer-Encoding' => 'binary',
+                             -attachment => ($extension) ? "shelf.$format.$extension" : "shelf.$format"
+        );
         print $output;
 
     } else {
