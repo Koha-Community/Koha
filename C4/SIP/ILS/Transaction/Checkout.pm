@@ -91,9 +91,14 @@ sub do_checkout {
             } elsif ($confirmation eq 'HIGHHOLDS') {
                 $overridden_duedate = $needsconfirmation->{$confirmation}->{returndate};
                 $self->screen_msg('Loan period reduced for high-demand item');
+            } elsif ($confirmation eq 'RENTALCHARGE') {
+                if ($self->{fee_ack} ne 'Y') {
+                    $noerror = 0;
+                }
             } else {
                 $self->screen_msg($needsconfirmation->{$confirmation});
                 $noerror = 0;
+                syslog('LOG_DEBUG', "Blocking checkout Reason:$confirmation");
             }
         }
     }
@@ -106,6 +111,14 @@ sub do_checkout {
         $debug and warn "Item is on hold shelf for another patron.";
         $self->screen_msg("Item is on hold shelf for another patron.");
         $noerror = 0;
+    }
+    my ($fee, undef) = GetIssuingCharges($itemnumber, $self->{patron}->{borrowernumber});
+    if ( $fee > 0 ) {
+        $self->{sip_fee_type} = '06';
+        $self->{fee_amount} = sprintf '%.2f', $fee;
+        if ($self->{fee_ack} eq 'N' ) {
+            $noerror = 0;
+        }
     }
 	unless ($noerror) {
 		$debug and warn "cannot issue: " . Dumper($issuingimpossible) . "\n" . Dumper($needsconfirmation);

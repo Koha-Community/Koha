@@ -34,6 +34,17 @@ sub do_renew_for  {
     my $self = shift;
     my $borrower = shift;
     my ($renewokay,$renewerror) = CanBookBeRenewed($borrower->{borrowernumber},$self->{item}->{itemnumber});
+    if ($renewokay) { # ok so far check charges
+        my ($fee, undef) = GetIssuingCharges($self->{item}->{itemnumber}, $self->{patron}->{borrowernumber});
+        if ($fee > 0) {
+            $self->{sip_fee_type} = '06';
+            $self->{fee_amount} = sprintf '%.2f',$fee;
+            if ($self->{fee_ack} eq 'N') {
+                $renewokay = 0;
+            }
+        }
+
+    }
     if ($renewokay){
         $self->{due} = undef;
         my $due_date = AddIssue( $borrower, $self->{item}->id, undef, 0 );

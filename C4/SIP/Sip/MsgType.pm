@@ -511,6 +511,7 @@ sub handle_checkout {
 
     $patron_id = $fields->{(FID_PATRON_ID)};
     $item_id   = $fields->{(FID_ITEM_ID)};
+    my $fee_ack = $fields->{(FID_FEE_ACK)};
 
 
     if ($no_block eq 'Y') {
@@ -525,7 +526,7 @@ sub handle_checkout {
     } else {
 	# Does the transaction date really matter for items that are
 	# checkout out while the terminal is online?  I'm guessing 'no'
-		$status = $ils->checkout($patron_id, $item_id, $sc_renewal_policy);
+		$status = $ils->checkout($patron_id, $item_id, $sc_renewal_policy, $fee_ack);
     }
 
     $item = $status->item;
@@ -567,17 +568,10 @@ sub handle_checkout {
 	    $resp .= maybe_add(FID_MEDIA_TYPE, $item->sip_media_type);
 	    $resp .= maybe_add(FID_ITEM_PROPS, $item->sip_item_properties);
 
-	    # Financials
-	    if ($status->fee_amount) {
-		$resp .= add_field(FID_FEE_AMT, $status->fee_amount);
-		$resp .= maybe_add(FID_CURRENCY, $status->sip_currency);
-		$resp .= maybe_add(FID_FEE_TYPE, $status->sip_fee_type);
-		$resp .= maybe_add(FID_TRANSACTION_ID,
-				   $status->transaction_id);
 	    }
 	}
 
-    } else {
+    else {
 	# Checkout failed
 	# Checkout Response: not ok, no renewal, don't know mag. media,
 	# no desensitize
@@ -606,6 +600,16 @@ sub handle_checkout {
 				   sipbool($patron->check_password($fields->{(FID_PATRON_PWD)})));
 	    }
 	}
+    }
+	if ($protocol_version >= 2) {
+	    # Financials : return irrespective of ok status
+        if ($status->fee_amount) {
+            $resp .= add_field(FID_FEE_AMT, $status->fee_amount);
+            $resp .= maybe_add(FID_CURRENCY, $status->sip_currency);
+            $resp .= maybe_add(FID_FEE_TYPE, $status->sip_fee_type);
+            $resp .= maybe_add(FID_TRANSACTION_ID,
+                $status->transaction_id);
+        }
     }
 
     $self->write_msg($resp,undef,$server->{account}->{terminator},$server->{account}->{encoding});
