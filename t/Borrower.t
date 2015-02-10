@@ -42,7 +42,7 @@ is( $object2->surname(), 'Test Borrower Surname 2', "Accessor returns correct va
 
 my $ret;
 $ret = $object2->set({ surname => "Test Borrower Surname 3", firstname => "Test Firstname" });
-is( $ret, 1, "Set returns 1 on success" );
+ok( ref($ret) eq 'Koha::Borrower', "Set returns object on success" );
 is( $object2->surname(), "Test Borrower Surname 3", "Set sets first field correctly" );
 is( $object2->firstname(), "Test Firstname", "Set sets second field correctly" );
 
