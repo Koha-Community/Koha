@@ -35,7 +35,6 @@ Koha::Database
 use Modern::Perl;
 use Carp;
 use C4::Context;
-use Koha::Schema;
 use base qw(Class::Accessor);
 
 __PACKAGE__->mk_accessors(qw( ));
@@ -46,6 +45,7 @@ __PACKAGE__->mk_accessors(qw( ));
 # returns it.
 sub _new_schema {
 
+    require Koha::Schema;
     my $context = C4::Context->new();
 
     # we are letting C4::Context->dbh not set the RaiseError handle attribute
