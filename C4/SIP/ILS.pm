@@ -126,13 +126,16 @@ sub offline_ok {
 # the response.
 #
 sub checkout {
-    my ($self, $patron_id, $item_id, $sc_renew) = @_;
+    my ($self, $patron_id, $item_id, $sc_renew, $fee_ack) = @_;
     my ($patron, $item, $circ);
 
     $circ = C4::SIP::ILS::Transaction::Checkout->new();
     # BEGIN TRANSACTION
     $circ->patron($patron = C4::SIP::ILS::Patron->new( $patron_id));
     $circ->item($item = C4::SIP::ILS::Item->new( $item_id));
+    if ($fee_ack) {
+        $circ->fee_ack($fee_ack);
+    }
 
     if (!$patron) {
 		$circ->screen_msg("Invalid Patron");
