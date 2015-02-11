@@ -588,7 +588,7 @@
         <!-- This will only work if the OPACBaseURL syspref is set. -->
         <xsl:if test="string-length($OPACBaseURL) > 0">
         <p>OPAC View: <a>
-                      <xsl:attribute name="href">http://<xsl:value-of select="$OPACBaseURL"/>/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/></xsl:attribute>
+                      <xsl:attribute name="href"><xsl:value-of select="$OPACBaseURL"/>/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/></xsl:attribute>
                       <xsl:attribute name="target">_blank</xsl:attribute>
                       Open in new window
                       </a></p>

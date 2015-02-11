@@ -113,7 +113,21 @@ sub _get_uri {
 
     my $protocol = "https://";
 
-    my $return = $protocol . C4::Context->preference('OPACBaseURL');
+    my $uri = C4::Context->preference('OPACBaseURL') // '';
+    if ($uri eq '') {
+        $debug and warn 'OPACBaseURL not set!';
+    }
+    if ($uri =~ /(.*):\/\/(.*)/) {
+        my $oldprotocol = $1;
+        if ($oldprotocol ne 'https') {
+            $debug
+                and warn
+                  'Shibboleth requires OPACBaseURL to use the https protocol!';
+        }
+        $uri = $2;
+    }
+
+    my $return = $protocol . $uri;
     return $return;
 }
 

@@ -10504,6 +10504,29 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.19.00.XXX';
+if ( CheckVersion($DBversion) ) {
+    my $OPACBaseURL = C4::Context->preference('OPACBaseURL');
+    if (defined($OPACBaseURL) && substr($OPACBaseURL,0,4) ne "http") {
+        my $explanation = q{Specify the Base URL of the OPAC, e.g., http://opac.mylibrary.com, including the protocol (http:// or https://). Otherwise, the http:// will be added automatically by Koha upon saving.};
+        $OPACBaseURL = 'http://' . $OPACBaseURL;
+        my $sth_OPACBaseURL = $dbh->prepare( q{
+            UPDATE systempreferences SET value=?,explanation=?
+            WHERE variable='OPACBaseURL'; } );
+        $sth_OPACBaseURL->execute($OPACBaseURL,$explanation);
+    }
+    if (defined($OPACBaseURL)) {
+        $dbh->do( q{ UPDATE letter
+                     SET content=replace(content,
+                                         'http://<<OPACBaseURL>>',
+                                         '<<OPACBaseURL>>')
+                     WHERE content LIKE "%http://<<OPACBaseURL>>%"; } );
+    }
+
+    print "Upgrade to $DBversion done (Bug 5010: Fix OPACBaseURL to include protocol)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.

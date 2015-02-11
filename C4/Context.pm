@@ -609,6 +609,11 @@ sub set_preference {
 
     $value = 0 if ( $type && $type eq 'YesNo' && $value eq '' );
 
+    # force explicit protocol on OPACBaseURL
+    if ($var eq 'opacbaseurl' && substr($value,0,4) !~ /http/) {
+        $value = 'http://' . $value;
+    }
+
     my $sth = $dbh->prepare( "
       INSERT INTO systempreferences
         ( variable, value )

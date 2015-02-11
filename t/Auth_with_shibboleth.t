@@ -27,7 +27,7 @@ use C4::Context;
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 6;
+        plan tests => 9;
     } else {
         plan skip_all => "Need Test::DBIx::Class"
     }
@@ -59,6 +59,7 @@ sub mockedConfig {
 }
 
 ### Mock ->preference
+my $OPACBaseURL = "testopac.com";
 $context->mock( 'preference', \&mockedPref );
 
 sub mockedPref {
@@ -66,7 +67,7 @@ sub mockedPref {
     my $return;
 
     if ( $param eq 'OPACBaseURL' ) {
-        $return = "testopac.com";
+        $return = $OPACBaseURL;
     }
 
     return $return;
@@ -237,8 +238,29 @@ subtest "checkpw_shib tests" => sub {
 };
 
 ## _get_uri
+$OPACBaseURL = "testopac.com";
 is( C4::Auth_with_shibboleth::_get_uri(),
     "https://testopac.com", "https opac uri returned" );
+
+$OPACBaseURL = "http://testopac.com";
+my $result;
+warnings_are { $result = C4::Auth_with_shibboleth::_get_uri() }
+             [ { carped =>
+                 'Shibboleth requires OPACBaseURL to use the https protocol!' },
+             ],
+             "improper protocol - received expected warning";
+is( $result, "https://testopac.com", "https opac uri returned" );
+
+$OPACBaseURL = "https://testopac.com";
+is( C4::Auth_with_shibboleth::_get_uri(),
+    "https://testopac.com", "https opac uri returned" );
+
+$OPACBaseURL = undef;
+warnings_are { $result = C4::Auth_with_shibboleth::_get_uri() }
+             [ { carped => 'OPACBaseURL not set!' },
+             ],
+             "undefined OPACBaseURL - received expected warning";
+is( $result, "https://", "https opac uri returned" );
 
 ## _get_shib_config
 # Internal helper function, covered in tests above

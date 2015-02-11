@@ -397,12 +397,6 @@ if ( (C4::Context->preference("HTML5MediaEnabled") eq 'both') or (C4::Context->p
     $template->param( C4::HTML5Media->gethtml5media($record));
 }
 
-
-# Get OPAC URL
-if (C4::Context->preference('OPACBaseURL')){
-     $template->param( OpacUrl => C4::Context->preference('OPACBaseURL') );
-}
-
 # Displaying tags
 
 my $tag_quantity;
