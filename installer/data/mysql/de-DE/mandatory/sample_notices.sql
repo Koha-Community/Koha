@@ -101,7 +101,7 @@ VALUES (
 
 Ihr Bibliothekskonto wurde angelegt. Bitte bestätigen Sie Ihre E-Mail-Adresse indem Sie auf folgenden Link klicken:
 
-http://<<OPACBaseURL>>/cgi-bin/koha/opac-registration-verify.pl?token=<<borrower_modifications.verification_token>>
+<<OPACBaseURL>>/cgi-bin/koha/opac-registration-verify.pl?token=<<borrower_modifications.verification_token>>
 
 Wenn Sie keine Kontoanmeldung durchgeführt haben, können Sie diese Benachrichtigung ignorieren. Sie wird in Kürze ungültig.
 

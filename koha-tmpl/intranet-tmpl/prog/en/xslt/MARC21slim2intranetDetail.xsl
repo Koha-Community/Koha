@@ -940,7 +940,7 @@
 
         <xsl:if test="$OPACBaseURL!=''">
         <span class="results_summary"><span class="label">OPAC view: </span>
-            <a><xsl:attribute name="href">http://<xsl:value-of select="$OPACBaseURL"/>/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="marc:datafield[@tag=999]/marc:subfield[@code='c']"/></xsl:attribute><xsl:attribute name="target">_blank</xsl:attribute>Open in new window</a>.
+            <a><xsl:attribute name="href"><xsl:value-of select="$OPACBaseURL"/>/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="marc:datafield[@tag=999]/marc:subfield[@code='c']"/></xsl:attribute><xsl:attribute name="target">_blank</xsl:attribute>Open in new window</a>.
         </span>
         </xsl:if>
 

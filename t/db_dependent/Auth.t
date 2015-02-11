@@ -8,7 +8,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 6;
+use Test::More tests => 8;
 use C4::Members;
 use Koha::AuthUtils qw/hash_password/;
 
@@ -106,6 +106,34 @@ $dbh->{RaiseError} = 1;
     ok( ( any { $_->name eq 'KohaOpacLanguage' and $_->value eq 'en' } @$cookies ),
         'BZ9735: invalid language, then default to en');
 }
+
+# Check that there is always an OPACBaseURL set.
+my $input = CGI->new();
+my ( $template1, $borrowernumber, $cookie );
+( $template1, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name => "opac-detail.tt",
+        type => "opac",
+        query => $input,
+        authnotrequired => 1,
+    }
+);
+
+ok( ( any { 'OPACBaseURL' eq $_ } keys %{$template1->{VARS}} ),
+    'OPACBaseURL is in OPAC template' );
+
+my ( $template2 );
+( $template2, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name => "catalogue/detail.tt",
+        type => "intranet",
+        query => $input,
+        authnotrequired => 1,
+    }
+);
+
+ok( ( any { 'OPACBaseURL' eq $_ } keys %{$template2->{VARS}} ),
+    'OPACBaseURL is in Staff template' );
 
 my $hash1 = hash_password('password');
 my $hash2 = hash_password('password');

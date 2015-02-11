@@ -114,7 +114,7 @@ VALUES (
 
 Your library account has been created. Please verify your email address by clicking this link to complete the signup process:
 
-http://<<OPACBaseURL>>/cgi-bin/koha/opac-registration-verify.pl?token=<<borrower_modifications.verification_token>>
+<<OPACBaseURL>>/cgi-bin/koha/opac-registration-verify.pl?token=<<borrower_modifications.verification_token>>
 
 If you did not initiate this request, you may safely ignore this one-time message. The request will expire shortly.'
 );

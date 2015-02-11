@@ -445,9 +445,9 @@ function verify_images() {
 </li>
     [% END %]
     
-    [% IF ( OpacUrl ) %]
+    [% IF ( OPACBaseURL ) %]
         <li><strong>OPAC view:</strong>
-    	<a href="http://[% OpacUrl %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]" target="_blank">Open in new window</a>
+    <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]" target="_blank">Open in new window</a>
 		</li>
 	[% END %]
         <li id="catalogue_detail_marc_preview">

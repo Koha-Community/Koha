@@ -115,7 +115,7 @@ VALUES (
 
 Votre compte de bibliothèque a été créé. Veuillez valider votre adresse email et le processus d''inscription en cliquant sur ce lien:
 
-http://<<OPACBaseURL>>/cgi-bin/koha/opac-registration-verify.pl?token=<<borrower_modifications.verification_token>>
+<<OPACBaseURL>>/cgi-bin/koha/opac-registration-verify.pl?token=<<borrower_modifications.verification_token>>
 
 Si vous n''êtes pas à l''origine de cette inscription, vous pouvez ignorer ce message.'
 );

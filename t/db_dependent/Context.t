@@ -18,8 +18,34 @@ BEGIN {
 		use_ok('C4::Context');
 }
 
-ok($koha = C4::Context->new,  'C4::Context->new');
 ok($dbh = C4::Context->dbh(), 'Getting dbh from C4::Context');
+
+$dbh->begin_work;
+C4::Context->disable_syspref_cache();
+C4::Context->set_preference('OPACBaseURL','junk');
+C4::Context->clear_syspref_cache();
+my $OPACBaseURL = C4::Context->preference('OPACBaseURL');
+is($OPACBaseURL,'http://junk','OPACBaseURL saved with http:// when missing it');
+
+C4::Context->set_preference('OPACBaseURL','https://junk');
+C4::Context->clear_syspref_cache();
+$OPACBaseURL = C4::Context->preference('OPACBaseURL');
+is($OPACBaseURL,'https://junk','OPACBaseURL saved with https:// as specified');
+
+C4::Context->set_preference('OPACBaseURL','http://junk2');
+C4::Context->clear_syspref_cache();
+$OPACBaseURL = C4::Context->preference('OPACBaseURL');
+is($OPACBaseURL,'http://junk2','OPACBaseURL saved with http:// as specified');
+
+C4::Context->set_preference('SillyPreference','random');
+C4::Context->clear_syspref_cache();
+my $SillyPeference = C4::Context->preference('SillyPreference');
+is($SillyPeference,'random','SillyPreference saved as specified');
+C4::Context->clear_syspref_cache();
+C4::Context->enable_syspref_cache();
+$dbh->rollback;
+
+ok($koha = C4::Context->new,  'C4::Context->new');
 my @keys = keys %$koha;
 my $width = 0;
 if (ok(@keys)) { 

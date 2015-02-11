@@ -38,7 +38,7 @@ my $dbh = C4::Context->dbh;
 $dbh->{ AutoCommit } = 0;
 $dbh->{ RaiseError } = 1;
 
-C4::Context->set_preference('OPACBaseURL','localhost');
+C4::Context->set_preference('OPACBaseURL','http://localhost');
 C4::Context->set_preference('staffClientBaseURL','localhost:8080');
 
 my $opac_base_url = C4::Context->preference('OpacBaseURL');

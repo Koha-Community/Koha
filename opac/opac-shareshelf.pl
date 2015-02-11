@@ -185,8 +185,7 @@ sub send_invitekey {
     my ($param) = @_;
     my $fromaddr = C4::Context->preference('KohaAdminEmailAddress');
     my $url =
-        'http://'
-      . C4::Context->preference('OPACBaseURL')
+        C4::Context->preference('OPACBaseURL')
       . "/cgi-bin/koha/opac-shareshelf.pl?shelfnumber="
       . $param->{shelfnumber}
       . "&op=accept&key=";

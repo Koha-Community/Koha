@@ -389,6 +389,7 @@ sub get_template_and_user {
         noItemTypeImages   => C4::Context->preference("noItemTypeImages"),
         marcflavour        => C4::Context->preference("marcflavour"),
         persona            => C4::Context->preference("persona"),
+        OPACBaseURL        => C4::Context->preference('OPACBaseURL'),
     );
     if ( $in->{'type'} eq "intranet" ) {
         $template->param(
@@ -460,11 +461,6 @@ sub get_template_and_user {
             $opac_name = C4::Context->userenv->{'branch'};
         }
 
-        # FIXME Under Plack the CGI->https method always returns 'OFF' ($using_https will be set to 0 in this case)
-        my $opac_base_url = C4::Context->preference("OPACBaseURL");    #FIXME uses $using_https below as well
-        if ( !$opac_base_url ) {
-            $opac_base_url = $ENV{'SERVER_NAME'} . ( $ENV{'SERVER_PORT'} eq ( $using_https ? "443" : "80" ) ? '' : ":$ENV{'SERVER_PORT'}" );
-        }
         $template->param(
             OpacAdditionalStylesheet                   => C4::Context->preference("OpacAdditionalStylesheet"),
             AnonSuggestions                       => "" . C4::Context->preference("AnonSuggestions"),
@@ -483,7 +479,6 @@ sub get_template_and_user {
             OPACUserCSS                           => "" . C4::Context->preference("OPACUserCSS"),
             OPACViewOthersSuggestions             => "" . C4::Context->preference("OPACViewOthersSuggestions"),
             OpacAuthorities                       => C4::Context->preference("OpacAuthorities"),
-            OPACBaseURL                           => ( $using_https ? "https://" : "http://" ) . $opac_base_url,
             opac_css_override                     => $ENV{'OPAC_CSS_OVERRIDE'},
             opac_search_limit                     => $opac_search_limit,
             opac_limit_override                   => $opac_limit_override,
