@@ -10776,6 +10776,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.19.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT INTO `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`)
+        VALUES ('FeeOnChangePatronCategory','1','','If set, when a patron changes to a category with enrolment fee, a fee is added','YesNo')
+    });
+    print "Upgrade to $DBversion done (Bug 13697 - Option to don't add a fee, if the patron changes to a category with enrolment fee)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
