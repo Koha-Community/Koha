@@ -1,4 +1,4 @@
-#!/usr/bin/perl 
+#!/usr/bin/perl
 
 
 # Copyright 2000-2002 Katipo Communications
@@ -686,6 +686,18 @@ sub build_tabs {
     $template->param( BIG_LOOP => \@BIG_LOOP );
 }
 
+=head enforceField001FromNewBiblionumber
+
+It is important to make sure the Record has a field 001.
+If 001 has not been catalogued, default to the new biblionumber.
+=cut
+sub enforceField001FromNewBiblionumber {
+    my ($record, $biblionumber, $frameworkcode) = @_;
+    my $f001Content = ($record->field('001')) ? $record->field('001')->data() : undef;
+    $record->insert_fields_ordered( MARC::Field->new('001',$biblionumber) ) unless $f001Content;
+    ModBiblio( $record, $biblionumber, $frameworkcode );
+}
+
 # ========================
 #          MAIN
 #=========================
@@ -855,6 +867,7 @@ if ( $op eq "addbiblio" ) {
         }
         else {
             ( $biblionumber, $oldbibitemnum ) = AddBiblio( $record, $frameworkcode );
+            enforceField001FromNewBiblionumber($record, $biblionumber, $frameworkcode);
         }
         if ($redirect eq "items" || ($mode ne "popup" && !$is_a_modif && $redirect ne "view" && $redirect ne "just_save")){
 	    if ($frameworkcode eq 'FA'){
