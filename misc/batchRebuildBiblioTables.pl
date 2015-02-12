@@ -20,28 +20,63 @@ use Time::HiRes qw(gettimeofday);
 
 use Getopt::Long;
 my ( $input_marc_file, $number) = ('', 0);
-my ($version, $confirm, $test_parameter);
+my ($help, $confirm, $test_parameter);
+my ($updateUpstream, $updateDownstream, $limitedColumns);
 GetOptions(
-    'c' => \$confirm,
-    'h' => \$version,
-    't' => \$test_parameter,
+    'c|confirm'    => \$confirm,
+    'h|help'       => \$help,
+    't|test'       => \$test_parameter,
+    'u|upstream'   => \$updateUpstream,
+    'd|downstream' => \$updateDownstream,
+    'columns:s'    => \$limitedColumns,
 );
 
-if ($version || (!$confirm)) {
-    print <<EOF
-This script rebuilds the non-MARC DB from the MARC values.
+my $helpText = <<EOF
+This script rebuilds the non-MARC DB from the MARC values and vice versa.
 You can/must use it when you change your mapping.
 
 Example: you decide to map biblio.title to 200\$a (it was previously mapped to 610\$a).
 Run this script or you will have strange results in OPAC !
 
+ -h | --help        This friendly helper!
+ -u | --upstream    Update MARC Records from the database columns using "Koha to MARC mappings".
+ -d | --downstream  Update database columns from the MARC Records  using "Koha to MARC mappings".
+ -c | --confirm     Confirm, that you want to batch modify all of your Bibliographic records.
+                    It is better to double check your mappings now since this operation cannot be undone.
+                    This will take a long time...
+ -t | --test        Test only, change nothing in DB
+ --columns          NOT IMPLEMENTED YET! Limit the updates to this list of table
+                    columns, instead of updating all "Koha to MARC mappings".
+                    Example: --columns "biblioitems.publicationyear, biblioitems.datereceived, biblio.copyrightdate"
+                    Only columns for tables biblio and biblioitems are supported.
+
 Syntax:
-\t./batchRebuildBiblioTables.pl -h (or without arguments => shows this screen)
-\t./batchRebuildBiblioTables.pl -c (c like confirm => rebuild non marc DB (may be long)
-\t-t => test only, change nothing in DB
+./batchRebuildBiblioTables.pl --help
+./batchRebuildBiblioTables.pl --test --upstream
+./batchRebuildBiblioTables.pl --confirm --downstream
 EOF
 ;
-    exit;
+
+if ($help) {
+    print $helpText;
+    exit();
+}
+if (not($updateUpstream) && not($updateDownstream)) {
+    print $helpText."\n\nyou must choose either --upstream or --downstream !\n";
+    exit();
+}
+if (!$confirm) {
+    print $helpText."\n\nRead the help file!\n";
+    exit();
+}
+my @limitedColumns = split(/\s*,\s*/,$limitedColumns);
+if ($limitedColumns && scalar(@limitedColumns) == 0) {
+    print $helpText."\n\nCouldn't parse --columns '$limitedColumns'!\n";
+    exit();
+}
+elsif (scalar(@limitedColumns)) {
+    @limitedColumns = undef;
+    #TODO limited columns parsing.
 }
 
 my $dbh = C4::Context->dbh;
@@ -56,6 +91,14 @@ my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.itemnumber",'');
 # $dbh->do("lock tables biblio write, biblioitems write, items write, marc_biblio write, marc_subfield_table write, marc_blob_subfield write, marc_word write, marc_subfield_structure write");
 my $sth = $dbh->prepare("SELECT biblionumber FROM biblio");
 $sth->execute;
+
+if ($updateUpstream) {
+    while (my ($biblionumber) = $sth->fetchrow) {
+        DB_ToRecord($biblionumber, \@limitedColumns);
+    }
+    exit();
+}
+
 # my ($biblionumbermax) =  $sth->fetchrow;
 # warn "$biblionumbermax <<==";
 my @errors;
@@ -100,4 +143,11 @@ sub localNEWmodbiblio {
     C4::Biblio::_koha_modify_biblio( $dbh, $oldbiblio, $frameworkcode );
     C4::Biblio::_koha_modify_biblioitem_nonmarc( $dbh, $oldbiblio );
     return 1;
+}
+
+sub DB_ToRecord {
+    my ($biblionumber) = @_;
+
+    my $errors = C4::Biblio::UpdateKohaToMarc($biblionumber);
+    print "bn: $biblionumber, $errors\n" if $errors;
 }

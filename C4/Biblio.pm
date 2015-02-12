@@ -2593,6 +2593,88 @@ sub TransformKohaToMarc {
     return $record;
 }
 
+=head UpdateKohaToMarc
+
+    C4::Biblio::UpdateKohaToMarc($bibliodata, $record);
+    ||
+    C4::Biblio::UpdateKohaToMarc($biblionumberOrBibliodata);
+    ||
+    C4::Biblio::UpdateKohaToMarc($biblionumber);
+
+Overwrites all MARC Fields mapped to Koha biblio or biblioitems -tables with
+their values from DB.
+items-table columns are not updated to the MARC Record, because they are no longer stored there.
+
+@PARAM1  MANDATORY
+         Integer, biblionumber of the target Biblio. This updates all DB coluns to the MARC record which takes a long time.
+         OR
+         Hash, with keys matching column names of biblio- and biblioitems-tables. biblionumber must be present.
+               Eg. {biblio.biblionumber => 1213, biblioitems.agerestriction => 'K18', biblioitems.publishercode => 'PKA'}
+               This way only the given columns are updated to the MARC record, possibly skipping unnecessary work.
+@PARAM2  OPTIONAL
+               MARC::Record-object, to have it's Koha mapped fields updated.
+@RETURNS String, Error code:
+                        'NOBIBLIODATA' : Couldn't find the biblio columns from the given $biblionumberOrBibliodata, or the biblionumber is missing.
+                        'NORECORD'     : The given $record is not a MARC::Record-object
+=cut
+sub UpdateKohaToMarc {
+    my ($biblionumberOrBibliodata, $record) = @_;
+
+    my $bibdata;
+
+    unless (ref $biblionumberOrBibliodata) { #We have a SCALAR, eg. a biblionumber.
+        $bibdata = {};
+        my @biblioitems = C4::Biblio::GetBiblioItemByBiblioNumber($biblionumberOrBibliodata);
+        my $biblioitem = $biblioitems[0];
+        return 'NOBIBLIODATA' unless $biblioitem;
+        map {$bibdata->{"biblioitems.$_"} = $biblioitem->{$_}} keys($biblioitem);
+        my $biblio = C4::Biblio::GetBiblio($biblionumberOrBibliodata);
+        return 'NOBIBLIODATA' unless $biblio;
+        map {$bibdata->{"biblio.$_"} = $biblio->{$_}} keys(%$biblio);
+        $bibdata->{biblionumber} = $biblionumberOrBibliodata;
+    }
+    else {
+        $bibdata = $biblionumberOrBibliodata;
+    }
+    my $biblionumber = $bibdata->{'biblio.biblionumber'} || $bibdata->{'biblio.biblionumber'};
+    return 'NOBIBLIODATA' if (not($bibdata) || not($biblionumber));
+    unless (ref $record eq 'MARC::Record') {
+        $record = C4::Biblio::GetMarcBiblio(  $bibdata->{biblionumber}  );
+    }
+    return 'NORECORD' unless $record;
+    my $frameworkcode = ($bibdata->{frameworkcode}) ? $bibdata->{frameworkcode} : C4::Biblio::GetFrameworkCode($bibdata->{biblionumber});
+
+    my $mss = GetMarcSubfieldStructure( $frameworkcode ); #Get the mapping rules.
+    my $db_columns_as_fields = {};
+    while ( my ($kohafield, $value) = each %$bibdata ) {
+        next unless $value;
+        next unless exists $mss->{$kohafield};
+        next unless $mss->{$kohafield};
+        my $tagfield    = $mss->{$kohafield}{tagfield} . '';
+        my $tagsubfield = $mss->{$kohafield}{tagsubfield};
+        foreach my $value ( split(/\s?\|\s?/, $value, -1) ) {
+            next if $value eq '';
+            $db_columns_as_fields->{$tagfield} //= {};
+            $db_columns_as_fields->{$tagfield}->{$tagsubfield} = $value;
+        }
+    }
+    foreach my $fieldCode (sort keys %$db_columns_as_fields) {
+        my $subfields = $db_columns_as_fields->{ $fieldCode };
+
+        my @existingFields = $record->field($fieldCode);
+        if ($existingFields[0]) {
+            $existingFields[0]->update(each $subfields);
+        }
+        else {
+            my $newField = MARC::Field->new($fieldCode, '', '', each $subfields);
+            $record->insert_fields_ordered($newField);
+        }
+    }
+
+    C4::Biblio::ModBiblio($record, $biblionumber, $frameworkcode);
+    return undef;
+}
+
 =head2 PrepHostMarcField
 
     $hostfield = PrepHostMarcField ( $hostbiblionumber,$hostitemnumber,$marcflavour )
