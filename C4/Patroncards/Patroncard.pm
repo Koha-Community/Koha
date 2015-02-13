@@ -173,13 +173,10 @@ sub draw_text {
             }
             box ($origin_llx, $box_lly, $self->{'width'} - $text_attribs->{'llx'}, $box_height, $pdf);
         }
-#        my $font_resource = $pdf->TTFont("/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman_Bold.ttf");
-#        $pdf->FontSize($text_attribs->{'font_size'});
-        my $font_resource = $pdf->Font($text_attribs->{'font'});
+        $pdf->Font($text_attribs->{'font'});
+        $pdf->FontSize($text_attribs->{'font_size'});
         foreach my $line (@lines) {
-#            $pdf->Text($line->{'Tx'}, $line->{'Ty'}, $line->{'line'});
-            my $text_line = "BT /$font_resource $text_attribs->{'font_size'} Tf $line->{'Tx'} $line->{'Ty'} Td $line->{'Tw'} Tw ($line->{'line'}) Tj ET";
-            $pdf->Add($text_line);
+            $pdf->Text($line->{'Tx'}, $line->{'Ty'}, $line->{'line'});
         }
     }
 }
