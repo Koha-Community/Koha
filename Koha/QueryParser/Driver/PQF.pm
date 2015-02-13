@@ -701,6 +701,8 @@ sub TEST_SETUP {
     $self->add_bib1_filter_map( 'biblioserver', 'copydate', { 'target_syntax_callback' => \&Koha::QueryParser::Driver::PQF::date_filter_target_callback, '1' => '30', '4' => '4' });
     $self->add_bib1_filter_map( 'biblioserver', 'pubdate', { 'target_syntax_callback' => \&Koha::QueryParser::Driver::PQF::date_filter_target_callback, '1' => 'pubdate', '4' => '4' });
     $self->add_bib1_filter_map( 'biblioserver', 'acqdate', { 'target_syntax_callback' => \&Koha::QueryParser::Driver::PQF::date_filter_target_callback, '1' => 'Date-of-acquisition', '4' => '4' });
+    $self->add_bib1_field_map('keyword' => 'datereceived' => 'biblioserver' => { '1' => '9014' } );
+    $self->add_search_field_alias( 'keyword' => 'date-of-receival' => 'datereceived' );
     $self->add_bib1_field_map('keyword' => 'isbn' => 'biblioserver' => { '1' => '7' } );
     $self->add_search_field_alias( 'keyword' => 'isbn' => 'nb' );
     $self->add_bib1_field_map('keyword' => 'issn' => 'biblioserver' => { '1' => '8' } );

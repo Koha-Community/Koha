@@ -56,6 +56,7 @@ INSERT IGNORE INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, 
 
 INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('942', '0', 'Koha issues (borrowed), all copies', 'Koha issues (borrowed), all copies', 0, 0, 'biblioitems.totalissues', 9, '', '', '', NULL, -5, '', '', '', NULL),
+                ('942', '1', 'First date received',                'First date received',                0, 0, 'biblioitems.datereceived',9, '', '', '', NULL, 0,  '', '', '', NULL),
 		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, 'cn_source', '', '', NULL, 0, '', '', '', NULL),
 		('942', '6', 'Koha normalized classification for sorting', 'Koha normalized classification for sorting', 0, 0, 'biblioitems.cn_sort', -1, '', '', '', 0, 7, '', '', '', NULL),
 		('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, '', '', '', NULL),
@@ -114,6 +115,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('952', 'p', 'Barcode', 'Barcode', 0, 0, 'items.barcode', 10, '', '', 'barcode.pl', 0, 0, '', '', '', NULL),
 		('952', 'q', 'Checked out', 'Checked out', 0, 0, 'items.onloan', 10, '', '', '', NULL, -5, '', '', '', NULL),
 		('952', 'r', 'Date last seen', 'Date last seen', 0, 0, 'items.datelastseen', 10, '', '', '', NULL, -5, '', '', '', NULL),
+                ('952', 'R', 'Date received',  'Date received',  0, 0, 'items.datereceived', 10, '', '', '', NULL, 0,  '', '', '', NULL),
              ('952', 's', 'Date last checked out', 'Date last checked out', 0, 0, 'items.datelastborrowed', 10, '', '', '', NULL, -5, '', '', '', NULL),
 		('952', 't', 'Copy number', 'Copy number', 0, 0, 'items.copynumber', 10, '', '', '', NULL, 0, '', '', '', NULL),
 		('952', 'u', 'Uniform Resource Identifier', 'Uniform Resource Identifier', 0, 0, 'items.uri', 10, '', '', '', 1, 0, '', '', '', NULL),

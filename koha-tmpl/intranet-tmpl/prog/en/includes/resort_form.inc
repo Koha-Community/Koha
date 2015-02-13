@@ -70,6 +70,18 @@
 [% ELSE %]
 <option value="acqdate_asc">Acquisition date: oldest to newest</option>
  [% END %]
+
+[% IF ( sort_by == "datereceived_dsc" ) %]
+    <option value="datereceived_dsc" selected="selected">Receival date: newest to oldest</option>
+[% ELSE %]
+    <option value="datereceived_dsc">Receival date: newest to oldest</option>
+[% END %]
+
+[% IF ( sort_by == "datereceived_asc" ) %]
+    <option value="datereceived_asc" selected="selected">Receival date: oldest to newest</option>
+[% ELSE %]
+    <option value="datereceived_asc">Receival date: oldest to newest</option>
+[% END %]
 </optgroup>
 
 <optgroup label="Title">

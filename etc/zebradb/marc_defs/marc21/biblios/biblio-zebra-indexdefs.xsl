@@ -1268,6 +1268,13 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
       </xslo:if>
     </xslo:for-each>
     <xslo:for-each select="marc:subfield">
+      <xslo:if test="contains('1', @code)">
+        <z:index name="Date-of-receival:w Date-of-receival:d Date-of-receival:s">
+          <xslo:value-of select="."/>
+        </z:index>
+      </xslo:if>
+    </xslo:for-each>
+    <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('2', @code)">
         <z:index name="cn-bib-source:w">
           <xslo:value-of select="."/>
@@ -1503,6 +1510,13 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('r', @code)">
         <z:index name="datelastseen:w">
+          <xslo:value-of select="."/>
+        </z:index>
+      </xslo:if>
+    </xslo:for-each>
+    <xslo:for-each select="marc:subfield">
+      <xslo:if test="contains('R', @code)">
+        <z:index name="Date-of-receival:w Date-of-receival:d">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>

@@ -38,5 +38,59 @@ if ( CheckVersion($DBversion) ) {
                         IF(IFNULL(i.datereceived,'9999-12-31') < IFNULL(di.datereceived,'9999-12-31'), i.datereceived, di.datereceived);");
     }
     print "Upgrade to $DBversion done (Bug 13707 - Add datereceived-column and and search index, for genuinely knowing the real Biblios datereceived.)\n";
+
+    require C4::Biblio;
+    #Check if it is safe to do the upgrade by looking if the default mappings have alredy been taken.
+    my $sth3 = $dbh->prepare("SELECT 1 FROM marc_subfield_structure WHERE (tagfield = '942' AND tagsubfield = '1') OR (tagfield = '952' AND tagsubfield = 'R')");
+    $sth3->execute();
+    my $mappingUsed = $sth3->fetchall_arrayref();
+    $sth3->finish();
+    if (@$mappingUsed > 0) {
+        print "Upgrade to $DBversion failed (Bug 13707 - Adding a new column datereceived for items and biblioitems. New sortable Zebra index! ). The default \"Koha to MARC mappings\" for biblioitems.datereceived are already taken. You must manually map biblioitems.datereceived to a MARC framework to enable searching by datereceived. You can see the subroutine inside this upgrade clause on how to do that.\n";
+    }
+    else {
+        my $doTheDirtyDeed = sub {
+            print "Upgrading Bug 13707, mapping biblioitems.datereceived to MARC 954\$1 and mapping items.datereceived to 952\$R. Then putting biblioitems.datereceived to all MARC Records. This will take several hours.\n";
+
+            my $sth = $dbh->prepare("SELECT frameworkcode FROM biblio_framework");
+            $sth->execute();
+            my $frameworks = $sth->fetchall_arrayref();
+            $sth->finish();
+            push @$frameworks, ['']; #Add the Default framework
+
+            ###Add the default "Koha to MARC mappings"            ###
+            foreach my $fwAry (@$frameworks) {
+                my $framework = $fwAry->[0];
+                $dbh->do("INSERT INTO marc_subfield_structure VALUES ('952','R','Date received','Date received','0','0','items.datereceived','10','','','','0','0','$framework',NULL,'','','9999');");
+                $dbh->do("INSERT INTO marc_subfield_structure VALUES ('942','1','First date received','First date received','0','0','biblioitems.datereceived','9','','','','0','0','$framework',NULL,'','','9999');");
+            }
+            my ( $datereceivedFieldCode, $datereceivedSubfieldCode ) =
+                    C4::Biblio::GetMarcFromKohaField( "biblioitems.datereceived", '' );
+            ###Add the biblioitems.datereceived to all MARC Records to the mapped location.          ###
+            #Fetch all biblios
+            my $sth2 = $dbh->prepare(" SELECT b.biblionumber, datereceived, frameworkcode FROM biblioitems bi LEFT JOIN biblio b ON b.biblionumber = bi.biblionumber WHERE datereceived IS NOT NULL; ");
+            $sth2->execute();
+            my $biblios = $sth2->fetchall_arrayref({});
+            $sth2->finish();
+            foreach my $b (@$biblios) {
+                #UPSERT the datereceived
+                my $record = C4::Biblio::GetMarcBiblio(  $b->{biblionumber}  );
+                my @existingFields = $record->field($datereceivedFieldCode);
+                if ($existingFields[0]) {
+                    $existingFields[0]->update($datereceivedSubfieldCode => $b->{datereceived});
+                }
+                else {
+                    my $newField = MARC::Field->new($datereceivedFieldCode, '', '', $datereceivedSubfieldCode => $b->{datereceived});
+                    $record->insert_fields_ordered($newField);
+                }
+                C4::Biblio::ModBiblio($record, $b->{biblionumber}, $b->{frameworkcode});
+            }
+
+            print "Upgrade to $DBversion done (Bug 13707 - Adding a new column datereceived for items and biblioitems. New sortable Zebra index! )\n";
+            print "-    All MARC records have now been updated, but Zebra needs to be fully reindexed.\n";
+        };
+        &$doTheDirtyDeed();
+    }
+
     SetVersion ($DBversion);
 }

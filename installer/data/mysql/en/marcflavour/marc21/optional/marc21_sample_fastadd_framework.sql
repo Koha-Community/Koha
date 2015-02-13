@@ -71,6 +71,7 @@ UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '500' AND tagsub
 UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '500' AND tagsubfield = 'x' AND frameworkcode = 'FA';
 UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '500' AND tagsubfield = 'z' AND frameworkcode = 'FA';
 UPDATE marc_subfield_structure SET hidden ='5' WHERE tagfield = '942' AND tagsubfield = '0' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '942' AND tagsubfield = '1' AND frameworkcode = 'FA';
 UPDATE marc_subfield_structure SET hidden ='5' WHERE tagfield = '942' AND tagsubfield = 'c' AND frameworkcode = 'FA';
 UPDATE marc_subfield_structure SET hidden ='5' WHERE tagfield = '942' AND tagsubfield = 'n' AND frameworkcode = 'FA';
 UPDATE marc_subfield_structure SET hidden ='5' WHERE tagfield = '942' AND tagsubfield = 's' AND frameworkcode = 'FA';
@@ -84,5 +85,6 @@ UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsub
 UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = 'n' AND frameworkcode = 'FA';
 UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = 'q' AND frameworkcode = 'FA';
 UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = 'r' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = 'R' AND frameworkcode = 'FA';
 UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = 's' AND frameworkcode = 'FA';
 UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = 'x' AND frameworkcode = 'FA';
