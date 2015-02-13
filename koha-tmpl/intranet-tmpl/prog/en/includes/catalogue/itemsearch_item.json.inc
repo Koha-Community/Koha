@@ -2,11 +2,15 @@
 [%- biblio = item.biblio -%]
 [%- biblioitem = item.biblioitem -%]
 [
-  "<a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber %]' title='Go to record detail page'>[% biblio.title |html %]</a> by [% biblio.author |html %]",
+  "[% FILTER escape_quotes = replace('"', '\"') ~%]
+    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber %]" title="Go to record detail page">[% biblio.title |html %]</a> by [% biblio.author |html %]
+  [%~ END %]",
   "[% biblioitem.publicationyear |html %]",
   "[% biblioitem.publishercode |html %]",
   "[% biblioitem.collectiontitle |html %]",
-  "<a href='/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio.biblionumber %]#item[% item.itemnumber %]' title='Go to item details'>[% item.barcode |html %]</a>",
+  "[% FILTER escape_quotes ~%]
+    <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio.biblionumber %]#item[% item.itemnumber %]" title="Go to item details">[% item.barcode |html %]</a>
+  [%~ END %]",
   "[% item.itemcallnumber |html %]",
   "[% Branches.GetName(item.homebranch) |html %]",
   "[% Branches.GetName(item.holdingbranch) |html %]",
@@ -14,5 +18,7 @@
   "[% item.stocknumber |html %]",
   "[% item.status |html %]",
   "[% (item.issues || 0) |html %]",
-  "<a href='/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber %]&itemnumber=[% item.itemnumber %]'>Edit</a>"
+  "[% FILTER escape_quotes ~%]
+    <a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber %]&itemnumber=[% item.itemnumber %]">Edit</a>
+  [%~ END %]"
 ]
