@@ -157,9 +157,11 @@ ModItem(
         price                => $unitprice,
         replacementprice     => $order->{rrp},
         replacementpricedate => $datereceived,
+        datereceived         => DateTime->now( time_zone => C4::Context->tz() )->iso8601(),
     },
     $biblionumber,
     $_
 ) foreach GetItemnumbersFromOrder($new_ordernumber);
+C4::Biblio::UpdateDatereceived($biblionumber);
 
 print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid&sticky_filters=1");

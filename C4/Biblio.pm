@@ -103,6 +103,7 @@ BEGIN {
       &TransformKohaToMarc
       &PrepHostMarcField
 
+      &UpdateDatereceived
       &CountItemsIssued
       &CountBiblioInOrders
       &GetSubscriptionsId
@@ -2551,6 +2552,95 @@ sub GetFrameworkCode {
     return $frameworkcode;
 }
 
+=head UpdateDatereceived
+
+    my $error = C4::Biblio::UpdateDatereceived($bibliodataOrBiblionumber, $datereceived, $record);
+    my $error = C4::Biblio::UpdateDatereceived({biblionumber => 1213, datereceived => '2014-12-10 10:12:33', ...}, DateTime, MARC::Record);
+
+Updates the biblioitems.datereceived and the corresponding MARC-Subfield if the datereceived
+hasn't been set for this Biblio yet. Datereceived for the Biblio is the first moment
+the Biblio became available for the library and shouldn't be updated for subsequent receivals.
+
+@PARAM1 MANDATORY
+        Integer, koha.biblio.biblionumber
+        OR
+        Hash, Like returned by C4::Biblio::GetBiblioData().
+              biblionumber must be a hash key!
+              datereceived must be present as well, otherwise the koha.biblioitems.datereceived
+              will be overwritten, unless this is intended.
+@PARAM2 OPTIONAL
+        DateTime-object, of the moment of receival.
+        Defaults to Now() if not given.
+@PARAM3 OPTIONAL
+        MARC::Record, of the biblio to be updated.
+        By default is fetched using the supplied biblionumber.
+@RETURNS String, error code:
+                 'NO_BIBLIODATA', couldn't find the koha.biblioitems-row
+                 'NO_BIBLIONUMBER', no biblionumber given as parameter or couldn't
+                                    find it from the Hash
+                 'NOT_DATETIME', $datereceived is not a DateTime-object
+                 'NO_RECORD', The given MARC::Record is invalid, or no MARC Record
+                              could be found using the supplied biblionumber.
+                 'MODBIBLIO_ERROR', C4::Biblio::ModBiblio() failed.
+
+=cut
+sub UpdateDatereceived {
+    my ($biblionumberOrBibliodata, $datereceived, $record) = @_;
+
+    my $bibdata;
+    unless (ref $biblionumberOrBibliodata) { #We have a SCALAR, eg. a biblionumber.
+        my @biblioitems = C4::Biblio::GetBiblioItemByBiblioNumber($biblionumberOrBibliodata);
+        $bibdata = $biblioitems[0];
+    }
+    else {
+        $bibdata = $biblionumberOrBibliodata;
+    }
+    return 'NO_BIBLIODATA' if (not($bibdata));
+    return 'NO_BIBLIONUMBER' if (not($bibdata->{biblionumber}));
+
+    if ($datereceived && ref $datereceived ne 'DateTime') {
+        return 'NOT_DATETIME';
+    }
+    #Use the given DateTime or Use Now()
+    $datereceived = ($datereceived) ? $datereceived->iso8601() : DateTime->now( time_zone => C4::Context->tz() )->iso8601();
+
+    #Make sure to only update the datereceived for the Biblio if it hasn't been set yet.
+    if ($bibdata->{datereceived}) {
+        return undef; #All is OK and we will preserve the first moment of datereceived.
+    }
+
+    if (not($record)) {
+        $record = C4::Biblio::GetMarcBiblio($bibdata->{biblionumber});
+    }
+    elsif (ref($record) ne 'MARC::Record') {
+        return 'NO_RECORD';
+    }
+    return 'NO_RECORD' unless $record;
+
+    my $frameworkcode = ($bibdata->{frameworkcode}) ? $bibdata->{frameworkcode} : C4::Biblio::GetFrameworkCode($bibdata->{biblionumber});
+
+    #Get the mapped MARC-fields for items.datereceived
+    my ( $datereceivedFieldCode, $datereceivedSubfieldCode ) =
+            C4::Biblio::GetMarcFromKohaField( "biblioitems.datereceived", $frameworkcode );
+    ( $datereceivedFieldCode, $datereceivedSubfieldCode ) =
+            C4::Biblio::GetMarcFromKohaField( "biblioitems.datereceived", '' ) unless ($datereceivedFieldCode);
+
+    #UPSERT the datereceived DB column to MARC
+    my @existingFields = $record->field($datereceivedFieldCode);
+    if ($existingFields[0]) {
+        $existingFields[0]->update($datereceivedSubfieldCode => $datereceived);
+    }
+    else {
+        my $newField = MARC::Field->new($datereceivedFieldCode, '', '', $datereceivedSubfieldCode => $datereceived);
+        $record->insert_fields_ordered($newField);
+    }
+
+    my $ok = C4::Biblio::ModBiblio($record, $bibdata->{biblionumber}, $frameworkcode);
+    return 'MODBIBLIO_ERROR' unless $ok;
+    return undef; #All is OK!
+}
+
+
 =head2 TransformKohaToMarc
 
     $record = TransformKohaToMarc( $hash )
@@ -3605,6 +3695,7 @@ sub _koha_modify_biblioitem_nonmarc {
         issn            = ?,
         publicationyear = ?,
         publishercode   = ?,
+        datereceived    = ?,
         volumedate      = ?,
         volumedesc      = ?,
         collectiontitle = ?,
@@ -3632,7 +3723,7 @@ sub _koha_modify_biblioitem_nonmarc {
     my $sth = $dbh->prepare($query);
     $sth->execute(
         $biblioitem->{'biblionumber'},     $biblioitem->{'volume'},           $biblioitem->{'number'},                $biblioitem->{'itemtype'},
-        $biblioitem->{'isbn'},             $biblioitem->{'issn'},             $biblioitem->{'publicationyear'},       $biblioitem->{'publishercode'},
+        $biblioitem->{'isbn'},             $biblioitem->{'issn'},             $biblioitem->{'publicationyear'},       $biblioitem->{'publishercode'}, $biblioitem->{datereceived},
         $biblioitem->{'volumedate'},       $biblioitem->{'volumedesc'},       $biblioitem->{'collectiontitle'},       $biblioitem->{'collectionissn'},
         $biblioitem->{'collectionvolume'}, $biblioitem->{'editionstatement'}, $biblioitem->{'editionresponsibility'}, $biblioitem->{'illus'},
         $biblioitem->{'pages'},            $biblioitem->{'bnotes'},           $biblioitem->{'size'},                  $biblioitem->{'place'},
