@@ -23,16 +23,11 @@ use Template::Plugin::Filter;
 use base qw( Template::Plugin::Filter );
 
 use Koha::Number::Price;
-our $DYNAMIC = 1;
 
 sub filter {
-    my ( $self, $value, $args, $config ) = @_;
+    my ( $self, $value ) = @_;
     $value ||= 0;
-    $config->{on_editing} //= 0;
-    my $formatted_price;
-    return $config->{on_editing}
-        ? Koha::Number::Price->new( $value )->format_for_editing
-        : Koha::Number::Price->new( $value )->format;
+    return Koha::Number::Price->new( $value )->format;
 }
 
 1;
