@@ -1470,24 +1470,6 @@ install :: all install_koha set_koha_ownership set_koha_permissions warn_koha_en
           unless exists $skip_directories->{$key};
 			}
 	}
-								# We can attempt some creative things with command line utils such as CACLS which allows permission
-
-	    foreach my $key (sort keys %$target_directories) {
-		    $install .= qq(
-KOHA_INST_$key = blib/$key
-KOHA_DEST_$key = $target_directories->{$key}
-) unless exists $skip_directories->{$key};
-		}
-		$install .= qq(
-install :: all install_koha warn_koha_env_vars
-\t\$(NOECHO) \$(NOOP)
-);
-		$install .= "install_koha ::\n";
-		$install .= "\t\$(MOD_INSTALL) \\\n";
-		foreach my $key (sort keys %$target_directories) {
-			$install .= "\t\t\$(KOHA_INST_$key) \$(KOHA_DEST_$key) \\\n"
-        unless exists $skip_directories->{$key};
-		}
 
 	$install .= "\n";
 
