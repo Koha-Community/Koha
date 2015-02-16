@@ -44,17 +44,19 @@
                             </fieldset>
                             <input type="hidden" name="op" value="show" />
 
-                            <fieldset class="rows">
-                                <legend>Use default values</legend>
-                                <ol class="radio">
-                                    <li>
-                                        <label>
-                                            <input type="checkbox" name="use_default_values" id="use_default_values" />
-                                            Populate fields with default values from default framework
-                                        </label>
-                                    </li>
-                                </ol>
-                            </fieldset>
+                            [% UNLESS del %]
+                                <fieldset class="rows">
+                                    <legend>Use default values</legend>
+                                    <ol class="radio">
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="use_default_values" id="use_default_values" />
+                                                Populate fields with default values from default framework
+                                            </label>
+                                        </li>
+                                    </ol>
+                                </fieldset>
+                            [% END %]
 
                             [% IF ( del ) %]<input type="hidden" name="del" value="1" />[% END %]
                             <fieldset class="action">
