@@ -446,8 +446,6 @@ my %config_defaults = (
 
 # set some default configuration options based on OS
 # more conditions need to be added for other OS's
-# this should probably also incorporate usage of Win32::GetOSName() and/or Win32::GetOSVersion()
-# to allow for more granular decisions based on which Win32 platform
 
 warn "Your platform appears to be $^O.\n" if $DEBUG;
 
@@ -1202,7 +1200,7 @@ sub get_target_directories {
 
     my @basedir = File::Spec->splitdir($directories);
 
-	if ( $^O eq 'cygwin' ) { shift @basedir; unshift @basedir, 'c:'; }   # in a cygwin environment, $volume is returned empty
+    if ( $^O eq 'cygwin' ) { shift @basedir; unshift @basedir, 'c:'; }   # in a cygwin environment, $volume is returned empty
 
     my $package = pop @basedir;
 
@@ -1379,16 +1377,12 @@ sub display_configuration {
     print "perl Makefile.PL\n";
     print "\nor\n\n";
     print "DB_USER=my_koha DOC_DIR=/usr/local/info perl Makefile.PL\n\n";
-    print "If installing on a Win32 platform, be sure to use:\n";
-    print "'dmake -x MAXLINELENGTH=300000'\n\n";
 }
 
 =head2 find_zebra
 
 Attempt to find Zebra - check user's PATH and
 a few other directories for zebrasrv and zebraidx.
-
-FIXME: doesn't handle Win32
 
 =cut
 
@@ -1410,8 +1404,6 @@ sub find_zebra {
 }
 
 package MY;
-
-# This will have to be reworked in order to accommodate Win32...
 
 sub test {
     my $self = shift;
