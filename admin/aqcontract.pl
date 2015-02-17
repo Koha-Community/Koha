@@ -29,14 +29,14 @@ use C4::Output;
 use C4::Contract;
 use Koha::DateUtils;
 
-use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Booksellers;
 
 my $input          = new CGI;
 my $contractnumber = $input->param('contractnumber');
 my $booksellerid   = $input->param('booksellerid');
 my $op             = $input->param('op') || 'list';
 
-my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
+my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => "admin/aqcontract.tt",
@@ -51,10 +51,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 $template->param(
     contractnumber => $contractnumber,
     booksellerid   => $booksellerid,
-    booksellername => $bookseller->{name},
-    basketcount   => $bookseller->{'basketcount'},
-    active         => $bookseller->{active},
-    subscriptioncount   => $bookseller->{'subscriptioncount'},
+    booksellername => $bookseller->name,
+    basketcount   => $bookseller->baskets->count,
+    active         => $bookseller->active,
+    subscriptioncount   => $bookseller->subscriptions->count,
 );
 
 #ADD_FORM: called if $op is 'add_form'. Used to create form to add or  modify a record

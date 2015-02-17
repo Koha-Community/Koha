@@ -122,7 +122,7 @@ if ( defined $subscriptionid ) {
     my $lastOrderReceived = GetLastOrderReceivedFromSubscriptionid $subscriptionid;
     if ( defined $lastOrderNotReceived ) {
         my $basket = GetBasket $lastOrderNotReceived->{basketno};
-        my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $basket->{booksellerid} });
+        my $bookseller = Koha::Acquisition::Booksellers->find( $basket->{booksellerid} );
         ( $tmpl_infos->{value_tax_included_ordered}, $tmpl_infos->{value_tax_excluded_ordered} ) = get_value_with_gst_params ( $lastOrderNotReceived->{ecost}, $lastOrderNotReceived->{tax_rate}, $bookseller );
         $tmpl_infos->{value_tax_included_ordered} = sprintf( "%.2f", $tmpl_infos->{value_tax_included_ordered} );
         $tmpl_infos->{value_tax_excluded_ordered} = sprintf( "%.2f", $tmpl_infos->{value_tax_excluded_ordered} );
@@ -132,7 +132,7 @@ if ( defined $subscriptionid ) {
     }
     if ( defined $lastOrderReceived ) {
         my $basket = GetBasket $lastOrderReceived->{basketno};
-        my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $basket->{booksellerid} });
+        my $bookseller = Koha::Acquisition::Booksellers->find( $basket->{booksellerid} );
         ( $tmpl_infos->{value_tax_included_spent}, $tmpl_infos->{value_tax_excluded_spent} ) = get_value_with_gst_params ( $lastOrderReceived->{unitprice}, $lastOrderReceived->{tax_rate}, $bookseller );
         $tmpl_infos->{value_tax_included_spent} = sprintf( "%.2f", $tmpl_infos->{value_tax_included_spent} );
         $tmpl_infos->{value_tax_excluded_spent} = sprintf( "%.2f", $tmpl_infos->{value_tax_excluded_spent} );
@@ -193,7 +193,7 @@ sub get_value_with_gst_params {
     my $value = shift;
     my $tax_rate = shift;
     my $bookseller = shift;
-    if ( $bookseller->{listincgst} ) {
+    if ( $bookseller->listincgst ) {
         return ( $value, $value / ( 1 + $tax_rate ) );
     } else {
         return ( $value * ( 1 + $tax_rate ), $value );
@@ -204,7 +204,7 @@ sub get_tax_excluded {
     my $value = shift;
     my $tax_rate = shift;
     my $bookseller = shift;
-    if ( $bookseller->{invoiceincgst} ) {
+    if ( $bookseller->invoiceincgst ) {
         return $value / ( 1 + $tax_rate );
     } else {
         return $value;
@@ -215,7 +215,7 @@ sub get_gst {
     my $value = shift;
     my $tax_rate = shift;
     my $bookseller = shift;
-    if ( $bookseller->{invoiceincgst} ) {
+    if ( $bookseller->invoiceincgst ) {
         return $value / ( 1 + $tax_rate ) * $tax_rate;
     } else {
         return $value * ( 1 + $tax_rate ) - $value;

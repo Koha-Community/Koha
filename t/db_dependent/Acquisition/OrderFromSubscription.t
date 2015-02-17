@@ -1,10 +1,9 @@
 use Modern::Perl;
 
-use Test::More tests => 13;
+use Test::More tests => 12;
 
 use_ok('C4::Acquisition');
 use_ok('C4::Biblio');
-use_ok('C4::Bookseller');
 use_ok('C4::Budgets');
 use_ok('C4::Serials');
 
@@ -17,14 +16,14 @@ $schema->storage->txn_begin();
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 
-my $booksellerid = C4::Bookseller::AddBookseller(
+my $bookseller = Koha::Acquisition::Bookseller->new(
     {
         name => "my vendor",
         address1 => "bookseller's address",
         phone => "0123456",
         active => 1
     }
-);
+)->store;
 
 my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
 my $budgetid;
@@ -53,7 +52,7 @@ my $subscriptionid = NewSubscription(
 die unless $subscriptionid;
 
 my ($basket, $basketno);
-ok($basketno = NewBasket($booksellerid, 1), "NewBasket(  $booksellerid , 1  ) returns $basketno");
+ok($basketno = NewBasket($bookseller->id, 1), "NewBasket(  " . $bookseller->id . ", 1  ) returns $basketno");
 
 my $cost = 42.00;
 my $subscription = GetSubscription( $subscriptionid );
@@ -83,7 +82,7 @@ is ( $order->{subscriptionid}, $subscription->{subscriptionid}, "test subscripti
 ok( $order->{ecost} == $cost, "test cost for the last order not received");
 
 $dbh->do(q{DELETE FROM aqinvoices});
-my $invoiceid = AddInvoice(invoicenumber => 'invoice1', booksellerid => $booksellerid, unknown => "unknown");
+my $invoiceid = AddInvoice(invoicenumber => 'invoice1', booksellerid => $bookseller->id, unknown => "unknown");
 
 my $invoice = GetInvoice( $invoiceid );
 $invoice->{datereceived} = '02-01-2013';

@@ -3,10 +3,9 @@
 use Modern::Perl;
 
 use C4::Biblio qw( AddBiblio );
-use C4::Bookseller qw( AddBookseller );
 
 use Koha::Acquisition::Order;
-use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Booksellers;
 use Koha::Database;
 
 use Test::More tests => 24;
@@ -22,16 +21,17 @@ $dbh->{RaiseError} = 1;
 
 $dbh->do(q{DELETE FROM aqinvoices});
 
-my $booksellerid = C4::Bookseller::AddBookseller(
+my $bookseller = Koha::Acquisition::Bookseller->new(
     {
         name => "my vendor",
         address1 => "bookseller's address",
         phone => "0123456",
         active => 1
     }
-);
+)->store;
+my $booksellerid = $bookseller->id;
 
-my $booksellerinfo = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
+my $booksellerinfo = Koha::Acquisition::Booksellers->find( $booksellerid );
 my $basketno = NewBasket($booksellerid, 1);
 my $basket   = GetBasket($basketno);
 

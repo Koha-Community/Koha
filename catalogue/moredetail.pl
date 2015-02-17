@@ -34,7 +34,7 @@ use C4::Members; # to use GetMember
 use C4::Search;		# enabled_staff_search_views
 use C4::Reserves qw(GetReservesFromBiblionumber);
 
-use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Booksellers;
 use Koha::AuthorisedValues;
 use Koha::DateUtils;
 use Koha::Items;
@@ -160,8 +160,8 @@ foreach my $item (@items){
     $item->{'orderdate'}               = $order->{'entrydate'};
     if ($item->{'basketno'}){
 	    my $basket = GetBasket($item->{'basketno'});
-        my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $basket->{booksellerid} });
-	    $item->{'vendor'} = $bookseller->{'name'};
+        my $bookseller = Koha::Acquisition::Booksellers->find( $basket->{booksellerid} );
+        $item->{'vendor'} = $bookseller->name;
     }
     $item->{'invoiceid'}               = $order->{'invoiceid'};
     if($item->{invoiceid}) {

@@ -111,7 +111,7 @@ unless( $invoiceid and $invoice->{invoiceid} ) {
 }
 
 my $booksellerid = $invoice->{booksellerid};
-my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
+my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
 
 my @orders        = @{ $invoice->{orders} };
 my $countlines    = scalar @orders;
@@ -125,7 +125,7 @@ my $subtotal_for_funds;
 for my $order ( @orders ) {
     $order->{'unitprice'} += 0;
 
-    if ( $bookseller->{invoiceincgst} ) {
+    if ( $bookseller->invoiceincgst ) {
         $order->{ecost}     = $order->{ecost_tax_included};
         $order->{unitprice} = $order->{unitprice_tax_included};
     }
@@ -223,7 +223,7 @@ unless( defined $invoice->{closedate} ) {
     for (my $i = 0 ; $i < $countpendings ; $i++) {
         my $order = $pendingorders->[$i];
 
-        if ( $bookseller->{invoiceincgst} ) {
+        if ( $bookseller->invoiceincgst ) {
             $order->{ecost} = $order->{ecost_tax_included};
         } else {
             $order->{ecost} = $order->{ecost_tax_excluded};
@@ -285,8 +285,8 @@ $template->param(
     invoice               => $invoice->{invoicenumber},
     invoiceclosedate      => $invoice->{closedate},
     datereceived          => dt_from_string,
-    name                  => $bookseller->{'name'},
-    booksellerid          => $bookseller->{id},
+    name                  => $bookseller->name,
+    booksellerid          => $bookseller->id,
     loop_received         => \@loop_received,
     loop_orders           => \@loop_orders,
     book_foot_loop        => \@book_foot_loop,

@@ -11,10 +11,10 @@ use C4::Serials;
 use C4::Serials::Frequency;
 use C4::Serials::Numberpattern;
 use C4::Debug;
-use C4::Bookseller;
 use C4::Biblio;
 use C4::Budgets;
 use Koha::DateUtils;
+use Koha::Acquisition::Booksellers;
 use t::lib::Mocks;
 use Test::More tests => 48;
 
@@ -32,7 +32,7 @@ $dbh->{RaiseError} = 1;
 my @methods = ('updateClaim');
 can_ok('C4::Serials', @methods);
 
-my $booksellerid = C4::Bookseller::AddBookseller(
+my $bookseller = Koha::Acquisition::Bookseller->new(
     {
         name => "my vendor",
         address1 => "bookseller's address",

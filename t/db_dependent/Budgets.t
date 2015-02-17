@@ -7,11 +7,11 @@ BEGIN {
 }
 use C4::Context;
 use C4::Biblio;
-use C4::Bookseller;
 use C4::Acquisition;
 use C4::Members qw( AddMember );
 
 use Koha::Acquisition::Order;
+use Koha::Acquisition::Booksellers;
 
 use t::lib::TestBuilder;
 
@@ -270,7 +270,7 @@ my $budget_id21 = AddBudget(
     }
 );
 
-my $booksellerid = C4::Bookseller::AddBookseller(
+my $bookseller = Koha::Acquisition::Bookseller->new(
     {
         name         => "my vendor",
         address1     => "bookseller's address",
@@ -278,7 +278,8 @@ my $booksellerid = C4::Bookseller::AddBookseller(
         active       => 1,
         deliverytime => 5,
     }
-);
+)->store;
+my $booksellerid = $bookseller->id;
 
 my $basketno = C4::Acquisition::NewBasket( $booksellerid, 1 );
 my ( $biblionumber, $biblioitemnumber ) =

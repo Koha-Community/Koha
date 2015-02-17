@@ -20,8 +20,8 @@
 use Modern::Perl;
 
 use C4::Context;
-use C4::Bookseller;
 use Koha::DateUtils;
+use Koha::Acquisition::Booksellers;
 
 use DateTime::Duration;
 
@@ -40,9 +40,11 @@ $dbh->do(q|DELETE FROM aqcontract|);
 $dbh->do(q|DELETE FROM aqbooksellers|);
 
 
-my $bookseller_id1 = C4::Bookseller::AddBookseller( { name => 'My first bookseller' } );
+my $bookseller1 = Koha::Acquisition::Bookseller->new( { name => 'My first bookseller' } )->store;
+my $bookseller_id1 = $bookseller1->id;
 isnt( $bookseller_id1, undef, 'AddBookseller does not return undef' );
-my $bookseller_id2 = C4::Bookseller::AddBookseller( { name => 'My second bookseller' } );
+my $bookseller2 = Koha::Acquisition::Bookseller->new( { name => 'My second bookseller' } )->store;
+my $bookseller_id2 = $bookseller2->id;
 isnt( $bookseller_id2, undef, 'AddBookseller does not return undef' );
 my $contracts = GetContracts();
 is( @$contracts, 0, 'GetContracts returns the correct number of contracts' );

@@ -54,7 +54,7 @@ use C4::Output;
 use C4::Acquisition qw/GetBasket NewBasket ModBasketHeader/;
 use C4::Contract qw/GetContracts/;
 
-use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Booksellers;
 
 my $input = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -104,18 +104,18 @@ if ( $op eq 'add_form' ) {
         });
         push(@contractloop, @$contracts);
     }
-    my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
+    my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
     my $count = scalar @contractloop;
     if ( $count > 0) {
         $template->param(contractloop => \@contractloop,
                          basketcontractnumber => $basket->{'contractnumber'});
     }
-    my @booksellers = Koha::Acquisition::Bookseller->search;
+    my @booksellers = Koha::Acquisition::Booksellers->search;
     $template->param( add_form => 1,
                     basketname => $basket->{'basketname'},
                     basketnote => $basket->{'note'},
                     basketbooksellernote => $basket->{'booksellernote'},
-                    booksellername => $bookseller->{'name'},
+                    booksellername => $bookseller->name,
                     booksellerid => $booksellerid,
                     basketno => $basketno,
                     booksellers => \@booksellers,

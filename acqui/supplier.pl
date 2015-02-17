@@ -48,11 +48,10 @@ use C4::Biblio;
 use C4::Output;
 use CGI qw ( -utf8 );
 
-use C4::Bookseller qw( DelBookseller );
-use C4::Bookseller::Contact;
 use C4::Budgets;
 
-use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Bookseller::Contacts;
+use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Currencies;
 
 my $query    = CGI->new;
@@ -67,33 +66,36 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 my $booksellerid       = $query->param('booksellerid');
-my $supplier = {};
+my $supplier;
 if ($booksellerid) {
-    $supplier = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
-    foreach ( keys %{$supplier} ) {
-        $template->{'VARS'}->{$_} = $supplier->{$_};
+    $supplier = Koha::Acquisition::Booksellers->find( $booksellerid );
+    my $supplier_hashref = $supplier->unblessed;
+    foreach ( keys %{$supplier_hashref} ) {
+        $template->{'VARS'}->{$_} = $supplier->$_;
     }
+    $template->{VARS}->{contacts} = $supplier->contacts if $supplier->contacts->count;
     $template->{'VARS'}->{'booksellerid'} = $booksellerid;
 }
-$template->{'VARS'}->{'contacts'} = C4::Bookseller::Contact->new() unless $template->{'VARS'}->{'contacts'};
+
+$template->{VARS}->{contacts} ||= Koha::Acquisition::Bookseller::Contact->new;
 
 if ( $op eq 'display' ) {
     my $contracts = GetContracts( { booksellerid => $booksellerid } );
 
     $template->param(
-        active        => $supplier->{'active'},
-        tax_rate       => $supplier->{'tax_rate'} + 0.0,
-        invoiceprice  => $supplier->{'invoiceprice'},
-        listprice     => $supplier->{'listprice'},
-        basketcount   => $supplier->{'basketcount'},
-        subscriptioncount   => $supplier->{'subscriptioncount'},
+        active        => $supplier->active,
+        tax_rate      => $supplier->tax_rate + 0.0,
+        invoiceprice  => $supplier->invoiceprice,
+        listprice     => $supplier->listprice,
+        basketcount   => $supplier->baskets->count,
+        subscriptioncount => $supplier->subscriptions->count,
         contracts     => $contracts,
     );
 } elsif ( $op eq 'delete' ) {
     # no further message needed for the user
     # the DELETE button only appears in the template if basketcount == 0
-    if ( $supplier->{'basketcount'} == 0 ) {
-        DelBookseller($booksellerid);
+    if ( $supplier->baskets->count == 0 ) {
+        Koha::Acquisition::Booksellers->find($booksellerid)->delete;
     }
     print $query->redirect('/cgi-bin/koha/acqui/acqui-home.pl');
     exit;
@@ -107,8 +109,8 @@ if ( $op eq 'display' ) {
 
     $template->param(
         # set active ON by default for supplier add (id empty for add)
-        active       => $booksellerid ? $supplier->{'active'} : 1,
-        tax_rate       => $supplier->{tax_rate} ? $supplier->{'tax_rate'}+0.0 : 0,
+        active     => $supplier ? $supplier->active         : 1,
+        tax_rate   => $supplier ? $supplier->tax_rate + 0.0 : 0,
         gst_values    => \@gst_values,
         currencies    => \@currencies,
         enter         => 1,

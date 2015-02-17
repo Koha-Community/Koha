@@ -25,7 +25,7 @@ use C4::Context;
 use C4::Output;
 use C4::Serials;
 
-use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Booksellers;
 
 my $query        = new CGI;
 my $title        = $query->param('title_filter');
@@ -52,7 +52,7 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
 
 my $basket = GetBasket($basketno);
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
-my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
+my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
 
 my @subscriptions;
 if ($searched) {
@@ -88,6 +88,6 @@ $template->param(
     booksellerid     => $booksellerid,
     basketno         => $basket->{basketno},
     basketname       => $basket->{basketname},
-    booksellername   => $bookseller->{name},
+    booksellername   => $bookseller->name,
 );
 output_html_with_http_headers $query, $cookie, $template->output;

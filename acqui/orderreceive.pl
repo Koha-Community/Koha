@@ -73,7 +73,7 @@ use C4::Items;
 use C4::Biblio;
 use C4::Suggestions;
 
-use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Booksellers;
 use Koha::DateUtils qw( dt_from_string );
 
 my $input      = new CGI;
@@ -85,7 +85,7 @@ my $booksellerid   = $invoice->{booksellerid};
 my $freight      = $invoice->{shipmentcost};
 my $ordernumber  = $input->param('ordernumber');
 
-my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
+my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
 my $results;
 $results = SearchOrders({
     ordernumber => $ordernumber
@@ -155,7 +155,7 @@ $order->{quantityreceived} = '' if $order->{quantityreceived} == 0;
 
 my $unitprice = $order->{unitprice};
 my ( $rrp, $ecost );
-if ( $bookseller->{invoiceincgst} ) {
+if ( $bookseller->invoiceincgst ) {
     $rrp = $order->{rrp_tax_included};
     $ecost = $order->{ecost_tax_included};
     unless ( $unitprice != 0 and defined $unitprice) {
@@ -198,7 +198,7 @@ $template->param(
     subscriptionid        => $order->{subscriptionid},
     booksellerid          => $order->{'booksellerid'},
     freight               => $freight,
-    name                  => $bookseller->{'name'},
+    name                  => $bookseller->name,
     title                 => $order->{'title'},
     author                => $order->{'author'},
     copyrightdate         => $order->{'copyrightdate'},

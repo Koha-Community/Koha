@@ -49,7 +49,7 @@ use CGI qw ( -utf8 );
 use C4::Acquisition qw( SearchOrders );
 use Koha::DateUtils;
 
-use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Booksellers;
 
 my $query=new CGI;
 my ($template, $loggedinuser, $cookie)
@@ -62,7 +62,7 @@ my ($template, $loggedinuser, $cookie)
                  });
 
 my $supplier=$query->param('supplier');
-my @suppliers = Koha::Acquisition::Bookseller->search({ name => $supplier });
+my @suppliers = Koha::Acquisition::Booksellers->search({ name => $supplier });
 #my $count = scalar @suppliers;
 
 #build result page

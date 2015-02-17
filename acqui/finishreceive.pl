@@ -28,11 +28,10 @@ use C4::Output;
 use C4::Context;
 use C4::Acquisition;
 use C4::Biblio;
-use C4::Bookseller;
 use C4::Items;
 use C4::Search;
 
-use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Booksellers;
 
 use List::MoreUtils qw/any/;
 
@@ -83,8 +82,6 @@ if ($quantityrec > $origquantityrec ) {
     $order->{order_internalnote} = $input->param("order_internalnote");
     $order->{tax_rate_on_receiving} = $input->param("tax_rate");
     $order->{unitprice} = $unitprice;
-
-    my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 
     $order = C4::Acquisition::populate_order_with_prices(
         {

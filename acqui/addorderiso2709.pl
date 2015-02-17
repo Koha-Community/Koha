@@ -44,7 +44,7 @@ use C4::Members;
 use Koha::Number::Price;
 use Koha::Acquisition::Currencies;
 use Koha::Acquisition::Order;
-use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Booksellers;
 
 my $input = new CGI;
 my ($template, $loggedinuser, $cookie, $userflags) = get_template_and_user({
@@ -60,11 +60,11 @@ my $cgiparams = $input->Vars;
 my $op = $cgiparams->{'op'} || '';
 my $booksellerid  = $input->param('booksellerid');
 my $allmatch = $input->param('allmatch');
-my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
+my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
 
 $template->param(scriptname => "/cgi-bin/koha/acqui/addorderiso2709.pl",
                 booksellerid => $booksellerid,
-                booksellername => $bookseller->{name},
+                booksellername => $bookseller->name,
                 );
 
 if ($cgiparams->{'import_batch_id'} && $op eq ""){
@@ -218,9 +218,9 @@ if ($op eq ""){
             # in this case, the price will be x100 when unformatted ! Replace the . by a , to get a proper price calculation
             $price =~ s/\./,/ if C4::Context->preference("CurrencyFormat") eq "FR";
             $price = Koha::Number::Price->new($price)->unformat;
-            $orderinfo{tax_rate} = $bookseller->{tax_rate};
-            my $c = $c_discount ? $c_discount : $bookseller->{discount} / 100;
-            if ( $bookseller->{listincgst} ) {
+            $orderinfo{tax_rate} = $bookseller->tax_rate;
+            my $c = $c_discount ? $c_discount : $bookseller->discount / 100;
+            if ( $bookseller->listincgst ) {
                 if ( $c_discount ) {
                     $orderinfo{ecost} = $price;
                     $orderinfo{rrp}   = $orderinfo{ecost} / ( 1 - $c );

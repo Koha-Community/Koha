@@ -7,7 +7,6 @@ use C4::Context;
 use C4::Acquisition;
 use C4::Biblio;
 use C4::Items;
-use C4::Bookseller;
 use C4::Budgets;
 use Koha::Acquisition::Order;
 use t::lib::Mocks;

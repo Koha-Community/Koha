@@ -8,14 +8,13 @@ use Module::Load::Conditional qw/check_install/;
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 17;
+        plan tests => 16;
     } else {
         plan skip_all => "Need Test::DBIx::Class"
     }
 }
 
 use_ok('C4::Acquisition');
-use_ok('C4::Bookseller');
 use_ok('C4::Context');
 use_ok('Koha::Number::Price');
 
@@ -36,6 +35,13 @@ fixtures_ok [
         [ qw/ currency symbol rate active / ],
         [[ 'my_cur', '€', 1, 1, ]],
     ],
+    Aqbookseller => [
+        [ qw/ id name listincgst invoiceincgst / ],
+        [ 1, '0 0', 0, 0 ],
+        [ 2, '0 1', 0, 1 ],
+        [ 3, '1 0', 1, 0 ],
+        [ 4, '1 1', 1, 1 ],
+    ],
 ], 'add currency fixtures';
 
 my $bookseller_module = Test::MockModule->new('Koha::Acquisition::Bookseller');
@@ -48,12 +54,6 @@ for my $currency_format ( qw( US FR ) ) {
     t::lib::Mocks::mock_preference( 'CurrencyFormat', $currency_format );
     subtest 'Configuration 1: 0 0' => sub {
         plan tests => 8;
-        $bookseller_module->mock(
-            'fetch',
-            sub {
-                return { listincgst => 0, invoiceincgst => 0 };
-            }
-        );
 
         my $biblionumber_0_0 = 42;
 
@@ -74,7 +74,7 @@ for my $currency_format ( qw( US FR ) ) {
         $order_0_0 = C4::Acquisition::populate_order_with_prices(
             {
                 order        => $order_0_0,
-                booksellerid => 'just_something',
+                booksellerid => 1,
                 ordering     => 1,
             }
         );
@@ -123,7 +123,7 @@ for my $currency_format ( qw( US FR ) ) {
         $order_0_0 = C4::Acquisition::populate_order_with_prices(
             {
                 order        => $order_0_0,
-                booksellerid => 'just_something',
+                booksellerid => 1,
                 receiving    => 1,
             }
         );
@@ -156,12 +156,6 @@ for my $currency_format ( qw( US FR ) ) {
 
     subtest 'Configuration 1: 1 1' => sub {
         plan tests => 8;
-        $bookseller_module->mock(
-            'fetch',
-            sub {
-                return { listincgst => 1, invoiceincgst => 1 };
-            }
-        );
 
         my $biblionumber_1_1 = 43;
         my $order_1_1        = {
@@ -182,7 +176,7 @@ for my $currency_format ( qw( US FR ) ) {
         $order_1_1 = C4::Acquisition::populate_order_with_prices(
             {
                 order        => $order_1_1,
-                booksellerid => 'just_something',
+                booksellerid => 4,
                 ordering     => 1,
             }
         );
@@ -231,7 +225,7 @@ for my $currency_format ( qw( US FR ) ) {
         $order_1_1 = C4::Acquisition::populate_order_with_prices(
             {
                 order        => $order_1_1,
-                booksellerid => 'just_something',
+                booksellerid => 4,
                 receiving    => 1,
             }
         );
@@ -264,12 +258,6 @@ for my $currency_format ( qw( US FR ) ) {
 
     subtest 'Configuration 1: 1 0' => sub {
         plan tests => 8;
-        $bookseller_module->mock(
-            'fetch',
-            sub {
-                return { listincgst => 1, invoiceincgst => 0 };
-            }
-        );
 
         my $biblionumber_1_0 = 44;
         my $order_1_0        = {
@@ -290,7 +278,7 @@ for my $currency_format ( qw( US FR ) ) {
         $order_1_0 = C4::Acquisition::populate_order_with_prices(
             {
                 order        => $order_1_0,
-                booksellerid => 'just_something',
+                booksellerid => 3,
                 ordering     => 1,
             }
         );
@@ -339,7 +327,7 @@ for my $currency_format ( qw( US FR ) ) {
         $order_1_0 = C4::Acquisition::populate_order_with_prices(
             {
                 order        => $order_1_0,
-                booksellerid => 'just_something',
+                booksellerid => 3,
                 receiving    => 1,
             }
         );
@@ -372,12 +360,6 @@ for my $currency_format ( qw( US FR ) ) {
 
     subtest 'Configuration 1: 0 1' => sub {
         plan tests => 8;
-        $bookseller_module->mock(
-            'fetch',
-            sub {
-                return { listincgst => 0, invoiceincgst => 1 };
-            }
-        );
 
         my $biblionumber_0_1 = 45;
         my $order_0_1        = {
@@ -398,7 +380,7 @@ for my $currency_format ( qw( US FR ) ) {
         $order_0_1 = C4::Acquisition::populate_order_with_prices(
             {
                 order        => $order_0_1,
-                booksellerid => 'just_something',
+                booksellerid => 2,
                 ordering     => 1,
             }
         );
@@ -447,7 +429,7 @@ for my $currency_format ( qw( US FR ) ) {
         $order_0_1 = C4::Acquisition::populate_order_with_prices(
             {
                 order        => $order_0_1,
-                booksellerid => 'just_something',
+                booksellerid => 2,
                 receiving    => 1,
             }
         );

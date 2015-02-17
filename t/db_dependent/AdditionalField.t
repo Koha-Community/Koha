@@ -3,7 +3,6 @@
 use Modern::Perl;
 use Test::More tests => 40;
 
-use C4::Bookseller qw( AddBookseller );
 use C4::Context;
 use Koha::AdditionalField;
 
@@ -107,15 +106,6 @@ use C4::Budgets;
 use C4::Serials;
 use C4::Serials::Frequency;
 use C4::Serials::Numberpattern;
-
-my $booksellerid = C4::Bookseller::AddBookseller(
-    {
-        name => "my vendor",
-        address1 => "bookseller's address",
-        phone => "0123456",
-        active => 1
-    }
-);
 
 my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
 my $budgetid;

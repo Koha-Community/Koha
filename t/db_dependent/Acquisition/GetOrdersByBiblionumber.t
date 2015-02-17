@@ -5,7 +5,6 @@ use Modern::Perl;
 use Test::More;
 use C4::Acquisition;
 use C4::Biblio;
-use C4::Bookseller;
 use C4::Budgets;
 use Koha::Database;
 use Koha::Acquisition::Order;
@@ -18,17 +17,17 @@ $schema->storage->txn_begin();
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 
-my $booksellerid = C4::Bookseller::AddBookseller(
+my $bookseller = Koha::Acquisition::Bookseller->new(
     {
         name => "my vendor",
         address1 => "bookseller's address",
         phone => "0123456",
         active => 1
     }
-);
+)->store;
 
 my $basketno = C4::Acquisition::NewBasket(
-    $booksellerid
+    $bookseller->id
 );
 
 my $budgetid = C4::Budgets::AddBudget(

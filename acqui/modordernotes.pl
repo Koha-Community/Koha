@@ -33,7 +33,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Acquisition;
 
-use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Booksellers;
 
 my $input = new CGI;
 my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
@@ -51,7 +51,7 @@ my $referrer = $input->param('referrer') || $input->referer();
 my $type = $input->param('type');
 my $order = GetOrder($ordernumber);
 my $basket = GetBasket($order->{basketno});
-my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $basket->{booksellerid} });
+my $bookseller = Koha::Acquisition::Booksellers->find( $basket->{booksellerid} );
 
 
 if($op and $op eq 'save') {
@@ -79,8 +79,8 @@ if($op) {
 $template->param(
     basketname           => $basket->{'basketname'},
     basketno             => $order->{basketno},
-    booksellerid         => $bookseller->{'id'},
-    booksellername       => $bookseller->{'name'},
+    booksellerid         => $bookseller->id,
+    booksellername       => $bookseller->name,
     ordernumber => $ordernumber,
     referrer => $referrer,
     type => $type,

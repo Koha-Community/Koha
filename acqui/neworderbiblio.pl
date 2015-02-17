@@ -67,7 +67,7 @@ use C4::Koha;
 use C4::Members qw/ GetMember /;
 use C4::Budgets qw/ GetBudgetHierarchy /;
 
-use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Booksellers;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
@@ -83,7 +83,7 @@ my $results_per_page = $params->{'num'} || 20;
 my $booksellerid     = $params->{'booksellerid'};
 my $basketno         = $params->{'basketno'};
 my $sub              = $params->{'sub'};
-my $bookseller       = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
+my $bookseller       = Koha::Acquisition::Booksellers->find( $booksellerid );
 
 # getting the template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -115,8 +115,8 @@ if (defined $error) {
     $template->param(
         query_error => $error,
         basketno             => $basketno,
-        booksellerid     => $bookseller->{'id'},
-        name             => $bookseller->{'name'},
+        booksellerid     => $bookseller->id,
+        name             => $bookseller->name,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
     exit;
@@ -147,8 +147,8 @@ foreach my $r (@{$budgets}) {
 $template->param(
     has_budgets          => $has_budgets,
     basketno             => $basketno,
-    booksellerid         => $bookseller->{'id'},
-    name                 => $bookseller->{'name'},
+    booksellerid         => $bookseller->id,
+    name                 => $bookseller->name,
     resultsloop          => \@results,
     total                => $total_hits,
     query                => $query,

@@ -6,7 +6,6 @@ use Data::Dumper;
 
 use C4::Acquisition qw( NewBasket GetBasketsInfosByBookseller );
 use C4::Biblio qw( AddBiblio );
-use C4::Bookseller qw( AddBookseller );
 use C4::Budgets qw( AddBudget );
 use C4::Context;
 use Koha::Database;
@@ -18,7 +17,7 @@ $schema->storage->txn_begin();
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 
-my $supplierid = C4::Bookseller::AddBookseller(
+my $supplier = Koha::Acquisition::Bookseller->new(
     {
         name => 'my vendor',
         address1 => 'bookseller\'s address',
@@ -26,7 +25,8 @@ my $supplierid = C4::Bookseller::AddBookseller(
         active => 1,
         deliverytime => 5,
     }
-);
+)->store;
+my $supplierid = $supplier->id;
 
 my $basketno;
 ok($basketno = NewBasket($supplierid, 1), 'NewBasket(  $supplierid , 1  ) returns $basketno');

@@ -75,7 +75,7 @@ use C4::Output;
 use C4::Acquisition;
 use C4::Budgets;
 
-use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Booksellers;
 use Koha::DateUtils qw( output_pref dt_from_string );
 
 my $input          = CGI->new;
@@ -139,7 +139,7 @@ if ($op and $op eq 'confirm') {
     }
 }
 
-my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
+my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
 my @parcels = GetInvoices(
     supplierid => $booksellerid,
     invoicenumber => $code,
@@ -203,7 +203,7 @@ $template->param(
     datefrom                 => $datefrom,
     dateto                   => $dateto,
     resultsperpage           => $resultsperpage,
-    name                     => $bookseller->{'name'},
+    name                     => $bookseller->name,
     shipmentdate_today       => dt_from_string,
     booksellerid             => $booksellerid,
     GST                      => C4::Context->preference('gist'),

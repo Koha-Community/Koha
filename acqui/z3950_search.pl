@@ -29,7 +29,7 @@ use C4::Context;
 use C4::Breeding;
 use C4::Koha;
 
-use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Booksellers;
 use Koha::BiblioFrameworks;
 
 my $input           = new CGI;
@@ -52,7 +52,7 @@ $page               = $input->param('goto_page') if $input->param('changepage_go
 # get framework list
 my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
 
-my $vendor = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
+my $vendor = Koha::Acquisition::Booksellers->find( $booksellerid );
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -66,7 +66,7 @@ $template->param(
         frameworks   => $frameworks,
         booksellerid => $booksellerid,
         basketno     => $basketno,
-        name         => $vendor->{'name'},
+        name         => $vendor->name,
         isbn         => $isbn,
         issn         => $issn,
         lccn         => $lccn,

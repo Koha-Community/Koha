@@ -63,7 +63,7 @@ use C4::Acquisition qw/ GetBasketsInfosByBookseller CanUserManageBasket /;
 use C4::Members qw/GetMember/;
 use C4::Context;
 
-use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Booksellers;
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
@@ -83,18 +83,18 @@ my $allbaskets= $query->param('allbaskets')||0;
 my @suppliers;
 
 if ($booksellerid) {
-    push @suppliers, Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
+    push @suppliers, Koha::Acquisition::Booksellers->find( $booksellerid );
 } else {
-    @suppliers = Koha::Acquisition::Bookseller->search({ name => $supplier });
+    @suppliers = Koha::Acquisition::Booksellers->search({ name => $supplier });
 }
 
 my $supplier_count = @suppliers;
 if ( $supplier_count == 1 ) {
     $template->param(
-        supplier_name => $suppliers[0]->{'name'},
-        booksellerid  => $suppliers[0]->{'id'},
-        basketcount   => $suppliers[0]->{'basketcount'},
-        active        => $suppliers[0]->{active},
+        supplier_name => $suppliers[0]->name,
+        booksellerid  => $suppliers[0]->id,
+        basketcount   => $suppliers[0]->baskets->count,
+        active        => $suppliers[0]->active,
     );
 }
 
@@ -124,7 +124,7 @@ foreach my $r (@{$budgets}) {
 my $loop_suppliers = [];
 
 for my $vendor (@suppliers) {
-    my $baskets = GetBasketsInfosByBookseller( $vendor->{id}, $allbaskets );
+    my $baskets = GetBasketsInfosByBookseller( $vendor->id, $allbaskets );
 
     my $loop_basket = [];
 
@@ -150,9 +150,9 @@ for my $vendor (@suppliers) {
 
     push @{$loop_suppliers},
       { loop_basket => $loop_basket,
-        booksellerid  => $vendor->{id},
-        name        => $vendor->{name},
-        active      => $vendor->{active},
+        booksellerid  => $vendor->id,
+        name        => $vendor->name,
+        active      => $vendor->active,
       };
 
 }

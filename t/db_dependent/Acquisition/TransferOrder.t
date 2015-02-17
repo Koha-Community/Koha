@@ -7,10 +7,10 @@ use C4::Context;
 use C4::Acquisition;
 use C4::Biblio;
 use C4::Items;
-use C4::Bookseller;
 use C4::Budgets;
 use Koha::Database;
 use Koha::DateUtils;
+use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Order;
 use MARC::Record;
 
@@ -20,30 +20,30 @@ $schema->storage->txn_begin();
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 
-my $booksellerid1 = C4::Bookseller::AddBookseller(
+my $bookseller1 = Koha::Acquisition::Bookseller->new(
     {
         name => "my vendor 1",
         address1 => "bookseller's address",
         phone => "0123456",
         active => 1
     }
-);
+)->store;
 
 my $basketno1 = C4::Acquisition::NewBasket(
-    $booksellerid1
+    $bookseller1->id
 );
 
-my $booksellerid2 = C4::Bookseller::AddBookseller(
+my $bookseller2 = Koha::Acquisition::Bookseller->new(
     {
         name => "my vendor 2",
         address1 => "bookseller's address",
         phone => "0123456",
         active => 1
     }
-);
+)->store;
 
 my $basketno2 = C4::Acquisition::NewBasket(
-    $booksellerid2
+    $bookseller2->id
 );
 
 my $budgetid = C4::Budgets::AddBudget(

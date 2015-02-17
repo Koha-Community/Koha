@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 80;
+use Test::More tests => 79;
 use Test::MockModule;
 use Test::Warn;
 
@@ -38,14 +38,14 @@ use_ok('C4::Context');
 use_ok('C4::Members');
 use_ok('C4::Acquisition');
 use_ok('C4::Biblio');
-use_ok('C4::Bookseller');
 use_ok('C4::Letters');
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Order;
-use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Booksellers;
+use Koha::Acquisition::Bookseller::Contacts;
 use Koha::Libraries;
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin();
@@ -366,19 +366,19 @@ $dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('orde
     is( $values->{dateexpiry}, '2015-12-13', "_parseletter doesn't modify its parameters" );
 }
 
-my $booksellerid = C4::Bookseller::AddBookseller(
+my $bookseller = Koha::Acquisition::Bookseller->new(
     {
         name => "my vendor",
         address1 => "bookseller's address",
         phone => "0123456",
         active => 1,
         deliverytime => 5,
-    },
-    [
-        { name => 'John Smith', acqprimary => 1, phone => '0123456x1', claimacquisition => 1, orderacquisition => 1 },
-        { name => 'Leo Tolstoy', phone => '0123456x2', claimissues => 1 },
-    ]
-);
+    }
+)->store;
+my $booksellerid = $bookseller->id;
+
+Koha::Acquisition::Bookseller::Contact->new( { name => 'John Smith',  phone => '0123456x1', claimacquisition => 1, orderacquisition => 1, booksellerid => $booksellerid } )->store;
+Koha::Acquisition::Bookseller::Contact->new( { name => 'Leo Tolstoy', phone => '0123456x2', claimissues      => 1, booksellerid => $booksellerid } )->store;
 my $basketno = NewBasket($booksellerid, 1);
 
 my $budgetid = C4::Budgets::AddBudget({
@@ -416,10 +416,8 @@ warning_like {
     "SendAlerts prints a warning";
 is($err->{'error'}, 'no_email', "Trying to send an alert when there's no e-mail results in an error");
 
-my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
-$bookseller->contacts->[0]->email('testemail@mydomain.com');
-C4::Bookseller::ModBookseller($bookseller);
-$bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
+$bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
+$bookseller->contacts->next->email('testemail@mydomain.com')->store;
 
 # Ensure that the preference 'LetterLog' is set to logging
 t::lib::Mocks::mock_preference( 'LetterLog', 'on' );

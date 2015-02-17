@@ -23,13 +23,8 @@ use warnings;
 
 use base qw( Exporter );
 
-use C4::Bookseller::Contact;
-
 our @EXPORT_OK = qw(
   GetBooksellersWithLateOrders
-  ModBookseller
-  DelBookseller
-  AddBookseller
 );
 
 =head1 NAME
@@ -111,139 +106,6 @@ sub GetBooksellersWithLateOrders {
     }
 
     return %supplierlist;
-}
-
-#--------------------------------------------------------------------#
-
-=head2 AddBookseller
-
-$id = &AddBookseller($bookseller);
-
-Creates a new bookseller. C<$bookseller> is a reference-to-hash whose
-keys are the fields of the aqbooksellers table in the Koha database.
-All fields must be present.
-
-Returns the ID of the newly-created bookseller.
-
-=cut
-
-sub AddBookseller {
-    my ($data, $contacts) = @_;
-    my $dbh    = C4::Context->dbh;
-    my $query = q|
-        INSERT INTO aqbooksellers
-            (
-                name,      address1,      address2,     address3, address4,
-                postal,    phone,         accountnumber,fax,      url,
-                active,    listprice,     invoiceprice, gstreg,
-                listincgst,invoiceincgst, tax_rate,      discount, notes,
-                deliverytime
-            )
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) |
-      ;
-    my $sth = $dbh->prepare($query);
-    $sth->execute(
-        $data->{'name'},         $data->{'address1'},
-        $data->{'address2'},     $data->{'address3'},
-        $data->{'address4'},     $data->{'postal'},
-        $data->{'phone'},        $data->{'accountnumber'},
-        $data->{'fax'},          $data->{'url'},
-        $data->{'active'},       $data->{'listprice'},
-        $data->{'invoiceprice'}, $data->{'gstreg'},
-        $data->{'listincgst'},   $data->{'invoiceincgst'},
-        $data->{'tax_rate'},      $data->{'discount'},
-        $data->{notes},          $data->{deliverytime},
-    );
-
-    # return the id of this new supplier
-    my $id = $dbh->{'mysql_insertid'};
-    if ($id && $contacts) {
-        foreach my $contact (@$contacts) {
-            $contact = C4::Bookseller::Contact->new( $contact )
-                unless ref $contacts eq 'C4::Bookseller::Contact';
-            $contact->bookseller($id);
-            $contact->save();
-        }
-    }
-    return $id;
-}
-
-#-----------------------------------------------------------------#
-
-=head2 ModBookseller
-
-ModBookseller($bookseller);
-
-Updates the information for a given bookseller. C<$bookseller> is a
-reference-to-hash whose keys are the fields of the aqbooksellers table
-in the Koha database. It must contain entries for all of the fields.
-The entry to modify is determined by C<$bookseller-E<gt>{id}>.
-
-The easiest way to get all of the necessary fields is to look up a
-book seller with C<Koha::Acquisition::Bookseller>, modify what's necessary, then call
-C<&ModBookseller> with the result.
-
-=cut
-
-sub ModBookseller {
-    my ($data, $contacts) = @_;
-    my $dbh    = C4::Context->dbh;
-    return unless $data->{'id'};
-    my $query  = 'UPDATE aqbooksellers
-        SET name=?,address1=?,address2=?,address3=?,address4=?,
-            postal=?,phone=?,accountnumber=?,fax=?,url=?,
-            active=?,listprice=?, invoiceprice=?,
-            gstreg=?,listincgst=?,invoiceincgst=?,
-            discount=?,notes=?,tax_rate=?,deliverytime=?
-        WHERE id=?';
-    my $sth = $dbh->prepare($query);
-    my $cnt = $sth->execute(
-        $data->{'name'},         $data->{'address1'},
-        $data->{'address2'},     $data->{'address3'},
-        $data->{'address4'},     $data->{'postal'},
-        $data->{'phone'},        $data->{'accountnumber'},
-        $data->{'fax'},          $data->{'url'},
-        $data->{'active'},       $data->{'listprice'},
-        $data->{'invoiceprice'}, $data->{'gstreg'},
-        $data->{'listincgst'},   $data->{'invoiceincgst'},
-        $data->{'discount'},     $data->{'notes'},
-        $data->{'tax_rate'},      $data->{deliverytime},
-        $data->{'id'}
-    );
-    $contacts ||= $data->{'contacts'};
-    my $contactquery = "DELETE FROM aqcontacts WHERE booksellerid = ?";
-    my @contactparams = ($data->{'id'});
-    if ($contacts) {
-        foreach my $contact (@$contacts) {
-            $contact = C4::Bookseller::Contact->new( $contact )
-                unless ref $contacts eq 'C4::Bookseller::Contact';
-            $contact->bookseller($data->{'id'});
-            $contact->save();
-            push @contactparams, $contact->id if $contact->id;
-        }
-        if ($#contactparams > 0) {
-            $contactquery .= ' AND id NOT IN (' . ('?, ' x ($#contactparams - 1)) . '?);';
-        }
-    }
-    $sth = $dbh->prepare($contactquery);
-    $sth->execute(@contactparams);
-    return $cnt;
-}
-
-=head2 DelBookseller
-
-DelBookseller($booksellerid);
-
-delete the supplier record identified by $booksellerid
-This sub assumes it is called only if the supplier has no order.
-
-=cut
-
-sub DelBookseller {
-    my $id  = shift;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare('DELETE FROM aqbooksellers WHERE id=?');
-    return $sth->execute($id);
 }
 
 1;

@@ -36,6 +36,7 @@ use C4::Output;
 use C4::Acquisition qw/GetInvoices/;
 use C4::Budgets;
 use Koha::DateUtils;
+use Koha::Acquisition::Booksellers;
 
 my $input = CGI->new;
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
@@ -89,7 +90,7 @@ if ( $op and $op eq 'do_search' ) {
 }
 
 # Build suppliers list
-my @suppliers      = Koha::Acquisition::Bookseller->search;
+my @suppliers      = Koha::Acquisition::Booksellers->search;
 my $suppliers_loop = [];
 my $suppliername;
 foreach (@suppliers) {

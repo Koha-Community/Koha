@@ -221,7 +221,6 @@ sub _columns {
     return $self->{_columns};
 }
 
-
 =head3 AUTOLOAD
 
 The autoload method is used only to get and set values for an objects properties.

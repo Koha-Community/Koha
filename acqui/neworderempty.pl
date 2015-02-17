@@ -87,7 +87,7 @@ use C4::Search qw/FindDuplicate/;
 #needed for z3950 import:
 use C4::ImportBatch qw/GetImportRecordMarc SetImportRecordStatus/;
 
-use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Currencies;
 use Koha::ItemTypes;
 
@@ -130,7 +130,7 @@ if(!$basketno) {
 
 our $basket = GetBasket($basketno);
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
-my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
+my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
 
 my $contract = GetContract({
     contractnumber => $basket->{contractnumber}
@@ -320,20 +320,20 @@ $template->param(
     firstnamesuggestedby => $suggestion->{firstnamesuggestedby},
     biblionumber         => $biblionumber,
     uncertainprice       => $data->{'uncertainprice'},
-    discount_2dp         => sprintf( "%.2f",  $bookseller->{'discount'} ) ,   # for display
-    discount             => $bookseller->{'discount'},
+    discount_2dp         => sprintf( "%.2f",  $bookseller->discount ) ,   # for display
+    discount             => $bookseller->discount,
     orderdiscount_2dp    => sprintf( "%.2f", $data->{'discount'} || 0 ),
     orderdiscount        => $data->{'discount'},
     order_internalnote   => $data->{'order_internalnote'},
     order_vendornote     => $data->{'order_vendornote'},
-    listincgst       => $bookseller->{'listincgst'},
-    invoiceincgst    => $bookseller->{'invoiceincgst'},
-    name             => $bookseller->{'name'},
+    listincgst       => $bookseller->listincgst,
+    invoiceincgst    => $bookseller->invoiceincgst,
+    name             => $bookseller->name,
     cur_active_sym   => $active_currency->symbol,
     cur_active       => $active_currency->currency,
     currencies       => \@currencies,
     currency         => $data->{currency},
-    vendor_currency  => $bookseller->{listprice},
+    vendor_currency  => $bookseller->listprice,
     orderexists      => ( $new eq 'yes' ) ? 0 : 1,
     title            => $data->{'title'},
     author           => $data->{'author'},
@@ -348,7 +348,7 @@ $template->param(
     quantityrec      => $quantity,
     rrp              => $data->{'rrp'},
     gst_values       => \@gst_values,
-    tax_rate         => $data->{tax_rate_on_ordering} ? $data->{tax_rate_on_ordering}+0.0 : $bookseller->{tax_rate} ? $bookseller->{tax_rate}+0.0 : 0,
+    tax_rate         => $data->{tax_rate_on_ordering} ? $data->{tax_rate_on_ordering}+0.0 : $bookseller->tax_rate ? $bookseller->tax_rate+0.0 : 0,
     listprice        => sprintf( "%.2f", $data->{listprice} || $data->{price} || $listprice),
     total            => sprintf( "%.2f", ($data->{ecost} || 0) * ($data->{'quantity'} || 0) ),
     ecost            => sprintf( "%.2f", $data->{ecost} || 0),

@@ -34,6 +34,7 @@ use C4::Members qw/GetMember/;  #needed for permissions checking for changing ba
 use C4::Items;
 use C4::Suggestions;
 use Koha::Biblios;
+use Koha::Acquisition::Booksellers;
 use Koha::Libraries;
 use C4::Letters qw/SendAlerts/;
 use Date::Calc qw/Add_Delta_Days/;
@@ -87,7 +88,7 @@ my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
 
 my $basket = GetBasket($basketno);
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
-my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
+my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
 my $schema = Koha::Database->new()->schema();
 my $rs = $schema->resultset('VendorEdiAccount')->search(
     { vendor_id => $booksellerid, } );
@@ -99,7 +100,7 @@ unless (CanUserManageBasket($loggedinuser, $basket, $userflags)) {
         basketno => $basketno,
         basketname => $basket->{basketname},
         booksellerid => $booksellerid,
-        name => $bookseller->{name}
+        name => $bookseller->name,
     );
     output_html_with_http_headers $query, $cookie, $template->output;
     exit;
@@ -294,7 +295,7 @@ if ( $op eq 'list' ) {
     my $estimateddeliverydate;
     if( $basket->{closedate} ) {
         my ($year, $month, $day) = ($basket->{closedate} =~ /(\d+)-(\d+)-(\d+)/);
-        ($year, $month, $day) = Add_Delta_Days($year, $month, $day, $bookseller->{deliverytime});
+        ($year, $month, $day) = Add_Delta_Days($year, $month, $day, $bookseller->deliverytime);
         $estimateddeliverydate = sprintf( "%04d-%02d-%02d", $year, $month, $day );
     }
 
@@ -396,9 +397,9 @@ if ( $op eq 'list' ) {
         is_standing          => $basket->{is_standing},
         deliveryplace        => $basket->{deliveryplace},
         billingplace         => $basket->{billingplace},
-        active               => $bookseller->{'active'},
-        booksellerid         => $bookseller->{'id'},
-        name                 => $bookseller->{'name'},
+        active               => $bookseller->active,
+        booksellerid         => $bookseller->id,
+        name                 => $bookseller->name,
         books_loop           => \@books_loop,
         book_foot_loop       => \@book_foot_loop,
         cancelledorders_loop => \@cancelledorders_loop,
@@ -407,7 +408,7 @@ if ( $op eq 'list' ) {
         total_tax_included   => $total_tax_included,
         total_tax_value      => $total_tax_value,
         currency             => $active_currency->currency,
-        listincgst           => $bookseller->{listincgst},
+        listincgst           => $bookseller->listincgst,
         basketgroups         => $basketgroups,
         basketgroup          => $basketgroup,
         grouped              => $basket->{basketgroupid},
@@ -493,7 +494,7 @@ sub get_order_infos {
     foreach my $key (qw(transferred_from transferred_to)) {
         if ($line{$key}) {
             my $order = GetOrder($line{$key});
-            my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $basket->{booksellerid} });
+            my $bookseller = Koha::Acquisition::Booksellers->find( $basket->{booksellerid} );
             $line{$key} = {
                 order => $order,
                 basket => $basket,

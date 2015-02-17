@@ -24,12 +24,12 @@ use C4::Context;
 use C4::Acquisition;
 use C4::Biblio;
 use C4::Items;
-use C4::Bookseller;
 use C4::Budgets;
 use t::lib::Mocks;
 
 use Koha::Database;
 use Koha::DateUtils;
+use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Order;
 use MARC::Record;
 
@@ -41,17 +41,17 @@ $dbh->{RaiseError} = 1;
 my $builder = t::lib::TestBuilder->new;
 my $itemtype = $builder->build({ source => 'Itemtype' })->{ itemtype };
 
-my $booksellerid1 = C4::Bookseller::AddBookseller(
+my $bookseller = Koha::Acquisition::Bookseller->new(
     {
         name => "my vendor 1",
         address1 => "bookseller's address",
         phone => "0123456",
         active => 1
     }
-);
+)->store;
 
 my $basketno1 = C4::Acquisition::NewBasket(
-    $booksellerid1
+    $bookseller->id
 );
 
 my $budgetid = C4::Budgets::AddBudget(

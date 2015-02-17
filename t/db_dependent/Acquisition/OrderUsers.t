@@ -3,10 +3,10 @@ use Test::More tests => 3;
 
 use C4::Acquisition;
 use C4::Biblio;
-use C4::Bookseller;
 use C4::Letters;
 use Koha::Database;
 use Koha::Acquisition::Order;
+use Koha::Acquisition::Booksellers;
 
 use t::lib::TestBuilder;
 
@@ -19,16 +19,16 @@ my $library = $builder->build({
 });
 
 # Creating some orders
-my $booksellerid = C4::Bookseller::AddBookseller(
+my $bookseller = Koha::Acquisition::Bookseller->new(
     {
         name         => "my vendor",
         address1     => "bookseller's address",
         phone        => "0123456",
         active       => 1,
     }
-);
+)->store;
 
-my $basketno = NewBasket( $booksellerid, 1 );
+my $basketno = NewBasket( $bookseller->id, 1 );
 
 my $budgetid = C4::Budgets::AddBudget(
     {
@@ -61,7 +61,7 @@ my $ordernumber = $order->{ordernumber};
 
 my $invoiceid = AddInvoice(
     invoicenumber => 'invoice',
-    booksellerid  => $booksellerid,
+    booksellerid  => $bookseller->id,
     unknown       => "unknown"
 );
 

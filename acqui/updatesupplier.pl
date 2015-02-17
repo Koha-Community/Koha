@@ -52,10 +52,11 @@ use List::Util;
 use C4::Context;
 use C4::Auth;
 
-use C4::Bookseller qw( ModBookseller AddBookseller );
-use C4::Bookseller::Contact;
 use C4::Biblio;
 use C4::Output;
+
+use Koha::Acquisition::Bookseller::Contacts;
+use Koha::Acquisition::Booksellers;
 use CGI qw ( -utf8 );
 
 my $input=new CGI;
@@ -108,15 +109,27 @@ for my $cnt (0..scalar(@{$contact_info{'id'}})) {
         $contact{$_} = $contact_info{$_}->[$cnt];
         $real_contact = 1 if $contact{$_};
     }
-    push @contacts, C4::Bookseller::Contact->new(\%contact) if $real_contact;
+    push @contacts, \%contact if $real_contact;
 }
 
 if($data{'name'}) {
-	if ($data{'id'}){
-        ModBookseller(\%data, \@contacts);
-	} else {
-        $data{id}=AddBookseller(\%data, \@contacts);
-	}
+    if ( $data{id} ) {
+        # Update
+        my $bookseller = Koha::Acquisition::Booksellers->find( $data{id} )->set(\%data)->store;
+        # Delete existing contacts
+        $bookseller->contacts->delete;
+    } else {
+        # Insert
+        delete $data{id}; # Remove the key if exists
+        my $bookseller = Koha::Acquisition::Bookseller->new( \%data )->store;
+        $data{id} = $bookseller->id;
+    }
+    # Insert contacts
+    for my $contact ( @contacts ) {
+        $contact->{booksellerid} = $data{id};
+        Koha::Acquisition::Bookseller::Contact->new( $contact )->store
+    }
+
     #redirect to booksellers.pl
     print $input->redirect("booksellers.pl?booksellerid=".$data{id});
 } else {

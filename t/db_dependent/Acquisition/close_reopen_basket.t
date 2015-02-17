@@ -5,10 +5,10 @@ use Modern::Perl;
 use Test::More tests => 6;
 use C4::Acquisition;
 use C4::Biblio qw( AddBiblio DelBiblio );
-use C4::Bookseller;
 use C4::Budgets;
 use C4::Context;
 use Koha::Database;
+use Koha::Acquisition::Bookseller;
 use Koha::Acquisition::Order;
 
 # Start transaction
@@ -22,17 +22,17 @@ $dbh->do(q{
     DELETE FROM aqorders;
 });
 
-my $booksellerid = C4::Bookseller::AddBookseller(
+my $bookseller = Koha::Acquisition::Bookseller->new(
     {
         name => "my vendor",
         address1 => "bookseller's address",
         phone => "0123456",
         active => 1
     }
-);
+)->store;
 
 my $basketno = C4::Acquisition::NewBasket(
-    $booksellerid
+    $bookseller->id
 );
 
 my $budgetid = C4::Budgets::AddBudget(

@@ -35,7 +35,7 @@ use C4::Output;
 use C4::Acquisition;
 use C4::Budgets;
 
-use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Currencies;
 use Koha::DateUtils;
 use Koha::Misc::Files;
@@ -112,7 +112,7 @@ elsif ( $op && $op eq 'delete' ) {
 
 
 my $details = GetInvoiceDetails($invoiceid);
-my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $details->{booksellerid} });
+my $bookseller = Koha::Acquisition::Booksellers->find( $details->{booksellerid} );
 my @orders_loop = ();
 my $orders = $details->{'orders'};
 my @foot_loop;
@@ -177,7 +177,7 @@ $template->param(
     total_tax_value  => $total_tax_value,
     total_tax_excluded_shipment => $total_tax_excluded + $details->{shipmentcost},
     total_tax_included_shipment => $total_tax_included + $details->{shipmentcost},
-    invoiceincgst    => $bookseller->{invoiceincgst},
+    invoiceincgst    => $bookseller->invoiceincgst,
     currency         => Koha::Acquisition::Currencies->get_active,
     budgets_loop     => \@budgets_loop,
 );
