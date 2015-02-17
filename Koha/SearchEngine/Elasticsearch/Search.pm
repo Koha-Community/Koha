@@ -48,10 +48,11 @@ Koha::SearchEngine::Elasticsearch::Search->mk_accessors(qw( store ));
 
 =head2 search
 
-    my $results = $searcher->search($query, $page, $count);
+    my $results = $searcher->search($query, $page, $count, %options);
 
 Run a search using the query. It'll return C<$count> results, starting at page
 C<$page> (C<$page> counts from 1, anything less that, or C<undef> becomes 1.)
+C<$count> is also the number of entries on a page.
 
 C<%options> is a hash containing extra options:
 
@@ -64,6 +65,8 @@ an offset (i.e. the number of the record to start with), rather than a page.
 
 =back
 
+Returns
+
 =cut
 
 sub search {
@@ -71,8 +74,9 @@ sub search {
 
     my $params = $self->get_elasticsearch_params();
     my %paging;
+    # 20 is the default number of results per page
     $paging{limit} = $count || 20;
-    # ES doesn't want pages, it wants a record to start from.
+    # ES/Catmandu doesn't want pages, it wants a record to start from.
     if (exists $options{offset}) {
         $paging{start} = $options{offset};
     } else {
@@ -82,7 +86,7 @@ sub search {
     $self->store(
         Catmandu::Store::ElasticSearch->new(
             %$params,
-            trace_calls => 0,
+            trace_calls => 1,
         )
     );
     my $results = $self->store->bag->search( %$query, %paging );
@@ -130,6 +134,32 @@ sub search_compat {
     $result{biblioserver}{hits} = $results->total;
     $result{biblioserver}{RECORDS} = \@records;
     return (undef, \%result, $self->_convert_facets($results->{facets}));
+}
+
+=head2 search_marc
+
+    my ( $results, $total ) =
+      $searcher->search_marc( $query, $page, $count, %options );
+
+This has a similar calling convention to L<search>, however it assumes that all
+the results are going to contain MARC, and just provides an arrayref of them,
+along with a count of the total number of results.
+
+=cut
+
+sub search_marc {
+    # TODO this probably should be temporary, until something more
+    # comprehensive is implemented using Koha::RecordProcessor and such.
+    my $self = shift;
+
+    my $res = $self->search(@_);
+    my @records;
+    $res->each(sub {
+            my $marc_json = @_[0]->{record};
+            my $marc = $self->json2marc($marc_json);
+            push @records, $marc;
+        });
+    return (\@records, $res->total);
 }
 
 =head2 json2marc
