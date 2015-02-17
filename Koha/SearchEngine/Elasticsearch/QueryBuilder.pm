@@ -264,8 +264,8 @@ sub build_authorities_query {
     my @query_parts;
     my @filter_parts;
     foreach my $s ( @{ $search->{searches} } ) {
-        my ($wh, $op, $val) = $s->{'where', 'operator', 'value'};
-        my ($q_type);
+        my ($wh, $op, $val) = @{ $s }{qw(where operator value)};
+        $wh = '_any' if $wh eq 'any';
         if ($op eq 'is' || $op eq '=') {
             # look for something that matches completely
             # note, '=' is about numerical vals. May need special handling.
@@ -299,7 +299,8 @@ sub build_authorities_query {
       $builder->build_authorities_query_compat( \@marclist, \@and_or,
         \@excluding, \@operator, \@value, $authtypecode, $orderby );
 
-This builds a query for searching for authorities.
+This builds a query for searching for authorities, in the style of
+L<C4::AuthoritiesMarc::SearchAuthorities>.
 
 Arguments:
 
@@ -364,7 +365,7 @@ sub build_authorities_query_compat {
         'match-heading' => 'Match-heading',
         'see-from'      => 'Match-heading-see-from',
         thesaurus       => 'Subject-heading-thesaurus',
-        ''              => '',
+        any              => '',
     );
 
     # Make sure everything exists

@@ -32,6 +32,8 @@ use C4::Koha;
 use C4::Search::History;
 
 use Koha::Authority::Types;
+use Koha::SearchEngine::Search;
+use Koha::SearchEngine::QueryBuilder;
 
 my $query        = new CGI;
 my $op           = $query->param('op') || '';
@@ -58,10 +60,16 @@ if ( $op eq "do_search" ) {
     $resultsperpage = $query->param('resultsperpage');
     $resultsperpage = 20 if ( !defined $resultsperpage );
     my @tags;
-    my ( $results, $total, @fields ) =
-      SearchAuthorities( \@marclist, \@and_or, \@excluding, \@operator,
-        \@value, $startfrom * $resultsperpage,
-        $resultsperpage, $authtypecode, $orderby );
+    my $builder  = Koha::SearchEngine::QueryBuilder->new();
+    my $searcher = Koha::SearchEngine::Search->new({index => 'authorities'});
+    my $search_query = $builder->build_authorities_query_compat( \@marclist, \@and_or,
+        \@excluding, \@operator, \@value, $authtypecode, $orderby );
+#    use Data::Dumper;
+#    die Dumper(\@marclist, \@and_or,
+#        \@excluding, \@operator, \@value, $authtypecode, $orderby, $query);
+    my ( $results, $total ) =
+      $searcher->search_marc( $search_query, $startfrom, $resultsperpage );
+
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "opac-authoritiessearchresultlist.tt",
@@ -116,8 +124,9 @@ if ( $op eq "do_search" ) {
         $to = ( ( $startfrom + 1 ) * $resultsperpage );
     }
     unless (C4::Context->preference('OPACShowUnusedAuthorities')) {
-        my @usedauths = grep { $_->{used} > 0 } @$results;
-        $results = \@usedauths;
+#        TODO implement usage counts
+#        my @usedauths = grep { $_->{used} > 0 } @$results;
+#        $results = \@usedauths;
     }
 
     # Opac search history
@@ -151,7 +160,6 @@ if ( $op eq "do_search" ) {
     }
 
     $template->param( result => $results ) if $results;
-    $template->param( FIELDS => \@fields );
     $template->param( orderby => $orderby );
     $template->param(
         startfrom      => $startfrom,
