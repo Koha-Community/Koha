@@ -152,6 +152,10 @@
 <!-- PUB / COPY YEAR LIMIT --><!-- FIXME: add publication,copyright,acquisition options -->
 	<p><label for="limit-yr">Year: </label>
 		<input type="text" size="15" name="limit-yr" id="limit-yr" value=""/>&nbsp;&nbsp;(format: yyyy-yyyy)</p>
+    <p>
+        <label for="limit-datereceived-yr">Receival year: </label>
+        <input type="text" size="15" name="limit-datereceived-yr" id="limit-datereceived-yr" value=""/>&nbsp;&nbsp;(format: yyyy)
+    </p>
 <!-- /PUB / COPY YEAR LIMIT -->
 </fieldset>
 <fieldset id="language">
@@ -251,7 +255,26 @@
 <!-- AVAILABILITY LIMITS -->
     <fieldset id="availability"><legend>Location and availability</legend>
 <fieldset id="currently-avail">
-        <p><label for="available-items">Only items currently available:</label> <input type="checkbox" id="available-items" name="limit" value="available" /></p>
+        <p><label for="available-items">Only items currently available</label> <input type="checkbox" id="available-items" name="limit" value="available" />
+        <br/>
+        <label for="notforloan">Items with the following "Not for loan"-status</label>
+            <select name="limit" class="subtype">
+            <option value="" >Any status</option>
+            <option value="notforloan:0" >No status</option>
+            [% FOREACH notforloanStatus IN notforloanStatuses %]
+                [% IF notforloanStatus.authorised_value == -1 %]
+                    <option value="notforloan:[% notforloanStatus.authorised_value %]" >On order</option>
+                [% ELSIF notforloanStatus.authorised_value == 6 %]
+                    <option value="notforloan:[% notforloanStatus.authorised_value %]" >Billed</option>
+                [% ELSIF notforloanStatus.authorised_value == 2 %]
+                    <option value="notforloan:[% notforloanStatus.authorised_value %]" >Staff reference</option>
+                [% ELSIF notforloanStatus.authorised_value == 1 %]
+                    <option value="notforloan:[% notforloanStatus.authorised_value %]" >Not for loan</option>
+                [% ELSE %]
+                    <option value="notforloan:[% notforloanStatus.authorised_value %]" >[% notforloanStatus.lib %]</option>
+                [% END %]
+            [% END %]
+            </select></p>
 </fieldset>
 
 <fieldset id="select-libs">

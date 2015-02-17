@@ -275,6 +275,10 @@ $template->param(advancedsearchesloop => $advancedsearchesloop);
 # The following should only be loaded if we're bringing up the advanced search template
 if ( $template_type eq 'advsearch' ) {
 
+    #Load the notforloan-statuses for Items
+    my $notforloanStatuses = C4::Koha::GetAuthorisedValues('NOT_LOAN');
+    $template->param(notforloanStatuses =>  $notforloanStatuses,);
+
     # load the servers (used for searching -- to do federated searching, etc.)
     my $primary_servers_loop;# = displayPrimaryServers();
     $template->param(outer_servers_loop =>  $primary_servers_loop,);
@@ -429,6 +433,17 @@ if ($params->{'limit-yr'}) {
         $limit_yr_value = $params->{'limit-yr'};
     }
     push @limits,$limit_yr;
+    #FIXME: Should return a error to the user, incorect date format specified
+}
+# append receivaldate limits if they exist
+if ($params->{'limit-datereceived-yr'}) {
+    my $limit_datereceived_yr_value;
+    my $limit_datereceived_yr;
+    if ($params->{'limit-datereceived-yr'} =~ /\d{4}/) {
+        $limit_datereceived_yr = "datereceived,rtrn=$params->{'limit-datereceived-yr'}";
+        $limit_datereceived_yr_value = $params->{'limit-datereceived-yr'};
+    }
+    push @limits,$limit_datereceived_yr;
     #FIXME: Should return a error to the user, incorect date format specified
 }
 
