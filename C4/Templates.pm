@@ -264,6 +264,10 @@ sub themelanguage {
             return ( $theme, 'en', uniq( \@themes ) );
         }
     }
+    # tmpl is a full path, so this is a template for a plugin
+    if ( $tmpl =~ /^\// && -e $tmpl ) {
+        return ( $themes[0], $lang, uniq( \@themes ) );
+    }
 }
 
 
