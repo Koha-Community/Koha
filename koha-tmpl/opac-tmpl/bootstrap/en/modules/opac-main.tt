@@ -41,7 +41,7 @@
             <div id="news" class="newscontainer">
                 [% FOREACH koha_new IN koha_news %]
                     <div class="newsitem">
-                        <h4 class="newsheader">[% koha_new.title %]</h4>
+                        <a name="newsitem[% koha_new.idnew %]"></a><h4 class="newsheader">[% koha_new.title %]</h4>
                         <div class="newsbody">[% koha_new.new %]</div>
                         <div class="newsfooter">(published on [% koha_new.newdate %])</div>
                     </div>
