@@ -19,11 +19,8 @@
 <div id="login_error">
     <strong>Error:</strong>
     You do not have permission to access this page.
-    <p>Log in as a different user.</p>
 </div>
-<div id="onerror_actions">
-    <a href="javascript:window.history.back()" class="button">Previous page</a>
-</div>
+<p><strong>Log in as a different user</strong></p></h2>
 [% END %]
 
 [% IF ( timed_out ) %]
@@ -71,6 +68,11 @@
 
 <p class="submit"><input id="submit" type="submit" value="Login" tabindex="4" /></p>
 </form>
+[% IF ( nopermission ) %]
+    <p><a href="javascript:window.history.back()">[Previous page]</a>
+    <a href="/">[Main page]</a></p>
+[% END %]
+
 <!--<ul> -->
 <!--	<li><a href="/cgi-bin/koha/lostpassword.pl" title="Password lost and found">Lost your password?</a></li> -->
 <!-- </ul> -->
