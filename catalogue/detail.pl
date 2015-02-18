@@ -224,7 +224,7 @@ foreach my $item (@items) {
     $item->{'ccode'} = $collections->{$ccode} if ( defined( $ccode ) && defined($collections) && exists( $collections->{$ccode} ) );
     my $copynumber = $item->{'copynumber'};
     $item->{'copynumber'} = $copynumbers->{$copynumber} if ( defined($copynumber) && defined($copynumbers) && exists( $copynumbers->{$copynumber} ) );
-    foreach (qw(ccode enumchron copynumber itemnotes uri)) {
+    foreach (qw(ccode enumchron copynumber stocknumber itemnotes uri)) {
         $itemfields{$_} = 1 if ( $item->{$_} );
     }
 
@@ -313,6 +313,7 @@ $template->param(
 	itemdata_enumchron  => $itemfields{enumchron},
 	itemdata_uri        => $itemfields{uri},
 	itemdata_copynumber => $itemfields{copynumber},
+	itemdata_stocknumber => $itemfields{stocknumber},
 	volinfo				=> $itemfields{enumchron},
     itemdata_itemnotes  => $itemfields{itemnotes},
 	z3950_search_params	=> C4::Search::z3950_search_args($dat),
