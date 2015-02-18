@@ -73,7 +73,7 @@ print_available()
 {
     # Loop over only one opac theme
     for i in $( ls $PO_DIR | grep opac-bootstrap ); do
-        echo `basename $i -i-opac-bootstrap.po` | \
+        echo `basename $i -opac-bootstrap.po` | \
             grep -v -x -e en
     done
 }
