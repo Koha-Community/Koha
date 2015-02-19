@@ -42,11 +42,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $casAuthentication = C4::Context->preference('casAuthentication');
-$template->param(
-    casAuthentication   => $casAuthentication,
-);
-
 # Get the news to display
 # use cookie setting for language, bug default to syspref if it's not set
 my ($theme, $news_lang, $availablethemes) = C4::Templates::themelanguage(C4::Context->config('opachtdocs'),'opac-main.tt','opac',$input);
