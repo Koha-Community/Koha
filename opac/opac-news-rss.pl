@@ -25,10 +25,6 @@ use C4::Output;
 use C4::NewsChannels;    # GetNewsToDisplay
 use C4::Languages qw(getTranslatedLanguages accept_language);
 
-use strict;
-use warnings;
-
-
 my $input = new CGI;
 my $dbh   = C4::Context->dbh;
 
