@@ -35,7 +35,7 @@
       [% INCLUDE itemsearch_header name='homebranch' label='home branch' text='Home library' %]
       [% INCLUDE itemsearch_header name='holdingbranch' label='holding branch' text='Current location' %]
       [% INCLUDE itemsearch_header name='location' label='location' text='Shelving location' %]
-      [% INCLUDE itemsearch_header name='stocknumber' label='stock number' text='Stock number' %]
+      [% INCLUDE itemsearch_header name='stocknumber' label='inventory number' text='Inventory number' %]
       [% INCLUDE itemsearch_header name='notforloan' label='status' text='Status' %]
       [% INCLUDE itemsearch_header name='issues' label='issues' text='Checkouts' %]
       <th></th>
