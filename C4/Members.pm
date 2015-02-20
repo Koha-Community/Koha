@@ -2111,17 +2111,24 @@ sub GetBorrowersToExpunge {
                          : "");  
 
     my $dbh   = C4::Context->dbh;
-    my $query = "
+    my $query = q|
         SELECT borrowers.borrowernumber,
                MAX(old_issues.timestamp) AS latestissue,
                MAX(issues.timestamp) AS currentissue
         FROM   borrowers
         JOIN   categories USING (categorycode)
+        LEFT JOIN (
+            SELECT guarantorid
+            FROM borrowers
+            WHERE guarantorid IS NOT NULL
+                AND guarantorid <> 0
+        ) as tmp ON borrowers.borrowernumber=tmp.guarantorid
         LEFT JOIN old_issues USING (borrowernumber)
         LEFT JOIN issues USING (borrowernumber) 
         WHERE  category_type <> 'S'
-        AND borrowernumber NOT IN (SELECT guarantorid FROM borrowers WHERE guarantorid IS NOT NULL AND guarantorid <> 0)
-   ";
+        AND tmp.guarantorid IS NOT NULL
+   |;
+
     my @query_params;
     if ( $filterbranch && $filterbranch ne "" ) {
         $query.= " AND borrowers.branchcode = ? ";
