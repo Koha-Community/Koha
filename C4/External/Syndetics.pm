@@ -63,7 +63,9 @@ Get Summary data from Syndetics
 =cut
 
 sub get_syndetics_index {
-    my ( $isbn,$upc,$oclc ) = @_;
+    my ( $isbn, $upc, $oclc ) = @_;
+
+    return unless ( $isbn || $upc || $oclc );
 
     my $response = _fetch_syndetics_content('INDEX.XML', $isbn, $upc, $oclc);
     unless ($response->content_type =~ /xml/) {
@@ -80,9 +82,9 @@ sub get_syndetics_index {
     for my $available_type ('SUMMARY','TOC','FICTION','AWARDS1','SERIES1','SPSUMMARY','SPREVIEW', 'AVPROFILE', 'AVSUMMARY','DBCHAPTER','LJREVIEW','PWREVIEW','SLJREVIEW','CHREVIEW','BLREVIEW','HBREVIEW','KIREVIEW','CRITICASREVIEW','ANOTES') {
         if (exists $response->{$available_type} && $response->{$available_type} =~ /$available_type/) {
             $syndetics_elements->{$available_type} = $available_type;
-            #warn "RESPONSE: $available_type : $response->{$available_type}";
         }
     }
+
     return $syndetics_elements if $syndetics_elements;
 }
 
