@@ -176,10 +176,8 @@
        <li>
         <label for="creator">Created by: </label>
         <span>
-          [% IF (creator && creator.firstname && creator.surname) %]
-            [% IF creator.firstname %]
-              [% creator.firstname %]
-            [% END %]
+          [% IF creator and (creator.firstname or creator.surname) %]
+            [% creator.firstname %]
             [% creator.surname %]
           [% ELSE %]
             No name
