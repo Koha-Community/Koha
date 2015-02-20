@@ -106,31 +106,17 @@ if ($date) {
 }
 
 my $branchname;
-my @branches_loop;
+my $branches_loop;
 if (   $flags->{superlibrarian}
     or ( ref $flags->{serials}  and $flags->{serials}->{superserials} )
     or ( !ref $flags->{serials} and $flags->{serials} == 1 ) )
 {
-    my $branches = GetBranches();
-    foreach my $b (sort keys %$branches) {
-        my $selected = 0;
-        if( $branch and $branch eq $b ){
-            $selected = 1;
-            $branchname = $branches->{$b}->{branchname};
-        }
-        push @branches_loop, {
-            branchcode => $b,
-            branchname => $branches->{$b}->{branchname},
-            selected   => $selected,
-        };
-    }
+    $branches_loop = C4::Branch::GetBranchesLoop( $branch );
 }
 
 $template->param (
     (uc(C4::Context->preference("marcflavour"))) => 1,
-    branches_loop   => \@branches_loop,
-    branchcode      => $branch,
-    branchname      => $branchname,
+    branches_loop   => $branches_loop,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
