@@ -59,6 +59,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.07039'
     },
+    'DBIx::Connector' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.47'
+    },
     'Net::Z3950::ZOOM' => {
         'usage'    => 'Core',
         'required' => '1',
