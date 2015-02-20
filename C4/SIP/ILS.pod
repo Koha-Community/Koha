@@ -76,12 +76,11 @@ successfully logged in, is initialize the ILS module by calling
 
     $ils = new ILS $institution
 
-where C<$institution> is an object of type
-C<Sip::Configuration::Institution>, describing the institution to
-which the terminal belongs.  In general, this will be the single
-institution that the ILS supports, but it may be that in a
-consortial setting, the SIP server may support connecting to
-different ILSs based on the C<$institution> of the terminal.
+where C<$institution> is a hash ( institution => 'Foo Public Library' )
+describing the institution to which the terminal belongs.
+In general, this will be the single institution that the ILS supports,
+but it may be that in a consortial setting, the SIP server may support
+connecting to different ILSs based on the C<$institution> of the terminal.
 
 =head1 BASIC OBJECT ACCESS AND PROTOCOL SUPPORT
 
