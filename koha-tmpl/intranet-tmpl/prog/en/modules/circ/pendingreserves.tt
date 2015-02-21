@@ -14,7 +14,8 @@ $(document).ready(function() {
         { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
         { "sType": "title-string", "aTargets" : [ "title-string" ] },
         { "sType": "string", "aTargets": [ "string-sort" ] } //Target columns that use <br> separators and pull-down menus.
-    ]
+    ],
+    "sPaginationType": "full_numbers"
   }));
   holdst.fnAddFilters("filter");
   [%# add separateData function to cleanse jQuery select lists by breaking apart strings glued with BR tags and then de-duplicating any repeated library codes %]
@@ -36,7 +37,7 @@ $(document).ready(function() {
   [%# add SeparateData function into createSelect function, so that it does the createSelect on clean data %]
   function createSelect( data ) {
       data = separateData(data);
-      var r='<select style="width:99%"><option value="">None</option>', i, len=data.length;
+      var r='<select style="width:99%"><option value="">' + _("None") + '</option>', i, len=data.length;
       for ( i=0 ; i<len ; i++ ) {
           r += '<option value="'+data[i]+'">'+data[i]+'</option>';
       }
