@@ -1,4 +1,6 @@
 [% USE KohaDates %]
+[% USE Branches %]
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials [% biblionumber %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
@@ -76,7 +78,7 @@
                                     [% IF (sub.internalnotes) %]([% sub.internalnotes %])[% END %]
                                 </td>
                                 <td>
-                                    [% IF (sub.branchcode) %][% sub.branchcode %][% END %]
+                                    [% IF (sub.branchcode) %][% Branches.GetName( sub.branchcode ) %][% END %]
                                 </td>
                                 <td>
                                     [% IF (sub.callnumber) %][% sub.callnumber %][% END %]
