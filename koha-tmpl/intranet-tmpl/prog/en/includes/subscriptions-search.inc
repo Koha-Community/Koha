@@ -12,20 +12,22 @@
                 <label for="title">Title:</label>
                 <input type="text" id="title" name="title_filter" value="[% title_filter %]" />
               </li>
+              [% IF Koha.Preference( 'marcflavour' ) == "UNIMARC" %]
               <li>
                 <label for="ean">EAN:</label>
                 <input type="text" id="ean" name="EAN_filter" value="[% EAN_filter %]" />
               </li>
+              [% END %]
               <li>
                 <label for="publisher">Publisher:</label>
                 <input type="text" id="publisher" name="publisher_filter" value="[% publisher_filter %]" />
               </li>
               <li>
-                <label for="supplier">Supplier:</label>
+                <label for="supplier">Vendor:</label>
                 <input type="text" id="supplier" name="supplier_filter" value="[% supplier_filter %]" />
               </li>
               <li>
-                <label for="branch">Branch:</label>
+                <label for="branch">Library:</label>
                 <select id="branch" name="branch_filter">
                   <option value="">All</option>
                   [% FOREACH branch IN branches_loop %]
