@@ -1490,11 +1490,11 @@ sub NewSubscription {
     # then create the 1st expected number
     $query = qq(
         INSERT INTO subscriptionhistory
-            (biblionumber, subscriptionid, histstartdate,  opacnote, librariannote)
-        VALUES (?,?,?,?,?)
+            (biblionumber, subscriptionid, histstartdate)
+        VALUES (?,?,?)
         );
     $sth = $dbh->prepare($query);
-    $sth->execute( $biblionumber, $subscriptionid, $startdate, $notes, $internalnotes );
+    $sth->execute( $biblionumber, $subscriptionid, $startdate);
 
     # reread subscription to get a hash (for calculation of the 1st issue number)
     my $subscription = GetSubscription($subscriptionid);
