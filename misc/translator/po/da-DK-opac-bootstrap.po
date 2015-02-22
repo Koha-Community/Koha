@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2015-01-19 16:19-0300\n"
+"POT-Creation-Date: 2015-02-15 21:06-0300\n"
 "PO-Revision-Date: 2015-01-20 16:50+0000\n"
 "Last-Translator: Poul <poul@wachmann.dk>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha.org>\n"
@@ -67,8 +67,8 @@ msgid ""
 "%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s%s"
 "%sKoha online%s catalog &rsaquo; Details for: %s%s, %s%s %s %s %s"
 msgstr ""
-"%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s%s%"
-"sKoha online%s katalog &rsaquo; Detaljer for: %s%s, %s%s %s %s %s"
+"%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s%s"
+"%sKoha online%s katalog &rsaquo; Detaljer for: %s%s, %s%s %s %s %s"
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -172,9 +172,9 @@ msgid ""
 "'%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s %s You did not specify any search "
 "criteria. %s %s %s %s "
 msgstr ""
-"%s %s %s %s %s%s%sKoha online%s katalog &rsaquo; %s Søgeresultat %sfor "
-"'%s'%s%s&nbsp;med afgrænsning:&nbsp;'%s'%s %s Du angav ingen søgekriterier. %"
-"s %s %s %s "
+"%s %s %s %s %s%s%sKoha online%s katalog &rsaquo; %s Søgeresultat %sfor '%s'%s"
+"%s&nbsp;med afgrænsning:&nbsp;'%s'%s %s Du angav ingen søgekriterier. %s %s "
+"%s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE KohaDates 
@@ -274,19 +274,6 @@ msgstr ""
 #, c-format
 msgid "%s %s %s %s You have subscribed to email notification on new issues "
 msgstr "%s %s %s %s Du har abonnement på email-beskeder om nye udgaver "
-
-#. %1$s:  IF showpriority 
-#. %2$s:  bibitemloo.rank 
-#. %3$s:  END 
-#. %4$s:  IF showholds && showpriority 
-#. %5$s:  END 
-#. %6$s:  IF showholds 
-#. %7$s:  bibitemloo.reservecount 
-#. %8$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:178
-#, c-format
-msgid "%s %s %s %s out of %s %s %s %s "
-msgstr "%s %s %s %s ud af %s %s %s %s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnList ) 
@@ -871,8 +858,8 @@ msgid ""
 msgstr ""
 "%s %s [%%#- This include takes two parameters: an item structure and an "
 "optional loan (issue) structure. The issue structure is used by course "
-"reserves pages, which do not use an API to fetch items that populates "
-"item.datedue. -%%] %s %s %s %s "
+"reserves pages, which do not use an API to fetch items that populates item."
+"datedue. -%%] %s %s %s %s "
 
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -1558,12 +1545,6 @@ msgstr "%sLog ud"
 msgid "%s MARC view"
 msgstr "%sMARC-visning"
 
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:397
-#, c-format
-msgid "%s Mobile phone:"
-msgstr "%s Mobiltelefon:"
-
 #. %1$s:  ELSIF ( ISSUE.too_soon ) 
 #. %2$s:  ISSUE.soonestrenewdate 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:235
@@ -1597,6 +1578,12 @@ msgstr "%sReserveret %sIkke flere fornyelser tilbage %s "
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:197
 #, c-format
 msgid "%s Other names:"
+msgstr "%s Andre navne:"
+
+#. %1$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:397
+#, fuzzy, c-format
+msgid "%s Other phone:"
 msgstr "%s Andre navne:"
 
 #. %1$s:  IF ( PassMismatch ) 
@@ -1804,7 +1791,7 @@ msgstr "%s Videoudtog"
 #. %12$s:  itemLoo.reservedate 
 #. %13$s:  END 
 #. %14$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:361
 #, fuzzy, c-format
 msgid ""
 "%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s %s "
@@ -1902,9 +1889,9 @@ msgid ""
 "%%] "
 msgstr ""
 "%s [%% UNLESS hidden.defined('streetnumber') && hidden.defined('address') && "
-"hidden.defined('address2') && hidden.defined('city') && "
-"hidden.defined('state') && hidden.defined('zipcode') && "
-"hidden.defined('country') %%] "
+"hidden.defined('address2') && hidden.defined('city') && hidden."
+"defined('state') && hidden.defined('zipcode') && hidden.defined('country') "
+"%%] "
 
 #. %1$s:  END # / defined 'branchcode' 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:90
@@ -1915,10 +1902,10 @@ msgid ""
 "defined('initials') && hidden.defined('othernames') && hidden.defined('sex') "
 "%%] "
 msgstr ""
-"%s [%% UNLESS hidden.defined('title') && hidden.defined('surname') && "
-"hidden.defined('firstname') && hidden.defined('dateofbirth') && "
-"hidden.defined('initials') && hidden.defined('othernames') && "
-"hidden.defined('sex') %%] "
+"%s [%% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden."
+"defined('firstname') && hidden.defined('dateofbirth') && hidden."
+"defined('initials') && hidden.defined('othernames') && hidden.defined('sex') "
+"%%] "
 
 #. %1$s:  BLOCK showreference 
 #. %2$s:  SET authidurl = '/cgi-bin/koha/opac-authoritiesdetail.pl?authid=' 
@@ -2447,9 +2434,8 @@ msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;"
 "AuthenticatePatron&gt; &lt;id&gt;419&lt;/id&gt; &lt;/AuthenticatePatron&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; "
-"&lt;AuthenticatePatron&gt; &lt;id&gt;419&lt;/id&gt; "
-"&lt;/AuthenticatePatron&gt;"
+"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;"
+"AuthenticatePatron&gt; &lt;id&gt;419&lt;/id&gt; &lt;/AuthenticatePatron&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:774
 #, c-format
@@ -2534,85 +2520,74 @@ msgid ""
 "datelastborrowed&gt; &lt;/loan&gt; &lt;/loans&gt; &lt;/GetPatronInfo&gt;"
 msgstr ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetPatronInfo&gt; "
-"&lt;category_type&gt;A&lt;/category_type&gt; "
-"&lt;categorycode&gt;ADUEXT&lt;/categorycode&gt; "
-"&lt;borrowernumber&gt;419&lt;/borrowernumber&gt; &lt;lost&gt;0&lt;/lost&gt; "
-"&lt;branchcode&gt;BIB&lt;/branchcode&gt; "
-"&lt;amountoutstanding&gt;6&lt;/amountoutstanding&gt; &lt;description&gt;"
-"Adulte extérieur&lt;/description&gt; &lt;title&gt;M&lt;/title&gt; "
-"&lt;enrolmentperiod&gt;12&lt;/enrolmentperiod&gt; "
-"&lt;charges&gt;6.00&lt;/charges&gt; "
-"&lt;dateenrolled&gt;2009-03-04&lt;/dateenrolled&gt; "
-"&lt;borrowernotes&gt;&lt;/borrowernotes&gt; "
-"&lt;dateexpiry&gt;2010-03-04&lt;/dateexpiry&gt; &lt;firstname&gt;Jean-"
-"André&lt;/firstname&gt; &lt;gonenoaddress&gt;0&lt;/gonenoaddress&gt; "
-"&lt;dateofbirth&gt;1984-06-08&lt;/dateofbirth&gt; "
-"&lt;debarred&gt;0&lt;/debarred&gt; &lt;branchname&gt;Bibliothèque Jean "
-"Prunier&lt;/branchname&gt; &lt;surname&gt;SANTONI&lt;/surname&gt; "
-"&lt;cardnumber&gt;815&lt;/cardnumber&gt; &lt;initials&gt;JAS&lt;/initials&gt;"
-" &lt;sort1&gt;CSP5&lt;/sort1&gt; &lt;sex&gt;M&lt;/sex&gt; &lt;loans&gt; "
-"&lt;loan&gt; &lt;lastreneweddate&gt;2009-04-03&lt;/lastreneweddate&gt; "
-"&lt;isbn&gt;2253003689&lt;/isbn&gt; "
-"&lt;borrowernumber&gt;419&lt;/borrowernumber&gt; "
-"&lt;branchcode&gt;BIB&lt;/branchcode&gt; "
-"&lt;itemnumber&gt;4454&lt;/itemnumber&gt; "
-"&lt;date_due&gt;2009-05-06&lt;/date_due&gt; "
-"&lt;barcode&gt;4765476&lt;/barcode&gt; "
-"&lt;datelastseen&gt;2008-08-23&lt;/datelastseen&gt; "
-"&lt;issuedate&gt;2008-08-23&lt;/issuedate&gt; &lt;title&gt;L'Île au "
-"trésor&lt;/title&gt; &lt;itemtype&gt;LITT&lt;/itemtype&gt; &lt;author&gt;"
-"Robert Louis Stevenson&lt;/author&gt; &lt;timestamp&gt;2009-04-03 "
-"14:46:10&lt;/timestamp&gt; &lt;publishercode&gt;Librairie générale "
-"française&lt;/publishercode&gt; "
-"&lt;datecreated&gt;2008-08-23&lt;/datecreated&gt; "
-"&lt;totalrenewals&gt;11&lt;/totalrenewals&gt; "
-"&lt;dateaccessioned&gt;2008-08-23&lt;/dateaccessioned&gt; "
-"&lt;onloan&gt;2008-09-17&lt;/onloan&gt; "
-"&lt;biblioitemnumber&gt;4483&lt;/biblioitemnumber&gt; "
-"&lt;withdrawn&gt;0&lt;/withdrawn&gt; &lt;notforloan&gt;0&lt;/notforloan&gt; "
-"&lt;replacementpricedate&gt;2008-08-23&lt;/replacementpricedate&gt; "
-"&lt;itemcallnumber&gt;RO STE&lt;/itemcallnumber&gt; &lt;location&gt;Salle de "
-"lecture&lt;/location&gt; &lt;itemlost&gt;0&lt;/itemlost&gt; "
-"&lt;publicationyear&gt;1985&lt;/publicationyear&gt; "
-"&lt;issues&gt;1&lt;/issues&gt; &lt;homebranch&gt;BIB&lt;/homebranch&gt; "
-"&lt;holdingbranch&gt;BIB&lt;/holdingbranch&gt; "
-"&lt;biblionumber&gt;4483&lt;/biblionumber&gt; "
-"&lt;renewals&gt;3&lt;/renewals&gt; &lt;damaged&gt;0&lt;/damaged&gt; "
-"&lt;cn_sort&gt;RO_STE&lt;/cn_sort&gt; "
-"&lt;frameworkcode&gt;&lt;/frameworkcode&gt; "
-"&lt;datelastborrowed&gt;2008-08-23&lt;/datelastborrowed&gt; &lt;/loan&gt; "
-"&lt;loan&gt; &lt;lastreneweddate&gt;2009-03-17&lt;/lastreneweddate&gt; "
-"&lt;isbn&gt;9782700017823&lt;/isbn&gt; "
-"&lt;borrowernumber&gt;419&lt;/borrowernumber&gt; "
-"&lt;branchcode&gt;BIB&lt;/branchcode&gt; "
-"&lt;itemnumber&gt;4456&lt;/itemnumber&gt; "
-"&lt;date_due&gt;2009-04-18&lt;/date_due&gt; "
-"&lt;barcode&gt;2700017UUU&lt;/barcode&gt; "
-"&lt;datelastseen&gt;2008-08-23&lt;/datelastseen&gt; "
-"&lt;issuedate&gt;2008-08-23&lt;/issuedate&gt; &lt;title&gt;La guitare en 10 "
+"&lt;category_type&gt;A&lt;/category_type&gt; &lt;categorycode&gt;ADUEXT&lt;/"
+"categorycode&gt; &lt;borrowernumber&gt;419&lt;/borrowernumber&gt; &lt;"
+"lost&gt;0&lt;/lost&gt; &lt;branchcode&gt;BIB&lt;/branchcode&gt; &lt;"
+"amountoutstanding&gt;6&lt;/amountoutstanding&gt; &lt;description&gt;Adulte "
+"extérieur&lt;/description&gt; &lt;title&gt;M&lt;/title&gt; &lt;"
+"enrolmentperiod&gt;12&lt;/enrolmentperiod&gt; &lt;charges&gt;6.00&lt;/"
+"charges&gt; &lt;dateenrolled&gt;2009-03-04&lt;/dateenrolled&gt; &lt;"
+"borrowernotes&gt;&lt;/borrowernotes&gt; &lt;dateexpiry&gt;2010-03-04&lt;/"
+"dateexpiry&gt; &lt;firstname&gt;Jean-André&lt;/firstname&gt; &lt;"
+"gonenoaddress&gt;0&lt;/gonenoaddress&gt; &lt;dateofbirth&gt;1984-06-08&lt;/"
+"dateofbirth&gt; &lt;debarred&gt;0&lt;/debarred&gt; &lt;branchname&gt;"
+"Bibliothèque Jean Prunier&lt;/branchname&gt; &lt;surname&gt;SANTONI&lt;/"
+"surname&gt; &lt;cardnumber&gt;815&lt;/cardnumber&gt; &lt;initials&gt;JAS&lt;/"
+"initials&gt; &lt;sort1&gt;CSP5&lt;/sort1&gt; &lt;sex&gt;M&lt;/sex&gt; &lt;"
+"loans&gt; &lt;loan&gt; &lt;lastreneweddate&gt;2009-04-03&lt;/"
+"lastreneweddate&gt; &lt;isbn&gt;2253003689&lt;/isbn&gt; &lt;"
+"borrowernumber&gt;419&lt;/borrowernumber&gt; &lt;branchcode&gt;BIB&lt;/"
+"branchcode&gt; &lt;itemnumber&gt;4454&lt;/itemnumber&gt; &lt;"
+"date_due&gt;2009-05-06&lt;/date_due&gt; &lt;barcode&gt;4765476&lt;/"
+"barcode&gt; &lt;datelastseen&gt;2008-08-23&lt;/datelastseen&gt; &lt;"
+"issuedate&gt;2008-08-23&lt;/issuedate&gt; &lt;title&gt;L'Île au trésor&lt;/"
+"title&gt; &lt;itemtype&gt;LITT&lt;/itemtype&gt; &lt;author&gt;Robert Louis "
+"Stevenson&lt;/author&gt; &lt;timestamp&gt;2009-04-03 14:46:10&lt;/"
+"timestamp&gt; &lt;publishercode&gt;Librairie générale française&lt;/"
+"publishercode&gt; &lt;datecreated&gt;2008-08-23&lt;/datecreated&gt; &lt;"
+"totalrenewals&gt;11&lt;/totalrenewals&gt; &lt;"
+"dateaccessioned&gt;2008-08-23&lt;/dateaccessioned&gt; &lt;"
+"onloan&gt;2008-09-17&lt;/onloan&gt; &lt;biblioitemnumber&gt;4483&lt;/"
+"biblioitemnumber&gt; &lt;withdrawn&gt;0&lt;/withdrawn&gt; &lt;"
+"notforloan&gt;0&lt;/notforloan&gt; &lt;"
+"replacementpricedate&gt;2008-08-23&lt;/replacementpricedate&gt; &lt;"
+"itemcallnumber&gt;RO STE&lt;/itemcallnumber&gt; &lt;location&gt;Salle de "
+"lecture&lt;/location&gt; &lt;itemlost&gt;0&lt;/itemlost&gt; &lt;"
+"publicationyear&gt;1985&lt;/publicationyear&gt; &lt;issues&gt;1&lt;/"
+"issues&gt; &lt;homebranch&gt;BIB&lt;/homebranch&gt; &lt;holdingbranch&gt;"
+"BIB&lt;/holdingbranch&gt; &lt;biblionumber&gt;4483&lt;/biblionumber&gt; &lt;"
+"renewals&gt;3&lt;/renewals&gt; &lt;damaged&gt;0&lt;/damaged&gt; &lt;"
+"cn_sort&gt;RO_STE&lt;/cn_sort&gt; &lt;frameworkcode&gt;&lt;/"
+"frameworkcode&gt; &lt;datelastborrowed&gt;2008-08-23&lt;/"
+"datelastborrowed&gt; &lt;/loan&gt; &lt;loan&gt; &lt;"
+"lastreneweddate&gt;2009-03-17&lt;/lastreneweddate&gt; &lt;"
+"isbn&gt;9782700017823&lt;/isbn&gt; &lt;borrowernumber&gt;419&lt;/"
+"borrowernumber&gt; &lt;branchcode&gt;BIB&lt;/branchcode&gt; &lt;"
+"itemnumber&gt;4456&lt;/itemnumber&gt; &lt;date_due&gt;2009-04-18&lt;/"
+"date_due&gt; &lt;barcode&gt;2700017UUU&lt;/barcode&gt; &lt;"
+"datelastseen&gt;2008-08-23&lt;/datelastseen&gt; &lt;"
+"issuedate&gt;2008-08-23&lt;/issuedate&gt; &lt;title&gt;La guitare en 10 "
 "leçons&lt;/title&gt; &lt;itemtype&gt;LITT&lt;/itemtype&gt; &lt;author&gt;Jon "
 "Buck&lt;/author&gt; &lt;timestamp&gt;2009-03-17 16:48:14&lt;/timestamp&gt; "
-"&lt;publishercode&gt;Gründ&lt;/publishercode&gt; "
-"&lt;datecreated&gt;2008-08-23&lt;/datecreated&gt; "
-"&lt;totalrenewals&gt;6&lt;/totalrenewals&gt; "
-"&lt;dateaccessioned&gt;2008-08-23&lt;/dateaccessioned&gt; &lt;notes&gt;La "
-"couv. porte en plus : \"un guide simple et facile pour apprendre la guitare\""
-" | Glossaire. Index&lt;/notes&gt; &lt;onloan&gt;2008-09-25&lt;/onloan&gt; "
-"&lt;biblioitemnumber&gt;4486&lt;/biblioitemnumber&gt; "
-"&lt;withdrawn&gt;0&lt;/withdrawn&gt; &lt;notforloan&gt;0&lt;/notforloan&gt; "
-"&lt;replacementpricedate&gt;2008-08-23&lt;/replacementpricedate&gt; "
-"&lt;itemcallnumber&gt;787.87 BUC&lt;/itemcallnumber&gt; &lt;location&gt;"
-"Salle de lecture&lt;/location&gt; &lt;itemlost&gt;0&lt;/itemlost&gt; "
-"&lt;publicationyear&gt;2007&lt;/publicationyear&gt; "
-"&lt;issues&gt;1&lt;/issues&gt; &lt;homebranch&gt;BIB&lt;/homebranch&gt; "
-"&lt;holdingbranch&gt;BIB&lt;/holdingbranch&gt; "
-"&lt;biblionumber&gt;4486&lt;/biblionumber&gt; "
-"&lt;renewals&gt;3&lt;/renewals&gt; &lt;damaged&gt;0&lt;/damaged&gt; "
-"&lt;cn_sort&gt;78787_BUC&lt;/cn_sort&gt; &lt;volume&gt;une méthode simple et "
-"facile pour apprendre la guitare&lt;/volume&gt; "
-"&lt;frameworkcode&gt;&lt;/frameworkcode&gt; "
-"&lt;datelastborrowed&gt;2008-08-23&lt;/datelastborrowed&gt; &lt;/loan&gt; "
-"&lt;/loans&gt; &lt;/GetPatronInfo&gt;"
+"&lt;publishercode&gt;Gründ&lt;/publishercode&gt; &lt;"
+"datecreated&gt;2008-08-23&lt;/datecreated&gt; &lt;totalrenewals&gt;6&lt;/"
+"totalrenewals&gt; &lt;dateaccessioned&gt;2008-08-23&lt;/dateaccessioned&gt; "
+"&lt;notes&gt;La couv. porte en plus : \"un guide simple et facile pour "
+"apprendre la guitare\" | Glossaire. Index&lt;/notes&gt; &lt;"
+"onloan&gt;2008-09-25&lt;/onloan&gt; &lt;biblioitemnumber&gt;4486&lt;/"
+"biblioitemnumber&gt; &lt;withdrawn&gt;0&lt;/withdrawn&gt; &lt;"
+"notforloan&gt;0&lt;/notforloan&gt; &lt;"
+"replacementpricedate&gt;2008-08-23&lt;/replacementpricedate&gt; &lt;"
+"itemcallnumber&gt;787.87 BUC&lt;/itemcallnumber&gt; &lt;location&gt;Salle de "
+"lecture&lt;/location&gt; &lt;itemlost&gt;0&lt;/itemlost&gt; &lt;"
+"publicationyear&gt;2007&lt;/publicationyear&gt; &lt;issues&gt;1&lt;/"
+"issues&gt; &lt;homebranch&gt;BIB&lt;/homebranch&gt; &lt;holdingbranch&gt;"
+"BIB&lt;/holdingbranch&gt; &lt;biblionumber&gt;4486&lt;/biblionumber&gt; &lt;"
+"renewals&gt;3&lt;/renewals&gt; &lt;damaged&gt;0&lt;/damaged&gt; &lt;"
+"cn_sort&gt;78787_BUC&lt;/cn_sort&gt; &lt;volume&gt;une méthode simple et "
+"facile pour apprendre la guitare&lt;/volume&gt; &lt;frameworkcode&gt;&lt;/"
+"frameworkcode&gt; &lt;datelastborrowed&gt;2008-08-23&lt;/"
+"datelastborrowed&gt; &lt;/loan&gt; &lt;/loans&gt; &lt;/GetPatronInfo&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:642
 #, c-format
@@ -2622,10 +2597,10 @@ msgid ""
 "status&gt;0&lt;/status&gt; &lt;type&gt;ADUEXT&lt;/type&gt; &lt;/"
 "GetPatronStatus&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; "
-"&lt;GetPatronStatus&gt; &lt;expiry&gt;2010-03-04&lt;/expiry&gt; "
-"&lt;status&gt;0&lt;/status&gt; &lt;type&gt;ADUEXT&lt;/type&gt; "
-"&lt;/GetPatronStatus&gt;"
+"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;"
+"GetPatronStatus&gt; &lt;expiry&gt;2010-03-04&lt;/expiry&gt; &lt;"
+"status&gt;0&lt;/status&gt; &lt;type&gt;ADUEXT&lt;/type&gt; &lt;/"
+"GetPatronStatus&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:210
 #, c-format
@@ -2739,118 +2714,112 @@ msgid ""
 "record&gt;RecordNotFound&lt;/record&gt; &lt;/GetRecords&gt;"
 msgstr ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetRecords&gt; "
-"&lt;record&gt; &lt;biblioitemnumber&gt;1&lt;/biblioitemnumber&gt; "
-"&lt;isbn&gt;9782862749198&lt;/isbn&gt; &lt;marcxml&gt; &lt;?xml version=\"1."
-"0\" encoding=\"UTF-8\" ?&gt; &lt;record xmlns:xsi=\"http://www.w3.org/2001"
-"/XMLSchema-instance\" xsi:schemaLocation=\"http://www.loc.gov/MARC21/slim "
-"http://www.loc.gov/ standards/marcxml/schema/MARC21slim.xsd\" xmlns=\""
-"http://www.loc.gov/MARC21/slim\"&gt; &lt;leader&gt;00397nac a22001451u "
-"4500&lt;/leader&gt; &lt;datafield tag=\"010\" ind1=\" \" ind2=\" \"&gt; &lt;"
-"subfield code=\"a\"&gt;9782862749198&lt;/subfield&gt; &lt;/datafield&gt; &lt;"
-"datafield tag=\"090\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\""
-"&gt;1&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"101\" ind1=\" "
-"\" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;fre&lt;/subfield&gt; "
-"&lt;/datafield&gt; &lt;datafield tag=\"100\" ind1=\" \" ind2=\" \"&gt; &lt;"
+"&lt;record&gt; &lt;biblioitemnumber&gt;1&lt;/biblioitemnumber&gt; &lt;"
+"isbn&gt;9782862749198&lt;/isbn&gt; &lt;marcxml&gt; &lt;?xml version=\"1.0\" "
+"encoding=\"UTF-8\" ?&gt; &lt;record xmlns:xsi=\"http://www.w3.org/2001/"
+"XMLSchema-instance\" xsi:schemaLocation=\"http://www.loc.gov/MARC21/slim "
+"http://www.loc.gov/ standards/marcxml/schema/MARC21slim.xsd\" xmlns=\"http://"
+"www.loc.gov/MARC21/slim\"&gt; &lt;leader&gt;00397nac a22001451u 4500&lt;/"
+"leader&gt; &lt;datafield tag=\"010\" ind1=\" \" ind2=\" \"&gt; &lt;subfield "
+"code=\"a\"&gt;9782862749198&lt;/subfield&gt; &lt;/datafield&gt; &lt;"
+"datafield tag=\"090\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a"
+"\"&gt;1&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"101\" ind1="
+"\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;fre&lt;/subfield&gt; &lt;/"
+"datafield&gt; &lt;datafield tag=\"100\" ind1=\" \" ind2=\" \"&gt; &lt;"
 "subfield code=\"a\"&gt;20080725 frey50 &lt;/subfield&gt; &lt;/datafield&gt; "
-"&lt;datafield tag=\"200\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\""
-"&gt;Jardins d'enfance&lt;/subfield&gt; &lt;subfield code=\"b\""
-"&gt;LITT&lt;/subfield&gt; &lt;subfield code=\"f\"&gt;Abécassis, "
-"Eliette&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"210\" ind1=\""
-" \" ind2=\" \"&gt; &lt;subfield code=\"c\"&gt;cherche midi "
-"éditeur&lt;/subfield&gt; &lt;subfield code=\"d\"&gt;11/2001&lt;/subfield&gt; "
-"&lt;/datafield&gt; &lt;datafield tag=\"215\" ind1=\" \" ind2=\" \"&gt; &lt;"
-"subfield code=\"a\"&gt;180&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield "
-"tag=\"225\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\""
-"&gt;nouvelles&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"995\" "
-"ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"9\"&gt;1&lt;/subfield&gt; &lt;"
-"subfield code=\"c\"&gt;BIB&lt;/subfield&gt; &lt;subfield code=\"2\""
-"&gt;0&lt;/subfield&gt; &lt;subfield code=\"k\"&gt;R ABE&lt;/subfield&gt; &lt;"
-"subfield code=\"o\"&gt;0&lt;/subfield&gt; &lt;subfield code=\"e\"&gt;Secteur "
-"Adulte&lt;/subfield&gt; &lt;subfield code=\"b\"&gt;BIB&lt;/subfield&gt; &lt;"
-"subfield code=\"j\"&gt;7786000200&lt;/subfield&gt; &lt;subfield code=\"q\""
-"&gt;a&lt;/subfield&gt; &lt;subfield code=\"r\"&gt;2&lt;/subfield&gt; &lt;"
-"subfield code=\"s\"&gt;Achats&lt;/subfield&gt; &lt;/datafield&gt; &lt;"
-"controlfield tag=\"001\"&gt;1&lt;/controlfield&gt; &lt;/record&gt; "
-"&lt;/marcxml&gt; &lt;publicationyear&gt;2001&lt;/publicationyear&gt; "
-"&lt;collectiontitle&gt;nouvelles&lt;/collectiontitle&gt; "
-"&lt;pages&gt;180&lt;/pages&gt; &lt;issues&gt; &lt;/issues&gt; "
-"&lt;itemtype&gt;LITT&lt;/itemtype&gt; "
-"&lt;biblionumber&gt;1&lt;/biblionumber&gt; &lt;timestamp&gt;2008-09-03 "
-"18:43:19&lt;/timestamp&gt; &lt;cn_sort&gt;_&lt;/cn_sort&gt; "
-"&lt;publishercode&gt;cherche midi éditeur&lt;/publishercode&gt; "
-"&lt;reserves&gt; &lt;/reserves&gt; &lt;items&gt; &lt;item&gt; "
-"&lt;biblioitemnumber&gt;1&lt;/biblioitemnumber&gt; "
-"&lt;withdrawn&gt;0&lt;/withdrawn&gt; &lt;holdingbranchname&gt;Bibliothèque "
-"Jean Prunier&lt;/holdingbranchname&gt; &lt;notforloan&gt;0&lt;/notforloan&gt;"
-" &lt;replacementpricedate&gt;2008-08-20&lt;/replacementpricedate&gt; "
-"&lt;itemnumber&gt;1&lt;/itemnumber&gt; &lt;location&gt;Secteur "
-"Adulte&lt;/location&gt; &lt;itemcallnumber&gt;R ABE&lt;/itemcallnumber&gt; "
-"&lt;date_due&gt;&lt;/date_due&gt; &lt;itemlost&gt;0&lt;/itemlost&gt; "
-"&lt;datelastseen&gt;2008-08-20&lt;/datelastseen&gt; "
-"&lt;homebranch&gt;BIB&lt;/homebranch&gt; &lt;homebranchname&gt;Bibliothèque "
-"Jean Prunier&lt;/homebranchname&gt; "
-"&lt;biblionumber&gt;1&lt;/biblionumber&gt; "
-"&lt;holdingbranch&gt;BIB&lt;/holdingbranch&gt; &lt;timestamp&gt;2008-08-20 "
-"17:15:51&lt;/timestamp&gt; &lt;damaged&gt;0&lt;/damaged&gt; "
-"&lt;cn_sort&gt;R_ABE&lt;/cn_sort&gt; "
-"&lt;dateaccessioned&gt;2008-08-20&lt;/dateaccessioned&gt; &lt;/item&gt; "
-"&lt;/items&gt; &lt;/record&gt; &lt;record&gt; "
-"&lt;biblioitemnumber&gt;2&lt;/biblioitemnumber&gt; "
-"&lt;isbn&gt;9782265078031&lt;/isbn&gt; &lt;marcxml&gt; &lt;?xml version=\"1."
-"0\" encoding=\"UTF-8\" ?&gt; &lt;record xmlns:xsi=\"http://www.w3.org/2001"
-"/XMLSchema-instance\" xsi:schemaLocation=\"http://www.loc.gov/MARC21/slim "
-"http://www.loc.gov/ standards/marcxml/schema/MARC21slim.xsd\" xmlns=\""
-"http://www.loc.gov/MARC21/slim\"&gt; &lt;leader&gt;00407nac a22001451u "
-"4500&lt;/leader&gt; &lt;datafield tag=\"010\" ind1=\" \" ind2=\" \"&gt; &lt;"
-"subfield code=\"a\"&gt;9782265078031&lt;/subfield&gt; &lt;/datafield&gt; &lt;"
-"datafield tag=\"090\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\""
-"&gt;2&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"101\" ind1=\" "
-"\" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;fre&lt;/subfield&gt; "
-"&lt;/datafield&gt; &lt;datafield tag=\"100\" ind1=\" \" ind2=\" \"&gt; &lt;"
+"&lt;datafield tag=\"200\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a"
+"\"&gt;Jardins d'enfance&lt;/subfield&gt; &lt;subfield code=\"b\"&gt;LITT&lt;/"
+"subfield&gt; &lt;subfield code=\"f\"&gt;Abécassis, Eliette&lt;/subfield&gt; "
+"&lt;/datafield&gt; &lt;datafield tag=\"210\" ind1=\" \" ind2=\" \"&gt; &lt;"
+"subfield code=\"c\"&gt;cherche midi éditeur&lt;/subfield&gt; &lt;subfield "
+"code=\"d\"&gt;11/2001&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag="
+"\"215\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;180&lt;/"
+"subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"225\" ind1=\" \" ind2=\" "
+"\"&gt; &lt;subfield code=\"a\"&gt;nouvelles&lt;/subfield&gt; &lt;/"
+"datafield&gt; &lt;datafield tag=\"995\" ind1=\" \" ind2=\" \"&gt; &lt;"
+"subfield code=\"9\"&gt;1&lt;/subfield&gt; &lt;subfield code=\"c\"&gt;BIB&lt;/"
+"subfield&gt; &lt;subfield code=\"2\"&gt;0&lt;/subfield&gt; &lt;subfield code="
+"\"k\"&gt;R ABE&lt;/subfield&gt; &lt;subfield code=\"o\"&gt;0&lt;/"
+"subfield&gt; &lt;subfield code=\"e\"&gt;Secteur Adulte&lt;/subfield&gt; &lt;"
+"subfield code=\"b\"&gt;BIB&lt;/subfield&gt; &lt;subfield code=\"j"
+"\"&gt;7786000200&lt;/subfield&gt; &lt;subfield code=\"q\"&gt;a&lt;/"
+"subfield&gt; &lt;subfield code=\"r\"&gt;2&lt;/subfield&gt; &lt;subfield code="
+"\"s\"&gt;Achats&lt;/subfield&gt; &lt;/datafield&gt; &lt;controlfield tag="
+"\"001\"&gt;1&lt;/controlfield&gt; &lt;/record&gt; &lt;/marcxml&gt; &lt;"
+"publicationyear&gt;2001&lt;/publicationyear&gt; &lt;collectiontitle&gt;"
+"nouvelles&lt;/collectiontitle&gt; &lt;pages&gt;180&lt;/pages&gt; &lt;"
+"issues&gt; &lt;/issues&gt; &lt;itemtype&gt;LITT&lt;/itemtype&gt; &lt;"
+"biblionumber&gt;1&lt;/biblionumber&gt; &lt;timestamp&gt;2008-09-03 "
+"18:43:19&lt;/timestamp&gt; &lt;cn_sort&gt;_&lt;/cn_sort&gt; &lt;"
+"publishercode&gt;cherche midi éditeur&lt;/publishercode&gt; &lt;reserves&gt; "
+"&lt;/reserves&gt; &lt;items&gt; &lt;item&gt; &lt;biblioitemnumber&gt;1&lt;/"
+"biblioitemnumber&gt; &lt;withdrawn&gt;0&lt;/withdrawn&gt; &lt;"
+"holdingbranchname&gt;Bibliothèque Jean Prunier&lt;/holdingbranchname&gt; &lt;"
+"notforloan&gt;0&lt;/notforloan&gt; &lt;"
+"replacementpricedate&gt;2008-08-20&lt;/replacementpricedate&gt; &lt;"
+"itemnumber&gt;1&lt;/itemnumber&gt; &lt;location&gt;Secteur Adulte&lt;/"
+"location&gt; &lt;itemcallnumber&gt;R ABE&lt;/itemcallnumber&gt; &lt;"
+"date_due&gt;&lt;/date_due&gt; &lt;itemlost&gt;0&lt;/itemlost&gt; &lt;"
+"datelastseen&gt;2008-08-20&lt;/datelastseen&gt; &lt;homebranch&gt;BIB&lt;/"
+"homebranch&gt; &lt;homebranchname&gt;Bibliothèque Jean Prunier&lt;/"
+"homebranchname&gt; &lt;biblionumber&gt;1&lt;/biblionumber&gt; &lt;"
+"holdingbranch&gt;BIB&lt;/holdingbranch&gt; &lt;timestamp&gt;2008-08-20 "
+"17:15:51&lt;/timestamp&gt; &lt;damaged&gt;0&lt;/damaged&gt; &lt;cn_sort&gt;"
+"R_ABE&lt;/cn_sort&gt; &lt;dateaccessioned&gt;2008-08-20&lt;/"
+"dateaccessioned&gt; &lt;/item&gt; &lt;/items&gt; &lt;/record&gt; &lt;"
+"record&gt; &lt;biblioitemnumber&gt;2&lt;/biblioitemnumber&gt; &lt;"
+"isbn&gt;9782265078031&lt;/isbn&gt; &lt;marcxml&gt; &lt;?xml version=\"1.0\" "
+"encoding=\"UTF-8\" ?&gt; &lt;record xmlns:xsi=\"http://www.w3.org/2001/"
+"XMLSchema-instance\" xsi:schemaLocation=\"http://www.loc.gov/MARC21/slim "
+"http://www.loc.gov/ standards/marcxml/schema/MARC21slim.xsd\" xmlns=\"http://"
+"www.loc.gov/MARC21/slim\"&gt; &lt;leader&gt;00407nac a22001451u 4500&lt;/"
+"leader&gt; &lt;datafield tag=\"010\" ind1=\" \" ind2=\" \"&gt; &lt;subfield "
+"code=\"a\"&gt;9782265078031&lt;/subfield&gt; &lt;/datafield&gt; &lt;"
+"datafield tag=\"090\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a"
+"\"&gt;2&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"101\" ind1="
+"\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;fre&lt;/subfield&gt; &lt;/"
+"datafield&gt; &lt;datafield tag=\"100\" ind1=\" \" ind2=\" \"&gt; &lt;"
 "subfield code=\"a\"&gt;20080725 frey50 &lt;/subfield&gt; &lt;/datafield&gt; "
-"&lt;datafield tag=\"200\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\""
-"&gt;(Les) tribulations d'une jeune divorcée&lt;/subfield&gt; &lt;subfield "
+"&lt;datafield tag=\"200\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a"
+"\"&gt;(Les) tribulations d'une jeune divorcée&lt;/subfield&gt; &lt;subfield "
 "code=\"b\"&gt;LITT&lt;/subfield&gt; &lt;subfield code=\"f\"&gt;Abécassis, "
-"Eliette&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"210\" ind1=\""
-" \" ind2=\" \"&gt; &lt;subfield code=\"c\"&gt;bussière&lt;/subfield&gt; &lt;"
-"subfield code=\"d\"&gt;01/2005&lt;/subfield&gt; &lt;/datafield&gt; &lt;"
-"datafield tag=\"215\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\""
-"&gt;306&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"225\" ind1=\""
-" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;fleuve noir&lt;/subfield&gt; "
+"Eliette&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"210\" ind1="
+"\" \" ind2=\" \"&gt; &lt;subfield code=\"c\"&gt;bussière&lt;/subfield&gt; "
+"&lt;subfield code=\"d\"&gt;01/2005&lt;/subfield&gt; &lt;/datafield&gt; &lt;"
+"datafield tag=\"215\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a"
+"\"&gt;306&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"225\" ind1="
+"\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;fleuve noir&lt;/subfield&gt; "
 "&lt;/datafield&gt; &lt;datafield tag=\"995\" ind1=\" \" ind2=\" \"&gt; &lt;"
-"subfield code=\"9\"&gt;2&lt;/subfield&gt; &lt;subfield code=\"c\""
-"&gt;BIB&lt;/subfield&gt; &lt;subfield code=\"2\"&gt;0&lt;/subfield&gt; &lt;"
-"subfield code=\"k\"&gt;R ABE&lt;/subfield&gt; &lt;subfield code=\"o\""
-"&gt;0&lt;/subfield&gt; &lt;subfield code=\"e\"&gt;Secteur "
-"Adulte&lt;/subfield&gt; &lt;subfield code=\"b\"&gt;BIB&lt;/subfield&gt; &lt;"
-"subfield code=\"j\"&gt;7786004672&lt;/subfield&gt; &lt;subfield code=\"q\""
-"&gt;a&lt;/subfield&gt; &lt;subfield code=\"s\"&gt;Achats&lt;/subfield&gt; "
-"&lt;/datafield&gt; &lt;controlfield tag=\"001\"&gt;2&lt;/controlfield&gt; "
-"&lt;/record&gt; &lt;/marcxml&gt; "
-"&lt;publicationyear&gt;2005&lt;/publicationyear&gt; &lt;collectiontitle&gt;"
-"fleuve noir&lt;/collectiontitle&gt; &lt;pages&gt;306&lt;/pages&gt; "
-"&lt;issues&gt; &lt;/issues&gt; &lt;itemtype&gt;LITT&lt;/itemtype&gt; "
-"&lt;biblionumber&gt;2&lt;/biblionumber&gt; &lt;timestamp&gt;2008-09-03 "
-"18:43:19&lt;/timestamp&gt; &lt;cn_sort&gt;_&lt;/cn_sort&gt; "
-"&lt;publishercode&gt;bussière&lt;/publishercode&gt; &lt;reserves&gt; "
-"&lt;/reserves&gt; &lt;items&gt; &lt;item&gt; "
-"&lt;biblioitemnumber&gt;2&lt;/biblioitemnumber&gt; "
-"&lt;withdrawn&gt;0&lt;/withdrawn&gt; &lt;holdingbranchname&gt;Bibliothèque "
-"Jean Prunier&lt;/holdingbranchname&gt; &lt;notforloan&gt;0&lt;/notforloan&gt;"
-" &lt;replacementpricedate&gt;2008-08-20&lt;/replacementpricedate&gt; "
-"&lt;itemnumber&gt;2&lt;/itemnumber&gt; &lt;location&gt;Secteur "
-"Adulte&lt;/location&gt; &lt;itemcallnumber&gt;R ABE&lt;/itemcallnumber&gt; "
-"&lt;date_due&gt;&lt;/date_due&gt; &lt;itemlost&gt;0&lt;/itemlost&gt; "
-"&lt;datelastseen&gt;2008-08-20&lt;/datelastseen&gt; "
-"&lt;homebranch&gt;BIB&lt;/homebranch&gt; &lt;homebranchname&gt;Bibliothèque "
-"Jean Prunier&lt;/homebranchname&gt; "
-"&lt;biblionumber&gt;2&lt;/biblionumber&gt; "
-"&lt;holdingbranch&gt;BIB&lt;/holdingbranch&gt; &lt;timestamp&gt;2008-08-20 "
-"17:15:51&lt;/timestamp&gt; &lt;damaged&gt;0&lt;/damaged&gt; "
-"&lt;cn_sort&gt;R_ABE&lt;/cn_sort&gt; "
-"&lt;dateaccessioned&gt;2008-08-20&lt;/dateaccessioned&gt; &lt;/item&gt; "
-"&lt;/items&gt; &lt;/record&gt; &lt;record&gt;RecordNotFound&lt;/record&gt; "
-"&lt;/GetRecords&gt;"
+"subfield code=\"9\"&gt;2&lt;/subfield&gt; &lt;subfield code=\"c\"&gt;BIB&lt;/"
+"subfield&gt; &lt;subfield code=\"2\"&gt;0&lt;/subfield&gt; &lt;subfield code="
+"\"k\"&gt;R ABE&lt;/subfield&gt; &lt;subfield code=\"o\"&gt;0&lt;/"
+"subfield&gt; &lt;subfield code=\"e\"&gt;Secteur Adulte&lt;/subfield&gt; &lt;"
+"subfield code=\"b\"&gt;BIB&lt;/subfield&gt; &lt;subfield code=\"j"
+"\"&gt;7786004672&lt;/subfield&gt; &lt;subfield code=\"q\"&gt;a&lt;/"
+"subfield&gt; &lt;subfield code=\"s\"&gt;Achats&lt;/subfield&gt; &lt;/"
+"datafield&gt; &lt;controlfield tag=\"001\"&gt;2&lt;/controlfield&gt; &lt;/"
+"record&gt; &lt;/marcxml&gt; &lt;publicationyear&gt;2005&lt;/"
+"publicationyear&gt; &lt;collectiontitle&gt;fleuve noir&lt;/"
+"collectiontitle&gt; &lt;pages&gt;306&lt;/pages&gt; &lt;issues&gt; &lt;/"
+"issues&gt; &lt;itemtype&gt;LITT&lt;/itemtype&gt; &lt;biblionumber&gt;2&lt;/"
+"biblionumber&gt; &lt;timestamp&gt;2008-09-03 18:43:19&lt;/timestamp&gt; &lt;"
+"cn_sort&gt;_&lt;/cn_sort&gt; &lt;publishercode&gt;bussière&lt;/"
+"publishercode&gt; &lt;reserves&gt; &lt;/reserves&gt; &lt;items&gt; &lt;"
+"item&gt; &lt;biblioitemnumber&gt;2&lt;/biblioitemnumber&gt; &lt;"
+"withdrawn&gt;0&lt;/withdrawn&gt; &lt;holdingbranchname&gt;Bibliothèque Jean "
+"Prunier&lt;/holdingbranchname&gt; &lt;notforloan&gt;0&lt;/notforloan&gt; &lt;"
+"replacementpricedate&gt;2008-08-20&lt;/replacementpricedate&gt; &lt;"
+"itemnumber&gt;2&lt;/itemnumber&gt; &lt;location&gt;Secteur Adulte&lt;/"
+"location&gt; &lt;itemcallnumber&gt;R ABE&lt;/itemcallnumber&gt; &lt;"
+"date_due&gt;&lt;/date_due&gt; &lt;itemlost&gt;0&lt;/itemlost&gt; &lt;"
+"datelastseen&gt;2008-08-20&lt;/datelastseen&gt; &lt;homebranch&gt;BIB&lt;/"
+"homebranch&gt; &lt;homebranchname&gt;Bibliothèque Jean Prunier&lt;/"
+"homebranchname&gt; &lt;biblionumber&gt;2&lt;/biblionumber&gt; &lt;"
+"holdingbranch&gt;BIB&lt;/holdingbranch&gt; &lt;timestamp&gt;2008-08-20 "
+"17:15:51&lt;/timestamp&gt; &lt;damaged&gt;0&lt;/damaged&gt; &lt;cn_sort&gt;"
+"R_ABE&lt;/cn_sort&gt; &lt;dateaccessioned&gt;2008-08-20&lt;/"
+"dateaccessioned&gt; &lt;/item&gt; &lt;/items&gt; &lt;/record&gt; &lt;"
+"record&gt;RecordNotFound&lt;/record&gt; &lt;/GetRecords&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:665
 #, c-format
@@ -2860,8 +2829,8 @@ msgid ""
 "AvailableFor&gt;item level hold&lt;/AvailableFor&gt; &lt;/GetServices&gt;"
 msgstr ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetServices&gt; "
-"&lt;AvailableFor&gt;title level hold&lt;/AvailableFor&gt; "
-"&lt;AvailableFor&gt;item level hold&lt;/AvailableFor&gt; &lt;/GetServices&gt;"
+"&lt;AvailableFor&gt;title level hold&lt;/AvailableFor&gt; &lt;"
+"AvailableFor&gt;item level hold&lt;/AvailableFor&gt; &lt;/GetServices&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:720
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:751
@@ -2872,11 +2841,10 @@ msgid ""
 "date_available&gt;2009-05-11&lt;/date_available&gt; &lt;pickup_location&gt;"
 "Bibliothèque Jean-Prunier&lt;/pickup_location&gt; &lt;/HoldTitle&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;HoldTitle&gt; "
-"&lt;title&gt;(les) galères de l'Orfèvre&lt;/title&gt; "
-"&lt;date_available&gt;2009-05-11&lt;/date_available&gt; "
-"&lt;pickup_location&gt;Bibliothèque Jean-Prunier&lt;/pickup_location&gt; "
-"&lt;/HoldTitle&gt;"
+"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;HoldTitle&gt; &lt;"
+"title&gt;(les) galères de l'Orfèvre&lt;/title&gt; &lt;"
+"date_available&gt;2009-05-11&lt;/date_available&gt; &lt;pickup_location&gt;"
+"Bibliothèque Jean-Prunier&lt;/pickup_location&gt; &lt;/HoldTitle&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:472
 #, c-format
@@ -2894,9 +2862,9 @@ msgid ""
 "success&gt;0&lt;/success&gt; &lt;renewals&gt;5&lt;/renewals&gt; &lt;"
 "date_due&gt;2009-05-11&lt;/date_due&gt; &lt;/RenewLoan&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;RenewLoan&gt; "
-"&lt;success&gt;0&lt;/success&gt; &lt;renewals&gt;5&lt;/renewals&gt; "
-"&lt;date_due&gt;2009-05-11&lt;/date_due&gt; &lt;/RenewLoan&gt;"
+"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;RenewLoan&gt; &lt;"
+"success&gt;0&lt;/success&gt; &lt;renewals&gt;5&lt;/renewals&gt; &lt;"
+"date_due&gt;2009-05-11&lt;/date_due&gt; &lt;/RenewLoan&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:137
 #, c-format
@@ -2925,30 +2893,27 @@ msgid ""
 "&lt;/dlf:items&gt; &lt;/dlf:record&gt; &lt;/dlf:collection&gt;"
 msgstr ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;dlf:collection "
-"xmlns:dlf=\"http://diglib.org/ilsdi/1.1\" xmlns:xsi=\"http://www.w3.org/2001"
-"/XMLSchema-instance\" xsi:schemaLocation=\"http://diglib.org/ilsdi/1.1 "
-"http://diglib.org/architectures/ilsdi/schemas/1.1/dlfexpanded.xsd\"&gt; "
-"&lt;dlf:record&gt; &lt;dlf:bibliographic id=\"1\" /&gt; &lt;dlf:items&gt; "
-"&lt;dlf:item id=\"1\"&gt; &lt;dlf:simpleavailability&gt; "
-"&lt;dlf:identifier&gt;1&lt;/dlf:identifier&gt; "
-"&lt;dlf:availabilitystatus&gt;available&lt;/dlf:availabilitystatus&gt; "
-"&lt;dlf:location&gt;Bibliothèque Jean Prunier&lt;/dlf:location&gt; "
-"&lt;/dlf:simpleavailability&gt; &lt;/dlf:item&gt; &lt;/dlf:items&gt; "
-"&lt;/dlf:record&gt; &lt;dlf:record&gt; &lt;dlf:bibliographic id=\"2\" /&gt; "
-"&lt;dlf:items&gt; &lt;dlf:item id=\"2\"&gt; &lt;dlf:simpleavailability&gt; "
-"&lt;dlf:identifier&gt;2&lt;/dlf:identifier&gt; "
-"&lt;dlf:availabilitystatus&gt;available&lt;/dlf:availabilitystatus&gt; "
-"&lt;dlf:location&gt;Bibliothèque Jean Prunier&lt;/dlf:location&gt; "
-"&lt;/dlf:simpleavailability&gt; &lt;/dlf:item&gt; &lt;/dlf:items&gt; "
-"&lt;/dlf:record&gt; &lt;dlf:record&gt; &lt;dlf:bibliographic id=\"99999\" "
-"/&gt; &lt;dlf:items&gt; &lt;dlf:item id=\"99999\"&gt; "
-"&lt;dlf:simpleavailability&gt; "
-"&lt;dlf:identifier&gt;99999&lt;/dlf:identifier&gt; "
-"&lt;dlf:availabilitystatus&gt;unknown&lt;/dlf:availabilitystatus&gt; "
-"&lt;dlf:availabilitymsg&gt;Error: could not retrieve availability for this "
-"ID&lt;/dlf:availabilitymsg&gt; &lt;/dlf:simpleavailability&gt; "
-"&lt;/dlf:item&gt; &lt;/dlf:items&gt; &lt;/dlf:record&gt; "
-"&lt;/dlf:collection&gt;"
+"xmlns:dlf=\"http://diglib.org/ilsdi/1.1\" xmlns:xsi=\"http://www.w3.org/2001/"
+"XMLSchema-instance\" xsi:schemaLocation=\"http://diglib.org/ilsdi/1.1 http://"
+"diglib.org/architectures/ilsdi/schemas/1.1/dlfexpanded.xsd\"&gt; &lt;dlf:"
+"record&gt; &lt;dlf:bibliographic id=\"1\" /&gt; &lt;dlf:items&gt; &lt;dlf:"
+"item id=\"1\"&gt; &lt;dlf:simpleavailability&gt; &lt;dlf:identifier&gt;1&lt;/"
+"dlf:identifier&gt; &lt;dlf:availabilitystatus&gt;available&lt;/dlf:"
+"availabilitystatus&gt; &lt;dlf:location&gt;Bibliothèque Jean Prunier&lt;/dlf:"
+"location&gt; &lt;/dlf:simpleavailability&gt; &lt;/dlf:item&gt; &lt;/dlf:"
+"items&gt; &lt;/dlf:record&gt; &lt;dlf:record&gt; &lt;dlf:bibliographic id="
+"\"2\" /&gt; &lt;dlf:items&gt; &lt;dlf:item id=\"2\"&gt; &lt;dlf:"
+"simpleavailability&gt; &lt;dlf:identifier&gt;2&lt;/dlf:identifier&gt; &lt;"
+"dlf:availabilitystatus&gt;available&lt;/dlf:availabilitystatus&gt; &lt;dlf:"
+"location&gt;Bibliothèque Jean Prunier&lt;/dlf:location&gt; &lt;/dlf:"
+"simpleavailability&gt; &lt;/dlf:item&gt; &lt;/dlf:items&gt; &lt;/dlf:"
+"record&gt; &lt;dlf:record&gt; &lt;dlf:bibliographic id=\"99999\" /&gt; &lt;"
+"dlf:items&gt; &lt;dlf:item id=\"99999\"&gt; &lt;dlf:simpleavailability&gt; "
+"&lt;dlf:identifier&gt;99999&lt;/dlf:identifier&gt; &lt;dlf:"
+"availabilitystatus&gt;unknown&lt;/dlf:availabilitystatus&gt; &lt;dlf:"
+"availabilitymsg&gt;Error: could not retrieve availability for this ID&lt;/"
+"dlf:availabilitymsg&gt; &lt;/dlf:simpleavailability&gt; &lt;/dlf:item&gt; "
+"&lt;/dlf:items&gt; &lt;/dlf:record&gt; &lt;/dlf:collection&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:414
 #, c-format
@@ -3497,7 +3462,7 @@ msgstr "/cgi-bin/koha/tracklinks.pl?uri="
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:136
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:161
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACDetail.xsl:463
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "/images/filefind.png"
 msgstr "/images/filefind.png"
 
@@ -3721,7 +3686,7 @@ msgstr "En liste kaldet "
 msgid "A record matching barcode "
 msgstr "En post svarende til stregkode "
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:264
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:270
 #, c-format
 msgid "A specific item"
 msgstr "Angiv et bestemt eksemplar"
@@ -3897,7 +3862,7 @@ msgstr "Yderligere forfattere:"
 msgid "Additional content types for books/printed materials"
 msgstr "Andre indholdstyper for bøger/trykt materiale"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:745
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:746
 #, fuzzy, c-format
 msgid "Additional information"
 msgstr "Kontaktinformation"
@@ -4516,7 +4481,7 @@ msgstr "Tilbage til resultater"
 msgid "Back to the results search list"
 msgstr "Tilbage til resultat-søgelisten"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:291
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:297
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:92
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:133
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:379
@@ -4820,7 +4785,7 @@ msgstr "Hyldeplads."
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:185
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:189
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:191
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:296
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:302
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:214
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:216
@@ -4916,13 +4881,18 @@ msgid "Cancels an active hold request for the patron."
 msgstr "Aflyser en aktiv reservering for låneren."
 
 #. IMG
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:311
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:317
 msgid "Cannot be put on hold"
 msgstr "Kan ikke reserveres"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:65
 #, c-format
 msgid "Card number"
+msgstr "Kortnummer"
+
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:48
+#, fuzzy, c-format
+msgid "Card number:"
 msgstr "Kortnummer"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:23
@@ -5089,7 +5059,7 @@ msgstr "Slet alle"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:403
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:409
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:170
 #, c-format
 msgid "Clear date"
@@ -5364,7 +5334,7 @@ msgstr "Fortsættes:"
 msgid "Continuing Resource"
 msgstr "Fortsat ressource"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:287
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:293
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1165
 #, fuzzy, c-format
@@ -5915,7 +5885,7 @@ msgstr "Har du ikke en adgangskode endnu?"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:310
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:79
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:75
 #, c-format
 msgid "Don't have an account? "
 msgstr "Har du ikke en konto? "
@@ -5959,7 +5929,7 @@ msgid "Due"
 msgstr "Afleveres"
 
 #. %1$s:  itemLoo.dateDue 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:341
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:347
 #, c-format
 msgid "Due %s"
 msgstr "Afleveres %s"
@@ -6328,7 +6298,7 @@ msgid "Excerpt provided by Syndetics"
 msgstr "Uddrag leveret af Syndetics"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:403
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:409
 #, fuzzy
 msgid "Expecting a specific item selection."
 msgstr "Forventer et bestemt eksemplar-valg."
@@ -6539,7 +6509,7 @@ msgstr "For psykisk udviklingshæmmede;"
 
 #. %1$s:  IF OpacPasswordChange 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:40
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:53
 #, c-format
 msgid ""
 "For your convenience, the login box on this page has been pre-filled with "
@@ -6914,7 +6884,7 @@ msgid "Hi,"
 msgstr "Hej!"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:403
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:409
 msgid "Hide options"
 msgstr "Skjul valg"
 
@@ -6941,17 +6911,17 @@ msgstr "Reserveringsdato"
 msgid "Hold date:"
 msgstr "Reserveringsdato"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:230
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:236
 #, fuzzy, c-format
 msgid "Hold not needed after:"
 msgstr "Reservering ikke nødvendig efter"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:238
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:244
 #, fuzzy, c-format
 msgid "Hold notes:"
 msgstr "Eksemplar-notits:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:223
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:229
 #, fuzzy, c-format
 msgid "Hold starts on date:"
 msgstr "Reservering starter på datoen"
@@ -7001,11 +6971,6 @@ msgstr "Reserveringer "
 #, c-format
 msgid "Holds (%s)"
 msgstr "Reserveringer (%s)"
-
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:178
-#, c-format
-msgid "Holds and priority: "
-msgstr "Reserveringer og prioritet: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:332
 #, c-format
@@ -7075,7 +7040,7 @@ msgstr "Hjem"
 msgid "Home libraries"
 msgstr "Hjemmebibliotek"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:293
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:299
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1158
 #, c-format
 msgid "Home library"
@@ -7319,7 +7284,7 @@ msgstr "Undervejs ("
 #. %2$s:  item.transfertto 
 #. %3$s:  item.transfertwhen | $KohaDates 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:44
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:343
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:349
 #, fuzzy, c-format
 msgid "In transit from %s to %s since %s"
 msgstr "Undervejs fra %s, til %s, siden %s"
@@ -7354,7 +7319,7 @@ msgstr "Registreret i:"
 msgid "Indexes"
 msgstr "Registre"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:300
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:306
 #, c-format
 msgid "Information"
 msgstr "Information"
@@ -7436,7 +7401,7 @@ msgid "Item lost"
 msgstr "Eksemplarreserveringer"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:71
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:289
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:295
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:130
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:378
@@ -7718,7 +7683,7 @@ msgstr "Stor skrift"
 msgid "Last"
 msgstr "Sidste"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:294
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:300
 #, c-format
 msgid "Last location"
 msgstr "Sidste sted"
@@ -7946,7 +7911,7 @@ msgstr "Placering"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:685
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:697
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:77
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:60
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:73
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:283
 #, c-format
 msgid "Log in"
@@ -7980,7 +7945,7 @@ msgid "Log in to your account"
 msgstr "Log ind på din konto"
 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:73
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:56
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:69
 #, c-format
 msgid "Log in to your account:"
 msgstr "Log ind på din konto:"
@@ -7997,7 +7962,7 @@ msgstr "Login"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:303
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:74
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:57
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:70
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:278
 #, c-format
 msgid "Login:"
@@ -8630,7 +8595,7 @@ msgstr "Næste &gt;&gt;"
 msgid "Next &raquo;"
 msgstr "Næste &rsaquo;"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:249
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:255
 #, fuzzy, c-format
 msgid "Next available item"
 msgstr "Ingen eksemplarer tilgængelige."
@@ -8843,12 +8808,12 @@ msgid "Not for loan %s"
 msgstr "Ikke til udlån (%s)"
 
 #. %1$s:  itemLoo.notforloanvalue 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:351
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:357
 #, c-format
 msgid "Not for loan (%s)"
 msgstr "Ikke til udlån (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:377
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:383
 #, c-format
 msgid "Not on hold"
 msgstr "Ikke reserveret"
@@ -8868,6 +8833,13 @@ msgstr "Note"
 #, fuzzy, c-format
 msgid "Note: "
 msgstr "Noter: "
+
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:738
+#, c-format
+msgid ""
+"Note: The preceding box is case-sensitive. Ensure that the entered "
+"characters are in all-caps."
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:47
 #, c-format
@@ -8999,6 +8971,11 @@ msgstr "November"
 #, c-format
 msgid "Number"
 msgstr "Nummer"
+
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:186
+#, c-format
+msgid "Number of holds: "
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:535
 #, c-format
@@ -9265,17 +9242,12 @@ msgstr "Adgangskoden er opdateret"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:304
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:75
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:58
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:42
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:71
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:280
 #, c-format
 msgid "Password:"
 msgstr "Adgangskode:"
-
-#. %1$s:  password_cleartext 
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:38
-#, fuzzy, c-format
-msgid "Password: %s"
-msgstr "Adgangskode: %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:311
 #, c-format
@@ -9362,7 +9334,7 @@ msgstr "Afhentningssted"
 msgid "Pick up location"
 msgstr "Afhentningssted"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:189
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:195
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:549
 #, fuzzy, c-format
 msgid "Pick up location:"
@@ -9380,7 +9352,7 @@ msgid "Piece-Analytic Level"
 msgstr "Styk-analyse-niveau"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:403
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:409
 #, fuzzy
 msgid "Place a hold on"
 msgstr "Reserver"
@@ -9391,13 +9363,13 @@ msgid "Place a hold on "
 msgstr "Reserver "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:403
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:409
 msgid "Place a hold on: "
 msgstr "Reserver: "
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:6
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:9
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:392
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:398
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:232
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:235
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:422
@@ -9937,7 +9909,7 @@ msgstr "Opret en ny konto"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:310
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:79
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:75
 #, c-format
 msgid "Register here."
 msgstr "Registrer her."
@@ -10549,7 +10521,7 @@ msgstr ""
 msgid "Select a list"
 msgstr "Vælg en liste"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:285
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:291
 #, fuzzy, c-format
 msgid "Select a specific item:"
 msgstr "Reserver et bestemt eksemplar:"
@@ -10831,8 +10803,8 @@ msgstr "Viser de sidste 50 udlån"
 msgid "Show more"
 msgstr "Vis flere"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:216
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:403
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:222
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:409
 #, c-format
 msgid "Show more options"
 msgstr "Vis flere valgmuligheder"
@@ -10888,7 +10860,7 @@ msgid "Sign in with your Email"
 msgstr "Log ind med din email"
 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:90
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:68
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:81
 #, fuzzy, c-format
 msgid "Sign in with your email"
 msgstr "Log ind med din email"
@@ -11312,7 +11284,7 @@ msgstr "Emne: %s "
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:73
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:69
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:79
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:771
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:772
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:151
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:185
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:289
@@ -11332,7 +11304,7 @@ msgid "Submit changes"
 msgstr "Send ændringer"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:765
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:766
 msgid "Submit update request"
 msgstr "Send dit forslag"
 
@@ -11695,7 +11667,7 @@ msgstr "De %s sidste numre af dette abonnement:"
 #. %6$s:  branch 
 #. %7$s:  END 
 #. %8$s:  IF ( timeLimitFinite ) 
-#. %9$s:  timeLimitFinite 
+#. %9$s:  timeLimitFinite |html 
 #. %10$s:  ELSE 
 #. %11$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:42
@@ -11798,13 +11770,13 @@ msgid ""
 "on Friday %s %s on Saturday %s %s on Sunday %s for %s%s issues%s %s%s weeks"
 "%s %s%s months%s "
 msgstr ""
-"Det nuværende abonnement startede den %s og udkommer %s 2 gange om dagen %s %"
-"s hver dag %s %s 3 gange om ugen %s %s hver uge %s %s hver 2. uge %s %s hver "
-"3. uge %s %s hver måned %s %s hver 2. måned %s %s hvert kvartal %s %s 2 "
+"Det nuværende abonnement startede den %s og udkommer %s 2 gange om dagen %s "
+"%s hver dag %s %s 3 gange om ugen %s %s hver uge %s %s hver 2. uge %s %s "
+"hver 3. uge %s %s hver måned %s %s hver 2. måned %s %s hvert kvartal %s %s 2 "
 "gange om året %s %s hvert år %s %s hvert 2. år %s %s uregelmæssigt %s %s på "
 "mandage %s %s på tirsdage %s %s på onsdage %s %s på torsdage %s %s på "
-"fredage %s %s på lørdage %s %s på søndage %s for %s%s udgivelser%s %s%s uger%"
-"s %s%s måneder%s "
+"fredage %s %s på lørdage %s %s på søndage %s for %s%s udgivelser%s %s%s uger"
+"%s %s%s måneder%s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:30
 #, c-format
@@ -12100,7 +12072,7 @@ msgid "This title cannot be requested."
 msgstr "Denne titel kan ikke bestelles."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:403
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:409
 msgid ""
 "This title consists of multiple volumes/parts. Please indicate which part "
 "you need. Clicking on specific item information may be helpful."
@@ -12382,7 +12354,7 @@ msgstr "Ukendt;"
 msgid "Unable to add one or more tags."
 msgstr "Kunne ikke tilføje et eller flere mærker."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:347
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:353
 #, c-format
 msgid "Unavailable (lost or missing)"
 msgstr "Ikke tilgængelig (mangler eller er tabt)"
@@ -12489,10 +12461,9 @@ msgstr "Brugt til/se fra:"
 msgid "Used in "
 msgstr "Brugt i "
 
-#. %1$s:  borrower.userid 
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:37
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:38
 #, fuzzy, c-format
-msgid "Username: %s"
+msgid "Username:"
 msgstr "Brugernavn: %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:39
@@ -12654,7 +12625,7 @@ msgstr "Voksne over 18 år;"
 msgid "Voksne;"
 msgstr "Voksne;"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:304
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1163
 #, c-format
 msgid "Vol info"
@@ -13237,6 +13208,11 @@ msgstr "Din adgangskode skal mindst bestå af %s tegn."
 msgid "Your personal details"
 msgstr "Dine personlige oplysninger"
 
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:179
+#, fuzzy, c-format
+msgid "Your priority: "
+msgstr "Reserveringer og prioritet: "
+
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:13
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:25
 #, fuzzy, c-format
@@ -13380,8 +13356,8 @@ msgid ""
 "[%% PROCESS showreference heading=seeals.heading linkType='seealso' "
 "type=seeals.type authid=seeals.authid %%] "
 msgstr ""
-"[%% PROCESS showreference heading=seeals.heading linkType='seealso' type="
-"seeals.type authid=seeals.authid %%] "
+"[%% PROCESS showreference heading=seeals.heading linkType='seealso' "
+"type=seeals.type authid=seeals.authid %%] "
 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:96
 #, c-format
@@ -13389,8 +13365,8 @@ msgid ""
 "[%% PROCESS showreference heading=seefro.heading linkType='seefrom' "
 "type=seefro.type %%] "
 msgstr ""
-"[%% PROCESS showreference heading=seefro.heading linkType='seefrom' type="
-"seefro.type %%] "
+"[%% PROCESS showreference heading=seefro.heading linkType='seefrom' "
+"type=seefro.type %%] "
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:646
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:683
@@ -14033,13 +14009,13 @@ msgid ""
 "%]&rft.edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT."
 "series %]&rft.genre="
 msgstr ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft.au=[%"
-" BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url "
-"%]&rft.date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% "
-"BIBLIO_RESULT.item('size') %]&rft.isbn=[% BIBLIO_RESULT.isbn |url "
-"%]&rft.aucorp=&rft.place=[% BIBLIO_RESULT.place %]&rft.pub=[% "
-"BIBLIO_RESULT.publisher |url %]&rft.edition=[% BIBLIO_RESULT.edition "
-"%]&rft.series=[% BIBLIO_RESULT.series %]&rft.genre="
+"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
+"au=[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
+"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT."
+"item('size') %]&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft."
+"place=[% BIBLIO_RESULT.place %]&rft.pub=[% BIBLIO_RESULT.publisher |url "
+"%]&rft.edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT."
+"series %]&rft.genre="
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:325
 #, c-format

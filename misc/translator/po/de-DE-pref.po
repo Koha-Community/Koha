@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 3.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:26+0200\n"
-"PO-Revision-Date: 2015-01-22 09:12+0000\n"
-"Last-Translator: Katrin <katrin.fischer@bsz-bw.de>\n"
+"PO-Revision-Date: 2015-02-19 17:52+0000\n"
+"Last-Translator: Marc <veron@veron.ch>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-"
 "community.org>\n"
 "Language: de\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1421917960.000000\n"
+"X-POOTLE-MTIME: 1424368370.000000\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 # Acquisitions
@@ -293,6 +293,21 @@ msgid "admin.pref#ReturnpathDefault# as the email address set as the return path
 msgstr "als als Rückantwortandresse bei Problemen beim Versand einer Benachrichtigung. Wenn das Feld freigelassen wird, wid statt dessen Admin-E-Mail-Adresse  verwendet."
 
 # Administration > Login options
+msgid "admin.pref#SessionRestrictionByIP# Disable"
+msgstr "admin.pref#SessionRestrictionByIP# Prüfe nicht"
+
+# Administration > Login options
+msgid "admin.pref#SessionRestrictionByIP# Enable"
+msgstr "admin.pref#SessionRestrictionByIP# Prüfe"
+
+# Administration > Login options
+msgid "admin.pref#SessionRestrictionByIP# check for change in remote IP address for session security. Disable only when remote IP address changes frequently."
+msgstr ""
+"admin.pref#SessionRestrictionByIP# auf Änderung der Zugriffs-IP-Adresse zur "
+"Session-Sicherheit. Nur deaktivieren, wenn sich die Zugriffs-IP-Adresse "
+"häufig ändert."
+
+# Administration > Login options
 msgid "admin.pref#SessionStorage# Store login session information"
 msgstr "Speichere Session-Informationen"
 
@@ -534,7 +549,7 @@ msgstr "Hierarchien für weitere/engere Terme zwischen Normdaten."
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
-msgstr "Bei der Exemplarbearbeitung sollen fehlende Normdatensätze"
+msgstr "Bei der Bearbeitung von Titeln sollen fehlende Normdatensätze"
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# authority records that are missing (BiblioAddsAuthorities must be set to \"allow\" for this to have any effect)."
@@ -702,7 +717,7 @@ msgstr "Wenn das Importwerkzeug auf ISBN-Vergleich gesetzt ist,"
 
 # Cataloging > Importing
 msgid "cataloguing.pref#AggressiveMatchOnISBN# attempt to match aggressively by trying all variations of the ISBNs in the imported record as a phrase in the ISBN fields of already cataloged records.  Note that this preference has no effect if UseQueryParser is on."
-msgstr "cataloguing.pref#AggressiveMatchOnISBN# aggressiver Abgleichversuch des importierten Datensatzes durch Vergleich aller Varianten von ISBN-Nummern mit den ISBN-Feldern bereits katalogisierter Titel.    Hinweis: Wenn UseQueryParser eingeschaltet ist, hat diese Einstellung keine Auswirkung."
+msgstr "aggressiver Abgleichversuch des importierten Datensatzes durch Vergleich aller Varianten von ISBN-Nummern mit den ISBN-Feldern bereits katalogisierter Titel.    Hinweis: Wenn UseQueryParser eingeschaltet ist, hat diese Einstellung keine Auswirkung."
 
 # Cataloging > Importing
 msgid "cataloguing.pref#AggressiveMatchOnISBN# do"
@@ -850,7 +865,7 @@ msgstr " eine Erklärungsseite ('Dieser Titel ist gesperrt')."
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# items marked as suppressed from OPAC search results. Note that you must have the <code>Suppress</code> index set up in Zebra and at least one suppressed item, or your searches will be broken."
-msgstr "Exemplare, die als unterdrückt in den OPAC-Suchtreffern markiert wurden. Bitte beachten Sie, dass der Index <code>Suppress</code> in Zebra konfiguriert sein und es mindestens ein unterdrücktes Exemplar geben muss, damit die Suche funktioniert."
+msgstr "Titel, die als unterdrückt in den OPAC-Suchtreffern markiert wurden. Bitte beachten Sie, dass der Index <code>Suppress</code> in Zebra konfiguriert sein und es mindestens einen unterdrückten Titel geben muss, damit die Suche funktioniert."
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# the 404 error page ('Not found')."
@@ -5407,8 +5422,7 @@ msgstr "Privatbibliothek"
 
 # Serials
 msgid "serials.pref#RoutingSerials# the routing list feature in the serials module."
-msgstr ""
-"die Funktionen für die Verwaltung von Umlauflisten im Zeitschriftenmodul."
+msgstr "die Funktionen für die Verwaltung von Umlauflisten im Zeitschriftenmodul."
 
 # Serials
 msgid "serials.pref#StaffSerialIssueDisplayCount# Show the"

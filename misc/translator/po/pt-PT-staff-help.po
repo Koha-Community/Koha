@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pt-PT-i-staff-t-prog-v-3000000\n"
-"POT-Creation-Date: 2015-01-19 18:23-0300\n"
-"PO-Revision-Date: 2014-08-01 09:18+0000\n"
+"POT-Creation-Date: 2015-02-15 23:04-0300\n"
+"PO-Revision-Date: 2015-01-28 12:56+0000\n"
 "Last-Translator: vfernandes <vfernandes@keep.pt>\n"
 "Language-Team: <>\n"
 "Language: pt\n"
@@ -14,8 +14,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1406884707.0\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1422449779.000000\n"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:83
 #, c-format
@@ -122,6 +122,9 @@ msgid ""
 "server here, like sru_version=1.1 or schema=marc21, etc. Note that these "
 "options are server dependent."
 msgstr ""
+"'Opções SRU adicionais': Pode adicionar opções adicionais ao servidor "
+"externo, como sru_version=1.1 ou schema=marc21, etc. Note que todas estas "
+"opções são dependentes do servidor."
 
 #: intranet-tmpl/prog/en/modules/help/tools/koha-news.tt:15
 #, c-format
@@ -236,6 +239,9 @@ msgid ""
 "enter the path name part of the URL (the local part following domain and "
 "port). See also example below."
 msgstr ""
+"'Base de dados' é o nome da base de dados dos servidores Z39.50. Para "
+"servidores SRU insira o caminho do URL (parte depois do domínio e da posta. "
+"Veja o exemplo abaixo. "
 
 #: intranet-tmpl/prog/en/modules/help/admin/auth_subfields_structure.tt:26
 #, c-format
@@ -338,6 +344,8 @@ msgid ""
 "'Hostname' will be the address to the Z39.50 target. For a SRU target, only "
 "enter the domain name here. (See example below.)"
 msgstr ""
+"'Nome' será o endereço do servidor Z39.50. Para um servidor SRU, insira "
+"apenas o nome do domínio. (Veja o exemplo abaixo.)"
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:27
 #, c-format
@@ -540,12 +548,13 @@ msgstr ""
 "leitores"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:21
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'Rank' lets you enter where in the list you'd like this target to appear. If "
 "this is left blank the targets will be in alphabetical order."
 msgstr ""
-"'Rank' permite inserir a posição na lista que deseja que o alvo apareça. "
+"'Rank' permite inserir a posição na lista que deseja que o alvo apareça. Se "
+"deixar em branco os servidores aparecem ordenados alfabeticamente."
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:25
 #, c-format
@@ -604,6 +613,12 @@ msgid ""
 "for the Any field on the Koha form. If you do not enter an index name for a "
 "specific search field, the whole record will be searched."
 msgstr ""
+"'Mapeamento de campo de pesquisa SRU': Clique em Modificar para adicionar ou "
+"atualizar o mapeamento em os campos disponíveis no formulário de pesquisa do "
+"Koha para campos de índice específicos do servidor. Por exemplo, o servidor "
+"SRU pode usar 'cql.anywhere' para o campo Qualquer no formulário do Koha. Se "
+"não inserir um índice  para um campo de pesquisa específico, todo o registo "
+"será pesquisado."
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:40
 #, c-format
@@ -637,12 +652,12 @@ msgstr ""
 "MARC\"."
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'Server name' should be populated with a name that will help you identify "
 "the source (such as the library name)."
 msgstr ""
-"'Servidor Z39.50' deve ser preenchido com o nome que irá ajudar a "
+"Nome do servidor' deve ser preenchido com o nome que irá ajudar a "
 "identificar a fonte (como o nome da biblioteca)."
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:80
@@ -740,6 +755,8 @@ msgid ""
 "'XSLT file(s)': You can enter here one or more (comma-separated) XSLT file "
 "names that you want to apply on the search results."
 msgstr ""
+"'Ficheiro(s) XSLT': Pode inserir um ou mais nomes de ficheiros XSLT "
+"(separados por vírgula) que deseja aplicar aos resultados de pesquisa."
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:42
 #, c-format
@@ -1855,9 +1872,9 @@ msgid "Add a Vendor"
 msgstr "Adicionar fornecedor"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:11
-#, fuzzy, c-format
+#, c-format
 msgid "Add a Z39.50/SRU Target"
-msgstr "Adicionar servidor Z39.50"
+msgstr "Adicionar servidor Z39.50/SRU"
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:9
 #, c-format
@@ -2594,7 +2611,7 @@ msgstr "Resposta:"
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:68
 #, c-format
 msgid "Any"
-msgstr ""
+msgstr "Qualquer"
 
 #: intranet-tmpl/prog/en/modules/help/mainpage.tt:25
 #, c-format
@@ -2745,9 +2762,9 @@ msgid "Audience"
 msgstr "Audiência"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:69
-#, fuzzy, c-format
+#, c-format
 msgid "Author"
-msgstr "Autoridades"
+msgstr "Autor"
 
 #: intranet-tmpl/prog/en/modules/help/authorities/detail.tt:3
 #: intranet-tmpl/prog/en/modules/help/authorities/authorities-home.tt:3
@@ -3385,13 +3402,13 @@ msgstr ""
 "visualização de detalhes do leitor à esquerda do ecrã de empréstimo."
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Check 'Preselected (searched by default)' if you want this target to always "
 "be selected by default."
 msgstr ""
-"Marque a caixa 'Selecionado' se o alvo de pesquisa esteja selecionado por "
-"omissão."
+"Marque a caixa 'Selecionado (pesquisado por omissão)' se o alvo de pesquisa "
+"esteja selecionado por omissão."
 
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:37
 #, c-format
@@ -4812,7 +4829,7 @@ msgstr "DUEDGST "
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:60
 #, c-format
 msgid "Database"
-msgstr ""
+msgstr "Base de dados"
 
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:38
 #: intranet-tmpl/prog/en/modules/help/members/members-home.tt:40
@@ -4905,33 +4922,36 @@ msgstr "Definir um mapeamento"
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:36
 #, c-format
 msgid "Del952.xsl: Remove items (MARC21/NORMARC)"
-msgstr ""
+msgstr "Del952.xsl: Remove exemplares (MARC21/NORMARC)"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:37
 #, c-format
 msgid "Del995.xsl: Remove items (UNIMARC)"
-msgstr ""
+msgstr "Del995.xsl: Remove exemplares (UNIMARC)"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:50
 #, c-format
 msgid "Del9LinksExcept952.xsl, Del952.xsl"
-msgstr ""
+msgstr "Del9LinksExcept952.xsl, Del952.xsl"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:38
 #, c-format
 msgid ""
 "Del9LinksExcept952.xsl: Remove $9 links. Skip item fields (MARC21/NORMARC)."
 msgstr ""
+"Del9LinksExcept952.xsl: Remove links $9. Salta os exemplares (MARC21/"
+"NORMARC)."
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:51
 #, c-format
 msgid "Del9LinksExcept995.xsl, Del995.xsl"
-msgstr ""
+msgstr "Del9LinksExcept995.xsl, Del995.xsl"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:39
 #, c-format
 msgid "Del9LinksExcept995.xsl: Remove $9 links. Skip item fields (UNIMARC)."
 msgstr ""
+"Del9LinksExcept995.xsl: Remove links $9. Salta os exemplares (UNIMARC). "
 
 #: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:12
 #, c-format
@@ -5358,7 +5378,7 @@ msgstr "Email: "
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:62
 #, c-format
 msgid "Encoding"
-msgstr ""
+msgstr "Codificação"
 
 #: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:23
 #, c-format
@@ -5673,9 +5693,9 @@ msgstr ""
 "dos padrões de numeração."
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:42
-#, fuzzy, c-format
+#, c-format
 msgid "Example"
-msgstr "Exemplos: "
+msgstr "Exemplos"
 
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:30
 #: intranet-tmpl/prog/en/modules/help/members/members-home.tt:32
@@ -6533,10 +6553,12 @@ msgstr ""
 "escolher mais ou menos de 2, será mostrado um erro"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "From the main Z39.50/SRU page, click 'New Z39.50 Server' or 'New SRU server'."
-msgstr "A partir da página principal Z39.50, clique em 'Novo servidor Z39.50' "
+msgstr ""
+"A partir da página principal Z39.50/SRU, clique em 'Novo servidor Z39.50' ou "
+"'Novo servidor SRU'."
 
 #: intranet-tmpl/prog/en/modules/help/course_reserves/course.tt:7
 #, c-format
@@ -6831,6 +6853,8 @@ msgid ""
 "From this page you will see your bibliographic search history and your "
 "authority search history."
 msgstr ""
+"A partir desta página pode ver o histórico de pesquisa de registos "
+"bibliográficos e de autoridades."
 
 #: intranet-tmpl/prog/en/modules/help/authorities/merge.tt:5
 #, c-format
@@ -7090,7 +7114,7 @@ msgstr "Calendário dos feriados"
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:58
 #, c-format
 msgid "Host"
-msgstr ""
+msgstr "Servidor"
 
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:13
 #, c-format
@@ -7125,12 +7149,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:67
 #, c-format
 msgid "ISBN"
-msgstr ""
+msgstr "ISBN"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:70
 #, c-format
 msgid "ISSN"
-msgstr ""
+msgstr "ISSN"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:270
 #, c-format
@@ -8427,6 +8451,10 @@ msgid ""
 "history then you can access this information by clicking on your username in "
 "the top right of the staff client and choosing 'Search history'."
 msgstr ""
+"Se tem a preferência EnableSearchHistory definida para manter o seu "
+"histórico de pesquisa então pode aceder a essa informação clicando no seu "
+"nome de utilizador no topo superior do interface dos técnicos e escolhendo "
+"'Histórico de pesquisa'."
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:21
 #, c-format
@@ -8582,6 +8610,9 @@ msgid ""
 "use the following information. The full URL http://lx2.loc.gov:210/LCDB must "
 "be entered as follows:"
 msgstr ""
+"Se deseja inserir o servidor SRU da Library of Congress, deve pelo menos "
+"usar a seguinte informação. O endereço URL http://lx2.loc.gov:210/LCDB deve "
+"ser inserido da seguinte forma:"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/moveitem.tt:11
 #, c-format
@@ -8607,6 +8638,7 @@ msgid ""
 "If you want to remove both holdings data and $9 links when importing, you "
 "can use:"
 msgstr ""
+"Se desejar remover os exemplares e as ligações $9 quando importar, pode usar:"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/z3950_search.tt:5
 #, c-format
@@ -8840,7 +8872,7 @@ msgstr ""
 "biblioteca todos de uma vez use o menu de cópia abaixo do calendário"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:59
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you're allowing renewals you can control how long the renewal loan period "
 "will be (in the units you have chosen) in the 'Renewal period' box"
@@ -9327,13 +9359,13 @@ msgid "Important: Requires the borrowers permission above"
 msgstr "Importante: Necessita da permissão de leitores acima"
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Important: The 'password' value should be stored in plain text, and will be "
 "converted to a Bcrypt hash (which is an encrypted version of the password)."
 msgstr ""
 "Importante: A 'palavra-passe' deve ser guardada em texto, e será convertida "
-"para uma hash MD5 (se as suas palavras-passe já se encontram encriptadas "
+"para uma hash Bcrypt (se as suas palavras-passe já se encontram encriptadas "
 "fale com o administrador de sistema sobre as diferentes opções)."
 
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:99
@@ -10154,13 +10186,13 @@ msgstr ""
 "palavra-passe."
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha comes with a default list of Z39.50/SRU targets set up that you can add "
 "to, edit or delete."
 msgstr ""
-"O Koha tem uma lista por omissão de servidores Z39.50 definida que pode "
-"editar e adicionar/remover elementos"
+"O Koha tem uma lista por omissão de servidores Z39.50/SRU definida que pode "
+"editar e adicionar/remover elementos."
 
 #: intranet-tmpl/prog/en/modules/help/tools/export.tt:5
 #, c-format
@@ -10375,7 +10407,7 @@ msgstr "LCC"
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:60
 #, c-format
 msgid "LCDB"
-msgstr ""
+msgstr "LCDB"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:98
 #, c-format
@@ -10683,12 +10715,12 @@ msgstr "Importar MARC"
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:50
 #, c-format
 msgid "MARC21/NORMARC"
-msgstr ""
+msgstr "MARC21/NORMARC"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:61
 #, c-format
 msgid "MARC21/USMARC"
-msgstr ""
+msgstr "MARC21/USMARC"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:86
 #, c-format
@@ -11276,6 +11308,8 @@ msgid ""
 "Note that the version number between parentheses following the module name "
 "is the required version; the installed version is in the next column."
 msgstr ""
+"Note que o número de versão entre parêntesis depois do nome do módulo é a "
+"versão necessária; a versão instalada está na coluna a seguir."
 
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:57
 #: intranet-tmpl/prog/en/modules/help/acqui/lateorders.tt:9
@@ -12677,7 +12711,7 @@ msgstr "Plugins"
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:59
 #, c-format
 msgid "Port"
-msgstr ""
+msgstr "Porta"
 
 #: intranet-tmpl/prog/en/modules/help/tools/quotes-upload.tt:19
 #, c-format
@@ -12701,11 +12735,11 @@ msgstr "Imprimir recibos"
 
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:14
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:28
-#, fuzzy, c-format
+#, c-format
 msgid "Private list: Is managed by you and can be seen only by you"
 msgstr ""
-"Uma lista privada apenas é utilizada pelo próprio e não pode ser vista por "
-"outros."
+"Lista privada: Apenas é utilizada pelo próprio e não pode ser vista por "
+"outros"
 
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:30
 #, c-format
@@ -12749,11 +12783,10 @@ msgstr ""
 # Ricardo Dias Marques: estava "apenasmodificada"
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:15
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:29
-#, fuzzy, c-format
+#, c-format
 msgid "Public list: Can be seen by everybody, but managed only by you"
 msgstr ""
-"Uma lista pública pode ser vista por todos, mas apenas modificada pelo "
-"próprio."
+"Lista pública: Pode ser vista por todos, mas apenas modificada pelo próprio"
 
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:65
 #, c-format
@@ -13094,7 +13127,7 @@ msgstr "SHARE_INVITE "
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:55
 #, c-format
 msgid "SRU example"
-msgstr ""
+msgstr "Exemplo SRU"
 
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:29
 #, c-format
@@ -13166,9 +13199,9 @@ msgid "Search for the item you would like to catalog "
 msgstr "Pesquisar o registo que deseja catalogar "
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search-history.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Search history"
-msgstr "Pesquisa"
+msgstr "Histórico de pesquisa"
 
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:35
 #, c-format
@@ -13698,9 +13731,9 @@ msgid "See the full documentation for Routing Lists in the "
 msgstr "Ver a documentação completa para as listas de circulação no "
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search-history.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid "See the full documentation for Search History in the "
-msgstr "Ver a documentação completa para a pesquisa no "
+msgstr "Ver a documentação completa para o Histórico de pesquisa no "
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:81
 #, c-format
@@ -13794,9 +13827,9 @@ msgid "See the full documentation for Vendor Contracts in the "
 msgstr "Ver a documentação completa para os contratos de fornecedor no "
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
-#, fuzzy, c-format
+#, c-format
 msgid "See the full documentation for Z39.50/SRU Servers in the "
-msgstr "Ver a documentação completa para os servidores Z30.50 no "
+msgstr "Ver a documentação completa para os servidores Z30.50/SRU no "
 
 #: intranet-tmpl/prog/en/modules/help/course_reserves/course.tt:17
 #, c-format
@@ -13838,11 +13871,11 @@ msgid "See the full documentation for the Calendar in the "
 msgstr "Ver a documentação completa para o calendário no "
 
 #: intranet-tmpl/prog/en/modules/help/reports/manager.tt:11
-#, fuzzy, c-format
+#, c-format
 msgid "See the full documentation for the Catalog by Item type report in the "
 msgstr ""
-"Ver a documentação completa para o relatório 'Catalogação por tipo de "
-"documento' no "
+"Ver a documentação completa para o relatório Catalogação por tipo de "
+"documento no "
 
 #: intranet-tmpl/prog/en/modules/help/admin/didyoumean.tt:20
 #, c-format
@@ -14301,9 +14334,9 @@ msgid "Stage MARC records into the reservoir"
 msgstr "Transferência para área temporária de registos MARC"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:72
-#, fuzzy, c-format
+#, c-format
 msgid "Standard ID"
-msgstr "Omissão: "
+msgstr "ID por omissão"
 
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:12
 #: intranet-tmpl/prog/en/modules/help/members/members-home.tt:14
@@ -14434,7 +14467,7 @@ msgstr "Subcampos: a"
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:71
 #, c-format
 msgid "Subject"
-msgstr ""
+msgstr "Assunto"
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/help/edithelp.tt:36
@@ -14476,7 +14509,7 @@ msgstr "Servidores Z39.50 Sugeridos"
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:61
 #, c-format
 msgid "Syntax"
-msgstr ""
+msgstr "Sintaxe"
 
 #: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:3
 #, c-format
@@ -17032,7 +17065,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/about.tt:34
 #, c-format
 msgid "Timeline"
-msgstr ""
+msgstr "Linha temporal"
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:24
 #, c-format
@@ -17255,7 +17288,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:66
 #, c-format
 msgid "Title"
-msgstr ""
+msgstr "Título"
 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:9
 #, c-format
@@ -17756,6 +17789,9 @@ msgid ""
 "the SRU search field mappings. To do this, edit the server and click the "
 "Modify button next to this field."
 msgstr ""
+"Para refinar as suas pesquisas, pode adicionar os seguintes índices ao "
+"mapeamento de campos de pesquisa SRU. Para fazer isso, edite o servidor e "
+"clique no botão Modificar junto ao campo."
 
 #: intranet-tmpl/prog/en/modules/help/circ/view_holdsqueue.tt:7
 #, c-format
@@ -18275,7 +18311,7 @@ msgstr "Solução de problemas"
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:51
 #, c-format
 msgid "UNIMARC"
-msgstr ""
+msgstr "UNIMARC"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/uncertainprice.tt:3
 #, c-format
@@ -18479,7 +18515,7 @@ msgstr "Usando Perfis CSV"
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:31
 #, c-format
 msgid "Using XSLT file(s) to transform the imported records"
-msgstr ""
+msgstr "Usar ficheiros XSLT para transformar os registos importados"
 
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:11
 #, c-format
@@ -18923,6 +18959,9 @@ msgid ""
 "changes to those records. XSLT's allow you to do this. Koha ships with some "
 "sample XSLT files ready for use."
 msgstr ""
+"Quanto retornar registos de servidores externos pode desejar automatizar "
+"algumas modificações a esses registos. Os ficheiros XSLT permitem isso. O "
+"Koha já possui alguns ficheiros XSLT prontos a usar."
 
 #: intranet-tmpl/prog/en/modules/help/suggestion/suggestion.tt:21
 #, c-format
@@ -19251,9 +19290,9 @@ msgid "XML - Included as an alternate export format"
 msgstr "XML - Incluido como uma alternativa de formato de exportação"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:47
-#, fuzzy, c-format
+#, c-format
 msgid "XSLT configuration"
-msgstr "Configuração dos conjuntos OAI-PMH"
+msgstr "Configuração XSLT"
 
 #: intranet-tmpl/prog/en/modules/help/admin/classsources.tt:25
 #, c-format
@@ -20107,7 +20146,7 @@ msgstr ""
 "aceitar ou rejeitar a sugestão (ver 'Estado')."
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Z39.50 and SRU are client–server protocols for searching and retrieving "
 "information from remote computer databases, in short tools used for copy "
@@ -20116,16 +20155,17 @@ msgid ""
 "bibliographic and/or authority records from that source. (Note that not all "
 "SRU targets will offer bibliographic information in MARC format.)"
 msgstr ""
-"Z39.50 é um protocolo cliente-servidor para pesquisar e obter informação de "
-"computadores de forma remota, é uma ferramenta usada para copiar catálogos. "
-"Usando o Koha pode-se conectar a vários servidores Z39.50, que está "
-"disponível publicamente ou do qual tem credenciais, e copiar tanto registos "
-"bibliográficos como de autoridade."
+"Z39.50 e SRU são protocolos cliente-servidor para pesquisar e obter "
+"informação de computadores de forma remota, é uma ferramenta usada para "
+"copiar catálogos. Usando o Koha pode-se conectar a vários servidores Z39.50 "
+"ou SRU, que está disponível publicamente ou do qual tem credenciais, e "
+"copiar tanto registos bibliográficos como de autoridade. (Note que nem todos "
+"os servidores SRU devolvem os registos bibliográficos em formato MARC.)"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Z39.50/SRU Servers"
-msgstr "Servidores Z39.50"
+msgstr "Servidores Z39.50/SRU"
 
 #: intranet-tmpl/prog/en/modules/help/tools/picture-upload.tt:14
 #, c-format
@@ -20224,17 +20264,17 @@ msgstr "batch_upload_patron_images "
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:67
 #, c-format
 msgid "bath.isbn"
-msgstr ""
+msgstr "bath.isbn"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:70
 #, c-format
 msgid "bath.issn"
-msgstr ""
+msgstr "bath.issn"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:72
 #, c-format
 msgid "bath.standardIdentifier"
-msgstr ""
+msgstr "bath.standardIdentifier"
 
 #: intranet-tmpl/prog/en/modules/help/tools/quotes.tt:21
 #, c-format
@@ -20336,7 +20376,7 @@ msgstr "contracts_manage "
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:68
 #, c-format
 msgid "cql.anywhere"
-msgstr ""
+msgstr "cql.anywhere"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:471
 #, c-format
@@ -20477,17 +20517,17 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:69
 #, c-format
 msgid "dc.author"
-msgstr ""
+msgstr "dc.author"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:71
 #, c-format
 msgid "dc.subject"
-msgstr ""
+msgstr "dc.subject"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:66
 #, c-format
 msgid "dc.title"
-msgstr ""
+msgstr "dc.title"
 
 #: intranet-tmpl/prog/en/modules/help/admin/classsources.tt:10
 #, c-format
@@ -20853,7 +20893,7 @@ msgstr "uso local "
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:58
 #, c-format
 msgid "lx2.loc.gov"
-msgstr ""
+msgstr "lx2.loc.gov"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:160
 #, c-format
@@ -21375,7 +21415,7 @@ msgstr "upload_local_cover_images "
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:62
 #, c-format
 msgid "utf8"
-msgstr ""
+msgstr "utf8"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:17
 #, c-format
