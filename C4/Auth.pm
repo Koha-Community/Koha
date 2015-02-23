@@ -459,7 +459,7 @@ sub get_template_and_user {
             $opac_base_url = $ENV{'SERVER_NAME'} . ( $ENV{'SERVER_PORT'} eq ( $using_https ? "443" : "80" ) ? '' : ":$ENV{'SERVER_PORT'}" );
         }
         $template->param(
-            opaccolorstylesheet                   => C4::Context->preference("opaccolorstylesheet"),
+            OpacAdditionalStylesheet                   => C4::Context->preference("OpacAdditionalStylesheet"),
             AnonSuggestions                       => "" . C4::Context->preference("AnonSuggestions"),
             AuthorisedValueImages                 => C4::Context->preference("AuthorisedValueImages"),
             BranchesLoop                          => GetBranchesLoop($opac_name),
@@ -1155,7 +1155,7 @@ sub checkauth {
     my $template = C4::Templates::gettemplate( $template_name, $type, $query );
     $template->param(
         branchloop                            => GetBranchesLoop(),
-        opaccolorstylesheet                   => C4::Context->preference("opaccolorstylesheet"),
+        OpacAdditionalStylesheet                   => C4::Context->preference("OpacAdditionalStylesheet"),
         opaclayoutstylesheet                  => C4::Context->preference("opaclayoutstylesheet"),
         login                                 => 1,
         INPUTS                                => \@inputs,

@@ -106,8 +106,8 @@ sub output {
     $vars->{interface} =
       ( $self->{interface} ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' );
     $vars->{theme} = $self->theme;
-    $vars->{opaccolorstylesheet} =
-        C4::Context->preference('opaccolorstylesheet');
+    $vars->{OpacAdditionalStylesheet} =
+        C4::Context->preference('OpacAdditionalStylesheet');
     $vars->{opaclayoutstylesheet} =
         C4::Context->preference('opaclayoutstylesheet');
 

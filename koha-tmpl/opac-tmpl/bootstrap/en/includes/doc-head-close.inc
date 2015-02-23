@@ -21,11 +21,11 @@
 [% ELSE %]
     <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/[% opaclayoutstylesheet %]" />
 [% END %]
-[% IF ( opaccolorstylesheet ) %]
-    [% IF (opaccolorstylesheet.match('^https?:|^\/')) %]
-        <link rel="stylesheet" type="text/css" href="[% opaccolorstylesheet %]" />
+[% IF ( OpacAdditionalStylesheet ) %]
+    [% IF (OpacAdditionalStylesheet.match('^https?:|^\/')) %]
+        <link rel="stylesheet" type="text/css" href="[% OpacAdditionalStylesheet %]" />
     [% ELSE %]
-        <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/[% opaccolorstylesheet %]" />
+        <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/[% OpacAdditionalStylesheet %]" />
     [% END %]
 [% END %]
 [% IF ( opac_css_override ) %]
