@@ -69,10 +69,15 @@
             }
         });
 
+        [%# Only ask for a confirmation if it is an edit %]
         $("#z3950search").click(function(){
-            if (confirm(_("Please note that this external search could replace the current record."))){
+            [% IF biblionumber %]
+                if (confirm(_("Please note that this external search could replace the current record."))){
+                    PopupZ3950();
+                }
+            [% ELSE %]
                 PopupZ3950();
-            }
+            [% END %]
         });
 
         $("#saverecord").click(function(){
