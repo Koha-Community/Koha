@@ -1,5 +1,6 @@
 [% USE KohaDates %]
 [% USE Koha %]
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Circulation History for [% INCLUDE 'patron-title.inc' %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -108,7 +109,7 @@
           <td>
             <span title="[% issue.issuedate %]">[% issue.issuedate |$KohaDates with_hours => 1 %]</span></td>
           </td>
-          <td>[% issue.issuingbranch %]</td>
+          <td>[% Branches.GetName( issue.branchcode ) %]</td>
           <td>
             [% IF issue.date_due %]
                 <span title="[% issue.date_due %]">[% issue.date_due |$KohaDates with_hours => 1 %]</span>

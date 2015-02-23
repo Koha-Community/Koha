@@ -74,9 +74,6 @@ if ( $borrowernumber eq C4::Context->preference('AnonymousPatron') ){
 }
 
 my $branches = GetBranches();
-foreach my $issue ( @{$issues} ) {
-    $issue->{issuingbranch} = $branches->{ $issue->{branchcode} }->{branchname};
-}
 
 #   barcode export
 if ( $op eq 'export_barcodes' ) {

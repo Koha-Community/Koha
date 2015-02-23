@@ -1144,7 +1144,6 @@ CREATE TABLE `issues` ( -- information related to check outs or issues
   `itemnumber` int(11), -- foreign key, linking this to the items table for the item that was checked out
   `date_due` datetime default NULL, -- datetime the item is due (yyyy-mm-dd hh:mm::ss)
   `branchcode` varchar(10) default NULL, -- foreign key, linking to the branches table for the location the item was checked out
-  `issuingbranch` varchar(18) default NULL,
   `returndate` datetime default NULL, -- date the item was returned, will be NULL until moved to old_issues
   `lastreneweddate` datetime default NULL, -- date the item was last renewed
   `return` varchar(4) default NULL,
@@ -1156,7 +1155,6 @@ CREATE TABLE `issues` ( -- information related to check outs or issues
   KEY `issuesborridx` (`borrowernumber`),
   KEY `itemnumber_idx` (`itemnumber`),
   KEY `branchcode_idx` (`branchcode`),
-  KEY `issuingbranch_idx` (`issuingbranch`),
   KEY `bordate` (`borrowernumber`,`timestamp`),
   CONSTRAINT `issues_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `issues_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE RESTRICT ON UPDATE CASCADE
@@ -1620,7 +1618,6 @@ CREATE TABLE `old_issues` ( -- lists items that were checked out and have been r
   `itemnumber` int(11) default NULL, -- foreign key, linking this to the items table for the item that was checked out
   `date_due` datetime default NULL, -- date the item is due (yyyy-mm-dd)
   `branchcode` varchar(10) default NULL, -- foreign key, linking to the branches table for the location the item was checked out
-  `issuingbranch` varchar(18) default NULL,
   `returndate` datetime default NULL, -- date the item was returned
   `lastreneweddate` datetime default NULL, -- date the item was last renewed
   `return` varchar(4) default NULL,
@@ -1632,7 +1629,6 @@ CREATE TABLE `old_issues` ( -- lists items that were checked out and have been r
   KEY `old_issuesborridx` (`borrowernumber`),
   KEY `old_issuesitemidx` (`itemnumber`),
   KEY `branchcode_idx` (`branchcode`),
-  KEY `issuingbranch_idx` (`issuingbranch`),
   KEY `old_bordate` (`borrowernumber`,`timestamp`),
   CONSTRAINT `old_issues_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
     ON DELETE SET NULL ON UPDATE SET NULL,
