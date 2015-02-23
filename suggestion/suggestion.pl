@@ -176,14 +176,11 @@ elsif ($op eq "change" ) {
     }
     if ( my $reason = $$suggestion_ref{"reason$tabcode"}){
         if ( $reason eq "other" ) {
-                $reason = $$suggestion_ref{"other_reason$tabcode"};
+            $reason = $$suggestion_ref{"other_reason$tabcode"};
         }
-        $$suggestion_ref{'reason'}=$reason;
+        $suggestion_only->{reason}=$reason;
     }
-    delete $$suggestion_ref{$_} foreach ("reason$tabcode", "other_reason$tabcode");
-     foreach (keys %$suggestion_ref){
-        delete $$suggestion_ref{$_} unless ($$suggestion_ref{$_});
-    }
+
     foreach my $suggestionid (@editsuggestions) {
         next unless $suggestionid;
         $suggestion_only->{'suggestionid'}=$suggestionid;
