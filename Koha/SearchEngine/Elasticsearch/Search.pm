@@ -80,7 +80,7 @@ sub search {
     if (exists $options{offset}) {
         $paging{start} = $options{offset};
     } else {
-        $page = (!defined($page) || ($page <= 0)) ? 1 : $page - 1;
+        $page = (!defined($page) || ($page <= 0)) ? 0 : $page - 1;
         $paging{start} = $page * $paging{limit};
     }
     $self->store(
@@ -136,27 +136,37 @@ sub search_compat {
     return (undef, \%result, $self->_convert_facets($results->{facets}));
 }
 
-=head2 search_marc
+=head2 search_auth_compat
 
     my ( $results, $total ) =
-      $searcher->search_marc( $query, $page, $count, %options );
+      $searcher->search_auth_compat( $query, $page, $count, %options );
 
-This has a similar calling convention to L<search>, however it assumes that all
-the results are going to contain MARC, and just provides an arrayref of them,
-along with a count of the total number of results.
+This has a similar calling convention to L<search>, however it returns its
+results in a form the same as L<C4::AuthoritiesMarc::SearchAuthorities>.
 
 =cut
 
-sub search_marc {
-    # TODO this probably should be temporary, until something more
-    # comprehensive is implemented using Koha::RecordProcessor and such.
+sub search_auth_compat {
     my $self = shift;
 
+    my $database = Koha::Database->new();
+    my $schema = $database->schema();
     my $res = $self->search(@_);
     my @records;
     $res->each(sub {
-            my $marc_json = @_[0]->{record};
+            my %result;
+            my $record = @_[0];
+            my $marc_json = $record->{record};
+            # I wonder if these should be real values defined in the mapping
+            # rather than hard-coded conversions.
+            $result{authid} = $record{Local-Number};
+            # TODO put all this info into the record at index time so we
+            # don't have to go and sort it all out now.
+            my $rs = $schema->resultset('auth_types')->search({ authtypecode => $authtypecode });
+            my $authtype = $rs->first;
+            my $authtypecode = $record{authtype};
             my $marc = $self->json2marc($marc_json);
+            die Dumper(\@_);
             push @records, $marc;
         });
     return (\@records, $res->total);

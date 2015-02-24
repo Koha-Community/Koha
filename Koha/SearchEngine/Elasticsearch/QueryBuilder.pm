@@ -265,7 +265,7 @@ sub build_authorities_query {
     my @filter_parts;
     foreach my $s ( @{ $search->{searches} } ) {
         my ($wh, $op, $val) = @{ $s }{qw(where operator value)};
-        $wh = '_any' if $wh eq 'any';
+        $wh = '_all' if $wh eq 'any';
         if ($op eq 'is' || $op eq '=') {
             # look for something that matches completely
             # note, '=' is about numerical vals. May need special handling.
