@@ -68,8 +68,7 @@ if ( $op eq "do_search" ) {
 #    die Dumper(\@marclist, \@and_or,
 #        \@excluding, \@operator, \@value, $authtypecode, $orderby, $query);
     my ( $results, $total ) =
-      $searcher->search_marc( $search_query, $startfrom, $resultsperpage );
-
+      $searcher->search_auth_compat( $search_query, $startfrom, $resultsperpage );
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "opac-authoritiessearchresultlist.tt",
