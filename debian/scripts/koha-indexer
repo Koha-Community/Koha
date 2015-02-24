@@ -175,7 +175,7 @@ while [ $# -gt 0 ]; do
 done
 
 # Check if an alternate indexer has been set
-if [ -z $ALTERNATE_INDEXER_DAEMON ]; then
+if [ ! -z $ALTERNATE_INDEXER_DAEMON ]; then
     INDEXER_DAEMON="$ALTERNATE_INDEXER_DAEMON"
 else
     # We default to rebuild_zebra.pl if no alternate indexer set
