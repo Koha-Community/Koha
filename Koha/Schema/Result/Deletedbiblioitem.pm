@@ -210,7 +210,7 @@ __PACKAGE__->table("deletedbiblioitems");
 =head2 marcxml
 
   data_type: 'longtext'
-  is_nullable: 0
+  is_nullable: 1
 
 =cut
 
@@ -287,7 +287,7 @@ __PACKAGE__->add_columns(
   "totalissues",
   { data_type => "integer", is_nullable => 1 },
   "marcxml",
-  { data_type => "longtext", is_nullable => 0 },
+  { data_type => "longtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -303,8 +303,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("biblioitemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-10-24 09:58:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ObIMBOrm2gbpPRMA0yRpLw
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-02-24 14:19:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RTMXhtMKvih1zhllHwwwYQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
