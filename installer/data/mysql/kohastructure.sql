@@ -2568,7 +2568,7 @@ CREATE TABLE `message_queue` (
   `to_address` mediumtext,
   `from_address` mediumtext,
   `content_type` text,
-  KEY `message_id` (`message_id`),
+  PRIMARY KEY `message_id` (`message_id`),
   KEY `borrowernumber` (`borrowernumber`),
   KEY `message_transport_type` (`message_transport_type`),
   CONSTRAINT `messageq_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,

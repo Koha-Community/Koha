@@ -10606,6 +10606,43 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.21.00.XXX";
+if ( CheckVersion($DBversion) ) {
+
+    #First make sure that there are no duplicate message_id's which might be quite impossible thanks to the AUTO_INCREMENT.
+    #If duplicates exists, find the next free message_id and UPDATE the duplicate message_queues with the new biggest id's.
+    my $sthGetDuplicatePKs = $dbh->prepare("SELECT count(message_id) as duplicate_pks, message_id ".
+                            "FROM message_queue GROUP BY message_id HAVING duplicate_pks > 1;");
+#USE THIS TO TEST           "FROM message_queue GROUP BY message_id HAVING duplicate_pks > 0;");
+    my $sthGetMessage_queues = $dbh->prepare("SELECT * FROM message_queue WHERE message_id = ?");
+    my $sthGetBiggestMessageId = $dbh->prepare("SELECT max(message_id) as message_id FROM message_queue;");
+    my $sthUpdateMessageQueue = $dbh->prepare("UPDATE message_queue SET message_id = ? WHERE message_id = ? AND borrowernumber = ? AND time_queued = ? AND content = ?;");
+
+    #Get duplicate message_ids
+    $sthGetDuplicatePKs->execute;
+    my $message_ids = $sthGetDuplicatePKs->fetchall_arrayref({});
+    foreach my $mi (@$message_ids) {
+        if ($mi->{duplicate_pks} > 1) { #Making sure there are multiple usages of this id
+#USE TO TEST  if ($mi->{duplicate_pks} > 0) { #Making sure we trigger this repair routine for messages with no duplicates, just to test.
+            $sthGetMessage_queues->execute($mi->{message_id}); #Get all the message_queues sharing the same id.
+            my $duplicates = $sthGetMessage_queues->fetchall_arrayref({});
+            my $firstRun = 1; #On the first replace run for this set of duplicates, preserve the original id.
+            foreach my $duplicate (@$duplicates) {
+                next if $firstRun-- == 1; #Preserve the original id for the first conflicting message_queue-row
+                $sthGetBiggestMessageId->execute();
+                my $max_message_id = $sthGetBiggestMessageId->fetchrow();
+                $max_message_id++;
+                $sthUpdateMessageQueue->execute( $max_message_id, $duplicate->{message_id}, $duplicate->{borrowernumber}, $duplicate->{time_queued}, $duplicate->{content} );
+            }
+        }
+    }
+
+    #Finally add the PRIMARY KEY
+    $dbh->do( "ALTER TABLE message_queue DROP KEY message_id, ADD CONSTRAINT PRIMARY KEY (message_id);" );
+    print "Upgrade to $DBversion done (Bug 7793 - redefine the field message_id as PRIMARY KEY of message_queue)\n";
+    SetVersion ($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
