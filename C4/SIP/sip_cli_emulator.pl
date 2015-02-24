@@ -347,8 +347,8 @@ sub build_item_information_command_message {
 sub build_checkout_command_message {
     my ($params) = @_;
 
-    my $SC_renewal_policy = $params->{SC_renewal_policy};
-    my $no_block          = $params->{no_block};
+    my $SC_renewal_policy = $params->{SC_renewal_policy} || 'N';
+    my $no_block          = $params->{no_block} || 'N';
     my $transaction_date  = $params->{transaction_date};
     my $nb_due_date       = $params->{nb_due_date};
     my $institution_id    = $params->{institution_id};
@@ -357,13 +357,13 @@ sub build_checkout_command_message {
     my $terminal_password = $params->{terminal_password};
     my $item_properties   = $params->{item_properties};
     my $patron_password   = $params->{patron_password};
-    my $fee_acknowledged  = $params->{fee_acknowledged};
-    my $cancel            = $params->{cancel};
+    my $fee_acknowledged  = $params->{fee_acknowledged} || 'N';
+    my $cancel            = $params->{cancel} || 'N';
 
-    $SC_renewal_policy = $SC_renewal_policy ? 'Y' : 'N';
-    $no_block          = $no_block          ? 'Y' : 'N';
-    $fee_acknowledged  = $fee_acknowledged  ? 'Y' : 'N';
-    $cancel            = $cancel            ? 'Y' : 'N';
+    $SC_renewal_policy = $SC_renewal_policy eq 'Y' ? 'Y' : 'N';
+    $no_block          = $no_block          eq 'Y' ? 'Y' : 'N';
+    $fee_acknowledged  = $fee_acknowledged  eq 'Y' ? 'Y' : 'N';
+    $cancel            = $cancel            eq 'Y' ? 'Y' : 'N';
 
     $nb_due_date ||= $transaction_date;
 
@@ -386,7 +386,7 @@ sub build_checkout_command_message {
 sub build_checkin_command_message {
     my ($params) = @_;
 
-    my $no_block          = $params->{no_block};
+    my $no_block          = $params->{no_block} || 'N';
     my $transaction_date  = $params->{transaction_date};
     my $return_date       = $params->{return_date};
     my $current_location  = $params->{current_location};
@@ -394,10 +394,10 @@ sub build_checkin_command_message {
     my $item_identifier   = $params->{item_identifier};
     my $terminal_password = $params->{terminal_password};
     my $item_properties   = $params->{item_properties};
-    my $cancel            = $params->{cancel};
+    my $cancel            = $params->{cancel} || 'N';
 
-    $no_block = $no_block ? 'Y' : 'N';
-    $cancel   = $cancel   ? 'Y' : 'N';
+    $no_block = $no_block eq 'Y' ? 'Y' : 'N';
+    $cancel   = $cancel   eq 'Y' ? 'Y' : 'N';
 
     $return_date ||= $transaction_date;
 
@@ -417,8 +417,8 @@ sub build_checkin_command_message {
 sub build_renew_command_message {
     my ($params) = @_;
 
-    my $third_party_allowed = $params->{third_party_allowed};
-    my $no_block            = $params->{no_block};
+    my $third_party_allowed = $params->{third_party_allowed} || 'N';
+    my $no_block            = $params->{no_block}            || 'N';
     my $transaction_date    = $params->{transaction_date};
     my $nb_due_date         = $params->{nb_due_date};
     my $institution_id      = $params->{institution_id};
@@ -428,11 +428,11 @@ sub build_renew_command_message {
     my $title_identifier    = $params->{title_identifier};
     my $terminal_password   = $params->{terminal_password};
     my $item_properties     = $params->{item_properties};
-    my $fee_acknowledged    = $params->{fee_acknowledged};
+    my $fee_acknowledged    = $params->{fee_acknowledged}    || 'N';
 
-    $third_party_allowed = $third_party_allowed ? 'Y' : 'N';
-    $no_block            = $no_block            ? 'Y' : 'N';
-    $fee_acknowledged    = $fee_acknowledged    ? 'Y' : 'N';
+    $third_party_allowed = $third_party_allowed eq 'Y' ? 'Y' : 'N';
+    $no_block            = $no_block            eq 'Y' ? 'Y' : 'N';
+    $fee_acknowledged    = $fee_acknowledged    eq 'Y' ? 'Y' : 'N';
 
     $nb_due_date ||= $transaction_date;
 
