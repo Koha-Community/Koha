@@ -211,7 +211,7 @@ __PACKAGE__->table("biblioitems");
 =head2 marcxml
 
   data_type: 'longtext'
-  is_nullable: 0
+  is_nullable: 1
 
 =cut
 
@@ -293,7 +293,7 @@ __PACKAGE__->add_columns(
   "totalissues",
   { data_type => "integer", is_nullable => 1 },
   "marcxml",
-  { data_type => "longtext", is_nullable => 0 },
+  { data_type => "longtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
