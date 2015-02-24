@@ -158,6 +158,12 @@
    <div id="bd">
        <div id="yui-main">
            <div class="yui-b">
+             [% IF ( allmatch ) %]<div class="dialog alert">
+              <h4>No records imported</h4>
+             No record have been imported because they all match an existing record in your catalog.<br />You'll have to treat them individually.
+             </div>
+             [% END %]
+
              [% IF ( batch_details ) %]
                 <h1>Add orders from [% comments %]
                     ([% file_name %] staged on [% upload_timestamp | $KohaDates with_hours => 1 %])

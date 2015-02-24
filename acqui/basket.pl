@@ -68,6 +68,7 @@ the supplier this script have to display the basket.
 my $query        = new CGI;
 our $basketno     = $query->param('basketno');
 my $booksellerid = $query->param('booksellerid');
+my $duplinbatch =  $query->param('duplinbatch');
 
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     {
@@ -390,6 +391,7 @@ if ( $op eq 'delete_confirm' ) {
         grouped              => $basket->{basketgroupid},
         unclosable           => @orders ? 0 : 1, 
         has_budgets          => $has_budgets,
+        duplinbatch          => $duplinbatch,
     );
 }
 

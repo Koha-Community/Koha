@@ -60,6 +60,7 @@ my ($template, $loggedinuser, $cookie, $userflags) = get_template_and_user({
 my $cgiparams = $input->Vars;
 my $op = $cgiparams->{'op'} || '';
 my $booksellerid  = $input->param('booksellerid');
+my $allmatch = $input->param('allmatch');
 my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 my $data;
 
@@ -123,6 +124,7 @@ if ($op eq ""){
     $template->param("batch_details" => 1,
                      "basketno"      => $cgiparams->{'basketno'},
                      loop_currencies  => \@loop_currency,
+                     "allmatch" => $allmatch,
                      );
     import_biblios_list($template, $cgiparams->{'import_batch_id'});
     if ( C4::Context->preference('AcqCreateItem') eq 'ordering' ) {
@@ -157,6 +159,8 @@ if ($op eq ""){
     # retrieve the file you want to import
     my $import_batch_id = $cgiparams->{'import_batch_id'};
     my $biblios = GetImportRecordsRange($import_batch_id);
+    my $duplinbatch;
+    my $imported = 0;
     my @import_record_id_selected = $input->param("import_record_id");
     my @quantities = $input->param('quantity');
     my @prices = $input->param('price');
@@ -181,6 +185,7 @@ if ($op eq ""){
 
         # 1st insert the biblio, or find it through matcher
         unless ( $biblionumber ) {
+            $duplinbatch=$import_batch_id and next if FindDuplicate($marcrecord);
             # add the biblio
             my $bibitemnum;
 
@@ -284,9 +289,14 @@ if ($op eq ""){
         } else {
             SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );
         }
+        $imported++;
     }
     # go to basket page
-    print $input->redirect("/cgi-bin/koha/acqui/basket.pl?basketno=".$cgiparams->{'basketno'});
+    if ( $imported ) {
+        print $input->redirect("/cgi-bin/koha/acqui/basket.pl?basketno=".$cgiparams->{'basketno'}."&amp;duplinbatch=$duplinbatch");
+    } else {
+        print $input->redirect("/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=$import_batch_id&amp;basketno=".$cgiparams->{'basketno'}."&amp;booksellerid=$booksellerid&amp;allmatch=1");
+    }
     exit;
 }
 
