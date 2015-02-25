@@ -42,7 +42,7 @@ $(document).ready(function() {
 [% IF ( run_report ) %]
     [% IF ( total ) %]
         <div class="results">[% total %] items found for
-            [% IF ( branchlimit ) %][% Branches.GetName( branchlimit ) %][% ELSE %]ALL libraries[% END %]
+            [% IF ( branchlimit ) %][% Branches.GetName( branchlimit ) %][% ELSE %]All libraries[% END %]
         </div>
     [% ELSE %]
         <div class="dialog message">No items found.</div>
