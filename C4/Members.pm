@@ -2126,7 +2126,7 @@ sub GetBorrowersToExpunge {
         LEFT JOIN old_issues USING (borrowernumber)
         LEFT JOIN issues USING (borrowernumber) 
         WHERE  category_type <> 'S'
-        AND tmp.guarantorid IS NOT NULL
+        AND tmp.guarantorid IS NULL
    |;
 
     my @query_params;
