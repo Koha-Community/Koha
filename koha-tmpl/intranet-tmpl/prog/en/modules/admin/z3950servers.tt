@@ -85,25 +85,8 @@
                 <h1>New Z39.50 server</h1>
         [% END %]                
         <fieldset class="rows">
-        <ol>
-        <li><label for="name">Server name: </label><input type="text" name="servername" id="servername" size="65" maxlength="100" onblur="toUC(this)" value="[% server.servername | html %]"/></li>
-
-        <li><label for="host" class="required">Hostname: </label> <input type="text" name="host" id="host" size="30" value="[% server.host %]" required="required" /> <span class="required">Required</span>
-            [% IF (server.servertype||type) == 'sru' %]
-                <div class="hint">Includes the domain part, but the path part of the URL should go into Database.</div>
-            [% END %]
-        </li>
-        <li><label for="port" class="required">Port: </label> <input type="text" name="port" id="port" size="5" value="[% server.port %]" required="required" /> <span class="required">Required</span>
-        </li>
-        <li><label for="db" class="required">Database: </label> <input type="text" name="db" id="db" value="[% server.db %]" required="required" /> <span class="required">Required</span>
-        </li>
-        <li><label for="userid">Userid: </label> <input type="text" name="userid" id="userid" value="[% server.userid %]" />
-        </li>
-        <li><label for="password">Password: </label> <input type="text" name="password" id="password" value="[% server.password %]" />
-        </li>
-        <li><label for="checked">Preselected (searched by default): </label>
-        [% IF ( server.checked ) %]
-            <input type="checkbox" name="checked" id="checked" value="1" checked="checked" />
+        <ol>[% IF ( searchfield ) %]
+                <li><span class="label">Z39.50 server: </span>        <input type="hidden" name="searchfield" value="[% searchfield %]" />[% searchfield %]</li>
         [% ELSE %]
                 <li><label for="searchfield" class="required">Z39.50 server: </label>        <input type="text" name="searchfield" id="searchfield" size="65" maxlength="100" onblur="toUC(this)" required="required" /> <span class="required">Required</span></li>
         [% END %]
@@ -239,36 +222,8 @@
                    <option value="authority">Authority</option>
             [% END %]
         </select>
-        </li>
-
-        <li><label for="timeout">Timeout (0 its like not set): </label>
-        <input type="text" name="timeout" id="timeout" size="4" value="[% server.timeout %]" /> seconds
-        </li>
-        <li><label for="recordtype">Record type: </label>
-        <select name="recordtype" id="recordtype">
-            <option value="biblio">Bibliographic</option>
-            <option value="authority">Authority</option>
-        </select>
-        </li>
-        [% IF (server.servertype||type) == 'sru' %]
-        <li>
-        <label for="sru_options">Additional SRU options: </label>
-        <input type="text" name="sru_options" id="sru_options" size="50" value="[% server.sru_options %]"/>
-        <div class="hint">Separate options by commas. Example: sru=get,sru_version=1.1. See also http://www.indexdata.com/yaz/doc/zoom.html.</div>
-        </li>
-        <li>
-        <label for="sru_fields">SRU Search fields mapping: </label>
-        <input type="hidden" name="sru_fields" id="sru_fields" value="[% server.sru_fields %]" />
-        <input type="text" name="show_sru_fields" id="show_sru_fields" size="100" value="[% server.sru_fields %]" disabled/> <input type="button" value="Modify" onclick="ModMapping()" />
-        </li>
-        [% END %]
-        <li>
-        <label for="add_xslt">XSLT File(s) for transforming results: </label>
-        <input type="text" name="add_xslt" id="add_xslt" size="100" value="[% server.add_xslt %]"/>
-        <div class="hint">Separate multiple filenames by commas.</span>
-        </li>
-
-        </ol>
+    </li>
+</ol>
         </fieldset>
 
         <fieldset class="action"><input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/z3950servers.pl">Cancel</a></fieldset>
