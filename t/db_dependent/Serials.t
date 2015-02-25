@@ -15,7 +15,7 @@ use C4::Bookseller;
 use C4::Biblio;
 use C4::Budgets;
 use Koha::DateUtils;
-use Test::More tests => 44;
+use Test::More tests => 48;
 
 BEGIN {
     use_ok('C4::Serials');
@@ -65,16 +65,25 @@ my $pattern_id = AddSubscriptionNumberpattern({
     whenmorethan1 => 1,
 });
 
+my $notes = 'notes';
+my $internalnotes = 'intnotes';
 my $subscriptionid = NewSubscription(
     undef,      "",     undef, undef, $budget_id, $biblionumber,
     '2013-01-01', $frequency_id, undef, undef,  undef,
     undef,      undef,  undef, undef, undef, undef,
-    1,          "notes",undef, '2013-01-01', undef, $pattern_id,
-    undef,       undef,  0,    "intnotes",  0,
+    1,          $notes,undef, '2013-01-01', undef, $pattern_id,
+    undef,       undef,  0,    $internalnotes,  0,
     undef, undef, 0,          undef,         '2013-12-31', 0
 );
 
 my $subscriptioninformation = GetSubscription( $subscriptionid );
+
+is( $subscriptioninformation->{notes}, $notes, 'NewSubscription should set notes' );
+is( $subscriptioninformation->{internalnotes}, $internalnotes, 'NewSubscription should set internalnotes' );
+
+my $subscription_history = C4::Serials::GetSubscriptionHistoryFromSubscriptionId($subscriptionid);
+is( $subscription_history->{opacnote}, '', 'NewSubscription should not set subscriptionhistory opacnotes' );
+is( $subscription_history->{librariannote}, '', 'NewSubscription should not set subscriptionhistory librariannotes' );
 
 my @subscriptions = GetSubscriptions( $$subscriptioninformation{bibliotitle} );
 isa_ok( \@subscriptions, 'ARRAY' );
@@ -191,8 +200,8 @@ $subscriptionid = NewSubscription(
     undef,      "",     undef, undef, $budget_id, $biblionumber,
     '2013-01-01', $frequency_id, undef, undef,  undef,
     undef,      undef,  undef, undef, undef, undef,
-    1,          "notes",undef, '2013-01-01', undef, $pattern_id,
-    undef,       undef,  0,    "intnotes",  0,
+    1,          $notes,undef, '2013-01-01', undef, $pattern_id,
+    undef,       undef,  0,    $internalnotes,  0,
     undef, undef, 0,          undef,         '2013-12-31', 0
 );
 my $total_issues;
