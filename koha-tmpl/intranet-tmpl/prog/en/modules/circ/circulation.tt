@@ -74,6 +74,9 @@ function toggle_onsite_checkout(){
     }
 }
 
+function Dopop(link) {
+    var newin = window.open(link, 'popup', 'width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');
+}
 $(document).ready(function() {
     $('#mainform').on('submit',function() {
         if ($("#barcode") && $("#barcode").val()) {
@@ -353,6 +356,24 @@ $(document).ready(function() {
     <input type="submit" class="approve" value="Yes, check out (Y)" accesskey="y" />
     [% END %]
     <input type="hidden" name="onsite_checkout" value="[% onsite_checkout %]" />
+</form>
+[% END %]
+
+[% IF ( RESERVED ) %]
+<form method="get" action="/cgi-bin/koha/circ/circulation.pl">
+    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+    <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
+    <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
+    <input class="print" type="submit" onclick="Dopop('hold-transfer-slip.pl?borrowernumber=[% reserveborrowernumber %]&amp;biblionumber=[% itembiblionumber %]&amp;op=slip');this.form.submit();" value="Don't Check Out and Print Slip (P)">
+</form>
+[% END %]
+
+[% IF ( RESERVE_WAITING ) %]
+<form method="get" action="/cgi-bin/koha/circ/circulation.pl">
+    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+    <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
+    <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
+    <input class="print" type="submit" onclick="Dopop('hold-transfer-slip.pl?borrowernumber=[% reserveborrowernumber %]&amp;biblionumber=[% itembiblionumber %]&amp;op=slip');this.form.submit();" value="Don't Check Out and Print Slip (P)">
 </form>
 [% END %]
 

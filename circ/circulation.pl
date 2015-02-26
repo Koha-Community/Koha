@@ -381,6 +381,13 @@ if ($barcode) {
     
     my ( $od, $issue, $fines ) = GetMemberIssuesAndFines($borrowernumber);
     $template->param( issuecount => $issue );
+
+    if ($question->{RESERVE_WAITING} or $question->{RESERVED}){
+        $template->param(
+            reserveborrowernumber => $question->{'resborrowernumber'},
+            itembiblionumber => $getmessageiteminfo->{'biblionumber'}
+        );
+    }
 }
 
 # reload the borrower info for the sake of reseting the flags.....
