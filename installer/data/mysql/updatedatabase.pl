@@ -9755,7 +9755,7 @@ if ( CheckVersion($DBversion) ) {
     } else {
         print "Upgrade to $DBversion done (Bug 12905: Check budget integrity: OK)\n";
     }
-    SetVersion($DBversion);
+    SetVersion ($DBversion);
 }
 
 $DBversion = "3.19.00.008";
