@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; [% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron [% IF (firstname) %][% firstname %] [% END %][% IF (surname) %][% surname %] [% END %]([%IF ( categoryname ) %][% categoryname %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -490,6 +491,21 @@
             [% END %]
             <input id="guarantordelete" type="button" value="Delete" />
         </li>
+    [% IF guarantorid && Koha.Preference('AllowStaffToSetCheckoutsVisibilityForGuarantor') %]
+        <li>
+            <label for="privacy_guarantor_checkouts">Show checkouts to guarantor</label>
+            <select name="privacy_guarantor_checkouts" id="privacy_guarantor_checkouts">
+                [% IF privacy_guarantor_checkouts %]
+                    <option value="0">No</option>
+                    <option value="1" selected>Yes</option>
+                [% ELSE %]
+                    <option value="0" selected>No</option>
+                    <option value="1">Yes</option>
+                [% END %]
+            </select>
+            <div class="hint">Allow guarantor of this patron to view this patron's checkouts from the OPAC</div>
+        </li>
+    [% END %]
         </ol>
     </fieldset>
 

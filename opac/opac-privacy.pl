@@ -45,18 +45,25 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $op = $query->param("op");
-my $privacy = $query->param("privacy");
+my $op                         = $query->param("op");
+my $privacy                    = $query->param("privacy");
+my $privacy_guarantor_checkouts = $query->param("privacy_guarantor_checkouts");
 
-if ($op eq "update_privacy")
-{
-    ModPrivacy($borrowernumber,$privacy);
-    $template->param('privacy_updated' => 1);
+if ( $op eq "update_privacy" ) {
+    ModMember(
+        borrowernumber             => $borrowernumber,
+        privacy                    => $privacy,
+        privacy_guarantor_checkouts => $privacy_guarantor_checkouts,
+    );
+    $template->param( 'privacy_updated' => 1 );
 }
-if ($op eq "delete_record") {
+elsif ( $op eq "delete_record" ) {
+
     # delete all reading records for items returned
     # uses a hardcoded date ridiculously far in the future
-    my ($rows,$err_history_not_deleted) = AnonymiseIssueHistory('2999-12-12',$borrowernumber);
+    my ( $rows, $err_history_not_deleted ) =
+      AnonymiseIssueHistory( '2999-12-12', $borrowernumber );
+
     # confirm the user the deletion has been done
     if ( !$err_history_not_deleted ) {
         $template->param( 'deleted' => 1 );
@@ -67,13 +74,15 @@ if ($op eq "delete_record") {
 }
 
 # get borrower privacy ....
-my $borr = C4::Members::GetMember( borrowernumber => $borrowernumber );
+my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
 
-$template->param( 'Ask_data'       => '1',
-                    'privacy'.$borr->{'privacy'} => 1,
-                    'firstname' => $borr->{'firstname'},
-                    'surname' => $borr->{'surname'},
-                    'privacyview' => 1,
+$template->param(
+    'Ask_data'                         => 1,
+    'privacy' . $borrower->{'privacy'} => 1,
+    'privacyview'                      => 1,
+    'borrower'                         => $borrower,
+    'surname'                          => $borrower->{surname},
+    'firstname'                        => $borrower->{firstname},
 );
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };

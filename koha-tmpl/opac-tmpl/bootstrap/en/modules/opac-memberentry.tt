@@ -70,6 +70,33 @@
                     <div class="alert">You typed in the wrong characters in the box before submitting. Please try again.</div>
                 [% END %]
 
+                [% IF borrower.guarantorid && !Koha.Preference('OPACPrivacy') && Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') %]
+                    <fieldset class="rows" id="memberentry_privacy">
+                        <legend id="privacy_legend">Privacy</legend>
+                        <ol>
+                            <li>
+                                <label>Allow your guarantor to view your current checkouts?</label>
+                                <select id="privacy_guarantor_checkouts">
+                                    <option value="0">No</option>
+                                    [% IF borrower.privacy_guarantor_checkouts %]
+                                        <option value="1" selected="selected">Yes</option>
+                                    [% ELSE %]
+                                        <option value="1">Yes</option>
+                                    [% END %]
+                                </select>
+                                <span class="hint">
+                                    <a id="update_privacy_guarantor_checkouts" href="#" class="btn">Update</a>
+                                    <span id="update_privacy_guarantor_checkouts_message" class="alert" style="display:none"></span>
+                                </span>
+                                <span class="hint">
+                                    [% SET g = Koha.Find('Borrower',borrower.guarantorid) %]
+                                    Your guarantor is <i>[% g.firstname %] [% g.surname %]</i>
+                                </span>
+                            </li>
+                        </ol>
+                    </fieldset>
+                [% END %]
+
                 <form method="post" action="/cgi-bin/koha/opac-memberentry.pl" id="memberentry-form">
 
                 [% UNLESS hidden.defined('branchcode') %]
@@ -822,6 +849,7 @@
             [% ELSE %]
                 $( "#borrower_dateofbirth" ).datepicker({ yearRange: "c-120:c" });
             [% END %]
+
             $("#memberentry-form").validate({
                 rules: {
                     borrower_email: {
@@ -853,6 +881,22 @@
                     error.css('width', 'auto');
                 }
             });
+
+            [% IF borrower.guarantorid && !Koha.Preference('OPACPrivacy') && Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') %]
+                $('#update_privacy_guarantor_checkouts').click( function() {
+                    $.post( "/cgi-bin/koha/svc/patron/show_checkouts_to_relatives", { privacy_guarantor_checkouts: $('#privacy_guarantor_checkouts').val() }, null, 'json')
+                     .done(function( data ) {
+                         var message;
+                         if ( data.success ) {
+                             message = _("Your setting has been updated!");
+                         } else {
+                             message = _("Unable to update your setting!");
+                         }
+
+                         $('#update_privacy_guarantor_checkouts_message').fadeIn("slow").text( message ).delay( 5000 ).fadeOut("slow");
+                     });
+                });
+            [% END %]
         });
     //]]>
     </script>

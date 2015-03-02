@@ -37,6 +37,7 @@ use C4::Branch; # GetBranches
 use Koha::DateUtils;
 use Koha::Borrower::Debarments qw(IsDebarred);
 use Koha::Holds;
+use Koha::Database;
 
 use constant ATTRIBUTE_SHOW_BARCODE => 'SHOW_BCODE';
 
@@ -317,7 +318,22 @@ if ( $borr->{'opacnote'} ) {
   );
 }
 
+if (   C4::Context->preference('AllowPatronToSetCheckoutsVisibilityForGuarantor')
+    || C4::Context->preference('AllowStaffToSetCheckoutsVisibilityForGuarantor') )
+{
+    my @relatives =
+      Koha::Database->new()->schema()->resultset("Borrower")->search(
+        {
+            privacy_guarantor_checkouts => 1,
+            'me.guarantorid'           => $borrowernumber
+        },
+        { prefetch => [ { 'issues' => { 'item' => 'biblio' } } ] }
+      );
+    $template->param( relatives => \@relatives );
+}
+
 $template->param(
+    borrower                 => $borr,
     bor_messages_loop        => GetMessages( $borrowernumber, 'B', 'NONE' ),
     patronupdate             => $patronupdate,
     OpacRenewalAllowed       => C4::Context->preference("OpacRenewalAllowed"),

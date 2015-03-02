@@ -115,7 +115,6 @@ BEGIN {
     push @EXPORT, qw(
         &ModMember
         &changepassword
-         &ModPrivacy
     );
 
     #Delete data

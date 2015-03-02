@@ -110,6 +110,7 @@
                     <div id="opac-user-views" class="toptabs">
                         <ul>
                             <li><a href="#opac-user-checkouts">Checked out ([% issues_count %])</a></li>
+                            [% IF relatives %]<li><a href="#opac-user-relative-issues">Relatives' checkouts</a></li>[% END %]
                             [% IF ( overdues_count ) %]<li><a href="#opac-user-overdues">Overdue ([% overdues_count %])</a></li>[% END %]
                             [% IF ( OPACFinesTab ) %]
                                 [% IF ( BORROWER_INF.amountoverfive ) %]<li><a href="#opac-user-fines">Fines ([% BORROWER_INF.amountoutstanding %])</a></li>[% END %]
@@ -137,7 +138,7 @@
                                                 [% IF ( show_barcode ) %]
                                                     <th>Barcode</th>
                                                 [% END %]
-                                                    <th>Call No.</th>
+                                                    <th>Call number</th>
                                                 [% IF ( OpacRenewalAllowed && !( borrower.is_expired && borrower.BlockExpiredPatronOpacActions ) ) %]
                                                     <th class="nosort">Renew</th>
                                                 [% END %]
@@ -332,6 +333,52 @@
                             [% END %]
                         [% END # / OPACFinesTab %]
 
+                        [% IF relatives %]
+                            <div id="opac-user-relative-issues">
+                                <table id="opac-user-relative-issues-table" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th class="anti-the">Title</th>
+                                            <th>Due</th>
+                                            <th>Barcode</th>
+                                            <th>Call number</th>
+                                            <th class="psort">Relative</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        [% FOREACH r IN relatives %]
+                                            [% FOREACH i IN r.issues %]
+                                                <tr>
+                                                    <td>
+                                                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.item.biblio.biblionumber %]">
+                                                            [% i.item.biblio.title %]
+                                                        </a>
+                                                    </td>
+
+                                                    <td>
+                                                        [% i.date_due | $KohaDates %]
+                                                    </td>
+
+                                                    <td>
+                                                        [% i.item.barcode %]
+                                                    </td>
+
+                                                    <td>
+                                                        [% i.item.itemcallnumber %]
+                                                    </td>
+
+                                                    <td>
+                                                        [% r.firstname %] [% r.surname %]
+                                                    </td>
+                                                </tr>
+                                            [% END %]
+                                        [% END %]
+                                    </tbody>
+                                </table>
+                            </div>
+                        [% END %]
+
                         [% IF ( overdues_count ) %]
                             <div id="opac-user-overdues">
                                 <table id="overduest" class="table table-bordered table-striped">
@@ -343,7 +390,7 @@
                                             <th class="anti-the">Title</th>
                                             [% UNLESS ( item_level_itypes ) %]<th>Item type</th> [% END %]
                                             [% IF ( show_barcode ) %]<th>Barcode</th>[% END %]
-                                            <th>Call no.</th>
+                                            <th>Call number</th>
                                             <th class="title-string psort">Due</th>
                                             [% IF ( OpacRenewalAllowed ) %]
                                                 <th class="nosort">Renew</th>
@@ -671,7 +718,8 @@
             $(".js-hide").hide();
             $(".modal-nojs").addClass("modal").addClass("hide").removeClass("modal-nojs");
             $(".suspend-until").prop("readonly",1);
-            var dTables = $("#checkoutst,#holdst,#overduest");
+
+            var dTables = $("#checkoutst,#holdst,#overduest,#opac-user-relative-issues-table");
             dTables.each(function(){
                 var thIndex = $(this).find("th.psort").index();
                 $(this).dataTable($.extend(true, {}, dataTablesDefaults, {

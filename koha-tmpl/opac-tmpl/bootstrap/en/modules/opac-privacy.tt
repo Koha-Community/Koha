@@ -49,7 +49,7 @@
                                 <input type="hidden" name="op" value="update_privacy" />
                                     <fieldset>
                                     <label for="privacy">Please choose your privacy rule:</label>
-                                    <div class="input-append">
+                                    <div>
                                         <select name="privacy" id="privacy">
                                             [% IF ( privacy0 ) %]
                                                 <option value="0" selected="selected" class="privacy0">Forever</option>
@@ -67,8 +67,28 @@
                                                 <option value="2" class="privacy2">Never</option>
                                             [% END %]
                                         </select>
-                                        <button type="Submit" class="btn">Submit</button>
                                     </div>
+
+                                    [% SET b = Koha.Find('Borrower', borrower.borrowernumber) %]
+                                    [% IF b.guarantorid && Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') %]
+                                        <div>
+                                            <label for="privacy_guarantor_checkouts">Allow your guarantor to view your current checkouts?</label>
+                                            <select name="privacy_guarantor_checkouts">
+                                                [% IF borrower.privacy_guarantor_checkouts %]
+                                                    <option value="0">No</option>
+                                                    <option value="1" selected>Yes</option>
+                                                [% ELSE %]
+                                                    <option value="0" selected>No</option>
+                                                    <option value="1">Yes</option>
+                                                [% END %]
+                                            </select>
+                                            <span class="hint">
+                                                Your guarantor is <i>[% b.guarantor.firstname %] [% b.guarantor.surname %]</i>
+                                            </span>
+                                        </div>
+                                    [% END %]
+
+                                    <button type="Submit" class="btn">Save</button>
                                 </fieldset>
                             </form>
                         <h2>Immediate deletion</h2>
