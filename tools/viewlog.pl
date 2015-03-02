@@ -85,34 +85,14 @@ if ( $src eq 'circ' ) {
         );
     }
 
-    # Computes full borrower address
     my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $data->{streettype} );
-    my $address = $data->{'streetnumber'} . " $roadtype " . $data->{'address'};
+    $template->param(%$data);
 
     $template->param(
         menu           => 1,
-        title          => $data->{'title'},
-        initials       => $data->{'initials'},
-        surname        => $data->{'surname'},
-        othernames     => $data->{'othernames'},
         borrowernumber => $borrowernumber,
-        firstname      => $data->{'firstname'},
-        cardnumber     => $data->{'cardnumber'},
-        categorycode   => $data->{'categorycode'},
-        category_type  => $data->{'category_type'},
         categoryname   => $data->{'description'},
-        address        => $address,
-        address2       => $data->{'address2'},
-        city           => $data->{'city'},
-        state          => $data->{'state'},
-        zipcode        => $data->{'zipcode'},
-        country        => $data->{'country'},
-        phone          => $data->{'phone'},
-        phonepro       => $data->{'phonepro'},
-        mobile         => $data->{'mobile'},
-        email          => $data->{'email'},
-        emailpro       => $data->{'emailpro'},
-        branchcode     => $data->{'branchcode'},
+        roadtype       => $roadtype,
         branchname     => GetBranchName( $data->{'branchcode'} ),
         RoutingSerials => C4::Context->preference('RoutingSerials'),
     );

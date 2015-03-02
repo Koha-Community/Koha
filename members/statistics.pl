@@ -96,15 +96,14 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
 my ($picture, $dberror) = GetPatronImage($borrower->{'borrowernumber'});
 $template->param( picture => 1 ) if $picture;
 
-# Computes full borrower address
 my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $borrower->{streettype} );
-my $address = $borrower->{'streetnumber'} . " $roadtype " . $borrower->{'address'};
+$template->param(%$borrower);
 
 $template->param(
-    statisticsview => 1,
-    datas          => $datas,
-    address        => $address,
-    column_names   => \@statistic_column_names,
+    statisticsview     => 1,
+    datas              => $datas,
+    roadtype           => $roadtype,
+    column_names       => \@statistic_column_names,
     count_total_issues => $count_total_issues,
     count_total_issues_returned => $count_total_issues_returned,
     count_total_precedent_state => $count_total_precedent_state,

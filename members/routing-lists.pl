@@ -101,38 +101,18 @@ if ($borrowernumber) {
 ##################################################################################
 
 
-# Computes full borrower address
 my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $borrower->{streettype} );
-my $address = $borrower->{'streetnumber'} . " $roadtype " . $borrower->{'address'};
+$template->param(%$borrower);
 
 $template->param(
-
     findborrower      => $findborrower,
     borrower          => $borrower,
     borrowernumber    => $borrowernumber,
     branch            => $branch,
     branchname        => GetBranchName($borrower->{'branchcode'}),
-    title             => $borrower->{'title'},
-    initials          => $borrower->{'initials'},
-    firstname         => $borrower->{'firstname'},
-    surname           => $borrower->{'surname'},
-    othernames        => $borrower->{'othernames'},
-    categorycode      => $borrower->{'categorycode'},
     categoryname      => $borrower->{description},
-    address           => $address,
-    address2          => $borrower->{'address2'},
-    phone             => $borrower->{'phone'},
-    phonepro          => $borrower->{'phonepro'},
-    mobile            => $borrower->{'mobile'},
-    email             => $borrower->{'email'},
-    emailpro          => $borrower->{'emailpro'},
-    borrowernotes     => $borrower->{'borrowernotes'},
-    city              => $borrower->{'city'},
-    state             => $borrower->{'state'},
-    zipcode           => $borrower->{'zipcode'},
-    country           => $borrower->{'country'},
-    cardnumber        => $borrower->{'cardnumber'},
-    RoutingSerials => C4::Context->preference('RoutingSerials'),
+    roadtype          => $roadtype,
+    RoutingSerials    => C4::Context->preference('RoutingSerials'),
 );
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {

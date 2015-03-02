@@ -104,39 +104,22 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     );
 }
 
-# Computes full borrower address
 my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $data->{streettype} );
-my $address = $data->{'streetnumber'} . " $roadtype " . $data->{'address'};
+
+#workaround for Bug 4041 to get rid of duplicated code in circ-menu.tt, use circ-menu.inc instad
+$template->param(%$data);
 
 $template->param(
     finesview           => 1,
-    firstname           => $data->{'firstname'},
-    surname             => $data->{'surname'},
-    othernames          => $data->{'othernames'},
     borrowernumber      => $borrowernumber,
-    cardnumber          => $data->{'cardnumber'},
-    categorycode        => $data->{'categorycode'},
-    category_type       => $data->{'category_type'},
-    categoryname		=> $data->{'description'},
-    address             => $address,
-    address2            => $data->{'address2'},
-    city                => $data->{'city'},
-    state               => $data->{'state'},
-    zipcode             => $data->{'zipcode'},
-    country             => $data->{'country'},
-    phone               => $data->{'phone'},
-    phonepro            => $data->{'phonepro'},
-    mobile              => $data->{'mobile'},
-    email               => $data->{'email'},
-    emailpro            => $data->{'emailpro'},
-    branchcode          => $data->{'branchcode'},
-	branchname			=> GetBranchName($data->{'branchcode'}),
+    roadtype            => $roadtype,
+    branchname		=> GetBranchName($data->{'branchcode'}),
     total               => sprintf("%.2f",$total),
     totalcredit         => $totalcredit,
     is_child            => ($data->{'category_type'} eq 'C'),
     reverse_col         => $reverse_col,
     accounts            => $accts,
-	activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
+    activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
     RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 

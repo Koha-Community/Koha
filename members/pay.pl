@@ -133,6 +133,10 @@ sub add_accounts_to_template {
         }
     }
     borrower_add_additional_fields($borrower);
+
+    #workaround for Bug 4041 to get rid of duplicated code in circ-menu.tt, use circ-menu.inc instad
+    $template->param(%$borrower);
+
     $template->param(
         accounts => $accounts,
         borrower => $borrower,
@@ -226,10 +230,8 @@ sub borrower_add_additional_fields {
     if ($picture) {
         $b_ref->{has_picture} = 1;
     }
-
-    # Computes full borrower address
     my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $borrower->{streettype} );
-    $b_ref->{address} = $borrower->{'streetnumber'} . " $roadtype " . $borrower->{'address'};
+    $b_ref->{roadtype} = $roadtype;
 
     if (C4::Context->preference('ExtendedPatronAttributes')) {
         $b_ref->{extendedattributes} = GetBorrowerAttributes($borrowernumber);

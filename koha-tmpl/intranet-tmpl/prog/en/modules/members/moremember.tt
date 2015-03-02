@@ -196,13 +196,13 @@ function validate1(date) {
 
      [% UNLESS ( I ) %][% IF ( othernames ) %]&ldquo;[% othernames %]&rdquo;[% END %]
 
-<p class="address">
-        [% address %]<br />
-        [% IF ( address2 ) %][% address2 %]<br />[% END %]
-    	[% IF ( city ) %][% city %][% END %] 
-    	[% IF ( state ) %][% state %][% END %]
-    	[% IF ( zipcode ) %][% zipcode %]<br />[% END %]
-	[% IF ( country ) %][% country %][% END %]</p>
+    <div class = "address">
+        [% IF Koha.Preference( 'addressformat' ) %]
+            [% INCLUDE "member-display-address-style-${ Koha.Preference( 'addressformat' ) }.inc" %]
+        [% ELSE %]
+            [% INCLUDE 'member-display-address-style-us.inc' %]
+        [% END %]
+    </div>
 		    
 	<div class="rows">
 		<ol>

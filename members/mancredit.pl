@@ -83,44 +83,26 @@ if ($add){
     my ($picture, $dberror) = GetPatronImage($data->{'borrowernumber'});
     $template->param( picture => 1 ) if $picture;
 
-if (C4::Context->preference('ExtendedPatronAttributes')) {
-    my $attributes = GetBorrowerAttributes($borrowernumber);
-    $template->param(
-        ExtendedPatronAttributes => 1,
-        extendedattributes => $attributes
-    );
-}
+    if (C4::Context->preference('ExtendedPatronAttributes')) {
+        my $attributes = GetBorrowerAttributes($borrowernumber);
+        $template->param(
+            ExtendedPatronAttributes => 1,
+            extendedattributes => $attributes
+        );
+    }
 
-# Computes full borrower address
-my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $data->{streettype} );
-my $address = $data->{'streetnumber'} . " $roadtype " . $data->{'address'};
+    my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $data->{streettype} );
+    $template->param(%$data);
 
     $template->param(
-        finesview => 1,
+        finesview      => 1,
         borrowernumber => $borrowernumber,
-        firstname => $data->{'firstname'},
-        surname  => $data->{'surname'},
-        othernames => $data->{'othernames'},
-		    cardnumber => $data->{'cardnumber'},
-		    categorycode => $data->{'categorycode'},
-		    category_type => $data->{'category_type'},
-		    categoryname  => $data->{'description'},
-            address => $address,
-		    address2 => $data->{'address2'},
-		    city => $data->{'city'},
-		    state => $data->{'state'},
-		    zipcode => $data->{'zipcode'},
-		    country => $data->{'country'},
-		    phone => $data->{'phone'},
-            phonepro => $data->{'phonepro'},
-            mobile => $data->{'mobile'},
-		    email => $data->{'email'},
-            emailpro => $data->{'emailpro'},
-		    branchcode => $data->{'branchcode'},
-		    branchname => GetBranchName($data->{'branchcode'}),
-		    is_child        => ($data->{'category_type'} eq 'C'),
-			activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
-            RoutingSerials => C4::Context->preference('RoutingSerials'),
+        categoryname   => $data->{'description'},
+        roadtype       => $roadtype,
+        branchname     => GetBranchName($data->{'branchcode'}),
+        is_child       => ($data->{'category_type'} eq 'C'),
+        activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
+        RoutingSerials => C4::Context->preference('RoutingSerials'),
         );
     output_html_with_http_headers $input, $cookie, $template->output;
 }

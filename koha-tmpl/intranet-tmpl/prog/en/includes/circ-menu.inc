@@ -5,30 +5,20 @@
 }</style>
 <![endif]-->
 <ul class="patronbriefinfo">
-[% IF ( patronimages ) %]
-[% IF ( picture ) %]
-<li><img src="/cgi-bin/koha/members/patronimage.pl?borrowernumber=[% borrowernumber | uri %]" id="patronimage" alt="[% firstname %] [% surname %] ([% cardnumber %])" border="0" style="max-width : 140px; margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC; width:auto !important; width:130px;" /></li>
-[% ELSE %]
-<li id="patronbasics"><img src="[% interface %]/[% theme %]/img/patron-blank.png" alt="[% firstname %] [% surname %] ([% cardnumber %])" border="0" style="margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC;" /></li>
-[% END %]
-[% END %]
-    [% IF ( address or address2 ) %]
-        [% IF ( address ) %]
-            <li class="patronaddress1">[% address %]</li>
+    [% IF ( patronimages ) %]
+        [% IF ( picture ) %]
+            <li><img src="/cgi-bin/koha/members/patronimage.pl?borrowernumber=[% borrowernumber | uri %]" id="patronimage" alt="[% firstname %] [% surname %] ([% cardnumber %])" border="0" style="max-width : 140px; margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC; width:auto !important; width:130px;" /></li>
+        [% ELSE %]
+            <li id="patronbasics"><img src="[% interface %]/[% theme %]/img/patron-blank.png" alt="[% firstname %] [% surname %] ([% cardnumber %])" border="0" style="margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC;" /></li>
         [% END %]
-        [% IF ( address2 ) %]
-            <li class="patronaddress2">[% address2 %]</li>
-        [% END %]
-    [% ELSE %]
-            <li><span class="empty" id="noaddressstored">No address stored.</span></li>
     [% END %]
-    <li class="patroncity">[% IF ( city ) %]
-            [% city %][% IF ( state ) %], [% state %][% END %]
-	    [% zipcode %][% IF ( country ) %], [% country %][% END %]
+    [% IF Koha.Preference( 'addressformat' ) %]
+        [% INCLUDE "member-display-address-style-${ Koha.Preference( 'addressformat' ) }.inc" %]
     [% ELSE %]
-        <span class="empty" id="nocitystored">No city stored.</span>
-    [% END %]</li>
-    <li class="patronphone">[% IF ( phone ) %]
+        [% INCLUDE 'member-display-address-style-us.inc' %]
+    [% END %]
+
+    [% IF ( phone ) %]<li class="patronphone">
         [% phone %]
     [% ELSE %]
         [% IF ( mobile ) %]
@@ -36,20 +26,30 @@
         [% ELSE %]
             [% IF ( phonepro ) %]
                 [% phonepro %]
-            [% ELSE %]
-                <span class="empty" id="nophonestored">No phone stored.</span>
             [% END %]
-        [% END %]
-    [% END %]</li>
+        [% END %]</li>
+    [% END %]
     [% IF ( email ) %]
         <li class="email"> <a href="mailto:[% email %]" title="[% email %]">[% email %]</a></li>
     [% ELSE %]
         [% IF ( emailpro ) %]
             <li class="email"> <a href="mailto:[% emailpro %]" title="[% emailpro %]">[% emailpro %]</a></li>
-        [% ELSE %]
-            <li> <span class="empty">No email stored.</span>    </li>
         [% END %]
     [% END %]
+
+    [% UNLESS ( address or address2 ) %]
+        <li><span class="empty" id="noaddressstored">No address stored.</span></li>
+    [% END %]
+    [% UNLESS ( city ) %]
+        <li><span class="empty" id="nocitystored">No city stored.</span></li>
+    [% END %]
+    [% UNLESS ( phone or mobile or phonepro) %]
+        <li> <span class="empty">No phone stored.</span></li>
+    [% END %]
+    [% UNLESS ( email or emailpro) %]
+        <li> <span class="empty">No email stored.</span></li>
+    [% END %]
+
     [% IF ( ExtendedPatronAttributes ) %][% FOREACH extendedattribute IN extendedattributes %]
         [% IF ( extendedattribute.display_checkout ) %]
             [% IF ( extendedattribute.value ) %]

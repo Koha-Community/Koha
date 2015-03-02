@@ -143,6 +143,10 @@ if ( $total_paid and $total_paid ne '0.00' ) {
 
 borrower_add_additional_fields($borrower);
 
+#workaround for Bug 4041 to get rid of duplicated code in circ-menu.tt, use circ-menu.inc instad
+$template->param(%$borrower);
+
+
 $template->param(
     borrowernumber => $borrowernumber,    # some templates require global
     borrower      => $borrower,
@@ -182,9 +186,8 @@ sub borrower_add_additional_fields {
         $b_ref->{extendedattributes} = GetBorrowerAttributes($borrowernumber);
     }
 
-    # Computes full borrower address
     my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $borrower->{streettype} );
-    $b_ref->{address} = $borrower->{'streetnumber'} . " $roadtype " . $borrower->{'address'};
+    $b_ref->{roadtype} = $roadtype;
 
     $b_ref->{branchname} = GetBranchName( $b_ref->{branchcode} );
     return;

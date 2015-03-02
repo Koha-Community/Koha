@@ -512,12 +512,6 @@ if($lib_messages_loop){ $template->param(flagged => 1 ); }
 my $bor_messages_loop = GetMessages( $borrowernumber, 'B', $branch );
 if($bor_messages_loop){ $template->param(flagged => 1 ); }
 
-# Computes full borrower address
-my @fulladdress;
-push @fulladdress, $borrower->{'streetnumber'} if ( $borrower->{'streetnumber'} );
-push @fulladdress, C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $borrower->{'streettype'} ) if ( $borrower->{'streettype'} );
-push @fulladdress, $borrower->{'address'} if ( $borrower->{'address'} );
-
 my $fast_cataloging = 0;
 if (defined getframeworkinfo('FA')) {
     $fast_cataloging = 1 
@@ -536,6 +530,10 @@ my $relatives_issues_count =
   Koha::Database->new()->schema()->resultset('Issue')
   ->count( { borrowernumber => \@relatives } );
 
+my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $borrower->{streettype} );
+
+$template->param(%$borrower);
+
 $template->param(
     lib_messages_loop => $lib_messages_loop,
     bor_messages_loop => $bor_messages_loop,
@@ -547,28 +545,9 @@ $template->param(
     branchname        => GetBranchName($borrower->{'branchcode'}),
     printer           => $printer,
     printername       => $printer,
-    firstname         => $borrower->{'firstname'},
-    surname           => $borrower->{'surname'},
-    showname          => $borrower->{'showname'},
-    category_type     => $borrower->{'category_type'},
     was_renewed       => $query->param('was_renewed') ? 1 : 0,
     expiry            => format_date($borrower->{'dateexpiry'}),
-    categorycode      => $borrower->{'categorycode'},
-    categoryname      => $borrower->{description},
-    address           => join(' ', @fulladdress),
-    address2          => $borrower->{'address2'},
-    email             => $borrower->{'email'},
-    emailpro          => $borrower->{'emailpro'},
-    borrowernotes     => $borrower->{'borrowernotes'},
-    city              => $borrower->{'city'},
-    state              => $borrower->{'state'},
-    zipcode           => $borrower->{'zipcode'},
-    country           => $borrower->{'country'},
-    phone             => $borrower->{'phone'},
-    mobile            => $borrower->{'mobile'},
-    phonepro          => $borrower->{'phonepro'},
-    cardnumber        => $borrower->{'cardnumber'},
-    othernames        => $borrower->{'othernames'},
+    roadtype          => $roadtype,
     amountold         => $amountold,
     barcode           => $barcode,
     stickyduedate     => $stickyduedate,

@@ -52,7 +52,6 @@ $template->param( picture => 1 ) if $picture;
 
 # Getting the messages
 my $queued_messages = C4::Letters::GetQueuedMessages({borrowernumber => $borrowernumber});
-$template->param( %{$borrower} );
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
     my $attributes = GetBorrowerAttributes($borrowernumber);
@@ -62,19 +61,18 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     );
 }
 
-# Computes full borrower address
 my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $borrower->{'streettype'} );
-my $address = $borrower->{'streetnumber'} . " $roadtype " . $borrower->{'address'};
+$template->param(%$borrower);
 
 $template->param(
-			QUEUED_MESSAGES 	=> $queued_messages,
-			borrowernumber 		=> $borrowernumber,
-			sentnotices 		=> 1,
-                        branchname              => GetBranchName($borrower->{'branchcode'}),
-                        categoryname            => $borrower->{'description'},
-                        address                 => $address,
-			activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
-            RoutingSerials => C4::Context->preference('RoutingSerials'),
+    QUEUED_MESSAGES    => $queued_messages,
+    borrowernumber     => $borrowernumber,
+    sentnotices        => 1,
+    branchname         => GetBranchName($borrower->{'branchcode'}),
+    categoryname       => $borrower->{'description'},
+    roadtype           => $roadtype,
+    activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
+    RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 
