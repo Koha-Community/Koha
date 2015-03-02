@@ -23,7 +23,7 @@ use Socket qw(:crlf);
 use IO::Socket::INET;
 use Getopt::Long;
 
-use Sip::Constants qw(:all);
+use C4::SIP::Sip::Constants qw(:all);
 
 use constant { LANGUAGE => '001' };
 
