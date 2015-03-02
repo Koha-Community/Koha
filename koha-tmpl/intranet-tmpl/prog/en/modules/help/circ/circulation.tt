@@ -2,7 +2,9 @@
 
 <h1>Checking out (Issuing)</h1>
 
-<p>To check an item out to a patron, first search for that patron using one of the many options listed above.</p>
+<p>To check an item out to a patron, first search for that patron using one of the many options listed above. You will then be presented with the checkout screen.</p>
+
+<p>If you have chosen to 'Always show checkouts immediately' then you will see the list of checkouts below the check out box.</p>
 
 <p>At the top of the Check Out screen is a box for you to type or scan the item's barcode into.
 
@@ -11,17 +13,24 @@
 </ul>
 <ul>
 	<li>If the barcode is not found you will be prompted to use fast cataloging to add the item. Learn more about fast cataloging later in this manual.</li>
+	<li>If you have itemBarcodeFallbackSearch set to 'Enable' then you can enter a keyword search in this box instead of just a barcode (this will make it possible to check out using title and/or call number).</li>
 </ul>
 
-<p>Below the box for the barcode there may be options for you to override the default due date for the item.
+<p>Below the box for the barcode you will see a checkbox for 'Automatic renewal'. This will allow this item to automatically renew if the appropriate cron job is running and there are no holds on the item.</p>
+
+<p>Below the box for the barcode there may be options for you to override the default due date for the item.</p>
 
 <ul>
 	<li>This option will only appear if you have set the SpecifyDueDate system preference to allow staff to override the due date</li>
 </ul>
 
+<p>If you're allowing the checkout of items on site to patrons (these are usually items that are not for loan that you would like to check for in library use) then you will see the 'On-site checkout' checkbox.</p>
+
 <p>At the bottom of the page there is a summary of the patron's current checked out items along with the due date (and time if the item is an hourly loan), items checked out today will appear at the top.</p>
 
 <p style="background-color: #ffe599"><strong>Tip</strong> If the checked out time is listed as 00:00 then the item is a daily loan item. The due time for daily checkouts will show 23:59 which is the last minute of the day.</p>
+
+<p>If you checked out an item for on site use you will see that highlighted in red in the checkout summary.</p>
 
 <p>If you have set your ExportWithCsvProfile preference, you will also see the option to export the patron's current checkout information using a CSV Profile or ISO2709 (MARC21) format.</p>
 
@@ -34,6 +43,8 @@
 <p>If there are notes on the patron record these will appear to the right of the checkout box</p>
 
 <p>If the patron has a hold waiting at the library that too will appear to the right of the check out box making it easy for the circulation librarian to see that there is another item to give the patron</p>
+
+<p>The details of the checkouts will appear on the bib detail page in the staff client as well.</p>
 
 <h3>Printing Receipts</h3>
 
@@ -65,9 +76,11 @@
 	<li>You can set the amount at which patron checkouts are blocked with the noissuescharge system preference</li>
 </ul>
 </li>
-	<li>Patron has been barred from the library
+	<li>Patron has a restriction on their account
 <ul>
-    <li>This can be set by the librarian editing a patron record and adding a flag or by the Overdue/Notice Status Triggers</li>
+    <li>This can be set by the librarian editing a patron record and adding a restriction or by the Overdue/Notice Status Triggers</li>
+
+    <li>If the staff member has the right permission they can override the restriction temporarily</li>
 </ul>
 </li>
 	<li>Patron needs to confirm their address
@@ -101,7 +114,7 @@
 </li>
     <li>Barcode not found
 <ul>
-    <li>Learn more about fast cataloging later in this manual.</li>
+    <li>Learn more about fast cataloging later in this file.</li>
 </ul>
 </li>
     <li>Item being checked out is marked as 'lost'
