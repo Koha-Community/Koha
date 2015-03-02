@@ -395,6 +395,12 @@ __PACKAGE__->table("borrowers");
   default_value: 1
   is_nullable: 0
 
+=head2 privacy_guarantor_checkouts
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -560,6 +566,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "privacy",
   { data_type => "integer", default_value => 1, is_nullable => 0 },
+  "privacy_guarantor_checkouts",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -1156,6 +1164,10 @@ __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-10-21 19:50:05
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QafovaRBnm36nyoyQTGIgQ
 
+__PACKAGE__->belongs_to(
+    "guarantor",
+    "Koha::Schema::Result::Borrower",
+    { borrowernumber => "guarantorid" },
+);
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

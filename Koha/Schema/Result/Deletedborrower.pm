@@ -393,6 +393,12 @@ __PACKAGE__->table("deletedborrowers");
   default_value: 1
   is_nullable: 0
 
+=head2 privacy_guarantor_checkouts
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -546,6 +552,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "privacy",
   { data_type => "integer", default_value => 1, is_nullable => 0 },
+  "privacy_guarantor_checkouts",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 
