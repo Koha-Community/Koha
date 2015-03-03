@@ -221,26 +221,25 @@ $(document).ready(function() {
 
 // Update the string "Results found ..."
 function update_searched(){
-    var searched = "";
-    searched += "on " + $("#searchfieldstype_filter").find("option:selected").text().toLowerCase() + " fields";
+    var searched = $("#searchfieldstype_filter").find("option:selected").text();
     if ( $("#searchmember_filter").val() ) {
         if ( $("#searchtype_filter").val() == 'start_with' ) {
             searched += _(" starting with ");
         } else {
             searched += _(" containing ");
         }
-        searched += $("#searchmember_filter").val();
+        searched += "'" + $("#searchmember_filter").val() + "'";
     }
     if ( $("#firstletter_filter").val() ) {
-        searched += _(" begin with ") + $("#firstletter_filter").val();
+        searched += _(" begins with ") + "'" + $("#firstletter_filter").val() +"'";
     }
     if ( $("#categorycode_filter").val() ) {
-        searched += _(" with category ") + $("#categorycode_filter").find("option:selected").text();
+        searched += _(" with category ") + "'" + $("#categorycode_filter").find("option:selected").text() + "'";
     }
     if ( $("#branchcode_filter").val() ) {
         searched += _(" in library ") + $("#branchcode_filter").find("option:selected").text();
     }
-    $("#searchpattern").text("for patron " + searched);
+    $("#searchpattern").text(searched);
 }
 
 // Redraw the table
@@ -327,7 +326,7 @@ function filterByFirstLetterSurname(letter) {
 
           <div id="searchresults">
             <div id="searchheader">
-              <h3>Results found <span id="searchpattern">[% IF searchmember %] for '[% searchmember %]'[% END %]</span></h3>
+              <h3>Patrons found for: <span id="searchpattern">[% IF searchmember %] for '[% searchmember %]'[% END %]</span></h3>
             </div>
             [% IF CAN_user_tools_manage_patron_lists %]
               <div id="searchheader">
