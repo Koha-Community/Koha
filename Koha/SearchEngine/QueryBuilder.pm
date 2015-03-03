@@ -45,11 +45,13 @@ Creates a new C<QueryBuilder> of whatever the relevant type is.
 
 use C4::Context;
 use Modern::Perl;
+use Carp;
 
 sub new {
     my $engine = C4::Context->preference("SearchEngine");
     my $file = "Koha/SearchEngine/${engine}/QueryBuilder.pm";
     my $class = "Koha::SearchEngine::${engine}::QueryBuilder";
+    croak "SearchEngine system preference not set" unless $engine;
     require $file;
     shift @_;
     return $class->new(@_);
