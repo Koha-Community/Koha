@@ -17,7 +17,16 @@
 	<li>all libraries, all patron types, all item types</li>
 </ul>
 
-<p>Tip: If you are a single library system choose your library name before creating rules (sometimes having only rules for the 'all libraries' option can cause issues with holds)</p>
+<p>The CircControl and HomeOrHoldingBranch also come in to play when figuring out which circulation rule to follow.</p>
+
+<ul>
+	<li>If CircControl is set to "the library you are logged in at" circ rules will be selected based on the library you are logged in at</li>
+	<li>If CircControl is set to "the library the patron is from" circ rules will be selected based on the patron's library</li>
+	<li>If CircControl is set to "the library the item is from" circ rules will be selected based on the item's library where HomeOrHoldingBranch chooses if item's home library is used or holding library is used.</li>
+	<li>If IndependentBranches is set to 'Prevent' then the value of HomeOrHoldingBranch is used in figuring out if the item can be checked out. If the item's home library does not match the logged in library, the item cannot be checked out unless you are a superlibrarian.</li>
+</ul>
+
+<p>If you are a single library system choose your branch name before creating rules (sometimes having only rules for the 'all libraries' option can cause issues with holds)</p>
 
 <p style="color: #990000;">Important: At the very least you will need to set a default circulation rule. This rule should be set for all item types, all libraries and all patron categories. That will catch all instances that do not match a specific rule. When checking out if you do not have a rule for all libraries, all item types and all patron types then you may see patrons getting blocked from placing holds. You will also want a rule for your specific library set for all item types and all patron types to avoid this holds issue. Koha needs to know what rule to fall back on.</p>
 
@@ -55,10 +64,14 @@
     <li style="color: #990000;">Important: This can only be set for the Day unit, not in Hours</li>
 </ul>
 </li>
+    <li>You can also define the maximum number of days a patron will be suspended in the 'Max suspension duration' setting</li>
     <li>Next decide if the patron can renew this item type and if so, enter how many times they can renew it in the 'Renewals Allowed' box</li>
     <li>If you're allowing renewals you can control how long the renewal loan period will be (in the units you have chosen) in the 'Renewal period' box</li>
     <li>If you're allowing renewals you can control how soon before the due date patrons can renew their materials with the 'No renewals before' box.
     <ul><li>Items can be renewed at any time if this value is left blank. Otherwise items can only be renewed if the item is before the number in units (days/hours) entered in this box.</li></ul></li>
+    <li>You can enable automatic renewals for certain items/patrons if you'd like. This will renew automatically following your circulation rules unless there is a hold on the item
+    <ul><li style="color: #990000;">Important: You will need to enable the automatic renewal cron job for this to work.</li></ul>
+    </li>
     <li>If the patron can place holds on this item type, enter the total numbers of items (of this type) that can be put on hold in the 'Holds Allowed' field</li>
     <li>Finally, if you charge a rental fee for the item type and want to give a specific patron type a discount on that fee, enter the percentage discount (without the % symbol) in the 'Rental Discount' field</li>
 </ul>
