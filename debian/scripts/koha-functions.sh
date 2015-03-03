@@ -121,6 +121,37 @@ is_indexer_running()
     fi
 }
 
+is_plack_enabled()
+{
+    local site=$1
+    local instancefile=$(get_apache_config_for $site)
+
+    if [ "$instancefile" = "" ]; then
+        return 1
+    fi
+
+    if grep -q '^[[:space:]]*Include /etc/koha/apache-shared-opac-plack.conf' \
+            "$instancefile" && \
+       grep -q '^[[:space:]]*Include /etc/koha/apache-shared-intranet-plack.conf' \
+            "$instancefile" ; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+is_plack_running()
+{
+    local instancename=$1
+
+    if start-stop-daemon --pidfile "/var/run/koha/${instancename}/plack.pid" \
+            --status ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 get_instances()
 {
     find /etc/koha/sites -mindepth 1 -maxdepth 1\
