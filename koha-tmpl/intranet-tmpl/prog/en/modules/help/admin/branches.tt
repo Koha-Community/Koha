@@ -11,15 +11,45 @@
 <p>To add a new library:</p>
 
 <ul>
-   <li>Click 'New Library'</li>
-	<li>Fill in the data requested on the form that follows
+	<li>Click 'New Library'</li>
+	<li>The top of the form asks for some basics about the library
 <ul>
-	<li>Of the fields listed, only 'Library code' and 'Name' are required</li>
-	<li>Be sure to enter a library email address to make sure that notices are sent to and from the right address</li>
-	<li>An IP address is required if you have enabled AutoLocation</li>
+	<li>The library code should not contain any spaces and be 10 or fewer characters. This code will be used as a unique identifier in the database.</li>
+	<li>The name will be displayed on the OPAC wherever the library name displays to the public and should be a name that makes sense to your patrons.</li>
+	<li>If you have groups set up you can choose what group this library belongs to after entering in the code and name</li>
+</ul>
+</li>
+	<li>Next you can enter basic contact info about the branch
+<ul>
+	<li>The address and contact fields can be used to make notices custom for each library</li>
+	<li>The email address field is not required, but it should be filled for every library in your system
+<ul>
+	<li style="color: #990000;">Important: Be sure to enter a library email address to make sure that notices are sent to and from the right address</li>
+</ul>
+</li>
+	<li>If you'd like you can enter a different 'Reply-To' email address. This is the email address that all replies will go to.
+<ul>
+	<li>Tip: If you do not fill in this value Koha will use the address in the ReplytoDefault preference</li>
+</ul>
+</li>
+	<li>If you'd like you can also enter a different 'Return-Path' email address. This is the email address that all bounced messages will go to.
+<ul>
+	<li>Tip: If you do not fill in this value Koha will use the address in the ReturnpathDefault preference</li>
+</ul>
+</li>
+	<li>If the URL field is populated then the library name will be linked in the holdings table on the OPAC</li>
+	<li>The OPAC Info box is for you to put information about the library that will appear in the OPAC when the branch name is moused over in the holdings table</li>
+	<li>IP Address does not have be filled in unless you plan on limiting access to your staff client to a specific IP Address
+<ul>
+	<li style="color: #990000;">Important: An IP address is required if you have enabled AutoLocation</li>
+</ul>
+</li>
+	<li>Finally, if you have any notes you can put them here. These will not show in the OPAC</li>
 </ul>
 </li>
 </ul>
+
+<p style="background-color: #ffe599;">Tip: Of the fields listed, only 'Library code' and 'Name' are required</p>
 
 <h2>Editing/Deleting a Library</h2>
 
