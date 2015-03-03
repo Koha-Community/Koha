@@ -150,26 +150,56 @@ sub search_auth_compat {
     my $self = shift;
 
     my $database = Koha::Database->new();
-    my $schema = $database->schema();
-    my $res = $self->search(@_);
+    my $schema   = $database->schema();
+    my $res      = $self->search(@_);
     my @records;
-    $res->each(sub {
+    $res->each(
+        sub {
             my %result;
-            my $record = @_[0];
+            my $record    = @_[0];
             my $marc_json = $record->{record};
+
             # I wonder if these should be real values defined in the mapping
             # rather than hard-coded conversions.
-            $result{authid} = $record{Local-Number};
+            $result{authid} = $record->{ Local-Number };
+
             # TODO put all this info into the record at index time so we
             # don't have to go and sort it all out now.
-            my $rs = $schema->resultset('auth_types')->search({ authtypecode => $authtypecode });
-            my $authtype = $rs->first;
-            my $authtypecode = $record{authtype};
-            my $marc = $self->json2marc($marc_json);
-            die Dumper(\@_);
+            my $authtypecode = $record->{authtype};
+            my $rs           = $schema->resultset('AuthType')
+              ->search( { authtypecode => $authtypecode } );
+
+            # FIXME there's an assumption here that we will get a result.
+            # the original code also makes an assumption that some provided
+            # authtypecode may sometimes be used instead of the one stored
+            # with the record. It's not documented why this is the case, so
+            # it's not reproduced here.
+            my $authtype           = $rs->single;
+            my $auth_tag_to_report = $authtype->auth_tag_to_report;
+            my $marc               = $self->json2marc($marc_json);
+            my $mainentry          = $marc->field($auth_tag_to_report);
+            my $reported_tag;
+            if ($mainentry) {
+                foreach ( $mainentry->subfields() ) {
+                    $reported_tag .= '$' . $_->[0] . $_->[1];
+                }
+            }
+            # Turn the resultset into a hash
+            my %authtype_cols;
+            foreach my $col (@{ $authtype->result_source->columns }) {
+                $authtype_cols{$col} = $authtype->get_column($col);
+            }
+            $result{authtype}     = $authtype_cols;
+            $result{reported_tag} = $reported_tag;
+
+            # Reimplementing BuildSummary is out of scope because it'll be hard
+            $result{summary} =
+              C4::AuthoritiesMarc::BuildSummary( $marc, $result{authid},
+                $authtypecode );
             push @records, $marc;
-        });
-    return (\@records, $res->total);
+        }
+    );
+    return ( \@records, $res->total );
 }
 
 =head2 json2marc
