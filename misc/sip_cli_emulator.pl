@@ -24,6 +24,7 @@ use IO::Socket::INET;
 use Getopt::Long;
 
 use C4::SIP::Sip::Constants qw(:all);
+use C4::SIP::Sip;
 
 use constant { LANGUAGE => '001' };
 
@@ -85,7 +86,7 @@ $/ = $terminator;
 
 my ( $sec, $min, $hour, $day, $month, $year ) = localtime(time);
 $year += 1900;
-my $transaction_date = "$year$month$day    $hour$min$sec";
+my $transaction_date = C4::SIP::Sip::timestamp();
 
 my $terminal_password = $login_password;
 
@@ -459,7 +460,7 @@ sub build_field {
 
     return q{} if ( $params->{optional} && !$value );
 
-    return $field_identifier . $value . '|';
+    return $field_identifier . (($value) ? $value : '') . '|';
 }
 
 sub help {
