@@ -63,6 +63,12 @@ do
         RET=$(disable_instance $name)
         if [ "$RET" = 0 ]; then
             restart_apache="yes"
+            if is_sip_enabled $name; then
+                koha-stop-sip $name
+            fi
+            if is_zebra_running $name; then
+                koha-stop-zebra $name
+            fi
         elif [ "$RET" = 2 ]; then
             warn "Error: Apache configuration file not present for instance $name."
         else
