@@ -10448,11 +10448,11 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.19.00.XXX";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
-        INSERT INTO authorised_values (category, authorised_value, lib) VALUES
+        INSERT IGNORE INTO authorised_values (category, authorised_value, lib) VALUES
         ('REPORT_GROUP', 'SER', 'Serials')
     |);
 
-    print "Upgrade to $DBversion done (Bug 5338 - Add Serial to the report groups)\n";
+    print "Upgrade to $DBversion done (Bug 5338 - Add Serial to the report groups if does not exist)\n";
     SetVersion ($DBversion);
 }
 
