@@ -15,6 +15,7 @@ INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES 
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('REPORT_GROUP', 'PAT', 'Adhérents');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('REPORT_GROUP', 'ACQ', 'Acquisitions');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('REPORT_GROUP', 'ACC', 'Comptes');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'SER', 'Serials');
 -- availability statuses
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('LOST','1','Perdu');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ('LOST','2','Long retard (perdu)');
