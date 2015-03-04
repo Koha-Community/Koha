@@ -872,12 +872,11 @@ for (my $i=0;$i<@servers;$i++) {
 } #/end of the for loop
 #$template->param(FEDERATED_RESULTS => \@results_array);
 
-my @input_values = map { Encode::decode_utf8($_->{input_value}) } @limit_inputs;
 for my $facet ( @$facets ) {
     for my $entry ( @{ $facet->{facets} } ) {
         my $index = $entry->{type_link_value};
         my $value = $entry->{facet_link_value};
-        $entry->{active} = grep { $_ eq qq{$index:$value} } @input_values;
+        $entry->{active} = grep { $_->{input_value} eq qq{$index:$value} } @limit_inputs;
     }
 }
 
