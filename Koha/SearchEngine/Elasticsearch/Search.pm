@@ -161,7 +161,9 @@ sub search_auth_compat {
 
             # I wonder if these should be real values defined in the mapping
             # rather than hard-coded conversions.
-            $result{authid} = $record->{ Local-Number };
+            # Our results often come through as nested arrays, to fix this
+            # requires changes in catmandu.
+            $result{authid} = $record->{ 'Local-Number' }[0][0];
 
             # TODO put all this info into the record at index time so we
             # don't have to go and sort it all out now.
