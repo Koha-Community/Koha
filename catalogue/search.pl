@@ -519,7 +519,7 @@ for my $this_cgi ( split('&',$limit_cgi) ) {
     my $input_name = $1;
     my $input_value = $2;
     $input_name =~ s/=$//;
-    push @limit_inputs, { input_name => $input_name, input_value => uri_unescape($input_value) };
+    push @limit_inputs, { input_name => $input_name, input_value => Encode::decode_utf8( uri_unescape($input_value) ) };
 }
 $template->param ( LIMIT_INPUTS => \@limit_inputs );
 
@@ -723,12 +723,11 @@ my $gotopage = $cgi->param('gotoPage');
 $template->{'VARS'}->{'gotoPage'} = $gotopage
   if $gotopage =~ m/^(ISBD|labeledMARC|MARC|more)?detail.pl$/;
 
-my @input_values = map { Encode::decode_utf8($_->{input_value}) } @limit_inputs;
 for my $facet ( @$facets ) {
     for my $entry ( @{ $facet->{facets} } ) {
         my $index = $entry->{type_link_value};
         my $value = $entry->{facet_link_value};
-        $entry->{active} = grep { $_ eq qq{$index:$value} } @input_values;
+        $entry->{active} = grep { $_->{input_value} eq qq{$index:$value} } @limit_inputs;
     }
 }
 
