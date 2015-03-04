@@ -6,7 +6,7 @@ use diagnostics;
 
 use C4::InstallAuth;
 use CGI qw ( -utf8 );
-use IPC::Cmd;
+use POSIX qw(strftime);
 
 use C4::Context;
 use C4::Output;
@@ -320,20 +320,35 @@ elsif ( $step && $step == 3 ) {
         warn "# plack? inserted PERL5LIB $ENV{PERL5LIB}\n";
     }
 
-        my $cmd = C4::Context->config("intranetdir") . "/installer/data/$info{dbms}/updatedatabase.pl";
-        my ($success, $error_code, $full_buf, $stdout_buf, $stderr_buf) = IPC::Cmd::run(command => $cmd, verbose => 0);
+        my $now = POSIX::strftime( "%Y-%m-%dT%H:%M:%S", localtime() );
+        my $logdir = C4::Context->config('logdir');
+        my ( $logfilepath, $logfilepath_errors ) = ( $logdir . "/updatedatabase_$now.log", $logdir . "/updatedatabase-error_$now.log" );
 
-        if (@$stdout_buf) {
-            $template->param(update_report => [ map { { line => $_ } } split(/\n/, join('', @$stdout_buf)) ] );
-            $template->param(has_update_succeeds => 1);
+        my $cmd = C4::Context->config("intranetdir") . "/installer/data/$info{dbms}/updatedatabase.pl > $logfilepath 2> $logfilepath_errors";
+
+        system($cmd );
+
+        my $fh;
+        open( $fh, "<", $logfilepath ) or die "Cannot open log file $logfilepath: $!";
+        my @report = <$fh>;
+        close $fh;
+        if (@report) {
+            $template->param( update_report => [ map { { line => $_ } } split( /\n/, join( '', @report ) ) ] );
+            $template->param( has_update_succeeds => 1 );
+        } else {
+            eval{ `rm $logfilepath` };
         }
-        if (@$stderr_buf) {
-            $template->param(update_errors => [ map { { line => $_ } } split(/\n/, join('', @$stderr_buf)) ] );
-            $template->param(has_update_errors => 1);
+        open( $fh, "<", $logfilepath_errors ) or die "Cannot open log file $logfilepath_errors: $!";
+        @report = <$fh>;
+        close $fh;
+        if (@report) {
+            $template->param( update_errors => [ map { { line => $_ } } split( /\n/, join( '', @report ) ) ] );
+            $template->param( has_update_errors => 1 );
             warn "The following errors were returned while attempting to run the updatedatabase.pl script:\n";
-            foreach my $line (@$stderr_buf) {warn "$line\n";}
+            foreach my $line (@report) { warn "$line\n"; }
+        } else {
+            eval{ `rm $logfilepath_errors` };
         }
-
         $template->param( $op => 1 );
     }
     else {
