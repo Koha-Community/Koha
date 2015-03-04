@@ -769,7 +769,7 @@ sub checkauth {
             $sessiontype = $session->param('sessiontype') || '';
         }
         if ( ( $query->param('koha_login_context') && ( $q_userid ne $s_userid ) )
-            || ( $cas && $query->param('ticket') ) || ( $shib && $shib_login && !$logout ) ) {
+            || ( $cas && $query->param('ticket') && !C4::Context->userenv->{'id'} ) || ( $shib && $shib_login && !$logout ) ) {
 
             #if a user enters an id ne to the id in the current session, we need to log them in...
             #first we need to clear the anonymous session...
