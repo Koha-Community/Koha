@@ -181,6 +181,18 @@ sub as_list {
     return wantarray ? @objects : \@objects;
 }
 
+=head3 Koha::Objects->unblessed
+
+Returns an unblessed representation of objects.
+
+=cut
+
+sub unblessed {
+    my ($self) = @_;
+
+    return [ map { $_->unblessed } $self->as_list ];
+}
+
 =head3 Koha::Objects->_wrap
 
 wraps the DBIC object in a corresponding Koha object

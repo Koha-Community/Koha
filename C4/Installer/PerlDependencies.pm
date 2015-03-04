@@ -762,6 +762,16 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.05',
     },
+    'Mojolicious' => {
+        'usage'    => 'REST API',
+        'required' => '0',
+        'min_ver'  => '5.54',
+    },
+    'Swagger2' => {
+        'usage'    => 'REST API',
+        'required' => '0',
+        'min_ver'  => '0.28',
+    },
 };
 
 1;

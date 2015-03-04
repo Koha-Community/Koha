@@ -207,6 +207,18 @@ sub id {
     return $id;
 }
 
+=head3 $object->unblessed();
+
+Returns an unblessed representation of object.
+
+=cut
+
+sub unblessed {
+    my ($self) = @_;
+
+    return { $self->_result->get_columns };
+}
+
 =head3 $object->_result();
 
 Returns the internal DBIC Row object

@@ -1,0 +1,108 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Koha REST API",
+    "version": "1",
+    "license": {
+      "name": "GPL v3",
+      "url": "http://www.gnu.org/licenses/gpl.txt"
+    },
+    "contact": {
+      "name": "Koha Team",
+      "url": "http://koha-community.org/"
+    }
+  },
+  "basePath": "/api/v1",
+  "paths": {
+    "/borrowers": {
+      "get": {
+        "x-mojo-controller": "Koha::REST::V1::Borrowers",
+        "operationId": "listBorrowers",
+        "tags": ["borrowers"],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of borrowers",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/borrower"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/borrowers/{borrowernumber}": {
+      "get": {
+        "x-mojo-controller": "Koha::REST::V1::Borrowers",
+        "operationId": "getBorrower",
+        "tags": ["borrowers"],
+        "parameters": [
+          {
+            "$ref": "#/parameters/borrowernumberPathParam"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "A borrower",
+            "schema": {
+              "$ref": "#/definitions/borrower"
+            }
+          },
+          "404": {
+            "description": "Borrower not found",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "borrower": {
+      "type": "object",
+      "properties": {
+        "borrowernumber": {
+          "$ref": "#/definitions/borrowernumber"
+        },
+        "cardnumber": {
+          "description": "library assigned ID number for borrowers"
+        },
+        "surname": {
+          "description": "borrower's last name"
+        },
+        "firstname": {
+          "description": "borrower's first name"
+        }
+      }
+    },
+    "borrowernumber": {
+      "description": "Borrower internal identifier"
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "description": "Error message",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "parameters": {
+    "borrowernumberPathParam": {
+      "name": "borrowernumber",
+      "in": "path",
+      "description": "Internal borrower identifier",
+      "required": "true",
+      "type": "integer"
+    }
+  }
+}
