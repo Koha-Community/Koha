@@ -1141,6 +1141,7 @@ CREATE TABLE `import_items` (
 
 DROP TABLE IF EXISTS `issues`;
 CREATE TABLE `issues` ( -- information related to check outs or issues
+  `issue_id` int(11) NOT NULL AUTO_INCREMENT, -- primary key for issues table
   `borrowernumber` int(11), -- foreign key, linking this to the borrowers table for the patron this item was checked out to
   `itemnumber` int(11), -- foreign key, linking this to the items table for the item that was checked out
   `date_due` datetime default NULL, -- datetime the item is due (yyyy-mm-dd hh:mm::ss)
@@ -1153,6 +1154,7 @@ CREATE TABLE `issues` ( -- information related to check outs or issues
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
   `issuedate` datetime default NULL, -- date the item was checked out or issued
   `onsite_checkout` int(1) NOT NULL default 0, -- in house use flag
+  PRIMARY KEY (`issue_id`),
   KEY `issuesborridx` (`borrowernumber`),
   KEY `itemnumber_idx` (`itemnumber`),
   KEY `branchcode_idx` (`branchcode`),
@@ -1616,6 +1618,7 @@ CREATE TABLE `oai_sets_biblios` (
 
 DROP TABLE IF EXISTS `old_issues`;
 CREATE TABLE `old_issues` ( -- lists items that were checked out and have been returned
+  `issue_id` int(11) NOT NULL, -- primary key for issues table
   `borrowernumber` int(11) default NULL, -- foreign key, linking this to the borrowers table for the patron this item was checked out to
   `itemnumber` int(11) default NULL, -- foreign key, linking this to the items table for the item that was checked out
   `date_due` datetime default NULL, -- date the item is due (yyyy-mm-dd)
@@ -1628,6 +1631,7 @@ CREATE TABLE `old_issues` ( -- lists items that were checked out and have been r
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
   `issuedate` datetime default NULL, -- date the item was checked out or issued
   `onsite_checkout` int(1) NOT NULL default 0, -- in house use flag
+  PRIMARY KEY (`issue_id`),
   KEY `old_issuesborridx` (`borrowernumber`),
   KEY `old_issuesitemidx` (`itemnumber`),
   KEY `branchcode_idx` (`branchcode`),

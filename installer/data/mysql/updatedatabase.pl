@@ -37,6 +37,7 @@ use Getopt::Long;
 use C4::Context;
 use C4::Installer;
 use C4::Dates;
+use Koha::Database;
 
 use MARC::Record;
 use MARC::File::XML ( BinaryEncoding => 'utf8' );
@@ -3809,8 +3810,8 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (3.2.0 general release)\n";
     SetVersion ($DBversion);
 }
-
 # This is the point where 3.2.x and master diverged, we can use $original_version to make sure we don't
+
 # apply updates that have already been done
 
 $DBversion = "3.03.00.001";
@@ -9916,6 +9917,7 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
+
 $DBversion = '3.19.00.017';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     # First create the column
@@ -10161,6 +10163,34 @@ while ( my $file = readdir $dirh ) {
     print "DEV atomic update : $file \n";
     my $installer = C4::Installer->new();
     my $rv = $installer->load_sql( $update_dir . $file ) ? 0 : 1;
+}
+
+$DBversion = "XXX";
+if(CheckVersion($DBversion)) {
+    $dbh->do(q{
+        ALTER TABLE old_issues ADD issue_id INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST
+    });
+
+    $dbh->do(q{
+        ALTER TABLE issues ADD issue_id INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST
+    });
+
+    $dbh->do(q{
+        UPDATE issues SET issue_id = issue_id + ( SELECT COUNT(*) FROM old_issues ) ORDER BY issue_id DESC
+    });
+
+    my $schema = Koha::Database->new()->schema();
+    my $max_issue_id = $schema->resultset('Issue')->get_column('issue_id')->max();
+    $max_issue_id ||= $schema->resultset('OldIssue')->get_column('issue_id')->max();
+    $max_issue_id ||= 0;
+    $max_issue_id++;
+    $dbh->do(qq{
+        ALTER TABLE issues AUTO_INCREMENT = $max_issue_id}
+    );
+
+    print "Upgrade to $DBversion done (Bug 13790 - Add unique id issue_id to issues and oldissues tables)\n";
+    SetVersion($DBversion);
+
 }
 
 =head1 FUNCTIONS
