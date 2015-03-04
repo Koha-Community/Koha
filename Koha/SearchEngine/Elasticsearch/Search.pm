@@ -173,7 +173,7 @@ sub search_auth_compat {
             # the original code also makes an assumption that some provided
             # authtypecode may sometimes be used instead of the one stored
             # with the record. It's not documented why this is the case, so
-            # it's not reproduced here.
+            # it's not reproduced here yet.
             my $authtype           = $rs->single;
             my $auth_tag_to_report = $authtype->auth_tag_to_report;
             my $marc               = $self->json2marc($marc_json);
@@ -186,17 +186,17 @@ sub search_auth_compat {
             }
             # Turn the resultset into a hash
             my %authtype_cols;
-            foreach my $col (@{ $authtype->result_source->columns }) {
+            foreach my $col ($authtype->result_source->columns) {
                 $authtype_cols{$col} = $authtype->get_column($col);
             }
-            $result{authtype}     = $authtype_cols;
+            $result{authtype}     = $authtype->authtypetext;
             $result{reported_tag} = $reported_tag;
 
             # Reimplementing BuildSummary is out of scope because it'll be hard
             $result{summary} =
               C4::AuthoritiesMarc::BuildSummary( $marc, $result{authid},
                 $authtypecode );
-            push @records, $marc;
+            push @records, \%result;
         }
     );
     return ( \@records, $res->total );
