@@ -530,16 +530,16 @@ CREATE TABLE collections_tracking (
 
 DROP TABLE IF EXISTS courses;
 CREATE TABLE `courses` (
-  `course_id` int(11) NOT NULL AUTO_INCREMENT,
-  `department` varchar(80) DEFAULT NULL, -- Stores the authorised value DEPT
-  `course_number` varchar(255) DEFAULT NULL, -- An arbitrary field meant to store the "course number" assigned to a course
-  `section` varchar(255) DEFAULT NULL, -- Also arbitrary, but for the 'section' of a course.
-  `course_name` varchar(255) DEFAULT NULL,
-  `term` varchar(80) DEFAULT NULL, -- Stores the authorised value TERM
-  `staff_note` mediumtext,
-  `public_note` mediumtext,
-  `students_count` varchar(20) DEFAULT NULL, -- Meant to be just an estimate of how many students will be taking this course/section
-  `enabled` enum('yes','no') NOT NULL DEFAULT 'yes', -- Determines whether the course is active
+  `course_id` int(11) NOT NULL AUTO_INCREMENT, -- unique id for the course
+  `department` varchar(80) DEFAULT NULL, -- the authorised value for the DEPARTMENT
+  `course_number` varchar(255) DEFAULT NULL, -- the "course number" assigned to a course
+  `section` varchar(255) DEFAULT NULL, -- the 'section' of a course
+  `course_name` varchar(255) DEFAULT NULL, -- the name of the course
+  `term` varchar(80) DEFAULT NULL, -- the authorised value for the TERM
+  `staff_note` mediumtext, -- the text of the staff only note
+  `public_note` mediumtext, -- the text of the public / opac note
+  `students_count` varchar(20) DEFAULT NULL, -- how many students will be taking this course/section
+  `enabled` enum('yes','no') NOT NULL DEFAULT 'yes', -- determines whether the course is active
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    PRIMARY KEY (`course_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
@@ -554,8 +554,8 @@ CREATE TABLE `courses` (
 
 DROP TABLE IF EXISTS course_instructors;
 CREATE TABLE `course_instructors` (
-  `course_id` int(11) NOT NULL,
-  `borrowernumber` int(11) NOT NULL,
+  `course_id` int(11) NOT NULL, -- foreign key to link to courses.course_id
+  `borrowernumber` int(11) NOT NULL, -- foreign key to link to borrowers.borrowernumber for instructor information
   PRIMARY KEY (`course_id`,`borrowernumber`),
   KEY `borrowernumber` (`borrowernumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -577,13 +577,13 @@ ALTER TABLE `course_instructors`
 
 DROP TABLE IF EXISTS course_items;
 CREATE TABLE `course_items` (
-  `ci_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ci_id` int(11) NOT NULL AUTO_INCREMENT, -- course item id
   `itemnumber` int(11) NOT NULL, -- items.itemnumber for the item on reserve
-  `itype` varchar(10) DEFAULT NULL, -- an optional new itemtype for the item to have while on reserve
-  `ccode` varchar(10) DEFAULT NULL, -- an optional new category code for the item to have while on reserve
-  `holdingbranch` varchar(10) DEFAULT NULL, -- an optional new holding branch for the item to have while on reserve
-  `location` varchar(80) DEFAULT NULL, -- an optional new shelving location for the item to have while on reseve
-  `enabled` enum('yes','no') NOT NULL DEFAULT 'no', -- If at least one enabled course has this item on reseve, this field will be 'yes', otherwise it will be 'no'
+  `itype` varchar(10) DEFAULT NULL, -- new itemtype for the item to have while on reserve (optional)
+  `ccode` varchar(10) DEFAULT NULL, -- new category code for the item to have while on reserve (optional)
+  `holdingbranch` varchar(10) DEFAULT NULL, -- new holding branch for the item to have while on reserve (optional)
+  `location` varchar(80) DEFAULT NULL, -- new shelving location for the item to have while on reseve (optional)
+  `enabled` enum('yes','no') NOT NULL DEFAULT 'no', -- if at least one enabled course has this item on reseve, this field will be 'yes', otherwise it will be 'no'
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    PRIMARY KEY (`ci_id`),
    UNIQUE KEY `itemnumber` (`itemnumber`),
@@ -607,10 +607,10 @@ ALTER TABLE `course_items`
 DROP TABLE IF EXISTS course_reserves;
 CREATE TABLE `course_reserves` (
   `cr_id` int(11) NOT NULL AUTO_INCREMENT,
-  `course_id` int(11) NOT NULL, -- Foreign key to the courses table
-  `ci_id` int(11) NOT NULL, -- Foreign key to the course_items table
-  `staff_note` mediumtext, -- Staff only note
-  `public_note` mediumtext, -- Public, OPAC visible note
+  `course_id` int(11) NOT NULL, -- foreign key to link to courses.course_id
+  `ci_id` int(11) NOT NULL, -- foreign key to link to courses_items.ci_id
+  `staff_note` mediumtext, -- staff only note
+  `public_note` mediumtext, -- public, OPAC visible note
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    PRIMARY KEY (`cr_id`),
    UNIQUE KEY `pseudo_key` (`course_id`,`ci_id`),
