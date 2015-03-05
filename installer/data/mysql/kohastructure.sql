@@ -322,15 +322,15 @@ CREATE TABLE `borrower_attributes` ( -- values of custom patron fields known as 
 --
 
 DROP TABLE IF EXISTS `borrower_debarments`;
-CREATE TABLE borrower_debarments (
-  borrower_debarment_id int(11) NOT NULL AUTO_INCREMENT,
-  borrowernumber int(11) NOT NULL,
-  expiration date DEFAULT NULL,
-  `type` enum('SUSPENSION','OVERDUES','MANUAL') NOT NULL DEFAULT 'MANUAL',
-  `comment` text,
-  manager_id int(11) DEFAULT NULL,
-  created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  updated timestamp NULL DEFAULT NULL,
+CREATE TABLE borrower_debarments ( -- tracks restrictions on the patron's record
+  borrower_debarment_id int(11) NOT NULL AUTO_INCREMENT, -- unique key for the restriction
+  borrowernumber int(11) NOT NULL, -- foreign key for borrowers.borrowernumber for patron who is restricted
+  expiration date DEFAULT NULL, -- expiration date of the restriction
+  `type` enum('SUSPENSION','OVERDUES','MANUAL') NOT NULL DEFAULT 'MANUAL', -- type of restriction
+  `comment` text, -- comments about the restriction
+  manager_id int(11) DEFAULT NULL, -- foreign key for borrowers.borrowernumber for the librarian managing the restriction
+  created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- date the restriction was added
+  updated timestamp NULL DEFAULT NULL, -- date the restriction was updated
   PRIMARY KEY (borrower_debarment_id),
   KEY borrowernumber (borrowernumber),
   CONSTRAINT `borrower_debarments_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
@@ -477,7 +477,7 @@ CREATE TABLE `categories` ( -- this table shows information related to Koha patr
   `enrolmentperiod` smallint(6) default NULL, -- number of months the patron is enrolled for (will be NULL if enrolmentperioddate is set)
   `enrolmentperioddate` DATE NULL DEFAULT NULL, -- date the patron is enrolled until (will be NULL if enrolmentperiod is set)
   `upperagelimit` smallint(6) default NULL, -- age limit for the patron
-  `dateofbirthrequired` tinyint(1) default NULL,
+  `dateofbirthrequired` tinyint(1) default NULL, -- the minimum age required for the patron category
   `finetype` varchar(30) default NULL, -- unused in Koha
   `bulk` tinyint(1) default NULL,
   `enrolmentfee` decimal(28,6) default NULL, -- enrollment fee for the patron
