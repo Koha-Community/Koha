@@ -7,17 +7,20 @@ use C4::Branch;
 use C4::Circulation;
 use C4::Items;
 use C4::Context;
-
-use Test::More tests => 10;
+use Data::Dumper;
+use Test::More tests => 13;
 
 BEGIN {
     use_ok('C4::Circulation');
 }
 
 can_ok( 'C4::Circulation', qw(
-                            GetBranchBorrowerCircRule
-                            GetBranchItemRule
-                            )
+    AddIssue
+    AddReturn
+    GetBranchBorrowerCircRule
+    GetBranchItemRule
+    GetIssuingRule
+    )
 );
 
 #Start transaction
@@ -160,6 +163,58 @@ $sth->execute(
     $sampleitemtype2->{imageurl},     $sampleitemtype2->{summary}
 );
 
+#Add biblio and item
+my $record = MARC::Record->new();
+$record->append_fields(
+    MARC::Field->new( '952', '0', '0', a => $samplebranch1->{branchcode} ) );
+my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( $record, '' );
+
+# item 2 has home branch and holding branch samplebranch1
+my @sampleitem1 = C4::Items::AddItem(
+    {
+        barcode        => 'barcode_1',
+        itemcallnumber => 'callnumber1',
+        homebranch     => $samplebranch1->{branchcode},
+        holdingbranch  => $samplebranch1->{branchcode}
+    },
+    $biblionumber
+);
+my $item_id1    = $sampleitem1[2];
+
+# item 2 has holding branch samplebranch2
+my @sampleitem2 = C4::Items::AddItem(
+    {
+        barcode        => 'barcode_2',
+        itemcallnumber => 'callnumber2',
+        homebranch     => $samplebranch2->{branchcode},
+        holdingbranch  => $samplebranch1->{branchcode}
+    },
+    $biblionumber
+);
+my $item_id2 = $sampleitem2[2];
+
+# item 3 has item type sampleitemtype2 with noreturn policy
+my @sampleitem3 = C4::Items::AddItem(
+    {
+        barcode        => 'barcode_3',
+        itemcallnumber => 'callnumber3',
+        homebranch     => $samplebranch2->{branchcode},
+        holdingbranch  => $samplebranch2->{branchcode},
+        itype          => $sampleitemtype2->{itemtype}
+    },
+    $biblionumber
+);
+my $item_id3 = $sampleitem3[2];
+
+#Add borrower
+my $borrower_id1 = C4::Members::AddMember(
+    firstname    => 'firstname1',
+    surname      => 'surname1 ',
+    categorycode => $samplecat->{categorycode},
+    branchcode   => $samplebranch1->{branchcode},
+);
+my $borrower_1 = C4::Members::GetMember(borrowernumber => $borrower_id1);
+
 $query =
 "INSERT INTO branch_borrower_circ_rules (branchcode,categorycode,maxissueqty) VALUES( ?,?,?)";
 $dbh->do(
@@ -167,13 +222,14 @@ $dbh->do(
     $samplebranch1->{branchcode},
     $samplecat->{categorycode}, 5
 );
-$query =
-"INSERT INTO default_branch_circ_rules (branchcode,maxissueqty,holdallowed,returnbranch) VALUES( ?,?,?,?)";
-$dbh->do( $query, {}, $samplebranch2->{branchcode},
-    3, 1, $samplebranch2->{branchcode} );
+
 $query =
 "INSERT INTO default_circ_rules (singleton,maxissueqty,holdallowed,returnbranch) VALUES( ?,?,?,?)";
-$dbh->do( $query, {}, 'singleton', 4, 3, $samplebranch1->{branchcode} );
+$dbh->do( $query, {}, 'singleton', 4, 3, 'homebranch' );
+
+$query =
+"INSERT INTO default_branch_circ_rules (branchcode,maxissueqty,holdallowed,returnbranch) VALUES( ?,?,?,?)";
+$dbh->do( $query, {}, $samplebranch2->{branchcode}, 3, 1, 'holdingbranch' );
 
 $query =
 "INSERT INTO branch_item_rules (branchcode,itemtype,holdallowed,returnbranch) VALUES( ?,?,?,?)";
@@ -181,12 +237,17 @@ $sth = $dbh->prepare($query);
 $sth->execute(
     $samplebranch1->{branchcode},
     $sampleitemtype1->{itemtype},
-    5, $samplebranch1->{branchcode}
+    5, 'homebranch'
+);
+$sth->execute(
+    $samplebranch2->{branchcode},
+    $sampleitemtype1->{itemtype},
+    5, 'holdingbranch'
 );
 $sth->execute(
     $samplebranch2->{branchcode},
     $sampleitemtype2->{itemtype},
-    5, $samplebranch1->{branchcode}
+    5, 'noreturn'
 );
 
 #Test GetBranchBorrowerCircRule
@@ -220,23 +281,52 @@ is_deeply(
         $samplebranch1->{branchcode},
         $sampleitemtype1->{itemtype}
     ),
-    { returnbranch => $samplebranch1->{branchcode}, holdallowed => 5 },
+    { returnbranch => 'homebranch', holdallowed => 5 },
     "GetBranchitem returns holdallowed and return branch"
 );
 is_deeply(
     GetBranchItemRule(),
-    { returnbranch => $samplebranch1->{branchcode}, holdallowed => 3 },
+    { returnbranch => 'homebranch', holdallowed => 3 },
 "Without parameters GetBranchItemRule returns the values in default_circ_rules"
 );
 is_deeply(
-    GetBranchItemRule( $samplebranch1->{branchcode} ),
-    { returnbranch => $samplebranch1->{branchcode}, holdallowed => 3 },
+    GetBranchItemRule( $samplebranch2->{branchcode} ),
+    { returnbranch => 'holdingbranch', holdallowed => 1 },
 "With only a branchcode GetBranchItemRule returns values in default_branch_circ_rules"
 );
 is_deeply(
     GetBranchItemRule( -1, -1 ),
-    { returnbranch => $samplebranch1->{branchcode}, holdallowed => 3 },
+    { returnbranch => 'homebranch', holdallowed => 3 },
     "With only one parametern GetBranchItemRule returns default values"
 );
+
+# Test return policies
+C4::Context->set_preference('AutomaticItemReturn','0');
+
+# item1 returned at branch2 should trigger transfer to homebranch
+$query =
+"INSERT INTO issues (borrowernumber,itemnumber,branchcode) VALUES( ?,?,? )";
+$dbh->do( $query, {}, $borrower_id1, $item_id1, $samplebranch1->{branchcode} );
+
+my ($doreturn, $messages, $iteminformation, $borrower) = AddReturn('barcode_1',
+    $samplebranch2->{branchcode});
+is( $messages->{NeedsTransfer}, $samplebranch1->{branchcode}, "AddReturn respects default return policy - return to homebranch" );
+
+# item2 returned at branch2 should trigger transfer to holding branch
+$query =
+"INSERT INTO issues (borrowernumber,itemnumber,branchcode) VALUES( ?,?,? )";
+$dbh->do( $query, {}, $borrower_id1, $item_id2, $samplebranch2->{branchcode} );
+($doreturn, $messages, $iteminformation, $borrower) = AddReturn('barcode_2',
+    $samplebranch2->{branchcode});
+is( $messages->{NeedsTransfer}, $samplebranch1->{branchcode}, "AddReturn respects branch return policy - item2->homebranch policy = 'holdingbranch'" );
+
+# item3 should not trigger transfer - floating collection
+$query =
+"INSERT INTO issues (borrowernumber,itemnumber,branchcode) VALUES( ?,?,? )";
+$dbh->do( $query, {}, $borrower_id1, $item_id3, $samplebranch1->{branchcode} );
+($doreturn, $messages, $iteminformation, $borrower) = AddReturn('barcode_3',
+    $samplebranch1->{branchcode});
+is($messages->{NeedsTransfer},undef,"AddReturn respects branch item return policy - noreturn");
+
 
 $dbh->rollback;

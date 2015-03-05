@@ -249,10 +249,6 @@ if ($barcode) {
 #
 # save the return
 #
-    ( $returned, $messages, $issueinformation, $borrower ) =
-      AddReturn( $barcode, $userenv_branch, $exemptfine, $dropboxmode, $return_date_override, $dropboxdate );
-    my $homeorholdingbranchreturn = C4::Context->preference('HomeOrHoldingBranchReturn');
-    $homeorholdingbranchreturn ||= 'homebranch';
 
     # get biblio description
     my $biblio = GetBiblioFromItemNumber($itemnumber);
@@ -269,10 +265,16 @@ if ($barcode) {
         );
     }
 
+    # make sure return branch respects home branch circulation rules, default to homebranch
+    my $hbr = GetBranchItemRule($biblio->{'homebranch'}, $itemtype)->{'returnbranch'} || "homebranch";
+    my $returnbranch = $biblio->{$hbr} ;
+
     $template->param(
         title            => $biblio->{'title'},
         homebranch       => $biblio->{'homebranch'},
-        homebranchname   => GetBranchName( $biblio->{$homeorholdingbranchreturn} ),
+        homebranchname   => GetBranchName( $biblio->{'homebranch'} ),
+        returnbranch     => $returnbranch,
+        returnbranchname => GetBranchName( $returnbranch ),
         author           => $biblio->{'author'},
         itembarcode      => $biblio->{'barcode'},
         itemtype         => $biblio->{'itemtype'},
@@ -288,6 +290,10 @@ if ($barcode) {
         first   => 1,
         barcode => $barcode,
     );
+
+    # do the return
+    ( $returned, $messages, $issueinformation, $borrower ) =
+      AddReturn( $barcode, $userenv_branch, $exemptfine, $dropboxmode, $return_date_override );
 
     if ($returned) {
         my $time_now = DateTime->now( time_zone => C4::Context->tz )->truncate( to => 'minute');
@@ -358,7 +364,7 @@ if ( $messages->{'WasTransfered'} ) {
 if ( $messages->{'NeedsTransfer'} ){
     $template->param(
         found          => 1,
-        needstransfer  => 1,
+        needstransfer  => $messages->{'NeedsTransfer'},
         itemnumber     => $itemnumber,
     );
 }

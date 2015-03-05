@@ -1607,6 +1607,7 @@ holdallowed => Hold policy for this branch and itemtype. Possible values:
 returnbranch => branch to which to return item.  Possible values:
   noreturn: do not return, let item remain where checked in (floating collections)
   homebranch: return to item's home branch
+  holdingbranch: return to issuer branch
 
 This searches branchitemrules in the following order:
 
@@ -1725,6 +1726,14 @@ fields from the reserves table of the Koha database, and
 C<biblioitemnumber>. It also has the key C<ResFound>, whose value is
 either C<Waiting>, C<Reserved>, or 0.
 
+=item C<WasReturned>
+
+Value 1 if return is successful.
+
+=item C<NeedsTransfer>
+
+If AutomaticItemReturn is disabled, return branch is given as value of NeedsTransfer.
+
 =back
 
 C<$iteminformation> is a reference-to-hash, giving information about the
@@ -1756,7 +1765,6 @@ sub AddReturn {
         return (0, { BadBarcode => $barcode }); # no barcode means no item or borrower.  bail out.
     }
     my $issue  = GetItemIssue($itemnumber);
-#   warn Dumper($iteminformation);
     if ($issue and $issue->{borrowernumber}) {
         $borrower = C4::Members::GetMemberDetails($issue->{borrowernumber})
             or die "Data inconsistency: barcode $barcode (itemnumber:$itemnumber) claims to be issued to non-existant borrowernumber '$issue->{borrowernumber}'\n"
@@ -1788,9 +1796,9 @@ sub AddReturn {
 
         # full item data, but no borrowernumber or checkout info (no issue)
         # we know GetItem should work because GetItemnumberFromBarcode worked
-    my $hbr      = GetBranchItemRule($item->{'homebranch'}, $item->{'itype'})->{'returnbranch'} || "homebranch";
+    my $hbr = GetBranchItemRule($item->{'homebranch'}, $item->{'itype'})->{'returnbranch'} || "homebranch";
         # get the proper branch to which to return the item
-    $hbr = $item->{$hbr} || $branch ;
+    my $returnbranch = $item->{$hbr} || $branch ;
         # if $hbr was "noreturn" or any other non-item table value, then it should 'float' (i.e. stay at this branch)
 
     my $borrowernumber = $borrower->{'borrowernumber'} || undef;    # we don't know if we had a borrower or not
@@ -1817,9 +1825,9 @@ sub AddReturn {
 
     # check if the book is in a permanent collection....
     # FIXME -- This 'PE' attribute is largely undocumented.  afaict, there's no user interface that reflects this functionality.
-    if ( $hbr ) {
+    if ( $returnbranch ) {
         my $branches = GetBranches();    # a potentially expensive call for a non-feature.
-        $branches->{$hbr}->{PE} and $messages->{'IsPermanent'} = $hbr;
+        $branches->{$returnbranch}->{PE} and $messages->{'IsPermanent'} = $returnbranch;
     }
 
     # check if the return is allowed at this branch
@@ -2023,21 +2031,18 @@ sub AddReturn {
         DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });
     }
 
-    # FIXME: make this comment intelligible.
-    #adding message if holdingbranch is non equal a userenv branch to return the document to homebranch
-    #we check, if we don't have reserv or transfert for this document, if not, return it to homebranch .
-
-    if ( !$is_in_rotating_collection && ($doreturn or $messages->{'NotIssued'}) and !$resfound and ($branch ne $hbr) and not $messages->{'WrongTransfer'}){
-        if ( C4::Context->preference("AutomaticItemReturn"    ) or
+    # Transfer to returnbranch if Automatic transfer set or append message NeedsTransfer
+    if (!$is_in_rotating_collection && ($doreturn or $messages->{'NotIssued'}) and !$resfound and ($branch ne $returnbranch) and not $messages->{'WrongTransfer'}){
+        if  (C4::Context->preference("AutomaticItemReturn"    ) or
             (C4::Context->preference("UseBranchTransferLimits") and
-             ! IsBranchTransferAllowed($branch, $hbr, $item->{C4::Context->preference("BranchTransferLimitsType")} )
+             ! IsBranchTransferAllowed($branch, $returnbranch, $item->{C4::Context->preference("BranchTransferLimitsType")} )
            )) {
-            $debug and warn sprintf "about to call ModItemTransfer(%s, %s, %s)", $item->{'itemnumber'},$branch, $hbr;
+            $debug and warn sprintf "about to call ModItemTransfer(%s, %s, %s)", $item->{'itemnumber'},$branch, $returnbranch;
             $debug and warn "item: " . Dumper($item);
-            ModItemTransfer($item->{'itemnumber'}, $branch, $hbr);
+            ModItemTransfer($item->{'itemnumber'}, $branch, $returnbranch);
             $messages->{'WasTransfered'} = 1;
         } else {
-            $messages->{'NeedsTransfer'} = 1;   # TODO: instead of 1, specify branchcode that the transfer SHOULD go to, $item->{homebranch}
+            $messages->{'NeedsTransfer'} = $returnbranch;
         }
     }
 

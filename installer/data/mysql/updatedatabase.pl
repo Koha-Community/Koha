@@ -8507,6 +8507,13 @@ if ( CheckVersion($DBversion) ) {
     ");
 
     print "Upgrade to $DBversion done (Bug 10500 - Improve isbn matching when importing records)\n";
+
+$DBversion = "3.15.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        DELETE FROM systempreferences WHERE variable = 'HomeOrHoldingBranchReturn';
+    });
+    print "Upgrade to $DBversion done (Bug 7981 - Transfer message on return. HomeOrHoldingBranchReturn syspref removed in favour of circulation rules.)\n";
     SetVersion($DBversion);
 }
 
