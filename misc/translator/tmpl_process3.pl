@@ -64,7 +64,7 @@ sub text_replace_tag ($$) {
     if ($attr->{$a}) {
         next if $a eq 'label' && $tag ne 'optgroup';
         next if $a eq 'content' && $tag ne 'meta';
-        next if $a eq 'value' && ($tag ne 'input' || (ref $attr->{'type'} && $attr->{'type'}->[1] =~ /^(?:checkbox|hidden|radio|text)$/)); # FIXME
+        next if $a eq 'value' && ($tag ne 'input' || (ref $attr->{'type'} && $attr->{'type'}->[1] =~ /^(?:checkbox|hidden|radio)$/)); # FIXME
 
         my($key, $val, $val_orig, $order) = @{$attr->{$a}}; #FIXME
         if ($val =~ /\S/s) {
