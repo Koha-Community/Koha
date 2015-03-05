@@ -3274,7 +3274,7 @@ sub SendCirculationAlert {
                     'borrowers'   => $borrower,
                     'branches'    => $branch,
                 }
-            ) or return;
+            ) or next;
             C4::Message->enqueue($letter, $borrower, $_);
         } else {
             #warn "append to old message";
@@ -3291,7 +3291,7 @@ sub SendCirculationAlert {
                     'borrowers'   => $borrower,
                     'branches'    => $branch,
                 }
-            ) or return;
+            ) or next;
             $message->append($letter);
             $message->update;
         }
