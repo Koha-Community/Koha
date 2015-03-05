@@ -1,0 +1,161 @@
+[% USE Price %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Reports &rsaquo; Orders by fund</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
+<script type="text/javascript">
+    $(document).ready( function () {
+        $('#funds').DataTable($.extend(true, {}, dataTablesDefaults,{"sPaginationType": "full_numbers"}));
+
+        showallbudgets = $('#budgetfilter').html();
+        $('#budgetfilter .b_inactive').remove();
+
+        $('#showbudgets').click(function(){
+            if ($(this).is(":checked"))
+                $('#budgetfilter').html(showallbudgets);
+            else
+                $('#budgetfilter .b_inactive').remove();
+        });
+    } );
+</script>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>[% IF ( get_orders ) %] &rsaquo; <a href="/cgi-bin/koha/reports/orders_by_fund.pl">Orders by fund</a> &rsaquo; Results[% ELSE %] &rsaquo; Orders by fund[% END %]</div>
+
+<div id="doc3" class="yui-t2">
+
+<div id="bd">
+        <div id="yui-main">
+        <div class="yui-b">
+
+[% IF ( current_budget_name ) %]<h1>Orders for fund '[% current_budget_name %]'</h1>
+[% ELSE %]<h1>Orders by fund</h1>
+[% END %]
+
+[% IF ( get_orders ) %]
+    <div class="results">
+        [% IF ( total ) %]
+            Orders found: [% total %]
+        [% ELSE %]
+            No order found
+        [% END %]
+    </div>
+
+    [% IF ( ordersloop ) %]<table id="funds">
+        <thead>
+        <tr>
+        <th>Fund</th>
+        <th>Basket</th>
+        <th>Basket name</th>
+        <th>Basket by</th>
+        <th>Title</th>
+        <th>Currency</th>
+        <th>List price</th>
+        <th>RRP</th>
+        <th>Budgeted cost</th>
+        <th>Quantity</th>
+        <th>Total RRP</th>
+        <th>Total cost</th>
+        <th>Entry date</th>
+        <th>Date deceived</th>
+        <th>Internal note</th>
+        <th>Vendor note</th>
+        </tr>
+        </thead>
+        <tbody>
+        [% FOREACH ordersloo IN ordersloop %]
+            [% UNLESS ( loop.odd ) %]<tr class="highlight">
+            [% ELSE %] <tr>
+            [% END %]
+            <td>[% ordersloo.budget_name |html %]</td>
+            <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% ordersloo.basketno %]"> [% ordersloo.basketno |html %]</a></td>
+            <td>[% ordersloo.basketname |html %]</td>
+            <td>[% ordersloo.authorisedbyname %]</td>
+            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ordersloo.biblionumber %]"> [% ordersloo.title |html %]</a></td>
+            <td>[% ordersloo.currency %]</td>
+            <td>[% ordersloo.listprice | $Price %]</td>
+            <td>[% ordersloo.rrp | $Price %]</td>
+            <td>[% ordersloo.ecost | $Price %]</td>
+            <td>[% ordersloo.quantity %]</td>
+            <td>[% ordersloo.total_rrp | $Price %]</td>
+            <td>[% ordersloo.total_ecost | $Price %]</td>
+            <td>[% ordersloo.entrydate %]</td>
+            <td>[% ordersloo.datereceived %]</td>
+            <td>[% ordersloo.order_internalnote |html %]</td>
+            <td>[% ordersloo.order_vendornote |html %]</td>
+            </tr>
+        [% END %]
+        </tbody>
+        <tfoot><tr><th>TOTAL</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>[% total_quantity  %]</th><th>[% total_rrp | $Price %]</th><th>[% total_ecost | $Price %]</th><th></th><th></th><th></th></tr></tfoot>
+        </table>
+    [% END %]
+    [% ELSE %]
+        <form name="f" action="/cgi-bin/koha/reports/orders_by_fund.pl" method="post">
+        <fieldset class="rows">
+        <legend>Filters</legend>
+        <ol><li><label for="budgetfilter">Fund: </label>
+        <select name="budgetfilter" id="budgetfilter">
+            <option value="">All funds</option>
+            <option value="activebudgets">All active funds</option>
+        [% FOREACH budgetsloo IN budgetsloop %]
+            [% IF ( budgetsloo.selected ) %]
+                <option value="[% budgetsloo.value %]" selected="selected">
+            [% ELSE %]
+                [% bdgclass=budgetsloo.active? "": "b_inactive" %]
+                    <option class="[% bdgclass %]" value="[% budgetsloo.value %]">
+            [% END %]
+            [% budgetsloo.description %] [% IF !budgetsloo.active %](inactive)[% END %]
+            </option>
+        [% END %]
+        </select>
+        <label for="showallbudgets" style="float:none;">&nbsp;Show inactive:</label>
+        <input type="checkbox" id="showbudgets" />
+        </li></ol>
+        </fieldset>
+
+        <fieldset class="rows">
+        <legend>Output</legend>
+        <ol><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
+            <li><label for="outputfile">To a file:</label>
+                <input type="radio" name="output" value="file" id="outputfile" />
+                <label class="inline" for="basename">Named: </label>
+                <input type="text" name="basename" id="basename" value="Export" />
+                <label class="inline" for="MIME">Into an application </label>
+                <select id='MIME' name='MIME' size='1'>
+                [% FOREACH outputFormatloo IN outputFormatloop %]
+                    <option value="[% outputFormatloo %]">[% outputFormatloo %]</option>
+                [% END %]
+                </select>
+                <select id='sep' name='sep' size='1'>
+                [% FOREACH delimiterloo IN delimiterloop %]
+                    [% IF delimiterloo == delimiterPreference %]
+                        <option value="[% delimiterloo %]">[% delimiterloo %]</option>
+                    [% END %]
+                [% END %]
+                [% FOREACH delimiterloo IN delimiterloop %]
+                    [% IF delimiterloo != delimiterPreference %]
+                        <option value="[% delimiterloo %]">[% delimiterloo %]</option>
+                    [% END %]
+                [% END %]
+                </select>
+        </li></ol>
+        </fieldset>
+
+        <fieldset class="action">
+        <input type="submit" value="Submit" />
+        <input type="hidden" name="get_orders" value="1" /></fieldset>
+        </form>
+
+    [% END %]
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'reports-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

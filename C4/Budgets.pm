@@ -33,6 +33,9 @@ BEGIN {
         &GetBudgetByOrderNumber
         &GetBudgetByCode
         &GetBudgets
+        &BudgetsByActivity
+        &GetBudgetsReport
+        &GetBudgetReport
         &GetBudgetHierarchy
 	    &AddBudget
         &ModBudget
@@ -70,7 +73,6 @@ BEGIN {
 }
 
 # ----------------------------BUDGETS.PM-----------------------------";
-
 
 =head1 FUNCTIONS ABOUT BUDGETS
 
@@ -451,7 +453,6 @@ sub GetBudgetPeriod {
 	return $data;
 }
 
-# -------------------------------------------------------------------
 sub DelBudgetPeriod{
 	my ($budget_period_id) = @_;
 	my $dbh = C4::Context->dbh;
@@ -595,6 +596,8 @@ sub DelBudget {
 }
 
 
+# -------------------------------------------------------------------
+
 =head2 GetBudget
 
   &GetBudget($budget_id);
@@ -603,7 +606,6 @@ get a specific budget
 
 =cut
 
-# -------------------------------------------------------------------
 sub GetBudget {
     my ( $budget_id ) = @_;
     my $dbh = C4::Context->dbh;
@@ -618,6 +620,8 @@ sub GetBudget {
     return $result;
 }
 
+# -------------------------------------------------------------------
+
 =head2 GetBudgetByOrderNumber
 
   &GetBudgetByOrderNumber($ordernumber);
@@ -626,7 +630,6 @@ get a specific budget by order number
 
 =cut
 
-# -------------------------------------------------------------------
 sub GetBudgetByOrderNumber {
     my ( $ordernumber ) = @_;
     my $dbh = C4::Context->dbh;
@@ -640,6 +643,117 @@ sub GetBudgetByOrderNumber {
     $sth->execute( $ordernumber );
     my $result = $sth->fetchrow_hashref;
     return $result;
+}
+
+=head2 GetBudgetReport
+
+  &GetBudgetReport( [$budget_id] );
+
+Get all orders for a specific budget, without cancelled orders.
+
+Returns an array of hashrefs.
+
+=cut
+
+# --------------------------------------------------------------------
+sub GetBudgetReport {
+    my ( $budget_id ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = '
+        SELECT o.*, b.budget_name
+        FROM   aqbudgets b
+        INNER JOIN aqorders o
+        ON b.budget_id = o.budget_id
+        WHERE  b.budget_id=?
+        AND (o.orderstatus != "cancelled")
+        ORDER BY b.budget_name';
+
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $budget_id );
+
+    my @results = ();
+    while ( my $data = $sth->fetchrow_hashref ) {
+        push( @results, $data );
+    }
+    return @results;
+}
+
+=head2 GetBudgetsByActivity
+
+  &GetBudgetsByActivity( $budget_period_active );
+
+Get all active or inactive budgets, depending of the value
+of the parameter.
+
+1 = active
+0 = inactive
+
+=cut
+
+# --------------------------------------------------------------------
+sub GetBudgetsByActivity {
+    my ( $budget_period_active ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = "
+        SELECT DISTINCT b.*
+        FROM   aqbudgetperiods bp
+        INNER JOIN aqbudgets b
+        ON bp.budget_period_id = b.budget_period_id
+        WHERE  bp.budget_period_active=?
+        ";
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $budget_period_active );
+    my @results = ();
+    while ( my $data = $sth->fetchrow_hashref ) {
+        push( @results, $data );
+    }
+    return @results;
+}
+# --------------------------------------------------------------------
+
+=head2 GetBudgetsReport
+
+  &GetBudgetsReport( [$activity] );
+
+Get all but cancelled orders for all funds.
+
+If the optionnal activity parameter is passed, returns orders for active/inactive budgets only.
+
+active = 1
+inactive = 0
+
+Returns an array of hashrefs.
+
+=cut
+
+sub GetBudgetsReport {
+    my ($activity) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = '
+        SELECT o.*, b.budget_name
+        FROM   aqbudgetperiods bp
+        INNER JOIN aqbudgets b
+        ON bp.budget_period_id = b.budget_period_id
+        INNER JOIN aqorders o
+        ON b.budget_id = o.budget_id ';
+    if($activity ne ''){
+        $query .= 'WHERE  bp.budget_period_active=? ';
+    }
+    $query .= 'AND (o.orderstatus != "cancelled")
+               ORDER BY b.budget_name';
+
+    my $sth = $dbh->prepare($query);
+    if($activity ne ''){
+        $sth->execute($activity);
+    }
+    else{
+        $sth->execute;
+    }
+    my @results = ();
+    while ( my $data = $sth->fetchrow_hashref ) {
+        push( @results, $data );
+    }
+    return @results;
 }
 
 =head2 GetBudgetByCode

@@ -1,6 +1,6 @@
+#!/usr/bin/perl
 use Modern::Perl;
-use Test::More tests => 130;
-
+use Test::More tests => 133;
 BEGIN {
     use_ok('C4::Budgets')
 }
@@ -468,6 +468,15 @@ for my $budget (@$budget_hierarchy_cloned) {
 is( $number_of_budgets_not_reset, 0,
     'CloneBudgetPeriod has reset all budgets (funds)' );
 
+#GetBudgetsByActivity
+my $result=C4::Budgets::GetBudgetsByActivity(1);
+isnt( $result, undef ,'GetBudgetsByActivity return correct value with parameter 1');
+$result=C4::Budgets::GetBudgetsByActivity(0);
+ isnt( $result, undef ,'GetBudgetsByActivity return correct value with parameter 0');
+$result=C4::Budgets::GetBudgetsByActivity();
+ is( $result, 0 , 'GetBudgetsByActivity return 0 with none parameter or other 0 or 1' );
+DelBudget($budget_id);
+DelBudgetPeriod($bpid);
 
 # CloneBudgetPeriod with param amount_change_*
 $budget_period_id_cloned = C4::Budgets::CloneBudgetPeriod(

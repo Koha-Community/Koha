@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 87;
+use Test::More tests => 91;
 use Koha::Database;
 
 BEGIN {
@@ -147,10 +147,18 @@ ok(
 );
 ok( $basket = GetBasket($basketno), "GetBasket($basketno) returns $basket" );
 
+my $bpid=AddBudgetPeriod({
+        budget_period_startdate => '2008-01-01'
+        , budget_period_enddate => '2008-12-31'
+        , budget_period_active  => 1
+        , budget_period_description    => "MAPERI"
+});
+
 my $budgetid = C4::Budgets::AddBudget(
     {
         budget_code => "budget_code_test_getordersbybib",
         budget_name => "budget_name_test_getordersbybib",
+        budget_period_id => $bpid,
     }
 );
 my $budget = C4::Budgets::GetBudget($budgetid);
@@ -934,3 +942,15 @@ ok((not defined GetBiblio($order4->{biblionumber})), "biblio does not exist anym
 # End of tests for DelOrder
 
 $schema->storage->txn_rollback();
+# Budget reports
+#my @report = GetBudgetReport(1);
+#ok(@report >= 1, "GetBudgetReport OK");
+
+my $all_count = scalar GetBudgetsReport();
+ok($all_count >= 1, "GetBudgetReport OK");
+
+my $active_count = scalar GetBudgetsReport(1);
+ok($active_count >= 1 , "GetBudgetsReport(1) OK");
+
+ok($all_count == scalar GetBudgetsReport(), "GetBudgetReport returns inactive budget period acquisitions.");
+ok($active_count >= scalar GetBudgetsReport(1), "GetBudgetReport doesn't return inactive budget period acquisitions.");

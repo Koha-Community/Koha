@@ -1,0 +1,12 @@
+[% INCLUDE csv_headers/reports/orders_by_budget.tt %]
+[%- FOREACH row IN rows %]
+    [%- FOREACH field IN row;
+       field;
+       sep IF !loop.last;
+    END %]
+[% END -%]
+TOTAL
+[%- FOREACH field IN totalrow;
+    field;
+    sep IF !loop.last;
+END %]
