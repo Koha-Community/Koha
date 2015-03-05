@@ -2007,15 +2007,15 @@ DROP TABLE IF EXISTS `statistics`;
 CREATE TABLE `statistics` ( -- information related to transactions (circulation and fines) in Koha
   `datetime` datetime default NULL, -- date and time of the transaction
   `branch` varchar(10) default NULL, -- foreign key, branch where the transaction occurred
-  `proccode` varchar(4) default NULL, -- proceedure code 
+  `proccode` varchar(4) default NULL, -- type of procedure used when making payments (does not appear in the code)
   `value` double(16,4) default NULL, -- monetary value associated with the transaction
   `type` varchar(16) default NULL, -- transaction type (locause, issue, return, renew, writeoff, payment, Credit*)
-  `other` mediumtext,
-  `usercode` varchar(10) default NULL,
+  `other` mediumtext, -- used by SIP
+  `usercode` varchar(10) default NULL, -- unused in Koha
   `itemnumber` int(11) default NULL, -- foreign key from the items table, links transaction to a specific item
   `itemtype` varchar(10) default NULL, -- foreign key from the itemtypes table, links transaction to a specific item type
   `borrowernumber` int(11) default NULL, -- foreign key from the borrowers table, links transaction to a specific borrower
-  `associatedborrower` int(11) default NULL,
+  `associatedborrower` int(11) default NULL, -- unused in Koha
   `ccode` varchar(10) default NULL, -- foreign key from the items table, links transaction to a specific collection code
   KEY `timeidx` (`datetime`),
   KEY `branch_idx` (`branch`),
