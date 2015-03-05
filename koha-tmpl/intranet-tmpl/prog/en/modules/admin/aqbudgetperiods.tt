@@ -217,48 +217,35 @@
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
 
-    <!-- add or modify a budget period -->
-    <!-- ####################################### -->
     [% IF ( add_form ) %]
         <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo;
         [% IF ( budget_period_id ) %]
-            Modify budget <i>[% budget_period_description %]</i>
-
+            <span>Modify budget '[% budget_period_description %]'</span>
         [% ELSE %]
-            Add budget
+            <span>Add budget</span>
         [% END %]
     [% END %]
-
-    <!-- delete a budget period -->
-    <!-- ################################ -->
     [% IF ( delete_confirm ) %]
         <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo;
         [% IF ( total ) %]
-            Cannot delete budget '[% budget_period_description %]'
+            <span>Cannot delete budget '[% budget_period_description %]'</span>
         [% ELSE %]
-            Delete budget '[% budget_period_description %]'?
+            <span>Delete budget '[% budget_period_description %]'?</span>
         [% END %]
     [% END %]
-    <!-- duplicate a budget -->
     [% IF ( duplicate_form ) %]
         <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo; Duplicate budget
     [% END %]
-
-    <!-- close a budget -->
     [% IF close_form %]
         <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo;
-        Close budget <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id %]">[% budget_period_description %]</a>
+        <span>Close budget <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id %]">[% budget_period_description %]</a></span>
     [% END %]
-
-    <!-- budget closed -->
     [% IF closed %]
         <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo;
-        Budget <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id %]">[% budget_period_description %]</a> closed
+        <span>Budget <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id %]">[% budget_period_description %]</a> closed</span>
     [% END %]
-    <!-- display budget periods list -->
-    <!-- ########################################## -->
     [% IF ( else ) %]
-        Budgets administration
+        <span>Budgets administration</span>
     [% END %]
 </div>
 
