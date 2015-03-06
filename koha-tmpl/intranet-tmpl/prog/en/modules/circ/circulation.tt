@@ -50,7 +50,9 @@ var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
 function toggle_onsite_checkout(){
     if ( $("#onsite_checkout").attr('checked') ) {
         $("#duedatespec").val("[% todaysdate | $KohaDates with_hours => 1%]")
-        $("#duedatespec").datetimepicker('destroy');
+        [% IF !Koha.Preference('SpecifyDueDate') %]
+            $("#duedatespec").datetimepicker('destroy');
+        [% END %]
     } else {
         $("#duedatespec").datetimepicker({
             onClose: function(dateText, inst) { $("#barcode").focus(); },
