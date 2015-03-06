@@ -160,7 +160,7 @@ else {
 my ($datedue,$invalidduedate);
 
 my $duedatespec_allow = C4::Context->preference('SpecifyDueDate');
-if( $onsite_checkout ) {
+if( $onsite_checkout && !$duedatespec_allow ) {
     $datedue = output_pref({ dt => dt_from_string, dateonly => 1, dateformat => 'iso' });
     $datedue .= ' 23:59:00';
 } elsif( $duedatespec_allow ) {
