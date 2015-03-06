@@ -68,7 +68,7 @@ sub fetch_bib {
     my $biblionumber = shift;
     my $record = GetMarcBiblio( $biblionumber, $query->url_param('items') );
     if  (defined $record) {
-        print $query->header(-type => 'text/xml');
+        print $query->header(-type => 'text/xml',-charset => 'utf-8',);
         print $record->as_xml_record();
     } else {
         print $query->header(-type => 'text/xml', -status => '404 Not Found');
