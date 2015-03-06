@@ -66,7 +66,7 @@ $(document).ready(function() {
                 if ( data.returned ) {
                     content = CIRCULATION_RETURNED;
                     $(id).parent().parent().addClass('ok');
-                    $('#date_due_' + data.itemnumber).html(_("Returned"));
+                    $('#date_due_' + data.itemnumber).html(CIRCULATION_RETURNED);
                 } else {
                     content = CIRCULATION_NOT_RETURNED;
                     $(id).parent().parent().addClass('warn');
