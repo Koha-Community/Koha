@@ -1958,18 +1958,18 @@ CREATE TABLE IF NOT EXISTS `search_history` ( -- patron's opac search history
 --
 
 DROP TABLE IF EXISTS `serial`;
-CREATE TABLE `serial` (
-  `serialid` int(11) NOT NULL auto_increment,
-  `biblionumber` varchar(100) NOT NULL default '',
-  `subscriptionid` varchar(100) NOT NULL default '',
-  `serialseq` varchar(100) NOT NULL default '',
-  `status` tinyint(4) NOT NULL default 0,
-  `planneddate` date default NULL,
-  `notes` text,
-  `publisheddate` date default NULL,
-  `claimdate` date default NULL,
-  claims_count int(11) default 0,
-  `routingnotes` text,
+CREATE TABLE `serial` ( -- issues related to subscriptions
+  `serialid` int(11) NOT NULL auto_increment, -- unique key for the issue
+  `biblionumber` varchar(100) NOT NULL default '', -- foreign key for the biblio.biblionumber that this issue is attached to
+  `subscriptionid` varchar(100) NOT NULL default '', -- foreign key to the subscription.subscriptionid that this issue is part of
+  `serialseq` varchar(100) NOT NULL default '', -- issue information (volume, number, etc)
+  `status` tinyint(4) NOT NULL default 0, -- status code for this issue (see manual for full descriptions)
+  `planneddate` date default NULL, -- date expected
+  `notes` text, -- notes
+  `publisheddate` date default NULL, -- date published
+  `claimdate` date default NULL, -- date claimed
+  claims_count int(11) default 0, -- number of claims made related to this issue
+  `routingnotes` text, -- notes from the routing list
   PRIMARY KEY  (`serialid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -2092,47 +2092,47 @@ CREATE TABLE subscription_numberpatterns (
 --
 
 DROP TABLE IF EXISTS `subscription`;
-CREATE TABLE `subscription` (
-  `biblionumber` int(11) NOT NULL default 0,
-  `subscriptionid` int(11) NOT NULL auto_increment,
-  `librarian` varchar(100) default '',
-  `startdate` date default NULL,
-  `aqbooksellerid` int(11) default 0,
+CREATE TABLE `subscription` ( -- information related to the subscription
+  `biblionumber` int(11) NOT NULL default 0, -- foreign key for biblio.biblionumber that this subscription is attached to
+  `subscriptionid` int(11) NOT NULL auto_increment, -- unique key for this subscription
+  `librarian` varchar(100) default '', -- the librarian's username from borrowers.userid
+  `startdate` date default NULL, -- start date for this subscription
+  `aqbooksellerid` int(11) default 0, -- foreign key for aqbooksellers.id to link to the vendor
   `cost` int(11) default 0,
   `aqbudgetid` int(11) default 0,
-  `weeklength` int(11) default 0,
-  `monthlength` int(11) default 0,
-  `numberlength` int(11) default 0,
-  `periodicity` integer default null,
+  `weeklength` int(11) default 0, -- subscription length in weeks (will not be filled in if monthlength or numberlength is set)
+  `monthlength` int(11) default 0, -- subscription length in weeks (will not be filled in if weeklength or numberlength is set)
+  `numberlength` int(11) default 0, -- subscription length in weeks (will not be filled in if monthlength or weeklength is set)
+  `periodicity` integer default null, -- frequency type links to subscription_frequencies.id
   countissuesperunit INTEGER NOT NULL DEFAULT 1,
-  `notes` mediumtext,
-  `status` varchar(100) NOT NULL default '',
+  `notes` mediumtext, -- notes
+  `status` varchar(100) NOT NULL default '',  -- status of this subscription
   `lastvalue1` int(11) default NULL,
   `innerloop1` int(11) default 0,
   `lastvalue2` int(11) default NULL,
   `innerloop2` int(11) default 0,
   `lastvalue3` int(11) default NULL,
   `innerloop3` int(11) default 0,
-  `firstacquidate` date default NULL,
-  `manualhistory` tinyint(1) NOT NULL default 0,
-  `irregularity` text,
+  `firstacquidate` date default NULL, -- first issue received date
+  `manualhistory` tinyint(1) NOT NULL default 0, -- yes or no to managing the history manually
+  `irregularity` text, -- any irregularities in the subscription
   skip_serialseq BOOLEAN NOT NULL DEFAULT 0,
   `letter` varchar(20) default NULL,
-  `numberpattern` integer default null,
-  locale VARCHAR(80) DEFAULT NULL,
+  `numberpattern` integer default null, -- the numbering pattern used links to subscription_numberpatterns.id
+  locale VARCHAR(80) DEFAULT NULL, -- for foreign language subscriptions to display months, seasons, etc correctly
   `distributedto` text,
   `internalnotes` longtext,
-  `callnumber` text,
-  `location` varchar(80) NULL default '',
-  `branchcode` varchar(10) NOT NULL default '',
+  `callnumber` text, -- default call number
+  `location` varchar(80) NULL default '', -- default shelving location (items.location)
+  `branchcode` varchar(10) NOT NULL default '', -- default branches (items.homebranch)
   `lastbranch` varchar(10),
-  `serialsadditems` tinyint(1) NOT NULL default '0',
-  `staffdisplaycount` VARCHAR(10) NULL,
-  `opacdisplaycount` VARCHAR(10) NULL,
-  `graceperiod` int(11) NOT NULL default '0',
-  `enddate` date default NULL,
-  `closed` INT(1) NOT NULL DEFAULT 0,
-  `reneweddate` date default NULL,
+  `serialsadditems` tinyint(1) NOT NULL default '0', -- does receiving this serial create an item record
+  `staffdisplaycount` VARCHAR(10) NULL, -- how many issues to show to the staff
+  `opacdisplaycount` VARCHAR(10) NULL, -- how many issues to show to the public
+  `graceperiod` int(11) NOT NULL default '0', -- grace period in days
+  `enddate` date default NULL, -- subscription end date
+  `closed` INT(1) NOT NULL DEFAULT 0, -- yes / no if the subscription is closed
+  `reneweddate` date default NULL, -- date of last renewal for the subscription
   PRIMARY KEY  (`subscriptionid`),
   CONSTRAINT subscription_ibfk_1 FOREIGN KEY (periodicity) REFERENCES subscription_frequencies (id) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT subscription_ibfk_2 FOREIGN KEY (numberpattern) REFERENCES subscription_numberpatterns (id) ON DELETE SET NULL ON UPDATE CASCADE
