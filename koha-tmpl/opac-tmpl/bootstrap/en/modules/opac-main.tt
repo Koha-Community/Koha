@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog
 [% INCLUDE 'doc-head-close.inc' %]
@@ -48,8 +49,9 @@
                 [% END %]
             </div>
             <div id="rssnews-container">
-                <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-news-rss.pl"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png"></a>
-                RSS for Library News.
+                [% SET branchcode = Branches.GetLoggedInBranchcode() %]
+                <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-news-rss.pl?branchcode=[% branchcode %]"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png"></a>
+                RSS feed for [% IF ( loggedinusername ) %][% Branches.GetName( branchcode ) %] <i>and</i> [% END %] system-wide library news.
             </div>
         [% END %]
 

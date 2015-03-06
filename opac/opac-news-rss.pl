@@ -42,12 +42,9 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 # use cookie setting for language, bug default to syspref if it's not set
 my ($theme, $news_lang, $availablethemes) = C4::Templates::themelanguage(C4::Context->config('opachtdocs'),'opac-main.tt','opac',$input);
 
-my $homebranch;
+my $branchcode = $input->param('branchcode');
 
-if (C4::Context->userenv) {
-    $homebranch = C4::Context->userenv->{'branch'};
-}
-my $all_koha_news   = &GetNewsToDisplay($news_lang,$homebranch);
+my $all_koha_news   = GetNewsToDisplay( $news_lang, $branchcode );
 my $koha_news_count = scalar @$all_koha_news;
 
 $template->param(
