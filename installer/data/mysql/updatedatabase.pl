@@ -38,6 +38,7 @@ use C4::Context;
 use C4::Installer;
 use C4::Dates;
 
+use File::Slurp;
 use MARC::Record;
 use MARC::File::XML ( BinaryEncoding => 'utf8' );
 
@@ -9901,6 +9902,21 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (Bug 5786 - Move AllowOnShelfHolds to circulation matrix; Move OPACItemHolds system preference to circulation matrix)\n";
     SetVersion ($DBversion);
 }
+
+# DEVELOPER PROCESS, search for anything to execute in the db_update directory
+# SEE bug 13068
+# if there is anything in the atomicupdate, read and execute it.
+
+opendir( my $dirh, C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate' );
+my $old_delimiter = $/;
+$/ = ';';
+while (readdir $dirh) {
+    next unless $_ =~ /\.sql$/; # skip non SQL files
+        my $installer = C4::Installer->new();
+        $rv = $installer->load_sql( $atomicupd->{location}. "/$file" )? 0: 1;
+        #Note: load_sql already warns
+}
+
 
 =head1 FUNCTIONS
 
