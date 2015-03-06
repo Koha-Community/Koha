@@ -15,7 +15,6 @@ use C4::SIP::Sip::Constants qw(:all);
 use C4::SIP::Sip::Configuration;
 use C4::SIP::Sip::Checksum qw(checksum verify_cksum);
 use C4::SIP::Sip::MsgType qw( handle login_core );
-use C4::SIP::Sip qw( read_SIP_packet );
 
 use base qw(Net::Server::PreFork);
 
@@ -116,6 +115,7 @@ sub process_request {
     } else {
 		&$transport($self);
     }
+    return;
 }
 
 #
@@ -130,7 +130,7 @@ sub raw_transport {
     while (!$self->{account}) {
     local $SIG{ALRM} = sub { die "raw_transport Timed Out!\n"; };
     syslog("LOG_DEBUG", "raw_transport: timeout is %d", $service->{timeout});
-    $input = read_SIP_packet(*STDIN);
+    $input = read_request();
     if (!$input) {
         # EOF on the socket
         syslog("LOG_INFO", "raw_transport: shutting down: EOF during login");
@@ -146,6 +146,7 @@ sub raw_transport {
 
     $self->sip_protocol_loop();
     syslog("LOG_INFO", "raw_transport: shutting down");
+    return;
 }
 
 sub get_clean_string {
@@ -230,6 +231,7 @@ sub telnet_transport {
     syslog("LOG_DEBUG", "telnet_transport: uname/inst: '%s/%s'", $account->{id}, $account->{institution});
     $self->sip_protocol_loop();
     syslog("LOG_INFO", "telnet_transport: shutting down");
+    return;
 }
 
 #
@@ -242,7 +244,6 @@ sub sip_protocol_loop {
 	my $service = $self->{service};
 	my $config  = $self->{config};
     my $timeout = $self->{service}->{timeout} || $config->{timeout} || 30;
-	my $input;
 
     # The spec says the first message will be:
 	# 	SIP v1: SC_STATUS
@@ -257,39 +258,77 @@ sub sip_protocol_loop {
 	# case, the LOGIN message has already been processed (above).
 	# 
 	# In short, we'll take any valid message here.
-	#my $expect = SC_STATUS;
-    local $SIG{ALRM} = sub { die "SIP Timed Out!\n"; };
-    my $expect = '';
-    while (1) {
-        alarm $timeout;
-        $input = read_SIP_packet(*STDIN);
-        unless ($input) {
-            return;		# EOF
+    eval {
+        local $SIG{ALRM} = sub {
+            syslog( 'LOG_DEBUG', 'Inactive: timed out' );
+            die "Timed Out!\n";
+        };
+        my $previous_alarm = alarm($timeout);
+
+        while ( my $inputbuf = read_request() ) {
+            if ( !defined $inputbuf ) {
+                return;    #EOF
+            }
+            alarm($timeout);
+
+            unless ($inputbuf) {
+                syslog( "LOG_ERR", "sip_protocol_loop: empty input skipped" );
+                print("96$CR");
+                next;
+            }
+
+            my $status = C4::SIP::Sip::MsgType::handle( $inputbuf, $self, q{} );
+            if ( !$status ) {
+                syslog(
+                    "LOG_ERR",
+                    "sip_protocol_loop: failed to handle %s",
+                    substr( $inputbuf, 0, 2 )
+                );
+            }
+            next if $status eq REQUEST_ACS_RESEND;
         }
-		# begin input hacks ...  a cheap stand in for better Telnet layer
-		$input =~ s/^[^A-z0-9]+//s;	# Kill leading bad characters... like Telnet handshakers
-		$input =~ s/[^A-z0-9]+$//s;	# Same on the end, should get DOSsy ^M line-endings too.
-		while (chomp($input)) {warn "Extra line ending on input";}
-		unless ($input) {
-            syslog("LOG_ERR", "sip_protocol_loop: empty input skipped");
-            print("96$CR");
-            next;
-		}
-		# end cheap input hacks
-		my $status = handle($input, $self, $expect);
-		if (!$status) {
-			syslog("LOG_ERR", "sip_protocol_loop: failed to handle %s",substr($input,0,2));
-		}
-		next if $status eq REQUEST_ACS_RESEND;
-		if ($expect && ($status ne $expect)) {
-			# We received a non-"RESEND" that wasn't what we were expecting.
-		    syslog("LOG_ERR", "sip_protocol_loop: expected %s, received %s, exiting", $expect, $input);
-		}
-		# We successfully received and processed what we were expecting
-		$expect = '';
-    alarm 0;
-	}
+        alarm($previous_alarm);
+        return;
+    };
+    if ( $@ =~ m/timed out/i ) {
+        return;
+    }
+    return;
 }
 
+sub read_request {
+      my $raw_length;
+      local $/ = "\015";
+
+    # proper SPEC: (octal) \015 = (hex) x0D = (dec) 13 = (ascii) carriage return
+      my $buffer = <STDIN>;
+      if ( defined $buffer ) {
+          STDIN->flush();    # clear an extra linefeed
+          chomp $buffer;
+          $raw_length = length $buffer;
+          $buffer =~ s/^\s*[^A-z0-9]+//s;
+# Every line must start with a "real" character.  Not whitespace, control chars, etc.
+          $buffer =~ s/[^A-z0-9]+$//s;
+
+# Same for the end.  Note this catches the problem some clients have sending empty fields at the end, like |||
+          $buffer =~ s/\015?\012//g;    # Extra line breaks must die
+          $buffer =~ s/\015?\012//s;    # Extra line breaks must die
+          $buffer =~ s/\015*\012*$//s;
+
+    # treat as one line to include the extra linebreaks we are trying to remove!
+      }
+      else {
+          syslog( 'LOG_DEBUG', 'EOF returned on read' );
+          return;
+      }
+      my $len = length $buffer;
+      if ( $len != $raw_length ) {
+          my $trim = $raw_length - $len;
+          syslog( 'LOG_DEBUG', "read_request trimmed $trim character(s) " );
+      }
+
+      syslog( 'LOG_INFO', "INPUT MSG: '$buffer'" );
+      return $buffer;
+}
 1;
 __END__
