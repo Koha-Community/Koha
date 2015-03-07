@@ -1,0 +1,1 @@
+UPDATE systempreferences SET options = 'metric|us|iso|dmydot', explanation = 'Define global date format (us mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy-mm-dd, DMY separated by dots dd.mm.yyyy)' WHERE variable = 'dateformat'

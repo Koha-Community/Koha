@@ -85,6 +85,16 @@ sub dt_from_string {
             (?<year>\d{4})
         |xms;
     }
+    elsif ( $date_format eq 'dmydot' ) {
+        # dmydot format is "dd.mm.yyyy[ hh:mm:ss]"
+        $regex = qr|
+            (?<day>\d{2})
+            .
+            (?<month>\d{2})
+            .
+            (?<year>\d{4})
+        |xms;
+    }
     elsif ( $date_format eq 'us' ) {
         # us format is "mm/dd/yyyy[ hh:mm:ss]"
         $regex = qr|
@@ -231,6 +241,12 @@ sub output_pref {
           ? $dt->strftime("%d/%m/%Y")
           : $dt->strftime("%d/%m/%Y $time");
     }
+    elsif ( $pref =~ m/^dmydot/ ) {
+        $date = $dateonly
+          ? $dt->strftime("%d.%m.%Y")
+          : $dt->strftime("%d.%m.%Y $time");
+    }
+
     elsif ( $pref =~ m/^us/ ) {
         $date = $dateonly
           ? $dt->strftime("%m/%d/%Y")

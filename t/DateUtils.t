@@ -3,7 +3,9 @@ use DateTime;
 use DateTime::TimeZone;
 
 use C4::Context;
-use Test::More tests => 59;
+
+use Test::More tests => 60;
+
 use Test::MockModule;
 use Test::Warn;
 use Time::HiRes qw/ gettimeofday /;
@@ -195,6 +197,8 @@ $dt = eval { dt_from_string( '31/01/2015', 'us' ); };
 is( ref($dt), '', '31/01/2015 is not a correct date in us format' );
 $dt = dt_from_string( '01/01/2015', 'us' );
 is( ref($dt), 'DateTime', '01/01/2015 is a correct date in us format' );
+$dt = dt_from_string( '01.01.2015', 'dmydot' );
+is( ref($dt), 'DateTime', '01.01.2015 is a correct date in dmydot format' );
 
 
 # default value for hh and mm is 00:00
