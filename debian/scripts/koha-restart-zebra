@@ -95,21 +95,16 @@ EOF
 for name in "$@"
 do
     if is_instance $name ; then
-        if is_enabled $name ; then
+        if ! is_zebra_running $name; then
+            warn "Zebra does not appear to have been running for instance $name."
 
-            if ! is_zebra_running $name; then
-                warn "Zebra does not appear to have been running for instance $name."
-
-                if ! start_zebra_instance $name ; then
-                    warn "Something went wrong starting Zebra for $name."
-                fi
-            else
-                if ! restart_zebra_instance $name; then
-                  warn "Something went wrong restarting Zebra for $name."
-                fi
+            if ! start_zebra_instance $name ; then
+                warn "Something went wrong starting Zebra for $name."
             fi
         else
-            warn "Instance $name disabled. No action taken."
+            if ! restart_zebra_instance $name; then
+              warn "Something went wrong restarting Zebra for $name."
+            fi
         fi
     else
         warn "Unknown instance $name."
