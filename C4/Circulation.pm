@@ -2795,7 +2795,6 @@ sub CanBookBeRenewed {
             }
         }
     }
-
     return ( 0, "on_reserve" ) if $resfound;    # '' when no hold was found
 
     return ( 1, undef ) if $override_limit;
@@ -2806,6 +2805,17 @@ sub CanBookBeRenewed {
 
     return ( 0, "too_many" )
       if $issuingrule->{renewalsallowed} <= $itemissue->{renewals};
+
+    my $overduesblockrenewing = C4::Context->preference('OverduesBlockRenewing');
+    my $restrictionblockrenewing = C4::Context->preference('RestrictionBlockRenewing');
+    my $restricted = Koha::Borrower::Debarments::IsDebarred($borrowernumber);
+    my $hasoverdues = C4::Members::HasOverdues($borrowernumber);
+
+    if ( $restricted and $restrictionblockrenewing ) {
+        return ( 0, 'restriction');
+    } elsif ( ($hasoverdues and $overduesblockrenewing eq 'block') || ($itemissue->{overdue} and $overduesblockrenewing eq 'blockitem') ) {
+        return ( 0, 'overdue');
+    }
 
     if ( $issuingrule->{norenewalbefore} ) {
 

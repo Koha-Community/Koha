@@ -197,6 +197,7 @@ if ($issues){
         if ($renewerror) {
             $issue->{'too_many'}       = 1 if $renewerror eq 'too_many';
             $issue->{'on_reserve'}     = 1 if $renewerror eq 'on_reserve';
+            $issue->{'norenew_overdue'} = 1 if $renewerror eq 'overdue';
             $issue->{'auto_renew'}     = 1 if $renewerror eq 'auto_renew';
             $issue->{'auto_too_soon'}  = 1 if $renewerror eq 'auto_too_soon';
 
@@ -244,6 +245,8 @@ if ($issues){
                 }
     }
 }
+my $overduesblockrenewing = C4::Context->preference('OverduesBlockRenewing');
+$canrenew = 0 if ($overduesblockrenewing ne 'allow' and $overdues_count == $count);
 $template->param( ISSUES       => \@issuedat );
 $template->param( issues_count => $count );
 $template->param( canrenew     => $canrenew );

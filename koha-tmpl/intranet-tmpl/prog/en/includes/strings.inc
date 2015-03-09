@@ -2,6 +2,8 @@
 //<![CDATA[
     var CIRCULATION_RETURNED = _("Checked in");
     var CIRCULATION_NOT_RETURNED = _("Unable to check in");
+    var NOT_RENEWABLE_OVERDUE = _("Not allowed: overdue");
+    var NOT_RENEWABLE_RESTRICTION = _("Not allowed: patron restricted");
     var CIRCULATION_RENEWED_DUE = _("Renewed, due:");
     var CIRCULATION_RENEW_FAILED = _("Renew failed:");
     var NOT_CHECKED_OUT = _("not checked out");

@@ -1,0 +1,1 @@
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OverduesBlockRenewing','allow','If any of a patron checked out documents is late, should renewal be allowed, blocked only on overdue items or blocked on whatever checked out document','allow|blockitem|block','Choice');

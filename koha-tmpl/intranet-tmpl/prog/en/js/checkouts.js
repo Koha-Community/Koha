@@ -106,6 +106,10 @@ $(document).ready(function() {
                         content += TOO_MANY_RENEWALS;
                     } else if ( data.error == "on_reserve" ) {
                         content += ON_RESERVE;
+                    } else if ( data.error == "restriction" ) {
+                        content += NOT_RENEWABLE_RESTRICTION;
+                    } else if ( data.error == "overdue" ) {
+                        content += NOT_RENEWABLE_OVERDUE;
                     } else if ( data.error ) {
                         content += data.error;
                     } else {
@@ -303,6 +307,20 @@ $(document).ready(function() {
                         } else if ( oObj.can_renew_error == "too_many" ) {
                             content += "<span class='renewals-disabled'>"
                                     + NOT_RENEWABLE
+                                    + "</span>";
+
+                            span_style = "display: none";
+                            span_class = "renewals-allowed";
+                        } else if ( oObj.can_renew_error == "restriction" ) {
+                            content += "<span class='renewals-disabled'>"
+                                    + NOT_RENEWABLE_RESTRICTION
+                                    + "</span>";
+
+                            span_style = "display: none";
+                            span_class = "renewals-allowed";
+                        } else if ( oObj.can_renew_error == "overdue" ) {
+                            content += "<span class='renewals-disabled'>"
+                                    + NOT_RENEWABLE_OVERDUE
                                     + "</span>";
 
                             span_style = "display: none";
