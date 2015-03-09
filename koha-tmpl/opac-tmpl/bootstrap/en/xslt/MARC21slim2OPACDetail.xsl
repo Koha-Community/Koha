@@ -795,6 +795,18 @@
         </xsl:for-each>
         </xsl:if>
 
+        <!-- Bug 13385 Added 508 field  -->
+            <xsl:if test="marc:datafield[@tag=508]">
+                <div class="results_summary prod_credits">
+                    <span class="label">Production Credits: </span>
+                    <xsl:for-each select="marc:datafield[@tag=508]">
+                        <xsl:call-template name="subfieldSelectSpan">
+                            <xsl:with-param name="codes">a</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:for-each>
+                </div>
+            </xsl:if>
+
         <!-- 586 -->
         <xsl:if test="marc:datafield[@tag=586]">
             <span class="results_summary awardsnote">
