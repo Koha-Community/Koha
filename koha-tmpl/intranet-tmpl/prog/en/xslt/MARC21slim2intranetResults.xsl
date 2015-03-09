@@ -302,37 +302,29 @@
         <xsl:attribute name="class">title</xsl:attribute>
 
         <xsl:if test="marc:datafield[@tag=245]">
-        <xsl:for-each select="marc:datafield[@tag=245]">
-            <xsl:variable name="title">
-                     <xsl:call-template name="subfieldSelect">
-                        <xsl:with-param name="codes">a</xsl:with-param>
-                    </xsl:call-template>
-                    <xsl:if test="marc:subfield[@code='h']">
-                        <xsl:text> </xsl:text>
-                        <xsl:call-template name="subfieldSelect">
-                            <xsl:with-param name="codes">h</xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:if>
-                    <xsl:if test="marc:subfield[@code='b']">
-                        <xsl:text> </xsl:text>
-                        <xsl:call-template name="subfieldSelect">
-                            <xsl:with-param name="codes">b</xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:if>
-                <xsl:text> </xsl:text>
-                    <xsl:call-template name="subfieldSelect">
-                        <xsl:with-param name="codes">fgknps</xsl:with-param>
-                     </xsl:call-template>
-            </xsl:variable>
-            <xsl:variable name="titleChop">
-                <xsl:call-template name="chopPunctuation">
-                    <xsl:with-param name="chopString">
-                        <xsl:value-of select="$title"/>
-                    </xsl:with-param>
+            <xsl:for-each select="marc:datafield[@tag=245]">
+                <xsl:call-template name="subfieldSelect">
+                    <xsl:with-param name="codes">a</xsl:with-param>
                 </xsl:call-template>
-            </xsl:variable>
-            <xsl:value-of select="$titleChop"/>
-        </xsl:for-each>
+                <xsl:text> </xsl:text>
+                <!-- 13381 add additional subfields-->
+                <xsl:for-each select="marc:subfield[contains('bchknps', @code)]">
+                    <xsl:choose>
+                        <xsl:when test="@code='h'">
+                            <!--  13381 Span class around subfield h so it can be suppressed via css -->
+                            <span class="title_medium"><xsl:apply-templates/> </span>
+                        </xsl:when>
+                        <xsl:when test="@code='c'">
+                            <!--  13381 Span class around subfield c so it can be suppressed via css -->
+                            <span class="title_resp_stmt"><xsl:apply-templates/> </span>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:apply-templates/>
+                            <xsl:text> </xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:for-each>
+            </xsl:for-each>
         </xsl:if>
     </a>
 
