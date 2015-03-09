@@ -312,7 +312,7 @@ if ( $op eq 'delete_confirm' ) {
     if( $basket->{closedate} ) {
         my ($year, $month, $day) = ($basket->{closedate} =~ /(\d+)-(\d+)-(\d+)/);
         ($year, $month, $day) = Add_Delta_Days($year, $month, $day, $bookseller->{deliverytime});
-        $estimateddeliverydate = "$year-$month-$day";
+        $estimateddeliverydate = sprintf( "%04d-%02d-%02d", $year, $month, $day );
     }
 
     # if new basket, pre-fill infos
