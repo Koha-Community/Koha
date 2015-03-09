@@ -27,6 +27,7 @@ use C4::Auth qw(check_cookie_auth);
 use C4::Biblio qw(GetMarcBiblio GetFrameworkCode GetRecordValue );
 use C4::Circulation qw(GetIssuingCharges CanBookBeRenewed GetRenewCount GetSoonestRenewDate);
 use C4::Koha qw(GetAuthorisedValueByCode);
+use C4::Overdues qw(GetFine);
 use C4::Context;
 
 use Koha::DateUtils;
@@ -126,6 +127,7 @@ my @checkouts_today;
 my @checkouts_previous;
 while ( my $c = $sth->fetchrow_hashref() ) {
     my ($charge) = GetIssuingCharges( $c->{itemnumber}, $c->{borrowernumber} );
+    my $fine = GetFine( $c->{itemnumber}, $c->{borrowernumber} );
 
     my ( $can_renew, $can_renew_error ) =
       CanBookBeRenewed( $c->{borrowernumber}, $c->{itemnumber} );
@@ -154,6 +156,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         branchname => $c->{branchname},
         itemcallnumber => $c->{itemcallnumber}   || q{},
         charge         => $charge,
+        fine           => $fine,
         price          => $c->{replacementprice} || q{},
         can_renew      => $can_renew,
         can_renew_error     => $can_renew_error,

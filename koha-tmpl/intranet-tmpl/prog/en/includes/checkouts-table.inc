@@ -19,6 +19,7 @@
                         <th scope="col">Checked out from</th>
                         <th scope="col">Call no</th>
                         <th scope="col">Charge</th>
+                        <th scope="col">Fine</th>
                         <th scope="col">Price</th>
                         <th scope="col">Renew <p class="column-tool"><a href="#" id="CheckAllRenewals">select all</a> | <a href="#" id="UncheckAllRenewals">none</a></p></th>
                         <th scope="col">Check in <p class="column-tool"><a href="#" id="CheckAllCheckins">select all</a> | <a href="#" id="UncheckAllCheckins">none</a></p></th>
