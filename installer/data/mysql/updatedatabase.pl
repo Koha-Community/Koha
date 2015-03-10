@@ -9676,7 +9676,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.19.00.012";
+$DBversion = "3.18.04.001";
 if(CheckVersion($DBversion)) {
     $dbh->do(q{
         ALTER TABLE biblioitems MODIFY COLUMN marcxml longtext
