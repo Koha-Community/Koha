@@ -21,7 +21,7 @@
 [% FOREACH i IN ITEMS %]
  <item>
   <title>[% i.TITLE %], by [% i.AUTHOR %]</title>
-  <link>http://opac.library.org.nz/cgi-bin/koha/opac-searchresults.pl?isbn=[% i.ISBN %]</link>
+  <link>[% OPACBaseURL %]/cgi-bin/koha/opac-searchresults.pl?isbn=[% i.ISBN %]</link>
 
  </item>
 [% END %]

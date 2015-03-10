@@ -41,6 +41,7 @@ my $feed    = Template->new();
 my %channel = getConf("channel");
 my %image   = getConf("image");
 my $vars    = {
+    OPACBaseURL      => C4::Context->preference('OPACBaseURL'),
     CHANNELTITLE     => $channel{'title'},
     CHANNELLINK      => $channel{'link'},
     CHANNELDESC      => $channel{'desc'},

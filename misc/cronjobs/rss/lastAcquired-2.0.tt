@@ -20,12 +20,12 @@
 [% FOREACH i IN ITEMS %]
  <item>
   <title>[% i.TITLE %][% IF i.AUTHOR %] by [% i.AUTHOR %][% END %]</title>
-  <link>http://opac.library.org.nz/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.biblionumber %]</link>
+  <link>[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.biblionumber %]</link>
 <description><![CDATA[[% i.TITLE %][% IF i.AUTHOR %] by [%  i.AUTHOR %][% END %]
 <br>[% IF i.publishercode %][% i.place %] [%  i.publishercode %] [%  publicationyear %]<br>[% END %]
 [% IF i.pages %][% i.pages %][% i.illus %][% i.size %][% END %]
 [% IF i.notes %]<p>[% i.notes %]</p>[% END %]<br>
-<a href="http://opac.library.org.nz/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.biblionumber %]">View Details</a> | <a href="http://opac.library.org.nz/cgi-bin/koha/opac-reserve.pl?biblionumber=[% i.biblionumber %]">Reserve this Item</a>[% IF i.author %] | <a href="http://opac.library.org.nz/cgi-bin/koha/opac-search.pl?marclist=biblio.author&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=[% i.author %]&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search">More by this Author</a>[% END %]
+<a href="[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.biblionumber %]">View Details</a> | <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-reserve.pl?biblionumber=[% i.biblionumber %]">Reserve this Item</a>[% IF i.author %] | <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?marclist=biblio.author&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=[% i.author %]&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search">More by this Author</a>[% END %]
 ]]></description>
  </item>
 [% END %]
