@@ -122,78 +122,58 @@ else {
 
     $req = $dbh->prepare("SELECT DISTINCTROW itemtype,description FROM itemtypes ORDER BY description");
     $req->execute;
-    my @select;
-    my %select;
-    push @select, "";
-    $select{''} = "All item types";
+    my @iselect;
+    my %iselect;
     while ( my ( $value, $desc ) = $req->fetchrow ) {
-        push @select, $value;
-        $select{$value} = $desc;
+        push @iselect, $value;
+        $iselect{$value} = $desc;
     }
-    my $CGIItemTypes = CGI::scrolling_list(
-        -name     => 'Filter',
-        -id       => 'itemtypes',
-        -values   => \@select,
-        -labels   => \%select,
-        -size     => 1,
-        -multiple => 0
-    );
+    my $ItemTypes = {
+        values  => \@iselect,
+        labels  => \%iselect,
+   };
 
     $req = $dbh->prepare("SELECT DISTINCTROW budget_code, budget_name FROM aqbudgets ORDER BY budget_name");
     $req->execute;
-    undef @select;
-    undef %select;
-    push @select, "";
-    $select{''} = "All funds";
+    my @bselect;
+    my %bselect;
 
     while ( my ( $value, $desc ) = $req->fetchrow ) {
-        push @select, $value;
-        $select{$value} = $desc;
+        push @bselect, $value;
+        $bselect{$value} = $desc;
     }
-    my $CGIBudget = CGI::scrolling_list(
-        -name     => 'Filter',
-        -id       => 'budget',
-        -values   => \@select,
-        -labels   => \%select,
-        -size     => 1,
-        -multiple => 0
-    );
+    my $Budgets = {
+        values   => \@bselect,
+        labels   => \%bselect,
+    };
 
     $req =
       $dbh->prepare(
 "SELECT DISTINCTROW sort1 FROM aqorders WHERE sort1 IS NOT NULL ORDER BY sort1"
       );
     $req->execute;
-    undef @select;
-    undef %select;
-    push @select, "";
-    $select{''} = "All";
+    my @s1select;
+    my %s1select;
     my $hassort1;
     while ( my ($value) = $req->fetchrow ) {
         if ($value) {
             $hassort1 = 1;
-            push @select, $value;
-            $select{$value} = $value;
+            push @s1select, $value;
+            $s1select{$value} = $value;
         }
     }
-    my $CGISort1 = CGI::scrolling_list(
-        -name     => 'Filter',
-        -id       => 'sort1',
-        -values   => \@select,
-        -labels   => \%select,
-        -size     => 1,
-        -multiple => 0
-    );
+    my $Sort1 = {
+        values   => \@s1select,
+        labels   => \%s1select,
+    };
 
     $req =
       $dbh->prepare(
 "SELECT DISTINCTROW sort2 FROM aqorders WHERE sort2 IS NOT NULL ORDER BY sort2"
       );
     $req->execute;
-    undef @select;
-    undef %select;
-    push @select, "";
-    $select{''} = "All";
+    my @s2select;
+    my %s2select;
     my $hassort2;
     my $hglghtsort2;
 
@@ -201,26 +181,14 @@ else {
         if ($value) {
             $hassort2    = 1;
             $hglghtsort2 = !($hassort1);
-            push @select, $value;
-            $select{$value} = $value;
+            push @s2select, $value;
+            $s2select{$value} = $value;
         }
     }
-    my $CGISort2 = CGI::scrolling_list(
-        -name     => 'Filter',
-        -id       => 'sort2',
-        -values   => \@select,
-        -labels   => \%select,
-        -size     => 1,
-        -multiple => 0
-    );
-
-    my $CGIextChoice = CGI::scrolling_list(
-        -name     => 'MIME',
-        -id       => 'MIME',
-        -values   => ['CSV'], # FIXME translation
-        -size     => 1,
-        -multiple => 0
-    );
+    my $Sort2 = {
+        values   => \@s2select,
+        labels   => \%s2select,
+    };
 
     my $CGIsepChoice = GetDelimiterChoices;
 
@@ -240,13 +208,12 @@ else {
 
     $template->param(
         booksellers   => $booksellers,
-        CGIItemType   => $CGIItemTypes,
-        CGIBudget     => $CGIBudget,
+        ItemTypes     => $ItemTypes,
+        Budgets       => $Budgets,
         hassort1      => $hassort1,
         hassort2      => $hassort2,
-        CGISort1      => $CGISort1,
-        CGISort2      => $CGISort2,
-        CGIextChoice  => $CGIextChoice,
+        Sort1         => $Sort1,
+        Sort2         => $Sort2,
         CGIsepChoice  => $CGIsepChoice,
         branches      => \@branches,
         ccode_label   => $ccode_label,

@@ -220,14 +220,28 @@
                 <td>Item type</td>
 				<td><input type="radio" name="Line" value="biblioitems.itemtype" /></td>
 				<td><input type="radio" name="Column" value="biblioitems.itemtype" /></td>
-				<td>[% CGIItemType %]</td>
+                <td>
+                    <select name="Filter" size="1" id="itemtypes">
+                        <option value="">All item types</option>
+                        [% FOREACH value IN ItemTypes.values %]
+                        <option value="[% value %]">[% ItemTypes.labels.$value %]</option>
+                        [% END %]
+                    </select>
+                </td>
 			</tr>
 
 			<tr>
 				<td>Fund</td>
 				<td><input type="radio" name="Line" value="aqbudgets.budget_code" /></td>
 				<td><input type="radio" name="Column" value="aqbudgets.budget_code" /></td>
-				<td>[% CGIBudget %]</td>
+                <td>
+                    <select name="Filter" size="1" id="budget">
+                        <option value="">All funds</option>
+                        [% FOREACH value IN Budgets.values %]
+                        <option value="[% value %]">[% Budgets.labels.$value %]</option>
+                        [% END %]
+                    </select>
+                </td>
 			</tr>
 
 			[% IF ( hassort1 ) %]
@@ -235,7 +249,14 @@
 					<td>Sort1</td>
 					<td><input type="radio" name="Line" value="aqorders.sort1" /></td>
 					<td><input type="radio" name="Column" value="aqorders.sort1" /></td>
-					<td>[% CGISort1 %] </td>
+                    <td>
+                        <select name="Filter" size="1" id="sort1">
+                            <option value="">All</option>
+                            [% FOREACH value IN Sort1.values %]
+                            <option value="[% value %]">[% Sort1.labels.$value %]</option>
+                            [% END %]
+                        </select>
+                    </td>
 				</tr>
 			[% END %]
 			[% IF ( hassort2 ) %]
@@ -243,7 +264,14 @@
 					<td>Sort2</td>
 					<td><input type="radio" name="Line" value="aqorders.sort2" /></td>
 					<td><input type="radio" name="Column" value="aqorders.sort2" /></td>
-					<td>[% CGISort2 %] </td>
+                    <td>
+                        <select name="Filter" size="1" id="sort2">
+                            <option value="">All</option>
+                            [% FOREACH value IN Sort2.values %]
+                            <option value="[% value %]">[% Sort2.labels.$value %]</option>
+                            [% END %]
+                        </select>
+                    </td>
 				</tr>
 			[% END %]
 		</tbody>
@@ -281,7 +309,9 @@
             <label for="outputfile">To a file:</label> <input type="radio" name="output" value="file" id="outputfile" />
             <label class="inline" for="basename">Named: </label> <input type="text" name="basename" id="basename" value="Export" />
             <label class="inline" for="MIME">Into an application</label>
-            [% CGIextChoice %]
+            <select name="MIME" id="MIME" size="1">
+                <option value="CSV">CSV</option>
+            </select>
             <select name="sep" id="sep" size="1">
             [% FOREACH value IN CGIsepChoice.values.sort() %]
               [% IF ( value == CGIsepChoice.default ) %]
