@@ -93,6 +93,27 @@ sub search {
     return $results;
 }
 
+=head2 count
+
+    my $count = $searcher->count($query);
+
+This mimics a search request, but just gets the result count instead. That's
+faster than pulling all the data in, ususally.
+
+=cut
+
+sub count {
+    my ($self, $query) = @_;
+
+    my $params = $self->get_elasticsearch_params();
+    $self->store(
+        Catmandu::Store::ElasticSearch->new( %$params, trace_calls => 1, ) );
+#    TODO something like this should work, but doesn't seem to just yet.
+#    my $count = $self->store->bag->count($query);
+    my $count = $self->store->bag->search(%$query)->total;
+    return $count;
+}
+
 =head2 search_compat
 
     my ( $error, $results, $facets ) = $search->search_compat(
@@ -149,9 +170,11 @@ results in a form the same as L<C4::AuthoritiesMarc::SearchAuthorities>.
 sub search_auth_compat {
     my $self = shift;
 
+    # TODO handle paging
     my $database = Koha::Database->new();
     my $schema   = $database->schema();
     my $res      = $self->search(@_);
+    my $bib_searcher = Koha::SearchEngine::Elasticsearch::Search->new({index => 'biblios'});
     my @records;
     $res->each(
         sub {
@@ -163,7 +186,8 @@ sub search_auth_compat {
             # rather than hard-coded conversions.
             # Our results often come through as nested arrays, to fix this
             # requires changes in catmandu.
-            $result{authid} = $record->{ 'Local-Number' }[0][0];
+            my $authid = $record->{ 'Local-Number' }[0][0];
+            $result{authid} = $authid;
 
             # TODO put all this info into the record at index time so we
             # don't have to go and sort it all out now.
@@ -198,11 +222,38 @@ sub search_auth_compat {
             $result{summary} =
               C4::AuthoritiesMarc::BuildSummary( $marc, $result{authid},
                 $authtypecode );
+            $result{used} = $self->count_auth_use($bib_searcher, $authid);
             push @records, \%result;
         }
     );
     return ( \@records, $res->total );
 }
+
+=head2 count_auth_use
+
+    my $count = $auth_searcher->count_auth_use($bib_searcher, $authid);
+
+This runs a search to determine the number of records that reference the
+specified authid. C<$bib_searcher> must be something compatible with
+elasticsearch, as the query is built in this function.
+
+=cut
+
+sub count_auth_use {
+    my ($self, $bib_searcher, $authid) = @_;
+
+    my $query = {
+        query => {
+            filtered => {
+                query  => { match_all => {} },
+                filter => { term      => { an => $authid } }
+            }
+        }
+    };
+    $bib_searcher->count($query);
+}
+
+
 
 =head2 json2marc
 
