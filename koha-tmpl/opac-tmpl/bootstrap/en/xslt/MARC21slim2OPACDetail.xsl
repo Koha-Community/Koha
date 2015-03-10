@@ -513,7 +513,8 @@
                    </xsl:with-param>
                </xsl:call-template>
                 </span>
-                    <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+                <!-- #13386 added separator | -->
+                <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise></xsl:choose>
             </xsl:for-each>
         </span>
        </xsl:if>
