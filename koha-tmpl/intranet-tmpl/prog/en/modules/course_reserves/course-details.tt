@@ -155,7 +155,7 @@
                             <td>[% cr.public_note %]</td>
 
                             [% IF CAN_user_coursereserves_add_reserves %]
-                                <td><a href="add_items.pl?course_id=[% course.course_id %]&amp;barcode=[% cr.item.barcode %]&amp;action=lookup">Edit</a></td>
+                                <td><a href="add_items.pl?course_id=[% course.course_id %]&amp;barcode=[% cr.item.barcode %]&amp;action=lookup&amp;return=[% course.course_id %]">Edit</a></td>
                             [% END %]
 
                             [% IF CAN_user_coursereserves_delete_reserves %]

@@ -35,6 +35,7 @@ my $cgi = new CGI;
 my $action    = $cgi->param('action')    || '';
 my $course_id = $cgi->param('course_id') || '';
 my $barcode   = $cgi->param('barcode')   || '';
+my $return    = $cgi->param('return')    || '';
 
 my $item = GetBiblioFromItemNumber( undef, $barcode );
 
@@ -73,6 +74,7 @@ if ( $action eq 'lookup' ) {
         locations => GetAuthorisedValues('LOC'),
         itypes    => GetItemTypes( style => 'array' ),
         branches  => GetBranchesLoop(),
+        return    => $return,
     );
 
 } elsif ( $action eq 'add' ) {
@@ -90,6 +92,11 @@ if ( $action eq 'lookup' ) {
         staff_note  => $cgi->param('staff_note'),
         public_note => $cgi->param('public_note'),
     );
+
+    if ( $return ) {
+        print $cgi->redirect("/cgi-bin/koha/course_reserves/course-details.pl?course_id=$return");
+        exit;
+    }
 }
 
 output_html_with_http_headers $cgi, $cookie, $template->output;
