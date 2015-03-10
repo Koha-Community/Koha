@@ -67,6 +67,8 @@ if ( $op eq "do_search" ) {
 #    use Data::Dumper;
 #    die Dumper(\@marclist, \@and_or,
 #        \@excluding, \@operator, \@value, $authtypecode, $orderby, $query);
+    # The searchengine API expects pages to start at page 1
+    $startfrom = defined($startfrom) ? $startfrom+1 : undef;
     my ( $results, $total ) =
       $searcher->search_auth_compat( $search_query, $startfrom, $resultsperpage );
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(

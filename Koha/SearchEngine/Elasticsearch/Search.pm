@@ -103,13 +103,14 @@ faster than pulling all the data in, ususally.
 =cut
 
 sub count {
-    my ($self, $query) = @_;
+    my ( $self, $query ) = @_;
 
     my $params = $self->get_elasticsearch_params();
     $self->store(
         Catmandu::Store::ElasticSearch->new( %$params, trace_calls => 1, ) );
-#    TODO something like this should work, but doesn't seem to just yet.
-#    my $count = $self->store->bag->count($query);
+
+    #    TODO something like this should work, but doesn't seem to just yet.
+    #    my $count = $self->store->bag->count($query);
     my $count = $self->store->bag->search(%$query)->total;
     return $count;
 }
