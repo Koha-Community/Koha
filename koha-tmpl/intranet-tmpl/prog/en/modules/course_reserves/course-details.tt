@@ -172,13 +172,13 @@
                             [% END %]
 
                             <td>
-                                [% FOREACH course IN cr.courses %]
-                                    [% UNLESS cr.course_id == course.course_id %]
+                                [% FOREACH c IN cr.courses %]
+                                    [% UNLESS cr.course_id == c.course_id %]
                                         <p>
-                                            <a href="course-details.pl?course_id=[% course.course_id %]">
-                                                [% course.course_name %]
-                                                [% IF course.section %] [% course.section %] [% END %]
-                                                [% IF course.term %] [% AuthorisedValues.GetByCode( 'TERM', course.term ) %] [% END %]
+                                            <a href="course-details.pl?course_id=[% c.course_id %]">
+                                                [% c.course_name %]
+                                                [% IF c.section %] [% c.section %] [% END %]
+                                                [% IF c.term %] [% AuthorisedValues.GetByCode( 'TERM', c.term ) %] [% END %]
                                             </a>
                                         </p>
                                     [% END %]
