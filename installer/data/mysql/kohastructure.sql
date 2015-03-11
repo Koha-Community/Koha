@@ -3093,9 +3093,9 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
 --
 
 DROP TABLE IF EXISTS `aqorder_users`;
-CREATE TABLE aqorder_users (
-    ordernumber int(11) NOT NULL,
-    borrowernumber int(11) NOT NULL,
+CREATE TABLE aqorder_users ( -- Mapping orders to patrons for notification sending
+    ordernumber int(11) NOT NULL, -- the order this patrons receive notifications from (aqorders.ordernumber)
+    borrowernumber int(11) NOT NULL, -- the borrowernumber for the patron receiving notifications for this order (borrowers.borrowernumber)
     PRIMARY KEY (ordernumber, borrowernumber),
     CONSTRAINT aqorder_users_ibfk_1 FOREIGN KEY (ordernumber) REFERENCES aqorders (ordernumber) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT aqorder_users_ibfk_2 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
