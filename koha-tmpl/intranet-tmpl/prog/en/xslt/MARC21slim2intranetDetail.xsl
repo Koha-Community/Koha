@@ -647,6 +647,19 @@
             </div>
         </xsl:if>
 
+        <!-- 586 -->
+        <xsl:if test="marc:datafield[@tag=586]">
+            <span class="results_summary awardsnote">
+                <xsl:if test="marc:datafield[@tag=586]/@ind1=' '">
+                    <span class="label">Awards: </span>
+                </xsl:if>
+                <xsl:for-each select="marc:datafield[@tag=586]">
+                    <xsl:value-of select="marc:subfield[@code='a']"/>
+                    <xsl:if test="position()!=last()"><span class="separator"><xsl:text> | </xsl:text></span></xsl:if>
+                </xsl:for-each>
+            </span>
+        </xsl:if>
+
         <!-- 773 -->
         <xsl:if test="marc:datafield[@tag=773]">
         <xsl:for-each select="marc:datafield[@tag=773]">
