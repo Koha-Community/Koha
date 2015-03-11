@@ -23,6 +23,12 @@ __PACKAGE__->table("search_history");
 
 =head1 ACCESSORS
 
+=head2 id
+
+  data_type: 'integer'
+  is_auto_increment: 1
+  is_nullable: 0
+
 =head2 userid
 
   data_type: 'integer'
@@ -67,6 +73,8 @@ __PACKAGE__->table("search_history");
 =cut
 
 __PACKAGE__->add_columns(
+  "id",
+  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "userid",
   { data_type => "integer", is_nullable => 0 },
   "sessionid",
@@ -93,9 +101,21 @@ __PACKAGE__->add_columns(
   },
 );
 
+=head1 PRIMARY KEY
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-05-05 02:39:48
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8x/CWZQFWoXcKGVs4h4CWQ
+=over 4
+
+=item * L</id>
+
+=back
+
+=cut
+
+__PACKAGE__->set_primary_key("id");
+
+
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-03-11 14:59:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IDEfmaznxc6sCi0r/8ibhg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
