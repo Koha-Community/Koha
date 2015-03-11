@@ -341,6 +341,21 @@ __PACKAGE__->set_primary_key("ordernumber");
 
 =head1 RELATIONS
 
+=head2 aqorder_users
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::AqorderUser>
+
+=cut
+
+__PACKAGE__->has_many(
+  "aqorder_users",
+  "Koha::Schema::Result::AqorderUser",
+  { "foreign.ordernumber" => "self.ordernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 aqorders_items
 
 Type: has_many
@@ -481,9 +496,19 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 borrowernumbers
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-02-05 15:20:11
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MfXZ8f2Md6X+C1fVU8TtOg
+Type: many_to_many
+
+Composing rels: L</aqorder_users> -> borrowernumber
+
+=cut
+
+__PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
+
+
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-03-11 11:50:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BbhBIc0Bvj3Olf/dYzDjnw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

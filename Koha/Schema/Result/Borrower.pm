@@ -678,6 +678,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 aqorder_users
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::AqorderUser>
+
+=cut
+
+__PACKAGE__->has_many(
+  "aqorder_users",
+  "Koha::Schema::Result::AqorderUser",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 borrower_attributes
 
 Type: has_many
@@ -1128,9 +1143,19 @@ Composing rels: L</course_instructors> -> course
 
 __PACKAGE__->many_to_many("courses", "course_instructors", "course");
 
+=head2 ordernumbers
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-12-31 14:08:18
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mOTD/GsDpo3RPjUjTHrLRQ
+Type: many_to_many
+
+Composing rels: L</aqorder_users> -> ordernumber
+
+=cut
+
+__PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
+
+
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-03-11 11:50:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4wVgO/FIFHQV+AxzXc+k8g
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
