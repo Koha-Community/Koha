@@ -1939,7 +1939,7 @@ CREATE TABLE saved_reports (
 
 DROP TABLE IF EXISTS `search_history`;
 CREATE TABLE IF NOT EXISTS `search_history` ( -- patron's opac search history
-  `ìd` int(11) NOT NULL auto_increment, -- search history id
+  `id` int(11) NOT NULL auto_increment, -- search history id
   `userid` int(11) NOT NULL, -- the patron who performed the search (borrowers.borrowernumber)
   `sessionid` varchar(32) NOT NULL, -- a system generated session id
   `query_desc` varchar(255) NOT NULL, -- the search that was performed
@@ -1948,7 +1948,7 @@ CREATE TABLE IF NOT EXISTS `search_history` ( -- patron's opac search history
   `total` int(11) NOT NULL, -- the total of results found
   `time` timestamp NOT NULL default CURRENT_TIMESTAMP, -- the date and time the search was run
   KEY `userid` (`userid`),
-  KEY `sessionid` (`sessionid`)
+  KEY `sessionid` (`sessionid`),
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Opac search history results';
 
