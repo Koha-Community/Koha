@@ -9804,7 +9804,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.19.00.XXX";
+$DBversion = "3.19.00.014";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
         CREATE TABLE aqorder_users (
