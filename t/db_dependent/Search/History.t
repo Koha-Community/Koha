@@ -2,7 +2,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 18;
+use Test::More tests => 19;
+use Test::Warn;
 use URI::Escape;
 use List::Util qw( shuffle );
 
@@ -123,7 +124,9 @@ is( scalar(@$all), 0, 'There are 0 search after deleting all searches for a user
 delete_all( $userid );
 
 add( $userid, $current_sessionid, $previous_sessionid, $total, $query_cgi_b, $query_cgi_a );
-C4::Search::History::delete({});
+warning_like { C4::Search::History::delete({}) }
+          qr/^ERROR: userid or id is required for history deletion/,
+          'Calling delete without userid raises warning';
 $all = C4::Search::History::get({userid => $userid});
 is( scalar(@$all), 9, 'There are still 9 searches after calling delete without userid' );
 delete_all( $userid );
