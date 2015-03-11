@@ -9807,12 +9807,12 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.19.00.XXX";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
-        CREATE TABLE aqorderusers (
+        CREATE TABLE aqorder_users (
             ordernumber int(11) NOT NULL,
             borrowernumber int(11) NOT NULL,
             PRIMARY KEY (ordernumber, borrowernumber),
-            CONSTRAINT aqorderusers_ibfk_1 FOREIGN KEY (ordernumber) REFERENCES aqorders (ordernumber) ON DELETE CASCADE ON UPDATE CASCADE,
-            CONSTRAINT aqorderusers_ibfk_2 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
+            CONSTRAINT aqorder_users_ibfk_1 FOREIGN KEY (ordernumber) REFERENCES aqorders (ordernumber) ON DELETE CASCADE ON UPDATE CASCADE,
+            CONSTRAINT aqorder_users_ibfk_2 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
     |);
 

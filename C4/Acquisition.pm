@@ -2915,7 +2915,7 @@ sub GetOrderUsers {
 
     my $query = q|
         SELECT borrowernumber
-        FROM aqorderusers
+        FROM aqorder_users
         WHERE ordernumber = ?
     |;
     my $dbh = C4::Context->dbh;
@@ -2948,14 +2948,14 @@ sub ModOrderUsers {
 
     my $dbh   = C4::Context->dbh;
     my $query = q|
-        DELETE FROM aqorderusers
+        DELETE FROM aqorder_users
         WHERE ordernumber = ?
     |;
     my $sth = $dbh->prepare($query);
     $sth->execute($ordernumber);
 
     $query = q|
-        INSERT INTO aqorderusers (ordernumber, borrowernumber)
+        INSERT INTO aqorder_users (ordernumber, borrowernumber)
         VALUES (?, ?)
     |;
     $sth = $dbh->prepare($query);
