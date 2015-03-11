@@ -2436,6 +2436,42 @@ sub DeleteMessage {
 
   $quickslip is boolean, to indicate whether we want a quick slip
 
+  IssueSlip populates ISSUESLIP and ISSUEQSLIP, and will make the following expansions:
+
+  Both slips:
+
+      <<branches.*>>
+      <<borrowers.*>>
+
+  ISSUESLIP:
+
+      <checkedout>
+         <<biblio.*>>
+         <<items.*>>
+         <<biblioitems.*>>
+         <<issues.*>>
+      </checkedout>
+
+      <overdue>
+         <<biblio.*>>
+         <<items.*>>
+         <<biblioitems.*>>
+         <<issues.*>>
+      </overdue>
+
+      <news>
+         <<opac_news.*>>
+      </news>
+
+  ISSUEQSLIP:
+
+      <checkedout>
+         <<biblio.*>>
+         <<items.*>>
+         <<biblioitems.*>>
+         <<issues.*>>
+      </checkedout>
+
 =cut
 
 sub IssueSlip {
@@ -2469,9 +2505,10 @@ sub IssueSlip {
         $letter_code = 'ISSUEQSLIP';
         %repeat =  (
             'checkedout' => [ map {
-                'biblio' => $_,
-                'items'  => $_,
-                'issues' => $_,
+                'biblio'       => $_,
+                'items'        => $_,
+                'biblioitems'  => $_,
+                'issues'       => $_,
             }, grep { $_->{'now'} } @issues ],
         );
     }
@@ -2479,15 +2516,17 @@ sub IssueSlip {
         $letter_code = 'ISSUESLIP';
         %repeat =  (
             'checkedout' => [ map {
-                'biblio' => $_,
-                'items'  => $_,
-                'issues' => $_,
+                'biblio'       => $_,
+                'items'        => $_,
+                'biblioitems'  => $_,
+                'issues'       => $_,
             }, grep { !$_->{'overdue'} } @issues ],
 
             'overdue' => [ map {
-                'biblio' => $_,
-                'items'  => $_,
-                'issues' => $_,
+                'biblio'       => $_,
+                'items'        => $_,
+                'biblioitems'  => $_,
+                'issues'       => $_,
             }, grep { $_->{'overdue'} } @issues ],
 
             'news' => [ map {
