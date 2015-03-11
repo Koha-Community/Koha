@@ -85,10 +85,9 @@ sub search {
     }
     $self->store(
         Catmandu::Store::ElasticSearch->new(
-            %$params,
-            trace_calls => 1,
+            %$params, trace_calls => 1,
         )
-    );
+    ) unless $self->store;
     my $results = $self->store->bag->search( %$query, %paging );
     return $results;
 }
@@ -107,11 +106,11 @@ sub count {
 
     my $params = $self->get_elasticsearch_params();
     $self->store(
-        Catmandu::Store::ElasticSearch->new( %$params, trace_calls => 1, ) );
+        Catmandu::Store::ElasticSearch->new( %$params, trace_calls => 1, ) )
+      unless $self->store;
 
-    #    TODO something like this should work, but doesn't seem to just yet.
-    #    my $count = $self->store->bag->count($query);
-    my $count = $self->store->bag->search(%$query)->total;
+    my $searcher = $self->store->bag->searcher(query => $query);
+    my $count = $searcher->count();
     return $count;
 }
 
