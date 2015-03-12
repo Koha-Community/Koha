@@ -32,17 +32,20 @@
                         <ul>
                             [% FOREACH facet IN facets_loo.facets %]
                                 <li>
-                                  [% SET url = "/cgi-bin/koha/opac-search.pl?" _ query_cgi _ limit_cgi %]
+                                  [% SET query_cgi_f = query_cgi | url %]
+                                  [% SET limit_cgi_f = limit_cgi | url %]
+                                  [% SET url = "/cgi-bin/koha/opac-search.pl?" _ query_cgi_f _ limit_cgi_f %]
                                   [% IF ( sort_by ) %]
-                                    [% url = BLOCK %][% url %][% "&amp;sort_by=" _ sort_by |url %][% END %]
+                                    [% SET url = url _ "&amp;sort_by=" _ sort_by |url %]
                                   [% END %]
+                                  [% facet.facet_link_value = BLOCK %][% facet.facet_link_value | uri %][% END %]
                                   [% IF facet.active %]
                                     [% SET url = url _ "&amp;nolimit=" _ facet.type_link_value _ ":" _ facet.facet_link_value %]
                                     <span class="facet-label">[% facet.facet_label_value %]</span>
-                                    [<a href="[% url %]" title="Remove facet [% facet.facet_link_value | html %]">x</a>]
+                                    [<a href="[% url |url%]" title="Remove facet [% facet.facet_link_value | html %]">x</a>]
                                   [% ELSE %]
                                     [% SET url = url _ "&amp;limit=" _ facet.type_link_value _ ":" _ facet.facet_link_value %]
-                                    <span class="facet-label"><a href="[% url %]" title="[% facet.facet_title_value |html %]">[% facet.facet_label_value %]</a></span>
+                                    <span class="facet-label"><a href="[% url |url%]" title="[% facet.facet_title_value |html %]">[% facet.facet_label_value %]</a></span>
                                     [% IF ( displayFacetCount ) %]
                                       <span class="facet-count"> ([% facet.facet_count %])</span>
                                     [% END %]

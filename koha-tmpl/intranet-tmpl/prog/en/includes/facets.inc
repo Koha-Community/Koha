@@ -23,14 +23,17 @@
 <ul>
   [% FOREACH facet IN facets_loo.facets %]
     <li>
-      [% SET url = "/cgi-bin/koha/catalogue/search.pl?" _ query_cgi _ limit_cgi %]
+      [% SET query_cgi_f = query_cgi | html %]
+      [% SET limit_cgi_f = limit_cgi | html %]
+      [% SET url = "/cgi-bin/koha/catalogue/search.pl?" _ query_cgi_f _ limit_cgi_f %]
       [% IF ( sort_by ) %]
-        [% url = BLOCK %][% url %][% "&amp;sort_by=" _ sort_by |url %][% END %]
+        [% SET url = url _ "&amp;sort_by=" _ sort_by %]
       [% END %]
+      [% facet.facet_link_value = BLOCK %][% facet.facet_link_value | uri %][% END %]
       [% IF facet.active %]
         [% SET url = url _ "&amp;nolimit=" _ facet.type_link_value _ ":" _ facet.facet_link_value %]
         <span class="facet-label">[% facet.facet_label_value %]</span>
-        [<a href="[% url %]" title="Remove facet [% facet.facet_link_value | html %]">x</a>]
+        [<a href="[% url |url%]" title="Remove facet [% facet.facet_title_value | html %]">x</a>]
       [% ELSE %]
         [% SET url = url _ "&amp;limit=" _ facet.type_link_value _ ":" _ facet.facet_link_value %]
         <span class="facet-label"><a href="[% url |url%]" title="[% facet.facet_title_value |html %]">[% facet.facet_label_value %]</a></span>
@@ -41,10 +44,7 @@
     </li>
   [% END %]
   [% IF ( facets_loo.expandable ) %]
-      <li class="showmore">
-          <a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi %][% limit_cgi |url %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %][% IF ( offset ) %]
-                  &amp;offset=[% offset |url %][% END %]&amp;expand=[% facets_loo.expand |url %]#[% facets_loo.type_id |url %]">Show more</a>
-      </li>
+    <li class="showmore"><a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi |html %][% limit_cgi |html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url%][% END %][% IF ( offset ) %]&amp;offset=[% offset %][% END %]&amp;expand=[% facets_loo.expand %]#[% facets_loo.type_id %]">Show more</a></li>
   [% END %]
 </ul></li>
 [% END %]
