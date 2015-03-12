@@ -133,13 +133,13 @@ sub get_elasticsearch_settings {
                 analyzer => {
                     analyser_phrase => {
                         tokenizer => 'keyword',
-                        filter    => 'lowercase',
+                        filter    => ['lowercase'],
                     },
                     analyser_standard => {
                         tokenizer => 'standard',
-                        filter    => 'lowercase',
+                        filter    => ['lowercase'],
                     }
-                }
+                },
             }
         }
     };
@@ -166,6 +166,11 @@ sub get_elasticsearch_mappings {
                     include_in_all => "false",
                     type           => "string",
                 },
+                '_all.phrase' => {
+                    search_analyzer => "analyser_phrase",
+                    index_analyzer  => "analyser_phrase",
+                    type            => "string",
+                },
             }
         }
     };
@@ -190,7 +195,8 @@ sub get_elasticsearch_mappings {
                     phrase => {
                         search_analyzer => "analyser_phrase",
                         index_analyzer  => "analyser_phrase",
-                        type            => "string"
+                        type            => "string",
+                        copy_to         => "_all.phrase",
                     },
                 },
             };
