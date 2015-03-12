@@ -292,7 +292,9 @@ foreach my $res (@reserves) {
     if ($show_priority) {
         $res->{'priority'} ||= '';
     }
-    $res->{'suspend_until'} = C4::Dates->new( $res->{'suspend_until'}, "iso")->output("syspref") if ( $res->{'suspend_until'} );
+    if ( $res->{'suspend_until'} ) {
+        $res->{'suspend_until'} = output_pref({ dt => dt_from_string( $res->{'suspend_until'} , 'iso' ), dateonly => 1 });
+    }
 }
 
 # use Data::Dumper;

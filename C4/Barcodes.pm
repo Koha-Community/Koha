@@ -24,7 +24,6 @@ use Carp;
 
 use C4::Context;
 use C4::Debug;
-use C4::Dates;
 use C4::Barcodes::hbyymmincr;
 use C4::Barcodes::annual;
 use C4::Barcodes::incremental;

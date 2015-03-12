@@ -25,7 +25,7 @@ use C4::Reports::Guided;
 use C4::Auth;
 use CGI qw ( -utf8 );
 use C4::Output;
-use C4::Dates;
+use Koha::DateUtils;;
 
 use vars qw($debug);
 
@@ -62,10 +62,10 @@ my $id   = $input->param('id');
 if ( $mode eq 'job_add' ) {
 
     # Retrieving the date according to the dateformat syspref
-    my $c4date = C4::Dates->new($input->param('startdate'));
+    my $c4date = output_pref({ dt => dt_from_string( $input->param('startdate') ), dateformat => 'iso', dateonly => 1 });
 
     # Formatting it for Schedule::At
-    my $startdate = join('', (split /-/, $c4date->output("iso")));
+    my $startdate = join('', (split /-/, $c4date));
 
     my $starttime = $input->param('starttime');
     $starttime =~ s/\://g;

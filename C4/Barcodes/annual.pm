@@ -24,7 +24,8 @@ use Carp;
 
 use C4::Context;
 use C4::Debug;
-use C4::Dates;
+
+use Koha::DateUtils qw( output_pref dt_from_string );
 
 use vars qw($VERSION @ISA);
 use vars qw($debug $cgi_debug);	# from C4::Debug, of course
@@ -44,13 +45,13 @@ sub db_max ($;$) {
 	my ($iso);
 	if (@_) {
 		my $input = shift;
-		$iso = C4::Dates->new($input,'iso')->output('iso'); # try to set the date w/ 2nd arg
+        $iso = output_pref({ dt => dt_from_string( $input, 'iso' ), dateformat => 'iso', dateonly => 1 }); # try to set the date w/ 2nd arg
 		unless ($iso) {
 			warn "Failed to create 'iso' Dates object with input '$input'.  Reverting to today's date.";
-			$iso = C4::Dates->new->output('iso');	# failover back to today
+            $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });	# failover back to today
 		}
 	} else {
-		$iso = C4::Dates->new->output('iso');
+        $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
 	}
 	my $year = substr($iso,0,4);	# YYYY
 	$sth->execute("$year-%");
@@ -61,7 +62,7 @@ sub db_max ($;$) {
 
 sub initial () {
 	my $self = shift;
-	return substr(C4::Dates->new->output('iso'),0,4) .'-'. sprintf('%'."$width.$width".'d', 1);
+    return substr(output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }), 0, 4 ) .'-'. sprintf('%'."$width.$width".'d', 1);
 }
 
 sub parse ($;$) {
@@ -82,7 +83,7 @@ sub width ($;$) {
 sub process_head($$;$$) {	# (self,head,whole,specific)
 	my ($self,$head,$whole,$specific) = @_;
 	$specific and return $head;	# if this is built off an existing barcode, just return the head unchanged.
-	return substr(C4::Dates->new->output('iso'),0,4) . '-';	# else get new YYYY-
+    return substr(output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }), 0, 4 ) . '-';	# else get new YYYY-
 }
 
 sub new_object {

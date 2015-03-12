@@ -25,7 +25,7 @@ use strict;
 use warnings;
 
 use C4::Context;
-use C4::Dates qw(format_date);
+use Koha::DateUtils;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -220,8 +220,8 @@ sub GetLogs {
     my $object   = shift;
     my $info     = shift;
    
-    my $iso_datefrom = C4::Dates->new($datefrom,C4::Context->preference("dateformat"))->output('iso');
-    my $iso_dateto = C4::Dates->new($dateto,C4::Context->preference("dateformat"))->output('iso');
+    my $iso_datefrom = output_pref({ dt => dt_from_string( $datefrom ), dateformat => 'iso', dateonly => 1 });
+    my $iso_dateto = output_pref({ dt => dt_from_string( $dateto ), dateformat => 'iso', dateonly => 1 });
 
     my $dbh = C4::Context->dbh;
     my $query = "

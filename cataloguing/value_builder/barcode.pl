@@ -23,7 +23,7 @@ no warnings 'redefine'; # otherwise loading up multiple plugins fills the log wi
 
 use C4::Context;
 require C4::Barcodes::ValueBuilder;
-require C4::Dates;
+use Koha::DateUtils;
 
 use Algorithm::CheckDigits;
 
@@ -35,7 +35,7 @@ sub plugin_javascript {
     my %args;
 
 	# find today's date
-    ($args{year}, $args{mon}, $args{day}) = split('-', C4::Dates->today('iso'));
+    ($args{year}, $args{mon}, $args{day}) = split('-', output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }));
     ($args{tag},$args{subfield})       =  GetMarcFromKohaField("items.barcode", '');
     ($args{loctag},$args{locsubfield}) =  GetMarcFromKohaField("items.homebranch", '');
 

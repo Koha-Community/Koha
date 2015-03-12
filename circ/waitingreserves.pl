@@ -25,12 +25,11 @@ use C4::Context;
 use C4::Output;
 use C4::Branch; # GetBranchName
 use C4::Auth;
-use C4::Dates qw/format_date/;
 use C4::Circulation;
 use C4::Members;
 use C4::Biblio;
 use C4::Items;
-
+use Koha::DateUtils;
 use Date::Calc qw(
   Today
   Add_Delta_Days
@@ -158,7 +157,7 @@ $template->param(
     reservecount => $reservcount,
     overloop    => \@overloop,
     overcount   => $overcount,
-    show_date   => format_date(C4::Dates->today('iso')),
+    show_date   => output_pref({ dt => dt_from_string, dateonly => 1 }),
     ReservesMaxPickUpDelay => C4::Context->preference('ReservesMaxPickUpDelay')
 );
 

@@ -25,7 +25,6 @@ use CGI qw ( -utf8 );
 use Text::CSV::Encoded;
 use C4::Context;
 use C4::Koha;
-use C4::Dates;
 use C4::Output;
 use C4::Log;
 use C4::Items;

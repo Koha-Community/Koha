@@ -25,13 +25,11 @@ use CGI qw ( -utf8 );
 
 use C4::Context;
 use C4::Output;
-use C4::Dates qw(format_date format_date_in_iso);
 use C4::Debug;
 use C4::Letters;
-use Koha::DateUtils qw( dt_from_string );
+use Koha::DateUtils;
 
 use List::MoreUtils qw(any);
-use C4::Dates qw(format_date_in_iso);
 use base qw(Exporter);
 
 our $VERSION = 3.07.00.049;
@@ -176,16 +174,15 @@ sub SearchSuggestion {
     }
 
     # filter on date fields
-    my $today = C4::Dates->today('iso');
     foreach my $field (qw( suggesteddate manageddate accepteddate )) {
         my $from = $field . "_from";
         my $to   = $field . "_to";
         if ( $suggestion->{$from} || $suggestion->{$to} ) {
             push @query, qq{ AND suggestions.$field BETWEEN ? AND ? };
             push @sql_params,
-              format_date_in_iso( $suggestion->{$from} ) || '0000-00-00';
+              output_pref({ dt => dt_from_string( $suggestion->{$from} ), dateformat => 'iso', dateonly => 1 }) || '0000-00-00';
             push @sql_params,
-              format_date_in_iso( $suggestion->{$to} ) || $today;
+              output_pref({ dt => dt_from_string( $suggestion->{$to} ), dateformat => 'iso', dateonly => 1 }) || output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
         }
     }
 

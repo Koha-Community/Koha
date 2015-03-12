@@ -22,7 +22,6 @@ use Modern::Perl;
 use Carp;
 use C4::Context;
 use C4::Debug;
-use C4::Dates qw(format_date format_date_in_iso);
 use C4::Suggestions;
 use C4::Biblio;
 use C4::Contract;
@@ -1393,7 +1392,7 @@ sub ModReceiveOrder {
     my $order_vendornote = $params->{order_vendornote};
 
     my $dbh = C4::Context->dbh;
-    $datereceived = C4::Dates->output('iso') unless $datereceived;
+    $datereceived = output_pref({ dt=>dt_from_string, dateonly=>1, dateformat=>'iso' }) unless $datereceived;
     my $suggestionid = GetSuggestionFromBiblionumber( $biblionumber );
     if ($suggestionid) {
         ModSuggestion( {suggestionid=>$suggestionid,
@@ -2719,7 +2718,7 @@ sub CloseInvoice {
 
 Reopen an invoice
 
-Equivalent to ModInvoice(invoiceid => $invoiceid, closedate => C4::Dates->new()->output('iso'))
+Equivalent to ModInvoice(invoiceid => $invoiceid, closedate => output_pref({ dt=>dt_from_string, dateonly=>1, otputpref=>'iso' }))
 
 =cut
 

@@ -29,7 +29,6 @@ use C4::Branch;
 use C4::Letters;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 
-use C4::Dates qw/format_date/;
 my $input=new CGI;
 
 

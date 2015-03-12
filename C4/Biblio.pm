@@ -31,7 +31,6 @@ use POSIX qw(strftime);
 use Module::Load::Conditional qw(can_load);
 
 use C4::Koha;
-use C4::Dates qw/format_date/;
 use C4::Log;    # logaction
 use C4::Budgets;
 use C4::ClassSource;

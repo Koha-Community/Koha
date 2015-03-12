@@ -20,7 +20,7 @@ package C4::NewsChannels;
 
 use Modern::Perl;
 use C4::Context;
-use C4::Dates qw(format_date);
+use Koha::DateUtils;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -135,8 +135,8 @@ sub get_opac_new {
     $sth->execute($idnew);
     my $data = $sth->fetchrow_hashref;
     $data->{$data->{'lang'}} = 1 if defined $data->{lang};
-    $data->{expirationdate} = format_date($data->{expirationdate});
-    $data->{timestamp}      = format_date($data->{timestamp});
+    $data->{expirationdate} = output_pref({ dt => dt_from_string( $data->{expirationdate} ), dateonly => 1 });
+    $data->{timestamp}      = output_pref({ dt => dt_from_string( $data->{timestamp} ), dateonly => 1 }) ;
     return $data;
 }
 
@@ -209,7 +209,7 @@ sub GetNewsToDisplay {
     $sth->execute($lang,$branch);
     my @results;
     while ( my $row = $sth->fetchrow_hashref ){
-        $row->{newdate} = format_date($row->{newdate});
+        $row->{newdate} = output_pref({ dt => dt_from_string( $row->{newdate} ), dateonly => 1 });
         push @results, $row;
     }
     return \@results;

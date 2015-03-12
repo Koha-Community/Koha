@@ -25,7 +25,7 @@ use C4::Context;
 use C4::Output;
 use C4::Branch;     # GetBranches
 use C4::Auth;
-use C4::Dates qw/format_date/;
+use Koha::DateUtils;
 use C4::Biblio;
 use C4::Circulation;
 use C4::Members;
@@ -119,7 +119,7 @@ foreach my $br ( keys %$branches ) {
 
 $template->param(
     branchesloop => \@branchesloop,
-    show_date    => format_date(C4::Dates->today('iso')),
+    show_date    => output_pref({ dt => dt_from_string, dateonly => 1 }),
 	TransfersMaxDaysWarning => C4::Context->preference('TransfersMaxDaysWarning'),
 	latetransfers => $latetransfers ? 1 : 0,
 );

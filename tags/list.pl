@@ -24,7 +24,6 @@ use CGI qw ( -utf8 );
 use C4::Auth qw(:DEFAULT check_cookie_auth);
 use C4::Biblio;
 use C4::Context;
-use C4::Dates qw(format_date);
 use C4::Items;
 use C4::Koha;
 use C4::Tags qw(get_tags remove_tag get_tag_rows);

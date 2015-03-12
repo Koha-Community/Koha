@@ -29,7 +29,6 @@ use C4::Branch;
 use C4::Circulation;
 use C4::Members;
 use C4::Biblio;
-use C4::Dates qw/format_date/;
 
 use List::Util qw(shuffle);
 use List::MoreUtils qw(any);

@@ -31,8 +31,6 @@ use C4::Members;
 use C4::Branch qw(GetBranches);
 use List::MoreUtils qw/any uniq/;
 use Koha::DateUtils;
-
-use C4::Dates qw/format_date/;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 
 my $input = CGI->new;
@@ -77,8 +75,7 @@ my $branches = GetBranches();
 
 #   barcode export
 if ( $op eq 'export_barcodes' ) {
-    my $today = C4::Dates->new();
-    $today = $today->output('iso');
+    my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
     my @barcodes =
       map { $_->{barcode} } grep { $_->{returndate} =~ m/^$today/o } @{$issues};
     my $borrowercardnumber =

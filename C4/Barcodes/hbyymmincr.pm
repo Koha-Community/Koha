@@ -24,7 +24,8 @@ use Carp;
 
 use C4::Context;
 use C4::Debug;
-use C4::Dates;
+
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 use vars qw($VERSION @ISA);
 use vars qw($debug $cgi_debug);	# from C4::Debug, of course
@@ -48,16 +49,16 @@ sub db_max {
 	$debug and print STDERR "(hbyymmincr) db_max query: $query\n";
 	my $sth = C4::Context->dbh->prepare($query);
 	my ($iso);
-	if (@_) {
-		my $input = shift;
-		$iso = C4::Dates->new($input,'iso')->output('iso'); # try to set the date w/ 2nd arg
-		unless ($iso) {
-			warn "Failed to create 'iso' Dates object with input '$input'.  Reverting to today's date.";
-			$iso = C4::Dates->new->output('iso');	# failover back to today
-		}
-	} else {
-		$iso = C4::Dates->new->output('iso');
-	}
+        if (@_) {
+                my $input = shift;
+                $iso = output_pref({ dt => dt_from_string( $input, 'iso' ), dateformat => 'iso', dateonly => 1 }); # try to set the date w/ 2nd arg
+                unless ($iso) {
+                        warn "Failed to create 'iso' Dates object with input '$input'.  Reverting to today's date.";
+                        $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });      # failover back to today
+                }
+        } else {
+                $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
+        }
 	my $year = substr($iso,2,2);    # i.e. "08" for 2008
 	my $andtwo = $width+2;
 	$sth->execute("^[a-zA-Z]{1,}" . $year . "[0-9]{$andtwo}");	# the extra two digits are the month.  we don't care what they are, just that they are there.
@@ -74,7 +75,7 @@ sub db_max {
 sub initial {
 	my $self = shift;
 	# FIXME: populated branch?
-	my $iso = C4::Dates->new->output('iso'); 	# like "2008-07-02"
+    my $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }); 	# like "2008-07-02"
 	return $self->branch . substr($iso,2,2) . substr($iso,5,2) . sprintf('%' . "$width.$width" . 'd',1);
 }
 
@@ -104,7 +105,7 @@ sub process_head {	# (self,head,whole,specific)
 	my ($self,$head,$whole,$specific) = @_;
 	$specific and return $head;	# if this is built off an existing barcode, just return the head unchanged.
 	$head =~ s/\d{4}$//;		# else strip the old yymm
-	my $iso = C4::Dates->new->output('iso'); 	# like "2008-07-02"
+    my $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }); 	# like "2008-07-02"
 	return $head . substr($iso,2,2) . substr($iso,5,2);
 }
 

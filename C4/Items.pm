@@ -25,7 +25,7 @@ use Carp;
 use C4::Context;
 use C4::Koha;
 use C4::Biblio;
-use C4::Dates qw/format_date format_date_in_iso/;
+use Koha::DateUtils;
 use MARC::Record;
 use C4::ClassSource;
 use C4::Log;
@@ -648,8 +648,8 @@ C<$itemnum> is the item number
 sub ModDateLastSeen {
     my ($itemnumber) = @_;
     
-    my $today = C4::Dates->new();    
-    ModItem({ itemlost => 0, datelastseen => $today->output("iso") }, undef, $itemnumber);
+    my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
+    ModItem({ itemlost => 0, datelastseen => $today }, undef, $itemnumber);
 }
 
 =head2 DelItem
@@ -2128,7 +2128,7 @@ C<items.withdrawn>
 
 sub _set_defaults_for_add {
     my $item = shift;
-    $item->{dateaccessioned} ||= C4::Dates->new->output('iso');
+    $item->{dateaccessioned} ||= output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
     $item->{$_} ||= 0 for (qw( notforloan damaged itemlost withdrawn));
 }
 
@@ -2162,7 +2162,7 @@ sub _koha_new_item {
             notforloan          = ?,
             damaged             = ?,
             itemlost            = ?,
-            withdrawn            = ?,
+            withdrawn           = ?,
             itemcallnumber      = ?,
             coded_location_qualifier = ?,
             restricted          = ?,
@@ -2171,7 +2171,7 @@ sub _koha_new_item {
             holdingbranch       = ?,
             paidfor             = ?,
             location            = ?,
-            permanent_location            = ?,
+            permanent_location  = ?,
             onloan              = ?,
             issues              = ?,
             renewals            = ?,
@@ -2181,14 +2181,14 @@ sub _koha_new_item {
             ccode               = ?,
             itype               = ?,
             materials           = ?,
-            uri = ?,
+            uri                 = ?,
             enumchron           = ?,
             more_subfields_xml  = ?,
             copynumber          = ?,
             stocknumber         = ?
           ";
     my $sth = $dbh->prepare($query);
-    my $today = C4::Dates->today('iso');
+    my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
    $sth->execute(
             $item->{'biblionumber'},
             $item->{'biblioitemnumber'},

@@ -25,7 +25,6 @@ $VERSION = '0.25';
 
 use C4::Context;
 use C4::Output;
-use C4::Dates;
 
 =head1 NAME
 

@@ -18,15 +18,14 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
+use Koha::DateUtils;
 no warnings 'redefine';
 
 sub plugin_javascript {
 	# my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
 	my $function_name = "dateaccessioned".(int(rand(100000))+1);
 
-    require C4::Dates;
-	my $date = C4::Dates->today('iso');
+    my $date = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
 
 	# find the tag/subfield mapped to items.dateaccessioned
 	my ($tag,$subfield) =  GetMarcFromKohaField("items.dateaccessioned","");
