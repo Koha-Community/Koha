@@ -269,7 +269,10 @@ sub build_authorities_query {
         if ($op eq 'is' || $op eq '=') {
             # look for something that matches completely
             # note, '=' is about numerical vals. May need special handling.
-            push @filter_parts, { term => { $wh => $val }};
+            # _allphrase is a special field that only groups the exact
+            # matches. Also, we lowercase our search because the ES
+            # index lowercases its values.
+            push @filter_parts, { term => { "$wh.phrase" => lc $val }};
         } elsif ($op eq 'exact') {
             # left and right truncation, otherwise an exact phrase
             push @query_parts, { match_phrase => { $wh => $val }};
@@ -283,6 +286,8 @@ sub build_authorities_query {
     # 'should' behaves like 'or', if we want 'and', use 'must'
     my $query_part = { bool => { should => \@query_parts } };
     my $filter_part = { bool => { should => \@filter_parts }};
+    # extract the sort stuff
+    my %sort = ( sort => [ $search->{sort} ] ) if exists $search->{sort};
     my $query;
     if (@filter_parts) {
         $query = { query => { filtered => { filter => $filter_part, query => $query_part }}};
@@ -375,7 +380,7 @@ sub build_authorities_query_compat {
     for ( my $i = 0 ; $i < @$value ; $i++ ) {
         push @searches,
           {
-            where    => $marclist->[$i],
+            where    => $koha_to_index_name{$marclist->[$i]},
             operator => $operator->[$i],
             value    => $value->[$i],
           };
@@ -388,7 +393,7 @@ sub build_authorities_query_compat {
       :                              undef;
     if ($sort_field) {
         my $sort_order = ( $orderby =~ /Asc$/ ) ? 'asc' : 'desc';
-        %sort = ( $orderby => $sort_order, );
+        %sort = ( $sort_field => $sort_order, );
     }
     my %search = (
         searches     => \@searches,

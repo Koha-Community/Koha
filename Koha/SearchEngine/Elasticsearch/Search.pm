@@ -106,7 +106,7 @@ sub count {
 
     my $params = $self->get_elasticsearch_params();
     $self->store(
-        Catmandu::Store::ElasticSearch->new( %$params, trace_calls => 1, ) )
+        Catmandu::Store::ElasticSearch->new( %$params, trace_calls => 0, ) )
       unless $self->store;
 
     my $searcher = $self->store->bag->searcher(query => $query);
