@@ -20,6 +20,9 @@
                 <li class="breadcrumb-item">
                     <a href="/cgi-bin/koha/opac-main.pl">Home</a>
                 </li>
+                <li class="breadcrumb-item">
+                    <a class="previous-page" href="">Catalog search for '[% q | html %]'</a>
+                </li>
                 <li class="breadcrumb-item active">
                     <a href="#" aria-current="page">OverDrive search for '[% q | html %]'</a>
                 </li>
@@ -212,6 +215,11 @@
             $( '#breadcrumbs p' )
                 .append( ' ' )
                 .append( '<span id="overdrive-status"></span>' );
+
+            $(".previous-page").click(function(){
+                parent.history.back();
+                return false;
+            });
 
             $( document ).on( 'click', 'a.od-nav', function() {
                 search( $( this ).data( 'offset' ) );
