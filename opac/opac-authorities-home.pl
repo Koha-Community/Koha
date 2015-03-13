@@ -68,9 +68,9 @@ if ( $op eq "do_search" ) {
 #    die Dumper(\@marclist, \@and_or,
 #        \@excluding, \@operator, \@value, $authtypecode, $orderby, $query);
     # The searchengine API expects pages to start at page 1
-    $startfrom = defined($startfrom) ? $startfrom+1 : undef;
+    $startfrom = $startfrom // 0;
     my ( $results, $total ) =
-      $searcher->search_auth_compat( $search_query, $startfrom, $resultsperpage );
+      $searcher->search_auth_compat( $search_query, $startfrom+1, $resultsperpage );
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "opac-authoritiessearchresultlist.tt",

@@ -279,10 +279,10 @@ warn "Search is " . Dumper $search;
             # left and right truncation, otherwise an exact phrase
             push @query_parts, { match_phrase => { $wh => $val }};
         } elsif ($op eq 'start') {
+            # startswith search
             push @query_parts, { wildcard => { "$wh.phrase" => lc "$val*" }};
         } else {
             # regular wordlist stuff
-            # TODO truncation
             push @query_parts, { match => { $wh => $val }};
         }
     }
