@@ -1168,9 +1168,9 @@
                 <th id="item_datedue" class="date_due">Date due</th>
                 [% IF ( OPACShowBarcode ) %]<th id="item_barcode" class="barcode">Barcode</th>[% END %]
                 [% IF holds_count.defined %]
-                    <th>Item holds</th>
+                    <th id="item_holds">Item holds</th>
                 [% ELSIF show_priority %]
-                    <th>Item hold queue priority</th>
+                    <th id="item_priority">Item hold queue priority</th>
                 [% END %]
                 [% IF ( ShowCourseReservesHeader ) %]<th id="item_coursereserves">Course reserves</th>[% END %]
             </tr>
