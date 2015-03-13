@@ -260,22 +260,26 @@ The search description is a hashref that looks something like:
 sub build_authorities_query {
     my ($self, $search) = @_;
 
+warn "Search is " . Dumper $search;
     # Start by making the query parts
     my @query_parts;
     my @filter_parts;
     foreach my $s ( @{ $search->{searches} } ) {
         my ($wh, $op, $val) = @{ $s }{qw(where operator value)};
-        $wh = '_all' if $wh eq 'any';
+        $wh = '_all' if $wh eq '';
         if ($op eq 'is' || $op eq '=') {
             # look for something that matches completely
             # note, '=' is about numerical vals. May need special handling.
             # _allphrase is a special field that only groups the exact
             # matches. Also, we lowercase our search because the ES
-            # index lowercases its values.
+            # index lowercases its values, and term searches don't get the
+            # search analyzer applied to them.
             push @filter_parts, { term => { "$wh.phrase" => lc $val }};
         } elsif ($op eq 'exact') {
             # left and right truncation, otherwise an exact phrase
             push @query_parts, { match_phrase => { $wh => $val }};
+        } elsif ($op eq 'start') {
+            push @query_parts, { wildcard => { "$wh.phrase" => lc "$val*" }};
         } else {
             # regular wordlist stuff
             # TODO truncation
@@ -294,6 +298,7 @@ sub build_authorities_query {
     } else {
         $query = { query => $query_part };
     }
+    $query = { %$query, %sort };
     return $query;
 }
 
