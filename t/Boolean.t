@@ -1,8 +1,8 @@
 
-use strict;
-use warnings;
+use Modern::Perl;
 
-use Test::More tests => 19;
+use Test::More tests => 22;
+use Test::Warn;
 
 BEGIN { use_ok( 'C4::Boolean', qw( true_p ) ); }
 
@@ -23,6 +23,18 @@ is( true_p('yes'),  '1', 'recognizes \'yes\' as true' );
 is( true_p('y'),    '1', 'recognizes \'y\' as true' );
 is( true_p('YES'),  '1', 'verified case insensitivity' );
 
-is( true_p(undef), undef, 'recognizes undefined as not boolean' );
-is( true_p('foo'), undef, 'recognizes \'foo\' as not boolean' );
-is( true_p([]),    undef, 'recognizes a reference as not a boolean' );
+my $result;
+warning_like { $result = true_p(undef) }
+             qr/^The given value does not seem to be interpretable as a Boolean value/,
+             'Invalid boolean (undef) raises warning';
+is( $result, undef, 'recognizes undefined as not boolean' );
+warning_like { $result = true_p('foo') }
+             qr/^The given value does not seem to be interpretable as a Boolean value/,
+             'Invalid boolean (\'foo\') raises warning';
+is( $result, undef, 'recognizes \'foo\' as not boolean' );
+warning_like { $result = true_p([]) }
+             qr/^The given value does not seem to be interpretable as a Boolean value/,
+             'Invalid boolean (reference) raises warning';
+is( $result, undef, 'recognizes a reference as not a boolean' );
+
+1;
