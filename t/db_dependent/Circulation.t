@@ -23,10 +23,11 @@ use C4::Branch;
 use C4::Items;
 use C4::Members;
 use C4::Reserves;
+use C4::Overdues qw(UpdateFine);
 use Koha::DateUtils;
 use Koha::Database;
 
-use Test::More tests => 59;
+use Test::More tests => 60;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -537,6 +538,41 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     $upcoming_dues = C4::Circulation::GetUpcomingDueIssues();
     is ( scalar ( @$upcoming_dues), 2, "days_in_advance is 7 in GetUpcomingDueIssues if not provided" );
 
+}
+
+{
+    my $barcode  = '1234567890';
+    my $branch   = 'MPL';
+
+    my $biblio = MARC::Record->new();
+    my ($biblionumber, $biblioitemnumber) = AddBiblio($biblio, '');
+
+    #Create third item
+    my ( undef, undef, $itemnumber ) = AddItem(
+        {
+            homebranch       => $branch,
+            holdingbranch    => $branch,
+            barcode          => $barcode
+        },
+        $biblionumber
+    );
+
+    # Create a borrower
+    my %a_borrower_data = (
+        firstname =>  'Kyle',
+        surname => 'Hall',
+        categorycode => 'S',
+        branchcode => $branch,
+    );
+
+    my $borrowernumber = AddMember(%a_borrower_data);
+
+    UpdateFine( $itemnumber, $borrowernumber, 0 );
+
+    my $hr = $dbh->selectrow_hashref(q{SELECT COUNT(*) AS count FROM accountlines WHERE borrowernumber = ? AND itemnumber = ?}, undef, $borrowernumber, $itemnumber );
+    my $count = $hr->{count};
+
+    is ( $count, 0, "Calling UpdateFine on non-existant fine with an amount of 0 does not result in an empty fine" );
 }
 
 $dbh->rollback;
