@@ -106,7 +106,7 @@ sub _format_params {
     }
 
     $format_params{p_cs_precedes}  = $p_cs_precedes  if defined $p_cs_precedes;
-    $format_params{p_sep_by_space} = $p_sep_by_space if defined $p_sep_by_space;
+    $format_params{p_sep_by_space} = ( $int_curr_symbol and defined $p_sep_by_space ) ? $p_sep_by_space : 0;
 
     return \%format_params;
 }
