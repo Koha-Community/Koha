@@ -2,7 +2,7 @@
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Circulation &rsaquo; On-site checkouts</title>
+<title>Koha &rsaquo; Circulation &rsaquo; Pending on-site checkouts</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
@@ -35,13 +35,13 @@ $(document).ready(function(){
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>  &rsaquo; On-site checkouts</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>  &rsaquo; Pending on-site checkouts</div>
 
 <div id="doc3" class="yui-t2">
   <div id="bd">
     <div id="yui-main">
       <div class="yui-b">
-        <h1>Pending on-site checkout list</h1>
+        <h1>Pending on-site checkouts</h1>
         [% IF pending_onsite_checkouts %]
           <table id="pending_onsite_checkout">
             <thead>
