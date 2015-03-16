@@ -625,6 +625,18 @@
             </span>
         </xsl:if>
 
+            <!-- Genre/Form -->
+            <xsl:if test="marc:datafield[@tag=655]">
+                <span class="results_summary genre"><span class="label">Genre/Form: </span>
+                    <xsl:for-each select="marc:datafield[@tag=655]">
+                        <xsl:call-template name="subfieldSelect">
+                            <xsl:with-param name="codes">avxyz</xsl:with-param>
+                        </xsl:call-template>
+                        <xsl:if test="position()!=last()"><span class="separator"> | </span></xsl:if>
+                    </xsl:for-each>
+                </span>
+            </xsl:if>
+
 <!-- DDC classification -->
     <xsl:if test="marc:datafield[@tag=082]">
         <span class="results_summary ddc">
