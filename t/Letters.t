@@ -42,6 +42,8 @@ my $dbh = C4::Context->dbh();
 
 $dbh->{mock_add_resultset} = $mock_letters;
 
+t::lib::Mocks::mock_preference('dateformat', 'metric');
+
 my $letters = C4::Letters::GetLetters();
 
 my ( $ISBN_letter ) = grep {$_->{code} eq 'ISBN'} @$letters;
