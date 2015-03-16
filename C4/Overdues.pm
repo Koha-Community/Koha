@@ -580,29 +580,24 @@ sub UpdateFine {
             #      print "no update needed $data->{'amount'}"
         }
     } else {
-        my $sth4 = $dbh->prepare(
-            "SELECT title FROM biblio LEFT JOIN items ON biblio.biblionumber=items.biblionumber WHERE items.itemnumber=?"
-        );
-        $sth4->execute($itemnum);
-        my $title = $sth4->fetchrow;
+        if ( $amount ) { # Don't add new fines with an amount of 0
+            my $sth4 = $dbh->prepare(
+                "SELECT title FROM biblio LEFT JOIN items ON biblio.biblionumber=items.biblionumber WHERE items.itemnumber=?"
+            );
+            $sth4->execute($itemnum);
+            my $title = $sth4->fetchrow;
 
-#         #   print "not in account";
-#         my $sth3 = $dbh->prepare("Select max(accountno) from accountlines");
-#         $sth3->execute;
-# 
-#         # FIXME - Make $accountno a scalar.
-#         my @accountno = $sth3->fetchrow_array;
-#         $sth3->finish;
-#         $accountno[0]++;
-# begin transaction
-		my $nextaccntno = C4::Accounts::getnextacctno($borrowernumber);
-		my $desc = ($type ? "$type " : '') . "$title $due";	# FIXEDME, avoid whitespace prefix on empty $type
-		my $query = "INSERT INTO accountlines
-		    (borrowernumber,itemnumber,date,amount,description,accounttype,amountoutstanding,lastincrement,accountno)
-			    VALUES (?,?,now(),?,?,'FU',?,?,?)";
-		my $sth2 = $dbh->prepare($query);
-		$debug and print STDERR "UpdateFine query: $query\nw/ args: $borrowernumber, $itemnum, $amount, $desc, $amount, $amount, $nextaccntno\n";
-        $sth2->execute($borrowernumber, $itemnum, $amount, $desc, $amount, $amount, $nextaccntno);
+            my $nextaccntno = C4::Accounts::getnextacctno($borrowernumber);
+
+            my $desc = ( $type ? "$type " : '' ) . "$title $due";    # FIXEDME, avoid whitespace prefix on empty $type
+
+            my $query = "INSERT INTO accountlines
+                         (borrowernumber,itemnumber,date,amount,description,accounttype,amountoutstanding,lastincrement,accountno)
+                         VALUES (?,?,now(),?,?,'FU',?,?,?)";
+            my $sth2 = $dbh->prepare($query);
+            $debug and print STDERR "UpdateFine query: $query\nw/ args: $borrowernumber, $itemnum, $amount, $desc, $amount, $amount, $nextaccntno\n";
+            $sth2->execute( $borrowernumber, $itemnum, $amount, $desc, $amount, $amount, $nextaccntno );
+        }
     }
     # logging action
     &logaction(
