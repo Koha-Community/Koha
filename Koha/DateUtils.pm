@@ -105,7 +105,7 @@ sub dt_from_string {
     }
 
     # Add the faculative time part [hh:mm[:ss]]
-    $regex .= qr|
+    my $time_re .= qr|
             (
                 \s*
                 (?<hour>\d{2})
@@ -117,6 +117,8 @@ sub dt_from_string {
                 )?
             )?
     |xms;
+    $regex .= $time_re;
+    $fallback_re .= $time_re;
 
     my %dt_params;
     if ( $date_string =~ $regex ) {

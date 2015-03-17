@@ -3,7 +3,7 @@ use DateTime;
 use DateTime::TimeZone;
 
 use C4::Context;
-use Test::More tests => 54;
+use Test::More tests => 55;
 use Test::MockModule;
 use Time::HiRes qw/ gettimeofday /;
 use t::lib::Mocks;
@@ -211,3 +211,7 @@ is( output_pref( { dt => $dt } ), '31/01/2015 12:34', 'dt_from_string should mat
 # date before 1900
 $dt = dt_from_string('01/01/1900');
 is( output_pref( { dt => $dt, dateonly => 1 } ), '01/01/1900', 'dt_from_string should manage date < 1900' );
+
+# fallback
+$dt = dt_from_string('2015-01-31 01:02:03');
+is( output_pref( {dt => $dt} ), '31/01/2015 01:02', 'dt_from_string should fallback to sql format' );
