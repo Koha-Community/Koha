@@ -62,6 +62,18 @@ sub waiting_expires_on {
     return $dt;
 }
 
+=head3 is_waiting
+
+Returns true if hold is a waiting hold
+
+=cut
+
+sub is_waiting {
+    my ($self) = @_;
+
+    return $self->found() eq 'W';
+}
+
 =head3 biblio
 
 Returns the related Koha::Biblio object for this hold

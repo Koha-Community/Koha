@@ -23,6 +23,8 @@ use Carp;
 
 use Koha::Database;
 
+use Koha::Branches;
+
 use base qw(Koha::Object);
 
 =head1 NAME
@@ -46,6 +48,31 @@ sub effective_itemtype {
 
     return $self->_result()->effective_itemtype();
 }
+
+=head3 home_branch
+
+=cut
+
+sub home_branch {
+    my ($self) = @_;
+
+    $self->{_home_branch} ||= Koha::Branches->find( $self->homebranch() );
+
+    return $self->{_home_branch};
+}
+
+=head3 holding_branch
+
+=cut
+
+sub holding_branch {
+    my ($self) = @_;
+
+    $self->{_holding_branch} ||= Koha::Branches->find( $self->holdingbranch() );
+
+    return $self->{_holding_branch};
+}
+
 
 =head3 type
 

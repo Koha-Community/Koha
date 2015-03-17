@@ -29,8 +29,8 @@ use C4::Charset;
 use C4::Circulation qw(GetTransfers);
 use C4::Context;
 
-use Koha::Database;
 use Koha::DateUtils;
+use Koha::Holds;
 
 my $input = new CGI;
 
@@ -59,7 +59,7 @@ my $sorting_column    = $sort_columns[ $input->param('iSortCol_0') ]
 binmode STDOUT, ":encoding(UTF-8)";
 print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
 
-my $holds_rs = $schema->resultset('Reserve')->search(
+my $holds_rs = Koha::Holds->search(
     { borrowernumber => $borrowernumber },
     {
         order_by => { "-$sorting_direction" => $sorting_column }
@@ -79,15 +79,15 @@ while ( my $h = $holds_rs->next() ) {
         title          => $h->biblio()->title(),
         author         => $h->biblio()->author(),
         reserve_id     => $h->reserve_id(),
-        branchcode     => $h->branchcode()->branchname(),
+        branchcode     => $h->branch()->branchname(),
         reservedate    => $h->reservedate(),
         expirationdate => $h->expirationdate(),
         suspend        => $h->suspend(),
         suspend_until  => $h->suspend_until(),
         found          => $h->found(),
-        waiting        => $h->found() eq 'W',
-        waiting_at     => $h->branchcode()->branchname(),
-        waiting_here   => $h->branchcode()->branchcode() eq $branch,
+        waiting        => $h->is_waiting(),
+        waiting_at     => $h->branch()->branchname(),
+        waiting_here   => $h->branch()->branchcode() eq $branch,
         priority       => $h->priority(),
         subtitle       => GetRecordValue(
             'subtitle', GetMarcBiblio($biblionumber),
@@ -107,6 +107,11 @@ while ( my $h = $holds_rs->next() ) {
         : q{},
     };
 
+    if ( my $e = $h->waiting_expires_on() ) {
+        $hold->{expirationdate} = $e->ymd();
+        $hold->{expirationdate_formatted} = output_pref( { dt => $e, dateonly => 1 });
+    }
+
     $hold->{transfered}     = 0;
     $hold->{not_transfered} = 0;
 
@@ -124,11 +129,11 @@ while ( my $h = $holds_rs->next() ) {
             $hold->{date_sent} = output_pref( dt_from_string($transferred_when) );
             $hold->{from_branch} = GetBranchName($transferred_from);
         }
-        elsif ( $item->holdingbranch()->branchcode() ne
-            $h->branchcode()->branchcode() )
+        elsif ( $item->holding_branch()->branchcode() ne
+            $h->branch()->branchcode() )
         {
             $hold->{not_transferred}    = 1;
-            $hold->{not_transferred_by} = $h->item()->holdingbranch()->branchname();
+            $hold->{not_transferred_by} = $h->item()->holding_branch()->branchname();
         }
     }
 
