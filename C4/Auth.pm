@@ -30,7 +30,6 @@ use C4::Templates;    # to get the template
 use C4::Languages;
 use C4::Branch;       # GetBranches
 use C4::Search::History;
-use C4::VirtualShelves;
 use Koha::AuthUtils qw(hash_password);
 use POSIX qw/strftime/;
 use List::MoreUtils qw/ any /;
@@ -199,13 +198,16 @@ sub get_template_and_user {
         $template->param( loggedinusernumber => $borrowernumber );
         $template->param( sessionID          => $sessionID );
 
-        my ( $total, $pubshelves, $barshelves ) = C4::VirtualShelves::GetSomeShelfNames( $borrowernumber, 'MASTHEAD' );
-        $template->param(
-            pubshelves     => $total->{pubtotal},
-            pubshelvesloop => $pubshelves,
-            barshelves     => $total->{bartotal},
-            barshelvesloop => $barshelves,
-        );
+        if ( $in->{'type'} eq 'opac' ) {
+            require C4::VirtualShelves;
+            my ( $total, $pubshelves, $barshelves ) = C4::VirtualShelves::GetSomeShelfNames( $borrowernumber, 'MASTHEAD' );
+            $template->param(
+                pubshelves     => $total->{pubtotal},
+                pubshelvesloop => $pubshelves,
+                barshelves     => $total->{bartotal},
+                barshelvesloop => $barshelves,
+            );
+        }
 
         my ($borr) = C4::Members::GetMemberDetails($borrowernumber);
         my @bordat;
@@ -334,11 +336,14 @@ sub get_template_and_user {
 
         $template->param( sessionID => $sessionID );
 
-        my ( $total, $pubshelves ) = C4::VirtualShelves::GetSomeShelfNames( undef, 'MASTHEAD' );
-        $template->param(
-            pubshelves     => $total->{pubtotal},
-            pubshelvesloop => $pubshelves,
-        );
+        if ( $in->{'type'} eq 'opac' ){
+            require C4::VirtualShelves;
+            my ( $total, $pubshelves ) = C4::VirtualShelves::GetSomeShelfNames( undef, 'MASTHEAD' );
+            $template->param(
+                pubshelves     => $total->{pubtotal},
+                pubshelvesloop => $pubshelves,
+            );
+        }
     }
 
     # Anonymous opac search history
@@ -1202,6 +1207,7 @@ sub checkauth {
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
 
     if ( $type eq 'opac' ) {
+        require C4::VirtualShelves;
         my ( $total, $pubshelves ) = C4::VirtualShelves::GetSomeShelfNames( undef, 'MASTHEAD' );
         $template->param(
             pubshelves     => $total->{pubtotal},
