@@ -26,19 +26,19 @@ use String::Random;
 use_ok( 'Koha::Template::Plugin::Koha' );
 ok( my $cache = Koha::Template::Plugin::Koha->new() );
 
-subtest "Koha::Template::Plugin::Koha::Version tests" => sub {
+subtest "Koha::Template::Plugin::Koha::version tests" => sub {
 
     plan tests => 2;
 
-    # Variables for mocking KOHAVERSION
+    # Variables for mocking Koha::version()
     my $major;
     my $minor;
     my $maintenance;
     my $development;
 
-    # Mock C4::Context::KOHAVERSION
-    my $context = new Test::MockModule('C4::Context');
-    $context->mock( 'KOHAVERSION', sub {
+    # Mock Koha::version()
+    my $koha = new Test::MockModule('Koha');
+    $koha->mock( 'Version', sub {
         return "$major.$minor.$maintenance.$development";
     });
 
@@ -49,7 +49,7 @@ subtest "Koha::Template::Plugin::Koha::Version tests" => sub {
     $maintenance = $rnd->randregex('\d\d');
     $development = $rnd->randregex('\d\d\d');
     my $version = "$major.$minor.$maintenance.$development";
-    my $res = Koha::Template::Plugin::Koha::Version( $version );
+    my $res = Koha::Template::Plugin::Koha::version( $version );
     is_deeply( $res, {
         major       => $major,
         release     => $major . "." . $minor,
@@ -64,7 +64,7 @@ subtest "Koha::Template::Plugin::Koha::Version tests" => sub {
     $maintenance = $rnd->randregex('\d\d');
     $development = "000";
     $version = "$major.$minor.$maintenance.$development";
-    $res = Koha::Template::Plugin::Koha::Version( $version );
+    $res = Koha::Template::Plugin::Koha::version( $version );
     is_deeply( $res, {
         major       => $major,
         release     => $major . "." . $minor,

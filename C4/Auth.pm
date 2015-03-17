@@ -30,6 +30,7 @@ use C4::Templates;    # to get the template
 use C4::Languages;
 use C4::Branch;       # GetBranches
 use C4::Search::History;
+use Koha;
 use Koha::AuthUtils qw(hash_password);
 use POSIX qw/strftime/;
 use List::MoreUtils qw/ any /;
@@ -662,7 +663,7 @@ sub _version_check {
     # there is no DB version, it's a fresh install,
     # go to web installer
     # there is a DB version, compare it to the code version
-    my $kohaversion = C4::Context::KOHAVERSION;
+    my $kohaversion = Koha::version();
 
     # remove the 3 last . to have a Perl number
     $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
@@ -1311,7 +1312,7 @@ sub check_api_auth {
         # database has not been installed yet
         return ( "maintenance", undef, undef );
     }
-    my $kohaversion = C4::Context::KOHAVERSION;
+    my $kohaversion = Koha::version();
     $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
     if ( C4::Context->preference('Version') < $kohaversion ) {
 
@@ -1565,7 +1566,7 @@ sub check_cookie_auth {
         # database has not been installed yet
         return ( "maintenance", undef );
     }
-    my $kohaversion = C4::Context::KOHAVERSION;
+    my $kohaversion = Koha::version();
     $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
     if ( C4::Context->preference('Version') < $kohaversion ) {
 

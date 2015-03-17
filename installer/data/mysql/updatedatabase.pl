@@ -39,6 +39,8 @@ use C4::Installer;
 use C4::Dates;
 use Koha::Database;
 
+use Koha;
+
 use MARC::Record;
 use MARC::File::XML ( BinaryEncoding => 'utf8' );
 
@@ -10509,7 +10511,7 @@ sub CheckVersion {
     return 1 if ( $proposed_version =~ m/XXX/ );
 
     if ( C4::Context->preference("Version") < $version_number
-        && $version_number <= TransformToNum( C4::Context->final_linear_version ) )
+        && $version_number <= TransformToNum( $Koha::VERSION ) )
     {
         return 1;
     }

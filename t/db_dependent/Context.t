@@ -20,13 +20,6 @@ BEGIN {
 
 ok($koha = C4::Context->new,  'C4::Context->new');
 ok($dbh = C4::Context->dbh(), 'Getting dbh from C4::Context');
-ok($ret = C4::Context->KOHAVERSION, '  (function)  KOHAVERSION = ' . ($ret||''));
-ok($ret =       $koha->KOHAVERSION, '       $koha->KOHAVERSION = ' . ($ret||''));
-ok(
-    TransformVersionToNum( C4::Context->final_linear_version ) <=
-      TransformVersionToNum( C4::Context->KOHAVERSION ),
-    'Final linear version is less than or equal to kohaversion.pl'
-);
 my @keys = keys %$koha;
 my $width = 0;
 if (ok(@keys)) { 

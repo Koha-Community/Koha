@@ -24,6 +24,7 @@ use Encode qw( encode is_utf8 );
 our $VERSION = 3.07.00.049;
 use C4::Context;
 use C4::Installer::PerlModules;
+use Koha;
 
 =head1 NAME
 
@@ -389,7 +390,7 @@ Koha software version.
 sub set_version_syspref {
     my $self = shift;
 
-    my $kohaversion=C4::Context::KOHAVERSION;
+    my $kohaversion = Koha::version();
     # remove the 3 last . to have a Perl number
     $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
     if (C4::Context->preference('Version')) {

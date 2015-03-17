@@ -23,6 +23,7 @@ use Encode qw( encode );
 use base qw( Template::Plugin );
 
 use C4::Context;
+use Koha;
 
 =pod
 
@@ -46,7 +47,7 @@ sub Preference {
 }
 
 sub Version {
-    my $version_string = C4::Context::KOHAVERSION;
+    my $version_string = Koha::version();
     my ($major,$minor,$maintenance,$development) = split('\.',$version_string);
 
     return {

@@ -14,6 +14,8 @@ use C4::Templates;
 use C4::Languages qw(getAllLanguages getTranslatedLanguages);
 use C4::Installer;
 
+use Koha;
+
 my $query = new CGI;
 my $step  = $query->param('step');
 
@@ -398,7 +400,7 @@ elsif ( $step && $step == 3 ) {
                 $dbversion = "$1.$2.$3.$4";
                 $template->param("upgrading" => 1,
                                 "dbversion" => $dbversion,
-                                "kohaversion" => C4::Context->KOHAVERSION,
+                                "kohaversion" => Koha::version(),
                                 );
             }
         }

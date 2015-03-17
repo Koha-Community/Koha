@@ -20,6 +20,7 @@ package C4::External::OverDrive;
 use strict;
 use warnings;
 
+use Koha;
 use JSON;
 use Koha::Cache;
 use HTTP::Request;
@@ -39,7 +40,7 @@ BEGIN {
 
 sub _request {
     my ( $request ) = @_;
-    my $ua = LWP::UserAgent->new( "Koha " . C4::Context->KOHAVERSION );
+    my $ua = LWP::UserAgent->new( "Koha " . $KOHA::VERSION );
 
     my $response;
     eval {

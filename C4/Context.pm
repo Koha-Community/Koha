@@ -103,6 +103,7 @@ use ZOOM;
 use XML::Simple;
 use C4::Boolean;
 use C4::Debug;
+use Koha;
 use POSIX ();
 use DateTime::TimeZone;
 use Module::Load::Conditional qw(can_load);
@@ -203,36 +204,6 @@ my $INSTALLED_CONFIG_FNAME = '__KOHA_CONF_DIR__/koha-conf.xml';
 $context = undef;        # Initially, no context is set
 @context_stack = ();        # Initially, no saved contexts
 
-
-=head2 KOHAVERSION
-
-returns the kohaversion stored in kohaversion.pl file
-
-=cut
-
-sub KOHAVERSION {
-    my $cgidir = C4::Context->intranetdir;
-
-    # Apparently the GIT code does not run out of a CGI-BIN subdirectory
-    # but distribution code does?  (Stan, 1jan08)
-    if(-d $cgidir . "/cgi-bin"){
-        my $cgidir .= "/cgi-bin";
-    }
-    
-    do $cgidir."/kohaversion.pl" || die "NO $cgidir/kohaversion.pl";
-    return kohaversion();
-}
-
-=head2 final_linear_version
-
-Returns the version number of the final update to run in updatedatabase.pl.
-This number is equal to the version in kohaversion.pl
-
-=cut
-
-sub final_linear_version {
-    return KOHAVERSION;
-}
 
 =head2 read_config_file
 
@@ -1199,7 +1170,7 @@ Gets various version info, for core Koha packages, Currently called from carp ha
 # A little example sub to show more debugging info for CGI::Carp
 sub get_versions {
     my %versions;
-    $versions{kohaVersion}  = KOHAVERSION();
+    $versions{kohaVersion}  = Koha::version();
     $versions{kohaDbVersion} = C4::Context->preference('version');
     $versions{osVersion} = join(" ", POSIX::uname());
     $versions{perlVersion} = $];

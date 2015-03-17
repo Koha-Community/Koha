@@ -42,6 +42,8 @@ use C4::Context;
 use C4::External::OverDrive;
 use C4::Output;
 
+use Koha;
+
 my $query = new CGI;
 
 my $token;
@@ -62,7 +64,7 @@ if ( !IsOverDriveEnabled() || !( $token = GetOverDriveToken() ) ) {
 my $request = HTTP::Request::Common::GET( "https://api.overdrive.com/v1" . $query->path_info . '?' . $query->query_string );
 $request->header( Authorization => $token );
 
-my $ua = LWP::UserAgent->new( "Koha " . C4::Context->KOHAVERSION );
+my $ua = LWP::UserAgent->new( "Koha " . Koha::version() );
 
 my $response = $ua->request( $request ) ;
 if ( $response->code eq '500' ) {

@@ -33,6 +33,8 @@ use C4::Auth;
 use C4::Context;
 use C4::Installer;
 
+use Koha;
+
 #use Smart::Comments '####';
 
 my $query = new CGI;
@@ -47,7 +49,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $kohaVersion   = C4::Context::KOHAVERSION;
+my $kohaVersion   = Koha::version();
 my $osVersion     = `uname -a`;
 my $perl_path = $^X;
 if ($^O ne 'VMS') {
