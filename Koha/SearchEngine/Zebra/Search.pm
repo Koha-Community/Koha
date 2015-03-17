@@ -22,21 +22,9 @@ package Koha::SearchEngine::Zebra::Search;
 #with 'Koha::SearchEngine::SearchRole';
 
 use base qw(Class::Accessor);
-# Removed because it doesn't exist/doesn't work.
-#use Data::SearchEngine::Zebra;
-#use Data::SearchEngine::Query;
-#use Koha::SearchEngine::Zebra;
-#use Data::Dump qw(dump);
 
 use C4::Search; # :(
-
-# Broken without the Data:: stuff
-#has searchengine => (
-#    is => 'rw',
-#    isa => 'Koha::SearchEngine::Zebra',
-#    default => sub { Koha::SearchEngine::Zebra->new },
-#    lazy => 1
-#);
+use C4::AuthoritiesMarc;
 
 sub search {
     my ($self,$query_string) = @_;
@@ -71,6 +59,21 @@ sub search_compat {
     return getRecords(@_);
 }
 
-sub dosmth {'bou' }
+=head search_auth_compat
+
+This passes the search query on to C4::AuthoritiesMarc::SearchAuthorities
+
+=cut
+
+sub search_auth_compat {
+    my ( $self, $q, $startfrom, $resperpage ) = @_;
+
+    my @params = (
+        @{$q}{ marclist, and_or, excluding, operator, value },
+        $startfrom - 1,
+        $resperpage, @{$q}{ authtypecode, orderby }
+    );
+    C4::AuthoritiesMarc::SearchAuthorities(@params);
+}
 
 1;
