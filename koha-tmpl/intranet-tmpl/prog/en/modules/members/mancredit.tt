@@ -45,7 +45,7 @@ $(document).ready(function(){
 	<li><label for="barcode">Barcode: </label><input type="text" name="barcode" id="barcode" /></li>
 	<li><label for="desc">Description: </label><input type="text" name="desc" size="50" id="desc" /></li>
     <li><label for="note">Note: </label><input type="text" name="note" size="50" id="note" /></li>
-	<li><label for="amount">Amount: </label><input type="text" name="amount" id="amount" /> Example: 5.00</li>
+    <li><label for="amount">Amount: </label><input type="number" name="amount" id="amount" required="required" value="0" step="any" min="0" /> Example: 5.00</li>
 </ol></fieldset>
 
 <fieldset class="action"><input type="submit" name="add" value="Add credit" /> <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrowernumber %]">Cancel</a></fieldset>
