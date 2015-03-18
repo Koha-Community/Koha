@@ -130,7 +130,7 @@
             var budget_from = "[% budget_period_description %]";
             var budget_to = $("#to_budget_period_id").find("option:selected").html();
             var alert_message = _("You have chosen to move all unreceived orders from '%s' to '%s'.").format(budget_from, budget_to);
-            alert_message += _("\nThis action cannot be reversed. Do you wish to continue?");
+            alert_message += "\n" + _("This action cannot be reversed. Do you wish to continue?");
             return confirm ( alert_message );
           });
         [% END %]
