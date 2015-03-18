@@ -1,11 +1,12 @@
 [%- USE Branches -%]
+[%- USE Koha -%]
 [%- biblio = item.biblio -%]
 [%- biblioitem = item.biblioitem -%]
 [
   "[% FILTER escape_quotes = replace('"', '\"') ~%]
-    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber %]" title="Go to record detail page">[% biblio.title |html %]</a> by [% biblio.author |html %]
+    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber %]" title="Go to record detail page">[% biblio.title |html %]</a>[% IF ( Koha.Preference( 'marcflavour' ) == 'UNIMARC' && biblio.author ) %] by[% END %] [% biblio.author |html %]
   [%~ END %]",
-  "[% biblioitem.publicationyear |html %]",
+  "[% (biblioitem.publicationyear || biblio.copyrightdate) |html %]",
   "[% biblioitem.publishercode |html %]",
   "[% biblioitem.collectiontitle |html %]",
   "[% FILTER escape_quotes ~%]
