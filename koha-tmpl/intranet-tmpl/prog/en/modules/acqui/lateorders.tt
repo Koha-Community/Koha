@@ -1,10 +1,12 @@
 [% USE KohaDates %]
 [% USE Branches %]
+[% USE ColumnsSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Late orders</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'datatables.inc' %]
+[% INCLUDE 'columns_settings.inc' %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
@@ -23,7 +25,8 @@ function check_uncheck() {
 
 $(document).ready(function() {
 
-    late_orderst = $("#late_orders").dataTable($.extend(true, {}, dataTablesDefaults, {
+    var columns_settings = [% ColumnsSettings.GetColumns( 'acqui', 'lateorders', 'late_orders', 'json' ) %];
+    late_orderst = KohaTable("#late_orders", {
         "aoColumnDefs": [
             { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
             { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
@@ -37,7 +40,7 @@ $(document).ready(function() {
                 $('input:checkbox[name=ordernumber]').bind('click', check_uncheck);
             };
         }
-    } ) );
+    }, columns_settings );
     $('input:checkbox[name=ordernumber]').bind('click', check_uncheck);
     $('#CheckAll').click(function(){ $(late_orderst.fnGetNodes()).find("td").checkCheckboxes();});
     $('#CheckNone').click(function(){ $(late_orderst.fnGetNodes()).find("td").unCheckCheckboxes();});
