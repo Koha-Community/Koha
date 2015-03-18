@@ -2033,7 +2033,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     </z:index>
   </xslo:template>
   <xslo:template mode="index_data_field" match="marc:datafield[@tag='205']">
-    <z:index name="Title:w Title:p">
+    <z:index name="Title:w Title:p Edition:w Edition:p Edition:s">
       <xslo:variable name="raw_heading">
         <xslo:for-each select="marc:subfield">
           <xslo:if test="position() &gt; 1">

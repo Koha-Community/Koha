@@ -1172,6 +1172,7 @@ sub getIndexes{
                     'dtlm',
                     'EAN',
                     'extent',
+                    'Edition',
                     'fic',
                     'fiction',
                     'Form-subdivision',

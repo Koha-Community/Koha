@@ -772,6 +772,7 @@ sub TEST_SETUP {
     $self->add_bib1_field_map('keyword' => 'id-other' => 'biblioserver' => { '1' => '9012' } );
     $self->add_bib1_field_map('keyword' => 'date-entered-on-file' => 'biblioserver' => { '1' => 'date-entered-on-file' } );
     $self->add_bib1_field_map('keyword' => 'extent' => 'biblioserver' => { '1' => 'Extent' } );
+    $self->add_bib1_field_map('keyword' => 'Edition' => 'biblioserver' => { '1' => '1223' } );
     $self->add_bib1_field_map('keyword' => 'llength' => 'biblioserver' => { '1' => 'llength' } );
     $self->add_bib1_field_map('keyword' => 'summary' => 'biblioserver' => { '1' => 'Summary' } );
     $self->add_bib1_field_map('keyword' => 'withdrawn' => 'biblioserver' => { '1' => '8001' } );
