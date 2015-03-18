@@ -1,23 +1,26 @@
 [% USE KohaDates %]
+[% USE ColumnsSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( order_loop ) %]Orders search &rsaquo; Search results[% ELSE %]Order search[% END %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 [% INCLUDE 'datatables.inc' %]
+[% INCLUDE 'columns_settings.inc' %]
 
 <script type="text/javascript" src="[% interface %]/js/autocomplete/patrons.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 var MSG_REMOVE_PATRON = _("Remove");
  $(document).ready(function() {
-    $("#histsearcht").dataTable($.extend(true, {}, dataTablesDefaults, {
+    var columns_settings = [% ColumnsSettings.GetColumns( 'acqui', 'histsearch', 'histsearcht', 'json' ) %];
+    KohaTable("#histsearcht", {
         "aoColumnDefs": [
             { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
             { "sType": "title-string", "aTargets" : [ "title-string" ] }
         ],
         "sPaginationType": "four_button"
-    } ) );
+    }, columns_settings );
 
     [% UNLESS order_loop %]
         patron_autocomplete({
