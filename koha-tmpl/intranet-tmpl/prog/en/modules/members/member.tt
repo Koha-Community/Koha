@@ -1,9 +1,11 @@
 [% USE Koha %]
+[% USE ColumnsSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons [% IF ( searching ) %]&rsaquo; Search results[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
+[% INCLUDE 'columns_settings.inc' %]
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
@@ -130,7 +132,8 @@ $(document).ready(function() {
     });
 
     // Apply DataTables on the results table
-    dtMemberResults = $("#memberresultst").dataTable($.extend(true, {}, dataTablesDefaults, {
+    var columns_settings = [% ColumnsSettings.GetColumns( 'members', 'member', 'memberresultst', 'json' ) %];
+    dtMemberResults = KohaTable("#memberresultst", {
         'bServerSide': true,
         'sAjaxSource': "/cgi-bin/koha/svc/members/search",
         'fnServerData': function(sSource, aoData, fnCallback) {
@@ -215,7 +218,7 @@ $(document).ready(function() {
         'sPaginationType': 'full_numbers',
         "iDisplayLength": [% PatronsPerPage %],
         "bProcessing": true,
-    }));
+    }, columns_settings);
     update_searched();
 });
 
