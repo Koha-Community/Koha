@@ -486,7 +486,7 @@
                                                                 <span class="actions"><a class="tag_add" id="tag_add[% SEARCH_RESULT.biblionumber %]" href="#">Add tag</a></span>
                                                                 <div id="tagform[% SEARCH_RESULT.biblionumber %]" class="tag_results_input" style="display:none;">
                                                                         <label for="newtag[% SEARCH_RESULT.biblionumber %]">New tag(s), separated by a comma:</label>
-                                                                        <input type="text" name="newtag[% SEARCH_RESULT.biblionumber %]" id="newtag[% SEARCH_RESULT.biblionumber %]" maxlength="100" />
+                                                                        <input type="text" name="newtag[% SEARCH_RESULT.biblionumber %]" id="newtag[% SEARCH_RESULT.biblionumber %]" class="newtag" maxlength="100" />
                                                                         <input name="tagbutton" class="btn btn-small tagbutton" title="[% SEARCH_RESULT.biblionumber %]" type="submit" value="Add" />
                                                                         <a class="cancel_tag_add" id="cancel[% SEARCH_RESULT.biblionumber %]" href="#">(done)</a>
                                                                 </div>
@@ -918,6 +918,10 @@ $(document).ready(function(){
             });
         });
 [% END %]
+
+$("input.newtag").on('keydown', function(e){
+    if (e.keyCode == 13) { e.preventDefault(); }
+});
 
 });
 //]]>
