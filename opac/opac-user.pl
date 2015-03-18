@@ -36,6 +36,7 @@ use C4::Letters;
 use C4::Branch; # GetBranches
 use Koha::DateUtils;
 use Koha::Borrower::Debarments qw(IsDebarred);
+use Koha::Holds;
 
 use constant ATTRIBUTE_SHOW_BARCODE => 'SHOW_BCODE';
 
@@ -275,79 +276,14 @@ for my $branch_hash ( sort keys %{$branches} ) {
 $template->param( branchloop => \@branch_loop );
 
 # now the reserved items....
-my @reserves  = GetReservesFromBorrowernumber( $borrowernumber );
-foreach my $res (@reserves) {
+my $reserves = Koha::Holds->search( { borrowernumber => $borrowernumber } );
 
-    if ( $res->{'expirationdate'} eq '0000-00-00' ) {
-      $res->{'expirationdate'} = '';
-    }
-    $res->{'subtitle'} = GetRecordValue('subtitle', GetMarcBiblio($res->{'biblionumber'}), GetFrameworkCode($res->{'biblionumber'}));
-    $res->{'waiting'} = 1 if $res->{'found'} eq 'W';
-    $res->{'branch'} = $branches->{ $res->{'branchcode'} }->{'branchname'};
-    my $biblioData = GetBiblioData($res->{'biblionumber'});
-    $res->{'reserves_title'} = $biblioData->{'title'};
-    $res->{'author'} = $biblioData->{'author'};
-
-    if ($show_priority) {
-        $res->{'priority'} ||= '';
-    }
-    if ( $res->{'suspend_until'} ) {
-        $res->{'suspend_until'} = output_pref({ dt => dt_from_string( $res->{'suspend_until'} , 'iso' ), dateonly => 1 });
-    }
-}
-
-# use Data::Dumper;
-# warn Dumper(@reserves);
-
-$template->param( RESERVES       => \@reserves );
-$template->param( reserves_count => $#reserves+1 );
-$template->param( showpriority=>$show_priority );
-
-my @waiting;
-my $wcount = 0;
-foreach my $res (@reserves) {
-    if ( $res->{'itemnumber'} ) {
-        my $item = GetItem( $res->{'itemnumber'});
-        $res->{'holdingbranch'} =
-          $branches->{ $item->{'holdingbranch'} }->{'branchname'};
-        $res->{'branch'} = $branches->{ $res->{'branchcode'} }->{'branchname'};
-        $res->{'enumchron'} = $item->{'enumchron'} if $item->{'enumchron'};
-        # get document reserve status
-        my $biblioData = GetBiblioData($res->{'biblionumber'});
-        $res->{'waiting_title'} = $biblioData->{'title'};
-        if ( ( $res->{'found'} eq 'W' ) ) {
-            my $item = $res->{'itemnumber'};
-            $item = GetBiblioFromItemNumber($item,undef);
-            $res->{'wait'}= 1;
-            $res->{'holdingbranch'}=$item->{'holdingbranch'};
-            $res->{'biblionumber'}=$item->{'biblionumber'};
-            $res->{'barcode'} = $item->{'barcode'};
-            $res->{'wbrcode'} = $res->{'branchcode'};
-            $res->{'itemnumber'}    = $res->{'itemnumber'};
-            $res->{'wbrname'} = $branches->{$res->{'branchcode'}}->{'branchname'};
-            if($res->{'holdingbranch'} eq $res->{'wbrcode'}){
-                $res->{'atdestination'} = 1;
-            }
-            # set found to 1 if reserve is waiting for patron pickup
-            $res->{'found'} = 1 if $res->{'found'} eq 'W';
-        } else {
-            my ($transfertwhen, $transfertfrom, $transfertto) = GetTransfers( $res->{'itemnumber'} );
-            if ($transfertwhen) {
-                $res->{intransit} = 1;
-                $res->{datesent}   = $transfertwhen;
-                $res->{frombranch} = GetBranchName($transfertfrom);
-            }
-        }
-        push @waiting, $res;
-        $wcount++;
-    }
-    # can be cancelled
-    #$res->{'cancelable'} = 1 if ($res->{'wait'} && $res->{'atdestination'} && $res->{'found'} ne "1");
-    $res->{'cancelable'} = 1 if    ($res->{wait} and not $res->{found}) or (not $res->{wait} and not $res->{intransit});
-
-}
-
-$template->param( WAITING => \@waiting );
+$template->param(
+    RESERVES       => $reserves,
+    reserves_count => $reserves->count(),
+    showpriority   => $show_priority,
+    WAITING        => $reserves->waiting()
+);
 
 # current alert subscriptions
 my $alerts = getalert($borrowernumber);

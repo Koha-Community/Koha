@@ -521,9 +521,9 @@
                                     </thead>
                                     <tbody>
                                     [% FOREACH RESERVE IN RESERVES %]
-                                        [% IF ( RESERVE.wait ) %]
-                                            [% IF ( RESERVE.atdestination ) %]
-                                                [% IF ( RESERVE.found ) %]
+                                        [% IF ( RESERVE.is_waiting ) %]
+                                            [% IF ( RESERVE.is_at_destination ) %]
+                                                [% IF ( RESERVE.is_found ) %]
                                                     <tr class="reserved">
                                                 [% ELSE %]
                                                     <tr>
@@ -536,13 +536,13 @@
                                         [% END %]
                                             <td class="title">
                                                 <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% RESERVE.biblionumber %]">
-                                                    [% RESERVE.reserves_title %]
-                                                    [% FOREACH subtitl IN RESERVE.subtitle %]
+                                                    [% RESERVE.biblio.title %]
+                                                    [% FOREACH subtitl IN RESERVE.biblio.subtitle %]
                                                         [% subtitl.subfield %]
                                                     [% END %]
-                                                    [% RESERVE.enumchron %]
+                                                    [% RESERVE.item.enumchron %]
                                                 </a>
-                                                [% RESERVE.author %]
+                                                [% RESERVE.biblio.author %]
                                             </td>
                                             <td class="reservedate">
                                                 <span title="[% RESERVE.reservedate %]">
@@ -551,19 +551,23 @@
                                                 </span>
                                             </td>
                                             <td class="expirationdate">
-                                                [% IF ( RESERVE.expirationdate ) %]
-                                                    <span>
+                                                [% IF ! RESERVE.found %]
+                                                    [% IF ( RESERVE.expirationdate ) %]
+                                                        <span>
+                                                            <span class="tdlabel">Expiration:</span>
+                                                                [% RESERVE.expirationdate | $KohaDates %]
+                                                        </span>
+                                                    [% ELSE %]
                                                         <span class="tdlabel">Expiration:</span>
-                                                        [% RESERVE.expirationdate | $KohaDates %]
-                                                    </span>
+                                                        Never expires
+                                                    [% END %]
                                                 [% ELSE %]
-                                                    <span class="tdlabel">Expiration:</span>
-                                                    Never expires
+                                                    -
                                                 [% END %]
                                             </td>
                                             <td class="branch">
                                                 <span class="tdlabel">Pick up location:</span>
-                                                [% RESERVE.branch %]
+                                                [% RESERVE.branch.branchname %]
                                             </td>
                                             [% IF ( showpriority ) %]
                                                  <td class="priority">
@@ -573,11 +577,17 @@
                                             [% END %]
                                             <td class="status">
                                                 <span class="tdlabel">Status:</span>
-                                                [% IF ( RESERVE.wait ) %]
-                                                    [% IF ( RESERVE.atdestination ) %]
+                                                [% IF ( RESERVE.is_waiting ) %]
+                                                    [% IF ( RESERVE.is_at_destination ) %]
                                                         [% IF ( RESERVE.found ) %]
-                                                            Item waiting at <b> [% RESERVE.wbrname %]</b>[% IF ( RESERVE.waitingdate ) %] since [% RESERVE.waitingdate | $KohaDates %][% END %]
-                                                            <input type="hidden" name="pickup" value="[% RESERVE.wbrcd %]" />
+                                                            Item waiting at <b> [% RESERVE.branch.branchname %]</b>
+                                                            [% IF ( RESERVE.waitingdate ) %]
+                                                                since [% RESERVE.waitingdate | $KohaDates %]
+                                                                [% IF RESERVE.waiting_expires_on %]
+                                                                    until [% RESERVE.waiting_expires_on | $KohaDates %]
+                                                                [% END %]
+                                                            [% END %]
+                                                            <input type="hidden" name="pickup" value="[% RESERVE.branchcode %]" />
                                                         [% ELSE %]
                                                             Item waiting to be pulled from <b> [% RESERVE.wbrname %]</b>
                                                         [% END %]
@@ -585,7 +595,7 @@
                                                         Item in transit to <b> [% RESERVE.wbrname %]</b> <input type="hidden" name="pickup" value="[% RESERVE.wbrcd %]" />
                                                     [% END %]
                                                 [% ELSE %]
-                                                    [% IF ( RESERVE.intransit ) %]
+                                                    [% IF ( RESERVE.is_in_transit ) %]
                                                         Item in transit from <b> [% RESERVE.frombranch %]</b> since
                                                         [% RESERVE.datesent | $KohaDates %]
                                                     [% ELSIF ( RESERVE.suspend ) %]
@@ -597,7 +607,7 @@
                                             </td>
                                             [% IF SuspendHoldsOpac %]
                                                 <td>
-                                                    [% IF ( RESERVE.cancelable ) %]
+                                                    [% IF ( RESERVE.is_cancelable ) %]
                                                         [% IF RESERVE.suspend %]
                                                             <form class="form-inline" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
                                                                 <input type="hidden" name="reserve_id" value="[% RESERVE.reserve_id %]" />
@@ -638,11 +648,11 @@
                                                                 </form>
                                                             [% END # / IF AutoResumeSuspendedHolds %]
                                                         [% END # / IF RESERVE.suspend %]
-                                                    [% END # / IF ( RESERVE.cancelable )%]
+                                                    [% END # / IF ( RESERVE.is_cancelable )%]
                                                 </td>
                                             [% END # / IF SuspendHoldsOpac %]
                                             <td class="modify">
-                                                [% IF ( RESERVE.cancelable ) %]
+                                                [% IF ( RESERVE.is_cancelable ) %]
                                                     <form action="/cgi-bin/koha/opac-modrequest.pl" method="post">
                                                     <input type="hidden" name="biblionumber" value="[% RESERVE.biblionumber %]" />
                                                     <input type="hidden" name="reserve_id" value="[% RESERVE.reserve_id %]" />

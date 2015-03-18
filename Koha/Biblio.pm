@@ -21,6 +21,8 @@ use Modern::Perl;
 
 use Carp;
 
+use C4::Biblio qw( GetRecordValue GetMarcBiblio GetFrameworkCode );
+
 use Koha::Database;
 
 use base qw(Koha::Object);
@@ -34,6 +36,17 @@ Koha::Biblio - Koha Biblio Object class
 =head2 Class Methods
 
 =cut
+
+=head3 subtitle
+
+=cut
+
+sub subtitle {
+    my ( $self ) = @_;
+
+    return GetRecordValue( 'subtitle', GetMarcBiblio( $self->id() ), GetFrameworkCode( $self->id() ) );
+}
+
 
 =head3 type
 

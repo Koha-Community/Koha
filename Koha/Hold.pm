@@ -105,6 +105,31 @@ sub is_in_transit {
     return $self->found() eq 'T';
 }
 
+=head3 is_cancelable
+
+Returns true if hold is a cancelable hold
+
+=cut
+
+sub is_cancelable {
+    my ($self) = @_;
+
+    return ( $self->is_waiting() && !$self->is_found() )
+      || ( !$self->is_waiting() && !$self->is_in_transit() );
+}
+
+=head3 is_at_destination
+
+Returns true if hold is a in_transit hold
+
+=cut
+
+sub is_at_destination {
+    my ($self) = @_;
+
+    return $self->is_waiting() && ( $self->branchcode() eq $self->item()->holdingbranch() );
+}
+
 =head3 biblio
 
 Returns the related Koha::Biblio object for this hold
