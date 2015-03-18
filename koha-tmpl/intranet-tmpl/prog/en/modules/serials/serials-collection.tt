@@ -290,7 +290,7 @@ $(document).ready(function() {
                 </td>
                 [% IF ( routing ) %]
                 <td>
-                    <a href="" onclick="print_slip([% serial.subscriptionid |html %], '[% serial.serialseq |html %] ([% serial.publisheddate %])'); return false" >Print list</a>
+                    <a href="" onclick="print_slip([% serial.subscriptionid |html %], '[% serial.serialseq |html %] ([% serial.publisheddate | $KohaDates %])'); return false" >Print list</a>
                 </td>
                 [% END %]
             </tr>
