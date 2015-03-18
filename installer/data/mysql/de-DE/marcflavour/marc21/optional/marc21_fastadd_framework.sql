@@ -45,7 +45,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('100', '6', 'Verknüpfung', 'Verknüpfung', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
 		('100', '8', 'Feldverknüpfung und Reihenfolge', 'Feldverknüpfung und Reihenfolge', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
 		('100', '9', 'Koha-Normdatenidentnummer', 'Koha-Normdatenidentnummer', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('100', 'c', 'Titel und andere Wörter in Verbindung mit einem Namen', 'Titel und andere Wörter in Verbindung mit einem Namen', 0, 0, 'biblio.author', 0, '', 'PERSO_NAME', '', 0, 0, 'FA', NULL, '', ''),
+        ('100', 'a', 'Persönlicher Name','Persönlicher Name',0,0,'biblio.author',0,'','PERSO_NAME','',0,0,'FA',NULL,'',''),
 		('100', 'b', 'Zählung', 'Zählung', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
 		('100', 'c', 'Titel und andere Wörter in Verbindung mit einem Namen', 'Titel und andere Wörter in Verbindung mit einem Namen', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
 		('100', 'd', 'Datumsangaben in Verbindung mit einem Namen', 'Datumsangaben in Verbindung mit einem Namen', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),

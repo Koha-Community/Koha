@@ -45,7 +45,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('100', '6', 'Enlace', 'Enlace', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
 		('100', '8', 'Enlace entre campo y número de secuencia', 'Enlace entre campo y número de secuencia', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
 		('100', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('100', 'c', 'Títulos y otros términos asociados al nombre', 'Títulos y otros términos asociados al nombre', 0, 0, 'biblio.author', 0, '', 'PERSO_NAME', '', 0, 0, 'FA', NULL, '', ''),
+        ('100', 'a', 'Personal name', 'Personal name', 0, 0, 'biblio.author', 0, '', 'PERSO_NAME', '', 0, 0, 'FA', NULL, '', ''),
 		('100', 'b', 'Numeración', 'Numeración', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
 		('100', 'c', 'Títulos y otros términos asociados al nombre', 'Títulos y otros términos asociados al nombre', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
 		('100', 'd', 'Fechas asociadas al nombre', 'Fechas asociadas al nombre', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
