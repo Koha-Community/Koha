@@ -45,6 +45,7 @@ use C4::Members;
 use C4::Search;		# enabled_staff_search_views
 use Koha::DateUtils;
 use Koha::Borrower::Debarments qw(IsDebarred);
+use Koha::Holds;
 
 my $dbh = C4::Context->dbh;
 my $sth;
@@ -486,85 +487,90 @@ foreach my $biblionumber (@biblionumbers) {
 
     # existingreserves building
     my @reserveloop;
-    $reserves = GetReservesFromBiblionumber({ biblionumber => $biblionumber, all_dates => 1 });
-    foreach my $res ( sort {
-            my $a_found = $a->{found} || '';
-            my $b_found = $a->{found} || '';
+    my @reserves = Koha::Holds->search( { biblionumber => $biblionumber }, { order_by => 'priority' } );
+    foreach my $res (
+        sort {
+            my $a_found = $a->found() || '';
+            my $b_found = $a->found() || '';
             $a_found cmp $b_found;
-        } @$reserves ) {
+        } @reserves
+      )
+    {
         my %reserve;
         my @optionloop;
         for ( my $i = 1 ; $i <= $totalcount ; $i++ ) {
             push(
-                 @optionloop,
-                 {
-                  num      => $i,
-                  selected => ( $i == $res->{priority} ),
-                 }
-                );
+                @optionloop,
+                {
+                    num      => $i,
+                    selected => ( $i == $res->priority() ),
+                }
+            );
         }
 
-        if ( defined $res->{'found'} && ($res->{'found'} eq 'W' || $res->{'found'} eq 'T' )) {
-            my $item = $res->{'itemnumber'};
-            $item = GetBiblioFromItemNumber($item,undef);
-            $reserve{'wait'}= 1;
-            $reserve{'holdingbranch'}=$item->{'holdingbranch'};
-            $reserve{'biblionumber'}=$item->{'biblionumber'};
-            $reserve{'barcodenumber'}   = $item->{'barcode'};
-            $reserve{'wbrcode'} = $res->{'branchcode'};
-            $reserve{'itemnumber'}  = $res->{'itemnumber'};
-            $reserve{'wbrname'} = $branches->{$res->{'branchcode'}}->{'branchname'};
-            if($reserve{'holdingbranch'} eq $reserve{'wbrcode'}){
+        if ( $res->is_found() ) {
+            $reserve{'wait'}          = 1;
+            $reserve{'holdingbranch'} = $res->item()->holdingbranch();
+            $reserve{'biblionumber'}  = $res->item()->biblionumber();
+            $reserve{'barcodenumber'} = $res->item()->barcode();
+            $reserve{'wbrcode'}       = $res->branchcode();
+            $reserve{'itemnumber'}    = $res->itemnumber();
+            $reserve{'wbrname'}       = $res->branch()->branchname();
+
+            if ( $reserve{'holdingbranch'} eq $reserve{'wbrcode'} ) {
+
                 # Just because the holdingbranch matches the reserve branch doesn't mean the item
                 # has arrived at the destination, check for an open transfer for the item as well
-                my ( $transfertwhen, $transfertfrom, $transferto ) = C4::Circulation::GetTransfers( $res->{itemnumber} );
-                if ( not $transferto or $transferto ne $res->{branchcode} ) {
+                my ( $transfertwhen, $transfertfrom, $transferto ) =
+                  C4::Circulation::GetTransfers( $res->itemnumber() );
+                if ( not $transferto or $transferto ne $res->branchcode() ) {
                     $reserve{'atdestination'} = 1;
                 }
             }
+
             # set found to 1 if reserve is waiting for patron pickup
-            $reserve{'found'} = 1 if $res->{'found'} eq 'W';
-            $reserve{'intransit'} = 1 if $res->{'found'} eq 'T';
-        } elsif ($res->{priority} > 0) {
-            if (defined($res->{itemnumber})) {
-                my $item = GetItem($res->{itemnumber});
-                $reserve{'itemnumber'}  = $res->{'itemnumber'};
-                $reserve{'barcodenumber'}   = $item->{'barcode'};
+            $reserve{'found'}     = $res->is_found();
+            $reserve{'intransit'} = $res->is_in_transit();
+        }
+        elsif ( $res->priority() > 0 ) {
+            if ( my $item = $res->item() )  {
+                $reserve{'itemnumber'}      = $item->id();
+                $reserve{'barcodenumber'}   = $item->barcode();
                 $reserve{'item_level_hold'} = 1;
             }
         }
 
         #     get borrowers reserve info
-        my $reserveborrowerinfo = GetMember( borrowernumber => $res->{'borrowernumber'} );
-        if (C4::Context->preference('HidePatronName')){
-	    $reserve{'hidename'} = 1;
-	    $reserve{'cardnumber'} = $reserveborrowerinfo->{'cardnumber'};
-	}
-        $reserve{'expirationdate'} = output_pref({ dt => dt_from_string( $res->{'expirationdate'} ), dateonly => 1 })
-            unless ( !defined($res->{'expirationdate'}) || $res->{'expirationdate'} eq '0000-00-00' );
-        $reserve{'date'}           = output_pref({ dt => dt_from_string( $res->{'reservedate'} ), dateonly => 1 });
-        $reserve{'borrowernumber'} = $res->{'borrowernumber'};
-        $reserve{'biblionumber'}   = $res->{'biblionumber'};
-        $reserve{'borrowernumber'} = $res->{'borrowernumber'};
-        $reserve{'firstname'}      = $reserveborrowerinfo->{'firstname'};
-        $reserve{'surname'}        = $reserveborrowerinfo->{'surname'};
-        $reserve{'notes'}          = $res->{'reservenotes'};
-        $reserve{'wait'}           =
-          ( ( defined $res->{'found'} and $res->{'found'} eq 'W' ) or ( $res->{'priority'} eq '0' ) );
-        $reserve{'voldesc'}         = $res->{'volumeddesc'};
-        $reserve{'ccode'}           = $res->{'ccode'};
-        $reserve{'barcode'}         = $res->{'barcode'};
-        $reserve{'priority'}    = $res->{'priority'};
-        $reserve{'lowestPriority'}    = $res->{'lowestPriority'};
-        $reserve{'optionloop'} = \@optionloop;
-        $reserve{'suspend'} = $res->{'suspend'};
-        $reserve{'suspend_until'} = $res->{'suspend_until'};
-        $reserve{'reserve_id'} = $res->{'reserve_id'};
+        if ( C4::Context->preference('HidePatronName') ) {
+            $reserve{'hidename'}   = 1;
+            $reserve{'cardnumber'} = $res->borrower()->cardnumber();
+        }
+        $reserve{'expirationdate'} = output_pref( { dt => dt_from_string( $res->expirationdate ), dateonly => 1 } )
+          unless ( !defined( $res->expirationdate ) || $res->expirationdate eq '0000-00-00' );
+        $reserve{'date'}           = output_pref( { dt => dt_from_string( $res->reservedate ), dateonly => 1 } );
+        $reserve{'borrowernumber'} = $res->borrowernumber();
+        $reserve{'biblionumber'}   = $res->biblionumber();
+        $reserve{'borrowernumber'} = $res->borrowernumber();
+        $reserve{'firstname'}      = $res->borrower()->firstname();
+        $reserve{'surname'}        = $res->borrower()->surname();
+        $reserve{'notes'}          = $res->reservenotes();
+        $reserve{'wait'}           = $res->is_waiting();
+        $reserve{'waiting_date'}   = $res->waitingdate();
+        $reserve{'waiting_until'}  = $res->is_waiting() ? $res->waiting_expires_on() : undef;
+        $reserve{'ccode'}          = $res->item() ? $res->item()->ccode() : undef;
+        $reserve{'barcode'}        = $res->item() ? $res->item()->barcode() : undef;
+        $reserve{'priority'}       = $res->priority();
+        $reserve{'lowestPriority'} = $res->lowestPriority();
+        $reserve{'optionloop'}     = \@optionloop;
+        $reserve{'suspend'}        = $res->suspend();
+        $reserve{'suspend_until'}  = $res->suspend_until();
+        $reserve{'reserve_id'}     = $res->reserve_id();
 
         if ( C4::Context->preference('IndependentBranches') && $flags->{'superlibrarian'} != 1 ) {
-              $reserve{'branchloop'} = [ GetBranchDetail($res->{'branchcode'}) ];
-        } else {
-              $reserve{'branchloop'} = GetBranchesLoop($res->{'branchcode'});
+            $reserve{'branchloop'} = [ GetBranchDetail( $res->branchcode() ) ];
+        }
+        else {
+            $reserve{'branchloop'} = GetBranchesLoop( $res->branchcode() );
         }
 
         push( @reserveloop, \%reserve );

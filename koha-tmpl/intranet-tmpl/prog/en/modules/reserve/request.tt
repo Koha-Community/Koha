@@ -742,12 +742,18 @@ function checkMultiHold() {
         </td>
         <td>[% reserveloo.notes %]</td>
         <td>[% reserveloo.date %]</td>
-	<td>[% reserveloo.expirationdate %]</td>
+        <td>
+            [% IF reserveloo.waiting_until %]
+                [% reserveloo.waiting_until | $KohaDates %]
+            [% ELSE %]
+                [% reserveloo.expirationdate %]
+            [% END %]
+        </td>
         <td>
     [% IF ( reserveloo.wait ) %]
     	[% IF ( reserveloo.atdestination ) %]
             [% IF ( reserveloo.found ) %]
-                Item waiting at <b> [% reserveloo.wbrname %]</b> <input type="hidden" name="pickup" value="[% reserveloo.wbrcode %]" />
+                Item waiting at <b> [% reserveloo.wbrname %]</b> <input type="hidden" name="pickup" value="[% reserveloo.wbrcode %]" /> since [% reserveloo.waiting_date | $KohaDates %]
             [% ELSE %]
                 Waiting to be pulled <input type="hidden" name="pickup" value="[% reserveloo.wbrcode %]" />
             [% END %]
