@@ -7,6 +7,7 @@ use diagnostics;
 use C4::InstallAuth;
 use CGI qw ( -utf8 );
 use POSIX qw(strftime);
+use File::Temp qw( tempdir );
 
 use C4::Context;
 use C4::Output;
@@ -322,6 +323,9 @@ elsif ( $step && $step == 3 ) {
 
         my $now = POSIX::strftime( "%Y-%m-%dT%H:%M:%S", localtime() );
         my $logdir = C4::Context->config('logdir');
+        unless ( -w $logdir ) {
+            $logdir = tempdir;
+        }
         my ( $logfilepath, $logfilepath_errors ) = ( $logdir . "/updatedatabase_$now.log", $logdir . "/updatedatabase-error_$now.log" );
 
         my $cmd = C4::Context->config("intranetdir") . "/installer/data/$info{dbms}/updatedatabase.pl > $logfilepath 2> $logfilepath_errors";
