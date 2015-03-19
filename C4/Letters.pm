@@ -429,9 +429,14 @@ sub SendAlerts {
                     from    => $branchdetails->{'branchemail'},
                     replyto => $branchdetails->{'branchreplyto'},
                     sender  => $branchdetails->{'branchreturnpath'},
-                    subject => Encode::encode( "utf8", "" . $letter->{title} ),
-                    message => $letter->{'is_html'} ? _wrap_html( Encode::encode( "utf8", $letter->{'content'} ), Encode::encode( "utf8", "" . $letter->{'title'}  ) ) : Encode::encode( "utf8", "" . $letter->{'content'} ),
-                    contenttype => $letter->{'is_html'} ? 'text/html; charset="utf-8"' : 'text/plain; charset="utf-8"',
+                    subject => Encode::encode( "UTF-8", "" . $letter->{title} ),
+                    message => $letter->{'is_html'}
+                                ? _wrap_html( Encode::encode( "UTF-8", $letter->{'content'} ),
+                                              Encode::encode( "UTF-8", "" . $letter->{'title'} ))
+                                : Encode::encode( "UTF-8", "" . $letter->{'content'} ),
+                    contenttype => $letter->{'is_html'}
+                                    ? 'text/html; charset="utf-8"'
+                                    : 'text/plain; charset="utf-8"',
                 }
             );
             sendmail(%mail) or carp $Mail::Sendmail::error;
@@ -515,9 +520,14 @@ sub SendAlerts {
             To => join( ',', @email),
             Cc             => join( ',', @cc),
             From           => $userenv->{emailaddress},
-            Subject        => Encode::encode( "utf8", "" . $letter->{title} ),
-            Message => $letter->{'is_html'} ? _wrap_html( Encode::encode( "utf8", $letter->{'content'} ), Encode::encode( "utf8", "" . $letter->{'title'}  ) ) : Encode::encode( "utf8", "" . $letter->{'content'} ),
-            'Content-Type' => $letter->{'is_html'} ? 'text/html; charset="utf-8"' : 'text/plain; charset="utf-8"',
+            Subject        => Encode::encode( "UTF-8", "" . $letter->{title} ),
+            Message => $letter->{'is_html'}
+                            ? _wrap_html( Encode::encode( "UTF-8", $letter->{'content'} ),
+                                          Encode::encode( "UTF-8", "" . $letter->{'title'} ))
+                            : Encode::encode( "UTF-8", "" . $letter->{'content'} ),
+            'Content-Type' => $letter->{'is_html'}
+                                ? 'text/html; charset="utf-8"'
+                                : 'text/plain; charset="utf-8"',
         );
 
         $mail{'Reply-to'} = C4::Context->preference('ReplytoDefault')
@@ -564,9 +574,14 @@ sub SendAlerts {
                 from    => $branchdetails->{'branchemail'},
                 replyto => $branchdetails->{'branchreplyto'},
                 sender  => $branchdetails->{'branchreturnpath'},
-                subject => Encode::encode( "utf8", "" . $letter->{'title'} ),
-                message => $letter->{'is_html'} ? _wrap_html( Encode::encode( "utf8", $letter->{'content'} ), Encode::encode( "utf8", "" . $letter->{'title'}  ) ) : Encode::encode( "utf8", "" . $letter->{'content'} ),
-                contenttype => $letter->{'is_html'} ? 'text/html; charset="utf-8"' : 'text/plain; charset="utf-8"',
+                subject => Encode::encode( "UTF-8", "" . $letter->{'title'} ),
+                message => $letter->{'is_html'}
+                            ? _wrap_html( Encode::encode( "UTF-8", $letter->{'content'} ),
+                                          Encode::encode( "UTF-8", "" . $letter->{'title'}  ) )
+                            : Encode::encode( "UTF-8", "" . $letter->{'content'} ),
+                contenttype => $letter->{'is_html'}
+                                ? 'text/html; charset="utf-8"'
+                                : 'text/plain; charset="utf-8"',
             }
         );
         sendmail(%mail) or carp $Mail::Sendmail::error;
@@ -1132,8 +1147,8 @@ sub _send_message_by_email {
 
     my $utf8   = decode('MIME-Header', $message->{'subject'} );
     $message->{subject}= encode('MIME-Header', $utf8);
-    my $subject = encode('utf8', $message->{'subject'});
-    my $content = encode('utf8', $message->{'content'});
+    my $subject = encode('UTF-8', $message->{'subject'});
+    my $content = encode('UTF-8', $message->{'content'});
     my $content_type = $message->{'content_type'} || 'text/plain; charset="UTF-8"';
     my $is_html = $content_type =~ m/html/io;
     my $branch_email = undef;
