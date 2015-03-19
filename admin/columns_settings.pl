@@ -27,7 +27,7 @@ if ( $action eq 'save' ) {
     my @columnids = $input->param("columnid");
     my @columns;
     for my $columnid (@columnids) {
-        next unless $columnid =~ m|^([^_]*)_([^_]*)_(.*)$|;
+        next unless $columnid =~ m|^([^#]*)#([^#]*)#(.*)$|;
         my $is_hidden = $input->param( $columnid . '_hidden' ) // 0;
         my $cannot_be_toggled =
           $input->param( $columnid . '_cannot_be_toggled' ) // 0;

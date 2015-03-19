@@ -22,42 +22,43 @@
               <thead><tr><th>Column name</th><th>Is hidden by default</th><th>Cannot be toggled</th></tr></thead>
               <tbody>
               [% FOR column IN tables.$pagename.$tablename %]
+                [% SET value = pagename _ '#' _ tablename _ '#' _ column.columnname %]
                 <tr>
                   <td>
                     [% column.columnname %]
-                    <input type="hidden" name="columnid" value="[% pagename %]_[% tablename %]_[% column.columnname %]" />
+                    <input type="hidden" name="columnid" value="[% value %]" />
                   </td>
                   <td>
                     [% IF column.is_hidden %]
                       [% IF column.cannot_be_modified %]
-                        <input type="checkbox" name="[% pagename %]_[% tablename %]_[% column.columnname %]_hidden" value="1" checked="checked" disabled="disabled" />
-                        <input type="hidden" name="[% pagename %]_[% tablename %]_[% column.columnname %]_hidden" value="1" />
+                        <input type="checkbox" name="[% value %]_hidden" value="1" checked="checked" disabled="disabled" />
+                        <input type="hidden" name="[% value %]_hidden" value="1" />
                       [% ELSE %]
-                        <input type="checkbox" name="[% pagename %]_[% tablename %]_[% column.columnname %]_hidden" value="1" checked="checked" />
+                        <input type="checkbox" name="[% value %]_hidden" value="1" checked="checked" />
                       [% END %]
                     [% ELSE %]
                       [% IF column.cannot_be_modified %]
-                        <input type="checkbox" name="[% pagename %]_[% tablename %]_[% column.columnname %]_hidden" value="1" disabled="disabled" />
-                        <input type="hidden" name="[% pagename %]_[% tablename %]_[% column.columnname %]_hidden" value="0" />
+                        <input type="checkbox" name="[% value %]_hidden" value="1" disabled="disabled" />
+                        <input type="hidden" name="[% value %]_hidden" value="0" />
                       [% ELSE %]
-                        <input type="checkbox" name="[% pagename %]_[% tablename %]_[% column.columnname %]_hidden" value="1" />
+                        <input type="checkbox" name="[% value %]_hidden" value="1" />
                       [% END %]
                     [% END %]
                   </td>
                   <td>
                     [% IF column.cannot_be_toggled %]
                       [% IF column.cannot_be_modified %]
-                        <input type="checkbox" name="[% pagename %]_[% tablename %]_[% column.columnname %]_cannot_be_toggled" value="1" checked="checked" disabled="disabled" />
-                        <input type="hidden" name="[% pagename %]_[% tablename %]_[% column.columnname %]_cannot_be_toggled" value="1" />
+                        <input type="checkbox" name="[% value %]_cannot_be_toggled" value="1" checked="checked" disabled="disabled" />
+                        <input type="hidden" name="[% value %]_cannot_be_toggled" value="1" />
                       [% ELSE %]
-                        <input type="checkbox" name="[% pagename %]_[% tablename %]_[% column.columnname %]_cannot_be_toggled" value="1" checked="checked" />
+                        <input type="checkbox" name="[% value %]_cannot_be_toggled" value="1" checked="checked" />
                       [% END %]
                     [% ELSE %]
                       [% IF column.cannot_be_modified %]
-                        <input type="checkbox" name="[% pagename %]_[% tablename %]_[% column.columnname %]_cannot_be_toggled" value="1" disabled="disabled" />
-                        <input type="hidden" name="[% pagename %]_[% tablename %]_[% column.columnname %]_cannot_be_toggled" value="0" />
+                        <input type="checkbox" name="[% value %]_cannot_be_toggled" value="1" disabled="disabled" />
+                        <input type="hidden" name="[% value %]_cannot_be_toggled" value="0" />
                       [% ELSE %]
-                        <input type="checkbox" name="[% pagename %]_[% tablename %]_[% column.columnname %]_cannot_be_toggled" value="1" />
+                        <input type="checkbox" name="[% value %]_cannot_be_toggled" value="1" />
                       [% END %]
                     [% END %]
                   </td>
