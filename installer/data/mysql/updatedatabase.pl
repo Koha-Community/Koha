@@ -38,7 +38,6 @@ use C4::Context;
 use C4::Installer;
 use C4::Dates;
 
-use File::Slurp;
 use MARC::Record;
 use MARC::File::XML ( BinaryEncoding => 'utf8' );
 
