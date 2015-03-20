@@ -33,28 +33,19 @@ my ( $template, $loggedinuser, $cookie, $staff_flags ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { acquisition => 'budget_modify'  },
+        flagsrequired => { serials => 'routing' },
     }
 );
 
 my $q = $input->param('q') || '';
 my $op = $input->param('op') || '';
-my $selection_type = $input->param('selection_type') || 'add';
 
 my $referer = $input->referer();
 
-# If this script is called by admin/aqbudgets.pl
-# the patrons to return should be superlibrarian or have the order_manage
-# acquisition flag.
-my $search_patrons_with_acq_perm_only =
-    ( $referer =~ m|admin/aqbudgets.pl| )
-        ? 1 : 0;
-
 $template->param(
-    patrons_with_acq_perm_only => $search_patrons_with_acq_perm_only,
     view => ( $input->request_method() eq "GET" ) ? "show_form" : "show_results",
-    columns => ['cardnumber', 'name', 'branch', 'category', 'action'],
-    json_template => 'acqui/tables/members_results.tt',
-    selection_type => $selection_type,
+    columns => ['cardnumber', 'name', 'branch', 'action'],
+    json_template => 'serials/tables/members_results.tt',
+    selection_type => 'add',
 );
 output_html_with_http_headers( $input, $cookie, $template->output );

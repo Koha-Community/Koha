@@ -114,18 +114,27 @@ function filter() {
 
     // modify parent window owner element
     [% IF selection_type == 'add' %]
-        [%# Note that add_user could sent data instead of borrowername too %]
         function add_user(borrowernumber, borrowername) {
             var p = window.opener;
-            $("#info").hide();
-            $("#error").hide();
-            if ( p.add_user(borrowernumber, borrowername) < 0 ) {
-                $("#error").html(_("Borrower '%s' is already in the list.").format(borrowername));
-                $("#error").show();
-            } else {
-                $("#info").html(_("Borrower '%s' added.").format(borrowername));
-                $("#info").show();
+            // In one place (serials/routing.tt), the page is reload on every add
+            // We have to wait for the page to be there
+            function wait_for_opener () {
+                if ( ! $(opener.document).find('body').size() ) {
+                    setTimeout(wait_for_opener, 500);
+                } else {
+                    [%# Note that add_user could sent data instead of borrowername too %]
+                    $("#info").hide();
+                    $("#error").hide();
+                    if ( p.add_user(borrowernumber, borrowername) < 0 ) {
+                        $("#error").html(_("Borrower '%s' is already in the list.").format(borrowername));
+                        $("#error").show();
+                    } else {
+                        $("#info").html(_("Borrower '%s' added.").format(borrowername));
+                        $("#info").show();
+                    }
+                }
             }
+            wait_for_opener();
         }
     [% ELSIF selection_type == 'select' %]
         function select_user(borrowernumber, data) {
