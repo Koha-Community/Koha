@@ -1,3 +1,4 @@
+[% USE To %]
 {
     "sEcho": [% sEcho %],
     "iTotalRecords": [% iTotalRecords %],
@@ -14,7 +15,11 @@
                 "dt_category":
                     "[% data.category_description |html %] ([% data.category_type |html %])",
                 "dt_action":
-                    "<a style='cursor:pointer' onclick='add_user(\"[% data.borrowernumber %]\", \"[% data.firstname %] [% data.surname %]\");'>Select</a>"
+                    [%- IF selection_type == 'select' -%]
+                        "<a style='cursor:pointer' onclick='select_user(\"[% data.borrowernumber %]\", [% To.json(data) | html %] );'>Select</a>"
+                    [%- ELSE -%]
+                        "<a style='cursor:pointer' onclick='add_user(\"[% data.borrowernumber %]\", \"[% data.firstname %] [% data.surname %]\");'>Select</a>"
+                    [%- END -%]
             }[% UNLESS loop.last %],[% END %]
         [% END %]
     ]

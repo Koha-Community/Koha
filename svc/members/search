@@ -45,6 +45,7 @@ my $branchcode = $input->param('branchcode');
 my $searchtype = $input->param('searchtype');
 my $searchfieldstype = $input->param('searchfieldstype') || 'standard';
 my $has_permission = $input->param('has_permission');
+my $selection_type = $input->param('selection_type');
 
 if ( $searchfieldstype eq "dateofbirth" ) {
     $searchmember = output_pref({dt => dt_from_string($searchmember), dateformat => 'iso', dateonly => 1});
@@ -115,7 +116,8 @@ $template->param(
     sEcho => $sEcho,
     iTotalRecords => $results->{iTotalRecords},
     iTotalDisplayRecords => $results->{iTotalDisplayRecords},
-    aaData => $results->{patrons}
+    aaData => $results->{patrons},
+    selection_type => $selection_type,
 );
 
 output_with_http_headers $input, $cookie, $template->output, 'json';
