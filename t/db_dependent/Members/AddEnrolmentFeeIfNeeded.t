@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use C4::Context;
 use C4::Members;
@@ -42,6 +42,16 @@ $borrower_data{borrowernumber} = $borrowernumber;
 
 my ( $total ) = C4::Members::GetMemberAccountRecords( $borrowernumber );
 is( $total, $enrolmentfee_K, "New kid pay $enrolmentfee_K" );
+
+C4::Context->set_preference( 'FeeOnChangePatronCategory', 0 );
+$borrower_data{categorycode} = 'J';
+C4::Members::ModMember( %borrower_data );
+( $total ) = C4::Members::GetMemberAccountRecords( $borrowernumber );
+is( $total, $enrolmentfee_K , "Kid growing and become a juvenile, but shouldn't pay for the upgrade ");
+
+$borrower_data{categorycode} = 'K';
+C4::Members::ModMember( %borrower_data );
+C4::Context->set_preference( 'FeeOnChangePatronCategory', 1 );
 
 $borrower_data{categorycode} = 'J';
 C4::Members::ModMember( %borrower_data );
