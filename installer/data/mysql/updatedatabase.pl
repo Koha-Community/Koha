@@ -9949,14 +9949,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
-opendir( my $dirh, C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate' );
-my $old_delimiter = $/;
-$/ = ';';
-while (readdir $dirh) {
-    next unless $_ =~ /\.sql$/; # skip non SQL files
-    print "DEV atomic update : $_ \n";
+my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
+opendir( my $dirh, $update_dir );
+while ( my $file = readdir $dirh ) {
+    next unless $file =~ /\.sql$/;    # skip non SQL files
+    print "DEV atomic update : $file \n";
     my $installer = C4::Installer->new();
-    my $rv = $installer->load_sql( C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/' . $_ )? 0: 1;
+    my $rv = $installer->load_sql( $update_dir . $file ) ? 0 : 1;
 }
 
 
