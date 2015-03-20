@@ -32,8 +32,16 @@ $(document).ready(function(){
             aoData.push({
                 'name': 'searchmember',
                 'value': $("#searchmember_filter").val()
-            },
-            {
+            },{
+                'name': 'name_sorton',
+                'value': 'borrowers.surname borrowers.firstname'
+            },{
+                'name': 'category_sorton',
+                'value': 'categories.description',
+            },{
+                'name': 'branch_sorton',
+                'value': 'branches.branchname'
+            },{
                 'name': 'template_path',
                 'value': '[% json_template %]',
             }
@@ -58,6 +66,8 @@ $(document).ready(function(){
             [% FOR column IN columns %]
                 [% IF column == 'action' %]
                     { 'mDataProp': 'dt_action', 'bSortable': false }
+                [% ELSIF column == 'address' %]
+                    { 'mDataProp': 'dt_address', 'bSortable': false }
                 [% ELSE %]
                     { 'mDataProp': 'dt_[% column %]' }
                 [% END %]
