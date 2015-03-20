@@ -36,6 +36,8 @@ my $report_annotation = $query->param('annotated');
 my $report_rec = get_saved_report( $report_name ? { 'name' => $report_name } : { 'id' => $report_id } );
 if (!$report_rec) { die "There is no such report.\n"; }
 
+my @sql_params  = $query->param('sql_params');
+
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "intranet-main.tt",
@@ -50,14 +52,20 @@ my $cache = Koha::Cache->get_instance();
 my $cache_active = $cache->is_cache_active;
 my ($cache_key, $json_text);
 if ($cache_active) {
-    $cache_key = "intranet:report:".($report_name ? "name:$report_name" : "id:$report_id");
+    $cache_key = "intranet:report:".($report_name ? "name:$report_name" : "id:$report_id")
+    . join( '-', @sql_params );
     $json_text = $cache->get_from_cache($cache_key);
 }
 
 unless ($json_text) {
     my $offset = 0;
     my $limit  = C4::Context->preference("SvcMaxReportRows") || 10;
-    my ( $sth, $errors ) = execute_query( $report_rec->{savedsql}, $offset, $limit );
+    my $sql = $report_rec->{savedsql};
+
+    # convert SQL parameters to placeholders
+    $sql =~ s/(<<.*?>>)/\?/g;
+
+    my ( $sth, $errors ) = execute_query( $sql, $offset, $limit, \@sql_params );
     if ($sth) {
         my $lines;
         if ($report_annotation) {
