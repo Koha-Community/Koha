@@ -7,7 +7,6 @@ use diagnostics;
 use C4::InstallAuth;
 use CGI qw ( -utf8 );
 use POSIX qw(strftime);
-use File::Temp qw( tempdir );
 
 use C4::Context;
 use C4::Output;
@@ -323,12 +322,9 @@ elsif ( $step && $step == 3 ) {
 
         my $now = POSIX::strftime( "%Y-%m-%dT%H:%M:%S", localtime() );
         my $logdir = C4::Context->config('logdir');
-        unless ( -w $logdir ) {
-            $logdir = tempdir;
-        }
-        my ( $logfilepath, $logfilepath_errors ) = ( $logdir . "/updatedatabase_$now.log", $logdir . "/updatedatabase-error_$now.log" );
+        my ( $logfilepath, $logfilepath_errors ) = ( chk_log($logdir, "updatedatabase_$now"), chk_log($logdir, "updatedatabase-error_$now") );
 
-        my $cmd = C4::Context->config("intranetdir") . "/installer/data/$info{dbms}/updatedatabase.pl > $logfilepath 2> $logfilepath_errors";
+        my $cmd = C4::Context->config("intranetdir") . "/installer/data/$info{dbms}/updatedatabase.pl >> $logfilepath 2>> $logfilepath_errors";
 
         system($cmd );
 
@@ -423,3 +419,15 @@ else {
     }
 }
 output_html_with_http_headers $query, $cookie, $template->output;
+
+sub chk_log { #returns a logfile in $dir or - if that failed - in temp dir
+    my ($dir, $name) = @_;
+    my $fn=$dir.'/'.$name.'.log';
+    if( ! open my $fh, '>', $fn ) {
+        $name.= '_XXXX';
+        require File::Temp;
+        ($fh, $fn)= File::Temp::tempfile( $name, TMPDIR => 1, SUFFIX => '.log');
+        #if this should not work, let croak take over
+    }
+    return $fn;
+}
