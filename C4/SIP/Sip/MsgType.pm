@@ -514,19 +514,18 @@ sub handle_checkout {
     my $fee_ack = $fields->{(FID_FEE_ACK)};
 
 
-    if ($no_block eq 'Y') {
-	# Off-line transactions need to be recorded, but there's
-	# not a lot we can do about it
-	syslog("LOG_WARNING", "received no-block checkout from terminal '%s'",
-	       $account->{id});
+    if ( $no_block eq 'Y' ) {
 
-	$status = $ils->checkout_no_block($patron_id, $item_id,
-					  $sc_renewal_policy,
-					  $trans_date, $nb_due_date);
-    } else {
-	# Does the transaction date really matter for items that are
-	# checkout out while the terminal is online?  I'm guessing 'no'
-		$status = $ils->checkout($patron_id, $item_id, $sc_renewal_policy, $fee_ack);
+        # Off-line transactions need to be recorded, but there's
+        # not a lot we can do about it
+        syslog( "LOG_WARNING", "received no-block checkout from terminal '%s'", $account->{id} );
+
+        $status = $ils->checkout_no_block( $patron_id, $item_id, $sc_renewal_policy, $trans_date, $nb_due_date );
+    }
+    else {
+        # Does the transaction date really matter for items that are
+        # checkout out while the terminal is online?  I'm guessing 'no'
+        $status = $ils->checkout( $patron_id, $item_id, $sc_renewal_policy, $fee_ack );
     }
 
     $item = $status->item;
@@ -601,14 +600,15 @@ sub handle_checkout {
 	    }
 	}
     }
-	if ($protocol_version >= 2) {
-	    # Financials : return irrespective of ok status
-        if ($status->fee_amount) {
-            $resp .= add_field(FID_FEE_AMT, $status->fee_amount);
-            $resp .= maybe_add(FID_CURRENCY, $status->sip_currency);
-            $resp .= maybe_add(FID_FEE_TYPE, $status->sip_fee_type);
-            $resp .= maybe_add(FID_TRANSACTION_ID,
-                $status->transaction_id);
+
+    if ( $protocol_version >= 2 ) {
+
+        # Financials : return irrespective of ok status
+        if ( $status->fee_amount ) {
+            $resp .= add_field( FID_FEE_AMT, $status->fee_amount );
+            $resp .= maybe_add( FID_CURRENCY,       $status->sip_currency );
+            $resp .= maybe_add( FID_FEE_TYPE,       $status->sip_fee_type );
+            $resp .= maybe_add( FID_TRANSACTION_ID, $status->transaction_id );
         }
     }
 
