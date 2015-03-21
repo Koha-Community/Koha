@@ -1,13 +1,9 @@
 Installation and Setup instructions for Talking Tech I-tiva phone notification
 =============================
 
-Be sure you've run installer/data/mysql/atomicupdate/Bug-4246-Talking-Tech-itiva-phone-notifications.pl
-to install the required data pack (new syspref, notice placeholders and messaging transport preferences)
+Be sure you enabled the TalkingTechItivaPhoneNotification syspref and you created notice text for the Phone message transport type under the HOLD, PREDUE and OVERDUE notices. (See Tools > Notices & Slips.)
 
-To use, TalkingTechItivaPhoneNotification syspref must be turned on.
-
-If you wish to process PREOVERDUE or RESERVES messages, you'll need the EnhancedMessagingPreferences
-system preference turned on, and patrons to have filled in a perference for receiving these notices by phone.
+If you wish to process PREDUE or HOLD messages, you'll need the EnhancedMessagingPreferences system preference turned on, and patrons to have filled in a preference for receiving these notices by phone.
 
 For OVERDUE messages, overdue notice triggers must be configured under Koha -> Tools -> Overdue Notice Triggers.
 Either branch-specific triggers or the default level triggers may be used (script will select whichever is appropriate).
