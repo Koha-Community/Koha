@@ -18,6 +18,10 @@
             PopupZ3950($(this).prop('id'));
             return false;
         });
+        $(".merge-items").on("click",function(e){
+            e.preventDefault();
+            MergeItems();
+        });
      });
 
     /* this function open a popup to search on z3950 server.  */
@@ -34,6 +38,20 @@
             strQuery += "&" + "[% z3950_search_param.name | uri %]" + "=" + "[% z3950_search_param.value | uri %]";
         [% END %]
         return strQuery;
+    }
+
+    /**
+     * This function checks if the adequate number of records are checked for merging
+     */
+    function MergeItems() {
+	var checkboxes = $("input:checkbox:checked");
+        var nbCheckbox = checkboxes.length;
+	if (nbCheckbox != 2) {
+	    alert(_("Two records must be selected for merging."));
+	} else {
+	    location.href='/cgi-bin/koha/cataloguing/merge.pl?biblionumber=' + checkboxes[0].value + '&amp;biblionumber=' + checkboxes[1].value;
+	}
+	return false;
     }
 
     //]]>
@@ -73,6 +91,7 @@
                 [% END %]
             </ul>
         </div>
+        <div class="btn-group"><button type="submit" class="btn btn-small merge-items"><i class="icon-merge"></i> Merge selected</button></div>
   </div>
 [% END %]
 
@@ -89,6 +108,7 @@
 <div class="searchresults">
     <table>
         <tr>
+            <th>&nbsp;</th>
             <th>Title</th>
             <th>Location</th>
             <th>Preview</th>
@@ -101,6 +121,7 @@
         [% ELSE %]
             <tr>
         [% END %]
+            <td><input type="checkbox" class="selection" id="bib[% resultsloo.biblionumber %]" name="biblionumber" value="[% resultsloo.biblionumber %]" /></td>
             <td>
                 <p>
                     <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% resultsloo.biblionumber %]">[% resultsloo.title |html %]</a>
