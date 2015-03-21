@@ -42,6 +42,18 @@ $(document).ready(function() {
             $(':radio', this).attr('checked', 'true')
         }
     });
+    var my_table = $("#requestspecific").dataTable($.extend(true, {}, dataTablesDefaults, {
+        'bPaginate': false,
+        'bInfo': false,
+        "bAutoWidth": false,
+    }));
+
+    //Override fieldset styling for dataTables search box
+    $("div.top.pager").css("margin-left","1em");
+    $(".dataTables_filter label").css({
+        "width":"auto",
+        "margin-right":"0em"
+    });
 
 });
 
@@ -431,81 +443,86 @@ function checkMultiHold() {
 
         <table id="requestspecific">
         <caption>Place a hold on a specific item</caption>
-		<tr>
-            <th>Hold</th>
-            [% IF ( item_level_itypes ) %]
-                <th>Item type</th>
-            [% END %]
-            <th>Barcode</th>
-            <th>Home library</th>
-            <th>Last location</th>
-            <th>Call no.</th>
-            <th>Copy number</th>
-            [% IF itemdata_enumchron %]
-            <th>Vol no.</th>
-            [% END %]
-            <th>Information</th>
-        </tr>
-    [% FOREACH itemloo IN bibitemloo.itemloop %]
-        [% UNLESS ( itemloo.hide ) %]
-        <tr class="[% itemloo.backgroundcolor %]">
-            <td>
-            [% IF ( itemloo.available ) %]
-                <input type="radio" name="checkitem" value="[% itemloo.itemnumber %]" />
-            [% ELSIF ( itemloo.override ) %]
-                <input type="radio" name="checkitem" class="needsoverride" value="[% itemloo.itemnumber %]" />
-                <img src="/intranet-tmpl/[% theme %]/img/famfamfam/silk/error.png" alt="Requires override of hold policy" />
-            [% ELSE %]
-                <input disabled="disabled" type="radio" name="checkitem" value="[% itemloo.itemnumber %]" />
-                <img src="/intranet-tmpl/[% theme %]/img/famfamfam/silk/cross.png" alt="Cannot be put on hold" />
-            [% END %]
-            </td>
-            [% IF ( item_level_itypes ) %]
-                <td>
+            <thead>
+                <tr>
+                    <th>Hold</th>
+                [% IF ( item_level_itypes ) %]
+                    <th>Item type</th>
+                [% END %]
+                    <th>Barcode</th>
+                    <th>Home library</th>
+                    <th>Last location</th>
+                    <th>Call no.</th>
+                    <th>Copy number</th>
+                [% IF itemdata_enumchron %]
+                    <th>Vol no.</th>
+                [% END %]
+                    <th>Information</th>
+                </tr>
+            </thead>
+            <tbody>
+            [% FOREACH itemloo IN bibitemloo.itemloop %]
+            [% UNLESS ( itemloo.hide ) %]
+                <tr class="[% itemloo.backgroundcolor %]">
+                    <td>
+                [% IF ( itemloo.available ) %]
+                    <input type="radio" name="checkitem" value="[% itemloo.itemnumber %]" />
+                [% ELSIF ( itemloo.override ) %]
+                    <input type="radio" name="checkitem" class="needsoverride" value="[% itemloo.itemnumber %]" />
+                    <img src="/intranet-tmpl/[% theme %]/img/famfamfam/silk/error.png" alt="Requires override of hold policy" />
+                [% ELSE %]
+                    <input disabled="disabled" type="radio" name="checkitem" value="[% itemloo.itemnumber %]" />
+                    <img src="/intranet-tmpl/[% theme %]/img/famfamfam/silk/cross.png" alt="Cannot be put on hold" />
+                [% END %]
+                    </td>
+                [% IF ( item_level_itypes ) %]
+                    <td>
                     [% UNLESS ( noItemTypeImages ) %]
                         [% IF ( itemloo.imageurl ) %]<img src="[% itemloo.imageurl %]" alt="" /> <br /> [% END %]
                     [% END %]
-                    [% itemloo.itypename %]
-                </td>
-            [% END %]
+                        [% itemloo.itypename %]
+                    </td>
+                [% END %]
 
-            <td>
-                    [% itemloo.barcode %]
-            </td>
-            <td>
-            [% itemloo.homebranchname %]
-            </td>
-            <td>
-            [% itemloo.holdingbranchname %]
-            </td>
-            <td>
-            [% itemloo.itemcallnumber %]
-            </td>
-            <td>[% IF ( itemloo.copynumber ) %][% itemloo.copynumber %][% ELSE %]&nbsp;[% END %]</td>
-            [% IF itemdata_enumchron %]
-            <td>
-            [% itemloo.enumchron %]
-            </td>
-            [% END %]
-            <td>
+                    <td>
+                        [% itemloo.barcode %]
+                    </td>
+                    <td>
+                        [% itemloo.homebranchname %]
+                    </td>
+                    <td>
+                        [% itemloo.holdingbranchname %]
+                    </td>
+                    <td>
+                        [% itemloo.itemcallnumber %]
+                    </td>
+                    <td>
+                        [% IF ( itemloo.copynumber ) %][% itemloo.copynumber %][% ELSE %]&nbsp;[% END %]
+                    </td>
+                [% IF itemdata_enumchron %]
+                    <td>
+                        [% itemloo.enumchron %]
+                    </td>
+                [% END %]
+                    <td>
         	[% IF ( itemloo.onloan ) %]
-            <span class="checkedout">Due [% itemloo.date_due %]</span>
-			[% ELSE %]
-        	[% IF ( itemloo.transfertwhen ) %]
-            In transit from [% itemloo.transfertfrom %],
-            to [% itemloo.transfertto %], since [% itemloo.transfertwhen %]
-        	[% END %]
-        	[% END %]
-
-        	[% IF ( itemloo.message ) %]
-            Unavailable (lost or missing)
+                    <span class="checkedout">Due [% itemloo.date_due %]</span>
+                [% ELSE %]
+		    [% IF ( itemloo.transfertwhen ) %]
+                        In transit from [% itemloo.transfertfrom %],
+                        to [% itemloo.transfertto %], since [% itemloo.transfertwhen %]
+		    [% END %]
         	[% END %]
 
-        	[% IF ( itemloo.notforloan ) %]
-            Not for loan ([% itemloo.notforloanvalue %])
-        	[% END %]
+                [% IF ( itemloo.message ) %]
+                   Unavailable (lost or missing)
+                [% END %]
 
-            [% IF ( itemloo.reservedate ) %]
+                [% IF ( itemloo.notforloan ) %]
+                   Not for loan ([% itemloo.notforloanvalue %])
+                [% END %]
+
+                [% IF ( itemloo.reservedate ) %]
                     [% IF ( itemloo.nocancel ) %]
                             Can't be cancelled when item is in transit
                     [% ELSE %]
@@ -515,13 +532,14 @@ function checkMultiHold() {
                     [% IF ( itemloo.waitingdate ) %][% itemloo.waitingdate | $KohaDates %][% ELSE %][% IF ( itemloo.reservedate ) %][% itemloo.reservedate %][% END %][% END %]. <a class="info" href="modrequest.pl?CancelBiblioNumber=[% itemloo.biblionumber %]&amp;CancelBorrowerNumber=[% itemloo.ReservedForBorrowernumber %]&amp;CancelItemnumber=[% itemloo.itemnumber %]"  onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);">Cancel hold</a>
 
                     [% END %]
-            [% ELSE %]
+                 [% ELSE %]
                     Not on hold
-            [% END %]
-            </td>
-        </tr>
-      [% END %] <!--UNLESS item hide-->
-    [% END %] <!-- itemloop -->
+                [% END %]
+                    </td>
+                </tr>
+            [% END %] <!--UNLESS item hide-->
+            [% END %] <!-- itemloop -->
+            </tbody>
         </table>
     [% IF ( bibitemloo.hiddencount ) %]
         <form>
