@@ -36,10 +36,9 @@ BEGIN {
 
 use C4::Context;
 use C4::Dates;
-
 use C4::Search;
-
 use Getopt::Long;
+use C4::Log;
 
 sub usage {
     print STDERR <<USAGE;
@@ -131,6 +130,8 @@ if ($pDebarments && $allDebarments) {
     print "You can not specify both --restrictions and --all-restrictions.\n\n";
     usage(1);
 }
+
+cronlogaction();
 
 my $dbh = C4::Context->dbh();
 my $sth;

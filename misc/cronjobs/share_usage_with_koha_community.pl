@@ -7,6 +7,7 @@ use Getopt::Long;
 
 use C4::Context;
 use C4::UsageStats;
+use C4::Log;
 use POSIX qw(strftime);
 
 my ( $help, $verbose, $force );
@@ -29,6 +30,8 @@ If your library wants to share their usage statistics with the Koha community, y
     );
     exit 1;
 }
+
+cronlogaction();
 
 my $need_update = ($force ? 1 : C4::UsageStats::NeedUpdate() );
 

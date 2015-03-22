@@ -30,6 +30,7 @@ BEGIN {
 
 use C4::Context;
 use C4::Members qw/ DelMember /;
+use C4::Log;
 
 my $help;
 my $confirm;
@@ -58,6 +59,8 @@ if ( $help || !$confirm ) {
     print $usage;
     exit;
 }
+
+cronlogaction();
 
 my $dbh = C4::Context->dbh;
 

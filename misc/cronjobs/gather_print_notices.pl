@@ -36,6 +36,7 @@ use C4::Letters;
 use C4::Templates;
 use File::Spec;
 use Getopt::Long;
+use C4::Log;
 
 sub usage {
     print STDERR <<USAGE;
@@ -64,6 +65,8 @@ if ( !$output_directory || !-d $output_directory || !-w $output_directory ) {
 "Error: You must specify a valid and writeable directory to dump the print notices in.\n";
     usage(1);
 }
+
+cronlogaction();
 
 my $today        = C4::Dates->new();
 my @all_messages = @{ GetPrintMessages() };

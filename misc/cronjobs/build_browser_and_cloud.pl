@@ -18,6 +18,8 @@ use Time::HiRes qw(gettimeofday);
 use ZOOM;
 use MARC::File::USMARC;
 use Getopt::Long;
+use C4::Log;
+
 my ( $input_marc_file, $number) = ('',0);
 my ($version, $confirm,$test_parameter,$field,$batch,$max_digits,$cloud_tag);
 GetOptions(
@@ -59,6 +61,8 @@ my $browser_tag = $1;
 my $browser_subfield = $2;
 warn "browser : $browser_tag / $browser_subfield" unless $batch;
 die "no cloud or browser field/subfield defined : nothing to do !" unless $browser_tag or $cloud_tag;
+
+cronlogaction();
 
 my $dbh = C4::Context->dbh;
 

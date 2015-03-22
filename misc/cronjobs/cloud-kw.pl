@@ -26,7 +26,7 @@ use YAML::Syck;
 use Pod::Usage;
 use Getopt::Long;
 use C4::Context;
-
+use C4::Log;
 
 my $verbose     = 0;
 my $help        = 0;
@@ -44,6 +44,7 @@ sub usage {
 
 usage() if $help || !$conf;          
 
+cronlogaction();
 
 my @clouds;
 print "Reading configuration file: $conf\n" if $verbose;

@@ -8,6 +8,7 @@ use Getopt::Long;
 use C4::Members;
 use C4::VirtualShelves;
 use Koha::DateUtils;
+use C4::Log;
 
 my ( $help, $verbose, $not_borrowed_since, $expired_before, $category_code,
     $branchcode, $confirm );
@@ -35,6 +36,8 @@ unless ( $not_borrowed_since or $expired_before or $category_code or $branchcode
     pod2usage(q{At least one filter is mandatory});
     exit;
 }
+
+cronlogaction();
 
 my $members = GetBorrowersToExpunge(
     {

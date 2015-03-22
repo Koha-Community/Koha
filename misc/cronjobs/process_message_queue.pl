@@ -26,6 +26,7 @@ BEGIN {
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 use C4::Letters;
+use C4::Log;
 use Getopt::Long;
 
 my $username = undef;
@@ -59,6 +60,8 @@ This script has the following parameters :
 ENDUSAGE
 
 die $usage if $help;
+
+cronlogaction();
 
 C4::Letters::SendQueuedMessages( { verbose => $verbose, username => $username, password => $password, method => $method } );
 

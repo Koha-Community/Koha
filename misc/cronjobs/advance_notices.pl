@@ -56,6 +56,7 @@ use C4::Members;
 use C4::Members::Messaging;
 use C4::Overdues;
 use Koha::DateUtils;
+use C4::Log;
 
 =head1 NAME
 
@@ -199,6 +200,9 @@ END_WARN
 unless ($confirm) {
      pod2usage(1);
 }
+
+cronlogaction();
+
 # The fields that will be substituted into <<items.content>>
 my @item_content_fields = split(/,/,$itemscontent);
 

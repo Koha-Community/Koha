@@ -38,6 +38,7 @@ use File::Spec;
 
 use Koha::Calendar;
 use Koha::DateUtils;
+use C4::Log;
 
 my $help;
 my $verbose;
@@ -69,6 +70,8 @@ if ($help) {
     print $usage;
     exit;
 }
+
+cronlogaction();
 
 my @borrower_fields =
   qw(cardnumber categorycode surname firstname email phone address citystate);

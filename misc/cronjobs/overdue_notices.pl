@@ -43,11 +43,10 @@ use C4::Debug;
 use C4::Letters;
 use C4::Overdues qw(GetFine GetOverdueMessageTransportTypes);
 use C4::Budgets qw(GetCurrency);
-use Koha::DateUtils;
-
 use Koha::Borrower::Debarments qw(AddUniqueDebarment);
 use Koha::DateUtils;
 use Koha::Calendar;
+use C4::Log;
 
 =head1 NAME
 
@@ -315,6 +314,8 @@ GetOptions(
 ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
+
+cronlogaction();
 
 if ( defined $csvfilename && $csvfilename =~ /^-/ ) {
     warn qq(using "$csvfilename" as filename, that seems odd);

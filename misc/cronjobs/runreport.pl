@@ -24,6 +24,7 @@ use warnings;
 use C4::Reports::Guided; # 0.12
 use C4::Context;
 use Koha::Email;
+use C4::Log;
 
 use Getopt::Long qw(:config auto_help auto_version);
 use Pod::Usage;
@@ -188,6 +189,8 @@ GetOptions(
 pod2usage( -verbose => 2 ) if ($man);
 pod2usage( -verbose => 2 ) if ($help and $verbose);
 pod2usage(1) if $help;
+
+cronlogaction();
 
 unless ($format) {
     $verbose and print STDERR "No format specified, assuming 'text'\n";

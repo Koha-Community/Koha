@@ -37,6 +37,7 @@ use Date::Calc qw(
   Add_Delta_Days
 );
 use Getopt::Long;
+use C4::Log;
 
 sub usage {
     print STDERR <<USAGE;
@@ -65,6 +66,8 @@ if ( !$days  ) {
     print "The days parameter is mandatory.\n\n";
     usage(1);
 }
+
+cronlogaction();
 
 my ($year,$month,$day) = Today();
 my ($newyear,$newmonth,$newday) = Add_Delta_Days ($year,$month,$day,(-1)*$days);

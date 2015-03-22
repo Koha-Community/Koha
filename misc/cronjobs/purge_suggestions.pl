@@ -32,6 +32,7 @@ BEGIN {
 use Getopt::Long;
 use Pod::Usage;
 use C4::Suggestions;
+use C4::Log;
 
 my ($help, $days);
 
@@ -55,6 +56,7 @@ EOF
 }
 
 if($days){
+    cronlogaction();
     DelSuggestionsOlderThan($days);
 }
 

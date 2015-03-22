@@ -32,6 +32,7 @@ use C4::Context;
 use C4::Members;
 use Getopt::Long;
 use Pod::Usage;
+use C4::Log;
 
 =head1 NAME
 
@@ -125,6 +126,8 @@ if(not $fromcat && $tocat) { #make sure we've specified the info we need.
 	print "please specify -help for usage tips.\n";
 		exit;
 }
+
+cronlogaction();
 
 my $dbh=C4::Context->dbh;
 my @branches = C4::Branch::GetBranches();

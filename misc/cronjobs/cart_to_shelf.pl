@@ -29,6 +29,7 @@ use strict;
 use warnings;
 
 use C4::Items qw/ CartToShelf /;
+use C4::Log;
 
 BEGIN {
 
@@ -62,6 +63,8 @@ unless ($hours) {
     print $usage;
     die "ERROR: No --hours (-h) option defined";
 }
+
+cronlogaction();
 
 my $query = "SELECT itemnumber FROM items WHERE location = 'CART' AND TIMESTAMPDIFF(HOUR, items.timestamp, NOW() ) > ?";
 my $sth = C4::Context->dbh->prepare($query);

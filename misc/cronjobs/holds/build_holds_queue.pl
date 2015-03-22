@@ -16,6 +16,9 @@ BEGIN {
 }
 
 use C4::HoldsQueue qw(CreateQueue);
+use C4::Log;
+
+cronlogaction();
 
 CreateQueue();
 

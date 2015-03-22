@@ -37,6 +37,7 @@ use C4::Context;
 use C4::Items;
 use C4::Circulation qw/LostItem/;
 use Getopt::Long;
+use C4::Log;
 
 my  $lost;  #  key=lost value,  value=num days.
 my ($charge, $verbose, $confirm, $quiet);
@@ -128,6 +129,8 @@ unless ($confirm) {
     $verbose = 1;     # If you're not running it for real, then the whole point is the print output.
     print "### TEST MODE -- NO ACTIONS TAKEN ###\n";
 }
+
+cronlogaction();
 
 # In my opinion, this line is safe SQL to have outside the API. --atz
 our $bounds_sth = C4::Context->dbh->prepare("SELECT DATE_SUB(CURDATE(), INTERVAL ? DAY)");

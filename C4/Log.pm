@@ -30,11 +30,11 @@ use C4::Dates qw(format_date);
 use vars qw($VERSION @ISA @EXPORT);
 
 BEGIN {
-	# set the version for version checking
+    # set the version for version checking
     $VERSION = 3.07.00.049;
-	require Exporter;
-	@ISA = qw(Exporter);
-	@EXPORT = qw(&logaction &GetLogStatus &displaylog &GetLogs);
+        require Exporter;
+        @ISA = qw(Exporter);
+        @EXPORT = qw(&logaction &cronlogaction &GetLogStatus &displaylog &GetLogs);
 }
 
 =head1 NAME
@@ -80,6 +80,20 @@ sub logaction {
     $sth->execute($usernumber,$modulename,$actionname,$objectnumber,$infos);
     $sth->finish;
 }
+
+=item cronlogaction
+
+  &cronlogaction();
+
+Convenience routine to add a record into action_logs table from a cron job.
+
+=cut
+
+#'
+sub cronlogaction {
+    logaction( 'CRONJOBS', 'Run', 0, (caller(0))[1] ) if C4::Context->preference('CronjobLog');
+}
+
 
 =item GetLogStatus
 

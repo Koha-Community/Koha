@@ -30,5 +30,8 @@ BEGIN {
 # cancel all expired hold requests
 
 use C4::Reserves;
+use C4::Log;
+
+cronlogaction();
 
 CancelExpiredReserves();

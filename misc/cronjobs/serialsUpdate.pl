@@ -32,6 +32,7 @@ use C4::Context;
 use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Debug;
 use C4::Serials;
+use C4::Log;
 
 use Date::Calc qw/Date_to_Days check_date/;
 use Getopt::Long;
@@ -76,6 +77,8 @@ GetOptions(
 
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
+
+cronlogaction();
 
 $verbose and !$confirm and print "### Database will not be modified ###\n";
 

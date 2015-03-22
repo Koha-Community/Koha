@@ -32,6 +32,7 @@ use Getopt::Long;
 use Pod::Usage;
 use C4::Context;
 use C4::Biblio;
+use C4::Log;
 use DateTime;
 use DateTime::Format::MySQL;
 use Time::HiRes qw/time/;
@@ -93,6 +94,8 @@ unless ( $usestats || $useitems ) {
 if ( not $result or $want_help ) {
     usage();
 }
+
+cronlogaction();
 
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
