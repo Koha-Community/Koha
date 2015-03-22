@@ -406,11 +406,26 @@ sub handle {
 #
 sub build_patron_status {
     my ( $patron, $lang, $fields, $server ) = @_;
-
+    my $overdrive_mode = $server->{account}->{'overdrive-mode'};
     my $patron_pwd = $fields->{ (FID_PATRON_PWD) };
     my $resp = (PATRON_STATUS_RESP);
+    my $password_ok = 1;
+    my $password_rc;
 
     if ($patron) {
+        if ($patron_pwd) {
+            $password_rc = $patron->check_password($patron_pwd);
+            $password_ok = 0 unless $password_rc;
+        }
+        elsif ( $overdrive_mode
+            and not exists $fields->{'AL'} # not block_request
+            and not $patron_pwd ) # no password supplied
+        {
+            $password_ok = 0;
+        }
+    }
+
+    if ( $patron and $password_ok ) {
         $resp .= patron_status_string($patron);
         $resp .= $lang . timestamp();
         $resp .= add_field( FID_PERSONAL_NAME, $patron->name );
@@ -418,11 +433,12 @@ sub build_patron_status {
         # while the patron ID we got from the SC is valid, let's
         # use the one returned from the ILS, just in case...
         $resp .= add_field( FID_PATRON_ID, $patron->id );
+
         if ( $protocol_version >= 2 ) {
             $resp .= add_field( FID_VALID_PATRON, 'Y' );
 
             # Patron password is a required field.
-            $resp .= add_field( FID_VALID_PATRON_PWD, sipbool( $patron->check_password($patron_pwd) ) );
+            $resp .= add_field( FID_VALID_PATRON_PWD, sipbool($password_rc) );
             $resp .= maybe_add( FID_CURRENCY, $patron->currency );
             $resp .= maybe_add( FID_FEE_AMT,  $patron->fee_amount );
         }
@@ -430,11 +446,12 @@ sub build_patron_status {
         $resp .= maybe_add( FID_SCREEN_MSG, $patron->screen_msg, $server );
         $resp .= maybe_add( FID_SCREEN_MSG, $patron->{branchcode}, $server )
           if ( $server->{account}->{send_patron_home_library_in_af} );
-
         $resp .= maybe_add( FID_PRINT_LINE, $patron->print_line );
     } else {
 
-        # Invalid patron id.  Report that the user has no privs.,
+        # Invalid patron id (and/or passwd for overdrive_mode)
+        # Report that the user has no privs.
+
         # no personal name, and is invalid (if we're using 2.00)
         $resp .= 'YYYY' . ( ' ' x 10 ) . $lang . timestamp();
         $resp .= add_field( FID_PERSONAL_NAME, '' );
@@ -445,6 +462,9 @@ sub build_patron_status {
 
         ( $protocol_version >= 2 )
           and $resp .= add_field( FID_VALID_PATRON, 'N' );
+
+        $resp .=
+          maybe_add( FID_SCREEN_MSG, 'Invalid patron or patron password' );
     }
 
     $resp .= add_field( FID_INST_ID, $fields->{ (FID_INST_ID) } );
