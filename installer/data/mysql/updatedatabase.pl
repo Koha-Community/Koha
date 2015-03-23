@@ -9876,36 +9876,43 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.19.00.016";
 if(CheckVersion($DBversion)) {
-    $dbh->do(q{
-        INSERT INTO authorised_values (category, authorised_value, lib) VALUES
-         ('ORDER_CANCELLATION_REASON', 0, 'No reason provided'),
-         ('ORDER_CANCELLATION_REASON', 1, 'Out of stock'),
-         ('ORDER_CANCELLATION_REASON', 2, 'Restocking')
-    });
+    my @order_cancellation_reason = $dbh->selectrow_array("SELECT count(*) FROM authorised_values WHERE category='ORDER_CANCELLATION_REASON'");
+    if ($order_cancellation_reason[0] == 0) {
+        $dbh->do(q{
+            INSERT INTO authorised_values (category, authorised_value, lib) VALUES
+             ('ORDER_CANCELLATION_REASON', 0, 'No reason provided'),
+             ('ORDER_CANCELLATION_REASON', 1, 'Out of stock'),
+             ('ORDER_CANCELLATION_REASON', 2, 'Restocking')
+        });
 
-    my $already_existing_reasons = $dbh->selectcol_arrayref(q{
-        SELECT DISTINCT( cancellationreason )
-        FROM aqorders;
-    }, { Slice => {} });
+        my $already_existing_reasons = $dbh->selectcol_arrayref(q{
+            SELECT DISTINCT( cancellationreason )
+            FROM aqorders;
+        }, { Slice => {} });
 
-    my $update_orders_sth = $dbh->prepare(q{
-        UPDATE aqorders
-        SET cancellationreason = ?
-        WHERE cancellationreason = ?
-    });
+        my $update_orders_sth = $dbh->prepare(q{
+            UPDATE aqorders
+            SET cancellationreason = ?
+            WHERE cancellationreason = ?
+        });
 
-    my $insert_av_sth = $dbh->prepare(q{
-        INSERT INTO authorised_values (category, authorised_value, lib) VALUES
-         ('ORDER_CANCELLATION_REASON', ?, ?)
-    });
-    my $i = 3;
-    for my $reason ( @$already_existing_reasons ) {
-        next unless $reason;
-        $insert_av_sth->execute( $i, $reason );
-        $update_orders_sth->execute( $i, $reason );
-        $i++;
+        my $insert_av_sth = $dbh->prepare(q{
+            INSERT INTO authorised_values (category, authorised_value, lib) VALUES
+             ('ORDER_CANCELLATION_REASON', ?, ?)
+        });
+        my $i = 3;
+        for my $reason ( @$already_existing_reasons ) {
+            next unless $reason;
+            $insert_av_sth->execute( $i, $reason );
+            $update_orders_sth->execute( $i, $reason );
+            $i++;
+        }
+        print "Upgrade to $DBversion done (Bug 13380: Add the ORDER_CANCELLATION_REASON authorised value)\n";
     }
-    print "Upgrade to $DBversion done (Bug 13380: Add the ORDER_CANCELLATION_REASON authorised value)\n";
+    else {
+        print "Upgrade to $DBversion done (Bug 13380: ORDER_CANCELLATION_REASON authorised value already existed from earlier update!)\n";
+    }
+
     SetVersion($DBversion);
 }
 
