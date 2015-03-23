@@ -40,6 +40,7 @@ start_zebra_instance()
         "/var/log/koha/$instancename/zebra-output.log"
     daemon \
         --name="$instancename-koha-zebra" \
+        --pidfiles="/var/run/koha/$instancename/" \
         --errlog="/var/log/koha/$instancename/zebra-error.log" \
         --stdout="/var/log/koha/$instancename/zebra.log" \
         --output="/var/log/koha/$instancename/zebra-output.log" \
