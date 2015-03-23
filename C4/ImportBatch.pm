@@ -623,7 +623,7 @@ sub BatchCommitRecords {
             $recordid = $record_match;
             my $oldxml;
             if ($record_type eq 'biblio') {
-                my ($count, $oldbiblio) = GetBiblio($recordid);
+                my $oldbiblio = GetBiblio($recordid);
                 $oldxml = GetXmlBiblio($recordid);
 
                 # remove item fields so that they don't get
@@ -822,7 +822,7 @@ sub BatchRevertRecords {
             my $old_record = MARC::Record->new_from_xml(StripNonXmlChars($rowref->{'marcxml_old'}), 'UTF-8', $rowref->{'encoding'}, $marc_type);
             if ($record_type eq 'biblio') {
                 my $biblionumber = $rowref->{'matched_biblionumber'};
-                my ($count, $oldbiblio) = GetBiblio($biblionumber);
+                my $oldbiblio = GetBiblio($biblionumber);
                 $num_items_deleted += BatchRevertItems($rowref->{'import_record_id'}, $rowref->{'matched_biblionumber'});
                 ModBiblio($old_record, $biblionumber, $oldbiblio->{'frameworkcode'});
             } else {
