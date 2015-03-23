@@ -427,7 +427,7 @@ sub build_patron_status {
             $resp .= maybe_add( FID_FEE_AMT,  $patron->fee_amount );
         }
 
-        $resp .= maybe_add( FID_SCREEN_MSG, $patron->screen_msg,   $server );
+        $resp .= maybe_add( FID_SCREEN_MSG, $patron->screen_msg, $server );
         $resp .= maybe_add( FID_SCREEN_MSG, $patron->{branchcode}, $server )
           if ( $server->{account}->{send_patron_home_library_in_af} );
 
