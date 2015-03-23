@@ -6,6 +6,8 @@
     <title>Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Confirm holds</title>
 [% END %]
 [% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
     // <![CDATA[
@@ -24,6 +26,23 @@ $(document).ready(function() {
     [% IF AutoResumeSuspendedHolds %]
         $(".suspend_until_datepicker, .datepickerfrom, .datepickerto").datepicker("option", "minDate", 1);
     [% END %]
+
+    var table = $("#table_borrowers").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+            { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
+        ],
+        "aaSorting": [[ 2, "asc" ]],
+        "sDom": "t",
+        "iDisplayLength": -1
+    }));
+    $(table).find('tbody tr').filter(':has(:radio:checked)').end().click(function(event) {
+        $('#table_borrowers tbody tr').removeClass('selected');
+        $(this).addClass('selected');
+        if (event.target.type !== 'radio') {
+            $(':radio', this).attr('checked', 'true')
+        }
+    });
+
 });
 
 function check() {
@@ -144,7 +163,7 @@ function checkMultiHold() {
 
     $('#hold-request-form').preventDoubleFormSubmit();
 
-[% UNLESS ( borrowernumber || borrower_list || noitems ) %]
+[% UNLESS ( borrowernumber || borrowers || noitems ) %]
     [% IF ( CircAutocompl ) %]
     $( "#patron" ).autocomplete({
         source: "/cgi-bin/koha/circ/ysearch.pl",
@@ -218,7 +237,7 @@ function checkMultiHold() {
       <div class="dialog alert"><h3>Patron not found</h3><p>No patron with this name, please, try another</p> </div>
     [% END %]
     <form  id="holds_patronsearch" action="request.pl?biblionumber=[% biblionumber %]" method="post">
-        [% UNLESS borrower_list %]
+        [% UNLESS borrowers %]
             <fieldset class="brief">
                 <label for="patron">Patron: </label>
                 <div class="hint">Enter patron card number or partial name:</div>
@@ -228,16 +247,33 @@ function checkMultiHold() {
             </fieldset>
         [% ELSE %]
           <fieldset>
-            <select size="7" name="borrowernumber">
-            [% FOREACH borrower IN borrower_list %]
-                <option value="[% borrower.borrowernumber %]">
-[% borrower.surname -%], [% borrower.firstname -%]
- ... ( [% borrower.cardnumber -%] - [% borrower.categorycode -%] - [% borrower.branchcode %]
-) ... [% borrower.address %]
-                </option>
-            [% END %]
-            </select>
-            <input type="hidden" name="biblionumber" value="[% biblionumber %]" /><fieldset class="action"><input type="submit" value="Select" /></fieldset></fieldset>
+            <table id="table_borrowers">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Cardnumber</th>
+                        <th>Category</th>
+                        <th>Library</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    [% FOREACH borrower IN borrowers %]
+                    <tr>
+                        <td><input type="radio" name="borrowernumber" value="[% borrower.borrowernumber %]" /></td>
+                        <td>[% borrower.surname %], [% borrower.firstname %]</td>
+                        <td>[% borrower.cardnumber %]</td>
+                        <td>[% borrower.categorycode %]</td>
+                        <td>[% borrower.branchcode %]</td>
+                        <td>[% borrower.address %]</td>
+                    </tr>
+                    [% END %]
+                </tbody>
+            </table>
+            <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+            <fieldset class="action"><input type="submit" value="Select" /></fieldset>
+          </fieldset>
 
         [% END %]
         [% IF ( multi_hold ) %]

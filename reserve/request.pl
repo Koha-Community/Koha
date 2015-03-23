@@ -40,6 +40,7 @@ use C4::Items;
 use C4::Koha;
 use C4::Circulation;
 use C4::Dates qw/format_date/;
+use C4::Utils::DataTables::Members;
 use C4::Members;
 use C4::Search;		# enabled_staff_search_views
 use Koha::DateUtils;
@@ -102,17 +103,25 @@ if ( $action eq 'move' ) {
 }
 
 if ($findborrower) {
-    my $borrowers = Search($findborrower, 'cardnumber');
-
-    if ($borrowers && @$borrowers) {
-        if ( @$borrowers == 1 ) {
-            $borrowernumber_hold = $borrowers->[0]->{'borrowernumber'};
-        }
-        else {
-            $template->param( borrower_list => sort_borrowerlist($borrowers));
-        }
+    my $borrower = C4::Members::GetMember( cardnumber => $findborrower );
+    if ( $borrower ) {
+        $borrowernumber_hold = $borrower->{borrowernumber};
     } else {
-        $messageborrower = "'$findborrower'";
+        my $dt_params = { iDisplayLength => -1 };
+        my $results = C4::Utils::DataTables::Members::search(
+            {
+                searchmember => $findborrower,
+                dt_params => $dt_params,
+            }
+        );
+        my $borrowers = $results->{patrons};
+        if ( scalar @$borrowers == 1 ) {
+            $borrowernumber_hold = $borrower->[0]->{borrowernumber};
+        } elsif ( @$borrowers ) {
+            $template->param( borrowers => $borrowers );
+        } else {
+            $messageborrower = "'$findborrower'";
+        }
     }
 }
 
