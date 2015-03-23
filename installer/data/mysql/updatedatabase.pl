@@ -9746,6 +9746,13 @@ if(CheckVersion($DBversion)) {
 }
 
 
+$DBversion = "3.18.05.002";
+if(CheckVersion($DBversion)) {
+    $dbh->do(q{UPDATE authorised_values SET category='ORDER_CANCELLATION_REASON' WHERE category='ORDER_CANCELLATI'});
+    print "Upgrade to $DBversion done (Bug 13380: Fix the authorised value categories if truncated with previous DB update (3.18.04.002))\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
