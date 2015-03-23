@@ -1,24 +1,24 @@
-<h1>RELEASE NOTES FOR KOHA 3.18.5</h1>
-<p>22 Mar 2015</p>
+<h1>RELEASE NOTES FOR KOHA 3.18.5.1</h1>
+<p>23 Mar 2015</p>
 
 <p>Koha is the first free and open source software library automation package  (ILS). Development is sponsored by libraries of varying types and sizes,  volunteers, and support companies from around the world.</p>
-<p>The website for the Koha project is <a href="http://koha-community.org/">http://koha-community.org</a> and Koha 3.18.5 can be downloaded from: <a href="http://download.koha-community.org/koha-3.18.05.tar.gz">http://download.koha-community.org/koha-3.18.05.tar.gz</a></p>
+<p>The website for the Koha project is <a href="http://koha-community.org/">http://koha-community.org</a> and Koha 3.18.5.1 can be downloaded from: <a href="http://download.koha-community.org/koha-3.18.05.1.tar.gz">http://download.koha-community.org/koha-3.18.05.1.tar.gz</a></p>
 
 <p>Installation instructions can be found at <a href="http://wiki.koha-community.org/wiki/Installation_Documentation">http://wiki.koha-community.org/wiki/Installation_Documentation</a> or in the INSTALL files that come in the tarball</p>
 
 
-Koha 3.18.5 is a bugfix/maintenance release.
+Koha 3.18.5.1 is a bugfix/maintenance release.
 
-<p>It includes 3 enhancements and 36 bugfixes.</p>
+<p>It includes 3 enhancements and 38 bugfixes.</p>
 <h4>Table of contents</h4>
 <nav>
-    <ul>        <li><a href="#koha-features">New features</a></li>        <li><a href="#koha-enhancements">Enhancements</a></li>        <li><a href="#koha-other">Other bugfixes</a></li>        <li><a href="#koha-sysprefs">Changes on system preferences</a></li>        <li><a href="#koha-requirements">System requirements</a></li>
+    <ul>           <li><a href="#koha-enhancements">Enhancements</a></li>        <li><a href="#koha-other">Other bugfixes</a></li>             <li><a href="#koha-requirements">System requirements</a></li>
         <li><a href="#koha-docs">Documentation</a></li>        <li><a href="#koha-translations">Translations</a></li>        <li><a href="#koha-release-team">Release team</a></li>        <li><a href="#koha-credits">Credits</a></li>
         <li><a href="#koha-git">Revision control</a></li>
         <li><a href="#koha-report-bugs">Bug and feature requests</a></li>
     </ul>
 </nav>
-        <h3 id="koha-enhancements">Enhancements in Koha 3.18.5</h3>    <h4>OPAC</h4>
+        <h3 id="koha-enhancements">Enhancements in Koha 3.18.5.1</h3>    <h4>OPAC</h4>
     <ul>            <li>
                 Give news in Opac a unique anchor <i>(bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13729">13729</a>)</i>
             </li>    </ul>    <h4>Packaging</h4>
@@ -27,9 +27,12 @@ Koha 3.18.5 is a bugfix/maintenance release.
             </li>    </ul>    <h4>Test Suite</h4>
     <ul>            <li>
                 Add unit tests for C4::Boolean <i>(bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13814">13814</a>)</i>
-            </li>    </ul>    <h3 id="koha-critical">Critical bugs fixed in Koha 3.18.5</h3>    <h4>Acquisitions</h4>
+            </li>    </ul>    <h3 id="koha-critical">Critical bugs fixed in Koha 3.18.5.1</h3>    <h4>Acquisitions</h4>
     <ul>        <li>
             Suggestions reason doesn't save <i>(major - bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13731">13731</a>)</i>
+        </li>    </ul>    <h4>Architecture, internals, and plumbing</h4>
+    <ul>        <li>
+            Authorised_values.category is varchar(16) <i>(major - bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13379">13379</a>)</i>
         </li>    </ul>    <h4>Cataloging</h4>
     <ul>        <li>
             AddBiblio fails on mysql with STRICT_TRANS_TABLES <i>(major - bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13523">13523</a>)</i>
@@ -41,7 +44,7 @@ Koha 3.18.5 is a bugfix/maintenance release.
         </li>    </ul>    <h4>Tools</h4>
     <ul>        <li>
             Plugins fail when loading templates <i>(critical - bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13473">13473</a>)</i>
-        </li>    </ul>    <h3 id="koha-other">Other bugs fixed in Koha 3.18.5</h3>    <h4>Acquisitions</h4>
+        </li>    </ul>    <h3 id="koha-other">Other bugs fixed in Koha 3.18.5.1</h3>    <h4>Acquisitions</h4>
     <ul>          <li>
             Auto fill order cancellation reasons from authorised values <i>(normal - bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13380">13380</a>)</i>
           </li>    </ul>    <h4>Architecture, internals, and plumbing</h4>
@@ -77,6 +80,9 @@ Koha 3.18.5 is a bugfix/maintenance release.
             Untranslatable strings in aqbudgetperiods.tt <i>(trivial - bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13350">13350</a>)</i>
           </li>          <li>
             Untranslatable javascript in members.tt <i>(trivial - bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13351">13351</a>)</i>
+          </li>    </ul>    <h4>OPAC</h4>
+    <ul>          <li>
+            Opaccredits printing at top on printable version <i>(minor - bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=12399">12399</a>)</i>
           </li>    </ul>    <h4>Packaging</h4>
     <ul>          <li>
             Allow running Zebra daemon for disabled instances in packages <i>(minor - bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13784">13784</a>)</i>
@@ -118,8 +124,7 @@ Koha 3.18.5 is a bugfix/maintenance release.
             Inventory: fix "wrong place" and "item not scanned" statuses <i>(normal - bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=12631">12631</a>)</i>
           </li>          <li>
             Patron cards creator doesn't work with diacritics, utf-8 or ttf fonts <i>(minor - bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13709">13709</a>)</i>
-          </li>    </ul>    <h3 id="koha-sysprefs">New system preferences in Koha 3.18.5</h3>
-    <ul>    </ul>
+          </li>    </ul> 
 
 
 <h3 id="koha-requirements">System requirements</h3>
@@ -146,35 +151,21 @@ Koha 3.18.5 is a bugfix/maintenance release.
 
 <li>Armenian (98%)</li>
 
-<li>Chinese (China) (91%)</li>
-
-<li>Chinese (Taiwan) (98%)</li>
-
 <li>Czech (99%)</li>
 
 <li>Danish (85%)</li>
 
-<li>English (New Zealand) (95%)</li>
-
-<li>French (97%)</li>
-
-<li>French (Canada) (87%)</li>
+<li>French (98%)</li>
 
 <li>German (100%)</li>
 
-<li>German (Switzerland) (100%)</li>
-
-<li>Italian (99%)</li>
+<li>Italian (100%)</li>
 
 <li>Kurdish (62%)</li>
-
-<li>Norwegian Bokmål (58%)</li>
 
 <li>Polish (80%)</li>
 
 <li>Portuguese (98%)</li>
-
-<li>Portuguese (Brazil) (89%)</li>
 
 <li>Slovak (100%)</li>
 
@@ -199,7 +190,7 @@ Koha 3.18.5 is a bugfix/maintenance release.
 
 <h3 id="koha-release-team">Release Team</h3>
 
-The release team for Koha 3.18.5 is
+The release team for Koha 3.18.5.1 is
 
 <ul>
     <li>Release Manager: Tomás Cohen Arazi <tomascohen@gmail.com></li>
@@ -235,7 +226,7 @@ The release team for Koha 3.18.5 is
 <h3 id="koha-credits">Credits</h3>
 
 
-<p>We thank the following libraries who are known to have sponsored new features in Koha 3.18.5:</p>
+<p>We thank the following libraries who are known to have sponsored new features in Koha 3.18.5.1:</p>
 <ul>
 
 <li>Universidad Nacional de Cordoba
@@ -245,7 +236,7 @@ The release team for Koha 3.18.5 is
 
 
 
-<p>We thank the following individuals who contributed patches to Koha 3.18.5:</p>
+<p>We thank the following individuals who contributed patches to Koha 3.18.5.1:</p>
 <ul>
 
 <li>Rochelle (1)</li>
@@ -254,11 +245,13 @@ The release team for Koha 3.18.5 is
 
 <li>Larry Baerveldt (2)</li>
 
+<li>Galen Charlton (1)</li>
+
 <li>Tomás Cohen Arazi (6)</li>
 
-<li>Chris Cormack (5)</li>
+<li>Chris Cormack (7)</li>
 
-<li>Jonathan Druart (15)</li>
+<li>Jonathan Druart (17)</li>
 
 <li>Nicole Engard (2)</li>
 
@@ -290,7 +283,7 @@ The release team for Koha 3.18.5 is
 
 <li>Mark Tompsett (1)</li>
 
-<li>Marc Véron (4)</li>
+<li>Marc Véron (5)</li>
 
 </ul>
 
@@ -298,18 +291,20 @@ The release team for Koha 3.18.5 is
 
 
 
-<p>We thank the following libraries, companies, and other institutions who contributed patches to Koha 3.18.5:</p>
+<p>We thank the following libraries, companies, and other institutions who contributed patches to Koha 3.18.5.1:</p>
 <ul>
 
 <li>BSZ BW (11)</li>
 
-<li>BibLibre (21)</li>
+<li>BibLibre (23)</li>
 
 <li>BigBallOfWax (1)</li>
 
 <li>ByWater-Solutions (15)</li>
 
-<li>Catalyst (5)</li>
+<li>Catalyst (7)</li>
+
+<li>Equinox (1)</li>
 
 <li>Oslo Public Library (1)</li>
 
@@ -323,20 +318,22 @@ The release team for Koha 3.18.5 is
 
 <li>unidentified (2)</li>
 
-<li>veron.ch (4)</li>
+<li>veron.ch (5)</li>
 
 </ul>
 
 
 
-<p>We also especially thank the following individuals who tested patches for Koha 3.18.5:</p>
+<p>We also especially thank the following individuals who tested patches for Koha 3.18.5.1:</p>
 <ul>
 
-<li>Brendan Gallagher (13)</li>
+<li>Brendan Gallagher (14)</li>
 
-<li>Chris Cormack (66)</li>
+<li>Chris Cormack (69)</li>
 
 <li>Dobrica Pavlinusic (4)</li>
+
+<li>Galen Charlton (1)</li>
 
 <li>Jacek Ablewicz (1)</li>
 
@@ -346,7 +343,7 @@ The release team for Koha 3.18.5 is
 
 <li>Jonathan Druart (27)</li>
 
-<li>Katrin Fischer (22)</li>
+<li>Katrin Fischer (23)</li>
 
 <li>Larry Baerveldt (4)</li>
 
@@ -366,13 +363,13 @@ The release team for Koha 3.18.5 is
 
 <li>Robin Sheat (2)</li>
 
-<li>Tomas Cohen Arazi (66)</li>
+<li>Tomas Cohen Arazi (67)</li>
 
 <li>Nicole C. Engard (1)</li>
 
-<li>Kyle M Hall (12)</li>
+<li>Kyle M Hall (13)</li>
 
-<li>Bernardo Gonzalez Kriegel (2)</li>
+<li>Bernardo Gonzalez Kriegel (3)</li>
 
 </ul>
 
@@ -393,4 +390,4 @@ The release team for Koha 3.18.5 is
 <p>Bug reports and feature requests can be filed at the Koha bug tracker at <a href="http://bugs.koha-community.org/">http://bugs.koha-community.org</a></p>
 
 <p>He rau ringa e oti ai. (Many hands finish the work)</p>
-##### Autogenerated release notes updated last on 22 Mar 2015 05:45:05 Z #####
+##### Autogenerated release notes updated last on 23 Mar 2015 23:16:56 Z #####
