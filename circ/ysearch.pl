@@ -22,61 +22,63 @@
 
 =head1 ysearch.pl
 
-
 =cut
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Members;
 use C4::Auth qw/check_cookie_auth/;
+use Koha::Borrowers;
 
-my $input   = new CGI;
-my $query   = $input->param('term');
+use JSON qw( to_json );
+
+my $input = new CGI;
+my $query = $input->param('term');
 
 binmode STDOUT, ":encoding(UTF-8)";
-print $input->header(-type => 'text/plain', -charset => 'UTF-8');
+print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
 
-my ($auth_status, $sessionID) = check_cookie_auth($input->cookie('CGISESSID'), { circulate => '*' });
-if ($auth_status ne "ok") {
+my ( $auth_status, $sessionID ) = check_cookie_auth( $input->cookie('CGISESSID'), { circulate => '*' } );
+if ( $auth_status ne "ok" ) {
     exit 0;
 }
 
-my $dbh = C4::Context->dbh;
-my $sql = q(
-    SELECT borrowernumber, surname, firstname, cardnumber, address, city, zipcode, country
-    FROM borrowers
-    WHERE ( surname LIKE ?
-        OR firstname LIKE ?
-        OR cardnumber LIKE ? )
-);
+my $limit_on_branch;
 if (   C4::Context->preference("IndependentBranches")
     && C4::Context->userenv
     && !C4::Context->IsSuperLibrarian()
-    && C4::Context->userenv->{'branch'} )
-{
-    $sql .= " AND borrowers.branchcode ="
-      . $dbh->quote( C4::Context->userenv->{'branch'} );
+    && C4::Context->userenv->{'branch'} ) {
+    $limit_on_branch = 1;
 }
 
-$sql    .= q( ORDER BY surname, firstname LIMIT 10);
-my $sth = $dbh->prepare( $sql );
-$sth->execute("$query%", "$query%", "$query%");
+my $borrowers_rs = Koha::Borrowers->search(
+    {   -or => {
+            surname    => { -like => "$query%" },
+            firstname  => { -like => "$query%" },
+            cardnumber => { -like => "$query%" },
+            ( $limit_on_branch ? { branchcode => C4::Context->userenv->{branch} } : () ),
+        },
+    },
+    {
+        # Get the first 10 results
+        page     => 1,
+        rows     => 10,
+        order_by => [ 'surname', 'firstname' ],
+    },
+);
 
-print "[";
-my $i = 0;
-while ( my $rec = $sth->fetchrow_hashref ) {
-    if($i > 0){ print ","; }
-    print "{\"borrowernumber\":\"" . $rec->{borrowernumber} . "\",\"" .
-          "surname\":\"".$rec->{surname} . "\",\"" .
-          "firstname\":\"".$rec->{firstname} . "\",\"" .
-          "cardnumber\":\"".$rec->{cardnumber} . "\",\"" .
-          "address\":\"".$rec->{address} . "\",\"" .
-          "city\":\"".$rec->{city} . "\",\"" .
-          "zipcode\":\"".$rec->{zipcode} . "\",\"" .
-          "country\":\"".$rec->{country} . "\"" .
-          "}";
-    $i++;
+my @borrowers;
+while ( my $b = $borrowers_rs->next ) {
+    push @borrowers,
+      { borrowernumber => $b->borrowernumber,
+        surname        => $b->surname,
+        firstname      => $b->firstname,
+        cardnumber     => $b->cardnumber,
+        address        => $b->address,
+        city           => $b->city,
+        zipcode        => $b->zipcode,
+        country        => $b->country
+      };
 }
-print "]";
+
+print to_json( \@borrowers );

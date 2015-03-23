@@ -96,17 +96,17 @@ my @objects = Koha::Objects->search($params);
 =cut
 
 sub search {
-    my ( $self, $params ) = @_;
+    my ( $self, $params, $attributes ) = @_;
 
     if (wantarray) {
-        my @dbic_rows = $self->_resultset()->search($params);
+        my @dbic_rows = $self->_resultset()->search($params, $attributes);
 
         return $self->_wrap(@dbic_rows);
 
     }
     else {
         my $class = ref($self) ? ref($self) : $self;
-        my $rs = $self->_resultset()->search($params);
+        my $rs = $self->_resultset()->search($params, $attributes);
 
         return $class->_new_from_dbic($rs);
     }
