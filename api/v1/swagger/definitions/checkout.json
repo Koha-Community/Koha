@@ -1,0 +1,48 @@
+{
+  "type": "object",
+  "properties": {
+    "issue_id": {
+      "type": "string",
+      "description": "internally assigned checkout identifier"
+    },
+    "borrowernumber": {
+      "$ref": "../x-primitives.json#/borrowernumber"
+    },
+    "itemnumber": {
+      "$ref": "../x-primitives.json#/itemnumber"
+    },
+    "date_due": {
+      "description": "Due date"
+    },
+    "branchcode": {
+      "$ref": "../x-primitives.json#/branchcode"
+    },
+    "issuingbranch": {
+      "description": "Code of the branch where issue was made"
+    },
+    "returndate": {
+      "description": "Date the item was returned"
+    },
+    "lastreneweddate": {
+      "description": "Date the item was last renewed"
+    },
+    "return": {
+      "description": "?"
+    },
+    "renewals": {
+      "description": "Number of renewals"
+    },
+    "auto_renew": {
+      "description": "Auto renewal"
+    },
+    "timestamp": {
+      "description": "Last update time"
+    },
+    "issuedate": {
+      "description": "Date the item was issued"
+    },
+    "onsite_checkout": {
+      "description": "On site checkout"
+    }
+  }
+}
