@@ -16,6 +16,22 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table api_keys
+--
+
+DROP TABLE IF EXISTS api_keys;
+CREATE TABLE api_keys (
+    borrowernumber int(11) NOT NULL, -- foreign key to the borrowers table
+    api_key VARCHAR(255) NOT NULL, -- API key used for API authentication
+    active int(1) DEFAULT 1, -- 0 means this API key is revoked
+    PRIMARY KEY (borrowernumber, api_key),
+    CONSTRAINT api_keys_fk_borrowernumber
+      FOREIGN KEY (borrowernumber)
+      REFERENCES borrowers (borrowernumber)
+      ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
 -- Table structure for table `auth_header`
 --
 

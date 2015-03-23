@@ -1,0 +1,76 @@
+[% USE Koha %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Patrons [% IF ( searching ) %]&rsaquo; API Keys[% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body id="pat_apikeys" class="pat">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'patron-search.inc' %]
+
+<div id="breadcrumbs">
+  <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+  &rsaquo;
+  <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
+  &rsaquo;
+  API Keys for [% INCLUDE 'patron-title.inc' %]
+</div>
+
+<div id="doc3" class="yui-t2">
+  <div id="bd">
+    <div id="yui-main">
+      <div class="yui-b">
+        [% INCLUDE 'members-toolbar.inc' %]
+
+        <h1>API keys for [% INCLUDE 'patron-title.inc' %]</h1>
+        <div>
+          <form action="/cgi-bin/koha/members/apikeys.pl" method="post">
+            <input type="hidden" name="borrowernumber" value="[% borrowernumber %]">
+            <input type="hidden" name="op" value="generate">
+            <input type="submit" value="Generate new key">
+          </form>
+        </div>
+        [% IF api_keys.size > 0 %]
+          <table>
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Active</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              [% FOREACH key IN api_keys %]
+                <tr>
+                  <td>[% key.api_key %]</td>
+                  <td>[% IF key.active %]Yes[% ELSE %]No[% END %]</td>
+                  <td>
+                    <form action="/cgi-bin/koha/members/apikeys.pl" method="post">
+                      <input type="hidden" name="borrowernumber" value="[% borrowernumber %]">
+                      <input type="hidden" name="key" value="[% key.api_key %]">
+                      <input type="hidden" name="op" value="delete">
+                      <input type="submit" value="Delete">
+                    </form>
+                    <form action="/cgi-bin/koha/members/apikeys.pl" method="post">
+                      <input type="hidden" name="borrowernumber" value="[% borrowernumber %]">
+                      <input type="hidden" name="key" value="[% key.api_key %]">
+                      [% IF key.active %]
+                        <input type="hidden" name="op" value="revoke">
+                        <input type="submit" value="Revoke">
+                      [% ELSE %]
+                        <input type="hidden" name="op" value="activate">
+                        <input type="submit" value="Activate">
+                      [% END %]
+                    </form>
+                  </td>
+                </tr>
+              [% END %]
+            </tbody>
+          </table>
+        [% END %]
+      </div>
+    </div>
+    <div class="yui-b">
+      [% INCLUDE 'circ-menu.inc' %]
+    </div>
+  </div>
+[% INCLUDE 'intranet-bottom.inc' %]
