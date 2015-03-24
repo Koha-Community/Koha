@@ -74,10 +74,10 @@
         }
       }
     },
-    "/reserves": {
+    "/holds": {
       "get": {
-        "operationId": "listReserves",
-        "tags": ["borrowers", "reserves"],
+        "operationId": "listHolds",
+        "tags": ["borrowers", "holds"],
         "parameters": [
           {
             "name": "borrowernumber",
@@ -90,8 +90,8 @@
         "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": "A list of reserves",
-            "schema": { "$ref": "#/definitions/reserves" }
+            "description": "A list of holds",
+            "schema": { "$ref": "#/definitions/holds" }
           },
           "404": {
             "description": "Borrower not found",
@@ -100,13 +100,13 @@
         }
       },
       "post": {
-        "operationId": "addReserve",
-        "tags": ["borrowers", "reserves"],
+        "operationId": "addHold",
+        "tags": ["borrowers", "holds"],
         "parameters": [
           {
             "name": "body",
             "in": "body",
-            "description": "A JSON object containing informations about the new reserve",
+            "description": "A JSON object containing informations about the new hold",
             "required": true,
             "schema": {
               "type": "object",
@@ -128,7 +128,7 @@
                   "type": "string"
                 },
                 "expirationdate": {
-                  "description": "Reserve end date",
+                  "description": "Hold end date",
                   "type": "string",
                   "format": "date"
                 }
@@ -140,15 +140,15 @@
         "produces": ["application/json"],
         "responses": {
           "201": {
-            "description": "Created reserve",
-            "schema": { "$ref": "#/definitions/reserve" }
+            "description": "Created hold",
+            "schema": { "$ref": "#/definitions/hold" }
           },
           "400": {
             "description": "Missing or wrong parameters",
             "schema": { "$ref": "#/definitions/error" }
           },
           "403": {
-            "description": "Reserve not allowed",
+            "description": "Hold not allowed",
             "schema": { "$ref": "#/definitions/error" }
           },
           "404": {
@@ -162,12 +162,12 @@
         }
       }
     },
-    "/reserves/{reserve_id}": {
+    "/holds/{reserve_id}": {
       "put": {
-        "operationId": "editReserve",
-        "tags": ["reserves"],
+        "operationId": "editHold",
+        "tags": ["holds"],
         "parameters": [
-          { "$ref": "#/parameters/reserveIdPathParam" },
+          { "$ref": "#/parameters/holdIdPathParam" },
           {
             "name": "body",
             "in": "body",
@@ -198,24 +198,24 @@
         "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": "Updated reserve",
-            "schema": { "$ref": "#/definitions/reserve" }
+            "description": "Updated hold",
+            "schema": { "$ref": "#/definitions/hold" }
           },
           "400": {
             "description": "Missing or wrong parameters",
             "schema": { "$ref": "#/definitions/error" }
           },
           "404": {
-            "description": "Reserve not found",
+            "description": "Hold not found",
             "schema": { "$ref": "#/definitions/error" }
           }
         }
       },
       "delete": {
-        "operationId": "deleteReserve",
-        "tags": ["reserves"],
+        "operationId": "deleteHold",
+        "tags": ["holds"],
         "parameters": [
-          { "$ref": "#/parameters/reserveIdPathParam" }
+          { "$ref": "#/parameters/holdIdPathParam" }
         ],
         "produces": ["application/json"],
         "responses": {
@@ -226,7 +226,7 @@
             }
           },
           "404": {
-            "description": "Reserve not found",
+            "description": "Hold not found",
             "schema": { "$ref": "#/definitions/error" }
           }
         }
@@ -244,10 +244,10 @@
       "required": true,
       "type": "integer"
     },
-    "reserveIdPathParam": {
+    "holdIdPathParam": {
       "name": "reserve_id",
       "in": "path",
-      "description": "Internal reserve identifier",
+      "description": "Internal hold identifier",
       "required": true,
       "type": "integer"
     }

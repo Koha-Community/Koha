@@ -68,30 +68,30 @@ my $put_data = {
     priority => 2,
     suspend_until => $suspend_until,
 };
-$t->put_ok("/api/v1/reserves/$reserve_id" => json => $put_data)
+$t->put_ok("/api/v1/holds/$reserve_id" => json => $put_data)
   ->status_is(200)
   ->json_is('/reserve_id', $reserve_id)
   ->json_is('/suspend_until', $suspend_until . ' 00:00:00')
   ->json_is('/priority', 2);
 
-$t->delete_ok("/api/v1/reserves/$reserve_id")
+$t->delete_ok("/api/v1/holds/$reserve_id")
   ->status_is(200);
 
-$t->put_ok("/api/v1/reserves/$reserve_id" => json => $put_data)
+$t->put_ok("/api/v1/holds/$reserve_id" => json => $put_data)
   ->status_is(404)
   ->json_has('/error');
 
-$t->delete_ok("/api/v1/reserves/$reserve_id")
+$t->delete_ok("/api/v1/holds/$reserve_id")
   ->status_is(404)
   ->json_has('/error');
 
 
-$t->get_ok("/api/v1/reserves?borrowernumber=$borrowernumber")
+$t->get_ok("/api/v1/holds?borrowernumber=$borrowernumber")
   ->status_is(200)
   ->json_is([]);
 
 my $inexisting_borrowernumber = $borrowernumber2 + 1;
-$t->get_ok("/api/v1/reserves?borrowernumber=$inexisting_borrowernumber")
+$t->get_ok("/api/v1/holds?borrowernumber=$inexisting_borrowernumber")
   ->status_is(404)
   ->json_has('/error');
 
@@ -109,19 +109,19 @@ my $post_data = {
     branchcode => $branchcode,
     expirationdate => $expirationdate,
 };
-$t->post_ok("/api/v1/reserves" => json => $post_data)
+$t->post_ok("/api/v1/holds" => json => $post_data)
   ->status_is(201)
   ->json_has('/reserve_id');
 
 $reserve_id = $t->tx->res->json->{reserve_id};
 
-$t->get_ok("/api/v1/reserves?borrowernumber=$borrowernumber")
+$t->get_ok("/api/v1/holds?borrowernumber=$borrowernumber")
   ->status_is(200)
   ->json_is('/0/reserve_id', $reserve_id)
   ->json_is('/0/expirationdate', $expirationdate)
   ->json_is('/0/branchcode', $branchcode);
 
-$t->post_ok("/api/v1/reserves" => json => $post_data)
+$t->post_ok("/api/v1/holds" => json => $post_data)
   ->status_is(403)
   ->json_like('/error', qr/tooManyReserves/);
 

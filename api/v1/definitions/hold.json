@@ -2,14 +2,14 @@
     "type": "object",
     "properties": {
         "reserve_id": {
-            "description": "Internal reserve identifier"
+            "description": "Internal hold identifier"
         },
         "borrowernumber": {
             "type": "string",
             "description": "internally assigned user identifier"
         },
         "reservedate": {
-            "description": "the date the reserve was placed"
+            "description": "the date the hold was placed"
         },
         "biblionumber": {
             "type": "string",
@@ -26,19 +26,19 @@
             "description": "currently unused"
         },
         "cancellationdate": {
-            "description": "the date the reserve was cancelled"
+            "description": "the date the hold was cancelled"
         },
         "reservenotes": {
-            "description": "notes related to this reserve"
+            "description": "notes related to this hold"
         },
         "priority": {
             "description": "where in the queue the patron sits"
         },
         "found": {
-            "description": "a one letter code defining what the status of the reserve is after it has been confirmed"
+            "description": "a one letter code defining what the status of the hold is after it has been confirmed"
         },
         "timestamp": {
-            "description": "date and time the reserve was last updated"
+            "description": "date and time the hold was last updated"
         },
         "itemnumber": {
             "type": ["string", "null"],
@@ -48,7 +48,7 @@
             "description": "the date the item was marked as waiting for the patron at the library"
         },
         "expirationdate": {
-            "description": "the date the reserve expires"
+            "description": "the date the hold expires"
         },
         "lowestPriority": {
             "description": ""

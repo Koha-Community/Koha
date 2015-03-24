@@ -1,4 +1,4 @@
-package Koha::REST::V1::Reserve;
+package Koha::REST::V1::Hold;
 
 # This file is part of Koha.
 #
