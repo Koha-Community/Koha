@@ -68,14 +68,12 @@
             [% END # / opacreadinghistory %]
 
             [% IF Koha.Preference( 'suggestion' ) == 1 %]
-                [% UNLESS ( Koha.Preference( 'AnonSuggestions' ) == 1 ) %]
-                    [% IF ( suggestionsview ) %]
-                        <li class="active">
-                    [% ELSE %]
-                        <li>
-                    [% END %]
-                    <a href="/cgi-bin/koha/opac-suggestions.pl">your purchase suggestions</a></li>
+                [% IF ( suggestionsview ) %]
+                    <li class="active">
+                [% ELSE %]
+                    <li>
                 [% END %]
+                <a href="/cgi-bin/koha/opac-suggestions.pl">your purchase suggestions</a></li>
             [% END %]
 
             [% IF ( EnhancedMessagingPreferences ) %]

@@ -479,7 +479,6 @@ sub get_template_and_user {
             OPACShelfBrowser                      => "" . C4::Context->preference("OPACShelfBrowser"),
             OPACURLOpenInNewWindow                => "" . C4::Context->preference("OPACURLOpenInNewWindow"),
             OPACUserCSS                           => "" . C4::Context->preference("OPACUserCSS"),
-            OPACViewOthersSuggestions             => "" . C4::Context->preference("OPACViewOthersSuggestions"),
             OpacAuthorities                       => C4::Context->preference("OpacAuthorities"),
             opac_css_override                     => $ENV{'OPAC_CSS_OVERRIDE'},
             opac_search_limit                     => $opac_search_limit,
