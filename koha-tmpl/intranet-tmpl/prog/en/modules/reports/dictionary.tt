@@ -21,7 +21,7 @@
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided reports wizard</a>
 [% IF ( new_dictionary ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Name the new definition</strong>
 [% ELSIF ( step_2 ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Step 2: Choose the area </strong> 
-[% ELSIF ( step_3 ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Step 3: Choose columns </strong> 
+[% ELSIF ( step_3 ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Step 3: Choose a column </strong>
 [% ELSIF ( step_4 ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Step 4: Specify a value </strong> 
 [% ELSIF ( step_5 ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Step 5: Confirm definition</strong> 
 [% ELSE %] &rsaquo; <strong> Dictionary </strong>[% END %]</div>
@@ -136,13 +136,12 @@
 <h3>Add new definition</h3>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">      
 <fieldset class="rows">
-<legend>Step 3 of 5: Choose columns</legend>
+<legend>Step 3 of 5: Choose a column</legend>
 <input type="hidden" name="area" value="[% area %]" />
 <input type="hidden" name="definition_name" value="[% definition_name %]" />
 <input type="hidden" name="definition_description" value="[% definition_description %]" />
 
-<table style="border: 0;margin:1em;"><tr>
-<td style="border: 0;"><select id="availableColumns" name="oldcolumns2" size="25" style="width:200px;height:300px;">    
+<select id="availableColumns" name="columns" size="25" style="width:200px;height:300px;margin:1em;">
 [% FOREACH column IN columns %]
 [% IF ( column.table ) %]
 [% IF ( loop.first ) %]                              
@@ -161,11 +160,7 @@
 [% END %]              
 [% END %]                
 </optgroup>
-</select></td>
-
-<td style="border: 0;"><input type="button" name="Add" value="Add" class="button"  style="width : 6em; margin-bottom : .5em;" onclick="addColumn()" /><br /><input type="button" name="delete" value="&lt;&lt; Delete" class="button" style="width : 6em;"  onclick="delColumn()" />  </td>
-
-<td style="border: 0;"><select id="selectedColumns" name="columns" size="25" style="width:200px;height:300px;"></select>     </td>   </tr></table>     
+</select>
 
 <input type="hidden" name="phase" value="New Term step 4" />
 </fieldset>
@@ -282,34 +277,4 @@
 [% INCLUDE 'guided-reports-view.inc' %]
 </div>
 </div>
-<script type="text/javascript">                            
-//<![CDATA[
-function setObjects() {                    
-    selectedColumnsObj=document.getElementById('selectedColumns');           
-	availableColumnsObj=document.getElementById('availableColumns');   
-}              
-setObjects();                          
-
-function addColumn() {                             
-  for (i=0;i<availableColumnsObj.length;i++) {   
-    if (availableColumnsObj.options[i].selected==true) {     
-	  var newColumnObj=document.createElement("OPTION");                           
-	  newColumnObj.value=availableColumnsObj.options[i].value;          
-	  newColumnObj.text=availableColumnsObj.options[i].text;              
-	  selectedColumnsObj.appendChild(newColumnObj);          
-	  newColumnObj.selected=true;    
-	}        
-  }                        
-}   
-
-function delColumn() {                   
-  for (i=0;i<=selectedColumnsObj.options.length;i++) {       
-    if (selectedColumnsObj.options.selectedIndex>=0) {    
-	  selectedColumnsObj.remove(selectedColumnsObj.options.selectedIndex)        
-    }  
-  }
-}
-//]]>
-</script>
-
 [% INCLUDE 'intranet-bottom.inc' %]
