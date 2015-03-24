@@ -16,36 +16,6 @@ function popup(subscriptionid) {
 	window.open("subscription-renew.pl?subscriptionid="+subscriptionid,"subscription_renewal",'width=700,height=400,toolbar=false,scrollbars=yes');
 }
 
-function barcode_check(){
-    [% IF ( count ) %]
-    var count = [% count %];
-    for(var i=1;i<=count;i++){
-
-        var barcodenum = "barcode"+i;
-        var statusnum = "status"+i;
-        var elembarcode = "document.getElementById('"+barcodenum+"')";
-        var elemstatus = "document.getElementById('"+statusnum+"')";
-// alert(elembarcode+"\n"+eval(elembarcode+".value));
-// alert(elemstatus+"\n"+eval(elemstatus+".value"));
-        if(eval(elembarcode+".value") =='' && eval(elemstatus+".value") == 2){
-            var answer = confirm("Leave barcode blank?\n - Note: unable to change this later");
-            if (answer){
-                document.f.submit();
-            } else {
-                return false;
-            }
-        }
-        if(eval(elembarcode+".value".indexOf('TEMP')) > 0 && eval(elemstatus+".value") == 2){
-            var answer = confirm("A barcode was not entered.\nDo you want to put in a barcode\nor do you want to use a system generated barcode?");
-            if (answer){
-                document.f.submit();
-            } else {
-                return false;
-            }
-        }
-    }
-    [% END %]
-}
 function unHideItems(index,labelindex, serialId) {
 	subfield = document.getElementById(index);
 	subfield.style.display = 'block';
@@ -127,7 +97,6 @@ $(document).ready(function() {
     [% IF ( callnumber ) %] callnumber: [% callnumber %][% END %]</h1>
 [% IF internalnotes %]<p>Nonpublic note: [% internalnotes %]</p>[% END %]
 <form method="post" name="f" action="serials-edit.pl" id="serials_edit">
-<!--onsubmit="return barcode_check()">-->
 
 [% IF ( Errors ) %]
 <div class="dialog alert">
