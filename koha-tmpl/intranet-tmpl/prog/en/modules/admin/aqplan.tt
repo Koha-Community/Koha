@@ -225,6 +225,8 @@
 
 </form>
 
+        [% ELSIF not budget_period_id %]
+<div class="dialog alert">No active budget defined. You should define one before continuing.</div>
         [% ELSE %]
 <div class="dialog message">No funds to display for this search criteria</div>
         [% END %]
