@@ -104,6 +104,10 @@ if ( $budget_period_locked == 1  && not defined  $show_actual ) {
 
 $authcat = 'Asort1' if  not defined $authcat; # defaults to Asort if no authcat given
 
+# If no active budget is defined, budget_period_id is undef
+# This is the behavior of GetBudgetPeriod
+$authcat = '' unless $budget_period_id;
+
 my $budget_id = $input->param('budget_id');
 my $op        = $input->param("op");
 
