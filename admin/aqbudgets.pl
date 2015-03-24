@@ -100,16 +100,7 @@ $template->param(
 
 my $budget;
 
-my $branches = GetBranches($show_mine);
-my @branchloop2;
-foreach my $thisbranch (keys %$branches) {
-    my %row = (
-        value      => $thisbranch,
-        branchname => $branches->{$thisbranch}->{'branchname'},
-    );
-    $row{selected} = 1 if $thisbranch eq $filter_budgetbranch;
-    push @branchloop2, \%row;
-}
+my $branchloop = C4::Branch::GetBranchesLoop($filter_budgetbranch);
 
 $template->param(auth_cats_loop => GetBudgetAuthCats( $budget_period_id ))
     if $budget_period_id;
@@ -284,6 +275,7 @@ if ( $op eq 'list' ) {
 
 	#This Looks WEIRD to me : should budgets be filtered in such a way ppl who donot own it would not see the amount spent on the budget by others ?
 
+    my @budgets_to_display;
     foreach my $budget (@budgets) {
         # PERMISSIONS
         unless(CanUserModifyBudget($borrowernumber, $budget, $staffflags)) {
@@ -335,6 +327,7 @@ if ( $op eq 'list' ) {
         $budget->{budget_hierarchy} = \@budget_hierarchy;
 
         $budget->{budget_has_children} = BudgetHasChildren( $budget->{budget_id} );
+        push @budgets_to_display, $budget;
     }
 
     my $budget_period_total = $period->{budget_period_total};
@@ -343,14 +336,15 @@ if ( $op eq 'list' ) {
 
     $template->param(
         op                     => 'list',
-        budgets                => \@budgets,
+        budgets                => \@budgets_to_display,
         periods                => $periods,
         budget_period_total    => $budget_period_total,
         period_alloc_total     => $period_alloc_total,
         spent_total            => $spent_total,
         ordered_total          => $ordered_total,
         available_total        => $available_total,
-        branchloop             => \@branchloop2,
+        branchloop             => $branchloop,
+        filter_budgetname      => $filter_budgetname,
     );
 
 } #---- END list
