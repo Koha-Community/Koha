@@ -400,6 +400,7 @@ if ( $output eq "file" ) {
     exit(1);
 }
 
+my $branchloop = C4::Branch::GetBranchesLoop();
 $template->param(
     authvals_row              => \@authvals_row,
     budget_lines              => \@budget_lines,
@@ -415,7 +416,8 @@ $template->param(
     CGIsepChoice              => $CGIsepChoice,
 
     authvals              => \@authvals_row,
-    hide_cols_loop              => \@hide_cols
+    hide_cols_loop              => \@hide_cols,
+    branchloop                => $branchloop,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

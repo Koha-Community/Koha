@@ -287,6 +287,8 @@ $url = "aqbudgetperiods.pl?tab=2";
 $url .= "&apage=$activepage" if($activepage != 1);
 my $inactive_pagination_bar = pagination_bar ($url, getnbpages( scalar(@$results), $inactivepagesize), $inactivepage, "ipage");
 
+my $branchloop = C4::Branch::GetBranchesLoop();
+
 my $tab = $input->param('tab') ? $input->param('tab') - 1 : 0;
 $template->param(
     period_active_loop      => \@period_active_loop,
@@ -294,6 +296,7 @@ $template->param(
     active_pagination_bar   => $active_pagination_bar,
     inactive_pagination_bar => $inactive_pagination_bar,
     tab                     => $tab,
+    branchloop              => $branchloop,
 );
 
 $template->param($op=>1);
