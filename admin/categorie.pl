@@ -71,8 +71,9 @@ my $input         = new CGI;
 my $searchfield   = $input->param('description');
 my $script_name   = "/cgi-bin/koha/admin/categorie.pl";
 my $categorycode  = $input->param('categorycode');
-my $op            = $input->param('op') // '';
+my $op            = $input->param('op') // 'list';
 my $block_expired = $input->param("block_expired");
+my @messages;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -83,12 +84,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         flagsrequired   => { parameters => 'parameters_remaining_permissions' },
         debug           => 1,
     }
-);
-
-$template->param(
-    script_name  => $script_name,
-    categorycode => $categorycode,
-    searchfield  => $searchfield
 );
 
 ################## ADD_FORM ##################################
@@ -171,7 +166,6 @@ if ( $op eq 'add_form' ) {
     # called by add_form, used to insert/modify data in DB
 }
 elsif ( $op eq 'add_validate' ) {
-    $template->param( add_validate => 1 );
 
     my $is_a_modif = $input->param("is_a_modif");
 
@@ -249,7 +243,7 @@ elsif ( $op eq 'add_validate' ) {
                 default_privacy
             )
             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)" );
-        $sth->execute(
+        my $inserted = $sth->execute(
             map { $input->param($_) } (
                 'categorycode',    'description',
                 'enrolmentperiod', 'enrolmentperioddate',
@@ -260,15 +254,20 @@ elsif ( $op eq 'add_validate' ) {
                 'default_privacy',
             )
         );
-        $sth->finish;
+        if ( $inserted ) {
+            push @messages, { type => 'message', code => 'success_on_insert' };
+        } else {
+            $searchfield = q||;
+            push @messages, { type => 'error', code => 'error_on_insert' };
+        }
     }
 
     if ( C4::Context->preference('EnhancedMessagingPreferences') ) {
         C4::Form::MessagingPreferences::handle_form_action( $input,
             { categorycode => $input->param('categorycode') }, $template );
     }
-    print $input->redirect("/cgi-bin/koha/admin/categorie.pl");
-    exit;
+
+    $op = 'list';
 
     # END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
@@ -301,15 +300,20 @@ elsif ( $op eq 'delete_confirmed' ) {
 
     my $sth = $dbh->prepare("delete from categories where categorycode=?");
 
-    $sth->execute($categorycode);
-    $sth->finish;
+    my $deleted = $sth->execute($categorycode);
 
-    print $input->redirect("/cgi-bin/koha/admin/categorie.pl");
-    exit;
+    if ( $deleted ) {
+        push @messages, { type => 'message', code => 'success_on_delete' };
+    } else {
+        push @messages, { type => 'error', code => 'error_on_delete' };
+    }
+
+    $op = 'list';
 
     # END $OP eq DELETE_CONFIRMED
 }
-else {    # DEFAULT
+
+if ( $op eq 'list' ) {
     $template->param( else => 1 );
     my @loop;
     my ( $count, $results ) = StringSearch( $searchfield, 'web' );
@@ -378,6 +382,14 @@ else {    # DEFAULT
     $sth->finish;
 
 }    #---- END $OP eq DEFAULT
+
+$template->param(
+    script_name  => $script_name,
+    categorycode => $categorycode,
+    searchfield  => $searchfield,
+    messages     => \@messages,
+);
+
 output_html_with_http_headers $input, $cookie, $template->output;
 
 exit 0;

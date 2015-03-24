@@ -1,9 +1,8 @@
 [% USE KohaDates -%]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Patron categories &rsaquo; [% IF ( add_form ) %][% IF ( categorycode ) %]Modify category '[% categorycode |html %]'[% ELSE %]New category[% END %][% END %]
-[% IF ( add_validate ) %]Data recorded[% END %]
 [% IF ( delete_confirm ) %][% IF ( patrons_in_category > 0 ) %]Cannot delete: category [% categorycode |html %] in use[% ELSE %]Confirm deletion of category '[% categorycode |html %]'[% END %][% END %]
-[% IF ( delete_confirmed ) %]Category deleted[% END %]</title>
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
@@ -98,7 +97,6 @@
 [% INCLUDE 'patrons-admin-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/categorie.pl">Patron categories</a> &rsaquo; [% IF ( categorycode ) %]Modify category '[% categorycode |html %]'[% ELSE %]New category[% END %][% END %]
-[% IF ( add_validate ) %] <a href="/cgi-bin/koha/admin/categorie.pl">Patron categories</a> &rsaquo; Data recorded[% END %]
 [% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/categorie.pl">Patron categories</a> &rsaquo; [% IF ( patrons_in_category > 0 ) %]Cannot delete: Category [% categorycode |html %] in use[% ELSE %]Confirm deletion of category '[% categorycode |html %]'[% END %][% END %]
 [% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/categorie.pl">Patron categories</a> &rsaquo; Category deleted[% END %]
 [% IF ( else ) %]Patron categories[% END %]</div>
@@ -109,11 +107,24 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
+[% FOR m IN messages %]
+    <div class="dialog [% m.type %]">
+        [% SWITCH m.code %]
+        [% CASE 'error_on_insert' %]
+            An error occurred when inserting this patron category. Perhaps the category code already exists.
+        [% CASE 'error_on_delete' %]
+            An error occurred when deleteing this patron category. Check the logs.
+        [% CASE 'success_on_insert' %]
+            Patron category inserted with success.
+        [% CASE 'success_on_delete' %]
+            Patron category deleted with success.
+        [% CASE %]
+            [% m.code %]
+        [% END %]
+    </div>
+[% END %]
+
 [% IF ( add_form ) %]
-	
-
-
-	
 	<form name="Aform" action="[% script_name %]" method="post">
 	<input type="hidden" name="op" value="add_validate" />
 	<input type="hidden" name="checked" value="0" />
@@ -258,13 +269,6 @@
 
 [% END %]
 
-[% IF ( add_validate ) %]
-<h3>Data recorded</h3>
-	<form action="[% script_name %]" method="post">
-		<input type="submit" value="OK" />
-	</form>
-[% END %]
-
 [% IF ( delete_confirm ) %]
     <form action="[% script_name %]" method="post">
         <fieldset>
@@ -315,14 +319,6 @@
 			<input type="hidden" name="op" value="delete_confirmed" />
             <input type="hidden" name="categorycode" value="[% categorycode |html %]" /> <input type="submit" value="Delete this category" /> <a class="cancel" href="/cgi-bin/koha/admin/categorie.pl">Cancel</a>
 		[% END %]</fieldset></fieldset></form>
-[% END %]
-
-[% IF ( delete_confirmed ) %]
-<h3>Category deleted</h3>
-
-        <form action="[% script_name %]" method="post">
-        <input type="submit" value="OK" />
-        </form>
 [% END %]
 
 [% IF ( else ) %]
