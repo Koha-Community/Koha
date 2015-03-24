@@ -1,0 +1,63 @@
+{
+    "type": "object",
+    "properties": {
+        "reserve_id": {
+            "description": "Internal reserve identifier"
+        },
+        "borrowernumber": {
+            "type": "string",
+            "description": "internally assigned user identifier"
+        },
+        "reservedate": {
+            "description": "the date the reserve was placed"
+        },
+        "biblionumber": {
+            "type": "string",
+            "description": "internally assigned biblio identifier"
+        },
+        "branchcode": {
+            "type": ["string", "null"],
+            "description": "internally assigned branch identifier"
+        },
+        "notificationdate": {
+            "description": "currently unused"
+        },
+        "reminderdate": {
+            "description": "currently unused"
+        },
+        "cancellationdate": {
+            "description": "the date the reserve was cancelled"
+        },
+        "reservenotes": {
+            "description": "notes related to this reserve"
+        },
+        "priority": {
+            "description": "where in the queue the patron sits"
+        },
+        "found": {
+            "description": "a one letter code defining what the status of the reserve is after it has been confirmed"
+        },
+        "timestamp": {
+            "description": "date and time the reserve was last updated"
+        },
+        "itemnumber": {
+            "type": ["string", "null"],
+            "description": "internally assigned item identifier"
+        },
+        "waitingdate": {
+            "description": "the date the item was marked as waiting for the patron at the library"
+        },
+        "expirationdate": {
+            "description": "the date the reserve expires"
+        },
+        "lowestPriority": {
+            "description": ""
+        },
+        "suspend": {
+            "description": ""
+        },
+        "suspend_until": {
+            "description": ""
+        }
+    }
+}

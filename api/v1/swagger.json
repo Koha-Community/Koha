@@ -73,6 +73,164 @@
           }
         }
       }
+    },
+    "/reserves": {
+      "get": {
+        "operationId": "listReserves",
+        "tags": ["borrowers", "reserves"],
+        "parameters": [
+          {
+            "name": "borrowernumber",
+            "in": "query",
+            "description": "Internal borrower identifier",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "A list of reserves",
+            "schema": { "$ref": "#/definitions/reserves" }
+          },
+          "404": {
+            "description": "Borrower not found",
+            "schema": { "$ref": "#/definitions/error" }
+          }
+        }
+      },
+      "post": {
+        "operationId": "addReserve",
+        "tags": ["borrowers", "reserves"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "A JSON object containing informations about the new reserve",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "borrowernumber": {
+                  "description": "Borrower internal identifier",
+                  "type": "integer"
+                },
+                "biblionumber": {
+                  "description": "Biblio internal identifier",
+                  "type": "integer"
+                },
+                "itemnumber": {
+                  "description": "Item internal identifier",
+                  "type": "integer"
+                },
+                "branchcode": {
+                  "description": "Pickup location",
+                  "type": "string"
+                },
+                "expirationdate": {
+                  "description": "Reserve end date",
+                  "type": "string",
+                  "format": "date"
+                }
+              }
+            }
+          }
+        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "Created reserve",
+            "schema": { "$ref": "#/definitions/reserve" }
+          },
+          "400": {
+            "description": "Missing or wrong parameters",
+            "schema": { "$ref": "#/definitions/error" }
+          },
+          "403": {
+            "description": "Reserve not allowed",
+            "schema": { "$ref": "#/definitions/error" }
+          },
+          "404": {
+            "description": "Borrower not found",
+            "schema": { "$ref": "#/definitions/error" }
+          },
+          "500": {
+            "description": "Internal error",
+            "schema": { "$ref": "#/definitions/error" }
+          }
+        }
+      }
+    },
+    "/reserves/{reserve_id}": {
+      "put": {
+        "operationId": "editReserve",
+        "tags": ["reserves"],
+        "parameters": [
+          { "$ref": "#/parameters/reserveIdPathParam" },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "A JSON object containing fields to modify",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "priority": {
+                  "description": "Position in waiting queue",
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "branchcode": {
+                  "description": "Pickup location",
+                  "type": "string"
+                },
+                "suspend_until": {
+                  "description": "Suspend until",
+                  "type": "string",
+                  "format": "date"
+                }
+              }
+            }
+          }
+        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Updated reserve",
+            "schema": { "$ref": "#/definitions/reserve" }
+          },
+          "400": {
+            "description": "Missing or wrong parameters",
+            "schema": { "$ref": "#/definitions/error" }
+          },
+          "404": {
+            "description": "Reserve not found",
+            "schema": { "$ref": "#/definitions/error" }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteReserve",
+        "tags": ["reserves"],
+        "parameters": [
+          { "$ref": "#/parameters/reserveIdPathParam" }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successful deletion",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "404": {
+            "description": "Reserve not found",
+            "schema": { "$ref": "#/definitions/error" }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -83,6 +241,13 @@
       "name": "borrowernumber",
       "in": "path",
       "description": "Internal patron identifier",
+      "required": true,
+      "type": "integer"
+    },
+    "reserveIdPathParam": {
+      "name": "reserve_id",
+      "in": "path",
+      "description": "Internal reserve identifier",
       "required": true,
       "type": "integer"
     }
