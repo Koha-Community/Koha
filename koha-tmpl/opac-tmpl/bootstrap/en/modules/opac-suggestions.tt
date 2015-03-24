@@ -92,7 +92,7 @@
                                     </ol>
                                 </fieldset>
                                 <fieldset class="action">
-                                    <input type="hidden" name="suggestedby" value="[% suggestedbyme %]" />
+                                    <input type="hidden" name="suggested_by_anyone" value="[% suggested_by_anyone %]" />
                                     <input type="hidden" name="op" value="add_confirm" />
                                     <input type="submit" onclick="Check(this.form); return false;" class="btn" value="Submit your suggestion" /> <a class="action" href="/cgi-bin/koha/opac-suggestions.pl">Cancel</a>
                                 </fieldset>
@@ -127,29 +127,36 @@
                             [% IF ( deleted ) %]<div class="alert alert-info">The selected suggestions have been deleted.</div>[% END %]
 
                             [% IF ( suggestions_loop ) %]
-                                [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]
-                                    <form action="/cgi-bin/koha/opac-suggestions.pl" class="form-inline" method="get">
-                                        <fieldset>
-                                            <label for="title">Search for:</label>
-                                            <input type="text" name="title" id="title" value="[% title |html %]" />
-                                            <label for="suggestedby">Suggested by:</label>
-                                            <div class="input-append">
-                                                <select name="suggestedby" id="suggestedby">
-                                                    <option value="0">Anyone</option>
-                                                    <option value="1">Me</option>
-                                                </select>
-                                                <button type="submit" class="btn">Go</button>
-                                            </div>
-                                        </fieldset>
-                                    </form>
-                                [% END %]
+                                <form action="/cgi-bin/koha/opac-suggestions.pl" class="form-inline" method="get">
+                                    <fieldset>
+                                        <label for="title">Search for:</label>
+                                        <input type="text" name="title" id="title" value="[% title |html %]" />
+                                        [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]
+                                            [% IF loggedinusername %]
+                                                <label for="suggested_by_anyone">Suggested by:</label>
+                                                <div class="input-append">
+                                                    <select name="suggested_by_anyone" id="suggested_by_anyone">
+                                                        [% IF suggested_by_anyone %]
+                                                            <option value="0">Me</option>
+                                                            <option value="1" selected="selected">Anyone</option>
+                                                        [% ELSE %]
+                                                            <option value="0" selected="selected">Me</option>
+                                                            <option value="1">Anyone</option>
+                                                        [% END %]
+                                                    </select>
+                                                    <button type="submit" class="btn">Go</button>
+                                                </div>
+                                            [% END %]
+                                        [% END %]
+                                    </fieldset>
+                                </form>
                                 <form action="/cgi-bin/koha/opac-suggestions.pl" method="post" id="myform">
                                     <input type="hidden" name="op" value="delete_confirm" />
-                                    <div id="toolbar" class="toolbar clearfix">
-                                        [% IF ( loggedinusername || ( Koha.Preference( 'AnonSuggestions' ) == 1 ) ) %]
+                                    [% IF ( loggedinusername || ( Koha.Preference( 'AnonSuggestions' ) == 1 ) ) %]
+                                        <div id="toolbar" class="toolbar clearfix">
                                             <a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a>
-                                        [% END %]
-                                    </div>
+                                        </div>
+                                    [% END %]
 
                                     [% IF ( loggedinusername ) %]
                                         <div id="selections-toolbar" class="toolbar">
@@ -237,7 +244,11 @@
                                     [% END %]
                                 </form>
                             [% ELSE %]
-                                <p>There are no pending purchase suggestions.</p>
+                                [% UNLESS Koha.Preference( 'OPACViewOthersSuggestions' ) or $loggedinusername %]
+                                    <p>You are not authorized to see pending purchase suggestions.</p>
+                                [% ELSE %]
+                                    <p>There are no pending purchase suggestions.</p>
+                                [% END %]
                                 [% IF ( loggedinusername || ( Koha.Preference( 'AnonSuggestions' ) == 1 ) ) %]
                                     <p><a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a></p>
                                 [% END %]
@@ -280,7 +291,7 @@
                 [% IF ( loggedinusername ) %]null,[% END %]
                 { "sType": "anti-the" },
                 null,
-                [% IF ( OPACViewOthersSuggestions ) %]null,[% END %]
+                [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]null,[% END %]
                 [% IF Koha.Preference( 'OpacSuggestionManagedBy' ) %]null,[% END %]
                 null
             ]
