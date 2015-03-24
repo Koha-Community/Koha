@@ -32,11 +32,11 @@ use C4::Scrubber;
 use Koha::DateUtils qw( dt_from_string );
 
 my $input           = new CGI;
-my $allsuggestions  = $input->param('showall');
 my $op              = $input->param('op');
 my $suggestion      = $input->Vars;
 delete $suggestion->{negcap};
 my $negcaptcha      = $input->param('negcap');
+my $suggested_by_anyone = $input->param('suggested_by_anyone') || 0;
 
 # If a spambot accidentally populates the 'negcap' field in the sugesstions form, then silently skip and return.
 if ($negcaptcha ) {
@@ -50,14 +50,14 @@ if ( ! C4::Context->preference('suggestion') ) {
     exit;
 }
 
-delete $$suggestion{$_} foreach qw<op suggestedbyme>;
+delete $suggestion->{$_} foreach qw<op suggested_by_anyone>;
 $op = 'else' unless $op;
 
 my ( $template, $borrowernumber, $cookie, @messages );
 my $deleted = $input->param('deleted');
 my $submitted = $input->param('submitted');
 
-if ( C4::Context->preference("AnonSuggestions") ) {
+if ( C4::Context->preference("AnonSuggestions") or ( C4::Context->preference("OPACViewOthersSuggestions") and $op eq 'else' ) ) {
     ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         {
             template_name   => "opac-suggestions.tt",
@@ -66,9 +66,6 @@ if ( C4::Context->preference("AnonSuggestions") ) {
             authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
         }
     );
-    if ( !$$suggestion{suggestedby} ) {
-        $$suggestion{suggestedby} = C4::Context->preference("AnonymousPatron");
-    }
 }
 else {
     ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -80,13 +77,36 @@ else {
         }
     );
 }
-if ($allsuggestions){
-	delete $$suggestion{suggestedby};
+
+if ( $op eq 'else' ) {
+    if ( C4::Context->preference("OPACViewOthersSuggestions") ) {
+        if ( $borrowernumber ) {
+            # A logged in user is able to see suggestions from others
+            $suggestion->{suggestedby} = $suggested_by_anyone
+                ? undef
+                : $borrowernumber;
+        }
+        else {
+            # Non logged in user is able to see all suggestions
+            $suggestion->{suggestedby} = undef;
+        }
+    }
+    else {
+        if ( $borrowernumber ) {
+            $suggestion->{suggestedby} = $borrowernumber;
+        }
+        else {
+            $suggestion->{suggestedby} = -1;
+        }
+    }
+} else {
+    if ( $borrowernumber ) {
+        $suggestion->{suggestedby} = $borrowernumber;
+    }
+    else {
+        $suggestion->{suggestedby} = C4::Context->preference("AnonymousPatron");
+    }
 }
-else {
-	$$suggestion{suggestedby} ||= $borrowernumber unless ($allsuggestions);
-}
-# warn "bornum:",$borrowernumber;
 
 my $suggestions_loop =
   &SearchSuggestion( $suggestion);
@@ -170,11 +190,11 @@ $template->param(
 	itemtypeloop=> $supportlist,
     suggestions_loop => $suggestions_loop,
     patron_reason_loop => $patron_reason_loop,
-    showall    => $allsuggestions,
     "op_$op"         => 1,
     $op => 1,
     messages => \@messages,
     suggestionsview => 1,
+    suggested_by_anyone => $suggested_by_anyone,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

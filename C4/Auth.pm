@@ -477,7 +477,6 @@ sub get_template_and_user {
             OPACShelfBrowser                      => "" . C4::Context->preference("OPACShelfBrowser"),
             OPACURLOpenInNewWindow                => "" . C4::Context->preference("OPACURLOpenInNewWindow"),
             OPACUserCSS                           => "" . C4::Context->preference("OPACUserCSS"),
-            OPACViewOthersSuggestions             => "" . C4::Context->preference("OPACViewOthersSuggestions"),
             OpacAuthorities                       => C4::Context->preference("OpacAuthorities"),
             OPACBaseURL                           => ( $using_https ? "https://" : "http://" ) . $opac_base_url,
             opac_css_override                     => $ENV{'OPAC_CSS_OVERRIDE'},
