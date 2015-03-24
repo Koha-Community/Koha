@@ -1,23 +1,31 @@
-#!/usr/bin/python
+#!/usr/bin/perl
 
-import re
-import debian.deb822
+use strict;
+use warnings;
 
-exclusions = [
+my @exclusions = (
     'debhelper',
-    'python',
-    'python-debian',
-]
+);
 
-exclusions = [re.compile(s) for s in exclusions]
+open my $control_fh, '<', 'debian/control' or die "Cannot open debian/control";
+my @lines = <$control_fh>;
+close $control_fh;
 
-depstring = debian.deb822.Deb822(file('debian/control')).get('Build-Depends')
-deps = [s.strip() for s in depstring.split(',')]
-result = []
-for dep in deps:
-    for ex in exclusions:
-        if ex.match(dep):
-            break
-    else:
-        result.append(dep)
-print 'koha:Depends=%s' % ', '.join(result)
+my @build_depends;
+my $in_build_depends_block;
+for my $line ( @lines ) {
+    chomp $line;
+    if ( $line =~ m|Build-Depends:| ) {
+        $in_build_depends_block = 1;
+        $line =~ s|Build-Depends:||;
+    }
+    next unless $in_build_depends_block;
+    if ( $line =~ m|^\s*$| ) {
+        last;
+    }
+    for my $dep ( split ',', $line ) {
+        $dep =~ s|^\s*||;
+        push @build_depends, $dep unless ( map { ( $dep =~ m|$_| ) ? 1 : () } @exclusions);
+    }
+}
+print 'koha:Depends=' . join ( ', ', @build_depends ) . "\n";
