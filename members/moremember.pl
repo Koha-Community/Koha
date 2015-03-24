@@ -277,23 +277,6 @@ foreach (@$alerts) {
     $_->{relatedto} = findrelatedto( $_->{type}, $_->{externalid} );
 }
 
-my $candeleteuser;
-my $userenv = C4::Context->userenv;
-if ( C4::Context->IsSuperLibrarian() ) {
-    $candeleteuser = 1;
-}
-elsif ( C4::Context->preference("IndependentBranches") ) {
-    $candeleteuser = ( $data->{'branchcode'} eq $userenv->{branch} );
-}
-else {
-    if ( C4::Auth::getuserflags( $userenv->{flags}, $userenv->{number} )->{borrowers} ) {
-        $candeleteuser = 1;
-    }
-    else {
-        $candeleteuser = 0;
-    }
-}
-
 # Add sync data to the user data
 if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
     my $sync = NLGetSyncDataFromBorrowernumber( $borrowernumber );
@@ -360,7 +343,6 @@ $template->param( $data->{'categorycode'} => 1 );
 $template->param(
     detailview => 1,
     AllowRenewalLimitOverride => C4::Context->preference("AllowRenewalLimitOverride"),
-    CANDELETEUSER    => $candeleteuser,
     roadtype        => $roadtype,
     borrowernumber  => $borrowernumber,
     othernames      => $data->{'othernames'},
