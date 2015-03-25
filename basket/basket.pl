@@ -61,6 +61,7 @@ foreach my $biblionumber ( @bibs ) {
     $template->param( biblionumber => $biblionumber );
 
     my $dat              = &GetBiblioData($biblionumber);
+    next unless $dat;
     my $record           = &GetMarcBiblio($biblionumber);
     my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
     my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
