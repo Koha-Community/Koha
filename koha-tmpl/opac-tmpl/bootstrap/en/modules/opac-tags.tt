@@ -122,8 +122,13 @@
                                         <tr>
                                             <td class="tagterm">
                                                 <span class="tdlabel">Tag:</span>
-                                                <a href="/cgi-bin/koha/opac-search.pl?tag=[% MY_TAG.term |url %]&amp;q=[% MY_TAG.term |url %]">
-                                            [% MY_TAG.term |html %]</a></td>
+                                                [% IF MY_TAG.approved == 1 %]
+                                                    <a href="/cgi-bin/koha/opac-search.pl?tag=[% MY_TAG.term |url %]&amp;q=[% MY_TAG.term |url %]">[% MY_TAG.term |html %]</a>
+                                                [% ELSE %]
+                                                    [% MY_TAG.term |html %] (not approved)
+                                                [% END %]
+                                            </td>
+
                                             <td>
                                                 [% IF ( MY_TAG.XSLTBloc ) %]
                                                     [% MY_TAG.XSLTBloc %]

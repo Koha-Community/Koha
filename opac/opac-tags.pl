@@ -226,20 +226,22 @@ my $results = [];
 my $my_tags = [];
 
 if ($loggedinuser) {
-	$my_tags = get_tag_rows({borrowernumber=>$loggedinuser});
-	foreach (@$my_tags) {
-		my $biblio = GetBiblioData($_->{biblionumber});
-        my $record = &GetMarcBiblio( $_->{biblionumber} );
-        $_->{subtitle} = GetRecordValue( 'subtitle', $record, GetFrameworkCode( $_->{biblionumber} ) );
-        $_->{title} = $biblio->{title};
-        $_->{author} = $biblio->{author};
+    $my_tags = get_tag_rows({borrowernumber=>$loggedinuser});
+    my $my_approved_tags = get_approval_rows({borrowernumber => $loggedinuser, approved => 1});
+    foreach my $tag (@$my_tags) {
+        my $biblio = GetBiblioData($tag->{biblionumber});
+        my $record = &GetMarcBiblio( $tag->{biblionumber} );
+        $tag->{subtitle} = GetRecordValue( 'subtitle', $record, GetFrameworkCode( $tag->{biblionumber} ) );
+        $tag->{title} = $biblio->{title};
+        $tag->{author} = $biblio->{author};
         if (C4::Context->preference("OPACXSLTResultsDisplay")) {
-            $_->{XSLTBloc} = XSLTParse4Display($_->{biblionumber}, $record, "OPACXSLTResultsDisplay");
+            $tag->{XSLTBloc} = XSLTParse4Display($tag->{biblionumber}, $record, "OPACXSLTResultsDisplay");
         }
-		my $date = $_->{date_created} || '';
-		$date =~ /\s+(\d{2}\:\d{2}\:\d{2})/;
-		$_->{time_created_display} = $1;
-	}
+        my $date = $tag->{date_created} || '';
+        $date =~ /\s+(\d{2}\:\d{2}\:\d{2})/;
+        $tag->{time_created_display} = $1;
+        $tag->{approved} = ( grep { $_->{term} eq $tag->{term} and $_->{approved} } @$my_approved_tags );
+    }
 }
 
 $template->param(tagsview => 1);
