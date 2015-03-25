@@ -207,12 +207,20 @@ while ( my $c = $sth->fetchrow_hashref() ) {
     }
 }
 
+
+@checkouts_today = sort { $a->{timstamp} cmp $b->{timestamp} } @checkouts_today;
 @checkouts_today = reverse(@checkouts_today)
-  if ( C4::Context->preference('todaysIssuesDefaultSortOrder') eq 'desc' );
+  unless ( C4::Context->preference('todaysIssuesDefaultSortOrder') eq 'desc' );
+
+@checkouts_previous = sort { $a->{date_due} cmp $b->{date_due} } @checkouts_previous;
 @checkouts_previous = reverse(@checkouts_previous)
   if ( C4::Context->preference('previousIssuesDefaultSortOrder') eq 'desc' );
 
 my @checkouts = ( @checkouts_today, @checkouts_previous );
+
+my $i = 1;
+map { $_->{sort_order} = $i++ } @checkouts;
+
 
 my $data;
 $data->{'iTotalRecords'}        = scalar @checkouts;
