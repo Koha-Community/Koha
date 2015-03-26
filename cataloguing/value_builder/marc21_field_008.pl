@@ -36,6 +36,8 @@ my $builder = sub {
     my $lang = C4::Context->preference('DefaultLanguageField008' );
     $lang = "eng" unless $lang;
     $lang = pack("A3", $lang);
+    my $country = C4::Context->preference('DefaultCountryField008') // "xxu";
+    $country = pack("A3", $country);
 
     my $function_name = $params->{id};
     my $dateentered = date_entered();
@@ -47,7 +49,7 @@ function Focus$function_name(event) {
     if ( document.getElementById(event.data.id).value ) {
 	}
 	else {
-        document.getElementById(event.data.id).value='$dateentered' + 'b        xxu||||| |||| 00| 0 $lang d';
+        document.getElementById(event.data.id).value='$dateentered' + 'b        $country||||| |||| 00| 0 $lang d';
 	}
     return 1;
 }
@@ -77,6 +79,8 @@ my $launcher = sub {
     my $lang = C4::Context->preference('DefaultLanguageField008' );
     $lang = "eng" unless $lang;
     $lang = pack("A3", $lang);
+    my $country = C4::Context->preference('DefaultCountryField008') // "xxu";
+    $country = pack("A3", $country);
 
     my $index   = $input->param('index');
     my $result  = $input->param('result');
@@ -142,7 +146,7 @@ my $launcher = sub {
     );
 
     my $dateentered = date_entered();
-    $result = "$dateentered" . "b        xxu||||| |||| 00| 0 $lang d" unless $result;
+    $result = "$dateentered" . "b        $country||||| |||| 00| 0 $lang d" unless $result;
     my $errorXml = '';
     # Check if the xml, xsd exists and is validated
     my $dir = C4::Context->config('intrahtdocs') . '/prog/' . $template->{lang} . '/data/';
