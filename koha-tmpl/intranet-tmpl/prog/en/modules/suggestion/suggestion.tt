@@ -505,6 +505,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
     <table id="[% suggestion.suggestiontype %]t" class="sorted">
         <thead>
             <tr><th>&nbsp;</th>
+            <th>No.</th>
             <th class="anti-the">Suggestion</th>
             <th>Suggested by - on</th>
             <th>Managed by - on</th>
@@ -517,6 +518,9 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
             [% IF ( suggestions_loo.even ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
                 <td>
                     <input type="checkbox" name="edit_field" value="[% suggestions_loo.suggestionid %]" />
+                </td>
+                <td>
+                    [% suggestions_loo.suggestionid %]
                 </td>
                 <td>
                     <a href="suggestion.pl?suggestionid=[% suggestions_loo.suggestionid %]&amp;op=show" title="suggestion" >
