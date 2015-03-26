@@ -424,7 +424,11 @@ function openBiblio(dest,biblionumber) {
 function addSelToShelf() {
     var items = document.getElementById('records').value;
     if(items){
-    document.location = "/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber="+items;
+        var iW = 820;
+        var iH = 450;
+        var optWin = "status=yes,scrollbars=yes,resizable=yes,toolbar=no,location=yes,height="+iH+",width="+iW;
+        var loc = "/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber="+items;
+        var shelf = open(loc, "shelf", optWin);
     } else {
         alert(MSG_NO_RECORD_SELECTED);
     }
