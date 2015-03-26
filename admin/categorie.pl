@@ -257,7 +257,6 @@ elsif ( $op eq 'add_validate' ) {
         if ( $inserted ) {
             push @messages, { type => 'message', code => 'success_on_insert' };
         } else {
-            $searchfield = q||;
             push @messages, { type => 'error', code => 'error_on_insert' };
         }
     }
@@ -267,6 +266,7 @@ elsif ( $op eq 'add_validate' ) {
             { categorycode => $input->param('categorycode') }, $template );
     }
 
+    $searchfield = q||;
     $op = 'list';
 
     # END $OP eq ADD_VALIDATE
