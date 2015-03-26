@@ -33,6 +33,7 @@ use Koha::Acquisition::Booksellers;
 use Koha::Biblios;
 use Koha::Number::Price;
 use Koha::Libraries;
+use Koha::CsvProfiles;
 
 use C4::Koha;
 
@@ -277,7 +278,7 @@ $cgi parameter is needed for column name translation
 =cut
 
 sub GetBasketAsCSV {
-    my ($basketno, $cgi) = @_;
+    my ($basketno, $cgi, $csv_profile_id) = @_;
     my $basket = GetBasket($basketno);
     my @orders = GetOrders($basketno);
     my $contract = GetContract({
@@ -285,48 +286,93 @@ sub GetBasketAsCSV {
     });
 
     my $template = C4::Templates::gettemplate("acqui/csv/basket.tt", "intranet", $cgi);
-
     my @rows;
-    foreach my $order (@orders) {
-        my $bd = GetBiblioData( $order->{'biblionumber'} );
-        my $row = {
-            contractname => $contract->{'contractname'},
-            ordernumber => $order->{'ordernumber'},
-            entrydate => $order->{'entrydate'},
-            isbn => $order->{'isbn'},
-            author => $bd->{'author'},
-            title => $bd->{'title'},
-            publicationyear => $bd->{'publicationyear'},
-            publishercode => $bd->{'publishercode'},
-            collectiontitle => $bd->{'collectiontitle'},
-            notes => $order->{'order_vendornote'},
-            quantity => $order->{'quantity'},
-            rrp => $order->{'rrp'},
-        };
-        for my $place ( qw( deliveryplace billingplace ) ) {
-            if ( my $library = Koha::Libraries->find( $row->{deliveryplace} ) ) {
-                $row->{$place} = $library->branchname
+    if ($csv_profile_id) {
+        my $csv_profile = Koha::CsvProfiles->find( $csv_profile_id );
+        die "There is no valid csv profile given" unless $csv_profile;
+
+        my $csv = Text::CSV_XS->new({'quote_char'=>'"','escape_char'=>'"','sep_char'=>$csv_profile->csv_separator,'binary'=>1});
+        my $csv_profile_content = $csv_profile->content;
+        my ( @headers, @fields );
+        while ( $csv_profile_content =~ /
+            ([^=]+) # header
+            =
+            ([^\|]+) # fieldname (table.row or row)
+            \|? /gxms
+        ) {
+            push @headers, $1;
+            my $field = $2;
+            $field =~ s/[^\.]*\.?//; # Remove the table name if exists.
+            push @fields, $field;
+        }
+        for my $order (@orders) {
+            my @row;
+            my $bd = GetBiblioData( $order->{'biblionumber'} );
+            my @biblioitems = GetBiblioItemByBiblioNumber( $order->{'biblionumber'});
+            for my $biblioitem (@biblioitems) {
+                if ($biblioitem->{isbn} eq $order->{isbn}) {
+                    $order = {%$order, %$biblioitem};
+                }
             }
+            if ($contract) {
+                $order = {%$order, %$contract};
+            }
+            $order = {%$order, %$basket, %$bd};
+            for my $field (@fields) {
+                push @row, $order->{$field};
+            }
+            push @rows, \@row;
         }
-        foreach(qw(
-            contractname author title publishercode collectiontitle notes
-            deliveryplace billingplace
-        ) ) {
-            # Double the quotes to not be interpreted as a field end
-            $row->{$_} =~ s/"/""/g if $row->{$_};
+        my $content = join( $csv_profile->csv_separator, @headers ) . "\n";
+        for my $row ( @rows ) {
+            $csv->combine(@$row);
+            my $string = $csv->string;
+            $content .= $string . "\n";
         }
-        push @rows, $row;
+        return $content;
     }
+    else {
+        foreach my $order (@orders) {
+            my $bd = GetBiblioData( $order->{'biblionumber'} );
+            my $row = {
+                contractname => $contract->{'contractname'},
+                ordernumber => $order->{'ordernumber'},
+                entrydate => $order->{'entrydate'},
+                isbn => $order->{'isbn'},
+                author => $bd->{'author'},
+                title => $bd->{'title'},
+                publicationyear => $bd->{'publicationyear'},
+                publishercode => $bd->{'publishercode'},
+                collectiontitle => $bd->{'collectiontitle'},
+                notes => $order->{'order_vendornote'},
+                quantity => $order->{'quantity'},
+                rrp => $order->{'rrp'},
+            };
+            for my $place ( qw( deliveryplace billingplace ) ) {
+                if ( my $library = Koha::Libraries->find( $row->{deliveryplace} ) ) {
+                    $row->{$place} = $library->branchname
+                }
+            }
+            foreach(qw(
+                contractname author title publishercode collectiontitle notes
+                deliveryplace billingplace
+            ) ) {
+                # Double the quotes to not be interpreted as a field end
+                $row->{$_} =~ s/"/""/g if $row->{$_};
+            }
+            push @rows, $row;
+         }
 
-    @rows = sort {
-        if(defined $a->{publishercode} and defined $b->{publishercode}) {
-            $a->{publishercode} cmp $b->{publishercode};
-        }
-    } @rows;
+        @rows = sort {
+            if(defined $a->{publishercode} and defined $b->{publishercode}) {
+                $a->{publishercode} cmp $b->{publishercode};
+            }
+        } @rows;
 
-    $template->param(rows => \@rows);
+        $template->param(rows => \@rows);
 
-    return $template->output;
+        return $template->output;
+    }
 }
 
 

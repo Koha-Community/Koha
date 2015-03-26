@@ -35,7 +35,7 @@ my $nb_of_csv_profiles = Koha::CsvProfiles->search->count;
 my $new_csv_profile_1 = Koha::CsvProfile->new({
     profile => 'my_csv_profile_name_for_test_1',
     description => 'my_csv_profile_description_for_test_1',
-    type => 'sql'
+    type => 'late_issues'
 })->store;
 my $new_csv_profile_2 = Koha::CsvProfile->new({
     profile => 'my_csv_profile_name_for_test_2',

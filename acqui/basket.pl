@@ -40,6 +40,7 @@ use C4::Letters qw/SendAlerts/;
 use Date::Calc qw/Add_Delta_Days/;
 use Koha::Database;
 use Koha::EDI qw( create_edi_order get_edifact_ean );
+use Koha::CsvProfiles;
 
 =head1 NAME
 
@@ -169,7 +170,12 @@ if ( $op eq 'delete_confirm' ) {
         -type       => 'text/csv',
         -attachment => 'basket' . $basket->{'basketno'} . '.csv',
     );
-    print GetBasketAsCSV($query->param('basketno'), $query);
+    if ( $query->param('csv_profile') eq 'default'){
+        print GetBasketAsCSV($query->param('basketno'), $query);
+    } else {
+        my $csv_profile_id = $query->param('csv_profile');
+        print  GetBasketAsCSV($query->param('basketno'), $query, $csv_profile_id);
+    }
     exit;
 } elsif ($op eq 'email') {
     my $err = eval {
@@ -425,6 +431,7 @@ if ( $op eq 'list' ) {
         unclosable           => @orders ? $basket->{is_standing} : 1,
         has_budgets          => $has_budgets,
         duplinbatch          => $duplinbatch,
+        csv_profiles         => [ Koha::CsvProfiles->search({ type => 'export_basket' }) ],
     );
 }
 

@@ -101,6 +101,14 @@ function reloadPage(p) {
     [% END %]
 [% END %]
 
+[% BLOCK type_description %]
+    [% IF type_code == 'marc' %] MARC for export records
+    [% ELSIF type_code == 'late_issues' %] SQL for late serial issues claims
+    [% ELSIF type_code == 'export_basket' %] SQL for basket export in acquisition
+    [% ELSE %] Uknown type
+    [% END %]
+[% END %]
+
 [% IF op == 'add_form' %]
     [% IF csv_profile %]
         <h1>Modify a CSV profile</h1>
@@ -124,12 +132,12 @@ function reloadPage(p) {
                 <li>
                     <label for="type" class="required">Profile type: </label>
                     <select id="type" name="type">
-                        [% IF csv_profile.type == 'sql' %]
-                            <option value="marc">MARC</option>
-                            <option value="sql" selected="selected">SQL</option>
+                        [% FOREACH type IN [ 'marc' 'late_issues' 'export_basket'] %]
+                        [% IF csv_profile.type == type %]
+                            <option value="[% type %]" selected="selected">[% PROCESS type_description type_code = type %]</option>
                         [% ELSE %]
-                            <option value="marc" selected="selected">MARC</option>
-                            <option value="sql">SQL</option>
+                            <option value="[% type %]">[% PROCESS type_description type_code = type %]</option>
+                        [% END %]
                         [% END %]
                     </select>
                     <span class="required">Required</span>
@@ -182,11 +190,13 @@ function reloadPage(p) {
                 </li>
 
                 <li class="sql_specific">
-                  <label for="sql_content" class="required">Profile SQL fields: </label>
-                  <textarea cols="50" rows="2" name="sql_content" id="sql_content">[% csv_profile.content %]</textarea>
-                  <p>You have to define which fields you want to export, separated by pipes.</p>
-                  <p>You can also use your own headers (instead of the ones from Koha) by prefixing the field name with an header, followed by the equal sign.</p>
-                  <p>Example: Name=subscription.name|Title=subscription.title|Issue number=serial.serialseq</p>
+                    <label for="late_issues_content" class="required">Profile SQL fields: </label>
+                    <textarea cols="50" rows="2" name="sql_content" id="sql_content">[% csv_profile.content %]</textarea>
+                    <p>You have to define which fields you want to export, separated by pipes.</p>
+                    <p>You can also use your own headers (instead of the ones from Koha) by prefixing the field name with an header, followed by the equal sign.</p>
+                    <p>Example: Name=subscription.name|Title=subscription.title|Issue number=serial.serialseq</p>
+                    <p>For late issues claims you can use data from following tables: serial, subscription, biblio, biblioitems and aqbookseller.</p>
+                    <p>For basket exports you can use data from following tables: biblio, biblioitems, aqorders, aqbudgets and aqbasket.</p>
                 </li>
             </ol>
         </fieldset>
@@ -243,11 +253,7 @@ function reloadPage(p) {
                     <td>[% csv_profile.description %]</td>
                     <td>[% csv_profile.content %]</td>
                     <td>[% csv_profile.csv_separator %]</td>
-                    [% IF csv_profile.type == 'sql' %]
-                        <td>SQL</td>
-                    [% ELSE %]
-                        <td>MARC</td>
-                    [% END %]
+                    <td>[% PROCESS type_description type_code = csv_profile.type %]</td>
                     <td><a href="/cgi-bin/koha/tools/csv-profiles.pl?op=add_form&amp;export_format_id=[% csv_profile.export_format_id %]">Edit</a></td>
                     <td><a href="/cgi-bin/koha/tools/csv-profiles.pl?op=delete_confirm&amp;export_format_id=[% csv_profile.export_format_id %]">Delete</a></td>
                 </tr>

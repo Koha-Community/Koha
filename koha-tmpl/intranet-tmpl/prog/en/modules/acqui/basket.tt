@@ -1,3 +1,17 @@
+[% BLOCK csv_export %]
+    <div class="btn-group">
+        <a id="exportbutton" class="btn btn-default btn-sm" href="[% script_name %]?op=export&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]"><i class="fa fa-download"></i> Export as CSV</a>
+      <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+      <ul class="dropdown-menu" id="export-csv-menu">
+          <li><a href="#">Default</a></li>
+          [% IF csv_profiles %]
+              [% FOR csv IN csv_profiles %]
+                <li><a href="#" data-value="[% csv.export_format_id %]">[% csv.profile %]</a></li>
+              [% END %]
+          [% END %]
+       </ul>
+    </div>
+[% END %]
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE Price %]
@@ -121,6 +135,18 @@
             e.preventDefault();
             confirm_reopen();
         });
+        // Generates a dynamic link for exporting the selections data as CSV
+        $("#exportbutton, #export-csv-menu a").click(function() {
+            // Building the url from currently checked boxes
+            var url = '/cgi-bin/koha/acqui/basket.pl';
+            url += $('#exportbutton').attr('href');
+            if($(this).attr("data-value")) {
+                url += '&amp;csv_profile=' + $(this).attr("data-value");
+            }
+            // And redirecting to the CSV page
+            location.href = url;
+            return false;
+        });
     });
 
     function UserSearchPopup(f) {
@@ -203,10 +229,13 @@
                             <a href="/cgi-bin/koha/acqui/basket.pl?op=close&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" class="btn btn-default btn-sm" id="closebutton"><i class="fa fa-times-circle"></i> Close this basket</a>
                         </div>
                     [% END %]
-                        <div class="btn-group"><a href="/cgi-bin/koha/acqui/basket.pl?op=export&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" class="btn btn-default btn-sm" id="exportbutton"><i class="fa fa-download"></i> Export this basket as CSV</a></div>
+
+                    [% PROCESS csv_export %]
+
                         [% IF ediaccount %]
                         <div class="btn-group"><a href="/cgi-bin/koha/acqui/edi_ean.pl?op=ediorder&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" class="btn btn-default btn-sm" id="ediorderbutton"><i class="fa fa-download"></i> Create EDIFACT order</a></div>
                         [% END %]
+
                         [% IF ( active && books_loop ) %]
                             <div class="btn-group">
                                 <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
@@ -218,7 +247,8 @@
                         [% END %]
                 </div>
             [% END %]
-<!-- Modal for confirm deletion box-->
+
+            <!-- Modal for confirm deletion box-->
                 <div class="modal" id="deleteBasketModal" tabindex="-1" role="dialog" aria-labelledby="delbasketModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                     <div class="modal-content">
@@ -275,8 +305,11 @@
             [% ELSE %]
                 [% UNLESS ( grouped ) %]
                 <div id="toolbar" class="btn-toolbar">
+
                     <div class="btn-group"><a href="#" class="btn btn-default btn-sm" id="reopenbutton"><i class="fa fa-refresh"></i> Reopen this basket</a></div>
-                    <div class="btn-group"><a href="/cgi-bin/koha/acqui/basket.pl?op=export&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" class="btn btn-default btn-sm" id="exportbutton"><i class="fa fa-download"></i> Export this basket as CSV</a></div>
+
+                    [% PROCESS csv_export %]
+
                 </div>
                 [% END %]
             [% END %]
