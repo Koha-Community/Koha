@@ -471,7 +471,7 @@
                                                 <div class="actions-menu noprint">
                                                         [% IF Koha.Preference( 'RequestOnOpac' ) == 1 %]
                                                             [% UNLESS ( SEARCH_RESULT.norequests ) %]
-                                                                [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) && SEARCH_RESULT.holdable %]
+                                                                [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
                                                                     <span class="actions"><a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Place hold</a></span><!-- add back when available 0 holds in queue-->
                                                                 [% END # / IF opacuserlogin && holdable %]
                                                             [% END # UNLESS SEARCH_RESULT.norequests %]
