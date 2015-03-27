@@ -41,7 +41,7 @@ use C4::Koha qw(
     GetAuthValCode
     GetKohaAuthorisedValueLib
 );
-use C4::Overdues qw(CalcFine UpdateFine);
+use C4::Overdues qw(CalcFine UpdateFine get_chargeable_units);
 use C4::RotatingCollections qw(GetCollectionItemBranches);
 use Algorithm::CheckDigits;
 
@@ -2135,16 +2135,13 @@ sub _debar_user_on_return {
     my ( $borrower, $item, $dt_due, $dt_today ) = @_;
 
     my $branchcode = _GetCircControlBranch( $item, $borrower );
-    my $calendar = Koha::Calendar->new( branchcode => $branchcode );
-
-    # $deltadays is a DateTime::Duration object
-    my $deltadays = $calendar->days_between( $dt_due, $dt_today );
 
     my $circcontrol = C4::Context->preference('CircControl');
     my $issuingrule =
       GetIssuingRule( $borrower->{categorycode}, $item->{itype}, $branchcode );
     my $finedays = $issuingrule->{finedays};
     my $unit     = $issuingrule->{lengthunit};
+    my $chargeable_units = get_chargeable_units($unit, $dt_due, $dt_today, $branchcode);
 
     if ($finedays) {
 
@@ -2156,6 +2153,9 @@ sub _debar_user_on_return {
         my $grace =
           DateTime::Duration->new( $unit => $issuingrule->{firstremind} );
 
+        my $deltadays = DateTime::Duration->new(
+            days => $chargeable_units
+        );
         if ( $deltadays->subtract($grace)->is_positive() ) {
             my $suspension_days = $deltadays * $finedays;
 
