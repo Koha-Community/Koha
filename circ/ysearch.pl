@@ -51,14 +51,23 @@ if (   C4::Context->preference("IndependentBranches")
     $limit_on_branch = 1;
 }
 
+my @parts = split( / /, $query );
+my @params;
+foreach my $p (@parts) {
+    push(
+        @params,
+        -or => [
+            surname    => { -like => "$p%" },
+            firstname  => { -like => "$p%" },
+            cardnumber => { -like => "$p%" },
+        ]
+    );
+}
+
+push( @params, { branchcode => C4::Context->userenv->{branch} } ) if $limit_on_branch;
+
 my $borrowers_rs = Koha::Borrowers->search(
-    {   -or => {
-            surname    => { -like => "$query%" },
-            firstname  => { -like => "$query%" },
-            cardnumber => { -like => "$query%" },
-            ( $limit_on_branch ? { branchcode => C4::Context->userenv->{branch} } : () ),
-        },
-    },
+    { -and => \@params },
     {
         # Get the first 10 results
         page     => 1,
