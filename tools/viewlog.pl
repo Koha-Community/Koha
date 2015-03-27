@@ -47,7 +47,7 @@ $debug or $debug = $cgi_debug;
 my $do_it    = $input->param('do_it');
 my @modules  = $input->param("modules");
 my $user     = $input->param("user");
-my @action   = $input->param("action");
+my @actions  = $input->param("actions");
 my $object   = $input->param("object");
 my $info     = $input->param("info");
 my $datefrom = $input->param("from");
@@ -126,10 +126,10 @@ $template->param(
 if ($do_it) {
 
     my @data;
-    my ( $results, $modules, $action );
-    if ( $action[0]  ne '' ) { $action  = \@action; }     # match All means no limit
+    my ( $results, $modules, $actions );
+    if ( $actions[0]  ne '' ) { $actions  = \@actions; }     # match All means no limit
     if ( $modules[0] ne '' ) { $modules = \@modules; }    # match All means no limit
-    $results = GetLogs( $datefrom, $dateto, $user, $modules, $action, $object, $info );
+    $results = GetLogs( $datefrom, $dateto, $user, $modules, $actions, $object, $info );
     @data = @$results;
     foreach my $result (@data) {
 
@@ -188,15 +188,11 @@ if ($do_it) {
             dateto   => $dateto,
             user     => $user,
             object   => $object,
-            action   => \@action,
             info     => $info,
             src      => $src,
+            modules  => \@modules,
+            actions  => \@actions,
         );
-
-        # Used modules
-        foreach my $module (@modules) {
-            $template->param( $module => 1 );
-        }
 
         output_html_with_http_headers $input, $cookie, $template->output;
     }
