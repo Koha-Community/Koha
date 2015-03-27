@@ -191,12 +191,8 @@ if ($do_it) {
             action   => \@actions,
             info     => $info,
             src      => $src,
+            modules  => \@modules,
         );
-
-        # Used modules
-        foreach my $module (@modules) {
-            $template->param( $module => 1 );
-        }
 
         output_html_with_http_headers $input, $cookie, $template->output;
     }
