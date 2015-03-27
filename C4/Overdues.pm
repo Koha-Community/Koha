@@ -47,7 +47,7 @@ BEGIN {
         &AmountNotify
         &UpdateFine
         &GetFine
-        
+        &get_chargeable_units
         &CheckItemNotify
         &GetOverduesForBranch
         &RemoveNotifyLine
@@ -248,7 +248,7 @@ sub CalcFine {
     my $fine_unit = $data->{lengthunit};
     $fine_unit ||= 'days';
 
-    my $chargeable_units = _get_chargeable_units($fine_unit, $start_date, $end_date, $branchcode);
+    my $chargeable_units = get_chargeable_units($fine_unit, $start_date, $end_date, $branchcode);
     my $units_minus_grace = $chargeable_units - $data->{firstremind};
     my $amount = 0;
     if ($data->{'chargeperiod'}  && ($units_minus_grace > 0)  ) {
@@ -267,9 +267,9 @@ sub CalcFine {
 }
 
 
-=head2 _get_chargeable_units
+=head2 get_chargeable_units
 
-    _get_chargeable_units($unit, $start_date_ $end_date, $branchcode);
+    get_chargeable_units($unit, $start_date_ $end_date, $branchcode);
 
 return integer value of units between C<$start_date> and C<$end_date>, factoring in holidays for C<$branchcode>.
 
@@ -281,7 +281,7 @@ C<$branchcode> is the branch whose calendar to use for finding holidays.
 
 =cut
 
-sub _get_chargeable_units {
+sub get_chargeable_units {
     my ($unit, $date_due, $date_returned, $branchcode) = @_;
 
     # If the due date is later than the return date
