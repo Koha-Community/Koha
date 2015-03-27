@@ -62,7 +62,6 @@ print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
 my $holds_rs = $schema->resultset('Reserve')->search(
     { borrowernumber => $borrowernumber },
     {
-        prefetch => { 'item'                => 'biblio' },
         order_by => { "-$sorting_direction" => $sorting_column }
     }
 );
