@@ -43,8 +43,7 @@ my $view= $input->param('viewas')||'';
 
 my $record;
 if ($importid) {
-    my ($marc) = GetImportRecordMarc($importid);
-    $record = MARC::Record->new_from_usmarc($marc);
+    $record = C4::ImportBatch::GetRecordFromImportBiblio( $importid, 'embed_items' );
 }
 else {
     $record =GetMarcBiblio($biblionumber);
