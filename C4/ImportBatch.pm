@@ -169,12 +169,42 @@ sub GetImportRecordMarc {
     my ($import_record_id) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT marc, encoding FROM import_records WHERE import_record_id = ?");
-    $sth->execute($import_record_id);
-    my ($marc, $encoding) = $sth->fetchrow();
-    $sth->finish();
-    return $marc, $encoding;
+    my ( $marc, $encoding ) = $dbh->selectrow_array(q|
+        SELECT marc, encoding
+        FROM import_records
+        WHERE import_record_id = ?
+    |, undef, $import_record_id );
 
+    return $marc, $encoding;
+}
+
+sub GetRecordFromImportBiblio {
+    my ( $import_record_id, $embed_items ) = @_;
+
+    my ($marc) = GetImportRecordMarc($import_record_id);
+    my $record = MARC::Record->new_from_usmarc($marc);
+
+    EmbedItemsInImportBiblio( $record, $import_record_id ) if $embed_items;
+
+    return $record;
+}
+
+sub EmbedItemsInImportBiblio {
+    my ( $record, $import_record_id ) = @_;
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField("items.itemnumber", '');
+    my $dbh = C4::Context->dbh;
+    my $import_items = $dbh->selectall_arrayref(q|
+        SELECT import_items.marcxml
+        FROM import_items
+        WHERE import_record_id = ?
+    |, { Slice => {} }, $import_record_id );
+    my @item_fields;
+    for my $import_item ( @$import_items ) {
+        my $item_marc = MARC::Record::new_from_xml($import_item->{marcxml});
+        push @item_fields, $item_marc->field($itemtag);
+    }
+    $record->append_fields(@item_fields);
+    return $record;
 }
 
 =head2 GetImportRecordMarcXML
