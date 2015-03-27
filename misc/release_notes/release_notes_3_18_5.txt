@@ -1,5 +1,5 @@
-RELEASE NOTES FOR KOHA 3.18.5
-22 Mar 2015
+RELEASE NOTES FOR KOHA 3.18.5.1
+23 Mar 2015
 ========================================================================
 
 Koha is the first free and open source software library automation package 
@@ -9,9 +9,9 @@ The website for the Koha project is
 
     http://koha-community.org/
 
-Koha 3.18.5 can be downloaded from:
+Koha 3.18.5.1 can be downloaded from:
 
-    http://download.koha-community.org/koha-3.18.05.tar.gz
+    http://download.koha-community.org/koha-3.18.05.1.tar.gz
 
 Installation instructions can be found at:
 
@@ -20,13 +20,12 @@ Installation instructions can be found at:
     OR in the INSTALL files that come in the tarball
 
 
-Koha 3.18.5 is a bugfix/maintenance release.
+Koha 3.18.5.1 is a bugfix/maintenance release.
 
-It includes 3 enhancements and 36 bugfixes.
+It includes 3 enhancements and 38 bugfixes.
 
-
-Enhancements in 3.18.5
-======================
+Enhancements in 3.18.5.1
+========================
 
 OPAC
 ----------
@@ -41,13 +40,17 @@ Test Suite
 	13814	Add unit tests for C4::Boolean
 
 
-Critical bugs fixed in 3.18.5
+Critical bugs fixed in 3.18.5.1
 ======================
 
 
 Acquisitions
 ----------
 	13731	major	Suggestions reason doesn't save
+
+Architecture, internals, and plumbing
+----------
+	13379	major	Authorised_values.category is varchar(16)
 
 Cataloging
 ----------
@@ -63,7 +66,7 @@ Tools
 	13473	critical	Plugins fail when loading templates
 
 
-Other bugs fixed in 3.18.5
+Other bugs fixed in 3.18.5.1
 ======================
 
 
@@ -99,6 +102,10 @@ I18N/L10N
 	13741	minor	"No fund found" not translatable
 	13350	trivial	Untranslatable strings in aqbudgetperiods.tt
 	13351	trivial	Untranslatable javascript in members.tt
+
+OPAC
+----------
+	12399	minor	Opaccredits printing at top on printable version
 
 Packaging
 ----------
@@ -144,11 +151,6 @@ Tools
 	13709	minor	Patron cards creator doesn't work with diacritics, utf-8 or ttf fonts
 
 
-New sysprefs in 3.18.5
-======================
-
-
-
 System requirements
 ======================
 
@@ -186,21 +188,14 @@ interface are available in this release for the following languages:
   * English (USA)
   * Arabic (100%)
   * Armenian (98%)
-  * Chinese (China) (91%)
-  * Chinese (Taiwan) (98%)
   * Czech (99%)
   * Danish (85%)
-  * English (New Zealand) (95%)
-  * French (97%)
-  * French (Canada) (87%)
+  * French (98%)
   * German (100%)
-  * German (Switzerland) (100%)
-  * Italian (99%)
+  * Italian (100%)
   * Kurdish (62%)
-  * Norwegian Bokmål (58%)
   * Polish (80%)
   * Portuguese (98%)
-  * Portuguese (Brazil) (89%)
   * Slovak (100%)
   * Spanish (100%)
   * Swedish (80%)
@@ -227,7 +222,7 @@ The most up-to-date translations can be found at:
 Release Team
 ======================
 
-The release team for Koha 3.18.5 is
+The release team for Koha 3.18.5.1 is
 
   Release Manager:       Tomás Cohen Arazi <tomascohen@gmail.com>
   Documentation Manager: Nicole C Engard <nengard@gmail.com>
@@ -254,17 +249,18 @@ Credits
 
 
 We thank the following libraries who are known to have sponsored
-new features in Koha 3.18.5:
+new features in Koha 3.18.5.1:
   * Universidad Nacional de Cordoba
 
-We thank the following individuals who contributed patches to Koha 3.18.5.
+We thank the following individuals who contributed patches to Koha 3.18.5.1.
 
   * Rochelle (1)
   * Nicole (8)
   * Larry Baerveldt (2)
+  * Galen Charlton (1)
   * Tomás Cohen Arazi (6)
-  * Chris Cormack (5)
-  * Jonathan Druart (15)
+  * Chris Cormack (7)
+  * Jonathan Druart (17)
   * Nicole Engard (2)
   * Julian FIOL (2)
   * Katrin Fischer (11)
@@ -280,37 +276,39 @@ We thank the following individuals who contributed patches to Koha 3.18.5.
   * Robin Sheat (1)
   * Fridolin Somers (1)
   * Mark Tompsett (1)
-  * Marc Véron (4)
+  * Marc Véron (5)
 
 
 We thank the following libraries, companies, and other institutions who contributed
-patches to Koha 3.18.5
+patches to Koha 3.18.5.1
 
 
   * BSZ BW (11)
-  * BibLibre (21)
+  * BibLibre (23)
   * BigBallOfWax (1)
   * ByWater-Solutions (15)
-  * Catalyst (5)
+  * Catalyst (7)
+  * Equinox (1)
   * Oslo Public Library (1)
   * Universidad Nacional de Córdoba (8)
   * pttk.fi (1)
   * regionhalland.se (1)
   * rot13.org (2)
   * unidentified (2)
-  * veron.ch (4)
+  * veron.ch (5)
 
 We also especially thank the following individuals who tested patches
-for Koha 3.18.5.
+for Koha 3.18.5.1.
 
-  * Brendan Gallagher (13)
-  * Chris Cormack (66)
+  * Brendan Gallagher (14)
+  * Chris Cormack (69)
   * Dobrica Pavlinusic (4)
+  * Galen Charlton (1)
   * Jacek Ablewicz (1)
   * Jesse Maseto (4)
   * joel aloi (1)
   * Jonathan Druart (27)
-  * Katrin Fischer (22)
+  * Katrin Fischer (23)
   * Larry Baerveldt (4)
   * Magnus Enger (3)
   * Marc Veron (2)
@@ -320,10 +318,10 @@ for Koha 3.18.5.
   * Nicole (3)
   * Nicole Engard (1)
   * Robin Sheat (2)
-  * Tomas Cohen Arazi (66)
+  * Tomas Cohen Arazi (67)
   * Nicole C. Engard (1)
-  * Kyle M Hall (12)
-  * Bernardo Gonzalez Kriegel (2)
+  * Kyle M Hall (13)
+  * Bernardo Gonzalez Kriegel (3)
 
 We regret any omissions.  If a contributor has been inadvertently missed,
 please send a patch against these release notes to 
@@ -354,4 +352,4 @@ tracker at
 He rau ringa e oti ai.
 (Many hands finish the work)
 
-##### Autogenerated release notes updated last on 22 Mar 2015 05:45:24 Z #####
+##### Autogenerated release notes updated last on 23 Mar 2015 23:10:16 Z #####
