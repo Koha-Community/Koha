@@ -345,8 +345,10 @@ if ( $template_type && $template_type eq 'advsearch' ) {
 #  * multivalued CGI paramaters are returned as a packaged string separated by "\0" (null)
 my $params = $cgi->Vars;
 my $tag;
-$tag = $params->{tag} if $params->{tag};
-
+if ( $params->{tag} ) {
+    $tag = $params->{tag};
+    $template->param( tag => $tag );
+}
 
 # String with params with the search criteria for the paging in opac-detail
 # param value is URI encoded and params separator is HTML encode (&amp;)

@@ -131,10 +131,12 @@
                                             <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
                                         </div>
                                     [% END %]
-                                    <div class="sort_by pull-right">
-                                        <select id="sort_by" class="resort" name="sort_by"> [% INCLUDE 'resort_form.inc' %] </select>
-                                        <input type="submit" class="btn btn-small clearfix" id="sortsubmit" value="Go" />
-                                    </div>
+                                    [% UNLESS tag %]
+                                        <div class="sort_by pull-right">
+                                            <select id="sort_by" class="resort" name="sort_by"> [% INCLUDE 'resort_form.inc' %] </select>
+                                            <input type="submit" class="btn btn-small clearfix" id="sortsubmit" value="Go" />
+                                        </div>
+                                    [% END %]
                                 </div> <!-- / #toolbar -->
 
                                 <div id="selections-toolbar" class="toolbar noprint">
