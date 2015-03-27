@@ -41,7 +41,7 @@ BEGIN {
         &GetOAISets &GetOAISet &GetOAISetBySpec &ModOAISet &DelOAISet &AddOAISet
         &GetOAISetsMappings &GetOAISetMappings &ModOAISetMappings
         &GetOAISetsBiblio &ModOAISetsBiblios &AddOAISetsBiblios
-        &CalcOAISetsBiblio &UpdateOAISetsBiblio
+        &CalcOAISetsBiblio &UpdateOAISetsBiblio &DelOAISetsBiblio
     );
 }
 
