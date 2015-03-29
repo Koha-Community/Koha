@@ -48,7 +48,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
 my $batch_id    = $cgi->param('batch_id') if $cgi->param('batch_id');
 my $template_id = $cgi->param('template_id') || undef;
 my $layout_id   = $cgi->param('layout_id') || undef;
-my $start_label = $cgi->param('start_label') || 1;
+my $start_card = $cgi->param('start_card') || 1;
 my @label_ids   = $cgi->param('label_id') if $cgi->param('label_id');
 my @borrower_numbers  = $cgi->param('borrower_number') if $cgi->param('borrower_number');
 
@@ -78,7 +78,7 @@ $pdf->Compress(1); # comment this out to debug pdf files, but be sure to uncomme
 $pdf->Mbox($lower_left_x, $lower_left_y, $upper_right_x, $upper_right_y);
 
 my ($llx, $lly) = 0,0;
-(undef, undef, $llx, $lly) = $pc_template->get_label_position($start_label);
+(undef, undef, $llx, $lly) = $pc_template->get_label_position($start_card);
 
 if (@label_ids) {
     my $batch_items = $batch->get_attr('items');
