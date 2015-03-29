@@ -44,14 +44,14 @@
      * This function checks if the adequate number of records are checked for merging
      */
     function MergeItems() {
-	var checkboxes = $("input:checkbox:checked");
+     var checkboxes = $("input:checkbox:checked");
         var nbCheckbox = checkboxes.length;
-	if (nbCheckbox != 2) {
-	    alert(_("Two records must be selected for merging."));
-	} else {
-	    location.href='/cgi-bin/koha/cataloguing/merge.pl?biblionumber=' + checkboxes[0].value + '&amp;biblionumber=' + checkboxes[1].value;
-	}
-	return false;
+     if (nbCheckbox != 2) {
+         alert(_("Two records must be selected for merging."));
+     } else {
+         location.href='/cgi-bin/koha/cataloguing/merge.pl?biblionumber=' + checkboxes[0].value + '&amp;biblionumber=' + checkboxes[1].value;
+     }
+     return false;
     }
 
     //]]>
@@ -66,7 +66,7 @@
 <div id="doc" class="yui-t7">
 
    <div id="bd">
-	<div id="yui-main">
+     <div id="yui-main">
 
 [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
   <div id="toolbar" class="btn-toolbar">
@@ -95,9 +95,9 @@
   </div>
 [% END %]
 
-	[% IF ( noitemsfound ) %]
-		No results found
-	[% END %]
+     [% IF ( noitemsfound ) %]
+          No results found
+     [% END %]
 
 <!-- display the search results -->
 
@@ -135,7 +135,7 @@
                         [% ELSE %]
                             &nbsp;
                         [% END %]
-			[% IF ( resultsloo.isbn ) %] - [% resultsloo.isbn %] [% END %]
+               [% IF ( resultsloo.isbn ) %] - [% resultsloo.isbn %] [% END %]
                         [% IF ( resultsloo.publicationyear ) %] - [% resultsloo.publicationyear %][% END %]
                         [% IF ( resultsloo.publishercode ) %]- [% resultsloo.publishercode %][% END %]
                         [% IF ( resultsloo.copyrightdate ) %] - [% resultsloo.copyrightdate %][% END %]
@@ -173,7 +173,7 @@
                         [% IF ( resultsloo.notforloancount ) %] Not for loan ([% resultsloo.notforloancount %])[% END %]
                     </span>
                 </td>
-				<td> <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% resultsloo.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% resultsloo.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">Card</a>
+                    <td> <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% resultsloo.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% resultsloo.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">Card</a>
                 </td>
                 [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<td><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% resultsloo.biblionumber %]">Edit biblio</a></td>[% END %]
                 [% IF ( CAN_user_editcatalogue_edit_items ) %]<td><a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% resultsloo.biblionumber %]">Add/Edit items</a></td>[% END %]
@@ -217,7 +217,7 @@
                 <td>[% breeding_loo.edition %]</td>
                 <td>[% breeding_loo.file %]</td>
                 <td> <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.id %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.id %]" title="MARC" rel="gb_page_center[600,500]">Card</a>
-				</td>
+                    </td>
                 [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<td>
                     <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?breedingid=[% breeding_loo.id %]">Add biblio</a>
                 </td>[% END %]
