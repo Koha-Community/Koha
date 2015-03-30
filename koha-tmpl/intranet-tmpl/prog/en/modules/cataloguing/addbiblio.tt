@@ -432,7 +432,7 @@ function Changefwk(FwkList) {
 [% END %]
 
 <div id="toolbar" class="btn-toolbar">
-    [% IF ( CAN_user_editcatalogue_edit_items ) %]
+    [% IF CAN_user_editcatalogue_edit_items or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
         [% IF (circborrowernumber) %][%# fast cataloging must lead to items %]
             <!-- Action is under fast cataloging - Save button redirecting to items -->
             <div class="btn-group"><a href="#" id="saveanditems" class="btn btn-small"><i class="icon-hdd"></i> Save</a></div>
