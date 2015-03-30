@@ -116,7 +116,7 @@ if ($findborrower) {
         );
         my $borrowers = $results->{patrons};
         if ( scalar @$borrowers == 1 ) {
-            $borrowernumber_hold = $borrower->[0]->{borrowernumber};
+            $borrowernumber_hold = $borrowers->[0]->{borrowernumber};
         } elsif ( @$borrowers ) {
             $template->param( borrowers => $borrowers );
         } else {
