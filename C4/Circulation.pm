@@ -2666,51 +2666,60 @@ sub CanBookBeRenewed {
     {
         my $schema = Koha::Database->new()->schema();
 
-        # Get all other items that could possibly fill reserves
-        my @itemnumbers = $schema->resultset('Item')->search(
-            {
-                biblionumber => $resrec->{biblionumber},
-                onloan       => undef,
-                -not         => { itemnumber => $itemnumber }
-            },
-            { columns => 'itemnumber' }
-        )->get_column('itemnumber')->all();
-
-        # Get all other reserves that could have been filled by this item
-        my @borrowernumbers;
-        while (1) {
-            my ( $reserve_found, $reserve, undef ) =
-              C4::Reserves::CheckReserves( $itemnumber, undef, undef,
-                \@borrowernumbers );
-
-            if ($reserve_found) {
-                push( @borrowernumbers, $reserve->{borrowernumber} );
-            }
-            else {
-                last;
-            }
+        my $item_holds = $schema->resultset('Reserve')->search( { itemnumber => $itemnumber, found => undef } )->count();
+        if ($item_holds) {
+            # There is an item level hold on this item, no other item can fill the hold
+            $resfound = 1;
         }
+        else {
 
-        # If the count of the union of the lists of reservable items for each borrower
-        # is equal or greater than the number of borrowers, we know that all reserves
-        # can be filled with available items. We can get the union of the sets simply
-        # by pushing all the elements onto an array and removing the duplicates.
-        my @reservable;
-        foreach my $b (@borrowernumbers) {
-            foreach my $i (@itemnumbers) {
-                if (   IsAvailableForItemLevelRequest($i)
-                    && CanItemBeReserved( $b, $i )
-                    && !IsItemOnHoldAndFound($i) )
+            # Get all other items that could possibly fill reserves
+            my @itemnumbers = $schema->resultset('Item')->search(
                 {
-                    push( @reservable, $i );
+                    biblionumber => $resrec->{biblionumber},
+                    onloan       => undef,
+                    -not         => { itemnumber => $itemnumber }
+                },
+                { columns => 'itemnumber' }
+            )->get_column('itemnumber')->all();
+
+            # Get all other reserves that could have been filled by this item
+            my @borrowernumbers;
+            while (1) {
+                my ( $reserve_found, $reserve, undef ) =
+                  C4::Reserves::CheckReserves( $itemnumber, undef, undef, \@borrowernumbers );
+
+                if ($reserve_found) {
+                    push( @borrowernumbers, $reserve->{borrowernumber} );
+                }
+                else {
+                    last;
                 }
             }
-        }
 
-        @reservable = uniq(@reservable);
+            # If the count of the union of the lists of reservable items for each borrower
+            # is equal or greater than the number of borrowers, we know that all reserves
+            # can be filled with available items. We can get the union of the sets simply
+            # by pushing all the elements onto an array and removing the duplicates.
+            my @reservable;
+            foreach my $b (@borrowernumbers) {
+                my ($borr) = C4::Members::GetMemberDetails($b);
+                foreach my $i (@itemnumbers) {
+                    my $item = GetItem($i);
+                    if (   IsAvailableForItemLevelRequest( $item, $borr )
+                        && CanItemBeReserved( $b, $i )
+                        && !IsItemOnHoldAndFound($i) )
+                    {
+                        push( @reservable, $i );
+                    }
+                }
+            }
 
-        if ( @reservable >= @borrowernumbers ) {
-            $resfound = 0;
+            @reservable = uniq(@reservable);
+
+            if ( @reservable >= @borrowernumbers ) {
+                $resfound = 0;
+            }
         }
     }
 
