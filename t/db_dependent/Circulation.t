@@ -300,9 +300,24 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     is( $renewokay, 1, 'Bug 11634 - Allow renewal of item with unfilled holds if other available items can fill those holds');
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber2);
     is( $renewokay, 1, 'Bug 11634 - Allow renewal of item with unfilled holds if other available items can fill those holds');
+
+    # Now let's add an item level hold, we should no longer be able to renew the item
+    my $hold = Koha::Database->new()->schema()->resultset('Reserve')->create(
+        {
+            borrowernumber => $hold_waiting_borrowernumber,
+            biblionumber   => $biblionumber,
+            itemnumber     => $itemnumber,
+            branchcode     => $branch,
+            priority       => 3,
+        }
+    );
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber);
+    is( $renewokay, 0, 'Bug 13919 - Renewal possible with item level hold on item');
+    $hold->delete();
+
     # Now let's add a waiting hold on the 3rd item, it's no longer available tp check out by just anyone, so we should no longer
     # be able to renew these items
-    my $hold = Koha::Database->new()->schema()->resultset('Reserve')->create(
+    $hold = Koha::Database->new()->schema()->resultset('Reserve')->create(
         {
             borrowernumber => $hold_waiting_borrowernumber,
             biblionumber   => $biblionumber,
