@@ -44,7 +44,7 @@ var relatives_borrowernumbers = new Array();
 var MSG_ADD_MESSAGE = _("Add a new message");
 var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
 [% IF ( borrowernumber ) %]if($.cookie("holdfor") != [% borrowernumber %]){ $.cookie("holdfor",null, { path: "/", expires: 0 }); }[% ELSE %]$.cookie("holdfor",null, { path: "/", expires: 0 });[% END %]
-[% UNLESS ( borrowernumber ) %][% UNLESS ( selectborrower ) %]window.onload=function(){ $('#findborrower').focus(); };[% END %][% END %]
+[% UNLESS ( borrowernumber ) %][% UNLESS ( borrowers ) %]window.onload=function(){ $('#findborrower').focus(); };[% END %][% END %]
 
 // On-site checkout
 function toggle_onsite_checkout(){
@@ -83,6 +83,23 @@ $(document).ready(function() {
     $("#onsite_checkout").click(function(){
         toggle_onsite_checkout();
     });
+
+    var table = $("#table_borrowers").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+            { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
+        ],
+        "aaSorting": [ 2, "asc" ],
+        "sDom": "t",
+        "iDisplayLength": -1
+    }));
+    $(table).find('tbody tr').filter(':has(:radio:checked)').end().click(function(event) {
+        $('#table_borrowers tbody tr').removeClass('selected');
+        $(this).addClass('selected');
+        if (event.target.type !== 'radio') {
+            $(':radio', this).attr('checked', 'true')
+        }
+    });
+
 });
 
 //]]>
@@ -100,7 +117,7 @@ $(document).ready(function() {
     <strong>Checkouts</strong>
 [% END %]
 </div>
-[% IF ( selectborrower ) %]
+[% IF ( $borrowers ) %]
 <div id="doc" class="yui-t7">
 
    <div id="bd">
@@ -500,19 +517,34 @@ No patron matched <span class="ex">[% message %]</span>
     <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
     <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
 
-<ol>    <li>
-    <label for="borrowernumber">Select a patron: </label>
-    <select name="borrowernumber" id="borrowernumber" size="7" class="focus" ondblclick="document.forms['mainform'].submit()">
-        [% FOREACH borrower IN selectborrower.values %]
-        <option value="[% borrower %]">[% selectborrower.labels.$borrower %]</option>
-        [% END %]
-    </select>
-    </li>
-</ol>
-<p><input type="submit" value="Select" /></p>
+    <table id="table_borrowers">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Cardnumber</th>
+                <th>Category</th>
+                <th>Library</th>
+                <th>Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            [% FOREACH borrower IN borrowers %]
+            <tr>
+                <td><input type="radio" name="borrowernumber" value="[% borrower.borrowernumber %]" /></td>
+                <td>[% borrower.surname %], [% borrower.firstname %]</td>
+                <td>[% borrower.cardnumber %]</td>
+                <td>[% borrower.categorycode %]</td>
+                <td>[% borrower.branchcode %]</td>
+                <td>[% borrower.address %]</td>
+            </tr>
+            [% END %]
+        </tbody>
+    </table>
+    <fieldset class="action"><input type="submit" value="Select" /></fieldset>
 </fieldset>
 </form>
-[% ELSE %] <!-- selectborrower -->
+[% ELSE %]
 
 <!-- BARCODE ENTRY -->
 
@@ -878,7 +910,7 @@ No patron matched <span class="ex">[% message %]</span>
 
 </div>
 </div>
-[% UNLESS ( selectborrower ) %][% IF ( borrowernumber ) %]<div class="yui-b">
+[% UNLESS ( borrowers ) %][% IF ( borrowernumber ) %]<div class="yui-b">
 [% INCLUDE 'circ-menu.inc' %]
 </div>[% END %][% END %]
 </div>

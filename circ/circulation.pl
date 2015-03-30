@@ -34,6 +34,7 @@ use C4::Dates qw/format_date/;
 use C4::Branch; # GetBranches
 use C4::Koha;   # GetPrinter
 use C4::Circulation;
+use C4::Utils::DataTables::Members;
 use C4::Members;
 use C4::Biblio;
 use C4::Search;
@@ -202,25 +203,30 @@ if ( $print eq 'yes' && $borrowernumber ne '' ) {
 # STEP 2 : FIND BORROWER
 # if there is a list of find borrowers....
 #
-my $borrowerslist;
 my $message;
 if ($findborrower) {
-    my $borrowers = Search($findborrower, 'cardnumber') || [];
-    my $categories = GetBorrowercategoryList;
-    $categories->[0]->{first} = 1;
-    $template->param( categories => $categories );
-
-    if ( @$borrowers == 0 ) {
-        $query->param( 'findborrower', '' );
-        $message = "'$findborrower'";
-    }
-    elsif ( @$borrowers == 1 ) {
-        $borrowernumber = $borrowers->[0]->{'borrowernumber'};
-        $query->param( 'borrowernumber', $borrowernumber );
-        $query->param( 'barcode',           '' );
-    }
-    else {
-        $borrowerslist = $borrowers;
+    my $borrower = C4::Members::GetMember( cardnumber => $findborrower );
+    if ( $borrower ) {
+        $borrowernumber = $borrower->{borrowernumber};
+    } else {
+        my $dt_params = { iDisplayLength => -1 };
+        my $results = C4::Utils::DataTables::Members::search(
+            {
+                searchmember => $findborrower,
+                dt_params => $dt_params,
+            }
+        );
+        my $borrowers = $results->{patrons};
+        if ( scalar @$borrowers == 1 ) {
+            $borrowernumber = $borrowers->[0]->{borrowernumber};
+            $query->param( 'borrowernumber', $borrowernumber );
+            $query->param( 'barcode',           '' );
+        } elsif ( @$borrowers ) {
+            $template->param( borrowers => $borrowers );
+        } else {
+            $query->param( 'findborrower', '' );
+            $message = "'$findborrower'";
+        }
     }
 }
 
@@ -417,25 +423,6 @@ if ($borrowernumber) {
       if ( $borrower->{'category_type'} eq 'A' );
 }
 
-my @values;
-my %labels;
-my $selectborrower;
-if ($borrowerslist) {
-    foreach (
-        sort {(lc $a->{'surname'} cmp lc $b->{'surname'} || lc $a->{'firstname'} cmp lc $b->{'firstname'})
-        } @$borrowerslist
-      )
-    {
-        push @values, $_->{'borrowernumber'};
-        $labels{ $_->{'borrowernumber'} } =
-"$_->{'surname'}, $_->{'firstname'} ... ($_->{'cardnumber'} - $_->{'categorycode'} - $_->{'branchcode'}) ...  $_->{'address'} ";
-    }
-    $selectborrower = {
-        values => \@values,
-        labels => \%labels,
-    };
-}
-
 #title
 my $flags = $borrower->{'flags'};
 foreach my $flag ( sort keys %$flags ) {
@@ -586,7 +573,6 @@ $template->param(
     stickyduedate     => $stickyduedate,
     duedatespec       => $duedatespec,
     message           => $message,
-    selectborrower    => $selectborrower,
     totaldue          => sprintf('%.2f', $total),
     inprocess         => $inprocess,
     is_child          => ($borrowernumber && $borrower->{'category_type'} eq 'C'),
