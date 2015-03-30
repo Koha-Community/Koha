@@ -27,7 +27,7 @@
 	function addToShelf() {	window.open('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber=[% biblionumber %]','Add_to_virtualshelf','width=500,height=400,toolbar=false,scrollbars=yes');
 	}
     function printBiblio() {window.print(); }
-[% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
+[% IF CAN_user_editcatalogue_edit_catalogue or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
     function confirm_deletion() {
         var count = [% count %];
         var holdcount = [% holdcount %];
@@ -68,7 +68,7 @@
     }
 [% END %]
 
-[% IF ( CAN_user_editcatalogue_edit_items ) %]
+[% IF CAN_user_editcatalogue_edit_items or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
     function confirm_items_deletion() {
         var count = [% count %];
         var holdcount = [% holdcount %];
@@ -159,15 +159,15 @@ CAN_user_serials_create_subscription ) %]
     </div>
 [% END %]
 
-[% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items || CAN_user_tools_items_batchmod || CAN_user_tools_items_batchdel ) %]
+[% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items || CAN_user_tools_items_batchmod || CAN_user_tools_items_batchdel ) or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
     <div class="btn-group">
     <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="icon-pencil"></i> Edit <span class="caret"></span></button>
         <ul class="dropdown-menu">
-            [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
+            [% IF CAN_user_editcatalogue_edit_catalogue or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
             <li><a id="editbiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber %]&amp;frameworkcode=[% current_framework %]&amp;op=">Edit record</a></li>
             [% END %]
 
-            [% IF ( CAN_user_editcatalogue_edit_items ) %]
+            [% IF CAN_user_editcatalogue_edit_items or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
             <li><a id="edititems" href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber %]">Edit items</a></li>
             [% END %]
 
@@ -193,9 +193,11 @@ CAN_user_serials_create_subscription ) %]
             [% IF ( LocalCoverImages || OPACLocalCoverImages) %][% IF ( CAN_user_tools_upload_local_cover_images ) %]<li><a href="/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber %]&amp;filetype=image">Upload image</a>[% END %][% END %]
 
             [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
-            <li><a id="duplicatebiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber %]&amp;frameworkcode=[% current_framework %]&amp;op=duplicate">Edit as new (duplicate)</a></li>
-            <li><a href="#" id="z3950copy">Replace record via Z39.50/SRU</a></li>
+                <li><a id="duplicatebiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber %]&amp;frameworkcode=[% current_framework %]&amp;op=duplicate">Edit as new (duplicate)</a></li>
+                <li><a href="#" id="z3950copy">Replace record via Z39.50/SRU</a></li>
+            [% END %]
 
+            [% IF CAN_user_editcatalogue_edit_catalogue or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
                 [% IF ( count ) %]
                     <li class="disabled"><a id="deletebiblio" data-toggle="tooltip" data-placement="left" title="[% count %] item(s) are attached to this record. You must delete all items before deleting this record." href="#">Delete record</a></li>
                 [% ELSE %]
@@ -203,7 +205,7 @@ CAN_user_serials_create_subscription ) %]
                 [% END %]
             [% END %]
 
-            [% IF ( CAN_user_editcatalogue_delete_all_items ) %]
+            [% IF CAN_user_editcatalogue_delete_all_items or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
                 [% IF ( count ) %]
                     <li><a href="#" id="deleteallitems">Delete all items</a></li>
                 [% ELSE %]

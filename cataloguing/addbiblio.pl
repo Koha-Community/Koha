@@ -727,13 +727,14 @@ my $fa_stickyduedate      = $input->param('stickyduedate');
 my $fa_duedatespec        = $input->param('duedatespec');
 
 my $userflags = 'edit_catalogue';
-if ($frameworkcode eq 'FA'){
-    $userflags = 'fast_cataloging';
-}
 
 my $changed_framework = $input->param('changed_framework');
 $frameworkcode = &GetFrameworkCode($biblionumber)
   if ( $biblionumber and not($frameworkcode) and $op ne 'addbiblio' );
+
+if ($frameworkcode eq 'FA'){
+    $userflags = 'fast_cataloging';
+}
 
 $frameworkcode = '' if ( $frameworkcode eq 'Default' );
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
