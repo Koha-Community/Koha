@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 13;
+use Test::More tests => 16;
 use Test::Warn;
 
 use Koha::Database;
@@ -46,11 +46,13 @@ ok( ref($ret) eq 'Koha::Borrower', "Set returns object on success" );
 is( $object2->surname(), "Test Borrower Surname 3", "Set sets first field correctly" );
 is( $object2->firstname(), "Test Firstname", "Set sets second field correctly" );
 
-$ret = $object->set({ surname => "Test Borrower Surname 4", bork => "bork" });
+warning_is { $ret = $object->set({ surname => "Test Borrower Surname 4", bork => "bork" }) } "No property bork!", "Expected 'No property bork!' caught";
 is( $object2->surname(), "Test Borrower Surname 3", "Bad Set does not set field" );
 is( $ret, 0, "Set returns 0 when passed a bad property" );
 
-ok( ! defined $object->bork(), 'Bad getter returns undef' );
-ok( ! defined $object->bork('bork'), 'Bad setter returns undef' );
+warning_is { $ret = $object->bork() } 'No method bork!', "Expected 'No method bork!' caught for getter.";
+ok( ! defined $ret, 'Bad getter returns undef' );
+warning_is { $ret = $object->bork('bork') } 'No method bork!', "Expected 'No method bork!' caught for setter.";
+ok( ! defined $ret, 'Bad setter returns undef' );
 
 1;
