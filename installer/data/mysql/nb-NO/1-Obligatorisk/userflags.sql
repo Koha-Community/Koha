@@ -26,7 +26,6 @@ INSERT INTO `userflags` VALUES(3,'parameters','Endre Kohas systempreferanser',0)
 INSERT INTO `userflags` VALUES(4,'borrowers','Legge til og endre lånere',0);
 INSERT INTO `userflags` VALUES(5,'permissions','Endre brukerrettigheter',0);
 INSERT INTO `userflags` VALUES(6,'reserveforothers','Reservere og endre reservasjoner for lånere',0);
-INSERT INTO `userflags` VALUES(7,'borrow','Låne dokumenter',1);
 INSERT INTO `userflags` VALUES(9,'editcatalogue','Endre katalogen (Endre bibliografiske poster og eksemplaropplysninger)',0);
 INSERT INTO `userflags` VALUES(10,'updatecharges','Endre gebyrer for lånere',0);
 INSERT INTO `userflags` VALUES(11,'acquisition','Innkjøp og/eller behandling av forslag',0);

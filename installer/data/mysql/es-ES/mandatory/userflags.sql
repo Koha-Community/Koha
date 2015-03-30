@@ -5,7 +5,6 @@ INSERT INTO `userflags` VALUES(3,'parameters','Set Koha system parameters',0);
 INSERT INTO `userflags` VALUES(4,'borrowers','Add or modify borrowers',0);
 INSERT INTO `userflags` VALUES(5,'permissions','Set user permissions',0);
 INSERT INTO `userflags` VALUES(6,'reserveforothers','Place and modify holds for patrons',0);
-INSERT INTO `userflags` VALUES(7,'borrow','Borrow books',1);
 INSERT INTO `userflags` VALUES(9,'editcatalogue','Edit Catalog (Modify bibliographic/holdings data)',0);
 INSERT INTO `userflags` VALUES(10,'updatecharges','Update borrower charges',0);
 INSERT INTO `userflags` VALUES(11,'acquisition','Acquisition and/or suggestion management',0);

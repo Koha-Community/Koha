@@ -45,13 +45,14 @@ InstallAuth - Authenticates Koha users for Install process
 
   my $query = new CGI;
 
-  my ($template, $borrowernumber, $cookie) 
-    = get_template_and_user({template_name   => "opac-main.tt",
-                             query           => $query,
-			     type            => "opac",
-			     authnotrequired => 1,
-			     flagsrequired   => {borrow => 1},
-			  });
+    my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+        {   template_name   => "opac-main.tt",
+            query           => $query,
+            type            => "opac",
+            authnotrequired => 1,
+            flagsrequired   => { acquisition => '*' },
+        }
+    );
 
   output_html_with_http_headers $query, $cookie, $template->output;
 
@@ -80,13 +81,14 @@ InstallAuth - Authenticates Koha users for Install process
 
 =item get_template_and_user
 
-  my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name   => "opac-main.tt",
-                             query           => $query,
-			     type            => "opac",
-			     authnotrequired => 1,
-			     flagsrequired   => {borrow => 1},
-			  });
+    my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+        {   template_name   => "opac-main.tt",
+            query           => $query,
+            type            => "opac",
+            authnotrequired => 1,
+            flagsrequired   => { acquisition => '*' },
+        }
+    );
 
     This call passes the C<query>, C<flagsrequired> and C<authnotrequired>
     to C<&checkauth> (in this module) to perform authentification.
@@ -139,7 +141,6 @@ sub get_template_and_user {
             $template->param( CAN_user_borrowers        => 1 );
             $template->param( CAN_user_permission       => 1 );
             $template->param( CAN_user_reserveforothers => 1 );
-            $template->param( CAN_user_borrow           => 1 );
             $template->param( CAN_user_editcatalogue    => 1 );
             $template->param( CAN_user_updatecharges    => 1 );
             $template->param( CAN_user_acquisition      => 1 );

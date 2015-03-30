@@ -35,7 +35,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         type            => "opac",
         query           => $input,
         authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
-        flagsrequired   => { borrow => 1 },
     }
 );
 

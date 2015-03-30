@@ -6,7 +6,6 @@ INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
 (4,'borrowers','Add or modify patrons',0),
 (5,'permissions','Set user permissions',0),
 (6,'reserveforothers','Place and modify holds for patrons',0),
-(7,'borrow','Borrow books',1),
 (9,'editcatalogue','Edit catalog (Modify bibliographic/holdings data)',0),
 (10,'updatecharges','Manage patrons fines and fees',0),
 (11,'acquisition','Acquisition and/or suggestion management',0),

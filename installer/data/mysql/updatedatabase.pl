@@ -9977,6 +9977,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+
 $DBversion = "3.19.00.018";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
@@ -10553,6 +10554,17 @@ foreach my $file ( sort readdir $dirh ) {
         do $update_dir . $file;
     }
 }
+
+
+$DBversion = "3.19.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        DELETE FROM userflags WHERE bit=7;
+    |);
+    print "Upgrade to $DBversion done (Bug 7976 - Remove the 'borrow' permission)\n";
+    SetVersion($DBversion);
+}
+
 
 =head1 FUNCTIONS
 

@@ -107,7 +107,7 @@ C4::Auth - Authenticates Koha users
             query           => $query,
       type            => "opac",
       authnotrequired => 0,
-      flagsrequired   => {borrow => 1, catalogue => '*', tools => 'import_patrons' },
+      flagsrequired   => { catalogue => '*', tools => 'import_patrons' },
   }
     );
 
@@ -131,7 +131,7 @@ automatically. This gets loaded into the template.
          query           => $query,
          type            => "opac",
          authnotrequired => 0,
-         flagsrequired   => {borrow => 1, catalogue => '*', tools => 'import_patrons' },
+         flagsrequired   => { catalogue => '*', tools => 'import_patrons' },
        }
      );
 
@@ -230,7 +230,6 @@ sub get_template_and_user {
             $template->param( CAN_user_borrowers        => 1 );
             $template->param( CAN_user_permissions      => 1 );
             $template->param( CAN_user_reserveforothers => 1 );
-            $template->param( CAN_user_borrow           => 1 );
             $template->param( CAN_user_editcatalogue    => 1 );
             $template->param( CAN_user_updatecharges    => 1 );
             $template->param( CAN_user_acquisition      => 1 );

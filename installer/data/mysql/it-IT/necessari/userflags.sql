@@ -7,7 +7,6 @@ INSERT INTO `userflags` VALUES(3,'parameters','Imposta i parametri di Koha',0);
 INSERT INTO `userflags` VALUES(4,'borrowers','Aggiungi o modifica gli utenti',0);
 INSERT INTO `userflags` VALUES(5,'permissions','Imposta i permessi utente',0);
 INSERT INTO `userflags` VALUES(6,'reserveforothers','Prenota i libri per gli utenti',0);
-INSERT INTO `userflags` VALUES(7,'borrow','Presta i libri',1);
 INSERT INTO `userflags` VALUES(9,'editcatalogue','Modifica il catalogo (modifica i dati bibliografici e titoli)',0);
 INSERT INTO `userflags` VALUES(10,'updatecharges','Aggiorna le tariffe del prestito',0);
 INSERT INTO `userflags` VALUES(11,'acquisition','Gestione delle acquisizioni e dei suggerimenti d\'acquisto',0);

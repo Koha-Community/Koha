@@ -5,7 +5,6 @@ INSERT INTO `userflags` VALUES(3,'parameters','Administration und Systemparamete
 INSERT INTO `userflags` VALUES(4,'borrowers','Benutzer anlegen/ändern',0);
 INSERT INTO `userflags` VALUES(5,'permissions','Berechtigungen für Benutzer vergeben',0);
 INSERT INTO `userflags` VALUES(6,'reserveforothers','Vormerkungen für Benutzer setzen/ändern',0);
-INSERT INTO `userflags` VALUES(7,'borrow','Medien entleihen',1);
 INSERT INTO `userflags` VALUES(9,'editcatalogue','Katalogdaten ändern (Titel- und Bestandsdaten ändern)',0);
 INSERT INTO `userflags` VALUES(10,'updatecharges','Gebühren verwalten',0);
 INSERT INTO `userflags` VALUES(11,'acquisition','Erwerbung und Verwaltung von Anschaffungsvorschlägen',0);

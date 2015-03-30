@@ -6,7 +6,6 @@ INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
 (4,'borrowers','Dodawanie i modyfikowanie użytkowników',0),
 (5,'permissions','Ustawianie uprawnień użytkownikom',0),
 (6,'reserveforothers','Składanie i modyfikacja zamówień w imieniu użytkowników',0),
-(7,'borrow','Wypożyczanie książek',1),
 (9,'editcatalogue','Modyfikowanie katalogu (Modyfikacja rekordów bibliograficznych/egzemplarza)',0),
 (10,'updatecharges','Zarządzanie należnościami',0),
 (11,'acquisition','Gromadzenie oraz/lub zarządzanie propozycjami zakupu',0),
