@@ -1077,7 +1077,9 @@ sub GetExpirationDate {
     # we don't do the same test if the subscription is based on X numbers or on X weeks/months
     $enddate = $startdate || $subscription->{startdate};
     my @date = split( /-/, $enddate );
+
     return if ( scalar(@date) != 3 || not check_date(@date) );
+
     my $frequency = C4::Serials::Frequency::GetSubscriptionFrequency($subscription->{periodicity});
     if ( $frequency and $frequency->{unit} ) {
 
@@ -2373,18 +2375,26 @@ sub abouttoexpire {
     my $per = $subscription->{'periodicity'};
     my $frequency = C4::Serials::Frequency::GetSubscriptionFrequency($per);
     if ($frequency and $frequency->{unit}){
+
         my $expirationdate = GetExpirationDate($subscriptionid);
+
         my ($res) = $dbh->selectrow_array('select max(planneddate) from serial where subscriptionid = ?', undef, $subscriptionid);
         my $nextdate = GetNextDate($subscription, $res);
-        if(Date::Calc::Delta_Days(
-            split( /-/, $nextdate ),
-            split( /-/, $expirationdate )
-        ) <= 0) {
-            return 1;
+
+        # only compare dates if both dates exist.
+        if ($nextdate and $expirationdate) {
+            if(Date::Calc::Delta_Days(
+                split( /-/, $nextdate ),
+                split( /-/, $expirationdate )
+            ) <= 0) {
+                return 1;
+            }
         }
+
     } elsif ($subscription->{numberlength}>0) {
         return (countissuesfrom($subscriptionid,$subscription->{'startdate'}) >=$subscription->{numberlength}-1);
     }
+
     return 0;
 }
 
