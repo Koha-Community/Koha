@@ -260,7 +260,6 @@ The search description is a hashref that looks something like:
 sub build_authorities_query {
     my ($self, $search) = @_;
 
-warn "Search is " . Dumper $search;
     # Start by making the query parts
     my @query_parts;
     my @filter_parts;
@@ -637,6 +636,9 @@ sub _clean_search_term {
 
     $term = $self->_convert_index_strings_freeform($term);
     $term =~ s/[{}]/"/g;
+    # Some hardcoded searches (like with authorities) produce things like
+    # 'an=123', when it ought to be 'an:123'.
+    $term =~ s/=/:/g;
     return $term;
 }
 
