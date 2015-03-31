@@ -1392,7 +1392,13 @@ sub ModReceiveOrder {
     my $order_vendornote = $params->{order_vendornote};
 
     my $dbh = C4::Context->dbh;
-    $datereceived = output_pref({ dt=>dt_from_string, dateonly=>1, dateformat=>'iso' }) unless $datereceived;
+    $datereceived = output_pref(
+        {
+            dt => ( $datereceived ? dt_from_string( $datereceived ) : dt_from_string ),
+            dateformat => 'iso',
+            dateonly => 1,
+        }
+    );
     my $suggestionid = GetSuggestionFromBiblionumber( $biblionumber );
     if ($suggestionid) {
         ModSuggestion( {suggestionid=>$suggestionid,

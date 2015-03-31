@@ -1,6 +1,8 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Receipt summary for : [% name %] [% IF ( invoice ) %]invoice, [% invoice %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
 [% INCLUDE 'additem.js.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/additem.js"></script>
 <script type="text/javascript" src="[% themelang %]/js/cataloging.js"></script>
@@ -259,14 +261,16 @@
     <input type="hidden" name="invoiceid" value="[% invoiceid %]" />
     <input type="hidden" name="ordernumber" value="[% ordernumber %]" />
     <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
-    <input type="hidden" name="datereceived" value="[% datereceived_iso %]" />
     <input type="hidden" name="gstrate" value="[% gstrate %]" />
 	</div>
 	<div class="yui-u">
     <fieldset class="rows">
     <legend>Accounting details</legend>
-       <ol>
-       <li><label for="datereceived">Date received: </label><span> [% datereceived %] </span></li>
+        <ol>
+            <li>
+                <label for="datereceived">Date received: </label>
+                <input type="text" size="10" id="datereceived" name="datereceived" value="[% datereceived | $KohaDates %]" class="datepicker" />
+            </li>
        <li><label for="bookfund">Fund: </label><select id="bookfund" name="bookfund">
             <option value="">Keep current ([% budget_period_description %] - [% bookfund %])</option>
             [% FOREACH period IN budget_loop %]

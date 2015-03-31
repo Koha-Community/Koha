@@ -67,7 +67,6 @@ use C4::Koha;   # GetKohaAuthorisedValues GetItemTypes
 use C4::Acquisition;
 use C4::Auth;
 use C4::Output;
-use C4::Dates qw/format_date/;
 use C4::Budgets qw/ GetBudget GetBudgetHierarchy CanUserUseBudget GetBudgetPeriods /;
 use C4::Members;
 use C4::Branch;    # GetBranches
@@ -76,7 +75,7 @@ use C4::Biblio;
 use C4::Suggestions;
 
 use Koha::Acquisition::Bookseller;
-
+use Koha::DateUtils qw( dt_from_string );
 
 my $input      = new CGI;
 
@@ -85,10 +84,7 @@ my $invoiceid    = $input->param('invoiceid');
 my $invoice      = GetInvoice($invoiceid);
 my $booksellerid   = $invoice->{booksellerid};
 my $freight      = $invoice->{shipmentcost};
-my $datereceived = $invoice->{shipmentdate};
 my $ordernumber  = $input->param('ordernumber');
-
-$datereceived = $datereceived ? C4::Dates->new($datereceived, 'iso') : C4::Dates->new();
 
 my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 my $results;
@@ -196,6 +192,8 @@ my $member = GetMember( borrowernumber => $authorisedby );
 
 my $budget = GetBudget( $order->{budget_id} );
 
+my $datereceived = $order->{datereceived} ? dt_from_string( $order->{datereceived} ) : dt_from_string;
+
 $template->param(
     AcqCreateItem         => $AcqCreateItem,
     count                 => 1,
@@ -205,7 +203,6 @@ $template->param(
     booksellerid          => $order->{'booksellerid'},
     freight               => $freight,
     name                  => $bookseller->{'name'},
-    date                  => format_date($order->{entrydate}),
     title                 => $order->{'title'},
     author                => $order->{'author'},
     copyrightdate         => $order->{'copyrightdate'},
@@ -221,8 +218,7 @@ $template->param(
     membersurname         => $member->{surname} || "",
     invoiceid             => $invoice->{invoiceid},
     invoice               => $invoice->{invoicenumber},
-    datereceived          => $datereceived->output(),
-    datereceived_iso      => $datereceived->output('iso'),
+    datereceived          => $datereceived,
     order_internalnote    => $order->{order_internalnote},
     order_vendornote      => $order->{order_vendornote},
     suggestionid          => $suggestion->{suggestionid},
