@@ -10,6 +10,9 @@ use t::lib::Mocks;
 
 BEGIN { use_ok('Koha::DateUtils'); }
 
+t::lib::Mocks::mock_preference('dateformat', 'us');
+t::lib::Mocks::mock_preference('TimeFormat', 'This_is_not_used_but_called');
+
 my $tz = C4::Context->tz;
 
 isa_ok( $tz, 'DateTime::TimeZone', 'Context returns timezone object' );
@@ -25,10 +28,6 @@ $dt->set_hour(12);
 $dt->set_minute(0);
 
 my $date_string;
-
-my $module_context = new Test::MockModule('C4::Context');
-
-t::lib::Mocks::mock_preference('dateformat', 'us');
 
 my $dateformat = C4::Context->preference('dateformat');
 cmp_ok  output_pref({ dt => $dt, dateformat => $dateformat }),
@@ -160,6 +159,7 @@ cmp_ok $date_string, 'eq', '12/11/2013 06:35 PM', 'as_due_date with hours and ti
 my $now = DateTime->now;
 is( dt_from_string, $now, "Without parameter, dt_from_string should return today" );
 
+my $module_context = new Test::MockModule('C4::Context');
 $module_context->mock(
     'tz',
     sub {
