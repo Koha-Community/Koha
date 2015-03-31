@@ -135,9 +135,12 @@ for( x=0; x<allColumns.length; x++ ){
 		    <div id="jobstatus">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
 		    <div id="jobfailed"></div>
 		</div>
-		[% IF ( too_many_items ) %]<input type="submit" name="mainformsubmit" value="Delete ALL submitted items" onclick="return submitBackgroundJob(this.form);" />[% ELSE %]
-		<input type="checkbox" name="del_records" id="del_records" /> <label for="del_records">Delete records if no items remain.</label><p>
-		<input type="submit" name="mainformsubmit" value="Delete selected items" onclick="return submitBackgroundJob(this.form);" />[% END %]
+        <input type="checkbox" name="del_records" id="del_records" /> <label for="del_records">Delete records if no items remain.</label>
+        [% IF too_many_items %]
+            <input type="submit" name="mainformsubmit" value="Delete ALL submitted items" onclick="return submitBackgroundJob(this.form);" />
+        [% ELSE %]
+            <input type="submit" name="mainformsubmit" value="Delete selected items" onclick="return submitBackgroundJob(this.form);" />
+        [% END %]
 
 		<a href="/cgi-bin/koha/tools/batchMod.pl?del=1" class="cancel">Cancel</a>
 	    </fieldset>
