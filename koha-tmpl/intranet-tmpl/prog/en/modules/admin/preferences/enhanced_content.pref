@@ -339,10 +339,19 @@ Enhanced Content:
             - .
     Coce Cover images cache:
         -
+            - pref: Coce
+              choices:
+                  yes: Enable
+                  no: "Don't enable"
+            - a Coce image cache service.
+        -
             - Coce server URL
             - pref: CoceHost
               class: url
         -
-            - Providers
+            - Use the following providers to fetch the covers
             - pref: CoceProviders
-            - 'separated by comma, for example: aws,gb. Leave empty not to activate this service.'
+              multiple:
+                aws: Amazon Web Services
+                gb: Google Books
+                ol: Open Library

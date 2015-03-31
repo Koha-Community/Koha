@@ -53,7 +53,7 @@
                                         <span class="no-image">No cover image available</span>
                                     [% END %]
                                 [% END %]
-                                [% IF ( Koha.Preference('CoceProviders') ) %]
+                                [% IF ( Koha.Preference('Coce') && Koha.Preference('CoceProviders') ) %]
                                   [% coce_id = item.browser_normalized_ean || item.browser_normalized_isbn %]
                                   <div title="[% item.biblionumber |url %]" class="[% coce_id %]" id="coce-thumbnail-preview-[% coce_id %]"></div>
                                 [% END %]

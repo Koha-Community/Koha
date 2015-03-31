@@ -9957,13 +9957,17 @@ $DBversion = "3.19.00.XXX";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         INSERT IGNORE INTO systempreferences (variable, value, explanation, options, type)
+        VALUES('Coce','0', 'If on, enables cover retrieval from the configured Coce server', NULL, 'YesNo')
+    });
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable, value, explanation, options, type)
         VALUES('CoceHost', NULL, 'Coce server URL', NULL,'Free')
     });
     $dbh->do(q{
         INSERT IGNORE INTO systempreferences (variable, value, explanation, options, type)
-        VALUES('CoceProviders', NULL, 'Coce Providers, for example: aws,gb', NULL,'Free')
+        VALUES('CoceProviders', NULL, 'Coce providers', 'aws,gb,ol', 'multiple')
     });
-    print "Upgrade to $DBversion done (Bug 9580 - Cover image from Coce, a remote image URL cache)\n";
+    print "Upgrade to $DBversion done (Bug 9580: Cover image from Coce, a remote image URL cache)\n";
     SetVersion($DBversion);
 }
 

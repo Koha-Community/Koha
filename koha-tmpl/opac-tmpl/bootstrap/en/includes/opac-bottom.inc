@@ -165,7 +165,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         //]]>
     </script>
 [% END %]
-[% IF Koha.Preference('CoceProviders') %]
+[% IF ( Koha.Preference('Coce') && Koha.Preference('CoceProviders') ) %]
     <script type="text/javascript" src="[% interface %]/[% theme %]/js/coce.js"></script>
     <script type="text/javascript">
         //<![CDATA[

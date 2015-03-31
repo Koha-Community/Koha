@@ -79,7 +79,7 @@
                     [% IF ( GoogleJackets ) %]
                         <div title="[% biblionumber |url %]" class="[% normalized_isbn %]" id="gbs-thumbnail-preview"></div>
                     [% END %]
-                    [% IF ( Koha.Preference('CoceProviders') ) %]
+                    [% IF ( Koha.Preference('Coce') && Koha.Preference('CoceProviders') ) %]
                       [% coce_id = normalized_ean || normalized_isbn %]
                       <div style="block" title="[% biblionumber |url %]" class="[% coce_id %]" id="coce-thumbnail-preview"></div>
                     [% END %]
@@ -1445,7 +1445,7 @@
     [% IF ( GoogleJackets ) %]
         KOHA.Google.GetCoverFromIsbn([% covernewwindow %]);
     [% END %]
-    [% IF ( Koha.Preference('CoceProviders') ) %]
+    [% IF ( Koha.Preference('Coce') && Koha.Preference('CoceProviders') ) %]
         KOHA.coce.getURL('[% Koha.Preference('CoceHost') %]', '[% Koha.Preference('CoceProviders') %]',[% covernewwindow %]);
     [% END %]
 
@@ -1506,7 +1506,7 @@
                     [% IF ( GoogleJackets ) %]
                       KOHA.Google.GetCoverFromIsbn([% covernewwindow %]);
                     [% END %]
-                    [% IF ( Koha.Preference('CoceProviders') ) %]
+                    [% IF ( Koha.Preference('Coce') && Koha.Preference('CoceProviders') ) %]
                       KOHA.coce.getURL('[% Koha.Preference('CoceHost') %]', '[% Koha.Preference('CoceProviders') %]',[% covernewwindow %]);
                     [% END %]
                     [% IF OpenLibraryCovers %]
@@ -1532,7 +1532,7 @@
                     [% IF ( GoogleJackets ) %]
                       KOHA.Google.GetCoverFromIsbn([% covernewwindow %]);
                     [% END %]
-                    [% IF ( Koha.Preference('CoceProviders') ) %]
+                    [% IF ( Koha.Preference('Coce') && Koha.Preference('CoceProviders') ) %]
                       KOHA.coce.getURL('[% Koha.Preference('CoceHost') %]', '[% Koha.Preference('CoceProviders') %]',[% covernewwindow %]);
                     [% END %]
                     [% IF OpenLibraryCovers %]
