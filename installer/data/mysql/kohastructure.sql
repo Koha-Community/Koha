@@ -58,7 +58,8 @@ CREATE TABLE `auth_subfield_structure` (
   `frameworkcode` varchar(10) NOT NULL default '',
   `defaultvalue` TEXT DEFAULT '',
   PRIMARY KEY  (`authtypecode`,`tagfield`,`tagsubfield`),
-  KEY `tab` (`authtypecode`,`tab`)
+  KEY `tab` (`authtypecode`,`tab`),
+  CONSTRAINT `auth_subfield_structure_ibfk_1` FOREIGN KEY (`authtypecode`) REFERENCES `auth_types` (`authtypecode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
