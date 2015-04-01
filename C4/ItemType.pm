@@ -99,6 +99,9 @@ an object.
 
 sub get {
     my ($class, $itemtype) = @_;
+
+    return unless defined $itemtype;
+
     my $dbh = C4::Context->dbh;
 
     my $data = $dbh->selectrow_hashref(

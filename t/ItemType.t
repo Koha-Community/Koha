@@ -1,9 +1,8 @@
 #!/usr/bin/perl
 
-use strict;
-use warnings;
+use Modern::Perl;
 use DBI;
-use Test::More tests => 26;
+use Test::More tests => 27;
 use Test::MockModule;
 
 BEGIN {
@@ -105,3 +104,6 @@ is( $itemtype->notforloan, '0', 'not for loan is 0' );
 is( $itemtype->imageurl, '', ' not for loan is undef' );
 
 is( $itemtype->checkinmsg, 'foo', 'checkinmsg is foo' );
+
+$itemtype = C4::ItemType->get;
+is( $itemtype, undef, 'C4::ItemType->get should return unless if no parameter is given' );
