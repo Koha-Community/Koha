@@ -73,7 +73,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 $template->param(
     SCRIPT_NAME => $ENV{'SCRIPT_NAME'},
-    uploadmarc  => $fileID
+    uploadmarc  => $fileID,
+    record_type => $record_type,
 );
 
 my %cookies = parse CGI::Cookie($cookie);
