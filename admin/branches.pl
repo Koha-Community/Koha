@@ -284,7 +284,7 @@ sub editcatform {
 	my @cats;
     my $data;
 	if ($categorycode) {
-        my $data = GetBranchCategory($categorycode);
+        $data = GetBranchCategory($categorycode);
         $innertemplate->param(
             categorycode    => $data->{'categorycode'},
             categoryname    => $data->{'categoryname'},
