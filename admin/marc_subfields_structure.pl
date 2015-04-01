@@ -154,9 +154,9 @@ if ( $op eq 'add_form' ) {
     # 2 cases here : on CVS install, $cgidir does not need a /cgi-bin
     # on a standard install, /cgi-bin need to be added.
     # test one, then the other
-    my $cgidir = C4::Context->intranetdir . "/cgi-bin";
+    my $cgidir = C4::Context->config('intranetdir') . "/cgi-bin";
     unless ( opendir( DIR, "$cgidir/cataloguing/value_builder" ) ) {
-        $cgidir = C4::Context->intranetdir;
+        $cgidir = C4::Context->config('intranetdir');
         opendir( DIR, "$cgidir/cataloguing/value_builder" )
           || die "can't opendir $cgidir/value_builder: $!";
     }

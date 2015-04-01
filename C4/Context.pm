@@ -622,24 +622,6 @@ sub set_preference {
     }
 }
 
-# AUTOLOAD
-# This implements C4::Config->foo, and simply returns
-# C4::Context->config("foo"), as described in the documentation for
-# &config, above.
-
-# FIXME - Perhaps this should be extended to check &config first, and
-# then &preference if that fails. OTOH, AUTOLOAD could lead to crappy
-# code, so it'd probably be best to delete it altogether so as not to
-# encourage people to use it.
-sub AUTOLOAD
-{
-    my $self = shift;
-
-    $AUTOLOAD =~ s/.*:://;        # Chop off the package name,
-                    # leaving only the function name.
-    return $self->config($AUTOLOAD);
-}
-
 =head2 Zconn
 
   $Zconn = C4::Context->Zconn

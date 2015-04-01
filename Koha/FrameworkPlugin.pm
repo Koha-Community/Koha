@@ -256,7 +256,7 @@ sub _load {
 }
 
 sub _valuebuilderpath {
-    return C4::Context->intranetdir . "/cataloguing/value_builder";
+    return C4::Context->config('intranetdir') . "/cataloguing/value_builder";
     #Formerly, intranetdir/cgi-bin was tested first.
     #But the intranetdir from koha-conf already includes cgi-bin for
     #package installs, single and standard installs.

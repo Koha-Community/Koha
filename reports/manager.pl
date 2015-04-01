@@ -44,7 +44,7 @@ $template->param(do_it => $do_it,
 		);
 my $cgidir = C4::Context->config('intranetdir')."/cgi-bin/reports/";
 unless (-r $cgidir and -d $cgidir) {
-	$cgidir = C4::Context->intranetdir."/reports/";
+    $cgidir = C4::Context->config('intranetdir')."/reports/";
 } 
 my $plugin = $cgidir.$report_name.".plugin";
 require $plugin;
