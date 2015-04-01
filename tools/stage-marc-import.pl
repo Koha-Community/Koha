@@ -156,6 +156,8 @@ if ($completedJobID) {
         } else {
             $matcher_failed = 1;
         }
+    } else {
+        $dbh->commit();
     }
 
     my $results = {
