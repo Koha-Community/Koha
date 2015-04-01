@@ -27,7 +27,7 @@ use C4::Overdues qw(UpdateFine);
 use Koha::DateUtils;
 use Koha::Database;
 
-use Test::More tests => 69;
+use Test::More tests => 70 ;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -234,6 +234,9 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         $biblionumber
     );
 
+
+
+
     # Create borrowers
     my %renewing_borrower_data = (
         firstname =>  'John',
@@ -256,11 +259,21 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         branchcode => $branch,
     );
 
+    my %restricted_borrower_data = (
+        firstname =>  'Alice',
+        surname => 'Reservation',
+        categorycode => 'S',
+        debarred => '3228-01-01',
+        branchcode => $branch,
+    );
+
     my $renewing_borrowernumber = AddMember(%renewing_borrower_data);
     my $reserving_borrowernumber = AddMember(%reserving_borrower_data);
     my $hold_waiting_borrowernumber = AddMember(%hold_waiting_borrower_data);
+    my $restricted_borrowernumber = AddMember(%restricted_borrower_data);
 
     my $renewing_borrower = GetMember( borrowernumber => $renewing_borrowernumber );
+    my $restricted_borrower = GetMember( borrowernumber => $restricted_borrowernumber );
 
     my $bibitems       = '';
     my $priority       = '1';
@@ -277,6 +290,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my $issue2 = AddIssue( $renewing_borrower, $barcode2);
     $datedue = dt_from_string( $issue->date_due() );
     is (defined $issue2, 1, "Item 2 checked out, due date: " . $issue2->date_due());
+
 
     my $borrowing_borrowernumber = GetItemIssue($itemnumber)->{borrowernumber};
     is ($borrowing_borrowernumber, $renewing_borrowernumber, "Item checked out to $renewing_borrower->{firstname} $renewing_borrower->{surname}");
@@ -373,6 +387,62 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 
     # FIXME: Add more for itemtype not for loan etc.
 
+    # Restricted users cannot renew when RestrictionBlockRenewing is enabled
+    my $barcode5 = 'R00000347';
+    my ( $item_bibnum5, $item_bibitemnum5, $itemnumber5 ) = AddItem(
+        {
+            homebranch       => $branch,
+            holdingbranch    => $branch,
+            barcode          => $barcode5,
+            replacementprice => 23.00
+        },
+        $biblionumber
+    );
+    my $datedue5 = AddIssue($restricted_borrower, $barcode5);
+    is (defined $datedue5, 1, "Item with date due checked out, due date: $datedue5");
+
+    C4::Context->set_preference('RestrictionBlockRenewing','1');
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber2);
+    is( $renewokay, 1, '(Bug 8236), Can renew, user is not restricted');
+    ( $renewokay, $error ) = CanBookBeRenewed($restricted_borrowernumber, $itemnumber5);
+    is( $renewokay, 0, '(Bug 8236), Cannot renew, user is restricted');
+
+    # Users cannot renew an overdue item
+    my $barcode6 = 'R00000348';
+    my ( $item_bibnum6, $item_bibitemnum6, $itemnumber6 ) = AddItem(
+        {
+            homebranch       => $branch,
+            holdingbranch    => $branch,
+            barcode          => $barcode6,
+            replacementprice => 23.00
+        },
+        $biblionumber
+    );
+
+    my $barcode7 = 'R00000349';
+    my ( $item_bibnum7, $item_bibitemnum7, $itemnumber7 ) = AddItem(
+        {
+            homebranch       => $branch,
+            holdingbranch    => $branch,
+            barcode          => $barcode7,
+            replacementprice => 23.00
+        },
+        $biblionumber
+    );
+    my $datedue6 = AddIssue( $renewing_borrower, $barcode6);
+    is (defined $datedue6, 1, "Item 2 checked out, due date: $datedue6");
+
+    my $passeddatedue1 = AddIssue($renewing_borrower, $barcode7, DateTime->from_epoch(epoch => 1));
+    is (defined $passeddatedue1, 1, "Item with passed date due checked out, due date: $passeddatedue1");
+
+
+    C4::Context->set_preference('OverduesBlockRenewing','blockitem');
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber6);
+    is( $renewokay, 1, '(Bug 8236), Can renew, this item is not overdue');
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber7);
+    is( $renewokay, 0, '(Bug 8236), Cannot renew, this item is overdue');
+
+
     $reserveid = C4::Reserves::GetReserveId({ biblionumber => $biblionumber, itemnumber => $itemnumber, borrowernumber => $reserving_borrowernumber});
     CancelReserve({ reserve_id => $reserveid });
 
@@ -468,7 +538,15 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     $future->add( days => 7 );
     my $units = C4::Overdues::get_chargeable_units('days', $future, $now, 'MPL');
     ok( $units == 0, '_get_chargeable_units returns 0 for items not past due date (Bug 12596)' );
-}
+
+    # Users cannot renew any item if there is an overdue item
+    C4::Context->set_preference('OverduesBlockRenewing','block');
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber6);
+    is( $renewokay, 0, '(Bug 8236), Cannot renew, one of the items is overdue');
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber7);
+    is( $renewokay, 0, '(Bug 8236), Cannot renew, one of the items is overdue');
+
+  }
 
 {
     # GetUpcomingDueIssues tests
