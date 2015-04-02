@@ -518,10 +518,15 @@ our $PERL_DEPS = {
         'min_ver'  => '2.05',
     },
     'Template' => {
-	'usage'    => 'Core',
-	'required' => '1',
-	'min_ver'  => '2.22',
-    },
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '2.22',
+      },
+    'Template::Plugin::Stash' => {
+        'usage'    => 'Debugging',
+        'required' => '1',
+        'min_ver'  => '1.006',
+      },
     'Gravatar::URL' => {
         'usage'    => 'Photos in OPAC reviews',
         'required' => '0',

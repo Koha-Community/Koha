@@ -1,61 +1,75 @@
 Logging:
-    -
-        - pref: LetterLog
-          choices:
-              on: Log
-              off: "Don't log"
-        - when an automatic claim notice is sent.
-    -
-        - pref: BorrowersLog
-          choices:
-              on: Log
-              off: "Don't log"
-        - changes to patron records.
-    -
-        - pref: CataloguingLog
-          choices:
-              on: Log
-              off: "Don't log"
-        - any changes to bibliographic or item records. Since this occurs whenever a book is checked in or out as well, it is not advisable to turn this on.
-    -
-        - pref: AuthoritiesLog
-          choices:
-              on: Log
-              off: "Don't log"
-        - changes to authority records.
-    -
-        - pref: FinesLog
-          choices:
-              on: Log
-              off: "Don't log"
-        - when fines are charged, paid, or forgiven.
-    -
-        - pref: IssueLog
-          choices:
-              on: Log
-              off: "Don't log"
-        - when items are checked out.
-    -
-        - pref: ReturnLog
-          choices:
-              on: Log
-              off: "Don't log"
-        - when items are returned.
-    -
-        - pref: SubscriptionLog
-          choices:
-              on: Log
-              off: "Don't log"
-        - when serials are added, deleted or changed.
-    -
-        - pref: CronjobLog
-          choices:
-              on: Log
-              off: "Don't log"
-        - information from cron jobs.
-    -
-        - pref: ReportsLog
-          choices:
-              on: Log
-              off: "Don't log"
-        - when reports are added, deleted or changed.
+    Logging:
+        -
+            - pref: LetterLog
+              choices:
+                  on: Log
+                  off: "Don't log"
+            - when an automatic claim notice is sent.
+        -
+            - pref: BorrowersLog
+              choices:
+                  on: Log
+                  off: "Don't log"
+            - changes to patron records.
+        -
+            - pref: CataloguingLog
+              choices:
+                  on: Log
+                  off: "Don't log"
+            - any changes to bibliographic or item records. Since this occurs whenever a book is checked in or out as well, it is not advisable to turn this on.
+        -
+            - pref: AuthoritiesLog
+              choices:
+                  on: Log
+                  off: "Don't log"
+            - changes to authority records.
+        -
+            - pref: FinesLog
+              choices:
+                  on: Log
+                  off: "Don't log"
+            - when fines are charged, paid, or forgiven.
+        -
+            - pref: IssueLog
+              choices:
+                  on: Log
+                  off: "Don't log"
+            - when items are checked out.
+        -
+            - pref: ReturnLog
+              choices:
+                  on: Log
+                  off: "Don't log"
+            - when items are returned.
+        -
+            - pref: SubscriptionLog
+              choices:
+                  on: Log
+                  off: "Don't log"
+            - when serials are added, deleted or changed.
+        -
+            - pref: CronjobLog
+              choices:
+                  on: Log
+                  off: "Don't log"
+            - information from cron jobs.
+        -
+            - pref: ReportsLog
+              choices:
+                  on: Log
+                  off: "Don't log"
+            - when reports are added, deleted or changed.
+    Debugging:
+        -
+            - pref: DumpTemplateVarsIntranet
+              choices:
+                  on: Do
+                  off: "Don't"
+            - dump all Template Toolkit variable to a comment in the html source for the staff intranet.
+        -
+            - pref: DumpTemplateVarsOpac
+              choices:
+                  on: Do
+                  off: "Don't"
+            - dump all Template Toolkit variable to a comment in the html source for the OPAC.

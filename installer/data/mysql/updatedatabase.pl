@@ -38,7 +38,6 @@ use C4::Context;
 use C4::Installer;
 use C4::Dates;
 use Koha::Database;
-
 use Koha;
 
 use MARC::Record;
@@ -10701,6 +10700,29 @@ if ( CheckVersion($DBversion) ) {
     });
 
     print "Upgrade to $DBversion done (Bug 12137: Extend functionality of CalendarFirstDayOfWeek to be any day)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "XXX";
+if ( CheckVersion($DBversion) ) {
+    my $rs = Koha::Database->new()->schema()->resultset('Systempreference');
+    $rs->find_or_create(
+        {
+            variable => 'DumpTemplateVarsIntranet',
+            value    => 0,
+            explanation => 'If enabled, dump all Template Toolkit variable to a comment in the html source for the staff intranet.',
+            type => 'YesNo',
+        }
+    );
+    $rs->find_or_create(
+        {
+            variable => 'DumpTemplateVarsOpac',
+            value    => 0,
+            explanation => 'If enabled, dump all Template Toolkit variable to a comment in the html source for the opac.',
+            type => 'YesNo',
+        }
+    );
+    print "Upgrade to $DBversion done (Bug 13948: Add ability to dump template toolkit variables to html comment)\n";
     SetVersion($DBversion);
 }
 
