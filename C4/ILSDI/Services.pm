@@ -26,7 +26,7 @@ use C4::Circulation;
 use C4::Branch;
 use C4::Accounts;
 use C4::Biblio;
-use C4::Reserves qw(AddReserve GetReservesFromBiblionumber GetReservesFromBorrowernumber CanBookBeReserved CanItemBeReserved);
+use C4::Reserves qw(AddReserve GetReservesFromBiblionumber GetReservesFromBorrowernumber CanBookBeReserved CanItemBeReserved IsAvailableForItemLevelRequest);
 use C4::Context;
 use C4::AuthoritiesMarc;
 use XML::Simple;
