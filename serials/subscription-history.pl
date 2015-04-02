@@ -71,7 +71,7 @@ if($op && $op eq 'mod') {
     exit;
 } else {
     my $history = GetSubscriptionHistoryFromSubscriptionId($subscriptionid);
-    my (undef, $biblio) = GetBiblio($history->{'biblionumber'});
+    my $biblio  = GetBiblio($history->{'biblionumber'});
 
     $template->param(
         subscriptionid  => $subscriptionid,
