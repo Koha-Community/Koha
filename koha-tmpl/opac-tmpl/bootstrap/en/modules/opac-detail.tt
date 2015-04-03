@@ -87,10 +87,14 @@
                         <div title="[% biblionumber |url %]" class="[% normalized_isbn %]" id="openlibrary-thumbnail-preview"></div>
                     [% END %]
                     [% IF ( BakerTaylorEnabled && normalized_isbn ) %]
-                        [% IF ( OPACurlOpenInNewWindow ) %]
-                            <a href="https://[% BakerTaylorBookstoreURL |html %][% normalized_isbn %]" target="_blank"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% normalized_isbn %]" /></a>
+                        [% IF BakerTaylorBookstoreURL %]
+                            [% IF ( OPACurlOpenInNewWindow ) %]
+                                <a href="https://[% BakerTaylorBookstoreURL |html %][% normalized_isbn %]" target="_blank"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% normalized_isbn %]" /></a>
+                            [% ELSE %]
+                                <a href="https://[% BakerTaylorBookstoreURL |html %][% normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% normalized_isbn %]" /></a>
+                            [% END %]
                         [% ELSE %]
-                            <a href="https://[% BakerTaylorBookstoreURL |html %][% normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% normalized_isbn %]" /></a>
+                            <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% normalized_isbn %]" />
                         [% END %]
                     [% END %]
                     </div><!-- / #bookcover -->

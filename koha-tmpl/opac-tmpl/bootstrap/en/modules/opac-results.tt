@@ -273,11 +273,21 @@
                                                                 <span class="no-image">No cover image available</span>
                                                             [% END %]
                                                         [% END %]
+
+                                                        [% IF ( BakerTaylorEnabled && !BakerTaylorBookstoreURL ) %]
+                                                            [% IF ( SEARCH_RESULT.normalized_isbn ) %]
+                                                                <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% SEARCH_RESULT.normalized_isbn %]" />
+                                                            [% ELSE %]
+                                                                <span class="no-image">No cover image available</span>
+                                                            [% END %]
+                                                        [% END %]
                                                     </a>
 
-                                                    [% IF ( BakerTaylorEnabled ) %]
+                                                    [% IF ( BakerTaylorEnabled && BakerTaylorBookstoreURL ) %]
                                                         [% IF ( SEARCH_RESULT.normalized_isbn ) %]
-                                                            <a href="https://[% BakerTaylorBookstoreURL |html %][% SEARCH_RESULT.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% SEARCH_RESULT.normalized_isbn %]" /></a>
+                                                            <a href="https://[% BakerTaylorBookstoreURL |html %][% SEARCH_RESULT.normalized_isbn %]">
+                                                                <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% SEARCH_RESULT.normalized_isbn %]" />
+                                                            </a>
                                                         [% ELSE %]
                                                             <span class="no-image">No cover image available</span>
                                                         [% END %]
