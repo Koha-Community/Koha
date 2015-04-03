@@ -239,7 +239,7 @@
                                                     [% ELSIF ( ISSUE.too_many ) %]
                                                         Not renewable
                                                     [% ELSIF ( ISSUE.norenew_overdue ) %]
-                                                        Not allowed <span class="renewals">(overdue on a document)</span>
+                                                        Not allowed <span class="renewals">(overdue)</span>
                                                     [% ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) %]
                                                         Automatic renewal
                                                         <span class="renewals">([% ISSUE.renewsleft %] of [% ISSUE.renewsallowed %] renewals remaining)</span>
@@ -475,7 +475,7 @@
                                                             [% END %]
                                                                 <span class="renewals">([% OVERDUE.renewsleft %] of [% OVERDUE.renewsallowed %] renewals remaining)</span>
                                                         [% ELSIF ( OVERDUE.norenew_overdue ) %]
-                                                            Not allowed<span class="renewals">(overdue on a document)</span>
+                                                            Not allowed<span class="renewals">(overdue)</span>
                                                         [% ELSIF ( OVERDUE.onreserve ) %]
                                                             On hold
                                                         [% ELSE %]

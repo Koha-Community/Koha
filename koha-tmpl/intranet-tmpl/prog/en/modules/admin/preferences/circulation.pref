@@ -400,13 +400,13 @@ Circulation:
             - If enabled, the number of checkouts allowed will be normal checkouts + on-site checkouts.
             - If disabled, both values will be checked separately.
         -
-            - When a patron's checked out item is late,
+            - When a patron's checked out item is overdue,
             - pref: OverduesBlockRenewing
               type: choice
               choices:
                   allow: allow renewing.
                   blockitem: block renewing only for this item.
-                  block: block renewing for all his items.
+                  block: block renewing for all the patron's items.
         -
             - If patron is restricted,
             - pref: RestrictionBlockRenewing

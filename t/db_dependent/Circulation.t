@@ -378,7 +378,6 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber2, 1);
     is( $renewokay, 1, 'Can renew item 2, item-level hold is on item 1');
 
-
     # Items can't fill hold for reasons
     ModItem({ notforloan => 1 }, $biblionumber, $itemnumber);
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber, 1);
