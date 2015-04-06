@@ -226,7 +226,7 @@
 </form>
 
         [% ELSIF not budget_period_id %]
-<div class="dialog alert">No active budget defined. You should define one before continuing.</div>
+<div class="dialog alert">That budget is not defined. You should select a defined budget to continue.</div>
         [% ELSE %]
 <div class="dialog message">No funds to display for this search criteria</div>
         [% END %]
@@ -237,6 +237,7 @@
 <div class="yui-b">
 
 <form method="post" action="/cgi-bin/koha/admin/aqplan.pl">
+    <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
 <fieldset class="brief">
 <h4>Filter</h4>
 [% BLOCK planning_types %]
@@ -313,6 +314,7 @@
         </li>
     </ol>
     <fieldset class="action">    <input type="submit" value="Submit"/>
+    <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
     <input type="hidden" name="report_name" value="[% report_name %]" />
     <input type="hidden" name="output" value="file" /></fieldset>
     <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
