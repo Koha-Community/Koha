@@ -194,6 +194,7 @@ sub draw_image {
         my $intName = $pdf->AltJpeg($images->{$image}->{'data'},$images->{$image}->{'Sx'}, $images->{$image}->{'Sy'}, 1, $images->{$image}->{'alt'}->{'data'},$images->{$image}->{'alt'}->{'Sx'}, $images->{$image}->{'alt'}->{'Sy'}, 1);
         my $obj_stream = "q\n";
         $obj_stream .= "$images->{$image}->{'Sx'} $images->{$image}->{'Ox'} $images->{$image}->{'Oy'} $images->{$image}->{'Sy'} $Tx $Ty cm\n";       # see http://www.adobe.com/devnet/pdf/pdf_reference.html sec 8.3.3 of ISO 32000-1
+        $obj_stream .= "$images->{$image}->{'scale'} 0 0 $images->{$image}->{'scale'} 0 0 cm\n"; #scale to 20%
         $obj_stream .= "/$intName Do\n";
         $obj_stream .= "Q\n";
         $pdf->Add($obj_stream);

@@ -63,7 +63,7 @@ print $cgi->header( -type       => 'application/pdf',
 
 my $pdf = C4::Creators::PDF->new(InitVars => 0);
 my $batch = C4::Patroncards::Batch->retrieve(batch_id => $batch_id);
-my $template = C4::Patroncards::Template->retrieve(template_id => $template_id, profile_id => 1);
+my $pc_template = C4::Patroncards::Template->retrieve(template_id => $template_id, profile_id => 1);
 my $layout = C4::Patroncards::Layout->retrieve(layout_id => $layout_id);
 
 $| = 1;
@@ -71,14 +71,14 @@ $| = 1;
 # set the paper size
 my $lower_left_x  = 0;
 my $lower_left_y  = 0;
-my $upper_right_x = $template->get_attr('page_width');
-my $upper_right_y = $template->get_attr('page_height');
+my $upper_right_x = $pc_template->get_attr('page_width');
+my $upper_right_y = $pc_template->get_attr('page_height');
 
 $pdf->Compress(1); # comment this out to debug pdf files, but be sure to uncomment it in production or you may be very sorry...
 $pdf->Mbox($lower_left_x, $lower_left_y, $upper_right_x, $upper_right_y);
 
 my ($llx, $lly) = 0,0;
-(undef, undef, $llx, $lly) = $template->get_label_position($start_label);
+(undef, undef, $llx, $lly) = $pc_template->get_label_position($start_label);
 
 if (@label_ids) {
     my $batch_items = $batch->get_attr('items');
@@ -126,8 +126,8 @@ foreach my $item (@{$items}) {
                 borrower_number         => $borrower_number,
                 llx                     => $llx, # lower left corner of the card
                 lly                     => $lly,
-                height                  => $template->get_attr('label_height'), # of the card
-                width                   => $template->get_attr('label_width'),
+                height                  => $pc_template->get_attr('label_height'), # of the card
+                width                   => $pc_template->get_attr('label_width'),
                 layout                  => $layout_xml,
                 text_wrap_cols          => 30, #FIXME: hardcoded
         );
@@ -178,6 +178,11 @@ foreach my $item (@{$items}) {
         $alt_image->BlobToImage($binary_data);
         $alt_image->Set(magick => 'jpg', quality => 100);
 
+        #To avoid pixelation have the image 5 times bigger and
+        #scale it down in PDF itself
+        my $oversize_factor = 8;
+        my $pdf_scale_factor = 1 / $oversize_factor;
+
         my $alt_width = ceil($image->Get('width')); # the rounding up is important: Adobe reader does not handle long decimal numbers well
         my $alt_height = ceil($image->Get('height'));
         my $ratio = $alt_width / $alt_height;
@@ -185,17 +190,20 @@ foreach my $item (@{$items}) {
         my $display_width = ceil($ratio * $display_height);
 
 
-        $image->Resize(width => $display_width, height => $display_height);
+        $image->Resize(width => $oversize_factor * $display_width, height => $oversize_factor * $display_height);
         $image->Set(magick => 'jpg', quality => 100);
 
+#       Write param for downsizing in pdf
+            $images->{$_}->{'scale'} = $pdf_scale_factor;
+
 #       Write params for alt image...
-            $images->{$_}->{'alt'}->{'Sx'} = $alt_width;
-            $images->{$_}->{'alt'}->{'Sy'} = $alt_height;
+            $images->{$_}->{'alt'}->{'Sx'} = $oversize_factor * $alt_width;
+            $images->{$_}->{'alt'}->{'Sy'} = $oversize_factor * $alt_height;
             $images->{$_}->{'alt'}->{'data'} = $alt_image->ImageToBlob();
 
 #       Write params for display image...
-            $images->{$_}->{'Sx'} = $display_width;
-            $images->{$_}->{'Sy'} = $display_height;
+            $images->{$_}->{'Sx'} = $oversize_factor * $display_width;
+            $images->{$_}->{'Sy'} = $oversize_factor * $display_height;
             $images->{$_}->{'data'} = $image->ImageToBlob();
 
             my $err = $patron_card->draw_image($pdf);
@@ -203,7 +211,7 @@ foreach my $item (@{$items}) {
         }
         $patron_card->draw_text($pdf);
     }
-    ($llx, $lly, $new_page) = $template->get_next_label_pos();
+    ($llx, $lly, $new_page) = $pc_template->get_next_label_pos();
     $pdf->Page() if $new_page;
 }
 
