@@ -65,7 +65,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 
-$recordBiblionumber =GetMarcBiblio($biblionumber);
+$recordBiblionumber = GetMarcBiblio($biblionumber, 'embed_items');
 if( $recordBiblionumber ) {
     $formatted1 = $recordBiblionumber->as_formatted;
     my $data = GetBiblioData($biblionumber);
@@ -74,9 +74,8 @@ if( $recordBiblionumber ) {
     $errorFormatted1 = 1;
 }
 
-my ($marc,$encoding) = GetImportRecordMarc($importid);
-if( $marc ) {
-    $recordImportid = MARC::Record->new_from_usmarc($marc) ;
+if( $importid ) {
+    $recordImportid = C4::ImportBatch::GetRecordFromImportBiblio( $importid, 'embed_items' );
     $formatted2 = $recordImportid->as_formatted;
     my $biblio = GetImportBiblios($importid);
     $importTitle = $biblio->[0]->{'title'};
