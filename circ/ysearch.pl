@@ -71,13 +71,13 @@ my @borrowers;
 while ( my $b = $borrowers_rs->next ) {
     push @borrowers,
       { borrowernumber => $b->borrowernumber,
-        surname        => $b->surname,
-        firstname      => $b->firstname,
-        cardnumber     => $b->cardnumber,
-        address        => $b->address,
-        city           => $b->city,
-        zipcode        => $b->zipcode,
-        country        => $b->country
+        surname        => $b->surname    // '',
+        firstname      => $b->firstname  // '',
+        cardnumber     => $b->cardnumber // '',
+        address        => $b->address    // '',
+        city           => $b->city       // '',
+        zipcode        => $b->zipcode    // '',
+        country        => $b->country    // '',
       };
 }
 
