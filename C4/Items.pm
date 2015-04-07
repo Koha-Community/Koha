@@ -2608,10 +2608,10 @@ For instance you can search all items with a specific stocknumber like this:
 sub SearchItemsByField {
     my ($field, $value) = @_;
 
-    my $filters = [ {
-            field => $field,
-            query => $value,
-    } ];
+    my $filters = {
+        field => $field,
+        query => $value,
+    };
 
     my ($results) = SearchItems($filters);
     return $results;
