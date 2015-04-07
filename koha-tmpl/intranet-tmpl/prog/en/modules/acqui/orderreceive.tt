@@ -69,7 +69,9 @@
                             var tds = $("#item_"+itemnumber+" td");
                             for(var i=2; i<tds.length; i++) {
                                 var column = items_columns[i];
-                                $(tds[i]).text(item[column]);
+                                var text = item[column];
+                                if ( text == null ) text = '';
+                                $(tds[i]).text(text);
                             }
                         }
                     );
