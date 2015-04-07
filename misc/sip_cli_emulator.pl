@@ -84,8 +84,6 @@ $terminator = ( $terminator eq 'CR' ) ? $CR : $CRLF;
 # Set perl to expect the same record terminator it is sending
 $/ = $terminator;
 
-my ( $sec, $min, $hour, $day, $month, $year ) = localtime(time);
-$year += 1900;
 my $transaction_date = C4::SIP::Sip::timestamp();
 
 my $terminal_password = $login_password;
