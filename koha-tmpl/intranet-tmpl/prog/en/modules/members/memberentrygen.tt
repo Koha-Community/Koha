@@ -184,7 +184,11 @@
 			<div class="dialog alert">
 				<h3>Duplicate patron record?</h3>
 				<p><a class="popup" href="javascript:Dopop('moremember.pl?print=brief&amp;borrowernumber=[% check_member %]');" >View existing record</a></p>
-				<form action="/cgi-bin/koha/members/memberentry.pl" method="get"><input type="hidden" name="op" value="modify" /><input type="hidden" name="borrowernumber" value="[% check_member %]" /><input type="hidden" name="category_type" value="[% check_categorytype %]" /><input class="edit" type="submit" value="It is a duplicate. Edit existing record" /></form>
+                <form action="/cgi-bin/koha/members/memberentry.pl" method="get">
+                    <input type="hidden" name="op" value="modify" />
+                    <input type="hidden" name="borrowernumber" value="[% check_member %]" />
+                    <input class="edit" type="submit" value="It is a duplicate. Edit existing record" />
+                </form>
 
                 <form name="form_double" action="/cgi-bin/koha/members/memberentry.pl" method="post" autocomplete="off">
 				<input type="hidden" name="nodouble" value="1" />
@@ -459,9 +463,9 @@
         <li>
             <span class="label">&nbsp;</span>
             [% IF ( guarantorid ) %]
-            <input id="guarantorsearch" type="button" value="Change" onclick="Dopopguarantor('guarantor_search.pl?category_type=[% category_type %]');" />
+            <input id="guarantorsearch" type="button" value="Change" onclick="Dopopguarantor('guarantor_search.pl');" />
             [% ELSE %]
-            <input id="guarantorsearch" type="button" value="Set to patron" onclick="Dopopguarantor('guarantor_search.pl?category_type=[% category_type %]');" />
+            <input id="guarantorsearch" type="button" value="Set to patron" onclick="Dopopguarantor('guarantor_search.pl');" />
             [% END %]
             <input id="guarantordelete" type="button" value="Delete" />
         </li>

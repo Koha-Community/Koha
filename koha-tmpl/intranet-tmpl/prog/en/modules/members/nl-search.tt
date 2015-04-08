@@ -32,15 +32,9 @@
                     <h3>Existing patrons</h3>
                     <ul>
                         [% FOREACH patron IN local_result %]
-                            [%# Find the category_type %]
-                            [% FOREACH category IN categories %]
-                                [% IF category.categorycode == patron.categorycode %]
-                                    [% patron.category_type = category.category_type %]
-                                [% END %]
-                            [% END %]
                             <li>[% patron.firstname %] [% patron.surname %] [% patron.cardnumber %] |
                                 <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">Details</a> |
-                                <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&destination=circ&borrowernumber=[% patron.borrowernumber %]&category_type=[% patron.category_type %]">Edit</a> |
+                                <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&destination=circ&borrowernumber=[% patron.borrowernumber %]">Edit</a> |
                                 <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% patron.borrowernumber %]">Check out</a>
                             </li>
                         [% END %]
