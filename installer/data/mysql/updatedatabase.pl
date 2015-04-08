@@ -8821,7 +8821,7 @@ $DBversion = "3.17.00.030";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(
         q{
-       INSERT INTO systempreferences (variable, value, options, explanation, type )
+       INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type )
        VALUES
         ('UsageStatsCountry', '', NULL, 'The country where your library is located, to be shown on the Hea Koha community website', 'YesNo'),
         ('UsageStatsID', '', NULL, 'This preference is part of Koha but it should not be deleted or updated manually.',  'Free'),
