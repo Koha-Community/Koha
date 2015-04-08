@@ -374,6 +374,18 @@ function show_page_2() {
 
 
 $(document).ready(function() {
+    $("#aqbooksellerid").on('keypress', function(e) {
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            FindAcqui();
+        }
+    });
+    $("#biblionumber").on('keypress', function(e) {
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            Plugin();
+        }
+    });
     $("select#frequency").change(function(){
         patternneedtobetested = 1;
         $("input[name='enddate']").val('');
@@ -479,7 +491,7 @@ $(document).ready(function() {
                                 [% END %]
                                 <li>
                                     <label for="aqbooksellerid">Vendor: </label>
-                                    <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="[% aqbooksellerid %]" size="8" /> (<input type="text" name="aqbooksellername" value="[% aqbooksellername %]" disabled="disabled" readonly="readonly" />) <a href="#" onclick="FindAcqui(f)">Search for a vendor</a>
+                                    <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="[% aqbooksellerid %]" size="8" /> (<input type="text" name="aqbooksellername" id="aqbooksellername" value="[% aqbooksellername %]" disabled="disabled" readonly="readonly" />) <a href="#" onclick="FindAcqui(f)">Search for a vendor</a>
                                 </li>
                                 <li>
                                     <label for="biblionumber" class="required" title="Subscriptions must be associated with a bibliographic record">Record:</label>
