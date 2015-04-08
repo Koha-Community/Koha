@@ -40,7 +40,7 @@ $searchfield=~ s/\,//g;
 
 my $offset    = $input->param('offset') || 0;
 my $op        = $input->param('op')     || '';
-my $dspchoice = $input->param('select_display');
+my $dspchoice = $input->cookie("marctagstructure_selectdisplay") // $input->param('select_display');
 my $pagesize = 20;
 
 my $script_name = "/cgi-bin/koha/admin/marctagstructure.pl";

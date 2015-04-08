@@ -7,6 +7,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.cookie.min.js"></script>
 
 <script type="text/javascript">
 //<![CDATA[
@@ -169,9 +170,9 @@ $(document).ready(function() {
     <input type="submit" value="Search" />
 <p>        <label for="select_display">Display only used tags/subfields</label>
         [% IF ( select_display ) %]
-            <input type="checkbox" name="select_display" id="select_display" value="True" checked="checked"  onchange="this.form.submit();" />
+            <input type="checkbox" name="select_display" id="select_display" value="True" checked="checked"  onchange="$.cookie('marctagstructure_selectdisplay', 0); this.form.submit();" />
         [% ELSE %]
-            <input type="checkbox" name="select_display" id="select_display" value="True" onchange="this.form.submit();" />
+            <input type="checkbox" name="select_display" id="select_display" value="True" onchange="$.cookie('marctagstructure_selectdisplay', 1); this.form.submit();" />
         [% END %]</p>
 </fieldset>
 </form>
