@@ -33,6 +33,7 @@ stop_zebra_instance()
     echo "Stopping Zebra server for $instancename"
     daemon \
         --name="$instancename-koha-zebra" \
+        --pidfiles="/var/run/koha/$instancename/" \
         --errlog="/var/log/koha/$instancename/zebra-error.log" \
         --stdout="/var/log/koha/$instancename/zebra.log" \
         --output="/var/log/koha/$instancename/zebra-output.log" \
