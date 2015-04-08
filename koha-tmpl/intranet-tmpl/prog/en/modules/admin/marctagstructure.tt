@@ -188,13 +188,21 @@ $(document).ready(function() {
         <th>Edit</th>
         <th>Delete</th>
         </tr>
-	</thead>
+    </thead>
     <tbody>
     [% IF ( select_display ) %]
         [% FOREACH loo IN loop %]
-            <tr>
+        <tr>
             <td>[% loo.tagfield %]</td>
-            <td>[% loo.liblibrarian %]</td>
+            <td>
+                [% loo.liblibrarian %]
+                [% FOREACH subfield IN loo.subfields %]
+                    <p>
+                        Tab:[% subfield.tab %] | $[% subfield.tagsubfield %]
+                        [% subfield.liblibrarian %] [% IF ( subfield.kohafield ) %][% subfield.kohafield %][% END %][% IF ( subfield.repeatable ) %], repeatable[% END %][% IF ( subfield.mandatory ) %], Mandatory[% END %][% IF ( subfield.seealso ) %], See [% subfield.seealso %][% END %][% IF ( subfield.authorised_value ) %], [% subfield.authorised_value %][% END %][% IF ( subfield.authtypecode ) %], [% subfield.authtypecode %][% END %][% IF ( subfield.value_builder ) %], [% subfield.value_builder %][% END %]
+                    </p>
+                [% END %]
+            </td>
             <td>[% IF ( loo.repeatable ) %]Yes[% ELSE %]No[% END %]</td>
             <td>[% IF ( loo.mandatory ) %]Yes[% ELSE %]No[% END %]</td>
             <td>[% loo.authorised_value %]</td>
@@ -202,20 +210,10 @@ $(document).ready(function() {
             <td><a href="[% loo.edit %]">Edit</a></td>
             <td><a href="[% loo.delete %]">Delete</a></td>
         </tr>
-      [% IF ( loop.odd ) %]<tr>[% ELSE %]<tr class="highlight">[% END %]
-            <td>&nbsp;</td>
-            <td colspan="7">
-                [% FOREACH subfield IN loo.subfields %]
-                    <p>	Tab:[% subfield.tab %] | $[% subfield.tagsubfield %]
-                            [% subfield.liblibrarian %] [% IF ( subfield.kohafield ) %][% subfield.kohafield %][% END %][% IF ( subfield.repeatable ) %], repeatable[% END %][% IF ( subfield.mandatory ) %], Mandatory[% END %][% IF ( subfield.seealso ) %], See [% subfield.seealso %][% END %][% IF ( subfield.authorised_value ) %], [% subfield.authorised_value %][% END %][% IF ( subfield.authtypecode ) %], [% subfield.authtypecode %][% END %][% IF ( subfield.value_builder ) %], [% subfield.value_builder %][% END %]
-                    </p>
-                [% END %]
-            </td>
-        </tr>
         [% END %]
     [% ELSE %]
     [% FOREACH loo IN loop %]
-    [% IF ( loop.odd ) %]<tr>[% ELSE %]<tr class="highlight">[% END %]
+    <tr>
         <td>[% loo.tagfield %]</td>
         <td>[% loo.liblibrarian %]</td>
         <td>[% IF ( loo.repeatable ) %]Yes[% ELSE %]No[% END %]</td>
