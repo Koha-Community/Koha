@@ -101,13 +101,15 @@ use DBIx::Connector;
 use Encode;
 use ZOOM;
 use XML::Simple;
-use C4::Boolean;
-use C4::Debug;
-use Koha;
 use POSIX ();
 use DateTime::TimeZone;
 use Module::Load::Conditional qw(can_load);
 use Carp;
+
+use C4::Boolean;
+use C4::Debug;
+use Koha;
+use Koha::Config::SysPrefs;
 
 =head1 NAME
 
@@ -525,14 +527,8 @@ sub preference {
     if ( defined $ENV{"OVERRIDE_SYSPREF_$var"} ) {
         $value = $ENV{"OVERRIDE_SYSPREF_$var"};
     } else {
-        # Look up systempreferences.variable==$var
-        my $sql = q{
-            SELECT  value
-            FROM    systempreferences
-            WHERE   variable = ?
-            LIMIT   1
-        };
-        $value = $dbh->selectrow_array( $sql, {}, lc $var );
+        my $syspref = Koha::Config::SysPrefs->find( lc $var );
+        $value = $syspref ? $syspref->value() : undef;
     }
 
     $sysprefs{lc $var} = $value;
@@ -603,28 +599,21 @@ sub set_preference {
     my $var = lc(shift);
     my $value = shift;
 
-    my $dbh = C4::Context->dbh or return 0;
-
-    my $type = $dbh->selectrow_array( "SELECT type FROM systempreferences WHERE variable = ?", {}, $var );
+    my $syspref = Koha::Config::SysPrefs->find( $var );
+    my $type = $syspref ? $syspref->type() : undef;
 
     $value = 0 if ( $type && $type eq 'YesNo' && $value eq '' );
 
-    # force explicit protocol on OPACBaseURL
-    if ($var eq 'opacbaseurl' && substr($value,0,4) !~ /http/) {
-        $value = 'http://' . $value;
+    if ($syspref) {
+        $syspref = $syspref->set( { value => $value } )->store();
+    }
+    else {
+        $syspref = Koha::Config::SysPref->new( { variable => $var, value => $value } )->store();
     }
 
-    my $sth = $dbh->prepare( "
-      INSERT INTO systempreferences
-        ( variable, value )
-        VALUES( ?, ? )
-        ON DUPLICATE KEY UPDATE value = VALUES(value)
-    " );
-
-    if($sth->execute( $var, $value )) {
+    if ($syspref) {
         $sysprefs{$var} = $value;
     }
-    $sth->finish;
 }
 
 # AUTOLOAD

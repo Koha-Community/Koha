@@ -19,7 +19,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use C4::Context;
 
 # Start transaction
@@ -27,20 +27,22 @@ my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 $dbh->{AutoCommit} = 0;
 
-my $opacheader = C4::Context->preference('opacheader');
+my $opacheader    = C4::Context->preference('opacheader');
 my $newopacheader = "newopacheader";
 
-C4::Context->set_preference('OPACHEADER', $newopacheader);
-ok(C4::Context->preference('opacheader') eq $newopacheader);
+C4::Context->set_preference( 'OPACHEADER', $newopacheader );
+is( C4::Context->preference('opacheader'), $newopacheader );
 
-C4::Context->set_preference('opacheader', $opacheader);
-ok(C4::Context->preference('OPACHEADER') eq $opacheader);
+C4::Context->set_preference( 'opacheader', $opacheader );
+is( C4::Context->preference('OPACHEADER'), $opacheader );
 
 $ENV{OVERRIDE_SYSPREF_opacheader} = 'this is an override';
 C4::Context->clear_syspref_cache();
-is(C4::Context->preference('opacheader'),
-   'this is an override',
-   'system preference value overridden from environment'
+is(
+    C4::Context->preference('opacheader'),
+    'this is an override',
+    'system preference value overridden from environment'
 );
 
-$dbh->rollback;
+C4::Context->set_preference( 'IDoNotExist', 'NonExistent' );
+is( C4::Context->preference('IDoNotExist'), 'NonExistent', 'Test creation of non-existant system preferencer' );
