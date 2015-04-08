@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( booksellername ) %]Orders with uncertain prices for vendor [% booksellername %][% ELSE %]Orders with uncertain prices[% END %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
@@ -126,8 +127,13 @@ function check(form) {
 	    </td>
 	    <td>
 	        
-	        <input type="text" size="10" name="qty[% uncertainpriceorder.ordernumber %]" value="[% uncertainpriceorder.quantity %]"
-	                                        onchange="uncheckbox(this.form, [% uncertainpriceorder.ordernumber %]);" />
+        [% IF Koha.Preference('AcqCreateItem') == 'ordering' %]
+            [% uncertainpriceorder.quantity %]
+            <input type="hidden" name="qty[% uncertainpriceorder.ordernumber %]" value="[% uncertainpriceorder.quantity %]" />
+        [% ELSE %]
+            <input type="text" size="10" name="qty[% uncertainpriceorder.ordernumber %]" value="[% uncertainpriceorder.quantity %]"
+                    onchange="uncheckbox(this.form, [% uncertainpriceorder.ordernumber %]);" />
+        [% END %]
 	    </td>
 	    </tr>
 	    [% END %]
