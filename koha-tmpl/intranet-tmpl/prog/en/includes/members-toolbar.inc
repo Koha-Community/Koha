@@ -130,30 +130,22 @@ function searchToHold(){
 
 <div id="toolbar" class="btn-toolbar">
     [% IF ( CAN_user_borrowers ) %]
-        [% IF ( category_type ) %]
-            [% IF ( guarantor ) %]
-                <a id="editpatron" class="btn btn-small" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;guarantorid=[% guarantorborrowernumber %]&amp;category_type=[% category_type %]">
-            [% ELSE %]
-                <a id="editpatron" class="btn btn-small" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;category_type=[% category_type %]">
-            [% END %]
-                <i class="icon-pencil"></i> Edit</a>
-        [% ELSE %] <!-- try with categorycode if no category_type -->
-            [% IF ( categorycode ) %]
-                <a id="editpatron" class="btn btn-small" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]"><i class="icon-pencil"></i> Edit</a>
-            [% ELSE %] <!-- if no categorycode, set category_type to A by default -->
-                <a id="editpatron" class="btn btn-small" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;category_type=A"><i class="icon-pencil"></i> Edit</a>
-            [% END %]
+        [% IF ( guarantor ) %]
+            <a id="editpatron" class="btn btn-small" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;guarantorid=[% guarantorborrowernumber %]&amp;categorycode=[% categorycode %]">
+        [% ELSE %]
+            <a id="editpatron" class="btn btn-small" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]">
         [% END %]
+        <i class="icon-pencil"></i> Edit</a>
     [% END %]
 
     [% IF ( CAN_user_borrowers ) %]
         [% IF ( adultborrower AND activeBorrowerRelationship ) %]
-            <a id="addchild" class="btn btn-small" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=[% borrowernumber %]&amp;category_type=C"><i class="icon-plus"></i> Add child</a>
+            <a id="addchild" class="btn btn-small" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=[% borrowernumber %]"><i class="icon-plus"></i> Add child</a>
         [% END %]
         [% IF ( CAN_user_borrowers ) %]
             <a id="changepassword" class="btn btn-small" href="/cgi-bin/koha/members/member-password.pl?member=[% borrowernumber %]"><i class="icon-lock"></i> Change password</a>
         [% END %]
-        <a id="duplicate" class="btn btn-small" href="/cgi-bin/koha/members/memberentry.pl?op=duplicate&amp;borrowernumber=[% borrowernumber %]&amp;category_type=[% category_type %]"><i class="icon-copy"></i>Duplicate</a>
+        <a id="duplicate" class="btn btn-small" href="/cgi-bin/koha/members/memberentry.pl?op=duplicate&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]"><i class="icon-copy"></i>Duplicate</a>
     [% END %]
 
     <div class="btn-group">

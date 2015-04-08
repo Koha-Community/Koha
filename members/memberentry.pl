@@ -90,8 +90,6 @@ my $guarantorinfo = $input->param('guarantorinfo');
 my $step          = $input->param('step') || 0;
 my @errors;
 my $default_city;
-# $check_categorytype contains the value of duplicate borrowers category type to redirect in good template in step =2
-my $check_categorytype=$input->param('check_categorytype');
 # NOTE: Alert for ethnicity and ethnotes fields, they are invalid in all borrowers form
 my $borrower_data;
 my $NoUpdateLogin;
@@ -236,12 +234,6 @@ if ( ( $op eq 'insert' ) and !$nodouble ) {
     );
     if ( !$check_member ) {
         $nodouble = 1;
-    }
-
-    #   recover the category type if the borrowers is a doublon
-    if ($check_category) {
-        my $tmpborrowercategory = GetBorrowercategory($check_category);
-        $check_categorytype = $tmpborrowercategory->{'category_type'};
     }
 }
 
@@ -711,7 +703,6 @@ $template->param(
   borrotitlepopup => $borrotitlepopup,
   guarantorinfo   => $guarantorinfo,
   flagloop  => \@flagdata,
-  check_categorytype =>$check_categorytype,#to recover the category type with checkcategorytype function
   category_type =>$category_type,
   modify          => $modify,
   nok     => $nok,#flag to konw if an error 
