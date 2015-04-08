@@ -40,12 +40,6 @@
 [% UNLESS ( closedate ) %]
 <script type="text/javascript">
 //<![CDATA[
-            function confirm_close() {
-                var is_confirmed = confirm(_("Are you sure you want to close this basket?"));
-                if (is_confirmed) {
-                    window.location = "[% script_name %]?op=close&basketno=[% basketno %]";
-                }
-            }
 
             function delete_basket(basketno,booksellerid,delbiblio) {
                 window.location = "[% script_name %]?op=delete_confirm&delbiblio="+delbiblio+"&basketno="+basketno+"&booksellerid="+booksellerid;
