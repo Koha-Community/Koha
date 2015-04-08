@@ -34,6 +34,7 @@ restart_zebra_instance()
         echo "Restarting Zebra server for $instancename"
         daemon \
             --name="$instancename-koha-zebra" \
+            --pidfiles="/var/run/koha/$instancename/" \
             --errlog="/var/log/koha/$instancename/zebra-error.log" \
             --stdout="/var/log/koha/$instancename/zebra.log" \
             --output="/var/log/koha/$instancename/zebra-output.log" \
@@ -60,6 +61,7 @@ start_zebra_instance()
         echo "Starting Zebra server for $instancename"
         daemon \
             --name="$instancename-koha-zebra" \
+            --pidfiles="/var/run/koha/$instancename/" \
             --errlog="/var/log/koha/$instancename/zebra-error.log" \
             --stdout="/var/log/koha/$instancename/zebra.log" \
             --output="/var/log/koha/$instancename/zebra-output.log" \
