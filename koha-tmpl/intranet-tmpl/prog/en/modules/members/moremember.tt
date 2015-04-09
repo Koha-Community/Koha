@@ -172,8 +172,15 @@ function validate1(date) {
     <div id="circmessages" class="circmessage attention">
         <ul>
         [% IF ( userdebarred ) %]
-            <li class="blocker">Patron is restricted[% IF ( userdebarreddate ) %] until [% userdebarreddate%] [% IF (debarredcomment ) %]([% debarredcomment %])[% END %][% END %]
-            <a href="#reldebarments" onclick="$('#debarments-tab-link').click()">View restrictions</a>
+            <li class="blocker">Patron's account is restricted
+               [% IF ( userdebarreddate ) %]
+                   until [% userdebarreddate %]
+               [% END %]
+
+               [% IF ( debarredcomment ) %]
+                   with the explanation: <i>[% debarredcomment | html_line_break %]</i>
+               [% END %]
+                <a href="#reldebarments" onclick="$('#debarments-tab-link').click()">View restrictions</a>
             </li>
         [% END %]
         [% IF ( gonenoaddress ) %]<li class="blocker">Patron's address is in doubt.</li>[% END %]
