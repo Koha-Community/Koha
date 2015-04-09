@@ -1899,8 +1899,18 @@ sub AddReturn {
                 }
             }
 
-            MarkIssueReturned( $borrowernumber, $item->{'itemnumber'},
-                $circControlBranch, $return_date, $borrower->{'privacy'} );
+            eval {
+                MarkIssueReturned( $borrowernumber, $item->{'itemnumber'},
+                    $circControlBranch, $return_date, $borrower->{'privacy'} );
+            };
+            if ( $@ ) {
+                $messages->{'Wrongbranch'} = {
+                    Wrongbranch => $branch,
+                    Rightbranch => $message
+                };
+                carp $@;
+                return ( 0, { WasReturned => 0 }, $issue, $borrower );
+            }
 
             # FIXME is the "= 1" right?  This could be the borrower hash.
             $messages->{'WasReturned'} = 1;
@@ -2075,6 +2085,16 @@ routine in C<C4::Accounts>.
 sub MarkIssueReturned {
     my ( $borrowernumber, $itemnumber, $dropbox_branch, $returndate, $privacy ) = @_;
 
+    my $anonymouspatron;
+    if ( $privacy == 2 ) {
+        # The default of 0 will not work due to foreign key constraints
+        # The anonymisation will fail if AnonymousPatron is not a valid entry
+        # We need to check if the anonymous patron exist, Koha will fail loudly if it does not
+        # Note that a warning should appear on the about page (System information tab).
+        $anonymouspatron = C4::Context->preference('AnonymousPatron');
+        die "Fatal error: the patron ($borrowernumber) has requested a privacy on returning item but the AnonymousPatron pref is not set correctly"
+            unless C4::Members::GetMember( borrowernumber => $anonymouspatron );
+    }
     my $dbh   = C4::Context->dbh;
     my $query = 'UPDATE issues SET returndate=';
     my @bind;
@@ -2100,10 +2120,6 @@ sub MarkIssueReturned {
     $sth_copy->execute($borrowernumber, $itemnumber);
     # anonymise patron checkout immediately if $privacy set to 2 and AnonymousPatron is set to a valid borrowernumber
     if ( $privacy == 2) {
-        # The default of 0 does not work due to foreign key constraints
-        # The anonymisation will fail quietly if AnonymousPatron is not a valid entry
-        # FIXME the above is unacceptable - bug 9942 relates
-        my $anonymouspatron = (C4::Context->preference('AnonymousPatron')) ? C4::Context->preference('AnonymousPatron') : 0;
         my $sth_ano = $dbh->prepare("UPDATE old_issues SET borrowernumber=?
                                   WHERE borrowernumber = ?
                                   AND itemnumber = ?");
