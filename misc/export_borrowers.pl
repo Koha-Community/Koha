@@ -26,7 +26,7 @@ use Getopt::Long qw(:config no_ignore_case);
 use C4::Context;
 use C4::Members;
 
-use encoding 'utf8';
+binmode STDOUT, ":encoding(UTF-8)";
 
 sub print_usage {
     ( my $basename = $0 ) =~ s|.*/||;
