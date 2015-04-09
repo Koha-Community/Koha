@@ -18,8 +18,9 @@
 
 use Modern::Perl;
 use C4::Context;
-use Test::More tests => 145;
+use Test::More tests => 147;
 use Test::MockModule;
+use Test::Warn;
 
 
 BEGIN {
@@ -88,9 +89,12 @@ ok (!defined(AddOAISet($set_without_name)), 'AddOAISet without "name" field is u
         'spec' => 'specWrong',
         'name' => 'nameWrong',
     };
-    my $setWrong_id = AddOAISet($setWrong);
+    my $setWrong_id;
+    warning_is { $setWrong_id = AddOAISet($setWrong) }
+                'AddOAISet failed',
+                'AddOAISet raises warning if there is a problem with SET spec or SET name';
 
-    DelOAISet($setWrong_id);
+    ok(!defined $setWrong_id, '$setWrong_id is not defined');
 }
 
 #Adding a Set without description
@@ -197,8 +201,9 @@ my $new_set_without_id =  {
     'name' => 'nameNoSpec',
     'descriptions' => ['descNoSpecNoName'],
 };
-ok (!defined(ModOAISet($new_set_without_id)), 'ModOAISet without "id" field is undef');
-
+warning_is { ModOAISet($new_set_without_id) }
+            'Set ID not defined, can\'t modify the set',
+            'ModOAISet raises warning if Set ID is not defined';
 
 my $new_set_without_spec_and_name =  {
     'id' => $set1_id,
@@ -593,10 +598,6 @@ UpdateOAISetsBiblio($biblionumberNotVH, $record);
 
 my @setsNotEq = CalcOAISetsBiblio($record);
 is_deeply(@setsNotEq, $setNotVH_id, 'The $record only belongs to $setNotVH');
-
-
-#
-
 
 
 
