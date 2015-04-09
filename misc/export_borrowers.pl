@@ -87,6 +87,11 @@ $query .= " ORDER BY borrowernumber";
 my $sth   = $dbh->prepare($query);
 $sth->execute;
 
+unless ( $separator ) {
+    $separator = C4::Context->preference('delimiter') || ',';
+    $separator = "\t" if ($separator eq 'tabulation');
+}
+
 my $csv = Text::CSV->new( { sep_char => $separator, binary => 1 } );
 
 # If the user did not specify any field to export, we assume he wants them all
