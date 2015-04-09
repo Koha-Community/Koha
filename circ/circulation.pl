@@ -90,7 +90,6 @@ if (!C4::Context->userenv && !$branch){
 }
 
 my $barcodes = [];
-my $batch = $query->param('batch');
 if ( my $barcode = $query->param('barcode') ) {
     $barcodes = [ $barcode ];
 } else {
@@ -110,9 +109,20 @@ if ( my $barcode = $query->param('barcode') ) {
 
 $barcodes = [ uniq @$barcodes ];
 
-my $template_name = $batch
-    ? q|circ/circulation_batch_checkouts.tt|
-    : q|circ/circulation.tt|;
+my $template_name = q|circ/circulation.tt|;
+my $borrowernumber = $query->param('borrowernumber');
+my $borrower = $borrowernumber ? GetMember( borrowernumber => $borrowernumber ) : undef;
+my $batch = $query->param('batch');
+my $batch_allowed = 0;
+if ( $batch ) {
+    $template_name = q|circ/circulation_batch_checkouts.tt|;
+    my @batch_category_codes = split '\|', C4::Context->preference('batch_checkouts');
+    if ( grep {/^$borrower->{categorycode}$/} @batch_category_codes ) {
+        $batch_allowed = 1;
+    } else {
+        $barcodes = [];
+    }
+}
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
     {
@@ -143,7 +153,6 @@ for (@failedreturns) { $return_failed{$_} = 1; }
 
 my $findborrower = $query->param('findborrower') || q{};
 $findborrower =~ s|,| |g;
-my $borrowernumber = $query->param('borrowernumber');
 
 $branch  = C4::Context->userenv->{'branch'};  
 $printer = C4::Context->userenv->{'branchprinter'};
@@ -259,7 +268,6 @@ if ($findborrower) {
 }
 
 # get the borrower information.....
-my $borrower;
 if ($borrowernumber) {
     $borrower = GetMemberDetails( $borrowernumber, 0 );
     my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrowernumber );
@@ -591,6 +599,7 @@ $template->param(
     inprocess         => $inprocess,
     is_child          => ($borrowernumber && $borrower->{'category_type'} eq 'C'),
     $view             => 1,
+    batch_allowed     => $batch_allowed,
     soundon           => C4::Context->preference("SoundOn"),
     fast_cataloging   => $fast_cataloging,
     CircAutoPrintQuickSlip   => C4::Context->preference("CircAutoPrintQuickSlip"),

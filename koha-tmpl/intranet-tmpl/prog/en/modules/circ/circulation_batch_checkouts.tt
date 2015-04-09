@@ -19,7 +19,6 @@
 <script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>[% END %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery-ui-timepicker-addon.js"></script>
-<script type="text/javascript" src="[% themelang %]/js/pages/circulation.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
@@ -54,7 +53,9 @@ $(document).ready(function() {
 
 <div class="yui-g">
 
-[% UNLESS checkout_infos %]
+[% IF NOT batch_allowed %]
+  <div class="dialog message">You are not allowed to use batch checkout for this patron</div>
+[% ELSIF NOT checkout_infos %]
   <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/circ/circulation.pl">
     <fieldset id="circ_circulation_issue">
       <label for="barcode">Checking out a batch to [% INCLUDE 'patron-title.inc' %]</label>
@@ -172,7 +173,7 @@ $(document).ready(function() {
 
                   [% IF NOT checkout_info.IMPOSSIBLE && ( CAN_user_circulate_force_checkout or checkout_info.HIGHHOLDS ) %]
                       [% IF checkout_info.RESERVED || checkout_info.RESERVE_WAITING %] <!-- arbitrary choice, revert the reserve is not possible-->
-                      <p>The hold will be canceled.</p>
+                        <p>This item is on hold for another patron. The hold will be overridden, but not cancelled.</p>
                       [% END %]
                   [% END %]
                 </p>
