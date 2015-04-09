@@ -973,12 +973,14 @@ sub checkauth {
 
             }
             else {
+                $debug and warn "Login failed, resetting anonymous session...";
                 if ($userid) {
                     $info{'invalid_username_or_password'} = 1;
                     C4::Context->_unset_userenv($sessionID);
                 }
                 $session->param('lasttime',time());
                 $session->param('ip',$session->remote_addr());
+                $session->param('sessiontype','anon');
             }
         }    # END if ( $userid    = $query->param('userid') )
         elsif ($type eq "opac") {
