@@ -10516,6 +10516,39 @@ if ( CheckVersion($DBversion) ) {
 }
 
 
+$DBversion = "3.21.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    my $msg;
+    if ( C4::Context->preference('OPACPrivacy') ) {
+        if ( my $anonymous_patron = C4::Context->preference('AnonymousPatron') ) {
+            my $anonymous_patron_exists = $dbh->selectcol_arrayref(q|
+                SELECT COUNT(*)
+                FROM borrowers
+                WHERE borrowernumber=?
+            |, {}, $anonymous_patron);
+            unless ( $anonymous_patron_exists->[0] ) {
+                $msg = "Configuration WARNING: OPACPrivacy is set but AnonymousPatron is not linked to an existing patron";
+            }
+        }
+        else {
+            $msg = "Configuration WARNING: OPACPrivacy is set but AnonymousPatron is not";
+        }
+    }
+    else {
+        my $patrons_have_required_anonymity = $dbh->selectcol_arrayref(q|
+            SELECT COUNT(*)
+            FROM borrowers
+            WHERE privacy = 2
+        |, {} );
+        if ( $patrons_have_required_anonymity->[0] ) {
+            $msg = "Configuration WARNING: OPACPrivacy is not set but $patrons_have_required_anonymity->[0] patrons have required anonymity (perhaps in a previous configuration). You should fix that asap.";
+        }
+    }
+
+    $msg //= "Privacy is correctly set";
+    print "Upgrade to $DBversion done (Bug 9942: $msg)\n";
+    SetVersion ($DBversion);
+}
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
