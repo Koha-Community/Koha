@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 use C4::Context;
-use Test::More tests => 147;
+use Test::More tests => 148;
 use Test::MockModule;
 use Test::Warn;
 
@@ -201,9 +201,11 @@ my $new_set_without_id =  {
     'name' => 'nameNoSpec',
     'descriptions' => ['descNoSpecNoName'],
 };
-warning_is { ModOAISet($new_set_without_id) }
+my $res;
+warning_is { $res = ModOAISet($new_set_without_id) }
             'Set ID not defined, can\'t modify the set',
             'ModOAISet raises warning if Set ID is not defined';
+ok(!defined($res), 'ModOAISet returns undef if Set ID is not defined');
 
 my $new_set_without_spec_and_name =  {
     'id' => $set1_id,
