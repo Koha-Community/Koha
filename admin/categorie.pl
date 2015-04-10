@@ -207,22 +207,6 @@ elsif ( $op eq 'add_validate' ) {
                 'categorycode'
             )
         );
-        my @branches = $input->param("branches");
-        if (@branches) {
-            $sth = $dbh->prepare(
-                "DELETE FROM categories_branches WHERE categorycode = ?"
-            );
-            $sth->execute( $input->param("categorycode") );
-            $sth = $dbh->prepare(
-                "INSERT INTO categories_branches ( categorycode, branchcode ) VALUES ( ?, ? )"
-            );
-            for my $branchcode (@branches) {
-                next if not $branchcode;
-                $sth->bind_param( 1, $input->param("categorycode") );
-                $sth->bind_param( 2, $branchcode );
-                $sth->execute;
-            }
-        }
         $sth->finish;
     }
     else {
@@ -258,6 +242,23 @@ elsif ( $op eq 'add_validate' ) {
             push @messages, { type => 'message', code => 'success_on_insert' };
         } else {
             push @messages, { type => 'error', code => 'error_on_insert' };
+        }
+    }
+
+    my @branches = $input->param("branches");
+    if (@branches) {
+        my $sth = $dbh->prepare(
+            "DELETE FROM categories_branches WHERE categorycode = ?"
+        );
+        $sth->execute( $input->param("categorycode") );
+        $sth = $dbh->prepare(
+            "INSERT INTO categories_branches ( categorycode, branchcode ) VALUES ( ?, ? )"
+        );
+        for my $branchcode (@branches) {
+            next if not $branchcode;
+            $sth->bind_param( 1, $input->param("categorycode") );
+            $sth->bind_param( 2, $branchcode );
+            $sth->execute;
         }
     }
 
