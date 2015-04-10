@@ -9983,7 +9983,7 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "XXX";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
-        INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('addressformat','us','Choose format to display postal addresses',NULL,'Choice')
+        INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AddressFormat','us','Choose format to display postal addresses',NULL,'Choice')
     |);
     print "Upgrade to $DBversion done (Bug 4041: Address Format as a I18N/L10N system preference\n";
     SetVersion ($DBversion);

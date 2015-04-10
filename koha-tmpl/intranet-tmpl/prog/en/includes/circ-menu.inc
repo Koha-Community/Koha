@@ -12,8 +12,8 @@
             <li id="patronbasics"><img src="[% interface %]/[% theme %]/img/patron-blank.png" alt="[% firstname %] [% surname %] ([% cardnumber %])" border="0" style="margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC;" /></li>
         [% END %]
     [% END %]
-    [% IF Koha.Preference( 'addressformat' ) %]
-        [% INCLUDE "member-display-address-style-${ Koha.Preference( 'addressformat' ) }.inc" %]
+    [% IF Koha.Preference( 'AddressFormat' ) %]
+        [% INCLUDE "member-display-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
     [% ELSE %]
         [% INCLUDE 'member-display-address-style-us.inc' %]
     [% END %]
