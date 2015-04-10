@@ -300,6 +300,25 @@ sub get {
     return $self->{extra_values}->{$key};
 }
 
+
+=head2 clear
+
+=over 4
+
+=item $job->clear();
+
+=back
+
+Clear the job from the current session.
+
+=cut
+
+sub clear {
+    my $self = shift;
+    get_session($self->{sessionID})->clear('job_' . $self->{jobID});
+}
+
+
 1;
 __END__
 
