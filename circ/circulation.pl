@@ -404,7 +404,7 @@ if (@$barcodes) {
                 $template_params->{getTitleMessageIteminfo} = $iteminfo->{'title'};
                 $template_params->{getBarcodeMessageIteminfo} = $iteminfo->{'barcode'};
                 $template_params->{NEEDSCONFIRMATION} = 1;
-                $template_params->{onsite_checkout} => $onsite_checkout,
+                $template_params->{onsite_checkout} = $onsite_checkout;
                 $confirm_required = 1;
             }
         }
@@ -416,6 +416,7 @@ if (@$barcodes) {
         }
     }
 
+    # FIXME If the issue is confirmed, we launch another time GetMemberIssuesAndFines, now display the issue count after issue
     my ( $od, $issue, $fines ) = GetMemberIssuesAndFines($borrowernumber);
 
     if ($question->{RESERVE_WAITING} or $question->{RESERVED}){
