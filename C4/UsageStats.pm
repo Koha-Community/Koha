@@ -58,11 +58,11 @@ sub NeedUpdate {
 sub BuildReport {
     my $report = {
         library => {
-            id   => C4::Context->preference('UsageStatsID')          || 0,
-            name => C4::Context->preference('UsageStatsLibraryName') || q||,
-            url => C4::Context->preference('UsageStatsLibraryUrl')   || q||,
-            type => C4::Context->preference('UsageStatsLibraryType') || q||,
-            country => C4::Context->preference('UsageStatsCountry') || q||,
+            id      => C4::Context->preference('UsageStatsID')          || 0,
+            name    => C4::Context->preference('UsageStatsLibraryName') || q||,
+            url     => C4::Context->preference('UsageStatsLibraryUrl')  || q||,
+            type    => C4::Context->preference('UsageStatsLibraryType') || q||,
+            country => C4::Context->preference('UsageStatsCountry')     || q||,
         },
     };
 
