@@ -41,7 +41,6 @@ my $BRANCHCODE   = 'CPL';
 my $CHANGED_FIRSTNAME = "Marry Ann";
 my $EMAIL             = "Marie\@email.com";
 my $EMAILPRO          = "Marie\@work.com";
-my $ETHNICITY         = "German";
 my $PHONE             = "555-12123";
 
 # XXX should be randomised and checked against the database
@@ -113,14 +112,12 @@ is($member->{dateofbirth}, undef, "Empty dates handled correctly");
 
 $member->{firstname} = $CHANGED_FIRSTNAME;
 $member->{email}     = $EMAIL;
-$member->{ethnicity} = $ETHNICITY;
 $member->{phone}     = $PHONE;
 $member->{emailpro}  = $EMAILPRO;
 ModMember(%$member);
 my $changedmember=GetMemberDetails("",$CARDNUMBER);
 ok ( $changedmember->{firstname} eq $CHANGED_FIRSTNAME &&
      $changedmember->{email}     eq $EMAIL             &&
-     $changedmember->{ethnicity} eq $ETHNICITY         &&
      $changedmember->{phone}     eq $PHONE             &&
      $changedmember->{emailpro}  eq $EMAILPRO
      , "Member Changed")

@@ -90,7 +90,6 @@ my $guarantorinfo = $input->param('guarantorinfo');
 my $step          = $input->param('step') || 0;
 my @errors;
 my $default_city;
-# NOTE: Alert for ethnicity and ethnotes fields, they are invalid in all borrowers form
 my $borrower_data;
 my $NoUpdateLogin;
 my $userenv = C4::Context->userenv;
@@ -507,26 +506,13 @@ if(!defined($data{'sex'})){
 }
 
 ##Now all the data to modify a member.
-my ($categories,$labels)=ethnicitycategories();
-  
-my $ethnicitycategoriescount=$#{$categories};
-my $ethcatpopup;
-if ($ethnicitycategoriescount>=0) {
-  $ethcatpopup = CGI::popup_menu(-name=>'ethnicity',
-        -id => 'ethnicity',
-        -tabindex=>'',
-        -values=>$categories,
-        -default=>$data{'ethnicity'},
-        -labels=>$labels);
-  $template->param(ethcatpopup => $ethcatpopup); # bad style, has to be fixed
-}
 
 my @typeloop;
 my $no_categories = 1;
 my $no_add;
 foreach (qw(C A S P I X)) {
     my $action="WHERE category_type=?";
-	($categories,$labels)=GetborCatFromCatType($_,$action);
+    my ($categories,$labels)=GetborCatFromCatType($_,$action);
     if(scalar(@$categories) > 0){ $no_categories = 0; }
 	my @categoryloop;
 	foreach my $cat (@$categories){
@@ -709,7 +695,6 @@ $template->param(
   nodouble  => $nodouble,
   borrowernumber  => $borrowernumber, #register number
   guarantorid => ($borrower_data->{'guarantorid'} || $guarantorid),
-  ethcatpopup => $ethcatpopup,
   relshiploop => \@relshipdata,
   city_loop => $city_arrayref,
   borrotitlepopup => $borrotitlepopup,

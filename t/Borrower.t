@@ -106,8 +106,6 @@ my $borrower = Koha::Borrower->new(
         guarantorid         => '123454321',
         borrowernotes       => 'borrowernotes',
         relationship        => 'myRelationship',
-        ethnicity           => undef,
-        ethnotes            => undef,
         sex                 => 'M',
         password            => 'hfkurhfe976634èj!',
         flags               => '55555',
@@ -132,7 +130,7 @@ my $borrower = Koha::Borrower->new(
 
 #borrower Accessor tests
 subtest 'Accessor tests' => sub {
-    plan tests => 67;
+    plan tests => 65;
     is( $borrower->borrowernumber, '12345',                           'borrowernumber accessor returns correct value' );
     is( $borrower->cardnumber,     '1234567890',                      'cardnumber accessor returns correct value' );
     is( $borrower->surname,        'mySurname',                       'surname accessor returns correct value' );
@@ -179,8 +177,6 @@ subtest 'Accessor tests' => sub {
     is( $borrower->guarantorid,         '123454321',             'guarantorid accessor returns correct value' );
     is( $borrower->borrowernotes,       'borrowernotes',         'borrowernotes accessor returns correct value' );
     is( $borrower->relationship,        'myRelationship',        'relationship accessor returns correct value' );
-    is( $borrower->ethnicity,           undef,                   'ethnicity accessor returns correct value' );
-    is( $borrower->ethnotes,            undef,                   'ethnotes accessor returns correct value' );
     is( $borrower->sex,                 'M',                     'sex accessor returns correct value' );
     is( $borrower->password,            'hfkurhfe976634èj!',    'password accessor returns correct value' );
     is( $borrower->flags,               '55555',                 'flags accessor returns correct value' );
@@ -204,7 +200,7 @@ subtest 'Accessor tests' => sub {
 
 #borrower Set tests
 subtest 'Set tests' => sub {
-    plan tests => 67;
+    plan tests => 65;
 
     $borrower->set(
         {
@@ -254,8 +250,6 @@ subtest 'Set tests' => sub {
             guarantorid         => '223454321',
             borrowernotes       => 'Sborrowernotes',
             relationship        => 'SmyRelationship',
-            ethnicity           => undef,
-            ethnotes            => undef,
             sex                 => 'F',
             password            => 'zerzerzer#',
             flags               => '666666',
@@ -324,8 +318,6 @@ subtest 'Set tests' => sub {
     is( $borrower->guarantorid,         '223454321',                        'guarantorid field set ok' );
     is( $borrower->borrowernotes,       'Sborrowernotes',                   'borrowernotes field set ok' );
     is( $borrower->relationship,        'SmyRelationship',                  'relationship field set ok' );
-    is( $borrower->ethnicity,           undef,                              'ethnicity field set ok' );
-    is( $borrower->ethnotes,            undef,                              'ethnotes field set ok' );
     is( $borrower->sex,                 'F',                                'sex field set ok' );
     is( $borrower->password,            'zerzerzer#',                       'password field set ok' );
     is( $borrower->flags,               '666666',                           'flags field set ok' );

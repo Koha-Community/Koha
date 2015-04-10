@@ -82,8 +82,6 @@ my ( $borr ) = GetMemberDetails( $borrowernumber );
 my (  $today_year,   $today_month,   $today_day) = Today();
 my ($warning_year, $warning_month, $warning_day) = split /-/, $borr->{'dateexpiry'};
 
-$borr->{'ethnicity'} = fixEthnicity( $borr->{'ethnicity'} );
-
 my $debar = IsDebarred($borrowernumber);
 my $userdebarred;
 

@@ -135,8 +135,6 @@ BEGIN {
         &checkuserpassword
         &Check_Userid
         &Generate_Userid
-        &fixEthnicity
-        &ethnicitycategories
         &fixup_cardnumber
         &checkcardnumber
     );
@@ -1613,54 +1611,6 @@ sub GetBorrowercategoryList {
     $sth->finish;
     return $data;
 }    # sub getborrowercategory
-
-=head2 ethnicitycategories
-
-  ($codes_arrayref, $labels_hashref) = &ethnicitycategories();
-
-Looks up the different ethnic types in the database. Returns two
-elements: a reference-to-array, which lists the ethnicity codes, and a
-reference-to-hash, which maps the ethnicity codes to ethnicity
-descriptions.
-
-=cut
-
-#'
-
-sub ethnicitycategories {
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("Select code,name from ethnicity order by name");
-    $sth->execute;
-    my %labels;
-    my @codes;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push @codes, $data->{'code'};
-        $labels{ $data->{'code'} } = $data->{'name'};
-    }
-    return ( \@codes, \%labels );
-}
-
-=head2 fixEthnicity
-
-  $ethn_name = &fixEthnicity($ethn_code);
-
-Takes an ethnicity code (e.g., "european" or "pi") and returns the
-corresponding descriptive name from the C<ethnicity> table in the
-Koha database ("European" or "Pacific Islander").
-
-=cut
-
-#'
-
-sub fixEthnicity {
-    my $ethnicity = shift;
-    return unless $ethnicity;
-    my $dbh       = C4::Context->dbh;
-    my $sth       = $dbh->prepare("Select name from ethnicity where code = ?");
-    $sth->execute($ethnicity);
-    my $data = $sth->fetchrow_hashref;
-    return $data->{'name'};
-}    # sub fixEthnicity
 
 =head2 GetAge
 

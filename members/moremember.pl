@@ -155,7 +155,6 @@ if ( IsDebarred($borrowernumber) ) {
     }
 }
 
-$data->{'ethnicity'} = fixEthnicity( $data->{'ethnicity'} );
 $data->{ "sex_".$data->{'sex'}."_p" } = 1 if defined $data->{sex};
 
 my $catcode;
@@ -167,10 +166,6 @@ if ( $category_type eq 'C') {
    $template->param( 'catcode' =>    $catcodes->[0])  if $cnt == 1;
 }
 
-
-if ( $data->{'ethnicity'} || $data->{'ethnotes'} ) {
-    $template->param( printethnicityline => 1 );
-}
 my ( $count, $guarantees ) = GetGuarantees( $data->{'borrowernumber'} );
 if ( $count ) {
     $template->param( isguarantee => 1 );
