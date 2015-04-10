@@ -245,8 +245,6 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `guarantorid` int(11) default NULL, -- borrowernumber used for children or professionals to link them to guarentors or organizations
   `borrowernotes` mediumtext, -- a note on the patron/borrower's account that is only visible in the staff client
   `relationship` varchar(100) default NULL, -- used for children to include the relationship to their guarentor
-  `ethnicity` varchar(50) default NULL, -- unused in Koha
-  `ethnotes` varchar(255) default NULL, -- unused in Koha
   `sex` varchar(1) default NULL, -- patron/borrower's gender
   `password` varchar(60) default NULL, -- patron/borrower's encrypted password
   `flags` int(11) default NULL, -- will include a number associated with the staff member's permissions
@@ -877,8 +875,6 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `guarantorid` int(11) default NULL, -- borrowernumber used for children or professionals to link them to guarentors or organizations
   `borrowernotes` mediumtext, -- a note on the patron/borrower's account that is only visible in the staff client
   `relationship` varchar(100) default NULL, -- used for children to include the relationship to their guarentor
-  `ethnicity` varchar(50) default NULL, -- unused in Koha
-  `ethnotes` varchar(255) default NULL, -- unused in Koha
   `sex` varchar(1) default NULL, -- patron/borrower's gender
   `password` varchar(30) default NULL, -- patron/borrower's encrypted password
   `flags` int(11) default NULL, -- will include a number associated with the staff member's permissions
@@ -959,17 +955,6 @@ CREATE TABLE `deleteditems` (
   KEY `delhomebranch` (`homebranch`),
   KEY `delholdingbranch` (`holdingbranch`),
   KEY `itype_idx` (`itype`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Table structure for table `ethnicity`
---
-
-DROP TABLE IF EXISTS `ethnicity`;
-CREATE TABLE `ethnicity` (
-  `code` varchar(10) NOT NULL default '',
-  `name` varchar(255) default NULL,
-  PRIMARY KEY  (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -3321,8 +3306,6 @@ CREATE TABLE IF NOT EXISTS `borrower_modifications` (
   `guarantorid` int(11) DEFAULT NULL,
   `borrowernotes` mediumtext,
   `relationship` varchar(100) DEFAULT NULL,
-  `ethnicity` varchar(50) DEFAULT NULL,
-  `ethnotes` varchar(255) DEFAULT NULL,
   `sex` varchar(1) DEFAULT NULL,
   `password` varchar(30) DEFAULT NULL,
   `flags` int(11) DEFAULT NULL,

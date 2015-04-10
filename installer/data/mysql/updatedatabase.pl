@@ -10986,6 +10986,61 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.19.00.XXX";
+if ( CheckVersion($DBversion) ) {
+
+    my $done = 0;
+    my $count_ethnicity = $dbh->selectrow_arrayref(q|
+        SELECT COUNT(*) FROM ethnicity
+    |);
+    my $count_borrower_modifications = $dbh->selectrow_arrayref(q|
+        SELECT COUNT(*)
+        FROM borrower_modifications
+        WHERE ethnicity IS NOT NULL
+            OR ethnotes IS NOT NULL
+    |);
+    my $count_borrowers = $dbh->selectrow_arrayref(q|
+        SELECT COUNT(*)
+        FROM borrowers
+        WHERE ethnicity IS NOT NULL
+            OR ethnotes IS NOT NULL
+    |);
+    # We don't care about the ethnicity of the deleted borrowers, right?
+    if ( $count_ethnicity->[0] == 0
+            and $count_borrower_modifications->[0] == 0
+            and $count_borrowers->[0] == 0
+    ) {
+        $dbh->do(q|
+            DROP TABLE ethnicity
+        |);
+        $dbh->do(q|
+            ALTER TABLE borrower_modifications
+            DROP COLUMN ethnicity,
+            DROP COLUMN ethnotes
+        |);
+        $dbh->do(q|
+            ALTER TABLE borrowers
+            DROP COLUMN ethnicity,
+            DROP COLUMN ethnotes
+        |);
+        $dbh->do(q|
+            ALTER TABLE deletedborrowers
+            DROP COLUMN ethnicity,
+            DROP COLUMN ethnotes
+        |);
+        $done = 1;
+    }
+    if ( $done ) {
+        print "Upgrade to $DBversion done (Bug 10020: Drop table ethnicity and columns ethnicity and ethnotes)\n";
+    }
+    else {
+        print "Upgrade to $DBversion done (Bug 10020: This database contains data related to 'ethnicity'. No change will be done on the DB structure but note that the Koha codebase does not use it)\n";
+    }
+
+    SetVersion ($DBversion);
+}
+
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
