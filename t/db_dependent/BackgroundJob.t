@@ -1,49 +1,59 @@
 #!/usr/bin/perl
-#
-# This Koha test module is a stub!  
-# Add more tests here!!!
 
-use strict;
-use warnings;
+use Modern::Perl;
 use C4::Auth;
 use CGI qw ( -utf8 );
-use Test::More tests => 14;
+use Test::More tests => 18;
 
 BEGIN {
-        use_ok('C4::BackgroundJob');
+    use_ok('C4::BackgroundJob');
 }
 my $query = new CGI;
-my ($userid, $cookie, $sessionID) = &checkauth($query, 1);
-#my ($sessionID, $job_name, $job_invoker, $num_work_units) = @_;
-my $background;
-diag $sessionID;
-ok ($background=C4::BackgroundJob->new($sessionID), "making job");
-ok ($background->id, "fetching id number");
 
-$background->name("George");
-is ($background->name, "George", "testing name");
+# Generate a session id
+my $dbh     = C4::Context->dbh;
+$dbh->{AutoCommit} = 1;
+$dbh->{RaiseError} = 1;
 
-$background->invoker("enjoys");
-is ($background->invoker, "enjoys", "testing invoker");
+my $session = C4::Auth::get_session;
+$session->flush;
+my $sessionID = $session->id;
+my $job;
+ok( $job = C4::BackgroundJob->new($sessionID), "making job" );
+ok( $job->id, "fetching id number" );
 
-$background->progress("testing");
-is ($background->progress, "testing", "testing progress");
+$job->name("George");
+is( $job->name, "George", "testing name" );
 
-ok ($background->status, "testing status");
+$job->invoker("enjoys");
+is( $job->invoker, "enjoys", "testing invoker" );
 
-$background->size("56");
-is ($background->size, "56", "testing size");
+$job->progress("testing");
+is( $job->progress, "testing", "testing progress" );
 
-ok (!$background->fetch($sessionID, $background->id), "testing fetch");
+ok( $job->status, "testing status" );
 
-$background->set({ key1 => 'value1', key2 => 'value2' });
-is ($background->get('key1'), 'value1', 'fetched extra value for key key1');
-is ($background->get('key2'), 'value2', 'fetched extra value for key key2');
+$job->size("56");
+is( $job->size, "56", "testing size" );
 
-$background->set({ size => 666 });
-is ($background->size, "56", '->set() does not scribble over private object data');
+ok( C4::BackgroundJob->fetch( $sessionID, $job->id ), "testing fetch" );
+$job->set( { key1 => 'value1', key2 => 'value2' } );
+is( $job->get('key1'), 'value1', 'fetched extra value for key key1' );
+is( $job->get('key2'), 'value2', 'fetched extra value for key key2' );
 
-$background->finish("finished");
-is ($background->status,'completed', "testing finished");
+$job->set( { size => 666 } );
+is( $job->size, "56", '->set() does not scribble over private object data' );
 
-ok ($background->results); #Will return undef unless finished
+$job->finish("finished");
+is( $job->status, 'completed', "testing finished" );
+
+ok( $job->results );    #Will return undef unless finished
+
+my $second_job = C4::BackgroundJob->new( $sessionID, "making new job" );
+$session = C4::Auth::get_session( $job->{sessionID} );
+is( ref( $session->param( 'job_' . $job->id ) ),        "C4::BackgroundJob", 'job_$jobid should be a C4::BackgroundJob for uncleared job 1' );
+is( ref( $session->param( 'job_' . $second_job->id ) ), "C4::BackgroundJob", 'job_$jobid should be a C4::BackgroundJob for uncleared job 2' );
+$job->clear;
+$session = C4::Auth::get_session( $job->{sessionID} );
+is( $session->param( 'job_' . $job->id ), undef, 'After clearing it, job 1 should not exist anymore in the session' );
+is( ref( $session->param( 'job_' . $second_job->id ) ), "C4::BackgroundJob", 'After clear on job 1, job 2 should still be a C4::BackgroundJob' );
