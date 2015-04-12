@@ -3,7 +3,8 @@
 use Modern::Perl;
 use File::Temp qw/ tempdir /;
 use Test::CGI::Multipart;
-use Test::More tests => 15;
+use Test::More tests => 17;
+use Test::Warn;
 
 use t::lib::Mocks;
 
@@ -44,9 +45,13 @@ open my $fh,">",($file->{filepath});
 print $fh "";
 close $fh;
 
-ok(C4::UploadedFiles::DelUploadedFile($id)==1, "DelUploadedFile($id) returned 1.");
-ok(C4::UploadedFiles::DelUploadedFile($id)==-1, "DelUploadedFile($id) returned -1 as expected.");
+my $DelResult;
+is(C4::UploadedFiles::DelUploadedFile($id),1, "DelUploadedFile($id) returned 1 as expected.");
+warning_like { $DelResult=C4::UploadedFiles::DelUploadedFile($id); } qr/file for id=/, "Expected warning for deleting Dangling Entry.";
+is($DelResult,-1, "DelUploadedFile($id) returned -1 as expected.");
 ok(! -e $file->{filepath}, "File $file->{filepath} does not exist anymore");
 
-is(C4::UploadedFiles::UploadFile($testfilename, '../', $testfile_fh->handle), undef, 'UploadFile with $dir containing ".." return undef');
+my $UploadResult;
+warning_like { $UploadResult=C4::UploadedFiles::UploadFile($testfilename,'../',$testfile_fh->handle); } qr/^Filename or dirname contains '..'. Aborting upload/, "Expected warning for bad file upload.";
+is($UploadResult, undef, "UploadFile with dir containing \"..\" return undef");
 is(C4::UploadedFiles::GetUploadedFile(), undef, 'GetUploadedFile without parameters returns undef');
