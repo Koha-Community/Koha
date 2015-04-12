@@ -450,7 +450,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my $now = dt_from_string();
     my $future = dt_from_string();
     $future->add( days => 7 );
-    my $units = C4::Overdues::_get_chargeable_units('days', $future, $now, 'MPL');
+    my $units = C4::Overdues::get_chargeable_units('days', $future, $now, 'MPL');
     ok( $units == 0, '_get_chargeable_units returns 0 for items not past due date (Bug 12596)' );
 }
 

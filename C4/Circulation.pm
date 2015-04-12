@@ -2141,7 +2141,7 @@ sub _debar_user_on_return {
       GetIssuingRule( $borrower->{categorycode}, $item->{itype}, $branchcode );
     my $finedays = $issuingrule->{finedays};
     my $unit     = $issuingrule->{lengthunit};
-    my $chargeable_units = get_chargeable_units($unit, $dt_due, $dt_today, $branchcode);
+    my $chargeable_units = C4::Overdues::get_chargeable_units($unit, $dt_due, $dt_today, $branchcode);
 
     if ($finedays) {
 
