@@ -443,22 +443,6 @@ sub get_output_formats {
     return $output_formats;
 }
 
-=head2 C4::Creators::Lib::get_column_names($table_name)
-
-Return an arrayref of an array containing the column names of the supplied table.
-
-=cut
-
-sub get_column_names {
-    my $table = shift;
-    my $dbh = C4::Context->dbh();
-    my $column_names = [];
-    my $sth = $dbh->column_info(undef,undef,$table,'%');
-    while (my $info = $sth->fetchrow_hashref()){
-        $$column_names[$info->{'ORDINAL_POSITION'}] = $info->{'COLUMN_NAME'};
-    }
-    return $column_names;
-}
 
 =head2 C4::Creators::Lib::get_table_names($search_term)
 
