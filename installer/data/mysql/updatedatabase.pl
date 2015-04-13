@@ -10009,12 +10009,12 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.19.00.XXX";
+$DBversion = "3.19.00.023";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
         DELETE FROM systempreferences where variable = 'AddPatronLists'
     |);
-    print "Upgrade to $DBversion done (Bug XXXXX - Remove the AddPatronLists system preferences)\n";
+    print "Upgrade to $DBversion done (Bug 13497: Remove the AddPatronLists system preferences)\n";
     SetVersion ($DBversion);
 }
 
