@@ -9573,15 +9573,6 @@ if( CheckVersion($DBversion) ){
     $dbh->do("INSERT INTO systempreferences (variable, explanation, type) VALUES('DefaultLongOverdueLostValue', 'Set the LOST value of an item to n when the item has been overdue for more than defaultlongoverduedays days.', 'integer')");
     $dbh->do("INSERT INTO systempreferences (variable, explanation, type) VALUES('DefaultLongOverdueDays', 'Set the LOST value of an item when the item has been overdue for more than n days.',  'integer')");
     print "Upgrade to $DBversion done (Bug 8337: System preferences for longoverdue cron)\n";
-}
-
-$DBversion = "3.17.00.XXX";
-if ( CheckVersion($DBversion) ) {
-    $dbh->do(q|
-        ALTER TABLE aqorders DROP COLUMN supplierreference;
-    |);
-
-    print "Upgrade to $DBversion done (Bug 11008 - DROP column aqorders.supplierreference)\n";
     SetVersion($DBversion);
 }
 
@@ -9987,6 +9978,15 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.19.00.020";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        ALTER TABLE aqorders DROP COLUMN supplierreference;
+    |);
+
+    print "Upgrade to $DBversion done (Bug 11008: DROP column aqorders.supplierreference)\n";
+    SetVersion($DBversion);
+}
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
