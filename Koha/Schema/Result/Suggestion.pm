@@ -141,12 +141,6 @@ __PACKAGE__->table("suggestions");
   is_nullable: 1
   size: 30
 
-=head2 mailoverseeing
-
-  data_type: 'smallint'
-  default_value: 0
-  is_nullable: 1
-
 =head2 biblionumber
 
   data_type: 'integer'
@@ -262,8 +256,6 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "isbn",
   { data_type => "varchar", is_nullable => 1, size => 30 },
-  "mailoverseeing",
-  { data_type => "smallint", default_value => 0, is_nullable => 1 },
   "biblionumber",
   { data_type => "integer", is_nullable => 1 },
   "reason",
@@ -323,8 +315,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-02-09 15:51:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:k7YUEiU7g+VxpMsEuOiizg
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-04-13 11:06:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zXNCczGjuuyoojx85UcQig
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
