@@ -272,9 +272,7 @@ if ($barcode) {
     $template->param(
         title            => $biblio->{'title'},
         homebranch       => $biblio->{'homebranch'},
-        homebranchname   => GetBranchName( $biblio->{'homebranch'} ),
         returnbranch     => $returnbranch,
-        returnbranchname => GetBranchName( $returnbranch ),
         author           => $biblio->{'author'},
         itembarcode      => $biblio->{'barcode'},
         itemtype         => $biblio->{'itemtype'},
