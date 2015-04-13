@@ -619,7 +619,7 @@ sub Z3950SearchAuth {
             $oConnection[$s] = create ZOOM::Connection($option1);
             $oConnection[$s]->connect( $server->{host}, $server->{port} );
             $serverhost[$s] = $server->{host};
-            $servername[$s] = $server->{name};
+            $servername[$s] = $server->{servername};
             $encoding[$s]   = ($server->{encoding}?$server->{encoding}:"iso-5426");
             $s++;
         }    ## while fetch
