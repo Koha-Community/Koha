@@ -47,12 +47,6 @@ __PACKAGE__->table("old_issues");
   is_nullable: 1
   size: 10
 
-=head2 issuingbranch
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 18
-
 =head2 returndate
 
   data_type: 'datetime'
@@ -116,8 +110,6 @@ __PACKAGE__->add_columns(
   },
   "branchcode",
   { data_type => "varchar", is_nullable => 1, size => 10 },
-  "issuingbranch",
-  { data_type => "varchar", is_nullable => 1, size => 18 },
   "returndate",
   {
     data_type => "datetime",
@@ -196,8 +188,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-11-03 10:40:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lNB9CDFcwG4DjD0pl14mvQ
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-04-13 10:32:46
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uJ9927OIBB4Q4f4FCV9EDg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

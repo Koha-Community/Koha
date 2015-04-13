@@ -47,12 +47,6 @@ __PACKAGE__->table("issues");
   is_nullable: 1
   size: 10
 
-=head2 issuingbranch
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 18
-
 =head2 returndate
 
   data_type: 'datetime'
@@ -116,8 +110,6 @@ __PACKAGE__->add_columns(
   },
   "branchcode",
   { data_type => "varchar", is_nullable => 1, size => 10 },
-  "issuingbranch",
-  { data_type => "varchar", is_nullable => 1, size => 18 },
   "returndate",
   {
     data_type => "datetime",
@@ -196,8 +188,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-11-03 10:40:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7Y+5IerDnajn5GLwAY5thg
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-04-13 10:32:46
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0OEqB+pEZ2LV083bMk9xHA
 
 __PACKAGE__->belongs_to(
     "borrower",
