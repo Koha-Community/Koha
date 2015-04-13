@@ -10018,7 +10018,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.19.00.XXX";
+$DBversion = "3.19.00.024";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(qq|DROP table patroncards;|);
     print "Upgrade to $DBversion done (Bug 13539: Remove table patroncards from database as it's no longer in use)\n";
