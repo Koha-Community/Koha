@@ -129,7 +129,6 @@ sub BuildReport {
         AutoRemoveOverduesRestrictions
         CircControl
         HomeOrHoldingBranch
-        HomeOrHoldingBranchReturn
         InProcessingToShelvingCart
         IssueLostItem
         IssuingInProcess
