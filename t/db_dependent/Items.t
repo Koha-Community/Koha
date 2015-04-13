@@ -228,7 +228,7 @@ subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
 };
 
 subtest 'SearchItems test' => sub {
-    plan tests => 13;
+    plan tests => 14;
 
     # Start transaction
     $dbh->{AutoCommit} = 0;
@@ -382,6 +382,9 @@ subtest 'SearchItems test' => sub {
     # This time it will search in items.itemnotes
     ($items, $total_results) = SearchItems($filter);
     ok(scalar @$items == 1, 'found 1 item with itemnotes = "foobar"');
+
+    my $cpl_items = SearchItemsByField( 'homebranch', 'CPL');
+    is( ( $cpl_items and scalar( @$cpl_items ) ), 1, 'SearchItemsByField should return something' );
 
     $dbh->rollback;
 };
