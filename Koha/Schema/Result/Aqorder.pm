@@ -115,11 +115,6 @@ __PACKAGE__->table("aqorders");
   data_type: 'mediumtext'
   is_nullable: 1
 
-=head2 supplierreference
-
-  data_type: 'mediumtext'
-  is_nullable: 1
-
 =head2 purchaseordernumber
 
   data_type: 'mediumtext'
@@ -272,8 +267,6 @@ __PACKAGE__->add_columns(
   "order_internalnote",
   { data_type => "mediumtext", is_nullable => 1 },
   "order_vendornote",
-  { data_type => "mediumtext", is_nullable => 1 },
-  "supplierreference",
   { data_type => "mediumtext", is_nullable => 1 },
   "purchaseordernumber",
   { data_type => "mediumtext", is_nullable => 1 },
@@ -507,8 +500,8 @@ Composing rels: L</aqorder_users> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-03-11 11:50:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BbhBIc0Bvj3Olf/dYzDjnw
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-04-13 10:17:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9C0lOmkz7e7xDjXItNB2Sg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
