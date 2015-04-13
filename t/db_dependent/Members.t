@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 72;
+use Test::More tests => 61;
 use Test::MockModule;
 use Data::Dumper;
 use C4::Context;
@@ -46,8 +46,6 @@ my $PHONE             = "555-12123";
 
 # XXX should be randomised and checked against the database
 my $IMPOSSIBLE_CARDNUMBER = "XYZZZ999";
-
-my $INDEPENDENT_BRANCHES_PREF = 'IndependentBranches';
 
 # XXX make a non-commit transaction and rollback rather than insert/delete
 
@@ -127,61 +125,6 @@ ok ( $changedmember->{firstname} eq $CHANGED_FIRSTNAME &&
      $changedmember->{emailpro}  eq $EMAILPRO
      , "Member Changed")
   or diag("Mismatching member details: ".Dumper($member, $changedmember));
-
-C4::Context->set_preference( $INDEPENDENT_BRANCHES_PREF, '0' );
-C4::Context->clear_syspref_cache();
-
-my $results = Search($CARDNUMBER);
-ok (@$results == 1, "Search cardnumber returned only one result")
-  or diag("Multiple members with Card $CARDNUMBER: ".Dumper($results));
-ok (_find_member($results), "Search cardnumber")
-  or diag("Card $CARDNUMBER not found in the resultset: ".Dumper($results));
-
-my @searchstring=($SURNAME);
-$results = Search(\@searchstring);
-ok (_find_member($results), "Search (arrayref)")
-  or diag("Card $CARDNUMBER not found in the resultset: ".Dumper($results));
-
-$results = Search(\@searchstring,undef,undef,undef,["surname"]);
-ok (_find_member($results), "Surname Search (arrayref)")
-  or diag("Card $CARDNUMBER not found in the resultset: ".Dumper($results));
-
-$results = Search("$CHANGED_FIRSTNAME $SURNAME", "surname");
-ok (_find_member($results), "Full name  Search (string)")
-  or diag("Card $CARDNUMBER not found in the resultset: ".Dumper($results));
-
-@searchstring=($PHONE);
-$results = Search(\@searchstring,undef,undef,undef,["phone"]);
-ok (_find_member($results), "Phone Search (arrayref)")
-  or diag("Card $CARDNUMBER not found in the resultset: ".Dumper($results));
-
-$results = Search($PHONE,undef,undef,undef,["phone"]);
-ok (_find_member($results), "Phone Search (string)")
-  or diag("Card $CARDNUMBER not found in the resultset: ".Dumper($results));
-
-C4::Context->set_preference( $INDEPENDENT_BRANCHES_PREF, '1' );
-C4::Context->clear_syspref_cache();
-
-$results = Search("$CHANGED_FIRSTNAME $SURNAME", "surname");
-ok (!_find_member($results), "Full name  Search (string) for independent branches, different branch")
-  or diag("Card $CARDNUMBER found in the resultset for independent branches: ".Dumper(C4::Context->preference($INDEPENDENT_BRANCHES_PREF), $results));
-
-@searchstring=($SURNAME);
-$results = Search(\@searchstring);
-ok (!_find_member($results), "Search (arrayref) for independent branches, different branch")
-  or diag("Card $CARDNUMBER found in the resultset for independent branches: ".Dumper(C4::Context->preference($INDEPENDENT_BRANCHES_PREF), $results));
-
-$USERENV[$BRANCH_IDX] = $BRANCHCODE;
-C4::Context->set_userenv ( @USERENV );
-
-$results = Search("$CHANGED_FIRSTNAME $SURNAME", "surname");
-ok (_find_member($results), "Full name  Search (string) for independent branches, same branch")
-  or diag("Card $CARDNUMBER not found in the resultset for independent branches: ".Dumper(C4::Context->preference($INDEPENDENT_BRANCHES_PREF), $results));
-
-@searchstring=($SURNAME);
-$results = Search(\@searchstring);
-ok (_find_member($results), "Search (arrayref) for independent branches, same branch")
-  or diag("Card $CARDNUMBER not found in the resultset for independent branches: ".Dumper(C4::Context->preference($INDEPENDENT_BRANCHES_PREF), $results));
 
 C4::Context->set_preference( 'CardnumberLength', '' );
 C4::Context->clear_syspref_cache();
@@ -263,9 +206,8 @@ is( @$messages, 0, 'DeleteMessage deletes a message correctly' );
 
 # clean up 
 DelMember($member->{borrowernumber});
-$results = Search($CARDNUMBER,undef,undef,undef,["cardnumber"]);
-ok (!_find_member($results), "Delete member")
-  or diag("Card $CARDNUMBER found for the deleted member in the resultset: ".Dumper($results));
+my $borrower = GetMember( cardnumber => $CARDNUMBER );
+is( $borrower, undef, 'DelMember should remove the patron' );
 
 # Check_Userid tests
 %data = (
@@ -295,7 +237,7 @@ is( Check_Userid( 'tomasito.none', '' ), 0,
     'userid not unique (blank borrowernumber)' );
 is( Check_Userid( 'tomasito.none', $new_borrowernumber ), 0,
     'userid not unique (second borrowernumber passed)' );
-my $borrower = GetMember( borrowernumber => $new_borrowernumber );
+$borrower = GetMember( borrowernumber => $new_borrowernumber );
 ok( $borrower->{userid} ne 'tomasito', "Borrower with duplicate userid has new userid generated" );
 
 $data{ cardnumber } = "234567890";

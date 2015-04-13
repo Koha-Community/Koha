@@ -32,7 +32,6 @@ use C4::Reserves;
 use C4::Accounts;
 use C4::Biblio;
 use C4::Letters;
-use C4::SQLHelper qw(InsertInTable UpdateInTable SearchInTable);
 use C4::Members::Attributes qw(SearchIdMatchingAttribute UpdateBorrowerAttribute);
 use C4::NewsChannels; #get slip news
 use DateTime;
@@ -156,139 +155,6 @@ use C4::Members;
 This module contains routines for adding, modifying and deleting members/patrons/borrowers 
 
 =head1 FUNCTIONS
-
-=head2 Search
-
-  $borrowers_result_array_ref = &Search($filter,$orderby, $limit, 
-                       $columns_out, $search_on_fields,$searchtype);
-
-Looks up patrons (borrowers) on filter. A wrapper for SearchInTable('borrowers').
-
-For C<$filter>, C<$orderby>, C<$limit>, C<&columns_out>, C<&search_on_fields> and C<&searchtype>
-refer to C4::SQLHelper:SearchInTable().
-
-Special C<$filter> key '' is effectively expanded to search on surname firstname othernamescw
-and cardnumber unless C<&search_on_fields> is defined
-
-Examples:
-
-  $borrowers = Search('abcd', 'cardnumber');
-
-  $borrowers = Search({''=>'abcd', category_type=>'I'}, 'surname');
-
-=cut
-
-sub _express_member_find {
-    my ($filter) = @_;
-
-    # this is used by circulation everytime a new borrowers cardnumber is scanned
-    # so we can check an exact match first, if that works return, otherwise do the rest
-    my $dbh   = C4::Context->dbh;
-    my $query = "SELECT borrowernumber FROM borrowers WHERE cardnumber = ?";
-    if ( my $borrowernumber = $dbh->selectrow_array($query, undef, $filter) ) {
-        return( {"borrowernumber"=>$borrowernumber} );
-    }
-
-    my ($search_on_fields, $searchtype);
-    if ( length($filter) == 1 ) {
-        $search_on_fields = [ qw(surname) ];
-        $searchtype = 'start_with';
-    } else {
-        $search_on_fields = [ qw(surname firstname othernames cardnumber) ];
-        $searchtype = 'contain';
-    }
-
-    return (undef, $search_on_fields, $searchtype);
-}
-
-sub Search {
-    my ( $filter, $orderby, $limit, $columns_out, $search_on_fields, $searchtype, $not_attributes ) = @_;
-
-    my $search_string;
-    my $found_borrower;
-
-    if ( my $fr = ref $filter ) {
-        if ( $fr eq "HASH" ) {
-            if ( my $search_string = $filter->{''} ) {
-                my ($member_filter, $member_search_on_fields, $member_searchtype) = _express_member_find($search_string);
-                if ($member_filter) {
-                    $filter = $member_filter;
-                    $found_borrower = 1;
-                } else {
-                    $search_on_fields ||= $member_search_on_fields;
-                    $searchtype ||= $member_searchtype;
-                }
-            }
-        }
-        else {
-            $search_string = $filter;
-        }
-    }
-    else {
-        $search_string = $filter;
-        my ($member_filter, $member_search_on_fields, $member_searchtype) = _express_member_find($search_string);
-        if ($member_filter) {
-            $filter = $member_filter;
-            $found_borrower = 1;
-        } else {
-            $search_on_fields ||= $member_search_on_fields;
-            $searchtype ||= $member_searchtype;
-        }
-    }
-
-    if ( !$found_borrower && C4::Context->preference('ExtendedPatronAttributes') && $search_string && !$not_attributes ) {
-        my $matching_records = C4::Members::Attributes::SearchIdMatchingAttribute($search_string);
-        if(scalar(@$matching_records)>0) {
-            if ( my $fr = ref $filter ) {
-                if ( $fr eq "HASH" ) {
-                    my %f = %$filter;
-                    $filter = [ $filter ];
-                    delete $f{''};
-                    push @$filter, { %f, "borrowernumber"=>$$matching_records };
-                }
-                else {
-                    push @$filter, {"borrowernumber"=>$matching_records};
-                }
-            }
-            else {
-                $filter = [ $filter ];
-                push @$filter, {"borrowernumber"=>$matching_records};
-            }
-        }
-    }
-
-    # $showallbranches was not used at the time SearchMember() was mainstreamed into Search().
-    # Mentioning for the reference
-
-    if ( C4::Context->preference("IndependentBranches") ) { # && !$showallbranches){
-        if ( my $userenv = C4::Context->userenv ) {
-            my $branch =  $userenv->{'branch'};
-            if ( !C4::Context->IsSuperLibrarian() && $branch ){
-                if (my $fr = ref $filter) {
-                    if ( $fr eq "HASH" ) {
-                        $filter->{branchcode} = $branch;
-                    }
-                    else {
-                        foreach (@$filter) {
-                            $_ = { '' => $_ } unless ref $_;
-                            $_->{branchcode} = $branch;
-                        }
-                    }
-                }
-                else {
-                    $filter = { '' => $filter, branchcode => $branch };
-                }
-            }
-        }
-    }
-
-    if ($found_borrower) {
-        $searchtype = "exact";
-    }
-    $searchtype ||= "start_with";
-
-    return SearchInTable( "borrowers", $filter, $orderby, $limit, $columns_out, $search_on_fields, $searchtype );
-}
 
 =head2 GetMemberDetails
 
@@ -797,8 +663,18 @@ sub ModMember {
         }
     }
     my $old_categorycode = GetBorrowerCategorycode( $data{borrowernumber} );
-    my $execute_success=UpdateInTable("borrowers",\%data);
-    if ($execute_success) { # only proceed if the update was a success
+
+    # get only the columns of a borrower
+    my $schema = Koha::Database->new()->schema;
+    my @columns = $schema->source('Borrower')->columns;
+    my $new_borrower = { map { join(' ', @columns) =~ /$_/ ? ( $_ => $data{$_} ) : () } keys(%data) };
+    delete $new_borrower->{flags};
+
+    my $rs = $schema->resultset('Borrower')->search({
+        borrowernumber => $new_borrower->{borrowernumber},
+     });
+    my $execute_success = $rs->update($new_borrower);
+    if ($execute_success ne '0E0') { # only proceed if the update was a success
         # ok if its an adult (type) it may have borrowers that depend on it as a guarantor
         # so when we update information for an adult we should check for guarantees and update the relevant part
         # of their records, ie addresses and phone numbers
@@ -857,6 +733,7 @@ Returns as undef upon any db error without further processing
 sub AddMember {
     my (%data) = @_;
     my $dbh = C4::Context->dbh;
+    my $schema = Koha::Database->new()->schema;
 
     # generate a proper login if none provided
     $data{'userid'} = Generate_Userid( $data{'borrowernumber'}, $data{'firstname'}, $data{'surname'} )
@@ -872,9 +749,7 @@ sub AddMember {
         $data{'dateenrolled'} = C4::Dates->new()->output("iso");
     }
 
-    my $patron_category =
-      Koha::Database->new()->schema()->resultset('Category')
-      ->find( $data{'categorycode'} );
+    my $patron_category = $schema->resultset('Category')->find( $data{'categorycode'} );
     $data{'privacy'} =
         $patron_category->default_privacy() eq 'default' ? 1
       : $patron_category->default_privacy() eq 'never'   ? 2
@@ -885,7 +760,15 @@ sub AddMember {
 
     # create a disabled account if no password provided
     $data{'password'} = ($data{'password'})? hash_password($data{'password'}) : '!';
-    $data{'borrowernumber'}=InsertInTable("borrowers",\%data);
+    $data{'dateofbirth'} = undef if( not $data{'dateofbirth'} );
+
+    # get only the columns of Borrower
+    my @columns = $schema->source('Borrower')->columns;
+    my $new_member = { map { join(' ',@columns) =~ /$_/ ? ( $_ => $data{$_} )  : () } keys(%data) } ;
+    delete $new_member->{borrowernumber};
+
+    my $rs = $schema->resultset('Borrower');
+    $data{borrowernumber} = $rs->create($new_member)->id;
 
     # If NorwegianPatronDBEnable is enabled, we set syncstatus to something that a
     # cronjob will use for syncing with NL
@@ -904,7 +787,7 @@ sub AddMember {
 
     AddEnrolmentFeeIfNeeded( $data{categorycode}, $data{borrowernumber} );
 
-    return $data{'borrowernumber'};
+    return $data{borrowernumber};
 }
 
 =head2 Check_Userid
