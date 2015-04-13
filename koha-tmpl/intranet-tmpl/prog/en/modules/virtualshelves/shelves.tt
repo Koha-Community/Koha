@@ -4,6 +4,16 @@
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
+
+[% IF print %]
+<script type="text/javascript">
+    $( document ).ready(function() {
+        window.print();
+        setTimeout('window.close()', 1);
+    });
+</script>
+[% END %]
+
 [% IF ( viewshelf ) %]
     <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
     <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
@@ -356,7 +366,7 @@ function placeHold () {
     [% SET new_direction = 'asc' %]
 [% END %]
 
-<div id="searchheader">
+<div id="searchheader" class="noprint">
     [% IF ( itemsloop ) %]
         <div id="selection_ops"><span class="checkall"></span> |
         <span class="clearall"></span>
@@ -476,7 +486,7 @@ function placeHold () {
 [% IF ( allowaddingitem ) %]
 <div class="yui-g">
 <form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
- <fieldset class="brief">
+ <fieldset class="brief noprint">
     <legend>Add an item to <i>[% shelfname | html %]</i></legend>
         <ol>
             <li>

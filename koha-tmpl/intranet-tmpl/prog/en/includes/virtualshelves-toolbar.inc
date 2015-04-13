@@ -12,10 +12,6 @@
             sendList();
             return false;
         });
-        $("#printlist").click(function(){
-            print();
-            return false;
-        });
         $("#deleteshelf").click(function(e){
             if(confirmDelete(_("Are you sure you want to delete this list?"))){
                 return true;
@@ -60,6 +56,6 @@
                 </ul>
         </div>
         <div class="btn-group"><a class="btn btn-small" href="#" id="sendlist"><i class="icon-envelope"></i> Send list</a></div>
-        <div class="btn-group"><a class="btn btn-small" id="printlist" href="#"><i class="icon-print"></i> Print list</a></div>
+        <div class="btn-group"><a class="btn btn-small" id="printlist" target="_blank" href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&amp;print=1"><i class="icon-print"></i> Print list</a></div>
     [% END %]
 </div>

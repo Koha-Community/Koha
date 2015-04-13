@@ -35,4 +35,5 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         flagsrequired   => { catalogue => 1 },
     }
 );
+$template->param( print => $query->param('print') );
 shelfpage('intranet', $query, $template, $loggedinuser, $cookie);

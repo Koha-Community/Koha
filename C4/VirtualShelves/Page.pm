@@ -76,12 +76,14 @@ sub shelfpage {
     my ( $shelflimit, $shelfoffset, $shelveslimit, $shelvesoffset );
     my $marcflavour = C4::Context->preference("marcflavour");
 
-    $shelflimit = ( $type eq 'opac' ? C4::Context->preference('OPACnumSearchResults') : C4::Context->preference('numSearchResults') );
-    $shelflimit = $shelflimit || ShelvesMax('MGRPAGE');
-    $shelflimit = undef if $query->param('rss');
-    $shelfoffset   = ( $itemoff - 1 ) * $shelflimit;     # Sets the offset to begin retrieving items at
-    $shelveslimit  = $shelflimit;                        # Limits number of shelves returned for a given query (row_count)
-    $shelvesoffset = ( $shelfoff - 1 ) * $shelflimit;    # Sets the offset to begin retrieving shelves at (offset)
+    unless ( $query->param('print') ) {
+        $shelflimit = ( $type eq 'opac' ? C4::Context->preference('OPACnumSearchResults') : C4::Context->preference('numSearchResults') );
+        $shelflimit = $shelflimit || ShelvesMax('MGRPAGE');
+        $shelflimit = undef if $query->param('rss');
+        $shelfoffset   = ( $itemoff - 1 ) * $shelflimit;     # Sets the offset to begin retrieving items at
+        $shelveslimit  = $shelflimit;                        # Limits number of shelves returned for a given query (row_count)
+        $shelvesoffset = ( $shelfoff - 1 ) * $shelflimit;    # Sets the offset to begin retrieving shelves at (offset)
+    }
 
     # getting the Shelves list
     my $category = ( ( $displaymode eq 'privateshelves' ) ? 1 : 2 );
@@ -469,6 +471,7 @@ sub shelfpage {
                  pagination_bar => pagination_bar( $url, ( int( $totshelves / $shelveslimit ) ) + ( ( $totshelves % $shelveslimit ) > 0 ? 1 : 0 ), $shelfoff, "shelfoff" )  );
         }
     }
+
     $template->param(
         shelveslooppriv                                                    => \@shelveslooppriv,
         shelvesloop                                                        => \@shelvesloop,
