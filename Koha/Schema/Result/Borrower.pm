@@ -933,21 +933,6 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 patroncards
-
-Type: has_many
-
-Related object: L<Koha::Schema::Result::Patroncard>
-
-=cut
-
-__PACKAGE__->has_many(
-  "patroncards",
-  "Koha::Schema::Result::Patroncard",
-  { "foreign.borrowernumber" => "self.borrowernumber" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
 =head2 patronimage
 
 Type: might_have
@@ -1154,8 +1139,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-03-11 11:50:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4wVgO/FIFHQV+AxzXc+k8g
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-04-13 13:23:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:eNJqc7s8OA+vQIKYUryvaA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
