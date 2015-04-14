@@ -75,4 +75,4 @@ td input { font-size: 1.5em; }
     //]]>
 </script>
 </head>
-<body>
+<body id="installer" class="installer">

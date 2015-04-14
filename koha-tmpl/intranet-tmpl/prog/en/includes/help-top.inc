@@ -16,4 +16,4 @@
 
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/help.css" />
 </head>
-<body id="help">
+<body id="help" class="help">
