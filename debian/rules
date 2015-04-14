@@ -24,10 +24,6 @@ override_dh_auto_install:
 		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/lib/tiny_mce
 	ln -s /usr/share/tinymce/www \
               $(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/lib/tiny_mce
-	rm -r \
-              $(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/lib/yui
-	ln -s /usr/share/javascript/yui \
-         $(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/lib/yui
 	install -d $(TMP)/etc/apache2/sites-available
 	install -d $(TMP)/etc/apache2/sites-enabled
 	install -d $(TMP)/etc/apache2/conf.d
