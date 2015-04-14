@@ -10005,7 +10005,7 @@ if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         ALTER TABLE suggestions DROP COLUMN mailoverseeing;
     });
-    print "Upgrade to $DBversion done (Bug 13006: Drop column suggestion.mailoverseeing)";
+    print "Upgrade to $DBversion done (Bug 13006: Drop column suggestion.mailoverseeing)\n";
     SetVersion($DBversion);
 }
 
