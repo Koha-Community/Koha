@@ -1862,11 +1862,11 @@ sub TransferOrder {
 
     $query = q{
         UPDATE aqorders
-        SET datecancellationprinted = CAST(NOW() AS date)
+        SET datecancellationprinted = CAST(NOW() AS date), orderstatus = ?
         WHERE ordernumber = ?
     };
     $sth = $dbh->prepare($query);
-    $rv = $sth->execute($ordernumber);
+    $rv = $sth->execute('cancelled', $ordernumber);
 
     delete $order->{'ordernumber'};
     delete $order->{parent_ordernumber};
