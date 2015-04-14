@@ -271,7 +271,15 @@ sub SearchPrefs {
 
 sub matches {
     my ( $text, $terms ) = @_;
-    if ( $text ) { return !grep( { $text !~ /$_/i } @$terms ); }
+    if ( $text ) {
+        return !grep(
+            {
+                my $re = eval{qr|$_|i};
+                $re = qr|\Q$_\E| if $@;
+                $text !~ m|$re|;
+            } @$terms
+        )
+    }
 }
 
 my $dbh = C4::Context->dbh;
