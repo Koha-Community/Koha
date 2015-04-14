@@ -54,7 +54,7 @@ my $datefrom = $input->param("from");
 my $dateto   = $input->param("to");
 my $basename = $input->param("basename");
 my $output   = $input->param("output") || "screen";
-my $src      = $input->param("src"); # this param allows us to be told where we were called from -fbcit
+my $src      = $input->param("src") || ""; # this param allows us to be told where we were called from -fbcit
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
