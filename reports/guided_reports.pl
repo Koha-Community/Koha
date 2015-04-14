@@ -193,7 +193,7 @@ elsif ( $phase eq 'Update SQL'){
         push @errors, {sqlerr => $1};
     }
     elsif ($sql !~ /^(SELECT)/i) {
-        push @errors, {queryerr => 1};
+        push @errors, {queryerr => "No SELECT"};
     }
 
     if (@errors) {
@@ -932,6 +932,7 @@ elsif ($phase eq 'Save Compound'){
 # pass $sth, get back an array of names for the column headers
 sub header_cell_values {
     my $sth = shift or return ();
+    return '' unless ($sth->{NAME});
     return @{$sth->{NAME}};
 }
 
