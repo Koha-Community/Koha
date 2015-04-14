@@ -23,8 +23,19 @@ use C4::Log;
 use File::Basename qw( dirname );
 use Koha::DateUtils;
 
-my ( $stylesheet, $help, $split, $html, $csv, $ods, $delimiter, @letter_codes );
+my (
+    $stylesheet,
+    $help,
+    $split,
+    $html,
+    $csv,
+    $ods,
+    $delimiter,
+    @letter_codes,
+    $send,
+);
 
+$send = 1;
 GetOptions(
     'h|help'  => \$help,
     's|split' => \$split,
@@ -33,6 +44,7 @@ GetOptions(
     'ods'     => \$ods,
     'd|delimiter:s' => \$delimiter,
     'letter_code:s' => \@letter_codes,
+    'send!'         => \$send,
 ) || pod2usage(1);
 
 pod2usage(0) if $help;
@@ -76,7 +88,7 @@ my @all_messages = @{ GetPrintMessages() };
     (
         grep { /^$letter_code$/ } @letter_codes
     ) ? $_ : ()
-} @all_messages;
+} @all_messages if @letter_codes;
 exit unless @all_messages;
 
 my ( $html_filenames, $csv_filenames, $ods_filenames );
@@ -155,13 +167,15 @@ sub print_notices {
             });
         }
 
-        foreach my $message ( @$branch_messages ) {
-            C4::Letters::_set_message_status(
-                {
-                    message_id => $message->{'message_id'},
-                    status => 'sent'
-                }
-            );
+        if ( $send ) {
+            foreach my $message ( @$branch_messages ) {
+                C4::Letters::_set_message_status(
+                    {
+                        message_id => $message->{'message_id'},
+                        status => 'sent'
+                    }
+                );
+            }
         }
         push @filenames, $filename;
     }
@@ -231,7 +245,7 @@ sub generate_ods {
     my $table = $doc->getTable(0);
 
     my @headers;
-    my ( $nb_rows, $nb_cols ) = ( scalar(@$messages), 0 );
+    my ( $nb_rows, $nb_cols, $i ) = ( scalar(@$messages), 0, 0 );
     foreach my $message ( @$messages ) {
         my @lines = split /\n/, $message->{content};
         chomp for @lines;
@@ -248,10 +262,10 @@ sub generate_ods {
                 $doc->cellValue( $row, $j, Encode::encode( 'UTF8', $header ) );
                 $j++;
             }
+            $i = 1;
         }
 
         shift @lines; # remove headers
-        my $i = 1;
         for my $line ( @lines ) {
             my @row_data = split $delimiter, $line;
             my $row = $doc->getRow( $table, $i );
@@ -285,6 +299,12 @@ The generated filename will be holdnotices-TODAY.[csv|html|ods] or holdnotices-T
 =item B<output_directory>
 
 Define the output directory where the files will be generated.
+
+=item B<--send|--nosend>
+
+After files have been generated, messages status is changed from 'pending' to
+'sent'. This is the default action, without this parameter or with --send.
+Using --nosend, mesages status aren't changed.
 
 =item B<-s|--split>
 
