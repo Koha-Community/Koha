@@ -1004,6 +1004,9 @@ Sub report:<select name="subreport">
     [% ELSIF ( error.cache_expiry ) %]Please select a cache expiry less than 30 days.
     [% ELSE %]
     [% END %]
+    <div id="onerror_actions">
+        <a href="javascript:window.history.back()" class="button">Back to previous page</a>
+    </div>
 [% END %]
 </div>
 <fieldset class="action"><input type="hidden" name="phase" value="Use saved" />
