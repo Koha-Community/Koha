@@ -9,9 +9,9 @@
     //<![CDATA[
      $(document).ready(function() {
         [% IF ( loop ) %]$("#sysprefst").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "sDom": 't',
+            "sDom": '<"top pager"ilf>t',
             "aoColumnDefs": [
-                { "aTargets": [ -1, -2, -3, -4 ], "bSortable": false, "bSearchable": false }
+                { "aTargets": [ -1, -2, -3, -4 ], "bSortable": false }
             ],
             "bPaginate": false
         }));[% END %]
