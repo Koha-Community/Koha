@@ -45,11 +45,6 @@ my ($template, $loggedinuser, $cookie)
 
 my $theme = $input->param('theme') || "default";
 
-my $patron = $input->Vars;
-foreach (keys %$patron){
-    delete $patron->{$_} unless($patron->{$_});
-}
-
 my $searchmember = $input->param('searchmember');
 my $quicksearch = $input->param('quicksearch') // 0;
 
@@ -82,8 +77,8 @@ my $view = $input->request_method() eq "GET" ? "show_form" : "show_results";
 $template->param(
     patron_lists => [ GetPatronLists() ],
     searchmember        => $searchmember,
-    branchcode          => $patron->{branchcode},
-    categorycode        => $patron->{categorycode},
+    branchcode_filter   => $input->param('branchcode_filter'),
+    categorycode_filter => $input->param('categorycode_filter'),
     searchtype          => $input->param('searchtype') || 'start_with',
     searchfieldstype    => $searchfieldstype,
     PatronsPerPage      => C4::Context->preference("PatronsPerPage") || 20,

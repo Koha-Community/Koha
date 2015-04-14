@@ -75,8 +75,8 @@
 
         <p>
             <label for="branchcode">Library: </label>
-            [% SET branches = Branches.all( selected => branchcode ) %]
-            <select name="branchcode" id="branchcode">
+            [% SET branches = Branches.all( selected => branchcode_filter ) %]
+            <select name="branchcode_filter" id="branchcode">
                 [% IF branches.size != 1 %]
                   <option value="">Any</option>
                 [% END %]
@@ -92,8 +92,8 @@
 
         <p>
             <label for="categorycode">Category: </label>
-            [% SET categories = Categories.all( selected => categorycode ) %]
-            <select name="categorycode" id="categorycode">
+            [% SET categories = Categories.all( selected => categorycode_filter ) %]
+            <select name="categorycode_filter" id="categorycode">
                 <option value="">Any</option>
                 [% FOREACH categorie IN categories %]
                     [% IF ( categorie.selected ) %]

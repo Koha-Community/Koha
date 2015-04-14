@@ -98,10 +98,10 @@ $(document).ready(function() {
         $("#searchtype_filter").val("[% searchtype %]");
     [% END %]
     [% IF categorycode %]
-        $("#categorycode_filter").val("[% categorycode %]");
+        $("#categorycode_filter").val("[% categorycode_filter %]");
     [% END %]
     [% IF branchcode %]
-        $("#branchcode_filter").val("[% branchcode %]");
+        $("#branchcode_filter").val("[% branchcode_filter %]");
     [% END %]
 
     [% IF view != "show_results" %]
@@ -454,7 +454,7 @@ function filterByFirstLetterSurname(letter) {
             </li>
             <li>
               <label for="categorycode_filter">Category:</label>
-              [% SET categories = Categories.all( selected => categorycode ) %]
+              [% SET categories = Categories.all( selected => categorycode_filter ) %]
               <select id="categorycode_filter">
                 <option value="">Any</option>
                 [% FOREACH cat IN categories %]
@@ -468,7 +468,7 @@ function filterByFirstLetterSurname(letter) {
             </li>
             <li>
               <label for="branchcode_filter">Library:</label>
-              [% SET branches = Branches.all( selected => branchcode ) %]
+              [% SET branches = Branches.all( selected => branchcode_filter ) %]
               <select id="branchcode_filter">
                 [% IF branches.size != 1 %]
                   <option value="">Any</option>
