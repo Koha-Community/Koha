@@ -319,7 +319,7 @@ function confirmnotdup(redirect){
                         <img class="buttonUp" src="[% interface %]/[% theme %]/img/up.png" onclick="upSubfield('subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]')" alt="Move Up" title="Move Up" />
                     [% END %]
                         <input type="text"
-                            title="[% subfield_loo.marc_lib_plain %]"
+                            title="[% subfield_loo.marc_lib %]"
                             style=" [% IF ( subfield_loo.fixedfield ) %]display:none; [% END %]border:0;"
                             name="tag_[% subfield_loo.tag %]_code_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]"
                             value="[% subfield_loo.subfield %]"
@@ -336,7 +336,7 @@ function confirmnotdup(redirect){
 
                 [% UNLESS advancedMARCEditor %]
                     [% IF ( subfield_loo.mandatory ) %]<span class="subfield subfield_mandatory">[% ELSE %]<span class="subfield">[% END %]
-                        [% subfield_loo.marc_lib_plain %]
+                        [% subfield_loo.marc_lib %]
                         [% IF ( subfield_loo.mandatory ) %]<span class="mandatory_marker" title="This field is mandatory">*</span>[% END %]
                     </span>
                     </label>

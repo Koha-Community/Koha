@@ -175,8 +175,7 @@ sub create_input {
     my %subfield_data = (
         tag        => $tag,
         subfield   => $id_subfield,
-        marc_lib   => substr( $tagslib->{$tag}->{$subfield}->{lib}, 0, 22 ),
-        marc_lib_plain => $tagslib->{$tag}->{$subfield}->{lib}, 
+        marc_lib       => $tagslib->{$tag}->{$subfield}->{lib},
         tag_mandatory  => $tagslib->{$tag}->{mandatory},
         mandatory      => $tagslib->{$tag}->{$subfield}->{mandatory},
         repeatable     => $tagslib->{$tag}->{$subfield}->{repeatable},
