@@ -9,8 +9,7 @@ BEGIN {
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
-use
-  CGI; # NOT a CGI script, this is just to keep C4::Templates::gettemplate happy
+use CGI qw( utf8 ); # NOT a CGI script, this is just to keep C4::Templates::gettemplate happy
 use C4::Context;
 use C4::Dates;
 use C4::Debug;
@@ -184,7 +183,7 @@ sub generate_html {
         messages   => $messages,
     );
 
-    open my $OUTPUT, '>', $filepath
+    open my $OUTPUT, '>encoding(utf-8)', $filepath
         or die "Could not open $filepath: $!";
     print $OUTPUT $template->output;
     close $OUTPUT;
@@ -195,7 +194,7 @@ sub generate_csv {
     my $messages = $params->{messages};
     my $filepath = $params->{filepath};
 
-    open my $OUTPUT, '>', $filepath
+    open my $OUTPUT, '>encoding(utf-8)', $filepath
         or die "Could not open $filepath: $!";
     my ( @csv_lines, $headers );
     foreach my $message ( @$messages ) {
@@ -205,13 +204,13 @@ sub generate_csv {
         # We don't have headers, get them
         unless ( $headers ) {
             $headers = $lines[0];
-            say $OUTPUT Encode::encode( 'UTF8', $headers );
+            say $OUTPUT $headers;
         }
 
         shift @lines;
         for my $line ( @lines ) {
             next if $line =~ /^\s$/;
-            say $OUTPUT Encode::encode( 'UTF8', $line );
+            say $OUTPUT $line;
         }
     }
 }
@@ -254,11 +253,11 @@ sub generate_ods {
         shift @lines; # remove headers
         my $i = 1;
         for my $line ( @lines ) {
-            my $row_data = split $delimiter, $line;
+            my @row_data = split $delimiter, $line;
             my $row = $doc->getRow( $table, $i );
             # Note scalar(@$row_data) should be equal to $nb_cols
-            for ( my $j = 0 ; $j < scalar(@$row_data) ; $j++ ) {
-                my $value = Encode::encode( 'UTF8', $row_data->[$j] );
+            for ( my $j = 0 ; $j < scalar(@row_data) ; $j++ ) {
+                my $value = Encode::encode( 'UTF8', $row_data[$j] );
                 $doc->cellValue( $row, $j, $value );
             }
             $i++;
