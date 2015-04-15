@@ -50,7 +50,7 @@
                         <td>[% issue.author %]</td>
                         <td>[% issue.itemcallnumber %]</td>
                         <td>[% issue.itemtype_description %]</td>
-                        <td>[% issue.date_due | $KohaDates %]</td>
+                        <td>[% issue.date_due | $KohaDates as_due_date => 1 %]</td>
                         <td>[% issue.barcode %]</td>
                         <td>[% issue.charge %]</td>
                         <td>[% issue.replacementprice %]</td>
