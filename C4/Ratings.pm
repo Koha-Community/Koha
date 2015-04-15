@@ -26,6 +26,8 @@ use POSIX;
 use C4::Debug;
 use C4::Context;
 
+use Koha::Database;
+
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
