@@ -86,7 +86,7 @@ function verify_images() {
         var please_upload = _("Please %supload%s one.").format(
             "<a href='/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber %]&amp;filetype=image'>",
             "</a>");
-        no_images_msg += "<p>" + please_upload + '</p>';
+        no_images_msg += "<p id='upload_image'>" + please_upload + '</p>';
     [% END %]
 
         $('#images').html(no_images_msg);
