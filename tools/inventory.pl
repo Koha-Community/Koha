@@ -161,6 +161,7 @@ if ( $uploadbarcodes && length($uploadbarcodes) > 0 ) {
     my $count = 0;
 
     my @barcodes;
+    my @uploadedbarcodes;
 
     my $sth = $dbh->column_info(undef,undef,"items","barcode");
     my $barcode_def = $sth->fetchall_hashref('COLUMN_NAME');
@@ -169,8 +170,13 @@ if ( $uploadbarcodes && length($uploadbarcodes) > 0 ) {
     my $err_data=0;
     my $lines_read=0;
     binmode($uploadbarcodes, ":encoding(UTF-8)");
-    while (my $barcode=<$uploadbarcodes>){
-        $barcode =~ s/\r?\n$//;
+    while (my $barcode=<$uploadbarcodes>) {
+        $barcode =~ s/\r/\n/g;
+        $barcode =~ s/\n\n/\n/g;
+        my @data = split(/\n/,$barcode);
+        push @uploadedbarcodes, @data;
+    }
+    for my $barcode (@uploadedbarcodes) {
         next unless $barcode;
         ++$lines_read;
         if (length($barcode)>$barcode_size) {
