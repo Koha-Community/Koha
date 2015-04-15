@@ -253,7 +253,7 @@ if ( $compareinv2barcd ) {
     my $dls = output_pref( { dt => dt_from_string( $datelastseen ),
                              dateformat => 'iso' } );
     foreach my $item ( @$inventorylist ) {
-        my $cdls = output_pref( { dt => dt_from_string( $_->{datelastseen} ),
+        my $cdls = output_pref( { dt => dt_from_string( $item->{datelastseen} ),
                                   dateformat => 'iso' } );
         if ( $cdls lt $dls ) {
             $item->{problem} = 'missingitem';
@@ -300,7 +300,7 @@ foreach my $item ( @scanned_items ) {
     }
 
     # Modify date last seen for scanned items
-    ModDateLastSeen($_->{'itemnumber'});
+    ModDateLastSeen($item->{'itemnumber'});
     $moddatecount++;
 }
 
