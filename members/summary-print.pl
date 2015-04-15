@@ -95,6 +95,8 @@ sub build_issue_data {
 
         $row{'charge'} = sprintf( "%.2f", $charge );
 
+        $row{date_due} = $row{date_due_sql};
+
         push( @{$return}, \%row );
     }
 
