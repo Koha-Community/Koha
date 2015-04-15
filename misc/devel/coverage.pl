@@ -22,6 +22,7 @@ coverage.pl
 
 =head1 SYNOPSIS
 
+You have to be in yout Koha/src directory
 ./misc/devel/coverage.pl
 
 =head1 DESCRIPTION
@@ -32,21 +33,14 @@ This script make a cover on all files to see which modules are not tested yet
 
 use Modern::Perl;
 use C4::Context;
+use Cwd;
 
+#Die if you are not in your Koha src directory
 my $KOHA_PATH = C4::Context->config("intranetdir");
+die "ERROR : You are not in Koha src/ directory"
+  unless $KOHA_PATH eq getcwd;
 
-chdir $KOHA_PATH;
-
-eval{
-	require Devel::Cover;
-};
-
-if ($@) {
-	say "Devel::Cover needs to be installed";
-	exit 1;
-}
-
-#Delete old coverage
+# Delete old coverage
 system("cover -delete");
 
 #Start the cover
@@ -54,5 +48,5 @@ system("PERL5OPT=-MDevel::Cover /usr/bin/prove -r t/");
 
 #Create the HTML output
 system("cover");
-
-say("file://$KOHA_PATH/cover_db/coverage.html");
+say("file://$KOHA_PATH/cover_db/coverage.html")
+  unless !-e "$KOHA_PATH/cover_db/coverage.html";
