@@ -415,8 +415,6 @@ sub get_order_infos {
         my $seriestitle = $order->{'seriestitle'};
         $line{'title'} .= " / $seriestitle" if $seriestitle;
         $line{'title'} .= " / $volume"      if $volume;
-    } else {
-        $line{'title'} = "Deleted bibliographic notice, can't find title.";
     }
 
     my $biblionumber = $order->{'biblionumber'};
