@@ -466,7 +466,11 @@
                         <td>
                             <p>
                                 [% IF ( books_loo.order_received ) %] (rcvd)[% END %]
-                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% books_loo.biblionumber %]">[% books_loo.title |html %]</a> by [% books_loo.author %]
+                                [% IF books_loo.title %]
+                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% books_loo.biblionumber %]">[% books_loo.title |html %]</a> by [% books_loo.author %]
+                                [% ELSE %]
+                                    <em>Deleted bibliographic record, can't find title</em><br />
+                                [% END %]
                                 <br />
                                 [% IF ( books_loo.isbn ) %] - [% books_loo.isbn %][% END %]
                                 [% IF ( books_loo.issn ) %] - [% books_loo.issn %][% END %]
