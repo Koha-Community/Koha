@@ -147,9 +147,13 @@
               [% FOREACH order IN orders_loop %]
                 <tr>
                   <td>
-                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber %]">[% order.title %]</a>
-                    [% IF ( order.author ) %]
-                      <br /><em>by</em> [% order.author %]
+                    [% IF order.biblionumber %]
+                      <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber %]">[% order.title %]</a>
+                      [% IF ( order.author ) %]
+                        <br /><em>by</em> [% order.author %]
+                      [% END %]
+                    [% ELSE %]
+                      <em>Deleted bibliographic record, can't find title</em>
                     [% END %]
                     [% IF ( order.publishercode ) %]
                       <br/>[% order.publishercode %]
