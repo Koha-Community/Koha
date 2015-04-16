@@ -120,6 +120,7 @@ if ( $src eq 'circ' ) {
 $template->param(
     debug => $debug,
     C4::Search::enabled_staff_search_views,
+    object => $object,
 );
 
 if ($do_it) {
