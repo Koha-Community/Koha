@@ -46,7 +46,7 @@ my $input = new CGI;
 $debug or $debug = $cgi_debug;
 my $do_it    = $input->param('do_it');
 my @modules  = $input->param("modules");
-my $user     = $input->param("user");
+my $user     = $input->param("user") // '';
 my @actions  = $input->param("actions");
 my $object   = $input->param("object");
 my $info     = $input->param("info");
@@ -127,7 +127,7 @@ if ($do_it) {
 
     my @data;
     my ( $results, $modules, $actions );
-    if ( $actions[0]  ne '' ) { $actions  = \@actions; }     # match All means no limit
+    if ( defined $actions[0] && $actions[0] ne '' ) { $actions  = \@actions; }     # match All means no limit
     if ( $modules[0] ne '' ) { $modules = \@modules; }    # match All means no limit
     $results = GetLogs( $datefrom, $dateto, $user, $modules, $actions, $object, $info );
     @data = @$results;
