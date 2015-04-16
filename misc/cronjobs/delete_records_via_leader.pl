@@ -21,7 +21,7 @@
 
 use Modern::Perl;
 
-binmode( STDOUT, ":utf8" );
+binmode( STDOUT, ":encoding(UTF-8)" );
 
 BEGIN {
 
