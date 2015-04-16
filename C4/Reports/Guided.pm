@@ -678,12 +678,14 @@ sub get_saved_reports {
             push @args, $author, $author;
         }
         if (my $keyword = $filter->{keyword}) {
-            $keyword = "%$keyword%";
-            push @cond, "report LIKE ? OR
-                         report_name LIKE ? OR
-                         notes LIKE ? OR
-                         savedsql LIKE ?";
-            push @args, $keyword, $keyword, $keyword, $keyword;
+            push @cond, q|
+                       report LIKE ?
+                    OR report_name LIKE ?
+                    OR notes LIKE ?
+                    OR savedsql LIKE ?
+                    OR s.id = ?
+            |;
+            push @args, "%$keyword%", "%$keyword%", "%$keyword%", "%$keyword%", $keyword;
         }
         if ($filter->{group}) {
             push @cond, "report_group = ?";
