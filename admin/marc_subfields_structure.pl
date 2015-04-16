@@ -161,7 +161,8 @@ if ( $op eq 'add_form' ) {
           || die "can't opendir $cgidir/value_builder: $!";
     }
     while ( my $line = readdir(DIR) ) {
-        if ( $line =~ /\.pl$/ ) {
+        if ( $line =~ /\.pl$/ &&
+             $line !~ /EXAMPLE\.pl$/ ) { # documentation purposes
             push( @value_builder, $line );
         }
     }

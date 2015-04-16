@@ -114,8 +114,9 @@ if ($op eq 'add_form') {
 		opendir(DIR, "$cgidir/cataloguing/value_builder") || die "can't opendir $cgidir/value_builder: $!";
 	} 
 	while (my $line = readdir(DIR)) {
-		if ($line =~ /\.pl$/) {
-			push (@value_builder,$line);
+        if ( $line =~ /\.pl$/ &&
+             $line !~ /EXAMPLE\.pl$/ ) { # documentation purposes
+            push (@value_builder,$line);
 		}
 	}
         @value_builder= sort {$a cmp $b} @value_builder;
