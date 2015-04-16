@@ -101,6 +101,7 @@ if ( $src eq 'circ' ) {
 $template->param(
     debug => $debug,
     C4::Search::enabled_staff_search_views,
+    object => $object,
 );
 
 if ($do_it) {
@@ -167,7 +168,6 @@ if ($do_it) {
             datefrom => $datefrom,
             dateto   => $dateto,
             user     => $user,
-            object   => $object,
             info     => $info,
             src      => $src,
             modules  => \@modules,

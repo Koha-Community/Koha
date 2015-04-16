@@ -30,7 +30,7 @@
 <ul>
 [% IF ( issuehistoryview ) %]<li class="active">[% ELSE %]<li>[% END %]
 <a href="/cgi-bin/koha/catalogue/issuehistory.pl?biblionumber=[% IF ( object ) %][% object %][% ELSE %][% IF ( object ) %][% object %][% ELSE %][% biblionumber %][% END %][% END %]" >Checkout history</a></li>
-[% IF ( CAN_user_tools_view_system_logs ) %][% IF ( logview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&amp;modules=CATALOGUING&amp;action=MODIFY&amp;object=[% biblionumber %]">Modification log</a> </li>[% END %]
+[% IF ( CAN_user_tools_view_system_logs ) %][% IF ( logview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&amp;modules=CATALOGUING&amp;action=MODIFY&amp;object=[% biblionumber or object %]">Modification log</a> </li>[% END %]
 </ul>
 </div>
 
