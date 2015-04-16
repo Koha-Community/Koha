@@ -10307,9 +10307,10 @@ if ( CheckVersion($DBversion) ) {
 
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
 opendir( my $dirh, $update_dir );
-while ( my $file = readdir $dirh ) {
-    if ( $file =~ /\.sql$/ ) {    # skip non SQL files
-        print "DEV atomic update : $file \n";
+foreach my $file ( sort readdir $dirh ) {
+    next if $file !~ /\.(sql|perl)$/;  #skip other files
+    print "DEV atomic update: $file\n";
+    if ( $file =~ /\.sql$/ ) {
         my $installer = C4::Installer->new();
         my $rv = $installer->load_sql( $update_dir . $file ) ? 0 : 1;
     } elsif ( $file =~ /\.perl$/ ) {
