@@ -134,6 +134,11 @@ if ( $op =~ /save/i ) {
             SearchSuggestion( $suggestion_only );
         if (@$suggestions_loop>=1){
             #some suggestion are answering the request Donot Add
+            my @messages;
+            for my $suggestion ( @$suggestions_loop ) {
+                push @messages, { type => 'error', code => 'already_exists', id => $suggestion->{suggestionid} };
+            }
+            $template->param( messages => \@messages );
         } 
         else {    
             ## Adding some informations related to suggestion
