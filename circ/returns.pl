@@ -68,6 +68,15 @@ if ($session->param('branch') eq 'NO_LIBRARY_SET'){
     exit;
 }
 
+# Print a reserve slip on this page
+if ( $query->param('print_slip') ) {
+    $template->param(
+        print_slip     => 1,
+        borrowernumber => $query->param('borrowernumber'),
+        biblionumber   => $query->param('biblionumber'),
+    );
+}
+
 #####################
 #Global vars
 my $branches = GetBranches();
