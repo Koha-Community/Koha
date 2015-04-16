@@ -18,6 +18,11 @@ function Dopop(link) {
     $("#barcode").focus();
 }
 $(document).ready(function () {
+
+    [% IF print_slip %]
+        Dopop('hold-transfer-slip.pl?borrowernumber=[% borrowernumber %]&amp;biblionumber=[% biblionumber %]');
+    [% END %]
+
     $("#return_date_override").datetimepicker({
         onClose: function(dateText, inst) { $("#barcode").focus(); },
         defaultDate: -1,
@@ -160,8 +165,11 @@ $(document).ready(function () {
             <input type="hidden" name="WT-itemNumber" value="[% WrongTransferItem %]" />
             <input type="hidden" name="WT-waitingAt" value="[% TransferWaitingAt %]" />
             <input type="hidden" name="WT-From" value="[% wtransfertFrom %]" />
-        <input type="submit" class="approve" value="Confirm" />
-            <input type="submit" value="Print slip and confirm" class="print" onclick="Dopop('hold-transfer-slip.pl?transfer=1&amp;borrowernumber=[% borrowernumber %]&amp;biblionumber=[% itembiblionumber %]&amp;op=slip'); this.form.submit();" />
+            <input type="submit" class="approve" value="Confirm" />
+            <input type="hidden" name="print_slip" value="0" />
+            <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+            <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+            <input type="submit" value="Print slip and confirm" class="print" onclick="this.form.print_slip.value = 1; this.form.submit();" />
         <input type="hidden" name="return_date_override" value="[% return_date_override %]" />
         <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember %]" />
     </form>
@@ -199,7 +207,8 @@ $(document).ready(function () {
         <form method="post" action="returns.pl" class="confirm">
             <input type="submit" class="approve" value="Confirm" />
 
-            <input type="submit" value="Print and confirm" class="print" onclick="Dopop('hold-transfer-slip.pl?borrowernumber=[% borrowernumber %]&amp;biblionumber=[% itembiblionumber %]&amp;op=slip'); this.form.submit();" />
+            <input type="hidden" name="print_slip" value="0" />
+            <input type="submit" value="Print and confirm" class="print" onclick="this.form.print_slip.value = 1; this.form.submit();" />
             [% FOREACH inputloo IN inputloop %]
                 <input type="hidden" name="ri-[% inputloo.counter %]" value="[% inputloo.barcode %]" />
                 <input type="hidden" name="dd-[% inputloo.counter %]" value="[% inputloo.duedate %]" />
@@ -207,6 +216,7 @@ $(document).ready(function () {
             [% END %]
                 <input type="hidden" name="itemnumber" value="[% itemnumber %]" />
                 <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                <input type="hidden" name="biblionumber" value="[% itembiblionumber %]" />
                 <input type="hidden" name="resbarcode" value="[% barcode %]" />
                 <input type="hidden" name="diffBranch" value="[% destbranch %]" />
                 <input type="hidden" name="exemptfine" value="[% exemptfine %]" />
@@ -244,7 +254,10 @@ $(document).ready(function () {
 
         <form method="post" action="returns.pl" class="confirm">
             <input type="submit" class="approve" value="Confirm" />
-            <input type="submit" value="Print slip and confirm" class="print" onclick="Dopop('hold-transfer-slip.pl?transfer=1&amp;borrowernumber=[% borrowernumber %]&amp;biblionumber=[% itembiblionumber %]&amp;op=slip'); this.form.submit();" />
+            <input type="hidden" name="print_slip" value="0" />
+            <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+            <input type="hidden" name="biblionumber" value="[% itembiblionumber %]" />
+            <input type="submit" value="Print slip and confirm" class="print" onclick="this.form.print_slip.value = 1; this.form.submit();" />
             [% FOREACH inputloo IN inputloop %]
                 <input type="hidden" name="ri-[% inputloo.counter %]" value="[% inputloo.barcode %]" />
                 <input type="hidden" name="dd-[% inputloo.counter %]" value="[% inputloo.duedate %]" />
@@ -359,12 +372,13 @@ $(document).ready(function () {
 		<h4><strong>Hold at</strong> [% destbranchname %]</h4>
         [% END %]
         <form method="post" action="returns.pl" class="confirm">
+            <input type="hidden" name="print_slip" value="0" />
             [% IF ( transfertodo ) %]
                 <input type="submit" class="approve" value="Confirm hold and transfer" />
-                <input type="submit" value="Print slip, transfer, and confirm" class="print" onclick="Dopop('hold-transfer-slip.pl?transfer=1&amp;borrowernumber=[% borrowernumber %]&amp;biblionumber=[% itembiblionumber %]&amp;op=slip'); this.form.submit();" />
+                <input type="submit" value="Print slip, transfer, and confirm" class="print" onclick="this.form.print_slip.value = 1; this.form.submit()" />
             [% ELSE %]
                 <input type="submit" class="approve" value="Confirm hold" />
-                <input type="submit" value="Print slip and confirm" class="print" onclick="Dopop('hold-transfer-slip.pl?borrowernumber=[% borrowernumber %]&amp;biblionumber=[% itembiblionumber %]&amp;op=slip'); this.form.submit();" />
+                <input type="submit" value="Print slip and confirm" class="print" onclick="this.form.print_slip.value = 1; this.form.submit();" />
             [% END %]
                 <input type="submit" class="deny" value="Ignore" onclick="$('.dialog:visible').hide('slow'); $('#barcode').focus(); return false;" />
             [% FOREACH inputloo IN inputloop %]
@@ -373,6 +387,7 @@ $(document).ready(function () {
 	<input type="hidden" name="bn-[% inputloo.counter %]" value="[% inputloo.borrowernumber %]" />[% END %]
             <input type="hidden" name="itemnumber" value="[% itemnumber %]" />
             <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+            <input type="hidden" name="biblionumber" value="[% itembiblionumber %]" />
             <input type="hidden" name="resbarcode" value="[% barcode %]" />
             <input type="hidden" name="diffBranch" value="[% destbranch %]" />
             <input type="hidden" name="exemptfine" value="[% exemptfine %]" />
