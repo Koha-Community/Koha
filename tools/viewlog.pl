@@ -194,6 +194,11 @@ if ($do_it) {
             actions  => \@actions,
         );
 
+        # Used modules
+        foreach my $module (@modules) {
+            $template->param( $module => 1 );
+        }
+
         output_html_with_http_headers $input, $cookie, $template->output;
     }
     else {
