@@ -2441,22 +2441,28 @@ sub DeleteMessage {
 sub IssueSlip {
     my ($branch, $borrowernumber, $quickslip) = @_;
 
-#   return unless ( C4::Context->boolean_preference('printcirculationslips') );
+    # FIXME Check callers before removing this statement
+    #return unless $borrowernumber;
 
-    my $now       = POSIX::strftime("%Y-%m-%d", localtime);
+    my @issues = @{ GetPendingIssues($borrowernumber) };
 
-    my $issueslist = GetPendingIssues($borrowernumber);
-    foreach my $it (@$issueslist){
-        if ((substr $it->{'issuedate'}, 0, 10) eq $now || (substr $it->{'lastreneweddate'}, 0, 10) eq $now) {
-            $it->{'now'} = 1;
+    for my $issue (@issues) {
+        $issue->{date_due} = $issue->{date_due_sql};
+        if ($quickslip) {
+            my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
+            if ( substr( $issue->{issuedate}, 0, 10 ) eq $today
+                or substr( $issue->{lastreneweddate}, 0, 10 ) eq $today ) {
+                  $issue->{now} = 1;
+            };
         }
-        elsif ((substr $it->{'date_due'}, 0, 10) le $now) {
-            $it->{'overdue'} = 1;
-        }
-        my $dt = dt_from_string( $it->{'date_due'} );
-        $it->{'date_due'} = output_pref( $dt );;
     }
-    my @issues = sort { $b->{'timestamp'} <=> $a->{'timestamp'} } @$issueslist;
+
+    # Sort on timestamp then on issuedate (useful for tests and could be if modified in a batch
+    @issues = sort {
+        my $s = $b->{timestamp} <=> $a->{timestamp};
+        $s == 0 ?
+             $b->{issuedate} <=> $a->{issuedate} : $s;
+    } @issues;
 
     my ($letter_code, %repeat);
     if ( $quickslip ) {
