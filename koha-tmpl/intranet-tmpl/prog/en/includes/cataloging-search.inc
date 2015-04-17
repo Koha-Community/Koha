@@ -3,7 +3,7 @@
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin Cataloging Resident Search Box -->
     <div id="header_search">
         <div id="addbooks_search" class="residentsearch">
-	    <p class="tip">Search the catalog and the reservoir:</p>
+        <p class="tip">Search the catalog and the reservoir:</p>
             <form name="search" action="addbooks.pl">
                 <input type="text" name="q" size="40" />
                 <input type="submit" class="submit" value="Submit" />
@@ -20,7 +20,6 @@
         </div>
         [% END %]
 
-        [% IF ( CAN_user_catalogue ) %]
         <div id="catalog_search" class="residentsearch">
             <p class="tip">Enter search keywords:</p>
             <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
@@ -28,7 +27,6 @@
                 <input type="submit" class="submit" value="Submit" />
             </form>
         </div>
-        [% END %]
 
         [% INCLUDE 'patron-search-box.inc' %]
         <ul>
