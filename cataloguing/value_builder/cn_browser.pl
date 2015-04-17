@@ -6,11 +6,6 @@ use C4::Auth;
 use C4::ClassSource;
 use C4::Output;
 
-sub plugin_parameters {
-    my ( $dbh, $record, $tagslib, $i, $tabloop ) = @_;
-    return "";
-}
-
 sub plugin_javascript {
     my ( $dbh, $record, $tagslib, $field_number, $tabloop ) = @_;
     my $function_name = "328" . ( int( rand(100000) ) + 1 );
@@ -18,18 +13,9 @@ sub plugin_javascript {
 <script type=\"text/javascript\">
 //<![CDATA[
 
-function Focus$function_name(subfield_managed) {
-return 1;
-}
-
-function Blur$function_name(subfield_managed) {
-    return 1;
-}
-
 function Clic$function_name(i) {
     q = document.getElementById('$field_number');
     window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=cn_browser.pl&popup&q=\"+q.value,\"cnbrowser\",\"width=500,height=400,toolbar=false,scrollbars=yes\");
-
 }
 
 //]]>
