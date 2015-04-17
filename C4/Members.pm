@@ -2472,6 +2472,8 @@ sub DeleteMessage {
          <<issues.*>>
       </checkedout>
 
+  NOTE: Not all table fields are available, pleasee see GetPendingIssues for a list of available fields.
+
 =cut
 
 sub IssueSlip {
