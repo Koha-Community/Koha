@@ -4,6 +4,7 @@ no warnings 'redefine';
 use CGI;
 use C4::Auth;
 use C4::ClassSource;
+use C4::Output;
 
 sub plugin_parameters {
     my ( $dbh, $record, $tagslib, $i, $tabloop ) = @_;
