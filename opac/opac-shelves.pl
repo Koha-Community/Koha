@@ -25,8 +25,10 @@ use C4::Auth;
 
 my $query = CGI->new();
 
+my $template_name = $query->param('rss') ? "opac-shelves-rss.tt" : "opac-shelves.tt";
+
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
-        template_name   => "opac-shelves.tt",
+        template_name   => $template_name,
         query           => $query,
         type            => "opac",
         authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),

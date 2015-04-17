@@ -151,7 +151,13 @@
                     [% END # / IF paramsloop %]
 
                     [% IF ( viewshelf ) %]<!--  Viewing a particular shelf -->
-                        <h3>[% shelfname |html %]</h3>
+                        <h3>
+                            [% shelfname |html %]
+                            <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-shelves.pl?rss=1&amp;viewshelf=[% shelfnumber | html %]" class="rss-list-link noprint">
+                                <img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" class="rsssearchicon"/>
+                            </a>
+                        </h3>
+
                         [% IF ( itemsloop ) %]
                             <div id="toolbar" class="toolbar clearfix">
                                 <div class="list-actions">
