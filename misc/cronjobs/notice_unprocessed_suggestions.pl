@@ -28,12 +28,12 @@ unless (@days) {
 
 unless ($confirm) {
     say "Doing a dry run; no email will be sent.";
-    say "Run again with --confirm to sent emails.";
+    say "Run again with --confirm to send emails.";
     $verbose = 1 unless $verbose;
 }
 
 for my $number_of_days (@days) {
-    say "Searching suggestions suggested $number_of_days ago" if $verbose;
+    say "Searching suggestions suggested $number_of_days days ago" if $verbose;
 
     my $suggestions = C4::Suggestions::GetUnprocessedSuggestions($number_of_days);
 
