@@ -58,6 +58,8 @@ my (
     $prefitem,          # preference item in systempreferences table
 );
 
+my $schema = Koha::Database->new()->schema();
+
 my $silent;
 GetOptions(
     's' =>\$silent
@@ -10179,14 +10181,13 @@ if(CheckVersion($DBversion)) {
         UPDATE issues SET issue_id = issue_id + ( SELECT COUNT(*) FROM old_issues ) ORDER BY issue_id DESC
     });
 
-    my $schema = Koha::Database->new()->schema();
     my $max_issue_id = $schema->resultset('Issue')->get_column('issue_id')->max();
-    $max_issue_id ||= $schema->resultset('OldIssue')->get_column('issue_id')->max();
-    $max_issue_id ||= 0;
-    $max_issue_id++;
-    $dbh->do(qq{
-        ALTER TABLE issues AUTO_INCREMENT = $max_issue_id}
-    );
+    if ($max_issue_id) {
+        $max_issue_id++;
+        $dbh->do(qq{
+            ALTER TABLE issues AUTO_INCREMENT = $max_issue_id
+        });
+    }
 
     print "Upgrade to $DBversion done (Bug 13790 - Add unique id issue_id to issues and oldissues tables)\n";
     SetVersion($DBversion);
