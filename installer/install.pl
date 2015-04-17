@@ -322,7 +322,12 @@ elsif ( $step && $step == 3 ) {
 
         my $now = POSIX::strftime( "%Y-%m-%dT%H:%M:%S", localtime() );
         my $logdir = C4::Context->config('logdir');
-        my ( $logfilepath, $logfilepath_errors ) = ( chk_log($logdir, "updatedatabase_$now"), chk_log($logdir, "updatedatabase-error_$now") );
+        my $dbversion = C4::Context->preference('Version');
+        my $kohaversion = C4::Context->KOHAVERSION;
+        $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
+
+        my $filename_suffix = join '_', $now, $dbversion, $kohaversion;
+        my ( $logfilepath, $logfilepath_errors ) = ( chk_log($logdir, "updatedatabase_$filename_suffix"), chk_log($logdir, "updatedatabase-error_$filename_suffix") );
 
         my $cmd = C4::Context->config("intranetdir") . "/installer/data/$info{dbms}/updatedatabase.pl >> $logfilepath 2>> $logfilepath_errors";
 
