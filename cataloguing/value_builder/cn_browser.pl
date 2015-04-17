@@ -82,12 +82,12 @@ sub plugin {
         FROM items AS i
         JOIN biblio AS b USING (biblionumber)
         LEFT OUTER JOIN branches ON (branches.branchcode = homebranch)
-        WHERE cn_sort < '$cn_sort'
+        WHERE cn_sort < ?
         AND itemcallnumber != ''
         ORDER BY cn_sort DESC, itemnumber
         LIMIT $real_limit;";
         $sth = $dbh->prepare($query);
-        $sth->execute();
+        $sth->execute($cn_sort);
         while ( my $data = $sth->fetchrow_hashref ) {
             if ( $data->{itemcallnumber} eq $q ) {
                 $data->{background} = 'red';
@@ -102,7 +102,6 @@ sub plugin {
             unshift @cn, $data;
         }
         $rows_lt = $sth->rows;
-        $sth->finish;
     }
 
     if ( $search ne $lt ) {
