@@ -473,6 +473,7 @@ var holdForPatron = function () {
                         <th>Location</th>
                     </tr>
                         <!-- Actual Search Results -->
+                        [% SET MaxSearchResultsItemsPerRecordStatusCheck = Koha.Preference('MaxSearchResultsItemsPerRecordStatusCheck') %]
                         [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
                          [% IF ( loop.odd ) %]<tr>[% ELSE %]<tr class="highlight">[% END %]
                             [% IF ( AmazonCoverImages || LocalCoverImages ) %]
@@ -576,8 +577,18 @@ var holdForPatron = function () {
                                 </td>
 
                                 <td><div class="availability">
-                                    [% IF ( SEARCH_RESULT.items_count ) %]<strong>[% SEARCH_RESULT.items_count %]
-                                    [% IF ( SEARCH_RESULT.itemsplural ) %]items[% ELSE %]item[% END %][% IF ( SEARCH_RESULT.availablecount ) %], [% SEARCH_RESULT.availablecount %] available:[% ELSE %], None available[% END %]</strong>
+                                    [% IF ( SEARCH_RESULT.items_count ) %]
+                                        <strong>
+                                            [% IF MaxSearchResultsItemsPerRecordStatusCheck && SEARCH_RESULT.items_count > MaxSearchResultsItemsPerRecordStatusCheck %]
+                                                <span class="blocker inaccurate-item-statuses" title="Item statuses may be inaccurate. Please view the record details for accurate item statuses">
+                                            [% END %]
+
+                                            [% SEARCH_RESULT.items_count %] [% IF ( SEARCH_RESULT.itemsplural ) %]items[% ELSE %]item[% END %][% IF ( SEARCH_RESULT.availablecount ) %], [% SEARCH_RESULT.availablecount %] available:[% ELSE %], None available[% END %]
+
+                                            [% IF MaxSearchResultsItemsPerRecordStatusCheck && SEARCH_RESULT.items_count > MaxSearchResultsItemsPerRecordStatusCheck %]
+                                                </span>
+                                            [% END %]
+                                        </strong>
 
                                     [% IF ( SEARCH_RESULT.availablecount ) %]
                                     <ul>
