@@ -36,6 +36,7 @@ $dbh->{RaiseError} = 1;
 $dbh->{AutoCommit} = 0;
 
 $dbh->do(q|DELETE FROM saved_sql|);
+$dbh->do(q|DELETE FROM saved_reports|);
 
 #Start tests
 
