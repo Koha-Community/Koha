@@ -167,9 +167,6 @@ $(document).ready(function(){
         }
     });
 [% END %]
-  // redefine the datepicker's default because reports require ISO
-  // http://jqueryui.com/demos/datepicker/#option-dateFormat
-  $( ".datepicker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
 
 [% IF (create || editsql || save) %]
     $("#select_group").change(function() {
@@ -1026,12 +1023,12 @@ Sub report:<select name="subreport">
   <fieldset class="brief">
   <h3>Filter</h3>
   <ol>
-    <li><label for="filter_date">Date:</label> <input type="text" id="filter_date" name="filter_date" size="10" value="[% filter_date %]" class="datepicker" />
+    <li><label for="filter_date">Date:</label> <input type="text" id="filter_date" name="filter_date" size="10" value="[% filters.date %]" class="datepicker" />
     <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 
     </li>
-    <li><label for="filter_author">Author:</label> <input type="text" id="filter_author" name="filter_author" value="[% filter_author %]" /></li>
-    <li><label for="filter_keyword">Keyword:</label> <input type="text" id="filter_keyword" name="filter_keyword" value="[% filter_keyword %]" /></li>
+    <li><label for="filter_author">Author:</label> <input type="text" id="filter_author" name="filter_author" value="[% filters.author %]" /></li>
+    <li><label for="filter_keyword">Keyword:</label> <input type="text" id="filter_keyword" name="filter_keyword" value="[% filters.keyword %]" /></li>
   </ol>
   </fieldset>
   <fieldset class="action"><input type="submit" value="Apply filter" /></fieldset>
