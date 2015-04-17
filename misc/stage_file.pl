@@ -44,13 +44,15 @@ my $add_items = 0;
 my $input_file = "";
 my $batch_comment = "";
 my $want_help = 0;
-my $no_replace ;
+my $no_replace;
+my $format = 'ISO2709';
 my $no_create;
 my $item_action = 'always_add';
 
 my $result = GetOptions(
     'encoding:s'    => \$encoding,
     'file:s'        => \$input_file,
+    'format:s'      => \$format,
     'match|match-bibs:s'  => \$match,
     'add-items'     => \$add_items,
     'item-action:s' => \$item_action,
@@ -71,6 +73,11 @@ if (not $result or $input_file eq "" or $want_help) {
     print_usage();
     exit 0;
 }
+if ( $format !~ /^(MARCXML|ISO2709)$/i ) {
+    print "\n --format must be MARCXML or ISO2709\n";
+    print_usage();
+    exit 0;
+}
 
 unless (-r $input_file) {
     die "$0: cannot open input file $input_file: $!\n";
@@ -78,28 +85,18 @@ unless (-r $input_file) {
 
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
-process_batch($input_file, $record_type, $match, $add_items, $batch_comment);
+process_batch($format, $input_file, $record_type, $match, $add_items, $batch_comment);
 $dbh->commit();
 
 exit 0;
 
 sub process_batch {
-    my ($input_file, $record_type, $match, $add_items, $batch_comment) = @_;
+    my ($format, $input_file, $record_type, $match, $add_items, $batch_comment) = @_;
 
-    open IN, "<$input_file" or die "$0: cannot open input file $input_file: $!\n";
-    my $marc_records = "";
-    $/ = "\035";
-    my $num_input_records = 0;
-    while (<IN>) {
-        s/^\s+//;
-        s/\s+$//;
-        next unless $_; # skip if record has only whitespace, as might occur
-                        # if file includes newlines between each MARC record
-        $marc_records .= $_; # FIXME - this sort of string concatenation
-                             # is probably rather inefficient
-        $num_input_records++;
-    }
-    close IN;
+    my ($errors, $marc_records) = C4::ImportBatch::RecordsFromISO2709File($input_file, $record_type, $encoding) if $format eq 'ISO2709';
+    warn $errors if $errors;
+    $marc_records = C4::ImportBatch::RecordsFromMARCXMLFile($input_file, $encoding) if $format eq 'MARCXML';
+    my $num_input_records = ($marc_records) ? scalar(@$marc_records) : 0;
 
     print "... staging MARC records -- please wait\n";
     #FIXME: We should really allow the use of marc modification frameworks and to_marc plugins here if possible
@@ -182,6 +179,9 @@ Parameters:
     --encoding <encoding>   encoding of MARC records, default is utf8.
                             Other possible options are: MARC-8,
                             ISO_5426, ISO_6937, ISO_8859-1, EUC-KR
+    --format                The MARC transport format to use?
+                            Defaults to ISO2709.
+                            Available values, MARCXML, ISO2709.
     --match <match_id>      use this option to match records
                             in the file with records already in
                             the database for future overlay.

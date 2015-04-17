@@ -414,24 +414,17 @@ sub BatchStageMarcRecords {
     my $num_items = 0;
     # FIXME - for now, we're dealing only with bibs
     my $rec_num = 0;
-    foreach my $marc_blob (split(/\x1D/, $marc_records)) {
-        $marc_blob =~ s/^\s+//g;
-        $marc_blob =~ s/\s+$//g;
-        next unless $marc_blob;
+    foreach my $marc_record (@$marc_records) {
         $rec_num++;
         if ($progress_interval and (0 == ($rec_num % $progress_interval))) {
             &$progress_callback($rec_num);
         }
-        my ($marc_record, $charset_guessed, $char_errors) =
-            MarcToUTF8Record($marc_blob, $marc_type, $encoding);
-
-        $encoding = $charset_guessed unless $encoding;
 
         ModifyRecordWithTemplate( $marc_modification_template, $marc_record ) if ( $marc_modification_template );
 
         my $import_record_id;
         if (scalar($marc_record->fields()) == 0) {
-            push @invalid_records, $marc_blob;
+            push @invalid_records, $marc_record;
         } else {
 
             # Normalize the record so it doesn't have separated diacritics
@@ -1467,7 +1460,6 @@ sub GetImportRecordMatches {
     
 }
 
-
 =head2 SetImportRecordMatches
 
   SetImportRecordMatches($import_record_id, @matches);
@@ -1490,6 +1482,73 @@ sub SetImportRecordMatches {
     }
 }
 
+=head2 RecordsFromISO2709File
+
+    my ($errors, $records) = C4::ImportBatch::RecordsFromISO2709File($input_file, $record_type, $encoding);
+
+Reads ISO2709 binary porridge from the given file and creates MARC::Record-objects out of it.
+
+@PARAM1, String, absolute path to the ISO2709 file.
+@PARAM2, String, see stage_file.pl
+@PARAM3, String, should be utf8
+
+=cut
+
+sub RecordsFromISO2709File {
+    my ($input_file, $record_type, $encoding) = @_;
+    my $errors;
+
+    my $marc_type = C4::Context->preference('marcflavour');
+    $marc_type .= 'AUTH' if ($marc_type eq 'UNIMARC' && $record_type eq 'auth');
+
+    open IN, "<$input_file" or die "$0: cannot open input file $input_file: $!\n";
+    my @marc_records;
+    $/ = "\035";
+    while (<IN>) {
+        s/^\s+//;
+        s/\s+$//;
+        next unless $_; # skip if record has only whitespace, as might occur
+                        # if file includes newlines between each MARC record
+        my ($marc_record, $charset_guessed, $char_errors) = MarcToUTF8Record($_, $marc_type, $encoding);
+        push @marc_records, $marc_record;
+        if ($charset_guessed ne $encoding) {
+            $errors = '' unless $errors;
+            $errors .= "Unexpected charset $charset_guessed, expecting $encoding\n";
+        }
+    }
+    close IN;
+    return ($errors, \@marc_records);
+}
+
+=head2 RecordsFromMARCXMLFile
+
+    my ($errors, $records) = C4::ImportBatch::RecordsFromMARCXMLFile($input_file, $encoding);
+
+
+
+Creates MARC::Record-objects out of the given MARCXML-file.
+
+@PARAM1, String, absolute path to the ISO2709 file.
+@PARAM2, String, should be utf8
+
+=cut
+
+sub RecordsFromMARCXMLFile {
+    my ( $filename, $encoding ) = @_;
+    my $batch = MARC::File::XML->in( $filename );
+    my @marcRecords;
+    my @errors;
+    do {
+        eval {
+            my $record = $batch->next($encoding);
+            push @marcRecords, $record if $record;
+        };
+        if ($@) {
+            push @errors, $@;
+        }
+    } while( $record );
+    return (\@errors, \@marcRecords);
+}
 
 # internal functions
 

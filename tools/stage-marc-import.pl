@@ -56,7 +56,8 @@ my $parse_items                = $input->param('parse_items');
 my $item_action                = $input->param('item_action');
 my $comments                   = $input->param('comments');
 my $record_type                = $input->param('record_type');
-my $encoding                   = $input->param('encoding');
+my $encoding                   = $input->param('encoding') || 'utf8';
+my $format                     = $input->param('format') || 'ISO2709';
 my $to_marc_plugin             = $input->param('to_marc_plugin');
 my $marc_modification_template = $input->param('marc_modification_template_id');
 
@@ -84,22 +85,15 @@ if ($completedJobID) {
     my $results = $job->results();
     $template->param(map { $_ => $results->{$_} } keys %{ $results });
 } elsif ($fileID) {
-    my $upload = Koha::Upload->new->get({ id => $fileID, filehandle => 1 });
-    my $fh = $upload->{fh};
-    my $filename = $upload->{name}; # filename only, no path
+    my $upload = Koha::Upload->new->get({ id => $fileID });
+    my $filename = $upload->{path};
 	my $marcrecord='';
-    $/ = "\035";
-	while (<$fh>) {
-        s/^\s+//;
-        s/\s+$//;
-		$marcrecord.=$_;
-	}
-    $fh->close;
+    my ($errors, $marcrecords) = C4::ImportBatch::RecordsFromISO2709File($uploaded_file->filename(), $record_type, $encoding);
 
     my $job = undef;
     my $dbh;
     if ($runinbackground) {
-        my $job_size = () = $marcrecord =~ /\035/g;
+        my $job_size = scalar(@$marcrecords);
         # if we're matching, job size is doubled
         $job_size *= 2 if ($matcher_id ne "");
         $job = C4::BackgroundJob->new($sessionID, $filename, '/cgi-bin/koha/tools/stage-marc-import.pl', $job_size);
@@ -137,7 +131,7 @@ if ($completedJobID) {
     my ( $batch_id, $num_valid, $num_items, @import_errors ) =
       BatchStageMarcRecords(
         $record_type,    $encoding,
-        $marcrecord,     $filename,
+        $marcrecords,    $filename,
         $to_marc_plugin, $marc_modification_template,
         $comments,       '',
         $parse_items,    0,
