@@ -374,7 +374,7 @@ canned reports and writing custom SQL reports.</p>
     </div>
 </div>
 [% ELSE %]<div class="dialog message">
-    [% IF (filter_set) %]
+    [% IF (filter_set || filters.date || filters.author || filters.keyword) %]
     <h4>No saved reports match your criteria. </h4>
     [% IF ( CAN_user_reports_create_reports ) %]
     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
