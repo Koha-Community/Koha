@@ -69,12 +69,13 @@ function toggle_onsite_checkout(){
 
 $(document).ready(function() {
     $('#mainform').on('submit',function() {
-        $('#barcode').on('keypress',function(event) {
-            $('#barcodeSubmittedModal').modal();
-            event.preventDefault(); }
-        );
+        if (barcode && barcode.value) {
+            $('#barcode').on('keypress',function(event) {
+                $('#barcodeSubmittedModal').modal();
+                event.preventDefault(); }
+            );
+        }
     });
-
 
     [% IF !( CircAutoPrintQuickSlip == 'clear' ) %]
         // listen submit to trigger qslip on empty checkout
