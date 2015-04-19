@@ -797,6 +797,8 @@ elsif ($phase eq 'Export'){
 	# export results to tab separated text or CSV
 	my $sql    = $input->param('sql');  # FIXME: use sql from saved report ID#, not new user-supplied SQL!
     my $format = $input->param('format');
+    my $reportname = $input->param('reportname');
+    my $reportfilename = $reportname ? "$reportname-reportresults.$format" : "reportresults.$format" ;
 	my ($sth, $q_errors) = execute_query($sql);
     unless ($q_errors and @$q_errors) {
         my ( $type, $content );
@@ -870,7 +872,7 @@ elsif ($phase eq 'Export'){
         }
         print $input->header(
             -type => $type,
-            -attachment=>"reportresults.$format"
+            -attachment=> $reportfilename
         );
         print $content;
 
