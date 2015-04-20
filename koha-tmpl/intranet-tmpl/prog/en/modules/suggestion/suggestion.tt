@@ -462,7 +462,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
     <div class="dialog [% m.type %]">
         [% SWITCH m.code %]
         [% CASE 'already_exists' %]
-            The suggestion has not been inserted. The same suggestion already exists (<a href='/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% m.id %]&op=show'>see the suggestion</a>)
+            The suggestion has not been added. A suggestion with this title already exists (<a href='/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% m.id %]&op=show'>suggestion #[% m.id %]</a>)
         [% CASE %]
             [% m.code %]
         [% END %]
