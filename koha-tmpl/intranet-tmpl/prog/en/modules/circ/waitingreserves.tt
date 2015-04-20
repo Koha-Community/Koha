@@ -109,6 +109,7 @@
                             <input type="hidden" name="itemnumber" value="[% reserveloo.itemnumber %]" />
                             <input type="hidden" name="fbr" value="[% reserveloo.holdingbranch %]" />
                             <input type="hidden" name="tbr" value="[% reserveloo.homebranch %]" />
+                            <input type="hidden" name="tab" value="holdswaiting">
                             [% IF ( reserveloo.dotransfer ) %]
                             <input type="submit" value="Cancel hold and return to : [% reserveloo.branchname %]" /> 
                             [% ELSE %]
@@ -130,6 +131,7 @@
                <form name="cancelAllReserve" action="waitingreserves.pl" method="post">
                    <input type="hidden" name="cancelall" value="1" />
                    <input type="hidden" name="allbranches" value="[% allbranches %]" />
+                   <input type="hidden" name="tab" value="holdsover">
                    <input type="submit" value="Cancel [% IF TransferWhenCancelAllWaitingHolds %]and Transfer [% END %]All" />
                </form>
                [% UNLESS TransferWhenCancelAllWaitingHolds %]
@@ -167,6 +169,7 @@
                             <input type="hidden" name="itemnumber" value="[% overloo.itemnumber %]" />
                             <input type="hidden" name="fbr" value="[% overloo.holdingbranch %]" />
                             <input type="hidden" name="tbr" value="[% overloo.homebranch %]" />
+                            <input type="hidden" name="tab" value="holdsover">
                             [% IF ( overloo.dotransfer ) %]
                             <input type="submit" value="Cancel hold and return to : [% overloo.branchname %]" />
                             [% ELSE %]
