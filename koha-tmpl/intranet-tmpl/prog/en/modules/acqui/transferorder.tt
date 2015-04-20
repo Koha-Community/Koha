@@ -105,7 +105,9 @@
                             [% IF ( ordersloo.isbn ) %] &ndash; [% ordersloo.isbn %][% END %]
                             [% IF ( ordersloo.publishercode ) %]
                                 <br />Publisher: [% ordersloo.publishercode %]
-                                [%- IF ( ordersloo.publicationyear ) %], [% ordersloo.publicationyear %][% END %]
+                                [%- IF    ( ordersloo.publicationyear > 0) -%], [% ordersloo.publicationyear %]
+                                [%- ELSIF ( ordersloo.copyrightdate   > 0) -%], [% ordersloo.copyrightdate %]
+                                [% END %]
                             [% END %]
                         </td>
                         <td><a class="btn btn-mini" href="transferorder.pl?bookselleridfrom=[% ordersloo.bookselleridfrom %]&ordernumber=[% ordersloo.ordernumber %]">Transfer</a></td>
