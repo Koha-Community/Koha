@@ -32,6 +32,7 @@ use XML::Dumper;
 use C4::Debug;
 # use Smart::Comments;
 # use Data::Dumper;
+use C4::Log;
 
 BEGIN {
     # set the version for version checking
@@ -639,6 +640,10 @@ sub format_results {
 sub delete_report {
     my (@ids) = @_;
     return unless @ids;
+    foreach my $id (@ids) {
+        my $data = get_saved_report($id);
+        logaction( "REPORTS", "DELETE", $id, "Name: $data->{'report_name'} SQL: $data->{'savedsql'}  " ) if C4::Context->preference("ReportsLog");
+    }
     my $dbh = C4::Context->dbh;
     my $query = 'DELETE FROM saved_sql WHERE id IN (' . join( ',', ('?') x @ids ) . ')';
     my $sth = $dbh->prepare($query);
@@ -646,7 +651,6 @@ sub delete_report {
 }
 
 sub get_saved_reports_base_query {
-
     my $area_name_sql_snippet = get_area_name_sql_snippet;
     return <<EOQ;
 SELECT s.*, r.report, r.date_run, $area_name_sql_snippet, av_g.lib AS groupname, av_sg.lib AS subgroupname,

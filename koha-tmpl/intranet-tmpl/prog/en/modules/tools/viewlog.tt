@@ -27,6 +27,7 @@
 [%        CASE 'FINES'        %]Fines
 [%        CASE 'SYSTEMPREFERENCE' %]System prefs
 [%        CASE 'CRONJOBS' %]Cron jobs
+[%        CASE 'REPORTS'      %]Reports
 [%        CASE %][% module %]
 [%    END %]
 [% END %]
@@ -77,7 +78,7 @@
                                     [% ELSE %]
                                         <option value="">All</option>
                                     [% END %]
-                                    [% FOREACH modx IN [ 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'CIRCULATION' 'LETTER' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS' ] %]
+                                    [% FOREACH modx IN [ 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'CIRCULATION' 'LETTER' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS' ] %]
                                         [% IF modules.grep(modx).size %]
                                             <option value="[% modx %]" selected="selected">[% PROCESS translate_log_module module=modx %]</option>
                                         [% ELSE %]

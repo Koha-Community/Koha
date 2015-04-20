@@ -31,6 +31,8 @@ use C4::Dates qw/format_date/;
 use C4::Debug;
 use C4::Branch; # XXX subfield_is_koha_internal_p
 use C4::Koha qw/IsAuthorisedValueCategory GetFrameworksLoop/;
+use C4::Context;
+use C4::Log;
 
 =head1 NAME
 
@@ -237,6 +239,7 @@ elsif ( $phase eq 'Update SQL'){
                 'reportname'            => $reportname,
                 'id'                    => $id,
             );
+            logaction( "REPORTS", "MODIFY", $id, "$reportname: SQL: $sql" ) if C4::Context->preference("ReportsLog");
         }
         if ( $usecache ) {
             $template->param(
@@ -594,6 +597,7 @@ elsif ( $phase eq 'Save Report' ) {
                     cache_expiry   => $cache_expiry,
                     public         => $public,
                 } );
+                logaction( "REPORTS", "ADD", 0, "Name: $name: SQL: $sql" ) if C4::Context->preference("ReportsLog");
             $template->param(
                 'save_successful' => 1,
                 'reportname'      => $name,
