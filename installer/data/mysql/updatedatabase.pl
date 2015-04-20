@@ -11324,10 +11324,10 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.19.00.XXX";
 if ( CheckVersion($DBversion) ) {
     foreach my $format (@{ GetSupportList() }) {
-        $dbh->do(
-            q/INSERT INTO authorised_values (category, authorised_value, lib, lib_opac, imageurl)
-            VALUES (?, ?, ?, ?, ?)/,
-            {},
+        $dbh->do(q|
+            INSERT IGNORE INTO authorised_values (category, authorised_value, lib, lib_opac, imageurl)
+            VALUES (?, ?, ?, ?, ?)
+        |, {},
             'SUGGEST_FORMAT', $format->{itemtype}, $format->{description}, $format->{description}, $format->{imageurl}
         );
     }
