@@ -1575,6 +1575,32 @@ CREATE TABLE saved_reports (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
+-- Table structure for table `overdue_calendar_weekdays`
+--
+
+DROP TABLE IF EXISTS `overdue_calendar_weekdays`;
+CREATE TABLE `overdue_calendar_weekdays` ( -- Controls on which days overdue notices can be gathered
+  `id` int(11) NOT NULL auto_increment,
+  `branchcode` varchar(10) NOT NULL default '', -- foreign key from the branches table to define which branch this rule is for (if blank it's all libraries)
+  `weekdays` varchar(20) NOT NULL, -- comma-separated list of weekdays when to gather overdue notices. 1 = monday, 7 = sunday.
+   PRIMARY KEY  (`id`),
+   UNIQUE KEY `branchcode_idx` (`branchcode`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Table structure for table `overdue_calendar_exceptions`
+--
+
+DROP TABLE IF EXISTS `overdue_calendar_exceptions`;
+CREATE TABLE `overdue_calendar_exceptions` ( -- Controls on which days overdue notices cannot be gathered
+  `id` int(11) NOT NULL auto_increment,
+  `branchcode` varchar(10) NOT NULL default '', -- foreign key from the branches table to define which branch this rule is for (if blank it's all libraries)
+  `exceptiondate` date NOT NULL, -- The day when we prevent normal overdue notice gathering
+   PRIMARY KEY  (`id`),
+   UNIQUE KEY `no_sameday_for_branch` (`branchcode`,`exceptiondate`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
 -- Table structure for table 'search_field'
 --
 
@@ -2676,6 +2702,26 @@ CREATE TABLE `message_queue` (
   KEY `message_transport_type` (`message_transport_type`),
   CONSTRAINT `messageq_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `messageq_ibfk_2` FOREIGN KEY (`message_transport_type`) REFERENCES `message_transport_types` (`message_transport_type`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Table structure for table `message_queue_items`
+--
+
+DROP TABLE IF EXISTS `message_queue_items`;
+CREATE TABLE `message_queue_items` ( -- items linked to the message_queue
+  `id` int(12) NOT NULL auto_increment, -- unique identifier assigned by Koha
+  `issue_id` int(12) DEFAULT NULL, -- foreign key to the issue table.
+  `letternumber` int(1) DEFAULT NULL, -- for which overdue letter this item was notified by
+  `itemnumber` int(11) NOT NULL, -- foreign key from the items table, links transaction to the notified instrument
+  `branch` varchar(10) NOT NULL, -- foreign key, branch related to the item
+  `message_id` int(11) NOT NULL, -- foreign key to the message_queue
+  PRIMARY KEY  (`id`),
+  FOREIGN KEY (message_id) REFERENCES message_queue(message_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  UNIQUE KEY `no_duplicate_item_per_message` (`message_id`,`itemnumber`),
+  KEY `itemnumber_idx` (`itemnumber`),
+  KEY `issue_id_idx` (`issue_id`),
+  KEY `branch_idx` (`branch`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --

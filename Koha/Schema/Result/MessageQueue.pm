@@ -187,6 +187,21 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "RESTRICT", on_update => "CASCADE" },
 );
 
+=head2 message_queue_items
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::MessageQueueItem>
+
+=cut
+
+__PACKAGE__->has_many(
+  "message_queue_items",
+  "Koha::Schema::Result::MessageQueueItem",
+  { "foreign.message_id" => "self.message_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 
 # Created by DBIx::Class::Schema::Loader v0.07045 @ 2017-04-27 13:05:24
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Irdj30QHaI9gf5h/JEQHFQ
