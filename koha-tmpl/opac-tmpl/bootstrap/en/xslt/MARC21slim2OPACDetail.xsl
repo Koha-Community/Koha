@@ -795,7 +795,7 @@
         </xsl:for-each>
         </xsl:if>
 
-        <!-- Bug 13385 Added 508 field  -->
+        <!-- 508 -->
             <xsl:if test="marc:datafield[@tag=508]">
                 <div class="results_summary prod_credits">
                     <span class="label">Production Credits: </span>
