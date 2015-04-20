@@ -10035,21 +10035,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-# DEVELOPER PROCESS, search for anything to execute in the db_update directory
-# SEE bug 13068
-# if there is anything in the atomicupdate, read and execute it.
-
-my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
-opendir( my $dirh, $update_dir );
-while ( my $file = readdir $dirh ) {
-    next unless $file =~ /\.sql$/;    # skip non SQL files
-    print "DEV atomic update : $file \n";
-    my $installer = C4::Installer->new();
-    my $rv = $installer->load_sql( $update_dir . $file ) ? 0 : 1;
-}
-
-
-$DBversion = "3.19.00.XXX";
+$DBversion = "3.19.00.026";
 if(CheckVersion($DBversion)) {
     if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
     $dbh->do(q{
@@ -10156,6 +10142,18 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
+# DEVELOPER PROCESS, search for anything to execute in the db_update directory
+# SEE bug 13068
+# if there is anything in the atomicupdate, read and execute it.
+
+my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
+opendir( my $dirh, $update_dir );
+while ( my $file = readdir $dirh ) {
+    next unless $file =~ /\.sql$/;    # skip non SQL files
+    print "DEV atomic update : $file \n";
+    my $installer = C4::Installer->new();
+    my $rv = $installer->load_sql( $update_dir . $file ) ? 0 : 1;
+}
 
 =head1 FUNCTIONS
 
