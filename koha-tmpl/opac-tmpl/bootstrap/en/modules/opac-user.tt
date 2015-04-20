@@ -191,14 +191,14 @@
                                                     <td class="date_due overdue">
                                                         <span title="[% ISSUE.date_due %]">
                                                             <span class="tdlabel">Date due:</span>
-                                                            [% ISSUE.date_due | $KohaDates as_due_date => 1 %]
+                                                            [% ISSUE.date_due_sql | $KohaDates as_due_date => 1 %]
                                                         </span>
                                                     </td>
                                                 [% ELSE %]
                                                     <td class="date_due">
                                                         <span title="[% ISSUE.date_due %]">
                                                             <span class="tdlabel">Date due:</span>
-                                                            [% ISSUE.date_due | $KohaDates as_due_date => 1 %]
+                                                            [% ISSUE.date_due_sql | $KohaDates as_due_date => 1 %]
                                                         </span>
                                                     </td>
                                                 [% END %]

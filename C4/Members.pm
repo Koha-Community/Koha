@@ -1199,6 +1199,8 @@ sub GetPendingIssues {
         if ($_->{issuedate}) {
             $_->{issuedate} = dt_from_string($_->{issuedate}, 'sql');
         }
+        $_->{date_due_sql} = $_->{date_due};
+        # FIXME no need to have this value
         $_->{date_due} or next;
         $_->{date_due_sql} = $_->{date_due};
         # FIXME no need to have this value
