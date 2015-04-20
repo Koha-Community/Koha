@@ -69,7 +69,7 @@ function toggle_onsite_checkout(){
 
 $(document).ready(function() {
     $('#mainform').on('submit',function() {
-        if (barcode && barcode.value) {
+        if ($("#barcode") && $("#barcode").val()) {
             $('#barcode').on('keypress',function(event) {
                 $('#barcodeSubmittedModal').modal();
                 event.preventDefault(); }
