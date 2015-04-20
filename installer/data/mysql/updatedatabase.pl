@@ -10161,6 +10161,10 @@ if(CheckVersion($DBversion)) {
     });
 
     $dbh->do(q{
+        ALTER TABLE old_issues CHANGE issue_id issue_id INT( 11 ) NOT NULL
+    });
+
+    $dbh->do(q{
         ALTER TABLE issues ADD issue_id INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST
     });
 
