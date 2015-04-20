@@ -46,6 +46,7 @@ my $fbr            = $input->param('fbr') || '';
 my $tbr            = $input->param('tbr') || '';
 my $all_branches   = $input->param('allbranches') || '';
 my $cancelall      = $input->param('cancelall');
+my $tab            = $input->param('tab');
 
 my $cancel;
 
@@ -161,7 +162,9 @@ $template->param(
     ReservesMaxPickUpDelay => C4::Context->preference('ReservesMaxPickUpDelay')
 );
 
-if ($cancelall) {
+if ($item && $tab eq 'holdsover') {
+    print $input->redirect("/cgi-bin/koha/circ/waitingreserves.pl#holdsover");
+} elsif ($cancelall) {
     print $input->redirect("/cgi-bin/koha/circ/waitingreserves.pl");
 } else {
     output_html_with_http_headers $input, $cookie, $template->output;
