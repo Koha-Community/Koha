@@ -272,7 +272,9 @@
                 [% IF ( loop_order.isbn ) %] &ndash; [% loop_order.isbn %][% END %]
                 [% IF ( loop_order.publishercode ) %]
                     <br />Publisher: [% loop_order.publishercode %]
-                    [%- IF ( loop_order.publicationyear ) %], [% loop_order.publicationyear %][% END %]
+                    [%- IF    ( loop_order.publicationyear > 0) -%], [% loop_order.publicationyear %]
+                    [%- ELSIF ( loop_order.copyrightdate   > 0) -%], [% loop_order.copyrightdate %]
+                    [% END %]
                 [% END %]
                 [% IF ( loop_order.suggestionid ) %]
                     <br/>
@@ -422,7 +424,9 @@
                 [% IF ( order.isbn ) %] - [% order.isbn %][% END %]
                 [% IF ( order.publishercode ) %]
                     <br />Publisher: [% order.publishercode %]
-                    [%- IF ( order.publicationyear ) %], [% order.publicationyear %][% END %]
+                    [%- IF    ( order.publicationyear > 0) -%], [% order.publicationyear %]
+                    [%- ELSIF ( order.copyrightdate   > 0) -%], [% order.copyrightdate %]
+                    [% END %]
                 [% END %]
                 [% IF ( order.suggestionid ) %]
                     <br/>
