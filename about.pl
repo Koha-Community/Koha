@@ -101,13 +101,17 @@ if ( ! defined C4::Context->config('zebra_bib_index_mode') ) {
         if C4::Context->config('zebra_bib_index_mode') eq 'grs1';
 }
 
-if ( (C4::Context->config('zebra_bib_index_mode') eq 'dom') && ($context->{'server'}->{'biblioserver'}->{'config'} !~ /zebra-biblios-dom.cfg/) ) {
+if ( (C4::Context->config('zebra_bib_index_mode') eq 'dom') &&
+     ($context->{'server'}->{'biblioserver'}->{'config'} !~ /zebra-biblios-dom.cfg/) ) {
+
     push @xml_config_warnings, {
         error => 'zebra_bib_index_mode_mismatch_warn'
     };
 }
 
-if ( (C4::Context->config('zebra_auth_index_mode') eq 'grs1') && ($context->{'server'}->{'biblioserver'}->{'config'} =~ /zebra-biblios-dom.cfg/) ) {
+if ( (C4::Context->config('zebra_bib_index_mode') eq 'grs1') &&
+     ($context->{'server'}->{'biblioserver'}->{'config'} =~ /zebra-biblios-dom.cfg/) ) {
+
     push @xml_config_warnings, {
         error => 'zebra_bib_index_mode_mismatch_warn'
     };
