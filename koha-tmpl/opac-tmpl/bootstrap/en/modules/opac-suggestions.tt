@@ -111,9 +111,20 @@
                                     [% END %]
                                 [% END %]
                             </h1>
+                            [% FOR m IN messages %]
+                                <div class="alert alert-[% m.type %]">
+                                    [% SWITCH m.code %]
+                                    [% CASE 'already_exists' %]
+                                        The suggestion has not been inserted. The same suggestion already exists.
+                                    [% CASE 'success_on_inserted' %]
+                                        Your suggestion has been submitted.
+                                    [% CASE %]
+                                        [% m.code %]
+                                    [% END %]
+                                </div>
+                            [% END %]
 
                             [% IF ( deleted ) %]<div class="alert alert-info">The selected suggestions have been deleted.</div>[% END %]
-                            [% IF ( submitted ) %]<div class="alert alert-info">Your suggestion has been submitted.</div>[% END %]
 
                             [% IF ( suggestions_loop ) %]
                                 [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]

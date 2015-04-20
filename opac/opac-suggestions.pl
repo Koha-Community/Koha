@@ -53,7 +53,7 @@ if ( ! C4::Context->preference('suggestion') ) {
 delete $$suggestion{$_} foreach qw<op suggestedbyme>;
 $op = 'else' unless $op;
 
-my ( $template, $borrowernumber, $cookie );
+my ( $template, $borrowernumber, $cookie, @messages );
 my $deleted = $input->param('deleted');
 my $submitted = $input->param('submitted');
 
@@ -93,6 +93,10 @@ my $suggestions_loop =
 if ( $op eq "add_confirm" ) {
 	if (@$suggestions_loop>=1){
 		#some suggestion are answering the request Donot Add
+        for my $suggestion ( @$suggestions_loop ) {
+            push @messages, { type => 'error', code => 'already_exists', id => $suggestion->{suggestionid} };
+            last;
+        }
 	}
 	else {
 		my $scrubber = C4::Scrubber->new();
@@ -107,10 +111,9 @@ if ( $op eq "add_confirm" ) {
 		$$suggestion{$_}='' foreach qw<title author publishercode copyrightdate place collectiontitle isbn STATUS>;
 		$suggestions_loop =
 		   &SearchSuggestion( $suggestion );
+        push @messages, { type => 'info', code => 'success_on_inserted' };
 	}
-	$op              = 'else';
-    print $input->redirect("/cgi-bin/koha/opac-suggestions.pl?op=else&submitted=1");
-    exit;
+    $op = 'else';
 }
 
 if ( $op eq "delete_confirm" ) {
@@ -119,7 +122,7 @@ if ( $op eq "delete_confirm" ) {
         &DelSuggestion( $borrowernumber, $delete_field );
     }
     $op = 'else';
-    print $input->redirect("/cgi-bin/koha/opac-suggestions.pl?op=else&deleted=1");
+    print $input->redirect("/cgi-bin/koha/opac-suggestions.pl?op=else");
     exit;
 }
 map{ $_->{'branchcodesuggestedby'}=GetBranchInfo($_->{'branchcodesuggestedby'})->[0]->{'branchname'}} @$suggestions_loop;
@@ -169,6 +172,8 @@ $template->param(
     patron_reason_loop => $patron_reason_loop,
     showall    => $allsuggestions,
     "op_$op"         => 1,
+    $op => 1,
+    messages => \@messages,
     suggestionsview => 1,
 );
 
