@@ -1201,6 +1201,8 @@ sub GetPendingIssues {
         if ($_->{issuedate}) {
             $_->{issuedate} = dt_from_string($_->{issuedate}, 'sql');
         }
+        $_->{date_due_sql} = $_->{date_due};
+        # FIXME no need to have this value
         $_->{date_due} or next;
         $_->{date_due} = DateTime::Format::DateParse->parse_datetime($_->{date_due}, $tz->name());
         if ( DateTime->compare($_->{date_due}, $today) == -1 ) {
