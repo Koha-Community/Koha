@@ -652,13 +652,31 @@ $(document).ready(function() {
                                     <li>
                                         <label for="subtype">Subscription length:</label>
                                         <select name="subtype" id="subtype">
-                                            [% FOREACH subt IN subtype %]
-                                                [% IF (subt.selected) %]
-                                                    <option value="[% subt.name %]" selected="selected">
-                                                [% ELSE %]
-                                                    <option value="[% subt.name %]">
+                                            [% FOREACH st IN subtypes %]
+                                                [% SWITCH st %]
+                                                    [% CASE 'numberlength' %]
+                                                        [% IF st == subtype %]
+                                                            <option value="issues" selected="selected">
+                                                        [% ELSE %]
+                                                            <option value="issues">
+                                                        [% END %]
+                                                        issues
+                                                    [% CASE 'weeklength' %]
+                                                        [% IF st == subtype %]
+                                                            <option value="weeks" selected="selected">
+                                                        [% ELSE %]
+                                                            <option value="weeks">
+                                                        [% END %]
+                                                        weeks
+                                                    [% CASE 'monthlength' %]
+                                                        [% IF st == subtype %]
+                                                            <option value="months" selected="selected">
+                                                        [% ELSE %]
+                                                            <option value="months">
+                                                        [% END %]
+                                                        months
+                                                    [% CASE %][% st %]
                                                 [% END %]
-                                                    [% subt.name %]
                                                 </option>
                                             [% END %]
                                         </select>

@@ -59,8 +59,6 @@ my ($template, $loggedinuser, $cookie)
 
 
 my $sub_on;
-my @subscription_types = (qw(issues weeks months));
-my @sub_type_data;
 
 my $subs;
 our $firstissuedate;
@@ -164,17 +162,11 @@ if ($op eq 'addsubscription') {
 } elsif ($op eq 'modsubscription') {
     redirect_mod_subscription();
 } else {
-        while (@subscription_types) {
-           my $sub_type = shift @subscription_types;
-           my %row = ( 'name' => $sub_type );
-           if ( defined $sub_on and $sub_on eq $sub_type ) {
-	     $row{'selected'} = ' selected';
-           } else {
-	     $row{'selected'} = '';
-           }
-           push( @sub_type_data, \%row );
-        }
-    $template->param(subtype => \@sub_type_data);
+
+    $template->param(
+        subtypes => [ qw( numberlength weeklength monthlength ) ],
+        subtype => $sub_on,
+    );
 
     if ( $op ne 'modsubscription' && $op ne 'dup' && $op ne 'modify' ) {
         my $letters = get_letter_loop();
