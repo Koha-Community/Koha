@@ -55,12 +55,12 @@
                 <td>
                     <p>[% suggestions_loo.title |html %] - [% suggestions_loo.author %]</p>
                     <p>
-                        [% IF ( suggestions_loo.copyrightdate ) %]copy. year:[% suggestions_loo.copyrightdate %] [% END %]
-                        [% IF ( suggestions_loo.volumedesc ) %]volume:<i>[% suggestions_loo.volumedesc %]</i> [% END %]
-                        [% IF ( suggestions_loo.isbn ) %]ISBN :<i>[% suggestions_loo.isbn %]</i> [% END %]
-                        [% IF ( suggestions_loo.publishercode ) %]<br />published by:[% suggestions_loo.publishercode %] [% END %]
+                        [% IF ( suggestions_loo.copyrightdate ) %]&copy; [% suggestions_loo.copyrightdate %] [% END %]
+                        [% IF ( suggestions_loo.volumedesc ) %]volume: <i>[% suggestions_loo.volumedesc %]</i> [% END %]
+                        [% IF ( suggestions_loo.isbn ) %]ISBN: <i>[% suggestions_loo.isbn %]</i> [% END %]
+                        [% IF ( suggestions_loo.publishercode ) %]<br />published by: [% suggestions_loo.publishercode %] [% END %]
                         [% IF ( suggestions_loo.publicationyear ) %] in <i>[% suggestions_loo.publicationyear %]</i> [% END %]
-                        [% IF ( suggestions_loo.place ) %] at <i>[% suggestions_loo.place %]</i> [% END %]
+                        [% IF ( suggestions_loo.place ) %] in <i>[% suggestions_loo.place %]</i> [% END %]
                         [% IF ( suggestions_loo.note ) %]<p><i>([% suggestions_loo.note %])</i></p> [% END %]
                     </p>
                 </td>
