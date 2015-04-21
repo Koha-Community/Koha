@@ -138,7 +138,7 @@
                                                 [% IF ( show_barcode ) %]
                                                     <th>Barcode</th>
                                                 [% END %]
-                                                    <th>Call number</th>
+                                                    <th>Call no.</th>
                                                 [% IF ( OpacRenewalAllowed && !( borrower.is_expired && borrower.BlockExpiredPatronOpacActions ) ) %]
                                                     <th class="nosort">Renew</th>
                                                 [% END %]
@@ -224,7 +224,7 @@
                                                     </td>
                                                 [% END %]
                                                 <td class="call_no">
-                                                    <span class="tdlabel">Call number:</span>
+                                                    <span class="tdlabel">Call no.:</span>
                                                     [% ISSUE.itemcallnumber %]
                                                 </td>
                                                 [% IF ( OpacRenewalAllowed && !( borrower.is_expired && borrower.BlockExpiredPatronOpacActions ) ) %]
@@ -341,7 +341,7 @@
                                             <th class="anti-the">Title</th>
                                             <th>Due</th>
                                             <th>Barcode</th>
-                                            <th>Call number</th>
+                                            <th>Call no.</th>
                                             <th class="psort">Relative</th>
                                         </tr>
                                     </thead>
@@ -390,7 +390,7 @@
                                             <th class="anti-the">Title</th>
                                             [% UNLESS ( item_level_itypes ) %]<th>Item type</th> [% END %]
                                             [% IF ( show_barcode ) %]<th>Barcode</th>[% END %]
-                                            <th>Call number</th>
+                                            <th>Call no.</th>
                                             <th class="title-string psort">Due</th>
                                             [% IF ( OpacRenewalAllowed ) %]
                                                 <th class="nosort">Renew</th>
@@ -459,7 +459,7 @@
                                                     </td>
                                                 [% END %]
                                                 <td>
-                                                    <span class="tdlabel">Call number:</span>
+                                                    <span class="tdlabel">Call no.:</span>
                                                     [% OVERDUE.itemcallnumber %]
                                                 </td>
                                                 <td>
