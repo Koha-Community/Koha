@@ -8507,13 +8507,6 @@ if ( CheckVersion($DBversion) ) {
     ");
 
     print "Upgrade to $DBversion done (Bug 10500 - Improve isbn matching when importing records)\n";
-
-$DBversion = "3.15.00.XXX";
-if ( CheckVersion($DBversion) ) {
-    $dbh->do(q{
-        DELETE FROM systempreferences WHERE variable = 'HomeOrHoldingBranchReturn';
-    });
-    print "Upgrade to $DBversion done (Bug 7981 - Transfer message on return. HomeOrHoldingBranchReturn syspref removed in favour of circulation rules.)\n";
     SetVersion($DBversion);
 }
 
@@ -10590,6 +10583,15 @@ if ( CheckVersion($DBversion) ) {
     |);
     print "Upgrade to $DBversion done (Bug 14053: Acquisition db tables are missing indexes)\n";
     SetVersion ($DBversion);
+}
+
+$DBversion = "3.21.00.XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        DELETE FROM systempreferences WHERE variable = 'HomeOrHoldingBranchReturn';
+    });
+    print "Upgrade to $DBversion done (Bug 7981 - Transfer message on return. HomeOrHoldingBranchReturn syspref removed in favour of circulation rules.)\n";
+    SetVersion($DBversion);
 }
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory

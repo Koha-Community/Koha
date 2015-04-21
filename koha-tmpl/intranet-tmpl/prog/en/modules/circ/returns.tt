@@ -289,7 +289,7 @@ $(document).ready(function () {
         [% IF ( soundon ) %]
         <audio src="[% interface %]/[% theme %]/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
         [% END %]
-	<div id="item-transfer" class="dialog message"><h3> This item needs to be transferred to [% Branches.GetName( returnbranchname ) %]</h3>
+    <div id="item-transfer" class="dialog message"><h3> This item needs to be transferred to [% Branches.GetName( returnbranchname ) %]</h3>
     Transfer now?<br />
     <form method="post" action="returns.pl" name="mainform" id="mainform">
     [% IF itemnumber %]
@@ -297,7 +297,7 @@ $(document).ready(function () {
     [% END %]
 	<input type="submit" name="dotransfer" value="Yes" class="submit" />
 	<input type="submit" name="notransfer" value="No" class="submit" />
-	<input type="hidden" name="tobranch" value="[% returnbranch %]" />
+    <input type="hidden" name="tobranch" value="[% returnbranch %]" />
 	<input type="hidden" name="transferitem" value="[% itemnumber %]" />
         <input type="hidden" name="exemptfine" value="[% exemptfine %]" />
         <input type="hidden" name="dropboxmode" value="[% dropboxmode %]" />
