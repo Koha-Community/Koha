@@ -59,20 +59,29 @@ sub blank_row {
     return 1;
 }
 
-my $type=$input->param('type');
-my $branch = $input->param('branch');
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "tools/overduerules.tt",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { tools => 'edit_notice_status_triggers' },
+        debug           => 1,
+    }
+);
+
+my $type = $input->param('type');
+
+my $branch =
+    defined( $input->param('branch') ) ? $input->param('branch')
+  : GetBranchesCount() == 1            ? undef
+  :                                      C4::Branch::mybranch();
+$branch = q{} if $branch eq 'NO_LIBRARY_SET';
 $branch ||= q{};
+
 my $op = $input->param('op');
 $op ||= q{};
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "tools/overduerules.tt",
-                            query => $input,
-                            type => "intranet",
-                            authnotrequired => 0,
-                            flagsrequired => { tools => 'edit_notice_status_triggers'},
-                            debug => 1,
-                            });
 my $err=0;
 
 # save the values entered into tables
