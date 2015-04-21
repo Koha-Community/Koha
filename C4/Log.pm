@@ -83,15 +83,18 @@ sub logaction {
 
 =item cronlogaction
 
-  &cronlogaction();
+  &cronlogaction($infos);
 
 Convenience routine to add a record into action_logs table from a cron job.
+Logs the path and name of the calling script plus the information privided by param $infos.
 
 =cut
 
 #'
 sub cronlogaction {
-    logaction( 'CRONJOBS', 'Run', 0, (caller(0))[1] ) if C4::Context->preference('CronjobLog');
+    my ($infos)=@_;
+    my $loginfo = (caller(0))[1] . ' ' . $infos;
+    logaction( 'CRONJOBS', 'Run', 0, $loginfo ) if C4::Context->preference('CronjobLog');
 }
 
 
