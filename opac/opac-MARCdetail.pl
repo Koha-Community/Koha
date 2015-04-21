@@ -56,7 +56,7 @@ use C4::Reserves;
 use C4::Members;
 use C4::Acquisition;
 use C4::Koha;
-use List::MoreUtils qw/any/;
+use List::MoreUtils qw( any uniq );
 
 my $query = new CGI;
 
@@ -253,67 +253,50 @@ for ( my $tabloop = 0 ; $tabloop <= 9 ; $tabloop++ ) {
 my @fields = $record->fields();
 my %witness
   ; #---- stores the list of subfields used at least once, with the "meaning" of the code
-my @big_array;
+my @item_subfield_codes;
+my @item_loop;
 foreach my $field (@fields) {
     next if ( $field->tag() < 10 );
     next if ( ( $field->tag() eq $tag_itemnumber ) &&
               ( any { $field->subfield($subtag_itemnumber) eq $_ }
                    @items2hide) );
     my @subf = $field->subfields;
-    my %this_row;
+    my $item;
 
     # loop through each subfield
     for my $i ( 0 .. $#subf ) {
         my $sf_def = $tagslib->{ $field->tag() }->{ $subf[$i][0] };
         next if ( ($sf_def->{tab}||0) != 10 );
         next if ( ($sf_def->{hidden}||0) > 0 );
+        push @item_subfield_codes, $subf[$i][0];
         $witness{ $subf[$i][0] } = $sf_def->{lib};
 
         if ( $sf_def->{isurl} ) {
-            $this_row{ $subf[$i][0] } = "<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
+            $item->{ $subf[$i][0] } = "<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
         }
         elsif ( $sf_def->{kohafield} eq "biblioitems.isbn" ) {
-            $this_row{ $subf[$i][0] } = $subf[$i][1];
+            $item->{ $subf[$i][0] } = $subf[$i][1];
         }
         else {
-            $this_row{ $subf[$i][0] } = GetAuthorisedValueDesc( $field->tag(), $subf[$i][0],
+            $item->{ $subf[$i][0] } = GetAuthorisedValueDesc( $field->tag(), $subf[$i][0],
                 $subf[$i][1], '', $tagslib, '', 'opac' );
         }
     }
-    if (%this_row) {
-        push( @big_array, \%this_row );
-    }
+    push @item_loop, $item if $item;
 }
 my ( $holdingbrtagf, $holdingbrtagsubf ) =
   &GetMarcFromKohaField( "items.holdingbranch", $itemtype );
-@big_array =
-  sort { ($a->{$holdingbrtagsubf}||'') cmp ($b->{$holdingbrtagsubf}||'') } @big_array;
+@item_loop =
+  sort { ($a->{$holdingbrtagsubf}||'') cmp ($b->{$holdingbrtagsubf}||'') } @item_loop;
 
-#fill big_row with missing datas
-foreach my $subfield_code ( keys(%witness) ) {
-    for ( my $i = 0 ; $i <= $#big_array ; $i++ ) {
-        $big_array[$i]{$subfield_code} = "&nbsp;"
-          unless ( $big_array[$i]{$subfield_code} );
-    }
-}
-
-# now, construct template !
-my @item_value_loop;
-my @header_value_loop;
-for ( my $i = 0 ; $i <= $#big_array ; $i++ ) {
-    my $items_data;
-    foreach my $subfield_code ( keys(%witness) ) {
-        $items_data .= "<td>" . $big_array[$i]{$subfield_code} . "</td>";
-    }
-    my %row_data;
-    $row_data{item_value} = $items_data;
-    push( @item_value_loop, \%row_data );
-}
-
-foreach my $subfield_code ( keys(%witness) ) {
-    my %header_value;
-    $header_value{header_value} = $witness{$subfield_code};
-    push( @header_value_loop, \%header_value );
+@item_subfield_codes = uniq @item_subfield_codes;
+# fill item info
+my @item_header_loop;
+for my $subfield_code ( @item_subfield_codes ) {
+    push @item_header_loop, $witness{$subfield_code};
+    for my $item_data ( @item_loop ) {
+        $item_data->{$subfield_code} ||= "&nbsp;"
+     }
 }
 
 if(C4::Context->preference("ISBD")) {
@@ -346,9 +329,10 @@ if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
 }
 
 $template->param(
-    item_loop        => \@item_value_loop,
-    item_header_loop => \@header_value_loop,
-    biblionumber     => $biblionumber,
+    item_loop           => \@item_loop,
+    item_header_loop    => \@item_header_loop,
+    item_subfield_codes => \@item_subfield_codes,
+    biblionumber        => $biblionumber,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
