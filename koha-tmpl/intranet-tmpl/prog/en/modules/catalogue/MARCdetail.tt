@@ -167,15 +167,15 @@ function Changefwk(FwkList) {
     <div id="tab10XX">
         <table>
                 <tr>
-                    [% FOREACH item_header_loo IN item_header_loop %]
-                        <th>
-                            [% item_header_loo.header_value %]
-                        </th>
+                    [% FOREACH header IN item_header_loop %]
+                        <th>[% header %]</th>
                     [% END %]
                 </tr>
-                [% FOREACH item_loo IN item_loop %]
+                [% FOREACH item IN item_loop %]
                     <tr>
-                        [% item_loo.item_value %]
+                        [% FOREACH sf_code IN item_subfield_codes %]
+                            <td>[% item.$sf_code %]</td>
+                        [% END %]
                     </tr>
                 [% END %]
         </table>
