@@ -6,7 +6,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 13;
+use Test::More tests => 16;
 use List::Util qw(first);
 use Data::Dumper;
 use Test::Warn;
@@ -56,5 +56,38 @@ warnings_are { $translatedlanguages2 = C4::Languages::getTranslatedLanguages('op
 my @currentcheck2 = map { $_->{current} } @$translatedlanguages2;
 $onlyzeros = first { $_ != 0 } @currentcheck2;
 ok($onlyzeros, "There is a $onlyzeros\n");
+
+# Language Descriptions
+my $sth = $dbh->prepare("SELECT DISTINCT subtag,type,lang,description from language_descriptions;");
+$sth->execute();
+my $DistinctLangDesc = $sth->fetchall_arrayref({});
+
+$sth = $dbh->prepare("SELECT subtag,type,lang,description from language_descriptions;");
+$sth->execute();
+my $LangDesc = $sth->fetchall_arrayref({});
+
+is(scalar(@$LangDesc),scalar(@$DistinctLangDesc),"No unexpected language_description duplicates.");
+
+# Language_subtag_registry
+$sth = $dbh->prepare("SELECT DISTINCT subtag,type,description,added FROM language_subtag_registry;");
+$sth->execute();
+my $DistinctLangReg = $sth->fetchall_arrayref({});
+
+$sth = $dbh->prepare("SELECT subtag,type,description,added FROM language_subtag_registry;");
+$sth->execute();
+my $LangReg = $sth->fetchall_arrayref({});
+
+is(scalar(@$LangReg),scalar(@$DistinctLangReg),"No unexpected language_subtag_registry duplicates.");
+
+# Language RFC4646 to ISO639
+$sth = $dbh->prepare("SELECT DISTINCT rfc4646_subtag,iso639_2_code FROM language_rfc4646_to_iso639;");
+$sth->execute();
+my $DistinctLangRfc4646 = $sth->fetchall_arrayref({});
+
+$sth = $dbh->prepare("SELECT rfc4646_subtag,iso639_2_code FROM language_rfc4646_to_iso639;");
+$sth->execute();
+my $LangRfc4646 = $sth->fetchall_arrayref({});
+
+is(scalar(@$LangRfc4646),scalar(@$DistinctLangRfc4646),"No unexpected language_rfc4646_to_iso639 duplicates.");
 
 $dbh->rollback;

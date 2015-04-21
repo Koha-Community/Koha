@@ -554,7 +554,7 @@ INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'ka', 'language', 'fr', 'Géorgien');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES ( 'ka', 'language', 'de', 'Georgische');
+VALUES ( 'ka', 'language', 'de', 'Georgisch');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'ka', 'language', 'es', 'Georgiano');
