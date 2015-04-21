@@ -44,7 +44,16 @@ my ($template, $loggedinuser, $cookie)
                             });
 
 my $type=$input->param('type');
-my $branch = $input->param('branch') || ( C4::Branch::onlymine() ? ( C4::Branch::mybranch() || '*' ) : '*' );
+
+my $branch;
+if ( C4::Context->preference('DefaultToLoggedInLibraryCircRules') ) {
+    $branch = $input->param('branch') || GetBranchesCount() == 1 ? undef : C4::Branch::mybranch();
+}
+else {
+    $branch = $input->param('branch') || ( C4::Branch::onlymine() ? ( C4::Branch::mybranch() || '*' ) : '*' );
+}
+$branch = '*' if $branch eq 'NO_LIBRARY_SET';
+
 my $op = $input->param('op') || q{};
 my $language = C4::Languages::getlanguage();
 
