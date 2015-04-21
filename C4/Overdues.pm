@@ -939,8 +939,11 @@ sub GetOverdueMessageTransportTypes {
     return unless $categorycode and $letternumber;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("
-        SELECT message_transport_type FROM overduerules_transport_types
-        WHERE branchcode = ? AND categorycode = ? AND letternumber = ?
+        SELECT message_transport_type
+        FROM overduerules odr LEFT JOIN overduerules_transport_types ott USING (overduerules_id)
+        WHERE branchcode = ?
+          AND categorycode = ?
+          AND letternumber = ?
     ");
     $sth->execute( $branchcode, $categorycode, $letternumber );
     my @mtts;

@@ -98,14 +98,14 @@ if ($op eq 'save') {
     my $sth_delete=$dbh->prepare("DELETE FROM overduerules WHERE branchcode=? AND categorycode=?");
     my $sth_insert_mtt = $dbh->prepare("
         INSERT INTO overduerules_transport_types(
-            branchcode, categorycode, letternumber, message_transport_type
+            overduerules_id, letternumber, message_transport_type
         ) VALUES (
-            ?, ?, ?, ?
+            (SELECT overduerules_id FROM overduerules WHERE branchcode = ? AND categorycode = ?), ?, ?
         )
     ");
     my $sth_delete_mtt = $dbh->prepare("
         DELETE FROM overduerules_transport_types
-        WHERE branchcode = ? AND categorycode = ?
+        WHERE overduerules_id = (SELECT overduerules_id FROM overduerules WHERE branchcode = ? AND categorycode = ?)
     ");
 
     foreach my $key (@names){

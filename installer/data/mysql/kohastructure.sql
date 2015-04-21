@@ -1703,6 +1703,7 @@ CREATE TABLE `opac_news` ( -- data from the news tool
 
 DROP TABLE IF EXISTS `overduerules`;
 CREATE TABLE `overduerules` ( -- overdue notice status and triggers
+  `overduerules_id` mediumint NOT NULL AUTO_INCREMENT, -- unique identifier for the overduerules
   `branchcode` varchar(10) NOT NULL default '', -- foreign key from the branches table to define which branch this rule is for (if blank it's all libraries)
   `categorycode` varchar(10) NOT NULL default '', -- foreign key from the categories table to define which patron category this rule is for
   `delay1` int(4) default NULL, -- number of days after the item is overdue that the first notice is sent
@@ -1714,7 +1715,7 @@ CREATE TABLE `overduerules` ( -- overdue notice status and triggers
   `delay3` int(4) default NULL, -- number of days after the item is overdue that the third notice is sent
   `letter3` varchar(20) default NULL, -- foreign key from the letter table to define which notice should be sent as the third notice
   `debarred3` int(1) default 0, -- is the patron restricted when the third notice is sent (1 for yes, 0 for no)
-  PRIMARY KEY  (`branchcode`,`categorycode`)
+  PRIMARY KEY  (`overduerules_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -2567,12 +2568,10 @@ CREATE TABLE `message_transport_types` (
 DROP TABLE IF EXISTS `overduerules_transport_types`;
 CREATE TABLE overduerules_transport_types(
     `id` INT(11) NOT NULL AUTO_INCREMENT,
-    `branchcode` varchar(10) NOT NULL DEFAULT '',
-    `categorycode` VARCHAR(10) NOT NULL DEFAULT '',
-    `letternumber` INT(1) NOT NULL DEFAULT 1,
     `message_transport_type` VARCHAR(20) NOT NULL DEFAULT 'email',
+    `overduerules_id` mediumint NOT NULL,
     PRIMARY KEY (id),
-    CONSTRAINT overduerules_fk FOREIGN KEY (branchcode, categorycode) REFERENCES overduerules (branchcode, categorycode) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT overduerules_fk FOREIGN KEY (overduerules_id) REFERENCES overduerules (overduerules_id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT mtt_fk FOREIGN KEY (message_transport_type) REFERENCES message_transport_types (message_transport_type) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

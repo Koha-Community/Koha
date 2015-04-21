@@ -24,26 +24,25 @@ $dbh->do(q|
 |);
 
 $dbh->do(q|
-    INSERT INTO overduerules ( branchcode, categorycode ) VALUES
-    ('CPL', 'PT'),
-    ('CPL', 'YA'),
-    ('', 'PT'),
-    ('', 'YA')
+    INSERT INTO overduerules ( overduerules_id, branchcode, categorycode ) VALUES
+    (1, 'CPL', 'PT'),
+    (2, 'CPL', 'YA'),
+    (3, '', 'PT'),
+    (4, '', 'YA')
 |);
 
-$dbh->do(q|
-    INSERT INTO overduerules_transport_types( branchcode, categorycode, letternumber, message_transport_type ) VALUES
-    ('CPL', 'PT', 1, 'email'),
-    ('CPL', 'PT', 2, 'sms'),
-    ('CPL', 'PT', 3, 'email'),
-    ('CPL', 'YA', 3, 'print'),
-    ('', 'PT', 1, 'email'),
-    ('', 'PT', 2, 'email'),
-    ('', 'PT', 2, 'sms'),
-    ('', 'PT', 3, 'sms'),
-    ('', 'PT', 3, 'email'),
-    ('', 'PT', 3, 'print'),
-    ('', 'YA', 2, 'sms')
+$dbh->do(q|INSERT INTO overduerules_transport_types (overduerules_id, letternumber, message_transport_type) VALUES
+    (1, 1, 'email'),
+    (1, 2, 'sms'),
+    (1, 3, 'email'),
+    (2, 3, 'print'),
+    (3, 1, 'email'),
+    (3, 2, 'email'),
+    (3, 2, 'sms'),
+    (3, 3, 'sms'),
+    (3, 3, 'email'),
+    (3, 3, 'print'),
+    (4, 2, 'sms')
 |);
 
 my $mtts;
