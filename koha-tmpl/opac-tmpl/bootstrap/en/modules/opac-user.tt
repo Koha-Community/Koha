@@ -451,7 +451,7 @@
                                                 <td>
                                                     <span title="[% OVERDUE.date_due %]">
                                                         <span class="tdlabel">Date due:</span>
-                                                        [% OVERDUE.date_due | $KohaDates as_due_date => 1 %]
+                                                        [% OVERDUE.date_due_sql | $KohaDates as_due_date => 1 %]
                                                     </span>
                                                 </td>
                                                 [% IF ( OpacRenewalAllowed ) %]
