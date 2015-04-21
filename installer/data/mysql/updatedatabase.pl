@@ -11405,6 +11405,17 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.19.00.XXX";
+if(CheckVersion($DBversion)) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( variable, value, options, explanation, type )
+        VALUES ('DefaultToLoggedInLibraryOverdueTriggers',  '0', NULL,  'If enabled, overdue status triggers editor will default to the logged in library''s rules, rather than the ''default'' rules.',  'YesNo')
+    });
+
+    print "Upgrade to $DBversion done (Bug 11747 - add pref DefaultToLoggedInLibraryOverdueTriggers)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
