@@ -670,6 +670,9 @@ sub ModMember {
     my $new_borrower = { map { join(' ', @columns) =~ /$_/ ? ( $_ => $data{$_} ) : () } keys(%data) };
     delete $new_borrower->{flags};
 
+    $new_borrower->{dateofbirth}  ||= undef if exists $new_borrower->{dateofbirth};
+    $new_borrower->{dateenrolled} ||= undef if exists $new_borrower->{dateenrolled};
+    $new_borrower->{dateexpiry}   ||= undef if exists $new_borrower->{dateexpiry};
     my $rs = $schema->resultset('Borrower')->search({
         borrowernumber => $new_borrower->{borrowernumber},
      });
