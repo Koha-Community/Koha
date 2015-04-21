@@ -111,6 +111,8 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('DefaultLongOverdueLostValue', NULL, NULL, "Set the LOST value of an item to n when the item has been overdue for more than defaultlongoverduedays days.", 'integer'),
 ('defaultSortField','relevance','relevance|popularity|call_number|pubdate|acqdate|title|author','Specify the default field used for sorting','Choice'),
 ('defaultSortOrder','dsc','asc|dsc|az|za','Specify the default sort order','Choice'),
+('DefaultToLoggedInLibraryCircRules',  '0', NULL ,  'If enabled, circ rules editor will default to the logged in library''s rules, rather than the ''all libraries'' rules.',  'YesNo'),
+('DefaultToLoggedInLibraryNoticesSlips',  '0', NULL ,  'If enabled,slips and notices editor will default to the logged in library''s rules, rather than the ''all libraries'' rules.',  'YesNo'),
 ('delimiter',';',';|tabulation|,|/|\\|#||','Define the default separator character for exporting reports','Choice'),
 ('Display856uAsImage','OFF','OFF|Details|Results|Both','Display the URI in the 856u field as an image, the corresponding Staff Client XSLT option must be on','Choice'),
 ('DisplayClearScreenButton','0','','If set to ON, a clear screen button will appear on the circulation page.','YesNo'),
