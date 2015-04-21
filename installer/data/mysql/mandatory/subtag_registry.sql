@@ -537,18 +537,40 @@ VALUES ( 'ja', 'language', 'fr', 'Japonais');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'ja', 'language', 'de', 'Japanisch');
 
--- Kannada
+-- Georgian
 INSERT INTO language_subtag_registry( subtag, type, description, added)
-VALUES ( 'ka', 'language', 'Kannada','2014-10-30');
+VALUES ( 'ka', 'language', 'Georgian','2015-04-20');
 
 INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
-VALUES ( 'ka','kan');
+VALUES ( 'ka', 'geo');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES ( 'ka', 'language', 'ka', 'ಕನ್ನಡ');
+VALUES ( 'ka', 'language', 'ka', 'ქართული');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES ( 'ka', 'language', 'en', 'Kannada');
+VALUES ( 'ka', 'language', 'en', 'Georgian');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ka', 'language', 'fr', 'Géorgien');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ka', 'language', 'de', 'Georgische');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ka', 'language', 'es', 'Georgiano');
+
+-- Kannada
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'kn', 'language', 'Kannada','2014-10-30');
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'kn', 'kan');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'kn', 'language', 'kn', 'ಕನ್ನಡ');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'kn', 'language', 'en', 'Kannada');
 
 -- Khmer
 INSERT INTO language_subtag_registry( subtag, type, description, added)
