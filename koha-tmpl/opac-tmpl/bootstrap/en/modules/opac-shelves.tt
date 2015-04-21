@@ -43,7 +43,7 @@
 
 [% INCLUDE 'masthead.inc' %]
 <div class="main">
-    <ul class="breadcrumb">
+    <ul class="breadcrumb noprint">
         <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
         [% IF ( loggedinusername ) %]
             <li><a href="/cgi-bin/koha/opac-user.pl">[% FOREACH USER_INF IN USER_INFO %][% USER_INF.title %] [% USER_INF.firstname %] [% USER_INF.surname %][% END %]</a> <span class="divider">&rsaquo;</span></li>
@@ -91,7 +91,7 @@
 
     <div class="container-fluid">
         <div class="row-fluid">
-            [% IF ( OpacNav||loggedinusername ) %]
+            [% IF ( OpacNav||loggedinusername ) && !print %]
                 <div class="span2">
                     <div id="navigation">
                         [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
@@ -168,7 +168,7 @@
                                         <span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelfnumber | html %]" class="send" onclick="open('/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelfnumber | html %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; ">Send list</a></span>
                                     [% END %]
 
-                                    <a class="print-small" href="/cgi-bin/koha/opac-shelves.pl" onclick="print(); return false;">Print list</a>
+                                    <a class="print-small" target="_blank" href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% shelfnumber %]&sort=[% sort %]&direction=[% direction %]&print=1">Print list</a>
 
                                     [% IF ( manageshelf ) %]
                                         <span class="sep">|</span>
@@ -248,7 +248,7 @@
 
                             </div> <!-- / #toolbar -->
 
-                            <div id="selections-toolbar" class="toolbar">
+                            <div id="selections-toolbar" class="toolbar noprint">
                                 <span class="checkall"></span> <span class="clearall"></span> <span class="sep">|</span>
                                 <span class="links">
                                     <span id="selections">Select titles to: </span>
@@ -1023,6 +1023,11 @@ $(function() {
     [% IF OPACLocalCoverImages %]KOHA.LocalCover.GetCoverFromBibnumber(false);[% END %]
     [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
     $('#sort-submit').hide();
+
+    [% IF print %]
+        window.print();
+        setTimeout('window.close()', 1);
+    [% END %]
 }); // document.ready
 
 function Check(f) {

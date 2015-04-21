@@ -33,6 +33,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
         type            => "opac",
         authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
     });
-$template->param(listsview => 1);
+
+$template->param(
+    listsview => 1,
+    print     => $query->param('print')
+);
 
 shelfpage('opac', $query, $template, $loggedinuser, $cookie);
