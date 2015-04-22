@@ -150,47 +150,6 @@ if ( $op eq 'delete_confirm' ) {
     $template->param( delete_confirmed => 1 );
 } elsif ( !$bookseller ) {
     $template->param( NO_BOOKSELLER => 1 );
-} elsif ( $op eq 'del_basket') {
-    $template->param( delete_confirm => 1 );
-    if ( C4::Context->preference("IndependentBranches") ) {
-        my $userenv = C4::Context->userenv;
-        unless ( C4::Context->IsSuperLibrarian() ) {
-            my $validtest = ( $basket->{creationdate} eq '' )
-              || ( $userenv->{branch} eq $basket->{branch} )
-              || ( $userenv->{branch} eq '' )
-              || ( $basket->{branch}  eq '' );
-            unless ($validtest) {
-                print $query->redirect("../mainpage.pl");
-                exit 1;
-            }
-        }
-    }
-    $basket->{creationdate} = ""            unless ( $basket->{creationdate} );
-    $basket->{authorisedby} = $loggedinuser unless ( $basket->{authorisedby} );
-    my $contract = GetContract({
-        contractnumber => $basket->{contractnumber}
-    });
-    $template->param(
-        basketno             => $basketno,
-        basketname           => $basket->{'basketname'},
-        basketnote           => $basket->{note},
-        basketbooksellernote => $basket->{booksellernote},
-        basketcontractno     => $basket->{contractnumber},
-        basketcontractname   => $contract->{contractname},
-        creationdate         => $basket->{creationdate},
-        authorisedby         => $basket->{authorisedby},
-        authorisedbyname     => $basket->{authorisedbyname},
-        closedate            => $basket->{closedate},
-        deliveryplace        => $basket->{deliveryplace},
-        billingplace         => $basket->{billingplace},
-        active               => $bookseller->{'active'},
-        booksellerid         => $bookseller->{'id'},
-        name                 => $bookseller->{'name'},
-        address1             => $bookseller->{'address1'},
-        address2             => $bookseller->{'address2'},
-        address3             => $bookseller->{'address3'},
-        address4             => $bookseller->{'address4'},
-      );
 } elsif ($op eq 'export') {
     print $query->header(
         -type       => 'text/csv',

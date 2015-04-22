@@ -3,7 +3,7 @@
 [% USE AuthorisedValues %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Acquisitions &rsaquo; [% UNLESS ( basketno ) %]New [% END %][% IF ( delete_confirm ) %]Delete [% END %]Basket [% basketname|html %] ([% basketno %]) for [% name|html %]</title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; [% UNLESS ( basketno ) %]New [% END %]Basket [% basketname|html %] ([% basketno %]) for [% name|html %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'datatables.inc' %]
@@ -145,7 +145,7 @@
 [% INCLUDE 'acquisitions-search.inc' %]
 
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name|html %]</a> &rsaquo; [% UNLESS ( basketno ) %]New [% END %][% IF ( delete_confirm ) %]Delete [% END %]Basket [% basketname|html %] ([% basketno %]) for [% name|html %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name|html %]</a> &rsaquo; [% UNLESS ( basketno ) %]New [% END %]Basket [% basketname|html %] ([% basketno %]) for [% name|html %]</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -163,6 +163,7 @@
                 <div id="toolbar" class="btn-toolbar">
                     <div class="btn-group"><a href="#addtoBasket" role="button" class="btn btn-small" data-toggle="modal"><i class="icon-plus"></i> Add to basket</a></div>
                     <div class="btn-group"><a href="basketheader.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;op=add_form" class="btn btn-small" id="basketheadbutton"><i class="icon-pencil"></i> Edit basket</a></div>
+                    [%# FIXME This action should not be available for everyone %]
                     <div class="btn-group"><a href="#deleteBasketModal" role="button" class="btn btn-small" data-toggle="modal" id="delbasketbutton"><i class="icon-remove"></i> Delete this basket</a></div>
                    [% IF ( unclosable ) %]
                     [% ELSIF ( uncertainprices ) %]
@@ -241,21 +242,7 @@
             <META HTTP-EQUIV=Refresh CONTENT="0; url=booksellers.pl">
             [% END %]
         [% ELSE %]
-        <h1>[% UNLESS ( basketno ) %]New [% END %][% IF ( delete_confirm ) %]Delete [% END %]Basket [% basketname|html %] ([% basketno %]) for <a href="supplier.pl?booksellerid=[% booksellerid %]">[% name|html %]</a></h1>
-        [% IF ( delete_confirm ) %]
-            <h2>
-            <span class="yui-button yui-link-button">
-            <em class="first-child">
-                <a href="[% script_name %]?op=delete_confirm&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" class="yui-link-button">Yes, delete this basket!</a>
-            </em>
-            </span>
-            <span class="yui-button yui-link-button">
-            <em class="first-child">
-                <a href="[% script_name %]?basketno=[% basketno %]" class="yui-link-button">Cancel</a>
-            </em>
-            </span>
-            </h2>
-        [% END %]
+        <h1>[% UNLESS ( basketno ) %]New [% END %]Basket [% basketname|html %] ([% basketno %]) for <a href="supplier.pl?booksellerid=[% booksellerid %]">[% name|html %]</a></h1>
         [% IF ( basketno ) %]
             <div id="acqui_basket_summary" class="yui-g">
                 <div class="rows">
@@ -377,7 +364,6 @@
             </div>
         [% END %]
 
-        [% UNLESS ( delete_confirm ) %]
         <div id="acqui_basket_content" class="yui-g">
         [% IF ( books_loop ) %]
         <h2>Orders</h2>
@@ -638,7 +624,6 @@
     </div>
 
         [% INCLUDE 'acquisitions-add-to-basket.inc' %]
-        [% END %]
         [% END %]
 [% END %]
 [% END %]    [% ELSE %] <!-- if we want just to select a basketgroup for a closed basket -->
