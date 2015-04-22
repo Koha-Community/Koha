@@ -60,7 +60,7 @@ my $library2 = $builder->build({
 });
 my $itemtype = $builder->build(
     {   source => 'Itemtype',
-        value  => { notforloan => undef, rentalcharge => 0 }
+        value  => { notforloan => undef, rentalcharge => 0, defaultreplacecost => undef, processfee => undef }
     }
 )->{itemtype};
 my $patron_category = $builder->build({ source => 'Category', value => { categorycode => 'NOT_X', category_type => 'P', enrolmentfee => 0 } });
@@ -778,6 +778,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     is( $offset->type, 'Fine', 'Account offset type is Fine' );
     is( $offset->amount, '15.000000', 'Account offset amount is 15.00' );
 
+    ModItem({ itype => 'BK' }, $biblionumber, $itemnumber, 1);
     LostItem( $itemnumber, 1 );
 
     my $item = Koha::Database->new()->schema()->resultset('Item')->find($itemnumber);

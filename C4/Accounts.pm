@@ -28,6 +28,7 @@ use C4::Log qw(logaction);
 use Koha::Account;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
+use Koha::Items;
 
 use Data::Dumper qw(Dumper);
 
@@ -134,7 +135,15 @@ FIXME : if no replacement price, borrower just doesn't get charged?
 sub chargelostitem{
     my $dbh = C4::Context->dbh();
     my ($borrowernumber, $itemnumber, $amount, $description) = @_;
-
+    my $itype = Koha::ItemTypes->find({ itemtype => Koha::Items->find($itemnumber)->effective_itemtype() });
+    my $replacementprice = $amount;
+    my $defaultreplacecost = $itype->defaultreplacecost;
+    my $processfee = $itype->processfee;
+    my $usedefaultreplacementcost = C4::Context->preference("useDefaultReplacementCost");
+    my $processingfeenote = C4::Context->preference("ProcessingFeeNote");
+    if ($usedefaultreplacementcost && $amount == 0 && $defaultreplacecost){
+        $replacementprice = $defaultreplacecost;
+    }
     # first make sure the borrower hasn't already been charged for this item
     my $existing_charges = Koha::Account::Lines->search(
         {
@@ -189,6 +198,14 @@ sub chargelostitem{
             }));
         }
 
+        #add processing fee
+        if ($processfee && $processfee > 0){
+            manualinvoice($borrowernumber, $itemnumber, $description, 'PF', $processfee, $processingfeenote, 1);
+        }
+        #add replace cost
+        if ($replacementprice > 0){
+            manualinvoice($borrowernumber, $itemnumber, $description, 'L', $replacementprice, undef, 1);
+        }
     }
 }
 
@@ -219,7 +236,7 @@ should be the empty string.
 #
 
 sub manualinvoice {
-    my ( $borrowernumber, $itemnum, $desc, $type, $amount, $note ) = @_;
+    my ( $borrowernumber, $itemnum, $desc, $type, $amount, $note, $skip_notify ) = @_;
     my $manager_id = 0;
     $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
     my $dbh      = C4::Context->dbh;
@@ -227,6 +244,7 @@ sub manualinvoice {
     my $insert;
     my $accountno  = getnextacctno($borrowernumber);
     my $amountleft = $amount;
+    $skip_notify //= 0;
 
     if (   ( $type eq 'L' )
         or ( $type eq 'F' )
@@ -234,7 +252,7 @@ sub manualinvoice {
         or ( $type eq 'N' )
         or ( $type eq 'M' ) )
     {
-        $notifyid = 1;
+        $notifyid = 1 unless $skip_notify;
     }
 
     my $accountline = Koha::Account::Line->new(
@@ -281,19 +299,26 @@ sub manualinvoice {
 }
 
 sub getcharges {
-	my ( $borrowerno, $timestamp, $accountno ) = @_;
-	my $dbh        = C4::Context->dbh;
-	my $timestamp2 = $timestamp - 1;
-	my $query      = "";
-	my $sth = $dbh->prepare(
-			"SELECT * FROM accountlines WHERE borrowernumber=? AND accountno = ?"
-          );
-	$sth->execute( $borrowerno, $accountno );
+    my ( $borrowerno, $accountno ) = @_;
+    my $dbh = C4::Context->dbh;
+
+    my @params;
+
+    my $query = "SELECT * FROM accountlines WHERE borrowernumber = ?";
+    push( @params, $borrowerno );
+
+    if ( $accountno ) {
+        $query .= " AND accountno = ?";
+        push( @params, $accountno );
+    }
+
+    my $sth = $dbh->prepare( $query );
+    $sth->execute( @params );
 	
     my @results;
     while ( my $data = $sth->fetchrow_hashref ) {
-		push @results,$data;
-	}
+        push @results,$data;
+    }
     return (@results);
 }
 

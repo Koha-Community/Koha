@@ -235,7 +235,7 @@ Item types administration
                     </div>
                 </div>
             [% END %]
-            <ol>
+            <ol class="oladditemtype">
                 <li>
                     <label for="hideinopac">Hide in OPAC: </label>
                     [% IF ( itemtype.hideinopac ) %]
@@ -257,6 +257,14 @@ Item types administration
                 <li>
                     <label for="rentalcharge">Rental charge: </label>
                     <input type="text" id="rentalcharge" name="rentalcharge" size="10" value="[% itemtype.rentalcharge %]" />
+                </li>
+                <li>
+                    <label for="defaultreplacecost">Default replacement cost: </label>
+                    <input type="text" id="defaultreplacecost" name="defaultreplacecost" size="10" value="[% defaultreplacecost %]" />
+                </li>
+                <li>
+                    <label for="processfee">Processing fee (when lost): </label>
+                    <input type="text" id="processfee" name="processfee" size="10" value="[% processfee %]" />
                 </li>
                 <li>
                     <label for="checkinmsg">Checkin message: </label>
@@ -348,6 +356,8 @@ Item types administration
             <th>Not for loan</th>
             <th>Hide in OPAC</th>
             <th>Charge</th>
+            <th>Default replacement cost</th>
+            <th>Processing fee (when lost)</th>
             <th>Checkin message</th>
             <th>Actions</th>
           </thead>
@@ -387,6 +397,8 @@ Item types administration
               [% itemtype.rentalcharge | $Price %]
             [% END %]
             </td>
+            <td>[% itemtype.defaultreplacecost | $Price %]</td>
+            <td>[% itemtype.processfee | $Price %]</td>
             <td>[% itemtype.checkinmsg | html | html_line_break %]</td>
             <td class="actions">
               <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype |html %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>

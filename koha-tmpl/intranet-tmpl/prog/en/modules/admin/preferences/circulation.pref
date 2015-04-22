@@ -740,6 +740,17 @@ Circulation:
                   any_time_is_placed: "any time a hold is placed."
                   not_always: "only if all items are checked out and the record has at least one hold already."
                   any_time_is_collected: "any time a hold is collected."
+            - pref: useDefaultReplacementCost
+              choices:
+                  yes: use
+                  no: "Don't use"
+            - the default replacement cost defined in item type.
+        -
+            - "Set the text to be recorded in the column 'note', table 'accountlines' when the processing fee (defined in item type) is applied."
+            - pref: ProcessingFeeNote
+              type: textarea
+              class: code
+
     Self Checkout:
         -
             - "Include the following JavaScript on all pages in the web-based self checkout:"
