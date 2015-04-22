@@ -7,6 +7,20 @@
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        $("#authtypes").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+                { "aTargets": [ -1, -2, -3 ], "bSortable": false, "bSearchable": false },
+            ],
+            "sPaginationType": "four_button"
+        }));
+    });
+//]]>
+</script>
 </head>
 
 <body id="admin_authtypes" class="admin">
@@ -96,7 +110,8 @@
 
 <h1>Authority types</h1>
 <p>Define authority types, then authority MARC structure in the same way you define itemtypes and biblio MARC tag structure. Authority values are managed through plugins</p>
-<table>
+<table id="authtypes">
+    <thead>
 	<tr>
 		<th>Code</th>
 		<th>Description</th>
@@ -106,7 +121,8 @@
 		<th>Edit</th>
 		<th>Delete</th>
 	</tr>
-	
+    </thead>
+    <tbody>
 	[% FOREACH loo IN loop %]
 		<tr>
 			<td>[% loo.authtypecode %]</td>
@@ -118,10 +134,8 @@
 			<td><a href="[% loo.script_name %]?op=delete_confirm&amp;authtypecode=[% loo.authtypecode |html %]">Delete</a></td>
 		</tr>
 	[% END %]
+    <tbody>
 </table>
-
-	[% IF ( previous ) %]<p><a href="[% previous %]">&lt;&lt; Previous</a></p>[% END %]
-	[% IF ( next ) %]<p><a href="[% next %]">Next &gt;&gt;</a></p>[% END %]
 
 [% END %]
 </div>
