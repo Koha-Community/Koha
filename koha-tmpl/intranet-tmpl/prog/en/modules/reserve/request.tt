@@ -44,8 +44,7 @@ $(document).ready(function() {
     });
     var my_table = $("#requestspecific").dataTable($.extend(true, {}, dataTablesDefaults, {
         'bPaginate': false,
-        'bInfo': false,
-        "bAutoWidth": false,
+        "sDom": '<"top pager"ilf>t',
     }));
 
     //Override fieldset styling for dataTables search box
