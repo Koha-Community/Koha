@@ -278,6 +278,7 @@ if ($barcode) {
         itemtype         => $biblio->{'itemtype'},
         ccode            => $biblio->{'ccode'},
         itembiblionumber => $biblio->{'biblionumber'},
+        biblionumber     => $biblio->{'biblionumber'},
         borrower         => $borrower,
         additional_materials => $biblio->{'materials'},
     );
