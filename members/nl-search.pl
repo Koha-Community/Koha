@@ -42,6 +42,7 @@ use C4::Context;
 use C4::Output;
 use C4::Members;
 use C4::Members::Attributes qw( SetBorrowerAttributes );
+use C4::Utils::DataTables::Members;
 use Koha::NorwegianPatronDB qw( NLCheckSysprefs NLSearch NLDecodePin NLGetFirstname NLGetSurname NLSync );
 use Koha::Database;
 use Koha::DateUtils;
@@ -77,7 +78,12 @@ if ( $op && $op eq 'search' ) {
     my $identifier = $cgi->param('q');
     if ( $identifier ) {
         # Local search
-        my $local_results = Search( $identifier );
+        my $local_results = C4::Utils::DataTables::Members::search(
+            {
+                searchmember => $identifier,
+                dt_params => { iDisplayLength => -1 },
+            }
+        )->{patrons};
         $template->param( 'local_result' => $local_results );
         # Search NL, unless we got at least one hit and further searching is
         # disabled
