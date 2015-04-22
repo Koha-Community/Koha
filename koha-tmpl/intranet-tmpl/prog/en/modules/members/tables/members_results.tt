@@ -1,3 +1,4 @@
+[% USE To %]
 [% USE AuthorisedValues %]
 {
     "sEcho": [% sEcho %],
@@ -11,9 +12,9 @@
                     "<input type='checkbox' class='selection' name='borrowernumber' value='[% data.borrowernumber %]' />",
                 [% END %]
                 "dt_cardnumber":
-                    "[% data.cardnumber %]",
+                    "[% data.cardnumber | html %]",
                 "dt_name":
-                    "<span style='white-space:nowrap'><a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.borrowernumber %]'>[% INCLUDE 'patron-title.inc' borrowernumber = data.borrowernumber category_type = data.category_type firstname = data.firstname surname = data.surname othernames = data.othernames invert_name = 1%]</a><br />[% IF ( data.streetnumber ) %][% data.streetnumber %] [% END %][% IF ( data.streettype ) %][% AuthorisedValues.GetByCode( 'ROADTYPE', data.streettype ) %] [% END %][% data.address %][% IF ( data.address2 ) %]<br />[% data.address2 %][% END %][% IF ( data.city || data.state || data.zipcode || data.country) %]<br />[% END %][% IF ( data.city ) %][% data.city %][% IF ( data.state ) %],[% END %][% END %][% IF ( data.state ) %] [% data.state %][% END %] [% IF ( data.zipcode ) %] [% data.zipcode %][% END %][% IF ( data.country ) %], [% data.country %][% END %][% IF data.email %]<br/>Email&#58; <a href='mailto&#58;[% data.email %]'>[% data.email %]</a>[% END %]</span>",
+                    "<span style='white-space:nowrap'><a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.borrowernumber %]'>[% INCLUDE 'patron-title.inc' borrowernumber = data.borrowernumber category_type = data.category_type firstname = data.firstname surname = data.surname othernames = data.othernames invert_name = 1 %]</a><br />[% INCLUDE escape_address data = data %]</span>",
                 "dt_category":
                     "[% data.category_description |html %] ([% data.category_type |html %])",
                 "dt_branch":
@@ -34,3 +35,10 @@
         [% END %]
     ]
 }
+[% BLOCK escape_address %]
+[%~ SET address = data.streetnumber _ ' ' %]
+[%~ IF data.streettype %][% address = address _ AuthorisedValues.GetByCode( 'ROADTYPE', data.streettype ) _ ' ' %][% END %]
+[%~ IF data.address %][% address = address _ data.address _ ' ' %][% END %]
+[%~ IF data.address2 %][% address = address _ data.address2 _ ' ' %][% END %]
+[%~ To.json( address ) | html ~%]
+[% END %]

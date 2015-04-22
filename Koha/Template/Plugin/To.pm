@@ -27,7 +27,9 @@ sub json {
     my ( $self, $value ) = @_;
 
     my $json = JSON->new->allow_nonref(1);
-    return $json->encode( $value );
+    $json = $json->encode($value);
+    $json =~ s/^"|"$//g; # Remove quotes around the strings
+    return $json;
 }
 
 1;
