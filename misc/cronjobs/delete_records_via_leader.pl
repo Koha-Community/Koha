@@ -59,7 +59,9 @@ This script has the following parameters :
     -h --help: Prints this message
     -c --confirm: Script will do nothing without this parameter
     -v --verbose: Be verbose
-    -t --test: Test mode, does not delete records
+    -t --test: Test mode, does not delete records.
+               Test mode cannot determine if a record/item will be deleted successfully,
+               it will only tell you what records and items the script will attempt to delete.
     -i --delete-items: Try deleting items before deleting record.
                        Records with items cannot be deleted.
 };
