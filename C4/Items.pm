@@ -2336,7 +2336,8 @@ sub DelItemCheck {
     if ($onloan){
         $error = "book_on_loan" 
     }
-    elsif ( !C4::Context->IsSuperLibrarian()
+    elsif ( defined C4::Context->userenv
+        and !C4::Context->IsSuperLibrarian()
         and C4::Context->preference("IndependentBranches")
         and ( C4::Context->userenv->{branch} ne $item->{'homebranch'} ) )
     {
