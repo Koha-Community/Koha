@@ -121,9 +121,9 @@ $(document).ready(function() {
     <form action="[% script_name %]" method="post">
 	<input type="hidden" name="op" value="delete_confirmed" />
 	<input type="hidden" name="searchfield" value="[% searchfield %]" /><input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
-	<input type="submit" class="approve" value="Yes, Delete this Tag" /></form>
+    <input type="submit" class="approve" value="Yes, delete this tag" /></form>
 	
-	<form action="[% script_name %]" method="get"><input type="hidden" name="frameworkcode" value="[% frameworkcode %]" /><input type="submit" value="No, Do Not Delete" class="deny" /></form></div>
+    <form action="[% script_name %]" method="get"><input type="hidden" name="frameworkcode" value="[% frameworkcode %]" /><input type="submit" value="No, do not delete" class="deny" /></form></div>
 [% END %]
 
 [% IF ( delete_confirmed ) %]
