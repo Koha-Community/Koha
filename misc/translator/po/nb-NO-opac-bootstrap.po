@@ -9,17 +9,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nb-NO-i-opac-t-prog-v-3000000\n"
-"POT-Creation-Date: 2015-03-17 14:55-0300\n"
-"PO-Revision-Date: 2015-03-18 09:36+0100\n"
-"Last-Translator: Magnus Enger <magnus@enger.priv.no>\n"
+"POT-Creation-Date: 2015-04-15 11:04-0300\n"
+"PO-Revision-Date: 2015-04-16 07:22+0000\n"
+"Last-Translator: Magnus <magnus@enger.priv.no>\n"
 "Language-Team: Norwegian Bokmål <>\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
-"X-POOTLE-MTIME: 1425291656.000000\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1429168971.000000\n"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:111
 #, c-format
@@ -32,41 +32,41 @@ msgstr "#record"
 msgid "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
 msgstr "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
 
-#. %1$s:  USE Koha
-#. %2$s:  USE KohaDates
-#. %3$s:  USE Branches
-#. %4$s:  USE AuthorisedValues
-#. %5$s:  SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnDetail )
-#. %6$s:  SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnDetail )
-#. %7$s:  ShowCourseReservesHeader = 0
-#. %8$s:  IF Koha.Preference( 'UseCourseReserves' ) == 1
-#. %9$s:  FOREACH ITEM_RESULT IN itemloop
-#. %10$s:  IF ITEM_RESULT.course_reserves
-#. %11$s:  FOREACH r IN ITEM_RESULT.course_reserves
-#. %12$s:  IF r.course.enabled == 'yes'
-#. %13$s:  ShowCourseReservesHeader = 1
-#. %14$s:  END
-#. %15$s:  END
-#. %16$s:  END
-#. %17$s:  END
-#. %18$s:  END
-#. %19$s:  IF ( using_https )
-#. %20$s:  SET protocol = "https://"
-#. %21$s:  ELSE
-#. %22$s:  SET protocol = "http://"
-#. %23$s:  END
-#. %24$s:  INCLUDE 'doc-head-open.inc'
-#. %25$s:  IF ( LibraryNameTitle )
-#. %26$s:  LibraryNameTitle
-#. %27$s:  ELSE
-#. %28$s:  END
-#. %29$s:  title |html
-#. %30$s:  FOREACH subtitl IN subtitle
-#. %31$s:  subtitl.subfield |html
-#. %32$s:  END
-#. %33$s:  INCLUDE 'doc-head-close.inc'
-#. %34$s:  IF ( bidi )
-#. %35$s:  BLOCK cssinclude
+#. %1$s:  USE Koha 
+#. %2$s:  USE KohaDates 
+#. %3$s:  USE Branches 
+#. %4$s:  USE AuthorisedValues 
+#. %5$s:  SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnDetail ) 
+#. %6$s:  SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnDetail ) 
+#. %7$s:  ShowCourseReservesHeader = 0 
+#. %8$s:  IF Koha.Preference( 'UseCourseReserves' ) == 1 
+#. %9$s:  FOREACH ITEM_RESULT IN itemloop 
+#. %10$s:  IF ITEM_RESULT.course_reserves 
+#. %11$s:  FOREACH r IN ITEM_RESULT.course_reserves 
+#. %12$s:  IF r.course.enabled == 'yes' 
+#. %13$s:  ShowCourseReservesHeader = 1 
+#. %14$s:  END 
+#. %15$s:  END 
+#. %16$s:  END 
+#. %17$s:  END 
+#. %18$s:  END 
+#. %19$s:  IF ( using_https ) 
+#. %20$s:  SET protocol = "https://" 
+#. %21$s:  ELSE 
+#. %22$s:  SET protocol = "http://" 
+#. %23$s:  END 
+#. %24$s:  INCLUDE 'doc-head-open.inc' 
+#. %25$s:  IF ( LibraryNameTitle ) 
+#. %26$s:  LibraryNameTitle 
+#. %27$s:  ELSE 
+#. %28$s:  END 
+#. %29$s:  title |html 
+#. %30$s:  FOREACH subtitl IN subtitle 
+#. %31$s:  subtitl.subfield |html 
+#. %32$s:  END 
+#. %33$s:  INCLUDE 'doc-head-close.inc' 
+#. %34$s:  IF ( bidi ) 
+#. %35$s:  BLOCK cssinclude 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1
 #, c-format
 msgid ""
@@ -76,19 +76,19 @@ msgstr ""
 "%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s%s"
 "%sKoha %s katalog &rsaquo; Detaljer for: %s%s, %s%s %s %s %s"
 
-#. %1$s:  USE Koha
-#. %2$s:  USE KohaDates
-#. %3$s:  USE AuthorisedValues
-#. %4$s:  USE ItemTypes
-#. %5$s:  USE Branches
-#. %6$s:  INCLUDE 'doc-head-open.inc'
-#. %7$s:  IF ( LibraryNameTitle )
-#. %8$s:  LibraryNameTitle
-#. %9$s:  ELSE
-#. %10$s:  END
-#. %11$s:  course.course_name
-#. %12$s:  INCLUDE 'doc-head-close.inc'
-#. %13$s:  BLOCK cssinclude
+#. %1$s:  USE Koha 
+#. %2$s:  USE KohaDates 
+#. %3$s:  USE AuthorisedValues 
+#. %4$s:  USE ItemTypes 
+#. %5$s:  USE Branches 
+#. %6$s:  INCLUDE 'doc-head-open.inc' 
+#. %7$s:  IF ( LibraryNameTitle ) 
+#. %8$s:  LibraryNameTitle 
+#. %9$s:  ELSE 
+#. %10$s:  END 
+#. %11$s:  course.course_name 
+#. %12$s:  INCLUDE 'doc-head-close.inc' 
+#. %13$s:  BLOCK cssinclude 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:1
 #, c-format
 msgid ""
@@ -97,79 +97,79 @@ msgid ""
 msgstr ""
 "%s %s %s %s %s %s %s%s%sKoha %s katalog &rsaquo; Pensumsamlinger for%s %s %s "
 
-#. %1$s:  IF holds_count.defined
-#. %2$s:  ITEM_RESULT.holds_count
-#. %3$s:  END
-#. %4$s:  IF ITEM_RESULT.priority
-#. %5$s:  IF holds_count.defined
-#. %6$s:  ITEM_RESULT.priority
-#. %7$s:  ELSE
-#. %8$s:  ITEM_RESULT.priority
-#. %9$s:  END
-#. %10$s:  END
+#. %1$s:  IF holds_count.defined 
+#. %2$s:  ITEM_RESULT.holds_count 
+#. %3$s:  END 
+#. %4$s:  IF ITEM_RESULT.priority 
+#. %5$s:  IF holds_count.defined 
+#. %6$s:  ITEM_RESULT.priority 
+#. %7$s:  ELSE 
+#. %8$s:  ITEM_RESULT.priority 
+#. %9$s:  END 
+#. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1280
 #, c-format
 msgid "%s %s %s %s %s (priority %s) %s %s %s %s "
 msgstr "%s %s %s %s %s (prioritet %s) %s %s %s %s "
 
-#. %1$s:  END
-#. %2$s:  END
-#. %3$s:  IF ( itemsloo.title )
-#. %4$s:  itemsloo.title |html
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  FOREACH subtitl IN itemsloo.subtitle
-#. %8$s:  subtitl.subfield|html
-#. %9$s:  END
+#. %1$s:  END 
+#. %2$s:  END 
+#. %3$s:  IF ( itemsloo.title ) 
+#. %4$s:  itemsloo.title |html 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  FOREACH subtitl IN itemsloo.subtitle 
+#. %8$s:  subtitl.subfield|html 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:346
 #, c-format
 msgid "%s %s %s %s %s No title %s %s %s %s "
 msgstr "%s %s %s %s %s Mangler tittel %s %s %s %s "
 
-#. %1$s:  END
-#. %2$s:  END
-#. %3$s:  IF ( SEARCH_RESULT.title )
-#. %4$s:  SEARCH_RESULT.title |html
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  FOREACH subtitl IN SEARCH_RESULT.subtitle
-#. %8$s:  subtitl.subfield|html
-#. %9$s:  END
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:302
+#. %1$s:  END 
+#. %2$s:  END 
+#. %3$s:  IF ( SEARCH_RESULT.title ) 
+#. %4$s:  SEARCH_RESULT.title |html 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  FOREACH subtitl IN SEARCH_RESULT.subtitle 
+#. %8$s:  subtitl.subfield|html 
+#. %9$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:304
 #, c-format
 msgid "%s %s %s %s %s No title %s %s , %s %s"
 msgstr "%s %s %s %s %s Mangler tittel %s %s , %s %s"
 
-#. %1$s:  END
-#. %2$s:  END
-#. %3$s:  IF ( casAuthentication )
-#. %4$s:  IF ( shibbolethAuthentication )
-#. %5$s:  IF ( casServerUrl )
+#. %1$s:  END 
+#. %2$s:  END 
+#. %3$s:  IF ( casAuthentication ) 
+#. %4$s:  IF ( shibbolethAuthentication ) 
+#. %5$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
 #, c-format
 msgid "%s %s %s %s %s please "
 msgstr "%s %s %s %s %s vennligst"
 
-#. %1$s:  USE Koha
-#. %2$s:  SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnList )
-#. %3$s:  SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnList )
-#. %4$s:  INCLUDE 'doc-head-open.inc'
-#. %5$s:  IF ( LibraryNameTitle )
-#. %6$s:  LibraryNameTitle
-#. %7$s:  ELSE
-#. %8$s:  END
-#. %9$s:  IF ( searchdesc )
-#. %10$s:  IF ( query_desc )
+#. %1$s:  USE Koha 
+#. %2$s:  SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnList ) 
+#. %3$s:  SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnList ) 
+#. %4$s:  INCLUDE 'doc-head-open.inc' 
+#. %5$s:  IF ( LibraryNameTitle ) 
+#. %6$s:  LibraryNameTitle 
+#. %7$s:  ELSE 
+#. %8$s:  END 
+#. %9$s:  IF ( searchdesc ) 
+#. %10$s:  IF ( query_desc ) 
 #. %11$s:  query_desc | html
-#. %12$s:  END
-#. %13$s:  IF ( limit_desc )
-#. %14$s:  limit_desc | html
-#. %15$s:  END
-#. %16$s:  ELSE
-#. %17$s:  END
-#. %18$s:  INCLUDE 'doc-head-close.inc'
-#. %19$s:  IF ( OpacStarRatings == 'all' || Koha.Preference('Babeltheque') )
-#. %20$s:  BLOCK cssinclude
+#. %12$s:  END 
+#. %13$s:  IF ( limit_desc ) 
+#. %14$s:  limit_desc | html 
+#. %15$s:  END 
+#. %16$s:  ELSE 
+#. %17$s:  END 
+#. %18$s:  INCLUDE 'doc-head-close.inc' 
+#. %19$s:  IF ( OpacStarRatings == 'all' || Koha.Preference('Babeltheque') ) 
+#. %20$s:  BLOCK cssinclude 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:1
 #, c-format
 msgid ""
@@ -181,20 +181,20 @@ msgstr ""
 "%s&nbsp;bed avgrensningene:&nbsp;'%s'%s %s Du oppgav ingen søkekriterier. %s "
 "%s %s %s "
 
-#. %1$s:  USE Koha
-#. %2$s:  USE KohaDates
-#. %3$s:  SET userupdateview = 1
-#. %4$s:  INCLUDE 'doc-head-open.inc'
-#. %5$s:  IF ( LibraryNameTitle )
-#. %6$s:  LibraryNameTitle
-#. %7$s:  ELSE
-#. %8$s:  END
-#. %9$s:  IF action == 'edit'
-#. %10$s:  ELSE
-#. %11$s:  END
-#. %12$s:  INCLUDE 'doc-head-close.inc'
-#. %13$s:  BLOCK cssinclude
-#. %14$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  USE KohaDates 
+#. %3$s:  SET userupdateview = 1 
+#. %4$s:  INCLUDE 'doc-head-open.inc' 
+#. %5$s:  IF ( LibraryNameTitle ) 
+#. %6$s:  LibraryNameTitle 
+#. %7$s:  ELSE 
+#. %8$s:  END 
+#. %9$s:  IF action == 'edit' 
+#. %10$s:  ELSE 
+#. %11$s:  END 
+#. %12$s:  INCLUDE 'doc-head-close.inc' 
+#. %13$s:  BLOCK cssinclude 
+#. %14$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:1
 #, c-format
 msgid ""
@@ -204,36 +204,36 @@ msgstr ""
 "%s %s %s %s %s%s%sKoha %s katalog &rsaquo; %sOppdater personopplysningene "
 "dine%sRegistrer en ny konto%s %s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  USE KohaDates
-#. %3$s:  SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && TagsEnabled && TagsInputOnList )
-#. %4$s:  INCLUDE 'doc-head-open.inc'
-#. %5$s:  IF ( LibraryNameTitle )
-#. %6$s:  LibraryNameTitle
-#. %7$s:  ELSE
-#. %8$s:  END
-#. %9$s:  INCLUDE 'doc-head-close.inc'
-#. %10$s:  BLOCK cssinclude
+#. %1$s:  USE Koha 
+#. %2$s:  USE KohaDates 
+#. %3$s:  SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && TagsEnabled && TagsInputOnList ) 
+#. %4$s:  INCLUDE 'doc-head-open.inc' 
+#. %5$s:  IF ( LibraryNameTitle ) 
+#. %6$s:  LibraryNameTitle 
+#. %7$s:  ELSE 
+#. %8$s:  END 
+#. %9$s:  INCLUDE 'doc-head-close.inc' 
+#. %10$s:  BLOCK cssinclude 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:1
 #, c-format
 msgid "%s %s %s %s %s%s%sKoha online%s catalog &rsaquo; Your cart %s %s"
 msgstr "%s %s %s %s %s%s%sKoha %s katalog &rsaquo; Din kurv %s %s"
 
-#. %1$s:  IF ( itemsloo.ITEM_RESULTS )
-#. %2$s:  FOREACH ITEM_RESULT IN itemsloo.ITEM_RESULTS
-#. %3$s:  ITEM_RESULT.homebranch
-#. %4$s:  IF ( ITEM_RESULT.location_opac )
-#. %5$s:  ITEM_RESULT.location_opac
-#. %6$s:  END
-#. %7$s:  IF ( ITEM_RESULT.itemcallnumber )
-#. %8$s:  ITEM_RESULT.itemcallnumber
-#. %9$s:  IF ( loop.last )
-#. %10$s:  ELSE
-#. %11$s:  END
-#. %12$s:  END
-#. %13$s:  END
-#. %14$s:  ELSE
-#. %15$s:  END
+#. %1$s:  IF ( itemsloo.ITEM_RESULTS ) 
+#. %2$s:  FOREACH ITEM_RESULT IN itemsloo.ITEM_RESULTS 
+#. %3$s:  ITEM_RESULT.homebranch 
+#. %4$s:  IF ( ITEM_RESULT.location_opac ) 
+#. %5$s:  ITEM_RESULT.location_opac 
+#. %6$s:  END 
+#. %7$s:  IF ( ITEM_RESULT.itemcallnumber ) 
+#. %8$s:  ITEM_RESULT.itemcallnumber 
+#. %9$s:  IF ( loop.last ) 
+#. %10$s:  ELSE 
+#. %11$s:  END 
+#. %12$s:  END 
+#. %13$s:  END 
+#. %14$s:  ELSE 
+#. %15$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:387
 #, c-format
 msgid ""
@@ -242,14 +242,14 @@ msgstr ""
 "%s %s %s %s , %s %s %s (%s) %s.%s,%s %s %s %s Denne posten har ingen "
 "eksemplarer. %s "
 
-#. %1$s:  END
-#. %2$s:  ELSE
-#. %3$s:  IF Koha.Preference('OPACAcquisitionDetails') and Koha.Preference('AcqCreateItem') != 'ordering' and acquisition_details.total_quantity > 0
-#. %4$s:  IF acquisition_details.total_quantity == 1
-#. %5$s:  ELSE
-#. %6$s:  acquisition_details.total_quantity
-#. %7$s:  END
-#. %8$s:  ELSE
+#. %1$s:  END 
+#. %2$s:  ELSE 
+#. %3$s:  IF Koha.Preference('OPACAcquisitionDetails') and Koha.Preference('AcqCreateItem') != 'ordering' and acquisition_details.total_quantity > 0 
+#. %4$s:  IF acquisition_details.total_quantity == 1 
+#. %5$s:  ELSE 
+#. %6$s:  acquisition_details.total_quantity 
+#. %7$s:  END 
+#. %8$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:669
 #, c-format
 msgid "%s %s %s %s 1 item is on order. %s %s items are on order. %s %s "
@@ -257,15 +257,15 @@ msgstr ""
 "%s %s %s %s Ett eksemplar er i bestilling. %s %s eksemplarer er i "
 "bestilling. %s %s "
 
-#. %1$s:  ELSIF ( itemloop.size )
-#. %2$s:  INCLUDE items_table items=itemloop tab="holdings"
-#. %3$s:  IF Koha.Preference('OPACAcquisitionDetails') and Koha.Preference('AcqCreateItem') != 'ordering' and acquisition_details.total_quantity > 0
-#. %4$s:  IF acquisition_details.total_quantity == 1
-#. %5$s:  ELSE
-#. %6$s:  acquisition_details.total_quantity
-#. %7$s:  END
-#. %8$s:  END
-#. %9$s:  IF holds_count.defined || priority
+#. %1$s:  ELSIF ( itemloop.size ) 
+#. %2$s:  INCLUDE items_table items=itemloop tab="holdings" 
+#. %3$s:  IF Koha.Preference('OPACAcquisitionDetails') and Koha.Preference('AcqCreateItem') != 'ordering' and acquisition_details.total_quantity > 0 
+#. %4$s:  IF acquisition_details.total_quantity == 1 
+#. %5$s:  ELSE 
+#. %6$s:  acquisition_details.total_quantity 
+#. %7$s:  END 
+#. %8$s:  END 
+#. %9$s:  IF holds_count.defined || priority 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:642
 #, c-format
 msgid "%s %s %s %s 1 item is on order. %s %s items are on order. %s %s %s "
@@ -273,30 +273,30 @@ msgstr ""
 "%s %s %s %s 1 eksemplar er i bestilling. %s %s eksemplarer er i bestilling. "
 "%s %s %s "
 
-#. %1$s:  END
-#. %2$s:  IF ( subscription_LOO.letter )
-#. %3$s:  IF ( loggedinusername )
-#. %4$s:  IF ( subscription_LOO.hasalert )
+#. %1$s:  END 
+#. %2$s:  IF ( subscription_LOO.letter ) 
+#. %3$s:  IF ( loggedinusername ) 
+#. %4$s:  IF ( subscription_LOO.hasalert ) 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:134
 #, c-format
 msgid "%s %s %s %s You have subscribed to email notification on new issues "
 msgstr "%s %s %s %s Du abonnerer på e-postmeldinger for nye utgaver "
 
-#. %1$s:  USE Koha
-#. %2$s:  SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnList )
-#. %3$s:  SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnList )
-#. %4$s:  INCLUDE 'doc-head-open.inc'
-#. %5$s:  IF ( LibraryNameTitle )
-#. %6$s:  LibraryNameTitle
-#. %7$s:  ELSE
-#. %8$s:  END
-#. %9$s:  IF ( viewshelf )
-#. %10$s:  shelfname |html
-#. %11$s:  ELSE
-#. %12$s:  END
-#. %13$s:  INCLUDE 'doc-head-close.inc'
-#. %14$s:  BLOCK cssinclude
-#. %15$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnList ) 
+#. %3$s:  SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnList ) 
+#. %4$s:  INCLUDE 'doc-head-open.inc' 
+#. %5$s:  IF ( LibraryNameTitle ) 
+#. %6$s:  LibraryNameTitle 
+#. %7$s:  ELSE 
+#. %8$s:  END 
+#. %9$s:  IF ( viewshelf ) 
+#. %10$s:  shelfname |html 
+#. %11$s:  ELSE 
+#. %12$s:  END 
+#. %13$s:  INCLUDE 'doc-head-close.inc' 
+#. %14$s:  BLOCK cssinclude 
+#. %15$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:1
 #, c-format
 msgid ""
@@ -306,152 +306,152 @@ msgstr ""
 "%s %s %s %s%s%s%sKoha %s katalog &rsaquo; %sInnhold i %s%sDine lister %s%s %s"
 "%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  USE AuthorisedValues
-#. %3$s:  INCLUDE 'doc-head-open.inc'
-#. %4$s:  IF ( LibraryNameTitle )
-#. %5$s:  LibraryNameTitle
-#. %6$s:  ELSE
-#. %7$s:  END
-#. %8$s:  INCLUDE 'doc-head-close.inc'
-#. %9$s:  BLOCK cssinclude
+#. %1$s:  USE Koha 
+#. %2$s:  USE AuthorisedValues 
+#. %3$s:  INCLUDE 'doc-head-open.inc' 
+#. %4$s:  IF ( LibraryNameTitle ) 
+#. %5$s:  LibraryNameTitle 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  INCLUDE 'doc-head-close.inc' 
+#. %9$s:  BLOCK cssinclude 
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:1
 #, c-format
 msgid "%s %s %s %s%s%sKoha online%s catalog &rsaquo; Courses %s %s "
 msgstr "%s %s %s %s%s%sKoha %s katalog &rsaquo; Emner %s %s "
 
-#. %1$s:  USE Koha
-#. %2$s:  USE KohaDates
-#. %3$s:  INCLUDE 'doc-head-open.inc'
-#. %4$s:  IF ( LibraryNameTitle )
-#. %5$s:  LibraryNameTitle
-#. %6$s:  ELSE
-#. %7$s:  END
-#. %8$s:  INCLUDE 'doc-head-close.inc'
-#. %9$s:  BLOCK cssinclude
-#. %10$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  USE KohaDates 
+#. %3$s:  INCLUDE 'doc-head-open.inc' 
+#. %4$s:  IF ( LibraryNameTitle ) 
+#. %5$s:  LibraryNameTitle 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  INCLUDE 'doc-head-close.inc' 
+#. %9$s:  BLOCK cssinclude 
+#. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:1
 #, c-format
 msgid "%s %s %s %s%s%sKoha online%s catalog &rsaquo; Placing a hold %s %s%s "
 msgstr "%s %s %s %s%s%sKoha %s katalog &rsaquo; Reserverer %s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  USE KohaDates
-#. %3$s:  INCLUDE 'doc-head-open.inc'
-#. %4$s:  IF ( LibraryNameTitle )
-#. %5$s:  LibraryNameTitle
-#. %6$s:  ELSE
-#. %7$s:  END
-#. %8$s:  INCLUDE 'doc-head-close.inc'
-#. %9$s:  BLOCK cssinclude
+#. %1$s:  USE Koha 
+#. %2$s:  USE KohaDates 
+#. %3$s:  INCLUDE 'doc-head-open.inc' 
+#. %4$s:  IF ( LibraryNameTitle ) 
+#. %5$s:  LibraryNameTitle 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  INCLUDE 'doc-head-close.inc' 
+#. %9$s:  BLOCK cssinclude 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:1
 #, c-format
 msgid ""
 "%s %s %s %s%s%sKoha online%s catalog &rsaquo; Your checkout history %s %s "
 msgstr "%s %s %s %s%s%sKoha %s katalog &rsaquo; Din lånehistorikk %s %s "
 
-#. %1$s:  USE Koha
-#. %2$s:  USE KohaDates
-#. %3$s:  INCLUDE 'doc-head-open.inc'
-#. %4$s:  IF ( LibraryNameTitle )
-#. %5$s:  LibraryNameTitle
-#. %6$s:  ELSE
-#. %7$s:  END
-#. %8$s:  INCLUDE 'doc-head-close.inc'
-#. %9$s:  BLOCK cssinclude
-#. %10$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  USE KohaDates 
+#. %3$s:  INCLUDE 'doc-head-open.inc' 
+#. %4$s:  IF ( LibraryNameTitle ) 
+#. %5$s:  LibraryNameTitle 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  INCLUDE 'doc-head-close.inc' 
+#. %9$s:  BLOCK cssinclude 
+#. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:1
 #, c-format
 msgid ""
 "%s %s %s %s%s%sKoha online%s catalog &rsaquo; Your library home %s %s%s "
 msgstr "%s %s %s %s%s%sKoha %s katalog &rsaquo; Ditt hjemmebibliotek %s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  USE KohaDates
-#. %3$s:  INCLUDE 'doc-head-open.inc'
-#. %4$s:  IF ( LibraryNameTitle )
-#. %5$s:  LibraryNameTitle
-#. %6$s:  ELSE
-#. %7$s:  END
-#. %8$s:  INCLUDE 'doc-head-close.inc'
-#. %9$s:  BLOCK cssinclude
-#. %10$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  USE KohaDates 
+#. %3$s:  INCLUDE 'doc-head-open.inc' 
+#. %4$s:  IF ( LibraryNameTitle ) 
+#. %5$s:  LibraryNameTitle 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  INCLUDE 'doc-head-close.inc' 
+#. %9$s:  BLOCK cssinclude 
+#. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:1
 #, c-format
 msgid ""
 "%s %s %s %s%s%sKoha online%s catalog &rsaquo; Your search history %s %s%s "
 msgstr "%s %s %s %s%s%sKoha %s katalog &rsaquo; Din søkehistorikk %s %s%s "
 
-#. %1$s:  END
-#. %2$s:  ELSE
-#. %3$s:  IF ( RESERVE.intransit )
+#. %1$s:  END 
+#. %2$s:  ELSE 
+#. %3$s:  IF ( RESERVE.intransit ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:569
 #, c-format
 msgid "%s %s %s Item in transit from "
 msgstr "%s %s %s Eksemplaret er under vegs fra "
 
-#. %1$s:  IF ( RESERVE.wait )
-#. %2$s:  IF ( RESERVE.atdestination )
-#. %3$s:  IF ( RESERVE.found )
+#. %1$s:  IF ( RESERVE.wait ) 
+#. %2$s:  IF ( RESERVE.atdestination ) 
+#. %3$s:  IF ( RESERVE.found ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:559
 #, c-format
 msgid "%s %s %s Item waiting at "
 msgstr "%s %s %s Eksemplaret venter ved "
 
-#. %1$s:  IF ( LibraryNameTitle )
-#. %2$s:  LibraryNameTitle
-#. %3$s:  ELSE
-#. %4$s:  END
+#. %1$s:  IF ( LibraryNameTitle ) 
+#. %2$s:  LibraryNameTitle 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:8
 #, c-format
 msgid "%s %s %s Koha online %s "
 msgstr "%s %s %s Koha %s "
 
-#. %1$s:  IF (otheritemloop.size)
-#. %2$s:  INCLUDE items_table items=otheritemloop tab="otherholdings"
-#. %3$s:  ELSE
-#. %4$s:  END
-#. %5$s:  INCLUDE shelfbrowser tab='otherholdings'
+#. %1$s:  IF (otheritemloop.size) 
+#. %2$s:  INCLUDE items_table items=otheritemloop tab="otherholdings" 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  INCLUDE shelfbrowser tab='otherholdings' 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:689
 #, c-format
 msgid "%s %s %s No other items. %s %s "
 msgstr "%s %s %s Ingen andre eksemplarer. %s %s "
 
-#. %1$s:  END
-#. %2$s:  END # / FOREACH ERROR
-#. %3$s:  IF ( WINDOW_CLOSE )
-#. %4$s:  END
+#. %1$s:  END 
+#. %2$s:  END # / FOREACH ERROR 
+#. %3$s:  IF ( WINDOW_CLOSE ) 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:30
 #, c-format
 msgid "%s %s %s Note: this window will close automatically in 5 seconds. %s "
 msgstr "%s %s %s NB: Dette vinduet vil bli lukket i løpet av 5 sekunder. %s "
 
-#. %1$s:  USE Koha
-#. %2$s:  USE KohaDates
-#. %3$s:  INCLUDE 'doc-head-open.inc'
-#. %4$s:  IF ( LibraryNameTitle )
-#. %5$s:  LibraryNameTitle
-#. %6$s:  ELSE
-#. %7$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  USE KohaDates 
+#. %3$s:  INCLUDE 'doc-head-open.inc' 
+#. %4$s:  IF ( LibraryNameTitle ) 
+#. %5$s:  LibraryNameTitle 
+#. %6$s:  ELSE 
+#. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:1
 #, c-format
 msgid "%s %s %s%s%s%sKoha %s &rsaquo; Self checkout "
 msgstr "%s %s %s%s%s%sKoha %s &rsaquo; Selvbetjent utlån "
 
-#. %1$s:  USE Koha
-#. %2$s:  USE AuthorisedValues
-#. %3$s:  INCLUDE 'doc-head-open.inc'
-#. %4$s:  IF ( LibraryNameTitle )
-#. %5$s:  LibraryNameTitle
-#. %6$s:  ELSE
-#. %7$s:  END
-#. %8$s:  IF ( op_add )
-#. %9$s:  END
-#. %10$s:  IF ( op_else )
-#. %11$s:  END
-#. %12$s:  INCLUDE 'doc-head-close.inc'
-#. %13$s:  BLOCK cssinclude
-#. %14$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  USE AuthorisedValues 
+#. %3$s:  INCLUDE 'doc-head-open.inc' 
+#. %4$s:  IF ( LibraryNameTitle ) 
+#. %5$s:  LibraryNameTitle 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  IF ( op_add ) 
+#. %9$s:  END 
+#. %10$s:  IF ( op_else ) 
+#. %11$s:  END 
+#. %12$s:  INCLUDE 'doc-head-close.inc' 
+#. %13$s:  BLOCK cssinclude 
+#. %14$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:1
 #, c-format
 msgid ""
@@ -461,20 +461,20 @@ msgstr ""
 "%s %s %s%s%s%sKoha %s katalog &rsaquo; %sLegg inn et nytt innkjøpsforslag%s "
 "%sInnkjøpsforslag%s %s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  PROCESS 'opac-authorities.inc'
-#. %3$s:  INCLUDE 'doc-head-open.inc'
-#. %4$s:  IF ( LibraryNameTitle )
-#. %5$s:  LibraryNameTitle
-#. %6$s:  ELSE
-#. %7$s:  END
-#. %8$s:  summary.mainentry
-#. %9$s:  IF authtypetext
-#. %10$s:  authtypetext
-#. %11$s:  END
-#. %12$s:  INCLUDE 'doc-head-close.inc'
-#. %13$s:  BLOCK cssinclude
-#. %14$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  PROCESS 'opac-authorities.inc' 
+#. %3$s:  INCLUDE 'doc-head-open.inc' 
+#. %4$s:  IF ( LibraryNameTitle ) 
+#. %5$s:  LibraryNameTitle 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  summary.mainentry 
+#. %9$s:  IF authtypetext 
+#. %10$s:  authtypetext 
+#. %11$s:  END 
+#. %12$s:  INCLUDE 'doc-head-close.inc' 
+#. %13$s:  BLOCK cssinclude 
+#. %14$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:1
 #, c-format
 msgid ""
@@ -484,48 +484,48 @@ msgstr ""
 "%s %s %s%s%s%sKoha %s katalog &rsaquo; Autoritetssøk &rsaquo; %s%s (%s)%s %s "
 "%s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  IF ( fullpage )
-#. %3$s:  INCLUDE 'doc-head-open.inc'
-#. %4$s:  IF ( LibraryNameTitle )
-#. %5$s:  LibraryNameTitle
-#. %6$s:  ELSE
-#. %7$s:  END
-#. %8$s:  shelfname
-#. %9$s:  INCLUDE 'doc-head-close.inc'
-#. %10$s:  BLOCK cssinclude
-#. %11$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  IF ( fullpage ) 
+#. %3$s:  INCLUDE 'doc-head-open.inc' 
+#. %4$s:  IF ( LibraryNameTitle ) 
+#. %5$s:  LibraryNameTitle 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  shelfname 
+#. %9$s:  INCLUDE 'doc-head-close.inc' 
+#. %10$s:  BLOCK cssinclude 
+#. %11$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:1
 #, c-format
 msgid "%s %s %s%s%s%sKoha online%s catalog &rsaquo; Download list %s%s %s%s "
 msgstr "%s %s %s%s%s%sKoha %s katalog &rsaquo; Last ned liste %s%s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  PROCESS 'opac-authorities.inc'
-#. %3$s:  INCLUDE 'doc-head-open.inc'
-#. %4$s:  IF ( LibraryNameTitle )
-#. %5$s:  LibraryNameTitle
-#. %6$s:  ELSE
-#. %7$s:  END
-#. %8$s:  authtypetext
-#. %9$s:  INCLUDE 'doc-head-close.inc'
-#. %10$s:  BLOCK cssinclude
-#. %11$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  PROCESS 'opac-authorities.inc' 
+#. %3$s:  INCLUDE 'doc-head-open.inc' 
+#. %4$s:  IF ( LibraryNameTitle ) 
+#. %5$s:  LibraryNameTitle 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  authtypetext 
+#. %9$s:  INCLUDE 'doc-head-close.inc' 
+#. %10$s:  BLOCK cssinclude 
+#. %11$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:1
 #, c-format
 msgid "%s %s %s%s%s%sKoha online%s catalog &rsaquo; Entry %s %s %s%s "
 msgstr "%s %s %s%s%s%sKoha %s katalog &rsaquo; Innførsel %s %s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  USE KohaDates
-#. %3$s:  INCLUDE 'doc-head-open.inc'
-#. %4$s:  IF ( LibraryNameTitle )
-#. %5$s:  LibraryNameTitle
-#. %6$s:  ELSE
-#. %7$s:  END
-#. %8$s:  bibliotitle
-#. %9$s:  INCLUDE 'doc-head-close.inc'
-#. %10$s:  BLOCK cssinclude
+#. %1$s:  USE Koha 
+#. %2$s:  USE KohaDates 
+#. %3$s:  INCLUDE 'doc-head-open.inc' 
+#. %4$s:  IF ( LibraryNameTitle ) 
+#. %5$s:  LibraryNameTitle 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  bibliotitle 
+#. %9$s:  INCLUDE 'doc-head-close.inc' 
+#. %10$s:  BLOCK cssinclude 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:1
 #, c-format
 msgid ""
@@ -535,45 +535,45 @@ msgstr ""
 "%s %s %s%s%s%sKoha %s katalog &rsaquo; Full abonnementshistorikk for %s %s "
 "%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  USE KohaDates
-#. %3$s:  INCLUDE 'doc-head-open.inc'
-#. %4$s:  IF ( LibraryNameTitle )
-#. %5$s:  LibraryNameTitle
-#. %6$s:  ELSE
-#. %7$s:  END
-#. %8$s:  INCLUDE 'doc-head-close.inc'
-#. %9$s:  BLOCK cssinclude
-#. %10$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  USE KohaDates 
+#. %3$s:  INCLUDE 'doc-head-open.inc' 
+#. %4$s:  IF ( LibraryNameTitle ) 
+#. %5$s:  LibraryNameTitle 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  INCLUDE 'doc-head-close.inc' 
+#. %9$s:  BLOCK cssinclude 
+#. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:1
 #, c-format
 msgid "%s %s %s%s%s%sKoha online%s catalog &rsaquo; Recent comments %s %s%s "
 msgstr "%s %s %s%s%s%sKoha %s katalog &rsaquo; De nyeste kommentarene %s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  USE KohaDates
-#. %3$s:  INCLUDE 'doc-head-open.inc'
-#. %4$s:  IF ( LibraryNameTitle )
-#. %5$s:  LibraryNameTitle
-#. %6$s:  ELSE
-#. %7$s:  END
-#. %8$s:  INCLUDE 'doc-head-close.inc'
-#. %9$s:  BLOCK cssinclude
+#. %1$s:  USE Koha 
+#. %2$s:  USE KohaDates 
+#. %3$s:  INCLUDE 'doc-head-open.inc' 
+#. %4$s:  IF ( LibraryNameTitle ) 
+#. %5$s:  LibraryNameTitle 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  INCLUDE 'doc-head-close.inc' 
+#. %9$s:  BLOCK cssinclude 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:1
 #, c-format
 msgid "%s %s %s%s%s%sKoha online%s catalog &rsaquo; Tags %s %s "
 msgstr "%s %s %s%s%s%sKoha %s katalog &rsaquo; Tagger %s %s "
 
-#. %1$s:  USE Koha
-#. %2$s:  USE KohaDates
-#. %3$s:  INCLUDE 'doc-head-open.inc'
-#. %4$s:  IF ( LibraryNameTitle )
-#. %5$s:  LibraryNameTitle
-#. %6$s:  ELSE
-#. %7$s:  END
-#. %8$s:  INCLUDE 'doc-head-close.inc'
-#. %9$s:  BLOCK cssinclude
-#. %10$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  USE KohaDates 
+#. %3$s:  INCLUDE 'doc-head-open.inc' 
+#. %4$s:  IF ( LibraryNameTitle ) 
+#. %5$s:  LibraryNameTitle 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  INCLUDE 'doc-head-close.inc' 
+#. %9$s:  BLOCK cssinclude 
+#. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:1
 #, c-format
 msgid ""
@@ -581,15 +581,15 @@ msgid ""
 msgstr "%s %s %s%s%s%sKoha %s katalog &rsaquo; Dine gebyrer %s %s%s "
 
 #. For the first occurrence,
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  INCLUDE 'doc-head-close.inc'
-#. %8$s:  BLOCK cssinclude
-#. %9$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  INCLUDE 'doc-head-close.inc' 
+#. %8$s:  BLOCK cssinclude 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-invalid.tt:1
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:1
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:1
@@ -597,29 +597,29 @@ msgstr "%s %s %s%s%s%sKoha %s katalog &rsaquo; Dine gebyrer %s %s%s "
 msgid "%s %s %s%s%sKoha online%s catalog %s %s%s "
 msgstr "%s %s %s%s%sKoha %s katalog %s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  IF ( GetAvailability )
-#. %8$s:  ELSIF ( GetRecords )
-#. %9$s:  ELSIF ( GetAuthorityRecords )
-#. %10$s:  ELSIF ( LookupPatron )
-#. %11$s:  ELSIF ( AuthenticatePatron )
-#. %12$s:  ELSIF ( GetPatronInfo )
-#. %13$s:  ELSIF ( GetPatronStatus )
-#. %14$s:  ELSIF ( GetServices )
-#. %15$s:  ELSIF ( RenewLoan )
-#. %16$s:  ELSIF ( HoldTitle )
-#. %17$s:  ELSIF ( HoldItem )
-#. %18$s:  ELSIF ( CancelHold )
-#. %19$s:  ELSE
-#. %20$s:  END
-#. %21$s:  INCLUDE 'doc-head-close.inc'
-#. %22$s:  BLOCK cssinclude
-#. %23$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  IF ( GetAvailability ) 
+#. %8$s:  ELSIF ( GetRecords ) 
+#. %9$s:  ELSIF ( GetAuthorityRecords ) 
+#. %10$s:  ELSIF ( LookupPatron ) 
+#. %11$s:  ELSIF ( AuthenticatePatron ) 
+#. %12$s:  ELSIF ( GetPatronInfo ) 
+#. %13$s:  ELSIF ( GetPatronStatus ) 
+#. %14$s:  ELSIF ( GetServices ) 
+#. %15$s:  ELSIF ( RenewLoan ) 
+#. %16$s:  ELSIF ( HoldTitle ) 
+#. %17$s:  ELSIF ( HoldItem ) 
+#. %18$s:  ELSIF ( CancelHold ) 
+#. %19$s:  ELSE 
+#. %20$s:  END 
+#. %21$s:  INCLUDE 'doc-head-close.inc' 
+#. %22$s:  BLOCK cssinclude 
+#. %23$s:  END 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:1
 #, c-format
 msgid ""
@@ -638,18 +638,18 @@ msgstr ""
 "GetServices %s ILS-DI &rsaquo; RenewLoan %s ILS-DI &rsaquo; HoldTitle %s ILS-"
 "DI &rsaquo; HoldItem %s ILS-DI &rsaquo; CancelHold %s ILS-DI %s %s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  IF Koha.Preference( 'opacuserlogin' ) == 1
-#. %8$s:  ELSE
-#. %9$s:  END
-#. %10$s:  INCLUDE 'doc-head-close.inc'
-#. %11$s:  BLOCK cssinclude
-#. %12$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#. %10$s:  INCLUDE 'doc-head-close.inc' 
+#. %11$s:  BLOCK cssinclude 
+#. %12$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:1
 #, c-format
 msgid ""
@@ -659,24 +659,24 @@ msgstr ""
 "%s %s %s%s%sKoha %s katalog &rsaquo; %s Logg inn med din konto %s Innlogging "
 "er ikke aktivert %s %s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  IF ( searchdesc )
-#. %8$s:  IF ( query_desc )
-#. %9$s:  query_desc | html
-#. %10$s:  END
-#. %11$s:  IF ( limit_desc )
-#. %12$s:  limit_desc | html
-#. %13$s:  END
-#. %14$s:  ELSE
-#. %15$s:  END
-#. %16$s:  INCLUDE 'doc-head-close.inc'
-#. %17$s:  BLOCK cssinclude
-#. %18$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  IF ( searchdesc ) 
+#. %8$s:  IF ( query_desc ) 
+#. %9$s:  query_desc | html 
+#. %10$s:  END 
+#. %11$s:  IF ( limit_desc ) 
+#. %12$s:  limit_desc | html 
+#. %13$s:  END 
+#. %14$s:  ELSE 
+#. %15$s:  END 
+#. %16$s:  INCLUDE 'doc-head-close.inc' 
+#. %17$s:  BLOCK cssinclude 
+#. %18$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:1
 #, c-format
 msgid ""
@@ -688,58 +688,58 @@ msgstr ""
 "%s&nbsp;med avgrensningene:&nbsp;'%s'%s %s Du oppgav ikke noen "
 "søkekriterier. %s %s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  INCLUDE 'doc-head-close.inc'
-#. %8$s:  BLOCK cssinclude
-#. %9$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  INCLUDE 'doc-head-close.inc' 
+#. %8$s:  BLOCK cssinclude 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:1
 #, c-format
 msgid "%s %s %s%s%sKoha online%s catalog &rsaquo; Advanced search %s %s%s "
 msgstr "%s %s %s%s%sKoha %s katalog &rsaquo; Avansert søk %s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  biblio.title |html
-#. %8$s:  INCLUDE 'doc-head-close.inc'
-#. %9$s:  BLOCK cssinclude
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  biblio.title |html 
+#. %8$s:  INCLUDE 'doc-head-close.inc' 
+#. %9$s:  BLOCK cssinclude 
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:1
 #, c-format
 msgid "%s %s %s%s%sKoha online%s catalog &rsaquo; Images for: %s %s %s "
 msgstr "%s %s %s%s%sKoha %s katalog &rsaquo; Bilder for: %s %s %s "
 
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  q | html
-#. %8$s:  INCLUDE 'doc-head-close.inc'
-#. %9$s:  BLOCK cssinclude
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  q | html 
+#. %8$s:  INCLUDE 'doc-head-close.inc' 
+#. %9$s:  BLOCK cssinclude 
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:1
 #, c-format
 msgid ""
 "%s %s %s%s%sKoha online%s catalog &rsaquo; OverDrive search for '%s' %s %s "
 msgstr "%s %s %s%s%sKoha %s katalog &rsaquo; OverDrive søk etter '%s' %s %s "
 
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  INCLUDE 'doc-head-close.inc'
-#. %8$s:  BLOCK cssinclude
-#. %9$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  INCLUDE 'doc-head-close.inc' 
+#. %8$s:  BLOCK cssinclude 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-email-sent.tt:1
 #, c-format
 msgid ""
@@ -749,70 +749,70 @@ msgstr ""
 "%s %s %s%s%sKoha %s katalog &rsaquo; Vennligst bekreft registreringen %s %s"
 "%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  INCLUDE 'doc-head-close.inc'
-#. %8$s:  BLOCK cssinclude
-#. %9$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  INCLUDE 'doc-head-close.inc' 
+#. %8$s:  BLOCK cssinclude 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:1
 #, c-format
 msgid "%s %s %s%s%sKoha online%s catalog &rsaquo; Subject cloud %s %s%s "
 msgstr "%s %s %s%s%sKoha %s katalog &rsaquo; Emnesky %s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  INCLUDE 'doc-head-close.inc'
-#. %8$s:  BLOCK cssinclude
-#. %9$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  INCLUDE 'doc-head-close.inc' 
+#. %8$s:  BLOCK cssinclude 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:1
 #, c-format
 msgid "%s %s %s%s%sKoha online%s catalog &rsaquo; Updates submitted %s %s%s "
 msgstr ""
 "%s %s %s%s%sKoha %s katalog &rsaquo; Oppdateringer er sendt inn %s %s%s "
 
-#. %1$s:  END
-#. %2$s:  END
-#. %3$s:  IF ( review.title )
-#. %4$s:  review.title
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  FOREACH subtitl IN review.subtitle
-#. %8$s:  subtitl.subfield |html
-#. %9$s:  END
+#. %1$s:  END 
+#. %2$s:  END 
+#. %3$s:  IF ( review.title ) 
+#. %4$s:  review.title 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  FOREACH subtitl IN review.subtitle 
+#. %8$s:  subtitl.subfield |html 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:43
 #, c-format
 msgid "%s %s %s%s%sNo title%s %s %s%s "
 msgstr "%s %s %s%s%sMangler tittel%s %s %s%s "
 
-#. %1$s:  IF (render=='standalone')
-#. %2$s:  USE Koha
-#. %3$s:  INCLUDE 'doc-head-open.inc'
-#. %4$s:  INCLUDE 'doc-head-close.inc'
-#. %5$s:  BLOCK cssinclude
-#. %6$s:  END
+#. %1$s:  IF (render=='standalone') 
+#. %2$s:  USE Koha 
+#. %3$s:  INCLUDE 'doc-head-open.inc' 
+#. %4$s:  INCLUDE 'doc-head-close.inc' 
+#. %5$s:  BLOCK cssinclude 
+#. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/svc/suggestion.tt:1
 #, c-format
 msgid "%s %s %sSearch suggestions %s %s%s "
 msgstr "%s %s %sSøk i forslag %s %s%s "
 
-#. %1$s:  END
-#. %2$s:  ELSE
+#. %1$s:  END 
+#. %2$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:566
 #, c-format
 msgid "%s %s Item in transit to "
 msgstr "%s %s Eksemplaret er på vei til "
 
-#. %1$s:  END
-#. %2$s:  ELSE
-#. %3$s:  END
+#. %1$s:  END 
+#. %2$s:  ELSE 
+#. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:65
 #, c-format
 msgid "%s %s No results found. %s "
@@ -832,10 +832,10 @@ msgstr ""
 "%s %s Søk også etter mer spesifikke emner %s Søk også etter mer generelle "
 "emner %s Søk også etter relaterte emner %s "
 
-#. %1$s:  END
-#. %2$s:  ELSE
-#. %3$s:  END
-#. %4$s:  END
+#. %1$s:  END 
+#. %2$s:  ELSE 
+#. %3$s:  END 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:145
 #, c-format
 msgid ""
@@ -845,12 +845,12 @@ msgstr ""
 "%s %s Du må logge deg inn for å abonnere på epostvarsling om nye utgaver %s "
 "%s "
 
-#. %1$s:  USE AuthorisedValues
-#. %2$s:  SET itemavailable = 1
-#. %3$s:  IF ( item.itemlost )
-#. %4$s:  SET itemavailable = 0
-#. %5$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 )
-#. %6$s:  IF ( av_lib_include )
+#. %1$s:  USE AuthorisedValues 
+#. %2$s:  SET itemavailable = 1 
+#. %3$s:  IF ( item.itemlost ) 
+#. %4$s:  SET itemavailable = 0 
+#. %5$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
+#. %6$s:  IF ( av_lib_include ) 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:1
 #, c-format
 msgid ""
@@ -864,82 +864,82 @@ msgstr ""
 "reserves pages, which do not use an API to fetch items that populates item."
 "datedue. -%%] %s %s %s %s "
 
-#. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc
-#. %2$s:  IF ( GROUP_RESULT.author )
+#. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
+#. %2$s:  IF ( GROUP_RESULT.author ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:184
 #, c-format
 msgid "%s %s by "
 msgstr "%s %s av "
 
-#. %1$s:  ELSE
-#. %2$s:  IF ( review.borrowernumber && ShowReviewer != "none" )
-#. %3$s:  SWITCH ShowReviewer
-#. %4$s:  CASE 'full'
-#. %5$s:  review.borrtitle
-#. %6$s:  review.firstname
-#. %7$s:  review.surname
-#. %8$s:  CASE 'first'
-#. %9$s:  review.firstname
-#. %10$s:  CASE 'surname'
-#. %11$s:  review.surname
-#. %12$s:  CASE 'firstandinitial'
-#. %13$s:  review.firstname
-#. %14$s:  review.surname|truncate(2,'.')
-#. %15$s:  CASE 'username'
-#. %16$s:  review.userid
-#. %17$s:  END
-#. %18$s:  END
-#. %19$s:  END
+#. %1$s:  ELSE 
+#. %2$s:  IF ( review.borrowernumber && ShowReviewer != "none" ) 
+#. %3$s:  SWITCH ShowReviewer 
+#. %4$s:  CASE 'full' 
+#. %5$s:  review.borrtitle 
+#. %6$s:  review.firstname 
+#. %7$s:  review.surname 
+#. %8$s:  CASE 'first' 
+#. %9$s:  review.firstname 
+#. %10$s:  CASE 'surname' 
+#. %11$s:  review.surname 
+#. %12$s:  CASE 'firstandinitial' 
+#. %13$s:  review.firstname 
+#. %14$s:  review.surname|truncate(2,'.') 
+#. %15$s:  CASE 'username' 
+#. %16$s:  review.userid 
+#. %17$s:  END 
+#. %18$s:  END 
+#. %19$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:88
 #, c-format
 msgid "%s %s by %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
 msgstr "%s %s av %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
 
 #. For the first occurrence,
-#. %1$s:  END
-#. %2$s:  IF ( casServersLoop )
+#. %1$s:  END 
+#. %2$s:  IF ( casServersLoop ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:98
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:119
 #, c-format
 msgid "%s %s please choose against which one you would like to authenticate: "
 msgstr "%s %s Velg hvilken du ønsker å autentisere mot: "
 
-#. %1$s:  firstname
-#. %2$s:  surname
+#. %1$s:  firstname 
+#. %2$s:  surname 
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:14
 #, c-format
 msgid "%s %s sent you a cart from our online catalog."
 msgstr "%s %s sendte deg en kurv fra vår publikumskatalog."
 
-#. %1$s:  firstname
-#. %2$s:  surname
-#. %3$s:  shelfname
+#. %1$s:  firstname 
+#. %2$s:  surname 
+#. %3$s:  shelfname 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:13
 #, c-format
 msgid "%s %s sent you from our online catalog, the virtual shelf called : %s."
 msgstr "%s %s sendte deg fra vår publikumskatalog, en liste med tittelen : %s."
 
-#. %1$s:  added_count
-#. %2$s:  IF ( added_count ==1 )
-#. %3$s:  ELSE
-#. %4$s:  END
+#. %1$s:  added_count 
+#. %2$s:  IF ( added_count ==1 ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:107
 #, c-format
 msgid "%s %s tag%stags%s successfully added."
 msgstr "%s %s taggen%stagger%s lagt til."
 
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  IF ( LibraryNameTitle )
-#. %5$s:  LibraryNameTitle
-#. %6$s:  ELSE
-#. %7$s:  END
-#. %8$s:  ELSE
-#. %9$s:  END
-#. %10$s:  INCLUDE 'doc-head-close.inc'
-#. %11$s:  BLOCK cssinclude
-#. %12$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  IF ( LibraryNameTitle ) 
+#. %5$s:  LibraryNameTitle 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  ELSE 
+#. %9$s:  END 
+#. %10$s:  INCLUDE 'doc-head-close.inc' 
+#. %11$s:  BLOCK cssinclude 
+#. %12$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:1
 #, c-format
 msgid ""
@@ -949,29 +949,29 @@ msgstr ""
 "%s %s%s%s%s%sKoha %s%sKoha %s katalog &rsaquo; Dine innstillinger for "
 "meldinger %s %s%s "
 
-#. %1$s:  USE KohaDates
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
+#. %1$s:  USE KohaDates 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:1
 #, c-format
 msgid "%s %s%s%s%sKoha %s &rsaquo; Self checkout help"
 msgstr "%s %s%s%s%sKoha %s &rsaquo; Hjelp til selvbetjent utlån"
 
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  IF ( typeissue )
-#. %8$s:  ELSIF ( typeissuecancel )
-#. %9$s:  END
-#. %10$s:  INCLUDE 'doc-head-close.inc'
-#. %11$s:  BLOCK cssinclude
-#. %12$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  IF ( typeissue ) 
+#. %8$s:  ELSIF ( typeissuecancel ) 
+#. %9$s:  END 
+#. %10$s:  INCLUDE 'doc-head-close.inc' 
+#. %11$s:  BLOCK cssinclude 
+#. %12$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:1
 #, c-format
 msgid ""
@@ -981,87 +981,87 @@ msgstr ""
 "%s %s%s%s%sKoha %s katalog &rsaquo; %sMeld deg på abonnementsvarsel %s Melde "
 "deg av abonnementsvarsel %s %s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  INCLUDE 'doc-head-close.inc'
-#. %8$s:  BLOCK cssinclude
-#. %9$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  INCLUDE 'doc-head-close.inc' 
+#. %8$s:  BLOCK cssinclude 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:1
 #, c-format
 msgid "%s %s%s%s%sKoha online%s catalog &rsaquo; Authority search %s %s%s "
 msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; Autoritetssøk %s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  INCLUDE 'doc-head-close.inc'
-#. %8$s:  BLOCK cssinclude
-#. %9$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  INCLUDE 'doc-head-close.inc' 
+#. %8$s:  BLOCK cssinclude 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-browser.tt:1
 #, c-format
 msgid "%s %s%s%s%sKoha online%s catalog &rsaquo; Browse our catalog %s %s%s "
 msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; Bla i katalogen %s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  INCLUDE 'doc-head-close.inc'
-#. %8$s:  BLOCK cssinclude
-#. %9$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  INCLUDE 'doc-head-close.inc' 
+#. %8$s:  BLOCK cssinclude 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:1
 #, c-format
 msgid "%s %s%s%s%sKoha online%s catalog &rsaquo; Change your password %s %s%s "
 msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; Endre passord %s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  INCLUDE 'doc-head-close.inc'
-#. %8$s:  BLOCK cssinclude
-#. %9$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  INCLUDE 'doc-head-close.inc' 
+#. %8$s:  BLOCK cssinclude 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:1
 #, c-format
 msgid "%s %s%s%s%sKoha online%s catalog &rsaquo; ISBD view %s %s%s "
 msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; ISBD-visning %s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  INCLUDE 'doc-head-close.inc'
-#. %8$s:  BLOCK cssinclude
-#. %9$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  INCLUDE 'doc-head-close.inc' 
+#. %8$s:  BLOCK cssinclude 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:1
 #, c-format
 msgid ""
 "%s %s%s%s%sKoha online%s catalog &rsaquo; Issues for a subscription %s %s%s "
 msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; Utgaver av et tidsskrift %s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  biblionumber
-#. %8$s:  INCLUDE 'doc-head-close.inc'
-#. %9$s:  BLOCK cssinclude
-#. %10$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  biblionumber 
+#. %8$s:  INCLUDE 'doc-head-close.inc' 
+#. %9$s:  BLOCK cssinclude 
+#. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:1
 #, c-format
 msgid ""
@@ -1070,42 +1070,42 @@ msgid ""
 msgstr ""
 "%s %s%s%s%sKoha %s katalog &rsaquo; MARC-detaljer for post nr. %s %s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  INCLUDE 'doc-head-close.inc'
-#. %8$s:  BLOCK cssinclude
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  INCLUDE 'doc-head-close.inc' 
+#. %8$s:  BLOCK cssinclude 
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:1
 #, c-format
 msgid "%s %s%s%s%sKoha online%s catalog &rsaquo; Most popular titles %s %s "
 msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; Mest populære titler %s %s "
 
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  INCLUDE 'doc-head-close.inc'
-#. %8$s:  BLOCK cssinclude
-#. %9$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  INCLUDE 'doc-head-close.inc' 
+#. %8$s:  BLOCK cssinclude 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:1
 #, c-format
 msgid "%s %s%s%s%sKoha online%s catalog &rsaquo; Share a list %s %s%s "
 msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; del en liste %s %s%s "
 
-#. %1$s:  USE Koha
-#. %2$s:  INCLUDE 'doc-head-open.inc'
-#. %3$s:  IF ( LibraryNameTitle )
-#. %4$s:  LibraryNameTitle
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  INCLUDE 'doc-head-close.inc'
-#. %8$s:  BLOCK cssinclude
-#. %9$s:  END
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  INCLUDE 'doc-head-close.inc' 
+#. %8$s:  BLOCK cssinclude 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:1
 #, c-format
 msgid ""
@@ -1114,12 +1114,12 @@ msgstr ""
 "%s %s%s%s%sKoha %s katalog &rsaquo; Dine innstillinger for personvern %s %s"
 "%s "
 
-#. %1$s:  INCLUDE 'doc-head-open.inc'
-#. %2$s:  IF ( LibraryNameTitle )
-#. %3$s:  LibraryNameTitle
-#. %4$s:  ELSE
-#. %5$s:  END
-#. %6$s:  borrowernumber
+#. %1$s:  INCLUDE 'doc-head-open.inc' 
+#. %2$s:  IF ( LibraryNameTitle ) 
+#. %3$s:  LibraryNameTitle 
+#. %4$s:  ELSE 
+#. %5$s:  END 
+#. %6$s:  borrowernumber 
 #: opac-tmpl/bootstrap/en/modules/sco/printslip.tt:1
 #, c-format
 msgid "%s %s%s%sKoha %s &rsaquo; Self checkout &rsaquo; Print Receipt for %s"
@@ -1127,68 +1127,68 @@ msgstr ""
 "%s %s%s%sKoha %s &rsaquo; Selvbetjent utlån &rsaquo; Skriv ut kvittering for "
 "%s"
 
-#. %1$s:  INCLUDE 'doc-head-open.inc'
-#. %2$s:  IF ( LibraryNameTitle )
-#. %3$s:  LibraryNameTitle
-#. %4$s:  ELSE
-#. %5$s:  END
-#. %6$s:  INCLUDE 'doc-head-close.inc'
-#. %7$s:  BLOCK cssinclude
+#. %1$s:  INCLUDE 'doc-head-open.inc' 
+#. %2$s:  IF ( LibraryNameTitle ) 
+#. %3$s:  LibraryNameTitle 
+#. %4$s:  ELSE 
+#. %5$s:  END 
+#. %6$s:  INCLUDE 'doc-head-close.inc' 
+#. %7$s:  BLOCK cssinclude 
 #: opac-tmpl/bootstrap/en/modules/maintenance.tt:1
 #, c-format
 msgid "%s %s%s%sKoha online%s catalog %s %s "
 msgstr "%s %s%s%sKoha %s katalog %s %s "
 
-#. %1$s:  INCLUDE 'doc-head-open.inc'
-#. %2$s:  IF ( LibraryNameTitle )
-#. %3$s:  LibraryNameTitle
-#. %4$s:  ELSE
-#. %5$s:  END
-#. %6$s:  INCLUDE 'doc-head-close.inc'
-#. %7$s:  BLOCK cssinclude
-#. %8$s:  END
+#. %1$s:  INCLUDE 'doc-head-open.inc' 
+#. %2$s:  IF ( LibraryNameTitle ) 
+#. %3$s:  LibraryNameTitle 
+#. %4$s:  ELSE 
+#. %5$s:  END 
+#. %6$s:  INCLUDE 'doc-head-close.inc' 
+#. %7$s:  BLOCK cssinclude 
+#. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-blocked.tt:1
 #, c-format
 msgid "%s %s%s%sKoha online%s catalog %s %s%s "
 msgstr "%s %s%s%sKoha %s katalog %s %s%s "
 
-#. %1$s:  INCLUDE 'doc-head-open.inc'
-#. %2$s:  IF ( LibraryNameTitle )
-#. %3$s:  LibraryNameTitle
-#. %4$s:  ELSE
-#. %5$s:  END
-#. %6$s:  INCLUDE 'doc-head-close.inc'
-#. %7$s:  BLOCK cssinclude
-#. %8$s:  END
+#. %1$s:  INCLUDE 'doc-head-open.inc' 
+#. %2$s:  IF ( LibraryNameTitle ) 
+#. %3$s:  LibraryNameTitle 
+#. %4$s:  ELSE 
+#. %5$s:  END 
+#. %6$s:  INCLUDE 'doc-head-close.inc' 
+#. %7$s:  BLOCK cssinclude 
+#. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:1
 #, c-format
 msgid "%s %s%s%sKoha online%s catalog &rsaquo; Add to your list %s %s%s "
 msgstr "%s %s%s%sKoha %s katalog &rsaquo; Legg til i lista di %s %s%s "
 
-#. %1$s:  INCLUDE 'doc-head-open.inc'
-#. %2$s:  IF ( LibraryNameTitle )
-#. %3$s:  LibraryNameTitle
-#. %4$s:  ELSE
-#. %5$s:  END
-#. %6$s:  title |html
+#. %1$s:  INCLUDE 'doc-head-open.inc' 
+#. %2$s:  IF ( LibraryNameTitle ) 
+#. %3$s:  LibraryNameTitle 
+#. %4$s:  ELSE 
+#. %5$s:  END 
+#. %6$s:  title |html 
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:1
 #, c-format
 msgid "%s %s%s%sKoha online%s catalog &rsaquo; Comments on %s "
 msgstr "%s %s%s%sKoha %s katalog &rsaquo; Kommentarer på %s "
 
-#. %1$s:  SWITCH type
-#. %2$s:  CASE 'earlier'
-#. %3$s:  CASE 'later'
-#. %4$s:  CASE 'acronym'
-#. %5$s:  CASE 'musical'
-#. %6$s:  CASE 'broader'
-#. %7$s:  CASE 'narrower'
-#. %8$s:  CASE 'parent'
-#. %9$s:  CASE
-#. %10$s:  IF type
-#. %11$s:  type | html
-#. %12$s:  END
-#. %13$s:  END
+#. %1$s:  SWITCH type 
+#. %2$s:  CASE 'earlier' 
+#. %3$s:  CASE 'later' 
+#. %4$s:  CASE 'acronym' 
+#. %5$s:  CASE 'musical' 
+#. %6$s:  CASE 'broader' 
+#. %7$s:  CASE 'narrower' 
+#. %8$s:  CASE 'parent' 
+#. %9$s:  CASE 
+#. %10$s:  IF type 
+#. %11$s:  type | html 
+#. %12$s:  END 
+#. %13$s:  END 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:35
 #, c-format
 msgid ""
@@ -1200,29 +1200,29 @@ msgstr ""
 "%s(Mer generelt emne) %s(Mer spesifikt emne) %s(Direkte overordnet "
 "organisasjon) %s %s (%s)%s %s "
 
-#. %1$s:  collectiontitle
-#. %2$s:  IF ( collectionissn )
-#. %3$s:  collectionissn
-#. %4$s:  END
-#. %5$s:  IF ( collectionvolume )
-#. %6$s:  collectionvolume
-#. %7$s:  END
+#. %1$s:  collectiontitle 
+#. %2$s:  IF ( collectionissn ) 
+#. %3$s:  collectionissn 
+#. %4$s:  END 
+#. %5$s:  IF ( collectionvolume ) 
+#. %6$s:  collectionvolume 
+#. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:228
 #, c-format
 msgid "%s %s, ISSN %s %s %s; %s %s "
 msgstr "%s %s, ISSN %s %s %s; %s %s "
 
-#. %1$s:  SWITCH option
-#. %2$s:  CASE 'bibtex'
-#. %3$s:  CASE 'dc'
-#. %4$s:  CASE 'endnote'
-#. %5$s:  CASE 'marcxml'
-#. %6$s:  CASE 'marc8'
-#. %7$s:  CASE 'utf8'
-#. %8$s:  CASE 'marcstd'
-#. %9$s:  CASE 'mods'
-#. %10$s:  CASE 'ris'
-#. %11$s:  END
+#. %1$s:  SWITCH option 
+#. %2$s:  CASE 'bibtex' 
+#. %3$s:  CASE 'dc' 
+#. %4$s:  CASE 'endnote' 
+#. %5$s:  CASE 'marcxml' 
+#. %6$s:  CASE 'marc8' 
+#. %7$s:  CASE 'utf8' 
+#. %8$s:  CASE 'marcstd' 
+#. %9$s:  CASE 'mods' 
+#. %10$s:  CASE 'ris' 
+#. %11$s:  END 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:45
 #, c-format
 msgid ""
@@ -1234,34 +1234,34 @@ msgstr ""
 "MARC-8) %sMARC (Unicode/UTF-8) %sMARC (Unicode/UTF-8, Standard) %sMODS (XML) "
 "%sRIS %s "
 
-#. %1$s:  SWITCH ACCOUNT_LINE.accounttype
-#. %2$s:  CASE 'Pay'
-#. %3$s:  CASE 'Pay00'
-#. %4$s:  CASE 'Pay01'
-#. %5$s:  CASE 'Pay02'
-#. %6$s:  CASE 'N'
-#. %7$s:  CASE 'F'
-#. %8$s:  CASE 'A'
-#. %9$s:  CASE 'M'
-#. %10$s:  CASE 'L'
-#. %11$s:  CASE 'W'
-#. %12$s:  CASE 'FU'
-#. %13$s:  CASE 'Rent'
-#. %14$s:  CASE 'FOR'
-#. %15$s:  CASE 'LR'
-#. %16$s:  CASE 'PAY'
-#. %17$s:  CASE 'WO'
-#. %18$s:  CASE 'C'
-#. %19$s:  CASE 'CR'
-#. %20$s:  CASE
-#. %21$s:  ACCOUNT_LINE.accounttype
+#. %1$s:  SWITCH ACCOUNT_LINE.accounttype 
+#. %2$s:  CASE 'Pay' 
+#. %3$s:  CASE 'Pay00' 
+#. %4$s:  CASE 'Pay01' 
+#. %5$s:  CASE 'Pay02' 
+#. %6$s:  CASE 'N' 
+#. %7$s:  CASE 'F' 
+#. %8$s:  CASE 'A' 
+#. %9$s:  CASE 'M' 
+#. %10$s:  CASE 'L' 
+#. %11$s:  CASE 'W' 
+#. %12$s:  CASE 'FU' 
+#. %13$s:  CASE 'Rent' 
+#. %14$s:  CASE 'FOR' 
+#. %15$s:  CASE 'LR' 
+#. %16$s:  CASE 'PAY' 
+#. %17$s:  CASE 'WO' 
+#. %18$s:  CASE 'C' 
+#. %19$s:  CASE 'CR' 
+#. %20$s:  CASE 
+#. %21$s:  ACCOUNT_LINE.accounttype 
 #. %22$s: - END -
-#. %23$s: - IF ACCOUNT_LINE.description
-#. %24$s:  ACCOUNT_LINE.description
-#. %25$s:  END
-#. %26$s:  IF ACCOUNT_LINE.title
-#. %27$s:  ACCOUNT_LINE.title
-#. %28$s:  END
+#. %23$s: - IF ACCOUNT_LINE.description 
+#. %24$s:  ACCOUNT_LINE.description 
+#. %25$s:  END 
+#. %26$s:  IF ACCOUNT_LINE.title 
+#. %27$s:  ACCOUNT_LINE.title 
+#. %28$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:52
 #, c-format
 msgid ""
@@ -1278,50 +1278,50 @@ msgstr ""
 "%sBetaling %sAvskrivning %sKreditt %sKreditt %s%s %s %s, %s%s %s(%s)%s "
 
 # 42wXYL  <a href="http://xjegsafqqsbo.com/">xjegsafqqsbo</a>, [url=http://ulbeaihsfgxa.com/]ulbeaihsfgxa[/url], [link=http://hzmthhanotoi.com/]hzmthhanotoi[/link], http://hczqnsqiwxwc.com/
-#. %1$s:  shelvesloo.count
-#. %2$s:  IF ( shelvesloo.single )
-#. %3$s:  ELSE
-#. %4$s:  END
+#. %1$s:  shelvesloo.count 
+#. %2$s:  IF ( shelvesloo.single ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:714
 #, c-format
 msgid "%s %sitem%sitem(s)%s"
 msgstr "%s %seksemplar%seksemplar(er)%s"
 
-#. %1$s:  IF loop.index == 0
-#. %2$s:  ELSE
-#. %3$s:  END
+#. %1$s:  IF loop.index == 0 
+#. %2$s:  ELSE 
+#. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:35
 #, c-format
 msgid "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s and %s "
 msgstr "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s og %s "
 
-#. %1$s:  bibliotitle
-#. %2$s:  biblionumber
+#. %1$s:  bibliotitle 
+#. %2$s:  biblionumber 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:26
 #, c-format
 msgid "%s (Record no. %s)"
 msgstr "%s (Post nr. %s)"
 
-#. %1$s:  IF ( related )
-#. %2$s:  FOREACH relate IN related
-#. %3$s:  relate.related_search
-#. %4$s:  END
-#. %5$s:  END
+#. %1$s:  IF ( related ) 
+#. %2$s:  FOREACH relate IN related 
+#. %3$s:  relate.related_search 
+#. %4$s:  END 
+#. %5$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:75
 #, c-format
 msgid "%s (related searches: %s %s %s ). %s "
 msgstr "%s (beslektede søk: %s %s %s ). %s "
 
-#. %1$s:  IF ( OVERDUE.debarred )
-#. %2$s:  ELSIF ( OVERDUE.status )
-#. %3$s:  IF ( canrenew )
+#. %1$s:  IF ( OVERDUE.debarred ) 
+#. %2$s:  ELSIF ( OVERDUE.status ) 
+#. %3$s:  IF ( canrenew ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:458
 #, c-format
 msgid "%s Account frozen %s %s "
 msgstr "%s Kontoen er sperret %s %s "
 
 #. For the first occurrence,
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:287
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:479
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:646
@@ -1330,7 +1330,7 @@ msgid "%s Address 2:"
 msgstr "%s Addresse 2:"
 
 #. For the first occurrence,
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:273
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:465
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:632
@@ -1338,20 +1338,20 @@ msgstr "%s Addresse 2:"
 msgid "%s Address:"
 msgstr "%s Addresse:"
 
-#. %1$s:  IF ( latestserial.status1 )
-#. %2$s:  ELSE
-#. %3$s:  IF ( latestserial.status2 )
-#. %4$s:  ELSE
-#. %5$s:  IF ( latestserial.status3 )
-#. %6$s:  ELSE
-#. %7$s:  IF ( latestserial.status4 )
-#. %8$s:  ELSE
-#. %9$s:  IF ( latestserial.status5 )
-#. %10$s:  END
-#. %11$s:  END
-#. %12$s:  END
-#. %13$s:  END
-#. %14$s:  END
+#. %1$s:  IF ( latestserial.status1 ) 
+#. %2$s:  ELSE 
+#. %3$s:  IF ( latestserial.status2 ) 
+#. %4$s:  ELSE 
+#. %5$s:  IF ( latestserial.status3 ) 
+#. %6$s:  ELSE 
+#. %7$s:  IF ( latestserial.status4 ) 
+#. %8$s:  ELSE 
+#. %9$s:  IF ( latestserial.status5 ) 
+#. %10$s:  END 
+#. %11$s:  END 
+#. %12$s:  END 
+#. %13$s:  END 
+#. %14$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:829
 #, c-format
 msgid ""
@@ -1361,24 +1361,24 @@ msgstr ""
 "%s Ventet %s %s Ankommet %s %s Forsinket %s %s Mangler %s %s Ikke utgitt %s "
 "%s %s %s %s "
 
-#. %1$s:  IF ( GROUP_RESULT.onloancount )
-#. %2$s:  GROUP_RESULT.onloancount
-#. %3$s:  END
-#. %4$s:  IF ( GROUP_RESULT.withdrawncount )
-#. %5$s:  GROUP_RESULT.withdrawncount
-#. %6$s:  END
-#. %7$s:  IF ( GROUP_RESULT.itemlostcount )
-#. %8$s:  GROUP_RESULT.itemlostcount
-#. %9$s:  END
-#. %10$s:  IF ( GROUP_RESULT.damagedcount )
-#. %11$s:  GROUP_RESULT.damagedcount
-#. %12$s:  END
-#. %13$s:  IF ( GROUP_RESULT.orderedcount )
-#. %14$s:  GROUP_RESULT.orderedcount
-#. %15$s:  END
-#. %16$s:  IF ( GROUP_RESULT.intransitcount )
-#. %17$s:  GROUP_RESULT.intransitcount
-#. %18$s:  END
+#. %1$s:  IF ( GROUP_RESULT.onloancount ) 
+#. %2$s:  GROUP_RESULT.onloancount 
+#. %3$s:  END 
+#. %4$s:  IF ( GROUP_RESULT.withdrawncount ) 
+#. %5$s:  GROUP_RESULT.withdrawncount 
+#. %6$s:  END 
+#. %7$s:  IF ( GROUP_RESULT.itemlostcount ) 
+#. %8$s:  GROUP_RESULT.itemlostcount 
+#. %9$s:  END 
+#. %10$s:  IF ( GROUP_RESULT.damagedcount ) 
+#. %11$s:  GROUP_RESULT.damagedcount 
+#. %12$s:  END 
+#. %13$s:  IF ( GROUP_RESULT.orderedcount ) 
+#. %14$s:  GROUP_RESULT.orderedcount 
+#. %15$s:  END 
+#. %16$s:  IF ( GROUP_RESULT.intransitcount ) 
+#. %17$s:  GROUP_RESULT.intransitcount 
+#. %18$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:218
 #, c-format
 msgid ""
@@ -1388,30 +1388,30 @@ msgstr ""
 "%s Utlånt (%s), %s %s Trukket tilbake (%s), %s %s Tapt (%s),%s %s Skadet "
 "(%s),%s %s I bestilling (%s),%s %s Underveis (%s),%s "
 
-#. %1$s:  IF ( SEARCH_RESULT.onloancount )
-#. %2$s:  SEARCH_RESULT.onloancount
-#. %3$s:  END
-#. %4$s:  IF ( SEARCH_RESULT.withdrawncount )
-#. %5$s:  SEARCH_RESULT.withdrawncount
-#. %6$s:  END
-#. %7$s:  UNLESS ( SEARCH_RESULT.hidelostitems )
-#. %8$s:  IF ( SEARCH_RESULT.itemlostcount )
-#. %9$s:  SEARCH_RESULT.itemlostcount
-#. %10$s:  END
-#. %11$s:  END
-#. %12$s:  IF ( SEARCH_RESULT.damagedcount )
-#. %13$s:  SEARCH_RESULT.damagedcount
-#. %14$s:  END
-#. %15$s:  IF ( SEARCH_RESULT.orderedcount )
-#. %16$s:  SEARCH_RESULT.orderedcount
-#. %17$s:  END
-#. %18$s:  IF ( SEARCH_RESULT.onholdcount )
-#. %19$s:  SEARCH_RESULT.onholdcount
-#. %20$s:  END
-#. %21$s:  IF ( SEARCH_RESULT.intransitcount )
-#. %22$s:  SEARCH_RESULT.intransitcount
-#. %23$s:  END
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:387
+#. %1$s:  IF ( SEARCH_RESULT.onloancount ) 
+#. %2$s:  SEARCH_RESULT.onloancount 
+#. %3$s:  END 
+#. %4$s:  IF ( SEARCH_RESULT.withdrawncount ) 
+#. %5$s:  SEARCH_RESULT.withdrawncount 
+#. %6$s:  END 
+#. %7$s:  UNLESS ( SEARCH_RESULT.hidelostitems ) 
+#. %8$s:  IF ( SEARCH_RESULT.itemlostcount ) 
+#. %9$s:  SEARCH_RESULT.itemlostcount 
+#. %10$s:  END 
+#. %11$s:  END 
+#. %12$s:  IF ( SEARCH_RESULT.damagedcount ) 
+#. %13$s:  SEARCH_RESULT.damagedcount 
+#. %14$s:  END 
+#. %15$s:  IF ( SEARCH_RESULT.orderedcount ) 
+#. %16$s:  SEARCH_RESULT.orderedcount 
+#. %17$s:  END 
+#. %18$s:  IF ( SEARCH_RESULT.onholdcount ) 
+#. %19$s:  SEARCH_RESULT.onholdcount 
+#. %20$s:  END 
+#. %21$s:  IF ( SEARCH_RESULT.intransitcount ) 
+#. %22$s:  SEARCH_RESULT.intransitcount 
+#. %23$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:389
 #, c-format
 msgid ""
 "%s Checked out (%s), %s %s Withdrawn (%s), %s %s%s Lost (%s),%s%s %s Damaged "
@@ -1421,7 +1421,7 @@ msgstr ""
 "(%s),%s %s I bestilling (%s),%s %s Reservert (%s),%s %s Underveis (%s),%s "
 
 #. For the first occurrence,
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:301
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:493
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:660
@@ -1429,23 +1429,23 @@ msgstr ""
 msgid "%s City:"
 msgstr "%s By:"
 
-#. %1$s:  IF ( ccodesearch )
-#. %2$s:  ELSE
-#. %3$s:  END
+#. %1$s:  IF ( ccodesearch ) 
+#. %2$s:  ELSE 
+#. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:79
 #, c-format
 msgid "%s Collection %s Item type %s: "
 msgstr "%s Samling %s Dokumenttype %s: "
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:577
 #, c-format
 msgid "%s Contact note:"
 msgstr "%s Kontaktnote:"
 
-#. %1$s:  IF (errcode==1)
-#. %2$s:  ELSE
-#. %3$s:  END
+#. %1$s:  IF (errcode==1) 
+#. %2$s:  ELSE 
+#. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:94
 #, c-format
 msgid ""
@@ -1456,7 +1456,7 @@ msgstr ""
 "Beklager, du kan ikke redigere denne lista. %s "
 
 #. For the first occurrence,
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:343
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:535
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:702
@@ -1464,134 +1464,134 @@ msgstr ""
 msgid "%s Country:"
 msgstr "%s Land:"
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:162
 #, c-format
 msgid "%s Date of birth:"
 msgstr "%s Fødselsdato og -år:"
 
-#. %1$s:  IF ( koha_spsuggest )
+#. %1$s:  IF ( koha_spsuggest ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:93
 #, c-format
 msgid "%s Did you mean: "
 msgstr "%s Mente du: "
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:563
 #, c-format
 msgid "%s Email:"
 msgstr "%s E-post:"
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:439
 #, c-format
 msgid "%s Fax:"
 msgstr "%s Faks:"
 
 #. For the first occurrence,
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:148
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:618
 #, c-format
 msgid "%s First name:"
 msgstr "%s Fornavn:"
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:74
 #, c-format
 msgid "%s Home library:"
 msgstr "%s Hjemmebibliotek:"
 
-#. %1$s:  ELSE
+#. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:70
 #, c-format
 msgid "%s If you have a "
 msgstr "%s Hvis du har en "
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:183
 #, c-format
 msgid "%s Initials:"
 msgstr "%s Initialer:"
 
-#. %1$s:  SEARCH_RESULT.num_critics
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:411
+#. %1$s:  SEARCH_RESULT.num_critics 
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:413
 #, c-format
 msgid "%s Internet user critics"
 msgstr "%s Nettkritikere"
 
-#. %1$s:  ELSE
+#. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:564
 #, c-format
 msgid "%s Item waiting to be pulled from "
 msgstr "%s Eksemplaret venter på å bli hentet fra "
 
-#. %1$s:  issues_count
+#. %1$s:  issues_count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:123
 #, c-format
 msgid "%s Item(s) checked out"
 msgstr "%s Eksemplar(er) utlånt"
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:98
 #, c-format
 msgid "%s Log out"
 msgstr "%s Logg ut"
 
-#. %1$s:  INCLUDE 'doc-head-open.inc'
+#. %1$s:  INCLUDE 'doc-head-open.inc' 
 #: opac-tmpl/bootstrap/en/modules/opac-showmarc.tt:1
 #, c-format
 msgid "%s MARC view"
 msgstr "%s MARC-visning"
 
-#. %1$s:  ELSIF ( ISSUE.too_soon )
-#. %2$s:  ISSUE.soonestrenewdate
+#. %1$s:  ELSIF ( ISSUE.too_soon ) 
+#. %2$s:  ISSUE.soonestrenewdate 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:235
 #, c-format
 msgid "%s No renewal before %s "
 msgstr "%s Ingen fornying før %s "
 
-#. %1$s:  IF ( searchdesc )
-#. %2$s:  LibraryName
+#. %1$s:  IF ( searchdesc ) 
+#. %2$s:  LibraryName 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:42
 #, c-format
 msgid "%s No results found for that in %s catalog. "
 msgstr "%s Fant ingen treff i %s katalogen. "
 
-#. %1$s:  ELSIF ( ISSUE.too_many )
-#. %2$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon )
+#. %1$s:  ELSIF ( ISSUE.too_many ) 
+#. %2$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:230
 #, c-format
 msgid "%s Not renewable %s Automatic renewal "
 msgstr "%s Kan ikke fornyes %s Automatisk fornying"
 
-#. %1$s:  ELSIF ( OVERDUE.onreserve )
-#. %2$s:  ELSE
-#. %3$s:  END
+#. %1$s:  ELSIF ( OVERDUE.onreserve ) 
+#. %2$s:  ELSE 
+#. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:465
 #, c-format
 msgid "%s On hold %s No renewals left %s "
 msgstr "%s Reservert %s Ingen fornyinger igjen %s "
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:197
 #, c-format
 msgid "%s Other names:"
 msgstr "%s Andre navn:"
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:397
 #, c-format
 msgid "%s Other phone:"
 msgstr "%s Alternativ telefon:"
 
-#. %1$s:  IF ( PassMismatch )
-#. %2$s:  END
-#. %3$s:  IF ( ShortPass )
-#. %4$s:  minpasslen
-#. %5$s:  END
-#. %6$s:  IF ( WrongPass )
-#. %7$s:  END
+#. %1$s:  IF ( PassMismatch ) 
+#. %2$s:  END 
+#. %3$s:  IF ( ShortPass ) 
+#. %4$s:  minpasslen 
+#. %5$s:  END 
+#. %6$s:  IF ( WrongPass ) 
+#. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:30
 #, c-format
 msgid ""
@@ -1606,43 +1606,43 @@ msgstr ""
 "for deg hvis dette problemet vedvarer. %s "
 
 #. For the first occurrence,
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:549
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:716
 #, c-format
 msgid "%s Phone:"
 msgstr "%s Telefon:"
 
-#. %1$s:  END # / IF circ_error_UNKNOWN_BARCODE
+#. %1$s:  END # / IF circ_error_UNKNOWN_BARCODE 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:72
 #, c-format
 msgid "%s Please see a member of the library staff. "
 msgstr "%s Vennligst oppsøk en ansatt i biblioteket. "
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:411
 #, c-format
 msgid "%s Primary email:"
 msgstr "%s Førstevalg e-post:"
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:369
 #, c-format
 msgid "%s Primary phone:"
 msgstr "%s Hovedtelefon:"
 
-#. %1$s:  SEARCH_RESULT.num_critics_pro
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:414
+#. %1$s:  SEARCH_RESULT.num_critics_pro 
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:416
 #, c-format
 msgid "%s Professional critics"
 msgstr "%s Profesjonelle kritikere"
 
-#. %1$s:  IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1
-#. %2$s:  ELSE
-#. %3$s:  IF ( loggedinusername )
-#. %4$s:  ELSE
-#. %5$s:  END
-#. %6$s:  END
+#. %1$s:  IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 
+#. %2$s:  ELSE 
+#. %3$s:  IF ( loggedinusername ) 
+#. %4$s:  ELSE 
+#. %5$s:  END 
+#. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:103
 #, c-format
 msgid ""
@@ -1651,62 +1651,62 @@ msgid ""
 msgstr ""
 "%s Innkjøpsforslag %s %s Dine innkjøpsforslag %s Innkjøpsforslag %s %s "
 
-#. %1$s:  SEARCH_RESULT.num_quotations
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:420
+#. %1$s:  SEARCH_RESULT.num_quotations 
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:422
 #, c-format
 msgid "%s Quotations"
 msgstr "%s Sitater"
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:113
 #, c-format
 msgid "%s Salutation:"
 msgstr "%s Tittel:"
 
-#. %1$s:  LibraryName |html
+#. %1$s:  LibraryName |html 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:5
 #, c-format
 msgid "%s Search"
 msgstr "%s Søk"
 
-#. %1$s:  LibraryName |html
-#. %2$s:  IF ( query_desc )
-#. %3$s:  query_desc |html
-#. %4$s:  END
-#. %5$s:  IF ( limit_desc )
-#. %6$s:  limit_desc |html
-#. %7$s:  END
+#. %1$s:  LibraryName |html 
+#. %2$s:  IF ( query_desc ) 
+#. %3$s:  query_desc |html 
+#. %4$s:  END 
+#. %5$s:  IF ( limit_desc ) 
+#. %6$s:  limit_desc |html 
+#. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:70
 #, c-format
 msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s Søk %setter '%s'%s%s&nbsp;med begrensning(er):&nbsp;'%s'%s"
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:425
 #, c-format
 msgid "%s Secondary email:"
 msgstr "%s Annen e-post:"
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:383
 #, c-format
 msgid "%s Secondary phone:"
 msgstr "%s Annen telefon:"
 
-#. %1$s:  LibraryName
+#. %1$s:  LibraryName 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:32
 #, c-format
 msgid "%s Self checkout system"
 msgstr "%s Selvutlånssystem"
 
-#. %1$s:  IF ( available )
+#. %1$s:  IF ( available ) 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:7
 #, c-format
 msgid "%s Showing only "
 msgstr "%s Viser bare "
 
 #. For the first occurrence,
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:315
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:507
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:674
@@ -1714,46 +1714,46 @@ msgstr "%s Viser bare "
 msgid "%s State:"
 msgstr "%s Delstat:"
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:259
 #, c-format
 msgid "%s Street number:"
 msgstr "%s Gatenummer:"
 
 #. For the first occurrence,
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:134
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:604
 #, c-format
 msgid "%s Surname:"
 msgstr "%s Etternavn:"
 
-#. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1
-#. %2$s:  ELSE
-#. %3$s:  END
+#. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
+#. %2$s:  ELSE 
+#. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:76
 #, c-format
 msgid "%s Tags to show from other users %s Tags to show %s: "
 msgstr ""
 "%s Tagger fra andre brukere som skal vises %s Tagger som skal vises %s: "
 
-#. %1$s:  ELSE
-#. %2$s:  END
+#. %1$s:  ELSE 
+#. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:226
 #, c-format
 msgid "%s This record has no items. %s "
 msgstr "%s Denne posten har ingen eksemplarer. %s "
 
-#. %1$s:  IF holds_count.defined
-#. %2$s:  holds_count
-#. %3$s:  END
-#. %4$s:  IF priority
-#. %5$s:  IF holds_count.defined
-#. %6$s:  priority
-#. %7$s:  ELSE
-#. %8$s:  priority
-#. %9$s:  END
-#. %10$s:  END
+#. %1$s:  IF holds_count.defined 
+#. %2$s:  holds_count 
+#. %3$s:  END 
+#. %4$s:  IF priority 
+#. %5$s:  IF holds_count.defined 
+#. %6$s:  priority 
+#. %7$s:  ELSE 
+#. %8$s:  priority 
+#. %9$s:  END 
+#. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:653
 #, c-format
 msgid ""
@@ -1763,8 +1763,8 @@ msgstr ""
 "%s Totalt antall reserveringer: %s %s %s %s (prioritet %s) %s Total "
 "prioritet i køen: %s %s %s "
 
-#. %1$s:  ELSE
-#. %2$s:  END
+#. %1$s:  ELSE 
+#. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:107
 #, c-format
 msgid ""
@@ -1772,26 +1772,26 @@ msgid ""
 msgstr ""
 "%s Beklager, bilder er for tiden ikke skrudd på for denne katalogen. %s "
 
-#. %1$s:  SEARCH_RESULT.num_videos
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:417
+#. %1$s:  SEARCH_RESULT.num_videos 
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:419
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s Videoutdrag"
 
-#. %1$s:  IF ( itemLoo.waitingdate )
-#. %2$s:  ELSE
-#. %3$s:  END
-#. %4$s:  IF ( itemLoo.waitingdate )
-#. %5$s:  ELSE
-#. %6$s:  END
-#. %7$s:  itemLoo.ExpectedAtLibrary
-#. %8$s:  IF ( itemLoo.waitingdate )
-#. %9$s:  itemLoo.waitingdate | $KohaDates
-#. %10$s:  ELSE
-#. %11$s:  IF ( itemLoo.reservedate )
-#. %12$s:  itemLoo.reservedate
-#. %13$s:  END
-#. %14$s:  END
+#. %1$s:  IF ( itemLoo.waitingdate ) 
+#. %2$s:  ELSE 
+#. %3$s:  END 
+#. %4$s:  IF ( itemLoo.waitingdate ) 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  itemLoo.ExpectedAtLibrary 
+#. %8$s:  IF ( itemLoo.waitingdate ) 
+#. %9$s:  itemLoo.waitingdate | $KohaDates 
+#. %10$s:  ELSE 
+#. %11$s:  IF ( itemLoo.reservedate ) 
+#. %12$s:  itemLoo.reservedate 
+#. %13$s:  END 
+#. %14$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:361
 #, c-format
 msgid ""
@@ -1802,31 +1802,31 @@ msgstr ""
 "%s %s %s %s. "
 
 #. For the first occurrence,
-#. %1$s:  IF ( ISSUE.charges )
-#. %2$s:  ELSE
-#. %3$s:  END
+#. %1$s:  IF ( ISSUE.charges ) 
+#. %2$s:  ELSE 
+#. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:246
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:475
 #, c-format
 msgid "%s Yes %s No %s "
 msgstr "%s Ja %s Nei %s "
 
-#. %1$s:  ELSE
-#. %2$s:  END
+#. %1$s:  ELSE 
+#. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:44
 #, c-format
 msgid "%s You did not specify any search criteria. %s "
 msgstr "%s Du oppga ingen søkekriterier. %s "
 
-#. %1$s:  IF READING_RECORD.size == 0
-#. %2$s:  ELSE
+#. %1$s:  IF READING_RECORD.size == 0 
+#. %2$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:29
 #, c-format
 msgid "%s You have never borrowed anything from this library. %s "
 msgstr "%s Du har aldri lånt noe fra dette biblioteket. %s "
 
 #. For the first occurrence,
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:329
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:521
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:688
@@ -1834,7 +1834,7 @@ msgstr "%s Du har aldri lånt noe fra dette biblioteket. %s "
 msgid "%s Zip/Postal code:"
 msgstr "%s Postnummer:"
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:162
 #, c-format
 msgid ""
@@ -1848,7 +1848,7 @@ msgstr ""
 "OpacAdvSearchMoreOptions.grep('language').size > 0 and expanded_options ) ) "
 "%%] "
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:448
 #, c-format
 msgid ""
@@ -1864,7 +1864,7 @@ msgstr ""
 "defined('B_phone') && hidden.defined('B_email') && hidden."
 "defined('contactnote') %%] "
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:587
 #, c-format
 msgid ""
@@ -1882,7 +1882,7 @@ msgstr ""
 "&& hidden.defined('altcontactcountry') && hidden.defined('altcontactphone') "
 "%%] "
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:353
 #, c-format
 msgid ""
@@ -1894,7 +1894,7 @@ msgstr ""
 "hidden.defined('mobile') && hidden.defined('email') && hidden."
 "defined('emailpro') && hidden.defined('fax') %%] "
 
-#. %1$s:  END # /UNLESS fields hidden
+#. %1$s:  END # /UNLESS fields hidden 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:242
 #, c-format
 msgid ""
@@ -1908,7 +1908,7 @@ msgstr ""
 "defined('state') && hidden.defined('zipcode') && hidden.defined('country') "
 "%%] "
 
-#. %1$s:  END # / defined 'branchcode'
+#. %1$s:  END # / defined 'branchcode' 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:90
 #, c-format
 msgid ""
@@ -1922,12 +1922,12 @@ msgstr ""
 "defined('initials') && hidden.defined('othernames') && hidden.defined('sex') "
 "%%] "
 
-#. %1$s:  BLOCK showreference
-#. %2$s:  SET authidurl = '/cgi-bin/koha/opac-authoritiesdetail.pl?authid='
-#. %3$s:  SET searchurl = '/cgi-bin/koha/opac-authorities-home.pl?op=do_search&type=opac&operator=contains&marclist=mainentry&and_or=and&orderby=HeadingAsc&value='
-#. %4$s:  IF marcflavour == 'UNIMARC'
-#. %5$s:  SWITCH type
-#. %6$s:  CASE 'broader'
+#. %1$s:  BLOCK showreference 
+#. %2$s:  SET authidurl = '/cgi-bin/koha/opac-authoritiesdetail.pl?authid=' 
+#. %3$s:  SET searchurl = '/cgi-bin/koha/opac-authorities-home.pl?op=do_search&type=opac&operator=contains&marclist=mainentry&and_or=and&orderby=HeadingAsc&value=' 
+#. %4$s:  IF marcflavour == 'UNIMARC' 
+#. %5$s:  SWITCH type 
+#. %6$s:  CASE 'broader' 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:1
 #, c-format
 msgid ""
@@ -1940,93 +1940,93 @@ msgstr ""
 "is a linked authority, its authid %%] %s %s %s %s %s "
 
 #. For the first occurrence,
-#. %1$s:  ind.label
+#. %1$s:  ind.label 
 #: opac-tmpl/bootstrap/en/includes/search/resort_form.inc:14
 #: opac-tmpl/bootstrap/en/includes/search/resort_form.inc:16
 #, c-format
 msgid "%s asc"
 msgstr "%s asc"
 
-#. %1$s:  resul.used
+#. %1$s:  resul.used 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:92
 #, c-format
 msgid "%s biblios"
 msgstr "%s bibliografiske poster"
 
 #. For the first occurrence,
-#. %1$s:  IF ( review.author )
+#. %1$s:  IF ( review.author ) 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:359
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:314
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:316
 #, c-format
 msgid "%s by "
 msgstr "%s av "
 
-#. %1$s:  IF ( XISBN.author )
-#. %2$s:  XISBN.author |html
-#. %3$s:  END
-#. %4$s:  IF ( XISBN.copyrightdate )
-#. %5$s:  XISBN.copyrightdate
-#. %6$s:  END
-#. %7$s:  IF ( XISBN.publishercode )
+#. %1$s:  IF ( XISBN.author ) 
+#. %2$s:  XISBN.author |html 
+#. %3$s:  END 
+#. %4$s:  IF ( XISBN.copyrightdate ) 
+#. %5$s:  XISBN.copyrightdate 
+#. %6$s:  END 
+#. %7$s:  IF ( XISBN.publishercode ) 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:973
 #, c-format
 msgid "%s by %s%s %s &copy;%s%s %s "
 msgstr "%s av %s%s %s &copy;%s%s %s "
 
 #. For the first occurrence,
-#. %1$s:  ind.label
+#. %1$s:  ind.label 
 #: opac-tmpl/bootstrap/en/includes/search/resort_form.inc:19
 #: opac-tmpl/bootstrap/en/includes/search/resort_form.inc:21
 #, c-format
 msgid "%s desc"
 msgstr "%s desc"
 
-#. %1$s:  IF renewal_blocked_fines != "0.00"
+#. %1$s:  IF renewal_blocked_fines != "0.00" 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:95
 #, c-format
 msgid "%s more than "
 msgstr "%s mer enn "
 
-#. %1$s:  IF issue.onsite_checkout
-#. %2$s:  ELSE
-#. %3$s:  END
+#. %1$s:  IF issue.onsite_checkout 
+#. %2$s:  ELSE 
+#. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:82
 #, c-format
 msgid "%s onsite %s checkout %s "
 msgstr "%s på stedet %s utlån %s "
 
 #. For the first occurrence,
-#. %1$s:  count
+#. %1$s:  count 
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:46
 #, c-format
 msgid "%s records"
 msgstr "%s poster"
 
-#. %1$s:  IF ( RESERVE.waitingdate )
-#. %2$s:  RESERVE.waitingdate | $KohaDates
-#. %3$s:  END
+#. %1$s:  IF ( RESERVE.waitingdate ) 
+#. %2$s:  RESERVE.waitingdate | $KohaDates 
+#. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:563
 #, c-format
 msgid "%s since %s%s "
 msgstr "%s siden %s%s "
 
-#. %1$s:  ELSE
-#. %2$s:  heading
-#. %3$s:  END
-#. %4$s:  END
-#. %5$s:  BLOCK language
-#. %6$s:  SWITCH lang
-#. %7$s:  CASE ['en', 'eng']
-#. %8$s:  CASE ['fr', 'fre']
-#. %9$s:  CASE ['it', 'ita']
-#. %10$s:  CASE ['de', 'ger', 'deu']
-#. %11$s:  CASE ['es', 'spa']
-#. %12$s:  CASE
-#. %13$s:  lang
-#. %14$s:  END
-#. %15$s:  END
+#. %1$s:  ELSE 
+#. %2$s:  heading 
+#. %3$s:  END 
+#. %4$s:  END 
+#. %5$s:  BLOCK language 
+#. %6$s:  SWITCH lang 
+#. %7$s:  CASE ['en', 'eng'] 
+#. %8$s:  CASE ['fr', 'fre'] 
+#. %9$s:  CASE ['it', 'ita'] 
+#. %10$s:  CASE ['de', 'ger', 'deu'] 
+#. %11$s:  CASE ['es', 'spa'] 
+#. %12$s:  CASE 
+#. %13$s:  lang 
+#. %14$s:  END 
+#. %15$s:  END 
 #: opac-tmpl/bootstrap/en/includes/opac-authorities.inc:56
 #, c-format
 msgid ""
@@ -2034,18 +2034,18 @@ msgid ""
 msgstr ""
 "%s%s %s %s %s %s %sEngelsk %sFransk %sItaliensk %sTysk %sSpansk %s%s %s %s "
 
-#. %1$s:  FILTER trim
-#. %2$s:  SWITCH type
-#. %3$s:  CASE 'earlier'
-#. %4$s:  CASE 'later'
-#. %5$s:  CASE 'acronym'
-#. %6$s:  CASE 'musical'
-#. %7$s:  CASE 'broader'
-#. %8$s:  CASE 'narrower'
-#. %9$s:  CASE
-#. %10$s:  type
-#. %11$s:  END
-#. %12$s:  END
+#. %1$s:  FILTER trim 
+#. %2$s:  SWITCH type 
+#. %3$s:  CASE 'earlier' 
+#. %4$s:  CASE 'later' 
+#. %5$s:  CASE 'acronym' 
+#. %6$s:  CASE 'musical' 
+#. %7$s:  CASE 'broader' 
+#. %8$s:  CASE 'narrower' 
+#. %9$s:  CASE 
+#. %10$s:  type 
+#. %11$s:  END 
+#. %12$s:  END 
 #: opac-tmpl/bootstrap/en/includes/opac-authorities.inc:26
 #, c-format
 msgid ""
@@ -2055,55 +2055,55 @@ msgstr ""
 "%s%s %sForrige emne %sNeste emne %sAkronym %sMusikalsk komposisjon %sMer "
 "generelt emne %sMer spesifikt emne %s%s %s%s"
 
-#. %1$s:  IF ( shelveslooppri.count )
-#. %2$s:  shelveslooppri.count
-#. %3$s:  IF ( shelveslooppri.single )
-#. %4$s:  ELSE
-#. %5$s:  END
-#. %6$s:  ELSE
-#. %7$s:  END
+#. %1$s:  IF ( shelveslooppri.count ) 
+#. %2$s:  shelveslooppri.count 
+#. %3$s:  IF ( shelveslooppri.single ) 
+#. %4$s:  ELSE 
+#. %5$s:  END 
+#. %6$s:  ELSE 
+#. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:640
 #, c-format
 msgid "%s%s %sitem%sitems%s%sEmpty%s"
 msgstr "%s%s %seksemplar%seksemplarer%s%sTom%s"
 
-#. %1$s:  IF SeparateHoldings
-#. %2$s:  LoginBranchname
-#. %3$s:  ELSE
-#. %4$s:  END
-#. %5$s:  UNLESS too_many_items
-#. %6$s:  itemloop.size || 0
-#. %7$s:  END
+#. %1$s:  IF SeparateHoldings 
+#. %2$s:  LoginBranchname 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  UNLESS too_many_items 
+#. %6$s:  itemloop.size || 0 
+#. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:540
 #, c-format
 msgid "%s%s holdings%sHoldings%s %s ( %s )%s"
 msgstr " %s%s beholdning%sBeholdning%s%s ( %s )%s"
 
-#. %1$s:  deleted_count
-#. %2$s:  IF ( deleted_count ==1 )
-#. %3$s:  ELSE
-#. %4$s:  END
+#. %1$s:  deleted_count 
+#. %2$s:  IF ( deleted_count ==1 ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:110
 #, c-format
 msgid "%s%s tag%stags%s successfully deleted."
 msgstr "%s%s tagg%stagger%s slettet."
 
-#. %1$s:  END
-#. %2$s:  IF ( BORROWER_INF.debarredcomment )
+#. %1$s:  END 
+#. %2$s:  IF ( BORROWER_INF.debarredcomment ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:86
 #, c-format
 msgid "%s%s with the comment "
 msgstr "%s%s med kommentaren "
 
 #. For the first occurrence,
-#. %1$s:  INCLUDE 'doc-head-open.inc'
-#. %2$s:  IF ( LibraryNameTitle )
-#. %3$s:  LibraryNameTitle
-#. %4$s:  ELSE
-#. %5$s:  END
-#. %6$s:  INCLUDE 'doc-head-close.inc'
-#. %7$s:  BLOCK cssinclude
-#. %8$s:  END
+#. %1$s:  INCLUDE 'doc-head-open.inc' 
+#. %2$s:  IF ( LibraryNameTitle ) 
+#. %3$s:  LibraryNameTitle 
+#. %4$s:  ELSE 
+#. %5$s:  END 
+#. %6$s:  INCLUDE 'doc-head-close.inc' 
+#. %7$s:  BLOCK cssinclude 
+#. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/errors/400.tt:1
 #: opac-tmpl/bootstrap/en/modules/errors/402.tt:1
 #: opac-tmpl/bootstrap/en/modules/errors/401.tt:1
@@ -2114,57 +2114,57 @@ msgstr "%s%s med kommentaren "
 msgid "%s%s%s%sKoha online%s catalog &rsaquo; An error has occurred %s %s%s "
 msgstr "%s%s%s%sKoha %s katalog &rsaquo; En feil har oppstått %s %s%s "
 
-#. %1$s:  INCLUDE 'doc-head-open.inc'
-#. %2$s:  IF ( LibraryNameTitle )
-#. %3$s:  LibraryNameTitle
-#. %4$s:  ELSE
-#. %5$s:  END
-#. %6$s:  INCLUDE 'doc-head-close.inc'
-#. %7$s:  BLOCK cssinclude
-#. %8$s:  END
+#. %1$s:  INCLUDE 'doc-head-open.inc' 
+#. %2$s:  IF ( LibraryNameTitle ) 
+#. %3$s:  LibraryNameTitle 
+#. %4$s:  ELSE 
+#. %5$s:  END 
+#. %6$s:  INCLUDE 'doc-head-close.inc' 
+#. %7$s:  BLOCK cssinclude 
+#. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:1
 #, c-format
 msgid "%s%s%s%sKoha online%s catalog &rsaquo; Download cart %s %s%s "
 msgstr "%s%s%s%sKoha %s katalog &rsaquo; Last ned handlekurv %s %s%s "
 
-#. %1$s:  INCLUDE 'doc-head-open.inc'
-#. %2$s:  IF ( LibraryNameTitle )
-#. %3$s:  LibraryNameTitle
-#. %4$s:  ELSE
-#. %5$s:  END
-#. %6$s:  INCLUDE 'doc-head-close.inc'
-#. %7$s:  BLOCK cssinclude
-#. %8$s:  END
+#. %1$s:  INCLUDE 'doc-head-open.inc' 
+#. %2$s:  IF ( LibraryNameTitle ) 
+#. %3$s:  LibraryNameTitle 
+#. %4$s:  ELSE 
+#. %5$s:  END 
+#. %6$s:  INCLUDE 'doc-head-close.inc' 
+#. %7$s:  BLOCK cssinclude 
+#. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:1
 #, c-format
 msgid "%s%s%s%sKoha online%s catalog &rsaquo; Sending your cart %s %s%s "
 msgstr "%s%s%s%sKoha %s katalog &rsaquo; Sender kurven din %s %s%s "
 
-#. %1$s:  INCLUDE 'doc-head-open.inc'
-#. %2$s:  IF ( LibraryNameTitle )
-#. %3$s:  LibraryNameTitle
-#. %4$s:  ELSE
-#. %5$s:  END
-#. %6$s:  INCLUDE 'doc-head-close.inc'
-#. %7$s:  BLOCK cssinclude
-#. %8$s:  END
+#. %1$s:  INCLUDE 'doc-head-open.inc' 
+#. %2$s:  IF ( LibraryNameTitle ) 
+#. %3$s:  LibraryNameTitle 
+#. %4$s:  ELSE 
+#. %5$s:  END 
+#. %6$s:  INCLUDE 'doc-head-close.inc' 
+#. %7$s:  BLOCK cssinclude 
+#. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:1
 #, c-format
 msgid "%s%s%s%sKoha online%s catalog &rsaquo; Sending your list %s %s%s "
 msgstr "%s%s%s%sKoha %s katalog &rsaquo; Sender lista di %s %s%s "
 
-#. %1$s:  IF ( SEARCH_RESULT.BiblioDefaultViewmarc )
-#. %2$s:  OPACBaseURL
-#. %3$s:  SEARCH_RESULT.biblionumber
-#. %4$s:  ELSE
-#. %5$s:  IF ( SEARCH_RESULT.BiblioDefaultViewisbd )
-#. %6$s:  OPACBaseURL
-#. %7$s:  SEARCH_RESULT.biblionumber
-#. %8$s:  ELSE
-#. %9$s:  OPACBaseURL
-#. %10$s:  SEARCH_RESULT.biblionumber
-#. %11$s:  END
-#. %12$s:  END
+#. %1$s:  IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) 
+#. %2$s:  OPACBaseURL 
+#. %3$s:  SEARCH_RESULT.biblionumber 
+#. %4$s:  ELSE 
+#. %5$s:  IF ( SEARCH_RESULT.BiblioDefaultViewisbd ) 
+#. %6$s:  OPACBaseURL 
+#. %7$s:  SEARCH_RESULT.biblionumber 
+#. %8$s:  ELSE 
+#. %9$s:  OPACBaseURL 
+#. %10$s:  SEARCH_RESULT.biblionumber 
+#. %11$s:  END 
+#. %12$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:38
 #, c-format
 msgid ""
@@ -2176,34 +2176,34 @@ msgstr ""
 "ISBDdetail.pl?biblionumber=%s%s%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
 "%s%s"
 
-#. %1$s:  IF ( shelveslooppri.viewcategory1 )
-#. %2$s:  IF !shelveslooppri.shares
-#. %3$s:  ELSE
-#. %4$s:  END
-#. %5$s:  END
+#. %1$s:  IF ( shelveslooppri.viewcategory1 ) 
+#. %2$s:  IF !shelveslooppri.shares 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#. %5$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:641
 #, c-format
 msgid "%s%sPrivate%sShared%s%s "
 msgstr "%s%sPrivat%sDelt%s%s "
 
-#. %1$s:  IF ( dateformat == "us" )
-#. %2$s:  ELSIF ( dateformat == "metric" )
-#. %3$s:  ELSE
-#. %4$s:  END
+#. %1$s:  IF ( dateformat == "us" ) 
+#. %2$s:  ELSIF ( dateformat == "metric" ) 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/includes/date-format.inc:1
 #, c-format
 msgid "%s(MM/DD/YYYY)%s(DD/MM/YYYY)%s(YYYY-MM-DD)%s"
 msgstr "%s(MM/DD/ÅÅÅÅ)%s(DD/MM/ÅÅÅÅ)%s(ÅÅÅÅ-MM-DD)%s"
 
-#. %1$s:  IF ( bibitemloo.author )
-#. %2$s:  bibitemloo.author
-#. %3$s:  END
+#. %1$s:  IF ( bibitemloo.author ) 
+#. %2$s:  bibitemloo.author 
+#. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:141
 #, c-format
 msgid "%s, by %s%s "
 msgstr "%s, av %s%s "
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:86
 #, c-format
 msgid ""
@@ -2214,60 +2214,60 @@ msgstr ""
 "betalt. Dersom "
 
 #. For the first occurrence,
-#. %1$s:  OPACBaseURL
-#. %2$s:  SEARCH_RESULT.biblionumber
+#. %1$s:  OPACBaseURL 
+#. %2$s:  SEARCH_RESULT.biblionumber 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:59
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:101
 #, c-format
 msgid "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
 msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
 
-#. %1$s:  OPACBaseURL
-#. %2$s:  review.biblionumber
+#. %1$s:  OPACBaseURL 
+#. %2$s:  review.biblionumber 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews-rss.tt:12
 #, c-format
 msgid "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s#comments"
 msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s#comments"
 
-#. %1$s:  OPACBaseURL
-#. %2$s:  review.biblionumber
-#. %3$s:  review.reviewid
+#. %1$s:  OPACBaseURL 
+#. %2$s:  review.biblionumber 
+#. %3$s:  review.reviewid 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews-rss.tt:31
 #, c-format
 msgid "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s&amp;reviewid=%s"
 msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s&amp;reviewid=%s"
 
-#. %1$s:  OPACBaseURL
-#. %2$s:  query_cgi |html
-#. %3$s:  limit_cgi |html
+#. %1$s:  OPACBaseURL 
+#. %2$s:  query_cgi |html 
+#. %3$s:  limit_cgi |html 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:69
 #, c-format
 msgid "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
 msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
 
-#. %1$s:  OPACBaseURL
-#. %2$s:  query_cgi |html
-#. %3$s:  limit_cgi |html
+#. %1$s:  OPACBaseURL 
+#. %2$s:  query_cgi |html 
+#. %3$s:  limit_cgi |html 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:22
 #, c-format
 msgid "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=rss2"
 msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=rss2"
 
-#. %1$s:  OPACBaseURL
+#. %1$s:  OPACBaseURL 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews-rss.tt:5
 #, c-format
 msgid "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 
-#. %1$s:  IF ( starting_homebranch )
-#. %2$s:  starting_homebranch
-#. %3$s:  END
-#. %4$s:  IF ( starting_location )
-#. %5$s:  starting_location
-#. %6$s:  END
-#. %7$s:  IF ( starting_ccode )
-#. %8$s:  starting_ccode
-#. %9$s:  END
+#. %1$s:  IF ( starting_homebranch ) 
+#. %2$s:  starting_homebranch 
+#. %3$s:  END 
+#. %4$s:  IF ( starting_location ) 
+#. %5$s:  starting_location 
+#. %6$s:  END 
+#. %7$s:  IF ( starting_ccode ) 
+#. %8$s:  starting_ccode 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:4
 #, c-format
 msgid ""
@@ -2276,30 +2276,30 @@ msgid ""
 msgstr ""
 "%sGressing %s Hyller%s %s, Hylleplassering: %s%s %s, Samlingskode: %s%s "
 
-#. %1$s:  IF ( ccodesearch )
-#. %2$s:  ELSE
-#. %3$s:  END
+#. %1$s:  IF ( ccodesearch ) 
+#. %2$s:  ELSE 
+#. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:58
 #, c-format
 msgid "%sCollection%sItem type%s"
 msgstr "%sSamling%sDokumenttype%s"
 
-#. %1$s:  IF ( serial.status1 )
-#. %2$s:  END
-#. %3$s:  IF ( serial.status2 )
-#. %4$s:  END
-#. %5$s:  IF ( serial.status3 )
-#. %6$s:  END
-#. %7$s:  IF ( serial.status4 )
-#. %8$s:  END
-#. %9$s:  IF ( serial.status5 )
-#. %10$s:  END
-#. %11$s:  IF ( serial.status6 )
-#. %12$s:  END
-#. %13$s:  IF ( serial.status7 )
-#. %14$s:  END
-#. %15$s:  IF ( serial.status8 )
-#. %16$s:  END
+#. %1$s:  IF ( serial.status1 ) 
+#. %2$s:  END 
+#. %3$s:  IF ( serial.status2 ) 
+#. %4$s:  END 
+#. %5$s:  IF ( serial.status3 ) 
+#. %6$s:  END 
+#. %7$s:  IF ( serial.status4 ) 
+#. %8$s:  END 
+#. %9$s:  IF ( serial.status5 ) 
+#. %10$s:  END 
+#. %11$s:  IF ( serial.status6 ) 
+#. %12$s:  END 
+#. %13$s:  IF ( serial.status7 ) 
+#. %14$s:  END 
+#. %15$s:  IF ( serial.status8 ) 
+#. %16$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:103
 #, c-format
 msgid ""
@@ -2309,14 +2309,14 @@ msgstr ""
 "%sVentet%s %sAnkommet%s %sForsinket%s %sMangler%s %sIkke tilgjengelig%s "
 "%sDlett%s %sPurret%s %sStoppet%s "
 
-#. %1$s:  IF ( messaging_preference.Item_Due )
-#. %2$s:  ELSIF ( messaging_preference.Advance_Notice )
-#. %3$s:  ELSIF ( messaging_preference.Upcoming_Events )
-#. %4$s:  ELSIF ( messaging_preference.Hold_Filled )
-#. %5$s:  ELSIF ( messaging_preference.Item_Check_in )
-#. %6$s:  ELSIF ( messaging_preference.Item_Checkout )
-#. %7$s:  ELSE
-#. %8$s:  END
+#. %1$s:  IF ( messaging_preference.Item_Due ) 
+#. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
+#. %3$s:  ELSIF ( messaging_preference.Upcoming_Events ) 
+#. %4$s:  ELSIF ( messaging_preference.Hold_Filled ) 
+#. %5$s:  ELSIF ( messaging_preference.Item_Check_in ) 
+#. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
+#. %7$s:  ELSE 
+#. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:36
 #, c-format
 msgid ""
@@ -2326,41 +2326,41 @@ msgstr ""
 "%sForfalte lån %sForhåndsvarsel %sKommende arrangementer %sReservasjon "
 "tilgjengelig %sInnlevering %sUtlån %sUkjent %s"
 
-#. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' )
-#. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' )
-#. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' )
-#. %4$s:  ELSE
-#. %5$s:  END
+#. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
+#. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
+#. %3$s:  ELSIF ( advsearchloo.advanced_search_type == 'loc' ) 
+#. %4$s:  ELSE 
+#. %5$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:121
 #, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
 msgstr "%sDokumenttype %sSamling %sHylleisgnatur %sAnnet %s "
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/includes/masthead-sco.inc:17
 #, c-format
 msgid "%sLog out"
 msgstr "%sLogg ut"
 
-#. %1$s:  IF ( shelvesloo.viewcategory2 )
-#. %2$s:  END
+#. %1$s:  IF ( shelvesloo.viewcategory2 ) 
+#. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:715
 #, c-format
 msgid "%sPublic%s "
 msgstr "%sOffentlig%s "
 
-#. %1$s:  IF ( suggestions_loo.ASKED )
-#. %2$s:  ELSIF ( suggestions_loo.CHECKED )
-#. %3$s:  ELSIF ( suggestions_loo.ACCEPTED )
-#. %4$s:  ELSIF ( suggestions_loo.ORDERED )
-#. %5$s:  ELSIF ( suggestions_loo.REJECTED )
-#. %6$s:  ELSIF ( suggestions_loo.AVAILABLE )
-#. %7$s:  ELSE
-#. %8$s:  AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 )
-#. %9$s:  END
-#. %10$s:  IF ( suggestions_loo.reason )
-#. %11$s:  suggestions_loo.reason |html
-#. %12$s:  END
+#. %1$s:  IF ( suggestions_loo.ASKED ) 
+#. %2$s:  ELSIF ( suggestions_loo.CHECKED ) 
+#. %3$s:  ELSIF ( suggestions_loo.ACCEPTED ) 
+#. %4$s:  ELSIF ( suggestions_loo.ORDERED ) 
+#. %5$s:  ELSIF ( suggestions_loo.REJECTED ) 
+#. %6$s:  ELSIF ( suggestions_loo.AVAILABLE ) 
+#. %7$s:  ELSE 
+#. %8$s:  AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) 
+#. %9$s:  END 
+#. %10$s:  IF ( suggestions_loo.reason ) 
+#. %11$s:  suggestions_loo.reason |html 
+#. %12$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:207
 #, c-format
 msgid ""
@@ -2371,9 +2371,9 @@ msgstr ""
 "%sEtterspurt%sSjekket av biblioteket %sGodtatt av biblioteket %sBestilt av "
 "biblioteket %sForslag avslått %sTilgjengelig i biblioteket %s %s %s %s(%s)%s "
 
-#. %1$s:  IF ( typeissue )
-#. %2$s:  ELSIF ( typeissuecancel )
-#. %3$s:  END
+#. %1$s:  IF ( typeissue ) 
+#. %2$s:  ELSIF ( typeissuecancel ) 
+#. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:13
 #, c-format
 msgid ""
@@ -2382,39 +2382,39 @@ msgid ""
 msgstr ""
 "%sMeld deg på et abonnementsvarsel %s Meld deg av et abonnementsvarsel %s"
 
-#. %1$s:  ELSE
-#. %2$s:  END
+#. %1$s:  ELSE 
+#. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:281
 #, c-format
 msgid "%sThis record has no items.%s "
 msgstr "%sDenne posten har ingen eksemplarer.%s "
 
-#. %1$s:  IF ( ISSUE.charges )
-#. %2$s:  ELSE
-#. %3$s:  END
+#. %1$s:  IF ( ISSUE.charges ) 
+#. %2$s:  ELSE 
+#. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:260
 #, c-format
 msgid "%sYes%sNo%s "
 msgstr "%sJa%sNei%s "
 
-#. %1$s:  ELSE
-#. %2$s:  END
+#. %1$s:  ELSE 
+#. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:17
 #, c-format
 msgid "%sa list:%s"
 msgstr "%sen liste:%s"
 
-#. %1$s:  IF ( MY_TAG.author )
-#. %2$s:  MY_TAG.author
-#. %3$s:  END
+#. %1$s:  IF ( MY_TAG.author ) 
+#. %2$s:  MY_TAG.author 
+#. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:129
 #, c-format
 msgid "%sby %s%s"
 msgstr "%sav %s%s"
 
-#. %1$s:  ELSE
-#. %2$s:  END
-#. %3$s:  IF ( BORROWER_INF.OPACPatronDetails )
+#. %1$s:  ELSE 
+#. %2$s:  END 
+#. %3$s:  IF ( BORROWER_INF.OPACPatronDetails ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
 #, c-format
 msgid ""
@@ -2422,9 +2422,9 @@ msgid ""
 msgstr ""
 "%skontaktinformasjon%s lagret. Vennligst kontakt biblioteket%s eller bruk "
 
-#. %1$s:  IF ( paramsloo.single )
-#. %2$s:  ELSE
-#. %3$s:  END
+#. %1$s:  IF ( paramsloo.single ) 
+#. %2$s:  ELSE 
+#. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:119
 #, c-format
 msgid "%sentry%sentries%s. "
@@ -2971,9 +2971,9 @@ msgstr ""
 "RecordNotFound&lt;/code&gt; &lt;/record&gt; &lt;record&gt; &lt;code&gt;"
 "RecordNotFound&lt;/code&gt; &lt;/record&gt; &lt;/GetAuthorityRecords&gt;"
 
-#. %1$s:  SEARCH_RESULT.score_avg
-#. %2$s:  SEARCH_RESULT.num_scores
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:408
+#. %1$s:  SEARCH_RESULT.score_avg 
+#. %2$s:  SEARCH_RESULT.num_scores 
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:410
 #, c-format
 msgid "&nbsp;&nbsp; %s / 5 (on %s rates)"
 msgstr "&nbsp;&nbsp; %s / 5 (av %s vurderinger)"
@@ -3043,21 +3043,21 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Emnefrase"
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Title phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Tittelfrase"
 
-#. %1$s:  SEARCH_RESULT.rating_total
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:464
+#. %1$s:  SEARCH_RESULT.rating_total 
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:466
 #, c-format
 msgid "&nbsp;&nbsp;(%s votes)"
 msgstr "&nbsp;&nbsp;(%s stemmer)"
 
-#. %1$s:  LEVEL_LOO.number
+#. %1$s:  LEVEL_LOO.number 
 #: opac-tmpl/bootstrap/en/modules/opac-browser.tt:50
 #, c-format
 msgid "(%s biblios)"
 msgstr "(%s bibliografiske poster)"
 
 #. For the first occurrence,
-#. %1$s:  ISSUE.renewsleft
-#. %2$s:  ISSUE.renewsallowed
+#. %1$s:  ISSUE.renewsleft 
+#. %2$s:  ISSUE.renewsallowed 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:230
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:235
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:238
@@ -3067,7 +3067,7 @@ msgid "(%s of %s renewals remaining)"
 msgstr "(%s av %s fornyelser igjen)"
 
 #. For the first occurrence,
-#. %1$s:  overdues_count
+#. %1$s:  overdues_count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:372
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:494
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:213
@@ -3173,8 +3173,8 @@ msgstr "(Bruk heller SRU)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:439
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:413
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:159
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:491
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:161
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:493
 #, c-format
 msgid "(done)"
 msgstr "(ferdig)"
@@ -3185,22 +3185,22 @@ msgid "(filtered from _MAX_ total entries)"
 msgstr "(filtrert fra _MAX_ antall innførsler)"
 
 #. For the first occurrence,
-#. %1$s:  GROUP_RESULT.timestamp
+#. %1$s:  GROUP_RESULT.timestamp 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:198
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:336
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:338
 #, c-format
 msgid "(modified on %s)"
 msgstr "(endret %s)"
 
-#. %1$s:  koha_new.newdate
+#. %1$s:  koha_new.newdate 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:46
 #, c-format
 msgid "(published on %s)"
 msgstr "(publisert %s)"
 
-#. %1$s:  FOREACH relate IN related
-#. %2$s:  relate.related_search
-#. %3$s:  END
+#. %1$s:  FOREACH relate IN related 
+#. %2$s:  relate.related_search 
+#. %3$s:  END 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:15
 #, c-format
 msgid "(related searches: %s%s%s)"
@@ -3210,8 +3210,8 @@ msgstr "(beslektede søk: %s%s%s)"
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:27
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:459
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:461
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:507
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:509
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:511
 #, c-format
 msgid "(remove)"
 msgstr "(fjern)"
@@ -3589,8 +3589,8 @@ msgstr "6 måneder"
 msgid "9999-12-31"
 msgstr "9999-12-31"
 
-#. %1$s:  ELSE
-#. %2$s:  END
+#. %1$s:  ELSE 
+#. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:15
 #, c-format
 msgid ": %sa list:%s"
@@ -3674,13 +3674,13 @@ msgstr "; Type periodikum: "
 msgid ";biblionumber="
 msgstr ";biblionumber="
 
-#. %1$s:  HTML5MediaParent
-#. %2$s:  FOREACH HTML5MediaSet IN HTML5MediaSets
-#. %3$s:  HTML5MediaSet.child
-#. %4$s:  HTML5MediaSet.srcblock
-#. %5$s:  HTML5MediaSet.typeblock
-#. %6$s:  END
-#. %7$s:  HTML5MediaParent
+#. %1$s:  HTML5MediaParent 
+#. %2$s:  FOREACH HTML5MediaSet IN HTML5MediaSets 
+#. %3$s:  HTML5MediaSet.child  
+#. %4$s:  HTML5MediaSet.srcblock 
+#. %5$s:  HTML5MediaSet.typeblock 
+#. %6$s:  END 
+#. %7$s:  HTML5MediaParent 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:992
 #, c-format
 msgid ""
@@ -3764,7 +3764,7 @@ msgstr "Referater/sammendrag"
 msgid "Access denied"
 msgstr "Nektet tilgang"
 
-#. %1$s:  UNLESS ( BORROWER_INF.OPACPatronDetails )
+#. %1$s:  UNLESS ( BORROWER_INF.OPACPatronDetails ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
 #, c-format
 msgid "According to our records, we don't have up-to-date %s"
@@ -3792,13 +3792,13 @@ msgstr "Innkjøpsdato: Eldste til nyeste"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:438
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:412
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:158
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:490
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:160
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:492
 msgid "Add"
 msgstr "Legg til i"
 
-#. %1$s:  total
-#. %2$s:  IF ( singleshelf )
+#. %1$s:  total 
+#. %2$s:  IF ( singleshelf ) 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:15
 #, c-format
 msgid "Add %s items to %s"
@@ -3810,7 +3810,7 @@ msgid "Add another field"
 msgstr "Legg til et nytt felt"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:434
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:486
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:488
 #, c-format
 msgid "Add tag"
 msgstr "Legg til tagg"
@@ -3820,7 +3820,7 @@ msgstr "Legg til tagg"
 msgid "Add tag(s)"
 msgstr "Legg til tagg(er)"
 
-#. %1$s:  IF ( singleshelf )
+#. %1$s:  IF ( singleshelf ) 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:17
 #, c-format
 msgid "Add to %s"
@@ -3837,8 +3837,8 @@ msgid "Add to a new list:"
 msgstr "Legg inn i en ny liste:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:461
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:509
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:511
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 #, c-format
 msgid "Add to cart"
 msgstr "Legg i handlekurven"
@@ -3849,7 +3849,7 @@ msgid "Add to list:"
 msgstr "Legg inn i en liste"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 msgid "Add to list: "
 msgstr "Legg til i liste: "
 
@@ -3860,12 +3860,12 @@ msgid "Add to your cart"
 msgstr "Legg i handlekurven"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 msgid "Add to..."
 msgstr "Legg til i ..."
 
-#. %1$s:  review.datereviewed | $KohaDates
-#. %2$s:  IF ( review.your_comment )
+#. %1$s:  review.datereviewed | $KohaDates 
+#. %2$s:  IF ( review.your_comment ) 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:88
 #, c-format
 msgid "Added %s %s by "
@@ -4240,7 +4240,7 @@ msgid "Ascending"
 msgstr "Stigende"
 
 #. For the first occurrence,
-#. %1$s:  subscription.branchname
+#. %1$s:  subscription.branchname 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:793
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:796
 #, c-format
@@ -4337,21 +4337,21 @@ msgid "Author(s)"
 msgstr "Forfatter(e)"
 
 #. For the first occurrence,
-#. %1$s:  IF ( BIBLIO_RESULT.author )
-#. %2$s:  BIBLIO_RESULT.author
-#. %3$s:  END
-#. %4$s:  IF ( BIBLIO_RESULT.MARCAUTHORS )
-#. %5$s:  IF ( BIBLIO_RESULT.author )
-#. %6$s:  END
-#. %7$s:  FOREACH MARCAUTHOR IN BIBLIO_RESULT.MARCAUTHORS
-#. %8$s:  FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP
-#. %9$s:  MARCAUTHOR_SUBFIELDS_LOO.separator
-#. %10$s:  MARCAUTHOR_SUBFIELDS_LOO.value
-#. %11$s:  END
-#. %12$s:  UNLESS ( loop.last )
-#. %13$s:  END
-#. %14$s:  END
-#. %15$s:  END
+#. %1$s:  IF ( BIBLIO_RESULT.author ) 
+#. %2$s:  BIBLIO_RESULT.author 
+#. %3$s:  END 
+#. %4$s:  IF ( BIBLIO_RESULT.MARCAUTHORS ) 
+#. %5$s:  IF ( BIBLIO_RESULT.author ) 
+#. %6$s:  END 
+#. %7$s:  FOREACH MARCAUTHOR IN BIBLIO_RESULT.MARCAUTHORS 
+#. %8$s:  FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP 
+#. %9$s:  MARCAUTHOR_SUBFIELDS_LOO.separator 
+#. %10$s:  MARCAUTHOR_SUBFIELDS_LOO.value 
+#. %11$s:  END 
+#. %12$s:  UNLESS ( loop.last ) 
+#. %13$s:  END 
+#. %14$s:  END 
+#. %15$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:45
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:40
 #, c-format
@@ -4406,7 +4406,7 @@ msgstr "Tilgjengelighet "
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:353
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:355
 #, c-format
 msgid "Availability:"
 msgstr "Tilgjengelighet:"
@@ -4418,7 +4418,7 @@ msgstr "Tilgjengelighet:"
 msgid "Availability: "
 msgstr "Tilgjengelighet: "
 
-#. %1$s:  IF ( item.restrictedopac )
+#. %1$s:  IF ( item.restrictedopac ) 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:86
 #, c-format
 msgid "Available %s"
@@ -4477,7 +4477,7 @@ msgstr "VÆR FORSIKTIG"
 msgid "BK"
 msgstr "BK"
 
-#. %1$s:  heading | html
+#. %1$s:  heading | html 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:14
 #, c-format
 msgid "BT: %s"
@@ -4775,7 +4775,7 @@ msgid "CR"
 msgstr "CR"
 
 #. For the first occurrence,
-#. %1$s:  csv_profile.profile
+#. %1$s:  csv_profile.profile 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:19
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:58
 #, c-format
@@ -4837,7 +4837,7 @@ msgid "Call number:"
 msgstr "Hyllesignatur:"
 
 #. For the first occurrence,
-#. %1$s:  subscription.callnumber
+#. %1$s:  subscription.callnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:802
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:814
 #, c-format
@@ -4914,7 +4914,7 @@ msgid "Card number:"
 msgstr "Kortnummer:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:23
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 #, c-format
 msgid "Cart"
 msgstr "Kurv"
@@ -4946,7 +4946,7 @@ msgstr "Kataloger"
 msgid "Category:"
 msgstr "Kategori:"
 
-#. ACRONYM
+#. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
@@ -4978,8 +4978,8 @@ msgstr "Lever inn lånet"
 msgid "Check out"
 msgstr "Lån"
 
-#. %1$s:  IF ( AllowSelfCheckReturns )
-#. %2$s:  END
+#. %1$s:  IF ( AllowSelfCheckReturns ) 
+#. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:181
 #, c-format
 msgid "Check out%s, return%s or renew an item: "
@@ -5003,17 +5003,17 @@ msgstr "Lånt ut"
 msgid "Checked out ("
 msgstr "Utlånt ("
 
-#. %1$s:  issues_count
+#. %1$s:  issues_count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:106
 #, c-format
 msgid "Checked out (%s)"
 msgstr "Utlånt (%s)"
 
-#. %1$s:  item.firstname
-#. %2$s:  item.surname
-#. %3$s:  IF ( item.cardnumber )
-#. %4$s:  item.cardnumber
-#. %5$s:  END
+#. %1$s:  item.firstname 
+#. %2$s:  item.surname 
+#. %3$s:  IF ( item.cardnumber ) 
+#. %4$s:  item.cardnumber 
+#. %5$s:  END 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:35
 #, c-format
 msgid "Checked out to %s %s %s(%s)%s"
@@ -5030,7 +5030,7 @@ msgstr "Utlånshistorikk"
 msgid "Checkouts"
 msgstr "Utlån"
 
-#. %1$s:  borrowername
+#. %1$s:  borrowername 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:213
 #, c-format
 msgid "Checkouts for %s "
@@ -5052,7 +5052,7 @@ msgid "Classification: "
 msgstr "Klassifikasjon: "
 
 #. For the first occurrence,
-#. %1$s:  BIBLIO_RESULT.classification
+#. %1$s:  BIBLIO_RESULT.classification 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:126
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:118
 #, c-format
@@ -5069,7 +5069,7 @@ msgstr "Tøm"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:825
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:246
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:36
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 #, c-format
 msgid "Clear all"
 msgstr "Slett alle"
@@ -5089,8 +5089,8 @@ msgid "Clear date to suspend indefinitely"
 msgstr "Tøm dato for å utsette reservasjonen på ubestemt tid"
 
 # N8vueH  <a href="http://kzgdcvdjgixn.com/">kzgdcvdjgixn</a>, [url=http://gmjxowvkemmj.com/]gmjxowvkemmj[/url], [link=http://flfunohbiskz.com/]flfunohbiskz[/link], http://oszcbgfzbsjr.com/
-#. %1$s:  BORROWER_INF.title
-#. %2$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INF.category_type firstname = BORROWER_INF.firstname surname = BORROWER_INF.surname othernames = BORROWER_INF.othernames cardnumber = BORROWER_INF.cardnumber
+#. %1$s:  BORROWER_INF.title 
+#. %2$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INF.category_type firstname = BORROWER_INF.firstname surname = BORROWER_INF.surname othernames = BORROWER_INF.othernames cardnumber = BORROWER_INF.cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:47
 #, c-format
 msgid "Click here if you're not %s %s"
@@ -5210,7 +5210,7 @@ msgid "Collection: "
 msgstr "Samling: "
 
 #. For the first occurrence,
-#. %1$s:  BIBLIO_RESULT.seriestitle
+#. %1$s:  BIBLIO_RESULT.seriestitle 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:84
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:76
 #, c-format
@@ -5218,7 +5218,7 @@ msgid "Collection: %s "
 msgstr "Samling: %s "
 
 #. For the first occurrence,
-#. %1$s:  review.firstname
+#. %1$s:  review.firstname 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:910
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:912
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:916
@@ -5226,16 +5226,16 @@ msgstr "Samling: %s "
 msgid "Comment by %s"
 msgstr "Kommentar fra %s"
 
-#. %1$s:  review.firstname
-#. %2$s:  review.surname|truncate(2,'.')
+#. %1$s:  review.firstname 
+#. %2$s:  review.surname|truncate(2,'.') 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:914
 #, c-format
 msgid "Comment by %s %s"
 msgstr "Kommentar fra %s %s"
 
-#. %1$s:  review.title
-#. %2$s:  review.firstname
-#. %3$s:  review.surname
+#. %1$s:  review.title 
+#. %2$s:  review.firstname 
+#. %3$s:  review.surname 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:908
 #, c-format
 msgid "Comment by %s %s %s"
@@ -5247,7 +5247,7 @@ msgstr "Kommentar fra %s %s %s"
 msgid "Comment:"
 msgstr "Kommentar:"
 
-#. %1$s:  reviews.size || 0
+#. %1$s:  reviews.size || 0 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:584
 #, c-format
 msgid "Comments ( %s )"
@@ -5274,11 +5274,11 @@ msgstr "Datafil"
 msgid "Confirm"
 msgstr "Bekreft"
 
-#. %1$s:  FOREACH USER_INF IN USER_INFO
-#. %2$s:  USER_INF.firstname
-#. %3$s:  USER_INF.surname
-#. %4$s:  USER_INF.cardnumber
-#. %5$s:  END
+#. %1$s:  FOREACH USER_INF IN USER_INFO 
+#. %2$s:  USER_INF.firstname 
+#. %3$s:  USER_INF.surname 
+#. %4$s:  USER_INF.cardnumber 
+#. %5$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:95
 #, c-format
 msgid "Confirm holds for: %s %s %s (%s) %s "
@@ -5376,7 +5376,7 @@ msgid "Copyright date:"
 msgstr "Opphavsrettsdato:"
 
 #. For the first occurrence,
-#. %1$s:  BIBLIO_RESULT.copyrightdate
+#. %1$s:  BIBLIO_RESULT.copyrightdate 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:96
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:88
 #, c-format
@@ -5485,7 +5485,7 @@ msgstr "CreativeWork"
 msgid "Credits"
 msgstr "Navngiving"
 
-#. %1$s:  BORROWER_INF.amountoutstanding
+#. %1$s:  BORROWER_INF.amountoutstanding 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:111
 #, c-format
 msgid "Credits (%s)"
@@ -5512,11 +5512,11 @@ msgstr "Denne økta"
 msgid "Currently in local use"
 msgstr "For øyeblikket i lokal bruk"
 
-#. %1$s:  item.firstname
-#. %2$s:  item.surname
-#. %3$s:  IF ( item.cardnumber )
-#. %4$s:  item.cardnumber
-#. %5$s:  END
+#. %1$s:  item.firstname 
+#. %2$s:  item.surname 
+#. %3$s:  IF ( item.cardnumber ) 
+#. %4$s:  item.cardnumber 
+#. %5$s:  END 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:29
 #, c-format
 msgid "Currently in local use by %s %s %s(%s)%s"
@@ -5595,7 +5595,7 @@ msgid "Date received"
 msgstr "Mottaksdato"
 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:76
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:347
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:349
 #, c-format
 msgid "Date:"
 msgstr "Dato:"
@@ -5755,7 +5755,7 @@ msgid "Details"
 msgstr "Detaljer"
 
 #. For the first occurrence,
-#. %1$s:  bibliotitle
+#. %1$s:  bibliotitle 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:12
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:17
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:12
@@ -5763,10 +5763,10 @@ msgstr "Detaljer"
 msgid "Details for %s"
 msgstr "Detaljer for %s"
 
-#. %1$s:  title |html
-#. %2$s:  FOREACH subtitl IN subtitle
-#. %3$s:  subtitl.subfield |html
-#. %4$s:  END
+#. %1$s:  title |html 
+#. %2$s:  FOREACH subtitl IN subtitle 
+#. %3$s:  subtitl.subfield |html 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:41
 #, c-format
 msgid "Details for: %s%s, %s%s"
@@ -5783,7 +5783,7 @@ msgid "Dewey: "
 msgstr "Dewey: "
 
 #. For the first occurrence,
-#. %1$s:  BIBLIO_RESULT.dewey
+#. %1$s:  BIBLIO_RESULT.dewey 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:120
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:112
 #, c-format
@@ -5938,13 +5938,13 @@ msgstr "Skuespill"
 msgid "Due"
 msgstr "Utlånt til"
 
-#. %1$s:  itemLoo.dateDue
+#. %1$s:  itemLoo.dateDue 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:347
 #, c-format
 msgid "Due %s"
 msgstr "Utlånt til %s"
 
-#. %1$s:  paramsloo.delete_fail
+#. %1$s:  paramsloo.delete_fail 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:136
 #, c-format
 msgid "ERROR: Database error. Delete (list number %s) failed."
@@ -5955,7 +5955,7 @@ msgstr "FEIL: Databasefeil. Klarte ikke å slette (listenummer %s)."
 msgid "ERROR: Internal error: incomplete hold request."
 msgstr "FEIL: Intern feil: ukomplett reservasjon."
 
-#. %1$s:  paramsloo.unrecognized
+#. %1$s:  paramsloo.unrecognized 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:139
 #, c-format
 msgid "ERROR: List number %s unrecognized."
@@ -5966,7 +5966,7 @@ msgstr "FEIL: Listenummeret «%s» ble ikke gjenkjent."
 msgid "ERROR: No barcode given."
 msgstr "FEIL: Ingen strekkode er angitt."
 
-#. %1$s:  bad_biblionumber
+#. %1$s:  bad_biblionumber 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:56
 #, c-format
 msgid "ERROR: No biblio record found for biblionumber %s."
@@ -5977,7 +5977,7 @@ msgstr "FEIL: Fant ingen eksemplarer med strekkoden %s."
 msgid "ERROR: No biblionumber received."
 msgstr "FEIL: Ingen strekkode ble mottatt."
 
-#. %1$s:  paramsloo.failgetitem
+#. %1$s:  paramsloo.failgetitem 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:127
 #, c-format
 msgid "ERROR: No item found with barcode %s."
@@ -5988,7 +5988,7 @@ msgstr "FEIL: Fant ingen eksemplarer med strekkoden %s."
 msgid "ERROR: No shelfnumber given."
 msgstr "FEIL: Intet hyllenummer ble angitt."
 
-#. %1$s:  paramsloo.modifyfailure
+#. %1$s:  paramsloo.modifyfailure 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:142
 #, c-format
 msgid ""
@@ -6133,8 +6133,8 @@ msgstr "Skriv inn et nytt innkjøpsforslag"
 msgid "Enter search terms"
 msgstr "Skriv inn et søkebegrep"
 
-#. %1$s:  IF ( SelfCheckoutByLogin )
-#. %2$s:  END
+#. %1$s:  IF ( SelfCheckoutByLogin ) 
+#. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:39
 #, c-format
 msgid ""
@@ -6145,7 +6145,7 @@ msgstr ""
 "på tastaturet)."
 
 #. For the first occurrence,
-#. %1$s:  authtypetext
+#. %1$s:  authtypetext 
 #: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:45
 #, c-format
@@ -6189,7 +6189,7 @@ msgid "Error 500"
 msgstr "Feil 500"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 msgid "Error searching OverDrive collection"
 msgstr "Feil ved søk i OverDrive-samlingen"
 
@@ -6444,7 +6444,7 @@ msgid "Fines"
 msgstr "Gebyrer"
 
 #. For the first occurrence,
-#. %1$s:  BORROWER_INF.amountoutstanding
+#. %1$s:  BORROWER_INF.amountoutstanding 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:109
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:110
 #, c-format
@@ -6516,8 +6516,8 @@ msgstr ""
 msgid "For psykisk utviklingshemmede;"
 msgstr "For psykisk utviklingshemmede;"
 
-#. %1$s:  IF OpacPasswordChange
-#. %2$s:  END
+#. %1$s:  IF OpacPasswordChange 
+#. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:53
 #, c-format
 msgid ""
@@ -6613,7 +6613,7 @@ msgstr "Fotomosaikk"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 msgid "Found"
 msgstr "Funnet"
 
@@ -6659,7 +6659,7 @@ msgstr "Full historikk"
 msgid "Full subscription history"
 msgstr "Full abonnementshistorikk"
 
-#. %1$s:  bibliotitle
+#. %1$s:  bibliotitle 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:48
 #, c-format
 msgid "Full subscription history for %s"
@@ -6773,7 +6773,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:24
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:138
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:130
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:136
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:137
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:66
 #, c-format
 msgid "Go"
@@ -6874,7 +6874,7 @@ msgstr "Emner i stigende rekkefølge"
 msgid "Heading descendant"
 msgstr "Emner i synkende rekkefølge"
 
-#. %1$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INF.category_type firstname = BORROWER_INF.firstname surname = BORROWER_INF.surname othernames = BORROWER_INF.othernames cardnumber = BORROWER_INF.cardnumber
+#. %1$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INF.category_type firstname = BORROWER_INF.firstname surname = BORROWER_INF.surname othernames = BORROWER_INF.othernames cardnumber = BORROWER_INF.cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:44
 #, c-format
 msgid "Hello, %s "
@@ -6974,7 +6974,7 @@ msgstr "Beholdning:"
 msgid "Holds "
 msgstr "Reserveringer "
 
-#. %1$s:  reserves_count
+#. %1$s:  reserves_count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:114
 #, c-format
 msgid "Holds (%s)"
@@ -7104,7 +7104,7 @@ msgstr "ISBD-visning"
 msgid "ISBN"
 msgstr "ISBN"
 
-#. %1$s:  SEARCH_RESULT.isbn |html
+#. %1$s:  SEARCH_RESULT.isbn |html 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:37
 #, c-format
 msgid "ISBN %s"
@@ -7123,17 +7123,17 @@ msgstr "ISBN:"
 msgid "ISBN: "
 msgstr "ISBN: "
 
-#. %1$s:  BIBLIO_RESULT.ISBN
+#. %1$s:  BIBLIO_RESULT.ISBN 
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:55
 #, c-format
 msgid "ISBN: %s "
 msgstr "ISBN: %s "
 
-#. %1$s:  FOREACH isbn IN BIBLIO_RESULT.ISBN
-#. %2$s:  isbn
-#. %3$s:  UNLESS ( loop.last )
-#. %4$s:  END
-#. %5$s:  END
+#. %1$s:  FOREACH isbn IN BIBLIO_RESULT.ISBN 
+#. %2$s:  isbn 
+#. %3$s:  UNLESS ( loop.last ) 
+#. %4$s:  END 
+#. %5$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:60
 #, c-format
 msgid "ISBN: %s %s %s; %s %s "
@@ -7181,7 +7181,7 @@ msgstr ""
 "ikke oppfører seg som forventet, så kan du ha nytte av å se i denne "
 "veiledningen for å komme i gang."
 
-#. %1$s:  SelfCheckTimeout
+#. %1$s:  SelfCheckTimeout 
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:48
 #, c-format
 msgid ""
@@ -7258,7 +7258,7 @@ msgstr "Illustrasjon"
 msgid "Images"
 msgstr "Bilder"
 
-#. %1$s:  IF ( BiblioDefaultViewmarc )
+#. %1$s:  IF ( BiblioDefaultViewmarc ) 
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:69
 #, c-format
 msgid "Images for %s "
@@ -7271,8 +7271,8 @@ msgid "Immediate deletion"
 msgstr "Umiddelbar sletting"
 
 #. For the first occurrence,
-#. %1$s:  OPACBaseURL
-#. %2$s:  BIBLIO_RESULT.biblionumber
+#. %1$s:  OPACBaseURL 
+#. %2$s:  BIBLIO_RESULT.biblionumber 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:144
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:136
 #, c-format
@@ -7287,9 +7287,9 @@ msgid "In transit ("
 msgstr "Underveis ("
 
 #. For the first occurrence,
-#. %1$s:  item.transfertfrom
-#. %2$s:  item.transfertto
-#. %3$s:  item.transfertwhen | $KohaDates
+#. %1$s:  item.transfertfrom 
+#. %2$s:  item.transfertto 
+#. %3$s:  item.transfertwhen | $KohaDates 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:44
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:349
 #, c-format
@@ -7299,7 +7299,7 @@ msgstr "Underveis fra %s til %s siden %s"
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:25
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:106
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:459
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:507
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:509
 #, c-format
 msgid "In your cart"
 msgstr "I handlekurven"
@@ -7462,7 +7462,7 @@ msgstr "Eksemplarer tilgjengelige for oppslag: "
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:355
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:357
 #, c-format
 msgid "Items available:"
 msgstr "Tilgjengelig eksemplarer:"
@@ -7652,7 +7652,7 @@ msgid "LCCN:"
 msgstr "LCCN:"
 
 #. For the first occurrence,
-#. %1$s:  BIBLIO_RESULT.lccn
+#. %1$s:  BIBLIO_RESULT.lccn 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:132
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:124
 #, c-format
@@ -7803,14 +7803,14 @@ msgstr "LinkedIn"
 msgid "Links"
 msgstr "Lenker"
 
-#. %1$s:  paramsloo.delete_ok
+#. %1$s:  paramsloo.delete_ok 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:133
 #, c-format
 msgid "List %s Deleted."
 msgstr "Lista %s ble slettet."
 
-#. %1$s:  IF loggedinuser==0
-#. %2$s:  END
+#. %1$s:  IF loggedinuser==0 
+#. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112
 #, c-format
 msgid ""
@@ -7926,7 +7926,7 @@ msgstr "Logg inn"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:445
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:419
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:497
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:499
 #, c-format
 msgid "Log in to add tags."
 msgstr "Logg inn for å få tilgang"
@@ -8063,7 +8063,7 @@ msgstr "MARC-visning"
 msgid "MARC view"
 msgstr "MARC-visning"
 
-#. %1$s:  bibliotitle
+#. %1$s:  bibliotitle 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:11
 #, c-format
 msgid "MARC view: %s"
@@ -8195,8 +8195,8 @@ msgstr "Hovedadresse"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:264
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:266
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:531
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:535
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:533
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:537
 #, c-format
 msgid "Make a "
 msgstr "Lag et "
@@ -8248,7 +8248,7 @@ msgstr "Mar"
 msgid "March"
 msgstr "Mars"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:445
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:447
 #, c-format
 msgid "Match:"
 msgstr "Treff:"
@@ -8329,7 +8329,7 @@ msgstr "Mikroformer"
 msgid "Mikroskopdia"
 msgstr "Mikroskopdia"
 
-#. %1$s:  subscription.missinglist
+#. %1$s:  subscription.missinglist 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:808
 #, c-format
 msgid "Missing issues: %s "
@@ -8401,7 +8401,7 @@ msgid "More details"
 msgstr "Flere detaljer"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 msgid "More lists"
 msgstr "Flere lister"
 
@@ -8480,7 +8480,7 @@ msgstr "Mine tagger"
 msgid "N/A:"
 msgstr "Ikke tilgjengelig"
 
-#. %1$s:  heading | html
+#. %1$s:  heading | html 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:16
 #, c-format
 msgid "NT: %s"
@@ -8512,7 +8512,7 @@ msgstr "Nettressurser"
 msgid "Never"
 msgstr "Aldri"
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:544
 #, c-format
 msgid "Never expires %s "
@@ -8527,10 +8527,10 @@ msgstr ""
 "Aldri: Slett lånehistorikken umiddelbart. Dette vil slette alle opplysninger "
 "om lånet i det det blir levert inn."
 
-#. %1$s:  review.title |html
-#. %2$s:  FOREACH subtitl IN review.subtitle
-#. %3$s:  subtitl.subfield |html
-#. %4$s:  END
+#. %1$s:  review.title |html 
+#. %2$s:  FOREACH subtitl IN review.subtitle 
+#. %3$s:  subtitl.subfield |html 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews-rss.tt:11
 #, c-format
 msgid "New comment on %s %s, %s%s"
@@ -8541,7 +8541,7 @@ msgstr "Ny kommentar til %s %s, %s%s"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:482
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:624
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:694
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 #, c-format
 msgid "New list"
 msgstr "Ny liste"
@@ -8565,13 +8565,13 @@ msgstr "Nytt søk"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:257
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:436
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:410
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:488
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:490
 #, c-format
 msgid "New tag(s), separated by a comma:"
 msgstr "Nye tagger, adskilt med komma:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:55
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:156
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:158
 #, c-format
 msgid "New tag:"
 msgstr "Ny tagg:"
@@ -8645,11 +8645,11 @@ msgstr "Ingen tilgjengelige eksemplarer."
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:415
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:965
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:236
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:248
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:256
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:264
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:273
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:238
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:250
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:258
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:266
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:275
 #, c-format
 msgid "No cover image available"
 msgstr "Ingen omslagsbilder er tilgjengelige."
@@ -8688,7 +8688,7 @@ msgid "No items available."
 msgstr "Ingen tilgjengelige eksemplarer."
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:216
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:383
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:385
 #, c-format
 msgid "No items available:"
 msgstr "Ingen lån er tilgjengelige:"
@@ -8799,21 +8799,21 @@ msgstr "Normal visning"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:264
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:266
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:531
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:534
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:533
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:536
 #, c-format
 msgid "Not finding what you're looking for?"
 msgstr "Finner du ikke det du leter etter?"
 
 #. For the first occurrence,
-#. %1$s:  IF ( item.restrictedopac )
+#. %1$s:  IF ( item.restrictedopac ) 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:63
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:67
 #, c-format
 msgid "Not for loan %s"
 msgstr "Ikke til utlån %s"
 
-#. %1$s:  itemLoo.notforloanvalue
+#. %1$s:  itemLoo.notforloanvalue 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:357
 #, c-format
 msgid "Not for loan (%s)"
@@ -8868,7 +8868,7 @@ msgstr "Merk: Din kommentar må godkjennes av en bibliotekar. "
 msgid "Note: you can only delete your own tags."
 msgstr "Merk: Du kan bare slette egne tagger."
 
-#. %1$s:  ELSIF ( ERROR.scrubbed )
+#. %1$s:  ELSIF ( ERROR.scrubbed ) 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:60
 #, c-format
 msgid ""
@@ -8917,7 +8917,7 @@ msgid "Notes"
 msgstr "Merknader"
 
 #. For the first occurrence,
-#. %1$s:  BIBLIO_RESULT.notes
+#. %1$s:  BIBLIO_RESULT.notes 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:102
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:94
 #, c-format
@@ -9156,7 +9156,7 @@ msgstr "Andre utgaver: "
 msgid "Other forms:"
 msgstr "Andre former:"
 
-#. %1$s:  otheritemloop.size || 0
+#. %1$s:  otheritemloop.size || 0 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:543
 #, c-format
 msgid "Other holdings ( %s )"
@@ -9181,14 +9181,14 @@ msgid "OutputRewritablePage "
 msgstr "OutputRewritablePage "
 
 #. For the first occurrence,
-#. %1$s:  q | html
+#. %1$s:  q | html 
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:20
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:32
 #, c-format
 msgid "OverDrive search for '%s'"
 msgstr "OverDrive-søk etter '%s'"
 
-#. %1$s:  overdues_count
+#. %1$s:  overdues_count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:107
 #, c-format
 msgid "Overdue (%s)"
@@ -9266,7 +9266,7 @@ msgstr "Patentdokument"
 msgid "Patent information: "
 msgstr "Patentinformasjon: "
 
-#. %1$s:  review.datereviewed | $KohaDates
+#. %1$s:  review.datereviewed | $KohaDates 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:920
 #, c-format
 msgid "Patron comment on %s"
@@ -9383,9 +9383,9 @@ msgstr "Sett deg på venteliste: "
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:825
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:475
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:478
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:477
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:480
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:90
 #, c-format
 msgid "Place hold"
@@ -9537,8 +9537,8 @@ msgstr "Merk:"
 msgid "Please note: "
 msgstr "Merk: "
 
-#. %1$s:  ELSE
-#. %2$s:  END
+#. %1$s:  ELSE 
+#. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:66
 #, c-format
 msgid "Please try again with plain text. %sUnrecognized error. %s "
@@ -9576,7 +9576,7 @@ msgstr "Send eller rediger dine kommentarer til dette dokumentet. "
 msgid "Postkort"
 msgstr "Postkort"
 
-#. %1$s:  IF template.name.match('opac-main.tt')
+#. %1$s:  IF template.name.match('opac-main.tt') 
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:19
 #, c-format
 msgid "Powered by %s "
@@ -9732,7 +9732,7 @@ msgstr "Offentlige lister"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 msgid "Public lists:"
 msgstr "Offentlige lister"
 
@@ -9760,7 +9760,7 @@ msgstr "Publiserings-/opphavsrettsdato: Eldste til nyeste"
 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:368
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:323
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:325
 #, c-format
 msgid "Publication:"
 msgstr "Publisering:"
@@ -9776,16 +9776,16 @@ msgid "Published by :"
 msgstr "Publisert av:"
 
 #. For the first occurrence,
-#. %1$s:  BIBLIO_RESULT.publishercode
-#. %2$s:  IF ( BIBLIO_RESULT.publicationyear )
-#. %3$s:  BIBLIO_RESULT.publicationyear
-#. %4$s:  END
-#. %5$s:  IF ( BIBLIO_RESULT.pages )
-#. %6$s:  BIBLIO_RESULT.pages
-#. %7$s:  END
-#. %8$s:  IF BIBLIO_RESULT.item('size')
-#. %9$s:  BIBLIO_RESULT.item('size')
-#. %10$s:  END
+#. %1$s:  BIBLIO_RESULT.publishercode 
+#. %2$s:  IF ( BIBLIO_RESULT.publicationyear ) 
+#. %3$s:  BIBLIO_RESULT.publicationyear 
+#. %4$s:  END 
+#. %5$s:  IF ( BIBLIO_RESULT.pages ) 
+#. %6$s:  BIBLIO_RESULT.pages 
+#. %7$s:  END 
+#. %8$s:  IF BIBLIO_RESULT.item('size') 
+#. %9$s:  BIBLIO_RESULT.item('size') 
+#. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:69
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:61
 #, c-format
@@ -9845,7 +9845,7 @@ msgstr "KVITTERING"
 msgid "RIS (Zotero, EndNote, others)"
 msgstr "RIS (Zotero, EndNote, m.fl.)"
 
-#. %1$s:  heading | html
+#. %1$s:  heading | html 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:20
 #, c-format
 msgid "RT: %s"
@@ -9883,10 +9883,14 @@ msgstr "RecallItem "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:260
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:15
-#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:31
 #, c-format
 msgid "Recent comments"
 msgstr "Nyeste kommentarer"
+
+#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:31
+#, c-format
+msgid "Recent comments "
+msgstr "Nye kommentarer"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:156
 #, c-format
@@ -10109,21 +10113,21 @@ msgstr "Sorter liste på nytt"
 msgid "Results"
 msgstr "Resultater"
 
-#. %1$s:  from
-#. %2$s:  to
-#. %3$s:  total
+#. %1$s:  from 
+#. %2$s:  to 
+#. %3$s:  total 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:65
 #, c-format
 msgid "Results %s to %s of %s"
 msgstr "Resultater %s til %s av %s"
 
 #. For the first occurrence,
-#. %1$s:  IF ( query_desc )
-#. %2$s:  query_desc | html
-#. %3$s:  END
-#. %4$s:  IF ( limit_desc )
-#. %5$s:  limit_desc | html
-#. %6$s:  END
+#. %1$s:  IF ( query_desc ) 
+#. %2$s:  query_desc | html 
+#. %3$s:  END 
+#. %4$s:  IF ( limit_desc ) 
+#. %5$s:  limit_desc | html 
+#. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:23
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:30
 #, c-format
@@ -10305,7 +10309,7 @@ msgstr "Lørdag"
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:589
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:795
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:88
@@ -10317,7 +10321,7 @@ msgstr "Lagre"
 msgid "Save record "
 msgstr "Lagre post "
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:502
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:504
 #, c-format
 msgid "Save to Lists"
 msgstr "Lagre til dine lister:"
@@ -10392,11 +10396,11 @@ msgstr "Søk"
 msgid "Search "
 msgstr "Søk "
 
-#. %1$s:  UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 )
-#. %2$s:  IF ( mylibraryfirst )
-#. %3$s:  mylibraryfirst
-#. %4$s:  END
-#. %5$s:  END
+#. %1$s:  UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) 
+#. %2$s:  IF ( mylibraryfirst ) 
+#. %3$s:  mylibraryfirst 
+#. %4$s:  END 
+#. %5$s:  END 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:142
 #, c-format
 msgid "Search %s %s (in %s only) %s %s "
@@ -10411,7 +10415,7 @@ msgstr "Let etter denne tittelen i:"
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:187
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:50
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:362
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:317
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:319
 msgid "Search for works by this author"
 msgstr "Søk etter verk av denne forfatteren"
 
@@ -10438,7 +10442,7 @@ msgstr "Søkevalg:"
 msgid "Search suggestions"
 msgstr "Søk i forslag"
 
-#. %1$s:  LibraryName |html
+#. %1$s:  LibraryName |html 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:6
 #, c-format
 msgid "Search the %s"
@@ -10457,7 +10461,7 @@ msgstr "SearchCourseReserves "
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 msgid "Searching OverDrive..."
 msgstr "Søker i OverDrive..."
 
@@ -10485,7 +10489,7 @@ msgstr "Seksjon: "
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:413
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:87
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:89
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:271
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:273
 msgid "See Baker & Taylor"
 msgstr "Se Baker & Taylor"
 
@@ -10536,7 +10540,7 @@ msgstr "Velg et bestemt eksemplar:"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:825
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:246
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:35
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 #, c-format
 msgid "Select all"
 msgstr "Velg alle"
@@ -10561,7 +10565,7 @@ msgstr "Velg hva det skal søkes etter"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:825
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:39
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:317
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 #, c-format
 msgid "Select titles to: "
 msgstr "Velg eksemplarer til: "
@@ -10647,7 +10651,7 @@ msgid "Serial type"
 msgstr "Periodikatype"
 
 #. For the first occurrence,
-#. %1$s:  BIBLIO_RESULT.serial
+#. %1$s:  BIBLIO_RESULT.serial 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:114
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:106
 #, c-format
@@ -10837,8 +10841,8 @@ msgstr "Vis årganger"
 msgid "Show year: "
 msgstr "Vis år: "
 
-#. %1$s:  resultcount
-#. %2$s:  total
+#. %1$s:  resultcount 
+#. %2$s:  total 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:63
 #, c-format
 msgid "Showing %s of about %s results"
@@ -10910,7 +10914,7 @@ msgstr "Sløyfekassett"
 msgid "Småbarn;"
 msgstr "Småbarn;"
 
-#. %1$s:  failaddress
+#. %1$s:  failaddress 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:72
 #, c-format
 msgid ""
@@ -11008,13 +11012,13 @@ msgstr ""
 msgid "Sorry, you are too young to reserve this material."
 msgstr "Beklager, du er ikke gammel nok til å reservere dette."
 
-#. %1$s:  too_much_oweing
+#. %1$s:  too_much_oweing 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:44
 #, c-format
 msgid "Sorry, you cannot place holds because you owe %s. "
 msgstr "Beklager, du kan ikke reservere fordi du skylder %s. "
 
-#. %1$s:  too_many_reserves
+#. %1$s:  too_many_reserves 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:50
 #, c-format
 msgid "Sorry, you cannot place more than %s holds. "
@@ -11148,8 +11152,8 @@ msgstr "Status"
 msgid "Status:"
 msgstr "Status:"
 
-#. %1$s:  IF ( SelfCheckoutByLogin )
-#. %2$s:  END
+#. %1$s:  IF ( SelfCheckoutByLogin ) 
+#. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:38
 #, c-format
 msgid "Step one: Enter your user id%s and password%s"
@@ -11280,7 +11284,7 @@ msgid "Subject: "
 msgstr "Emne: "
 
 #. For the first occurrence,
-#. %1$s:  BIBLIO_RESULT.subject
+#. %1$s:  BIBLIO_RESULT.subject 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:90
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:82
 #, c-format
@@ -11336,6 +11340,11 @@ msgid "Subscribe to email notification on new issues "
 msgstr "Motta e-postbeskjeder ved nye utgaver "
 
 #. IMG
+#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:31
+msgid "Subscribe to recent comments"
+msgstr "Abonnér på nye kommentarer"
+
+#. IMG
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:64
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:92
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:44
@@ -11353,17 +11362,17 @@ msgstr "Abonnement"
 msgid "Subscription : "
 msgstr "Abonnement : "
 
-#. %1$s:  subscription.histstartdate | $KohaDates
-#. %2$s:  IF ( subscription.histenddate )
-#. %3$s:  subscription.histenddate | $KohaDates
-#. %4$s:  ELSE
-#. %5$s:  END
+#. %1$s:  subscription.histstartdate | $KohaDates 
+#. %2$s:  IF ( subscription.histenddate ) 
+#. %3$s:  subscription.histenddate | $KohaDates 
+#. %4$s:  ELSE 
+#. %5$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:806
 #, c-format
 msgid "Subscription from: %s to:%s %s %s now (current)%s"
 msgstr "Abonnement fra: %s til:%s %s %s nå (løpende)%s"
 
-#. %1$s:  subscription_LOO.bibliotitle
+#. %1$s:  subscription_LOO.bibliotitle 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:40
 #, c-format
 msgid "Subscription information for %s"
@@ -11490,7 +11499,7 @@ msgstr "Innholdsfortegnelse fra Syndetics"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:254
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:49
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:153
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:155
 #, c-format
 msgid "Tag"
 msgstr "Tagg"
@@ -11512,8 +11521,8 @@ msgstr "Status for tagger her."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:441
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:415
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:161
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:493
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:163
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:495
 #, c-format
 msgid "Tag status here. "
 msgstr "Status for tagger her. "
@@ -11541,7 +11550,7 @@ msgid "Tags from this library:"
 msgstr "Tagger fra dette biblioteket:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:407
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:431
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:433
 #, c-format
 msgid "Tags:"
 msgstr "Tagger:"
@@ -11659,23 +11668,23 @@ msgstr "Takk!"
 msgid "Thank you!"
 msgstr "Takk!"
 
-#. %1$s:  subscription.opacdisplaycount
+#. %1$s:  subscription.opacdisplaycount 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:817
 #, c-format
 msgid "The %s latest issues for this subscription:"
 msgstr "De %s siste numrene av dette abonnementet:"
 
-#. %1$s:  limit
-#. %2$s:  IF ( itemtype )
-#. %3$s:  itemtype
-#. %4$s:  END
-#. %5$s:  IF ( branch )
-#. %6$s:  branch
-#. %7$s:  END
-#. %8$s:  IF ( timeLimitFinite )
-#. %9$s:  timeLimitFinite |html
-#. %10$s:  ELSE
-#. %11$s:  END
+#. %1$s:  limit 
+#. %2$s:  IF ( itemtype ) 
+#. %3$s:  itemtype 
+#. %4$s:  END 
+#. %5$s:  IF ( branch ) 
+#. %6$s:  branch 
+#. %7$s:  END 
+#. %8$s:  IF ( timeLimitFinite ) 
+#. %9$s:  timeLimitFinite |html 
+#. %10$s:  ELSE 
+#. %11$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:42
 #, c-format
 msgid ""
@@ -11685,10 +11694,10 @@ msgstr ""
 "De %s mest utlånte %s %s %s %s at %s %s %s de siste %s månedene %s gjennom "
 "all tid%s "
 
-#. %1$s:  IF ( LibraryNameTitle )
-#. %2$s:  LibraryNameTitle
-#. %3$s:  ELSE
-#. %4$s:  END
+#. %1$s:  IF ( LibraryNameTitle ) 
+#. %2$s:  LibraryNameTitle 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/maintenance.tt:30
 #, c-format
 msgid ""
@@ -11708,62 +11717,62 @@ msgstr "Skyen er ikke tilgjengelig."
 msgid "The browser table is empty. this feature is not fully set-up. See the "
 msgstr "Tabellen er tom. Denne funksjonen er ikke tatt i bruk. Se "
 
-#. %1$s:  email_add
+#. %1$s:  email_add 
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:16
 #, c-format
 msgid "The cart was sent to: %s"
 msgstr "Handlekurven ble sendt til: %s"
 
-#. %1$s:  subscription_LOO.startdate
-#. %2$s:  IF ( subscription_LOO.periodicity1 )
-#. %3$s:  END
-#. %4$s:  IF ( subscription_LOO.periodicity2 )
-#. %5$s:  END
-#. %6$s:  IF ( subscription_LOO.periodicity3 )
-#. %7$s:  END
-#. %8$s:  IF ( subscription_LOO.periodicity4 )
-#. %9$s:  END
-#. %10$s:  IF ( subscription_LOO.periodicity5 )
-#. %11$s:  END
-#. %12$s:  IF ( subscription_LOO.periodicity6 )
-#. %13$s:  END
-#. %14$s:  IF ( subscription_LOO.periodicity7 )
-#. %15$s:  END
-#. %16$s:  IF ( subscription_LOO.periodicity8 )
-#. %17$s:  END
-#. %18$s:  IF ( subscription_LOO.periodicity9 )
-#. %19$s:  END
-#. %20$s:  IF ( subscription_LOO.periodicity10 )
-#. %21$s:  END
-#. %22$s:  IF ( subscription_LOO.periodicity11 )
-#. %23$s:  END
-#. %24$s:  IF ( subscription_LOO.periodicity12 )
-#. %25$s:  END
-#. %26$s:  IF ( subscription_LOO.periodicity13 )
-#. %27$s:  END
-#. %28$s:  IF ( subscription_LOO.arrival1 )
-#. %29$s:  END
-#. %30$s:  IF ( subscription_LOO.arrival2 )
-#. %31$s:  END
-#. %32$s:  IF ( subscription_LOO.arrival3 )
-#. %33$s:  END
-#. %34$s:  IF ( subscription_LOO.arrival4 )
-#. %35$s:  END
-#. %36$s:  IF ( subscription_LOO.arrival5 )
-#. %37$s:  END
-#. %38$s:  IF ( subscription_LOO.arrival6 )
-#. %39$s:  END
-#. %40$s:  IF ( subscription_LOO.arrival7 )
-#. %41$s:  END
-#. %42$s:  IF ( subscription_LOO.numberlength )
-#. %43$s:  subscription_LOO.numberlength
-#. %44$s:  END
-#. %45$s:  IF ( subscription_LOO.weeklength )
-#. %46$s:  subscription_LOO.weeklength
-#. %47$s:  END
-#. %48$s:  IF ( subscription_LOO.monthlength )
-#. %49$s:  subscription_LOO.monthlength
-#. %50$s:  END
+#. %1$s:  subscription_LOO.startdate 
+#. %2$s:  IF ( subscription_LOO.periodicity1 ) 
+#. %3$s:  END 
+#. %4$s:  IF ( subscription_LOO.periodicity2 ) 
+#. %5$s:  END 
+#. %6$s:  IF ( subscription_LOO.periodicity3 ) 
+#. %7$s:  END 
+#. %8$s:  IF ( subscription_LOO.periodicity4 ) 
+#. %9$s:  END 
+#. %10$s:  IF ( subscription_LOO.periodicity5 ) 
+#. %11$s:  END 
+#. %12$s:  IF ( subscription_LOO.periodicity6 ) 
+#. %13$s:  END 
+#. %14$s:  IF ( subscription_LOO.periodicity7 ) 
+#. %15$s:  END 
+#. %16$s:  IF ( subscription_LOO.periodicity8 ) 
+#. %17$s:  END 
+#. %18$s:  IF ( subscription_LOO.periodicity9 ) 
+#. %19$s:  END 
+#. %20$s:  IF ( subscription_LOO.periodicity10 ) 
+#. %21$s:  END 
+#. %22$s:  IF ( subscription_LOO.periodicity11 ) 
+#. %23$s:  END 
+#. %24$s:  IF ( subscription_LOO.periodicity12 ) 
+#. %25$s:  END 
+#. %26$s:  IF ( subscription_LOO.periodicity13 ) 
+#. %27$s:  END 
+#. %28$s:  IF ( subscription_LOO.arrival1 ) 
+#. %29$s:  END 
+#. %30$s:  IF ( subscription_LOO.arrival2 ) 
+#. %31$s:  END 
+#. %32$s:  IF ( subscription_LOO.arrival3 ) 
+#. %33$s:  END 
+#. %34$s:  IF ( subscription_LOO.arrival4 ) 
+#. %35$s:  END 
+#. %36$s:  IF ( subscription_LOO.arrival5 ) 
+#. %37$s:  END 
+#. %38$s:  IF ( subscription_LOO.arrival6 ) 
+#. %39$s:  END 
+#. %40$s:  IF ( subscription_LOO.arrival7 ) 
+#. %41$s:  END 
+#. %42$s:  IF ( subscription_LOO.numberlength ) 
+#. %43$s:  subscription_LOO.numberlength 
+#. %44$s:  END 
+#. %45$s:  IF ( subscription_LOO.weeklength ) 
+#. %46$s:  subscription_LOO.weeklength 
+#. %47$s:  END 
+#. %48$s:  IF ( subscription_LOO.monthlength ) 
+#. %49$s:  subscription_LOO.monthlength 
+#. %50$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:41
 #, c-format
 msgid ""
@@ -11798,7 +11807,7 @@ msgstr ""
 msgid "The feature of sharing lists is not in use in this library."
 msgstr "Funksjonen for deling av lister er ikke i bruk ved dette biblioteket. "
 
-#. %1$s:  subscription_LOO.histstartdate
+#. %1$s:  subscription_LOO.histstartdate 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:109
 #, c-format
 msgid "The first subscription was started on %s"
@@ -11834,13 +11843,13 @@ msgstr ""
 msgid "The list "
 msgstr "Listen: "
 
-#. %1$s:  email
+#. %1$s:  email 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:15
 #, c-format
 msgid "The list was sent to: %s"
 msgstr "Lista ble sendt til: %s"
 
-#. %1$s:  op
+#. %1$s:  op 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:34
 #, c-format
 msgid "The operation %s is not supported."
@@ -11851,20 +11860,20 @@ msgstr "Operasjonen %s støttes ikke. "
 msgid "The selected suggestions have been deleted."
 msgstr "De valgte forslagene har blitt slettet."
 
-#. %1$s:  subscription_LOO.histenddate
+#. %1$s:  subscription_LOO.histenddate 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:111
 #, c-format
 msgid "The subscription expired on %s"
 msgstr "Abonnementet utløp %s"
 
-#. %1$s:  ELSIF ( circ_error_max_loans_allowed )
+#. %1$s:  ELSIF ( circ_error_max_loans_allowed ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:44
 #, c-format
 msgid "The system does not recognize this barcode. %s "
 msgstr "Systemet gjenkjenner ikke denne strekkoden. %s "
 
-#. %1$s:  ERROR.scrubbed
-#. %2$s:  ELSIF ( ERROR.scrubbed_all_bad )
+#. %1$s:  ERROR.scrubbed 
+#. %2$s:  ELSIF ( ERROR.scrubbed_all_bad ) 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:63
 #, c-format
 msgid ""
@@ -11879,7 +11888,7 @@ msgstr ""
 msgid "The userid "
 msgstr "Bruker-IDen "
 
-#. %1$s:  subscriptionsnumber
+#. %1$s:  subscriptionsnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:790
 #, c-format
 msgid "There are %s subscription(s) associated with this title."
@@ -11895,18 +11904,18 @@ msgstr "Det er ingen kommentarer til denne posten."
 msgid "There are no pending purchase suggestions."
 msgstr "Det er ingen utestående innkjøpsforslag."
 
-#. %1$s:  RESERVE_CHARGE
+#. %1$s:  RESERVE_CHARGE 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:103
 #, c-format
 msgid "There is a charge of %s for placing this hold "
 msgstr "Det koster kroner %s å gjennomføre denne reservasjonen "
 
-#. %1$s:  IF ( ERROR.tagsdisabled )
-#. %2$s:  ELSIF ( ERROR.badparam )
-#. %3$s:  ERROR.badparam
-#. %4$s:  ELSIF ( ERROR.login )
-#. %5$s:  ELSIF ( ERROR.failed_delete )
-#. %6$s:  ERROR.failed_delete
+#. %1$s:  IF ( ERROR.tagsdisabled ) 
+#. %2$s:  ELSIF ( ERROR.badparam ) 
+#. %3$s:  ERROR.badparam 
+#. %4$s:  ELSIF ( ERROR.login ) 
+#. %5$s:  ELSIF ( ERROR.failed_delete ) 
+#. %6$s:  ERROR.failed_delete 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:50
 #, c-format
 msgid ""
@@ -11961,7 +11970,7 @@ msgstr ""
 "Denne «skyen» viser de mest brukte emnene i vår samling. Velg et av emnene "
 "for å se de tilknyttede dokumentene."
 
-#. %1$s:  ELSIF ( circ_error_GNA )
+#. %1$s:  ELSIF ( circ_error_GNA ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:68
 #, c-format
 msgid "This card has been declared lost. %s "
@@ -11995,7 +12004,7 @@ msgstr ""
 msgid "This is a serial"
 msgstr "Dette er et abonnement på periodika"
 
-#. %1$s:  ELSIF ( circ_error_RESTRICTED )
+#. %1$s:  ELSIF ( circ_error_RESTRICTED ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:56
 #, c-format
 msgid "This item has been withdrawn from the collection. %s "
@@ -12006,25 +12015,25 @@ msgstr "Dette dokumentet har blitt trukket tilbake fra samlingen. %s "
 msgid "This item is already checked out to you."
 msgstr "Dette eksemplaret er allerede utlånt til deg."
 
-#. %1$s:  ELSIF ( circ_error_NO_MORE_RENEWALS )
+#. %1$s:  ELSIF ( circ_error_NO_MORE_RENEWALS ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:48
 #, c-format
 msgid "This item is checked out to someone else. %s "
 msgstr "Dette dokumentet er allerede utlånt til en annen låner. %s "
 
-#. %1$s:  ELSIF ( circ_error_DEBT )
+#. %1$s:  ELSIF ( circ_error_DEBT ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:52
 #, c-format
 msgid "This item is not for loan. %s "
 msgstr "Dette dokumentet kan ikke lånes. %s "
 
-#. %1$s:  ELSIF ( circ_error_ITEMNOTSAMEBRANCH )
+#. %1$s:  ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:60
 #, c-format
 msgid "This item is on hold for another patron. %s "
 msgstr "Dette dokumentet er reservert for en annen låner. %s "
 
-#. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1
+#. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:504
 #, c-format
 msgid ""
@@ -12050,7 +12059,7 @@ msgstr ""
 "Denne siden inneholder utvidet innhold som er synlig når JavaScript er "
 "aktivert eller ved å klikke "
 
-#. %1$s:  items_count
+#. %1$s:  items_count 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:642
 #, c-format
 msgid "This record has many physical items (%s). "
@@ -12325,7 +12334,7 @@ msgstr "Skriv inn et søkebegrep"
 msgid "Type:"
 msgstr "Type:"
 
-#. %1$s:  heading | html
+#. %1$s:  heading | html 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:18
 #, c-format
 msgid "UF: %s"
@@ -12337,7 +12346,7 @@ msgid "URL(s)"
 msgstr "URL(er)"
 
 #. For the first occurrence,
-#. %1$s:  BIBLIO_RESULT.url |url
+#. %1$s:  BIBLIO_RESULT.url |url 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:137
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:129
 #, c-format
@@ -12390,7 +12399,7 @@ msgid "Unified title"
 msgstr "Enhetlig tittel"
 
 #. For the first occurrence,
-#. %1$s:  BIBLIO_RESULT.unititle
+#. %1$s:  BIBLIO_RESULT.unititle 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:108
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:100
 #, c-format
@@ -12573,9 +12582,9 @@ msgstr "Vis alle"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:341
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:344
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:346
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:297
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:300
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:299
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:302
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:304
 msgid "View details for this title"
 msgstr "Vis detaljer for denne tittelen"
 
@@ -12644,7 +12653,7 @@ msgstr "Årganger: "
 msgid "Waiting"
 msgstr "Venter"
 
-#. %1$s:  waiting_count
+#. %1$s:  waiting_count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:113
 #, c-format
 msgid "Waiting (%s)"
@@ -12738,7 +12747,7 @@ msgstr "Med valgte forslag: "
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:825
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:317
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 msgid "With selected titles: "
 msgstr "Valgte eksemplarer: "
 
@@ -12764,8 +12773,8 @@ msgstr "Uke"
 msgid "Would you like to print a receipt?"
 msgstr "Vil du skrive ut en kvittering?"
 
-#. %1$s:  bor_messages_loo.message_date | $KohaDates
-#. %2$s:  bor_messages_loo.branchname
+#. %1$s:  bor_messages_loo.message_date | $KohaDates 
+#. %2$s:  bor_messages_loo.branchname 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:35
 #, c-format
 msgid "Written on %s by %s"
@@ -12797,7 +12806,7 @@ msgid ""
 "again."
 msgstr "Du kobler deg opp mot Koha fra en annen IP-adresse. Logg inn igjen."
 
-#. %1$s:  borrowername
+#. %1$s:  borrowername 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:166
 #, c-format
 msgid "You are logged in as %s."
@@ -12839,7 +12848,7 @@ msgstr "Du kan bruke OAI-PMH ListRecords i stedt for denne tjenesten."
 msgid "You can't change your password."
 msgstr "Du kan ikke endre passordet."
 
-#. %1$s:  ELSIF ( circ_error_NOT_FOR_LOAN )
+#. %1$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:50
 #, c-format
 msgid "You cannot renew this item again. %s "
@@ -12906,7 +12915,7 @@ msgstr "Du har et tilgodebeløp på:"
 msgid "You have already requested this title."
 msgstr "Du har allerede reservert dette dokumentet."
 
-#. %1$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER )
+#. %1$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:46
 #, c-format
 msgid "You have checked out too many items and can't check out any more. %s "
@@ -12965,7 +12974,7 @@ msgstr "Du må være logget inn for å opprette eller endre lister"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 msgid "You must be logged in to create or add to lists"
 msgstr "Du må være logget inn for å opprette eller endre lister"
 
@@ -12979,8 +12988,8 @@ msgstr "Du må velge hvilket bibliotek du vil hente fra. "
 msgid "You must select at least one item. "
 msgstr "Du må velge minst ett dokument. "
 
-#. %1$s:  amount
-#. %2$s:  ELSIF ( circ_error_WTHDRAWN )
+#. %1$s:  amount 
+#. %2$s:  ELSIF ( circ_error_WTHDRAWN ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:54
 #, c-format
 msgid "You owe the library %s and cannot check out. %s "
@@ -13014,19 +13023,19 @@ msgid ""
 "again."
 msgstr "Sesjons-cookien har gått ut på dato, vennligst last inn siden på nytt."
 
-#. %1$s:  IF ( BORROWER_INF.userdebarreddate )
+#. %1$s:  IF ( BORROWER_INF.userdebarreddate ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:86
 #, c-format
 msgid "Your account has been frozen%s until "
 msgstr "Kontoen din har blitt deaktivert%s til "
 
-#. %1$s:  ELSIF ( circ_error_CARD_LOST )
+#. %1$s:  ELSIF ( circ_error_CARD_LOST ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:66
 #, c-format
 msgid "Your account has been suspended. %s "
 msgstr "Kontoen din har blitt deaktivert. %s "
 
-#. %1$s:  BORROWER_INF.warnexpired | $KohaDates
+#. %1$s:  BORROWER_INF.warnexpired | $KohaDates 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:60
 #, c-format
 msgid ""
@@ -13036,7 +13045,7 @@ msgstr ""
 "Kortet ditt gikk ut på dato %s. Kontakt biblioteket dersom du ønsker å "
 "fornye kortet."
 
-#. %1$s:  ELSIF ( circ_error_DEBARRED )
+#. %1$s:  ELSIF ( circ_error_DEBARRED ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:64
 #, c-format
 msgid "Your account has expired. %s "
@@ -13141,7 +13150,7 @@ msgstr ""
 "med kortet til utlånsskranken på ditt lokale bibliotek så feilen kan bli "
 "rettet opp."
 
-#. %1$s:  shelfname
+#. %1$s:  shelfname 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:1
 #, c-format
 msgid "Your list : %s "
@@ -13161,16 +13170,16 @@ msgstr "Dine lister"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 msgid "Your lists:"
 msgstr "Dine lister:"
 
-#. %1$s:  FOREACH error IN RENEW_ERROR.split('\|')
-#. %2$s:  IF error == 'card_expired'
-#. %3$s:  ELSIF error == 'too_many'
-#. %4$s:  ELSIF error == 'on_reserve'
-#. %5$s:  END
-#. %6$s:  END
+#. %1$s:  FOREACH error IN RENEW_ERROR.split('\|') 
+#. %2$s:  IF error == 'card_expired' 
+#. %3$s:  ELSIF error == 'too_many' 
+#. %4$s:  ELSIF error == 'on_reserve' 
+#. %5$s:  END 
+#. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:67
 #, c-format
 msgid ""
@@ -13200,7 +13209,7 @@ msgstr "Valgmuligheter: "
 msgid "Your password has been changed "
 msgstr "Passordet ditt er blitt endret "
 
-#. %1$s:  minpasslen
+#. %1$s:  minpasslen 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:48
 #, c-format
 msgid "Your password must be at least %s characters long."
@@ -13242,7 +13251,7 @@ msgstr "Lånehistorikken har blitt slettet."
 msgid "Your search history"
 msgstr "Din søkehistorikk"
 
-#. %1$s:  total |html
+#. %1$s:  total |html 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:75
 #, c-format
 msgid "Your search returned %s results."
@@ -13287,8 +13296,8 @@ msgid "[% LibraryName |html %] Search RSS feed"
 msgstr "[% LibraryName |html %] RSS-strøm for søk"
 
 #. SPAN
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:226
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:254
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:228
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:256
 msgid "[% SEARCH_RESULT.biblionumber |url %]"
 msgstr "[% SEARCH_RESULT.biblionumber |url %]"
 
@@ -13541,21 +13550,21 @@ msgstr "sammendrag"
 msgid "abstract or summary "
 msgstr "referat/sammendrag "
 
-#. %1$s:  ELSE
+#. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
 #, c-format
 msgid "account, %s "
 msgstr "konto, %s "
 
-#. %1$s:  IF ( casServerUrl )
+#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
 #, c-format
 msgid "account, %s please "
 msgstr "konto, %s vennligst "
 
-#. %1$s:  END
-#. %2$s:  ELSE
-#. %3$s:  END
+#. %1$s:  END 
+#. %2$s:  ELSE 
+#. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
 #, c-format
 msgid ""
@@ -13665,11 +13674,11 @@ msgstr "kunstreproduksjon "
 msgid "article"
 msgstr "artikkel"
 
-#. %1$s:  WAITIN.branch
-#. %2$s:  ELSE
-#. %3$s:  WAITIN.holdingbranch
-#. %4$s:  WAITIN.branch
-#. %5$s:  END
+#. %1$s:  WAITIN.branch 
+#. %2$s:  ELSE 
+#. %3$s:  WAITIN.holdingbranch 
+#. %4$s:  WAITIN.branch 
+#. %5$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:356
 #, c-format
 msgid "at %s %s In transit from %s to %s %s "
@@ -13730,8 +13739,8 @@ msgstr "tilgjengelig online "
 msgid "average rating: "
 msgstr "gjennomsnittlig vurdering: "
 
-#. %1$s:  rating_avg_int
-#. %2$s:  rating_total
+#. %1$s:  rating_avg_int 
+#. %2$s:  rating_total 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:501
 #, c-format
 msgid "average rating: %s (%s votes)"
@@ -13790,7 +13799,7 @@ msgid "biography "
 msgstr "biografi "
 
 #. IMG
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:205
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:207
 msgid "bonus"
 msgstr "bonus"
 
@@ -14527,14 +14536,14 @@ msgstr "ilsdi.pl?service=LookupPatron&amp;id=815&amp;id_type=cardnumber "
 msgid "ilsdi.pl?service=RenewLoan&amp;patron_id=1&amp;item_id=1 "
 msgstr "ilsdi.pl?service=RenewLoan&amp;patron_id=1&amp;item_id=1 "
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:95
 #, c-format
 msgid "in %s fines"
 msgstr "i %s gebyrer"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 msgid "in OverDrive collection"
 msgstr "i OverDrive-samlingen"
 
@@ -14638,7 +14647,7 @@ msgstr "sett"
 msgid "kit "
 msgstr "sett "
 
-#. %1$s:  LibraryName |html
+#. %1$s:  LibraryName |html 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:7
 #, c-format
 msgid "koha opac %s"
@@ -15263,8 +15272,8 @@ msgstr "prosjektbeskrivelse"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:264
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:266
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:531
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:535
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:533
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:537
 #, c-format
 msgid "purchase suggestion"
 msgstr "innkjøpsforslag"
@@ -15353,7 +15362,7 @@ msgstr ""
 "verdier: "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 msgid "results"
 msgstr "resultater"
 
@@ -15524,14 +15533,14 @@ msgid "shows your account to be clear, please contact the library."
 msgstr ""
 "ikke viser ubetalte gebyrer, vennligst kontakt en ansatt i biblioteket."
 
-#. %1$s:  RESERVE.datesent | $KohaDates
-#. %2$s:  ELSIF ( RESERVE.suspend )
-#. %3$s:  IF ( RESERVE.suspend_until )
-#. %4$s:  RESERVE.suspend_until
-#. %5$s:  END
-#. %6$s:  ELSE
-#. %7$s:  END
-#. %8$s:  END
+#. %1$s:  RESERVE.datesent | $KohaDates 
+#. %2$s:  ELSIF ( RESERVE.suspend ) 
+#. %3$s:  IF ( RESERVE.suspend_until ) 
+#. %4$s:  RESERVE.suspend_until 
+#. %5$s:  END 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:573
 #, c-format
 msgid "since %s %s Suspended %s until %s %s %s Pending %s %s "
@@ -15795,7 +15804,7 @@ msgstr ""
 "det kan oppstå en forsinkelse i gjennopretting av kontoen om du sender inn "
 "skjemaet)"
 
-#. %1$s:  END
+#. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
 #, c-format
 msgid "there may be a delay in restoring your account if you submit online)%s."
@@ -16042,7 +16051,7 @@ msgstr "om kontaktinformasjon skal være med eller ikke"
 msgid "width=device-width, initial-scale=1"
 msgstr "width=device-width, initial-scale=1"
 
-#. %1$s:  approvedaddress
+#. %1$s:  approvedaddress 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:69
 #, c-format
 msgid "will be sent shortly to %s."
@@ -16078,7 +16087,7 @@ msgstr "y3z"
 msgid "you"
 msgstr "du"
 
-#. %1$s:  new_reserves_allowed
+#. %1$s:  new_reserves_allowed 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:110
 #, c-format
 msgid ""
@@ -16134,7 +16143,7 @@ msgstr "dine innkjøpsforslag"
 msgid "your rating: "
 msgstr "din vurdering: "
 
-#. %1$s:  rating_value
+#. %1$s:  rating_value 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:496
 #, c-format
 msgid "your rating: %s, "
@@ -16192,4 +16201,3 @@ msgstr ""
 #, c-format
 msgid "• "
 msgstr "• "
-
