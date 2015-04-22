@@ -175,7 +175,7 @@ my %dt_params = (
 my $search_results;
 
 C4::Context->_new_userenv ('DUMMY_SESSION_ID');
-C4::Context::set_userenv($john_doe{borrowernumber}, $john_doe{userid}, 'usercnum', 'First name', 'Surname', 'MYLIBRARY', 'My Library', 0);
+C4::Context->set_userenv($john_doe{borrowernumber}, $john_doe{userid}, 'usercnum', 'First name', 'Surname', 'MYLIBRARY', 'My Library', 0);
 
 # Search private lists by title
 $search_results = C4::Utils::DataTables::VirtualShelves::search({
