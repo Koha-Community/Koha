@@ -28,18 +28,20 @@ use C4::Auth;
 use C4::Output;
 
 sub StringSearch  {
-    my $sth = C4::Context->dbh->prepare("SELECT * FROM auth_types WHERE (authtypecode like ?) ORDER BY authtypecode");
-    $sth->execute((shift || '') . "%");
-    return $sth->fetchall_arrayref({});
+    my $string = shift || '';
+    my $dbh = C4::Context->dbh;
+    return $dbh->selectall_arrayref(q|
+        SELECT authtypecode, authtypetext, auth_tag_to_report, summary
+        FROM auth_types
+        WHERE (authtypecode like ?) ORDER BY authtypecode
+    |, { Slice => {} }, $string . "%" );
 }
 
 my $input = new CGI;
 my $script_name  = "/cgi-bin/koha/admin/authtypes.pl";
 my $searchfield  = $input->param('authtypecode');  # FIXME: Auth Type search not really implemented
 my $authtypecode = $input->param('authtypecode');
-my $offset       = $input->param('offset') || 0;
 my $op           = $input->param('op')     || '';
-my $pagesize     = 20;
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "admin/authtypes.tt",
                 query => $input,
@@ -110,24 +112,6 @@ if ($op eq 'add_form') {
 ################## DEFAULT ##################################
 } else { # DEFAULT
     my $results = StringSearch($searchfield);
-    my $count = scalar @$results;
-    my @loop_data;
-    for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-        push @loop_data, {
-            authtypecode       => $results->[$i]{'authtypecode'},
-            authtypetext       => $results->[$i]{'authtypetext'},
-            auth_tag_to_report => $results->[$i]{'auth_tag_to_report'},
-            summary            => $results->[$i]{'summary'},
-        };
-    }
-    $template->param(loop => \@loop_data);
-    if ($offset>0) {
-        my $prevpage = $offset-$pagesize;
-        $template->param(previous => "$script_name?offset=".$prevpage);
-    }
-    if ($offset+$pagesize<$count) {
-        my $nextpage = $offset+$pagesize;
-        $template->param(next => "$script_name?offset=".$nextpage);
-    }
+    $template->param( loop => $results );
 } #---- END $OP eq DEFAULT
 output_html_with_http_headers $input, $cookie, $template->output;
