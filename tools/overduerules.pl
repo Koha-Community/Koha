@@ -72,12 +72,14 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $type = $input->param('type');
 
-my $branch =
-    defined( $input->param('branch') ) ? $input->param('branch')
-  : GetBranchesCount() == 1            ? undef
-  :                                      C4::Branch::mybranch();
-$branch = q{} if $branch eq 'NO_LIBRARY_SET';
+my $branch = $input->param('branch');
+$branch =
+    defined $branch                                                    ? $branch
+  : C4::Context->preference('DefaultToLoggedInLibraryOverdueTriggers') ? C4::Branch::mybranch()
+  : GetBranchesCount() == 1                                            ? undef
+  :                                                                      undef;
 $branch ||= q{};
+$branch = q{} if $branch eq 'NO_LIBRARY_SET';
 
 my $op = $input->param('op');
 $op ||= q{};
