@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 
 # written 20/02/2002 by paul.poulain@free.fr
-# This software is placed under the gnu General Public License, v2 (http://www.gnu.org/licenses/gpl.html)
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -20,8 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Auth;
@@ -61,7 +59,7 @@ my $dbh = C4::Context->dbh;
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {
     #---- if primkey exists, it's a modify action, so read values to modify...
-    if ($authtypecode) {
+    if ( defined $authtypecode) {
         my $sth = $dbh->prepare("SELECT * FROM auth_types WHERE authtypecode=?");
         $sth->execute($authtypecode);
         my $data = $sth->fetchrow_hashref();
