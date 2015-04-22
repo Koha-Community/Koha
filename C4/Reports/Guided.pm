@@ -383,7 +383,7 @@ sub get_criteria {
             my $list;
             $list='branches' if $column eq 'branchcode' or $column eq 'holdingbranch' or $column eq 'homebranch';
             $list='categorycode' if $column eq 'categorycode';
-            $list='itemtype' if $column eq 'itype';
+            $list='itemtypes' if $column eq 'itype';
             $list='ccode' if $column eq 'ccode';
             # TODO : improve to let the librarian choose the description at runtime
             push @values, { availablevalues => "<<$column".($list?"|$list":'').">>" };
