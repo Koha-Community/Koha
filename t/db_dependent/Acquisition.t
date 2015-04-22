@@ -331,7 +331,6 @@ my @expectedfields = qw(
   quantity
   currency
   listprice
-  totalamount
   datereceived
   invoiceid
   freight
@@ -482,7 +481,6 @@ my @base_expectedfields = qw(
   budget_expend
   rrp
   cn_sort
-  totalamount
   lccn
   sort1
   volume
@@ -603,7 +601,6 @@ ok(
   sort2_authcat
   rrp
   unitprice
-  totalamount
   sort1
   ordernumber
   datecreated

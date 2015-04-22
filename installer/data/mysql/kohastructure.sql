@@ -3037,7 +3037,6 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `quantity` smallint(6) default NULL, -- the quantity ordered
   `currency` varchar(3) default NULL, -- the currency used for the purchase
   `listprice` decimal(28,6) default NULL, -- the vendor price for this line item
-  `totalamount` decimal(28,6) default NULL, -- not used? always NULL
   `datereceived` date default NULL, -- the date this order was received
   invoiceid int(11) default NULL, -- id of invoice
   `freight` decimal(28,6) default NULL, -- shipping costs (not used)
