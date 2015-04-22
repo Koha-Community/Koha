@@ -78,10 +78,12 @@ sub shelfpage {
 
     $shelflimit = ( $type eq 'opac' ? C4::Context->preference('OPACnumSearchResults') : C4::Context->preference('numSearchResults') );
     $shelflimit = $shelflimit || ShelvesMax('MGRPAGE');
+    $shelflimit = undef if $query->param('rss');
     $shelfoffset   = ( $itemoff - 1 ) * $shelflimit;     # Sets the offset to begin retrieving items at
     $shelveslimit  = $shelflimit;                        # Limits number of shelves returned for a given query (row_count)
     $shelvesoffset = ( $shelfoff - 1 ) * $shelflimit;    # Sets the offset to begin retrieving shelves at (offset)
-                                                # getting the Shelves list
+
+    # getting the Shelves list
     my $category = ( ( $displaymode eq 'privateshelves' ) ? 1 : 2 );
     my $shelflist = GetShelves( $category, $shelveslimit, $shelvesoffset, $loggedinuser );
     my $totshelves = C4::VirtualShelves::GetShelfCount( $loggedinuser, $category );
@@ -459,11 +461,13 @@ sub shelfpage {
         $qhash{$_} = $query->param($_) if $query->param($_);
     }
     ( scalar keys %qhash ) and $url .= '?' . join '&', map { "$_=$qhash{$_}" } keys %qhash;
-    if ( $shelfnumber && $totitems ) {
-        $template->param(  pagination_bar => pagination_bar( $url, ( int( $totitems / $shelflimit ) ) + ( ( $totitems % $shelflimit ) > 0 ? 1 : 0 ), $itemoff, "itemoff" )  );
-    } elsif ( $totshelves ) {
-        $template->param(
-             pagination_bar => pagination_bar( $url, ( int( $totshelves / $shelveslimit ) ) + ( ( $totshelves % $shelveslimit ) > 0 ? 1 : 0 ), $shelfoff, "shelfoff" )  );
+    if ( $shelflimit ) {
+        if ( $shelfnumber && $totitems ) {
+            $template->param(  pagination_bar => pagination_bar( $url, ( int( $totitems / $shelflimit ) ) + ( ( $totitems % $shelflimit ) > 0 ? 1 : 0 ), $itemoff, "itemoff" )  );
+        } elsif ( $totshelves ) {
+            $template->param(
+                 pagination_bar => pagination_bar( $url, ( int( $totshelves / $shelveslimit ) ) + ( ( $totshelves % $shelveslimit ) > 0 ? 1 : 0 ), $shelfoff, "shelfoff" )  );
+        }
     }
     $template->param(
         shelveslooppriv                                                    => \@shelveslooppriv,
