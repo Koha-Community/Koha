@@ -78,7 +78,9 @@ if ( $op ne "do_search" ) {
             recordtype => 'biblio',
             servertype => ['zed', 'sru'],
         },
-        { result_class => 'DBIx::Class::ResultClass::HashRefInflator' },
+        {   result_class => 'DBIx::Class::ResultClass::HashRefInflator',
+            order_by     => ['rank', 'servername'],
+        },
     );
     $template->param(
         serverloop   => [ $rs->all ],
