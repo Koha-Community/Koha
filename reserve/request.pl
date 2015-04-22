@@ -347,7 +347,7 @@ foreach my $biblionumber (@biblionumbers) {
             # change the background color
             my $issues= GetItemIssue($itemnumber);
             if ( $issues->{'date_due'} ) {
-                $item->{date_due} = format_sqldatetime($issues->{date_due});
+                $item->{date_due} = $issues->{date_due_sql};
                 $item->{backgroundcolor} = 'onloan';
             }
 

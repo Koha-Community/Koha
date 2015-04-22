@@ -45,6 +45,9 @@ $(document).ready(function() {
     var my_table = $("#requestspecific").dataTable($.extend(true, {}, dataTablesDefaults, {
         'bPaginate': false,
         "sDom": '<"top pager"ilf>t',
+        "aoColumnDefs": [
+            { "sType": "title-string", "aTargets" : [ "title-string" ] }
+        ]
     }));
 
     //Override fieldset styling for dataTables search box
@@ -456,7 +459,7 @@ function checkMultiHold() {
                 [% IF itemdata_enumchron %]
                     <th>Vol no.</th>
                 [% END %]
-                    <th>Information</th>
+                    <th class="title-string">Information</th>
                 </tr>
             </thead>
             <tbody>
@@ -504,14 +507,16 @@ function checkMultiHold() {
                     </td>
                 [% END %]
                     <td>
-		[% IF ( itemloo.onloan ) %]
-                    <span class="checkedout">Due [% itemloo.date_due %]</span>
+                [% IF ( itemloo.onloan ) %]
+                    <span title="[% itemloo.date_due %]" class="checkedout">Due [% itemloo.date_due | $KohaDates as_due_date => 1 %]</span>
                 [% ELSE %]
-                    [% IF ( itemloo.transfertwhen ) %]
-                        In transit from [% itemloo.transfertfrom %],
-                        to [% itemloo.transfertto %], since [% itemloo.transfertwhen %]
-                    [% END %]
-		[% END %]
+                    <span title="0000-00-00">
+                        [% IF ( itemloo.transfertwhen ) %]
+                            In transit from [% itemloo.transfertfrom %],
+                            to [% itemloo.transfertto %], since [% itemloo.transfertwhen %]
+                        [% END %]
+                    </span>
+                [% END %]
 
                 [% IF ( itemloo.message ) %]
                    Unavailable (lost or missing)

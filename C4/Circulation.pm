@@ -2402,6 +2402,8 @@ sub GetItemIssue {
     $sth->execute($itemnumber);
     my $data = $sth->fetchrow_hashref;
     return unless $data;
+    $data->{issuedate_sql} = $data->{issuedate};
+    $data->{date_due_sql} = $data->{date_due};
     $data->{issuedate} = dt_from_string($data->{issuedate}, 'sql');
     $data->{issuedate}->truncate(to => 'minute');
     $data->{date_due} = dt_from_string($data->{date_due}, 'sql');
