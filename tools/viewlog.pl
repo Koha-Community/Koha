@@ -129,7 +129,7 @@ if ($do_it) {
     my ( $results, $modules, $actions );
     if ( defined $actions[0] && $actions[0] ne '' ) { $actions  = \@actions; }     # match All means no limit
     if ( $modules[0] ne '' ) { $modules = \@modules; }    # match All means no limit
-    $results = GetLogs( $datefrom, $dateto, $user, $modules, $action, $object, $info );
+    $results = GetLogs( $datefrom, $dateto, $user, $modules, $actions, $object, $info );
     @data = @$results;
     foreach my $result (@data) {
 
@@ -188,7 +188,7 @@ if ($do_it) {
             dateto   => $dateto,
             user     => $user,
             object   => $object,
-            action   => \@action,
+            action   => \@actions,
             info     => $info,
             src      => $src,
         );
