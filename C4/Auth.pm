@@ -1949,11 +1949,13 @@ sub haspermission {
         if ( $subperm eq '*' ) {
             return 0 unless ( $flags->{$module} == 1 or ref( $flags->{$module} ) );
         } else {
-            return 0 unless ( $flags->{$module} == 1 or
+            return 0 unless (
+                ( defined $flags->{$module} and
+                    $flags->{$module} == 1 )
+                or
                 ( ref( $flags->{$module} ) and
                     exists $flags->{$module}->{$subperm} and
-                    $flags->{$module}->{$subperm} == 1
-                )
+                    $flags->{$module}->{$subperm} == 1 )
             );
         }
     }
