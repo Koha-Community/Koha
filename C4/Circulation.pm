@@ -3805,12 +3805,15 @@ sub TransferSlip {
 sub CheckIfIssuedToPatron {
     my ($borrowernumber, $biblionumber) = @_;
 
-    my $items = GetItemsByBiblioitemnumber($biblionumber);
-
-    foreach my $item (@{$items}) {
-        return 1 if ($item->{borrowernumber} && $item->{borrowernumber} eq $borrowernumber);
-    }
-
+    my $dbh = C4::Context->dbh;
+    my $query = q|
+        SELECT COUNT(*) FROM issues
+        LEFT JOIN items ON items.itemnumber = issues.itemnumber
+        WHERE items.biblionumber = ?
+        AND issues.borrowernumber = ?
+    |;
+    my $is_issued = $dbh->selectrow_array($query, {}, $biblionumber, $borrowernumber );
+    return 1 if $is_issued;
     return;
 }
 
