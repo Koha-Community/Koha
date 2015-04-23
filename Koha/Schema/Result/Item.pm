@@ -174,6 +174,11 @@ __PACKAGE__->table("items");
   data_type: 'mediumtext'
   is_nullable: 1
 
+=head2 itemnotes_nonpublic
+
+  data_type: 'mediumtext'
+  is_nullable: 1
+
 =head2 holdingbranch
 
   data_type: 'varchar'
@@ -335,6 +340,8 @@ __PACKAGE__->add_columns(
   "restricted",
   { data_type => "tinyint", is_nullable => 1 },
   "itemnotes",
+  { data_type => "mediumtext", is_nullable => 1 },
+  "itemnotes_nonpublic",
   { data_type => "mediumtext", is_nullable => 1 },
   "holdingbranch",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
@@ -609,8 +616,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-10-24 09:58:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2slVK/FjcRDiYLeufoOFQQ
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-04-23 12:42:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:urSpNt7LBda4T5Plhi6cPw
 
 sub effective_itemtype {
     my ( $self ) = @_;

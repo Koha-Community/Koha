@@ -172,6 +172,11 @@ __PACKAGE__->table("deleteditems");
   data_type: 'mediumtext'
   is_nullable: 1
 
+=head2 itemnotes_nonpublic
+
+  data_type: 'mediumtext'
+  is_nullable: 1
+
 =head2 holdingbranch
 
   data_type: 'varchar'
@@ -328,6 +333,8 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", is_nullable => 1 },
   "itemnotes",
   { data_type => "mediumtext", is_nullable => 1 },
+  "itemnotes_nonpublic",
+  { data_type => "mediumtext", is_nullable => 1 },
   "holdingbranch",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "paidfor",
@@ -380,8 +387,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("itemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-10-24 09:58:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ru5DyaIlWJcMNAgpZRjOLg
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-04-23 12:42:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+aDMnEj1EvLQTQPAEl1ocg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
