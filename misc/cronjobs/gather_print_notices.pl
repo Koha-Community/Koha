@@ -145,10 +145,10 @@ sub print_notices {
     }
 
     while ( my ( $branchcode, $branch_messages ) = each %$messages_by_branch ) {
-        my $letter_code = @letter_codes == 1 ? $letter_codes[0] : 'hold';
+        my $letter_codes = @letter_codes == 0 ? 'all' : join '_', @letter_codes;
         my $filename = $split
-            ? "notices_$letter_code-" . $today->output('iso') . "-$branchcode.$format"
-            : "notices_$letter_code-" . $today->output('iso') . ".$format";
+            ? "notices_$letter_codes-" . $today->output('iso') . "-$branchcode.$format"
+            : "notices_$letter_codes-" . $today->output('iso') . ".$format";
         my $filepath = File::Spec->catdir( $output_directory, $filename );
         if ( $format eq 'html' ) {
             generate_html({
