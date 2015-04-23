@@ -9919,9 +9919,8 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
-
 $DBversion = '3.19.00.017';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if ( CheckVersion($DBversion) ) {
     # First create the column
     $dbh->do("ALTER TABLE issuingrules ADD onshelfholds tinyint(1) default 0 NOT NULL");
     # Now update the column
@@ -10040,7 +10039,7 @@ if ( CheckVersion($DBversion) ) {
 }
 
 $DBversion = "3.19.00.026";
-if(CheckVersion($DBversion)) {
+if( CheckVersion($DBversion) ) {
     if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
     $dbh->do(q{
         INSERT IGNORE INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value) VALUES
@@ -10154,8 +10153,8 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.19.00.XXX";
-if(CheckVersion($DBversion)) {
+$DBversion = "3.19.00.028";
+if( CheckVersion($DBversion) ) {
     $dbh->do(q{
         ALTER TABLE old_issues ADD issue_id INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST
     });
@@ -10183,7 +10182,6 @@ if(CheckVersion($DBversion)) {
     print "Upgrade to $DBversion done (Bug 13790 - Add unique id issue_id to issues and oldissues tables)\n";
     SetVersion($DBversion);
 }
-
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
