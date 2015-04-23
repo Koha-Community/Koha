@@ -621,6 +621,13 @@ __PACKAGE__->might_have(
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 
+__PACKAGE__->belongs_to(
+  "biblio",
+  "Koha::Schema::Result::Biblio",
+  { biblionumber => "biblionumber" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
 sub effective_itemtype {
     my ( $self ) = @_;
 
