@@ -304,15 +304,15 @@ Define the output directory where the files will be generated.
 
 After files have been generated, messages status is changed from 'pending' to
 'sent'. This is the default action, without this parameter or with --send.
-Using --nosend, mesages status aren't changed.
+Using --nosend, the message status is not changed.
 
 =item B<-s|--split>
 
-Split messages into separate file by borrower home library to OUTPUT_DIRECTORY/notices-CURRENT_DATE-BRANCHCODE.[csv|html|ods]
+Split messages into separate files by borrower home library to OUTPUT_DIRECTORY/notices-CURRENT_DATE-BRANCHCODE.[csv|html|ods]
 
 =item B<--html>
 
-Generate the print notices in a html file (default if --html, --csv and ods are not given).
+Generate the print notices in a html file (default is --html, if --csv and --ods are not given).
 
 =item B<--csv>
 
