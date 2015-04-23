@@ -112,6 +112,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 my $borrowernumber = $input->param('borrowernumber');
+my $error = $input->param('error');
+$template->param( error => $error ) if ( $error );
 
 my ( $od, $issue, $fines ) = GetMemberIssuesAndFines($borrowernumber);
 $template->param( issuecount => $issue );
