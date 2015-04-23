@@ -50,6 +50,12 @@ my ($template, $borrowernumber, $cookie)
 #print $input->header;
 my $member       = $input->param('member');
 
+#Do not delete yourself...
+if ($borrowernumber == $member ) {
+    print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_YOURSELF");
+    exit 1;
+}
+
 # Handle deletion from the Norwegian national patron database, if it is enabled
 # If the "deletelocal" parameter is set to "false", the regular deletion will be
 # short circuited, and only a deletion from the national database can be carried
