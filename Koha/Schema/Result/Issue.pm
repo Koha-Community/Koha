@@ -23,6 +23,12 @@ __PACKAGE__->table("issues");
 
 =head1 ACCESSORS
 
+=head2 issue_id
+
+  data_type: 'integer'
+  is_auto_increment: 1
+  is_nullable: 0
+
 =head2 borrowernumber
 
   data_type: 'integer'
@@ -98,6 +104,8 @@ __PACKAGE__->table("issues");
 =cut
 
 __PACKAGE__->add_columns(
+  "issue_id",
+  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "borrowernumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "itemnumber",
@@ -145,6 +153,18 @@ __PACKAGE__->add_columns(
   { data_type => "integer", default_value => 0, is_nullable => 0 },
 );
 
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</issue_id>
+
+=back
+
+=cut
+
+__PACKAGE__->set_primary_key("issue_id");
+
 =head1 RELATIONS
 
 =head2 borrowernumber
@@ -188,8 +208,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-04-13 10:32:46
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0OEqB+pEZ2LV083bMk9xHA
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-04-23 13:04:51
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3JH0+3CuwwhPyebyt/z+uw
 
 __PACKAGE__->belongs_to(
     "borrower",
