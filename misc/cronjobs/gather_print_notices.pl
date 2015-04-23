@@ -290,7 +290,7 @@ gather_print_notices output_directory [-s|--split] [--html] [--csv] [--ods] [--l
 
 Will print all waiting print notices to the output_directory.
 
-The generated filename will be holdnotices-TODAY.[csv|html|ods] or holdnotices-TODAY-BRANCHCODE.[csv|html|ods] if the --split parameter is given.
+The generated filename will be notices-TODAY.[csv|html|ods] or notices-TODAY-BRANCHCODE.[csv|html|ods] if the --split parameter is given.
 
 =head1 OPTIONS
 
