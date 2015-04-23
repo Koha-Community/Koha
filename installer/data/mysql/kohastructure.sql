@@ -2853,6 +2853,7 @@ CREATE TABLE `aqbasket` ( -- stores data about baskets in acquisitions
   KEY `booksellerid` (`booksellerid`),
   KEY `basketgroupid` (`basketgroupid`),
   KEY `contractnumber` (`contractnumber`),
+  KEY `authorisedby` (`authorisedby`),
   CONSTRAINT `aqbasket_ibfk_1` FOREIGN KEY (`booksellerid`) REFERENCES `aqbooksellers` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `aqbasket_ibfk_2` FOREIGN KEY (`contractnumber`) REFERENCES `aqcontract` (`contractnumber`),
   CONSTRAINT `aqbasket_ibfk_3` FOREIGN KEY (`basketgroupid`) REFERENCES `aqbasketgroups` (`id`) ON UPDATE CASCADE,
@@ -2907,6 +2908,7 @@ CREATE TABLE `aqbooksellers` ( -- information about the vendors listed in acquis
   PRIMARY KEY  (`id`),
   KEY `listprice` (`listprice`),
   KEY `invoiceprice` (`invoiceprice`),
+  KEY `name` (`name`(255)),
   CONSTRAINT `aqbooksellers_ibfk_1` FOREIGN KEY (`listprice`) REFERENCES `currency` (`currency`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `aqbooksellers_ibfk_2` FOREIGN KEY (`invoiceprice`) REFERENCES `currency` (`currency`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -2932,7 +2934,12 @@ CREATE TABLE `aqbudgets` ( -- information related to Funds
   `sort2_authcat` varchar(80) default NULL, -- second statistical category for this fund
   `budget_owner_id` int(11) default NULL, -- borrowernumber of the person who owns this fund (borrowers.borrowernumber)
   `budget_permission` int(1) default '0', -- level of permission for this fund (used only by the owner, only by the library, or anyone)
-  PRIMARY KEY  (`budget_id`)
+  PRIMARY KEY  (`budget_id`),
+  KEY `budget_parent_id` (`budget_parent_id`),
+  KEY `budget_code` (`budget_code`),
+  KEY `budget_branchcode` (`budget_branchcode`),
+  KEY `budget_period_id` (`budget_period_id`),
+  KEY `budget_owner_id` (`budget_owner_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -2985,6 +2992,7 @@ CREATE TABLE `aqbudgets_planning` (
   `authvalue` varchar(30) NOT NULL,
   `display` tinyint(1) DEFAULT 1,
   PRIMARY KEY  (`plan_id`),
+  KEY `budget_period_id` (`budget_period_id`),
   CONSTRAINT `aqbudgets_planning_ifbk_1` FOREIGN KEY (`budget_id`) REFERENCES `aqbudgets` (`budget_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -3074,6 +3082,8 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   KEY `basketno` (`basketno`),
   KEY `biblionumber` (`biblionumber`),
   KEY `budget_id` (`budget_id`),
+  KEY `parent_ordernumber` (`parent_ordernumber`),
+  KEY `orderstatus` (`orderstatus`),
   CONSTRAINT `aqorders_budget_id_fk` FOREIGN KEY (`budget_id`) REFERENCES `aqbudgets` (`budget_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `aqorders_ibfk_1` FOREIGN KEY (`basketno`) REFERENCES `aqbasket` (`basketno`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `aqorders_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE,
