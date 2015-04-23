@@ -62,6 +62,7 @@ our $input       = new CGI;
 my $searchfield = $input->param('searchfield');
 my $script_name = '/cgi-bin/koha/tools/letter.pl';
 our $branchcode  = $input->param('branchcode');
+$branchcode = '' if defined $branchcode and $branchcode eq '*';
 my $code        = $input->param('code');
 my $module      = $input->param('module') || '';
 my $content     = $input->param('content');
@@ -98,7 +99,7 @@ if ( $op eq 'add_validate' or $op eq 'copy_validate' ) {
 }
 if ($op eq 'copy_form') {
     my $oldbranchcode = $input->param('oldbranchcode') || q||;
-    my $branchcode = $input->param('branchcode') || q||;
+    my $branchcode = $input->param('branchcode');
     add_form($oldbranchcode, $module, $code);
     $template->param(
         oldbranchcode => $oldbranchcode,
@@ -248,7 +249,7 @@ sub add_form {
 
 sub add_validate {
     my $dbh        = C4::Context->dbh;
-    my $branchcode    = $input->param('branchcode') || '';
+    my $branchcode    = $input->param('branchcode');
     my $module        = $input->param('module');
     my $oldmodule     = $input->param('oldmodule');
     my $code          = $input->param('code');
@@ -264,7 +265,7 @@ sub add_validate {
 
         # getletter can return the default letter even if we pass a branchcode
         # If we got the default one and we needed the specific one, we didn't get the one we needed!
-        if ( $letter and $branchcode ne $letter->{branchcode} ) {
+        if ( $letter and $branchcode and $branchcode ne $letter->{branchcode} ) {
             $letter = undef;
         }
         unless ( $title and $content ) {
@@ -280,14 +281,14 @@ sub add_validate {
                     WHERE branchcode = ? AND module = ? AND code = ? AND message_transport_type = ?
                 },
                 undef,
-                $branchcode, $module, $name, $is_html || 0, $title, $content,
+                $branchcode || '', $module, $name, $is_html || 0, $title, $content,
                 $branchcode, $oldmodule, $code, $mtt
             );
         } else {
             $dbh->do(
                 q{INSERT INTO letter (branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES (?,?,?,?,?,?,?,?)},
                 undef,
-                $branchcode, $module, $code, $name, $is_html || 0, $title, $content, $mtt
+                $branchcode || '', $module, $code, $name, $is_html || 0, $title, $content, $mtt
             );
         }
     }
@@ -311,7 +312,7 @@ sub delete_confirmed {
     my ($branchcode, $module, $code, $mtt) = @_;
     C4::Letters::DelLetter(
         {
-            branchcode => $branchcode,
+            branchcode => $branchcode || '',
             module     => $module,
             code       => $code,
             mtt        => $mtt
@@ -356,6 +357,12 @@ sub retrieve_letters {
 
 sub default_display {
     my ($branchcode, $searchfield) = @_;
+
+    unless ( defined $branchcode ) {
+        if ( C4::Context->preference('DefaultToLoggedInLibraryNoticesSlips') ) {
+            $branchcode = C4::Branch::mybranch();
+        }
+    }
 
     if ( $searchfield  ) {
         $template->param( search      => 1 );

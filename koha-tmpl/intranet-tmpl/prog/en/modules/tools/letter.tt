@@ -166,7 +166,7 @@ $(document).ready(function() {
       <p>
         Select a library :
             <select name="branchcode" id="branch" style="width:20em;">
-                <option value="">All libraries</option>
+                <option value="*">All libraries</option>
             [% FOREACH branchloo IN branchloop %]
                 [% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
             [% END %]
