@@ -642,7 +642,7 @@ sub delete_report {
     return unless @ids;
     foreach my $id (@ids) {
         my $data = get_saved_report($id);
-        logaction( "REPORTS", "DELETE", $id, "Name: $data->{'report_name'} SQL: $data->{'savedsql'}  " ) if C4::Context->preference("ReportsLog");
+        logaction( "REPORTS", "DELETE", $id, "$data->{'report_name'} | $data->{'savedsql'}  " ) if C4::Context->preference("ReportsLog");
     }
     my $dbh = C4::Context->dbh;
     my $query = 'DELETE FROM saved_sql WHERE id IN (' . join( ',', ('?') x @ids ) . ')';

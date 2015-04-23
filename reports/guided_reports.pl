@@ -239,7 +239,7 @@ elsif ( $phase eq 'Update SQL'){
                 'reportname'            => $reportname,
                 'id'                    => $id,
             );
-            logaction( "REPORTS", "MODIFY", $id, "$reportname: SQL: $sql" ) if C4::Context->preference("ReportsLog");
+            logaction( "REPORTS", "MODIFY", $id, "$reportname | $sql" ) if C4::Context->preference("ReportsLog");
         }
         if ( $usecache ) {
             $template->param(
@@ -597,7 +597,7 @@ elsif ( $phase eq 'Save Report' ) {
                     cache_expiry   => $cache_expiry,
                     public         => $public,
                 } );
-                logaction( "REPORTS", "ADD", 0, "Name: $name: SQL: $sql" ) if C4::Context->preference("ReportsLog");
+                logaction( "REPORTS", "ADD", $id, "$name | $sql" ) if C4::Context->preference("ReportsLog");
             $template->param(
                 'save_successful' => 1,
                 'reportname'      => $name,
