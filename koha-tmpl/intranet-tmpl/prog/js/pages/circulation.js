@@ -29,12 +29,19 @@ $(document).ready(function() {
     });
 
     $("#newduedate").datetimepicker({
+        onClose: function(dateText, inst) {
+            validate_date(dateText, inst);
+        },
         minDate: 1, // require that renewal date is after today
         hour: 23,
         minute: 59
     });
     $("#duedatespec").datetimepicker({
-        onClose: function(dateText, inst) { $("#barcode").focus(); },
+        onClose: function(dateText, inst) {
+            if ( validate_date(dateText, inst) ) {
+                $("#barcode").focus();
+            }
+        },
         hour: 23,
         minute: 59
     });

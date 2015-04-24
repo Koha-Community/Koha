@@ -71,7 +71,11 @@ function toggle_onsite_checkout(){
         [% END %]
     } else {
         $("#duedatespec").datetimepicker({
-            onClose: function(dateText, inst) { $("#barcode").focus(); },
+            onClose: function(dateText, inst) {
+                if (validate_date(dateText, inst) ) {
+                    $("#barcode").focus();
+                }
+            },
             hour: 23,
             minute: 59
         });
@@ -335,7 +339,7 @@ $(document).ready(function() {
     [% IF ( DEBT ) %]<input type="hidden" name="debt_confirmed" value="1" />[% END %]
     [% IF ( INVALID_DATE ) %]
     <p>
-    <input type="text" size="13" id="duedatespec" name="duedatespec" readonly="readonly" value="[% duedatespec %]" />
+    <input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec %]" />
     <label for="duedatespec">Due date</label>
     </p>
     [% ELSE %]
@@ -597,9 +601,9 @@ No patron matched <span class="ex">[% message | html %]</span>
                 <div id="specify-due-date" class="checkout-setting">
                     <div class="hint">Specify due date [% INCLUDE 'date-format.inc' %]: </div>
                     [% IF ( duedatespec ) %]
-                        <input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec %]" readonly="readonly" />
+                        <input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec %]" />
                     [% ELSE %]
-                        <input type="text" size="13" id="duedatespec" name="duedatespec" value="" readonly="readonly" />
+                        <input type="text" size="13" id="duedatespec" name="duedatespec" value="" />
                     [% END %]
                     <label for="stickyduedate"> Remember for session:</label>
                     [% IF ( stickyduedate ) %]
@@ -647,7 +651,7 @@ No patron matched <span class="ex">[% message | html %]</span>
                 [% IF noissues %]
                     <div class="onsite-checkout-only">
                         <input type="checkbox" id="onsite_checkout" name="onsite_checkout_forced" checked="checked" disabled="disabled" /> <label for="onsite_checkout">On-site checkouts only. Automatic due date: </label>
-                        <input type="text" name="duedatespec" id="duedatespec" readonly="readonly" />
+                        <input type="text" name="duedatespec" id="duedatespec" />
                         <input type="hidden" name="onsite_checkout" checked="checked" value="1" />
                     </div>
                 [% ELSE %]

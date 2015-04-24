@@ -58,7 +58,11 @@ $(document).ready(function () {
             }, columns_settings);
 
     $("#return_date_override").datetimepicker({
-        onClose: function(dateText, inst) { $("#barcode").focus(); },
+        onClose: function(dateText, inst) {
+            if (validate_date(dateText, inst) ) {
+                $("#barcode").focus();
+            }
+        },
         defaultDate: -1,
         hour: 23,
         minute: 59,

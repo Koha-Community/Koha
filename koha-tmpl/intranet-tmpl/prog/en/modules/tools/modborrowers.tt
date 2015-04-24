@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc'%]
 <title>Koha &rsaquo; Tools &rsaquo; Batch patron modification</title>
@@ -335,7 +336,7 @@
                                             [% END %]
                                             </label>
                                             [% IF field.mandatory %]
-                                                <input type="checkbox" title="This field is mandatory" name="disable_input" value="[% field.name %]" readonly="readonly" onclick="return false;" />
+                                                <input type="checkbox" title="This field is mandatory" name="disable_input" value="[% field.name %]" onclick="return false;" />
                                             [% ELSE %]
                                                 <input type="checkbox" title="Check to delete this field" name="disable_input" value="[% field.name %]" />
                                             [% END %]
@@ -354,7 +355,7 @@
                                                 [% END %]
                                             [% END %]
                                             [% IF ( field.type == 'date' ) %]
-                                                <input type="text" name="[% field.name %]" id="[% field.name %]" value="" size="10" maxlength="10" readonly="readonly" class="datepicker" />
+                                                <input type="text" name="[% field.name %]" id="[% field.name %]" value="" size="10" maxlength="10" class="datepicker" />
                                                 <a href="#" onclick="clearDate('[% field.name %]');return false;"><i class="fa fa-fw fa-trash"></i> Clear</a>
                                             [% END %]
                                             [% IF field.mandatory %]

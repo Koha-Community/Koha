@@ -401,14 +401,14 @@ function checkMultiHold() {
 	[% IF ( reserve_in_future ) %]
 	<li>
         <label for="from">Hold starts on date:</label>
-        <input name="reserve_date" id="from" size="10" readonly="readonly" class="datepickerfrom">
+        <input name="reserve_date" id="from" size="10" class="datepickerfrom">
         <a href="#" id="clear-date-from" class="clear-date">Clear date</a>
 	</li>
 	[% END %]
 
 	<li>
         <label for="to">Hold expires on date:</label>
-        <input name="expiration_date" id="to" size="10" readonly="readonly" class="datepickerto" />
+        <input name="expiration_date" id="to" size="10" class="datepickerto" />
         <a href="#" id="clear-date-to" class="clear-date">Clear date</a>
 	</li>
 
@@ -881,7 +881,7 @@ function checkMultiHold() {
 
             [% IF AutoResumeSuspendedHolds %]
                 <label for="suspend_until_[% reserveloo.reserve_id %]">[% IF ( reserveloo.suspend ) %] on [% ELSE %] until [% END %]</label>
-                <input name="suspend_until" id="suspend_until_[% reserveloo.reserve_id %]" size="10" readonly="readonly" value="[% reserveloo.suspend_until | $KohaDates %]" class="datepicker suspend_until_datepicker" />
+                <input name="suspend_until" id="suspend_until_[% reserveloo.reserve_id %]" size="10" value="[% reserveloo.suspend_until | $KohaDates %]" class="datepicker suspend_until_datepicker" />
                 <a href='#' onclick="document.getElementById('suspend_until_[% reserveloo.reserve_id %]').value='';">Clear date</a>
             [% ELSE %]
                 <input type="hidden" name="suspend_until" id="suspend_until_[% reserveloo.reserve_id %]" value=""/>

@@ -84,11 +84,6 @@ $(document).ready(function() {
 	});[% END %]
 
     $("#suspend_until").datepicker({ minDate: 1 }); // require that hold suspended until date is after today
-    $("#newduedate").datetimepicker({
-        minDate: 1, // require that renewal date is after today
-        hour: 23,
-        minute: 59
-    });
     $("#view_restrictions").on("click",function(){
         $('#debarments-tab-link').click();
     });
