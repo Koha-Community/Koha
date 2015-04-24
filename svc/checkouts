@@ -76,6 +76,7 @@ my $sql = '
         itemnumber,
         barcode,
         itemnotes,
+        itemnotes_nonpublic,
         itemcallnumber,
         replacementprice,
 
@@ -143,16 +144,17 @@ while ( my $c = $sth->fetchrow_hashref() ) {
 
     my $itemtype = C4::Koha::getitemtypeinfo( $item_level_itypes ? $c->{itype} : $c->{itemtype} );
     my $checkout = {
-        DT_RowId   => $c->{itemnumber} . '-' . $c->{borrowernumber},
-        title      => $c->{title},
-        author     => $c->{author},
-        barcode    => $c->{barcode},
-        itemtype   => $item_level_itypes ? $c->{itype} : $c->{itemtype},
+        DT_RowId             => $c->{itemnumber} . '-' . $c->{borrowernumber},
+        title                => $c->{title},
+        author               => $c->{author},
+        barcode              => $c->{barcode},
+        itemtype             => $item_level_itypes ? $c->{itype} : $c->{itemtype},
         itemtype_description => $itemtype->{translated_description},
-        location   => $c->{location} ? GetAuthorisedValueByCode( 'LOC', $c->{location} ) : q{},
-        itemnotes  => $c->{itemnotes},
-        branchcode => $c->{branchcode},
-        branchname => $c->{branchname},
+        location             => $c->{location} ? GetAuthorisedValueByCode( 'LOC', $c->{location} ) : q{},
+        itemnotes            => $c->{itemnotes},
+        itemnotes_nonpublic  => $c->{itemnotes_nonpublic},
+        branchcode           => $c->{branchcode},
+        branchname           => $c->{branchname},
         itemcallnumber => $c->{itemcallnumber}   || q{},
         charge         => $charge,
         fine           => $fine,
@@ -167,7 +169,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         date_due            => $c->{date_due},
         date_due_overdue    => $c->{date_due_overdue} ? JSON::true : JSON::false,
         timestamp           => $c->{timestamp},
-        onsite_checkout         => $c->{onsite_checkout},
+        onsite_checkout     => $c->{onsite_checkout},
         renewals_count      => $renewals_count,
         renewals_allowed    => $renewals_allowed,
         renewals_remaining  => $renewals_remaining,
@@ -183,13 +185,10 @@ while ( my $c = $sth->fetchrow_hashref() ) {
                 as_due_date => 1
             }
         ),
-        subtitle => GetRecordValue(
-            'subtitle',
-            GetMarcBiblio( $c->{biblionumber} ),
-            GetFrameworkCode( $c->{biblionumber} )
-        ),
-        lost => $c->{itemlost} ? GetAuthorisedValueByCode( 'LOST', $c->{itemlost} ) : undef,
-        damaged => $c->{damaged} ? GetAuthorisedValueByCode( 'DAMAGED', $c->{damaged} ) : undef,
+        subtitle =>
+          GetRecordValue( 'subtitle', GetMarcBiblio( $c->{biblionumber} ), GetFrameworkCode( $c->{biblionumber} ) ),
+        lost    => $c->{itemlost} ? GetAuthorisedValueByCode( 'LOST',    $c->{itemlost} ) : undef,
+        damaged => $c->{damaged}  ? GetAuthorisedValueByCode( 'DAMAGED', $c->{damaged} )  : undef,
         borrower => {
             surname    => $c->{surname},
             firstname  => $c->{firstname},

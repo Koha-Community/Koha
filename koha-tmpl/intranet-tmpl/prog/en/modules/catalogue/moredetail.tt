@@ -220,18 +220,34 @@
                 [% IF ( ITEM_DAT.card1 ) %]<li><span class="label">Previous borrower:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.borrower1 %]">[% ITEM_DAT.card1 %]</a>&nbsp;</li>[% END %]
                 [% IF ( ITEM_DAT.card2 ) %]<li><span class="label">Previous borrower:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.borrower2 %]">[% ITEM_DAT.card2 %]</a>&nbsp;</li>[% END %]
                 [% IF ( ITEM_DAT.paidfor ) %]<li><span class="label">Paid for?:</span> [% ITEM_DAT.paidfor %]&nbsp;</li>[% END %]
+
                 [% IF ( ITEM_DAT.enumchron ) %]<li><span class="label">Serial enumeration:</span> [% ITEM_DAT.enumchron %]&nbsp;</li>[% END %]
-                <li><span class="label">Public note:</span>
-                [% IF ( CAN_user_editcatalogue_edit_items ) %]
-                <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber %]" />
-                    <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber %]" /><input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber %]" />
-                    <textarea name="itemnotes" rows="2" cols="30">[% ITEM_DAT.itemnotes %]</textarea><input type="submit" name="submit" class="submit" value="Update" />
-                </form>
-                [% ELSE %]
-                    [% ITEM_DAT.itemnotes %]
-                    &nbsp;
-                [% END %]
-            </li>
+
+                <li>
+                    <span class="label">Public note:</span>
+                    [% IF ( CAN_user_editcatalogue_edit_items ) %]
+                    <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber %]" />
+                        <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber %]" /><input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber %]" />
+                        <textarea name="itemnotes" rows="2" cols="30">[% ITEM_DAT.itemnotes %]</textarea><input type="submit" name="submit" class="submit" value="Update" />
+                    </form>
+                    [% ELSE %]
+                        [% ITEM_DAT.itemnotes %]
+                        &nbsp;
+                    [% END %]
+                </li>
+
+                <li>
+                    <span class="label">Non-public note:</span>
+                    [% IF ( CAN_user_editcatalogue_edit_items ) %]
+                    <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber %]" />
+                        <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber %]" /><input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber %]" />
+                        <textarea name="itemnotes_nonpublic" rows="2" cols="30">[% ITEM_DAT.itemnotes_nonpublic %]</textarea><input type="submit" name="submit" class="submit" value="Update" />
+                    </form>
+                    [% ELSE %]
+                        [% ITEM_DAT.itemnotes_nonpublic %]
+                        &nbsp;
+                    [% END %]
+                </li>
             </ol>
             </div>
 </div>

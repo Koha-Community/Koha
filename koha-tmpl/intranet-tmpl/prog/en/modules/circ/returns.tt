@@ -593,8 +593,10 @@ $(document).ready(function () {
                     [% riloo.borsurname %], [% riloo.borfirstname %] ([% riloo.borcategorycode %])
                 </a>
             [% ELSE %]Not checked out[% END %]</td>
-            <td class="ci-note">[% IF ( riloo.bornote ) %]<span class="circ-hlt">[% riloo.bornote %]<br /></span>[% END %]
-            [% IF ( riloo.itemnote ) %]<span class="circ-hlt">[% riloo.itemnote %]</span>[% END %]
+            <td class="ci-note">
+                [% IF ( riloo.bornote ) %]<p><span class="circ-hlt">[% riloo.bornote %]</p></span>[% END %]
+                [% IF ( riloo.itemnote ) %]<p><span class="circ-hlt">[% riloo.itemnote %]</p></span>[% END %]
+                [% IF ( riloo.itemnotes_nonpublic ) %]<p><span class="circ-hlt">[% riloo.itemnotes_nonpublic %]</p></span>[% END %]
             </td>
            </tr>
         [% END %]

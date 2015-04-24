@@ -241,6 +241,14 @@ $(document).ready(function() {
                             title += " - <span class='" + span_class + "'>" + oObj.itemnotes + "</span>"
                         }
 
+                        if ( oObj.itemnotes_nonpublic ) {
+                            var span_class = "";
+                            if ( $.datepicker.formatDate('yy-mm-dd', new Date(oObj.issuedate) ) == ymd ) {
+                                span_class = "circ-hlt";
+                            }
+                            title += " - <span class='" + span_class + "'>" + oObj.itemnotes_nonpublic + "</span>"
+                        }
+
                         var onsite_checkout = '';
                         if ( oObj.onsite_checkout == 1 ) {
                             onsite_checkout += " <span class='onsite_checkout'>(" + INHOUSE_USE + ")</span>";
