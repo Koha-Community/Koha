@@ -60,9 +60,19 @@ KOHA.browser = function (searchid, biblionumber) {
         }
         $.cookie(me.searchid, JSON.stringify(me.searchCookie), { path: '/' });
         $(document).ready(function () {
-            $('#searchresults table tr a[href*="detail.pl"]').click(function (ev) {
-                ev.preventDefault();
-                window.location = $(this).attr('href') + '&searchid=' + me.searchid;
+            //FIXME It's not a good idea to modify the click events
+            $('#searchresults table tr a[href*="detail.pl"]').on('mousedown', function (ev) {
+                if ( ev.which == 2 || ev.which == 1 && ev.ctrlKey ) {
+                    // Middle click or ctrl + click
+                    ev.preventDefault();
+                    var newwindow = window.open( $(this).attr('href') + '&searchid=' + me.searchid, '_blank' )
+                    newwindow.blur();
+                    window.focus();
+                } else if ( ev.which == 1 ) {
+                    // Left click
+                    ev.preventDefault();
+                    window.location = $(this).attr('href') + '&searchid=' + me.searchid;
+                }
             });
         });
     };
