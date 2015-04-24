@@ -10253,7 +10253,7 @@ DELETE FROM language_descriptions
             FROM language_descriptions GROUP BY subtag,type,lang,description)
            AS subtable);
     |);
-    print "Upgrade to $DBversion done (Bug 13606: Upgrade sessions.a_session to MEDIUMTEXT)\n";
+    print "Upgrade to $DBversion done (Bug 14030: Add Georgian language and fix Kannada language code)\n";
     SetVersion($DBversion);
 }
 
