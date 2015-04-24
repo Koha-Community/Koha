@@ -225,7 +225,6 @@ if ($show_results) {
         result_set=> \@results_set,
         batch_id  => $batch_id,
         type      => $type,
-        idx       => $idx,
         ccl_query => $ccl_query,
     );
 }
@@ -261,6 +260,8 @@ else {
     );
 
 }
+
+$template->param( idx => $idx );
 
 # Print the page
 output_html_with_http_headers $query, $cookie, $template->output;
