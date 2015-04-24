@@ -22,7 +22,6 @@ use warnings;
 
 use MARC::Charset qw/marc8_to_utf8/;
 use Text::Iconv;
-use C4::Context;
 use C4::Debug;
 use Unicode::Normalize;
 
@@ -328,6 +327,7 @@ sub SetMarcUnicodeFlag {
         substr($leader, 9, 1) = 'a';
         $marc_record->leader($leader); 
     } elsif ($marc_flavour =~/UNIMARC/) {
+        require C4::Context;
 	my $defaultlanguage = C4::Context->preference("UNIMARCField100Language");
         $defaultlanguage = "fre" if (!$defaultlanguage || length($defaultlanguage) != 3);
         my $string; 
