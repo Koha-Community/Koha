@@ -553,7 +553,11 @@ $(document).ready(function () {
         minute: 59
     });
     $("#duedatespec").datetimepicker({
-        onClose: function(dateText, inst) { setTimeout(function() { $('#checkout-barcode').trigger('focus'), 1 }); },
+        onClose: function(dateText, inst) {
+            if (validate_date(dateText, inst) ) {
+                setTimeout(function() { $('#checkout-barcode').trigger('focus'), 1 });
+            }
+        },
         hour: 23,
         minute: 59
     });
@@ -690,7 +694,7 @@ $(document).ready(function () {
 
                             <div class="date-select">
                                 <div class="hint">Specify due date [% INCLUDE 'date-format.inc' %]: </div>
-                                <input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec %]" readonly="readonly" />
+                                <input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec %]" />
                                 <label for="stickyduedate"> Remember for session:</label>
                                 <input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" checked="checked" />
                                 <input type="button" class="action" id="cleardate" value="Clear" name="cleardate" onclick="this.checked = false; this.form.duedatespec.value = ''; this.form.stickyduedate.checked = false; this.form.barcode.focus(); return false;" />

@@ -6,6 +6,24 @@ var debug    = "[% debug %]";
 var dformat  = "[% dateformat %]";
 var sentmsg = 0;
 if (debug > 1) {alert("dateformat: " + dformat + "\ndebug is on (level " + debug + ")");}
+var MSG_PLEASE_ENTER_A_VALID_DATE = ("Please enter a valid date.");
+
+function validate_date (dateText, inst) {
+    var dateformat = '[% Koha.Preference('dateformat') %]';
+    if ( dateformat == 'us' ) {
+        dateformat = 'mm/dd/yy';
+    } else if ( dateformat == 'metric' ) {
+        dateformat = 'dd/mm/yy';
+    } else if (dateformat == 'iso' ) {
+        dateformat = 'yy-mm-dd';
+    }
+    try {
+        $.datepicker.parseDate(dateformat, dateText);
+    } catch (e) {
+        alert(MSG_PLEASE_ENTER_A_VALID_DATE);
+        $('#'+inst.id).val('');
+    };
+}
 
 function Date_from_syspref(dstring) {
         var dateX = dstring.split(/[-/.]/);
@@ -89,7 +107,11 @@ $.datepicker.setDefaults({
         selectOtherMonths: true
     });
 
-    $( ".datepicker" ).datepicker();
+    $( ".datepicker" ).datepicker({
+        onClose: function(dateText, inst) {
+            validate_date(dateText, inst);
+        },
+    });
     // http://jqueryui.com/demos/datepicker/#date-range
     var dates = $( ".datepickerfrom, .datepickerto" ).datepicker({
         changeMonth: true,
@@ -102,7 +124,10 @@ $.datepicker.setDefaults({
                     $.datepicker._defaults.dateFormat,
                     selectedDate, instance.settings );
             dates.not( this ).datepicker( "option", option, date );
-        }
+        },
+        onClose: function(dateText, inst) {
+            validate_date(dateText, inst);
+        },
     });
 });
 //]]>
