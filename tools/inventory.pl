@@ -234,10 +234,36 @@ if ( $markseen or $op ) {
 
     # We use datelastseen only when comparing the results to the barcode file.
     my $paramdatelastseen = ($compareinv2barcd) ? $datelastseen : '';
-    ($inventorylist, $totalrecords) = GetItemsForInventory($minlocation, $maxlocation, $location, $itemtype, $ignoreissued, $paramdatelastseen, $branchcode, $branch, 0, undef, $staton);
+    ($inventorylist, $totalrecords) = GetItemsForInventory( {
+      minlocation  => $minlocation,
+      maxlocation  => $maxlocation,
+      location     => $location,
+      itemtype     => $itemtype,
+      ignoreissued => $ignoreissued,
+      datelastseen => $paramdatelastseen,
+      branchcode   => $branchcode,
+      branch       => $branch,
+      offset       => 0,
+      size         => undef,
+      statushash   => $staton,
+      interface    => 'staff',
+    } );
 
     # For the items that may be marked as "wrong place", we only check the location (callnumbers, location and branch)
-    ($wrongplacelist, $totalrecords) = GetItemsForInventory($minlocation, $maxlocation, $location, undef, undef, undef, $branchcode, $branch, 0, undef, undef);
+    ($wrongplacelist, $totalrecords) = GetItemsForInventory( {
+      minlocation  => $minlocation,
+      maxlocation  => $maxlocation,
+      location     => $location,
+      itemtype     => undef,
+      ignoreissued => undef,
+      datelastseen => undef,
+      branchcode   => $branchcode,
+      branch       => $branch,
+      offset       => 0,
+      size         => undef,
+      statushash   => undef,
+      interface    => 'staff',
+    } );
 
 }
 

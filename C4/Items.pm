@@ -1024,7 +1024,20 @@ sub GetLostItems {
 
 =head2 GetItemsForInventory
 
-($itemlist, $iTotalRecords)  = GetItemsForInventory($minlocation, $maxlocation, $location, $itemtype, $ignoreissued, $datelastseen, $branchcode, $offset, $size, $statushash);
+($itemlist, $iTotalRecords) = GetItemsForInventory( {
+  minlocation  => $minlocation,
+  maxlocation  => $maxlocation,
+  location     => $location,
+  itemtype     => $itemtype,
+  ignoreissued => $ignoreissued,
+  datelastseen => $datelastseen,
+  branchcode   => $branchcode,
+  branch       => $branch,
+  offset       => $offset,
+  size         => $size,
+  stautshash   => $statushash
+  interface    => $interface,
+} );
 
 Retrieve a list of title/authors/barcode/callnumber, for biblio inventory.
 
@@ -1042,7 +1055,20 @@ $iTotalRecords is the number of rows that would have been returned without the $
 =cut
 
 sub GetItemsForInventory {
-    my ( $minlocation, $maxlocation,$location, $itemtype, $ignoreissued, $datelastseen, $branchcode, $branch, $offset, $size, $statushash ) = @_;
+    my ( $parameters ) = @_;
+    my $minlocation  = $parameters->{'minlocation'}  // '';
+    my $maxlocation  = $parameters->{'maxlocation'}  // '';
+    my $location     = $parameters->{'location'}     // '';
+    my $itemtype     = $parameters->{'itemtype'}     // '';
+    my $ignoreissued = $parameters->{'ignoreissued'} // '';
+    my $datelastseen = $parameters->{'datelastseen'} // '';
+    my $branchcode   = $parameters->{'branchcode'}   // '';
+    my $branch       = $parameters->{'branch'}       // '';
+    my $offset       = $parameters->{'offset'}       // '';
+    my $size         = $parameters->{'size'}         // '';
+    my $statushash   = $parameters->{'statushash'}   // '';
+    my $interface    = $parameters->{'interface'}    // '';
+
     my $dbh = C4::Context->dbh;
     my ( @bind_params, @where_strings );
 
@@ -1121,16 +1147,15 @@ sub GetItemsForInventory {
     $sth->execute( @bind_params );
     my ($iTotalRecords) = $sth->fetchrow_array();
 
+    my $avmapping = C4::Koha::GetKohaAuthorisedValuesMapping( {
+                      interface => $interface
+                    } );
     foreach my $row (@$tmpresults) {
 
         # Auth values
         foreach (keys %$row) {
-            # If the koha field is mapped to a marc field
-            my ($f, $sf) = GetMarcFromKohaField("items.$_", $row->{'frameworkcode'});
-            if ($f and $sf) {
-                # We replace the code with it's description
-                my $authvals = C4::Koha::GetKohaAuthorisedValuesFromField($f, $sf, $row->{'frameworkcode'});
-                $row->{$_} = $authvals->{$row->{$_}} if defined $authvals->{$row->{$_}};
+            if (defined($avmapping->{"items.$_,".$row->{'frameworkcode'}.",".$row->{$_}})) {
+                $row->{$_} = $avmapping->{"items.$_,".$row->{'frameworkcode'}.",".$row->{$_}};
             }
         }
         push @results, $row;
