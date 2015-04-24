@@ -37,6 +37,7 @@ my $itemnumber=$cgi->param('itemnumber');
 my $biblioitemnumber=$cgi->param('biblioitemnumber');
 my $itemlost=$cgi->param('itemlost');
 my $itemnotes=$cgi->param('itemnotes');
+my $itemnotes_nonpublic=$cgi->param('itemnotes_nonpublic');
 my $withdrawn=$cgi->param('withdrawn');
 my $damaged=$cgi->param('damaged');
 
@@ -55,7 +56,13 @@ for ($damaged,$itemlost,$withdrawn) {
 
 # modify MARC item if input differs from items table.
 my $item_changes = {};
-if (defined $itemnotes) { # i.e., itemnotes parameter passed from form
+if (defined $itemnotes_nonpublic) { # i.e., itemnotes_nonpublic parameter passed from form
+    checkauth($cgi, 0, {editcatalogue => 'edit_items'}, 'intranet');
+    if ((not defined  $item_data_hashref->{'itemnotes_nonpublic'}) or $itemnotes_nonpublic ne $item_data_hashref->{'itemnotes_nonpublic'}) {
+        $item_changes->{'itemnotes_nonpublic'} = $itemnotes_nonpublic;
+    }
+}
+elsif (defined $itemnotes) { # i.e., itemnotes parameter passed from form
     checkauth($cgi, 0, {editcatalogue => 'edit_items'}, 'intranet');
     if ((not defined  $item_data_hashref->{'itemnotes'}) or $itemnotes ne $item_data_hashref->{'itemnotes'}) {
         $item_changes->{'itemnotes'} = $itemnotes;
