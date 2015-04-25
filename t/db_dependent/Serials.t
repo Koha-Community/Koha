@@ -184,8 +184,6 @@ is(C4::Serials::HasSubscriptionExpired(), undef, 'test if the subscriptions has 
 
 is(C4::Serials::GetLateOrMissingIssues(), undef, 'test getting last or missing issues');
 
-is(C4::Serials::removeMissingIssue(), undef, 'test removing a missing issue');
-
 is(C4::Serials::updateClaim(),undef, 'test updating claim');
 
 is(C4::Serials::getsupplierbyserialid(),undef, 'test getting supplier idea');

@@ -57,7 +57,7 @@ BEGIN {
       &GetDistributedTo   &SetDistributedTo
       &getroutinglist     &delroutingmember   &addroutingmember
       &reorder_members
-      &check_routing &updateClaim &removeMissingIssue
+      &check_routing &updateClaim
       &CountIssues
       HasItems
       &GetSubscriptionsFromBorrower
@@ -2045,47 +2045,6 @@ sub GetLateOrMissingIssues {
         push @issuelist, $line;
     }
     return @issuelist;
-}
-
-=head2 removeMissingIssue
-
-removeMissingIssue($subscriptionid)
-
-this function removes an issue from being part of the missing string in 
-subscriptionlist.missinglist column
-
-called when a missing issue is found from the serials-recieve.pl file
-
-=cut
-
-sub removeMissingIssue {
-    my ( $sequence, $subscriptionid ) = @_;
-
-    return unless ($sequence and $subscriptionid);
-
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT * FROM subscriptionhistory WHERE subscriptionid = ?");
-    $sth->execute($subscriptionid);
-    my $data              = $sth->fetchrow_hashref;
-    my $missinglist       = $data->{'missinglist'};
-    my $missinglistbefore = $missinglist;
-
-    # warn $missinglist." before";
-    $missinglist =~ s/($sequence)//;
-
-    # warn $missinglist." after";
-    if ( $missinglist ne $missinglistbefore ) {
-        $missinglist =~ s/\|\s\|/\|/g;
-        $missinglist =~ s/^\| //g;
-        $missinglist =~ s/\|$//g;
-        my $sth2 = $dbh->prepare(
-            "UPDATE subscriptionhistory
-                    SET missinglist = ?
-                    WHERE subscriptionid = ?"
-        );
-        $sth2->execute( $missinglist, $subscriptionid );
-    }
-    return;
 }
 
 =head2 updateClaim
