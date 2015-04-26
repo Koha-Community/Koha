@@ -201,7 +201,10 @@
                             <ul class="warnings">
                             [% FOREACH error IN errors %]
                                 [% IF ( error.error == 'can_not_update' ) %]
-                                    <li>Can not update patron with borrowernumber [% error.borrowernumber %]</li>
+                                    <li>Can not update patron.
+                                    [% IF ( error.cardnumber ) %] Cardnumber:  [% error.cardnumber %] [% END %]
+                                    (Borrowernumber: [% error.borrowernumber %])
+                                    </li>
                                 [% ELSE %]
                                     <li>[% error.error %]</li>
                                 [% END %]
