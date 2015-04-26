@@ -272,7 +272,11 @@ if ( $op eq 'do' ) {
         if ( defined $infos ) {
             $infos->{borrowernumber} = $borrowernumber;
             my $success = ModMember(%$infos);
-            push @errors, { error => "can_not_update", borrowernumber => $infos->{borrowernumber} } if not $success;
+            if (!$success) {
+                my $borrowerinfo = GetBorrowerInfos( borrowernumber => $borrowernumber );
+                $infos->{cardnumber} = $borrowerinfo->{cardnumber} || '';
+                push @errors, { error => "can_not_update", borrowernumber => $infos->{borrowernumber}, cardnumber => $infos->{cardnumber} };
+            }
         }
 
         #
