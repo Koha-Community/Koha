@@ -292,7 +292,7 @@ $(document).ready(function () {
 
     [% IF ( transfer ) %]
     <!-- transfer: item with no reservation, must be returned according to home library circulation rules -->
-	<div id="return1" class="dialog message audio-alert-action">
+        <div id="return1" class="dialog message audio-alert-action">
             <h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% title or "item" |html %]</a> to [% Branches.GetName( returnbranch ) %]<br/>( <a href="#" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;branchcode=[% returnbranch %]&amp;op=slip'); return true;">Print slip</a> )</h3>
         </div>
     [% END %]

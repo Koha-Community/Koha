@@ -27,7 +27,7 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::AudioAlert - Koha Borrower Object class
+Koha::AudioAlert - Koha Audio Alert object class
 
 =head1 API
 
