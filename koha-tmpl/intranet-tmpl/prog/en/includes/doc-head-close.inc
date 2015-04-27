@@ -23,10 +23,10 @@
 <!-- koha core js -->
 <script type="text/javascript" src="[% themelang %]/js/staff-global.js"></script>
 [% INCLUDE 'validator-strings.inc' %]
-[% IF ( intranetuserjs ) %]
+[% IF ( IntranetUserJS ) %]
     <script type="text/javascript">
     //<![CDATA[
-    [% intranetuserjs %]
+    [% IntranetUserJS %]
     //]]>
     </script>
 [% END %]
