@@ -9711,7 +9711,25 @@ if ( CheckVersion($DBversion) ) {
         $table_sth->execute;
         my @table = $table_sth->fetchrow_array;
         unless ( $table[1] =~ /COLLATE=utf8mb4_unicode_ci/ ) { #catches utf8mb4 collated tables
-            $dbh->do(qq|ALTER TABLE $name CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci|);
+            if ( $name eq 'marc_subfield_structure' ) {
+                $dbh->do(q|
+                    ALTER TABLE marc_subfield_structure
+                    MODIFY COLUMN tagfield varchar(3) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+                    MODIFY COLUMN tagsubfield varchar(1) COLLATE utf8_bin NOT NULL DEFAULT '',
+                    MODIFY COLUMN liblibrarian varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+                    MODIFY COLUMN libopac varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+                    MODIFY COLUMN kohafield varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
+                    MODIFY COLUMN authorised_value varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+                    MODIFY COLUMN authtypecode varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+                    MODIFY COLUMN value_builder varchar(80) COLLATE utf8_unicode_ci DEFAULT NULL,
+                    MODIFY COLUMN frameworkcode varchar(4) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+                    MODIFY COLUMN seealso varchar(1100) COLLATE utf8_unicode_ci DEFAULT NULL,
+                    MODIFY COLUMN link varchar(80) COLLATE utf8_unicode_ci DEFAULT NULL
+                |);
+            }
+            else {
+                $dbh->do(qq|ALTER TABLE $name CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci|);
+            }
         }
     }
     $dbh->do(q|SET foreign_key_checks = 1|);;
