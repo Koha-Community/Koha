@@ -3509,6 +3509,7 @@ CREATE TABLE items_search_fields (
 -- Table structure for table 'discharges'
 --
 
+DROP TABLE IF EXISTS discharges;
 CREATE TABLE discharges (
   borrower int(11) DEFAULT NULL,
   needed timestamp NULL DEFAULT NULL,
