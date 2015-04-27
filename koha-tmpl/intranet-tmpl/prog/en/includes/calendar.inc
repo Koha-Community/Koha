@@ -6,21 +6,25 @@ var debug    = "[% debug %]";
 var dformat  = "[% dateformat %]";
 var sentmsg = 0;
 if (debug > 1) {alert("dateformat: " + dformat + "\ndebug is on (level " + debug + ")");}
-var MSG_PLEASE_ENTER_A_VALID_DATE = ("Please enter a valid date.");
+var MSG_PLEASE_ENTER_A_VALID_DATE = _("Please enter a valid date (should match %s).");
 
 function validate_date (dateText, inst) {
     var dateformat = '[% Koha.Preference('dateformat') %]';
+    var dateformat_str = dateformat
     if ( dateformat == 'us' ) {
         dateformat = 'mm/dd/yy';
+        dateformat_str = 'mm/dd/yyyy';
     } else if ( dateformat == 'metric' ) {
         dateformat = 'dd/mm/yy';
+        dateformat_str = 'dd/mm/yyyy';
     } else if (dateformat == 'iso' ) {
         dateformat = 'yy-mm-dd';
+        dateformat_str = 'yyyy-mm-dd';
     }
     try {
         $.datepicker.parseDate(dateformat, dateText);
     } catch (e) {
-        alert(MSG_PLEASE_ENTER_A_VALID_DATE);
+        alert(MSG_PLEASE_ENTER_A_VALID_DATE.format(dateformat_str));
         $('#'+inst.id).val('');
     };
 }
