@@ -62,9 +62,7 @@ function displayMoreConstraint(numlayer){
             <ul>
                 [% FOREACH loo IN loop %]
                     [% IF ( loo.new_subfield ) %]
-                        [% IF ( tagfield >=10 ) %]<!-- display new only for > 10 fields -->
                         <li><a href="#sub[% loo.tagsubfield %]field" title="[% loo.liblibrarian %]">New</a></li>
-                        [% END %]
                     [% ELSE %]
                         <li><a href="#sub[% loo.tagsubfield %]field" title="[% loo.liblibrarian %]">
                             [% loo.tagsubfield %]
