@@ -83,7 +83,13 @@ $(document).ready(function() {
         return confirm(_("Are you sure you want to replace the current patron image? This cannot be undone."));
 	});[% END %]
 
-    $("#suspend_until").datepicker({ minDate: 1 }); // require that hold suspended until date is after today
+    $("#suspend_until").datepicker({
+        onClose: function(dateText, inst) {
+            validate_date(dateText, inst);
+        },
+        minDate: 1, // require that hold suspended until date is after today
+    });
+
     $("#view_restrictions").on("click",function(){
         $('#debarments-tab-link').click();
     });
@@ -547,7 +553,7 @@ function validate1(date) {
 
             [% IF AutoResumeSuspendedHolds %]
             <label for="suspend_until">until</label>
-            <input type="text" size="10" id="suspend_until" name="suspend_until"/>
+            <input type="text" size="10" id="suspend_until" name="suspend_until datepicker"/>
             <span class="hint">Specify date on which to resume [% INCLUDE 'date-format.inc' %]: </span>
             [% END %]
         </form>

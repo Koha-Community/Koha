@@ -107,6 +107,14 @@ $(document).ready(function() {
     $("#onsite_checkout").click(function(){
         toggle_onsite_checkout();
     });
+
+    $("#suspend_until").datepicker({
+        onClose: function(dateText, inst) {
+            validate_date(dateText, inst);
+        },
+        minDate: 1, // require that hold suspended until date is after today
+    });
+
 });
 
 //]]>
@@ -949,7 +957,7 @@ No patron matched <span class="ex">[% message | html %]</span>
 
             [% IF AutoResumeSuspendedHolds %]
             <label for="suspend_until">until</label>
-            <input type="text" size="10" id="suspend_until" name="suspend_until" class="datepicker" />
+            <input type="text" size="10" id="suspend_until" name="suspend_until datepicker" />
             <span class="hint">Specify date on which to resume [% INCLUDE 'date-format.inc' %]: </span>
              [% END %]
         </form>
