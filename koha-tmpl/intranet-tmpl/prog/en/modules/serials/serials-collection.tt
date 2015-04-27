@@ -170,7 +170,11 @@ $(document).ready(function() {
 <ul>
 	[% FOREACH year IN years %]
         [% IF ( year.year ) %]
-            <li><a href="#subscription-year-[% year.year %]">[% year.year %]</a></li>
+            [% IF year.year == 'manage' %]
+                <li><a href="#subscription-year-manage">Manage</a></li>
+            [% ELSE %]
+                <li><a href="#subscription-year-[% year.year %]">[% year.year %]</a></li>
+            [% END %]
         [% END %]
     [% END %]
 </ul>
