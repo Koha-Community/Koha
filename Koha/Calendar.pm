@@ -8,7 +8,6 @@ use DateTime::Set;
 use DateTime::Duration;
 use C4::Context;
 use Carp;
-use Readonly;
 
 sub new {
     my ( $classname, %options ) = @_;
@@ -34,7 +33,7 @@ sub _init {
     );
     $weekly_closed_days_sth->execute( $branch );
     $self->{weekly_closed_days} = [ 0, 0, 0, 0, 0, 0, 0 ];
-    Readonly::Scalar my $sunday => 7;
+    my $sunday => 7;
     while ( my $tuple = $weekly_closed_days_sth->fetchrow_hashref ) {
         $self->{weekly_closed_days}->[ $tuple->{weekday} ] = 1;
     }
@@ -127,7 +126,7 @@ sub addDate {
 
     if ( $unit eq 'hours' ) {
         # Fixed for legacy support. Should be set as a branch parameter
-        Readonly::Scalar my $return_by_hour => 10;
+        my $return_by_hour => 10;
 
         $dt = $self->addHours($startdate, $add_duration, $return_by_hour);
     } else {

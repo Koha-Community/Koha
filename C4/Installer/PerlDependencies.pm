@@ -237,16 +237,6 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.08'
     },
-    'Readonly' => {
-        'usage'    => 'Core',
-        'required' => '1',
-        'min_ver'  => '1.03'
-    },
-    'Readonly::XS' => {
-        'usage'    => 'Core',
-        'required' => '0',
-        'min_ver'  => '1.02'
-    },
     'Graphics::Magick' => {
         'usage'    => 'Patron Card Creator Feature',
         'required' => '0',
