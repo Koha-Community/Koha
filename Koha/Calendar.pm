@@ -33,7 +33,6 @@ sub _init {
     );
     $weekly_closed_days_sth->execute( $branch );
     $self->{weekly_closed_days} = [ 0, 0, 0, 0, 0, 0, 0 ];
-    my $sunday => 7;
     while ( my $tuple = $weekly_closed_days_sth->fetchrow_hashref ) {
         $self->{weekly_closed_days}->[ $tuple->{weekday} ] = 1;
     }
@@ -126,7 +125,7 @@ sub addDate {
 
     if ( $unit eq 'hours' ) {
         # Fixed for legacy support. Should be set as a branch parameter
-        my $return_by_hour => 10;
+        my $return_by_hour = 10;
 
         $dt = $self->addHours($startdate, $add_duration, $return_by_hour);
     } else {
@@ -221,7 +220,8 @@ sub is_holiday {
 
     my $dow = $localdt->day_of_week;
     # Representation fix
-    # TODO: Shouldn't we shift the rest of the $dow also?
+    # DateTime object dow (1-7) where Monday is 1
+    # Arrays are 0-based where 0 = Sunday, not 7.
     if ( $dow == 7 ) {
         $dow = 0;
     }
