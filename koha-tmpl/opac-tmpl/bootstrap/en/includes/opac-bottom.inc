@@ -262,10 +262,10 @@ $(document).ready(function() {
 </script>
 [% PROCESS jsinclude %]
 
-[% IF ( opacuserjs ) %]
+[% IF ( OPACUserJS ) %]
     <script type="text/javascript">
         //<![CDATA[
-        [% opacuserjs %]
+        [% OPACUserJS %]
         //]]>
     </script>
 [% END %]

@@ -317,7 +317,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OpacTopissue','0',NULL,'If ON, enables the \'most popular items\' link on OPAC. Warning, this is an EXPERIMENTAL feature, turning ON may overload your server','YesNo'),
 ('OPACURLOpenInNewWindow','0',NULL,'If ON, URLs in the OPAC open in a new window','YesNo'),
 ('OPACUserCSS','',NULL,'Add CSS to be included in the OPAC in an embedded <style> tag.','free'),
-('opacuserjs','','70|10','Define custom javascript for inclusion in OPAC','Textarea'),
+('OPACUserJS','','70|10','Define custom javascript for inclusion in OPAC','Textarea'),
 ('opacuserlogin','1',NULL,'Enable or disable display of user login features','YesNo'),
 ('OPACViewOthersSuggestions','0',NULL,'If ON, allows all suggestions to be displayed in the OPAC','YesNo'),
 ('OPACXSLTDetailsDisplay','default','','Enable XSL stylesheet control over details page display on OPAC','Free'),
