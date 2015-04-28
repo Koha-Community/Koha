@@ -530,7 +530,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
                 </td>
                 <td>
                     [% IF ( suggestions_loo.emailsuggestedby ) %]<a href="mailto:[% suggestions_loo.emailsuggestedby %]">[% END %][% suggestions_loo.surnamesuggestedby %][% IF ( suggestions_loo.firstnamesuggestedby ) %], [% suggestions_loo.firstnamesuggestedby %][% END %] [% IF (suggestions_loo.cardnumbersuggestedby ) %]([% suggestions_loo.cardnumbersuggestedby %])[% END %] [% IF ( suggestions_loo.emailsuggestedby ) %]</a>[% END %]
-                    [% IF ( suggestions_loo.suggesteddate ) %] - [% suggestions_loo.suggesteddate %][% END %]
+                    [% IF ( suggestions_loo.suggesteddate ) %] - [% suggestions_loo.suggesteddate | $KohaDates %][% END %]
                 </td>
                 <td>
                     [% IF ( suggestions_loo.emailmanagedby ) %]<a href="mailto:[% suggestions_loo.emailmanagedby %]">[% END %][% suggestions_loo.surnamemanagedby %][% IF ( suggestions_loo.firstnamemanagedby ) %], [% suggestions_loo.firstnamemanagedby %][% END %] [% IF ( suggestions_loo.emailmanagedby ) %]</a>[% END %]
