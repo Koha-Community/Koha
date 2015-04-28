@@ -44,6 +44,9 @@ my ($sourcetag,$sourcesubfield,$idmapfl, $dedup_barcode);
 my $framework = '';
 my $localcust;
 
+use OplibMatcher;
+my ($oplibMatcher, $oplibmatchlog);
+
 $|=1;
 
 GetOptions(
@@ -79,6 +82,8 @@ GetOptions(
     'dedupbarcode' => \$dedup_barcode,
     'framework=s' => \$framework,
     'custom:s'    => \$localcust,
+    'oplibmatcher=s' => \$oplibMatcher,
+    'oplibmatchlog=s' => \$oplibmatchlog,
 );
 $biblios ||= !$authorities;
 $insert  ||= !$update;
@@ -124,6 +129,14 @@ if (defined $idmapfl) {
 if ((not defined $sourcesubfield) && (not defined $sourcetag)){
   $sourcetag="910";
   $sourcesubfield="a";
+}
+
+#Get the manual matching verification file and read it in memory
+if ($oplibMatcher && not($oplibmatchlog)) {
+    die "\n--oplibmatchlog must be defined if --oplibmatcher is used\n";
+}
+if ($oplibMatcher && $oplibmatchlog) {
+    $oplibMatcher = OplibMatcher->new($oplibMatcher, $oplibmatchlog, $verbose);
 }
 
 
@@ -211,14 +224,16 @@ else {
 	$tagid||="001";
 }
 
+$tagid = '001'; #Override the original id finding.
+
 # the SQL query to search on isbn
 my $sth_isbn = $dbh->prepare("SELECT biblionumber,biblioitemnumber FROM biblioitems WHERE isbn=?");
 
-$dbh->{AutoCommit} = 0;
+#$dbh->{AutoCommit} = 0;
 my $loghandle;
 if ($logfile){
    $loghandle= IO::File->new($logfile, $writemode) ;
-   print $loghandle "id;operation;status\n";
+   print $loghandle "id;newid;operation;status\n";
 }
 
 my $searcher = Koha::SearchEngine::Search->new(
@@ -275,7 +290,34 @@ RECORD: while (  ) {
             $field->update('a' => $isbn);
         }
     }
-    my $id;
+   my $id; #Collect the biblionumber here if we find a duplicate record.
+    #This variable overrides the $biblionumber-variable in the insertion portion of this script.
+    #Thus blocking migrating this record (unless --update flag is given)
+    #Items are migrated normally.
+
+    my $matchResult = $oplibMatcher->checkMatch($record) if $oplibMatcher;
+    if ($matchResult && $matchResult =~ /^PEN/) { #This result needs manual confirmation and is waiting for manual override instructions
+        print 'P';
+        #we let it slip
+    }
+    elsif ($matchResult && $matchResult =~ /^KILL/) { #This result is manually instructed to die
+        print 'K';
+        next();
+    }
+    elsif ($matchResult && $matchResult =~ /^OK/) { #This result is added as a new record
+        print 'O';
+    }
+    elsif ($matchResult && $matchResult =~ /^CP/) { #This component part is added as a new record, because the component parent has been added as well.
+        print 'C';
+    }
+    elsif ($matchResult && $matchResult > 0) { #A match found and we got the target biblionumber
+        print 'M';
+        $id = $matchResult;
+    }
+    else { #No match found, safe to migrate.
+    }
+
+
     # search for duplicates (based on Local-number)
     my $originalid;
     $originalid = GetRecordId( $record, $tagid, $subfieldid );
@@ -361,7 +403,7 @@ RECORD: while (  ) {
 					printlog({id=>$originalid||$id||$authid, op=>"edit",status=>"ERROR"}) if ($logfile);
                 }
 				else{
-					printlog({id=>$originalid||$id||$authid, op=>"edit",status=>"ok"}) if ($logfile);
+					printlog({id=>$originalid||$id||$authid, newid => $authid, op=>"edit",status=>"ok"}) if ($logfile);
 				}
             }  
             elsif (defined $authid) {
@@ -372,7 +414,7 @@ RECORD: while (  ) {
 					printlog({id=>$originalid||$id||$authid, op=>"insert",status=>"ERROR"}) if ($logfile);
                 }
    				else{
-					printlog({id=>$originalid||$id||$authid, op=>"insert",status=>"ok"}) if ($logfile);
+					printlog({id=>$originalid||$id||$authid, newid => $authid, op=>"insert",status=>"ok"}) if ($logfile);
 				}
             }
 	        else {
@@ -383,7 +425,7 @@ RECORD: while (  ) {
 					printlog({id=>$originalid||$id||$authid, op=>"insert",status=>"ERROR"}) if ($logfile);
                 }
    				else{
-					printlog({id=>$originalid||$id||$authid, op=>"insert",status=>"ok"}) if ($logfile);
+					printlog({id=>$originalid||$id||$authid, newid => $authid, op=>"insert",status=>"ok"}) if ($logfile);
 				}
  	        }
             if ($yamlfile) {
@@ -422,26 +464,27 @@ RECORD: while (  ) {
                     eval { ( $biblionumber, $biblioitemnumber ) = ModBiblio( $record, $biblionumber, GetFrameworkCode($biblionumber) ) };
                     if ($@) {
                         warn "ERROR: Edit biblio $biblionumber failed: $@\n";
-                        printlog( { id => $id || $originalid || $biblionumber, op => "update", status => "ERROR" } ) if ($logfile);
+                        printlog( { id => $originalid || $id || $biblionumber, op => "update", status => "ERROR" } ) if ($logfile);
                         next RECORD;
                     } else {
-                        printlog( { id => $id || $originalid || $biblionumber, op => "update", status => "ok" } ) if ($logfile);
+                        printlog( { id => $originalid || $id || $biblionumber, newid => $biblionumber, op => "update", status => "ok" } ) if ($logfile);
                     }
                 } else {
-                    printlog( { id => $id || $originalid || $biblionumber, op => "insert", status => "warning : already in database" } ) if ($logfile);
+                    printlog( { id => $originalid || $id || $biblionumber, newid => $biblionumber, op => "insert", status => "warning : already in database" } ) if ($logfile);
                 }
             } else {
                 if ($insert) {
                     eval { ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, '', { defer_marc_save => 1 } ) };
+                    die "Biblionumber '$biblionumber' and biblioitemnumber '$biblioitemnumber' do not match! This causes critical issues in Koha!\n" if $biblionumber != $biblioitemnumber;
                     if ($@) {
                         warn "ERROR: Adding biblio $biblionumber failed: $@\n";
-                        printlog( { id => $id || $originalid || $biblionumber, op => "insert", status => "ERROR" } ) if ($logfile);
+                        printlog( { id => $originalid || $id || $biblionumber, op => "insert", status => "ERROR" } ) if ($logfile);
                         next RECORD;
                     } else {
-                        printlog( { id => $id || $originalid || $biblionumber, op => "insert", status => "ok" } ) if ($logfile);
+                        printlog( { id => $originalid || $id || $biblionumber, newid => $biblionumber, op => "insert", status => "ok" } ) if ($logfile);
                     }
                 } else {
-                    printlog( { id => $id || $originalid || $biblionumber, op => "update", status => "warning : not in database" } ) if ($logfile);
+                    printlog( { id => $originalid || $id || $biblionumber, newid => $biblionumber, op => "update", status => "warning : not in database" } ) if ($logfile);
                 }
             }
             eval { ( $itemnumbers_ref, $errors_ref ) = AddItemBatchFromMarc( $record, $biblionumber, $biblioitemnumber, '' ); };
@@ -452,7 +495,7 @@ RECORD: while (  ) {
             C4::Biblio::_strip_item_fields($clone_record, '');
             # This sets the marc fields if there was an error, and also calls
             # defer_marc_save.
-            ModBiblioMarc( $clone_record, $biblionumber, $framework );
+            ModBiblioMarc( $clone_record, $biblionumber, $framework ) unless $id; #We don't want to replace old record with the new record.
             if ( $error_adding ) {
                 warn "ERROR: Adding items to bib $biblionumber failed: $error_adding";
 				printlog({id=>$id||$originalid||$biblionumber, op=>"insertitem",status=>"ERROR"}) if ($logfile);
@@ -461,7 +504,7 @@ RECORD: while (  ) {
                 next RECORD;
             }
  			else{
-				printlog({id=>$id||$originalid||$biblionumber, op=>"insert",status=>"ok"}) if ($logfile);
+				#printlog({id=>$id||$originalid||$biblionumber, newid => $biblionumber, op=>"insert",status=>"ok"}) if ($logfile);
 			}
             if ($dedup_barcode && grep { exists $_->{error_code} && $_->{error_code} eq 'duplicate_barcode' } @$errors_ref) {
                 # Find the record called 'barcode'
@@ -510,13 +553,13 @@ RECORD: while (  ) {
             }
             $yamlhash->{$originalid} = $biblionumber if ($yamlfile);
         }
-        $dbh->commit() if (0 == $i % $commitnum);
+#        $dbh->commit() if (0 == $i % $commitnum);
     }
     print $record->as_formatted()."\n" if ($verbose//0)==2;
     last if $i == $number;
 }
-$dbh->commit();
-$dbh->{AutoCommit} = 1;
+#$dbh->commit();
+#$dbh->{AutoCommit} = 1;
 
 
 if ($fk_off) {
@@ -612,7 +655,7 @@ sub report_item_errors {
 }
 sub printlog{
 	my $logelements=shift;
-    print $loghandle join( ";", map { defined $_ ? $_ : "" } @$logelements{qw<id op status>} ), "\n";
+    print $loghandle join( ";", map { defined $_ ? $_ : "" } @$logelements{qw<id newid op status>} ), "\n";
 }
 sub get_heading_fields{
     my $headingfields;
