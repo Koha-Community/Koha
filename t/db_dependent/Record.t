@@ -1,18 +1,22 @@
 #!/usr/bin/perl
-#
-# This Koha test module is a stub!  
-# Add more tests here!!!
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 use MARC::Record;
+
+use C4::Context;
 
 BEGIN {
         use_ok('C4::Record');
 }
 
-#my ($marc,$to_flavour,$from_flavour,$encoding) = @_;
+my $dbh = C4::Context->dbh;
+# Start transaction
+$dbh->{AutoCommit} = 0;
+$dbh->{RaiseError} = 1;
+
+C4::Context->set_preference( "BibtexExportAdditionalFields", q{} );
 
 my @marcarray=marc2marc;
 is ($marcarray[0],"Feature not yet implemented\n","error works");
@@ -105,6 +109,19 @@ my $test5xml=qq(\@book{testID,
 );
 
 is ($bibtex, $test5xml, "testing bibtex");
+
+C4::Context->set_preference( "BibtexExportAdditionalFields", "'\@': 260\$b\ntest: 260\$b" );
+$bibtex = marc2bibtex( $marc, 'testID' );
+my $test6xml = qq(\@Scholastic{testID,
+	author = {Rowling, J.K.},
+	title = {Harry potter},
+	publisher = {Scholastic},
+	year = {2001},
+	test = {Scholastic}
+}
+);
+is( $bibtex, $test6xml, "testing bibtex" );
+C4::Context->set_preference( "BibtexExportAdditionalFields", q{} );
 
 $marc->append_fields(MARC::Field->new(
     '264', '3', '1', b => 'Reprints', c => '2011'
