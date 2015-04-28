@@ -15,5 +15,8 @@
                 [% END %]
             </ul>
     </div>
+    [% IF CAN_user_tools_manage_patron_lists %]
+        <a class="btn btn-small" href="/cgi-bin/koha/patron_lists/lists.pl"><i class="icon-edit"></i>Patron lists</a>
+    [% END %]
 </div>
 [% END %]
