@@ -40,10 +40,10 @@ function hideColumn(num) {
     if( !found ){
         valCookie.push(hide);
         var cookieString = valCookie.join("/");
-        $.cookie("showColumns", cookieString, { expires : date });
+        $.cookie("showColumns", cookieString, { expires : date, path: '/' });
     }
   } else {
-        $.cookie("showColumns", hide, { expires : date });
+        $.cookie("showColumns", hide, { expires : date, path: '/' });
   }
 }
 
@@ -75,7 +75,7 @@ function showColumn(num){
     }
     if( found ){
         var cookieString = valCookie.join("/");
-        $.cookie("showColumns", cookieString, { expires : date });
+        $.cookie("showColumns", cookieString, { expires : date, path: '/' });
     }
   }
 }
@@ -83,7 +83,7 @@ function showAllColumns(){
     $("#selections").checkCheckboxes();
     $("#selections span").addClass("selected");
     $("#itemst td:nth-child(2),#itemst tr th:nth-child(2)").nextAll().show();
-    $.cookie("showColumns",null);
+    $.removeCookie("showColumns", { path: '/' });
     $("#hideall").removeAttr("checked").parent().removeClass("selected");
 }
 function hideAllColumns(){
@@ -92,7 +92,7 @@ function hideAllColumns(){
     $("#itemst td:nth-child(2),#itemst th:nth-child(2)").nextAll().hide();
     $("#hideall").attr("checked","checked").parent().addClass("selected");
     var cookieString = allColumns.join("/");
-    $.cookie("showColumns", cookieString, { expires : date });
+    $.cookie("showColumns", cookieString, { expires : date, path: '/' });
 }
 
   $(document).ready(function() {
