@@ -18,6 +18,14 @@
     <div class="yui-b">
 <div class="yui-g">
 <h3>Discharge</h3>
+[% FOR message IN messages %]
+    <div class="dialog [% message.type %]">
+    [% IF message.code == "unable_to_generate_pdf" %]
+        An error occurs when generating the pdf file.
+        Please contact the administrator to resolve this problem.
+    [% END %]
+    </div>
+[% END %]
 [% UNLESS can_be_discharged %]
     <p>Cannot edit discharge: borrower has issues.</p>
 [% ELSE %]

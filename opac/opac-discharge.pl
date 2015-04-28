@@ -18,6 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use Carp;
 
 use C4::Auth qw(:DEFAULT get_session);
 use CGI qw( -utf8 );
@@ -55,21 +56,27 @@ if ( $op eq 'request' ) {
     }
 }
 elsif ( $op eq 'get' ) {
-    my $pdf_path = Koha::Borrower::Discharge::generate_as_pdf({
-        borrowernumber => $loggedinuser
-    });
+    eval {
+        my $pdf_path = Koha::Borrower::Discharge::generate_as_pdf({
+            borrowernumber => $loggedinuser
+        });
 
-    binmode(STDOUT);
-    print $input->header(
-        -type       => 'application/pdf',
-        -charset    => 'utf-8',
-        -attachment => "discharge_$loggedinuser.pdf",
-    );
-    open my $fh, '<', $pdf_path;
-    my @lines = <$fh>;
-    close $fh;
-    print @lines;
-    exit;
+        binmode(STDOUT);
+        print $input->header(
+            -type       => 'application/pdf',
+            -charset    => 'utf-8',
+            -attachment => "discharge_$loggedinuser.pdf",
+        );
+        open my $fh, '<', $pdf_path;
+        my @lines = <$fh>;
+        close $fh;
+        print @lines;
+        exit;
+    };
+    if ( $@ ) {
+        carp $@;
+        $template->param( messages => [ {type => 'error', code => 'unable_to_generate_pdf'} ] );
+    }
 }
 else {
     my $pending = Koha::Borrower::Discharge::count({

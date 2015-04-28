@@ -28,6 +28,7 @@ Allows librarian to edit and/or manage borrowers' discharges
 =cut
 
 use Modern::Perl;
+use Carp;
 
 use CGI qw( -utf8 );
 use C4::Auth;
@@ -75,20 +76,26 @@ if ( $input->param('borrowernumber') ) {
                 borrowernumber => $borrowernumber
             });
         }
-        my $pdf_path = Koha::Borrower::Discharge::generate_as_pdf(
-            { borrowernumber => $borrowernumber, } );
+        eval {
+            my $pdf_path = Koha::Borrower::Discharge::generate_as_pdf(
+                { borrowernumber => $borrowernumber, } );
 
-        binmode(STDOUT);
-        print $input->header(
-            -type       => 'application/pdf',
-            -charset    => 'utf-8',
-            -attachment => "discharge_$borrowernumber.pdf",
-        );
-        open my $fh, '<', $pdf_path;
-        my @lines = <$fh>;
-        close $fh;
-        print @lines;
-        exit;
+            binmode(STDOUT);
+            print $input->header(
+                -type       => 'application/pdf',
+                -charset    => 'utf-8',
+                -attachment => "discharge_$borrowernumber.pdf",
+            );
+            open my $fh, '<', $pdf_path;
+            my @lines = <$fh>;
+            close $fh;
+            print @lines;
+            exit;
+        };
+        if ( $@ ) {
+            carp $@;
+            $template->param( messages => [ {type => 'error', code => 'unable_to_generate_pdf'} ] );
+        }
     }
 
     $template->param(
