@@ -268,18 +268,21 @@ function batchDelete(){
         </tr>
         [% END %]
 
-        [% IF ( BIBLIO_RESULT.MARCurlS ) %]
-        <tr>
-            <th scope="row">URL(s)</th>
-            <td>
-	   [% FOREACH MARCurl IN BIBLIO_RESULT.MARCurlS %]
-		<p>[% IF ( MARCurl.part ) %][% MARCurl.part %]
-			<br />[% END %]
 
-		[% MARCurl.MARCurl %]
-			[% IF ( MARCurl.notes ) %][% FOREACH note IN MARCurl.notes %][% note.note %]<br />[% END %][% END %]
-            [% END %]</p></td>
-        </tr>[% END %]
+        [% IF BIBLIO_RESULT.MARCURLS.size %]
+            <tr>
+                <th scope="row">URL(s)</th>
+                <td>
+                   [% FOREACH MARCurl IN BIBLIO_RESULT.MARCURLS %]
+                        [% IF MARCurl.part %]<p>[% MARCurl.part %]</p>[% END %]
+
+                        <a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]">[% MARCurl.linktext %]</a>
+
+                        [% IF MARCurl.notes %][% FOREACH note IN MARCurl.notes %]<p>[% note.note %]</p>[% END %][% END %]
+                    [% END %]
+                </td>
+            </tr>
+        [% END %]
 
         <tr>
             <th scope="row">Location(s)</th>

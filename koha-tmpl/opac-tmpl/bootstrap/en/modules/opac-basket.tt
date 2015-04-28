@@ -191,20 +191,21 @@
                                             </tr>
                                         [% END %]
 
-                                        [% IF ( BIBLIO_RESULT.MARCurlS ) %]
+                                        [% IF BIBLIO_RESULT.MARCURLS.size %]
                                             <tr>
                                                 <th scope="row">URL(s)</th>
                                                 <td>
-                                                   [% FOREACH MARCurl IN BIBLIO_RESULT.MARCurlS %]
-                                                        <p>
-                                                        [% IF ( MARCurl.part ) %][% MARCurl.part %]
-                                                            <br />
+                                                   [% FOREACH MARCurl IN BIBLIO_RESULT.MARCURLS %]
+                                                        [% IF MARCurl.part %]<p>[% MARCurl.part %]</p>[% END %]
+
+                                                        [% IF OPACurlOpenInNewWindow %]
+                                                            <a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]" target="_blank">[% MARCurl.linktext %]</a>
+                                                        [% ELSE %]
+                                                            <a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]">[% MARCurl.linktext %]</a>
                                                         [% END %]
 
-                                                        [% MARCurl.MARCurl %]
-                                                            [% IF ( MARCurl.notes ) %][% FOREACH note IN MARCurl.notes %][% note.note %]<br />[% END %][% END %]
-                                                        [% END %]
-                                                        </p>
+                                                        [% IF MARCurl.notes %][% FOREACH note IN MARCurl.notes %]<p>[% note.note %]</p>[% END %][% END %]
+                                                    [% END %]
                                                 </td>
                                             </tr>
                                         [% END %]
