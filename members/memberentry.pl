@@ -135,8 +135,6 @@ my @field_check=split(/\|/,$check_BorrowerMandatoryField);
 foreach (@field_check) {
 	$template->param( "mandatory$_" => 1);    
 }
-# we'll need this, later.
-my $dateofbirthmandatory = (scalar grep {$_ eq "dateofbirth"} @field_check) ? 1 : 0;
 # function to designate unwanted fields
 my $check_BorrowerUnwantedField=C4::Context->preference("BorrowerUnwantedField");
 @field_check=split(/\|/,$check_BorrowerUnwantedField);
@@ -305,7 +303,7 @@ if ($op eq 'save' || $op eq 'insert'){
                 : ()
     }
 
-    if ($newdata{dateofbirth} && $dateofbirthmandatory) {
+    if ( $newdata{dateofbirth} ) {
         my $age = GetAge($newdata{dateofbirth});
         my $borrowercategory=GetBorrowercategory($newdata{'categorycode'});   
         my ($low,$high) = ($borrowercategory->{'dateofbirthrequired'}, $borrowercategory->{'upperagelimit'});
