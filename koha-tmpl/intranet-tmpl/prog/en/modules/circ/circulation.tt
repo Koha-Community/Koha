@@ -48,7 +48,14 @@ var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
 
 columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'circulation', 'issues-table', 'json' ) %]
 
-[% IF ( borrowernumber ) %]if($.cookie("holdfor") != [% borrowernumber %]){ $.cookie("holdfor",null, { path: "/", expires: 0 }); }[% ELSE %]$.cookie("holdfor",null, { path: "/", expires: 0 });[% END %]
+[% IF ( borrowernumber ) %]
+    if($.cookie("holdfor") != [% borrowernumber %]){
+        $.removeCookie("holdfor", { path: '/' });
+    }
+[% ELSE %]
+    $.removeCookie("holdfor", { path: '/' });
+[% END %]
+
 [% UNLESS ( borrowernumber ) %][% UNLESS ( borrowers ) %]window.onload=function(){ $('#findborrower').focus(); };[% END %][% END %]
 
 // On-site checkout

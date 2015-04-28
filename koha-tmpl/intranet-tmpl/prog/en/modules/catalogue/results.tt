@@ -204,7 +204,7 @@ function placeHold () {
 }
 
 function forgetPatron(){
-    $.cookie("holdfor",null, { path: "/", expires: 0 });
+    $.removeCookie("holdfor", { path: '/' });
     $(".holdforlink").remove();
     $("#placeholdc").html("<a class=\"btn btn-mini placehold\" href=\"#\"><i class=\"icon-hold\"></i> "+_("Place hold")+"</a>");
 }
