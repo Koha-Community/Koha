@@ -53,6 +53,7 @@ $template->param(
     booksellerid   => $booksellerid,
     booksellername => $bookseller->{name},
     basketcount   => $bookseller->{'basketcount'},
+    active         => $bookseller->{active},
     subscriptioncount   => $bookseller->{'subscriptioncount'},
 );
 

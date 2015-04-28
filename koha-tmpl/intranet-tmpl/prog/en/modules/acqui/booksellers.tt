@@ -157,7 +157,7 @@ $(document).ready(function() {
                                         <td>
                                             <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]">View</a>
 
-                                            [% UNLESS ( basket.closedate ) %]
+                                            [% IF not basket.closedate and supplier.active %]
                                                | <a id="addtoBasketLabel[% basket.basketno %]" href="#addtoBasket[% basket.basketno %]" role="button" data-toggle="modal">Add to basket</a>
                                                 <!-- Modal -->
                                                 <div id="addtoBasket[% basket.basketno %]" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="addtoBasketLabel[% basket.basketno %]" aria-hidden="true" data-basketno="[% basket.basketname %]">

@@ -194,7 +194,12 @@ function Check(ff) {
                     [% END %]
                 </table>
                 [% ELSE %]
-                <div class="dialog message">There are no contracts with this vendor. <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;booksellerid=[% booksellerid %]">Add a contract</a>.</div>
+                    <div class="dialog message">
+                        There are no contracts with this vendor.
+                        [% IF active %]
+                            <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;booksellerid=[% booksellerid %]">Add a contract</a>.
+                        [% END %]
+                    </div>
                 [% END %]
             [% END %]
 </div>

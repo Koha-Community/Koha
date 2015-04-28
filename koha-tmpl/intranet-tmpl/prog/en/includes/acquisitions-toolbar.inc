@@ -14,10 +14,10 @@ function confirm_deletion() {
         <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-            [% IF ( CAN_user_acquisition_order_manage ) %]
+            [% IF CAN_user_acquisition_order_manage && active %]
                 <li><a href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% booksellerid %]&amp;op=add_form">Basket</a></li>
             [% END %]
-            [% IF ( CAN_user_acquisition_contracts_manage ) %]
+            [% IF CAN_user_acquisition_contracts_manage && active %]
                 <li><a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;booksellerid=[% booksellerid %]">Contract</a></li>
             [% END %]
             [% IF ( CAN_user_acquisition_vendors_manage ) %]
@@ -31,7 +31,7 @@ function confirm_deletion() {
                     <div class="btn-group"><a class="btn btn-small" id="deletesupplier" href="javascript:confirm_deletion()"><i class="icon-remove"></i> Delete vendor</a></div>
                 [% END %]
             [% END %]
-            [% IF ( CAN_user_acquisition_order_receive && basketcount ) %]
+            [% IF CAN_user_acquisition_order_receive && basketcount %]
                 <div class="btn-group"><a class="btn btn-small" id="receive" href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% booksellerid %]"><i class="icon-inbox"></i> Receive shipments</a></div>
             [% END %]
         [% ELSE %]

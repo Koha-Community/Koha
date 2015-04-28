@@ -128,6 +128,7 @@ $template->param( uncertainpriceorders => \@orders,
                                    booksellernotes => $bookseller->{'notes'},
                                    basketcount   => $bookseller->{'basketcount'},
                                    subscriptioncount   => $bookseller->{'subscriptioncount'},
+                                   active => $bookseller->{active},
                                    owner => $owner,
                                    scriptname => "/cgi-bin/koha/acqui/uncertainprice.pl");
 $template->{'VARS'}->{'contacts'} = $bookseller->{'contacts'};

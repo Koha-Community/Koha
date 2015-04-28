@@ -161,7 +161,9 @@
         [% UNLESS ( selectbasketg ) %]
             [% UNLESS ( closedate ) %]
                 <div id="toolbar" class="btn-toolbar">
-                    <div class="btn-group"><a href="#addtoBasket" role="button" class="btn btn-small" data-toggle="modal"><i class="icon-plus"></i> Add to basket</a></div>
+                    [% IF active %]
+                        <div class="btn-group"><a href="#addtoBasket" role="button" class="btn btn-small" data-toggle="modal"><i class="icon-plus"></i> Add to basket</a></div>
+                    [% END %]
                     <div class="btn-group"><a href="basketheader.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;op=add_form" class="btn btn-small" id="basketheadbutton"><i class="icon-pencil"></i> Edit basket</a></div>
                     [%# FIXME This action should not be available for everyone %]
                     <div class="btn-group"><a href="#deleteBasketModal" role="button" class="btn btn-small" data-toggle="modal" id="delbasketbutton"><i class="icon-remove"></i> Delete this basket</a></div>
@@ -627,7 +629,10 @@
         </div>
     </div>
 
+    [% IF active %]
         [% INCLUDE 'acquisitions-add-to-basket.inc' %]
+    [% END %]
+
         [% END %]
 [% END %]
 [% END %]    [% ELSE %] <!-- if we want just to select a basketgroup for a closed basket -->
