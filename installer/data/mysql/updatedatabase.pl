@@ -10257,10 +10257,10 @@ DELETE FROM language_descriptions
     SetVersion($DBversion);
 }
 
-$DBversion = "3.19.00.XXX";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+$DBversion = "3.19.00.031";
+if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
-        INSERT INTO systempreferences (variable,value,explanation,options,type)
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
         VALUES('IdRef','0','Disable/enable the IdRef webservice from the OPAC detail page.',NULL,'YesNo')
     });
     print "Upgrade to $DBversion done (Bug 8992: Add system preference IdRef))\n";
