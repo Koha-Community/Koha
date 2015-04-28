@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Test::More tests => 13;
+use Test::More tests => 17;
 
 use C4::Acquisition;
 use C4::Bookseller;
@@ -135,6 +135,7 @@ is( exists $late_or_missing_issues[0]->{claimdate}, 1, 'GetLateOrMissingIssues r
 is( exists $late_or_missing_issues[0]->{claims_count}, 1, 'GetLateOrMissingIssues returns claims_count' );
 is( $late_or_missing_issues[0]->{claims_count}, 0, 'The issues should not habe been claimed yet' );
 
+is( updateClaim(), undef, 'updateClaim should return undef if not param passed' );
 my $serialid_to_claim = $late_or_missing_issues[0]->{serialid};
 updateClaim( $serialid_to_claim );
 
@@ -143,6 +144,17 @@ is( scalar(@late_or_missing_issues), 2, 'supplier 2 should have 2 issues in late
 
 my ( $serial_claimed ) = grep { ($_->{serialid} == $serialid_to_claim) ? $_ : () } @late_or_missing_issues;
 is( $serial_claimed->{claims_count}, 1, 'The serial should have been claimed' );
+
+my @serials_to_claim = map { $_->{serialid} } @late_or_missing_issues;
+updateClaim( \@serials_to_claim );
+@late_or_missing_issues = GetLateOrMissingIssues( $supplier_id2);
+is( scalar(@late_or_missing_issues), 2, 'supplier 2 should have 2 issues in late' );
+
+( $serial_claimed ) = grep { ($_->{serialid} == $serials_to_claim[0]) ? $_ : () } @late_or_missing_issues;
+is( $serial_claimed->{claims_count}, 2, 'The serial should have been claimed' );
+( $serial_claimed ) = grep { ($_->{serialid} == $serials_to_claim[1]) ? $_ : () } @late_or_missing_issues;
+is( $serial_claimed->{claims_count}, 1, 'The serial should have been claimed' );
+
 
 my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
 # FIXME: This test should pass. The GetLateOrMissingIssues should not deal with date format!

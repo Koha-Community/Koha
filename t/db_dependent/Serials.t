@@ -15,7 +15,7 @@ use C4::Bookseller;
 use C4::Biblio;
 use C4::Budgets;
 use Koha::DateUtils;
-use Test::More tests => 48;
+use Test::More tests => 46;
 
 BEGIN {
     use_ok('C4::Serials');
@@ -151,7 +151,6 @@ if ($old_frequency) {
 
 # Test calling subs without parameters
 is(C4::Serials::AddItem2Serial(), undef, 'test adding item to serial');
-is(C4::Serials::UpdateClaimdateIssues(), undef, 'test updating claim date');
 is(C4::Serials::GetFullSubscription(), undef, 'test getting full subscription');
 is(C4::Serials::PrepareSerialsData(), undef, 'test preparing serial data');
 is(C4::Serials::GetSubscriptionsFromBiblionumber(), undef, 'test getting subscriptions form biblio number');
@@ -181,8 +180,6 @@ is(C4::Serials::HasSubscriptionStrictlyExpired(), undef, 'test if the subscripti
 is(C4::Serials::HasSubscriptionExpired(), undef, 'test if the subscriptions has expired');
 
 is(C4::Serials::GetLateOrMissingIssues(), undef, 'test getting last or missing issues');
-
-is(C4::Serials::updateClaim(),undef, 'test updating claim');
 
 is(C4::Serials::getsupplierbyserialid(),undef, 'test getting supplier idea');
 
