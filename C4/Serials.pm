@@ -77,7 +77,6 @@ BEGIN {
       &GetSerialInformation                   &AddItem2Serial
       &PrepareSerialsData &GetNextExpected    &ModNextExpected
 
-      &UpdateClaimdateIssues
       &GetSuppliersWithLateIssues             &getsupplierbyserialid
       &GetDistributedTo   &SetDistributedTo
       &getroutinglist     &delroutingmember   &addroutingmember
@@ -258,34 +257,6 @@ sub AddItem2Serial {
     my $dbh = C4::Context->dbh;
     my $rq  = $dbh->prepare("INSERT INTO `serialitems` SET serialid=? , itemnumber=?");
     $rq->execute( $serialid, $itemnumber );
-    return $rq->rows;
-}
-
-=head2 UpdateClaimdateIssues
-
-UpdateClaimdateIssues($serialids,[$date]);
-
-Update Claimdate for issues in @$serialids list with date $date
-(Take Today if none)
-
-=cut
-
-sub UpdateClaimdateIssues {
-    my ( $serialids, $date ) = @_;
-
-    return unless ($serialids);
-
-    my $dbh = C4::Context->dbh;
-    $date = strftime( "%Y-%m-%d", localtime ) unless ($date);
-    my $query = "
-        UPDATE serial
-        SET claimdate = ?,
-            status = ?,
-            claims_count = claims_count + 1
-        WHERE  serialid in (" . join( ",", map { '?' } @$serialids ) . ")
-    ";
-    my $rq = $dbh->prepare($query);
-    $rq->execute($date, CLAIMED, @$serialids);
     return $rq->rows;
 }
 
@@ -1895,15 +1866,19 @@ called from claims.pl file
 =cut
 
 sub updateClaim {
-    my ($serialid) = @_;
-    my $dbh        = C4::Context->dbh;
-    $dbh->do(q|
+    my ($serialids) = @_;
+    return unless $serialids;
+    unless ( ref $serialids ) {
+        $serialids = [ $serialids ];
+    }
+    my $dbh = C4::Context->dbh;
+    return $dbh->do(q|
         UPDATE serial
         SET claimdate = NOW(),
-            claims_count = claims_count + 1
-        WHERE serialid = ?
-    |, {}, $serialid );
-    return;
+            claims_count = claims_count + 1,
+            status = ?
+        WHERE serialid in (| . join( q|,|, (q|?|) x @$serialids ) . q|)|,
+        {}, CLAIMED, @$serialids );
 }
 
 =head2 getsupplierbyserialid

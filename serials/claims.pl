@@ -73,7 +73,7 @@ if (@serialnums) { # i.e. they have been flagged to generate claims
     eval {
         $err = SendAlerts('claimissues',\@serialnums,$input->param("letter_code"));
         if ( not ref $err or not exists $err->{error} ) {
-           UpdateClaimdateIssues(\@serialnums);
+            C4::Serials::updateClaim( \@serialnums );
         }
     };
     if ( $@ ) {
