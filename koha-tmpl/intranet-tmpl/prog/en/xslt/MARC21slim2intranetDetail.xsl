@@ -558,25 +558,19 @@
         </xsl:if>
 
         <xsl:if test="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730][@ind2!=2]">
-        <span class="results_summary uniform_title"><span class="label">Uniform titles: </span>
-        <xsl:for-each select="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730][@ind2!=2]">
-            <xsl:variable name="str">
-                <xsl:for-each select="marc:subfield">
-                    <xsl:if test="(contains('adfklmor',@code) and (not(../marc:subfield[@code='n' or @code='p']) or (following-sibling::marc:subfield[@code='n' or @code='p'])))">
-                        <xsl:value-of select="text()"/>
-                        <xsl:text> </xsl:text>
-                     </xsl:if>
+            <span class="results_summary uniform_title"><span class="label">Uniform titles: </span>
+                <xsl:for-each select="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730][@ind2!=2]">
+                    <xsl:for-each select="marc:subfield">
+                        <xsl:if test="contains('adfghklmnoprst',@code)">
+                            <xsl:value-of select="text()"/>
+                            <xsl:text> </xsl:text>
+                        </xsl:if>
+                    </xsl:for-each>
+                    <xsl:if test="position() != last()">
+                        <span class="separator"><xsl:text> | </xsl:text></span>
+                    </xsl:if>
                 </xsl:for-each>
-            </xsl:variable>
-            <xsl:call-template name="chopPunctuation">
-                <xsl:with-param name="chopString">
-                    <xsl:value-of select="substring($str,1,string-length($str)-1)"/>
-                        
-                </xsl:with-param>
-            </xsl:call-template>
-            <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
-        </xsl:for-each>
-        </span>
+            </span>
         </xsl:if>
 
         <!-- #13382 Added Related works 700$i -->
