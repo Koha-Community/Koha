@@ -139,11 +139,6 @@ function validate1(date) {
 
 [% IF ( error ) %]
 <div class="dialog alert">
-    [% IF ( AUTH_UPDATE_FAILED ) %]
-        <h3>Userid / Password update failed</h3>
-        <strong>Insufficient privileges.</strong>
-        <p>Other fields updated.</p>
-    [% END %]
     [% IF ( error == 'CANT_DELETE_STAFF' ) %]
         <h3>Unable to delete staff user</h3>
         <p>Insufficient privileges.</p>
