@@ -804,6 +804,9 @@ Converts a string from ISO-5426 to UTF-8.
 
 
 my %chars;
+
+####
+## 0xb
 $chars{0xb0}=0x0101;#3/0ayn[ain]
 $chars{0xb1}=0x0623;#3/1alif/hamzah[alefwithhamzaabove]
 #$chars{0xb2}=0x00e0;#'à';
@@ -812,14 +815,46 @@ $chars{0xb2}=0x00e0;#3/2leftlowsinglequotationmark
 $chars{0xb3}=0x00e7;#3/2leftlowsinglequotationmark
 # $chars{0xb4}='è';
 $chars{0xb4}=0x00e8;
-$chars{0xbd}=0x02b9;
-$chars{0xbe}=0x02ba;
 # $chars{0xb5}='é';
 $chars{0xb5}=0x00e9;
+$chars{0xb6}=0x2021; # double dagger
+$chars{0xb7}=0x00b7; # middle dot
+$chars{0xb8}=0x2033; # double prime
+$chars{0xb9}=0x2019; # right single quotation mark
+$chars{0xba}=0x201d; # right double quotation mark
+$chars{0xbb}=0x00bb; # right-pointing double angle quotation mark
+$chars{0xbc}=0x266f; # music sharp sign
+$chars{0xbd}=0x02b9; # modifier letter prime
+$chars{0xbe}=0x02ba; # modifier letter double prime
+$chars{0xbf}=0x00bf; # inverted question mark
+
+####
+## 0xe
+$chars{0xe1}=0x00c6; # latin capital letter ae
+$chars{0xe2}=0x0110; # latin capital letter d with stroke
+$chars{0xe6}=0x0132; # latin capital ligature ij
+$chars{0xe8}=0x0141; # latin capital letter l with stroke
+$chars{0xe9}=0x00d8; # latin capital letter o with stroke
+$chars{0xea}=0x0152; # latin capital ligature oe
+$chars{0xec}=0x00de; # latin capital letter thorn
+
+####
+## 0xf
+$chars{0xf1}=0x00e6; # latin small letter ae
+$chars{0xf2}=0x0111; # latin small letter d with stroke
+$chars{0xf3}=0x00f0; # latin small letter eth
+$chars{0xf5}=0x0131; # latin small letter dotless i
+$chars{0xf6}=0x0133; # latin small ligature ij
+$chars{0xf8}=0x0142; # latin small letter l with stroke
+$chars{0xf9}=0x00f8; # latin small letter o with stroke
+$chars{0xfa}=0x0153; # latin small ligature oe
+$chars{0xfb}=0x00df; # latin small letter sharp s
+$chars{0xfc}=0x00fe; # latin small letter thorn
+
+####
+## Others
 $chars{0x97}=0x003c;#3/2leftlowsinglequotationmark
 $chars{0x98}=0x003e;#3/2leftlowsinglequotationmark
-$chars{0xfa}=0x0153; #oe
-$chars{0xea}=0x0152; #oe
 #$chars{0x81d1}=0x00b0; # FIXME useless
 
 ####
