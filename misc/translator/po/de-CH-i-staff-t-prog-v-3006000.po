@@ -17,17 +17,16 @@ msgstr ""
 #: intranet-tmpl/prog/en/xslt/MARC21slimUtils-MODS31.xsl:12
 #, c-format
 msgid ""
-"!\"#$%%&amp;'()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]"
-"^_`abcdefghijklmnopqrstuvwxyz{|}~"
+"!\"#$%%&amp;'()*+,-./0123456789:;&lt;=&gt;?"
+"@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
 msgstr ""
-"!\"#$%%&amp;'()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]"
-"^_`abcdefghijklmnopqrstuvwxyz{|}~"
+"!\"#$%%&amp;'()*+,-./0123456789:;&lt;=&gt;?"
+"@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slimUtils-MODS31.xsl:20
 #, c-format
 msgid "!'()*-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~"
-msgstr ""
-"!'()*-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~"
+msgstr "!'()*-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~"
 
 #. %1$s:  data.borrowernotes.replace('\\\\' , '\\\\') |html |html_line_break |collapse
 #. %2$s:  IF data.category_type
@@ -2799,8 +2798,8 @@ msgstr "%s Exemplar geht zurück an Ausleihbibliothek "
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:227
 #, c-format
 msgid ""
-"%s Item type is normally not for loan. %s %s Item is normally not for loan %s"
-"(%s)%s. %s %s Check out anyway? %s "
+"%s Item type is normally not for loan. %s %s Item is normally not for loan "
+"%s(%s)%s. %s %s Check out anyway? %s "
 msgstr ""
 "%s Medientyp normalerweise nicht ausleihbar. %s %s Exemplar normalerweise "
 "nicht ausleihbar. %s(%s)%s. %s %s Trotzdem ausleihen? %s "
@@ -4203,8 +4202,8 @@ msgstr "%s Pflichtfelder sind leer (hervorgehoben)"
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:40
 #, c-format
 msgid ""
-"%s not imported because already in borrowers table and overwrite disabled %s"
-"(last was %s)%s"
+"%s not imported because already in borrowers table and overwrite disabled "
+"%s(last was %s)%s"
 msgstr ""
 "%s nicht importiert, da bereits in der Benutzertabelle vorhanden und "
 "überschreiben verboten %s(letzter war %s)%s"
@@ -16554,8 +16553,8 @@ msgstr "Vormerkung verhindert Löschung"
 #. B
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:538
 msgid ""
-"Can't delete catalog record, because of [% books_loo.items %] existing hold"
-"(s)"
+"Can't delete catalog record, because of [% books_loo.items %] existing "
+"hold(s)"
 msgstr ""
 "Titelsatz kann nicht gelöscht werden, es sind  [% books_loo.items %] "
 "Vormerkungen vorhanden"
@@ -16563,8 +16562,8 @@ msgstr ""
 #. B
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:298
 msgid ""
-"Can't delete catalog record, because of [% loop_order.items %] existing item"
-"(s)"
+"Can't delete catalog record, because of [% loop_order.items %] existing "
+"item(s)"
 msgstr ""
 "Titelsatz kann nicht gelöscht werden, es sind weitere  [% loop_order.items "
 "%] Exemplare vorhanden"
@@ -59169,7 +59168,7 @@ msgstr "[% recycle_loo.value |html %]"
 #. A
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:78
 msgid "[% repet | html %]"
-msgstr "[% road_type |html %]"
+msgstr "[% repet | html %]"
 
 #. INPUT name=suspend_until
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:763
@@ -59504,8 +59503,8 @@ msgid ""
 "]%s %s(Withdrawn)%s %s(Lost)%s %s(Damaged)%s %s(In transit)%s %s(On hold)%s "
 "%s%s%s (%s) %s "
 msgstr ""
-"]%s %s(Ausgeschieden)%s %s(Verloren)%s %s(Damaged)%s %s(Unterwegs)%s %s"
-"(Vorgemerkt)%s %s%s%s (%s) %s "
+"]%s %s(Ausgeschieden)%s %s(Verloren)%s %s(Damaged)%s %s(Unterwegs)%s "
+"%s(Vorgemerkt)%s %s%s%s (%s) %s "
 
 #. %1$s:  END
 #. %2$s:  onloan_items_loo.count
@@ -63591,21 +63590,21 @@ msgstr "csh"
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:164
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:350
 msgid ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft.au="
-"[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
-"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT.item"
-"('size') %]&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft.place=[% "
-"BIBLIO_RESULT.place %]&rft.pub=[% BIBLIO_RESULT.publisher |url %]&rft."
-"edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT.series %]"
-"&rft.genre="
+"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
+"au=[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
+"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT."
+"item('size') %]&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft."
+"place=[% BIBLIO_RESULT.place %]&rft.pub=[% BIBLIO_RESULT.publisher |url "
+"%]&rft.edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT."
+"series %]&rft.genre="
 msgstr ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft.au="
-"[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
-"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT.item"
-"('size') %]&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft.place=[% "
-"BIBLIO_RESULT.place %]&rft.pub=[% BIBLIO_RESULT.publisher |url %]&rft."
-"edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT.series %]"
-"&rft.genre="
+"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
+"au=[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
+"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT."
+"item('size') %]&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft."
+"place=[% BIBLIO_RESULT.place %]&rft.pub=[% BIBLIO_RESULT.publisher |url "
+"%]&rft.edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT."
+"series %]&rft.genre="
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:584
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:586
@@ -76945,11 +76944,11 @@ msgstr "| "
 #: intranet-tmpl/prog/en/xslt/MARC21slimUtils-MODS31.xsl:16
 #, c-format
 msgid ""
-"¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾"
-"¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ"
+"¡¢£¤¥¦§¨©ª«¬­®¯°±²³"
+"´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ"
 msgstr ""
-"¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾"
-"¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ"
+"¡¢£¤¥¦§¨©ª«¬­®¯°±²³"
+"´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ"
 
 #: intranet-tmpl/prog/en/xslt/NORMARCslim2intranetResults.xsl:487
 #, c-format
