@@ -15,7 +15,7 @@ use C4::Bookseller;
 use C4::Biblio;
 use C4::Budgets;
 use Koha::DateUtils;
-use Test::More tests => 48;
+use Test::More tests => 47;
 
 BEGIN {
     use_ok('C4::Serials');
