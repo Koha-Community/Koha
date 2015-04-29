@@ -1,28 +1,28 @@
-		<fieldset class="rows" id="memberentry_address">
-		<legend id="alt_address_lgd">Alternate address</legend><ol>
+        <fieldset class="rows" id="memberentry_address">
+        <legend id="alt_address_lgd">Alternate address</legend><ol>
         [% UNLESS noB_address %]
-			<li>
-				[% IF ( mandatoryB_address ) %]
-					<label for="B_address" class="required">
-				[% ELSE %]
-					<label for="B_address">
-				[% END %]
-				Address: </label>
+            <li>
+                [% IF ( mandatoryB_address ) %]
+                    <label for="B_address" class="required">
+                [% ELSE %]
+                    <label for="B_address">
+                [% END %]
+                Address: </label>
                     <input type="text" id="B_address" name="B_address" size="40" value="[% B_address %]" />
-	  [% IF ( mandatoryB_address ) %]<span class="required">Required</span>[% END %]
-			</li>
+      [% IF ( mandatoryB_address ) %]<span class="required">Required</span>[% END %]
+            </li>
         [% END %]
         [% UNLESS noB_address2 %]
-			<li>
-				[% IF ( mandatoryB_address2 ) %]
-					<label for="B_address2" class="required">
-				[% ELSE %]
-					<label for="B_address2">
-				[% END %]
-				Address 2: </label>
+            <li>
+                [% IF ( mandatoryB_address2 ) %]
+                    <label for="B_address2" class="required">
+                [% ELSE %]
+                    <label for="B_address2">
+                [% END %]
+                Address 2: </label>
                     <input type="text" id="B_address2" name="B_address2" size="40" value="[% B_address2 %]" />
-	  [% IF ( mandatoryB_address2 ) %]<span class="required">Required</span>[% END %]
-			</li>
+      [% IF ( mandatoryB_address2 ) %]<span class="required">Required</span>[% END %]
+            </li>
         [% END %]
         [% UNLESS noB_zipcode %]
                         <li>
@@ -37,40 +37,40 @@
                         </li>
         [% END %]
         [% UNLESS noB_city %]
-			<li>
-				[% IF ( mandatoryB_city ) %]
-					<label for="B_city" class="required" >
-				[% ELSE %]
-					<label for="B_city">
-				[% END %]
-				City: </label>
+            <li>
+                [% IF ( mandatoryB_city ) %]
+                    <label for="B_city" class="required" >
+                [% ELSE %]
+                    <label for="B_city">
+                [% END %]
+                City: </label>
                 <input type="text" id="B_city" name="B_city" size="20" value="[% B_city %]" />
-	  [% IF ( mandatoryB_city ) %]<span class="required">Required</span>[% END %]
-			</li>
+      [% IF ( mandatoryB_city ) %]<span class="required">Required</span>[% END %]
+            </li>
         [% END %]
         [% UNLESS noB_state %]
-			<li>
-				[% IF ( mandatoryB_state ) %]
-					<label for="B_state" class="required" >
-				[% ELSE %]
-					<label for="B_state">
-				[% END %]
-				State: </label>
+            <li>
+                [% IF ( mandatoryB_state ) %]
+                    <label for="B_state" class="required" >
+                [% ELSE %]
+                    <label for="B_state">
+                [% END %]
+                State: </label>
                 <input type="text" id="B_state" name="B_state" size="20" value="[% B_state %]" />
-	  [% IF ( mandatoryB_state ) %]<span class="required">Required</span>[% END %]
-			</li>
+      [% IF ( mandatoryB_state ) %]<span class="required">Required</span>[% END %]
+            </li>
         [% END %]
         [% UNLESS noB_country %]
-			<li>
-				[% IF ( mandatoryB_country ) %]
-					<label for="B_country" class="required">
-				[% ELSE %]
-					<label for="B_country">
-				[% END %]
-				Country: </label>
+            <li>
+                [% IF ( mandatoryB_country ) %]
+                    <label for="B_country" class="required">
+                [% ELSE %]
+                    <label for="B_country">
+                [% END %]
+                Country: </label>
                     <input type="text" id="B_country" name="B_country" size="20" value="[% B_country %]" />
-	  [% IF ( mandatoryB_country ) %]<span class="required">Required</span>[% END %]
-			</li>
+      [% IF ( mandatoryB_country ) %]<span class="required">Required</span>[% END %]
+            </li>
         [% END %]
         [% UNLESS noB_phone %]
             <li>
@@ -85,7 +85,7 @@
             </li>
         [% END %]
         [% UNLESS noB_email %]
-			<li>
+            <li>
         [% IF ( mandatoryB_email ) %]
           <label for="B_email" class="required">
         [% ELSE %]
@@ -93,7 +93,7 @@
         [% END %]
         Email: </label>
             <input type="text" id="B_email" name="B_email" size="45" value="[% B_email %]" />
-		[% IF ( mandatoryB_email ) %]<span class="required">Required</span>[% END %] </li>
+        [% IF ( mandatoryB_email ) %]<span class="required">Required</span>[% END %] </li>
         [% END %]
         [% UNLESS nocontactnote %]
             <li>
@@ -107,5 +107,5 @@
         [% IF ( mandatorycontactnote ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
-			</ol>
-		</fieldset>
+            </ol>
+        </fieldset>

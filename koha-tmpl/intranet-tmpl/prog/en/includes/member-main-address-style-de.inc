@@ -19,7 +19,7 @@
           [% END %]
         [% END %]
       </select>
-	  [% IF ( mandatorystreettype ) %]<span class="required">Required</span>[% END %]
+      [% IF ( mandatorystreettype ) %]<span class="required">Required</span>[% END %]
       </li>
     [% END %]
         [% END %]
@@ -32,7 +32,7 @@
       [% END %]
       Address: </label>
             <input type="text" id="address" name="address" size="35" value="[% address %]" />
-	  [% IF ( mandatoryaddress ) %]<span class="required">Required</span>[% END %]
+      [% IF ( mandatoryaddress ) %]<span class="required">Required</span>[% END %]
     </li>
         [% END %]
         [% UNLESS nostreetnumber %]
@@ -56,7 +56,7 @@
       [% END %]
       Address 2: </label>
             <input type="text" id="address2" name="address2" size="35" value="[% address2 %]" />
-	  [% IF ( mandatoryaddress2 ) %]<span class="required">Required</span>[% END %]
+      [% IF ( mandatoryaddress2 ) %]<span class="required">Required</span>[% END %]
     </li>
         [% END %]
         [% UNLESS nozipcode %]
@@ -93,7 +93,7 @@
         [% END %]
         </select>
         [% END %]
-	  [% IF ( mandatorycity ) %]<span class="required">Required</span>[% END %]
+      [% IF ( mandatorycity ) %]<span class="required">Required</span>[% END %]
     </li>
         [% END %]
         [% UNLESS nostate %]
@@ -105,7 +105,7 @@
       [% END %]
       State: </label>
       <input type="text" name="state" id="state" size="20" value="[% state %]" />
-	  [% IF ( mandatorystate ) %]<span class="required">Required</span>[% END %]
+      [% IF ( mandatorystate ) %]<span class="required">Required</span>[% END %]
     </li>
         [% END %]
         [% UNLESS nocountry %]
@@ -117,8 +117,8 @@
       [% END %]
       Country: </label>
         <input type="text" name="country" id="country" size="20" value="[% country %]" />
-	  [% IF ( mandatorycountry ) %]<span class="required">Required</span>[% END %]
+      [% IF ( mandatorycountry ) %]<span class="required">Required</span>[% END %]
     </li>
         [% END %]
-	</ol>
+    </ol>
 </fieldset>

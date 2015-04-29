@@ -113,7 +113,7 @@ $template->param(
     finesview           => 1,
     borrowernumber      => $borrowernumber,
     roadtype            => $roadtype,
-    branchname		=> GetBranchName($data->{'branchcode'}),
+    branchname          => GetBranchName($data->{'branchcode'}),
     total               => sprintf("%.2f",$total),
     totalcredit         => $totalcredit,
     is_child            => ($data->{'category_type'} eq 'C'),
