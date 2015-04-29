@@ -287,8 +287,20 @@ msgid "admin.pref#ReturnpathDefault# Use"
 msgstr "Použít"
 
 # Administration > Interface options
-msgid "admin.pref#ReturnpathDefault# as the email address set as the return path, if you leave this empty the admin address will be used."
-msgstr "jako e-mailovou adresu pro příjem odpovědi (hlavička Reply-To), pokud nebude tato adresa nastavena, použije se adresa administrátora systému Koha."
+msgid "admin.pref#ReturnpathDefault# as the return path or bounce address for undeliverable mail messages. If you leave this empty, the From address will be used (often defaulting to the admin address)."
+msgstr ""
+
+# Administration > Login options
+msgid "admin.pref#SessionRestrictionByIP# Disable"
+msgstr ""
+
+# Administration > Login options
+msgid "admin.pref#SessionRestrictionByIP# Enable"
+msgstr ""
+
+# Administration > Login options
+msgid "admin.pref#SessionRestrictionByIP# check for change in remote IP address for session security. Disable only when remote IP address changes frequently."
+msgstr ""
 
 # Administration > Login options
 msgid "admin.pref#SessionStorage# Store login session information"
@@ -359,12 +371,44 @@ msgid "admin.pref#UsageStatsLibraryType# The library type"
 msgstr "Typ knihovny"
 
 # Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# academic"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# corporate"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# government"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# private"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryType# public"
 msgstr "veřejná"
 
 # Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStatsLibraryType# university"
-msgstr "akademická"
+msgid "admin.pref#UsageStatsLibraryType# religious organization"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# research"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# school"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# society or association"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# subscription"
+msgstr ""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryType# will be shown on the <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
@@ -815,8 +859,8 @@ msgid "cataloguing.pref#OpacSuppression# an explanatory page ('This record is bl
 msgstr "vysvětlující stránku (\"Záznam je skrytý\")."
 
 # Cataloging > Display
-msgid "cataloguing.pref#OpacSuppression# items marked as suppressed from OPAC search results. Note that you must have the <code>Suppress</code> index set up in Zebra and at least one suppressed item, or your searches will be broken."
-msgstr "jednotky označené ve výsledcích vyhledávání v on-line katalogu jako odepsané. Pamatujte, že je nutné mít v indexu nástroje Zebra definované pole <code>Suppress</code> a alespoň jednu odepsanou jednotku, jinak se nebudou výsledky zobrazovat správně."
+msgid "cataloguing.pref#OpacSuppression# items marked as suppressed from OPAC search results. Note that you must have the <code>Suppress</code> index set up in Zebra and at least one suppressed biblio record, or your searches will be broken."
+msgstr ""
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# the 404 error page ('Not found')."
@@ -1267,18 +1311,6 @@ msgid "circulation.pref#AllowOfflineCirculation# offline circulation on regular 
 msgstr "offline výpůjčky přímo v rozhraní systému Koha. (Toto nastavení nemá vliv na funkci rozšíření pro Firefox ani na desktopovou aplikaci pro offline výpůjčky)"
 
 # Circulation > Holds Policy
-msgid "circulation.pref#AllowOnShelfHolds# Allow"
-msgstr "Povolit"
-
-# Circulation > Holds Policy
-msgid "circulation.pref#AllowOnShelfHolds# Don't allow"
-msgstr "Nepovolit"
-
-# Circulation > Holds Policy
-msgid "circulation.pref#AllowOnShelfHolds# hold requests to be placed on items that are not checked out."
-msgstr "rezervaci na výtisky, které nejsou vypůjčené."
-
-# Circulation > Holds Policy
 msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Allow"
 msgstr "Povolit"
 
@@ -1288,9 +1320,7 @@ msgstr "Nepovolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# a patron to renew an item with unfilled holds if other available items can fill that hold."
-msgstr ""
-"čtenáři prodloužit výpůjčku, na kterou je rezervace, pokud je k dispozici "
-"jiná jednotka daného titulu."
+msgstr "čtenáři prodloužit výpůjčku, na kterou je rezervace, pokud je k dispozici jiná jednotka daného titulu."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowRenewalLimitOverride# Allow"
@@ -1494,14 +1524,11 @@ msgstr "dní). Poznámka: Tento počet dní bude použit i ve výchozím filtru,
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>(Used when the longoverdue.pl script is called without the --charge parameter)"
-msgstr ""
-"<br>(Používá se, pokud je skript longoverdue.pl spouštěn bez parametru "
-"--charge)"
+msgstr "<br>(Používá se, pokud je skript longoverdue.pl spouštěn bez parametru --charge)"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>Leave this field empty if you don't want to charge the user for lost items."
-msgstr ""
-" <br>Nechte pole prázdné pokud nechcete vybírat náhradu za ztrátu dokumentů."
+msgstr " <br>Nechte pole prázdné pokud nechcete vybírat náhradu za ztrátu dokumentů."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueChargeValue# Charge a lost item to the borrower's account when the LOST value of the item changes to :"
@@ -1509,21 +1536,15 @@ msgstr "Naúčtovat čtenáři poplatek, pokud se hodnota LOST změní na :"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# <br>(Used when the longoverdue.pl script is called without the --lost parameter)"
-msgstr ""
-"<br>(Používá se, pokud je skript longoverdue.pl spouštěn bez parametru "
-"--lost)"
+msgstr "<br>(Používá se, pokud je skript longoverdue.pl spouštěn bez parametru --lost)"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# <br>Example: [1] [30] Sets an item to the LOST value 1 when it has been overdue for more than 30 days."
-msgstr ""
-"<br>Například: [1] [30] Nastaví hodnotu LOST statusu jednotky na 1, pokud je "
-"výpůjční lhůta překročena o více než 30 dní."
+msgstr "<br>Například: [1] [30] Nastaví hodnotu LOST statusu jednotky na 1, pokud je výpůjční lhůta překročena o více než 30 dní."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# <br>WARNING — These preferences will activate the automatic item loss process. Leave these fields empty if you don't want to activate this feature."
-msgstr ""
-"<br>Varování — Tato nastavení aktivují automatické zpracování ztracených "
-"jednotek. Nechte tato pole prázdná, pokud nechcete tuto funkci používat."
+msgstr "<br>Varování — Tato nastavení aktivují automatické zpracování ztracených jednotek. Nechte tato pole prázdná, pokud nechcete tuto funkci používat."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# By default, set the LOST value of an item to"
@@ -2498,6 +2519,10 @@ msgstr "Babelthèque"
 msgid "enhanced_content.pref Baker and Taylor"
 msgstr "Baker and Taylor"
 
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref Coce Cover images cache"
+msgstr ""
+
 # Enhanced Content > Google
 msgid "enhanced_content.pref Google"
 msgstr "Google"
@@ -2665,6 +2690,26 @@ msgstr "Přistupovat k Baker and Taylor pomocí uživatelského jména"
 # Enhanced Content > Baker and Taylor
 msgid "enhanced_content.pref#BakerTaylorUsername# and password"
 msgstr "a hesla"
+
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref#Coce# Don't enable"
+msgstr ""
+
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref#Coce# Enable"
+msgstr ""
+
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref#Coce# a Coce image cache service."
+msgstr ""
+
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref#CoceHost# Coce server URL"
+msgstr ""
+
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref#CoceProviders# Use the following providers to fetch the covers"
+msgstr ""
 
 # Enhanced Content > All
 msgid "enhanced_content.pref#FRBRizeEditions# Don't show"
@@ -3187,6 +3232,18 @@ msgid "i18n_l10n.pref"
 msgstr "Jazyky"
 
 # I18N/L10N
+msgid "i18n_l10n.pref#AddressFormat# Format postal addresses using"
+msgstr ""
+
+# I18N/L10N
+msgid "i18n_l10n.pref#AddressFormat# German style ([Adress] [Street number] - [Zip/Postal Code] [City] - [Country])"
+msgstr ""
+
+# I18N/L10N
+msgid "i18n_l10n.pref#AddressFormat# US style ([Street number], [Address] - [City], [Zip/Postal Code], [Country])"
+msgstr ""
+
+# I18N/L10N
 msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Monday"
 msgstr "Pondělí"
 
@@ -3217,6 +3274,10 @@ msgstr "24hodinovém formátu (např. \"14:18\")"
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# Format times in"
 msgstr "Zobrazovat čas v"
+
+# I18N/L10N
+msgid "i18n_l10n.pref#alphabet# <br/> Hint: Changing collation in the database for the 'surname' column of the 'borrowers' table is helpful to make browsing by last name work in members-home.pl when using an alphabet outside of A-Z"
+msgstr ""
 
 # I18N/L10N
 msgid "i18n_l10n.pref#alphabet# Use the alphabet"
@@ -3642,22 +3703,6 @@ msgstr "Nepovolit"
 msgid "opac.pref#OPACFinesTab# patrons to access the Fines tab on the My Account page on the OPAC."
 msgstr "čtenářům přístup k záložce Pokuty v Můj účet na OPACu."
 
-# OPAC > Policy
-msgid "opac.pref#OPACItemHolds# Allow"
-msgstr "Povolit"
-
-# OPAC > Policy
-msgid "opac.pref#OPACItemHolds# Don't allow"
-msgstr "Nepovolit"
-
-# OPAC > Policy
-msgid "opac.pref#OPACItemHolds# Force"
-msgstr "Vynutit"
-
-# OPAC > Policy
-msgid "opac.pref#OPACItemHolds# patrons to place holds on specific items in the OPAC. If this is disabled, users can only put a hold on the next available item. If this is forced, users must put a hold on a specific item."
-msgstr "vytváření rezervací v on-line katalogu na konkrétní jednotku. Pokud je zakázáno, je možné vytvářet rezervace pouze na tituly (tedy na jednotku, která bude první k dispozici). Pokud je vynuceno, čtenáři budou moci vytvářet rezervace pouze na kokrétní jednotky."
-
 # OPAC > Appearance
 msgid "opac.pref#OPACMySummaryHTML# <br />Note: The placeholders {BIBLIONUMBER}, {TITLE}, {ISBN} and {AUTHOR} will be replaced with information from the displayed record."
 msgstr "<br /> Poznámka: zástupné řetězce {BIBLIONUMBER}, {TITLE}, {ISBN} a {AUTHOR} budou nahrazeny konkrétními informacemi ze zobrazeného záznamu."
@@ -3866,6 +3911,14 @@ msgstr "Nepřidávat"
 msgid "opac.pref#OpacAddMastheadLibraryPulldown# a library select pulldown menu on the OPAC masthead."
 msgstr "roletové menu pro výběr knihovny v záhlaví na OPACu."
 
+# OPAC > Appearance
+msgid "opac.pref#OpacAdditionalStylesheet# Include the additional CSS stylesheet"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacAdditionalStylesheet# to override specified settings from the default stylesheet (leave blank to disable). Enter just a filename, a full local path or a complete URL starting with <code>http://</code> (if the file lives on a remote server). Please note that if you just enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory. A full local path is expected to start from your HTTP document root."
+msgstr ""
+
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Show search options for the expanded view"
 msgstr "V rozšířeném zobrazení formuláře pro pokročilé vyhledávání zobrazit tyto položky"
@@ -3951,20 +4004,8 @@ msgid "opac.pref#OpacCustomSearch# Replace the search box at the top of OPAC pag
 msgstr "Místo hlavního vyhledávacího pole v on-line katalogu použít tento HTML kód:"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacExportOptions# <br />Note: Available options are: BIBTEX (<code>bibtex</code>), Dublin Core (<code>dc</code>),"
-msgstr "<br />Poznámka: Dostupné možnosti jsou: BIBTEX (<code>bibtex</code>), Dublin Core (<code>dc</code>),"
-
-# OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# List export options that should be available from OPAC detail page separated by |:"
 msgstr "Seznam exportních možností, které jsou možné z detalní stránky na OPACu, oddělené svislítkem |;"
-
-# OPAC > Appearance
-msgid "opac.pref#OpacExportOptions# MARCXML (<code>marcxml</code>), MARC-8 encoded MARC (<code>marc8</code>), Unicode/UTF-8 encoded MARC (<code>utf8</code>),"
-msgstr "MARCXML (<code>marcxml</code>), MARC-8 kódovaný MARC (<code>marc8</code>), Unicode/UTF-8 kódovaný MARC (<code>utf8</code>),"
-
-# OPAC > Appearance
-msgid "opac.pref#OpacExportOptions# Unicode/UTF-8 encoded MARC without local use -9xx, x9x, xx9- fields and subfields (<code>marcstd</code>), MODS (<code>mods</code>), RIS (<code>ris</code>)"
-msgstr "Unicode/UTF-8 kódovaný MARC bez lokálních -9xx, x9x, xx9- polí a podpolí (<code>marcstd</code>), MODS (<code>mods</code>), RIS (<code>ris</code>)"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacFavicon# Use the image at"
@@ -4495,14 +4536,6 @@ msgid "opac.pref#opacbookbag# patrons to store items in a temporary \"Cart\" on 
 msgstr "čtenářům uložit si výtisky do prozatímního \"košíku\" v OPACu."
 
 # OPAC > Appearance
-msgid "opac.pref#opaccolorstylesheet# Include the additional CSS stylesheet"
-msgstr "Zahrnout přídavnou CSS šablonu"
-
-# OPAC > Appearance
-msgid "opac.pref#opaccolorstylesheet# to override specified settings from the default stylesheet (leave blank to disable). Enter just a filename, a full local path or a complete URL starting with <code>http://</code> (if the file lives on a remote server). Please note that if you just enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory. A full local path is expected to start from your HTTP document root."
-msgstr "ignorovat určitá nastavení z výchozí šablony (nechte prázdné pro zakázání). Vložit jméno souboru, plnou lokální cestu nebo kompletní URL začínající na <code>http://</code> (pokud soubory jsou na jiném vzdáleném serveru). Pozn: Jestliže vložíte jméno souboru, soubor by měl být v css podadresáři pro každý aktivní styl a jazyk v adresáři Koha šablon. Očekává se úplná lokální cesta začínající na vašem hlavním adresáři webu (document root)."
-
-# OPAC > Appearance
 msgid "opac.pref#opaccredits# Include the following HTML in the footer of all pages in the OPAC:"
 msgstr "Vložit následující HTML do patičky všech stránek OPACu:"
 
@@ -4601,22 +4634,6 @@ msgstr "Základní"
 # Patrons > Norwegian patron database
 msgid "patrons.pref Norwegian patron database"
 msgstr "Norská databáze uživatelů knihoven"
-
-# Patrons > General
-msgid "patrons.pref#AddPatronLists# List"
-msgstr "Zobrazit seznam"
-
-# Patrons > General
-msgid "patrons.pref#AddPatronLists# general patron types"
-msgstr "obecných čtenářských typů"
-
-# Patrons > General
-msgid "patrons.pref#AddPatronLists# specific categories"
-msgstr "konkrétních kategorií"
-
-# Patrons > General
-msgid "patrons.pref#AddPatronLists# under the new patron menu."
-msgstr "v nabídce \"nový čtenář\""
 
 # Patrons > General
 msgid "patrons.pref#AutoEmailOpacUser# Don't send"
@@ -4780,21 +4797,15 @@ msgstr "Neprovádět"
 
 # Patrons > Norwegian patron database
 msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# search the Norwegian national patron database after a local search result was found."
-msgstr ""
-"hledání v Norské národní databázi uživatelů knihoven, pokud hledání ve "
-"vlastní bázi nepřineslo výsledky."
+msgstr "hledání v Norské národní databázi uživatelů knihoven, pokud hledání ve vlastní bázi nepřineslo výsledky."
 
 # Patrons > Norwegian patron database
 msgid "patrons.pref#NorwegianPatronDBUsername# . You can get these from \"Base Bibliotek\", which is maintained by the Norwegian National Library."
-msgstr ""
-". Tyto údaje získáte z \"Base Bibliotek\", kterou spravuje Norská národní "
-"knihovna."
+msgstr ". Tyto údaje získáte z \"Base Bibliotek\", kterou spravuje Norská národní knihovna."
 
 # Patrons > Norwegian patron database
 msgid "patrons.pref#NorwegianPatronDBUsername# Communicate with the Norwegian national patron database using the username"
-msgstr ""
-"Komunikace s Norskou národní databízí uživatelů knihovne s použitím "
-"uživatelského jména"
+msgstr "Komunikace s Norskou národní databízí uživatelů knihovne s použitím uživatelského jména"
 
 # Patrons > Norwegian patron database
 msgid "patrons.pref#NorwegianPatronDBUsername# and the password"
@@ -5184,6 +5195,22 @@ msgstr "Použít"
 msgid "searching.pref#QueryWeightFields# ranking of search results by relevance (REQUIRES ZEBRA)."
 msgstr "setřídění výsledků vyhledání podle relevace (Vyžaduje systém Zebra)."
 
+# Searching > Results Display
+msgid "searching.pref#SearchWithISBNVariations# When searching on the ISBN index,"
+msgstr ""
+
+# Searching > Results Display
+msgid "searching.pref#SearchWithISBNVariations# don't search"
+msgstr ""
+
+# Searching > Results Display
+msgid "searching.pref#SearchWithISBNVariations# on all variations of the ISBN. Note that this preference has no effect if UseQueryParser is on."
+msgstr ""
+
+# Searching > Results Display
+msgid "searching.pref#SearchWithISBNVariations# search"
+msgstr ""
+
 # Searching > Features
 msgid "searching.pref#TraceCompleteSubfields# Don't force"
 msgstr "Nenutit"
@@ -5381,16 +5408,16 @@ msgid "serials.pref#RoutingListNote# Include following note on all routing lists
 msgstr "Vložit ke všem distribučním seznamům následující poznámku:"
 
 # Serials
-msgid "serials.pref#RoutingSerials# Add"
-msgstr "Přidej"
+msgid "serials.pref#RoutingSerials# Don't use"
+msgstr ""
 
 # Serials
-msgid "serials.pref#RoutingSerials# Don't add"
-msgstr "Nepřidej"
+msgid "serials.pref#RoutingSerials# Use"
+msgstr ""
 
 # Serials
-msgid "serials.pref#RoutingSerials# received serials to the routing list."
-msgstr "došlá čísla periodik na distribuční seznam."
+msgid "serials.pref#RoutingSerials# the routing list feature in the serials module."
+msgstr ""
 
 # Serials
 msgid "serials.pref#StaffSerialIssueDisplayCount# Show the"
@@ -5700,6 +5727,10 @@ msgstr "Webové služby"
 msgid "web_services.pref ILS-DI"
 msgstr "ILS-DI"
 
+# Web services > IdRef
+msgid "web_services.pref IdRef"
+msgstr ""
+
 # Web services > OAI-PMH
 msgid "web_services.pref OAI-PMH"
 msgstr "OAI-PMH"
@@ -5727,6 +5758,18 @@ msgstr "Povolit IP adresám"
 # Web services > ILS-DI
 msgid "web_services.pref#ILS-DI:AuthorizedIPs# to use the ILS-DI services (when enabled). Separate the IP addresses with commas and without spaces. Leave the field blank to allow any IP address."
 msgstr "přístup ke službám ILS-DI (pokud jsou zapnuty). IP adresy oddělte čárkami bez mezer. Pro povolení všech adres nechte toto pole prázdné."
+
+# Web services > IdRef
+msgid "web_services.pref#IdRef# Disable"
+msgstr ""
+
+# Web services > IdRef
+msgid "web_services.pref#IdRef# Enable"
+msgstr ""
+
+# Web services > IdRef
+msgid "web_services.pref#IdRef# the IdRef webservice from the opac detail page. IdRef allows to request authorities from the Sudoc database."
+msgstr ""
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH# <a href=\"http://www.openarchives.org/pmh/\">OAI-PMH</a> server."
@@ -5787,3 +5830,4 @@ msgstr "Vracet maximálně"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "řádků z výstupů vyžádaných pomocí webové služby."
+

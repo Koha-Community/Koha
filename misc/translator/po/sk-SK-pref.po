@@ -56,9 +56,7 @@ msgstr "možnosť načítať a priložiť ľubovoľné súbory k faktúram."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqItemSetSubfieldsWhenReceiptIsCancelled# Upon cancelling a receipt, update the item's subfields if they were created when placing an order (e.g. o=5|a=\"bar foo\"\")."
-msgstr ""
-"Po zrušení potvrdenky, aktualizujte podpolia exemplára, ak boli vytvorené "
-"počas zadávania objednávky (napr. o=5|a=\"foo bar\")."
+msgstr "Po zrušení potvrdenky, aktualizujte podpolia exemplára, ak boli vytvorené počas zadávania objednávky (napr. o=5|a=\"foo bar\")."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqItemSetSubfieldsWhenReceived# Upon receiving items, update their subfields if they were created when placing an order (e.g. o=5|a=\"foo bar\")."
@@ -289,10 +287,20 @@ msgid "admin.pref#ReturnpathDefault# Use"
 msgstr "Použiť"
 
 # Administration > Interface options
-msgid "admin.pref#ReturnpathDefault# as the email address set as the return path, if you leave this empty the admin address will be used."
+msgid "admin.pref#ReturnpathDefault# as the return path or bounce address for undeliverable mail messages. If you leave this empty, the From address will be used (often defaulting to the admin address)."
 msgstr ""
-"ako emailovú adresu nastavenú ako cestu nazad, ak ju necháte prázdnu, "
-"použije sa adresa administrátora."
+
+# Administration > Login options
+msgid "admin.pref#SessionRestrictionByIP# Disable"
+msgstr ""
+
+# Administration > Login options
+msgid "admin.pref#SessionRestrictionByIP# Enable"
+msgstr ""
+
+# Administration > Login options
+msgid "admin.pref#SessionRestrictionByIP# check for change in remote IP address for session security. Disable only when remote IP address changes frequently."
+msgstr ""
 
 # Administration > Login options
 msgid "admin.pref#SessionStorage# Store login session information"
@@ -324,15 +332,11 @@ msgstr "Zdieľať"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# anonymous Koha usage data with the Koha community. You can see the data on the <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
-msgstr ""
-"anonymné dáta o používaní Kohy s komunitou Koha. Dáta si môžete pozrieť na <"
-"a href=\"http://hea.koha-community.org\">webstránke komunity Hea Koha</a>."
+msgstr "anonymné dáta o používaní Kohy s komunitou Koha. Dáta si môžete pozrieť na <a href=\"http://hea.koha-community.org\">webstránke komunity Hea Koha</a>."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
-msgstr ""
-"Všimnite si, že táto hodnota nemá žiaden účinok, ak systémové nastavenie "
-"UsageStats je na \"Nezdieľať\""
+msgstr "Všimnite si, že táto hodnota nemá žiaden účinok, ak systémové nastavenie UsageStats je na \"Nezdieľať\""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# The country where your library is located:"
@@ -340,9 +344,7 @@ msgstr "Krajina, v ktorej sa nachádza vaša knižnica:"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# This will be shown on the <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
-msgstr ""
-"Toto sa zobrazí na <a href=\"http://hea.koha-community.org\">webstránke "
-"komunity Hea Koha</a>."
+msgstr "Toto sa zobrazí na <a href=\"http://hea.koha-community.org\">webstránke komunity Hea Koha</a>."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryName# If this field is empty data will be sent anonymously."
@@ -350,9 +352,7 @@ msgstr "Ak je toto pole prázdne, dáta budú poslané anonymne."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryName# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
-msgstr ""
-"Všimnite si, že táto hodnota nemá žiaden účinok, ak systémové nastavenie "
-"UsageStats je na \"Nezdieľať\""
+msgstr "Všimnite si, že táto hodnota nemá žiaden účinok, ak systémové nastavenie UsageStats je na \"Nezdieľať\""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryName# The library name"
@@ -360,39 +360,63 @@ msgstr "Názov knižnice"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryName# will be shown on the <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
-msgstr ""
-"Toto sa zobrazí na <a href=\"http://hea.koha-community.org\">webstránke "
-"komunity Hea Koha</a>."
+msgstr "Toto sa zobrazí na <a href=\"http://hea.koha-community.org\">webstránke komunity Hea Koha</a>."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryType# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
-msgstr ""
-"Všimnite si, že táto hodnota nemá žiaden účinok, ak systémové nastavenie "
-"UsageStats je na \"Nezdieľať\""
+msgstr "Všimnite si, že táto hodnota nemá žiaden účinok, ak systémové nastavenie UsageStats je na \"Nezdieľať\""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryType# The library type"
 msgstr "Typ knižnice"
 
 # Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# academic"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# corporate"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# government"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# private"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryType# public"
 msgstr "verejná"
 
 # Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStatsLibraryType# university"
-msgstr "univerzitná"
+msgid "admin.pref#UsageStatsLibraryType# religious organization"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# research"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# school"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# society or association"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# subscription"
+msgstr ""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryType# will be shown on the <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
-msgstr ""
-"Toto sa zobrazí na <a href=\"http://hea.koha-community.org\">webstránke "
-"komunity Hea Koha</a>."
+msgstr "Toto sa zobrazí na <a href=\"http://hea.koha-community.org\">webstránke komunity Hea Koha</a>."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryUrl# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
-msgstr ""
-"Všimnite si, že táto hodnota nemá žiaden účinok, ak systémové nastavenie "
-"UsageStats je na \"Nezdieľať\""
+msgstr "Všimnite si, že táto hodnota nemá žiaden účinok, ak systémové nastavenie UsageStats je na \"Nezdieľať\""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryUrl# The library URL"
@@ -400,9 +424,7 @@ msgstr "URL knižnice"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryUrl# will be shown on the <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
-msgstr ""
-"Toto sa zobrazí na <a href=\"http://hea.koha-community.org\">webstránke "
-"komunity Hea Koha</a>."
+msgstr "Toto sa zobrazí na <a href=\"http://hea.koha-community.org\">webstránke komunity Hea Koha</a>."
 
 # Administration > CAS Authentication
 msgid "admin.pref#casAuthentication# CAS for login authentication."
@@ -814,9 +836,7 @@ msgstr "(Ak nepoužívate, nechajte prázdne. Definujte rozpätie ako <code>192.
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# <br />Display the following message on the redirect page for suppressed biblios"
-msgstr ""
-"<br />Zobraziť nasledovné hlásenie na presmerovacej stránke pre znemožnené "
-"záznamy biblio"
+msgstr "<br />Zobraziť nasledovné hlásenie na presmerovacej stránke pre znemožnené záznamy biblio"
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# <br />Redirect the opac detail page for suppressed records to"
@@ -839,8 +859,8 @@ msgid "cataloguing.pref#OpacSuppression# an explanatory page ('This record is bl
 msgstr "na vysvetľujúcu stránku ('Tento záznam je zablokovaný')."
 
 # Cataloging > Display
-msgid "cataloguing.pref#OpacSuppression# items marked as suppressed from OPAC search results. Note that you must have the <code>Suppress</code> index set up in Zebra and at least one suppressed item, or your searches will be broken."
-msgstr "exempláre označené ako znemožnené z výsledkov hľadania v OPACu. Všimnite si pritom, že musíte mať index <code>znemožnenia</code> nastavený v Zebre a aspoň jeden znemožnený exemplár, inak vaše vyhľadávanie nebude fungovať."
+msgid "cataloguing.pref#OpacSuppression# items marked as suppressed from OPAC search results. Note that you must have the <code>Suppress</code> index set up in Zebra and at least one suppressed biblio record, or your searches will be broken."
+msgstr ""
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# the 404 error page ('Not found')."
@@ -920,9 +940,7 @@ msgstr "tlačidlá na stránke podrobností o knižničných záznamoch pri tla�
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# Define a list of subfields for which editing is authorized when items_batchmod_restricted permission is enabled, separated by spaces."
-msgstr ""
-"Definujte zoznam podpolí oddelených medzerou, pre ktoré je povolená úprava, "
-"keď je zapnuté oprávnenie items_batchmod_restricted."
+msgstr "Definujte zoznam podpolí oddelených medzerou, pre ktoré je povolená úprava, keď je zapnuté oprávnenie items_batchmod_restricted."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# Examples:"
@@ -946,9 +964,7 @@ msgstr "UNIMARC: \"995$f 995$h 995$j\""
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# Define a list of subfields for which editing is authorized when edit_items_restricted permission is enabled, separated by spaces."
-msgstr ""
-"Definujte zoznam podpolí oddelených medzerou, pre ktoré je povolená úprava, "
-"keď je zapnuté obmedzené oprávnenie edit_items_restricted."
+msgstr "Definujte zoznam podpolí oddelených medzerou, pre ktoré je povolená úprava, keď je zapnuté obmedzené oprávnenie edit_items_restricted."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# Examples:"
@@ -1268,9 +1284,7 @@ msgstr "Nepovoliť"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowMultipleIssuesOnABiblio# patrons to check out multiple items from the same record.  (NOTE: This will only effect records without a subscription attached.)"
-msgstr ""
-"čitateľom výpožičku viacerých exemplárov rovnakého záznamu. (POZNÁMKA: Toto "
-"sa dotkne iba záznamov bez pridaného predplatného.)"
+msgstr "čitateľom výpožičku viacerých exemplárov rovnakého záznamu. (POZNÁMKA: Toto sa dotkne iba záznamov bez pridaného predplatného.)"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowNotForLoanOverride# Allow"
@@ -1297,18 +1311,6 @@ msgid "circulation.pref#AllowOfflineCirculation# offline circulation on regular 
 msgstr "obeh offline na bežných počítačoch obehu. (POZNÁMKA: Toto systémové nastavenie neovplyvňuje zásuvný modul Firefoxu alebo počítačový program)"
 
 # Circulation > Holds Policy
-msgid "circulation.pref#AllowOnShelfHolds# Allow"
-msgstr "Povoliť"
-
-# Circulation > Holds Policy
-msgid "circulation.pref#AllowOnShelfHolds# Don't allow"
-msgstr "Nepovoliť"
-
-# Circulation > Holds Policy
-msgid "circulation.pref#AllowOnShelfHolds# hold requests to be placed on items that are not checked out."
-msgstr "zadávanie žiadostí o rezervácie na exempláre, ktoré nie sú vypožičané."
-
-# Circulation > Holds Policy
 msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Allow"
 msgstr "Povoliť"
 
@@ -1318,9 +1320,7 @@ msgstr "Nepovoliť"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# a patron to renew an item with unfilled holds if other available items can fill that hold."
-msgstr ""
-"čitateľovi, aby obnovil exemplár s nenaplnenými rezerváciami, pokiaľ ďalšie "
-"dostupné exempláre môžu naplniť túto rezerváciu."
+msgstr "čitateľovi, aby obnovil exemplár s nenaplnenými rezerváciami, pokiaľ ďalšie dostupné exempláre môžu naplniť túto rezerváciu."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowRenewalLimitOverride# Allow"
@@ -1332,11 +1332,7 @@ msgstr "Nepovoliť"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowRenewalLimitOverride# staff to manually override renewal blocks and renew a checkout when it would go over the renewal limit or be premature with respect to the \"No renewal before\" setting in the circulation policy or has been scheduled for automatic renewal."
-msgstr ""
-"knihovníkom manuálne obídenie obmedzení predĺženia a obnovu výpožičky, ak by "
-"sa tým mal prekročiť limit predĺženia alebo by bol predčasný vzhľadom na "
-"nastavenie \"Nepredĺžiť pred\" v pravidlách obehu, alebo bol nastavený na "
-"automatické predĺženie."
+msgstr "knihovníkom manuálne obídenie obmedzení predĺženia a obnovu výpožičky, ak by sa tým mal prekročiť limit predĺženia alebo by bol predčasný vzhľadom na nastavenie \"Nepredĺžiť pred\" v pravidlách obehu, alebo bol nastavený na automatické predĺženie."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowReturnToBranch# Allow materials to be returned to"
@@ -1528,38 +1524,27 @@ msgstr "dní odteraz) v čase výpožičky. Tento počet dní sa tiež použije 
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>(Used when the longoverdue.pl script is called without the --charge parameter)"
-msgstr ""
-"<br>(Používa sa, keď je skript longoverdue.pl vyvolaný bez parametra "
-"--charge)"
+msgstr "<br>(Používa sa, keď je skript longoverdue.pl vyvolaný bez parametra --charge)"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>Leave this field empty if you don't want to charge the user for lost items."
-msgstr ""
-"<br>Nechajte toto pole prázdne, ak nechcete účtovať od užívateľa za stratené "
-"exempláre."
+msgstr "<br>Nechajte toto pole prázdne, ak nechcete účtovať od užívateľa za stratené exempláre."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueChargeValue# Charge a lost item to the borrower's account when the LOST value of the item changes to :"
-msgstr ""
-"Účtovať od čitateľa za stratený exemplár, keď sa hodnota exemplára LOST "
-"zmení na :"
+msgstr "Účtovať od čitateľa za stratený exemplár, keď sa hodnota exemplára LOST zmení na :"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# <br>(Used when the longoverdue.pl script is called without the --lost parameter)"
-msgstr ""
-"<br>(Používa sa, keď je skript longoverdue.pl vyvolaný bez parametra --lost)"
+msgstr "<br>(Používa sa, keď je skript longoverdue.pl vyvolaný bez parametra --lost)"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# <br>Example: [1] [30] Sets an item to the LOST value 1 when it has been overdue for more than 30 days."
-msgstr ""
-"<br>Príklad: [1] [30] Nastaví exemplár na hodnotu LOST 1, keď bol omeškaný "
-"na viac ako 30 dní."
+msgstr "<br>Príklad: [1] [30] Nastaví exemplár na hodnotu LOST 1, keď bol omeškaný na viac ako 30 dní."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# <br>WARNING — These preferences will activate the automatic item loss process. Leave these fields empty if you don't want to activate this feature."
-msgstr ""
-"<br>POZOR — Tieto nastavenia aktivujú automatický proces strát exemplárov. "
-"Nechajte tieto polia prázdne, ak túto schopnosť nechcete aktivovať."
+msgstr "<br>POZOR — Tieto nastavenia aktivujú automatický proces strát exemplárov. Nechajte tieto polia prázdne, ak túto schopnosť nechcete aktivovať."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# By default, set the LOST value of an item to"
@@ -2196,15 +2181,11 @@ msgstr "Každý pár hodnôt by mal byť na osobitnom riadku."
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#UpdateNotForLoanStatusOnCheckin# This is a list of value pairs. When an item is checked in, if the not for loan value on the left matches the items not for loan value"
-msgstr ""
-"Toto je zoznam hodnotových párov. Keď sa exemplár vracia, ak hodnota "
-"nevypožičateľné vľavo sa zhoduje s hodnotou nevypožičateľné exemplára"
+msgstr "Toto je zoznam hodnotových párov. Keď sa exemplár vracia, ak hodnota nevypožičateľné vľavo sa zhoduje s hodnotou nevypožičateľné exemplára"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#UpdateNotForLoanStatusOnCheckin# it will be updated to the right-hand value. E.g. '-1: 0' will cause an item that was set to 'Ordered' to now be available for loan."
-msgstr ""
-"bude aktualizovaná na hodnotu pravej ruky. Napr. '-1: 0' spôsobí, že "
-"exemplár, ktorý bol nastavený na 'Objednaný' bol teraz dostupný na výpožičku."
+msgstr "bude aktualizovaná na hodnotu pravej ruky. Napr. '-1: 0' spôsobí, že exemplár, ktorý bol nastavený na 'Objednaný' bol teraz dostupný na výpožičku."
 
 # Circulation > Interface
 msgid "circulation.pref#UpdateTotalIssuesOnCirc# Do"
@@ -2538,6 +2519,10 @@ msgstr "Babelthèque"
 msgid "enhanced_content.pref Baker and Taylor"
 msgstr "Baker and Taylor"
 
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref Coce Cover images cache"
+msgstr ""
+
 # Enhanced Content > Google
 msgid "enhanced_content.pref Google"
 msgstr "Google"
@@ -2588,10 +2573,7 @@ msgstr "Menovky"
 
 # Enhanced Content > All
 msgid "enhanced_content.pref## <strong>NOTE:</strong> you can only choose one source of cover images from below, otherwise Koha will show the images from all sources selected."
-msgstr ""
-"<strong>POZNÁMKA:</strong> môžete si zvoliť iba jeden prameň pre obrázky "
-"obálok nižšie, inak bude Koha zobrazovať obrázky zo všetkých vybraných "
-"prameňov."
+msgstr "<strong>POZNÁMKA:</strong> môžete si zvoliť iba jeden prameň pre obrázky obálok nižšie, inak bude Koha zobrazovať obrázky zo všetkých vybraných prameňov."
 
 # Enhanced Content > Local Cover Images
 msgid "enhanced_content.pref#AllowMultipleCovers# Allow"
@@ -2708,6 +2690,26 @@ msgstr "Prístup do Baker and Taylor pomocou užívateľského mena"
 # Enhanced Content > Baker and Taylor
 msgid "enhanced_content.pref#BakerTaylorUsername# and password"
 msgstr "a hesla"
+
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref#Coce# Don't enable"
+msgstr ""
+
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref#Coce# Enable"
+msgstr ""
+
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref#Coce# a Coce image cache service."
+msgstr ""
+
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref#CoceHost# Coce server URL"
+msgstr ""
+
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref#CoceProviders# Use the following providers to fetch the covers"
+msgstr ""
 
 # Enhanced Content > All
 msgid "enhanced_content.pref#FRBRizeEditions# Don't show"
@@ -3230,6 +3232,18 @@ msgid "i18n_l10n.pref"
 msgstr "I18N/L10N"
 
 # I18N/L10N
+msgid "i18n_l10n.pref#AddressFormat# Format postal addresses using"
+msgstr ""
+
+# I18N/L10N
+msgid "i18n_l10n.pref#AddressFormat# German style ([Adress] [Street number] - [Zip/Postal Code] [City] - [Country])"
+msgstr ""
+
+# I18N/L10N
+msgid "i18n_l10n.pref#AddressFormat# US style ([Street number], [Address] - [City], [Zip/Postal Code], [Country])"
+msgstr ""
+
+# I18N/L10N
 msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Monday"
 msgstr "pondelok"
 
@@ -3247,10 +3261,7 @@ msgstr "ako prvý deň týždňa v kalendári."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# . <b>Note:</b> Do not change this preference on a production server with overdue items that are accruing fines. Doing so will result in duplicate fines!"
-msgstr ""
-". <b>Poznámka:</b> Nemeňte toto nastavenie na produkčnom serveri s "
-"omeškanými exemplármi, u ktorých sa pripočítavajú pokuty. V opačnom prípade "
-"sa pokuty zdvojnásobia!"
+msgstr ". <b>Poznámka:</b> Nemeňte toto nastavenie na produkčnom serveri s omeškanými exemplármi, u ktorých sa pripočítavajú pokuty. V opačnom prípade sa pokuty zdvojnásobia!"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# 12 hour format ( e.g. \"02:18 PM\" )"
@@ -3265,6 +3276,10 @@ msgid "i18n_l10n.pref#TimeFormat# Format times in"
 msgstr "Formátovať čas v"
 
 # I18N/L10N
+msgid "i18n_l10n.pref#alphabet# <br/> Hint: Changing collation in the database for the 'surname' column of the 'borrowers' table is helpful to make browsing by last name work in members-home.pl when using an alphabet outside of A-Z"
+msgstr ""
+
+# I18N/L10N
 msgid "i18n_l10n.pref#alphabet# Use the alphabet"
 msgstr "Použiť abecedu"
 
@@ -3274,10 +3289,7 @@ msgstr "pre zoznamy prehliadateľných písmen. Mal by to byť zoznam veľkých 
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# . <b>Note:</b> Do not change this preference on a production server with overdue items that are accruing fines. Doing so will result in duplicate fines!"
-msgstr ""
-". <b>Poznámka:</b> Nemeňte toto nastavenie na produkčnom serveri s "
-"omeškanými exemplármi, u ktorých sa pripočítavajú pokuty. V opačnom prípade "
-"sa pokuty zdvojnásobia!"
+msgstr ". <b>Poznámka:</b> Nemeňte toto nastavenie na produkčnom serveri s omeškanými exemplármi, u ktorých sa pripočítavajú pokuty. V opačnom prípade sa pokuty zdvojnásobia!"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# Format dates like"
@@ -3691,25 +3703,6 @@ msgstr "Nepovoliť"
 msgid "opac.pref#OPACFinesTab# patrons to access the Fines tab on the My Account page on the OPAC."
 msgstr "čitateľom prístup na záložku Pokuty na stránke Môj účet v OPACu."
 
-# OPAC > Policy
-msgid "opac.pref#OPACItemHolds# Allow"
-msgstr "Povoliť"
-
-# OPAC > Policy
-msgid "opac.pref#OPACItemHolds# Don't allow"
-msgstr "Nepovoliť"
-
-# OPAC > Policy
-msgid "opac.pref#OPACItemHolds# Force"
-msgstr "Prinútiť"
-
-# OPAC > Policy
-msgid "opac.pref#OPACItemHolds# patrons to place holds on specific items in the OPAC. If this is disabled, users can only put a hold on the next available item. If this is forced, users must put a hold on a specific item."
-msgstr ""
-"čitateľov, aby zadávali rezervácie na špecifické exempláre v OPACu. Ak je to "
-"vypnuté, čitatelia si môžu zarezervovať iba nasledujúci dostupný exemplár. "
-"Ak je to prinútené, užívatelia si musia zarezervovať špecifický exemplár."
-
 # OPAC > Appearance
 msgid "opac.pref#OPACMySummaryHTML# <br />Note: The placeholders {BIBLIONUMBER}, {TITLE}, {ISBN} and {AUTHOR} will be replaced with information from the displayed record."
 msgstr "<br />Poznámka: Zástupné znaky {BIBLIONUMBER}, {TITLE}, {ISBN} a {AUTHOR} budú nahradené informáciami zo zobrazeného záznamu."
@@ -3918,6 +3911,14 @@ msgstr "Nepridávať"
 msgid "opac.pref#OpacAddMastheadLibraryPulldown# a library select pulldown menu on the OPAC masthead."
 msgstr "rozbaľovaciu ponuku výberu knižnice na hlavičke OPACu."
 
+# OPAC > Appearance
+msgid "opac.pref#OpacAdditionalStylesheet# Include the additional CSS stylesheet"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacAdditionalStylesheet# to override specified settings from the default stylesheet (leave blank to disable). Enter just a filename, a full local path or a complete URL starting with <code>http://</code> (if the file lives on a remote server). Please note that if you just enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory. A full local path is expected to start from your HTTP document root."
+msgstr ""
+
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Show search options for the expanded view"
 msgstr "Zobraziť možnosti hľadania pre rozšírený náhľad"
@@ -4003,20 +4004,8 @@ msgid "opac.pref#OpacCustomSearch# Replace the search box at the top of OPAC pag
 msgstr "Nahradiť políčko hľadania na vrchu stránok OPAC nasledovným HTML:"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacExportOptions# <br />Note: Available options are: BIBTEX (<code>bibtex</code>), Dublin Core (<code>dc</code>),"
-msgstr "<br />Poznámka: Dostupné možnosti sú: BIBTEX (<code>bibtex</code>), Dublin Core (<code>dc</code>),"
-
-# OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# List export options that should be available from OPAC detail page separated by |:"
 msgstr "Vymenujte možnosti exportu, ktoré by mali byť dostupné zo stránky podrobností OPACu oddelené |:"
-
-# OPAC > Appearance
-msgid "opac.pref#OpacExportOptions# MARCXML (<code>marcxml</code>), MARC-8 encoded MARC (<code>marc8</code>), Unicode/UTF-8 encoded MARC (<code>utf8</code>),"
-msgstr "MARCXML (<code>marcxml</code>), MARC-8 encoded MARC (<code>marc8</code>), Unicode/UTF-8 encoded MARC (<code>utf8</code>),"
-
-# OPAC > Appearance
-msgid "opac.pref#OpacExportOptions# Unicode/UTF-8 encoded MARC without local use -9xx, x9x, xx9- fields and subfields (<code>marcstd</code>), MODS (<code>mods</code>), RIS (<code>ris</code>)"
-msgstr "Unicode/UTF-8 kódovaný MARC bez miestneho použitia polí a podpolí -9xx, x9x, xx9- (<code>marcstd</code>), MODS (<code>mods</code>), RIS (<code>ris</code>)"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacFavicon# Use the image at"
@@ -4044,10 +4033,7 @@ msgstr "Zvýrazniť"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# words the patron searched for in their search results and detail pages; To prevent certain words from ever being highlighted, enter a list of stopwords here"
-msgstr ""
-"slová, ktoré čitateľ hľadal na ich stránkach výsledkov hľadania a "
-"podrobností; K znemožneniu zvýraznenia určitých slov, zadajte zoznam "
-"stopslov sem"
+msgstr "slová, ktoré čitateľ hľadal na ich stránkach výsledkov hľadania a podrobností; K znemožneniu zvýraznenia určitých slov, zadajte zoznam stopslov sem"
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# Allow"
@@ -4550,14 +4536,6 @@ msgid "opac.pref#opacbookbag# patrons to store items in a temporary \"Cart\" on 
 msgstr "čitateľom ukladať exempláre v dočasnom \"Košíku\" v OPACu."
 
 # OPAC > Appearance
-msgid "opac.pref#opaccolorstylesheet# Include the additional CSS stylesheet"
-msgstr "Zahrnúť dodatočný štýlový hárok CSS"
-
-# OPAC > Appearance
-msgid "opac.pref#opaccolorstylesheet# to override specified settings from the default stylesheet (leave blank to disable). Enter just a filename, a full local path or a complete URL starting with <code>http://</code> (if the file lives on a remote server). Please note that if you just enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory. A full local path is expected to start from your HTTP document root."
-msgstr "pre obídenie špecifických nastavení z predvoleného štýlového hárku (prázdnym deaktivujte). Zadajte len názov súboru, úplnú miestnu cestu alebo kompletné URL začínajúce s <code>http://</code> (ak je súbor umiestnený na vzdialenom serveri). Všimnite si prosím, že ak zadáte iba názov súboru, súbor by mal byť v podadresári css pre každú aktívnu tému a jazyk vrámci adresára šablón Kohy. Úplná lokálna cesta by sa mala začať z vášho koreňa dokumentu HTTP."
-
-# OPAC > Appearance
 msgid "opac.pref#opaccredits# Include the following HTML in the footer of all pages in the OPAC:"
 msgstr "Zahrnúť nasledovné HTML do päty všetkých stránok v OPACu:"
 
@@ -4656,22 +4634,6 @@ msgstr "Všeobecne"
 # Patrons > Norwegian patron database
 msgid "patrons.pref Norwegian patron database"
 msgstr "Nórska databáza užívateľov"
-
-# Patrons > General
-msgid "patrons.pref#AddPatronLists# List"
-msgstr "Zoznam"
-
-# Patrons > General
-msgid "patrons.pref#AddPatronLists# general patron types"
-msgstr "všeobecných typov čitateľov"
-
-# Patrons > General
-msgid "patrons.pref#AddPatronLists# specific categories"
-msgstr "špecifické kategórie"
-
-# Patrons > General
-msgid "patrons.pref#AddPatronLists# under the new patron menu."
-msgstr "pod ponukou nového čitateľa."
 
 # Patrons > General
 msgid "patrons.pref#AutoEmailOpacUser# Don't send"
@@ -4839,9 +4801,7 @@ msgstr "nórsku národnú databázu potom, ako sa uskutočnilo lokálne hľadani
 
 # Patrons > Norwegian patron database
 msgid "patrons.pref#NorwegianPatronDBUsername# . You can get these from \"Base Bibliotek\", which is maintained by the Norwegian National Library."
-msgstr ""
-"Môžete ich získať z \"Base Bibliotek\", ktorú udržiava Nórska národná "
-"knižnica."
+msgstr "Môžete ich získať z \"Base Bibliotek\", ktorú udržiava Nórska národná knižnica."
 
 # Patrons > Norwegian patron database
 msgid "patrons.pref#NorwegianPatronDBUsername# Communicate with the Norwegian national patron database using the username"
@@ -5235,6 +5195,22 @@ msgstr "Aktivovať"
 msgid "searching.pref#QueryWeightFields# ranking of search results by relevance (REQUIRES ZEBRA)."
 msgstr "usporadúvania výsledkov hľadania podľa dôležitosti (VYŽADUJE ZEBRU)."
 
+# Searching > Results Display
+msgid "searching.pref#SearchWithISBNVariations# When searching on the ISBN index,"
+msgstr ""
+
+# Searching > Results Display
+msgid "searching.pref#SearchWithISBNVariations# don't search"
+msgstr ""
+
+# Searching > Results Display
+msgid "searching.pref#SearchWithISBNVariations# on all variations of the ISBN. Note that this preference has no effect if UseQueryParser is on."
+msgstr ""
+
+# Searching > Results Display
+msgid "searching.pref#SearchWithISBNVariations# search"
+msgstr ""
+
 # Searching > Features
 msgid "searching.pref#TraceCompleteSubfields# Don't force"
 msgstr "Nenútiť"
@@ -5432,16 +5408,16 @@ msgid "serials.pref#RoutingListNote# Include following note on all routing lists
 msgstr "Priložiť nasledovnú poznámku na všetky distribučné zoznamy:"
 
 # Serials
-msgid "serials.pref#RoutingSerials# Add"
-msgstr "Pridať"
+msgid "serials.pref#RoutingSerials# Don't use"
+msgstr ""
 
 # Serials
-msgid "serials.pref#RoutingSerials# Don't add"
-msgstr "Nepridať"
+msgid "serials.pref#RoutingSerials# Use"
+msgstr ""
 
 # Serials
-msgid "serials.pref#RoutingSerials# received serials to the routing list."
-msgstr "prijatých periodík na distribučný zoznam."
+msgid "serials.pref#RoutingSerials# the routing list feature in the serials module."
+msgstr ""
 
 # Serials
 msgid "serials.pref#StaffSerialIssueDisplayCount# Show the"
@@ -5751,6 +5727,10 @@ msgstr "Webové služby"
 msgid "web_services.pref ILS-DI"
 msgstr "ILS-DI"
 
+# Web services > IdRef
+msgid "web_services.pref IdRef"
+msgstr ""
+
 # Web services > OAI-PMH
 msgid "web_services.pref OAI-PMH"
 msgstr "OAI-PMH"
@@ -5778,6 +5758,18 @@ msgstr "Povoliť IP adresy"
 # Web services > ILS-DI
 msgid "web_services.pref#ILS-DI:AuthorizedIPs# to use the ILS-DI services (when enabled). Separate the IP addresses with commas and without spaces. Leave the field blank to allow any IP address."
 msgstr "pre použitie služieb ILS-DI (ak sú zapnuté). Oddeľte IP adresy čiarkami bez medzier. Pre povolenie ľubovoľnej IP adresy nechajte políčko prázdne."
+
+# Web services > IdRef
+msgid "web_services.pref#IdRef# Disable"
+msgstr ""
+
+# Web services > IdRef
+msgid "web_services.pref#IdRef# Enable"
+msgstr ""
+
+# Web services > IdRef
+msgid "web_services.pref#IdRef# the IdRef webservice from the opac detail page. IdRef allows to request authorities from the Sudoc database."
+msgstr ""
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH# <a href=\"http://www.openarchives.org/pmh/\">OAI-PMH</a> server."
@@ -5838,3 +5830,4 @@ msgstr "Zobraziť iba"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "riadky výkazu vyžiadaného cez webový servis výkazov."
+

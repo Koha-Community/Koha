@@ -287,8 +287,20 @@ msgid "admin.pref#ReturnpathDefault# Use"
 msgstr "Kullan"
 
 # Administration > Interface options
-msgid "admin.pref#ReturnpathDefault# as the email address set as the return path, if you leave this empty the admin address will be used."
-msgstr "dönüş yolu olarak ayarlanan e-posta adresi olarak, eğer bunu boş bırakırsanız yönetici adresi kullanılacaktır."
+msgid "admin.pref#ReturnpathDefault# as the return path or bounce address for undeliverable mail messages. If you leave this empty, the From address will be used (often defaulting to the admin address)."
+msgstr ""
+
+# Administration > Login options
+msgid "admin.pref#SessionRestrictionByIP# Disable"
+msgstr ""
+
+# Administration > Login options
+msgid "admin.pref#SessionRestrictionByIP# Enable"
+msgstr ""
+
+# Administration > Login options
+msgid "admin.pref#SessionRestrictionByIP# check for change in remote IP address for session security. Disable only when remote IP address changes frequently."
+msgstr ""
 
 # Administration > Login options
 msgid "admin.pref#SessionStorage# Store login session information"
@@ -359,12 +371,44 @@ msgid "admin.pref#UsageStatsLibraryType# The library type"
 msgstr "Kütüphane türü"
 
 # Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# academic"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# corporate"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# government"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# private"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryType# public"
 msgstr "halk"
 
 # Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStatsLibraryType# university"
-msgstr "üniversite"
+msgid "admin.pref#UsageStatsLibraryType# religious organization"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# research"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# school"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# society or association"
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibraryType# subscription"
+msgstr ""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryType# will be shown on the <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
@@ -815,8 +859,8 @@ msgid "cataloguing.pref#OpacSuppression# an explanatory page ('This record is bl
 msgstr "bir açıklama sayfası ('Bu kayıt blokeli')."
 
 # Cataloging > Display
-msgid "cataloguing.pref#OpacSuppression# items marked as suppressed from OPAC search results. Note that you must have the <code>Suppress</code> index set up in Zebra and at least one suppressed item, or your searches will be broken."
-msgstr "OPAC arama sonuçlarından çıkartılmış olarak işaretlenen materyaller. Zebra'da <code>Suppress</code> index set up mevcut olmalıdır ve en az bir materyal çıkarılmalıdır aksi takdirde aramalarınız eksik olacaktır."
+msgid "cataloguing.pref#OpacSuppression# items marked as suppressed from OPAC search results. Note that you must have the <code>Suppress</code> index set up in Zebra and at least one suppressed biblio record, or your searches will be broken."
+msgstr ""
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# the 404 error page ('Not found')."
@@ -1267,18 +1311,6 @@ msgid "circulation.pref#AllowOfflineCirculation# offline circulation on regular 
 msgstr "Düzenli olarak kullanılan dolaşım bilgisayarlarında çevrimdışı dolaşım. (NOT: Bu sistem tercihi Firefox eklentisini veya masaüstü eklentisini etkilemez) "
 
 # Circulation > Holds Policy
-msgid "circulation.pref#AllowOnShelfHolds# Allow"
-msgstr "İzin ver"
-
-# Circulation > Holds Policy
-msgid "circulation.pref#AllowOnShelfHolds# Don't allow"
-msgstr "İzin verme"
-
-# Circulation > Holds Policy
-msgid "circulation.pref#AllowOnShelfHolds# hold requests to be placed on items that are not checked out."
-msgstr "Ödünç alınmamış materyallere yerleştirilecek ayırma istekleri."
-
-# Circulation > Holds Policy
 msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Allow"
 msgstr "İzin ver"
 
@@ -1492,27 +1524,19 @@ msgstr "(şu an itibariyle günler) iade zamanında. Gün sayılarının çekile
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>(Used when the longoverdue.pl script is called without the --charge parameter)"
-msgstr ""
-"<br>(Longoverdue.pl komut dizisi --charge parametresi olmadan çağrıldığında "
-"kullanılır)"
+msgstr "<br>(Longoverdue.pl komut dizisi --charge parametresi olmadan çağrıldığında kullanılır)"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>Leave this field empty if you don't want to charge the user for lost items."
-msgstr ""
-"Eğer kayıp materyaller için kullanıcıdan ücret tahsil etmek istemiyorsanız "
-"bu alanı boş bırakın."
+msgstr "Eğer kayıp materyaller için kullanıcıdan ücret tahsil etmek istemiyorsanız bu alanı boş bırakın."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueChargeValue# Charge a lost item to the borrower's account when the LOST value of the item changes to :"
-msgstr ""
-"KAYIP materyalin değeri yandaki miktara değişim gösterdiğinde kayıp "
-"materyalin bedelini kullanıcının hesabından tahsil et :"
+msgstr "KAYIP materyalin değeri yandaki miktara değişim gösterdiğinde kayıp materyalin bedelini kullanıcının hesabından tahsil et :"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# <br>(Used when the longoverdue.pl script is called without the --lost parameter)"
-msgstr ""
-"<br>(Longoverdue.pl komut dizisi --lost parametresi olmadan çağrıldığında "
-"kullanılır)"
+msgstr "<br>(Longoverdue.pl komut dizisi --lost parametresi olmadan çağrıldığında kullanılır)"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# <br>Example: [1] [30] Sets an item to the LOST value 1 when it has been overdue for more than 30 days."
@@ -1520,9 +1544,7 @@ msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# <br>WARNING — These preferences will activate the automatic item loss process. Leave these fields empty if you don't want to activate this feature."
-msgstr ""
-"<br>UYARI — Bu tercihler ,otomatik madde kaybı sürecini aktive eder. Bu "
-"özelliği etkinleştirmek istemiyorsanız, bu alanları boş bırakın."
+msgstr "<br>UYARI — Bu tercihler ,otomatik madde kaybı sürecini aktive eder. Bu özelliği etkinleştirmek istemiyorsanız, bu alanları boş bırakın."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# By default, set the LOST value of an item to"
@@ -2497,6 +2519,10 @@ msgstr "Babelthèque"
 msgid "enhanced_content.pref Baker and Taylor"
 msgstr "Baker and Taylor"
 
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref Coce Cover images cache"
+msgstr ""
+
 # Enhanced Content > Google
 msgid "enhanced_content.pref Google"
 msgstr "Google"
@@ -2664,6 +2690,26 @@ msgstr "Baker and Taylor'a kullanıcı adı ile eriş"
 # Enhanced Content > Baker and Taylor
 msgid "enhanced_content.pref#BakerTaylorUsername# and password"
 msgstr "ve şifre"
+
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref#Coce# Don't enable"
+msgstr ""
+
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref#Coce# Enable"
+msgstr ""
+
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref#Coce# a Coce image cache service."
+msgstr ""
+
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref#CoceHost# Coce server URL"
+msgstr ""
+
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref#CoceProviders# Use the following providers to fetch the covers"
+msgstr ""
 
 # Enhanced Content > All
 msgid "enhanced_content.pref#FRBRizeEditions# Don't show"
@@ -3186,6 +3232,18 @@ msgid "i18n_l10n.pref"
 msgstr "I18N/L10N"
 
 # I18N/L10N
+msgid "i18n_l10n.pref#AddressFormat# Format postal addresses using"
+msgstr ""
+
+# I18N/L10N
+msgid "i18n_l10n.pref#AddressFormat# German style ([Adress] [Street number] - [Zip/Postal Code] [City] - [Country])"
+msgstr ""
+
+# I18N/L10N
+msgid "i18n_l10n.pref#AddressFormat# US style ([Street number], [Address] - [City], [Zip/Postal Code], [Country])"
+msgstr ""
+
+# I18N/L10N
 msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Monday"
 msgstr "Pazartesi"
 
@@ -3216,6 +3274,10 @@ msgstr "24 saatlik format ( örneğin \"14:18\" )"
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# Format times in"
 msgstr "Saat biçimi"
+
+# I18N/L10N
+msgid "i18n_l10n.pref#alphabet# <br/> Hint: Changing collation in the database for the 'surname' column of the 'borrowers' table is helpful to make browsing by last name work in members-home.pl when using an alphabet outside of A-Z"
+msgstr ""
 
 # I18N/L10N
 msgid "i18n_l10n.pref#alphabet# Use the alphabet"
@@ -3641,22 +3703,6 @@ msgstr "İzin verme"
 msgid "opac.pref#OPACFinesTab# patrons to access the Fines tab on the My Account page on the OPAC."
 msgstr "OPAC üzerinde Hesabım sayfasındaki Cezalar sekmesine erişebilecek kullanıcılar."
 
-# OPAC > Policy
-msgid "opac.pref#OPACItemHolds# Allow"
-msgstr "İzin ver"
-
-# OPAC > Policy
-msgid "opac.pref#OPACItemHolds# Don't allow"
-msgstr "İzin verme"
-
-# OPAC > Policy
-msgid "opac.pref#OPACItemHolds# Force"
-msgstr "Zorla"
-
-# OPAC > Policy
-msgid "opac.pref#OPACItemHolds# patrons to place holds on specific items in the OPAC. If this is disabled, users can only put a hold on the next available item. If this is forced, users must put a hold on a specific item."
-msgstr "Kullanıcıların OPAC içerisinde belirli materyaller üzerinde ayırma yapmaları. Eğer bu devre dışı bırakılırsa, kullanıcılar sadece bir sonraki kullanılabilir materyal üzerinde ayırma yapabilirler. Eğer bu zorunlu tutulursa, kullanıcılar mutlaka belirli bir materyal üzerinde ayırma yapmalıdırlar."
-
 # OPAC > Appearance
 msgid "opac.pref#OPACMySummaryHTML# <br />Note: The placeholders {BIBLIONUMBER}, {TITLE}, {ISBN} and {AUTHOR} will be replaced with information from the displayed record."
 msgstr "<br /> Not: tutucuları {BIBLIONUMBER}, {TITLE}, {ISBN} ve {AUTHOR} görüntülenen kayıt bilgileri ile değiştirilecektir."
@@ -3865,6 +3911,14 @@ msgstr "Ekleme"
 msgid "opac.pref#OpacAddMastheadLibraryPulldown# a library select pulldown menu on the OPAC masthead."
 msgstr "OPAC yönetiminde açılır menüden bir kütüphane seç."
 
+# OPAC > Appearance
+msgid "opac.pref#OpacAdditionalStylesheet# Include the additional CSS stylesheet"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacAdditionalStylesheet# to override specified settings from the default stylesheet (leave blank to disable). Enter just a filename, a full local path or a complete URL starting with <code>http://</code> (if the file lives on a remote server). Please note that if you just enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory. A full local path is expected to start from your HTTP document root."
+msgstr ""
+
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Show search options for the expanded view"
 msgstr "Genişletilmiş görünüm için arama seçeneklerini göster"
@@ -3950,20 +4004,8 @@ msgid "opac.pref#OpacCustomSearch# Replace the search box at the top of OPAC pag
 msgstr "OPAC sayfalarının üst kısmındaki arama kutusunu aşağıdaki HTML ile değiştirin:"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacExportOptions# <br />Note: Available options are: BIBTEX (<code>bibtex</code>), Dublin Core (<code>dc</code>),"
-msgstr "<br />Not: Kullanılabilir seçenekler: BIBTEX (<code>bibtex</code>), Dublin Core (<code>dc</code>),"
-
-# OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# List export options that should be available from OPAC detail page separated by |:"
 msgstr "|: ile ayrılan OPAC detay sayfasında mevcut olması gereken dışa aktarım (ihraç) seçeneklerini listele:"
-
-# OPAC > Appearance
-msgid "opac.pref#OpacExportOptions# MARCXML (<code>marcxml</code>), MARC-8 encoded MARC (<code>marc8</code>), Unicode/UTF-8 encoded MARC (<code>utf8</code>),"
-msgstr "MARCXML (<code>marcxml</code>), MARC-8 encoded MARC (<code>marc8</code>), Unicode/UTF-8 encoded MARC (<code>utf8</code>),"
-
-# OPAC > Appearance
-msgid "opac.pref#OpacExportOptions# Unicode/UTF-8 encoded MARC without local use -9xx, x9x, xx9- fields and subfields (<code>marcstd</code>), MODS (<code>mods</code>), RIS (<code>ris</code>)"
-msgstr "Unicode/UTF-8 encoded MARC yerel kullanım olmaksızın -9xx, x9x, xx9- alanlar ve  (<code>marcstd</code>), MODS (<code>mods</code>), RIS (<code>ris</code>)"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacFavicon# Use the image at"
@@ -4494,14 +4536,6 @@ msgid "opac.pref#opacbookbag# patrons to store items in a temporary \"Cart\" on 
 msgstr "materyalleri OPAC’daki geçici \"Sepette\" kaydedecek kullanıcılar."
 
 # OPAC > Appearance
-msgid "opac.pref#opaccolorstylesheet# Include the additional CSS stylesheet"
-msgstr "Ek CSS Stili ekleyin"
-
-# OPAC > Appearance
-msgid "opac.pref#opaccolorstylesheet# to override specified settings from the default stylesheet (leave blank to disable). Enter just a filename, a full local path or a complete URL starting with <code>http://</code> (if the file lives on a remote server). Please note that if you just enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory. A full local path is expected to start from your HTTP document root."
-msgstr "varsayılan stil sayfasından özel ayarları geçersiz kılmak için (devre dışı bırakmak için boşluk bırakınız). Sadece bir dosya ismi, tam lokal yol ya da  <code>http://</code> ile başlayan tam URL giriniz (dosya uzak bir sunucuda bulunuyorsa). Lütfen sadece dosya ismi girdiğinize dikkat ediniz, dosya her aktif tema için css altdizininde ve Koha şablon dizininde olması gerekir. Tam lokal yolun HTTP belge kökünden başlanması beklenmektedir."
-
-# OPAC > Appearance
 msgid "opac.pref#opaccredits# Include the following HTML in the footer of all pages in the OPAC:"
 msgstr "OPAC’ın tüm sayfalarının alt bilgisinde yer alan, takip eden HTML’yi dahil ediniz:"
 
@@ -4600,22 +4634,6 @@ msgstr "Genel"
 # Patrons > Norwegian patron database
 msgid "patrons.pref Norwegian patron database"
 msgstr "Norveç kullanıcı veritabanı"
-
-# Patrons > General
-msgid "patrons.pref#AddPatronLists# List"
-msgstr "Liste"
-
-# Patrons > General
-msgid "patrons.pref#AddPatronLists# general patron types"
-msgstr "genel üye türleri"
-
-# Patrons > General
-msgid "patrons.pref#AddPatronLists# specific categories"
-msgstr "özel kategoriler"
-
-# Patrons > General
-msgid "patrons.pref#AddPatronLists# under the new patron menu."
-msgstr "yeni üye menüsü altında."
 
 # Patrons > General
 msgid "patrons.pref#AutoEmailOpacUser# Don't send"
@@ -4779,9 +4797,7 @@ msgstr "Yapma"
 
 # Patrons > Norwegian patron database
 msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# search the Norwegian national patron database after a local search result was found."
-msgstr ""
-"Yerel bir arama sonucu bulunduktan sonra Norveç ulusal kullanıcı "
-"veritabanını ara."
+msgstr "Yerel bir arama sonucu bulunduktan sonra Norveç ulusal kullanıcı veritabanını ara."
 
 # Patrons > Norwegian patron database
 msgid "patrons.pref#NorwegianPatronDBUsername# . You can get these from \"Base Bibliotek\", which is maintained by the Norwegian National Library."
@@ -5179,6 +5195,22 @@ msgstr "Etkinleştir"
 msgid "searching.pref#QueryWeightFields# ranking of search results by relevance (REQUIRES ZEBRA)."
 msgstr "arama sonuçlarının uygunluğa göre sıralanması (ZEBRA GEREKMEKTEDİR)."
 
+# Searching > Results Display
+msgid "searching.pref#SearchWithISBNVariations# When searching on the ISBN index,"
+msgstr ""
+
+# Searching > Results Display
+msgid "searching.pref#SearchWithISBNVariations# don't search"
+msgstr ""
+
+# Searching > Results Display
+msgid "searching.pref#SearchWithISBNVariations# on all variations of the ISBN. Note that this preference has no effect if UseQueryParser is on."
+msgstr ""
+
+# Searching > Results Display
+msgid "searching.pref#SearchWithISBNVariations# search"
+msgstr ""
+
 # Searching > Features
 msgid "searching.pref#TraceCompleteSubfields# Don't force"
 msgstr "Zorlama"
@@ -5376,16 +5408,16 @@ msgid "serials.pref#RoutingListNote# Include following note on all routing lists
 msgstr "Aşağıdaki notu tüm yönlendirme listesine dahil ediniz:"
 
 # Serials
-msgid "serials.pref#RoutingSerials# Add"
-msgstr "Ekle"
+msgid "serials.pref#RoutingSerials# Don't use"
+msgstr ""
 
 # Serials
-msgid "serials.pref#RoutingSerials# Don't add"
-msgstr "Ekleme"
+msgid "serials.pref#RoutingSerials# Use"
+msgstr ""
 
 # Serials
-msgid "serials.pref#RoutingSerials# received serials to the routing list."
-msgstr "yönlendirme listesine gelen süreli yayınlar."
+msgid "serials.pref#RoutingSerials# the routing list feature in the serials module."
+msgstr ""
 
 # Serials
 msgid "serials.pref#StaffSerialIssueDisplayCount# Show the"
@@ -5695,6 +5727,10 @@ msgstr "Web Servisleri"
 msgid "web_services.pref ILS-DI"
 msgstr "ILS-DI"
 
+# Web services > IdRef
+msgid "web_services.pref IdRef"
+msgstr ""
+
 # Web services > OAI-PMH
 msgid "web_services.pref OAI-PMH"
 msgstr "OAI-PMH"
@@ -5722,6 +5758,18 @@ msgstr "IP adreslerine izin ver"
 # Web services > ILS-DI
 msgid "web_services.pref#ILS-DI:AuthorizedIPs# to use the ILS-DI services (when enabled). Separate the IP addresses with commas and without spaces. Leave the field blank to allow any IP address."
 msgstr "ILS-DI servisleri kullanmak için (etkinleştirildiğinde). IP adreslerini boşluk bırakmadan virgül ile ayırın. Herhangi bir IP adresine izin verebilmesi için  alanı boş bırakın."
+
+# Web services > IdRef
+msgid "web_services.pref#IdRef# Disable"
+msgstr ""
+
+# Web services > IdRef
+msgid "web_services.pref#IdRef# Enable"
+msgstr ""
+
+# Web services > IdRef
+msgid "web_services.pref#IdRef# the IdRef webservice from the opac detail page. IdRef allows to request authorities from the Sudoc database."
+msgstr ""
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH# <a href=\"http://www.openarchives.org/pmh/\">OAI-PMH</a> server."
@@ -5782,3 +5830,4 @@ msgstr "Sadece geri dönen"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "raporlar web hizmeti yoluyla talep edilen bir raporun satırları"
+
