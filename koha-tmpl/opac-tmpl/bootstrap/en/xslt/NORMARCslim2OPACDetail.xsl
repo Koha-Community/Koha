@@ -34,10 +34,14 @@
         </xsl:variable>
         <xsl:variable name="DisplayOPACiconsXSLT" select="marc:sysprefs/marc:syspref[@name='DisplayOPACiconsXSLT']"/>
         <xsl:variable name="theme" select="marc:sysprefs/marc:syspref[@name='opacthemes']"/>
-
+        <xsl:variable name="OPACURLOpenInNewWindow" select="marc:sysprefs/marc:syspref[@name='OPACURLOpenInNewWindow']"/>
+        <xsl:variable name="URLLinkText" select="marc:sysprefs/marc:syspref[@name='URLLinkText']"/>
+        <xsl:variable name="Show856uAsImage" select="marc:sysprefs/marc:syspref[@name='OPACDisplay856uAsImage']"/>
+        <xsl:variable name="OPACTrackClicks" select="marc:sysprefs/marc:syspref[@name='TrackClicks']"/>
         <xsl:variable name="leader" select="marc:leader"/>
         <xsl:variable name="leader6" select="substring($leader,7,1)"/>
         <xsl:variable name="leader7" select="substring($leader,8,1)"/>
+        <xsl:variable name="biblionumber" select="marc:datafield[@tag=999]/marc:subfield[@code='c']"/>
         <xsl:variable name="controlField008" select="marc:controlfield[@tag=008]"/>
         <xsl:variable name="field019b" select="marc:datafield[@tag=019]/marc:subfield[@code='b']"/>
         <xsl:variable name="typeOf008">
@@ -476,23 +480,45 @@
             </span>
         </xsl:if>
 
+<!-- Image processing code added here, takes precedence over text links including y3z text   -->
         <xsl:if test="marc:datafield[@tag=856]">
-        <span class="results_summary"><span class="label">Nettbasert ressurs: </span>
+        <span class="results_summary online_resources"><span class="label">Online resources: </span>
         <xsl:for-each select="marc:datafield[@tag=856]">
-            <a><xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
-        <xsl:choose>
-            <xsl:when test="marc:subfield[@code='y' or @code='3' or @code='z']">
-                    <xsl:call-template name="subfieldSelect">
-                        <xsl:with-param name="codes">y3z</xsl:with-param>
-                    </xsl:call-template>
-            </xsl:when>
-        <xsl:when test="not(marc:subfield[@code='y']) and not(marc:subfield[@code='3']) and not(marc:subfield[@code='z'])">
-        Klikk her for tilgang
-        </xsl:when>
-        </xsl:choose>
-        </a>
+            <xsl:variable name="SubqText"><xsl:value-of select="marc:subfield[@code='q']"/></xsl:variable>
+	    <a property="url">
+	    <xsl:choose>
+	      <xsl:when test="$OPACTrackClicks='track'">
+	        <xsl:attribute name="href">/cgi-bin/koha/tracklinks.pl?uri=<xsl:value-of select="marc:subfield[@code='u']"/>;biblionumber=<xsl:value-of select="$biblionumber"/></xsl:attribute>
+	      </xsl:when>
+	      <xsl:when test="$OPACTrackClicks='anonymous'">
+	        <xsl:attribute name="href">/cgi-bin/koha/tracklinks.pl?uri=<xsl:value-of select="marc:subfield[@code='u']"/>;biblionumber=<xsl:value-of select="$biblionumber"/></xsl:attribute>
+	      </xsl:when>
+	      <xsl:otherwise>
+                <xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
+	      </xsl:otherwise>
+	    </xsl:choose>
+            <xsl:if test="$OPACURLOpenInNewWindow='1'">
+                <xsl:attribute name="target">_blank</xsl:attribute>
+            </xsl:if>
             <xsl:choose>
-            <xsl:when test="position()=last()"></xsl:when>
+            <xsl:when test="($Show856uAsImage='Details' or $Show856uAsImage='Both') and (substring($SubqText,1,6)='image/' or $SubqText='img' or $SubqText='bmp' or $SubqText='cod' or $SubqText='gif' or $SubqText='ief' or $SubqText='jpe' or $SubqText='jpeg' or $SubqText='jpg' or $SubqText='jfif' or $SubqText='png' or $SubqText='svg' or $SubqText='tif' or $SubqText='tiff' or $SubqText='ras' or $SubqText='cmx' or $SubqText='ico' or $SubqText='pnm' or $SubqText='pbm' or $SubqText='pgm' or $SubqText='ppm' or $SubqText='rgb' or $SubqText='xbm' or $SubqText='xpm' or $SubqText='xwd')">
+                <xsl:element name="img"><xsl:attribute name="src"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute><xsl:attribute name="alt"><xsl:value-of select="marc:subfield[@code='y']"/></xsl:attribute><xsl:attribute name="style">height:100px</xsl:attribute></xsl:element><xsl:text></xsl:text>
+            </xsl:when>
+            <xsl:when test="marc:subfield[@code='y' or @code='3' or @code='z']">
+                <xsl:call-template name="subfieldSelect">
+                    <xsl:with-param name="codes">y3z</xsl:with-param>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$URLLinkText!=''">
+                <xsl:value-of select="$URLLinkText"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>Click here to access online</xsl:text>
+            </xsl:otherwise>
+            </xsl:choose>
+            </a>
+            <xsl:choose>
+            <xsl:when test="position()=last()"><xsl:text>  </xsl:text></xsl:when>
             <xsl:otherwise> | </xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
