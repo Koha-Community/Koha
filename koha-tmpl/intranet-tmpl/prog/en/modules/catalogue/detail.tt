@@ -444,12 +444,12 @@ function verify_images() {
             [% END %]</ul>
 </li>
     [% END %]
-    
+
     [% IF ( OPACBaseURL ) %]
         <li><strong>OPAC view:</strong>
-    <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]" target="_blank">Open in new window</a>
-		</li>
-	[% END %]
+        <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]" target="_blank">Open in new window</a>
+        </li>
+    [% END %]
         <li id="catalogue_detail_marc_preview">
             <strong>MARC Preview:</strong>
             <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblionumber %]" title="MARC" rel="gb_page_center[600,500]">Show</a>
