@@ -9667,7 +9667,7 @@ if ( CheckVersion($DBversion) ) {
                 DROP INDEX userid ,
                 ADD UNIQUE userid (userid)
         });
-        print "Upgrade to $DBversion done (Bug 1861 - Unique patrons logins not (totally) enforced)\n";
+        print "Upgrade to $DBversion done (Bug 1861: Unique patrons logins not (totally) enforced)\n";
     }
 
     SetVersion($DBversion);
@@ -9697,7 +9697,7 @@ if(CheckVersion($DBversion)) {
         ALTER TABLE borrower_attribute_types MODIFY COLUMN authorised_value_category VARCHAR(32) DEFAULT NULL
     });
 
-    print "Upgrade to $DBversion done (Bug 13379 - Modify authorised_values.category to varchar(32))\n";
+    print "Upgrade to $DBversion done (Bug 13379: Modify authorised_values.category to varchar(32))\n";
     SetVersion($DBversion);
 }
 
@@ -9716,7 +9716,7 @@ if ( CheckVersion($DBversion) ) {
     }
     $dbh->do(q|SET foreign_key_checks = 1|);;
 
-    print "Upgrade to $DBversion done (Bug 11944 - Convert DB tables to utf8_unicode_ci)\n";
+    print "Upgrade to $DBversion done (Bug 11944: Convert DB tables to utf8_unicode_ci)\n";
     SetVersion($DBversion);
 }
 
@@ -9779,7 +9779,7 @@ if ( CheckVersion($DBversion) ) {
         ADD CONSTRAINT aqorders_budget_id_fk FOREIGN KEY (budget_id) REFERENCES aqbudgets(budget_id) ON DELETE CASCADE ON UPDATE CASCADE
     |);
 
-    print "Upgrade to $DBversion done (Bug 12601 - Add new foreign key aqorders.budget_id" . ( ( $number_of_orders_not_linked->[0] > 0 )  ? ' WARNING: temporary budget and fund have been created (search for "BACKUP_TMP"). At least one of your order was not linked to a budget' : '' ) . ")\n";
+    print "Upgrade to $DBversion done (Bug 12601: Add new foreign key aqorders.budget_id" . ( ( $number_of_orders_not_linked->[0] > 0 )  ? ' WARNING: temporary budget and fund have been created (search for "BACKUP_TMP"). At least one of your order was not linked to a budget' : '' ) . ")\n";
     SetVersion($DBversion);
 }
 
@@ -9799,14 +9799,14 @@ if ( CheckVersion($DBversion) ) {
         ADD CONSTRAINT suggestions_budget_id_fk FOREIGN KEY (budgetid) REFERENCES aqbudgets(budget_id) ON DELETE SET NULL ON UPDATE CASCADE
     |);
 
-    print "Upgrade to $DBversion done (Bug 13007 - Add new foreign key suggestions.budgetid)\n";
+    print "Upgrade to $DBversion done (Bug 13007: Add new foreign key suggestions.budgetid)\n";
     SetVersion($DBversion);
 }
 
 $DBversion = "3.19.00.010";
 if ( CheckVersion($DBversion) ) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SessionRestrictionByIP','1','Check for Change in  Remote IP address for Session Security. Disable when remote ip address changes frequently.','','YesNo')");
-    print "Upgrade to $DBversion done (Bug 5511 - SessionRestrictionByIP)\n";
+    print "Upgrade to $DBversion done (Bug 5511: SessionRestrictionByIP)\n";
     SetVersion ($DBversion);
 }
 
@@ -9834,35 +9834,8 @@ if(CheckVersion($DBversion)) {
         ALTER TABLE deletedbiblioitems MODIFY COLUMN marcxml longtext
     });
 
-    print "Upgrade to $DBversion done (Bug 13523 - Remove NOT NULL restriction on field marcxml due to mysql STRICT_TRANS_TABLES)\n";
+    print "Upgrade to $DBversion done (Bug 13523 Remove NOT NULL restriction on field marcxml due to mysql STRICT_TRANS_TABLES)\n";
     SetVersion ($DBversion);
-}
-
-$DBversion = "3.19.00.XXX";
-if ( CheckVersion($DBversion) ) {
-    $dbh->do(q|
-        INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('useDischarge','','Allows librarians to discharge borrowers and borrowers to request a discharge','','YesNo')
-    |);
-    $dbh->do(q|
-        INSERT INTO `letter` (module, code, name, title, content) VALUES('members', 'DISCHARGE', 'Discharge', 'Discharge for <<borrowers.firstname>> <<borrowers.surname>>', '<h1>Discharge</h1>\r\n\r\nThe library <<borrowers.branchcode>> certifies that the following borrower :\r\n\r\n    <<borrowers.firstname>> <<borrowers.surname>>\r\n   Cardnumber : <<borrowers.cardnumber>>\r\n\r\nreturned all his documents.')
-    |);
-
-    $dbh->do(q|
-        ALTER TABLE borrower_debarments CHANGE type type ENUM('SUSPENSION','OVERDUES','MANUAL','DISCHARGE') NOT NULL DEFAULT 'MANUAL'
-    |);
-
-    $dbh->do(q|
-        CREATE TABLE discharges (
-          borrower int(11) DEFAULT NULL,
-          needed timestamp NULL DEFAULT NULL,
-          validated timestamp NULL DEFAULT NULL,
-          KEY borrower_discharges_ibfk1 (borrower),
-          CONSTRAINT borrower_discharges_ibfk1 FOREIGN KEY (borrower) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
-        )
-    |);
-
-    print "Upgrade to $DBversion done (Bug 8007 - Add System Preferences useDischarge, the discharge notice and the new table discharges)\n";
-    SetVersion($DBversion);
 }
 
 $DBversion = "3.19.00.013";
@@ -9900,7 +9873,7 @@ if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
         ALTER TABLE search_history ADD COLUMN id INT(11) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY(id);
     |);
-    print "Upgrade to $DBversion done (Bug 11430 - Add primary key for search_history)\n";
+    print "Upgrade to $DBversion done (Bug 11430: Add primary key for search_history)\n";
     SetVersion($DBversion);
 }
 
@@ -9977,7 +9950,7 @@ if ( CheckVersion($DBversion) ) {
     # Remove from the systempreferences table
     $dbh->do("DELETE FROM systempreferences WHERE variable = 'OPACItemHolds'");
 
-    print "Upgrade to $DBversion done (Bug 5786 - Move AllowOnShelfHolds to circulation matrix; Move OPACItemHolds system preference to circulation matrix)\n";
+    print "Upgrade to $DBversion done (Bug 5786: Move AllowOnShelfHolds to circulation matrix; Move OPACItemHolds system preference to circulation matrix)\n";
     SetVersion ($DBversion);
 }
 
@@ -10061,7 +10034,7 @@ if ( CheckVersion($DBversion) ) {
         INSERT INTO systempreferences ( variable, value, options, explanation, type ) VALUES
         ('SearchWithISBNVariations','0',NULL,'If enabled, search on all variations of the ISBN','YesNo')
     |);
-    print "Upgrade to $DBversion done (Bug 13528 - Add the SearchWithISBNVariations syspref)\n";
+    print "Upgrade to $DBversion done (Bug 13528: Add the SearchWithISBNVariations syspref)\n";
     SetVersion ($DBversion);
 }
 
@@ -10168,7 +10141,7 @@ if( CheckVersion($DBversion) ) {
     });
     }
 
-    print "Upgrade to $DBversion done (Bug 13322 - Update MARC21 frameworks to Update No. 19 - October 2014)\n";
+    print "Upgrade to $DBversion done (Bug 13322: Update MARC21 frameworks to Update No. 19 - October 2014)\n";
     SetVersion($DBversion);
 }
 
@@ -10206,7 +10179,7 @@ if( CheckVersion($DBversion) ) {
         });
     }
 
-    print "Upgrade to $DBversion done (Bug 13790 - Add unique id issue_id to issues and oldissues tables)\n";
+    print "Upgrade to $DBversion done (Bug 13790: Add unique id issue_id to issues and oldissues tables)\n";
     SetVersion($DBversion);
 }
 
@@ -10326,6 +10299,33 @@ if ( CheckVersion($DBversion) ) {
     |);
     print "Upgrade to $DBversion done (Bug 13984: CardnumberLength syspref missing on some setups\n";
     SetVersion ($DBversion);
+}
+
+$DBversion = "3.19.00.035";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('useDischarge','','Allows librarians to discharge borrowers and borrowers to request a discharge','','YesNo')
+    |);
+    $dbh->do(q|
+        INSERT IGNORE INTO letter (module, code, name, title, content) VALUES('members', 'DISCHARGE', 'Discharge', 'Discharge for <<borrowers.firstname>> <<borrowers.surname>>', '<h1>Discharge</h1>\r\n\r\nThe library <<borrowers.branchcode>> certifies that the following borrower :\r\n\r\n    <<borrowers.firstname>> <<borrowers.surname>>\r\n   Cardnumber : <<borrowers.cardnumber>>\r\n\r\nreturned all his documents.')
+    |);
+
+    $dbh->do(q|
+        ALTER TABLE borrower_debarments CHANGE type type ENUM('SUSPENSION','OVERDUES','MANUAL','DISCHARGE') NOT NULL DEFAULT 'MANUAL'
+    |);
+
+    $dbh->do(q|
+        CREATE TABLE discharges (
+          borrower int(11) DEFAULT NULL,
+          needed timestamp NULL DEFAULT NULL,
+          validated timestamp NULL DEFAULT NULL,
+          KEY borrower_discharges_ibfk1 (borrower),
+          CONSTRAINT borrower_discharges_ibfk1 FOREIGN KEY (borrower) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
+        )
+    |);
+
+    print "Upgrade to $DBversion done (Bug 8007: Add System Preferences useDischarge, the discharge notice and the new table discharges)\n";
+    SetVersion($DBversion);
 }
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
