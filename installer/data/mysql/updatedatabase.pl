@@ -10155,6 +10155,13 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.19.00.028";
 if( CheckVersion($DBversion) ) {
+    eval {
+        local $dbh->{PrintError} = 0;
+        $dbh->do(q{
+            ALTER TABLE issues DROP PRIMARY KEY
+        });
+    };
+
     $dbh->do(q{
         ALTER TABLE old_issues ADD issue_id INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST
     });
