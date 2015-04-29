@@ -820,7 +820,7 @@ $chars{0x97}=0x003c;#3/2leftlowsinglequotationmark
 $chars{0x98}=0x003e;#3/2leftlowsinglequotationmark
 $chars{0xfa}=0x0153; #oe
 $chars{0xea}=0x0152; #oe
-$chars{0x81d1}=0x00b0;
+#$chars{0x81d1}=0x00b0; # FIXME useless
 
 ####
 ## combined characters iso5426
@@ -1122,8 +1122,8 @@ $chars{0xd375}=0x0173; # small u with ogonek
 $chars{0xd441}=0x1e00; # capital a with ring below
 $chars{0xd461}=0x1e01; # small a with ring below
         # 5/5 half circle below
-$chars{0xf948}=0x1e2a; # capital h with breve below
-$chars{0xf968}=0x1e2b; # small h with breve below
+$chars{0xd548}=0x1e2a; # capital h with breve below
+$chars{0xd568}=0x1e2b; # small h with breve below
         # 5/6 dot below
 $chars{0xd641}=0x1ea0; # capital a with dot below
 $chars{0xd642}=0x1e04; # capital b with dot below
