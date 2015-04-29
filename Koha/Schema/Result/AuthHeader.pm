@@ -43,11 +43,12 @@ __PACKAGE__->table("auth_header");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
-=head2 datemodified
+=head2 modification_time
 
-  data_type: 'date'
+  data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  is_nullable: 1
+  default_value: current_timestamp
+  is_nullable: 0
 
 =head2 origincode
 
@@ -89,8 +90,13 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
   "datecreated",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
-  "datemodified",
-  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  "modification_time",
+  {
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    default_value => \"current_timestamp",
+    is_nullable => 0,
+  },
   "origincode",
   { data_type => "varchar", is_nullable => 1, size => 20 },
   "authtrees",
@@ -116,8 +122,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("authid");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Z7KMl3JNWUJlOte5CD25Dw
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-04-29 15:07:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:H93XLwvtYfEGFBes5PJCyA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
