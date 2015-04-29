@@ -109,6 +109,7 @@ sub SearchAuthorities {
     my ($tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby,$skipmetadata) = @_;
     # warn Dumper($tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby);
     my $dbh=C4::Context->dbh;
+    $sortby="" unless $sortby;
     my $query;
     my $qpquery = '';
     my $QParser;
