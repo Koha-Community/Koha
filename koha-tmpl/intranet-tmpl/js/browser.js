@@ -61,6 +61,9 @@ KOHA.browser = function (searchid, biblionumber) {
         $.cookie(me.searchid, JSON.stringify(me.searchCookie), { path: '/' });
         $(document).ready(function () {
             //FIXME It's not a good idea to modify the click events
+            $('#searchresults table tr a[href*="detail.pl"]').on('click', function (ev) {
+                ev.preventDefault();
+            });
             $('#searchresults table tr a[href*="detail.pl"]').on('mousedown', function (ev) {
                 if ( ev.which == 2 || ev.which == 1 && ev.ctrlKey ) {
                     // Middle click or ctrl + click
