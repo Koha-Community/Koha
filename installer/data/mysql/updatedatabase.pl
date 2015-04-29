@@ -9980,14 +9980,6 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 9580: Cover image from Coce, a remote image URL cache)\n";
     SetVersion($DBversion);
 }
-$DBversion = "XXX";
-if ( CheckVersion($DBversion) ) {
-    $dbh->do(q|
-        INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AddressFormat','us','Choose format to display postal addresses',NULL,'Choice')
-    |);
-    print "Upgrade to $DBversion done (Bug 4041: Address Format as a I18N/L10N system preference\n";
-    SetVersion ($DBversion);
-}
 
 $DBversion = "3.19.00.020";
 if ( CheckVersion($DBversion) ) {
@@ -10273,6 +10265,16 @@ if ( CheckVersion($DBversion) ) {
     });
     print "Upgrade to $DBversion done (Bug 8992: Add system preference IdRef))\n";
     SetVersion($DBversion);
+}
+
+$DBversion = "3.19.00.032";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
+        VALUES('AddressFormat','us','Choose format to display postal addresses','','Choice')
+    |);
+    print "Upgrade to $DBversion done (Bug 4041: Address Format as a I18N/L10N system preference\n";
+    SetVersion ($DBversion);
 }
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
