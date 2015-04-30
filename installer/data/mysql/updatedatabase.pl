@@ -10321,7 +10321,7 @@ if ( CheckVersion($DBversion) ) {
           validated timestamp NULL DEFAULT NULL,
           KEY borrower_discharges_ibfk1 (borrower),
           CONSTRAINT borrower_discharges_ibfk1 FOREIGN KEY (borrower) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
-        )
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
     |);
 
     print "Upgrade to $DBversion done (Bug 8007: Add System Preferences useDischarge, the discharge notice and the new table discharges)\n";
