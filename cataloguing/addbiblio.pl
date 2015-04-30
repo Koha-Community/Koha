@@ -184,26 +184,19 @@ sub build_authorized_values_list {
             $authorised_lib{$thisbranch} = $branches->{$thisbranch}->{'branchname'};
         }
 
-        #----- itemtypes
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
-        my $sth =
-          $dbh->prepare(
-            "select itemtype,description from itemtypes order by description");
-        $sth->execute;
         push @authorised_values, ""
           unless ( $tagslib->{$tag}->{$subfield}->{mandatory}
             && ( $value || $tagslib->{$tag}->{$subfield}->{defaultvalue} ) );
-          
+
         my $itemtype;
-        
-        while ( my ( $itemtype, $description ) = $sth->fetchrow_array ) {
-            push @authorised_values, $itemtype;
-            $authorised_lib{$itemtype} = $description;
+        my $itemtypes = GetItemTypes( style => 'array' );
+        for my $itemtype ( @$itemtypes ) {
+            push @authorised_values, $itemtype->{itemtype};
+            $authorised_lib{$itemtype->{itemtype}} = $itemtype->{translated_description};
         }
         $value = $itemtype unless ($value);
-
-          #---- class_sources
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "cn_source" ) {
         push @authorised_values, ""

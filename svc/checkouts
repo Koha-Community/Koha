@@ -83,9 +83,7 @@ my $sql = '
         branchname,
 
         items.itype,
-        itemtype_item.description AS itype_description,
         biblioitems.itemtype,
-        itemtype_bib.description AS itemtype_description,
 
         borrowernumber,
         surname,
@@ -103,8 +101,6 @@ my $sql = '
         LEFT JOIN biblioitems USING ( biblionumber )
         LEFT JOIN borrowers USING ( borrowernumber )
         LEFT JOIN branches ON ( issues.branchcode = branches.branchcode )
-        LEFT JOIN itemtypes itemtype_bib ON ( biblioitems.itemtype = itemtype_bib.itemtype )
-        LEFT JOIN itemtypes itemtype_item ON ( items.itype = itemtype_item.itemtype )
     WHERE borrowernumber
 ';
 
@@ -145,13 +141,14 @@ while ( my $c = $sth->fetchrow_hashref() ) {
     my ( $renewals_count, $renewals_allowed, $renewals_remaining ) =
       GetRenewCount( $c->{borrowernumber}, $c->{itemnumber} );
 
+    my $itemtype = C4::Koha::getitemtypeinfo( $item_level_itypes ? $c->{itype} : $c->{itemtype} );
     my $checkout = {
         DT_RowId   => $c->{itemnumber} . '-' . $c->{borrowernumber},
         title      => $c->{title},
         author     => $c->{author},
         barcode    => $c->{barcode},
         itemtype   => $item_level_itypes ? $c->{itype} : $c->{itemtype},
-        itemtype_description => $item_level_itypes ? $c->{itype_description} : $c->{itemtype_description},
+        itemtype_description => $itemtype->{translated_description},
         location   => $c->{location} ? GetAuthorisedValueByCode( 'LOC', $c->{location} ) : q{},
         itemnotes  => $c->{itemnotes},
         branchcode => $c->{branchcode},

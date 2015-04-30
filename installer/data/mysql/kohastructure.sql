@@ -3563,6 +3563,20 @@ CREATE TABLE `additional_field_values` (
   CONSTRAINT `afv_fk` FOREIGN KEY (`field_id`) REFERENCES `additional_fields` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Table structure for table 'localization'
+--
+
+DROP TABLE IF EXISTS localization;
+CREATE TABLE `localization` (
+      localization_id int(11) NOT NULL AUTO_INCREMENT,
+      entity varchar(16) COLLATE utf8_unicode_ci NOT NULL,
+      code varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+      lang varchar(25) COLLATE utf8_unicode_ci NOT NULL, --could be a foreign key
+      translation text COLLATE utf8_unicode_ci,
+      PRIMARY KEY (localization_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

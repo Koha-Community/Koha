@@ -1,0 +1,92 @@
+#!/usr/bin/perl
+
+use Modern::Perl;
+
+use C4::Service;
+use Koha::Localizations;
+
+our ( $query, $response ) = C4::Service->init( parameters => 'parameters_remaining_permissions' );
+
+sub get_translations {
+    my $rs = Koha::Localizations->search({ type => $query->param('type'), code => $query->param('code') });
+    my @translations;
+    while ( my $s = $rs->next ) {
+        push @translations, {
+            id => $s->localization_id,
+            type => $s->type,
+            code => $s->code,
+            lang => $s->lang,
+            translation => $s->translation,
+        }
+    }
+    $response->param( translations => \@translations );
+    C4::Service->return_success( $response );
+}
+
+sub update_translation {
+    my $id = $query->param('id');
+    my $translation = $query->param('translation');
+    my $lang = $query->param('lang');
+    my $localization = Koha::Localizations->find( $id );
+
+    if ( defined $lang and $localization->lang ne $lang ) {
+        $localization->lang( $lang )
+    }
+    if ( defined $translation and $localization->translation ne $translation ) {
+        $localization->translation( $translation )
+    }
+    my $is_changed;
+    if ( $localization->is_changed ) {
+        $is_changed = 1;
+        $localization->store;
+    }
+    $response->param(
+        id          => $localization->localization_id,
+        entity      => $localization->entity,
+        code        => $localization->code,
+        lang        => $localization->lang,
+        translation => $localization->translation,
+        is_changed  => $is_changed,
+    );
+    C4::Service->return_success( $response );
+}
+
+sub add_translation {
+    my $entity = $query->param('entity');
+    my $code = $query->param('code');
+    my $lang = $query->param('lang');
+    my $translation = $query->param('translation');
+    my $localization = Koha::Localization->new(
+        {
+            entity => $entity,
+            code => $code,
+            lang => $lang,
+            translation => $translation,
+        }
+    );
+    $localization->store;
+    $localization->localization_id;
+    $response->param(
+        id          => $localization->localization_id,
+        entity      => $localization->entity,
+        code        => $localization->code,
+        lang        => $localization->lang,
+        translation => $localization->translation,
+    );
+
+    C4::Service->return_success( $response );
+}
+
+sub delete_translation {
+    my $id = $query->param('id');
+    Koha::Localizations->find($id)->delete;
+    $response->param( id => $id );
+    C4::Service->return_success( $response );
+}
+
+C4::Service->dispatch(
+    [ 'GET /', [ 'id' ], \&get_translations ],
+    [ 'PUT /', [ 'id' ], \&update_translation ],
+    [ 'POST /', [ 'entity', 'code', 'lang', 'translation' ], \&add_translation ],
+    [ 'DELETE /', ['id'],  \&delete_translation ],
+);

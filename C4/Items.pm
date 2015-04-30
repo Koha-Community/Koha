@@ -3027,13 +3027,12 @@ sub PrepareItemrecordDisplay {
 
                         #----- itemtypes
                     } elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
-                        my $sth = $dbh->prepare( "SELECT itemtype,description FROM itemtypes ORDER BY description" );
-                        $sth->execute;
+                        my $itemtypes = GetItemTypes( style => 'array' );
                         push @authorised_values, ""
                           unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
-                        while ( my ( $itemtype, $description ) = $sth->fetchrow_array ) {
-                            push @authorised_values, $itemtype;
-                            $authorised_lib{$itemtype} = $description;
+                        for my $itemtype ( @$itemtypes ) {
+                            push @authorised_values, $itemtype->{itemtype};
+                            $authorised_lib{$itemtype->{itemtype}} = $itemtype->{translated_description};
                         }
                         #---- class_sources
                     } elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "cn_source" ) {

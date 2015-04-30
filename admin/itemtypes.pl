@@ -52,18 +52,7 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 
-sub StringSearch {
-    my ( $searchstring, $type ) = @_;
-    my $dbh = C4::Context->dbh;
-    $searchstring =~ s/\'/\\\'/g;
-    my @data = split( ' ', $searchstring );
-    my $sth = $dbh->prepare(
-        "SELECT * FROM itemtypes WHERE (description LIKE ?) ORDER BY itemtype"
-	);
-    $sth->execute("$data[0]%");
-    return $sth->fetchall_arrayref({});		# return ref-to-array of ref-to-hashes
-								# like [ fetchrow_hashref(), fetchrow_hashref() ... ]
-}
+use Koha::Localizations;
 
 my $input       = new CGI;
 my $searchfield = $input->param('description');
@@ -99,8 +88,26 @@ if ( $op eq 'add_form' ) {
     #---- if primkey exists, it's a modify action, so read values to modify...
     my $data;
     if ($itemtype) {
-        my $sth = $dbh->prepare("select * from itemtypes where itemtype=?");
-        $sth->execute($itemtype);
+        my $sth = $dbh->prepare(q|
+            SELECT
+                   itemtypes.itemtype,
+                   itemtypes.description,
+                   itemtypes.rentalcharge,
+                   itemtypes.notforloan,
+                   itemtypes.imageurl,
+                   itemtypes.summary,
+                   itemtypes.checkinmsg,
+                   itemtypes.checkinmsgtype,
+                   itemtypes.sip_media_type,
+                   COALESCE( localization.translation, itemtypes.description ) AS translated_description
+            FROM   itemtypes
+            LEFT JOIN localization ON itemtypes.itemtype = localization.code
+                AND localization.entity='itemtypes'
+                AND localization.lang = ?
+            WHERE itemtype = ?
+        |);
+        my $language = C4::Languages::getlanguage();
+        $sth->execute($language, $itemtype);
         $data = $sth->fetchrow_hashref;
     }
 
@@ -259,11 +266,24 @@ elsif ( $op eq 'delete_confirmed' ) {
 }
 
 if ( $op eq 'list' ) {
-    my ($results) = StringSearch( $searchfield, 'web' );
+    my $results = C4::Koha::GetItemTypes( style => 'array' );
     my @loop;
     foreach my $itemtype ( @{$results} ) {
         $itemtype->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtype->{imageurl} );
         $itemtype->{rentalcharge} = sprintf( '%.2f', $itemtype->{rentalcharge} );
+
+        my @translated_descriptions = Koha::Localizations->search(
+            {   entity => 'itemtypes',
+                code   => $itemtype->{itemtype},
+            }
+        );
+        $itemtype->{translated_descriptions} = [ map {
+            {
+                lang => $_->lang,
+                translation => $_->translation,
+            }
+        } @translated_descriptions ];
+
         push( @loop, $itemtype );
     }
 

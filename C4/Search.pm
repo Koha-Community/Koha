@@ -1873,15 +1873,9 @@ sub searchResults {
     #Build itemtype hash
     #find itemtype & itemtype image
     my %itemtypes;
-    $bsth =
-      $dbh->prepare(
-        "SELECT itemtype,description,imageurl,summary,notforloan FROM itemtypes"
-      );
-    $bsth->execute();
-    while ( my $bdata = $bsth->fetchrow_hashref ) {
-		foreach (qw(description imageurl summary notforloan)) {
-        	$itemtypes{ $bdata->{'itemtype'} }->{$_} = $bdata->{$_};
-		}
+    my $itemtypes = GetItemTypes( style => 'array' );
+    for my $itemtype ( @$itemtypes ) {
+        $itemtypes{ $itemtype->{itemtype} } = $itemtype;
     }
 
     #search item field code

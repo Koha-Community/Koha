@@ -355,14 +355,13 @@ foreach my $tag (sort keys %{$tagslib}) {
 	    }
         $value = "";
 	}
-	elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
-	    push @authorised_values, "";
-	    my $sth = $dbh->prepare("select itemtype,description from itemtypes order by description");
-	    $sth->execute;
-	    while ( my ( $itemtype, $description ) = $sth->fetchrow_array ) {
-		push @authorised_values, $itemtype;
-		$authorised_lib{$itemtype} = $description;
-	    }
+    elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
+        push @authorised_values, "";
+        my $itemtypes = GetItemTypes( style => 'array' );
+        for my $itemtype ( @$itemtypes ) {
+            push @authorised_values, $itemtype->{itemtype};
+            $authorised_lib{$itemtype->{itemtype}} = $itemtype->{translated_description};
+        }
         $value = "";
 
           #---- class_sources

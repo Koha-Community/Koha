@@ -254,15 +254,30 @@ sub GetItemTypes {
     my ( %params ) = @_;
     my $style = defined( $params{'style'} ) ? $params{'style'} : 'hash';
 
+    my $language = C4::Languages::getlanguage();
     # returns a reference to a hash of references to itemtypes...
     my %itemtypes;
     my $dbh   = C4::Context->dbh;
-    my $query = qq|
-        SELECT *
+    my $query = q|
+        SELECT
+               itemtypes.itemtype,
+               itemtypes.description,
+               itemtypes.rentalcharge,
+               itemtypes.notforloan,
+               itemtypes.imageurl,
+               itemtypes.summary,
+               itemtypes.checkinmsg,
+               itemtypes.checkinmsgtype,
+               itemtypes.sip_media_type,
+               COALESCE( localization.translation, itemtypes.description ) AS translated_description
         FROM   itemtypes
+        LEFT JOIN localization ON itemtypes.itemtype = localization.code
+            AND localization.entity = 'itemtypes'
+            AND localization.lang = ?
+        ORDER BY itemtype
     |;
     my $sth = $dbh->prepare($query);
-    $sth->execute;
+    $sth->execute( $language );
 
     if ( $style eq 'hash' ) {
         while ( my $IT = $sth->fetchrow_hashref ) {
@@ -540,14 +555,30 @@ Defaults to intranet.
 
 sub getitemtypeinfo {
     my ($itemtype, $interface) = @_;
-    my $dbh        = C4::Context->dbh;
-    my $sth        = $dbh->prepare("select * from itemtypes where itemtype=?");
-    $sth->execute($itemtype);
-    my $res = $sth->fetchrow_hashref;
+    my $dbh      = C4::Context->dbh;
+    my $language = C4::Languages::getlanguage();
+    my $it = $dbh->selectrow_hashref(q|
+        SELECT
+               itemtypes.itemtype,
+               itemtypes.description,
+               itemtypes.rentalcharge,
+               itemtypes.notforloan,
+               itemtypes.imageurl,
+               itemtypes.summary,
+               itemtypes.checkinmsg,
+               itemtypes.checkinmsgtype,
+               itemtypes.sip_media_type,
+               COALESCE( localization.translation, itemtypes.description ) AS translated_description
+        FROM   itemtypes
+        LEFT JOIN localization ON itemtypes.itemtype = localization.code
+            AND localization.entity = 'itemtypes'
+            AND localization.lang = ?
+        WHERE itemtypes.itemtype = ?
+    |, undef, $language, $itemtype );
 
-    $res->{imageurl} = getitemtypeimagelocation( ( ( defined $interface && $interface eq 'opac' ) ? 'opac' : 'intranet' ), $res->{imageurl} );
+    $it->{imageurl} = getitemtypeimagelocation( ( ( defined $interface && $interface eq 'opac' ) ? 'opac' : 'intranet' ), $it->{imageurl} );
 
-    return $res;
+    return $it;
 }
 
 =head2 getitemtypeimagedir

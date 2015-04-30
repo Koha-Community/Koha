@@ -177,13 +177,12 @@ sub generate_subfield_form {
             }
             elsif ( $subfieldlib->{authorised_value} eq "itemtypes" ) {
                   push @authorised_values, "" unless ( $subfieldlib->{mandatory} );
-                  my $sth = $dbh->prepare("SELECT itemtype,description FROM itemtypes ORDER BY description");
-                  $sth->execute;
-                  while ( my ( $itemtype, $description ) = $sth->fetchrow_array ) {
-                      push @authorised_values, $itemtype;
-                      $authorised_lib{$itemtype} = $description;
+                  my $itemtypes = GetItemTypes( style => 'array' );
+                  for my $itemtype ( @$itemtypes ) {
+                      push @authorised_values, $itemtype->{itemtype};
+                      $authorised_lib{$itemtype->{itemtype}} = $itemtype->{translated_description};
                   }
-        
+
                   unless ( $value ) {
                       my $itype_sth = $dbh->prepare("SELECT itemtype FROM biblioitems WHERE biblionumber = ?");
                       $itype_sth->execute( $biblionumber );
