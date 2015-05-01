@@ -4,11 +4,32 @@ use strict;
 use warnings;
 
 use Test::More tests => 327;
+use Test::Warn;
 
 BEGIN {
     use FindBin;
     use lib $FindBin::Bin;
     use_ok( 'C4::Dates', qw(format_date format_date_in_iso) );
+}
+
+sub isBadDate {
+    my ($tdate,$tformat) = @_;
+    my $retval = 0;
+    if (index('iso,us,metric',$tformat)>=0) {
+        if ($tdate =~ /^00*-/ || $tdate =~ /-00*-/ ||
+            $tdate =~ /-00*$/ || $tdate =~ /-00* /) {
+
+            $retval = 1;
+        }
+    }
+    elsif ($tformat eq 'sql') {
+        if ($tdate =~ /^0000/ || $tdate =~ /^....00/ ||
+            $tdate =~ /^......00/) {
+
+            $retval = 1;
+        }
+    }
+    return $retval;
 }
 
 sub describe ($$) {
@@ -41,31 +62,40 @@ if ($fake_syspref) {
 $fake_syspref or $fake_syspref = $fake_syspref_default;
 $C4::Dates::prefformat = $fake_syspref;    # So Dates doesn't have to ask the DB anything.
 
-diag <<EndOfDiag;
+print <<EndOfDiag;
 
-In order to run without DB access, this test will substitute '$fake_syspref'
-as your default date format.  Export environmental variable KOHA_TEST_DATE_FORMAT
-to override this default, or pass the value as an argument to this test script.
+In order to run without DB access, this test will substitute
+'$fake_syspref' as your default date format.  Export
+environmental variable KOHA_TEST_DATE_FORMAT to override this
+default, or pass the value as an argument to this test script.
 
-NOTE: we test for the system handling dd=00 and 00 for TIME values, therefore
-you SHOULD see some warnings like:
-Illegal date specified (year = 1952, month = 1, day = 00) at t/Dates.t ...
-
-Testing Legacy Functions: format_date and format_date_in_iso
+NOTE: we test for the system handling dd=00 and 00 for TIME
+      values, but you should not see any warnings.
 
 EndOfDiag
 
+# Testing Legacy Functions: format_date and format_date_in_iso
 ok( $syspref = C4::Dates->new->format(), "Your system preference is: $syspref" );
-print "\n";
 foreach ( @{ $thash{'iso'} } ) {
-    ok( $val = format_date($_), "format_date('$_'): $val" );
+    if (isBadDate($_,'iso')==1) {
+        warning_like { $val = format_date($_); } qr/Illegal date/,
+            "format_date('$_'): Warning as expected";
+    }
+    else {
+        ok( $val = format_date($_), "format_date('$_'): $val" );
+    }
 }
 foreach ( @{ $thash{$syspref} } ) {
-    ok( $val = format_date_in_iso($_), "format_date_in_iso('$_'): $val" );
+    if (isBadDate($_,$syspref)==1) {
+        warning_like { $val = format_date_in_iso($_); } qr/Illegal date/,
+            "format_date_in_iso('$_'): Warning as expected";
+    }
+    else {
+        ok( $val = format_date_in_iso($_), "format_date_in_iso('$_'): $val" );
+    }
 }
 ok( $today0 = C4::Dates->today(), "(default) CLASS ->today : $today0" );
-diag "\nTesting " . scalar(@formats) . " formats.\nTesting no input (defaults):\n";
-print "\n";
+#diag "Testing " . scalar(@formats) . " formats.\nTesting no input (defaults):";
 foreach (@formats) {
     my $pre = sprintf '(%-6s)', $_;
     ok( $date = C4::Dates->new(), "$pre Date Creation   : new()" );
@@ -73,14 +103,20 @@ foreach (@formats) {
     ok( $format = $date->visual(), "$pre visual()        : " . ( $format || 'FAILED' ) );
     ok( $today  = $date->output(), "$pre output()        : " . ( $today  || 'FAILED' ) );
     ok( $today  = $date->today(),  "$pre object->today   : " . ( $today  || 'FAILED' ) );
-    print "\n";
 }
 
-diag "\nTesting with valid inputs:\n";
+#diag "Testing with valid inputs:";
 foreach $format (@formats) {
     my $pre = sprintf '(%-6s)', $format;
     foreach my $testval ( @{ $thash{$format} } ) {
-        ok( $date = C4::Dates->new( $testval, $format ), "$pre Date Creation   : new('$testval','$format')" );
+        if (isBadDate($testval,$format)==1) {
+            warning_like { $date = C4::Dates->new( $testval, $format ) }
+                qr/Illegal date/,
+                "$pre Date Creation   : new('$testval','$format') -- Warning as expected.";
+        }
+        else {
+            ok( $date = C4::Dates->new( $testval, $format ), "$pre Date Creation   : new('$testval','$format')" );
+        }
         ok( $re = $date->regexp, "$pre has regexp()" );
         ok( $testval =~ /^$re$/, "$pre has regexp() match $testval" );
         ok( $val = $date->output(), describe( "$pre output()", $val ) );
@@ -98,11 +134,10 @@ foreach $format (@formats) {
         ok( $val = $date->output(), describe( "$pre output()", $val ) );
 
         # ok($format eq ($format = $date->format()),  "$pre format()        : $format" );
-        print "\n";
     }
 }
 
-diag "\nTesting object independence from class\n";
+#diag "Testing object independence from class";
 my $in1  = '12/25/1952';                       # us
 my $in2  = '13/01/2001';                       # metric
 my $d1   = C4::Dates->new( $in1, 'us' );
@@ -110,4 +145,3 @@ my $d2   = C4::Dates->new( $in2, 'metric' );
 my $out1 = $d1->output('iso');
 my $out2 = $d2->output('iso');
 ok( $out1 ne $out2, "subsequent constructors get different dataspace ($out1 != $out2)" );
-diag "done.\n";
