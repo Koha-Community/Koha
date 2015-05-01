@@ -17,6 +17,7 @@
 
 use Modern::Perl;
 
+$| = 1;
 use Module::Load::Conditional qw/check_install/;
 use Test::More;
 use Test::MockModule;
@@ -216,7 +217,9 @@ subtest "checkpw_shib tests" => sub {
     warnings_exist {
         ( $retval, $retcard, $retuserid ) = checkpw_shib( $shib_login );
     }
-    [ qr/checkpw_shib/, qr/User Shibboleth-authenticated as:/ ],
+    [ qr/checkpw_shib/, qr/koha borrower field to match: userid/,
+      qr/shibboleth attribute to match: uid/,
+      qr/User Shibboleth-authenticated as:/ ],
       "good user with debug enabled";
     is( $retval,    "1",              "user authenticated" );
     is( $retcard,   "testcardnumber", "expected cardnumber returned" );
@@ -229,6 +232,8 @@ subtest "checkpw_shib tests" => sub {
     }
     [
         qr/checkpw_shib/,
+        qr/koha borrower field to match: userid/,
+        qr/shibboleth attribute to match: uid/,
         qr/User Shibboleth-authenticated as:/,
         qr/not a valid Koha user/
     ],
