@@ -115,7 +115,7 @@ sub _get_text_fields {
     my $csv = Text::CSV_XS->new({allow_whitespace => 1});
     my $status = $csv->parse($format_string);
     my @sorted_fields = map {{ 'code' => $_, desc => $_ }} 
-                        map { $_ eq 'callnumber' ? 'itemcallnumber' : $_ } # see bug 5653
+                        map { $_ && $_ eq 'callnumber' ? 'itemcallnumber' : $_ } # see bug 5653
                         $csv->fields();
     my $error = $csv->error_input();
     warn sprintf('Text field sort failed with this error: %s', $error) if $error;
@@ -129,10 +129,11 @@ sub _split_lccn {
     # lccn examples: 'HE8700.7 .P6T44 1983', 'BS2545.E8 H39 1996';
     my @parts = Library::CallNumber::LC->new($lccn)->components();
     unless (scalar @parts && defined $parts[0])  {
-        warn sprintf('regexp failed to match string: %s', $_);
+        $debug and warn sprintf('regexp failed to match string: %s', $_);
         @parts = $_;     # if no match, just use the whole string.
     }
-    push @parts, split /\s+/, pop @parts;   # split the last piece into an arbitrary number of pieces at spaces
+    my $LastPiece = pop @parts;
+    push @parts, split /\s+/, $LastPiece if $LastPiece;   # split the last piece into an arbitrary number of pieces at spaces
     $debug and warn "split_lccn array: ", join(" | ", @parts), "\n";
     return @parts;
 }
