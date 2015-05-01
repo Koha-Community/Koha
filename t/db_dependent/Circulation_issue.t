@@ -1,6 +1,22 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
+
 use Koha::DateUtils;
 use DateTime::Duration;
 use C4::Biblio;
@@ -193,16 +209,19 @@ my $sth = $dbh->prepare($query);
 $sth->execute;
 my $countissue = $sth -> fetchrow_array;
 is ($countissue ,0, "there is no issue");
-my $datedue1 = C4::Circulation::AddIssue( $borrower_1, 'barcode_1', $daysago10,0, $today, '' );
+my $issue1 = C4::Circulation::AddIssue( $borrower_1, 'barcode_1', $daysago10,0, $today, '' );
+is( ref $issue1, 'Koha::Schema::Result::Issue',
+       'AddIssue returns a Koha::Schema::Result::Issue object' );
+my $datedue1 = dt_from_string( $issue1->date_due() );
 like(
     $datedue1,
     qr/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/,
-    "AddRenewal returns a date"
+    "Koha::Schema::Result::Issue->date_due() returns a date"
 );
 my $issue_id1 = $dbh->last_insert_id( undef, undef, 'issues', undef );
 
-my $datedue2 = C4::Circulation::AddIssue( $borrower_1, 'nonexistent_barcode' );
-is( $datedue2, undef, "AddIssue returns undef if no datedue is specified" );
+my $issue2 = C4::Circulation::AddIssue( $borrower_1, 'nonexistent_barcode' );
+is( $issue2, undef, "AddIssue returns undef if no datedue is specified" );
 my $issue_id2 = $dbh->last_insert_id( undef, undef, 'issues', undef );
 
 $sth->execute;
@@ -252,8 +271,7 @@ my $openissue = GetOpenIssue($borrower_id1, $item_id1);
 
 my @renewcount;
 #Test GetRenewCount
-$datedue2 = C4::Circulation::AddIssue( $borrower_1, 'barcode_1' );
-isnt( $datedue2, undef, "AddIssue does not return undef if datedue is specified" );
+my $issue3 = C4::Circulation::AddIssue( $borrower_1, 'barcode_1' );
 #Without anything in DB
 @renewcount = C4::Circulation::GetRenewCount();
 is_deeply(
