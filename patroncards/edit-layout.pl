@@ -96,6 +96,8 @@ if ($op eq 'edit') {
             push @text_fields, (
                                 "field_" . $field_number . "_llx" => $field_params->{'llx'},
                                 "field_" . $field_number . "_lly" => $field_params->{'lly'},
+                                "field_" . $field_number . "_height_scale" => $field_params->{'height_scale'},
+                                "field_" . $field_number . "_width_scale" => $field_params->{'width_scale'},
                                 "field_" . $field_number . "_font" => _set_selected($field_params->{'font'}, $font_types),
                                 "field_" . $field_number . "_font_size" => $field_params->{'font_size'},
                                 "field_" . $field_number . "_text_alignment" => _set_selected($field_params->{'text_alignment'}, $alignment_types),

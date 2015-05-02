@@ -384,6 +384,14 @@
                                     <input type="text" name="barcode_lly" id="barcode_lly" size="2" value="[% barcode_lly |html %]" />
                                 </li>
                                 <li>
+                                    <label for="barcode_height_scale">Scale height (relative to card): </label>
+                                    <input type="text" name="barcode_height_scale" id="barcode_height_scale" size="2" value="[% barcode_height_scale |html %]" />
+                                </li>
+                                <li>
+                                    <label for="barcode_width_scale">Scale width (relative to card): </label>
+                                    <input type="text" name="barcode_width_scale" id="barcode_width_scale" size="2" value="[% barcode_width_scale |html %]" />
+                                </li>
+                                <li>
                                     <label for="barcode_type">Barcode type: </label>
                                     <select name="barcode_type" id="barcode_type">
                                         [% FOREACH barcode_typ IN barcode_type %]

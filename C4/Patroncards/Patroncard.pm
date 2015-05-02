@@ -45,6 +45,8 @@ sub new {
         width                   => $params{'width'},
         layout                  => $params{'layout'},
         text_wrap_cols          => $params{'text_wrap_cols'},
+        barcode_height_scale    => $params{'layout'}->{'barcode'}[0]->{'height_scale'} || 0.01,
+        barcode_width_scale     => $params{'layout'}->{'barcode'}[0]->{'width_scale'} || 0.8,
     };
     bless ($self, $type);
     return $self;
@@ -52,14 +54,15 @@ sub new {
 
 sub draw_barcode {
     my ($self, $pdf) = @_;
-#FIXME: We do some scaling foo on the barcode here which probably should be done by the one invoking draw_barcode
-    my $barcode_width = 0.8 * $self->{'width'};                         # this scales the barcode width to 80% of the label width
-    my $barcode_y_scale_factor = 0.01 * $self->{'height'};              # this scales the barcode height to 1% of the label height
+    # Default values for barcode scaling are set in constructor to work with pre-existing installations
+    my $barcode_height_scale = $self->{'barcode_height_scale'};
+    my $barcode_width_scale = $self->{'barcode_width_scale'};
+
     _draw_barcode(      $self,
                         llx     => $self->{'llx'} + $self->{'layout'}->{'barcode'}->[0]->{'llx'},
                         lly     => $self->{'lly'} + $self->{'layout'}->{'barcode'}->[0]->{'lly'},
-                        width   => $barcode_width,
-                        y_scale_factor  => $barcode_y_scale_factor,
+                        width   => $self->{'width'} * $barcode_width_scale,
+                        y_scale_factor  => $self->{'height'} * $barcode_height_scale,
                         barcode_type    => $self->{'layout'}->{'barcode'}->[0]->{'type'},
                         barcode_data    => $self->{'layout'}->{'barcode'}->[0]->{'data'},
                         text    => $self->{'layout'}->{'barcode'}->[0]->{'text_print'},
