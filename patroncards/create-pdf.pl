@@ -89,7 +89,7 @@ if (@label_ids) {
 }
 elsif (@borrower_numbers) {
     grep {
-        push(@{$items}, {item_number => $_});
+        push(@{$items}, {borrower_number => $_});
     } @borrower_numbers;
 }
 else {
