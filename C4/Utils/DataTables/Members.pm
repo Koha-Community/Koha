@@ -103,10 +103,10 @@ sub search {
 
     my $limit;
     # If iDisplayLength == -1, we want to display all patrons
-    if ( $dt_params->{iDisplayLength} > -1 ) {
+    if ( !$dt_params->{iDisplayLength} || $dt_params->{iDisplayLength} > -1 ) {
         # In order to avoid sql injection
-        $dt_params->{iDisplayStart} =~ s/\D//g;
-        $dt_params->{iDisplayLength} =~ s/\D//g;
+        $dt_params->{iDisplayStart} =~ s/\D//g if defined($dt_params->{iDisplayStart});
+        $dt_params->{iDisplayLength} =~ s/\D//g if defined($dt_params->{iDisplayLength});
         $dt_params->{iDisplayStart} //= 0;
         $dt_params->{iDisplayLength} //= 20;
         $limit = "LIMIT $dt_params->{iDisplayStart},$dt_params->{iDisplayLength}";
