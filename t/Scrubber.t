@@ -3,7 +3,10 @@
 use strict;
 use warnings;
 
-use Test::More tests => 19;
+$| = 1;
+use Test::More tests => 29;
+use Test::Warn;
+
 BEGIN {
 	use FindBin;
 	use lib $FindBin::Bin;
@@ -43,46 +46,39 @@ $html = q|
 At the end here, I actually have some regular text.
 |;
 
-print pretty_line("Original HTML:"), $html, "\n", pretty_line();
-$collapse and diag "Note: scrubber test output will have whitespace collapsed for readability\n";
 ok($scrubber = C4::Scrubber->new(), "Constructor: C4::Scrubber->new()");
 
 isa_ok($scrubber, 'HTML::Scrubber', 'Constructor returns HTML::Scrubber object');
 
-ok(printf("# scrubber settings: default %s, comment %s, process %s\n",
-	$scrubber->default(),$scrubber->comment(),$scrubber->process()),
-	"Outputting settings from scrubber object (type: [default])"
-);
+warning_like { $scrubber->default() } '', "\$scrubber->default ran without fault.";
+warning_like { $scrubber->comment() } '', "\$scrubber->comment ran without fault.";
+warning_like { $scrubber->process() } '', "\$scrubber->process ran without fault.";
+
 ok($result = $scrubber->scrub($html), "Getting scrubbed text (type: [default])");
-$collapse and $result =~ s/\s*\n\s*/\n/g;
-print pretty_line('default'), $result, "\n", pretty_line();
 
 foreach(@types) {
 	ok($scrubber = C4::Scrubber->new($_), "testing Constructor: C4::Scrubber->new($_)");
-	ok(printf("# scrubber settings: default %s, comment %s, process %s\n",
-		$scrubber->default(),$scrubber->comment(),$scrubber->process()),
-		"Outputting settings from scrubber object (type: $_)"
-	);
-	ok($result = $scrubber->scrub($html), "Getting scrubbed text (type: $_)");
-	$collapse and $result =~ s/\s*\n\s*/\n/g;
-	print pretty_line($_), $result, "\n", pretty_line();
-}
 
-print "\n\n######################################################\nStart of invalid tests\n";
+        warning_like { $scrubber->default() } '', "\$scrubber->default ran without fault.";
+        warning_like { $scrubber->comment() } '', "\$scrubber->comment ran without fault.";
+        warning_like { $scrubber->process() } '', "\$scrubber->process ran without fault.";
+
+	ok($result = $scrubber->scrub($html), "Getting scrubbed text (type: $_)");
+}
 
 #Test for invalid new entry
 eval{
 	C4::Scrubber->new("");
-	fail("test should fail on entry of ''\n");
+	fail("test should fail on entry of ''");
 };
-pass("Test should have failed on entry of '' (empty string) and it did. YAY!\n");
+if ($@) {
+    pass("Test should have failed on entry of '' (empty string) and it did. YAY!");
+}
 
 eval{
 	C4::Scrubber->new("Client");
-	fail("test should fail on entry of 'Client'\n");
+	fail("test should fail on entry of 'Client'");
 };
-pass("Test should have failed on entry of 'Client' and it did. YAY!\n");
-
-print "######################################################\n";
-
-diag "done.\n";
+if ($@) {
+    pass("Test should have failed on entry of 'Client' and it did. YAY!");
+}
