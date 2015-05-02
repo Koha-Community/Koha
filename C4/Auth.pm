@@ -252,7 +252,7 @@ sub get_template_and_user {
 
         if ($flags) {
             foreach my $module ( keys %$all_perms ) {
-                if ( $flags->{$module} == 1 ) {
+                if ( defined($flags->{$module}) && $flags->{$module} == 1 ) {
                     foreach my $subperm ( keys %{ $all_perms->{$module} } ) {
                         $template->param( "CAN_user_${module}_${subperm}" => 1 );
                     }

@@ -161,6 +161,7 @@ sub _get_template_file {
     my $is_intranet = $interface eq 'intranet';
     my $htdocs = C4::Context->config($is_intranet ? 'intrahtdocs' : 'opachtdocs');
     my ($theme, $lang, $availablethemes) = themelanguage($htdocs, $tmplbase, $interface, $query);
+    $lang //= 'en';
     my $filename = "$htdocs/$theme/$lang/modules/$tmplbase";
 
     return ($htdocs, $theme, $lang, $filename);
