@@ -43,6 +43,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $op = $cgi->param('op') || 'none';
 my @label_ids = $cgi->param('label_id') if $cgi->param('label_id');   # this will handle individual card printing; we use label_id to maintain consistency with the column names in the creator_batches table
 my @batch_ids = $cgi->param('batch_id') if $cgi->param('batch_id');
+my $patronlist_id = $cgi->param('patronlist_id') || undef;
 my $layout_id = $cgi->param('layout_id') || undef;
 my $template_id = $cgi->param('template_id') || undef;
 my $start_card = $cgi->param('start_card') || 1;
@@ -104,6 +105,15 @@ if ($op eq 'export') {
                         referer     => $referer,
                         );
     }
+    elsif ($patronlist_id ) {
+        $template->param(
+                         patronlist_id   => $patronlist_id,
+                         template_id     => $template_id,
+                         layout_id       => $layout_id,
+                         start_card      => $start_card,
+                         referer         => $referer,
+                        );
+    }
 }
 elsif ($op eq 'none') {
     # setup select menus for selecting layout and template for this run...
@@ -119,6 +129,7 @@ elsif ($op eq 'none') {
                     batch_ids                   => \@batch_ids,
                     label_ids                   => \@label_ids,
                     borrower_numbers            => \@borrower_numbers,
+                    patronlist_id               => $patronlist_id,
                     templates                   => $templates,
                     layouts                     => $layouts,
                     output_formats              => $output_formats,

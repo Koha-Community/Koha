@@ -32,6 +32,7 @@ use C4::Context;
 use autouse 'C4::Members' => qw(GetPatronImage GetMember);
 use C4::Creators;
 use C4::Patroncards;
+use Koha::List::Patron;
 
 my $cgi = new CGI;
 
@@ -51,6 +52,7 @@ my $layout_id   = $cgi->param('layout_id') || undef;
 my $start_card = $cgi->param('start_card') || 1;
 my @label_ids   = $cgi->param('label_id') if $cgi->param('label_id');
 my @borrower_numbers  = $cgi->param('borrower_number') if $cgi->param('borrower_number');
+my $patronlist_id = $cgi->param('patronlist_id');
 
 my $items = undef; # items = cards
 my $new_page = 0;
@@ -91,6 +93,14 @@ elsif (@borrower_numbers) {
     grep {
         push(@{$items}, {borrower_number => $_});
     } @borrower_numbers;
+}
+elsif ( $patronlist_id  ) {
+    my ($list) = GetPatronLists( { patron_list_id => $patronlist_id } );
+    my @borrowerlist = $list->patron_list_patrons()->search_related('borrowernumber')
+    ->get_column('borrowernumber')->all();
+    grep {
+        push(@{$items}, {borrower_number => $_});
+    } @borrowerlist;
 }
 else {
     $items = $batch->get_attr('items');

@@ -88,7 +88,17 @@
                 }
                 return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?" + getstr, 400, 800);
             };
-            function selected_layouts(op) {
+
+            function XportPatronlist() {
+                if ( patron_list_id.value.length < 1 ) {
+                    alert(_("Please select a patron list."));
+                    return;     // no patron list selected
+                }
+                getstr = 'patronlist_id='+patron_list_id.value;
+                return GB_showCenter(_("Export patron cards from list"), "/cgi-bin/koha/patroncards/print.pl?" + getstr, 700, 800);
+            };
+
+            function selected_layout(op) {
                 if (document.layouts.action.length) {
                     var selected = new Array();
                     for (i=0;i<document.layouts.action.length;i++){
@@ -141,6 +151,10 @@
             });
             $("#print").click(function(){
                 Xport();
+                return false;
+            });
+            $("#printlist").click(function(){
+                XportPatronlist();
                 return false;
             });
          });
@@ -204,7 +218,27 @@
                             <fieldset class="action">
                                 [% IF ( print ) %]<input class="btn btn-sm" type="button" id="print" value="Export selected batches" />[% END %]
                             </fieldset>
+                            [% IF patron_lists %]
+                            <fieldset class="rows">
+                                <legend>Or use a patron list</legend>
+                                <ol>
+                                    <li>
+                                        <label for="patron_list_id">Patron list: </label>
+                                        <select id="patron_list_id" name="patron_list_id">
+                                            <option value=""></option>
+                                            [% FOREACH pl IN patron_lists %]
+                                                <option value="[% pl.patron_list_id %]">[% pl.name %]</option>
+                                            [% END %]
+                                        </select>
+                                    </li>
+                                </ol>
+                            </fieldset>
+                            <fieldset class="action">
+                                <input type="button" id="printlist" value="Export from patron list" />
+                            </fieldset>
+                            [% END %]
                             </form>
+
                             [% ELSE %]
                         <div class="dialog message">
                             <h4>There are no [% PROCESS translate_card_element element=card_element_title %] currently available.</h4>
