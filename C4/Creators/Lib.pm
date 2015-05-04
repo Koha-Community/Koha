@@ -40,7 +40,6 @@ BEGIN {
                      get_font_types
                      get_text_justification_types
                      get_output_formats
-                     get_column_names
                      get_table_names
                      get_unit_values
                      html_table
