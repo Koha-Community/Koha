@@ -10373,21 +10373,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.19.00.XXX";
-if ( CheckVersion($DBversion) ) {
-    $dbh->do(q|
-        INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
-        (20, 'shelves', 'Virtual shelves', 0)
-    |);
-    $dbh->do(q|
-        INSERT INTO permissions (module_bit, code, description) VALUES
-        (20, 'manage_shelves', 'Manage shelves')
-    |);
-    print "Upgrade to $DBversion done (Bug XXXXX: Add permission for shelves)\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = "3.19.00.XXX";
+$DBversion = "3.19.00.038";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
         ALTER TABLE virtualshelves
@@ -10400,7 +10386,7 @@ if ( CheckVersion($DBversion) ) {
         UPDATE virtualshelves
         SET created_on = lastmodified, lastmodified = lastmodified
     |);
-    print "Upgrade to $DBversion done (Bug XXXXX: Add DB field virtualshelves.created_on)\n";
+    print "Upgrade to $DBversion done (Bug 13421: Add DB field virtualshelves.created_on)\n";
     SetVersion ($DBversion);
 }
 
