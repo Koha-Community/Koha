@@ -18,7 +18,6 @@ use Modern::Perl;
 use Test::More tests => 552;
 use t::lib::Mocks qw(mock_preference);
 use POSIX qw(strftime);
-use Data::Dumper;
 
 BEGIN {
     use_ok('C4::UsageStats');
@@ -42,6 +41,8 @@ can_ok(
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
+
+$dbh->do('DELETE FROM issues');
 $dbh->do('DELETE FROM biblio');
 $dbh->do('DELETE FROM items');
 $dbh->do('DELETE FROM auth_header');
