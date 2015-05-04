@@ -478,6 +478,7 @@ canned reports and writing custom SQL reports.</p>
 [% END %]
 
 [% IF ( build3 ) %]
+<h1>Build a report</h1>
 <h3>Step 3 of 6: Select columns for display</h3>
 <p>Note: Be careful selecting when selecting columns. If your choice is too broad it could result in a very large report that will either not complete, or slow your system down.</p>
 
@@ -530,6 +531,7 @@ canned reports and writing custom SQL reports.</p>
 [% END %]
 
 [% IF ( build4 ) %]
+<h1>Build a report</h1>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" >
     <input type="hidden" name="area" value="[% area %]" />
     <input type="hidden" name="type" value="[% type %]" />
@@ -600,6 +602,7 @@ canned reports and writing custom SQL reports.</p>
 
 
 [% IF ( build5 ) %]
+<h1>Build a report</h1>
 <h3>Step 5 of 6: Pick which columns to total</h3>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
 <input type="hidden" name="area" value="[% area %]" />
@@ -631,6 +634,7 @@ canned reports and writing custom SQL reports.</p>
 
 
 [% IF ( build6 ) %]
+<h1>Build a report</h1>
 <h3>Step 6 of 6: Choose how you want the report ordered</h3>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
 <input type="hidden" name="area" value="[% area %]" />
