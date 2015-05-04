@@ -556,7 +556,7 @@ sub html_table {
                 next POPULATE_ROW;
             }
             elsif ($table_column =~ m/^_((.*)_(.*$))/) {   # this a special case
-                my $table_name = get_table_names($2);
+                my $table_name = get_table_names('creator_'.$2); #Bug 14143 fix to remove ambiguity with table 'club_template_enrollment_fields'
                 my $record_set = _SELECT($1, @$table_name[0], $2 . "_id = " . $db_row->{$2 . "_id"});
                 $$fields[$col_index] = {hidden => 0, link_field => $link_field->{$table_column}, select_field => 0, field_name => ($table_column . "_tbl"), field_value => $$record_set[0]{$1}};
                 $col_index++;
