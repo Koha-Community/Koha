@@ -2203,6 +2203,9 @@ CREATE TABLE `suggestions` ( -- purchase suggestions
   PRIMARY KEY  (`suggestionid`),
   KEY `suggestedby` (`suggestedby`),
   KEY `managedby` (`managedby`),
+  KEY `status` (`STATUS`),
+  KEY `biblionumber` (`biblionumber`),
+  KEY `branchcode` (`branchcode`),
   CONSTRAINT `suggestions_budget_id_fk` FOREIGN KEY (`budgetid`) REFERENCES `aqbudgets` (`budget_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
