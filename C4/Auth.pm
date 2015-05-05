@@ -672,7 +672,7 @@ sub _version_check {
         my $warning = "Database update needed, redirecting to %s. Database is $version and Koha is $kohaversion";
         if ( $type ne 'opac' ) {
             warn sprintf( $warning, 'Installer' );
-            print $query->redirect("/cgi-bin/koha/installer/install.pl?step=3");
+            print $query->redirect("/cgi-bin/koha/installer/install.pl?step=1&op=updatestructure");
         } else {
             warn sprintf( "OPAC: " . $warning, 'maintenance' );
             print $query->redirect("/cgi-bin/koha/maintenance.pl");

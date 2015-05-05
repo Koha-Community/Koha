@@ -55,9 +55,10 @@ my $dbh = DBI->connect(
 );
 
 if ( $step && $step == 1 ) {
-    #First Step
+    #First Step (for both fresh installations and upgrades)
     #Checking ALL perl Modules and services needed are installed.
     #Whenever there is an error, adding a report to the page
+    my $op = $query->param('op') || 'noop';
     $template->param( language => 1 );
     $template->param( 'checkmodule' => 1 ); # we start with the assumption that there are no problems and set this to 0 if there are
 
@@ -86,7 +87,7 @@ if ( $step && $step == 1 ) {
             );
         }
         @components = sort {$a->{'name'} cmp $b->{'name'}} @components;
-        $template->param( missing_modules => \@components, checkmodule => $checkmodule );
+        $template->param( missing_modules => \@components, checkmodule => $checkmodule, op => $op );
     }
 }
 elsif ( $step && $step == 2 ) {
@@ -314,13 +315,13 @@ elsif ( $step && $step == 3 ) {
         #
         #Do updatedatabase And report
 
-    if ( ! defined $ENV{PERL5LIB} ) {
-        my $find = "C4/Context.pm";
-        my $path = $INC{$find};
-        $path =~ s/\Q$find\E//;
-        $ENV{PERL5LIB} = "$path:$path/installer";
-        warn "# plack? inserted PERL5LIB $ENV{PERL5LIB}\n";
-    }
+        if ( ! defined $ENV{PERL5LIB} ) {
+            my $find = "C4/Context.pm";
+            my $path = $INC{$find};
+            $path =~ s/\Q$find\E//;
+            $ENV{PERL5LIB} = "$path:$path/installer";
+            warn "# plack? inserted PERL5LIB $ENV{PERL5LIB}\n";
+        }
 
         my $now = POSIX::strftime( "%Y-%m-%dT%H:%M:%S", localtime() );
         my $logdir = C4::Context->config('logdir');

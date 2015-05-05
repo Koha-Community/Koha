@@ -30,7 +30,9 @@ listed, please inform your systems administrator.</p>
 </form>
 [% END %]
 [% IF ( language ) %]
-  [% UNLESS ( checkmodule ) %]
+  [% IF ( checkmodule ) %]
+  <p>All required Perl modules appear to be installed.<br />
+  [% ELSE %]
   [% IF ( missing_modules ) %]
   <p>Some Perl modules are missing. Modules in red <b>must</b> be installed before you may continue.<br />
   <ul>
@@ -57,11 +59,22 @@ listed, please inform your systems administrator.</p>
   [% END %]
 <form name="checkmodules" action="install.pl">
 [% IF ( checkmodule ) %]
+[% IF (op == 'noop') %]
 <input type="hidden" name="step" value="2" />
+[% ELSE %]
+<input type="hidden" name="step" value="3" />
+<input type="hidden" name="op" value="[% op %]" />
+<input type="hidden" name="checkmodule" value="[% checkmodule %]"/>
+[% END %]
 <p> All dependencies installed.</p>
 <p>Please click 'Next' to continue <input value="Next &gt;&gt;" type="submit" /></p>
 [% ELSE %]
+[% IF (op == 'noop') %]
 <input type="hidden" name="step" value="1" />
+[% ELSE %]
+<input type="hidden" name="step" value="1" />
+<input type="hidden" name="op" value="[% op %]" />
+[% END %]
 <p>Click to recheck dependencies <input value="Recheck" type="submit" /></p>
 [% END %]
 </form>
