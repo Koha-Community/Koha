@@ -53,6 +53,7 @@ can_ok(
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
+$dbh->do('DELETE FROM issues');
 $dbh->do('DELETE FROM creator_templates');
 $dbh->do('DELETE FROM creator_layouts');
 $dbh->do('DELETE FROM creator_images');
