@@ -203,8 +203,12 @@ if ($completedJobID) {
     my @templates = GetModificationTemplates();
     $template->param( MarcModificationTemplatesLoop => \@templates );
 
-    my @plugins = Koha::Plugins->new()->GetPlugins('to_marc');
-    $template->param( plugins => \@plugins );
+    if ( C4::Context->preference('UseKohaPlugins') &&
+         C4::Context->config('enable_plugins') ) {
+
+        my @plugins = Koha::Plugins->new()->GetPlugins('to_marc');
+        $template->param( plugins => \@plugins );
+    }
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;
