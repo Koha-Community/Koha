@@ -3,7 +3,6 @@ package Koha::Borrower::Discharge;
 use Modern::Perl;
 use CGI;
 use File::Temp qw( :POSIX );
-use PDF::FromHTML;
 
 use C4::Members qw( GetPendingIssues );
 use C4::Reserves qw( GetReservesFromBorrowernumber CancelReserve );
@@ -114,6 +113,7 @@ sub generate_as_pdf {
     open my $html_fh, '>:encoding(utf8)', $html_path;
     say $html_fh $html_content;
     close $html_fh;
+    require PDF::FromHTML;
     my $pdf = PDF::FromHTML->new( encoding => 'utf-8' );
     $pdf->load_file( $html_path );
     $pdf->convert;
