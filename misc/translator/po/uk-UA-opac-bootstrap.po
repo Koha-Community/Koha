@@ -1,16 +1,16 @@
-# Ukrainian translation Koha-OPAC-bootstrap.
+# Ukrainian translation Koha-Intranet.
 #
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Serhij Dubyk <dubyk@lsl.lviv.ua>, 2005.
+# Serhij Dubyk <dubyk@lsl.lviv.ua>, 2006.
 # Serhij Dubyk <dubyk@library.lviv.ua>, 2007.
 # Serhij Dubyk <serhijdubyk@gmail.com>, 2008-2014.
 msgid ""
 msgstr ""
-"Project-Id-Version: opac_prog_uk_UA\n"
-"POT-Creation-Date: 2015-04-29 16:20-0300\n"
-"PO-Revision-Date: 2014-09-25 13:06+0000\n"
+"Project-Id-Version: uk-UA-i-staff-t-prog-v-3002000\n"
+"POT-Creation-Date: 2015-05-06 20:48-0300\n"
+"PO-Revision-Date: 2014-09-11 06:00+0000\n"
 "Last-Translator: Serhij <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
@@ -21,9 +21,7 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.5.0\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-KeywordsList: інтегроване бібліотечне програмне забезпечення;Open "
-"Source Library System;відкрита бібліотечна система\n"
-"X-POOTLE-MTIME: 1411650414.0\n"
+"X-POOTLE-MTIME: 1410415258.0\n"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:302
@@ -307,6 +305,21 @@ msgid ""
 msgstr ""
 "%s %s %s %s%s%s%sКоха %s &rsaquo; Електронний каталог &rsaquo; %s Вміст "
 "списку „%s“%s Мої списки %s%s %s%s "
+
+#. %1$s:  USE Koha 
+#. %2$s:  USE Branches 
+#. %3$s:  INCLUDE 'doc-head-open.inc' 
+#. %4$s:  IF ( LibraryNameTitle ) 
+#. %5$s:  LibraryNameTitle 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  INCLUDE 'doc-head-close.inc' 
+#. %9$s:  BLOCK cssinclude 
+#. %10$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:1
+#, fuzzy, c-format
+msgid "%s %s %s %s%s%sKoha online%s catalog %s %s%s "
+msgstr "%s %s %s%s%sКоха %s &rsaquo; Електронний каталог %s %s%s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE AuthorisedValues 
@@ -611,7 +624,6 @@ msgstr ""
 #. %8$s:  BLOCK cssinclude 
 #. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-invalid.tt:1
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:1
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:1
 #, c-format
 msgid "%s %s %s%s%sKoha online%s catalog %s %s%s "
@@ -729,6 +741,22 @@ msgid "%s %s %s%s%sKoha online%s catalog &rsaquo; Advanced search %s %s%s "
 msgstr ""
 "%s %s %s%s%sКоха %s &rsaquo; Електронний каталог &rsaquo; Детальніший пошук "
 "%s  %s%s "
+
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  INCLUDE 'doc-head-close.inc' 
+#. %8$s:  BLOCK cssinclude 
+#. %9$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:1
+#, fuzzy, c-format
+msgid "%s %s %s%s%sKoha online%s catalog &rsaquo; Discharge %s %s%s "
+msgstr ""
+"%s %s%s%s%s Коха %s &rsaquo; Електронний каталог &rsaquo; Перегляд у ISBD %s "
+"%s%s "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -926,7 +954,7 @@ msgstr "%s %s / "
 #: opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:12
 #, fuzzy, c-format
 msgid "%s %s by %s %s "
-msgstr "%s / %s%s "
+msgstr "%s %s / %s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  IF ( review.borrowernumber && ShowReviewer != "none" ) 
@@ -1404,7 +1432,7 @@ msgstr "%s Обліковий запис заблоковано %s %s "
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:646
 #, c-format
 msgid "%s Address 2:"
-msgstr "%s Адреса, решту:"
+msgstr "%s Адреса 2: "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -1413,7 +1441,18 @@ msgstr "%s Адреса, решту:"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:632
 #, c-format
 msgid "%s Address:"
-msgstr "%s Адреса:"
+msgstr "%s Адреса: "
+
+#. %1$s:  IF message.code == "unable_to_generate_pdf" 
+#. %2$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:27
+#, fuzzy, c-format
+msgid ""
+"%s An error occurs when generating the pdf file. Please contact the staff to "
+"resolve this problem. %s "
+msgstr ""
+"Даруйте, цей пункт самообслуговування втратив автентифікацію. Зверніться до "
+"адміністратора, щоб вирішити цю проблему. "
 
 #. %1$s:  IF ( latestserial.status1 ) 
 #. %2$s:  ELSE 
@@ -1505,7 +1544,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:660
 #, c-format
 msgid "%s City:"
-msgstr "%s Населений пункт:"
+msgstr "%s Населений пункт: "
 
 #. %1$s:  IF ( ccodesearch ) 
 #. %2$s:  ELSE 
@@ -1540,7 +1579,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:702
 #, c-format
 msgid "%s Country:"
-msgstr "%s Країна:"
+msgstr "%s Країна: "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:162
@@ -1572,7 +1611,7 @@ msgstr "%s Факс:"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:618
 #, c-format
 msgid "%s First name:"
-msgstr "%s Ім’я та по батькові:"
+msgstr "%s Ім’я та по батькові: "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:74
@@ -1689,7 +1728,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:716
 #, c-format
 msgid "%s Phone:"
-msgstr "%s Телефон:"
+msgstr "%s Телефон: "
 
 #. %1$s:  END # / IF circ_error_UNKNOWN_BARCODE 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:72
@@ -1793,7 +1832,7 @@ msgstr "%s Показані лише "
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:674
 #, c-format
 msgid "%s State:"
-msgstr "%s Область, район:"
+msgstr "%s Область/штат/провінція: "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:259
@@ -1801,14 +1840,13 @@ msgstr "%s Область, район:"
 msgid "%s Street number:"
 msgstr "%s Номер будинку:"
 
-# Можливе значення змінної id_type функції LookupPatron з ILS-DI
 #. For the first occurrence,
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:134
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:604
 #, c-format
 msgid "%s Surname:"
-msgstr "%s Прізвище:"
+msgstr "%s Прізвище: "
 
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
 #. %2$s:  ELSE 
@@ -1822,13 +1860,13 @@ msgstr "%s Показувати міток від інших користува�
 #. %2$s:  ELSE 
 #. %3$s:  FOREACH role IN content 
 #: opac-tmpl/bootstrap/en/modules/opac-idref.tt:20
-#, c-format
+#, fuzzy, c-format
 msgid "%s This ppn is not found on the idref service. %s %s "
-msgstr ""
+msgstr "Не означено жодного авторитетного значення для „%s“"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:226
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:227
 #, c-format
 msgid "%s This record has no items. %s "
 msgstr "%s Цей запис не має жодного примірника. %s "
@@ -1920,7 +1958,7 @@ msgstr "%s Ви ніколи не випозичали чого-небудь у 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:688
 #, c-format
 msgid "%s Zip/Postal code:"
-msgstr "%s Поштовий індекс:"
+msgstr "%s Поштовий індекс: "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:162
@@ -2019,7 +2057,7 @@ msgid ""
 "'seefrom' or 'seealso', controls the label for the entry type: authid: if it "
 "is a linked authority, its authid %%] %s %s %s %s %s "
 msgstr ""
-"%s [%%# Параметри: heading: сам заголовок  linkType: на даний час „seefrom“ "
+"%s [%%# Параметри: heading: сам заголовок linkType: на даний час „seefrom“ "
 "або „seealso“, контролює мітку для входження type: authid: якщо це є "
 "пов’язане авторитетне джерело, то це є authid %%] %s %s %s %s %s "
 
@@ -2053,7 +2091,7 @@ msgstr "%s / "
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:138
 #, fuzzy, c-format
 msgid "%s by %s %s %s "
-msgstr "%s / %s%s "
+msgstr "%s %s %s %s (%s)"
 
 #. %1$s:  IF ( XISBN.author ) 
 #. %2$s:  XISBN.author |html 
@@ -2104,6 +2142,12 @@ msgstr "%s записі(ах)"
 #, c-format
 msgid "%s since %s%s "
 msgstr "%s починаючи з %s%s "
+
+#. %1$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:54
+#, c-format
+msgid "%s system-wide library news. "
+msgstr ""
 
 #. %1$s:  ELSE 
 #. %2$s:  heading 
@@ -2354,6 +2398,12 @@ msgid "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s&amp;reviewid=%s"
 msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s&amp;reviewid=%s"
 
 #. %1$s:  OPACBaseURL 
+#: opac-tmpl/bootstrap/en/modules/opac-news-rss.tt:6
+#, fuzzy, c-format
+msgid "%s/cgi-bin/koha/opac-main.pl"
+msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
+
+#. %1$s:  OPACBaseURL 
 #. %2$s:  query_cgi |html 
 #. %3$s:  limit_cgi |html 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:69
@@ -2459,8 +2509,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:121
 #, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
-msgstr ""
-"%s Тип одиниці %s Зібрання %s Загальне розташування полиці %s Щось ще %s "
+msgstr "%sТип одиниці %sЗібрання %sЗагальне розташування полиці %sЩось ще %s "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/includes/masthead-sco.inc:17
@@ -2512,7 +2561,7 @@ msgstr ""
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:281
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:282
 #, c-format
 msgid "%sThis record has no items.%s "
 msgstr "%s Цей запис не має жодного примірника. %s "
@@ -2530,7 +2579,7 @@ msgstr "%sТак%sНі%s "
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:17
 #, c-format
 msgid "%sa list:%s"
-msgstr "%s список: %s"
+msgstr "%s до списку: %s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -2562,7 +2611,7 @@ msgstr "&lt;&lt; Назад"
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:158
 #, c-format
 msgid "&lt;&lt; Previous"
-msgstr "&lt;&lt;Попередні"
+msgstr "&lt;&lt; Попередні"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:493
 #, c-format
@@ -3404,7 +3453,7 @@ msgstr "(виконано)"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "(filtered from _MAX_ total entries)"
-msgstr "(вибрано з _MAX_ записів загалом)"
+msgstr "(відфільтровано з _MAX_ записів загалом)"
 
 #. For the first occurrence,
 #. %1$s:  GROUP_RESULT.timestamp 
@@ -3415,7 +3464,7 @@ msgid "(modified on %s)"
 msgstr "(змінено %s)"
 
 #. %1$s:  koha_new.newdate 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:46
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:47
 #, c-format
 msgid "(published on %s)"
 msgstr "(опубліковано %s)"
@@ -3426,7 +3475,7 @@ msgstr "(опубліковано %s)"
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:15
 #, c-format
 msgid "(related searches: %s%s%s)"
-msgstr "(споріднені пошуки: %s%s%s)"
+msgstr "(пов'язані пошуки: %s%s%s)"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:21
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:23
@@ -3499,12 +3548,12 @@ msgstr "-- Виберіть --"
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:53
 #, c-format
 msgid "-- Choose format --"
-msgstr "-- Виберіть формат --"
+msgstr "-- виберіть формат --"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:214
 #, c-format
 msgid "-- none -- "
-msgstr "-- немає -- "
+msgstr " -- немає -- "
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:76
 #, c-format
@@ -3608,7 +3657,14 @@ msgstr "9999-12-31"
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:15
 #, c-format
 msgid ": %sa list:%s"
-msgstr ":%s список: %s"
+msgstr ": %s до списку: %s"
+
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:46
+#, c-format
+msgid ""
+": This request is only valid if you are in good standing with the library. "
+"Once the application is made, you can not borrow library materials."
+msgstr ""
 
 #. %1$s:  HTML5MediaParent 
 #. %2$s:  FOREACH HTML5MediaSet IN HTML5MediaSets 
@@ -3623,8 +3679,8 @@ msgid ""
 "<%s controls preload=none> %s <%s src=\"%s\"%s /> %s [%s tag not supported "
 "by your browser.] "
 msgstr ""
-"<%s controls preload=none> %s <%s src=\"%s\"%s /> %s [теґ „%s“  не "
-"підтримується Вашим веб-оглядачем.] "
+"<%s controls preload=none> %s <%s src=\"%s\"%s /> %s [тег «%s» не "
+"поддерживается вашим браузером.] "
 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-email-sent.tt:32
 #, fuzzy, c-format
@@ -3639,7 +3695,7 @@ msgstr "Список з назвою „ "
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:130
 #, c-format
 msgid "A record matching barcode "
-msgstr "Запис, якому відповідає штрих-код "
+msgstr "Запис, що відповідає штрих-коду "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:266
 #, c-format
@@ -3700,7 +3756,7 @@ msgstr "Додати"
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:15
 #, c-format
 msgid "Add %s items to %s"
-msgstr "Додаємо %s елемент/и/ів у %s"
+msgstr "Додати %s елемент(и/ів) до списку: %s"
 
 #. A name=ButtonPlus
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:97
@@ -3722,7 +3778,7 @@ msgstr "Додати мітку"
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:17
 #, c-format
 msgid "Add to %s"
-msgstr "Додати у: %s"
+msgstr "Додати %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:43
 #, c-format
@@ -3732,7 +3788,7 @@ msgstr "Додати у список"
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:73
 #, c-format
 msgid "Add to a new list:"
-msgstr "Додаємо у новий список:"
+msgstr "Додаємо у новий список: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:467
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:537
@@ -3769,11 +3825,10 @@ msgstr "додати у…"
 msgid "Added %s %s by "
 msgstr "Додано %s %s "
 
-# це перелік полів авторів 700-712 (Unimarc), 700-720 (Marc21); це не є додаткові автори, це всі поокремо у формі точок доступу
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:132
 #, c-format
 msgid "Additional authors:"
-msgstr "Серед авторів:"
+msgstr "Додаткові автори: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:306
 #, c-format
@@ -3785,15 +3840,17 @@ msgstr "Додаткові типи вмісту для книжок / друк�
 msgid "Additional information"
 msgstr "Дані для зв’язку"
 
+# 008.22=d - http://marc21.rsl.ru/index.php?doc=1050
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:262
 #, c-format
 msgid "Adolescent"
-msgstr "для дітей старшого шкільного віку (14-17)"
+msgstr "для дітей старшого шкільного віку (14-17 років)"
 
+# advsearch.tt: „для дорослих“ 008.22=e (http://marc21.rsl.ru/index.php?doc=1050)
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:263
 #, c-format
 msgid "Adult"
-msgstr "для повнолітніх"
+msgstr "дорослий"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:256
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:14
@@ -3831,7 +3888,7 @@ msgstr "Усі типи одиниць"
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:113
 #, c-format
 msgid "All libraries"
-msgstr "Усі бібліотеки"
+msgstr "Усі бібліотеки/підрозділи"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:15
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:23
@@ -3857,14 +3914,14 @@ msgstr "Запасна адреса"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:596
 #, c-format
 msgid "Alternate contact"
-msgstr "Запасні дані для зв’язку:"
+msgstr "Запасні дані для зв’язку"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:288
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:302
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:316
 #, c-format
 msgid "Amount"
-msgstr "Кількість"
+msgstr "Кількість "
 
 # Обсяг несплат
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:37
@@ -3904,6 +3961,7 @@ msgstr "Запрошення, щоб поділитися списком "
 msgid "Any"
 msgstr "довільно"
 
+# advsearch.tt: „не відомо чи не вказано“ 008.22=# - http://marc21.rsl.ru/index.php?doc=1050
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:258
 #, c-format
 msgid "Any audience"
@@ -3912,12 +3970,12 @@ msgstr "будь-яка аудиторія"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:275
 #, c-format
 msgid "Any content"
-msgstr "будь-який вміст"
+msgstr "Будь-який вміст"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:289
 #, c-format
 msgid "Any format"
-msgstr "будь-який формат"
+msgstr "Будь-який формат"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:75
 #, c-format
@@ -3968,7 +4026,7 @@ msgstr "Чи Ви справді хочете очистити Вашу істо
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:106
 msgid "Are you sure you want to empty your cart?"
-msgstr "Чи Ви справді хочете спорожнити Ваш возик?"
+msgstr "Чи Ви справді хочете очистити Ваш возик?"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:106
@@ -3978,7 +4036,7 @@ msgstr "Чи Ви справді хочете вилучити відібран�
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:831
 msgid "Are you sure you want to remove these items from the list?"
-msgstr "Чи Ви справді хочете вилучити ці одиниці зі списку?"
+msgstr "Чи Ви справді хочете вилучити ці записи зі списку?"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:831
@@ -4012,6 +4070,11 @@ msgstr ""
 #, c-format
 msgid "Ascending"
 msgstr "За зростанням"
+
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:47
+#, c-format
+msgid "Ask for a discharge"
+msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  subscription.branchname 
@@ -4069,7 +4132,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:553
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:780
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:64
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:244
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:245
 #, c-format
 msgid "Author"
 msgstr "Автор"
@@ -4078,13 +4141,13 @@ msgstr "Автор"
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:18
 #, c-format
 msgid "Author (A-Z)"
-msgstr "Автор (А-Я)"
+msgstr "Автор (за алфавітом)"
 
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:21
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:23
 #, c-format
 msgid "Author (Z-A)"
-msgstr "Автор (Я-А)"
+msgstr "Автор (зворотньо за алфавітом)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:782
 #, c-format
@@ -4121,12 +4184,12 @@ msgstr "Автор(и): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:38
 #, c-format
 msgid "Author:"
-msgstr "Автор:"
+msgstr "Автор: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:39
 #, fuzzy, c-format
 msgid "Authority"
-msgstr "Автор"
+msgstr "Авторитетне джерело: "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:259
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:39
@@ -4136,7 +4199,7 @@ msgstr "Автор"
 #: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:13
 #, c-format
 msgid "Authority search"
-msgstr "Пошук серед авторитетних джерел"
+msgstr "Шукаємо за авторитетним джерелом"
 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:56
 #, c-format
@@ -4153,7 +4216,6 @@ msgstr "Тип авторитетного джерела: "
 msgid "Authorized headings"
 msgstr "Заголовки авторитетних джерел"
 
-# пов’язано з полями 700ab 701ab 702ab укрмарку та 100a 110a 700a marc21
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:21
 #, c-format
 msgid "Authors"
@@ -4198,7 +4260,7 @@ msgstr "ОБЕРЕЖНО"
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:14
 #, c-format
 msgid "BT: %s"
-msgstr "ШТ: %s"
+msgstr "ШТ: %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:17
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:29
@@ -4247,11 +4309,10 @@ msgstr "Бібліографічних записів"
 msgid "Bibliographies"
 msgstr "бібліографічні покажчики"
 
-# ; 008 - 34 - Biography (006/17)
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:278
 #, c-format
 msgid "Biography"
-msgstr "біографія"
+msgstr "Біографія"
 
 #: opac-tmpl/bootstrap/en/modules/opac-blocked.tt:18
 #, c-format
@@ -4358,7 +4419,7 @@ msgstr "Шифр зберігання"
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
 #, c-format
 msgid "Call no."
-msgstr "Шифр зберігання"
+msgstr "Шифр для замовлення"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:183
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:185
@@ -4466,7 +4527,6 @@ msgstr "Скасовує активний запит на резервуванн
 msgid "Cannot be put on hold"
 msgstr "Неможливо встановити резервування"
 
-# Можливе значення змінної id_typeфункції LookupPatron з ILS-DI
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:65
 #, c-format
 msgid "Card number"
@@ -4490,9 +4550,9 @@ msgid "Cassette recording"
 msgstr "касетний запис"
 
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:38
-#, fuzzy, c-format
+#, c-format
 msgid "Catalog"
-msgstr "каталоги"
+msgstr "Каталог"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:311
 #, c-format
@@ -4504,7 +4564,7 @@ msgstr "каталоги"
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:76
 #, c-format
 msgid "Category:"
-msgstr "Категорія:"
+msgstr "Категорія: "
 
 #. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
@@ -4531,7 +4591,7 @@ msgstr "Повернути примірник"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
 msgid "Check out"
-msgstr "Отримати"
+msgstr "Видача"
 
 #. %1$s:  IF ( AllowSelfCheckReturns ) 
 #. %2$s:  END 
@@ -4547,9 +4607,9 @@ msgstr "Дата повернення: "
 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:37
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:149
-#, fuzzy, c-format
+#, c-format
 msgid "Checked out"
-msgstr "(Видано)"
+msgstr "Видано"
 
 #. %1$s:  issues_count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:106
@@ -4590,9 +4650,9 @@ msgid "Checkouts: "
 msgstr "Видачі: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-idref.tt:30
-#, fuzzy, c-format
+#, c-format
 msgid "Citation"
-msgstr "ілюстрації"
+msgstr "Зразок цитування"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:182
 #, c-format
@@ -4666,7 +4726,7 @@ msgstr "Клацніть, щоб додати у возик"
 #: opac-tmpl/bootstrap/en/modules/opac-idref.tt:26
 #, fuzzy
 msgid "Click to expand this role"
-msgstr "Клацніть, щоб перемотати список назад до"
+msgstr "Клацніть, щоб розкрити цей розділ"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
@@ -4723,8 +4783,9 @@ msgstr "Зачинити вікно"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:22
+#, fuzzy
 msgid "Collect items you are interested in"
-msgstr ""
+msgstr "Виберіть одиниці, які Ви хочете перевірити"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:127
@@ -4736,7 +4797,7 @@ msgstr "Зібрання"
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:42
 #, c-format
 msgid "Collection title:"
-msgstr "Назва зібрання:"
+msgstr "Назва зібрання: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:240
 #, c-format
@@ -4779,7 +4840,7 @@ msgstr "Коментар на „%s“ від відвідувача: %s %s"
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:37
 #, c-format
 msgid "Comment:"
-msgstr "Коментар:"
+msgstr "Коментар: "
 
 #. %1$s:  reviews.size || 0 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:596
@@ -4811,7 +4872,7 @@ msgstr "Підтвердіть резервування для: %s %s %s (%s) %s
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:361
 #, c-format
 msgid "Contact information"
-msgstr "Дані для зв’язку"
+msgstr "Контактна інформація"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:273
 #, c-format
@@ -4832,14 +4893,14 @@ msgstr "Вміст"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:79
 #, c-format
 msgid "Contents of "
-msgstr "Вміст списку "
+msgstr "Вміст списку: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:280
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1177
 #, c-format
 msgid "Copy number"
-msgstr "Номер примірника"
+msgstr "Порядковый номер комплекта/экземпляра"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:144
 #, c-format
@@ -4888,7 +4949,6 @@ msgstr "№ курсу"
 msgid "Course number:"
 msgstr "Номер курсу: "
 
-# назва функції ILS-DI
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:257
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:20
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1187
@@ -4955,9 +5015,9 @@ msgid "Credits (%s)"
 msgstr "Кредити (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1166
-#, fuzzy, c-format
+#, c-format
 msgid "Current location"
-msgstr "Поточний сеанс"
+msgstr "Поточне розташування"
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:49
 #, c-format
@@ -5017,18 +5077,20 @@ msgstr "Коли додано"
 msgid "Date added:"
 msgstr "Коли додано: "
 
+# --Дата повернення (конфлікт з Return date)
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:59
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1180
 #, c-format
 msgid "Date due"
-msgstr "Дата очікування"
+msgstr "Очікується на дату"
 
+# --Дата повернення (конфлікт з Return date)
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:193
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:200
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:453
 #, c-format
 msgid "Date due:"
-msgstr "Дата очікування: "
+msgstr "Очікується на дату: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:156
 #, c-format
@@ -5120,7 +5182,7 @@ msgstr "Вилучити список"
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:235
 msgid "Delete selected"
-msgstr "Вилучити вибране"
+msgstr "Вилучити позначене"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:529
@@ -5156,12 +5218,12 @@ msgstr "За спаданням"
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:35
 #, c-format
 msgid "Description"
-msgstr "Опис"
+msgstr "Опис "
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:120
 #, c-format
 msgid "Details"
-msgstr "Подробиці:"
+msgstr "Подробиці"
 
 #. For the first occurrence,
 #. %1$s:  bibliotitle 
@@ -5214,6 +5276,12 @@ msgstr "Лише дайджести?"
 msgid "Directories"
 msgstr "довідники-покажчики"
 
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:13
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:25
+#, fuzzy, c-format
+msgid "Discharge"
+msgstr "Плата"
+
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:318
 #, c-format
 msgid "Discographies"
@@ -5251,7 +5319,7 @@ msgid "Don't have a password yet?"
 msgstr "Ще не маєте пароля?"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:310
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:79
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:85
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:75
 #, c-format
 msgid "Don't have an account? "
@@ -5265,12 +5333,12 @@ msgstr "Виконано"
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:28
 #, c-format
 msgid "Download"
-msgstr "Звантажити"
+msgstr "Звантаження"
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:11
 #, c-format
 msgid "Download cart"
-msgstr "Звантажити возик"
+msgstr "Звантаження возика"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:165
 #, c-format
@@ -5279,9 +5347,9 @@ msgstr "Звантажити список"
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:22
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:49
-#, fuzzy, c-format
+#, c-format
 msgid "Download list "
-msgstr "Звантажити список"
+msgstr "Звантажити список "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:128
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:381
@@ -5333,7 +5401,7 @@ msgstr "ПОМИЛКА: не надано номера бібліографіч�
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:127
 #, c-format
 msgid "ERROR: No item found with barcode %s."
-msgstr "ПОМИЛКА: не знайдено жодного примірника із штрих-кодом %s."
+msgstr "ПОМИЛКА: не знайдено жодного примірника із штрих-кодом: %s."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:115
 #, c-format
@@ -5374,7 +5442,7 @@ msgstr "Редагувати список"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:87
 #, c-format
 msgid "Edit list "
-msgstr "Редагування списку "
+msgstr "Редагувати список "
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:539
 #, c-format
@@ -5427,13 +5495,13 @@ msgstr "Розширені описи з Syndetics:"
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:29
 #, c-format
 msgid "Enter a new purchase suggestion"
-msgstr "Внесення нової пропозиції на придбання"
+msgstr "Вносимо нову пропозицію на придбання"
 
 #. INPUT type=text name=q
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:94
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:157
 msgid "Enter search terms"
-msgstr "Вводимо пошукові терміни"
+msgstr "Введіть пошукові терміни"
 
 #. %1$s:  IF ( SelfCheckoutByLogin ) 
 #. %2$s:  END 
@@ -5543,7 +5611,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:119
 #, c-format
 msgid "Error:"
-msgstr "Помилка:"
+msgstr "Помилка: "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:106
@@ -5609,12 +5677,12 @@ msgstr "Очікується вибір конкретного примірни�
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:550
 #, c-format
 msgid "Expiration:"
-msgstr "Строк дії: "
+msgstr "Термін дії: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:500
 #, c-format
 msgid "Expires on"
-msgstr "Закінчується"
+msgstr "Дата закінчення терміну"
 
 # назва функції ILS-DI
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:816
@@ -5656,7 +5724,7 @@ msgstr "[Менше параметрів]"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:276
 #, c-format
 msgid "Fiction"
-msgstr "художня література"
+msgstr "художня проза, белетристика"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:460
 #, c-format
@@ -5668,11 +5736,10 @@ msgstr "Примітки про художню літературу:"
 msgid "Filmographies"
 msgstr "фільмографії"
 
-# Нарахування пені
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:36
 #, c-format
 msgid "Fine amount"
-msgstr "Сума штрафу"
+msgstr "Сума пені"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:140
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:386
@@ -5710,7 +5777,7 @@ msgstr "Завершити"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "First"
-msgstr "Перший"
+msgstr "Перше"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:158
 #, c-format
@@ -5754,7 +5821,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:831
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:257
 msgid "Form not submitted because of the following problem(s)"
-msgstr "Форма не передана через наступну проблему(и)"
+msgstr "Форма не прийнята через наступну(і) проблему(и)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:287
 #, c-format
@@ -5787,7 +5854,7 @@ msgstr "П’ятниця"
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:111
 #, c-format
 msgid "From: "
-msgstr "Звідки: "
+msgstr "від: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:82
 #, c-format
@@ -5811,10 +5878,16 @@ msgstr "Вся історія підписки"
 msgid "Full subscription history for %s"
 msgstr "Вся історія підписки для „%s“"
 
+# 008.22=g - http://marc21.rsl.ru/index.php?doc=1050
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:265
 #, c-format
 msgid "General"
-msgstr "для всіх"
+msgstr "для усіх"
+
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:38
+#, fuzzy, c-format
+msgid "Get your discharge"
+msgstr "Опис стягнень"
 
 # назва функції ILS-DI
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:48
@@ -6067,7 +6140,7 @@ msgstr "Наявність у фондах"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:681
 #, c-format
 msgid "Holdings:"
-msgstr "Наявність у фондах:"
+msgstr "Наявність у фондах: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:494
 #, c-format
@@ -6113,7 +6186,7 @@ msgstr "Очікуючі резервування"
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:11
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:47
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:10
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:12
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:13
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:13
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:19
@@ -6122,6 +6195,7 @@ msgstr "Очікуючі резервування"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:14
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:39
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:11
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:12
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:41
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:12
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:13
@@ -6174,9 +6248,9 @@ msgstr "IP-адреса, за якою розміщується запит кі�
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:17
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:56
-#, fuzzy, c-format
+#, c-format
 msgid "ISBD"
-msgstr "Перегляд у ISBD"
+msgstr "ISBD"
 
 #: opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:11
 #: opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:21
@@ -6204,7 +6278,7 @@ msgstr "ISBN %s"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:228
 #, c-format
 msgid "ISBN:"
-msgstr "ISBN:"
+msgstr "ISBN: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:231
 #, c-format
@@ -6235,7 +6309,7 @@ msgstr "ISSN"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:236
 #, c-format
 msgid "ISSN:"
-msgstr "ISSN:"
+msgstr "ISSN: "
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:189
@@ -6380,7 +6454,7 @@ msgstr "У Вашому возику"
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:72
 #, c-format
 msgid "Indexed in:"
-msgstr "Проіндексовано як:"
+msgstr "Проіндексовано як: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:316
 #, c-format
@@ -6426,7 +6500,7 @@ msgstr "Звіт про випуски"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:119
 #, c-format
 msgid "It has "
-msgstr "Він містить "
+msgstr "Він складається з "
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:635
 #, c-format
@@ -6466,14 +6540,14 @@ msgstr "Резервування примірників"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1164
 #, c-format
 msgid "Item type"
-msgstr "Тип одиниці"
+msgstr "Тип одиниці зберігання"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:138
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:44
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:207
 #, c-format
 msgid "Item type:"
-msgstr "Тип одиниці:"
+msgstr "Тип одиниці: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:170
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:325
@@ -6481,7 +6555,6 @@ msgstr "Тип одиниці:"
 msgid "Item type: "
 msgstr "Тип одиниці: "
 
-# пов’язано з полями 995r(Тип одиниці (рівень примірника)) укрмарку та  952y(Тип одиниці (рівень примірника)) 942c(Тип одиниці (рівень запису)) для marc21
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:26
 #, c-format
 msgid "Item types"
@@ -6547,6 +6620,7 @@ msgstr "Червень"
 msgid "June"
 msgstr "Червень"
 
+# 008.22=j - http://marc21.rsl.ru/index.php?doc=1050
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:266
 #, c-format
 msgid "Juvenile"
@@ -6563,7 +6637,7 @@ msgstr "Ключове слово"
 #: opac-tmpl/bootstrap/en/modules/opac-idref.tt:38
 #, c-format
 msgid "Koha"
-msgstr "Koha"
+msgstr "Коха"
 
 #. LINK
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:11
@@ -6584,12 +6658,13 @@ msgstr "Коха [% Version %]"
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:189
 #, c-format
 msgid "LCCN"
-msgstr "Номер LCCN"
+msgstr "LCCN (ш.з.БК)"
 
+# Контро́льний но́мер Бібліоте́ки Конгре́су (англ. Library of Congress Control Number (LCCN))
 #: opac-tmpl/bootstrap/en/xslt/compact.xsl:66
 #, c-format
 msgid "LCCN:"
-msgstr "LCCN:"
+msgstr "LCCN: "
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.lccn 
@@ -6622,7 +6697,7 @@ msgstr "великий друк"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "Last"
-msgstr "Останній"
+msgstr "Останнє"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:287
 #, c-format
@@ -6696,12 +6771,12 @@ msgstr "Каталог бібліотеки"
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:59
 #, c-format
 msgid "Library:"
-msgstr "Бібліотека:"
+msgstr "Бібліотека: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:134
 #, c-format
 msgid "Limit to any of the following:"
-msgstr "Обмежити пошук наступними типами:"
+msgstr "Обмежити пошук наступними типами: "
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:11
 #, c-format
@@ -6758,7 +6833,7 @@ msgstr "Назва списку"
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:74
 #, c-format
 msgid "List name:"
-msgstr "Назва списку:"
+msgstr "Назва списку: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:541
 #, c-format
@@ -6784,14 +6859,14 @@ msgstr "Завантажується"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:818
 #, fuzzy, c-format
 msgid "Loading "
-msgstr "Завантажується"
+msgstr "Йде завантаження…"
 
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
 msgid "Loading..."
-msgstr "Завантаження…"
+msgstr "Йде завантаження…"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:298
 #, fuzzy, c-format
@@ -6809,7 +6884,7 @@ msgstr "Локальний вхід"
 msgid "Location"
 msgstr "Розташування"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:246
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:247
 #, c-format
 msgid "Location (Status)"
 msgstr "Розташування (стан)"
@@ -6819,13 +6894,11 @@ msgstr "Розташування (стан)"
 msgid "Location and availability: "
 msgstr "Розташування та доступність: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:213
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:214
 #, c-format
 msgid "Location(s) (Status)"
 msgstr "Розташування (стан)"
 
-# пов’язано з полем 995e(Поличкове розташування) укрмарку та 952c(Поличкове розташування) marc21.
-# тут переважно назва фонду, фондосховища і т.п.
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:31
 #, c-format
 msgid "Locations"
@@ -6837,7 +6910,7 @@ msgstr "Розташування"
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:152
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:691
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:703
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:77
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:73
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:283
 #, c-format
@@ -6871,7 +6944,7 @@ msgstr "Ввійдіть, щоб побачити Ваші власні збер
 msgid "Log in to your account"
 msgstr "Ввійти у Вашу облікову скриньку"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:73
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:69
 #, c-format
 msgid "Log in to your account:"
@@ -6888,7 +6961,7 @@ msgid "Login"
 msgstr "Вхід"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:303
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:74
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:70
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:278
 #, c-format
@@ -6916,12 +6989,12 @@ msgstr "LookupPatron"
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:57
 #, c-format
 msgid "MARC"
-msgstr "MARC (ISO 2709)"
+msgstr "МАРК"
 
 #: opac-tmpl/bootstrap/en/xslt/compact.xsl:15
 #, c-format
 msgid "MARC Card View"
-msgstr "Перегляд МАРК-картки"
+msgstr "Вигляд МАРК-картки"
 
 #: opac-tmpl/bootstrap/en/xslt/plainMARC.xsl:8
 #, c-format
@@ -7027,7 +7100,7 @@ msgstr "ПОВІДОМЛЕННЯ № 9:"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:251
 #, c-format
 msgid "Main address"
-msgstr "Основна адреса:"
+msgstr "Основна адреса"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:258
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:260
@@ -7057,7 +7130,6 @@ msgstr "Ведеться ким: "
 msgid "Mar"
 msgstr "Березень"
 
-# Search — ../../koha-tmpl/opac-tmpl/prog/en/modules/ilsdi.tmpl (назва функції з ILS-DI)
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:1
 msgid "March"
@@ -7130,7 +7202,7 @@ msgstr "Подробиці"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:587
 msgid "More lists"
-msgstr "Більше списків"
+msgstr "Ще списки"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:373
 #, fuzzy, c-format
@@ -7155,7 +7227,7 @@ msgstr "Найпопулярніші заголовки"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:279
 #, c-format
 msgid "Musical recording"
-msgstr "музичні записи"
+msgstr "музичний запис"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:222
 #, c-format
@@ -7167,12 +7239,12 @@ msgstr "Не відомо:"
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:16
 #, c-format
 msgid "NT: %s"
-msgstr "ВТ: %s"
+msgstr "ВТ: %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:30
 #, c-format
 msgid "Name"
-msgstr "Найменування"
+msgstr "Найменування "
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:64
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:66
@@ -7217,13 +7289,13 @@ msgstr "Новий список"
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:50
 #, c-format
 msgid "New password:"
-msgstr "Новий пароль:"
+msgstr "Новий пароль: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:150
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:242
 #, c-format
 msgid "New purchase suggestion"
-msgstr "Нова пропозиція на придбання"
+msgstr "Нова пропозиція на придбання "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:377
 #, fuzzy, c-format
@@ -7244,6 +7316,15 @@ msgstr "Нові мітки, відокремлені комами:"
 msgid "New tag:"
 msgstr "Нова мітка:"
 
+#. %1$s:  IF ( LibraryNameTitle ) 
+#. %2$s:  LibraryNameTitle 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-news-rss.tt:5
+#, fuzzy, c-format
+msgid "News from %s%s%sthe library%s"
+msgstr "Мітки з цієї бібліотеки:"
+
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:73
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:1
@@ -7251,13 +7332,13 @@ msgstr "Нова мітка:"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1083
 #, c-format
 msgid "Next"
-msgstr "Далі"
+msgstr "Наступне"
 
 #: opac-tmpl/bootstrap/en/includes/search/page-numbers.inc:14
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:169
 #, c-format
 msgid "Next &gt;&gt;"
-msgstr "Наступні &gt;&gt;"
+msgstr "Далі &gt;&gt;"
 
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:15
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1081
@@ -7270,11 +7351,12 @@ msgstr "Далі &raquo;"
 msgid "Next available item"
 msgstr "Наступний доступний примірник."
 
+# ні (memberentrygen)
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:31
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:45
 #, c-format
 msgid "No"
-msgstr "Ні"
+msgstr "ні"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:153
 #, c-format
@@ -7318,12 +7400,12 @@ msgstr "Немає доступних примірників."
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:305
 #, c-format
 msgid "No cover image available"
-msgstr "Зображення обкладинки відсутнє."
+msgstr "Зображення обкладинки не доступне"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "No data available in table"
-msgstr "Немає доступних даних у таблиці"
+msgstr "Немає даних у таблиці"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
@@ -7363,7 +7445,7 @@ msgstr "Без обмежень"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "No matching records found"
-msgstr "Не знайдено відповідних записів"
+msgstr "Відповідних записів не знайдено"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:35
 #, c-format
@@ -7440,10 +7522,11 @@ msgstr "наукова література"
 msgid "Non-musical recording"
 msgstr "немузичний запис"
 
+# Нічого (?)
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:71
 #, c-format
 msgid "None"
-msgstr "ні"
+msgstr "немає"
 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:32
 #: opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:21
@@ -7497,7 +7580,7 @@ msgstr "Нотатка"
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:195
 #, c-format
 msgid "Note: "
-msgstr "Нотатки: "
+msgstr "Примітка: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:738
 #, c-format
@@ -7572,7 +7655,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:36
 #, c-format
 msgid "Notes"
-msgstr "Нотатки"
+msgstr "Нотатки "
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.notes 
@@ -7591,7 +7674,7 @@ msgstr "Нотатки/коментарі"
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:83
 #, c-format
 msgid "Notes:"
-msgstr "Нотатки:"
+msgstr "Нотатки: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:133
 #, c-format
@@ -7606,6 +7689,7 @@ msgstr ""
 "Нічого не вибрано. Встановіть прапорець для кожного примірника, який Ви "
 "хочете продовжити"
 
+# ні (memberentrygen)
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:1
 msgid "Nov"
@@ -7660,9 +7744,9 @@ msgid "October"
 msgstr "Жовтень"
 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:50
-#, fuzzy, c-format
+#, c-format
 msgid "On hold"
-msgstr "(Зарезервовано)"
+msgstr "Зарезервовано"
 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:82
 #, fuzzy, c-format
@@ -7672,12 +7756,12 @@ msgstr "Замовлено ("
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:61
 #, fuzzy, c-format
 msgid "On-site checkouts"
-msgstr "Сьогоднішні видачі"
+msgstr "Видач загалом"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:335
 #, c-format
 msgid "Online resources:"
-msgstr "Електронні ресурси:"
+msgstr "Ресурси он-лайн: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:221
 #, c-format
@@ -7709,7 +7793,7 @@ msgstr "Впорядкувати за заголовком"
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:69
 #, c-format
 msgid "Order by: "
-msgstr "Впорядкування: "
+msgstr "Впорядкувати за: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:960
 #, c-format
@@ -7785,13 +7869,13 @@ msgid "Password updated"
 msgstr "Пароль оновлено"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:304
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:75
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:81
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:42
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:71
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:280
 #, c-format
 msgid "Password:"
-msgstr "Пароль:"
+msgstr "Пароль: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:317
 #, c-format
@@ -7817,7 +7901,7 @@ msgstr "Телефон"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:224
 #, c-format
 msgid "Physical details:"
-msgstr "Фіз. характеристика:"
+msgstr "Фіз. характеристика: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:337
 #, c-format
@@ -7870,11 +7954,10 @@ msgstr "Встановити резервування"
 msgid "Placed on"
 msgstr "Розміщено"
 
-# пов’язано з полем 607a(Географічна назва як предметна рубрика) укрмарку та 651a(Додаткове предметне введення — географічна назва) marc21
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:24
 #, c-format
 msgid "Places"
-msgstr "Географічні назви"
+msgstr "Місця"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:15
 #, c-format
@@ -8007,7 +8090,7 @@ msgstr "Будь ласка, введіть такі символи у попе�
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:2
 msgid "Popularity"
-msgstr "Популярність"
+msgstr "Полярність"
 
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:9
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:11
@@ -8032,31 +8115,32 @@ msgstr "Опублікуйте чи відредагуйте Ваші комен
 msgid "Powered by %s "
 msgstr "Працює на АБІС %s "
 
+# 008.22=c - http://marc21.rsl.ru/index.php?doc=1050
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:261
 #, c-format
 msgid "Pre-adolescent"
-msgstr "для дітей середнього шкільного віку (9-13)"
+msgstr "для дітей середнього шкільного віку (9-13 років)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:54
 #, c-format
 msgid "Preferred form: "
 msgstr "Рекомендована форма: "
 
+# 008.22=a - http://marc21.rsl.ru/index.php?doc=1050
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:259
 #, c-format
 msgid "Preschool"
-msgstr "для дітей від 0 до 5"
+msgstr "для дітей ясельного віку від 0 до 5 років"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:1
 msgid "Prev"
-msgstr "Назад"
+msgstr "Попереднє"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:179
-#, fuzzy
 msgid "Preview"
-msgstr "огляди "
+msgstr "Перегляд"
 
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:16
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
@@ -8064,7 +8148,7 @@ msgstr "огляди "
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
 #, c-format
 msgid "Previous"
-msgstr "Назад"
+msgstr "Попереднє"
 
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:84
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:167
@@ -8072,10 +8156,11 @@ msgstr "Назад"
 msgid "Previous sessions"
 msgstr "Попередні сеанси"
 
+# 008.22=b - http://marc21.rsl.ru/index.php?doc=1050
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:260
 #, c-format
 msgid "Primary"
-msgstr "для дітей молодшого віку від 6 до 8"
+msgstr "для дітей молодшого віку від 6 до 8 років"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:11
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:29
@@ -8083,6 +8168,7 @@ msgstr "для дітей молодшого віку від 6 до 8"
 msgid "Print"
 msgstr "Друк"
 
+# квиток?
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:171
 #, c-format
 msgid "Print list"
@@ -8114,9 +8200,8 @@ msgstr "Приватні списки"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "Processing..."
-msgstr "Обробка…"
+msgstr "Опрацювання триває…"
 
-# Описи проектів (http://marc21.rsl.ru/index.php?doc=1050)
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:323
 #, c-format
 msgid "Programmed texts"
@@ -8128,7 +8213,7 @@ msgstr "програмовані тексти"
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:80
 #, c-format
 msgid "Public"
-msgstr "Загальний"
+msgstr "Спільний"
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:36
@@ -8145,13 +8230,13 @@ msgstr "Загальні списки"
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:18
 #, c-format
 msgid "Public lists"
-msgstr "загальні списки"
+msgstr "Загальні списки"
 
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:587
 msgid "Public lists:"
-msgstr "Загальні списки:"
+msgstr "Загальні списки: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:155
 #, c-format
@@ -8161,7 +8246,7 @@ msgstr "Діапазон дат публікації: "
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:43
 #, c-format
 msgid "Publication place:"
-msgstr "Місце публікації:"
+msgstr "Місце публікації: "
 
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:40
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:42
@@ -8219,7 +8304,7 @@ msgstr "Розташування видавця"
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:41
 #, c-format
 msgid "Publisher:"
-msgstr "Видавець:"
+msgstr "Видавець: "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:266
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:268
@@ -8227,7 +8312,7 @@ msgstr "Видавець:"
 msgid "Purchase suggestions"
 msgstr "Пропозиції на придбання"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:54
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:60
 #, c-format
 msgid "Quote of the Day"
 msgstr "Цитата дня"
@@ -8237,6 +8322,13 @@ msgstr "Цитата дня"
 #, c-format
 msgid "RIS (Zotero, EndNote, others)"
 msgstr "RIS (Zotero, EndNote та інші)"
+
+#. %1$s:  IF ( loggedinusername ) 
+#. %2$s:  Branches.GetName( branchcode ) 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:53
+#, fuzzy, c-format
+msgid "RSS feed for %s%s "
+msgstr "Немає загальних списків"
 
 #. %1$s:  shelfname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:8
@@ -8253,7 +8345,7 @@ msgstr "Немає загальних списків"
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:20
 #, c-format
 msgid "RT: %s"
-msgstr "АТ: %s"
+msgstr "АТ: %s "
 
 #. INPUT type=submit name=rate_button
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:505
@@ -8308,7 +8400,7 @@ msgid "Register a new account"
 msgstr "Зареєструємо новий обліковий запис"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:310
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:79
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:85
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:75
 #, c-format
 msgid "Register here."
@@ -8388,7 +8480,7 @@ msgstr "Вилучити вибрані одиниці"
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:199
 #, fuzzy
 msgid "Remove selected searches"
-msgstr "Вилучити вибрані одиниці"
+msgstr "Вилучити обраних відвідувачів"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:41
@@ -8482,7 +8574,7 @@ msgstr "Пересортувати список"
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:62
 #, c-format
 msgid "Required"
-msgstr " (обов’язкове)"
+msgstr "обов’язкове"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:246
@@ -8496,7 +8588,7 @@ msgstr "Пересортувати список"
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:185
 #, c-format
 msgid "Results"
-msgstr "Знайдено"
+msgstr "Результати пошуку"
 
 #. %1$s:  from 
 #. %2$s:  to 
@@ -8504,7 +8596,7 @@ msgstr "Знайдено"
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:65
 #, c-format
 msgid "Results %s to %s of %s"
-msgstr "Результати пошуку з %s до %s із %s"
+msgstr "Результати пошуку з %s до %s зі %s"
 
 #. For the first occurrence,
 #. %1$s:  IF ( query_desc ) 
@@ -8527,7 +8619,7 @@ msgstr "Продовжити"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:663
 #, c-format
 msgid "Resume all suspended holds"
-msgstr "Продовжити усі призупинені резервування"
+msgstr "Відновити усі призупинені резервування"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:605
 #, c-format
@@ -8556,9 +8648,9 @@ msgstr "Повернутися до "
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:51
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:113
-#, c-format
+#, fuzzy, c-format
 msgid "Return to the last advanced search"
-msgstr ""
+msgstr "Детальніший пошук"
 
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:52
 #, c-format
@@ -8606,7 +8698,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:568
 #, c-format
 msgid "Reviews"
-msgstr "Рецензії"
+msgstr "рецензії"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:385
 #, c-format
@@ -8704,9 +8796,8 @@ msgstr "Переглянути покажчик щодо: "
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:61
 #, c-format
 msgid "Scan index:"
-msgstr "Перегляд покажчика:"
+msgstr "Огляд покажчика: "
 
-# Search — ../../koha-tmpl/opac-tmpl/prog/en/modules/ilsdi.tmpl (назва функції з ILS-DI)
 #. INPUT type=submit name=do
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:367
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:166
@@ -8717,7 +8808,7 @@ msgstr "Перегляд покажчика:"
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:184
 #, c-format
 msgid "Search"
-msgstr "Шукати"
+msgstr "Пошук"
 
 # Search — ../../koha-tmpl/opac-tmpl/prog/en/modules/ilsdi.tmpl (назва функції з ILS-DI)
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:793
@@ -8769,7 +8860,7 @@ msgstr "Параметри пошуку: "
 #: opac-tmpl/bootstrap/en/modules/svc/suggestion.tt:13
 #, c-format
 msgid "Search suggestions"
-msgstr "Пропозиції до результатів пошуку"
+msgstr "Пошук пропозицій"
 
 #. %1$s:  LibraryName |html 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:6
@@ -8777,11 +8868,10 @@ msgstr "Пропозиції до результатів пошуку"
 msgid "Search the %s"
 msgstr "Шукаємо у %s"
 
-# Search — ../../koha-tmpl/opac-tmpl/prog/en/modules/ilsdi.tmpl (назва функції з ILS-DI)
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "Search:"
-msgstr "Шукати:"
+msgstr "Шукати: "
 
 # назва функції ILS-DI
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:815
@@ -8906,7 +8996,7 @@ msgstr "Виберіть термін(и) для пошуку"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:254
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:831
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:39
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:317
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:318
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:587
 #, c-format
 msgid "Select titles to: "
@@ -8934,12 +9024,12 @@ msgstr "Вислати список"
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:28
 #, c-format
 msgid "Sending your cart"
-msgstr "Висилаємо Ваш возик"
+msgstr "Висилання Вашого возика"
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:31
 #, c-format
 msgid "Sending your list"
-msgstr "Висилаємо Ваш список"
+msgstr "Висилання Вашого списку"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:1
@@ -8970,7 +9060,6 @@ msgstr "Зібрання серіального видання"
 msgid "Serial: %s "
 msgstr "Серіальне видання: %s "
 
-# пов’язано з полями 225a(Серія) укрмарку та 440a(Серія) 490a(Серія) marc21
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:25
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:177
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:179
@@ -9064,12 +9153,12 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:37
 #, c-format
 msgid "Show"
-msgstr "Відобразити"
+msgstr "Показати"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "Show _MENU_ entries"
-msgstr "Показати _MENU_ записів"
+msgstr "Виводити _MENU_ записів"
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:9
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:48
@@ -9128,7 +9217,7 @@ msgstr "Показані %s з біля %s результатів"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "Showing _START_ to _END_ of _TOTAL_"
-msgstr "Показані з _START_ по _END_ з _TOTAL_"
+msgstr "Показані від _START_ по _END_ з _TOTAL_ загалом"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:51
 #, fuzzy, c-format
@@ -9145,7 +9234,7 @@ msgstr "Показуються останні 50 примірників"
 msgid "Sign in with your Email"
 msgstr "Увійти з допомогою електронної пошти!"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:96
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:81
 #, c-format
 msgid "Sign in with your email"
@@ -9305,6 +9394,7 @@ msgstr "Сортування цього списку: "
 msgid "Sorting: "
 msgstr "Сортування: "
 
+# 008.22=f - http://marc21.rsl.ru/index.php?doc=1050
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:264
 #, c-format
 msgid "Specialized"
@@ -9324,7 +9414,7 @@ msgstr "Стандартний номер (ISBN, ISSN чи інший): "
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:326
 #, c-format
 msgid "Statistics"
-msgstr "статистика"
+msgstr "Статистика"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:79
@@ -9595,7 +9685,7 @@ msgstr "Зміст, наданий Syndetics"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:166
 #, c-format
 msgid "Tag"
-msgstr "Мітка"
+msgstr "Ознака"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:586
 #, c-format
@@ -9608,7 +9698,7 @@ msgstr "Оглядач міток:"
 msgid "Tag cloud"
 msgstr "Хмара міток"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:262
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:263
 #, c-format
 msgid "Tag status here."
 msgstr "Стан мітки тут."
@@ -9624,7 +9714,7 @@ msgstr "Стан мітки тут. "
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:123
 #, c-format
 msgid "Tag:"
-msgstr "Мітка: "
+msgstr "Ознака: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:31
 #, c-format
@@ -9647,7 +9737,7 @@ msgstr "Мітки з цієї бібліотеки:"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:463
 #, c-format
 msgid "Tags:"
-msgstr "Мітки:"
+msgstr "Мітки: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:327
 #, c-format
@@ -9660,7 +9750,7 @@ msgstr "технічні звіти"
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:34
 #, c-format
 msgid "Term"
-msgstr "Терм"
+msgstr "Термін"
 
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:55
 #, c-format
@@ -9872,7 +9962,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:117
 #, c-format
 msgid "The list "
-msgstr "Список „ "
+msgstr "Список "
 
 #. %1$s:  email 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:15
@@ -10002,6 +10092,15 @@ msgstr ""
 #, c-format
 msgid "This card has been declared lost. %s "
 msgstr "Цей читацький квиток був оголошений як втрачений. %s "
+
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:45
+#, c-format
+msgid ""
+"This document certifies that you have returned all borrowed items. It is "
+"sometimes asked during a file transfer from a school to another. The "
+"discharge is sent by us to your school. You will also find it available on "
+"your reader account."
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/errors/400.tt:30
 #: opac-tmpl/bootstrap/en/modules/errors/402.tt:30
@@ -10149,7 +10248,7 @@ msgstr "Четвер"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:548
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:779
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:53
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:243
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:244
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:127
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:335
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:377
@@ -10183,11 +10282,12 @@ msgstr "Примітки щодо заголовку"
 msgid "Title phrase"
 msgstr "Заголовок як фраза"
 
+# z3950_search (Пошук по заголовку)
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:37
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:130
 #, c-format
 msgid "Title:"
-msgstr "Заголовок:"
+msgstr "Заголовок: "
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:39
 #, c-format
@@ -10230,13 +10330,11 @@ msgstr "Сьогодні"
 msgid "Top level"
 msgstr "Верхній рівень"
 
-# пов’язано з полями 600ab 601ab 602a 604at 605a 606ax 610a укрмарку та 650a marc21
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:23
 #, c-format
 msgid "Topics"
-msgstr "Предметні рубрики"
+msgstr "Рубрики"
 
-# перевірити б ще раз
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:43
 #, c-format
 msgid "Total due"
@@ -10277,7 +10375,7 @@ msgstr "Твіт"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:713
 #, c-format
 msgid "Type"
-msgstr "Тип"
+msgstr "Тип "
 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:78
 #, c-format
@@ -10293,11 +10391,11 @@ msgstr "Вводимо пошукові терміни"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
 msgid "Type:"
-msgstr "Тип:"
+msgstr "Тип: "
 
 # Типи зв'язків можуть бути:
 # BT - зв'язок з батьківським термом, тобто з термом більш широкого сенсу.
-# NT - зв'язок з дочірнім термом, тобто з термом більш вузького сенсу. Зв'язок BT-NT є взаємно зворотного.
+# NT - зв'язок з дочірнім термом, тобто з термом більш вузького сенсу. Зв'язок BT-NT є взаємно зворотнім.
 # USE - зв'язок з термом, який використовується замість цього.
 # UF - взаємно зворотний зв'язок USE.
 # RT - зв'язок, що визначає пов'язаний терм.
@@ -10307,7 +10405,7 @@ msgstr "Тип:"
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:18
 #, c-format
 msgid "UF: %s"
-msgstr "ВЗ: %s"
+msgstr "ВЗ: %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:196
 #, c-format
@@ -10330,7 +10428,7 @@ msgstr "Не вдається додати одну чи декілька міт
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:340
 #, c-format
 msgid "Unavailable (lost or missing)"
-msgstr "Недоступно (втрачено або відсутнє)"
+msgstr "Недоступно (загублено або відсутнє)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:126
 #, c-format
@@ -10394,13 +10492,12 @@ msgstr "Використовується для / див. також:"
 #: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:46
 #, c-format
 msgid "Used in "
-msgstr "Використовується у "
+msgstr "Використовується в "
 
-# назва змінної функції AuthenticatePatron ILS-DI
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:38
-#, fuzzy, c-format
+#, c-format
 msgid "Username:"
-msgstr "Ім’я користувача: %s"
+msgstr "Ім’я користувача: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:39
 #, c-format
@@ -10424,7 +10521,7 @@ msgstr "Перевірка:"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:44
 #, c-format
 msgid "View All"
-msgstr "Переглянути усі"
+msgstr "Оглянути усі"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:56
 #, c-format
@@ -10478,13 +10575,18 @@ msgstr "Дані про том"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:356
 #, c-format
 msgid "Waiting"
-msgstr "Очікує"
+msgstr "Очікування"
 
 #. %1$s:  waiting_count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:113
 #, c-format
 msgid "Waiting (%s)"
 msgstr "Очікує (%s)"
+
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:46
+#, c-format
+msgid "Warning"
+msgstr "Увага"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:106
@@ -10519,7 +10621,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:299
 #, c-format
 msgid "Website"
-msgstr "веб-сайт"
+msgstr "Веб-сайт"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:1
@@ -10536,6 +10638,11 @@ msgstr "Середа"
 #, c-format
 msgid "Welcome, "
 msgstr "Вітання, "
+
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:44
+#, c-format
+msgid "What is a discharge?"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/errors/404.tt:36
 #, c-format
@@ -10570,7 +10677,7 @@ msgstr "Вибрані пропозиції: "
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:831
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:317
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:318
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:587
 msgid "With selected titles: "
 msgstr "З вибраними заголовками: "
@@ -10595,7 +10702,7 @@ msgstr "Написано %s з: „%s“"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:556
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:558
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:781
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:245
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:246
 #, c-format
 msgid "Year"
 msgstr "Рік"
@@ -10605,11 +10712,12 @@ msgstr "Рік"
 msgid "Year: "
 msgstr "Рік: "
 
+# так (memberentrygen)
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:30
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:44
 msgid "Yes"
-msgstr "Так"
+msgstr "так"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:149
 #, c-format
@@ -10668,6 +10776,13 @@ msgstr "Ви можете використовувати „ListRecords“ OAI-P
 #, c-format
 msgid "You can't change your password."
 msgstr "Ви не можете змінити свій пароль."
+
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:42
+#, c-format
+msgid ""
+"You cannot be discharged, you have issues. Please return items before asking "
+"for a discharge."
+msgstr ""
 
 #. %1$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:50
@@ -10914,7 +11029,7 @@ msgstr "Ваш возик "
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:106
 msgid "Your cart is currently empty"
-msgstr "Ваш возик на зараз порожній"
+msgstr "Ваш возик наразі порожній"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:17
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:27
@@ -10950,6 +11065,18 @@ msgid ""
 msgstr ""
 "Ваші виправлення були направлені у бібліотеку, працівник бібліотеки оновить "
 "Ваш обліковий запис щонайшвидше."
+
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:36
+#, c-format
+msgid ""
+"Your discharge request has been sent. Your discharge will be available on "
+"this page within a few days."
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:40
+#, c-format
+msgid "Your discharge will be available on this page within a few days."
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:46
 #, c-format
@@ -10998,7 +11125,7 @@ msgstr "Ваші списки"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:587
 msgid "Your lists:"
-msgstr "Ваші списки:"
+msgstr "Ваші списки: "
 
 #. %1$s:  FOREACH error IN RENEW_ERROR.split('\|') 
 #. %2$s:  IF error == 'card_expired' 
@@ -11123,73 +11250,10 @@ msgstr ""
 msgid "[% LibraryName |html %] Search RSS feed"
 msgstr "[% LibraryName |html %] Стрічка новин (RSS) за пошуком"
 
-#. SPAN
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:239
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:267
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:276
-msgid "[% SEARCH_RESULT.biblionumber |url %]"
-msgstr "[% SEARCH_RESULT.biblionumber |url %]"
-
-#. DIV
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:52
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:81
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:85
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:88
-msgid "[% biblionumber |url %]"
-msgstr "[% biblionumber |url %]"
-
-#. INPUT type=text name=borrower_dateofbirth
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:166
-msgid "[% borrower.dateofbirth | $KohaDates %]"
-msgstr "[% borrower.dateofbirth | $KohaDates %]"
-
-#. A
-#: opac-tmpl/bootstrap/en/includes/opac-facets.inc:45
-msgid "[% facet.facet_title_value |html %]"
-msgstr "[% facet.facet_title_value |html %]"
-
-#. DIV
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:100
-msgid "[% issue.biblionumber |url %]"
-msgstr "[% issue.biblionumber |url %]"
-
-#. DIV
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:25
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:51
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:58
-msgid "[% item.biblionumber |url %]"
-msgstr "[% item.biblionumber |url %]"
-
-#. SPAN
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:298
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:319
-msgid "[% itemsloo.biblionumber |url %]"
-msgstr "[% itemsloo.biblionumber |url %]"
-
 #. INPUT type=text name=limit
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:84
 msgid "[% limit or"
 msgstr "[% limit or"
-
-#. INPUT type=text name=q
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:200
-msgid "[% ms_value |html %]"
-msgstr "[% ms_value |html %]"
-
-#. DIV
-#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:133
-msgid "[% review.biblionumber |url %]"
-msgstr "[% review.biblionumber |url %]"
-
-#. INPUT type=text name=shelfname
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:541
-msgid "[% shelfname |html %]"
-msgstr "[% shelfname |html %]"
-
-#. INPUT type=text name=title
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:134
-msgid "[% title |html %]"
-msgstr "[% title |html %]"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:113
 #, c-format
@@ -11227,7 +11291,6 @@ msgstr ""
 "[%% PROCESS showreference heading=seefro.heading linkType='seefrom' "
 "type=seefro.type %%] "
 
-# це артиклі, в укр. мові для окремих слів не використовуються, хоча у реченні можуть http://www.aratta-ukraine.com/text_ua.php?id=1129
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "a an the"
@@ -11277,10 +11340,11 @@ msgstr "ідентифікатор, що вказує місце, куди до�
 msgid "an identifier used to look up the patron in Koha"
 msgstr "ідентифікатор, використовуваний для пошуку відвідувача у Коха"
 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:54
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:29
 #, c-format
 msgid "and"
-msgstr " та"
+msgstr " і "
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:17
 #, c-format
@@ -11294,12 +11358,17 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:25
 #, c-format
 msgid "anyone to remove his own contributed entries."
-msgstr " будь-кому вилучати свої власні внесені записи."
+msgstr " будь-кому вилучати свої внесені записи."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:33
 #, c-format
 msgid "anyone to remove other contributed entries."
 msgstr " будь-кому вилучати записи внесені іншими."
+
+#: opac-tmpl/bootstrap/en/includes/usermenu.inc:105
+#, c-format
+msgid "ask for a discharge"
+msgstr ""
 
 #. %1$s:  WAITIN.branch 
 #. %2$s:  ELSE 
@@ -11314,7 +11383,7 @@ msgstr " у підрозділі „%s“%s На переміщенні з „%s
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:9
 #, c-format
 msgid "available"
-msgstr " доступні"
+msgstr " доступні "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
@@ -11358,12 +11427,13 @@ msgstr "borrowernumber"
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
 msgid "by"
-msgstr " /"
+msgstr "за"
 
+# parcel?
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:117
 #, c-format
 msgid "by "
-msgstr " / "
+msgstr "за "
 
 # Можливе значення змінної id_typeфункції LookupPatron з ILS-DI
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:461
@@ -11411,8 +11481,7 @@ msgstr "містить"
 
 #. SPAN
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:80
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:260
-#, fuzzy
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:261
 msgid ""
 "ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
 "au=[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
@@ -11422,13 +11491,6 @@ msgid ""
 "%]&rft.edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT."
 "series %]&rft.genre="
 msgstr ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
-"au=[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
-"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT.size "
-"%]&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft.place=[% "
-"BIBLIO_RESULT.place %]&rft.pub=[% BIBLIO_RESULT.publisher |url %]&rft."
-"edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT.series "
-"%]&rft.genre="
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:711
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:742
@@ -11481,7 +11543,7 @@ msgstr " за додатковою інформацією про те, як це
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:130
 #, c-format
 msgid "has already been added."
-msgstr " вже був доданий раніше."
+msgstr " вже було додано раніше. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:572
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:575
@@ -11489,7 +11551,7 @@ msgstr " вже був доданий раніше."
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1141
 #, c-format
 msgid "here"
-msgstr " тут"
+msgstr "тут"
 
 # назва змінної функцій GetAvailability … з ILS-DI
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:113
@@ -11646,7 +11708,6 @@ msgstr " одиницю(і) додано до Вашого возика"
 msgid "item_id"
 msgstr "item_id"
 
-# варіант змінних id_type, return_type функції GetAvailability з ILS-DI
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:9
 #, c-format
 msgid "items. "
@@ -11694,7 +11755,7 @@ msgstr "negcap "
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
 #, c-format
 msgid "not"
-msgstr " не"
+msgstr "не"
 
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:139
 #, c-format
@@ -11715,7 +11776,7 @@ msgstr "веб-формою оновлення"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:30
 #, c-format
 msgid "or"
-msgstr " чи"
+msgstr " або "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
@@ -12038,9 +12099,8 @@ msgstr "аж до "
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1176
 #, c-format
 msgid "url"
-msgstr "URL"
+msgstr "URL-посилання"
 
-# перевірити, зв’язано з http://www.loc.gov/marc/authority/ad4xx.html та http://www.gpntb.ru/win/usmarc/ch2/box6.html
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:93
 #, c-format
 msgid "used for/see from:"

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-04-29 16:06-0300\n"
+"POT-Creation-Date: 2015-05-06 20:38-0300\n"
 "PO-Revision-Date: 2013-01-14 03:10+0200\n"
 "Last-Translator: Reynir Örn Bachmann <reynir.gudmundsson@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -280,6 +280,21 @@ msgid ""
 "%s %s %s %s%s%s%sKoha online%s catalog &rsaquo; %sContents of %s%sYour lists"
 "%s%s %s%s "
 msgstr "Safnskrá &rsaquo; Aðgangur fyrir %s %s "
+
+#. %1$s:  USE Koha 
+#. %2$s:  USE Branches 
+#. %3$s:  INCLUDE 'doc-head-open.inc' 
+#. %4$s:  IF ( LibraryNameTitle ) 
+#. %5$s:  LibraryNameTitle 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  INCLUDE 'doc-head-close.inc' 
+#. %9$s:  BLOCK cssinclude 
+#. %10$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:1
+#, fuzzy, c-format
+msgid "%s %s %s %s%s%sKoha online%s catalog %s %s%s "
+msgstr "Koha netskrá "
 
 #. %1$s:  USE Koha 
 #. %2$s:  USE AuthorisedValues 
@@ -560,7 +575,6 @@ msgstr "Safnskrá &rsaquo; Karfan þín "
 #. %8$s:  BLOCK cssinclude 
 #. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-invalid.tt:1
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:1
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:1
 #, fuzzy, c-format
 msgid "%s %s %s%s%sKoha online%s catalog %s %s%s "
@@ -659,6 +673,20 @@ msgstr ""
 #, fuzzy, c-format
 msgid "%s %s %s%s%sKoha online%s catalog &rsaquo; Advanced search %s %s%s "
 msgstr "Safnskrá &rsaquo; Ítarleg leit "
+
+#. %1$s:  USE Koha 
+#. %2$s:  INCLUDE 'doc-head-open.inc' 
+#. %3$s:  IF ( LibraryNameTitle ) 
+#. %4$s:  LibraryNameTitle 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  INCLUDE 'doc-head-close.inc' 
+#. %8$s:  BLOCK cssinclude 
+#. %9$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:1
+#, fuzzy, c-format
+msgid "%s %s %s%s%sKoha online%s catalog &rsaquo; Discharge %s %s%s "
+msgstr "Safnskrá &rsaquo; ISBD sýn "
 
 #. %1$s:  USE Koha 
 #. %2$s:  INCLUDE 'doc-head-open.inc' 
@@ -838,7 +866,7 @@ msgstr "%s, %s "
 #: opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:12
 #, fuzzy, c-format
 msgid "%s %s by %s %s "
-msgstr "%s %s %s %s (%s) "
+msgstr "%s %s %s%s"
 
 #. %1$s:  ELSE 
 #. %2$s:  IF ( review.borrowernumber && ShowReviewer != "none" ) 
@@ -1289,6 +1317,17 @@ msgstr "Heimilisfang:"
 msgid "%s Address:"
 msgstr "Heimilisfang:"
 
+#. %1$s:  IF message.code == "unable_to_generate_pdf" 
+#. %2$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:27
+#, fuzzy, c-format
+msgid ""
+"%s An error occurs when generating the pdf file. Please contact the staff to "
+"resolve this problem. %s "
+msgstr ""
+"Afsakaðu, Þessi sjálfsafgreiðslustöð hefur týnt auðkenninu sínu. "
+"Vinsamlegast hafðu samband við kerfisstjóra til að leysa þetta vandarmál."
+
 #. %1$s:  IF ( latestserial.status1 ) 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( latestserial.status2 ) 
@@ -1681,13 +1720,13 @@ msgstr "frá öðrum notendum "
 #. %2$s:  ELSE 
 #. %3$s:  FOREACH role IN content 
 #: opac-tmpl/bootstrap/en/modules/opac-idref.tt:20
-#, c-format
+#, fuzzy, c-format
 msgid "%s This ppn is not found on the idref service. %s %s "
-msgstr ""
+msgstr "%s %s %s %s (%s) "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:226
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:227
 #, fuzzy, c-format
 msgid "%s This record has no items. %s "
 msgstr "Þessi færsla er ekki með neina hluti. "
@@ -1752,7 +1791,7 @@ msgstr "%s %s %s %s (%s) "
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:475
 #, fuzzy, c-format
 msgid "%s Yes %s No %s "
-msgstr "%s %s %s %s "
+msgstr "%s %s %s %s (%s) "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -1883,7 +1922,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:138
 #, fuzzy, c-format
 msgid "%s by %s %s %s "
-msgstr "%s %s %s %s (%s) "
+msgstr "%s %s (%s) "
 
 #. %1$s:  IF ( XISBN.author ) 
 #. %2$s:  XISBN.author |html 
@@ -1934,6 +1973,12 @@ msgstr "hljóð upptaka"
 #, fuzzy, c-format
 msgid "%s since %s%s "
 msgstr "%s %s %s %s (%s) "
+
+#. %1$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:54
+#, c-format
+msgid "%s system-wide library news. "
+msgstr ""
 
 #. %1$s:  ELSE 
 #. %2$s:  heading 
@@ -2167,6 +2212,12 @@ msgid "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s&amp;reviewid=%s"
 msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
 
 #. %1$s:  OPACBaseURL 
+#: opac-tmpl/bootstrap/en/modules/opac-news-rss.tt:6
+#, fuzzy, c-format
+msgid "%s/cgi-bin/koha/opac-main.pl"
+msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
+
+#. %1$s:  OPACBaseURL 
 #. %2$s:  query_cgi |html 
 #. %3$s:  limit_cgi |html 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:69
@@ -2312,7 +2363,7 @@ msgstr ""
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:281
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:282
 #, fuzzy, c-format
 msgid "%sThis record has no items.%s "
 msgstr "Þessi færsla er ekki með neina hluti. "
@@ -3112,7 +3163,7 @@ msgid "(modified on %s)"
 msgstr "(breytt þann %s)"
 
 #. %1$s:  koha_new.newdate 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:46
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:47
 #, c-format
 msgid "(published on %s)"
 msgstr "(útgefið þann %s)"
@@ -3302,6 +3353,13 @@ msgstr ""
 msgid ": %sa list:%s"
 msgstr "Listi:"
 
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:46
+#, c-format
+msgid ""
+": This request is only valid if you are in good standing with the library. "
+"Once the application is made, you can not borrow library materials."
+msgstr ""
+
 #. %1$s:  HTML5MediaParent 
 #. %2$s:  FOREACH HTML5MediaSet IN HTML5MediaSets 
 #. %3$s:  HTML5MediaSet.child  
@@ -3430,7 +3488,7 @@ msgstr "Bæta við á nýjan lista:"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:587
 #, fuzzy, c-format
 msgid "Add to cart"
-msgstr "Bæta við körfu"
+msgstr "Bæta við á lista"
 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:30
 #, c-format
@@ -3495,9 +3553,9 @@ msgstr "Ýtarleg leit"
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:59
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:141
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:270
-#, fuzzy, c-format
+#, c-format
 msgid "All"
-msgstr "Blindraletur"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:72
 #, c-format
@@ -3703,6 +3761,11 @@ msgstr ""
 msgid "Ascending"
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:47
+#, c-format
+msgid "Ask for a discharge"
+msgstr ""
+
 #. For the first occurrence,
 #. %1$s:  subscription.branchname 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:805
@@ -3756,7 +3819,7 @@ msgstr "Auðkennir notenda og skila auðkenni til baka fyrir meðliminn."
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:553
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:780
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:64
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:244
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:245
 #, c-format
 msgid "Author"
 msgstr "Höfundur"
@@ -4152,7 +4215,7 @@ msgstr "Ekki hægt að taka frá"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:65
 #, fuzzy, c-format
 msgid "Card number"
-msgstr "kortanúmer"
+msgstr "Korta númer:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:48
 #, fuzzy, c-format
@@ -4230,9 +4293,9 @@ msgstr "Endurnýja hlut"
 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:37
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:149
-#, fuzzy, c-format
+#, c-format
 msgid "Checked out"
-msgstr "(Í útláni)"
+msgstr "Í útláni"
 
 #. %1$s:  issues_count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:106
@@ -4408,8 +4471,9 @@ msgstr "Loka glugga"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:22
+#, fuzzy
 msgid "Collect items you are interested in"
-msgstr ""
+msgstr "Valdir hlutir :"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:127
@@ -4548,7 +4612,7 @@ msgstr "Dagsetning höfundarréttar:"
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:88
 #, fuzzy, c-format
 msgid "Copyright year: %s "
-msgstr "Dagsetning höfundarréttar: "
+msgstr "Höfundarréttur "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:213
@@ -4562,9 +4626,9 @@ msgid "Count"
 msgstr "Fjöldi"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:32
-#, c-format
+#, fuzzy, c-format
 msgid "Course #"
-msgstr ""
+msgstr "Heldur áfram:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:33
 #, fuzzy, c-format
@@ -4577,7 +4641,7 @@ msgstr "Korta númer:"
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:18
 #, fuzzy, c-format
 msgid "Course reserves"
-msgstr "SearchCourseReserves"
+msgstr "Vista færslu:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:21
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:28
@@ -4586,9 +4650,9 @@ msgid "Course reserves for "
 msgstr "SearchCourseReserves "
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:25
-#, c-format
+#, fuzzy, c-format
 msgid "Courses"
-msgstr ""
+msgstr "Heldur áfram:"
 
 #. IMG
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:61
@@ -4816,9 +4880,9 @@ msgid "Delicious"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:32
-#, c-format
+#, fuzzy, c-format
 msgid "Department:"
-msgstr ""
+msgstr "Einhver tegund"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:31
 #, c-format
@@ -4892,6 +4956,12 @@ msgstr "Einungis úrvinnsla ?"
 msgid "Directories"
 msgstr "Skráarsöfn"
 
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:13
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:25
+#, fuzzy, c-format
+msgid "Discharge"
+msgstr "Sektir og gjöld"
+
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:318
 #, c-format
 msgid "Discographies"
@@ -4927,7 +4997,7 @@ msgid "Don't have a password yet?"
 msgstr "Ertu ekki mað aðgangsorð ennþá ?"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:310
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:79
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:85
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:75
 #, fuzzy, c-format
 msgid "Don't have an account? "
@@ -4957,7 +5027,7 @@ msgstr "Niðurhals listi:"
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:49
 #, fuzzy, c-format
 msgid "Download list "
-msgstr "Niðurhals listi:"
+msgstr "Niðurhals listi: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:128
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:381
@@ -5408,9 +5478,9 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:54
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:56
-#, fuzzy, c-format
+#, c-format
 msgid "Forever"
-msgstr "endurskoðun"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:41
 #, c-format
@@ -5486,6 +5556,11 @@ msgstr "Áskriftarupplýsingar %s"
 #, fuzzy, c-format
 msgid "General"
 msgstr "Almennt;"
+
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:38
+#, fuzzy, c-format
+msgid "Get your discharge"
+msgstr "Sektir og gjöld"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:48
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:394
@@ -5647,9 +5722,9 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:11
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:12
-#, fuzzy, c-format
+#, c-format
 msgid "Hi,"
-msgstr ", %s"
+msgstr ""
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:396
@@ -5769,7 +5844,7 @@ msgstr "Frátektir í bíð"
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:11
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:47
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:10
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:12
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:13
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:13
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:19
@@ -5778,6 +5853,7 @@ msgstr "Frátektir í bíð"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:14
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:39
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:11
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:12
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:41
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:12
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:13
@@ -5871,7 +5947,7 @@ msgstr "ISBN: "
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:55
 #, fuzzy, c-format
 msgid "ISBN: %s "
-msgstr "ISBN: %s "
+msgstr "ISBN: %s"
 
 #. %1$s:  FOREACH isbn IN BIBLIO_RESULT.ISBN 
 #. %2$s:  isbn 
@@ -6010,7 +6086,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:136
 #, fuzzy, c-format
 msgid "In online catalog: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
-msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
+msgstr "/cgi-bin/koha/opac-detail.pl?biblionumber="
 
 #. For the first occurrence,
 #. %1$s:  item.transfertfrom 
@@ -6046,14 +6122,14 @@ msgid "Information"
 msgstr "Upplýsingar"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:35
-#, c-format
+#, fuzzy, c-format
 msgid "Instructors"
-msgstr ""
+msgstr "Mynd"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:36
-#, c-format
+#, fuzzy, c-format
 msgid "Instructors:"
-msgstr ""
+msgstr "Mynd"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:36
 #, fuzzy, c-format
@@ -6167,7 +6243,7 @@ msgstr "Senda körfuna þína "
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:141
 #, fuzzy, c-format
 msgid "Items: "
-msgstr "hlutir "
+msgstr "hlutir"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:1
@@ -6251,7 +6327,7 @@ msgstr "LCCN:"
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:124
 #, fuzzy, c-format
 msgid "LCCN: %s "
-msgstr "LCCN: "
+msgstr "LCCN:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:170
 #, c-format
@@ -6465,7 +6541,7 @@ msgstr "Kerfisauðkenni"
 msgid "Location"
 msgstr "Staðsetning"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:246
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:247
 #, fuzzy, c-format
 msgid "Location (Status)"
 msgstr "Staðsetningar"
@@ -6475,7 +6551,7 @@ msgstr "Staðsetningar"
 msgid "Location and availability: "
 msgstr "Staðsetning og fáanleiki: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:213
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:214
 #, fuzzy, c-format
 msgid "Location(s) (Status)"
 msgstr "Staðsetningar"
@@ -6491,7 +6567,7 @@ msgstr "Staðsetning"
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:152
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:691
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:703
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:77
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:73
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:283
 #, fuzzy, c-format
@@ -6525,7 +6601,7 @@ msgstr "<a1>Skráðu þig inn</a> til að sjá tögin sem þú hefur vistað."
 msgid "Log in to your account"
 msgstr "Skráðu þig inn á þínu auðkenni"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:73
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:69
 #, fuzzy, c-format
 msgid "Log in to your account:"
@@ -6542,7 +6618,7 @@ msgid "Login"
 msgstr "Innskráning"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:303
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:74
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:70
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:278
 #, c-format
@@ -6579,7 +6655,7 @@ msgstr "Marksnið kortasýn"
 #: opac-tmpl/bootstrap/en/xslt/plainMARC.xsl:8
 #, fuzzy, c-format
 msgid "MARC View"
-msgstr "Marksnið sýn"
+msgstr "Marksnið kortasýn"
 
 #: opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:21
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:23
@@ -6829,7 +6905,7 @@ msgstr "ISBN: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:30
 #, c-format
 msgid "Name"
-msgstr ""
+msgstr "Nafn"
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:64
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:66
@@ -6898,6 +6974,15 @@ msgstr ""
 #, c-format
 msgid "New tag:"
 msgstr "Nýtt tag:"
+
+#. %1$s:  IF ( LibraryNameTitle ) 
+#. %2$s:  LibraryNameTitle 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-news-rss.tt:5
+#, fuzzy, c-format
+msgid "News from %s%s%sthe library%s"
+msgstr "Tög frá þessu safni:"
 
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:73
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
@@ -7238,7 +7323,7 @@ msgstr "Athugasemd"
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:94
 #, fuzzy, c-format
 msgid "Notes : %s "
-msgstr "Athugasemd: "
+msgstr "Athugasemd:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:74
 #, c-format
@@ -7441,7 +7526,7 @@ msgid "Password updated"
 msgstr "Aðgangsorð uppfært"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:304
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:75
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:81
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:42
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:71
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:280
@@ -7620,10 +7705,10 @@ msgid ""
 "which can be imported into personal bibliographic software like EndNote, "
 "Reference Manager or ProCite."
 msgstr ""
-"Hæ, %s %s hefur sent þér körfu útfrá safnskránni okkar sem er birt á netinu. "
-"Vinsamlegast takið eftir að viðhengið inniheldur safnfærslur á Marksniði sem "
-"hægt er að flytja inn í bókasafnshugbúnað fyrir einstaklinga eins og t.d. "
-"EndNote, Reference Manager eða ProCite."
+"Hæ, %s %s hefur sent þér sýndarhillu sem kallast : %s útfrá safnskránni "
+"okkar sem er birt á netinu. Vinsamlegast takið eftir að viðhengið inniheldur "
+"safnfærslur á Marksniði sem hægt er að flytja inn í bókasafnshugbúnað fyrir "
+"einstaklinga eins og t.d. EndNote, Reference Manager eða ProCite. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:25
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:53
@@ -7706,7 +7791,7 @@ msgstr "Fyrri"
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:179
 #, fuzzy
 msgid "Preview"
-msgstr "endurskoðun "
+msgstr "endurskoðun"
 
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:16
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
@@ -7878,7 +7963,7 @@ msgstr "Útgefandi:"
 msgid "Purchase suggestions"
 msgstr "Kauptillaga"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:54
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:60
 #, c-format
 msgid "Quote of the Day"
 msgstr ""
@@ -7888,6 +7973,13 @@ msgstr ""
 #, c-format
 msgid "RIS (Zotero, EndNote, others)"
 msgstr ""
+
+#. %1$s:  IF ( loggedinusername ) 
+#. %2$s:  Branches.GetName( branchcode ) 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:53
+#, fuzzy, c-format
+msgid "RSS feed for %s%s "
+msgstr "Enginn opinn listi."
 
 #. %1$s:  shelfname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:8
@@ -7954,7 +8046,7 @@ msgid "Register a new account"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:310
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:79
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:85
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:75
 #, fuzzy, c-format
 msgid "Register here."
@@ -8208,9 +8300,9 @@ msgstr "Skila þessum hlut "
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:51
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:113
-#, c-format
+#, fuzzy, c-format
 msgid "Return to the last advanced search"
-msgstr ""
+msgstr "Ýtarleg leit"
 
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:52
 #, fuzzy, c-format
@@ -8453,7 +8545,7 @@ msgstr "kafli"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:34
 #, fuzzy, c-format
 msgid "Section:"
-msgstr "kafli"
+msgstr "Aðgerði:"
 
 #. IMG
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:62
@@ -8553,7 +8645,7 @@ msgstr "Valdir hlutir :"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:254
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:831
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:39
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:317
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:318
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:587
 #, fuzzy, c-format
 msgid "Select titles to: "
@@ -8616,7 +8708,7 @@ msgstr "Ráðnúmerasafn"
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:106
 #, fuzzy, c-format
 msgid "Serial: %s "
-msgstr "Raðnúmer "
+msgstr "Raðnúmer"
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:25
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:177
@@ -8791,7 +8883,7 @@ msgstr "Sýna seinustu 50 hluti"
 msgid "Sign in with your Email"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:96
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:81
 #, c-format
 msgid "Sign in with your email"
@@ -9042,7 +9134,7 @@ msgstr "Efni:"
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:82
 #, fuzzy, c-format
 msgid "Subject: %s "
-msgstr "Efni: "
+msgstr "Efni:"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:73
@@ -9249,7 +9341,7 @@ msgstr "Skoða tög"
 msgid "Tag cloud"
 msgstr "Tagaský"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:262
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:263
 #, c-format
 msgid "Tag status here."
 msgstr "Staða tags hér."
@@ -9263,9 +9355,9 @@ msgid "Tag status here. "
 msgstr "Staða tags hér. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:123
-#, c-format
+#, fuzzy, c-format
 msgid "Tag:"
-msgstr ""
+msgstr "BT: %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:31
 #, fuzzy, c-format
@@ -9624,6 +9716,15 @@ msgstr ""
 msgid "This card has been declared lost. %s "
 msgstr "<em>SKILABOÐ 13:</em> Þetta kort hefur verið skráð sem týnt. "
 
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:45
+#, c-format
+msgid ""
+"This document certifies that you have returned all borrowed items. It is "
+"sometimes asked during a file transfer from a school to another. The "
+"discharge is sent by us to your school. You will also find it available on "
+"your reader account."
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/errors/400.tt:30
 #: opac-tmpl/bootstrap/en/modules/errors/402.tt:30
 #, c-format
@@ -9717,7 +9818,7 @@ msgstr "Þessi færsla er ekki með neina hluti. "
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:812
 #, fuzzy, c-format
 msgid "This subscription is closed."
-msgstr "Áskriftin rennur út þann %s"
+msgstr "Áskriftir"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:156
 #, fuzzy, c-format
@@ -9765,7 +9866,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:548
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:779
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:53
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:243
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:244
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:127
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:335
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:377
@@ -9965,7 +10066,7 @@ msgstr "Sameinaður titill"
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:100
 #, fuzzy, c-format
 msgid "Unified title: %s "
-msgstr "Sameinaður titill "
+msgstr "Sameinaður titill"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:249
 #, c-format
@@ -10095,6 +10196,11 @@ msgstr "Í bið"
 msgid "Waiting (%s)"
 msgstr "Í bið"
 
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:46
+#, c-format
+msgid "Warning"
+msgstr ""
+
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:106
 msgid "Warning: Cannot be undone. Please confirm once again"
@@ -10143,6 +10249,11 @@ msgstr ""
 msgid "Welcome, "
 msgstr "Velkomin(n), <a1> "
 
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:44
+#, c-format
+msgid "What is a discharge?"
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/errors/404.tt:36
 #, c-format
 msgid "What's next?"
@@ -10175,7 +10286,7 @@ msgstr "Valdir hlutir : "
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:831
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:317
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:318
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:587
 #, fuzzy
 msgid "With selected titles: "
@@ -10201,7 +10312,7 @@ msgstr "Skrifað þann %s af %s"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:556
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:558
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:781
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:245
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:246
 #, c-format
 msgid "Year"
 msgstr "Ár"
@@ -10275,6 +10386,13 @@ msgstr "Þú getur notað OAI-PMH ListRecords í staðinn fyrir þessa þjónust
 #, c-format
 msgid "You can't change your password."
 msgstr "Þú getur ekki breytt aðgangsorðinu þínu."
+
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:42
+#, c-format
+msgid ""
+"You cannot be discharged, you have issues. Please return items before asking "
+"for a discharge."
+msgstr ""
 
 #. %1$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:50
@@ -10493,7 +10611,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:204
 #, fuzzy, c-format
 msgid "Your authority search history is empty."
-msgstr "Leitarsaga þín er tóm."
+msgstr "Karfan þín er tóm."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:53
 #, c-format
@@ -10524,7 +10642,7 @@ msgstr "Karfan þín er tóm."
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:123
 #, fuzzy, c-format
 msgid "Your catalog search history is empty."
-msgstr "Leitarsaga þín er tóm."
+msgstr "Karfan þín er tóm."
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:17
 #, fuzzy, c-format
@@ -10549,6 +10667,18 @@ msgid ""
 msgstr ""
 "Leiðréttingarnar þínar hafa verið sendar safninu, og starfsmaður mun uppfæra "
 "upplýsingarnar þínar eins fljótt og auðið er."
+
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:36
+#, c-format
+msgid ""
+"Your discharge request has been sent. Your discharge will be available on "
+"this page within a few days."
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:40
+#, c-format
+msgid "Your discharge will be available on this page within a few days."
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:46
 #, c-format
@@ -10713,74 +10843,11 @@ msgstr ""
 msgid "[% LibraryName |html %] Search RSS feed"
 msgstr ""
 
-#. SPAN
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:239
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:267
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:276
-msgid "[% SEARCH_RESULT.biblionumber |url %]"
-msgstr "[% SEARCH_RESULT.biblionumber |url %]"
-
-#. DIV
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:52
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:81
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:85
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:88
-msgid "[% biblionumber |url %]"
-msgstr "[% biblionumber |url %]"
-
-#. INPUT type=text name=borrower_dateofbirth
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:166
-msgid "[% borrower.dateofbirth | $KohaDates %]"
-msgstr "[% borrower.dateofbirth | $KohaDates %]"
-
-#. A
-#: opac-tmpl/bootstrap/en/includes/opac-facets.inc:45
-msgid "[% facet.facet_title_value |html %]"
-msgstr "[% facet.facet_title_value |html %]"
-
-#. DIV
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:100
-msgid "[% issue.biblionumber |url %]"
-msgstr "[% issue.biblionumber |url %]"
-
-#. DIV
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:25
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:51
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:58
-msgid "[% item.biblionumber |url %]"
-msgstr "[% item.biblionumber |url %]"
-
-#. SPAN
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:298
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:319
-msgid "[% itemsloo.biblionumber |url %]"
-msgstr "[% itemsloo.biblionumber |url %]"
-
 #. INPUT type=text name=limit
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:84
 #, fuzzy
 msgid "[% limit or"
 msgstr "Takmarkað við:"
-
-#. INPUT type=text name=q
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:200
-msgid "[% ms_value |html %]"
-msgstr "[% ms_value |html %]"
-
-#. DIV
-#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:133
-msgid "[% review.biblionumber |url %]"
-msgstr "[% review.biblionumber |url %]"
-
-#. INPUT type=text name=shelfname
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:541
-msgid "[% shelfname |html %]"
-msgstr "[% shelfname |html %]"
-
-#. INPUT type=text name=title
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:134
-msgid "[% title |html %]"
-msgstr "[% title |html %]"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:113
 #, c-format
@@ -10863,6 +10930,7 @@ msgstr "auðkenni sem sýnir staðsetninguna þar sem á að senda hlutinn"
 msgid "an identifier used to look up the patron in Koha"
 msgstr "auðkenni sem er notað til þess að flétta upp meðlim í Koha"
 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:54
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:29
 #, c-format
 msgid "and"
@@ -10883,6 +10951,11 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:33
 #, c-format
 msgid "anyone to remove other contributed entries."
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/includes/usermenu.inc:105
+#, c-format
+msgid "ask for a discharge"
 msgstr ""
 
 #. %1$s:  WAITIN.branch 
@@ -10994,7 +11067,7 @@ msgstr "inniheldur"
 
 #. SPAN
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:80
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:260
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:261
 #, fuzzy
 msgid ""
 "ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
@@ -11411,9 +11484,9 @@ msgid "search"
 msgstr "Leit"
 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:105
-#, fuzzy, c-format
+#, c-format
 msgid "see also:"
-msgstr "Velja lista"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:509
 #, c-format

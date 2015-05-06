@@ -1,19 +1,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.14 staff\n"
-"POT-Creation-Date: 2015-04-29 16:01-0300\n"
-"PO-Revision-Date: 2014-11-27 16:35+0000\n"
+"POT-Creation-Date: 2015-05-06 20:34-0300\n"
+"PO-Revision-Date: 2015-04-30 19:45+0000\n"
 "Last-Translator: Héctor <hector.hecaxmmx@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-community."
 "org>\n"
-"Language: es-ES\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1417106132.000000\n"
+"X-POOTLE-MTIME: 1430423116.000000\n"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slimUtils-MODS31.xsl:12
 #, c-format
@@ -2433,7 +2433,7 @@ msgstr "Continúa en parte por:"
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:975
 #, c-format
 msgid "Continues in part:"
-msgstr "Continuado en parte:"
+msgstr "En parte es continuación de:"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:829
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:972
@@ -2560,9 +2560,9 @@ msgstr "Cirílico"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:608
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:669
-#, fuzzy, c-format
+#, c-format
 msgid "DDC classification: "
-msgstr "Clasificación: "
+msgstr "Clasificación CDD: "
 
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:1009
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:523
@@ -3320,9 +3320,9 @@ msgstr "General; "
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:574
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:635
-#, fuzzy, c-format
+#, c-format
 msgid "Genre/Form: "
-msgstr "Formato: "
+msgstr "Género/Forma: "
 
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:613
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:270
@@ -4068,7 +4068,7 @@ msgstr "Material textual manuscrito"
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:330
 #, c-format
 msgid "Manuscript notated music"
-msgstr "Manuscrito de música anotada"
+msgstr "Música manuscrita"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:84
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:415
@@ -4434,7 +4434,7 @@ msgstr "Revistas musicales y comedias"
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:332
 #, c-format
 msgid "Musical sound recording"
-msgstr "Grabación de sonidos musicales"
+msgstr "Grabación sonora musical"
 
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:352
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:482
@@ -4808,7 +4808,7 @@ msgstr "Ninguno de los siguientes"
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:331
 #, c-format
 msgid "Nonmusical sound recording"
-msgstr "Grabación de sonidos no musicales"
+msgstr "Grabación sonora no musical"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:42
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:44
@@ -5056,6 +5056,7 @@ msgstr ""
 "008/25-27 (Naturaleza de contenidos) y la posición 008/24 se codifica en "
 "blanco (#)."
 
+# Traducción según BNE 008 Recursos Continuados > pos 33
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:1150
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:664
 #, c-format
@@ -5064,11 +5065,8 @@ msgid ""
 "of the language of the title on the source item upon which the key title "
 "(field 222) is based."
 msgstr ""
-"Código alfabético de un carácter que indica la naturaleza de un ejemplar si "
-"el consiste completamente de un tipo de material. Si el ejemplar puede "
-"considerarse de más de un tipo de material, los tipos se indican en "
-"008/25-27 (Naturaleza de contenidos) y la posición 008/24 se codifica en "
-"blanco (#)."
+"Código alfabético de una sola letra que indica el alfabeto original del "
+"título de un documento fuente en el que se basa el título clave (campo 222)."
 
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:1324
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:768
@@ -5638,11 +5636,12 @@ msgstr "Fotografías"
 msgid "Pictorially"
 msgstr "Ilustradamente"
 
+# Según traducción de la BNE campo 008 Materiales Visuales pos:33 dato:i y 006/16.
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:1308
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:752
 #, c-format
 msgid "Picture"
-msgstr "Pintura"
+msgstr "Imagen"
 
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:659
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:316
@@ -5798,9 +5797,9 @@ msgstr "Producto"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:703
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:805
-#, fuzzy, c-format
+#, c-format
 msgid "Production Credits: "
-msgstr "Elementos de producción"
+msgstr "Créditos de producción: "
 
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:790
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:377
@@ -5830,7 +5829,7 @@ msgstr "Gráfico proyectado"
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:691
 #, c-format
 msgid "Projected medium"
-msgstr "Medio proyectado"
+msgstr "Material gráfico proyectable"
 
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:558
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:215
@@ -6679,7 +6678,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:694
 #, c-format
 msgid "Three-dimensional artifact or naturally occurring object"
-msgstr "Artefacto tridimensional u objeto de ocurrencia natural"
+msgstr "Objeto tridimensional artificial o natural"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:486
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:528
@@ -7150,9 +7149,9 @@ msgid ""
 "position contains a blank (#)."
 msgstr ""
 "Hasta dos códigos de un caracter (registrados en el orden de la siguiente "
-"lista) que indican el tipo de texto literario contenido en una grabación no-"
-"musical. Si se asigna solo un código, será alineado a la izquierda y la "
-"posición no utilizada contendrá un caracter vacío (#)."
+"lista) que indican el tipo de texto literario contenido en una grabación "
+"sonora no musical. Si se asigna solo un código, será alineado a la izquierda "
+"y la posición no utilizada contendrá un caracter vacío (#)."
 
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:1041
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:555
@@ -8403,9 +8402,9 @@ msgstr "disponible en línea "
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:595
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:644
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:657
-#, fuzzy, c-format
+#, c-format
 msgid "avxyz"
-msgstr "abvxyz"
+msgstr "avxyz"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:779
 #, c-format
@@ -9630,7 +9629,7 @@ msgstr "d- Con pérdida"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:64
 #, c-format
 msgid "d- Manuscript notated music"
-msgstr "d- Manuscrito de música anotada"
+msgstr "d- Música notada manuscrita"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -10604,6 +10603,7 @@ msgstr "fuente"
 msgid "full level"
 msgstr "nivel completo"
 
+# Traducción según MARC21 BNE
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader_computerfile.tt:77
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader_computerfile.tt:79
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader_book.tt:76
@@ -10612,7 +10612,7 @@ msgstr "nivel completo"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:79
 #, c-format
 msgid "g - Projected medium"
-msgstr "g- Medio proyectado"
+msgstr "g - Material gráfico proyectable"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -11050,7 +11050,7 @@ msgstr "humor, sátira "
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:84
 #, c-format
 msgid "i - Nonmusical sound recording"
-msgstr "i- Grabación de sonidos no musicales"
+msgstr "i- Grabación sonora no musical"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -11127,11 +11127,12 @@ msgstr "i- Intergubernamental e internacional"
 msgid "i- Nitrate base"
 msgstr "i- Base de nitrato"
 
+# Traducido segun MARC21 BNE campo 007. Material gráfico no proyectable. Pos: 01
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
 msgid "i- Picture"
-msgstr "i- Ilustración"
+msgstr "i- Imagen"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -11245,7 +11246,7 @@ msgstr "número de ejemplar"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:89
 #, c-format
 msgid "j - Musical sound recording"
-msgstr "j- Grabación de sonidos musicales"
+msgstr "j- Grabación sonora musical"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -11365,7 +11366,7 @@ msgstr "jz- Otros datos ultravioleta"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:94
 #, c-format
 msgid "k - Two-dimensional nonprojectable graphic"
-msgstr "k- Gráfico no proyectable de dos dimensiones"
+msgstr "k- Material gráfico bidimensional, no proyectable"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -12867,7 +12868,7 @@ msgstr "q- Modelo"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
 msgid "q- Notated music"
-msgstr "q- Música con notación"
+msgstr "q- Música notada"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -12895,7 +12896,7 @@ msgstr "q- Rollo"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:114
 #, c-format
 msgid "r - Three-dimensional artifact or naturally occurring object"
-msgstr "r- Artefacto tridimensional u objeto natural"
+msgstr "r- Objeto tridimensional artificial o natural"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -13320,7 +13321,7 @@ msgstr "s- Casete de sonido"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
 msgid "s- Sound recording"
-msgstr "s- Grabación de sonido"
+msgstr "s- Grabación sonora"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -13512,21 +13513,21 @@ msgstr "disco de sonido"
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:207
 #, c-format
 msgid "sound recording"
-msgstr "grabación de sonido"
+msgstr "grabación sonora"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:299
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3.xsl:308
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3-1.xsl:288
 #, c-format
 msgid "sound recording-musical"
-msgstr "grabación de sonido-musical"
+msgstr "grabación sonora-musical"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:298
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3.xsl:307
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3-1.xsl:287
 #, c-format
 msgid "sound recording-nonmusical"
-msgstr "grabación de sonido-no musical"
+msgstr "grabación sonora-no musical"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:1101
 #, c-format
@@ -13658,7 +13659,7 @@ msgstr "revisión de literatura "
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:119
 #, c-format
 msgid "t - Manuscript language material"
-msgstr "t- Material de idioma manuscrito"
+msgstr "t- Material textual manuscrito"
 
 #. For the first occurrence,
 #. SCRIPT
