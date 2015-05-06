@@ -2,6 +2,7 @@
 
 use Modern::Perl;
 use Test::More;
+use Test::Warn;
 use MARC::Record;
 
 use C4::Biblio qw( AddBiblio );
@@ -45,6 +46,22 @@ AddReturn( $barcode );
 
 # Discharge possible without issue
 is( Koha::Borrower::Discharge::can_be_discharged({ borrowernumber => $borrowernumber }), 1, 'A patron without issues can be discharged' );
+
+is(Koha::Borrower::Discharge::generate_as_pdf,undef,"Confirm failure when lacking borrower number");
+
+# Check if PDF::FromHTML is installed.
+my $check = eval { require PDF::FromHTML; };
+
+# Tests for if PDF::FromHTML is installed
+if ($check) {
+    isnt( Koha::Borrower::Discharge::generate_as_pdf({ borrowernumber => $borrowernumber }), undef, "Temporary PDF generated." );
+}
+# Tests for if PDF::FromHTML is not installed
+else {
+    warning_like { Koha::Borrower::Discharge::generate_as_pdf({ borrowernumber => $borrowernumber, testing => 1 }) }
+          [ qr/Can't locate PDF\/FromHTML.pm in \@INC/ ],
+          "Expected failure because of missing PDF::FromHTML.";
+}
 
 # FIXME
 # At this point, there is a problem with the AutoCommit off
