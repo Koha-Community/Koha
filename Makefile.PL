@@ -279,6 +279,7 @@ my $target_map = {
   './installer'                 => 'INTRANET_CGI_DIR',
   './errors'                    => {target => 'INTRANET_CGI_DIR'},
   './Koha'                      => 'PERL_MODULE_DIR',
+  './Koha.pm'                   => 'PERL_MODULE_DIR',
   './koha-tmpl/intranet-tmpl'   => {target => 'INTRANET_TMPL_DIR', trimdir => -1},
   './koha-tmpl/opac-tmpl'       => {target => 'OPAC_TMPL_DIR', trimdir => -1},
   './kohaversion.pl'            => 'INTRANET_CGI_DIR', 
