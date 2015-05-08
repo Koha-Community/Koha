@@ -40,7 +40,7 @@ BEGIN {
 
 sub _request {
     my ( $request ) = @_;
-    my $ua = LWP::UserAgent->new( "Koha " . $KOHA::VERSION );
+    my $ua = LWP::UserAgent->new( agent => "Koha " . $Koha::VERSION );
 
     my $response;
     eval {
