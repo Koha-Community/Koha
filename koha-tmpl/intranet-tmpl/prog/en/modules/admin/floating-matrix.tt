@@ -1,0 +1,124 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; Floating matrix</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/admin/floating-matrix.css" />
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/admin/floating-matrix-loader.css" />
+[% INCLUDE 'doc-head-close.inc' %]
+
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Floating matrix</div>
+
+<div id="doc3" class="yui-t1">
+
+<div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+        <h1 class="parameters">
+                Defining floating rules between libraries
+        </h1>
+
+        <fieldset>
+            <div class="help">
+                <p>There are four types of floating:</p>
+                <ul>
+                    <li>Disabled, denoted by red cells</li>
+                    <li>Always, denoted by green cells. This means that Items checked-in to 'From' branch, which would normally be transfered to 'To' branch, stay in the checked-in branch.</li>
+                    <li>Possible, denoted by blue cells. This is like always, except the librarian is prompted if he/she wants to initiate a transfer or not. Default behaviour is not to transfer.</li>
+                    <li>Conditional, denoted by purple cells. This is like always, but only when the given condition matches.
+                        <p class="example">
+                            itype eq BK - this will always float all Items with item type 'BK'<br/>
+                            itype eq BK or itype eq CR - this will always float all Items with item type 'BK' or 'CR'<br/>
+                            ccode eq FLOAT - this will float all Items with a collection code 'FLOAT'<br/>
+                            itype ne CR and permanent_location eq CART  - this will float all Items not of item type CR and whose permanent location (set when the Item's location is set) is 'CART'<br/>
+                            <i>These boolean statements are actually evaluable Perl boolean expressions and target the columns in the koha.items-table. See <a href="http://schema.koha-community.org/tables/items.html">here</a> for available data columns.</i>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+
+            <fieldset>
+            <legend>Floating rule tester</legend>
+            <div id="floatingRuleTester">
+                <label for="testerFromBranch">Choose the origin library:</label>
+                <select id="testerFromBranch">
+                [% FOREACH branch IN branches %]
+                    <option value="[% branch.branchcode %]">[% branch.branchcode %]</option>
+                [% END %]
+                </select>
+                <label for="testerToBranch">Choose the destination library:</label>
+                <select id="testerToBranch">
+                [% FOREACH branch IN branches%]
+                    <option value="[% branch.branchcode %]">[% branch.branchcode %]</option>
+                [% END %]
+                </select>
+                <input id="testerBarcode" type="test" width="12"/>
+                <input id="tester" type="submit" value="Test"/>
+                <span id="testResulDisplay"/>
+                <div class="cssload-loader">
+                    <div class="cssload-inner cssload-one"></div>
+                    <div class="cssload-inner cssload-two"></div>
+                    <div class="cssload-inner cssload-three"></div>
+                </div>
+            </div>
+            </fieldset>
+
+            <table id="floatingMatrix">
+                <tr id="fmHeaderRow">
+                    <th>From \ To</th>
+                    [% FOREACH branch IN branches %]
+                        <th title="[% branch.branchname %]">[% branch.branchcode %]</th>
+                    [% END %]
+                </tr>
+                [% FOREACH fromBranchCode IN branches %]
+                <tr>
+                    <th title="[% fromBranchCode.branchname %]">[% fromBranchCode.branchcode %]</th>
+                    [% FOREACH toBranchCode IN branches; branchRule = fm.getBranchRule(fromBranchCode.branchcode, toBranchCode.branchcode) %]
+                    <td>
+                        [% IF toBranchCode.branchcode == fromBranchCode.branchcode %]
+                            &nbsp;
+                        [% ELSE %]
+                            <div class="branchRule"[% IF branchRule.getId %] id="br_[% branchRule.getId %]"[% END %]>
+
+                                [% INCLUDE 'admin/floating-matrix-floatingTypes.inc' %]
+
+                                <input name="conditionRules" type="text" value="[% branchRule.getConditionRules() %]" class="hidden"/>
+                                <div>
+                                    <input name="submit" type="submit" value="%"/>
+                                    <input name="cancel" type="submit" value="V"/>
+                                </div>
+                            </div>
+                        [% END %]
+                    </td>
+                [% END %]
+                </tr>
+            [% END %]
+            </table>
+        </fieldset>
+    </div>
+    </div>
+<div class="yui-b">
+[% INCLUDE 'admin-menu.inc' %]
+</div>
+</div>
+
+
+
+<!-- HTML Templates -->
+<div class="branchRule TEMPLATE" id="br_TEMPLATE">
+
+    [% INCLUDE 'admin/floating-matrix-floatingTypes.inc' %]
+
+    <input name="conditionRules" type="text" value="" class="hidden"/>
+    <div>
+        <input name="submit" type="submit" value="%"/>
+        <input name="cancel" type="submit" value="V"/>
+    </div>
+</div>
+
+
+
+<script type="text/javascript" src="[% themelang %]/js/admin/floating-matrix.js"></script>
+[% INCLUDE 'intranet-bottom.inc' %]

@@ -39,6 +39,7 @@ use C4::RotatingCollections;
 use Algorithm::CheckDigits;
 use C4::KohaSuomi::Billing::BillingManager qw(RemovePayment);
 
+use Koha::FloatingMatrix;
 use Data::Dumper;
 use Koha::Account;
 use Koha::AuthorisedValues;
@@ -2105,18 +2106,36 @@ sub AddReturn {
         DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });
     }
 
+    my $floatingType = Koha::FloatingMatrix::CheckFloating($item, $branch, $returnbranch);
     # Transfer to returnbranch if Automatic transfer set or append message NeedsTransfer
-    if (!$is_in_rotating_collection && ($doreturn or $messages->{'NotIssued'}) and !$resfound and ($branch ne $returnbranch) and not $messages->{'WrongTransfer'}){
-        if  (C4::Context->preference("AutomaticItemReturn"    ) or
+    if (!$is_in_rotating_collection && ($doreturn or $messages->{'NotIssued'}) and !$resfound and ($branch ne $returnbranch) and not $messages->{'WrongTransfer'} && (not($floatingType) || $floatingType eq 'POSSIBLE')){
+        if  ( not($floatingType && $floatingType eq 'POSSIBLE') and
+            (C4::Context->preference("AutomaticItemReturn"    ) or
             (C4::Context->preference("UseBranchTransferLimits") and
-             ! IsBranchTransferAllowed($branch, $returnbranch, $item->{C4::Context->preference("BranchTransferLimitsType")} )
-           )) {
+             ! IsBranchTransferAllowed($branch, $returnbranch, $item->{C4::Context->preference("BranchTransferLimitsType")} )))
+           )
+        {
             $debug and warn sprintf "about to call ModItemTransfer(%s, %s, %s)", $item->{'itemnumber'},$branch, $returnbranch;
             $debug and warn "item: " . Dumper($item);
             ModItemTransfer($item->{'itemnumber'}, $branch, $returnbranch);
             $messages->{'WasTransfered'} = 1;
         } else {
             $messages->{'NeedsTransfer'} = $returnbranch;
+        }
+    }
+    #This elsif-clause copypastes the upper if-clause. This is horrible and I cry, but cannot refactor this mess now :( due to Koha upstream master stuff looming.
+    elsif (!$is_in_rotating_collection && ($doreturn or $messages->{'NotIssued'})
+        and !$resfound and ($branch ne $returnbranch)
+        and not($messages->{'WrongTransfer'})
+        && $floatingType){ #So if we would otherwise transfer, but we have a floating rule overriding it.
+                           #We can infer that the transfer was averted because of a floating rule.
+        #Make sure we dont log the same floating denial multiple times
+        #So first check if we already logged this operation.
+        my $logs = C4::Log::GetLogs(DateTime->now(time_zone => C4::Context->tz),
+                                    DateTime->now(time_zone => C4::Context->tz),
+                                    undef, ['FLOATING'], undef, $item->{'itemnumber'}, "$branch -> $returnbranch denied");
+        if (not($logs) || (ref($logs) eq 'ARRAY' && scalar(@$logs) == 0)) {
+            C4::Log::logaction("FLOATING", $floatingType, $item->{'itemnumber'}, "$branch -> $returnbranch denied");
         }
     }
 
