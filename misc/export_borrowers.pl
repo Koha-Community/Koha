@@ -47,13 +47,15 @@ $0 -h
     -s, --separator=CHAR    This character will be used to separate fields.
                             Some characters like | or ; will need to be escaped
                             in the parameter setting, like -s=\\| or -s=\\;
-                            If no separator is specifield, a comma will be used.
+                            If no separator is specified, the delimiter pref
+                            will be used (or a comma, if the pref is empty)
     -H, --show-header       Print field names on first row
     -w, --where=CONDITION   Condition to filter borrowers to export
                             (SQL where clause).
-                            CONDITION must be enclosed by double quotes and
-                            if needed, where value by single quotes.
-                            example : --where "surname='De Lattre'"
+                            CONDITION must be enclosed by double quotes
+                            You can use single quotes around a field value
+                            within the condition like:
+                                --where "surname='De Lattre'"
     -h, --help              Show this help
 
 USAGE
