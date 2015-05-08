@@ -1,9 +1,11 @@
 #!/usr/bin/perl
 
-use strict;
-use warnings;
+use Modern::Perl;
+use Test::More tests => 73;
+use Test::Warn;
 
-use Test::More tests => 66;
+$| = 1;
+
 BEGIN {
     use FindBin;
     use lib $FindBin::Bin;
@@ -21,12 +23,40 @@ my ($obj1,$obj2,$format,$value,$initial,$serial,$re,$next,$previous,$temp);
 my @formats = sort keys %thash;
 foreach (@formats) {
     my $pre = sprintf '(%-12s)', $_;
-    ok($obj1 = C4::Barcodes->new($_),           "$pre Barcode Creation : new($_)");
+    if ($_ eq 'EAN13') {
+        warning_like { $obj1 = C4::Barcodes->new($_); }
+                     [ qr/not valid EAN-13 barcode/ ],
+                     "$pre Expected complaint regarding $_ not being a valid EAN-13 barcode";
+    }
+    elsif ($_ eq 'annual') {
+        warning_like { $obj1 = C4::Barcodes->new($_); }
+                     [ qr/No max barcode (.*) found\.  Using initial value\./ ],
+                     "$pre Expected complaint regarding no max barcode found";
+    }
+    elsif ($_ eq 'hbyymmincr') {
+        warning_like { $obj1 = C4::Barcodes->new($_); }
+                     [ qr/No existing hbyymmincr barcodes found\.  Reverting to initial value\./ ],
+                     "$pre Expected complaint regarding no hbyymmincr barcodes found";
+    }
+    elsif ($_ eq 'incremental') {
+        $obj1 = C4::Barcodes->new($_);
+    }
+    else {
+        die "This should not happen! ($_)\n";
+    }
+    ok($obj1,           "$pre Barcode Creation : new($_)");
     SKIP: {
         skip "No Object Returned by new($_)", 17 unless $obj1;
         ok($_ eq ($format = $obj1->autoBarcode()),  "$pre autoBarcode()    : " . ($format || 'FAILED') );
         ok($initial= $obj1->initial(),              "$pre initial()        : " . ($initial|| 'FAILED') );
-        $temp = $obj1->db_max();
+        if ($_ eq 'hbyymmincr') {
+            warning_like { $temp = $obj1->db_max(); }
+                         [ qr/No existing hbyymmincr barcodes found\.  Reverting to initial value\./ ],
+                         "$pre Expected complaint regarding no hbyymmincr barcodes found";
+        }
+        else {
+            $temp = $obj1->db_max();
+        }
         ok($temp   = $obj1->max(),                  "$pre max()            : " . ($temp   || 'FAILED') );
         ok($value  = $obj1->value(),                "$pre value()          : " . ($value  || 'FAILED') );
         ok($serial = $obj1->serial(),               "$pre serial()         : " . ($serial || 'FAILED') );
@@ -45,12 +75,24 @@ foreach (@formats) {
 foreach $format (@formats) {
     my $pre = sprintf '(%-12s)', $format;
     foreach my $testval (@{$thash{ $format }}) {
-        ok($obj1 = C4::Barcodes->new($format,$testval),    "$pre Barcode Creation : new('$format','$testval')");
         if ($format eq 'hbyymmincr') {
+            warning_like { $obj1 = C4::Barcodes->new($format,$testval); }
+                         [ qr/No existing hbyymmincr barcodes found\.  Reverting to initial value\./ ],
+                         "$pre Expected complaint regarding no hbyymmincr barcodes found";
+            ok($obj1,    "$pre Barcode Creation : new('$format','$testval')");
             $obj2 = $obj1->new();
             my $branch;
             ok($branch = $obj1->branch(),   "$pre branch() : " . ($branch || 'FAILED') );
             ok($branch eq $obj2->branch(),  "$pre branch extended to derived object : " . ($obj2->branch || 'FAILED'));
+        }
+        elsif ($format eq 'EAN13') {
+            warning_like { $obj1 = C4::Barcodes->new($format,$testval) }
+                         [ qr/not valid EAN-13 barcode/ ],
+                         "$pre Expected complaint regarding $testval not being a valid EAN-13 barcode";
+            ok($obj1,    "$pre Barcode Creation : new('$format','$testval')");
+        }
+        else {
+            ok($obj1 = C4::Barcodes->new($format,$testval),    "$pre Barcode Creation : new('$format','$testval')");
         }
     }
 }
