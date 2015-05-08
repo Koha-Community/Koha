@@ -45,6 +45,7 @@ my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 $dbh->do('DELETE FROM reviews');
+$dbh->do('DELETE FROM issues');
 $dbh->do('DELETE FROM borrowers');
 
 # ---------- Some borrowers for testing -------------------
