@@ -7,7 +7,7 @@
 <div id="checkin_search" class="residentsearch">
     <p class="tip">Scan a barcode to check in:</p>
     <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off">
-        <input name="barcode" id="ret_barcode" size="40" accesskey="r" />
+        <input name="barcode" class="head-searchbox" id="ret_barcode" size="40" accesskey="r" />
         <input value="Submit" class="submit" type="submit" />
     </form>
 </div>[% END %]
@@ -15,7 +15,7 @@
 <div id="patron_search" class="residentsearch">
     <p class="tip">Enter patron card number or partial name:</p>
     <form action="/cgi-bin/koha/members/member.pl" method="post">
-        <input name="searchmember" id="searchmember" size="40" type="text"/>
+        <input name="searchmember" class="head-searchbox" id="searchmember" size="40" type="text"/>
         <input type="hidden" name="quicksearch" value="1" />
         <input value="Submit" class="submit" type="submit" />
     </form>
@@ -24,16 +24,16 @@
 <div id="catalog_search" class="residentsearch">
     <p class="tip">Enter search keywords:</p>
     <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
-        <input type="text" name="q" id="search-form" size="40" accesskey="q" />
+        <input type="text" name="q" id="search-form" class="head-searchbox" size="40" accesskey="q" />
         <input type="submit" class="submit" value="Submit"/>
     </form>
 </div>[% END %]
 
 <ul>
-    [% IF ( CAN_user_circulate ) %]<li><a href="#circ_search">Check out</a></li>[% END %]
-    [% IF ( CAN_user_circulate ) %]<li><a href="#checkin_search">Check in</a></li>[% END %]
-    [% IF ( CAN_user_borrowers ) %]<li><a href="#patron_search">Search patrons</a></li>[% END %]
-    [% IF ( CAN_user_catalogue ) %]<li><a href="#catalog_search">Search the catalog</a></li>[% END %]
+    [% IF ( CAN_user_circulate ) %]<li><a onclick="keep_text(0)" href="#circ_search">Check out</a></li>[% END %]
+    [% IF ( CAN_user_circulate ) %]<li><a onclick="keep_text(1)" href="#checkin_search">Check in</a></li>[% END %]
+    [% IF ( CAN_user_borrowers ) %]<li><a onclick="keep_text(2)" href="#patron_search">Search patrons</a></li>[% END %]
+    [% IF ( CAN_user_catalogue ) %]<li><a onclick="keep_text(3)" href="#catalog_search">Search the catalog</a></li>[% END %]
 </ul>
 
 </div><!-- /header_search -->

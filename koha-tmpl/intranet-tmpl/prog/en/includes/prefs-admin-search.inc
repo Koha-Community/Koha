@@ -6,24 +6,24 @@
 	    <form action="/cgi-bin/koha/admin/preferences.pl">
         <input type="hidden" name="tab" value="[% last_tab %]" />
         <input type="hidden" name="op" value="search" />
-        <input type="text" size="40" name="searchfield" value="[% searchfield |html %]" />
+        <input class="head-searchbox" type="text" size="40" name="searchfield" value="[% searchfield |html %]" />
         <input type="submit" class="submit" value="Search" />
     </form>
 	</div>
     [% INCLUDE 'patron-search-box.inc' %]
 	[% IF ( CAN_user_catalogue ) %]
     <div id="catalog_search" class="residentsearch">
-	<p class="tip">Enter search keywords:</p>
+<p class="tip">Enter search keywords:</p>
 		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
-			 <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="form-text" />
+             <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="head-searchbox form-text" />
 				<input type="submit" value="Submit" class="submit" />
 		</form>
 	</div>
 	[% END %]
 			<ul>
-            <li><a href="#syspref_search">Search system preferences</a></li>
-            [% IF ( CAN_user_circulate ) %]<li><a href="#circ_search">Check out</a></li>[% END %]
-            [% IF ( CAN_user_catalogue ) %]<li><a href="#catalog_search">Search the catalog</a></li>[% END %]
+            <li><a onclick="keep_text(0)" href="#syspref_search">Search system preferences</a></li>
+            [% IF ( CAN_user_circulate ) %]<li><a onclick="keep_text(1)" href="#circ_search">Check out</a></li>[% END %]
+            [% IF ( CAN_user_catalogue ) %]<li><a onclick="keep_text(2)" href="#catalog_search">Search the catalog</a></li>[% END %]
 			</ul>
 </div>
 </div>

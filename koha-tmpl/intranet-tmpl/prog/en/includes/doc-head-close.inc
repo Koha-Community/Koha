@@ -56,3 +56,6 @@ var NO_LOCAL_JACKET = _("No cover image available");
 //]]>
 </script>
 [% END %]
+
+<!-- For keeping the text when navigating the search tabs -->
+[% INCLUDE 'searchbox-keep-text.inc' %]
