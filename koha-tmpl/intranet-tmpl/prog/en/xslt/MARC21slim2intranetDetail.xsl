@@ -809,7 +809,7 @@
         <!-- 773 -->
         <xsl:if test="marc:datafield[@tag=773]">
         <xsl:for-each select="marc:datafield[@tag=773]">
-        <xsl:if test="@ind1=0">
+        <xsl:if test="@ind1 !=1">
         <span class="results_summary in"><span class="label">
         <xsl:choose>
         <xsl:when test="@ind2=' '">
