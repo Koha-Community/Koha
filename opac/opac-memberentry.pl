@@ -25,6 +25,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Members;
 use C4::Form::MessagingPreferences;
+use Koha::Borrowers;
 use Koha::Borrower::Modifications;
 use C4::Branch qw(GetBranchesLoop);
 use C4::Scrubber;
@@ -225,7 +226,9 @@ elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
     }
 
     $template->param(
-        borrower => $borrower, );
+        borrower  => $borrower,
+        guarantor => Koha::Borrowers->find($borrowernumber)->guarantor(),
+    );
 
     if (C4::Context->preference('OPACpatronimages')) {
         my ($image, $dberror) = GetPatronImage($borrower->{borrowernumber});

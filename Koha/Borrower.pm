@@ -35,6 +35,18 @@ Koha::Borrower - Koha Borrower Object class
 
 =cut
 
+=head3 guarantor
+
+Returns a Koha::Borrower object for this borrower's guarantor
+
+=cut
+
+sub guarantor {
+    my ( $self ) = @_;
+
+    return Koha::Borrowers->find( $self->guarantorid() );
+}
+
 =head3 type
 
 =cut

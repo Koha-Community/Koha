@@ -69,8 +69,7 @@
                                         </select>
                                     </div>
 
-                                    [% SET b = Koha.Find('Borrower', borrower.borrowernumber) %]
-                                    [% IF b.guarantorid && Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') %]
+                                    [% IF borrower.guarantorid && Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') %]
                                         <div>
                                             <label for="privacy_guarantor_checkouts">Allow your guarantor to view your current checkouts?</label>
                                             <select name="privacy_guarantor_checkouts">
@@ -83,7 +82,7 @@
                                                 [% END %]
                                             </select>
                                             <span class="hint">
-                                                Your guarantor is <i>[% b.guarantor.firstname %] [% b.guarantor.surname %]</i>
+                                                Your guarantor is <i>[% borrower.guarantor.firstname %] [% borrower.guarantor.surname %]</i>
                                             </span>
                                         </div>
                                     [% END %]

@@ -24,6 +24,7 @@ use C4::Context;
 use C4::Circulation;
 use C4::Members;
 use C4::Output;
+use Koha::Borrowers;
 
 my $query = new CGI;
 
@@ -74,15 +75,15 @@ elsif ( $op eq "delete_record" ) {
 }
 
 # get borrower privacy ....
-my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
+my $borrower = Koha::Borrowers->find( $borrowernumber );;
 
 $template->param(
-    'Ask_data'                         => 1,
-    'privacy' . $borrower->{'privacy'} => 1,
-    'privacyview'                      => 1,
-    'borrower'                         => $borrower,
-    'surname'                          => $borrower->{surname},
-    'firstname'                        => $borrower->{firstname},
+    'Ask_data'                       => 1,
+    'privacy' . $borrower->privacy() => 1,
+    'privacyview'                    => 1,
+    'borrower'                       => $borrower,
+    'surname'                        => $borrower->surname,
+    'firstname'                      => $borrower->firstname,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };

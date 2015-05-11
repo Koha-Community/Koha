@@ -89,8 +89,7 @@
                                     <span id="update_privacy_guarantor_checkouts_message" class="alert" style="display:none"></span>
                                 </span>
                                 <span class="hint">
-                                    [% SET g = Koha.Find('Borrower',borrower.guarantorid) %]
-                                    Your guarantor is <i>[% g.firstname %] [% g.surname %]</i>
+                                    Your guarantor is <i>[% guarantor.firstname %] [% guarantor.surname %]</i>
                                 </span>
                             </li>
                         </ol>
