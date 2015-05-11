@@ -166,6 +166,9 @@ $category_type="A" unless $category_type; # FIXME we should display a error mess
 # if a add or modify is requested => check validity of data.
 %data = %$borrower_data if ($borrower_data);
 
+##KD-258, making sure CGI parameters are defined if the same info is available in the borrowers-hash (%data) WTF is that variable name? 'data'? noNIIIN, whole Koha is about data.
+$guarantorid = $data{guarantorid} unless $guarantorid;
+
 # initialize %newdata
 my %newdata;                                                                             # comes from $input->param()
 if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' ) {
