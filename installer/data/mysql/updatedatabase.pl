@@ -9825,7 +9825,10 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.19.00.010";
 if ( CheckVersion($DBversion) ) {
-    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SessionRestrictionByIP','1','Check for Change in  Remote IP address for Session Security. Disable when remote ip address changes frequently.','','YesNo')");
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
+        VALUES('SessionRestrictionByIP','1','Check for Change in  Remote IP address for Session Security. Disable when remote ip address changes frequently.','','YesNo')
+    |);
     print "Upgrade to $DBversion done (Bug 5511: SessionRestrictionByIP)\n";
     SetVersion ($DBversion);
 }
@@ -10389,6 +10392,12 @@ if ( CheckVersion($DBversion) ) {
         SET created_on = lastmodified, lastmodified = lastmodified
     |);
     print "Upgrade to $DBversion done (Bug 13421: Add DB field virtualshelves.created_on)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.19.00.039";
+if ( CheckVersion($DBversion) ) {
+    print "Upgrade to $DBversion done (Koha 3.20 beta)\n";
     SetVersion ($DBversion);
 }
 
