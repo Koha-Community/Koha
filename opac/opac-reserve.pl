@@ -466,7 +466,8 @@ foreach my $biblioNum (@biblionumbers) {
         my $ItemBorrowerReserveInfo = GetMemberDetails( $reservedfor, 0);
 
         # the item could be reserved for this borrower vi a host record, flag this
-        if ($reservedfor eq $borrowernumber){
+        $reservedfor //= '';
+	if ($reservedfor eq $borrowernumber){
             $itemLoopIter->{already_reserved} = 1;
         }
 
