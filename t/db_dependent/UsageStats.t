@@ -15,7 +15,7 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 552;
+use Test::More tests => 551;
 use t::lib::Mocks qw(mock_preference);
 use POSIX qw(strftime);
 
@@ -27,7 +27,6 @@ BEGIN {
     use_ok('C4::Reserves');
     use_ok('MARC::Record');
     use_ok('Koha::Acquisition::Order');
-    use_ok('t::lib::TestBuilder');
 }
 
 can_ok(
@@ -112,7 +111,7 @@ is( $report->{library}->{type},           'TYPE',    "UsageStatsLibraryType   is
 is( $report->{library}->{country},        'COUNTRY', "UsageStatsCountry       is good" );
 
 #Test report->volumetry ---------------
-#without objects
+#with original values
 $report = C4::UsageStats->BuildReport();
 
 isa_ok( $report,              'HASH', '$report is a HASH' );
@@ -127,22 +126,22 @@ is( $report->{volumetry}->{borrowers},      0, "There is no borrowers" );
 is( $report->{volumetry}->{aqorders},       0, "There is no aqorders" );
 is( $report->{volumetry}->{subscription},   0, "There is no subscription" );
 
+#after adding objects
 construct_objects_needed();
 
-#with objects
 $report = C4::UsageStats->BuildReport();
 
 isa_ok( $report,              'HASH', '$report is a HASH' );
 isa_ok( $report->{volumetry}, 'HASH', '$report->{volumetry} is a HASH' );
 is( scalar( keys( $report->{volumetry} ) ), 8, "There are 8 fields in $report->{volumetry}" );
-is( $report->{volumetry}->{biblio},         4, "There are 4 biblio" );
+is( $report->{volumetry}->{biblio},         3, "There are 3 biblio" );
 is( $report->{volumetry}->{items},          3, "There are 3 items" );
 is( $report->{volumetry}->{auth_header},    2, "There are 2 auth_header" );
-is( $report->{volumetry}->{old_issues},     1, "There is 1 old_issues" );
-is( $report->{volumetry}->{old_reserves},   1, "There is 1 old_reserves" );
+is( $report->{volumetry}->{old_issues},     1, "There is  1 old_issues" );
+is( $report->{volumetry}->{old_reserves},   1, "There is  1 old_reserves" );
 is( $report->{volumetry}->{borrowers},      3, "There are 3 borrowers" );
-is( $report->{volumetry}->{aqorders},       1, "There is 1 aqorders" );
-is( $report->{volumetry}->{subscription},   1, "There is 1 subscription" );
+is( $report->{volumetry}->{aqorders},       1, "There is  1 aqorders" );
+is( $report->{volumetry}->{subscription},   1, "There is  1 subscription" );
 
 #Test report->systempreferences -------
 #mock to 0
@@ -166,20 +165,14 @@ verif_systempreferences_values( $report, 1 );
 # ---------- Testing ReportToCommunity ----------
 
 # ---------- Testing _count ---------------------
-
-$dbh->do('DROP TABLE IF EXISTS _exmpl_tbl');
-$dbh->do('CREATE TABLE _exmpl_tbl (id INT, val VARCHAR(10))');
-$dbh->do( 'INSERT INTO _exmpl_tbl VALUES(1, ?)', undef, 'Hello' );
-$dbh->do( 'INSERT INTO _exmpl_tbl VALUES(2, ?)', undef, 'World' );
-
 my $query = '
   SELECT count(*)
-  FROM   _exmpl_tbl
+  FROM   borrowers
   ';
 my $count = $dbh->selectrow_array($query);
 
-my $nb_fields = C4::UsageStats::_count('_exmpl_tbl');
-is( $nb_fields, $count, "_exmpl_tbl has 2 fields" );
+my $nb_fields = C4::UsageStats::_count('borrowers');
+is( $nb_fields, $count, "_count return the good number of fields" );
 
 #################################################
 #             Subs
@@ -204,28 +197,23 @@ sub construct_objects_needed {
     my $firstname1   = 'firstname 1';
     my $firstname2   = 'firstname 2';
     my $firstname3   = 'firstname 3';
-    my $cardnumber1  = '00001';
-    my $cardnumber2  = '00002';
-    my $cardnumber3  = '00003';
+    my $cardnumber1  = 'test_card1';
+    my $cardnumber2  = 'test_card2';
+    my $cardnumber3  = 'test_card3';
     my $categorycode = Koha::Database->new()->schema()->resultset('Category')->first()->categorycode();
     my $branchcode   = Koha::Database->new()->schema()->resultset('Branch')->first()->branchcode();
 
     my $query = '
-   INSERT INTO borrowers
+    INSERT INTO borrowers
       (surname, firstname, cardnumber, branchcode, categorycode)
     VALUES (?,?,?,?,?)';
     my $insert_sth = $dbh->prepare($query);
     $insert_sth->execute( $surname1, $firstname1, $cardnumber1, $branchcode, $categorycode );
+    my $borrowernumber1 = $dbh->last_insert_id( undef, undef, 'borrowers', undef );
     $insert_sth->execute( $surname2, $firstname2, $cardnumber2, $branchcode, $categorycode );
+    my $borrowernumber2 = $dbh->last_insert_id( undef, undef, 'borrowers', undef );
     $insert_sth->execute( $surname3, $firstname3, $cardnumber3, $branchcode, $categorycode );
-
-    $query = '
-    SELECT borrowernumber
-    FROM   borrowers
-    WHERE  surname = ?';
-    my $borrowernumber1 = $dbh->selectrow_array( $query, {}, $surname1 );
-    my $borrowernumber2 = $dbh->selectrow_array( $query, {}, $surname2 );
-    my $borrowernumber3 = $dbh->selectrow_array( $query, {}, $surname3 );
+    my $borrowernumber3 = $dbh->last_insert_id( undef, undef, 'borrowers', undef );
 
     # ---------- 3 biblios -----------------------
     my $title1  = 'Title 1';
@@ -253,17 +241,12 @@ sub construct_objects_needed {
       (biblionumber, itemtype, marcxml)
     VALUES (?,?,?)';
     $insert_sth = $dbh->prepare($query);
-    $insert_sth->execute( $biblionumber1, 'Book',  '' );
+    $insert_sth->execute( $biblionumber1, 'Book', '' );
+    my $biblioitemnumber1 = $dbh->last_insert_id( undef, undef, 'biblioitems', undef );
     $insert_sth->execute( $biblionumber2, 'Music', '' );
-    $insert_sth->execute( $biblionumber3, 'Book',  '' );
-
-    $query = '
-    SELECT biblioitemnumber
-    FROM   biblioitems
-    WHERE  biblionumber = ?';
-    my $biblioitemnumber1 = $dbh->selectrow_array( $query, {}, $biblionumber1 );
-    my $biblioitemnumber2 = $dbh->selectrow_array( $query, {}, $biblionumber2 );
-    my $biblioitemnumber3 = $dbh->selectrow_array( $query, {}, $biblionumber3 );
+    my $biblioitemnumber2 = $dbh->last_insert_id( undef, undef, 'biblioitems', undef );
+    $insert_sth->execute( $biblionumber3, 'Book', '' );
+    my $biblioitemnumber3 = $dbh->last_insert_id( undef, undef, 'biblioitems', undef );
 
     # ---------- 3 items  -------------------------
     my $barcode1 = '111111';
@@ -276,16 +259,11 @@ sub construct_objects_needed {
     VALUES (?,?,?,?)';
     $insert_sth = $dbh->prepare($query);
     $insert_sth->execute( $biblionumber1, $biblioitemnumber1, $barcode1, 'Book' );
+    my $item_number1 = $dbh->last_insert_id( undef, undef, 'items', undef );
     $insert_sth->execute( $biblionumber2, $biblioitemnumber2, $barcode2, 'Music' );
+    my $item_number2 = $dbh->last_insert_id( undef, undef, 'items', undef );
     $insert_sth->execute( $biblionumber3, $biblioitemnumber3, $barcode3, 'Book' );
-
-    $query = '
-    SELECT itemnumber
-    FROM   items
-    WHERE  barcode = ?';
-    my $item_number1 = $dbh->selectrow_array( $query, {}, $barcode1 );
-    my $item_number2 = $dbh->selectrow_array( $query, {}, $barcode2 );
-    my $item_number3 = $dbh->selectrow_array( $query, {}, $barcode3 );
+    my $item_number3 = $dbh->last_insert_id( undef, undef, 'items', undef );
 
     # ---------- Add 2 auth_header
     $query = '
@@ -294,14 +272,9 @@ sub construct_objects_needed {
     VALUES (?)';
     $insert_sth = $dbh->prepare($query);
     $insert_sth->execute('authtypecode1');
+    my $authid1 = $dbh->last_insert_id( undef, undef, 'auth_header', undef );
     $insert_sth->execute('authtypecode2');
-
-    $query = '
-    SELECT authid
-    FROM   auth_header
-    WHERE  authtypecode = ?';
-    my $authid1 = $dbh->selectrow_array( $query, {}, 'authtypecode1' );
-    my $authid2 = $dbh->selectrow_array( $query, {}, 'authtypecode2' );
+    my $authid2 = $dbh->last_insert_id( undef, undef, 'auth_header', undef );
 
     # ---------- Add 1 old_issues
     $query = '
@@ -310,12 +283,7 @@ sub construct_objects_needed {
     VALUES (?,?,?)';
     $insert_sth = $dbh->prepare($query);
     $insert_sth->execute( $borrowernumber1, $branchcode, $item_number1 );
-
-    $query = '
-    SELECT issue_id
-    FROM   old_issues
-    WHERE  borrowernumber = ?';
-    my $issue_id1 = $dbh->selectrow_array( $query, {}, $borrowernumber1 );
+    my $issue_id1 = $dbh->last_insert_id( undef, undef, 'old_issues', undef );
 
     # ---------- Add 1 old_reserves
     AddReserve( $branchcode, $borrowernumber1, $biblionumber1, 'a', '', 1, undef, undef, '', 'Title', undef, undef );
@@ -323,16 +291,33 @@ sub construct_objects_needed {
     my $reserve_id1 = $reserves1->[0]->{reserve_id};
     my $reserve1    = CancelReserve( { reserve_id => $reserve_id1 } );
 
-    # ---------- Add 1 biblio, 1 subscription and 1 aqorder
-    my $builder = t::lib::TestBuilder->new();
-    $builder->clear( { source => 'Aqorder' } );
-    my $order1 = $builder->build(
-        {   source  => 'Aqorder',
-            value   => { datecancellationprinted => undef, },
-            only_fk => 1,
-        }
-    );
-    my $newordernumber = Koha::Acquisition::Order->new($order1)->insert->{ordernumber};
+    # ---------- Add 1 aqbudgets
+    $query = '
+    INSERT INTO aqbudgets
+      (budget_amount)
+    VALUES (?)';
+    $insert_sth = $dbh->prepare($query);
+    $insert_sth->execute("20.0");
+    my $aqbudgets1 = $dbh->last_insert_id( undef, undef, 'aqbudgets', undef );
+
+    # ---------- Add 1 aqorders
+    $query = '
+    INSERT INTO aqorders
+      (budget_id, basketno, biblionumber, invoiceid, subscriptionid)
+    VALUES (?,?,?,?,?)';
+    $insert_sth = $dbh->prepare($query);
+    $insert_sth->execute( $aqbudgets1, undef, undef, undef, undef );
+    my $aqorders1 = $dbh->last_insert_id( undef, undef, 'aqorders', undef );
+
+    # --------- Add 1 subscription
+    $query = '
+    INSERT INTO subscription
+      (biblionumber)
+    VALUES (?)';
+    $insert_sth = $dbh->prepare($query);
+    $insert_sth->execute($biblionumber1);
+    my $subscription1 = $dbh->last_insert_id( undef, undef, 'subscription', undef );
+
 }
 
 #Change systempreferences values to $set_value
