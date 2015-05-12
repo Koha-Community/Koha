@@ -1003,12 +1003,14 @@ CREATE TABLE `default_branch_item_rules` (
 
 DROP TABLE IF EXISTS `branchtransfers`;
 CREATE TABLE `branchtransfers` ( -- information for items that are in transit between branches
+  `branchtransfer_id` int(12) NOT NULL auto_increment, -- primary key
   `itemnumber` int(11) NOT NULL default 0, -- the itemnumber that it is in transit (items.itemnumber)
   `datesent` datetime default NULL, -- the date the transfer was initialized
   `frombranch` varchar(10) NOT NULL default '', -- the branch the transfer is coming from
   `datearrived` datetime default NULL, -- the date the transfer arrived at its destination
   `tobranch` varchar(10) NOT NULL default '', -- the branch the transfer was going to
   `comments` mediumtext, -- any comments related to the transfer
+  PRIMARY KEY (`branchtransfer_id`),
   KEY `frombranch` (`frombranch`),
   KEY `tobranch` (`tobranch`),
   KEY `itemnumber` (`itemnumber`),

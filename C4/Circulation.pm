@@ -3205,7 +3205,8 @@ sub GetTransfers {
     my $query = '
         SELECT datesent,
                frombranch,
-               tobranch
+               tobranch,
+               branchtransfer_id
         FROM branchtransfers
         WHERE itemnumber = ?
           AND datearrived IS NULL
@@ -3229,7 +3230,7 @@ sub GetTransfersFromTo {
     return unless ( $frombranch && $tobranch );
     my $dbh   = C4::Context->dbh;
     my $query = "
-        SELECT itemnumber,datesent,frombranch
+        SELECT branchtransfer_id,itemnumber,datesent,frombranch
         FROM   branchtransfers
         WHERE  frombranch=?
           AND  tobranch=?

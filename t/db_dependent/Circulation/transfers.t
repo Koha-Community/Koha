@@ -125,7 +125,7 @@ is(CreateBranchTransferLimit(undef,$branchcode_2),undef,
 my @transfers = GetTransfers($item_id1);
 cmp_deeply(
     \@transfers,
-    [ re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'), $branchcode_1, $branchcode_2 ],
+    [ re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'), $branchcode_1, $branchcode_2, re('[0-9]*') ],
     "Transfers of the item1"
 );    #NOTE: Only the first transfer is returned
 @transfers = GetTransfers;
@@ -142,14 +142,16 @@ cmp_deeply(
     \@transferfrom1to2,
     [
         {
-            itemnumber => $item_id1,
-            datesent   => re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'),
-            frombranch => $branchcode_1
+            branchtransfer_id => re('[0-9]*'),
+            itemnumber        => $item_id1,
+            datesent          => re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'),
+            frombranch        => $branchcode_1
         },
         {
-            itemnumber => $item_id2,
-            datesent   => re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'),
-            frombranch => $branchcode_1
+            branchtransfer_id => re('[0-9]*'),
+            itemnumber        => $item_id2,
+            datesent          => re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'),
+            frombranch        => $branchcode_1
         }
     ],
     "Item1 and Item2 has been transferred from branch1 to branch2"
