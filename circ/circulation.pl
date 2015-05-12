@@ -625,7 +625,7 @@ $template->param(
     AllowRenewalLimitOverride => C4::Context->preference("AllowRenewalLimitOverride"),
     canned_bor_notes_loop     => $canned_notes,
     debarments                => GetDebarments({ borrowernumber => $borrowernumber }),
-    todaysdate                => dt_from_string()->set(hour => 23)->set(minute => 59),
+    todaysdate                => output_pref( { dt => dt_from_string()->set(hour => 23)->set(minute => 59), dateformat => 'sql' } ),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
