@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -26,6 +25,7 @@ use C4::Context;
 
 use C4::Search;
 use C4::Output;
+use Koha::Util::FrameworkPlugin qw|date_entered|;
 
 use constant FIXLEN_DATA_ELTS => '|| aca||aabn           | a|a     d';
 use constant PREF_008 => 'MARCAuthorityControlField008';
@@ -36,16 +36,11 @@ plugin_parameters : other parameters added when the plugin is called by the dopo
 
 =cut
 
-# find today's date
-my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
-
-$year +=1900; $mon +=1;
-my $dateentered = substr($year,2,2).sprintf ("%0.2d", $mon).sprintf ("%0.2d",$mday);
-my $defaultval = Field008();
-
 sub plugin_javascript {
     my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
     my $function_name= $field_number;
+    my $dateentered = date_entered();
+    my $defaultval = substr( C4::Context->preference(PREF_008) || FIXLEN_DATA_ELTS, 0, 34 );
     my $res="
 <script type=\"text/javascript\">
 //<![CDATA[
@@ -79,6 +74,8 @@ sub plugin {
     my $index= $input->param('index');
     my $result= $input->param('result');
     my $authtype= $input->param('authtypecode')||'';
+
+    my $defaultval = substr( C4::Context->preference(PREF_008) || FIXLEN_DATA_ELTS, 0, 34 );
     substr($defaultval,14-6,1)='b' if $authtype=~ /TOPIC_TERM|GENRE.FORM|CHRON_TERM/;
 
     my $dbh = C4::Context->dbh;
@@ -91,6 +88,7 @@ sub plugin {
                  flagsrequired => {editcatalogue => '*'},
                  debug => 1,
                  });
+    my $dateentered = date_entered();
     $result = "$dateentered$defaultval" unless $result;
     my @f;
     for(0,6..17,28,29,31..33,38,39) {
@@ -108,16 +106,4 @@ sub plugin {
         );
     }
     output_html_with_http_headers $input, $cookie, $template->output;
-}
-
-sub Field008 {
-  my $pref= C4::Context->preference(PREF_008);
-  if(!$pref) {
-    return FIXLEN_DATA_ELTS;
-  }
-  elsif(length($pref)<34) {
-    warn "marc21_field_008_authorities.pl: Syspref ".PREF_008." should be 34 characters long ";
-    return FIXLEN_DATA_ELTS;
-  }
-  return substr($pref,0,34);  #ignore remainder
 }

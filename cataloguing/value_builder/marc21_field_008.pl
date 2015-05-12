@@ -27,19 +27,13 @@ use C4::Search;
 use C4::Output;
 
 use XML::LibXML;
+use Koha::Util::FrameworkPlugin qw|date_entered|;
 
 =head1 DESCRIPTION
 
 plugin_parameters : other parameters added when the plugin is called by the dopop function
 
 =cut
-
-# find today's date
-my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = localtime(time);
-
-$year += 1900;
-$mon  += 1;
-my $dateentered = substr($year, 2, 2) . sprintf("%0.2d", $mon) . sprintf("%0.2d", $mday);
 
 sub plugin_javascript {
     my $lang = C4::Context->preference('DefaultLanguageField008' );
@@ -48,6 +42,7 @@ sub plugin_javascript {
 
     my ($dbh, $record, $tagslib, $field_number, $tabloop) = @_;
     my $function_name = $field_number;
+    my $dateentered = date_entered();
     my $res           = "
 <script type=\"text/javascript\">
 //<![CDATA[
@@ -149,6 +144,7 @@ sub plugin {
         }
     );
 
+    my $dateentered = date_entered();
     $result = "$dateentered" . "b        xxu||||| |||| 00| 0 $lang d" unless $result;
     my $errorXml = '';
     # Check if the xml, xsd exists and is validated

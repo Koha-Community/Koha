@@ -27,7 +27,7 @@ BEGIN {
     require Exporter;
     @ISA = qw( Exporter );
     @EXPORT = qw( );
-    @EXPORT_OK = qw( wrapper );
+    @EXPORT_OK = qw( wrapper date_entered );
 }
 
 =head1 NAME
@@ -50,6 +50,20 @@ sub wrapper {
     return "pipe" if $str eq "|";
     return "dblpipe" if $str eq "||";
     return $str;
+}
+
+=head2 date_entered
+
+    date_entered returns date in yymmdd format as needed by MARC21 field 008
+
+=cut
+
+sub date_entered {
+    # find today's date
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+    $year +=1900;
+    $mon +=1;
+    return substr($year,2,2).sprintf ("%0.2d", $mon).sprintf ("%0.2d",$mday);
 }
 
 1;
