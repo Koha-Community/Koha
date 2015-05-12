@@ -524,7 +524,7 @@ our $PERL_DEPS = {
       },
     'Template::Plugin::Stash' => {
         'usage'    => 'Debugging',
-        'required' => '1',
+        'required' => '0',
         'min_ver'  => '1.006',
       },
     'Gravatar::URL' => {
