@@ -1052,6 +1052,7 @@ sub SearchCourses {
         GROUP BY c.course_id
     ";
 
+    $term //= '';
     $term   = "%$term%";
     @params = ($term) x 10;
 
