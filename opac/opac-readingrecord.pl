@@ -73,6 +73,7 @@ else {
 
 
 my $limit = $query->param('limit');
+$limit //= '';
 $limit = ( $limit eq 'full' ) ? 0 : 50;
 
 my $issues = GetAllIssues( $borrowernumber, $order, $limit );
