@@ -38,7 +38,7 @@ $(document).ready(function() {
                 itm = $(this).text();
                 itm = itm.replace(/^\s*|\s*$/g,'');
                 var current_column = $("#edit_row td:eq("+i+")");
-                if ( i != 5 ) {
+                if ( i != 6 ) {
                     $(current_column).find("input[type='text']").val(itm);
                     // select the corresponding option
                     $(current_column).find("select option").each(function(){
@@ -58,8 +58,8 @@ $(document).ready(function() {
                         // Remove potential previous input added
                         $(current_column).find("input").remove();
                         $(current_column).append("<input type='hidden' name='"+name+"' value='"+val+"' />");
-                    } else if ( i == 2 ) {
-                        // If the value is not an integer for "Current checkouts allowed"
+                    } else if ( i == 2 || i == 3 ) {
+                        // If the value is not an integer for "Current checkouts allowed" or "Current on-site checkouts allowed"
                         // The value is "Unlimited" (or an equivalent translated string)
                         // an it should be set to an empty string
                         if( !((parseFloat(itm) == parseInt(itm)) && !isNaN(itm)) ) {
@@ -142,6 +142,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                 <th>Patron category</th>
                 <th>Item type</th>
                 <th>Current checkouts allowed</th>
+                <th>Current on-site checkouts allowed</th>
                 <th>Loan period</th>
                 <th>Unit</th>
                 <th>Hard due date</th>
@@ -183,6 +184,12 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
 									[% rule.maxissueqty %]
 								[% END %]
 							</td>
+                            <td>[% IF rule.unlimited_maxonsiteissueqty %]
+                                    Unlimited
+                                [% ELSE %]
+                                    [% rule.maxonsiteissueqty %]
+                                [% END %]
+                            </td>
 							<td>[% rule.issuelength %]</td>
 							<td>
 							    [% rule.lengthunit %]
@@ -247,6 +254,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                         </select>
                     </td>
                     <td><input type="text" name="maxissueqty" id="maxissueqty" size="3" /></td>
+                    <td><input type="text" name="maxonsiteissueqty" id="maxonsiteissueqty" size="3" /></td>
                     <td><input type="text" name="issuelength" id="issuelength" size="3" /> </td>
                     <td>
                       <select name="lengthunit" id="lengthunit">
@@ -338,6 +346,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                 <tr>
                     <th>&nbsp;</th>
                     <th>Total current checkouts allowed</th>
+                    <th>Total current on-site checkouts allowed</th>
                     <th>Hold policy</th>
                     <th>Return policy</th>
                     <th>&nbsp;</th>
@@ -346,6 +355,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                 <tr>
                     <td><em>Defaults[% UNLESS ( default_rules ) %] (not set)[% END %]</em></td>
                     <td><input type="text" name="maxissueqty" size="3" value="[% default_maxissueqty %]"/></td>
+                    <td><input type="text" name="maxonsiteissueqty" size="3" value="[% default_onsitemaxissueqty %]"/></td>
                     <td>
                         <select name="holdallowed">
                             [% IF ( default_holdallowed_any ) %]
@@ -420,6 +430,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                 <tr>
                     <th>Patron category</th>
                     <th>Total current checkouts allowed</th>
+                    <th>Total current on-site checkouts allowed</th>
                     <th>&nbsp;</th>
                 </tr>
                 [% FOREACH branch_cat_rule_loo IN branch_cat_rule_loop %]
@@ -440,6 +451,13 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                                 [% branch_cat_rule_loo.maxissueqty %]
                             [% END %]
                         </td>
+                        <td>[% IF ( branch_cat_rule_loo.unlimited_maxonsiteissueqty ) %]
+                                Unlimited
+                            [% ELSE %]
+                                [% branch_cat_rule_loo.maxonsiteissueqty %]
+                            [% END %]
+                        </td>
+
                         <td>
                             <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=[% branch_cat_rule_loo.categorycode %]&amp;branch=[% current_branch %]">Delete</a>
                         </td>
@@ -454,6 +472,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                         </select>
                     </td>
                     <td><input name="maxissueqty" size="3" /></td>
+                    <td><input name="maxonsiteissueqty" size="3" /></td>
                     <td><input type="submit" value="Add" class="submit" /></td>
                 </tr>
             </table>
