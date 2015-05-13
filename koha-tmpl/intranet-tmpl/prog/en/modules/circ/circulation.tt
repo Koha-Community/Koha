@@ -252,8 +252,12 @@ $(document).ready(function() {
     </li>
 [% END %]
 
-[% IF ( TOO_MANY ) %]
+[% IF TOO_MANY and TOO_MANY == 'TOO_MANY_CHECKOUTS' %]
     <li>Too many checked out. [% current_loan_count %] checked out, only [% max_loans_allowed %] are allowed.</li>
+[% END %]
+
+[% IF TOO_MANY and TOO_MANY == 'TOO_MANY_ONSITE_CHECKOUTS' %]
+    <li>Too many on-site checked out. [% current_loan_count %] on-site checked out, only [% max_loans_allowed %] are allowed.</li>
 [% END %]
 
 [% IF ( BORRNOTSAMEBRANCH ) %]

@@ -462,16 +462,28 @@ sub TooMany {
 
         if ( $onsite_checkout ) {
             if ( $onsite_checkout_count >= $max_onsite_checkouts_allowed )  {
-                return ($onsite_checkout_count, $max_onsite_checkouts_allowed);
+                return {
+                    reason => 'TOO_MANY_ONSITE_CHECKOUTS',
+                    count => $onsite_checkout_count,
+                    max_allowed => $max_onsite_checkouts_allowed,
+                }
             }
         }
         if ( C4::Context->preference('ConsiderOnSiteCheckoutsAsNormalCheckouts') ) {
             if ( $checkout_count >= $max_checkouts_allowed ) {
-                return ($checkout_count, $max_checkouts_allowed);
+                return {
+                    reason => 'TOO_MANY_CHECKOUTS',
+                    count => $checkout_count,
+                    max_allowed => $max_checkouts_allowed,
+                };
             }
         } elsif ( not $onsite_checkout ) {
             if ( $checkout_count - $onsite_checkout_count >= $max_checkouts_allowed )  {
-                return ($checkout_count - $onsite_checkout_count, $max_checkouts_allowed);
+                return {
+                    reason => 'TOO_MANY_CHECKOUTS',
+                    count => $checkout_count - $onsite_checkout_count,
+                    max_allowed => $max_checkouts_allowed,
+                };
             }
         }
     }
@@ -503,16 +515,28 @@ sub TooMany {
 
         if ( $onsite_checkout ) {
             if ( $onsite_checkout_count >= $max_onsite_checkouts_allowed )  {
-                return ($onsite_checkout_count, $max_onsite_checkouts_allowed);
+                return {
+                    reason => 'TOO_MANY_ONSITE_CHECKOUTS',
+                    count => $onsite_checkout_count,
+                    max_allowed => $max_onsite_checkouts_allowed,
+                }
             }
         }
         if ( C4::Context->preference('ConsiderOnSiteCheckoutsAsNormalCheckouts') ) {
             if ( $checkout_count >= $max_checkouts_allowed ) {
-                return ($checkout_count, $max_checkouts_allowed);
+                return {
+                    reason => 'TOO_MANY_CHECKOUTS',
+                    count => $checkout_count,
+                    max_allowed => $max_checkouts_allowed,
+                };
             }
         } elsif ( not $onsite_checkout ) {
             if ( $checkout_count - $onsite_checkout_count >= $max_checkouts_allowed )  {
-                return ($checkout_count - $onsite_checkout_count, $max_checkouts_allowed);
+                return {
+                    reason => 'TOO_MANY_CHECKOUTS',
+                    count => $checkout_count - $onsite_checkout_count,
+                    max_allowed => $max_checkouts_allowed,
+                };
             }
         }
     }
@@ -861,21 +885,20 @@ sub CanBookBeIssued {
 #
     # JB34 CHECKS IF BORROWERS DON'T HAVE ISSUE TOO MANY BOOKS
     #
-    my ($current_loan_count, $max_loans_allowed) = TooMany( $borrower, $item->{biblionumber}, $item, { onsite_checkout => $onsite_checkout } );
-    # if TooMany max_loans_allowed returns 0 the user doesn't have permission to check out this book
-    if (defined $max_loans_allowed && $max_loans_allowed == 0) {
-        $needsconfirmation{PATRON_CANT} = 1;
-    } else {
-        if($max_loans_allowed){
-            if ( C4::Context->preference("AllowTooManyOverride") ) {
-                $needsconfirmation{TOO_MANY} = 1;
-                $needsconfirmation{current_loan_count} = $current_loan_count;
-                $needsconfirmation{max_loans_allowed} = $max_loans_allowed;
-            } else {
-                $issuingimpossible{TOO_MANY} = 1;
-                $issuingimpossible{current_loan_count} = $current_loan_count;
-                $issuingimpossible{max_loans_allowed} = $max_loans_allowed;
-            }
+    my $toomany = TooMany( $borrower, $item->{biblionumber}, $item, { onsite_checkout => $onsite_checkout } );
+    # if TooMany max_allowed returns 0 the user doesn't have permission to check out this book
+    if ( $toomany ) {
+        if ( $toomany->{max_allowed} == 0 ) {
+            $needsconfirmation{PATRON_CANT} = 1;
+        }
+        if ( C4::Context->preference("AllowTooManyOverride") ) {
+            $needsconfirmation{TOO_MANY} = $toomany->{reason};
+            $needsconfirmation{current_loan_count} = $toomany->{count};
+            $needsconfirmation{max_loans_allowed} = $toomany->{max_allowed};
+        } else {
+            $needsconfirmation{TOO_MANY} = $toomany->{reason};
+            $issuingimpossible{current_loan_count} = $toomany->{count};
+            $issuingimpossible{max_loans_allowed} = $toomany->{max_allowed};
         }
     }
 
