@@ -346,13 +346,13 @@ OPAC:
                   no: "Don't allow"
             - patrons to change their own password on the OPAC. Note that this must be off to use LDAP authentication.
         -
-            - "The user "
+            - "Library users are "
             - pref: OpacResetPassword
               default: 1
               choices:
-                  yes: "can reset"
-                  no: "can not reset"
-            - " their password on OPAC."
+                  yes: "allowed"
+                  no: "not allowed"
+            - " to recover their password via e-mail in the OPAC"
         -
             - pref: OPACPatronDetails
               choices:

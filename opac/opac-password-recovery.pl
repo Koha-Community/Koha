@@ -54,7 +54,6 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
     $email ||= ''; # avoid undef
     my $borrower;
     my $search_results;
-
     # Find the borrower by his userid or email
     if( $username ){
         $search_results = Search({ userid => $username });
@@ -62,8 +61,11 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
     elsif ( $email ){
         $search_results = Search({ '' => $email }, undef, undef, undef, ['emailpro', 'email', 'B_email']);
     }
-
-    if(scalar @$search_results > 1){ # Many matching borrowers
+    if ( not $search_results ){
+       $hasError            = 1;
+       $errNoBorrowerFound  = 1;
+    }
+    elsif(scalar @$search_results > 1){ # Many matching borrowers
        $hasError             = 1;
        $errTooManyEmailFound = 1;
     }
@@ -112,7 +114,7 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
             email     => $email
         );
     }
-    else {# if it doesnt work....
+    else {# if it doesn't work....
         $template->param(
             password_recovery => 1,
             sendmailError     => 1
