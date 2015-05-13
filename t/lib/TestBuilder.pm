@@ -288,8 +288,18 @@ sub _gen_date {
 
 sub _gen_text {
     my ($self, $params) = @_;
-    my $random = String::Random->new( max => $params->{info}->{size} );
-    return $random->randregex('[A-Za-z]+[A-Za-z0-9_]*');
+    # From perldoc String::Random
+    # max: specify the maximum number of characters to return for * and other
+    # regular expression patters that don't return a fixed number of characters
+    my $regex = '[A-Za-z][A-Za-z0-9_]*';
+    my $size = $params->{info}{size};
+    if ( defined $size and $size > 1 ) {
+        $size--;
+    } elsif ( defined $size and $size == 1 ) {
+        $regex = '[A-Za-z]';
+    }
+    my $random = String::Random->new( max => $size );
+    return $random->randregex($regex);
 }
 
 sub _gen_set_enum {
