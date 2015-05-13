@@ -301,7 +301,7 @@ if ($borrowernumber) {
 if ($barcode) {
     # always check for blockers on issuing
     my ( $error, $question, $alerts ) =
-    CanBookBeIssued( $borrower, $barcode, $datedue , $inprocess );
+    CanBookBeIssued( $borrower, $barcode, $datedue , $inprocess, undef, { onsite_checkout => $onsite_checkout } );
     my $blocker = $invalidduedate ? 1 : 0;
 
     $template->param( alert => $alerts );

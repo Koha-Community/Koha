@@ -378,6 +378,8 @@ sub TooMany {
     my $borrower        = shift;
     my $biblionumber = shift;
 	my $item		= shift;
+    my $params = shift;
+    my $onsite_checkout = $params->{onsite_checkout} || 0;
     my $cat_borrower    = $borrower->{'categorycode'};
     my $dbh             = C4::Context->dbh;
 	my $branch;
@@ -396,8 +398,11 @@ sub TooMany {
     # rule
     if (defined($issuing_rule) and defined($issuing_rule->{'maxissueqty'})) {
         my @bind_params;
-        my $count_query = "SELECT COUNT(*) FROM issues
-                           JOIN items USING (itemnumber) ";
+        my $count_query = q|
+            SELECT COUNT(*) AS total, COALESCE(SUM(onsite_checkout), 0) AS onsite_checkouts
+            FROM issues
+            JOIN items USING (itemnumber)
+        |;
 
         my $rule_itemtype = $issuing_rule->{itemtype};
         if ($rule_itemtype eq "*") {
@@ -450,13 +455,24 @@ sub TooMany {
             }
         }
 
-        my $count_sth = $dbh->prepare($count_query);
-        $count_sth->execute(@bind_params);
-        my ($current_loan_count) = $count_sth->fetchrow_array;
+        my ( $checkout_count, $onsite_checkout_count ) = $dbh->selectrow_array( $count_query, {}, @bind_params );
 
-        my $max_loans_allowed = $issuing_rule->{'maxissueqty'};
-        if ($current_loan_count >= $max_loans_allowed) {
-            return ($current_loan_count, $max_loans_allowed);
+        my $max_checkouts_allowed = $issuing_rule->{maxissueqty};
+        my $max_onsite_checkouts_allowed = $issuing_rule->{maxonsiteissueqty};
+
+        if ( $onsite_checkout ) {
+            if ( $onsite_checkout_count >= $max_onsite_checkouts_allowed )  {
+                return ($onsite_checkout_count, $max_onsite_checkouts_allowed);
+            }
+        }
+        if ( C4::Context->preference('ConsiderOnSiteCheckoutsAsNormalCheckouts') ) {
+            if ( $checkout_count >= $max_checkouts_allowed ) {
+                return ($checkout_count, $max_checkouts_allowed);
+            }
+        } elsif ( not $onsite_checkout ) {
+            if ( $checkout_count - $onsite_checkout_count >= $max_checkouts_allowed )  {
+                return ($checkout_count - $onsite_checkout_count, $max_checkouts_allowed);
+            }
         }
     }
 
@@ -464,9 +480,12 @@ sub TooMany {
     my $branch_borrower_circ_rule = GetBranchBorrowerCircRule($branch, $cat_borrower);
     if (defined($branch_borrower_circ_rule->{maxissueqty})) {
         my @bind_params = ();
-        my $branch_count_query = "SELECT COUNT(*) FROM issues
-                                  JOIN items USING (itemnumber)
-                                  WHERE borrowernumber = ? ";
+        my $branch_count_query = q|
+            SELECT COUNT(*) AS total, COALESCE(SUM(onsite_checkout), 0) AS onsite_checkouts
+            FROM issues
+            JOIN items USING (itemnumber)
+            WHERE borrowernumber = ?
+        |;
         push @bind_params, $borrower->{borrowernumber};
 
         if (C4::Context->preference('CircControl') eq 'PickupLibrary') {
@@ -478,13 +497,23 @@ sub TooMany {
             $branch_count_query .= " AND items.homebranch = ? ";
             push @bind_params, $branch;
         }
-        my $branch_count_sth = $dbh->prepare($branch_count_query);
-        $branch_count_sth->execute(@bind_params);
-        my ($current_loan_count) = $branch_count_sth->fetchrow_array;
+        my ( $checkout_count, $onsite_checkout_count ) = $dbh->selectrow_array( $branch_count_query, {}, @bind_params );
+        my $max_checkouts_allowed = $branch_borrower_circ_rule->{maxissueqty};
+        my $max_onsite_checkouts_allowed = $branch_borrower_circ_rule->{maxonsiteissueqty};
 
-        my $max_loans_allowed = $branch_borrower_circ_rule->{maxissueqty};
-        if ($current_loan_count >= $max_loans_allowed) {
-            return ($current_loan_count, $max_loans_allowed);
+        if ( $onsite_checkout ) {
+            if ( $onsite_checkout_count >= $max_onsite_checkouts_allowed )  {
+                return ($onsite_checkout_count, $max_onsite_checkouts_allowed);
+            }
+        }
+        if ( C4::Context->preference('ConsiderOnSiteCheckoutsAsNormalCheckouts') ) {
+            if ( $checkout_count >= $max_checkouts_allowed ) {
+                return ($checkout_count, $max_checkouts_allowed);
+            }
+        } elsif ( not $onsite_checkout ) {
+            if ( $checkout_count - $onsite_checkout_count >= $max_checkouts_allowed )  {
+                return ($checkout_count - $onsite_checkout_count, $max_checkouts_allowed);
+            }
         }
     }
 
@@ -695,10 +724,12 @@ if the borrower borrows to much things
 =cut
 
 sub CanBookBeIssued {
-    my ( $borrower, $barcode, $duedate, $inprocess, $ignore_reserves ) = @_;
+    my ( $borrower, $barcode, $duedate, $inprocess, $ignore_reserves, $params ) = @_;
     my %needsconfirmation;    # filled with problems that needs confirmations
     my %issuingimpossible;    # filled with problems that causes the issue to be IMPOSSIBLE
     my %alerts;               # filled with messages that shouldn't stop issuing, but the librarian should be aware of.
+
+    my $onsite_checkout = $params->{onsite_checkout} || 0;
 
     my $item = GetItem(GetItemnumberFromBarcode( $barcode ));
     my $issue = GetItemIssue($item->{itemnumber});
@@ -830,7 +861,7 @@ sub CanBookBeIssued {
 #
     # JB34 CHECKS IF BORROWERS DON'T HAVE ISSUE TOO MANY BOOKS
     #
-	my ($current_loan_count, $max_loans_allowed) = TooMany( $borrower, $item->{biblionumber}, $item );
+    my ($current_loan_count, $max_loans_allowed) = TooMany( $borrower, $item->{biblionumber}, $item, { onsite_checkout => $onsite_checkout } );
     # if TooMany max_loans_allowed returns 0 the user doesn't have permission to check out this book
     if (defined $max_loans_allowed && $max_loans_allowed == 0) {
         $needsconfirmation{PATRON_CANT} = 1;
