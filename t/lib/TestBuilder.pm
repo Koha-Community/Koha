@@ -357,7 +357,9 @@ sub _gen_blob {
 
 sub DESTROY {
     my $self = shift;
-    $self->schema->txn_rollback();
+    eval {
+        $self->schema->txn_rollback();
+    };
 }
 
 
