@@ -26,7 +26,6 @@ sub plugin_javascript {
     my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
     my $function_name= $field_number;
 
-    # find today's date
     my $org = C4::Context->preference('MARCOrgCode');
     my $res  = "
 <script type=\"text/javascript\">

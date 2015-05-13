@@ -20,13 +20,11 @@
 use strict;
 #use warnings; FIXME - Bug 2505
 use C4::Context;
-# use MARC::Record;
 
 sub plugin_javascript {
     my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
     my $function_name= $field_number;
 
-    # find today's date
     my $org = C4::Context->preference('MARCOrgCode');
     my $res  = "
 <script type=\"text/javascript\">

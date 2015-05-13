@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2009 Kyle Hall <kyle.m.hall@gmail.com>
 #
 # This file is part of Koha.
@@ -44,5 +43,5 @@ function Blur$function_name(index) {
 //]]>
 </script>
 ";
-return ($function_name,$res);
+    return ($function_name,$res);
 }

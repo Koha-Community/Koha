@@ -30,12 +30,6 @@ use Koha::Util::FrameworkPlugin qw|date_entered|;
 use constant FIXLEN_DATA_ELTS => '|| aca||aabn           | a|a     d';
 use constant PREF_008 => 'MARCAuthorityControlField008';
 
-=head1 DESCRIPTION
-
-plugin_parameters : other parameters added when the plugin is called by the dopop function
-
-=cut
-
 sub plugin_javascript {
     my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
     my $function_name= $field_number;
@@ -69,6 +63,7 @@ function Clic$function_name(i) {
 
     return ($function_name,$res);
 }
+
 sub plugin {
     my ($input) = @_;
     my $index= $input->param('index');

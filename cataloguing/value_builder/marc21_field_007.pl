@@ -27,12 +27,6 @@ use C4::Context;
 use C4::Search;
 use C4::Output;
 
-=head1 DESCRIPTION
-
-plugin_parameters : other parameters added when the plugin is called by the dopop function
-
-=cut
-
 sub plugin_javascript {
     my ( $dbh, $record, $tagslib, $field_number, $tabloop ) = @_;
     my $function_name = $field_number;

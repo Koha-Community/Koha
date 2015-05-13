@@ -49,19 +49,14 @@ sub plugin_javascript {
     return ( $function_name, $res );
 }
 
-# sub plugin
-#
-# input arg :
-# -- op could be equals to
-# * fillinput :
-# * do_search :
-#
-
 sub plugin {
-    my ($input)   = @_;
+    my ($query)   = @_;
     my $dbh       = C4::Context->dbh;
-    my $query     = new CGI;
     my $op        = $query->param('op');
+    # -- op could be equal to
+    # * fillinput
+    # * do_search
+
     my $type      = $query->param('type');
     my $startfrom = $query->param('startfrom');
     $startfrom = 0 if ( !defined $startfrom );

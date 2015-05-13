@@ -29,18 +29,13 @@ use C4::Output;
 use XML::LibXML;
 use Koha::Util::FrameworkPlugin qw|date_entered|;
 
-=head1 DESCRIPTION
-
-plugin_parameters : other parameters added when the plugin is called by the dopop function
-
-=cut
-
 sub plugin_javascript {
+    my ($dbh, $record, $tagslib, $field_number, $tabloop) = @_;
+
     my $lang = C4::Context->preference('DefaultLanguageField008' );
     $lang = "eng" unless $lang;
     $lang = pack("A3", $lang);
 
-    my ($dbh, $record, $tagslib, $field_number, $tabloop) = @_;
     my $function_name = $field_number;
     my $dateentered = date_entered();
     my $res           = "
@@ -76,11 +71,11 @@ function Clic$function_name(i) {
 }
 
 sub plugin {
+    my ($input) = @_;
     my $lang = C4::Context->preference('DefaultLanguageField008' );
     $lang = "eng" unless $lang;
     $lang = pack("A3", $lang);
 
-    my ($input) = @_;
     my $index   = $input->param('index');
     my $result  = $input->param('result');
     my $leader  = $input->param('leader');

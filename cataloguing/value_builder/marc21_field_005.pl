@@ -19,7 +19,6 @@
 
 use strict;
 #use warnings; FIXME - Bug 2505
-#use C4::Context;
 
 sub plugin_javascript {
     my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
