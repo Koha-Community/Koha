@@ -391,6 +391,15 @@ Circulation:
                   yes: Enable
                   no: Disable
             - the on-site for all cases (Even if a user is debarred, etc.).
+        -
+            - pref: ConsiderOnSiteCheckoutsAsNormalCheckouts
+              choices:
+                  yes: Consider
+                  no: "Don't consider"
+            - on-site checkouts as normal checkouts.
+            - If enabled, the number of checkouts allowed will be normal checkouts + on-site checkouts.
+            - If disabled, both values will be checked separately.
+
     Checkin Policy:
         -
             - pref: BlockReturnOfWithdrawnItems

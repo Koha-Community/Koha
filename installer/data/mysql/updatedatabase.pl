@@ -11054,6 +11054,47 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "XXX";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        ALTER TABLE branch_borrower_circ_rules ADD COLUMN maxonsiteissueqty int(4) DEFAULT NULL AFTER maxissueqty;
+    |);
+    $dbh->do(q|
+        UPDATE branch_borrower_circ_rules SET maxonsiteissueqty = maxissueqty;
+    |);
+    $dbh->do(q|
+        ALTER TABLE default_borrower_circ_rules ADD COLUMN maxonsiteissueqty int(4) DEFAULT NULL AFTER maxissueqty;
+    |);
+    $dbh->do(q|
+        UPDATE default_borrower_circ_rules SET maxonsiteissueqty = maxissueqty;
+    |);
+    $dbh->do(q|
+        ALTER TABLE default_branch_circ_rules ADD COLUMN maxonsiteissueqty int(4) DEFAULT NULL AFTER maxissueqty;
+    |);
+    $dbh->do(q|
+        UPDATE default_branch_circ_rules SET maxonsiteissueqty = maxissueqty;
+    |);
+    $dbh->do(q|
+        ALTER TABLE default_circ_rules ADD COLUMN maxonsiteissueqty int(4) DEFAULT NULL AFTER maxissueqty;
+    |);
+    $dbh->do(q|
+        UPDATE default_circ_rules SET maxonsiteissueqty = maxissueqty;
+    |);
+    $dbh->do(q|
+        ALTER TABLE issuingrules ADD COLUMN maxonsiteissueqty int(4) DEFAULT NULL AFTER maxissueqty;
+    |);
+    $dbh->do(q|
+        UPDATE issuingrules SET maxonsiteissueqty = maxissueqty;
+    |);
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
+        VALUES ('ConsiderOnSiteCheckoutsAsNormalCheckouts','1',NULL,'Consider on-site checkouts as normal checkouts','YesNo');
+    |);
+
+    print "Upgrade to $DBversion done (Bug 14045: Add DB fields maxonsiteissueqty and pref ConsiderOnSiteCheckoutsAsNormalCheckouts)\n";
+    SetVersion ($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.

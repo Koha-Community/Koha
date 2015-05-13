@@ -634,6 +634,7 @@ CREATE TABLE `branch_borrower_circ_rules` ( -- includes default circulation rule
   `branchcode` VARCHAR(10) NOT NULL, -- the branch this rule applies to (branches.branchcode)
   `categorycode` VARCHAR(10) NOT NULL, -- the patron category this rule applies to (categories.categorycode)
   `maxissueqty` int(4) default NULL, -- the maximum number of checkouts this patron category can have at this branch
+  `maxonsiteissueqty` int(4) default NULL, -- the maximum number of on-site checkouts this patron category can have at this branch
   PRIMARY KEY (`categorycode`, `branchcode`),
   CONSTRAINT `branch_borrower_circ_rules_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`)
     ON DELETE CASCADE ON UPDATE CASCADE,
@@ -649,6 +650,7 @@ DROP TABLE IF EXISTS `default_borrower_circ_rules`;
 CREATE TABLE `default_borrower_circ_rules` ( -- default checkout rules found under "Default checkout, hold and return policy"
   `categorycode` VARCHAR(10) NOT NULL, -- patron category this rul
   `maxissueqty` int(4) default NULL,
+  `maxonsiteissueqty` int(4) default NULL,
   PRIMARY KEY (`categorycode`),
   CONSTRAINT `borrower_borrower_circ_rules_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`)
     ON DELETE CASCADE ON UPDATE CASCADE
@@ -662,6 +664,7 @@ DROP TABLE IF EXISTS `default_branch_circ_rules`;
 CREATE TABLE `default_branch_circ_rules` (
   `branchcode` VARCHAR(10) NOT NULL,
   `maxissueqty` int(4) default NULL,
+  `maxonsiteissueqty` int(4) default NULL,
   `holdallowed` tinyint(1) default NULL,
   `returnbranch` varchar(15) default NULL,
   PRIMARY KEY (`branchcode`),
@@ -690,6 +693,7 @@ DROP TABLE IF EXISTS `default_circ_rules`;
 CREATE TABLE `default_circ_rules` (
     `singleton` enum('singleton') NOT NULL default 'singleton',
     `maxissueqty` int(4) default NULL,
+    `maxonsiteissueqty` int(4) default NULL,
     `holdallowed` int(1) default NULL,
     `returnbranch` varchar(15) default NULL,
     PRIMARY KEY (`singleton`)
@@ -1171,6 +1175,7 @@ CREATE TABLE `issuingrules` ( -- circulation and fine rules
   `accountsent` int(11) default NULL, -- not used? always NULL
   `chargename` varchar(100) default NULL, -- not used? always NULL
   `maxissueqty` int(4) default NULL, -- total number of checkouts allowed
+  `maxonsiteissueqty` int(4) default NULL, -- total number of on-site checkouts allowed
   `issuelength` int(4) default NULL, -- length of checkout in the unit set in issuingrules.lengthunit
   `lengthunit` varchar(10) default 'days', -- unit of checkout length (days, hours)
   `hardduedate` date default NULL, -- hard due date
