@@ -42,6 +42,11 @@ __PACKAGE__->table("branch_borrower_circ_rules");
   data_type: 'integer'
   is_nullable: 1
 
+=head2 maxonsiteissueqty
+
+  data_type: 'integer'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -50,6 +55,8 @@ __PACKAGE__->add_columns(
   "categorycode",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 10 },
   "maxissueqty",
+  { data_type => "integer", is_nullable => 1 },
+  "maxonsiteissueqty",
   { data_type => "integer", is_nullable => 1 },
 );
 
@@ -100,8 +107,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:X24Sil3WTnxoeAa/16tpUQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-05-13 17:48:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MrhgFhfjV71AC5PXmvRPzg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
