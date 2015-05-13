@@ -1569,6 +1569,10 @@ maxissueqty - maximum number of loans that a
 patron of the given category can have at the given
 branch.  If the value is undef, no limit.
 
+maxonsiteissueqty - maximum of on-site checkouts that a
+patron of the given category can have at the given
+branch.  If the value is undef, no limit.
+
 This will first check for a specific branch and
 category match from branch_borrower_circ_rules. 
 
@@ -1582,6 +1586,7 @@ If no rule has been found in the database, it will default to
 the buillt in rule:
 
 maxissueqty - undef
+maxonsiteissueqty - undef
 
 C<$branchcode> and C<$categorycode> should contain the
 literal branch code and patron category code, respectively - no
@@ -1590,53 +1595,45 @@ wildcards.
 =cut
 
 sub GetBranchBorrowerCircRule {
-    my $branchcode = shift;
-    my $categorycode = shift;
+    my ( $branchcode, $categorycode ) = @_;
 
-    my $branch_cat_query = "SELECT maxissueqty
-                            FROM branch_borrower_circ_rules
-                            WHERE branchcode = ?
-                            AND   categorycode = ?";
+    my $rules;
     my $dbh = C4::Context->dbh();
-    my $sth = $dbh->prepare($branch_cat_query);
-    $sth->execute($branchcode, $categorycode);
-    my $result;
-    if ($result = $sth->fetchrow_hashref()) {
-        return $result;
-    }
+    $rules = $dbh->selectrow_hashref( q|
+        SELECT maxissueqty, maxonsiteissueqty
+        FROM branch_borrower_circ_rules
+        WHERE branchcode = ?
+        AND   categorycode = ?
+    |, {}, $branchcode, $categorycode ) ;
+    return $rules if $rules;
 
     # try same branch, default borrower category
-    my $branch_query = "SELECT maxissueqty
-                        FROM default_branch_circ_rules
-                        WHERE branchcode = ?";
-    $sth = $dbh->prepare($branch_query);
-    $sth->execute($branchcode);
-    if ($result = $sth->fetchrow_hashref()) {
-        return $result;
-    }
+    $rules = $dbh->selectrow_hashref( q|
+        SELECT maxissueqty, maxonsiteissueqty
+        FROM default_branch_circ_rules
+        WHERE branchcode = ?
+    |, {}, $branchcode ) ;
+    return $rules if $rules;
 
     # try default branch, same borrower category
-    my $category_query = "SELECT maxissueqty
-                          FROM default_borrower_circ_rules
-                          WHERE categorycode = ?";
-    $sth = $dbh->prepare($category_query);
-    $sth->execute($categorycode);
-    if ($result = $sth->fetchrow_hashref()) {
-        return $result;
-    }
-  
+    $rules = $dbh->selectrow_hashref( q|
+        SELECT maxissueqty, maxonsiteissueqty
+        FROM default_borrower_circ_rules
+        WHERE categorycode = ?
+    |, {}, $categorycode ) ;
+    return $rules if $rules;
+
     # try default branch, default borrower category
-    my $default_query = "SELECT maxissueqty
-                          FROM default_circ_rules";
-    $sth = $dbh->prepare($default_query);
-    $sth->execute();
-    if ($result = $sth->fetchrow_hashref()) {
-        return $result;
-    }
-    
+    $rules = $dbh->selectrow_hashref( q|
+        SELECT maxissueqty, maxonsiteissueqty
+        FROM default_circ_rules
+    |, {} );
+    return $rules if $rules;
+
     # built-in default circulation rule
     return {
         maxissueqty => undef,
+        maxonsiteissueqty => undef,
     };
 }
 

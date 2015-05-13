@@ -113,6 +113,7 @@ my $sampleissuingrule1 = {
     restrictedtype     => 0,
     accountsent        => 0,
     maxissueqty        => 5,
+    maxonsiteissueqty  => 4,
     finedays           => 0,
     lengthunit         => 'Null',
     renewalperiod      => 5,
@@ -140,6 +141,7 @@ my $sampleissuingrule2 = {
     categorycode       => $samplecat->{categorycode},
     itemtype           => 'BOOK',
     maxissueqty        => 2,
+    maxonsiteissueqty  => 1,
     renewalsallowed    => 'Null',
     renewalperiod      => 2,
     norenewalbefore    => 7,
@@ -168,6 +170,7 @@ my $sampleissuingrule3 = {
     categorycode       => $samplecat->{categorycode},
     itemtype           => 'DVD',
     maxissueqty        => 3,
+    maxonsiteissueqty  => 2,
     renewalsallowed    => 'Null',
     renewalperiod      => 3,
     norenewalbefore    => 8,
@@ -196,6 +199,7 @@ $query = 'INSERT INTO issuingrules (
                 categorycode,
                 itemtype,
                 maxissueqty,
+                maxonsiteissueqty,
                 renewalsallowed,
                 renewalperiod,
                 norenewalbefore,
@@ -216,13 +220,14 @@ $query = 'INSERT INTO issuingrules (
                 chargename,
                 restrictedtype,
                 maxsuspensiondays
-                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 my $sth = $dbh->prepare($query);
 $sth->execute(
     $sampleissuingrule1->{branchcode},
     $sampleissuingrule1->{categorycode},
     $sampleissuingrule1->{itemtype},
     $sampleissuingrule1->{maxissueqty},
+    $sampleissuingrule1->{maxonsiteissueqty},
     $sampleissuingrule1->{renewalsallowed},
     $sampleissuingrule1->{renewalperiod},
     $sampleissuingrule1->{norenewalbefore},
@@ -249,6 +254,7 @@ $sth->execute(
     $sampleissuingrule2->{categorycode},
     $sampleissuingrule2->{itemtype},
     $sampleissuingrule2->{maxissueqty},
+    $sampleissuingrule2->{maxonsiteissueqty},
     $sampleissuingrule2->{renewalsallowed},
     $sampleissuingrule2->{renewalperiod},
     $sampleissuingrule2->{norenewalbefore},
@@ -275,6 +281,7 @@ $sth->execute(
     $sampleissuingrule3->{categorycode},
     $sampleissuingrule3->{itemtype},
     $sampleissuingrule3->{maxissueqty},
+    $sampleissuingrule3->{maxonsiteissueqty},
     $sampleissuingrule3->{renewalsallowed},
     $sampleissuingrule3->{renewalperiod},
     $sampleissuingrule3->{norenewalbefore},

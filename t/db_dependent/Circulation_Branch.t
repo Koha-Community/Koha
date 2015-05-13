@@ -7,8 +7,8 @@ use C4::Branch;
 use C4::Circulation;
 use C4::Items;
 use C4::Context;
-use Data::Dumper;
-use Test::More tests => 13;
+
+use Test::More tests => 14;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -215,21 +215,37 @@ my $borrower_id1 = C4::Members::AddMember(
 );
 my $borrower_1 = C4::Members::GetMember(borrowernumber => $borrower_id1);
 
-$query =
-"INSERT INTO branch_borrower_circ_rules (branchcode,categorycode,maxissueqty) VALUES( ?,?,?)";
+is_deeply(
+    GetBranchBorrowerCircRule(),
+    { maxissueqty => undef, maxonsiteissueqty => undef },
+"Without parameter, GetBranchBorrower returns undef (unilimited) for maxissueqty and maxonsiteissueqty if no rules defined"
+);
+
+$query = q|
+    INSERT INTO branch_borrower_circ_rules
+    (branchcode, categorycode, maxissueqty, maxonsiteissueqty)
+    VALUES( ?, ?, ?, ? )
+|;
+
 $dbh->do(
     $query, {},
     $samplebranch1->{branchcode},
-    $samplecat->{categorycode}, 5
+    $samplecat->{categorycode}, 5, 6
 );
 
-$query =
-"INSERT INTO default_circ_rules (singleton,maxissueqty,holdallowed,returnbranch) VALUES( ?,?,?,?)";
-$dbh->do( $query, {}, 'singleton', 4, 3, 'homebranch' );
-
-$query =
-"INSERT INTO default_branch_circ_rules (branchcode,maxissueqty,holdallowed,returnbranch) VALUES( ?,?,?,?)";
-$dbh->do( $query, {}, $samplebranch2->{branchcode}, 3, 1, 'holdingbranch' );
+$query = q|
+    INSERT INTO default_branch_circ_rules
+    (branchcode, maxissueqty, maxonsiteissueqty, holdallowed, returnbranch)
+    VALUES( ?, ?, ?, ?, ? )
+|;
+$dbh->do( $query, {}, $samplebranch2->{branchcode},
+    3, 2, 1, 'holdingbranch' );
+$query = q|
+    INSERT INTO default_circ_rules
+    (singleton, maxissueqty, maxonsiteissueqty, holdallowed, returnbranch)
+    VALUES( ?, ?, ?, ?, ? )
+|;
+$dbh->do( $query, {}, 'singleton', 4, 5, 3, 'homebranch' );
 
 $query =
 "INSERT INTO branch_item_rules (branchcode,itemtype,holdallowed,returnbranch) VALUES( ?,?,?,?)";
@@ -253,26 +269,26 @@ $sth->execute(
 #Test GetBranchBorrowerCircRule
 is_deeply(
     GetBranchBorrowerCircRule(),
-    { maxissueqty => 4 },
-"Without parameter, GetBranchBorrower returns the maxissueqty of default_circ_rules"
+    { maxissueqty => 4, maxonsiteissueqty => 5 },
+"Without parameter, GetBranchBorrower returns the maxissueqty and maxonsiteissueqty of default_circ_rules"
 );
 is_deeply(
     GetBranchBorrowerCircRule( $samplebranch2->{branchcode} ),
-    { maxissueqty => 3 },
-"Without only the branchcode specified, GetBranchBorrower returns the maxissueqty corresponding"
+    { maxissueqty => 3, maxonsiteissueqty => 2 },
+"Without only the branchcode specified, GetBranchBorrower returns the maxissueqty and maxonsiteissueqty corresponding"
 );
 is_deeply(
     GetBranchBorrowerCircRule(
         $samplebranch1->{branchcode},
         $samplecat->{categorycode}
     ),
-    { maxissueqty => 5 },
-    "GetBranchBorrower returns the maxissueqty of the branch1 and the category1"
+    { maxissueqty => 5, maxonsiteissueqty => 6 },
+    "GetBranchBorrower returns the maxissueqty and maxonsiteissueqty of the branch1 and the category1"
 );
 is_deeply(
     GetBranchBorrowerCircRule( -1, -1 ),
-    { maxissueqty => 4 },
-"GetBranchBorrower  with wrong parameters returns tthe maxissueqty of default_circ_rules"
+    { maxissueqty => 4, maxonsiteissueqty => 5 },
+"GetBranchBorrower with wrong parameters returns the maxissueqty and maxonsiteissueqty of default_circ_rules"
 );
 
 #Test GetBranchItemRule
