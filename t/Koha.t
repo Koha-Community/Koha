@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use C4::Context;
-use Test::More tests => 18;
+use Test::More tests => 29;
 use Test::MockModule;
 use DBD::Mock;
 
@@ -97,5 +97,17 @@ ok(!defined $isbn, 'NormalizeISBN returns undef when converting to ISBN10 an ISB
 
 @isbns = GetVariationsOfISBNs('abc');
 is(scalar(@isbns), 0, 'zero variations returned of invalid ISBN');
+
+is( C4::Koha::GetNormalizedISBN('9780062059994 (hardcover bdg.) | 0062059998 (hardcover bdg.)'), '0062059998', 'Test GetNormalizedISBN' );
+is( C4::Koha::GetNormalizedISBN('9780385753067 (trade) | 0385753063 (trade) | 9780385753074 (lib. bdg.) | 0385753071 (lib. bdg.)'), '0385753063', 'Test GetNormalizedISBN' );
+is( C4::Koha::GetNormalizedISBN('9781432829162 (hardcover) | 1432829165 (hardcover)'), '1432829165', 'Test GetNormalizedISBN' );
+is( C4::Koha::GetNormalizedISBN('9780062063625 (hardcover) | 9780062063632 | 0062063634'), '0062063626', 'Test GetNormalizedISBN' );
+is( C4::Koha::GetNormalizedISBN('9780062059932 (hardback)'), '0062059939', 'Test GetNormalizedISBN' );
+is( C4::Koha::GetNormalizedISBN('9780316370318 (hardback) | 9780316376266 (special edition hardcover) | 9780316405454 (international paperback edition)'), '0316370312', 'Test GetNormalizedISBN' );
+is( C4::Koha::GetNormalizedISBN('9781595148032 (hbk.) | 1595148035 (hbk.)') , '1595148035', 'Test GetNormalizedISBN' );
+is( C4::Koha::GetNormalizedISBN('9780062349859 | 0062349856 | 9780062391308 | 0062391305'), '0062349856', 'Test GetNormalizedISBN' );
+is( C4::Koha::GetNormalizedISBN('9781250075345 (hardcover) | 1250075343 (hardcover) | 9781250049872 (trade pbk.) | 1250049873 (trade pbk.)'), '1250075343', 'Test GetNormalizedISBN' );
+is( C4::Koha::GetNormalizedISBN('9781250067128 | 125006712X'), '125006712X', 'Test GetNormalizedISBN' );
+is( C4::Koha::GetNormalizedISBN('9780373211463 | 0373211465'), '0373211465', 'Test GetNormalizedISBN' );
 
 1;
