@@ -58,12 +58,6 @@ __PACKAGE__->table("aqorders");
   is_nullable: 1
   size: [28,6]
 
-=head2 totalamount
-
-  data_type: 'decimal'
-  is_nullable: 1
-  size: [28,6]
-
 =head2 datereceived
 
   data_type: 'date'
@@ -247,8 +241,6 @@ __PACKAGE__->add_columns(
   "currency",
   { data_type => "varchar", is_nullable => 1, size => 3 },
   "listprice",
-  { data_type => "decimal", is_nullable => 1, size => [28, 6] },
-  "totalamount",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "datereceived",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
@@ -500,8 +492,8 @@ Composing rels: L</aqorder_users> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-04-13 10:17:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9C0lOmkz7e7xDjXItNB2Sg
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-05-14 11:27:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BCa/SxerJ+zEh8Pg9Jdkaw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
