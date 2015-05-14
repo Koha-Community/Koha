@@ -1487,7 +1487,7 @@ sub GetNormalizedISBN {
     if ($isbn) {
         # Koha attempts to store multiple ISBNs in biblioitems.isbn, separated by " | "
         # anything after " | " should be removed, along with the delimiter
-        $isbn =~ s/(.*)( \| )(.*)/$1/;
+        ($isbn) = split(/\|/, $isbn );
         return _isbn_cleanup($isbn);
     }
     return unless $record;
