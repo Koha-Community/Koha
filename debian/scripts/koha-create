@@ -586,6 +586,10 @@ eof
     generate_config_file koha-conf-site.xml.in \
         "/etc/koha/sites/$name/koha-conf.xml"
 
+    # Generate and install the log4perl config file.
+    generate_config_file log4perl-site.conf.in \
+        "/etc/koha/sites/$name/log4perl.conf"
+
     # Generate and install Zebra config files.
     generate_config_file zebra-biblios-site.cfg.in \
         "/etc/koha/sites/$name/zebra-biblios.cfg"
