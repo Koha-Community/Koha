@@ -1,12 +1,12 @@
 #!/usr/bin/perl
 #-----------------------------------
-# Copyright 2013 ByWater Solutions
+# Copyright 2015 ByWater Solutions
 #
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
+# Foundation; either version 3 of the License, or (at your option) any later
 # version.
 #
 # Koha is distributed in the hope that it will be useful, but WITHOUT ANY
@@ -36,7 +36,7 @@ use C4::Biblio;
 use C4::Koha qw( GetVariationsOfISBN );
 use Koha::Database;
 
-binmode STDOUT, ':utf8';
+binmode STDOUT, ':encoding(UTF-8)';
 
 BEGIN {
 
@@ -46,6 +46,9 @@ BEGIN {
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
+my $help;
+my $confirm;
+my $test;
 my $file;
 my $verbose;
 my $start;
@@ -56,6 +59,9 @@ my $subfield_source               = "b";
 my $subfield_source_value         = "Lexile";
 
 GetOptions(
+    'h|help'                 => \$help,
+    'c|confirm'              => \$confirm,
+    't|test'                 => \$test,
     'f|file=s'               => \$file,
     'v|verbose+'             => \$verbose,
     's|start=s'              => \$start,
@@ -73,16 +79,22 @@ import_lexile.pl -f /path/to/LexileTitles.txt
 
 This script takes the following parameters :
 
-    -f | --file             CSV file of lexile scores ( acquired from Lexile.com )
-    -v | --verbose          Print data on found matches
+    -h --help               Display this help
+    -c --confirm            Confirms you want to really run this script ( otherwise print help )
+    -t --test               Runs the script in test mode ( no changes will be made to your database )
+    -f --file               CSV file of lexile scores ( acquired from Lexile.com )
+    -v --verbose            Print data on found matches
     --field                 Defines the field number for the Lexile data ( default: 521 )
     --target-audience-note  Defines the subfield for the lexile score ( default: a )
     --source                Defines the "Source" subfield ( default: b )
     --source-value          Defines the value to put stored in the "Source" subfield ( default: "Lexile" )
 
+    The CSV file must have the following columns ( with the first line being the column headers ) in tab delimited format:
+    Title, Author, ISBN, ISBN13, Lexile
+
 ENDUSAGE
 
-unless ($file) {
+if ( $help || !$file || !$confirm ) {
     say $usage;
     exit(1);
 }
@@ -188,7 +200,7 @@ while ( my $row = $csv->getline_hr($fh) ) {
             $record->append_fields($field);
         }
 
-        ModBiblio( $record, $biblionumber );
+        ModBiblio( $record, $biblionumber ) unless ( $test );
     }
 
 }
