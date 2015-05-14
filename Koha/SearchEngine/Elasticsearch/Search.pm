@@ -124,7 +124,7 @@ sub count {
 
 A search interface somewhat compatible with L<C4::Search->getRecords>. Anything
 that is returned in the query created by build_query_compat will probably
-get ignored here.
+get ignored here, along with some other things (like C<@servers>.)
 
 =cut
 
