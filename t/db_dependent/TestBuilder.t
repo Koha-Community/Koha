@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 40;
+use Test::More tests => 41;
 
 BEGIN {
     use_ok('t::lib::TestBuilder');
