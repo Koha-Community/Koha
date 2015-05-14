@@ -94,6 +94,7 @@ my $itemnumbers = $iteminfo[0];
 for my $itemnumber ( @$itemnumbers ) {
     ok($batch->add_item($itemnumber) eq 0 ) || diag "Batch->add_item() FAILED.";
 }
+$batch_id=$batch->get_attr('batch_id');
 
 diag "Testing Batch->retrieve() method.";
 ok(my $saved_batch = C4::Labels::Batch->retrieve(batch_id => $batch_id)) || diag "Batch->retrieve() FAILED.";
