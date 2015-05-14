@@ -177,7 +177,7 @@ sub build_query_compat {
         $lang )
       = @_;
 
-#die Dumper ( $self, $operators, $operands, $indexes, $limits, $sort_by, $scan, $lang );
+#die Dumper ( $self, $operators, $operands, $indexes, $orig_limits, $sort_by, $scan, $lang );
     my @sort_params  = $self->_convert_sort_fields(@$sort_by);
     my @index_params = $self->_convert_index_fields(@$indexes);
     my $limits       = $self->_fix_limit_special_cases($orig_limits);
@@ -523,6 +523,28 @@ sub _convert_index_strings {
     return @res;
 }
 
+=head2 _convert_index_strings_freeform
+
+    my $search = $self->_convert_index_strings_freeform($search);
+
+This is similar to L<_convert_index_strings>, however it'll search out the
+things to change within the string. So it can handle strings such as
+C<(su:foo) AND (su:bar)>, converting the C<su> appropriately.
+
+If there is something of the form "su,complete-subfield" or something, the
+second part is stripped off as we can't yet handle that. Making it work
+will have to wait for a real query parser.
+
+=cut
+
+sub _convert_index_strings_freeform {
+    my ( $self, $search ) = @_;
+    while ( my ( $zeb, $es ) = each %index_field_convert ) {
+        $search =~ s/\b$zeb(?:,[\w-]*)?:/$es:/g;
+    }
+    return $search;
+}
+
 =head2 _modify_string_by_type
 
     my $str = $self->_modify_string_by_type(%index_field);
@@ -543,25 +565,6 @@ sub _modify_string_by_type {
     $str .= '*' if $type eq 'right-truncate';
     $str = '"' . $str . '"' if $type eq 'phrase';
     return $str;
-}
-
-=head2 _convert_index_strings_freeform
-
-    my $search = $self->_convert_index_strings_freeform($search);
-
-This is similar to L<_convert_index_strings>, however it'll search out the
-things to change within the string. So it can handle strings such as
-C<(su:foo) AND (su:bar)>, converting the C<su> appropriately.
-
-=cut
-
-sub _convert_index_strings_freeform {
-    my ( $self, $search ) = @_;
-
-    while ( my ( $zeb, $es ) = each %index_field_convert ) {
-        $search =~ s/\b$zeb:/$es:/g;
-    }
-    return $search;
 }
 
 =head2 _join_queries
