@@ -30,13 +30,13 @@ my $builder = sub {
 <script type=\"text/javascript\">
 //<![CDATA[
 
-function Blur$function_name(index) {
-    var fieldValue = document.getElementById(\"$params->{id}\").value;
+function Blur$function_name(event) {
+    var fieldValue = document.getElementById(event.data.id).value;
     if (  fieldValue.substring(0,1) != '[' 
           &&
           fieldValue.substring(fieldValue.length-1) != '[' 
         ) {
-      document.getElementById(\"$params->{id}\").value = '[' + fieldValue + ']';
+      document.getElementById(event.data.id).value = '[' + fieldValue + ']';
     }
     return 0;
 }

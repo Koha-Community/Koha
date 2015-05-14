@@ -35,16 +35,16 @@ my $builder = sub {
 <script type=\"text/javascript\">
 //<![CDATA[
 
-function Focus$function_name(subfield_managed) {
-    if(!document.getElementById(\"$params->{id}\").value){
-        document.getElementById(\"$params->{id}\").value = '     nam a22     7a 4500';
+function Focus$function_name(event) {
+    if(!document.getElementById(event.data.id).value){
+        document.getElementById(event.data.id).value = '     nam a22     7a 4500';
     }
     return 1;
 }
 
-function Click$function_name(i) {
-    defaultvalue=document.getElementById(\"$params->{id}\").value;
-    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_leader.pl&index=$params->{id}&result=\"+defaultvalue,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
+function Click$function_name(event) {
+    defaultvalue=document.getElementById(event.data.id).value;
+    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_leader.pl&index=\"+ event.data.id +\"&result=\"+defaultvalue,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
 //]]>

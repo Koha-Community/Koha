@@ -40,22 +40,22 @@ my $builder = sub {
 <script type=\"text/javascript\">
 //<![CDATA[
 
-function Focus$function_name(subfield_managed) {
-    if (!document.getElementById(\"$params->{id}\").value) {
+function Focus$function_name(event) {
+    if (!document.getElementById(event.data.id).value) {
     var authtype=document.forms['f'].elements['authtypecode'].value;
     var fieldval='$dateentered$defaultval';
     if(authtype && (authtype == 'TOPIC_TERM' || authtype == 'GENRE/FORM' || authtype == 'CHRON_TERM')) {
       fieldval= fieldval.substr(0,14)+'b'+fieldval.substr(15);
     }
-        document.getElementById(\"$params->{id}\").value=fieldval;
+        document.getElementById(event.data.id).value=fieldval;
     }
     return 1;
 }
 
-function Click$function_name(i) {
+function Click$function_name(event) {
     var authtype=document.forms['f'].elements['authtypecode'].value;
-    defaultvalue=document.getElementById(\"$params->{id}\").value;
-    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_008_authorities.pl&index=$params->{id}&result=\"+defaultvalue+\"&authtypecode=\"+authtype,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
+    defaultvalue=document.getElementById(event.data.id).value;
+    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_008_authorities.pl&index=\"+ event.data.id +\"&result=\"+defaultvalue+\"&authtypecode=\"+authtype,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
 //]]>

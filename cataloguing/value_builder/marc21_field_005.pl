@@ -33,8 +33,8 @@ my $builder = sub {
 <script type=\"text/javascript\">
 //<![CDATA[
 
-function Focus$function_name(subfield_managed) {
-    document.getElementById(\"$params->{id}\").value='$date';
+function Focus$function_name(event) {
+    document.getElementById(event.data.id).value='$date';
     return 0;
 }
 

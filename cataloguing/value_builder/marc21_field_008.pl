@@ -43,17 +43,17 @@ my $builder = sub {
 <script type=\"text/javascript\">
 //<![CDATA[
 
-function Focus$function_name(subfield_managed) {
-    if ( document.getElementById(\"$params->{id}\").value ) {
+function Focus$function_name(event) {
+    if ( document.getElementById(event.data.id).value ) {
 	}
 	else {
-        document.getElementById(\"$params->{id}\").value='$dateentered' + 'b        xxu||||| |||| 00| 0 $lang d';
+        document.getElementById(event.data.id).value='$dateentered' + 'b        xxu||||| |||| 00| 0 $lang d';
 	}
     return 1;
 }
 
-function Click$function_name(i) {
-    defaultvalue=document.getElementById(\"$params->{id}\").value;
+function Click$function_name(event) {
+    defaultvalue=document.getElementById(event.data.id).value;
     //Retrieve full leader string and pass it to the 008 tag editor
     var leader_value = \$(\"input[id^='tag_000']\").val();
     var leader_parameter = \"\";
@@ -61,7 +61,7 @@ function Click$function_name(i) {
         //Only add the parameter to the URL if there is a value to add
         leader_parameter = \"&leader=\"+leader_value;
     }
-    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_008.pl&index=$params->{id}&result=\"+defaultvalue+leader_parameter,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
+    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_008.pl&index=\"+ event.data.id +\"&result=\"+defaultvalue+leader_parameter,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
 //]]>

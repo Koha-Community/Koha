@@ -35,9 +35,9 @@ my $builder = sub {
 <script type=\"text/javascript\">
 //<![CDATA[
 
-function Click$function_name(i) {
-    defaultvalue=document.getElementById(\"$params->{id}\").value;
-    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_007.pl&index=$params->{id}&result=\"+defaultvalue,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
+function Click$function_name(event) {
+    defaultvalue=document.getElementById(event.data.id).value;
+    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_007.pl&index=\"+ event.data.id +\"&result=\"+defaultvalue,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
 //]]>
