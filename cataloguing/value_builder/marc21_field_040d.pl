@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# Converted to new plugin style (Bug 13437)
+
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -17,13 +19,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 use C4::Context;
 
-sub plugin_javascript {
-    my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-    my $function_name = $field_number;
+my $builder = sub {
+    my ( $params ) = @_;
+    my $function_name = $params->{id};
 
     my $org = C4::Context->preference('MARCOrgCode');
     my $res  = "
@@ -31,12 +32,14 @@ sub plugin_javascript {
 //<![CDATA[
 
 function Focus$function_name(subfield_managed) {
-    document.getElementById(\"$field_number\").value='$org';
+    document.getElementById(\"$params->{id}\").value='$org';
     return 0;
 }
 
 //]]>
 </script>
 ";
-    return ($function_name,$res);
-}
+    return $res;
+};
+
+return { builder => $builder };

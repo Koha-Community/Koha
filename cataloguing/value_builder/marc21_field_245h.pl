@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# Converted to new plugin style (Bug 13437)
+
 # Copyright 2009 Kyle Hall <kyle.m.hall@gmail.com>
 #
 # This file is part of Koha.
@@ -17,25 +19,24 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 use C4::Context;
 
-sub plugin_javascript {
-    my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-    my $function_name = $field_number;
+my $builder = sub {
+    my ( $params ) = @_;
+    my $function_name = $params->{id};
 
     my $res  = "
 <script type=\"text/javascript\">
 //<![CDATA[
 
 function Blur$function_name(index) {
-    var fieldValue = document.getElementById(\"$field_number\").value;
+    var fieldValue = document.getElementById(\"$params->{id}\").value;
     if (  fieldValue.substring(0,1) != '[' 
           &&
           fieldValue.substring(fieldValue.length-1) != '[' 
         ) {
-      document.getElementById(\"$field_number\").value = '[' + fieldValue + ']';
+      document.getElementById(\"$params->{id}\").value = '[' + fieldValue + ']';
     }
     return 0;
 }
@@ -43,5 +44,7 @@ function Blur$function_name(index) {
 //]]>
 </script>
 ";
-    return ($function_name,$res);
-}
+    return $res;
+};
+
+return { builder => $builder };

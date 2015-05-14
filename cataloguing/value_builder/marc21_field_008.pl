@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# Converted to new plugin style (Bug 13437)
+
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -17,8 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 use C4::Auth;
 use CGI qw ( -utf8 );
 use C4::Context;
@@ -29,30 +30,30 @@ use C4::Output;
 use XML::LibXML;
 use Koha::Util::FrameworkPlugin qw|date_entered|;
 
-sub plugin_javascript {
-    my ($dbh, $record, $tagslib, $field_number, $tabloop) = @_;
+my $builder = sub {
+    my ( $params ) = @_;
 
     my $lang = C4::Context->preference('DefaultLanguageField008' );
     $lang = "eng" unless $lang;
     $lang = pack("A3", $lang);
 
-    my $function_name = $field_number;
+    my $function_name = $params->{id};
     my $dateentered = date_entered();
     my $res           = "
 <script type=\"text/javascript\">
 //<![CDATA[
 
 function Focus$function_name(subfield_managed) {
-	if ( document.getElementById(\"$field_number\").value ) {
+    if ( document.getElementById(\"$params->{id}\").value ) {
 	}
 	else {
-        document.getElementById(\"$field_number\").value='$dateentered' + 'b        xxu||||| |||| 00| 0 $lang d';
+        document.getElementById(\"$params->{id}\").value='$dateentered' + 'b        xxu||||| |||| 00| 0 $lang d';
 	}
     return 1;
 }
 
-function Clic$function_name(i) {
-	defaultvalue=document.getElementById(\"$field_number\").value;
+function Click$function_name(i) {
+    defaultvalue=document.getElementById(\"$params->{id}\").value;
     //Retrieve full leader string and pass it to the 008 tag editor
     var leader_value = \$(\"input[id^='tag_000']\").val();
     var leader_parameter = \"\";
@@ -60,18 +61,19 @@ function Clic$function_name(i) {
         //Only add the parameter to the URL if there is a value to add
         leader_parameter = \"&leader=\"+leader_value;
     }
-    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_008.pl&index=$field_number&result=\"+defaultvalue+leader_parameter,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
+    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_008.pl&index=$params->{id}&result=\"+defaultvalue+leader_parameter,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
 //]]>
 </script>
 ";
 
-    return ($function_name, $res);
-}
+    return $res;
+};
 
-sub plugin {
-    my ($input) = @_;
+my $launcher = sub {
+    my ( $params ) = @_;
+    my $input = $params->{cgi};
     my $lang = C4::Context->preference('DefaultLanguageField008' );
     $lang = "eng" unless $lang;
     $lang = pack("A3", $lang);
@@ -163,4 +165,6 @@ sub plugin {
             material_configuration => $material_configuration,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
-}
+};
+
+return { builder => $builder, launcher => $launcher };

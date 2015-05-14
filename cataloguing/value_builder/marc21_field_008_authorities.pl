@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# Converted to new plugin style (Bug 13437)
+
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -17,8 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 use C4::Auth;
 use CGI qw ( -utf8 );
 use C4::Context;
@@ -30,9 +31,9 @@ use Koha::Util::FrameworkPlugin qw|date_entered|;
 use constant FIXLEN_DATA_ELTS => '|| aca||aabn           | a|a     d';
 use constant PREF_008 => 'MARCAuthorityControlField008';
 
-sub plugin_javascript {
-    my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-    my $function_name= $field_number;
+my $builder = sub {
+    my ( $params ) = @_;
+    my $function_name = $params->{id};
     my $dateentered = date_entered();
     my $defaultval = substr( C4::Context->preference(PREF_008) || FIXLEN_DATA_ELTS, 0, 34 );
     my $res="
@@ -40,32 +41,33 @@ sub plugin_javascript {
 //<![CDATA[
 
 function Focus$function_name(subfield_managed) {
-    if (!document.getElementById(\"$field_number\").value) {
+    if (!document.getElementById(\"$params->{id}\").value) {
     var authtype=document.forms['f'].elements['authtypecode'].value;
     var fieldval='$dateentered$defaultval';
     if(authtype && (authtype == 'TOPIC_TERM' || authtype == 'GENRE/FORM' || authtype == 'CHRON_TERM')) {
       fieldval= fieldval.substr(0,14)+'b'+fieldval.substr(15);
     }
-        document.getElementById(\"$field_number\").value=fieldval;
+        document.getElementById(\"$params->{id}\").value=fieldval;
     }
     return 1;
 }
 
-function Clic$function_name(i) {
+function Click$function_name(i) {
     var authtype=document.forms['f'].elements['authtypecode'].value;
-    defaultvalue=document.getElementById(\"$field_number\").value;
-    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_008_authorities.pl&index=$field_number&result=\"+defaultvalue+\"&authtypecode=\"+authtype,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
+    defaultvalue=document.getElementById(\"$params->{id}\").value;
+    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_008_authorities.pl&index=$params->{id}&result=\"+defaultvalue+\"&authtypecode=\"+authtype,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
 //]]>
 </script>
 ";
 
-    return ($function_name,$res);
-}
+    return $res;
+};
 
-sub plugin {
-    my ($input) = @_;
+my $launcher = sub {
+    my ( $params ) = @_;
+    my $input = $params->{cgi};
     my $index= $input->param('index');
     my $result= $input->param('result');
     my $authtype= $input->param('authtypecode')||'';
@@ -101,4 +103,6 @@ sub plugin {
         );
     }
     output_html_with_http_headers $input, $cookie, $template->output;
-}
+};
+
+return { builder => $builder, launcher => $launcher };
