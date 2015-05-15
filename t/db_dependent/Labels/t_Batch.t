@@ -36,10 +36,11 @@ my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
-my $sth = C4::Context->dbh->prepare('SELECT branchcode FROM branches b LIMIT 0,1');
+my $sth = $dbh->prepare('SELECT branchcode FROM branches b LIMIT 0,1');
 $sth->execute();
 my $branch_code = $sth->fetchrow_hashref()->{'branchcode'};
 diag sprintf('Database returned the following error: %s', $sth->errstr) if $sth->errstr;
+
 my $expected_batch = {
         creator         => 'Labels',
         items           => [],
@@ -50,23 +51,23 @@ my $expected_batch = {
 my $batch = 0;
 my $item_number = 0;
 
-diag "Testing Batch->new() method.";
-ok($batch = C4::Labels::Batch->new(branch_code => $branch_code)) || diag "Batch->new() FAILED.";
+# Testing Batch->new() method.
+ok($batch = C4::Labels::Batch->new(branch_code => $branch_code), "C4::Labels::Batch-->new() succeeds");
 my $batch_id = $batch->get_attr('batch_id');
 $expected_batch->{'batch_id'} = $batch_id;
-is_deeply($batch, $expected_batch) || diag "New batch object FAILED to verify.";
+is_deeply($batch, $expected_batch, "New batch object is correct.");
 
-diag "Testing Batch->get_attr() method.";
+# Testing Batch->get_attr() method.
 foreach my $key (keys %{$expected_batch}) {
     if (ref($expected_batch->{$key}) eq 'ARRAY') {
-        ok(ref($expected_batch->{$key}) eq ref($batch->get_attr($key))) || diag "Batch->get_attr() FAILED on attribute $key.";
+        ok(ref($expected_batch->{$key}) eq ref($batch->get_attr($key)), "Batch->get_attr() SUCCESS on attribute $key.");
     }
     else {
-        ok($expected_batch->{$key} eq $batch->get_attr($key)) || diag "Batch->get_attr() FAILED on attribute $key.";
+        ok($expected_batch->{$key} eq $batch->get_attr($key), "Batch->get_attr() SUCCESS on attribute $key.");
     }
 }
 
-diag "Testing Batch->add_item() method.";
+# Testing Batch->add_item() method.
 # Create the item
 my ( $f_holdingbranch, $sf_holdingbranch ) = GetMarcFromKohaField( 'items.holdingbranch' );
 my ( $f_homebranch, $sf_homebranch ) = GetMarcFromKohaField( 'items.homebranch' );
@@ -92,25 +93,23 @@ my @iteminfo = C4::Items::AddItemBatchFromMarc( $record, $biblionumber, $biblioi
 my $itemnumbers = $iteminfo[0];
 
 for my $itemnumber ( @$itemnumbers ) {
-    ok($batch->add_item($itemnumber) eq 0 ) || diag "Batch->add_item() FAILED.";
+    ok($batch->add_item($itemnumber) eq 0 , "Batch->add_item() success.");
 }
-$batch_id=$batch->get_attr('batch_id');
+$batch_id = $batch->get_attr('batch_id');
 
-diag "Testing Batch->retrieve() method.";
-ok(my $saved_batch = C4::Labels::Batch->retrieve(batch_id => $batch_id)) || diag "Batch->retrieve() FAILED.";
-is_deeply($saved_batch, $batch) || diag "Retrieved batch object FAILED to verify.";
+# Testing Batch->retrieve() method.
+ok(my $saved_batch = C4::Labels::Batch->retrieve(batch_id => $batch_id), "Batch->retrieve() success.");
+is_deeply($saved_batch, $batch, "Batch object retrieved correctly" );
 
-diag "Testing Batch->remove_item() method.";
-
+# Testing Batch->remove_item() method.
 my $itemnumber = @$itemnumbers[0];
-ok($batch->remove_item($itemnumber) eq 0) || diag "Batch->remove_item() FAILED.";
+ok($batch->remove_item($itemnumber) eq 0, "Batch->remove_item() success.");
 
 my $updated_batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
-is_deeply($updated_batch, $batch) || diag "Updated batch object FAILED to verify.";
+is_deeply($updated_batch, $batch, "Updated batch object is correct.");
 
-diag "Testing Batch->delete() method.";
-
+# Testing Batch->delete() method.
 my $del_results = $batch->delete();
-ok($del_results eq 0) || diag "Batch->delete() FAILED.";
+ok($del_results eq 0, "Batch->delete() success.");
 
 $dbh->rollback;
