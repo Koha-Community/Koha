@@ -14,7 +14,7 @@
             $("#contactname, #contactfirstname")
                 .each(function () { this.type = 'text' })
                 .parent().find('span').remove();
-            $("#guarantorsearch").val("Set to Patron");
+            $("#guarantorsearch").val(_("Set to patron"));
         });
         $("#select_city").change(function(){
             var myRegEx=new RegExp(/(.*)\|(.*)\|(.*)\|(.*)/);
@@ -129,7 +129,7 @@
         form.country.value = borrower.country;
         form.branchcode.value = borrower.branchcode;
 
-        form.guarantorsearch.value = 'Change';
+        form.guarantorsearch.value = _("Change");
 
         return 0;
     }
