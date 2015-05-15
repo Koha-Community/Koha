@@ -69,18 +69,18 @@ SELECT
 FROM (aqorders, aqbasket)
 LEFT JOIN biblio ON
     biblio.biblionumber=aqorders.biblionumber
-LEFT JOIN items ON
-    biblio.biblionumber = items.biblionumber
 LEFT JOIN aqorders_items ON
-     items.itemnumber = aqorders_items.itemnumber
+    aqorders.ordernumber = aqorders_items.ordernumber
+LEFT JOIN items ON
+    aqorders_items.itemnumber = items.itemnumber
 LEFT JOIN aqinvoices ON
     aqorders.invoiceid = aqinvoices.invoiceid
 WHERE
-    aqorders.ordernumber=aqorders_items.ordernumber AND
     aqorders.basketno=aqbasket.basketno AND
     budget_id=? AND
     (datecancellationprinted IS NULL OR
-        datecancellationprinted='0000-00-00')
+        datecancellationprinted='0000-00-00') AND
+    datereceived IS NOT NULL
     GROUP BY aqorders.ordernumber
 EOQ
 my $sth = $dbh->prepare($query);
