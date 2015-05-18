@@ -131,7 +131,8 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                 }
             }
             if( $(inputs[1]).hasClass('framework_plugin') ) {
-                var oldcontrol= original.getElementsByTagName('input')[1];
+                var olddiv= original.getElementsByTagName('div')[i];
+                var oldcontrol= olddiv.getElementsByTagName('input')[1];
                 AddEventHandlers( oldcontrol,inputs[1],id_input );
             }
 
@@ -177,7 +178,8 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                         // 2 possibilities :
                         try{
                             if( $(buttonDot).hasClass('framework_plugin') ) {
-                                var oldcontrol= original.getElementsByTagName('a')[0];
+                                var olddiv= original.getElementsByTagName('div')[i];
+                                var oldcontrol= olddiv.getElementsByTagName('a')[0];
                                 AddEventHandlers(oldcontrol,buttonDot,id_input);
                             } else {
                                 if(buttonDotOnClick.match('Dopop')) {  // -2- It's a auth value
