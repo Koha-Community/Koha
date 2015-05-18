@@ -10425,7 +10425,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.19.00.XXX";
+$DBversion = "3.19.00.042";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         DELETE ass.*
@@ -10435,8 +10435,10 @@ if ( CheckVersion($DBversion) ) {
     });
 
     $dbh->do(q{
-        ALTER TABLE auth_subfield_structure
-        ADD CONSTRAINT auth_subfield_structure_ibfk_1 FOREIGN KEY (authtypecode) REFERENCES auth_types(authtypecode) ON DELETE CASCADE ON UPDATE CASCADE
+        ALTER IGNORE TABLE auth_subfield_structure
+        ADD CONSTRAINT auth_subfield_structure_ibfk_1
+        FOREIGN KEY (authtypecode) REFERENCES auth_types(authtypecode)
+        ON DELETE CASCADE ON UPDATE CASCADE
     });
 
     print "Upgrade to $DBversion done (Bug 8480: Add foreign key on auth_subfield_structure.authtypecode)\n";
