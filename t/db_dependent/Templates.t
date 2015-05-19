@@ -41,8 +41,8 @@ my $columns = C4::Templates::GetColumnDefs( $query );
 is( ref( $columns ) eq 'HASH', 1, 'GetColumnDefs returns a hashref' );
 # get the tables names, sorted
 my @keys = sort keys %$columns;
-is( scalar @keys, 5, "GetColumnDefs correctly returns the 5 tables defined in columns.def" );
-my @tables = ( 'biblio', 'biblioitems', 'borrowers', 'items', 'statistics');
+is( scalar @keys, 6, "GetColumnDefs correctly returns the 5 tables defined in columns.def" );
+my @tables = ( 'biblio', 'biblioitems', 'borrowers', 'items', 'statistics', 'subscription');
 cmp_deeply( \@keys, \@tables, "GetColumnDefs returns the expected tables");
 
 

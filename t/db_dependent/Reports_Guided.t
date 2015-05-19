@@ -48,7 +48,7 @@ my @report_ids;
 for my $id ( 1 .. 3 ) {
     push @report_ids, save_report({
         borrowernumber => $id,
-        savedsql       => "SQL$id",
+        sql            => "SQL$id",
         name           => "Name$id",
         area           => "area$id",
         group          => "group$id",
@@ -115,7 +115,7 @@ ok(
     'attempting to run a report with an SQL syntax error returns error message (Bug 12214)'
 );
 
-is_deeply( get_report_areas(), [ 'CIRC', 'CAT', 'PAT', 'ACQ', 'ACC' ],
+is_deeply( get_report_areas(), [ 'CIRC', 'CAT', 'PAT', 'ACQ', 'ACC', 'SER' ],
     "get_report_areas returns the correct array of report areas");
 
 #End transaction
