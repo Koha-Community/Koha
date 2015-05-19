@@ -225,7 +225,37 @@ $(document).ready(function() {
                [% ELSE %]
                <label>[% ite.subfield %] - [% ite.marc_lib %]</label>
                [% END %]
-                [% ite.marc_value %]
+
+                [% SET mv = ite.marc_value %]
+                [% IF ( mv.type == 'hidden' ) %]
+                    <input type="hidden" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" />[% mv.avalue %].hidden
+                [% ELSIF ( mv.type == 'select' ) %]
+                    <select name="[%- mv.name -%]" id="[%- mv.id -%]" size="1" class="input_marceditor" [% mv.readonly %] [% mv.disabled %]>
+                    [% FOREACH aval IN mv.values %]
+                        [% IF aval == mv.default %]
+                        <option value="[%- aval -%]" selected="selected">[%- mv.labels.$aval -%]</option>
+                        [% ELSE %]
+                        <option value="[%- aval -%]">[%- mv.labels.$aval -%]</option>
+                        [% END %]
+                    [% END %]
+                    </select>
+                [% ELSIF ( mv.type == 'text_auth' ) %]
+                    <input type="text" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" />
+                    [% SET dopop = "Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=\"${mv.authtypecode}\"&index=${mv.id}','${mv.id}')" %]
+                    <a href="#" class="buttonDot"  onclick="[%- dopop -%]; return false;" title="Tag Editor">...</a>
+                [% ELSIF ( mv.type == 'text_plugin' ) %]
+                    <input type="text" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" />
+                    [% IF ( mv.title == 'Tag editor' ) %]
+                    <a href="#" id="buttonDot_[%- mv.id -%]" class="[%- mv.class -%]" title="Tag editor">...</a>[%- mv.javascript -%]
+                    [% ELSIF ( mv.title == 'No popup' ) %]
+                    <a href="#" id="buttonDot_[%- mv.id -%]" class="[%- mv.class -%]" title="No popup">...</a>[%- mv.javascript -%]
+                    [% END %]
+                [% ELSIF ( mv.type == 'text' ) %]
+                    <input type="text" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" />
+                [% ELSIF ( mv.type == 'textarea' ) %]
+                    <textarea id="[%- mv.id -%]" name="field_value" class="input_marceditor" rows="5" cols="64" >[% mv.value %]</textarea>
+                [% END %]
+
                 <input type="hidden" name="tag"       value="[% ite.tag %]" />
                 <input type="hidden" name="subfield"  value="[% ite.subfield %]" />
                 <input type="hidden" name="mandatory" value="[% ite.mandatory %]" />
