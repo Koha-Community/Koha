@@ -231,39 +231,43 @@ sub generate_subfield_form {
             }
 
             if ( $subfieldlib->{hidden} > 4 or $subfieldlib->{hidden} <= -4 ) {
-                $subfield_data{marc_value} = qq(<input type="hidden" $attributes /> $authorised_lib{$value});
+                $subfield_data{marc_value} = {
+                    type        => 'hidden',
+                    id          => $subfield_data{id},
+                    maxlength   => $subfield_data{max_length},
+                    value       => $value,
+                    avalue      => $authorised_lib{$value},
+                };
             }
             else {
-                my @scrparam = (
-                    -name     => "field_value",
-                    -values   => \@authorised_values,
-                    -default  => $value,
-                    -labels   => \%authorised_lib,
-                    -override => 1,
-                    -size     => 1,
-                    -multiple => 0,
-                    -id       => "tag_".$tag."_subfield_".$subfieldtag."_".$index_subfield,
-                    -class    => "input_marceditor",
-                );
-
+                $subfield_data{marc_value} = {
+                    type     => 'select',
+                    id       => "tag_".$tag."_subfield_".$subfieldtag."_".$index_subfield,
+                    values   => \@authorised_values,
+                    labels   => \%authorised_lib,
+                    default  => $value,
+                };
                 # If we're on restricted editing, and our field is not in the list of subfields to allow,
                 # then it is read-only
-                push @scrparam, (-readonly => "readonly"), (-disabled => "disabled")
-                    if (
-                        not $allowAllSubfields
-                        and $restrictededition
-                        and !grep { $tag . '$' . $subfieldtag  eq $_ } @subfieldsToAllow
-                    );
-                $subfield_data{marc_value} =CGI::scrolling_list(@scrparam);
+                if (
+                    not $allowAllSubfields
+                    and $restrictededition
+                    and !grep { $tag . '$' . $subfieldtag  eq $_ } @subfieldsToAllow
+                ) {
+                    $subfield_data{marc_value}->{readonly} ='readonly="readonly"',
+                    $subfield_data{marc_value}->{disabled} ='disabled="disabled"',
+                }
             }
-
         }
             # it's a thesaurus / authority field
         elsif ( $subfieldlib->{authtypecode} ) {
-                $subfield_data{marc_value} = "<input type=\"text\" $attributes />
-                    <a href=\"#\" class=\"buttonDot\"
-                        onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$subfieldlib->{authtypecode}."&index=$subfield_data{id}','$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
-            ";
+                $subfield_data{marc_value} = {
+                    type         => 'text_auth',
+                    id           => $subfield_data{id},
+                    maxlength    => $subfield_data{max_length},
+                    value        => $value,
+                    authtypecode => $subfieldlib->{authtypecode},
+                };
         }
             # it's a plugin field
         elsif ( $subfieldlib->{value_builder} ) { # plugin
@@ -279,29 +283,66 @@ sub generate_subfield_form {
                 #TODO Report 12176 will make this even better !
                 my $class= 'buttonDot'. ( $plugin->noclick? ' disabled': '' );
                 my $title= $plugin->noclick? 'No popup': 'Tag editor';
-                $subfield_data{marc_value} = qq[<input type="text" $attributes /><a href="#" id="buttonDot_$subfield_data{id}" class="$class" title="$title">...</a>\n].$plugin->javascript;
+                $subfield_data{marc_value} = {
+                    type        => 'text_plugin',
+                    id          => $subfield_data{id},
+                    maxlength   => $subfield_data{max_length},
+                    value       => $value,
+                    class       => $class,
+                    title       => $title,
+                    javascript  => $plugin->javascript,
+                };
             } else {
                 warn $plugin->errstr;
-                $subfield_data{marc_value} = "<input type=\"text\" $attributes />"; # supply default input form
+                $subfield_data{marc_value} = {
+                    type        => 'text',
+                    id          => $subfield_data{id},
+                    maxlength   => $subfield_data{max_length},
+                    value       => $value,
+                }; # supply default input form
             }
         }
         elsif ( $tag eq '' ) {       # it's an hidden field
-            $subfield_data{marc_value} = qq(<input type="hidden" $attributes />);
+            $subfield_data{marc_value} = {
+                type        => 'hidden',
+                id          => $subfield_data{id},
+                maxlength   => $subfield_data{max_length},
+                value       => $value,
+            };
         }
         elsif ( $subfieldlib->{'hidden'} ) {   # FIXME: shouldn't input type be "hidden" ?
-            $subfield_data{marc_value} = qq(<input type="text" $attributes />);
+            $subfield_data{marc_value} = {
+                type        => 'text',
+                id          => $subfield_data{id},
+                maxlength   => $subfield_data{max_length},
+                value       => $value,
+            };
         }
-        elsif ( length($value) > 100
-                    or (C4::Context->preference("marcflavour") eq "UNIMARC" and
-                          300 <= $tag && $tag < 400 && $subfieldtag eq 'a' )
-                    or (C4::Context->preference("marcflavour") eq "MARC21"  and
-                          500 <= $tag && $tag < 600                     )
-                  ) {
+        elsif (
+                length($value) > 100
+                or (
+                    C4::Context->preference("marcflavour") eq "UNIMARC"
+                    and 300 <= $tag && $tag < 400 && $subfieldtag eq 'a'
+                )
+                or (
+                    C4::Context->preference("marcflavour") eq "MARC21"
+                    and 500 <= $tag && $tag < 600
+                )
+              ) {
             # oversize field (textarea)
-            $subfield_data{marc_value} = "<textarea $attributes_no_value_textarea>$value</textarea>\n";
+            $subfield_data{marc_value} = {
+                type        => 'textarea',
+                id          => $subfield_data{id},
+                value       => $value,
+            };
         } else {
-           # it's a standard field
-           $subfield_data{marc_value} = "<input type=\"text\" $attributes />";
+            # it's a standard field
+            $subfield_data{marc_value} = {
+                type        => 'text',
+                id          => $subfield_data{id},
+                maxlength   => $subfield_data{max_length},
+                value       => $value,
+            };
         }
         
         return \%subfield_data;
