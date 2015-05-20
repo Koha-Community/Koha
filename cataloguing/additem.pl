@@ -155,7 +155,6 @@ sub generate_subfield_form {
 	    $value = $input->param('barcode');
 	}
         my $attributes_no_value = qq(id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$subfield_data{maxlength}" );
-        my $attributes_no_value_textarea = qq(id="$subfield_data{id}" name="field_value" class="input_marceditor" rows="5" cols="64" );
 
         # Getting list of subfields to keep when restricted editing is enabled
         my $subfieldsToAllowForRestrictedEditing = C4::Context->preference('SubfieldsToAllowForRestrictedEditing');
@@ -236,7 +235,6 @@ sub generate_subfield_form {
                     id          => $subfield_data{id},
                     maxlength   => $subfield_data{max_length},
                     value       => $value,
-                    avalue      => $authorised_lib{$value},
                 };
             }
             else {
@@ -249,14 +247,11 @@ sub generate_subfield_form {
                 };
                 # If we're on restricted editing, and our field is not in the list of subfields to allow,
                 # then it is read-only
-                if (
+                $subfield_data{marc_value}->{readonlyselect} = (
                     not $allowAllSubfields
                     and $restrictededition
                     and !grep { $tag . '$' . $subfieldtag  eq $_ } @subfieldsToAllow
-                ) {
-                    $subfield_data{marc_value}->{readonly} ='readonly="readonly"',
-                    $subfield_data{marc_value}->{disabled} ='disabled="disabled"',
-                }
+                ) ? 1: 0;
             }
         }
             # it's a thesaurus / authority field
@@ -280,16 +275,14 @@ sub generate_subfield_form {
                 id => $subfield_data{id}, tabloop => $loop_data };
             $plugin->build( $pars );
             if( !$plugin->errstr ) {
-                #TODO Report 12176 will make this even better !
                 my $class= 'buttonDot'. ( $plugin->noclick? ' disabled': '' );
-                my $title= $plugin->noclick? 'No popup': 'Tag editor';
                 $subfield_data{marc_value} = {
                     type        => 'text_plugin',
                     id          => $subfield_data{id},
                     maxlength   => $subfield_data{max_length},
                     value       => $value,
                     class       => $class,
-                    title       => $title,
+                    nopopup     => $plugin->noclick,
                     javascript  => $plugin->javascript,
                 };
             } else {
