@@ -30,7 +30,6 @@ BEGIN {
 
 use C4::Context;
 use C4::Members qw/ DelMember /;
-use C4::Log;
 
 my $help;
 my $confirm;
