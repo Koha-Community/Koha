@@ -246,7 +246,7 @@ $(document).ready(function() {
                 [% ELSIF ( mv.type == 'text_auth' ) %]
                     <input type="text" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" />
                     [% SET dopop = "Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=\"${mv.authtypecode}\"&index=${mv.id}','${mv.id}')" %]
-                    <a href="#" class="buttonDot"  onclick="[%- dopop -%]; return false;" title="Tag Editor">...</a>
+                    <a href="#" class="buttonDot"  onclick="[%- dopop -%]; return false;" title="Tag editor">...</a>
                 [% ELSIF ( mv.type == 'text_plugin' ) %]
                     <input type="text" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" />
                     [% IF ( mv.nopopup ) %]
