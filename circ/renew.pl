@@ -83,7 +83,8 @@ if ($barcode) {
                     );
                 }
                 if ($can_renew) {
-                    my $date_due = AddRenewal( undef, $item->itemnumber() );
+                    my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+                    my $date_due = AddRenewal( undef, $item->itemnumber(), $branchcode );
                     $template->param( date_due => $date_due );
                 }
             }
