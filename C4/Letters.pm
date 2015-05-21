@@ -207,8 +207,7 @@ sub GetLettersAvailableForALibrary {
 our %letter;
 sub getletter {
     my ( $module, $code, $branchcode, $message_transport_type ) = @_;
-    $message_transport_type ||= 'email';
-
+    $message_transport_type //= '%';
 
     if ( C4::Context->preference('IndependentBranches')
             and $branchcode
@@ -226,7 +225,8 @@ sub getletter {
     my $sth = $dbh->prepare(q{
         SELECT *
         FROM letter
-        WHERE module=? AND code=? AND (branchcode = ? OR branchcode = '') AND message_transport_type = ?
+        WHERE module=? AND code=? AND (branchcode = ? OR branchcode = '')
+        AND message_transport_type LIKE ?
         ORDER BY branchcode DESC LIMIT 1
     });
     $sth->execute( $module, $code, $branchcode, $message_transport_type );
@@ -236,6 +236,7 @@ sub getletter {
     $letter{$module}{$code}{$branchcode}{$message_transport_type} = $line;
     return { %$line };
 }
+
 
 =head2 DelLetter
 
