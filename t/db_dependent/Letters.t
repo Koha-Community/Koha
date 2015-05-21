@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 58;
+use Test::More tests => 60;
 use Test::MockModule;
 use Test::Warn;
 
@@ -177,6 +177,12 @@ is( $letter->{title}, $title, 'GetLetters gets the title correctly' );
 is( $letter->{content}, $content, 'GetLetters gets the content correctly' );
 is( $letter->{message_transport_type}, 'email', 'GetLetters gets the message type correctly' );
 
+# Regression test for Bug 14206
+$dbh->do( q|INSERT INTO letter(branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES ('FFL','my module','my code','my name',1,?,?,'print')|, undef, $title, $content );
+my $letter14206_a = C4::Letters::getletter('my module', 'my code', 'FFL' );
+is( $letter14206_a->{message_transport_type}, 'print', 'Bug 14206 - message_transport_type not passed, correct mtt detected' );
+my $letter14206_b = C4::Letters::getletter('my module', 'my code', 'FFL', 'print');
+is( $letter14206_b->{message_transport_type}, 'print', 'Bug 14206 - message_transport_type passed, correct mtt detected'  );
 
 # addalert
 my $type = 'my type';
