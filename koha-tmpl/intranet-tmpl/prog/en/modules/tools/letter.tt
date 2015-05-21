@@ -448,7 +448,7 @@ $(document).ready(function() {
             </tr>
             </thead>
             <tr>
-                <td>[% Branches.GetName( letter.branchcode ) %]</td>
+                <td>[% IF letter.branchcode %][% Branches.GetName( letter.branchcode ) %][% ELSE %](All libraries)[% END %]</td>
                 <td>[% letter.module %]</td>
                 <td>[% letter.code %]</td>
                 <td>[% letter.name %]</td>
