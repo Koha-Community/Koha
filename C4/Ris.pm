@@ -94,12 +94,14 @@ C<$record> - a MARC::Record object
 
 =cut
 
+my $intype;
+
 sub marc2ris {
     my ($record) = @_;
     my $output;
 
     my $marcflavour = C4::Context->preference("marcflavour");
-    my $intype = lc($marcflavour);
+    $intype = lc($marcflavour);
     my $marcprint = 0; # Debug flag;
 
     # Let's redirect stdout
@@ -457,7 +459,7 @@ sub normalize_author {
 
 	## we currently ignore subfield c until someone complains
 	if (length($rawauthorb) > 0) {
-	    return join ",", ($rawauthora, $rawauthorb);
+        return join ", ", ($rawauthora, $rawauthorb);
 	}
 	else {
 	    return $rawauthora;
@@ -496,7 +498,7 @@ sub get_author {
 	normalize_author($authorname, $authorfield->subfield('b'), $authorfield->subfield('c'), $authorfield->indicator("$indicator"));
     }
     else {
-	normalize_author($authorfield->subfield('a'), $authorfield->subfield('b'), $authorfield->subfield('c'), $authorfield->indicator("$indicator"));
+        normalize_author($authorfield->subfield('a') // '', $authorfield->subfield('b') // '', $authorfield->subfield('c') // '', $authorfield->indicator("$indicator"));
     }
 }
 
