@@ -30,47 +30,6 @@
 
 </div> <!-- / #wrap in masthead.inc -->
 
-    [% IF ( opaclanguagesdisplay ) %]
-        [% IF ( languages_loop && opaclanguagesdisplay ) %]
-            [% UNLESS ( one_language_enabled ) %]
-                <div id="changelanguage" class="navbar navbar-fixed-bottom navbar-static-bottom noprint">
-                    <div class="navbar-inner">
-                        <ul id="i18nMenu" class="nav">
-                            <li><p class="lang navbar-text"><strong>Languages:&nbsp;</strong></p></li>
-                            [% FOREACH languages_loo IN languages_loop %]
-                                [% IF ( languages_loo.group_enabled ) %]
-                                    [% IF ( languages_loo.plural ) %]
-                                        <li class="dropdown">
-                                            <a data-toggle="dropdown" class="dropdown-toggle sublangs" id="show[% languages_loo.rfc4646_subtag %]" href="#">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %] <b class="caret"></b></a>
-                                                <ul id="sub[% languages_loo.rfc4646_subtag %]" class="dropdown-menu">
-                                                    [% FOREACH sublanguages_loo IN languages_loo.sublanguages_loop %]
-                                                        [% IF ( sublanguages_loo.enabled ) %]
-                                                            [% IF ( sublanguages_loo.sublanguage_current ) %]
-                                                                <li> <p>[% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %] ([% sublanguages_loo.rfc4646_subtag %])</p></li>
-                                                            [% ELSE %]
-                                                                <li><a href="/cgi-bin/koha/opac-changelanguage.pl?language=[% sublanguages_loo.rfc4646_subtag %]"> [% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %] ([% sublanguages_loo.rfc4646_subtag %])</a></li>
-                                                            [% END %]
-                                                        [% END # / IF sublanguages_loo.enabled %]
-                                                    [% END # / FOREACH sublanguages_loo %]
-                                                </ul>
-                                        </li> <!-- / .more -->
-                                    [% ELSE %]
-                                        [% IF ( languages_loo.group_enabled ) %]
-                                            [% IF ( languages_loo.current ) %]
-                                                <li class="active"><p class="navbar-text">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]</p></li>
-                                            [% ELSE %]
-                                                <li><a href="/cgi-bin/koha/opac-changelanguage.pl?language=[% languages_loo.rfc4646_subtag %]">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]</a></li>
-                                            [% END %]
-                                        [% END # / IF languages_loo.current %]
-                                    [% END # / IF ( languages_loo.plural ) %]
-                                [% END # / IF ( languages_loo.group_enabled ) %]
-                            [% END # / FOREACH languages_loo IN languages_loop %]
-                        </ul> <!-- / #i18menu -->
-                    </div> <!-- / .navbar-inner -->
-                </div> <!-- / #changelanguage -->
-            [% END # / UNLESS ( one_language_enabled ) %]
-        [% END # / IF ( languages_loop && opaclanguagesdisplay ) %]
-    [% END # / IF opaclanguagesdisplay %]
 [% END # / UNLESS is_popup %]
 
 
