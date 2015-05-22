@@ -30,6 +30,7 @@ $(document).ready(function() {
     $("#submit_form").click( function(event) {
         event.preventDefault();
         var at_least_one_exists = 0;
+        var are_valid = 1;
         $("fieldset.mtt").each( function(){
             var title = $(this).find('input[name="title"]').val();
             var content = $(this).find('textarea[name="content"]').val();
@@ -41,14 +42,17 @@ $(document).ready(function() {
                 var msg = _("Please specify title and content for %s");
                 msg = msg.replace( "%s", mtt );
                 at_least_one_exists = 1;
-                alert(msg)
-                return false;
+                alert(msg);
+                return are_valid = false;
             } else if ( title.length > 0 && content.length > 0 ) {
                 at_least_one_exists = 1;
             }
         } );
         if ( ! at_least_one_exists ) {
             alert( _("Please fill at least one template.") );
+            return false;
+        }
+        if ( ! are_valid ) {
             return false;
         }
 
