@@ -231,9 +231,9 @@ $(document).ready(function() {
                     <input type="hidden" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]">
                 [% ELSIF ( mv.type == 'select' ) %]
                     [% IF ( mv.readonlyselect ) %]
-                        <select name="[%- mv.name -%]" id="[%- mv.id -%]" size="1" class="input_marceditor" readonly="readonly" disabled="disabled">
+                        <select name="field_value" id="[%- mv.id -%]" size="1" class="input_marceditor" readonly="readonly" disabled="disabled">
                     [% ELSE %]
-                        <select name="[%- mv.name -%]" id="[%- mv.id -%]" size="1" class="input_marceditor">
+                        <select name="field_value" id="[%- mv.id -%]" size="1" class="input_marceditor">
                     [% END %]
                     [% FOREACH aval IN mv.values %]
                         [% IF aval == mv.default %]
