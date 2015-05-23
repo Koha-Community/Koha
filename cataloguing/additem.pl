@@ -154,7 +154,6 @@ sub generate_subfield_form {
 	    my $input = new CGI;
 	    $value = $input->param('barcode');
 	}
-        my $attributes_no_value = qq(id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$subfield_data{maxlength}" );
 
         # Getting list of subfields to keep when restricted editing is enabled
         my $subfieldsToAllowForRestrictedEditing = C4::Context->preference('SubfieldsToAllowForRestrictedEditing');
@@ -164,17 +163,6 @@ sub generate_subfield_form {
         ) ? 1 : 0;
         my @subfieldsToAllow = split(/ /, $subfieldsToAllowForRestrictedEditing);
 
-        # If we're on restricted editing, and our field is not in the list of subfields to allow,
-        # then it is read-only
-        $attributes_no_value .= 'readonly="readonly" '
-            if (
-                not $allowAllSubfields
-                and $restrictededition
-                and !grep { $tag . '$' . $subfieldtag  eq $_ } @subfieldsToAllow
-            );
-
-        my $attributes          = qq($attributes_no_value value="$value" );
-        
         if ( $subfieldlib->{authorised_value} ) {
             my @authorised_values;
             my %authorised_lib;
