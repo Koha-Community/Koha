@@ -85,7 +85,7 @@ my $report = C4::UsageStats->BuildReport();
 
 isa_ok( $report,            'HASH', '$report is a HASH' );
 isa_ok( $report->{library}, 'HASH', '$report->{library} is a HASH' );
-is( scalar( keys( $report->{library} ) ), 5,  "There are 5 fields in $report->{library}" );
+is( scalar( keys %{$report->{library}} ), 5,  "There are 5 fields in $report->{library}" );
 is( $report->{library}->{id},             0,  "UsageStatsID           is good" );
 is( $report->{library}->{name},           '', "UsageStatsLibraryName  is good" );
 is( $report->{library}->{url},            '', "UsageStatsLibraryUrl   is good" );
@@ -103,7 +103,7 @@ $report = C4::UsageStats->BuildReport();
 
 isa_ok( $report,            'HASH', '$report is a HASH' );
 isa_ok( $report->{library}, 'HASH', '$report->{library} is a HASH' );
-is( scalar( keys( $report->{library} ) ), 5,         "There are 5 fields in $report->{library}" );
+is( scalar( keys %{$report->{library}} ), 5,         "There are 5 fields in $report->{library}" );
 is( $report->{library}->{id},             1,         "UsageStatsID            is good" );
 is( $report->{library}->{name},           'NAME',    "UsageStatsLibraryName   is good" );
 is( $report->{library}->{url},            'URL',     "UsageStatsLibraryUrl    is good" );
@@ -116,7 +116,7 @@ $report = C4::UsageStats->BuildReport();
 
 isa_ok( $report,              'HASH', '$report is a HASH' );
 isa_ok( $report->{volumetry}, 'HASH', '$report->{volumetry} is a HASH' );
-is( scalar( keys( $report->{volumetry} ) ), 8, "There are 8 fields in $report->{volumetry}" );
+is( scalar( keys %{$report->{volumetry}} ), 8, "There are 8 fields in $report->{volumetry}" );
 is( $report->{volumetry}->{biblio},         0, "There is no biblio" );
 is( $report->{volumetry}->{items},          0, "There is no items" );
 is( $report->{volumetry}->{auth_header},    0, "There is no auth_header" );
@@ -133,7 +133,7 @@ $report = C4::UsageStats->BuildReport();
 
 isa_ok( $report,              'HASH', '$report is a HASH' );
 isa_ok( $report->{volumetry}, 'HASH', '$report->{volumetry} is a HASH' );
-is( scalar( keys( $report->{volumetry} ) ), 8, "There are 8 fields in $report->{volumetry}" );
+is( scalar( keys %{$report->{volumetry}} ), 8, "There are 8 fields in $report->{volumetry}" );
 is( $report->{volumetry}->{biblio},         3, "There are 3 biblio" );
 is( $report->{volumetry}->{items},          3, "There are 3 items" );
 is( $report->{volumetry}->{auth_header},    2, "There are 2 auth_header" );
@@ -150,7 +150,7 @@ mocking_systempreferences_to_a_set_value(0);
 $report = C4::UsageStats->BuildReport();
 isa_ok( $report,                      'HASH', '$report is a HASH' );
 isa_ok( $report->{systempreferences}, 'HASH', '$report->{systempreferences} is a HASH' );
-is( scalar( keys( $report->{systempreferences} ) ), 248, "There are 248 fields in $report->{systempreferences}" );
+is( scalar( keys %{$report->{systempreferences}} ), 248, "There are 248 fields in $report->{systempreferences}" );
 verif_systempreferences_values( $report, 0 );
 
 #mock with values
@@ -159,7 +159,7 @@ mocking_systempreferences_to_a_set_value(1);
 $report = C4::UsageStats->BuildReport();
 isa_ok( $report,                      'HASH', '$report is a HASH' );
 isa_ok( $report->{systempreferences}, 'HASH', '$report->{systempreferences} is a HASH' );
-is( scalar( keys( $report->{systempreferences} ) ), 248, "There are 248 fields in $report->{systempreferences}" );
+is( scalar( keys %{$report->{systempreferences}} ), 248, "There are 248 fields in $report->{systempreferences}" );
 verif_systempreferences_values( $report, 1 );
 
 # ---------- Testing ReportToCommunity ----------
@@ -584,7 +584,7 @@ sub mocking_systempreferences_to_a_set_value {
 sub verif_systempreferences_values {
     my ( $report, $value_to_test ) = @_;
 
-    foreach my $key ( keys $report->{systempreferences} ) {
+    foreach my $key ( keys %{$report->{systempreferences}} ) {
         is( $report->{systempreferences}->{$key}, $value_to_test, "\$report->{systempreferences}->{$key} = $value_to_test" );
     }
 }
