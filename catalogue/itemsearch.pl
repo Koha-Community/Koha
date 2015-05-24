@@ -303,7 +303,10 @@ if ($format eq 'csv') {
         type => 'text/csv',
         attachment => 'items.csv',
     });
-    print $template->output;
+
+    for my $line ( split '\n', $template->output ) {
+        print "$line\n" unless $line =~ m|^\s*$|;
+    }
 } else {
     output_with_http_headers $cgi, $cookie, $template->output, $content_type;
 }
