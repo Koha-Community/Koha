@@ -62,4 +62,6 @@ print $input->header(
     -attachment => 'lateorders.csv',
 );
 $template->param( orders => \@orders );
-print $template->output;
+for my $line ( split '\n', $template->output ) {
+    print "$line\n" unless $line =~ m|^\s*$|;
+}
