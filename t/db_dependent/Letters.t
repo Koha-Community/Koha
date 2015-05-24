@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 60;
+use Test::More tests => 61;
 use Test::MockModule;
 use Test::Warn;
 
@@ -178,6 +178,15 @@ my $letter14206_a = C4::Letters::getletter('my module', 'my code', 'FFL' );
 is( $letter14206_a->{message_transport_type}, 'print', 'Bug 14206 - message_transport_type not passed, correct mtt detected' );
 my $letter14206_b = C4::Letters::getletter('my module', 'my code', 'FFL', 'print');
 is( $letter14206_b->{message_transport_type}, 'print', 'Bug 14206 - message_transport_type passed, correct mtt detected'  );
+
+# test for overdue_notices.pl
+my $overdue_rules = {
+    letter1         => 'my code',
+};
+my $i = 1;
+my $branchcode = 'FFL';
+my $letter14206_c = C4::Letters::getletter('my module', $overdue_rules->{"letter$i"}, $branchcode);
+is( $letter14206_c->{message_transport_type}, 'print', 'Bug 14206 - correct mtt detected for call from overdue_notices.pl' );
 
 # addalert
 my $type = 'my type';
