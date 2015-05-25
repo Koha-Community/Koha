@@ -782,9 +782,9 @@ sub marc2bibtex {
         push @elt, qq|\t$bh[$i] = {$bh[$i+1]}|;
     }
     $tex .= join(",\n", $id, @elt);
-    $tex .= "\n";
 
     if ($additional_fields) {
+        $tex .= ",\n";
         foreach my $bibtex_tag ( keys %$additional_fields ) {
             next if $bibtex_tag eq '@';
 
@@ -801,6 +801,9 @@ sub marc2bibtex {
                 }
             }
         }
+    }
+    else {
+        $tex .= "\n";
     }
 
     $tex .= "}\n";
