@@ -44,7 +44,7 @@
 
     [% ELSIF op=='invite' %]
         <div id="invite">
-        <form method="post" onsubmit="return $('#invite_address').val().trim()!='';">
+        <form method="post" onsubmit="return $.trim($('#invite_address').val())!='';">
         <fieldset class="rows">
             <ol>
             <input type="hidden" name="op" value="conf_invite"/>
