@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Full subscription history for [% bibliotitle %]
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
@@ -26,10 +27,9 @@
                             <h4>Refine your search</h4>
                             <form action="/cgi-bin/koha/opac-serial-issues.pl" id="filterform">
                                 <fieldset>
-                                    <label for="libraryfilter">Library : </label>
+                                    <label for="libraryfilter">Library: </label>
                                     <select id="libraryfilter" name="libraryfilter" style="width:10em;"></select>
-
-                                    <label for="subscriptionidfilter">Subscription : </label>
+                                    <label for="subscriptionidfilter">Subscription: </label>
                                     <select id="subscriptionidfilter" name="subscriptionfilter" style="width:10em;" disabled="disabled"></select>
                                 </fieldset>
                                 <fieldset class="action">
@@ -90,7 +90,7 @@
                                                         &nbsp;
                                                     [% END %]
                                                 </td>
-                                                <td class="libraryfilterclass">[% serial.branchcode %]</td>
+                                                <td class="libraryfilterclass">[% Branches.GetName( serial.branchcode ) %]</td>
                                                 <td>[% serial.notes %]</td>
                                                 <td>
                                                     [% IF ( serial.status2 && serial.planneddate ) %]
@@ -174,13 +174,14 @@
             });
 
             // Setting the option values with branchcodes
-            $("#libraryfilter").append('<option value="all">(All)</option>');
+            $("#libraryfilter").append('<option value="all">'+_("(All)")+'</option>');
             for (var i = 0; i < subarray.length; i++) {
                 $("#libraryfilter").append('<option value="' + subarray[i] + '">' + subarray[i] + '</option>');
             }
         }
 
         // Filter by Library
+
         function filterByLibrary() {
 
             selectedStatus = $("#libraryfilter").val();
@@ -205,7 +206,7 @@
                 if (subarray.indexOf($(this).text()) == -1) { subarray.push($(this).text()); }
             });
             // Setting the option values with subscription id's
-            $("#subscriptionidfilter").append('<option value="all">(All)</option>');
+            $("#subscriptionidfilter").append('<option value="all">'+_("(All)")+'</option>');
             for (var i = 0; i < subarray.length; i++) {
                 $("#subscriptionidfilter").append('<option value="' + subarray[i] + '">' + subarray[i] + '</option>');
             }
@@ -248,7 +249,7 @@
 
             // Remove old subscription options
             $("#subscriptionidfilter option").remove();
-            $("#subscriptionidfilter option").append('<option value="all">(All)</option>');
+            $("#subscriptionidfilter option").append('<option value="all">'+_("(All)")+'</option>');
             $("#subscriptionidfilter").attr("disabled", "disabled");
 
             if (keeplibrary != true) {
