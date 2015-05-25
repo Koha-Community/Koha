@@ -113,11 +113,11 @@ is ($bibtex, $test5xml, "testing bibtex");
 C4::Context->set_preference( "BibtexExportAdditionalFields", "'\@': 260\$b\ntest: 260\$b" );
 $bibtex = marc2bibtex( $marc, 'testID' );
 my $test6xml = qq(\@Scholastic{testID,
-	author = {Rowling, J.K.},
-	title = {Harry potter},
-	publisher = {Scholastic},
-	year = {2001},
-	test = {Scholastic}
+\tauthor = {Rowling, J.K.},
+\ttitle = {Harry potter},
+\tpublisher = {Scholastic},
+\tyear = {2001},
+\ttest = {Scholastic}
 }
 );
 is( $bibtex, $test6xml, "testing bibtex" );

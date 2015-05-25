@@ -326,27 +326,27 @@ sub marc2endnote {
     if ($f500) {
         $abstract = $f500->subfield('a');
     }
-	my $fields = {
-		DB => C4::Context->preference("LibraryName"),
-		Title => $marc_rec_obj->title(),
-		Author => $marc_rec_obj->author(),
-		Publisher => $f710a,
-		City => $f260a,
-		Year => $marc_rec_obj->publication_date,
-		Abstract => $abstract,
-	};
-	my $endnote;
-	my $style = new Biblio::EndnoteStyle();
-	my $template;
-	$template.= "DB - DB\n" if C4::Context->preference("LibraryName");
-	$template.="T1 - Title\n" if $marc_rec_obj->title();
-	$template.="A1 - Author\n" if $marc_rec_obj->author();
-	$template.="PB - Publisher\n" if  $f710a;
-	$template.="CY - City\n" if $f260a;
-	$template.="Y1 - Year\n" if $marc_rec_obj->publication_date;
-	$template.="AB - Abstract\n" if $abstract;
-	my ($text, $errmsg) = $style->format($template, $fields);
-	return ($text);
+    my $fields = {
+        DB => C4::Context->preference("LibraryName"),
+        Title => $marc_rec_obj->title(),
+        Author => $marc_rec_obj->author(),
+        Publisher => $f710a,
+        City => $f260a,
+        Year => $marc_rec_obj->publication_date,
+        Abstract => $abstract,
+    };
+    my $endnote;
+    my $style = new Biblio::EndnoteStyle();
+    my $template;
+    $template.= "DB - DB\n" if C4::Context->preference("LibraryName");
+    $template.="T1 - Title\n" if $marc_rec_obj->title();
+    $template.="A1 - Author\n" if $marc_rec_obj->author();
+    $template.="PB - Publisher\n" if  $f710a;
+    $template.="CY - City\n" if $f260a;
+    $template.="Y1 - Year\n" if $marc_rec_obj->publication_date;
+    $template.="AB - Abstract\n" if $abstract;
+    my ($text, $errmsg) = $style->format($template, $fields);
+    return ($text);
 
 }
 
