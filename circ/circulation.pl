@@ -55,7 +55,6 @@ use Date::Calc qw(
 );
 use List::MoreUtils qw/uniq/;
 
-
 #
 # PARAMETERS READING
 #
@@ -156,7 +155,6 @@ $findborrower =~ s|,| |g;
 $branch  = C4::Context->userenv->{'branch'};  
 $printer = C4::Context->userenv->{'branchprinter'};
 
-
 # If AutoLocation is not activated, we show the Circulation Parameters to chage settings of librarian
 if (C4::Context->preference("AutoLocation") != 1) {
     $template->param(ManualLocation => 1);
@@ -176,7 +174,10 @@ my $stickyduedate  = $query->param('stickyduedate') || $session->param('stickydu
 my $duedatespec    = $query->param('duedatespec')   || $session->param('stickyduedate');
 $duedatespec = eval { output_pref( { dt => dt_from_string( $duedatespec ), dateformat => 'iso' }); }
     if ( $duedatespec );
-
+my $restoreduedatespec  = $query->param('restoreduedatespec') || $session->param('stickyduedate') || $duedatespec;
+if ($restoreduedatespec eq "highholds_empty") {
+    undef $restoreduedatespec;
+}
 my $issueconfirmed = $query->param('issueconfirmed');
 my $cancelreserve  = $query->param('cancelreserve');
 my $print          = $query->param('print') || q{};
@@ -577,6 +578,17 @@ my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $borrower->{stree
 
 $template->param(%$borrower);
 
+# Restore date if changed by holds and/or save stickyduedate to session
+if ($restoreduedatespec || $stickyduedate) {
+    $duedatespec = $restoreduedatespec || $duedatespec;
+
+    if ($stickyduedate) {
+        $session->param( 'stickyduedate', $duedatespec );
+    }
+} elsif (defined($duedatespec) && !defined($restoreduedatespec)) {
+    undef $duedatespec;
+}
+
 $template->param(
     lib_messages_loop => $lib_messages_loop,
     bor_messages_loop => $bor_messages_loop,
@@ -595,6 +607,7 @@ $template->param(
     barcodes          => $barcodes,
     stickyduedate     => $stickyduedate,
     duedatespec       => $duedatespec,
+    restoreduedatespec => $restoreduedatespec,
     message           => $message,
     totaldue          => sprintf('%.2f', $total),
     inprocess         => $inprocess,
@@ -611,11 +624,6 @@ $template->param(
     relatives_issues_count => $relatives_issues_count,
     relatives_borrowernumbers => \@relatives,
 );
-
-# save stickyduedate to session
-if ($stickyduedate) {
-    $session->param( 'stickyduedate', $duedatespec );
-}
 
 my ($picture, $dberror) = GetPatronImage($borrower->{'borrowernumber'});
 $template->param( picture => 1 ) if $picture;
