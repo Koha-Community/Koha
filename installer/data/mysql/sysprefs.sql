@@ -218,6 +218,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('MembershipExpiryDaysNotice',NULL,'Send an account expiration notice that a patron\'s card is about to expire after',NULL,'Integer'),
 ('minPasswordLength','3',NULL,'Specify the minimum length of a patron/staff password','free'),
 ('NewItemsDefaultLocation','','','If set, all new items will have a location of the given Location Code ( Authorized Value type LOC )',''),
+('NewsAuthorDisplay','none','none|opac|staff|both','Display the author name for news items.','Choice'),
 ('noissuescharge','5','','Define maximum amount withstanding before check outs are blocked','Integer'),
 ('noItemTypeImages','0',NULL,'If ON, disables item-type images','YesNo'),
 ('NoLoginInstructions', '', '60|10', 'Instructions to display on the OPAC login form when a patron is not logged in', 'Textarea'),
