@@ -1133,6 +1133,7 @@ sub getIndexes{
                     'Date-of-publication',
                     'Dewey-classification',
                     'Dissertation-information',
+                    'diss',
                     'EAN',
                     'extent',
                     'fic',
