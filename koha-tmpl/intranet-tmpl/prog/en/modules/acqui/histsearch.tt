@@ -73,9 +73,9 @@
                   <option value="new">New</option>
                 [% END %]
                 [% IF orderstatus == "ordered" %]
-                  <option value="ordered" selected="selected">Pending</option>
+                  <option value="ordered" selected="selected">Ordered</option>
                 [% ELSE %]
-                  <option value="ordered">Pending</option>
+                  <option value="ordered">Ordered</option>
                 [% END %]
                 [% IF orderstatus == "partial" %]
                   <option value="partial" selected="selected">Partially received</option>
@@ -157,7 +157,7 @@
                     <td>
                         [% SWITCH order.orderstatus %]
                             [% CASE 'new' %]New
-                            [% CASE 'ordered' %]Pending
+                            [% CASE 'ordered' %]Ordered
                             [% CASE 'partial' %]Partially received
                             [% CASE 'complete' %]Received
                             [% CASE 'cancelled' %]Cancelled
