@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 61;
+use Test::More tests => 65;
 use Test::MockModule;
 use Test::Warn;
 
@@ -351,6 +351,7 @@ $bookseller->contacts->[0]->email('testemail@mydomain.com');
 C4::Bookseller::ModBookseller($bookseller);
 $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 
+{
 warning_is {
     $err = SendAlerts( 'claimacquisition', [ $ordernumber ], 'TESTACQCLAIM' ) }
     "Fake sendmail",
@@ -359,5 +360,45 @@ warning_is {
 is($err, 1, "Successfully sent claim");
 is($mail{'To'}, 'testemail@mydomain.com', "mailto correct in sent claim");
 is($mail{'Message'}, 'my vendor|John Smith|Ordernumber ' . $ordernumber . ' (Silence in the library) (1 ordered)', 'Claim notice text constructed successfully');
+}
+
+{
+use C4::Serials;
+
+my $notes = 'notes';
+my $internalnotes = 'intnotes';
+my $subscriptionid = NewSubscription(
+     undef,      "",     undef, undef, undef, $biblionumber,
+    '2013-01-01', 1, undef, undef,  undef,
+    undef,      undef,  undef, undef, undef, undef,
+    1,          $notes,undef, '2013-01-01', undef, 1,
+    undef,       undef,  0,    $internalnotes,  0,
+    undef, undef, 0,          undef,         '2013-12-31', 0
+);
+$dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('serial','RLIST','Serial issue notification','Serial issue notification','<<biblio.title>>,<<subscription.subscriptionid>>,<<serial.serialseq>>');});
+my ($serials_count, @serials) = GetSerials($subscriptionid);
+my $serial = $serials[0];
+
+my $borrowernumber = AddMember(
+    firstname    => 'John',
+    surname      => 'Smith',
+    categorycode => 'PT',
+    branchcode   => 'CPL',
+    dateofbirth  => $date,
+    email        => 'john.smith@test.de',
+);
+my $alert_id = C4::Letters::addalert($borrowernumber, 'issue', $subscriptionid);
+
+
+my $err2;
+warning_is {
+$err2 = SendAlerts( 'issue', $serial->{serialid}, 'RLIST' ) }
+    "Fake sendmail",
+    "SendAlerts is using the mocked sendmail routine";
+is($err2, "", "Successfully sent serial notification");
+is($mail{'To'}, 'john.smith@test.de', "mailto correct in sent serial notification");
+is($mail{'Message'}, 'Silence in the library,'.$subscriptionid.',No. 0', 'Serial notification text constructed successfully');
+}
+
 
 $schema->storage->txn_rollback();
