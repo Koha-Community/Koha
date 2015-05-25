@@ -213,6 +213,9 @@ sub add_form {
             push @{$field_selection}, {value => "biblio.$_", text => ucfirst $_ };
         }
     }
+    elsif ($module eq 'serial') {
+        push @{$field_selection}, add_fields('branches', 'biblio', 'biblioitems', 'borrowers', 'subscription', 'serial');
+    }
     elsif ($module eq 'suggestions') {
         push @{$field_selection}, add_fields('suggestions', 'borrowers', 'biblio');
     }

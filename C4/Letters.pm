@@ -390,18 +390,27 @@ sub SendAlerts {
     if ( $type eq 'issue' ) {
 
         # prepare the letter...
-        # search the biblionumber
+        # search the subscriptionid
         my $sth =
           $dbh->prepare(
-            "SELECT biblionumber FROM subscription WHERE subscriptionid=?");
+            "SELECT subscriptionid FROM serial WHERE serialid=?");
         $sth->execute($externalid);
-        my ($biblionumber) = $sth->fetchrow
+        my ($subscriptionid) = $sth->fetchrow
           or warn( "No subscription for '$externalid'" ),
+             return;
+
+        # search the biblionumber
+        $sth =
+          $dbh->prepare(
+            "SELECT biblionumber FROM subscription WHERE subscriptionid=?");
+        $sth->execute($subscriptionid);
+        my ($biblionumber) = $sth->fetchrow
+          or warn( "No biblionumber for '$subscriptionid'" ),
              return;
 
         my %letter;
         # find the list of borrowers to alert
-        my $alerts = getalert( '', 'issue', $externalid );
+        my $alerts = getalert( '', 'issue', $subscriptionid );
         foreach (@$alerts) {
             my $borinfo = C4::Members::GetMember('borrowernumber' => $_->{'borrowernumber'});
             my $email = $borinfo->{email} or next;
@@ -418,6 +427,8 @@ sub SendAlerts {
                     'biblio'      => $biblionumber,
                     'biblioitems' => $biblionumber,
                     'borrowers'   => $borinfo,
+                    'subscription' => $subscriptionid,
+                    'serial' => $externalid,
                 },
                 want_librarian => 1,
             ) or return;
@@ -759,6 +770,8 @@ sub _parseletter_sth {
     ($table eq 'aqorders'     ) ? "SELECT * FROM $table WHERE    ordernumber = ?"                                  :
     ($table eq 'opac_news'    ) ? "SELECT * FROM $table WHERE          idnew = ?"                                  :
     ($table eq 'borrower_modifications') ? "SELECT * FROM $table WHERE verification_token = ?" :
+    ($table eq 'subscription') ? "SELECT * FROM $table WHERE subscriptionid = ?" :
+    ($table eq 'serial') ? "SELECT * FROM $table WHERE serialid = ?" :
     undef ;
     unless ($query) {
         warn "ERROR: No _parseletter_sth query for table '$table'";
