@@ -43,22 +43,6 @@ $(document).ready(function(){
     } ) );
 
 });
-function active(numlayer)
-{
-    for (i=10; i < 11 ; i++ ) {
-        ong = i+"XX";
-            link = "link"+i;
-        if (numlayer==i) {
-            document.getElementById(ong).style.visibility="visible";
-            document.getElementById(link).style.backgroundColor="#11AA11";
-            document.getElementById(link).style.backgroundImage="url([% themelang %]/images/background-mem.gif)";
-        } else {
-            document.getElementById(ong).style.visibility="hidden";
-            document.getElementById(link).style.backgroundColor="#FFFFFF";
-            document.getElementById(link).style.backgroundImage="";
-        }
-    }
-}
 function Check(f) {
     var total_errors = CheckMandatorySubfields(f);
     if (total_errors==0) {
