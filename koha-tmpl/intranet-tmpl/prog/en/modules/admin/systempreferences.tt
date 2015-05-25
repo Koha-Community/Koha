@@ -200,8 +200,58 @@
         <div class="hint">Note: you should have no reasons to modify the following default values</div>
         <ol>
         <li><label for="preftype">Variable type:</label>
-        <div class="hint"> (<span class="variabletype" id="Free">Free</span>, <span class="variabletype" id="Choice">Choice</span>, <span class="variabletype" id="YesNo">YesNo</span>, <span class="variabletype" id="Integer">Integer</span>, <span class="variabletype" id="Textarea">Textarea</span>, <span class="variabletype" id="Float">Float</span>, <span class="variabletype" id="Themes">Themes</span>, <span class="variabletype" id="Languages">Languages</span>, <span class="variabletype" id="Upload">Upload</span> or <span class="variabletype" id="ClassSources">ClassSources</span>)</div>
-        <input type="text" name="preftype" id="preftype" value="[% preftype %]" size="40" maxlength="40" /></li>
+        <select name="preftype" id="preftype">
+        [%- IF (preftype && preftype == 'Free') || !preftype -%]
+            <option value="Free" selected>Free</option>
+        [%- ELSE -%]
+            <option value="Free">Free</option>
+        [% END %]
+        [%- IF (preftype && preftype == 'Choice') -%]
+            <option value="Choice" selected>Choice</option>
+        [%- ELSE -%]
+            <option value="Choice">Choice</option>
+        [% END %]
+        [%- IF (preftype && preftype == 'YesNo') -%]
+            <option value="YesNo" selected>YesNo</option>
+        [%- ELSE -%]
+            <option value="YesNo">YesNo</option>
+        [% END %]
+        [%- IF (preftype && preftype == 'Integer') -%]
+            <option value="Integer" selected>Integer</option>
+        [%- ELSE -%]
+            <option value="Integer">Integer</option>
+        [% END %]
+        [%- IF (preftype && preftype == 'Textarea') -%]
+            <option value="Textarea" selected>Textarea</option>
+        [%- ELSE -%]
+            <option value="Textarea">Textarea</option>
+        [% END %]
+        [%- IF (preftype && preftype == 'Float') -%]
+            <option value="Float" selected>Float</option>
+        [%- ELSE -%]
+            <option value="Float">Float</option>
+        [% END %]
+        [%- IF (preftype && preftype == 'Themes') -%]
+            <option value="Themes" selected>Themes</option>
+        [%- ELSE -%]
+            <option value="Themes">Themes</option>
+        [% END %]
+        [%- IF (preftype && preftype == 'Languages') -%]
+            <option value="Languages" selected>Languages</option>
+        [%- ELSE -%]
+            <option value="Languages">Languages</option>
+        [% END %]
+        [%- IF (preftype && preftype == 'Upload') -%]
+            <option value="Upload" selected>Upload</option>
+        [%- ELSE -%]
+            <option value="Upload">Upload</option>
+        [% END %]
+        [%- IF (preftype && preftype == 'ClassSources') -%]
+            <option value="ClassSources" selected>ClassSources</option>
+        [%- ELSE -%]
+            <option value="ClassSources">ClassSources</option>
+        [% END %]
+        </select>
         <li><label for="prefoptions">Variable options:</label>
         <div class="hint">(a choice list for choice (separated by |) or cols|rows for texarea)</div>
         <input type="text" name="prefoptions" id="prefoptions" value="[% prefoptions %]" size="60" maxlength="80" /></li>
