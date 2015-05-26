@@ -115,94 +115,70 @@ if ($do_it) {
 } else {
     my $dbh = C4::Context->dbh;
     my @values;
-    my %labels;
-    my %select;
     my $req;
     $req = $dbh->prepare("select distinctrow categorycode,description from categories order by description");
     $req->execute;
-    my @select;
-    push @select,"";
-    $select{""}="";
+    my %labelsc;
+    my @selectc;
     while (my ($value, $desc) =$req->fetchrow) {
-        push @select, $value;
-        $select{$value}=$desc;
+        push @selectc, $value;
+        $labelsc{$value} = $desc;
     }
-    my $CGIBorCat=CGI::scrolling_list( -name     => 'Filter',
-                -id => 'borcat',
-                -values   => \@select,
-                -labels   => \%select,
-                -size     => 1,
-                -multiple => 0 );
+    my $BorCat = {
+        values   => \@selectc,
+        labels   => \%labelsc,
+    };
     
     $req = $dbh->prepare( "select distinctrow itemtype,description from itemtypes order by description");
     $req->execute;
-    undef @select;
-    undef %select;
-    push @select,"";
-    $select{""}="";
+    my @selecti;
+    my %labelsi;
     while (my ($value,$desc) =$req->fetchrow) {
-        push @select, $value;
-        $select{$value}=$desc;
+        push @selecti, $value;
+        $labelsi{$value}=$desc;
     }
-    my $CGIItemTypes=CGI::scrolling_list( -name     => 'Filter',
-                -id => 'itemtypes',
-                -values   => \@select,
-                -labels    => \%select,
-                -size     => 1,
-                -multiple => 0 );
+    my $ItemTypes = {
+        values   => \@selecti,
+        labels    => \%labelsi,
+    };
     
     $req = $dbh->prepare("select distinctrow sort1 from borrowers where sort1 is not null order by sort1");
     $req->execute;
-    undef @select;
-    push @select,"";
+    my @selects1;
     my $hassort1;
     while (my ($value) =$req->fetchrow) {
         $hassort1 =1 if ($value);
-        push @select, $value;
+        push @selects1, $value;
     }
-    
-    my $CGISort1=CGI::scrolling_list( -name     => 'Filter',
-                -id => 'sort1',
-                -values   => \@select,
-                -size     => 1,
-                -multiple => 0 );
+    my $Sort1 = {
+        values   => \@selects1,
+    };
     
     $req = $dbh->prepare("select distinctrow sort2 from borrowers where sort2 is not null order by sort2");
     $req->execute;
-    undef @select;
-    push @select,"";
+    my @selects2;
     my $hassort2;
     my $hglghtsort2;
     while (my ($value) =$req->fetchrow) {
         $hassort2 =1 if ($value);
         $hglghtsort2= !($hassort1);
-        push @select, $value;
+        push @selects2, $value;
     }
-    my $CGISort2=CGI::scrolling_list( -name     => 'Filter',
-                -id => 'sort2',
-                -values   => \@select,
-                -size     => 1,
-                -multiple => 0 );
-    
-    my $CGIextChoice=CGI::scrolling_list(
-                -name     => 'MIME',
-                -id       => 'MIME',
-                -values   => ['CSV'], # FIXME translation
-                -size     => 1,
-                -multiple => 0 );
+    my $Sort2 = {
+        values   => \@selects2,
+    };
     
     my $CGIsepChoice=GetDelimiterChoices;
     
     $template->param(
-                    CGIBorCat    => $CGIBorCat,
-                    CGIItemType  => $CGIItemTypes,
+                    BorCat       => $BorCat,
+                    ItemType     => $ItemTypes,
                     branchloop   => GetBranchesLoop(),
                     hassort1     => $hassort1,
                     hassort2     => $hassort2,
                     HlghtSort2   => $hglghtsort2,
-                    CGISort1     => $CGISort1,
-                    CGISort2     => $CGISort2,
-                    CGIextChoice => $CGIextChoice,
+                    Sort1        => $Sort1,
+                    Sort2        => $Sort2,
                     CGIsepChoice => $CGIsepChoice
                     );
 output_html_with_http_headers $input, $cookie, $template->output;
