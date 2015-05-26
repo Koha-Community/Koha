@@ -22,18 +22,43 @@ coverage.pl
 
 =head1 SYNOPSIS
 
-You have to be in yout Koha/src directory
-./misc/devel/coverage.pl
+    misc/devel/coverage.pl [-h|--help]
+
+This script must be run from your Koha source tree.
 
 =head1 DESCRIPTION
 
-This script make a cover on all files to see which modules are not tested yet
+This script runs all Koha tests and generates a coverage report on the
+cover_db directory.
+
+=cut
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<-h|--help>
+
+prints this help text
+
+=back
 
 =cut
 
 use Modern::Perl;
+
 use C4::Context;
 use Cwd;
+use Getopt::Long;
+use Pod::Usage;
+
+my $help;
+
+GetOptions(
+    "h|help"      => \$help
+);
+
+pod2usage(1) if defined $help;
 
 #Die if you are not in your Koha src directory
 my $KOHA_PATH = C4::Context->config("intranetdir");
@@ -50,3 +75,5 @@ system("PERL5OPT=-MDevel::Cover /usr/bin/prove -r t/");
 system("cover");
 say("file://$KOHA_PATH/cover_db/coverage.html")
   unless !-e "$KOHA_PATH/cover_db/coverage.html";
+
+1;
