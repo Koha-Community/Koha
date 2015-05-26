@@ -10462,6 +10462,12 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.21.00.000";
+if ( CheckVersion($DBversion) ) {
+    print "Upgrade to $DBversion done (El tiempo vuela, un nuevo ciclo comienza.)\n";
+    SetVersion ($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
