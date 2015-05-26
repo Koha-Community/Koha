@@ -1,0 +1,398 @@
+RELEASE NOTES FOR KOHA 3.18.7
+26 May 2015
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.18.7 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.18.07.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+
+Koha 3.18.7 is a bugfix/maintenance release.
+
+
+Critical bugs fixed in 3.18.7
+======================
+
+
+Acquisitions
+----------
+	6059	major	Problem with changing quantity on uncertain prices list
+	14172	major	Acq: Orders without items missing from 'Spent' list
+
+Circulation
+----------
+	13919	major	Renewal possible with item level hold on item
+	14194	major	Date due for on-site checkouts defaults to 00:00 for hh:mm
+
+OPAC
+----------
+	14016	major	Due dates in OPAC show 0:00 when it should be 23:59
+
+Packaging
+----------
+	14055	critical	Bug 13979 breaks package upgrades
+	14068	critical	Bug 14055 breaks new package installs
+
+Serials
+----------
+	13109	major	Serial failure for received and general viewing
+
+System Administration
+----------
+	6007	major	Checking 'Display only used Tags/Subfields' on MARC framework page results in unusable output
+
+
+Other bugs fixed in 3.18.7
+======================
+
+
+About
+----------
+	14006	normal	About.pl checks the wrong zebra index mode
+
+Acquisitions
+----------
+	10388	normal	Acq edited items showing 'null's
+	10752	normal	Impossible to add 2 identical suggestions, but without any explanation
+	10971	minor	Hide EAN search option for MARC21 when 'ordering from subscription'
+	14018	minor	Ordering from suggestion shows 'copy. year:2014'
+
+Architecture, internals, and plumbing
+----------
+	14042	normal	The authority type admin page manage its own pagination
+	14046	normal	CheckIfIssuedToPatron fails if biblionumber != biblioitemnumber
+
+Cataloging
+----------
+	9742	normal	Confirm overlay prompt always appears on creating record from Z39.50
+	10985	normal	Unimarc: Authority summary does not work as expected
+
+Circulation
+----------
+	10423	normal	Date not well formatted on 'print summary' from patron account
+	12135	normal	Pending suggestions table width is wrong
+	13315	normal	Add feedback for last item checked out to circulation.pl
+	13482	normal	A race condition prevents item info from being available for ReserveSlip (hold notice) printing.
+	13982	normal	Checkouts table not sorting on correct column
+
+Course reserves
+----------
+	13817	normal	Edit links on course items may point to the wrong course!
+
+Developer documentation
+----------
+	14129	normal	Templates.readme is outdated
+
+Documentation
+----------
+	14051	trivial	Tiny adjustment of ReturnPathDefault pref description
+
+Hold requests
+----------
+	8474	minor	Holds done by librarians cause silent errors in koha-error_log
+
+I18N/L10N
+----------
+	11576	minor	Untranslatable "manage" in serials-collection
+	12192	minor	Template toolkit code in HTML attributes is picked up into po-files
+	13423	trivial	Unused code in serials-edit.tt and serials-recieve.tt
+
+Installation and upgrade (command-line installer)
+----------
+	13984	normal	CardnumberLength missing in sysprefs.sql
+
+Label/patron card printing
+----------
+	14122	minor	Patron card: Software error when creating using borrower_number as parameter from URL
+
+Lists
+----------
+	11574	normal	Clean up printing of lists in OPAC
+
+OPAC
+----------
+	13591	minor	Rss sample templates have hardcoded urls
+	14075	minor	Undefined value creates noisy warns in C4::AuthoritiesMarc
+	14065	trivial	Typo in opac self registration form
+
+Patrons
+----------
+	13910	normal	Prevent delete of one's own patron account
+	14077	trivial	Remove unused AUTH_UPDATE_FAILED from moremember.tt
+
+Reports
+----------
+	4281	normal	Reports dictionary limited to only 1 field
+	10976	normal	The assistant for reports uses the wrong value for the list of item types
+	14008	normal	Filters are not displayed on search for reports
+
+Searching
+----------
+	13516	minor	Display issue for search results with items both checkout out and lost
+
+Serials
+----------
+	9139	normal	Sending empty vendor or biblio when adding subscriptions gives wrong error
+	14022	normal	Subscription form resets 'subscription length' to issues on editing
+
+SIP2
+----------
+	7904	normal	SIP modules handling of @INC is confused
+
+Staff Client
+----------
+	10285	normal	Error 500 in staff client displays old start page
+	13834	trivial	News: Wording not consistent for Publication date / Creation date
+
+System Administration
+----------
+	11464	minor	Saving preferences - Nothing to Save
+
+Templates
+----------
+	12253	normal	MARCURLS not showing in OPAC basket
+	9878	minor	Flag display is inconsistent between circulation.pl and memberentry.pl
+	14127	minor	Typo in message preference form - "mesage"
+	10174	trivial	Digest is confusing
+	14033	trivial	Capitalization: confirmation message on deleting an authority type
+	14128	trivial	Capitalization: Guided Reports - step 2 - Build A Report
+
+Test Suite
+----------
+	14204	normal	Fix t/db_dependent/Labels/t_Batch.t failing test from Bug 12911
+
+Tools
+----------
+	6911	normal	Log viewer should remember search terms
+	12911	minor	Batch_id for new label batches can be assigned to several batches
+	14056	trivial	Small punctuation error in description for deleting a holiday
+
+
+New sysprefs in 3.18.7
+======================
+
+  * CardnumberLength
+
+
+System requirements
+======================
+
+    Important notes:
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+The Koha manual is maintained in DocBook.The home page for Koha 
+documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.18/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+
+  * English (USA)
+  * Arabic (99%)
+  * Armenian (100%)
+  * Chinese (China) (91%)
+  * Chinese (Taiwan) (99%)
+  * Czech (99%)
+  * Danish (85%)
+  * English (New Zealand) (95%)
+  * French (98%)
+  * French (Canada) (93%)
+  * German (100%)
+  * German (Switzerland) (100%)
+  * Italian (100%)
+  * Kurdish (62%)
+  * Norwegian Bokmål (58%)
+  * Polish (80%)
+  * Portuguese (98%)
+  * Portuguese (Brazil) (89%)
+  * Slovak (99%)
+  * Spanish (100%)
+  * Swedish (80%)
+  * Turkish (100%)
+  * Vietnamese (89%)
+
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+
+Release Team
+======================
+
+The release team for Koha 3.18.7 is
+
+  Release Manager:       Tomás Cohen Arazi <tomascohen@gmail.com>
+  Documentation Manager: Nicole C Engard <nengard@gmail.com>
+  Translation Manager:   Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  QA Manager:            Katrin Fischer <Katrin.Fischer@bsz-bw.de>
+  QA Team:               Galen Charlton <gmc@esilibrary.com>
+                         Jonathan Druart <jonathan.druart@biblibre.com>
+                         Brendan Gallagher <brendan@bywatersolutions.com>
+                         Kyle Hall <kyle@bywatersolutions.com>
+                         Julian Maurice <julian.maurice@biblibre.com>
+                         Paul Poulain <paul.poulain@biblibre.com>
+                         Martin Renvoize <martin.renvoize@ptfs-europe.com>
+                         Marcel de Rooy <M.de.Rooy@rijksmuseum.nl>
+  Bug Wranglers:         Alex Sassmannshausen <alex.sassmannshausen@ptfs-europe.com>
+                         Zeno Tajoli <z.tajoli@cineca.it>
+  Packaging Manager:     Robin Sheat <robin@catalyst.net.nz>
+
+  Release Maintainer (3.16.x): Galen Charlton <gmc@esilibrary.com>
+  Release Maintainer (3.14.x): Fridolin Somers <fridolin.somers@biblibre.com>
+  Release Maintainer (3.12.x): Kyle Hall <kyle@bywatersolutions.com>
+
+Credits
+======================
+
+
+We thank the following libraries who are known to have sponsored
+new features in Koha 3.18.7:
+  * Universidad de El Salvador
+
+We thank the following individuals who contributed patches to Koha 3.18.7.
+
+  * Aleisha (2)
+  * Colin Campbell (2)
+  * Nick Clemens (2)
+  * Tomás Cohen Arazi (5)
+  * Chris Cormack (2)
+  * Marcel de Rooy (1)
+  * Jonathan Druart (31)
+  * Katrin Fischer (4)
+  * Bernardo González Kriegel (5)
+  * Mason James (1)
+  * Olli-Antti Kivilahti (1)
+  * Owen Leonard (1)
+  * Kyle M Hall (8)
+  * Robin Sheat (3)
+  * Fridolin Somers (1)
+  * Mark Tompsett (1)
+  * Marc Véron (11)
+
+
+We thank the following libraries, companies, and other institutions who contributed
+patches to Koha 3.18.7
+
+
+  * ACPL (1)
+  * BSZ BW (4)
+  * BibLibre (31)
+  * ByWater-Solutions (8)
+  * Catalyst (5)
+  * KohaAloha (1)
+  * PTFS-Europe (2)
+  * Rijksmuseum (1)
+  * Universidad Nacional de Córdoba (10)
+  * jns.fi (1)
+  * koha-community.org (1)
+  * quecheelibrary.org (2)
+  * unidentified (3)
+  * veron.ch (11)
+
+We also especially thank the following individuals who tested patches
+for Koha 3.18.7.
+
+  * Brendan Gallagher (1)
+  * Chris Cormack (77)
+  * Christopher Brannon (1)
+  * Frederic Demians (1)
+  * Hector Castro (4)
+  * Jonathan Druart (18)
+  * Josef Moravec (1)
+  * Katrin Fischer (51)
+  * Magnus Enger (1)
+  * Marc Veron (2)
+  * Marc Véron (13)
+  * Mark Tompsett (14)
+  * Mirko Tietgen (2)
+  * Nick (2)
+  * Nick Clemens (4)
+  * Nicolas Legrand (2)
+  * Owen Leonard (1)
+  * Tom Misilo (1)
+  * vagrant (1)
+  * Jason Burds  (2)
+  * Tomas Cohen Arazi (78)
+  * Indranil Das Gupta (L2C2 Technologies) (1)
+  * Kyle M Hall (12)
+  * Bernardo Gonzalez Kriegel (1)
+  * Andreas Hedström Mace (1)
+  * Marcel de Rooy (5)
+  * Eivin Giske Skaaren (2)
+
+We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release line is 3.18.x.
+
+The last Koha release was 3.14.10, which was released on September 4, 2014.
+
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+He rau ringa e oti ai.
+(Many hands finish the work)
+
+##### Autogenerated release notes updated last on 26 May 2015 00:16:34 Z #####
