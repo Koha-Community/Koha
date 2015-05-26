@@ -167,9 +167,9 @@
                                     [% IF ( resul.even ) %]<td class="hilighted">
                                     [% ELSE %]<td>[% END %]
                                                             [% IF ( resul.MARC_ON ) %]
-                                                                    <a_class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=[% resul.biblionumber |uri %]">[% resul.title |html %]</a>
+                                                                    <a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.title |html %]</a>
                                                             [% ELSE %]
-                                                                    <a_class="transparent resultlist" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% resul.biblionumber |uri %]">[% resul.title |html %]</a>   [% END %]
+                                                                    <a class="transparent resultlist" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.fulltitle |html %]</a>[% END %]
                                                     <p>[% resul.author |html %]
                                                     [% IF ( resul.publishercode ) %]- [% resul.publishercode |html %][% END %]
                                                     [% IF ( resul.place ) %] ; [% resul.place |html %][% END %]
