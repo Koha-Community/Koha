@@ -44,7 +44,7 @@
 
     [% ELSIF op=='invite' %]
         <div id="invite">
-        <form method="post" onsubmit="return $.trim($('#invite_address').val())!='';">
+        <form id="share_list">
         <fieldset class="rows">
             <ol>
             <input type="hidden" name="op" value="conf_invite"/>
@@ -89,4 +89,17 @@
     </div> <!-- / .container-fluid -->
 </div> <!-- / .main -->
 [% INCLUDE 'opac-bottom.inc' %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        $("#share_list").on('submit', function(e) {
+            var address = $("#invite_address").val();
+            if ( address.length == 0) {
+                e.preventDefault();
+            }
+        });
+    });
+//]]>
+</script>
+[% END %]

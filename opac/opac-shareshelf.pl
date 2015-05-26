@@ -60,6 +60,12 @@ sub _init {
     $param->{fail_addr}   = [];
     $param->{errcode}     = check_common_errors($param);
 
+    # trim email address
+    if ( $param->{addrlist} ) {
+        $param->{addrlist} =~ s|^\s+||;
+        $param->{addrlist} =~ s|\s+$||;
+    }
+
     #get some list details
     my @temp;
     @temp = GetShelf( $param->{shelfnumber} ) if !$param->{errcode};
