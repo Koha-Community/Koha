@@ -721,17 +721,12 @@ elsif ($phase eq 'Run this report'){
                     }
                     $labelid = $text;
                     $labelid =~ s/\W//g;
-                    $input =CGI::scrolling_list(      # FIXME: factor out scrolling_list
-                        -name     => "sql_params",
-                        -id       => "sql_params_".$labelid,
-                        -values   => \@authorised_values,
-#                     -default  => $value,
-                        -labels   => \%authorised_lib,
-                        -override => 1,
-                        -size     => 1,
-                        -multiple => 0,
-                        -tabindex => 1,
-                    );
+                    $input = {
+                        name    => "sql_params",
+                        id      => "sql_params_".$labelid,
+                        values  => \@authorised_values,
+                        labels  => \%authorised_lib,
+                    };
                 }
 
                 push @tmpl_parameters, {'entry' => $text, 'input' => $input, 'labelid' => $labelid };
