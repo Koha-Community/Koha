@@ -379,7 +379,7 @@ sub marc2csv {
     }
 
     # Preprocessing
-    eval {$preprocess} if ($preprocess);
+    eval $preprocess if ($preprocess);
 
     my $firstpass = 1;
     if ( @$itemnumbers ) {
@@ -396,7 +396,7 @@ sub marc2csv {
     }
 
     # Postprocessing
-    eval {$postprocess} if ($postprocess);
+    eval $postprocess if ($postprocess);
 
     return $output;
 }
@@ -575,7 +575,7 @@ sub marcrecord2csv {
                         # Field processing
                         my $marcfield = $tag->{fieldtag}; # This line fixes a retrocompatibility concern
                                                           # The "processing" could be based on the $marcfield variable.
-                        eval {$fieldprocessing} if ($fieldprocessing);
+                        eval $fieldprocessing if ($fieldprocessing);
 
                         push @loop_values, $value;
                     }
