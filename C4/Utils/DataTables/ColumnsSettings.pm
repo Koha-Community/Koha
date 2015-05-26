@@ -5,14 +5,20 @@ use List::Util qw( first );
 use YAML;
 use C4::Context;
 use Koha::Database;
+use Koha::Cache;
 
 sub get_yaml {
-    my $yml_path =
-      C4::Context->config('intranetdir') . '/admin/columns_settings.yml';
-    my $yaml = eval { YAML::LoadFile($yml_path) };
-    warn
-"ERROR: the yaml file for DT::ColumnsSettings is not correctly formatted: $@"
-      if $@;
+    my $yml_path = C4::Context->config('intranetdir') . '/admin/columns_settings.yml';
+    my $cache = Koha::Cache->get_instance();
+    my $yaml  = $cache->get_from_cache('ColumnsSettingsYaml');
+
+    unless ($yaml) {
+        $yaml = eval { YAML::LoadFile($yml_path) };
+        warn "ERROR: the yaml file for DT::ColumnsSettings is not correctly formated: $@"
+          if $@;
+        $cache->set_in_cache( 'ColumnsSettingsYaml', $yaml, { expiry => 3600 } );
+    }
+
     return $yaml;
 }
 
