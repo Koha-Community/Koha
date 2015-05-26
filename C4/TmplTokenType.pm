@@ -83,15 +83,15 @@ sub to_string {
     return $this->{'name'}
 }
 
-sub TEXT		 { $_text }
-sub TEXT_PARAMETRIZED	 { $_text_parametrized }
-sub CDATA		 { $_cdata }
-sub TAG			 { $_tag }
-sub DECL		 { $_decl }
-sub PI			 { $_pi }
-sub DIRECTIVE		 { $_directive }
-sub COMMENT		 { $_comment }
-sub UNKNOWN		 { $_unknown }
+sub TEXT		() { $_text }
+sub TEXT_PARAMETRIZED	() { $_text_parametrized }
+sub CDATA		() { $_cdata }
+sub TAG			() { $_tag }
+sub DECL		() { $_decl }
+sub PI			() { $_pi }
+sub DIRECTIVE		() { $_directive }
+sub COMMENT		() { $_comment }
+sub UNKNOWN		() { $_unknown }
 
 ###############################################################################
 
