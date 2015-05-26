@@ -14,11 +14,6 @@
                 $("#header_search").tabs( "option", "selected", 2 );
             }
         }
-        $("#header_search input[type='text'], #header_search select").change(function() {
-            var myname = $(this).attr("name");
-            var myval  = $(this).val();
-            $("#header_search [name='" + myname + "']").val(myval);
-        });
     });
 //]]>
 </script>
@@ -58,7 +53,7 @@
             <option value="is">is exactly</option>
             [% END %]
         </select>
-        <input id="value_mainentry" type="text" name="value" value="[% value | html%]" />
+        <input id="value_mainentry" type="text" name="value" value="[% value | html%]" class="head-searchbox" />
         <select name="orderby">
             [% IF ( orderby == 'HeadingAsc' ) %]
             <option value="HeadingAsc" selected="selected">Heading A-Z</option>
@@ -112,7 +107,7 @@
             <option value="is">is exactly</option>
             [% END %]
         </select>
-        <input id="value_matchheading" type="text" name="value" value="[% value | html %]" />
+        <input id="value_matchheading" type="text" name="value" value="[% value | html %]" class="head-searchbox" />
         <select name="orderby">
             [% IF ( orderby == 'HeadingAsc' ) %]
             <option value="HeadingAsc" selected="selected">Heading A-Z</option>
@@ -168,7 +163,7 @@
             <option value="is">is exactly</option>
             [% END %]
         </select>
-        <input id="value_anywhere" type="text" name="value" value="[% value | html %]" />
+        <input id="value_anywhere" type="text" name="value" value="[% value | html %]" class="head-searchbox" />
         <select name="orderby">
             [% IF ( orderby == 'HeadingAsc' ) %]
             <option value="HeadingAsc" selected="selected">Heading A-Z</option>
@@ -190,9 +185,9 @@
     </form>
     </div>
     <ul>
-        <li><a href="#main_heading">Search main heading</a></li>
-        <li><a href="#matchheading_search">Search all headings</a></li>
-        <li><a href="#all_headings">Keyword search</a></li>
+        <li><a onclick="keep_text(0)" href="#main_heading">Search main heading</a></li>
+        <li><a onclick="keep_text(1)" href="#matchheading_search">Search all headings</a></li>
+        <li><a onclick="keep_text(2)" href="#all_headings">Keyword search</a></li>
     </ul>
 </div><!-- /header_search -->
 </div><!-- /gradient -->
