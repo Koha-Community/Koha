@@ -81,9 +81,9 @@ is(scalar GetOrders($basketno1), 0, "0 order in basket1");
 is(scalar GetOrders($basketno2), 1, "1 order in basket2");
 
 # Determine if the transfer marked things cancelled properly.
-is($order->{orderstatus},'new','Order marked as new as expected');
+is($order->{orderstatus},'new','Before the transfer, the order status should be new');
 ($order) = GetOrders($basketno1, { 'cancelled' => 1 });
-is($order->{orderstatus},'cancelled','Order marked as cancelled as expected');
+is($order->{orderstatus},'cancelled','After the transfer, the order status should be set to cancelled');
 
 ($order) = GetOrders($basketno2);
 is(scalar GetItemnumbersFromOrder($order->{ordernumber}), 1, "1 item in basket2's order");
