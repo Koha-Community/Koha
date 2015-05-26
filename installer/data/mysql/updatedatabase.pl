@@ -10468,6 +10468,24 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.21.00.001";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        UPDATE systempreferences SET variable='IntranetUserJS' where variable='intranetuserjs'
+    |);
+    print "Upgrade to $DBversion done (Bug 12160: Rename intranetuserjs to IntranetUserJS)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.21.00.002";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        UPDATE systempreferences SET variable='OPACUserJS' where variable='opacuserjs'
+    |);
+    print "Upgrade to $DBversion done (Bug 12160: Rename opacuserjs to OPACUserJS)\n";
+    SetVersion ($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
