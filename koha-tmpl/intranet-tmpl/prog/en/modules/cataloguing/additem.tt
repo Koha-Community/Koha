@@ -89,13 +89,6 @@ function confirm_deletion(biblionumber,itemnumber) {
 	$("#row"+itemnumber).attr("class","");
     }
 }
-
-$(document).ready(function() {
-    $("#cataloguing_additem_itemlist  tr").hover(
-        function () {$(this).addClass("highlight");},
-        function () {$(this).removeClass("highlight");}
-    );
-});
 //]]>
 </script>
 <link type="text/css" rel="stylesheet" href="[% themelang %]/css/addbiblio.css" />
@@ -146,9 +139,9 @@ $(document).ready(function() {
                 [% FOREACH item_loo IN item_loop %]
                     [% IF ( item_loo.itemnumber == itemnumber) %]
                         [% IF item_loo.nomod %]
-                           <tr id="row[% item_loo.itemnumber %]" class="active">
+                           <tr id="row[% item_loo.itemnumber %]" class="active highlight">
                         [% ELSE %]
-                            <tr id="row[% item_loo.itemnumber %]" class="active editable">
+                            <tr id="row[% item_loo.itemnumber %]" class="active editable highlight">
                         [% END %]
                     [% ELSE %]
                         [% IF item_loo.nomod %]
