@@ -114,6 +114,7 @@ elsif ( $op eq 'add' ) {
                 timestamp      => $timestamp,
                 number         => $number,
                 branchcode     => $branchcode,
+                borrowernumber => $borrowernumber,
             }
         );
         print $cgi->redirect("/cgi-bin/koha/tools/koha-news.pl");
