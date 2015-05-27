@@ -287,7 +287,7 @@ subtest 'update_field' => sub {
 subtest 'copy_field' => sub {
     plan tests              => 2;
     subtest 'copy subfield' => sub {
-        plan tests => 18;
+        plan tests => 20;
         my $record = new_record;
         $record->append_fields(
             MARC::Field->new(
@@ -387,7 +387,7 @@ subtest 'copy_field' => sub {
                     { record => $record, field => '651', subfield => 'a' }
                 )
             ],
-            ['Computer algorithms.'],
+            ['Computer programming.', 'Computer algorithms.'],
             'Copy second field 650$a'
         );
         delete_field( { record => $record, field => '651' } );
@@ -409,6 +409,7 @@ subtest 'copy_field' => sub {
             [ 'The art of programming.', 'The art of algorithms.' ],
             'Copy field using regex'
         );
+        delete_field( { record => $record, field => '651' } );
 
         copy_field(
             {
@@ -549,6 +550,7 @@ subtest 'copy_field' => sub {
             'Copy field using regex'
         );
 
+        $record = new_record;
         $record->append_fields(
             MARC::Field->new(
                 952, ' ', ' ',
@@ -568,9 +570,10 @@ subtest 'copy_field' => sub {
         );
         my @fields_952d =
           read_field( { record => $record, field => '952', subfield => 'd' } );
+        # FIXME We need a new action "duplicate" if we don't want to modify the original field
         is_deeply(
             \@fields_952d,
-            [ '2001-06-25', '2001-06-25' ],
+            [ '2001-06-25', '2001-06-25', '2001-06-25' ],
             'copy 952$d into others 952 field'
         );
 
@@ -605,7 +608,7 @@ subtest 'copy_field' => sub {
                     { record => $record, field => '245', subfield => 'a' }
                 )
             ],
-            ['BEGIN The art of computer programming'],
+            ['The art of computer programming', 'BEGIN The art of computer programming'],
             'Update a subfield: add a string at the beginning'
         );
 
@@ -626,14 +629,55 @@ subtest 'copy_field' => sub {
                     { record => $record, field => '245', subfield => 'a' }
                 )
             ],
-            ['The art of computer programming END'],
+            ['The art of computer programming', 'The art of computer programming END'],
             'Update a subfield: add a string at the end'
         );
 
+        $record = new_record;
+        copy_field(
+            {
+                record        => $record,
+                from_field    => 245,
+                from_subfield => 'c',
+                to_field      => 650,
+                to_subfield   => 'c',
+            }
+        );
+
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '650' }
+                )
+            ],
+            [ 'Computer programming.', '462', 'Donald E. Knuth.' ],
+            'Copy a subfield to an existent field but inexistent subfield'
+        );
+
+        $record = new_record;
+        copy_field(
+            {
+                record        => $record,
+                from_field    => 245,
+                from_subfield => 'c',
+                to_field      => 650,
+                to_subfield   => '9',
+            }
+        );
+
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '650' }
+                )
+            ],
+            [ 'Computer programming.', '462', 'Donald E. Knuth.' ],
+            'Copy a subfield to an existent field / subfield'
+        );
     };
 
     subtest 'copy field' => sub {
-        plan tests => 12;
+        plan tests => 14;
         my $record = new_record;
         $record->append_fields(
             MARC::Field->new(
@@ -782,6 +826,34 @@ subtest 'copy_field' => sub {
           read_field( { record => $record, field => '999', subfield => '9' } );
         is_deeply( \@fields_9999, [],
             'copy a nonexistent field does not create a new one' );
+
+        $record = new_record;
+        copy_field(
+            {
+                record        => $record,
+                from_field    => 245,
+                to_field      => 650,
+            }
+        );
+
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '650', field_numbers => [2] }
+                )
+            ],
+            [ 'The art of computer programming', 'Donald E. Knuth.' ],
+            'Copy a field to existent fields should create a new field'
+        );
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '650', field_numbers => [1] }
+                )
+            ],
+            [ 'Computer programming.', '462' ],
+            'Copy a field to existent fields should create a new field, the original one should not have been updated'
+        );
     };
 };
 

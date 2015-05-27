@@ -123,6 +123,7 @@ sub _copy_field {
         to_field => $toFieldName,
         regex => $regex,
         field_numbers => $field_numbers,
+        action => 'copy',
     });
 }
 
@@ -136,13 +137,16 @@ sub _copy_subfield {
     my $regex = $params->{regex};
     my $field_numbers = $params->{field_numbers} // [];
 
-    my @values = read_field({ record => $record, field => $fromFieldName, subfield => $fromSubfieldName });
-    if ( @$field_numbers ) {
-        @values = map { $_ <= @values ? $values[ $_ - 1 ] : () } @$field_numbers;
-    }
-    _modify_values({ values => \@values, regex => $regex });
-
-    update_field({ record => $record, field => $toFieldName, subfield => $toSubfieldName, values => \@values });
+    _copy_move_subfield({
+        record => $record,
+        from_field => $fromFieldName,
+        from_subfield => $fromSubfieldName,
+        to_field => $toFieldName,
+        to_subfield => $toSubfieldName,
+        regex => $regex,
+        field_numbers => $field_numbers,
+        action => 'copy',
+    });
 }
 
 sub update_field {
@@ -463,20 +467,15 @@ sub _move_subfield {
     my $regex = $params->{regex};
     my $field_numbers = $params->{field_numbers} // [];
 
-    # Copy
-    my @values = read_field({ record => $record, field => $fromFieldName, subfield => $fromSubfieldName });
-    if ( @$field_numbers ) {
-        @values = map { $_ <= @values ? $values[ $_ - 1 ] : () } @$field_numbers;
-    }
-    _modify_values({ values => \@values, regex => $regex });
-    _update_subfield({ record => $record, field => $toFieldName, subfield => $toSubfieldName, dont_erase => 1, values => \@values });
-
-    # And delete
-    _delete_subfield({
+    _copy_move_subfield({
         record => $record,
-        field => $fromFieldName,
-        subfield => $fromSubfieldName,
+        from_field => $fromFieldName,
+        from_subfield => $fromSubfieldName,
+        to_field => $toFieldName,
+        to_subfield => $toSubfieldName,
+        regex => $regex,
         field_numbers => $field_numbers,
+        action => 'move',
     });
 }
 
@@ -567,6 +566,36 @@ sub _copy_move_field {
         $record->append_fields( $new_field );
         $record->delete_field( $field )
             if $action eq 'move';
+    }
+}
+
+sub _copy_move_subfield {
+    my ( $params ) = @_;
+    my $record = $params->{record};
+    my $fromFieldName = $params->{from_field};
+    my $fromSubfieldName = $params->{from_subfield};
+    my $toFieldName = $params->{to_field};
+    my $toSubfieldName = $params->{to_subfield};
+    my $regex = $params->{regex};
+    my $field_numbers = $params->{field_numbers} // [];
+    my $action = $params->{action} || 'copy';
+
+    my @values = read_field({ record => $record, field => $fromFieldName, subfield => $fromSubfieldName });
+    if ( @$field_numbers ) {
+        @values = map { $_ <= @values ? $values[ $_ - 1 ] : () } @$field_numbers;
+    }
+    _modify_values({ values => \@values, regex => $regex });
+    my $dont_erase = $action eq 'copy' ? 1 : 0;
+    _update_subfield({ record => $record, field => $toFieldName, subfield => $toSubfieldName, values => \@values, dont_erase => $dont_erase });
+
+    # And delete if it's a move
+    if ( $action eq 'move' ) {
+        _delete_subfield({
+            record => $record,
+            field => $fromFieldName,
+            subfield => $fromSubfieldName,
+            field_numbers => $field_numbers,
+        });
     }
 }
 
