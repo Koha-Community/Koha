@@ -71,6 +71,7 @@
                         <a id="user-menu-trigger" class="pull-right" href="#"><i class="icon-user"></i> <span class="caret"></span></a>
                         <div id="members">
                             <ul class="nav pull-right">
+                            [% IF ( Koha.Preference( 'OpacLangSelectorMode' ) == 'both' ) || ( Koha.Preference( 'OpacLangSelectorMode' ) == 'head' ) %]
                             [% IF ( opaclanguagesdisplay ) %]
                                 [% IF ( languages_loop && opaclanguagesdisplay ) %]
                                     [% UNLESS ( one_language_enabled ) %]
@@ -105,6 +106,7 @@
                                     [% END # / UNLESS ( one_language_enabled ) %]
                                 [% END # / IF ( languages_loop && opaclanguagesdisplay ) %]
                             [% END # / IF opaclanguagesdisplay %]
+                            [% END # / IF OpacLangSelectorMode %]
                                 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
                                     [% UNLESS ( loggedinusername ) %]
                                         [% IF Koha.Preference('casAuthentication') %]
