@@ -38,6 +38,7 @@ my $dbh = C4::Context->dbh;
 $dbh->{ AutoCommit } = 0;
 $dbh->{ RaiseError } = 1;
 
+C4::Context->disable_syspref_cache();
 C4::Context->set_preference('OPACBaseURL','http://localhost');
 C4::Context->set_preference('staffClientBaseURL','localhost:8080');
 

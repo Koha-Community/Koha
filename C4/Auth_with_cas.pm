@@ -208,13 +208,14 @@ sub _url_with_get_params {
                         C4::Context->preference('staffClientBaseURL');
 
     my $uri_params_part = '';
-    foreach ( $query->url_param() ) {
+    foreach my $param ( $query->url_param() ) {
         # url_param() always returns parameters that were deleted by delete()
         # This additional check ensure that parameter was not deleted.
-        if ($query->param($_)) {
+        my $uriPiece = $query->param($param);
+        if ($uriPiece) {
             $uri_params_part .= '&' if $uri_params_part;
-            $uri_params_part .= $_ . '=';
-            $uri_params_part .= URI::Escape::uri_escape( $query->param($_) );
+            $uri_params_part .= $param . '=';
+            $uri_params_part .= URI::Escape::uri_escape( $uriPiece );
         }
     }
     $uri_base_part .= '?' if $uri_params_part;
