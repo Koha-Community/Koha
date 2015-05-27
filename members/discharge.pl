@@ -78,7 +78,7 @@ if ( $input->param('borrowernumber') ) {
         }
         eval {
             my $pdf_path = Koha::Borrower::Discharge::generate_as_pdf(
-                { borrowernumber => $borrowernumber, } );
+                { borrowernumber => $borrowernumber, branchcode => $data->{'branchcode'} } );
 
             binmode(STDOUT);
             print $input->header(

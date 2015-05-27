@@ -95,7 +95,7 @@ sub generate_as_pdf {
     my $letter = C4::Letters::GetPreparedLetter(
         module      => 'members',
         letter_code => 'DISCHARGE',
-        tables      => { borrowers => $params->{borrowernumber}, },
+        tables      => { borrowers => $params->{borrowernumber}, branches => $params->{'branchcode'}, },
     );
 
     my $today = output_pref( dt_from_string() );

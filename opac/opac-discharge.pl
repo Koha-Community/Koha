@@ -57,8 +57,12 @@ if ( $op eq 'request' ) {
 }
 elsif ( $op eq 'get' ) {
     eval {
+
+        # Getting member data
+        my $data = GetMember( borrowernumber => $loggedinuser );
         my $pdf_path = Koha::Borrower::Discharge::generate_as_pdf({
-            borrowernumber => $loggedinuser
+            borrowernumber => $loggedinuser,
+            branchcode => $data->{'branchcode'},
         });
 
         binmode(STDOUT);
