@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 
 use_ok("MARC::Field");
 use_ok("MARC::Record");
@@ -804,7 +804,7 @@ subtest 'copy_field' => sub {
                 )
             ],
             [ '4242423917', 'BK', 'GEN', '2001-06-25' ],
-            "copy all wirh regex: first original fields has been copied"
+            "copy all with regex: first original fields has been copied"
         );
         is_deeply(
             [
@@ -853,6 +853,580 @@ subtest 'copy_field' => sub {
             ],
             [ 'Computer programming.', '462' ],
             'Copy a field to existent fields should create a new field, the original one should not have been updated'
+        );
+    };
+};
+
+# copy_and_replace_field - subfield
+subtest 'copy_and_replace_field' => sub {
+    plan tests              => 2;
+    subtest 'copy and replace subfield' => sub {
+        plan tests => 19;
+        my $record = new_record;
+        $record->append_fields(
+            MARC::Field->new(
+                650, ' ', '0',
+                a => 'Computer algorithms.',
+                9 => '463',
+            )
+        );
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => '245',
+                from_subfield => 'a',
+                to_field      => '246',
+                to_subfield   => 'a'
+            }
+        );
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '245', subfield => 'a' }
+                )
+            ],
+            ['The art of computer programming'],
+            'Copy and replace should not have modify original subfield 245$a (same as copy)'
+        );
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '246', subfield => 'a' }
+                )
+            ],
+            ['The art of computer programming'],
+            'Copy and replace should create a new 246$a (same as copy)'
+        );
+
+        $record = new_record;
+        $record->append_fields(
+            MARC::Field->new(
+                650, ' ', '0',
+                a => 'Computer algorithms.',
+                9 => '463',
+            )
+        );
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => '650',
+                from_subfield => 'a',
+                to_field      => '651',
+                to_subfield   => 'a'
+            }
+        );
+        my @fields_651a =
+          read_field( { record => $record, field => '651', subfield => 'a' } );
+        is_deeply(
+            \@fields_651a,
+            [ 'Computer programming.', 'Computer algorithms.' ],
+            'Copy and replace multivalued field (same as copy)'
+        );
+        delete_field( { record => $record, field => '651' } );
+
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => '650',
+                from_subfield => 'a',
+                to_field      => '651',
+                to_subfield   => 'a',
+                field_numbers => [1]
+            }
+        );
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '651', subfield => 'a' }
+                )
+            ],
+            ['Computer programming.'],
+            'Copy and replace first field 650$a should only copy the 1st (same as copy)'
+        );
+
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => '650',
+                from_subfield => 'a',
+                to_field      => '651',
+                to_subfield   => 'a',
+                field_numbers => [2]
+            }
+        );
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '651', subfield => 'a' }
+                )
+            ],
+            ['Computer algorithms.'],
+            'Copy and replace second field 650$a should erase 651$a'
+        );
+        delete_field( { record => $record, field => '651' } );
+
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => '650',
+                from_subfield => 'a',
+                to_field      => '651',
+                to_subfield   => 'a',
+                regex => { search => 'Computer', replace => 'The art of' }
+            }
+        );
+        @fields_651a =
+          read_field( { record => $record, field => '651', subfield => 'a' } );
+        is_deeply(
+            \@fields_651a,
+            [ 'The art of programming.', 'The art of algorithms.' ],
+            'Copy and replace field using regex (same as copy)'
+        );
+        delete_field( { record => $record, field => '651' } );
+
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => '650',
+                from_subfield => 'a',
+                to_field      => '651',
+                to_subfield   => 'a',
+                regex => { search => 'Computer', replace => 'The mistake of' }
+            }
+        );
+        @fields_651a =
+          read_field( { record => $record, field => '651', subfield => 'a' } );
+        is_deeply(
+            \@fields_651a,
+            [ 'The mistake of programming.', 'The mistake of algorithms.' ],
+            'Copy and replace fields using regex on existing fields (same as copy)'
+        );
+        delete_field( { record => $record, field => '651' } );
+
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => '650',
+                from_subfield => 'a',
+                to_field      => '651',
+                to_subfield   => 'a',
+                regex => { search => 'Computer', replace => 'The art of' }
+            }
+        );
+        @fields_651a =
+          read_field( { record => $record, field => '651', subfield => 'a' } );
+        is_deeply(
+            \@fields_651a,
+            [ 'The art of programming.', 'The art of algorithms.', ],
+            'Copy and replace all fields using regex (same as copy)'
+        );
+        delete_field( { record => $record, field => '651' } );
+
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => '650',
+                from_subfield => 'a',
+                to_field      => '651',
+                to_subfield   => 'a',
+                regex => { search => 'Computer', replace => 'The art of' },
+                field_numbers => [1]
+            }
+        );
+        @fields_651a =
+          read_field( { record => $record, field => '651', subfield => 'a' } );
+        is_deeply(
+            \@fields_651a,
+            [ 'The art of programming.', ],
+            'Copy and replace first field using regex (same as copy)'
+        );
+        delete_field( { record => $record, field => '651' } );
+
+        # Copy and replace with regex modifiers
+        $record = new_record;
+        $record->append_fields(
+            MARC::Field->new(
+                650, ' ', '0',
+                a => 'Computer algorithms.',
+                9 => '463',
+            )
+        );
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => '650',
+                from_subfield => 'a',
+                to_field      => '652',
+                to_subfield   => 'a',
+                regex         => { search => 'o', replace => 'foo' }
+            }
+        );
+        my @fields_652a =
+          read_field( { record => $record, field => '652', subfield => 'a' } );
+        is_deeply(
+            \@fields_652a,
+            [ 'Cfoomputer programming.', 'Cfoomputer algorithms.' ],
+            'Copy and replace field using regex (same as copy)'
+        );
+
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => '650',
+                from_subfield => 'a',
+                to_field      => '653',
+                to_subfield   => 'a',
+                regex => { search => 'o', replace => 'foo', modifiers => 'g' }
+            }
+        );
+        my @fields_653a =
+          read_field( { record => $record, field => '653', subfield => 'a' } );
+        is_deeply(
+            \@fields_653a,
+            [ 'Cfoomputer prfoogramming.', 'Cfoomputer algfoorithms.' ],
+            'Copy and replace field using regex (same as copy)'
+        );
+
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => '650',
+                from_subfield => 'a',
+                to_field      => '654',
+                to_subfield   => 'a',
+                regex => { search => 'O', replace => 'foo', modifiers => 'i' }
+            }
+        );
+        my @fields_654a =
+          read_field( { record => $record, field => '654', subfield => 'a' } );
+        is_deeply(
+            \@fields_654a,
+            [ 'Cfoomputer programming.', 'Cfoomputer algorithms.' ],
+            'Copy and replace field using regex (same as copy)'
+        );
+
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => '650',
+                from_subfield => 'a',
+                to_field      => '655',
+                to_subfield   => 'a',
+                regex => { search => 'O', replace => 'foo', modifiers => 'gi' }
+            }
+        );
+        my @fields_655a =
+          read_field( { record => $record, field => '655', subfield => 'a' } );
+        is_deeply(
+            \@fields_655a,
+            [ 'Cfoomputer prfoogramming.', 'Cfoomputer algfoorithms.' ],
+            'Copy and replace field using regex (same as copy)'
+        );
+
+        $record = new_record;
+        $record->append_fields(
+            MARC::Field->new(
+                952, ' ', ' ',
+                p => '3010023917',
+                y => 'BK',
+            ),
+        );
+
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => '952',
+                from_subfield => 'd',
+                to_field      => '952',
+                to_subfield   => 'd'
+            }
+        );
+        my @fields_952d =
+          read_field( { record => $record, field => '952', subfield => 'd' } );
+        is_deeply(
+            \@fields_952d,
+            [ '2001-06-25', '2001-06-25' ],
+            'copy and replace 952$d into others 952 field'
+        );
+
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => '111',
+                from_subfield => '1',
+                to_field      => '999',
+                to_subfield   => '9'
+            }
+        );
+        my @fields_9999 =
+          read_field( { record => $record, field => '999', subfield => '9' } );
+        is_deeply( \@fields_9999, [],
+            'copy and replace a nonexistent subfield does not create a new one (same as copy)' );
+
+        $record = new_record;
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => 245,
+                from_subfield => 'a',
+                to_field      => 245,
+                to_subfield   => 'a',
+                regex         => { search => '^', replace => 'BEGIN ' }
+            }
+        );
+        # This is the same as update the subfield
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '245', subfield => 'a' }
+                )
+            ],
+            ['BEGIN The art of computer programming'],
+            'Copy and replace - Update a subfield: add a string at the beginning'
+        );
+
+        $record = new_record;
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => 245,
+                from_subfield => 'a',
+                to_field      => 245,
+                to_subfield   => 'a',
+                regex         => { search => '$', replace => ' END' }
+            }
+        );
+        # This is the same as update the subfield
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '245', subfield => 'a' }
+                )
+            ],
+            ['The art of computer programming END'],
+            'Copy and replace - Update a subfield: add a string at the end'
+        );
+
+        $record = new_record;
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => 245,
+                from_subfield => 'c',
+                to_field      => 650,
+                to_subfield   => 'c',
+            }
+        );
+
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '650' }
+                )
+            ],
+            [ 'Computer programming.', '462', 'Donald E. Knuth.' ],
+            'Copy and replace a subfield to an existent field but inexistent subfield (same as copy)'
+        );
+
+        $record = new_record;
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => 245,
+                from_subfield => 'c',
+                to_field      => 650,
+                to_subfield   => '9',
+            }
+        );
+
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '650' }
+                )
+            ],
+            [ 'Computer programming.', 'Donald E. Knuth.' ],
+            'Copy and replace a subfield to an existent field / subfield, the origin subfield is replaced'
+        );
+    };
+
+    subtest 'copy and replace field' => sub {
+        plan tests => 14;
+        my $record = new_record;
+        $record->append_fields(
+            MARC::Field->new(
+                952, ' ', ' ',
+                p => '3010023918',
+                y => 'CD',
+            ),
+        );
+
+        #- copy all fields
+        copy_and_replace_field(
+            { record => $record, from_field => '952', to_field => '953' } );
+        my @fields_952 = read_field( { record => $record, field => '952' } );
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '952', field_numbers => [1] }
+                )
+            ],
+            [ '3010023917', 'BK', 'GEN', '2001-06-25' ],
+            "copy all: original first field still exists (same as copy)"
+        );
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '952', field_numbers => [2] }
+                )
+            ],
+            [ '3010023918', 'CD' ],
+            "copy all: original second field still exists (same as copy)"
+        );
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '953', field_numbers => [1] }
+                )
+            ],
+            [ '3010023917', 'BK', 'GEN', '2001-06-25' ],
+            "copy all: first original fields has been copied (same as copy)"
+        );
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '953', field_numbers => [2] }
+                )
+            ],
+            [ '3010023918', 'CD' ],
+            "copy all: second original fields has been copied (same as copy)"
+        );
+
+        #- copy only the first field
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => '953',
+                to_field      => '954',
+                field_numbers => [1]
+            }
+        );
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '953', field_numbers => [1] }
+                )
+            ],
+            [ '3010023917', 'BK', 'GEN', '2001-06-25' ],
+            "copy and replace first: first original fields has been copied (same as copy)"
+        );
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '953', field_numbers => [2] }
+                )
+            ],
+            [ '3010023918', 'CD' ],
+            "copy and replace first: second original fields has been copied (same as copy)"
+        );
+        is_deeply(
+            [ read_field( { record => $record, field => '954' } ) ],
+            [ '3010023917', 'BK', 'GEN', '2001-06-25' ],
+            "copy and replace first: only first, first 953 has been copied (same as copy)"
+        );
+
+        $record = new_record;
+        $record->append_fields(
+            MARC::Field->new(
+                952, ' ', ' ',
+                p => '3010023918',
+                y => 'CD',
+            ),
+        );
+
+        #- copy and replace all fields and modify values using a regex
+        copy_and_replace_field(
+            {
+                record     => $record,
+                from_field => '952',
+                to_field   => '953',
+                regex      => { search => '30100', replace => '42424' }
+            }
+        );
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '952', field_numbers => [1] }
+                )
+            ],
+            [ '3010023917', 'BK', 'GEN', '2001-06-25' ],
+            "copy and replace all with regex: original first field still exists (same as copy)"
+        );
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '952', field_numbers => [2] }
+                )
+            ],
+            [ '3010023918', 'CD' ],
+            "copy and replace all with regex: original second field still exists (same as copy)"
+        );
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '953', field_numbers => [1] }
+                )
+            ],
+            [ '4242423917', 'BK', 'GEN', '2001-06-25' ],
+            "copy and replace all with regex: first original fields has been copied (same as copy)"
+        );
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '953', field_numbers => [2] }
+                )
+            ],
+            [ '4242423918', 'CD' ],
+            "copy and replace all with regex: second original fields has been copied (same as copy)"
+        );
+        copy_and_replace_field(
+            {
+                record     => $record,
+                from_field => '111',
+                to_field   => '999',
+            }
+        );
+        my @fields_9999 =
+          read_field( { record => $record, field => '999', subfield => '9' } );
+        is_deeply( \@fields_9999, [],
+            'copy and replace a nonexistent field does not create a new one (same as copy)' );
+
+        $record = new_record;
+        copy_and_replace_field(
+            {
+                record        => $record,
+                from_field    => 245,
+                to_field      => 650,
+            }
+        );
+
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '650', field_numbers => [1] }
+                )
+            ],
+            [ 'The art of computer programming', 'Donald E. Knuth.' ],
+            'Copy and replace to an existent field should erase the original field'
+        );
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '650', field_numbers => [2] }
+                )
+            ],
+            [],
+            'Copy and replace to an existent field should not create a new field'
         );
     };
 };

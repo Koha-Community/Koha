@@ -612,6 +612,21 @@ sub ModifyRecordWithTemplate {
                     field_numbers => $field_numbers,
                 });
             }
+            elsif ( $action eq 'copy_and_replace_field' ) {
+                copy_and_replace_field({
+                    record => $record,
+                    from_field => $from_field,
+                    from_subfield => $from_subfield,
+                    to_field => $to_field,
+                    to_subfield => $to_subfield,
+                    regex => {
+                        search => $to_regex_search,
+                        replace => $to_regex_replace,
+                        modifiers => $to_regex_modifiers
+                    },
+                    field_numbers => $field_numbers,
+                });
+            }
             elsif ( $action eq 'update_field' ) {
                 update_field({
                     record => $record,
