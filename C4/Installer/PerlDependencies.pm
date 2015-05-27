@@ -735,7 +735,7 @@ our $PERL_DEPS = {
     'Devel::Cover' => {
         'usage'    => 'Test code coverage',
         'required' => '0',
-        'min_ver'  => '1.17',
+        'min_ver'  => '0.89',
     },
 };
 
