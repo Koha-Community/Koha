@@ -124,6 +124,7 @@ foreach my $action ( @actions ) {
   $action->{'action_update_field'} = ( $action->{'action'} eq 'update_field' );
   $action->{'action_move_field'} = ( $action->{'action'} eq 'move_field' );
   $action->{'action_copy_field'} = ( $action->{'action'} eq 'copy_field' );
+  $action->{'action_copy_and_replace_field'} = ( $action->{'action'} eq 'copy_and_replace_field' );
 
   $action->{'conditional_if'} = ( $action->{'conditional'} eq 'if' );
   $action->{'conditional_unless'} = ( $action->{'conditional'} eq 'unless' );

@@ -14,7 +14,7 @@ $(document).ready(function() {
 
     $("#add_action").submit(function(){
         var action = $("#action").val();
-        if ( action == 'move_field' || action == 'copy_field' ) {
+        if ( action == 'move_field' || action == 'copy_field' || action == 'copy_and_replace_field') {
             if ( $("#from_subfield").val().length != $("#to_subfield").val().length ) {
                 alert(_("Both subfield values should be filled or empty."));
                 return false;
@@ -91,6 +91,12 @@ function onActionChange(selectObj) {
             break;
 
         case 'copy_field':
+            show('field_number_block');
+            hide('with_value_block');
+            show('to_field_block');
+            break;
+
+        case 'copy_and_replace_field':
             show('field_number_block');
             hide('with_value_block');
             show('to_field_block');
@@ -375,6 +381,7 @@ function setSelectByValue( selectId, value ) {
                                     [% IF ( ActionsLoo.action_update_field ) %] Update [% END %]
                                     [% IF ( ActionsLoo.action_move_field ) %] Move [% END %]
                                     [% IF ( ActionsLoo.action_copy_field ) %] Copy [% END %]
+                                    [% IF ( ActionsLoo.action_copy_and_replace_field ) %] Copy and replace [% END %]
 
                                     [% UNLESS ( ActionsLoo.action_update_field ) %]
                                         [% IF ( ActionsLoo.field_number ) %]
@@ -455,6 +462,7 @@ function setSelectByValue( selectId, value ) {
                             <option value="update_field">Add/Update</option>
                             <option value="move_field">Move</option>
                             <option value="copy_field">Copy</option>
+                            <option value="copy_and_replace_field">Copy and replace</option>
                         </select>
 
                         <span id="field_number_block">
