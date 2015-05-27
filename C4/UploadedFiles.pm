@@ -290,4 +290,18 @@ sub DelUploadedFile {
     return $retval;
 }
 
+=head2 httpheaders
+
+    httpheaders returns http headers for a retrievable upload
+    Will be extended by report 14282
+
+=cut
+
+sub httpheaders {
+    my $file= shift;
+    return
+        ( '-type' => 'application/octet-stream',
+          '-attachment' => $file, );
+}
+
 1;

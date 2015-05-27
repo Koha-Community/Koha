@@ -27,21 +27,11 @@ my $input = new CGI;
 
 my $id = $input->param('id');
 my $file = C4::UploadedFiles::GetUploadedFile($id);
-exit 1 if not $file;
+exit 1 if !$file || !-f $file->{filepath};
 
-my $file_path = $file->{filepath};
-
-if( -f $file_path ) {
-    open my $fh, '<', $file_path or die "Can't open file: $!";
-    print $input->header(
-        -type => "application/octet-stream",
-        -attachment => $file->{filename}
-    );
-    while(<$fh>) {
-        print $_;
-    }
-} else {
-    exit 1;
+open my $fh, '<', $file->{filepath} or die "Can't open file: $!";
+print $input->header( C4::UploadedFiles::httpheaders( $file->{filename} ));
+while(<$fh>) {
+    print $_;
 }
-
-exit 0;
+close $fh;

@@ -3,7 +3,7 @@
 use Modern::Perl;
 use File::Temp qw/ tempdir /;
 use Test::CGI::Multipart;
-use Test::More tests => 17;
+use Test::More tests => 18;
 use Test::Warn;
 
 use t::lib::Mocks;
@@ -55,3 +55,7 @@ my $UploadResult;
 warning_like { $UploadResult=C4::UploadedFiles::UploadFile($testfilename,'../',$testfile_fh->handle); } qr/^Filename or dirname contains '..'. Aborting upload/, "Expected warning for bad file upload.";
 is($UploadResult, undef, "UploadFile with dir containing \"..\" return undef");
 is(C4::UploadedFiles::GetUploadedFile(), undef, 'GetUploadedFile without parameters returns undef');
+
+#trivial test for httpheaders
+my @hdrs = C4::UploadedFiles::httpheaders('does_not_matter_yet');
+is( @hdrs == 4 && $hdrs[1] =~ /application\/octet-stream/, 1, 'Simple test for httpheaders'); #TODO Will be extended on report 14282
