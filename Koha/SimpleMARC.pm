@@ -85,68 +85,32 @@ sub copy_field {
     if ( ! ( $record && $fromFieldName && $toFieldName ) ) { return; }
 
 
-    if ( not $fromSubfieldName or $fromSubfieldName eq ''
-      or not $toSubfieldName or $toSubfieldName eq ''
-    ) {
-        _copy_field({
-            record => $record,
-            from_field => $fromFieldName,
-            to_field => $toFieldName,
-            regex => $regex,
-            field_numbers => $field_numbers,
-        });
+    if (   not $fromSubfieldName
+        or $fromSubfieldName eq ''
+        or not $toSubfieldName
+        or $toSubfieldName eq '' ) {
+        _copy_move_field(
+            {   record        => $record,
+                from_field    => $fromFieldName,
+                to_field      => $toFieldName,
+                regex         => $regex,
+                field_numbers => $field_numbers,
+                action        => 'copy',
+            }
+        );
     } else {
-        _copy_subfield({
-            record => $record,
-            from_field => $fromFieldName,
-            from_subfield => $fromSubfieldName,
-            to_field => $toFieldName,
-            to_subfield => $toSubfieldName,
-            regex => $regex,
-            field_numbers => $field_numbers,
-        });
+        _copy_move_subfield(
+            {   record        => $record,
+                from_field    => $fromFieldName,
+                from_subfield => $fromSubfieldName,
+                to_field      => $toFieldName,
+                to_subfield   => $toSubfieldName,
+                regex         => $regex,
+                field_numbers => $field_numbers,
+                action        => 'copy',
+            }
+        );
     }
-
-}
-
-sub _copy_field {
-    my ( $params ) = @_;
-    my $record = $params->{record};
-    my $fromFieldName = $params->{from_field};
-    my $toFieldName = $params->{to_field};
-    my $regex = $params->{regex};
-    my $field_numbers = $params->{field_numbers} // [];
-
-    _copy_move_field({
-        record => $record,
-        from_field => $fromFieldName,
-        to_field => $toFieldName,
-        regex => $regex,
-        field_numbers => $field_numbers,
-        action => 'copy',
-    });
-}
-
-sub _copy_subfield {
-    my ( $params ) = @_;
-    my $record = $params->{record};
-    my $fromFieldName = $params->{from_field};
-    my $fromSubfieldName = $params->{from_subfield};
-    my $toFieldName = $params->{to_field};
-    my $toSubfieldName = $params->{to_subfield};
-    my $regex = $params->{regex};
-    my $field_numbers = $params->{field_numbers} // [];
-
-    _copy_move_subfield({
-        record => $record,
-        from_field => $fromFieldName,
-        from_subfield => $fromSubfieldName,
-        to_field => $toFieldName,
-        to_subfield => $toSubfieldName,
-        regex => $regex,
-        field_numbers => $field_numbers,
-        action => 'copy',
-    });
 }
 
 sub update_field {
@@ -416,67 +380,32 @@ sub move_field {
     my $regex = $params->{regex};
     my $field_numbers = $params->{field_numbers} // [];
 
-    if ( not $fromSubfieldName or $fromSubfieldName eq ''
-        or not $toSubfieldName or $toSubfieldName eq ''
-    ) {
-        _move_field({
-            record => $record,
-            from_field => $fromFieldName,
-            to_field => $toFieldName,
-            regex => $regex,
-            field_numbers => $field_numbers,
-        });
+    if (   not $fromSubfieldName
+        or $fromSubfieldName eq ''
+        or not $toSubfieldName
+        or $toSubfieldName eq '' ) {
+        _copy_move_field(
+            {   record        => $record,
+                from_field    => $fromFieldName,
+                to_field      => $toFieldName,
+                regex         => $regex,
+                field_numbers => $field_numbers,
+                action        => 'move',
+            }
+        );
     } else {
-        _move_subfield({
-            record => $record,
-            from_field => $fromFieldName,
-            from_subfield => $fromSubfieldName,
-            to_field => $toFieldName,
-            to_subfield => $toSubfieldName,
-            regex => $regex,
-            field_numbers => $field_numbers,
-        });
+        _copy_move_subfield(
+            {   record        => $record,
+                from_field    => $fromFieldName,
+                from_subfield => $fromSubfieldName,
+                to_field      => $toFieldName,
+                to_subfield   => $toSubfieldName,
+                regex         => $regex,
+                field_numbers => $field_numbers,
+                action        => 'move',
+            }
+        );
     }
-}
-
-sub _move_field {
-    my ( $params ) = @_;
-    my $record = $params->{record};
-    my $fromFieldName = $params->{from_field};
-    my $toFieldName = $params->{to_field};
-    my $regex = $params->{regex};
-    my $field_numbers = $params->{field_numbers} // [];
-
-    _copy_move_field({
-        record => $record,
-        from_field => $fromFieldName,
-        to_field => $toFieldName,
-        regex => $regex,
-        field_numbers => $field_numbers,
-        action => 'move',
-    });
-}
-
-sub _move_subfield {
-    my ( $params ) = @_;
-    my $record = $params->{record};
-    my $fromFieldName = $params->{from_field};
-    my $fromSubfieldName = $params->{from_subfield};
-    my $toFieldName = $params->{to_field};
-    my $toSubfieldName = $params->{to_subfield};
-    my $regex = $params->{regex};
-    my $field_numbers = $params->{field_numbers} // [];
-
-    _copy_move_subfield({
-        record => $record,
-        from_field => $fromFieldName,
-        from_subfield => $fromSubfieldName,
-        to_field => $toFieldName,
-        to_subfield => $toSubfieldName,
-        regex => $regex,
-        field_numbers => $field_numbers,
-        action => 'move',
-    });
 }
 
 =head2 _delete_field
