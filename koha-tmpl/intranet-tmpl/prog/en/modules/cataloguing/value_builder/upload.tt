@@ -7,36 +7,21 @@
     <script type="text/javascript" src="[% interface %]/lib/jquery/jquery.js"></script>
     <link rel="stylesheet" type="text/css" href="[% themelang %]/css/staff-global.css" />
     <script type="text/javascript">
-      function ValidateForm() {
-        var filename = document.forms["UploadForm"]["uploaded_file"].value;
-        var selected = 0;
-        var value;
-        $('form').each(function() {
-          value = $(this).find('input[type="radio"][name="dir"]:checked').val();
-          if (value) {
-            selected = 1;
-          }
-        });
-        if (!filename && !selected) {
-          alert("Please select a file and its destination.");
-          return false;
+        function ValidateForm() {
+            var filename = document.forms["UploadForm"]["uploaded_file"].value;
+            if (!filename) {
+                alert("Please select a file to upload.");
+                return false;
+            }
+            return true;
         }
-        else if (!filename) {
-          alert("Please select a file to upload.");
-          return false;
-        }
-        else if (!selected) {
-          alert("Please select a file destination.");
-          return false;
-        }
-        else {
-          return true;
-        }
-      }
     </script>
 
 </head>
 <body>
+
+<div id="doc3" class="yui-t2"><div id="bd"><div id="yui-main">
+
 [% IF ( success ) %]
 
     <script type="text/javascript">
@@ -63,28 +48,6 @@
         <p>Error: Failed to upload file. See logs for details.</p>
         <p><input type="button" value="close" onclick="window.close();" /></p>
     [% ELSE %]
-        [%# This block display recursively a directory tree in variable 'dirs' %]
-        [% BLOCK list_dirs %]
-            [% IF dirs.size %]
-                <ul>
-                    [% FOREACH dir IN dirs %]
-                        <li style="list-style-type:none">
-                            <input type="radio" name="dir" id="[% dir.value %]" value="[% dir.value %]">
-                                <label for="[% dir.value %]">
-                                    [% IF (dir.name == '/') %]
-                                        <em>(root)</em>
-                                    [% ELSE %]
-                                        [% dir.name %]
-                                    [% END %]
-                                </label>
-                            </input>
-                            [% INCLUDE list_dirs dirs=dir.dirs %]
-                        </li>
-                    [% END %]
-                </ul>
-            [% END %]
-        [% END %]
-
         [% IF (error_upload_path_not_configured) %]
           <h2>Configuration error</h2>
           <p>Configuration variable 'upload_path' is not configured.</p>
@@ -102,21 +65,39 @@
           [% IF (dangling) %]
               <p class="error">Error: The URL has no file to retrieve.</p>
           [% END %]
-          <h2>Please select the file to upload : </h2>
+
+          <h2>Please select the file to upload:</h2>
           <form name="UploadForm" method="post" enctype="multipart/form-data" action="/cgi-bin/koha/cataloguing/plugin_launcher.pl" onsubmit="return ValidateForm()">
-              [% filefield %]
-              <h3>Choose where to upload the file</h3>
-              [% INCLUDE list_dirs dirs = dirs_tree %]
               <input type="hidden" name="from_popup" value="1" />
               <input type="hidden" name="plugin_name" value="upload.pl" />
               <input type="hidden" name="index" value="[% index %]" />
-              <input type="submit" value="Upload file">
-              <input type="button" value="Cancel" onclick="window.close();" />
+
+              <div>[% filefield %]</div>
+              <p/>
+              <div>
+                  <label for="uploadcategory">Category: </label>
+                  [% IF uploadcategories %]
+                      <select id="uploadcategory" name="uploadcategory">
+                      [% FOREACH cat IN uploadcategories %]
+                          <option value="[% cat.code %]">[% cat.name %]</option>
+                      [% END %]
+                      </select>
+                  [% ELSE %]
+                      <input type="hidden" name="uploadcategory" value="CATALOGUING" />
+                  [% END %]
+              </div>
+              <p/>
+              <fieldset class="action">
+                  <input type="submit" value="Upload">
+                  <input type="button" value="Cancel" onclick="window.close();" />
+              </fieldset>
           </form>
         [% END %]
     [% END %]
 
 [% END %]
+
+</div></div></div>
 
 </body>
 </html>

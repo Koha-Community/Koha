@@ -3366,9 +3366,15 @@ CREATE TABLE IF NOT EXISTS `borrower_modifications` (
 
 DROP TABLE IF EXISTS uploaded_files;
 CREATE TABLE uploaded_files (
-    id CHAR(40) NOT NULL PRIMARY KEY,
+    id int(11) NOT NULL AUTO_INCREMENT,
+    hashvalue CHAR(40) NOT NULL,
     filename TEXT NOT NULL,
-    dir TEXT NOT NULL
+    dir TEXT NOT NULL,
+    filesize int(11),
+    dtcreated timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    categorycode tinytext,
+    owner int(11),
+    PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --

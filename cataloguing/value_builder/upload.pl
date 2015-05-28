@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# Converted to new plugin style (Bug 6874/See also 13437)
+
 # This file is part of Koha.
 #
 # Copyright (C) 2011-2012 BibLibre
@@ -19,32 +21,19 @@
 
 use Modern::Perl;
 use CGI qw/-utf8/;
-use File::Basename;
 
 use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::UploadedFiles;
 
-sub plugin_parameters {
-    my ( $dbh, $record, $tagslib, $i, $tabloop ) = @_;
-    return "";
-}
-
-sub plugin_javascript {
-    my ( $dbh, $record, $tagslib, $field_number, $tabloop ) = @_;
-    my $function_name = $field_number;
+my $builder = sub {
+    my ( $params ) = @_;
+    my $function_name = $params->{id};
     my $res           = "
     <script type=\"text/javascript\">
-        function Focus$function_name(subfield_managed) {
-            return 1;
-        }
-
-        function Blur$function_name(subfield_managed) {
-            return 1;
-        }
-
-        function Clic$function_name(index) {
+        function Click$function_name(event) {
+            var index = event.data.id;
             var id = document.getElementById(index).value;
             var IsFileUploadUrl=0;
             if (id.match(/opac-retrieve-file/)) {
@@ -55,16 +44,15 @@ sub plugin_javascript {
             }
             var newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=upload.pl&index=\"+index+\"&id=\"+id+\"&from_popup=0\"+\"&IsFileUploadUrl=\"+IsFileUploadUrl, 'upload', 'width=600,height=400,toolbar=false,scrollbars=no');
             newin.focus();
-
         }
     </script>
 ";
+    return $res;
+};
 
-    return ( $function_name, $res );
-}
-
-sub plugin {
-    my ($input) = @_;
+my $launcher = sub {
+    my ( $params ) = @_;
+    my $input = $params->{cgi};
     my $index = $input->param('index');
     my $id = $input->param('id');
     my $delete = $input->param('delete');
@@ -95,7 +83,7 @@ sub plugin {
     }
 
     # Dealing with the uploaded file
-    my $dir = $input->param('dir');
+    my $dir = $input->param('uploadcategory');
     if ($uploaded_file and $dir) {
         my $fh = $input->upload('uploaded_file');
 
@@ -132,16 +120,9 @@ sub plugin {
                 -name => 'uploaded_file',
                 -size => 50,
             );
-
-            my $dirs_tree = [ {
-                name => '/',
-                value => '/',
-                dirs => finddirs($upload_path)
-            } ];
-
             $template->param(
-                dirs_tree => $dirs_tree,
-                filefield => $filefield
+                filefield => $filefield,
+                uploadcategories => C4::UploadedFiles::getCategories(),
             );
         } else {
             $template->param( error_upload_path_not_configured => 1 );
@@ -165,47 +146,19 @@ sub plugin {
     );
 
     output_html_with_http_headers $input, $cookie, $template->output;
-}
+};
 
-# Build a hierarchy of directories
-sub finddirs {
-    my $base = shift;
-    my $upload_path = C4::Context->config('upload_path');
-    my $found = 0;
-    my @dirs;
-    my @files = glob("$base/*");
-    foreach (@files) {
-        if (-d $_ and -w $_) {
-            my $lastdirname = basename($_);
-            my $dirname =  $_;
-            $dirname =~ s/^$upload_path//g;
-            push @dirs, {
-                value => $dirname,
-                name => $lastdirname,
-                dirs => finddirs($_)
-            };
-            $found = 1;
-        };
-    }
-    return \@dirs;
-}
+return { builder => $builder, launcher => $launcher };
 
 1;
-
 
 __END__
 
 =head1 upload.pl
 
-This plugin allow to upload files on the server and reference it in a marc
+This plugin allows to upload files on the server and reference it in a marc
 field.
 
-Two system preference are used:
+It uses config variable upload_path and pref OPACBaseURL.
 
-=over 4
-
-=item * upload_path: the real absolute path where files will be stored
-
-=item * OPACBaseURL: for building URLs to be stored in MARC
-
-=back
+=cut

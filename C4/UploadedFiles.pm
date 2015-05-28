@@ -57,12 +57,16 @@ use Fcntl;
 use Encode;
 
 use C4::Context;
+use C4::Koha;
 
 sub _get_file_path {
-    my ($id, $dirname, $filename) = @_;
+    my ($hash, $dirname, $filename) = @_;
 
     my $upload_path = C4::Context->config('upload_path');
-    my $filepath = "$upload_path/$dirname/${id}_$filename";
+    if( !-d "$upload_path/$dirname" ) {
+        mkdir "$upload_path/$dirname";
+    }
+    my $filepath = "$upload_path/$dirname/${hash}_$filename";
     $filepath =~ s|/+|/|g;
 
     return $filepath;
@@ -90,21 +94,21 @@ It returns undef if file is not found
 =cut
 
 sub GetUploadedFile {
-    my ($id) = @_;
+    my ( $hashvalue ) = @_;
 
-    return unless $id;
+    return unless $hashvalue;
 
     my $dbh = C4::Context->dbh;
     my $query = qq{
-        SELECT id, filename, dir
+        SELECT hashvalue, filename, dir
         FROM uploaded_files
-        WHERE id = ?
+        WHERE hashvalue = ?
     };
     my $sth = $dbh->prepare($query);
-    $sth->execute($id);
+    $sth->execute( $hashvalue );
     my $file = $sth->fetchrow_hashref;
     if ($file) {
-        $file->{filepath} = _get_file_path($file->{id}, $file->{dir},
+        $file->{filepath} = _get_file_path($file->{hashvalue}, $file->{dir},
             $file->{filename});
     }
 
@@ -134,7 +138,6 @@ $cgi->upload('uploaded_file')->handle;
 
 sub UploadFile {
     my ($filename, $dir, $handle) = @_;
-
     $filename = decode_utf8($filename);
     if($filename =~ m#(^|/)\.\.(/|$)# or $dir =~ m#(^|/)\.\.(/|$)#) {
         warn "Filename or dirname contains '..'. Aborting upload";
@@ -152,15 +155,15 @@ sub UploadFile {
     $sha->add($data);
     $sha->add($filename);
     $sha->add($dir);
-    my $id = $sha->hexdigest;
+    my $hash = $sha->hexdigest;
 
     # Test if this id already exist
-    my $file = GetUploadedFile($id);
+    my $file = GetUploadedFile($hash);
     if ($file) {
-        return $file->{id};
+        return $file->{hashvalue};
     }
 
-    my $file_path = _get_file_path($id, $dir, $filename);
+    my $file_path = _get_file_path($hash, $dir, $filename);
 
     my $out_fh;
     # Create the file only if it doesn't exist
@@ -170,16 +173,18 @@ sub UploadFile {
     }
 
     print $out_fh $data;
+    my $size= tell($out_fh);
     close $out_fh;
 
     my $dbh = C4::Context->dbh;
     my $query = qq{
-        INSERT INTO uploaded_files (id, filename, dir)
-        VALUES (?,?, ?);
+        INSERT INTO uploaded_files (hashvalue, filename, filesize, dir, categorycode, owner) VALUES (?,?,?,?,?,?);
     };
     my $sth = $dbh->prepare($query);
-    if($sth->execute($id, $filename, $dir)) {
-        return $id;
+    my $uid= C4::Context->userenv? C4::Context->userenv->{number}: undef;
+        # uid is null in unit test
+    if($sth->execute($hash, $filename, $size, $dir, $dir, $uid)) {
+        return $hash;
     }
 
     return;
@@ -192,7 +197,7 @@ sub UploadFile {
 Determine if a entry is dangling.
 
 Returns: 2 == no db entry
-         1 == no file
+         1 == no plain file
          0 == both a file and db entry.
         -1 == N/A (undef id / non-file-upload URL)
 
@@ -230,9 +235,9 @@ sub DanglingEntry {
 
 =head2 DelUploadedFile
 
-    C4::UploadedFiles::DelUploadedFile($id);
+    C4::UploadedFiles::DelUploadedFile( $hash );
 
-Remove a previously uploaded file, given its id.
+Remove a previously uploaded file, given its hash value.
 
 Returns: 1 == file deleted
          0 == file not deleted
@@ -241,16 +246,16 @@ Returns: 1 == file deleted
 =cut
 
 sub DelUploadedFile {
-    my ($id) = @_;
+    my ( $hashval ) = @_;
     my $retval;
 
-    if ($id) {
-        my $file = GetUploadedFile($id);
+    if ( $hashval ) {
+        my $file = GetUploadedFile( $hashval );
         if($file) {
             my $file_path = $file->{filepath};
             my $file_deleted = 0;
             unless( -f $file_path ) {
-                warn "Id $file->{id} is in database but not in filesystem, removing id from database";
+                warn "Id $file->{hashvalue} is in database but no plain file found, removing id from database";
                 $file_deleted = 1;
             } else {
                 if(unlink $file_path) {
@@ -265,10 +270,10 @@ sub DelUploadedFile {
             my $dbh = C4::Context->dbh;
             my $query = qq{
                 DELETE FROM uploaded_files
-                WHERE id = ?
+                WHERE hashvalue = ?
             };
             my $sth = $dbh->prepare($query);
-            my $numrows = $sth->execute($id);
+            my $numrows = $sth->execute( $hashval );
             # if either a DB entry or file was deleted,
             # then clearly we have a deletion.
             if ($numrows>0 || $file_deleted==1) {
@@ -279,15 +284,26 @@ sub DelUploadedFile {
             }
         }
         else {
-            warn "There was no file for id=($id)";
+            warn "There was no file for hash $hashval.";
             $retval = -1;
         }
     }
     else {
-        warn "DelUploadFile called with no id.";
+        warn "DelUploadFile called without hash value.";
         $retval = -1;
     }
     return $retval;
+}
+
+=head2 getCategories
+
+    getCategories returns a list of upload category codes and names
+
+=cut
+
+sub getCategories {
+    my $cats = C4::Koha::GetAuthorisedValues('UPLOAD');
+    [ map {{ code => $_->{authorised_value}, name => $_->{lib} }} @$cats ];
 }
 
 =head2 httpheaders

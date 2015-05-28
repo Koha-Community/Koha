@@ -30,7 +30,7 @@ ok($id, "File uploaded, id is $id");
 
 my $file = C4::UploadedFiles::GetUploadedFile($id);
 isa_ok($file, 'HASH', "GetUploadedFiles($id)");
-foreach my $key (qw(id filename filepath dir)) {
+foreach my $key (qw(hashvalue filename filepath dir)) {
     ok(exists $file->{$key}, "GetUploadedFile($id)->{$key} exists");
 }
 
@@ -47,7 +47,7 @@ close $fh;
 
 my $DelResult;
 is(C4::UploadedFiles::DelUploadedFile($id),1, "DelUploadedFile($id) returned 1 as expected.");
-warning_like { $DelResult=C4::UploadedFiles::DelUploadedFile($id); } qr/file for id=/, "Expected warning for deleting Dangling Entry.";
+warning_like { $DelResult=C4::UploadedFiles::DelUploadedFile($id); } qr/file for hash/, "Expected warning for deleting Dangling Entry.";
 is($DelResult,-1, "DelUploadedFile($id) returned -1 as expected.");
 ok(! -e $file->{filepath}, "File $file->{filepath} does not exist anymore");
 
