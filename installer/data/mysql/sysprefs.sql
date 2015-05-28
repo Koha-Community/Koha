@@ -480,5 +480,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('XSLTDetailsDisplay','default','','Enable XSL stylesheet control over details page display on intranet','Free'),
 ('XSLTResultsDisplay','default','','Enable XSL stylesheet control over results page display on intranet','Free'),
 ('z3950AuthorAuthFields','701,702,700',NULL,'Define the MARC biblio fields for Personal Name Authorities to fill biblio.author','free'),
-('z3950NormalizeAuthor','0','','If ON, Personal Name Authorities will replace authors in biblio.author','YesNo')
+('z3950NormalizeAuthor','0','','If ON, Personal Name Authorities will replace authors in biblio.author','YesNo'),
+('OAI-PMH:DeletedRecord','persistent','Koha\'s deletedbiblio table will never be deleted (persistent) or might be deleted (transient)','transient|persistent','Choice')
 ;

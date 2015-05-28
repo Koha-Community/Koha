@@ -152,7 +152,7 @@ sub new {
         MaxCount            => C4::Context->preference("OAI-PMH:MaxCount"),
         granularity         => 'YYYY-MM-DD',
         earliestDatestamp   => '0001-01-01',
-        deletedRecord       => 'no',
+        deletedRecord       => C4::Context->preference("OAI-PMH:DeletedRecord") || 'no',
     );
 
     # FIXME - alas, the description element is not so simple; to validate
@@ -252,6 +252,36 @@ sub new {
 
 # __END__ C4::OAI::Record
 
+package C4::OAI::DeletedRecord;
+
+use strict;
+use warnings;
+use HTTP::OAI;
+use HTTP::OAI::Metadata::OAI_DC;
+
+use base ("HTTP::OAI::Record");
+
+sub new {
+    my ($class, $timestamp, $setSpecs, %args) = @_;
+
+    my $self = $class->SUPER::new(%args);
+
+    $timestamp =~ s/ /T/, $timestamp .= 'Z';
+    $self->header( new HTTP::OAI::Header(
+        status      => 'deleted',
+        identifier  => $args{identifier},
+        datestamp   => $timestamp,
+    ) );
+
+    foreach my $setSpec (@$setSpecs) {
+        $self->header->setSpec($setSpec);
+    }
+
+    return $self;
+}
+
+# __END__ C4::OAI::DeletedRecord
+
 
 
 package C4::OAI::GetRecord;
@@ -278,7 +308,16 @@ sub new {
     my ($biblionumber) = $args{identifier} =~ /^$prefix(.*)/;
     $sth->execute( $biblionumber );
     my ($marcxml, $timestamp);
+    my $deleted = 0;
     unless ( ($marcxml, $timestamp) = $sth->fetchrow ) {
+      $sth = $dbh->prepare("
+        SELECT biblionumber, timestamp
+        FROM deletedbiblio
+        WHERE biblionumber=? " );
+      $sth->execute( $biblionumber );
+
+      unless ( ($marcxml, $timestamp) = $sth->fetchrow ) {
+
         return HTTP::OAI::Response->new(
             requestURL  => $repository->self_url(),
             errors      => [ new HTTP::OAI::Error(
@@ -286,8 +325,10 @@ sub new {
                 message => "There is no biblio record with this identifier",
                 ) ] ,
         );
+      } else {
+        $deleted = 1;
+      }
     }
-
     my $oai_sets = GetOAISetsBiblio($biblionumber);
     my @setSpecs;
     foreach (@$oai_sets) {
@@ -295,9 +336,10 @@ sub new {
     }
 
     #$self->header( HTTP::OAI::Header->new( identifier  => $args{identifier} ) );
-    $self->record( C4::OAI::Record->new(
+    ($deleted == 1) ? $self->record( C4::OAI::DeletedRecord->new(
+        $timestamp, \@setSpecs, %args ) )
+        : $self->record( C4::OAI::Record->new(
         $repository, $marcxml, $timestamp, \@setSpecs, %args ) );
-
     return $self;
 }
 
@@ -328,18 +370,26 @@ sub new {
     }
     my $max = $repository->{koha_max_count};
     my $sql = "
-        SELECT biblioitems.biblionumber, biblioitems.timestamp
+        (SELECT biblioitems.biblionumber, timestamp
         FROM biblioitems
     ";
     $sql .= " JOIN oai_sets_biblios ON biblioitems.biblionumber = oai_sets_biblios.biblionumber " if defined $set;
     $sql .= " WHERE timestamp >= ? AND timestamp <= ? ";
     $sql .= " AND oai_sets_biblios.set_id = ? " if defined $set;
-    $sql .= "
+    $sql .= ") UNION
+        (SELECT deletedbiblio.biblionumber, timestamp FROM deletedbiblio";
+    $sql .= " JOIN oai_sets_biblios ON deletedbiblio.biblionumber = oai_sets_biblios.biblionumber " if defined $set;
+    $sql .= " WHERE DATE(timestamp) >= ? AND DATE(timestamp) <= ? ";
+    $sql .= " AND oai_sets_biblios.set_id = ? " if defined $set;
+
+    $sql .= ") ORDER BY biblionumber
         LIMIT " . ($max+1) . "
         OFFSET $token->{offset}
     ";
     my $sth = $dbh->prepare( $sql );
     my @bind_params = ($token->{'from_arg'}, $token->{'until_arg'});
+    push @bind_params, $set->{'id'} if defined $set;
+    push @bind_params, ($token->{'from'}, $token->{'until'});
     push @bind_params, $set->{'id'} if defined $set;
     $sth->execute( @bind_params );
 
@@ -485,19 +535,26 @@ sub new {
     }
     my $max = $repository->{koha_max_count};
     my $sql = "
-        SELECT biblioitems.biblionumber, biblioitems.marcxml, biblioitems.timestamp
+        (SELECT biblioitems.biblionumber, marcxml, timestamp
         FROM biblioitems
     ";
     $sql .= " JOIN oai_sets_biblios ON biblioitems.biblionumber = oai_sets_biblios.biblionumber " if defined $set;
     $sql .= " WHERE timestamp >= ? AND timestamp <= ? ";
     $sql .= " AND oai_sets_biblios.set_id = ? " if defined $set;
-    $sql .= "
+    $sql .= ") UNION
+        (SELECT deletedbiblio.biblionumber, null as marcxml, timestamp FROM deletedbiblio";
+    $sql .= " JOIN oai_sets_biblios ON deletedbiblio.biblionumber = oai_sets_biblios.biblionumber " if defined $set;
+    $sql .= " WHERE DATE(timestamp) >= ? AND DATE(timestamp) <= ? ";
+    $sql .= " AND oai_sets_biblios.set_id = ? " if defined $set;
+
+    $sql .= ") ORDER BY biblionumber
         LIMIT " . ($max + 1) . "
         OFFSET $token->{offset}
     ";
-
     my $sth = $dbh->prepare( $sql );
     my @bind_params = ($token->{'from_arg'}, $token->{'until_arg'});
+    push @bind_params, $set->{'id'} if defined $set;
+    push @bind_params, ($token->{'from'}, $token->{'until'});
     push @bind_params, $set->{'id'} if defined $set;
     $sth->execute( @bind_params );
 
@@ -521,11 +578,16 @@ sub new {
         foreach (@$oai_sets) {
             push @setSpecs, $_->{spec};
         }
-        $self->record( C4::OAI::Record->new(
-            $repository, $marcxml, $timestamp, \@setSpecs,
-            identifier      => $repository->{ koha_identifier } . ':' . $biblionumber,
-            metadataPrefix  => $token->{metadata_prefix}
-        ) );
+        if ($marcxml) {
+          $self->record( C4::OAI::Record->new(
+              $repository, $marcxml, $timestamp, \@setSpecs,
+              identifier      => $repository->{ koha_identifier } . ':' . $biblionumber,
+              metadataPrefix  => $token->{metadata_prefix}
+          ) );
+        } else {
+          $self->record( C4::OAI::DeletedRecord->new(
+          $timestamp, \@setSpecs, identifier => $repository->{ koha_identifier } . ':' . $biblionumber ) );
+        }
     }
 
     return $self;

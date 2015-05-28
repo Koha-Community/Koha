@@ -1610,7 +1610,6 @@ CREATE TABLE `oai_sets_biblios` (
   `biblionumber` int(11) NOT NULL,
   `set_id` int(11) NOT NULL,
   PRIMARY KEY (`biblionumber`, `set_id`),
-  CONSTRAINT `oai_sets_biblios_ibfk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `oai_sets_biblios_ibfk_2` FOREIGN KEY (`set_id`) REFERENCES `oai_sets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
