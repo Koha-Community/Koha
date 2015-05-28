@@ -1515,6 +1515,16 @@ VALUES ( 'ID', 'region', 'en', 'Indonesia');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'ID', 'region', 'id', 'Indonesia');
 
+-- India
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'IN', 'region', 'India','2015-05-28');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'IN', 'region', 'en', 'India');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'IN', 'region', 'bn', 'ভারত');
+
 -- Iceland
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'IS', 'region', 'Iceland','2014-10-30');
