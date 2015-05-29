@@ -208,7 +208,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
 }
 
 
-@checkouts_today = sort { $a->{timstamp} cmp $b->{timestamp} } @checkouts_today;
+@checkouts_today = sort { $a->{timestamp} cmp $b->{timestamp} } @checkouts_today;
 @checkouts_today = reverse(@checkouts_today)
   unless ( C4::Context->preference('todaysIssuesDefaultSortOrder') eq 'desc' );
 
