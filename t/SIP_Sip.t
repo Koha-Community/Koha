@@ -37,8 +37,5 @@ my $something = C4::SIP::Sip::Checksum::checksum($testdata);
 $something =  sprintf("%4X", $something);
 ok( C4::SIP::Sip::Checksum::verify_cksum($testdata.$something), "Checksum: $something is valid.");
 
-my $invalidTest;
-warning_is { $invalidTest = C4::SIP::Sip::Checksum::verify_cksum("1234567") }
-            'verify_cksum: no sum detected',
-            'verify_cksum prints the expected warning for an invalid checksum';
+my $invalidTest = C4::SIP::Sip::Checksum::verify_cksum("1234567");
 is($invalidTest, 0, "Checksum: 1234567 is invalid as expected");
