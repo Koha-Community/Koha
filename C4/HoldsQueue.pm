@@ -457,6 +457,8 @@ sub MapItemsToHoldRequests {
             } else {
                 $pull_branches = [keys %items_by_branch];
             }
+
+            # Try picking items where the home and pickup branch match first
             PULL_BRANCHES:
             foreach my $branch (@$pull_branches) {
                 my $holding_branch_items = $items_by_branch{$branch}
@@ -473,11 +475,30 @@ sub MapItemsToHoldRequests {
                 }
             }
 
+            # Now try items from the least cost branch based on the transport cost matrix or StaticHoldsQueueWeight
             unless ( $itemnumber ) {
                 foreach my $current_item ( @{ $items_by_branch{$holdingbranch} } ) {
                     if ( $holdingbranch && ( $current_item->{holdallowed} == 2 || $request->{borrowerbranch} eq $current_item->{homebranch} ) ) {
                         $itemnumber = $current_item->{itemnumber};
                         last; # quit this loop as soon as we have a suitable item
+                    }
+                }
+            }
+
+            # Now try for items for any item that can fill this hold
+            unless ( $itemnumber ) {
+                PULL_BRANCHES2:
+                foreach my $branch (@$pull_branches) {
+                    my $holding_branch_items = $items_by_branch{$branch}
+                      or next;
+
+                    $holdingbranch ||= $branch;
+                    foreach my $item (@$holding_branch_items) {
+                        next if ( $item->{holdallowed} == 1 && $item->{homebranch} ne $request->{borrowerbranch} );
+
+                        $itemnumber = $item->{itemnumber};
+                        $holdingbranch = $branch;
+                        last PULL_BRANCHES2;
                     }
                 }
             }
