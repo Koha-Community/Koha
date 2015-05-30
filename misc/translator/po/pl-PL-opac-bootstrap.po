@@ -8,9 +8,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.2\n"
-"POT-Creation-Date: 2015-02-16 03:11-0300\n"
-"PO-Revision-Date: 2015-02-05 12:07+0000\n"
-"Last-Translator: Renata <rpatela@afm.edu.pl>\n"
+"POT-Creation-Date: 2015-05-30 01:23-0300\n"
+"PO-Revision-Date: 2015-05-25 21:03+0000\n"
+"Last-Translator: Ilona <szczudlo@biblos.pk.edu.pl>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1423138032.000000\n"
+"X-POOTLE-MTIME: 1432587781.000000\n"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:110
 #, c-format
@@ -9098,7 +9098,7 @@ msgstr "Periodika"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:12
 #, c-format
 msgid "Permissions: "
-msgstr "Pozwolenia: "
+msgstr "Uprawnienia: "
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:1027
 #, c-format
@@ -9564,8 +9564,8 @@ msgstr "Wydawca:"
 #. %5$s:  IF ( BIBLIO_RESULT.pages ) 
 #. %6$s:  BIBLIO_RESULT.pages 
 #. %7$s:  END 
-#. %8$s:  IF BIBLIO_RESULT.size 
-#. %9$s:  BIBLIO_RESULT.size 
+#. %8$s:  IF BIBLIO_RESULT.item('size') 
+#. %9$s:  BIBLIO_RESULT.item('size') 
 #. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:69
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:61
@@ -10569,7 +10569,7 @@ msgstr "Wyświetl wszystkie egzemplarze"
 #: opac-tmpl/bootstrap/en/xslt/NORMARCslim2OPACResults.xsl:389
 #, c-format
 msgid "Show analytics"
-msgstr "Wyświetl sprawozdania"
+msgstr "Wyświetl rekordy powiązane"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:51
 #, c-format
@@ -11528,7 +11528,7 @@ msgstr ""
 "%s raz na kwartał %s %s raz na pół roku %s %s raz na rok %s %s raz na 2 lata "
 "%s %s nieregularnie %s %s w poniedziałek %s %s we wtorek %s %s w środę %s %s "
 "w czwartek %s %s w piątek %s %s w sobotę %s %s w niedzielę %s dla %s%s "
-"numerów%s %s%s tygodni%s %s%s miesięcy%s       "
+"numerów%s %s%s tygodni%s %s%s miesięcy%s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:30
 #, c-format
@@ -13261,12 +13261,12 @@ msgstr "adfklmor"
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:13
 #, c-format
 msgid "adult, General"
-msgstr "dorośli, Ogólne"
+msgstr "dorosły, Ogólny"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:12
 #, c-format
 msgid "adult, serious"
-msgstr "dorośli, tematyka poważna"
+msgstr "dorosły, tematyka poważna"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:111
 #, c-format
@@ -13283,7 +13283,7 @@ msgstr "w schowku"
 #, c-format
 msgid ""
 "an identifier indicating the location to which to deliver the item for pickup"
-msgstr "miejsce, gdzie egzemplarz ma oczekiwać na odbiór"
+msgstr "miejsce, w któym egzemplarz oczekuje na odbiór"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:457
 #, c-format
@@ -13695,14 +13695,15 @@ msgstr "corporate_secondary_author"
 #. SPAN
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:259
+#, fuzzy
 msgid ""
 "ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
 "au=[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
-"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT.size "
-"%]&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft.place=[% "
-"BIBLIO_RESULT.place %]&rft.pub=[% BIBLIO_RESULT.publisher |url %]&rft."
-"edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT.series "
-"%]&rft.genre="
+"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT."
+"item('size') %]&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft."
+"place=[% BIBLIO_RESULT.place %]&rft.pub=[% BIBLIO_RESULT.publisher |url "
+"%]&rft.edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT."
+"series %]&rft.genre="
 msgstr ""
 "ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
 "au=[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
@@ -13727,7 +13728,7 @@ msgstr "baza danych"
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:742
 #, c-format
 msgid "date after which hold request is no longer needed"
-msgstr "data, po której zamówienie nie jest potrzebne"
+msgstr "data, po której zamówienie jest anulowane"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:713
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:744
@@ -13865,7 +13866,7 @@ msgstr "zasoby elektroniczne"
 #: opac-tmpl/bootstrap/en/modules/errors/403.tt:32
 #, c-format
 msgid "email the Koha Administrator"
-msgstr "skontaktuj się z administratorem systemu e-mailowo"
+msgstr "skontaktuj się poprzez e-mail z administratorem systemu"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:93
 #, c-format

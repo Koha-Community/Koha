@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.12\n"
-"POT-Creation-Date: 2015-02-16 01:53-0300\n"
-"PO-Revision-Date: 2015-01-20 19:22+0000\n"
-"Last-Translator: Héctor <hector.hecaxmmx@gmail.com>\n"
+"POT-Creation-Date: 2015-05-30 01:15-0300\n"
+"PO-Revision-Date: 2015-04-29 15:45+0000\n"
+"Last-Translator: maxgomez <maxgomez@famaf.unc.edu.ar>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-community."
 "org>\n"
 "Language: es\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1421781736.000000\n"
+"X-POOTLE-MTIME: 1430322308.000000\n"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:110
 #, c-format
@@ -862,8 +862,8 @@ msgid ""
 "%s %s Search also for narrower subjects %s Search also for broader subjects "
 "%s Search also for related subjects %s "
 msgstr ""
-"%s %s Buscar además por materias específicas %s Buscar además por materias "
-"genéricos %s Buscar además por materias relacionadas %s "
+"%s %s Buscar además por términos específicos %s Buscar además por términos "
+"generales %s Buscar además por términos relacionados %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -9598,8 +9598,8 @@ msgstr "Publicado por :"
 #. %5$s:  IF ( BIBLIO_RESULT.pages ) 
 #. %6$s:  BIBLIO_RESULT.pages 
 #. %7$s:  END 
-#. %8$s:  IF BIBLIO_RESULT.size 
-#. %9$s:  BIBLIO_RESULT.size 
+#. %8$s:  IF BIBLIO_RESULT.item('size') 
+#. %9$s:  BIBLIO_RESULT.item('size') 
 #. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:69
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:61
@@ -10840,7 +10840,7 @@ msgstr "Ordenar esta lista por: "
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:231
 #, c-format
 msgid "Sorting: "
-msgstr "Orden: "
+msgstr "Ordenar: "
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:90
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:553
@@ -13763,14 +13763,15 @@ msgstr "corporate_secondary_author"
 #. SPAN
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:259
+#, fuzzy
 msgid ""
 "ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
 "au=[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
-"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT.size "
-"%]&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft.place=[% "
-"BIBLIO_RESULT.place %]&rft.pub=[% BIBLIO_RESULT.publisher |url %]&rft."
-"edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT.series "
-"%]&rft.genre="
+"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT."
+"item('size') %]&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft."
+"place=[% BIBLIO_RESULT.place %]&rft.pub=[% BIBLIO_RESULT.publisher |url "
+"%]&rft.edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT."
+"series %]&rft.genre="
 msgstr ""
 "ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
 "au=[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."

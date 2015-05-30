@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zh-Hans-TW-i-staff-t-prog-v-3004000\n"
-"POT-Creation-Date: 2015-02-16 04:07-0300\n"
-"PO-Revision-Date: 2015-02-13 02:10+0000\n"
+"POT-Creation-Date: 2015-05-30 01:30-0300\n"
+"PO-Revision-Date: 2015-05-27 11:47+0000\n"
 "Last-Translator: Frank <frank@sris.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1423793441.000000\n"
+"X-POOTLE-MTIME: 1432727271.000000\n"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slimUtils-MODS31.xsl:12
 #, c-format
@@ -206,7 +206,7 @@ msgid ""
 "%sCirculation %sLetter %sFines %sSystem prefs %s%s %s %s %s %s %sAdd "
 "%sDelete %sModify %sCheckout %sReturn %sCreate %s%s %s %s "
 msgstr ""
-"%s %s %s %s %s目錄 %s權威 %s讀者 %s採訪 %s期刊 %s流通 %s信件 %s罰款 %s系統偏"
+"%s %s %s %s %s編目 %s權威 %s讀者 %s採訪 %s期刊 %s流通 %s信件 %s罰款 %s系統偏"
 "好 %s%s %s %s %s %s %s新增 %s刪除 %s修改 %s借出 %s還入 %s新增 %s%s %s %s "
 
 #. %1$s:  IF ( loo.messaging_prefs ) 
@@ -323,8 +323,8 @@ msgstr "%s %s %s %s錯誤：無法取得館藏。"
 #. %23$s:  IF ( resultsloo.pages ) 
 #. %24$s:  resultsloo.pages 
 #. %25$s:  END 
-#. %26$s:  IF ( resultsloo.size ) 
-#. %27$s:  resultsloo.size 
+#. %26$s:  IF ( resultsloo.item('size') ) 
+#. %27$s:  resultsloo.item('size') 
 #. %28$s:  END 
 #. %29$s:  IF ( resultsloo.timestamp ) 
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:107
@@ -384,7 +384,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:367
 #, c-format
 msgid "%s %s %s Basket group no. %s %s "
-msgstr "%s %s %s 採購項目群組編號 %s %s "
+msgstr "%s %s %s 採購單群組編號 %s %s "
 
 #. %1$s:  IF ccode_label 
 #. %2$s:  ccode_label 
@@ -393,7 +393,7 @@ msgstr "%s %s %s 採購項目群組編號 %s %s "
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:197
 #, c-format
 msgid "%s %s %s Collection %s "
-msgstr "%s %s %s 館藏 %s "
+msgstr "%s %s %s 合集 %s "
 
 #. %1$s:  IF ( reserveloo.wait ) 
 #. %2$s:  IF ( reserveloo.atdestination ) 
@@ -423,7 +423,7 @@ msgstr "%s %s %s 那一個分館 %s %s "
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:270
 #, c-format
 msgid "%s %s %s No name, basketnumber: %s %s "
-msgstr "%s %s %s 沒有名稱，採購項目號碼: %s %s "
+msgstr "%s %s %s 沒有名稱，採購單號碼: %s %s "
 
 #. %1$s:  IF (otheritemloop.size) 
 #. %2$s:  PROCESS items_table items=otheritemloop 
@@ -542,6 +542,35 @@ msgstr "%s %s %s 只有這種類型："
 #, c-format
 msgid "%s %s %s unknown %s "
 msgstr "%s %s %s 不明 %s "
+
+#. %1$s:  BLOCK translate_label_types 
+#. %2$s:   SWITCH type 
+#. %3$s:    CASE 'BIB'    
+#. %4$s:    CASE 'BARBIB' 
+#. %5$s:    CASE 'BIBBAR' 
+#. %6$s:    CASE 'ALT'    
+#. %7$s:    CASE 'BAR'    
+#. %8$s:   END 
+#. %9$s:  END 
+#. %10$s:  INCLUDE 'doc-head-open.inc' 
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:1
+#, c-format
+msgid ""
+"%s %s %sBiblio %sBarcode/Biblio %sBiblio/Barcode %sAlternating %sBarcode %s "
+"%s %s "
+msgstr ""
+
+#. %1$s:  BLOCK translate_justification_types 
+#. %2$s:   SWITCH type 
+#. %3$s:    CASE 'L' 
+#. %4$s:    CASE 'C' 
+#. %5$s:    CASE 'R' 
+#. %6$s:   END 
+#. %7$s:  END 
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:30
+#, fuzzy, c-format
+msgid "%s %s %sLeft %sCenter %sRight %s %s "
+msgstr "%s%s%s %s (%s) %s會員 %s%s%s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -801,7 +830,7 @@ msgstr "%s %s KB 您真的要上傳此檔案嗎?"
 #. %5$s:    CASE 
 #. %6$s:  opac_new.lang 
 #. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:223
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:224
 #, c-format
 msgid "%s %s Librarian interface %s Slip %s All %s OPAC (%s) %s "
 msgstr "%s %s 館員介面 %s 收條 %s 全部 %s 線上公用目錄 (%s) %s "
@@ -827,7 +856,7 @@ msgstr "%s %s 手冊 %s 逾期 %s 停權 %s "
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:63
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:64
 #, c-format
 msgid "%s %s No %s"
 msgstr "%s %s 不 %s"
@@ -1112,7 +1141,7 @@ msgstr "%s %s x %s%s(書目紀錄 #%s)"
 
 #. %1$s:  END 
 #. %2$s:  IF ( MEMBERS ) 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:192
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:195
 #, c-format
 msgid "%s %s for "
 msgstr "%s %s 給 "
@@ -1557,7 +1586,7 @@ msgstr "%s %s在%s期望在%s %s 自從 %s%s%s%s%s%s%s。 "
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:537
 #, c-format
 msgid "%s %sitems%sitem%s%s, %s available:%s, None available%s"
-msgstr "%s %s館藏%s館藏%s%s, %s 可取用：%s, 不可得%s"
+msgstr "%s %s館藏%s館藏%s%s, %s 可外借：%s, 不可得%s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -1985,7 +2014,7 @@ msgstr "%s 地址："
 #. %2$s:  ELSE 
 #. %3$s:  opac_new.branchname 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:234
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:235
 #, c-format
 msgid "%s All Libraries %s%s %s"
 msgstr "%s 所有圖書館 %s%s %s"
@@ -2094,7 +2123,7 @@ msgstr "%s 借出給 %s %s "
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:394
 #, c-format
 msgid "%s Checkout(s)"
-msgstr "借出 %s 筆(s)"
+msgstr "%s 筆借出"
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1046
@@ -2189,11 +2218,11 @@ msgstr "%s 生日："
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:101
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Defining circulation and fine rules for \"%s\" %s Defining circulation "
 "and fine rules for all libraries %s "
-msgstr "%s 設定所有圖書館的流通與罰款規則 %s "
+msgstr "%s 設定流通與罰款規則針對 \"%s\" %s  設定所有圖書館的流通與罰款規則 %s"
 
 #. %1$s:  IF ( ActionsLoo.action_delete_field ) 
 #. %2$s:  END 
@@ -2342,19 +2371,19 @@ msgstr "%s 基金供 '%s' %s 全部基金 %s "
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:401
 #, c-format
 msgid "%s Hold(s)"
-msgstr "%s 筆(s)預約"
+msgstr "%s 筆預約"
 
 #. %1$s:  overcount 
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:74
 #, c-format
 msgid "%s Hold(s) over"
-msgstr "%s 筆(s)預約"
+msgstr "%s 筆預約"
 
 #. %1$s:  reservecount 
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:73
 #, c-format
 msgid "%s Hold(s) waiting"
-msgstr "%s 筆(s)預約中"
+msgstr "%s 筆預約中"
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -2423,7 +2452,7 @@ msgid ""
 "%s Item type is normally not for loan. %s %s Item is normally not for loan "
 "%s(%s)%s. %s %s Check out anyway? %s "
 msgstr ""
-"%s 類型的館藏通常不外借。%s %s 館藏通常不外借 %s(%s)%s。%s %s 仍要外借嗎？ "
+"%s 此館藏類型通常不外借。%s %s 館藏通常不外借 %s(%s)%s。%s %s 仍要外借嗎？ "
 "%s "
 
 #. %1$s:  IF ( itemtype_notforloan ) 
@@ -2436,7 +2465,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:358
 #, c-format
 msgid "%s Item type not for loan. %s %s Item not for loan %s(%s)%s. %s "
-msgstr "%s 類型的館藏通常不外借。%s %s 館藏不外借%s(%s)%s。%s "
+msgstr "%s 館藏類型不外借。%s %s 館藏不外借%s(%s)%s。%s "
 
 #. %1$s:  IF (more_than_one_serial) 
 #. %2$s:  ELSE 
@@ -2669,7 +2698,7 @@ msgstr "%s 其他電話："
 
 #. %1$s:  IF (sub.alreadyOnOrder) 
 #. %2$s:  ELSIF not sub.aqbooksellerid || booksellerid == sub.aqbooksellerid
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:90
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:91
 #, c-format
 msgid "%s Outstanding order (only one order per subscription is allowed) %s "
 msgstr "%s 訂購中(每筆訂單祗允許一筆訂購) %s "
@@ -3151,7 +3180,7 @@ msgstr "%s 沒有限制的值供%s %s %s %s 使用 "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:341
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:343
 #, c-format
 msgid "%s This ordernumber does not exist. %s "
 msgstr "%s 此採購編號不存在。%s "
@@ -3196,7 +3225,7 @@ msgstr "%s 是 %s 否 %s "
 
 #. %1$s:  IF ( issue.renewals ) 
 #. %2$s:  IF ( issue.lastreneweddate ) 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:62
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:63
 #, c-format
 msgid "%s Yes%s, "
 msgstr "%s 是的%s, "
@@ -3225,7 +3254,7 @@ msgstr "%s 您搜尋此 %s"
 #. %1$s:  IF ( searchfield ) 
 #. %2$s:  searchfield 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:327
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:272
 #, c-format
 msgid "%s You searched for %s %s "
 msgstr "%s 您搜尋此 %s %s "
@@ -3541,7 +3570,7 @@ msgstr "%s 匯入的紀錄 %s(最後一筆是 %s)%s"
 
 #. %1$s:  reserveloo.reservedate | $KohaDates 
 #. %2$s:  reserveloo.branch 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:132
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:133
 #, c-format
 msgid "%s in %s"
 msgstr "%s 在 %s "
@@ -3636,12 +3665,12 @@ msgstr "%s 修改的館藏 ( %s 欄位被修改) "
 
 #. %1$s:  total 
 #. %2$s:  IF ( branchlimit ) 
-#. %3$s:  branchlimit 
+#. %3$s:  Branches.GetName( branchlimit ) 
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:44
-#, c-format
-msgid "%s items found for %s%s%sALL libraries%s "
+#, fuzzy, c-format
+msgid "%s items found for %s%s%sAll libraries%s "
 msgstr "找到 %s 筆館藏，係供%s %s %s 所有圖書館%s "
 
 #. %1$s:  moddatecount 
@@ -3696,7 +3725,7 @@ msgstr "%s 裡的%s"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
 msgid "%s of %s renewals remaining"
-msgstr "%s 裡的 %s 仍在續借中"
+msgstr "仍有 %s 次, 全部可續借 %s 次"
 
 #. For the first occurrence,
 #. %1$s:  IF ( subscription_LOO.arrival1 ) 
@@ -4098,7 +4127,7 @@ msgstr "%s%s 單一書標%s%s 單一書標%s"
 #. %7$s:  loopro.object 
 #. %8$s:  END 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:155
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:157
 #, c-format
 msgid "%s%s%s %s (%s) %sMember %s%s%s "
 msgstr "%s%s%s %s (%s) %s會員 %s%s%s "
@@ -4114,8 +4143,8 @@ msgstr "%s%s%s %s (%s) %s會員 %s%s%s "
 #. %9$s:  IF ( itemsloo.pages ) 
 #. %10$s:  itemsloo.pages 
 #. %11$s:  END 
-#. %12$s:  IF ( itemsloo.size ) 
-#. %13$s:  itemsloo.size 
+#. %12$s:  IF ( itemsloo.item('size') ) 
+#. %13$s:  itemsloo.item('size') 
 #. %14$s:  END 
 #. %15$s:  IF ( itemsloo.isbn ) 
 #. %16$s:  itemsloo.isbn 
@@ -4219,7 +4248,7 @@ msgstr "%s%s%s館藏無轉移紀錄%s"
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:2
 #, c-format
 msgid "%s%s%sKoha online%s Catalog &rsaquo; Your cart"
-msgstr "%s%s%sKoha線上%s 目錄 &rsaquo; 您的採購項目"
+msgstr "%s%s%sKoha線上%s 目錄 &rsaquo; 您的採購單"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -4228,7 +4257,7 @@ msgstr "%s%s%sKoha線上%s 目錄 &rsaquo; 您的採購項目"
 #: intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:2
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Sending your cart"
-msgstr "%s%s%sKoha 線上%s 目錄 &rsaquo; 送至您的採購項目"
+msgstr "%s%s%sKoha 線上%s 目錄 &rsaquo; 送至您的採購單"
 
 #. For the first occurrence,
 #. %1$s:  IF ( template_id ) 
@@ -4292,7 +4321,7 @@ msgstr "%s%s&nbsp;限制為："
 #. %3$s:  suggestions_loo.author 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:484
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:89
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:90
 #, c-format
 msgid "%s%s, by %s%s"
 msgstr "%s%s, x %s%s"
@@ -4648,7 +4677,7 @@ msgstr "%s編輯群組 %s%s新增群組%s"
 #. %1$s:  IF ( layout_id ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:38
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:54
 #, c-format
 msgid "%sEdit%sCreate%s Label layout"
 msgstr "%s編輯%s新增%s 書標布局"
@@ -4709,8 +4738,8 @@ msgid ""
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot issued"
 "%s %sDelete%s %s Claimed %s %s %s %s %sStopped%s "
 msgstr ""
-"%s預期%s %s到館%s %s晚到%s %s遺漏%s %s遺漏 (不曾簽收)%s %s遺漏 (售完)%s %s遺"
-"漏 (毀損)%s %s遺漏(遺失)%s %s未發行%s %s刪除%s %s 催缺 %s %s %s %s %s停訂%s "
+"%s等待%s %s到館%s %s逾期%s %s遺失%s %s遺失 (從未收到)%s %s遺失 (售完)%s %s遺"
+"失 (毀損)%s %s遺失(弄丟)%s %s未發行%s %s刪除%s %s 催缺 %s %s %s %s %s停訂%s "
 
 #. For the first occurrence,
 #. %1$s:  IF ( serial.status1 ) 
@@ -4746,8 +4775,8 @@ msgid ""
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot issued"
 "%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
-"%s預期%s %s到館%s %s晚到%s %s遺漏%s %s遺漏 (不曾簽收)%s %s遺漏 (售完)%s %s遺"
-"漏 (毀損)%s %s遺漏(遺失)%s %s未發行%s %s刪除%s %s催缺%s %s停訂%s "
+"%s等待%s %s到館%s %s逾期%s %s遺失%s %s遺失 (從未收到)%s %s遺失 (售完)%s %s遺"
+"失 (毀損)%s %s遺失(遺失)%s %s未發行%s %s刪除%s %s催缺%s %s停訂%s "
 
 #. %1$s:  IF ( sex == 'F' ) 
 #. %2$s:  ELSIF ( sex == 'M' ) 
@@ -4938,7 +4967,7 @@ msgstr "%s修改%s新增%s 基金 %s %s 供預算 '%s' %s "
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:261
 #, c-format
 msgid "%sNew %s%sDelete %sBasket %s (%s) for "
-msgstr "%s新增 %s%s刪除 %s採購項目 %s (%s) 給 "
+msgstr "%s新增 %s%s刪除 %s採購單 %s (%s) 給 "
 
 #. %1$s:  IF ( heading_branches_add_branch_p ) 
 #. %2$s:  ELSE 
@@ -5126,7 +5155,7 @@ msgstr "%s是的%s&nbsp;%s"
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:262
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:342
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:341
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:286
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:188
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:189
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:211
@@ -5489,13 +5518,13 @@ msgstr "&lt;&lt;回到採訪建議"
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:136
 #, c-format
 msgid "&lt;&lt; Previous"
-msgstr "&lt;&lt; 前一個"
+msgstr "&lt;&lt; 上一頁"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_4XX.tt:204
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_linking_section.tt:201
 #, c-format
 msgid "&lt;&lt; Previous "
-msgstr "&lt;&lt; 前一個 "
+msgstr "&lt;&lt; 上一頁"
 
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:216
 #, c-format
@@ -5657,7 +5686,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:19
 #, c-format
 msgid "&rsaquo; %s %sEdit basket '%s' %sAdd a basket to %s %s %s "
-msgstr "&rsaquo; %s %s編輯採購項目 '%s' %s新增採購項目至 %s %s %s "
+msgstr "&rsaquo; %s %s編輯採購單 '%s' %s新增採購單至 %s %s %s "
 
 #. %1$s:  IF ( opadd ) 
 #. %2$s:  IF ( categoryname ) 
@@ -5703,7 +5732,7 @@ msgstr "&rsaquo; %s 編輯 "
 #. %3$s:  END 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:54
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:55
 #, c-format
 msgid "&rsaquo; %s Edit news item%sAdd news item%s%sNews%s"
 msgstr "&rsaquo; %s 編輯新增館藏%s新增館藏%s%s公告%s"
@@ -5821,7 +5850,7 @@ msgstr "&rsaquo; %s新增傳閱清單%s編輯傳閱清單%s"
 #. %1$s:  IF ( layout_id ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:29
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:45
 #, c-format
 msgid "&rsaquo; %sEdit%sCreate%s Label layout "
 msgstr "&rsaquo; %s編輯%s新增%s 標籤布局 "
@@ -5846,7 +5875,7 @@ msgstr "&rsaquo; %s編輯 "
 #. %4$s:  END 
 #. %5$s:  END 
 #. %6$s:  IF ( delete_confirm ) 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:65
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:55
 #, c-format
 msgid "&rsaquo; %sModify Z39.50 server %s%sNew Z39.50 server%s%s %s "
 msgstr "&rsaquo; %s修改 Z39.50 伺服器 %s%s新增 Z39.50 伺服器%s%s %s "
@@ -5943,7 +5972,7 @@ msgstr "&rsaquo; %s修改系統偏好 '%s'%s新增系統偏好%s%s%s "
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:165
 #, c-format
 msgid "&rsaquo; %sNew %s%sDelete %sBasket %s (%s) for %s"
-msgstr "&rsaquo; %s新增 %s%s刪除 %s採購項目 %s (%s) 給 %s"
+msgstr "&rsaquo; %s新增 %s%s刪除 %s採購單 %s (%s) 給 %s"
 
 #. %1$s:  IF ( opsearch ) 
 #. %2$s:  ELSE 
@@ -6020,7 +6049,7 @@ msgstr "&rsaquo; %s儲存報表 %s從SQL新增 %s"
 #. %1$s:  IF ( else ) 
 #. %2$s:  END 
 #. %3$s:  IF ( add_form ) 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:64
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:54
 #, c-format
 msgid "&rsaquo; %sZ39.50 servers%s %s "
 msgstr "&rsaquo; %sZ39.50 伺服器%s %s "
@@ -6051,7 +6080,7 @@ msgstr "&rsaquo; 新增 OAI 集%s"
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:132
 #, c-format
 msgid "&rsaquo; Add basket group for %s"
-msgstr "&rsaquo; 新增採購項目群組給 %s"
+msgstr "&rsaquo; 新增採購單群組給 %s"
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -6070,7 +6099,7 @@ msgstr "&rsaquo; 新增館藏類型 %s %s %s %s "
 msgid "&rsaquo; Add notice%s%s%s "
 msgstr "&rsaquo; 新增說明 %s%s%s "
 
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:41
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:42
 #, c-format
 msgid "&rsaquo; Add order from a subscription"
 msgstr "&rsaquo; 從訂閱新增訂單"
@@ -6145,7 +6174,7 @@ msgstr "&rsaquo; 權威搜尋結果"
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:134
 #, c-format
 msgid "&rsaquo; Basket grouping"
-msgstr "&rsaquo; 採購項目群組"
+msgstr "&rsaquo; 採購單群組"
 
 #. %1$s:  import_batch_id 
 #. %2$s:  ELSE 
@@ -6208,7 +6237,7 @@ msgstr "&rsaquo; 還入"
 msgid "&rsaquo; Check in subscription for "
 msgstr "&rsaquo; 還入訂閱 "
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:24
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:25
 #, c-format
 msgid "&rsaquo; Checkout history for "
 msgstr "&rsaquo; 借出紀錄 "
@@ -6286,7 +6315,7 @@ msgstr "&rsaquo; 確認刪除標籤 '%s' %s &rsaquo; "
 
 #. %1$s:  END 
 #. %2$s:  IF ( confirm_add ) 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:66
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:56
 #, c-format
 msgid "&rsaquo; Confirm deletion%s %s "
 msgstr "&rsaquo; 確認刪除 %s %s "
@@ -6485,7 +6514,7 @@ msgstr "&rsaquo; 欄位 %s"
 msgid "&rsaquo; Hold ratios"
 msgstr "&rsaquo; 預約比率"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:76
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:77
 #, c-format
 msgid "&rsaquo; Holds to pull"
 msgstr "&rsaquo; 預約狀態"
@@ -6946,7 +6975,7 @@ msgstr "&rsaquo; 搜尋結果%s搜尋訂單%s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/members/member.tt:76
+#: intranet-tmpl/prog/en/modules/members/member.tt:77
 #, c-format
 msgid "&rsaquo; Search results%sPatrons%s"
 msgstr "&rsaquo; 搜尋結果%s讀者%s"
@@ -7155,20 +7184,20 @@ msgstr "&rsaquo; 上傳結果%s上傳在地封面%s"
 
 #. %1$s:  END 
 #. %2$s:  IF ( confirm_update ) 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:67
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:57
 #, c-format
 msgid "&rsaquo; Z39.50 server added%s %s "
 msgstr "&rsaquo; 已加入的 Z39.50 伺服器%s %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:70
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:60
 #, c-format
 msgid "&rsaquo; Z39.50 server deleted%s"
 msgstr "&rsaquo; 已刪除的Z39.50伺服器%s"
 
 #. %1$s:  END 
 #. %2$s:  IF ( delete_confirmed ) 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:68
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:58
 #, c-format
 msgid "&rsaquo; Z39.50 server updated%s %s "
 msgstr "&rsaquo; 已更新的 Z39.50 伺服器%s %s "
@@ -7392,7 +7421,7 @@ msgstr "(縮小。 "
 #. %3$s:  HoldsToPullEndDate 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:181
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:182
 #, c-format
 msgid ""
 "(Inclusive, default is %s days ago to %s%s days ahead%stoday%s, set other "
@@ -7576,7 +7605,7 @@ msgstr "(鍵入已知的位元深度； <br />或使用下拉選單)"
 msgid "(ignore means that the subfield does not display in the record editor) "
 msgstr "(忽視表示不在記錄編輯器顯示此分欄) "
 
-#: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:116
+#: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:127
 #, c-format
 msgid "(inclusive) "
 msgstr "(包括) "
@@ -7677,7 +7706,7 @@ msgstr "(以*做為糢糊搜尋) "
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:409
 #, c-format
 msgid ") %s No basket group %s "
-msgstr ") %s 無借出籃群組 %s "
+msgstr ") %s 無採購單群組 %s "
 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:82
 #, c-format
@@ -7795,7 +7824,7 @@ msgid ""
 ", France (biblio frameworks, MARC authorities, OPAC basket, Serials "
 "sponsorship)"
 msgstr ""
-", 法國 (書目紀錄框架, 權威機讀編目格式, 線上公用目錄採購項目, 期刊贊助者)"
+", 法國 (書目紀錄框架, 權威機讀編目格式, 線上公用目錄採購單, 期刊贊助者)"
 
 #: intranet-tmpl/prog/en/modules/about.tt:143
 #, c-format
@@ -8151,8 +8180,8 @@ msgstr ". %s 借出是 "
 #. %1$s:  IF ( CAN_user_parameters ) 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:147
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:148
-#: intranet-tmpl/prog/en/modules/members/member.tt:94
 #: intranet-tmpl/prog/en/modules/members/member.tt:95
+#: intranet-tmpl/prog/en/modules/members/member.tt:96
 #, c-format
 msgid ". %sPlease "
 msgstr ". %s請 "
@@ -8237,7 +8266,7 @@ msgstr "。可試試其他搜尋或 "
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:147
-#: intranet-tmpl/prog/en/modules/members/member.tt:94
+#: intranet-tmpl/prog/en/modules/members/member.tt:95
 #, c-format
 msgid ".%sAn administrator must define at least one library.%s"
 msgstr "。%s管理者至少需設定一個圖書館。%s"
@@ -8250,7 +8279,7 @@ msgstr "。%s管理者至少需設定一個讀者類型。"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/members/member.tt:95
+#: intranet-tmpl/prog/en/modules/members/member.tt:96
 #, c-format
 msgid ".%sAn administrator must define at least one patron category.%s"
 msgstr ".%s管理者至少需設定一個讀者類型%s"
@@ -8541,14 +8570,14 @@ msgstr "000 - Postens hode"
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:309
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:316
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:203
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:71
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:76
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:81
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:72
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:77
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:82
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:89
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:141
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:187
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:190
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:87
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:88
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:127
 msgid "0000-00-00"
 msgstr "0000-00-00"
@@ -9086,7 +9115,7 @@ msgstr "1- 10-19%"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:205
 #, c-format
 msgid "1- Full level, material not examined"
-msgstr "1- 完整層次，資料未審查"
+msgstr "1- 非依資料本身完整著錄"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:965
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:967
@@ -9417,7 +9446,7 @@ msgstr "17 - 編碼"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:194
 #, c-format
 msgid "17- Encoding level"
-msgstr "17- 編碼層次"
+msgstr "17- 著錄依據及層次"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008_authorities.tt:414
 #, c-format
@@ -9440,12 +9469,12 @@ msgstr "17.78 公分或 7 英吋"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:252
 #, c-format
 msgid "18 - Descriptive cataloging form"
-msgstr "18- 敘述編目表單"
+msgstr "18- 記述編目格式"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:258
 #, c-format
 msgid "18- Descriptive cataloging form"
-msgstr "18- 敘述編目表單"
+msgstr "18- 記述編目格式"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader_authorities.tt:109
 #, c-format
@@ -9471,7 +9500,7 @@ msgstr "19- 需要連結紀錄"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:285
 #, c-format
 msgid "19 - Multipart resource record level"
-msgstr "19- 多部件來源紀錄層次"
+msgstr "19- 層次等級"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:287
 #, c-format
@@ -9491,7 +9520,7 @@ msgstr "第一"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:210
 #, c-format
 msgid "2 - Less-than-full level, material not examined"
-msgstr "2- 小於完整層次，資料未經檢查"
+msgstr "2- 非於資料次完整著錄"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:210
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:212
@@ -9636,7 +9665,7 @@ msgstr "3- 30-39%"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:215
 #, c-format
 msgid "3- Abbreviated level"
-msgstr "3- 小型的層次"
+msgstr "3- 簡略著錄層次"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121b.tt:96
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121b.tt:98
@@ -9761,7 +9790,7 @@ msgstr "4- 40-49%"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:220
 #, c-format
 msgid "4- Core level"
-msgstr "4- 核心層次"
+msgstr "4- 核心著錄層次"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:156
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:158
@@ -9830,7 +9859,7 @@ msgstr "5- 50-59%"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:225
 #, c-format
 msgid "5- Partial (preliminary) level"
-msgstr "5- 部份(初步)層次"
+msgstr "5- 初步(部份)著錄層次"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader_authorities.tt:15
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:14
@@ -9839,7 +9868,7 @@ msgstr "5- 部份(初步)層次"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:15
 #, c-format
 msgid "5- Record status"
-msgstr "5- 紀錄狀態"
+msgstr "5- 紀錄性質"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:279
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:281
@@ -9940,7 +9969,7 @@ msgstr "7- 70-79%"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:125
 #, c-format
 msgid "7- Bibliographic level"
-msgstr "7- 書目層次"
+msgstr "7- 書目性質"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader_computerfile.tt:236
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader_computerfile.tt:238
@@ -9950,7 +9979,7 @@ msgstr "7- 書目層次"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:230
 #, c-format
 msgid "7- Minimal level"
-msgstr "7- 最低層次"
+msgstr "7- 最低著錄層次"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader_authorities.tt:65
 #, c-format
@@ -10023,7 +10052,7 @@ msgstr "8- 階層層次代碼"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:235
 #, c-format
 msgid "8- Prepublication level"
-msgstr "8- 出版前層次"
+msgstr "8- 預行編錄著錄層次"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:168
 #, c-format
@@ -10233,7 +10262,7 @@ msgstr "<< 刪除"
 
 #. INPUT type=button
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:825
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:349
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:294
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:287
 msgid "<< Previous"
 msgstr "<< 前一頁"
@@ -10630,8 +10659,8 @@ msgstr "AR"
 msgid "ATS"
 msgstr "ATS"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:193
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:195
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:166
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:168
 #, c-format
 msgid "AUSMARC"
 msgstr "AUSMARC"
@@ -10836,10 +10865,10 @@ msgid ""
 "postal address,Contract number,Contract name,Basket group delivery place,"
 "Basket group billing place,Basket delivery place,Basket billing place "
 msgstr ""
-"帳號、採購項目名稱、訂單號碼、著者、題名、出版社、出版年、集叢題名、國際標準"
-"書號、數量、RRP、折扣、預估費用、內部說明、鍵入日期、書商名稱、書商地址、書商"
-"郵寄地址、合約號碼、合約名稱、採購項目群組寄送地址、採購項目群組帳單地址、採"
-"購項目寄送地址、採購項目帳單地址 "
+"帳號、採購單名稱、訂單號碼、著者、題名、出版社、出版年、集叢題名、國際標準書"
+"號、數量、RRP、折扣、預估費用、內部說明、鍵入日期、書商名稱、書商地址、書商郵"
+"寄地址、合約號碼、合約名稱、採購單群組寄送地址、採購單群組帳單地址、採購項目"
+"寄送地址、採購單帳單地址 "
 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:65
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:191
@@ -10945,7 +10974,7 @@ msgstr "採訪參數"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:171
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:122
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:130
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:41
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:42
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:10
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:54
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:64
@@ -10975,7 +11004,7 @@ msgstr "採訪統計 "
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:146
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:323
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:360
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:140
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:141
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:313
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:72
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:389
@@ -11149,7 +11178,7 @@ msgstr "新增機讀編目格式紀錄"
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:35
 #, c-format
 msgid "Add a basket to %s"
-msgstr "新增採購項目至 %s"
+msgstr "新增採購單至 %s"
 
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:192
 #, c-format
@@ -11214,7 +11243,7 @@ msgstr "新增另一個欄位"
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:156
 #, c-format
 msgid "Add basket group for "
-msgstr "新增採購項目群組 "
+msgstr "新增採購單群組 "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:197
 #, c-format
@@ -11381,12 +11410,12 @@ msgstr "新增訂單"
 #: intranet-tmpl/prog/en/includes/acquisitions-add-to-basket.inc:2
 #, c-format
 msgid "Add order to basket"
-msgstr "新增訂單給採購項目"
+msgstr "新增訂單給採購單"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:12
 msgid "Add order to basket %s"
-msgstr "新增訂單給採購項目 %s"
+msgstr "新增訂單給採購單 %s"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:407
 #, c-format
@@ -11469,12 +11498,12 @@ msgstr "新增至新的虛擬書架："
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:158
 #, c-format
 msgid "Add to basket"
-msgstr "新增至採購項目"
+msgstr "新增至採購單"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:243
 #, c-format
 msgid "Add to cart"
-msgstr "新增到購物車"
+msgstr "新增到採購單"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:241
 #, c-format
@@ -11559,13 +11588,13 @@ msgstr "新增/移除館藏"
 msgid "Add/Update"
 msgstr "新增/更新"
 
-#: intranet-tmpl/prog/en/modules/members/member.tt:126
+#: intranet-tmpl/prog/en/modules/members/member.tt:127
 #, c-format
 msgid "Add:"
 msgstr "新增："
 
 #. %1$s:  patrons_added_to_list.size 
-#: intranet-tmpl/prog/en/modules/members/member.tt:86
+#: intranet-tmpl/prog/en/modules/members/member.tt:87
 #, c-format
 msgid "Added %s patrons to "
 msgstr "新增 %s 讀者至 "
@@ -11614,11 +11643,6 @@ msgstr "已新增。"
 #, c-format
 msgid "Adding authority %s"
 msgstr "新增權威 %s"
-
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:255
-#, fuzzy, c-format
-msgid "Additional SRU options: "
-msgstr "其他工具"
 
 #: intranet-tmpl/prog/en/modules/about.tt:458
 #, c-format
@@ -11733,7 +11757,7 @@ msgstr "地址："
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:100
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:46
 #: intranet-tmpl/prog/en/modules/admin/item_circulation_alerts.tt:91
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:64
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:54
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:175
 #: intranet-tmpl/prog/en/modules/admin/searchengine/solr/indexes.tt:67
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:53
@@ -11975,10 +11999,10 @@ msgstr "Alexandra Horsman"
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:73
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:82
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:429
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:81
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:83
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:156
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:158
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:82
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:84
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:157
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:159
 #, c-format
 msgid "All"
 msgstr "所有"
@@ -11988,10 +12012,10 @@ msgstr "所有"
 msgid "All Item Types"
 msgstr "所有館藏類型"
 
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:108
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:110
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:181
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:183
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:109
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:111
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:182
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:184
 #, c-format
 msgid "All Libraries"
 msgstr "所有圖書館"
@@ -12077,7 +12101,7 @@ msgstr "所有圖書館"
 #, c-format
 msgid ""
 "All orders of this basket will be cancelled and used funds will be refunded."
-msgstr "將取消此採購項目的訂單並還入使用的基金。"
+msgstr "將取消此採購單的訂單並還入使用的基金。"
 
 #. %1$s:  last_issue_date | $KohaDates 
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:174
@@ -12085,7 +12109,7 @@ msgstr "將取消此採購項目的訂單並還入使用的基金。"
 msgid "All patrons with checkouts older than %s have been anonymized"
 msgstr "所有借出的讀者超過 %s 都匿名"
 
-#: intranet-tmpl/prog/en/modules/members/member.tt:129
+#: intranet-tmpl/prog/en/modules/members/member.tt:130
 #, c-format
 msgid "All resultant patrons"
 msgstr "全部讀者"
@@ -12690,7 +12714,7 @@ msgstr "Apache License v2.0"
 msgid "Apache version: "
 msgstr "Apache 版本："
 
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:136
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:137
 #, c-format
 msgid "Appear in position: "
 msgstr "顯示的位置："
@@ -12776,7 +12800,7 @@ msgid "Arabic"
 msgstr "阿拉伯文"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/member.tt:5
+#: intranet-tmpl/prog/en/modules/members/member.tt:6
 msgid ""
 "Are you sure you want to add the entire set of patron results to this list "
 "( including results on other pages )?"
@@ -12801,17 +12825,17 @@ msgstr "確定取消此改變嗎？"
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:663
 #, c-format
 msgid "Are you sure you want to close basket %s?"
-msgstr "確定關閉採購項目%s嗎？"
+msgstr "確定關閉採購單%s嗎？"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:38
 msgid "Are you sure you want to close this basket?"
-msgstr "確定關閉此採購項目嗎？"
+msgstr "確定關閉此採購單嗎？"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:89
 msgid "Are you sure you want to close this basketgroup?"
-msgstr "確定關閉此採購項目群組嗎？"
+msgstr "確定關閉此採購單群組嗎？"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:1
@@ -12846,7 +12870,7 @@ msgid "Are you sure you want to delete the list %s?"
 msgstr "確定刪除此虛擬書架 %s 嗎？"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:23
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:24
 msgid "Are you sure you want to delete the selected news?"
 msgstr "確定移除選定的公告嗎？"
 
@@ -12859,15 +12883,14 @@ msgstr "確定移除指定的報表嗎？"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/authorities/detail.tt:14
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:5
-#, fuzzy
 msgid "Are you sure you want to delete this authority?"
-msgstr "確定刪除此館藏嗎？"
+msgstr "確定刪除此權威記錄嗎？"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:202
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:210
 #, c-format
 msgid "Are you sure you want to delete this basket?"
-msgstr "確定刪除此採購項目嗎？"
+msgstr "確定刪除此採購單嗎？"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -12962,7 +12985,7 @@ msgstr "您確定要編輯另個規則嗎？"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/doc-head-close.inc:34
 msgid "Are you sure you want to empty your cart?"
-msgstr "確定清空您的採購項目嗎？"
+msgstr "確定清空您的採購單嗎？"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:7
@@ -13007,7 +13030,7 @@ msgstr "確定更新讀者證的有效期嗎？"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:86
 msgid "Are you sure you want to reopen this basket?"
-msgstr "確定再打開此採購項目嗎？"
+msgstr "確定再打開此採購單嗎？"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -13138,7 +13161,7 @@ msgstr "詢問 "
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:797
 #, c-format
 msgid "At library: %s"
-msgstr "在圖書館：%s"
+msgstr "圖書館：%s"
 
 #: intranet-tmpl/prog/en/modules/labels/label-home.tt:43
 #, c-format
@@ -13214,7 +13237,7 @@ msgstr "附加館藏"
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:666
 #, c-format
 msgid "Attach this basket to a new basket group with the same name"
-msgstr "此借出籃以同樣的名稱附加在新的採購項目群組"
+msgstr "此採購單以同樣的名稱附加在新的採購單群組"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121b.tt:30
 #, c-format
@@ -13406,9 +13429,8 @@ msgstr "著者：%s"
 msgid "Authorities"
 msgstr "權威"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:237
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:239
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:250
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:210
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:212
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:48
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:112
 #, c-format
@@ -13423,7 +13445,7 @@ msgid "Authority #%s (%s)"
 msgstr "權威#%s(%s)"
 
 #. %1$s:  loopro.object 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:170
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:172
 #, c-format
 msgid "Authority %s"
 msgstr "權威 %s"
@@ -13614,33 +13636,33 @@ msgstr "可用"
 msgid "Availability"
 msgstr "可用"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:98
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:99
 #, c-format
 msgid "Available call numbers"
 msgstr "可用的索書號"
 
 #. INPUT type=text
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:146
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:147
 msgid "Available copy"
 msgstr "可用的複本"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:99
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:100
 #, c-format
 msgid "Available copy numbers"
 msgstr "可用的複本號"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:100
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:147
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:101
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:148
 #, c-format
 msgid "Available enumeration"
 msgstr "Available enumeration"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:101
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:102
 #, c-format
 msgid "Available itypes"
 msgstr "Available itypes"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:102
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:103
 #, c-format
 msgid "Available locations"
 msgstr "可用位置"
@@ -13819,7 +13841,7 @@ msgstr "樂團"
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:505
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:104
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:169
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:41
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:42
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:532
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:390
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:365
@@ -14021,7 +14043,7 @@ msgstr "基本參數"
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:137
 #, c-format
 msgid "Basket"
-msgstr "採購項目"
+msgstr "採購單"
 
 #. For the first occurrence,
 #. %1$s:  basketno 
@@ -14033,34 +14055,34 @@ msgstr "採購項目"
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:156
 #, c-format
 msgid "Basket %s"
-msgstr "採購項目 %s"
+msgstr "採購單 %s"
 
 #. %1$s:  basketname|html 
 #. %2$s:  basketno 
 #: intranet-tmpl/prog/en/modules/acqui/modordernotes.tt:15
 #, c-format
 msgid "Basket %s (%s)"
-msgstr "採購項目 %s (%s)"
+msgstr "採購單 %s (%s)"
 
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:45
 #, c-format
 msgid "Basket (#)"
-msgstr "採購項目 (#)"
+msgstr "採購單 (#)"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:494
 #, c-format
 msgid "Basket :"
-msgstr "採購項目："
+msgstr "採購單："
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:238
 #, c-format
 msgid "Basket deleted"
-msgstr "刪除採購項目"
+msgstr "刪除採購單"
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:192
 #, c-format
 msgid "Basket details"
-msgstr "採購項目詳情"
+msgstr "採購單詳情"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:850
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:120
@@ -14070,97 +14092,97 @@ msgstr "採購項目詳情"
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:105
 #, c-format
 msgid "Basket group"
-msgstr "採購項目群組"
+msgstr "採購單群組"
 
 #. %1$s:  name 
 #. %2$s:  basketgroupid 
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:152
 #, c-format
 msgid "Basket group %s (%s) for "
-msgstr "採購項目群組 %s (%s) 供 "
+msgstr "採購單群組 %s (%s) 供 "
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:386
 #, c-format
 msgid "Basket group billing place:"
-msgstr "採購項目群組帳單地址："
+msgstr "採購單群組帳單地址："
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:385
 #, c-format
 msgid "Basket group delivery placename:"
-msgstr "採購項目群組送達地名："
+msgstr "採購單群組送達地名："
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:498
 #, c-format
 msgid "Basket group name :"
-msgstr "採購項目群組名稱："
+msgstr "採購單群組名稱："
 
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:195
 #, c-format
 msgid "Basket group name:"
-msgstr "採購項目群組名稱"
+msgstr "採購單群組名稱"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:230
 #, c-format
 msgid "Basket group search"
-msgstr "搜尋採購項目群組"
+msgstr "搜尋採購單群組"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:347
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:48
 #, c-format
 msgid "Basket group:"
-msgstr "採購項目群組："
+msgstr "採購單群組："
 
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:132
 #, c-format
 msgid "Basket grouping"
-msgstr "採購項目群組"
+msgstr "採購單群組"
 
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:306
 #, c-format
 msgid "Basket grouping for "
-msgstr "採購項目群組 "
+msgstr "採購單群組 "
 
 #: intranet-tmpl/prog/en/includes/vendor-menu.inc:5
 #, c-format
 msgid "Basket groups"
-msgstr "採購項目群組"
+msgstr "採購單群組"
 
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:48
 #, c-format
 msgid "Basket name: "
-msgstr "採購項目名稱："
+msgstr "採購單名稱："
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:229
 #, c-format
 msgid "Basket search"
-msgstr "搜尋採購項目"
+msgstr "搜尋採購單"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-search.inc:21
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:45
 #, c-format
 msgid "Basket: "
-msgstr "採購項目："
+msgstr "採購單："
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:206
 #, c-format
 msgid "Basketgroup: "
-msgstr "採購項目群組："
+msgstr "採購單群組："
 
 #: intranet-tmpl/prog/en/includes/vendor-menu.inc:4
 #, c-format
 msgid "Baskets"
-msgstr "採購項目"
+msgstr "採購單"
 
 #. %1$s:  booksellertoname 
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:41
 #, c-format
 msgid "Baskets for %s"
-msgstr "採購項目 %s"
+msgstr "採購單 %s"
 
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:262
 #, c-format
 msgid "Baskets in this group:"
-msgstr "在此群組的採購項目"
+msgstr "在此群組的採購單"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:330
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:332
@@ -14369,7 +14391,7 @@ msgid "BibTex"
 msgstr "BibTex"
 
 #. %1$s:  loopro.object 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:161
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:163
 #, c-format
 msgid "Biblio %s"
 msgstr "書目 %s"
@@ -14411,9 +14433,8 @@ msgstr "Bibliografier"
 msgid "Bibliografiske data"
 msgstr "Bibliografiske資料"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:232
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:234
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:249
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:205
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:207
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:111
 #, c-format
 msgid "Bibliographic"
@@ -14425,7 +14446,7 @@ msgstr "書目"
 msgid "Bibliographic data"
 msgstr "書目資料"
 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:70
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:86
 #, c-format
 msgid "Bibliographic data to print"
 msgstr "待列印的書目資料"
@@ -14444,7 +14465,7 @@ msgid "Bibliographic record"
 msgstr "書目紀錄"
 
 #. %1$s:  object 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:192
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:195
 #, c-format
 msgid "Bibliographic record %s"
 msgstr "書目紀錄 %s"
@@ -14953,7 +14974,7 @@ msgstr "Brooke Johnson"
 #. For the first occurrence,
 #. %1$s:  FOREACH letter IN alphabet.split(' ') 
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:50
-#: intranet-tmpl/prog/en/modules/members/member.tt:98
+#: intranet-tmpl/prog/en/modules/members/member.tt:99
 #, c-format
 msgid "Browse by last name: %s "
 msgstr "依姓瀏覽：%s "
@@ -15188,20 +15209,20 @@ msgstr ""
 "NETWORK: * # Resources that can be substituted if the user is offline "
 "FALLBACK: "
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:178
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:180
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:151
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:153
 #, c-format
 msgid "CANMARC"
 msgstr "CANMARC"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:203
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:205
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:176
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:178
 #, c-format
 msgid "CATMARC"
 msgstr "CATMARC"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:143
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:145
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:116
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:118
 #, c-format
 msgid "CCF"
 msgstr "CCF"
@@ -15377,7 +15398,7 @@ msgstr "索書號"
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:752
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:505
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:145
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:146
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:105
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:171
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:529
@@ -15388,7 +15409,7 @@ msgstr "索書號"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:377
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:179
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:222
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:61
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:62
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:63
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:45
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:66
@@ -15546,7 +15567,7 @@ msgstr "不能儲存此紀錄，因為以下欄位尚未填入資料："
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:118
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:270
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:119
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:274
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:219
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:529
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:153
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:246
@@ -15580,7 +15601,7 @@ msgstr "不能儲存此紀錄，因為以下欄位尚未填入資料："
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:185
 #: intranet-tmpl/prog/en/modules/labels/label-print.tt:100
 #: intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:165
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:162
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:178
 #: intranet-tmpl/prog/en/modules/labels/label-edit-profile.tt:133
 #: intranet-tmpl/prog/en/modules/labels/search.tt:104
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:110
@@ -15688,7 +15709,7 @@ msgstr "不能儲存此紀錄，因為以下欄位尚未填入資料："
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:576
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:579
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:581
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:340
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:342
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:296
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:46
 #: intranet-tmpl/prog/en/modules/acqui/modordernotes.tt:37
@@ -15701,7 +15722,7 @@ msgstr "不能儲存此紀錄，因為以下欄位尚未填入資料："
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:495
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:371
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:148
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:149
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:128
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:142
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:200
@@ -15824,12 +15845,12 @@ msgid "Cannot Delete"
 msgstr "不能刪除"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:146
-#: intranet-tmpl/prog/en/modules/members/member.tt:93
+#: intranet-tmpl/prog/en/modules/members/member.tt:94
 #, c-format
 msgid "Cannot add patron"
 msgstr "不能新增讀者"
 
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:98
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:99
 #, c-format
 msgid "Cannot be ordered"
 msgstr "不能訂購"
@@ -15993,7 +16014,7 @@ msgstr "卡拉卡斯，委內瑞拉"
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:194
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:143
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:77
-#: intranet-tmpl/prog/en/modules/members/member.tt:165
+#: intranet-tmpl/prog/en/modules/members/member.tt:166
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:172
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:289
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:437
@@ -16104,7 +16125,7 @@ msgstr "頌歌"
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:8
 #, c-format
 msgid "Cart"
-msgstr "採購項目"
+msgstr "採購單"
 
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:196
 #, c-format
@@ -16128,7 +16149,7 @@ msgstr "Cassini的"
 msgid "Cassini-Soldner"
 msgstr "卡西尼-索爾特奈投影"
 
-#: intranet-tmpl/prog/en/modules/members/member.tt:167
+#: intranet-tmpl/prog/en/modules/members/member.tt:168
 #, c-format
 msgid "Cat"
 msgstr "目錄"
@@ -16146,7 +16167,7 @@ msgstr "目錄"
 #: intranet-tmpl/prog/en/modules/errors/405.tt:54
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:53
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:22
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:24
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:25
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:36
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:47
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:281
@@ -16286,7 +16307,7 @@ msgstr "類型代碼不明。"
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:309
 #, c-format
 msgid "Category code:"
-msgstr "範圍代碼："
+msgstr "類型代碼："
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:127
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:130
@@ -16295,7 +16316,7 @@ msgstr "範圍代碼："
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:62
 #, c-format
 msgid "Category code: "
-msgstr "範圍代碼："
+msgstr "類型代碼："
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:275
 #, c-format
@@ -16430,12 +16451,12 @@ msgstr "改變"
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:382
 msgid "Change basket group"
-msgstr "改變採購項目群組"
+msgstr "改變採購單群組"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:219
 msgid "Change basketgroup"
-msgstr "改變借出籃群組"
+msgstr "改變採購單群組"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:483
 #, c-format
@@ -16455,9 +16476,8 @@ msgstr "改變館藏狀態"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1319
-#, fuzzy
 msgid "Change messaging preferences to default for this category?"
-msgstr "此讀者類型的預設訊息偏好"
+msgstr "將此類型的訊息偏好改為預設？"
 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:311
 #, c-format
@@ -16598,7 +16618,7 @@ msgstr "圖表"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:9
 msgid "Check All"
-msgstr "全部檢查"
+msgstr "全選"
 
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:654
 #, c-format
@@ -16623,7 +16643,7 @@ msgstr "借出"
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:174
 #, c-format
 msgid "Check all"
-msgstr "全部檢查"
+msgstr "全選"
 
 #: intranet-tmpl/prog/en/includes/serials-menu.inc:21
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:42
@@ -16802,7 +16822,7 @@ msgstr "還入日期"
 msgid "Check-in date from:"
 msgstr "還入日期："
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:333
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:278
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:350
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:352
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:547
@@ -16813,7 +16833,7 @@ msgstr "還入日期："
 msgid "Checked"
 msgstr "檢查"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:121
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:94
 #, c-format
 msgid "Checked (searched by default): "
 msgstr "檢查(預設搜尋)："
@@ -16845,7 +16865,7 @@ msgid "Checked out "
 msgstr "借出 "
 
 #. %1$s:  total 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:37
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:38
 #, c-format
 msgid "Checked out %s times"
 msgstr "借出 %s  次"
@@ -16860,7 +16880,7 @@ msgstr "借出 %s 給 "
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:730
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:718
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:736
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:42
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:43
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:422
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:481
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:55
@@ -16890,7 +16910,7 @@ msgstr "今天借出"
 msgid "Checked-in items"
 msgstr "還入館藏"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:302
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:247
 #, c-format
 msgid "Checked: "
 msgstr "檢查："
@@ -16915,7 +16935,7 @@ msgstr "還入訊息類型："
 msgid "Checkin message: "
 msgstr "還入訊息："
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:46
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:47
 #, c-format
 msgid "Checkin on"
 msgstr "還入於"
@@ -16983,12 +17003,12 @@ msgid "Checkout history"
 msgstr "借出紀錄"
 
 #. %1$s:  title |html 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:32
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:33
 #, c-format
 msgid "Checkout history for %s"
 msgstr "借出紀錄 %s"
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:44
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:45
 #, c-format
 msgid "Checkout on"
 msgstr "借出於"
@@ -17100,7 +17120,7 @@ msgstr "選擇成人類型 "
 msgid "Choose Hemisphere:"
 msgstr "選擇半球："
 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:75
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:91
 #, c-format
 msgid "Choose Order Of Text Fields to Print"
 msgstr "選擇文字檔案訂單至列印"
@@ -17137,12 +17157,12 @@ msgstr "選擇圖示："
 msgid "Choose and validate 1 MARC subfield for "
 msgstr "選擇並啟用一個機讀編目格式分欄 "
 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:45
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:61
 #, c-format
 msgid "Choose barcode type (encoding): "
 msgstr "選擇條碼類型(編碼方式)："
 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:57
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:73
 #, c-format
 msgid "Choose layout type: "
 msgstr "選擇佈局類型："
@@ -17171,7 +17191,7 @@ msgstr ""
 "選擇一個以限制此屬性祗適用於特定的讀者類型。若您希望適用於所有的讀者類型，請"
 "保留空白。"
 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:73
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:89
 #, c-format
 msgid "Choose order of text fields to print"
 msgstr "選擇文字欄位的排序供列印之用"
@@ -17179,7 +17199,7 @@ msgstr "選擇文字欄位的排序供列印之用"
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:371
 #, c-format
 msgid "Choose the file to add to the basket"
-msgstr "選擇新增入採購項目的檔案"
+msgstr "選擇新增入採購單的檔案"
 
 #. A
 #: intranet-tmpl/prog/en/modules/serials/result.tt:50
@@ -17275,7 +17295,7 @@ msgstr "Christopher Hyde"
 msgid "Cindy Murdock Ames"
 msgstr "Cindy Murdock Ames"
 
-#: intranet-tmpl/prog/en/modules/members/member.tt:172
+#: intranet-tmpl/prog/en/modules/members/member.tt:173
 #, c-format
 msgid "Circ note"
 msgstr "流通說明"
@@ -17299,7 +17319,7 @@ msgstr "流通說明"
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:29
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:15
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:95
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:76
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:77
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:29
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:9
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:16
@@ -17654,7 +17674,7 @@ msgstr "全部清除"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:9
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:308
 #: intranet-tmpl/prog/en/modules/members/pay.tt:69
-#: intranet-tmpl/prog/en/modules/members/member.tt:123
+#: intranet-tmpl/prog/en/modules/members/member.tt:124
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:8
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:132
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:111
@@ -17973,7 +17993,7 @@ msgstr "關閉與列印"
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:284
 #, c-format
 msgid "Close basket group"
-msgstr "關閉借出籃群組"
+msgstr "關閉採購單群組"
 
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:828
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:415
@@ -17984,7 +18004,7 @@ msgstr "關閉分數"
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:189
 #, c-format
 msgid "Close this basket"
-msgstr "關閉借出籃"
+msgstr "關閉採購單"
 
 #. A
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:162
@@ -18478,7 +18498,7 @@ msgstr "電腦檔案"
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:139
 #, c-format
 msgid "Computer file/Electronic resource"
-msgstr "電腦檔案/電子來源"
+msgstr "電腦檔/電子資源"
 
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:434
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:163
@@ -18654,7 +18674,7 @@ msgid "Confirm deletion of record matching rule "
 msgstr "確認刪除匹配規則 "
 
 #. %1$s:  searchfield 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:294
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:239
 #, c-format
 msgid "Confirm deletion of server %s"
 msgstr "確認刪除伺服器 %s"
@@ -19274,7 +19294,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/itemtypes.tt:38
 #, c-format
 msgid "Count"
-msgstr "計算"
+msgstr "總數"
 
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:330
 #, c-format
@@ -19346,7 +19366,7 @@ msgstr "國家："
 #: intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:66
 #, c-format
 msgid "Course #"
-msgstr "課程編號"
+msgstr "課程代號"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:541
 #, c-format
@@ -19366,12 +19386,12 @@ msgstr "課程名稱："
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:60
 #, c-format
 msgid "Course number"
-msgstr "課程編號"
+msgstr "課程代號"
 
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:93
 #, c-format
 msgid "Course number:"
-msgstr "課程編號："
+msgstr "課程代號："
 
 #: intranet-tmpl/prog/en/includes/header.inc:26
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:11
@@ -19561,7 +19581,7 @@ msgstr "新增者："
 #: intranet-tmpl/prog/en/columns.def:116
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:853
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:304
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:208
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:209
 #, c-format
 msgid "Creation date"
 msgstr "登記日期"
@@ -19795,8 +19815,8 @@ msgstr "D Ruth Bavousett (3.12 翻譯經理)"
 msgid "D&aelig;nsk (Danish)"
 msgstr "D&aelig;nsk (丹麥文)"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:168
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:170
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:141
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:143
 #, c-format
 msgid "DANMARC"
 msgstr "DANMARC"
@@ -19930,7 +19950,7 @@ msgstr "資料被刪除"
 msgid "Data error"
 msgstr "資料錯誤"
 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:103
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:119
 #, c-format
 msgid "Data fields"
 msgstr "資料欄位"
@@ -19949,7 +19969,7 @@ msgid "Data:"
 msgstr "資料："
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:136
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:333
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:278
 #, c-format
 msgid "Database"
 msgstr "資料庫"
@@ -19969,9 +19989,8 @@ msgstr "資料庫設定："
 msgid "Database tables created"
 msgstr "新增資料庫表"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:98
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:115
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:299
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:88
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:244
 #, c-format
 msgid "Database: "
 msgstr "資料庫："
@@ -19999,7 +20018,7 @@ msgstr "資料庫："
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:75
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:47
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:104
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:137
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:138
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:436
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:510
 #: intranet-tmpl/prog/en/modules/about.tt:597
@@ -20513,7 +20532,7 @@ msgstr "%s 敬啟者"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/calendar.inc:1
 msgid "Dec"
-msgstr "12月"
+msgstr "十二月"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121b.tt:222
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121b.tt:224
@@ -20527,7 +20546,7 @@ msgstr "十公尺"
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:129
 #, c-format
 msgid "December"
-msgstr "12月"
+msgstr "十二月"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121b.tt:212
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121b.tt:214
@@ -20814,7 +20833,7 @@ msgstr "延遲是逾期後天數，屆時才啟發逾期通知。 "
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:386
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:98
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:111
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:343
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:288
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:575
 #: intranet-tmpl/prog/en/modules/admin/searchengine/solr/indexes.tt:6
 #: intranet-tmpl/prog/en/modules/admin/searchengine/solr/indexes.tt:182
@@ -20937,22 +20956,22 @@ msgstr "刪除全部館藏"
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:206
 #, c-format
 msgid "Delete basket"
-msgstr "刪除採購項目"
+msgstr "刪除採購單"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:218
 #, c-format
 msgid "Delete basket and orders"
-msgstr "刪除採購項目與訂單"
+msgstr "刪除採購單與訂單"
 
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:149
 #, c-format
 msgid "Delete basket group"
-msgstr "刪除採購項目群組"
+msgstr "刪除採購單群組"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:219
 #, c-format
 msgid "Delete basket, orders and bibs"
-msgstr "刪除採購項目、訂單與書目"
+msgstr "刪除採購單、訂單與書目"
 
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:179
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:157
@@ -21078,7 +21097,7 @@ msgstr "若無館藏附屬，則刪除該筆紀錄。"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:579
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:361
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:250
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:251
 #, c-format
 msgid "Delete selected"
 msgstr "刪除選定的部份"
@@ -21155,7 +21174,7 @@ msgstr "刪除此標籤"
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:183
 #, c-format
 msgid "Delete this basket"
-msgstr "刪除此採購項目"
+msgstr "刪除此採購單"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:270
@@ -21189,7 +21208,7 @@ msgid "Delete this saved report"
 msgstr "刪除此儲存的報表"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:308
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:253
 msgid "Delete this server"
 msgstr "刪除此伺服器"
 
@@ -21343,7 +21362,7 @@ msgstr "系所："
 #: intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:65
 #, c-format
 msgid "Dept."
-msgstr "系科級班"
+msgstr "系所"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:189
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:302
@@ -21760,17 +21779,17 @@ msgid "Display children too."
 msgstr "也顯示兒童。"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:170
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:172
 msgid "Display detail for this authority"
 msgstr "顯示此權威的詳情"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:161
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:163
 msgid "Display detail for this biblio"
 msgstr "顯示此書目的詳情"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:180
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:182
 msgid "Display detail for this item"
 msgstr "顯示此館藏的詳情"
 
@@ -21795,18 +21814,18 @@ msgstr "顯示於線上公用目錄 "
 msgid "Display in check-out: "
 msgstr "顯示於借出："
 
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:78
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:79
 #, c-format
 msgid "Display location"
 msgstr "顯示位置"
 
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:153
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:154
 #, c-format
 msgid "Display location:"
 msgstr "顯示位置："
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:155
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:157
 msgid "Display member details."
 msgstr "顯示讀者詳情。"
 
@@ -21886,7 +21905,7 @@ msgid ""
 msgstr "不要新增重複的紀錄，從目錄內的既有紀錄新增訂閱。"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:308
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:253
 msgid "Do not delete"
 msgstr "不要刪除"
 
@@ -22086,7 +22105,7 @@ msgstr "下載為XML"
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:11
 #, c-format
 msgid "Download cart"
-msgstr "下載借出籃"
+msgstr "下載採購單"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/export.tt:240
@@ -22151,7 +22170,7 @@ msgstr "戲劇"
 msgid "Dramas"
 msgstr "戲劇"
 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:115
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:131
 #, c-format
 msgid "Draw guide boxes: "
 msgstr "繪製書標邊線："
@@ -22185,7 +22204,7 @@ msgstr "到期日 %s"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:731
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:505
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:100
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:45
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:46
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:417
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:418
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:477
@@ -22358,7 +22377,7 @@ msgstr "每個儲存格包括實際的與估計的值"
 msgid "Each contains a blank (#) or a fill character (|)"
 msgstr "每個都包括一個空格 (#) 或一個填充字元 (|)"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:103
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:104
 #, c-format
 msgid "Earliest hold date"
 msgstr "最早預約日期"
@@ -22397,7 +22416,7 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:229
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:186
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:385
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:343
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:288
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:574
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:246
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:276
@@ -22434,9 +22453,9 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:725
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:91
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:154
-#: intranet-tmpl/prog/en/modules/members/member.tt:205
-#: intranet-tmpl/prog/en/modules/members/member.tt:208
-#: intranet-tmpl/prog/en/modules/members/member.tt:210
+#: intranet-tmpl/prog/en/modules/members/member.tt:206
+#: intranet-tmpl/prog/en/modules/members/member.tt:209
+#: intranet-tmpl/prog/en/modules/members/member.tt:211
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:230
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:232
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:300
@@ -22451,7 +22470,7 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:342
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:345
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:405
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:245
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:246
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:200
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:59
 #, c-format
@@ -22524,20 +22543,20 @@ msgstr "編輯權威"
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:182
 #, c-format
 msgid "Edit basket"
-msgstr "編輯採購項目"
+msgstr "編輯採購單"
 
 #. %1$s:  basketname 
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:34
 #, c-format
 msgid "Edit basket %s"
-msgstr "編輯採購項目 %s"
+msgstr "編輯採購單 %s"
 
 #. %1$s:  name 
 #. %2$s:  basketgroupid 
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:154
 #, c-format
 msgid "Edit basket group %s (%s) for "
-msgstr "編輯採購項目群組  %s (%s) 給 "
+msgstr "編輯採購單群組  %s (%s) 給 "
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:491
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:153
@@ -22831,7 +22850,7 @@ msgid "Email:"
 msgstr "電子郵件："
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:128
-#: intranet-tmpl/prog/en/modules/members/member.tt:196
+#: intranet-tmpl/prog/en/modules/members/member.tt:197
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:369
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:80
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:202
@@ -22869,17 +22888,17 @@ msgstr "啟用"
 msgid "Enabled?"
 msgstr "啟用？"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:333
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:278
 #, c-format
 msgid "Encoding"
 msgstr "編碼"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:215
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:188
 #, c-format
 msgid "Encoding (z3950 can send"
 msgstr "編碼(Z39.50可送出"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:305
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:250
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:143
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:344
 #, c-format
@@ -22934,14 +22953,14 @@ msgid "End date missing"
 msgstr "遺失終止日期"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:303
+#: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:124
 #, c-format
 msgid "End date:"
 msgstr "終止日期："
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:183
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:222
-#: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:112
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:175
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:176
 #: intranet-tmpl/prog/en/modules/tools/export.tt:92
 #, c-format
 msgid "End date: "
@@ -23006,7 +23025,7 @@ msgid ""
 "label printers"
 msgstr "鍵入條碼，產生可列印的書標，供指定的書標列表機使用"
 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:106
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:122
 #, c-format
 msgid "Enter a comma separated list of fields to print. You may include any "
 msgstr "鍵入逗點區隔列印的欄位，您可包括任何 "
@@ -23611,15 +23630,15 @@ msgstr "過期"
 
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:83
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:155
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:62
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:209
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:63
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:210
 #, c-format
 msgid "Expiration date"
 msgstr "到期日"
 
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:78
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:327
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:131
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:132
 #, c-format
 msgid "Expiration date: "
 msgstr "到期日："
@@ -23655,7 +23674,7 @@ msgstr "到期日："
 
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:149
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:81
-#: intranet-tmpl/prog/en/modules/members/member.tt:169
+#: intranet-tmpl/prog/en/modules/members/member.tt:170
 #, c-format
 msgid "Expires on"
 msgstr "到期日"
@@ -23844,12 +23863,12 @@ msgstr "以批次匯出單筆或多筆讀者證"
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:228
 #, c-format
 msgid "Export this basket as CSV"
-msgstr "匯出此採購項目為CSV格式"
+msgstr "匯出此採購單為CSV格式"
 
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:145
 #, c-format
 msgid "Export this basket group as CSV"
-msgstr "匯出此採購項目群組為CSV格式"
+msgstr "匯出此採購單群組為CSV格式"
 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:197
 #, c-format
@@ -23895,8 +23914,8 @@ msgstr "匯出 %s 讀者證。"
 msgid "Extended Roman"
 msgstr "延伸羅馬字型"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:173
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:175
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:146
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:148
 #, c-format
 msgid "FINMARC"
 msgstr "FINMARC"
@@ -24340,7 +24359,7 @@ msgstr "幻燈捲片"
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:73
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:111
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:122
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:197
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:198
 #, c-format
 msgid "Filter"
 msgstr "篩選器"
@@ -24433,7 +24452,7 @@ msgstr "罰款寬限期(天)"
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:70
 #: intranet-tmpl/prog/en/includes/members-menu.inc:7
 #: intranet-tmpl/prog/en/includes/circ-menu.tt:73
-#: intranet-tmpl/prog/en/modules/members/member.tt:171
+#: intranet-tmpl/prog/en/modules/members/member.tt:172
 #, c-format
 msgid "Fines"
 msgstr "罰款"
@@ -24476,7 +24495,7 @@ msgstr "Finlay Thompson"
 #: intranet-tmpl/prog/en/includes/datatables.inc:2
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:6
 msgid "First"
-msgstr "首先"
+msgstr "最前頁"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:178
 #, c-format
@@ -24593,7 +24612,7 @@ msgstr "遵從系統偏好 BlockExpiredPatronOpacActions 的設定 "
 msgid "Font"
 msgstr "字型"
 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:155
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:171
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:205
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:259
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:313
@@ -24601,7 +24620,7 @@ msgstr "字型"
 msgid "Font size: "
 msgstr "字體大小："
 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:143
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:159
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:193
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:247
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:301
@@ -25229,7 +25248,7 @@ msgstr "全譜"
 msgid "Full score, miniature or study size"
 msgstr "全譜、簡譜或學習譜"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:133
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:134
 #, c-format
 msgid "Fullfilled"
 msgstr "填入"
@@ -25612,7 +25631,7 @@ msgstr "Gnomic"
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:640
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:722
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:736
-#: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:119
+#: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:130
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:299
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:206
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:50
@@ -26046,7 +26065,7 @@ msgstr "Henri-Damien Laurent"
 #: intranet-tmpl/prog/en/modules/basket/sendbasket.tt:14
 #, c-format
 msgid "Here is your cart, sent from our online catalog."
-msgstr "從您的線上目錄寄來的借出籃。"
+msgstr "從您的線上目錄寄來的採購單。"
 
 #. %1$s:  shelfname 
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelf.tt:13
@@ -26257,9 +26276,9 @@ msgstr "預約政策"
 msgid "Hold ratio"
 msgstr "預約比率"
 
-#: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:103
-#, c-format
-msgid "Hold ratio: "
+#: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:105
+#, fuzzy, c-format
+msgid "Hold ratio:"
 msgstr "預約比率："
 
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:42
@@ -26302,17 +26321,17 @@ msgstr "館藏圖書館"
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:50
 #, c-format
 msgid "Holding library"
-msgstr "預約圖書館"
+msgstr "借出圖書館"
 
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:80
 #, c-format
 msgid "Holding library:"
-msgstr "預約圖書館："
+msgstr "借出圖書館："
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:495
 #, c-format
 msgid "Holdings"
-msgstr "預約"
+msgstr "館藏"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:667
 #, c-format
@@ -26322,7 +26341,7 @@ msgstr "館藏註："
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:752
 #, c-format
 msgid "Holdings:"
-msgstr "預約："
+msgstr "館藏："
 
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:13
 #: intranet-tmpl/prog/en/includes/biblio-view-menu.inc:24
@@ -26336,11 +26355,6 @@ msgstr "預約："
 #, c-format
 msgid "Holds"
 msgstr "預約"
-
-#: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:40
-#, c-format
-msgid "Holds Queue"
-msgstr "預約排程"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:156
 #, c-format
@@ -26367,6 +26381,7 @@ msgid "Holds listed here have been awaiting pickup for more than %s days."
 msgstr "預約到館待提取已逾 %s 天。"
 
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:30
+#: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:40
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:39
 #, c-format
 msgid "Holds queue"
@@ -26388,7 +26403,7 @@ msgstr "預約狀態"
 #. %2$s:  from 
 #. %3$s:  to 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:84
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:85
 #, c-format
 msgid "Holds to pull%s placed between %s and %s%s"
 msgstr "預約狀態 %s 置於 %s 與 %s%s之間"
@@ -26486,7 +26501,7 @@ msgstr "全像"
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:100
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:46
 #: intranet-tmpl/prog/en/modules/admin/item_circulation_alerts.tt:91
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:64
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:54
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:175
 #: intranet-tmpl/prog/en/modules/admin/searchengine/solr/indexes.tt:67
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:53
@@ -26525,7 +26540,7 @@ msgstr "全像"
 #: intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:8
 #: intranet-tmpl/prog/en/modules/labels/label-home.tt:13
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:101
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:26
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:42
 #: intranet-tmpl/prog/en/modules/labels/label-edit-profile.tt:43
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:11
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:40
@@ -26555,7 +26570,7 @@ msgstr "全像"
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:28
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:15
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:95
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:76
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:77
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:29
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:9
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:9
@@ -26573,7 +26588,7 @@ msgstr "全像"
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:25
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:53
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:22
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:24
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:25
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:36
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:281
 #: intranet-tmpl/prog/en/modules/catalogue/subject.tt:10
@@ -26609,7 +26624,7 @@ msgstr "全像"
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:17
 #: intranet-tmpl/prog/en/modules/members/member-flags.tt:106
 #: intranet-tmpl/prog/en/modules/members/routing-lists.tt:9
-#: intranet-tmpl/prog/en/modules/members/member.tt:76
+#: intranet-tmpl/prog/en/modules/members/member.tt:77
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:23
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:119
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:27
@@ -26633,7 +26648,7 @@ msgstr "全像"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:171
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:122
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:130
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:41
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:42
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:10
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:54
 #: intranet-tmpl/prog/en/modules/acqui/modordernotes.tt:15
@@ -26665,7 +26680,7 @@ msgstr "全像"
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:14
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:53
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:9
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:54
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:55
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:193
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:20
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:29
@@ -26784,14 +26799,13 @@ msgstr "紐西蘭赫羅范努瓦圖書館理事會"
 msgid "Host records"
 msgstr "主紀錄"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:333
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:278
 #, c-format
 msgid "Hostname/Port"
 msgstr "主機位址/埠"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:91
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:111
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:297
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:84
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:242
 #, c-format
 msgid "Hostname: "
 msgstr "主機位址："
@@ -26868,8 +26882,8 @@ msgstr "我遇到麻煩。"
 msgid "I18N/L10N"
 msgstr "I18N/L10N"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:198
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:200
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:171
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:173
 #, c-format
 msgid "IBERMARC"
 msgstr "IBERMARC"
@@ -26890,8 +26904,8 @@ msgstr "儲存鍵入的"
 msgid "INSTID:12345,LANG:fr"
 msgstr "INSTID:12345,LANG:fr"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:138
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:140
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:111
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:113
 #, c-format
 msgid "INTERMARC"
 msgstr "INTERMARC"
@@ -27059,7 +27073,7 @@ msgstr "ISO2709 無館藏"
 #: intranet-tmpl/prog/en/modules/labels/search.tt:42
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:393
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:394
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:57
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:58
 #, c-format
 msgid "ISSN"
 msgstr "國際標準期刊號"
@@ -27540,13 +27554,13 @@ msgstr "匯入 >>"
 msgid ""
 "Import all the checked items in the basket with the following accounting "
 "details (used only if no information is filled for the item):"
-msgstr "以下列帳戶詳情匯入採購項目勾選的館藏(祗限無資訊的館藏)："
+msgstr "以下列帳戶詳情匯入採購單勾選的館藏(祗限無資訊的館藏)："
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:266
 #, c-format
 msgid ""
 "Import all the checked items in the basket with the following parameters:"
-msgstr "以下列參數匯入採購項目內勾選的館藏："
+msgstr "以下列參數匯入採購單內勾選的館藏："
 
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:203
 #, c-format
@@ -27694,12 +27708,10 @@ msgstr "包括失效的訂閱："
 msgid "Include tax"
 msgstr "含稅"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:93
-#, c-format
-msgid ""
-"Includes the domain part, but the path part of the URL should go into "
-"Database."
-msgstr ""
+#: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:110
+#, fuzzy, c-format
+msgid "Included ordered:"
+msgstr "取消訂單"
 
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:10
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:366
@@ -27797,7 +27809,7 @@ msgstr "個別傳記"
 msgid "Individual libraries:"
 msgstr "個別圖書館："
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:142
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:143
 #, c-format
 msgid "Info"
 msgstr "資訊"
@@ -28221,7 +28233,7 @@ msgstr "期 #"
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:298
 #, c-format
 msgid "Issue history"
-msgstr "發行版紀錄"
+msgstr "到館紀錄"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:251
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:270
@@ -28318,8 +28330,8 @@ msgstr "館藏 "
 
 #. For the first occurrence,
 #. %1$s:  loopro.object 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:159
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:180
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:161
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:182
 #, c-format
 msgid "Item %s"
 msgstr "館藏 %s"
@@ -28430,9 +28442,8 @@ msgstr "館藏資訊 %s%s %s "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "Item is <strong>in transit</strong> from %s since %s"
-msgstr "館藏 <strong>轉移</strong> 自 %s"
+msgstr "館藏 <strong>轉移</strong> 從 %s 自從 %s"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
@@ -28522,7 +28533,7 @@ msgstr "館藏記錄最新的同步時間："
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:98
 #, c-format
 msgid "Item renewed:"
-msgstr "續借的館藏："
+msgstr "館藏續借："
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:492
 #, c-format
@@ -28699,8 +28710,8 @@ msgstr "館藏號"
 msgid "Items"
 msgstr "館藏"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:94
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:141
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:95
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:142
 #, c-format
 msgid "Items available"
 msgstr "可取得的館藏"
@@ -28742,7 +28753,7 @@ msgstr "此書架內的館藏"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/doc-head-close.inc:34
 msgid "Items in your cart: "
-msgstr "採購項目裡的館藏："
+msgstr "採購單裡的館藏："
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:364
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:166
@@ -29223,7 +29234,7 @@ msgstr "Kip DeGraaf"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:54
 #, c-format
 msgid "Kit"
-msgstr "組件"
+msgstr "特殊教學資料"
 
 #: intranet-tmpl/prog/en/xslt/NORMARCslim2intranetResults.xsl:712
 #, c-format
@@ -29347,7 +29358,7 @@ msgid ""
 "Koha &rsaquo; Acquisitions &rsaquo; %s %sEdit basket '%s' %sAdd a basket to "
 "%s %s %s "
 msgstr ""
-"Koha &rsaquo; 採訪 &rsaquo; %s %s編輯採購項目 '%s' %s新增採購項目至 %s %s %s "
+"Koha &rsaquo; 採訪 &rsaquo; %s %s編輯採購單 '%s' %s新增採購單至 %s %s %s "
 
 #. %1$s:  IF ( date ) 
 #. %2$s:  name 
@@ -29378,7 +29389,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Koha &rsaquo; Acquisitions &rsaquo; %sNew %s%sDelete %sBasket %s (%s) for %s"
-msgstr "Koha &rsaquo; 採訪 &rsaquo; %s新增 %s%s刪除 %s採購項目 %s (%s) 給 %s"
+msgstr "Koha &rsaquo; 採訪 &rsaquo; %s新增 %s%s刪除 %s採購單 %s (%s) 給 %s"
 
 #. %1$s:  IF ( opsearch ) 
 #. %2$s:  ELSE 
@@ -29429,15 +29440,15 @@ msgid ""
 "Koha &rsaquo; Acquisitions &rsaquo; Basket %s &rsaquo; %sModify order "
 "details (line #%s)%sNew order%s"
 msgstr ""
-"Koha &rsaquo; 採訪 &rsaquo; 採購項目 %s &rsaquo; %s修改訂單詳情 (列 #%s)%s新"
-"增訂單%s"
+"Koha &rsaquo; 採訪 &rsaquo; 採購單 %s &rsaquo; %s修改訂單詳情 (列 #%s)%s新增"
+"訂單%s"
 
 #. %1$s:  basketno 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:2
 #, c-format
 msgid ""
 "Koha &rsaquo; Acquisitions &rsaquo; Basket %s &rsaquo; Duplicate warning"
-msgstr "Koha &rsaquo; 採訪 &rsaquo; 採購項目 %s &rsaquo; 複製警示"
+msgstr "Koha &rsaquo; 採訪 &rsaquo; 採購單 %s &rsaquo; 複製警示"
 
 #. %1$s:  IF ( add_form ) 
 #. %2$s:  IF ( contractnumber ) 
@@ -30171,13 +30182,13 @@ msgstr "Koha &rsaquo; 條碼與書標 &rsaquo; 搜尋結果"
 #: intranet-tmpl/prog/en/modules/acqui/aqbasketuser_search.tt:2
 #, c-format
 msgid "Koha &rsaquo; Basket User Search"
-msgstr "Koha &rsaquo; 搜尋採購項目使用者"
+msgstr "Koha &rsaquo; 搜尋採購單使用者"
 
 #. %1$s:  booksellername |html 
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:3
 #, c-format
 msgid "Koha &rsaquo; Basket grouping for %s"
-msgstr "Koha &rsaquo; 採購項目群組 %s"
+msgstr "Koha &rsaquo; 採購單群組 %s"
 
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:2
 #, c-format
@@ -30552,7 +30563,7 @@ msgstr "Koha &rsaquo; 課程指定用書 &rsaquo; 課程詳情 %s"
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:2
 #, c-format
 msgid "Koha &rsaquo; Download cart"
-msgstr "Koha &rsaquo; 下載採購項目"
+msgstr "Koha &rsaquo; 下載採購單"
 
 #: intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:2
 #, c-format
@@ -30639,7 +30650,7 @@ msgstr "Koha &rsaquo; 新增讀者證 &rsaquo; 管理照片"
 #. %1$s:  IF ( searching ) 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:2
-#: intranet-tmpl/prog/en/modules/members/member.tt:2
+#: intranet-tmpl/prog/en/modules/members/member.tt:3
 #, c-format
 msgid "Koha &rsaquo; Patrons %s&rsaquo; Search results%s"
 msgstr "Koha &rsaquo; 讀者 %s&rsaquo; 搜尋結果%s"
@@ -31135,7 +31146,7 @@ msgstr "Koha &rsaquo; 工具 &rsaquo; 匯入讀者 %s&rsaquo; 結果%s"
 msgid "Koha &rsaquo; Tools &rsaquo; Inventory"
 msgstr "Koha &rsaquo; 工具 &rsaquo; 館藏盤點"
 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:2
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:11
 #: intranet-tmpl/prog/en/modules/labels/label-edit-profile.tt:2
 #, c-format
 msgid "Koha &rsaquo; Tools &rsaquo; Labels"
@@ -31455,7 +31466,7 @@ msgstr "Koha發展團隊"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:194
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:151
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:106
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:122
 #, c-format
 msgid "Koha field"
 msgstr "Koha欄位"
@@ -31677,8 +31688,8 @@ msgstr "LDR "
 msgid "LEAVE UNCHANGED"
 msgstr "請勿修改"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:163
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:165
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:136
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:138
 #, c-format
 msgid "LIBRISMARC"
 msgstr "LIBRISMARC"
@@ -31758,7 +31769,7 @@ msgstr "書標"
 #: intranet-tmpl/prog/en/includes/labels-menu.inc:2
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:168
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:103
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:28
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:44
 #, c-format
 msgid "Labels home"
 msgstr "書標首頁"
@@ -32050,7 +32061,7 @@ msgstr "拉丁"
 msgid "Law reports and digests"
 msgstr "法律報告與摘要"
 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:41
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:57
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:135
 #, c-format
 msgid "Layout name: "
@@ -32191,7 +32202,7 @@ msgid "LibLime, USA"
 msgstr "LibLime公司，美國"
 
 #: intranet-tmpl/prog/en/modules/serials/serials-recieve.tt:343
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:138
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:139
 #, c-format
 msgid "Librarian"
 msgstr "館員"
@@ -32201,10 +32212,10 @@ msgstr "館員"
 msgid "Librarian identity:"
 msgstr "館員辨識："
 
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:86
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:88
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:161
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:163
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:87
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:89
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:162
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:164
 #, c-format
 msgid "Librarian interface"
 msgstr "館員介面"
@@ -32215,7 +32226,7 @@ msgid "Librarian:"
 msgstr "館員："
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:162
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:97
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:98
 #, c-format
 msgid "Libraries"
 msgstr "圖書館"
@@ -32251,10 +32262,10 @@ msgstr "圖書館限制："
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:102
 #: intranet-tmpl/prog/en/modules/circ/stats.tt:31
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:80
-#: intranet-tmpl/prog/en/modules/members/member.tt:168
+#: intranet-tmpl/prog/en/modules/members/member.tt:169
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:121
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:122
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:60
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:61
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:112
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:164
 #: intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:90
@@ -32267,7 +32278,7 @@ msgstr "圖書館限制："
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:38
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:138
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:148
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:206
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:207
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:231
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:165
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:396
@@ -32416,8 +32427,8 @@ msgstr "圖書館："
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:91
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:89
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:110
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:105
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:178
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:106
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:179
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:123
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:127
 #: intranet-tmpl/prog/en/modules/tools/export.tt:68
@@ -32537,9 +32548,9 @@ msgstr "里斯本，葡萄牙"
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:237
 #, c-format
 msgid "List"
-msgstr "清單"
+msgstr "虛擬書架"
 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:100
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:116
 #, c-format
 msgid "List Fields"
 msgstr "清單欄位"
@@ -32559,7 +32570,7 @@ msgid ""
 "account.)%s"
 msgstr "不能新增虛擬書架。%s(不使用資料庫管理者帳號。)%s"
 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:98
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:114
 #, c-format
 msgid "List fields"
 msgstr "清單欄位"
@@ -32703,7 +32714,7 @@ msgstr "載入中..."
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:27
 msgid "Loading... you may continue scanning."
-msgstr ""
+msgstr "載入中...您可繼續掃瞄。"
 
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:242
 #, c-format
@@ -32784,7 +32795,7 @@ msgstr "地區設定："
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:221
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:41
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:85
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:205
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:206
 #, c-format
 msgid "Location"
 msgstr "位置"
@@ -33020,8 +33031,8 @@ msgstr "M&#257;ori"
 msgid "MADS (XML)"
 msgstr "MADS (XML)"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:208
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:210
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:181
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:183
 #, c-format
 msgid "MALMARC"
 msgstr "MALMARC"
@@ -33230,8 +33241,8 @@ msgstr "MARC-8"
 msgid "MARC21 Plugin to build links between records"
 msgstr "MARC21外掛程式建立紀錄間連結"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:148
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:150
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:121
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:123
 #, c-format
 msgid "MARC21/USMARC"
 msgstr "MARC21/USMARC"
@@ -33504,7 +33515,7 @@ msgstr "管理索引、層面與對映至機讀編目格式欄位與分欄。"
 msgid "Manage label batches"
 msgstr "管理書標批次"
 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:29
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:45
 #, c-format
 msgid "Manage label layouts"
 msgstr "管理書標布局"
@@ -33677,12 +33688,12 @@ msgstr "手稿"
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:197
 #, c-format
 msgid "Manuscript cartographic material"
-msgstr "手稿地圖資料"
+msgstr "手稿形式之地圖資料"
 
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:6
 #, c-format
 msgid "Manuscript language material"
-msgstr "手稿語文資料"
+msgstr "手稿形式之文字資料"
 
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:330
 #, c-format
@@ -34467,7 +34478,7 @@ msgstr "遺失"
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:301
 #, c-format
 msgid "Missing (damaged)"
-msgstr "遺漏(毀損)"
+msgstr "遺失(毀損)"
 
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:215
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:217
@@ -34479,7 +34490,7 @@ msgstr "遺漏(毀損)"
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:302
 #, c-format
 msgid "Missing (lost)"
-msgstr "遺漏(遺失)"
+msgstr "遺失(弄丟)"
 
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:200
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:202
@@ -34491,7 +34502,7 @@ msgstr "遺漏(遺失)"
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:299
 #, c-format
 msgid "Missing (never received)"
-msgstr "遺漏(不曾簽收)"
+msgstr "遺失(從未收到)"
 
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:205
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:207
@@ -34503,7 +34514,7 @@ msgstr "遺漏(不曾簽收)"
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:300
 #, c-format
 msgid "Missing (sold out)"
-msgstr "遺漏(售完)"
+msgstr "遺失(售完)"
 
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:348
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:478
@@ -34546,7 +34557,7 @@ msgstr "遺失開始日"
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:778
 #, c-format
 msgid "Mixed Materials"
-msgstr "混搭資料"
+msgstr "混合性資料"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:65
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:67
@@ -34663,7 +34674,6 @@ msgid "Modified stereographic for Alaska"
 msgstr "修改的阿拉斯加立體圖"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:206
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:262
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:105
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:422
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:532
@@ -34677,7 +34687,7 @@ msgstr "修改"
 msgid "Modify OAI set '%s'"
 msgstr "修改 OAI 資料集 '%s'"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:83
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:73
 #, c-format
 msgid "Modify Z39.50 server"
 msgstr "修改Z39.50伺服器"
@@ -34789,7 +34799,7 @@ msgstr "修改選定的館藏"
 msgid "Modify word"
 msgstr "修改高頻字"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:139
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:140
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:166
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:397
 #, c-format
@@ -35232,8 +35242,8 @@ msgstr "無名稱"
 msgid "NOAA"
 msgstr "NOAA"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:158
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:160
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:131
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:133
 #, c-format
 msgid "NORMARC"
 msgstr "NORMARC"
@@ -35312,7 +35322,7 @@ msgstr "Nahuel Angelinetti"
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:78
 #: intranet-tmpl/prog/en/modules/members/files.tt:31
 #: intranet-tmpl/prog/en/modules/members/guarantor_search.tt:80
-#: intranet-tmpl/prog/en/modules/members/member.tt:166
+#: intranet-tmpl/prog/en/modules/members/member.tt:167
 #: intranet-tmpl/prog/en/modules/acqui/aqbasketuser_search.tt:51
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:98
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:242
@@ -35569,8 +35579,8 @@ msgstr "新增CSV匯出設定檔"
 msgid "New SQL report"
 msgstr "新增SQL報表"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:85
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:324
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:75
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:269
 #, c-format
 msgid "New Z39.50 server"
 msgstr "新增Z39.50伺服器"
@@ -35594,7 +35604,7 @@ msgstr "新增 %s 的容許值"
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:86
 #, c-format
 msgid "New basket"
-msgstr "新增採購項目"
+msgstr "新增採購單"
 
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:304
 #, c-format
@@ -35677,7 +35687,7 @@ msgstr "新增幣別"
 msgid "New definition"
 msgstr "新增設定"
 
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:64
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:65
 #, c-format
 msgid "New entry"
 msgstr "新增項目"
@@ -35892,13 +35902,13 @@ msgstr "新增高頻字"
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:163
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:60
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:91
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:54
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:211
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:55
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:212
 #, c-format
 msgid "News"
 msgstr "公告"
 
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:143
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:144
 #, c-format
 msgid "News: "
 msgstr "公告："
@@ -35930,7 +35940,7 @@ msgstr "報紙格式"
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:158
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:215
 msgid "Next"
-msgstr "下一個"
+msgstr "下一頁"
 
 #: intranet-tmpl/prog/en/includes/page-numbers.inc:6
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:286
@@ -35941,11 +35951,11 @@ msgstr "下一個"
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:146
 #, c-format
 msgid "Next &gt;&gt;"
-msgstr "下一個&gt;&gt;"
+msgstr "下一頁&gt;&gt;"
 
 #. INPUT type=button
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:611
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:354
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:299
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:427
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:452
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:511
@@ -35960,7 +35970,7 @@ msgstr "下一個&gt;&gt;"
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:29
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:62
 msgid "Next >>"
-msgstr "下一個>>"
+msgstr "下一頁>>"
 
 #. INPUT type=button name=changepage_next
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:197
@@ -35989,13 +35999,13 @@ msgstr "下一筆紀錄"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/labs_theses.tt:97
 #, c-format
 msgid "Next&gt;&gt;"
-msgstr "下一個&gt;&gt;"
+msgstr "下一頁&gt;&gt;"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_4XX.tt:222
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_linking_section.tt:219
 #, c-format
 msgid "Next&gt;&gt; "
-msgstr "下一個&gt;&gt; "
+msgstr "下一頁&gt;&gt; "
 
 #: intranet-tmpl/prog/en/modules/about.tt:461
 #, c-format
@@ -36086,13 +36096,6 @@ msgid ""
 "No MARC frameworks are available for your language. Defaulting to the "
 "frameworks supplied for English (en)"
 msgstr "您的語系裡無可用的機讀編目格式框架，預設使用英文(en)的框架"
-
-#. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:14
-msgid ""
-"No SRU search field mappings have been defined. This means that all field "
-"searches will go through the whole record. Continue?"
-msgstr ""
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:335
 #, c-format
@@ -36365,7 +36368,7 @@ msgstr "未儲存電子郵件。"
 #: intranet-tmpl/prog/en/includes/datatables-strings.inc:1
 #: intranet-tmpl/prog/en/includes/datatables.inc:2
 msgid "No entries to show"
-msgstr "暫無課程"
+msgstr "暫無項目"
 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:74
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:185
@@ -36373,6 +36376,11 @@ msgstr "暫無課程"
 #, c-format
 msgid "No fund"
 msgstr "無基金"
+
+#: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:405
+#, fuzzy, c-format
+msgid "No fund found"
+msgstr "無預約。"
 
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:227
 #, c-format
@@ -36466,7 +36474,7 @@ msgstr "此條碼沒有對映的館藏"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/doc-head-close.inc:34
 msgid "No item was added to your cart"
-msgstr "無館藏加入此採購項目"
+msgstr "無館藏加入此採購單"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/doc-head-close.inc:34
@@ -36504,7 +36512,7 @@ msgstr "館藏沒有此 %s"
 
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:48
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:95
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:155
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:156
 #, c-format
 msgid "No items found."
 msgstr "找不到館藏。"
@@ -36530,7 +36538,7 @@ msgstr "沒有限制 %s 於 %s 讀者類型。若有限制，應特別聲明。"
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:140
 #, c-format
 msgid "No limit"
-msgstr "借限制"
+msgstr "無限制"
 
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:339
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:469
@@ -36544,7 +36552,7 @@ msgid "No linguistic content"
 msgstr "無語文內容"
 
 #. %1$s:  IF ( CATALOGUING ) 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:189
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:192
 #, c-format
 msgid "No log found %s for "
 msgstr "找不到 %s 的紀錄 "
@@ -36581,7 +36589,7 @@ msgstr "未找到遺失的期刊。"
 msgid "No more renewals possible"
 msgstr "無續借的可能"
 
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:253
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:254
 #, c-format
 msgid "No news loaded"
 msgstr "未上傳公告"
@@ -36650,7 +36658,7 @@ msgstr "無讀者使用該姓名，請再找其他"
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:176
 #, c-format
 msgid "No pending baskets"
-msgstr "無待決採購項目"
+msgstr "無待決採購單"
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:40
 #: intranet-tmpl/prog/en/includes/circ-menu.tt:43
@@ -36709,7 +36717,7 @@ msgstr "無公共虛擬書架"
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:9
 msgid ""
 "No quotes available. Please use the \\\"Add quote\\\" button to add a quote."
-msgstr "無引句可用。請使用 \\\"新增引句\\\" 鈕，以新增引句。"
+msgstr "無引句可用。請使用[新增引句]鈕，以新增引句。"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:172
 #, c-format
@@ -36741,7 +36749,7 @@ msgstr "您的搜尋未找到結果"
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:161
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:342
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:61
-#: intranet-tmpl/prog/en/modules/members/member.tt:224
+#: intranet-tmpl/prog/en/modules/members/member.tt:225
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:40
 #, c-format
 msgid "No results found"
@@ -36949,7 +36957,7 @@ msgstr "非必要值"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:258
 #, c-format
 msgid "Non-ISBD"
-msgstr "非國際標準書目著錄"
+msgstr "不採用ISBD之格式"
 
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:183
 #, c-format
@@ -36972,6 +36980,7 @@ msgstr "非音樂錄音"
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:119
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:203
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:24
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:9
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:77
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:154
 #: intranet-tmpl/prog/en/modules/tags/review.tt:16
@@ -37175,7 +37184,7 @@ msgstr "未安排或未轉移或未指定"
 #: intranet-tmpl/prog/en/modules/serials/serials-recieve.tt:266
 #, c-format
 msgid "Not available"
-msgstr "不可得"
+msgstr "不外借"
 
 #: intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:68
 #, c-format
@@ -37369,7 +37378,7 @@ msgstr "說明"
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:210
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:151
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:245
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:59
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:60
 #, c-format
 msgid "Notes "
 msgstr "說明 "
@@ -37509,7 +37518,7 @@ msgstr "通知代號"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/calendar.inc:1
 msgid "Nov"
-msgstr "11月"
+msgstr "十一月"
 
 #: intranet-tmpl/prog/en/xslt/NORMARCslim2intranetResults.xsl:549
 #, c-format
@@ -37528,7 +37537,7 @@ msgstr "小說"
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:128
 #, c-format
 msgid "November"
-msgstr "11月"
+msgstr "十一月"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/timepicker.inc:1
@@ -37552,7 +37561,7 @@ msgstr "期/讀者"
 #: intranet-tmpl/prog/en/modules/serials/showpredictionpattern.tt:49
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:319
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:356
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:207
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:208
 #, c-format
 msgid "Number"
 msgstr "編號"
@@ -37567,7 +37576,7 @@ msgstr "編號"
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:359
 #, c-format
 msgid "Number of baskets"
-msgstr "採購項目數量"
+msgstr "採購單數量"
 
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:27
 #, c-format
@@ -37695,7 +37704,7 @@ msgstr "更新紀錄數"
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:53
 #, c-format
 msgid "Number of renewals"
-msgstr "更新次數"
+msgstr "續借次數"
 
 #: intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:129
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:121
@@ -37800,10 +37809,10 @@ msgstr "OAI 資料集"
 msgid "OAI sets configuration"
 msgstr "OAI 資料集"
 
-#: intranet-tmpl/prog/en/modules/members/member.tt:170
+#: intranet-tmpl/prog/en/modules/members/member.tt:171
 #, c-format
 msgid "OD/Checkouts"
-msgstr "OD/借出"
+msgstr "逾期/借出"
 
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:186
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:363
@@ -37821,9 +37830,9 @@ msgstr "關"
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:233
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:267
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:278
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:281
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:288
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:317
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:226
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:233
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:262
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:122
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:137
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:310
@@ -37965,10 +37974,10 @@ msgstr "線上公用目錄"
 
 #. For the first occurrence,
 #. %1$s:  lang_lis.language 
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:97
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:99
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:172
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:174
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:98
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:100
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:173
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:175
 #, c-format
 msgid "OPAC (%s)"
 msgstr "'線上公用目錄 (%s)"
@@ -37983,7 +37992,7 @@ msgstr "線上公用目錄說明："
 msgid "OPAC View: "
 msgstr "檢視線上公用目錄："
 
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:76
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:77
 #, c-format
 msgid "OPAC and Koha news"
 msgstr "線上公用目錄與Koha公告"
@@ -38070,7 +38079,7 @@ msgstr "作業系統版本('uname -a') "
 msgid "OVER THE LIMIT"
 msgstr "超過限制"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:141
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:142
 #, c-format
 msgid "Object"
 msgstr "物件"
@@ -38857,7 +38866,7 @@ msgstr "訂單"
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:42
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:85
 #: intranet-tmpl/prog/en/modules/acqui/ordered.tt:41
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:94
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:95
 #, c-format
 msgid "Order "
 msgstr "訂單 "
@@ -38937,7 +38946,7 @@ msgstr "訂單狀態："
 
 #. A
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:85
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:94
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:95
 msgid "Order this one"
 msgstr "訂閱此"
 
@@ -39201,7 +39210,7 @@ msgstr "其他館藏"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:613
 #, c-format
 msgid "Other holdings:"
-msgstr "其他預約："
+msgstr "其他館藏："
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:98
 #, c-format
@@ -39434,8 +39443,8 @@ msgid ""
 "on a printer"
 msgstr "PDF - 可以被標準的PDF閱讀器讀取，標示為可直接由列表機列印"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:188
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:190
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:161
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:163
 #, c-format
 msgid "PICAMARC"
 msgstr "PICAMARC"
@@ -39559,7 +39568,7 @@ msgid "Passion music"
 msgstr "受難曲"
 
 #: intranet-tmpl/prog/en/columns.def:58
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:333
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:278
 #, c-format
 msgid "Password"
 msgstr "密碼"
@@ -39587,9 +39596,8 @@ msgstr "密碼至少應有 %s 字元"
 msgid "Password:"
 msgstr "密碼："
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:102
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:119
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:301
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:92
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:246
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:345
 #, c-format
 msgid "Password: "
@@ -39640,7 +39648,7 @@ msgstr "專利資訊："
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:505
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:35
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:101
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:40
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:41
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:591
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:485
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:77
@@ -39846,7 +39854,7 @@ msgid "Patron has outstanding fines: "
 msgstr "讀者有罰款待繳："
 
 #. INPUT type=text
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:142
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:143
 msgid "Patron holds"
 msgstr "讀者預約"
 
@@ -39917,7 +39925,7 @@ msgid "Patron lists"
 msgstr "讀者清單"
 
 #. OPTGROUP
-#: intranet-tmpl/prog/en/modules/members/member.tt:136
+#: intranet-tmpl/prog/en/modules/members/member.tt:137
 msgid "Patron lists:"
 msgstr "讀者清單："
 
@@ -40123,7 +40131,7 @@ msgstr "讀者："
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:17
 #: intranet-tmpl/prog/en/modules/members/member-flags.tt:106
 #: intranet-tmpl/prog/en/modules/members/routing-lists.tt:9
-#: intranet-tmpl/prog/en/modules/members/member.tt:76
+#: intranet-tmpl/prog/en/modules/members/member.tt:77
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:24
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:120
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:27
@@ -40158,7 +40166,7 @@ msgid "Patrons in list"
 msgstr "在清單裡的讀者"
 
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:141
-#: intranet-tmpl/prog/en/modules/members/member.tt:107
+#: intranet-tmpl/prog/en/modules/members/member.tt:108
 #, c-format
 msgid "Patrons requesting modifications"
 msgstr "讀者請求修改"
@@ -40181,7 +40189,7 @@ msgstr "新增讀者"
 msgid "Patrons who haven't checked out"
 msgstr "不曾借出的讀者"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:95
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:96
 #, c-format
 msgid "Patrons with holds"
 msgstr "預約的讀者"
@@ -40936,7 +40944,7 @@ msgstr "請選擇合併的紀錄，該紀錄被保留，刪除被合併的紀錄
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:62
 #, c-format
 msgid "Please click 'Next' to continue "
-msgstr "請勾選'下一個'，繼續作業 "
+msgstr "請勾選'下一頁'，繼續作業 "
 
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:51
 #, c-format
@@ -41426,9 +41434,8 @@ msgstr "通俗性(最多至最少)"
 msgid "Populate fields with default values from default framework "
 msgstr "填入預設框架裡的預設值 "
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:96
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:113
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:298
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:86
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:243
 #, c-format
 msgid "Port: "
 msgstr "埠："
@@ -41552,11 +41559,6 @@ msgstr "學齡前"
 msgid "Preschool; "
 msgstr "學齡前； "
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:104
-#, fuzzy, c-format
-msgid "Preselected (searched by default): "
-msgstr "檢查(預設搜尋)："
-
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115a.tt:512
 #, c-format
 msgid "Presentation format - motion picture"
@@ -41575,7 +41577,7 @@ msgstr "照片或非照片呈現技術："
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/calendar.inc:1
 msgid "Prev"
-msgstr "前一個"
+msgstr "上一頁"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:90
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:179
@@ -41608,7 +41610,7 @@ msgstr "預視傳閱清單 "
 #: intranet-tmpl/prog/en/includes/datatables-strings.inc:1
 #: intranet-tmpl/prog/en/includes/datatables.inc:2
 msgid "Previous"
-msgstr "前一個"
+msgstr "上一頁"
 
 #. INPUT type=button name=changepage_prev
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:193
@@ -41849,7 +41851,7 @@ msgstr "列印摘要"
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:146
 #, c-format
 msgid "Print this basket group in PDF"
-msgstr "以PDF格式列印此採購項目群組"
+msgstr "以PDF格式列印此採購單群組"
 
 #: intranet-tmpl/prog/en/modules/labels/spinelabel-print.tt:38
 #, c-format
@@ -41950,7 +41952,7 @@ msgstr "私人虛擬書架"
 #: intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:14
 #, c-format
 msgid "Problem sending the cart..."
-msgstr "送出採購項目有問題..."
+msgstr "送出採購單有問題..."
 
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:13
 #, c-format
@@ -42200,7 +42202,7 @@ msgstr "出版年 1"
 msgid "Publication date and copyright date"
 msgstr "出版年與著作權年"
 
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:126
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:127
 #, c-format
 msgid "Publication date: "
 msgstr "公告日期："
@@ -42272,8 +42274,8 @@ msgstr "出版者"
 #. %5$s:  IF ( BIBLIO_RESULT.pages ) 
 #. %6$s:  BIBLIO_RESULT.pages 
 #. %7$s:  END 
-#. %8$s:  IF BIBLIO_RESULT.size 
-#. %9$s:  BIBLIO_RESULT.size 
+#. %8$s:  IF BIBLIO_RESULT.item('size') 
+#. %9$s:  BIBLIO_RESULT.item('size') 
 #. %10$s:  END 
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelf.tt:68
 #: intranet-tmpl/prog/en/modules/basket/sendbasket.tt:61
@@ -42374,8 +42376,8 @@ msgstr "出版者：%s%s %s "
 msgid "Pulkova (Leningrad), Russia"
 msgstr "列寧格勒，俄羅斯"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:93
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:140
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:94
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:141
 #, c-format
 msgid "Pull this many items"
 msgstr "拉出多個館藏"
@@ -42388,7 +42390,7 @@ msgstr "購買"
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:34
 #, c-format
 msgid "Purchase suggestions"
-msgstr "採訪建議"
+msgstr "新書推薦"
 
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:661
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:318
@@ -42572,26 +42574,26 @@ msgid "Range of years of bulk of collection"
 msgstr "館藏的年份範圍"
 
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:53
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:333
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:278
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:70
 #, c-format
 msgid "Rank"
-msgstr "等級"
+msgstr "排名"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:128
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:101
 #, c-format
 msgid "Rank (display order): "
-msgstr "等級(顯示順序)："
+msgstr "排名(顯示順序)："
 
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:66
 #, c-format
 msgid "Rank/Biblioitemnumbers"
 msgstr "排名/書目館藏號"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:303
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:248
 #, c-format
 msgid "Rank: "
-msgstr "等級："
+msgstr "排名："
 
 #: intranet-tmpl/prog/en/xslt/NORMARCslim2intranetResults.xsl:565
 #, c-format
@@ -42782,7 +42784,7 @@ msgstr "紀錄匹配規則："
 msgid "Record matching rules"
 msgstr "紀錄匹配規則"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:333
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:278
 #, c-format
 msgid "Record type"
 msgstr "記錄類型"
@@ -42792,9 +42794,8 @@ msgstr "記錄類型"
 msgid "Record type:"
 msgstr "紀錄類型："
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:229
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:247
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:307
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:202
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:252
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:223
 #, c-format
 msgid "Record type: "
@@ -42838,7 +42839,7 @@ msgstr "Reed Wade"
 msgid "Referanseverk"
 msgstr "Referanseverk"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:167
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:168
 #, c-format
 msgid "Refine results"
 msgstr "縮小結果"
@@ -43169,13 +43170,13 @@ msgstr "移除嗎？"
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:117
 #, c-format
 msgid "Renew"
-msgstr "續訂"
+msgstr "續借"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:697
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:426
 #, c-format
 msgid "Renew "
-msgstr "續訂 "
+msgstr "續借"
 
 #. %1$s:  subscription.subscriptionid 
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:444
@@ -43187,7 +43188,7 @@ msgstr "續訂 #%s"
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:443
 #, c-format
 msgid "Renew all"
-msgstr "全部續訂"
+msgstr "全部續借"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
@@ -43231,7 +43232,7 @@ msgstr "續借期限"
 msgid "Renewals allowed (count)"
 msgstr "允許續借(計數)"
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:43
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:44
 #, c-format
 msgid "Renewed"
 msgstr "續借"
@@ -43419,7 +43420,7 @@ msgid "Report:"
 msgstr "報表："
 
 #. %1$s:  todaysdate | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:86
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:87
 #, c-format
 msgid "Reported on %s"
 msgstr "報表 %s"
@@ -43479,7 +43480,7 @@ msgstr "報表字典"
 #: intranet-tmpl/prog/en/modules/reports/itemtypes.tt:33
 #, c-format
 msgid "Reports on item types %s held at %s%s"
-msgstr "館藏類 %s 的報表預約在 %s%s"
+msgstr "館藏類 %s 統計報表, 來自%s%s "
 
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:435
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:164
@@ -43510,13 +43511,10 @@ msgstr "安魂彌撒"
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:487
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:122
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:128
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:91
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:96
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:98
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:108
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:111
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:113
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:115
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:81
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:84
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:86
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:88
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:212
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:217
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:221
@@ -43742,7 +43740,7 @@ msgstr "結果 %s 至 %s 的 %s "
 #. %3$s:  numresults 
 #. %4$s:  IF ( member ) 
 #: intranet-tmpl/prog/en/modules/serials/member-search.tt:49
-#: intranet-tmpl/prog/en/modules/members/member.tt:117
+#: intranet-tmpl/prog/en/modules/members/member.tt:118
 #, c-format
 msgid "Results %s to %s of %s found for %s'"
 msgstr "結果 %s 至 %s 的 %s 找到給 %s"
@@ -44177,8 +44175,8 @@ msgstr "聖莫普羅旺斯"
 msgid "SAN-Ouest Provence, France"
 msgstr "聖莫普羅旺斯，法國"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:183
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:185
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:156
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:158
 #, c-format
 msgid "SBN"
 msgstr "SBN"
@@ -44236,11 +44234,6 @@ msgstr "SQL"
 #, c-format
 msgid "SQL:"
 msgstr "SQL："
-
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:260
-#, fuzzy, c-format
-msgid "SRU Search fields mapping: "
-msgstr "搜尋欄位："
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:48
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:38
@@ -44349,7 +44342,7 @@ msgstr "星期六"
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:117
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:225
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:119
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:274
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:219
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:523
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:526
 #: intranet-tmpl/prog/en/modules/admin/searchengine/solr/indexes.tt:213
@@ -44367,7 +44360,7 @@ msgstr "星期六"
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:268
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:344
 #: intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:165
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:161
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:177
 #: intranet-tmpl/prog/en/modules/labels/label-edit-profile.tt:132
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:108
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:169
@@ -44387,7 +44380,7 @@ msgstr "星期六"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1376
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:74
 #: intranet-tmpl/prog/en/modules/members/member-flags.tt:158
-#: intranet-tmpl/prog/en/modules/members/member.tt:152
+#: intranet-tmpl/prog/en/modules/members/member.tt:153
 #: intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:103
 #: intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:27
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:8
@@ -44397,7 +44390,7 @@ msgstr "星期六"
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:172
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:120
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:574
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:339
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:341
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:296
 #: intranet-tmpl/prog/en/modules/acqui/modordernotes.tt:36
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:366
@@ -44781,7 +44774,7 @@ msgstr "搜尋 "
 #: intranet-tmpl/prog/en/modules/acqui/aqbasketuser_search.tt:33
 #, c-format
 msgid "Search for Basket User"
-msgstr "搜尋採購項目使用者"
+msgstr "搜尋採購單使用者"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:488
 #, c-format
@@ -45204,12 +45197,12 @@ msgstr "分："
 #: intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:67
 #, c-format
 msgid "Section"
-msgstr "期間"
+msgstr "地點"
 
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:99
 #, c-format
 msgid "Section:"
-msgstr "期間："
+msgstr "地點："
 
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:160
 #, c-format
@@ -45226,7 +45219,7 @@ msgstr "見採購籃資訊"
 msgid "See invoice information"
 msgstr "見發票資訊"
 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:107
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:123
 #, c-format
 msgid "See online help for advanced options"
 msgstr "見進階選項的線上說明"
@@ -45396,7 +45389,7 @@ msgstr "選定資料類型給予指定的變數"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:9
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:306
 #: intranet-tmpl/prog/en/modules/members/pay.tt:69
-#: intranet-tmpl/prog/en/modules/members/member.tt:121
+#: intranet-tmpl/prog/en/modules/members/member.tt:122
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:8
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:132
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:111
@@ -45564,7 +45557,7 @@ msgstr "選定嗎？"
 msgid "Selected items :"
 msgstr "選定館藏："
 
-#: intranet-tmpl/prog/en/modules/members/member.tt:128
+#: intranet-tmpl/prog/en/modules/members/member.tt:129
 #, c-format
 msgid "Selected patrons"
 msgstr "選擇讀者"
@@ -45651,7 +45644,7 @@ msgstr "送出"
 #: intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:22
 #, c-format
 msgid "Sending your cart"
-msgstr "送出您的借出籃"
+msgstr "送出您的採購單"
 
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:21
 #, c-format
@@ -45670,18 +45663,6 @@ msgstr "將通知送給 %s"
 #: intranet-tmpl/prog/en/includes/calendar.inc:1
 msgid "Sep"
 msgstr "九月"
-
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:268
-#, c-format
-msgid "Separate multiple filenames by commas."
-msgstr "用逗號來分隔多個檔案名稱"
-
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:257
-#, c-format
-msgid ""
-"Separate options by commas. Example: sru=get,sru_version=1.1. See also "
-"http://www.indexdata.com/yaz/doc/zoom.html."
-msgstr ""
 
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:615
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:272
@@ -45839,7 +45820,7 @@ msgstr "期刊(傳閱清單)"
 msgid "Serials planning"
 msgstr "期刊計畫"
 
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:47
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:48
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:36
 #, c-format
 msgid "Serials subscriptions"
@@ -45893,11 +45874,6 @@ msgstr "伺服器資訊"
 #, c-format
 msgid "Server information"
 msgstr "伺服器資訊"
-
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:89
-#, fuzzy, c-format
-msgid "Server name: "
-msgstr "印表機名稱："
 
 #: intranet-tmpl/prog/en/modules/installer/auth.tt:18
 #, c-format
@@ -46097,7 +46073,7 @@ msgid "Shipping cost: "
 msgstr "運送成本："
 
 #. %1$s:  basketno 
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:41
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:42
 #, c-format
 msgid "Shopping Basket %s"
 msgstr "購物籃 %s"
@@ -46136,7 +46112,7 @@ msgstr "顯示機讀編目格式標籤文件連結"
 #: intranet-tmpl/prog/en/includes/datatables-strings.inc:1
 #: intranet-tmpl/prog/en/includes/datatables.inc:2
 msgid "Show _MENU_ entries"
-msgstr "顯示_MENU_ 課程"
+msgstr "顯示_MENU_ 項目"
 
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:104
 #, c-format
@@ -46146,7 +46122,7 @@ msgstr "顯示啟用與未啟用："
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:69
 #, c-format
 msgid "Show active baskets only"
-msgstr "僅顯示使用中的採購項目"
+msgstr "僅顯示使用中的採購單"
 
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:259
 #, c-format
@@ -46168,7 +46144,7 @@ msgstr "顯示所有"
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:71
 #, c-format
 msgid "Show all baskets"
-msgstr "顯示所有採購項目"
+msgstr "顯示所有採購單"
 
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:101
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:81
@@ -46241,7 +46217,7 @@ msgstr "顯示更多"
 msgid "Show my funds only"
 msgstr "祗顯示我的基金"
 
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:50
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:51
 #, c-format
 msgid "Show only renewed "
 msgstr "祗顯示續借 "
@@ -46440,10 +46416,10 @@ msgstr "幻燈片 2 x 2英吋 (5*5 公分)"
 msgid "Slides 21⁄4 x 21⁄4 in. (5.5*5.5 cm)"
 msgstr "幻燈片 2 1⁄4 x 2 1⁄4 英吋 (5.5*5.5 公分)"
 
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:91
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:93
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:166
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:168
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:92
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:94
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:167
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:169
 #, c-format
 msgid "Slip"
 msgstr "收條"
@@ -46524,7 +46500,7 @@ msgstr "女高音"
 msgid "Sorry, but there is no results for your search."
 msgstr "抱歉，您的搜尋沒有結果。"
 
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:106
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:107
 #, c-format
 msgid "Sorry, there is no result for your search."
 msgstr "抱歉，您的搜尋沒有結果。"
@@ -46867,7 +46843,7 @@ msgstr "溢出"
 msgid "Spine label"
 msgstr "書標"
 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:123
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:139
 #, c-format
 msgid "Split call numbers: "
 msgstr "拆開索書號："
@@ -47093,6 +47069,7 @@ msgid "Start date must be before end date"
 msgstr "開始日期必須早於結束日期"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:302
+#: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:119
 #: intranet-tmpl/prog/en/modules/tools/export.tt:89
 #, c-format
 msgid "Start date:"
@@ -47101,8 +47078,7 @@ msgstr "開始日期："
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:26
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:177
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:216
-#: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:107
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:170
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:171
 #, c-format
 msgid "Start date: "
 msgstr "開始日期："
@@ -47856,7 +47832,7 @@ msgstr "主題："
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:657
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:81
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:449
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:182
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:183
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:149
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:123
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:82
@@ -47878,7 +47854,7 @@ msgstr "主題："
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:127
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:171
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:371
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:148
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:149
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:208
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:379
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:55
@@ -47902,7 +47878,7 @@ msgid "Subscription #%s"
 msgstr "訂閱 #%s"
 
 #. %1$s:  loopro.object 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:167
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:169
 #, c-format
 msgid "Subscription %s "
 msgstr "訂閱 %s "
@@ -48180,7 +48156,7 @@ msgstr "建議資訊"
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:381
 #, c-format
 msgid "Suggestion management"
-msgstr "建議管理"
+msgstr "管理建議"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:3
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:160
@@ -48196,7 +48172,7 @@ msgstr "建議"
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:432
 #, c-format
 msgid "Suggestions management"
-msgstr "建議管理"
+msgstr "管理建議"
 
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:119
 #, c-format
@@ -48426,17 +48402,17 @@ msgstr "交響樂"
 msgid "Synchronize"
 msgstr "同步化"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:333
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:278
 #, c-format
 msgid "Syntax"
 msgstr "語法"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:130
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:103
 #, c-format
 msgid "Syntax (z3950 can send"
 msgstr "語法(Z39.50可以送出"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:304
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:249
 #, c-format
 msgid "Syntax: "
 msgstr "語法："
@@ -48761,7 +48737,7 @@ msgstr "磁帶組態："
 msgid "Tape width:"
 msgstr "磁帶寬度："
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:333
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:278
 #, c-format
 msgid "Target"
 msgstr "目標"
@@ -48800,7 +48776,7 @@ msgstr "預期讀者代碼 2"
 msgid "Target audience code 3"
 msgstr "預期讀者代碼 3"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:296
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:241
 #, c-format
 msgid "Target: "
 msgstr "目標："
@@ -49022,7 +48998,7 @@ msgstr "男高音"
 #: intranet-tmpl/prog/en/modules/tags/review.tt:333
 #, c-format
 msgid "Term"
-msgstr "期間"
+msgstr "學期"
 
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:405
 #, c-format
@@ -49124,7 +49100,7 @@ msgstr "給圖書館員的訊息："
 msgid "Text for opac: "
 msgstr "給 OPAC 的訊息："
 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:131
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:147
 #, c-format
 msgid "Text justification: "
 msgstr "文字對齊："
@@ -49172,7 +49148,7 @@ msgstr "這個 "
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:804
 #, c-format
 msgid "The %s latest issues related to this subscription:"
-msgstr "與此訂閱有關的%s 最新期："
+msgstr "與此訂閱有關的最近 %s 期："
 
 #: intranet-tmpl/prog/en/modules/about.tt:131
 #, c-format
@@ -49311,7 +49287,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:10
 #, c-format
 msgid "The cart was sent to: %s"
-msgstr "採購項目送至：%s"
+msgstr "採購單送至：%s"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:194
 #, c-format
@@ -49441,7 +49417,7 @@ msgstr "找到以下的錯誤。請更正它們並再送出："
 msgid "The following fields are wrong. Please fix them."
 msgstr "以下欄位是錯的，請更正它們。"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:87
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:88
 #, c-format
 msgid ""
 "The following holds have not been filled. Please retrieve them and check "
@@ -49690,8 +49666,8 @@ msgstr "主題"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:147
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:148
-#: intranet-tmpl/prog/en/modules/members/member.tt:94
 #: intranet-tmpl/prog/en/modules/members/member.tt:95
+#: intranet-tmpl/prog/en/modules/members/member.tt:96
 #, c-format
 msgid "There are "
 msgstr "有 "
@@ -49844,7 +49820,7 @@ msgstr "沒有現存的模板。"
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:62
 #, c-format
 msgid "There is no open baskets for this supplier."
-msgstr "此供應商沒有開啟借出籃。"
+msgstr "此供應商沒有開啟採購單。"
 
 #: intranet-tmpl/prog/en/modules/members/notices.tt:82
 #, c-format
@@ -49993,7 +49969,7 @@ msgstr "此發票編號已被使用，您要在既有的發票上接收嗎？"
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:793
 #, c-format
 msgid "This is a serial subscription"
-msgstr "這是訂閱期刊"
+msgstr "訂閱期刊"
 
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:38
 #, c-format
@@ -50011,7 +49987,7 @@ msgstr "此館藏屬於 %s 且不能從此借出。"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/doc-head-close.inc:34
 msgid "This item has been added to your cart"
-msgstr "此館藏新增至您的借出籃"
+msgstr "此館藏新增至您的採購單"
 
 #. %1$s:  alert.ITEM_LOST 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:136
@@ -50031,7 +50007,7 @@ msgstr "此館藏已遺失，它的狀態是\"%s\"。%s仍要借出嗎？ %s"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/doc-head-close.inc:34
 msgid "This item is already in your cart"
-msgstr "此館藏已經在您的借出籃"
+msgstr "此館藏已經在您的採購單"
 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:71
 #, c-format
@@ -50194,7 +50170,7 @@ msgid "This subfield will be deleted"
 msgstr "此分欄將被刪除"
 
 #. A
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:98
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:99
 msgid "This subscription depends on another supplier"
 msgstr "此訂閱視另個供應商而定"
 
@@ -50351,7 +50327,7 @@ msgstr "三位數字，表示電影或錄影的執行時間。此數字向右靠
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:694
 #, c-format
 msgid "Three-dimensional artifact or naturally occurring object"
-msgstr "三度空間人造物或自然形成的物件"
+msgstr "立體藝術品、實物"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:16
@@ -50413,18 +50389,17 @@ msgstr "時區"
 msgid "Time:"
 msgstr "時間："
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:333
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:278
 #, c-format
 msgid "Timeout"
 msgstr "時間到"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:226
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:244
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:199
 #, c-format
 msgid "Timeout (0 its like not set): "
 msgstr "時間到(不會設為0)："
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:306
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:251
 #, c-format
 msgid "Timeout: "
 msgstr "時間到："
@@ -50490,8 +50465,8 @@ msgstr "底索正形圓錐投影"
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:81
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:141
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:505
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:96
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:143
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:97
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:144
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:48
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:34
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:109
@@ -50511,7 +50486,7 @@ msgstr "底索正形圓錐投影"
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:465
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:156
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:256
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:58
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:59
 #: intranet-tmpl/prog/en/modules/reports/reservereport.tt:18
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:102
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:75
@@ -50523,7 +50498,7 @@ msgstr "底索正形圓錐投影"
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:108
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:119
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:297
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:210
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:211
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:91
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:232
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:116
@@ -50616,7 +50591,7 @@ msgstr "題名："
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:38
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:259
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:140
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:122
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:123
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:271
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:342
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:89
@@ -50896,7 +50871,7 @@ msgstr "工具外掛程式"
 #: intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:8
 #: intranet-tmpl/prog/en/modules/labels/label-home.tt:14
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:102
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:27
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:43
 #: intranet-tmpl/prog/en/modules/labels/label-edit-profile.tt:44
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:30
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:101
@@ -50923,7 +50898,7 @@ msgstr "工具外掛程式"
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:268
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:14
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:54
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:54
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:55
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:193
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:20
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:30
@@ -51083,7 +51058,7 @@ msgstr "總計："
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:289
 #, c-format
 msgid "Total available"
-msgstr "全部可得"
+msgstr "全部可外借"
 
 #: intranet-tmpl/prog/en/columns.def:86
 #: intranet-tmpl/prog/en/modules/members/statistics.tt:66
@@ -51728,7 +51703,7 @@ msgstr "樂譜類型："
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:745
 #, c-format
 msgid "Type of visual material"
-msgstr "視覺資料類型"
+msgstr "視聽資料類型"
 
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:92
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:862
@@ -51761,14 +51736,14 @@ msgstr "U-matic"
 msgid "UF: %s"
 msgstr "UF: %s"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:153
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:155
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:126
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:128
 #, c-format
 msgid "UKMARC"
 msgstr "UKMARC"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:133
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:135
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:106
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:108
 #, c-format
 msgid "UNIMARC"
 msgstr "UNIMARC"
@@ -52123,7 +52098,7 @@ msgstr "未授權讀者 "
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:592
 #, c-format
 msgid "Unavailable (lost or missing)"
-msgstr "不可得(遺失)"
+msgstr "不外借(遺失)"
 
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:98
 #, c-format
@@ -53018,7 +52993,7 @@ msgstr "使用報表字典定義使用於您報表的客製化範圍"
 msgid "Use the search form on the left to find invoices."
 msgstr "使用左方的搜尋表單找尋發票。"
 
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:109
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:110
 #, c-format
 msgid "Use the search form on the left to find subscriptions."
 msgstr "使用左方的搜尋表單檢索訂閱。"
@@ -53084,7 +53059,7 @@ msgstr "使用者 "
 msgid "User code"
 msgstr "使用者 代碼"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:333
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:278
 #, c-format
 msgid "Userid"
 msgstr "使用者帳號"
@@ -53094,9 +53069,8 @@ msgstr "使用者帳號"
 msgid "Userid / Password update failed"
 msgstr "使用者帳號/密碼更新失敗"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:100
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:117
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:300
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:90
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:245
 #, c-format
 msgid "Userid: "
 msgstr "使用者帳號："
@@ -53342,7 +53316,7 @@ msgstr "供應商說明："
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:284
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:99
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:560
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:333
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:334
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:348
 #, c-format
 msgid "Vendor note: "
@@ -53663,18 +53637,18 @@ msgstr "能見度："
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:413
 #, c-format
 msgid "Visual Material"
-msgstr "視覺資料"
+msgstr "視聽資料"
 
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:1199
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:689
 #, c-format
 msgid "Visual Materials"
-msgstr "視覺資料"
+msgstr "視聽資料"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:85
 #, c-format
 msgid "Visual material"
-msgstr "視覺資料"
+msgstr "視聽資料"
 
 #: intranet-tmpl/prog/en/modules/about.tt:275
 #, c-format
@@ -53788,7 +53762,7 @@ msgstr "警示："
 msgid "Wait while system maintenance is being done or "
 msgstr "等待系統維護完成或 "
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:133
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:134
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:46
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:614
 #, c-format
@@ -54326,11 +54300,6 @@ msgstr "XML - 包括其他匯出格式"
 msgid "XML configuration file"
 msgstr "XML組態檔"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:266
-#, c-format
-msgid "XSLT File(s) for transforming results: "
-msgstr ""
-
 #: intranet-tmpl/prog/en/modules/about.tt:455
 #, c-format
 msgid "Xercode, Spain"
@@ -54518,7 +54487,7 @@ msgid "Yohann Dufour"
 msgstr "Yohann Dufour"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/member.tt:5
+#: intranet-tmpl/prog/en/modules/members/member.tt:6
 msgid "You already have a list with that name!"
 msgstr "已存該名稱的清單！"
 
@@ -54539,7 +54508,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:173
 #, c-format
 msgid "You are not authorised to manage this basket."
-msgstr "您無權管理此採購項目。"
+msgstr "您無權管理此採購單。"
 
 #. A
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:146
@@ -54732,7 +54701,7 @@ msgid ""
 msgstr "未選擇目錄篩選器且將條碼檔案與整個目錄比較。"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/member.tt:5
+#: intranet-tmpl/prog/en/modules/members/member.tt:6
 msgid "You have not selected any patrons to add to a list!"
 msgstr "您未選取任何讀者加入此清單！"
 
@@ -54801,7 +54770,7 @@ msgid "You must enter a term to search on "
 msgstr "您必須鍵入搜尋的字詞 "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/member.tt:5
+#: intranet-tmpl/prog/en/modules/members/member.tt:6
 msgid "You must give your new patron list a name!"
 msgstr "新增清單必須給個名稱！"
 
@@ -54921,22 +54890,22 @@ msgstr "您的權威搜尋記錄是空的。"
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:88
 #, c-format
 msgid "Your cart"
-msgstr "您的借出籃"
+msgstr "您的採購單"
 
 #: intranet-tmpl/prog/en/modules/basket/sendbasket.tt:1
 #, c-format
 msgid "Your cart "
-msgstr "您的借出籃 "
+msgstr "您的採購單"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/doc-head-close.inc:34
 msgid "Your cart is currently empty"
-msgstr "您的採購項目是空的"
+msgstr "您的採購單是空的"
 
 #: intranet-tmpl/prog/en/includes/header.inc:93
 #, c-format
 msgid "Your cart is empty."
-msgstr "您的採購項目是空的。"
+msgstr "您的採購單是空的。"
 
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:108
 #, c-format
@@ -55051,12 +55020,12 @@ msgstr "搜尋Z39.50"
 msgid "Z39.50 search points"
 msgstr "Z39.50搜尋項"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:279
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:224
 #, c-format
 msgid "Z39.50 server added"
 msgstr "新增Z39.50伺服器"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:315
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:260
 #, c-format
 msgid "Z39.50 server deleted"
 msgstr "刪除Z39.50伺服器"
@@ -55066,26 +55035,27 @@ msgstr "刪除Z39.50伺服器"
 msgid "Z39.50 server search:"
 msgstr "搜尋Z39.50伺服器："
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:286
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:231
 #, c-format
 msgid "Z39.50 server updated"
 msgstr "更新Z39.50伺服器"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:108
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:79
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:81
 #, c-format
 msgid "Z39.50 server: "
 msgstr "Z39.50伺服器名稱："
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:65
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:66
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:67
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:68
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:70
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:55
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:56
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:57
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:58
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:60
 #, c-format
 msgid "Z39.50 servers"
 msgstr "Z39.50伺服器"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:327
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:272
 #, c-format
 msgid "Z39.50 servers administration"
 msgstr "管理Z39.50伺服器"
@@ -55153,7 +55123,7 @@ msgstr "郵遞區號"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:9
-#: intranet-tmpl/prog/en/modules/members/member.tt:143
+#: intranet-tmpl/prog/en/modules/members/member.tt:144
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:8
 #, c-format
 msgid "[ New list ]"
@@ -55522,12 +55492,12 @@ msgid "[% firstname %] [% surname %] ([% cardnumber %])"
 msgstr "[% firstname %] [% surname %] ([% cardnumber %])"
 
 #. INPUT type=text name=font_size
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:156
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:172
 msgid "[% font_size |html %]"
 msgstr "[% font_size |html %]"
 
 #. INPUT type=text name=format_string
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:104
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:120
 msgid "[% format_string |html %]"
 msgstr "[% format_string |html %]"
 
@@ -55653,12 +55623,6 @@ msgstr "[% reserveloo.suspend_until | $KohaDates %]"
 #: intranet-tmpl/prog/en/includes/prefs-admin-search.inc:9
 msgid "[% searchfield |html %]"
 msgstr "[% searchfield |html %]"
-
-#. INPUT type=text name=servername
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:89
-#, fuzzy
-msgid "[% server.servername | html %]"
-msgstr "[% shelfname |html %]"
 
 #. INPUT type=text name=shelfname
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:459
@@ -56257,7 +56221,7 @@ msgstr "a- 塗布"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:54
 #, c-format
 msgid "a- Language material"
-msgstr "a- 語文資料"
+msgstr "a- 文字資料"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader_computerfile.tt:52
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader_computerfile.tt:54
@@ -56265,7 +56229,7 @@ msgstr "a- 語文資料"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader_book.tt:53
 #, c-format
 msgid "a- Language material (monography)"
-msgstr "a- 語文資料(專書)"
+msgstr "a- 文字資料(專書)"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008_authorities.tt:223
 #, c-format
@@ -56320,7 +56284,7 @@ msgstr "a- 氣象"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:131
 #, c-format
 msgid "a- Monographic component part"
-msgstr "a- 套書"
+msgstr "a- 單行本之組成部份"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008_authorities.tt:283
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008_authorities.tt:285
@@ -56422,7 +56386,7 @@ msgstr "a- 期刊組件"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:296
 #, c-format
 msgid "a- Set"
-msgstr "a- 集"
+msgstr "a- 含多個單件之合集"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -57007,13 +56971,13 @@ msgid "ad- poster"
 msgstr "ad - 海報"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:147
-#: intranet-tmpl/prog/en/modules/members/member.tt:94
+#: intranet-tmpl/prog/en/modules/members/member.tt:95
 #, c-format
 msgid "add a library"
 msgstr "新增圖書館"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:148
-#: intranet-tmpl/prog/en/modules/members/member.tt:95
+#: intranet-tmpl/prog/en/modules/members/member.tt:96
 #, c-format
 msgid "add a patron category"
 msgstr "新增讀者類型"
@@ -57218,7 +57182,7 @@ msgstr "已經有一個預約"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/doc-head-close.inc:34
 msgid "already in your cart"
-msgstr "已在您的採購項目"
+msgstr "已在您的採購單"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:1542
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:1544
@@ -57901,7 +57865,7 @@ msgstr "b- 不適合"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:301
 #, c-format
 msgid "b- Part with independent title"
-msgstr "b- 有獨立題名的部份作品"
+msgstr "b- 題名獨立之單件"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -57939,7 +57903,7 @@ msgstr "b- 已更新的紀錄"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:136
 #, c-format
 msgid "b- Serial component part"
-msgstr "b- 期刊的組件"
+msgstr "b- 連續性出版品之組成部份"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -58095,7 +58059,7 @@ msgstr "玄武岩"
 #. A
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:164
 msgid "basket"
-msgstr "採購項目"
+msgstr "採購單"
 
 #. For the first occurrence,
 #. %1$s:  basket.basketname 
@@ -58103,13 +58067,13 @@ msgstr "採購項目"
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:618
 #, c-format
 msgid "basket: %s"
-msgstr "採購項目：%s"
+msgstr "採購單：%s"
 
 #. A
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:172
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:353
 msgid "basketgroup"
-msgstr "採購項目群組"
+msgstr "採購單群組"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:130
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:132
@@ -58478,9 +58442,9 @@ msgstr "著者 "
 
 #. For the first occurrence,
 #. %1$s:  reserveloo.author 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:117
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:118
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:35
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:33
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:34
 #, c-format
 msgid "by %s"
 msgstr "著者 %s"
@@ -58585,7 +58549,7 @@ msgstr "製作者Bridge Consortium of Carleton College 與 St. Olaf College。"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:165
 #, c-format
 msgid "c - Collection - bibliographic item that is a made-up collection"
-msgstr "c - 館藏 - 書目館藏藏成館藏"
+msgstr "c - 合集 - 書目館藏製成合集"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:24
 #, c-format
@@ -58767,7 +58731,7 @@ msgstr "c- 拚貼"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:141
 #, c-format
 msgid "c- Collection"
-msgstr "c- 館藏"
+msgstr "c- 合集"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -58848,7 +58812,7 @@ msgstr "c- 高縮率"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:268
 #, c-format
 msgid "c- ISBD punctuation omitted"
-msgstr "c- 省略標點術號的國際標準書目著錄"
+msgstr "c- ISBD標點符號部份省略"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -58912,7 +58876,7 @@ msgstr "c- 硝酸鹽基底"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:59
 #, c-format
 msgid "c- Notated music"
-msgstr "c- 音符"
+msgstr "c- 樂譜"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008_authorities.tt:330
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008_authorities.tt:332
@@ -58930,7 +58894,7 @@ msgstr "c- Outtakes"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:306
 #, c-format
 msgid "c- Part with dependent title"
-msgstr "c- 有獨立題名的部份"
+msgstr "c- 非題名獨立之單件"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -59920,14 +59884,15 @@ msgstr "csh"
 #. SPAN
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:139
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:321
+#, fuzzy
 msgid ""
 "ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
 "au=[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
-"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT.size "
-"%]&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft.place=[% "
-"BIBLIO_RESULT.place %]&rft.pub=[% BIBLIO_RESULT.publisher |url %]&rft."
-"edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT.series "
-"%]&rft.genre="
+"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT."
+"item('size') %]&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft."
+"place=[% BIBLIO_RESULT.place %]&rft.pub=[% BIBLIO_RESULT.publisher |url "
+"%]&rft.edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT."
+"series %]&rft.genre="
 msgstr ""
 "ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
 "au=[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
@@ -60230,7 +60195,7 @@ msgstr "d- 漏失"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:64
 #, c-format
 msgid "d- Manuscript notated music"
-msgstr "d- 標記樂譜手稿"
+msgstr "d- 手稿形式之樂譜"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -60318,7 +60283,7 @@ msgstr "d- 複分"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:146
 #, c-format
 msgid "d- Subunit"
-msgstr "d- 次單元"
+msgstr "d- 子單位"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -60829,7 +60794,7 @@ msgid "discussion, dissertation, thesis"
 msgstr "討論、論文"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:149
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:151
 msgid "display detail for this librarian."
 msgstr "顯示這個館員的詳情"
 
@@ -61521,7 +61486,7 @@ msgstr ""
 "euskara (Basque) Fernando Berrizbeitia, the librarians of Eima Katalogoa, "
 "Tabakalera International Contemporary Culture Centre, and Nere Erkiaga"
 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:108
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:124
 #, c-format
 msgid "ex: barcode, itemcallnumber, title, \"050a 050b\", 300a "
 msgstr "ex: barcode, itemcallnumber, title, \"050a 050b\", 300a "
@@ -61556,7 +61521,7 @@ msgstr "存在"
 msgid "exists."
 msgstr "存在。"
 
-#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:240
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:241
 #, c-format
 msgid "expired"
 msgstr "失效"
@@ -61575,7 +61540,7 @@ msgstr "f - 地圖資料，手稿"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:74
 #, c-format
 msgid "f - Manuscript cartographic material"
-msgstr "f - 手稿地圖資料"
+msgstr "f - 手稿形式之地圖資料"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:438
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:440
@@ -62241,7 +62206,7 @@ msgstr "g- 動態放映資料"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:79
 #, c-format
 msgid "g - Projected medium"
-msgstr "g - 投影媒體"
+msgstr "g - 投映性資料"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:443
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:445
@@ -62950,7 +62915,7 @@ msgstr "資料庫都需要授權 "
 msgid "has already been added."
 msgstr "已經新增。"
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:89
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:90
 #, c-format
 msgid "has never been checked out."
 msgstr "不曾借出。"
@@ -63135,7 +63100,7 @@ msgstr "i - 部份或不完成的國際標準書目著錄表單"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:160
 #, c-format
 msgid "i - Integrating resource"
-msgstr "i - 整合資源"
+msgstr "i - 整合性資源"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader_computerfile.tt:82
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader_computerfile.tt:84
@@ -63145,7 +63110,7 @@ msgstr "i - 整合資源"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:84
 #, c-format
 msgid "i - Nonmusical sound recording"
-msgstr "i - 非音樂錄音"
+msgstr "i - 非音樂性錄音資料"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:104
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:106
@@ -63237,7 +63202,7 @@ msgstr "i- 靛捲片"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:273
 #, c-format
 msgid "i- ISBD punctuation included"
-msgstr "i- 包括國際標準書目著錄標點符號"
+msgstr "i- 包括ISBD標點符號"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -63259,7 +63224,7 @@ msgstr "i- 即時(現場錄音)"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:151
 #, c-format
 msgid "i- Integrating resource"
-msgstr "i- 整合資源"
+msgstr "i- 整合性資源"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008_authorities.tt:486
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008_authorities.tt:488
@@ -63846,7 +63811,7 @@ msgstr "館藏類型未定"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/doc-head-close.inc:34
 msgid "item(s) added to your cart"
-msgstr "新增館藏至您的借出籃"
+msgstr "新增館藏至您的採購單"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:745
 #, c-format
@@ -63896,7 +63861,7 @@ msgstr "象牙"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:89
 #, c-format
 msgid "j - Musical sound recording"
-msgstr "j - 音樂錄音"
+msgstr "j - 音樂錄音資料"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:110
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:112
@@ -64161,7 +64126,7 @@ msgstr "k - 兩度空間圖片"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:94
 #, c-format
 msgid "k - Two-dimensional nonprojectable graphic"
-msgstr "k - 兩度空間非投射圖片"
+msgstr "k - 非放映性圖像資料"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:77
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:79
@@ -64320,13 +64285,13 @@ msgstr "ka- 韓文"
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:451
 #, c-format
 msgid "kit"
-msgstr "組件"
+msgstr "特殊教學資料"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:125
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:628
 #, c-format
 msgid "kit "
-msgstr "組件 "
+msgstr "特殊教學資料"
 
 #: intranet-tmpl/prog/en/modules/installer/auth.tt:38
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:36
@@ -64545,7 +64510,7 @@ msgid "large print"
 msgstr "大字本"
 
 #. %1$s:  issue.lastreneweddate |$KohaDates with_hours => 1  
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:63
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:64
 #, c-format
 msgid "last on: %s"
 msgstr "最後在：%s"
@@ -64927,7 +64892,7 @@ msgstr "m - 電腦檔案"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:170
 #, c-format
 msgid "m - Monographic - Bibliographic item"
-msgstr "m - 專書 - 書目館藏"
+msgstr "m - 圖書式資料 - 書目館藏"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:128
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:130
@@ -65085,7 +65050,7 @@ msgstr "m- 單聲道"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:156
 #, c-format
 msgid "m- Monograph/item"
-msgstr "m- 專書/館藏"
+msgstr "m- 圖書式資料(單行本)"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
@@ -66299,7 +66264,7 @@ msgstr "報紙格式"
 #. INPUT type=image
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:257
 msgid "next"
-msgstr "下一個"
+msgstr "下一頁"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115b.tt:341
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115b.tt:343
@@ -66423,7 +66388,7 @@ msgid "no index or name lis"
 msgstr "無索名或名稱清單"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:147
-#: intranet-tmpl/prog/en/modules/members/member.tt:94
+#: intranet-tmpl/prog/en/modules/members/member.tt:95
 #, c-format
 msgid "no libraries defined"
 msgstr "未設定圖書館"
@@ -66435,7 +66400,7 @@ msgid "no narrative tex"
 msgstr "無狹義詞"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:148
-#: intranet-tmpl/prog/en/modules/members/member.tt:95
+#: intranet-tmpl/prog/en/modules/members/member.tt:96
 #, c-format
 msgid "no patron categories defined"
 msgstr "未設定讀者類型"
@@ -66947,7 +66912,7 @@ msgstr "數字表格"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:104
 #, c-format
 msgid "o - Kit"
-msgstr "o - 組件"
+msgstr "o - 特殊教學資料"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:39
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:41
@@ -67060,7 +67025,7 @@ msgstr "o- 不完整的權威紀錄"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_007.tt:93
 msgid "o- Kit"
-msgstr "o- 組件"
+msgstr "o- 特殊教學資料"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader_authorities.tt:40
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader_authorities.tt:42
@@ -67221,7 +67186,7 @@ msgstr "或"
 msgid "or "
 msgstr "或 "
 
-#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:106
+#: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:122
 #, c-format
 msgid "or MARC subfield."
 msgstr "或機讀編目格式分欄。"
@@ -67660,7 +67625,7 @@ msgstr "序曲"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:109
 #, c-format
 msgid "p - Mixed materials"
-msgstr "p - 混搭資料"
+msgstr "p - 混合性資料"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:44
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:46
@@ -68460,7 +68425,7 @@ msgstr "保存"
 #. INPUT type=image
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:252
 msgid "previous"
-msgstr "前一個"
+msgstr "上一頁"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:12
 #, c-format
@@ -68783,7 +68748,7 @@ msgstr "季刊"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:136
 #, c-format
 msgid "r - Three-dimensional artefacts and realia"
-msgstr "r - 三度空間人造物"
+msgstr "r - 立體藝術品及實物"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader_computerfile.tt:107
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader_computerfile.tt:109
@@ -68793,7 +68758,7 @@ msgstr "r - 三度空間人造物"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:114
 #, c-format
 msgid "r - Three-dimensional artifact or naturally occurring object"
-msgstr "r - 三度空間人造物或自然物"
+msgstr "r - 立體藝術品、實物"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:501
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:503
@@ -69008,12 +68973,12 @@ msgstr "記錄工作"
 msgid "recording not a tape"
 msgstr "未記錄成帶子"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:215
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:188
 #, c-format
 msgid "records in various encodings. Choose one): "
 msgstr "以多種編碼方式記錄它。選擇一個)："
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:130
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:103
 #, c-format
 msgid "records in various format. Choose one): "
 msgstr "以多種格式記錄它。選擇一個)："
@@ -69197,7 +69162,7 @@ msgstr "移除此圖像"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:89
 msgid "reopen basketgroup"
-msgstr "再開啟採購項目群組"
+msgstr "再開啟採購單群組"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:919
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3.xsl:965
@@ -69433,7 +69398,7 @@ msgstr "rvm"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:175
 #, c-format
 msgid "s - Serial - Bibliographic item"
-msgstr "s- 期刊 - 書目館藏"
+msgstr "s- 連續性出版品 - 書目館藏"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:506
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:508
@@ -69530,7 +69495,7 @@ msgstr "s- 區"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:161
 #, c-format
 msgid "s- Serial"
-msgstr "s- 期刊"
+msgstr "s- 連續性出版品"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -69755,8 +69720,7 @@ msgstr "se"
 msgid "sears"
 msgstr "西爾氏"
 
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:227
-#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:245
+#: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:200
 #, c-format
 msgid "seconds "
 msgstr "秒 "
@@ -70541,7 +70505,7 @@ msgstr "訂閱者"
 #. A
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:185
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:275
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:70
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:71
 msgid "subscription detail"
 msgstr "訂閱詳情"
 
@@ -70677,7 +70641,7 @@ msgstr "合成材料(如：塑膠、尼龍等)與玻璃"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:119
 #, c-format
 msgid "t - Manuscript language material"
-msgstr "t - 手稿語文資料"
+msgstr "t - 手稿形式之文字資料"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:512
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:514
@@ -71182,7 +71146,7 @@ msgstr "此紀錄沒有附加的館藏。 "
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl:210
 #, c-format
 msgid "three dimensional object"
-msgstr "三度空間物件"
+msgstr "立體物品"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115b.tt:465
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115b.tt:467
@@ -71288,7 +71252,7 @@ msgstr "管理Koha之用，並給予超級圖書館員的權限。"
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:692
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:705
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:718
-#: intranet-tmpl/prog/en/modules/members/member.tt:132
+#: intranet-tmpl/prog/en/modules/members/member.tt:133
 #, c-format
 msgid "to:"
 msgstr "至："
@@ -71502,7 +71466,7 @@ msgstr "投射類型不明"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:240
 #, c-format
 msgid "u - Unknown"
-msgstr "u - 不明"
+msgstr "u - 不詳"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:91
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:93
@@ -71535,7 +71499,7 @@ msgstr "u Ukjent status (periodika)"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tt:278
 #, c-format
 msgid "u- Unknown"
-msgstr "u- 不明"
+msgstr "u- 不詳"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008_authorities.tt:511
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008_authorities.tt:513
@@ -71561,7 +71525,7 @@ msgstr "u- 沒有指明"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:351
 #, c-format
 msgid "u- unknown"
-msgstr "u- 不明"
+msgstr "u- 不詳"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_130.tt:179
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_130.tt:181
@@ -72125,7 +72089,7 @@ msgstr "柔音中提琴"
 #. IMG
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetResults.xsl:413
 msgid "visual material"
-msgstr "視覺資料"
+msgstr "視聽資料"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:121
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115a.tt:25
@@ -72984,15 +72948,47 @@ msgstr "• "
 msgid "﻿%s "
 msgstr "%s "
 
+#, fuzzy
+#~ msgid "Additional SRU options: "
+#~ msgstr "其他 SRU選項:"
+
 #~ msgid "Format"
 #~ msgstr "格式"
 
+#~ msgid "Holds Queue"
+#~ msgstr "預約排程"
+
+#, fuzzy
+#~ msgid ""
+#~ "Includes the domain part, but the path part of the URL should go into "
+#~ "Database."
+#~ msgstr "包含網域的部份, 但URL的路徑應直接連進資料庫."
+
 #~ msgid "Items on Reserve"
 #~ msgstr "保留的館藏"
+
+#, fuzzy
+#~ msgid "Preselected (searched by default): "
+#~ msgstr "檢查(預設搜尋)："
 
 #~ msgid "Requested"
 #~ msgstr "請求"
 
 #, fuzzy
+#~ msgid "SRU Search fields mapping: "
+#~ msgstr "搜尋欄位："
+
+#~ msgid "Separate multiple filenames by commas."
+#~ msgstr "用逗號來分隔多個檔案名稱"
+
+#, fuzzy
+#~ msgid "Server name: "
+#~ msgstr "印表機名稱："
+
+#, fuzzy
 #~ msgid "Show checkouts"
 #~ msgstr "全部借出"
+
+#, fuzzy
+#~ msgid "[% server.servername | html %]"
+#~ msgstr "[% shelfname |html %]"
