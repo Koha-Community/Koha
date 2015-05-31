@@ -1,4 +1,5 @@
 [% UNLESS ( is_popup ) %]
+    [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
     [% IF ( opaccredits ) %]
         <div class="container-fluid">
             <div class="row-fluid">
@@ -29,7 +30,7 @@
     [% END # / OpacKohaUrl %]
 
 </div> <!-- / #wrap in masthead.inc -->
-[% IF ( Koha.Preference( 'OpacLangSelectorMode' ) == 'both' ) || ( Koha.Preference( 'OpacLangSelectorMode' ) == 'foot' ) %]
+[% IF OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'foot' %]
     [% IF ( opaclanguagesdisplay ) %]
         [% IF ( languages_loop && opaclanguagesdisplay ) %]
             [% UNLESS ( one_language_enabled ) %]

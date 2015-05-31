@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
 <div id="wrap">
     <div id="header-region" class="noprint">
         <div class="navbar navbar-inverse navbar-static-top">
@@ -71,7 +72,7 @@
                         <a id="user-menu-trigger" class="pull-right" href="#"><i class="icon-user"></i> <span class="caret"></span></a>
                         <div id="members">
                             <ul class="nav pull-right">
-                            [% IF ( Koha.Preference( 'OpacLangSelectorMode' ) == 'both' ) || ( Koha.Preference( 'OpacLangSelectorMode' ) == 'head' ) %]
+                            [% IF OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'mast' %]
                             [% IF ( opaclanguagesdisplay ) %]
                                 [% IF ( languages_loop && opaclanguagesdisplay ) %]
                                     [% UNLESS ( one_language_enabled ) %]
