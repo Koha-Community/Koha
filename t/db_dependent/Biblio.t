@@ -200,7 +200,6 @@ sub run_tests {
             "(GetMarcISBN) Corretly retrieves ISBN #". ($i + 1));
     }
 
-
     is( GetMarcPrice( $record_for_isbn, $marcflavour ), 100,
         "GetMarcPrice returns the correct value");
     my $newincbiblioitemnumber=$biblioitemnumber+1;
@@ -216,6 +215,17 @@ sub run_tests {
         $biblioitemnumbertotest = $updatedrecord->field($biblioitem_tag)->subfield($biblioitem_subfield);
     }
     is ($newincbiblioitemnumber, $biblioitemnumbertotest);
+
+    # test for GetMarcNotes
+    my $a1= GetMarcNotes( $marc_record, $marcflavour );
+    my $field2 = MARC::Field->new( $marcflavour eq 'UNIMARC'? 300: 555, 0, '', a=> 'Some text', u=> 'http://url-1.com', u=> 'nohttp://something_else' );
+    $marc_record->append_fields( $field2 );
+    my $a2= GetMarcNotes( $marc_record, $marcflavour );
+    my $last= @$a2? $a2->[@$a2-1]->{marcnote}: '';
+    is( @$a2 == @$a1 + 1 && (
+        ( $marcflavour eq 'UNIMARC' && $last eq $field2->as_string() ) ||
+        ( $marcflavour ne 'UNIMARC' && $last =~ /\<a href=/ )),
+        1, 'Test for GetMarcNotes' );
 }
 
 sub mock_marcfromkohafield {
@@ -282,19 +292,19 @@ sub create_issn_field {
 }
 
 subtest 'MARC21' => sub {
-    plan tests => 28;
+    plan tests => 29;
     run_tests('MARC21');
     $dbh->rollback;
 };
 
 subtest 'UNIMARC' => sub {
-    plan tests => 28;
+    plan tests => 29;
     run_tests('UNIMARC');
     $dbh->rollback;
 };
 
 subtest 'NORMARC' => sub {
-    plan tests => 28;
+    plan tests => 29;
     run_tests('NORMARC');
     $dbh->rollback;
 };

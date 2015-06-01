@@ -86,7 +86,6 @@ if ( $email_add ) {
         my $dat              = GetBiblioData($biblionumber);
         next unless $dat;
         my $record           = GetMarcBiblio($biblionumber, 1);
-        my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
         my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 
@@ -98,7 +97,6 @@ if ( $email_add ) {
         }
 	
 
-        $dat->{MARCNOTES}      = $marcnotesarray;
         $dat->{MARCSUBJCTS}    = $marcsubjctsarray;
         $dat->{MARCAUTHORS}    = $marcauthorsarray;
         $dat->{HASAUTHORS}     = $hasauthors;

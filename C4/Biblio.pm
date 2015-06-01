@@ -1816,22 +1816,18 @@ sub GetMarcNotes {
     my %blacklist = map { $_ => 1 } split(/,/,C4::Context->preference('NotesBlacklist'));
     foreach my $field ( $record->field($scope) ) {
         my $tag = $field->tag();
-        if (!$blacklist{$tag}) {
-            my $value = $field->as_string();
-            if ( $note ne "" ) {
-                $marcnote = { marcnote => $note, };
-                push @marcnotes, $marcnote;
-                $note = $value;
-            }
-            if ( $note ne $value ) {
-                $note = $note . " " . $value;
+        next if $blacklist{$tag};
+
+        my $value = $field->as_string();
+        if( $marcflavour ne 'UNIMARC' && $tag =~ /555/ ) {
+            my @sub= $field->subfield('u');
+            foreach my $s (@sub) {
+                next if $s !~ /^http/;
+                my $i= index( $value, $s);
+                $value= substr( $value,0, $i) . "<a href=\"$s\" target=\"_blank\">$s</a>" . substr( $value, $i + length($s) );
             }
         }
-    }
-
-    if ($note) {
-        $marcnote = { marcnote => $note };
-        push @marcnotes, $marcnote;    #load last tag into array
+        push @marcnotes, { marcnote => $value };
     }
     return \@marcnotes;
 }    # end GetMarcNotes
