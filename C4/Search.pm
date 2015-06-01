@@ -2127,6 +2127,8 @@ sub searchResults {
          # items not on loan, but still unavailable ( lost, withdrawn, damaged )
             else {
 
+                $item->{notforloan}=1 if !$item->{notforloan}  && $itemtypes{ C4::Context->preference("item-level_itypes")? $item->{itype}: $oldbiblio->{itemtype} }->{notforloan};
+
                 # item is on order
                 if ( $item->{notforloan} < 0 ) {
                     $ordered_count++;
