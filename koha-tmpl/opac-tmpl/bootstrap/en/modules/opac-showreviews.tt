@@ -160,7 +160,7 @@
                                 [% END %]
                                 [% FOREACH PAGE_NUMBER IN PAGE_NUMBERS %]
                                     [% IF ( PAGE_NUMBER.highlight ) %]
-                                        <span class="current">[% PAGE_NUMBER.pg %]</span>
+                                        <span class="currentPage">[% PAGE_NUMBER.pg %]</span>
                                     [% ELSE %]
                                         <a class="nav" href="/cgi-bin/koha/opac-showreviews.pl?offset=[% PAGE_NUMBER.offset %]">[% PAGE_NUMBER.pg %]</a>
                                     [% END %]
