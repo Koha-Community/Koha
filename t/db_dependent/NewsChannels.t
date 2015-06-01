@@ -3,7 +3,7 @@
 use Modern::Perl;
 use C4::Dates qw(format_date);
 use C4::Branch qw(GetBranchName);
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 BEGIN {
     use_ok('C4::NewsChannels');
@@ -21,6 +21,46 @@ if ( !GetBranchName($addbra) ) {
     $dbh->do( q{ INSERT INTO branches (branchcode,branchname) VALUES (?,?) },
         undef, ( $addbra, "$addbra branch" ) );
 }
+
+# Add CAT1, if it doesn't exist.
+my $addcat = 'CAT1';
+{
+    my $sth = $dbh->prepare( q{ SELECT categorycode FROM categories WHERE categorycode = ? } );
+    $sth->execute ( $addcat );
+    if ( not defined $sth->fetchrow () ) {
+        diag("Category $addcat not found, inserting");
+        $dbh->do( q{ INSERT INTO categories (categorycode,description) VALUES (?,?) },
+            undef, ( $addcat, "$addcat description") );
+    }
+}
+
+# Add a test user if not already present.
+my $addbrwr = 'BRWR1';
+my $brwrnmbr;
+{
+    my $query =
+        q{ SELECT borrowernumber from borrowers WHERE surname = ? AND branchcode = ? AND categorycode = ? };
+    my $sth = $dbh->prepare( $query );
+    $sth->execute( ($addbrwr, $addbra, $addcat) );
+    $brwrnmbr = $sth->fetchrow;
+
+    # Not found, let us insert it.
+    if ( not defined $brwrnmbr ) {
+        diag("Borrower $addbrwr not found, inserting");
+        $dbh->do( q{ INSERT INTO borrowers (surname, address, city, branchcode, categorycode) VALUES (?, ?, ?, ?, ?) },
+            undef, ($addbrwr, '(test) address', '(test) city', $addbra, $addcat) );
+
+        # Retrieve the njew borrower number.
+        $query =
+            q{ SELECT borrowernumber from borrowers WHERE surname = ? AND branchcode = ? AND categorycode = ? };
+        my $sth = $dbh->prepare( $query );
+        $sth->execute( ($addbrwr, $addbra, $addcat) );
+        $brwrnmbr = $sth->fetchrow;
+    }
+}
+
+# Must have valid borrower number, or tests are meaningless.
+ok ( defined $brwrnmbr );
 
 # Test add_opac_new
 my $rv = add_opac_new();    # intentionally bad
@@ -52,6 +92,7 @@ my $href_entry2 = {
     expirationdate => $expirationdate2,
     timestamp      => $timestamp2,
     number         => $number2,
+    borrowernumber => $brwrnmbr,
     branchcode     => 'LIB1',
 };
 $rv = add_opac_new($href_entry2);
@@ -95,6 +136,7 @@ is_deeply(
         expirationdate => $expirationdate1,
         timestamp      => $timestamp1,
         number         => $number1,
+        borrowernumber => undef,
         idnew          => $idnew1,
         branchname     => "$addbra branch",
         branchcode     => $addbra,
@@ -117,6 +159,7 @@ is_deeply(
         expirationdate => $expirationdate2,
         timestamp      => $timestamp2,
         number         => $number2,
+        borrowernumber => $brwrnmbr,
         idnew          => $idnew2,
         branchname     => "$addbra branch",
         branchcode     => $addbra,
