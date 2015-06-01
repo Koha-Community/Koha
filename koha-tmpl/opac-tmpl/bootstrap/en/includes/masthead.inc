@@ -72,7 +72,7 @@
                         <a id="user-menu-trigger" class="pull-right" href="#"><i class="icon-user"></i> <span class="caret"></span></a>
                         <div id="members">
                             <ul class="nav pull-right">
-                                [% IF OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'mast' %]
+                                [% IF OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'top' %]
                                     [% IF ( opaclanguagesdisplay ) %]
                                         [% IF ( languages_loop && opaclanguagesdisplay ) %]
                                             [% UNLESS ( one_language_enabled ) %]

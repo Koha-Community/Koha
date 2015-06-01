@@ -30,7 +30,7 @@
     [% END # / OpacKohaUrl %]
 
 </div> <!-- / #wrap in masthead.inc -->
-[% IF OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'foot' %]
+[% IF OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'footer' %]
     [% IF ( opaclanguagesdisplay ) %]
         [% IF ( languages_loop && opaclanguagesdisplay ) %]
             [% UNLESS ( one_language_enabled ) %]
