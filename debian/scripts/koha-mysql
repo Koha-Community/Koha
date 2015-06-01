@@ -29,8 +29,9 @@ else
     exit 1
 fi
 
-[ "$#" = 1 ] || die "Usage: $0 instancename"
+is_instance "$1" || die "Usage: $0 instancename"
 name="$1"
+shift # remove instance name from argument list.
 kohaconfig="/etc/koha/sites/$name/koha-conf.xml"
 
 mysqlhost="$( xmlstarlet sel -t -v 'yazgfs/config/hostname' $kohaconfig )"
@@ -39,5 +40,5 @@ mysqluser="$( xmlstarlet sel -t -v 'yazgfs/config/user' $kohaconfig )"
 mysqlpass="$( xmlstarlet sel -t -v 'yazgfs/config/pass' $kohaconfig )"
 
 mysql --host="$mysqlhost" --user="$mysqluser" --password="$mysqlpass" \
-    "$mysqldb"
+    "$mysqldb"  "${@}"
 
