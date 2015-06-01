@@ -1198,6 +1198,8 @@ sub getIndexes{
                     'popularity',
                     'pubdate',
                     'Publisher',
+                    'Provider',
+                    'pv',
                     'Record-control-number',
                     'rcn',
                     'Record-type',

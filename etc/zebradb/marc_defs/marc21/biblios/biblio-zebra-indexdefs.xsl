@@ -1861,7 +1861,20 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     </z:index>
   </xslo:template>
   <xslo:template mode="index_data_field" match="marc:datafield[@tag='260']">
-    <z:index name="pl:w">
+    <z:index name="pl:w Provider:w">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="position() &gt; 1">
+            <xslo:value-of select="substring(' ', 1, 1)"/>
+          </xslo:if>
+          <xslo:value-of select="."/>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_data_field" match="marc:datafield[@tag='264']">
+    <z:index name="Provider:w">
       <xslo:variable name="raw_heading">
         <xslo:for-each select="marc:subfield">
           <xslo:if test="position() &gt; 1">
