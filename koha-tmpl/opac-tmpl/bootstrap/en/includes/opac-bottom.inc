@@ -34,7 +34,7 @@
     [% IF ( opaclanguagesdisplay ) %]
         [% IF ( languages_loop && opaclanguagesdisplay ) %]
             [% UNLESS ( one_language_enabled ) %]
-                <div id="changelanguage" class="navbar navbar-fixed-bottom navbar-static-bottom">
+                <div id="changelanguage" class="navbar navbar-fixed-bottom navbar-static-bottom noprint">
                     <div class="navbar-inner">
                         <ul id="i18nMenu" class="nav">
                             <li><p class="lang navbar-text"><strong>Languages:&nbsp;</strong></p></li>
