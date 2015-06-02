@@ -117,7 +117,7 @@ elsif ($op eq 'add') {
     my $renewalsallowed  = $input->param('renewalsallowed');
     my $renewalperiod    = $input->param('renewalperiod');
     my $norenewalbefore  = $input->param('norenewalbefore');
-    $norenewalbefore = undef if $norenewalbefore eq '0' or $norenewalbefore =~ /^\s*$/;
+    $norenewalbefore = undef if $norenewalbefore =~ /^\s*$/;
     my $auto_renew = $input->param('auto_renew') eq 'yes' ? 1 : 0;
     my $reservesallowed  = $input->param('reservesallowed');
     my $onshelfholds     = $input->param('onshelfholds') || 0;

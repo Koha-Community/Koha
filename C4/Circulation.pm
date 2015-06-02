@@ -2817,12 +2817,15 @@ sub CanBookBeRenewed {
         return ( 0, 'overdue');
     }
 
-    if ( $issuingrule->{norenewalbefore} ) {
+    if ( defined $issuingrule->{norenewalbefore}
+        and $issuingrule->{norenewalbefore} ne "" )
+    {
 
         # Get current time and add norenewalbefore.
         # If this is smaller than date_due, it's too soon for renewal.
+        my $now = dt_from_string;
         if (
-            DateTime->now( time_zone => C4::Context->tz() )->add(
+            $now->add(
                 $issuingrule->{lengthunit} => $issuingrule->{norenewalbefore}
             ) < $itemissue->{date_due}
           )
@@ -2830,9 +2833,20 @@ sub CanBookBeRenewed {
             return ( 0, "auto_too_soon" ) if $itemissue->{auto_renew};
             return ( 0, "too_soon" );
         }
+        elsif ( $itemissue->{auto_renew} ) {
+            return ( 0, "auto_renew" );
+        }
     }
 
-    return ( 0, "auto_renew" ) if $itemissue->{auto_renew};
+    # Fallback for automatic renewals:
+    # If norenewalbefore is undef, don't renew before due date.
+    elsif ( $itemissue->{auto_renew} ) {
+        my $now = dt_from_string;
+        return ( 0, "auto_renew" )
+          if $now >= $itemissue->{date_due};
+        return ( 0, "auto_too_soon" );
+    }
+
     return ( 1, undef );
 }
 
@@ -3044,9 +3058,11 @@ sub GetSoonestRenewDate {
     my $issuingrule =
       GetIssuingRule( $borrower->{categorycode}, $item->{itype}, $branchcode );
 
-    my $now = DateTime->now( time_zone => C4::Context->tz() );
+    my $now = dt_from_string;
 
-    if ( $issuingrule->{norenewalbefore} ) {
+    if ( defined $issuingrule->{norenewalbefore}
+        and $issuingrule->{norenewalbefore} ne "" )
+    {
         my $soonestrenewal =
           $itemissue->{date_due}->subtract(
             $issuingrule->{lengthunit} => $issuingrule->{norenewalbefore} );
