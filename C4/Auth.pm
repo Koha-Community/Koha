@@ -434,12 +434,15 @@ sub get_template_and_user {
         $LibraryNameTitle =~ s/<(?:\/?)(?:br|p)\s*(?:\/?)>/ /sgi;
         $LibraryNameTitle =~ s/<(?:[^<>'"]|'(?:[^']*)'|"(?:[^"]*)")*>//sg;
 
-        # clean up the busc param in the session if the page is not opac-detail and not the "add to list" page
+        # clean up the busc param in the session
+        # if the page is not opac-detail and not the "add to list" page
+        # and not the "edit comments" page
         if ( C4::Context->preference("OpacBrowseResults")
             && $in->{'template_name'} =~ /opac-(.+)\.(?:tt|tmpl)$/ ) {
             my $pagename = $1;
             unless ( $pagename =~ /^(?:MARC|ISBD)?detail$/
-                or $pagename =~ /^addbybiblionumber$/ ) {
+                or $pagename =~ /^addbybiblionumber$/
+                or $pagename =~ /^review$/ ) {
                 my $sessionSearch = get_session( $sessionID || $in->{'query'}->cookie("CGISESSID") );
                 $sessionSearch->clear( ["busc"] ) if ( $sessionSearch->param("busc") );
             }
