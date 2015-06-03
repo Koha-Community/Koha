@@ -155,13 +155,62 @@ sub _buildColumnValues {
 
     my $col_values;
     my @columns = $self->schema->source($source)->columns;
-    for my $col_name( @columns ) {
-        my $col_value = $self->_buildColumnValue({
-            source      => $source,
-            column_name => $col_name,
-            value       => $value,
-        });
-        $col_values->{$col_name} = $col_value if( defined( $col_value ) );
+    my %unique_constraints = $self->schema->source($source)->unique_constraints();
+
+    my $values_ok = 0;
+    my $at_least_one_constraint_failed;
+
+    while ( not $values_ok ) {
+
+        $at_least_one_constraint_failed = 0;
+        # generate random values
+        for my $col_name( @columns ) {
+            my $col_value = $self->_buildColumnValue({
+                source      => $source,
+                column_name => $col_name,
+                value       => $value,
+            });
+            $col_values->{$col_name} = $col_value if( defined( $col_value ) );
+        }
+
+        # If default values are set, maybe the data exist in the DB
+        # But no need to wait for another value
+        last if exists( $default_value->{$source} );
+
+        if ( scalar keys %unique_constraints > 0 ) {
+
+            # verify the data would respect each unique constraint
+            foreach my $constraint (keys %unique_constraints) {
+
+                my $condition;
+                my @constraint_columns = $unique_constraints{$constraint};
+                # loop through all constraint columns and build the condition
+                foreach my $constraint_column ( @constraint_columns ) {
+                    # build the filter
+                    $condition->{ $constraint_column } =
+                            $col_values->{ $constraint_column };
+                }
+
+                my $count = $self->schema
+                                 ->resultset( $source )
+                                 ->search( $condition )
+                                 ->count();
+                if ( $count > 0 ) {
+                    $at_least_one_constraint_failed = 1;
+                    # no point checking more stuff, exit the loop
+                    last;
+                }
+            }
+
+            if ( $at_least_one_constraint_failed ) {
+                $values_ok = 0;
+            } else {
+                $values_ok = 1;
+            }
+
+        } else {
+            $values_ok = 1;
+        }
     }
     return $col_values;
 }
