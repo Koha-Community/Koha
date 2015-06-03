@@ -20,7 +20,7 @@ $dbh->{RaiseError} = 1;
 $dbh->do(q|DELETE FROM discharges|);
 
 C4::Context->_new_userenv('xxx');
-C4::Context::set_userenv(0, 0, 0, 'firstname', 'surname', 'CPL', 'CPL', '', '', '');
+C4::Context->set_userenv(0, 0, 0, 'firstname', 'surname', 'CPL', 'CPL', '', '', '', '', '');
 
 my $borrowernumber = AddMember(
     cardnumber => 'UTCARD1',
