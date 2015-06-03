@@ -1,0 +1,56 @@
+#!/usr/bin/perl
+
+# Copyright 2014 ByWater Solutions
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+use Modern::Perl;
+
+use CGI;
+
+use C4::Auth;
+use C4::Context;
+use Koha::Database;
+
+use JSON qw( to_json );
+
+my $cgi = CGI->new();
+
+my $privacy_guarantor_checkouts = $cgi->param('privacy_guarantor_checkouts');
+
+my ( $userid, $cookie, $sessionID, $flags ) = checkauth( $cgi, 1, {}, 'opac' );
+
+my $borrowernumber = C4::Context->userenv ? C4::Context->userenv->{number} : undef;
+
+my $success = 0;
+if ( $borrowernumber && defined($privacy_guarantor_checkouts) ) {
+    my $patron = Koha::Database->new()->schema()->resultset('Borrower')->find($borrowernumber);
+
+    $success = $patron->update( { privacy_guarantor_checkouts => $privacy_guarantor_checkouts } );
+}
+
+binmode STDOUT, ":encoding(UTF-8)";
+print $cgi->header(
+    -type    => 'application/json',
+    -charset => 'UTF-8'
+);
+
+print to_json(
+    {
+        success => $success ? 1 : 0,
+        privacy_guarantor_checkouts => $privacy_guarantor_checkouts,
+    }
+);
