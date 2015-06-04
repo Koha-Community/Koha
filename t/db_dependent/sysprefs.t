@@ -19,7 +19,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use C4::Context;
 
 # Start transaction
@@ -31,10 +31,10 @@ my $opacheader    = C4::Context->preference('opacheader');
 my $newopacheader = "newopacheader";
 
 C4::Context->set_preference( 'OPACHEADER', $newopacheader );
-is( C4::Context->preference('opacheader'), $newopacheader );
+is( C4::Context->preference('opacheader'), $newopacheader, 'The pref should have been set correctly' );
 
 C4::Context->set_preference( 'opacheader', $opacheader );
-is( C4::Context->preference('OPACHEADER'), $opacheader );
+is( C4::Context->preference('OPACHEADER'), $opacheader, 'A pref name should be case insensitive');
 
 $ENV{OVERRIDE_SYSPREF_opacheader} = 'this is an override';
 C4::Context->clear_syspref_cache();
@@ -44,5 +44,7 @@ is(
     'system preference value overridden from environment'
 );
 
+is( C4::Context->preference('IDoNotExist'), undef, 'Get a non-existent system preference should return undef');
+
 C4::Context->set_preference( 'IDoNotExist', 'NonExistent' );
-is( C4::Context->preference('IDoNotExist'), 'NonExistent', 'Test creation of non-existant system preferencer' );
+is( C4::Context->preference('IDoNotExist'), 'NonExistent', 'Test creation of non-existent system preference' );

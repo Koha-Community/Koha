@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::Warn;
 
 use C4::Context;
@@ -71,6 +71,9 @@ is( $b1->surname(), $b1_new->surname(), "Found matching borrower" );
 
 my @borrowers = Koha::Borrowers->search( { branchcode => $branchcode } );
 is( @borrowers, 3, "Found 3 borrowers with Search" );
+
+my $unexistent = Koha::Borrowers->find( '1234567890' );
+is( $unexistent, undef, 'Koha::Objects->Find should return undef if the record does not exist' );
 
 my $borrowers = Koha::Borrowers->search( { branchcode => $branchcode } );
 is( $borrowers->count( { branchcode => $branchcode } ), 3, "Counted 3 borrowers with Count" );
