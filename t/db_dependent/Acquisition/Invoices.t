@@ -7,6 +7,7 @@ use C4::Bookseller qw( AddBookseller );
 
 use Koha::Acquisition::Order;
 use Koha::Acquisition::Bookseller;
+use Koha::Database;
 
 use Test::More tests => 24;
 
@@ -14,8 +15,9 @@ BEGIN {
     use_ok('C4::Acquisition');
 }
 
+my $schema = Koha::Database->new()->schema();
+$schema->storage->txn_begin();
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 $dbh->do(q{DELETE FROM aqinvoices});
@@ -193,5 +195,5 @@ my @invoices_linked_to_subscriptions = map{
 is_deeply( \@invoices_linked_to_subscriptions, [], "GetInvoices return linked_to_subscriptions: there is no invoices linked to subscriptions yet" );
 
 END {
-    $dbh and $dbh->rollback;
+    $dbh and $schema->storage->txn_rollback();
 }

@@ -7,14 +7,15 @@ use C4::Acquisition;
 use C4::Biblio;
 use C4::Bookseller;
 use C4::Budgets;
-
+use Koha::Database;
 use Koha::Acquisition::Order;
 
 use MARC::Record;
 
 #Start transaction
+my $schema = Koha::Database->new()->schema();
+$schema->storage->txn_begin();
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 my $booksellerid = C4::Bookseller::AddBookseller(
@@ -81,6 +82,6 @@ is(scalar(@orders), 1, '1 order on biblionumber 1');
 is(scalar(@orders), 2, '2 orders on biblionumber 2');
 
 #End transaction
-$dbh->rollback;
+$schema->storage->txn_rollback();
 
 done_testing;

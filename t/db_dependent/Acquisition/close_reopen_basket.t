@@ -8,12 +8,14 @@ use C4::Biblio qw( AddBiblio DelBiblio );
 use C4::Bookseller;
 use C4::Budgets;
 use C4::Context;
-
+use Koha::Database;
 use Koha::Acquisition::Order;
 
 # Start transaction
+my $schema = Koha::Database->new()->schema();
+$schema->storage->txn_begin();
+
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 $dbh->do(q{
@@ -80,4 +82,4 @@ C4::Acquisition::ReopenBasket( $basketno );
 is ( scalar( map { $_->{orderstatus} eq 'ordered' ? 1 : () } @orders ), 0, "No order are ordered, the basket is reopen" );
 is ( scalar( map { $_->{orderstatus} eq 'new' ? 1 : () } @orders ), 2, "2 orders are new, the basket is reopen" );
 
-$dbh->rollback;
+$schema->storage->txn_rollback();

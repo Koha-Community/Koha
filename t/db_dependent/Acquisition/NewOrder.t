@@ -8,11 +8,13 @@ use C4::Biblio;
 use C4::Bookseller;
 use C4::Budgets;
 use MARC::Record;
+use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Order;
 
+my $schema = Koha::Database->new()->schema();
+$schema->storage->txn_begin();
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 my $booksellerid = C4::Bookseller::AddBookseller(
@@ -84,3 +86,5 @@ my $ordernumber = $order->{ordernumber};
 $order = Koha::Acquisition::Order->fetch({ ordernumber => $ordernumber });
 is( $order->{quantityreceived}, 0, 'Koha::Acquisition::Order->insert set quantityreceivedto 0 if undef is given' );
 is( $order->{entrydate}, output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }), 'Koha::Acquisition::Order->insert set entrydate to today' );
+
+$schema->storage->txn_rollback();

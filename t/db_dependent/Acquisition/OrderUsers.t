@@ -5,12 +5,13 @@ use C4::Acquisition;
 use C4::Biblio;
 use C4::Bookseller;
 use C4::Letters;
-
+use Koha::Database;
 use Koha::Acquisition::Order;
 
+my $schema = Koha::Database->new()->schema();
+$schema->storage->txn_begin();
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
 
 # Creating some orders
 my $booksellerid = C4::Bookseller::AddBookseller(
@@ -108,3 +109,5 @@ ModReceiveOrder(
 
 $messages = C4::Letters::GetQueuedMessages({ borrowernumber => $borrowernumber });
 is( scalar( @$messages ), 1, 'The letter has been sent to message queue on receiving the order');
+
+$schema->storage->txn_rollback();

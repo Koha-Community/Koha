@@ -20,6 +20,7 @@ use Modern::Perl;
 use POSIX qw(strftime);
 
 use Test::More tests => 87;
+use Koha::Database;
 
 BEGIN {
     use_ok('C4::Acquisition');
@@ -116,8 +117,11 @@ sub _check_fields_of_orders {
     );
 }
 
+
+my $schema = Koha::Database->new()->schema();
+$schema->storage->txn_begin();
+
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 # Creating some orders
@@ -917,4 +921,4 @@ ok(($order4->{cancellationreason} eq "foobar"), "order has cancellation reason \
 ok((not defined GetBiblio($order4->{biblionumber})), "biblio does not exist anymore");
 # End of tests for DelOrder
 
-$dbh->rollback;
+$schema->storage->txn_rollback();

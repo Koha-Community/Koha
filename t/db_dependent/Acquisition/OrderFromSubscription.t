@@ -9,10 +9,12 @@ use_ok('C4::Budgets');
 use_ok('C4::Serials');
 
 use Koha::Acquisition::Order;
+use Koha::Database;
 
 # Start transaction
+my $schema = Koha::Database->new()->schema();
+$schema->storage->txn_begin();
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 my $booksellerid = C4::Bookseller::AddBookseller(
@@ -109,4 +111,4 @@ my @invoices_linked_to_subscriptions = grep { $_->{is_linked_to_subscriptions} }
 is(scalar(@invoices_linked_to_subscriptions), 1, 'GetInvoices() can identify invoices that are linked to a subscription');
 
 # Cleanup
-$dbh->rollback;
+$schema->storage->txn_rollback();

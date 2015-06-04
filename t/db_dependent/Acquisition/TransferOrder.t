@@ -9,13 +9,16 @@ use C4::Biblio;
 use C4::Items;
 use C4::Bookseller;
 use C4::Budgets;
+use Koha::Database;
 use Koha::DateUtils;
 use Koha::Acquisition::Order;
 use MARC::Record;
 
+my $schema = Koha::Database->new()->schema();
+$schema->storage->txn_begin();
+
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
 
 my $booksellerid1 = C4::Bookseller::AddBookseller(
     {
@@ -97,4 +100,4 @@ $order = GetOrder( $newordernumber );
 is ( $order->{ordernumber}, $newordernumber, 'Regression test Bug 11549: After a transfer, receive and cancel the receive should be possible.' );
 is ( $order->{basketno}, $basketno2, 'Regression test Bug 11549: The order still exist in the basket where the transfer has been done.');
 
-$dbh->rollback;
+$schema->storage->txn_rollback();

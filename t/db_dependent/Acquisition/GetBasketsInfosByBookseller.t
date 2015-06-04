@@ -9,11 +9,13 @@ use C4::Biblio qw( AddBiblio );
 use C4::Bookseller qw( AddBookseller );
 use C4::Budgets qw( AddBudget );
 use C4::Context;
-
+use Koha::Database;
 use Koha::Acquisition::Order;
 
+my $schema = Koha::Database->new()->schema();
+$schema->storage->txn_begin();
+
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 my $supplierid = C4::Bookseller::AddBookseller(
@@ -94,4 +96,4 @@ $baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid, 1 );
 is( scalar(@$baskets), 1, 'Basket is closed, test allbasket parameter');
 
 
-$dbh->rollback
+$schema->storage->txn_rollback();

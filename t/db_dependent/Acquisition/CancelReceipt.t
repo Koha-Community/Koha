@@ -11,13 +11,15 @@ use C4::Bookseller;
 use C4::Budgets;
 use t::lib::Mocks;
 
+use Koha::Database;
 use Koha::DateUtils;
 use Koha::Acquisition::Order;
 use MARC::Record;
 
+my $schema = Koha::Database->new()->schema();
+$schema->storage->txn_begin();
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
 
 my $booksellerid1 = C4::Bookseller::AddBookseller(
     {
@@ -148,4 +150,4 @@ is( $item1->{notforloan}, 9, "The notforloan value has been updated with '9'" );
 my $item2 = C4::Items::GetItem( $itemnumber2 );
 is( $item2->{notforloan}, 0, "The notforloan value has been updated with '9'" );
 
-$dbh->rollback;
+$schema->storage->txn_rollback();
