@@ -171,8 +171,8 @@ function BindPluginEvents(data) {
 // the events for the plugin
 // when we append, this code does not get executed anymore; so we do it here
     var events= data.match(/BindEventstag_\d+_subfield_._\d+/g);
-    var i;
-    for(i=0; i<events.length; i++) {
+    if ( events == null ) return;
+    for(var i=0; i<events.length; i++) {
         window[events[i]]();
         if( i<events.length-1 && events[i]==events[i+1] ) { i++; }
             // normally we find the function name twice
