@@ -45,11 +45,15 @@ use t::lib::Mocks;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Order;
 use Koha::Acquisition::Bookseller;
+use Koha::Database;
 
 my $dbh = C4::Context->dbh;
 
+my $database = Koha::Database->new();
+my $schema = $database->schema();
+$schema->storage->txn_begin();
+
 # Start transaction
-$dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 $dbh->do(q|DELETE FROM letter|);
@@ -341,4 +345,4 @@ is($err, 1, "Successfully sent claim");
 is($mail{'To'}, 'testemail@mydomain.com', "mailto correct in sent claim");
 is($mail{'Message'}, 'my vendor|John Smith|Ordernumber ' . $ordernumber . ' (Silence in the library) (1 ordered)', 'Claim notice text constructed successfully');
 
-$dbh->rollback;
+$schema->storage->txn_rollback();
