@@ -10462,6 +10462,30 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.20.00.001";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(
+        q|
+                    INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added)
+                    VALUES ( 'IN', 'region', 'India','2015-05-28');
+                |
+    );
+    $dbh->do(
+        q|
+                    INSERT IGNORE INTO language_descriptions(subtag, type, lang, description)
+                    VALUES ( 'IN', 'region', 'en', 'India');
+                |
+    );
+    $dbh->do(
+        q|
+                    INSERT IGNORE INTO language_descriptions(subtag, type, lang, description)
+                    VALUES ( 'IN', 'region', 'bn', 'ভারত');
+                |
+    );
+    print "Upgrade to $DBversion done (Bug 14285: Add new region India)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
