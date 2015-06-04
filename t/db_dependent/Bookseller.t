@@ -15,6 +15,7 @@ use C4::Budgets;
 use C4::Biblio;
 
 use Koha::Acquisition::Order;
+use Koha::Database;
 
 BEGIN {
     use_ok('C4::Bookseller');
@@ -32,8 +33,11 @@ can_ok(
 
 #Start transaction
 my $dbh = C4::Context->dbh;
+my $database = Koha::Database->new();
+my $schema = $database->schema();
+$schema->storage->txn_begin();
+
 $dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
 
 #Start tests
 $dbh->do(q|DELETE FROM aqorders|);
@@ -742,7 +746,7 @@ is( scalar @$contacts,
     1, 'Only one contact after modification' );
 
 #End transaction
-$dbh->rollback;
+$schema->storage->txn_rollback();
 
 #field_filter filters the useless fields or foreign keys
 #NOTE: all the fields of aqbookseller arent considered
