@@ -46,7 +46,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
 
 my $bib_list     = $query->param('bib_list');
 my $email_add    = $query->param('email_add');
-my $email_sender = $query->param('email_sender');
 
 my $dbh          = C4::Context->dbh;
 
@@ -101,7 +100,6 @@ if ( $email_add ) {
     my $resultsarray = \@results;
     $template2->param(
         BIBLIO_RESULTS => $resultsarray,
-        email_sender   => $email_sender,
         comment        => $comment
     );
 
