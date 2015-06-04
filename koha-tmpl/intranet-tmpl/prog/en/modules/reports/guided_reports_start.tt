@@ -1045,7 +1045,10 @@ Sub report:<select name="subreport">
     <li><label for="filter_keyword">Keyword:</label> <input type="text" id="filter_keyword" name="filter_keyword" value="[% filters.keyword %]" /></li>
   </ol>
   </fieldset>
-  <fieldset class="action"><input type="submit" value="Apply filter" /></fieldset>
+  <fieldset class="action">
+    <input type="submit" value="Apply filter" />
+    <a id="resetReportsFilter" href="?phase=Use saved&clear_filters=1">Clear</a>
+  </fieldset>
 </form>
 </div>
 [% END %]

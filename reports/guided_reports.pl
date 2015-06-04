@@ -77,7 +77,7 @@ if ( $input->param("filter_set") ) {
     $session->param('report_filter', $filter) if $session;
     $template->param( 'filter_set' => 1 );
 }
-elsif ($session) {
+elsif ($session and not $input->param('clear_filters')) {
     $filter = $session->param('report_filter');
 }
 
