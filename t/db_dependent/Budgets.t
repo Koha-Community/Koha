@@ -12,10 +12,13 @@ use C4::Dates;
 use C4::Members qw( AddMember );
 
 use Koha::Acquisition::Order;
+use Koha::Database;
 
 use YAML;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
+my $database = Koha::Database->new();
+my $schema = $database->schema();
+$schema->storage->txn_begin();
 $dbh->{RaiseError} = 1;
 
 $dbh->do(q|DELETE FROM aqbudgetperiods|);
@@ -578,6 +581,8 @@ is( C4::Budgets::GetBudget($budget_id2)->{budget_owner_id},
     undef, "SetOwnerToFundHierarchy should have set John Doe $john_doe for budget 2 ($budget_id2)" );
 is( C4::Budgets::GetBudget($budget_id21)->{budget_owner_id},
     undef, "SetOwnerToFundHierarchy should have set John Doe $john_doe for budget 21 ($budget_id21)" );
+
+$schema->storage->txn_rollback();
 
 sub _get_dependencies {
     my ($budget_hierarchy) = @_;
