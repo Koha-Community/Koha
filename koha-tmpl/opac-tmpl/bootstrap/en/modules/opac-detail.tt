@@ -1612,7 +1612,7 @@
         if ($.browser.msie && parseInt($.browser.version, 10) >= 8 && window.XDomainRequest) {
         // Use Microsoft XDR for IE version 8 or above
             var xdr = new XDomainRequest();
-            xdr.open("get", "http://idreambooks.com/newbooks/api.json?q="+encodeURIComponent(isbn)+"&key=8bf66516232d1b72f3e47df939653e1e");
+            xdr.open("get", "https://idreambooks.com/newbooks/api.json?q="+encodeURIComponent(isbn)+"&key=8bf66516232d1b72f3e47df939653e1e");
             xdr.onload = function() {
                 json = 'json = '+xdr.responseText; // the string now looks like..  json = { ... };
                 eval(json); // json is now a regular JSON object
@@ -1620,7 +1620,7 @@
             }
             xdr.send();
         } else {
-            $.getJSON("http://idreambooks.com/newbooks/api.json?q="+encodeURIComponent(isbn)+"&key=8bf66516232d1b72f3e47df939653e1e", function(json){
+            $.getJSON("https://idreambooks.com/newbooks/api.json?q="+encodeURIComponent(isbn)+"&key=8bf66516232d1b72f3e47df939653e1e", function(json){
                 parseIDBJSON(json);
             });
         }
@@ -1635,7 +1635,7 @@
                 isbn = isbn.replace(/-/, '');
 
                 [% IF ( IDreamBooksReadometer ) %]
-                    $(".title").append('<a href="'+json.book.detail_link+'" id="idreambooksreadometer"><img src="http://idreambooks.com/remotereadometer/'+isbn+'.jpg" alt="'+json.book.title+' by '+json.book.author+'" title="Rating based on reviews of '+json.book.title+'"></a>');
+                    $(".title").append('<a href="'+json.book.detail_link+'" id="idreambooksreadometer"><img src="https://idreambooks.com/remotereadometer/'+isbn+'.jpg" alt="'+json.book.title+' by '+json.book.author+'" title="Rating based on reviews of '+json.book.title+'"></a>');
                 [% END %]
 
                 [% IF ( IDreamBooksReviews ) %]
