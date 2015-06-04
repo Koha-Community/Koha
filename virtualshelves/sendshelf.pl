@@ -108,7 +108,6 @@ if ($email) {
 
     $template2->param(
         BIBLIO_RESULTS => \@results,
-        email_sender   => $mail{'from'},
         comment        => $comment,
         shelfname      => $shelf[1],
     );
