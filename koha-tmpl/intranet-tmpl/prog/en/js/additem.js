@@ -165,6 +165,19 @@ function cloneItemBlock(index, unique_item_fields) {
     });
 }
 
+function BindPluginEvents(data) {
+// the script tag in data for plugins contains a document ready that binds
+// the events for the plugin
+// when we append, this code does not get executed anymore; so we do it here
+    var events= data.match(/BindEventstag_\d+_subfield_._\d+/g);
+    if ( events == null ) return;
+    for(var i=0; i<events.length; i++) {
+        window[events[i]]();
+        if( i<events.length-1 && events[i]==events[i+1] ) { i++; }
+            // normally we find the function name twice
+    }
+}
+
 function clearItemBlock(node) {
     var index = $(node).closest("div").attr('id');
     var block = $("#"+index);
