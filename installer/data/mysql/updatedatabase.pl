@@ -10538,6 +10538,22 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.21.00.006";
+if ( CheckVersion($DBversion) ) {
+    # Remove the borrow permission flag (bit 7)
+    $dbh->do(q|
+        UPDATE borrowers
+        SET flags = flags - ( flags & (1<<7) )
+        WHERE flags IS NOT NULL
+            AND flags > 0
+    |);
+    $dbh->do(q|
+        DELETE FROM userflags WHERE bit=7;
+    |);
+    print "Upgrade to $DBversion done (Bug 7976: Remove the 'borrow' permission)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
