@@ -3476,10 +3476,7 @@ sub get_biblio_authorised_values {
 
 =head2 CountBiblioInOrders
 
-=over 4
-$count = &CountBiblioInOrders( $biblionumber);
-
-=back
+    $count = &CountBiblioInOrders( $biblionumber);
 
 This function return count of biblios in orders with $biblionumber 
 
@@ -3499,10 +3496,7 @@ sub CountBiblioInOrders {
 
 =head2 GetSubscriptionsId
 
-=over 4
-$subscriptions = &GetSubscriptionsId($biblionumber);
-
-=back
+    $subscriptions = &GetSubscriptionsId($biblionumber);
 
 This function return an array of subscriptionid with $biblionumber
 
@@ -3522,10 +3516,7 @@ sub GetSubscriptionsId {
 
 =head2 GetHolds
 
-=over 4
-$holds = &GetHolds($biblionumber);
-
-=back
+    $holds = &GetHolds($biblionumber);
 
 This function return the count of holds with $biblionumber
 
