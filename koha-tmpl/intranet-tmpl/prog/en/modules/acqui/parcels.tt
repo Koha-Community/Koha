@@ -139,7 +139,7 @@
     [% IF ( number.highlight ) %]
     <span class="current">[% number.number %]</span>
     [% ELSE %]
-    <a href="parcels.pl?booksellerid=[% number.booksellerid %]&amp;startfrom=[% number.startfrom %][% IF ( number.datefrom ) %]&amp;datefrom=[% number.datefrom %][% END %][% IF ( number.dateto ) %]&amp;dateto=[% number.dateto %][% END %][% IF ( number.code ) %]&amp;filter=[% number.code %][% END %][% IF ( number.orderby ) %]&amp;orderby=[% number.orderby %][% END %][% IF ( number.resultsperpage ) %]&amp;resultsperpage=[% number.resultsperpage %][% END %]&amp;type=intra">[% number.number %]</a>
+    <a href="parcels.pl?booksellerid=[% booksellerid %]&amp;startfrom=[% number.startfrom %][% IF ( number.datefrom ) %]&amp;datefrom=[% number.datefrom %][% END %][% IF ( number.dateto ) %]&amp;dateto=[% number.dateto %][% END %][% IF ( number.code ) %]&amp;filter=[% number.code %][% END %][% IF ( number.orderby ) %]&amp;orderby=[% number.orderby %][% END %][% IF ( number.resultsperpage ) %]&amp;resultsperpage=[% number.resultsperpage %][% END %]&amp;type=intra">[% number.number %]</a>
     [% END %]
 [% END %]
 [% IF ( displaynext ) %]
