@@ -54,14 +54,20 @@ BEGIN {
     Log::Log4perl->init_once($conf);
 }
 
+=head2 get
+
+    Returns a log4perl object.
+    Category and interface parameter are optional.
+    Normally, the category should follow the current package and the interface
+    should be set correctly via C4::Context.
+
+=cut
+
 sub get {
     my ( $class, $category, $interface ) = @_;
-
-    croak("No category passed in!") unless $category;
-
     $interface ||= C4::Context->interface();
-
-    return Log::Log4perl->get_logger("$interface.$category");
+    $category = caller if !$category;
+    return Log::Log4perl->get_logger( $interface. '.'. $category );
 }
 
 =head1 AUTHOR
