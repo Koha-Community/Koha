@@ -76,8 +76,8 @@ sub search {
         $term .= '%' # end with anything
             if $term !~ /%$/;
         $term = "%$term" # begin with anythin unless start_with
-            if $term !~ /^%/
-                and $searchtype eq "contain";
+            if (defined $searchtype) && $searchtype eq "contain"
+                && $term !~ /^%/;
         my @where_strs_or;
         for my $searchfield ( split /,/, $searchfields->{$searchfieldstype} ) {
             push @where_strs_or, "borrowers." . $dbh->quote_identifier($searchfield) . " LIKE ?";
