@@ -147,7 +147,7 @@ if ( ($op eq 'Upload') && $uploadfile ) {       # Case is important in these ope
     $template->param(filetype => $filetype);
 } elsif ( $op eq 'Delete' ) {
     my $dberror = RmPatronImage($borrowernumber);
-	$debug and warn "Patron image deleted for $cardnumber";
+    $debug and warn "Patron image deleted for $borrowernumber";
     warn "Database returned $dberror" if $dberror;
 }
 if ( $borrowernumber && !$errors && !$template->param('ERRORS') ) {
