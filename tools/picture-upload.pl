@@ -157,8 +157,8 @@ elsif ( ( $op eq 'Upload' ) && !$uploadfile ) {
     $template->param( filetype   => $filetype );
 }
 elsif ( $op eq 'Delete' ) {
-    my $dberror = RmPatronImage($cardnumber);
-    $debug and warn "Patron image deleted for $cardnumber";
+    my $dberror = RmPatronImage($borrowernumber);
+    $debug and warn "Patron image deleted for $borrowernumber";
     warn "Database returned $dberror" if $dberror;
 }
 if ( $borrowernumber && !%errors && !$template->param('ERRORS') ) {
