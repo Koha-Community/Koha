@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 44;
+use Test::More tests => 46;
 use Test::MockModule;
 use Test::Warn;
 use DBD::Mock;
@@ -167,9 +167,16 @@ warning_is { $ret = RemoveAllNsb() }
 
 ok( !defined $ret, 'RemoveAllNsb returns undef if not passed rec');
 
-warning_is { $ret = UpdateTotalIssues() }
-           { carped => 'UpdateTotalIssues could not get biblio record'},
-           "UpdateTotalIssues returns carped warning if biblio record does not exist";
+warning_is { $ret = GetMarcBiblio() }
+           { carped => 'GetMarcBiblio called with undefined biblionumber'},
+           "GetMarcBiblio returns carped warning on undef biblionumber";
+
+ok( !defined $ret, 'GetMarcBiblio returns undef if not passed a biblionumber');
+
+warnings_like { $ret = UpdateTotalIssues() }
+              [ { carped => qr/GetMarcBiblio called with undefined biblionumber/ },
+                { carped => qr/UpdateTotalIssues could not get biblio record/ } ],
+    "UpdateTotalIssues returns carped warnings if biblio record does not exist";
 
 ok( !defined $ret, 'UpdateTotalIssues returns carped warning if biblio record does not exist');
 
