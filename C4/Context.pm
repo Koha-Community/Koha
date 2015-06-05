@@ -527,7 +527,8 @@ sub preference {
     if ( defined $ENV{"OVERRIDE_SYSPREF_$var"} ) {
         $value = $ENV{"OVERRIDE_SYSPREF_$var"};
     } else {
-        my $syspref = Koha::Config::SysPrefs->find( lc $var );
+        my $syspref;
+        eval { $syspref = Koha::Config::SysPrefs->find( lc $var ) };
         $value = $syspref ? $syspref->value() : undef;
     }
 
