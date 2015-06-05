@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-#
 
 use strict;
 use warnings;
@@ -8,14 +7,17 @@ use Test::More;
 use Test::MockModule;
 use vars qw($debug $koha $dbh $config $ret);
 
+use Koha::Database;
+
 BEGIN {
-		$debug = $ENV{DEBUG} || 0;
-        # Note: The overall number of tests may vary by configuration.
-        # First we need to check your environmental variables
-		for (qw(KOHA_CONF PERL5LIB)) {
-			ok($ret = $ENV{$_}, "ENV{$_} = $ret");
-		}
-		use_ok('C4::Context');
+    $debug = $ENV{DEBUG} || 0;
+
+    # Note: The overall number of tests may vary by configuration.
+    # First we need to check your environmental variables
+    for (qw(KOHA_CONF PERL5LIB)) {
+        ok( $ret = $ENV{$_}, "ENV{$_} = $ret" );
+    }
+    use_ok('C4::Context');
 }
 
 ok($dbh = C4::Context->dbh(), 'Getting dbh from C4::Context');
@@ -72,53 +74,57 @@ $module->mock(
 );
 
 my $history;
-$dbh = C4::Context->dbh({ new => 1 });
 
-$dbh->{mock_add_resultset} = [ ['value'], ['thing1'] ];
-$dbh->{mock_add_resultset} = [ ['value'], ['thing2'] ];
-$dbh->{mock_add_resultset} = [ ['value'], ['thing3'] ];
-$dbh->{mock_add_resultset} = [ ['value'], ['thing4'] ];
+my $schema = Koha::Database->new()->schema();
+$schema->storage->debug(1);
+my $trace_read;
+open my $trace, '>', \$trace_read or die "Can't open variable: $!";
+$schema->storage->debugfh( $trace );
+
+C4::Context->set_preference('SillyPreference', 'thing1');
+my $silly_preference = Koha::Config::SysPrefs->find('SillyPreference');
+
+my $pref = C4::Context->preference("SillyPreference");
+is(C4::Context->preference("SillyPreference"), 'thing1', "Retrieved syspref (value='thing1') successfully with default behavior");
+ok( $trace_read, 'Retrieved syspref from database');
+$trace_read = q{};
 
 is(C4::Context->preference("SillyPreference"), 'thing1', "Retrieved syspref (value='thing1') successfully with default behavior");
-$history = $dbh->{mock_all_history};
-is(scalar(@{$history}), 1, 'Retrieved syspref from database');
-
-$dbh->{mock_clear_history} = 1;
-is(C4::Context->preference("SillyPreference"), 'thing1', "Retrieved syspref (value='thing1') successfully with default behavior");
-$history = $dbh->{mock_all_history};
-is(scalar(@{$history}), 0, 'Did not retrieve syspref from database');
+is( $trace_read , q{}, 'Did not retrieve syspref from database');
+$trace_read = q{};
 
 C4::Context->disable_syspref_cache();
+$silly_preference->set( { value => 'thing2' } )->store();
 is(C4::Context->preference("SillyPreference"), 'thing2', "Retrieved syspref (value='thing2') successfully with disabled cache");
-$history = $dbh->{mock_all_history};
-is(scalar(@{$history}), 1, 'Retrieved syspref from database');
+ok($trace_read, 'Retrieved syspref from database');
+$trace_read = q{};
 
-$dbh->{mock_clear_history} = 1;
+$silly_preference->set( { value => 'thing3' } )->store();
 is(C4::Context->preference("SillyPreference"), 'thing3', "Retrieved syspref (value='thing3') successfully with disabled cache");
-$history = $dbh->{mock_all_history};
-is(scalar(@{$history}), 1, 'Retrieved syspref from database');
+ok($trace_read, 'Retrieved syspref from database');
+$trace_read = q{};
 
 C4::Context->enable_syspref_cache();
-$dbh->{mock_clear_history} = 1;
 is(C4::Context->preference("SillyPreference"), 'thing3', "Retrieved syspref (value='thing3') successfully from cache");
-$history = $dbh->{mock_all_history};
-is(scalar(@{$history}), 0, 'Did not retrieve syspref from database');
+is( $trace_read, q{}, 'Did not retrieve syspref from database');
+$trace_read = q{};
 
+$silly_preference->set( { value => 'thing4' } )->store();
 C4::Context->clear_syspref_cache();
-$dbh->{mock_clear_history} = 1;
 is(C4::Context->preference("SillyPreference"), 'thing4', "Retrieved syspref (value='thing4') successfully after clearing cache");
-$history = $dbh->{mock_all_history};
-is(scalar(@{$history}), 1, 'Retrieved syspref from database');
+ok($trace_read, 'Retrieved syspref from database');
+$trace_read = q{};
 
-$dbh->{mock_clear_history} = 1;
 is(C4::Context->preference("SillyPreference"), 'thing4', "Retrieved syspref (value='thing4') successfully from cache");
-$history = $dbh->{mock_all_history};
-is(scalar(@{$history}), 0, 'Did not retrieve syspref from database');
+is( $trace_read, q{}, 'Did not retrieve syspref from database');
+$trace_read = q{};
 
 my $oConnection = C4::Context->Zconn('biblioserver', 0);
 isnt($oConnection->option('async'), 1, "ZOOM connection is synchronous");
 $oConnection = C4::Context->Zconn('biblioserver', 1);
 is($oConnection->option('async'), 1, "ZOOM connection is asynchronous");
+
+$silly_preference->delete();
 
 done_testing();
 
