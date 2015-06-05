@@ -1632,7 +1632,7 @@
         function parseIDBJSON( json ) {
             if(json.total_results > 0 && json.book.rating > 0){
                 var isbn = $(".isbn:last").text().split(" ")[1];
-                isbn = isbn.replace(/-/, '');
+                isbn = isbn.replace(/\W+/g, '');
 
                 [% IF ( IDreamBooksReadometer ) %]
                     $(".title").append('<a href="'+json.book.detail_link+'" id="idreambooksreadometer"><img src="https://idreambooks.com/remotereadometer/'+isbn+'.jpg" alt="'+json.book.title+_(" by ")+json.book.author+'" title="'+_("Rating based on reviews of ")+json.book.title+'"></a>');
