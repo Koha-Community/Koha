@@ -201,8 +201,8 @@ sub build_query_compat {
     # them into a structured ES query itself. Maybe later, though that'd be
     # more robust.
     my $query_str = join( ' AND ',
-        join( ' ', $self->_create_query_string(@search_params) ),
-        $self->_join_queries( $self->_convert_index_strings(@$limits) ) );
+        join( ' ', $self->_create_query_string(@search_params) ) || (),
+        $self->_join_queries( $self->_convert_index_strings(@$limits) ) || () );
 
     # If there's no query on the left, let's remove the junk left behind
     $query_str =~ s/^ AND //;
@@ -215,11 +215,10 @@ sub build_query_compat {
     my $query_cgi = 'idx=kw&q=' . uri_escape( $operands->[0] ) if @$operands;
     my $simple_query = $operands->[0] if @$operands == 1;
     my $query_desc   = $simple_query;
-    my $limit        = 'and ' . join( ' and ', @$limits );
+    my $limit        = $self->_join_queries( $self->_convert_index_strings(@$limits));
     my $limit_cgi =
       '&limit=' . join( '&limit=', map { uri_escape($_) } @$orig_limits );
-    my $limit_desc = "@$limits";
-
+    my $limit_desc = "$limit";
     return (
         undef,  $query,     $simple_query, $query_cgi, $query_desc,
         $limit, $limit_cgi, $limit_desc,   undef,      undef
@@ -460,19 +459,19 @@ types.
 =cut
 
 our %index_field_convert = (
-    'kw'       => '_all',
-    'ti'       => 'title',
-    'au'       => 'author',
-    'su'       => 'subject',
-    'nb'       => 'isbn',
-    'se'       => 'title-series',
-    'callnum'  => 'callnum',
-    'mc-itype' => 'itype',
-    'ln'       => 'ln',
-    'branch'   => 'homebranch',
-    'fic'      => 'lf',
-    'mus'      => 'rtype',
-    'aud'      => 'ta',
+    'kw'      => '_all',
+    'ti'      => 'title',
+    'au'      => 'author',
+    'su'      => 'subject',
+    'nb'      => 'isbn',
+    'se'      => 'title-series',
+    'callnum' => 'callnum',
+    'itype'   => 'itype',
+    'ln'      => 'ln',
+    'branch'  => 'homebranch',
+    'fic'     => 'lf',
+    'mus'     => 'rtype',
+    'aud'     => 'ta',
 );
 
 sub _convert_index_fields {
@@ -481,13 +480,23 @@ sub _convert_index_fields {
     my %index_type_convert =
       ( __default => undef, phr => 'phrase', rtrn => 'right-truncate' );
 
-    # Convert according to our table, drop anything that doesn't convert
+    # Convert according to our table, drop anything that doesn't convert.
+    # If a field starts with mc- we save it as it's used (and removed) later
+    # when joining things, to indicate we make it an 'OR' join.
+    # (Sorry, this got a bit ugly after special cases were found.)
     grep { $_->{field} } map {
         my ( $f, $t ) = split /,/;
-        {
+        my $mc = '';
+        if ($f =~ /^mc-/) {
+            $mc = 'mc-';
+            $f =~ s/^mc-//;
+        }
+        my $r = {
             field => $index_field_convert{$f},
             type  => $index_type_convert{ $t // '__default' }
-        }
+        };
+        $r->{field} = ($mc . $r->{field}) if $mc && $r->{field};
+        $r;
     } @indexes;
 }
 
@@ -503,7 +512,6 @@ elasticsearch-style. Anything it doesn't understand is returned verbatim.
 
 sub _convert_index_strings {
     my ( $self, @searches ) = @_;
-
     my @res;
     foreach my $s (@searches) {
         next if $s eq '';
@@ -576,15 +584,31 @@ booleaned together, or specifying fields, or whatever, wraps them in
 parentheses, and ANDs them all together. Suitable for feeding to the ES
 query string query.
 
+Note: doesn't AND them together if they specify an index that starts with "mc"
+as that was a special case in the original code for dealing with multiple
+choice options (you can't search for something that has an itype of A and
+and itype of B otherwise.)
+
 =cut
 
 sub _join_queries {
     my ( $self, @parts ) = @_;
 
-    @parts = grep { defined($_) && $_ ne '' } @parts;
-    return () unless @parts;
-    return $parts[0] if @parts < 2;
-    join ' AND ', map { "($_)" } @parts;
+    my @norm_parts = grep { defined($_) && $_ ne '' && $_ !~ /^mc-/ } @parts;
+    my @mc_parts =
+      map { s/^mc-//r } grep { defined($_) && $_ ne '' && $_ =~ /^mc-/ } @parts;
+    return () unless @norm_parts + @mc_parts;
+    return ( @norm_parts, @mc_parts )[0] if @norm_parts + @mc_parts == 1;
+    my $grouped_mc =
+      @mc_parts ? '(' . ( join ' OR ', map { "($_)" } @mc_parts ) . ')' : ();
+
+    # Handy trick: $x || () inside a join means that if $x ends up as an
+    # empty string, it gets replaced with (), which makes join ignore it.
+    # (bad effect: this'll also happen to '0', this hopefully doesn't matter
+    # in this case.)
+    join( ' AND ',
+        join( ' AND ', map { "($_)" } @norm_parts ) || (),
+        $grouped_mc || () );
 }
 
 =head2 _make_phrases
