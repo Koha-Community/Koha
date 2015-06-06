@@ -360,6 +360,7 @@ CREATE TABLE `branch_item_rules` ( -- information entered in the circulation and
 -- Table structure for table borrower_sync
 --
 
+DROP TABLE IF EXISTS `borrower_sync`;
 CREATE TABLE borrower_sync (
   borrowersyncid int(11) NOT NULL AUTO_INCREMENT, -- Primary key, unique identifier
   borrowernumber int(11) NOT NULL, -- Connects data about synchronisations to a borrower
