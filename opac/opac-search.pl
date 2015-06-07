@@ -189,13 +189,14 @@ if ($cgi->param("returntosearch")) {
 }
 if ($cgi->cookie("search_path_code")) {
     my $pathcode = $cgi->cookie("search_path_code");
-    given ($pathcode)
-    {
-        when ('"ads"') { $template->param('ReturnPath' => '/cgi-bin/koha/opac-search.pl?returntosearch=1'); }
-        when ('"exs"') {
-            $template->param('ReturnPath' => '/cgi-bin/koha/opac-search.pl?expanded_options=1&returntosearch=1');
-        }
-        default {warn "ReturnPath swith error";}
+    if ($pathcode eq '"ads"') {
+        $template->param('ReturnPath' => '/cgi-bin/koha/opac-search.pl?returntosearch=1');
+    }
+    elsif ($pathcode eq '"exs"') {
+         $template->param('ReturnPath' => '/cgi-bin/koha/opac-search.pl?expanded_options=1&returntosearch=1');
+    }
+    else {
+        warn "ReturnPath switch error";
     }
 }
 
