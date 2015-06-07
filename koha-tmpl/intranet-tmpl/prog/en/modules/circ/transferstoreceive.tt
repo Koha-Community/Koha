@@ -1,4 +1,5 @@
 [% USE KohaDates %]
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Transfers to your library</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -60,16 +61,18 @@ $(document).ready(function() {
                     <td><p><span title="[% reser.datetransfer %]">[% reser.datetransfer | $KohaDates %]</span></p> [% IF ( reser.messcompa ) %]<span class="error">Transfer is [% reser.diff %] days late</span>[% END %]</td>
                     <td>
                         [% INCLUDE 'biblio-default-view.inc' biblionumber = reser.biblionumber %][% reser.title |html %] [% IF ( reser.subtitle ) %] [% FOREACH subtitl IN reser.subtitle %][% subtitl.subfield %][% END %][% END %]</a> [% IF ( reser.author ) %]by [% reser.author %][% END %]
-                            [% IF ( reser.itemtype ) %]&nbsp; (<b>[% reser.itemtype %]</b>)[% END %]
+                            [% IF ( reser.itemtype ) %] (<b>[% reser.itemtype %]</b>)[% END %]
                             <br />Barcode: [% reser.barcode %]
                     </td>
                     <td>[% IF ( reser.borrowername ) %]
                         <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reser.borrowernum %]">
-                            [% reser.borrowername %] &nbsp; [% reser.borrowerfirstname %]
+                            [% reser.borrowername %][%IF ( reser.borrowerfirstname ) %], [% reser.borrowerfirstname %][% END %]
                         </a>
-                        <br />[% reser.borrowerphone %]<br />
+                        [% IF ( reser.borrowerphone ) %]<br />[% reser.borrowerphone %][% END %]
                             [% IF ( reser.borrowermail ) %]
-                                <a href="mailto:[% reser.email %]?subject=Reservation: [% reser.title |html %]">
+                                <br />
+                                [% BLOCK subject %]Hold:[% END %]
+                                <a href="mailto:[% reser.borrowermail %]?subject=[% INCLUDE subject %] [% reser.title |html %]">
                                     [% reser.borrowermail %]
                                 </a>
                             [% END %]
@@ -77,7 +80,7 @@ $(document).ready(function() {
                         <p>None</p>
                     [% END %]
                     </td>
-                    <td>[% reser.homebranch %]</td>
+                    <td>[% IF reser.homebranch %][% Branches.GetName( reser.homebranch ) %][% END %]</td>
                     <td>[% reser.itemcallnumber %]</td>
                     <td><a href="/cgi-bin/koha/circ/returns.pl?itemnumber=[% reser.itemnumber %]&amp;canceltransfer=1&amp;dest=ttr">Cancel transfer</a></td>
                 </tr>
