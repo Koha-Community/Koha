@@ -2,6 +2,7 @@
 <title>Koha &rsaquo; Circulation &rsaquo; Items overdue as of [% todaysdate %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
+[%- USE Branches -%]
 <script type="text/javascript">
  //<![CDATA[
      function clone_parent(node) {
@@ -106,13 +107,15 @@ overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%
     <th>Price</th>
 </tr></thead>
 
+[%- BLOCK subject -%]Overdue:[%- END -%]
+
 <tbody>[% FOREACH overdueloo IN overdueloop %]
     <tr>
         <td>[% overdueloo.duedate %]</td>
         <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overdueloo.borrowernumber %]">[% overdueloo.surname %][% IF (overdueloo.firstname) %], [% overdueloo.firstname %][% END %] ([% overdueloo.cardnumber %])</a>
-        [% IF ( overdueloo.email ) %][<a href="mailto:[% overdueloo.email %]?subject=Overdue: [% overdueloo.title |html %]">email</a>][% END %]
+        [% IF ( overdueloo.email ) %][<a href="mailto:[% overdueloo.email %]?subject=[% INCLUDE subject %] [% overdueloo.title |html %]">email</a>][% END %]
         [% IF ( overdueloo.phone ) %]([% overdueloo.phone %])[% ELSIF ( overdueloo.mobile ) %]([% overdueloo.mobile %])[% ELSIF ( overdueloo.phonepro ) %]([% overdueloo.phonepro %])[% END %]</td>
-        <td>[% overdueloo.branchcode %]</td>
+        <td>[% IF overdueloo.branchcode %][% Branches.GetName( overdueloo.branchcode ) %][% END %]</td>
         <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = overdueloo.biblionumber %][% overdueloo.title |html %]  [% overdueloo.subtitle %]</a> [% IF ( overdueloo.author ) %], by [% overdueloo.author %][% END %][% IF ( overdueloo.enumchron ) %], [% overdueloo.enumchron %][% END %]
         </td>
 		<td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% overdueloo.biblionumber %]&amp;itemnumber=[% overdueloo.itemnum %]#item[% overdueloo.itemnum %]">[% overdueloo.barcode %]</a></td>
