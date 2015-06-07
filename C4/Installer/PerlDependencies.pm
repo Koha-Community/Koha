@@ -112,7 +112,7 @@ our $PERL_DEPS = {
     'URI::Escape' => {
         'usage'    => 'Core',
         'required' => '1',
-        'min_ver'  => '1.36'
+        'min_ver'  => '3.31'
     },
     'Unicode::Normalize' => {
         'usage'    => 'Core',
