@@ -10486,7 +10486,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = '3.19.00.XXX';
+$DBversion = '3.20.00.002';
 if ( CheckVersion($DBversion) ) {
     my $OPACBaseURL = C4::Context->preference('OPACBaseURL');
     if (defined($OPACBaseURL) && substr($OPACBaseURL,0,4) ne "http") {
