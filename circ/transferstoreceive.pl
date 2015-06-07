@@ -105,7 +105,7 @@ foreach my $br ( keys %$branches ) {
                 $getransf{'borrowernum'}       = $getborrower->{'borrowernumber'};
                 $getransf{'borrowername'}      = $getborrower->{'surname'};
                 $getransf{'borrowerfirstname'} = $getborrower->{'firstname'};
-                $getransf{'borrowermail'}      = $getborrower->{'emailaddress'} if $getborrower->{'emailaddress'};
+                $getransf{'borrowermail'}      = $getborrower->{'email'} if $getborrower->{'email'};
                 $getransf{'borrowerphone'}     = $getborrower->{'phone'};
             }
             push( @transferloop, \%getransf );
