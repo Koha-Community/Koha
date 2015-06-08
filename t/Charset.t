@@ -39,6 +39,8 @@ ok(defined(NormalizeString($string,1,1)),     'Initialized string case 4 normali
 my $octets = "abc";
 ok(IsStringUTF8ish($octets), "verify octets are valid UTF-8 (ASCII)");
 
+$octets = "flamb\c3\a9";
+ok(!utf8::is_utf8($octets), "verify that string does not have Perl UTF-8 flag on");
 ok(IsStringUTF8ish($octets), "verify octets are valid UTF-8 (LATIN SMALL LETTER E WITH ACUTE)");
 ok(!utf8::is_utf8($octets), "verify that IsStringUTF8ish does not magically turn Perl UTF-8 flag on");
 
