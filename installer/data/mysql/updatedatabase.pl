@@ -9780,6 +9780,26 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (3.18.7 release)\n";
     SetVersion($DBversion);
 }
+$DBversion = "3.18.07.001";
+if ( CheckVersion($DBversion) ) {
+
+    print "Bug 14285 - Bengali locale needs to be re-defined\n";
+    $dbh->do(q|
+        INSERT IGNORE INTO language_subtag_registry( subtag, type, description, added)
+        VALUES ( 'IN', 'region', 'India','2015-05-28');
+    |);
+    $dbh->do(q|
+        INSERT IGNORE INTO language_descriptions(subtag, type, lang, description)
+        VALUES ( 'IN', 'region', 'en', 'India');
+    |);
+    $dbh->do(q|
+        INSERT IGNORE INTO language_descriptions(subtag, type, lang, description)
+        VALUES ( 'IN', 'region', 'bn', 'ভারত');
+    |);
+    print "Upgrade to $DBversion done\n";
+    SetVersion ($DBversion);
+}
+
 
 
 
