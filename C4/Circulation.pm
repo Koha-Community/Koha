@@ -4048,7 +4048,8 @@ sub GetAgeRestriction {
             }
 
             #Get how many days the borrower has to reach the age restriction
-            my $daysToAgeRestriction = Date_to_Days(@alloweddate) - Date_to_Days(Today);
+            my @Today = split /-/, DateTime->today->ymd();
+            my $daysToAgeRestriction = Date_to_Days(@alloweddate) - Date_to_Days(@Today);
             #Negative days means the borrower went past the age restriction age
             return ($restriction_year, $daysToAgeRestriction);
         }
