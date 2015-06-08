@@ -276,7 +276,7 @@ sub makepayment {
     }
 
     UpdateStats({
-                branch => $user,
+                branch => $branch,
                 type => 'payment',
                 amount => $amount,
                 borrowernumber => $borrowernumber,
