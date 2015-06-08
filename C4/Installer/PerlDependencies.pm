@@ -782,6 +782,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '1.10',
     },
+    'Time::Fake'   => {
+        'usage'    => 'Test code coverage',
+        'required' => '0',
+        'min_ver'  => '0.11',
+    }
 };
 
 1;
