@@ -1634,7 +1634,7 @@
                 isbn = isbn.replace(/-/, '');
 
                 [% IF ( IDreamBooksReadometer ) %]
-                    $(".title").append('<a href="'+json.book.detail_link+'" id="idreambooksreadometer"><img src="http://idreambooks.com/remotereadometer/'+isbn+'.jpg" alt="'+json.book.title+' by '+json.book.author+'" title="Rating based on reviews of '+json.book.title+'"></a>');
+                    $(".title").append('<a href="'+json.book.detail_link+'" id="idreambooksreadometer"><img src="https://idreambooks.com/remotereadometer/'+isbn+'.jpg" alt="'+json.book.title+_(" by ")+json.book.author+'" title="'+_("Rating based on reviews of ")+json.book.title+'"></a>');
                 [% END %]
 
                 [% IF ( IDreamBooksReviews ) %]
@@ -1643,11 +1643,11 @@
 
                     //append happy-sad cloud review
 
-                    $("#catalogue_detail_biblio").append("<span class='idreambookssummary results_summary'><a href='"+json.book.detail_link+"'><img src='"+json.book.to_read_or_not_small+"' alt='"+json.book.title+" by "+json.book.author+"' title='Rating based on reviews of "+json.book.title+"'>"+json.book.rating+"%</a> <a href='http://www.idreambooks.com/'>rating based on reviews at iDreamBooks.com</a></span>");
+                    $("#catalogue_detail_biblio").append("<span class='idreambookssummary results_summary'><a href='"+json.book.detail_link+"'><img src='"+json.book.to_read_or_not_small+"' alt='"+json.book.title+_(" by ")+json.book.author+"' title='"+_("Rating based on reviews of ")+json.book.title+"'>"+json.book.rating+"%</a> <a href='http://www.idreambooks.com/'>"+_("rating based on reviews at iDreamBooks.com")+"</a></span>");
 
                     //insert data into Book reviews tab
                     $.each(json.book.critic_reviews, function(){
-                            $("#idb_review_snippets").append("<div class='review'><div><a href='"+this.review_link+"'>"+this.source+"</a></div><div>\"..."+this.snippet+"...\"</div><div>Review date: "+this.review_date+"</div><div><a class='reviewlink' href='"+json.book.detail_link+"'>Review result: "+this.pos_or_neg+" <img src='"+this.smiley_or_sad_small+"' alt='iDreamBooks.com rating' title='"+this.pos_or_neg+"' /></a></div></div>");
+                            $("#idb_review_snippets").append("<div class='review'><div><a href='"+this.review_link+"'>"+this.source+"</a></div><div>\"..."+this.snippet+"...\"</div><div>"+_("Review date: ")+this.review_date+"</div><div><a class='reviewlink' href='"+json.book.detail_link+"'>"+_("Review result: ")+this.pos_or_neg+" <img src='"+this.smiley_or_sad_small+"' alt='"+_("iDreamBooks.com rating")+"' title='"+this.pos_or_neg+"' /></a></div></div>");
                             });
                     $("#seemoreidb").attr('href', json.book.detail_link);
                     $("#tab_idb_critic_reviews").show();
@@ -1750,7 +1750,7 @@
                 if (arrPagination[i] == undefined || arrPagination[i].url == "") continue;
                 var li = $("<li id='li_pag_" + i + "' " + ((j % 2 == 0)?"class='highlight'":"")  + " title='" + _("Go to detail") + "' />");
                 var html = "<span class='li_pag_index'>" + i + "</span><a href='" + arrPagination[i].url + "'>" + arrPagination[i].title + "</a>";
-                if (arrPagination[i].author) html += "<br /> by " + arrPagination[i].author;
+                if (arrPagination[i].author) html += "<br /> " + _("by") + " " + arrPagination[i].author;
                 li.html(html);
                 if (highlIndex && i == index) li.css("backgroundColor", "#DDDDDD");
                 ul.append(li);
