@@ -60,6 +60,8 @@ my $rodsp = $input->param("ReturnDisplay");
 my $calc = $input->param("Cellvalue");
 my $output = $input->param("output");
 my $basename = $input->param("basename");
+my $itype = C4::Context->preference('item-level_itypes') ? "items.itype" : "biblioitems.itemtype";
+
 #warn "calcul : ".$calc;
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => $fullreportname,
@@ -222,8 +224,7 @@ sub calculate {
 #	warn "filtres ".@filters[2];
 #	warn "filtres ".@filters[3];
     $line = "old_issues.".$line if ($line=~/branchcode/) or ($line=~/timestamp/);
-    $line = "biblioitems.".$line if $line=~/itemtype/;
-    
+    if ( $line=~/itemtype/ ) { $line = $itype; }
     $linefilter[0] = @$filters[0] if ($line =~ /timestamp/ )  ;
     $linefilter[1] = @$filters[1] if ($line =~ /timestamp/ )  ;
     $linefilter[2] = @$filters[2] if ($line =~ /timestamp/ )  ;
@@ -235,13 +236,11 @@ sub calculate {
     $linefilter[0] = @$filters[8] if ($line =~ /category/ )  ;
     $linefilter[0] = @$filters[9] if ($line =~ /itemtype/ )  ;
     $linefilter[0] = @$filters[10] if ($line =~ /branch/ )  ;
-# 	$linefilter[0] = @$filters[11] if ($line =~ /sort2/ ) ;
     $linefilter[0] = @$filters[11] if ($line =~ /sort1/ ) ;
     $linefilter[0] = @$filters[12] if ($line =~ /sort2/ ) ;
-#warn "filtre lignes".$linefilter[0]." ".$linefilter[1];
-# 
+
     $column = "old_issues.".$column if (($column=~/branchcode/) or ($column=~/timestamp/));
-    $column = "biblioitems.".$column if $column=~/itemtype/;
+    if ( $column=~/itemtype/ ) { $column = $itype; }
     my @colfilter ;
     $colfilter[0] = @$filters[0] if ($column =~ /timestamp/ )  ;
     $colfilter[1] = @$filters[1] if ($column =~ /timestamp/ )  ;
@@ -252,12 +251,10 @@ sub calculate {
     $colfilter[2] = @$filters[6] if ($column =~ /returndate/ )  ;
     $colfilter[3] = @$filters[7] if ($column =~ /returndate/ )  ;
     $colfilter[0] = @$filters[8] if ($column =~ /category/ )  ;
-    $colfilter[0] = @$filters[9] if ($column =~ /itemtype/ )  ;
+    $colfilter[0] = @$filters[9] if ($column =~ $itype )  ;
     $colfilter[0] = @$filters[10] if ($column =~ /branch/ )  ;
-# 	$colfilter[0] = @$filters[11] if ($column =~ /sort2/ ) ;
     $colfilter[0] = @$filters[11] if ($column =~ /sort1/ ) ;
     $colfilter[0] = @$filters[12] if ($column =~ /sort2/ ) ;
-#warn "filtre col ".$colfilter[0]." ".$colfilter[1];
                                             
 # 1st, loop rows.                             
     my $linefield;
@@ -290,7 +287,7 @@ sub calculate {
                 LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber) 
                 LEFT JOIN issuingrules ON 
                     (issuingrules.branchcode=old_issues.branchcode
-                    AND  issuingrules.itemtype=biblioitems.itemtype 
+                    AND  issuingrules.itemtype=$itype
                     AND  issuingrules.categorycode=borrowers.categorycode) 
                 WHERE 1";
     
@@ -318,7 +315,6 @@ sub calculate {
     my $sth = $dbh->prepare( $strsth );
     $sth->execute;
 
-    
     while ( my ($celvalue) = $sth->fetchrow) {
         my %cell;
         if ($celvalue) {
@@ -352,7 +348,7 @@ sub calculate {
         $colfield .= $column;
         $colorder .= $column;
     }  
-    
+
     my $strsth2;
     $strsth2 .= "SELECT distinctrow $colfield 
                   FROM `old_issues`
@@ -361,7 +357,7 @@ sub calculate {
                   LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber) 
                   LEFT JOIN issuingrules ON 
                     (issuingrules.branchcode=old_issues.branchcode 
-                    AND  issuingrules.itemtype=biblioitems.itemtype 
+                    AND  issuingrules.itemtype=$itype
                     AND  issuingrules.categorycode=borrowers.categorycode) 
                   WHERE 1";
     
@@ -387,14 +383,14 @@ sub calculate {
     $strsth2 .=" ORDER BY $colorder";
     
     my $sth2 = $dbh->prepare( $strsth2 );
+
     if (( @colfilter ) and ($colfilter[1])){
         $sth2->execute("'".$colfilter[0]."'","'".$colfilter[1]."'");
     } elsif ($colfilter[0]) {
-        $sth2->execute($colfilter[0]);
+        $sth2->execute;
     } else {
         $sth2->execute;
     }
-    
 
     while (my ($celvalue) = $sth2->fetchrow) {
         my %cell;
@@ -429,7 +425,7 @@ sub calculate {
     
 # Processing average loanperiods
     $strcalc .= "SELECT $linefield, $colfield, ";
-    $strcalc .= " issuedate, returndate, old_issues.timestamp, COUNT(*), date_due, old_issues.renewals, issuelength FROM `old_issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber) LEFT JOIN issuingrules ON (issuingrules.branchcode=branchcode AND  issuingrules.itemtype=biblioitems.itemtype AND  issuingrules.categorycode=categorycode) WHERE old_issues.itemnumber=items.itemnumber AND old_issues.borrowernumber=borrowers.borrowernumber";
+    $strcalc .= " issuedate, returndate, old_issues.timestamp, COUNT(*), date_due, old_issues.renewals, issuelength FROM `old_issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber) LEFT JOIN issuingrules ON (issuingrules.branchcode=branchcode AND  issuingrules.itemtype=$itype AND  issuingrules.categorycode=categorycode) WHERE old_issues.itemnumber=items.itemnumber AND old_issues.borrowernumber=borrowers.borrowernumber";
 
     @$filters[0]=~ s/\*/%/g if (@$filters[0]);
     $strcalc .= " AND old_issues.timestamp > '" . @$filters[0] ."'" if ( @$filters[0] );
@@ -442,7 +438,7 @@ sub calculate {
     @$filters[8]=~ s/\*/%/g if (@$filters[8]);
     $strcalc .= " AND borrowers.categorycode like '" . @$filters[8] ."'" if ( @$filters[8] );
     @$filters[9]=~ s/\*/%/g if (@$filters[9]);
-    $strcalc .= " AND biblioitems.itemtype like '" . @$filters[9] ."'" if ( @$filters[9] );
+    $strcalc .= " AND $itype like '" . @$filters[9] ."'" if ( @$filters[9] );
     @$filters[10]=~ s/\*/%/g if (@$filters[10]);
     $strcalc .= " AND old_issues.branchcode like '" . @$filters[10] ."'" if ( @$filters[10] );
     @$filters[11]=~ s/\*/%/g if (@$filters[11]);
@@ -466,7 +462,7 @@ sub calculate {
     my $err;
     my $emptycol;
     my $weightrow;
-    
+
     while (my  @data = $dbcalc->fetchrow) {
         my ($row, $col, $issuedate, $returndate, $weight)=@data;
 #		warn "filling table $row / $col / $issuedate / $returndate /$weight";
@@ -559,6 +555,7 @@ sub calculate {
     $globalline{column} = $column;
     push @mainloop,\%globalline;
     return \@mainloop;
+
 }
 
 1;
