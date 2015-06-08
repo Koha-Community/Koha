@@ -515,25 +515,23 @@ sub GetMemberRelatives {
 
   my ($block_status, $count) = IsMemberBlocked( $borrowernumber );
 
-Returns whether a patron has overdue items that may result
-in a block or whether the patron has active fine days
-that would block circulation privileges.
+Returns whether a patron is restricted or has overdue items that may result
+in a block of circulation privileges.
 
 C<$block_status> can have the following values:
 
-1 if the patron has outstanding fine days or a manual debarment, in which case
+1 if the patron is currently restricted, in which case
 C<$count> is the expiration date (9999-12-31 for indefinite)
 
 -1 if the patron has overdue items, in which case C<$count> is the number of them
 
 0 if the patron has no overdue items or outstanding fine days, in which case C<$count> is 0
 
-Outstanding fine days are checked before current overdue items
-are.
+Existing active restrictions are checked before current overdue items.
 
 FIXME: this needs to be split into two functions; a potential block
 based on the number of current overdue items could be orthogonal
-to a block based on whether the patron has any fine days accrued.
+to a block based on whether the patron has any restrictions.
 
 =cut
 
