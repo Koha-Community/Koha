@@ -12,7 +12,7 @@ $(document).ready(function() {
     var resultst = $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
         bPaginate: false,
         aoColumnDefs: [
-            { "bSortable": false, "aTargets": [1, 8] },
+            { "bSortable": false, "aTargets": [1, 9] },
             { "bVisible": false, "aTargets": [0] },
             { "sType": "title-string", "aTargets" : [ "title-string" ] }
         ]
@@ -106,6 +106,7 @@ $(document).ready(function() {
                 <th>&nbsp;</th>
                 <th>Invoice no.</th>
                 <th>Vendor</th>
+                <th class="title-string">Shipment date</th>
                 <th class="title-string">Billing date</th>
                 <th>Received biblios</th>
                 <th>Received items</th>
@@ -120,6 +121,13 @@ $(document).ready(function() {
                   <td><input type="checkbox" class="select-invoice" value="[% invoice.invoiceid %]" /></td>
                   <td><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoice.invoiceid %]">[% invoice.invoicenumber %]</a></td>
                   <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% invoice.booksellerid %]">[% invoice.suppliername %]</a></td>
+                  <td>
+                    [% IF invoice.shipmentdate %]
+                      <span title="[% invoice.shipmentdate %]">[% invoice.shipmentdate | $KohaDates %]</span>
+                    [% ELSE %]
+                      <span title="0000-00-00"></span>
+                    [% END %]
+                  </td>
                   <td>
                     [% IF invoice.billingdate %]
                       <span title="[% invoice.billingdate %]">[% invoice.billingdate | $KohaDates %]</span>
