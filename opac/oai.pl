@@ -254,8 +254,7 @@ sub new {
 
 package C4::OAI::DeletedRecord;
 
-use strict;
-use warnings;
+use Modern::Perl;
 use HTTP::OAI;
 use HTTP::OAI::Metadata::OAI_DC;
 
@@ -300,23 +299,20 @@ sub new {
     my $self = HTTP::OAI::GetRecord->new(%args);
 
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("
-        SELECT marcxml, timestamp
-        FROM   biblioitems
-        WHERE  biblionumber=? " );
     my $prefix = $repository->{koha_identifier} . ':';
     my ($biblionumber) = $args{identifier} =~ /^$prefix(.*)/;
-    $sth->execute( $biblionumber );
     my ($marcxml, $timestamp);
     my $deleted = 0;
-    unless ( ($marcxml, $timestamp) = $sth->fetchrow ) {
-      $sth = $dbh->prepare("
-        SELECT biblionumber, timestamp
-        FROM deletedbiblio
-        WHERE biblionumber=? " );
-      $sth->execute( $biblionumber );
+    unless ( ($marcxml, $timestamp) = $dbh->selectrow_array(q/
+        SELECT marcxml, timestamp
+        FROM   biblioitems
+        WHERE  biblionumber=? /, undef, $biblionumber)) {
 
-      unless ( ($marcxml, $timestamp) = $sth->fetchrow ) {
+      unless ( ($marcxml, $timestamp) = $dbh->selectrow_array(q/
+          SELECT biblionumber, timestamp
+          FROM deletedbiblio
+          WHERE biblionumber=? /, undef, $biblionumber )) {
+
 
         return HTTP::OAI::Response->new(
             requestURL  => $repository->self_url(),
@@ -370,7 +366,7 @@ sub new {
     }
     my $max = $repository->{koha_max_count};
     my $sql = "
-        (SELECT biblioitems.biblionumber, timestamp
+        (SELECT biblioitems.biblionumber, biblioitems.timestamp
         FROM biblioitems
     ";
     $sql .= " JOIN oai_sets_biblios ON biblioitems.biblionumber = oai_sets_biblios.biblionumber " if defined $set;
@@ -535,7 +531,7 @@ sub new {
     }
     my $max = $repository->{koha_max_count};
     my $sql = "
-        (SELECT biblioitems.biblionumber, marcxml, timestamp
+        (SELECT biblioitems.biblionumber, biblioitems.marcxml, biblioitems.timestamp
         FROM biblioitems
     ";
     $sql .= " JOIN oai_sets_biblios ON biblioitems.biblionumber = oai_sets_biblios.biblionumber " if defined $set;
