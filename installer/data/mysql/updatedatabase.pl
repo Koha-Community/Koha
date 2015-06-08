@@ -10554,6 +10554,37 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.21.00.007";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        ALTER IGNORE TABLE aqbasket
+            ADD KEY authorisedby (authorisedby)
+    |);
+    $dbh->do(q|
+        ALTER IGNORE TABLE aqbooksellers
+            ADD KEY name (name(255))
+    |);
+    $dbh->do(q|
+        ALTER IGNORE TABLE aqbudgets
+            ADD KEY budget_parent_id (budget_parent_id),
+            ADD KEY budget_code (budget_code),
+            ADD KEY budget_branchcode (budget_branchcode),
+            ADD KEY budget_period_id (budget_period_id),
+            ADD KEY budget_owner_id (budget_owner_id)
+    |);
+    $dbh->do(q|
+        ALTER IGNORE TABLE aqbudgets_planning
+            ADD KEY budget_period_id (budget_period_id)
+    |);
+    $dbh->do(q|
+        ALTER IGNORE TABLE aqorders
+            ADD KEY parent_ordernumber (parent_ordernumber),
+            ADD KEY orderstatus (orderstatus)
+    |);
+    print "Upgrade to $DBversion done (Bug 14053: Acquisition db tables are missing indexes)\n";
+    SetVersion ($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
