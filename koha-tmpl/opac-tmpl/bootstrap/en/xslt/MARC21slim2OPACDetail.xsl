@@ -551,23 +551,39 @@
             </xsl:call-template>
         </xsl:if>
 
-        <xsl:if test="marc:datafield[@tag=246]">
-        <span class="results_summary other_title"><span class="label">Other title: </span>
-            <xsl:for-each select="marc:datafield[@tag=246]">
-                <span property="alternateName">
-                <xsl:call-template name="chopPunctuation">
-                  <xsl:with-param name="chopString">
-                    <xsl:call-template name="subfieldSelect">
-                        <xsl:with-param name="codes">iabhfgnp</xsl:with-param>
-                    </xsl:call-template>
-                   </xsl:with-param>
-               </xsl:call-template>
+            <xsl:if test="marc:datafield[@tag=246]">
+                <span class="results_summary other_title"><span class="label">Other title: </span>
+                    <xsl:for-each select="marc:datafield[@tag=246]">
+                        <span property="alternateName">
+                            <xsl:call-template name="chopPunctuation">
+                                <xsl:with-param name="chopString">
+                                    <xsl:call-template name="subfieldSelect">
+                                        <xsl:with-param name="codes">abhfgnp</xsl:with-param>
+                                    </xsl:call-template>
+                                </xsl:with-param>
+                            </xsl:call-template>
+                            <xsl:if test="@ind1=1 and not(marc:subfield[@code='i'])">
+                                <xsl:choose>
+                                    <xsl:when test="@ind2=0"> [Portion of title]</xsl:when>
+                                    <xsl:when test="@ind2=1"> [Parallel title]</xsl:when>
+                                    <xsl:when test="@ind2=2"> [Distinctive title]</xsl:when>
+                                    <xsl:when test="@ind2=3"> [Other title]</xsl:when>
+                                    <xsl:when test="@ind2=4"> [Cover title]</xsl:when>
+                                    <xsl:when test="@ind2=5"> [Added title page title]</xsl:when>
+                                    <xsl:when test="@ind2=6"> [Caption title]</xsl:when>
+                                    <xsl:when test="@ind2=7"> [Running title]</xsl:when>
+                                    <xsl:when test="@ind2=8"> [Spine title]</xsl:when>
+                                </xsl:choose>
+                            </xsl:if>
+                            <xsl:if test="marc:subfield[@code='i']">
+                                <xsl:value-of select="concat(' [',marc:subfield[@code='i'],']')"/>
+                            </xsl:if>
+                        </span>
+                        <!-- #13386 added separator | -->
+                        <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise></xsl:choose>
+                    </xsl:for-each>
                 </span>
-                <!-- #13386 added separator | -->
-                <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise></xsl:choose>
-            </xsl:for-each>
-        </span>
-       </xsl:if>
+            </xsl:if>
 
 
         <xsl:if test="marc:datafield[@tag=242]">
