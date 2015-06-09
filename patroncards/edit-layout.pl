@@ -141,6 +141,12 @@ if ($op eq 'edit') {
         push @barcode, (($barcode_param eq 'type' ? ("barcode_" . $barcode_param => _set_selected($layout_xml->{'barcode'}->[0]->{'barcode_type'}, $barcode_types)) : ("barcode_" . $barcode_param => $layout_xml->{'barcode'}->[0]->{$barcode_param})));
     }
 
+    foreach my $unit (@$units){
+        if ($unit->{'type'} eq $layout->get_attr('units')) {
+            $unit->{'selected'} = 1;
+        }
+    }
+
     $template->param(
             layout_id       => $layout->get_attr('layout_id') > -1 ? $layout->get_attr('layout_id') : '',
             layout_name     => $layout->get_attr('layout_name'),
@@ -212,6 +218,7 @@ elsif  ($op eq 'save') {
     }
     $layout->{'text'} = $text_lines;
     my @params = (layout_name => $layout_name, layout_id => $layout_id, layout_xml => XMLout($layout));
+    push(@params,units => $layout->{'units'}) if $layout->{'units'};
     if ($layout_id) {   # if a label_id was passed in, this is an update to an existing layout
         $layout = C4::Patroncards::Layout->retrieve(layout_id => $layout_id);
         $layout->set_attr(@params);
