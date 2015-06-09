@@ -79,7 +79,7 @@
                     <div id="pending_updates">
                             [% FOREACH pm IN PendingModifications %]
                                 [% SET borrowernumber = pm.borrowernumber %]
-                                <h3><a href="#panel_modify_[% pm.borrowernumber %]">[% borrowers.$borrowernumber.surname %], [% borrowers.$borrowernumber.firstname %] ([% Branches.GetName( borrowers.$borrowernumber.branchcode ) %])</a></h3>
+                                <h3><a href="#panel_modify_[% pm.borrowernumber %]">[% borrowers.$borrowernumber.surname %][% IF ( borrowers.$borrowernumber.firstname ) %], [% borrowers.$borrowernumber.firstname %][% END %] ([% Branches.GetName( borrowers.$borrowernumber.branchcode ) %])</a></h3>
                                 <div id="panel_modify_[% pm.borrowernumber %]">
                                     <div style="background-color:#E6F0F2;padding:.5em;margin:.3em 0;">
                                         <input type="radio" id="approve_modify_[% pm.borrowernumber %]" name="modify_[% pm.borrowernumber %]" value="approve" />
@@ -90,6 +90,7 @@
 
                                         <input type="radio" id="ignore_modify_[% pm.borrowernumber %]" name="modify_[% pm.borrowernumber %]" value="ignore" checked="checked"/>
                                         <label for="ignore_modify_[% pm.borrowernumber %]">Ignore</label>
+                                        | <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% pm.borrowernumber %]" >Patron details</a>
                                     </div>
                                         <table>
                                             <tr>
