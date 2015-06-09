@@ -295,9 +295,9 @@ function verify_images() {
                 'sDom': 't',
                 'bPaginate': false,
                 'bAutoWidth': false,
-                "aaSorting": [[ 3, "desc" ]],
+                "aaSorting": [[ 4, "desc" ]],
                 "aoColumnDefs": [
-                    { "aTargets": [ 3, 4 ], "sType": "title-string" }
+                    { "aTargets": [ 4, 5 ], "sType": "title-string" }
                 ]
             }));
 
@@ -932,6 +932,7 @@ function verify_images() {
     <table id="orders">
       <thead>
         <tr>
+          <th>Vendor</th>
           <th>Basket group</th>
           <th>Basket</th>
           <th>Order number</th>
@@ -944,6 +945,11 @@ function verify_images() {
       <tbody>
       [% FOR order IN orders %]
           <tr>
+            <td>
+            [% IF (order.id) %]
+                [% order.name %]
+            [% END %]
+            </td>
             <td>
             [% IF (order.basketgroupid) %]
                 [% IF CAN_user_acquisition_group_manage %]
@@ -970,7 +976,7 @@ function verify_images() {
                 [% CASE 'cancelled' %]Cancelled
               [% END %]
             </td>
-            <td>[% order.quantity %]</th>
+            <td>[% order.quantity %]</td>
           </tr>
       [% END %]
       </tbody>
