@@ -98,6 +98,11 @@ if ( $input->param('borrowernumber') ) {
         }
     }
 
+    # Already generated discharges
+    my $validated_discharges = Koha::Borrower::Discharge::get_validated({
+        branchcode => $data->{'branchcode'},
+    });
+
     $template->param(
         borrowernumber    => $borrowernumber,
         biblionumber      => $data->{'biblionumber'},
@@ -120,6 +125,7 @@ if ( $input->param('borrowernumber') ) {
         branchcode        => $data->{'branchcode'},
         has_reserves      => $has_reserves,
         can_be_discharged => $can_be_discharged,
+        validated_discharges => $validated_discharges,
     );
 }
 

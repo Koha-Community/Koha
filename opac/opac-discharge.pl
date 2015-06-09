@@ -92,7 +92,7 @@ else {
         validated      => 1,
     });
     $template->param(
-        available => $available,
+        available => $available && Koha::Borrower::Discharge::is_discharged({borrowernumber => $loggedinuser}),
         pending   => $pending,
     );
 }

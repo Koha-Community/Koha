@@ -45,12 +45,27 @@ sub can_be_discharged {
     }
 }
 
+sub is_discharged {
+    my ($params) = @_;
+    return unless $params->{borrowernumber};
+    my $borrowernumber = $params->{borrowernumber};
+
+
+    my $restricted = Koha::Borrower::Debarments::IsDebarred($borrowernumber);
+    my $validated = get_validated({borrowernumber => $borrowernumber});
+
+    if ($restricted && $validated) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
 sub request {
     my ($params) = @_;
     my $borrowernumber = $params->{borrowernumber};
     return unless $borrowernumber;
     return unless can_be_discharged({ borrowernumber => $borrowernumber });
-    return if count($params);
 
     return $rs->create({
         borrower => $borrowernumber,
@@ -76,7 +91,7 @@ sub discharge {
     });
 
     # Generate the discharge
-    my $discharge = $rs->search({ borrower => $borrowernumber });
+    my $discharge = $rs->search({ borrower => $borrowernumber }, { order_by => { -desc => 'needed' }, rows => 1 });
     if( $discharge->count > 0 ) {
         $discharge->update({ validated => dt_from_string });
     }
@@ -148,5 +163,21 @@ sub get_pendings {
     my @rs = $rs->search( $cond, { join => 'borrower' } );
     return \@rs;
 }
+
+sub get_validated {
+    my ($params)       = @_;
+    my $branchcode     = $params->{branchcode};
+    my $borrowernumber = $params->{borrowernumber};
+
+    my $cond = {
+        'me.validated' => { '!=', undef },
+        ( defined $borrowernumber ? ( 'me.borrower' => $borrowernumber ) : () ),
+        ( defined $branchcode ? ( 'borrower.branchcode' => $branchcode ) : () ),
+    };
+
+    my @rs = $rs->search( $cond, { join => 'borrower' } );
+    return \@rs;
+}
+
 
 1;

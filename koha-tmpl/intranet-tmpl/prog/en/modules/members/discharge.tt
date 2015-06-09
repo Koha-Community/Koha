@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; [% IF (unknowuser) %]Patron does not exist[% ELSE %]Discharge for [% firstname %] [% surname %] ([% cardnumber %])[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -37,6 +38,27 @@
         <input type="hidden" value="[% borrowernumber %]" name="borrowernumber" />
     </form>
 [% END %]
+
+[% IF validated_discharges %]
+    <h2>Already validated discharges</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Requested</th>
+                <th>Validated</th>
+            </tr>
+        </thead>
+        <tbody>
+            [% FOR d IN validated_discharges %]
+                <tr>
+                    <td>[% d.needed | $KohaDates with_hours = 1 %]</td>
+                    <td>[% d.validated | $KohaDates with_hours = 1 %]</td>
+                </tr>
+            [% END %]
+        </tbody>
+    </table>
+[% END %]
+
 </div>
 
 

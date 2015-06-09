@@ -3531,9 +3531,11 @@ CREATE TABLE items_search_fields (
 
 DROP TABLE IF EXISTS discharges;
 CREATE TABLE discharges (
+  discharge_id int(11) NOT NULL AUTO_INCREMENT,
   borrower int(11) DEFAULT NULL,
   needed timestamp NULL DEFAULT NULL,
   validated timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (discharge_id),
   KEY borrower_discharges_ibfk1 (borrower),
   CONSTRAINT borrower_discharges_ibfk1 FOREIGN KEY (borrower) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
