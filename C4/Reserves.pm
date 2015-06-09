@@ -1077,7 +1077,6 @@ sub CancelExpiredReserves {
     # Cancel reserves that have been waiting too long
     if ( C4::Context->preference("ExpireReservesMaxPickUpDelay") ) {
         my $max_pickup_delay = C4::Context->preference("ReservesMaxPickUpDelay");
-        my $charge = C4::Context->preference("ExpireReservesMaxPickUpDelayCharge");
         my $cancel_on_holidays = C4::Context->preference('ExpireReservesOnHolidays');
 
         my $today = dt_from_string();
@@ -1098,11 +1097,7 @@ sub CancelExpiredReserves {
             }
 
             if ( $do_cancel ) {
-                if ( $charge ) {
-                    manualinvoice($res->{'borrowernumber'}, $res->{'itemnumber'}, 'Hold waiting too long', 'F', $charge);
-                }
-
-                CancelReserve({ reserve_id => $res->{'reserve_id'} });
+                CancelReserve({ reserve_id => $res->{'reserve_id'}, charge_cancel_fee => 1 });
             }
         }
     }
@@ -1129,9 +1124,9 @@ sub AutoUnsuspendReserves {
 
 =head2 CancelReserve
 
-  CancelReserve({ reserve_id => $reserve_id, [ biblionumber => $biblionumber, borrowernumber => $borrrowernumber, itemnumber => $itemnumber ] });
+  CancelReserve({ reserve_id => $reserve_id, [ biblionumber => $biblionumber, borrowernumber => $borrrowernumber, itemnumber => $itemnumber, ] [ charge_cancel_fee => 1 ] });
 
-Cancels a reserve.
+Cancels a reserve. If C<charge_cancel_fee> is passed and the C<ExpireReservesMaxPickUpDelayCharge> syspref is set, charge that fee to the patron's account.
 
 =cut
 
@@ -1139,7 +1134,9 @@ sub CancelReserve {
     my ( $params ) = @_;
 
     my $reserve_id = $params->{'reserve_id'};
-    $reserve_id = GetReserveId( $params ) unless ( $reserve_id );
+    # Filter out only the desired keys; this will insert undefined values for elements missing in
+    # \%params, but GetReserveId filters them out anyway.
+    $reserve_id = GetReserveId( { biblionumber => $params->{'biblionumber'}, borrowernumber => $params->{'borrowernumber'}, itemnumber => $params->{'itemnumber'} } ) unless ( $reserve_id );
 
     return unless ( $reserve_id );
 
@@ -1174,6 +1171,12 @@ sub CancelReserve {
 
         # now fix the priority on the others....
         _FixPriority({ biblionumber => $reserve->{biblionumber} });
+
+        # and, if desired, charge a cancel fee
+        my $charge = C4::Context->preference("ExpireReservesMaxPickUpDelayCharge");
+        if ( $charge && $params->{'charge_cancel_fee'} ) {
+            manualinvoice($reserve->{'borrowernumber'}, $reserve->{'itemnumber'}, 'Hold waiting too long', 'F', $charge);
+        }
     }
 
     return $reserve;

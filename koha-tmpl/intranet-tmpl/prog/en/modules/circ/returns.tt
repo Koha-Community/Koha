@@ -79,6 +79,16 @@ $(document).ready(function () {
         }
         $("#barcode").focus();
     });
+    $("#forgivemanualholdsexpire").change(function () {
+        if (this.checked == true) {
+            $("#barcode").addClass("alert");
+            $("#forgivemanualholdsexpire-alert").show();
+        } else {
+            $("#barcode").removeClass("alert");
+            $("#forgivemanualholdsexpire-alert").hide();
+        }
+        $("#barcode").focus();
+    });
     [% IF(overduecharges) %] $("#barcode").focus(function () {
         if (($("#exemptcheck").attr("checked") == true) || ($("#dropboxcheck").attr("checked") == true)) {
             $("#barcode").addClass("alert");
@@ -211,6 +221,9 @@ $(document).ready(function () {
 		<h4><strong>Hold at</strong> [% destbranchname %]</h4>
         [% END %]
         <form method="post" action="returns.pl" class="confirm">
+            <input type="hidden" name="cancel_reserve" value="0" />
+            <input type="submit" class="deny" value="Cancel" onclick="this.form.cancel_reserve.value = 1; this.form.submit();" />
+
             <input type="submit" class="approve" value="Confirm" />
 
             <input type="hidden" name="print_slip" value="0" />
@@ -227,6 +240,7 @@ $(document).ready(function () {
                 <input type="hidden" name="diffBranch" value="[% destbranch %]" />
                 <input type="hidden" name="exemptfine" value="[% exemptfine %]" />
                 <input type="hidden" name="dropboxmode" value="[% dropboxmode %]" />
+                <input type="hidden" name="forgivemanualholdsexpire" value="[% forgivemanualholdsexpire %]" />
 
                 <input type="hidden" name="return_date_override" value="[% return_date_override %]" />
                 <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember %]" />
@@ -272,6 +286,7 @@ $(document).ready(function () {
             <input type="hidden" name="diffBranch" value="[% destbranch %]" />
             <input type="hidden" name="exemptfine" value="[% exemptfine %]" />
             <input type="hidden" name="dropboxmode" value="[% dropboxmode %]" />
+            <input type="hidden" name="forgivemanualholdsexpire" value="[% forgivemanualholdsexpire %]" />
             <input type="hidden" name="barcode" value="0" />
 
             <input type="hidden" name="return_date_override" value="[% return_date_override %]" />
@@ -307,6 +322,7 @@ $(document).ready(function () {
 	<input type="hidden" name="transferitem" value="[% itemnumber %]" />
         <input type="hidden" name="exemptfine" value="[% exemptfine %]" />
         <input type="hidden" name="dropboxmode" value="[% dropboxmode %]" />
+        <input type="hidden" name="forgivemanualholdsexpire" value="[% forgivemanualholdsexpire %]" />
 	[% FOREACH inputloo IN inputloop %]
 	<input type="hidden" name="ri-[% inputloo.counter %]" value="[% inputloo.barcode %]" />
 	<input type="hidden" name="dd-[% inputloo.counter %]" value="[% inputloo.duedate %]" />
@@ -398,6 +414,7 @@ $(document).ready(function () {
             <input type="hidden" name="diffBranch" value="[% destbranch %]" />
             <input type="hidden" name="exemptfine" value="[% exemptfine %]" />
             <input type="hidden" name="dropboxmode" value="[% dropboxmode %]" />
+            <input type="hidden" name="forgivemanualholdsexpire" value="[% forgivemanualholdsexpire %]" />
             <input type="hidden" name="return_date_override" value="[% return_date_override %]" />
             <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember %]" />
         </form>
@@ -488,6 +505,9 @@ $(document).ready(function () {
     <div id="exemptfines" class="dialog message" style="display:none;">
         <p>Fines for returned items are forgiven.</p>
     </div>
+    <div id="forgivemanualholdsexpire-alert" class="dialog message" style="display:none;">
+        <p>Fines are not charged for manually cancelled holds.</p>
+    </div>
     <div id="dropboxmode" class="dialog message" style="display:none;">
         <p>Book drop mode.  (Effective checkin date is [% dropboxdate %] ).</p>
     </div>
@@ -553,6 +573,16 @@ $(document).ready(function () {
                         [% END %]
                         <label for="dropboxcheck">Book drop mode</label>
                     </p>
+                    [% IF Koha.Preference('ExpireReservesMaxPickUpDelayCharge') %]
+                    <p>
+                        [% IF ( forgivemanualholdsexpire ) %]
+                        <input type="checkbox" id="forgivemanualholdsexpire" name="forgivemanualholdsexpire" value="forgivemanualholdsexpire" checked="checked" />
+                        [% ELSE %]
+                        <input type="checkbox" id="forgivemanualholdsexpire" name="forgivemanualholdsexpire" value="forgivemanualholdsexpire" />
+                        [% END %]
+                        <label for="forgivemanualholdsexpire">Forgive fees for manually expired holds</label>
+                    </p>
+                    [% END %] <!-- overduecharges -->
             </fieldset>
         </div>
     </form>
