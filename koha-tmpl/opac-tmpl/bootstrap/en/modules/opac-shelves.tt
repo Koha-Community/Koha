@@ -130,10 +130,10 @@
                               <div class="alert">A record matching barcode <b>[% paramsloo.duplicatebiblio %]</b> has already been added.</div>
                             [% END %]
                             [% IF ( paramsloo.delete_ok ) %]
-                              <div class="alert alert-info">List [% paramsloo.delete_ok %] Deleted.</div>
+                              <div class="alert alert-info">List [% paramsloo.delete_ok |html %] Deleted.</div>
                             [% END %]
                             [% IF ( paramsloo.delete_fail ) %]
-                              <div class="alert alert-info">ERROR: Database error. Delete (list number [% paramsloo.delete_fail %]) failed.</div>
+                              <div class="alert alert-info">ERROR: Database error. Delete (list number [% paramsloo.delete_fail |html %]) failed.</div>
                             [% END %]
                             [% IF ( paramsloo.unrecognized ) %]
                               <div class="alert alert-info">ERROR: List number [% paramsloo.unrecognized %] unrecognized.</div>
