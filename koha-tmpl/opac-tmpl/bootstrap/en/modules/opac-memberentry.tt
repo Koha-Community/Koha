@@ -61,10 +61,19 @@
 
                         <legend id="library_legend">Library</legend>
                             <ol>
+                                [% UNLESS hidden.defined('cardnumber') %]
                                 <li>
-                                    <label>Card number</label>
+                                    <label>Card number:</label>
                                     <input type="text" value="[% borrower.cardnumber %]" disabled="disabled"/>
                                 </li>
+                                [% END %]
+
+                                [% UNLESS hidden.defined('dateexpiry') %]
+                                <li>
+                                    <label>Expiration date:</label>
+                                    <input type="text" value="[% borrower.dateexpiry | $KohaDates  %]" disabled="disabled" size="10" />
+                                </li>
+                                [% END %]
 
                                 [% UNLESS hidden.defined('branchcode') %]
                                     <li>
