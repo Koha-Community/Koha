@@ -174,10 +174,11 @@ sub get_elasticsearch_mappings {
             }
         }
     };
+    my $marcflavour = lc C4::Context->preference('marcflavour');
     $self->_foreach_mapping(
         sub {
-            my ( undef, $name, $type, $facet ) = @_;
-
+            my ( $name, $type, $facet, $marc_type ) = @_;
+            return if $marc_type ne $marcflavour;
             # TODO if this gets any sort of complexity to it, it should
             # be broken out into its own function.
 
@@ -221,19 +222,18 @@ sub get_fixer_rules {
     my @rules;
     $self->_foreach_mapping(
         sub {
-            my ( undef, $name, $type, $facet, $marcs ) = @_;
-            my $field = $marcs->{$marcflavour};
-            return unless defined $marcs->{$marcflavour};
+            my ( $name, $type, $facet, $marc_type, $marc_field ) = @_;
+            return if $marc_type ne $marcflavour;
             my $options = '';
 
             # There's a bug when using 'split' with something that
             # selects a range
             # The split makes everything into nested arrays, but that's not
             # really a big deal, ES doesn't mind.
-            $options = '-split => 1' unless $field =~ m|_/| || $type eq 'sum';
-            push @rules, "marc_map('$field','${name}', $options)";
+            $options = '-split => 1' unless $marc_field =~ m|_/| || $type eq 'sum';
+            push @rules, "marc_map('$marc_field','${name}', $options)";
             if ($facet) {
-                push @rules, "marc_map('$field','${name}__facet', $options)";
+                push @rules, "marc_map('$marc_field','${name}__facet', $options)";
             }
             if ( $type eq 'boolean' ) {
 
@@ -247,7 +247,7 @@ sub get_fixer_rules {
             }
         }
     );
-
+die Dumper(\@rules);
     return \@rules;
 }
 
@@ -255,8 +255,9 @@ sub get_fixer_rules {
 
     $self->_foreach_mapping(
         sub {
-            my ( $id, $name, $type, $facet, $marcs ) = @_;
-            my $marc = $marcs->{marc21};
+            my ( $name, $type, $facet, $marc_type, $marc_field ) = @_;
+            return unless $marc_type eq 'marc21';
+            print "Data comes from: " . $marc_field . "\n";
         }
     );
 
@@ -266,10 +267,6 @@ table, in order to build the mappings for whatever is needed.
 In the provided function, the files are:
 
 =over 4
-
-=item C<$id>
-
-An ID number, corresponding to the entry in the database.
 
 =item C<$name>
 
@@ -285,11 +282,15 @@ The type for this value, e.g. 'string'.
 True if this value should be facetised. This only really makes sense if the
 field is understood by the facet processing code anyway.
 
-=item C<$marc>
+=item C<$marc_type>
 
-A hashref containing the MARC field specifiers for each MARC type. It's quite
-possible for this to be undefined if there is otherwise an entry in a
-different MARC form.
+A string that indicates the MARC type that this mapping is for, e.g. 'marc21',
+'unimarc', 'normarc'.
+
+=item C<$marc_field>
+
+A string that describes the MARC field that contains the data to extract.
+These are of a form suited to Catmandu's MARC fixers.
 
 =back
 
@@ -302,20 +303,22 @@ sub _foreach_mapping {
     my $database = Koha::Database->new();
     my $schema   = $database->schema();
     my $rs =
-      $schema->resultset('ElasticsearchMapping')
-      ->search( { indexname => $self->index } );
+      $schema->resultset('SearchMarcMap')
+      ->search( { index_name => $self->index } );
     for my $row ( $rs->all ) {
-        $sub->(
-            $row->id,
-            $row->mapping,
-            $row->type,
-            $row->facet,
-            {
-                marc21  => $row->marc21,
-                unimarc => $row->unimarc,
-                normarc => $row->normarc
-            }
-        );
+        my $marc_type = $row->marc_type;
+        my $marc_field = $row->marc_field;
+        my $facet = $row->facet;
+        my $search_field = $row->search_fields();
+        for my $sf ( $search_field->all ) {
+            $sub->(
+                $sf->name,
+                $sf->type,
+                $facet,
+                $marc_type,
+                $marc_field,
+            );
+        }
     }
 }
 

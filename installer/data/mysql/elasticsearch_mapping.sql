@@ -1,4 +1,7 @@
 DROP TABLE IF EXISTS elasticsearch_mapping;
+DROP TABLE IF EXISTS search_marc_to_field;
+DROP TABLE IF EXISTS search_field;
+DROP TABLE IF EXISTS search_marc_map;
 CREATE TABLE `elasticsearch_mapping` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `indexname` varchar(255) NOT NULL,
@@ -11,21 +14,56 @@ CREATE TABLE `elasticsearch_mapping` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- This specifies the fields that will be stored in the search engine.
+CREATE TABLE `search_field` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL COMMENT 'the name of the field as it will be stored in the search engine',
+  `type` ENUM('string', 'date', 'number', 'boolean', 'sum') NOT NULL COMMENT 'what type of data this holds, relevant when storing it',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- This contains a MARC field specifier for a given index, marc type, and marc
+-- field.
+CREATE TABLE `search_marc_map` (
+    id int(11) NOT NULL AUTO_INCREMENT,
+    index_name ENUM('biblios','authorities') NOT NULL COMMENT 'what storage index this map is for',
+    marc_type ENUM('marc21', 'unimarc', 'normarc') NOT NULL COMMENT 'what MARC type this map is for',
+    marc_field VARCHAR(255) NOT NULL COMMENT 'the MARC specifier for this field',
+    `facet` boolean DEFAULT FALSE COMMENT 'true if a facet field should be generated for this',
+    PRIMARY KEY(`id`),
+    INDEX (`index_name`),
+    UNIQUE KEY (index_name, marc_type, marc_field)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- This joins the two search tables together. We can have any combination:
+-- one marc field could have many search fields (maybe you want one value
+-- to go to 'author' and 'corporate-author) and many marc fields could go
+-- to one search field (e.g. all the various author fields going into
+-- 'author'.)
+CREATE TABLE `search_marc_to_field` (
+    search_marc_map_id int(11) NOT NULL,
+    search_field_id int(11) NOT NULL,
+    PRIMARY KEY(search_marc_map_id, search_field_id),
+    FOREIGN KEY(search_marc_map_id) REFERENCES search_marc_map(id),
+    FOREIGN KEY(search_field_id) REFERENCES search_field(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','llength',FALSE,'','leader_/1-5',NULL,'leader_/1-5');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','rtype',FALSE,'','leader_/6',NULL,'leader_/6');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','bib-level',FALSE,'','leader_/7',NULL,'leader_/7');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','control-number',FALSE,'','001',NULL,'001');
-INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','local-number',FALSE,'',NULL,'001',NULL);
+INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','local-number',FALSE,'string',NULL,'001',NULL);
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','date-time-last-modified',FALSE,'','005','099d',NULL);
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','microform-generation',FALSE,'','007_/11',NULL,'007_/11');
-INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','material-type',FALSE,'','007','200b','007');
+INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','material-type',FALSE,'','007','','007');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','ff7-00',FALSE,'','007_/1',NULL,'007_/1');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','ff7-01',FALSE,'','007_/2',NULL,'007_/2');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','ff7-02',FALSE,'','007_/3',NULL,'007_/3');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','ff7-01-02',FALSE,'','007_/1-2',NULL,'007_/1-2');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','date-entered-on-file',FALSE,'','008_/1-5','099c','008_/1-5');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','pubdate',FALSE,'','008_/7-10','100a_/9-12','008_/7-10');
-INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','pl',FALSE,'','008_/15-17','210a','008_/15-17');
+INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','pl',FALSE,'','008_/15-17','','008_/15-17');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','ta',FALSE,'','008_/22','100a_/17','008_/22');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','ff8-23',FALSE,'','008_/23',NULL,'008_/23');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','ff8-29',FALSE,'','008_/29','105a_/8','008_/29');
@@ -33,7 +71,7 @@ INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `m
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','bio',FALSE,'','008_/34','105a_/12','008_/34');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','ln',FALSE,'','008_/35-37','101a','008_/35-37');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','ctype',FALSE,'','008_/24-27','105a_/4-7','008_/24-27');
-INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','record-source',FALSE,'','008_/39','995c','008_/39');
+INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','record-source',FALSE,'','008_/39','','008_/39');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','lc-cardnumber',FALSE,'','010','995j','010');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','lc-cardnumber',FALSE,'','011',NULL,NULL);
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','identifier-standard',FALSE,'','010',NULL,'010');
@@ -54,7 +92,7 @@ INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `m
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','author',TRUE,'string','110a','200g','110a');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','author',TRUE,'string','111a',NULL,'111a');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','author',TRUE,'string','700a','700a','700a');
-INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','author',FALSE,'string','245c','701','245c');
+INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','author',TRUE,'string','245c','701','245c');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','title',FALSE,'string','245a','200a','245a');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','title',FALSE,'string','246','200c','246');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','title',FALSE,'string','247','200d','247');
@@ -132,11 +170,11 @@ INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `m
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','subject',TRUE,'string','653a','610','653');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','local-classification',FALSE,'','952o','995k','952o');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','local-classification',FALSE,'',NULL,'686',NULL);
-INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','local-number',FALSE,'','999c','001','999c');
-INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','local-number',FALSE,'',NULL,'0909',NULL);
+INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','local-number',FALSE,'string','999c','001','999c');
+INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','local-number',FALSE,'string',NULL,'0909',NULL);
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','itype',TRUE,'string','942c','200b','942c');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','itype',TRUE,'string','952y','995r','952y');
-INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','acqdate',FALSE,'date','952d','9955','952y');
+INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','acqdate',FALSE,'date','952d','9955','952d');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','place',TRUE,'string','260a','210a','260a');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','publisher',TRUE,'string','260b','210c','260b');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','copydate',TRUE,'date','260c',NULL,'260c'); -- No copydate for unimarc? Seems strange.
@@ -192,7 +230,7 @@ INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `m
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','an',FALSE,'number',NULL,'6219',NULL);
 
 -- Authorities: incomplete
-INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('authorities','Local-Number',FALSE,'string','001',NULL,'001');
+INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('authorities','local-number',FALSE,'string','001',NULL,'001');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('authorities','authtype',FALSE,'','942a',NULL,'942a');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('authorities','Kind-of-record',FALSE,'','008_/9',NULL,'008_/9');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('authorities','Descriptive-cataloging-rules',FALSE,'','008_/10',NULL,'008_/10');
@@ -235,3 +273,19 @@ INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `m
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('authorities','Meeting-name-see-also-from',FALSE,'','511acdefghjklnpqstvxyz',NULL,'511acdefghjklnpqstvxyz');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('authorities','See-also-from',FALSE,'','511acdefghjklnpqstvxyz',NULL,'511acdefghjklnpqstvxyz');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('authorities','Match',FALSE,'','511acdefghjklnpqstvxyz',NULL,'511acdefghjklnpqstvxyz');
+
+-- temporary to convert into new table form
+insert into search_marc_map(index_name, marc_type, marc_field, facet) select distinct indexname, 'marc21', marc21, facet from elasticsearch_mapping where marc21 is not null;
+insert into search_marc_map(index_name, marc_type, marc_field, facet) select distinct indexname, 'unimarc', unimarc, facet from elasticsearch_mapping where unimarc is not null;
+insert into search_marc_map(index_name, marc_type, marc_field, facet) select distinct indexname, 'normarc', normarc, facet from elasticsearch_mapping where normarc is not null;
+insert into search_field (name, type) select distinct mapping, type from elasticsearch_mapping;
+
+insert into search_marc_to_field(search_field_id, search_marc_map_id) select search_field.id,search_marc_map.id from search_field, search_marc_map, elasticsearch_mapping where elasticsearch_mapping.mapping=search_field.name AND elasticsearch_mapping.marc21=search_marc_map.marc_field AND search_marc_map.marc_type='marc21' AND index_name='biblios';
+insert into search_marc_to_field(search_field_id, search_marc_map_id) select search_field.id,search_marc_map.id from search_field, search_marc_map, elasticsearch_mapping where elasticsearch_mapping.mapping=search_field.name AND elasticsearch_mapping.marc21=search_marc_map.marc_field AND search_marc_map.marc_type='unimarc' AND index_name='biblios';
+insert into search_marc_to_field(search_field_id, search_marc_map_id) select search_field.id,search_marc_map.id from search_field, search_marc_map, elasticsearch_mapping where elasticsearch_mapping.mapping=search_field.name AND elasticsearch_mapping.marc21=search_marc_map.marc_field AND search_marc_map.marc_type='normarc' AND index_name='biblios';
+
+insert into search_marc_to_field(search_field_id, search_marc_map_id) select search_field.id,search_marc_map.id from search_field, search_marc_map, elasticsearch_mapping where elasticsearch_mapping.mapping=search_field.name AND elasticsearch_mapping.marc21=search_marc_map.marc_field AND search_marc_map.marc_type='marc21' AND index_name='authorities';
+insert into search_marc_to_field(search_field_id, search_marc_map_id) select search_field.id,search_marc_map.id from search_field, search_marc_map, elasticsearch_mapping where elasticsearch_mapping.mapping=search_field.name AND elasticsearch_mapping.marc21=search_marc_map.marc_field AND search_marc_map.marc_type='unimarc' AND index_name='authorities';
+insert into search_marc_to_field(search_field_id, search_marc_map_id) select search_field.id,search_marc_map.id from search_field, search_marc_map, elasticsearch_mapping where elasticsearch_mapping.mapping=search_field.name AND elasticsearch_mapping.marc21=search_marc_map.marc_field AND search_marc_map.marc_type='normarc' AND index_name='authorities';
+
+drop table elasticsearch_mapping;
