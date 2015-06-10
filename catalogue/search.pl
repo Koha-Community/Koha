@@ -536,7 +536,7 @@ eval {
 # This sorts the facets into alphabetical order
 if ($facets) {
     foreach my $f (@$facets) {
-        $f->{facets} = [ sort { uc($a->{facet_title_value}) cmp uc($b->{facet_title_value}) } @{ $f->{facets} } ];
+        $f->{facets} = [ sort { uc($a->{facet_label_value}) cmp uc($b->{facet_label_value}) } @{ $f->{facets} } ];
     }
 }
 if ($@ || $error) {
