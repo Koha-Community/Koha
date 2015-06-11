@@ -25,14 +25,29 @@ use IO::File;
 use CGI qw ( -utf8 );
 use CGI::Session;
 use C4::Context;
-use C4::Auth qw/check_cookie_auth/;
+use C4::Auth qw/check_cookie_auth haspermission/;
 use C4::UploadedFile;
 use CGI::Cookie; # need to check cookies before
                  # having CGI parse the POST request
 
+my $flags_required = [
+		{circulate => 'circulate_remaining_permissions'},
+		{tools => 'stage_marc_import'},
+		{tools => 'upload_local_cover_images'}
+];
+
 my %cookies = fetch CGI::Cookie;
-my ($auth_status, $sessionID) = check_cookie_auth($cookies{'CGISESSID'}->value, { tools => '*' });
-if ($auth_status ne "ok") {
+
+my ($auth_status, $sessionID) = check_cookie_auth($cookies{'CGISESSID'}->value);
+
+my $auth_failure = 1;
+foreach my $flag_required (@{ $flags_required}) {
+		if (my $flags = haspermission(C4::Context->config('user'), $flag_required)) {
+				$auth_failure = 0 if $auth_status eq 'ok';
+		}
+}
+
+if ($auth_failure) {
     my $reply = CGI->new("");
     print $reply->header(-type => 'text/html');
     print '{"progress":"0"}';
