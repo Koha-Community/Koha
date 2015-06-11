@@ -35,6 +35,7 @@ use Date::Calc qw( Add_Delta_Days );
 use Encode;
 use Carp;
 use Koha::Email;
+use Koha::DateUtils qw( format_sqldatetime );
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -799,15 +800,7 @@ sub _parseletter {
     my ( $letter, $table, $values ) = @_;
 
     if ( $table eq 'borrowers' && $values->{'dateexpiry'} ){
-        my @dateexpiry = split /-/, $values->{'dateexpiry'};
-
-        $values->{'dateexpiry'} = C4::Dates->new(
-            sprintf(
-                '%04d-%02d-%02d',
-                Add_Delta_Days( @dateexpiry,0)
-            ),
-            'iso'
-        )->output();
+        $values->{'dateexpiry'} = format_sqldatetime( $values->{'dateexpiry'} );
     }
 
     if ( $table eq 'reserves' && $values->{'waitingdate'} ) {

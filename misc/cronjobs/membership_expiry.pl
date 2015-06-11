@@ -45,6 +45,9 @@ BEGIN {
 use C4::Context;
 use C4::Letters;
 use C4::Dates qw/format_date/;
+use C4::Log;
+
+cronlogaction();
 
 # These are defaults for command line options.
 my $confirm;                              # -c: Confirm that the user has read and configured this script.

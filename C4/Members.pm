@@ -1493,16 +1493,18 @@ sub GetExpiryDate {
 
 sub GetUpcomingMembershipExpires {
     my $dbh = C4::Context->dbh;
-    my $days = C4::Context->preference("MembershipExpiryDaysNotice");
+    my $days = C4::Context->preference("MembershipExpiryDaysNotice") || 0;
+    my $dateexpiry = DateTime->now()->add(days => $days)->ymd();
+
     my $query = "
         SELECT borrowers.*, categories.description,
         branches.branchname, branches.branchemail FROM borrowers
         LEFT JOIN branches on borrowers.branchcode = branches.branchcode
         LEFT JOIN categories on borrowers.categorycode = categories.categorycode
-        WHERE dateexpiry = DATE_ADD(CURDATE(),INTERVAL $days DAY);
+        WHERE dateexpiry = ?;
     ";
     my $sth = $dbh->prepare($query);
-    $sth->execute;
+    $sth->execute($dateexpiry);
     my $results = $sth->fetchall_arrayref({});
     return $results;
 }
