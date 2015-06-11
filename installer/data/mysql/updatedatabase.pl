@@ -10585,12 +10585,13 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.21.00.XXX";
+$DBversion = "3.21.00.008";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
-        DELETE FROM systempreferences WHERE variable = 'HomeOrHoldingBranchReturn';
+        DELETE IGNORE FROM systempreferences
+        WHERE variable = 'HomeOrHoldingBranchReturn';
     });
-    print "Upgrade to $DBversion done (Bug 7981 - Transfer message on return. HomeOrHoldingBranchReturn syspref removed in favour of circulation rules.)\n";
+    print "Upgrade to $DBversion done (Bug 7981: Transfer message on return. HomeOrHoldingBranchReturn syspref removed in favour of circulation rules.)\n";
     SetVersion($DBversion);
 }
 
