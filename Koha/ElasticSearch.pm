@@ -247,7 +247,6 @@ sub get_fixer_rules {
             }
         }
     );
-die Dumper(\@rules);
     return \@rules;
 }
 
