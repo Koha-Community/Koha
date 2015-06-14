@@ -39,19 +39,19 @@ use C4::UploadedFile;
 # have been created.
 
 my $flags_required = [
-		{circulate => 'circulate_remaining_permissions'},
-		{tools => 'stage_marc_import'},
-		{tools => 'upload_local_cover_images'}
+    {circulate  => 'circulate_remaining_permissions'},
+    {tools      => 'stage_marc_import'},
+    {tools      => 'upload_local_cover_images'}
 ];
 
 my %cookies = fetch CGI::Cookie;
 
 my $auth_failure = 1;
-my ($auth_status, $sessionID) = check_cookie_auth($cookies{'CGISESSID'}->value);
-foreach my $flag_required (@{ $flags_required}) {
-		if (my $flags = haspermission(C4::Context->config('user'), $flag_required)) {
-				$auth_failure = 0 if $auth_status eq 'ok';
-		}
+my ( $auth_status, $sessionID ) = check_cookie_auth( $cookies{'CGISESSID'}->value );
+foreach my $flag_required ( @{$flags_required} ) {
+    if ( my $flags = haspermission( C4::Context->config('user'), $flag_required ) ) {
+        $auth_failure = 0 if $auth_status eq 'ok';
+    }
 }
 
 if ($auth_failure) {
