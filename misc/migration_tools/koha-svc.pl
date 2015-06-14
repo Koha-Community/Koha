@@ -77,7 +77,7 @@ This same script can be used as module (as it defines T<Koha::SVC> package) usin
 
   require "koha-svc.pl"
 
-at begining of script. Rest of API is described below. Example of it's usage is at beginning of this script.
+at beginning of script. Rest of API is described below. Example of its usage is at beginning of this script.
 
 =head2 new
 

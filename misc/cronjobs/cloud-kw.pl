@@ -128,12 +128,12 @@ sub new {
 # RETURN:
 #   A 4-dimensionnal array in $self->{top_terms}
 #   [0] term
-#   [1] term number of occurences
+#   [1] term number of occurrences
 #   [2] term proportional relative weight in terms set E[0-1]
 #   [3] term logarithmic relative weight E [0-levels_cloud]
 #   
 #   This array is sorted alphabetically by terms ([0])
-#   It can be easily sorted by occurences:
+#   It can be easily sorted by occurrences:
 #     @t = sort { $a[1] <=> $a[1] } @{$self->{top_terms}};
 #
 sub scan {
@@ -236,7 +236,7 @@ sub scan {
 
 
 #
-# Returns a HTML version of index top terms formated
+# Returns a HTML version of index top terms formatted
 # as a 'tag cloud'.
 #
 sub html_cloud {
@@ -376,14 +376,14 @@ Configuration file looks like that:
 =head1 IMPROVEMENTS
 
 Generated top terms have more informations than those outputted from
-the time beeing. Some parameters could be easily added to improve
+the time being. Some parameters could be easily added to improve
 this script:
 
 =over
 
 =item B<WithCount>
 
-In order to output terms with the number of occurences they
+In order to output terms with the number of occurrences they
 have been found in Koha Catalogue by Zebra.
 
 =item B<CloudLevels>

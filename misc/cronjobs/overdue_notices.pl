@@ -119,7 +119,7 @@ overdues that could not be emailed are sent in CSV format to the admin.
 
 Produces html data. If patron does not have an email address or
 -n (no mail) flag is set, an HTML file is generated in the specified
-directory. This can be downloaded or futher processed by library staff.
+directory. This can be downloaded or further processed by library staff.
 The file will be called notices-YYYY-MM-DD.html and placed in the directory
 specified.
 
@@ -127,7 +127,7 @@ specified.
 
 Produces plain text data. If patron does not have an email address or
 -n (no mail) flag is set, a text file is generated in the specified
-directory. This can be downloaded or futher processed by library staff.
+directory. This can be downloaded or further processed by library staff.
 The file will be called notices-YYYY-MM-DD.txt and placed in the directory
 specified.
 
@@ -268,7 +268,7 @@ overdues in the last 2 weeks for the MAIN library.
 =head1 SEE ALSO
 
 The F<misc/cronjobs/advance_notices.pl> program allows you to send
-messages to patrons in advance of thier items becoming due, or to
+messages to patrons in advance of their items becoming due, or to
 alert them of items that have just become due.
 
 =cut

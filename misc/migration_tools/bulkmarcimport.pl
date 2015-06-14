@@ -122,7 +122,7 @@ if ((not defined $sourcesubfield) && (not defined $sourcetag)){
 }
 
 
-# Disable logging for the biblios and authorities import operation. It would unnecesarily
+# Disable logging for the biblios and authorities import operation. It would unnecessarily
 # slow the import
 
 # Disable the syspref cache so we can change logging settings
@@ -727,7 +727,7 @@ if set, do whatever is required
 
 =item B<-k, -keepids>=<FIELD>
 
-Field store ids in I<FIELD> (usefull for authorities, where 001 contains the
+Field store ids in I<FIELD> (useful for authorities, where 001 contains the
 authid for Koha, that can contain a very valuable info for authorities coming
 from LOC or BNF. useless for biblios probably)
 
@@ -761,7 +761,7 @@ I<FILE> for the koha bib and source id
 
 =item B<-keepids>
 
-Store ids in 009 (usefull for authorities, where 001 contains the authid for
+Store ids in 009 (useful for authorities, where 001 contains the authid for
 Koha, that can contain a very valuable info for authorities coming from LOC or
 BNF. useless for biblios probably)
 

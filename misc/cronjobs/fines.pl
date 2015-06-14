@@ -3,7 +3,7 @@
 #  This script loops through each overdue item, determines the fine,
 #  and updates the total amount of fines due by each user.  It relies on
 #  the existence of /tmp/fines, which is created by ???
-# Doesnt really rely on it, it relys on being able to write to /tmp/
+# Doesn't really rely on it, it relys on being able to write to /tmp/
 # It creates the fines file
 #
 #  This script is meant to be run nightly out of cron.

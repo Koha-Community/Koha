@@ -72,7 +72,7 @@ misc/devel/update_dbix_class_files.pl
                             --db_passwd=db-pass ...
 
 The command in usually called from the root directory for the Koha source tree.
-If you are runing from another directory, use the --path switch to specify
+If you are running from another directory, use the --path switch to specify
 a different path.
 
 =head1 OPTIONS

@@ -71,7 +71,7 @@ my @mainpage;
 print "--------------\n";
 print "Koha circulation benchmarking utility\n";
 print "--------------\n";
-print "Benchmarking with $max_tries occurences of each operation and $concurrency concurrent sessions \n";
+print "Benchmarking with $max_tries occurrences of each operation and $concurrency concurrent sessions \n";
 print "Load testing staff client dashboard page";
 for (my $i=1;$i<=$max_tries;$i++) {
     push @mainpage,"$baseurl/mainpage.pl";

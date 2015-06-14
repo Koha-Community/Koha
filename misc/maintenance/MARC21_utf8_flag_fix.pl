@@ -170,7 +170,7 @@ The default is to target all records with bad leaders.
 
 =item B<--offset=N>
 
-Like an OFFSET statement in SQL, this tells the script to skip N of the targetted records.
+Like an OFFSET statement in SQL, this tells the script to skip N of the targeted records.
 The default is 0, i.e. skip none of them.
 
 =back
