@@ -150,8 +150,8 @@ sub delete {
         push @query_params, $opts{'template_id'}, $opts{'creator'};
     }
     if (scalar(@query_params) < 2) {   # If there is no template id or creator type then we cannot delete it
-        warn sprintf('%s : Cannot delete template as the template id is invalid or non-existant.', $call_type) if !$query_params[0];
-        warn sprintf('%s : Cannot delete template as the creator type is invalid or non-existant.', $call_type) if !$query_params[1];
+        warn sprintf('%s : Cannot delete template as the template id is invalid or non-existent.', $call_type) if !$query_params[0];
+        warn sprintf('%s : Cannot delete template as the creator type is invalid or non-existent.', $call_type) if !$query_params[1];
         return -1;
     }
     my $query = "DELETE FROM creator_templates WHERE template_id = ? AND creator = ?";
@@ -344,7 +344,7 @@ CM      = SI Centimeters (28.3464567 points per)
         my $template = C4::Labels::Template->new(profile_id => 1, page_width => 8.5, page_height => 11.0, units => 'INCH'); # Creates and returns a new template object using
             the supplied values to override the defaults
 
-    B<NOTE:> This template is I<not> written to the database untill save() is invoked. You have been warned!
+    B<NOTE:> This template is I<not> written to the database until save() is invoked. You have been warned!
 
 =head2 retrieve(template_id => $template_id)
 

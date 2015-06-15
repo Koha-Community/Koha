@@ -2584,7 +2584,7 @@ sub _numeration {
 
 =head2 is_barcode_in_use
 
-Returns number of occurence of the barcode in the items table
+Returns number of occurrences of the barcode in the items table
 Can be used as a boolean test of whether the barcode has
 been deployed as yet
 
@@ -2593,13 +2593,13 @@ been deployed as yet
 sub is_barcode_in_use {
     my $barcode = shift;
     my $dbh       = C4::Context->dbh;
-    my $occurences = $dbh->selectall_arrayref(
+    my $occurrences = $dbh->selectall_arrayref(
         'SELECT itemnumber from items where barcode = ?',
         {}, $barcode
 
     );
 
-    return @{$occurences};
+    return @{$occurrences};
 }
 
 =head2 CloseSubscription

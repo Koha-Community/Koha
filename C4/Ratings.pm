@@ -72,7 +72,7 @@ Delete a rating for a bib
 
 All subroutines in Ratings.pm return a hashref which contain 4 keys
 
-for example, after executing this statment below...
+for example, after executing this statement below...
 
     my $rating_hashref = GetRating ( $biblionumber, $borrowernumber ) ;
 

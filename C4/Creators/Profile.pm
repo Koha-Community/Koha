@@ -110,8 +110,8 @@ sub delete {
         push @params, $opts{'profile_id'}, $opts{'creator'};
     }
     if (scalar(@params) < 2) {   # If there is no profile id or creator type then we cannot delete it
-        warn sprintf('%s : Cannot delete profile as the profile id is invalid or non-existant.', $call_type) if !$params[0];
-        warn sprintf('%s : Cannot delete profile as the creator type is invalid or non-existant.', $call_type) if !$params[1];
+        warn sprintf('%s : Cannot delete profile as the profile id is invalid or non-existent.', $call_type) if !$params[0];
+        warn sprintf('%s : Cannot delete profile as the creator type is invalid or non-existent.', $call_type) if !$params[1];
         return -1;
     }
     my $query = "DELETE FROM printers_profile WHERE profile_id = ? AND creator = ?";

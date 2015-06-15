@@ -1741,7 +1741,7 @@ sub NormalizeISBN {
 
   my @isbns = GetVariationsOfISBN( $isbn );
 
-  Returns a list of varations of the given isbn in
+  Returns a list of variations of the given isbn in
   both ISBN-10 and ISBN-13 formats, with and without
   hyphens.
 
@@ -1773,7 +1773,7 @@ sub GetVariationsOfISBN {
 
   my @isbns = GetVariationsOfISBNs( @isbns );
 
-  Returns a list of varations of the given isbns in
+  Returns a list of variations of the given isbns in
   both ISBN-10 and ISBN-13 formats, with and without
   hyphens.
 

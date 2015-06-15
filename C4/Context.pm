@@ -288,7 +288,7 @@ sub import {
     # the first time the module is called
     # (a config file can be optionaly passed)
 
-    # default context allready exists? 
+    # default context already exists?
     return if $context;
 
     # no ? so load it!
@@ -350,7 +350,7 @@ sub new {
     }
     
     if ($ismemcached) {
-        # retreive from memcached
+        # retrieve from memcached
         $self = $memcached->get('kohaconf');
         if (not defined $self) {
             # not in memcached yet

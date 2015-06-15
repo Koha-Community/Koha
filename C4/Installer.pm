@@ -458,7 +458,7 @@ sub load_sql {
         $error = qx($strcmd -f $filename 2>&1 1>/dev/null);
         # Be sure to set 'client_min_messages = error' in postgresql.conf
         # so that only true errors are returned to stderr or else the installer will
-        # report the import a failure although it really succeded -fbcit
+        # report the import as a failure although it really succeeded -fbcit
     }
 #   errors thrown while loading installer data should be logged
     if($error) {

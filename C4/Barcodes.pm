@@ -133,7 +133,7 @@ sub next_value {
 	}
 	my $x = length($incr);		# number of digits
 	$incr =~ /^9+$/ and $x++;	# if they're all 9's, we need an extra.
-		# Note, this enlargement might be undesireable for some barcode formats.
+        # Note, this enlargement might be undesirable for some barcode formats.
 		# Those should override next_value() to work accordingly.
 	$incr++;
 

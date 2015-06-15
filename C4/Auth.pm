@@ -320,7 +320,7 @@ sub get_template_and_user {
     else {    # if this is an anonymous session, setup to display public lists...
 
         # If shibboleth is enabled, and we're in an anonymous session, we should allow
-        # the user to attemp login via shibboleth.
+        # the user to attempt login via shibboleth.
         if ($shib) {
             $template->param( shibbolethAuthentication => $shib,
                 shibbolethLoginUrl => login_shib_url( $in->{'query'} ),
@@ -636,7 +636,7 @@ sub _version_check {
     my $query = shift;
     my $version;
 
-    # If Version syspref is unavailable, it means Koha is beeing installed,
+    # If version syspref is unavailable, it means Koha is being installed,
     # and so we must redirect to OPAC maintenance page or to the WebInstaller
     # also, if OpacMaintenance is ON, OPAC should redirect to maintenance
     if ( C4::Context->preference('OpacMaintenance') && $type eq 'opac' ) {
@@ -745,7 +745,7 @@ sub checkauth {
     }
     elsif ($persona) {
 
-        # we dont want to set a session because we are being called by a persona callback
+        # we don't want to set a session because we are being called by a persona callback
     }
     elsif ( $sessionID = $query->cookie("CGISESSID") )
     {    # assignment, not comparison
@@ -901,7 +901,7 @@ sub checkauth {
                 $info{'invalidShibLogin'} = 1 unless ($return);
             }
 
-            # If shib login and match were successfull, skip further login methods
+            # If shib login and match were successful, skip further login methods
             unless ($shibSuccess) {
                 if ( $cas && $query->param('ticket') ) {
                     my $retuserid;

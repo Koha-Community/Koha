@@ -22,7 +22,7 @@ sub search {
 
     my ($iTotalRecords, $iTotalDisplayRecords);
 
-    # If branches are independant and user is not superlibrarian
+    # If branches are independent and user is not superlibrarian
     # The search has to be only on the user branch
     if ( C4::Branch::onlymine ) {
         my $userenv = C4::Context->userenv;

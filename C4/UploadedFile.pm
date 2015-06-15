@@ -63,7 +63,7 @@ to survive beyond the life of the user's session.
 This module allows for tracking the progress of the file
 currently being uploaded.
 
-TODO: implement secure persistant storage of uploaded files.
+TODO: implement secure persistent storage of uploaded files.
 
 =cut
 

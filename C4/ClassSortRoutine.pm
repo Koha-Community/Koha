@@ -48,7 +48,7 @@ use C4::ClassSortRoutine;
    &GetClassSortKey
 );
 
-# intialization code
+# initialization code
 my %loaded_routines = ();
 my @sort_routines = GetSortRoutineNames();
 foreach my $sort_routine (@sort_routines) {

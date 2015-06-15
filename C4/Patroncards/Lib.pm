@@ -198,7 +198,7 @@ This library provides functions used by various sections of the Patroncard Creat
 
 =head2 C4::Patroncards::Lib::unpack_UTF8()
 
-    This function returns a reference to an array of hex values equivelant to the utf8 values of the string passed in. This assumes, of course, that the string is
+    This function returns a reference to an array of hex values equivalent to the utf8 values of the string passed in. This assumes, of course, that the string is
     indeed utf8.
 
     example:
@@ -235,7 +235,7 @@ This library provides functions used by various sections of the Patroncard Creat
 
 =head2 C4::Patroncards::Lib::leading()
 
-    This function accepts a single parameter, font postscript point size, and returns the ammount of leading to be added.
+    This function accepts a single parameter, font postscript point size, and returns the amount of leading to be added.
 
     example:
 

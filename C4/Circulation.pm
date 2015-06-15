@@ -837,7 +837,7 @@ sub CanBookBeIssued {
     }
 
 #
-    # JB34 CHECKS IF BORROWERS DONT HAVE ISSUE TOO MANY BOOKS
+    # JB34 CHECKS IF BORROWERS DON'T HAVE ISSUE TOO MANY BOOKS
     #
 	my ($current_loan_count, $max_loans_allowed) = TooMany( $borrower, $item->{biblionumber}, $item );
     # if TooMany max_loans_allowed returns 0 the user doesn't have permission to check out this book
@@ -1293,7 +1293,7 @@ sub AddIssue {
             UpdateTotalIssues($item->{'biblionumber'}, 1);
         }
 
-        ## If item was lost, it has now been found, reverse any list item charges if neccessary.
+        ## If item was lost, it has now been found, reverse any list item charges if necessary.
         if ( $item->{'itemlost'} ) {
             if ( C4::Context->preference('RefundLostItemFeeOnReturn' ) ) {
                 _FixAccountForLostAndReturned( $item->{'itemnumber'}, undef, $item->{'barcode'} );
@@ -1767,7 +1767,7 @@ sub AddReturn {
     my $issue  = GetItemIssue($itemnumber);
     if ($issue and $issue->{borrowernumber}) {
         $borrower = C4::Members::GetMemberDetails($issue->{borrowernumber})
-            or die "Data inconsistency: barcode $barcode (itemnumber:$itemnumber) claims to be issued to non-existant borrowernumber '$issue->{borrowernumber}'\n"
+            or die "Data inconsistency: barcode $barcode (itemnumber:$itemnumber) claims to be issued to non-existent borrowernumber '$issue->{borrowernumber}'\n"
                 . Dumper($issue) . "\n";
     } else {
         $messages->{'NotIssued'} = $barcode;
@@ -3419,7 +3419,7 @@ sub CalcDateDue {
         }
     }
 
-    # if Hard Due Dates are used, retreive them and apply as necessary
+    # if Hard Due Dates are used, retrieve them and apply as necessary
     my ( $hardduedate, $hardduedatecompare ) =
       GetHardDueDate( $borrower->{'categorycode'}, $itemtype, $branch );
     if ($hardduedate) {    # hardduedates are currently dates
@@ -3877,7 +3877,7 @@ sub GetAgeRestriction {
     my @values = split ' ', uc($record_restrictions);
     return unless @values;
 
-    # Search first occurence of one of the markers
+    # Search first occurrence of one of the markers
     my @markers = split /\|/, uc($markers);
     return unless @markers;
 

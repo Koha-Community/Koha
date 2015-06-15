@@ -165,7 +165,7 @@ sub get_exception_holidays {
     $single_holidays = $calendar->get_single_holidays();
 
 Returns a hash reference to single holidays. This kind of holidays are those which
-happend just one time.
+happened just one time.
 
 =cut
 

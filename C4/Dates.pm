@@ -279,7 +279,7 @@ date format unless otherwise instructed.
 With no argument, format returns the object's current date_format.  Otherwise it attempts to 
 set the object format to the supplied value.
 
-Some previously desireable functions are now unnecessary.  For example, you might want a 
+Some previously desirable functions are now unnecessary.  For example, you might want a
 method/function to tell you whether or not a Dates.pm object is of the 'iso' type.  But you 
 can see by this example that such a test is trivial to accomplish, and not necessary to 
 include in the module:
@@ -315,7 +315,7 @@ Or even:
 
 Perhaps you want to force data obtained in a known format to display according to the user's system
 preference, without necessarily knowing what that preference is.  For this purpose, you can use the
-psuedo-format argument "syspref".  
+pseudo-format argument "syspref".
 
 For example, to print an ISO date (from the database) in the <systempreference> format:
 

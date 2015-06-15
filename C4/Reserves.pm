@@ -61,7 +61,7 @@ This modules provides somes functions to deal with reservations.
   The following columns contains important values :
   - priority >0      : then the reserve is at 1st stage, and not yet affected to any item.
              =0      : then the reserve is being dealed
-  - found : NULL       : means the patron requested the 1st available, and we haven't choosen the item
+  - found : NULL       : means the patron requested the 1st available, and we haven't chosen the item
             T(ransit)  : the reserve is linked to an item but is in transit to the pickup branch
             W(aiting)  : the reserve is linked to an item, is at the pickup branch, and is waiting on the hold shelf
             F(inished) : the reserve has been completed, and is done
@@ -74,7 +74,7 @@ This modules provides somes functions to deal with reservations.
          if there is no transfer to do, the reserve waiting
          patron can pick it up                                    P =0, F=W,    I=filled
          if there is a transfer to do, write in branchtransfer    P =0, F=T,    I=filled
-           The pickup library recieve the book, it check in       P =0, F=W,    I=filled
+           The pickup library receive the book, it check in       P =0, F=W,    I=filled
   The patron borrow the book                                      P =0, F=F,    I=filled
 
   ==== 2nd use case ====
@@ -660,7 +660,7 @@ sub GetReserveCount {
 
   ($messages,$nextreservinfo)=$GetOtherReserves(itemnumber);
 
-Check queued list of this document and check if this document must be  transfered
+Check queued list of this document and check if this document must be transferred
 
 =cut
 
@@ -1386,7 +1386,7 @@ sub ModReserveAffect {
     my $request = GetReserveInfo($reserve_id);
     my $already_on_shelf = ($request && $request->{found} eq 'W') ? 1 : 0;
 
-    # If we affect a reserve that has to be transfered, don't set to Waiting
+    # If we affect a reserve that has to be transferred, don't set to Waiting
     my $query;
     if ($transferToDo) {
     $query = "
@@ -1591,7 +1591,7 @@ sub _get_itype {
 
     my $itype;
     if (C4::Context->preference('item-level_itypes')) {
-        # We cant trust GetItem to honour the syspref, so safest to do it ourselves
+        # We can't trust GetItem to honour the syspref, so safest to do it ourselves
         # When GetItem is fixed, we can remove this
         $itype = $item->{itype};
     }
@@ -1920,7 +1920,7 @@ sub _Findgroupreserve {
     my $dbh   = C4::Context->dbh;
 
     # TODO: consolidate at least the SELECT portion of the first 2 queries to a common $select var.
-    # check for exact targetted match
+    # check for exact targeted match
     my $item_level_target_query = qq{
         SELECT reserves.biblionumber        AS biblionumber,
                reserves.borrowernumber      AS borrowernumber,
@@ -1954,7 +1954,7 @@ sub _Findgroupreserve {
     }
     return @results if @results;
 
-    # check for title-level targetted match
+    # check for title-level targeted match
     my $title_level_target_query = qq{
         SELECT reserves.biblionumber        AS biblionumber,
                reserves.borrowernumber      AS borrowernumber,
@@ -2174,7 +2174,7 @@ sub OPACItemHoldsAllowed {
     my $itype;
     my $dbh = C4::Context->dbh;
     if (C4::Context->preference('item-level_itypes')) {
-       # We cant trust GetItem to honour the syspref, so safest to do it ourselves
+       # We can't trust GetItem to honour the syspref, so safest to do it ourselves
        # When GetItem is fixed, we can remove this
        $itype = $item->{itype};
     }

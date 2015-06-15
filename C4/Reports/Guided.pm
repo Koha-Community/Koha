@@ -185,7 +185,7 @@ This will return a list of all columns for a report area
 
 sub get_columns {
 
-    # this calls the internal fucntion _get_columns
+    # this calls the internal function _get_columns
     my ( $area, $cgi ) = @_;
     my %table_areas = get_table_areas;
     my $tables = $table_areas{$area}
@@ -440,7 +440,7 @@ for the query.
 C<$offset>, and C<$limit> are required parameters.
 
 C<\@sql_params> is an optional list of parameter values to paste in.
-The caller is reponsible for making sure that C<$sql> has placeholders
+The caller is responsible for making sure that C<$sql> has placeholders
 and that the number placeholders matches the number of parameters.
 
 =cut
@@ -783,7 +783,7 @@ sub get_column_type {
 	my $catalog;
 	my $schema;
 
-	# mysql doesnt support a column selection, set column to %
+    # mysql doesn't support a column selection, set column to %
 	my $tempcolumn='%';
 	my $sth = $dbh->column_info( $catalog, $schema, $table, $tempcolumn ) || die $dbh->errstr;
 	while (my $info = $sth->fetchrow_hashref()){

@@ -105,8 +105,8 @@ sub remove_item {
 }
 
 # FIXME: This method is effectively useless the way the current add_item method is written. Ideally, the items should be added to the object
-#       and then the save method called. This does not work well in practice due to the inability to pass objects accross cgi script calls.
-#       I'm leaving it here because it should be here and for consistency's sake and once memcached support is fully implimented this should be as well. -cnighswonger
+#       and then the save method called. This does not work well in practice due to the inability to pass objects across cgi script calls.
+#       I'm leaving it here because it should be here and for consistency's sake and once memcached support is fully implemented this should be as well. -cnighswonger
 #
 #=head2 $batch->save()
 #

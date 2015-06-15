@@ -1692,7 +1692,7 @@ sub SearchOrders {
             LEFT JOIN biblioitems ON biblioitems.biblionumber=biblio.biblionumber
     };
 
-    # If we search on ordernumber, we retrieve the transfered order if a transfer has been done.
+    # If we search on ordernumber, we retrieve the transferred order if a transfer has been done.
     $query .= q{
             LEFT JOIN aqorders_transfers ON aqorders_transfers.ordernumber_to = aqorders.ordernumber
     } if $ordernumber;
@@ -1838,11 +1838,11 @@ sub DelOrder {
     my $newordernumber = TransferOrder($ordernumber, $basketno);
 
 Transfer an order line to a basket.
-Mark $ordernumber as cancelled with an internal note 'Cancelled and transfered
+Mark $ordernumber as cancelled with an internal note 'Cancelled and transferred
 to BOOKSELLER on DATE' and create new order with internal note
-'Transfered from BOOKSELLER on DATE'.
+'Transferred from BOOKSELLER on DATE'.
 Move all attached items to the new order.
-Received orders cannot be transfered.
+Received orders cannot be transferred.
 Return the ordernumber of created order.
 
 =cut

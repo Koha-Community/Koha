@@ -581,7 +581,7 @@ sub add_tag {	# biblionumber,term,[borrowernumber,approvernumber]
 #   ($min, $max) = stratify_tags($strata, $tags);
 # $stratum: the number of divisions you want
 # $tags: the tags, as provided by get_approval_rows
-# $min: the minumum stratum value
+# $min: the minimum stratum value
 # $max: the maximum stratum value. This may be the same as $min if there
 # is only one weight. Beware of divide by zeros.
 # This will add a field to the tag called "stratum" containing the calculated
@@ -666,7 +666,7 @@ This could be called an "approved terms" table.  See above regarding the Externa
 	approved       - Negative, 0 or positive if tag is rejected, pending or approved.
 	date_approved  - date of last action
 	approved_by    - staffer performing the last action
-	weight_total   - total occurance of term in any biblio by any users
+    weight_total   - total occurrence of term in any biblio by any users
 
 tags_index - This table is for performance, because by far the most common operation will 
 be fetching tags for a list of search results.  We will have a set of biblios, and we will

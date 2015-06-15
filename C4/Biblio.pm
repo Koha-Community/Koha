@@ -126,8 +126,8 @@ BEGIN {
 
     # Internal functions
     # those functions are exported but should not be used
-    # they are usefull is few circumstances, so are exported.
-    # but don't use them unless you're a core developer ;-)
+    # they are useful in a few circumstances, so they are exported,
+    # but don't use them unless you are a core developer ;-)
     push @EXPORT, qw(
       &ModBiblioMarc
     );
@@ -1519,7 +1519,7 @@ sub MungeMarcPrice {
             (                          # start of capturing parenthesis
             (?:
             (?:[\p{Sc}\p{L}\/.]){1,4}  # any character from Currency signs or Letter Unicode categories or slash or dot                                              within 1 to 4 occurrences : call this whole block 'symbol block'
-            |(?:\d+[\p{P}\s]?){1,4}    # or else at least one digit followed or not by a punctuation sign or whitespace,                                             all theese within 1 to 4 occurrences : call this whole block 'digits block'
+            |(?:\d+[\p{P}\s]?){1,4}    # or else at least one digit followed or not by a punctuation sign or whitespace,                                             all these within 1 to 4 occurrences : call this whole block 'digits block'
             )
             \s?\p{Sc}?\s?              # followed or not by a whitespace. \p{Sc}?\s? are for cases like '25$ USD'
             (?:

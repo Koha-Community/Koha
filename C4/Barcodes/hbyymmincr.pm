@@ -129,7 +129,7 @@ __END__
 
 This format is deprecated and SHOULD NOT BE USED.
 
-It is fairly clear the originator of the format did not intend to accomodate 
+It is fairly clear the originator of the format did not intend to accommodate
 multiple branch libraries, given that the format caps the available namespace to
 10,000 barcodes per year TOTAL.  
 

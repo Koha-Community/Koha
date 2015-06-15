@@ -171,7 +171,7 @@ This function provides a simple search API on the bibliographic catalog
 
     * $query can be a simple keyword or a complete CCL query
     * @servers is optional. Defaults to biblioserver as found in koha-conf.xml
-    * $offset - If present, represents the number of records at the beggining to omit. Defaults to 0
+    * $offset - If present, represents the number of records at the beginning to omit. Defaults to 0
     * $max_results - if present, determines the maximum number of records to fetch. undef is All. defaults to undef.
 
 
@@ -922,7 +922,7 @@ sub _remove_stopwords {
 
 # remove stopwords from operand : parse all stopwords & remove them (case insensitive)
 #       we use IsAlpha unicode definition, to deal correctly with diacritics.
-#       otherwise, a French word like "leçon" woudl be split into "le" "çon", "le"
+#       otherwise, a French word like "leçon" would be split into "le" "çon", "le"
 #       is a stopword, we'd get "çon" and wouldn't find anything...
 #
 		foreach ( keys %{ C4::Context->stopwords } ) {

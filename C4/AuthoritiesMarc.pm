@@ -888,7 +888,7 @@ sub FindDuplicateAuthority {
 
 Returns a hashref with a summary of the specified record.
 
-Comment : authtypecode can be infered from both record and authid.
+Comment : authtypecode can be inferred from both record and authid.
 Moreover, authid can also be inferred from $record.
 Would it be interesting to delete those things.
 

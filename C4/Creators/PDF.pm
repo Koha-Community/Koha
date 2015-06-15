@@ -323,7 +323,7 @@ __END__
 
 =head1 NAME
 
-C4::Creators::PDF -   A class wrapper for PDF::Reuse and PDF::Reuse::Barcode to allow usage as a psuedo-object. For usage see
+C4::Creators::PDF -   A class wrapper for PDF::Reuse and PDF::Reuse::Barcode to allow usage as a pseudo-object. For usage see
                     PDF::Reuse documentation and C4::Creators::PDF code.
 
 =cut

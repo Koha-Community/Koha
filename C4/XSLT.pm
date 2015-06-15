@@ -100,7 +100,7 @@ sub transformMARCXML4XSLT {
 
 =head2 getAuthorisedValues4MARCSubfields
 
-Returns a ref of hash of ref of hash for tag -> letter controled by authorised values
+Returns a ref of hash of ref of hash for tag -> letter controlled by authorised values
 Is only used in this module currently.
 
 =cut

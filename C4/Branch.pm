@@ -186,9 +186,9 @@ sub GetBranchName {
 
 $error = &ModBranch($newvalue);
 
-This function modify an existing branch
+This function modifies an existing branch
 
-C<$newvalue> is a ref to an array wich is containt all the column from branches table.
+C<$newvalue> is a ref to an array which contains all the columns from branches table.
 
 =cut
 

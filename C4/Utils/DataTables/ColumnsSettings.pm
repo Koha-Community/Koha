@@ -11,7 +11,7 @@ sub get_yaml {
       C4::Context->config('intranetdir') . '/admin/columns_settings.yml';
     my $yaml = eval { YAML::LoadFile($yml_path) };
     warn
-"ERROR: the yaml file for DT::ColumnsSettings is not correctly formated: $@"
+"ERROR: the yaml file for DT::ColumnsSettings is not correctly formatted: $@"
       if $@;
     return $yaml;
 }

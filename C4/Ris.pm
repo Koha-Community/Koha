@@ -299,7 +299,7 @@ sub marc2ris {
 
 ##********************************************************************
 ## print_typetag(): prints the first line of a RIS dataset including
-## the preceeding newline
+## the preceding newline
 ## Argument: the leader of a MARC dataset
 ## Returns: the value at leader position 06 
 ##********************************************************************
@@ -713,7 +713,7 @@ sub print_pubinfo {
 		$protoyear =~ s% *[\.;:/]*$%%;
 
 		## isolate a four-digit year. We discard anything
-		## preceeding the year, but keep everything after
+        ## preceding the year, but keep everything after
 		## the year as other info.
 		$protoyear =~ s%\D*([0-9\-]{4})(.*)%$1///$2%;
 

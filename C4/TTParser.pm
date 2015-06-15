@@ -55,9 +55,9 @@ sub peep_token{
 sub build_tokens{
     my ($self, $filename) = @_;
     $self->{filename} = $filename;
-    $self->handler(start => "start", "self, line, tagname, attr, text"); #signature is start( self, linenumber, tagname, hash of attributes, origional text )
-    $self->handler(text => "text", "self, line, text, is_cdata"); #signature is text( self, linenumber, origional text, is_cdata )
-    $self->handler(end => "end", "self, line, tag, attr, text"); #signature is end( self, linenumber, tagename, origional text )
+    $self->handler(start => "start", "self, line, tagname, attr, text"); #signature is start( self, linenumber, tagname, hash of attributes, original text )
+    $self->handler(text => "text", "self, line, text, is_cdata"); #signature is text( self, linenumber, original text, is_cdata )
+    $self->handler(end => "end", "self, line, tag, attr, text"); #signature is end( self, linenumber, tagename, original text )
     $self->handler(declaration => "declaration", "self, line, text, is_cdata"); # declaration
     $self->handler(comment => "comment", "self, line, text, is_cdata"); # comments
 #    $self->handler(default => "default", "self, line, text, is_cdata"); # anything else
@@ -132,7 +132,7 @@ sub start{
     my $line = shift;
     my $tag = shift;
     my $hash = shift; #hash of attr/value pairs
-    my $text = shift; #origional text
+    my $text = shift; #original text
     my $t = C4::TmplToken->new( $text, C4::TmplTokenType::TAG, $line, $self->{filename});
     my %attr;
     # tags seem to be uses in an 'interesting' way elsewhere..

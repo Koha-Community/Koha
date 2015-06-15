@@ -103,7 +103,7 @@ C<ShelfBrowserUsesCcode>.
 The option C<$num_each_side> value determines how many items will be fetched
 each side of the supplied item. Note that the item itself is the first entry
 in the 'next' set, and counts towards this limit (this is to keep the
-behaviour consistant with the code that this is a refactor of.) Default is
+behaviour consistent with the code that this is a refactor of.) Default is
 3.
 
 This will throw an exception if something went wrong.

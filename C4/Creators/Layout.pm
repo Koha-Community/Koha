@@ -129,8 +129,8 @@ sub delete {
         push @params, $opts{'layout_id'}, $opts{'creator'};
     }
     if (scalar(@params) < 2) {   # If there is no layout id or creator type then we cannot delete it
-        warn sprintf('%s : Cannot delete layout as the profile id is invalid or non-existant.', $call_type) if !$params[0];
-        warn sprintf('%s : Cannot delete layout as the creator type is invalid or non-existant.', $call_type) if !$params[1];
+        warn sprintf('%s : Cannot delete layout as the profile id is invalid or non-existent.', $call_type) if !$params[0];
+        warn sprintf('%s : Cannot delete layout as the creator type is invalid or non-existent.', $call_type) if !$params[1];
         return -1;
     }
     my $query = "DELETE FROM creator_layouts WHERE layout_id = ? AND creator = ?";
@@ -267,7 +267,7 @@ This module provides methods for creating, retrieving, and otherwise manipulatin
             CODE39MOD10     = Code 3 of 9 with modulo 10 checksum
 
 =item .
-            COOP2OF5        = A varient of 2 of 5 barcode based on NEC's "Process 8000" code
+            COOP2OF5        = A variant of 2 of 5 barcode based on NEC's "Process 8000" code
 
 =item .
             INDUSTRIAL2OF5  = The standard 2 of 5 barcode (a binary level bar code developed by Identicon Corp. and Computer Identics Corp. in 1970)

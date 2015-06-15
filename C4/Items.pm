@@ -432,7 +432,7 @@ other purposes, C<ModItem> should be used.
 
 This function uses the hash %default_values_for_mod_from_marc,
 which contains default values for item fields to
-apply when modifying an item.  This is needed beccause
+apply when modifying an item.  This is needed because
 if an item field's value is cleared, TransformMarcToKoha
 does not include the column in the
 hash that's passed to ModItem, which without
@@ -791,7 +791,7 @@ C<items.notforloan> field.
 NOTE: does B<not> return an individual item's
 status.
 
-Can be MARC dependant.
+Can be MARC dependent.
 fwkcode is optional.
 But basically could be can be loan or not
 Create a status selector with the following code
@@ -2310,7 +2310,7 @@ sub DelItemCheck {
         $error = "not_same_branch";
     }
 	else{
-        # check it doesnt have a waiting reserve
+        # check it doesn't have a waiting reserve
         $sth = $dbh->prepare(q{
             SELECT COUNT(*) FROM reserves
             WHERE (found = 'W' OR found = 'T')
