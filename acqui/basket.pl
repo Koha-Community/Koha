@@ -20,8 +20,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 use C4::Auth;
 use C4::Koha;
 use C4::Output;
@@ -35,6 +34,7 @@ use C4::Members qw/GetMember/;  #needed for permissions checking for changing ba
 use C4::Items;
 use C4::Suggestions;
 use Koha::Libraries;
+use C4::Letters qw/SendAlerts/;
 use Date::Calc qw/Add_Delta_Days/;
 use Koha::Database;
 use Koha::EDI qw( create_edi_order get_edifact_ean );
@@ -116,6 +116,10 @@ if (!defined $op) {
 my $confirm_pref= C4::Context->preference("BasketConfirmations") || '1';
 $template->param( skip_confirm_reopen => 1) if $confirm_pref eq '2';
 
+$template->param( email_ok => 1 ) if defined $query->param('email_ok');
+$template->param( email_error => $query->param('email_error') ) if defined $query->param('email_error');
+
+
 if ( $op eq 'delete_confirm' ) {
     my $basketno = $query->param('basketno');
     my $delbiblio = $query->param('delbiblio');
@@ -165,6 +169,25 @@ if ( $op eq 'delete_confirm' ) {
     );
     print GetBasketAsCSV($query->param('basketno'), $query);
     exit;
+} elsif ($op eq 'email') {
+    my $redirect_url = '/cgi-bin/koha/acqui/basket.pl?basketno='.$basket->{'basketno'};
+    my $err;
+
+    eval {
+        $err = SendAlerts( 'orderacquisition', $query->param('basketno'), 'ACQORDER' );
+    };
+    if ( $@ ) {
+    $redirect_url .= '&email_error='.$@;
+    } elsif ( ref $err and exists $err->{error} and $err->{error} eq "no_email" ) {
+        $redirect_url .= '&email_error=no_email';
+    } elsif ( ref $err and exists $err->{error} and $err->{error} eq "no_basketno" ) {
+        $redirect_url .= '&email_error=no_basketno';
+    } else {
+        $redirect_url .= '&email_ok=1';
+    }
+
+    print $query->redirect($redirect_url)
+
 } elsif ($op eq 'close') {
     my $confirm = $query->param('confirm') || $confirm_pref eq '2';
     if ($confirm) {

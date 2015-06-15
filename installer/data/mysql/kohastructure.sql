@@ -2914,6 +2914,7 @@ CREATE TABLE aqcontacts (
   fax varchar(100) default NULL,  -- contact's fax number
   email varchar(100) default NULL, -- contact's email address
   notes mediumtext, -- notes related to the contact
+  orderacquisition BOOLEAN NOT NULL DEFAULT 0, -- should this contact receive acquisition orders
   claimacquisition BOOLEAN NOT NULL DEFAULT 0, -- should this contact receive acquisitions claims
   claimissues BOOLEAN NOT NULL DEFAULT 0, -- should this contact receive serial claims
   acqprimary BOOLEAN NOT NULL DEFAULT 0, -- is this the primary contact for acquisitions messages

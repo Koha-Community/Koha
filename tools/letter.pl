@@ -198,8 +198,8 @@ sub add_form {
     elsif ( $module eq 'acquisition' ) {
         push @{$field_selection}, add_fields('aqbooksellers', 'aqorders', 'biblio', 'items');
     }
-    elsif ($module eq 'claimacquisition') {
-        push @{$field_selection}, add_fields('aqbooksellers', 'aqorders', 'biblio', 'biblioitems');
+    elsif ($module eq 'claimacquisition' || $module eq 'orderacquisition') {
+        push @{$field_selection}, add_fields('aqbooksellers', 'aqbasket', 'aqorders', 'biblio', 'biblioitems');
     }
     elsif ($module eq 'claimissues') {
         push @{$field_selection}, add_fields('aqbooksellers', 'serial', 'subscription');

@@ -30,6 +30,13 @@
                 <input type="checkbox" id="contact_serialsprimary[% contact.id %]" class="contact_serialsprimary"></input>
             [% END %]
             <input type="hidden" class="contact_serialsprimary_hidden" name="contact_serialsprimary" value="[% contact.serialsprimary %]"></input>
+        <li><label for="contact_orderacquisition[% contact.id %]">Contact when ordering?</label>
+            [% IF contact.orderacquisition %]
+                <input type="checkbox" id="contact_orderacquisition[% contact.id %]" class="contact_orderacquisition" checked="checked"></input>
+            [% ELSE %]
+                <input type="checkbox" id="contact_orderacquisition[% contact.id %]" class="contact_orderacquisition"></input>
+            [% END %]
+            <input type="hidden" class="contact_orderacquisition_hidden" name="contact_orderacquisition" value="[% contact.orderacquisition %]"></input>
         <li><label for="contact_claimacquisition[% contact.id %]">Contact about late orders?</label>
             [% IF contact.claimacquisition %]
                 <input type="checkbox" id="contact_claimacquisition[% contact.id %]" class="contact_claimacquisition" checked="checked"></input>
@@ -67,6 +74,9 @@
     [% IF ( contact.serialsprimary ) %]
         <p><span class="label">Primary serials contact</span></p>
     [% END %]
+    [% IF ( contact.orderacquisition ) %]
+        <p><span class="label">Receives orders</span></p>
+    [% END %]
     [% IF ( contact.claimacquisition ) %]
         <p><span class="label">Receives claims for late orders</span></p>
     [% END %]
@@ -101,7 +111,7 @@ function add_contact() {
     });
     $(new_contact).insertBefore(this);
     if ($('.supplier-contact').length === 2) { // First contact
-        $.each(['.contact_acqprimary', '.contact_serialsprimary', '.contact_claimacquisition', '.contact_claimissues'], function (idx, checkbox) {
+        $.each(['.contact_acqprimary', '.contact_serialsprimary', '.contact_orderacquisition', '.contact_claimacquisition', '.contact_claimissues'], function (idx, checkbox) {
             $(checkbox, new_contact).click();
         });
     }
@@ -141,6 +151,9 @@ function delete_contact(ev) {
             });
         }
         $(this).next('.contact_serialsprimary_hidden').val($(this).is(':checked') ? '1' : '0');
+    });
+    $('body').on('click', '.contact_orderacquisition', null, function () {
+        $(this).next('.contact_orderacquisition_hidden').val($(this).is(':checked') ? '1' : '0');
     });
     $('body').on('click', '.contact_claimacquisition', null, function () {
         $(this).next('.contact_claimacquisition_hidden').val($(this).is(':checked') ? '1' : '0');

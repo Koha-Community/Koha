@@ -201,6 +201,9 @@
                         [% IF ediaccount %]
                         <div class="btn-group"><a href="/cgi-bin/koha/acqui/edi_ean.pl?op=ediorder&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="ediorderbutton"><i class="fa fa-download"></i> Create EDIFACT order</a></div>
                         [% END %]
+                        [% IF ( active && books_loop ) %]
+                        <div class="btn-group"><a href="[% script_name %]?op=email&amp;basketno=[% basketno %]" class="btn btn-small" id="emailvendorbutton"><i class="fa fa-envelope"></i> E-mail order</a></div>
+                        [% END %]
                 </div>
 <!-- Modal for confirm deletion box-->
                 <div class="modal hide" id="deleteBasketModal" tabindex="-1" role="dialog" aria-labelledby="delbasketModalLabel" aria-hidden="true">
@@ -291,6 +294,21 @@
             <META HTTP-EQUIV=Refresh CONTENT="0; url=booksellers.pl">
             [% END %]
         [% ELSE %]
+
+        [% IF email_error %]
+            <div class="dialog alert">
+            [% IF ( email_error == "no_email" ) %]
+                This vendor has no contact selected for sending orders to or is missing an e-mail address.
+            [% ELSIF ( email_error == "no_basketno" ) %]
+                No basket given.
+            [% ELSE %]
+                ERROR! - [% email_error %]
+            [% END %]
+            </div>
+        [% END %]
+        [% IF ( email_ok ) %]
+            <div class="dialog message">Order e-mail was sent to the vendor.</div>
+        [% END %]
         <h1>[% UNLESS ( basketno ) %]New [% END %]Basket [% basketname|html %] ([% basketno %]) for <a href="supplier.pl?booksellerid=[% booksellerid %]">[% name|html %]</a></h1>
         [% IF ( basketno ) %]
             <div id="acqui_basket_summary" class="yui-g">
@@ -433,7 +451,7 @@
                         <th>No.</th>
                         <th class="anti-the">Order</th>
                         <th class="gste">RRP tax exc.</th>
-                        <th class="gste">ecost tax exc.</th>
+                        <th class="gste">Ecost tax exc.</th>
                         <th class="gsti">RRP tax inc.</th>
                         <th class="gsti">ecost tax inc.</th>
                         <th>Qty.</th>
