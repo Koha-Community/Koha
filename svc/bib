@@ -86,7 +86,7 @@ sub update_bib {
 
     my $result = {};
     my $inxml = $query->param('POSTDATA');
-    print $query->header(-type => 'text/xml');
+    print $query->header(-type => 'text/xml', -charset => 'utf-8');
 
     my $record = eval {MARC::Record::new_from_xml( $inxml, "utf8", C4::Context->preference('marcflavour'))};
     my $do_not_escape = 0;

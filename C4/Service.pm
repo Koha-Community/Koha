@@ -55,6 +55,17 @@ BEGIN {
 
 our ( $query, $cookie );
 
+sub _output {
+    my ( $response, $status ) = @_;
+    binmode STDOUT, ':encoding(UTF-8)';
+
+    if ( $query->param( 'callback' ) ) {
+        output_with_http_headers $query, $cookie, $query->param( 'callback' ) . '(' . $response->output . ');', 'js';
+    } else {
+        output_with_http_headers $query, $cookie, $response->output, 'json', $status;
+    }
+}
+
 =head1 METHODS
 
 =head2 init
@@ -113,7 +124,7 @@ sub return_error {
     $response->param( message => $error ) if ( $error );
     $response->param( type => $type, %flags );
 
-    output_with_http_headers $query, $cookie, $response->output, 'json', '400 Bad Request';
+    _output( $response, '400 Bad Request' );
     exit;
 }
 
@@ -159,7 +170,7 @@ sub return_multi {
         }
 
         $response->param( 'multi' => JSON::true, responses => \@responses_formatted, @flags );
-        output_with_http_headers $query, $cookie, $response->output, 'json', '207 Multi-Status';
+        _output( $response, '207 Multi-Status' );
     }
 
     exit;
@@ -177,7 +188,7 @@ exit with HTTP status 200.
 sub return_success {
     my ( $class, $response ) = @_;
 
-    output_with_http_headers $query, $cookie, $response->output, 'json';
+    _output( $response );
 }
 
 =head2 require_params
