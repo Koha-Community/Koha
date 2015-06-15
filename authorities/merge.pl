@@ -123,10 +123,13 @@ else {
                 }
             }
 
-            my $notreference =
-              ( $authid[0] == $mergereference )
-              ? $authid[1]
-              : $authid[0];
+            #Setting $notreference
+            my $notreference = $authid[1];
+            if($mergereference == $notreference){
+                $notreference = $authid[0];
+                #Swap so $recordObj1 is always the correct merge reference
+                ($recordObj1, $recordObj2) = ($recordObj2, $recordObj1);
+            }
 
             # Creating a loop for display
 
