@@ -86,7 +86,7 @@ See http://dev.mysql.com/doc/refman/5.0/en/time-zone-support.html
 
 =head2 cron/crontab
 
-Current versions of cron in debian allow ENV variables to be set in the lines preceeding 
+Current versions of cron in debian allow ENV variables to be set in the lines preceding
 scheduled commands.  They will be exported to the environment of the scheduled job.  This is 
 an example for crontab:
 

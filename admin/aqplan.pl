@@ -330,7 +330,7 @@ foreach my $budget (@budgets) {
         or  $authcat eq 'BRANCHES'
         or  $authcat eq 'MONTHS' ) {
 
-        # but skip budgets that dont match the current auth-category
+        # but skip budgets that don't match the current auth-category
         next if ( $budget->{'sort1_authcat'} ne $authcat
             && $budget->{'sort2_authcat'} ne $authcat );
     }

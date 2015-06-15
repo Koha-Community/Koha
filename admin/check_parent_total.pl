@@ -67,7 +67,7 @@ if ($parent) {
     my $sum = $sth->fetchrow_hashref;
     $sth->finish;
     $sub_unalloc = $parent->{'budget_amount'} - $sum->{sum};
-#    TRICKY.. , IF THE PARENT IS THE CURRENT PARENT  - THEN SUBSTRACT CURRENT BUDGET FROM TOTAL
+#    TRICKY.. , IF THE PARENT IS THE CURRENT PARENT  - THEN SUBTRACT CURRENT BUDGET FROM TOTAL
     $sub_unalloc           += $budget->{'budget_amount'} if ( $budget->{'budget_parent_id'} == $parent_id ) ;
 }
 

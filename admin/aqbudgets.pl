@@ -60,7 +60,7 @@ my $op = $input->param('op') || 'list';
 # see if the user want to see all budgets or only owned ones by default
 my $show_mine = $input->param('show_mine') // 0;
 
-# IF USER DOESNT HAVE PERM FOR AN 'ADD', THEN REDIRECT TO THE DEFAULT VIEW...
+# IF USER DOESN'T HAVE PERM FOR AN 'ADD', THEN REDIRECT TO THE DEFAULT VIEW...
 if (not defined $template->{VARS}->{'CAN_user_acquisition_budget_add_del'}
     and $op eq 'add_form')
 {
@@ -282,7 +282,7 @@ if ( $op eq 'list' ) {
             $budget->{'budget_lock'} = 1;
         }
 
-        # if a budget search doesnt match, next
+        # if a budget search doesn't match, next
         if ($filter_budgetname) {
             next
               unless $budget->{budget_code} =~ m/$filter_budgetname/i
@@ -303,7 +303,7 @@ if ( $op eq 'list' ) {
             $available_total += $budget->{total_remaining};
         }
 
-# if amount == 0 dont display...
+# if amount == 0 don't display...
         delete $budget->{'budget_unalloc_sublevel'}
             if (!defined $budget->{'budget_unalloc_sublevel'}
             or $budget->{'budget_unalloc_sublevel'} == 0);
