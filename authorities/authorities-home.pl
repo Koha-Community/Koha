@@ -77,13 +77,24 @@ if ( $op eq "do_search" ) {
     my $startfrom      = $query->param('startfrom')      || 1;
     my $resultsperpage = $query->param('resultsperpage') || 20;
 
-    my ( $results, $total ) = SearchAuthorities(
-        [$marclist],  [$and_or],
-        [$excluding], [$operator],
-        [$value], ( $startfrom - 1 ) * $resultsperpage,
-        $resultsperpage, $authtypecode,
-        $orderby
+    my $builder  = Koha::SearchEngine::QueryBuilder->new();
+    my $searcher = Koha::SearchEngine::Search->new({index => 'authorities'});
+    my $search_query = $builder->build_authorities_query_compat(
+        [$marclist], [$and_or], [$excluding], [$operator],
+        [$value], $authtypecode, $orderby
     );
+    $startfrom = $startfrom // 0;
+    my ( $results, $total ) =
+      $searcher->search_auth_compat( $search_query, $startfrom + 1,
+        $resultsperpage );
+
+    #my ( $results, $total ) = SearchAuthorities(
+    #    [$marclist],  [$and_or],
+    #    [$excluding], [$operator],
+    #    [$value], ( $startfrom - 1 ) * $resultsperpage,
+    #    $resultsperpage, $authtypecode,
+    #    $orderby
+    #);
 
 
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
