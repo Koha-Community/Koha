@@ -19,7 +19,7 @@
 
 =head1 DESCRIPTION
 
-# Here is an exemple of a CAS Proxy
+# Here is an example of a CAS Proxy
 # The proxy is a foreign application that will authenticate the user against CAS
 # Once authenticated as a proxy, the foreign application will be able to call some
 # Koha webservices, proving authentication only by giving a proxy ticket
@@ -58,14 +58,14 @@ if ($cgi->param('ticket')) {
     # We validate it against the CAS Server, providing the callback URL
     my $r = $cas->service_validate( $proxy_service, $cgi->param('ticket'), pgtUrl => $pgtUrl);
 
-    # If it is sucessful, we are authenticated
+    # If it is successful, we are authenticated
     if( $r->is_success() ) {
 	print "User authenticated as: ", $r->user(), "<br>\n";
     } else {
 	print "User authentication failed<br />\n";
     }
 
-    # If we have a PGTIou ticket, the proxy validation was sucessful 
+    # If we have a PGTIou ticket, the proxy validation was successful
     if (defined $r->iou) {
       print "Proxy granting ticket IOU: ", $r->iou, "<br />\n";
       my $pgtIou = $r->iou;

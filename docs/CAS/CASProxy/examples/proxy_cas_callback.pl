@@ -19,7 +19,7 @@
 
 =head1 DESCRIPTION
 
-# Here is an exemple of a callback page for a CAS Proxy
+# Here is an example of a callback page for a CAS Proxy
 # This is the page the CAS server will call back with a Proxy Ticket, allowing us (the foreign application)
 # to query koha webservices, being CAS authenticated 
 

@@ -19,7 +19,7 @@
 
 =head1 DESCRIPTION
 
-# Here is an exemple of a simple phony webservice, returning "Hello World" if the user is authenticated
+# Here is an example of a simple phony webservice, returning "Hello World" if the user is authenticated
 # The purpose is to show how CAS Proxy can work with koha
 # In this configuration, this page acts as a CAS Client, instead of the user's browser.
 # This page is meant to be called from a foreign application
