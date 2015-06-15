@@ -114,7 +114,7 @@ For the time being, two validations are done:
 
   <li[% IF
 
-This kind of constuction MUST be avoided because it break Koha translation
+This kind of construction MUST be avoided because it breaks Koha translation
 process.
 
 [2] Test tag <body> tags have both attibutes 'id' and 'class'

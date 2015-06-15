@@ -127,7 +127,7 @@ sub create_template_test {
 
 =head1 AUTHOR
 
-Koha Developement Team <http://koha-community.org>
+Koha Development Team <http://koha-community.org>
 
 Chris Cormack <chrisc@catalyst.net.nz>
 

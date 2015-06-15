@@ -137,7 +137,7 @@ for my $i (0..9){
     }
 
     if (defined $status) {
-        is($countbefore, $countafter - 1, 'added bib to list');  # the bib has been successfuly added.
+        is($countbefore, $countafter - 1, 'added bib to list');  # the bib has been successfully added.
     } else {
         is($countbefore, $countafter, 'did not add duplicate bib to list');
     }

@@ -46,7 +46,7 @@ check_db($ref_syspref);
 #
 # Get sysprefs from SQL file populating sysprefs table with INSERT statement.
 #
-# Exemple:
+# Example:
 # INSERT INTO `systempreferences` (variable,value,explanation,options,type)
 # VALUES('AmazonLocale','US','Use to set the Locale of your Amazon.com Web Services',
 # 'US|CA|DE|FR|JP|UK','Choice')

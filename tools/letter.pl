@@ -401,7 +401,7 @@ sub add_fields {
 
 sub get_columns_for {
     my $table = shift;
-# FIXME untranslateable
+# FIXME untranslatable
     my %column_map = (
         aqbooksellers => '---BOOKSELLERS---',
         aqorders      => '---ORDERS---',

@@ -278,7 +278,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             }
             unless (ModMember(%borrower)) {
                 $invalid++;
-                # untill we have better error trapping, we have no way of knowing why ModMember errored out...
+                # until we have better error trapping, we have no way of knowing why ModMember errored out...
                 push @errors, {unknown_error => 1};
                 $template->param('lastinvalid'=>$borrower{'surname'}.' / '.$borrowernumber);
                 next LINE;

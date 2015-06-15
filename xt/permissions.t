@@ -55,7 +55,7 @@ foreach my $file_name ( @trans_perms_files ) {
 # Get user permissions from SQL file populating permissions table with INSERT
 # statement.
 #
-# Exemple:
+# Example:
 #  INSERT INTO permissions (module_bit, code, description) VALUES
 #  ( 1, 'override_renewals', 'Override blocked renewals'),
 #

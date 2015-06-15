@@ -275,7 +275,7 @@ if ( $markseen or $op ) {
 
 # If "compare barcodes list to results" has been checked, we want to alert for missing items
 if ( $compareinv2barcd ) {
-    # set "missing" flags for all items with a datelastseen (dls) before the choosen datelastseen (cdls)
+    # set "missing" flags for all items with a datelastseen (dls) before the chosen datelastseen (cdls)
     my $dls = output_pref( { dt => dt_from_string( $datelastseen ),
                              dateformat => 'iso' } );
     foreach my $item ( @$inventorylist ) {
@@ -292,7 +292,7 @@ if ( $compareinv2barcd ) {
 
 
 # insert "wrongplace" to all scanned items that are not supposed to be in this range
-# note this list is always displayed, whatever the librarian has choosen for comparison
+# note this list is always displayed, whatever the librarian has chosen for comparison
 my $moddatecount = 0;
 foreach my $item ( @scanned_items ) {
 
