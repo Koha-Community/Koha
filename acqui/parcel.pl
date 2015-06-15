@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#script to recieve orders
+#script to receive orders
 
 
 # Copyright 2000-2002 Katipo Communications

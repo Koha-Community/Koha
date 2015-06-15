@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 
-#script to recieve orders
+#script to receive orders
 #written by chris@katipo.co.nz 24/2/2000
 
 # Copyright 2000-2002 Katipo Communications

@@ -355,7 +355,7 @@ if ( $op eq "add" ) {
 # FIXME
         }
     }else{
-    # we create a new basketgroup (whith a closed basket)
+    # we create a new basketgroup (with a closed basket)
         $basketgroup = {
             name              => $basketgroupname,
             booksellerid      => $booksellerid,

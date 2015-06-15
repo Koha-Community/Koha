@@ -85,7 +85,7 @@ if ($op eq ""){
 #display batches
     import_batches_list($template);
 #
-# 2nd step = display the content of the choosen file
+# 2nd step = display the content of the chosen file
 #
 } elsif ($op eq "batch_details"){
 #display lines inside the selected batch

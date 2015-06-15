@@ -43,7 +43,7 @@ BEGIN {
 
 
 #be careful, all the sizes (height, width, etc...) are in mm, not PostScript points (the default measurment of PDF::API2).
-#The constants exported tranform that into PostScript points (/mm for milimeter, /in for inch, pt is postscript point, and as so is there only to show what is happening.
+#The constants exported transform that into PostScript points (/mm for milimeter, /in for inch, pt is postscript point, and as so is there only to show what is happening.
 use constant mm => 25.4 / 72;
 use constant in => 1 / 72;
 use constant pt => 1;
