@@ -34,6 +34,8 @@ use C4::Biblio;
 use C4::Search::History;
 
 use Koha::Authority::Types;
+use Koha::SearchEngine::Search;
+use Koha::SearchEngine::QueryBuilder;
 
 my $query = new CGI;
 my $dbh   = C4::Context->dbh;
@@ -85,9 +87,8 @@ if ( $op eq "do_search" ) {
     );
     $startfrom = $startfrom // 0;
     my ( $results, $total ) =
-      $searcher->search_auth_compat( $search_query, $startfrom + 1,
+      $searcher->search_auth_compat( $search_query, $startfrom,
         $resultsperpage );
-
     #my ( $results, $total ) = SearchAuthorities(
     #    [$marclist],  [$and_or],
     #    [$excluding], [$operator],
