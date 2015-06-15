@@ -1,0 +1,434 @@
+/*> Infrastructure */
+body {
+    padding: 0;
+}
+
+#loading {
+    background-color: #FFF;
+    cursor: wait;
+    height: 100%;
+    left: 0;
+    opacity: .7;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+#loading div {
+    background : transparent url(../../img/loading.gif) top left no-repeat;
+    font-size : 175%;
+    font-weight: bold;
+    height: 2em;
+    left: 50%;
+    margin: -1em 0 0 -2.5em;
+    padding-left : 50px;
+    position: absolute;
+    top: 50%;
+    width: 15em;
+}
+
+#alerts-container {
+    font-size: 12px;
+}
+
+#alerts-container h3 {
+    font-size: inherit;
+}
+
+#alerts-container > ul {
+    padding: 0;
+}
+
+#alerts-container > ul > li {
+    border-bottom: 1px solid #DDD;
+    display: block;
+    padding: 4px 0;
+}
+
+#alerts-container > ul > li:first-child {
+    padding-top: 0;
+}
+
+#alerts-container > ul > li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+/*> MARC editor */
+#editor .CodeMirror {
+    line-height: 1.2;
+}
+
+.cm-tagnumber {
+    color: #080;
+    font-weight: bold;
+}
+
+.cm-bad-tagnumber {
+    color: #A20;
+    font-weight: bold;
+}
+
+.cm-indicator {
+    color: #884;
+}
+
+.cm-subfieldcode {
+    background-color: #F4F4F4;
+    color: #187848;
+    border-radius: 3px 8px 8px 3px;
+    border-right: 2px solid white;
+    font-weight: bold;
+    margin-right: -2px;
+}
+
+.cm-bad-subfieldcode {
+    background-color: #FFD9D9;
+    color: #482828;
+    border-radius: 3px 8px 8px 3px;
+    font-weight: bold;
+}
+
+.cm-end-space {
+    background-color: #DDDDBB;
+}
+
+#editor .modified-line-gutter {
+    width: 10px;
+}
+
+#editor .modified-line {
+    background: #F8F8F8;
+    border-left: 5px solid black;
+    margin-left: -10px;
+    padding-left: 5px;
+}
+
+#editor .CodeMirror-gutters {
+    background: transparent;
+    border-right: none;
+}
+
+/*> MARC editor widgets */
+
+#editor .subfield-widget {
+    color: #538200;
+    border: solid 2px #538200;
+    border-radius: 6px;
+    font-family: inherit;
+    line-height: 2.75;
+    margin: 3px 0;
+    padding: 4px;
+}
+
+#editor .subfield-widget select, #editor .subfield-widget input {
+    height: 1.5em;
+    vertical-align: middle;
+}
+
+#editor .subfield-widget select:focus {
+    outline: 2px #83A230 solid;
+}
+
+#editor .fixed-widget input {
+    width: 4em;
+}
+
+#editor .fixed-widget select {
+    width: 3em;
+}
+
+#editor .fixed-widget .material-select {
+    width: 4.5em;
+    margin-right: .5em;
+}
+
+#editor .fixed-collapsed {
+    display: inline-block;
+    margin: 0 .25em;
+    text-align: center;
+    text-decoration: underline;
+}
+
+#editor .hidden-widget {
+    color: #999999;
+    border: solid 2px #AAAAAA;
+    line-height: 2;
+    padding: 2px;
+}
+
+.structure-error {
+    background: #FFEEEE;
+    font-size: 0.9em;
+    line-height: 1.5;
+    margin: .5em;
+    padding: 0 .5em;
+}
+
+.structure-error i {
+    vertical-align: text-bottom;
+}
+
+#statusbar {
+    background-color: #F4F8F9;
+    border: solid 2px #b9d8d9;
+    border-bottom-style: none;
+    border-radius: 6px 6px 0 0;
+    height: 18px;
+    margin-bottom: -32px;
+    overflow: auto;
+    padding: 4px;
+    padding-bottom: 0;
+}
+
+#statusbar #status-tag-info, #statusbar #status-subfield-info {
+    float: left;
+    overflow: hidden;
+    padding-right: 2%;
+    width: 48%;
+}
+
+#record-info .label {
+    float: none;
+}
+
+#record-info .label + span {
+    display: block;
+    padding-left: 1em;
+}
+
+/*> Search */
+
+#advanced-search-ui, #search-results-ui, #macro-ui {
+    padding: 5px;
+    width: 90%;
+}
+
+.modal-body {
+    max-height: none;
+    padding: 0;
+}
+
+#quicksearch-overlay {
+    background: rgba(255, 255, 255, .9);
+    border: 2px solid #CC8877;
+    border-radius: 5px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #664444;
+    position: relative;
+    vertical-align: middle;
+}
+
+#quicksearch-overlay h3 {
+    font-size: 1.5em%;
+    margin: 0;
+    text-align: center;
+    padding: 50px 5px;
+}
+
+#quicksearch-overlay p {
+    bottom: 0;
+    font-size: .8em;
+    overflow: hidden;
+    padding: 8px 15px;
+    position: absolute;
+    text-align: center;
+}
+
+#quicksearch input, #quicksearch a {
+    font-size: 1.2em;
+    padding: 3px 0;
+    width: 96%; /* I have no idea why this is necessary */
+}
+
+#show-advanced-search {
+    display: block;
+    margin-top: .3em;
+}
+
+#advanced-search-fields {
+    -moz-column-width: 26em;
+    -webkit-column-width: 26em;
+    column-width: 26em;
+    margin: 0;
+    padding: 0;
+}
+
+#advanced-search-fields li {
+    display: block;
+    list-style-type: none;
+}
+
+#advanced-search-fields label {
+    display: inline-block;
+    font-weight: bold;
+    padding: 1em 1em 1em 0;
+    width: 10em;
+    text-align: right;
+}
+
+#advanced-search-fields input {
+    display: inline-block;
+    margin: 0px auto;
+    width: 14em;
+}
+
+.icon-loading {
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background: transparent url("../../img/spinner-small.gif") top left no-repeat;
+    padding: -1px;
+    vertical-align: text-top;
+}
+
+/*> Search results */
+
+#search-serversinfo li {
+    list-style-type: none;
+}
+
+#search-serversinfo .search-toggle-server {
+    margin-right: 5px;
+}
+
+#searchresults table {
+    width: 100%;
+}
+
+.sourcecol {
+    width: 50px;
+}
+
+.results-info {
+    height: 100px;
+    overflow: auto;
+}
+
+.toolscol {
+    padding: 0;
+    width: 100px;
+}
+
+.toolscol ul {
+    margin: 0;
+    padding: 0;
+}
+
+#searchresults .toolscol li {
+    list-style-type: none;
+    list-style-image: none;
+}
+
+.toolscol a {
+    border-bottom: 1px solid #BCBCBC;
+    display: block;
+    padding: 0 1em;
+    line-height: 24px;
+}
+
+.marccol {
+    font-family: monospace;
+    height: auto;
+    white-space: pre-wrap;
+}
+
+#searchresults {
+    position: relative;
+}
+
+#search-overlay {
+    background: white;
+    bottom: 0;
+    font-size: 2em;
+    left: 0;
+    opacity: .7;
+    padding: 2em;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    top: 0;
+    z-index: 9001;
+}
+
+/*> Macros */
+
+#macro-ui .CodeMirror {
+    width: 100%;
+}
+
+#macro-save-message {
+    color: #666;
+    font-size: 13px;
+    float: right;
+    line-height: 26px;
+}
+
+#macro-list > li {
+    border: 2px solid #F0F0F0;
+    border-radius: 6px;
+    display: block;
+    font-size: 115%;
+}
+
+#macro-list > li + li {
+    margin-top: -2px;
+}
+
+#macro-list .active {
+    background: #EDF4F6;
+    border-color: none;
+}
+
+#macro-list a {
+    display: block;
+    padding: 6px;
+}
+
+#macro-list a:focus {
+    outline: none;
+}
+
+.macro-info {
+    background-color: #F4F4F4;
+    display: none;
+    margin: 0;
+    padding: 10px;
+    text-align: right;
+}
+
+.macro-info li {
+    color: #666;
+    font-size: 75%;
+    list-style-type: none;
+}
+
+.macro-info .label {
+    clear: left;
+    font-weight: bold;
+    float: left;
+}
+
+#macro-list .active .macro-info {
+    display: block;
+}
+
+.btn-toolbar label, .btn-toolbar select {
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+.btn-toolbar label {
+    margin-left: 1em;
+}
+
+.btn-toolbar select {
+    padding: 2px;
+}
+
+#macro-editor .CodeMirror {
+    height: 100%;
+}

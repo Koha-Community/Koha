@@ -117,4 +117,29 @@ sub createMergeHash {
     }
 }
 
+sub getKohaField {
+    my ($self, $kohafield) = @_;
+
+    if ($self->schema =~ m/marc/) {
+        my $relations = C4::Context->marcfromkohafield->{''};
+        my $tagfield = $relations->{$kohafield};
+
+        return '' if ref($tagfield) ne 'ARRAY';
+
+        my ($tag, $subfield) = @$tagfield;
+        my @kohafield;
+        foreach my $field ( $self->record->field($tag) ) {
+            if ( $field->tag() < 10 ) {
+                push @kohafield, $field->data();
+            } else {
+                foreach my $contents ( $field->subfield($subfield) ) {
+                    push @kohafield, $contents;
+                }
+            }
+        }
+
+        return join ' | ', @kohafield;
+    }
+}
+
 1;

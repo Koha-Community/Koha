@@ -1,0 +1,76 @@
+#!/usr/bin/perl
+#
+# Copyright 2014 ByWater Solutions
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+
+use C4::Service;
+use Encode qw( encode_utf8 );
+use Koha::MetaSearcher;
+
+my ( $query, $response ) = C4::Service->init( catalogue => 1 );
+
+my ( $query_string, $servers ) = C4::Service->require_params( 'q', 'servers' );
+
+my $server_errors = {};
+
+my $sort_key = $query->param( 'sort_key' ) || 'title';
+my $sort_direction = $query->param( 'sort_direction' ) || 'asc';
+my $offset = $query->param( 'offset' ) || 0;
+my $page_size = $query->param( 'page_size' ) || 20;
+my $fetched = $query->param( 'fetched' ) || 100;
+
+my $searcher = Koha::MetaSearcher->new( {
+    fetched => $fetched,
+    on_error => sub {
+        my ( $server, $exception ) = @_;
+
+        $server_errors->{ $server->{id} } = $exception->message;
+    },
+} );
+
+$searcher->resultset( $query->param('resultset') ) if ( $query->param('resultset') );
+
+my @server_ids = split( /,/, $servers );
+my $stats = $searcher->search( \@server_ids, $query_string );
+
+$searcher->sort( $sort_key, $sort_direction eq 'desc' ? -1 : 1 );
+
+my @hits;
+
+foreach my $hit ( $searcher->results( $offset, $page_size ) ) {
+    push @hits, {
+        server => $hit->{server}->{id},
+        index => $hit->{index},
+        record => $hit->{record}->as_xml_record(),
+        metadata => $hit->{metadata}
+    };
+}
+
+$response->param(
+    resultset => $searcher->resultset,
+    sort_key => $sort_key,
+    sort_direction => $sort_direction,
+    offset => $offset,
+    page_size => $page_size,
+    errors => $server_errors,
+    hits => \@hits,
+    %$stats
+);
+
+C4::Service->return_success( $response );

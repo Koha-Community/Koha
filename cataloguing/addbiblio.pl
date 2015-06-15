@@ -746,7 +746,13 @@ if ($frameworkcode eq 'FA'){
         'stickyduedate'      => $fa_stickyduedate,
         'duedatespec'        => $fa_duedatespec,
     );
+} elsif ( C4::Context->preference('EnableAdvancedCatalogingEditor') && $input->cookie( 'catalogue_editor_' . $loggedinuser ) eq 'advanced' && !$breedingid ) {
+    # Only use the advanced editor for non-fast-cataloging.
+    # breedingid is not handled because those would only come off a Z39.50
+    # search initiated by the basic editor.
+    print $input->redirect( '/cgi-bin/koha/cataloguing/editor.pl' . ( $biblionumber ? ( '#catalog/' . $biblionumber ) : '' ) );
 }
+
 
 # Getting the list of all frameworks
 # get framework list

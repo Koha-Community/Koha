@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging</title>
 [% INCLUDE 'greybox.inc' %]
@@ -21,6 +22,11 @@
         $(".merge-items").on("click",function(e){
             e.preventDefault();
             MergeItems();
+        });
+
+        $("#useadvanced").click(function(){
+            $.cookie( 'catalogue_editor_[% USER_INFO.0.borrowernumber %]', 'advanced', { expires: 365, path: '/' } );
+            return true;
         });
      });
 
@@ -70,6 +76,9 @@
 
 [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
   <div id="toolbar" class="btn-toolbar">
+        [% IF Koha.Preference( 'EnableAdvancedCatalogingEditor' ) == 1 %]
+            <a id="useadvanced" href="/cgi-bin/koha/cataloguing/editor.pl" class="btn btn-small"><i class="icon-edit"></i> Advanced editor</a>
+        [% END %]
         <div class="btn-group">
             <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New record <span class="caret"></span></button>
             <ul class="dropdown-menu">

@@ -1,0 +1,234 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Cataloging &rsaquo; Editor</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" href="[% themelang %]/css/cateditor.css" />
+<link rel="stylesheet" href="[% themelang %]/css/datatables.css" />
+<link rel="stylesheet" href="/intranet-tmpl/lib/codemirror/codemirror.css" />
+<link rel="stylesheet" href="[% themelang %]/css/humanmsg.css" />
+<script src="[% interface %]/lib/jquery/plugins/humanmsg.js" type="text/javascript"></script>
+[% IF ( bidi ) %]
+   <link rel="stylesheet" type="text/css" href="[% themelang %]/css/right-to-left.css" />
+[% END %]
+</head>
+<body id="cat_addbiblio" class="cat">
+
+   <div id="loading">
+       <div>Loading, please wait...</div>
+   </div>
+
+[% INCLUDE 'header.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a> &rsaquo; Editor</div>
+
+<div id="doc3" class="yui-t2">
+<div id="bd">
+
+<h1 id="title">Cataloging editor</h1>
+
+<div id="yui-main"><div class="yui-b">
+
+<div id="editor">
+    <input id="import-records-input" type="file" style="display: none">
+    <div id="toolbar" class="btn-toolbar">
+        <button class="btn btn-small" id="new-record" title="Open fresh record"><i class="icon-plus"></i> <span>New record</span></button>
+        <div class="btn-group">
+            <button class="btn btn-small" id="save-record" title="Save current record (Ctrl-S)"><i class="icon-hdd"></i> <span>Save</span></button>
+            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" id="save-dropdown">
+            </ul>
+        </div>
+        <button class="btn btn-small" id="import-records" title="Import an ISO2709 or MARCXML record"><i class="icon-upload"></i> <span>Import record...</span></button>
+        <button class="btn btn-small" id="open-macros" title="Run and edit macros"><i class="icon-play"></i> <span>Macros...</span></button>
+        <div class="btn-group">
+            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> Settings <span class="caret"></span></button>
+            <ul id="prefs-menu" class="dropdown-menu">
+                <li><a id="switch-editor" href="#">Switch to basic editor</a></li>
+                <li><a id="set-field-widgets" href="#"></a></li>
+                <li class="divider"></li>
+                <li><a class="set-fontSize" style="font-size: .92em" href="#">Small text</a></li>
+                <li><a class="set-fontSize" style="font-size: 1em" href="#">Normal text</a></li>
+                <li><a class="set-fontSize" style="font-size: 1.08em" href="#">Large text</a></li>
+                <li><a class="set-fontSize" style="font-size: 1.18em" href="#">Huge text</a></li>
+                <li class="divider"></li>
+                <li><a class="set-font" style="font-family: monospace" href="#">Default font</a></li>
+                <li><a class="set-font" style="font-family: 'Courier New'" href="#">Courier New</a></li>
+                <li><a class="set-font" style="font-family: peep" href="#">peep</a></li>
+            </ul>
+        </div>
+        <button class="btn btn-small" id="show-alerts" title="Previous alerts"><i class="icon-info-sign"></i> Alerts <span class="caret"></span></button>
+    </div>
+    [%# CodeMirror instance will be inserted here %]
+    <div id="statusbar">
+        <div id="status-tag-info">
+        </div>
+        <div id="status-subfield-info">
+        </div>
+    </div>
+</div>
+
+</div></div>
+
+<div class="yui-b" id="sidebar">
+
+<h3>Search</h3>
+<form id="quicksearch">
+    <fieldset class="brief">
+    <ol>
+        <li><label for="search-by-keywords">Keywords:</label></li>
+        <li><input class="search-box" data-qualifier="term" id="search-by-keywords" placeholder="(Ctrl-Alt-K)" /></li>
+        <li><label for="search-by-author">Author:</label></li>
+        <li><input class="search-box" data-qualifier="author" id="search-by-author" placeholder="(Ctrl-Alt-A)" /></li>
+        <li><label for="search-by-isbn">ISBN:</label></li>
+        <li><input class="search-box" data-qualifier="isbn" id="search-by-isbn" placeholder="(Ctrl-Alt-I)" /></li>
+        <li><label for="search-by-title">Title:</label></li>
+        <li><input class="search-box" data-qualifier="title" id="search-by-title" placeholder="(Ctrl-Alt-T)" /></li>
+        <li><a href="#" id="show-advanced-search" title="Show advanced search (Ctrl-Alt-S)">Advanced &raquo;</a></li>
+    </fieldset>
+</form>
+
+</div>
+
+</div>
+</div>
+
+<div id="advanced-search-ui" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="advanced-search-title" aria-hidden="true">
+
+<div class="modal-header">
+    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="advanced-search-title">Advanced search</h3>
+</div>
+
+<form id="advanced-search" class="modal-body">
+    <div class="span3">
+        <div id="search-facets">
+            <ul>
+                <li>Servers:<ul id="advanced-search-servers"></ul></li>
+            </ul>
+        </div>
+    </div>
+    <div class="span9">
+        <div id="toolbar" class="btn-toolbar">
+            <button class="btn btn-small" type="submit"><i class="icon-search"></i> <span>Search</span></button>
+            <button class="btn btn-small" type="reset"><i class="icon-remove"></i> <span>Clear</span></button>
+        </div>
+        <ul id="advanced-search-fields">
+            <li>
+                <label for="advanced-search-by-author">Author:</label>
+                <input class="search-box" data-qualifier="author" id="advanced-search-by-author" />
+            </li>
+            <li>
+                <label for="advanced-search-by-control-number">Control number:</label>
+                <input class="search-box" data-qualifier="local_number" id="advanced-search-by-control-number" />
+            </li>
+            <li>
+                <label for="advanced-search-by-dewey">Dewey number:</label>
+                <input class="search-box" data-qualifier="cn_dewey" id="advanced-search-by-dewey" />
+            </li>
+            <li>
+                <label for="advanced-search-by-isbn">ISBN:</label>
+                <input class="search-box" data-qualifier="isbn" id="advanced-search-by-isbn" />
+            </li>
+            <li>
+                <label for="advanced-search-by-issn">ISSN:</label>
+                <input class="search-box" data-qualifier="issn" id="advanced-search-by-issn" />
+            </li>
+            <li>
+                <label for="advanced-search-by-lccn">LCCN:</label>
+                <input class="search-box" data-qualifier="lccn" id="advanced-search-by-lccn" />
+            </li>
+            <li>
+                <label for="advanced-search-by-lc-number">LC call number:</label>
+                <input class="search-box" data-qualifier="cn_lc" id="advanced-search-by-lc-number" />
+            </li>
+            <li>
+                <label for="advanced-search-by-publisher-number">Publisher number:</label>
+                <input class="search-box" data-qualifier="music_identifier" id="advanced-search-by-publisher-number" />
+            </li>
+            <li>
+                <label for="advanced-search-by-standard-number">Standard number:</label>
+                <input class="search-box" data-qualifier="standard_identifier" id="advanced-search-by-standard-number" />
+            </li>
+            <li>
+                <label for="advanced-search-by-subject">Subject:</label>
+                <input class="search-box" data-qualifier="subject" id="advanced-search-by-subject" />
+            </li>
+            <li>
+                <label for="advanced-search-by-publication-date">Publication date:</label>
+                <input class="search-box" data-qualifier="date" id="advanced-search-by-publication-date" />
+            </li>
+            <li>
+                <label for="advanced-search-by-title">Title:</label>
+                <input class="search-box" data-qualifier="title" id="advanced-search-by-title" />
+            </li>
+        </ul>
+    </div>
+</form>
+
+</div>
+
+<div id="search-results-ui" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="search-results-title" aria-hidden="true">
+
+<div class="modal-header">
+    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="search-results-title">Results</h3>
+</div>
+
+<div class="modal-body row-fluid">
+    <div class="span3">
+        <div id="search-facets">
+            <ul>
+                <li>Servers:<ul id="search-serversinfo"></ul></li>
+            </ul>
+        </div>
+    </div>
+    <div class="span9">
+        <div id="searchresults">
+            <div id="search-top-pages">
+                <div class="pagination pagination-small">
+                </div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr></tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <div id="search-bottom-pages">
+                <div class="pagination pagination-small">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="search-overlay"><span>Loading...</span><div class="progress progress-striped active"><div class="bar" style="width: 100%"></div></div></div>
+</div>
+
+</div>
+
+<div id="macro-ui" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="macro-title" aria-hidden="true">
+
+<div class="modal-header">
+    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="macro-title">Macros</h3>
+</div>
+
+<div class="modal-body row-fluid">
+    <div class="span3"><ul id="macro-list"></ul></div>
+    <div class="span9" id="macro-editor">
+        <div id="macro-toolbar" class="btn-toolbar">
+            <button class="btn btn-small" id="run-macro" title="Run and edit macros"><i class="icon-play"></i> Run macro</button>
+            <button class="btn btn-small" id="delete-macro" title="Delete macro"><i class="icon-remove"></i> Delete macro</button>
+            <label for="macro-format">Format: </label> <select id="macro-format"></select>
+            <div id="macro-save-message"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+[% PROCESS 'cateditor-ui.inc' %]
+
+[% INCLUDE 'intranet-bottom.inc' %]
