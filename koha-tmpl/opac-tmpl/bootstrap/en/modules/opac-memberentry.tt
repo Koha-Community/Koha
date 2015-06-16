@@ -64,14 +64,14 @@
                                 [% UNLESS hidden.defined('cardnumber') %]
                                 <li>
                                     <label>Card number:</label>
-                                    <input type="text" value="[% borrower.cardnumber %]" disabled="disabled"/>
+                                    [% borrower.cardnumber %]
                                 </li>
                                 [% END %]
 
                                 [% UNLESS hidden.defined('dateexpiry') %]
                                 <li>
                                     <label>Expiration date:</label>
-                                    <input type="text" value="[% borrower.dateexpiry | $KohaDates  %]" disabled="disabled" size="10" />
+                                    [% borrower.dateexpiry | $KohaDates  %]
                                 </li>
                                 [% END %]
 
