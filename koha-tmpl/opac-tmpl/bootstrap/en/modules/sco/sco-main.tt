@@ -214,11 +214,21 @@
                                     <caption>Checkouts for [% borrowername %] <span class="count">([%   issues_count %] total)</span></caption>
                                     <!-- ISSUES TABLE ROWS -->
                                     <thead>
-                                        <tr><th class="anti-the">Title</th><th>Call no.</th><th class="title-string">Due</th><th class="nosort">Renew</th>[% UNLESS ( nofines ) %]<th>Fines</th>[% END %]</tr>
+                                        <tr>
+                                            <th class="no-show">Checked out on</th>
+                                            <th class="anti-the">Title</th>
+                                            <th>Call no.</th>
+                                            <th class="title-string">Due</th>
+                                            <th class="nosort">Renew</th>
+                                            [% UNLESS ( nofines ) %]
+                                                <th>Fines</th>
+                                            [% END %]
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         [% FOREACH ISSUE IN ISSUES %]
                                             <tr>
+                                                <td>[% ISSUE.issuedate %]</td>
                                                 <td>
                                                     [% UNLESS ( noitemlinks ) %]
                                                         <a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.  biblionumber %]">[% ISSUE.title |html %]</a>
@@ -348,9 +358,10 @@
             dofocus();
             [% IF ( patronid ) %]sco_init();[% END %]
             $("#loanTable").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aaSorting": [ [2, "desc"], [0, "asc"] ],
+                "aaSorting": [ 0 ],
                 "aoColumnDefs": [
-                    { "aTargets": [ "nosort" ],"bSortable": false,"bSearchable": false },
+                    { "aTargets": [ "nosort" ], "bSortable": false, "bSearchable": false },
+                    { "aTargets": [ "no-show" ], "bVisible": false, "bSearchable": false },
                     { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
                     { "sType": "title-string", "aTargets" : [ "title-string" ] }
                 ]
