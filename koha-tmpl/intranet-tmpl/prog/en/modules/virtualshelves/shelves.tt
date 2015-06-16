@@ -302,9 +302,11 @@ function placeHold () {
 
 [% IF ( viewshelf ) %]&rsaquo; Contents of <i>[% shelfname | html %]</i>[% END %][% IF ( shelves ) %] &rsaquo; Create new list[% END %][% IF ( edit ) %] &rsaquo; Edit list <i>[% shelfname | html %]</i>[% END %]</div>
 
-<div id="doc2" class="yui-t7">
- <div id="bd">
-  <div id="yui-main">
+<div id="doc3" class="yui-t2">
+<div id="bd">
+<div id="yui-main">
+<div class="yui-b">
+
    <div class="yui-g">[% INCLUDE 'virtualshelves-toolbar.inc' %]
    </div>
 [% IF ( paramsloop ) %]
@@ -483,25 +485,6 @@ function placeHold () {
    </div>
 [% END %]<!-- /viewshelf -->
 
-[% IF ( allowaddingitem ) %]
-<div class="yui-g">
-<form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
- <fieldset class="brief noprint">
-    <legend>Add an item to <i>[% shelfname | html %]</i></legend>
-        <ol>
-            <li>
-                <label for="addbarcode">Barcode:</label>
-                <input name="addbarcode" type="text" id="addbarcode" size="14" />
-                <input type="hidden" name="viewshelf" value="[% shelfnumber %]" />
-                <input type="hidden" name="modifyshelfcontents" value="1" />
-                <input type="submit" value="Add" />
-            </li>
-        </ol>
- </fieldset>
-</form>
-</div>
-[% END %]<!-- /allowaddingitem -->
-
 [% IF ( debug ) %]
   [% IF ( edit ) %]<div>Edit is on ([% shelfname | html %])</div>[% END %]
   [% IF ( seflag ) %]<div>seflag is on ([% seflag %])</div>[% END %]
@@ -651,5 +634,28 @@ function placeHold () {
 </form>
 
 </div>
+</div>
+
+[% IF ( allowaddingitem ) %]
+<div class="yui-b">
+  <form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
+    <fieldset class="brief">
+      <legend>Add an item</legend>
+      <ol>
+        <li>
+          <label for="addbarcode">Barcode:</label>
+          <input name="addbarcode" type="text" id="addbarcode" class="focus" />
+          <input type="hidden" name="viewshelf" value="[% shelfnumber %]" />
+          <input type="hidden" name="modifyshelfcontents" value="1" />
+        </li>
+      </ol>
+      <fieldset class="action">
+        <input type="submit" value="Add" />
+      </fieldset>
+    </fieldset>
+  </form>
+</div>
+[% END %]<!-- /allowaddingitem -->
+
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]
