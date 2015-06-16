@@ -40,18 +40,32 @@ use C4::Context;
 BEGIN {
     Log::Log4perl->wrapper_register(__PACKAGE__);
 
-    my $conf;
     if ( exists $ENV{"LOG4PERL_CONF"} and $ENV{'LOG4PERL_CONF'} and -s $ENV{"LOG4PERL_CONF"} ) {
-
         # Check for web server level configuration first
-        $conf = $ENV{"LOG4PERL_CONF"};
+        Log::Log4perl->init_once( $ENV{"LOG4PERL_CONF"} );
     }
-    else {
+    elsif ( C4::Context->config("log4perl_conf") ) {
         # If no web server level config exists, look in the koha conf file for one
-        $conf = C4::Context->config("log4perl_conf");
-    }
+        Log::Log4perl->init_once( C4::Context->config("log4perl_conf") );
+    } else {
+        my $logdir = C4::Context->config("logdir");
+        my $conf = qq(
+            log4perl.logger.intranet = WARN, INTRANET
+            log4perl.appender.INTRANET=Log::Log4perl::Appender::File
+            log4perl.appender.INTRANET.filename=$logdir/intranet-error.log
+            log4perl.appender.INTRANET.mode=append
+            log4perl.appender.INTRANET.layout=PatternLayout
+            log4perl.appender.INTRANET.layout.ConversionPattern=[%d] [%p] %m %l %n
 
-    Log::Log4perl->init_once($conf);
+            log4perl.logger.opac = WARN, OPAC
+            log4perl.appender.OPAC=Log::Log4perl::Appender::File
+            log4perl.appender.OPAC.filename=$logdir/opac-error.log
+            log4perl.appender.OPAC.mode=append
+            log4perl.appender.OPAC.layout=PatternLayout
+            log4perl.appender.OPAC.layout.ConversionPattern=[%d] [%p] %m %l %n
+        );
+        Log::Log4perl->init_once(\$conf);
+    }
 }
 
 =head2 get
