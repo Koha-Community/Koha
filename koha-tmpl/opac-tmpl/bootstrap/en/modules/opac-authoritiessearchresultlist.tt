@@ -26,7 +26,8 @@
         </ul>
     </div> <!-- / #pages -->
 [% END %]
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; [% IF ( total ) %]Authority search result[% ELSE %]No results found[% END %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; [% IF ( total ) %]Authority search result[% ELSE %]No results found[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>

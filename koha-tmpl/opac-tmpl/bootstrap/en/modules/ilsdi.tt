@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;
     [% IF ( GetAvailability ) %]
         ILS-DI &rsaquo; GetAvailability
     [% ELSIF ( GetRecords ) %]
@@ -27,7 +27,7 @@
         ILS-DI &rsaquo; CancelHold
     [% ELSE %]
         ILS-DI
-    [% END %]
+    [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>

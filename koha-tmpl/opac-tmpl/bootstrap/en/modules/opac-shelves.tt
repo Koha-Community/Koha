@@ -2,7 +2,8 @@
 [% SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnList ) %]
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnList ) %]
 
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;   [% IF ( viewshelf ) %]Contents of [% shelfname |html %][% ELSE %]Your lists[% END %][% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;   [% IF ( viewshelf ) %]Contents of [% shelfname |html %][% ELSE %]Your lists[% END %]</title>[% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
 [% IF ( loggedinusername ) %][% INCLUDE 'bodytag.inc' bodyid='opac-userlists' bodyclass='scrollto' %][% ELSE %][% INCLUDE 'bodytag.inc' bodyid='opac-lists' bodyclass='scrollto' %][% END %]

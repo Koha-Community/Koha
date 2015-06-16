@@ -3,7 +3,7 @@
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && TagsEnabled && TagsInputOnList ) %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your cart
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your cart</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]<style type="text/css">.item-status { display: inline; }</style>[% END %]
 </head>

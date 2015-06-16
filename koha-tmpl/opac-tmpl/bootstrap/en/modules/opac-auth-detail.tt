@@ -1,6 +1,7 @@
 [% USE Koha %]
 [% PROCESS 'opac-authorities.inc' %]
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Authority search &rsaquo; [% summary.mainentry %][% IF authtypetext %] ([% authtypetext %])[% END %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Authority search &rsaquo; [% summary.mainentry %][% IF authtypetext %] ([% authtypetext %])[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
