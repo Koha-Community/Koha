@@ -297,7 +297,7 @@ function verify_images() {
                 'bAutoWidth': false,
                 "aaSorting": [[ 4, "desc" ]],
                 "aoColumnDefs": [
-                    { "aTargets": [ 4, 5 ], "sType": "title-string" }
+                    { "aTargets": "title-string", "sType": "title-string" }
                 ]
             }));
 
@@ -936,8 +936,8 @@ function verify_images() {
           <th>Basket group</th>
           <th>Basket</th>
           <th>Order number</th>
-          <th>Creation date</th>
-          <th>Receive date</th>
+          <th class="title-string">Creation date</th>
+          <th class="title-string">Receive date</th>
           <th>Status</th>
           <th>Quantity</th>
         </tr>
@@ -947,7 +947,7 @@ function verify_images() {
           <tr>
             <td>
             [% IF (order.id) %]
-                [% order.name %]
+                <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.id %]" title="Vendor detail page">[% order.name %]</a>
             [% END %]
             </td>
             <td>
