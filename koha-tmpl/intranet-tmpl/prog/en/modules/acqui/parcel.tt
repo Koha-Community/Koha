@@ -226,7 +226,7 @@
           <th>Order line</th>
           <th title="Item holds / Total holds">Holds</th>
           <th>Summary</th>
-          <th>View record</th>
+          <th>More</th>
           <th>Quantity</th>
           <th>Fund</th>
           <th>Est cost</th>
@@ -313,7 +313,11 @@
                     (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% order.suggestionid %]&amp;op=show">suggestion #[% order.suggestionid %]</a>)
                 [% END %]
                 </td>
-                <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% order.biblionumber %]" class="previewData">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% order.biblionumber %]" class="previewData">Card</a></td>
+                <td>
+                  <a href="/cgi-bin/koha/acqui/showorder.pl?ordernumber=[% order.ordernumber %]" class="previewData">Order</a><br>
+                  <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% order.biblionumber %]" class="previewData">MARC</a><br>
+                  <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% order.biblionumber %]" class="previewData">Card</a>
+                </td>
                 <td>[% order.quantityreceived %]</td>
                 <td>[% order.budget.budget_name %]</td>
                 <td>[% order.ecost | $Price %]</td>
