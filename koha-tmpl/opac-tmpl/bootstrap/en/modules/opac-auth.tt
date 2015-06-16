@@ -1,11 +1,11 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;
 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
     Log in to your account
 [% ELSE %]
     Catalog login disabled
-[% END %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>

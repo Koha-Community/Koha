@@ -4,7 +4,7 @@
 [% USE ItemTypes %]
 [% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
-[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Course reserves for [% course.course_name %]
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Course reserves for [% course.course_name %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
     <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />

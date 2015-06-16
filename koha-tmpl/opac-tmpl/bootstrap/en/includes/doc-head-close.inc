@@ -1,4 +1,3 @@
-</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Koha [% Version %]" /> <!-- leave this for stats -->
 <meta name="viewport" content="width=device-width, initial-scale=1" />
