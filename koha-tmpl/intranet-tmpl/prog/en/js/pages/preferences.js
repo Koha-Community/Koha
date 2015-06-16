@@ -52,7 +52,7 @@ $( document ).ready( function () {
     }
 
     $( '.prefs-tab' )
-        .find( 'input.preference, textarea.preference' ).keyup( function () {
+        .find( 'input.preference, textarea.preference' ).on('input', function () {
             if ( this.defaultValue === undefined || this.value != this.defaultValue ) mark_modified.call( this );
         } ).end()
         .find( 'select.preference' ).change( mark_modified );
