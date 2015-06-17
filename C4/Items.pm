@@ -536,6 +536,7 @@ sub GetItemsForInventory {
     my $statushash   = $parameters->{'statushash'}   // '';
     my $ignore_waiting_holds = $parameters->{'ignore_waiting_holds'} // '';
     my $itemtypes    = $parameters->{'itemtypes'}    || [];
+    my $ccode        = $parameters->{'ccode'}        // '';
 
     my $dbh = C4::Context->dbh;
     my ( @bind_params, @where_strings );
@@ -544,7 +545,8 @@ sub GetItemsForInventory {
     my $max_cnsort = GetClassSort($class_source,undef,$maxlocation);
 
     my $select_columns = q{
-        SELECT DISTINCT(items.itemnumber), barcode, itemcallnumber, title, author, biblio.biblionumber, biblio.frameworkcode, datelastseen, homebranch, location, notforloan, damaged, itemlost, withdrawn, stocknumber, items.cn_sort
+        SELECT DISTINCT(items.itemnumber), barcode, itemcallnumber, title, author, biblio.biblionumber, biblio.frameworkcode, datelastseen, homebranch, location, notforloan, damaged, itemlost, withdrawn, stocknumber, items.cn_sort, ccode
+
     };
     my $select_count = q{SELECT COUNT(DISTINCT(items.itemnumber))};
     my $query = q{
@@ -559,6 +561,11 @@ sub GetItemsForInventory {
                 push @where_strings, "$authvfield in (" . $joinedvals . ")";
             }
         }
+    }
+
+    if ($ccode){
+        push @where_strings, 'ccode = ?';
+        push @bind_params, $ccode;
     }
 
     if ($minlocation) {

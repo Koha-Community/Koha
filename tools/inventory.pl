@@ -58,6 +58,7 @@ my $op         = $input->param('op');
 my $compareinv2barcd = $input->param('compareinv2barcd');
 my $dont_checkin = $input->param('dont_checkin');
 my $out_of_order = $input->param('out_of_order');
+my $ccode = $input->param('ccode');
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {   template_name   => "tools/inventory.tt",
@@ -72,6 +73,9 @@ my $authorisedvalue_categories = '';
 
 my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] })->unblessed;
 unshift @$frameworks, { frameworkcode => '' };
+
+my @collections = ();
+my @collection_codes = ();
 
 for my $fwk ( @$frameworks ){
   my $fwkcode = $fwk->{frameworkcode};
@@ -149,6 +153,7 @@ $template->param(
     class_sources            => \@class_sources,
     pref_class               => $pref_class,
     itemtypes                => \@itemtypes,
+    ccode                    => $ccode,
 );
 
 # Walk through uploaded barcodes, report errors, mark as seen, check in
@@ -260,12 +265,14 @@ if ( $op && ( !$uploadbarcodes || $compareinv2barcd )) {
       branch       => $branch,
       offset       => 0,
       statushash   => $staton,
+      ccode        => $ccode,
       ignore_waiting_holds => $ignore_waiting_holds,
       itemtypes    => \@selected_itemtypes,
     });
 }
 # Build rightplacelist used to check if a scanned item is in the right place.
 if( @scanned_items ) {
+    # For the items that may be marked as "wrong place", we only check the location (callnumbers, location, ccode and branch)
     ( $rightplacelist ) = GetItemsForInventory({
       minlocation  => $minlocation,
       maxlocation  => $maxlocation,
@@ -279,11 +286,13 @@ if( @scanned_items ) {
       statushash   => undef,
       ignore_waiting_holds => $ignore_waiting_holds,
       itemtypes    => \@selected_itemtypes,
+      ccode        => $ccode,
     });
     # Convert the structure to a hash on barcode
     $rightplacelist = {
         map { $_->{barcode} ? ( $_->{barcode}, $_ ) : (); } @$rightplacelist
     };
+
 }
 
 # Report scanned items that are on the wrong place, or have a wrong notforloan
@@ -394,7 +403,7 @@ if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
     my @translated_keys;
     for my $key (qw / biblioitems.title    biblio.author
                       items.barcode        items.itemnumber
-                      items.homebranch     items.location
+                      items.homebranch     items.location   items.ccode
                       items.itemcallnumber items.notforloan
                       items.itemlost       items.damaged
                       items.withdrawn      items.stocknumber
@@ -406,7 +415,7 @@ if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
     $csv->combine(@translated_keys);
     print $csv->string, "\n";
 
-    my @keys = qw/ title author barcode itemnumber homebranch location itemcallnumber notforloan itemlost damaged withdrawn stocknumber /;
+    my @keys = qw/ title author barcode itemnumber homebranch location ccode itemcallnumber notforloan itemlost damaged withdrawn stocknumber /;
     for my $item ( @$loop ) {
         my @line;
         for my $key (@keys) {
