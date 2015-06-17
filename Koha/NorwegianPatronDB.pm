@@ -96,7 +96,6 @@ sub SOAP::Transport::HTTP::Client::get_basic_credentials {
     # Combine usernames and passwords, and encrypt with SHA256
     my $combined_username = "$vendor_username-$library_username";
     my $combined_password = sha256_hex( "$library_password-$vendor_password" );
-    warn "$combined_username => $combined_password";
     return $combined_username => $combined_password;
 }
 
