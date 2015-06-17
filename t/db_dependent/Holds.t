@@ -6,12 +6,14 @@ use t::lib::Mocks;
 use C4::Context;
 use C4::Branch;
 
-use Test::More tests => 41;
+use Test::More tests => 49;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
 use C4::Members;
 use C4::Calendar;
+
+use Koha::Holds;
 
 use Koha::DateUtils qw( dt_from_string output_pref );
 
@@ -30,6 +32,7 @@ $dbh->{RaiseError} = 1;
 my $borrowers_count = 5;
 
 $dbh->do('DELETE FROM itemtypes');
+$dbh->do('DELETE FROM reserves');
 my $insert_sth = $dbh->prepare('INSERT INTO itemtypes (itemtype) VALUES (?)');
 $insert_sth->execute('CAN');
 $insert_sth->execute('CANNOT');
@@ -88,6 +91,20 @@ is( $borrowernumber, $borrowernumbers[0], "GetReservesFromItemnumber should retu
 is( $branchcode, 'CPL', "GetReservesFromItemnumber should return a valid branchcode");
 ok($reserve_id, "Test GetReservesFromItemnumber()");
 
+my $hold = Koha::Holds->find( $reserve_id );
+ok( $hold, "Koha::Holds found the hold" );
+my $hold_biblio = $hold->biblio();
+ok( $hold_biblio, "Got biblio using biblio() method" );
+ok( $hold_biblio == $hold->biblio(), "biblio method returns stashed biblio" );
+my $hold_item = $hold->item();
+ok( $hold_item, "Got item using item() method" );
+ok( $hold_item == $hold->item(), "item method returns stashed item" );
+my $hold_branch = $hold->branch();
+ok( $hold_branch, "Got branch using branch() method" );
+ok( $hold_branch == $hold->branch(), "branch method returns stashed branch" );
+my $hold_found = $hold->found();
+$hold->set({ found => 'W'})->store();
+is( Koha::Holds->waiting()->count(), 1, "Koha::Holds->waiting returns waiting holds" );
 
 my ( $reserve ) = GetReservesFromBorrowernumber($borrowernumbers[0]);
 ok( $reserve->{'borrowernumber'} eq $borrowernumbers[0], "Test GetReservesFromBorrowernumber()");
