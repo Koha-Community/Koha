@@ -120,7 +120,7 @@ sub build_query {
 
 This performs a "starts with" style query on a particular field. The field
 to be searched must have been indexed with an appropriate mapping as a
-"phrase" subfield.
+"phrase" subfield, which pretty much everything has.
 
 =cut
 # XXX this isn't really a browse query like we want in the end
@@ -257,43 +257,65 @@ The search description is a hashref that looks something like:
 =cut
 
 sub build_authorities_query {
-    my ($self, $search) = @_;
+    my ( $self, $search ) = @_;
 
     # Start by making the query parts
     my @query_parts;
     my @filter_parts;
     foreach my $s ( @{ $search->{searches} } ) {
-        my ($wh, $op, $val) = @{ $s }{qw(where operator value)};
+        my ( $wh, $op, $val ) = @{$s}{qw(where operator value)};
         $wh = '_all' if $wh eq '';
-        if ($op eq 'is' || $op eq '=') {
+        if ( $op eq 'is' || $op eq '=' ) {
+
             # look for something that matches completely
             # note, '=' is about numerical vals. May need special handling.
             # _allphrase is a special field that only groups the exact
             # matches. Also, we lowercase our search because the ES
             # index lowercases its values, and term searches don't get the
             # search analyzer applied to them.
-            push @filter_parts, { term => { "$wh.phrase" => lc $val }};
-        } elsif ($op eq 'exact') {
+            push @filter_parts, { term => { "$wh.phrase" => lc $val } };
+        }
+        elsif ( $op eq 'exact' ) {
+
             # left and right truncation, otherwise an exact phrase
-            push @query_parts, { match_phrase => { $wh => $val }};
-        } elsif ($op eq 'start') {
+            push @query_parts, { match_phrase => { $wh => $val } };
+        }
+        elsif ( $op eq 'start' ) {
+
             # startswith search
-            push @query_parts, { wildcard => { "$wh.phrase" => lc "$val*" }};
-        } else {
+            push @query_parts, { wildcard => { "$wh.phrase" => lc "$val*" } };
+        }
+        else {
             # regular wordlist stuff
-            push @query_parts, { match => { $wh => $val }};
+            push @query_parts, { match => { $wh => $val } };
         }
     }
+
     # Merge the query and filter parts appropriately
     # 'should' behaves like 'or', if we want 'and', use 'must'
-    my $query_part = { bool => { should => \@query_parts } };
-    my $filter_part = { bool => { should => \@filter_parts }};
+    my $query_part  = { bool => { should => \@query_parts } };
+    my $filter_part = { bool => { should => \@filter_parts } };
+
+    # We need to add '.phrase' to all the sort headings otherwise it'll sort
+    # based on the tokenised form.
+    if ( exists $search->{sort} ) {
+        my %s;
+        foreach my $k ( keys %{ $search->{sort} } ) {
+            $s{"$k.phrase"} = $search->{sort}{$k};
+        }
+        $search->{sort} = \%s;
+    }
+
     # extract the sort stuff
     my %sort = ( sort => [ $search->{sort} ] ) if exists $search->{sort};
     my $query;
     if (@filter_parts) {
-        $query = { query => { filtered => { filter => $filter_part, query => $query_part }}};
-    } else {
+        $query =
+          { query =>
+              { filtered => { filter => $filter_part, query => $query_part } }
+          };
+    }
+    else {
         $query = { query => $query_part };
     }
     $query = { %$query, %sort };
