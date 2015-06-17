@@ -242,7 +242,7 @@ if ($format eq 'html') {
 
     my $branches = GetBranches();
     my @branches;
-    foreach my $branchcode (keys %$branches) {
+    foreach my $branchcode ( sort { uc($branches->{$a}->{branchname}) cmp uc($branches->{$b}->{branchname}) } keys %$branches) {
         push @branches, {
             value => $branchcode,
             label => $branches->{$branchcode}->{branchname},
