@@ -249,7 +249,8 @@ sub getLanguages {
                 $language_subtag_registry->{language_description} = $language_descriptions->{description};
             }
         }
-        if ( !$language_list || index (  $language_list, $language_subtag_registry->{ iso639_2_code } ) >= 0) {
+        # Do not push unless valid iso639-2 code
+        if ( $language_subtag_registry->{ iso639_2_code } and ( !$language_list || index (  $language_list, $language_subtag_registry->{ iso639_2_code } ) >= 0) ) {
             push @languages_loop, $language_subtag_registry;
         }
     }
