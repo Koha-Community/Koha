@@ -139,8 +139,11 @@ A hashref containing:
 =over
 
 =item * rating_avg - average rating of a biblio
+
 =item * rating_avg_int - average rating of a biblio, rounded to 1dp
+
 =item * rating_total - total number of ratings of a biblio
+
 =item * rating_value - logged-in user's rating of a biblio
 
 =back
