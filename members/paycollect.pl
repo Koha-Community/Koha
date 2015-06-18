@@ -143,9 +143,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
 
 borrower_add_additional_fields($borrower);
 
-#workaround for Bug 4041 to get rid of duplicated code in circ-menu.tt, use circ-menu.inc instad
 $template->param(%$borrower);
-
 
 $template->param(
     borrowernumber => $borrowernumber,    # some templates require global
