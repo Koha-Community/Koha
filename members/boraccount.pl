@@ -106,7 +106,6 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
 
 my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $data->{streettype} );
 
-#workaround for Bug 4041 to get rid of duplicated code in circ-menu.tt, use circ-menu.inc instad
 $template->param(%$data);
 
 $template->param(

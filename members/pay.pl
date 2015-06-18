@@ -134,7 +134,6 @@ sub add_accounts_to_template {
     }
     borrower_add_additional_fields($borrower);
 
-    #workaround for Bug 4041 to get rid of duplicated code in circ-menu.tt, use circ-menu.inc instad
     $template->param(%$borrower);
 
     $template->param(
