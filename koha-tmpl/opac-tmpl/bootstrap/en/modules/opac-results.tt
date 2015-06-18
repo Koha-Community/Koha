@@ -41,7 +41,7 @@
                         <strong>No results found!</strong>
                         <p>
                             [% IF ( searchdesc ) %]
-                                No results found for that in [% LibraryName %] catalog. <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi | html | url %]&amp;format=rss2" class="rsssearchlink noprint"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" class="rsssearchicon"/></a>
+                                No results found for that in [% LibraryName %] catalog. <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi | uri %][% limit_cgi | html | url %]&amp;format=rss2" class="rsssearchlink noprint"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" class="rsssearchicon"/></a>
                             [% ELSE %]
                                 You did not specify any search criteria.
                             [% END %]
@@ -80,7 +80,7 @@
                                 [% END %]
                             ).
                         [% END %]
-                        <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi |html | url %]&amp;count=[% countrss |html %]&amp;sort_by=acqdate_dsc&amp;format=rss2" class="rsssearchlink noprint"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" class="rsssearchicon"/></a>
+                        <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi | uri %][% limit_cgi |html | url %]&amp;count=[% countrss |html %]&amp;sort_by=acqdate_dsc&amp;format=rss2" class="rsssearchlink noprint"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" class="rsssearchicon"/></a>
                     [% END # / IF total %]
                     </p>
                 [% END # / IF searchdesc %]
