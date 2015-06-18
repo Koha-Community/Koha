@@ -30,12 +30,12 @@
                                             <label for="shelfnumber">Add to list:</label> <select name="shelfnumber" id="shelfnumber">
                                                 [% IF ( privatevirtualshelves ) %]<optgroup label="Private Lists">
                                                     [% FOREACH privatevirtualshelve IN privatevirtualshelves %]
-                                                    <option value="[% privatevirtualshelve.shelfnumber %]">[% privatevirtualshelve.shelfname %]</option>
+                                                    <option value="[% privatevirtualshelve.shelfnumber %]">[% privatevirtualshelve.shelfname | html%]</option>
                                                     [% END %]
                                                 </optgroup>[% END %]
                                                 [% IF ( publicvirtualshelves ) %]<optgroup label="Public Lists">
                                                     [% FOREACH publicvirtualshelve IN publicvirtualshelves %]
-                                                    <option value="[% publicvirtualshelve.shelfnumber %]">[% publicvirtualshelve.shelfname %]</option>
+                                                    <option value="[% publicvirtualshelve.shelfnumber %]">[% publicvirtualshelve.shelfname |html%]</option>
                                                     [% END %]
                                                 </optgroup>[% END %]
                                             </select>
