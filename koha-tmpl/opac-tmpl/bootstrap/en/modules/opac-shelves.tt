@@ -162,7 +162,7 @@
                                         <span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelfnumber | html %]" class="send" onclick="open('/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelfnumber | html %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; ">Send list</a></span>
                                     [% END %]
 
-                                    <a class="print-small" href="/cgi-bin/koha/opac-shelves.pl" onclick="print(); return false;">Print list</a>
+                                    <a class="print-small" target="_blank" href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% shelfnumber %]&sort=[% sort %]&direction=[% direction |uri %]&print=1">Print list</a>
 
                                     [% IF ( manageshelf ) %]
                                         <span class="sep">|</span>
