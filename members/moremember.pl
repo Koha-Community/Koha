@@ -191,7 +191,6 @@ if ( $count ) {
         );
     }
     $template->param( guaranteeloop => \@guaranteedata );
-    ( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' || $category_type eq 'I' );
 }
 else {
     if ($data->{'guarantorid'}){
@@ -205,6 +204,8 @@ else {
 		$template->param('C' => 1);
 	}
 }
+
+( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' || $category_type eq 'I' );
 
 my %bor;
 $bor{'borrowernumber'} = $borrowernumber;
