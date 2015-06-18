@@ -51,8 +51,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $number = $query->param('number') || 100;
 
-my $sth = $dbh->prepare("SELECT entry,weight FROM tags ORDER BY weight DESC LIMIT $number");
-$sth->execute;
+my $sth = $dbh->prepare("SELECT entry,weight FROM tags ORDER BY weight DESC LIMIT ?");
+$sth->execute($number);
 
 my %result;
 my $max=0;
