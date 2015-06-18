@@ -29,7 +29,7 @@ use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Branches - Koha Reserve object set class
+Koha::Branches - Koha Branch object set class
 
 =head1 API
 
