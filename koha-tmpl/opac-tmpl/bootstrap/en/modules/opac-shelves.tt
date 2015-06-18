@@ -527,7 +527,7 @@
                     [% IF ( edit ) %]
                         <form method="post" action="/cgi-bin/koha/opac-shelves.pl">
                             <input type="hidden" name="op" value="modifsave" />
-                            <input type="hidden" name="display" value="[% display %]" />
+                            <input type="hidden" name="display" value="[% display |html %]" />
                             <input type="hidden" name="shelfnumber" value="[% shelfnumber | html %]" />
                             <fieldset class="rows">
                                 <legend>Editing <em>[% shelfname |html %]</em></legend>
