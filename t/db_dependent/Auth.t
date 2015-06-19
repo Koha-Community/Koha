@@ -9,6 +9,7 @@ use CGI;
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
 use Test::More tests => 6;
+use Test::Warn;
 use C4::Members;
 use Koha::AuthUtils qw/hash_password/;
 
@@ -105,6 +106,27 @@ $dbh->{RaiseError} = 1;
 
     ok( ( any { $_->name eq 'KohaOpacLanguage' and $_->value eq 'en' } @$cookies ),
         'BZ9735: invalid language, then default to en');
+
+    for my $template_name (
+        qw(
+            ../../../../../../../../../../../../../../../etc/passwd
+            test/../../../../../../../../../../../../../../etc/passwd
+            /etc/passwd
+        )
+    ) {
+        eval {
+            ( $template, $loggedinuser, $cookies ) = get_template_and_user(
+                {
+                    template_name   => $template_name,
+                    query           => $query,
+                    type            => "intranet",
+                    authnotrequired => 1,
+                    flagsrequired   => { catalogue => 1 },
+                }
+            );
+        };
+        like ( $@, qr(^bad template path), 'The file $template_name should not be accessible' );
+    }
 }
 
 my $hash1 = hash_password('password');
