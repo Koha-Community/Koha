@@ -796,7 +796,8 @@ No patron matched <span class="ex">[% message %]</span>
 
                                 <br/>
                                 [% IF ( w.branch.branchcode == Branches.GetLoggedInBranchcode()  ) %]<strong class="waitinghere">[% ELSE %]<strong>[% END %]
-                                    Waiting at [% w.branch.branchname | html %] [% IF w.waiting_expires_on %] until [% w.waiting_expires_on | $KohaDates %] [% END %]
+                                    [% SET waiting_expires_on = w.waiting_expires_on %]
+                                    Waiting at [% w.branch.branchname | html %] [% IF waiting_expires_on %] until [% waiting_expires_on | $KohaDates %] [% END %]
                                 </strong>
                             </li>
                         </ul>
