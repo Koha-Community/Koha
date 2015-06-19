@@ -17,9 +17,9 @@
 <div id="custom-doc" class="yui-t7">
    <div id="bd">
                 [% IF ( multiple ) %]
-		    <h1>Add [% total %] items to [% IF ( singleshelf ) %]<em>[% shelfname %]</em>: [% ELSE %]a list:[% END %]</h1>
+		    <h1>Add [% total %] items to [% IF ( singleshelf ) %]<em>[% shelfname | html%]</em>: [% ELSE %]a list:[% END %]</h1>
                 [% ELSE %]
-                        <h1>Add to [% IF ( singleshelf ) %]<em>[% shelfname %]</em>[% ELSE %]a list:[% END %]</h1>
+                        <h1>Add to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>[% ELSE %]a list:[% END %]</h1>
                 [% END %]
 		<ul>
 		    [% FOREACH biblio IN biblios %]
@@ -46,14 +46,14 @@
 		[% IF ( privatevirtualshelves ) %]
         <optgroup label="Private lists">
 		[% FOREACH privatevirtualshelve IN privatevirtualshelves %]
-		<option value="[% privatevirtualshelve.shelfnumber %]">[% privatevirtualshelve.shelfname %]</option>
+		<option value="[% privatevirtualshelve.shelfnumber %]">[% privatevirtualshelve.shelfname | html%]</option>
 		[% END %]
 		</optgroup>
 		[% END %]
 		[% IF ( publicvirtualshelves ) %]
         <optgroup label="Public lists">
 		[% FOREACH publicvirtualshelve IN publicvirtualshelves %]
-		<option value="[% publicvirtualshelve.shelfnumber %]">[% publicvirtualshelve.shelfname %]</option>
+		<option value="[% publicvirtualshelve.shelfnumber %]">[% publicvirtualshelve.shelfname | html%]</option>
 		[% END %]
 		</optgroup>
 		[% END %]
