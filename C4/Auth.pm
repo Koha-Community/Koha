@@ -157,6 +157,10 @@ sub get_template_and_user {
 
     C4::Context->interface( $in->{type} );
 
+    # Sanitize template path to avoid path traversal
+    $in->{template_name} =~ s|^/||;
+    $in->{template_name} =~ s|\.\.||g;
+
     $in->{'authnotrequired'} ||= 0;
     my $template = C4::Templates::gettemplate(
         $in->{'template_name'},
