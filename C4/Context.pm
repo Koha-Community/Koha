@@ -1205,7 +1205,7 @@ sub tz {
 
 =head2 IsSuperLibrarian
 
-    C4::Context->IsSuperlibrarian();
+    C4::Context->IsSuperLibrarian();
 
 =cut
 
