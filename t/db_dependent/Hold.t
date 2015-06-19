@@ -20,7 +20,7 @@ use Modern::Perl;
 use C4::Context;
 use Koha::Database;
 
-use Test::More tests => 5;
+use Test::More tests => 8;
 
 use_ok('Koha::Hold');
 
@@ -36,6 +36,8 @@ C4::Context->set_preference( 'ReservesMaxPickUpDelay', '' );
 my $dt = $hold->waiting_expires_on();
 is( $dt, undef, "Koha::Hold->waiting_expires_on returns undef if ReservesMaxPickUpDelay is not set");
 
+is( $hold->is_waiting, 1, 'The hold is waiting' );
+
 C4::Context->set_preference( 'ReservesMaxPickUpDelay', '5' );
 $dt = $hold->waiting_expires_on();
 is( $dt->ymd, "2000-01-06", "Koha::Hold->waiting_expires_on returns DateTime of waitingdate + ReservesMaxPickUpDelay if set");
@@ -43,10 +45,12 @@ is( $dt->ymd, "2000-01-06", "Koha::Hold->waiting_expires_on returns DateTime of 
 $hold->found('T');
 $dt = $hold->waiting_expires_on();
 is( $dt, undef, "Koha::Hold->waiting_expires_on returns undef if found is not 'W' ( Set to 'T' )");
+isnt( $hold->is_waiting, 1, 'The hold is not waiting (T)' );
 
 $hold->found(q{});
 $dt = $hold->waiting_expires_on();
 is( $dt, undef, "Koha::Hold->waiting_expires_on returns undef if found is not 'W' ( Set to empty string )");
+isnt( $hold->is_waiting, 1, 'The hold is not waiting (W)' );
 
 $schema->storage->txn_rollback();
 
