@@ -10595,6 +10595,17 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.21.00.009";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        UPDATE aqorders SET orderstatus='cancelled'
+        WHERE (datecancellationprinted IS NOT NULL OR
+               datecancellationprinted<>'0000-00-00');
+    |);
+    print "Upgrade to $DBversion done (Bug 13993: Correct orderstatus for transferred orders)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
