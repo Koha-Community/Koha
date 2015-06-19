@@ -23,8 +23,8 @@ C4::SMS - send SMS messages
 
 =head1 SYNOPSIS
 
-my $success = C4::SMS->send_sms( message     => 'This is my text message',
-                                 destination => '212-555-1212' );
+my $success = C4::SMS->send_sms({ message     => 'This is my text message',
+                                  destination => '212-555-1212' });
 
 =head1 DESCRIPTION
 
