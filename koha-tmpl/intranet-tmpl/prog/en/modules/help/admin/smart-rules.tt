@@ -70,9 +70,19 @@
     <li>If you're allowing renewals you can control how soon before the due date patrons can renew their materials with the 'No renewals before' box.
     <ul><li>Items can be renewed at any time if this value is left blank. Otherwise items can only be renewed if the item is before the number in units (days/hours) entered in this box.</li></ul></li>
     <li>You can enable automatic renewals for certain items/patrons if you'd like. This will renew automatically following your circulation rules unless there is a hold on the item
-    <ul><li style="color: #990000;">Important: You will need to enable the automatic renewal cron job for this to work.</li></ul>
+    <ul>
+    <li style="color: #990000;">Important: You will need to enable the automatic renewal cron job for this to work.</li>
+    <li style="color: #990000;">Important: This feature needs to have the "no renewal before" column filled in or it will auto renew everyday after the due date.</li>
+    </ul>
     </li>
     <li>If the patron can place holds on this item type, enter the total numbers of items (of this type) that can be put on hold in the 'Holds Allowed' field</li>
+    <li>Next you can decide if this patron/item combo are allowed to place holds on items that are on the shelf (or available in the library) or not. If you choose 'no' then items can only be placed on hold if checked out</li>
+    <li>You can also decide if patrons are allowed to place item specific holds on the item type in question. The options are:
+    <ul>
+    <li>Allow: Will allow patrons the option to choose next available or item specific</li>
+    <li>Don't allow: Will only allow patrons to choose next available</li>
+    <li>Force: Will only allow patrons to choose an specific item</li>
+    </ul></li>
     <li>Finally, if you charge a rental fee for the item type and want to give a specific patron type a discount on that fee, enter the percentage discount (without the % symbol) in the 'Rental Discount' field</li>
 </ul>
 
