@@ -4960,7 +4960,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE default_branch_item_rules ADD
             COLUMN `returnbranch` varchar(15) default NULL AFTER `holdallowed`");
     # set the default rule to the current value of HomeOrHoldingBranchReturn (default to 'homebranch' if need be)
-    my $homeorholdingbranchreturn = C4::Context->prefernce('HomeOrHoldingBranchReturn') || 'homebranch';
+    my $homeorholdingbranchreturn = C4::Context->preference('HomeOrHoldingBranchReturn') || 'homebranch';
     $dbh->do("UPDATE default_circ_rules SET returnbranch = '$homeorholdingbranchreturn'");
     print "Upgrade to $DBversion done (Atomic update for OAI-PMH sets management)\n";
     SetVersion($DBversion);
