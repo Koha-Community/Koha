@@ -82,6 +82,23 @@ sub update_index {
     return 1;
 }
 
+=head2 $indexer->update_index_background($biblionums, $records)
+
+This has exactly the same API as C<update_index_background> however it'll
+return immediately. It'll start a background process that does the adding.
+
+If it fails to add to Elasticsearch then it'll add to a queue that will cause
+it to be updated by a regular index cron job in the future.
+
+# TODO implement in the future - I don't know the best way of doing this yet.
+# If fork: make sure process group is changed so apache doesn't wait for us.
+
+=cut
+
+sub update_index_background {
+    $self->update_index(@_);
+}
+
 =head2 $indexer->delete_index();
 
 Deletes the index from the elasticsearch server. Calling C<update_index>

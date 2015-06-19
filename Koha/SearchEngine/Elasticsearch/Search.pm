@@ -253,7 +253,80 @@ sub count_auth_use {
     $bib_searcher->count($query);
 }
 
+=head2 simple_search_compat
 
+    my ( $error, $marcresults, $total_hits ) =
+      $searcher->simple_search( $query, $offset, $max_results );
+
+This is a simpler interface to the searching, intended to be similar enough to
+L<C4::Search::SimpleSearch>.
+
+Arguments:
+
+=over 4
+
+=item C<$query>
+
+A thing to search for. It could be a simple string, or something constructed
+with the appropriate QueryBuilder module.
+
+=item C<$offset>
+
+How many results to skip from the start of the results.
+
+=item C<$max_results>
+
+The max number of results to return. The default is 1,000 (because unlimited
+is a pretty terrible thing to do.)
+
+=back
+
+Returns:
+
+=over 4
+
+=item C<$error>
+
+if something went wrong, this'll contain some kind of error
+message.
+
+=item C<$marcresults>
+
+an arrayref of MARC::Records (note that this is different from the
+L<C4::Search> version which will return plain XML, but too bad.)
+
+=item C<$total_hits>
+
+the total number of results that this search could have returned.
+
+=back
+
+=cut
+
+sub simple_search_compat {
+    my ($self, $query, $offset, $max_results) = @_;
+
+    return ('No query entered', undef, undef) unless $query;
+
+    my %options;
+    $options{offset} = $offset // 0;
+    $max_results //= 100;
+
+    unless (ref $query) {
+        # We'll push it through the query builder
+        my $qb = Koha::SearchEngine::QueryBuilder->new();
+        $query = $qb->build_query($query);
+    }
+    my $results = $self->search($query, undef, $max_results, %options);
+    my @records;
+    $results->each(sub {
+            # The results come in an array for some reason
+            my $marc_json = @_[0]->{record};
+            my $marc = $self->json2marc($marc_json);
+            push @records, $marc;
+        });
+    return (undef, \@records, $results->total);
+}
 
 =head2 json2marc
 

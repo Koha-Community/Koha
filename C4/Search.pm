@@ -2536,7 +2536,7 @@ sub _ZOOM_event_loop {
     }
 }
 
-=head2 new_record_from_searchengine
+=head2 new_record_from_zebra
 
 Given raw data from a searchengine result set, return a MARC::Record object
 
@@ -2547,7 +2547,8 @@ MARC::Record object.
 If we are using GRS-1, then the raw data we get from Zebra should be USMARC
 data. If we are using DOM, then it has to be MARCXML.
 
-If we are using elasticsearch, it'll already be a MARC::Record.
+If we are using elasticsearch, it'll already be a MARC::Record and this
+function needs a new name.
 
 =cut
 
@@ -2556,13 +2557,13 @@ sub new_record_from_zebra {
     my $server   = shift;
     my $raw_data = shift;
     # Set the default indexing modes
-    my $index_mode = ( $server eq 'biblioserver' )
-                        ? C4::Context->config('zebra_bib_index_mode') // 'dom'
-                        : C4::Context->config('zebra_auth_index_mode') // 'dom';
     my $search_engine = C4::Context->preference("SearchEngine");
     if ($search_engine eq 'Elasticsearch') {
         return $raw_data;
     }
+    my $index_mode = ( $server eq 'biblioserver' )
+                        ? C4::Context->config('zebra_bib_index_mode') // 'dom'
+                        : C4::Context->config('zebra_auth_index_mode') // 'dom';
 
     my $marc_record =  eval {
         if ( $index_mode eq 'dom' ) {
