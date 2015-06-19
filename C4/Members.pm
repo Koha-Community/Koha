@@ -529,10 +529,6 @@ C<$count> is the expiration date (9999-12-31 for indefinite)
 
 Existing active restrictions are checked before current overdue items.
 
-FIXME: this needs to be split into two functions; a potential block
-based on the number of current overdue items could be orthogonal
-to a block based on whether the patron has any restrictions.
-
 =cut
 
 sub IsMemberBlocked {
