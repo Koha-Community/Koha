@@ -326,7 +326,7 @@ elsif ( $step && $step == 3 ) {
         my $now = POSIX::strftime( "%Y-%m-%dT%H:%M:%S", localtime() );
         my $logdir = C4::Context->config('logdir');
         my $dbversion = C4::Context->preference('Version');
-        my $kohaversion = C4::Context->KOHAVERSION;
+        my $kohaversion = Koha::version;
         $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
 
         my $filename_suffix = join '_', $now, $dbversion, $kohaversion;
