@@ -218,7 +218,7 @@ sub build_query_compat {
     my $limit        = $self->_join_queries( $self->_convert_index_strings(@$limits));
     my $limit_cgi =
       '&limit=' . join( '&limit=', map { uri_escape($_) } @$orig_limits );
-    my $limit_desc = "$limit";
+    my $limit_desc = "$limit" if $limit;
     return (
         undef,  $query,     $simple_query, $query_cgi, $query_desc,
         $limit, $limit_cgi, $limit_desc,   undef,      undef
