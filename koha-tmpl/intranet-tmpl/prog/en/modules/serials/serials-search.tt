@@ -60,29 +60,29 @@
               <ol>
                 <li>
                   <label for="issn">ISSN:</label>
-                  <input type="text" id="issn" name="ISSN_filter" value="[% ISSN_filter %]" />
+                  <input type="text" id="issn" name="ISSN_filter" value="[% ISSN_filter | html %]" />
                 </li>
                 <li>
                   <label for="title">Title:</label>
-                  <input type="text" id="title" name="title_filter" value="[% title_filter %]" />
+                  <input type="text" id="title" name="title_filter" value="[% title_filter | html %]" />
                 </li>
                 [% IF ( marcflavour == "UNIMARC" ) %]
                 <li>
                   <label for="ean">EAN:</label>
-                  <input type="text" id="ean" name="EAN_filter" value="[% EAN_filter %]" />
+                  <input type="text" id="ean" name="EAN_filter" value="[% EAN_filter | html %]" />
                 </li>
                 [% END %]
                 <li>
                   <label for="callnumber">Call number:</label>
-                  <input type="text" id="callnumber" name="callnumber_filter" value="[% callnumber_filter %]" />
+                  <input type="text" id="callnumber" name="callnumber_filter" value="[% callnumber_filter | html %]" />
                 </li>
                 <li>
                   <label for="publisher">Publisher:</label>
-                  <input type="text" id="publisher" name="publisher_filter" value="[% publisher_filter %]" />
+                  <input type="text" id="publisher" name="publisher_filter" value="[% publisher_filter | html %]" />
                 </li>
                 <li>
                   <label for="bookseller">Vendor:</label>
-                  <input type="text" id="bookseller" name="bookseller_filter" value="[% bookseller_filter %]" />
+                  <input type="text" id="bookseller" name="bookseller_filter" value="[% bookseller_filter | html %]" />
                 </li>
                 <li>
                   <label for="branch">Library:</label>
@@ -294,7 +294,7 @@
                                     [% IF ( routing && CAN_user_serials_routing ) %]
                                         [% UNLESS ( subscription.cannotedit ) %]
                                             <li>
-                                                <a href="/cgi-bin/koha/serials/serials-search.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=reopen&amp;routing=[% subscription.routing %]&amp;searched=1&amp;title_filter=[% title_filter %]&amp;ISSN_filter=[% ISSN_filter %]&amp;EAN_filter=[% EAN_filter %]&amp;published_filter=[% publisher_filter %]&amp;bookseller_filter=[% bookseller_filter %]&amp;branch_filter=[% branch_filter %]" id="reopensub"> <i class="icon-repeat"></i> Reopen</a>
+                                                <a href="/cgi-bin/koha/serials/serials-search.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=reopen&amp;routing=[% subscription.routing %]&amp;searched=1&amp;title_filter=[% title_filter | uri %]&amp;ISSN_filter=[% ISSN_filter | uri %]&amp;EAN_filter=[% EAN_filter | uri %]&amp;published_filter=[% publisher_filter | uri %]&amp;bookseller_filter=[% bookseller_filter | uri %]&amp;branch_filter=[% branch_filter | uri %]" id="reopensub"> <i class="icon-repeat"></i> Reopen</a>
                                             </li>
                                         [% END %]
                                     [% END # IF ( routing && CAN_user_serials_routing ) %]
@@ -337,29 +337,29 @@
               <ol>
                 <li>
                   <label for="issn">ISSN:</label>
-                  <input type="text" id="issn" name="ISSN_filter" value="[% ISSN_filter %]" />
+                  <input type="text" id="issn" name="ISSN_filter" value="[% ISSN_filter | html %]" />
                 </li>
                 <li>
                   <label for="title">Title:</label>
-                  <input type="text" id="title" name="title_filter" value="[% title_filter %]" />
+                  <input type="text" id="title" name="title_filter" value="[% title_filter | html %]" />
                 </li>
                 [% IF ( marcflavour == "UNIMARC" ) %]
                 <li>
                   <label for="ean">EAN:</label>
-                  <input type="text" id="ean" name="EAN_filter" value="[% EAN_filter %]" />
+                  <input type="text" id="ean" name="EAN_filter" value="[% EAN_filter | html %]" />
                 </li>
                 [% END %]
                 <li>
                   <label for="callnumber">Call number:</label>
-                  <input type="text" id="callnumber" name="callnumber_filter" value="[% callnumber_filter %]" />
+                  <input type="text" id="callnumber" name="callnumber_filter" value="[% callnumber_filter | html %]" />
                 </li>
                 <li>
                   <label for="publisher">Publisher:</label>
-                  <input type="text" id="publisher" name="publisher_filter" value="[% publisher_filter %]" />
+                  <input type="text" id="publisher" name="publisher_filter" value="[% publisher_filter | html %]" />
                 </li>
                 <li>
                   <label for="bookseller">Vendor:</label>
-                  <input type="text" id="bookseller" name="bookseller_filter" value="[% bookseller_filter %]" />
+                  <input type="text" id="bookseller" name="bookseller_filter" value="[% bookseller_filter | html %]" />
                 </li>
                 <li>
                   <label for="branch">Library:</label>
