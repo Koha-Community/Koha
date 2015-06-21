@@ -167,19 +167,19 @@ function populateHiddenCheckboxes(tab) {
 [% INCLUDE 'cat-search.inc' %]
 
 <div id="breadcrumbs">
-  <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a> &rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode %]&amp;searchfield=[% tagfield %]">[% IF ( frameworkcode ) %][% frameworkcode %][% ELSE %]Default[% END %] framework structure</a> &rsaquo;
+  <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a> &rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode %]&amp;searchfield=[% tagfield | uri %]">[% IF ( frameworkcode ) %][% frameworkcode %][% ELSE %]Default[% END %] framework structure</a> &rsaquo;
   [% IF ( add_form ) %]
   [% IF ( use_heading_flags_p ) %]
-  [% IF ( heading_edit_subfields_p ) %] <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield %]&amp;frameworkcode=[% frameworkcode %]">Tag [% tagfield %] subfield structure</a> &rsaquo; Edit subfields constraints
+  [% IF ( heading_edit_subfields_p ) %] <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode %]">Tag [% tagfield | html %] subfield structure</a> &rsaquo; Edit subfields constraints
   [% END %]
-  [% ELSE %] <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield %]&amp;frameworkcode=[% frameworkcode %]">Tag [% tagfield %] Subfield structure</a> &rsaquo; [% action %]
+  [% ELSE %] <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode %]">Tag [% tagfield | html %] Subfield structure</a> &rsaquo; [% action %]
   [% END %]
   [% END %]
-[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield %]&amp;frameworkcode=[% frameworkcode %]">Tag [% tagfield %] Subfield structure</a> &rsaquo; Confirm deletion of subfield [% tagsubfield %]
+[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode %]">Tag [% tagfield | html %] Subfield structure</a> &rsaquo; Confirm deletion of subfield [% tagsubfield %]
 [% END %]
-[% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield %]&amp;frameworkcode=[% frameworkcode %]">Tag [% tagfield %] subfield structure</a> &rsaquo; Subfield deleted
+[% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode %]">Tag [% tagfield | html %] subfield structure</a> &rsaquo; Subfield deleted
 [% END %]
-[% IF ( else ) %]Tag [% tagfield %] Subfield structure[% END %]
+[% IF ( else ) %]Tag [% tagfield | html %] Subfield structure[% END %]
 </div>
 
 <div id="doc" class="yui-t7">
@@ -191,14 +191,14 @@ function populateHiddenCheckboxes(tab) {
 [% IF ( add_form ) %]
     <h1>
         [% IF ( use_heading_flags_p ) %]
-            [% IF ( heading_edit_subfields_p ) %]Tag [% tagfield %] Subfield constraints[% END %]
+            [% IF ( heading_edit_subfields_p ) %]Tag [% tagfield | html %] Subfield constraints[% END %]
         [% ELSE %]
             [% action %]
         [% END %]
     </h1>
     <form action="[% script_name %]" name="Aform" method="post">
     <input type="hidden" name="op" value="add_validate" />
-	<input type="hidden" name="tagfield" value="[% tagfield %]" />
+	<input type="hidden" name="tagfield" value="[% tagfield | html %]" />
     <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
     <div id="subfieldtabs" class="toptabs numbered">
    <ul>
@@ -339,7 +339,7 @@ function populateHiddenCheckboxes(tab) {
         [% END %]
 		</div><!-- /content -->
     <fieldset class="action">
-        <input type="submit" value="Save changes" /> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield %]&amp;frameworkcode=[% frameworkcode %]" class="cancel">Cancel</a>
+        <input type="submit" value="Save changes" /> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield  | uri %]&amp;frameworkcode=[% frameworkcode %]" class="cancel">Cancel</a>
     </fieldset>
     </form>
 [% END %]
@@ -352,7 +352,7 @@ function populateHiddenCheckboxes(tab) {
 
             <form action="[% delete_link %]" method="post"><input type="hidden" name="op" value="delete_confirmed" />
                 <input type="hidden" name="searchfield" value="[% searchfield %]" />
-                <input type="hidden" name="tagfield" value="[% tagfield %]" />
+                <input type="hidden" name="tagfield" value="[% tagfield  | html %]" />
 				<input type="hidden" name="tagsubfield" value="[% tagsubfield %]" />
 				<input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
 				<input type="submit" value="Yes, delete this subfield" />
@@ -360,7 +360,7 @@ function populateHiddenCheckboxes(tab) {
 			
 			<form action="[% script_name %]" method="post">
 			<input type="hidden" name="searchfield" value="[% searchfield %]" />
-			<input type="hidden" name="tagfield" value="[% tagfield %]" />
+			<input type="hidden" name="tagfield" value="[% tagfield | html %]" />
 			<input type="hidden" name="tagsubfield" value="[% tagsubfield %]" />
 			<input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
 			<input type="submit" value="No, do not delete" />
@@ -371,14 +371,14 @@ function populateHiddenCheckboxes(tab) {
 
     <h3>Data deleted</h3>
     <form action="[% script_name %]" method="post">
-	<input type="hidden" name="tagfield" value="[% tagfield %]" />
+	<input type="hidden" name="tagfield" value="[% tagfield | html %]" />
     <input type="submit" value="OK" />
     </form>
 [% END %]
 
 
 [% IF ( else ) %]
-<h1>MARC subfield structure admin for [% tagfield %] [% IF ( frameworkcode ) %](framework [% frameworkcode %])[% ELSE %](default framework)[% END %]</h1>
+<h1>MARC subfield structure admin for [% tagfield | html %] [% IF ( frameworkcode ) %](framework [% frameworkcode %])[% ELSE %](default framework)[% END %]</h1>
 <p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on edit. </p>
 <p>The column Koha field shows that the subfield is linked with a Koha field. Koha can manage a MARC interface, or a Koha interface. This link ensures that both DB are synchronized, thus you can change from a MARC to a Koha interface easily.</p>
 
@@ -428,7 +428,7 @@ function populateHiddenCheckboxes(tab) {
     <input type="hidden" name="tagfield" value="[% edit_tagfield %]" />
     <input type="hidden" name="frameworkcode" value="[% edit_frameworkcode %]" />
     <input type="submit" value="Edit subfields" />
-	<a class="cancel" href="marctagstructure.pl?searchfield=[% tagfield %]&amp;frameworkcode=[% frameworkcode %]">Cancel</a>
+	<a class="cancel" href="marctagstructure.pl?searchfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode %]">Cancel</a>
 	</fieldset>
 </form>
 
