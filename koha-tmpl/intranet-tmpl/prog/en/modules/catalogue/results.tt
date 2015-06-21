@@ -259,7 +259,7 @@ var holdForPatron = function () {
 <div id="breadcrumbs">
          <a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
-&rsaquo; Search [% IF ( query_desc ) %]for '[% query_desc |html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc %]'[% END %]
+&rsaquo; Search [% IF ( query_desc ) %]for '[% query_desc |html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %]
 </div>
 
 <div id="doc3" class="yui-t1">
@@ -304,7 +304,7 @@ var holdForPatron = function () {
                 <!-- RESORT END -->
             </form>
             <h3>
-                [% total %] result(s) found [% IF ( query_desc ) %]for <span style="font-weight: bold;">'[% query_desc |html %]'</span>[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s): <span style="font-weight: bold;">'[% limit_desc %]'</span>[% END %][% IF ( LibraryName ) %] in [% LibraryName %] Catalog[% END %].<br />&nbsp;
+                [% total %] result(s) found [% IF ( query_desc ) %]for <span style="font-weight: bold;">'[% query_desc |html %]'</span>[% END %][% IF limit_desc  %]&nbsp;with limit(s): <span style="font-weight: bold;">'[% limit_desc | html %]'</span>[% END %][% IF ( LibraryName ) %] in [% LibraryName %] Catalog[% END %].<br />&nbsp;
             </h3>
             <div id="selection_ops" class="cartlist" style="display:none">
                 <a href="#" onclick="selectAll(); return false;">Select all</a>
@@ -346,7 +346,7 @@ var holdForPatron = function () {
             <h3>No results found</h3>
         [% IF ( searchdesc ) %]
             <p>
-                No results match your search [% IF ( query_desc ) %]for <span style="font-weight: bold;">'[% query_desc |html %]'</span>[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s): <span style="font-weight: bold;">'[% limit_desc %]'</span>[% END %][% IF ( LibraryName ) %] in [% LibraryName %] Catalog[% END %].
+                No results match your search [% IF ( query_desc ) %]for <span style="font-weight: bold;">'[% query_desc |html %]'</span>[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s): <span style="font-weight: bold;">'[% limit_desc | html %]'</span>[% END %][% IF ( LibraryName ) %] in [% LibraryName %] Catalog[% END %].
             </p>
         [% ELSE %]
             <p>You did not specify any search criteria.</p>
