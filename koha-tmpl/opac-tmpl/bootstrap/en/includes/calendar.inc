@@ -1,3 +1,4 @@
+[% USE Koha %]
 <script type="text/javascript">
     //<![CDATA[
         var debug    = "[% debug %]";
@@ -37,7 +38,7 @@
                 dayNamesMin: [_("Su"),_("Mo"),_("Tu"),_("We"),_("Th"),_("Fr"),_("Sa")],
                 weekHeader: _("Wk"),
                 dateFormat: '[% IF ( dateformat == "us" ) %]mm/dd/yy[% ELSIF ( dateformat == "metric" ) %]dd/mm/yy[% ELSE %]yy-mm-dd[% END %]',
-                firstDay: [% CalendarFirstDayOfWeek %],
+                firstDay: [% Koha.Preference('CalendarFirstDayOfWeek') %],
                 isRTL: [% IF ( bidi ) %]true[% ELSE %]false[% END %],
                 showMonthAfterYear: false,
                 yearSuffix: ''};
