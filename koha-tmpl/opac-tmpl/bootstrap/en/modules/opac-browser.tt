@@ -32,7 +32,7 @@
                                 <ul>
                                     [% FOREACH HIERARCHY_LOO IN HIERARCHY_LOOP %]
                                         <li>
-                                            <a href="opac-browser.pl?level=[% HIERARCHY_LOO.level %]&amp;filter=[% HIERARCHY_LOO.classification |uri %]">[% HIERARCHY_LOO.description |html %]</a>
+                                            <a href="opac-browser.pl?level=[% HIERARCHY_LOO.level %]&amp;filter=[% HIERARCHY_LOO.classification |uri %]">[% HIERARCHY_LOO.description %]</a>
                                         </li>
                                         <li style="list-style-type: none;">
                                     [% END %]
@@ -43,9 +43,9 @@
                                                     <td>
                                                         <p>
                                                             [% IF ( LEVEL_LOO.endnode ) %]
-                                                                <a href="opac-search.pl?q=Dewey-classification:[% LEVEL_LOO.classification |uri %]">[% LEVEL_LOO.description |html %]</a>
+                                                                <a href="opac-search.pl?q=Dewey-classification:[% LEVEL_LOO.classification |uri %]">[% LEVEL_LOO.description %]</a>
                                                             [% ELSE %]
-                                                                <a href="opac-browser.pl?level=[% LEVEL_LOO.level %]&amp;filter=[% LEVEL_LOO.classification |uri %]">[% LEVEL_LOO.description |html %]</a>
+                                                                <a href="opac-browser.pl?level=[% LEVEL_LOO.level %]&amp;filter=[% LEVEL_LOO.classification |uri %]">[% LEVEL_LOO.description %]</a>
                                                             [% END %]
                                                         </p>
                                                         <p style="font-size:0.75em"><i>([% LEVEL_LOO.number %] biblios)</i></p>

@@ -37,7 +37,7 @@
                             <h3>Item cannot be checked out.</h3>
                             <p>Sorry, this item cannot be checked out at this station.</p>
                             [% IF ( title ) %]
-                                <p>Title: <em>[% title |html %]</em> </p>
+                                <p>Title: <em>[% title %]</em> </p>
                             [% END %]
 
                             <p>
@@ -231,9 +231,9 @@
                                                 <td>[% ISSUE.issuedate %]</td>
                                                 <td>
                                                     [% UNLESS ( noitemlinks ) %]
-                                                        <a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.  biblionumber %]">[% ISSUE.title |html %]</a>
+                                                        <a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.  biblionumber %]">[% ISSUE.title %]</a>
                                                     [% ELSE %]
-                                                        <strong>[% ISSUE.title |html %]</strong>
+                                                        <strong>[% ISSUE.title %]</strong>
                                                     [% END %]
                                                     <span class="item-details">[% ISSUE.author %]</span>
                                                     ([% ISSUE.barcode %])
@@ -302,7 +302,7 @@
                                         [% END # / IF authbylogin %]
 
                                         [% FOREACH INPUT IN INPUTS %]
-                                            <input type="hidden" name="[% INPUT.name |html %]" value="[% INPUT.value |html %]">
+                                            <input type="hidden" name="[% INPUT.name %]" value="[% INPUT.value %]">
                                         [% END %]
                                         <input type="hidden" name="op" value="login" />
                                     </fieldset>

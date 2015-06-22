@@ -12,13 +12,13 @@
                         [% IF ( authorized ) %]
                             [% UNLESS ( newshelf ) %]
                                 [% IF ( multiple ) %]
-                                    <h1>Add [% total %] items to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>: [% ELSE %]a list:[% END %]</h1>
+                                    <h1>Add [% total %] items to [% IF ( singleshelf ) %]<em>[% shelfname %]</em>: [% ELSE %]a list:[% END %]</h1>
                                 [% ELSE %]
-                                    <h1>Add to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>[% ELSE %]a list:[% END %]</h1>
+                                    <h1>Add to [% IF ( singleshelf ) %]<em>[% shelfname %]</em>[% ELSE %]a list:[% END %]</h1>
                                 [% END %]
                                 <ul>
                                     [% FOREACH biblio IN biblios %]
-                                        <li> <span class="title">[% biblio.title |html %]</span>
+                                        <li> <span class="title">[% biblio.title %]</span>
                                             [% IF ( biblio.author ) %]<span class="author"> [% biblio.author %] </span>[% END %]
                                         </li>
                                     [% END %]
@@ -30,17 +30,17 @@
                                             <label for="shelfnumber">Add to list:</label> <select name="shelfnumber" id="shelfnumber">
                                                 [% IF private_shelves.count %]<optgroup label="Private lists">
                                                     [% FOREACH private_shelf IN private_shelves %]
-                                                    <option value="[% private_shelf.shelfnumber %]">[% private_shelf.shelfname | html%]</option>
+                                                    <option value="[% private_shelf.shelfnumber %]">[% private_shelf.shelfname %]</option>
                                                     [% END %]
                                                 </optgroup>[% END %]
                                                 [% IF private_shelves_shared_with_me.count %]<optgroup label="Private lists shared with me">
                                                     [% FOREACH private_shelf IN private_shelves_shared_with_me %]
-                                                    <option value="[% private_shelf.shelfnumber %]">[% private_shelf.shelfname | html%]</option>
+                                                    <option value="[% private_shelf.shelfnumber %]">[% private_shelf.shelfname %]</option>
                                                     [% END %]
                                                 </optgroup>[% END %]
                                                 [% IF public_shelves.count %]<optgroup label="Public lists">
                                                     [% FOREACH public_shelf IN public_shelves %]
-                                                    <option value="[% public_shelf.shelfnumber %]">[% public_shelf.shelfname |html%]</option>
+                                                    <option value="[% public_shelf.shelfnumber %]">[% public_shelf.shelfname %]</option>
                                                     [% END %]
                                                 </optgroup>[% END %]
                                             </select>
@@ -87,7 +87,7 @@
                                             </select>
                                     </fieldset>
                                     [% FOREACH biblio IN biblios %]
-                                        <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html%]" />
+                                        <input type="hidden" name="biblionumber" value="[% biblio.biblionumber%]" />
                                     [% END %]
                                     <fieldset class="action">
                                         <input type="hidden" name="sortfield" value="title" />

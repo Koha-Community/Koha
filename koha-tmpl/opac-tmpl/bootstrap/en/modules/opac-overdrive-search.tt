@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; OverDrive search for '[% q | html %]'</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; OverDrive search for '[% q %]'</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/jquery.rating.css" />
@@ -17,7 +17,7 @@
     <div class="main">
         <ul class="breadcrumb">
             <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="#">OverDrive search for '[% q | html %]'</a></li>
+            <li><a href="#">OverDrive search for '[% q %]'</a></li>
         </ul>
 
         <div class="container-fluid">
@@ -29,7 +29,7 @@
                 </div>
                 <div class="span10">
                     <div id="overdrive-results-content" class="maincontent searchresults">
-                        <h1>OverDrive search for '[% q | html %]'</h1>
+                        <h1>OverDrive search for '[% q %]'</h1>
                             <div id="breadcrumbs">
                                 <p></p>
                             </div>
@@ -60,7 +60,7 @@
 <script type="text/javascript" src="[% interface %]/[% theme %]/js/overdrive.js"></script>
 <script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/plugins/jquery.rating.js"></script>
 <script type="text/javascript">
-var querystring = "[% q |replace( "'", "\'" ) |replace( '\n', '\\n' ) |replace( '\r', '\\r' ) |html %]";
+var querystring = "[% q |replace( "'", "\'" ) |replace( '\n', '\\n' ) |replace( '\r', '\\r' ) %]";
 var results_per_page = [% OPACnumSearchResults %];
 
 function fetch_availability( prod, $tr ) {

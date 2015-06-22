@@ -66,14 +66,14 @@
                                 [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
                                     <h3>
                                         [% IF ( print_basket ) %]
-                                            [% BIBLIO_RESULT.title |html %]
-                                                [% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %] [% subtitl.subfield |html %] [% END %][% END %]
-                                                [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author |html %][% END %]
+                                            [% BIBLIO_RESULT.title %]
+                                                [% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %] [% subtitl.subfield %] [% END %][% END %]
+                                                [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author %][% END %]
                                         [% ELSE %]
                                                 <input type="checkbox" class="cb" value="[% BIBLIO_RESULT.biblionumber %]" name="bib[% BIBLIO_RESULT.biblionumber %]" id="bib[% BIBLIO_RESULT.biblionumber %]" onclick="selRecord(value,checked)" />
-                                                [% BIBLIO_RESULT.title |html %]
-                                                [% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %] [% subtitl.subfield |html %] [% END %][% END %]
-                                                [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author |html %][% END %]
+                                                [% BIBLIO_RESULT.title %]
+                                                [% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %] [% subtitl.subfield %] [% END %][% END %]
+                                                [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author %][% END %]
                                         [% END # / IF print_basket %]
                                     </h3>
                                     <!-- COinS / Openurl -->
@@ -256,7 +256,7 @@
                                                 </td>
                                             [% END %]
                                             <td>
-                                                <a href="#" onclick="openBiblio('[% BIBLIO_RESULT.dest %]',[% BIBLIO_RESULT.biblionumber %])">[% BIBLIO_RESULT.title |html %][% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %][% subtitl.subfield |html %][% END %][% END %]</a>
+                                                <a href="#" onclick="openBiblio('[% BIBLIO_RESULT.dest %]',[% BIBLIO_RESULT.biblionumber %])">[% BIBLIO_RESULT.title %][% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
                                                 <!-- COinS / Openurl -->
                                                 <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition %]&amp;rft.series=[% BIBLIO_RESULT.series %]&amp;rft.genre="></span>
                                                 [% IF ( TagsInputEnabled && loggedinusername ) %]

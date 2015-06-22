@@ -45,7 +45,7 @@
                                                 [% END %]
                                             [% END %]
                                             [% IF ( review.title ) %][% review.title %][% ELSE %]No title[% END %]
-                                            [% FOREACH subtitl IN review.subtitle %] [% subtitl.subfield |html %][% END %]
+                                            [% FOREACH subtitl IN review.subtitle %] [% subtitl.subfield %][% END %]
                                             </a>
                                             [% IF ( review.author ) %]
                                                 by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% review.author |url %]" title="Search for works by this author" class="author">[% review.author %]</a>
@@ -84,7 +84,7 @@
                                                 <img class="avatar" src="[% review.avatarurl %]" height="40" width="40" alt="" />
                                             [% END %]
                                             [% FILTER html_break %]
-                                                [% review.review |html %]
+                                                [% review.review %]
                                             [% END %]
                                         <span style="font-size:87%;font-color:#CCC;">Added [% review.datereviewed | $KohaDates %] [% IF ( review.your_comment ) %] by <strong>you</strong>[% ELSE %]
                                         [% IF ( review.borrowernumber && ShowReviewer != "none" ) %] by
@@ -140,7 +140,7 @@
                                         [% bt_id = ( review.normalized_upc || review.normalized_isbn ) %]
                                         [% IF ( BakerTaylorEnabled ) %]
                                             [% IF ( bt_id ) %]
-                                                <a href="https://[% review.BakerTaylorBookstoreURL |html %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% review.BakerTaylorImageURL |html %][% bt_id %]" /></a>
+                                                <a href="https://[% review.BakerTaylorBookstoreURL %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% review.BakerTaylorImageURL %][% bt_id %]" /></a>
                                             [% ELSE %]
                                                 <span class="no-image">No cover image available</span>
                                             [% END %]

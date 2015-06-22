@@ -97,7 +97,7 @@
                             <div id="tagcloud">
                                 [% FOREACH TAGLOO IN TAGLOOP %]
                                     <span class="tag tagweight[% TAGLOO.stratum %]" id="tag[% loop.count %]" style="display:inline;">
-                                    <a href="/cgi-bin/koha/opac-search.pl?tag=[% TAGLOO.term |url %]&amp;q=[% TAGLOO.term |url %]">[% TAGLOO.term |html %]</a>
+                                    <a href="/cgi-bin/koha/opac-search.pl?tag=[% TAGLOO.term |url %]&amp;q=[% TAGLOO.term |url %]">[% TAGLOO.term %]</a>
                                     <span class="tagweight">[% TAGLOO.weight_total %]</span>
                                     </span>
                                 [% END %]
@@ -123,22 +123,21 @@
                                             <td class="tagterm">
                                                 <span class="tdlabel">Tag:</span>
                                                 [% IF MY_TAG.approved == 1 %]
-                                                    <a href="/cgi-bin/koha/opac-search.pl?tag=[% MY_TAG.term |url %]&amp;q=[% MY_TAG.term |url %]">[% MY_TAG.term |html %]</a>
+                                                    <a href="/cgi-bin/koha/opac-search.pl?tag=[% MY_TAG.term |url %]&amp;q=[% MY_TAG.term |url %]">[% MY_TAG.term %]</a>
                                                 [% ELSE %]
-                                                    [% MY_TAG.term |html %] (not approved)
+                                                    [% MY_TAG.term %] (not approved)
                                                 [% END %]
                                             </td>
-
                                             <td>
                                                 [% IF ( MY_TAG.XSLTBloc ) %]
                                                     [% MY_TAG.XSLTBloc %]
                                                 [% ELSE %]
                                                     <span class="tdlabel">Title:</span>
                                                     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% MY_TAG.biblionumber %]">
-                                                        [% MY_TAG.title |html %]
+                                                        [% MY_TAG.title %]
                                                         [% IF ( MY_TAG.subtitle ) %]
                                                             [% FOREACH subtitle IN MY_TAG.subtitle %]
-                                                                [% subtitle.subfield |html %]
+                                                                [% subtitle.subfield %]
                                                             [% END %]
                                                         [% END %]
                                                     </a>

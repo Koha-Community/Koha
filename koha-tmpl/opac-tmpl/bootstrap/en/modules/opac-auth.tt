@@ -142,7 +142,7 @@
                                 <input type="hidden" name="koha_login_context" value="opac" />
                                 <fieldset class="brief">
                                     [% FOREACH INPUT IN INPUTS %]
-                                        <input type="hidden" name="[% INPUT.name |html %]" value="[% INPUT.value |html %]" />
+                                        <input type="hidden" name="[% INPUT.name %]" value="[% INPUT.value %]" />
                                     [% END %]
                                     <label for="userid">Login</label>
                                     <input type="text"  size="25" id="userid"  name="userid" />

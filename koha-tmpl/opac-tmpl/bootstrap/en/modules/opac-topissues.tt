@@ -44,7 +44,7 @@
                                     [% branch %]
                                     [% END %]
                                     [% IF ( timeLimit != 999 ) %]
-                                    in the past [% timeLimit |html %] months
+                                    in the past [% timeLimitFinite %] months
                                     [% ELSE %] of all time[% END %]
                                 </caption>
                                 <thead>
@@ -58,7 +58,7 @@
                                 <tbody>
                                     [% FOREACH result IN results %]
                                         <tr>
-                                            <td><a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% result.biblionumber %]">[% result.title |html %]</a><p>[% result.author %]
+                                            <td><a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% result.biblionumber %]">[% result.title %]</a><p>[% result.author %]
                                             [% IF ( result.publishercode ) %]- [% result.publishercode %][% END %]
                                             [% IF ( result.place ) %][% result.place %][% END %]
                                             [% IF ( result.publicationyear ) %]

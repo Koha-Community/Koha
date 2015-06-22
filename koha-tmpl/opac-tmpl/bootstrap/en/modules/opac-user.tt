@@ -174,7 +174,7 @@
                                                     [% IF ( BakerTaylorEnabled ) %]
                                                         [% bt_id = ( ISSUE.normalized_upc || ISSUE.normalized_isbn ) %]
                                                         [% IF ( bt_id ) %]
-                                                            <a href="https://[% BakerTaylorBookstoreURL |html %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" /></a>
+                                                            <a href="https://[% BakerTaylorBookstoreURL %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL %][% bt_id %]" /></a>
                                                         [% ELSE %]
                                                             <span class="no-image">No cover image available</span><!-- BakerTaylor needs normalized_upc or normalized_isbn! -->
                                                         [% END %]
@@ -191,7 +191,7 @@
                                                 </td>[% END # / IF JacketImages %]
 
                                                 <td class="title">
-                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber %]">[% ISSUE.title |html %] [% FOREACH subtitl IN ISSUE.subtitle %] [% subtitl.subfield %][% END %]</a>
+                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber %]">[% ISSUE.title %] [% FOREACH subtitl IN ISSUE.subtitle %] [% subtitl.subfield %][% END %]</a>
                                                     <span class="item-details">[% ISSUE.author %]</span>
                                                 </td>
                                                 [% IF ( ISSUE.overdue ) %]
@@ -424,7 +424,7 @@
                                                     [% IF ( BakerTaylorEnabled ) %]
                                                         [% bt_id = ( OVERDUE.normalized_upc || OVERDUE.normalized_isbn ) %]
                                                         [% IF ( bt_id ) %]
-                                                            <a href="https://[% BakerTaylorBookstoreURL |html %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" /></a>
+                                                            <a href="https://[% BakerTaylorBookstoreURL %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL %][% bt_id %]" /></a>
                                                         [% ELSE %]
                                                             <span class="no-image">No cover image available</span><!-- BakerTaylor needs normalized_upc or normalized_isbn! -->
                                                         [% END %]
@@ -441,7 +441,7 @@
                                                 [% END # /IF jacketcell %]
 
                                                 <td>
-                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?bib=[% OVERDUE.biblionumber %]">[% OVERDUE.title |html %] [% FOREACH subtitl IN OVERDUE.subtitle %] [% subtitl.subfield %][% END %]
+                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?bib=[% OVERDUE.biblionumber %]">[% OVERDUE.title %] [% FOREACH subtitl IN OVERDUE.subtitle %] [% subtitl.subfield %][% END %]
                                                     </a>
                                                     <span class="item-details">[% OVERDUE.author %]</span></td>
 

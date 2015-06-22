@@ -60,7 +60,7 @@
                                 [% IF ( BakerTaylorEnabled ) %]
                                     [% bt_id = ( item.browser_normalized_upc || item.browser_normalized_isbn ) %]
                                     [% IF ( bt_id ) %]
-                                        <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" />
+                                        <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL %][% bt_id %]" />
                                     [% ELSE %]
                                         <span class="no-image">No cover image available</span>
                                     [% END %]
@@ -81,7 +81,7 @@
                     [% FOREACH item IN shelfbrowser_items %]
                         <td class="top">
                             [% item.itemcallnumber %]
-                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.biblionumber %]&amp;shelfbrowse_itemnumber=[% item.itemnumber %]#shelfbrowser">[% item.title |html %]</a>
+                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.biblionumber %]&amp;shelfbrowse_itemnumber=[% item.itemnumber %]#shelfbrowser">[% item.title %]</a>
                         </td>
                     [% END %]
                 </tr>

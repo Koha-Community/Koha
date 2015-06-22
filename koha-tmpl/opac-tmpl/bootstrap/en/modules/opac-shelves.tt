@@ -5,7 +5,7 @@
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && Koha.Preference('TagsInputOnList') ) %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;   [% IF op == 'view' %]Contents of [% shelf.shelfname |html %][% ELSE %]Your lists[% END %]</title>[% INCLUDE 'doc-head-close.inc' %]
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;   [% IF op == 'view' %]Contents of [% shelf.shelfname %][% ELSE %]Your lists[% END %]</title>[% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
 [% IF ( loggedinusername ) %][% INCLUDE 'bodytag.inc' bodyid='opac-userlists' bodyclass='scrollto' %][% ELSE %][% INCLUDE 'bodytag.inc' bodyid='opac-lists' bodyclass='scrollto' %][% END %]
@@ -66,7 +66,7 @@
         [% END %]
 
         [% IF op == 'view' %]
-            <li><span class="divider">&rsaquo;</span> Contents of <i>[% shelf.shelfname | html %]</i></li>
+            <li><span class="divider">&rsaquo;</span> Contents of <i>[% shelf.shelfname %]</i></li>
         [% END %]
 
         [% IF op == 'add_form' %]
@@ -74,7 +74,7 @@
         [% END %]
 
         [% IF op == 'edit_form' %]
-            <li><span class="divider">&rsaquo;</span> Edit list <i>[% shelf.shelfname | html %]</i></li>
+            <li><span class="divider">&rsaquo;</span> Edit list <i>[% shelf.shelfname %]</i></li>
         [% END %]
 
     </ul> <!-- / .breadcrumb -->
@@ -155,20 +155,13 @@
 
                     [% IF op == 'view' %]
                         <h3>
-                            [% shelf.shelfname |html %]
+                            [% shelf.shelfname %]
                             <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-shelves.pl?rss=1&amp;op=view&amp;shelfnumber=[% shelf.shelfnumber %]" class="rss-list-link noprint">
-                                <img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png" alt="Subscribe to this list" title="Subscribe to this list" border="0" class="rsssearchicon"/>
-                            </a>
-                        </h3>
-
-                        [% IF ( itemsloop ) %]
-                            <div id="toolbar" class="toolbar clearfix">
-                                <div class="list-actions">
                                     <a class="newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form">New list</a> <span class="sep">|</span>
-                                    <a href="/cgi-bin/koha/opac-downloadshelf.pl?shelfnumber=[% shelf.shelfnumber | html %]" class="download" data-toggle="modal" data-target="#modalWin">Download list</a>
+                                    <a href="/cgi-bin/koha/opac-downloadshelf.pl?shelfnumber=[% shelf.shelfnumber %]" class="download" data-toggle="modal" data-target="#modalWin">Download list</a>
 
                                     [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                        <span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | html %]" class="send" onclick="open('/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | html %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; ">Send list</a></span>
+                                        <span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber %]" class="send" onclick="open('/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; ">Send list</a></span>
                                     [% END %]
 
                                     <a class="print-small" target="_blank" href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber %]&sortfield=[% sortfield %]&direction=[% direction |uri %]&print=1">Print list</a>
@@ -179,7 +172,7 @@
                                             <input type="hidden" name="op" value="edit_form" />
                                             <input type="hidden" name="referer" value="view" />
                                             <input type='hidden' name='category' value='[% category %]' />
-                                            <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                                            <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber %]" />
                                             <input type="submit" class="editshelf" value="Edit list" />
                                         </form>
 
@@ -187,18 +180,18 @@
                                             <input type="hidden" name="op" value="delete" />
                                             <input type="hidden" name="referer" value="list" />
                                             <input type='hidden' name='category' value='[% category %]' />
-                                            <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                                            <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber %]" />
                                             <input type="submit" class="deleteshelf" value="Delete list" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"/>
                                         </form>
                                         [% IF category == PRIVATE && Koha.Preference('OpacAllowSharingPrivateLists') %]
-                                            <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% shelf.shelfnumber | html %]" class="">Share list</a>
+                                            <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% shelf.shelfnumber %]" class="">Share list</a>
                                         [% END %]
                                     [% ELSIF category == PRIVATE # not manageshelf and private means shared %]
                                         <form action="/cgi-bin/koha/opac-shelves.pl" method="post" class="form-inline">
                                             <input type="hidden" name="op" value="remove_share" />
                                             <input type="hidden" name="referer" value="list" />
                                             <input type='hidden' name='category' value='[% category %]' />
-                                            <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                                            <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber %]" />
                                             <input type="submit" class="deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_REMOVE_SHARE);" value="Remove share" />
                                         </form>
                                     [% END %]
@@ -206,7 +199,7 @@
 
                                 <form action="/cgi-bin/koha/opac-shelves.pl" id="sorting-form" class="form-inline sort_by pull-right">
                                     <input type="hidden" name="op" value="view" />
-                                    <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                                    <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber %]" />
 
                                     <label for="sortfield">Sort by: </label>
                                     <select name="sortfield" id="sortfield" class="resort" onchange="$('#sorting-form').submit()">
@@ -283,7 +276,7 @@
                             <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="myform" name="myform" class="checkboxed">
                                 [% IF can_manage_shelf %]
                                     <input type="hidden" name="op" value="remove_biblios" />
-                                    <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                                    <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber %]" />
                                 [% END %]
                                 <div class="searchresults">
                                     <table id="listcontents" class="table">
@@ -342,7 +335,7 @@
                                                         [% IF ( BakerTaylorEnabled ) %]
                                                             [% bt_id = ( itemsloo.normalized_upc || itemsloo.normalized_isbn ) %]
                                                             [% IF ( bt_id ) %]
-                                                                <a href="https://[% BakerTaylorBookstoreURL |html %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" /></a>
+                                                                <a href="https://[% BakerTaylorBookstoreURL %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL %][% bt_id %]" /></a>
                                                             [% ELSE %]
                                                                 <span class="no-image">No cover image available</span>
                                                             [% END %]
@@ -363,13 +356,13 @@
                                                         [% END %]
 
                                                         [% IF ( itemsloo.title ) %]
-                                                            [% itemsloo.title |html %]
+                                                            [% itemsloo.title %]
                                                         [% ELSE %]
                                                             No title
                                                         [% END %]
 
                                                         [% FOREACH subtitl IN itemsloo.subtitle %]
-                                                            [% subtitl.subfield|html %]
+                                                            [% subtitl.subfield %]
                                                         [% END %]
                                                         </a>
 
@@ -385,7 +378,7 @@
                                                                 [% itemsloo.place %]
                                                             [% END %]
                                                             [% IF ( itemsloo.publishercode ) %]
-                                                                [% itemsloo.publishercode|html %]
+                                                                [% itemsloo.publishercode %]
                                                             [% END %]
                                                             [% IF ( itemsloo.publicationyear ) %]
                                                                 [% itemsloo.publicationyear %]
@@ -395,7 +388,7 @@
                                                                 [% END %]
                                                             [% END %]
                                                             [% IF ( itemsloo.pages ) %]. [% itemsloo.pages %][% END %]
-                                                            [% IF ( itemsloo.notes ) %], [% itemsloo.notes|html %][% END %]
+                                                            [% IF ( itemsloo.notes ) %], [% itemsloo.notes %][% END %]
                                                             [% IF ( itemsloo.item('size') ) %] [% itemsloo.item('size') %][% END %]
                                                         </span>
                                                         <span class="results_summary">
@@ -500,13 +493,13 @@
                                         <form method="get" action="/cgi-bin/koha/opac-shelves.pl" class="form-inline">
                                             <input type="hidden" name="op" value="edit_form" />
                                             <input type="hidden" name="category" value="category" />
-                                            <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                                            <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber %]" />
                                             <input type="submit" class="editshelf" value="Edit list" />
                                         </form>
 
                                         <form method="post" action="/cgi-bin/koha/opac-shelves.pl" class="form-inline">
                                             <input type="hidden" name="op" value="delete" />
-                                            <input type="hidden" name="shelfnumber" value="[% shelfnumber | html  %]"/>
+                                            <input type="hidden" name="shelfnumber" value="[% shelfnumber %]"/>
                                             <input type="hidden" name="category" value="category" />
                                             <input type="submit" class="deleteshelf" value="Delete list" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"/>
                                         </form>
@@ -525,7 +518,7 @@
 
                     [% IF itemsloop && can_remove_biblios %]
                         <input type="hidden" name="op" value="remove_biblios" />
-                        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber %]" />
                         <input type="hidden" name="modifyshelfcontents" value="1" />
                         <input type="submit" value="Remove selected items" id="remove-selected" class="btn btn-danger"/>
                         </form>
@@ -533,7 +526,7 @@
                         <form method="post" action="opac-shelves.pl">
                         <input type="hidden" name="op" value="delete" />
                         <input type="hidden" name="referer" value="list" />
-                        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html  %]"/>
+                        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber %]"/>
                         <input type="submit" class="btn btn-danger" value="Delete this list" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST)" />
                         </form>
                     [% END %]
@@ -546,16 +539,16 @@
                                     <legend>Create a new list</legend>
                                     <input type="hidden" name="op" value="add" />
                                 [% ELSE %]
-                                    <legend>Editing <em>[% shelf.shelfname |html %]</em></legend>
+                                    <legend>Editing <em>[% shelf.shelfname %]</em></legend>
                                     <input type="hidden" name="op" value="edit" />
                                     <input type="hidden" name="referer" value="[% referer %]" />
-                                    <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                                    <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber %]" />
                                 [% END %]
                                 <input type="hidden" name="owner" id="owner" value="[% loggedinusernumber %]" />
                                 <ol>
                                     <li>
                                         <label class="required" for="shelfname">List name: </label>
-                                        <input type="text" id="shelfname" name="shelfname" maxlength="255" value="[% shelf.shelfname |html %]" /></li>
+                                        <input type="text" id="shelfname" name="shelfname" maxlength="255" value="[% shelf.shelfname %]" /></li>
                                     <li>
                                         <label for="sortfield" >Sort this list by: </label>
                                         <select name="sortfield" id="sortfield">
@@ -665,7 +658,7 @@
                                         [% FOREACH s IN shelves %]
                                             [% SET contents = s.get_contents %]
                                             <tr>
-                                                <td><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber %]">[% s.shelfname |html %]</a></td>
+                                                <td><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber %]">[% s.shelfname %]</a></td>
                                                 <td>[% IF contents.count %][% contents.count %] [% IF contents.count == 1 %]item[% ELSE %]items[% END %][% ELSE %]Empty[% END %]</td>
                                                 <td>
                                                     [% IF s.category == PRIVATE %]
@@ -677,7 +670,7 @@
                                                 <td>
                                                     [% IF s.can_be_managed( loggedinusernumber ) %]
                                                         <form action="/cgi-bin/koha/opac-shelves.pl" method="get" class="form-inline">
-                                                            <input type="hidden" name="shelfnumber" value="[% s.shelfnumber |html %]" />
+                                                            <input type="hidden" name="shelfnumber" value="[% s.shelfnumber %]" />
                                                             <input type="hidden" name="category" value="[% s.category %]" />
                                                             <input type="hidden" name="op" value="edit_form" />
                                                             <input type="hidden" name="referer" value="list" />
@@ -689,19 +682,19 @@
                                                             <input type="hidden" name="op" value="delete" />
                                                             <input type="hidden" name="referer" value="list" />
                                                             <input type='hidden' name='category' value='[% category %]' />
-                                                            <input type="hidden" name="shelfnumber" value="[% s.shelfnumber | html %]" />
+                                                            <input type="hidden" name="shelfnumber" value="[% s.shelfnumber %]" />
                                                             <input type="submit" class="deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);" value="Delete" />
                                                         </form>
                                                     [% END %]
                                                     [% IF s.category == PRIVATE AND s.can_be_managed( loggedinusernumber ) AND Koha.Preference('OpacAllowSharingPrivateLists') %]
-                                                        <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% s.shelfnumber |html %]" class="">Share</a>
+                                                        <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% s.shelfnumber %]" class="">Share</a>
                                                     [% END %]
                                                     [% IF s.is_shared_with( loggedinusernumber ) %]
                                                         <form action="opac-shelves.pl" method="post" class="form-inline">
                                                             <input type="hidden" name="op" value="remove_share" />
                                                             <input type="hidden" name="referer" value="list" />
                                                             <input type='hidden' name='category' value='[% category %]' />
-                                                            <input type="hidden" name="shelfnumber" value="[% s.shelfnumber | html %]" />
+                                                            <input type="hidden" name="shelfnumber" value="[% s.shelfnumber %]" />
                                                             <input type="submit" class="deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_REMOVE_SHARE);" value="Remove share" />
                                                         </form>
                                                     [% END %]&nbsp;

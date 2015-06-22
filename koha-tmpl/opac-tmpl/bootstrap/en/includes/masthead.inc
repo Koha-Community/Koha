@@ -41,7 +41,7 @@
                                     <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=2" tabindex="-1" role="menuitem"><strong>Public lists</strong></a></li>
                                     [% SET number_of_public_shelves = 0 %]
                                     [% FOREACH s IN some_public_shelves %]
-                                        <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber %]&amp;sortfield=[% s.sortfield %]" tabindex="-1" role="menuitem">[% s.shelfname |html %]</a></li>
+                                        <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber %]&amp;sortfield=[% s.sortfield %]" tabindex="-1" role="menuitem">[% s.shelfname %]</a></li>
                                         [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
                                         [% IF number_of_public_shelves >= 10 %][% LAST %][% END %]
                                     [% END %]
@@ -58,7 +58,7 @@
                                         [% IF some_private_shelves.count %]
                                             [% SET number_of_private_shelves = 0 %]
                                             [% FOREACH s IN some_private_shelves %]
-                                                <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber %]&amp;sortfield=[% s.sortfield %]" tabindex="-1" role="menuitem">[% s.shelfname |html %]</a></li>
+                                                <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber %]&amp;sortfield=[% s.sortfield %]" tabindex="-1" role="menuitem">[% s.shelfname %]</a></li>
                                                 [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
                                                 [% IF number_of_private_shelves >= 10 %][% LAST %][% END %]
                                             [% END %]
@@ -211,7 +211,7 @@
                                     <div class="input-append nolibrarypulldown">
                                 [% END %]
                                 [% IF ( ms_value ) %]
-                                    <input type="text" title="Type search term" class="transl1" id = "translControl1" name="q" value="[% ms_value |html %]" /><span id="translControl"></span>
+                                    <input type="text" title="Type search term" class="transl1" id = "translControl1" name="q" value="[% ms_value %]" /><span id="translControl"></span>
                                 [% ELSE %]
                                     <input type="text" title="Type search term" class="transl1" id = "translControl1" name="q" /><span id="translControl"></span>
                                 [% END # /ms_value %]

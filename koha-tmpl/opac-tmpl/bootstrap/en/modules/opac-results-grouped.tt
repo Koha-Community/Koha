@@ -2,14 +2,14 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;
 [% IF ( searchdesc ) %]
-    Results of search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %]
+    Results of search [% IF ( query_desc ) %]for '[% query_desc %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc %]'[% END %]
 [% ELSE %]
     You did not specify any search criteria.
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 <link rel="alternate" type="application/rss+xml" title="Koha - RSS"
-href="/cgi-bin/koha/opac-rss.pl?[% query_cgi %][% limit_cgi |html %]" />
+href="/cgi-bin/koha/opac-rss.pl?[% query_cgi %][% limit_cgi %]" />
 
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='results-grouped' %]
@@ -20,7 +20,7 @@ href="/cgi-bin/koha/opac-rss.pl?[% query_cgi %][% limit_cgi |html %]" />
             <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
             <li>
                 [% IF ( searchdesc ) %]
-                    <a href="#">Results of search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %]</a>
+                    <a href="#">Results of search [% IF ( query_desc ) %]for '[% query_desc %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc %]'[% END %]</a>
                 [% ELSE %]
                     <a href="#">You did not specify any search criteria.</a>
                 [% END %]
@@ -104,7 +104,7 @@ href="/cgi-bin/koha/opac-rss.pl?[% query_cgi %][% limit_cgi |html %]" />
                                                 [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
                                                 <tr>
                                                     <td>
-                                                        <a href="/cgi-bin/koha/opac-search.pl?q=[% SEARCH_RESULT.scan_use |url %]&quot;[% SEARCH_RESULT.title |url %]&quot;">[% SEARCH_RESULT.title |html %]</a>
+                                                        <a href="/cgi-bin/koha/opac-search.pl?q=[% SEARCH_RESULT.scan_use |url %]&quot;[% SEARCH_RESULT.title |url %]&quot;">[% SEARCH_RESULT.title %]</a>
                                                     </td>
                                                     <td>
                                                         [% FOREACH subtitl IN SEARCH_RESULT.subtitle %]
@@ -122,10 +122,10 @@ href="/cgi-bin/koha/opac-rss.pl?[% query_cgi %][% limit_cgi |html %]" />
                                     <form action="/cgi-bin/koha/opac-search.pl" method="get" name="bookbag_form" id="bookbag_form">
                                         [% IF ( searchdesc ) %]
                                             [% FOREACH QUERY_INPUT IN QUERY_INPUTS %]
-                                                <input type="hidden" name="[% QUERY_INPUT.input_name |html %]" value="[% QUERY_INPUT.input_value |html %]"/>
+                                                <input type="hidden" name="[% QUERY_INPUT.input_name %]" value="[% QUERY_INPUT.input_value %]"/>
                                             [% END %]
                                             [% FOREACH LIMIT_INPUT IN LIMIT_INPUTS %]
-                                                <input type="hidden" name="[% LIMIT_INPUT.input_name |html %]" value="[% LIMIT_INPUT.input_value |html %]"/>
+                                                <input type="hidden" name="[% LIMIT_INPUT.input_name %]" value="[% LIMIT_INPUT.input_value %]"/>
                                             [% END %]
                                         [% END %]
 
@@ -323,7 +323,7 @@ $(document).ready(function(){
         return false;
     });
     [% IF ( query_desc ) %]
-    var query_desc = "[% query_desc |replace("'", "\'") |replace('\n', '\\n') |replace('\r', '\\r') |html %]";
+    var query_desc = "[% query_desc |replace("'", "\'") |replace('\n', '\\n') |replace('\r', '\\r') %]";
     q_array = query_desc.split(" ");
     // ensure that we don't have "" at the end of the array, which can
     // break the highlighter

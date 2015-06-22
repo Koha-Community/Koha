@@ -5,14 +5,14 @@
 <channel>
  <title>[% shelf.shelfname %]</title>
  <link>[% OPACBaseURL %]/cgi-bin/koha/opac-shelves.pl?rss=1&amp;viewshelf=[% shelf.shelfnumber %]</link>
- <description>RSS feed for public list [% shelf.shelfname | html %]</description>
+ <description>RSS feed for public list [% shelf.shelfname %]</description>
 
 [% FOREACH i IN itemsloop %]
  <item>
   <title>
-    [% i.title | html %]
+    [% i.title %]
     [% IF i.author %]
-        by [% i.author | html %]
+        by [% i.author %]
     [% END %]
   </title>
   <link>[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.biblionumber %]</link>

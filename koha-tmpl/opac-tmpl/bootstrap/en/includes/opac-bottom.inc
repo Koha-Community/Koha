@@ -241,7 +241,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         signinLink.onclick = function(evt) {
             // Requests a signed identity assertion from the user.
             navigator.id.request({
-                siteName: "[% LibraryName | html %]",
+                siteName: "[% LibraryName %]",
                 returnTo: '/cgi-bin/koha/opac-user.pl',
                 oncancel: function() { alert('user refuses to share identity.'); }
                 });

@@ -120,7 +120,7 @@
                                 <form action="/cgi-bin/koha/opac-suggestions.pl" class="form-inline" method="get">
                                     <fieldset>
                                         <label for="title">Search for:</label>
-                                        <input type="text" name="title" id="title" value="[% title |html %]" />
+                                        <input type="text" name="title" id="title" value="[% title %]" />
                                         [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]
                                             [% IF loggedinusername %]
                                                 <label for="suggested_by_anyone">Suggested by:</label>
@@ -178,19 +178,19 @@
                                                         </td>
                                                     [% END %]
                                                     <td>
-                                                        <p><strong>[% suggestions_loo.title |html %]</strong></p>
-                                                            <p>[% IF ( suggestions_loo.author ) %][% suggestions_loo.author |html %],[% END %]
-                                                                [% IF ( suggestions_loo.copyrightdate ) %] - [% suggestions_loo.copyrightdate |html %],[% END %]
-                                                                [% IF ( suggestions_loo.publishercode ) %] - [% suggestions_loo.publishercode |html %][% END %]
-                                                                [% IF ( suggestions_loo.place ) %]([% suggestions_loo.place |html %])[% END %]
-                                                                [% IF ( suggestions_loo.collectiontitle ) %] , [% suggestions_loo.collectiontitle |html %][% END %]
+                                                        <p><strong>[% suggestions_loo.title %]</strong></p>
+                                                            <p>[% IF ( suggestions_loo.author ) %][% suggestions_loo.author %],[% END %]
+                                                                [% IF ( suggestions_loo.copyrightdate ) %] - [% suggestions_loo.copyrightdate %],[% END %]
+                                                                [% IF ( suggestions_loo.publishercode ) %] - [% suggestions_loo.publishercode %][% END %]
+                                                                [% IF ( suggestions_loo.place ) %]([% suggestions_loo.place %])[% END %]
+                                                                [% IF ( suggestions_loo.collectiontitle ) %] , [% suggestions_loo.collectiontitle %][% END %]
                                                                 [% IF ( suggestions_loo.itemtype ) %] - [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestions_loo.itemtype, 1 ) %][% END %]
                                                         </p>
                                                     </td>
                                                     <td>
                                                         [% IF ( suggestions_loo.note ) %]
                                                             <span class="tdlabel">Note: </span>
-                                                            [% suggestions_loo.note |html %]
+                                                            [% suggestions_loo.note %]
                                                         [% END %]
                                                     </td>
                                                     [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]
@@ -220,7 +220,7 @@
                                                         [% ELSIF ( suggestions_loo.REJECTED ) %]Suggestion declined
                                                         [% ELSIF ( suggestions_loo.AVAILABLE ) %]Available in the library
                                                         [% ELSE %] [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS, 1 ) %] [% END %]
-                                                        [% IF ( suggestions_loo.reason ) %]([% suggestions_loo.reason |html %])[% END %]
+                                                        [% IF ( suggestions_loo.reason ) %]([% suggestions_loo.reason %])[% END %]
                                                     </td>
                                                 </tr>
                                             [% END # / FOREACH suggestions_loo %]

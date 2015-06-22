@@ -57,16 +57,16 @@
                                             <option value="isbd">ISBD</option>
                                             <option value="iso2709">MARC</option>
                                             [% FOREACH csv_profile IN csv_profiles %]
-                                            <option value="[% csv_profile.export_format_id |html %]">CSV - [% csv_profile.profile |html %]</option>
+                                            <option value="[% csv_profile.export_format_id %]">CSV - [% csv_profile.profile %]</option>
                                             [% END %]
                                         </select>
                                         <span class="required">Required</span>
                                     </fieldset>
 
                                     <fieldset class="action">
-                                        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                                        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber %]" />
                                         <input type="submit" name="save" class="btn" value="Go" />
-                                        <a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | html %]" class="cancel close" data-dismiss="modal">Cancel</a>
+                                        <a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber %]" class="cancel close" data-dismiss="modal">Cancel</a>
                                     </fieldset>
                                 </form>
                                 [% IF ( modal ) %]
