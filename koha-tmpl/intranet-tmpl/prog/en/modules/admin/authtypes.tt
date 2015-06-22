@@ -91,7 +91,7 @@
                 </li>
                 <li>
                     <label for="authtypetext" class="required">Description: </label>
-                    <input type="text" id="authtypetext" name="authtypetext" size="40" maxlength="80" value="[% authority_type.authtypetext |html %]" class="required" required="required" />
+                    <input type="text" id="authtypetext" name="authtypetext" size="40" maxlength="80" value="[% authority_type.authtypetext %]" class="required" required="required" />
                     <span class="required">Required</span>
                 </li>
                 <li>
@@ -163,8 +163,8 @@
                 <td>[% authority_type.summary %]</td>
                 <td>[% authority_type.auth_tag_to_report %]</td>
                 <td><a href="auth_tag_structure.pl?authtypecode=[% authority_type.authtypecode %]" class="button parameters" >MARC structure</a></td>
-                <td><a href="/cgi-bin/koha/admin/authtypes.pl?op=add_form&amp;authtypecode=[% authority_type.authtypecode |html %]">Edit</a></td>
-                <td><a href="/cgi-bin/koha/admin/authtypes.pl?op=delete_confirm&amp;authtypecode=[% authority_type.authtypecode |html %]">Delete</a></td>
+                <td><a href="/cgi-bin/koha/admin/authtypes.pl?op=add_form&amp;authtypecode=[% authority_type.authtypecode %]">Edit</a></td>
+                <td><a href="/cgi-bin/koha/admin/authtypes.pl?op=delete_confirm&amp;authtypecode=[% authority_type.authtypecode %]">Delete</a></td>
             </tr>
         [% END %]
         <tbody>

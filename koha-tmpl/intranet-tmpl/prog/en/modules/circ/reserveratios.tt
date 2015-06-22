@@ -70,7 +70,7 @@
             <td><p>[% reserveloo.reservecount %]</p></td>
             <td><p>[% reserveloo.itemcount %]</p></td>
             <td><p class="ratiolimit">[% reserveloo.thisratio %]</p></td>
-            <td> [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %][% reserveloo.title |html %] [% IF ( reserveloo.subtitle ) %][% FOREACH subtitl IN reserveloo.subtitle %][% subtitl.subfield %][% END %][% END %]</a>[% IF ( reserveloo.author ) %] by [% reserveloo.author %][% END %]
+            <td> [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %][% reserveloo.title %] [% IF ( reserveloo.subtitle ) %][% FOREACH subtitl IN reserveloo.subtitle %][% subtitl.subfield %][% END %][% END %]</a>[% IF ( reserveloo.author ) %] by [% reserveloo.author %][% END %]
             </td>
             <td><p>[% reserveloo.homebranch_list %]</p></td>
             <td><p>[% reserveloo.holdingbranch_list %]</p></td>

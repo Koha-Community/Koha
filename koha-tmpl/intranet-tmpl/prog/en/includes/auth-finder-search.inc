@@ -142,7 +142,7 @@ function finderjumpfull(page)
                         <option value="is">is exactly</option>
                         [% END %]
                     </select>
-                    <input id="value_mainstr" style="width:400px;" type="text" name="value_mainstr" value="[% value_mainstr |html %]" />
+                    <input id="value_mainstr" style="width:400px;" type="text" name="value_mainstr" value="[% value_mainstr %]" />
                     <div id="yvaluecontainermainmainentry"></div>
                 </li>
 
@@ -168,7 +168,7 @@ function finderjumpfull(page)
                         <option value="is">is exactly</option>
                         [% END %]
                     </select>
-                    <input id="value_main" style="width:400px;" type="text" name="value_main" value="[% value_main |html %]" />
+                    <input id="value_main" style="width:400px;" type="text" name="value_main" value="[% value_main %]" />
                     <div id="yvaluecontainermainentry"></div>
                 </li>
                 <li>
@@ -193,7 +193,7 @@ function finderjumpfull(page)
                         <option value="is">is exactly</option>
                         [% END %]
                     </select>
-                    <input type="text" name="value_match" value="[% value_match |html %]" />
+                    <input type="text" name="value_match" value="[% value_match %]" />
                 </li>
                 <li>
                     <label for="marclistanywhere">Search entire record: </label>
@@ -217,7 +217,7 @@ function finderjumpfull(page)
                         <option value="is">is exactly</option>
                         [% END %]
                     </select>
-                    <input id="value_any" style="width:400px;" type="text" name="value_any" value="[% value_any |html %]" />
+                    <input id="value_any" style="width:400px;" type="text" name="value_any" value="[% value_any %]" />
                     <div id="yvaluecontainermarclist"></div>
                 </li>
         <li>

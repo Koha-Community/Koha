@@ -43,17 +43,17 @@
                 <tr>
                 <th>Espace\Temps</th>
                 [% FOREACH col_hd IN BIGLOO.col_hdr %]
-                    <th scope="col" id="[% col_hd.colvalue %]">  [% col_hd.collib |html %] <br /><input type="checkbox" name="[% col_hd.colvalue %]" onclick="check_col('[% col_hd.colvalue %]')" />
+                    <th scope="col" id="[% col_hd.colvalue %]">  [% col_hd.collib %] <br /><input type="checkbox" name="[% col_hd.colvalue %]" onclick="check_col('[% col_hd.colvalue %]')" />
                     </th>
                 [% END %]
                 </tr>
                 [% FOREACH line IN BIGLOO.lines %]
                 <tr>
-                    <th scope="row" id="[% line.rowvalue %]">  [% line.rowlib |html %] <br /><input type="checkbox" name="[% line.rowvalue %]" onclick="check_row('[% line.rowvalue %]')" />
+                    <th scope="row" id="[% line.rowvalue %]">  [% line.rowlib %] <br /><input type="checkbox" name="[% line.rowvalue %]" onclick="check_row('[% line.rowvalue %]')" />
                     </th>
                     [% FOREACH cell IN line.cells %]
                     <td headers="[% cell.rowvalue %] [% cell.colvalue %]">
-                    <span title="[% FOREACH lib IN cell.libs %][% lib.lib |html %] - [% END %]">
+                    <span title="[% FOREACH lib IN cell.libs %][% lib.lib %] - [% END %]">
                     [% cell.celvalue %] <br /><input type="checkbox" name="[% cell.celvalue %]" value="[% cell.celvalue %]" />
                     </span>
                     </td>
@@ -67,17 +67,17 @@
             [% FOREACH List IN BIGLOO.Lists %]
                 <h3>[% List.lib %]</h3>
                 [% FOREACH liblis IN List.liblist %]
-                <a href="#[% liblis.listvalue %]" onclick="check_multiple([% liblis.listvalue %])"> [% liblis.listlib |html %]</a><br />
+                <a href="#[% liblis.listvalue %]" onclick="check_multiple([% liblis.listvalue %])"> [% liblis.listlib %]</a><br />
                 [% END %]
             [% END %]
             [% END %]
             [% UNLESS ( BIGLOO.Table ) %]
             <!-- Listes simples :Onglets 0 et 9-->
             [% FOREACH line IN BIGLOO.lines %]
-                <h3>[% line.rowvalue |html %]&nbsp;-&nbsp;[% line.rowlib |html %]&nbsp;<input type="checkbox" name="[% line.rowvalue %]" onclick="check_row('[% line.rowvalue %]')" /></h3>
+                <h3>[% line.rowvalue %]&nbsp;-&nbsp;[% line.rowlib %]&nbsp;<input type="checkbox" name="[% line.rowvalue %]" onclick="check_row('[% line.rowvalue %]')" /></h3>
                 [% FOREACH cell IN line.cells %]
-                <p>[% cell.celvalue |html %]&nbsp;-&nbsp;[% FOREACH lib IN cell.libs %]
-                        [% lib.lib |html %] &nbsp;
+                <p>[% cell.celvalue %]&nbsp;-&nbsp;[% FOREACH lib IN cell.libs %]
+                        [% lib.lib %] &nbsp;
                     [% END %]
                     <input type="checkbox" name="[% cell.celvalue %]" value="[% cell.celvalue %]" />
                 </p>

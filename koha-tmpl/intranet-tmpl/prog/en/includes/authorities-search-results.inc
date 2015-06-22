@@ -12,24 +12,24 @@
     [% IF marcflavour == 'UNIMARC' %]
         [% SWITCH type %]
         [% CASE 'broader' %]
-            <span class="BT">BT: [% heading | html %]</span>
+            <span class="BT">BT: [% heading %]</span>
         [% CASE 'narrower' %]
-            <span class="NT">NT: [% heading | html %]</span>
+            <span class="NT">NT: [% heading %]</span>
         [% CASE 'seefrom' %]
-            <span class="UF">UF: [% heading | html %]</span>
+            <span class="UF">UF: [% heading %]</span>
         [% CASE 'seealso' %]
-            <span class="RT">RT: [% heading | html %]</span>
+            <span class="RT">RT: [% heading %]</span>
         [% END %]
     [% ELSE %]
         <span class="heading">
         [% IF ( linkType=='seealso' ) %]
             [% IF ( authid ) %]
-            <a href="[% authidurl | url %][% authid | url %]">[% heading | html %]</a>
+            <a href="[% authidurl | url %][% authid | url %]">[% heading %]</a>
             [% ELSE %]
-            <a href="[% searchurl | url %][% heading | html %]">[% heading | html %]</a>
+            <a href="[% searchurl | url %][% heading %]">[% heading %]</a>
             [% END %]
         [% ELSE %]
-            [% heading | html %]
+            [% heading %]
         [% END %]
         </span>
         [% UNLESS ( type=='seefrom' || type=='seealso' ) %]
@@ -42,7 +42,7 @@
             [% CASE 'broader' %](Broader heading)
             [% CASE 'narrower' %](Narrower heading)
             [% CASE 'parent' %](Immediate parent body)
-            [% CASE %][% IF type %]([% type | html %])
+            [% CASE %][% IF type %]([% type %])
             [% END %]
         [% END %]
         </span>
@@ -50,7 +50,7 @@
     [% END %]
 [% END %]
 [% BLOCK authresult %]
-    [% IF ( summary.label ) %][% summary.label | html %]:[% END %]
+    [% IF ( summary.label ) %][% summary.label %]:[% END %]
     [% IF summary.summary %]
       <div class="authority-summary">
         [% summary.summary %]
@@ -59,7 +59,7 @@
     [% UNLESS ( summary.summaryonly ) %]
         <div class="authorizedheading">
           [% FOREACH authorize IN summary.authorized %]
-            <span class="authorizedheading">[% authorize.heading | html %]</span>
+            <span class="authorizedheading">[% authorize.heading %]</span>
             [% UNLESS loop.last %] | [% END %]
           [% END %]
         </div>
@@ -67,7 +67,7 @@
           [% IF summary.notes %]
            <div class="authres_notes">
            [% FOREACH note IN summary.notes %]
-             <span>[% note.note | html %]</span>
+             <span>[% note.note %]</span>
            [% END %]
            </div>
           [% END %]

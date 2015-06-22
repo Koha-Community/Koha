@@ -117,7 +117,7 @@ function CheckRuleForm(f) {
        </li>
        <li><label for="description">Description: </label>
            <input type="text" id="description" name="description" size="50" maxlength="250" 
-                  value="[% description |html %]" />
+                  value="[% description %]" />
        </li>
        <li><label for="used">Source in use?</label>
            [% IF ( used ) %]<input type="checkbox" id="used" name="used" value="used" checked="checked" />[% ELSE %]
@@ -165,7 +165,7 @@ function CheckRuleForm(f) {
        </li>
        <li><label for="description">Description: </label>
            <input type="text" id="description" name="description" size="50" maxlength="250" 
-                  value="[% description |html %]" />
+                  value="[% description %]" />
        </li>
        <li><label for="sort_routine">Filing routine: </label>
            <select id="sort_routine" name="sort_routine">
@@ -256,8 +256,8 @@ function CheckRuleForm(f) {
     <td>[% IF ( class_source.used ) %]Yes[% ELSE %]No[% END %]</td>
     <td>[% class_source.sortrule %]</td>
     <td>
-      <a href="[% class_source.script_name %]?op=edit_source&amp;class_source=[% class_source.code |html %]">Edit</a>
-      <a href="[% class_source.script_name %]?op=delete_source&amp;class_source=[% class_source.code |html %]">Delete</a>
+      <a href="[% class_source.script_name %]?op=edit_source&amp;class_source=[% class_source.code %]">Edit</a>
+      <a href="[% class_source.script_name %]?op=delete_source&amp;class_source=[% class_source.code %]">Delete</a>
     </td>
   </tr>
   [% END %]
@@ -292,8 +292,8 @@ function CheckRuleForm(f) {
     <td>[% class_sort_rule.description %]</td>
     <td>[% class_sort_rule.sort_routine %]</td>
     <td>
-      <a href="[% class_sort_rule.script_name %]?op=edit_sort_rule&amp;sort_rule=[% class_sort_rule.rule |html %]">Edit</a>
-      <a href="[% class_sort_rule.script_name %]?op=delete_sort_rule&amp;sort_rule=[% class_sort_rule.rule |html %]">Delete</a>
+      <a href="[% class_sort_rule.script_name %]?op=edit_sort_rule&amp;sort_rule=[% class_sort_rule.rule %]">Edit</a>
+      <a href="[% class_sort_rule.script_name %]?op=delete_sort_rule&amp;sort_rule=[% class_sort_rule.rule %]">Delete</a>
     </td>
   </tr>
   [% END %]

@@ -16,7 +16,7 @@ function print_slip(subscriptionid,issue){
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]"><i>[% title |html %]</i></a> &rsaquo; Preview routing list</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]"><i>[% title %]</i></a> &rsaquo; Preview routing list</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -24,7 +24,7 @@ function print_slip(subscriptionid,issue){
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h2>Preview routing list for <i>[% title |html %]</i></h2>
+<h2>Preview routing list for <i>[% title %]</i></h2>
 
 <form method="post" action="routing-preview.pl">
 <input type="hidden" name="subscriptionid" value="[% subscriptionid %]" />

@@ -20,7 +20,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Item details for <i>[% title |html %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield|html %][% END %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Item details for <i>[% title %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]</i></div>
 
 <div id="doc3" class="yui-t2">
 
@@ -31,8 +31,8 @@
 
 <div id="catalogue_detail_biblio">
 
-    <h2>[% title |html %]</h2>
-    [% IF ( subtitle ) %]<h4>[% FOREACH subtitl IN subtitle %] [% subtitl.subfield|html %][% END %]</h4>[% END %]
+    <h2>[% title %]</h2>
+    [% IF ( subtitle ) %]<h4>[% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]</h4>[% END %]
     [% IF ( author ) %]<h4>by [% author %]</h4>[% END %]
     <ol class="bibliodetails">
         <li><span class="label">Biblionumber:</span> [% biblionumber %]&nbsp;</li>
@@ -41,7 +41,7 @@
         [% END %]
         [% IF ( rentalcharge ) %]<li><span class="label">Rental charge:</span>[% rentalcharge %]&nbsp;</li>[% END %]
         <li><span class="label">ISBN:</span> [% isbn %]&nbsp;</li>
-        <li><span class="label">Publisher:</span>[% place %] [% publishercode |html %] [% publicationyear %]&nbsp;</li>
+        <li><span class="label">Publisher:</span>[% place %] [% publishercode %] [% publicationyear %]&nbsp;</li>
         [% IF ( volumeddesc ) %]<li><span class="label">Volume:</span> [% volumeddesc %]</li>[% END %]
         <li><span class="label">Physical details:</span> [% pages %] [% illus %] [% size %]&nbsp;</li>
         [% IF ( bnotes ) %]<li><span class="label">Notes:</span> [% bnotes %]</li>[% END %]

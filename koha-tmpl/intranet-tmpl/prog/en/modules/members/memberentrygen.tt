@@ -1025,7 +1025,7 @@
             [% FOREACH patron_attribute IN pa_loo.items %]
                 <li data-category_code="[% patron_attribute.category_code %]">
                     <label for="[% patron_attribute.form_id %]">[% patron_attribute.description %]: </label>
-                        <input type="hidden" id="[% patron_attribute.form_id %]_code" name="[% patron_attribute.form_id %]_code" value="[% patron_attribute.code |html %]" />
+                        <input type="hidden" id="[% patron_attribute.form_id %]_code" name="[% patron_attribute.form_id %]_code" value="[% patron_attribute.code %]" />
                         [% IF ( patron_attribute.use_dropdown ) %]
                             <select id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]">
                                 <option value=""></option>

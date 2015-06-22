@@ -348,7 +348,7 @@ $(document).ready(function() {
 </p>
 [% END %]
 
-    <input type="hidden" name="barcode" value="[% barcode |html %]" />
+    <input type="hidden" name="barcode" value="[% barcode %]" />
     <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
     <input type="hidden" name="issueconfirmed" value="1" />
     [% IF ( DEBT ) %]<input type="hidden" name="debt_confirmed" value="1" />[% END %]
@@ -431,7 +431,7 @@ $(document).ready(function() {
         [% END %]
 
         [% IF ( UNKNOWN_BARCODE ) %]
-            <li>The barcode was not found [% barcode |html %]
+            <li>The barcode was not found [% barcode %]
 	    [% IF ( fast_cataloging ) %]
 	        [% IF ( CAN_user_editcatalogue_fast_cataloging ) %]
             <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA&amp;barcode=[% barcode |uri %]&amp;circborrowernumber=[% borrowernumber %]&amp;branch=[% branch %]&amp;duedatespec=[% duedatespec %]&amp;stickyduedate=[% stickyduedate %]">Fast cataloging</a>
@@ -812,16 +812,16 @@ No patron matched <span class="ex">[% message %]</span>
                     [% FOREACH w IN WaitingHolds %]
                         <ul>
                             <li>
-                                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% w.biblio.biblionumber %]">[% w.biblio.title | html %]</a>
+                                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% w.biblio.biblionumber %]">[% w.biblio.title %]</a>
                                 ([% ItemTypes.GetDescription( w.item.effective_itemtype ) %]),
-                                [% IF ( w.biblio.author ) %] by [% w.biblio.author | html %] [% END %]
+                                [% IF ( w.biblio.author ) %] by [% w.biblio.author %] [% END %]
                                 [% IF ( w.item.itemcallnumber ) %] [[% w.item.itemcallnumber %]] [% END %]
                                 Hold placed on [% w.reservedate | $KohaDates %].
 
                                 <br/>
                                 [% IF ( w.branch.branchcode == Branches.GetLoggedInBranchcode()  ) %]<strong class="waitinghere">[% ELSE %]<strong>[% END %]
                                     [% SET waiting_expires_on = w.waiting_expires_on %]
-                                    Waiting at [% w.branch.branchname | html %] [% IF waiting_expires_on %] until [% waiting_expires_on | $KohaDates %] [% END %]
+                                    Waiting at [% w.branch.branchname %] [% IF waiting_expires_on %] until [% waiting_expires_on | $KohaDates %] [% END %]
                                 </strong>
                             </li>
                         </ul>

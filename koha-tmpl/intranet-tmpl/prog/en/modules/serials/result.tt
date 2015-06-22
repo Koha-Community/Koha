@@ -32,19 +32,19 @@ function GetIt(bibno,title)
     </tr>
     [% FOREACH resultsloo IN resultsloop %]
         <tr>
-            <td class="title">[% resultsloo.title |html %] [% resultsloo.subtitle |html %]
+            <td class="title">[% resultsloo.title %] [% resultsloo.subtitle %]
             </td>
             <td>
-                [% resultsloo.author |html %]
+                [% resultsloo.author %]
             </td>
             <td>
-                [% resultsloo.publishercode |html %]
+                [% resultsloo.publishercode %]
             </td>
             <td>
-                [% resultsloo.publicationyear |html %]
+                [% resultsloo.publicationyear %]
             </td>
             <td>
-                [% resultsloo.issn |html %]
+                [% resultsloo.issn %]
             </td>
 
 			<td><a href="#" onclick="GetIt('[% resultsloo.biblionumber %]',$(this));" title="Choose this record">Choose</a></td>

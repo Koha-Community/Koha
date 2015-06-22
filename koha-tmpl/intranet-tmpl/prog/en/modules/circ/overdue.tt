@@ -90,12 +90,12 @@ overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%
 
 <p>
     [% IF ( isfiltered ) %]
-      <a href="overdue.pl?op=csv&amp;[% csv_param_string |html %]">Download file of displayed overdues</a>
+      <a href="overdue.pl?op=csv&amp;[% csv_param_string %]">Download file of displayed overdues</a>
     [% ELSE %]
       <a href="overdue.pl?op=csv">Download file of all overdues</a>
     [% END %]
 </p>
-<div class="sql"><pre>[% sql |html %]</pre></div>
+<div class="sql"><pre>[% sql %]</pre></div>
 <div class="searchresults">
 <table id="overduest">
 <thead><tr>
@@ -114,10 +114,10 @@ overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%
     <tr>
         <td>[% overdueloo.duedate %]</td>
         <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overdueloo.borrowernumber %]">[% overdueloo.surname %][% IF (overdueloo.firstname) %], [% overdueloo.firstname %][% END %] ([% overdueloo.cardnumber %])</a>
-        [% IF ( overdueloo.email ) %][<a href="mailto:[% overdueloo.email %]?subject=[% INCLUDE subject %] [% overdueloo.title |html %]">email</a>][% END %]
+        [% IF ( overdueloo.email ) %][<a href="mailto:[% overdueloo.email %]?subject=[% INCLUDE subject %] [% overdueloo.title %]">email</a>][% END %]
         [% IF ( overdueloo.phone ) %]([% overdueloo.phone %])[% ELSIF ( overdueloo.mobile ) %]([% overdueloo.mobile %])[% ELSIF ( overdueloo.phonepro ) %]([% overdueloo.phonepro %])[% END %]</td>
         <td>[% IF overdueloo.branchcode %][% Branches.GetName( overdueloo.branchcode ) %][% END %]</td>
-        <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = overdueloo.biblionumber %][% overdueloo.title |html %]  [% overdueloo.subtitle %]</a> [% IF ( overdueloo.author ) %], by [% overdueloo.author %][% END %][% IF ( overdueloo.enumchron ) %], [% overdueloo.enumchron %][% END %]
+        <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = overdueloo.biblionumber %][% overdueloo.title %]  [% overdueloo.subtitle %]</a> [% IF ( overdueloo.author ) %], by [% overdueloo.author %][% END %][% IF ( overdueloo.enumchron ) %], [% overdueloo.enumchron %][% END %]
         </td>
 		<td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% overdueloo.biblionumber %]&amp;itemnumber=[% overdueloo.itemnum %]#item[% overdueloo.itemnum %]">[% overdueloo.barcode %]</a></td>
 		<td>[% overdueloo.itemcallnumber %]</td>
@@ -146,10 +146,10 @@ overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%
     </li>
     </ol></fieldset>
     <ol>
-    <li><label>Name or cardnumber:</label><input type="text" name="borname" value="[% borname |html %]" /></li>
+    <li><label>Name or cardnumber:</label><input type="text" name="borname" value="[% borname %]" /></li>
     <li><label>Patron category:</label><select name="borcat" id="borcat"><option value="">Any</option>
       [% FOREACH borcatloo IN borcatloop %]
-        [% IF ( borcatloo.selected ) %]<option value="[% borcatloo.value |html %]" selected="selected">[% borcatloo.catname %]</option>[% ELSE %]<option value="[% borcatloo.value |html %]">[% borcatloo.catname %]</option>[% END %]
+        [% IF ( borcatloo.selected ) %]<option value="[% borcatloo.value %]" selected="selected">[% borcatloo.catname %]</option>[% ELSE %]<option value="[% borcatloo.value %]">[% borcatloo.catname %]</option>[% END %]
       [% END %]
       </select>
     </li>
@@ -169,14 +169,14 @@ overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%
 		<li>
 			<label>[% patron_attr_filter_loo.description %]:</label>
             [% IF ( patron_attr_filter_loo.authorised_value_category ) %]
-                <script type="text/javascript" x-code="[% patron_attr_filter_loo.code |html %]">create_auto_completion_responder([% patron_attr_filter_loo.domid %],"[% patron_attr_filter_loo.code |html %]");</script>
+                <script type="text/javascript" x-code="[% patron_attr_filter_loo.code %]">create_auto_completion_responder([% patron_attr_filter_loo.domid %],"[% patron_attr_filter_loo.code %]");</script>
 				<span id="pattrodue-getready-[% patron_attr_filter_loo.domid %]">
 						<div class="pattrodue-autocomplete">
-							<input autocomplete="off" id="pattrodue-input-[% patron_attr_filter_loo.domid %]" name="patron_attr_filter_[% patron_attr_filter_loo.code |html %]" value="[% patron_attr_filter_loo.cgivalue |html %]"  class="pattrodue-input" type="text" />
+							<input autocomplete="off" id="pattrodue-input-[% patron_attr_filter_loo.domid %]" name="patron_attr_filter_[% patron_attr_filter_loo.code %]" value="[% patron_attr_filter_loo.cgivalue %]"  class="pattrodue-input" type="text" />
 						</div>
 				</span>
 			[% ELSE %]
-				<input type="text" name="patron_attr_filter_[% patron_attr_filter_loo.code |html %]" value="[% patron_attr_filter_loo.cgivalue |html %]"/>
+				<input type="text" name="patron_attr_filter_[% patron_attr_filter_loo.code %]" value="[% patron_attr_filter_loo.cgivalue %]"/>
 			[% END %]
 			[% IF ( patron_attr_filter_loo.repeatable ) %]
                 <a href="#" onclick="clone_parent(this); return false;">Add</a>
@@ -193,8 +193,8 @@ overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%
 
     <li><label>Item type:</label><select name="itemtype" id="itemtype"><option value="">Any</option>
       [% FOREACH itemtypeloo IN itemtypeloop %][% IF ( itemtypeloo.selected ) %]
-        <option value="[% itemtypeloo.value |html %]" selected="selected">[% itemtypeloo.itemtypename %]</option>[% ELSE %]
-        <option value="[% itemtypeloo.value |html %]">[% itemtypeloo.itemtypename %]</option>[% END %]
+        <option value="[% itemtypeloo.value %]" selected="selected">[% itemtypeloo.itemtypename %]</option>[% ELSE %]
+        <option value="[% itemtypeloo.value %]">[% itemtypeloo.itemtypename %]</option>[% END %]
       [% END %]
       </select>
     </li>
@@ -204,8 +204,8 @@ overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%
         <select name="homebranch" id="homebranch">
             <option value="">Any</option>
             [% FOREACH homebranchloo IN homebranchloop %][% IF ( homebranchloo.selected ) %]
-            <option value="[% homebranchloo.value |html %]" selected="selected">[% homebranchloo.branchname %]</option>[% ELSE %]
-            <option value="[% homebranchloo.value |html %]">[% homebranchloo.branchname %]</option>[% END %]
+            <option value="[% homebranchloo.value %]" selected="selected">[% homebranchloo.branchname %]</option>[% ELSE %]
+            <option value="[% homebranchloo.value %]">[% homebranchloo.branchname %]</option>[% END %]
             [% END %]
         </select>
     </li>
@@ -215,8 +215,8 @@ overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%
             <select name="holdingbranch" id="holdingbranch">
             <option value="">Any</option>
             [% FOREACH holdingbranchloo IN holdingbranchloop %][% IF ( holdingbranchloo.selected ) %]
-            <option value="[% holdingbranchloo.value |html %]" selected="selected">[% holdingbranchloo.branchname %]</option>[% ELSE %]
-            <option value="[% holdingbranchloo.value |html %]">[% holdingbranchloo.branchname %]</option>[% END %]
+            <option value="[% holdingbranchloo.value %]" selected="selected">[% holdingbranchloo.branchname %]</option>[% ELSE %]
+            <option value="[% holdingbranchloo.value %]">[% holdingbranchloo.branchname %]</option>[% END %]
             [% END %]
         </select>
     </li>
@@ -226,8 +226,8 @@ overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%
         <option value="">Any</option>
       [% FOREACH branchloo IN branchloop %]
         [% IF ( branchloo.selected ) %]
-        <option value="[% branchloo.value |html %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]
-        <option value="[% branchloo.value |html %]">[% branchloo.branchname %]</option>[% END %]
+        <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]
+        <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
       [% END %]
       </select>
     </li>
@@ -253,8 +253,8 @@ overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%
     </option>
 [% END %]
 	[% FOREACH patron_attr_order_loo IN patron_attr_order_loop %]
-        [% IF ( patron_attr_order_loo.selected ) %]<option value="[% patron_attr_order_loo.value |html %]" selected="selected">[% patron_attr_order_loo.label %]</option>
-        [% ELSE %]<option value="[% patron_attr_order_loo.value |html %]">[% patron_attr_order_loo.label %]</option>[% END %]
+        [% IF ( patron_attr_order_loo.selected ) %]<option value="[% patron_attr_order_loo.value %]" selected="selected">[% patron_attr_order_loo.label %]</option>
+        [% ELSE %]<option value="[% patron_attr_order_loo.value %]">[% patron_attr_order_loo.label %]</option>[% END %]
 	[% END %]
 </select></li>
 

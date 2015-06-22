@@ -22,7 +22,7 @@
   [% IF ( unknownbiblionumber ) %]
     Unknown record
   [% ELSE %]
-    Details for [% title |html %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]
+    Details for [% title %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]
   [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]<script type="text/JavaScript">
@@ -317,7 +317,7 @@ function verify_images() {
   [% IF ( unknownbiblionumber ) %]
     Unknown record
   [% ELSE %]
-    Details for <i>[% title |html %]  [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]</i>
+    Details for <i>[% title %]  [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]</i>
   [% END %]
 </div>
 
@@ -369,9 +369,9 @@ function verify_images() {
                 <span class="results_summary"><span class="label">Tags:</span>
                     [% FOREACH TagLoo IN TagLoop %]
                         [% IF ( CAN_user_tools_moderate_tags ) %]
-                        <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term |url %]">[% TagLoo.term |html %]</a>
+                        <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term |url %]">[% TagLoo.term %]</a>
                         [% ELSE %]
-                        [% TagLoo.term |html %]
+                        [% TagLoo.term %]
                         [% END %]
                         <span class="weight">([% TagLoo.weight_total %])</span>[% IF ( loop.last ) %][% ELSE %], [% END %]
                     [% END %]
@@ -394,12 +394,12 @@ function verify_images() {
         [% END %]
     [% ELSE %]
 
-    <h3>[% title |html %]</h3>
+    <h3>[% title %]</h3>
     [% FOREACH subtitl IN subtitle %]
     	<h4>[% subtitl.subfield %]</h4>
     [% END %]
             [% UNLESS ( item_level_itypes ) %]<img src="[% imageurl %]" alt="[% translated_description %]" title="[% translated_description %]">[% END %]
-            [% IF ( unititle ) %]<p>[% unititle |html %]</p>[% END %]
+            [% IF ( unititle ) %]<p>[% unititle %]</p>[% END %]
             [% IF ( author ) %]<p>By <a href="/cgi-bin/koha/catalogue/search.pl?q=au:[% author |url %]">[% author %]</a></p>[% END %]
         <ul>
         [% IF ( MARCAUTHORS ) %]
@@ -421,7 +421,7 @@ function verify_images() {
         [% IF ( publishercode ) %]
     <li><strong>Published by:</strong>
         <a href="/cgi-bin/koha/catalogue/search.pl?q=pb:[% publishercode |url %]">
-            [% publishercode |html %]
+            [% publishercode %]
         </a> [% IF ( place ) %]([% place %])[% END %] [% IF ( publicationyear ) %], [% publicationyear %][% END %] [% IF ( editionstatement ) %][% editionstatement %][% END %] [% IF ( editionresponsability ) %][% editionresponsability %][% END %]
     </li>
     [% END %]
@@ -490,7 +490,7 @@ function verify_images() {
             <li><strong>Subjects:</strong> 
             <ul>
                 [% FOREACH MARCSUBJCT IN MARCSUBJCTS %]
-                <li>[% FOREACH MARCSUBJECT_SUBFIELDS_LOO IN MARCSUBJCT.MARCSUBJECT_SUBFIELDS_LOOP %] [% MARCSUBJECT_SUBFIELDS_LOO.separator %] <a title="‡[% MARCSUBJECT_SUBFIELDS_LOO.code %] [% MARCSUBJECT_SUBFIELDS_LOO.value %]" href="/cgi-bin/koha/catalogue/search.pl?q=[% FOREACH link_loo IN MARCSUBJECT_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit %]:[% link_loo.link |url %][% END %]">[% MARCSUBJECT_SUBFIELDS_LOO.value |html %]</a>[% END %]</li>
+                <li>[% FOREACH MARCSUBJECT_SUBFIELDS_LOO IN MARCSUBJCT.MARCSUBJECT_SUBFIELDS_LOOP %] [% MARCSUBJECT_SUBFIELDS_LOO.separator %] <a title="‡[% MARCSUBJECT_SUBFIELDS_LOO.code %] [% MARCSUBJECT_SUBFIELDS_LOO.value %]" href="/cgi-bin/koha/catalogue/search.pl?q=[% FOREACH link_loo IN MARCSUBJECT_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit %]:[% link_loo.link |url %][% END %]">[% MARCSUBJECT_SUBFIELDS_LOO.value %]</a>[% END %]</li>
                 [% END %]
                 </ul>
             </li>
@@ -528,9 +528,9 @@ function verify_images() {
                     [% FOREACH TagLoo IN TagLoop %]
                         <li>
                         [% IF ( CAN_user_tools_moderate_tags ) %]
-                        <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term |url %]">[% TagLoo.term |html %]</a>
+                        <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term |url %]">[% TagLoo.term %]</a>
                         [% ELSE %]
-                        [% TagLoo.term |html %]
+                        [% TagLoo.term %]
                         [% END %]
                         <span class="weight">([% TagLoo.weight_total %])</span>[% IF ( loop.last ) %][% ELSE %], [% END %]</li>
                     [% END %]
@@ -989,7 +989,7 @@ function verify_images() {
 <table>
 [% FOREACH XISBN IN XISBNS %]<tr>[% IF ( AmazonCoverImages ) %]<td><a href="http://www.amazon.com/gp/reader/[% XISBN.normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img src="https://images-na.ssl-images-amazon.com/images/P/[% XISBN.normalized_isbn %].01._AA75_PU_PU-5_.jpg" /></a></td>[% END %]
 [% UNLESS ( item_level_itypes ) %]<td>[% IF ( noItemTypeImages ) %][% XISBN.description %][% ELSE %]<img src="[% XISBN.imageurl %]" alt="[% XISBN.description %]" title="[% XISBN.description %]">[% END %]</td>[% END %]
-<td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% XISBN.biblionumber %]">[% XISBN.title |html %]</a> by [% XISBN.author %] &copy;[% XISBN.copyrightdate %]
+<td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% XISBN.biblionumber %]">[% XISBN.title %]</a> by [% XISBN.author %] &copy;[% XISBN.copyrightdate %]
   [% IF ( XISBN.publishercode ) %]
 [% XISBN.publishercode %] [% IF ( XISBN.place ) %]([% XISBN.place %])[% END %] [% IF ( XISBN.publicationyear ) %], [% XISBN.publicationyear %][% END %] [% IF ( XISBN.editionstatement ) %][% XISBN.editionstatement %][% END %] [% IF ( XISBN.editionresponsability ) %][% XISBN.editionresponsability %][% END %]
     [% END %]

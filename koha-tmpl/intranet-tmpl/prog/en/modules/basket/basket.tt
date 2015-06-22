@@ -160,12 +160,12 @@ function batchDelete(){
     [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
     <h3>
         [% IF ( print_basket ) %]
-            [% BIBLIO_RESULT.title |html %]
+            [% BIBLIO_RESULT.title %]
                 [% IF ( BIBLIO_RESULT.subtitle ) %] [% BIBLIO_RESULT.subtitle %][% END %]
                 [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author %][% END %]
         [% ELSE %]
                 <input type="checkbox" value="[% BIBLIO_RESULT.biblionumber %]" name="bib[% BIBLIO_RESULT.biblionumber %]" id="bib[% BIBLIO_RESULT.biblionumber %]" onclick="selRecord(value,checked)" />
-                [% BIBLIO_RESULT.title |html %]
+                [% BIBLIO_RESULT.title %]
                 [% IF ( BIBLIO_RESULT.subtitle ) %] [% BIBLIO_RESULT.subtitle %][% END %]
                 [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author %][% END %]
         [% END %]
@@ -348,7 +348,7 @@ function batchDelete(){
 
                 </td> [% END %]
             <td><a href="#" onclick="openBiblio('[% BIBLIO_RESULT.dest %]',[% BIBLIO_RESULT.biblionumber %])">
-                        [% BIBLIO_RESULT.title |html %]
+                        [% BIBLIO_RESULT.title %]
                     </a>
                         [% BIBLIO_RESULT.author %]
                         <p>[% IF ( BIBLIO_RESULT.publishercode ) %]- [% BIBLIO_RESULT.publishercode %]

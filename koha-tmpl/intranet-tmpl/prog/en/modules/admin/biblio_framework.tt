@@ -162,7 +162,7 @@
                 [% END %]
                 <li>
                     <label for="description" class="required">Description: </label>
-                    <input type="text" name="frameworktext" id="description" size="40" maxlength="80" value="[% framework.frameworktext |html %]" required="required" class="required" />
+                    <input type="text" name="frameworktext" id="description" size="40" maxlength="80" value="[% framework.frameworktext %]" required="required" class="required" />
                     <span class="required">Required</span>
                 </li>
             </ol>
@@ -272,8 +272,8 @@
             <td>[% loo.frameworkcode %]</td>
             <td>[% loo.frameworktext %]</td>
             <td><a href="marctagstructure.pl?frameworkcode=[% loo.frameworkcode %]" >MARC structure</a></td>
-            <td><a href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form&amp;frameworkcode=[% loo.frameworkcode |html %]">Edit</a></td>
-            <td><a href="/cgi-bin/koha/admin/biblio_framework.pl?op=delete_confirm&amp;frameworkcode=[% loo.frameworkcode |html %]">Delete</a></td>
+            <td><a href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form&amp;frameworkcode=[% loo.frameworkcode %]">Edit</a></td>
+            <td><a href="/cgi-bin/koha/admin/biblio_framework.pl?op=delete_confirm&amp;frameworkcode=[% loo.frameworkcode %]">Delete</a></td>
             <td>
 
                 <!-- Button to trigger modal -->

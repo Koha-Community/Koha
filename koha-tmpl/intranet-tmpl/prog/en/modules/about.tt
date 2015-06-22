@@ -37,21 +37,21 @@
 
         <table>
             <caption>Server information</caption>
-            <tr><th scope="row">Koha version: </th><td>[% kohaVersion |html %]</td></tr>
-            <tr><th scope="row">OS version ('uname -a'): </th><td>[% osVersion |html %]</td></tr>
-            <tr><th scope="row">Perl interpreter: </th><td>[% perlPath |html %]</td></tr>
-            <tr><th scope="row">Perl version: </th><td>[% perlVersion |html %]</td></tr>
+            <tr><th scope="row">Koha version: </th><td>[% kohaVersion %]</td></tr>
+            <tr><th scope="row">OS version ('uname -a'): </th><td>[% osVersion %]</td></tr>
+            <tr><th scope="row">Perl interpreter: </th><td>[% perlPath %]</td></tr>
+            <tr><th scope="row">Perl version: </th><td>[% perlVersion %]</td></tr>
             <tr><th scope="row">Perl @INC: </th><td>
                 [% FOREACH perlIncPat IN perlIncPath %]
-                    [% perlIncPat.perlinc |html %] <br />
+                    [% perlIncPat.perlinc %] <br />
                 [% END %]
             </td></tr>
-            <tr><th scope="row">MySQL version: </th><td>[% mysqlVersion |html %]</td></tr>
-            <tr><th scope="row">Apache version: </th><td>[% apacheVersion |html %]</td></tr>
+            <tr><th scope="row">MySQL version: </th><td>[% mysqlVersion %]</td></tr>
+            <tr><th scope="row">Apache version: </th><td>[% apacheVersion %]</td></tr>
           [% IF (is_psgi) %]
-            <tr><th scope="row">PSGI: </th><td>[% psgi_server |html %]</td></tr>
+            <tr><th scope="row">PSGI: </th><td>[% psgi_server %]</td></tr>
           [% END %]
-            <tr><th scope="row">Zebra version: </th><td>[% zebraVersion |html %]</td></tr>
+            <tr><th scope="row">Zebra version: </th><td>[% zebraVersion %]</td></tr>
             [% IF (errZebraConnection == 10000) %]
             <tr><th scope="row"><b>Error</b> </th><td>Zebra server seems not to be available. Is it started?</td></tr>
             [% ELSIF (errZebraConnection) %]
@@ -826,7 +826,7 @@
             <tr class="[% loop.parity %]">
                 [% FOREACH ro IN tabl.row2 %]
                      <td>[% ro.date %]</td>
-                     <td>[% ro.desc|html %]</td>
+                     <td>[% ro.desc %]</td>
                 [% END %]
             </tr>
         [% END %]

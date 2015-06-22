@@ -12,7 +12,7 @@
 <body id="acq_modordernotes" class="acq">
 [% INCLUDE 'header.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisition</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername|html %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Basket [% basketname|html %] ([% basketno %])</a> &rsaquo; Change order [% IF (type == "vendor") %]vendor[% ELSE %]internal[% END %] note</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisition</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Basket [% basketname %] ([% basketno %])</a> &rsaquo; Change order [% IF (type == "vendor") %]vendor[% ELSE %]internal[% END %] note</div>
 
 <div id="doc" class="yui-t7">
 

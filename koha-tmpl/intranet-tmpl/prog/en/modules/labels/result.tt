@@ -69,7 +69,7 @@
                 <input type="hidden" name="ccl_query" value="[% ccl_query %]" />
             [% FOREACH result_se IN result_set %]
             <div style="border-bottom:1px solid #CCC;margin: .5em 0;">
-		            <h4>[% result_se.title |html %]</h4>
+		            <h4>[% result_se.title %]</h4>
                             <p>[% IF ( result_se.author ) %]by [% result_se.author %][% END %]
                             [[% result_se.itemtype %]], [% IF ( result_se.publishercode ) %][% result_se.publishercode %] [% END %][% IF ( result_se.place ) %][% result_se.place %] [% END %][% IF ( result_se.copyrightdate ) %][% result_se.copyrightdate %], [% END %][% IF ( result_se.pages ) %][% result_se.pages %][% END %][% IF ( result_se.isbn ) %], <b>ISBN: </b>[% result_se.isbn %][% END %][% IF ( result_se.notes ) %],<br />[% result_se.notes %][% END %]</p>
 

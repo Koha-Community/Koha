@@ -50,7 +50,7 @@
             <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% review.biblionumber %]">[% review.bibliotitle %]</a>
         </td>
         <td>
-            [% review.review |html %]
+            [% review.review %]
         </td>
         <td>
             [% IF ( status ) %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=unapprove&amp;reviewid=[% review.reviewid %]">Unapprove</a>[% ELSE %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=approve&amp;reviewid=[% review.reviewid %]">Approve</a>[% END %] |

@@ -12,7 +12,7 @@
 	
 		<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
         <label for="title">Title: </label> <input type="text" id="title" name="title" size="15" value="[% title %]" />
-        <label for="searchsupplier">Vendor:</label> <input type="text" id="searchsupplier" name="name" size="15" value="[% name|html %]" />
+        <label for="searchsupplier">Vendor:</label> <input type="text" id="searchsupplier" name="name" size="15" value="[% name %]" />
         <input type="hidden" id="do_search" name="do_search" value="do" />
         <span class="filteraction" id="filteraction_off" style="display:none"> <a href="#" onclick="$('#filters,.filteraction').toggle();">[-]</a></span>
         <span class="filteraction" id="filteraction_on"> <a href="#" onclick="$('#filters,.filteraction').toggle();">[+]</a></span>

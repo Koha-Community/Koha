@@ -1,6 +1,6 @@
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Circulation &rsaquo; Circulation statistics for [% title |html %]</title>
+<title>Koha &rsaquo; Circulation &rsaquo; Circulation statistics for [% title %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript">
 $(document).ready(function(){
@@ -13,7 +13,7 @@ $(document).ready(function(){
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Circulation statistics for [% title |html %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Circulation statistics for [% title %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -22,7 +22,7 @@ $(document).ready(function(){
 	<div class="yui-b">
 
 <h2>
-[% title |html %] [% IF ( author ) %] by [% author |html %][% END %]</h2>
+[% title %] [% IF ( author ) %] by [% author %][% END %]</h2>
 <h3>Barcode [% barcode %]</h3>
 <table>
         <tr><th>Home library</th><th>Current library</th><th>Date arrived<br />at current library </th><th>Number of checkouts<br />since last transfer</th></tr>

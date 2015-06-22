@@ -130,9 +130,9 @@
                 <option value="">All item types</option>
 				[% FOREACH itypeloo IN itypeloop %]
 				[% IF ( itypeloo.selected ) %]
-                <option value="[% itypeloo.itemtype %]" selected="selected">[% itypeloo.description |html %]</option>
+                <option value="[% itypeloo.itemtype %]" selected="selected">[% itypeloo.description %]</option>
 				[% ELSE %]
-                <option value="[% itypeloo.itemtype %]">[% itypeloo.description |html %]</option>
+                <option value="[% itypeloo.itemtype %]">[% itypeloo.description %]</option>
 				[% END %]
 				[% END %]
 				</select>
@@ -176,24 +176,24 @@
                                     [% IF ( resul.even ) %]<td class="hilighted">
                                     [% ELSE %]<td>[% END %]
                                                             [% IF ( resul.MARC_ON ) %]
-                                                                    <a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.title |html %]</a>
+                                                                    <a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.title %]</a>
                                                             [% ELSE %]
-                                                                    <a class="transparent resultlist" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.fulltitle |html %]</a>[% END %]
-                                                    <p>[% resul.author |html %]
-                                                    [% IF ( resul.publishercode ) %]- [% resul.publishercode |html %][% END %]
-                                                    [% IF ( resul.place ) %] ; [% resul.place |html %][% END %]
-                                                    [% IF ( resul.pages ) %] - [% resul.pages |html %][% END %]
-                                                    [% IF ( resul.notes ) %] : [% resul.notes |html %][% END %]
-                                                    [% IF ( resul.item('size') ) %] ; [% resul.item('size') |html %][% END %]
+                                                                    <a class="transparent resultlist" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.fulltitle %]</a>[% END %]
+                                                    <p>[% resul.author %]
+                                                    [% IF ( resul.publishercode ) %]- [% resul.publishercode %][% END %]
+                                                    [% IF ( resul.place ) %] ; [% resul.place %][% END %]
+                                                    [% IF ( resul.pages ) %] - [% resul.pages %][% END %]
+                                                    [% IF ( resul.notes ) %] : [% resul.notes %][% END %]
+                                                    [% IF ( resul.item('size') ) %] ; [% resul.item('size') %][% END %]
                                             </p>
 					</td>
                     [% IF ( resul.even ) %]<td align="center" class="hilighted">
                     [% ELSE %]<td align="center">[% END %]
-                        [% resul.totitem |html %]
+                        [% resul.totitem %]
 					</td>
                     [% IF ( resul.even ) %]<td class="hilighted">
                     [% ELSE %]<td>[% END %]
-                        [% resul.CN |html %]
+                        [% resul.CN %]
 					</td>
 					<td>
                       [% IF ( resul.biblionumber ) %]

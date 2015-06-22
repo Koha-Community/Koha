@@ -103,19 +103,19 @@
         [% IF ( modify ) %]Modify
         [% ELSE %]Add
         [% END %] a system preference</legend><ol>
-            <li><label for="explanation">Explanation: </label><input type="text" name="explanation" id="explanation" size="60" value="[% explanation |html %]" /><input type="hidden" name="op" value="add_validate" /></li>
+            <li><label for="explanation">Explanation: </label><input type="text" name="explanation" id="explanation" size="60" value="[% explanation %]" /><input type="hidden" name="op" value="add_validate" /></li>
             <li>[% IF ( searchfield ) %]<span class="label">Variable: </span>[% searchfield %]<input type="hidden" name="variable" value="[% searchfield %]" />
             [% ELSE %]<label for="variable">Variable: </label><input type="text" name="variable" id="variable" size="60" />[% END %]</li>
             <li><label for="value">Value: </label>
                 [% IF ( type_free ) %]
-                    <textarea id="value" name="value" cols="[% fieldlength %]">[% value |html %]</textarea>
+                    <textarea id="value" name="value" cols="[% fieldlength %]">[% value %]</textarea>
                 [% ELSIF ( type_upload ) %]
                     <input type="file" name="value" />
                 [% ELSIF ( type_textarea || type_htmlarea ) %]
                     [% IF ( type_htmlarea ) && ( Koha.Preference('UseWYSIWYGinSystemPreferences') ) %]
-                        <textarea class="mce" name="value" id="value" rows="[% rows %]" cols="[% cols %]">[% value |html %]</textarea>
+                        <textarea class="mce" name="value" id="value" rows="[% rows %]" cols="[% cols %]">[% value %]</textarea>
                     [% ELSE %]
-                    <textarea name="value" id="value" rows="[% rows %]" cols="[% cols %]">[% value |html %]</textarea>
+                    <textarea name="value" id="value" rows="[% rows %]" cols="[% cols %]">[% value %]</textarea>
                     [% END %]
                 [% ELSIF ( type_choice ) %]
                     <select name="value" id="value">
@@ -328,7 +328,7 @@
     <tbody>[% FOREACH loo IN loop %]
         <tr>
 
-        <td><strong><a href="[% loo.edit %]">[% loo.variable %]</a></strong></td><td> [% loo.explanation |html %]</td>
+        <td><strong><a href="[% loo.edit %]">[% loo.variable %]</a></strong></td><td> [% loo.explanation %]</td>
         [% IF ( loo.oneline ) %]
         <td class="single-line">
         [% ELSE %]
@@ -340,17 +340,17 @@
             <form action="/cgi-bin/koha/admin/systempreferences.pl" method="post">
         [% END %]
                 [% IF ( loo.type_free ) %]
-                <input type="text" name="value" size="[% loo.fieldlength %]" value="[% loo.value |html %]" />
+                <input type="text" name="value" size="[% loo.fieldlength %]" value="[% loo.value %]" />
                 [% END %]
                 [% IF ( loo.type_upload ) %]
-                <input type="file" name="value" value="[% loo.value |html %]" />
+                <input type="file" name="value" value="[% loo.value %]" />
                 [% END %]
                 [% IF ( loo.type_textarea ) || ( loo.type_htmlarea ) %]
                     [% IF ( loo.type_htmlarea ) && ( Koha.Preference('UseWYSIWYGinSystemPreferences') ) %]
-                        <textarea class="mce" name="value" rows="[% loo.rows %]" cols="[% loo.cols %]">[% loo.value |html %]</textarea>
+                        <textarea class="mce" name="value" rows="[% loo.rows %]" cols="[% loo.cols %]">[% loo.value %]</textarea>
                     [% ELSE %]
                         <a class="expand-textarea" style="display: none" href="#">Click to edit</a>
-                        <textarea name="value" rows="[% loo.rows %]" cols="[% loo.cols %]">[% loo.value |html %]</textarea>
+                        <textarea name="value" rows="[% loo.rows %]" cols="[% loo.cols %]">[% loo.value %]</textarea>
                     [% END %]
                 [% END %]
                 [% IF ( loo.type_choice ) %]
@@ -430,9 +430,9 @@
                 [% END %]
                 <input type="hidden" name="op" value="add_validate" />
                 <input type="hidden" name="variable" value="[% loo.variable %]" />
-                <input type="hidden" name="prefoptions" value="[% loo.prefoptions |html %]" />
+                <input type="hidden" name="prefoptions" value="[% loo.prefoptions %]" />
                 <input type="hidden" name="preftype" value="[% loo.type %]" />
-                <input type="hidden" name="explanation" value="[% loo.explanation |html %]" />
+                <input type="hidden" name="explanation" value="[% loo.explanation %]" />
                 <input type="submit" value="Save" />
             </form>
         </td>

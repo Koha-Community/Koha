@@ -34,10 +34,10 @@ Updated:<ul>
     [% END %]
     [% END %]
     </ul>
-<form method="post" action="[% referer or "/cgi-bin/koha/circ/circulation.pl" |html %]">
+<form method="post" action="[% referer or "/cgi-bin/koha/circ/circulation.pl" %]">
     <div class="noshow">
         [% FOREACH recycle_loo IN recycle_loop %]
-        <input type="text" name="[% recycle_loo.param %]" value="[% recycle_loo.value |html %]" />
+        <input type="text" name="[% recycle_loo.param %]" value="[% recycle_loo.value %]" />
         [% END %]
     </div>
     <button type="submit">Continue</button>
@@ -84,9 +84,9 @@ Updated:<ul>
 </fieldset>
 <div class="noshow">
     [% FOREACH recycle_loo IN recycle_loop %]
-    <input type="text" name="[% recycle_loo.param %]" value="[% recycle_loo.value |html %]" />
+    <input type="text" name="[% recycle_loo.param %]" value="[% recycle_loo.value %]" />
     [% END %]
-    <input type="hidden" name="oldreferer" value="[% referer or "/cgi-bin/koha/circ/circulation.pl" |html %]" />
+    <input type="hidden" name="oldreferer" value="[% referer or "/cgi-bin/koha/circ/circulation.pl" %]" />
 </div>
 </form>
 <!-- /updated -->

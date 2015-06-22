@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Cataloging &rsaquo; [% IF ( biblionumber ) %]Editing [% title |html %] (Record number [% biblionumber %])[% ELSE %]Add MARC record[% END %]</title>
+<title>Koha &rsaquo; Cataloging &rsaquo; [% IF ( biblionumber ) %]Editing [% title %] (Record number [% biblionumber %])[% ELSE %]Add MARC record[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
 <script type="text/javascript" src="[% themelang %]/js/cataloging.js"></script>
@@ -401,7 +401,7 @@ function Changefwk(FwkList) {
 
 [% INCLUDE 'header.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; [% IF ( biblionumber ) %]Editing <em>[% title |html %]</em> (Record number [% biblionumber %])[% ELSE %]Add MARC record[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; [% IF ( biblionumber ) %]Editing <em>[% title %]</em> (Record number [% biblionumber %])[% ELSE %]Add MARC record[% END %]</div>
 
 <div id="doc" class="yui-t7">
 
@@ -410,7 +410,7 @@ function Changefwk(FwkList) {
         <div class="yui-g">
 
 <h1>
-[% IF ( biblionumber ) %]Editing <em>[% title |html %]</em> (Record number [% biblionumber %])
+[% IF ( biblionumber ) %]Editing <em>[% title %]</em> (Record number [% biblionumber %])
 [% ELSE %]Add MARC record [% IF (circborrowernumber) %]<em>(fast cataloging)</em>[% END %]
 [% END %]
 </h1>
@@ -445,7 +445,7 @@ function Changefwk(FwkList) {
 [% IF ( done ) %]
     <script type="text/javascript">
         opener.document.forms['f'].biblionumber.value=[% biblionumber %];
-        opener.document.forms['f'].title.value='[% title |html %]';
+        opener.document.forms['f'].title.value='[% title %]';
         window.close();
     </script>
 [% ELSE %]

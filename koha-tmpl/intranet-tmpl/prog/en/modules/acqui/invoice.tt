@@ -230,9 +230,9 @@
                 <tbody>
                 [% FOREACH f IN files %]
                     <tr>
-                         <td><a href="/cgi-bin/koha/acqui/invoice-files.pl?invoiceid=[% invoiceid %]&amp;op=download&amp;view=1&amp;file_id=[% f.file_id %]">[% f.file_name | html %]</a></td>
-                         <td>[% f.file_type | html %]</td>
-                         <td>[% f.file_description | html %]</td>
+                         <td><a href="/cgi-bin/koha/acqui/invoice-files.pl?invoiceid=[% invoiceid %]&amp;op=download&amp;view=1&amp;file_id=[% f.file_id %]">[% f.file_name %]</a></td>
+                         <td>[% f.file_type %]</td>
+                         <td>[% f.file_description %]</td>
                          <td class="title-string">
                            <span title="[% f.date_uploaded %]">[% f.date_uploaded | $KohaDates %]</span>
                          </td>

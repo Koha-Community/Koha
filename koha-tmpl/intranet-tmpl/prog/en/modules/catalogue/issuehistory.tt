@@ -1,7 +1,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Catalog &rsaquo; Checkout history for [% title |html %]</title>
+<title>Koha &rsaquo; Catalog &rsaquo; Checkout history for [% title %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
@@ -22,7 +22,7 @@ $(document).ready(function() {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Checkout history for <i>[% title |html %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Checkout history for <i>[% title %]</i></div>
 
 <div id="doc3" class="yui-t2">
 
@@ -30,7 +30,7 @@ $(document).ready(function() {
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h1>Checkout history for [% title |html %]</h1>
+<h1>Checkout history for [% title %]</h1>
 [% IF ( author ) %]<h3>by [% author %]</h3>[% END %]
 
 <div class="searchresults">
@@ -91,7 +91,7 @@ $(document).ready(function() {
 		</table>
     [% ELSE %]
         <div class="dialog message"><p>
-        <b>[% title |html %][% IF ( author ) %], by [% author %][% END %]</b> has never been checked out.</p></div>
+        <b>[% title %][% IF ( author ) %], by [% author %][% END %]</b> has never been checked out.</p></div>
 
     [% END %]
 </div>

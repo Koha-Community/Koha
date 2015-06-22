@@ -43,7 +43,7 @@
                         [% overduesloo.date_due %]
                     </td>
                     <td>
-                    [% INCLUDE 'biblio-default-view.inc' biblionumber = overduesloo.biblionumber %][% overduesloo.title |html %] [% IF ( overduesloo.subtitle ) %][% overduesloo.subtitle %][% END %]</a> [% IF ( overduesloo.author ) %] by [% overduesloo.author %][% END %]
+                    [% INCLUDE 'biblio-default-view.inc' biblionumber = overduesloo.biblionumber %][% overduesloo.title %] [% IF ( overduesloo.subtitle ) %][% overduesloo.subtitle %][% END %]</a> [% IF ( overduesloo.author ) %] by [% overduesloo.author %][% END %]
 
                             <br />Barcode : [% overduesloo.barcode %]
                     </td>
@@ -51,7 +51,7 @@
                         <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overduesloo.borrowernumber %]">[% overduesloo.borrowersurname %], [% overduesloo.borrowerfirstname %]</a>
                         <br />[% overduesloo.cardnumber %]
                         <br />[% overduesloo.borrowerphone %]<br />
-                    [% IF ( overduesloo.borroweremail ) %]<a href="mailto:[% overduesloo.borroweremail %]?subject=Overdue: [% overduesloo.title |html %]">
+                    [% IF ( overduesloo.borroweremail ) %]<a href="mailto:[% overduesloo.borroweremail %]?subject=Overdue: [% overduesloo.title %]">
                     [% overduesloo.borroweremail %]</a>[% END %]
                     </td>
                     <td>[% overduesloo.homebranch %] [% overduesloo.itemcallnumber %]
@@ -119,7 +119,7 @@
                         </td>
                         <td>
                             <p>
-                                <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% todayoverduesloo.biblionumber %]">[% todayoverduesloo.title |html %]</a>
+                                <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% todayoverduesloo.biblionumber %]">[% todayoverduesloo.title %]</a>
                                 &nbsp; (<b>[% todayoverduesloo.description %]</b>)
                                 <br />Barcode : [% todayoverduesloo.barcode %]
                             </p>
@@ -128,7 +128,7 @@
                             <p><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% todayoverduesloo.borrowernumber %]">[% todayoverduesloo.borrowersurname %] &nbsp; [% todayoverduesloo.borrowerfirstname %]</a>
                             <br />[% todayoverduesloo.cardnumber %]<br />
                             <br />[% todayoverduesloo.borrowerphone %]<br />
-                        [% IF ( todayoverduesloo.borroweremail ) %]<a href="mailto:[% todayoverduesloo.borroweremail %]?subject=Overdue: [% todayoverduesloo.title |html %]">
+                        [% IF ( todayoverduesloo.borroweremail ) %]<a href="mailto:[% todayoverduesloo.borroweremail %]?subject=Overdue: [% todayoverduesloo.title %]">
                         [% todayoverduesloo.borroweremail %]</a>[% END %]
                             </p>
                         </td>

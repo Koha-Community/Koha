@@ -95,7 +95,7 @@
                       <tr>
                         <td><a href="neworderempty.pl?ordernumber=[% ordersloo.ordernumber %]">[% ordersloo.ordernumber %]</a></td>
                         <td>
-                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ordersloo.biblionumber %]">[% ordersloo.title |html %]</a>
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ordersloo.biblionumber %]">[% ordersloo.title %]</a>
                             [% IF ( ordersloo.author ) %] by [% ordersloo.author %][% END %]
                             [% IF ( ordersloo.isbn ) %] &ndash; [% ordersloo.isbn %][% END %]
                             [% IF ( ordersloo.publishercode ) %]<br />Publisher :[% ordersloo.publishercode %][% END %]

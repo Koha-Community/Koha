@@ -142,17 +142,17 @@ tinyMCE.init({
                 <li>
                     [% IF library %]
                         <span class="label">Library code: </span>
-                        <input type="hidden" name="branchcode" value="[% library.branchcode |html %]" />
+                        <input type="hidden" name="branchcode" value="[% library.branchcode %]" />
                         [% library.branchcode %]
                     [% ELSE %]
                         <label for="branchcode" class="required">Library code: </label>
-                        <input type="text" name="branchcode" id="branchcode" size="10" maxlength="10" value="[% library.branchcode |html %]" class="required" required="required" />
+                        <input type="text" name="branchcode" id="branchcode" size="10" maxlength="10" value="[% library.branchcode %]" class="required" required="required" />
                         <span class="required">Required</span>
                     [% END %]
                 </li>
                 <li>
                     <label for="branchname" class="required">Name: </label>
-                    <input type="text" name="branchname" id="branchname" size="80" value="[% library.branchname |html %]" class="required" required="required" />
+                    <input type="text" name="branchname" id="branchname" size="80" value="[% library.branchname %]" class="required" required="required" />
                     <span class="required">Required</span>
                 </li>
             </ol>
@@ -176,22 +176,22 @@ tinyMCE.init({
         [% END %]
         <fieldset class="rows">
             <ol>
-                <li><label for="branchaddress1">Address line 1: </label><input type="text" name="branchaddress1" id="branchaddress1" size="60" value="[% library.branchaddress1 |html %]" /></li>
-                <li><label for="branchaddress2">Address line 2: </label><input type="text" name="branchaddress2" id="branchaddress2" size="60" value="[% library.branchaddress2 |html %]" /></li>
-                <li><label for="branchaddress3">Address line 3: </label><input type="text" name="branchaddress3" id="branchaddress3" size="60" value="[% library.branchaddress3 |html %]" /></li>
-                <li><label for="branchcity">City: </label><input type="text" name="branchcity" id="branchcity" size="60" value="[% library.branchcity |html %]" /></li>
-                <li><label for="branchstate">State: </label><input type="text" name="branchstate" id="branchstate" size="60" value="[% library.branchstate |html %]" /></li>
-                <li><label for="branchzip">ZIP/Postal code: </label><input type="text" name="branchzip" id="branchzip"  size="25" maxlength="25" value="[% library.branchzip |html %]" /></li>
-                <li><label for="branchcountry">Country: </label><input type="text" name="branchcountry" id="branchcountry" size="60" value="[% library.branchcountry |html %]" /></li>
-                <li><label for="branchphone">Phone: </label><input type="text" name="branchphone" id="branchphone" size="60" value="[% library.branchphone |html %]" /></li>
-                <li><label for="branchfax">Fax: </label><input type="text" name="branchfax" id="branchfax" size="60" value="[% library.branchfax |html %]" /></li>
-                <li><label for="branchemail">Email: </label><input type="text" name="branchemail" id="branchemail" class="email"  size="80" value="[% library.branchemail |html %]" /></li>
-                <li><label for="branchreplyto">Reply-To (if different to Email): </label> <input type="text" name="branchreplyto" id="branchreplyto" class="email"  size="80" value="[% library.branchreplyto |html %]" /></li>
-                <li><label for="branchreturnpath">Return-Path (if different to Email): </label> <input type="text" name="branchreturnpath" id="branchreturnpath" class="email"  size="80" value="[% library.branchreturnpath |html %]" /></li>
-                <li><label for="branchurl">URL: </label><input type="text" name="branchurl" id="branchurl"  size="80" value="[% library.branchurl |html %]" class="url" /></li>
-                <li><label for="opac_info">OPAC info: </label><textarea name="opac_info" id="opac_info">[% library.opac_info |html %]</textarea></li>
-                <li><label for="branchip">IP: </label><input type="text" name="branchip" id="branchip"  size="15" maxlength="15" value="[% library.branchip |html %]" /> <span class="hint">Can be entered as a single IP, or a subnet such as 192.168.1.*</span></li>
-                <li><label for="branchnotes">Notes: </label><input type="text" name="branchnotes" id="branchnotes" size="80" value="[% library.branchnotes |html %]" /></li>
+                <li><label for="branchaddress1">Address line 1: </label><input type="text" name="branchaddress1" id="branchaddress1" size="60" value="[% library.branchaddress1 %]" /></li>
+                <li><label for="branchaddress2">Address line 2: </label><input type="text" name="branchaddress2" id="branchaddress2" size="60" value="[% library.branchaddress2 %]" /></li>
+                <li><label for="branchaddress3">Address line 3: </label><input type="text" name="branchaddress3" id="branchaddress3" size="60" value="[% library.branchaddress3 %]" /></li>
+                <li><label for="branchcity">City: </label><input type="text" name="branchcity" id="branchcity" size="60" value="[% library.branchcity %]" /></li>
+                <li><label for="branchstate">State: </label><input type="text" name="branchstate" id="branchstate" size="60" value="[% library.branchstate %]" /></li>
+                <li><label for="branchzip">ZIP/Postal code: </label><input type="text" name="branchzip" id="branchzip"  size="25" maxlength="25" value="[% library.branchzip %]" /></li>
+                <li><label for="branchcountry">Country: </label><input type="text" name="branchcountry" id="branchcountry" size="60" value="[% library.branchcountry %]" /></li>
+                <li><label for="branchphone">Phone: </label><input type="text" name="branchphone" id="branchphone" size="60" value="[% library.branchphone %]" /></li>
+                <li><label for="branchfax">Fax: </label><input type="text" name="branchfax" id="branchfax" size="60" value="[% library.branchfax %]" /></li>
+                <li><label for="branchemail">Email: </label><input type="text" name="branchemail" id="branchemail" class="email"  size="80" value="[% library.branchemail %]" /></li>
+                <li><label for="branchreplyto">Reply-To (if different to Email): </label> <input type="text" name="branchreplyto" id="branchreplyto" class="email"  size="80" value="[% library.branchreplyto %]" /></li>
+                <li><label for="branchreturnpath">Return-Path (if different to Email): </label> <input type="text" name="branchreturnpath" id="branchreturnpath" class="email"  size="80" value="[% library.branchreturnpath %]" /></li>
+                <li><label for="branchurl">URL: </label><input type="text" name="branchurl" id="branchurl"  size="80" value="[% library.branchurl %]" class="url" /></li>
+                <li><label for="opac_info">OPAC info: </label><textarea name="opac_info" id="opac_info">[% library.opac_info %]</textarea></li>
+                <li><label for="branchip">IP: </label><input type="text" name="branchip" id="branchip"  size="15" maxlength="15" value="[% library.branchip %]" /> <span class="hint">Can be entered as a single IP, or a subnet such as 192.168.1.*</span></li>
+                <li><label for="branchnotes">Notes: </label><input type="text" name="branchnotes" id="branchnotes" size="80" value="[% library.branchnotes %]" /></li>
             </ol>
         </fieldset>
         <fieldset class="action">
@@ -206,8 +206,8 @@ tinyMCE.init({
         <fieldset>
             <legend>Confirm deletion of [% library.branchname %] ([% library.branchcode %])?</legend>
             <input type="hidden" name="op" value="delete_confirmed" />
-            <input type="hidden" name="branchcode" value="[% library.branchcode |html %]" />
-            <input type="hidden" name="branchname" value="[% library.branchname |html %]">
+            <input type="hidden" name="branchcode" value="[% library.branchcode %]" />
+            <input type="hidden" name="branchname" value="[% library.branchname %]">
             <fieldset class="action">
                 <input type="submit" value="Delete Library" />
                 <a class="cancel" href="/cgi-bin/koha/admin/branches.pl">Cancel</a>
@@ -234,34 +234,34 @@ tinyMCE.init({
             <tbody>
                 [% FOREACH library IN libraries %]
                     <tr>
-                        <td>[% library.branchname |html %]</td>
-                        <td>[% library.branchcode |html %]</td>
+                        <td>[% library.branchname %]</td>
+                        <td>[% library.branchcode %]</td>
                         <td>
                             [% IF library.branchaddress1 %]
-                                [% library.branchaddress1 |html %][% END %]
+                                [% library.branchaddress1 %][% END %]
                             [% IF library.branchaddress2 %]
-                                <br />[% library.branchaddress2 |html %][% END %]
+                                <br />[% library.branchaddress2 %][% END %]
                             [% IF library.branchaddress3 %]
-                                <br />[% library.branchaddress3 |html %][% END %]
+                                <br />[% library.branchaddress3 %][% END %]
                             [% IF library.branchcity %]
-                                <br />[% library.branchcity |html %][% END %][% IF ( library.branchstate ) %],
-                                [% library.branchstate |html %][% END %]
+                                <br />[% library.branchcity %][% END %][% IF ( library.branchstate ) %],
+                                [% library.branchstate %][% END %]
                             [% IF library.branchzip %]
-                                [% library.branchzip |html %][% END %]
+                                [% library.branchzip %][% END %]
                             [% IF library.branchcountry %]
-                                <br />[% library.branchcountry |html %][% END %]
+                                <br />[% library.branchcountry %][% END %]
                             [% IF library.branchphone %]
-                                <br />Ph: [% library.branchphone |html %][% END %]
+                                <br />Ph: [% library.branchphone %][% END %]
                             [% IF library.branchfax %]
-                                <br />Fax: [% library.branchfax |html %][% END %]
+                                <br />Fax: [% library.branchfax %][% END %]
                             [% IF library.branchemail %]
-                                <br /><a href="mailto:[% library.branchemail %]">[% library.branchemail |html %]</a>[% END %]
+                                <br /><a href="mailto:[% library.branchemail %]">[% library.branchemail %]</a>[% END %]
                             [% IF library.branchurl %]
-                                <br /><a href="[% library.branchurl %]">[% library.branchurl |html %]</a>[% END %]
+                                <br /><a href="[% library.branchurl %]">[% library.branchurl %]</a>[% END %]
                             [% IF library.opac_info %]
                                 <br />OPAC Info: <div>[% library.opac_info %]</div>[% END %]
                             [% IF library.branchnotes %]
-                                <br />Notes: [% library.branchnotes |html %][% END %]
+                                <br />Notes: [% library.branchnotes %][% END %]
                         </td>
                         <td>
                             [% FOREACH category IN library.get_categories %]
@@ -339,7 +339,7 @@ tinyMCE.init({
                 <li>
                     [% IF category.categorycode %]
                         <span class="label">Category code: </span>
-                        <input type="hidden" name="categorycode" id="categorycode" value="[% category.categorycode |html %]" />
+                        <input type="hidden" name="categorycode" id="categorycode" value="[% category.categorycode %]" />
                         [% category.categorycode %]
                     [% ELSE %]
                         <label for="categorycode">Category code:</label>
@@ -348,11 +348,11 @@ tinyMCE.init({
                 </li>
                 <li>
                     <label for="categoryname">Name: </label>
-                    <input type="text" name="categoryname" id="categoryname" size="32" maxlength="32" value="[% category.categoryname |html %]" />
+                    <input type="text" name="categoryname" id="categoryname" size="32" maxlength="32" value="[% category.categoryname %]" />
                 </li>
                 <li>
                     <label for="codedescription">Description: </label>
-                    <input type="text" name="codedescription" id="codedescription" size="70" value="[% category.codedescription |html %]" />
+                    <input type="text" name="codedescription" id="codedescription" size="70" value="[% category.codedescription %]" />
                 </li>
                 <li>
                     <label for="categorytype">Category type: </label>
@@ -363,7 +363,6 @@ tinyMCE.init({
                         [% ELSE %]
                             <option value="searchdomain">Search domain</option>
                             <option value="properties">Properties</option>
-
                         [% END %]
                     </select>
                 </li>
@@ -386,7 +385,7 @@ tinyMCE.init({
     Are you sure you want to delete the group '[% category.codedescription %]' ([% category.categorycode %])?
     <form action="/cgi-bin/koha/admin/branches.pl" method="post">
         <input type="hidden" name="op" value="delete_confirmed_category" />
-        <input type="hidden" name="categorycode" value="[% category.categorycode |html %]" />
+        <input type="hidden" name="categorycode" value="[% category.categorycode %]" />
         <input type="submit" value="Delete" />
         <a class="cancel" href="/cgi-bin/koha/admin/branches.pl">Cancel</a>
     </form>
