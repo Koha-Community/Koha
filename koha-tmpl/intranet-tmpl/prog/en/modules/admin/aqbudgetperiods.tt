@@ -574,7 +574,7 @@
       [% ELSE %]
         No active budgets
       [% END %]
-      <div class="paginationBar">[% active_pagination_bar %]</div>
+      <div class="paginationBar">[% active_pagination_bar.raw %]</div>
     </div>
     <div id="inactive">
       [% IF ( period_inactive_loop ) %]
@@ -607,7 +607,7 @@
       [% ELSE %]
         No inactive budgets
       [% END %]
-      <div class="pages">[% inactive_pagination_bar %]</div>
+      <div class="pages">[% inactive_pagination_bar.raw %]</div>
     </div>
   </div>
 [% END %]

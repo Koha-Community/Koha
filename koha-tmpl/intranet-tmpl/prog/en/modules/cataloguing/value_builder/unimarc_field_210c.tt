@@ -41,7 +41,7 @@
             [% IF ( total ) %]
             <h3>Authority search results</h3>
             <div class="pages">
-                          [% pagination_bar %]      
+                          [% pagination_bar.raw %]
                         </div>[% END %]
             <p>
                 [% IF ( total ) %]
@@ -74,7 +74,7 @@
 [% END %]
 
             [% IF ( total ) %]<div class="pages">
-                          [% pagination_bar %]      
+                          [% pagination_bar.raw %]
                         </div>
             [% END %]
 <script type="text/javascript">

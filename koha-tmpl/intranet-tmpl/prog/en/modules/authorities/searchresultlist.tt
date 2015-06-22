@@ -56,7 +56,7 @@ function searchauthority() {
 
 <div id="merge_in_progress"></div>
 [% IF ( total ) %]
-<div class="pages">[% pagination_bar %]</div>
+<div class="pages">[% pagination_bar.raw %]</div>
 
 <p id="authorities_searchresultlist_current_page_info">
   Results [% from %] to [% to %] of [% total %]
@@ -100,7 +100,7 @@ function searchauthority() {
   </table>
 </div>
 
-<div class="paginationBar">[% pagination_bar %]</div>
+<div class="paginationBar">[% pagination_bar.raw %]</div>
 
 [% ELSE %]
   No results found
