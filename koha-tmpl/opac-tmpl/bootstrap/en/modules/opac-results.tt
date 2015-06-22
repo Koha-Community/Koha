@@ -321,7 +321,7 @@
                                                 [% END %]
 
                                                 [% IF ( OPACXSLTResultsDisplay ) %]
-                                                    [% SEARCH_RESULT.XSLTResultsRecord %]
+                                                    [% SEARCH_RESULT.XSLTResultsRecord.raw %]
                                                 [% ELSE %]
                                                     [% IF ( BiblioDefaultViewmarc ) %]
                                                         <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber |url %]" title="View details for this title">

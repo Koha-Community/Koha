@@ -109,7 +109,7 @@
                         [% IF ( ISBD ) %]<span class="view"><a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblionumber %]">ISBD view</a></span>[% END %]
                     </div>
                     [% IF ( OPACXSLTDetailsDisplay ) %]
-                        [% XSLTBloc %]
+                        [% XSLTBloc.raw %]
                     [% ELSE %]
                         <h1 class="title">[% title %][% IF ( subtitle ) %] <span class="subtitle">[% FOREACH subtitl IN subtitle %][% subtitl.subfield %] [% END %]</span>[% END %]</h1>
                         [% IF ( author ) %]<h5 class="author">by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% author |url %]">[% author %]</a></h5>[% END %]
