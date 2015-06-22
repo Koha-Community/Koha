@@ -127,6 +127,17 @@ $dbh->{RaiseError} = 1;
         };
         like ( $@, qr(^bad template path), 'The file $template_name should not be accessible' );
     }
+    ( $template, $loggedinuser, $cookies ) = get_template_and_user(
+        {
+            template_name   => 'errors/500.tt',
+            query           => $query,
+            type            => "intranet",
+            authnotrequired => 1,
+            flagsrequired   => { catalogue => 1 },
+        }
+    );
+    my $file_exists = ( -f $template->{filename} ) ? 1 : 0;
+    is ( $file_exists, 1, 'The file errors/500.tt should be accessible (contains integers)' );
 }
 
 my $hash1 = hash_password('password');
