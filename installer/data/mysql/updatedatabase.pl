@@ -10606,13 +10606,17 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.21.00.XXX";
+$DBversion = "3.21.00.010";
 if ( CheckVersion($DBversion) ) {
-
-    $dbh->do("ALTER TABLE message_queue DROP message_id" );
-    $dbh->do("ALTER TABLE message_queue ADD message_id INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST");
-
-    print "Upgrade to $DBversion done (Bug 7793 - redefine the field message_id as PRIMARY KEY of message_queue)\n";
+    $dbh->do(q|
+        ALTER TABLE message_queue
+            DROP message_id
+    |);
+    $dbh->do(q|
+        ALTER TABLE message_queue
+            ADD message_id INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST
+    |);
+    print "Upgrade to $DBversion done (Bug 7793: redefine the field message_id as PRIMARY KEY of message_queue)\n";
     SetVersion ($DBversion);
 }
 

@@ -131,6 +131,18 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
 );
 
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</message_id>
+
+=back
+
+=cut
+
+__PACKAGE__->set_primary_key("message_id");
+
 =head1 RELATIONS
 
 =head2 borrowernumber
@@ -169,8 +181,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YWxM2O2W/h34qqIOIpzOtw
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-06-22 16:37:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nQcmtLCbGEeLFLFP4jwy2g
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
