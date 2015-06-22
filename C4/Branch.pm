@@ -364,6 +364,7 @@ Other usage of agency categories falls under type: 'properties'.
 	to allow for other uses of categories.
 The searchdomain bit may be better implemented as a separate module, but
 the categories were already here, and minimally used.
+
 =cut
 
 	#TODO  manage category types.  rename possibly to 'agency domains' ? as borrowergroups are called categories.
@@ -430,6 +431,7 @@ $results = GetBranchInfo($branchcode);
 returns C<$results>, a reference to an array of hashes containing branches.
 if $branchcode, just this branch, with associated categories.
 if ! $branchcode && $categorytype, all branches in the category.
+
 =cut
 
 sub GetBranchInfo {
