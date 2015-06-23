@@ -59,15 +59,8 @@ use C4::Output;
 use CGI qw ( -utf8 );
 
 my $input=new CGI;
-my ($template, $loggedinuser, $cookie) = get_template_and_user(
-	{   template_name   => "",
-		query           => $input,
-		type            => "intranet",
-		authnotrequired => 0,
-		flagsrequired   => { acquisition => 'vendors_manage' },
-		debug           => 1,
-	}
-);
+
+checkauth( $input, 0, { acquisition => 'vendors_manage' }, 'intranet' );
 
 #print $input->header();
 my $booksellerid=$input->param('booksellerid');
