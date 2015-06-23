@@ -37,7 +37,7 @@
 <ul>
 	<li><strong>Required for staff login.</strong> Staff access, allows viewing the catalogue in staff client
 <ul>
-	<li style="color: #990000">Important: Must be given to all staff members to allow them to login to the staff client</li>
+	<li style="color: #990000;">Important: Must be given to all staff members to allow them to login to the staff client</li>
 </ul>
 </li>
 </ul>
@@ -45,7 +45,7 @@
 	<li>parameters
 <ul>
 	<li>Manage Koha system settings (Administration panel)</li>
-    <li>This section can be expanded</li>
+	<li>This section can be expanded</li>
 </ul>
 </li>
 	<li>borrowers
@@ -71,7 +71,7 @@
 </li>
 	<li>editcatalogue
 <ul>
-    <li>Edit Catalog (Modify bibliographic/holdings data)</li>
+	<li>Edit Catalog (Modify bibliographic/holdings data)</li>
 	<li>This section can be expanded</li>
 </ul>
 </li>
@@ -88,9 +88,9 @@
 </li>
 	<li>management
 <ul>
-    <li>Set library management parameters (deprecated)
+	<li>Set library management parameters (deprecated)
 <ul>
-	<li style="color: #990000">Important: This permission level no longer controls anything.</li>
+	<li style="color: #990000;">Important: This permission level no longer controls anything.</li>
 </ul>
 </li>
 </ul>
@@ -122,7 +122,14 @@
 	<li>staffaccess
 <ul>
 	<li>Allow staff members to modify permissions for other staff members</li>
-	<li style="color: #990000">Important: Requires the borrowers permission above</li>
+	<li style="color: #990000;">Important: Requires the borrowers permission above</li>
+</ul>
+</li>
+	<li>lists
+<ul>
+	<li>Koha Lists</li>
+	<li style="color: #990000;">Important: All staff have permission to create and modify their own lists, this permission is only necessary if you'd like to give a staff member permission to delete public lists that they have not created.</li>
+	<li>This section can be expanded</li>
 </ul>
 </li>
 </ul>
@@ -194,6 +201,12 @@
 <p>If the staff member has 'editcatalogue' permissions they have the ability to perform all of these actions. If you would like to control cataloging permissions on a more granular level choose from these options:</p>
 
 <ul>
+	<li>delete_all_items
+<ul>
+	<li>Delete all items at once</li>
+	<li>Ability to use the 'Delete all items' option found under the 'Edit' menu in cataloging</li>
+</ul>
+</li>
 	<li>edit_catalogue
 <ul>
 	<li>Edit catalog (Modify bibliographic/holdings data)</li>
@@ -204,6 +217,12 @@
 <ul>
 	<li>Edit items</li>
 	<li>Ability to make edits to item/holdings records, but not bibliographic records</li>
+</ul>
+</li>
+	<li>edit_items_restricted
+<ul>
+	<li>Limit item modification to subfields defined in the SubfieldsToAllowForRestrictedEditing preference</li>
+	<li>Note: Please note that edit_items permission is still required</li>
 </ul>
 </li>
 	<li>fast_cataloging
@@ -407,6 +426,12 @@
 	<li>Access to the Batch Item Modification Tool</li>
 </ul>
 </li>
+	<li>items_batchmod_restricted
+<ul>
+	<li>Limit batch item modification to subfields defined in the SubfieldsToAllowForRestrictedBatchmod preference</li>
+	<li>Note: Please note that items_batchmod permission is still required</li>
+</ul>
+</li>
 	<li>label_creator
 <ul>
 	<li>Create printable labels and barcodes from catalog and patron data</li>
@@ -435,6 +460,12 @@
 <ul>
 	<li>Moderate patron tags</li>
 	<li>Access to the Tags Tool</li>
+</ul>
+</li>
+	<li>records_batchdel
+<ul>
+	<li>Perform batch deletion of records (bibliographic or authority)</li>
+	<li>Access to the Batch Record Deletion Tool</li>
 </ul>
 </li>
 	<li>schedule_tasks
@@ -478,6 +509,18 @@
 <ul>
 	<li>Execute SQL Reports</li>
 	<li>The ability to run but not create or edit SQL reports</li>
+</ul>
+</li>
+</ul>
+
+<h4>Granular Lists Permissions</h4>
+
+<p>All staff members have permission to access lists. This section only needs to be checked off if you want to give permission to a staff member to delete public lists that they have no created themselves.</p>
+
+<ul>
+	<li>delete_public_lists
+<ul>
+	<li>Delete public lists</li>
 </ul>
 </li>
 </ul>
