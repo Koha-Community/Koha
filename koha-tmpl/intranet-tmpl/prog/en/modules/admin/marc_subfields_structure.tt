@@ -198,7 +198,7 @@ function populateHiddenCheckboxes(tab) {
     </h1>
     <form action="[% script_name %]" name="Aform" method="post">
     <input type="hidden" name="op" value="add_validate" />
-	<input type="hidden" name="tagfield" value="[% tagfield | html %]" />
+    <input type="hidden" name="tagfield" value="[% tagfield | html %]" />
     <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
     <div id="subfieldtabs" class="toptabs numbered">
    <ul>
@@ -360,7 +360,7 @@ function populateHiddenCheckboxes(tab) {
 			
 			<form action="[% script_name %]" method="post">
 			<input type="hidden" name="searchfield" value="[% searchfield %]" />
-			<input type="hidden" name="tagfield" value="[% tagfield | html %]" />
+                        <input type="hidden" name="tagfield" value="[% tagfield | html %]" />
 			<input type="hidden" name="tagsubfield" value="[% tagsubfield %]" />
 			<input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
 			<input type="submit" value="No, do not delete" />
@@ -371,7 +371,7 @@ function populateHiddenCheckboxes(tab) {
 
     <h3>Data deleted</h3>
     <form action="[% script_name %]" method="post">
-	<input type="hidden" name="tagfield" value="[% tagfield | html %]" />
+        <input type="hidden" name="tagfield" value="[% tagfield | html %]" />
     <input type="submit" value="OK" />
     </form>
 [% END %]
@@ -428,7 +428,7 @@ function populateHiddenCheckboxes(tab) {
     <input type="hidden" name="tagfield" value="[% edit_tagfield %]" />
     <input type="hidden" name="frameworkcode" value="[% edit_frameworkcode %]" />
     <input type="submit" value="Edit subfields" />
-	<a class="cancel" href="marctagstructure.pl?searchfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode %]">Cancel</a>
+        <a class="cancel" href="marctagstructure.pl?searchfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode %]">Cancel</a>
 	</fieldset>
 </form>
 
