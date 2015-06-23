@@ -8578,6 +8578,13 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.16.12.000";
+if ( CheckVersion($DBversion) ) {
+    print "Upgrade to $DBversion done (3.16.12 release)\n";
+    SetVersion ($DBversion);
+}
+
+
 
 =head1 FUNCTIONS
 
