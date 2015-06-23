@@ -28,27 +28,17 @@ note: there is currently no 'delete rating' functionality in this script
 use strict;
 use warnings;
 use CGI qw ( -utf8 );
-use CGI::Cookie;
-use C4::Auth qw(:DEFAULT check_cookie_auth);
+
+use C4::Auth;
 use C4::Context;
-use C4::Output;
-use C4::Dates qw(format_date);
-use C4::Biblio;
 use C4::Ratings;
 use C4::Debug;
 
 my $query = CGI->new();
-my $a     = $query->Vars;
-####  $a
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {
-        template_name   => "",
-        query           => $query,
-        type            => "opac",
-        authnotrequired => 0,        # auth required to add tags
-        debug           => 0,
-    }
-);
+
+# auth required to add ratings
+my ($userid, $cookie, $sessionID) = checkauth( $query, 0, {}, 'opac' );
+my $loggedinuser = C4::Context->userenv->{'number'};
 
 my $biblionumber     = $query->param('biblionumber');
 my $rating_old_value = $query->param('rating_value');
