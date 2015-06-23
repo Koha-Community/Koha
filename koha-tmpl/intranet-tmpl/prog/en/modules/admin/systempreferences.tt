@@ -2,6 +2,8 @@
 <title>Koha &rsaquo; Administration &rsaquo; [% IF ( add_form ) %] System preferences &rsaquo; [% IF ( modify ) %]Modify system preference '[% searchfield %]'[% ELSE %]Add a system preference[% END %][% END %][% IF ( add_validate ) %] System preferences &rsaquo; Data added[% END %]
 [% IF ( delete_confirm ) %] System preferences &rsaquo; [% searchfield %] &rsaquo; Confirm deletion of parameter '[% searchfield %]'[% END %][% IF ( delete_confirmed ) %] System preferences &rsaquo; Parameter deleted[% END %][% IF ( else ) %]System preferences[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[%# Add WYSIWYG editor for htmlarea system preferences %]
+[% INCLUDE 'wysiwyg-systempreferences.inc' %]
 [% IF ( else ) %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
@@ -108,6 +110,8 @@
                     <textarea id="value" name="value" cols="[% fieldlength %]">[% value |html %]</textarea>
                 [% ELSIF ( type_upload ) %]
                     <input type="file" name="value" />
+                [% ELSIF ( type_htmlarea ) %]
+                    <textarea class="mce" name="value" id="value" rows="[% rows %]" cols="[% cols %]">[% value |html %]</textarea>
                 [% ELSIF ( type_textarea ) %]
                     <textarea name="value" id="value" rows="[% rows %]" cols="[% cols %]">[% value |html %]</textarea>
                 [% ELSIF ( type_choice ) %]
@@ -336,6 +340,9 @@
                 [% IF ( loo.type_textarea ) %]
                 <a class="expand-textarea" style="display: none" href="#">Click to edit</a>
                 <textarea name="value" rows="[% loo.rows %]" cols="[% loo.cols %]">[% loo.value |html %]</textarea>
+                [% END %]
+                [% IF ( loo.type_htmlarea ) %]
+                <textarea class="mce" name="value" rows="[% loo.rows %]" cols="[% loo.cols %]">[% loo.value |html %]</textarea>
                 [% END %]
                 [% IF ( loo.type_choice ) %]
                 <select name="value">
