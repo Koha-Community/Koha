@@ -8,7 +8,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::Warn;
 use C4::Members;
 use Koha::AuthUtils qw/hash_password/;
@@ -112,6 +112,7 @@ $dbh->{RaiseError} = 1;
             ../../../../../../../../../../../../../../../etc/passwd
             test/../../../../../../../../../../../../../../etc/passwd
             /etc/passwd
+            test/does_not_finished_by_tt_t
         )
     ) {
         eval {
