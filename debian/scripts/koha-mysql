@@ -29,8 +29,24 @@ else
     exit 1
 fi
 
-is_instance "$1" || die "Usage: $0 instancename"
+usage()
+{
+    local scriptname=$0
+    cat <<EOF
+Run mysql in the context of a given Koha instance.
+
+Usage: $scriptname instancename [ optional mysql arguments ]
+
+EOF
+}
+
+# Parse command line.
+[ $# -ge 1 ] || ( usage ; die "Missing instance name..." )
+
 name="$1"
+
+is_instance "$name" || ( usage; die "Unknown instance '$name'" )
+
 shift # remove instance name from argument list.
 kohaconfig="/etc/koha/sites/$name/koha-conf.xml"
 
