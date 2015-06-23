@@ -105,25 +105,25 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         } );
 
         shortcut.add( 'alt+ctrl+k', function(event) {
-            if ( Search.IsAvailable() ) $( '#search-by-keywords' ).focus();
+            $( '#search-by-keywords' ).focus();
 
             return false;
         } );
 
         shortcut.add( 'alt+ctrl+a', function(event) {
-            if ( Search.IsAvailable() ) $( '#search-by-author' ).focus();
+            $( '#search-by-author' ).focus();
 
             return false;
         } );
 
         shortcut.add( 'alt+ctrl+i', function(event) {
-            if ( Search.IsAvailable() ) $( '#search-by-isbn' ).focus();
+            $( '#search-by-isbn' ).focus();
 
             return false;
         } );
 
         shortcut.add( 'alt+ctrl+t', function(event) {
-            if ( Search.IsAvailable() ) $( '#search-by-title' ).focus();
+            $( '#search-by-title' ).focus();
 
             return false;
         } );
@@ -351,7 +351,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
     function showAdvancedSearch() {
         $('#advanced-search-servers').empty();
         $.each( z3950Servers, function( server_id, server ) {
-            $('#advanced-search-servers').append( '<li data-server-id="' + server_id + '"><input class="search-toggle-server" type="checkbox"' + ( server.checked ? ' checked="checked">' : '>' ) + server.name + '</li>' );
+            $('#advanced-search-servers').append( '<li data-server-id="' + server_id + '"><label><input class="search-toggle-server" type="checkbox"' + ( server.checked ? ' checked="checked">' : '>' ) + server.name + '</label></li>' );
         } );
         $('#advanced-search-ui').modal('show');
     }
@@ -413,7 +413,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 num_fetched += '+';
             }
 
-            $('#search-serversinfo').append( '<li data-server-id="' + server_id + '"><input class="search-toggle-server" type="checkbox"' + ( server.checked ? ' checked="checked">' : '>' ) + server.name + ' (' + num_fetched + ')' + '</li>' );
+            $('#search-serversinfo').append( '<li data-server-id="' + server_id + '"><label><input class="search-toggle-server" type="checkbox"' + ( server.checked ? ' checked="checked">' : '>' ) + server.name + ' (' + num_fetched + ')' + '</label></li>' );
         } );
 
         var seenColumns = {};
@@ -527,6 +527,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         } else {
             $overlay.find('.bar').css( { display: 'block', width: '100%' } );
             $overlay.fadeOut();
+            $('#searchresults')[0].focus();
         }
     }
 
@@ -607,7 +608,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 break;
             case 'selected_search_targets':
                 $( document ).on( 'change', 'input.search-toggle-server', function() {
-                    var server_id = $( this ).parent().data('server-id');
+                    var server_id = $( this ).closest('li').data('server-id');
                     Preferences.user.selected_search_targets[server_id] = this.checked;
                     Preferences.Save( [% USER_INFO.0.borrowernumber %] );
                 } );
@@ -974,7 +975,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         });
 
         $( document ).on( 'change', 'input.search-toggle-server', function() {
-            var server = z3950Servers[ $( this ).parent().data('server-id') ];
+            var server = z3950Servers[ $( this ).closest('li').data('server-id') ];
             server.checked = this.checked;
 
             if ( $('#search-results-ui').is( ':visible' ) ) {
