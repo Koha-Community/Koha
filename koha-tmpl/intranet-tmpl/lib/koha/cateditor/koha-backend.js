@@ -156,7 +156,7 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
                     record.addFieldGrouped( newField );
 
                     if ( tagnum < '010' ) {
-                        newField.addSubfield( [ '@', '' ] );
+                        newField.addSubfield( [ '@', (taginfo.subfields[0] ? taginfo.subfields[0][1].defaultvalue : null ) || '' ] );
                         return;
                     }
                 }
@@ -167,7 +167,7 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
                     if ( subfieldinfo.mandatory != "1" && !allTags ) return;
 
                     $.each( fields, function( undef, field ) {
-                        if ( !field.hasSubfield(subfieldcode) ) field.addSubfieldGrouped( [ subfieldcode, '' ] );
+                        if ( !field.hasSubfield(subfieldcode) ) field.addSubfieldGrouped( [ subfieldcode, subfieldinfo.defaultvalue || '' ] );
                     } );
                 } );
             } );

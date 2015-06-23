@@ -7,6 +7,7 @@ require.config( {
     baseUrl: '/intranet-tmpl/lib/koha/cateditor/',
     config: {
         resources: {
+            marcflavour: '[% marcflavour %]',
             themelang: '[% themelang %]',
         },
     },
@@ -179,7 +180,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 var first = tag[0];
                 var url = "http://archive.ifla.org/VI/3/p1996-1/uni" + first + ".htm#";
                 if ( first == '0' ) url += "b";
-                if ( first != '9' ) url += field;
+                if ( first != '9' ) url += tag;
 
                 return url;
             }

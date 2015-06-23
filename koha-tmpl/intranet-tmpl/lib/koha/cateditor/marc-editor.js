@@ -172,7 +172,7 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
 
             for ( var i = positions.length - 1; i >= 0; i-- ) {
                 if ( positions[i].ch < cur.ch ) {
-                    activateTabPosition( cm, positions[i] );
+                    activateTabPosition( cm, positions[i], -1 );
                     return false;
                 }
             }
