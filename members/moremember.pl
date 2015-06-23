@@ -205,7 +205,7 @@ else {
 	}
 }
 
-( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' || $category_type eq 'I' );
+$template->param( adultborrower => 1 ) if ( $category_type eq 'A' || $category_type eq 'I' );
 
 my %bor;
 $bor{'borrowernumber'} = $borrowernumber;
