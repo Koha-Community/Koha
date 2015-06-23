@@ -5,18 +5,6 @@ use lib qw( ./lib );
 use Plack::Middleware::Debug;
 use Plack::App::Directory;
 
-use CGI qw(-utf8 ); # we will loose -utf8 under plack
-{
-    no warnings 'redefine';
-    my $old_new = \&CGI::new;
-    *CGI::new = sub {
-        my $q = $old_new->( @_ );
-        $CGI::PARAM_UTF8 = 1;
-        C4::Context->clear_syspref_cache();
-        return $q;
-    };
-}
-
 BEGIN {
 
 # override configuration from startup script below:
