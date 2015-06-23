@@ -1,0 +1,301 @@
+RELEASE NOTES FOR KOHA 3.18.8
+23 Jun 2015
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.18.8 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.18.08.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+
+Koha 3.18.8 is a bugfix/maintenance release.
+
+
+
+Critical bugs fixed in 3.18.8
+======================
+
+
+Circulation
+----------
+	12066	major	New renew page in staff client doesn't record branch in statistics
+
+Packaging
+----------
+	14106	major	Koha-conf paths to zebra libraries are wrong in jessie
+
+Tools
+----------
+	10625	major	Inventory/Stocktaking tool cannot handle windows file uploads
+
+
+Other bugs fixed in 3.18.8
+======================
+
+
+Architecture, internals, and plumbing
+----------
+	13265	normal	Still too many search cursor cookies
+	13815	normal	Plack loose CGI qw(-utf8) flag creating incorrect utf-8 encoding everywhere
+	11790	minor	C4::Charset should not depend on C4::Context
+	14344	minor	Uninitialized value warning C4/Utils/DataTables/Members.pm
+
+Cataloging
+----------
+	14047	normal	Sort z39.50 biblio servers by rank in derivate cataloguing doesn't work
+	14276	minor	Keep highlight on the active item in item editor
+	14327	minor	Fix js error "TypeError: events is null" in additem.js
+
+Circulation
+----------
+	14299	normal	Today's checkouts not always sorting correctly
+
+Command-line Utilities
+----------
+	14203	trivial	Koha-translate error string for non-existent lang removal
+
+Database
+----------
+	14350	minor	Missing statement in kohastructure.sql - DROP TABLE IF EXISTS borrower_sync;
+
+Notices
+----------
+	14206	normal	Notices using non email templates can't be deleted from the staff client
+
+OPAC
+----------
+	14173	normal	Paging on 'recent comments' page in OPAC is not displaying correctly
+	14025	minor	Fix 856u-links in the OPAC for NORMARC
+	14184	minor	Noisy warns in C4/CourseReserves.pm
+	14185	minor	Noisy warns in opac-readingrecord.pl
+	14186	minor	Noisy warns in opac-reserve.pl
+
+Patrons
+----------
+	14338	normal	Unable to delete patron images
+	11929	minor	Patron modification error shows borrowernumber
+	11941	minor	"Patron lists" are not easily accessible
+
+Reports
+----------
+	14130	normal	Column.def should be updated with descriptions for new columns
+
+System Administration
+----------
+	14314	trivial	System Preferences: Better explanation for syspref 'ShowReviewerPhoto'
+
+Templates
+----------
+	14265	normal	Use $.trim instead of trim() in admin/categorie.tt
+	14266	normal	Replace trim() with $.trim() in opac-shareshelf.tt
+	14279	normal	Remove CGI::scrolling_list from issues_avg_stats.pl
+	13946	minor	Change order status 'Pending' to ordered like in database
+	14275	minor	Remove CGI::scrolling_list from guided_reports.pl
+	14329	trivial	Useless copy/paste from Template::Plugin::HtmlToText
+	14330	trivial	Remove unused email_sender from sendbasket/sendshelf
+
+Test Suite
+----------
+	14112	minor	Silence warnings t/Charset.t
+
+Tools
+----------
+	10355	minor	Second click on modification log misses object parameter
+
+translate.koha-community.org
+----------
+	14285	trivial	Bengali locale needs to be re-defined
+
+
+
+System requirements
+======================
+
+    Important notes:
+
+    * With this release, Koha 3.18 is now compatible with Debian Jessie.
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+The Koha manual is maintained in DocBook.The home page for Koha 
+documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.18/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+
+  * English (USA)
+
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+
+Release Team
+======================
+
+The release team for Koha 3.18.8 is
+
+  Release Manager:       Tomás Cohen Arazi <tomascohen@gmail.com>
+  Documentation Manager: Nicole C Engard <nengard@gmail.com>
+  Translation Manager:   Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  QA Manager:            Katrin Fischer <Katrin.Fischer@bsz-bw.de>
+  QA Team:               Galen Charlton <gmc@esilibrary.com>
+                         Jonathan Druart <jonathan.druart@biblibre.com>
+                         Brendan Gallagher <brendan@bywatersolutions.com>
+                         Kyle Hall <kyle@bywatersolutions.com>
+                         Julian Maurice <julian.maurice@biblibre.com>
+                         Paul Poulain <paul.poulain@biblibre.com>
+                         Martin Renvoize <martin.renvoize@ptfs-europe.com>
+                         Marcel de Rooy <M.de.Rooy@rijksmuseum.nl>
+  Bug Wranglers:         Alex Sassmannshausen <alex.sassmannshausen@ptfs-europe.com>
+                         Zeno Tajoli <z.tajoli@cineca.it>
+  Packaging Manager:     Robin Sheat <robin@catalyst.net.nz>
+
+
+Credits
+======================
+
+
+We thank the following libraries who are known to have sponsored
+new features in Koha 3.18.8:
+
+We thank the following individuals who contributed patches to Koha 3.18.8.
+
+  * Aleisha (5)
+  * Chris (8)
+  * Tomas Cohen Arazi (1)
+  * Tomás Cohen Arazi (1)
+  * David Cook (2)
+  * Chris Cormack (4)
+  * Indranil Das Gupta (4)
+  * Marcel de Rooy (4)
+  * Jonathan Druart (7)
+  * Magnus Enger (1)
+  * Katrin Fischer (3)
+  * Bernardo González Kriegel (4)
+  * Kyle M Hall (3)
+  * Dobrica Pavlinusic (1)
+  * Liz Rea (4)
+  * Robin Sheat (2)
+  * Zeno Tajoli (1)
+  * Mark Tompsett (3)
+  * Marc Véron (2)
+
+
+We thank the following libraries, companies, and other institutions who contributed
+patches to Koha 3.18.8
+
+
+  * BSZ BW (3)
+  * BibLibre (3)
+  * BigBallOfWax (8)
+  * ByWater-Solutions (3)
+  * Catalyst (6)
+  * Cineca (1)
+  * Libriotech (1)
+  * Prosentient Systems (2)
+  * Rijksmuseum (4)
+  * Theke Solutions (1)
+  * Universidad Nacional de Córdoba (4)
+  * koha-community.org (4)
+  * psi.unc.edu.ar (1)
+  * rot13.org (1)
+  * unidentified (16)
+  * veron.ch (2)
+
+We also especially thank the following individuals who tested patches
+for Koha 3.18.8.
+
+  * Aleisha (2)
+  * Cédric Vita (1)
+  * Chris Cormack (39)
+  * Gaetan Boisson (1)
+  * Jonathan Druart (30)
+  * Katrin Fischer (28)
+  * Liz Rea (52)
+  * Marc Veron (1)
+  * Marc Véron (8)
+  * Mark Tompsett (5)
+  * Nick Clemens (1)
+  * Tomas Cohen Arazi (42)
+  * Indranil Das Gupta (2)
+  * Indranil Das Gupta (L2C2 Technologies) (6)
+  * Kyle M Hall (10)
+  * Bernardo Gonzalez Kriegel (6)
+  * Marcel de Rooy (4)
+
+We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release line is security-3.18.x.
+
+The last Koha release was 3.14.10, which was released on September 4, 2014.
+
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+He rau ringa e oti ai.
+(Many hands finish the work)
+
+##### Autogenerated release notes updated last on 23 Jun 2015 01:20:06 Z #####
