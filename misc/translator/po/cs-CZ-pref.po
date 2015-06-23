@@ -72,7 +72,7 @@ msgstr "Upozornit"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqWarnOnDuplicateInvoice# when the librarian tries to create an invoice with a duplicate number."
-msgstr "při pokusu o vytvoření faktury s již použitým číslem."
+msgstr "při pokusu vytvořit doklad s již použitým číslem."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#BasketConfirmations# When closing or reopening a basket,"
@@ -576,7 +576,7 @@ msgstr "Při importu bibliografických záznamů"
 
 # Cataloging > Importing
 msgid "cataloguing.pref#AggressiveMatchOnISBN# attempt to match aggressively by trying all variations of the ISBNs in the imported record as a phrase in the ISBN fields of already cataloged records.  Note that this preference has no effect if UseQueryParser is on."
-msgstr " najít shodu ISBN vyzkoušením všech možných variant tvaru ISBN. Toto nastavení nemá žádný vliv pokud je zapnuto UseQueryParser."
+msgstr "najít shodu ISBN vyzkoušením všech možných variant tvaru ISBN. Toto nastavení nemá žádný vliv pokud je zapnuto UseQueryParser."
 
 # Cataloging > Importing
 msgid "cataloguing.pref#AggressiveMatchOnISBN# do"
@@ -896,7 +896,7 @@ msgstr "bibliografický záznam"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#item-level_itypes# specific item"
-msgstr "holdingový záznam"
+msgstr "záznam jednotky"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#itemcallnumber# Map the MARC subfield"
@@ -1040,7 +1040,7 @@ msgstr "Nepovolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldDateInFuture# hold requests to be placed that do not enter the waiting list until a certain future date."
-msgstr "rezervace, které nejsou v pořadí až do určitého data v budoucnosti."
+msgstr "vytvářet rezervace s počátečním datem platnosti v budoucnu"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldPolicyOverride# Allow"
@@ -1288,15 +1288,15 @@ msgstr "Když je prázdné pole pro čárový kód během žádosti o výpůjčk
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# clear the screen"
-msgstr "vymažte obrazovku"
+msgstr "vymazat obrazovku"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# open a print quick slip window"
-msgstr "otevři vyskakovací okno tiskárny"
+msgstr "tisknout dnešní výpůjčky (quick slip)"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# open a print slip window"
-msgstr "otevřít standardní tisk výpůjček"
+msgstr "tisknout všechny výpůjčky"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutocompl# Don't try"
@@ -1536,7 +1536,7 @@ msgstr "Nepovolit"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACAllowHoldDateInFuture# patrons to place holds that don't enter the waiting list until a certain future date. (AllowHoldDateInFuture must also be enabled)."
-msgstr "čtenářům dávat rezervace, které nemají omezený zájem až do určitého budoucího data. (parameter AllowHoldDateInFuture musí být povolen)."
+msgstr "čtenářům vytvářet rezervaci s počátečním datem platnosti v budoucnu. (parametr AllowHoldDateInFuture musí být povolen)."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# Allow"
@@ -1628,7 +1628,7 @@ msgstr "zprávu o prodloužení podle výpůjčních pravidel."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#RentalsInNoissuesCharge# Don't include"
-msgstr "Nazahrnovat"
+msgstr "Nezahrnovat"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#RentalsInNoissuesCharge# Include"
@@ -2596,7 +2596,7 @@ msgstr "."
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveClientKey# Include OverDrive availability information with the client key"
-msgstr "Zahrnout do vyhledávání i dokumenty z databáze Overdrive. Klientský klíč: "
+msgstr "Zahrnout do vyhledávání i dokumenty z databáze Overdrive. Klientský klíč:"
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveClientKey# and client secret"
@@ -2608,7 +2608,7 @@ msgstr "."
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveLibraryID# Show items from the OverDrive catalog of library #"
-msgstr "Identifikátor knihovny v systému OverDrive: "
+msgstr "Identifikátor knihovny v systému OverDrive:"
 
 # Enhanced Content > Syndetics
 msgid "enhanced_content.pref#SyndeticsAuthorNotes# Don't show"
@@ -3124,7 +3124,7 @@ msgstr "Zobrazovat"
 
 # OPAC > Appearance
 msgid "opac.pref#AuthorisedValueImages# images for <a href=\"/cgi-bin/koha/admin/authorised_values.pl\">authorized values</a> (such as lost statuses and locations) in search results and item detail pages on the OPAC."
-msgstr "obrázky pro <a href=\"/cgi-bin/koha/admin/authorised_values.pl\">ovšřené hodnoty</a> (jako status ztracené nebo lokace) ve výsledcích vyhledávání nebo v detailech výtisku na OPACu."
+msgstr "obrázky pro <a href=\"/cgi-bin/koha/admin/authorised_values.pl\">ověřené hodnoty</a> (jako status ztracené nebo lokace) ve výsledcích vyhledávání nebo v detailech výtisku na OPACu."
 
 # OPAC > Appearance
 msgid "opac.pref#BiblioDefaultView# By default, show bib records"
@@ -3464,7 +3464,7 @@ msgstr "návrhy na nákupy od jiných čtenářů v OPACu."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"\">Leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" for the default one</li><li>put a path to define a xslt file</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language"
-msgstr "<br />Možnosti:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"\">Ponechat prázdné</a> pro \"no xslt\"</li><li>vložit \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">defaultně</a>\" pro defaultní</li><li>vložit cestu k definici xslt souboru</li><li>vložit URL pro extrení specifickou šablonu xslt</li></ul>{langcode} bude zaměněn se současnně používaným jazykem rozhraní"
+msgstr "<br />Možnosti:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"\">Ponechat prázdné</a> pro \"no xslt\"</li><li>vložit \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">defaultně</a>\" pro defaultní</li><li>vložit cestu k definici xslt souboru</li><li>vložit URL pro extrení specifickou šablonu xslt</li></ul>{langcode} bude zaměněn za kód právě používaného jazyka rozhraní"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACXSLTDetailsDisplay# Display OPAC details using XSLT stylesheet at: "
@@ -3880,7 +3880,7 @@ msgstr "čtenáři knihovny registrovat svůj účet pomocí OPACu."
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
-msgstr "Zborazit následující doplňující pokyny pro čtenáře, jkterý se samoobslužně registruje pomocí OPACu. (HTML je povoleno):"
+msgstr "Zobrazit následující doplňující pokyny pro čtenáře, který se při předregeistraci pomocí on-line katalogu. (HTML je povoleno):"
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# (separate columns with |)"
@@ -4300,7 +4300,7 @@ msgstr "(oddělit více možností svislítkem |)"
 
 # Patrons
 msgid "patrons.pref#BorrowersTitles# Borrowers can have the following titles:"
-msgstr "Čtenáři si mohou vypůjčit následující tituly:"
+msgstr "Čtenáři mohou mít následující tituly:"
 
 # Patrons
 msgid "patrons.pref#CardnumberLength# Card numbers for patrons must be"
@@ -4364,7 +4364,7 @@ msgstr "[% local_currency %]."
 
 # Patrons
 msgid "patrons.pref#NotifyBorrowerDeparture# Show a notice if the patron is about to expire or has expired"
-msgstr "Zobrazovat upozornění na blížíce se termín vypršení registrace."
+msgstr "Zobrazovat upozornění na blížící se termín vypršení registrace."
 
 # Patrons
 msgid "patrons.pref#NotifyBorrowerDeparture# days beforehand."
@@ -4936,15 +4936,15 @@ msgstr "Vložit ke všem distribučním seznamům následující poznámku:"
 
 # Serials
 msgid "serials.pref#RoutingSerials# Don't use"
-msgstr ""
+msgstr "Nepoužívat"
 
 # Serials
 msgid "serials.pref#RoutingSerials# Use"
-msgstr ""
+msgstr "Používat"
 
 # Serials
 msgid "serials.pref#RoutingSerials# the routing list feature in the serials module."
-msgstr ""
+msgstr "funkci distribučních seznamů v modulu Periodika."
 
 # Serials
 msgid "serials.pref#StaffSerialIssueDisplayCount# Show the"
@@ -4992,7 +4992,7 @@ msgstr "záložku odběrů"
 
 # Serials
 msgid "serials.pref#opacSerialDefaultTab# as default tab for serials in OPAC. Please note that the Serial Collection tab is currently available only for UNIMARC."
-msgstr "jako výchozí záložku pro seriály v OPACu. Pozn.: záložka fondu periodika je nyní dostupná pouze pro UNIMARC."
+msgstr "jako výchozí záložku pro periodika v OPACu. Pozn.: záložka fondu periodika je nyní dostupná pouze pro UNIMARC."
 
 # Staff Client
 msgid "staff_client.pref"
