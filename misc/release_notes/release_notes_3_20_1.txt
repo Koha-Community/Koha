@@ -1,0 +1,346 @@
+RELEASE NOTES FOR KOHA 3.20.1
+23 Jun 2015
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.20.1 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.20.01.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+
+Koha 3.20.1 is a Security and bugfix/maintenance release.
+
+
+
+Security fixes in 3.20.1
+======================
+
+Lists
+----------
+	14416	major	Stored XSS flaw affects OPAC and Staff interface
+
+OPAC
+----------
+	14412	critical	SQL Injection in OPAC Interface
+	14360	major	XSS Injection point
+	14418	major	XSS Flaws in OPAC Interface
+
+Staff Client
+----------
+	14408	critical	Path traversal vulnerabilty
+	14426	critical	SQL Injection in Staff Client
+	14423	major	Multiple XSS and XSRF issues in Staff Client
+
+
+Critical bugs fixed in 3.20.1
+======================
+
+
+Circulation
+----------
+	12066	major	New renew page in staff client doesn't record branch in statistics
+
+Tools
+----------
+	10625	major	Inventory/Stocktaking tool cannot handle windows file uploads
+
+
+Other bugs fixed in 3.20.1
+======================
+
+
+Architecture, internals, and plumbing
+----------
+	5010	normal	Fix OPACBaseURL to include protocol
+	12320	normal	$.cookie('foo', null) deprecated
+	13265	normal	Still too many search cursor cookies
+	13815	normal	Plack loose CGI qw(-utf8) flag creating incorrect utf-8 encoding everywhere
+	14351	normal	Remove given-when from opac-search.pl
+	11790	minor	C4::Charset should not depend on C4::Context
+	14325	minor	Test calls C4::Context::set_userenv
+	14344	minor	Uninitialized value warning C4/Utils/DataTables/Members.pm
+
+Cataloging
+----------
+	14047	normal	Sort z39.50 biblio servers by rank in derivate cataloguing doesn't work
+	14276	minor	Keep highlight on the active item in item editor
+	14327	minor	Fix js error "TypeError: events is null" in additem.js
+
+Circulation
+----------
+	14299	normal	Today's checkouts not always sorting correctly
+
+Command-line Utilities
+----------
+	14203	trivial	Koha-translate error string for non-existent lang removal
+
+Database
+----------
+	14350	minor	Missing statement in kohastructure.sql - DROP TABLE IF EXISTS borrower_sync;
+
+Hold requests
+----------
+	14142	minor	Holds queue viewer only displays first subtitle from marc keyword mappings
+
+I18N/L10N
+----------
+	13656	normal	"Change"/"Set to patron" button for linking a member to an organisation (or child to guarantor) not translatable
+	14263	normal	Export of CSV from item search form does only work in English
+
+Notices
+----------
+	14206	normal	Notices using non email templates can't be deleted from the staff client
+
+OPAC
+----------
+	14173	normal	Paging on 'recent comments' page in OPAC is not displaying correctly
+	14313	normal	OPAC: Adding a comment makes result browser disappear
+	14025	minor	Fix 856u-links in the OPAC for NORMARC
+	14184	minor	Noisy warns in C4/CourseReserves.pm
+	14185	minor	Noisy warns in opac-readingrecord.pl
+	14186	minor	Noisy warns in opac-reserve.pl
+	14269	minor	OPAC: Small template improvements to full serial history page
+
+Patrons
+----------
+	9314	normal	Remove useless code related to the type_only parameter
+	13970	normal	Remove related code to category_type
+	14338	normal	Unable to delete patron images
+	11929	minor	Patron modification error shows borrowernumber
+	11941	minor	"Patron lists" are not easily accessible
+
+Reports
+----------
+	14130	normal	Column.def should be updated with descriptions for new columns
+
+Serials
+----------
+	13662	normal	Serial permissions: receive_serials
+
+System Administration
+----------
+	14291	minor	OpacExportOptions shouldn't say 'separated by |'
+	14314	trivial	System Preferences: Better explanation for syspref 'ShowReviewerPhoto'
+
+Templates
+----------
+	14265	normal	Use $.trim instead of trim() in admin/categorie.tt
+	14266	normal	Replace trim() with $.trim() in opac-shareshelf.tt
+	14279	normal	Remove CGI::scrolling_list from issues_avg_stats.pl
+	12176	minor	Remove HTML from additem.pl
+	13946	minor	Change order status 'Pending' to ordered like in database
+	14267	minor	How active is active in additem.tt?
+	14275	minor	Remove CGI::scrolling_list from guided_reports.pl
+	14329	trivial	Useless copy/paste from Template::Plugin::HtmlToText
+	14330	trivial	Remove unused email_sender from sendbasket/sendshelf
+
+Test Suite
+----------
+	14256	normal	Tests for TestBuilder fail randomly
+	14112	minor	Silence warnings t/Charset.t
+
+Tools
+----------
+	10355	minor	Second click on modification log misses object parameter
+
+translate.koha-community.org
+----------
+	14285	trivial	Bengali locale needs to be re-defined
+
+
+New sysprefs in 3.20.1
+======================
+
+
+
+System requirements
+======================
+
+    Important notes:
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+The Koha manual is maintained in DocBook.The home page for Koha 
+documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.20/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+
+  * English (USA)
+
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+
+Release Team
+======================
+
+The release team for Koha 3.20.1 is
+
+  Release Manager:       Tomás Cohen Arazi <tomascohen@gmail.com>
+  QA Manager:            Katrin Fischer <Katrin.Fischer@bsz-bw.de>
+  Documentation Manager: Nicole C. Engard <nengard@gmail.com>
+  Translation Manager:   Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  QA Team:               Jonathan Druart <jonathan.druart@biblibre.com>
+                         Brendan Gallagher <brendan@bywatersolutions.com>
+                         Kyle Hall <kyle@bywatersolutions.com>
+                         Paul Poulain <paul.poulain@biblibre.com>
+                         Martin Renvoize <martin.renvoize@ptfs-europe.com>
+                         Marcel de Rooy <m.de.rooy@rijksmuseum.nl>
+  Bug Wrangler:          Magnus Enger <magnus@enger.priv.no>
+  Packaging Manager:     Robin Sheat <robin@catalyst.net.nz>
+
+  Release Maintainer (3.18.x): Chris Cormack <chrisc@catalyst.net.nz>
+  Release Maintainer (3.16.x): Mason James <mtj@kohaaloha.com>
+  Release Maintainer (3.14.x): Fridolin Somers <fridolin.somers@biblibre.com>
+
+Credits
+======================
+
+
+We thank the following libraries who are known to have sponsored
+new features in Koha 3.20.1:
+
+We thank the following individuals who contributed patches to Koha 3.20.1.
+
+  * Aleisha (5)
+  * Chris (7)
+  * Nicole C. Engard (1)
+  * Tomás Cohen Arazi (3)
+  * David Cook (2)
+  * Chris Cormack (9)
+  * Indranil Das Gupta (4)
+  * Marcel de Rooy (8)
+  * Jonathan Druart (18)
+  * Magnus Enger (1)
+  * Katrin Fischer (5)
+  * Bernardo González Kriegel (6)
+  * Kyle M Hall (4)
+  * Josef Moravec (1)
+  * Dobrica Pavlinusic (1)
+  * Zeno Tajoli (1)
+  * Mark Tompsett (4)
+  * Marc Véron (3)
+
+
+We thank the following libraries, companies, and other institutions who contributed
+patches to Koha 3.20.1
+
+
+  * BSZ BW (5)
+  * BibLibre (9)
+  * BigBallOfWax (9)
+  * ByWater-Solutions (5)
+  * Catalyst (7)
+  * Cineca (1)
+  * Libriotech (1)
+  * Prosentient Systems (2)
+  * Rijksmuseum (8)
+  * Universidad Nacional de Córdoba (6)
+  * koha-community.org (9)
+  * rot13.org (1)
+  * theke.io (3)
+  * unidentified (14)
+  * veron.ch (3)
+
+We also especially thank the following individuals who tested patches
+for Koha 3.20.1.
+
+  * Aleisha (1)
+  * Brendan Gallagher (1)
+  * Cédric Vita (1)
+  * Chris Cormack (78)
+  * Frederic Demians (1)
+  * Gaetan Boisson (1)
+  * Jonathan Druart (46)
+  * Katrin Fischer (36)
+  * Liz Rea (1)
+  * Marc Veron (1)
+  * Marc Véron (9)
+  * Mark Tompsett (7)
+  * Nick Clemens (1)
+  * Paola Rossi (1)
+  * Signed-off-by:Heather Braum (1)
+  * Tomas Cohen Arazi (74)
+  * Indranil Das Gupta (2)
+  * Indranil Das Gupta (L2C2 Technologies) (8)
+  * Kyle M Hall (13)
+  * Bernardo Gonzalez Kriegel (17)
+  * Marcel de Rooy (11)
+
+We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release line is 3.20.x.
+
+The last Koha release was 3.16.9, which was released on March 29, 2015.
+
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+He rau ringa e oti ai.
+(Many hands finish the work)
+
+##### Autogenerated release notes updated last on 23 Jun 2015 07:28:54 Z #####
