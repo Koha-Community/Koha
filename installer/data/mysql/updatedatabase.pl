@@ -9799,7 +9799,7 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done\n";
     SetVersion ($DBversion);
 }
-$DBversion = "3.18.00.000";
+$DBversion = "3.18.08.000";
 if ( CheckVersion($DBversion) ) {
     print "Upgrade to version 3.18.08\n";
     SetVersion ($DBversion);
