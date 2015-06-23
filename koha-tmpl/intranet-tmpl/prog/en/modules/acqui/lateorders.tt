@@ -95,7 +95,7 @@ $(document).ready(function() {
 [% IF ( lateorders ) %]
 <form action="lateorders.pl" name="claim" method="post">
   <input type="hidden" name="op" value="send_alert" />
-  <input type="hidden" name="delay" value="[% delay %]" />
+  <input type="hidden" name="delay" value="[% delay | html%]" />
   <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
 	[% IF ( letters ) %]
 	<p><label for="letter_code">Claim using notice: </label><select name="letter_code" id="letter_code">
@@ -219,10 +219,10 @@ $(document).ready(function() {
 <fieldset class="brief">
 <h4>Filter results:</h4>
 [% FOREACH ERROR_LOO IN ERROR_LOOP %]
-[% IF ( ERROR_LOO.delay_digits ) %]<p class="error">The number of days ([% ERROR_LOO.bad_delay %]) must be a number between 0 and 999.</p>[% END %]
+[% IF ( ERROR_LOO.delay_digits ) %]<p class="error">The number of days ([% ERROR_LOO.bad_delay | html %]) must be a number between 0 and 999.</p>[% END %]
 [% END %]
 <ol>
-    <li><label for="delay">Order date:</label><input size="3" maxlength="3" id="delay" type="text" name="delay" value="[% delay %]" /> days ago</li>
+    <li><label for="delay">Order date:</label><input size="3" maxlength="3" id="delay" type="text" name="delay" value="[% delay | html%]" /> days ago</li>
     <li><label for="from">Estimated delivery date from: </label>
         <input type="text" size="10" id="from" name="estimateddeliverydatefrom" value="[% estimateddeliverydatefrom %]" class="datepickerfrom" />
         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>

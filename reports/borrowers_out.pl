@@ -174,17 +174,19 @@ sub calculate {
         $colorder .= $column;
         
         my $strsth2;
-        $strsth2 .= "select distinct $colfield FROM borrowers WHERE 1";
-        if ($colfilter[0]) {
+        $strsth2 .= "select distinct " . $dbh->quote($colfield) . " FROM borrowers WHERE 1";
+        my @query_args;
+        if ( $colfilter[0] ) {
             $colfilter[0] =~ s/\*/%/g;
-            $strsth2 .= " and $column LIKE '$colfilter[0]' " ;
+            $strsth2 .= " and " . $dbh->quote($column) . "LIKE ?" ;
+            push @query_args, $colfilter[0];
         }
-        $strsth2 .=" group by $colfield";
-        $strsth2 .=" order by $colorder";
+        $strsth2 .=" group by " . $dbh->quote($colfield);
+        $strsth2 .=" order by " . $dbh->quote($colorder);
         # warn "". $strsth2;
         
         my $sth2 = $dbh->prepare( $strsth2 );
-        $sth2->execute;
+        $sth2->execute( @query_args );
         while (my ($celvalue) = $sth2->fetchrow) {
             my %cell;
     #		my %ft;
@@ -217,21 +219,30 @@ sub calculate {
     
 # Processing calculation
     $strcalc .= "SELECT CONCAT( borrowers.surname , \"\\t\",borrowers.firstname, \"\\t\", borrowers.cardnumber)";
-    $strcalc .= " , $colfield " if ($colfield);
+    $strcalc .= " , " . $dbh->quote($colfield) if ($colfield);
     $strcalc .= " FROM borrowers ";
     $strcalc .= "WHERE 1 ";
-    @$filters[0]=~ s/\*/%/g if (@$filters[0]);
-    $strcalc .= " AND borrowers.categorycode like '" . @$filters[0] ."'" if ( @$filters[0] );
-
+    my @query_args;
+    if ( @$filters[0] ) {
+        @$filters[0]=~ s/\*/%/g;
+        $strcalc .= " AND borrowers.categorycode like ?";
+        push @query_args, @$filters[0];
+    }
     $strcalc .= " AND NOT EXISTS (SELECT * FROM issues WHERE issues.borrowernumber=borrowers.borrowernumber ";
-    $strcalc .= " AND issues.timestamp> '" . @$filters[1] . "'" if (@$filters[1]);
+    if ( @$filters[1] ) {
+        $strcalc .= " AND issues.timestamap > ?";
+        push @query_args, @$filters[1];
+    }
     $strcalc .= ") ";
     $strcalc .= " AND NOT EXISTS (SELECT * FROM old_issues WHERE old_issues.borrowernumber=borrowers.borrowernumber ";
-    $strcalc .= " AND old_issues.timestamp> '" . @$filters[1] . "'" if (@$filters[1]);
+    if ( @$filters[1] ) {
+        $strcalc .= " AND old_issues.timestamp > ?";
+        push @query_args, @$filters[1];
+    }
     $strcalc .= ") ";
     $strcalc .= " group by borrowers.borrowernumber";
-    $strcalc .= ", $colfield" if ($column);
-    $strcalc .= " order by $colfield " if ($colfield);
+    $strcalc .= ", " . $dbh->quote($colfield) if ($column);
+    $strcalc .= " order by " . $dbh->quote($colfield) if ($colfield);
     my $max;
     if ($line) {
         if (@loopcol) {
@@ -241,7 +252,7 @@ sub calculate {
      } 
     
     my $dbcalc = $dbh->prepare($strcalc);
-    $dbcalc->execute;
+    $dbcalc->execute( @query_args );
 # 	warn "filling table";
     my $previous_col;
     $i=1;

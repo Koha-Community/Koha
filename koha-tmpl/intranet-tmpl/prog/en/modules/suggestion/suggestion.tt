@@ -329,12 +329,12 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
             <input type="text" id="title" name="title" size="80" maxlength="255" value="[% title |html %]" required="required" class="required" />
             <span class="required">Required</span>
         </li>
-        <li><label for="author">Author:</label><input type="text" id="author" name="author" size="50" maxlength="80" value="[% author %]"/></li>
-        <li><label for="copyrightdate">Copyright date:</label><input type="text" id="copyrightdate" name="copyrightdate" size="4" maxlength="4" value="[% copyrightdate %]" /></li>
-        <li><label for="isbn">ISBN or ISSN or other standard number:</label><input type="text" id="isbn" name="isbn" size="50" maxlength="80" value="[% isbn %]"/></li>
-        <li><label for="publishercode">Publisher:</label><input type="text" id="publishercode" name="publishercode" size="50" maxlength="80" value="[% publishercode %]"/></li>
-        <li><label for="place">Publication place:</label><input type="text" id="place" name="place" size="50" maxlength="80" value="[% place %]"/></li>
-        <li><label for="collectiontitle">Collection title:</label><input type="text" id="collectiontitle" name="collectiontitle" size="50" maxlength="80" value="[% collectiontitle %]"/></li>
+        <li><label for="author">Author:</label><input type="text" id="author" name="author" size="50" maxlength="80" value="[% author | html %]"/></li>
+        <li><label for="copyrightdate">Copyright date:</label><input type="text" id="copyrightdate" name="copyrightdate" size="4" maxlength="4" value="[% copyrightdate | html %]" /></li>
+        <li><label for="isbn">ISBN or ISSN or other standard number:</label><input type="text" id="isbn" name="isbn" size="50" maxlength="80" value="[% isbn | html %]"/></li>
+        <li><label for="publishercode">Publisher:</label><input type="text" id="publishercode" name="publishercode" size="50" maxlength="80" value="[% publishercode | html %]"/></li>
+        <li><label for="place">Publication place:</label><input type="text" id="place" name="place" size="50" maxlength="80" value="[% place | html %]"/></li>
+        <li><label for="collectiontitle">Collection title:</label><input type="text" id="collectiontitle" name="collectiontitle" size="50" maxlength="80" value="[% collectiontitle | html %]"/></li>
         <li><label for="itemtype">Document type:</label>
             <select id="itemtype" name="itemtype" >
             [% FOREACH itemtypeloo IN itemtypeloop %]
@@ -668,11 +668,11 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
 
 				<fieldset class="brief"><h4 class="local_collapse"><a href="#">Bibliographic information</a></h4>
                    <ol> <li><label for="title"> Title:</label><input type="text" id="title" name="title" value="[% title |html %]" /></li>
-                    <li><label for="author"> Author:</label><input type="text" id="author" name="author" value="[% author %]" /></li>
-                    <li><label for="isbn"> ISBN:</label><input type="text" id="isbn"  name="isbn" value="[% isbn %]" /></li>
-                    <li><label for="publishercode"> Publisher:</label><input type="text" id="publishercode" name="publishercode" value="[% publishercode %]" /></li>
-                    <li><label for="copyrightdate_filter"> Copyright date:</label><input type="text" id="copyrightdate_filter" name="copyrightdate" value="[% copyrightdate %]" /></li>
-                    <li><label for="collectiontitle"> Collection title:</label><input type="text" id="collectiontitle" name="collectiontitle" value="[% collectiontitle %]" /></li><li><input type="submit" value="Go" /></li></ol>
+                    <li><label for="author"> Author:</label><input type="text" id="author" name="author" value="[% author | html %]" /></li>
+                    <li><label for="isbn"> ISBN:</label><input type="text" id="isbn"  name="isbn" value="[% isbn | html %]" /></li>
+                    <li><label for="publishercode"> Publisher:</label><input type="text" id="publishercode" name="publishercode" value="[% publishercode | html %]" /></li>
+                    <li><label for="copyrightdate_filter"> Copyright date:</label><input type="text" id="copyrightdate_filter" name="copyrightdate" value="[% copyrightdate | html %]" /></li>
+                    <li><label for="collectiontitle"> Collection title:</label><input type="text" id="collectiontitle" name="collectiontitle" value="[% collectiontitle | html %]" /></li><li><input type="submit" value="Go" /></li></ol>
                 </fieldset>
 				 <fieldset class="brief"><h4 class="local_collapse"><a href="#">Suggestion information</a></h4>
                     <ol>
