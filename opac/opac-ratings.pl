@@ -42,7 +42,7 @@ my $a     = $query->Vars;
 ####  $a
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "",
+        template_name   => "errors/404.tt",
         query           => $query,
         type            => "opac",
         authnotrequired => 0,        # auth required to add tags
