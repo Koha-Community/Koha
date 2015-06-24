@@ -241,7 +241,7 @@ sub add_form {
 
         }
 
-        if ( $module eq 'circulation' && $code eq "CHECKIN" ) {
+        if ( $module eq 'circulation' and $code and $code eq "CHECKIN" ) {
             push @{$field_selection}, add_fields('old_issues');
         } else {
             push @{$field_selection}, add_fields('issues');
