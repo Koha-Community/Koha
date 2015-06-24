@@ -32,16 +32,12 @@ use C4::Output;
 my $cgi = new CGI;
 my $dbh = C4::Context->dbh;
 
-my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {
-        template_name   => "",
-        query           => $cgi,
-        type            => "intranet",
-        authnotrequired => 0,
-        flagsrequired   => { tools => 'edit_quotes' },
-        debug           => 1,
-    }
-);
+my ( $status, $cookie, $sessionID ) = C4::Auth::check_api_auth( $cgi, { tools => 'edit_quotes' } );
+unless ($status eq "ok") {
+    print $cgi->header(-type => 'application/json', -status => '403 Forbidden');
+    print to_json({ auth_status => $status });
+    exit 0;
+}
 
 my $success = 'true';
 
