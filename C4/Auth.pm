@@ -138,7 +138,8 @@ sub get_template_and_user {
     C4::Context->interface($in->{type});
 
     my $safe_chars = 'a-zA-Z0-9_\-\/';
-    die "bad template path" unless $in->{'template_name'} =~ m/^[$safe_chars]+.tt?$/ig; #sanitize input
+warn $in->{'template_name'} ;
+    die "bad template path" unless $in->{'template_name'} =~ m/^[$safe_chars]+\.(tt$|tmpl$)/ig; #sanitize input
 
     $in->{'authnotrequired'} ||= 0;
     my $template = C4::Templates::gettemplate(
