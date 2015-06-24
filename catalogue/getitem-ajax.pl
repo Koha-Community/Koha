@@ -21,6 +21,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use JSON;
 
+use C4::Auth;
 use C4::Biblio;
 use C4::Branch;
 use C4::Items;
@@ -28,6 +29,14 @@ use C4::Koha;
 use C4::Output;
 
 my $cgi = new CGI;
+
+my ( $status, $cookie, $sessionID ) = C4::Auth::check_api_auth( $cgi, { acquisition => 'order_receive' } );
+unless ($status eq "ok") {
+    print $cgi->header(-type => 'application/json', -status => '403 Forbidden');
+    print to_json({ auth_status => $status });
+    exit 0;
+}
+
 my $item = {};
 my $itemnumber = $cgi->param('itemnumber');
 
