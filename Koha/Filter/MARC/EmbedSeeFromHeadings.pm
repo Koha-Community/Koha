@@ -34,6 +34,7 @@ use strict;
 use warnings;
 use Carp;
 use Koha::Authority;
+use C4::Biblio qw/GetMarcFromKohaField/;
 
 use base qw(Koha::RecordProcessor::Base);
 our $NAME = 'EmbedSeeFromHeadings';
@@ -72,8 +73,12 @@ sub filter {
 sub _processrecord {
     my $record = shift;
 
+    my ($item_tag) = GetMarcFromKohaField("items.itemnumber", '');
+    $item_tag ||= '';
+
     foreach my $field ( $record->fields() ) {
         next if $field->is_control_field();
+        next if $field->tag() eq $item_tag;
         my $authid = $field->subfield('9');
 
         next unless $authid;
