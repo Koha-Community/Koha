@@ -31,6 +31,9 @@ use C4::Dates qw/format_date/;
 use C4::Debug;
 use C4::Branch; # XXX subfield_is_koha_internal_p
 use C4::Koha qw/IsAuthorisedValueCategory GetFrameworksLoop/;
+use C4::Context;
+use C4::Log;
+use Koha::DateUtils qw/dt_from_string output_pref/;
 
 =head1 NAME
 
@@ -746,9 +749,13 @@ elsif ($phase eq 'Run this report'){
             my @split = split /<<|>>/,$sql;
             my @tmpl_parameters;
             for(my $i=0;$i<$#split/2;$i++) {
-                my $quoted = C4::Context->dbh->quote($sql_params[$i]);
+                my $quoted = $sql_params[$i];
                 # if there are special regexp chars, we must \ them
                 $split[$i*2+1] =~ s/(\||\?|\.|\*|\(|\)|\%)/\\$1/g;
+                if ($split[$i*2+1] =~ /|date>>/) {
+                    $quoted = output_pref({ dt => dt_from_string($quoted), dateformat => 'iso', dateonly => 1 }) if $quoted;
+                }
+                $quoted = C4::Context->dbh->quote($quoted);
                 $sql =~ s/<<$split[$i*2+1]>>/$quoted/;
             }
             my ($sth, $errors) = execute_query($sql, $offset, $limit);
