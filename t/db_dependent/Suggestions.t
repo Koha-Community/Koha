@@ -365,7 +365,7 @@ $suggestion = GetSuggestion($my_suggestionid_test_budgetid);
 is( $suggestion->{budgetid}, undef, 'NewSuggestion Should set budgetid to NULL if equals an empty string' );
 
 subtest 'GetUnprocessedSuggestions' => sub {
-    plan tests => 9;
+    plan tests => 11;
     $dbh->do(q|DELETE FROM suggestions|);
     my $my_suggestionid         = NewSuggestion($my_suggestion);
     my $unprocessed_suggestions = C4::Suggestions::GetUnprocessedSuggestions;
@@ -380,11 +380,15 @@ subtest 'GetUnprocessedSuggestions' => sub {
     $unprocessed_suggestions = C4::Suggestions::GetUnprocessedSuggestions;
     is( scalar(@$unprocessed_suggestions), 1, 'GetUnprocessedSuggestions should return the suggestion if the suggestion is linked to a fund and has not been processed yet' );
 
-    ModSuggestion( { suggestionid => $my_suggestionid, STATUS => 'REJECTED' } );
+    warning_is { ModSuggestion( { suggestionid => $my_suggestionid, STATUS => 'REJECTED' } ) }
+                'No suggestions REJECTED letter transported by email',
+                'Warning raised if no REJECTED letter by email';
     $unprocessed_suggestions = C4::Suggestions::GetUnprocessedSuggestions;
     is( scalar(@$unprocessed_suggestions), 0, 'GetUnprocessedSuggestions should return the suggestion if the suggestion is linked to a fund and has not been processed yet' );
 
-    ModSuggestion( { suggestionid => $my_suggestionid, STATUS => 'ASKED', suggesteddate => dt_from_string->add_duration( DateTime::Duration->new( days => -4 ) ) } );
+    warning_is { ModSuggestion( { suggestionid => $my_suggestionid, STATUS => 'ASKED', suggesteddate => dt_from_string->add_duration( DateTime::Duration->new( days => -4 ) ) } ); }
+                'No suggestions ASKED letter transported by email',
+                'Warning raised if no ASKED letter by email';
     $unprocessed_suggestions = C4::Suggestions::GetUnprocessedSuggestions;
     is( scalar(@$unprocessed_suggestions), 0, 'GetUnprocessedSuggestions should use 0 as default value for days' );
     $unprocessed_suggestions = C4::Suggestions::GetUnprocessedSuggestions(4);
