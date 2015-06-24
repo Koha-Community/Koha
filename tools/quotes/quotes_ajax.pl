@@ -31,16 +31,12 @@ my $cgi = CGI->new;
 my $dbh = C4::Context->dbh;
 my $sort_columns = ["id", "source", "text", "timestamp"];
 
-my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {
-        template_name   => "",
-        query           => $cgi,
-        type            => "intranet",
-        authnotrequired => 0,
-        flagsrequired   => { tools => 'edit_quotes' },
-        debug           => 1,
-    }
-);
+my ( $status, $cookie, $sessionID ) = C4::Auth::check_api_auth( $cgi, { tools => 'edit_quotes' } );
+unless ($status eq "ok") {
+    print $cgi->header(-type => 'application/json', -status => '403 Forbidden');
+    print to_json({ auth_status => $status });
+    exit 0;
+}
 
 # NOTE: This is a collection of ajax functions for use with tools/quotes.pl
 
