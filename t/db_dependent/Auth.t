@@ -8,7 +8,7 @@ use Modern::Perl;
 use CGI;
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 6;
+use Test::More tests => 10;
 use Test::Warn;
 use C4::Members;
 use Koha::AuthUtils qw/hash_password/;
