@@ -10620,6 +10620,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.21.00.011";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
+        VALUES ('OpacLangSelectorMode','footer','top|both|footer','Select the location to display the language selector','Choice')
+    });
+    print "Upgrade to $DBversion done (Bug 14252: Make the OPAC language switcher available in the masthead navbar, footer, or both)\n";
+    SetVersion ($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
