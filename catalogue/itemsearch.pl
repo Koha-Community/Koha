@@ -37,7 +37,7 @@ my %params = $cgi->Vars;
 my $format = $cgi->param('format');
 my ($template_name, $content_type);
 if (defined $format and $format eq 'json') {
-    $template_name = 'catalogue/itemsearch.json.tt';
+    $template_name = 'catalogue/itemsearch_json.tt';
     $content_type = 'json';
 
     # Map DataTables parameters with 'regular' parameters
@@ -69,7 +69,7 @@ if (defined $format and $format eq 'json') {
     $cgi->param('op', @op);
     $cgi->param('c', @c);
 } elsif (defined $format and $format eq 'csv') {
-    $template_name = 'catalogue/itemsearch.csv.tt';
+    $template_name = 'catalogue/itemsearch_csv.tt';
 
     # Retrieve all results
     $cgi->param('rows', 0);
