@@ -1,6 +1,7 @@
 [% USE Koha %]
 [% USE Branches %]
 [% USE KohaDates %]
+[% USE EncodeUTF8 %]
 [% IF Koha.Preference('ExportRemoveFields') OR Koha.Preference('ExportWithCsvProfile') %]
    [% SET exports_enabled = 1 %]
 [% END %]
@@ -596,7 +597,7 @@ No patron matched <span class="ex">[% message %]</span>
 </fieldset>
 [% IF ( issue ) %]
     <div class="lastchecked">
-        <p><strong>Checked out: </strong>[% issue.item.biblio.title %] ([% issue.item.barcode %]). Due on [% issue.date_due | $KohaDates %]</p>
+        <p><strong>Checked out: </strong>[% issue.item.biblio.title | $EncodeUTF8 %] ([% issue.item.barcode %]). Due on [% issue.date_due | $KohaDates %]</p>
     </div>
 [% END %]
 </form></div>
