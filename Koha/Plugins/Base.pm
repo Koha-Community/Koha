@@ -20,6 +20,7 @@ package Koha::Plugins::Base;
 use Modern::Perl;
 
 use Module::Pluggable require => 1;
+use Cwd qw(abs_path);
 
 use base qw{Module::Bundled::Files};
 
@@ -106,7 +107,7 @@ sub get_template {
     require C4::Auth;
 
     my ( $template, $loggedinuser, $cookie ) = C4::Auth::get_template_and_user(
-        {   template_name   => $self->mbf_path( $args->{'file'} ),
+        {   template_name   => abs_path( $self->mbf_path( $args->{'file'} ) ),
             query           => $self->{'cgi'},
             type            => "intranet",
             authnotrequired => 1,
