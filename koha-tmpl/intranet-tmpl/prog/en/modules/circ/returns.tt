@@ -107,6 +107,11 @@ $(document).ready(function () {
 	<div id="yui-main">
 
 <div class="yui-g">
+[% IF !Koha.Preference('AnonymousPatron') %]
+    [% IF Koha.Preference('OPACPrivacy') %]
+        <div class="dialog alert"><strong>Error:</strong> The system preference OPACPrivacy is set but AnonymousPatron is not! Please correct this before continuing circulation.</div>
+    [% END %]
+[% END %]
 
 [% IF additional_materials %]
     <div class="dialog message" id="materials">Note about the accompanying materials: <br />
