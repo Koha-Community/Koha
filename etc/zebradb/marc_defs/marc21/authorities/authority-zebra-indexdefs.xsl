@@ -12,6 +12,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   <xslo:template match="text()"/>
   <xslo:template match="text()" mode="index_subfields"/>
   <xslo:template match="text()" mode="index_data_field"/>
+  <xslo:template match="text()" mode="index_facets"/>
   <xslo:template match="text()" mode="index_heading"/>
   <xslo:template match="text()" mode="index_heading_conditional"/>
   <xslo:template match="text()" mode="index_match_heading"/>
@@ -35,6 +36,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
       <xslo:apply-templates/>
       <xslo:apply-templates mode="index_subfields"/>
       <xslo:apply-templates mode="index_data_field"/>
+      <xslo:apply-templates mode="index_facets"/>
       <xslo:apply-templates mode="index_heading"/>
       <xslo:apply-templates mode="index_heading_conditional"/>
       <xslo:apply-templates mode="index_match_heading"/>
