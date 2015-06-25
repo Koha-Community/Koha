@@ -23,10 +23,11 @@ use C4::Biblio;
 use C4::Branch;
 use Koha::Database;
 
-use Test::More tests => 6;
+use Test::More tests => 8;
 
 BEGIN {
     use_ok('C4::Items');
+    use_ok('Koha::Items');
 }
 
 my $dbh = C4::Context->dbh;
@@ -387,6 +388,33 @@ subtest 'SearchItems test' => sub {
     is( ( $cpl_items and scalar( @$cpl_items ) ), 1, 'SearchItemsByField should return something' );
 
     $dbh->rollback;
+};
+
+subtest 'Koha::Item(s) tests' => sub {
+
+    plan tests => 5;
+
+    # Start transaction
+    my $schema = Koha::Database->new()->schema();
+    $schema->storage->txn_begin();
+    $dbh->{RaiseError} = 1;
+
+    # Create a biblio and item for testing
+    C4::Context->set_preference('marcflavour', 'MARC21');
+    my ($bibnum, $bibitemnum) = get_biblio();
+    my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch1, holdingbranch => $branch2 } , $bibnum);
+
+    # Get item.
+    my $item = Koha::Items->find( $itemnumber );
+    ok( $item, "Got Koha::Item" );
+
+    my $homebranch = $item->home_branch();
+    ok( $homebranch, "Got Koha::Branch from home_branch method" );
+    is( $homebranch->branchcode(), $branch1, "Home branch code matches homebranch" );
+
+    my $holdingbranch = $item->holding_branch();
+    ok( $holdingbranch, "Got Koha::Branch from holding_branch method" );
+    is( $holdingbranch->branchcode(), $branch2, "Home branch code matches holdingbranch" );
 };
 
 # Helper method to set up a Biblio.
