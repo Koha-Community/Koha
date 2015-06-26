@@ -1494,7 +1494,7 @@ sub GetExpiryDate {
 sub GetUpcomingMembershipExpires {
     my $dbh = C4::Context->dbh;
     my $days = C4::Context->preference("MembershipExpiryDaysNotice") || 0;
-    my $dateexpiry = DateTime->now()->add(days => $days)->ymd();
+    my $dateexpiry = output_pref({ dt => (dt_from_string()->add( days => $days)), dateformat => 'iso', dateonly => 1 });
 
     my $query = "
         SELECT borrowers.*, categories.description,

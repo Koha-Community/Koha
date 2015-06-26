@@ -211,6 +211,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('maxoutstanding','5','','maximum amount withstanding to be able make holds','Integer'),
 ('maxRecordsForFacets','20',NULL,NULL,'Integer'),
 ('maxreserves','50','','Define maximum number of holds a patron can place','Integer'),
+('MembershipExpiryDaysNotice','14','Send an account expiration notice that a patron\'s card is about to expire after',NULL,'Integer'),
 ('minPasswordLength','3',NULL,'Specify the minimum length of a patron/staff password','free'),
 ('NewItemsDefaultLocation','','','If set, all new items will have a location of the given Location Code ( Authorized Value type LOC )',''),
 ('noissuescharge','5','','Define maximum amount withstanding before check outs are blocked','Integer'),
@@ -492,6 +493,5 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('XSLTDetailsDisplay','default','','Enable XSL stylesheet control over details page display on intranet','Free'),
 ('XSLTResultsDisplay','default','','Enable XSL stylesheet control over results page display on intranet','Free'),
 ('z3950AuthorAuthFields','701,702,700',NULL,'Define the MARC biblio fields for Personal Name Authorities to fill biblio.author','free'),
-('z3950NormalizeAuthor','0','','If ON, Personal Name Authorities will replace authors in biblio.author','YesNo'),
-('MembershipExpiryDaysNotice' ,14,'Send an account expiration notice that a patron\'s card is about to expire after',NULL,'Integer')
+('z3950NormalizeAuthor','0','','If ON, Personal Name Authorities will replace authors in biblio.author','YesNo')
 ;
