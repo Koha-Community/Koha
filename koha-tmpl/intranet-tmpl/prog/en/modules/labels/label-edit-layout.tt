@@ -25,6 +25,15 @@
                     $('#layout_string').hide();
                 }
             }
+            function checkOblique() {
+                var font = document.getElementById("font");
+                var selectedfont = font.options[font.selectedIndex].value;
+                if ( selectedfont.match("I$") || selectedfont.match("O$") ) {
+                    document.getElementById("oblique_title").disabled = true;
+                } else {
+                    document.getElementById("oblique_title").disabled = false;
+                }
+            }
         //]]>
     </script>
 </head>
@@ -164,7 +173,7 @@
                                 </li>
                                 <li>
                                     <label for="font">Font: </label>
-                                    <select name="font" id="font">
+                                    <select name="font" id="font" onchange="checkOblique()">
                                         [% FOREACH font_type IN font_types %]
                                         [% IF ( font_type.selected ) %]
                                         <option value="[% font_type.type %]" selected="selected">[% font_type.name %]</option>
@@ -177,6 +186,14 @@
                                 <li>
                                     <label for="font_size">Font size: </label>
                                     <input type="text" name="font_size" id="font_size" size="2" value="[% font_size |html %]" />
+                                </li>
+                                <li>
+                                    <label for="font">Oblique title: </label>
+                                    [% IF ( oblique_title ) %]
+                                    <input type="checkbox" name="oblique_title" id="oblique_title" value="1"  checked="checked" />
+                                    [% ELSE %]
+                                    <input type="checkbox" name="oblique_title" id="oblique_title" value="1" />
+                                    [% END %]
                                 </li>
                             </ol>
                         </fieldset>

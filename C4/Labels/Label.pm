@@ -35,6 +35,7 @@ sub _check_params {
         'barcode_type',
         'printing_type',
         'guidebox',
+        'oblique_title',
         'font',
         'font_size',
         'callnum_split',
@@ -326,6 +327,7 @@ sub new {
         barcode_type            => $params{'barcode_type'},
         printing_type           => $params{'printing_type'},
         guidebox                => $params{'guidebox'},
+        oblique_title           => $params{'oblique_title'},
         font                    => $params{'font'},
         font_size               => $params{'font_size'},
         callnum_split           => $params{'callnum_split'},
@@ -408,8 +410,18 @@ sub draw_label_text {
         else {
             $field->{'data'} = _get_barcode_data($field->{'code'},$item,$record);
         }
-        #FIXME: We should not force the title to oblique; this should be selectible in the layout configuration
-        ($field->{'code'} eq 'title') ? (($font =~ /T/) ? ($font = 'TI') : ($font = ($font . 'O'))) : ($font = $font);
+        # Find apropriate font it oblique title selected, except main font is oblique
+        if ( ( $field->{'code'} eq 'title' ) and ( $self->{'oblique_title'} == 1 ) ) {
+            if ( $font =~ /^TB$/ ) {
+                $font .= 'I';
+            }
+            elsif ( $font =~ /^TR$/ ) {
+                $font = 'TI';
+            }
+            elsif ( $font !~ /^T/ and $font !~ /O$/ ) {
+                $font .= 'O';
+            }
+        }
         my $field_data = $field->{'data'};
         if ($field_data) {
             $field_data =~ s/\n//g;
