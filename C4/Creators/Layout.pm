@@ -230,7 +230,7 @@ sub get_text_wrap_cols {
     my $textlimit = $params{'label_width'} - (( 3 * $params{'left_text_margin'} ) || 13.5 );
 
     while ($strwidth < $textlimit) {
-        $string .= '0';
+        $string .= '8'; # using '8' as filling char instead of '0'
         $col_count++;
         $strwidth = C4::Creators::PDF->StrWidth( $string, $self->{'font'}, $self->{'font_size'} );
     }

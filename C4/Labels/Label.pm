@@ -468,9 +468,8 @@ sub draw_label_text {
         LABEL_LINES:    # generate lines of label text for current field
         foreach my $line (@label_lines) {
             next LABEL_LINES if $line eq '';
-            my $fontName = C4::Creators::PDF->Font($font);
             $line = log2vis( $line );
-            my $string_width = C4::Creators::PDF->StrWidth($line, $fontName, $self->{'font_size'});
+            my $string_width = C4::Creators::PDF->StrWidth($line, $font, $self->{'font_size'});
             if ($self->{'justify'} eq 'R') {
                 $text_llx = $params{'llx'} + $self->{'width'} - ($self->{'left_text_margin'} + $string_width);
             }
