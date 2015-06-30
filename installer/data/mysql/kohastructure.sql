@@ -1652,7 +1652,6 @@ CREATE TABLE `old_reserves` ( -- this table holds all holds/reserves that have b
   `borrowernumber` int(11) default NULL, -- foreign key from the borrowers table defining which patron this hold is for
   `reservedate` date default NULL, -- the date the hold was places
   `biblionumber` int(11) default NULL, -- foreign key from the biblio table defining which bib record this hold is on
-  `constrainttype` varchar(1) default NULL,
   `branchcode` varchar(10) default NULL, -- foreign key from the branches table defining which branch the patron wishes to pick this hold up at
   `notificationdate` date default NULL, -- currently unused
   `reminderdate` date default NULL, -- currently unused
@@ -1817,19 +1816,6 @@ CREATE TABLE reports_dictionary ( -- definitions (or snippets of SQL) stored for
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Table structure for table `reserveconstraints`
---
-
-DROP TABLE IF EXISTS `reserveconstraints`;
-CREATE TABLE `reserveconstraints` (
-  `borrowernumber` int(11) NOT NULL default 0,
-  `reservedate` date default NULL,
-  `biblionumber` int(11) NOT NULL default 0,
-  `biblioitemnumber` int(11) default NULL,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
 -- Table structure for table `reserves`
 --
 
@@ -1839,7 +1825,6 @@ CREATE TABLE `reserves` ( -- information related to holds/reserves in Koha
   `borrowernumber` int(11) NOT NULL default 0, -- foreign key from the borrowers table defining which patron this hold is for
   `reservedate` date default NULL, -- the date the hold was places
   `biblionumber` int(11) NOT NULL default 0, -- foreign key from the biblio table defining which bib record this hold is on
-  `constrainttype` varchar(1) default NULL,
   `branchcode` varchar(10) default NULL, -- foreign key from the branches table defining which branch the patron wishes to pick this hold up at
   `notificationdate` date default NULL, -- currently unused
   `reminderdate` date default NULL, -- currently unused
