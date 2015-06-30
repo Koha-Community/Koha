@@ -178,7 +178,7 @@ sub BuildReport {
         itemBarcodeInputFilter
         previousIssuesDefaultSortOrder
         RecordLocalUseOnReturn
-        soundon
+        AudioAlerts
         SpecifyDueDate
         todaysIssuesDefaultSortOrder
         UpdateTotalIssuesOnCirc
