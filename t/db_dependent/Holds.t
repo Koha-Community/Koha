@@ -68,7 +68,6 @@ foreach my $borrowernumber ( @borrowernumbers ) {
         $branch,
         $borrowernumber,
         $biblionumber,
-        my $constraint = 'a',
         my $bibitems = q{},
         my $priority,
         my $resdate,
@@ -148,7 +147,6 @@ AddReserve(
     $branch,
     $borrowernumber,
     $biblionumber,
-    my $constraint = 'a',
     my $bibitems = q{},
     my $priority,
     my $resdate,
@@ -254,7 +252,6 @@ AddReserve(
     $branch,
     $borrowernumbers[0],
     $bibnum,
-    'a',
     '',
     1,
 );
@@ -271,7 +268,6 @@ AddReserve(
     $branch,
     $borrowernumbers[1],
     $bibnum,
-    'a',
     '',
     2,
 );
@@ -292,7 +288,6 @@ AddReserve(
     $branch,
     $borrowernumbers[0],
     $bibnum,
-    'a',
     '',
     2,
 );
@@ -325,7 +320,6 @@ AddReserve(
     $branch,
     $borrowernumbers[0],
     $bibnum,
-    'a',
     '',
     1,
 );

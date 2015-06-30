@@ -262,7 +262,6 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 
     my $renewing_borrower = GetMember( borrowernumber => $renewing_borrowernumber );
 
-    my $constraint     = 'a';
     my $bibitems       = '';
     my $priority       = '1';
     my $resdate        = undef;
@@ -289,7 +288,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     # Biblio-level hold, renewal test
     AddReserve(
         $branch, $reserving_borrowernumber, $biblionumber,
-        $constraint, $bibitems,  $priority, $resdate, $expdate, $notes,
+        $bibitems,  $priority, $resdate, $expdate, $notes,
         $title, $checkitem, $found
     );
 
@@ -354,7 +353,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     # Item-level hold, renewal test
     AddReserve(
         $branch, $reserving_borrowernumber, $biblionumber,
-        $constraint, $bibitems,  $priority, $resdate, $expdate, $notes,
+        $bibitems,  $priority, $resdate, $expdate, $notes,
         $title, $itemnumber, $found
     );
 

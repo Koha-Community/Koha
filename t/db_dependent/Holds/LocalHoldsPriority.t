@@ -58,7 +58,6 @@ foreach my $borrowernumber (@borrowernumbers) {
         $branchcodes[$i],
         $borrowernumber,
         $biblionumber,
-        my $constraint = 'a',
         my $bibitems   = q{},
         my $priority = $i,
         my $resdate,
