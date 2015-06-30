@@ -146,21 +146,20 @@ BEGIN {
 
 =head2 AddReserve
 
-    AddReserve($branch,$borrowernumber,$biblionumber,$constraint,$bibitems,$priority,$resdate,$expdate,$notes,$title,$checkitem,$found)
+    AddReserve($branch,$borrowernumber,$biblionumber,$bibitems,$priority,$resdate,$expdate,$notes,$title,$checkitem,$found)
 
 =cut
 
 sub AddReserve {
     my (
         $branch,    $borrowernumber, $biblionumber,
-        $constraint, $bibitems,  $priority, $resdate, $expdate, $notes,
+        $bibitems,  $priority, $resdate, $expdate, $notes,
         $title,      $checkitem, $found
     ) = @_;
     my $fee =
-          GetReserveFee($borrowernumber, $biblionumber, $constraint,
+          GetReserveFee($borrowernumber, $biblionumber,
             $bibitems );
     my $dbh     = C4::Context->dbh;
-    my $const   = lc substr( $constraint, 0, 1 );
     $resdate = format_date_in_iso( $resdate ) if ( $resdate );
     $resdate = C4::Dates->today( 'iso' ) unless ( $resdate );
     if ($expdate) {
@@ -194,20 +193,18 @@ sub AddReserve {
             "Reserve Charge - $title", $fee );
     }
 
-    #if ($const eq 'a'){
     my $query = qq{
         INSERT INTO reserves
-            (borrowernumber,biblionumber,reservedate,branchcode,constrainttype,
+            (borrowernumber,biblionumber,reservedate,branchcode,
             priority,reservenotes,itemnumber,found,waitingdate,expirationdate)
         VALUES
              (?,?,?,?,?,
-             ?,?,?,?,?,?)
+             ?,?,?,?,?)
              };
     my $sth = $dbh->prepare($query);
     $sth->execute(
-        $borrowernumber, $biblionumber, $resdate, $branch,
-        $const,          $priority,     $notes,   $checkitem,
-        $found,          $waitingdate,	$expdate
+        $borrowernumber, $biblionumber, $resdate, $branch,      $priority,
+        $notes,          $checkitem,    $found,   $waitingdate, $expdate
     );
     my $reserve_id = $sth->{mysql_insertid};
 
@@ -239,9 +236,6 @@ sub AddReserve {
             );
         }
     }
-
-    #}
-    ($const eq "o" || $const eq "e") or return $reserve_id;
 
     return $reserve_id;
 }
@@ -302,7 +296,6 @@ sub GetReservesFromBiblionumber {
                 biblionumber,
                 borrowernumber,
                 reservedate,
-                constrainttype,
                 found,
                 itemnumber,
                 reservenotes,
@@ -659,18 +652,17 @@ sub GetOtherReserves {
 
 =head2 GetReserveFee
 
-  $fee = GetReserveFee($borrowernumber,$biblionumber,$constraint,$biblionumber);
+  $fee = GetReserveFee($borrowernumber,$biblionumber,$biblionumber);
 
 Calculate the fee for a reserve
 
 =cut
 
 sub GetReserveFee {
-    my ($borrowernumber, $biblionumber, $constraint, $bibitems ) = @_;
+    my ($borrowernumber, $biblionumber, $bibitems ) = @_;
 
     #check for issues;
     my $dbh   = C4::Context->dbh;
-    my $const = lc substr( $constraint, 0, 1 );
     my $query = qq{
       SELECT * FROM borrowers
     LEFT JOIN categories ON borrowers.categorycode = categories.categorycode
@@ -693,30 +685,19 @@ sub GetReserveFee {
         );
         $sth1->execute($biblionumber);
         while ( my $data1 = $sth1->fetchrow_hashref ) {
-            if ( $const eq "a" ) {
-                push @biblioitems, $data1;
+            my $found = 0;
+            my $x     = 0;
+            while ( $x < $cntitems ) {
+                if ( @$bibitems->{'biblioitemnumber'} ==
+                    $data->{'biblioitemnumber'} )
+                {
+                    $found = 1;
+                }
+                $x++;
             }
-            else {
-                my $found = 0;
-                my $x     = 0;
-                while ( $x < $cntitems ) {
-                    if ( @$bibitems->{'biblioitemnumber'} ==
-                        $data->{'biblioitemnumber'} )
-                    {
-                        $found = 1;
-                    }
-                    $x++;
-                }
-                if ( $const eq 'o' ) {
-                    if ( $found == 1 ) {
-                        push @biblioitems, $data1;
-                    }
-                }
-                else {
-                    if ( $found == 0 ) {
-                        push @biblioitems, $data1;
-                    }
-                }
+
+            if ( $found == 0 ) {
+                push @biblioitems, $data1;
             }
         }
         my $cntitemsfound = @biblioitems;
@@ -1795,7 +1776,7 @@ sub _FixPriority {
 
     # get whats left
     my $query = "
-        SELECT reserve_id, borrowernumber, reservedate, constrainttype
+        SELECT reserve_id, borrowernumber, reservedate
         FROM   reserves
         WHERE  biblionumber   = ?
           AND  ((found <> 'W' AND found <> 'T') OR found IS NULL)
@@ -1857,12 +1838,9 @@ sub _FixPriority {
 
   @results = &_Findgroupreserve($biblioitemnumber, $biblionumber, $itemnumber, $lookahead, $ignore_borrowers);
 
-Looks for an item-specific match first, then for a title-level match, returning the
-first match found.  If neither, then we look for a 3rd kind of match based on
-reserve constraints.
+Looks for a holds-queue based item-specific match first, then for a holds-queue title-level match, returning the
+first match found.  If neither, then we look for non-holds-queue based holds.
 Lookahead is the number of days to look in advance.
-
-TODO: add more explanation about reserve constraints
 
 C<&_Findgroupreserve> returns :
 C<@results> is an array of references-to-hash whose keys are mostly
@@ -2238,7 +2216,7 @@ sub MergeHolds {
         );
         my $upd_sth = $dbh->prepare(
 "UPDATE reserves SET priority = ? WHERE biblionumber = ? AND borrowernumber = ?
-        AND reservedate = ? AND constrainttype = ? AND (itemnumber = ? or itemnumber is NULL) "
+        AND reservedate = ? AND (itemnumber = ? or itemnumber is NULL) "
         );
         $sth->execute( $to_biblio, 'W', 'T' );
         my $priority = 1;
@@ -2246,7 +2224,7 @@ sub MergeHolds {
             $upd_sth->execute(
                 $priority,                    $to_biblio,
                 $reserve->{'borrowernumber'}, $reserve->{'reservedate'},
-                $reserve->{'constrainttype'}, $reserve->{'itemnumber'}
+                $reserve->{'itemnumber'}
             );
             $priority++;
         }

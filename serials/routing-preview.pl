@@ -79,7 +79,6 @@ if($ok){
 				$count--;
 			}
 		}
-		my $const = 'o';
 		my $notes;
 		my $title = $subs->{'bibliotitle'};
         for my $routing ( @routinglist ) {
@@ -95,7 +94,7 @@ if($ok){
                     branchcode     => $branch
                 });
             } else {
-                AddReserve($branch,$routing->{borrowernumber},$biblio,$const,\@bibitems,$routing->{ranking}, undef, undef, $notes,$title);
+                AddReserve($branch,$routing->{borrowernumber},$biblio,\@bibitems,$routing->{ranking}, undef, undef, $notes,$title);
         }
     }
 	}

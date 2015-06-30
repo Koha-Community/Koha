@@ -285,7 +285,7 @@ if ( $query->param('place_reserve') ) {
         if ($canreserve) {
             AddReserve(
                 $branch,      $borrowernumber,
-                $biblioNum,   'a',
+                $biblioNum,
                 [$biblioNum], $rank,
                 $startdate,   $expiration_date,
                 $notes,       $biblioData->{title},
