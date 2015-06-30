@@ -242,17 +242,7 @@ sub AddReserve {
 
     #}
     ($const eq "o" || $const eq "e") or return $reserve_id;
-    $query = qq{
-        INSERT INTO reserveconstraints
-            (borrowernumber,biblionumber,reservedate,biblioitemnumber)
-        VALUES
-            (?,?,?,?)
-    };
-    $sth = $dbh->prepare($query);    # keep prepare outside the loop!
-    foreach (@$bibitems) {
-        $sth->execute($borrowernumber, $biblionumber, $resdate, $_);
-    }
-        
+
     return $reserve_id;
 }
 
@@ -334,44 +324,7 @@ sub GetReservesFromBiblionumber {
     my $sth = $dbh->prepare($query);
     $sth->execute( @params );
     my @results;
-    my $i = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
-
-        # FIXME - What is this doing? How do constraints work?
-        if ($data->{constrainttype} eq 'o') {
-            $query = '
-                SELECT biblioitemnumber
-                FROM  reserveconstraints
-                WHERE  biblionumber   = ?
-                AND   borrowernumber = ?
-                AND   reservedate    = ?
-            ';
-            my $csth = $dbh->prepare($query);
-            $csth->execute($data->{biblionumber}, $data->{borrowernumber}, $data->{reservedate});
-            my @bibitemno;
-            while ( my $bibitemnos = $csth->fetchrow_array ) {
-                push( @bibitemno, $bibitemnos );    # FIXME: inefficient: use fetchall_arrayref
-            }
-            my $count = scalar @bibitemno;
-
-            # if we have two or more different specific itemtypes
-            # reserved by same person on same day
-            my $bdata;
-            if ( $count > 1 ) {
-                $bdata = GetBiblioItemData( $bibitemno[$i] );   # FIXME: This doesn't make sense.
-                $i++; #  $i can increase each pass, but the next @bibitemno might be smaller?
-            }
-            else {
-                # Look up the book we just found.
-                $bdata = GetBiblioItemData( $bibitemno[0] );
-            }
-            # Add the results of this latest search to the current
-            # results.
-            # FIXME - An 'each' would probably be more efficient.
-            foreach my $key ( keys %$bdata ) {
-                $data->{$key} = $bdata->{$key};
-            }
-        }
         push @results, $data;
     }
     return \@results;
@@ -2002,23 +1955,17 @@ sub _Findgroupreserve {
                reserves.reservenotes               AS reservenotes,
                reserves.priority                   AS priority,
                reserves.timestamp                  AS timestamp,
-               reserveconstraints.biblioitemnumber AS biblioitemnumber,
                reserves.itemnumber                 AS itemnumber,
                reserves.reserve_id                 AS reserve_id
         FROM reserves
-          LEFT JOIN reserveconstraints ON reserves.biblionumber = reserveconstraints.biblionumber
         WHERE reserves.biblionumber = ?
-          AND ( ( reserveconstraints.biblioitemnumber = ?
-          AND reserves.borrowernumber = reserveconstraints.borrowernumber
-          AND reserves.reservedate    = reserveconstraints.reservedate )
-          OR  reserves.constrainttype='a' )
           AND (reserves.itemnumber IS NULL OR reserves.itemnumber = ?)
           AND reserves.reservedate <= DATE_ADD(NOW(),INTERVAL ? DAY)
           AND suspend = 0
           ORDER BY priority
     };
     $sth = $dbh->prepare($query);
-    $sth->execute( $biblio, $bibitem, $itemnumber, $lookahead||0);
+    $sth->execute( $biblio, $itemnumber, $lookahead||0);
     @results = ();
     while ( my $data = $sth->fetchrow_hashref ) {
         push( @results, $data )
