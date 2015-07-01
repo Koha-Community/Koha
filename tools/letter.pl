@@ -237,7 +237,7 @@ sub add_form {
     $template->param(
         module     => $module,
         branchloop => _branchloop($branchcode),
-        SQLfieldname => $field_selection,
+        SQLfieldnames => $field_selection,
     );
     return;
 }
