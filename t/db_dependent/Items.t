@@ -406,14 +406,14 @@ subtest 'Koha::Item(s) tests' => sub {
 
     # Get item.
     my $item = Koha::Items->find( $itemnumber );
-    ok( $item, "Got Koha::Item" );
+    is( ref($item), 'Koha::Item', "Got Koha::Item" );
 
     my $homebranch = $item->home_branch();
-    ok( $homebranch, "Got Koha::Branch from home_branch method" );
+    is( ref($homebranch), 'Koha::Branch', "Got Koha::Branch from home_branch method" );
     is( $homebranch->branchcode(), $branch1, "Home branch code matches homebranch" );
 
     my $holdingbranch = $item->holding_branch();
-    ok( $holdingbranch, "Got Koha::Branch from holding_branch method" );
+    is( ref($holdingbranch), 'Koha::Branch', "Got Koha::Branch from holding_branch method" );
     is( $holdingbranch->branchcode(), $branch2, "Home branch code matches holdingbranch" );
 };
 
