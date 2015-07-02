@@ -80,11 +80,13 @@
 		No results found
 	[% END %]
 
-<!-- display the search results -->
+[%# display the search results %]
 
 [% IF ( total ) %]
-[% total %] result(s) found in catalog,
-<a href="#searchresult-breeding">[% breeding_count %] result(s) found in reservoir</a>
+<div>
+    [% total %] result(s) found in catalog,
+    <a href="#searchresult-breeding">[% breeding_count %] result(s) found in reservoir</a>
+</div>
 <div class="pages">[% pagination_bar %]</div>
 <div class="searchresults">
     <table>
