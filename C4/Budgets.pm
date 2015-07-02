@@ -529,8 +529,8 @@ sub GetBudgetHierarchy {
 
     # link child to parent
     my @first_parents;
-    foreach ( sort keys %links ) {
-        my $child = $links{$_};
+    foreach my $budget ( sort { $a->{budget_code} cmp $b->{budget_code} } values %links ) {
+        my $child = $links{$budget->{budget_id}};
         if ( $child->{'budget_parent_id'} ) {
             my $parent = $links{ $child->{'budget_parent_id'} };
             if ($parent) {
