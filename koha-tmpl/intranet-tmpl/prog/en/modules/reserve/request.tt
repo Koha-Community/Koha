@@ -304,20 +304,16 @@ function checkMultiHold() {
     [% UNLESS ( multi_hold ) %]
       <h3>Cannot place hold</h3>
   	  <ul>
-        [% IF ( maxreserves ) %]
-          <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> has too many holds.</li>
-        [% END %]
-        [% IF ( ageRestricted ) %]
-          <li><strong>Age restricted</strong></li>
-        [% END %]
-        [% IF ( alreadyreserved ) %]
-          <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>already has a hold</strong> on this item </li>
-        [% END %]
-        [% IF ( none_available ) %]
-          <li> <strong>No items are available</strong> to be placed on hold</li>
-        [% END %]
         [% IF ( alreadypossession ) %]
           <li> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>is already in possession</strong> of one item</li>
+        [% ELSIF ( alreadyreserved ) %]
+          <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>already has a hold</strong> on this item </li>
+        [% ELSIF ( ageRestricted ) %]
+          <li><strong>Age restricted</strong></li>
+        [% ELSIF ( none_available ) %]
+          <li> <strong>No items are available</strong> to be placed on hold</li>
+        [% ELSIF ( maxreserves ) %]
+          <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> has too many holds.</li>
         [% END %]
 	  </ul>
     [% ELSE %]
@@ -805,7 +801,7 @@ function checkMultiHold() {
                         <img src="[% interface %]/[% theme %]/img/go-down.png" border="0" alt="Set to lowest priority" />
 		        [% END %]
 		</a>
-	</td> 
+	</td>
     [% END %]
 
 	<td>
