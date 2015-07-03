@@ -751,7 +751,7 @@ elsif ($phase eq 'Run this report'){
                 my $quoted = $sql_params[$i];
                 # if there are special regexp chars, we must \ them
                 $split[$i*2+1] =~ s/(\||\?|\.|\*|\(|\)|\%)/\\$1/g;
-                if ($split[$i*2+1] =~ /|date>>/) {
+                if ($split[$i*2+1] =~ /\|\s*date\s*$/) {
                     $quoted = output_pref({ dt => dt_from_string($quoted), dateformat => 'iso', dateonly => 1 }) if $quoted;
                 }
                 $quoted = C4::Context->dbh->quote($quoted);
