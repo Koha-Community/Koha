@@ -620,6 +620,8 @@ $template->param(
 $itemnumber = GetItemnumberFromBarcode( $query->param('barcode') );
 if ( $itemnumber ) {
    my ( $holdingBranch, $collectionBranch ) = GetCollectionItemBranches( $itemnumber );
+    $holdingBranch //= '';
+    $collectionBranch //= '';
     if ( ! ( $holdingBranch eq $collectionBranch ) ) {
         $template->param(
           collectionItemNeedsTransferred => 1,
