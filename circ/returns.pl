@@ -466,7 +466,8 @@ foreach my $code ( keys %$messages ) {
     }
     elsif ( $code eq 'NotIssued' ) {
         $err{notissued} = 1;
-        $err{msg} = $branches->{ $messages->{'IsPermanent'} }->{'branchname'};
+        $err{msg} = '';
+        $err{msg} = $branches->{ $messages->{'IsPermanent'} }->{'branchname'} if $messages->{'IsPermanent'};
     }
     elsif ( $code eq 'LocalUse' ) {
         $err{localuse} = 1;
@@ -617,7 +618,7 @@ $template->param(
     BlockReturnOfWithdrawnItems => C4::Context->preference("BlockReturnOfWithdrawnItems"),
 );
 
-$itemnumber = GetItemnumberFromBarcode( $query->param('barcode') );
+$itemnumber = GetItemnumberFromBarcode( $barcode );
 if ( $itemnumber ) {
    my ( $holdingBranch, $collectionBranch ) = GetCollectionItemBranches( $itemnumber );
     $holdingBranch //= '';
