@@ -24,6 +24,7 @@ use String::Random qw( random_string );
 use C4::Auth;
 use C4::Output;
 use C4::Members;
+use C4::Form::MessagingPreferences;
 use Koha::Borrower::Modifications;
 use C4::Branch qw(GetBranchesLoop);
 use C4::Scrubber;
@@ -144,6 +145,7 @@ if ( $action eq 'create' ) {
                   C4::Context->preference('OpacPasswordChange') );
 
             my ( $borrowernumber, $password ) = AddMember_Opac(%borrower);
+            C4::Form::MessagingPreferences::handle_form_action($cgi, { borrowernumber => $borrowernumber }, $template, 1, C4::Context->preference('PatronSelfRegistrationDefaultCategory') ) if $borrowernumber && C4::Context->preference('EnhancedMessagingPreferences');
 
             $template->param( password_cleartext => $password );
             $template->param(
