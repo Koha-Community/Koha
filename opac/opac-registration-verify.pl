@@ -22,6 +22,7 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 use C4::Members;
+use C4::Form::MessagingPreferences;
 use Koha::Borrower::Modifications;
 
 my $cgi = new CGI;
@@ -56,6 +57,7 @@ if ( $m->Verify() ) {
 
     if ($borrowernumber) {
         Koha::Borrower::Modifications->DelModifications({ verification_token => $token });
+        C4::Form::MessagingPreferences::handle_form_action($cgi, { borrowernumber => $borrowernumber }, $template, 1, C4::Context->preference('PatronSelfRegistrationDefaultCategory') ) if C4::Context->preference('EnhancedMessagingPreferences');
 
         $template->param( password_cleartext => $password );
         $template->param(
