@@ -116,7 +116,7 @@ my $error = $input->param('error');
 $template->param( error => $error ) if ( $error );
 
 my ( $od, $issue, $fines ) = GetMemberIssuesAndFines($borrowernumber);
-$template->param( issuecount => $issue );
+$template->param( issuecount => $issue, fines => $fines );
 
 my $data = GetMember( 'borrowernumber' => $borrowernumber );
 
