@@ -149,6 +149,16 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '1.41'
     },
+    'Selenium::Remote::Driver' => {
+        'usage'    => 'Web testing',
+        'required' => '0',
+        'min_ver'  => '0.26',
+    },
+    'Selenium::PhantomJS' => {
+        'usage'    => 'Web testing',
+        'required' => '0',
+        'min_ver'  => '0.26',
+    },
     'DBD::SQLite2' => {
         'usage'    => 'Offline Circulation Feature',
         'required' => '0',

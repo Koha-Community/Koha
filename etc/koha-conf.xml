@@ -158,5 +158,18 @@ __PAZPAR2_TOGGLE_XML_POST__
      <index_name>__ELASTICSEARCH_INDEX__</index_name>  <!-- should be unique amongst all the indices on your cluster. _biblios and _authorities will be appended. -->
  </elasticsearch>
 
+ <!-- PageObject tests connect to these servers -->
+ <testservers>
+    <opac>
+        <base_url>__WEBSERVER_IP__:__WEBSERVER_PORT__</base_url>
+    </opac>
+    <staff>
+        <base_url>__WEBSERVER_IP__:__WEBSERVER_PORT_LIBRARIAN__</base_url>
+    </staff>
+    <rest>
+        <base_url>__WEBSERVER_IP__:__WEBSERVER_PORT_LIBRARIAN__</base_url>
+    </rest>
+ </testservers>
+
 </config>
 </yazgfs>
