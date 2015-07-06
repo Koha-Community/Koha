@@ -702,24 +702,29 @@ if (scalar(@itemloop) == 0 || scalar(@otheritemloop) == 0) {
 }
 
 ## get notes and subjects from MARC record
-my $dbh              = C4::Context->dbh;
+if (!C4::Context->preference("OPACXSLTDetailsDisplay") ) {
+    my $marcisbnsarray   = GetMarcISBN    ($record,$marcflavour);
+    my $marcauthorsarray = GetMarcAuthors ($record,$marcflavour);
+    my $marcsubjctsarray = GetMarcSubjects($record,$marcflavour);
+    my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
+    my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
+    my $marchostsarray   = GetMarcHosts($record,$marcflavour);
+
+    $template->param(
+        MARCSUBJCTS => $marcsubjctsarray,
+        MARCAUTHORS => $marcauthorsarray,
+        MARCSERIES  => $marcseriesarray,
+        MARCURLS    => $marcurlsarray,
+        MARCISBNS   => $marcisbnsarray,
+        MARCHOSTS   => $marchostsarray,
+    );
+}
+
 my $marcnotesarray   = GetMarcNotes   ($record,$marcflavour);
-my $marcisbnsarray   = GetMarcISBN    ($record,$marcflavour);
-my $marcauthorsarray = GetMarcAuthors ($record,$marcflavour);
-my $marcsubjctsarray = GetMarcSubjects($record,$marcflavour);
-my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
-my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
-my $marchostsarray  = GetMarcHosts($record,$marcflavour);
 my $subtitle         = GetRecordValue('subtitle', $record, GetFrameworkCode($biblionumber));
 
     $template->param(
                      MARCNOTES               => $marcnotesarray,
-                     MARCSUBJCTS             => $marcsubjctsarray,
-                     MARCAUTHORS             => $marcauthorsarray,
-                     MARCSERIES              => $marcseriesarray,
-                     MARCURLS                => $marcurlsarray,
-                     MARCISBNS               => $marcisbnsarray,
-                     MARCHOSTS               => $marchostsarray,
                      norequests              => $norequests,
                      RequestOnOpac           => C4::Context->preference("RequestOnOpac"),
                      itemdata_ccode          => $itemfields{ccode},
