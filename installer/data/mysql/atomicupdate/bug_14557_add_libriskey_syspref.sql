@@ -1,0 +1,1 @@
+INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('LibrisKey', '', 'This key must be obtained at http://api.libris.kb.se/. It is unique for the IP of the server.', NULL, 'Free');
