@@ -170,7 +170,6 @@ sub redirect_to_paycollect {
     $redirect .= get_for_redirect( 'amount', "amount$line_no", 1 );
     $redirect .=
       get_for_redirect( 'amountoutstanding', "amountoutstanding$line_no", 1 );
-    $redirect .= get_for_redirect( 'accountno',    "accountno$line_no",    0 );
     $redirect .= get_for_redirect( 'title',        "title$line_no",        0 );
     $redirect .= get_for_redirect( 'itemnumber',   "itemnumber$line_no",   0 );
     $redirect .= get_for_redirect( 'notify_id',    "notify_id$line_no",    0 );
@@ -184,7 +183,7 @@ sub redirect_to_paycollect {
 
 sub writeoff_all {
     my @params = @_;
-    my @wo_lines = grep { /^accountno\d+$/ } @params;
+    my @wo_lines = grep { /^accountlines_id\d+$/ } @params;
     for (@wo_lines) {
         if (/(\d+)/) {
             my $value       = $1;
@@ -193,7 +192,6 @@ sub writeoff_all {
             #    my $borrowernum    = $input->param("borrowernumber$value");
             my $itemno    = $input->param("itemnumber$value");
             my $amount    = $input->param("amountoutstanding$value");
-            my $accountno = $input->param("accountno$value");
             my $accountlines_id = $input->param("accountlines_id$value");
             my $payment_note = $input->param("payment_note_$value");
             WriteOffFee( $borrowernumber, $accountlines_id, $itemno, $accounttype, $amount, $branch, $payment_note );
@@ -250,7 +248,7 @@ sub payselected {
     foreach (@params) {
         if (/^incl_par_(\d+)$/) {
             my $index = $1;
-            push @lines_to_pay, $input->param("accountno$index");
+            push @lines_to_pay, $input->param("accountlines_id$index");
             $amt += $input->param("amountoutstanding$index");
         }
     }
