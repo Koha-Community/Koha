@@ -767,11 +767,11 @@ sub CanBookBeIssued {
     if ( !defined $borrower->{dateexpiry} || $borrower->{'dateexpiry'} eq '0000-00-00') {
         $issuingimpossible{EXPIRED} = 1;
     } else {
-        my $expiry_dt = dt_from_string( $borrower->{dateexpiry}, 'sql' );
+        my $expiry_dt = dt_from_string( $borrower->{dateexpiry}, 'sql', 'floating' );
         $expiry_dt->truncate( to => 'day');
         my $today = $now->clone()->truncate(to => 'day');
-
-        if ($expiry_dt->year < 9999 && DateTime->compare($today, $expiry_dt) == 1) {
+        $today->set_time_zone( 'floating' );
+        if ( DateTime->compare($today, $expiry_dt) == 1 ) {
             $issuingimpossible{EXPIRED} = 1;
         }
     }
@@ -3448,10 +3448,13 @@ sub CalcDateDue {
 
     # if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
     if ( C4::Context->preference('ReturnBeforeExpiry') ) {
-        my $expiry_dt = dt_from_string( $borrower->{dateexpiry}, 'iso' );
-        $expiry_dt->set( hour => 23, minute => 59);
-        if ( DateTime->compare( $datedue, $expiry_dt ) == 1 ) {
-            $datedue = $expiry_dt->clone;
+        my $expiry_dt = dt_from_string( $borrower->{dateexpiry}, 'iso', 'floating');
+        if( $expiry_dt ) { #skip empty expiry date..
+            $expiry_dt->set( hour => 23, minute => 59);
+            my $d1= $datedue->clone->set_time_zone('floating');
+            if ( DateTime->compare( $d1, $expiry_dt ) == 1 ) {
+                $datedue = $expiry_dt->clone->set_time_zone( C4::Context->tz );
+            }
         }
     }
 
