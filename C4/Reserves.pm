@@ -241,7 +241,7 @@ sub AddReserve {
     }
 
     #}
-    ($const eq "o" || $const eq "e") or return;   # FIXME: why not have a useful return value?
+    ($const eq "o" || $const eq "e") or return $reserve_id;
     $query = qq{
         INSERT INTO reserveconstraints
             (borrowernumber,biblionumber,reservedate,biblioitemnumber)

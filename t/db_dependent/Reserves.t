@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 58;
+use Test::More tests => 65;
 
 use MARC::Record;
 use DateTime::Duration;
@@ -532,6 +532,85 @@ $dbh->do(
     $rule->{categorycode}, $rule->{itemtype}, $rule->{branchcode}
 );
 ok( !C4::Reserves::OnShelfHoldsAllowed($item, $borrower), "OnShelfHoldsAllowed() disallowed" );
+
+# Tests for bug 14464
+
+$dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
+my ( undef, undef, $bz14464_fines ) = GetMemberIssuesAndFines( $borrowernumber );
+ok( !$bz14464_fines, 'Bug 14464 - No fines at beginning' );
+
+# First, test cancelling a reserve when there's no charge configured.
+t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelayCharge', 0);
+
+my $bz14464_reserve = AddReserve(
+    'CPL',
+    $borrowernumber,
+    $bibnum,
+    'a',
+    undef,
+    '1',
+    undef,
+    undef,
+    '',
+    $title,
+    $itemnumber,
+    'W'
+);
+
+ok( $bz14464_reserve, 'Bug 14464 - 1st reserve correctly created' );
+
+CancelReserve({ reserve_id => $bz14464_reserve, charge_cancel_fee => 1 });
+
+( undef, undef, $bz14464_fines ) = GetMemberIssuesAndFines( $borrowernumber );
+ok( !$bz14464_fines, 'Bug 14464 - No fines after cancelling reserve with no charge configured' );
+
+# Then, test cancelling a reserve when there's no charge desired.
+t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelayCharge', 42);
+
+$bz14464_reserve = AddReserve(
+    'CPL',
+    $borrowernumber,
+    $bibnum,
+    'a',
+    undef,
+    '1',
+    undef,
+    undef,
+    '',
+    $title,
+    $itemnumber,
+    'W'
+);
+
+ok( $bz14464_reserve, 'Bug 14464 - 2nd reserve correctly created' );
+
+CancelReserve({ reserve_id => $bz14464_reserve });
+
+( undef, undef, $bz14464_fines ) = GetMemberIssuesAndFines( $borrowernumber );
+ok( !$bz14464_fines, 'Bug 14464 - No fines after cancelling reserve with no charge desired' );
+
+# Finally, test cancelling a reserve when there's a charge desired and configured.
+$bz14464_reserve = AddReserve(
+    'CPL',
+    $borrowernumber,
+    $bibnum,
+    'a',
+    undef,
+    '1',
+    undef,
+    undef,
+    '',
+    $title,
+    $itemnumber,
+    'W'
+);
+
+ok( $bz14464_reserve, 'Bug 14464 - 1st reserve correctly created' );
+
+CancelReserve({ reserve_id => $bz14464_reserve, charge_cancel_fee => 1 });
+
+( undef, undef, $bz14464_fines ) = GetMemberIssuesAndFines( $borrowernumber );
+is( int( $bz14464_fines ), 42, 'Bug 14464 - Fine applied after cancelling reserve with charge desired and configured' );
 
 $dbh->rollback;
 
