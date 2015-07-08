@@ -232,7 +232,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OAI-PMH:archiveID','KOHA-OAI-TEST',NULL,'OAI-PMH archive identification','Free'),
 ('OAI-PMH:AutoUpdateSets','0','','Automatically update OAI sets when a bibliographic record is created or updated','YesNo'),
 ('OAI-PMH:ConfFile','',NULL,'If empty, Koha OAI Server operates in normal mode, otherwise it operates in extended mode.','File'),
-('OAI-PMH:DeletedRecord','persistent','Koha\'s deletedbiblio table will never be deleted (persistent), might be deleted (transient), or will never have any data in it (no)','transient|persistent|no','Choice')
+('OAI-PMH:DeletedRecord','persistent','Koha\'s deletedbiblio table will never be deleted (persistent), might be deleted (transient), or will never have any data in it (no)','transient|persistent|no','Choice'),
 ('OAI-PMH:MaxCount','50',NULL,'OAI-PMH maximum number of records by answer to ListRecords and ListIdentifiers queries','Integer'),
 ('OCLCAffiliateID','','','Use with FRBRizeEditions and XISBN. You can sign up for an AffiliateID here: http://www.worldcat.org/wcpa/do/AffiliateUserServices?method=initSelfRegister','free'),
 ('OPACAcquisitionDetails','0','','Show the acquisition details at the OPAC','YesNo'),
