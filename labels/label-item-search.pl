@@ -29,12 +29,15 @@ use C4::Auth qw(get_template_and_user);
 use C4::Output qw(output_html_with_http_headers);
 use C4::Context;
 use C4::Search qw(SimpleSearch);
+use C4::Dates;
 use C4::Biblio qw(TransformMarcToKoha);
 use C4::Items qw(GetItemInfosOf get_itemnumbers_of);
 use C4::Koha qw(GetItemTypes);
 use C4::Creators::Lib qw(html_table);
 use C4::Debug;
 use Koha::DateUtils;
+
+use Koha::SearchEngine::Search;
 
 BEGIN {
     $debug = $debug || $cgi_debug;
@@ -107,14 +110,14 @@ if ( $op eq "do_search" ) {
     }
 
     my $offset = $startfrom > 1 ? $startfrom - 1 : 0;
-    ( $error, $marcresults, $total_hits ) =
-      SimpleSearch( $ccl_query, $offset, $resultsperpage );
+    my $searcher = Koha::SearchEngine::Search->new({index => 'biblios'});
+    ( $error, $marcresults, $total_hits ) = $searcher->simple_search_compat($ccl_query, $offset, $resultsperpage);
 
     if (!defined $error && @{$marcresults} ) {
         $show_results = @{$marcresults};
     }
     else {
-        $debug and warn "ERROR label-item-search: no results from SimpleSearch";
+        $debug and warn "ERROR label-item-search: no results from simple_search_compat";
 
         # leave $show_results undef
     }

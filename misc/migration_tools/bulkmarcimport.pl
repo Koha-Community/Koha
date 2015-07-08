@@ -31,6 +31,9 @@ use Getopt::Long;
 use IO::File;
 use Pod::Usage;
 
+use Koha::SearchEngine;
+use Koha::SearchEngine::Search;
+
 use open qw( :std :encoding(UTF-8) );
 binmode( STDOUT, ":encoding(UTF-8)" );
 my ( $input_marc_file, $number, $offset) = ('',0,0);
@@ -215,6 +218,17 @@ if ($logfile){
    $loghandle= IO::File->new($logfile, $writemode) ;
    print $loghandle "id;operation;status\n";
 }
+
+my $searcher = Koha::SearchEngine::Search->new(
+    {
+        index => (
+              $authorities
+            ? $Koha::SearchEngine::AUTHORITIES_INDEX
+            : $Koha::SearchEngine::BIBLIOS_INDEX
+        )
+    }
+);
+
 RECORD: while (  ) {
     my $record;
     # get records
@@ -268,7 +282,7 @@ RECORD: while (  ) {
         my $query = build_query( $match, $record );
         my $server = ( $authorities ? 'authorityserver' : 'biblioserver' );
         $debug && warn $query;
-        my ( $error, $results, $totalhits ) = C4::Search::SimpleSearch( $query, 0, 3, [$server] );
+        my ( $error, $results, $totalhits ) = $searcher->simple_search_compat( $query, 0, 3, [$server] );
         # changed to warn so able to continue with one broken record
         if ( defined $error ) {
             warn "unable to search the database for duplicates : $error";

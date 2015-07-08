@@ -38,6 +38,8 @@ use Koha::DateUtils qw/dt_from_string/;
 use Koha::Database;
 
 use Koha::Database;
+use Koha::SearchEngine;
+use Koha::SearchEngine::Search;
 
 use vars qw(@ISA @EXPORT);
 
@@ -2601,12 +2603,12 @@ counts Usage of itemnumber in Analytical bibliorecords.
 
 sub GetAnalyticsCount {
     my ($itemnumber) = @_;
-    require C4::Search;
 
     ### ZOOM search here
     my $query;
     $query= "hi=".$itemnumber;
-            my ($err,$res,$result) = C4::Search::SimpleSearch($query,0,10);
+    my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
+    my ($err,$res,$result) = $searcher->simple_search_compat($query,0,10);
     return ($result);
 }
 

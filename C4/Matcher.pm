@@ -23,7 +23,8 @@ use warnings;
 use C4::Context;
 use MARC::Record;
 
-
+use Koha::SearchEngine;
+use Koha::SearchEngine::Search;
 
 =head1 NAME
 
@@ -655,10 +656,9 @@ sub get_matches {
                     #NOTE: double-quote the values so you don't get a "Embedded truncation not supported" error when a term has a ? in it.
             }
 
-            require C4::Search;
-
+            my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
             ( $error, $searchresults, $total_hits ) =
-              C4::Search::SimpleSearch( $query, 0, $max_matches );
+              $searcher->simple_search_compat( $query, 0, $max_matches );
         }
         elsif ( $self->{'record_type'} eq 'authority' ) {
             my $authresults;

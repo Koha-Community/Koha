@@ -34,8 +34,9 @@ BEGIN {
 # Koha modules used
 use MARC::Record;
 use C4::Context;
-use C4::Search;
 use Getopt::Long;
+
+use Koha::SearchEngine::Search;
 
 my ( $help, $confirm, $zebraqueue, $silent,$stealth );
 
@@ -62,13 +63,14 @@ $| = 1;
 my $sth = $dbh->prepare("SELECT biblionumber FROM biblio");
 my $sth_insert = $dbh->prepare("INSERT INTO zebraqueue (biblio_auth_number,operation,server,done) VALUES (?,'specialUpdate','biblioserver',0)");
 
+my $searcher = Koha::SearchEngine::Search->new({index => 'biblios'});
+
 # We get all biblios
 $sth->execute;
 my ($nbhits);
-
 # We check for each biblio
 while ( my ($biblionumber) = $sth->fetchrow ) {
-    (undef,undef,$nbhits) = SimpleSearch("Local-number=$biblionumber");
+    (undef,undef,$nbhits) = $searcher->simple_search_compat("Local-number=$biblionumber");
     print "biblionumber $biblionumber not indexed\n" unless $nbhits || $stealth;
 # If -z option we put the biblio in zebraqueue
     if ($zebraqueue && !$nbhits){
