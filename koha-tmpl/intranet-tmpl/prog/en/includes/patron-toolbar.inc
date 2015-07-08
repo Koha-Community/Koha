@@ -1,3 +1,6 @@
+[% USE Categories %]
+[% SET categories = Categories.all %]
+
 [% UNLESS ( no_add ) %]
 <div id="toolbar" class="btn-toolbar">
     <div class="btn-group">
