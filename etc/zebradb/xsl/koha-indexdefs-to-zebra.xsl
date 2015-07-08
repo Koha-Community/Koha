@@ -250,7 +250,19 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
                     <xsl:text>']</xsl:text>
                 </xsl:attribute>
                 <xsl:for-each select="key('index_subfields_tag', @tag)">
-                    <xsl:call-template name="handle-one-index-subfields"/>
+                    <xsl:choose>
+                        <xsl:when test="@condition">
+                            <xslo:if>
+                                <xsl:attribute name="test">
+                                    <xsl:value-of select="@condition"/>
+                                </xsl:attribute>
+                                <xsl:call-template name="handle-one-index-subfields" />
+                            </xslo:if>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:call-template name="handle-one-index-subfields" />
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:for-each>
             </xslo:template>
         </xsl:for-each>
@@ -262,34 +274,35 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
         <xsl:variable name="indexes">
             <xsl:call-template name="get-target-indexes"/>
         </xsl:variable>
-            <xslo:for-each select="marc:subfield">
-                <xslo:if>
-                    <xsl:attribute name="test">
-                        <xsl:text>contains('</xsl:text>
-                        <xsl:value-of select="@subfields"/>
-                        <xsl:text>', @code)</xsl:text>
-                    </xsl:attribute>
-                    <z:index>
-                        <xsl:attribute name="name"><xsl:value-of select="normalize-space($indexes)"/></xsl:attribute>
-                        <xslo:value-of>
-                            <xsl:attribute name="select">
-                                <xsl:choose>
-                                    <xsl:when test="@length">
-                                        <xsl:text>substring(., </xsl:text>
-                                        <xsl:value-of select="$offset + 1" />
-                                        <xsl:text>, </xsl:text>
-                                        <xsl:value-of select="$length"/>
-                                        <xsl:text>)</xsl:text>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:text>.</xsl:text>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:attribute>
-                        </xslo:value-of>
-                    </z:index>
-                </xslo:if>
-            </xslo:for-each>
+
+        <xslo:for-each select="marc:subfield">
+            <xslo:if>
+                <xsl:attribute name="test">
+                    <xsl:text>contains('</xsl:text>
+                    <xsl:value-of select="@subfields"/>
+                    <xsl:text>', @code)</xsl:text>
+                </xsl:attribute>
+                <z:index>
+                    <xsl:attribute name="name"><xsl:value-of select="normalize-space($indexes)"/></xsl:attribute>
+                    <xslo:value-of>
+                        <xsl:attribute name="select">
+                            <xsl:choose>
+                                <xsl:when test="@length">
+                                    <xsl:text>substring(., </xsl:text>
+                                    <xsl:value-of select="$offset + 1" />
+                                    <xsl:text>, </xsl:text>
+                                    <xsl:value-of select="$length"/>
+                                    <xsl:text>)</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>.</xsl:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:attribute>
+                    </xslo:value-of>
+                </z:index>
+            </xslo:if>
+        </xslo:for-each>
     </xsl:template>
 
     <xsl:template name="handle-index-facets">
