@@ -49,6 +49,8 @@ use Koha::DateUtils;
 use Koha::Database;
 use Koha::Patron::Messages;
 use Koha::Patron::Images;
+use Koha::SearchEngine;
+use Koha::SearchEngine::Search;
 
 use Date::Calc qw(
   Today
@@ -353,8 +355,9 @@ if (@$barcodes) {
     {
      $template_params->{FALLBACK} = 1;
 
+        my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
         my $query = "kw=" . $barcode;
-        my ( $searcherror, $results, $total_hits ) = SimpleSearch($query);
+        my ( $searcherror, $results, $total_hits ) = $searcher->simple_search_compat($query, 0, 10);
 
         # if multiple hits, offer options to librarian
         if ( $total_hits > 0 ) {

@@ -96,6 +96,7 @@ it to be updated by a regular index cron job in the future.
 =cut
 
 sub update_index_background {
+    my $self = shift;
     $self->update_index(@_);
 }
 

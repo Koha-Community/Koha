@@ -68,6 +68,9 @@ use C4::Members qw/ GetMember /;
 use C4::Budgets qw/ GetBudgetHierarchy /;
 
 use Koha::Acquisition::Bookseller;
+use Koha::SearchEngine;
+use Koha::SearchEngine::Search;
+use Koha::SearchEngine::QueryBuilder;
 
 my $input = new CGI;
 
@@ -99,13 +102,14 @@ my @operands = $query;
 my $QParser;
 $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
 my $builtquery;
+my $builder  = Koha::SearchEngine::QueryBuilder->new();
+my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
 if ($QParser) {
     $builtquery = $query;
 } else {
-    my ( $builterror,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type);
-    ( $builterror,$builtquery,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type) = buildQuery(undef,\@operands);
+    ( undef,$builtquery,undef,undef,undef,undef,undef,undef,undef,undef) = $builder->build_query_compat(undef,\@operands);
 }
-my ( $error, $marcresults, $total_hits ) = SimpleSearch( $builtquery, $results_per_page * ( $page - 1 ), $results_per_page );
+my ( $error, $marcresults, $total_hits ) = $searcher->simple_search_compat($builtquery, $results_per_page * ($page - 1), $results_per_page);
 
 if (defined $error) {
     $template->param(

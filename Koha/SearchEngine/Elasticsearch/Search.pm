@@ -38,6 +38,7 @@ Koha::SearchEngine::ElasticSearch::Search - search functions for Elasticsearch
 
 use base qw(Koha::ElasticSearch);
 use Koha::ItemTypes;
+use Koha::SearchEngine::QueryBuilder;
 
 use Catmandu::Store::ElasticSearch;
 
@@ -276,7 +277,7 @@ How many results to skip from the start of the results.
 
 =item C<$max_results>
 
-The max number of results to return. The default is 1,000 (because unlimited
+The max number of results to return. The default is 100 (because unlimited
 is a pretty terrible thing to do.)
 
 =back
@@ -313,9 +314,9 @@ sub simple_search_compat {
     $max_results //= 100;
 
     unless (ref $query) {
-        # We'll push it through the query builder
+        # We'll push it through the query builder to sanitise everything.
         my $qb = Koha::SearchEngine::QueryBuilder->new();
-        $query = $qb->build_query($query);
+        (undef,$query) = $qb->build_query_compat(undef, [$query]);
     }
     my $results = $self->search($query, undef, $max_results, %options);
     my @records;

@@ -5,6 +5,8 @@ use C4::Context;
 use C4::AuthoritiesMarc;
 use utf8;
 use open qw[ :std :encoding(utf8) ];
+use Koha::SearchEngine;
+use Koha::SearchEngine::Search;
 
 my $dbh=C4::Context->dbh;
 my $datatypes_query = $dbh->prepare(<<ENDSQL);
@@ -24,7 +26,8 @@ foreach my $authority (@$dataauthorities){
   my $query;
   $query= "an=".$authority->{'authid'};
   # search for biblios mapped
-  my ($err,$res,$used) = C4::Search::SimpleSearch($query,0,10);
+  my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
+  my ($err,undef,$used) = $searcher->simple_search_compat($query,0,1);
   if (defined $err) {
       $used = 0;
   }

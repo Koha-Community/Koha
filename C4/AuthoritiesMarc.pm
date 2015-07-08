@@ -29,6 +29,9 @@ use C4::Log;
 use Koha::MetadataRecord::Authority;
 use Koha::Authorities;
 use Koha::Authority::Types;
+use Koha::Authority;
+use Koha::SearchEngine;
+use Koha::SearchEngine::Search;
 
 use vars qw(@ISA @EXPORT);
 
@@ -349,7 +352,10 @@ sub CountUsage {
         ### ZOOM search here
         my $query;
         $query= "an:".$authid;
-  		my ($err,$res,$result) = C4::Search::SimpleSearch($query,0,10);
+        # Should really be replaced with a real count call, this is a
+        # bad way.
+        my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
+		my ($err,$res,$result) = $searcher->simple_search_compat($query,0,1);
         if ($err) {
             warn "Error: $err from search $query";
             $result = 0;
@@ -822,7 +828,8 @@ sub FindDuplicateAuthority {
             $_->[1]=~s/$filtervalues/ /g; $query.= " $op he:\"".$_->[1]."\"" if ($_->[0]=~/[A-z]/);
         }
     }
-    my ($error, $results, $total_hits) = C4::Search::SimpleSearch( $query, 0, 1, [ "authorityserver" ] );
+    my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::AUTHORITIES_INDEX});
+    my ($error, $results, $total_hits) = $searcher->simple_search_compat( $query, 0, 1 );
     # there is at least 1 result => return the 1st one
     if (!defined $error && @{$results} ) {
         my $marcrecord = C4::Search::new_record_from_zebra(

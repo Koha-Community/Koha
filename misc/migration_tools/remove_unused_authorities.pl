@@ -27,6 +27,8 @@ use C4::Context;
 use C4::AuthoritiesMarc;
 use Getopt::Long;
 
+use Koha::SearchEngine::Search;
+
 my @authtypes;
 my $want_help = 0;
 my $test = 0;
@@ -66,11 +68,12 @@ $rqselect->execute;
 my $counter=0;
 my $totdeleted=0;
 my $totundeleted=0;
+my $searcher = Koha::SearchEngine::Search->new({index => 'biblios'});
 while (my $data=$rqselect->fetchrow_hashref){
     my $query;
     $query= "an=".$data->{'authid'};
     # search for biblios mapped
-    my ($err,$res,$used) = C4::Search::SimpleSearch($query,0,10);
+    my ($err,$res,$used) = $searcher->simple_search_compat($query,0,10);
     if (defined $err) {
         warn "error: $err on search $query\n";
         next;
