@@ -149,6 +149,16 @@ BEGIN {
 
     AddReserve($branch,$borrowernumber,$biblionumber,$bibitems,$priority,$resdate,$expdate,$notes,$title,$checkitem,$found)
 
+Adds reserve and generates HOLDPLACED message.
+
+The following tables are available witin the HOLDPLACED message:
+
+    branches
+    borrowers
+    biblio
+    biblioitems
+    items
+
 =cut
 
 sub AddReserve {
@@ -215,10 +225,11 @@ sub AddReserve {
             letter_code => 'HOLDPLACED',
             branchcode => $branch,
             tables => {
-                'branches'  => $branch_details,
-                'borrowers' => $borrower,
-                'biblio'    => $biblionumber,
-                'items'     => $checkitem,
+                'branches'    => $branch_details,
+                'borrowers'   => $borrower,
+                'biblio'      => $biblionumber,
+                'biblioitems' => $biblionumber,
+                'items'       => $checkitem,
             },
         ) ) {
 
@@ -1934,6 +1945,25 @@ sub _Findgroupreserve {
 Sends a notification to the patron that their hold has been filled (through
 ModReserveAffect, _not_ ModReserveFill)
 
+The letter code for this notice may be found using the following query:
+
+    select distinct letter_code
+    from message_transports
+    inner join message_attributes using (message_attribute_id)
+    where message_name = 'Hold_Filled'
+
+This will probably sipmly be 'HOLD', but because it is defined in the database,
+it is subject to addition or change.
+
+The following tables are availalbe witin the notice:
+
+    branches
+    borrowers
+    biblio
+    biblioitems
+    reserves
+    items
+
 =cut
 
 sub _koha_notify_reserve {
@@ -1966,10 +1996,11 @@ sub _koha_notify_reserve {
         module => 'reserves',
         branchcode => $reserve->{branchcode},
         tables => {
-            'branches'  => $branch_details,
-            'borrowers' => $borrower,
-            'biblio'    => $biblionumber,
-            'reserves'  => $reserve,
+            'branches'       => $branch_details,
+            'borrowers'      => $borrower,
+            'biblio'         => $biblionumber,
+            'biblioitems'    => $biblionumber,
+            'reserves'       => $reserve,
             'items', $reserve->{'itemnumber'},
         },
         substitute => { today => output_pref( { dt => dt_from_string, dateonly => 1 } ) },
@@ -2303,7 +2334,17 @@ sub GetReserveId {
 
   ReserveSlip($branchcode, $borrowernumber, $biblionumber)
 
-  Returns letter hash ( see C4::Letters::GetPreparedLetter ) or undef
+Returns letter hash ( see C4::Letters::GetPreparedLetter ) or undef
+
+The letter code will be RESERVESLIP, and the following tables are
+available within the slip:
+
+    reserves
+    branches
+    borrowers
+    biblio
+    biblioitems
+    items
 
 =cut
 
@@ -2327,6 +2368,7 @@ sub ReserveSlip {
             'branches'    => $reserve->{branchcode},
             'borrowers'   => $reserve->{borrowernumber},
             'biblio'      => $reserve->{biblionumber},
+            'biblioitems' => $reserve->{biblionumber},
             'items'       => $reserve->{itemnumber},
         },
     );
