@@ -31,7 +31,6 @@ use DateTime::Format::MySQL;
 use Business::ISBN;
 use autouse 'Data::cselectall_arrayref' => qw(Dumper);
 use DBI qw(:sql_types);
- use Data::Dumper;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK $DEBUG);
 
 BEGIN {
@@ -281,7 +280,7 @@ sub GetItemTypes {
 
 Returns a hashref containing search categories.
 A search category will be put in the hash if at least one of its itemtypes is visible in OPAC.
-The categories must be part of Authorized Values (DOCTYPECAT)
+The categories must be part of Authorized Values (ITEMTYPECAT)
 
 =cut
 

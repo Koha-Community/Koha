@@ -184,7 +184,7 @@ if ( $op eq 'list' ) {
     }
 
     # push koha system categories
-    foreach (qw(Asort1 Asort2 Bsort1 Bsort2 SUGGEST DAMAGED LOST REPORT_GROUP REPORT_SUBGROUP DEPARTMENT TERM SUGGEST_STATUS DOCTYPECAT)) {
+    foreach (qw(Asort1 Asort2 Bsort1 Bsort2 SUGGEST DAMAGED LOST REPORT_GROUP REPORT_SUBGROUP DEPARTMENT TERM SUGGEST_STATUS ITEMTYPECAT)) {
         push @category_list, $_ unless $categories{$_};
     }
 

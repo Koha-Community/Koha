@@ -7,7 +7,6 @@ use strict;
 use warnings;
 use C4::Context;
 use Koha::DateUtils qw(dt_from_string);
-use Data::Dumper;
 
 use Test::More tests => 9;
 use DateTime::Format::MySQL;
@@ -316,7 +315,7 @@ subtest 'GetFrameworksLoop() tests' => sub {
 subtest 'GetItemTypesByCategory GetItemTypesCategorized test' => sub{
     plan tests => 7;
 
-    my $insertGroup = AddAuthorisedValue('DOCTYPECAT', 'Qwertyware');
+    my $insertGroup = AddAuthorisedValue('ITEMTYPECAT', 'Qwertyware');
     ok($insertGroup, "Create group Qwertyware");
 
     my $query = "INSERT into itemtypes (itemtype, description, searchcategory, hideinopac) values (?,?,?,?)";
@@ -334,7 +333,7 @@ subtest 'GetItemTypesByCategory GetItemTypesCategorized test' => sub{
     is_deeply(\@results,\@expected,'GetItemTypesByCategory: valid category returns itemtypes');
 
     # add more data since GetItemTypesCategorized's search is more subtle
-    $insertGroup = AddAuthorisedValue('DOCTYPECAT', 'Veryheavybook');
+    $insertGroup = AddAuthorisedValue('ITEMTYPECAT', 'Veryheavybook');
     $insertSth->execute('BKghjklo4', 'Another hidden book', 'Veryheavybook', 1);
 
     my $hrCat = GetItemTypesCategorized();

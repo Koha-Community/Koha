@@ -111,7 +111,7 @@ if ( $op eq 'add_form' ) {
         $remote_image = $data->{imageurl};
     }
 
-    my $searchcategory = GetAuthorisedValues("DOCTYPECAT", $data->{'searchcategory'});
+    my $searchcategory = GetAuthorisedValues("ITEMTYPECAT", $data->{'searchcategory'});
 
     $template->param(
         itemtype        => $itemtype,

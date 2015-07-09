@@ -1275,7 +1275,7 @@ CREATE TABLE `itemtypes` ( -- defines the item types
   checkinmsgtype CHAR(16) DEFAULT 'message' NOT NULL, -- type (CSS class) for the checkinmsg, can be "alert" or "message"
   sip_media_type VARCHAR(3) DEFAULT NULL, -- SIP2 protocol media type for this itemtype
   hideinopac tinyint(1) NOT NULL DEFAULT 0, -- Hide the item type from the search options in OPAC
-  searchcategory varchar(20) default NULL, -- Group this item type with others with the same value on OPAC search options
+  searchcategory varchar(80) default NULL, -- Group this item type with others with the same value on OPAC search options
   PRIMARY KEY  (`itemtype`),
   UNIQUE KEY `itemtype` (`itemtype`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
