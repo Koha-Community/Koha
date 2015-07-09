@@ -299,8 +299,39 @@ sub charged_items {
     return $self->x_items('items', @_);
 }
 sub fine_items {
+    require Koha::Database;
+    require Template;
+
     my $self = shift;
-    return $self->x_items('fine_items', @_);
+    my $start = shift;
+    my $end = shift;
+    my $server = shift;
+
+    my @fees = Koha::Database->new()->schema()->resultset('Accountline')->search(
+        {
+            borrowernumber    => $self->{borrowernumber},
+            amountoutstanding => { '>' => '0' },
+        }
+    );
+
+    $start = $start ? $start - 1 : 0;
+    $end   = $end   ? $end       : scalar @fees - 1;
+
+    my $av_field_template = $server ? $server->{account}->{av_field_template} : undef;
+    $av_field_template ||= "[% accountline.description %] [% accountline.amountoutstanding | format('%.2f') %]";
+
+    my $tt = Template->new();
+
+    my @return_values;
+    for ( my $i = $start; $i <= $end; $i++ ) {
+        my $fee = $fees[$i];
+
+        my $output;
+        $tt->process( \$av_field_template, { accountline => $fee }, \$output );
+        push( @return_values, { barcode => $output } );
+    }
+
+    return \@return_values;
 }
 sub recall_items {
     my $self = shift;

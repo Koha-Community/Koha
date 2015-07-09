@@ -42,7 +42,8 @@
       <login id="lpl-sc" password="1234" institution="LPL" />
       <login id="lpl-sc-beacock" password="xyzzy"
              delimiter="|" error-detect="enabled" institution="LPL"
-             send_patron_home_library_in_af="1" >
+             send_patron_home_library_in_af="1"
+             av_field_template="[% accountline.description %] [% accountline.amountoutstanding | format('%.2f') %]" >
           <screen_msg_regex find="Greetings from Koha." replace="Welcome to your library!" />
           <screen_msg_regex find="Invalid patron barcode." replace="Barcode not found, are you sure this is your library card?" />
       </login>

@@ -40,6 +40,8 @@ my $location_code;
 my $patron_identifier;
 my $patron_password;
 
+my $summary;
+
 my $item_identifier;
 
 my $fee_acknowledged = 0;
@@ -55,12 +57,14 @@ GetOptions(
     "sp|sip_pass=s"                => \$login_password,    # sip password
     "l|location|location_code=s"   => \$location_code,     # sip location code
 
-    "patron=s"   => \$patron_identifier,    # patron cardnumber or login
-    "password=s" => \$patron_password,      # patron's password
+    "patron=s"   => \$patron_identifier,                   # patron cardnumber or login
+    "password=s" => \$patron_password,                     # patron's password
 
     "i|item=s" => \$item_identifier,
 
     "fa|fee-acknowledged" => \$fee_acknowledged,
+
+    "s|summary=s" => \$summary,
 
     "t|terminator=s" => \$terminator,
 
@@ -126,8 +130,9 @@ my $handlers = {
             patron_identifier => $patron_identifier,
             terminal_password => $terminal_password,
             patron_password   => $patron_password,
+            summary           => $summary,
         },
-        optional => [ 'patron_password', ],
+        optional => [ 'patron_password', 'summary' ],
     },
     item_information => {
         name       => 'Item Information',
@@ -312,8 +317,9 @@ sub build_patron_information_command_message {
     my $patron_identifier = $params->{patron_identifier};
     my $terminal_password = $params->{terminal_password};
     my $patron_password   = $params->{patron_password};
+    my $summary           = $params->{summary};
 
-    my $summary = "          ";
+    $summary //= "          ";
 
     return
         PATRON_INFO
@@ -483,6 +489,9 @@ Options:
 
   --patron         ILS patron cardnumber or username
   --password       ILS patron password
+
+  -s --summary     Optionally define the patron information request summary field.
+                   Please refer to the SIP2 protocol specification for details
 
   --item           ILS item identifier ( item barcode )
 
