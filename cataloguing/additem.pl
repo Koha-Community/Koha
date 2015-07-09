@@ -803,6 +803,13 @@ for my $row ( @big_array ) {
 foreach my $subfield_code (sort keys(%witness)) {
     my %header_value;
     $header_value{header_value} = $witness{$subfield_code};
+
+	my $subfieldlib = $tagslib->{$itemtagfield}->{$subfield_code};
+    my $kohafield = $subfieldlib->{kohafield};
+    if ( $kohafield && $kohafield =~ /items.(.+)/ ) {
+        $header_value{column_name} = $1;
+    }
+
     push(@header_value_loop, \%header_value);
 }
 

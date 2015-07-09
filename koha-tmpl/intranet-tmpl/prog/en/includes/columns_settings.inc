@@ -9,11 +9,14 @@ function KohaTable(selector, dt_parameters, columns_settings) {
     var hidden_ids = [];
     var excluded_ids = [];
     $(columns_settings).each( function() {
+		var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', selector ).index( 'th' );
+		var used_id = named_id == -1 ? id : named_id;
+
         if ( this['is_hidden'] == "1" ) {
-            hidden_ids.push( id );
+            hidden_ids.push( used_id );
         }
         if ( this['cannot_be_toggled'] == "1" ) {
-            excluded_ids.push( id );
+            excluded_ids.push( used_id );
         }
         id++;
     });
