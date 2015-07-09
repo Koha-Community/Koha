@@ -72,7 +72,9 @@ sub new {
     bless( $self, $class );
 
     $self->schema( Koha::Database->new()->schema );
-    $self->schema->txn_begin();
+    eval {
+        $self->schema->txn_begin();
+    };
     $self->schema->storage->sql_maker->quote_char('`');
     return $self;
 }
