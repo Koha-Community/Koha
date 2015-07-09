@@ -49,7 +49,7 @@ is( $dt, undef, "Koha::Hold->waiting_expires_on returns undef if ReservesMaxPick
 
 is( $hold->is_waiting, 1, 'The hold is waiting' );
 is( $hold->is_found, 1, 'The hold is found');
-isnt( $hold->is_in_transit,  'The hold is not in transit' );
+ok( !$hold->is_in_transit, 'The hold is not in transit' );
 
 C4::Context->set_preference( 'ReservesMaxPickUpDelay', '5' );
 $dt = $hold->waiting_expires_on();
@@ -67,7 +67,7 @@ $dt = $hold->waiting_expires_on();
 is( $dt, undef, "Koha::Hold->waiting_expires_on returns undef if found is not 'W' ( Set to empty string )");
 isnt( $hold->is_waiting, 1, 'The hold is not waiting (W)' );
 is( $hold->is_found, 0, 'The hold is not found' );
-isnt( $hold->is_in_transit, 'The hold is not in transit' );
+ok( !$hold->is_in_transit, 'The hold is not in transit' );
 
 $schema->storage->txn_rollback();
 
