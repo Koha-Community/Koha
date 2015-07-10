@@ -2254,11 +2254,18 @@ Returns undef if the move failed or the biblionumber of the destination record o
 sub MoveItemFromBiblio {
     my ($itemnumber, $frombiblio, $tobiblio) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber = ?");
-    $sth->execute( $tobiblio );
-    my ( $tobiblioitem ) = $sth->fetchrow();
-    $sth = $dbh->prepare("UPDATE items SET biblioitemnumber = ?, biblionumber = ? WHERE itemnumber = ? AND biblionumber = ?");
-    my $return = $sth->execute($tobiblioitem, $tobiblio, $itemnumber, $frombiblio);
+    my ( $tobiblioitem ) = $dbh->selectrow_array(q|
+        SELECT biblioitemnumber
+        FROM biblioitems
+        WHERE biblionumber = ?
+    |, undef, $tobiblio );
+    my $return = $dbh->do(q|
+        UPDATE items
+        SET biblioitemnumber = ?,
+            biblionumber = ?
+        WHERE itemnumber = ?
+            AND biblionumber = ?
+    |, undef, $tobiblioitem, $tobiblio, $itemnumber, $frombiblio );
     if ($return == 1) {
         ModZebra( $tobiblio, "specialUpdate", "biblioserver" );
         ModZebra( $frombiblio, "specialUpdate", "biblioserver" );
@@ -2270,6 +2277,14 @@ sub MoveItemFromBiblio {
 		    $order->{'biblionumber'} = $tobiblio;
 	        C4::Acquisition::ModOrder($order);
 	    }
+
+        # Update holds
+        $dbh->do( q|
+            UPDATE reserves
+            SET biblionumber = ?
+            WHERE itemnumber = ?
+        |, undef, $tobiblio, $itemnumber );
+
         return $tobiblio;
 	}
     return;
