@@ -17,7 +17,7 @@ sub search {
     my $dt_params = $params->{dt_params};
 
     unless ( $searchmember ) {
-        $searchmember = $dt_params->{sSearch};
+        $searchmember = $dt_params->{sSearch} // '';
     }
 
     my ($iTotalRecords, $iTotalDisplayRecords);
