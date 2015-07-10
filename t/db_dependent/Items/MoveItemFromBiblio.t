@@ -16,9 +16,10 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 5;
+use Test::More tests => 8;
 
 use C4::Items;
+use C4::Reserves;
 
 use t::lib::TestBuilder;
 
@@ -43,6 +44,22 @@ my $item3 = $builder->build(
     }
 );
 
+my $bib_level_hold_not_to_move = $builder->build(
+    {   source => 'Reserve',
+        value  => { biblionumber => $from_biblio->{biblionumber}, },
+    }
+);
+my $item_level_hold_not_to_move = $builder->build(
+    {   source => 'Reserve',
+        value  => { biblionumber => $from_biblio->{biblionumber}, itemnumber => $item1->{itemnumber} },
+    }
+);
+my $item_level_hold_to_move = $builder->build(
+    {   source => 'Reserve',
+        value  => { biblionumber => $from_biblio->{biblionumber}, itemnumber => $item2->{itemnumber} },
+    }
+);
+
 my $to_biblionumber_after_moved = C4::Items::MoveItemFromBiblio( $item2->{itemnumber}, $from_biblio->{biblionumber}, $to_biblio->{biblionumber} );
 
 is( $to_biblionumber_after_moved, $to_biblio->{biblionumber}, 'MoveItemFromBiblio should return the to_biblionumber if success' );
@@ -57,3 +74,11 @@ my $get_item2 = C4::Items::GetItem( $item2->{itemnumber} );
 is( $get_item2->{biblionumber}, $to_biblio->{biblionumber}, 'The item2 should have been moved' );
 my $get_item3 = C4::Items::GetItem( $item3->{itemnumber} );
 is( $get_item3->{biblionumber}, $to_biblio->{biblionumber}, 'The item3 should not have been moved' );
+
+my $get_bib_level_hold    = C4::Reserves::GetReserve( $bib_level_hold_not_to_move->{reserve_id} );
+my $get_item_level_hold_1 = C4::Reserves::GetReserve( $item_level_hold_not_to_move->{reserve_id} );
+my $get_item_level_hold_2 = C4::Reserves::GetReserve( $item_level_hold_to_move->{reserve_id} );
+
+is( $get_bib_level_hold->{biblionumber},    $from_biblio->{biblionumber}, 'MoveItemFromBiblio should not have moved the biblio-level hold' );
+is( $get_item_level_hold_1->{biblionumber}, $from_biblio->{biblionumber}, 'MoveItemFromBiblio should not have moved the item-level hold placed on item 1' );
+is( $get_item_level_hold_2->{biblionumber}, $to_biblio->{biblionumber},   'MoveItemFromBiblio should have moved the item-level hold placed on item 2' );
