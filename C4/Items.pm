@@ -2278,13 +2278,14 @@ sub MoveItemFromBiblio {
 	        C4::Acquisition::ModOrder($order);
 	    }
 
-        # Update holds
-        $dbh->do( q|
-            UPDATE reserves
-            SET biblionumber = ?
-            WHERE itemnumber = ?
-        |, undef, $tobiblio, $itemnumber );
-
+        # Update reserves, hold_fill_targets, tmp_holdsqueue and linktracker tables
+        for my $table_name ( qw( reserves hold_fill_targets tmp_holdsqueue linktracker ) ) {
+            $dbh->do( qq|
+                UPDATE $table_name
+                SET biblionumber = ?
+                WHERE itemnumber = ?
+            |, undef, $tobiblio, $itemnumber );
+        }
         return $tobiblio;
 	}
     return;
