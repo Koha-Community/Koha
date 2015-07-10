@@ -227,7 +227,7 @@ my $my_tags = [];
 
 if ($loggedinuser) {
     $my_tags = get_tag_rows({borrowernumber=>$loggedinuser});
-    my $my_approved_tags = get_approval_rows({borrowernumber => $loggedinuser, approved => 1});
+    my $my_approved_tags = get_approval_rows({ approved => 1 });
     foreach my $tag (@$my_tags) {
         my $biblio = GetBiblioData($tag->{biblionumber});
         my $record = &GetMarcBiblio( $tag->{biblionumber} );
