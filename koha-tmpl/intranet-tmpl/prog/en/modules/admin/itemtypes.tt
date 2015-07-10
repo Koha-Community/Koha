@@ -85,6 +85,21 @@ Item types administration
     <a class="btn btn-small" id="newitemtype" href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form"><i class="icon-plus"></i> New item type</a>
 </div>[% END %]
 
+[% FOREACH message IN messages %]
+  [% IF message.type == 'success' %]
+    <div class="dialog message">
+  [% ELSIF message.type == 'warning' %]
+    <div class="dialog alert">
+  [% ELSIF message.type == 'error' %]
+    <div class="dialog error" style="margin:auto;">
+  [% END %]
+  [% IF message.code == 'already_exists' %]
+    This item type already exists.
+  [% END %]
+  </div>
+[% END %]
+
+
 [% IF ( add_form ) %]
   [% IF ( itemtype ) %]
       <h3>Modify item type</h3>
@@ -99,6 +114,7 @@ Item types administration
 	<ol>
   [% IF ( itemtype ) %]
       <li>
+          <input type="hidden" name="is_a_modif" value="1" />
           <span class="label">Item type: </span> <input type="hidden" name="itemtype" value="[% itemtype %]" />
           [% itemtype %]
      </li>

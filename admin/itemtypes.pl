@@ -69,7 +69,8 @@ my $input       = new CGI;
 my $searchfield = $input->param('description');
 my $script_name = "/cgi-bin/koha/admin/itemtypes.pl";
 my $itemtype    = $input->param('itemtype');
-my $op          = $input->param('op');
+my $op          = $input->param('op') // 'list';
+my @messages;
 $searchfield =~ s/\,//g;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -85,8 +86,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 $template->param(script_name => $script_name);
 if ($op) {
 	$template->param($op  => 1); # we show only the TMPL_VAR names $op
-} else {
-    $template->param(else => 1);
 }
 
 my $dbh = C4::Context->dbh;
@@ -132,14 +131,13 @@ if ( $op eq 'add_form' ) {
     # called by add_form, used to insert/modify data in DB
 }
 elsif ( $op eq 'add_validate' ) {
-    my $query = "
+    my $is_a_modif = $input->param('is_a_modif');
+    my ( $already_exists ) = $dbh->selectrow_array(q|
         SELECT itemtype
         FROM   itemtypes
         WHERE  itemtype = ?
-    ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($itemtype);
-    if ( $sth->fetchrow ) {		# it's a modification
+    |, undef, $itemtype );
+    if ( $already_exists and $is_a_modif ) { # it's a modification
         my $query2 = '
             UPDATE itemtypes
             SET    description = ?
@@ -152,7 +150,7 @@ elsif ( $op eq 'add_validate' ) {
                  , sip_media_type = ?
             WHERE itemtype = ?
         ';
-        $sth = $dbh->prepare($query2);
+        my $sth = $dbh->prepare($query2);
         $sth->execute(
             $input->param('description'),
             $input->param('rentalcharge'),
@@ -171,7 +169,7 @@ elsif ( $op eq 'add_validate' ) {
             $input->param('itemtype')
         );
     }
-    else {    # add a new itemtype & not modif an old
+    elsif ( not $already_exists and not $is_a_modif ) {
         my $query = "
             INSERT INTO itemtypes
                 (itemtype,description,rentalcharge, notforloan, imageurl, summary, checkinmsg, checkinmsgtype, sip_media_type)
@@ -194,10 +192,15 @@ elsif ( $op eq 'add_validate' ) {
             $sip_media_type,
         );
     }
+    else {
+        push @messages, {
+            type => 'error',
+            code => 'already_exists',
+        };
+    }
 
-    print $input->redirect('itemtypes.pl');
-    exit;
-
+    $searchfield = '';
+    $op = 'list';
     # END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
     # called by default form, used to confirm deletion of data in DB
@@ -244,7 +247,8 @@ elsif ( $op eq 'delete_confirmed' ) {
     # END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 }
-else {    # DEFAULT
+
+if ( $op eq 'list' ) {
     my ($results) = StringSearch( $searchfield, 'web' );
     my @loop;
     foreach my $itemtype ( @{$results} ) {
@@ -254,8 +258,10 @@ else {    # DEFAULT
     }
 
     $template->param(
-        loop           => \@loop,
+        loop     => \@loop,
+        else     => 1,
+        messages => \@messages,
     );
-}    #---- END $OP eq DEFAULT
+}
 
 output_html_with_http_headers $input, $cookie, $template->output;
