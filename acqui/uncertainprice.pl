@@ -46,7 +46,6 @@ The bookseller who we want to display the orders of.
 use strict;
 use warnings;
 
-use C4::Input;
 use C4::Auth;
 use C4::Output;
 use CGI qw ( -utf8 );

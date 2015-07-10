@@ -47,7 +47,6 @@ use strict;
 use warnings;
 use Carp;
 
-use C4::Input;
 use C4::Auth;
 use C4::Output;
 use CGI qw ( -utf8 );
