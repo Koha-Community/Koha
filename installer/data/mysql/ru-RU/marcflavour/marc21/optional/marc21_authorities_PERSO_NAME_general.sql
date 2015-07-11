@@ -20,7 +20,7 @@ INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tag
 INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('PERSO_NAME', '003', 1, '', 'Идентификатор контрольного номера', 'Идентификатор контрольного номера', NULL);
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
- ('', 'PERSO_NAME', '003', '@', 1, 0, 'Контрольное поле', 'Контрольное поле', 0, 0, '', NULL, 'marc21_field_003.pl', 0, NULL, 0);
+ ('', 'PERSO_NAME', '003', '@', 1, 0, 'Контрольное поле', 'Контрольное поле', 0, 0, '', NULL, 'marc21_orgcode.pl', 0, NULL, 0);
 
 INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('PERSO_NAME', '005', 1, '', 'Дата и время последней транзакции', 'Дата и время последней транзакции', NULL);
@@ -118,7 +118,7 @@ INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, 
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
  ('', 'PERSO_NAME', '040', '6', 0, 0, 'Элемент связи', 'Элемент связи', 0, 0, '', NULL, NULL, 0, NULL, 0),
  ('', 'PERSO_NAME', '040', '8', 0, 1, 'Номер связи и порядковый номер', 'Номер связи и порядковый номер', 0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', 'PERSO_NAME', '040', 'a', 1, 0, 'Служба первичной каталогизации', 'Служба первичной каталогизации', 0, 0, '', NULL, 'marc21_field_003.pl', 0, NULL, 0),
+ ('', 'PERSO_NAME', '040', 'a', 1, 0, 'Служба первичной каталогизации', 'Служба первичной каталогизации', 0, 0, '', NULL, 'marc21_orgcode.pl', 0, NULL, 0),
  ('', 'PERSO_NAME', '040', 'b', 0, 0, 'Язык каталогизации', 'Язык каталогизации', 0, 0, '', NULL, NULL, 0, NULL, 0),
  ('', 'PERSO_NAME', '040', 'c', 0, 0, 'Служба перезаписи или преобразования', 'Служба перезаписи или преобразования', 0, 0, '', NULL, NULL, 0, NULL, 0),
  ('', 'PERSO_NAME', '040', 'd', 0, 1, 'Служба модификации', 'Служба модификации', 0, 0, '', NULL, NULL, 0, NULL, 0),

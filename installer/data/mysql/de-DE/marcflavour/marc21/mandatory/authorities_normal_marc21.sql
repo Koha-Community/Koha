@@ -273,7 +273,7 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `tab`, `authorised_value`, `value_builder`, `seealso`, `isurl`, `hidden`, `linkid`, `kohafield`, `frameworkcode`) VALUES
 		('', '000', '@', 'Kontrollfeld mit fester Länge', 'Kontrollfeld mit fester Länge', 0, 1, 0, NULL, 'marc21_leader_authorities.pl', NULL, 0, 0, '', '', ''),
 		('', '001', '@', 'Kontrollfeld', 'Kontrollfeld', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', 'auth_header.authid', ''),
-		('', '003', '@', 'Kontrollfeld', 'Kontrollfeld', 0, 1, 0, NULL, 'marc21_field_003.pl', NULL, 0, 0, '', '', ''),
+        ('', '003', '@', 'Kontrollfeld', 'Kontrollfeld', 0, 1, 0, NULL, 'marc21_orgcode.pl', NULL, 0, 0, '', '', ''),
 		('', '005', '@', 'Kontrollfeld', 'Kontrollfeld', 0, 1, 0, NULL, 'marc21_field_005.pl', NULL, 0, 0, '', '', ''),
 		('', '008', '@', 'Kontrollfeld mit fester Länge', 'Kontrollfeld mit fester Länge', 0, 1, 0, NULL, 'marc21_field_008_authorities.pl', NULL, 0, 0, '', '', ''),
 		('', '010', 'a', 'LC-Kontrollnummer', 'LC-Kontrollnummer', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
@@ -351,7 +351,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '035', 'z', 'Gelöschte/ungültige Kontrollnummer', 'Gelöschte/ungültige Kontrollnummer', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '035', '6', 'Verknüpfung', 'Verknüpfung', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '035', '8', 'Feldverknüpfung und Reihenfolge', 'Feldverknüpfung und Reihenfolge', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '040', 'a', 'Original-Katalogisierungsstelle', 'Original-Katalogisierungsstelle', 0, 1, 0, NULL, 'marc21_field_003.pl', NULL, 0, 0, '', '', ''),
+        ('', '040', 'a', 'Original-Katalogisierungsstelle', 'Original-Katalogisierungsstelle', 0, 1, 0, NULL, 'marc21_orgcode.pl', NULL, 0, 0, '', '', ''),
 		('', '040', 'b', 'Katalogisierungssprache', 'Katalogisierungssprache', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '040', 'c', 'Übertragungsstelle', 'Übertragungsstelle', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '040', 'd', 'Bearbeitungsstelle', 'Bearbeitungsstelle', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),

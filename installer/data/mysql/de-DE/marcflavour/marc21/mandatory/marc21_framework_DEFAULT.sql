@@ -513,7 +513,7 @@ INSERT IGNORE INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, 
 INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('000', '@', 'Kontrollfeld mit fester Länge', 'Kontrollfeld mit fester Länge', 0, 1, '', 0, '', '', 'marc21_leader.pl', 0, 0, '', '', '', NULL),
 		('001', '@', 'Kontrollfeld', 'Kontrollfeld', 0, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
-		('003', '@', 'Kontrollfeld', 'Kontrollfeld', 0, 1, '', 0, '', '', 'marc21_field_003.pl', 0, 0, '', '', '', NULL),
+        ('003', '@', 'Kontrollfeld', 'Kontrollfeld', 0, 1, '', 0, '', '', 'marc21_orgcode.pl', 0, 0, '', '', '', NULL),
 		('005', '@', 'Kontrollfeld', 'Kontrollfeld', 0, 1, '', 0, '', '', 'marc21_field_005.pl', 0, 0, '', '', '', NULL),
 		('006', '@', 'Kontrollfeld mit fester Länge', 'Kontrollfeld mit fester Länge', 0, 0, '', 0, '', '', 'marc21_field_006.pl', 0, -1, '', '', '', NULL),
 		('007', '@', 'Kontrollfeld mit fester Länge', 'Kontrollfeld mit fester Länge', 0, 0, '', 0, '', '', 'marc21_field_007.pl', 0, 0, '', '', '', NULL),

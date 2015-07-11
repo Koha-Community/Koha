@@ -273,7 +273,7 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `tab`, `authorised_value`, `value_builder`, `seealso`, `isurl`, `hidden`, `linkid`, `kohafield`, `frameworkcode`) VALUES
 		('', '000', '@', 'fixed length control field', 'fixed length control field', 0, 1, 0, NULL, 'marc21_leader_authorities.pl', NULL, 0, 0, '', '', ''),
 		('', '001', '@', 'control field', 'control field', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', 'auth_header.authid', ''),
-		('', '003', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_field_003.pl', NULL, 0, 0, '', '', ''),
+        ('', '003', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_orgcode.pl', NULL, 0, 0, '', '', ''),
 		('', '005', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_field_005.pl', NULL, 0, 0, '', '', ''),
 		('', '008', '@', 'fixed length control field', 'fixed length control field', 0, 1, 0, NULL, 'marc21_field_008_authorities.pl', NULL, 0, 0, '', '', ''),
 		('', '010', 'a', 'LC control number', 'LC control number', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
@@ -351,7 +351,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '035', 'z', 'Canceled/invalid system control number', 'Canceled/invalid system control number', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '035', '6', 'Linkage', 'Linkage', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '035', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '040', 'a', 'Original cataloging agency', 'Original cataloging agency', 0, 1, 0, NULL, 'marc21_field_003.pl', NULL, 0, 0, '', '', ''),
+        ('', '040', 'a', 'Original cataloging agency', 'Original cataloging agency', 0, 1, 0, NULL, 'marc21_orgcode.pl', NULL, 0, 0, '', '', ''),
 		('', '040', 'b', 'Language of cataloging', 'Language of cataloging', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '040', 'c', 'Transcribing agency', 'Transcribing agency', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '040', 'd', 'Modifying agency', 'Modifying agency', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),

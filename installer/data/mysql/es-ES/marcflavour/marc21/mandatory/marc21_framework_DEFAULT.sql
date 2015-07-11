@@ -513,7 +513,7 @@ INSERT IGNORE INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, 
 INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('000', '@', 'campo de control de longitud fija', 'campo de control de longitud fija', 0, 1, '', 0, '', '', 'marc21_leader.pl', 0, 0, '', '', '', NULL),
 		('001', '@', 'campo de control', 'campo de control', 0, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
-		('003', '@', 'campo de control', 'campo de control', 0, 1, '', 0, '', '', 'marc21_field_003.pl', 0, 0, '', '', '', NULL),
+        ('003', '@', 'campo de control', 'campo de control', 0, 1, '', 0, '', '', 'marc21_orgcode.pl', 0, 0, '', '', '', NULL),
 		('005', '@', 'campo de control', 'campo de control', 0, 1, '', 0, '', '', 'marc21_field_005.pl', 0, 0, '', '', '', NULL),
 		('006', '@', 'campo de control de longitud fija', 'campo de control de longitud fija', 0, 0, '', 0, '', '', 'marc21_field_006.pl', 0, -1, '', '', '', NULL),
 		('007', '@', 'campo de control de longitud fija', 'campo de control de longitud fija', 0, 0, '', 0, '', '', 'marc21_field_007.pl', 0, 0, '', '', '', NULL),

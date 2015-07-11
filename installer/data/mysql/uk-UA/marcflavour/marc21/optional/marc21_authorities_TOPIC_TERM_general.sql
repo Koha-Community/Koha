@@ -20,7 +20,7 @@ INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tag
 INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('TOPIC_TERM', '003', 1, '', 'Ідентифікатор контрольного номера', 'Ідентифікатор контрольного номера', NULL);
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
- ('', 'TOPIC_TERM', '003', '@', 1, 0, 'Контрольне поле', 'Контрольне поле', 0, 0, '', NULL, 'marc21_field_003.pl', 0, NULL, 0);
+ ('', 'TOPIC_TERM', '003', '@', 1, 0, 'Контрольне поле', 'Контрольне поле', 0, 0, '', NULL, 'marc21_orgcode.pl', 0, NULL, 0);
 
 INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('TOPIC_TERM', '005', 1, '', 'Дата і час останньої транзакції', 'Дата і час останньої транзакції', NULL);
@@ -93,7 +93,7 @@ INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, 
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
  ('', 'TOPIC_TERM', '040', '6', 0, 0, 'Елемент зв’язку', 'Елемент зв’язку', 0, 0, '', NULL, NULL, 0, NULL, 0),
  ('', 'TOPIC_TERM', '040', '8', 0, 1, 'Номер зв’язку та порядковий номер', 'Номер зв’язку та порядковий номер', 0, 0, '', NULL, NULL, 0, NULL, 0),
- ('', 'TOPIC_TERM', '040', 'a', 1, 0, 'Служба первинної каталогізації', 'Служба первинної каталогізації', 0, 0, '', NULL, 'marc21_field_003.pl', 0, NULL, 0),
+ ('', 'TOPIC_TERM', '040', 'a', 1, 0, 'Служба первинної каталогізації', 'Служба первинної каталогізації', 0, 0, '', NULL, 'marc21_orgcode.pl', 0, NULL, 0),
  ('', 'TOPIC_TERM', '040', 'b', 0, 0, 'Мова каталогізації', 'Мова каталогізації', 0, 0, '', NULL, NULL, 0, NULL, 0),
  ('', 'TOPIC_TERM', '040', 'c', 0, 0, 'Управління перезапису або перетворення', 'Управління перезапису або перетворення', 0, 0, '', NULL, NULL, 0, NULL, 0),
  ('', 'TOPIC_TERM', '040', 'd', 0, 1, 'Служба змін', 'Служба змін',     0, 0, '', NULL, NULL, 0, NULL, 0),

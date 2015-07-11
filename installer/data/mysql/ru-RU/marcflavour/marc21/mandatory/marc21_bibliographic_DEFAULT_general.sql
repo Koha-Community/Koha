@@ -19,7 +19,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '003', '', '', 'Принадлежность контрольного номера', 'Принадлежность контрольного номера', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('', '', '003', '@', 0, 0, 'Контрольное поле', 'Контрольное поле',     0, 0, '', '', 'marc21_field_003.pl', 0, '', '', NULL);
+ ('', '', '003', '@', 0, 0, 'Контрольное поле', 'Контрольное поле',     0, 0, '', '', 'marc21_orgcode.pl', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '005', '', '', 'Дата корректировки', '', '');

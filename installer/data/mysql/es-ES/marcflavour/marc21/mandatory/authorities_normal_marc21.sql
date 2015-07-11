@@ -273,7 +273,7 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `tab`, `authorised_value`, `value_builder`, `seealso`, `isurl`, `hidden`, `linkid`, `kohafield`, `frameworkcode`) VALUES
 		('', '000', '@', 'campo de control de longitud fija', 'campo de control de longitud fija', 0, 1, 0, NULL, 'marc21_leader_authorities.pl', NULL, 0, 0, '', '', ''),
 		('', '001', '@', 'campo de control', 'campo de control', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', 'auth_header.authid', ''),
-		('', '003', '@', 'campo de control', 'campo de control', 0, 1, 0, NULL, 'marc21_field_003.pl', NULL, 0, 0, '', '', ''),
+        ('', '003', '@', 'campo de control', 'campo de control', 0, 1, 0, NULL, 'marc21_orgcode.pl', NULL, 0, 0, '', '', ''),
 		('', '005', '@', 'campo de control', 'campo de control', 0, 1, 0, NULL, 'marc21_field_005.pl', NULL, 0, 0, '', '', ''),
 		('', '008', '@', 'campo de control de longitud fija', 'campo de control de longitud fija', 0, 1, 0, NULL, 'marc21_field_008_authorities.pl', NULL, 0, 0, '', '', ''),
 		('', '010', 'a', 'Número de control de LC', 'Número de control de LC', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
@@ -351,7 +351,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '035', 'z', 'Número de control cancelado/no válido', 'Número de control cancelado/no válido', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '035', '6', 'Enlace', 'Enlace', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '035', '8', 'Enlace entre campo y número de secuencia', 'Enlace entre campo y número de secuencia', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '040', 'a', 'Centro catalogador/agencia de origen', 'Centro catalogador/agencia de origen', 0, 1, 0, NULL, 'marc21_field_003.pl', NULL, 0, 0, '', '', ''),
+        ('', '040', 'a', 'Centro catalogador/agencia de origen', 'Centro catalogador/agencia de origen', 0, 1, 0, NULL, 'marc21_orgcode.pl', NULL, 0, 0, '', '', ''),
 		('', '040', 'b', 'Lengua de catalogación', 'Lengua de catalogación', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '040', 'c', 'Centro/agencia transcriptor', 'Centro/agencia transcriptor', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '040', 'd', 'Centro/agencia modificador', 'Centro/agencia modificador', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),

@@ -527,7 +527,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('000', '@', 'fixed length control field', 'fixed length control field', 0, 1, '', 0, '', '', 'marc21_leader.pl', 0, 0, 'BKS', '', '', NULL),
 		('001', '@', 'control field', 'control field', 0, 0, '', 0, '', '', '', 0, -6, 'BKS', '', '', NULL),
-		('003', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_field_003.pl', 0, -6, 'BKS', '', '', NULL),
+        ('003', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_orgcode.pl', 0, -6, 'BKS', '', '', NULL),
 		('005', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_field_005.pl', 0, -1, 'BKS', '', '', NULL),
 		('006', '@', 'fixed length control field', 'fixed length control field', 0, 0, '', 0, '', '', 'marc21_field_006.pl', 0, -1, 'BKS', '', '', NULL),
 		('007', '@', 'fixed length control field', 'fixed length control field', 0, 0, '', 0, '', '', 'marc21_field_007.pl', 0, 0, 'BKS', '', '', NULL),
@@ -4454,7 +4454,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('000', '@', 'fixed length control field', 'fixed length control field', 0, 1, '', 0, '', '', 'marc21_leader.pl', 0, 0, 'CF', '', '', NULL),
 		('001', '@', 'control field', 'control field', 0, 0, '', 0, '', '', '', 0, -6, 'CF', '', '', NULL),
-		('003', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_field_003.pl', 0, -6, 'CF', '', '', NULL),
+        ('003', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_orgcode.pl', 0, -6, 'CF', '', '', NULL),
 		('005', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_field_005.pl', 0, -1, 'CF', '', '', NULL),
 		('006', '@', 'fixed length control field', 'fixed length control field', 0, 0, '', 0, '', '', 'marc21_field_006.pl', 0, -1, 'CF', '', '', NULL),
 		('007', '@', 'fixed length control field', 'fixed length control field', 0, 0, '', 0, '', '', 'marc21_field_007.pl', 0, 0, 'CF', '', '', NULL),
@@ -8380,7 +8380,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('000', '@', 'fixed length control field', 'fixed length control field', 0, 1, '', 0, '', '', 'marc21_leader.pl', 0, 0, 'SR', '', '', NULL),
 		('001', '@', 'control field', 'control field', 0, 0, '', 0, '', '', '', 0, -6, 'SR', '', '', NULL),
-		('003', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_field_003.pl', 0, -6, 'SR', '', '', NULL),
+        ('003', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_orgcode.pl', 0, -6, 'SR', '', '', NULL),
 		('005', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_field_005.pl', 0, -1, 'SR', '', '', NULL),
 		('006', '@', 'fixed length control field', 'fixed length control field', 0, 0, '', 0, '', '', 'marc21_field_006.pl', 0, -1, 'SR', '', '', NULL),
 		('007', '@', 'fixed length control field', 'fixed length control field', 0, 0, '', 0, '', '', 'marc21_field_007.pl', 0, 0, 'SR', '', '', NULL),
@@ -12306,7 +12306,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('000', '@', 'fixed length control field', 'fixed length control field', 0, 1, '', 0, '', '', 'marc21_leader.pl', 0, 0, 'VR', '', '', NULL),
 		('001', '@', 'control field', 'control field', 0, 0, '', 0, '', '', '', 0, -6, 'VR', '', '', NULL),
-		('003', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_field_003.pl', 0, -6, 'VR', '', '', NULL),
+        ('003', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_orgcode.pl', 0, -6, 'VR', '', '', NULL),
 		('005', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_field_005.pl', 0, -1, 'VR', '', '', NULL),
 		('006', '@', 'fixed length control field', 'fixed length control field', 0, 0, '', 0, '', '', 'marc21_field_006.pl', 0, -1, 'VR', '', '', NULL),
 		('007', '@', 'fixed length control field', 'fixed length control field', 0, 0, '', 0, '', '', 'marc21_field_007.pl', 0, 0, 'VR', '', '', NULL),
@@ -16230,7 +16230,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('000', '@', 'fixed length control field', 'fixed length control field', 0, 1, '', 0, '', '', 'marc21_leader.pl', 0, 0, 'AR', '', '', NULL),
 		('001', '@', 'control field', 'control field', 0, 0, '', 0, '', '', '', 0, -6, 'AR', '', '', NULL),
-		('003', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_field_003.pl', 0, -6, 'AR', '', '', NULL),
+        ('003', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_orgcode.pl', 0, -6, 'AR', '', '', NULL),
 		('005', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_field_005.pl', 0, -1, 'AR', '', '', NULL),
 		('006', '@', 'fixed length control field', 'fixed length control field', 0, 0, '', 0, '', '', 'marc21_field_006.pl', 0, -1, 'AR', '', '', NULL),
 		('007', '@', 'fixed length control field', 'fixed length control field', 0, 0, '', 0, '', '', 'marc21_field_007.pl', 0, 0, 'AR', '', '', NULL),
@@ -20154,7 +20154,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('000', '@', 'fixed length control field', 'fixed length control field', 0, 1, '', 0, '', '', 'marc21_leader.pl', 0, 0, 'KT', '', '', NULL),
 		('001', '@', 'control field', 'control field', 0, 0, '', 0, '', '', '', 0, -6, 'KT', '', '', NULL),
-		('003', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_field_003.pl', 0, -6, 'KT', '', '', NULL),
+        ('003', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_orgcode.pl', 0, -6, 'KT', '', '', NULL),
 		('005', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_field_005.pl', 0, -1, 'KT', '', '', NULL),
 		('006', '@', 'fixed length control field', 'fixed length control field', 0, 0, '', 0, '', '', 'marc21_field_006.pl', 0, -1, 'KT', '', '', NULL),
 		('007', '@', 'fixed length control field', 'fixed length control field', 0, 0, '', 0, '', '', 'marc21_field_007.pl', 0, 0, 'KT', '', '', NULL),
@@ -24080,7 +24080,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('000', '@', 'fixed length control field', 'fixed length control field', 0, 1, '', 0, '', '', 'marc21_leader.pl', 0, 0, 'IR', '', '', NULL),
 		('001', '@', 'control field', 'control field', 0, 0, '', 0, '', '', '', 0, -6, 'IR', '', '', NULL),
-		('003', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_field_003.pl', 0, -6, 'IR', '', '', NULL),
+        ('003', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_orgcode.pl', 0, -6, 'IR', '', '', NULL),
 		('005', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_field_005.pl', 0, -1, 'IR', '', '', NULL),
 		('006', '@', 'fixed length control field', 'fixed length control field', 0, 0, '', 0, '', '', 'marc21_field_006.pl', 0, -1, 'IR', '', '', NULL),
 		('007', '@', 'fixed length control field', 'fixed length control field', 0, 0, '', 0, '', '', 'marc21_field_007.pl', 0, 0, 'IR', '', '', NULL),
@@ -28001,7 +28001,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('000', '@', 'fixed length control field', 'fixed length control field', 0, 1, '', 0, '', '', 'marc21_leader.pl', 0, 0, 'SER', '', '', NULL),
 		('001', '@', 'control field', 'control field', 0, 0, '', 0, '', '', '', 0, -6, 'SER', '', '', NULL),
-		('003', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_field_003.pl', 0, -6, 'SER', '', '', NULL),
+        ('003', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_orgcode.pl', 0, -6, 'SER', '', '', NULL),
 		('005', '@', 'control field', 'control field', 0, 0, '', 0, '', '', 'marc21_field_005.pl', 0, -1, 'SER', '', '', NULL),
 		('006', '@', 'fixed length control field', 'fixed length control field', 0, 0, '', 0, '', '', 'marc21_field_006.pl', 0, -1, 'SER', '', '', NULL),
 		('007', '@', 'fixed length control field', 'fixed length control field', 0, 0, '', 0, '', '', 'marc21_field_007.pl', 0, 0, 'SER', '', '', NULL),
