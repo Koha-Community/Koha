@@ -163,7 +163,7 @@ sub selected_plugins {
         @fi = @$incl;
         $min = 0; #not sure how many will output
     } else { # some default MARC, UNIMARC and item plugins
-        @fi = qw| barcode.pl dateaccessioned.pl marc21_field_003.pl
+        @fi = qw| barcode.pl dateaccessioned.pl marc21_orgcode.pl
 marc21_field_005.pl marc21_field_006.pl marc21_field_007.pl marc21_field_008.pl
 marc21_field_008_authorities.pl marc21_leader.pl marc21_leader_authorities.pl
 unimarc_leader.pl unimarc_field_100.pl unimarc_field_105.pl
