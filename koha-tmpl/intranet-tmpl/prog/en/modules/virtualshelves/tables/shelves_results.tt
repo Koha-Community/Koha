@@ -28,8 +28,8 @@
 }
 
 [% BLOCK action_form -%]
-    [%- IF can_manage_shelf -%]
-<form action='shelves.pl' method='get'><input type='hidden' name='shelfnumber' value='[% shelfnumber %]' /><input type='hidden' name='op' value='modif' /><input type='submit' class='editshelf' value='Edit' /></form>[% IF can_manage_shelf OR can_delete_shelf %]<form action='shelves.pl' method='post'><input type='hidden' name='shelfoff' value='[% shelfoff %]' /><input type='hidden' name='shelves' value='1' /><input type='hidden' name='DEL-[% shelfnumber %]' value='1' /><input type='hidden' name='CONFIRM-[% shelfnumber %]' value='1' />[% IF type == 1 %]<input type='hidden' name='display' value='privateshelves' />[% ELSE %]<input type='hidden' name='display' value='publicshelves' />[% END %]<input type='submit' class='deleteshelf' onclick='return confirmDelete(MSG_CONFIRM_DELETE_LIST)' value='Delete' /></form>[% END %]
+    [%- IF can_manage_shelf OR can_delete_shelf-%]
+[% IF can_manage_shelf %]<form action='shelves.pl' method='get'><input type='hidden' name='shelfnumber' value='[% shelfnumber %]' /><input type='hidden' name='op' value='modif' /><input type='submit' class='editshelf' value='Edit' /></form>[% END %][% IF can_manage_shelf OR can_delete_shelf %]<form action='shelves.pl' method='post'><input type='hidden' name='shelfoff' value='[% shelfoff %]' /><input type='hidden' name='shelves' value='1' /><input type='hidden' name='DEL-[% shelfnumber %]' value='1' /><input type='hidden' name='CONFIRM-[% shelfnumber %]' value='1' />[% IF type == 1 %]<input type='hidden' name='display' value='privateshelves' />[% ELSE %]<input type='hidden' name='display' value='publicshelves' />[% END %]<input type='submit' class='deleteshelf' onclick='return confirmDelete(MSG_CONFIRM_DELETE_LIST)' value='Delete' /></form>[% END %]
     [%- ELSE -%]
         None
     [%- END -%]
