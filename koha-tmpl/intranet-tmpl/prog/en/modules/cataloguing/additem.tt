@@ -15,23 +15,35 @@
     browser.show();
 
 $(document).ready(function(){
+
+    // Remove the onclick event defined in browser.js,
+    // otherwise the deletion confirmation will not work correctly
+    $('a[href*="biblionumber="]').off('click');
+
     [% IF (popup) %]
         [% IF (opisadd) %]
             window.close();
         [% END %]
     [% END %]
             $("fieldset.rows input, fieldset.rows select").addClass("noEnterSubmit");
-		/* Inline edit/delete links */
-		var biblionumber = $("input[name='biblionumber']").attr("value");
-        $("tr.editable td").click(function(event){
-			var $tgt = $(event.target);
-			if($tgt.is("a")||$tgt.is(":first-child")||$tgt.is(":nth-child(2)")){ return true; } else {
-			var rowid = $(this).parent().attr("id");
-			num_rowid = rowid.replace("row","");
-			$(".linktools").remove();
-			$(this).append("<span class=\"linktools\"><a href=\"/cgi-bin/koha/cataloguing/additem.pl?op=edititem&frameworkcode=[% frameworkcode %]&biblionumber=[% biblionumber %]&itemnumber="+num_rowid+"#edititem\">" + _("Edit item") + "</a> <a href=\"/cgi-bin/koha/cataloguing/additem.pl?op=delitem&frameworkcode=[% frameworkcode %]&biblionumber=[% biblionumber %]&itemnumber="+num_rowid+"\" onclick=\"confirm_deletion([% biblionumber %],"+num_rowid+"); return false;\">" + _("Delete item") + "</a></span>");
-		}
-		});
+            /* Inline edit/delete links */
+            var biblionumber = $("input[name='biblionumber']").attr("value");
+            $("tr.editable").each(function(){
+                $(this).find("td:not(:first)").on('click', function(){
+                    var rowid = $(this).parent().attr("id");
+                    num_rowid = rowid.replace("row","");
+                    $(".linktools").remove();
+                    var edit_link = $('<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&frameworkcode=[% frameworkcode %]&biblionumber=[% biblionumber %]&itemnumber='+num_rowid+'&searchid=[% searchid %]#edititem">' + _("Edit item") + '</a>');
+                    var delete_link = $('<a href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&frameworkcode=[% frameworkcode %]&biblionumber=[% biblionumber %]&itemnumber='+num_rowid+'&searchid=[% searchid %]">' + _("Delete item") + '</a></span>');
+                    $(delete_link).on('click', function(e) {
+                        return confirm_deletion();
+                    });
+                    var tools_node = $('<span class="linktools"></span>');
+                    $(tools_node).append(edit_link);
+                    $(tools_node).append(delete_link);
+                    $(this).append(tools_node);
+                });
+            });
 
     var itemst = $("#itemst").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [
@@ -79,16 +91,10 @@ function Dopop(link,i) {
     newin=window.open(link+"&result="+defaultvalue,"valuebuilder",'width=500,height=400,toolbar=false,scrollbars=yes');
 }
 
-function confirm_deletion(biblionumber,itemnumber) {
-	var original = $("#row"+itemnumber).attr("class");
-	$("#row"+itemnumber).attr("class","confirm");
-    var is_confirmed = confirm(_("Are you sure you want to delete this item?"));
-    if (is_confirmed) {
-    window.location = "additem.pl?op=delitem&biblionumber="+biblionumber+"&itemnumber="+itemnumber;
-	} else {
-	$("#row"+itemnumber).attr("class","");
-    }
+function confirm_deletion() {
+    return confirm(_("Are you sure you want to delete this item?"));
 }
+
 //]]>
 </script>
 <link type="text/css" rel="stylesheet" href="[% themelang %]/css/addbiblio.css" />
@@ -155,13 +161,13 @@ function confirm_deletion(biblionumber,itemnumber) {
                     [% ELSE %]
                       <td>
                         [% IF ( item_loo.hostitemflag ) %]
-                          <a href="additem.pl?op=edititem&amp;biblionumber=[% item_loo.hostbiblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit in host</a> &nbsp; <a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delinkitem&amp;biblionumber=[% biblionumber %]&amp;hostitemnumber=[% item_loo.itemnumber %]">Delink</a>
+                          <a href="additem.pl?op=edititem&amp;biblionumber=[% item_loo.hostbiblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit in host</a> &nbsp; <a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delinkitem&amp;biblionumber=[% biblionumber %]&amp;hostitemnumber=[% item_loo.itemnumber %]&searchid=[% searchid %]">Delink</a>
                         [% ELSE %]
-                          <a href="additem.pl?op=edititem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit</a>
+                          <a href="additem.pl?op=edititem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]&searchid=[% searchid %]#edititem">Edit</a>
                           [% IF ( item_loo.countanalytics ) %]
                             <a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&amp;q=% item_loo.itemnumber %]">View analytics</a>
                           [% ELSE %]
-                            <a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]" onclick="confirm_deletion([% biblionumber %],[% item_loo.itemnumber %]); return false;">Delete</a>
+                            <a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]&searchid=[% searchid %]" onclick="return confirm_deletion();">Delete</a>
                           [% END %]
                         [% END %]
                       </td>
