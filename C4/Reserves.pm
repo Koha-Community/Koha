@@ -2151,7 +2151,8 @@ If $cancelreserve boolean is set to true, it will remove existing reserve
 sub MoveReserve {
     my ( $itemnumber, $borrowernumber, $cancelreserve ) = @_;
 
-    my ( $restype, $res, $all_reserves ) = CheckReserves( $itemnumber );
+    my $lookahead= C4::Context->preference('ConfirmFutureHolds'); #number of days to look for future holds
+    my ( $restype, $res, $all_reserves ) = CheckReserves( $itemnumber, undef, $lookahead );
     return unless $res;
 
     my $biblionumber     =  $res->{biblionumber};
