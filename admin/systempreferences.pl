@@ -70,14 +70,16 @@ sub StringSearch {
 
     my $strsth = "Select variable,value,explanation,type,options from systempreferences where variable in (";
     my $first = 1;
+    my @sql_bind;
     for my $name ( get_local_prefs() ) {
                 $strsth .= ',' unless $first;
-                $strsth .= "'$name'";
+                $strsth .= "?";
+                push(@sql_bind,$name);
                 $first = 0;
     }
     $strsth .= ") order by variable";
     $sth = $dbh->prepare($strsth);
-    $sth->execute();
+    $sth->execute(@sql_bind);
 
     while ( my $data = $sth->fetchrow_hashref ) {
             unless (defined $data->{value}) { $data->{value} = "";}
