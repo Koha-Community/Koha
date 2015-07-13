@@ -10516,7 +10516,7 @@ if ( CheckVersion($DBversion) ) {
 }
 
 
-$DBversion = "3.21.00.XXX";
+$DBversion = "3.20.01.001";
 if ( CheckVersion($DBversion) ) {
     my $msg;
     if ( C4::Context->preference('OPACPrivacy') ) {
