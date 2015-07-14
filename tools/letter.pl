@@ -238,6 +238,7 @@ sub add_form {
         module     => $module,
         branchloop => _branchloop($branchcode),
         SQLfieldnames => $field_selection,
+        branchcode => $branchcode,
     );
     return;
 }
