@@ -81,6 +81,12 @@ var myDate2=document.form.dateexpiry.value.split ('/');
 }
 //end function
 
+function check_password( password ) {
+    if ( password.match(/^\s/) || password.match(/\s$/)) {
+        return false;
+    }
+    return true;
+}
 
 // function to test all fields in forms and nav in different forms(1 ,2 or 3)
 function check_form_borrowers(nav){
@@ -104,6 +110,11 @@ function check_form_borrowers(nav){
             }
             message_champ+= MSG_PASSWORD_MISMATCH;
             statut=1;
+    }
+
+    if ( ! check_password( document.form.password.value ) ) {
+        message_champ += MSG_PASSWORD_CONTAINS_TRAILING_SPACES;
+        statut = 1;
     }
 
     //patrons form to test if you checked no to the question of double
