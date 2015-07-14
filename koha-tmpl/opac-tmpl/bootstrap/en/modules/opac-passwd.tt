@@ -38,6 +38,9 @@
                                 [% IF ( WrongPass ) %]
                                 Your current password was entered incorrectly.  If this problem persists, please ask a librarian to re-set your password for you.
                                 [% END %]
+                                [% IF PasswordContainsTrailingSpaces %]
+                                    Your password contains leading and/or trailing spaces.
+                                [% END %]
                             </p>
                         </div>
                     [% END # /IF Error_messages %]

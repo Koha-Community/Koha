@@ -55,7 +55,13 @@ if ( C4::Context->preference("OpacPasswordChange") ) {
         && $query->param('Confirm') )
     {
         if ( goodkey( $dbh, $borrowernumber, $query->param('Oldkey') ) ) {
-            if ( $query->param('Newkey') eq $query->param('Confirm')
+            if ( $query->param('Newkey') =~ m|^\s+| or $query->param('Newkey') =~ m|\s+$| ) {
+                $template->param(
+                    Error_messages => 1,
+                    PasswordContainsTrailingSpaces => 1,
+                );
+            }
+            elsif ( $query->param('Newkey') eq $query->param('Confirm')
                 && length( $query->param('Confirm') ) >= $minpasslen )
             {    # Record password
                 my $clave = hash_password( $query->param('Newkey') );
