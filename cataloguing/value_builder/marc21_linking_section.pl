@@ -41,7 +41,7 @@ my $builder = sub {
   <script type='text/javascript'>
              function Click$function_name(event) {
                        defaultvalue=document.getElementById(event.data.id).value;
-                 window.open(\"/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&index=\" + event.data.id + \"&result=\"+defaultvalue,\"marc21_field_7\"+ event.data.id +\"\",'width=900,height=700,toolbar=false,scrollbars=yes');
+                 window.open(\"/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&index=\" + event.data.id + \"&result=\"+defaultvalue, 'tag_editor', 'width=900,height=700,toolbar=false,scrollbars=yes');
 
              }
       </script>
