@@ -3205,8 +3205,9 @@ sub AnonymiseIssueHistory {
     ";
 
     # The default of 0 does not work due to foreign key constraints
-    # The anonymisation will fail quietly if AnonymousPatron is not a valid entry
-    my $anonymouspatron = (C4::Context->preference('AnonymousPatron')) ? C4::Context->preference('AnonymousPatron') : 0;
+    # The anonymisation should not fail quietly if AnonymousPatron is not a valid entry
+    # Set it to undef (NULL)
+    my $anonymouspatron = C4::Context->preference('AnonymousPatron') || undef;
     my @bind_params = ($anonymouspatron, $date);
     if (defined $borrowernumber) {
        $query .= " AND borrowernumber = ?";
