@@ -60,13 +60,17 @@ sub get_barcode {
     $nextnum = $year . $month . $nextnum;
     warn "New hbyymmincr Barcode = $nextnum" if $DEBUG;
     my $scr = "
-        for (i=0 ; i<document.f.field_value.length ; i++) {
-            if (document.f.tag[i].value == '$args->{loctag}' && document.f.subfield[i].value == '$args->{locsubfield}') {
+        var form = document.getElementById('f');
+        if ( !form ) {
+            form = document.getElementById('Aform');
+        }
+        for (i=0 ; i<form.field_value.length ; i++) {
+            if (form.tag[i].value == '$args->{loctag}' && form.subfield[i].value == '$args->{locsubfield}') {
                 fnum = i;
             }
         }
     if (\$('#' + id).val() == '') {
-        \$('#' + id).val(document.f.field_value[fnum].value + '$nextnum');
+        \$('#' + id).val(form.field_value[fnum].value + '$nextnum');
     }
     ";
     return $nextnum, $scr;
