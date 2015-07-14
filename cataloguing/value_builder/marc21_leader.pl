@@ -20,12 +20,10 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use CGI qw ( -utf8 );
 
 use C4::Auth;
-use CGI qw ( -utf8 );
 use C4::Context;
-
-use C4::Search;
 use C4::Output;
 
 my $builder = sub {
@@ -39,14 +37,13 @@ function Focus$function_name(event) {
     if(!document.getElementById(event.data.id).value){
         document.getElementById(event.data.id).value = '     nam a22     7a 4500';
     }
-    return 1;
 }
 
 function Click$function_name(event) {
     defaultvalue=document.getElementById(event.data.id).value;
     newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_leader.pl&index=\"+ event.data.id +\"&result=\"+defaultvalue,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
-
 }
+
 //]]>
 </script>
 ";
