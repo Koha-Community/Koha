@@ -27,7 +27,7 @@ KOHA.Google = {
         this.openInNewWindow=newWindow;
         scriptElement.setAttribute("id", "jsonScript");
         scriptElement.setAttribute("src",
-            "http://books.google.com/books?bibkeys=" + escape(bibkeys) +
+            "https://books.google.com/books?bibkeys=" + escape(bibkeys) +
             "&jscmd=viewapi&callback=KOHA.Google.gbsCallBack");
         scriptElement.setAttribute("type", "text/javascript");
         document.documentElement.firstChild.appendChild(scriptElement);
@@ -59,7 +59,7 @@ KOHA.Google = {
                              '<a '+target+'href="' +
                              book.info_url +
                              '"><img src="' +
-                             'http://books.google.com/intl/en/googlebooks/images/gbs_preview_sticker1.gif' +
+                             'https://books.google.com/intl/en/googlebooks/images/gbs_preview_sticker1.gif' +
                              '"></a></div>'
                              );
                      }
