@@ -474,6 +474,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('UseKohaPlugins','0','','Enable or disable the ability to use Koha Plugins.','YesNo'),
 ('UseQueryParser','0',NULL,'If enabled, try to use QueryParser for queries.','YesNo'),
 ('UseTransportCostMatrix','0','','Use Transport Cost Matrix when filling holds','YesNo'),
+('UseWYSIWYGinSystemPreferences','0','','Show WYSIWYG editor when editing certain HTML system preferences.','YesNo'),
 ('viewISBD','1','','Allow display of ISBD view of bibiographic records','YesNo'),
 ('viewLabeledMARC','0','','Allow display of labeled MARC view of bibiographic records','YesNo'),
 ('viewMARC','1','','Allow display of MARC view of bibiographic records','YesNo'),
