@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Batch patron deletion/anonymization [% IF step == 2 %]&rsaquo; Confirm[% END %][% IF step == 3 %]&rsaquo; Finished[% END %]</title>
@@ -91,6 +92,9 @@
         </fieldset>
         <fieldset>
         <legend>Anonymize checkout history</legend>
+        [% UNLESS Koha.Preference('AnonymousPatron') %]
+            <div class="dialog message">The AnonymousPatron system preference is not defined. You can use this feature anyway but NULL will be used to update the checkout history.</div>
+        [% END %]
         <h3><input id="checkissue" type="checkbox" name="checkbox" value="issue" /><label for="checkissue"> Verify you want to anonymize patron checkout history</label></h3>
         <br />
         <ul>
