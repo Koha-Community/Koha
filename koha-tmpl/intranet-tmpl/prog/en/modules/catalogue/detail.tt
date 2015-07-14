@@ -1,6 +1,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
+[% USE Branches %]
 
 [% ShowCourseReserves = 0 %]
 [% IF UseCourseReserves %]
@@ -624,7 +625,7 @@ function verify_images() {
                         </td>
                     [% END %]
                     <td class="location">[% UNLESS ( singlebranchmode ) %][% item.branchname %] [% END %]</td>
-                    <td class="homebranch">[% item.homebranch %]<span class="shelvingloc">[% item.location %]</span> </td>
+                    <td class="homebranch">[% Branches.GetName(item.homebranch) %]<span class="shelvingloc">[% item.location %]</span> </td>
                     [% IF ( itemdata_ccode ) %]<td>[% item.ccode %]</td>[% END %]
                     <td class="itemcallnumber">[% IF ( item.itemcallnumber ) %] [% item.itemcallnumber %][% END %]</td>
                     <td class="status">
@@ -806,8 +807,10 @@ function verify_images() {
                        [% END %]
                     </td>
                 [% END %]
-                [% IF ( CAN_user_editcatalogue_edit_items ) %]
+                [% IF CAN_user_editcatalogue_edit_items and not item.cannot_be_edited %]
                     <td><a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber %]&itemnumber=[% item.itemnumber %]#edititem">Edit</a></td>
+                [% ELSE %]
+                    <td></td>
                 [% END %]
                 </tr>
             [% END %]
