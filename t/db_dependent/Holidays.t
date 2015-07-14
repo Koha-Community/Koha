@@ -3,11 +3,12 @@ use warnings;
 use 5.010;
 use DateTime;
 use DateTime::TimeZone;
+use Test::More tests => 12;
 
 use C4::Context;
-use Koha::DateUtils;
-use Test::More tests => 12;
 use C4::Branch;
+
+use Koha::DateUtils;
 
 BEGIN { use_ok('Koha::Calendar'); }
 BEGIN { use_ok('C4::Calendar'); }
@@ -91,8 +92,9 @@ my $custom_holiday = DateTime->new(
     month => 11,
     day   => 12,
 );
+
 is( $koha_calendar->is_holiday($custom_holiday), 0, '2013-11-10 does not start off as a holiday' );
-$koha_calendar->add_holiday($custom_holiday);
+$koha_calendar->add_dummy_holiday($custom_holiday );
 is( $koha_calendar->is_holiday($custom_holiday), 1, 'able to add holiday for testing' );
 
 my $today = dt_from_string();
@@ -103,6 +105,7 @@ C4::Calendar->new( branchcode => 'CPL' )->insert_single_holiday(
     title       => "$today",
     description => "$today",
 );
+
 is( Koha::Calendar->new( branchcode => 'CPL' )->is_holiday( $today ), 1, "Today is a holiday for CPL" );
 is( Koha::Calendar->new( branchcode => 'MPL' )->is_holiday( $today ), 0, "Today is not a holiday for MPL");
 

@@ -4,9 +4,10 @@ use strict;
 use warnings;
 use DateTime;
 use DateTime::Duration;
-use Test::More tests => 35;
+use Test::More tests => 34;
 use Test::MockModule;
 use DBD::Mock;
+use Koha::Cache;
 use Koha::DateUtils;
 
 BEGIN {
@@ -14,7 +15,7 @@ BEGIN {
 
     # This was the only test C4 had
     # Remove when no longer used
-    use_ok('C4::Calendar');
+    #use_ok('C4::Calendar'); # not used anymore?
 }
 
 my $module_context = new Test::MockModule('C4::Context');
@@ -66,20 +67,35 @@ my $holidays_session = DBD::Mock::Session->new('holidays_session' => (
                         [ 11, 11, 2012 ] # sunday exception
                      ]
     },
-    { # single holidays
+
+    { # single holidays1
+        statement => "SELECT distinct(branchcode) FROM special_holidays",
+        results   => [
+                        [ 'branchcode' ],
+                        [ 'MPL']
+                     ]
+    },
+
+    { # single holidays2
         statement => "SELECT day, month, year FROM special_holidays WHERE branchcode = ? AND isexception = 0",
         results   => [
                         [ 'day', 'month', 'year' ],
                         [ 1, 6, 2011 ],  # single holiday
                         [ 4, 7, 2012 ]
                      ]
-    }
+    },
 ));
 
 # Initialize the global $dbh variable
 my $dbh = C4::Context->dbh();
 # Apply the mock session
 $dbh->{ mock_session } = $holidays_session;
+
+
+my $cache = Koha::Cache->get_instance();
+$cache->clear_from_cache( 'single_holidays') ;
+
+
 # 'MPL' branch is arbitrary, is not used at all but is needed for initialization
 my $cal = Koha::Calendar->new( branchcode => 'MPL' );
 
@@ -134,7 +150,6 @@ my $day_after_christmas = DateTime->new(
     day     => 26
 );  # for testing negative addDate
 
-
 {   # Syspref-agnostic tests
     is ( $saturday->day_of_week, 6, '\'$saturday\' is actually a saturday (6th day of week)');
     is ( $sunday->day_of_week, 7, '\'$sunday\' is actually a sunday (7th day of week)');
@@ -147,7 +162,6 @@ my $day_after_christmas = DateTime->new(
     is ( $cal->is_holiday($notspecial), 0, 'Fixed single date that is not a holiday test' );
     is ( $cal->is_holiday($sunday_exception), 0, 'Exception holiday is not a closed day test' );
 }
-
 
 {   # Bugzilla #8966 - is_holiday truncates referenced date
     my $later_dt = DateTime->new(    # Monday
@@ -164,7 +178,6 @@ my $day_after_christmas = DateTime->new(
     cmp_ok( $later_dt, 'eq', '2012-09-17T17:30:00', 'bz-8966 (2/2) Date should be the same after is_holiday' );
 }
 
-
 {   # Bugzilla #8800 - is_holiday should use truncated date for 'contains' call
     my $single_holiday_time = DateTime->new(
         year  => 2011,
@@ -179,12 +192,12 @@ my $day_after_christmas = DateTime->new(
         'bz-8800 is_holiday should truncate the date for holiday validation' );
 }
 
-
     my $one_day_dur = DateTime::Duration->new( days => 1 );
     my $two_day_dur = DateTime::Duration->new( days => 2 );
     my $seven_day_dur = DateTime::Duration->new( days => 7 );
 
-    my $dt = dt_from_string( '2012-07-03','iso' );
+    my $dt = dt_from_string( '2012-07-03','iso' ); #tuesday
+
     my $test_dt = DateTime->new(    # Monday
         year      => 2012,
         month     => 7,
@@ -202,7 +215,6 @@ my $day_after_christmas = DateTime->new(
         time_zone => 'Europe/London',
     );
 
-
 {    ## 'Datedue' tests
 
     $module_context->unmock('preference');
@@ -218,7 +230,7 @@ my $day_after_christmas = DateTime->new(
 
     $cal = Koha::Calendar->new( branchcode => 'MPL' );
 
-    is($cal->addDate( $dt, $one_day_dur, 'days' ),
+    is($cal->addDate( $dt, $one_day_dur, 'days' ), # tuesday
         dt_from_string('2012-07-05','iso'),
         'Single day add (Datedue, matches holiday, shift)' );
 
@@ -243,10 +255,7 @@ my $day_after_christmas = DateTime->new(
 
     cmp_ok( $cal->days_between( $later_dt, $test_dt )->in_units('days'),
                 '==', 40, 'Test parameter order not relevant (Days)' );
-
-
 }
-
 
 {   ## 'Calendar' tests'
 

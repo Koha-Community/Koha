@@ -7,6 +7,7 @@ use DateTime;
 use DateTime::Set;
 use DateTime::Duration;
 use C4::Context;
+use Koha::Cache;
 use Carp;
 
 sub new {
@@ -57,7 +58,9 @@ sub _init {
 # is allowing this with the expectation that prior to release of
 # 3.16, bug 8089 will be fixed and we can switch the caching over
 # to Koha::Cache.
-our ( $exception_holidays, $single_holidays );
+
+our ( $exception_holidays, $single_holidays ); ## no need for $single_holidays now, surely?
+
 sub exception_holidays {
     my ( $self ) = @_;
     my $dbh = C4::Context->dbh;
@@ -87,31 +90,67 @@ sub exception_holidays {
 }
 
 sub single_holidays {
-    my ( $self ) = @_;
-    my $dbh = C4::Context->dbh;
+    my ( $self, $date ) = @_;
     my $branchcode = $self->{branchcode};
-    if ( $single_holidays->{$branchcode} ) {
-        $self->{single_holidays}{$branchcode} = $single_holidays->{$branchcode};
-        return $single_holidays->{$branchcode};
-    }
-    my $single_holidays_sth = $dbh->prepare(
-'SELECT day, month, year FROM special_holidays WHERE branchcode = ? AND isexception = 0'
-    );
-    $single_holidays_sth->execute( $branchcode );
-    my $dates = [];
-    while ( my ( $day, $month, $year ) = $single_holidays_sth->fetchrow ) {
-        push @{$dates},
-          DateTime->new(
-            day       => $day,
-            month     => $month,
-            year      => $year,
-            time_zone => C4::Context->tz()
-          )->truncate( to => 'day' );
-    }
-    $self->{single_holidays}{$branchcode} = DateTime::Set->from_datetimes( dates => $dates );
-    $single_holidays->{$branchcode} = $self->{single_holidays}{$branchcode};
-    return $single_holidays->{$branchcode};
+    my $cache           = Koha::Cache->get_instance();
+    my $single_holidays = $cache->get_from_cache('single_holidays');
+
+=c
+$single_holidays looks like this..
+
+\ {
+   CPL   [
+        [0] 20131122,
+        [1] 20131123,
+        [2] 20131124
+    ],
+   MPL   [
+        [0] 20131122,
+        [1] 20131123,
+        [2] 20131124
+    ]
 }
+
+=cut
+
+    unless ($single_holidays) {
+        my $dbh = C4::Context->dbh;
+        $single_holidays = {};
+
+        # push holidays for each branch
+        my $branches_sth =
+          $dbh->prepare('SELECT distinct(branchcode) FROM special_holidays');
+        $branches_sth->execute();
+        while ( my $br = $branches_sth->fetchrow ) {
+            my $single_holidays_sth = $dbh->prepare(
+'SELECT day, month, year FROM special_holidays WHERE branchcode = ? AND isexception = 0'
+            );
+            $single_holidays_sth->execute($branchcode);
+
+            my @ymd_arr;
+            while ( my ( $day, $month, $year ) =
+                $single_holidays_sth->fetchrow )
+            {
+                my $dt = DateTime->new(
+                    day       => $day,
+                    month     => $month,
+                    year      => $year,
+                    time_zone => C4::Context->tz()
+                )->truncate( to => 'day' );
+                push @ymd_arr, $dt->ymd('');
+            }
+            $single_holidays->{$br} = \@ymd_arr;
+        }    # br
+        $cache->set_in_cache( 'single_holidays', $single_holidays,
+            76800 )    #24 hrs ;
+    }
+    my $holidays  = ( $single_holidays->{$branchcode} );
+    for my $hols  (@$holidays ) {
+            return 1 if ( $date == $hols )   #match ymds;
+    }
+    return 0;
+}
+
 sub addDate {
     my ( $self, $startdate, $add_duration, $unit ) = @_;
 
@@ -193,6 +232,7 @@ sub addDays {
             # Datedue, then use the calendar to push
             # the date to the next open day if holiday
             if ( $self->is_holiday($base_date) ) {
+
                 if ( $days_duration->is_negative() ) {
                     $base_date = $self->prev_open_day($base_date);
                 } else {
@@ -207,11 +247,13 @@ sub addDays {
 
 sub is_holiday {
     my ( $self, $dt ) = @_;
+
     my $localdt = $dt->clone();
     my $day   = $localdt->day;
     my $month = $localdt->month;
 
     $localdt->truncate( to => 'day' );
+
 
     if ( $self->exception_holidays->contains($localdt) ) {
         # exceptions are not holidays
@@ -234,7 +276,8 @@ sub is_holiday {
         return 1;
     }
 
-    if ( $self->single_holidays->contains($localdt) ) {
+    my $ymd   = $localdt->ymd('')  ;
+    if ($self->single_holidays(  $ymd  ) == 1 ) {
         return 1;
     }
 
@@ -340,18 +383,27 @@ sub clear_weekly_closed_days {
     return;
 }
 
-sub add_holiday {
-    my $self = shift;
-    my $new_dt = shift;
-    my @dt = $self->single_holidays->as_list;
-    push @dt, $new_dt;
-    my $branchcode = $self->{branchcode};
-    $self->{single_holidays}{$branchcode} =
-      DateTime::Set->from_datetimes( dates => \@dt );
-    $single_holidays->{$branchcode} = $self->{single_holidays}{$branchcode};
 
-    return;
+sub add_dummy_holiday {
+    my ( $self, $new_dt ) = @_;
+
+    my $cache           = Koha::Cache->get_instance();
+    my $single_holidays = $cache->get_from_cache('single_holidays');
+
+    # add a dummy holiday to the holiday cache...
+    my $ymd = $new_dt->ymd('');
+    $single_holidays->{'MPL'} = [$ymd];
+    $cache->set_in_cache( 'single_holidays', $single_holidays, 76800 );
+
+    # ...but *dont* reset the cache, as this holiday was not really written to the db
+    # its only used to mock a holiday insert for 1 test in t/db_dependent/Holidays.t
+
+    #   is( $koha_calendar->is_holiday($custom_holiday), 0, '2013-11-10 does not start off as a holiday' );
+    #   $koha_calendar->add_dummy_holiday($custom_holiday );
+    #   is( $koha_calendar->is_holiday($custom_holiday), 1, 'able to add holiday for testing' );
+
 }
+
 
 1;
 __END__
@@ -427,6 +479,13 @@ C<$unit> is a string value 'days' or 'hours' toflag granularity of duration
 
 Currently unit is only used to invoke Staffs return Monday at 10 am rule this
 parameter will be removed when issuingrules properly cope with that
+
+
+=head2 single_holidays
+
+my $rc = $self->single_holidays(  $ymd  );
+
+Passed a $date in Ymd (yyyymmdd) format -  returns 1 if date is a single_holiday, or 0 if not.
 
 
 =head2 is_holiday

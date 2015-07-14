@@ -1,4 +1,6 @@
 #!/usr/bin/perl
+#FIXME: add a license
+#FIXME: perltidy this file
 
 use strict;
 use warnings;
@@ -7,6 +9,8 @@ use CGI qw ( -utf8 );
 
 use C4::Auth;
 use C4::Output;
+
+use Koha::Cache;
 
 
 use C4::Calendar;
@@ -82,6 +86,7 @@ if($allbranches) {
 
 print $input->redirect("/cgi-bin/koha/tools/holidays.pl?branch=$originalbranchcode&calendardate=$calendardate");
 
+#FIXME: move add_holiday() to a better place
 sub add_holiday {
 	($newoperation, $branchcode, $weekday, $day, $month, $year, $title, $description) = @_;  
 	my $calendar = C4::Calendar->new(branchcode => $branchcode);
@@ -141,4 +146,7 @@ sub add_holiday {
             }
         }
     }
+    # we updated the single_holidays table, so wipe its cache
+    my $cache = Koha::Cache->get_instance();
+    $cache->clear_from_cache( 'single_holidays') ;
 }

@@ -23,8 +23,10 @@ use Carp;
 use Date::Calc qw( Date_to_Days Today);
 
 use C4::Context;
+use Koha::Cache;
 
 use constant ISO_DATE_FORMAT => "%04d-%02d-%02d";
+
 =head1 NAME
 
 C4::Calendar::Calendar - Koha module dealing with holidays.
@@ -262,7 +264,6 @@ C<$description> Is the description to store for the holiday formed by $year/$mon
 sub insert_single_holiday {
     my $self = shift @_;
     my %options = @_;
-    
     @options{qw(year month day)} = ( $options{date} =~ m/(\d+)-(\d+)-(\d+)/o )
       if $options{date} && !$options{day};
 
@@ -272,7 +273,14 @@ sub insert_single_holiday {
 	$insertHoliday->execute( $self->{branchcode}, $options{day},$options{month},$options{year}, $isexception, $options{title}, $options{description});
     $self->{'single_holidays'}->{"$options{year}/$options{month}/$options{day}"}{title} = $options{title};
     $self->{'single_holidays'}->{"$options{year}/$options{month}/$options{day}"}{description} = $options{description};
+
+
+    # changed the 'single_holidays' table, lets force/reset its cache
+    my $cache = Koha::Cache->get_instance();
+    $cache->clear_from_cache( 'single_holidays') ;
+
     return $self;
+
 }
 
 =head2 insert_exception_holiday
@@ -310,6 +318,11 @@ sub insert_exception_holiday {
 	$insertException->execute( $self->{branchcode}, $options{day},$options{month},$options{year}, $isexception, $options{title}, $options{description});
     $self->{'exception_holidays'}->{"$options{year}/$options{month}/$options{day}"}{title} = $options{title};
     $self->{'exception_holidays'}->{"$options{year}/$options{month}/$options{day}"}{description} = $options{description};
+
+    # changed the 'single_holidays' table, lets force/reset its cache
+    my $cache = Koha::Cache->get_instance();
+    $cache->clear_from_cache( 'single_holidays') ;
+
     return $self;
 }
 
@@ -398,10 +411,18 @@ sub ModSingleholiday {
 
     my $dbh = C4::Context->dbh();
     my $isexception = 0;
-    my $updateHoliday = $dbh->prepare("UPDATE special_holidays SET title = ?, description = ? WHERE day = ? AND month = ? AND year = ? AND branchcode = ? AND isexception = ?");
+
+    my $updateHoliday = $dbh->prepare("
+UPDATE special_holidays SET title = ?, description = ?
+    WHERE day = ? AND month = ? AND year = ? AND branchcode = ? AND isexception = ?");
       $updateHoliday->execute($options{title},$options{description},$options{day},$options{month},$options{year},$self->{branchcode},$isexception);    
     $self->{'single_holidays'}->{"$options{year}/$options{month}/$options{day}"}{title} = $options{title};
     $self->{'single_holidays'}->{"$options{year}/$options{month}/$options{day}"}{description} = $options{description};
+
+    # changed the 'single_holidays' table, lets force/reset its cache
+    my $cache = Koha::Cache->get_instance();
+    $cache->clear_from_cache( 'single_holidays') ;
+
     return $self;
 }
 
@@ -433,10 +454,17 @@ sub ModExceptionholiday {
 
     my $dbh = C4::Context->dbh();
     my $isexception = 1;
-    my $updateHoliday = $dbh->prepare("UPDATE special_holidays SET title = ?, description = ? WHERE day = ? AND month = ? AND year = ? AND branchcode = ? AND isexception = ?");
-    $updateHoliday->execute($options{title},$options{description},$options{day},$options{month},$options{year},$self->{branchcode},$isexception);    
+    my $updateHoliday = $dbh->prepare("
+UPDATE special_holidays SET title = ?, description = ?
+    WHERE day = ? AND month = ? AND year = ? AND branchcode = ? AND isexception = ?");
+    $updateHoliday->execute($options{title},$options{description},$options{day},$options{month},$options{year},$self->{branchcode},$isexception);
     $self->{'exception_holidays'}->{"$options{year}/$options{month}/$options{day}"}{title} = $options{title};
     $self->{'exception_holidays'}->{"$options{year}/$options{month}/$options{day}"}{description} = $options{description};
+
+    # changed the 'single_holidays' table, lets force/reset its cache
+    my $cache = Koha::Cache->get_instance();
+    $cache->clear_from_cache( 'single_holidays') ;
+
     return $self;
 }
 
@@ -465,7 +493,7 @@ sub delete_holiday {
 
     # Verify what kind of holiday that day is. For example, if it is
     # a repeatable holiday, this should check if there are some exception
-	# for that holiday rule. Otherwise, if it is a regular holiday, it´s 
+    # for that holiday rule. Otherwise, if it is a regular holiday, it´s
     # ok just deleting it.
 
     my $dbh = C4::Context->dbh();
@@ -512,6 +540,11 @@ sub delete_holiday {
             }
         }
     }
+
+    # changed the 'single_holidays' table, lets force/reset its cache
+    my $cache = Koha::Cache->get_instance();
+    $cache->clear_from_cache( 'single_holidays') ;
+
     return $self;
 }
 =head2 delete_holiday_range
@@ -537,6 +570,11 @@ sub delete_holiday_range {
     my $dbh = C4::Context->dbh();
     my $sth = $dbh->prepare("DELETE FROM special_holidays WHERE (branchcode = ?) AND (day = ?) AND (month = ?) AND (year = ?)");
     $sth->execute($self->{branchcode}, $options{day}, $options{month}, $options{year});
+
+    # changed the 'single_holidays' table, lets force/reset its cache
+    my $cache = Koha::Cache->get_instance();
+    $cache->clear_from_cache( 'single_holidays') ;
+
 }
 
 =head2 delete_holiday_range_repeatable
@@ -585,6 +623,10 @@ sub delete_exception_holiday_range {
     my $dbh = C4::Context->dbh();
     my $sth = $dbh->prepare("DELETE FROM special_holidays WHERE (branchcode = ?) AND (isexception = 1) AND (day = ?) AND (month = ?) AND (year = ?)");
     $sth->execute($self->{branchcode}, $options{day}, $options{month}, $options{year});
+
+    # changed the 'single_holidays' table, lets force/reset its cache
+    my $cache = Koha::Cache->get_instance();
+    $cache->clear_from_cache( 'single_holidays') ;
 }
 
 =head2 isHoliday
@@ -606,7 +648,7 @@ sub isHoliday {
 	$month=$month+0;
 	$year=$year+0;
 	$day=$day+0;
-    my $weekday = &Date::Calc::Day_of_Week($year, $month, $day) % 7; 
+    my $weekday = &Date::Calc::Day_of_Week($year, $month, $day) % 7;
     my $weekDays   = $self->get_week_days_holidays();
     my $dayMonths  = $self->get_day_month_holidays();
     my $exceptions = $self->get_exception_holidays();
@@ -617,7 +659,7 @@ sub isHoliday {
         if ((exists($weekDays->{$weekday})) ||
             (exists($dayMonths->{"$month/$day"})) ||
             (exists($singles->{"$year/$month/$day"}))) {
-		 	return 1;
+            return 1;
         } else {
             return 0;
         }
