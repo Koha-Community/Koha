@@ -556,7 +556,7 @@ END_SQL
                         next;
                     }
                 }
-                if ($borrowernumber eq $data->{'borrowernumber'}){
+                if (defined $borrowernumber && $borrowernumber eq $data->{'borrowernumber'}){
 # we have already dealt with this borrower
                     $verbose and warn "already dealt with this borrower $borrowernumber";
                     next;
