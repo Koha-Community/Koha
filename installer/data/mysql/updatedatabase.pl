@@ -10550,7 +10550,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.21.00.009";
+$DBversion = "3.20.01.002";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
         UPDATE aqorders SET orderstatus='cancelled'
