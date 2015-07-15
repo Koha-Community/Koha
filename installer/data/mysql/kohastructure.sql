@@ -1204,7 +1204,7 @@ CREATE TABLE `issuingrules` ( -- circulation and fine rules
   `hardduedatecompare` tinyint NOT NULL default "0", -- type of hard due date (1 = after, 0 = on, -1 = before)
   `renewalsallowed` smallint(6) NOT NULL default "0", -- how many renewals are allowed
   `renewalperiod` int(4) default NULL, -- renewal period in the unit set in issuingrules.lengthunit
-  `norenewalbefore` int(4) default NULL, -- no renewal allowed until X days or hours before due date. In the unit set in issuingrules.lengthunit
+  `norenewalbefore` int(4) default NULL, -- no renewal allowed until X days or hours before due date.
   `auto_renew` BOOLEAN default FALSE, -- automatic renewal
   `reservesallowed` smallint(6) NOT NULL default "0", -- how many holds are allowed
   `branchcode` varchar(10) NOT NULL default '', -- the branch this rule is for (branches.branchcode)

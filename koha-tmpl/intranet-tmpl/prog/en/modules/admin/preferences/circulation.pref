@@ -254,6 +254,13 @@ Circulation:
                   Calendar: the calendar to skip all days the library is closed.
                   Datedue: the calendar to push the due date to the next open day
         -
+            - Calculate "No renewal before" based on
+            - pref: NoRenewalBeforePrecision
+              choices:
+                  date: date.
+                  exact_time: exact time.
+            - Only relevant for loans calculated in days, hourly loans are not affected.
+        -
             - When renewing checkouts, base the new due date on
             - pref: RenewalPeriodBase
               choices:
