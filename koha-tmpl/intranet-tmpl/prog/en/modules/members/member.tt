@@ -76,6 +76,16 @@ $(document).ready(function() {
                 $("#patron_list_dialog > span.patrons-length").html(data.patrons_added_to_list);
                 $("#patron_list_dialog > a").attr("href", "/cgi-bin/koha/patron_lists/list.pl?patron_list_id=" + data.patron_list.patron_list_id);
                 $("#patron_list_dialog > a").html(data.patron_list.name);
+                if ( $('#add_to_patron_list').val() == 'new' ) {
+                    var new_patron_list_added = $("<option>", {
+                        value: data.patron_list.patron_list_id,
+                        text: data.patron_list.name
+                    });
+                    $("#add_to_patron_list optgroup").append(new_patron_list_added);
+                    $("#add_to_patron_list").val(data.patron_list.patron_list_id);
+                    $("#new_patron_list").val('');
+                    $('#add_to_patron_list').change();
+                }
             },
             error: function() {
                 alert("an error occurred");
