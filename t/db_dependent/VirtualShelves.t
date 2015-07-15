@@ -173,15 +173,15 @@ for my $i (0..9) {
     is(IsSharedList($sh),$n? 1: '', "Checked IsSharedList for shelf $sh");
 }
 
-#----------------TEST DelShelf & DelFromShelf functions------------------------#
+#----------------TEST Koha::Virtualshelf->delete & DelFromShelf functions------------------------#
 
 for my $i (0..9){
     my $shelfnumber = $shelves[$i]->{number};
     if($shelfnumber<0) {
-        ok(1, 'Skip DelShelf for shelf -1');
+        ok(1, 'Skip Koha::Virtualshelf->delete for shelf -1');
         next;
     }
-    my $status = DelShelf($shelfnumber);
+    my $status = Koha::Virtualshelves->find($shelfnumber)->delete;
     is($status, 1, "deleted shelf $shelfnumber and its contents");
 }
 

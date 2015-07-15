@@ -418,7 +418,7 @@ sub shelfpage {
                     $name = $shelflist->{$number}->{'shelfname'};
                     delete $shelflist->{$number};
                 }
-                unless ( DelShelf($number) ) {
+                unless( Koha::Virtualshelves->find($number)->delete ) {
                     push( @paramsloop, { delete_fail => $name } );
                     last;
                 }

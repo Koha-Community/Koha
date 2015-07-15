@@ -44,7 +44,7 @@ BEGIN {
             &AddToShelf
             &ModShelf
             &ShelfPossibleAction
-            &DelFromShelf &DelShelf
+            &DelFromShelf
             &GetBibliosShelves
             &AddShare &AcceptShare &RemoveShare &IsSharedList
     );
@@ -508,24 +508,6 @@ sub DelFromShelf {
     return $t;
 }
 
-=head2 DelShelf
-
-  $Number = DelShelf($shelfnumber);
-
-This function deletes the shelf number, and all of it's content.
-Authorization to do so MUST have been checked before calling, while using
-ShelfPossibleAction with manage parameter.
-
-=cut
-
-sub DelShelf {
-    my ($shelfnumber)= @_;
-    return unless $shelfnumber && $shelfnumber =~ /^\d+$/;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("DELETE FROM virtualshelves WHERE shelfnumber=?");
-    return $sth->execute($shelfnumber);
-}
-
 =head2 GetBibliosShelves
 
 This finds all the public lists that this bib record is in.
@@ -596,8 +578,8 @@ sub HandleDelBorrower {
     #Instead of deleting we could also disown lists (based on a pref).
     #In that way we could save shared and public lists.
     #The current table constraints support that idea now.
-    #This pref should then govern the results of other routines such as
-    #DelShelf too.
+    #This pref should then govern the results of other routines/methods such as
+    #Koha::Virtualshelf->new->delete too.
 }
 
 =head2 AddShare

@@ -18,7 +18,7 @@ $dbh->do(q|DELETE FROM virtualshelves|);
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'CRUD' => sub {
-    plan tests => 11;
+    plan tests => 13;
     my $patron = $builder->build({
         source => 'Borrower',
     });
@@ -72,4 +72,9 @@ subtest 'CRUD' => sub {
     )->store;
     $number_of_shelves = Koha::Virtualshelves->search->count;
     is( $number_of_shelves, 2, 'Another patron should be able to create a shelf with an existing shelfname');
+
+    my $is_deleted = Koha::Virtualshelves->find( $shelf->shelfnumber )->delete;
+    is( $is_deleted, 1, 'The shelf has been deleted correctly' );
+    $number_of_shelves = Koha::Virtualshelves->search->count;
+    is( $number_of_shelves, 1, 'To be sure the shelf has been deleted' );
 };
