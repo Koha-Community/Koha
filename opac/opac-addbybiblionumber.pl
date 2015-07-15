@@ -1,9 +1,6 @@
 #!/usr/bin/perl
 
 #script to provide virtualshelf management
-# WARNING: This file uses 4-character tabs!
-#
-# $Header$
 #
 # Copyright 2000-2002 Katipo Communications
 #
@@ -90,10 +87,16 @@ sub AddBibliosToShelf {
 
 sub HandleNewVirtualShelf {
     if($authorized= ShelfPossibleAction($loggedinuser, undef, $category==1? 'new_private': 'new_public')) {
-    $shelfnumber = AddShelf( {
-            shelfname => $newvirtualshelf,
-            category => $category }, $loggedinuser);
-    if($shelfnumber == -1) {
+    my $shelf = eval {
+        Koha::Virtualshelf->new(
+            {
+                shelfname => $newvirtualshelf,
+                category => $category,
+                owner => $loggedinuser,
+            }
+        );
+    };
+    if ( $@ or not $shelf ) {
         $authorized=0;
         $errcode=1;
         return;

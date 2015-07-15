@@ -20,6 +20,8 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
+use Koha::Exception::DuplicateObject;
 
 use base qw(Koha::Object);
 
@@ -36,6 +38,60 @@ Koha::Virtualshelf - Koha Virtualshelf Object class
 =head3 type
 
 =cut
+
+our $PRIVATE = 1;
+our $PUBLIC = 2;
+
+sub store {
+    my ( $self ) = @_;
+
+    unless ( $self->is_shelfname_valid ) {
+        Koha::Exceptions::Virtualshelves::DuplicateObject->throw;
+    }
+
+    $self->allow_add( 0 )
+        unless defined $self->allow_add;
+    $self->allow_delete_own( 1 )
+        unless defined $self->allow_delete_own;
+    $self->allow_delete_other( 0 )
+        unless defined $self->allow_delete_other;
+
+    $self->created_on( dt_from_string );
+
+    return $self->SUPER::store( $self );
+}
+
+sub is_shelfname_valid {
+    my ( $self ) = @_;
+
+    my $conditions = {
+        shelfname => $self->shelfname,
+        ( $self->shelfnumber ? ( "me.shelfnumber" => { '!=', $self->shelfnumber } ) : () ),
+    };
+
+    if ( $self->category == $PRIVATE and defined $self->owner ) {
+        $conditions->{-or} = {
+            "virtualshelfshares.borrowernumber" => $self->owner,
+            "me.owner" => $self->owner,
+        };
+        $conditions->{category} = $PRIVATE;
+    }
+    elsif ( $self->category == $PRIVATE and not defined $self->owner ) {
+        $conditions->{owner} = undef;
+        $conditions->{category} = $PRIVATE;
+    }
+    else {
+        $conditions->{category} = $PUBLIC;
+    }
+
+    my $count = Koha::Virtualshelves->search(
+        $conditions,
+        {
+            join => 'virtualshelfshares',
+        }
+    )->count;
+    return $count ? 0 : 1;
+}
 
 sub type {
     return 'Virtualshelve';

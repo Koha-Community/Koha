@@ -26,6 +26,9 @@ use C4::Members;
 
 use C4::VirtualShelves;
 
+use Koha::Virtualshelf;
+use Koha::Virtualshelves;
+
 use_ok( "C4::Utils::DataTables::VirtualShelves" );
 
 my $dbh = C4::Context->dbh;
@@ -83,89 +86,96 @@ $john_doe{borrowernumber} = AddMember( %john_doe );
 $jane_doe{borrowernumber} = AddMember( %jane_doe );
 $john_smith{borrowernumber} = AddMember( %john_smith );
 
-my $shelf1 = {
-    shelfname => 'my first private list (empty)',
-    category => 1, # private
-    sortfield => 'author',
-};
-$shelf1->{shelfnumber} = C4::VirtualShelves::AddShelf( $shelf1, $john_doe{borrowernumber} );
+my $shelf1 = Koha::Virtualshelf->new(
+    {
+        shelfname => 'my first private list (empty)',
+        category  => 1, # private
+        sortfield => 'author',
+        owner     => $john_doe{borrowernumber},
+    }
+)->store;
 
-my $shelf2 = {
-    shelfname => 'my second private list',
-    category => 1, # private
-    sortfield => 'title',
-};
-$shelf2->{shelfnumber} = C4::VirtualShelves::AddShelf( $shelf2, $john_doe{borrowernumber} );
+my $shelf2 = Koha::Virtualshelf->new(
+    {
+        shelfname => 'my second private list',
+        category  => 1, # private
+        sortfield => 'title',
+        owner     => $john_doe{borrowernumber},
+    }
+)->store;
 my $biblionumber1 = _add_biblio('title 1');
 my $biblionumber2 = _add_biblio('title 2');
 my $biblionumber3 = _add_biblio('title 3');
 my $biblionumber4 = _add_biblio('title 4');
 my $biblionumber5 = _add_biblio('title 5');
-C4::VirtualShelves::AddToShelf( $biblionumber1, $shelf2->{shelfnumber}, $john_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber2, $shelf2->{shelfnumber}, $john_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber3, $shelf2->{shelfnumber}, $john_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber4, $shelf2->{shelfnumber}, $john_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber5, $shelf2->{shelfnumber}, $john_doe{borrowernumber} );
+C4::VirtualShelves::AddToShelf( $biblionumber1, $shelf2->shelfnumber, $john_doe{borrowernumber} );
+C4::VirtualShelves::AddToShelf( $biblionumber2, $shelf2->shelfnumber, $john_doe{borrowernumber} );
+C4::VirtualShelves::AddToShelf( $biblionumber3, $shelf2->shelfnumber, $john_doe{borrowernumber} );
+C4::VirtualShelves::AddToShelf( $biblionumber4, $shelf2->shelfnumber, $john_doe{borrowernumber} );
+C4::VirtualShelves::AddToShelf( $biblionumber5, $shelf2->shelfnumber, $john_doe{borrowernumber} );
 
-my $shelf3 = {
-    shelfname => 'The first public list',
-    category => 2, # public
-    sortfield => 'author',
-};
-$shelf3->{shelfnumber} = C4::VirtualShelves::AddShelf( $shelf3, $jane_doe{borrowernumber} );
+my $shelf3 = Koha::Virtualshelf->new(
+    {
+        shelfname => 'The first public list',
+        category  => 2, # public
+        sortfield => 'author',
+        owner     => $jane_doe{borrowernumber},
+    }
+)->store;
 my $biblionumber6 = _add_biblio('title 6');
 my $biblionumber7 = _add_biblio('title 7');
 my $biblionumber8 = _add_biblio('title 8');
-C4::VirtualShelves::AddToShelf( $biblionumber6, $shelf3->{shelfnumber}, $jane_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber7, $shelf3->{shelfnumber}, $jane_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber8, $shelf3->{shelfnumber}, $jane_doe{borrowernumber} );
+C4::VirtualShelves::AddToShelf( $biblionumber6, $shelf3->shelfnumber, $jane_doe{borrowernumber} );
+C4::VirtualShelves::AddToShelf( $biblionumber7, $shelf3->shelfnumber, $jane_doe{borrowernumber} );
+C4::VirtualShelves::AddToShelf( $biblionumber8, $shelf3->shelfnumber, $jane_doe{borrowernumber} );
 
-my $shelf4 = {
-    shelfname => 'my second public list',
-    category => 2, # public
-    sortfield => 'title',
-};
-$shelf4->{shelfnumber}  = C4::VirtualShelves::AddShelf( $shelf4, $jane_doe{borrowernumber} );
+my $shelf4 = Koha::Virtualshelf->new(
+    {
+        shelfname => 'my second public list',
+        category  => 2, # public
+        sortfield => 'title',
+        owner     => $jane_doe{borrowernumber},
+    }
+)->store;
 my $biblionumber9  = _add_biblio('title 9');
 my $biblionumber10 = _add_biblio('title 10');
 my $biblionumber11 = _add_biblio('title 11');
 my $biblionumber12 = _add_biblio('title 12');
-C4::VirtualShelves::AddToShelf( $biblionumber9,  $shelf4->{shelfnumber}, $jane_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber10, $shelf4->{shelfnumber}, $jane_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber11, $shelf4->{shelfnumber}, $jane_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber12, $shelf4->{shelfnumber}, $jane_doe{borrowernumber} );
+C4::VirtualShelves::AddToShelf( $biblionumber9,  $shelf4->shelfnumber, $jane_doe{borrowernumber} );
+C4::VirtualShelves::AddToShelf( $biblionumber10, $shelf4->shelfnumber, $jane_doe{borrowernumber} );
+C4::VirtualShelves::AddToShelf( $biblionumber11, $shelf4->shelfnumber, $jane_doe{borrowernumber} );
+C4::VirtualShelves::AddToShelf( $biblionumber12, $shelf4->shelfnumber, $jane_doe{borrowernumber} );
 
-my $shelf5 = {
-    shelfname => 'my third private list',
-    category => 1, # private
-    sortfield => 'title',
-};
-$shelf5->{shelfnumber} = C4::VirtualShelves::AddShelf( $shelf5, $jane_doe{borrowernumber} );
+my $shelf5 = Koha::Virtualshelf->new(
+    {
+        shelfname => 'my third private list',
+        category  => 1, # private
+        sortfield => 'title',
+        owner     => $jane_doe{borrowernumber},
+    }
+)->store;
 my $biblionumber13 = _add_biblio('title 13');
 my $biblionumber14 = _add_biblio('title 14');
 my $biblionumber15 = _add_biblio('title 15');
 my $biblionumber16 = _add_biblio('title 16');
 my $biblionumber17 = _add_biblio('title 17');
 my $biblionumber18 = _add_biblio('title 18');
-C4::VirtualShelves::AddToShelf( $biblionumber13, $shelf5->{shelfnumber}, $jane_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber14, $shelf5->{shelfnumber}, $jane_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber15, $shelf5->{shelfnumber}, $jane_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber16, $shelf5->{shelfnumber}, $jane_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber17, $shelf5->{shelfnumber}, $jane_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber18, $shelf5->{shelfnumber}, $jane_doe{borrowernumber} );
+C4::VirtualShelves::AddToShelf( $biblionumber13, $shelf5->shelfnumber, $jane_doe{borrowernumber} );
+C4::VirtualShelves::AddToShelf( $biblionumber14, $shelf5->shelfnumber, $jane_doe{borrowernumber} );
+C4::VirtualShelves::AddToShelf( $biblionumber15, $shelf5->shelfnumber, $jane_doe{borrowernumber} );
+C4::VirtualShelves::AddToShelf( $biblionumber16, $shelf5->shelfnumber, $jane_doe{borrowernumber} );
+C4::VirtualShelves::AddToShelf( $biblionumber17, $shelf5->shelfnumber, $jane_doe{borrowernumber} );
+C4::VirtualShelves::AddToShelf( $biblionumber18, $shelf5->shelfnumber, $jane_doe{borrowernumber} );
 
-C4::VirtualShelves::AddShelf( { shelfname => 'another public list 6', category => 2}, $john_smith{borrowernumber} );
-C4::VirtualShelves::AddShelf( { shelfname => 'another public list 7', category => 2}, $john_smith{borrowernumber} );
-C4::VirtualShelves::AddShelf( { shelfname => 'another public list 8', category => 2}, $john_smith{borrowernumber} );
-C4::VirtualShelves::AddShelf( { shelfname => 'another public list 9', category => 2}, $john_smith{borrowernumber} );
-C4::VirtualShelves::AddShelf( { shelfname => 'another public list 10', category => 2}, $john_smith{borrowernumber} );
-C4::VirtualShelves::AddShelf( { shelfname => 'another public list 11', category => 2}, $john_smith{borrowernumber} );
-C4::VirtualShelves::AddShelf( { shelfname => 'another public list 12', category => 2}, $john_smith{borrowernumber} );
-C4::VirtualShelves::AddShelf( { shelfname => 'another public list 13', category => 2}, $john_smith{borrowernumber} );
-C4::VirtualShelves::AddShelf( { shelfname => 'another public list 14', category => 2}, $john_smith{borrowernumber} );
-C4::VirtualShelves::AddShelf( { shelfname => 'another public list 15', category => 2}, $john_smith{borrowernumber} );
-
-
+for my $i ( 6 .. 15 ) {
+    Koha::Virtualshelf->new(
+        {
+            shelfname => "another public list $i",
+            category  => 2,
+            owner     => $john_smith{borrowernumber},
+        }
+    )->store;
+}
 
 # Set common datatables params
 my %dt_params = (

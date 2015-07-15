@@ -53,6 +53,7 @@ BEGIN {
     $debug   = $ENV{DEBUG} || 0;
 }
 
+my @messages;
 our %pages = (
     intranet => { redirect => '/cgi-bin/koha/virtualshelves/shelves.pl', },
     opac     => { redirect => '/cgi-bin/koha/opac-shelves.pl', },
@@ -341,30 +342,40 @@ sub shelfpage {
         if ( $query->param('shelves') ) {
             my $stay = 1;
 
-        #Add a shelf
-            if ( my $newshelf = $query->param('addshelf') ) {
+            #Add a shelf
+            my $shelfname = $query->param('addshelf');
+
+            if ( $shelfname ) {
 
                 # note: a user can always add a new shelf (except database administrator account)
-                my $shelfnumber = AddShelf( {
-                    shelfname => $newshelf,
-                    sortfield => $query->param('sortfield'),
-                    category => $query->param('category'),
-                    allow_add => $query->param('allow_add'),
-                    allow_delete_own => $query->param('allow_delete_own'),
-                    allow_delete_other => $query->param('allow_delete_other'),
-                    },
-                    $query->param('owner') );
-                $stay = 1;
-                if( !$shelfnumber ) {
-                    push @paramsloop, { addshelf_failed => 1 };
-                } elsif ( $shelfnumber == -1 ) {    #shelf already exists.
+                my $shelf = eval {
+                    Koha::Virtualshelf->new(
+                        {
+                            shelfname          => $shelfname,
+                            sortfield          => $query->param('sortfield'),
+                            category           => $query->param('category'),
+                            allow_add          => $query->param('allow_add'),
+                            allow_delete_own   => $query->param('allow_delete_own'),
+                            allow_delete_other => $query->param('allow_delete_other'),
+                            owner              => $query->param('owner'),
+                        }
+                    )->store;
+                };
+                if ( $@ ) {
                     $showadd = 1;
-                    push @paramsloop, { already => $newshelf };
-                    $template->param( shelfnumber => $shelfnumber );
+                    push @messages, { type => 'error', code => ref($@) };
+                } elsif ( not $shelf ) {
+                    $showadd = 1;
+                    push @messages, { type => 'error', 'error_on_insert' };
                 } else {
                     print $query->redirect( $pages{$type}->{redirect} . "?viewshelf=$shelfnumber" );
                     exit;
                 }
+
+                $template->param(
+                    shelfname => $shelfname,
+                );
+                $stay = 1;
             }
 
         #Deleting a shelf (asking for confirmation if it has entries)
@@ -503,6 +514,7 @@ sub shelfpage {
             barshelvesloop => $barshelves,
             pubshelves     => $total->{pubtotal},
             pubshelvesloop => $pubshelves,
+            messages       => \@messages,
     );
 
     output_html_with_http_headers $query, $cookie, $template->output;

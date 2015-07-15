@@ -5,7 +5,7 @@
 # Larger modifications by Jonathan Druart and Marcel de Rooy
 
 use Modern::Perl;
-use Test::More tests => 96;
+use Test::More tests => 56;
 use MARC::Record;
 
 use C4::Biblio qw( AddBiblio DelBiblio );
@@ -47,65 +47,40 @@ foreach(0..9) {
 
 use_ok('C4::VirtualShelves');
 
-#-----------------------TEST AddShelf function------------------------#
-# usage : $shelfnumber = &AddShelf( $shelfname, $owner, $category);
+#-----------------------TEST Virtualshelf constructor------------------------#
 
 # creating shelves (could be <10 when names are not unique)
 my @shelves;
 for my $i (0..9){
     my $name= randomname();
     my $catg= int(rand(2))+1;
-    my $ShelfNumber= AddShelf(
-        {
-            shelfname => $name,
-            category  => $catg,
-        },
-        $borrowernumbers[$i]);
-
-    if($ShelfNumber>-1) {
-        ok($ShelfNumber > -1, "created shelf");   # Shelf creation successful;
-    }
-    else {
-        my $t= C4::VirtualShelves::_CheckShelfName(
-            $name, $catg, $borrowernumbers[$i], 0);
-        is($t, 0, "Name clash expected on shelf creation");
+    my $shelf = eval {
+        Koha::Virtualshelf->new(
+            {
+                shelfname => $name,
+                category  => $catg,
+                owner     =>$borrowernumbers[$i],
+            }
+        )->store;
+    };
+    if ( $@ or not $shelf ) {
+        my $valid_name = Koha::Virtualshelf->new(
+            {
+                shelfname => $name,
+                category  => $catg,
+                owner     =>$borrowernumbers[$i],
+            }
+        )->is_shelfname_valid;
+        is( $valid_name, 0, 'If the insert has failed, it should be caused by an invalid shelfname (or maybe not?)' );
+    } else {
+        ok($shelf->shelfnumber > -1, "The shelf $i should have been inserted");
     }
     push @shelves, {
-        number => $ShelfNumber,
-        name   => $name,
-        catg   => $catg,
+        number => $shelf->shelfnumber,
+        name   => $shelf->shelfname,
+        catg   => $shelf->category,
         owner  => $borrowernumbers[$i],
-    }; #also push the errors
-}
-
-# try to create shelves with duplicate names
-for my $i (0..9){
-    if($shelves[$i]->{number}<0) {
-        ok(1, 'skip duplicate test for earlier name clash');
-        next;
-    }
-    my $shelf = Koha::Virtualshelves->find( $shelves[$i]->{number} );
-
-    # A shelf name is not per se unique!
-    if( $shelf->category == 2 ) { #public list: try to create with same name
-        my $badNumShelf= AddShelf( {
-            shelfname=> $shelves[$i]->{name},
-            category => 2
-        }, $borrowernumbers[$i]);
-        is($badNumShelf, -1, 'do not create public lists with duplicate names');
-            #AddShelf returns -1 if name already exist.
-        DelShelf($badNumShelf) if $badNumShelf>-1; #delete if went wrong..
-    }
-    else { #private list, try to add another one for SAME user (owner)
-        my $badNumShelf= defined($shelf->owner)? AddShelf(
-            {
-                shelfname=> $shelves[$i]->{name},
-                category => 1,
-            },
-            $shelf->owner): -1;
-        is($badNumShelf, -1, 'do not create private lists with duplicate name for same user');
-        DelShelf($badNumShelf) if $badNumShelf>-1; #delete if went wrong..
-    }
+    };
 }
 
 #-----------TEST AddToShelf & GetShelfContents &  DelFromShelf functions--------------#
@@ -145,37 +120,6 @@ for my $i (0..9){
     }
 
     $used{$key}++;
-}
-
-#-----------------------TEST ModShelf & Koha::Virtualshelves->find functions/methods------------------------#
-# usage : ModShelf($shelfnumber, $shelfname, $owner, $category )
-
-for my $i (0..9){
-    my $rand = int(rand(9));
-    my $numA = $shelves[$rand]->{number};
-    if($numA<0) {
-        ok(1, 'Skip ModShelf test for shelf -1');
-        ok(1, 'Skip ModShelf test for shelf -1');
-        ok(1, 'Skip ModShelf test for shelf -1');
-        next;
-    }
-    my $newname= randomname();
-    my $shelf = {
-        shelfname => $newname,
-        category =>  3-$shelves[$rand]->{catg}, # tric: 1->2 and 2->1
-    };
-    #check name change (with category change)
-    if(C4::VirtualShelves::_CheckShelfName($newname,$shelf->{category},
-            $shelves[$rand]->{owner}, $numA)) {
-        ModShelf($numA,$shelf);
-        my $shelf_b = Koha::Virtualshelves->find( $numA );
-        is($numA, $shelf_b->shelfnumber, 'modified shelf');
-        is($shelf->{shelfname}, $shelf_b->shelfname,     '... and name change took');
-        is($shelf->{category}, $shelf_b->category, '... and category change took');
-    }
-    else {
-        ok(1, "No ModShelf for $newname") for 1..3;
-    }
 }
 
 #----------------------- TEST AddShare ----------------------------------------#

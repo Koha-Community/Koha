@@ -132,15 +132,22 @@ sub AddBibliosToShelf {
 }
 
 sub HandleNewVirtualShelf {
-    $shelfnumber = AddShelf( {
-        shelfname => $newvirtualshelf,
-        sortfield => $sortfield,
-        category => $category }, $loggedinuser);
-    if($shelfnumber == -1) {
-        $authorized=0;
-        $errcode=1; #add failed
+    my $shelf = eval {
+        Koha::Virtualshelf->new(
+            {
+                shelfname => $newvirtualshelf,
+                category => $category,
+                sortfield => $sortfield,
+                owner => $loggedinuser,
+            }
+        );
+    };
+    if ( $@ or not $shelf ) {
+        $authorized = 0;
+        $errcode    = 1;
         return;
     }
+
     AddBibliosToShelf($shelfnumber, @biblionumber);
     #Reload the page where you came from
     print $query->header;

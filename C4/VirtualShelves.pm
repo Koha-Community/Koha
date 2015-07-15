@@ -41,7 +41,7 @@ BEGIN {
     @ISA    = qw(Exporter);
     @EXPORT = qw(
             &GetShelves &GetShelfContents
-            &AddToShelf &AddShelf
+            &AddToShelf
             &ModShelf
             &ShelfPossibleAction
             &DelFromShelf &DelShelf
@@ -270,48 +270,6 @@ sub GetShelfContents {
     # Suitable for use in TMPL_LOOP.
     # See http://search.cpan.org/~timb/DBI-1.601/DBI.pm#fetchall_arrayref
     # or newer, for your version of DBI.
-}
-
-=head2 AddShelf
-
-  $shelfnumber = &AddShelf($hashref, $owner);
-
-Creates a new virtual shelf. Params passed in a hash like ModShelf.
-
-Returns a code to know what's happen.
-    * -1 : if this virtualshelves already exists.
-    * $shelfnumber : if success.
-
-=cut
-
-sub AddShelf {
-    my ($hashref, $owner)= @_;
-    my $dbh = C4::Context->dbh;
-
-    #initialize missing hash values to silence warnings
-    foreach('shelfname','category', 'sortfield', 'allow_add', 'allow_delete_own', 'allow_delete_other' ) {
-        $hashref->{$_}= undef unless exists $hashref->{$_};
-    }
-
-    return -1 unless _CheckShelfName($hashref->{shelfname}, $hashref->{category}, $owner, 0);
-
-    my $query = q|INSERT INTO virtualshelves
-        (shelfname,owner,category,sortfield,allow_add,allow_delete_own,allow_delete_other, created_on)
-        VALUES (?,?,?,?,?,?,?, NOW())
-    |;
-
-    my $sth = $dbh->prepare($query);
-    $sth->execute(
-        $hashref->{shelfname},
-        $owner,
-        $hashref->{category},
-        $hashref->{sortfield},
-        $hashref->{allow_add}//0,
-        $hashref->{allow_delete_own}//1,
-        $hashref->{allow_delete_other}//0 );
-    return if $sth->err;
-    my $shelfnumber = $dbh->{'mysql_insertid'};
-    return $shelfnumber;
 }
 
 =head2 AddToShelf
@@ -756,34 +714,6 @@ sub GetShelfCount {
     $sth->execute(@params);
     my ($total)= $sth->fetchrow;
     return $total;
-}
-
-# internal subs
-sub _CheckShelfName {
-    my ($name, $cat, $owner, $number)= @_;
-
-    my $dbh = C4::Context->dbh;
-    my @pars;
-    my $query = qq(
-        SELECT DISTINCT shelfnumber
-        FROM   virtualshelves
-        LEFT JOIN virtualshelfshares sh USING (shelfnumber)
-        WHERE  shelfname=? AND shelfnumber<>?);
-    if($cat==1 && defined($owner)) {
-        $query.= ' AND (sh.borrowernumber=? OR owner=?) AND category=1';
-        @pars=($name, $number, $owner, $owner);
-    }
-    elsif($cat==1 && !defined($owner)) { #owner is null (exceptional)
-        $query.= ' AND owner IS NULL AND category=1';
-        @pars=($name, $number);
-    }
-    else { #public list
-        $query.= ' AND category=2';
-        @pars=($name, $number);
-    }
-    my $sth = $dbh->prepare($query);
-    $sth->execute(@pars);
-    return $sth->rows>0? 0: 1;
 }
 
 1;
