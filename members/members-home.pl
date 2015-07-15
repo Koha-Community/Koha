@@ -27,6 +27,7 @@ use C4::Members;
 use C4::Branch;
 use C4::Category;
 use Koha::Borrower::Modifications;
+use Koha::List::Patron;
 
 my $query = new CGI;
 my $branch = $query->param('branchcode');
@@ -96,6 +97,7 @@ $template->param(
 
 $template->param(
     alphabet => C4::Context->preference('alphabet') || join (' ', 'A' .. 'Z'),
+    patron_lists => [ GetPatronLists() ],
     PatronsPerPage => C4::Context->preference("PatronsPerPage") || 20,
 );
 
