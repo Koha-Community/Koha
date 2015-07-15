@@ -110,7 +110,7 @@ sub gethtml5media {
         }
         # extension
         $HTML5Media{extension} = ($HTML5Media{srcblock} =~ m/([^.]+)$/)[0];
-        if ( !grep /$HTML5Media{extension}/, @HTML5MediaExtensions ) {
+        if ( !grep /\Q$HTML5Media{extension}\E/, @HTML5MediaExtensions ) {
             next; # not a specified media file
         }
         # mime
