@@ -12,6 +12,8 @@ use C4::Biblio qw( AddBiblio DelBiblio );
 use C4::Context;
 use C4::Members qw( AddMember );
 
+use Koha::Virtualshelves;
+
 
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
@@ -82,10 +84,10 @@ for my $i (0..9){
         ok(1, 'skip duplicate test for earlier name clash');
         next;
     }
-    my @shlf=GetShelf($shelves[$i]->{number}); #number, name, owner, catg, ...
+    my $shelf = Koha::Virtualshelves->find( $shelves[$i]->{number} );
 
     # A shelf name is not per se unique!
-    if( $shlf[3]==2 ) { #public list: try to create with same name
+    if( $shelf->category == 2 ) { #public list: try to create with same name
         my $badNumShelf= AddShelf( {
             shelfname=> $shelves[$i]->{name},
             category => 2
@@ -95,12 +97,12 @@ for my $i (0..9){
         DelShelf($badNumShelf) if $badNumShelf>-1; #delete if went wrong..
     }
     else { #private list, try to add another one for SAME user (owner)
-        my $badNumShelf= defined($shlf[2])? AddShelf(
+        my $badNumShelf= defined($shelf->owner)? AddShelf(
             {
                 shelfname=> $shelves[$i]->{name},
                 category => 1,
             },
-            $shlf[2]): -1;
+            $shelf->owner): -1;
         is($badNumShelf, -1, 'do not create private lists with duplicate name for same user');
         DelShelf($badNumShelf) if $badNumShelf>-1; #delete if went wrong..
     }
@@ -145,9 +147,8 @@ for my $i (0..9){
     $used{$key}++;
 }
 
-#-----------------------TEST ModShelf & GetShelf functions------------------------#
+#-----------------------TEST ModShelf & Koha::Virtualshelves->find functions/methods------------------------#
 # usage : ModShelf($shelfnumber, $shelfname, $owner, $category )
-# usage : (shelfnumber,shelfname,owner,category) = GetShelf($shelfnumber);
 
 for my $i (0..9){
     my $rand = int(rand(9));
@@ -167,10 +168,10 @@ for my $i (0..9){
     if(C4::VirtualShelves::_CheckShelfName($newname,$shelf->{category},
             $shelves[$rand]->{owner}, $numA)) {
         ModShelf($numA,$shelf);
-        my ($numB,$nameB,$ownerB,$categoryB) = GetShelf($numA);
-        is($numA, $numB, 'modified shelf');
-        is($shelf->{shelfname}, $nameB,     '... and name change took');
-        is($shelf->{category}, $categoryB, '... and category change took');
+        my $shelf_b = Koha::Virtualshelves->find( $numA );
+        is($numA, $shelf_b->shelfnumber, 'modified shelf');
+        is($shelf->{shelfname}, $shelf_b->shelfname,     '... and name change took');
+        is($shelf->{category}, $shelf_b->category, '... and category change took');
     }
     else {
         ok(1, "No ModShelf for $newname") for 1..3;

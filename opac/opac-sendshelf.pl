@@ -34,6 +34,7 @@ use C4::Output;
 use C4::VirtualShelves;
 use C4::Members;
 use Koha::Email;
+use Koha::Virtualshelves;
 
 my $query = new CGI;
 
@@ -72,7 +73,7 @@ if ( $email ) {
         }
     );
 
-    my @shelf               = GetShelf($shelfid);
+    my $shelf = Koha::Virtualshelves->find( $shelfid );
     my ($items, $totitems)  = GetShelfContents($shelfid);
     my $marcflavour         = C4::Context->preference('marcflavour');
     my $iso2709;
@@ -110,7 +111,7 @@ if ( $email ) {
     $template2->param(
         BIBLIO_RESULTS => \@results,
         comment        => $comment,
-        shelfname      => $shelf[1],
+        shelfname      => $shelf->shelfname,
         firstname      => $user->{firstname},
         surname        => $user->{surname},
     );

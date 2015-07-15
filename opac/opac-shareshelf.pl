@@ -34,6 +34,8 @@ use C4::Members ();
 use C4::Output;
 use C4::VirtualShelves;
 
+use Koha::Virtualshelves;
+
 #-------------------------------------------------------------------------------
 
 my $pvar = _init( {} );
@@ -67,11 +69,12 @@ sub _init {
     }
 
     #get some list details
-    my @temp;
-    @temp = GetShelf( $param->{shelfnumber} ) if !$param->{errcode};
-    $param->{shelfname} = @temp ? $temp[1] : '';
-    $param->{owner}     = @temp ? $temp[2] : -1;
-    $param->{category}  = @temp ? $temp[3] : -1;
+    my $shelf;
+    my $shelfnumber = $param->{shelfnumber};
+    $shelf = Koha::Virtualshelves->find( $shelfnumber ) unless $param->{errcode};
+    $param->{shelfname} = $shelf ? $shelf->shelfname : q||;
+    $param->{owner}     = $shelf ? $shelf->owner : -1;
+    $param->{category}  = $shelf ? $shelf->category : -1;
 
     load_template($param);
     return $param;

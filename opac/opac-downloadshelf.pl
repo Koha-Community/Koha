@@ -31,6 +31,9 @@ use C4::VirtualShelves;
 use C4::Record;
 use C4::Ris;
 use C4::Csv;
+
+use Koha::Virtualshelves;
+
 use utf8;
 my $query = new CGI;
 
@@ -104,8 +107,7 @@ if ( ShelfPossibleAction( (defined($borrowernumber) ? $borrowernumber : -1), $sh
 
     } else {
 
-        # get details of the list
-        my ($shelfnumber,$shelfname,$owner,$category,$sorton) = GetShelf($shelfid);
+        my $shelf = Koha::Virtualshelves->find( $shelfid );
 
         # if modal context is passed set a variable so that page markup can be different
         if($context eq "modal"){
@@ -116,10 +118,10 @@ if ( ShelfPossibleAction( (defined($borrowernumber) ? $borrowernumber : -1), $sh
         $template->param(csv_profiles => GetCsvProfilesLoop('marc'));
         $template->param(
             showprivateshelves  => $showprivateshelves,
-            shelfid             => $shelfid,
-            shelfname           => $shelfname,
-            shelfnumber         => $shelfnumber,
-            viewshelf           => $shelfnumber
+            shelfid             => $shelf->shelfnumber,
+            shelfnumber         => $shelf->shelfnumber,
+            viewshelf           => $shelf->shelfnumber,
+            shelfname           => $shelf->shelfname,
         );
         output_html_with_http_headers $query, $cookie, $template->output;
     }

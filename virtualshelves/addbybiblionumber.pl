@@ -67,6 +67,7 @@ use C4::Output;
 use C4::VirtualShelves qw/:DEFAULT GetAllShelves/;
 use C4::Auth;
 
+use Koha::Virtualshelves;
 
 our $query           = new CGI;
 our @biblionumber    = HandleBiblioPars();
@@ -161,11 +162,11 @@ sub HandleShelfNumber {
 sub HandleSelectedShelf {
     if($authorized= ShelfPossibleAction( $loggedinuser, $shelfnumber, 'add')){
         #confirm adding to specific shelf
-        my ($singleshelf, $singleshelfname)= GetShelf($shelfnumber);
+        my $shelf = Koha::Virtualshelves->find( $shelfnumber );
         $template->param(
         singleshelf               => 1,
-        shelfnumber               => $singleshelf,
-        shelfname                 => $singleshelfname,
+        shelfnumber               => $shelf->shelfnumber,
+        shelfname                 => $shelf->shelfname,
         );
     }
     else {

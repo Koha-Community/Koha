@@ -40,6 +40,8 @@ use C4::Tags qw(get_tags);
 use C4::Csv;
 use C4::XSLT;
 
+use Koha::Virtualshelves;
+
 use constant VIRTUALSHELVES_COUNT => 20;
 
 use vars qw($debug @EXPORT @ISA $VERSION);
@@ -203,23 +205,23 @@ sub shelfpage {
             }
         #Editing a shelf
         elsif ( $op eq 'modif' ) {
-                my ( $shelfnumber2, $shelfname, $owner, $category, $sortfield, $allow_add, $allow_delete_own, $allow_delete_other) = GetShelf($shelfnumber);
-                my $member = GetMember( 'borrowernumber' => $owner );
+                my $shelf = Koha::Virtualshelves->find( $shelfnumber );
+                my $member = GetMember( 'borrowernumber' => $shelf->owner );
                 my $ownername = defined($member) ? $member->{firstname} . " " . $member->{surname} : '';
                 $edit = 1;
                 $template->param(
                     edit                => 1,
                     display             => $displaymode,
-                    shelfnumber         => $shelfnumber2,
-                    shelfname           => $shelfname,
-                    owner               => $owner,
+                    shelfnumber         => $shelf->shelfnumber,
+                    shelfname           => $shelf->shelfname,
+                    owner               => $shelf->owner,
                     ownername           => $ownername,
-                    "category$category" => 1,
-                    category            => $category,
-                    sortfield           => $sortfield,
-                    allow_add           => $allow_add,
-                    allow_delete_own    => $allow_delete_own,
-                    allow_delete_other  => $allow_delete_other,
+                    "category".$shelf->category => 1,
+                    category            => $shelf->category,
+                    sortfield           => $shelf->sortfield,
+                    allow_add           => $shelf->allow_add,
+                    allow_delete_own    => $shelf->allow_delete_own,
+                    allow_delete_other  => $shelf->allow_delete_other,
                 );
             }
             last SWITCH;
@@ -227,9 +229,7 @@ sub shelfpage {
 
         #View a shelf
         if ( $shelfnumber = $query->param('viewshelf') ) {
-            # explicitly fetch this shelf
-            my ($shelfnumber2,$shelfname,$owner,$category,$sorton) = GetShelf($shelfnumber);
-
+            my $shelf = Koha::Virtualshelves->find( $shelfnumber );
             $template->param(
                 'DisplayMultiPlaceHold' => C4::Context->preference('DisplayMultiPlaceHold'),
             );
@@ -243,7 +243,7 @@ sub shelfpage {
             if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'view' ) ) {
                 my $items;
                 my $tag_quantity;
-                my $sortfield = ( $sorton ? $sorton : 'title' );
+                my $sortfield = ( $shelf->sortfield ? $shelf->sortfield : 'title' );
                 $sortfield = $query->param('sort') || $sortfield; ## Passed in sorting overrides default sorting
                 my $direction = $query->param('direction') || 'asc';
                 $template->param(
@@ -313,13 +313,13 @@ sub shelfpage {
                         addpubshelvesloop => $pubshelves,
                     );
                 }
-                push @paramsloop, { display => 'privateshelves' } if $category == 1;
+                push @paramsloop, { display => 'privateshelves' } if $shelf->category == 1;
                 $showadd = 1;
                 my $i = 0;
                 my $manageshelf = ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' );
                 my $can_delete_shelf = ShelfPossibleAction( $loggedinuser, $shelfnumber, 'delete_shelf' );
                 $template->param(
-                    shelfname           => $shelfname,
+                    shelfname           => $shelf->shelfname,
                     shelfnumber         => $shelfnumber,
                     viewshelf           => $shelfnumber,
                     sortfield           => $sortfield,
@@ -327,10 +327,10 @@ sub shelfpage {
                     allowremovingitems  => ShelfPossibleAction( $loggedinuser, $shelfnumber, 'delete'),
                     allowaddingitem     => ShelfPossibleAction( $loggedinuser, $shelfnumber, 'add'),
                     allowdeletingshelf  => $can_delete_shelf,
-                    "category$category" => 1,
-                    category            => $category,
+                    "category".$shelf->category => 1,
+                    category            => $shelf->category,
                     itemsloop           => $items,
-                    showprivateshelves  => $category==1,
+                    showprivateshelves  => $shelf->category==1,
                 );
             } else {
                 push @paramsloop, { nopermission => $shelfnumber };

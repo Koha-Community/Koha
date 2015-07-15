@@ -38,7 +38,7 @@ Koha::Virtualshelf - Koha Virtualshelf Object class
 =cut
 
 sub type {
-    return 'Virtualshelf';
+    return 'Virtualshelve';
 }
 
 1;

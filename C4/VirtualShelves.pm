@@ -40,7 +40,7 @@ BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(
-            &GetShelves &GetShelfContents &GetShelf
+            &GetShelves &GetShelfContents
             &AddToShelf &AddShelf
             &ModShelf
             &ShelfPossibleAction
@@ -211,28 +211,6 @@ sub GetSomeShelfNames {
     }
 
     return ( { bartotal => $bar? scalar @$bar: 0, pubtotal => $pub? scalar @$pub: 0}, $pub, $bar);
-}
-
-=head2 GetShelf
-
-  (shelfnumber,shelfname,owner,category,sortfield,allow_add,allow_delete_own,allow_delete_other) = &GetShelf($shelfnumber);
-
-Returns the above-mentioned fields for passed virtual shelf number.
-
-=cut
-
-sub GetShelf {
-    my ($shelfnumber) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query = qq(
-        SELECT shelfnumber, shelfname, owner, category, sortfield,
-            allow_add, allow_delete_own, allow_delete_other
-        FROM   virtualshelves
-        WHERE  shelfnumber=?
-    );
-    my $sth = $dbh->prepare($query);
-    $sth->execute($shelfnumber);
-    return $sth->fetchrow;
 }
 
 =head2 GetShelfContents
