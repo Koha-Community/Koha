@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 65;
+use Test::More tests => 71;
 
 use MARC::Record;
 use DateTime::Duration;
@@ -608,6 +608,57 @@ CancelReserve({ reserve_id => $bz14464_reserve, charge_cancel_fee => 1 });
 ( undef, undef, $bz14464_fines ) = GetMemberIssuesAndFines( $borrowernumber );
 is( int( $bz14464_fines ), 42, 'Bug 14464 - Fine applied after cancelling reserve with charge desired and configured' );
 
+# tests for MoveReserve in relation to ConfirmFutureHolds (BZ 14526)
+#   hold from A pos 1, today, no fut holds: MoveReserve should fill it
+$dbh->do('DELETE FROM reserves', undef, ($bibnum));
+C4::Context->set_preference('ConfirmFutureHolds', 0);
+C4::Context->set_preference('AllowHoldDateInFuture', 1);
+AddReserve('CPL',  $borrowernumber, $item_bibnum,
+    $bibitems,  1, undef, $expdate, $notes, $title, $checkitem, '');
+MoveReserve( $itemnumber, $borrowernumber );
+($status)=CheckReserves( $itemnumber );
+is( $status, '', 'MoveReserve filled hold');
+#   hold from A waiting, today, no fut holds: MoveReserve should fill it
+AddReserve('CPL',  $borrowernumber, $item_bibnum,
+   $bibitems,  1, undef, $expdate, $notes, $title, $checkitem, 'W');
+MoveReserve( $itemnumber, $borrowernumber );
+($status)=CheckReserves( $itemnumber );
+is( $status, '', 'MoveReserve filled waiting hold');
+#   hold from A pos 1, tomorrow, no fut holds: not filled
+$resdate= dt_from_string();
+$resdate->add_duration(DateTime::Duration->new(days => 1));
+$resdate=output_pref($resdate);
+AddReserve('CPL',  $borrowernumber, $item_bibnum,
+    $bibitems,  1, $resdate, $expdate, $notes, $title, $checkitem, '');
+MoveReserve( $itemnumber, $borrowernumber );
+($status)=CheckReserves( $itemnumber, undef, 1 );
+is( $status, 'Reserved', 'MoveReserve did not fill future hold');
+$dbh->do('DELETE FROM reserves', undef, ($bibnum));
+#   hold from A pos 1, tomorrow, fut holds=2: MoveReserve should fill it
+C4::Context->set_preference('ConfirmFutureHolds', 2);
+AddReserve('CPL',  $borrowernumber, $item_bibnum,
+    $bibitems,  1, $resdate, $expdate, $notes, $title, $checkitem, '');
+MoveReserve( $itemnumber, $borrowernumber );
+($status)=CheckReserves( $itemnumber, undef, 2 );
+is( $status, '', 'MoveReserve filled future hold now');
+#   hold from A waiting, tomorrow, fut holds=2: MoveReserve should fill it
+AddReserve('CPL',  $borrowernumber, $item_bibnum,
+    $bibitems,  1, $resdate, $expdate, $notes, $title, $checkitem, 'W');
+MoveReserve( $itemnumber, $borrowernumber );
+($status)=CheckReserves( $itemnumber, undef, 2 );
+is( $status, '', 'MoveReserve filled future waiting hold now');
+#   hold from A pos 1, today+3, fut holds=2: MoveReserve should not fill it
+$resdate= dt_from_string();
+$resdate->add_duration(DateTime::Duration->new(days => 3));
+$resdate=output_pref($resdate);
+AddReserve('CPL',  $borrowernumber, $item_bibnum,
+    $bibitems,  1, $resdate, $expdate, $notes, $title, $checkitem, '');
+MoveReserve( $itemnumber, $borrowernumber );
+($status)=CheckReserves( $itemnumber, undef, 3 );
+is( $status, 'Reserved', 'MoveReserve did not fill future hold of 3 days');
+$dbh->do('DELETE FROM reserves', undef, ($bibnum));
+
+# we reached the finish
 $dbh->rollback;
 
 sub count_hold_print_messages {
