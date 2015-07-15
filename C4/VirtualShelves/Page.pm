@@ -180,17 +180,17 @@ sub shelfpage {
                         push @paramsloop, { nopermission => $shelfnumber };
                         last SWITCH;
                 }
-                my $shelf = {
-                    shelfname          => $query->param('shelfname'),
-                    sortfield          => $query->param('sortfield'),
-                    allow_add          => $query->param('allow_add'),
-                    allow_delete_own   => $query->param('allow_delete_own'),
-                    allow_delete_other => $query->param('allow_delete_other'),
-                };
-                if($query->param('category')) { #optional
-                    $shelf->{category}= $query->param('category');
+                my $shelf = Koha::Virtualshelves->find( $shelfnumber );
+                $shelf->shelfname($query->param('shelfname'));
+                $shelf->sortfield($query->param('sortfield'));
+                $shelf->allow_add($query->param('allow_add'));
+                $shelf->allow_delete_own($query->param('allow_delete_own'));
+                $shelf->allow_delete_other($query->param('allow_delete_other'));
+                if( my $category = $query->param('category')) { #optional
+                    $shelf->category($category);
                 }
-                unless(ModShelf($shelfnumber, $shelf )) {
+                eval { $shelf->store };
+                if ( $@ ) {
                   push @paramsloop, {modifyfailure => $shelf->{shelfname}};
                   last SWITCH;
                 }

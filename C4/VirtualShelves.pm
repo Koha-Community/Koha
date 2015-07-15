@@ -42,7 +42,6 @@ BEGIN {
     @EXPORT = qw(
             &GetShelves &GetShelfContents
             &AddToShelf
-            &ModShelf
             &ShelfPossibleAction
             &DelFromShelf
             &GetBibliosShelves
@@ -305,61 +304,6 @@ sub AddToShelf {
                 WHERE shelfnumber = ?);
     $sth = $dbh->prepare($query);
     $sth->execute( $shelfnumber );
-}
-
-=head2 ModShelf
-
-my $result= ModShelf($shelfnumber, $hashref)
-
-Where $hashref->{column} = param
-
-Modify the value into virtualshelves table with values given 
-from hashref, which each key of the hashref should be
-the name of a column of virtualshelves.
-Fields like shelfnumber or owner cannot be changed.
-
-Returns 1 if the action seemed to be successful.
-
-=cut
-
-sub ModShelf {
-    my ($shelfnumber,$hashref) = @_;
-    my $dbh = C4::Context->dbh;
-
-    my $query= "SELECT * FROM virtualshelves WHERE shelfnumber=?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($shelfnumber);
-    my $oldrecord= $sth->fetchrow_hashref;
-    return 0 unless $oldrecord; #not found?
-
-    #initialize missing hash values to silence warnings
-    foreach('shelfname','category', 'sortfield', 'allow_add', 'allow_delete_own', 'allow_delete_other' ) {
-        $hashref->{$_}= undef unless exists $hashref->{$_};
-    }
-
-    #if name or category changes, the name should be tested
-    if($hashref->{shelfname} || $hashref->{category}) {
-        unless(_CheckShelfName(
-            $hashref->{shelfname}//$oldrecord->{shelfname},
-            $hashref->{category}//$oldrecord->{category},
-            $oldrecord->{owner},
-            $shelfnumber )) {
-                return 0; #name check failed
-        }
-    }
-
-    #only the following fields from the hash may be changed
-    $query= "UPDATE virtualshelves SET shelfname=?, category=?, sortfield=?, allow_add=?, allow_delete_own=?, allow_delete_other=? WHERE shelfnumber=?";
-    $sth = $dbh->prepare($query);
-    $sth->execute(
-        $hashref->{shelfname}//$oldrecord->{shelfname},
-        $hashref->{category}//$oldrecord->{category},
-        $hashref->{sortfield}//$oldrecord->{sortfield},
-        $hashref->{allow_add}//$oldrecord->{allow_add},
-        $hashref->{allow_delete_own}//$oldrecord->{allow_delete_own},
-        $hashref->{allow_delete_other}//$oldrecord->{allow_delete_other},
-        $shelfnumber );
-    return $@? 0: 1;
 }
 
 =head2 ShelfPossibleAction
