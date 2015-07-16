@@ -391,14 +391,22 @@
                 <li>
                     <label for="tax_rate">Tax rate: </label>
                     <select name="tax_rate" id="tax_rate" onchange="updateCosts();">
-                    [% FOREACH gst IN gst_values %]
-                      [% IF ( gst.option == tax_rate ) %]
-                        <option value="[% gst.option | html %]" selected="selected">[% gst.option * 100 | html %]%</option>
-                      [% ELSE %]
-                        <option value="[% gst.option | html %]">[% gst.option * 100 | html %]%</option>
-                      [% END %]
-                    [% END %]
+                        [% SET gst_found = 0 %]
+                        [% FOREACH gst IN gst_values %]
+                          [% IF ( gst.option == tax_rate ) %]
+                            <option value="[% gst.option | html %]" selected="selected">[% gst.option * 100 | html %]%</option>
+                            [% SET gst_found = 1 %]
+                          [% ELSE %]
+                            <option value="[% gst.option | html %]">[% gst.option * 100 | html %]%</option>
+                          [% END %]
+                        [% END %]
+
+                        [% IF !gst_found %]
+                            <option value="[% tax_rate %]" selected="selected">[% tax_rate * 100 | html %]%</option>
+                        [% END %]
                     </select>
+
+                    [% IF !gst_found %]<span class="required">Tax rate not defined in system preference gist!</span>[% END %]
             [% ELSE %]
                     <input type="hidden" name="tax_rate" value="0" />
                 </li>
