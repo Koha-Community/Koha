@@ -89,7 +89,13 @@ sub shelfpage {
 
     # getting the Shelves list
     my $category = ( ( $displaymode eq 'privateshelves' ) ? 1 : 2 );
-    my $shelflist = GetShelves( $category, $shelveslimit, $shelvesoffset, $loggedinuser );
+
+    my $shelflist;
+    if ( $category == 2 ) {
+        $shelflist = Koha::Virtualshelves->get_public_shelves({ limit => $shelveslimit, offset => $shelvesoffset });
+    } else {
+        $shelflist = Koha::Virtualshelves->get_private_shelves({ limit => $shelveslimit, offset => $shelvesoffset, borrowernumber => $loggedinuser });
+    }
     my $totshelves = C4::VirtualShelves::GetShelfCount( $loggedinuser, $category );
 
     my $op = $query->param('op');
@@ -438,7 +444,14 @@ sub shelfpage {
     my $numberCanManage = 0;
 
     # rebuild shelflist in case a shelf has been added
-    $shelflist = GetShelves( $category, $shelveslimit, $shelvesoffset, $loggedinuser ) unless $delflag;
+    unless ( $delflag ) {
+        if ( $category == 2 ) {
+            $shelflist = Koha::Virtualshelves->get_public_shelves({ limit => $shelveslimit, offset => $shelvesoffset });
+        } else {
+            $shelflist = Koha::Virtualshelves->get_private_shelves({ limit => $shelveslimit, offset => $shelvesoffset, borrowernumber => $loggedinuser });
+        }
+    }
+
     $totshelves = C4::VirtualShelves::GetShelfCount( $loggedinuser, $category ) unless $delflag;
     foreach my $element ( sort { lc( $shelflist->{$a}->{'shelfname'} ) cmp lc( $shelflist->{$b}->{'shelfname'} ) } keys %$shelflist ) {
         my %line;

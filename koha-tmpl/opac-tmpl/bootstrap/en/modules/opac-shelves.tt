@@ -115,7 +115,7 @@
                             [% IF ( paramsloo.need_confirm ) %]
                               <div class="alert">
                                 The list <i>[% paramsloo.need_confirm %]</i> is not empty.
-                                <br />It has <b>[% paramsloo.count %]</b> [% IF ( paramsloo.single ) %]entry[% ELSE %]entries[% END %].
+                                <br />It has <b>[% paramsloo.count %]</b> [% IF paramsloo.count == 1 %]entry[% ELSE %]entries[% END %].
                                 <br />Use the "Confirm" button below to confirm deletion.
                              </div>
                             [% END %]
@@ -643,7 +643,7 @@
                                                             [% FOREACH shelveslooppri IN shelveslooppriv %]
                                                                 <tr>
                                                                     <td><a href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves&amp;viewshelf=[% shelveslooppri.shelf %]&amp;sortfield=[% shelveslooppri.sortfield %]">[% shelveslooppri.shelfname |html %]</a></td>
-                                                                    <td>[% IF ( shelveslooppri.count ) %][% shelveslooppri.count %] [% IF ( shelveslooppri.single ) %]item[% ELSE %]items[% END %][% ELSE %]Empty[% END %]</td>
+                                                                    <td>[% IF ( shelveslooppri.count ) %][% shelveslooppri.count %] [% IF shelveslooppri.count == 1 %]item[% ELSE %]items[% END %][% ELSE %]Empty[% END %]</td>
                                                                     <td>
                                                                         [% IF ( shelveslooppri.viewcategory1 ) %][% IF !shelveslooppri.shares %]Private[% ELSE %]Shared[% END %][% END %]
                                                                     </td>
@@ -717,7 +717,7 @@
                                                 [% FOREACH shelvesloo IN shelvesloop %]
                                                     <tr>
                                                         <td><a class="title" href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% shelvesloo.shelf %]&amp;sortfield=[% shelvesloo.sortfield %]">[% shelvesloo.shelfname |html %]</a></td>
-                                                        <td>[% shelvesloo.count %] [% IF ( shelvesloo.single ) %]item[% ELSE %]item(s)[% END %]</td>
+                                                        <td>[% shelvesloo.count %] [% IF shelvesloo.count == 1 %]item[% ELSE %]item(s)[% END %]</td>
                                                         <td>
                                                             [% IF ( shelvesloo.viewcategory2 ) %]Public[% END %]
                                                         </td>

@@ -40,7 +40,7 @@ BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(
-            &GetShelves &GetShelfContents
+            &GetShelfContents
             &ShelfPossibleAction
     );
         @EXPORT_OK = qw(
@@ -64,74 +64,6 @@ including creating and deleting virtual shelves, and adding and removing
 bibs to and from virtual shelves.
 
 =head1 FUNCTIONS
-
-=head2 GetShelves
-
-  $shelflist = &GetShelves($category, $row_count, $offset, $owner);
-  ($shelfnumber, $shelfhash) = each %{$shelflist};
-
-Returns the number of shelves specified by C<$row_count> and C<$offset> as well as the total
-number of shelves that meet the C<$owner> and C<$category> criteria.  C<$category>,
-C<$row_count>, and C<$offset> are required. C<$owner> must be supplied when C<$category> == 1.
-When C<$category> is 2, supply undef as argument for C<$owner>.
-
-This function is used by shelfpage in VirtualShelves/Page.pm when listing all shelves for lists management in opac or staff client. Order is by shelfname.
-
-C<$shelflist>is a reference-to-hash. The keys are the virtualshelves numbers (C<$shelfnumber>, above),
-and the values (C<$shelfhash>, above) are themselves references-to-hash, with the following keys:
-
-=over
-
-=item C<$shelfhash-E<gt>{shelfname}>
-
-A string. The name of the shelf.
-
-=back
-
-=cut
-
-sub GetShelves {
-    my ($category, $row_count, $offset, $owner) = @_;
-    $offset ||= 0;
-    my @params = ( $offset, $row_count );
-    my $dbh = C4::Context->dbh;
-    my $query = qq{
-        SELECT vs.shelfnumber, vs.shelfname,vs.owner,
-        bo.surname,bo.firstname,vs.category,vs.sortfield,
-        count(vc.biblionumber) as count
-        FROM virtualshelves vs
-        LEFT JOIN borrowers bo ON vs.owner=bo.borrowernumber
-        LEFT JOIN virtualshelfcontents vc USING (shelfnumber) };
-    if($category==1) {
-        $query.= qq{
-            LEFT JOIN virtualshelfshares sh ON sh.shelfnumber=vs.shelfnumber
-            AND sh.borrowernumber=?
-        WHERE category=1 AND (vs.owner=? OR sh.borrowernumber=?) };
-        unshift @params, ($owner) x 3;
-    }
-    else {
-        $query.= 'WHERE category=2 ';
-    }
-    $query.= qq{
-        GROUP BY vs.shelfnumber
-        ORDER BY vs.shelfname
-        LIMIT ?, ?};
-
-    my $sth2 = $dbh->prepare($query);
-    $sth2->execute(@params);
-    my %shelflist;
-    while( my ($shelfnumber, $shelfname, $owner, $surname, $firstname, $category, $sortfield, $count)= $sth2->fetchrow) {
-        $shelflist{$shelfnumber}->{'shelfname'} = $shelfname;
-        $shelflist{$shelfnumber}->{'count'}     = $count;
-        $shelflist{$shelfnumber}->{'single'}    = $count==1;
-        $shelflist{$shelfnumber}->{'sortfield'} = $sortfield;
-        $shelflist{$shelfnumber}->{'category'}  = $category;
-        $shelflist{$shelfnumber}->{'owner'}     = $owner;
-        $shelflist{$shelfnumber}->{'surname'}   = $surname;
-        $shelflist{$shelfnumber}->{'firstname'} = $firstname;
-    }
-    return \%shelflist;
-}
 
 =head2 GetSomeShelfNames
 

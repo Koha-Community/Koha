@@ -39,6 +39,49 @@ Koha::Virtualshelf - Koha Virtualshelf Object class
 
 =cut
 
+sub get_private_shelves {
+    my ( $self, $params ) = @_;
+    my $limit = $params->{limit};
+    my $offset = $params->{offset} || 0;
+    my $borrowernumber = $params->{borrowernumber};
+
+    $self->search(
+        {
+            'virtualshelfshares.borrowernumber' => $borrowernumber,
+            category => 1,
+            -or => {
+                'virtualshelfshares.owner' => $borrowernumber,
+                'virtualshelves.borrowernumber' => $borrowernumber,
+            }
+        },
+        {
+            join => ['borrowers', 'virtualshelfcontents', 'virtualshelfshares' ],
+            group_by => 'shelfnumber',
+            order_by => 'shelfname',
+            limit => "$limit,$offset",
+        }
+    );
+}
+
+
+sub get_public_shelves {
+    my ( $self, $params ) = @_;
+    my $limit = $params->{limit};
+    my $offset = $params->{offset} || 0;
+
+    $self->search(
+        {
+            category => 1,
+        },
+        {
+            join => [ 'virtualshelfcontents' ],
+            group_by => 'shelfnumber',
+            order_by => 'shelfname',
+            limit => "$limit,$offset",
+        }
+    );
+}
+
 sub type {
     return 'Virtualshelve';
 }
