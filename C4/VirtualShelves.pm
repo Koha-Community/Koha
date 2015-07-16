@@ -47,7 +47,7 @@ BEGIN {
             &GetBibliosShelves
     );
         @EXPORT_OK = qw(
-            &GetAllShelves &ShelvesMax
+            &ShelvesMax
         );
 }
 
@@ -134,42 +134,6 @@ sub GetShelves {
         $shelflist{$shelfnumber}->{'firstname'} = $firstname;
     }
     return \%shelflist;
-}
-
-=head2 GetAllShelves
-
-    $shelflist = GetAllShelves($category, $owner)
-
-This function returns a reference to an array of hashrefs containing all shelves
-sorted by the shelf name.
-
-This function is intended to return a dataset reflecting all the shelves for
-the submitted parameters.
-
-=cut
-
-sub GetAllShelves {
-    my ($category,$owner,$adding_allowed) = @_;
-    my @params;
-    my $dbh = C4::Context->dbh;
-    my $query = 'SELECT vs.* FROM virtualshelves vs ';
-    if($category==1) {
-        $query.= qq{
-            LEFT JOIN virtualshelfshares sh ON sh.shelfnumber=vs.shelfnumber
-            AND sh.borrowernumber=?
-        WHERE category=1 AND (vs.owner=? OR sh.borrowernumber=?) };
-        @params = ($owner, $owner, $owner);
-    }
-    else {
-    $query.='WHERE category=2 ';
-        @params = ();
-    }
-    $query.='AND (allow_add=1 OR owner=?) ' if $adding_allowed;
-    push @params, $owner if $adding_allowed;
-    $query.= 'ORDER BY shelfname ASC';
-    my $sth = $dbh->prepare( $query );
-    $sth->execute(@params);
-    return $sth->fetchall_arrayref({});
 }
 
 =head2 GetSomeShelfNames

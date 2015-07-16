@@ -38,28 +38,35 @@
 
 [% UNLESS ( newshelf ) %]
      <fieldset class="rows">
-	<legend>Select an existing list</legend>
-	<ol>
-	    <li>
-		<label>Choose list</label>
-		<select name="shelfnumber" id="shelfnumber">
-		[% IF ( privatevirtualshelves ) %]
-        <optgroup label="Private lists">
-		[% FOREACH privatevirtualshelve IN privatevirtualshelves %]
-		<option value="[% privatevirtualshelve.shelfnumber %]">[% privatevirtualshelve.shelfname | html%]</option>
-		[% END %]
-		</optgroup>
-		[% END %]
-		[% IF ( publicvirtualshelves ) %]
-        <optgroup label="Public lists">
-		[% FOREACH publicvirtualshelve IN publicvirtualshelves %]
-		<option value="[% publicvirtualshelve.shelfnumber %]">[% publicvirtualshelve.shelfname | html%]</option>
-		[% END %]
-		</optgroup>
-		[% END %]
-		</select>
-	    </li>
-	</ol>
+    <legend>Select an existing list</legend>
+    <ol>
+        <li>
+            <label>Choose list</label>
+            <select name="shelfnumber" id="shelfnumber">
+                [% IF private_shelves.count %]
+                    <optgroup label="Private lists">
+                        [% FOREACH private_shelf IN private_shelves %]
+                            <option value="[% private_shelf.shelfnumber %]">[% private_shelf.shelfname | html%]</option>
+                        [% END %]
+                    </optgroup>
+                [% END %]
+                [% IF private_shelves_shared_with_me.count %]
+                    <optgroup label="Private lists shared with me">
+                        [% FOREACH private_shelf IN private_shelves_shared_with_me %]
+                            <option value="[% private_shelf.shelfnumber %]">[% private_shelf.shelfname | html%]</option>
+                        [% END %]
+                    </optgroup>
+                [% END %]
+                [% IF public_shelves.count %]
+                    <optgroup label="Public lists">
+                        [% FOREACH public_shelf IN public_shelves %]
+                            <option value="[% public_shelf.shelfnumber %]">[% public_shelf.shelfname | html%]</option>
+                        [% END %]
+                    </optgroup>
+                [% END %]
+            </select>
+        </li>
+    </ol>
 	[% FOREACH biblio IN biblios %]<input type="hidden" name="biblionumber" value="[% biblio.biblionumber %]" />[% END %]
 	[% UNLESS ( biblionumbers ) %]
 	  <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
@@ -100,6 +107,7 @@
 
 <!-- SAVE -->
 		    <fieldset class="action">
+            <input type="hidden" name="sortfield" value="title" />
 			<input type="submit" value="Save" class="submit" /> <a class="close cancel" href="#">Cancel</a>
 		    </fieldset>
 		</form>

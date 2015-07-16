@@ -28,8 +28,7 @@ sub search {
     my $dbh = C4::Context->dbh;
 
     # FIXME refactore the following queries
-    # We should call C4::VirtualShelves::GetShelves and C4::VirtualShelves::GetAllShelves
-    # But the code is too dirty to refactor...
+    # We should call Koha::Virtualshelves
     my $select = q|
         SELECT vs.shelfnumber, vs.shelfname, vs.owner, vs.category AS type,
         vs.created_on, vs.lastmodified as modification_time,

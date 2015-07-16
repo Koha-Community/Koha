@@ -24,7 +24,7 @@ use warnings;
 
 use CGI qw ( -utf8 );
 use C4::Biblio;
-use C4::VirtualShelves qw/:DEFAULT GetAllShelves/;
+use C4::VirtualShelves qw/:DEFAULT/;
 use C4::Output;
 use C4::Auth;
 
@@ -132,20 +132,41 @@ sub HandleSelectedShelf {
 
 sub HandleSelect {
     return unless $authorized= $loggedinuser>0;
-    my $privateshelves = GetAllShelves(1,$loggedinuser,1);
-    if(@{$privateshelves}){
-        $template->param (
-        privatevirtualshelves          => $privateshelves,
-        existingshelves => 1
+    my $private_shelves = Koha::Virtualshelves->search(
+        {
+            category => 1,
+            owner => $loggedinuser,
+        },
+        { order_by => 'shelfname' }
     );
-    }
-    my $publicshelves = GetAllShelves(2,$loggedinuser,1);
-    if(@{$publicshelves}){
-        $template->param (
-        publicvirtualshelves          => $publicshelves,
-        existingshelves => 1
+    my $shelves_shared_with_me = Koha::Virtualshelves->search(
+        {
+            category => 1,
+            'virtualshelfshares.borrowernumber' => $loggedinuser,
+            -or => {
+                allow_add => 1,
+                owner => $loggedinuser,
+            }
+        },
+        {
+            join => 'virtualshelfshares',
+        }
     );
-    }
+    my $public_shelves= Koha::Virtualshelves->search(
+        {
+            category => 2,
+            -or => {
+                allow_add => 1,
+                owner => $loggedinuser,
+            }
+        },
+        { order_by => 'shelfname' }
+    );
+    $template->param (
+        private_shelves => $private_shelves,
+        private_shelves_shared_with_me => $shelves_shared_with_me,
+        public_shelves  => $public_shelves,
+    );
 }
 
 sub LoadBib {
