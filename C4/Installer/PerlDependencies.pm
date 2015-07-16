@@ -99,6 +99,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '1.103'
     },
+    'Exception::Class' => {
+        'usage'    => 'Core',
+        'required' => '1.39',
+        'min_ver'  => '1.39'
+    },
     'HTML::Scrubber' => {
         'usage'    => 'Core',
         'required' => '1',

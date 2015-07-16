@@ -122,20 +122,35 @@ sub show_accept {
     #errorcode 5: should be private list
     #errorcode 8: should not be owner
 
-    my $dbkey = keytostring( stringtokey( $param->{key}, 0 ), 1 );
-    if ( AcceptShare( $param->{shelfnumber}, $dbkey, $param->{loggedinuser} ) )
-    {
-        notify_owner($param);
+    # We could have used ->find with the share id, but we don't want to change
+    # the url sent to the patron
+    my $shared_shelf = Koha::Virtualshelfshares->search(
+        {
+            shelfnumber => $param->{shelfnumber},
+        },
+        {
+            order_by => 'sharedate desc',
+            limit => 1,
+        }
+    );
 
-        #redirect to view of this shared list
-        print $param->{query}->redirect(
-            -uri    => SHELVES_URL . $param->{shelfnumber},
-            -cookie => $param->{cookie}
-        );
-        exit;
-    }
-    else {
+    if ( $shared_shelf ) {
+        $shared_shelf = $shared_shelf->next;
+        my $key = keytostring( stringtokey( $param->{key}, 0 ), 1 );
+        my $is_accepted = eval { $shared_shelf->accept( $key, $param->{loggedinuser} ) };
+        if ( $is_accepted ) {
+            notify_owner($param);
+
+            #redirect to view of this shared list
+            print $param->{query}->redirect(
+                -uri    => SHELVES_URL . $param->{shelfnumber},
+                -cookie => $param->{cookie}
+            );
+            exit;
+        }
         $param->{errcode} = 7;    #not accepted (key not found or expired)
+    } else {
+        # This shelf is not shared
     }
 }
 
@@ -200,7 +215,11 @@ sub send_invitekey {
         my @newkey = randomlist( KEYLENGTH, 64 );    #generate a new key
 
         #add a preliminary share record
-        if ( !AddShare( $param->{shelfnumber}, keytostring( \@newkey, 1 ) ) ) {
+        my $shelf = Koha::Virtualshelves->find( $param->{shelfnumber} );
+        my $key = keytostring( \@newkey, 1 );
+        my $is_shared = eval { $shelf->share( $key ); };
+        # TODO Better error handling, catch the exceptions
+        if ( $@ or not $is_shared ) {
             push @{ $param->{fail_addr} }, $a;
             next;
         }

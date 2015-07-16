@@ -389,7 +389,8 @@ sub shelfpage {
                 }
                 #remove a share
                 if(/REMSHR/) {
-                    RemoveShare($loggedinuser, $number);
+                    my $shelf = Koha::Virtualshelves->find( $number );
+                    $shelf->delete_share( $loggedinuser );
                     delete $shelflist->{$number} if exists $shelflist->{$number};
                     $stay=0;
                     next;
@@ -461,7 +462,8 @@ sub shelfpage {
         $shelflist->{$element}->{ownername} = defined($member) ? $member->{firstname} . " " . $member->{surname} : '';
         $numberCanManage++ if $canmanage;    # possibly outmoded
         if ( $shelflist->{$element}->{'category'} eq '1' ) {
-            $shelflist->{$element}->{shares} = IsSharedList($element);
+            my $shelf = Koha::Virtualshelves->find( $element );
+            $shelflist->{$element}->{shares} = $shelf->is_shared;
             push( @shelveslooppriv, $shelflist->{$element} );
         } else {
             push( @shelvesloop, $shelflist->{$element} );

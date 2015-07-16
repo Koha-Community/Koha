@@ -45,7 +45,6 @@ BEGIN {
             &ShelfPossibleAction
             &DelFromShelf
             &GetBibliosShelves
-            &AddShare &AcceptShare &RemoveShare &IsSharedList
     );
         @EXPORT_OK = qw(
             &GetAllShelves &ShelvesMax
@@ -390,7 +389,7 @@ sub ShelfPossibleAction {
         }
     }
     elsif($action eq 'acceptshare') {
-        #the key for accepting is checked later in AcceptShare
+        #the key for accepting is checked later in Koha::Virtualshelf->share
         #you must not be the owner, list must be private
         if( $shelf->{category}==1 ) {
             return (0, 8) if $shelf->{owner}==$user;
@@ -525,98 +524,6 @@ sub HandleDelBorrower {
     #This pref should then govern the results of other routines/methods such as
     #Koha::Virtualshelf->new->delete too.
 }
-
-=head2 AddShare
-
-     AddShare($shelfnumber, $key);
-
-Adds a share request to the virtualshelves table.
-Authorization must have been checked, and a key must be supplied. See script
-opac-shareshelf.pl for an example.
-This request is not yet confirmed. So it has no borrowernumber, it does have an
-expiry date.
-
-=cut
-
-sub AddShare {
-    my ($shelfnumber, $key)= @_;
-    return if !$shelfnumber || !$key;
-
-    my $dbh = C4::Context->dbh;
-    my $sql = "INSERT INTO virtualshelfshares (shelfnumber, invitekey, sharedate) VALUES (?, ?, NOW())";
-    $dbh->do($sql, undef, ($shelfnumber, $key));
-    return !$dbh->err;
-}
-
-=head2 AcceptShare
-
-     my $result= AcceptShare($shelfnumber, $key, $borrowernumber);
-
-Checks acceptation of a share request.
-Key must be found for this shelf. Invitation must not have expired.
-Returns true when accepted, false otherwise.
-
-=cut
-
-sub AcceptShare {
-    my ($shelfnumber, $key, $borrowernumber)= @_;
-    return if !$shelfnumber || !$key || !$borrowernumber;
-
-    my $sql;
-    my $dbh = C4::Context->dbh;
-    $sql="
-UPDATE virtualshelfshares
-SET invitekey=NULL, sharedate=NOW(), borrowernumber=?
-WHERE shelfnumber=? AND invitekey=? AND (sharedate + INTERVAL ? DAY) >NOW()
-    ";
-    my $i= $dbh->do($sql, undef, ($borrowernumber, $shelfnumber, $key,  SHARE_INVITATION_EXPIRY_DAYS));
-    return if !defined($i) || !$i || $i eq '0E0'; #not found
-    return 1;
-}
-
-=head2 IsSharedList
-
-     my $bool= IsSharedList( $shelfnumber );
-
-IsSharedList checks if a (private) list has shares.
-Note that such a check would not be useful for public lists. A public list has
-no shares, but is visible for anyone by nature..
-Used to determine the list type in the display of Your lists (all private).
-Returns boolean value.
-
-=cut
-
-sub IsSharedList {
-    my ($shelfnumber) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sql="SELECT id FROM virtualshelfshares WHERE shelfnumber=? AND borrowernumber IS NOT NULL";
-    my $sth = $dbh->prepare($sql);
-    $sth->execute($shelfnumber);
-    my ($rv)= $sth->fetchrow_array;
-    return defined($rv);
-}
-
-=head2 RemoveShare
-
-     RemoveShare( $user, $shelfnumber );
-
-RemoveShare removes a share for specific shelf and borrower.
-Returns true if a record could be deleted.
-
-=cut
-
-sub RemoveShare {
-    my ($user, $shelfnumber)= @_;
-    my $dbh = C4::Context->dbh;
-    my $sql="
-DELETE FROM virtualshelfshares
-WHERE borrowernumber=? AND shelfnumber=?
-    ";
-    my $n= $dbh->do($sql,undef,($user, $shelfnumber));
-    return if !defined($n) || !$n || $n eq '0E0'; #nothing removed
-    return 1;
-}
-
 
 sub GetShelfCount {
     my ($owner, $category) = @_;

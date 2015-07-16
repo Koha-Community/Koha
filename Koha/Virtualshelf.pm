@@ -21,7 +21,9 @@ use Carp;
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
-use Koha::Exception::DuplicateObject;
+use Koha::Exceptions;
+use Koha::Virtualshelfshare;
+use Koha::Virtualshelfshares;
 
 use base qw(Koha::Object);
 
@@ -91,6 +93,48 @@ sub is_shelfname_valid {
         }
     )->count;
     return $count ? 0 : 1;
+}
+
+sub get_shares {
+    my ( $self ) = @_;
+    return $self->{_result}->virtualshelfshares;
+}
+
+sub share {
+    my ( $self, $key ) = @_;
+    unless ( $key ) {
+        Koha::Exceptions::Virtualshelves::InvalidKeyOnSharing->throw;
+    }
+    Koha::Virtualshelfshare->new(
+        {
+            shelfnumber => $self->shelfnumber,
+            invitekey => $key,
+            sharedate => dt_from_string,
+        }
+    )->store;
+}
+
+sub is_shared {
+    my ( $self ) = @_;
+    return  $self->get_shares->search(
+        {
+            borrowernumber => { '!=' => undef },
+        }
+    )->count;
+}
+
+sub remove_share {
+    my ( $self, $borrowernumber ) = @_;
+    my $shelves = Koha::Virtualshelfshares->search(
+        {
+            shelfnumber => $self->shelfnumber,
+            borrowernumber => $borrowernumber,
+        }
+    );
+    return 0 unless $shelves->count;
+
+    # Only 1 share with 1 patron can exist
+    return $shelves->next->delete;
 }
 
 sub type {
