@@ -108,11 +108,11 @@ my $biblionumber2 = _add_biblio('title 2');
 my $biblionumber3 = _add_biblio('title 3');
 my $biblionumber4 = _add_biblio('title 4');
 my $biblionumber5 = _add_biblio('title 5');
-C4::VirtualShelves::AddToShelf( $biblionumber1, $shelf2->shelfnumber, $john_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber2, $shelf2->shelfnumber, $john_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber3, $shelf2->shelfnumber, $john_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber4, $shelf2->shelfnumber, $john_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber5, $shelf2->shelfnumber, $john_doe{borrowernumber} );
+$shelf2->add_biblio( $biblionumber1, $john_doe{borrowernumber} );
+$shelf2->add_biblio( $biblionumber2, $john_doe{borrowernumber} );
+$shelf2->add_biblio( $biblionumber3, $john_doe{borrowernumber} );
+$shelf2->add_biblio( $biblionumber4, $john_doe{borrowernumber} );
+$shelf2->add_biblio( $biblionumber5, $john_doe{borrowernumber} );
 
 my $shelf3 = Koha::Virtualshelf->new(
     {
@@ -125,9 +125,9 @@ my $shelf3 = Koha::Virtualshelf->new(
 my $biblionumber6 = _add_biblio('title 6');
 my $biblionumber7 = _add_biblio('title 7');
 my $biblionumber8 = _add_biblio('title 8');
-C4::VirtualShelves::AddToShelf( $biblionumber6, $shelf3->shelfnumber, $jane_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber7, $shelf3->shelfnumber, $jane_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber8, $shelf3->shelfnumber, $jane_doe{borrowernumber} );
+$shelf3->add_biblio( $biblionumber6, $jane_doe{borrowernumber} );
+$shelf3->add_biblio( $biblionumber7, $jane_doe{borrowernumber} );
+$shelf3->add_biblio( $biblionumber8, $jane_doe{borrowernumber} );
 
 my $shelf4 = Koha::Virtualshelf->new(
     {
@@ -141,10 +141,10 @@ my $biblionumber9  = _add_biblio('title 9');
 my $biblionumber10 = _add_biblio('title 10');
 my $biblionumber11 = _add_biblio('title 11');
 my $biblionumber12 = _add_biblio('title 12');
-C4::VirtualShelves::AddToShelf( $biblionumber9,  $shelf4->shelfnumber, $jane_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber10, $shelf4->shelfnumber, $jane_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber11, $shelf4->shelfnumber, $jane_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber12, $shelf4->shelfnumber, $jane_doe{borrowernumber} );
+$shelf3->add_biblio( $biblionumber9, $jane_doe{borrowernumber} );
+$shelf3->add_biblio( $biblionumber10, $jane_doe{borrowernumber} );
+$shelf3->add_biblio( $biblionumber11, $jane_doe{borrowernumber} );
+$shelf3->add_biblio( $biblionumber12, $jane_doe{borrowernumber} );
 
 my $shelf5 = Koha::Virtualshelf->new(
     {
@@ -160,12 +160,12 @@ my $biblionumber15 = _add_biblio('title 15');
 my $biblionumber16 = _add_biblio('title 16');
 my $biblionumber17 = _add_biblio('title 17');
 my $biblionumber18 = _add_biblio('title 18');
-C4::VirtualShelves::AddToShelf( $biblionumber13, $shelf5->shelfnumber, $jane_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber14, $shelf5->shelfnumber, $jane_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber15, $shelf5->shelfnumber, $jane_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber16, $shelf5->shelfnumber, $jane_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber17, $shelf5->shelfnumber, $jane_doe{borrowernumber} );
-C4::VirtualShelves::AddToShelf( $biblionumber18, $shelf5->shelfnumber, $jane_doe{borrowernumber} );
+$shelf5->add_biblio( $biblionumber13, $jane_doe{borrowernumber} );
+$shelf5->add_biblio( $biblionumber14, $jane_doe{borrowernumber} );
+$shelf5->add_biblio( $biblionumber15, $jane_doe{borrowernumber} );
+$shelf5->add_biblio( $biblionumber16, $jane_doe{borrowernumber} );
+$shelf5->add_biblio( $biblionumber17, $jane_doe{borrowernumber} );
+$shelf5->add_biblio( $biblionumber18, $jane_doe{borrowernumber} );
 
 for my $i ( 6 .. 15 ) {
     Koha::Virtualshelf->new(

@@ -106,7 +106,7 @@ sub shelfpage {
                     $item = GetItem( 0, $barcode);
                     if (defined $item && $item->{'itemnumber'}) {
                         $biblio = GetBiblioFromItemNumber( $item->{'itemnumber'} );
-                        AddToShelf( $biblio->{'biblionumber'}, $shelfnumber, $loggedinuser)
+                        Koha::Virtualshelves->find( $shelfnumber )->add_biblio( $biblio->{biblionumber}, $loggedinuser )
                           or push @paramsloop, { duplicatebiblio => $barcode };
                     }
                     else {
@@ -120,17 +120,17 @@ sub shelfpage {
             elsif(grep { /REM-(\d+)/ } $query->param) {
             #remove item(s) from shelf
                 if(ShelfPossibleAction($loggedinuser, $shelfnumber, 'delete')) {
-                #This is just a general okay; DelFromShelf checks further
                     my @bib;
                     foreach($query->param) {
                         /REM-(\d+)/ or next;
                         push @bib, $1; #$1 is biblionumber
                     }
-                    my $t= DelFromShelf(\@bib, $shelfnumber, $loggedinuser);
-                    if($t==0) {
+                    my $shelf = Koha::Virtualshelves->find( $shelfnumber );
+                    my $number_of_biblios_removed = $shelf->remove_biblios( { biblionumbers => \@bib, borrowernumber => $loggedinuser } );
+                    if( $number_of_biblios_removed == 0) {
                         push @paramsloop, {nothingdeleted => $shelfnumber};
                     }
-                    elsif($t<@bib) {
+                    elsif( $number_of_biblios_removed < @bib ) {
                         push @paramsloop, {somedeleted => $shelfnumber};
                     }
                 }

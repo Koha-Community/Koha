@@ -127,7 +127,7 @@ sub HandleBiblioPars {
 sub AddBibliosToShelf {
     my ($shelfnumber, @biblionumber)=@_;
     for my $bib (@biblionumber){
-        AddToShelf($bib, $shelfnumber, $loggedinuser);
+        Koha::Virtualshelves->find( $shelfnumber )->add_biblio( $bib, $loggedinuser );
     }
 }
 

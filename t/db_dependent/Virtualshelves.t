@@ -1,20 +1,23 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 2;
+use Test::More tests => 3;
+use DateTime::Duration;
 
 use C4::Context;
 use Koha::DateUtils;
 use Koha::Virtualshelves;
 use Koha::Virtualshelfshares;
+use Koha::Virtualshelfcontents;
 
 use t::lib::TestBuilder;
 
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 
-$dbh->do(q|DELETE FROM virtualshelves|);
 $dbh->do(q|DELETE FROM virtualshelfshares|);
+$dbh->do(q|DELETE FROM virtualshelfcontents|);
+$dbh->do(q|DELETE FROM virtualshelves|);
 
 my $builder = t::lib::TestBuilder->new;
 
@@ -146,4 +149,90 @@ subtest 'Sharing' => sub {
     is( $shelf_to_share->remove_share( $share_with_me->{borrowernumber} ), 1, '1 share should have been removed if the shelf was shared with this patron' );
     $number_of_shelves_shared = Koha::Virtualshelfshares->search->count;
     is( $number_of_shelves_shared, 1, 'To be sure the share has been removed' );
+};
+
+subtest 'Shelf content' => sub {
+
+    plan tests => 18;
+    my $patron1 = $builder->build( { source => 'Borrower', } );
+    my $patron2 = $builder->build( { source => 'Borrower', } );
+    my $biblio1 = $builder->build( { source => 'Biblio', } );
+    my $biblio2 = $builder->build( { source => 'Biblio', } );
+    my $biblio3 = $builder->build( { source => 'Biblio', } );
+    my $biblio4 = $builder->build( { source => 'Biblio', } );
+    my $number_of_contents = Koha::Virtualshelfcontents->search->count;
+
+    is( $number_of_contents, 0, 'No content should exist' );
+
+    my $dt_yesterday = dt_from_string->subtract_duration( DateTime::Duration->new( days => 1 ) );
+    my $shelf = Koha::Virtualshelf->new(
+        {   shelfname    => "my first shelf",
+            owner        => $patron1->{borrowernumber},
+            category     => 1,
+            lastmodified => $dt_yesterday,
+        }
+    )->store;
+
+    $shelf = Koha::Virtualshelves->find( $shelf->shelfnumber );
+    is( output_pref( dt_from_string $shelf->lastmodified ), output_pref($dt_yesterday), 'The lastmodified has been set to yesterday, will be useful for another test later' );
+    my $content1 = $shelf->add_biblio( $biblio1->{biblionumber}, $patron1->{borrowernumber} );
+    is( ref($content1), 'Koha::Virtualshelfcontent', 'add_biblio to a shelf should return a Koha::Virtualshelfcontent object if inserted' );
+    $shelf = Koha::Virtualshelves->find( $shelf->shelfnumber );
+    is( output_pref( dt_from_string( $shelf->lastmodified ) ), output_pref(dt_from_string), 'Adding a biblio to a shelf should update the lastmodified for the shelf' );
+    my $content2 = $shelf->add_biblio( $biblio2->{biblionumber}, $patron1->{borrowernumber} );
+    $number_of_contents = Koha::Virtualshelfcontents->search->count;
+    is( $number_of_contents, 2, '2 biblio should have been inserted' );
+
+    my $content1_bis = $shelf->add_biblio( $biblio1->{biblionumber}, $patron1->{borrowernumber} );
+    is( $content1_bis, undef, 'add_biblio should return undef on duplicate' );    # Or an exception ?
+    $number_of_contents = Koha::Virtualshelfcontents->search->count;
+    is( $number_of_contents, 2, 'The biblio should not have been duplicated' );
+
+    $shelf = Koha::Virtualshelves->find( $shelf->shelfnumber );
+    my $contents = $shelf->get_contents;
+    is( $contents->count, 2, 'There are 2 biblios on this shelf' );
+
+    # Patron 2 will try to remove a content
+    # allow_add = 0, allow_delete_own = 1, allow_delete_other = 0 => Default values
+    my $number_of_deleted_biblios = $shelf->remove_biblios( { biblionumbers => [ $biblio1->{biblionumber} ], borrowernumber => $patron2->{borrowernumber} } );
+    is( $number_of_deleted_biblios, 0, );
+    $number_of_deleted_biblios = $shelf->remove_biblios( { biblionumbers => [ $biblio1->{biblionumber} ], borrowernumber => $patron1->{borrowernumber} } );
+    is( $number_of_deleted_biblios, 1, );
+
+    $number_of_contents = Koha::Virtualshelfcontents->search->count;
+    is( $number_of_contents, 1, 'To be sure the content has been deleted' );
+
+    # allow_delete_own = 0
+    $shelf->allow_delete_own(0);
+    $shelf->store;
+    $number_of_deleted_biblios = $shelf->remove_biblios( { biblionumbers => [ $biblio2->{biblionumber} ], borrowernumber => $patron1->{borrowernumber} } );
+    is( $number_of_deleted_biblios, 1, );
+    $number_of_contents = Koha::Virtualshelfcontents->search->count;
+    is( $number_of_contents, 0, 'The biblio should have been deleted to the shelf by the patron, it is his own content (allow_delete_own=0)' );
+    $shelf->add_biblio( $biblio2->{biblionumber}, $patron1->{borrowernumber} );
+
+    # allow_add = 1, allow_delete_own = 1
+    $shelf->allow_add(1);
+    $shelf->allow_delete_own(1);
+    $shelf->store;
+
+    my $content3 = $shelf->add_biblio( $biblio3->{biblionumber}, $patron2->{borrowernumber} );
+    my $content4 = $shelf->add_biblio( $biblio4->{biblionumber}, $patron2->{borrowernumber} );
+
+    $number_of_contents = Koha::Virtualshelfcontents->search->count;
+    is( $number_of_contents, 3, 'The biblio should have been added to the shelf by the patron 2' );
+
+    $number_of_deleted_biblios = $shelf->remove_biblios( { biblionumbers => [ $biblio3->{biblionumber} ], borrowernumber => $patron2->{borrowernumber} } );
+    is( $number_of_deleted_biblios, 1, );
+    $number_of_contents = Koha::Virtualshelfcontents->search->count;
+    is( $number_of_contents, 2, 'The biblio should have been deleted to the shelf by the patron, it is his own content (allow_delete_own=1) ' );
+
+    # allow_add = 1, allow_delete_own = 1, allow_delete_other = 1
+    $shelf->allow_delete_other(1);
+    $shelf->store;
+
+    $number_of_deleted_biblios = $shelf->remove_biblios( { biblionumbers => [ $biblio2->{biblionumber} ], borrowernumber => $patron2->{borrowernumber} } );
+    is( $number_of_deleted_biblios, 1, );
+    $number_of_contents = Koha::Virtualshelfcontents->search->count;
+    is( $number_of_contents, 1, 'The biblio should have been deleted to the shelf by the patron 2, even if it is not his own content (allow_delete_other=1)' );
 };

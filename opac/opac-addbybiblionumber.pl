@@ -81,7 +81,8 @@ sub AddBibliosToShelf {
         @biblionumber = (split /\//,$biblionumber[0]);
     }
     for my $bib (@biblionumber) {
-        AddToShelf($bib, $shelfnumber, $loggedinuser);
+        my $shelf = Koha::Virtualshelves->find( $shelfnumber );
+        $shelf->add_biblio( $bib, $loggedinuser );
     }
 }
 

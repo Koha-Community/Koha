@@ -24,6 +24,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
 use Koha::Virtualshelfshare;
 use Koha::Virtualshelfshares;
+use Koha::Virtualshelfcontent;
 
 use base qw(Koha::Object);
 
@@ -100,6 +101,11 @@ sub get_shares {
     return $self->{_result}->virtualshelfshares;
 }
 
+sub get_contents {
+    my ( $self ) = @_;
+    return $self->{_result}->virtualshelfcontents;
+}
+
 sub share {
     my ( $self, $key ) = @_;
     unless ( $key ) {
@@ -135,6 +141,64 @@ sub remove_share {
 
     # Only 1 share with 1 patron can exist
     return $shelves->next->delete;
+}
+
+sub add_biblio {
+    my ( $self, $biblionumber, $borrowernumber ) = @_;
+    return unless $biblionumber;
+    my $already_exists = $self->get_contents->search(
+        {
+            biblionumber => $biblionumber,
+        }
+    )->count;
+    return if $already_exists;
+    my $content = Koha::Virtualshelfcontent->new(
+        {
+            shelfnumber => $self->shelfnumber,
+            biblionumber => $biblionumber,
+            borrowernumber => $borrowernumber,
+        }
+    )->store;
+    $self->lastmodified(dt_from_string);
+    $self->store;
+
+    return $content;
+}
+
+sub remove_biblios {
+    my ( $self, $params ) = @_;
+    my $biblionumbers = $params->{biblionumbers} || [];
+    my $borrowernumber = $params->{borrowernumber};
+    return unless @$biblionumbers;
+
+    my $number_removed = 0;
+    for my $biblionumber ( @$biblionumbers ) {
+        if ( $self->owner == $borrowernumber or $self->allow_delete_own ) {
+            $number_removed += $self->get_contents->search(
+                {
+                    biblionumber => $biblionumber,
+                    borrowernumber => $borrowernumber,
+                }
+            )->delete;
+        }
+        if ( $self->allow_delete_other ) {
+            $number_removed += $self->get_contents->search(
+                {
+                    biblionumber => $biblionumber,
+                    # FIXME
+                    # This does not make sense, but it's has been backported from DelFromShelf.
+                    # Why shouldn't we allow to remove his own contribution if allow_delete_other is on?
+                    borrowernumber => {
+                        -or => {
+                            '!=' => $borrowernumber,
+                            '=' => undef
+                        }
+                    },
+                }
+            )->delete;
+        }
+    }
+    return $number_removed;
 }
 
 sub type {

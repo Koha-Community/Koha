@@ -41,9 +41,7 @@ BEGIN {
     @ISA    = qw(Exporter);
     @EXPORT = qw(
             &GetShelves &GetShelfContents
-            &AddToShelf
             &ShelfPossibleAction
-            &DelFromShelf
             &GetBibliosShelves
     );
         @EXPORT_OK = qw(
@@ -234,41 +232,6 @@ sub GetShelfContents {
     # or newer, for your version of DBI.
 }
 
-=head2 AddToShelf
-
-  &AddToShelf($biblionumber, $shelfnumber, $borrower);
-
-Adds bib number C<$biblionumber> to virtual virtualshelves number
-C<$shelfnumber>, unless that bib is already on that shelf.
-
-=cut
-
-sub AddToShelf {
-    my ($biblionumber, $shelfnumber, $borrowernumber) = @_;
-    return unless $biblionumber;
-    my $dbh = C4::Context->dbh;
-    my $query = qq(
-        SELECT *
-        FROM   virtualshelfcontents
-        WHERE  shelfnumber=? AND biblionumber=?
-    );
-    my $sth = $dbh->prepare($query);
-
-    $sth->execute( $shelfnumber, $biblionumber );
-    ($sth->rows) and return; # already on shelf
-    $query = qq(
-        INSERT INTO virtualshelfcontents
-            (shelfnumber, biblionumber, flags, borrowernumber)
-        VALUES (?, ?, 0, ?));
-    $sth = $dbh->prepare($query);
-    $sth->execute( $shelfnumber, $biblionumber, $borrowernumber);
-    $query = qq(UPDATE virtualshelves
-                SET lastmodified = CURRENT_TIMESTAMP
-                WHERE shelfnumber = ?);
-    $sth = $dbh->prepare($query);
-    $sth->execute( $shelfnumber );
-}
-
 =head2 ShelfPossibleAction
 
 ShelfPossibleAction($loggedinuser, $shelfnumber, $action);
@@ -280,7 +243,7 @@ New additional actions are: invite, acceptshare.
 Note that add/delete here refers to adding/deleting entries from the list. Deleting the list itself falls under manage.
 new_public and new_private refers to creating a new public or private list.
 The distinction between deleting your own entries from the list or entries from
-others is made in DelFromShelf.
+others is made when deleting a content from the shelf.
 
 Returns 1 if the user can do the $action in the $shelfnumber shelf.
 Returns 0 otherwise.
@@ -339,7 +302,7 @@ sub ShelfPossibleAction {
         #this answer is just diplomatic: it says that you may be able to delete
         #some items from that shelf
         #it does not answer the question about a specific biblio
-        #DelFromShelf checks the situation per biblio
+        #Koha::Virtualshelf->remove_biblios checks the situation per biblio
         return 1 if $user>0 && ($shelf->{allow_delete_own}==1 || $shelf->{allow_delete_other}==1);
     }
     elsif($action eq 'invite') {
@@ -368,51 +331,6 @@ sub ShelfPossibleAction {
         return 1 if $user && $shelf->{owner}==$user;
     }
     return 0;
-}
-
-=head2 DelFromShelf
-
-    $result= &DelFromShelf( $bibref, $shelfnumber, $user);
-
-Removes biblionumbers in passed arrayref from shelf C<$shelfnumber>.
-If the bib wasn't on that virtualshelves to begin with, nothing happens.
-
-Returns 0 if no items have been deleted.
-
-=cut
-
-sub DelFromShelf {
-    my ($bibref, $shelfnumber, $user) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query = qq(SELECT allow_delete_own, allow_delete_other FROM virtualshelves WHERE shelfnumber=?);
-    my $sth= $dbh->prepare($query);
-    $sth->execute($shelfnumber);
-    my ($del_own, $del_oth)= $sth->fetchrow;
-    my $r; my $t=0;
-
-    if($del_own) {
-        $query = qq(DELETE FROM virtualshelfcontents
-            WHERE shelfnumber=? AND biblionumber=? AND borrowernumber=?);
-        $sth= $dbh->prepare($query);
-        foreach my $biblionumber (@$bibref) {
-            $sth->execute($shelfnumber, $biblionumber, $user);
-            $r= $sth->rows; #Expect -1, 0 or 1 (-1 means Don't know; count as 1)
-            $t+= ($r==-1)? 1: $r;
-        }
-    }
-    if($del_oth) {
-        #includes a check if borrowernumber is null (deleted patron)
-        $query = qq/DELETE FROM virtualshelfcontents
-            WHERE shelfnumber=? AND biblionumber=? AND
-            (borrowernumber IS NULL OR borrowernumber<>?)/;
-        $sth= $dbh->prepare($query);
-        foreach my $biblionumber (@$bibref) {
-            $sth->execute($shelfnumber, $biblionumber, $user);
-            $r= $sth->rows;
-            $t+= ($r==-1)? 1: $r;
-        }
-    }
-    return $t;
 }
 
 =head2 GetBibliosShelves
