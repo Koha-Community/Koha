@@ -2832,14 +2832,20 @@ sub CanBookBeRenewed {
         and $issuingrule->{norenewalbefore} ne "" )
     {
 
-        # Get current time and add norenewalbefore.
-        # If this is smaller than date_due, it's too soon for renewal.
-        my $now = dt_from_string;
-        if (
-            $now->add(
-                $issuingrule->{lengthunit} => $issuingrule->{norenewalbefore}
-            ) < $itemissue->{date_due}
-          )
+        # Calculate soonest renewal by subtracting 'No renewal before' from due date
+        my $soonestrenewal =
+          $itemissue->{date_due}->clone()
+          ->subtract(
+            $issuingrule->{lengthunit} => $issuingrule->{norenewalbefore} );
+
+        # Depending on syspref reset the exact time, only check the date
+        if ( C4::Context->preference('NoRenewalBeforePrecision') eq 'date'
+            and $issuingrule->{lengthunit} eq 'days' )
+        {
+            $soonestrenewal->truncate( to => 'day' );
+        }
+
+        if ( $soonestrenewal > DateTime->now( time_zone => C4::Context->tz() ) )
         {
             return ( 0, "auto_too_soon" ) if $itemissue->{auto_renew};
             return ( 0, "too_soon" );
@@ -3075,11 +3081,16 @@ sub GetSoonestRenewDate {
         and $issuingrule->{norenewalbefore} ne "" )
     {
         my $soonestrenewal =
-          $itemissue->{date_due}->subtract(
+          $itemissue->{date_due}->clone()
+          ->subtract(
             $issuingrule->{lengthunit} => $issuingrule->{norenewalbefore} );
 
-        $soonestrenewal = $now > $soonestrenewal ? $now : $soonestrenewal;
-        return $soonestrenewal;
+        if ( C4::Context->preference('NoRenewalBeforePrecision') eq 'date'
+            and $issuingrule->{lengthunit} eq 'days' )
+        {
+            $soonestrenewal->truncate( to => 'day' );
+        }
+        return $soonestrenewal if $now < $soonestrenewal;
     }
     return $now;
 }
