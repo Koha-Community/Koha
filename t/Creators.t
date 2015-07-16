@@ -14,7 +14,6 @@ BEGIN {
 }
 
 my $pdf_creator = C4::Creators::PDF->new(InitVars => 0);
-warn $pdf_creator;
 ok($pdf_creator, "testing new() works");
 if (-e $pdf_creator->{filename}) {
   pass('testing pdf file created');
