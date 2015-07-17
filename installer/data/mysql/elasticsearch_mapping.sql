@@ -1,3 +1,5 @@
+-- For now I'm keeping this form of table as it's easier to edit. When we get
+-- an interface, then we can then use the real form directly.
 DROP TABLE IF EXISTS elasticsearch_mapping;
 DROP TABLE IF EXISTS search_marc_to_field;
 DROP TABLE IF EXISTS search_field;
@@ -228,6 +230,7 @@ INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `m
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','an',FALSE,'number',NULL,'6179',NULL);
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','an',FALSE,'number',NULL,'6209',NULL);
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','an',FALSE,'number',NULL,'6219',NULL);
+INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','Host-Item-Number',FALSE,'number','7739','4619','7739');
 
 -- Authorities: incomplete
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('authorities','Local-number',FALSE,'string','001',NULL,'001');
