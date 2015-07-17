@@ -494,6 +494,7 @@ our %index_field_convert = (
     'fic'     => 'lf',
     'mus'     => 'rtype',
     'aud'     => 'ta',
+    'hi'      => 'Host-Item-Number',
 );
 
 sub _convert_index_fields {
@@ -683,11 +684,11 @@ to ensure those parts are correct.
 sub _clean_search_term {
     my ( $self, $term ) = @_;
 
+    # Some hardcoded searches (like with authorities) produce things like
+    # 'an=123', when it ought to be 'an:123' for our purposes.
+    $term =~ s/=/:/g;
     $term = $self->_convert_index_strings_freeform($term);
     $term =~ s/[{}]/"/g;
-    # Some hardcoded searches (like with authorities) produce things like
-    # 'an=123', when it ought to be 'an:123'.
-    $term =~ s/=/:/g;
     return $term;
 }
 

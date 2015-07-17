@@ -157,7 +157,7 @@ sub do_reindex {
 
         # We know it's safe to not recreate the indexer because update_index
         # hasn't been called yet.
-        $indexer->delete_index();
+        $indexer->drop_index();
     }
 
     my $count        = 0;

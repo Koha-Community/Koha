@@ -34,8 +34,9 @@ Koha::ElasticSearch::Indexer - handles adding new records to the index
 
 =head1 SYNOPSIS
 
-    my $indexer = Koha::ElasticSearch::Indexer->new({ index => 'biblios' });
-    $indexer->delete_index();
+    my $indexer = Koha::ElasticSearch::Indexer->new(
+        { index => Koha::SearchEngine::BIBLIOS_INDEX } );
+    $indexer->drop_index();
     $indexer->update_index(\@biblionumbers, \@records);
 
 =head1 FUNCTIONS
@@ -61,6 +62,8 @@ If that's a problem, clone them first.
 sub update_index {
     my ($self, $biblionums, $records) = @_;
 
+    # TODO should have a separate path for dealing with a large number
+    # of records at once where we use the bulk update functions in ES.
     if ($biblionums) {
         $self->_sanitise_records($biblionums, $records);
     }
@@ -100,14 +103,51 @@ sub update_index_background {
     $self->update_index(@_);
 }
 
-=head2 $indexer->delete_index();
+=head2 $indexer->delete_index($biblionums)
 
-Deletes the index from the elasticsearch server. Calling C<update_index>
-after this will recreate it again.
+C<$biblionums> is an arrayref of biblionumbers to delete from the index.
 
 =cut
 
 sub delete_index {
+    my ($self, $biblionums) = @_;
+
+    if ( !$self->store ) {
+        my $params  = $self->get_elasticsearch_params();
+        $self->store(
+            Catmandu::Store::ElasticSearch->new(
+                %$params,
+                index_settings => $self->get_elasticsearch_settings(),
+                index_mappings => $self->get_elasticsearch_mappings(),
+                trace_calls => 1,
+            )
+        );
+    }
+    $self->store->bag->delete($_) foreach @$biblionums;
+    $self->store->bag->commit;
+}
+
+=head2 $indexer->delete_index_background($biblionums)
+
+Identical to L<delete_index>, this will return immediately and start a
+background process to do the actual deleting.
+
+=cut
+
+# TODO implement in the future
+
+sub delete_index_background {
+    my $self = shift;
+    $self->delete_index(@_);
+}
+=head2 $indexer->drop_index();
+
+Drops the index from the elasticsearch server. Calling C<update_index>
+after this will recreate it again.
+
+=cut
+
+sub drop_index {
     my ($self) = @_;
 
     if (!$self->store) {

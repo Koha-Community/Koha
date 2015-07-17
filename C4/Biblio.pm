@@ -37,12 +37,15 @@ use C4::ClassSource;
 use C4::Charset;
 use C4::Linker;
 use C4::OAI::Sets;
+use C4::Debug;
 
 use Koha::Cache;
 use Koha::Authority::Types;
 use Koha::Acquisition::Currencies;
+use Koha::SearchEngine;
 
 use vars qw(@ISA @EXPORT);
+use vars qw($debug $cgi_debug);
 
 BEGIN {
 
@@ -2888,39 +2891,68 @@ sub TransformMarcToKohaOneField {
 
 =head2 ModZebra
 
-  ModZebra( $biblionumber, $op, $server );
+  ModZebra( $biblionumber, $op, $server, $record );
 
 $biblionumber is the biblionumber we want to index
 
-$op is specialUpdate or delete, and is used to know what we want to do
+$op is specialUpdate or recordDelete, and is used to know what we want to do
 
 $server is the server that we want to update
+
+$record is the update MARC record if it's available. If it's not supplied
+and is needed, it'll be loaded from the database.
 
 =cut
 
 sub ModZebra {
 ###Accepts a $server variable thus we can use it for biblios authorities or other zebra dbs
-    my ( $biblionumber, $op, $server ) = @_;
-    my $dbh = C4::Context->dbh;
+    my ( $biblionumber, $op, $server, $record ) = @_;
+    $debug && warn "ModZebra: update requested for: $biblionumber $op $server\n";
+    if ( C4::Context->preference('SearchEngine') eq 'Elasticsearch' ) {
 
-    # true ModZebra commented until indexdata fixes zebraDB crashes (it seems they occur on multiple updates
-    # at the same time
-    # replaced by a zebraqueue table, that is filled with ModZebra to run.
-    # the table is emptied by rebuild_zebra.pl script (using the -z switch)
+        # TODO abstract to a standard API that'll work for whatever
+        require Koha::ElasticSearch::Indexer;
+        my $indexer = Koha::ElasticSearch::Indexer->new(
+            {
+                index => $server eq 'biblioserver'
+                ? $Koha::SearchEngine::BIBLIOS_INDEX
+                : $Koha::SearchEngine::AUTHORITIES_INDEX
+            }
+        );
+        if ( $op eq 'specialUpdate' ) {
+            unless ($record) {
+                $record = GetMarcBiblio($biblionumber, 1);
+            }
+            my $records = [$record];
+            $indexer->update_index_background( [$biblionumber], [$record] );
+        }
+        elsif ( $op eq 'recordDelete' ) {
+            $indexer->delete_index_background( [$biblionumber] );
+        }
+        else {
+            croak "ModZebra called with unknown operation: $op";
+        }
+    } else {
+        my $dbh = C4::Context->dbh;
 
-    my $check_sql = "SELECT COUNT(*) FROM zebraqueue
-                     WHERE server = ?
-                     AND   biblio_auth_number = ?
-                     AND   operation = ?
-                     AND   done = 0";
-    my $check_sth = $dbh->prepare_cached($check_sql);
-    $check_sth->execute( $server, $biblionumber, $op );
-    my ($count) = $check_sth->fetchrow_array;
-    $check_sth->finish();
-    if ( $count == 0 ) {
-        my $sth = $dbh->prepare("INSERT INTO zebraqueue  (biblio_auth_number,server,operation) VALUES(?,?,?)");
-        $sth->execute( $biblionumber, $server, $op );
-        $sth->finish;
+        # true ModZebra commented until indexdata fixes zebraDB crashes (it seems they occur on multiple updates
+        # at the same time
+        # replaced by a zebraqueue table, that is filled with ModZebra to run.
+        # the table is emptied by rebuild_zebra.pl script (using the -z switch)
+        my $check_sql = "SELECT COUNT(*) FROM zebraqueue
+        WHERE server = ?
+            AND   biblio_auth_number = ?
+            AND   operation = ?
+            AND   done = 0";
+        my $check_sth = $dbh->prepare_cached($check_sql);
+        $check_sth->execute( $server, $biblionumber, $op );
+        my ($count) = $check_sth->fetchrow_array;
+        $check_sth->finish();
+        if ( $count == 0 ) {
+            my $sth = $dbh->prepare("INSERT INTO zebraqueue  (biblio_auth_number,server,operation) VALUES(?,?,?)");
+            $sth->execute( $biblionumber, $server, $op );
+            $sth->finish;
+        }
     }
 }
 
@@ -3468,15 +3500,7 @@ sub ModBiblioMarc {
     $sth = $dbh->prepare("UPDATE biblioitems SET marc=?,marcxml=? WHERE biblionumber=?");
     $sth->execute( $record->as_usmarc(), $record->as_xml_record($encoding), $biblionumber );
     $sth->finish;
-    if ( C4::Context->preference('SearchEngine') eq 'ElasticSearch' ) {
-# shift to its on sub, so it can do it realtime or queue
-        can_load( modules => { 'Koha::ElasticSearch::Indexer' => undef } );
-        # need to get this from syspref probably biblio/authority for index
-        my $indexer = Koha::ElasticSearch::Indexer->new();
-        my $records = [$record];
-        $indexer->update_index([$biblionumber], $records);
-    }
-    ModZebra( $biblionumber, "specialUpdate", "biblioserver" );
+    ModZebra( $biblionumber, "specialUpdate", "biblioserver", $record );
     return $biblionumber;
 }
 
