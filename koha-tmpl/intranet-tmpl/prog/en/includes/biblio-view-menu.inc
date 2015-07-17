@@ -1,3 +1,4 @@
+[% USE Biblio %]
 [% SET biblio_object_id = object || biblionumber %]
 <div id="menu">
 <ul>
@@ -22,7 +23,7 @@
     [% IF ( moredetailview ) %]<li class="active">[% ELSE %]<li>[% END %]
     <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio_object_id %]">Items</a></li>
     [% IF ( CAN_user_reserveforothers ) %]
-    [% IF ( holdsview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblio_object_id %]">Holds</a></li>
+    [% IF ( holdsview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblio_object_id %]">Holds ([% Biblio.HoldsCount( biblio_object_id ) %])</a></li>
     [% END %]
     [% IF ( EasyAnalyticalRecords ) %][% IF ( analyze ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio_object_id %]&amp;analyze=1">Analytics</a></li>[% END %]
 
