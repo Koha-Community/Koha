@@ -46,9 +46,10 @@ BEGIN {
 		&getrefunds
 		&chargelostitem
 		&ReversePayment
-                &makepartialpayment
-                &recordpayment_selectaccts
-                &WriteOffFee
+        &makepartialpayment
+        &recordpayment_selectaccts
+        &WriteOffFee
+        &purge_zero_balance_fees
 	);
 }
 
@@ -822,6 +823,31 @@ sub WriteOffFee {
                 borrowernumber => $borrowernumber}
     );
 
+}
+
+=head2 purge_zero_balance_fees
+
+  purge_zero_balance_fees( $days );
+
+Delete accountlines entries where amountoutstanding is 0 which are more than a given number of days old.
+
+B<$days> -- Zero balance fees older than B<$days> days old will be deleted.
+
+=cut
+
+sub purge_zero_balance_fees {
+    my $days  = shift;
+    my $count = 0;
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare(
+        q{
+            DELETE FROM accountlines
+            WHERE date < date_sub(curdate(), INTERVAL ? DAY)
+              AND amountoutstanding = 0;
+        }
+    );
+    $sth->execute($days) or die $dbh->errstr;
 }
 
 END { }    # module clean-up code here (global destructor)
