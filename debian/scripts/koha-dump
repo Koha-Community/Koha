@@ -95,6 +95,8 @@ dump_instance()
         "etc/apache2/sites-enabled/$instancefile" \
         "var/lib/koha/$name" \
         "var/log/koha/$name"
+    chown "root:$name-koha" "$metadump"
+    chmod g+r "$metadump"
 
     [ "$quiet" = "no" ] && echo "Done."
 }
