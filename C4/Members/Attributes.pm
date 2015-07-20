@@ -233,7 +233,7 @@ sub SetBorrowerAttributes {
             return; # bail immediately on errors
         }
     }
-    return 1; # borower attributes successfully set
+    return 1; # borrower attributes successfully set
 }
 
 =head2 DeleteBorrowerAttribute
