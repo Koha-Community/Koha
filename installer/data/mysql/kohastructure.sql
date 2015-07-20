@@ -242,7 +242,7 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `contactfirstname` text, -- used for children to include first name of guarentor
   `contacttitle` text, -- used for children to include title (Mr., Mrs., etc) of guarentor
   `guarantorid` int(11) default NULL, -- borrowernumber used for children or professionals to link them to guarentors or organizations
-  `borrowernotes` mediumtext, -- a note on the patron/borroewr's account that is only visible in the staff client
+  `borrowernotes` mediumtext, -- a note on the patron/borrower's account that is only visible in the staff client
   `relationship` varchar(100) default NULL, -- used for children to include the relationship to their guarentor
   `ethnicity` varchar(50) default NULL, -- unused in Koha
   `ethnotes` varchar(255) default NULL, -- unused in Koha
@@ -872,7 +872,7 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `contactfirstname` text, -- used for children to include first name of guarentor
   `contacttitle` text, -- used for children to include title (Mr., Mrs., etc) of guarentor
   `guarantorid` int(11) default NULL, -- borrowernumber used for children or professionals to link them to guarentors or organizations
-  `borrowernotes` mediumtext, -- a note on the patron/borroewr's account that is only visible in the staff client
+  `borrowernotes` mediumtext, -- a note on the patron/borrower's account that is only visible in the staff client
   `relationship` varchar(100) default NULL, -- used for children to include the relationship to their guarentor
   `ethnicity` varchar(50) default NULL, -- unused in Koha
   `ethnotes` varchar(255) default NULL, -- unused in Koha
