@@ -30,40 +30,119 @@ fi
 # Make sure the files we create are not accessible by anyone else.
 umask 0077
 
-# Parse command line.
-[ "$#" = 1 ] || die "Usage: $0 instancename"
-name="$1"
-kohaconfig="/etc/koha/sites/$name/koha-conf.xml"
-date="$(date +%Y-%m-%d)"
+usage()
+{
+    local scriptname=$(basename $0)
 
-echo "Dumping Koha site $name:"
+    cat <<EOF
+$scriptname
 
+This script dumps your Koha instance data for backup or migration.
 
-# Dump database.
-mysqlhost="$( xmlstarlet sel -t -v 'yazgfs/config/hostname' $kohaconfig )"
-mysqldb="$( xmlstarlet sel -t -v 'yazgfs/config/database' $kohaconfig )"
-mysqluser="$( xmlstarlet sel -t -v 'yazgfs/config/user' $kohaconfig )"
-mysqlpass="$( xmlstarlet sel -t -v 'yazgfs/config/pass' $kohaconfig )"
-backupdir="$( xmlstarlet sel -t -v 'yazgfs/config/backupdir' $kohaconfig || true )"
-[ -z "$backupdir" ] && backupdir="/var/spool/koha/$name"
-dbdump="$backupdir/$name-$date.sql.gz"
-echo "* DB to $dbdump"
-mysqldump --databases --host="$mysqlhost" \
-    --user="$mysqluser" --password="$mysqlpass" "$mysqldb" | 
-    gzip > "$dbdump"
-chown "root:$name-koha" "$dbdump"
-chmod g+r "$dbdump"
+Usage:
+$scriptname [--quiet|-q] [--include-indexes|-i] instancename1 [instancename2...]
+$scriptname -h|--help
 
-instancefile="$name.conf"
+    --exclude-indexes     Include Zebra indexes on the backup.
+    --quiet|-q            Make the script avoid printing to STDOUT
+                          (useful for calling from another scripts).
+    --help|-h             Display this help message
 
-# Dump configs, logs, etc.
-metadump="$backupdir/$name-$date.tar.gz"
-echo "* configs, logs to $metadump"
-tar -C / -czf "$metadump" \
-    "etc/koha/sites/$name" \
-    "etc/apache2/sites-available/$instancefile" \
-    "etc/apache2/sites-enabled/$instancefile" \
-    "var/lib/koha/$name" \
-    "var/log/koha/$name"
+EOF
+}
 
-echo "Done."
+dump_instance()
+{
+    local name=$1
+
+    kohaconfig="/etc/koha/sites/$name/koha-conf.xml"
+    date="$(date +%Y-%m-%d)"
+
+    [ "$quiet" = "no" ] && echo "Dumping Koha site $name:"
+
+    # Dump database.
+    mysqlhost="$( xmlstarlet sel -t -v 'yazgfs/config/hostname' $kohaconfig )"
+    mysqldb="$( xmlstarlet sel -t -v 'yazgfs/config/database' $kohaconfig )"
+    mysqluser="$( xmlstarlet sel -t -v 'yazgfs/config/user' $kohaconfig )"
+    mysqlpass="$( xmlstarlet sel -t -v 'yazgfs/config/pass' $kohaconfig )"
+    backupdir="$( xmlstarlet sel -t -v 'yazgfs/config/backupdir' $kohaconfig || true )"
+    [ -z "$backupdir" ] && backupdir="/var/spool/koha/$name"
+    dbdump="$backupdir/$name-$date.sql.gz"
+    [ "$quiet" = "no" ] && echo "* DB to $dbdump"
+    mysqldump --databases --host="$mysqlhost" \
+        --user="$mysqluser" --password="$mysqlpass" "$mysqldb" |
+        gzip > "$dbdump"
+    chown "root:$name-koha" "$dbdump"
+    chmod g+r "$dbdump"
+
+    instancefile="$name.conf"
+
+    # Dump configs, logs, etc.
+    metadump="$backupdir/$name-$date.tar.gz"
+    [ "$quiet" = "no" ] && echo "* configs, logs to $metadump"
+
+    zebra_files=""
+    if [ "$exclude_indexes" = "no" ]
+        zebra_files="var/lib/koha/$name"
+    fi
+
+    tar -C / -czf "$metadump" \
+        "etc/koha/sites/$name" \
+        "etc/apache2/sites-available/$instancefile" \
+        "etc/apache2/sites-enabled/$instancefile" \
+        "var/log/koha/$name" "$zebra_files"
+
+    [ "$quiet" = "no" ] && echo "Done."
+}
+
+# Default values
+quiet="no"
+exclude_indexes="no"
+
+while [ $# -gt 0 ]; do
+
+    case "$1" in
+        --exclude-indexes)
+            exclude_indexes="yes"
+            shift ;;
+        -h|--help)
+            usage ; exit 0 ;;
+        -q|--quiet)
+            quiet="yes"
+            shift ;;
+        -*)
+            die "Error: invalid option switch ($1)" ;;
+        *)
+            # We expect the remaining stuff are the instance names
+            break ;;
+    esac
+
+done
+
+# Read instance names
+if [ $# -gt 0 ]; then
+    # We have at least one instance name
+    for name in "$@"; do
+
+        if is_instance $name; then
+
+            dump_instance $name
+
+        else
+            if [ "$quiet" = "no" ]; then
+                die "Error: Invalid instance name $name"
+            else
+                exit 1
+            fi
+        fi
+
+    done
+else
+    if [ "$quiet" = "no" ]; then
+        die "Error: you must provide at least one instance name"
+    else
+        exit 1
+    fi
+fi
+
+exit 0

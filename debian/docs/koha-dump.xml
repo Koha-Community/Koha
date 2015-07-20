@@ -23,12 +23,46 @@
 
   <refsynopsisdiv>
     <cmdsynopsis>
-      <command>koha-dump</command> <arg choice="req" rep="norepeat"><replaceable>instancename</replaceable></arg>
+      <command>koha-dump</command>
+      <arg choice="noreq">
+        <option>--help</option>|<option>-h</option>
+        <option>--exclude-indexes</option>
+        <option>--quiet</option>|<option>-q</option>
+      </arg>
+      <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
 
+  <refsect1>
+    <title>Options</title>
+    <variablelist>
+
+      <varlistentry>
+        <term><option>--exclude-indexes</option></term>
+        <listitem>
+          <para>Make <command>koha-dump</command> exclude Zebra indexes during the dump operation. Having the Zebra indexes on the dump is useful for fast recovering Koha instances using <command>koha-restore</command> but the dumps tend to be a lot bigger and slower to create. Use this option to skip it.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>--quiet</option>|<option>-q</option></term>
+        <listitem>
+          <para>Make <command>koha-dump</command> run silently.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>--help</option>|<option>-h</option></term>
+        <listitem>
+          <para>Show usage information.</para>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+  </refsect1>
+
   <refsect1><title>Description</title>
-  <para>Dump all contents and configs for a Koha site.</para>
+  <para>Dump all contents and configs for one or more Koha instances.</para>
   </refsect1>
   
   <refsect1><title>See also</title>
