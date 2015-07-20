@@ -10688,7 +10688,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.21.00.XXX";
+$DBversion = "3.21.00.015";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         UPDATE systempreferences SET value='0' WHERE variable='CalendarFirstDayOfWeek' AND value='Sunday';
@@ -10700,7 +10700,7 @@ if ( CheckVersion($DBversion) ) {
         UPDATE systempreferences SET options='0|1|2|3|4|5|6' WHERE variable='CalendarFirstDayOfWeek';
     });
 
-    print "Upgrade to $DBversion done (Bug 12137 - Extend functionality of CalendarFirstDayOfWeek to be any day)\n";
+    print "Upgrade to $DBversion done (Bug 12137: Extend functionality of CalendarFirstDayOfWeek to be any day)\n";
     SetVersion($DBversion);
 }
 
