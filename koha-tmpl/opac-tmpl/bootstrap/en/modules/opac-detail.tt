@@ -58,11 +58,7 @@
                         [% ELSE %]
                             <a href="http://www.amazon[% AmazonTld %]/dp/[% normalized_isbn %]">
                         [% END %]
-                        [% IF ( using_https ) %]
                             <img border="0" src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="Cover image" /></a>
-                        [% ELSE %]
-                            <img border="0" src="http://images.amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="Cover image" /></a>
-                        [% END %]
                     [% END %]
 
                     [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
