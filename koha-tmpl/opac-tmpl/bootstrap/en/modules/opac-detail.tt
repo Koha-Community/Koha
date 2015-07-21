@@ -1263,9 +1263,17 @@
                         <td class="url">
                             [% IF ITEM_RESULT.uri %]
                                 [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
+                                    [% IF Koha.Preference("OPACURLOpenInNewWindow") %]
+                                    <a target="_blank" href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | url %]&amp;biblionumber=[% biblionumber |url %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | url %]" property="url"> Link to resource </a>
+                                    [% ELSE %]
                                     <a href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | url %]&amp;biblionumber=[% biblionumber |url %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | url %]" property="url"> Link to resource </a>
+                                    [% END %]
                                 [% ELSE %]
+                                    [% IF Koha.Preference("OPACURLOpenInNewWindow") %]
+                                    <a target="_blank" href="[% ITEM_RESULT.uri %]" property="url">[% ITEM_RESULT.uri %]</a>
+                                    [% ELSE %]
                                     <a href="[% ITEM_RESULT.uri %]" property="url">[% ITEM_RESULT.uri %]</a>
+                                    [% END %]
                                 [% END %]
                             [% END %]
                         </td>
