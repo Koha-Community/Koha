@@ -67,10 +67,9 @@ else {
 }
 
 my $rating;
+$rating_value //= '';
 
-undef $rating_value if $rating_value eq '';
-
-if ( !$rating_value ) {
+if ( $rating_value eq '' ) {
 #### delete
     $rating = DelRating( $biblionumber, $loggedinuser );
 }
