@@ -87,15 +87,15 @@ sub AUTOLOAD {
         #do not use log4perl; no print to stderr
     }
     elsif ( !$self->_recheck_logfile ) {
-        print STDERR "Log file not writable for log4perl\n";
-        print STDERR "$method: $line\n" if $line;
+        warn "Log file not writable for log4perl";
+        warn "$method: $line" if $line;
     }
     elsif ( $self->{logger}->can($method) ) {    #use log4perl
         $self->{logger}->$method($line);
         return 1;
     }
     else {                                       # we should not really get here
-        print STDERR "ERROR: Unsupported method $method\n";
+        warn "ERROR: Unsupported method $method";
     }
     return;
 }
