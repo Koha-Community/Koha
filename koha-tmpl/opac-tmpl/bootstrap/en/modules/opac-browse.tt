@@ -1,0 +1,94 @@
+[% USE Koha %]
+[% USE Asset %]
+[% USE raw %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Browse our catalog</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+[% INCLUDE 'bodytag.inc' bodyid='opac-browser' %]
+[% INCLUDE 'masthead.inc' %]
+
+<div class="main">
+    <ul class="breadcrumb">
+        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a>
+        <span class="divider">&rsaquo;</span></li>
+
+        <li><a href="#">Browse search</a></li>
+    </ul>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+    [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' && Koha.Preference('OpacBrowseSearch') %]
+        [% IF ( OpacNav || OpacNavBottom ) %]
+
+            <div class="span2">
+                <div id="navigation">
+                [% INCLUDE 'navigation.inc' %]
+                </div>
+            </div>
+        [% END %]
+
+        [% IF ( OpacNav ) %]
+
+            <div class="span10">
+            [% ELSE %]
+
+            <div class="span12">
+            [% END %]
+
+                <div id="browse-search">
+                    <h1>Browse search</h1>
+
+                    <form>
+                        <label for="browse-searchterm">Search for:</label>
+                        <input type="search" id="browse-searchterm" name="searchterm" value="">
+                        <label for="browse-searchfield" class="hide-text">Search type:</label>
+                        <select id="browse-searchfield" name="searchfield">
+                            <option value="author">Author</option>
+                            <option value="subject">Subject</option>
+                            <option value="title">Title</option>
+                        </select>
+
+                        <div id="browse-searchfuzziness">
+                            <label for="exact" class="radio inline"><input type="radio" name="browse-searchfuzziness" id="exact" value="0">Exact</label>
+                            <label for="fuzzy" class="radio inline"><input type="radio" name="browse-searchfuzziness" id="fuzzy" value="1" checked="checked"> Fuzzy</label>
+                            <label for="reallyfuzzy" class="radio inline"><input type="radio" name="browse-searchfuzziness" id="reallyfuzzy" value="2"> Really fuzzy</label>
+                        </div>
+                        <button class="btn btn-success" type="submit" accesskey="s">Search</button>
+                    </form>
+
+                    <p id="browse-suggestionserror" class="error hidden">
+                    An error occurred, please try again.</p>
+
+                    <div id="browse-resultswrapper" class="hidden">
+                        <ul id="browse-searchresults" class="span3" start="-1" aria-live="polite">
+                            <li class="loading hidden"><img src="[% interface | html %]/[% theme |html %]/images/loading.gif" alt=""> Loading</li>
+
+                            <li class="no-results hidden">Sorry, there are no results, try a different search term.</li>
+                        </ul>
+
+                        <h3 id="browse-selection" class="span9"></h3>
+
+                        <div id="browse-selectionsearch" class="span9 hidden">
+                            <div class="loading hidden">
+                                <img src="[% interface | html %]/[% theme | html %]/images/loading.gif" alt=""> Loading
+                            </div>
+
+                            <div class="no-results hidden">No results</div>
+
+                            <ol aria-live="polite"></ol>
+                        </div>
+                    </div><!-- / .results-wrapper -->
+                </div><!-- / .userbrowser -->
+            </div><!-- / .span10 -->
+    [% ELSE %]
+        <h3>This feature is not enabled</h3>
+    [% END %]
+        </div><!-- / .row-fluid -->
+    </div><!-- / .container-fluid -->
+</div><!-- / .main -->
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %]
+[% Asset.js("/js/browse.js") | $raw %]
+</script>
+[% END %]

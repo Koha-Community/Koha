@@ -3101,4 +3101,105 @@ $star-selected: #EDB867;
     }
 }
 
+/*opac browse search*/
+#browse-search {
+
+    form {
+        label {
+            display: inline-block;
+            margin-right:5px;
+        }
+
+        [type=submit] {
+            margin-top: 10px;
+        }
+    }
+
+    #browse-resultswrapper {
+       margin-top: 4em;
+
+        @media (min-width: 768px) and (max-width: 984px) {
+            margin-top: 2em;
+        }
+
+        @media (max-width: 767px) {
+            margin-top: 1em;
+        }
+    }
+    #browse-searchresults, #browse-selectionsearch {
+        border: 1px solid #E3E3E3;
+        border-radius: 4px;
+        padding: 0;
+        overflow-y: auto;
+        max-height: 31em;
+        margin-bottom: 2em;
+    }
+    #browse-searchresults {
+        max-height: 31em;
+        list-style: none;
+        padding: 10px;
+
+        a {
+            display: block;
+            margin-bottom: 5px;
+
+            &.selected {
+                background-color:#EEE;
+            }
+        }
+
+        li:last-child a {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 767px) {
+            max-height: 13em;
+        }
+    }
+    #browse-selection {
+        margin-top: -40px;
+        padding-top: 0;
+
+        @media (max-width: 767px) {
+            margin-top: 0;
+        }
+    }
+    #browse-selectionsearch ol {
+        list-style: none;
+        margin: 0;
+
+        li {
+            padding: 1em;
+
+            &:nth-child(odd) {
+                background-color: #F4F4F4;
+            }
+        }
+    }
+   #browse-selectionsearch p.subjects {
+        font-size: 0.9em;
+        margin-bottom: 0;
+    }
+    #browse-selectionsearch h4 {
+        margin: 0;
+    }
+    .error, .no-results {
+        background-color: #EEE;
+        border: 1px solid #E8E8E8;
+        text-align: left;
+        padding: 0.5em;
+        border-radius: 3px;
+    }
+    .loading {
+        text-align: center;
+
+        img {
+            margin:0.5em 0;
+            position: relative;
+            left: -5px;
+        }
+    }
+}
+/*end browse search*/
+
 @import "responsive";

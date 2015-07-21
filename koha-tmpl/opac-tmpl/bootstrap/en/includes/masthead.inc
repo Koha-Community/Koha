@@ -304,6 +304,7 @@
                                     [% IF Koha.Preference( 'TagsEnabled' ) == 1 %]<li><a href="/cgi-bin/koha/opac-tags.pl">Tag cloud</a></li>[% END %]
                                     [% IF Koha.Preference( 'OpacCloud' ) == 1 %]<li><a href="/cgi-bin/koha/opac-tags_subject.pl">Subject cloud</a></li>[% END %]
                                     [% IF Koha.Preference( 'OpacTopissue' ) == 1 %]<li><a href="/cgi-bin/koha/opac-topissues.pl">Most popular</a></li>[% END %]
+                                    [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' && Koha.Preference( 'OpacBrowseSearch' ) == 1 %]<li><a href="/cgi-bin/koha/opac-browse.pl">Browse search</a></li>[% END %]
                                     [% IF Koha.Preference( 'suggestion' ) == 1 %]
                                         [% IF Koha.Preference( 'AnonSuggestions' ) == 1 %]
                                             <li><a href="/cgi-bin/koha/opac-suggestions.pl">Purchase suggestions</a></li>
