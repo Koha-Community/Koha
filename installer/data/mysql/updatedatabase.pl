@@ -9841,6 +9841,13 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.18.09.000";
+if ( CheckVersion($DBversion) ) {
+    print "Upgrade to $DBversion\n"; 
+    SetVersion ($DBversion);
+    print "Done (3.18.9 release)\n";
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
