@@ -151,6 +151,12 @@ if ( (C4::Context->config('zebra_auth_index_mode') eq 'grs1') && ($context->{'se
     };
 }
 
+if ( ! defined C4::Context->config('log4perl_conf') ) {
+    push @xml_config_warnings, {
+        error => 'log4perl_entry_missing'
+    }
+}
+
 # Test QueryParser configuration sanity
 if ( C4::Context->preference( 'UseQueryParser' ) ) {
     # Get the QueryParser configuration file name
