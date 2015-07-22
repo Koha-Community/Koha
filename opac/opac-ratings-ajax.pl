@@ -106,7 +106,7 @@ exit;
 # a ratings specific ajax return sub, returns CGI object, and an 'auth_success' value
 sub ajax_auth_cgi {
     my $needed_flags = shift;
-    my %cookies      = fetch CGI::Cookie;
+    my %cookies      = CGI::Cookie->fetch;
     my $input        = CGI->new;
     my $sessid = $cookies{'CGISESSID'}->value || $input->param('CGISESSID');
     my ( $auth_status, $auth_sessid ) =

@@ -30,8 +30,8 @@ use C4::BackgroundJob;
 use CGI::Cookie; # need to check cookies before
                  # having CGI parse the POST request
 
-my $input = new CGI;
-my %cookies = fetch CGI::Cookie;
+my $input = CGI->new;
+my %cookies = CGI::Cookie->fetch;
 my ($auth_status, $sessionID) = check_cookie_auth($cookies{'CGISESSID'}->value, { tools => '*' });
 if ($auth_status ne "ok") {
     my $reply = CGI->new("");
@@ -51,7 +51,7 @@ if (defined $job) {
     $job_status = $job->status();
 }
 
-my $reply = CGI->new("");
+my $reply = CGI->new;
 print $reply->header(-type => 'text/html');
 # response will be sent back as JSON
 print '{"progress":"' . $reported_progress . '","job_size":"' . $job_size . '","job_status":"' . $job_status . '"}';

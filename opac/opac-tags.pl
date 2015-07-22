@@ -57,7 +57,7 @@ my @globalErrorIndexes = ();
 
 sub ajax_auth_cgi {     # returns CGI object
 	my $needed_flags = shift;
-	my %cookies = fetch CGI::Cookie;
+    my %cookies = CGI::Cookie->fetch;
 	my $input = CGI->new;
     my $sessid = $cookies{'CGISESSID'}->value;
 	my ($auth_status, $auth_sessid) = check_cookie_auth($sessid, $needed_flags);

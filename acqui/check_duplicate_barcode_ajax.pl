@@ -30,7 +30,7 @@ my $input        = new CGI;
 print $input->header('application/json');
 
 # Check the user's permissions
-my %cookies = fetch CGI::Cookie;
+my %cookies = CGI::Cookie->fetch;
 my $sessid = $cookies{'CGISESSID'}->value || $input->param('CGISESSID');
 my ($auth_status, $auth_sessid) = C4::Auth::check_cookie_auth($sessid, {acquisition => 'order_manage'});
 if ($auth_status ne "ok") {

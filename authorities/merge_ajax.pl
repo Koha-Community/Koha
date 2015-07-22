@@ -4,23 +4,21 @@ use strict;
 use warnings;
 
 use CGI qw ( -utf8 );
-use CGI::Session;
+use CGI::Cookie; # need to check cookies before CGI parses the POST request
+use JSON;
+
 use C4::Context;
 use C4::Auth qw/check_cookie_auth/;
 use C4::AuthoritiesMarc;
-use JSON;
-use CGI::Cookie; # need to check cookies before
-                 # having CGI parse the POST request
 
-my %cookies = fetch CGI::Cookie;
+my %cookies = CGI::Cookie->fetch;
 my ($auth_status, $sessionID) = check_cookie_auth($cookies{'CGISESSID'}->value, { editcatalogue => 'edit_catalogue' });
+my $reply = CGI->new;
 if ($auth_status ne "ok") {
-    my $reply = CGI->new("");
     print $reply->header(-type => 'text/html');
     exit 0;
 }
 
-my $reply = new CGI;
 my $framework = $reply->param('frameworkcode');
 my $tagslib = GetTagsLabels(1, $framework);
 print $reply->header(-type => 'text/html');
