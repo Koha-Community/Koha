@@ -5,15 +5,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-06-15 09:36-0300\n"
-"PO-Revision-Date: 2008-03-22 21:11+0200\n"
-"Last-Translator: translate.koha.org\n"
+"POT-Creation-Date: 2015-07-14 23:03-0300\n"
+"PO-Revision-Date: 2015-07-21 11:11+0000\n"
+"Last-Translator: Vinea-bybak <bybak@vinea.co.kr>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
-"X-Generator: Kartouche 0.1 - 22 October 2003\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1437477101.000000\n"
 
 #. %1$s:  data.borrowernumber 
 #. %2$s:  UNLESS loop.last 
@@ -116,7 +118,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:391
 #, c-format
 msgid "# Bibs"
-msgstr ""
+msgstr "# 문헌 기록"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:422
 #, fuzzy, c-format
@@ -155,27 +157,30 @@ msgid "%% matches any number of characters"
 msgstr ""
 
 #. %1$s: - USE Branches -
-#. %2$s: - biblio = item.biblio -
-#. %3$s: - biblioitem = item.biblioitem -
-#. %4$s:  biblio.title |html 
-#. %5$s:  biblio.author |html 
-#. %6$s:  biblioitem.publicationyear |html 
-#. %7$s:  biblioitem.publishercode |html 
-#. %8$s:  biblioitem.collectiontitle |html 
-#. %9$s:  item.barcode |html 
-#. %10$s:  item.itemcallnumber |html 
-#. %11$s:  Branches.GetName(item.homebranch) |html 
-#. %12$s:  Branches.GetName(item.holdingbranch) |html 
-#. %13$s:  item.location |html 
-#. %14$s:  item.stocknumber |html 
-#. %15$s:  item.status |html 
-#. %16$s:  (item.issues || 0) |html 
-#. %17$s:  INCLUDE 'empty_line.inc' 
+#. %2$s: - USE Koha -
+#. %3$s: - biblio = item.biblio -
+#. %4$s: - biblioitem = item.biblioitem -
+#. %5$s:  biblio.title |html 
+#. %6$s:  IF ( Koha.Preference( 'marcflavour' ) == 'UNIMARC' && biblio.author ) 
+#. %7$s:  END 
+#. %8$s:  biblio.author |html 
+#. %9$s:  (biblioitem.publicationyear || biblio.copyrightdate) |html 
+#. %10$s:  biblioitem.publishercode |html 
+#. %11$s:  biblioitem.collectiontitle |html 
+#. %12$s:  item.barcode |html 
+#. %13$s:  item.itemcallnumber |html 
+#. %14$s:  Branches.GetName(item.homebranch) |html 
+#. %15$s:  Branches.GetName(item.holdingbranch) |html 
+#. %16$s:  item.location |html 
+#. %17$s:  item.stocknumber |html 
+#. %18$s:  item.status |html 
+#. %19$s:  (item.issues || 0) |html 
+#. %20$s:  INCLUDE 'empty_line.inc' 
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.csv.inc:1
 #, fuzzy, c-format
 msgid ""
-"%s %s %s \"%s by %s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s"
-"\", \"%s\", \"%s\", \"%s\", \"%s\"%s "
+"%s %s %s %s \"%s %sby %s%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s"
+"\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\"%s "
 msgstr "%3$s의 %1$s에 대한 %2$s결과"
 
 #. %1$s:  END 
@@ -435,7 +440,7 @@ msgstr ""
 #. %27$s:  resultsloo.item('size') 
 #. %28$s:  END 
 #. %29$s:  IF ( resultsloo.timestamp ) 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:134
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:136
 #, c-format
 msgid ""
 "%s %s %s &nbsp; %s %s - %s %s %s - %s%s %s- %s%s %s - %s%s %sEdition: %s%s "
@@ -1019,7 +1024,7 @@ msgstr ""
 #. %1$s:  END 
 #. %2$s:  IF ( resultsloo.itemlostcount ) 
 #. %3$s:  resultsloo.itemlostcount 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:172
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:174
 #, fuzzy, c-format
 msgid "%s %s Lost (%s)"
 msgstr "%s%s 환영합니다"
@@ -1038,10 +1043,20 @@ msgstr "%3$s의 %1$s에 대한 %2$s결과 "
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:64
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:68
 #, fuzzy, c-format
 msgid "%s %s No %s"
 msgstr "%s%s 환영합니다"
+
+#. %1$s:  END 
+#. %2$s:  IF ( noitemsfound ) 
+#. %3$s:  END 
+#. %4$s: # display the search results 
+#. %5$s:  IF ( total ) 
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:97
+#, fuzzy, c-format
+msgid "%s %s No results found %s %s %s "
+msgstr "찾을 수 없습니다. "
 
 #. %1$s:  END 
 #. %2$s: - ELSE -
@@ -1064,7 +1079,7 @@ msgstr "%s%s 환영합니다 "
 #. %2$s:  IF ( resultsloo.notforloancount ) 
 #. %3$s:  resultsloo.notforloancount 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:174
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:176
 #, fuzzy, c-format
 msgid "%s %s Not for loan (%s)%s "
 msgstr "%s의 목차 "
@@ -1080,7 +1095,7 @@ msgstr "%s의 목차 "
 #. %1$s:  END 
 #. %2$s:  IF ( resultsloo.orderedcount ) 
 #. %3$s:  resultsloo.orderedcount 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:173
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:175
 #, fuzzy, c-format
 msgid "%s %s On order (%s)"
 msgstr "%s%s 환영합니다 "
@@ -1232,7 +1247,7 @@ msgstr ""
 #. %1$s:  END 
 #. %2$s:  IF ( resultsloo.withdrawncount ) 
 #. %3$s:  resultsloo.withdrawncount 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:171
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:173
 #, fuzzy, c-format
 msgid "%s %s Withdrawn (%s),"
 msgstr "%s의 목차"
@@ -1332,7 +1347,7 @@ msgstr "%s%s 환영합니다 "
 #. %1$s:  holdsfirstname 
 #. %2$s:  holdssurname 
 #. %3$s:  waiting_holds 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:131
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:137
 #, c-format
 msgid "%s %s has %s hold(s) waiting for pickup."
 msgstr ""
@@ -1527,7 +1542,7 @@ msgstr "%s%s 환영합니다"
 #. %12$s:  IF ( ORDER_LOO.desc ) 
 #. %13$s:  END 
 #. %14$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:236
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:239
 #, c-format
 msgid ""
 "%s %sDue date %sPatron %sBarcode %sTitle %sDue date desc %sPatron desc "
@@ -1543,8 +1558,8 @@ msgstr "%s%s 환영합니다 "
 
 #. %1$s:  IF ( use_heading_flags_p ) 
 #. %2$s:  IF ( heading_edit_subfields_p ) 
-#. %3$s:  tagfield 
-#. %4$s:  authtypecode 
+#. %3$s:  tagfield | html 
+#. %4$s:  authtypecode |html
 #. %5$s:  END 
 #. %6$s:  ELSE 
 #. %7$s:  action 
@@ -1620,7 +1635,7 @@ msgstr "%s%s 환영합니다"
 #. %4$s:  END 
 #. %5$s:  todaysdate 
 #. %6$s:  IF ( isfiltered ) 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:86
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:87
 #, fuzzy, c-format
 msgid "%s %sItems%sItem%s overdue as of %s%s "
 msgstr "%3$s의 %1$s에 대한 %2$s결과 "
@@ -1792,7 +1807,7 @@ msgstr ""
 
 #. %1$s:  IF ( use_heading_flags_p ) 
 #. %2$s:  IF ( heading_edit_subfields_p ) 
-#. %3$s:  tagfield 
+#. %3$s:  tagfield | html 
 #. %4$s:  END 
 #. %5$s:  ELSE 
 #. %6$s:  action 
@@ -2136,7 +2151,7 @@ msgid "%s (nothing entered) %s %s %s%s %s "
 msgstr "%3$s의 %1$s에 대한 %2$s결과 "
 
 #. %1$s:  riloo.duedate 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:564
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:570
 #, c-format
 msgid "%s (overdue)"
 msgstr ""
@@ -2366,7 +2381,7 @@ msgstr "%2$s %1$s 계정 "
 
 #. %1$s:  IF ( resultsloo.onloancount ) 
 #. %2$s:  resultsloo.onloancount 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:170
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:172
 #, fuzzy, c-format
 msgid "%s Checked out (%s),"
 msgstr "체크아웃"
@@ -2550,7 +2565,7 @@ msgid "%s Enabled "
 msgstr "전자메일: "
 
 #. %1$s:  IF ( error ) 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:188
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:190
 #, fuzzy, c-format
 msgid "%s Error: "
 msgstr "를 위해： "
@@ -2618,7 +2633,7 @@ msgid "%s Framework"
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:329
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:354
 #, fuzzy, c-format
 msgid "%s From any library "
 msgstr "도서관에서 보낸 메세지 "
@@ -2627,13 +2642,13 @@ msgstr "도서관에서 보낸 메세지 "
 #. %2$s:  ELSIF ( branch_item_rule_loo.holdallowed_same ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:482
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:507
 #, c-format
 msgid "%s From any library %s From home library %s No holds allowed %s "
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:336
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:361
 #, fuzzy, c-format
 msgid "%s From home library "
 msgstr "도서관에서 보낸 메세지 "
@@ -2698,13 +2713,13 @@ msgid "%s Initials: "
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:368
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:393
 #, c-format
 msgid "%s Item floats "
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:354
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:379
 #, fuzzy, c-format
 msgid "%s Item returns home "
 msgstr "%1$s에서 %2$s로 전환 "
@@ -2714,7 +2729,7 @@ msgstr "%1$s에서 %2$s로 전환 "
 #. %3$s:  ELSIF ( branch_item_rule_loo.returnbranch == 'noreturn' ) 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:490
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:515
 #, c-format
 msgid ""
 "%s Item returns home %s Item returns to issuing branch %s Item floats %s "
@@ -2722,7 +2737,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:361
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:386
 #, fuzzy, c-format
 msgid "%s Item returns to issuing library "
 msgstr "%1$s에서 %2$s로 전환 "
@@ -2873,7 +2888,7 @@ msgid "%s No collection id given. %s Title already in use. %s %s %s "
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:343
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:368
 #, fuzzy, c-format
 msgid "%s No holds allowed "
 msgstr "갱신할수 없습니다 "
@@ -3540,7 +3555,7 @@ msgstr ""
 #. %3$s:  rule.maxissueqty 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:180
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:412
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:437
 #, fuzzy, c-format
 msgid "%s Unlimited %s %s %s "
 msgstr "%s%s 환영합니다 "
@@ -3569,7 +3584,7 @@ msgstr "%s%s 환영합니다 "
 
 #. %1$s:  IF ( issue.renewals ) 
 #. %2$s:  IF ( issue.lastreneweddate ) 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:63
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:67
 #, fuzzy, c-format
 msgid "%s Yes%s, "
 msgstr "%s%s 환영합니다 "
@@ -3888,7 +3903,7 @@ msgid "%s for '%s'%s"
 msgstr "출판호 "
 
 #. For the first occurrence,
-#. %1$s:  authtypecode 
+#. %1$s:  authtypecode |html
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:30
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:37
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:48
@@ -4160,7 +4175,7 @@ msgstr ""
 #. %1$s:  IF issue.onsite_checkout 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:85
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:87
 #, fuzzy, c-format
 msgid "%s onsite_checkout %s standard_checkout %s "
 msgstr "%3$s의 %1$s에 대한 %2$s결과 "
@@ -4306,8 +4321,14 @@ msgstr "%1$s 기록"
 msgid "%s result(s) found %sfor "
 msgstr "찾을 수 없습니다. "
 
+#. %1$s:  total 
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:107
+#, fuzzy, c-format
+msgid "%s result(s) found in catalog, "
+msgstr "찾을 수 없습니다. "
+
 #. %1$s:  breeding_count 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:108
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:109
 #, fuzzy, c-format
 msgid "%s result(s) found in reservoir"
 msgstr "찾을 수 없습니다."
@@ -4409,7 +4430,7 @@ msgstr ""
 #. %7$s: - UNLESS loop.last 
 #. %8$s:  END -
 #. %9$s: - END -
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.json.tt:1
+#: intranet-tmpl/prog/en/modules/catalogue/itemsearch_json.tt:1
 #, c-format
 msgid ""
 "%s { \"sEcho\": %s, \"iTotalRecords\": %s, \"iTotalDisplayRecords\": %s, "
@@ -4450,7 +4471,7 @@ msgstr ""
 #. %3$s:  END 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:564
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:570
 #, fuzzy, c-format
 msgid "%s%s %s %sNot checked out %s "
 msgstr "%3$s의 %1$s에 대한 %2$s결과 "
@@ -4801,7 +4822,7 @@ msgstr "(%1$s 종합/합계)"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#. %2$s:  IF ( limit_desc ) 
+#. %2$s:  IF limit_desc  
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:307
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:349
 #, c-format
@@ -4814,7 +4835,7 @@ msgstr ""
 #. %3$s:  suggestions_loo.author 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:523
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:90
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:94
 #, fuzzy, c-format
 msgid "%s%s, by %s%s"
 msgstr "%s%s 환영합니다"
@@ -4966,7 +4987,7 @@ msgstr "%s%s 환영합니다"
 #. %4$s:  IF ( overdueloo.enumchron ) 
 #. %5$s:  overdueloo.enumchron 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:116
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:119
 #, fuzzy, c-format
 msgid "%s, by %s%s%s, %s%s "
 msgstr "%s의 목차 "
@@ -5114,7 +5135,7 @@ msgstr "%2$s %1$s 계정 "
 #. %2$s:  humanbranch 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:384
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:409
 #, c-format
 msgid ""
 "%sCheckout limit by patron category for %s%sDefault checkout limit by patron "
@@ -5349,11 +5370,18 @@ msgstr ""
 msgid "%sHidden%sShown%s"
 msgstr ""
 
+#. %1$s:  BLOCK subject 
+#. %2$s:  END 
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:73
+#, fuzzy, c-format
+msgid "%sHold:%s "
+msgstr "대기"
+
 #. %1$s:  IF humanbranch 
 #. %2$s:  humanbranch 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:439
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:464
 #, c-format
 msgid "%sHolds policy by item type for %s%sDefault holds policy by item type%s"
 msgstr ""
@@ -5485,7 +5513,7 @@ msgstr "주"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:582
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:588
 #, fuzzy, c-format
 msgid "%sNot checked out%s"
 msgstr "체크아웃"
@@ -5504,6 +5532,13 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:57
 #, fuzzy, c-format
 msgid "%sOverdue!%s&nbsp;%s"
+msgstr "%s%s 환영합니다"
+
+#. %1$s: - BLOCK subject -
+#. %2$s: - END -
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:108
+#, fuzzy, c-format
+msgid "%sOverdue:%s "
 msgstr "%s%s 환영합니다"
 
 #. %1$s:  IF ( FEEDBAC.filename ) 
@@ -5697,10 +5732,10 @@ msgstr "내 독서기록"
 #. %2$s:  reser.author 
 #. %3$s:  END 
 #. %4$s:  IF ( reser.itemtype ) 
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:62
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:63
 #, fuzzy, c-format
-msgid "%sby %s%s %s&nbsp; ("
-msgstr "%s%s 환영합니다"
+msgid "%sby %s%s %s ("
+msgstr "%s의 목차 "
 
 #. %1$s:  IF ( result_se.author ) 
 #. %2$s:  result_se.author 
@@ -5857,14 +5892,14 @@ msgid ""
 "Radoslav Kolev"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:727
+#: intranet-tmpl/prog/en/modules/about.tt:726
 #, c-format
 msgid ""
 "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian) Victor Titarchuk "
 "and Serhij Dubyk"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:734
+#: intranet-tmpl/prog/en/modules/about.tt:733
 #, c-format
 msgid ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; "
@@ -5876,12 +5911,12 @@ msgstr ""
 msgid "&#1506;&#1489;&#1512;&#1497;&#1514; (Hebrew)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:733
+#: intranet-tmpl/prog/en/modules/about.tt:732
 #, c-format
 msgid "&#1575;&#1585;&#1583;&#1608;(Urdu) Ata ur Rehman"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:722
+#: intranet-tmpl/prog/en/modules/about.tt:721
 #, c-format
 msgid "&#1601;&#1575;&#1585;&#1587;&#1609; (Persian)"
 msgstr ""
@@ -5902,27 +5937,27 @@ msgid ""
 "&#2476;&#2494;&#2434;&#2482;&#2494; (Bengali) Parthasarathi Mukhopadhyay"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:715
+#: intranet-tmpl/prog/en/modules/about.tt:714
 #, c-format
 msgid "&#26085;&#26412;&#35486; (Japanese)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:723
+#: intranet-tmpl/prog/en/modules/about.tt:722
 #, c-format
 msgid "&#2835;&#2908;&#2879;&#2822; (&#x014D;&#7771;iy&#257;)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:717
+#: intranet-tmpl/prog/en/modules/about.tt:716
 #, c-format
 msgid "&#3221;&#3240;&#3277;&#3240;&#3233; (kanna&#7693;a)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:721
+#: intranet-tmpl/prog/en/modules/about.tt:720
 #, c-format
 msgid "&#3374;&#3378;&#3375;&#3390;&#3379;&#3330; (Malayalam)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:731
+#: intranet-tmpl/prog/en/modules/about.tt:730
 #, c-format
 msgid "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; (Thai)"
 msgstr ""
@@ -5934,7 +5969,7 @@ msgid ""
 "Mulugeta (Team Leader), Tegene Assefa, Abiyot Bayou)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:716
+#: intranet-tmpl/prog/en/modules/about.tt:715
 #, c-format
 msgid "&#54620;&#44397;&#50612; (Korean)"
 msgstr ""
@@ -6069,15 +6104,15 @@ msgstr "%s%s 환영합니다"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:176
 #, fuzzy, c-format
-msgid "&nbsp;Show all funds:"
+msgid "&nbsp;Show inactive funds:"
 msgstr "복사할 수 없습니다."
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:516
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:194
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:350
-#, c-format
-msgid "&nbsp;Show all:"
-msgstr ""
+#, fuzzy, c-format
+msgid "&nbsp;Show inactive:"
+msgstr "모든 항복 보기 <a1>지난 50개 항목만 보기</a>"
 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:202
 #, c-format
@@ -6086,7 +6121,7 @@ msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  IF ( else ) 
-#. %3$s:  tagfield 
+#. %3$s:  tagfield | html 
 #. %4$s:  ELSE 
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:31
 #, c-format
@@ -6639,7 +6674,7 @@ msgstr ""
 msgid "&rsaquo; Check expiration "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:101
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:102
 #, c-format
 msgid "&rsaquo; Check in"
 msgstr ""
@@ -7118,7 +7153,7 @@ msgid "&rsaquo; Ordered - %s"
 msgstr ""
 
 #. %1$s:  todaysdate 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:70
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:71
 #, c-format
 msgid "&rsaquo; Overdues as of %s"
 msgstr ""
@@ -7375,7 +7410,7 @@ msgstr ""
 #. %2$s:  query_desc |html 
 #. %3$s:  END 
 #. %4$s:  IF ( limit_desc ) 
-#. %5$s:  limit_desc 
+#. %5$s:  limit_desc | html 
 #. %6$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:261
 #, c-format
@@ -7511,7 +7546,7 @@ msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  IF ( else ) 
-#. %3$s:  tagfield 
+#. %3$s:  tagfield | html 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:180
 #, c-format
@@ -7569,7 +7604,7 @@ msgstr ""
 msgid "&rsaquo; Transfers"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:29
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:30
 #, c-format
 msgid "&rsaquo; Transfers to your library"
 msgstr ""
@@ -7787,7 +7822,7 @@ msgstr "성"
 msgid "(Error)"
 msgstr "를 위해："
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:87
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:88
 #, c-format
 msgid "(Filtered. "
 msgstr ""
@@ -7804,7 +7839,7 @@ msgid ""
 "date ranges as needed. )"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:713
+#: intranet-tmpl/prog/en/modules/about.tt:712
 #, c-format
 msgid "(Indonesian)"
 msgstr ""
@@ -7880,7 +7915,7 @@ msgstr "제안자 "
 msgid "(checking)"
 msgstr "체크아웃"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:449
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:474
 #, c-format
 msgid "(default if none is defined)"
 msgstr ""
@@ -7989,7 +8024,7 @@ msgstr "호출 번호 "
 
 #. For the first occurrence,
 #. %1$s:  resultsloo.timestamp 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:148
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:150
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:518
 #, c-format
 msgid "(modified on %s)"
@@ -8505,10 +8540,10 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:301
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:309
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:188
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:72
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:77
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:76
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:81
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:513
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:117
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:119
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:146
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:192
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:214
@@ -8682,7 +8717,7 @@ msgstr ""
 msgid "A record matching barcode "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:438
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:444
 #, c-format
 msgid "A refund has been applied to the borrowing patron's account."
 msgstr ""
@@ -9099,11 +9134,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:198
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:803
 #: intranet-tmpl/prog/en/modules/serials/tables/members_results.tt:16
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:432
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:527
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:457
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:552
 #: intranet-tmpl/prog/en/modules/labels/result.tt:96
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:270
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:178
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:181
 #: intranet-tmpl/prog/en/modules/patroncards/tables/members_results.tt:22
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:497
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:514
@@ -9215,7 +9250,7 @@ msgstr ""
 msgid "Add basket group for "
 msgstr "%1$s 자료항목 "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:224
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:226
 #, fuzzy, c-format
 msgid "Add biblio"
 msgstr "%1$s 도서일람표"
@@ -9536,7 +9571,7 @@ msgstr ""
 msgid "Add vendor note"
 msgstr "서가 이름: "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:181
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:183
 #, fuzzy, c-format
 msgid "Add/Edit items"
 msgstr "가상서가를 수정합니다 <em>%s</em>"
@@ -9634,7 +9669,7 @@ msgid "Additional thanks to..."
 msgstr "추가된 저자들:"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:91
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:73
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:77
 #, fuzzy, c-format
 msgid "Additional tools"
 msgstr "추가된 저자들:"
@@ -9667,8 +9702,8 @@ msgstr "전자메일 주소 "
 msgid "Address 2: "
 msgstr "전자메일 주소 "
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:155
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:156
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:158
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:159
 #, c-format
 msgid "Address in question"
 msgstr ""
@@ -9903,7 +9938,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:119
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:49
 #: intranet-tmpl/prog/en/modules/tags/review.tt:16
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:62
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:64
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:13
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:263
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:326
@@ -10094,7 +10129,7 @@ msgstr "새로운 패스워드: "
 msgid "Allow transfer?"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:455
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:480
 #, c-format
 msgid "AllowHoldPolicyOverride"
 msgstr ""
@@ -10441,11 +10476,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:744
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:761
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:773
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:146
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:190
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:201
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:212
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:222
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:149
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:193
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:204
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:215
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:225
 #: intranet-tmpl/prog/en/modules/members/member.tt:459
 #: intranet-tmpl/prog/en/modules/members/member.tt:474
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:82
@@ -10497,7 +10532,7 @@ msgstr "모든 항목 유형"
 msgid "Any library"
 msgstr "모든 분관"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:440
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:446
 #, c-format
 msgid "Any lost item fees for this item will remain on the patron's account"
 msgstr ""
@@ -10566,7 +10601,7 @@ msgid "Apply directly"
 msgstr "사전검색"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:266
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:269
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1048
 msgid "Apply filter"
 msgstr ""
@@ -10957,11 +10992,6 @@ msgstr ""
 msgid "Armenian Tigran Zargaryan"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:712
-#, c-format
-msgid "ArmenianTigran Zargaryan"
-msgstr ""
-
 #: intranet-tmpl/prog/en/modules/about.tt:451
 #, c-format
 msgid "Arnaud Laurin"
@@ -11118,12 +11148,12 @@ msgstr "저자"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:183
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:41
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:558
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:564
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:168
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:383
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:384
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:10
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:73
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:75
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:34
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:401
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:527
@@ -11290,14 +11320,14 @@ msgstr "전거(검정)검색"
 msgid "Authority MARC framework for %s%s%sdefault framework%s"
 msgstr ""
 
-#. %1$s:  tagfield 
-#. %2$s:  authtypecode 
+#. %1$s:  tagfield | html 
+#. %2$s:  authtypecode | html
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:251
 #, c-format
 msgid "Authority MARC subfield structure admin for %s (authority: %s)"
 msgstr ""
 
-#. %1$s:  tagfield 
+#. %1$s:  tagfield | html 
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:34
 #, c-format
 msgid "Authority MARC subfield structure for %s"
@@ -11419,6 +11449,7 @@ msgid "Auto-fill row"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:157
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:319
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:603
 #, fuzzy, c-format
 msgid "Automatic renewal"
@@ -11551,17 +11582,17 @@ msgstr "의해 관리되어졌습니다"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:715
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:733
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:49
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:558
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:104
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:564
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:105
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:169
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:42
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:44
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:596
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:6
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:166
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:454
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:365
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:482
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:75
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:77
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:38
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:428
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:175
@@ -11648,7 +11679,7 @@ msgstr "바코드"
 #. %1$s:  reserveloo.barcode 
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:96
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:156
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:64
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:65
 #, fuzzy, c-format
 msgid "Barcode: %s "
 msgstr "바코드 "
@@ -11886,7 +11917,7 @@ msgid "Batch item %sdeletion%smodification%s"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:54
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:116
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:120
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:31
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:37
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:13
@@ -11900,7 +11931,7 @@ msgid "Batch item deletion results"
 msgstr "의해 관리되어졌습니다"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:57
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:121
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:125
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:51
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:58
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:15
@@ -11939,7 +11970,7 @@ msgid "Batch patrons results"
 msgstr "의해 관리되어졌습니다"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:60
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:126
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:130
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:74
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:81
 #, fuzzy, c-format
@@ -11947,7 +11978,7 @@ msgid "Batch record deletion"
 msgstr "의해 관리되어졌습니다"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:63
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:131
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:135
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:79
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:86
 #, fuzzy, c-format
@@ -12117,7 +12148,7 @@ msgstr "#도서목록"
 msgid "Biblionumber:"
 msgstr "#도서목록"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:197
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:199
 #, fuzzy, c-format
 msgid "Biblios in reservoir"
 msgstr "#도서목록"
@@ -12210,13 +12241,13 @@ msgstr "선택한 항목들을 삭제하세요"
 msgid "Blocked!"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:548
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:554
 #, c-format
 msgid "Book drop mode"
 msgstr ""
 
 #. %1$s:  dropboxdate 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:486
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:492
 #, c-format
 msgid "Book drop mode. (Effective checkin date is %s )."
 msgstr ""
@@ -12394,7 +12425,7 @@ msgstr ""
 msgid "Browse system logs"
 msgstr "목록검색결과"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:87
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:91
 #, fuzzy, c-format
 msgid "Browse the system logs"
 msgstr "목록검색결과"
@@ -12670,7 +12701,7 @@ msgid "CSV profile: "
 msgstr "선택한 항목들을 삭제하세요"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:97
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:81
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:85
 #, c-format
 msgid "CSV profiles"
 msgstr ""
@@ -12702,7 +12733,7 @@ msgid "Calculated on %s. From %s to %s"
 msgstr "%3$s의 %1$s에 대한 %2$s결과"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:94
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:76
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:80
 #, c-format
 msgid "Calendar"
 msgstr ""
@@ -12734,9 +12765,9 @@ msgstr "호출 번호"
 msgid "Call no"
 msgstr "호출 번호"
 
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:51
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:52
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:457
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:74
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:76
 #, fuzzy, c-format
 msgid "Call no."
 msgstr "호출 번호"
@@ -12752,9 +12783,9 @@ msgstr "호출 번호"
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:58
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:883
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:558
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:564
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:146
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:105
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:106
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:171
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:593
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:7
@@ -13139,8 +13170,8 @@ msgstr "항목취소"
 msgid "Cancel reservation and then attempt transfer:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:153
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:82
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:159
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:85
 #, c-format
 msgid "Cancel transfer"
 msgstr ""
@@ -13207,8 +13238,8 @@ msgstr "날짜"
 msgid "Cannot cancel receipt. Possible reasons : "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:149
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:445
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:155
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:451
 #, c-format
 msgid "Cannot check in"
 msgstr ""
@@ -13335,8 +13366,8 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:189
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:204
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:178
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:221
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:180
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:223
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:113
 #: intranet-tmpl/prog/en/modules/members/member.tt:372
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:183
@@ -13473,7 +13504,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:213
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:215
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:34
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:113
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:117
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:298
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:300
 #, fuzzy, c-format
@@ -13637,11 +13668,9 @@ msgstr "범주/영역: "
 msgid "Category: %s"
 msgstr "범주/영역: "
 
-#. For the first occurrence,
 #. %1$s:  categoryname 
 #. %2$s:  categorycode 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:60
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:65
 #, fuzzy, c-format
 msgid "Category: %s (%s)"
 msgstr "범주/영역:"
@@ -13838,7 +13867,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/circ-search.inc:25
 #: intranet-tmpl/prog/en/includes/patron-search.inc:132
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:606
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:493
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:499
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:22
 #, fuzzy, c-format
 msgid "Check in"
@@ -13852,7 +13881,7 @@ msgstr "체크아웃 "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:404
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:410
 #, c-format
 msgid "Check in message"
 msgstr ""
@@ -13877,7 +13906,6 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:65
 #: intranet-tmpl/prog/en/includes/members-menu.inc:4
 #: intranet-tmpl/prog/en/includes/cities-admin-search.inc:24
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:70
 #: intranet-tmpl/prog/en/includes/home-search.inc:33
 #: intranet-tmpl/prog/en/includes/cat-search.inc:27
 #: intranet-tmpl/prog/en/includes/circ-search.inc:24
@@ -13910,7 +13938,7 @@ msgstr ""
 msgid "Check out message"
 msgstr "체크아웃"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:132
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:138
 #, fuzzy, c-format
 msgid "Check out to this patron"
 msgstr "%2$s %1$s 계정"
@@ -14017,8 +14045,8 @@ msgid "Checked in item."
 msgstr "체크아웃"
 
 #. SPAN
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:82
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:124
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:86
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:126
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:34
 #, fuzzy, c-format
 msgid "Checked out"
@@ -14047,9 +14075,9 @@ msgstr "체크아웃"
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:861
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:718
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:736
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:43
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:45
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:451
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:78
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:80
 #, fuzzy, c-format
 msgid "Checked out from"
 msgstr "체크아웃"
@@ -14059,7 +14087,7 @@ msgstr "체크아웃"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:717
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:735
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:450
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:77
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:79
 #, fuzzy, c-format
 msgid "Checked out on"
 msgstr "체크아웃"
@@ -14075,7 +14103,7 @@ msgid "Checked out: "
 msgstr "체크아웃 "
 
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:664
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:556
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:562
 #, fuzzy, c-format
 msgid "Checked-in items"
 msgstr "체크아웃"
@@ -14100,7 +14128,7 @@ msgstr "항목(자료)유형 "
 msgid "Checkin message: "
 msgstr "출판되지 않았습니다 "
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:47
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:49
 #, fuzzy, c-format
 msgid "Checkin on"
 msgstr "체크아웃"
@@ -14176,7 +14204,7 @@ msgstr "체크아웃"
 msgid "Checkout history for %s"
 msgstr "%2$s %1$s 계정"
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:45
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:47
 #, fuzzy, c-format
 msgid "Checkout on"
 msgstr "체크아웃"
@@ -14190,7 +14218,7 @@ msgstr "체크아웃"
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:130
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:704
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:166
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:63
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:65
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:162
 #, fuzzy, c-format
 msgid "Checkouts"
@@ -14454,12 +14482,12 @@ msgstr "로케이션"
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:14
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:30
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:15
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:101
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:102
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:77
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:29
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:30
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:9
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:17
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:70
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:71
 #: intranet-tmpl/prog/en/modules/circ/stats.tt:9
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:9
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:27
@@ -14512,7 +14540,6 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:75
 #: intranet-tmpl/prog/en/includes/members-menu.inc:10
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:80
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:49
 #, fuzzy, c-format
 msgid "Circulation history"
@@ -14757,7 +14784,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:299
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:621
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:696
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:517
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:523
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1011
 #: intranet-tmpl/prog/en/modules/members/member.tt:488
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:500
@@ -15355,13 +15382,13 @@ msgstr ""
 msgid "Columns settings"
 msgstr "홈으로 돌아가기"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:205
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:207
 #, c-format
 msgid "Coming from"
 msgstr ""
 
 #. %1$s:  branchesloo.branchname 
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:45
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:46
 #, c-format
 msgid "Coming from %s"
 msgstr ""
@@ -15505,9 +15532,9 @@ msgid "Configuring "
 msgstr ""
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:168
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:208
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:256
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:174
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:214
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:262
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:153
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:221
 msgid "Confirm"
@@ -15602,12 +15629,12 @@ msgid "Confirm deletion of this vendor ?"
 msgstr "대기"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:380
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:386
 msgid "Confirm hold"
 msgstr ""
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:377
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:383
 msgid "Confirm hold and transfer"
 msgstr ""
 
@@ -16069,7 +16096,7 @@ msgstr ""
 msgid "Could not find a system preference named "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:759
+#: intranet-tmpl/prog/en/modules/about.tt:758
 #, c-format
 msgid ""
 "Could not read the history.txt file. Please make sure &lt;docdir&gt; is "
@@ -16286,7 +16313,7 @@ msgstr "새 가상서가 설치"
 msgid "Create new record"
 msgstr "새 가상서가 설치"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:147
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:151
 #, c-format
 msgid "Create printable labels and barcodes from catalog data"
 msgstr ""
@@ -16442,6 +16469,7 @@ msgid "Currency: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:144
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:306
 #, c-format
 msgid "Current checkouts allowed"
 msgstr ""
@@ -16529,7 +16557,7 @@ msgstr "복사할 수 없습니다."
 msgid "Currently in local use %s "
 msgstr "복사할 수 없습니다."
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:444
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:469
 #, c-format
 msgid ""
 "Currently, this means hold policies. The various policies have the following "
@@ -16702,7 +16730,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:77
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:184
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:203
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:205
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:259
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:395
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:64
@@ -16716,14 +16744,14 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/printinvoice.tt:38
 #: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:38
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:63
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:71
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:73
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:75
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:47
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:105
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:157
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:440
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:511
-#: intranet-tmpl/prog/en/modules/about.tt:745
+#: intranet-tmpl/prog/en/modules/about.tt:744
 #, c-format
 msgid "Date"
 msgstr "날짜"
@@ -16752,13 +16780,13 @@ msgstr "받은 날짜"
 #: intranet-tmpl/prog/en/modules/serials/routing-preview-slip.tt:26
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:33
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:108
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:79
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:81
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:37
 #, fuzzy, c-format
 msgid "Date due"
 msgstr "날짜"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:134
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:137
 #, fuzzy, c-format
 msgid "Date due:"
 msgstr "날짜"
@@ -16826,7 +16854,7 @@ msgstr ""
 msgid "Date of expiration is invalid."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:47
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:48
 #, c-format
 msgid "Date of transfer"
 msgstr ""
@@ -17020,8 +17048,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:33
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:39
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:57
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:407
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:477
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:432
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:502
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:490
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:91
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:62
@@ -17042,7 +17070,7 @@ msgstr "세부사항연결"
 #. %1$s:  IF ( humanbranch ) 
 #. %2$s:  humanbranch 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:307
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:332
 #, c-format
 msgid "Default checkout, hold and return policy%s for %s%s"
 msgstr ""
@@ -17092,7 +17120,7 @@ msgstr "선택"
 
 #. %1$s:  UNLESS ( default_rules ) 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:322
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:347
 #, c-format
 msgid "Defaults%s (not set)%s"
 msgstr ""
@@ -17134,7 +17162,7 @@ msgstr ""
 msgid "Define currencies and exchange rates used for acquisitions."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:77
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:81
 #, c-format
 msgid "Define days when the library is closed"
 msgstr ""
@@ -17328,17 +17356,17 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:260
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:296
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:228
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:419
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:501
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:444
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:526
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:114
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:152
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:660
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:164
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:202
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:179
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:180
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:182
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:184
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:183
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:185
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:187
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:105
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:141
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:183
@@ -17406,12 +17434,12 @@ msgstr "%1$s 장서목록"
 msgid "Delete [% field.name %] field"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:117
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:121
 #, fuzzy, c-format
 msgid "Delete a batch of items"
 msgstr "이 서가 지우기"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:127
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:131
 #, c-format
 msgid "Delete a batch of records (bibliographic or authority)"
 msgstr ""
@@ -17882,7 +17910,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:464
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:491
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:513
-#: intranet-tmpl/prog/en/modules/about.tt:746
+#: intranet-tmpl/prog/en/modules/about.tt:745
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:38
 #, c-format
 msgid "Description"
@@ -17997,7 +18025,6 @@ msgstr "#도서목록"
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:67
 #: intranet-tmpl/prog/en/includes/members-menu.inc:5
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:72
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:478
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:667
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:83
@@ -18125,7 +18152,6 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:95
 #: intranet-tmpl/prog/en/includes/members-menu.inc:23
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:96
 #: intranet-tmpl/prog/en/modules/members/discharge.tt:20
 #, fuzzy, c-format
 msgid "Discharge"
@@ -18458,12 +18484,12 @@ msgstr "서가에 추가하세요"
 msgid "Download database"
 msgstr "서가에 추가하세요"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:93
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:94
 #, c-format
 msgid "Download file of all overdues"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:91
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:92
 #, c-format
 msgid "Download file of displayed overdues"
 msgstr ""
@@ -18522,9 +18548,9 @@ msgstr "듀이분류법: %s"
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:857
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:713
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:731
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:558
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:100
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:46
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:564
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:101
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:48
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:447
 #, fuzzy, c-format
 msgid "Due date"
@@ -18857,7 +18883,7 @@ msgstr "가상서가를 수정합니다 <em>%s</em>"
 msgid "Edit basket group %s (%s) for "
 msgstr "%1$s 자료항목 "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:180
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:182
 #, fuzzy, c-format
 msgid "Edit biblio"
 msgstr "가상서가를 수정합니다 <em>%s</em>"
@@ -18972,7 +18998,7 @@ msgstr ""
 msgid "Edit purchase suggestion #%s"
 msgstr "구입 제안"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:101
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:105
 #, c-format
 msgid "Edit quotes for QOTD feature"
 msgstr ""
@@ -19046,7 +19072,7 @@ msgid "Edit vendor"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:185
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:204
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:206
 #, fuzzy, c-format
 msgid "Edition"
 msgstr "대기"
@@ -19258,7 +19284,7 @@ msgstr ""
 msgid "Enrollment period: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:152
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:156
 #, c-format
 msgid ""
 "Enter a barcode to generate a printable spine label. For use with dedicated "
@@ -19331,7 +19357,7 @@ msgid "Enter item barcode:"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:655
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:494
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:500
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:142
 #, c-format
 msgid "Enter item barcode: "
@@ -19532,6 +19558,7 @@ msgid "Error saving items"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/auth.tt:20
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:112
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:358
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:47
 #, fuzzy, c-format
@@ -19605,7 +19632,7 @@ msgstr "에러가 발생했습니다"
 msgid "Esiee School (Jérome Vizcaino, Michel Lerenard, Pierre Cauchois)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:728
+#: intranet-tmpl/prog/en/modules/about.tt:727
 #, c-format
 msgid ""
 "Espa&ntilde;ol (Spanish) Bernardo González Kriegel, Héctor Castro and Tomás "
@@ -19895,7 +19922,7 @@ msgstr ""
 msgid "Export bibliographic records"
 msgstr "#도서목록"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:137
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:141
 #, c-format
 msgid "Export bibliographic, holdings, and authority records"
 msgstr ""
@@ -19918,7 +19945,7 @@ msgid "Export configuration"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:66
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:136
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:140
 #, c-format
 msgid "Export data"
 msgstr ""
@@ -20320,7 +20347,6 @@ msgstr "URL： %s"
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:88
 #: intranet-tmpl/prog/en/includes/members-menu.inc:20
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:90
 #: intranet-tmpl/prog/en/modules/members/files.tt:18
 #, c-format
 msgid "Files"
@@ -20410,7 +20436,7 @@ msgstr "~에 의한 정렬 "
 msgid "Filter location"
 msgstr "발행인"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:133
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:136
 #, c-format
 msgid "Filter on:"
 msgstr ""
@@ -20464,6 +20490,7 @@ msgid "Fine"
 msgstr "연체료(미납도서)"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:148
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:310
 #, fuzzy, c-format
 msgid "Fine amount"
 msgstr "연체료"
@@ -20474,18 +20501,19 @@ msgid "Fine amount: "
 msgstr "연체료 "
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:149
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:311
 #, c-format
 msgid "Fine charging interval"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:150
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:312
 #, c-format
 msgid "Fine grace period (day)"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:70
 #: intranet-tmpl/prog/en/includes/members-menu.inc:7
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:75
 #: intranet-tmpl/prog/en/modules/members/member.tt:378
 #, c-format
 msgid "Fines"
@@ -20501,7 +20529,7 @@ msgstr "연체료 및 수수료"
 msgid "Fines &amp; charges"
 msgstr "연체료 및 수수료"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:483
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:489
 #, c-format
 msgid "Fines for returned items are forgiven."
 msgstr ""
@@ -20621,14 +20649,14 @@ msgstr ""
 msgid "For the selected operations: "
 msgstr "구입 제안 "
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:440
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:465
 #, c-format
 msgid ""
 "For this library, you can edit rules for given itemtypes, regardless of the "
 "patron's category. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:385
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:410
 #, c-format
 msgid ""
 "For this library, you can specify the maximum number of loans that a patron "
@@ -20665,7 +20693,7 @@ msgstr "%s%s 환영합니다"
 msgid "Forgive fines on return: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:539
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:545
 #, fuzzy, c-format
 msgid "Forgive overdue charges"
 msgstr "연체료 및 수수료"
@@ -20785,6 +20813,11 @@ msgstr ""
 msgid "Frederic Durand"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:203
+#, c-format
+msgid "Free"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:85
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:156
 #, fuzzy, c-format
@@ -20872,9 +20905,9 @@ msgid "From "
 msgstr "를 위해： "
 
 #: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:88
-#, fuzzy, c-format
+#, c-format
 msgid "From \\ To"
-msgstr "를 위해："
+msgstr "부터 \\ 까지"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-add-to-basket.inc:17
 #, c-format
@@ -20906,12 +20939,12 @@ msgstr "찾을 수 없습니다. "
 msgid "From an external source"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:515
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:540
 #, fuzzy, c-format
 msgid "From any library"
 msgstr "모든 분관"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:449
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:474
 #, fuzzy, c-format
 msgid "From any library:"
 msgstr "모든 분관"
@@ -20937,12 +20970,12 @@ msgstr "호출 번호 "
 msgid "From date:"
 msgstr "를 위해："
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:516
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:541
 #, fuzzy, c-format
 msgid "From home library"
 msgstr "모든 분관"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:450
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:475
 #, fuzzy, c-format
 msgid "From home library:"
 msgstr "모든 분관"
@@ -20958,7 +20991,7 @@ msgid "From titles with highest hold ratios"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:241
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:136
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:139
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:212
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:278
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:293
@@ -21484,6 +21517,7 @@ msgid "Handbooks"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:147
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:309
 #, fuzzy, c-format
 msgid "Hard due date"
 msgstr "패스워드갱신"
@@ -21672,9 +21706,9 @@ msgstr ""
 msgid "Hold Date"
 msgstr "항목(자료)들"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:205
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:252
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:372
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:211
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:258
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:378
 #, fuzzy, c-format
 msgid "Hold at"
 msgstr "대기"
@@ -21707,20 +21741,20 @@ msgstr "대기"
 msgid "Hold fee: "
 msgstr "대기 "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:154
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:192
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:324
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:356
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:160
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:198
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:330
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:362
 #, fuzzy, c-format
 msgid "Hold for:"
 msgstr "대기"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:238
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:244
 #, fuzzy, c-format
 msgid "Hold for: "
 msgstr "대기 "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:190
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:196
 #, c-format
 msgid "Hold found (item is already waiting): "
 msgstr ""
@@ -21731,7 +21765,7 @@ msgstr ""
 msgid "Hold found for (%s), please transfer"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:354
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:360
 #, c-format
 msgid "Hold found: "
 msgstr ""
@@ -21741,7 +21775,7 @@ msgstr ""
 msgid "Hold is <strong>suspended</strong>"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:237
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:243
 #, c-format
 msgid "Hold needing transfer found: "
 msgstr ""
@@ -21751,8 +21785,8 @@ msgstr ""
 msgid "Hold placed by : "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:316
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:466
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:341
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:491
 #, c-format
 msgid "Hold policy"
 msgstr ""
@@ -21799,7 +21833,7 @@ msgid "Holding libraries"
 msgstr "모든 분관"
 
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:558
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:564
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:430
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:177
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:237
@@ -21838,6 +21872,7 @@ msgid "Holds"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:158
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:320
 #, c-format
 msgid "Holds allowed (count)"
 msgstr ""
@@ -22047,12 +22082,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:13
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:29
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:15
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:101
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:102
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:77
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:29
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:30
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:9
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:10
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:70
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:71
 #: intranet-tmpl/prog/en/modules/circ/stats.tt:9
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:9
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:27
@@ -22218,8 +22253,8 @@ msgstr "모든 분관"
 #: intranet-tmpl/prog/en/columns.def:49
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:27
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:558
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:50
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:564
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:51
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:591
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:16
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:166
@@ -22257,14 +22292,12 @@ msgstr "모든 분관"
 msgid "Home library: %s"
 msgstr "모든 분관 "
 
-#. For the first occurrence,
 #. %1$s:  IF ( branchname ) 
 #. %2$s:  branchname 
 #. %3$s:  ELSE 
 #. %4$s:  branch 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:61
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:66
 #, fuzzy, c-format
 msgid "Home library: %s%s%s%s%s"
 msgstr "모든 분관"
@@ -22417,7 +22450,7 @@ msgstr "단순 보기"
 #: intranet-tmpl/prog/en/modules/labels/search.tt:38
 #: intranet-tmpl/prog/en/modules/labels/search.tt:39
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:186
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:202
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:204
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:395
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:396
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:14
@@ -22647,7 +22680,7 @@ msgstr ""
 msgid "If the field is a control field, the subfield should be empty"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:388
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:413
 #, c-format
 msgid ""
 "If the total amount loanable for a given patron category is left blank, no "
@@ -22706,7 +22739,7 @@ msgid ""
 msgstr ""
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:383
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:389
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:82
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:149
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:92
@@ -23316,7 +23349,7 @@ msgid "Inventory/Stocktaking"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:69
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:141
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:145
 #, c-format
 msgid "Inventory/stocktaking"
 msgstr ""
@@ -23540,7 +23573,7 @@ msgstr ""
 msgid "It is a duplicate. Edit existing record"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:714
+#: intranet-tmpl/prog/en/modules/about.tt:713
 #, c-format
 msgid ""
 "Italiano (Italian) for 3.2: Zeno Tajoli, Pietro Gozzetti and Paolo Pozzan; "
@@ -23606,7 +23639,7 @@ msgstr "체크아웃"
 msgid "Item circulation alerts"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:320
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:326
 #, c-format
 msgid "Item consigned:"
 msgstr ""
@@ -23622,7 +23655,7 @@ msgstr "항목(자료)유형"
 msgid "Item details"
 msgstr "더욱 세부적인 사항들"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:524
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:549
 #, fuzzy, c-format
 msgid "Item floats"
 msgstr "자료분실"
@@ -23647,12 +23680,12 @@ msgstr ""
 msgid "Item hasn't been transferred yet from %s"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:210
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:213
 #, fuzzy, c-format
 msgid "Item holding library:"
 msgstr "협력인접분관"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:199
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:202
 #, fuzzy, c-format
 msgid "Item home library:"
 msgstr "모든 분관"
@@ -23703,17 +23736,18 @@ msgstr ""
 msgid "Item is restricted (transaction recorded anyway)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:448
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:454
 #, c-format
 msgid "Item is withdrawn."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:446
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:452
 #, c-format
 msgid "Item is withdrawn. "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:160
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:322
 #, fuzzy, c-format
 msgid "Item level holds"
 msgstr "자료분실"
@@ -23773,12 +23807,12 @@ msgstr ""
 msgid "Item renewed:"
 msgstr "표제"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:522
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:547
 #, c-format
 msgid "Item returns home"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:523
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:548
 #, fuzzy, c-format
 msgid "Item returns to issuing library"
 msgstr "개인 기록에 반환"
@@ -23829,7 +23863,8 @@ msgstr "항목(자료)유형"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:17
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:236
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:143
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:465
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:305
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:490
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:228
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:78
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:655
@@ -23874,7 +23909,7 @@ msgid "Item type images are disabled. To enable them, turn off the "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:35
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:190
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:193
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:39
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:66
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:440
@@ -23911,7 +23946,7 @@ msgstr "항목(자료)유형"
 msgid "Item types administration"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:436
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:442
 #, c-format
 msgid "Item was lost, now found."
 msgstr ""
@@ -25330,7 +25365,7 @@ msgid "Koha &rsaquo; Catalog &rsaquo; Advanced search"
 msgstr "%s1$s 목록--상세검색목록"
 
 #. %1$s:  title |html 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:3
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:4
 #, fuzzy, c-format
 msgid "Koha &rsaquo; Catalog &rsaquo; Checkout history for %s"
 msgstr "%s 목록--계정"
@@ -25554,7 +25589,7 @@ msgstr ""
 msgid "Koha &rsaquo; Circulation &rsaquo; Transfers print receipt"
 msgstr "%1$s 목록--정기(연속)간행물"
 
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:3
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:4
 #, c-format
 msgid "Koha &rsaquo; Circulation &rsaquo; Transfers to your library"
 msgstr ""
@@ -26515,7 +26550,7 @@ msgstr ""
 msgid "Koha full call number"
 msgstr "호출 번호"
 
-#: intranet-tmpl/prog/en/modules/about.tt:740
+#: intranet-tmpl/prog/en/modules/about.tt:739
 #, c-format
 msgid "Koha history timeline"
 msgstr ""
@@ -26694,7 +26729,7 @@ msgid "Label Batch Number %s"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:72
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:146
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:150
 #, c-format
 msgid "Label creator"
 msgstr ""
@@ -26770,7 +26805,7 @@ msgstr "언어변경: "
 msgid "Languages"
 msgstr "언어변경:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:719
+#: intranet-tmpl/prog/en/modules/about.tt:718
 #, c-format
 msgid "Lao Anousak Anthony Souphavanh"
 msgstr ""
@@ -26880,7 +26915,7 @@ msgstr ""
 msgid "Late orders"
 msgstr "날짜"
 
-#: intranet-tmpl/prog/en/modules/about.tt:718
+#: intranet-tmpl/prog/en/modules/about.tt:717
 #, c-format
 msgid "Latina (Latin)"
 msgstr ""
@@ -27039,7 +27074,7 @@ msgstr "%1$s 장서목록 "
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:539
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:49
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:37
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:102
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:103
 #: intranet-tmpl/prog/en/modules/circ/stats.tt:31
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:271
 #: intranet-tmpl/prog/en/modules/members/member.tt:375
@@ -27140,7 +27175,7 @@ msgstr "%1$s 장서목록"
 msgid "Library not saved &mdash; code and/or name missing"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:221
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:224
 #, c-format
 msgid "Library of the patron:"
 msgstr ""
@@ -27447,6 +27482,7 @@ msgid "Loan length"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:145
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:307
 #, c-format
 msgid "Loan period"
 msgstr ""
@@ -27472,7 +27508,7 @@ msgid "Local use preferences"
 msgstr "Booklist 기록 번호："
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:389
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:433
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:439
 #, fuzzy, c-format
 msgid "Local use recorded"
 msgstr "Booklist 기록 번호："
@@ -27492,7 +27528,7 @@ msgstr "로케이션"
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:144
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:246
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:80
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:115
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:117
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:49
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:60
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:84
@@ -27557,7 +27593,7 @@ msgid "Log out"
 msgstr "로그아웃"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:100
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:86
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:90
 #, fuzzy, c-format
 msgid "Log viewer"
 msgstr "로케이션:"
@@ -27591,8 +27627,8 @@ msgstr "표제"
 msgid "Lost Items"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:159
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:160
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:162
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:163
 #, c-format
 msgid "Lost card"
 msgstr ""
@@ -27679,7 +27715,7 @@ msgstr ""
 msgid "Lower left Y coordinate: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:720
+#: intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "M&#257;ori"
 msgstr ""
@@ -27700,8 +27736,8 @@ msgstr "MARC"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:188
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:203
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:204
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:178
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:221
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:180
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:223
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:85
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:86
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:379
@@ -27830,7 +27866,7 @@ msgid "MARC frameworks: %s"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:307
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:161
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:160
 #, fuzzy, c-format
 msgid "MARC modification templates"
 msgstr "로케이션"
@@ -27860,7 +27896,7 @@ msgstr ""
 msgid "MARC subfield"
 msgstr "MARC"
 
-#. %1$s:  tagfield 
+#. %1$s:  tagfield | html 
 #. %2$s:  IF ( frameworkcode ) 
 #. %3$s:  frameworkcode 
 #. %4$s:  ELSE 
@@ -27971,7 +28007,7 @@ msgid "Make budget active: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:749
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:124
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:130
 #, c-format
 msgid "Make payment"
 msgstr ""
@@ -27995,7 +28031,7 @@ msgstr "나 "
 msgid "Manage"
 msgstr "의해 관리되어졌습니다"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:82
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:86
 #, c-format
 msgid "Manage CSV export profiles"
 msgstr ""
@@ -28100,7 +28136,7 @@ msgstr "구매제안"
 msgid "Manage profiles"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:157
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:70
 #, fuzzy, c-format
 msgid "Manage rotating collections"
 msgstr "합집:"
@@ -28141,7 +28177,7 @@ msgstr "구매제안"
 msgid "Manage templates"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:162
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:161
 #, c-format
 msgid "Manage templates for modifying MARC records during import."
 msgstr ""
@@ -28171,7 +28207,7 @@ msgstr "의해 관리되어졌습니다"
 msgid "Managed in tab: "
 msgstr "의해 관리되어졌습니다 "
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:172
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:171
 #, c-format
 msgid "Managed staged MARC records, including completing and reversing imports"
 msgstr ""
@@ -28494,6 +28530,7 @@ msgid "Max length:"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:153
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:315
 #, c-format
 msgid "Max. suspension duration (day)"
 msgstr ""
@@ -28806,7 +28843,6 @@ msgstr "로케이션"
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:78
 #: intranet-tmpl/prog/en/includes/members-menu.inc:13
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:82
 #: intranet-tmpl/prog/en/includes/biblio-view-menu.inc:33
 #, fuzzy, c-format
 msgid "Modification log"
@@ -28863,7 +28899,7 @@ msgstr "수정하다"
 msgid "Modify SRU Search fields mapping"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:132
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:136
 #, c-format
 msgid "Modify a batch of records (biblios or authorities)"
 msgstr ""
@@ -28925,7 +28961,7 @@ msgstr "(수정했음:%s)"
 msgid "Modify item type"
 msgstr "모든 항목 유형"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:122
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:126
 #, c-format
 msgid "Modify items in a batch"
 msgstr ""
@@ -29227,8 +29263,8 @@ msgstr ""
 msgid "NORMARC"
 msgstr "MARC"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:149
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:446
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:155
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:452
 #, c-format
 msgid "NOT CHECKED IN"
 msgstr ""
@@ -29350,7 +29386,7 @@ msgstr ""
 msgid "Name or barcode not found. Please try an other "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:145
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:148
 #, fuzzy, c-format
 msgid "Name or cardnumber:"
 msgstr "귀하의 카드번호"
@@ -29721,7 +29757,7 @@ msgstr "귀하의 카드번호"
 msgid "New password:"
 msgstr "새로운 패스워드:"
 
-#: intranet-tmpl/prog/en/includes/patron-toolbar.inc:4
+#: intranet-tmpl/prog/en/includes/patron-toolbar.inc:7
 #, fuzzy, c-format
 msgid "New patron "
 msgstr "새로운 패스워드: "
@@ -29834,7 +29870,7 @@ msgstr "새로운 패스워드:"
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:103
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:172
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:60
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:91
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:95
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:55
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:216
 #, c-format
@@ -29954,7 +29990,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:173
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:277
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:284
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:299
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:305
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:153
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:379
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:244
@@ -30054,7 +30090,6 @@ msgid "No active currency is defined. Please go to "
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:41
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:44
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
 #, c-format
 msgid "No address stored."
@@ -30066,7 +30101,6 @@ msgid "No categories have been defined. "
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:44
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:47
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
 #, c-format
 msgid "No city stored."
@@ -30122,7 +30156,6 @@ msgid "No email is configured for your user."
 msgstr "'%1$s'를 위한 검색결과"
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:50
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:53
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
 #, c-format
 msgid "No email stored."
@@ -30162,7 +30195,7 @@ msgstr "검색중"
 msgid "No groups defined."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:517
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:542
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:534
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:446
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:452
@@ -30170,7 +30203,7 @@ msgstr ""
 msgid "No holds allowed"
 msgstr "갱신할수 없습니다"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:451
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:476
 #, fuzzy, c-format
 msgid "No holds allowed:"
 msgstr "갱신할수 없습니다"
@@ -30226,7 +30259,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  errmsgloo.msg 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:424
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:430
 #, c-format
 msgid "No item with barcode: %s"
 msgstr ""
@@ -30360,7 +30393,7 @@ msgstr ""
 msgid "No patron matched "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:451
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:476
 #, c-format
 msgid "No patron may put this book on hold."
 msgstr ""
@@ -30396,7 +30429,6 @@ msgid "No pending on-site checkout."
 msgstr "체크아웃"
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:47
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:50
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
 #, c-format
 msgid "No phone stored."
@@ -30446,6 +30478,7 @@ msgid "No records have been staged."
 msgstr "귀하의 암호가 변경되었습니다."
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:156
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:318
 #, fuzzy, c-format
 msgid "No renewal before"
 msgstr "갱신할수 없습니다"
@@ -30461,7 +30494,7 @@ msgstr "갱신할수 없습니다"
 msgid "No results for your query"
 msgstr "'%1$s'를 위한 검색결과"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:188
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:190
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:346
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:61
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:40
@@ -30525,7 +30558,7 @@ msgstr "지위"
 msgid "No system preferences matched your search for "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:90
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:93
 #, c-format
 msgid "No transfers to receive"
 msgstr ""
@@ -30656,12 +30689,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:598
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:120
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:118
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:230
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:232
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:763
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:765
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:9
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:77
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:154
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:80
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:157
 #: intranet-tmpl/prog/en/modules/tags/review.tt:16
 #: intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:77
 #: intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:88
@@ -30779,7 +30812,7 @@ msgstr "사용가능함"
 msgid "Not checked out since: "
 msgstr "체크아웃 "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:430
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:436
 #, fuzzy, c-format
 msgid "Not checked out."
 msgstr "체크아웃"
@@ -30801,7 +30834,7 @@ msgstr "%s의 목차"
 #. %6$s:  AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.to ) 
 #. %7$s:  ELSE 
 #. %8$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:407
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:413
 #, c-format
 msgid ""
 "Not for loan status updated from %s %s %s being available for loan %s to %s "
@@ -30824,7 +30857,7 @@ msgstr "%s에 의해 출판되었습니다"
 msgid "Not renewable"
 msgstr "전체 수수료"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:558
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:564
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:896
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:65
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:46
@@ -30844,7 +30877,7 @@ msgid "Note : This export file will be very large, and is generated nightly."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:192
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:111
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:117
 #, c-format
 msgid "Note about the accompanying materials: "
 msgstr ""
@@ -30869,7 +30902,7 @@ msgstr "%1$s 자료항목 "
 msgid "Note for the librarian that will manage your renewal request: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:453
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:478
 #, c-format
 msgid "Note that if the system preference "
 msgstr ""
@@ -30983,8 +31016,8 @@ msgstr "주： "
 
 #. For the first occurrence,
 #. %1$s:  reservenotes 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:191
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:355
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:197
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:361
 #, fuzzy, c-format
 msgid "Notes: %s"
 msgstr "주： %s"
@@ -31029,7 +31062,6 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:81
 #: intranet-tmpl/prog/en/includes/members-menu.inc:16
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:84
 #, c-format
 msgid "Notices"
 msgstr ""
@@ -31251,7 +31283,7 @@ msgstr ""
 msgid "Number of records updated"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:76
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:78
 #, c-format
 msgid "Number of renewals"
 msgstr ""
@@ -31404,7 +31436,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/EXAMPLE.tt:17
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:55
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:66
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:328
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:334
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:27
 #: intranet-tmpl/prog/en/modules/tags/review.tt:241
 #: intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:55
@@ -31617,12 +31649,13 @@ msgstr ""
 msgid "On hold"
 msgstr "~에 의한 정렬"
 
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:49
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:50
 #, fuzzy, c-format
 msgid "On hold for"
 msgstr "~에 의한 정렬"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:159
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:321
 #, fuzzy, c-format
 msgid "On shelf holds allowed"
 msgstr "갱신할수 없습니다"
@@ -31640,7 +31673,7 @@ msgstr "서가 이름: "
 msgid "On-site checkout"
 msgstr "체크아웃"
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:64
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:66
 #, fuzzy, c-format
 msgid "On-site checkouts"
 msgstr "%1$s 정기간행물"
@@ -31740,7 +31773,7 @@ msgstr "복사할 수 없습니다."
 msgid "Only on-site checkouts are allowed"
 msgstr "갱신할수 없습니다"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:450
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:475
 #, c-format
 msgid "Only patrons from the item's home library may put this book on hold."
 msgstr ""
@@ -31821,7 +31854,7 @@ msgid "Optional module missing"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:222
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:531
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:537
 #: intranet-tmpl/prog/en/modules/tools/export.tt:113
 #: intranet-tmpl/prog/en/modules/tools/export.tt:196
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:106
@@ -32178,6 +32211,7 @@ msgid "Overdue"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:151
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:313
 #, c-format
 msgid "Overdue fines cap (amount)"
 msgstr ""
@@ -32193,7 +32227,7 @@ msgstr ""
 msgid "Overdue notice/status triggers"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:80
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:81
 #, c-format
 msgid "Overdue report"
 msgstr ""
@@ -32433,10 +32467,10 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:49
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:83
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:143
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:558
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:564
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:35
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:101
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:41
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:102
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:42
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:662
 #: intranet-tmpl/prog/en/modules/members/discharges.tt:20
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:455
@@ -32522,7 +32556,8 @@ msgstr "범주/영역:"
 
 #: intranet-tmpl/prog/en/columns.def:50
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:142
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:396
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:304
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:421
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:152
 #: intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:89
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:134
@@ -32537,7 +32572,7 @@ msgstr "범주/영역:"
 msgid "Patron category administration"
 msgstr "범주/영역:"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:146
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:149
 #, fuzzy, c-format
 msgid "Patron category:"
 msgstr "범주/영역:"
@@ -32560,7 +32595,7 @@ msgstr ""
 msgid "Patron fines are over limit: %s"
 msgstr "선택 "
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:152
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:155
 #, fuzzy, c-format
 msgid "Patron flags:"
 msgstr "범주/영역:"
@@ -32614,7 +32649,7 @@ msgid ""
 "anyway? %s "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:458
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:464
 #, fuzzy, c-format
 msgid "Patron has an indefinite restriction"
 msgstr "선택"
@@ -32642,7 +32677,7 @@ msgid "Patron has nothing on hold."
 msgstr ""
 
 #. %1$s:  fines 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:123
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:129
 #, c-format
 msgid "Patron has outstanding fines of %s."
 msgstr ""
@@ -32677,9 +32712,9 @@ msgstr ""
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:200
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:246
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:366
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:206
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:252
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:372
 #, c-format
 msgid "Patron is RESTRICTED"
 msgstr ""
@@ -32708,7 +32743,7 @@ msgid "Patron list: "
 msgstr "범주/영역: "
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:21
-#: intranet-tmpl/prog/en/includes/patron-toolbar.inc:10
+#: intranet-tmpl/prog/en/includes/patron-toolbar.inc:13
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:71
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:25
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:19
@@ -32803,7 +32838,7 @@ msgid "Patron types and categories"
 msgstr "범주/영역:"
 
 #. %1$s:  errmsgloo.prevdebarred | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:455
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:461
 #, fuzzy, c-format
 msgid "Patron was earlier restricted until %s"
 msgstr "선택"
@@ -32840,9 +32875,9 @@ msgid "Patron's address in doubt"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:447
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:201
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:247
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:367
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:207
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:253
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:373
 #, c-format
 msgid "Patron's address is in doubt"
 msgstr ""
@@ -32960,7 +32995,7 @@ msgstr "로케이션"
 msgid "Patrons found for: "
 msgstr "목차"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:449
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:474
 #, c-format
 msgid "Patrons from any library may put this item on hold. "
 msgstr ""
@@ -33175,7 +33210,7 @@ msgstr ""
 msgid "Perform a new search"
 msgstr "상세검색"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:142
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:146
 #, c-format
 msgid "Perform inventory (stocktaking) of your catalog"
 msgstr ""
@@ -33584,7 +33619,7 @@ msgstr ""
 msgid "Please choose at least one external target"
 msgstr "귀하는 적어도 한 개 이상의 품(항)목을 선정해야 합니다."
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:82
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:83
 #, c-format
 msgid "Please choose one or more filters to proceed."
 msgstr ""
@@ -33828,8 +33863,8 @@ msgstr ""
 msgid "Please put the "
 msgstr "다음을 주지하십시오： "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:153
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:280
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:159
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:286
 #, fuzzy, c-format
 msgid "Please return "
 msgstr "다음을 주지하십시오： "
@@ -33841,7 +33876,7 @@ msgid "Please return item to home library: %s"
 msgstr ""
 
 #. %1$s:  errmsgloo.msg 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:427
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:433
 #, fuzzy, c-format
 msgid "Please return to %s"
 msgstr "다음을 주지하십시오："
@@ -34064,7 +34099,7 @@ msgstr ""
 msgid "Policy for %s: %s"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:724
+#: intranet-tmpl/prog/en/modules/about.tt:723
 #, c-format
 msgid "Polski (Polish)"
 msgstr ""
@@ -34102,7 +34137,7 @@ msgstr ""
 msgid "Port: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:725
+#: intranet-tmpl/prog/en/modules/about.tt:724
 #, c-format
 msgid "Portugu&ecirc;s (Portuguese)"
 msgstr ""
@@ -34180,8 +34215,8 @@ msgstr ""
 msgid "Prev"
 msgstr "&lt;&lt;&lt;이전"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:116
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:206
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:118
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:208
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:171
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:185
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:211
@@ -34260,7 +34295,7 @@ msgstr "&lt;&lt;&lt;이전"
 #: intranet-tmpl/prog/en/columns.def:73
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:24
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:864
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:106
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:107
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:454
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:40
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:102
@@ -34369,7 +34404,7 @@ msgid "Print Receipt for %s"
 msgstr ""
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:211
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:217
 msgid "Print and confirm"
 msgstr ""
 
@@ -34400,21 +34435,21 @@ msgid "Print quick slip"
 msgstr "가상서가를 수정합니다 <em>%s</em>"
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:155
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:153
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:280
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:159
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:286
 #, fuzzy, c-format
 msgid "Print slip"
 msgstr "가상서가를 수정합니다 <em>%s</em>"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:172
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:260
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:381
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:178
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:266
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:387
 msgid "Print slip and confirm"
 msgstr ""
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:378
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:384
 msgid "Print slip, transfer, and confirm"
 msgstr ""
 
@@ -34872,11 +34907,6 @@ msgstr "발행인： "
 msgid "Pull this many items"
 msgstr "이 항목 선택"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:93
-#, c-format
-msgid "Purchase"
-msgstr ""
-
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:92
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:35
 #, fuzzy, c-format
@@ -34953,7 +34983,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:73
 #: intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:15
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:151
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:155
 #, c-format
 msgid "Quick spine label creator"
 msgstr ""
@@ -34965,7 +34995,7 @@ msgstr ""
 msgid "Quote editor"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:102
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:106
 #, c-format
 msgid "Quote editor for Quote-of-the-day feature in OPAC"
 msgstr ""
@@ -35374,7 +35404,7 @@ msgstr ""
 msgid "Relevance"
 msgstr "예약"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:510
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:516
 #, fuzzy, c-format
 msgid "Remember for next check in:"
 msgstr "구입희망(서) 검색"
@@ -35390,8 +35420,8 @@ msgstr "구입희망(서) 검색"
 msgid "Reminder Date"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:455
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:458
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:461
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:464
 #, fuzzy, c-format
 msgid "Reminder: "
 msgstr "거절되었음 "
@@ -35591,16 +35621,18 @@ msgid "Renewal due date:"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:155
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:317
 #, fuzzy, c-format
 msgid "Renewal period"
 msgstr "대출 혹은 구독예약기간연장"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:154
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:316
 #, fuzzy, c-format
 msgid "Renewals allowed (count)"
 msgstr "갱신할수 없습니다"
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:44
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:46
 #, fuzzy, c-format
 msgid "Renewed"
 msgstr "대출 혹은 구독예약기간연장"
@@ -35638,6 +35670,7 @@ msgid "Rental charge: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:161
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:323
 #, c-format
 msgid "Rental discount (%%)"
 msgstr ""
@@ -36057,7 +36090,7 @@ msgstr "총서명"
 msgid "Reset"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:87
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:88
 #, c-format
 msgid "Reset filter"
 msgstr ""
@@ -36077,8 +36110,8 @@ msgstr ""
 msgid "Restrict access to: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:157
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:158
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:160
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:161
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:432
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:179
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:222
@@ -36175,13 +36208,13 @@ msgstr ""
 msgid "Resume all suspended holds"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:80
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:82
 #, fuzzy, c-format
 msgid "Return date"
 msgstr "반환 booklist 기록"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:317
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:467
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:342
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:492
 #, fuzzy, c-format
 msgid "Return policy"
 msgstr "반환 booklist 기록"
@@ -36365,7 +36398,7 @@ msgstr ""
 msgid "Rollover:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:726
+#: intranet-tmpl/prog/en/modules/about.tt:725
 #, c-format
 msgid "Rom&acirc;n&#259; (Romanian)"
 msgstr ""
@@ -36386,7 +36419,7 @@ msgid "Ron Wickersham"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:76
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:156
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:69
 #: intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:9
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:32
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:16
@@ -36407,7 +36440,6 @@ msgid "Routing list"
 msgstr "가상서가를 수정합니다 <em>%s</em>"
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:72
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:77
 #, fuzzy, c-format
 msgid "Routing lists"
 msgstr "가상서가를 수정합니다 <em>%s</em>"
@@ -36629,7 +36661,7 @@ msgstr "토요일"
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:140
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:184
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:298
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:374
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:399
 #: intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:165
 #: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:178
 #: intranet-tmpl/prog/en/modules/labels/label-edit-profile.tt:132
@@ -36866,7 +36898,7 @@ msgstr "연체료(미납도서)"
 msgid "Schedule"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:97
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:101
 #, c-format
 msgid "Schedule tasks to run"
 msgstr ""
@@ -38150,7 +38182,7 @@ msgstr "대출카드번호"
 #: intranet-tmpl/prog/en/columns.def:97
 #: intranet-tmpl/prog/en/includes/search_indexes.inc:23
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:558
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:564
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:170
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:18
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:166
@@ -38316,7 +38348,7 @@ msgstr "구입 제안"
 msgid "Show all transactions"
 msgstr "로케이션"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:257
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:260
 #, fuzzy, c-format
 msgid "Show any items currently checked out:"
 msgstr "귀하는 체크아웃 한 것이 없습니다"
@@ -38548,7 +38580,7 @@ msgstr "미안합니다"
 msgid "Sort by :"
 msgstr "미안합니다"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:231
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:234
 #, fuzzy, c-format
 msgid "Sort by:"
 msgstr "미안합니다"
@@ -38723,7 +38755,7 @@ msgid "Specify how the holiday should repeat."
 msgstr ""
 
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:506
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:512
 #, fuzzy, c-format
 msgid "Specify return date %s: "
 msgstr "다음을 주지하십시오："
@@ -38783,6 +38815,11 @@ msgstr ""
 msgid "Staff client"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:52
+#, c-format
+msgid "Staff members are not allowed to access patron's checkout history"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:63
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:82
 #: intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:70
@@ -38801,7 +38838,7 @@ msgstr "%s의 목차"
 msgid "Stage MARC for import"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:166
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:165
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:38
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:46
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:201
@@ -38809,7 +38846,7 @@ msgstr ""
 msgid "Stage MARC records for import"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:167
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:166
 #, c-format
 msgid "Stage MARC records into the reservoir."
 msgstr ""
@@ -38836,7 +38873,7 @@ msgstr ""
 msgid "Staged MARC management"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:171
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:170
 #, c-format
 msgid "Staged MARC record management"
 msgstr ""
@@ -39018,7 +39055,6 @@ msgstr "지위"
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:85
 #: intranet-tmpl/prog/en/includes/members-menu.inc:18
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:87
 #: intranet-tmpl/prog/en/modules/circ/stats.tt:25
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:221
 #, fuzzy, c-format
@@ -39513,7 +39549,7 @@ msgstr "주제"
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:139
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:657
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:82
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:502
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:508
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:183
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:149
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:146
@@ -39954,11 +39990,12 @@ msgid "Suspend all holds"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:152
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:314
 #, c-format
 msgid "Suspension in days (day)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:729
+#: intranet-tmpl/prog/en/modules/about.tt:728
 #, c-format
 msgid "Svenska (Swedish)"
 msgstr ""
@@ -40055,7 +40092,7 @@ msgstr ""
 msgid "Sèbastien Hinderer"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:732
+#: intranet-tmpl/prog/en/modules/about.tt:731
 #, c-format
 msgid ""
 "T&uuml;rk&ccedil;e (Turkish) pre-3.8: Selma Aslan; for 3.8+, Suleyman "
@@ -40145,9 +40182,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:297
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:342
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:344
-#, fuzzy, c-format
+#, c-format
 msgid "Tabulation (\\t)"
-msgstr "로케이션"
+msgstr "표(\\t)"
 
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:183
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:166
@@ -40160,7 +40197,7 @@ msgid "Tag"
 msgstr "%1$s 목록"
 
 #. For the first occurrence,
-#. %1$s:  tagfield 
+#. %1$s:  tagfield | html 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:175
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:178
 #, c-format
@@ -40168,7 +40205,7 @@ msgid "Tag %s Subfield structure"
 msgstr ""
 
 #. For the first occurrence,
-#. %1$s:  tagfield 
+#. %1$s:  tagfield | html 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:173
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:180
 #, c-format
@@ -40267,7 +40304,7 @@ msgid "Target (database) record check field"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:106
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:96
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:100
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:17
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:35
 #, c-format
@@ -40382,7 +40419,7 @@ msgstr ""
 msgid "Testing..."
 msgstr "로케이션"
 
-#: intranet-tmpl/prog/en/modules/about.tt:730
+#: intranet-tmpl/prog/en/modules/about.tt:729
 #, c-format
 msgid "Tetun (Tetum) Karen Myers"
 msgstr ""
@@ -40847,7 +40884,7 @@ msgstr ""
 msgid "The new CSV profile \"%s\" has not been created."
 msgstr ""
 
-#. %1$s:  ERROR_LOO.bad_delay 
+#. %1$s:  ERROR_LOO.bad_delay | html 
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:225
 #, c-format
 msgid "The number of days (%s) must be a number between 0 and 999."
@@ -41003,6 +41040,13 @@ msgstr "%s를 위한 예약정보"
 #, fuzzy, c-format
 msgid "The subscription has not expired yet"
 msgstr "%s를 위한 예약정보"
+
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:112
+#, c-format
+msgid ""
+"The system preference OPACPrivacy is set but AnonymousPatron is not! Please "
+"correct this before continuing circulation."
+msgstr ""
 
 #. SPAN
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:104
@@ -41398,7 +41442,7 @@ msgstr ""
 msgid "This is a serial subscription"
 msgstr "정기간행물판"
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:52
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:54
 #, c-format
 msgid ""
 "This is the anonymous patron, so no circulation history is displayed. To get "
@@ -41455,19 +41499,19 @@ msgid "This item is on hold for pick-up at your library"
 msgstr "책바구니로 보내기"
 
 #. %1$s:  collectionBranch 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:117
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:123
 #, fuzzy, c-format
 msgid ""
 "This item is part of a rotating collection and needs to be transferred to %s"
 msgstr "책바구니로 보내기"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:149
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:155
 #, fuzzy, c-format
 msgid "This item must be checked in at its home library. "
 msgstr "책바구니로 보내기 "
 
 #. %1$s:  homebranchname 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:292
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:298
 #, fuzzy, c-format
 msgid "This item needs to be transferred to %s"
 msgstr "책바구니로 보내기"
@@ -41507,7 +41551,7 @@ msgstr ""
 msgid "This patron does not exist."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:54
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:56
 #, c-format
 msgid "This patron has no circulation history."
 msgstr ""
@@ -41810,8 +41854,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/labels/search.tt:53
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:75
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:182
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:114
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:201
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:116
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:203
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:40
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:55
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:858
@@ -41823,13 +41867,13 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:57
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:82
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:142
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:558
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:564
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:97
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:144
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:48
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:49
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:34
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:109
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:103
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:104
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:167
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:379
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:380
@@ -41839,7 +41883,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tags/list.tt:44
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:448
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:480
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:72
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:74
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:20
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:33
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:393
@@ -42122,7 +42166,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:730
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:741
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:752
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:140
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:143
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:213
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:282
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:297
@@ -42215,7 +42259,7 @@ msgstr ""
 msgid "Too many items (%s): not displaying each one individually."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:106
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:110
 #, fuzzy, c-format
 msgid "Tool Plugins"
 msgstr "로케이션:"
@@ -42428,8 +42472,8 @@ msgstr "%1$s 정기간행물"
 msgid "Total cost"
 msgstr "전체 수수료"
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:315
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:397
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:340
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:422
 #, fuzzy, c-format
 msgid "Total current checkouts allowed"
 msgstr "갱신할수 없습니다"
@@ -42592,12 +42636,12 @@ msgid "Transfer collection "
 msgstr "합집:"
 
 #. %1$s:  reser.diff 
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:60
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:61
 #, c-format
 msgid "Transfer is %s days late"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:292
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:298
 #, c-format
 msgid "Transfer now?"
 msgstr ""
@@ -42608,9 +42652,9 @@ msgstr ""
 msgid "Transfer to %s"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:203
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:250
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:370
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:209
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:256
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:376
 #, c-format
 msgid "Transfer to:"
 msgstr ""
@@ -42630,13 +42674,13 @@ msgstr ""
 msgid "Transferred to "
 msgstr "받은 날짜 "
 
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:40
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:41
 #, c-format
 msgid "Transfers are "
 msgstr ""
 
 #. %1$s:  show_date 
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:37
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:38
 #, c-format
 msgid "Transfers made to your library as of %s"
 msgstr ""
@@ -42735,13 +42779,13 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:342
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:163
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:558
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:564
 #: intranet-tmpl/prog/en/modules/circ/stats.tt:28
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:172
 #: intranet-tmpl/prog/en/modules/members/files.tt:32
 #: intranet-tmpl/prog/en/modules/members/notices.tt:49
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:929
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:70
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:72
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:613
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:54
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:221
@@ -42966,6 +43010,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:113
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:190
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:146
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:308
 #, c-format
 msgid "Unit"
 msgstr ""
@@ -43058,7 +43103,7 @@ msgstr "대출 혹은 구독예약기간연장"
 msgid "Unseen since"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:376
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:401
 #, c-format
 msgid "Unset"
 msgstr ""
@@ -43222,7 +43267,7 @@ msgid "Upload images"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:88
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:176
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:175
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:33
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:41
 #, c-format
@@ -43427,7 +43472,7 @@ msgstr ""
 msgid "Use the toolbar above to create a new %s."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:107
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:111
 #, c-format
 msgid "Use tool plugins"
 msgstr ""
@@ -43518,7 +43563,7 @@ msgstr "사용자。"
 msgid "Using framework:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:177
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:176
 #, c-format
 msgid "Utility to upload scanned cover images for display in OPAC"
 msgstr ""
@@ -44333,7 +44378,7 @@ msgstr ""
 msgid "Working day"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:92
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:96
 #, c-format
 msgid "Write news for the OPAC and staff interfaces"
 msgstr ""
@@ -44437,7 +44482,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:174
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:278
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:285
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:298
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:304
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:151
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:375
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:243
@@ -44467,7 +44512,7 @@ msgid "Yes, I confirm"
 msgstr ""
 
 #. INPUT type=submit name=dotransfer
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:296
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:302
 #, fuzzy
 msgid "Yes, Print slip"
 msgstr "가상서가를 수정합니다 <em>%s</em>"
@@ -44680,7 +44725,7 @@ msgstr ""
 msgid "You can make an exception on a range of dates repeated yearly."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:308
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:333
 #, c-format
 msgid ""
 "You can set a default maximum number of checkouts, hold policy and return "
@@ -45118,7 +45163,7 @@ msgstr ""
 msgid "Your file was processed."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:39
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:40
 #, c-format
 msgid "Your library is the destination for the following transfer(s)"
 msgstr ""
@@ -45353,13 +45398,6 @@ msgstr ""
 msgid "[% UNLESS opduplicate %][% othernames %][% END %]"
 msgstr ""
 
-#. IMG
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:12
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:14
-msgid ""
-"[% borrower.firstname %] [% borrower.surname %] ([% borrower.cardnumber %])"
-msgstr ""
-
 #. A
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:202
 msgid ""
@@ -45463,14 +45501,6 @@ msgid ""
 "include 'u' to signify unkown dates. See \"Legal Characters\" at: http://www."
 "loc.gov/marc/bibliographic/bd008a.html This search is also for date ranges "
 "due to the special Zebra r=r CCL mapping for 'yr' %%] "
-msgstr ""
-
-#. %1$s:  IF borrower 
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:1
-#, c-format
-msgid ""
-"[%%# duplicates circ-menu.inc but assumes all borrower attributes are in a "
-"borrower variable rather than in the global namespace %%] %s "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:236
@@ -45617,7 +45647,7 @@ msgid "added successfully"
 msgstr ""
 
 #. %1$s:  TransfersMaxDaysWarning 
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:40
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:41
 #, c-format
 msgid "after %s days."
 msgstr ""
@@ -46052,7 +46082,7 @@ msgstr "합집:"
 msgid "configuration file."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:40
+#: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:41
 #, c-format
 msgid "considered late"
 msgstr ""
@@ -46305,7 +46335,7 @@ msgstr "크레디트"
 msgid "edit "
 msgstr "크레디트 "
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:113
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:116
 #, fuzzy, c-format
 msgid "email"
 msgstr "전자메일:"
@@ -46505,7 +46535,7 @@ msgstr ""
 msgid "has already been added."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:90
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:94
 #, fuzzy, c-format
 msgid "has never been checked out."
 msgstr "귀하는 체크아웃 한 것이 없습니다"
@@ -46693,7 +46723,7 @@ msgstr "책바구니로 보내기"
 msgid "is duplicated"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:455
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:480
 #, c-format
 msgid ""
 "is enabled, these policies can be overridden by your circulation staff. "
@@ -46775,7 +46805,7 @@ msgid "is not empty. %s "
 msgstr "갱신할수 없습니다 "
 
 #. %1$s:  errmsgloo.debarred | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:452
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:458
 #, c-format
 msgid "is now debarred until %s "
 msgstr ""
@@ -46791,7 +46821,7 @@ msgstr ""
 msgid "is released under MIT license by Ludo van den Boom."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:142
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:148
 #, c-format
 msgid "is restricted. Please verify this patron should still be restricted. "
 msgstr ""
@@ -46998,7 +47028,7 @@ msgid "label_single_%s.xml"
 msgstr ""
 
 #. %1$s:  issue.lastreneweddate |$KohaDates with_hours => 1  
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:64
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:68
 #, fuzzy, c-format
 msgid "last on: %s"
 msgstr "분류: %s"
@@ -47168,7 +47198,7 @@ msgstr ""
 msgid "none"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:457
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:482
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:68
 #, c-format
 msgid "not"
@@ -47250,7 +47280,7 @@ msgstr "위한"
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:203
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:692
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:705
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:153
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:159
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:202
 #: intranet-tmpl/prog/en/modules/about.tt:151
 #: intranet-tmpl/prog/en/modules/about.tt:169
@@ -47734,11 +47764,6 @@ msgstr "구매제안"
 msgid "suggestion #%s"
 msgstr "구매제안"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.tt:93
-#, fuzzy, c-format
-msgid "suggestions"
-msgstr "구매제안"
-
 #: intranet-tmpl/prog/en/modules/about.tt:702
 #, c-format
 msgid "suomi, suomen kieli (Finnish) Pasi Korkalo"
@@ -47834,7 +47859,7 @@ msgstr ""
 msgid "the items.homebranch field MUST :"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:457
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:482
 #, c-format
 msgid "the library where the hold is being placed.. "
 msgstr ""
@@ -47887,8 +47912,8 @@ msgstr "목록검색 "
 
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( TransferWaitingAt ) 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:153
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:280
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:159
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:286
 #, fuzzy, c-format
 msgid "to %s"
 msgstr "서가에 추가하세요"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha Staff\n"
 "POT-Creation-Date: 2013-05-02 01:29-0300\n"
-"PO-Revision-Date: 2015-06-19 08:57+0000\n"
+"PO-Revision-Date: 2015-07-16 06:51+0000\n"
 "Last-Translator: Zeno <z.tajoli@cineca.it>\n"
 "Language-Team: CILEA <z.tajoli@cineca.it>\n"
 "Language: it\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1434704239.000000\n"
+"X-POOTLE-MTIME: 1437029470.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -159,12 +159,14 @@ msgid "acquisitions.pref#UniqueItemFields# The following <a href='http://schema.
 msgstr "I dati nelle seguenti <a href='http://schema.koha-community.org/tables/items.html' target='blank'>colonne nella tabella items</a> devono essere univoci nelle copie:"
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#gist# (enter in numeric form, 0.12 for 12%. First is the default. If you want more than 1 value, please separate with |)"
-msgstr "(inserisci in forma numerica, 0.12 per 12%. Il primo e' il default. Se vuoi usare più di un valore, separali con |)"
+msgid "acquisitions.pref#gist# . Enter in numeric form, 0.12 for 12%. The first item in the list will be selected by default. For more than one value, separate with | (pipe)."
+msgstr ""
+"Inserisci con un numero, 0.12 per 12%. Il primo valore nella listà sarà "
+"quello di default. Per inserire plù di un valore, separali con | (pipe)."
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#gist# Default tax rates are"
-msgstr "I tassi per l'IVA sono"
+msgid "acquisitions.pref#gist# Tax rates are"
+msgstr "Le aliquote IVA sono"
 
 # Administration
 msgid "admin.pref"
@@ -459,8 +461,8 @@ msgid "admin.pref#delimiter# #'s"
 msgstr "#"
 
 # Administration > Interface options
-msgid "admin.pref#delimiter# Separate columns in an exported report file with"
-msgstr "Nei report salvati le colonne hanno come delimitatore"
+msgid "admin.pref#delimiter# Separate columns in an exported CSV file with"
+msgstr "Le colonne vengono separate nel file CSV con"
 
 # Administration > Interface options
 msgid "admin.pref#delimiter# backslashes"
@@ -2352,6 +2354,12 @@ msgid "circulation.pref#finesCalendar# not including days the library is closed.
 msgstr "non includendo i giorni di chiusura della biblioteca."
 
 # Circulation > Fines Policy
+msgid "circulation.pref#finesMode# <br><b>Note:</b> Fines can also be charged by the CalculateFinesOnReturn system preference."
+msgstr ""
+"<br><b>Nota:</b> Le multe posso essere calcolate anche con la preferenza di "
+"sistema CalculateFinesOnReturn."
+
+# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate (but only for mailing to the admin)"
 msgstr "Calcola (ma solo per inviarlo via mail all'admin)"
 
@@ -3649,10 +3657,7 @@ msgstr "i dettagli dell'acquisizione nella pagina di dettaglio dell'Opac"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACBaseURL# . This should be a complete URL, starting with <code>http://</code> or <code>https://</code>. Do not include a trailing slash in the URL. (This must be filled in correctly for RSS, unAPI, and search plugins to work.)"
-msgstr ""
-"Deve essere un URL completa, che parte con <code>http://</code> o con "
-"<code>https://</code>. Non mettere lo slash finale. Va inserito così per far "
-"funzionare gli  RSS, unAPI e plugin di ricerca."
+msgstr "Deve essere un URL completa, che parte con <code>http://</code> o con <code>https://</code>. Non mettere lo slash finale. Va inserito così per far funzionare gli  RSS, unAPI e plugin di ricerca."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACBaseURL# The OPAC is located at "
@@ -4020,9 +4025,7 @@ msgstr "Rimpiazza il box di ricerca in alto nell'Opac con il seguente HTML:"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# Select export options that should be available from OPAC detail page:"
-msgstr ""
-"Selezione le opzioni di export che saranno disponibili dalla pagina di "
-"dettaglio dell'Opac:"
+msgstr "Selezione le opzioni di export che saranno disponibili dalla pagina di dettaglio dell'Opac:"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacFavicon# Use the image at"
@@ -4033,8 +4036,12 @@ msgid "opac.pref#OpacFavicon# for the OPAC's favicon. (This should be a complete
 msgstr "per l'icona dell'Opac (favicon) al posto di quella di Koha. Deve essere un URL completo, che inizia con <code>http://</code>."
 
 # OPAC > Policy
-msgid "opac.pref#OpacHiddenItems# Allows to define custom rules for hiding specific items at opac. See docs/opac/OpacHiddenItems.txt for more informations"
-msgstr "Permetti di definire delle regole ad hoc per nascondere specifiche copie nell'opac. Guarda docs/opac/OpacHiddenItems.txt per maggiori informazioni."
+msgid "opac.pref#OpacHiddenItems# Define custom rules to hide specific items from search and view on the OPAC. How to write these rules is documented on the <a href=\"http://wiki.koha-community.org/wiki/OpacHiddenItems\" target=\"_blank\">Koha wiki</a>."
+msgstr ""
+"Definisci regole locali per nascondere specifiche copie dalla ricerca e "
+"visualizzazione in Opac. Per vedere come scrivere queste regole vai al <a "
+"href=\"http://wiki.koha-community.org/wiki/OpacHiddenItems\" target=\""
+"_blank\">Koha wiki</a>."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# (separate columns with |)"
@@ -4490,9 +4497,7 @@ msgstr "Mostra"
 
 # OPAC > Features
 msgid "opac.pref#ShowReviewerPhoto# reviewer's avatar beside comments in OPAC. The avatar will be searched on www.libravatar.org using the patron's e-mail address."
-msgstr ""
-"l'avatar del commentatore a fianco dei commenti nell'Opac. L'avatar verrà "
-"cercato su www.libravatar.org usando l'e-mail dell'utente."
+msgstr "l'avatar del commentatore a fianco dei commenti nell'Opac. L'avatar verrà cercato su www.libravatar.org usando l'e-mail dell'utente."
 
 # OPAC > Features
 msgid "opac.pref#SocialNetworks# Disable"

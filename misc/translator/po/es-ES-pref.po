@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.14 staff\n"
 "POT-Creation-Date: 2015-04-15 09:32-0300\n"
-"PO-Revision-Date: 2015-06-16 00:50+0000\n"
-"Last-Translator: Marcos <marcos.varela.oroda@gmail.com>\n"
+"PO-Revision-Date: 2015-07-20 19:51+0000\n"
+"Last-Translator: Héctor <hector.hecaxmmx@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-"
 "community.org>\n"
 "Language: es\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1434415811.000000\n"
+"X-POOTLE-MTIME: 1437421903.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -160,12 +160,14 @@ msgid "acquisitions.pref#UniqueItemFields# The following <a href='http://schema.
 msgstr "Las siguientes <a href='http://schema.koha-community.org/tables/items.html' target='blank'>columnas de la base de datos</a> deben ser únicas en un ítem:"
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#gist# (enter in numeric form, 0.12 for 12%. First is the default. If you want more than 1 value, please separate with |)"
-msgstr "(ingresar en forma numérica. 0.12 para 12%. El primero es el valor predeterminado. Si quiere más de 1 valor, separar con |)"
+msgid "acquisitions.pref#gist# . Enter in numeric form, 0.12 for 12%. The first item in the list will be selected by default. For more than one value, separate with | (pipe)."
+msgstr ""
+". Ingrese en forma numérica, 0.12 para 12%. El primer ítem en la lista será "
+"seleccionado por defecto. Para más de un valor, separe con | (tubería)."
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#gist# Default tax rates are"
-msgstr "Las tasas predeterminadas son"
+msgid "acquisitions.pref#gist# Tax rates are"
+msgstr "La tasa de impuesto es"
 
 # Administration
 msgid "admin.pref"
@@ -460,8 +462,8 @@ msgid "admin.pref#delimiter# #'s"
 msgstr "#'s"
 
 # Administration > Interface options
-msgid "admin.pref#delimiter# Separate columns in an exported report file with"
-msgstr "Separe columnas en un archivo de reporte exportado con"
+msgid "admin.pref#delimiter# Separate columns in an exported CSV file with"
+msgstr "Separe las columnas de un archivo CSV exportado con"
 
 # Administration > Interface options
 msgid "admin.pref#delimiter# backslashes"
@@ -1521,7 +1523,7 @@ msgstr "Confirmar reservas futuras (comenzando no más tarde que"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ConfirmFutureHolds# days from now) at checkin time. Note that this number of days will be used too in calculating the default end date for the Holds to pull-report. But it does not interfere with issuing, renewing or transferring books."
-msgstr "días desde ahora) el momento de devolución. Note que este número de días será utilizado además al calcular la fecha final para el reporte Reservas a preparar. Pero no interfiere con préstamos, renovaciones o transferencia de libros."
+msgstr "días desde ahora) el momento de devolución. Note que este número de días será utilizado además al calcular la fecha final para el informe Reservas a preparar. Pero no interfiere con préstamos, renovaciones o transferencia de libros."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>(Used when the longoverdue.pl script is called without the --charge parameter)"
@@ -1597,7 +1599,9 @@ msgstr "la expiración de reservas si no han sido retiradas dentro del período 
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows his or her waiting hold to expire a fee of"
-msgstr "Si utiliza ExpireReservesMaxPickUpDelay, aplique al usuario que permitió expirar su reserva una tarifa de"
+msgstr ""
+"Si utiliza ExpireReservesMaxPickUpDelay, aplique al usuario que permitió "
+"expirar su reserva un costo de"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
@@ -1749,7 +1753,9 @@ msgstr "Impida"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#IssuingInProcess# patrons from checking out an item whose rental charge would take them over the limit."
-msgstr "a usuarios pedir prestado un ítem cuyo valor de alquiler los lleve sobre el límite."
+msgstr ""
+"a usuarios pedir prestado un ítem cuyo costo de alquiler los llevaría por "
+"encima del límite."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#LocalHoldsPriority# Don't give"
@@ -1910,7 +1916,9 @@ msgstr "Reembolse"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#RefundLostItemFeeOnReturn# lost item fees charged to a borrower when the lost item is returned."
-msgstr "el costo por ejemplar perdido cargados al usuario cuando se retorne el ejemplar perdido."
+msgstr ""
+"el costo por ítem perdido cargados al usuario cuando se regrese el ítem "
+"perdido."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#RenewalPeriodBase# When renewing checkouts, base the new due date on"
@@ -1938,7 +1946,7 @@ msgstr "un aviso de renovación de acuerdo con las preferencias de alerta del us
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#RentalFeesCheckoutConfirmation# When checking out an item with rental fees, "
-msgstr "Cuando se preste un ejemplar con cargos de uso, "
+msgstr "Cuando se preste un ítem con costos de alquiler, "
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#RentalFeesCheckoutConfirmation# ask"
@@ -2353,6 +2361,12 @@ msgid "circulation.pref#finesCalendar# not including days the library is closed.
 msgstr "no incluyendo los días en que la biblioteca está cerrada."
 
 # Circulation > Fines Policy
+msgid "circulation.pref#finesMode# <br><b>Note:</b> Fines can also be charged by the CalculateFinesOnReturn system preference."
+msgstr ""
+"<br><b>Nota:</b> Las multas también pueden ser cargadas por la preferencia "
+"de sistema CalculateFinesOnReturn."
+
+# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate (but only for mailing to the admin)"
 msgstr "Calcular (pero sólo para enviar por correo al administrador)"
 
@@ -2594,7 +2608,9 @@ msgstr "Ponga la etiqueta asociada"
 
 # Enhanced Content > Amazon
 msgid "enhanced_content.pref#AmazonAssocTag# on links to Amazon. This can net your library referral fees if a patron decides to buy an item."
-msgstr "en enlaces de Amazon. Esto puede aportar a su monto por referencias si el usuario decide comprar un ítem."
+msgstr ""
+"en enlaces de Amazon. Esto puede aportar a su biblioteca un costo por "
+"referencias si el usuario decide comprar un ítem."
 
 # Enhanced Content > Amazon
 msgid "enhanced_content.pref#AmazonCoverImages# Don't show"
@@ -3650,11 +3666,7 @@ msgstr "los detalles de adquisición en las páginas de detalles del OPAC."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACBaseURL# . This should be a complete URL, starting with <code>http://</code> or <code>https://</code>. Do not include a trailing slash in the URL. (This must be filled in correctly for RSS, unAPI, and search plugins to work.)"
-msgstr ""
-". Esto debe ser una URL completa, comenzando con <code>http://</code> o "
-"<code>https://</code>. No incluya una barra diagonal en la URL. (Esto se "
-"debe rellenar correctamente para RSS, unAPI y plugins de búsqueda para que "
-"funcione.)"
+msgstr ". Esto debe ser una URL completa, comenzando con <code>http://</code> o <code>https://</code>. No incluya una barra diagonal en la URL. (Esto se debe rellenar correctamente para RSS, unAPI y plugins de búsqueda para que funcione.)"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACBaseURL# The OPAC is located at "
@@ -4022,9 +4034,7 @@ msgstr "Reemplazar la caja de búsqueda en el tope del OPAC con el siguiente có
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# Select export options that should be available from OPAC detail page:"
-msgstr ""
-"Seleccione las opciones de exportación que deben estar disponibles desde la "
-"página de detalles del OPAC:"
+msgstr "Seleccione las opciones de exportación que deben estar disponibles desde la página de detalles del OPAC:"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacFavicon# Use the image at"
@@ -4035,8 +4045,12 @@ msgid "opac.pref#OpacFavicon# for the OPAC's favicon. (This should be a complete
 msgstr "para el favicon del OPAC. (Esto deberá ser una URL completa, comenzando con <code>http://</code>.)"
 
 # OPAC > Policy
-msgid "opac.pref#OpacHiddenItems# Allows to define custom rules for hiding specific items at opac. See docs/opac/OpacHiddenItems.txt for more informations"
-msgstr "Permite definir reglas a medida para ocultar ítems específicos en el OPAC. Vea docs/opac/OpacHiddenItems.txt para más información."
+msgid "opac.pref#OpacHiddenItems# Define custom rules to hide specific items from search and view on the OPAC. How to write these rules is documented on the <a href=\"http://wiki.koha-community.org/wiki/OpacHiddenItems\" target=\"_blank\">Koha wiki</a>."
+msgstr ""
+"Defina reglas personalizadas para ocultar ítems específicos de la búsqueda y "
+"de la vista del OPAC. Para saber de cómo escribir estas reglas, están "
+"documentadas en la<a href=\"http://wiki.koha-community.org/wiki/"
+"OpacHiddenItems\" target=\"_blank\">página de Koha wiki</a>."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# (separate columns with |)"
@@ -4492,9 +4506,7 @@ msgstr "Mostrar"
 
 # OPAC > Features
 msgid "opac.pref#ShowReviewerPhoto# reviewer's avatar beside comments in OPAC. The avatar will be searched on www.libravatar.org using the patron's e-mail address."
-msgstr ""
-"avatar del revisor al lado del comentario en el OPAC. El avatar se buscará "
-"en www.libravatar.org usando el e-mail del usuario."
+msgstr "avatar del revisor al lado del comentario en el OPAC. El avatar se buscará en www.libravatar.org usando el e-mail del usuario."
 
 # OPAC > Features
 msgid "opac.pref#SocialNetworks# Disable"
@@ -4962,7 +4974,9 @@ msgstr "No permitir"
 
 # Patrons > General
 msgid "patrons.pref#useDischarge# librarians to discharge borrowers and borrowers to request a discharge."
-msgstr "a los bibliotecario para realizar la generación de la liberación de la deuda a los lectores y los lectores a solicitar una liberación de la deuda."
+msgstr ""
+"a los bibliotecarios la realización de la generación de la liberación de la "
+"deuda a los lectores y los lectores a solicitar una liberación de la deuda."
 
 # Searching
 msgid "searching.pref"

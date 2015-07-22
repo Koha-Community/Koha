@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: zh-Hans-TW-i-staff-t-prog-v-3004000\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2015-06-17 06:52+0000\n"
+"PO-Revision-Date: 2015-07-15 04:40+0000\n"
 "Last-Translator: Anthony <mao@lins.fju.edu.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1434523970.000000\n"
+"X-POOTLE-MTIME: 1436935218.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -156,17 +156,15 @@ msgstr "(以空格區隔)"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#UniqueItemFields# The following <a href='http://schema.koha-community.org/tables/items.html' target='blank'>database columns</a> should be unique in an item:"
-msgstr ""
-"以下的 <a href='http://schema.koha-community.org/tables/items.html' "
-"target='blank'> 資料庫欄位</a>在館藏內應是唯一的："
+msgstr "以下的 <a href='http://schema.koha-community.org/tables/items.html' target='blank'> 資料庫欄位</a>在館藏內應是唯一的："
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#gist# (enter in numeric form, 0.12 for 12%. First is the default. If you want more than 1 value, please separate with |)"
-msgstr "(輸入數值格式，0.12 不用 12%。第一個數值為預設值。多個數值間以 | 區隔)"
+msgid "acquisitions.pref#gist# . Enter in numeric form, 0.12 for 12%. The first item in the list will be selected by default. For more than one value, separate with | (pipe)."
+msgstr "。進入數字模式，0.12 為 12%。清單內的第一個館藏將是預設值。以 | (直線)區隔多個值。"
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#gist# Default tax rates are"
-msgstr "預設稅率為"
+msgid "acquisitions.pref#gist# Tax rates are"
+msgstr "稅率是"
 
 # Administration
 msgid "admin.pref"
@@ -461,8 +459,8 @@ msgid "admin.pref#delimiter# #'s"
 msgstr "#'s"
 
 # Administration > Interface options
-msgid "admin.pref#delimiter# Separate columns in an exported report file with"
-msgstr "匯出檔案時，欄位間隔符號採用"
+msgid "admin.pref#delimiter# Separate columns in an exported CSV file with"
+msgstr "匯出的 CSV 檔案內有獨立的欄"
 
 # Administration > Interface options
 msgid "admin.pref#delimiter# backslashes"
@@ -758,9 +756,7 @@ msgstr "空白表示為預設的英文。"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#DefaultLanguageField008# Fill in the default language for field 008 Range 35-37 of MARC21 records (e.g. eng, nor, ger, see <a href=\"http://www.loc.gov/marc/languages/language_code.html\">MARC Code List for Languages</a>)"
-msgstr ""
-"在 MARC21 記錄的欄位 008 位址 35-37 填入預設語系(如：chi、eng、nor、ger等，見 <a href=\""
-"http://www.loc.gov/marc/languages/language_code.html\">MARC 語言代碼表</a>)"
+msgstr "在 MARC21 記錄的欄位 008 位址 35-37 填入預設語系(如：chi、eng、nor、ger等，見 <a href=\"http://www.loc.gov/marc/languages/language_code.html\">MARC 語言代碼表</a>)"
 
 # Cataloging > Interface
 msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
@@ -1164,9 +1160,7 @@ msgstr "自助借出"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AgeRestrictionMarker# E.g. enter target audience keyword(s) split by | (bar) FSK|PEGI|Age| (No white space near |). Be sure to map agerestriction in Koha to MARC mapping (e.g. 521$a). A MARC field value of FSK 12 or PEGI 12 would mean: Borrower must be 12 years old. Leave empty to not apply an age restriction."
-msgstr ""
-"如，輸入預期讀者的鍵詞以 | (直線) FSK|PEGI|Age|區隔(|前後沒有空格)。確定從 Koha 的年齡限制對映至 MARC 的對映 (如 "
-"521$a)。FSK 12 或 PEGI 12 的 MARC 欄位值指的是：借閱者必須滿 12 歲。若為空格，則不適用於年齡限制。"
+msgstr "如，輸入預期讀者的鍵詞以 | (直線) FSK|PEGI|Age|區隔(|前後沒有空格)。確定從 Koha 的年齡限制對映至 MARC 的對映 (如 521$a)。FSK 12 或 PEGI 12 的 MARC 欄位值指的是：借閱者必須滿 12 歲。若為空格，則不適用於年齡限制。"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AgeRestrictionMarker# Restrict patrons with the following target audience values from checking out inappropriate materials:"
@@ -2358,6 +2352,10 @@ msgid "circulation.pref#finesCalendar# not including days the library is closed.
 msgstr "不包括閉館日。"
 
 # Circulation > Fines Policy
+msgid "circulation.pref#finesMode# <br><b>Note:</b> Fines can also be charged by the CalculateFinesOnReturn system preference."
+msgstr "<br><b>說明：</b> 可經由 CalculateFinesOnReturn 糸統偏好設定罰款中。"
+
+# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate (but only for mailing to the admin)"
 msgstr "計算(但祗寄給管理者)"
 
@@ -2663,8 +2661,7 @@ msgstr "設定 Babeltheque javascript 檔的網址(如：http://www.babeltheque.
 
 # Enhanced Content > Babelthèque
 msgid "enhanced_content.pref#Babeltheque_url_update# Defined the url for the Babeltheque update periodically (eq. http://www.babeltheque.com/.../file.csv.bz2)."
-msgstr ""
-"設定 Babeltheque 的 url 以便定期更新 (如：http://www.babeltheque.com/.../file.csv.bz2)。"
+msgstr "設定 Babeltheque 的 url 以便定期更新 (如：http://www.babeltheque.com/.../file.csv.bz2)。"
 
 # Enhanced Content > Baker and Taylor
 msgid "enhanced_content.pref#BakerTaylorBookstoreURL# <em>isbn</em></code> (this should be filled in with something like <code>ocls.mylibrarybookstore.com/MLB/actions/searchHandler.do?nextPage=bookDetails&amp;parentNum=10923&amp;key=</code>). Leave it blank to disable these links."
@@ -3284,8 +3281,7 @@ msgstr "時間格式"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#alphabet# <br/> Hint: Changing collation in the database for the 'surname' column of the 'borrowers' table is helpful to make browsing by last name work in members-home.pl when using an alphabet outside of A-Z"
-msgstr ""
-"<br/> 提示：改變資料庫內 'borrows' 表 'surname' 欄的對照表有助於瀏覽 members-home.pl 的 A-Z 以外的姓"
+msgstr "<br/> 提示：改變資料庫內 'borrows' 表 'surname' 欄的對照表有助於瀏覽 members-home.pl 的 A-Z 以外的姓"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#alphabet# Use the alphabet"
@@ -3657,9 +3653,7 @@ msgstr "OPAC 詳情頁面的採訪詳情。"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACBaseURL# . This should be a complete URL, starting with <code>http://</code> or <code>https://</code>. Do not include a trailing slash in the URL. (This must be filled in correctly for RSS, unAPI, and search plugins to work.)"
-msgstr ""
-"應為完整的 URL，以 <code>http://</code> 或 <code>https://</code> 開頭。不要在 URL 之後加入斜撇。("
-"必須正確鍵入才能被 RSS、unAPI 與其他外掛搜尋軟體使用。)"
+msgstr "應為完整的 URL，以 <code>http://</code> 或 <code>https://</code> 開頭。不要在 URL 之後加入斜撇。(必須正確鍵入才能被 RSS、unAPI 與其他外掛搜尋軟體使用。)"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACBaseURL# The OPAC is located at "
@@ -3787,9 +3781,7 @@ msgstr "在 OPAC 的檢索結果裡，包括下列的 HTML："
 
 # OPAC > Appearance
 msgid "opac.pref#OPACSearchForTitleIn# <br />Note: The placeholders {BIBLIONUMBER}, {CONTROLNUMBER}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be replaced with information from the displayed record."
-msgstr ""
-"<br />說明：有設定占位符{BIBLIONUMBER}、{CONTROLNUMBER}、{TITLE}、{ISBN}、{ISSN} 與 "
-"{AUTHOR} 的內容將被系統相對欄位的資訊取代。"
+msgstr "<br />說明：有設定占位符{BIBLIONUMBER}、{CONTROLNUMBER}、{TITLE}、{ISBN}、{ISSN} 與 {AUTHOR} 的內容將被系統相對欄位的資訊取代。"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACSearchForTitleIn# Include a \"More Searches\" box on the detail pages of items on the OPAC, with the following HTML (leave blank to disable):"
@@ -3897,12 +3889,7 @@ msgstr "OPAC 其他讀者的採購建議。"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACXSLTDetailsDisplay# <br />Options:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"\">Leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">default</a>\" for the default one</li><li>put a path to define a xslt file</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language"
-msgstr ""
-"opac.pref#OPACXSLTDetailsDisplay# <br />選項：<ul><li><a href=\"#\" class=\""
-"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"\">空白</a> "
-"供 \"無 xslt\"</li><li>輸入 \"<a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"OPACXSLTDetailsDisplay\" data-value=\"default\">預設</a>\" 供預設使用</li><li>置入預設 "
-"xslt 檔案路徑</li><li>置入 URL 供指定外部樣式表之用。</li></ul>{langcode} 將取代現在的介面語系"
+msgstr "opac.pref#OPACXSLTDetailsDisplay# <br />選項：<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"\">空白</a> 供 \"無 xslt\"</li><li>輸入 \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTDetailsDisplay\" data-value=\"default\">預設</a>\" 供預設使用</li><li>置入預設 xslt 檔案路徑</li><li>置入 URL 供指定外部樣式表之用。</li></ul>{langcode} 將取代現在的介面語系"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACXSLTDetailsDisplay# Display OPAC details using XSLT stylesheet at: "
@@ -3910,12 +3897,7 @@ msgstr "使用 XSLT 樣式表顯示 OPAC 的詳情："
 
 # OPAC > Appearance
 msgid "opac.pref#OPACXSLTResultsDisplay# <br />Options:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value=\"\">Leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value=\"default\">default</a>\" for the default one</li><li> put a path to define a xslt file</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language"
-msgstr ""
-"opac.pref#OPACXSLTResultsDisplay# <br />選項：<ul><li><a href=\"#\" class=\""
-"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value=\"\">空白</a> "
-"供 \"無 xslt\"</li><li>輸入 \"<a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"OPACXSLTResultsDisplay\" data-value=\"default\">預設</a>\" 供預設使用</li><li> 置入預設 "
-"xslt 檔案路徑</li><li>置入 URL 供指定外部樣式表之用。</li></ul>{langcode} 將取代現在的介面語系"
+msgstr "opac.pref#OPACXSLTResultsDisplay# <br />選項：<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value=\"\">空白</a> 供 \"無 xslt\"</li><li>輸入 \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"OPACXSLTResultsDisplay\" data-value=\"default\">預設</a>\" 供預設使用</li><li> 置入預設 xslt 檔案路徑</li><li>置入 URL 供指定外部樣式表之用。</li></ul>{langcode} 將取代現在的介面語系"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACXSLTResultsDisplay# Display OPAC results using XSLT stylesheet at: "
@@ -3951,10 +3933,7 @@ msgstr "包括其他的 CSS"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacAdditionalStylesheet# to override specified settings from the default stylesheet (leave blank to disable). Enter just a filename, a full local path or a complete URL starting with <code>http://</code> (if the file lives on a remote server). Please note that if you just enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory. A full local path is expected to start from your HTTP document root."
-msgstr ""
-"以預設的樣式表(空白即停用)取代既有的設定。輸入檔案名稱，以及完整路徑或完整的 URL <code>http://</code> "
-"(若該檔案在外部的伺服器裡)。祗輸入檔名，表示該檔案應在樣式表的資料夾裡，包括每個佈景、語言包都在 Koha 版面的資料夾裡。建議使用完整的路徑，即 "
-"HTTP 的網址。"
+msgstr "以預設的樣式表(空白即停用)取代既有的設定。輸入檔案名稱，以及完整路徑或完整的 URL <code>http://</code> (若該檔案在外部的伺服器裡)。祗輸入檔名，表示該檔案應在樣式表的資料夾裡，包括每個佈景、語言包都在 Koha 版面的資料夾裡。建議使用完整的路徑，即 HTTP 的網址。"
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Show search options for the expanded view"
@@ -4053,8 +4032,10 @@ msgid "opac.pref#OpacFavicon# for the OPAC's favicon. (This should be a complete
 msgstr "OPAC 的圖示。(可以用網址取代 <code> http://</code>.)"
 
 # OPAC > Policy
-msgid "opac.pref#OpacHiddenItems# Allows to define custom rules for hiding specific items at opac. See docs/opac/OpacHiddenItems.txt for more informations"
-msgstr "允許設定客製化規則於 OPAC 隱藏特定館藏。詳情請見 docs/opac/OpacHiddenItems.txt"
+msgid "opac.pref#OpacHiddenItems# Define custom rules to hide specific items from search and view on the OPAC. How to write these rules is documented on the <a href=\"http://wiki.koha-community.org/wiki/OpacHiddenItems\" target=\"_blank\">Koha wiki</a>."
+msgstr ""
+"以客製化規則隱藏館藏不必搜尋也不顯示於 OPAC。參見 <a href=\"http://wiki.koha-community.org/wiki/"
+"OpacHiddenItems\" target=\"_blank\">Koha wiki</a>。"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# (separate columns with |)"
@@ -4586,10 +4567,7 @@ msgstr "使用 CSS"
 
 # OPAC > Appearance
 msgid "opac.pref#opaclayoutstylesheet# on all pages in the OPAC, instead of the default css (used when leaving this field blank). Enter just a filename, a full local path or a complete URL starting with <code>http://</code> (if the file lives on a remote server). Please note that if you just enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory. A full local path is expected to start from your HTTP document root."
-msgstr ""
-"在 OPAC 的所有頁面裡，不祗是預設的樣式表(此欄位空白才使用它)。輸入檔案名稱，以及完整路徑或完整的 URL <code>http://</code>"
-" (若該檔案在外部的伺服器裡)。祗輸入檔名，表示該檔案應在樣式表的資料夾裡，包括每個佈景、語言包都在 Koha 版面的資料夾裡。建議使用完整的路徑，即 "
-"HTTP 的網址。"
+msgstr "在 OPAC 的所有頁面裡，不祗是預設的樣式表(此欄位空白才使用它)。輸入檔案名稱，以及完整路徑或完整的 URL <code>http://</code> (若該檔案在外部的伺服器裡)。祗輸入檔名，表示該檔案應在樣式表的資料夾裡，包括每個佈景、語言包都在 Koha 版面的資料夾裡。建議使用完整的路徑，即 HTTP 的網址。"
 
 # OPAC > Privacy
 msgid "opac.pref#opacreadinghistory# Allow"
@@ -5637,12 +5615,7 @@ msgstr "館藏選項在記錄詳情頁面。"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#XSLTDetailsDisplay# <br />Options:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-value=\"\">Leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" for the default one</li><li>put a path to define a xslt file</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language"
-msgstr ""
-"staff_client.pref#XSLTDetailsDisplay# <br />選項：<ul><li><a href=\"#\" class=\""
-"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-value=\"\">空白</a> 供 \""
-"無 xslt\"</li><li>輸入 \"<a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"XSLTDetailsDisplay\" data-value=\"default\">預設</a>\" 供預設使用</li><li>置入預設 xslt "
-"檔案路徑</li><li>置入 URL 供指定外部樣式表之用。</li></ul>{langcode} 將取代現在的介面語系"
+msgstr "staff_client.pref#XSLTDetailsDisplay# <br />選項：<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-value=\"\">空白</a> 供 \"無 xslt\"</li><li>輸入 \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-value=\"default\">預設</a>\" 供預設使用</li><li>置入預設 xslt 檔案路徑</li><li>置入 URL 供指定外部樣式表之用。</li></ul>{langcode} 將取代現在的介面語系"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#XSLTDetailsDisplay# Display details in the staff client using XSLT stylesheet at: "
@@ -5650,12 +5623,7 @@ msgstr "以 XSLT 樣式表，在館員介面顯示詳情："
 
 # Staff Client > Appearance
 msgid "staff_client.pref#XSLTResultsDisplay# <br />Options:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-value=\"\">Leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" for the default one</li><li> put a path to define a xslt file</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language"
-msgstr ""
-"<br />選項：<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\""
-"XSLTDetailsDisplay\" data-value=\"\">空白</a> 供 \"無 xslt\"</li><li>輸入 \"<a "
-"href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-"
-"value=\"default\">預設</a>\" 供預設使用</li><li>置入預設 xslt 檔案路徑</li><li>置入 URL "
-"供指定外部樣式表之用。</li></ul>{langcode} 將取代現在的介面語系"
+msgstr "<br />選項：<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-value=\"\">空白</a> 供 \"無 xslt\"</li><li>輸入 \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-value=\"default\">預設</a>\" 供預設使用</li><li>置入預設 xslt 檔案路徑</li><li>置入 URL 供指定外部樣式表之用。</li></ul>{langcode} 將取代現在的介面語系"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#XSLTResultsDisplay# Display results in the staff client using XSLT stylesheet at: "
@@ -5687,9 +5655,7 @@ msgstr "包括額外的CSS樣式表"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#intranetcolorstylesheet# to override specified settings from the default stylesheet (leave blank to disable.) Enter just a filename, a full local path or a complete URL starting with <code>http://</code> (if the file lives on a remote server). Please note that if you just enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory. A full local path is expected to start from your HTTP document root."
-msgstr ""
-"取代預設的樣式表(空白則不啟用)。鍵入檔名，包括本機的路徑或含<code>http://</code>的完整 URL "
-"(若檔案在遠端的伺服器)；若祗鍵入檔名，則應在樣式表所在的資料夾，包括 Koha 模版的其主題與語系。完整的在地路徑預期從 HTTP 文件的根目錄開始。"
+msgstr "取代預設的樣式表(空白則不啟用)。鍵入檔名，包括本機的路徑或含<code>http://</code>的完整 URL (若檔案在遠端的伺服器)；若祗鍵入檔名，則應在樣式表所在的資料夾，包括 Koha 模版的其主題與語系。完整的在地路徑預期從 HTTP 文件的根目錄開始。"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#intranetstylesheet# Use the CSS stylesheet"
@@ -5697,10 +5663,7 @@ msgstr "使用CSS樣式表"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#intranetstylesheet# on all pages in the staff interface, instead of the default css (used when leaving this field blank). Enter just a filename, a full local path or a complete URL starting with <code>http://</code> (if the file lives on a remote server). Please note that if you just enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory. A full local path is expected to start from your HTTP document root."
-msgstr ""
-"使用於館員介面的所有頁面，取代預設的樣式表(空白則使用它)。鍵入檔名，包括完整的路徑與含 <code>http://</code> 的完整 URL "
-"(若檔案存放於遠端的伺服器)。請注意，若祗鍵入檔名，該檔案應在樣式表的資料來，在 Koha 模版目錄的主題與語系。完整的在地路徑應在 HTTP "
-"文件的根目錄。"
+msgstr "使用於館員介面的所有頁面，取代預設的樣式表(空白則使用它)。鍵入檔名，包括完整的路徑與含 <code>http://</code> 的完整 URL (若檔案存放於遠端的伺服器)。請注意，若祗鍵入檔名，該檔案應在樣式表的資料來，在 Koha 模版目錄的主題與語系。完整的在地路徑應在 HTTP 文件的根目錄。"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#intranetuserjs# Include the following JavaScript on all pages in the staff client:"
@@ -5872,9 +5835,7 @@ msgstr "新增或更新書目記錄時自動更新 OAI-PMH 的內容"
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:ConfFile# . If empty, Koha OAI Server operates in normal mode, otherwise it operates in extended mode. In extended mode, it's possible to parameter other formats than marcxml or Dublin Core. OAI-PMH:ConfFile specify a YAML configuration file which list available metadata formats and XSL file used to create them from marcxml records."
-msgstr ""
-"若空白，Koha OAI 伺服器以標準模式運作，否則以延伸模式運作。在延伸模式裡，可使用 marcxml 或 Doblin Core 以外的格式。OAI-"
-"PMH:ConfFile 指定 YAML 組態檔列出可用的元資料格式與 XSL 檔案供新增 marcxml 記錄之用。"
+msgstr "若空白，Koha OAI 伺服器以標準模式運作，否則以延伸模式運作。在延伸模式裡，可使用 marcxml 或 Doblin Core 以外的格式。OAI-PMH:ConfFile 指定 YAML 組態檔列出可用的元資料格式與 XSL 檔案供新增 marcxml 記錄之用。"
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:ConfFile# YAML OAI Koha server configuration file:"

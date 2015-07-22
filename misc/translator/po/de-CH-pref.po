@@ -160,12 +160,12 @@ msgid "acquisitions.pref#UniqueItemFields# The following <a href='http://schema.
 msgstr "Die folgenden  <a href='http://schema.koha-community.org/tables/items.html' target='blank'>Datenbankspalten</a> sollen über alle Exemplare einmalig sein:"
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#gist# (enter in numeric form, 0.12 for 12%. First is the default. If you want more than 1 value, please separate with |)"
-msgstr "(Numerisch, 0.12 für 12%. Der erste Wert ist der Standard, wenn mehr als 1 Wert angegeben wird, werden diese mit | getrennt)"
+msgid "acquisitions.pref#gist# . Enter in numeric form, 0.12 for 12%. The first item in the list will be selected by default. For more than one value, separate with | (pipe)."
+msgstr ""
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#gist# Default tax rates are"
-msgstr "Steuerraten sind"
+msgid "acquisitions.pref#gist# Tax rates are"
+msgstr ""
 
 # Administration
 msgid "admin.pref"
@@ -460,8 +460,8 @@ msgid "admin.pref#delimiter# #'s"
 msgstr "#'s"
 
 # Administration > Interface options
-msgid "admin.pref#delimiter# Separate columns in an exported report file with"
-msgstr "Trenne einzelne Spalten in exportierten Reports mit"
+msgid "admin.pref#delimiter# Separate columns in an exported CSV file with"
+msgstr ""
 
 # Administration > Interface options
 msgid "admin.pref#delimiter# backslashes"
@@ -2353,6 +2353,10 @@ msgid "circulation.pref#finesCalendar# not including days the library is closed.
 msgstr "ohne die Schliesstage."
 
 # Circulation > Fines Policy
+msgid "circulation.pref#finesMode# <br><b>Note:</b> Fines can also be charged by the CalculateFinesOnReturn system preference."
+msgstr ""
+
+# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate (but only for mailing to the admin)"
 msgstr "Berechne (aber nur für E-Mail an den Administrator)"
 
@@ -3650,11 +3654,7 @@ msgstr "Erwerbungsinformationen in der Detailansicht im OPAC."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACBaseURL# . This should be a complete URL, starting with <code>http://</code> or <code>https://</code>. Do not include a trailing slash in the URL. (This must be filled in correctly for RSS, unAPI, and search plugins to work.)"
-msgstr ""
-"opac.pref#OPACBaseURL# . Dies sollte eine komplette URL sein, beginnend mit "
-"<code>http://</code> oder <code>https://</code>. Die URL darf keinen "
-"abschliessenden Schrägstrich haben. (Diese Systempreferenz ist wichtig für "
-"das korrekte Funktioneren von RSS, unAPI und PlugIns für die Suche.)"
+msgstr "opac.pref#OPACBaseURL# . Dies sollte eine komplette URL sein, beginnend mit <code>http://</code> oder <code>https://</code>. Die URL darf keinen abschliessenden Schrägstrich haben. (Diese Systempreferenz ist wichtig für das korrekte Funktioneren von RSS, unAPI und PlugIns für die Suche.)"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACBaseURL# The OPAC is located at "
@@ -4022,9 +4022,7 @@ msgstr "Ersetze die einfache Suche am oberen Rand der OPAC-Seiten mit dem folgen
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# Select export options that should be available from OPAC detail page:"
-msgstr ""
-"opac.pref#OpacExportOptions# Wählen Sie die Exportoptionen auf der "
-"Detailseite des OPAC:"
+msgstr "opac.pref#OpacExportOptions# Wählen Sie die Exportoptionen auf der Detailseite des OPAC:"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacFavicon# Use the image at"
@@ -4035,8 +4033,8 @@ msgid "opac.pref#OpacFavicon# for the OPAC's favicon. (This should be a complete
 msgstr "als Favicon im OPAC. (Es muss eine komplette URL, beginnend mit <code>http://</code> angegeben werden.)"
 
 # OPAC > Policy
-msgid "opac.pref#OpacHiddenItems# Allows to define custom rules for hiding specific items at opac. See docs/opac/OpacHiddenItems.txt for more informations"
-msgstr "Erlaubt die Definition von benutzerspezifischen Regeln für die Anzeige von Exemplaren im OPAC. Dokumentation: docs/opac/OpacHiddenItems.txt"
+msgid "opac.pref#OpacHiddenItems# Define custom rules to hide specific items from search and view on the OPAC. How to write these rules is documented on the <a href=\"http://wiki.koha-community.org/wiki/OpacHiddenItems\" target=\"_blank\">Koha wiki</a>."
+msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# (separate columns with |)"
@@ -4492,9 +4490,7 @@ msgstr "Zeige"
 
 # OPAC > Features
 msgid "opac.pref#ShowReviewerPhoto# reviewer's avatar beside comments in OPAC. The avatar will be searched on www.libravatar.org using the patron's e-mail address."
-msgstr ""
-"opac.pref#ShowReviewerPhoto# Avatar des Kommentators im OPAC. Der Avatar "
-"wird auf www.libravatar.org unter Verwendung der E-Mail-Adresse gesucht."
+msgstr "opac.pref#ShowReviewerPhoto# Avatar des Kommentators im OPAC. Der Avatar wird auf www.libravatar.org unter Verwendung der E-Mail-Adresse gesucht."
 
 # OPAC > Features
 msgid "opac.pref#SocialNetworks# Disable"
@@ -5802,9 +5798,7 @@ msgstr "Aktiviere"
 
 # Web services > IdRef
 msgid "web_services.pref#IdRef# Please note that this feature is available only for UNIMARC."
-msgstr ""
-"web_services.pref#IdRef# Bitte beachten Sie dass diese Funktion nur für "
-"UNIMARC zur Verfügung steht."
+msgstr "web_services.pref#IdRef# Bitte beachten Sie dass diese Funktion nur für UNIMARC zur Verfügung steht."
 
 # Web services > IdRef
 msgid "web_services.pref#IdRef# the IdRef webservice from the opac detail page. IdRef allows to request authorities from the Sudoc database."
@@ -5869,3 +5863,4 @@ msgstr "Zeige maximal"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "Zeilen für einen Report, der über den Reports Web Service ausgeführt wird."
+

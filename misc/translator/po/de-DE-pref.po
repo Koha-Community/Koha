@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: German Koha Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:26+0200\n"
-"PO-Revision-Date: 2015-06-17 09:07+0000\n"
-"Last-Translator: mtietgen <5p4m@gmx.de>\n"
+"PO-Revision-Date: 2015-07-16 08:12+0000\n"
+"Last-Translator: Marc <veron@veron.ch>\n"
 "Language-Team: \n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1434532053.000000\n"
+"X-POOTLE-MTIME: 1437034352.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -160,11 +160,14 @@ msgid "acquisitions.pref#UniqueItemFields# The following <a href='http://schema.
 msgstr "Die folgenden  <a href='http://schema.koha-community.org/tables/items.html' target='blank'>Datenbankspalten</a> sollen über alle Exemplare einmalig sein:"
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#gist# (enter in numeric form, 0.12 for 12%. First is the default. If you want more than 1 value, please separate with |)"
-msgstr "(Numerisch, 0.12 für 12%. Der erste Wert ist der Standard, wenn mehr als 1 Wert angegeben wird, werden diese mit | getrennt)"
+msgid "acquisitions.pref#gist# . Enter in numeric form, 0.12 for 12%. The first item in the list will be selected by default. For more than one value, separate with | (pipe)."
+msgstr ""
+"In numerischer Form, 0.12 für 12%, angeben. Der erste Eintrag in der Liste "
+"ist später voreingestellt. Wenn mehrere Werte eingegeben werden, mit Pipe (|)"
+" trennen."
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#gist# Default tax rates are"
+msgid "acquisitions.pref#gist# Tax rates are"
 msgstr "Steuerraten sind"
 
 # Administration
@@ -301,9 +304,7 @@ msgstr "Prüfe "
 
 # Administration > Login options
 msgid "admin.pref#SessionRestrictionByIP# check for change in remote IP address for session security. Disable only when remote IP address changes frequently."
-msgstr ""
-"auf Änderung der Zugriffs-IP-Adresse zur Session-Sicherheit. Nur "
-"deaktivieren, wenn sich die Zugriffs-IP-Adresse häufig ändert."
+msgstr "auf Änderung der Zugriffs-IP-Adresse zur Session-Sicherheit. Nur deaktivieren, wenn sich die Zugriffs-IP-Adresse häufig ändert."
 
 # Administration > Login options
 msgid "admin.pref#SessionStorage# Store login session information"
@@ -462,8 +463,8 @@ msgid "admin.pref#delimiter# #'s"
 msgstr "#'s"
 
 # Administration > Interface options
-msgid "admin.pref#delimiter# Separate columns in an exported report file with"
-msgstr "Trenne einzelne Spalten in exportierten Reports mit"
+msgid "admin.pref#delimiter# Separate columns in an exported CSV file with"
+msgstr "Trenne die Spalten in einer exportierten CSV-Datei mit"
 
 # Administration > Interface options
 msgid "admin.pref#delimiter# backslashes"
@@ -2355,6 +2356,12 @@ msgid "circulation.pref#finesCalendar# not including days the library is closed.
 msgstr "ohne die Schließtage."
 
 # Circulation > Fines Policy
+msgid "circulation.pref#finesMode# <br><b>Note:</b> Fines can also be charged by the CalculateFinesOnReturn system preference."
+msgstr ""
+"<br><b>Hinweis:</b> Gebühren können auch durch den Systemparameter "
+"CalculateFinesOnReturn erhoben werden."
+
+# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate (but only for mailing to the admin)"
 msgstr "Berechne (aber nur für E-Mail an den Administrator)"
 
@@ -3652,11 +3659,7 @@ msgstr "Erwerbungsinformationen in der Detailansicht im OPAC."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACBaseURL# . This should be a complete URL, starting with <code>http://</code> or <code>https://</code>. Do not include a trailing slash in the URL. (This must be filled in correctly for RSS, unAPI, and search plugins to work.)"
-msgstr ""
-"Dies sollte eine komplette URL, beginnend mit <code>http://</code> oder "
-"<code>https://</code> sein. Es darf kein abschließender Schrägstrich am Ende "
-"der URL eingegeben werden. (Der Parameter muss korrekt belegt sein, damit "
-"RSS, unAPI, die Suchplugins und einige andere Features funktionieren.)"
+msgstr "Dies sollte eine komplette URL, beginnend mit <code>http://</code> oder <code>https://</code> sein. Es darf kein abschließender Schrägstrich am Ende der URL eingegeben werden. (Der Parameter muss korrekt belegt sein, damit RSS, unAPI, die Suchplugins und einige andere Features funktionieren.)"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACBaseURL# The OPAC is located at "
@@ -4035,8 +4038,12 @@ msgid "opac.pref#OpacFavicon# for the OPAC's favicon. (This should be a complete
 msgstr "als Favicon im OPAC. (Es muss eine komplette URL, beginnend mit <code>http://</code> angegeben werden.)"
 
 # OPAC > Policy
-msgid "opac.pref#OpacHiddenItems# Allows to define custom rules for hiding specific items at opac. See docs/opac/OpacHiddenItems.txt for more informations"
-msgstr "Erlaubt die Definition von benutzerspezifischen Regeln für die Anzeige von Exemplaren im OPAC. Dokumentation: docs/opac/OpacHiddenItems.txt"
+msgid "opac.pref#OpacHiddenItems# Define custom rules to hide specific items from search and view on the OPAC. How to write these rules is documented on the <a href=\"http://wiki.koha-community.org/wiki/OpacHiddenItems\" target=\"_blank\">Koha wiki</a>."
+msgstr ""
+"Definieren Sie Regeln, nach denen bestimmte Exemplare in der Suche und der "
+"Anzeige im OPAC ausgeblendet werden. Wie diese Regeln definiet werden, ist "
+"im <a href=\"http://wiki.koha-community.org/wiki/OpacHiddenItems\" target=\""
+"_blank\">Koha Wiki</a> dokumentiert."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# (separate columns with |)"
@@ -4492,9 +4499,7 @@ msgstr "Zeige"
 
 # OPAC > Features
 msgid "opac.pref#ShowReviewerPhoto# reviewer's avatar beside comments in OPAC. The avatar will be searched on www.libravatar.org using the patron's e-mail address."
-msgstr ""
-"den Avatar des Rezensenten bei seinem Kommentar im OPAC. Der Avatar wird "
-"über die E-Mail-Adresse bei www.libravatar.org gesucht."
+msgstr "den Avatar des Rezensenten bei seinem Kommentar im OPAC. Der Avatar wird über die E-Mail-Adresse bei www.libravatar.org gesucht."
 
 # OPAC > Features
 msgid "opac.pref#SocialNetworks# Disable"
