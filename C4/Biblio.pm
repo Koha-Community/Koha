@@ -1276,6 +1276,7 @@ OpacHiddenItems to be applied.
 sub GetMarcBiblio {
     my $biblionumber = shift;
     my $embeditems   = shift || 0;
+    my $opac         = shift || 0;
 
     if (not defined $biblionumber) {
         carp 'GetMarcBiblio called with undefined biblionumber';
