@@ -178,7 +178,24 @@ sub run_tests {
         is( $isbns->[$i], $more_isbns[$i],
             "(GetMarcISBN) Corretly retrieves ISBN #". ($i + 1));
     }
+# fails for 3.16.x
+#    is( GetMarcPrice( $record_for_isbn, $marcflavour ), 100,
+#        "GetMarcPrice returns the correct value");
 
+    my $newincbiblioitemnumber=$biblioitemnumber+1;
+    $dbh->do("UPDATE biblioitems SET biblioitemnumber = ? WHERE biblionumber = ?;", undef, $newincbiblioitemnumber, $biblionumber );
+    my $updatedrecord = GetMarcBiblio($biblionumber, 0);
+    my $frameworkcode = GetFrameworkCode($biblionumber);
+    my ( $biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField( "biblioitems.biblioitemnumber", $frameworkcode );
+    die qq{No biblioitemnumber tag for framework "$frameworkcode"} unless $biblioitem_tag;
+    my $biblioitemnumbertotest;
+    if ( $biblioitem_tag < 10 ) {
+        $biblioitemnumbertotest = $updatedrecord->field($biblioitem_tag)->data();
+    } else {
+        $biblioitemnumbertotest = $updatedrecord->field($biblioitem_tag)->subfield($biblioitem_subfield);
+    }
+
+    is ($newincbiblioitemnumber, $biblioitemnumbertotest);
 }
 
 sub mock_marcfromkohafield {
@@ -241,16 +258,15 @@ sub create_issn_field {
 }
 
 subtest 'MARC21' => sub {
-    plan tests => 25;
+    plan tests => 26;
     run_tests('MARC21');
     $dbh->rollback;
 };
 
 subtest 'UNIMARC' => sub {
-    plan tests => 25;
+    plan tests => 26;
     run_tests('UNIMARC');
     $dbh->rollback;
 };
-
 
 1;
