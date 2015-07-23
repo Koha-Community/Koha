@@ -166,7 +166,8 @@ if ( $op eq "export" ) {
 
         binmode STDOUT, ':encoding(UTF-8)'
             if $filename =~ m/\.gz$/
-                or $filename =~ m/\.bz2$/;
+               or $filename =~ m/\.bz2$/
+               or $output_format ne 'csv';
 
         if ( $filename =~ m/\.gz$/ ) {
             $mimetype = 'application/x-gzip';
