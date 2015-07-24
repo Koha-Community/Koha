@@ -102,9 +102,8 @@ sub GetValidLinkInfo {
 =cut
 
 sub SendPasswordRecoveryEmail {
-    my $borrower = shift; # from GetMember
+    my $borrower = shift; # Koha::Borrower
     my $userEmail = shift; #to_address (the one specified in the request)
-    my $protocol = shift; #only required to determine if 'http' or 'https'
     my $update = shift;
 
     my $schema = Koha::Database->new->schema;
@@ -119,26 +118,26 @@ sub SendPasswordRecoveryEmail {
     if($update){
         my $rs = $schema->resultset('BorrowerPasswordRecovery')->search(
         {
-            borrowernumber => $borrower->{'borrowernumber'},
+            borrowernumber => $borrower->borrowernumber,
         });
         $rs->update({uuid => $uuid_str, valid_until => $expirydate->datetime()});
     } else {
          my $rs = $schema->resultset('BorrowerPasswordRecovery')->create({
-            borrowernumber=>$borrower->{'borrowernumber'},
+            borrowernumber=>$borrower->borrowernumber,
             uuid => $uuid_str,
             valid_until=> $expirydate->datetime()
          });
     }
 
     # create link
-    my $uuidLink = $protocol . C4::Context->preference( 'OPACBaseURL' ) . "/cgi-bin/koha/opac-password-recovery.pl?uniqueKey=$uuid_str";
+    my $uuidLink = C4::Context->preference( 'OPACBaseURL' ) . "/cgi-bin/koha/opac-password-recovery.pl?uniqueKey=$uuid_str";
 
     # prepare the email
     my $letter = C4::Letters::GetPreparedLetter (
         module => 'members',
         letter_code => 'PASSWORD_RESET',
-        branchcode => $borrower->{branchcode},
-        substitute => {passwordreseturl => $uuidLink, user => $borrower->{userid} },
+        branchcode => $borrower->branchcode,
+        substitute => {passwordreseturl => $uuidLink, user => $borrower->userid },
     );
 
     # define to/from emails
@@ -146,7 +145,7 @@ sub SendPasswordRecoveryEmail {
 
     C4::Letters::EnqueueLetter( {
          letter => $letter,
-         borrowernumber => $borrower->{borrowernumber},
+         borrowernumber => $borrower->borrowernumber,
          to_address => $userEmail,
          from_address => $kohaEmail,
          message_transport_type => 'email',

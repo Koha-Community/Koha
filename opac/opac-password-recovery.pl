@@ -6,11 +6,12 @@ use CGI;
 
 use C4::Auth;
 use C4::Koha;
-use C4::Members qw(changepassword Search);
+use C4::Members qw(changepassword);
 use C4::Output;
 use C4::Context;
 use C4::Passwordrecovery qw(SendPasswordRecoveryEmail ValidateBorrowernumber GetValidLinkInfo CompletePasswordRecovery);
 use Koha::AuthUtils qw(hash_password);
+use Koha::Borrowers;
 my $query = new CGI;
 use HTML::Entities;
 
@@ -49,17 +50,16 @@ my $errPassNotMatch;
 my $errPassTooShort;
 
 if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
-    my $protocol = $query->https() ? "https://" : "http://";
     #try with the main email
     $email ||= ''; # avoid undef
     my $borrower;
     my $search_results;
     # Find the borrower by his userid or email
     if( $username ){
-        $search_results = Search({ userid => $username });
+        $search_results = [ Koha::Borrowers->search({ userid => $username }) ];
     }
     elsif ( $email ){
-        $search_results = Search({ '' => $email }, undef, undef, undef, ['emailpro', 'email', 'B_email']);
+        $search_results = [ Koha::Borrowers->search({-or => {email => $email, emailpro=> $email, B_email=>$email }}) ];
     }
     if ( not $search_results ){
        $hasError            = 1;
@@ -70,8 +70,8 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
        $errTooManyEmailFound = 1;
     }
     elsif( $borrower = shift @$search_results ){ # One matching borrower
-        $username ||= $borrower->{'userid'};
-        my @emails = ( $borrower->{'email'}, $borrower->{'emailpro'}, $borrower->{'B_email'} );
+        $username ||= $borrower->userid;
+        my @emails = ( $borrower->email, $borrower->emailpro, $borrower->B_email );
         # Is the given email one of the borrower's ?
         if( $email && !($email ~~ @emails) ){
              $hasError    = 1;
@@ -86,7 +86,7 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
              $errNoBorrowerEmail = 1;
         }
         # Check if a password reset already issued for this borrower AND we are not asking for a new email
-        elsif( ValidateBorrowernumber( $borrower->{'borrowernumber'} ) && !$query->param('resendEmail') ){
+        elsif( ValidateBorrowernumber( $borrower->borrowernumber ) && !$query->param('resendEmail') ){
             $hasError                = 1;
             $errAlreadyStartRecovery = 1;
         }
@@ -108,7 +108,7 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
             username                => $username
         );
     }
-    elsif ( SendPasswordRecoveryEmail( $borrower, $email, $protocol, $query->param('resendEmail') ) ) {#generate uuid and send recovery email
+    elsif ( SendPasswordRecoveryEmail( $borrower, $email, $query->param('resendEmail') ) ) {#generate uuid and send recovery email
         $template->param(
             mail_sent => 1,
             email     => $email
