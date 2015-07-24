@@ -104,8 +104,9 @@
                                                 [% END %]
 
                                                 [% IF BakerTaylorEnabled %]
-                                                    [% IF issue.normalized_isbn %]
-                                                      <a href="https://[% BakerTaylorBookstoreURL |html %][% issue.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% issue.normalized_isbn %]" /></a>
+                                                    [% bt_id = ( issue.normalized_upc || issue.normalized_isbn ) %]
+                                                    [% IF ( bt_id ) %]
+                                                       <a href="https://[% BakerTaylorBookstoreURL |html %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" /></a>
                                                     [% ELSE %]
                                                        <span class="no-image">No cover image available</span>
                                                     [% END %]

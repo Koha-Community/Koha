@@ -88,15 +88,16 @@
                     [% IF OpenLibraryCovers %]
                         <div title="[% biblionumber |url %]" class="[% normalized_isbn %]" id="openlibrary-thumbnail-preview"></div>
                     [% END %]
-                    [% IF ( BakerTaylorEnabled && normalized_isbn ) %]
+                    [% bt_id = ( normalized_upc || normalized_isbn ) %]
+                    [% IF ( BakerTaylorEnabled && bt_id ) %]
                         [% IF BakerTaylorBookstoreURL %]
                             [% IF ( OPACurlOpenInNewWindow ) %]
-                                <a href="https://[% BakerTaylorBookstoreURL |html %][% normalized_isbn %]" target="_blank"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% normalized_isbn %]" /></a>
+                                <a href="https://[% BakerTaylorBookstoreURL |html %][% bt_id %]" target="_blank"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" /></a>
                             [% ELSE %]
-                                <a href="https://[% BakerTaylorBookstoreURL |html %][% normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% normalized_isbn %]" /></a>
+                                <a href="https://[% BakerTaylorBookstoreURL |html %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" /></a>
                             [% END %]
                         [% ELSE %]
-                            <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% normalized_isbn %]" />
+                            <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" />
                         [% END %]
                     [% END %]
                     </div><!-- / #bookcover -->

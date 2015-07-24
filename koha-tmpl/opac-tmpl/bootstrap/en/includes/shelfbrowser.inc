@@ -58,8 +58,9 @@
                                   <div title="[% item.biblionumber |url %]" class="[% coce_id %]" id="coce-thumbnail-preview-[% coce_id %]"></div>
                                 [% END %]
                                 [% IF ( BakerTaylorEnabled ) %]
-                                    [% IF ( item.browser_normalized_isbn ) %]
-                                        <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% item.browser_normalized_isbn %]" />
+                                    [% bt_id = ( item.browser_normalized_upc || item.browser_normalized_upc ) %]
+                                    [% IF ( bt_id ) %]
+                                        <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" />
                                     [% ELSE %]
                                         <span class="no-image">No cover image available</span>
                                     [% END %]
