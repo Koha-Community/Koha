@@ -58,7 +58,7 @@
                                   <div title="[% item.biblionumber |url %]" class="[% coce_id %]" id="coce-thumbnail-preview-[% coce_id %]"></div>
                                 [% END %]
                                 [% IF ( BakerTaylorEnabled ) %]
-                                    [% bt_id = ( item.browser_normalized_upc || item.browser_normalized_upc ) %]
+                                    [% bt_id = ( item.browser_normalized_upc || item.browser_normalized_isbn ) %]
                                     [% IF ( bt_id ) %]
                                         <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" />
                                     [% ELSE %]
