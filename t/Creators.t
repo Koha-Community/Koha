@@ -1,11 +1,12 @@
 #!/usr/bin/perl
 #
-# This Koha test module is a stub!  
+# This Koha test module is a stub!
 # Add more tests here!!!
 
 use strict;
 use warnings;
 
+use File::Temp qw/ tempfile  /;
 use Test::More tests => 16;
 
 BEGIN {
@@ -50,12 +51,12 @@ is($pdf_creator->StrWidth("test", "H", 12), $expected_width, "testing StrWidth()
 is($result[0], '10', "testing Text() writes from a given x-value");
 is($result[1], $expected_offset, "testing Text() writes to the correct x-value");
 
-open(my $fh, '>', 'test.pdf');
+my  ($fh, $filename) = tempfile();
+open(  $fh, '>', $filename );
 select $fh;
 
 ok($pdf_creator->End(), "testing End() works");
 
 close($fh);
-ok( -s 'test.pdf', 'test.pdf created' );
-
-unlink 'test.pdf';
+ok( -s $filename , "test file $filename created OK" );
+unlink $filename ;
