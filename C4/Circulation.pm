@@ -1849,17 +1849,17 @@ sub AddReturn {
     my $stat_type = 'return';
 
     # get information on item
-    my $item       = GetItem( undef, $barcode )
-        or die "GetItem( undef, $barcode ) failed";
+    my $item = GetItem( undef, $barcode );
+    unless ($item) {
+        return ( 0, { BadBarcode => $barcode } );    # no barcode means no item or borrower.  bail out.
+    }
+
     my $itemnumber = $item->{ itemnumber };
     my $biblio = GetBiblioData( $item->{ biblionumber } );
     my $itemtype   = ( C4::Context->preference("item-level_itypes") )
                         ? $item->{ itype }
                         : $biblio->{ itemtype };
 
-    unless ($itemnumber) {
-        return (0, { BadBarcode => $barcode }); # no barcode means no item or borrower.  bail out.
-    }
     my $issue  = GetItemIssue($itemnumber);
     if ($issue and $issue->{borrowernumber}) {
         $borrower = C4::Members::GetMemberDetails($issue->{borrowernumber})
