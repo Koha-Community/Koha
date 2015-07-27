@@ -61,6 +61,7 @@ my $select       = $input->param('selected_accts');
 my $payment_note = uri_unescape $input->param('payment_note');
 my $accountno;
 my $accountlines_id;
+
 if ( $individual || $writeoff ) {
     if ($individual) {
         $template->param( pay_individual => 1 );
@@ -86,7 +87,7 @@ if ( $individual || $writeoff ) {
         amountoutstanding => $amountoutstanding,
         title             => $title,
         itemnumber        => $itemnumber,
-        description       => $description,
+        individual_description => $description,
         notify_id         => $notify_id,
         notify_level      => $notify_level,
         payment_note    => $payment_note,
