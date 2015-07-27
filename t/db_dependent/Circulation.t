@@ -29,7 +29,7 @@ use Koha::Database;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 82;
+use Test::More tests => 83;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -455,7 +455,9 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     $reserveid = C4::Reserves::GetReserveId({ biblionumber => $biblionumber, itemnumber => $itemnumber, borrowernumber => $reserving_borrowernumber});
     CancelReserve({ reserve_id => $reserveid });
 
+    # Bug 14101
     # Test automatic renewal before value for "norenewalbefore" in policy is set
+    # In this case automatic renewal is not permitted prior to due date
     my $barcode4 = '11235813';
     my ( $item_bibnum4, $item_bibitemnum4, $itemnumber4 ) = AddItem(
         {
@@ -467,31 +469,47 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         $biblionumber
     );
 
-    AddIssue( $renewing_borrower, $barcode4, undef, undef, undef, undef, { auto_renew => 1 } );
+    AddIssue( $renewing_borrower, $barcode4, undef, undef, undef, undef,
+        { auto_renew => 1 } );
     ( $renewokay, $error ) =
       CanBookBeRenewed( $renewing_borrowernumber, $itemnumber4 );
     is( $renewokay, 0, 'Bug 14101: Cannot renew, renewal is automatic and premature' );
     is( $error, 'auto_too_soon',
         'Bug 14101: Cannot renew, renewal is automatic and premature, "No renewal before" = undef (returned code is auto_too_soon)' );
 
-    # set policy to require that loans cannot be
-    # renewed until seven days prior to the due date
+    # Bug 7413
+    # Test premature manual renewal
     $dbh->do('UPDATE issuingrules SET norenewalbefore = 7');
+
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber);
     is( $renewokay, 0, 'Bug 7413: Cannot renew, renewal is premature');
     is( $error, 'too_soon', 'Bug 7413: Cannot renew, renewal is premature (returned code is too_soon)');
+
+    # Bug 14395
+    # Test 'exact time' setting for syspref NoRenewalBeforePrecision
+    C4::Context->set_preference( 'NoRenewalBeforePrecision', 'exact_time' );
     is(
-        GetSoonestRenewDate($renewing_borrowernumber, $itemnumber),
-        $datedue->clone->add(days => -7),
-        'Bug 7413: Renewals permitted 7 days before due date, as expected',
+        GetSoonestRenewDate( $renewing_borrowernumber, $itemnumber ),
+        $datedue->clone->add( days => -7 ),
+        'Bug 14395: Renewals permitted 7 days before due date, as expected'
     );
 
-    # Test automatic renewal again
+    # Bug 14395
+    # Test 'date' setting for syspref NoRenewalBeforePrecision
+    C4::Context->set_preference( 'NoRenewalBeforePrecision', 'date' );
+    is(
+        GetSoonestRenewDate( $renewing_borrowernumber, $itemnumber ),
+        $datedue->clone->add( days => -7 )->truncate( to => 'day' ),
+        'Bug 14395: Renewals permitted 7 days before due date, as expected'
+    );
+
+    # Bug 14101
+    # Test premature automatic renewal
     ( $renewokay, $error ) =
       CanBookBeRenewed( $renewing_borrowernumber, $itemnumber4 );
     is( $renewokay, 0, 'Bug 14101: Cannot renew, renewal is automatic and premature' );
     is( $error, 'auto_too_soon',
-'Bug 14101: Cannot renew, renewal is automatic and premature (returned code is auto_too_soon)'
+        'Bug 14101: Cannot renew, renewal is automatic and premature (returned code is auto_too_soon)'
     );
 
     # Change policy so that loans can only be renewed exactly on due date (0 days prior to due date)
@@ -501,7 +519,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
       CanBookBeRenewed( $renewing_borrowernumber, $itemnumber4 );
     is( $renewokay, 0, 'Bug 14101: Cannot renew, renewal is automatic and premature' );
     is( $error, 'auto_too_soon',
-'Bug 14101: Cannot renew, renewal is automatic and premature, "No renewal before" = 0 (returned code is auto_too_soon)'
+        'Bug 14101: Cannot renew, renewal is automatic and premature, "No renewal before" = 0 (returned code is auto_too_soon)'
     );
 
     # Change policy so that loans can be renewed 99 days prior to the due date
@@ -511,7 +529,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
       CanBookBeRenewed( $renewing_borrowernumber, $itemnumber4 );
     is( $renewokay, 0, 'Bug 14101: Cannot renew, renewal is automatic' );
     is( $error, 'auto_renew',
-'Bug 14101: Cannot renew, renewal is automatic (returned code is auto_renew)'
+        'Bug 14101: Cannot renew, renewal is automatic (returned code is auto_renew)'
     );
 
     # Too many renewals
