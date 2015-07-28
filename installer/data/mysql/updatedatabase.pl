@@ -10703,9 +10703,9 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "XXX";
+$DBversion = "3.21.00.016";
 if ( CheckVersion($DBversion) ) {
-    my $rs = Koha::Database->new()->schema()->resultset('Systempreference');
+    my $rs = $schema->resultset('Systempreference');
     $rs->find_or_create(
         {
             variable => 'DumpTemplateVarsIntranet',
