@@ -614,6 +614,14 @@ OPAC:
             - pref: MaxOpenSuggestions
               class: integer
             - "open suggestions. Leave empty for no limit. **Note: this setting does not affect anonymous suggestions"
+        -
+            - Keep accepted or rejected purchase suggestions for a period of [   ] days.
+            - pref: PurgeSuggestionsOlderThan
+              class: integer
+            - days.
+            - <br>WARNING - Leave this field empty if you don't want to activate this automatic feature.
+            - "<br>Example: [30] Sets purgation of suggestions for those older than 30 days."
+            - <br>(Used when the cronjob purge_suggestions.pl is active and called without a specific number of days)
     Privacy:
         -
             - pref: StoreLastBorrower

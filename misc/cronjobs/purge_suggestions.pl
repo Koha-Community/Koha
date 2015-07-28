@@ -33,6 +33,7 @@ use Getopt::Long;
 use Pod::Usage;
 use C4::Suggestions;
 use C4::Log;
+use C4::Context;
 
 my ($help, $days);
 
@@ -41,22 +42,41 @@ GetOptions(
     'days=s'         => \$days,
 );
 
-if($help or not $days){
-    print <<EOF
-    This script delete olds suggestions
-    Parameters :
-    -help|? This message
-    -days TTT to define the age of suggestions to delete
+my $usage = << 'ENDUSAGE';
+This script delete old suggestions
+Parameters:
+-help|? This message
+-days TTT to define the age of suggestions to delete
 
-     example :
-     export PERL5LIB=/path/to/koha;export KOHA_CONF=/etc/koha/koha-conf.xml;./purge_suggestions.pl -days 30
-EOF
-;
+Example:
+$PERL5LIB/misc/cronjobs/purge_suggestions.pl -days 30
+ENDUSAGE
+
+# If this script is called without the 'days' parameter, we use the system preferences value instead.
+if ( ! defined($days) and not $help) {
+    my $purge_sugg_days = C4::Context->preference('PurgeSuggestionsOlderThan') || '';
+    if($purge_sugg_days ne '' and $purge_sugg_days >= 0) {
+        $days = $purge_sugg_days;
+    }
+}
+# If this script is called with the 'help' parameter, we show up the help message and we leave the script without doing anything.
+if ($help) {
+    print $usage;
     exit;
 }
 
-if($days){
+if(defined($days) && $days > 0 && $days ne ''){
     cronlogaction();
     DelSuggestionsOlderThan($days);
 }
 
+elsif(defined($days) && $days == 0) {
+    print << 'ERROR';
+    This script is not executed with 0 days. Aborted.
+ERROR
+}
+else {
+    print << 'ERROR';
+    This script requires a positive number of days. Aborted.
+ERROR
+}
