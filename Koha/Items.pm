@@ -37,6 +37,10 @@ Koha::Items - Koha Item object set class
 
 =cut
 
+sub _get_castable_unique_columns {
+    return ['itemnumber', 'barcode'];
+}
+
 =head3 type
 
 =cut

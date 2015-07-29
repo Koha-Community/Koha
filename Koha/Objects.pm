@@ -19,10 +19,15 @@ package Koha::Objects;
 
 use Modern::Perl;
 
+use Scalar::Util qw(blessed);
 use Carp;
 use List::MoreUtils qw( none );
 
 use Koha::Database;
+
+
+use Koha::Exception::UnknownObject;
+use Koha::Exception::BadParameter;
 
 =head1 NAME
 
@@ -67,6 +72,132 @@ sub _new_from_dbic {
     my $self = { _resultset => $resultset };
 
     bless( $self, $class );
+}
+
+=head _get_castable_unique_columns
+@ABSTRACT, OVERLOAD FROM SUBCLASS
+
+Get the columns this Object can use to find a matching Object from the DB.
+These columns must be UNIQUE or preferably PRIMARY KEYs.
+So if the castable input is not an Object, we can try to find these scalars and do
+a DB search using them.
+=cut
+
+sub _get_castable_unique_columns {}
+
+=head Koha::Objects->cast();
+
+Try to find a matching Object from the given input. Is basically a validator to
+validate the given input and make sure we get a Koha::Object or an Exception.
+
+=head2 An example:
+
+    ### IN Koha/Borrowers.pm ###
+    package Koha::Borrowers;
+    ...
+    sub _get_castable_unique_columns {
+        return ['borrowernumber', 'cardnumber', 'userid'];
+    }
+
+    ### SOMEWHERE IN A SCRIPT FAR AWAY ###
+    my $borrower = Koha::Borrowers->cast('cardnumber');
+    my $borrower = Koha::Borrowers->cast($Koha::Borrower);
+    my $borrower = Koha::Borrowers->cast('userid');
+    my $borrower = Koha::Borrowers->cast('borrowernumber');
+    my $borrower = Koha::Borrowers->cast({borrowernumber => 123,
+                                        });
+    my $borrower = Koha::Borrowers->cast({firstname => 'Olli-Antti',
+                                                    surname => 'Kivi',
+                                                    address => 'Koskikatu 25',
+                                                    cardnumber => '11A001',
+                                                    ...
+                                        });
+
+=head Description
+
+Because there are gazillion million ways in Koha to invoke an Object, this is a
+helper for easily creating different kinds of objects from all the arcane invocations present
+in many parts of Koha.
+Just throw the crazy and unpredictable return values from myriad subroutines returning
+some kind of an objectish value to this casting function to get a brand new Koha::Object.
+@PARAM1 Scalar, or HASHRef, or Koha::Object or Koha::Schema::Result::XXX
+@RETURNS Koha::Object subclass, possibly already in DB or a completely new one if nothing was
+                         inferred from the DB.
+@THROWS Koha::Exception::BadParameter, if no idea what to do with the input.
+@THROWS Koha::Exception::UnknownObject, if we cannot find an Object with the given input.
+
+=cut
+
+sub cast {
+    my ($class, $input) = @_;
+
+    unless ($input) {
+        Koha::Exception::BadParameter->throw(error => "$class->cast():> No parameter given!");
+    }
+    if (blessed($input) && $input->isa( $class->object_class )) {
+        return $input;
+    }
+    if (blessed($input) && $input->isa( 'Koha::Schema::Result::'.$class->_type )) {
+        return $class->object_class->_new_from_dbic($input);
+    }
+
+    my %searchTerms; #Make sure the search terms are processed in the order they have been introduced.
+    #Extract unique keys and try to get the object from them.
+    my $castableColumns = $class->_get_castable_unique_columns();
+    my $resultSource = $class->_resultset()->result_source();
+
+    if (ref($input) eq 'HASH') {
+        foreach my $col (@$castableColumns) {
+            if ($input->{$col} &&
+                    $class->_cast_validate_column( $resultSource->column_info($col), $input->{$col}) ) {
+                $searchTerms{$col} = $input->{$col};
+            }
+        }
+    }
+    elsif (not(ref($input))) { #We have a scalar
+        foreach my $col (@$castableColumns) {
+            if ($class->_cast_validate_column( $resultSource->column_info($col), $input) ) {
+                $searchTerms{$col} = $input;
+            }
+        }
+    }
+
+    if (scalar(%searchTerms)) {
+        my @objects = $class->search({'-or' => \%searchTerms});
+
+        unless (scalar(@objects) == 1) {
+            my @keys = keys %searchTerms;
+            my $keys = join('|', @keys);
+            my @values = values %searchTerms;
+            my $values = join('|', @values);
+            Koha::Exception::UnknownObject->throw(error => "$class->cast():> Cannot find an existing ".$class->object_class." from $keys '$values'.")
+                            if scalar(@objects) < 1;
+            Koha::Exception::UnknownObject->throw(error => "$class->cast():> Too many ".$class->object_class."s found with $keys '$values'. Will not possibly return the wrong ".$class->object_class)
+                            if scalar(@objects) > 1;
+        }
+        return $objects[0];
+    }
+
+    Koha::Exception::BadParameter->throw(error => "$class->cast():> Unknown parameter '$input' given!");
+}
+
+=head _cast_validate_column
+
+    For some reason MySQL decided that it is a good idea to cast String to Integer automatically
+    For ex. SELECT * FROM borrowers WHERE borrowernumber = '11A001';
+    returns the Borrower with borrowernumber => 11, instead of no results!
+    This is potentially catastrophic.
+    Validate integers and other data types here.
+
+=cut
+
+sub _cast_validate_column {
+    my ($class, $column, $value) = @_;
+
+    if ($column->{data_type} eq 'integer' && $value !~ m/^\d+$/) {
+        return 0;
+    }
+    return 1;
 }
 
 =head3 Koha::Objects->find();

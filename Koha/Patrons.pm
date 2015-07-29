@@ -41,6 +41,10 @@ Koha::Patron - Koha Patron Object class
 
 =cut
 
+sub _get_castable_unique_columns {
+    return ['borrowernumber', 'cardnumber', 'userid'];
+}
+
 =head3 search_housebound_choosers
 
 Returns all Patrons which are Housebound choosers.
