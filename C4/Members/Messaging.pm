@@ -217,6 +217,9 @@ END_SQL
     }
 
     my @return = values %$choices;
+
+    @return = sort { $a->{message_attribute_id} <=> $b->{message_attribute_id} } @return;
+
     # warn( Data::Dumper->Dump( [ \@return ], [ 'return' ] ) );
     return \@return;
 }
