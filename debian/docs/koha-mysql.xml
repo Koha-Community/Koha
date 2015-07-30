@@ -17,26 +17,38 @@
 
   <refnamediv>
     <refname>koha-mysql</refname>
-    <refpurpose>Provide an interactive mysql shell set up for the specified Koha instance.</refpurpose>
+    <refpurpose>Provide a mysql shell set up for the specified Koha instance.</refpurpose>
     <refclass>UNIX/Linux</refclass>
   </refnamediv>
 
   <refsynopsisdiv>
     <cmdsynopsis>
-      <command>koha-mysql</command> <arg choice="req" rep="norepeat"><replaceable>instancename</replaceable></arg>
+      <command>koha-mysql</command> <arg choice="req" rep="norepeat"><replaceable>instancename</replaceable></arg> <arg choice="opt" rep="repeat">mysql option</arg>
     </cmdsynopsis>
   </refsynopsisdiv>
 
   <refsect1><title>Description</title>
-  <para>Provide an interactive mysql shell set up for the specified Koha instance.</para>
+  <para>Provide a mysql shell set up for the specified Koha instance.</para>
   </refsect1>
 
   <refsect1><title>Example usage</title>
     <variablelist>
       <varlistentry>
-        <term>Send an SQL query to MySQL</term>
+        <term>Run interactive mysql shell for speicified Koha instance</term>
         <listitem>
-          <para>"Some SQL query" | <command>koha-mysql</command> <arg choice="req" rep="norepeat"><replaceable>instancename</replaceable></arg></para>
+          <para><command>koha-mysql</command> <arg choice="req" rep="norepeat"><replaceable>instancename</replaceable></arg></para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Run a query given as an argument without launching mysql shell</term>
+        <listitem>
+          <para><command>koha-mysql</command> <arg choice="req" rep="norepeat"><replaceable>instancename</replaceable></arg> -e "SOME SQL QUERY"</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Run a query, skip column names on output</term>
+        <listitem>
+          <para><command>koha-mysql</command> <arg choice="req" rep="norepeat"><replaceable>instancename</replaceable></arg> -e "SOME SQL QUERY" --skip-column-names</para>
         </listitem>
       </varlistentry>
       <varlistentry>
@@ -50,6 +62,7 @@
   
   <refsect1><title>See also</title>
   <simplelist type="inline">
+    <member><command>mysql (1)</command></member>
     <member><command>koha-dump-defaults(8)</command></member>
     <member><command>koha-reset-passwd(8)</command></member>
     <member><command>koha-upgrade-schema(8)</command></member>
