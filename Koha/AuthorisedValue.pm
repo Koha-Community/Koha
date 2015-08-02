@@ -88,7 +88,7 @@ sub add_branch_limitation {
     return $limitation ? 1 : undef;
 }
 
-=head3 add_branch_limitation
+=head3 del_branch_limitation
 
 $av->del_branch_limitation( $branchcode );
 

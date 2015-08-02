@@ -27,7 +27,7 @@
     $('#icons').tabs();
 
     $("a.delete").click(function(){
-        return confirm(_("Are you sure you want to delete this authorised value?"));
+        return confirm(_("Are you sure you want to delete this authorized value?"));
     });
 });
 //]]>
@@ -173,17 +173,17 @@ $(document).ready(function() {
     <div class="dialog [% m.type %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
-            An error occurred when updating this authorised values. Perhaps the value already exists.
+            An error occurred when updating this authorized value. Perhaps the value already exists.
         [% CASE 'error_on_insert' %]
-            An error occurred when inserting this authorised values. Perhaps the value or the category already exists.
+            An error occurred when inserting this authorized value. Perhaps the value or the category already exists.
         [% CASE 'error_on_delete' %]
-            An error occurred when deleteing this authorised values. Check the logs.
+            An error occurred when deleting this authorized value. Check the logs.
         [% CASE 'success_on_update' %]
-            Authorised value updated with success.
+            Authorized value updated successfully.
         [% CASE 'success_on_insert' %]
-            Authorised value inserted with success.
+            Authorized value inserted successfully.
         [% CASE 'success_on_delete' %]
-            Authorised value deleted with success.
+            Authorized value deleted successfully.
         [% CASE %]
             [% m.code %]
         [% END %]
