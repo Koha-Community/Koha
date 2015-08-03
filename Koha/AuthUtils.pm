@@ -24,6 +24,8 @@ use Fcntl qw/O_RDONLY/; # O_RDONLY is used in generate_salt
 use List::MoreUtils qw/ any /;
 use Koha::Patron;
 
+use Koha::Exception::LoginFailed;
+
 use base 'Exporter';
 
 our @EXPORT_OK   = qw(hash_password get_script_name);
@@ -195,7 +197,7 @@ sub checkHash {
 Check if the userid and password match the ones in the $KOHA_CONF
 @PARAM1 String, user identifier, either the koha.borrowers.userid, or koha.borrowers.cardnumber
 @PARAM2 String, clear text password from the authenticating user
-@RETURNS Koha::Borrower branded as superuser with ->isSuperuser()
+@RETURNS Koha::Patron branded as superuser with ->isSuperuser()
          or undef if user logging in is not a superuser.
 @THROWS Koha::Exception::LoginFailed if user identifier matches, but password doesn't
 =cut
@@ -230,7 +232,7 @@ sub checkKohaSuperuserFromUserid {
 
 Create a temporary superuser which should be instantiated only to the environment
 and then discarded. So do not ->store() it!
-@RETURN Koha::Borrower, stamped as superuser.
+@RETURN Koha::Patron, stamped as superuser.
 =cut
 
 sub _createTemporarySuperuser {

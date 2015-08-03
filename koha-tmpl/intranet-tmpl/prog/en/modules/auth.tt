@@ -52,7 +52,9 @@
 <form action="[% script_name %]" method="post" name="loginform" id="loginform">
     <input type="hidden" name="koha_login_context" value="intranet" />
 [% FOREACH INPUT IN INPUTS %]
-    <input type="hidden" name="[% INPUT.name |html %]" value="[% INPUT.value |html %]" />
+    [% UNLESS INPUT.name == 'logout.x' #No reason to send the logout-signal again %]
+        <input type="hidden" name="[% INPUT.name |html %]" value="[% INPUT.value |html %]" />
+    [% END %]
 [% END %]
 <p><label for="userid">Username:</label>
 <input type="text" name="userid" id="userid" class="input focus" value="[% userid %]" size="20" tabindex="1" />

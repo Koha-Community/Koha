@@ -295,7 +295,7 @@ $template->param(
 );
 
 # current alert subscriptions
-my $alerts = getalert($borrowernumber) if $borrowernumber;
+my $alerts = getalert($borrowernumber) if $borrowernumber; #Superuser has no borrowernumber
 foreach ( @$alerts ) {
     $_->{ $_->{type} } = 1;
     $_->{relatedto} = findrelatedto( $_->{type}, $_->{externalid} );
