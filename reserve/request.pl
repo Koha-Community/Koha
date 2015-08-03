@@ -192,6 +192,7 @@ foreach my $biblionumber (@biblionumbers) {
     my $dat = GetBiblioData($biblionumber);
 
     my $canReserve = CanBookBeReserved( $borrowerinfo->{borrowernumber}, $biblionumber );
+    $canReserve //= '';
     if ( $canReserve eq 'OK' ) {
 
         #All is OK and we can continue
