@@ -67,8 +67,8 @@ This provides a hashref that contains the parameters for connecting to the
 ElasicSearch servers, in the form:
 
     {
-        'servers' => ['127.0.0.1:9200', 'anotherserver:9200'],
-        'index_name' => 'koha_instance',
+        'nodes' => ['127.0.0.1:9200', 'anotherserver:9200'],
+        'index_name' => 'koha_instance_index',
     }
 
 This is configured by the following in the C<config> block in koha-conf.xml:
@@ -95,11 +95,11 @@ sub get_elasticsearch_params {
     delete $es->{server};
     if ( ref($server) eq 'ARRAY' ) {
 
-        # store it called 'servers'
-        $es->{servers} = $server;
+        # store it called 'nodes' (which is used by newer Search::Elasticsearch)
+        $es->{nodes} = $server;
     }
     elsif ($server) {
-        $es->{servers} = [$server];
+        $es->{nodes} = [$server];
     }
     else {
         die "No elasticsearch servers were specified in koha-conf.xml.\n";
