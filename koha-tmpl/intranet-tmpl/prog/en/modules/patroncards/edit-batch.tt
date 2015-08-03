@@ -20,6 +20,7 @@
             function Remove() {
                 items = new Array;
                 item_num = new Array;
+
                 if(document.items.action.length > 0) {
                     for (var i=0; i < document.items.action.length; i++) {
                         if (document.items.action[i].checked) {
@@ -27,16 +28,15 @@
                             item_num.push(i+1);
                         }
                     }
-                    if (items.length < 1) {
-                        alert(_("Please select at least one item to delete."));
-                        return;     // no item selected
-                    }
                     getstr = items.join("&");
                     item_msg = item_num.join(", ");
                     var msg = _("Are you sure you want to remove card number(s): %s from this batch?").format(item_msg);
+                } else if (document.items.action.checked) {
+                    alert(_("Deletion of item from a batch with only one item will delete the batch.\n\nIf this is what you want, select 'Delete batch' option from toolbar"));
+                    return; // no deletion for single item batch
                 }
                 else {
-                    alert(_("Please select at least label to delete."));
+                    alert(_("Please select at least one patron to delete."));
                     return;     // no item selected
                 }
                 var answer = confirm(msg);
