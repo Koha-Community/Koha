@@ -17,10 +17,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
+use Test::Warn;
 
 BEGIN {
         use_ok('Koha::MetadataRecord');
@@ -96,3 +96,52 @@ foreach my $field (@$hash) {
 is_deeply($hash, $samplehash, 'Generated hash correctly');
 my $dupkeys = grep { $_ > 1 } values %fieldkeys;
 is($dupkeys, 0, 'No duplicate keys');
+
+
+subtest "new() tests" => sub {
+
+    plan tests => 12;
+
+    # Test default values with a MARC::Record record
+    my $record = MARC::Record->new();
+    my $metadata_record = new Koha::MetadataRecord({
+        record => $record
+    });
+
+    is( ref($metadata_record), 'Koha::MetadataRecord', 'Type correct');
+    is( ref($metadata_record->record), 'MARC::Record', 'Record type preserved');
+    is( $metadata_record->schema, 'marc21', 'Metadata schema defaults to marc21');
+    is( $metadata_record->format, 'MARC', 'Serializacion format defaults to marc');
+    is( $metadata_record->id, undef, 'id is optional, undef if unspecifid');
+
+    # Test passed values, also no constraint on record type
+    my $weird_record = {};
+    bless $weird_record, 'Weird::Class';
+
+    $metadata_record = new Koha::MetadataRecord({
+        record => $weird_record,
+        schema => 'something',
+        format => 'else',
+        id     => 'an id'
+    });
+
+    is( ref($metadata_record), 'Koha::MetadataRecord', 'Type correct');
+    is( ref($metadata_record->record), 'Weird::Class', 'Record type preserved');
+    is( $metadata_record->schema, 'something', 'Metadata schema correctly set');
+    is( $metadata_record->format, 'else', 'Serializacion format correctly set');
+    is( $metadata_record->id, 'an id', 'The id correctly set');
+
+    # Having a record object is mandatory
+    warning_is { $metadata_record = new Koha::MetadataRecord({
+                                        record => undef,
+                                        schema => 'something',
+                                        format => 'else',
+                                        id     => 'an id'
+                                    }) }
+                { carped => 'No record passed' },
+                'Undefined record raises carped warning';
+
+    is( $metadata_record, undef, 'record object mandatory')
+};
+
+1;
