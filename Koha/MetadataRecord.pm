@@ -23,7 +23,7 @@ Koha::MetadataRecord - base class for metadata records
 
 =head1 SYNOPSIS
 
-    my $record = new Koha::MetadataRecord({ 'record' => $marcrecord });
+    my $record = new Koha::MetadataRecord({ 'record' => $record });
 
 =head1 DESCRIPTION
 
@@ -32,15 +32,71 @@ and authority) records in Koha.
 
 =cut
 
-use strict;
-use warnings;
-use C4::Context;
+use Modern::Perl;
+
+use Carp;
 use Koha::Util::MARC;
 
 use base qw(Class::Accessor);
 
-__PACKAGE__->mk_accessors(qw( record schema ));
+__PACKAGE__->mk_accessors(qw( record schema format id ));
 
+
+=head2 new
+
+    my $metadata_record = new Koha::MetadataRecord({
+                                record => $record,
+                                schema => $schema,
+                                format => $format,
+                                id     => $id
+                          });
+
+Returns a Koha::MetadataRecord object encapsulating record metadata.
+
+C<$record> is expected to be a deserialized object (for example
+a MARC::Record or XML::LibXML::Document object or JSON).
+
+C<$schema> is used to describe the metadata schema (for example
+marc21, unimarc, dc, mods, etc).
+
+C<$format> is used to specify the serialization format. It is important
+for Koha::RecordProcessor because it will pick the right Koha::Filter
+implementation based on this parameter. Valid values are:
+
+   MARC (for MARC::Record objects)
+   XML  (for XML::LibXML::Document objects)
+   JSON (for JSON objects)
+
+(optional) C<$id> is used so the record carries its own id and Koha doesn't
+need to look for it inside the record.
+
+=cut
+
+sub new {
+
+    my $class  = shift;
+    my $params = shift;
+
+    if (!defined $params->{ record }) {
+        carp 'No record passed';
+        return;
+    }
+
+    my $record = $params->{ record };
+    my $schema = $params->{ schema } // 'marc21';
+    my $format = $params->{ format } // 'MARC';
+    my $id     = $params->{ id };
+
+    my $self = $class->SUPER::new({
+        record => $record,
+        schema => $schema,
+        format => $format,
+        id     => $id
+    });
+
+    bless $self, $class;
+    return $self;
+}
 
 =head2 createMergeHash
 
