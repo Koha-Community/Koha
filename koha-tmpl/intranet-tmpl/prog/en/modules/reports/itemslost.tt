@@ -9,7 +9,7 @@
 <script type='text/javascript'>
 //<![CDATA[
     $(document).ready(function() {
-        var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'lostitems', 'lostitems-table', 'json' ) %];
+        var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'lostitems', 'lostitems-table', 'json' ).raw %];
         var lostitems_table = KohaTable("#lostitems-table", {
             "sDom": 'C<"clearfix">t',
             "aaSorting": [],

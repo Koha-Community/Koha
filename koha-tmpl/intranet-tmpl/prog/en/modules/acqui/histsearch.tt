@@ -13,7 +13,7 @@
 //<![CDATA[
 var MSG_REMOVE_PATRON = _("Remove");
  $(document).ready(function() {
-    var columns_settings = [% ColumnsSettings.GetColumns( 'acqui', 'histsearch', 'histsearcht', 'json' ) %];
+    var columns_settings = [% ColumnsSettings.GetColumns( 'acqui', 'histsearch', 'histsearcht', 'json' ).raw %];
     KohaTable("#histsearcht", {
         "aoColumnDefs": [
             { "sType": "anti-the", "aTargets" : [ "anti-the" ] },

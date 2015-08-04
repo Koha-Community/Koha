@@ -25,7 +25,7 @@
     }
 
     $(document).ready(function() {
-        columns_settings = [% ColumnsSettings.GetColumns( 'admin', 'currency', 'currencies-table', 'json' ) %]
+        columns_settings = [% ColumnsSettings.GetColumns( 'admin', 'currency', 'currencies-table', 'json' ).raw %]
         var issuest = KohaTable("#currencies-table", {
             "sDom": 'C<"clearfix">t',
             "aaSorting": [],
