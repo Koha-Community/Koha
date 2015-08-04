@@ -205,7 +205,7 @@ sub telnet_transport {
 		syslog("LOG_DEBUG", "telnet_transport 2: uid length %s, pwd length %s", length($uid), length($pwd));
 
 	    if (exists ($config->{accounts}->{$uid})
-		&& ($pwd eq $config->{accounts}->{$uid}->password())) {
+		&& ($pwd eq $config->{accounts}->{$uid}->{password})) {
 			$account = $config->{accounts}->{$uid};
 			if ( C4::SIP::Sip::MsgType::login_core($self,$uid,$pwd) ) {
                 last;
