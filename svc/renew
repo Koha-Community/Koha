@@ -49,8 +49,6 @@ my $branchcode     = $input->param('branchcode')
 my $date_due;
 if ( $input->param('date_due') ) {
     $date_due = dt_from_string( $input->param('date_due') );
-    $date_due->set_hour(23);
-    $date_due->set_minute(59);
 }
 
 my $data;
