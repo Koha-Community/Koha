@@ -481,6 +481,10 @@ $(document).ready(function() {
             <li>No more renewals possible</li>
         [% END %]
 
+        [% IF NO_RENEWAL_FOR_ONSITE_CHECKOUTS %]
+            <li>This item can not be renewed, it's an on-site checkout</li>
+        [% END %]
+
         [%IF ( AGE_RESTRICTION ) %]
             <li>Age restriction [% AGE_RESTRICTION %].</li>
         [% END %]
