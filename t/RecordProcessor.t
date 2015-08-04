@@ -17,8 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
+
 use File::Spec;
 use MARC::Record;
 
@@ -76,5 +76,38 @@ eval {
 };
 
 ok(!$@, 'Destroyed processor successfully');
+
+subtest "new() tests" => sub {
+
+    plan tests => 13;
+
+    my $processor;
+
+    # Create a processor with a valid filter
+    $processor = new Koha::RecordProcessor({ filters => 'Null' });
+    is( ref($processor), 'Koha::RecordProcessor', 'Processor created' );
+    is( scalar @{ $processor->filters }, 1, 'One filter initialized' );
+    is( ref($processor->filters->[0]), 'Koha::Filter::MARC::Null', 'Correct filter initialized' );
+
+    # Create a processor with an invalid filter
+    $processor = new Koha::RecordProcessor({ filters => 'Dummy' });
+    is( ref($processor), 'Koha::RecordProcessor', 'Processor created' );
+    is( scalar @{ $processor->filters }, 0, 'No filter initialized' );
+    is( ref($processor->filters->[0]), '', 'Make sure no filter initialized' );
+
+    # Create a processor with two valid filters
+    $processor = new Koha::RecordProcessor({ filters => [ 'Null', 'EmbedSeeFromHeadings' ] });
+    is( ref($processor), 'Koha::RecordProcessor', 'Processor created' );
+    is( scalar @{ $processor->filters }, 2, 'Two filters initialized' );
+    is( ref($processor->filters->[0]), 'Koha::Filter::MARC::Null', 'Correct first filter initialized' );
+    is( ref($processor->filters->[1]), 'Koha::Filter::MARC::EmbedSeeFromHeadings', 'Correct second filter initialized' );
+
+    # Create a processor with both valid and invalid filters.
+    $processor = new Koha::RecordProcessor({ filters => [ 'Null', 'Dummy' ] });
+    is( ref($processor), 'Koha::RecordProcessor', 'Processor created' );
+    is( scalar @{ $processor->filters }, 1, 'Invalid filter skipped' );
+    is( ref($processor->filters->[0]), 'Koha::Filter::MARC::Null', 'Correct filter initialized' );
+
+};
 
 done_testing();
