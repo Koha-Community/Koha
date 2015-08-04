@@ -622,7 +622,9 @@ CREATE TABLE `course_reserves` (
 -- Constraints for table `course_reserves`
 --
 ALTER TABLE `course_reserves`
-  ADD CONSTRAINT `course_reserves_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`);
+  ADD CONSTRAINT `course_reserves_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
+  ADD CONSTRAINT `course_reserves_ibfk_2` FOREIGN KEY (`ci_id`) REFERENCES `course_items` (`ci_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 
 --
 -- Table structure for table `branch_borrower_circ_rules`
