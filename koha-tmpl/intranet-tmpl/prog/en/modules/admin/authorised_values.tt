@@ -184,6 +184,8 @@ $(document).ready(function() {
             Authorized value inserted successfully.
         [% CASE 'success_on_delete' %]
             Authorized value deleted successfully.
+        [% CASE 'already_exists' %]
+            This authorized value already exists.
         [% CASE %]
             [% m.code %]
         [% END %]

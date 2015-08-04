@@ -59,11 +59,7 @@ sub search {
       }
       : {};
     my $join = $branchcode ? { join => 'authorised_values_branches' } : {};
-    my $rs = $self->_resultset()
-      ->search( { %$params, %$or, }, $join );
-
-    my $class = ref($self);
-    return wantarray ? $self->_wrap( $rs->all() ) : $class->_new_from_dbic($rs);
+    return $self->SUPER::search( { %$params, %$or, }, $join );
 }
 
 sub categories {

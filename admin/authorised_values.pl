@@ -103,7 +103,17 @@ if ($op eq 'add_form') {
     my $duplicate_entry = 0;
     my @branches = grep { $_ ne q{} } $input->param('branches');
 
-    if ( $id ) { # Update
+    my $already_exists = Koha::AuthorisedValues->search(
+        {
+            category => $new_category,
+            authorised_value => $new_authorised_value,
+        }
+    )->next;
+
+    if ( $already_exists and ( not $id or $already_exists->id != $id ) ) {
+        push @messages, {type => 'error', code => 'already_exists' };
+    }
+    elsif ( $id ) { # Update
         my $av = Koha::AuthorisedValues->new->find( $id );
 
         $av->lib( $input->param('lib') || undef );
