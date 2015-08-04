@@ -270,7 +270,7 @@ $(document).ready(function() {
 [% IF ( OPACUserJS ) %]
     <script type="text/javascript">
         //<![CDATA[
-        [% OPACUserJS %]
+        [% OPACUserJS.raw %]
         //]]>
     </script>
 [% END %]
