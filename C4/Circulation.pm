@@ -938,7 +938,12 @@ sub CanBookBeIssued {
             $item->{'itemnumber'}
         );
         if ( $CanBookBeRenewed == 0 ) {    # no more renewals allowed
-            $issuingimpossible{NO_MORE_RENEWALS} = 1;
+            if ( $renewerror eq 'onsite_checkout' ) {
+                $issuingimpossible{NO_RENEWAL_FOR_ONSITE_CHECKOUTS} = 1;
+            }
+            else {
+                $issuingimpossible{NO_MORE_RENEWALS} = 1;
+            }
         }
         else {
             $needsconfirmation{RENEW_ISSUE} = 1;
@@ -2662,6 +2667,7 @@ sub CanBookBeRenewed {
 
     my $item      = GetItem($itemnumber)      or return ( 0, 'no_item' );
     my $itemissue = GetItemIssue($itemnumber) or return ( 0, 'no_checkout' );
+    return ( 0, 'onsite_checkout' ) if $itemissue->{onsite_checkout};
 
     $borrowernumber ||= $itemissue->{borrowernumber};
     my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber )
