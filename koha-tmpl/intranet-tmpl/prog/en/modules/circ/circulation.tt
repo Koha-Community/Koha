@@ -82,7 +82,7 @@
 
                     [% IF ( NEEDSCONFIRMATION ) %]
                         <div id="circ_needsconfirmation" class="dialog alert audio-alert-action">
-                            [% IF CAN_user_circulate_force_checkout %]
+                            [% IF CAN_user_circulate_force_checkout or additional_materials %]
                                 <h3>Please confirm checkout</h3>
                             [% ELSE %]
                               <h3>Cannot check out</h3>
@@ -97,6 +97,7 @@
                                         [% END %]
                                     </li>
                                 [% END %]
+
 
                                 [% IF ( DEBT ) %]
                                     <li>The patron has a debt of [% DEBT | $Price %].</li>
@@ -194,6 +195,12 @@
                                         [% IF CAN_user_circulate_force_checkout %]
                                             Check out anyway?
                                         [% END %]
+                                    </li>
+                                [% END %]
+
+                                [% IF additional_materials %]
+                                    <li>
+                                        Please confirm that the accompanying materials are present: [% additional_materials | html %]
                                     </li>
                                 [% END %]
                             </ul>

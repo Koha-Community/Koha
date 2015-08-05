@@ -271,18 +271,18 @@ if ($barcode) {
         my $checkout = $item->checkout;
         my $biblio   = $item->biblio;
         $template->param(
-            title            => $biblio->title,
-            homebranch       => $item->homebranch,
-            holdingbranch    => $item->holdingbranch,
-            returnbranch     => $returnbranch,
-            author           => $biblio->author,
-            itembarcode      => $item->barcode,
-            itemtype         => $item->effective_itemtype,
-            ccode            => $item->ccode,
-            itembiblionumber => $biblio->biblionumber,
-            biblionumber     => $biblio->biblionumber,
+            title                => $biblio->title,
+            homebranch           => $item->homebranch,
+            holdingbranch        => $item->holdingbranch,
+            returnbranch         => $returnbranch,
+            author               => $biblio->author,
+            itembarcode          => $item->barcode,
+            itemtype             => $item->effective_itemtype,
+            ccode                => $item->ccode,
+            itembiblionumber     => $biblio->biblionumber,
+            biblionumber         => $biblio->biblionumber,
             additional_materials => $materials,
-            issue            => $checkout,
+            issue                => $checkout,
         );
     } # FIXME else we should not call AddReturn but set BadBarcode directly instead
 
@@ -294,9 +294,18 @@ if ($barcode) {
 
     my $return_date = $dropboxmode ? $dropboxdate : $return_date_override_dt;
 
+    # Block return if multi-part and confirm has not been received
+    my $needs_confirm = 0;
+    if ( C4::Context->preference("CircConfirmParts") ) {
+        if ( $item->materials > 0 && !$query->param('multiple_confirm') ) {
+                $needs_confirm = 1;
+        }
+    }
+
     # do the return
     ( $returned, $messages, $issue, $borrower ) =
-      AddReturn( $barcode, $userenv_branch, $exemptfine, $return_date );
+      AddReturn( $barcode, $userenv_branch, $exemptfine, $return_date )
+      unless $needs_confirm;
 
     if ($returned) {
         my $time_now = dt_from_string()->truncate( to => 'minute');
@@ -337,13 +346,17 @@ if ($barcode) {
                 );
             }
         }
-    } elsif ( C4::Context->preference('ShowAllCheckins') and !$messages->{'BadBarcode'} ) {
+    } elsif ( C4::Context->preference('ShowAllCheckins') and !$messages->{'BadBarcode'} and !$needs_confirm ) {
         $input{duedate}   = 0;
         $returneditems{0} = $barcode;
         $riduedate{0}     = 0;
         push( @inputloop, \%input );
     }
     $template->param( privacy => $borrower->{privacy} );
+
+    if ( $needs_confirm ) {
+        $template->param( needs_confirm => $needs_confirm );
+    }
 }
 $template->param( inputloop => \@inputloop );
 

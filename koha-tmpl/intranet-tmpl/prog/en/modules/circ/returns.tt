@@ -118,11 +118,38 @@
                                 </div>
                             [% END %]
 
-                            [% IF additional_materials %]
-                                <div class="dialog message" id="materials">
-                                    Note about the accompanying materials: <br />
-                                    [% additional_materials | html %]
+                            [% IF needs_confirm %]
+                                <div id="circ_needsconfirmation" class="dialog alert audio-alert-action">
+                                    <h3>Please confirm checkin</h3>
+                                    <ul>
+                                        [% IF additional_materials %]
+                                        <li>
+                                        Please confirm that the accompanying materials are present: [% additional_materials | html %]
+                                        </li>
+                                        [% END %]
+                                    </ul>
+
+                                    <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off">
+                                        <input type="hidden" name="barcode" value="[% itembarcode | html %]" />
+
+                                        [% IF additional_materials %]
+                                        <input type="hidden" name="multiple_confirm" value="1" />
+                                        [% END %]
+
+                                        <button type="submit" class="approve" accesskey="y"><i class="fa fa-check"></i> Yes, checkin (Y)</button>
+                                        <button type="submit" class="deny" accesskey="n"><i class="fa fa-times"></i> No, don't checkin (N)</button>
+                                    </form>
                                 </div>
+                            [% ELSE %]
+                                [% IF additional_materials %]
+                                <div class="dialog alert">
+                                    <ul>
+                                        <li>
+                                        Note about the accompanying materials: [% additional_materials | html %]
+                                        </li>
+                                    </ul>
+                                </div>
+                                [% END %]
                             [% END %]
 
                             [% IF ( collectionItemNeedsTransferred ) %]
