@@ -57,8 +57,8 @@ clone it I<prior> to passing it off to the RecordProcessor.
 
 =cut
 
-use strict;
-use warnings;
+use Modern::Perl;
+
 use Module::Load::Conditional qw(can_load);
 use Module::Pluggable::Object;
 
@@ -90,15 +90,20 @@ Koha::Filter::${schema} namespace, as only the filter name, and
 
 =cut
 sub new {
+
     my $class = shift;
     my $param = shift;
 
 
-    my $schema = $param->{schema} || 'MARC';
+    my $schema  = $param->{schema}  || 'MARC';
     my $options = $param->{options} || '';
+
+    my $req_filters = ( ref($param->{filters}) ne 'ARRAY' )
+                        ? [ $param->{filters} ]
+                        :   $param->{filters};
     my @filters = ( );
 
-    foreach my $filter ($param->{filters}) {
+    foreach my $filter (@{ $req_filters }) {
         next unless $filter;
         my $filter_module = $filter =~ m/:/ ? $filter : "Koha::Filter::${schema}::${filter}";
         if (can_load( modules => { $filter_module => undef } )) {
