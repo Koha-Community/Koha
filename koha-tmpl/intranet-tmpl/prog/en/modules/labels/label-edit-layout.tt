@@ -49,6 +49,12 @@
         <div id="bd">
             <div id="yui-main">
                 <div class="yui-b">
+                    <div class="yui-g">
+                    [% INCLUDE 'labels-toolbar.inc' %]
+                        <div class="yui-u first">
+
+                        </div>
+                    </div>
                     <form name="input" action="/cgi-bin/koha/labels/label-edit-layout.pl" method="get">
                         <fieldset class="rows">
                             <legend>[% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] Label layout</legend>

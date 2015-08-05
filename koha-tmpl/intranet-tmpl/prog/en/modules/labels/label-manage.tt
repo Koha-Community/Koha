@@ -4,31 +4,6 @@
     [% INCLUDE 'greybox.inc' %]
     <script type="text/javascript">
         //<![CDATA[
-            function DeleteConfirm() {
-                var element_id = selected_layout("delete");
-                if (element_id>-1) {
-                    var msg = _("Are you sure you want to delete %s %s?").format("[% label_element %]", element_id);
-                    var answer = confirm(msg);
-                    if (answer) {
-                        window.location = "/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=[% label_element %]&amp;element_id=" + element_id;
-                    }
-                    else {
-                        return; // abort delete
-                    }
-                }
-                else {
-                    return;     // no layout selected
-                };
-            };
-            function Edit() {
-                var element_id = selected_layout("edit");
-                if (element_id>-1) {
-                    window.location = "/cgi-bin/koha/labels/label-edit-[% label_element %].pl?op=edit&amp;element_id=" + element_id;
-                }
-                else {
-                    return;     // no layout selected
-                };
-            };
             function Xport() {
                 batches= new Array;
                 if(document.layouts.action.length > 0) {
@@ -136,7 +111,8 @@
                                         <tr>
                                         [% FOREACH text_field IN table_loo.text_fields %]
                                             [% IF ( text_field.select_field ) %]
-                                                <td align="center"><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>
+                                                <td align="center"><a class="btn btn-mini" href="/cgi-bin/koha/labels/label-edit-[% label_element |url %].pl?op=edit&amp;element_id=[% text_field.field_value |url %]"><icon class="icon-edit"></icon> Edit</a>  <a class="btn btn-mini" href="/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=[% label_element %]&amp;element_id=[% text_field.field_value |url %]" onclick="return confirm('Are you sure you want to delete this?');"><icon class="icon-trash"></icon> Delete</a></td>
+                                                [% IF label_element == 'batch' %] <td align="center"><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>[% END %]
                                             [% ELSIF ( text_field.field_value ) %]
                                                 <td>[% text_field.field_value %]</td>
                                             [% ELSE %]
@@ -147,10 +123,7 @@
                                     [% END %]
                                 [% END %]
                             </table>
-                            <fieldset class="action">
-                                <input type="button" id="edit" onclick="Edit()" value="Edit" />
-                                <input type="button" id="delete" onclick="DeleteConfirm()" value="Delete" />
-                                [% IF ( print ) %]<input type="button" id="print" onclick="Xport()" value="Export" />[% END %]
+                                [% IF ( print ) %]<input type="button" class="btn btn-sm" id="print" onclick="Xport()" value="Export selected" />[% END %]
                             </fieldset>
                             </form>
                             [% ELSE %]
