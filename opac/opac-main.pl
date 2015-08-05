@@ -51,6 +51,9 @@ my $homebranch;
 if (C4::Context->userenv) {
     $homebranch = C4::Context->userenv->{'branch'};
 }
+if (defined $input->param('branch') and length $input->param('branch')) {
+    $homebranch = $input->param('branch');
+}
 my $all_koha_news   = &GetNewsToDisplay($news_lang,$homebranch);
 my $koha_news_count = scalar @$all_koha_news;
 
