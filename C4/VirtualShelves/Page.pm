@@ -68,7 +68,6 @@ sub shelfpage {
     loggedinuser => $loggedinuser,
     OpacAllowPublicListCreation => C4::Context->preference('OpacAllowPublicListCreation'),
     );
-    my $edit;
     my $shelves;
     my @paramsloop;
     my $totitems;
@@ -209,7 +208,6 @@ sub shelfpage {
                 my $shelf = Koha::Virtualshelves->find( $shelfnumber );
                 my $member = GetMember( 'borrowernumber' => $shelf->owner );
                 my $ownername = defined($member) ? $member->{firstname} . " " . $member->{surname} : '';
-                $edit = 1;
                 $template->param(
                     edit                => 1,
                     display             => $displaymode,
@@ -231,9 +229,6 @@ sub shelfpage {
         #View a shelf
         if ( $shelfnumber = $query->param('viewshelf') ) {
             my $shelf = Koha::Virtualshelves->find( $shelfnumber );
-            $template->param(
-                'DisplayMultiPlaceHold' => C4::Context->preference('DisplayMultiPlaceHold'),
-            );
             if (C4::Context->preference('TagsEnabled')) {
                 $template->param(TagsEnabled => 1);
                     foreach (qw(TagsShowOnList TagsInputOnList)) {
@@ -493,20 +488,6 @@ sub shelfpage {
         "BiblioDefaultView" . C4::Context->preference("BiblioDefaultView") => 1,
         csv_profiles                                                       => GetCsvProfilesLoop('marc')
     );
-
-    unless( $shelfnumber or $shelves or $edit ) {
-        # Only used for intranet
-        $template->param( op => 'list' );
-    }
-
-    if ($shelves or    # note: this part looks duplicative, but is intentional
-        $edit
-      ) {
-        $template->param( seflag => 1 );
-        #This hack is just another argument for refactoring this script one day
-        #At this point you are adding or editing a list; if you add, then you add a private list (by default) with permissions as below; if you edit, do not pass these permissions, they must come from the database
-        $template->param( allow_add => 0, allow_delete_own => 1, allow_delete_other => 0) unless $shelfnumber;
-    }
 
 #Next call updates the shelves for the Lists button.
 #May not always be needed (when nothing changed), but doesn't take much.

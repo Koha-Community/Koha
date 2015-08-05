@@ -360,7 +360,7 @@ function verify_images() {
         [% IF ( GetShelves ) %]
             <span class="results_summary"><span class="label">Lists that include this title: </span>
             [% FOREACH GetShelve IN GetShelves %]
-                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% GetShelve.shelfnumber %]">[% GetShelve.shelfname %]</a>
+                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% GetShelve.shelfnumber %]">[% GetShelve.shelfname %]</a>
                 [% IF ( loop.last ) %][% ELSE %]|[% END %]
             [% END %]
             </span>
@@ -525,7 +525,7 @@ function verify_images() {
 	        <li><strong>Lists that include this title: </strong>
 	        <ul>
 	        [% FOREACH GetShelve IN GetShelves %]
-		        <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% GetShelve.shelfnumber %]">[% GetShelve.shelfname %]</a></li>
+                <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% GetShelve.shelfnumber %]">[% GetShelve.shelfname %]</a></li>
 	        [% END %]
 	        </ul>
 	        </li>

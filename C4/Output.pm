@@ -89,6 +89,7 @@ sub pagination_bar {
     my $nb_pages       = (@_) ? shift : 1;
     my $current_page   = (@_) ? shift : undef;	# delay default until later
     my $startfrom_name = (@_) ? shift : 'page';
+    my $additional_parameters = shift || {};
 
     # how many pages to show before and after the current page?
     my $pages_around = 2;
@@ -105,6 +106,10 @@ sub pagination_bar {
 	$base_url =~ s/$delim$//;		# remove trailing delim
 
     my $url = $base_url . (($base_url =~ m/$delim/ or $base_url =~ m/\?/) ? '&amp;' : '?' ) . $startfrom_name . '=';
+    my $url_suffix;
+    while ( my ( $k, $v ) = each %$additional_parameters ) {
+        $url_suffix .= '&amp;' . $k . '=' . $v;
+    }
     my $pagination_bar = '';
 
     # navigation bar useful only if more than one page to display !
@@ -116,7 +121,9 @@ sub pagination_bar {
                 "\n" . '&nbsp;'
               . '<a href="'
               . $url
-              . '1" rel="start">'
+              . '1'
+              . $url_suffix
+              . '"rel="start">'
               . '&lt;&lt;' . '</a>';
         }
         else {
@@ -133,6 +140,7 @@ sub pagination_bar {
               . '<a href="'
               . $url
               . $previous
+              . $url_suffix
               . '" rel="prev">' . '&lt;' . '</a>';
         }
         else {
@@ -171,7 +179,9 @@ sub pagination_bar {
                         "\n" . '&nbsp;'
                       . '<a href="'
                       . $url
-                      . $page_number . '">'
+                      . $page_number
+                      . $url_suffix
+                      . '">'
                       . $page_number . '</a>';
                 }
                 $last_displayed_page = $page_number;
@@ -186,6 +196,7 @@ sub pagination_bar {
               . '&nbsp;<a href="'
               . $url
               . $next
+              . $url_suffix
               . '" rel="next">' . '&gt;' . '</a>';
         }
         else {
@@ -199,6 +210,7 @@ sub pagination_bar {
               . '&nbsp;<a href="'
               . $url
               . $nb_pages
+              . $url_suffix
               . '" rel="last">'
               . '&gt;&gt;' . '</a>';
         }

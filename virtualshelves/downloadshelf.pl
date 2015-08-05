@@ -31,10 +31,13 @@ use C4::VirtualShelves;
 use C4::Record;
 use C4::Ris;
 use C4::Csv;
+
+use Koha::Virtualshelves;
+
 use utf8;
 my $query = new CGI;
 
-my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
     {
         template_name   => "virtualshelves/downloadshelf.tt",
         query           => $query,
@@ -47,6 +50,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
 my $shelfid = $query->param('shelfid');
 my $format  = $query->param('format');
 my $dbh     = C4::Context->dbh;
+my @messages;
 
 if ($shelfid && $format) {
 
@@ -54,41 +58,52 @@ if ($shelfid && $format) {
     my $marcflavour         = C4::Context->preference('marcflavour');
     my $output='';
 
-    # CSV 
-    if ($format =~ /^\d+$/) {
-	my @biblios;
-	foreach (@$items) {
-	    push @biblios, $_->{biblionumber};
-	}
-	$output = marc2csv(\@biblios, $format);
-    }
-    else { #Other formats
-        foreach my $biblio (@$items) {
-            my $biblionumber = $biblio->{biblionumber};
-            my $record = GetMarcBiblio($biblionumber, 1);
-            if ($format eq 'iso2709') {
-                $output .= $record->as_usmarc();
+    my $shelf = Koha::Virtualshelves->find($shelfid);
+    if ( $shelf ) {
+        if ( $shelf->can_be_viewed( $loggedinuser ) ) {
+
+            # CSV
+            if ($format =~ /^\d+$/) {
+                my @biblios;
+                foreach (@$items) {
+                    push @biblios, $_->{biblionumber};
+                }
+                $output = marc2csv(\@biblios, $format);
             }
-            elsif ($format eq 'ris') {
-                $output .= marc2ris($record);
+            else { #Other formats
+                foreach my $biblio (@$items) {
+                    my $biblionumber = $biblio->{biblionumber};
+                    my $record = GetMarcBiblio($biblionumber, 1);
+                    if ($format eq 'iso2709') {
+                        $output .= $record->as_usmarc();
+                    }
+                    elsif ($format eq 'ris') {
+                        $output .= marc2ris($record);
+                    }
+                    elsif ($format eq 'bibtex') {
+                        $output .= marc2bibtex($record, $biblionumber);
+                    }
+                }
             }
-            elsif ($format eq 'bibtex') {
-                $output .= marc2bibtex($record, $biblionumber);
-            }
+            print $query->header(
+            -type => 'application/octet-stream',
+            -'Content-Transfer-Encoding' => 'binary',
+            -attachment=>"shelf.$format");
+            print $output;
+            exit;
+        } else {
+            push @messages, { type => 'error', code => 'unauthorized' };
         }
+    } else {
+        push @messages, { type => 'error', code => 'does_not_exist' };
     }
 
     # If it was a CSV export we change the format after the export so the file extension is fine
     $format = "csv" if ($format =~ m/^\d+$/);
-    
-    print $query->header(
-	-type => 'application/octet-stream',
-	-'Content-Transfer-Encoding' => 'binary',
-	-attachment=>"shelf.$format");
-    print $output;
 }
 else {
     $template->param(csv_profiles => GetCsvProfilesLoop('marc'));
     $template->param(shelfid => $shelfid); 
-    output_html_with_http_headers $query, $cookie, $template->output;
 }
+$template->param( messages => \@messages );
+output_html_with_http_headers $query, $cookie, $template->output;

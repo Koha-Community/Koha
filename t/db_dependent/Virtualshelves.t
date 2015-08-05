@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use DateTime::Duration;
 
 use C4::Context;
@@ -235,4 +235,109 @@ subtest 'Shelf content' => sub {
     is( $number_of_deleted_biblios, 1, );
     $number_of_contents = Koha::Virtualshelfcontents->search->count;
     is( $number_of_contents, 1, 'The biblio should have been deleted to the shelf by the patron 2, even if it is not his own content (allow_delete_other=1)' );
+};
+
+subtest 'Shelf permissions' => sub {
+
+    plan tests => 40;
+    my $patron1 = $builder->build( { source => 'Borrower', value => { flags => '2096766' } } ); # 2096766 is everything checked but not superlibrarian
+    my $patron2 = $builder->build( { source => 'Borrower', value => { flags => '1048190' } } ); # 1048190 is everything checked but not superlibrarian and delete_public_lists
+    my $biblio1 = $builder->build( { source => 'Biblio', } );
+    my $biblio2 = $builder->build( { source => 'Biblio', } );
+    my $biblio3 = $builder->build( { source => 'Biblio', } );
+    my $biblio4 = $builder->build( { source => 'Biblio', } );
+
+
+    my $public_shelf = Koha::Virtualshelf->new(
+        {   shelfname    => "my first shelf",
+            owner        => $patron1->{borrowernumber},
+            category     => 2,
+            allow_add          => 0,
+            allow_delete_own   => 0,
+            allow_delete_other => 0,
+        }
+    )->store;
+
+    is( $public_shelf->can_be_viewed( $patron1->{borrowernumber} ), 1, 'The owner should be able to view his public list' );
+    is( $public_shelf->can_be_viewed( $patron2->{borrowernumber} ), 1, 'Public list should be viewed by someone else' );
+
+    is( $public_shelf->can_be_deleted( $patron1->{borrowernumber} ), 1, 'The owner should be able to delete his list' );
+    is( $public_shelf->can_be_deleted( $patron2->{borrowernumber} ), 0, 'Public list should not be deleted by someone else' );
+
+    is( $public_shelf->can_be_managed( $patron1->{borrowernumber} ), 1, 'The owner should be able to manage his list' );
+    is( $public_shelf->can_be_managed( $patron2->{borrowernumber} ), 0, 'Public list should not be managed by someone else' );
+
+    is( $public_shelf->can_biblios_be_added( $patron1->{borrowernumber} ), 1, 'The owner should be able to add biblios to his list' );
+    is( $public_shelf->can_biblios_be_added( $patron2->{borrowernumber} ), 0, 'Public list should not be modified (add) by someone else' );
+
+    is( $public_shelf->can_biblios_be_removed( $patron1->{borrowernumber} ), 1, 'The owner should be able to remove biblios to his list' );
+    is( $public_shelf->can_biblios_be_removed( $patron2->{borrowernumber} ), 0, 'Public list should not be modified (remove) by someone else' );
+
+
+    $public_shelf->allow_add(1);
+    $public_shelf->allow_delete_own(1);
+    $public_shelf->allow_delete_other(1);
+    $public_shelf->store;
+
+    is( $public_shelf->can_be_viewed( $patron1->{borrowernumber} ), 1, 'The owner should be able to view his public list' );
+    is( $public_shelf->can_be_viewed( $patron2->{borrowernumber} ), 1, 'Public list should be viewed by someone else' );
+
+    is( $public_shelf->can_be_deleted( $patron1->{borrowernumber} ), 1, 'The owner should be able to delete his list' );
+    is( $public_shelf->can_be_deleted( $patron2->{borrowernumber} ), 0, 'Public list should not be deleted by someone else' );
+
+    is( $public_shelf->can_be_managed( $patron1->{borrowernumber} ), 1, 'The owner should be able to manage his list' );
+    is( $public_shelf->can_be_managed( $patron2->{borrowernumber} ), 0, 'Public list should not be managed by someone else' );
+
+    is( $public_shelf->can_biblios_be_added( $patron1->{borrowernumber} ), 1, 'The owner should be able to add biblios to his list' );
+    is( $public_shelf->can_biblios_be_added( $patron2->{borrowernumber} ), 1, 'Public list should not be modified (add) by someone else' );
+
+    is( $public_shelf->can_biblios_be_removed( $patron1->{borrowernumber} ), 1, 'The owner should be able to remove biblios to his list' );
+    is( $public_shelf->can_biblios_be_removed( $patron2->{borrowernumber} ), 1, 'Public list should not be modified (remove) by someone else' );
+
+
+    my $private_shelf = Koha::Virtualshelf->new(
+        {   shelfname    => "my first shelf",
+            owner        => $patron1->{borrowernumber},
+            category     => 1,
+            allow_add          => 0,
+            allow_delete_own   => 0,
+            allow_delete_other => 0,
+        }
+    )->store;
+
+    is( $private_shelf->can_be_viewed( $patron1->{borrowernumber} ), 1, 'The owner should be able to view his list' );
+    is( $private_shelf->can_be_viewed( $patron2->{borrowernumber} ), 0, 'Private list should not be viewed by someone else' );
+
+    is( $private_shelf->can_be_deleted( $patron1->{borrowernumber} ), 1, 'The owner should be able to delete his list' );
+    is( $private_shelf->can_be_deleted( $patron2->{borrowernumber} ), 0, 'Private list should not be deleted by someone else' );
+
+    is( $private_shelf->can_be_managed( $patron1->{borrowernumber} ), 1, 'The owner should be able to manage his list' );
+    is( $private_shelf->can_be_managed( $patron2->{borrowernumber} ), 0, 'Private list should not be managed by someone else' );
+
+    is( $private_shelf->can_biblios_be_added( $patron1->{borrowernumber} ), 1, 'The owner should be able to add biblios to his list' );
+    is( $private_shelf->can_biblios_be_added( $patron2->{borrowernumber} ), 0, 'Private list should not be modified (add) by someone else' );
+
+    is( $private_shelf->can_biblios_be_removed( $patron1->{borrowernumber} ), 1, 'The owner should be able to remove biblios to his list' );
+    is( $private_shelf->can_biblios_be_removed( $patron2->{borrowernumber} ), 0, 'Private list should not be modified (remove) by someone else' );
+
+
+    $private_shelf->allow_add(1);
+    $private_shelf->allow_delete_own(1);
+    $private_shelf->allow_delete_other(1);
+    $private_shelf->store;
+
+    is( $private_shelf->can_be_viewed( $patron1->{borrowernumber} ), 1, 'The owner should be able to view his list' );
+    is( $private_shelf->can_be_viewed( $patron2->{borrowernumber} ), 0, 'Private list should not be viewed by someone else' );
+
+    is( $private_shelf->can_be_deleted( $patron1->{borrowernumber} ), 1, 'The owner should be able to delete his list' );
+    is( $private_shelf->can_be_deleted( $patron2->{borrowernumber} ), 0, 'Private list should not be deleted by someone else' );
+
+    is( $private_shelf->can_be_managed( $patron1->{borrowernumber} ), 1, 'The owner should be able to manage his list' );
+    is( $private_shelf->can_be_managed( $patron2->{borrowernumber} ), 0, 'Private list should not be managed by someone else' );
+
+    is( $private_shelf->can_biblios_be_added( $patron1->{borrowernumber} ), 1, 'The owner should be able to add biblios to his list' );
+    is( $private_shelf->can_biblios_be_added( $patron2->{borrowernumber} ), 1, 'Private list could be modified (add) by someone else # individual check done later' );
+
+    is( $private_shelf->can_biblios_be_removed( $patron1->{borrowernumber} ), 1, 'The owner should be able to remove biblios to his list' );
+    is( $private_shelf->can_biblios_be_removed( $patron2->{borrowernumber} ), 1, 'Private list could be modified (remove) by someone else # individual check done later' );
 };

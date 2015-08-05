@@ -1,7 +1,7 @@
 <script type="text/javascript">
 //<![CDATA[
 
-[% IF ( viewshelf ) %]
+[% IF op == 'view' %]
 
     function sendList(){
         open(CGIBIN+'virtualshelves/sendshelf.pl?shelfid=[% shelfnumber %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100');
@@ -13,7 +13,7 @@
             return false;
         });
         $("#deleteshelf").click(function(e){
-            if(confirmDelete(_("Are you sure you want to delete this list?"))){
+            if(confirm(_("Are you sure you want to delete this list?"))){
                 return true;
             } else {
                 e.preventDefault();
@@ -27,20 +27,16 @@
 </script>
 
 <div id="toolbar" class="btn-toolbar">
-    <div class="btn-group"><a id="newshelf" class="btn btn-small" href="/cgi-bin/koha/virtualshelves/shelves.pl?shelves=1"><i class="fa fa-plus"></i> New list</a></div>
+    <div class="btn-group"><a id="newshelf" class="btn btn-small" href="/cgi-bin/koha/virtualshelves/shelves.pl?op=add_form&amp;referer=[% op %]"><i class="fa fa-plus"></i> New list</a></div>
 
-    [% IF ( viewshelf ) %]
-        [% IF ( manageshelf ) %]
+    [% IF op == 'view' %]
+        [% IF can_manage_shelf %]
         <div class="btn-group">
             <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil"></i> Edit <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl?shelfnumber=[% shelfnumber %]&amp;op=modif&amp;display=viewshelf">Edit list</a></li>
-                    [% IF ( showprivateshelves ) %]
-                        <li><a id="deleteshelf" href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves&amp;shelves=1&amp;DEL-[% shelfnumber %]=1">Delete list</a></li>
-                    [% ELSE %]
-                        <li><a id="deleteshelf" href="/cgi-bin/koha/virtualshelves/shelves.pl?shelves=1&amp;DEL-[% shelfnumber %]=1">Delete list</a></li>
-                    [% END %]
-                </ul>
+            <ul class="dropdown-menu">
+                <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=edit_form&amp;shelfnumber=[% shelf.shelfnumber %]&amp;referer=[% op %]">Edit list</a></li>
+                <li><a id="deleteshelf" href="/cgi-bin/koha/virtualshelves/shelves.pl?op=delete&amp;shelfnumber=[% shelf.shelfnumber %]">Delete list</a></li>
+            </ul>
         </div>
         [% END %]
 
@@ -56,6 +52,6 @@
                 </ul>
         </div>
         <div class="btn-group"><a class="btn btn-small" href="#" id="sendlist"><i class="fa fa-envelope"></i> Send list</a></div>
-        <div class="btn-group"><a class="btn btn-small" id="printlist" target="_blank" href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&amp;print=1"><i class="fa fa-print"></i> Print list</a></div>
+        <div class="btn-group"><a class="btn btn-small" id="printlist" target="_blank" href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber %]&amp;print=1"><i class="fa fa-print"></i> Print list</a></div>
     [% END %]
 </div>

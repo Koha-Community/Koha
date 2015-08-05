@@ -3,6 +3,22 @@
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="lists_downloadshelf" class="lists" style="padding:1em;">
+
+[% FOR m IN messages %]
+    <div class="dialog [% m.type %]">
+        [% SWITCH m.code %]
+        [% CASE 'unauthorized' %]
+            You do not have permission to view this list.
+        [% CASE 'does_not_exist' %]
+            This list does not exist.
+        [% CASE %]
+            [% m.code %]
+        [% END %]
+    </div>
+[% END %]
+
+
+
 [% IF ( format ) %]
     <p>Your download should begin automatically.</p>
 [% ELSE %]

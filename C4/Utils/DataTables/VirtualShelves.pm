@@ -5,7 +5,7 @@ use C4::Branch qw/onlymine/;
 use C4::Context;
 use C4::Members qw/GetMemberIssuesAndFines/;
 use C4::Utils::DataTables;
-use C4::VirtualShelves;
+use Koha::Virtualshelves;
 
 sub search {
     my ( $params ) = @_;
@@ -121,8 +121,9 @@ sub search {
     ( $iTotalRecords ) = $dbh->selectrow_array( $query, undef, @args );
 
     for my $shelf ( @$shelves ) {
-        $shelf->{can_manage_shelf} = C4::VirtualShelves::ShelfPossibleAction( $loggedinuser, $shelf->{shelfnumber}, 'manage' );
-        $shelf->{can_delete_shelf} = C4::VirtualShelves::ShelfPossibleAction( $loggedinuser, $shelf->{shelfnumber}, 'delete_shelf' );
+        my $s = Koha::Virtualshelves->find( $shelf->{shelfnumber} );
+        $shelf->{can_manage_shelf} = $s->can_be_managed( $loggedinuser );
+        $shelf->{can_delete_shelf} = $s->can_be_deleted( $loggedinuser );
     }
     return {
         iTotalRecords => $iTotalRecords,

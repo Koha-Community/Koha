@@ -19,6 +19,9 @@ use Modern::Perl;
 
 use Carp;
 
+use C4::Auth;
+
+use Koha::Borrowers;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
@@ -199,6 +202,59 @@ sub remove_biblios {
         }
     }
     return $number_removed;
+}
+
+sub can_be_viewed {
+    my ( $self, $borrowernumber ) = @_;
+    return 1 if $self->category == $PUBLIC;
+    return 0 unless $borrowernumber;
+    return 1 if $self->owner == $borrowernumber;
+    return $self->get_shares->search(
+        {
+            borrowernumber => $borrowernumber,
+        }
+    )->count;
+}
+
+sub can_be_deleted {
+    my ( $self, $borrowernumber ) = @_;
+
+    return 0 unless $borrowernumber;
+    return 1 if $self->owner == $borrowernumber;
+
+    my $patron = Koha::Borrowers->find( $borrowernumber );
+
+    return 1 if $self->category == $PUBLIC and C4::Auth::haspermission( $patron->userid, { lists => 'delete_public_lists' } );
+
+    return 0;
+}
+
+sub can_be_managed {
+    my ( $self, $borrowernumber ) = @_;
+    return 1
+      if $borrowernumber and $self->owner == $borrowernumber;
+    return 0;
+}
+
+sub can_biblios_be_added {
+    my ( $self, $borrowernumber ) = @_;
+
+    return 1
+      if $borrowernumber
+      and ( $self->owner == $borrowernumber
+         or $self->allow_add );
+    return 0;
+}
+
+sub can_biblios_be_removed {
+    my ( $self, $borrowernumber ) = @_;
+
+    return 1
+      if $borrowernumber
+      and (  $self->owner == $borrowernumber
+          or $self->allow_delete_own
+          or $self->allow_delete_other );
+    return 0;
 }
 
 sub type {

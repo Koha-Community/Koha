@@ -155,7 +155,8 @@ sub HandleNewVirtualShelf {
 }
 
 sub HandleShelfNumber {
-    if($authorized= ShelfPossibleAction($loggedinuser, $shelfnumber, 'add')) {
+    my $shelf = Koha::Virtualshelves->find( $shelfnumber );
+    if($authorized = $shelf->can_biblios_be_added( $loggedinuser ) ) {
     AddBibliosToShelf($shelfnumber, @biblionumber);
     #Close this page and return
     print $query->header;
@@ -167,9 +168,9 @@ sub HandleShelfNumber {
 }
 
 sub HandleSelectedShelf {
-    if($authorized= ShelfPossibleAction( $loggedinuser, $shelfnumber, 'add')){
+    my $shelf = Koha::Virtualshelves->find( $shelfnumber );
+    if($authorized = $shelf->can_biblios_be_added( $loggedinuser ) ) {
         #confirm adding to specific shelf
-        my $shelf = Koha::Virtualshelves->find( $shelfnumber );
         $template->param(
         singleshelf               => 1,
         shelfnumber               => $shelf->shelfnumber,
