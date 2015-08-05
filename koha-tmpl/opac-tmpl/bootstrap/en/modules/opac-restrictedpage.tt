@@ -1,5 +1,4 @@
 [% USE Koha %]
-[% USE KohaDates %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
@@ -22,8 +21,8 @@
 <div class="main">
     <ul class="breadcrumb">
         <li><a href="/cgi-bin/koha/opac-main.pl">Home</a></li>
-        [% IF ( RestrictedPageTitle ) %]
-            <li> <span class="divider">&rsaquo;</span> [% RestrictedPageTitle %]</li>
+        [% IF Koha.Preference('RestrictedPageTitle') %]
+            <li> <span class="divider">&rsaquo;</span> [% Koha.Preference('RestrictedPageTitle') %]</li>
         [% END %]
     </ul>
 
@@ -36,10 +35,10 @@
             </div>
             <div class="span10">
                 <div id="restrictedcontent" class="maincontent">
-                    [% IF ( RestrictedPageTitle ) %]
-                        <h1>[% RestrictedPageTitle %]</h1>
+                    [% IF Koha.Preference('RestrictedPageTitle') %]
+                        <h1>[% Koha.Preference('RestrictedPageTitle') %]</h1>
                     [% END %]
-                    [% RestrictedPageContent %]
+                    [% Koha.Preference('RestrictedPageContent') %]
                 </div>
             </div> <!-- / .span10 -->
         </div> <!-- / .row-fluid -->

@@ -45,9 +45,4 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-$template->param(
-                    RestrictedPageContent => C4::Context->preference('RestrictedPageContent'),
-                    RestrictedPageTitle => C4::Context->preference('RestrictedPageTitle')
-                );
-
 output_html_with_http_headers $query, $cookie, $template->output;
