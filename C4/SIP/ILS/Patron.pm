@@ -22,7 +22,7 @@ use C4::Members;
 use C4::Reserves;
 use C4::Branch qw(GetBranchName);
 use C4::Items qw( GetBarcodeFromItemnumber GetItemnumbersForBiblio);
-use C4::Auth qw(checkpw_hash);
+use C4::Auth qw(checkpw);
 
 our $VERSION = 3.07.00.049;
 
@@ -102,6 +102,7 @@ sub new {
         inet            => ( !$debarred && !$expired ),
         expired         => $expired,
         fee_limit       => $fee_limit,
+        userid          => $kp->{userid},
     );
     }
     $debug and warn "patron fines: $ilspatron{fines} ... amountoutstanding: $kp->{amountoutstanding} ... CHARGES->amount: $flags->{CHARGES}->{amount}";
@@ -192,13 +193,17 @@ sub AUTOLOAD {
 
 sub check_password {
     my ($self, $pwd) = @_;
+
     defined $pwd or return 0;                  # you gotta give me something (at least ''), or no deal
 
-    my $hashed_pwd = $self->{password};
-    defined $hashed_pwd or return $pwd eq '';  # if the record has a NULL password, accept '' as match
+    if ($pwd eq q{}) {
+        return 1;
+    }
 
-    # warn sprintf "check_password for %s: '%s' vs. '%s'",($self->{name}||''),($self->{password}||''),($pwd||'');
-    return checkpw_hash($pwd, $hashed_pwd);
+    my $dbh = C4::Context->dbh;
+    my $ret = 0;
+    ($ret) = checkpw($dbh, $self->{userid}, $pwd);
+    return $ret;
 }
 
 # A few special cases, not in AUTOLOADed %fields
