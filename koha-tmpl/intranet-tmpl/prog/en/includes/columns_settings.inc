@@ -10,7 +10,8 @@ function KohaTable(selector, dt_parameters, columns_settings) {
     var excluded_ids = [];
     $(columns_settings).each( function() {
         var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', selector ).index( 'th' );
-        var used_id = named_id == -1 ? id : named_id;
+        var used_id = this.columnname ? named_id : id;
+        if ( used_id == -1 ) return;
 
         if ( this['is_hidden'] == "1" ) {
             hidden_ids.push( used_id );
