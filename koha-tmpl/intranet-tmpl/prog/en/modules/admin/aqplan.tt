@@ -285,8 +285,10 @@
         <label for="show_actual">Show actual/estimated values</label>
     </li>
     </ol>
-<fieldset class="action">
-        <input type="submit" name="option_submit" value="Submit" /></fieldset>
+    <fieldset class="action">
+        <input type="submit" name="option_submit" value="Submit" />
+        <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
+    </fieldset>
 </fieldset>
 </form>
 [% IF ( budget_lines ) %]
