@@ -3361,6 +3361,8 @@ CREATE TABLE uploaded_files (
     dtcreated timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     categorycode tinytext,
     owner int(11),
+    public tinyint,
+    permanent tinyint,
     PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
