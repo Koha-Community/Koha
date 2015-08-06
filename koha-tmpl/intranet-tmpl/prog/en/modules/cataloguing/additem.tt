@@ -49,8 +49,8 @@ $(document).ready(function(){
             });
 
     var columns_settings = [% ColumnsSettings.GetColumns( 'cataloguing', 'additem', 'itemst', 'json' ) %]
-	// Skip the first column
-	columns_settings.unshift( { cannot_be_toggled: "1" } );
+    // Skip the first column
+    columns_settings.unshift( { cannot_be_toggled: "1" } );
 
     var itemst = KohaTable("#itemst", {
         "aoColumnDefs": [

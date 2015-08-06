@@ -12,14 +12,14 @@
         [% SET tables = module %]
         [% IF tables.$pagename.keys and tables.$pagename.keys.size > 0 %]
           [% FOR tablename IN tables.$pagename.keys.sort %]
-			[% IF pagename == 'additem' AND tablename == 'itemst' %]
-			  <div class="alert">Saving changes to column visibility here will override framework visibility settings for the table of items.</div>
-			[% END %]
+            [% IF pagename == 'additem' AND tablename == 'itemst' %]
+              <div class="alert">Saving changes to column visibility here will override framework visibility settings for the table of items.</div>
+            [% END %]
             <table>
               <caption>
                 [% IF tablename == 'currencies-table' %]
                   Currency
-				[% ELSIF pagename == 'additem' AND tablename == 'itemst' %]
+                [% ELSIF pagename == 'additem' AND tablename == 'itemst' %]
                   Items Editor
                 [% END %]
                 (id=[% tablename %])
