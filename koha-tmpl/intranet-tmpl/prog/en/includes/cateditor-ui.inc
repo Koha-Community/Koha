@@ -962,13 +962,14 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         } );
 
         $( document ).on( 'click', 'a.search-nav', function() {
-            $("#search-overlay").show();
-            Search.Fetch( { offset: $( this ).data( 'offset' ) } );
+            if ( Search.Fetch( { offset: $( this ).data( 'offset' ) } ) ) {
+                $("#search-overlay").show();
+            }
+
             return false;
         });
 
         $( document ).on( 'click', 'th[data-sort-label]', function() {
-            $("#search-overlay").show();
             var direction;
 
             if ( $( this ).hasClass( 'sorting_asc' ) ) {
@@ -977,9 +978,12 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 direction = 'asc';
             }
 
-            showSearchSorting( $( this ).data( 'sort-label' ), direction );
+            if ( Search.Fetch( { sort_key: $( this ).data( 'sort-label' ), sort_direction: direction } ) ) {
+                showSearchSorting( $( this ).data( 'sort-label' ), direction );
 
-            Search.Fetch( { sort_key: $( this ).data( 'sort-label' ), sort_direction: direction } );
+                $("#search-overlay").show();
+            }
+
             return false;
         });
 
@@ -987,9 +991,8 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             var server = z3950Servers[ $( this ).closest('li').data('server-id') ];
             server.checked = this.checked;
 
-            if ( $('#search-results-ui').is( ':visible' ) ) {
+            if ( $('#search-results-ui').is( ':visible' ) && Search.Fetch() ) {
                 $("#search-overlay").show();
-                Search.Fetch();
             }
         } );
 

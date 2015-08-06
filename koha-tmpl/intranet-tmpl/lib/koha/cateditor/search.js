@@ -75,6 +75,8 @@ define( [ 'marc-record' ], function( MARC ) {
                 if ( info.checked ) Search.includedServers.push( id );
             } );
 
+            if ( Search.includedServers.length == 0 ) return false;
+
             $.get(
                 '/cgi-bin/koha/svc/cataloguing/metasearch',
                 {
@@ -106,7 +108,7 @@ define( [ 'marc-record' ], function( MARC ) {
         Fetch: function( options ) {
             if ( !_last ) return;
             $.extend( _last.options, options );
-            Search.Run( _last.servers, _last.q, _last.options );
+            return Search.Run( _last.servers, _last.q, _last.options );
         }
     };
 
