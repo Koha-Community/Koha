@@ -372,7 +372,7 @@ foreach my $budget (@budgets) {
 
     %budget_line = (
         lines                   => \@cells_line,
-        budget_name_indent      => $budget->{budget_name_indent},
+        budget_name             => $budget->{budget_name},
         budget_amount           => $budget->{budget_amount},
         budget_alloc            => $budget->{budget_alloc},
         budget_act_remain       => sprintf( "%.2f", $budget_act_remain ),
@@ -448,8 +448,7 @@ sub _print_to_csv {
     print "$str\n";
 
     foreach my $row (@$results) {
-        $row->{'budget_name_indent'} =~ s/&nbsp;/ /g;
-        my @col = ( $row->{'budget_name_indent'}, $row->{'budget_amount'} );
+        my @col = ( $row->{'budget_name'}, $row->{'budget_amount'} );
         my $l = $row->{'lines'};
         foreach my $line (@$l) {
             push @col, $line->{'estimated_amount'};
