@@ -53,6 +53,8 @@ use Koha::DateUtils;
 use C4::HTML5Media;
 use C4::CourseReserves qw(GetItemCourseReservesInfo);
 
+use Koha::Virtualshelves;
+
 BEGIN {
 	if (C4::Context->preference('BakerTaylorEnabled')) {
 		require C4::External::BakerTaylor;
@@ -844,11 +846,18 @@ $template->param(
 );
 
 # Lists
-
 if (C4::Context->preference("virtualshelves") ) {
-   $template->param( 'GetShelves' => GetBibliosShelves( $biblionumber ) );
+    my $shelves = Koha::Virtualshelves->search(
+        {
+            biblionumber => $biblionumber,
+            category => 2,
+        },
+        {
+            join => 'virtualshelfcontents',
+        }
+    );
+    $template->param( shelves => $shelves );
 }
-
 
 # XISBN Stuff
 if (C4::Context->preference("OPACFRBRizeEditions")==1) {

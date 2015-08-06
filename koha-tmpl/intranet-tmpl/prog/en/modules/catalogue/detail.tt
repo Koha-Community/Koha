@@ -357,10 +357,10 @@ function verify_images() {
     [% IF ( XSLTDetailsDisplay ) %]
         [% XSLTBloc %]
 
-        [% IF ( GetShelves ) %]
+        [% IF shelves %]
             <span class="results_summary"><span class="label">Lists that include this title: </span>
-            [% FOREACH GetShelve IN GetShelves %]
-                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% GetShelve.shelfnumber %]">[% GetShelve.shelfname %]</a>
+            [% FOREACH s IN shelves %]
+                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber %]">[% s.shelfname %]</a>
                 [% IF ( loop.last ) %][% ELSE %]|[% END %]
             [% END %]
             </span>
@@ -521,14 +521,14 @@ function verify_images() {
             </li>
         [% END %]
         <!--This grabs all of the lists a bib record appears in -->
-        [% IF ( GetShelves ) %]
-	        <li><strong>Lists that include this title: </strong>
-	        <ul>
-	        [% FOREACH GetShelve IN GetShelves %]
-                <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% GetShelve.shelfnumber %]">[% GetShelve.shelfname %]</a></li>
-	        [% END %]
-	        </ul>
-	        </li>
+        [% IF shelves %]
+            <li><strong>Lists that include this title: </strong>
+            <ul>
+            [% FOREACH s IN shelves %]
+                <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber %]">[% s.shelfname %]</a></li>
+            [% END %]
+            </ul>
+            </li>
         [% END %]
         [% IF ( TagsEnabled &&  TagsShowOnDetail &&  TagLoop ) %]
                 <li><strong>Tags:</strong>

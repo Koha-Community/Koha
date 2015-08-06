@@ -44,6 +44,8 @@ use C4::HTML5Media;
 use C4::CourseReserves qw(GetItemCourseReservesInfo);
 use C4::Acquisition qw(GetOrdersByBiblionumber);
 
+use Koha::Virtualshelves;
+
 my $query = CGI->new();
 
 my $analyze = $query->param('analyze');
@@ -377,7 +379,16 @@ $template->param(
 # Lists
 
 if (C4::Context->preference("virtualshelves") ) {
-   $template->param( 'GetShelves' => GetBibliosShelves( $biblionumber ) );
+    my $shelves = Koha::Virtualshelves->search(
+        {
+            biblionumber => $biblionumber,
+            category => 2,
+        },
+        {
+            join => 'virtualshelfcontents',
+        }
+    );
+    $template->param( 'shelves' => $shelves );
 }
 
 # XISBN Stuff

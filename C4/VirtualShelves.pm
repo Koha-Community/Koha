@@ -42,7 +42,6 @@ BEGIN {
     @EXPORT = qw(
             &GetShelves &GetShelfContents
             &ShelfPossibleAction
-            &GetBibliosShelves
     );
         @EXPORT_OK = qw(
             &ShelvesMax
@@ -331,26 +330,6 @@ sub ShelfPossibleAction {
         return 1 if $user && $shelf->{owner}==$user;
     }
     return 0;
-}
-
-=head2 GetBibliosShelves
-
-This finds all the public lists that this bib record is in.
-
-=cut
-
-sub GetBibliosShelves {
-    my ( $biblionumber )  = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare('
-        SELECT vs.shelfname, vs.shelfnumber 
-        FROM virtualshelves vs 
-        JOIN virtualshelfcontents vc ON (vs.shelfnumber= vc.shelfnumber) 
-        WHERE vs.category=2
-        AND vc.biblionumber= ?
-    ');
-    $sth->execute( $biblionumber );
-    return $sth->fetchall_arrayref({});
 }
 
 =head2 ShelvesMax
