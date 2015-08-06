@@ -355,11 +355,6 @@ body {
 }
 
 /*> Macros */
-
-#macro-ui .CodeMirror {
-    width: 100%;
-}
-
 #macro-save-message {
     color: #666;
     font-size: 13px;
@@ -429,6 +424,18 @@ body {
     padding: 2px;
 }
 
-#macro-editor .CodeMirror {
+#macro-editor {
+    display: flex;
+    flex-direction: column;
     height: 100%;
+}
+
+#macro-editor .CodeMirror {
+    flex: 1;
+    font-size: 13px;
+}
+
+/* Hotpatch from latest CodeMirror: Fix gutter positioning */
+.CodeMirror-gutter-wrapper {
+    position: absolute;
 }

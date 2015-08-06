@@ -23,6 +23,8 @@
  *
  * ISO2709 import/export is cribbed from marcjs, which is under the MIT license.
  * Source: https://github.com/fredericd/marcjs/blob/master/lib/marcjs.js
+ *
+ * UTF8 encode/decode cribbed from: http://ecmanaut.blogspot.com/2006/07/encoding-decoding-utf8-in-javascript.html
  */
 
 define( function() {
@@ -44,6 +46,14 @@ define( function() {
             i = '0' + i;
         }
         return i;
+    }
+
+    function _encode_utf8(s) {
+        return unescape(encodeURIComponent(s));
+    }
+
+    function _decode_utf8(s) {
+        return decodeURIComponent(escape(s));
     }
 
     MARC.Record = function (fieldlist) {
@@ -200,7 +210,7 @@ define( function() {
                 } else {
                     chunk = element.indicators().join('');
                     $.each( element.subfields(), function( undef, subfield ) {
-                        chunk += DE + subfield[0] + subfield[1];
+                        chunk += DE + subfield[0] + _encode_utf8(subfield[1]);
                     } );
                 }
                 chunk += FT;
@@ -218,10 +228,13 @@ define( function() {
                 leader.substr(17);
             chunks[0] = leader;
             chunks[1] = directory;
-            return chunks.join('');
+            return _decode_utf8( chunks.join('') );
         },
 
         loadISO2709: function(data) {
+            // The underlying offsets work on bytes, not characters
+            data = _encode_utf8(data);
+
             this._fieldlist.length = 0;
             this.leader(data.substr(0, 24));
             var directory_len = parseInt(data.substring(12, 17), 0) - 25,
@@ -235,13 +248,13 @@ define( function() {
                 if ( parseInt(tag) < 10 ) {
                     this.addField( new MARC.Field( tag, '', '', [ [ '@', value ] ] ) );
                 } else {
-                    if ( value.indexOf('\x1F') ) { // There are some letters
+                    if ( value.indexOf('\x1F') ) { // There are some subfields
                         var ind1 = value.substr(0, 1), ind2 = value.substr(1, 1);
                         var subfields = [];
 
                         $.each( value.substr(3).split('\x1f'), function( undef, v ) {
                             if (v.length < 2) return;
-                            subfields.push([v.substr(0, 1), v.substr(1)]);
+                            subfields.push([v.substr(0, 1), _decode_utf8( v.substr(1) )]);
                         } );
 
                         this.addField( new MARC.Field( tag, ind1, ind2, subfields ) );

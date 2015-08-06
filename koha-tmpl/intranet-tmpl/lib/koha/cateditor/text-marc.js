@@ -80,13 +80,18 @@ define( [ 'marc-record' ], function( MARC ) {
 
                     var field = new MARC.Field( tagNumber, ( indicators[1] == '_' ? ' ' : indicators[1] ), ( indicators[2] == '_' ? ' ' : indicators[2] ), [] );
 
-                    var matcher = /[$|ǂ‡]([a-z0-9%]) /g;
+                    var matcher = /[$|ǂ‡]([a-zA-Z0-9%]) /g;
                     var match;
 
                     var subfields = [];
 
                     while ( ( match = matcher.exec(line) ) ) {
                         subfields.push( { code: match[1], ch: match.index } );
+                    }
+
+                    if ( !subfields.length ) {
+                        errors.push( { type: 'noSubfields', line: i } );
+                        return;
                     }
 
                     $.each( subfields, function( i, subfield ) {

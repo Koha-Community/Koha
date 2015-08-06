@@ -114,7 +114,7 @@ require( [ 'widget' ], function( Widget ) {
 
     Widget.Register( '005@', {
         init: function() {
-            var $result = $( '<span class="subfield-widget fixed-widget">Updated: </span>' );
+            var $result = $( '<span class="subfield-widget fixed-widget">' + _("Updated: ") + '</span>' );
 
             return $result[0];
         },
@@ -134,7 +134,7 @@ require( [ 'widget' ], function( Widget ) {
 
                 $( this.node ).append( dateVal.toLocaleString() );
             } else {
-                $( this.node ).append( '<span class="hint">unset</span>' );
+                $( this.node ).append( '<span class="hint">' + _("unset") + '</span>' );
             }
         }
     } );
@@ -145,7 +145,7 @@ require( [ 'widget' ], function( Widget ) {
             return Widget.PadNum( now.getYear() % 100, 2 ) + Widget.PadNum( now.getMonth() + 1, 2 ) + Widget.PadNum( now.getDate(), 2 ) + "b        xxu||||| |||| 00| 0 [% DefaultLanguageField008 %] d";
         },
         init: function() {
-            var $result = $( '<span class="subfield-widget fixed-widget">Fixed data:<span class="hint widget-loading">Loading...</span></span>' );
+            var $result = $( '<span class="subfield-widget fixed-widget">' + _("Fixed data:") + '<span class="hint widget-loading">' + _("Loading...") + '</span></span>' );
 
             return $result[0];
         },

@@ -137,7 +137,7 @@ CodeMirror.defineMode( 'marc', function( config, modeConfig ) {
 
                 if ( stream.eat( /[$|ǂ‡]/ ) ) {
                     var subfieldCode;
-                    if ( ( subfieldCode = stream.eat( /[a-z0-9%]/ ) ) && stream.eat( ' ' ) ) {
+                    if ( ( subfieldCode = stream.eat( /[a-zA-Z0-9%]/ ) ) && stream.eat( ' ' ) ) {
                         state.subfieldCode = subfieldCode;
                         if ( state.seenSubfields[state.subfieldCode] && ( modeConfig.nonRepeatableSubfields[state.tagNumber] || {} )[state.subfieldCode] ) {
                             return 'bad-subfieldcode';

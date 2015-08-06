@@ -569,7 +569,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 editor.refresh();
                 break;
             case 'macros':
-                showSavedMacros();
+                // Macros loaded on first show of modal
                 break;
             case 'selected_search_targets':
                 $.each( z3950Servers, function( server_id, server ) {
@@ -735,14 +735,6 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             position: function (elt) { $(elt).insertAfter('#toolbar') },
         } );
 
-        macroEditor = CodeMirror(
-            $('#macro-editor')[0],
-            {
-                mode: 'null',
-                lineNumbers: true,
-            }
-        );
-
         // Automatically detect resizes and change the height of the editor and position of modals.
         var resizeTimer = null;
         $( window ).resize( function() {
@@ -764,6 +756,32 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             } );
 
         } ).resize();
+
+        $( '#macro-ui' ).on( 'shown', function() {
+            if ( macroEditor ) return;
+
+            macroEditor = CodeMirror(
+                $('#macro-editor')[0],
+                {
+                    mode: 'null',
+                    lineNumbers: true,
+                }
+            );
+            var saveTimeout;
+            macroEditor.on( 'change', function( cm, change ) {
+                $('#macro-save-message').empty();
+                if ( change.origin == 'setValue' ) return;
+
+                if ( saveTimeout ) clearTimeout( saveTimeout );
+                saveTimeout = setTimeout( function() {
+                    saveMacro();
+
+                    saveTimeout = null;
+                }, 500 );
+            } );
+
+            showSavedMacros();
+        } );
 
         var saveableBackends = [];
         $.each( backends, function( id, backend ) {
@@ -804,6 +822,9 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                             break;
                         case 'noIndicators':
                             editor.addError( error.line, _("Invalid indicators") );
+                            break;
+                        case 'noSubfields':
+                            editor.addError( error.line, _("Tag has no subfields") );
                             break;
                         case 'missingTag':
                             editor.addError( null, _("Missing mandatory tag: ") + error.tag );
@@ -854,9 +875,9 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                     reader.onload = function() {
                         var record = new MARC.Record();
 
-                        if ( /\.mrc$/.test( file.name ) ) {
+                        if ( /\.(mrc|marc|iso|iso2709|marcstd)$/.test( file.name ) ) {
                             record.loadISO2709( reader.result );
-                        } else if ( /\.xml$/.test( file.name ) ) {
+                        } else if ( /\.(xml|marcxml)$/.test( file.name ) ) {
                             record.loadMARCXML( reader.result );
                         } else {
                             humanMsg.displayAlert( _("Unknown record type, cannot import"), { className: 'humanError' } );
@@ -912,19 +933,6 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             loadMacro( undefined );
 
             return false;
-        } );
-
-        var saveTimeout;
-        macroEditor.on( 'change', function( cm, change ) {
-            $('#macro-save-message').empty();
-            if ( change.origin == 'setValue' ) return;
-
-            if ( saveTimeout ) clearTimeout( saveTimeout );
-            saveTimeout = setTimeout( function() {
-                saveMacro();
-
-                saveTimeout = null;
-            }, 500 );
         } );
 
         $( '#switch-editor' ).click( function() {
