@@ -86,78 +86,73 @@ modules:
   cataloguing:
     additem:
       itemst:
-        # NOTE: These columns are selected from the non-hidden columns that have mappings to MARC
-        # subfields in the default MARC21 framework (and can thus be displayed in the item editor).
+        # NOTE: These columns are in the same order as kohastructure.sql, and contain all items
+        # columns except for the following internal/obsolete fields: stack, more_subfields_xml,
+        # cn_sort, permanent_location, itemlost_on, withdrawn_on, issues, renewals and reserves.
         -
-          columnname: withdrawn
-        -
-          columnname: itemlost
-        -
-          columnname: cn_source
-        -
-          columnname: materials
-        -
-          columnname: damaged
-        -
-          columnname: restricted
-        -
-          columnname: cn_sort
-        -
-          columnname: notforloan
-        -
-          columnname: ccode
-        -
-          columnname: itemnumber
-        -
-          columnname: homebranch
-        -
-          columnname: holdingbranch
-        -
-          columnname: location
+          columnname: barcode
         -
           columnname: dateaccessioned
         -
           columnname: booksellerid
         -
-          columnname: coded_location_qualifier
+          columnname: homebranch
         -
           columnname: price
-        -
-          columnname: enumchron
-        -
-          columnname: stocknumber
-        -
-          columnname: stack
-        -
-          columnname: issues
-        -
-          columnname: renewals
-        -
-          columnname: reserves
-        -
-          columnname: itemcallnumber
-        -
-          columnname: barcode
-        -
-          columnname: onloan
-        -
-          columnname: datelastseen
-        -
-          columnname: datelastborrowed
-        -
-          columnname: copynumber
-        -
-          columnname: uri
         -
           columnname: replacementprice
         -
           columnname: replacementpricedate
         -
+          columnname: datelastborrowed
+        -
+          columnname: datelastseen
+        -
+          columnname: stack
+        -
+          columnname: notforloan
+        -
+          columnname: damaged
+        -
+          columnname: itemlost
+        -
+          columnname: withdrawn
+        -
+          columnname: itemcallnumber
+        -
+          columnname: coded_location_qualifier
+        -
+          columnname: restricted
+        -
+          columnname: itemnotes
+        -
           columnname: itemnotes_nonpublic
+        -
+          columnname: holdingbranch
+        -
+          columnname: paidfor
+        -
+          columnname: timestamp
+        -
+          columnname: location
+        -
+          columnname: onloan
+        -
+          columnname: cn_source
+        -
+          columnname: ccode
+        -
+          columnname: materials
+        -
+          columnname: uri
         -
           columnname: itype
         -
-          columnname: itemnotes
+          columnname: enumchron
+        -
+          columnname: copynumber
+        -
+          columnname: stocknumber
 
   members:
     member:
