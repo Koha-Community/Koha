@@ -34,6 +34,7 @@ use C4::Context;
 use C4::Installer;
 
 use Koha;
+use Koha::Config::SysPrefs;
 
 #use Smart::Comments '####';
 
@@ -154,6 +155,19 @@ if ( (C4::Context->config('zebra_auth_index_mode') eq 'grs1') && ($context->{'se
 if ( ! defined C4::Context->config('log4perl_conf') ) {
     push @xml_config_warnings, {
         error => 'log4perl_entry_missing'
+    }
+}
+
+if ( ! defined C4::Context->config('upload_path') ) {
+    if ( Koha::Config::SysPrefs->find('OPACBaseURL')->value ) {
+        # OPACBaseURL seems to be set
+        push @xml_config_warnings, {
+            error => 'uploadpath_entry_missing'
+        }
+    } else {
+        push @xml_config_warnings, {
+            error => 'uploadpath_and_opacbaseurl_entry_missing'
+        }
     }
 }
 

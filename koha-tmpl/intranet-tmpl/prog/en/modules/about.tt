@@ -236,6 +236,21 @@
                         add it, pointing to the log4perl.conf file for your Koha instance.
                     </td>
                 </tr>
+                [% ELSIF config_entry.error == 'uploadpath_entry_missing' %]
+                <tr>
+                    <th scope="row"><b>Warning</b></th>
+                    <td>You are missing the <strong>&lt;upload_path&gt;</strong> entry in your koha-conf.xml file. Please
+                        add it, pointing to the configured file upload directory for your Koha instance.
+                    </td>
+                </tr>
+                [% ELSIF config_entry.error == 'uploadpath_and_opacbaseurl_entry_missing' %]
+                <tr>
+                    <th scope="row"><b>Warning</b></th>
+                    <td>You are missing the <strong>&lt;upload_path&gt;</strong> entry in your koha-conf.xml file. Please
+                        add it, pointing to the configured file upload directory for your Koha instance.
+                        Also note that you need to properly set the <strong>OPACBaseURL</strong> preference for the file upload plugin to work.
+                    </td>
+                </tr>
                 [% END %]
             [% END %]
             </table>
