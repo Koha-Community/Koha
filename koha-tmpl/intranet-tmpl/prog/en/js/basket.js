@@ -185,6 +185,7 @@ function addSelRecords(valSel) { // function for adding a selection of biblios t
     if (nbAdd) {
         if (i > nbAdd) {
             msg = MSG_NRECORDS_ADDED.format(nbAdd);
+            msg += "<br/>";
             msg += MSG_NRECORDS_IN_BASKET.format((i-nbAdd));
         }
         else {
