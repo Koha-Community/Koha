@@ -19,19 +19,33 @@
 
 use Modern::Perl;
 use CGI;
+use Encode;
 
+use C4::Auth;
 use C4::Context;
-use C4::UploadedFiles;
+use C4::Output;
+use Koha::Upload;
 
-my $input = new CGI;
+my $input = CGI::->new;
+my $hash = $input->param('id'); # historically called id (used in URLs?)
 
-my $id = $input->param('id');
-my $file = C4::UploadedFiles::GetUploadedFile($id);
-exit 1 if !$file || !-f $file->{filepath};
-
-open my $fh, '<', $file->{filepath} or die "Can't open file: $!";
-print $input->header( C4::UploadedFiles::httpheaders( $file->{filename} ));
-while(<$fh>) {
-    print $_;
+my $upl = Koha::Upload->new({ public => 1 });
+my $rec = $upl->get({ hashvalue => $hash, filehandle => 1 });
+my $fh = $rec->{fh};
+if( !$rec || !$fh ) {
+    my ( $template, $user, $cookie ) = get_template_and_user({
+        query           => $input,
+        template_name   => 'opac-retrieve-file.tt',
+        type            => 'opac',
+        authnotrequired => 1,
+    });
+    $template->param( hash => $hash );
+    output_html_with_http_headers $input, $cookie, $template->output;
+} else {
+    my @hdr = $upl->httpheaders( $rec->{name} );
+    print Encode::encode_utf8( $input->header( @hdr ) );
+    while( <$fh> ) {
+        print $_;
+    }
+    $fh->close;
 }
-close $fh;

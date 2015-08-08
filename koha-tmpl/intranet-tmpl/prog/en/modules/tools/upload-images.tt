@@ -1,14 +1,40 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Upload images</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'file-upload.inc' %]
+
 <script type="text/javascript" src="[% themelang %]/js/background-job-progressbar.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/file-upload.js"></script>
+
 <style type="text/css">
-	#uploadpanel,#fileuploadstatus,#fileuploadfailed,#jobpanel,#jobstatus,#jobfailed { display : none; }
+    #fileuploadstatus,#fileuploadfailed,#jobpanel,#jobstatus,#jobfailed { display : none; }
 	#fileuploadstatus,#jobstatus { margin:.4em; }
-    #fileuploadprogress,#jobprogress{ width:150px;height:10px;border:1px solid #666;background:url('[% interface %]/[% theme %]/img/progress.png') -300px 0px no-repeat; }</style>
+    #fileuploadprogress,#jobprogress { width:150px;height:10px;border:1px solid #666;background:url('[% interface %]/[% theme %]/img/progress.png') -300px 0px no-repeat; }
+</style>
+
 <script type="text/javascript">
 //<![CDATA[
+function StartUpload() {
+    if( $('#fileToUpload').prop('files').length == 0 ) return;
+    $('#uploadform button.submit').prop('disabled',true);
+    $("#fileuploadstatus").show();
+    $("#uploadedfileid").val('');
+    xhr= AjaxUpload( $('#fileToUpload'), $('#fileuploadprogress'), 'temp=1', cbUpload );
+}
+function cbUpload( status, fileid ) {
+    if( status=='done' ) {
+        $("#uploadedfileid").val( fileid );
+        $('#fileToUpload').prop('disabled',true);
+        $("#processfile").show();
+    } else {
+        $("#fileuploadstatus").hide();
+        $("#fileuploadfailed").show();
+        $("#fileuploadfailed").text( _("Upload status: ") +
+            ( status=='failed'? _("Failed"):
+            ( status=='denied'? _("Denied"): status ))
+        );
+        $("#processfile").hide();
+    }
+}
 $(document).ready(function(){
 	$("#processfile").hide();
 	$("#zipfile").click(function(){
@@ -19,7 +45,8 @@ $(document).ready(function(){
 	});
     $("#uploadfile").validate({
         submitHandler: function(form) {
-            ajaxFileUpload();
+            StartUpload();
+            return false;
         }
     });
 });
@@ -76,8 +103,14 @@ $(document).ready(function(){
     <fieldset class="action"><button class="submit">Upload file</button></fieldset>
 </fieldset>
 
-        <div id="uploadpanel"><div id="fileuploadstatus">Upload progress: <div id="fileuploadprogress"></div> <span id="fileuploadpercent">0</span>%</div>
-        <div id="fileuploadfailed"></div></div>
+    <div id="uploadpanel">
+        <div id="fileuploadstatus">Upload progress:
+            <progress min="0" max="100" value="0" id="fileuploadprogress">
+            </progress>
+            <span class="fileuploadpercent">0</span>%
+        </div>
+        <div id="fileuploadfailed"></div>
+    </div>
 </form>
 
     <form method="post" id="processfile" action="[% SCRIPT_NAME %]" enctype="multipart/form-data">

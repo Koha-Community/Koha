@@ -17,18 +17,17 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 
-# standard or CPAN modules used
-use IO::File;
 use CGI qw ( -utf8 );
-use CGI::Session;
+use CGI::Cookie;
+use Encode;
+use JSON;
+use URI::Escape;
+
 use C4::Context;
 use C4::Auth qw/check_cookie_auth haspermission/;
-use CGI::Cookie; # need to check cookies before
-                 # having CGI parse the POST request
-use C4::UploadedFile;
+use Koha::Upload;
 
 # upload-file.pl must authenticate the user
 # before processing the POST request,
@@ -36,7 +35,7 @@ use C4::UploadedFile;
 # not authorized.  Consequently, unlike
 # most of the other CGI scripts, upload-file.pl
 # requires that the session cookie already
-# have been created.
+# has been created.
 
 my $flags_required = [
     {circulate  => 'circulate_remaining_permissions'},
@@ -44,52 +43,53 @@ my $flags_required = [
     {tools      => 'upload_local_cover_images'}
 ];
 
-my %cookies = fetch CGI::Cookie;
+my %cookies = CGI::Cookie->fetch;
+my $sid = $cookies{'CGISESSID'}->value;
 
 my $auth_failure = 1;
-my ( $auth_status, $sessionID ) = check_cookie_auth( $cookies{'CGISESSID'}->value );
+my ( $auth_status, $sessionID ) = check_cookie_auth( $sid );
+my $uid = C4::Auth::get_session($sid)->param('id');
 foreach my $flag_required ( @{$flags_required} ) {
-    if ( my $flags = haspermission( C4::Context->config('user'), $flag_required ) ) {
+    if ( my $flags = haspermission( $uid, $flag_required ) ) {
         $auth_failure = 0 if $auth_status eq 'ok';
     }
 }
 
 if ($auth_failure) {
-    $auth_status = 'denied' if $auth_status eq 'failed';
-    send_reply($auth_status, "");
+    send_reply( 'denied' );
     exit 0;
 }
 
-our $uploaded_file = C4::UploadedFile->new($sessionID);
-unless (defined $uploaded_file) {
-    # FIXME - failed to create file for some reason
-    send_reply('failed', '');
-    exit 0;
+my $upload = Koha::Upload->new( upload_pars($ENV{QUERY_STRING}) );
+if( !$upload || !$upload->cgi || !$upload->count ) {
+    # not one upload succeeded
+    send_reply( 'failed', undef, $upload? $upload->err: undef );
+} else {
+    # in case of multiple uploads, at least one got through
+    send_reply( 'done', $upload->result, $upload->err );
 }
-$uploaded_file->max_size($ENV{'CONTENT_LENGTH'}); # may not be the file size, exactly
-
-my $query;
-$query = new CGI \&upload_hook;
-$uploaded_file->done();
-send_reply('done', $uploaded_file->id());
-
-# FIXME - if possible, trap signal caused by user cancelling upload
-# FIXME - something is wrong during cleanup: \t(in cleanup) Can't call method "commit" on unblessed reference at /usr/local/share/perl/5.8.8/CGI/Session/Driver/DBI.pm line 130 during global destruction.
 exit 0;
 
-sub upload_hook {
-    my ($file_name, $buffer, $bytes_read, $session) = @_;
-    $uploaded_file->stash(\$buffer, $bytes_read);
-    if ( ! $uploaded_file->name && $file_name ) { # save name on first chunk
-        $uploaded_file->name($file_name);
-    }
+sub send_reply {    # response will be sent back as JSON
+    my ( $upload_status, $data, $error ) = @_;
+    my $reply = CGI->new("");
+    print $reply->header( -type => 'text/html', -charset => 'UTF-8' );
+    print JSON::encode_json({
+        status => $upload_status,
+        fileid => $data,
+        errors => $error,
+   });
 }
 
-sub send_reply {
-    my ($upload_status, $fileid) = @_;
-
-    my $reply = CGI->new("");
-    print $reply->header(-type => 'text/html');
-    # response will be sent back as JSON
-    print '{"status":"' . $upload_status . '","fileid":"' . $fileid . '"}';
+sub upload_pars {
+    my ( $qstr ) = @_;
+    $qstr = Encode::decode_utf8( uri_unescape( $qstr ) );
+    # category could include a utf8 character
+    my $rv = {};
+    foreach my $p ( qw[public category temp] ) {
+        if( $qstr =~ /(^|&)$p=(\w+)(&|$)/ ) {
+            $rv->{$p} = $2;
+        }
+    }
+    return $rv;
 }

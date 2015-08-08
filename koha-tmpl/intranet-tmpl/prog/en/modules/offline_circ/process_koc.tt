@@ -1,22 +1,43 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Offline circulation file upload</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'file-upload.inc' %]
+
 <script type="text/javascript" src="[% themelang %]/js/background-job-progressbar.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/file-upload.js"></script>
 <script type="text/javascript">
 //<![CDATA[
+var xhr;
 $(document).ready(function(){
     $("#enqueuefile").hide();
     $("#processfile").hide();
 });
 
-function CheckUpload(f){
-    if (f.fileToUpload.value == ""){
-        alert(_("Please choose a file to upload"));
+function StartUpload() {
+    if( $('#fileToUpload').prop('files').length == 0 ) return;
+    $('#fileuploadform input.submit').prop('disabled',true);
+    $("#fileuploadfailed").hide();
+    $("#processfile").hide();
+    $("#fileuploadstatus").show();
+    $("form#processfile #uploadedfileid").val('');
+    $("form#enqueuefile #uploadedfileid").val('');
+    xhr= AjaxUpload( $('#fileToUpload'), $('#fileuploadprogress'), 'temp=1', cbUpload );
+}
+
+function cbUpload( status, fileid ) {
+    if( status=='done' ) {
+        $("form#processfile #uploadedfileid").val( fileid );
+        $("form#enqueuefile #uploadedfileid").val( fileid );
+        $('#fileToUpload').prop('disabled',true);
+        $("#processfile").show();
+        $("#enqueuefile").show();
     } else {
-        return ajaxFileUpload()
+        $("#fileuploadstatus").hide();
+        $("#fileuploadfailed").show();
+        $("#fileuploadfailed").text( _("Upload status: ") +
+            ( status=='failed'? _("Failed"):
+            ( status=='denied'? _("Denied"): status ))
+        );
     }
-    return false;
 }
 
 function CheckForm(f) {
@@ -25,6 +46,8 @@ function CheckForm(f) {
     } else {
         $("#fileuploadstatus").hide();
         $("#fileuploadform").slideUp();
+        $("#mainformsubmit").prop('disabled',true);
+        $("#queueformsubmit").prop('disabled',true);
         return submitBackgroundJob(f);
     }
     return false;
@@ -70,10 +93,10 @@ function CheckForm(f) {
 		<fieldset class="brief">
        <ol><li><label for="fileToUpload">Choose .koc file: </label>
        <input type="file" id="fileToUpload" size="50" name="fileToUpload" /></li></ol>
-	   <fieldset class="action"><input type="button" class="submit" value="Upload file" onclick="CheckUpload(this.form);" /></fieldset>
+       <fieldset class="action"><input type="button" class="submit" value="Upload file" onclick="StartUpload();return false;" /></fieldset>
 	   </fieldset>
      </form>
-     <div id="fileuploadstatus" style="display:none">Upload progress: <div id="fileuploadprogress"></div> <span id="fileuploadpercent">0</span>%</div>
+     <div id="fileuploadstatus" style="display:none">Upload progress: <progress id="fileuploadprogress" min="0" max="100" value="0"></progress> <span class="fileuploadpercent">0</span>%</div>
      <div id="fileuploadfailed" style="display:none"></div>
    </div>
 

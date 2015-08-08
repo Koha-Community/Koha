@@ -47,7 +47,7 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 use C4::Images;
-use C4::UploadedFile;
+use Koha::Upload;
 use C4::Log;
 
 my $debug = 1;
@@ -83,9 +83,9 @@ $template->{VARS}->{'biblionumber'} = $biblionumber;
 my $total = 0;
 
 if ($fileID) {
-    my $uploaded_file = C4::UploadedFile->fetch( $sessionID, $fileID );
+    my $upload = Koha::Upload->new->get({ id => $fileID, filehandle => 1 });
     if ( $filetype eq 'image' ) {
-        my $fh       = $uploaded_file->fh();
+        my $fh       = $upload->{fh};
         my $srcimage = GD::Image->new($fh);
         if ( defined $srcimage ) {
             my $dberror = PutImage( $biblionumber, $srcimage, $replace );
@@ -102,7 +102,7 @@ if ($fileID) {
         undef $srcimage;
     }
     else {
-        my $filename = $uploaded_file->filename();
+        my $filename = $upload->{path};
         my $dirname = File::Temp::tempdir( CLEANUP => 1 );
         unless ( system( "unzip", $filename, '-d', $dirname ) == 0 ) {
             $error = 'UZIPFAIL';

@@ -39,7 +39,7 @@ use C4::Output;
 use C4::Biblio;
 use C4::ImportBatch;
 use C4::Matcher;
-use C4::UploadedFile;
+use Koha::Upload;
 use C4::BackgroundJob;
 use C4::MarcModificationTemplates;
 use Koha::Plugins;
@@ -84,8 +84,9 @@ if ($completedJobID) {
     my $results = $job->results();
     $template->param(map { $_ => $results->{$_} } keys %{ $results });
 } elsif ($fileID) {
-    my $uploaded_file = C4::UploadedFile->fetch($sessionID, $fileID);
-    my $fh = $uploaded_file->fh();
+    my $upload = Koha::Upload->new->get({ id => $fileID, filehandle => 1 });
+    my $fh = $upload->{fh};
+    my $filename = $upload->{name}; # filename only, no path
 	my $marcrecord='';
     $/ = "\035";
 	while (<$fh>) {
@@ -93,8 +94,8 @@ if ($completedJobID) {
         s/\s+$//;
 		$marcrecord.=$_;
 	}
+    $fh->close;
 
-    my $filename = $uploaded_file->name();
     my $job = undef;
     my $dbh;
     if ($runinbackground) {

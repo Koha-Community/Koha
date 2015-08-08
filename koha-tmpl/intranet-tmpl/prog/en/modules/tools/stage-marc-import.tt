@@ -1,14 +1,19 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Stage MARC records for import</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'file-upload.inc' %]
+
 <script type="text/javascript" src="[% themelang %]/js/background-job-progressbar.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/file-upload.js"></script>
+
 <style type="text/css">
-	#uploadpanel,#fileuploadstatus,#fileuploadfailed,#jobpanel,#jobstatus,#jobfailed { display : none; }
+    #fileuploadstatus,#fileuploadfailed,#fileuploadcancel,#jobpanel,#jobstatus,#jobfailed { display : none; }
 	#fileuploadstatus,#jobstatus { margin:.4em; }
-    #fileuploadprogress,#jobprogress{ width:150px;height:10px;border:1px solid #666;background:url('[% interface %]/[% theme %]/img/progress.png') -300px 0px no-repeat; }</style>
+    #fileuploadprogress,#jobprogress { width:150px;height:10px;border:1px solid #666;background:url('[% interface %]/[% theme %]/img/progress.png') -300px 0px no-repeat; }
+</style>
+
 <script type="text/javascript">
 //<![CDATA[
+var xhr;
 $(document).ready(function(){
 	$("#processfile").hide();
     $("#record_type").change(function() {
@@ -27,7 +32,43 @@ function CheckForm(f) {
     }
     return false;
 }
-
+function StartUpload() {
+    if( $('#fileToUpload').prop('files').length == 0 ) return;
+    $('#fileuploadbutton').hide();
+    $("#fileuploadfailed").hide();
+    $("#processfile").hide();
+    $("#fileuploadstatus").show();
+    $("#uploadedfileid").val('');
+    xhr= AjaxUpload( $('#fileToUpload'), $('#fileuploadprogress'), 'temp=1', cbUpload );
+    $("#fileuploadcancel").show();
+}
+function CancelUpload() {
+    if( xhr ) xhr.abort();
+    $("#fileuploadstatus").hide();
+    $('#fileuploadbutton').show();
+    $("#fileuploadcancel").hide();
+    $("#fileuploadfailed").show();
+    $("#fileuploadfailed").text( _("Upload status: Cancelled ") );
+}
+function cbUpload( status, fileid ) {
+    if( status=='done' ) {
+        $("#uploadedfileid").val( fileid );
+        $('#fileToUpload').prop('disabled',true);
+        $('#fileuploadbutton').prop('disabled',true);
+        $('#fileuploadbutton').show();
+        $("#fileuploadcancel").hide();
+        $("#processfile").show();
+    } else {
+        $('#fileuploadbutton').show();
+        $("#fileuploadcancel").hide();
+        $("#fileuploadstatus").hide();
+        $("#fileuploadfailed").show();
+        $("#fileuploadfailed").text( _("Upload status: ") +
+            ( status=='failed'? _("Failed"):
+            ( status=='denied'? _("Denied"): status ))
+        );
+    }
+}
 //]]>
 </script>
 </head>
@@ -90,11 +131,20 @@ function CheckForm(f) {
 		<input type="file" id="fileToUpload" name="fileToUpload" />
         </div>	</li>
 </ol>
-        <fieldset class="action"><button class="submit" onclick="return ajaxFileUpload();">Upload file</button></fieldset>
+    <fieldset class="action">
+        <button id="fileuploadbutton" onclick="StartUpload(); return false;">Upload file</button>
+        <button id="fileuploadcancel" onclick="CancelUpload(); return false;">Cancel</button>
+    </fieldset>
 </fieldset>
 		
-        <div id="uploadpanel"><div id="fileuploadstatus">Upload progress: <div id="fileuploadprogress"></div> <span id="fileuploadpercent">0</span>%</div>
-        <div id="fileuploadfailed"></div></div>
+    <div id="fileuploadpanel">
+        <div id="fileuploadstatus">Upload progress:
+            <progress id="fileuploadprogress" min="0" max="100" value="0">
+            </progress>
+            <span class="fileuploadpercent">0</span>%
+        </div>
+        <div id="fileuploadfailed"></div>
+    </div>
 </form>
 
     <form method="post" id="processfile" action="[% SCRIPT_NAME %]" enctype="multipart/form-data">

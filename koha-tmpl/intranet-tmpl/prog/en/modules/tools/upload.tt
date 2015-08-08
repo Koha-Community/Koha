@@ -1,0 +1,342 @@
+[% INCLUDE 'doc-head-open.inc' %]
+[% USE Koha %]
+[% IF plugin %]
+    <title>Upload plugin</title>
+[% ELSE %]
+    <title>Koha &rsaquo; Tools &rsaquo; Upload</title>
+[% END %]
+[% INCLUDE 'doc-head-close.inc' %]
+
+[% BLOCK plugin_pars %]
+    [% IF plugin %]
+        <input type="hidden" name="plugin" value="1" />
+        <input type="hidden" name="index" value="[% index %]" />
+    [% END %]
+[% END %]
+
+[% BLOCK breadcrumbs %]
+    <div id="breadcrumbs">
+        <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        &rsaquo;
+        <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
+        &rsaquo;
+        <a href="/cgi-bin/koha/tools/upload.pl">Upload</a>
+        &rsaquo;
+        <span id="lastbreadcrumb">
+        [% IF mode=='new' || mode =='deleted'%]
+            Add new upload or search
+        [% ELSE %]
+            Results
+        [% END %]
+        </span>
+    </div>
+[% END %]
+
+[% BLOCK form_new %]
+    <form method="post" action="[% SCRIPT_NAME %]" id="uploadfile" enctype="multipart/form-data">
+        [% PROCESS plugin_pars %]
+        <fieldset class="rows" id="uploadform">
+        <legend>Upload new files</legend>
+        <ol>
+        <li>
+        <div id="fileuploadform">
+            <label for="fileToUpload">Select files: </label>
+            <input type="file" id="fileToUpload" name="fileToUpload" multiple/>
+        </div>
+        </li>
+        [% IF uploadcategories %]
+            <li>
+                <label for="uploadcategory">Category: </label>
+                <select id="uploadcategory" name="uploadcategory">
+                [% IF !plugin %]
+                    <option value="" disabled hidden selected></option>
+                [% END %]
+                [% FOREACH cat IN uploadcategories %]
+                    <option value="[% cat.code %]">[% cat.name %]</option>
+                [% END %]
+                </select>
+            </li>
+        [% END %]
+        [% IF !plugin %]
+            <li>
+            [% IF uploadcategories %]
+                <div class="hint">Note: For temporary uploads do not select a category.</div>
+            [% ELSE %]
+                <div class="hint">Note: No upload categories have been defined. All uploads will be marked as temporary.</div>
+            [% END %]
+            </li>
+        [% END %]
+        <li>
+            [% IF plugin %]
+                <input type="hidden" id="public" name="public" value="1"/>
+            [% ELSE %]
+                <label>&nbsp;</label>
+                <input type="checkbox" id="public" name="public">
+                    Allow public downloads
+                </input>
+            [% END %]
+        </li>
+        </ol>
+        <fieldset class="action">
+            <button id="fileuploadbutton" onclick="StartUpload(); return false;">Upload</button>
+            <button id="fileuploadcancel" onclick="CancelUpload(); return false;">Cancel</button>
+        </fieldset>
+        </fieldset>
+        <div id="fileuploadpanel">
+            <div id="fileuploadstatus">Upload progress:
+            <progress id="fileuploadprogress" min="0" max="100" value="0">
+            </progress>
+            <span class="fileuploadpercent">0</span>%
+            </div>
+            <div id="fileuploadfailed"></div>
+        </div>
+    </form>
+[% END %]
+
+[% BLOCK form_search %]
+    <form method="post" id="searchfile" action="[% SCRIPT_NAME %]" enctype="multipart/form-data">
+        [% PROCESS plugin_pars %]
+        <input type="hidden" name="op" value="search"/>
+        <fieldset class="rows">
+        <legend>Search uploads by name or hashvalue</legend>
+        <ol>
+        <li>
+            <label for="searchupload">Search term: </label>
+            <input type="text" id="term" name="term" value=""/>
+        </li>
+        <li>
+            <fieldset class="action">
+                <button id="searchbutton" onclick="return CheckSearch();" class="submit">Search</button>
+            </fieldset>
+        </li>
+        </ol>
+        </fieldset>
+    </form>
+[% END %]
+
+[% BLOCK submitter %]
+    <form id="submitter" style="display:none;" method="post">
+        [% PROCESS plugin_pars %]
+        <input type="hidden" name="op" id="op" value=""/>
+        <input type="hidden" name="id" id="id" value="" />
+        <input type="hidden" name="msg" id="msg" value="" />
+    </form>
+[% END %]
+
+[% BLOCK closer %]
+    [% IF plugin %]
+        <form id="closer">
+            <fieldset class="action">
+                <button onclick="window.close();return false;">Close</button>
+            </fieldset>
+        </form>
+    [% END %]
+[% END %]
+
+[% BLOCK newsearch %]
+    <form id="newsearch">
+        <fieldset class="action">
+            <button onclick="SubmitMe('new'); return false;">New search</button>
+            [% IF plugin %]
+                <button onclick="window.close();return false;">Close</button>
+            [% END %]
+        </fieldset>
+    </form>
+[% END %]
+
+[% BLOCK table_results %]
+    <table>
+    <thead>
+    <tr>
+        <th>Filename</td>
+        <th>Size</td>
+        <th>Hashvalue</td>
+        <th>Category</td>
+        [% IF !plugin %]<th>Public</td>[% END %]
+        [% IF !plugin %]<th>Temporary</td>[% END %]
+        <th>Actions</td>
+    </tr>
+    </thead>
+    <tbody>
+    [% FOREACH record IN uploads %]
+    <tr>
+        <td>[% record.name %]</td>
+        <td>[% record.filesize %]</td>
+        <td>[% record.hashvalue %]</td>
+        <td>[% record.categorycode %]</td>
+        [% IF !plugin %]
+            <td>[% IF record.public %]Yes[% ELSE %]No[% END %]</td>
+            <td>[% IF record.permanent %]No[% ELSE %]Yes[% END %]</td>
+        [% END %]
+        <td>
+            [% IF plugin %]
+                <a href="" onclick="Choose('[% record.hashvalue %]'); return false;">Choose</a>&nbsp;
+            [% END %]
+            <a href="" onclick="SubmitMe( 'download', [% record.id %] ); return false;">Download</a>&nbsp;
+            <a href="" onclick="ClearField(); SubmitMe( 'delete', [% record.id %] ); return false;">Delete</a>
+        </td>
+   </tr>
+   [% END %]
+   </tbody>
+   </table>
+[% END %]
+
+<style type="text/css">
+    #fileuploadstatus,#fileuploadfailed { display : none; }
+    #fileuploadstatus { margin:.4em; }
+    #fileuploadprogress { width:150px;height:10px;border:1px solid #666;background:url('[% interface %]/[% theme %]/img/progress.png') -300px 0px no-repeat; }
+</style>
+
+<script type="text/javascript">
+//<![CDATA[
+    var errMESSAGES = [
+        "Error 0: Not in use",
+        _("This file already exists (in this category)."),
+        _("File could not be created. Check permissions."),
+        _("Your koha-conf.xml does not contain a valid upload_path."),
+        _("No temporary directory found."),
+        _("File could not be read."),
+        _("File has been deleted."),
+        _("File could not be deleted."),
+    ];
+//]]>
+</script>
+<script type="text/javascript" src="[% themelang %]/js/file-upload.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+function StartUpload() {
+    if( $('#fileToUpload').prop('files').length == 0 ) return;
+    $('#fileToUpload').prop('disabled',true);
+    $('#fileuploadbutton').hide();
+    $("#fileuploadcancel").show();
+    $("#fileuploadfailed").html('');
+    $("#myalerts").hide('');
+    $("#myalerts").html('');
+    $("#fileuploadstatus").show();
+    $("#uploadedfileid").val('');
+    $("#searchfile").hide();
+    $("#lastbreadcrumb").text( _("Add a new upload") );
+
+    var cat, xtra='';
+    if( $("#uploadcategory").val() )
+        cat = encodeURIComponent( $("#uploadcategory").val() );
+    if( cat ) xtra= 'category=' + cat + '&';
+    [% IF plugin %]
+        xtra = xtra + 'public=1&temp=0';
+    [% ELSE %]
+        if( !cat ) xtra = 'temp=1&';
+        if( $('#public').prop('checked') ) xtra = xtra + 'public=1';
+    [% END %]
+    xhr= AjaxUpload( $('#fileToUpload'), $('#fileuploadprogress'), xtra, cbUpload );
+}
+function CancelUpload() {
+    if( xhr ) xhr.abort();
+    $("#fileuploadstatus").hide();
+    $('#fileToUpload').prop('disabled', false);
+    $('#fileuploadbutton').show();
+    $("#fileuploadcancel").hide();
+    $("#fileuploadfailed").show();
+    $("#fileuploadfailed").text( _("Upload status: Cancelled ") );
+}
+function cbUpload( status, fileid, err ) {
+    $('#fileToUpload').prop('disabled', false);
+    if( status=='done' ) {
+        var e = err? JSON.stringify(err): '';
+        SubmitMe( 'search', fileid, e );
+    } else {
+        $('#fileuploadbutton').show();
+        $("#fileuploadcancel").hide();
+        $("#fileuploadstatus").hide();
+        $("#fileuploadfailed").show();
+        $("#fileuploadfailed").html( _("Upload status: ") +
+            ( status=='failed'? _("Failed"):
+            ( status=='denied'? _("Denied"): status ))
+        );
+        ShowAlerts( err );
+    }
+}
+function ShowAlerts(err) {
+    var str = '';
+    for( var file in err ) {
+        str= str + '<p>' + file + ': ' +
+            errMESSAGES[ err[file] ] + '</p>';
+    }
+    if( str ) {
+        $('#myalerts').html(str);
+        $('#myalerts').show();
+    }
+}
+function CheckSearch() {
+    if( $("#term").val()=="" ) {
+        alert( _("Please enter a search term.") );
+        return false;
+    }
+    return true;
+}
+function SubmitMe(op, id, msg ) {
+    $("#submitter #op").val( op );
+    $("#submitter #id").val( id );
+    $("#submitter #msg").val( msg );
+    $("#submitter").submit();
+}
+function ClearField() {
+    [% IF plugin %]
+        $(window.opener.document).find('#[% index %]').val( '' );
+    [% END %]
+}
+function Choose(hashval) {
+    var res = '[% Koha.Preference('OPACBaseURL') %]';
+    res = res.replace( /\/$/, '');
+    res = res + '/cgi-bin/koha/opac-retrieve-file.pl?id=' + hashval;
+    [% IF index %]
+        $(window.opener.document).find('#[% index %]').val( res );
+    [% END %]
+    window.close();
+}
+$(document).ready(function() {
+    [% IF msg %]
+        ShowAlerts( [% msg %] );
+    [% END %]
+    $("#fileuploadcancel").hide();
+});
+//]]>
+</script>
+</head>
+
+<body id="tools_upload" class="tools">
+[% IF !plugin %]
+    [% INCLUDE 'header.inc' %]
+    [% INCLUDE 'cat-search.inc' %]
+    [% PROCESS breadcrumbs %]
+[% END %]
+
+<div id="doc3" class="yui-t2">
+   <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+<h1>Upload</h1>
+
+<div class="dialog alert" id="myalerts" style="display:none;"></div>
+
+[% PROCESS submitter %]
+[% IF mode == 'new' || mode == 'deleted' %]
+    [% PROCESS form_new %]
+    [% PROCESS form_search %]
+    [% PROCESS closer %]
+[% ELSIF mode == 'report' %]
+    [% IF uploads %]
+        <h3>Your request gave the following results:</h3>
+        [% PROCESS table_results %]
+        [% PROCESS closer %]
+    [% ELSE %]
+        <h4>Sorry, your request had no results.</h4>
+        [% PROCESS newsearch %]
+    [% END %]
+[% END %]
+
+</div>
+</div>
+</div>
+
+[% INCLUDE 'intranet-bottom.inc' %]
