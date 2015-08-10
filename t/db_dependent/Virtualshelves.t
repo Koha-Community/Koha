@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use DateTime::Duration;
 
 use C4::Context;
@@ -14,10 +14,7 @@ use t::lib::TestBuilder;
 
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
-
-$dbh->do(q|DELETE FROM virtualshelfshares|);
-$dbh->do(q|DELETE FROM virtualshelfcontents|);
-$dbh->do(q|DELETE FROM virtualshelves|);
+teardown();
 
 my $builder = t::lib::TestBuilder->new;
 
@@ -81,6 +78,8 @@ subtest 'CRUD' => sub {
     is( $is_deleted, 1, 'The shelf has been deleted correctly' );
     $number_of_shelves = Koha::Virtualshelves->search->count;
     is( $number_of_shelves, 1, 'To be sure the shelf has been deleted' );
+
+    teardown();
 };
 
 subtest 'Sharing' => sub {
@@ -149,6 +148,8 @@ subtest 'Sharing' => sub {
     is( $shelf_to_share->remove_share( $share_with_me->{borrowernumber} ), 1, '1 share should have been removed if the shelf was shared with this patron' );
     $number_of_shelves_shared = Koha::Virtualshelfshares->search->count;
     is( $number_of_shelves_shared, 1, 'To be sure the share has been removed' );
+
+    teardown();
 };
 
 subtest 'Shelf content' => sub {
@@ -235,6 +236,8 @@ subtest 'Shelf content' => sub {
     is( $number_of_deleted_biblios, 1, );
     $number_of_contents = Koha::Virtualshelfcontents->search->count;
     is( $number_of_contents, 1, 'The biblio should have been deleted to the shelf by the patron 2, even if it is not his own content (allow_delete_other=1)' );
+
+    teardown();
 };
 
 subtest 'Shelf permissions' => sub {
@@ -340,4 +343,67 @@ subtest 'Shelf permissions' => sub {
 
     is( $private_shelf->can_biblios_be_removed( $patron1->{borrowernumber} ), 1, 'The owner should be able to remove biblios to his list' );
     is( $private_shelf->can_biblios_be_removed( $patron2->{borrowernumber} ), 1, 'Private list could be modified (remove) by someone else # individual check done later' );
+
+    teardown();
 };
+
+subtest 'Get shelves' => sub {
+    plan tests => 4;
+    my $patron1 = $builder->build({
+        source => 'Borrower',
+    });
+    my $patron2 = $builder->build({
+        source => 'Borrower',
+    });
+
+    my $private_shelf1_1 = Koha::Virtualshelf->new({
+            shelfname => "private shelf 1 for patron 1",
+            owner => $patron1->{borrowernumber},
+            category => 1,
+        }
+    )->store;
+    my $private_shelf1_2 = Koha::Virtualshelf->new({
+            shelfname => "private shelf 2 for patron 1",
+            owner => $patron1->{borrowernumber},
+            category => 1,
+        }
+    )->store;
+    my $private_shelf2_1 = Koha::Virtualshelf->new({
+            shelfname => "private shelf 1 for patron 2",
+            owner => $patron2->{borrowernumber},
+            category => 1,
+        }
+    )->store;
+    my $public_shelf1_1 = Koha::Virtualshelf->new({
+            shelfname => "public shelf 1 for patron 1",
+            owner => $patron1->{borrowernumber},
+            category => 2,
+        }
+    )->store;
+    my $public_shelf1_2 = Koha::Virtualshelf->new({
+            shelfname => "public shelf 2 for patron 1",
+            owner => $patron1->{borrowernumber},
+            category => 2,
+        }
+    )->store;
+
+    my $private_shelves = Koha::Virtualshelves->get_private_shelves;
+    is( $private_shelves->count, 0, 'Without borrowernumber given, get_private_shelves should not return any shelf' );
+    $private_shelves = Koha::Virtualshelves->get_private_shelves({ borrowernumber => $patron1->{borrowernumber} });
+    is( $private_shelves->count, 2, 'get_private_shelves should return all shelves for a given patron' );
+
+    $private_shelf2_1->share('a key')->accept('a key', $patron1->{borrowernumber});
+    $private_shelves = Koha::Virtualshelves->get_private_shelves({ borrowernumber => $patron1->{borrowernumber} });
+    is( $private_shelves->count, 3, 'get_private_shelves should return all shelves for a given patron, even the shared ones' );
+
+    my $public_shelves = Koha::Virtualshelves->get_public_shelves;
+    is( $public_shelves->count, 2, 'get_public_shelves should return all public shelves, no matter who is the owner' );
+
+    teardown();
+};
+
+sub teardown {
+    $dbh->do(q|DELETE FROM virtualshelfshares|);
+    $dbh->do(q|DELETE FROM virtualshelfcontents|);
+    $dbh->do(q|DELETE FROM virtualshelves|);
+}

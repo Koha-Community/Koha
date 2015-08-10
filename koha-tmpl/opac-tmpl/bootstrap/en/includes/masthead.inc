@@ -38,26 +38,26 @@
                                 <a href="#" title="Show lists" class="dropdown-toggle" id="listsmenu" data-toggle="dropdown" role="button"><i class="icon-list icon-white"></i> <span class="listslabel">Lists</span> <b class="caret"></b></a>
                                 <ul aria-labelledby="listsmenu" role="menu" class="dropdown-menu">
                                     [% IF ( pubshelves ) %]
-                                            <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?display=publicshelves" tabindex="-1" role="menuitem"><strong>Public lists</strong></a></li>
+                                            <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=2" tabindex="-1" role="menuitem"><strong>Public lists</strong></a></li>
                                         [% FOREACH pubshelvesloo IN pubshelvesloop %]
-                                            <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% pubshelvesloo.shelfnumber %]&amp;sortfield=[% pubshelvesloo.sortfield %]" tabindex="-1" role="menuitem">[% pubshelvesloo.shelfname |html %]</a></li>
+                                            <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% pubshelvesloo.shelfnumber %]&amp;sortfield=[% pubshelvesloo.sortfield %]" tabindex="-1" role="menuitem">[% pubshelvesloo.shelfname |html %]</a></li>
                                         [% END %]
-                                            <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?display=publicshelves" tabindex="-1" role="menuitem" class="listmenulink">View All</a></li>
+                                            <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=2" tabindex="-1" role="menuitem" class="listmenulink">View All</a></li>
                                     [% ELSE %]
                                         <li role="presentation"><a href="#" tabindex="-1" class="menu-inactive" role="menuitem">No public lists</a></li>
                                     [% END %]
                                     <li class="divider" role="presentation"></li>
                                     [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                        <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves" tabindex="-1" role="menuitem"><strong>Your lists</strong></a></li>
+                                        <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=1" tabindex="-1" role="menuitem"><strong>Your lists</strong></a></li>
                                         [% IF ( loggedinusername ) %]
                                             [% IF ( barshelves ) %]
                                                 [% FOREACH barshelvesloo IN barshelvesloop %]
-                                                    <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% barshelvesloo.shelfnumber %]&amp;sortfield=[% barshelvesloo.sortfield %]" tabindex="-1" role="menuitem">[% barshelvesloo.shelfname |html %]</a></li>
+                                                    <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% barshelvesloo.shelfnumber %]&amp;sortfield=[% barshelvesloo.sortfield %]" tabindex="-1" role="menuitem">[% barshelvesloo.shelfname |html %]</a></li>
                                                 [% END %]
-                                                <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves" tabindex="-1" role="menuitem" class="listmenulink">View all</a></li>
+                                                <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=1" tabindex="-1" role="menuitem" class="listmenulink">View all</a></li>
                                             [% ELSE %]
                                                 <li role="presentation"><a href="#" tabindex="-1" class="menu-inactive" role="menuitem">No private lists</a></li>
-                                                <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves" tabindex="-1" role="menuitem" class="listmenulink">New list</a></li>
+                                                <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=1" tabindex="-1" role="menuitem" class="listmenulink">New list</a></li>
                                             [% END %]
                                         [% ELSE %]
                                             <li role="presentation"><a href="/cgi-bin/koha/opac-user.pl" tabindex="-1" class="menu-inactive loginModal-trigger" role="menuitem">Log in to create your own lists</a></li>

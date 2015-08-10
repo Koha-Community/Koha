@@ -15,7 +15,7 @@
                                 <div class="alert alert-success">
                                     <p>The list was sent to: [% email %]</p>
                                 </div>
-                                <p><a class="focus close" href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% shelfid %]">Back to lists</a></p>
+                                <p><a class="focus close" href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelfid %]">Back to lists</a></p>
                             [% END %]
                             [% IF ( error ) %]
                                 <div class="alert">
@@ -27,7 +27,7 @@
                                 <div class="alert">
                                     <p>You do not have permission to send this list.</p>
                                 </div>
-                                <p><a class="button close" href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% shelfid %]">Back to lists</a></p>
+                                <p><a class="button close" href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelfid %]">Back to lists</a></p>
                             [% ELSE %]
                                 <h1>Sending your list</h1>
                                 <form action="/cgi-bin/koha/opac-sendshelf.pl" method="post" id="sendshelfform">
@@ -42,7 +42,7 @@
                                     </fieldset>
                                     <fieldset class="action">
                                         <input type="submit" value="Send" class="btn" />
-                                        <a class="cancel close" href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% shelfid %]">Cancel</a>
+                                        <a class="cancel close" href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelfid %]">Cancel</a>
                                     </fieldset>
                                 </form>
 

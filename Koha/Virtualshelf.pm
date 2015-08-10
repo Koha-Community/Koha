@@ -101,12 +101,14 @@ sub is_shelfname_valid {
 
 sub get_shares {
     my ( $self ) = @_;
-    return $self->{_result}->virtualshelfshares;
+    my $shares = $self->{_result}->virtualshelfshares;
+    return $shares;
 }
 
 sub get_contents {
     my ( $self ) = @_;
-    return $self->{_result}->virtualshelfcontents;
+    my $contents = $self->{_result}->virtualshelfcontents;
+    return $contents;
 }
 
 sub share {
@@ -128,6 +130,16 @@ sub is_shared {
     return  $self->get_shares->search(
         {
             borrowernumber => { '!=' => undef },
+        }
+    )->count;
+}
+
+sub is_shared_with {
+    my ( $self, $borrowernumber ) = @_;
+    return unless $borrowernumber;
+    return  $self->get_shares->search(
+        {
+            borrowernumber => $borrowernumber,
         }
     )->count;
 }

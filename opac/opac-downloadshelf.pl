@@ -46,17 +46,17 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
     }
 );
 
-my $shelfid = $query->param('shelfid');
+my $shelfnumber = $query->param('shelfnumber');
 my $format  = $query->param('format');
 my $context = $query->param('context');
-my $showprivateshelves = $query->param('showprivateshelves');
 my $dbh     = C4::Context->dbh;
 
-if ( ShelfPossibleAction( (defined($borrowernumber) ? $borrowernumber : -1), $shelfid, 'view' ) ) {
+my $shelf = Koha::Virtualshelves->find( $shelfnumber );
+if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
 
-    if ($shelfid && $format) {
+    if ($shelfnumber && $format) {
 
-        my ($items, $totitems)  = GetShelfContents($shelfid);
+        my ($items, $totitems)  = GetShelfContents($shelfnumber);
         my $marcflavour         = C4::Context->preference('marcflavour');
         my $output;
         my $extension;
@@ -116,13 +116,7 @@ if ( ShelfPossibleAction( (defined($borrowernumber) ? $borrowernumber : -1), $sh
             $template->param(fullpage => 1);
         }
         $template->param(csv_profiles => GetCsvProfilesLoop('marc'));
-        $template->param(
-            showprivateshelves  => $showprivateshelves,
-            shelfid             => $shelf->shelfnumber,
-            shelfnumber         => $shelf->shelfnumber,
-            viewshelf           => $shelf->shelfnumber,
-            shelfname           => $shelf->shelfname,
-        );
+        $template->param( shelf => $shelf );
         output_html_with_http_headers $query, $cookie, $template->output;
     }
 

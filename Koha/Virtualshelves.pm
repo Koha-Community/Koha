@@ -41,24 +41,23 @@ Koha::Virtualshelf - Koha Virtualshelf Object class
 
 sub get_private_shelves {
     my ( $self, $params ) = @_;
-    my $limit = $params->{limit};
-    my $offset = $params->{offset} || 0;
-    my $borrowernumber = $params->{borrowernumber};
+    my $page = $params->{page};
+    my $rows = $params->{rows};
+    my $borrowernumber = $params->{borrowernumber} || 0;
 
     $self->search(
         {
-            'virtualshelfshares.borrowernumber' => $borrowernumber,
             category => 1,
             -or => {
-                'virtualshelfshares.owner' => $borrowernumber,
-                'virtualshelves.borrowernumber' => $borrowernumber,
+                'virtualshelfshares.borrowernumber' => $borrowernumber,
+                'me.owner' => $borrowernumber,
             }
         },
         {
-            join => ['borrowers', 'virtualshelfcontents', 'virtualshelfshares' ],
+            join => [ 'virtualshelfshares' ],
             group_by => 'shelfnumber',
             order_by => 'shelfname',
-            limit => "$limit,$offset",
+            ( ( $page and $rows ) ? ( page => $page, rows => $rows ) : () ),
         }
     );
 }
@@ -66,18 +65,17 @@ sub get_private_shelves {
 
 sub get_public_shelves {
     my ( $self, $params ) = @_;
-    my $limit = $params->{limit};
-    my $offset = $params->{offset} || 0;
+    my $page = $params->{page};
+    my $rows = $params->{rows};
 
     $self->search(
         {
-            category => 1,
+            category => 2,
         },
         {
-            join => [ 'virtualshelfcontents' ],
             group_by => 'shelfnumber',
             order_by => 'shelfname',
-            limit => "$limit,$offset",
+            ( ( $page and $rows ) ? ( page => $page, rows => $rows ) : () ),
         }
     );
 }

@@ -91,7 +91,7 @@
                 [% ELSE %]
                     <li>
                 [% END %]
-                <a href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">your lists</a></li>
+                <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=1">your lists</a></li>
             [% END %]
 
             [% IF Koha.Preference( 'useDischarge' ) == 1 %]

@@ -1,7 +1,7 @@
 [% USE Koha %]
 [% IF ( fullpage ) %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Download list [% shelfname %]</title>[% INCLUDE 'doc-head-close.inc' %]
+    <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Download list [% shelf.shelfname %]</title>[% INCLUDE 'doc-head-close.inc' %]
     [% BLOCK cssinclude %][% END %]
     </head>
     [% INCLUDE 'bodytag.inc' bodyid='opac-downloadlist' %]
@@ -13,14 +13,14 @@
                     <li><a href="/cgi-bin/koha/opac-user.pl">[% FOREACH USER_INF IN USER_INFO %][% USER_INF.title %] [% USER_INF.firstname %] [% USER_INF.surname %][% END %]</a> <span class="divider">&rsaquo;</span></li>
                 [% END %]
                 <li>
-                    [% IF ( showprivateshelves ) %]
-                        <a href="/cgi-bin/koha/opac-shelves.pl">Your lists</a>
+                    [% IF shelf.category == 1 %]
+                        <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=1">Your lists</a>
                     [% ELSE %]
-                        <a href="/cgi-bin/koha/opac-shelves.pl?display=publicshelves">Public lists</a>
+                        <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=2">Public lists</a>
                     [% END %]
                     <span class="divider">&rsaquo;</span>
                 </li>
-                <li>Download list <i>[% shelfname %]</i></li>
+                <li>Download list <i>[% shelf.shelfname %]</i></li>
             </ul>
             <div class="container-fluid">
                 <div class="row-fluid">
@@ -47,7 +47,7 @@
                                     <p>Your download should begin automatically.</p>
                                 </div>
                             [% ELSE %]
-                                <h1>Download list <i>[% shelfname %]</i></h1>
+                                <h1>Download list <i>[% shelf.shelfname %]</i></h1>
                                 <form method="post" action="/cgi-bin/koha/opac-downloadshelf.pl">
                                     <fieldset>
                                         <select name="format" id="dlformat" required="required">
@@ -64,9 +64,9 @@
                                     </fieldset>
 
                                     <fieldset class="action">
-                                        <input type="hidden" name="shelfid" value="[% shelfid | html %]" />
+                                        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
                                         <input type="submit" name="save" class="btn" value="Go" />
-                                        <a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% shelfid | html %]" class="cancel close" data-dismiss="modal">Cancel</a>
+                                        <a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | html %]" class="cancel close" data-dismiss="modal">Cancel</a>
                                     </fieldset>
                                 </form>
                                 [% IF ( modal ) %]

@@ -392,8 +392,8 @@
                     <!--This grabs all of the lists a bib record appears in -->
                     [% IF shelves %]
                         <span class="results_summary lists"><span class="label">List(s) this item appears in: </span>
-                        [% FOREACH shelf IN shelves %]
-                            <a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% shelf.shelfnumber %]">[% shelf.shelfname %]</a>
+                        [% FOREACH s IN shelves %]
+                            <a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber %]">[% s.shelfname %]</a>
                             [% IF ( loop.last ) %][% ELSE %]|[% END %]
                         [% END %]
                         </span>
