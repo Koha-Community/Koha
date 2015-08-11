@@ -45,12 +45,8 @@ sub do_renew_for  {
 
     }
     if ($renewokay){
-        $self->{due} = undef;
         my $issue = AddIssue( $borrower, $self->{item}->id, undef, 0 );
-        my $due_date = dt_from_string( $issue->date_due() );
-        if ($due_date) {
-            $self->{due} = $due_date;
-        }
+        $self->{due} = $self->duedatefromissue($issue, $self->{item}->{itemnumber});
         $self->renewal_ok(1);
     } else {
         $renewerror=~s/on_reserve/Item unavailable due to outstanding holds/;

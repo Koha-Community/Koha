@@ -8,6 +8,8 @@ use Carp;
 use strict;
 use warnings;
 use C4::Context;
+use C4::Circulation qw( GetItemIssue );
+use Koha::DateUtils;
 
 my %fields = (
 	ok            => 0,
@@ -34,6 +36,24 @@ sub new {
 	};
 	return bless $self, $class;
 }
+
+sub duedatefromissue {
+    my ($self, $iss, $itemnum) = @_;
+    my $due_dt;
+    if (defined $iss ) {
+        $due_dt = dt_from_string( $iss->date_due() );
+    } # renew from AddIssue ??
+    else {
+        # need to reread the issue to get due date
+        $iss = GetItemIssue($itemnum);
+        if ($iss && $iss->{date_due} ) {
+            $due_dt = dt_from_string( $iss->{date_due} );
+        }
+    }
+    return $due_dt;
+}
+
+
 
 sub DESTROY {
     # be cool
