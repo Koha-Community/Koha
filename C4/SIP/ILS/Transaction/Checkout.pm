@@ -140,14 +140,8 @@ sub do_checkout {
 		# . "w/ \$borrower: " . Dumper($borrower)
 		. "w/ C4::Context->userenv: " . Dumper(C4::Context->userenv);
     my $issue = AddIssue( $borrower, $barcode, $overridden_duedate, 0 );
-    my $due_dt = dt_from_string( $issue->date_due() );
-    if ($due_dt) {
-        $self->{due} = $due_dt->clone();
-    } else {
-        $self->{due} = undef;
-    }
+    $self->{due} = $self->duedatefromissue($issue, $itemnumber);
 
-    #$self->{item}->due_date($due);
 	$self->ok(1);
 	return $self;
 }
