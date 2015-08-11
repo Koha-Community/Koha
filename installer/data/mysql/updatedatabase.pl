@@ -10748,6 +10748,19 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.21.00.018";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
+        VALUES
+            ('RestrictedPageLocalIPs','',NULL,'Beginning of IP addresses considered as local (comma separated ex: \"127.0.0,127.0.2\")','Free'),
+            ('RestrictedPageContent','',NULL,'HTML content of the restricted page','TextArea'),
+            ('RestrictedPageTitle','',NULL,'Title of the restricted page (breadcrumb and header)','Free')
+    });
+    print "Upgrade to $DBversion done (Bug 13485: Add a page to display links to restricted sites)\n";
+    SetVersion ($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
