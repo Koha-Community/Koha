@@ -194,6 +194,11 @@ function searchToHold(){
                 [% ELSE %]
                     <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to set permissions" id="patronflags" href="#">Set permissions</a></li>
                 [% END %]
+                [% IF ( CAN_user_borrowers_manage_api_keys ) %]
+                    <li><a id="apikeys" href="/cgi-bin/koha/members/apikeys.pl?borrowernumber=[% borrowernumber %]">Manage API keys</a></li>
+                [% ELSE %]
+                    <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to manage API keys" id="apikeys" href="#">Manage API keys</a></li>
+                [% END %]
                 [% IF CAN_user_borrowers && useDischarge %]
                     <li><a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% borrowernumber %]">Discharge</a></li>
                 [% END %]

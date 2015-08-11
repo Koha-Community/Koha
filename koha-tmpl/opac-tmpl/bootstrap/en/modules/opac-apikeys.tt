@@ -1,0 +1,82 @@
+[% INCLUDE 'doc-head-open.inc' %]
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your library home &rsaquo; Your API keys</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+[% INCLUDE 'masthead.inc' %]
+<body>
+
+<div class="main">
+    <ul class="breadcrumb">
+        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+        <li>
+          <a href="/cgi-bin/koha/opac-user.pl">
+            [% INCLUDE 'patron-title.inc' category_type = borrower.category_type firstname = borrower.firstname surname = borrower.surname othernames = borrower.othernames %]
+          </a>
+          <span class="divider">&rsaquo;</span>
+        </li>
+        <li><a href="/cgi-bin/koha/opac-apikeys.pl">Your API keys</a></li>
+    </ul>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span2">
+                <div id="navigation">
+                    [% INCLUDE 'navigation.inc' IsPatronPage = 1 %]
+                </div>
+            </div>
+            <div class="span10">
+                <div id="apikeys" class="maincontent">
+                  <h1>Your API keys</h1>
+                  <div>
+                    <form action="/cgi-bin/koha/opac-apikeys.pl" method="post">
+                      <input type="hidden" name="op" value="generate">
+                      <input id="generatenewkey" type="submit" value="Generate new key">
+                    </form>
+                  </div>
+                  [% IF api_keys.size > 0 %]
+                    <table id="apikeystable" class="table table-bordered table-striped">
+                      <thead>
+                        <tr>
+                          <th>Key</th>
+                          <th>Active</th>
+                          <th>Last transaction</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        [% FOREACH key IN api_keys %]
+                          <tr>
+                            <td class="apikeykey">[% key.api_key %]</td>
+                            <td class="apikeyactive">[% IF key.active %]Yes[% ELSE %]No[% END %]</td>
+                            <td class="apikeylastransaction">[% key.last_request_time || '' %]</td>
+                            <td>
+                              <form action="/cgi-bin/koha/opac-apikeys.pl" method="post" class="form-inline">
+                                <input type="hidden" name="key" value="[% key.api_key %]">
+                                <input type="hidden" name="op" value="delete">
+                                <input class="apikeydelete" type="submit" value="Delete">
+                              </form>
+                              <form action="/cgi-bin/koha/opac-apikeys.pl" method="post" class="form-inline">
+                                <input type="hidden" name="key" value="[% key.api_key %]">
+                                [% IF key.active %]
+                                  <input type="hidden" name="op" value="revoke">
+                                  <input class="apikeyrevoke" type="submit" value="Revoke">
+                                [% ELSE %]
+                                  <input type="hidden" name="op" value="activate">
+                                  <input class="apikeyactivate" type="submit" value="Activate">
+                                [% END %]
+                              </form>
+                            </td>
+                          </tr>
+                        [% END %]
+                      </tbody>
+                    </table>
+                  [% END %]
+                </div> <!-- /#apikeys -->
+            </div> <!-- /.span10 -->
+        </div> <!-- /.row-fluid -->
+    </div> <!-- /.container-fluid -->
+</div> <!-- /#main -->
+
+[% BLOCK jsinclude %][% END %]
+[% INCLUDE 'opac-bottom.inc' %]

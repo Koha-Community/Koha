@@ -21,6 +21,7 @@ use Modern::Perl;
 use DateTime::Format::HTTP;
 use DateTime;
 
+use Koha::ApiKeys;
 use Koha::Patrons;
 
 use base qw(Koha::Auth::Challenge);

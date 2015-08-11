@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && loggedinusername ) %]
     <div id="menu">
         <h4><a href="#" class="menu-collapse-toggle">Your account menu</a></h4>
@@ -86,6 +87,13 @@
                     <a href="/cgi-bin/koha/opac-messaging.pl">your messaging</a></li>
                  [% END %]
             [% END %]
+
+            [% IF apikeysview %]
+              <li class="active">
+            [% ELSE %]
+              <li>
+            [% END %]
+              <a href="/cgi-bin/koha/opac-apikeys.pl">your API keys</a></li>
 
             [% IF Koha.Preference( 'virtualshelves' ) == 1 %]
                 [% IF ( listsview ) %]

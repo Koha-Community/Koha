@@ -93,7 +93,8 @@ sub normalizeMojolicious {
     my ($headers, $postParams, $cookies) = ({}, {}, {});
     my $headersHash = $request->headers()->to_hash();
     foreach my $authHeader (@$authenticationHeaders) {
-        if (my $val = $headersHash->{$authHeader}) {
+        my $val = $headersHash->{$authHeader} // $headersHash->{uc($authHeader)};
+        if ($val) {
             $headers->{$authHeader} = $val;
         }
     }

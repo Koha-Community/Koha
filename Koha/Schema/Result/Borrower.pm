@@ -667,7 +667,7 @@ __PACKAGE__->set_primary_key("borrowernumber");
 
 __PACKAGE__->add_unique_constraint("cardnumber", ["cardnumber"]);
 
-=head2 C<othernames_4>
+=head2 C<othernames_3>
 
 =over 4
 
@@ -677,7 +677,7 @@ __PACKAGE__->add_unique_constraint("cardnumber", ["cardnumber"]);
 
 =cut
 
-__PACKAGE__->add_unique_constraint("othernames_4", ["othernames"]);
+__PACKAGE__->add_unique_constraint("othernames_3", ["othernames"]);
 
 =head2 C<userid>
 
@@ -719,6 +719,21 @@ Related object: L<Koha::Schema::Result::Accountoffset>
 __PACKAGE__->has_many(
   "accountoffsets",
   "Koha::Schema::Result::Accountoffset",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 api_keys
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ApiKey>
+
+=cut
+
+__PACKAGE__->has_many(
+  "api_keys",
+  "Koha::Schema::Result::ApiKey",
   { "foreign.borrowernumber" => "self.borrowernumber" },
   { cascade_copy => 0, cascade_delete => 0 },
 );

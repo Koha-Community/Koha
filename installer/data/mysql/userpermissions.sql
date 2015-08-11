@@ -9,6 +9,7 @@ INSERT INTO permissions (module, code, description) VALUES
    ( 'parameters',      'parameters_remaining_permissions', 'Remaining system parameters permissions'),
    ( 'parameters',      'manage_circ_rules', 'manage circulation rules'),
    ( 'borrowers',       'view_borrowers', 'Show borrower details and search for borrowers.'),
+   ( 'borrowers',       'manage_api_keys', "Manage Borrowers' REST API keys"),
    ( 'permissions',     'set_permissions', 'Set user permissions'),
    ( 'reserveforothers','place_holds', 'Place holds for patrons'),
    ( 'reserveforothers','modify_holds_priority', 'Modify holds priority'),
