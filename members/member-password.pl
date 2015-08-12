@@ -101,7 +101,7 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
 }
 
 # Computes full borrower address
-my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $bor->{streettype} );
+my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $bor->{streettype} ) // '';
 my $address = $bor->{'streetnumber'} . " $roadtype " . $bor->{'address'};
 
     $template->param( othernames => $bor->{'othernames'},
