@@ -2,8 +2,12 @@
 
 # OPAC
 <VirtualHost *:__OPACPORT__>
+  <IfVersion >= 2.4>
+   Define instance "__KOHASITE__"
+  </IfVersion>
    Include /etc/koha/apache-shared.conf
 #  Include /etc/koha/apache-shared-disable.conf
+#  Include /etc/koha/apache-shared-opac-plack.conf
    Include /etc/koha/apache-shared-opac.conf
 
    ServerName __OPACSERVER__
@@ -19,8 +23,12 @@
 
 # Intranet
 <VirtualHost *:__INTRAPORT__>
+  <IfVersion >= 2.4>
+   Define instance "__KOHASITE__"
+  </IfVersion>
    Include /etc/koha/apache-shared.conf
 #  Include /etc/koha/apache-shared-disable.conf
+#  Include /etc/koha/apache-shared-intranet-plack.conf
    Include /etc/koha/apache-shared-intranet.conf
    
    ServerName __INTRASERVER__
