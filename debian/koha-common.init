@@ -40,6 +40,14 @@ fi
 # Depend on lsb-base (>= 3.0-6) to ensure that this file is present.
 . /lib/lsb/init-functions
 
+# include helper functions
+if [ -f "/usr/share/koha/bin/koha-functions.sh" ]; then
+    . "/usr/share/koha/bin/koha-functions.sh"
+else
+    echo "Error: /usr/share/koha/bin/koha-functions.sh not present." 1>&2
+    exit 1
+fi
+
 #
 # Function that starts the daemon/service
 #
@@ -49,6 +57,7 @@ do_start()
     koha-create-dirs $(koha-list)
     koha-start-zebra $(koha-list --enabled)
     koha-start-sip $(koha-list --enabled)
+    koha-plack --start --quiet $(koha-list --enabled --plack)
 
     if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
         koha-indexer --start --quiet $(koha-list --enabled)
@@ -63,6 +72,7 @@ do_stop()
     # We stop everything, including disabled ones.
     koha-stop-zebra $(koha-list) || true
     koha-stop-sip $(koha-list) || true
+    koha-plack --stop --quiet $(koha-list --enabled --plack)
 
     if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
         koha-indexer --stop --quiet $(koha-list --enabled)
@@ -76,42 +86,10 @@ do_reload() {
     koha-restart-zebra $(koha-list --enabled)
     koha-stop-sip $(koha-list) || true
     koha-start-sip $(koha-list --enabled)
+    koha-plack --restart --quiet $(koha-list --enabled --plack)
 
     if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
         koha-indexer --restart --quiet $(koha-list --enabled)
-    fi
-}
-
-#
-# Function that checks zebrasrv is running for the specified instance
-#
-is_zebra_running()
-{
-    local instancename=$1
-
-    if daemon --name="$instancename-koha-zebra" \
-            --user="$instancename-koha.$instancename-koha" \
-            --running ; then
-        return 0
-    else
-        return 1
-    fi
-}
-
-#
-# Function that checks SIP server is running for the specified instance
-#
-is_sip_running()
-{
-    local instancename=$1
-
-    if daemon --name="$instancename-koha-sip" \
-            --pidfiles="/var/run/koha/$instancename" \
-            --user="$instancename-koha.$instancename-koha" \
-            --running ; then
-        return 0
-    else
-        return 1
     fi
 }
 
@@ -123,7 +101,7 @@ zebra_status()
 {
     for instance in $(koha-list --enabled); do
 
-        log_daemon_msg "Zebra server running for instace $instance"
+        log_daemon_msg "Zebra server running for instance $instance"
 
         if is_zebra_running $instance ; then
             log_end_msg 0
@@ -141,9 +119,27 @@ sip_status()
 {
     for instance in $(koha-list --enabled --sip); do
 
-        log_daemon_msg "SIP server running for instace $instance"
+        log_daemon_msg "SIP server running for instance $instance"
 
         if is_sip_running $instance ; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    done
+}
+
+#
+# Function that shows the status of the Plack server daemon for
+# enabled instances
+#
+plack_status()
+{
+    for instance in $(koha-list --enabled --plack); do
+
+        log_daemon_msg "Plack server running for instance ${instance}"
+
+        if is_plack_running $instance ; then
             log_end_msg 0
         else
             log_end_msg 1
@@ -192,6 +188,7 @@ case "$1" in
   status)
         zebra_status
         sip_status
+        plack_status
         ;;
   *)
     echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload|status}" >&2
