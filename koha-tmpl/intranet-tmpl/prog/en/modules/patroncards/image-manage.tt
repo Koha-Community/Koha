@@ -3,6 +3,7 @@
     [% INCLUDE 'doc-head-close.inc' %]
     <script type="text/javascript">
         //<![CDATA[
+            var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this image?");
             function DeleteConfirm() {
                 var results = selected_images("delete");
                 if (results.images != -1) {
@@ -56,17 +57,16 @@
     <div id="bd">
         <div id="yui-main">
             <div class="yui-b">
+                    <div class="yui-g">
+                    [% INCLUDE 'patroncards-toolbar.inc' %]
+                        <div class="yui-u first">
+
+                        </div>
+                    </div>
                 [% INCLUDE 'patroncards-errors.inc' %]
                 <div class="yui-g">
                     <div class="yui-u first">
                         <h1>Upload Images</h1>
-                        [% IF ( IMPORT_SUCCESSFUL ) %]
-                        <div id="dialog" class="dialog message">
-                            <h3>Image successfully uploaded</h3>
-                            <ul><li>File: [% SOURCE_FILE %]</li>
-                            <li>Image name: [% IMAGE_NAME %]</li></ul>
-                        </div>
-                        [% END %]
                         <form name="upload_images" method="post" action="/cgi-bin/koha/patroncards/image-manage.pl" enctype="multipart/form-data">
                             <fieldset class="brief">
                                 <div class="hint">
@@ -86,21 +86,23 @@
                                     <input type="text" id="image_name" name="image_name" size="20" />
                                 </li>
                                 </ol>
+                                <div class="action">
+                                    <input type="hidden" name="op" value="upload" />
+                                    <input class="btn btn-default" id="uploadsu" type="submit" value="Upload" />
+                                </div>
+                                [% IF ( IMPORT_SUCCESSFUL ) %]
+                                    <div class="dialog message">
+                                    <h3>Image successfully uploaded</h3>
+                                    <ul><li>File: [% SOURCE_FILE %]</li>
+                                    <li>Image name: [% IMAGE_NAME %]</li></ul>
+                                    </div>
+                                [% END %]
                             </fieldset>
-                            <fieldset class="action">
-                                <input type="hidden" name="op" value="upload" />
-                                <input id="uploadsu" type="submit" value="Upload" />
-                                <a id="cancelul" href="/cgi-bin/koha/patroncards/home.pl" class="cancel">Cancel</a>
-                            </fieldset>
+
                         </form>
                     </div>
                     <div class="yui-u">
                     <h1>Delete Images</h1>
-                        [% IF ( DELETE_SUCCESSFULL ) %]
-                        <div id="dialog" class="dialog message">
-                            <h3>Image(s) successfully deleted</h3>
-                        </div>
-                        [% END %]
                         [% IF ( TABLE ) %]
                         <form name="delete_images" method="post" action="/cgi-bin/koha/patroncards/image-manage.pl" enctype="multipart/form-data">
                             <fieldset class="brief">
@@ -109,16 +111,30 @@
                                 </div>
                                <table>
                                     [% FOREACH TABL IN TABLE %]
+
                                     [% IF ( TABL.header_fields ) %]
+
                                     <tr>
                                     [% FOREACH header_field IN TABL.header_fields %]
-                                        <th>[% header_field.field_label %]</th>
+                                    [% SWITCH header_field.field_label -%]
+                                        [% CASE "ID" %]
+                                            <th>Image ID</th>
+                                        [% CASE "Name" %]
+                                            <th>Name</th>
+                                        [% CASE " " %]
+                                            <th>Delete</th>
+                                        [% CASE %]
+                                           <th>[% header_field.field_label %]</th>
+                                    [% END %]
                                     [% END %]
                                     </tr>
                                     [% ELSE %]
                                     <tr>
                                     [% FOREACH text_field IN TABL.text_fields %]
                                     [% IF ( text_field.select_field ) %]
+                                        <td>
+                                            <a class="btn btn-mini" onclick="return confirm(MSG_CONFIRM_DELETE);" href="/cgi-bin/koha/patroncards/image-manage.pl?op=delete&image_id=[% text_field.field_value %]"><icon class="icon-trash"></icon> Delete</a>
+                                        </td>
                                         <td align="center"><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>
                                     [% ELSIF ( text_field.field_value ) %]
                                         <td>[% text_field.field_value %]</td>
@@ -130,11 +146,15 @@
                                     [% END %]
                                     [% END %]
                                 </table>
-                            </fieldset>
-                            <fieldset class="action">
-                                <input type="hidden" name="op" value="delete" />
-                                <input type="button" id="delete" value="Delete" />
-                                <a id="canceldel" href="/cgi-bin/koha/patroncards/home.pl" class="cancel">Cancel</a>
+                                <div class="action">
+                                    <input type="hidden" name="op" value="delete" />
+                                    <input class="btn btn-default" type="button" id="delete" value="Delete selected" />
+                                </div>
+                                [% IF ( DELETE_SUCCESSFULL ) %]
+                                <div id="dialog" class="dialog message">
+                                    <h3>Image(s) successfully deleted</h3>
+                                </div>
+                                [% END %]
                             </fieldset>
                         </form>
                         [% ELSE %]
@@ -142,6 +162,11 @@
                             <div class="hint">
                                 No images are currently available.
                             </div>
+                            [% IF ( DELETE_SUCCESSFULL ) %]
+                                <div id="dialog" class="dialog message">
+                                    <h3>Image(s) successfully deleted</h3>
+                                </div>
+                            [% END %]
                         </fieldset>
                         [% END %]
                     </div>

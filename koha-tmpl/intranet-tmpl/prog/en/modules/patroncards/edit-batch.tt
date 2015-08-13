@@ -6,6 +6,7 @@
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
         //<![CDATA[
+           var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this patron from the card batch?");
            function DeleteConfirm() {
                 var msg = _("Are you sure you want to delete batch %s?").format("[% batch_id %]");
                 var answer = confirm(msg);
@@ -88,10 +89,10 @@
                         alert(_("Please select at least one card to export."));
                         return;     // no batch selected
                     }
-                    return GB_showCenter(_("Export labels"), "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id %]&" + getstr, 700, 800);
+                    return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id %]&" + getstr, 700, 800);
                 }
                 else if (mode == 'batch') {
-                    return GB_showCenter(_("Export labels"), "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id %]", 700, 800);
+                    return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id %]", 700, 800);
                 }
                 else {
                     // some pass-thru error trapping just in case...
@@ -117,9 +118,9 @@
          $(document).ready(function() {
             $("#batcht").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [
-                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false }
+                    { "aTargets": [ -2, -1 ], "bSortable": false, "bSearchable": false }
                 ],
-                "aaSorting": [[ 1, "asc" ]],
+                "aaSorting": [[ 0, "asc" ]],
                 "sPaginationType": "four_button"
             }));
             $("#additems").click(function(){
@@ -168,15 +169,12 @@
         <div id="bd">
             <div id="yui-main">
                 <div class="yui-b">
+                    <div class="yui-g">
+                    [% INCLUDE 'patroncards-toolbar.inc' %]
+                        <div class="yui-u first">
 
-                <div id="toolbar" class="btn-toolbar">
-                    <a class="btn btn-small" id="additems" href="#">Add item(s)</a>[% IF ( table_loop ) %]
-                    <a class="btn btn-small" id="removeitems" href="#">Remove item(s)</a>
-                    <a class="btn btn-small" id="deletebatch" href="#">Delete batch</a>
-                    <a class="btn btn-small" id="deduplicate" href="#">Remove duplicates</a>
-                    <a class="btn btn-small" id="exportitems" href="#">Export item(s)</a>
-                    <a class="btn btn-small" id="exportbatch" href="#">Export batch</a>[% END %]
-                </div>
+                        </div>
+                    </div>
 
                 [% IF ( duplicate_message ) %]
                     <div class="dialog message">
@@ -201,6 +199,13 @@
                                     </fieldset>
                                 </div>
                             </form>
+                            <div id="batch-manage" class="action">
+                                <a class="btn btn-small" id="additems" href="#"><icon class="icon-plus"></icon> Add patron(s)</a>[% IF ( table_loop ) %]
+                                <a class="btn btn-small" id="removeitems" href="#"><icon class="icon-trash"></icon> Remove selected patrons</a>
+                                <a class="btn btn-small" id="deduplicate" href="#"><icon class="icon-minus"></icon> Remove duplicates</a>
+                                <a class="btn btn-small" id="exportitems" href="#"><icon class="icon-share"></icon> Export selected card(s)</a>
+                                <a class="btn btn-small" id="exportbatch" href="#"><icon class="icon-share"></icon> Export card batch</a>[% END %]
+                            </div>
                             [% IF ( table_loop ) %]
                             <form name="items" class="checkboxed">
                                 <h2>Items in batch number [% batch_id %]</h2>
@@ -211,12 +216,12 @@
                                                 <tr>
                                                     [% FOREACH header_field IN table_loo.header_fields %]
                                                         [% SWITCH header_field.field_label -%]
-                                                            [% CASE "Card Number" -%]
-                                                                <th>Card number</th>
                                                             [% CASE "Summary" -%]
-                                                                <th>Summary</th>
+                                                                <th>Borrower name</th>
                                                             [% CASE "Borrower Number" %]
                                                                 <th>Borrower number</th>
+                                                            [% CASE "Actions " %]
+                                                                <th>Actions</th>
                                                             [% CASE "Select" -%]
                                                                 <th>Select</th>
                                                             [% CASE %]
@@ -230,6 +235,10 @@
                                             <tr>
                                                 [% FOREACH text_field IN table_loo.text_fields %]
                                                     [% IF ( text_field.select_field ) %]
+                                                        <td>
+                                                            <a class="btn btn-mini" onclick="return confirm(MSG_CONFIRM_DELETE);" href="/cgi-bin/koha/patroncards/edit-batch.pl?op=remove&amp;batch_id=[% batch_id %]&amp;label_id=[% text_field.field_value %]"><icon class="icon-trash"></icon> Delete</a>
+                                                            <a class="btn btn-mini" href="#" onclick="GB_showCenter('Export single card','/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id %]&label_id=[% text_field.field_value %]')"><icon class="icon-share"></icon> Export</a>
+                                                        </td>
                                                         <td><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>
                                                     [% ELSE %]
                                                         <td>[% text_field.field_value %]</td>

@@ -120,12 +120,19 @@
         <div id="bd">
             <div id="yui-main">
                 <div class="yui-b">
+                    <div class="yui-g">
+                    [% INCLUDE 'patroncards-toolbar.inc' %]
+                        <div class="yui-u first">
+
+                        </div>
+                    </div>
+
                 <!-- NOTE: The order of the elements on this form is crictical to correct processing. You've been warned...  -->
                 <form name="input" action="/cgi-bin/koha/patroncards/edit-layout.pl" method="get">
                 <div class="yui-g">
                 <div class="yui-g first">
                         <fieldset class="rows">
-                            <legend>[% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] Patron card text layout</legend>
+                            <legend>[% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] patron card text layout</legend>
                             <ol>
                                 <li>
                                 <fieldset>
@@ -346,7 +353,7 @@
                 </div>
                 <div class="yui-g">
                     <fieldset class="rows">
-                    <legend>[% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] Patron card graphic layout</legend>
+                    <legend>[% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] patron card graphic layout</legend>
                     <ol>
 <!--
                             <li>
@@ -539,7 +546,7 @@
                 </div>
                 </div>
                     <fieldset class="action">
-                        <input type="submit" value="Save" />
+                        <input class="btn btn-default" type="submit" value="Save" />
                         <a class="cancel" href="/cgi-bin/koha/patroncards/manage.pl?card_element=layout">Cancel</a>
                         <input type="hidden" name="op" value="save" />
                         <input type="hidden" name="layout_id" value="[% layout_id %]" />

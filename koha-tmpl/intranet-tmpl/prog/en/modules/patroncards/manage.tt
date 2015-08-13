@@ -8,6 +8,7 @@
 [%-  CASE 'Profiles'  -%]Profiles
 [%-  CASE 'batch'     -%]batch
 [%-  CASE 'Batches'   -%]Batches
+[%-  CASE 'Actions'   -%]Actions
 [%-  END -%]
 [% END %]
     [% INCLUDE 'doc-head-open.inc' %]
@@ -16,6 +17,7 @@
     [% INCLUDE 'greybox.inc' %]
     <script type="text/javascript">
         //<![CDATA[
+            var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this?");
             function DeleteConfirm() {
                 var element_id = selected_layout("delete");
                 if (element_id>-1) {
@@ -132,14 +134,24 @@
                                 [% IF ( table_loo.header_fields ) %]
                                 <tr>
                                 [% FOREACH header_field IN table_loo.header_fields %]
-                                    <th>[% header_field.field_label %]</th>
+                                    [% SWITCH header_field.field_label -%]
+                                        [% CASE "Select" -%]
+                                             [% IF ( print ) %]<th>Select</th>[% END %]
+                                        [% CASE %]
+                                             <th>[% header_field.field_label %]</th>
+                                        [% END -%]
                                 [% END %]
                                 </tr>
                                 [% ELSE %]
                                 <tr>
                                 [% FOREACH text_field IN table_loo.text_fields %]
                                 [% IF ( text_field.select_field ) %]
-                                    <td align="center"><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>
+                                    <td>
+                                      <a class="btn btn-mini" href="/cgi-bin/koha/patroncards/edit-[% card_element %].pl?op=edit&element_id=[% text_field.field_value %]"><icon class="icon-edit"></icon> Edit</a>
+                                      [% IF ( print ) %]<a class="btn btn-mini" href="#" onclick="GB_showCenter('Export single batch','/cgi-bin/koha/patroncards/print.pl?batch_id=[% text_field.field_value |url %]')"><icon class="icon-share"></icon> Export</a>[% END %]
+                                      <a class="btn btn-mini" onclick="return confirm(MSG_CONFIRM_DELETE);" href="/cgi-bin/koha/patroncards/manage.pl?op=delete&card_element=[% card_element %]&element_id=[% text_field.field_value %]"><icon class="icon-trash"></icon> Delete</a>
+                                    </td>
+                                    [% IF ( print ) %]<td align="center"><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>[% END %]
                                 [% ELSIF ( text_field.field_value ) %]
                                     <td>[% text_field.field_value %]</td>
                                 [% ELSE %]
@@ -151,9 +163,7 @@
                                 [% END %]
                             </table>
                             <fieldset class="action">
-                                <input type="button" id="edit" value="Edit" />
-                                <input type="button" id="delete" value="Delete" />
-                                [% IF ( print ) %]<input type="button" id="print" value="Export" />[% END %]
+                                [% IF ( print ) %]<input class="btn btn-sm" type="button" id="print" value="Export selected batches" />[% END %]
                             </fieldset>
                             </form>
                             [% ELSE %]

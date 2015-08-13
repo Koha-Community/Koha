@@ -47,9 +47,9 @@ my $duplicate_count = undef;
 my $duplicate_message = undef;
 my $db_rows = {};
 my $batch = undef;
-my $display_columns = [ {_card_number   => {label => 'Card Number', link_field => 0}},
-                        {_summary       => {label => 'Summary', link_field => 0}},
+my $display_columns = [ {_summary       => {label => 'Summary', link_field => 0}},
                         {borrowernumber => {label => 'Borrower Number', link_field => 0}},
+                        {_action        => {label => 'Actions ', link_field => 0}},
                         {select         => {label => 'Select', value => '_label_id'}},
                       ];
 my $op = $cgi->param('op') || 'new';

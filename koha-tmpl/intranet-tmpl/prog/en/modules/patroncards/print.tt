@@ -38,15 +38,15 @@
                     </fieldset>
 
                 <fieldset class="action">
-                    <input type="button" class="submit" id="done" onclick="parent.parent.GB_hide();" value="Done" />
+                    <input type="button" class="btn btn-default submit" id="done" onclick="parent.parent.GB_hide();" value="Done" />
                 </fieldset>
             </form>
             [% ELSE %]
             <h3>
                     [% IF ( label_ids ) %]
-                        [% IF ( card_count == 1 ) %]Exporting [% card_count %] patroncard[% ELSE %]Exporting [% card_count %] patroncards[% END %]
+                        [% IF ( card_count == 1 ) %]Exporting [% card_count %] patron card[% ELSE %]Exporting [% card_count %] patron cards[% END %]
                     [% ELSIF ( borrower_numbers ) %]
-                        [% IF ( borrower_count == 1 ) %]Exporting [% borrower_count %] patroncard[% ELSE %]Exporting [% borrower_count %] patroncards[% END %]
+                        [% IF ( borrower_count == 1 ) %]Exporting [% borrower_count %] patron card[% ELSE %]Exporting [% borrower_count %] patron cards[% END %]
                     [% ELSE %]
                         [% IF ( multi_batch_count == 1 ) %][% multi_batch_count %] batch to export[% ELSE %][% multi_batch_count %] batches to export[% END %]
                     [% END %]
@@ -88,7 +88,7 @@
                     </ol>
                 </fieldset>
                 <fieldset class="action">
-                    <input type="submit" class="submit" value="Export" />
+                    <input type="submit" class="btn btn-default submit" value="Export" />
                     <a href="#" class="cancel" id="done" onclick="parent.parent.GB_hide();">Cancel</a>
                 </fieldset>
             </form>

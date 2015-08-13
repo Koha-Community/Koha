@@ -37,6 +37,7 @@ my $source_file = "$file_name"; # otherwise we end up with what amounts to a poi
 my $display_columns = { image =>    [  #{db column      => {label => 'col label', is link?          }},
                                         {image_id       => {label => 'ID',      link_field      => 0}},
                                         {image_name     => {label => 'Name',    link_field      => 0}},
+                                        {_delete        => {label => 'Delete', link_field => 0}},
                                         {select         => {label => 'Select',  value           => 'image_id'}},
                                     ],
 };
