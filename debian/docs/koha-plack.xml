@@ -1,0 +1,108 @@
+<article xmlns='http://docbook.org/ns/docbook'>
+<title>koha-plack</title>
+<info>
+<productname>Koha</productname> is the first free software library automation package.
+<author>
+  <orgname>The Koha community</orgname>
+  <uri>http://koha-community.org/</uri>
+</author>
+</info>
+
+<refentry xml:id="koha-plack">
+
+  <refmeta>
+    <refentrytitle>koha-plack</refentrytitle>
+    <manvolnum>8</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>koha-plack</refname>
+    <refpurpose>Manage Plack for Koha instances.</refpurpose>
+    <refclass>UNIX/Linux</refclass>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>koha-plack</command>
+      <arg choice="req" rep="norepeat">
+        <option>--start</option>|
+        <option>--stop</option>|
+        <option>--restart</option>|
+        <option>--enable</option>|
+        <option>--disable</option>|
+        <option>--help</option>|<option>-h</option>
+        |<option>--quiet</option>|<option>-q</option>
+      </arg>
+      <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1><title>Options</title>
+
+  <variablelist>
+
+    <varlistentry>
+      <term><option>--start</option></term>
+      <listitem>
+        <para>Start the Plack daemon for the desired Koha instances.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--stop</option></term>
+      <listitem>
+        <para>Stop the Plack daemon for the desired Koha instances.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--restart</option></term>
+      <listitem>
+        <para>Restart the Plack daemon for the desired Koha instances.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--enable</option></term>
+      <listitem>
+        <para>Enable the use of Plack for the desired Koha instances.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--disable</option></term>
+      <listitem>
+        <para>Disable the use of Plack for the desired Koha instances.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--quiet|-q</option></term>
+      <listitem>
+        <para>Make the script quiet about non existent instance names. Useful when calling <command>koha-plack</command> from another scripts.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--help|-h</option></term>
+      <listitem>
+        <para>Show usage information.</para>
+      </listitem>
+    </varlistentry>
+
+  </variablelist>
+  </refsect1>
+
+  <refsect1><title>Description</title>
+    <para>The <command>koha-plack</command> script lets you manage your Koha instances Plack daemon.</para>
+  </refsect1>
+
+  <refsect1><title>See also</title>
+  <simplelist type="inline">
+    <member><command>/etc/default/koha-common</command></member>
+  </simplelist>
+  </refsect1>
+
+</refentry>
+
+</article>
