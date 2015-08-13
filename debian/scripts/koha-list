@@ -37,20 +37,23 @@ show_instances()
         case $show in
           "all")
               if instance_filter_email $instance $show_email && \
-                 instance_filter_sip $instance $show_sip; then
+                 instance_filter_plack $instance $show_plack && \
+                 instance_filter_sip   $instance $show_sip; then
                     echo $instance
               fi ;;
           "enabled")
               if is_enabled $instance; then
                   if instance_filter_email $instance $show_email && \
-                     instance_filter_sip $instance $show_sip; then
+                     instance_filter_plack $instance $show_plack && \
+                     instance_filter_sip   $instance $show_sip; then
                       echo $instance
                   fi
               fi ;;
           "disabled")
               if ! is_enabled $instance; then
                   if instance_filter_email $instance $show_email && \
-                     instance_filter_sip $instance $show_sip; then
+                     instance_filter_plack $instance $show_plack && \
+                     instance_filter_sip   $instance $show_sip; then
                       echo $instance
                   fi
               fi ;;
@@ -73,6 +76,28 @@ instance_filter_sip()
             fi ;;
         "disabled")
             if ! is_sip_enabled $instancename; then
+                return 0
+            fi ;;
+    esac
+
+    # Didn't match any criteria
+    return 1
+}
+
+instance_filter_plack()
+{
+    local instancename=$1
+    local show_plack=$2;
+
+    case $show_plack in
+        "all")
+            return 0 ;;
+        "enabled")
+            if is_plack_enabled $instancename; then
+                return 0
+            fi ;;
+        "disabled")
+            if ! is_plack_enabled $instancename; then
                 return 0
             fi ;;
     esac
@@ -125,6 +150,17 @@ set_show_email()
     fi
 }
 
+set_show_plack()
+{
+    local plack_param=$1
+
+    if [ "$show_plack" = "all" ]; then
+        show_plack=$plack_param
+    else
+        die "Error: --plack and --noplack are mutually exclusive."
+    fi
+}
+
 set_show_sip()
 {
     local sip_param=$1
@@ -146,12 +182,14 @@ email turned on.
     
 Usage: $scriptname [--enabled|--disabled] [--email|--noemail] [--sip|--nosip] [-h]
 Options:
-    --enabled       Only show instances that are enabled
-    --disabled      Only show instances that are disabled
-    --email         Only show instances that have email enabled
-    --noemail       Only show instances that do not have email enabled
-    --sip           Only show instances that have SIP enabled
-    --nosip         Only show instances that do not have SIP enabled
+    --enabled       Show enabled instances
+    --disabled      Show disabled instances
+    --email         Show instances with email enabled
+    --noemail       Show instances with email disabled
+    --sip           Show instances with SIP enabled
+    --nosip         Show instances with SIP disabled
+    --plack         Show instances with Plack enabled
+    --noplack       Show instances with Plack disabled
     --help | -h     Show this help
 
 The filtering options can be combined, and you probably want to do this
@@ -162,8 +200,9 @@ EOH
 show="all"
 show_email="all"
 show_sip="all"
+show_plack="all"
 
-args=$(getopt -l help,enabled,disabled,email,noemail,sip,nosip -o h -n $0 -- "$@")
+args=$(getopt -l help,enabled,disabled,email,noemail,sip,nosip,plack,noplack -o h -n $0 -- "$@")
 set -- $args
 
 while [ ! -z "$1" ]
@@ -174,6 +213,8 @@ do
   --noemail) set_show_email "disabled" ;;
       --sip) set_show_sip "enabled" ;;
     --nosip) set_show_sip "disabled" ;;
+    --plack) set_show_plack "enabled" ;;
+  --noplack) set_show_plack "disabled" ;;
   --enabled) set_show "enabled" ;;
  --disabled) set_show "disabled" ;;
           *) break;;

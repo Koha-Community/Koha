@@ -134,9 +134,9 @@ is_plack_enabled()
             "$instancefile" && \
        grep -q '^[[:space:]]*Include /etc/koha/apache-shared-intranet-plack.conf' \
             "$instancefile" ; then
-        return 1
-    else
         return 0
+    else
+        return 1
     fi
 }
 
