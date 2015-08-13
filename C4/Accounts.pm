@@ -276,12 +276,12 @@ sub makepayment {
     }
 
     UpdateStats({
-                branch => $branch,
-                type => 'payment',
-                amount => $amount,
-                borrowernumber => $borrowernumber,
-                accountno => $accountno}
-    );
+        branch => $branch,
+        type   => 'payment',
+        amount => $amount,
+        borrowernumber => $borrowernumber,
+        accountno => $accountno
+    });
 
     #check to see what accounttype
     if ( $data->{'accounttype'} eq 'Rep' || $data->{'accounttype'} eq 'L' ) {
@@ -726,12 +726,12 @@ sub makepartialpayment {
         '', 'Pay', $data->{'itemnumber'}, $manager_id, $payment_note);
 
     UpdateStats({
-                branch => $user,
-                type => 'payment',
-                amount => $amount,
-                borrowernumber => $borrowernumber,
-                accountno => $accountno}
-    );
+        branch => $branch,
+        type   => 'payment',
+        amount => $amount,
+        borrowernumber => $borrowernumber,
+        accountno => $accountno
+    });
 
     if ( C4::Context->preference("FinesLog") ) {
         logaction("FINES", 'CREATE',$borrowernumber,Dumper({
