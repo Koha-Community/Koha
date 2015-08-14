@@ -56,10 +56,11 @@ _koha_list_cmd()
     if [[ "$substract" != "" ]]; then
         instancelist=$( koha-list $filter | grep -v -x $substract )
     else
-        instancelist=$( koha-list $filer )
+        instancelist=$( koha-list $filter )
     fi
 
     COMPREPLY=( $(compgen -W "$instancelist" -- $cur ) )
+    return 0
 }
 
 _koha_email_disable()
@@ -125,7 +126,7 @@ _koha_list()
 
     COMPREPLY=()
     _get_comp_words_by_ref cur
-    opts="--enabled --disabled --email --noemail --sip --nosip --help -h"
+    opts="--enabled --disabled --email --noemail --plack --noplack --sip --nosip --help -h"
 
     # Build a list of the already used option switches
     for (( i=0; i < ${#COMP_WORDS[@]}-1; i++ )); do
@@ -139,6 +140,10 @@ _koha_list()
                     substract="$substract -e --noemail"; ;;
                 --noemail)
                     substract="$substract -e --email"; ;;
+                --plack)
+                    substract="$substract -e --noplack"; ;;
+                --noplack)
+                    substract="$substract -e --plack"; ;;
                 --sip)
                     substract="$substract -e --nosip"; ;;
                 --nosip)
@@ -161,6 +166,56 @@ _koha_list()
     return 0
 }
 complete -F _koha_list koha-list
+
+_koha_plack_instances()
+{
+    _koha_list_cmd "--plack"
+    return 0
+}
+
+_koha_noplack_instances()
+{
+    _koha_list_cmd "--noplack"
+    return 0
+}
+
+_koha-plack()
+{
+    local cur opts substract
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
+    opts="--start --stop --restart --enable --disable --quiet -q --help -h"
+
+    # Build a list of the already used option switches
+    for (( i=0; i < ${#COMP_WORDS[@]}-1; i++ )); do
+        if [[ ${COMP_WORDS[i]} == -* ]]; then
+            case ${COMP_WORDS[i]} in
+                --start) _koha_plack_instances ; return 0 ;;
+                 --stop) _koha_plack_instances ; return 0 ;;
+              --restart) _koha_plack_instances ; return 0 ;;
+               --enable) _koha_noplack_instances ; return 0 ;;
+              --disable) _koha_plack_instances ; return 0 ;;
+                 --help) COMPREPLY=() ; return 0 ;; # no more completions
+                     -h) COMPREPLY=() ; return 0 ;; # no more completions
+                --quiet) # filter the other quiet switches and go on
+                    substract="$substract -e '--quiet' -e '-q'"; ;;
+                -q)      # filter the other quiet switches and go on
+                    substract="$substract -e '--quiet' -e '-q'"; ;;
+            esac
+            substract="$substract -e ${COMP_WORDS[i]}"
+        fi
+    done
+
+    if [[ "$substract" != "" ]]; then
+        opts=$( echo $opts | sed -e 's/ /\n/g'  | grep -v -x $substract )
+    fi
+
+    COMPREPLY=( $(compgen -W "$opts" -- $cur ) )
+
+    return 0
+}
+complete -F _koha-plack koha-plack
 
 # Local variables:
 # mode: shell-script
