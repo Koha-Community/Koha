@@ -233,6 +233,11 @@
         [%- ELSE -%]
             <option value="Textarea">Textarea</option>
         [% END %]
+        [%- IF (preftype && preftype == 'Htmlarea') -%]
+            <option value="Htmlarea" selected>Htmlarea</option>
+        [%- ELSE -%]
+            <option value="Htmlarea">Htmlarea</option>
+        [% END %]
         [%- IF (preftype && preftype == 'Float') -%]
             <option value="Float" selected>Float</option>
         [%- ELSE -%]
