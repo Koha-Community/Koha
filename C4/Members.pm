@@ -1284,7 +1284,7 @@ sub GetMemberAccountRecords {
                         SELECT * 
                         FROM accountlines 
                         WHERE borrowernumber=?);
-    $strsth.=" ORDER BY date desc,timestamp DESC";
+    $strsth.=" ORDER BY accountlines_id desc";
     my $sth= $dbh->prepare( $strsth );
     $sth->execute( $borrowernumber );
 
