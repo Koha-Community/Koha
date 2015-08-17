@@ -107,8 +107,6 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
 
     } else {
 
-        my $shelf = Koha::Virtualshelves->find( $shelfid );
-
         # if modal context is passed set a variable so that page markup can be different
         if($context eq "modal"){
             $template->param(modal => 1);

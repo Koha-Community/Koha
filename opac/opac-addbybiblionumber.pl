@@ -87,47 +87,57 @@ sub AddBibliosToShelf {
 }
 
 sub HandleNewVirtualShelf {
-    if($authorized= ShelfPossibleAction($loggedinuser, undef, $category==1? 'new_private': 'new_public')) {
-    my $shelf = eval {
-        Koha::Virtualshelf->new(
-            {
-                shelfname => $newvirtualshelf,
-                category => $category,
-                owner => $loggedinuser,
-            }
-        );
-    };
-    if ( $@ or not $shelf ) {
-        $authorized=0;
-        $errcode=1;
-        return;
-    }
-    AddBibliosToShelf($shelfnumber, @biblionumber);
-    #Reload the page where you came from
-    print $query->header;
-    print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"window.opener.location.reload(true);self.close();\"></body></html>";
+    if ( $loggedinuser > 0 and
+        (
+            $category == 1
+                or $category == 2 and $loggedinuser>0 && C4::Context->preference('OpacAllowPublicListCreation')
+        )
+    ) {
+        my $shelf = eval {
+            Koha::Virtualshelf->new(
+                {
+                    shelfname => $newvirtualshelf,
+                    category => $category,
+                    owner => $loggedinuser,
+                }
+            );
+        };
+        if ( $@ or not $shelf ) {
+            $authorized = 0;
+            $errcode = 1;
+            return;
+        }
+        AddBibliosToShelf($shelfnumber, @biblionumber);
+        #Reload the page where you came from
+        print $query->header;
+        print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"window.opener.location.reload(true);self.close();\"></body></html>";
     }
 }
 
 sub HandleShelfNumber {
-    if($authorized= ShelfPossibleAction($loggedinuser, $shelfnumber, 'add')) {
-    AddBibliosToShelf($shelfnumber,@biblionumber);
-    #Close this page and return
-    print $query->header;
-    print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"self.close();\"></body></html>";
+    my $shelfnumber = $query->param('shelfnumber');
+    my $shelf = Koha::Virtualshelves->find( $shelfnumber );
+    if ( $shelf->can_biblios_be_added( $loggedinuser ) ) {
+        AddBibliosToShelf($shelfnumber,@biblionumber);
+        #Close this page and return
+        print $query->header;
+        print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"self.close();\"></body></html>";
+    } else {
+        # TODO
     }
 }
 
 sub HandleSelectedShelf {
-    if($authorized= ShelfPossibleAction( $loggedinuser, $selectedshelf, 'add')){
-        #adding to specific shelf
-        my $shelfnumber = $query->param('selectedshelf');
-        my $shelf = Koha::Virtualshelves->find( $shelfnumber );
+    my $shelfnumber = $query->param('selectedshelf');
+    my $shelf = Koha::Virtualshelves->find( $shelfnumber );
+    if ( $shelf->can_biblios_be_added( $loggedinuser ) ) {
         $template->param(
             singleshelf               => 1,
             shelfnumber               => $shelf->shelfnumber,
             shelfname                 => $shelf->shelfname,
         );
+    } else {
+        # TODO
     }
 }
 

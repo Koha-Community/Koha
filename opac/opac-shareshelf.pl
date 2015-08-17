@@ -115,13 +115,14 @@ sub confirm_invite {
 sub show_accept {
     my ($param) = @_;
 
-    my @rv = ShelfPossibleAction( $param->{loggedinuser},
-        $param->{shelfnumber}, 'acceptshare' );
-    $param->{errcode} = $rv[1] if !$rv[0];
-    return if $param->{errcode};
+    my $shelfnumber = $param->{shelfnumber};
+    my $shelf = Koha::Virtualshelves->find( $shelfnumber );
 
-    #errorcode 5: should be private list
-    #errorcode 8: should not be owner
+    # The key for accepting is checked later in Koha::Virtualshelf->share
+    # You must not be the owner and the list must be private
+    if ( $shelf->category == 2 or $shelf->owner == $param->{loggedinuser} ) {
+        return;
+    }
 
     # We could have used ->find with the share id, but we don't want to change
     # the url sent to the patron

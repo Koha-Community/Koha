@@ -52,7 +52,8 @@ my $email   = $query->param('email');
 
 my $dbh          = C4::Context->dbh;
 
-if ( ShelfPossibleAction( (defined($borrowernumber) ? $borrowernumber : -1), $shelfid, 'view' ) ) {
+my $shelf = Koha::Virtualshelves->find( $shelfid );
+if ( $shelf->can_be_viewed( $borrowernumber ) ) {
 
 if ( $email ) {
     my $message = Koha::Email->new();

@@ -41,7 +41,6 @@ BEGIN {
     @ISA    = qw(Exporter);
     @EXPORT = qw(
             &GetShelfContents
-            &ShelfPossibleAction
     );
         @EXPORT_OK = qw(
             &ShelvesMax
@@ -161,107 +160,6 @@ sub GetShelfContents {
     # Suitable for use in TMPL_LOOP.
     # See http://search.cpan.org/~timb/DBI-1.601/DBI.pm#fetchall_arrayref
     # or newer, for your version of DBI.
-}
-
-=head2 ShelfPossibleAction
-
-ShelfPossibleAction($loggedinuser, $shelfnumber, $action);
-
-C<$loggedinuser,$shelfnumber,$action>
-
-$action can be "view", "add", "delete", "manage", "new_public", "new_private".
-New additional actions are: invite, acceptshare.
-Note that add/delete here refers to adding/deleting entries from the list. Deleting the list itself falls under manage.
-new_public and new_private refers to creating a new public or private list.
-The distinction between deleting your own entries from the list or entries from
-others is made when deleting a content from the shelf.
-
-Returns 1 if the user can do the $action in the $shelfnumber shelf.
-Returns 0 otherwise.
-For the actions invite and acceptshare a second errorcode is returned if the
-result is false. See opac-shareshelf.pl
-
-=cut
-
-sub ShelfPossibleAction {
-    my ( $user, $shelfnumber, $action ) = @_;
-    $action= 'view' unless $action;
-    $user=0 unless $user;
-
-    if($action =~ /^new/) { #no shelfnumber needed
-        if($action eq 'new_private') {
-            return $user>0;
-        }
-        elsif($action eq 'new_public') {
-            return $user>0 && C4::Context->preference('OpacAllowPublicListCreation');
-        }
-        return 0;
-    }
-
-    return 0 unless defined($shelfnumber);
-
-    if ( $user > 0 and $action eq 'delete_shelf' ) {
-        my $borrower = C4::Members::GetMember( borrowernumber => $user );
-        require C4::Auth;
-        return 1
-            if C4::Auth::haspermission( $borrower->{userid}, { lists => 'delete_public_lists' } );
-    }
-
-    my $dbh = C4::Context->dbh;
-    my $query = q{
-        SELECT COALESCE(owner,0) AS owner, category, allow_add, allow_delete_own, allow_delete_other, COALESCE(sh.borrowernumber,0) AS borrowernumber
-        FROM virtualshelves vs
-        LEFT JOIN virtualshelfshares sh ON sh.shelfnumber=vs.shelfnumber
-        AND sh.borrowernumber=?
-        WHERE vs.shelfnumber=?
-        };
-    my $sth = $dbh->prepare($query);
-    $sth->execute($user, $shelfnumber);
-    my $shelf= $sth->fetchrow_hashref;
-
-    return 0 unless $shelf && ($shelf->{category}==2 || $shelf->{owner}==$user || ($user && $shelf->{borrowernumber}==$user));
-    if($action eq 'view') {
-        #already handled in the above condition
-        return 1;
-    }
-    elsif($action eq 'add') {
-        return 0 if $user<=0; #should be logged in
-        return 1 if $shelf->{allow_add}==1 || $shelf->{owner}==$user;
-        #owner may always add
-    }
-    elsif($action eq 'delete') {
-        #this answer is just diplomatic: it says that you may be able to delete
-        #some items from that shelf
-        #it does not answer the question about a specific biblio
-        #Koha::Virtualshelf->remove_biblios checks the situation per biblio
-        return 1 if $user>0 && ($shelf->{allow_delete_own}==1 || $shelf->{allow_delete_other}==1);
-    }
-    elsif($action eq 'invite') {
-        #for sharing you must be the owner and the list must be private
-        if( $shelf->{category}==1 ) {
-            return 1 if $shelf->{owner}==$user;
-            return (0, 4); # code 4: should be owner
-        }
-        else {
-            return (0, 5); # code 5: should be private list
-        }
-    }
-    elsif($action eq 'acceptshare') {
-        #the key for accepting is checked later in Koha::Virtualshelf->share
-        #you must not be the owner, list must be private
-        if( $shelf->{category}==1 ) {
-            return (0, 8) if $shelf->{owner}==$user;
-                #code 8: should not be owner
-            return 1;
-        }
-        else {
-            return (0, 5); # code 5: should be private list
-        }
-    }
-    elsif($action eq 'manage' or $action eq 'delete_shelf') {
-        return 1 if $user && $shelf->{owner}==$user;
-    }
-    return 0;
 }
 
 =head2 ShelvesMax
