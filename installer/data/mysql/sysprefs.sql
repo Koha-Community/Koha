@@ -356,6 +356,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OverduesBlockCirc','noblock','noblock|confirmation|block','When checking out an item should overdues block checkout, generate a confirmation dialogue, or allow checkout','Choice'),
 ('OverduesBlockRenewing','allow','allow|blockitem|block','If any of patron checked out documents is late, should renewal be allowed, blocked only on overdue items or blocked on whatever checked out document','Choice'),
 ('patronimages','0',NULL,'Enable patron images for the Staff Client','YesNo'),
+('PatronSelfModificationBorrowerUnwantedField','',NULL,'Name the fields you don\'t want to display when a patron is editing their information via the OPAC.','free'),
 ('PatronSelfRegistration','0',NULL,'If enabled, patrons will be able to register themselves via the OPAC.','YesNo'),
 ('PatronSelfRegistrationAdditionalInstructions','','','A free text field to display additional instructions to newly self registered patrons.','free'),
 ('PatronSelfRegistrationBorrowerMandatoryField','surname|firstname',NULL,'Choose the mandatory fields for a patron\'s account, when registering via the OPAC.','free'),

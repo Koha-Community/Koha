@@ -1,0 +1,1 @@
+INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) SELECT 'PatronSelfModificationBorrowerUnwantedField',value,NULL,'Name the fields you don\'t want to display when a patron is editing their information via the OPAC.','free' FROM systempreferences WHERE variable = 'PatronSelfRegistrationBorrowerUnwantedField';

@@ -61,11 +61,10 @@ if ( $action eq q{} ) {
 }
 
 my $mandatory = GetMandatoryFields($action);
-my $hidden = GetHiddenFields($mandatory);
 
 $template->param(
     action            => $action,
-    hidden            => $hidden,
+    hidden            => GetHiddenFields( $mandatory, 'registration' ),
     mandatory         => $mandatory,
     member_titles     => GetTitles() || undef,
     branches          => GetBranchesLoop(),
@@ -228,6 +227,7 @@ elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
     $template->param(
         borrower  => $borrower,
         guarantor => scalar Koha::Borrowers->find($borrowernumber)->guarantor(),
+        hidden => GetHiddenFields( $mandatory, 'modification' ),
     );
 
     if (C4::Context->preference('OPACpatronimages')) {
@@ -251,11 +251,11 @@ $template->param(
 output_html_with_http_headers $cgi, $cookie, $template->output, undef, { force_no_caching => 1 };
 
 sub GetHiddenFields {
-    my ($mandatory) = @_;
+    my ( $mandatory, $action ) = @_;
     my %hidden_fields;
 
     my $BorrowerUnwantedField =
-      C4::Context->preference("PatronSelfRegistrationBorrowerUnwantedField");
+      C4::Context->preference( "PatronSelf" . ucfirst($action) . "BorrowerUnwantedField" );
 
     my @fields = split( /\|/, $BorrowerUnwantedField );
     foreach (@fields) {

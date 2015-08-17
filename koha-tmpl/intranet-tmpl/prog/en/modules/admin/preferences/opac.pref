@@ -666,7 +666,7 @@ OPAC:
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - "library patrons to register an account via the OPAC."
+            - "library patrons to register or modify their account via the OPAC."
         -
             - pref: PatronSelfRegistrationVerifyByEmail
               choices:
@@ -689,8 +689,13 @@ OPAC:
               class: multi
             - (separate columns with |)
         -
-            - "The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron entry screen:"
+            - "The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-registration screen:"
             - pref: PatronSelfRegistrationBorrowerUnwantedField
+              class: multi
+            - (separate columns with |)
+        -
+            - "The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-modification screen:"
+            - pref: PatronSelfModificationBorrowerUnwantedField
               class: multi
             - (separate columns with |)
         -
