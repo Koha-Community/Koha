@@ -6,7 +6,6 @@ use Pod::Usage;
 use Getopt::Long;
 
 use C4::Members;
-use C4::VirtualShelves;
 use Koha::DateUtils;
 use C4::Log;
 
@@ -82,7 +81,7 @@ for my $member (@$members) {
         next;
     }
     eval {
-        C4::VirtualShelves::HandleDelBorrower( $borrowernumber )
+        C4::Members::HandleDelBorrower( $borrowernumber )
           if $confirm;
     };
     if ($@) {

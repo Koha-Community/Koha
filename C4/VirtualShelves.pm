@@ -63,45 +63,6 @@ bibs to and from virtual shelves.
 
 =head1 FUNCTIONS
 
-=head2 GetSomeShelfNames
-
-Returns shelf names and numbers for Add to combo of search results and Lists button of OPAC header.
-
-=cut
-
-sub GetSomeShelfNames {
-    my ($owner, $purpose, $adding_allowed)= @_;
-    my ($bar, $pub, @params);
-    my $dbh = C4::Context->dbh;
-
-    my $bquery = 'SELECT vs.shelfnumber, vs.shelfname FROM virtualshelves vs ';
-    my $limit= ShelvesMax($purpose);
-
-    my $qry1= $bquery."WHERE vs.category=2 ";
-    $qry1.= "AND (allow_add=1 OR owner=?) " if $adding_allowed;
-    push @params, $owner||0 if $adding_allowed;
-    $qry1.= "ORDER BY vs.lastmodified DESC LIMIT $limit";
-
-    unless($adding_allowed && (!defined($owner) || $owner<=0)) {
-        #if adding items, user should be known
-        $pub= $dbh->selectall_arrayref($qry1,{Slice=>{}},@params);
-    }
-
-    if($owner) {
-        my $qry2= $bquery. qq{
-            LEFT JOIN virtualshelfshares sh ON sh.shelfnumber=vs.shelfnumber AND sh.borrowernumber=?
-            WHERE vs.category=1 AND (vs.owner=? OR sh.borrowernumber=?) };
-        @params=($owner,$owner,$owner);
-        $qry2.= "AND (allow_add=1 OR owner=?) " if $adding_allowed;
-        push @params, $owner if $adding_allowed;
-        $qry2.= "ORDER BY vs.lastmodified DESC ";
-        $qry2.= "LIMIT $limit";
-        $bar= $dbh->selectall_arrayref($qry2,{Slice=>{}},@params);
-    }
-
-    return ( { bartotal => $bar? scalar @$bar: 0, pubtotal => $pub? scalar @$pub: 0}, $pub, $bar);
-}
-
 =head2 ShelvesMax
 
     $howmany= ShelvesMax($context);

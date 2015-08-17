@@ -80,6 +80,45 @@ sub get_public_shelves {
     );
 }
 
+sub get_some_shelves {
+    my ( $self, $params ) = @_;
+    my $borrowernumber = $params->{borrowernumber} || 0;
+    my $category = $params->{category} || 1;
+    my $add_allowed = $params->{add_allowed};
+
+    my @conditions;
+    if ( $add_allowed ) {
+        push @conditions, {
+            -or =>
+            {
+                "me.allow_add" => 1,
+                "me.owner" => $borrowernumber,
+            }
+        };
+    }
+    if ( $category == 1 ) {
+        push @conditions, {
+            -or =>
+            {
+                "virtualshelfshares.borrowernumber" => $borrowernumber,
+                "me.owner" => $borrowernumber,
+            }
+        };
+    }
+
+    $self->search(
+        {
+            category => $category,
+            ( @conditions ? ( -and => \@conditions ) : () ),
+        },
+        {
+            join => [ 'virtualshelfshares' ],
+            group_by => 'shelfnumber',
+            order_by => 'lastmodified desc',
+        }
+    );
+}
+
 sub type {
     return 'Virtualshelve';
 }

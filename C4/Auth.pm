@@ -226,13 +226,21 @@ sub get_template_and_user {
         $template->param( sessionID          => $sessionID );
 
         if ( $in->{'type'} eq 'opac' ) {
-            require C4::VirtualShelves;
-            my ( $total, $pubshelves, $barshelves ) = C4::VirtualShelves::GetSomeShelfNames( $borrowernumber, 'MASTHEAD' );
+            require Koha::Virtualshelves;
+            my $some_private_shelves = Koha::Virtualshelves->get_some_shelves(
+                {
+                    borrowernumber => $borrowernumber,
+                    category       => 1,
+                }
+            );
+            my $some_public_shelves = Koha::Virtualshelves->get_some_shelves(
+                {
+                    category       => 2,
+                }
+            );
             $template->param(
-                pubshelves     => $total->{pubtotal},
-                pubshelvesloop => $pubshelves,
-                barshelves     => $total->{bartotal},
-                barshelvesloop => $barshelves,
+                some_private_shelves => $some_private_shelves,
+                some_public_shelves  => $some_public_shelves,
             );
         }
 
@@ -363,11 +371,14 @@ sub get_template_and_user {
         $template->param( sessionID => $sessionID );
 
         if ( $in->{'type'} eq 'opac' ){
-            require C4::VirtualShelves;
-            my ( $total, $pubshelves ) = C4::VirtualShelves::GetSomeShelfNames( undef, 'MASTHEAD' );
+            require Koha::Virtualshelves;
+            my $some_public_shelves = Koha::Virtualshelves->get_some_shelves(
+                {
+                    category       => 2,
+                }
+            );
             $template->param(
-                pubshelves     => $total->{pubtotal},
-                pubshelvesloop => $pubshelves,
+                some_public_shelves  => $some_public_shelves,
             );
         }
     }
@@ -739,7 +750,7 @@ sub checkauth {
     # state variables
     my $loggedin = 0;
     my %info;
-    my ( $userid, $cookie, $sessionID, $flags, $barshelves, $pubshelves );
+    my ( $userid, $cookie, $sessionID, $flags );
     my $logout = $query->param('logout.x');
 
     my $anon_search_history;
@@ -1232,11 +1243,14 @@ sub checkauth {
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
 
     if ( $type eq 'opac' ) {
-        require C4::VirtualShelves;
-        my ( $total, $pubshelves ) = C4::VirtualShelves::GetSomeShelfNames( undef, 'MASTHEAD' );
+        require Koha::Virtualshelves;
+        my $some_public_shelves = Koha::Virtualshelves->get_some_shelves(
+            {
+                category       => 2,
+            }
+        );
         $template->param(
-            pubshelves     => $total->{pubtotal},
-            pubshelvesloop => $pubshelves,
+            some_public_shelves  => $some_public_shelves,
         );
     }
 

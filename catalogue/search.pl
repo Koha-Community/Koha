@@ -153,6 +153,8 @@ use POSIX qw(ceil floor);
 use C4::Branch; # GetBranches
 use C4::Search::History;
 
+use Koha::Virtualshelves;
+
 use URI::Escape;
 
 my $DisplayMultiPlaceHold = C4::Context->preference("DisplayMultiPlaceHold");
@@ -746,14 +748,25 @@ if ($query_desc || $limit_desc) {
 
 # VI. BUILD THE TEMPLATE
 
-# Build drop-down list for 'Add To:' menu...
-my ($totalref, $pubshelves, $barshelves)=
-	C4::VirtualShelves::GetSomeShelfNames($borrowernumber,'COMBO',1);
+my $some_private_shelves = Koha::Virtualshelves->get_some_shelves(
+    {
+        borrowernumber => $borrowernumber,
+        add_allowed    => 1,
+        category       => 1,
+    }
+);
+my $some_public_shelves = Koha::Virtualshelves->get_some_shelves(
+    {
+        borrowernumber => $borrowernumber,
+        add_allowed    => 1,
+        category       => 2,
+    }
+);
+
+
 $template->param(
-        addbarshelves     => $totalref->{bartotal},
-        addbarshelvesloop => $barshelves,
-	addpubshelves     => $totalref->{pubtotal},
-	addpubshelvesloop => $pubshelves,
-	);
+    add_to_some_private_shelves => $some_private_shelves,
+    add_to_some_public_shelves  => $some_public_shelves,
+);
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

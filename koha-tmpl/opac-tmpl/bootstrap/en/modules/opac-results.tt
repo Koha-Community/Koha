@@ -743,37 +743,43 @@ $(document).ready(function(){
     param1 += "<span id=\"selections\">"+_("Select titles to: ")+"</span>";
     [% END %]
 
-[% IF Koha.Preference( 'opacbookbag' ) == 1 %]
-    [% IF Koha.Preference( 'virtualshelves' ) == 1 %]
+[% IF Koha.Preference( 'opacbookbag' ) == 1 OR Koha.Preference('virtualshelves') %]
     param1 += "<select class=\"disabled\" name=\"addto\" id=\"addto\"><option>"+_("Add to...")+"</option>";
-    [% IF Koha.Preference( 'opacbookbag' ) == 1 %]    param1 += "<option value=\"addtocart\">"+_("Cart")+"<\/option>";
-    [% END %][% IF Koha.Preference( 'virtualshelves' ) == 1 %][% IF ( loggedinusername ) %][% IF ( addbarshelves ) %]
-    param1 += "<optgroup label=\""+_("Your lists:")+"\">";[% FOREACH addbarshelvesloo IN addbarshelvesloop %]
-    param1 += "<option id=\"s[% addbarshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addbarshelvesloo.shelfname |html %]<\/option>";[% END %]
-    param1 += "<\/optgroup>";[% END %]
-    [% IF ( addpubshelves ) %]param1 += "<optgroup label=\""+_("Public lists:")+"\">"[% FOREACH addpubshelvesloo IN addpubshelvesloop %]+"<option id=\"s[% addpubshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addpubshelvesloo.shelfname |html %]<\/option>"[% END %];
-    param1 += "<\/optgroup>";[% END %]
-    [% IF (( addbarshelvesloop && addbarshelvesloop.size>9) || (addpubshelvesloop && addpubshelvesloop.size>9 )) %]
-        param1 += "<option value=\"morelists\">[ "+_("More lists")+" ]<\/option>";
+
+    [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
+        param1 += "<option value=\"addtocart\">"+_("Cart")+"<\/option>";
     [% END %]
-    param1 += "<option value=\"newlist\">[ "+_("New list")+" ]<\/option>";
-    [% END %]
+    [% IF Koha.Preference('virtualshelves') %]
+        [% IF loggedinusername AND add_to_some_private_shelves.count %]
+            param1 += "<optgroup label=\""+_("Your lists:")+"\">";
+            [% SET number_of_private_shelves = 0 %]
+            [% FOREACH s IN add_to_some_private_shelves %]
+                [% IF shelfnumber != s.shelfnumber %]
+                    param1 += "<option id=\"s[% s.shelfnumber %]\" value=\"addtolist\">[% s.shelfname |html %]<\/option>";
+                    [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
+                    [% IF number_of_private_shelves == 10 %][% LAST %][% END %]
+                [% END %]
+            [% END %]
+            param1 += "<\/optgroup>";
+        [% END %]
+        [% IF add_to_some_public_shelves.count %]
+            param1 += "<optgroup label=\""+_("Public lists:")+"\">";
+            [% SET number_of_public_shelves = 0 %]
+            [% FOREACH s IN add_to_some_public_shelves %]
+                [% IF shelfnumber != s.shelfnumber %]
+                    param1 += "<option id=\"s[% s.shelfnumber %]\" value=\"addtolist\">[% s.shelfname |html %]<\/option>";
+                    [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
+                    [% IF number_of_public_shelves == 10 %][% LAST %][% END %]
+                [% END %]
+            [% END %]
+            param1 += "<\/optgroup>";
+        [% END %]
+        [% IF add_to_some_private_shelves.count > 10 or add_to_some_public_shelves.count > 10 %]
+            param1 += "<option value=\"morelists\">[ "+_("More lists")+" ]<\/option>";
+        [% END %]
+        param1 +="<option value=\"newlist\">"+_("[ New list ]")+"<\/option>"
     [% END %]
     param1 += "<\/select> <input type=\"submit\" class=\"btn btn-small\" value=\""+_("Save")+"\" />";
-    [% ELSE %]
-        param1 += "<a id=\"addto\" class=\"addtocart\" href=\"#\">" + _("Add to cart") + "<\/a>";
-    [% END %]
-[% ELSE %]
-        param1 += "<select name=\"addto\" id=\"addto\"><option value=\"\">"+_("Add to list: ")+"<\/option>";
-[% IF Koha.Preference( 'virtualshelves' ) == 1 %][% IF ( loggedinusername ) %][% IF ( addbarshelves ) %]
-    param1 += "<optgroup label=\""+_("Your lists:")+"\">";[% FOREACH addbarshelvesloo IN addbarshelvesloop %]
-    param1 += "<option id=\"s[% addbarshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addbarshelvesloo.shelfname |html %]<\/option>";[% END %]
-    param1 += "<\/optgroup>";[% END %]
-    [% IF ( addpubshelves ) %]param1 += "<optgroup label=\""+_("Public lists:")+"\">"[% FOREACH addpubshelvesloo IN addpubshelvesloop %]+"<option id=\"s[% addpubshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addpubshelvesloo.shelfname |html %]<\/option>"[% END %][% END %]
-    param1 +="<\/optgroup><option value=\"newlist\">[ "+_("New list")+" ]<\/option>"
-    [% END %]
-    [% END %]
-    param1 += "<\/select> <input type=\"submit\" class=\"btn btn-small disabled\" value=\""+_("Save")+"\" />";
 [% END %]
 
     $('#sortsubmit').hide();

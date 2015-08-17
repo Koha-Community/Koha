@@ -194,7 +194,7 @@ if ( $op eq 'view' ) {
     $shelf = Koha::Virtualshelves->find($shelfnumber);
     if ( $shelf ) {
         if ( $shelf->can_be_viewed( $loggedinuser ) ) {
-            my $sortfield = $query->param('sortfield') || $shelf->sortfield;    # Passed in sorting overrides default sorting
+            my $sortfield = $query->param('sortfield') || $shelf->sortfield || 'title';    # Passed in sorting overrides default sorting
             my $direction = $query->param('direction') || 'asc';
             my ( $rows, $page );
             unless ( $query->param('print') ) {
@@ -241,13 +241,24 @@ if ( $op eq 'view' ) {
                 push @items, $this_item;
             }
 
-            # Build drop-down list for 'Add To:' menu...
-            my ( $totalref, $pubshelves, $barshelves ) = C4::VirtualShelves::GetSomeShelfNames( $loggedinuser, 'COMBO', 1 );
+            my $some_private_shelves = Koha::Virtualshelves->get_some_shelves(
+                {
+                    borrowernumber => $loggedinuser,
+                    add_allowed    => 1,
+                    category       => 1,
+                }
+            );
+            my $some_public_shelves = Koha::Virtualshelves->get_some_shelves(
+                {
+                    borrowernumber => $loggedinuser,
+                    add_allowed    => 1,
+                    category       => 2,
+                }
+            );
+
             $template->param(
-                addbarshelves      => $totalref->{bartotal},
-                addbarshelvesloop  => $barshelves,
-                addpubshelves      => $totalref->{pubtotal},
-                addpubshelvesloop  => $pubshelves,
+                add_to_some_private_shelves => $some_private_shelves,
+                add_to_some_public_shelves  => $some_public_shelves,
                 can_manage_shelf   => $shelf->can_be_managed($loggedinuser),
                 can_remove_shelf   => $shelf->can_be_deleted($loggedinuser),
                 can_remove_biblios => $shelf->can_biblios_be_removed($loggedinuser),

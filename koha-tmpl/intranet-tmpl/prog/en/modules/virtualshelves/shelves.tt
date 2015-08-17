@@ -130,26 +130,32 @@ $(document).ready(function(){
     [% IF ( intranetbookbag ) %]
          param1 += "<option value=\"addtocart\">"+_("Cart")+"<\/option>";
     [% END %]
-    [% IF ( virtualshelves ) %]
-        [% IF ( addbarshelves ) %]
+    [% IF Koha.Preference('virtualshelves') %]
+        [% IF add_to_some_private_shelves.count %]
             param1 += "<optgroup label=\""+_("Your lists:")+"\">";
-            [% FOREACH addbarshelvesloo IN addbarshelvesloop %]
-                [% IF ( shelfnumber != addbarshelvesloo.shelfnumber ) %]
-                    param1 += "<option id=\"s[% addbarshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addbarshelvesloo.shelfname |html %]<\/option>";
+            [% SET number_of_private_shelves = 0 %]
+            [% FOREACH s IN add_to_some_private_shelves %]
+                [% IF shelfnumber != s.shelfnumber %]
+                    param1 += "<option id=\"s[% s.shelfnumber %]\" value=\"addtolist\">[% s.shelfname |html %]<\/option>";
+                    [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
+                    [% IF number_of_private_shelves == 10 %][% LAST %][% END %]
                 [% END %]
             [% END %]
             param1 += "<\/optgroup>";
         [% END %]
-        [% IF ( addpubshelves ) %]
+        [% IF add_to_some_public_shelves.count %]
             param1 += "<optgroup label=\""+_("Public lists:")+"\">";
-            [% FOREACH addpubshelvesloo IN addpubshelvesloop %]
-                [% IF ( shelfnumber != addpubshelvesloo.shelfnumber ) %]
-                    param1 += "<option id=\"s[% addpubshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addpubshelvesloo.shelfname |html %]<\/option>";
+            [% SET number_of_public_shelves = 0 %]
+            [% FOREACH s IN add_to_some_public_shelves %]
+                [% IF shelfnumber != s.shelfnumber %]
+                    param1 += "<option id=\"s[% s.shelfnumber %]\" value=\"addtolist\">[% s.shelfname |html %]<\/option>";
+                    [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
+                    [% IF number_of_public_shelves == 10 %][% LAST %][% END %]
                 [% END %]
             [% END %]
             param1 += "<\/optgroup>";
         [% END %]
-        [% IF ( ( addbarshelvesloop && addbarshelvesloop.size > 9 ) || (addpubshelvesloop && addpubshelvesloop.size > 9 )) %]
+        [% IF add_to_some_private_shelves.count > 10 or add_to_some_public_shelves.count > 10 %]
             param1 += "<option value=\"morelists\">[ "+_("More lists")+" ]<\/option>";
         [% END %]
         param1 +="<option value=\"newlist\">"+_("[ New list ]")+"<\/option>"

@@ -30,7 +30,6 @@ use C4::Output;
 use C4::Auth;
 use C4::Members;
 use C4::Branch; # GetBranches
-use C4::VirtualShelves (); #no import
 use Module::Load;
 if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
     load Koha::NorwegianPatronDB, qw( NLMarkForDeletion NLSync );
@@ -147,7 +146,7 @@ output_html_with_http_headers $input, $cookie, $template->output;
 
 } else {
     MoveMemberToDeleted($member);
-    C4::VirtualShelves::HandleDelBorrower($member);
+    C4::Members::HandleDelBorrower($member);
     DelMember($member);
     print $input->redirect("/cgi-bin/koha/members/members-home.pl");
 }

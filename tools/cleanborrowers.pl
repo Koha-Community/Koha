@@ -39,7 +39,6 @@ use C4::Auth;
 use C4::Output;
 use C4::Members;        # GetBorrowersWhoHavexxxBorrowed.
 use C4::Circulation;    # AnonymiseIssueHistory.
-use C4::VirtualShelves ();    #no import
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Date::Calc qw/Today Add_Delta_YM/;
 
@@ -124,7 +123,7 @@ elsif ( $step == 3 ) {
             $radio eq 'testrun' && last;
             my $borrowernumber = $membersToDelete->[$i]->{'borrowernumber'};
             $radio eq 'trash' && MoveMemberToDeleted( $borrowernumber );
-            C4::VirtualShelves::HandleDelBorrower( $borrowernumber );
+            C4::Members::HandleDelBorrower( $borrowernumber );
             DelMember( $borrowernumber );
         }
         $template->param(

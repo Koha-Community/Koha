@@ -283,13 +283,7 @@ if ( $op eq 'view' ) {
                 push @items, $this_item;
             }
 
-            # Build drop-down list for 'Add To:' menu...
-            my ( $totalref, $pubshelves, $barshelves ) = C4::VirtualShelves::GetSomeShelfNames( $loggedinuser, 'COMBO', 1 );
             $template->param(
-                addbarshelves      => $totalref->{bartotal},
-                addbarshelvesloop  => $barshelves,
-                addpubshelves      => $totalref->{pubtotal},
-                addpubshelvesloop  => $pubshelves,
                 can_manage_shelf   => $shelf->can_be_managed($loggedinuser),
                 can_delete_shelf   => $shelf->can_be_deleted($loggedinuser),
                 can_remove_biblios => $shelf->can_biblios_be_removed($loggedinuser),
