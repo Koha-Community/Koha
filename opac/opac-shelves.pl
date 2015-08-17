@@ -213,13 +213,12 @@ if ( $op eq 'view' ) {
             $category = $shelf->category;
             my $sortfield = $query->param('sortfield') || $shelf->sortfield;    # Passed in sorting overrides default sorting
             my $direction = $query->param('direction') || 'asc';
-            my ( $shelflimit, $shelfoffset, $itemoff );
+            my ( $page, $rows );
             unless ( $query->param('print') or $query->param('rss') ) {
-                $shelflimit = C4::Context->preference('OPACnumSearchResults') || 20;
-                $itemoff = ( $query->param('itemoff') ? $query->param('itemoff') : 1 );
-                $shelfoffset = ( $itemoff - 1 ) * $shelflimit;    # Sets the offset to begin retrieving items at
+                $rows = C4::Context->preference('OPACnumSearchResults') || 20;
+                $page = ( $query->param('page') ? $query->param('page') : 1 );
             }
-            my ( $items, $totitems ) = GetShelfContents( $shelfnumber, $shelflimit, $shelfoffset, $sortfield, $direction );
+            my $contents = $shelf->get_contents->search({}, { join => [ 'biblionumber' ], page => $page, rows => $rows, order_by => "$sortfield $direction", });
 
             # get biblionumbers stored in the cart
             my @cart_list;
@@ -229,8 +228,10 @@ if ( $op eq 'view' ) {
 
             my $borrower = GetMember( borrowernumber => $loggedinuser );
 
-            for my $this_item (@$items) {
-                my $biblionumber = $this_item->{biblionumber};
+            my @items;
+            while ( my $content = $contents->next ) {
+                my $this_item;
+                my $biblionumber = $content->biblionumber->biblionumber;
                 my $record       = GetMarcBiblio($biblionumber);
 
                 if ( C4::Context->preference("OPACXSLTResultsDisplay") ) {
@@ -238,9 +239,12 @@ if ( $op eq 'view' ) {
                 }
 
                 my $marcflavour = C4::Context->preference("marcflavour");
-                $this_item->{'imageurl'}        = getitemtypeinfo( $this_item->{'itemtype'}, 'intranet' )->{'imageurl'};
+                my $itemtypeinfo = getitemtypeinfo( $content->biblionumber->biblioitems->first->itemtype, 'intranet' );
+                $this_item->{imageurl}          = $itemtypeinfo->{imageurl};
+                $this_item->{description}       = $itemtypeinfo->{description};
+                $this_item->{notforloan}        = $itemtypeinfo->{notforloan};
                 $this_item->{'coins'}           = GetCOinSBiblio($record);
-                $this_item->{'subtitle'}        = GetRecordValue( 'subtitle', $record, GetFrameworkCode( $this_item->{'biblionumber'} ) );
+                $this_item->{'subtitle'}        = GetRecordValue( 'subtitle', $record, GetFrameworkCode( $biblionumber ) );
                 $this_item->{'normalized_upc'}  = GetNormalizedUPC( $record, $marcflavour );
                 $this_item->{'normalized_ean'}  = GetNormalizedEAN( $record, $marcflavour );
                 $this_item->{'normalized_oclc'} = GetNormalizedOCLCNumber( $record, $marcflavour );
@@ -253,12 +257,12 @@ if ( $op eq 'view' ) {
                 }
 
                 # Getting items infos for location display
-                my @items_infos = &GetItemsLocationInfo( $this_item->{'biblionumber'} );
+                my @items_infos = &GetItemsLocationInfo( $biblionumber );
                 $this_item->{'ITEM_RESULTS'} = \@items_infos;
 
                 if (C4::Context->preference('TagsEnabled') and C4::Context->preference('TagsShowOnList')) {
                     $this_item->{TagLoop} = get_tags({
-                        biblionumber=>$this_item->{'biblionumber'}, approved=>1, 'sort'=>'-weight',
+                        biblionumber => $biblionumber, approved=>1, 'sort'=>'-weight',
                         limit => C4::Context->preference('TagsShowOnList'),
                     });
                 }
@@ -273,8 +277,9 @@ if ( $op eq 'view' ) {
                 if ( $query->param('rss') ) {
                     $this_item->{title} = $content->biblionumber->title;
                     $this_item->{author} = $content->biblionumber->author;
-                    $this_item->{biblionumber} = $biblionumber;
                 }
+
+                $this_item->{biblionumber} = $biblionumber;
                 push @items, $this_item;
             }
 
@@ -290,15 +295,16 @@ if ( $op eq 'view' ) {
                 can_remove_biblios => $shelf->can_biblios_be_removed($loggedinuser),
                 can_add_biblios    => $shelf->can_biblios_be_added($loggedinuser),
                 sortfield          => $sortfield,
-                itemsloop          => $items,
+                itemsloop          => \@items,
                 sortfield          => $sortfield,
                 direction          => $direction,
             );
-            if ($shelflimit) {
+            if ( $page ) {
+                my $pager = $contents->pager;
                 $template->param(
                     pagination_bar => pagination_bar(
-                        q||, ( int( $totitems / $shelflimit ) ) + ( ( $totitems % $shelflimit ) > 0 ? 1 : 0 ),
-                        $itemoff, "itemoff", { op => 'view', shelfnumber => $shelf->shelfnumber, sortfield => $sortfield, direction => $direction, }
+                        q||, $pager->last_page - $pager->first_page + 1,
+                        $page, "page", { op => 'view', shelfnumber => $shelf->shelfnumber, sortfield => $sortfield, direction => $direction, }
                     ),
                 );
             }

@@ -40,7 +40,6 @@ BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(
-            &GetShelfContents
     );
         @EXPORT_OK = qw(
             &ShelvesMax
@@ -101,65 +100,6 @@ sub GetSomeShelfNames {
     }
 
     return ( { bartotal => $bar? scalar @$bar: 0, pubtotal => $pub? scalar @$pub: 0}, $pub, $bar);
-}
-
-=head2 GetShelfContents
-
-  $biblist = &GetShelfContents($shelfnumber);
-
-Looks up information about the contents of virtual virtualshelves number
-C<$shelfnumber>.  Sorted by a field in the biblio table.  copyrightdate 
-gives a desc sort.
-
-Returns a reference-to-array, whose elements are references-to-hash,
-as returned by C<C4::Biblio::GetBiblioFromItemNumber>.
-
-Note: the notforloan status comes from the itemtype, and where it equals 0
-it does not ensure that related items.notforloan status is likewise 0. The
-caller has to check any items on their own, possibly with CanBookBeIssued
-from C4::Circulation.
-
-=cut
-
-sub GetShelfContents {
-    my ($shelfnumber, $row_count, $offset, $sortfield, $sort_direction ) = @_;
-    my $dbh=C4::Context->dbh();
-    my $sth1 = $dbh->prepare("SELECT count(*) FROM virtualshelfcontents WHERE shelfnumber = ?");
-    $sth1->execute($shelfnumber);
-    my $total = $sth1->fetchrow;
-    if(!$sortfield) {
-        my $sth2 = $dbh->prepare('SELECT sortfield FROM virtualshelves WHERE shelfnumber=?');
-        $sth2->execute($shelfnumber);
-        ($sortfield) = $sth2->fetchrow_array;
-    }
-    my $query =
-       " SELECT DISTINCT vc.biblionumber, vc.shelfnumber, vc.dateadded, itemtypes.*,
-            biblio.*, biblioitems.itemtype, biblioitems.publicationyear as year, biblioitems.publishercode, biblioitems.place, biblioitems.size, biblioitems.pages
-         FROM   virtualshelfcontents vc
-         JOIN biblio      ON      vc.biblionumber =      biblio.biblionumber
-         LEFT JOIN biblioitems ON  biblio.biblionumber = biblioitems.biblionumber
-         LEFT JOIN items ON items.biblionumber=vc.biblionumber
-         LEFT JOIN itemtypes   ON biblioitems.itemtype = itemtypes.itemtype
-         WHERE  vc.shelfnumber=? ";
-    my @params = ($shelfnumber);
-    if($sortfield) {
-        $query .= " ORDER BY " . $dbh->quote_identifier( $sortfield );
-        $query .= " DESC " if ( $sort_direction eq 'desc' );
-    }
-    if($row_count){
-       $query .= " LIMIT ?, ? ";
-       push (@params, ($offset ? $offset : 0));
-       push (@params, $row_count);
-    }
-    my $sth3 = $dbh->prepare($query);
-    $sth3->execute(@params);
-    return ($sth3->fetchall_arrayref({}), $total);
-    # Like the perldoc says,
-    # returns reference-to-array, where each element is reference-to-hash of the row:
-    #   like [ $sth->fetchrow_hashref(), $sth->fetchrow_hashref() ... ]
-    # Suitable for use in TMPL_LOOP.
-    # See http://search.cpan.org/~timb/DBI-1.601/DBI.pm#fetchall_arrayref
-    # or newer, for your version of DBI.
 }
 
 =head2 ShelvesMax

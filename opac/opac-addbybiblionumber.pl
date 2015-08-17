@@ -41,6 +41,11 @@ our $authorized          = 1;
 our $errcode		= 0;
 our @biblios;
 
+
+if (scalar(@biblionumber) == 1) {
+    @biblionumber = (split /\//,$biblionumber[0]);
+}
+
 our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "opac-addbybiblionumber.tt",
@@ -72,20 +77,6 @@ else {
 }
 #end
 
-sub AddBibliosToShelf {
-    #splits incoming biblionumber(s) to array and adds each to shelf.
-    my ($shelfnumber,@biblionumber)=@_;
-
-    #multiple bibs might come in as '/' delimited string (from where, i don't see), or as array.
-    if (scalar(@biblionumber) == 1) {
-        @biblionumber = (split /\//,$biblionumber[0]);
-    }
-    for my $bib (@biblionumber) {
-        my $shelf = Koha::Virtualshelves->find( $shelfnumber );
-        $shelf->add_biblio( $bib, $loggedinuser );
-    }
-}
-
 sub HandleNewVirtualShelf {
     if ( $loggedinuser > 0 and
         (
@@ -100,14 +91,18 @@ sub HandleNewVirtualShelf {
                     category => $category,
                     owner => $loggedinuser,
                 }
-            );
+            )->store;
         };
         if ( $@ or not $shelf ) {
             $authorized = 0;
             $errcode = 1;
             return;
         }
-        AddBibliosToShelf($shelfnumber, @biblionumber);
+
+        for my $bib (@biblionumber) {
+            $shelf->add_biblio( $bib, $loggedinuser );
+        }
+
         #Reload the page where you came from
         print $query->header;
         print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"window.opener.location.reload(true);self.close();\"></body></html>";
@@ -118,7 +113,9 @@ sub HandleShelfNumber {
     my $shelfnumber = $query->param('shelfnumber');
     my $shelf = Koha::Virtualshelves->find( $shelfnumber );
     if ( $shelf->can_biblios_be_added( $loggedinuser ) ) {
-        AddBibliosToShelf($shelfnumber,@biblionumber);
+        for my $bib (@biblionumber) {
+            $shelf->add_biblio( $bib, $loggedinuser );
+        }
         #Close this page and return
         print $query->header;
         print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"self.close();\"></body></html>";
@@ -181,17 +178,13 @@ sub HandleSelect {
 }
 
 sub LoadBib {
-    #see comment in AddBibliosToShelf
-    if (scalar(@biblionumber) == 1) {
-        @biblionumber = (split /\//,$biblionumber[0]);
-    }
     for my $bib (@biblionumber) {
         my $data = GetBiblioData( $bib );
-    push(@biblios,
-        { biblionumber => $bib,
-          title        => $data->{'title'},
-          author       => $data->{'author'},
-    } );
+        push(@biblios,
+            { biblionumber => $bib,
+              title        => $data->{'title'},
+              author       => $data->{'author'},
+        } );
     }
     $template->param(
         multiple => (scalar(@biblios) > 1),

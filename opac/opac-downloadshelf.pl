@@ -56,7 +56,8 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
 
     if ($shelfnumber && $format) {
 
-        my ($items, $totitems)  = GetShelfContents($shelfnumber);
+
+        my $contents = $shelf->get_contents;
         my $marcflavour         = C4::Context->preference('marcflavour');
         my $output;
         my $extension;
@@ -65,15 +66,14 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
        # CSV
         if ($format =~ /^\d+$/) {
             my @biblios;
-            foreach (@$items) {
-                push @biblios, $_->{biblionumber};
+            while ( my $content = $contents->next ) {
+                push @biblios, $content->biblionumber->biblionumber;
             }
             $output = marc2csv(\@biblios, $format);
-                
         # Other formats
         } else {
-            foreach my $biblio (@$items) {
-                my $biblionumber = $biblio->{biblionumber};
+            while ( my $content = $contents->next ) {
+                my $biblionumber = $content->biblionumber->biblionumber;
 
                 my $record = GetMarcBiblio($biblionumber, 1);
                 next unless $record;

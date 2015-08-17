@@ -72,14 +72,13 @@ if ($email) {
     );
 
     my $shelf = Koha::Virtualshelves->find( $shelfid );
-    my ( $items, $totitems ) = GetShelfContents($shelf->shelfnumber);
+    my $contents = $shelf->get_contents;
     my $marcflavour = C4::Context->preference('marcflavour');
     my $iso2709;
     my @results;
 
-    # retrieve biblios from shelf
-    foreach my $biblio (@$items) {
-        my $biblionumber     = $biblio->{biblionumber};
+    while ( my $content = $contents->next ) {
+        my $biblionumber     = $content->biblionumber->biblionumber;
         my $fw               = GetFrameworkCode($biblionumber);
         my $dat              = GetBiblioData($biblionumber);
         my $record           = GetMarcBiblio($biblionumber, 1);

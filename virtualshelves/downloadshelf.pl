@@ -54,7 +54,6 @@ my @messages;
 
 if ($shelfid && $format) {
 
-    my ($items, $totitems)  = GetShelfContents($shelfid);
     my $marcflavour         = C4::Context->preference('marcflavour');
     my $output='';
 
@@ -62,17 +61,18 @@ if ($shelfid && $format) {
     if ( $shelf ) {
         if ( $shelf->can_be_viewed( $loggedinuser ) ) {
 
+            my $contents = $shelf->get_contents;
             # CSV
             if ($format =~ /^\d+$/) {
                 my @biblios;
-                foreach (@$items) {
-                    push @biblios, $_->{biblionumber};
+                while ( my $content = $contents->next ) {
+                    push @biblios, $content->biblionumber->biblionumber;
                 }
                 $output = marc2csv(\@biblios, $format);
             }
             else { #Other formats
-                foreach my $biblio (@$items) {
-                    my $biblionumber = $biblio->{biblionumber};
+                while ( my $content = $contents->next ) {
+                    my $biblionumber = $content->biblionumber->biblionumber;
                     my $record = GetMarcBiblio($biblionumber, 1);
                     if ($format eq 'iso2709') {
                         $output .= $record->as_usmarc();

@@ -124,13 +124,6 @@ sub HandleBiblioPars {
     return @bib;
 }
 
-sub AddBibliosToShelf {
-    my ($shelfnumber, @biblionumber)=@_;
-    for my $bib (@biblionumber){
-        Koha::Virtualshelves->find( $shelfnumber )->add_biblio( $bib, $loggedinuser );
-    }
-}
-
 sub HandleNewVirtualShelf {
     my $shelf = eval {
         Koha::Virtualshelf->new(
@@ -141,14 +134,16 @@ sub HandleNewVirtualShelf {
                 owner => $loggedinuser,
             }
         );
-    };
+    }->store;
     if ( $@ or not $shelf ) {
         $authorized = 0;
         $errcode    = 1;
         return;
     }
 
-    AddBibliosToShelf($shelfnumber, @biblionumber);
+    for my $bib (@biblionumber){
+        $shelf->add_biblio( $bib, $loggedinuser );
+    }
     #Reload the page where you came from
     print $query->header;
     print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"window.opener.location.reload(true);self.close();\"></body></html>";
@@ -157,13 +152,15 @@ sub HandleNewVirtualShelf {
 sub HandleShelfNumber {
     my $shelf = Koha::Virtualshelves->find( $shelfnumber );
     if($authorized = $shelf->can_biblios_be_added( $loggedinuser ) ) {
-    AddBibliosToShelf($shelfnumber, @biblionumber);
-    #Close this page and return
-    print $query->header;
-    print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"self.close();\"></body></html>";
+        for my $bib (@biblionumber){
+            $shelf->add_biblio( $bib, $loggedinuser );
+        }
+        #Close this page and return
+        print $query->header;
+        print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"self.close();\"></body></html>";
     }
     else {
-    $errcode=2; #no perm
+        $errcode=2; #no perm
     }
 }
 
