@@ -4,6 +4,7 @@
     [% INCLUDE 'greybox.inc' %]
     <script type="text/javascript">
         //<![CDATA[
+            var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this?");
             function Xport() {
                 batches= new Array;
                 if(document.layouts.action.length > 0) {
@@ -103,7 +104,22 @@
                                         <thead>
                                         <tr>
                                             [% FOREACH header_field IN table_loo.header_fields %]
-                                                 <th>[% header_field.field_label %]</th>
+                                                [% SWITCH header_field.field_label %]
+                                                    [% CASE 'Layout ID'     %]<th>Layout ID</th>
+                                                    [% CASE 'Layout'        %]<th>Layout</th>
+                                                    [% CASE 'Barcode Type'  %]<th>Barcode type</th>
+                                                    [% CASE 'Print Type'    %]<th>Print type</th>
+                                                    [% CASE 'Template ID'   %]<th>Template ID</th>
+                                                    [% CASE 'Template Name' %]<th>Template name</th>
+                                                    [% CASE 'Description'   %]<th>Description</th>
+                                                    [% CASE 'Actions'       %]<th>Actions</th>
+                                                    [% CASE 'Profile ID'    %]<th>Profile ID</th>
+                                                    [% CASE 'Printer Name'  %]<th>Printer name</th>
+                                                    [% CASE 'Paper Bin'     %]<th>Paper bin</th>
+                                                    [% CASE 'Batch ID'      %]<th>Batch ID</th>
+                                                    [% CASE 'Item Count'    %]<th>Item count</th>
+                                                    [% CASE                 %]<th>[% header_field.field_label %]</th>
+                                                [% END %]
                                             [% END %]
                                         </tr>
                                         </thead>
@@ -111,7 +127,7 @@
                                         <tr>
                                         [% FOREACH text_field IN table_loo.text_fields %]
                                             [% IF ( text_field.select_field ) %]
-                                                <td align="center"><a class="btn btn-mini" href="/cgi-bin/koha/labels/label-edit-[% label_element |url %].pl?op=edit&amp;element_id=[% text_field.field_value |url %]"><icon class="icon-edit"></icon> Edit</a>  <a class="btn btn-mini" href="/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=[% label_element %]&amp;element_id=[% text_field.field_value |url %]" onclick="return confirm('Are you sure you want to delete this?');"><icon class="icon-trash"></icon> Delete</a></td>
+                                                <td align="center"><a class="btn btn-mini" href="/cgi-bin/koha/labels/label-edit-[% label_element |url %].pl?op=edit&amp;element_id=[% text_field.field_value |url %]"><icon class="icon-edit"></icon> Edit</a>  <a class="btn btn-mini" href="/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=[% label_element %]&amp;element_id=[% text_field.field_value |url %]" onclick="return confirm(MSG_CONFIRM_DELETE);"><icon class="icon-trash"></icon> Delete</a></td>
                                                 [% IF label_element == 'batch' %] <td align="center"><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>[% END %]
                                             [% ELSIF ( text_field.field_value ) %]
                                                 <td>[% text_field.field_value %]</td>

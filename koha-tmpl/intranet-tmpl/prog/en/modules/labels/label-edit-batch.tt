@@ -7,6 +7,7 @@
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
     //<![CDATA[
+        var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this?");
         function dofocus() {    // named function req'd for body onload event by some FF and IE7 security models
             $(".focus:last").select();
         }
@@ -244,7 +245,7 @@
                                                     <tr>
                                                         [% FOREACH text_field IN table_loo.text_fields %]
                                                             [% IF ( text_field.select_field ) %]
-                                                                <td><a class="btn btn-mini" onclick="return confirm('Are you sure you want to delete this?');" href="/cgi-bin/koha/labels/label-edit-batch.pl?op=remove&amp;batch_id=[% batch_id |url %]&amp;label_id=[% text_field.field_value |url %]"><icon class="icon-trash"></icon> Delete</a> <a class="btn btn-mini" href="#" onclick="GB_showCenter('Export labels','/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id %]&amp;label_id=[% text_field.field_value |url %]')"><icon class="icon-share"></icon> Export</a></td>
+                                                                <td><a class="btn btn-mini" onclick="return confirm(MSG_CONFIRM_DELETE);" href="/cgi-bin/koha/labels/label-edit-batch.pl?op=remove&amp;batch_id=[% batch_id |url %]&amp;label_id=[% text_field.field_value |url %]"><icon class="icon-trash"></icon> Delete</a> <a class="btn btn-mini" href="#" onclick="GB_showCenter('Export labels','/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id %]&amp;label_id=[% text_field.field_value |url %]')"><icon class="icon-share"></icon> Export</a></td>
                                                                 <td><center><input type="checkbox" name="action" value="[% text_field.field_value %]"></center></td>
                                                             [% ELSE %]
                                                                 <td>
