@@ -54,8 +54,8 @@ my $dbh = C4::Context->dbh;
 $dbh->{RaiseError}=1;
 $dbh->{AutoCommit}=0;
 $dbh->do(q|DELETE FROM accountlines|);
-$dbh->do(q|DELETE FROM borrowers|);
 $dbh->do(q|DELETE FROM issues|);
+$dbh->do(q|DELETE FROM borrowers|);
 
 my $branchcode = 'CPL';
 my $borrower_number;
