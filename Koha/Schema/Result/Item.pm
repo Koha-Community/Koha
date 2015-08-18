@@ -623,9 +623,11 @@ sub effective_itemtype {
     my ( $self ) = @_;
 
     my $pref = $self->result_source->schema->resultset('Systempreference')->find('item-level_itypes');
-    if ( $pref->value() ) {
+    if ( $pref->value() && $self->itype() ) {
         return $self->itype();
     } else {
+        warn "item-level_itypes set but no itemtype set for item ($self->itemnumber)"
+          if $pref->value();
         return $self->biblioitemnumber()->itemtype();
     }
 }
