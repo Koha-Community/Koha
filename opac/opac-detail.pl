@@ -40,7 +40,6 @@ use C4::External::Syndetics qw(get_syndetics_index get_syndetics_summary get_syn
 use C4::Review;
 use C4::Ratings;
 use C4::Members;
-use C4::VirtualShelves;
 use C4::XSLT;
 use C4::ShelfBrowser;
 use C4::Reserves;

@@ -188,8 +188,6 @@ L<C4::Labels>,
 L<C4::Overdues>,
 L<C4::Reserves>,
 L<C4::Search>,
-L<C4::VirtualShelves::Page>,
-L<C4::VirtualShelves>,
 L<C4::XSLT>
 
 

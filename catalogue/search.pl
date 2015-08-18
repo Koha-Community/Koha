@@ -147,7 +147,6 @@ use C4::Search;
 use C4::Languages qw(getLanguages);
 use C4::Koha;
 use C4::Members qw(GetMember);
-use C4::VirtualShelves;
 use URI::Escape;
 use POSIX qw(ceil floor);
 use C4::Branch; # GetBranches

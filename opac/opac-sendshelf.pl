@@ -31,7 +31,6 @@ use C4::Auth;
 use C4::Biblio;
 use C4::Items;
 use C4::Output;
-use C4::VirtualShelves;
 use C4::Members;
 use Koha::Email;
 use Koha::Virtualshelves;
