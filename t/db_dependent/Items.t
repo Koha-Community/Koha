@@ -24,6 +24,7 @@ use C4::Branch;
 use Koha::Database;
 
 use Test::More tests => 8;
+use Test::Warn;
 
 BEGIN {
     use_ok('C4::Items');
@@ -195,7 +196,7 @@ subtest 'GetItemsInfo tests' => sub {
 
 subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
 
-    plan tests => 2;
+    plan tests => 4;
 
     # Start transaction
     $dbh->{AutoCommit} = 0;
@@ -224,6 +225,19 @@ subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
 
     C4::Context->set_preference( 'item-level_itypes', 1 );
     ok( $item->effective_itemtype() eq 'ITEM_LEVEL', '$item->itemtype() returns items.itype when item-level_itypes is enabled' );
+
+    # If itemtype is not defined and item-level_level item types are set
+    # fallback to biblio-level itemtype (Bug 14651) and warn
+    $item->itype( undef );
+    $item->update();
+    my $effective_itemtype;
+    warning_is { $effective_itemtype = $item->effective_itemtype() }
+                "item-level_itypes set but no itemtype set for item ($item->itemnumber)",
+                '->effective_itemtype() raises a warning when falling back to bib-level';
+
+    ok( defined $effective_itemtype &&
+                $effective_itemtype eq 'BIB_LEVEL',
+        '$item->effective_itemtype() falls back to biblioitems.itemtype when item-level_itypes is enabled but undef' );
 
     $dbh->rollback;
 };
