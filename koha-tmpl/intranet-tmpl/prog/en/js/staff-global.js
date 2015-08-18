@@ -122,7 +122,7 @@ function confirmDelete(message) {
 }
 
 function playSound( sound ) {
-    if ( ! ( sound.indexOf('http://') == 0 || sound.indexOf('https://') == 0  ) {
+    if ( ! ( sound.indexOf('http://') == 0 || sound.indexOf('https://') == 0  ) ) {
         sound = AUDIO_ALERT_PATH + sound;
     }
     document.getElementById("audio-alert").innerHTML = '<audio src="' + sound + '" autoplay="autoplay" autobuffer="autobuffer"></audio>';
