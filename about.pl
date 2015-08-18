@@ -34,6 +34,7 @@ use C4::Context;
 use C4::Installer;
 
 use Koha;
+use Koha::Borrowers;
 use Koha::Config::SysPrefs;
 
 #use Smart::Comments '####';
@@ -76,6 +77,9 @@ my $warnPrefAnonymousPatron = (
     C4::Context->preference('OPACPrivacy')
         and not C4::Context->preference('AnonymousPatron')
 );
+
+my $anonymous_patron = Koha::Borrowers->find( C4::Context->preference('AnonymousPatron') );
+my $warnPrefAnonymousPatron_PatronDoesNotExist = ( not $anonymous_patron and Koha::Borrowers->search({ privacy => 2 })->count );
 
 my $errZebraConnection = C4::Context->Zconn("biblioserver",0)->errcode();
 
@@ -227,6 +231,7 @@ $template->param(
     warnPrefBiblioAddsAuthorities => $warnPrefBiblioAddsAuthorities,
     warnPrefEasyAnalyticalRecords  => $warnPrefEasyAnalyticalRecords,
     warnPrefAnonymousPatron => $warnPrefAnonymousPatron,
+    warnPrefAnonymousPatron_PatronDoesNotExist => $warnPrefAnonymousPatron_PatronDoesNotExist,
     errZebraConnection => $errZebraConnection,
     warnIsRootUser => $warnIsRootUser,
     warnNoActiveCurrency => $warnNoActiveCurrency,
