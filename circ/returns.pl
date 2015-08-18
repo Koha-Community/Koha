@@ -351,6 +351,7 @@ if ($barcode) {
         $riduedate{0}     = 0;
         push( @inputloop, \%input );
     }
+    $template->param( privacy => $borrower->{privacy} );
 }
 $template->param( inputloop => \@inputloop );
 
