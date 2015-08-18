@@ -182,26 +182,34 @@ elsif ( $action eq 'update' ) {
         $template->param( action => 'edit' );
     }
     else {
-        ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-            {
-                template_name   => "opac-memberentry-update-submitted.tt",
-                type            => "opac",
-                query           => $cgi,
-                authnotrequired => 1,
-            }
-        );
-
         my %borrower_changes = DelUnchangedFields( $borrowernumber, %borrower );
+        if (%borrower_changes) {
+            ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+                {
+                    template_name   => "opac-memberentry-update-submitted.tt",
+                    type            => "opac",
+                    query           => $cgi,
+                    authnotrequired => 1,
+                }
+            );
 
-        my $m =
-          Koha::Borrower::Modifications->new(
-            borrowernumber => $borrowernumber );
+            my $m =
+              Koha::Borrower::Modifications->new(
+                borrowernumber => $borrowernumber );
 
-        $m->DelModifications;
-        $m->AddModifications(\%borrower_changes);
-        $template->param(
-            borrower => GetMember( borrowernumber => $borrowernumber ),
-        );
+            $m->DelModifications;
+            $m->AddModifications(\%borrower_changes);
+            $template->param(
+                borrower => GetMember( borrowernumber => $borrowernumber ),
+            );
+        }
+        else {
+            $template->param(
+                action => 'edit',
+                nochanges => 1,
+                borrower => GetMember( borrowernumber => $borrowernumber ),
+            );
+        }
     }
 }
 elsif ( $action eq 'edit' ) {    #Display logged in borrower's data

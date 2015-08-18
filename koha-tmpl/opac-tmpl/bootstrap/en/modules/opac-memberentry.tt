@@ -44,6 +44,9 @@
                     [% UNLESS OPACPatronDetails %]
                         <div class="alert alert-info">To make changes to your record please contact the library.</div>
                     [% END %]
+                    [% IF nochanges %]
+                        <div class="alert alert-error">No changes were made.</div>
+                    [% END %]
                 [% END %]
 
                 [% IF empty_mandatory_fields %]
