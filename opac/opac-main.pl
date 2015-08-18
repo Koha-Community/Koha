@@ -59,6 +59,7 @@ my $quote = GetDailyQuote();   # other options are to pass in an exact quote id 
 $template->param(
     koha_news           => $all_koha_news,
     koha_news_count     => $koha_news_count,
+    branchcode          => $homebranch,
     display_daily_quote => C4::Context->preference('QuoteOfTheDay'),
     daily_quote         => $quote,
 );
