@@ -18,7 +18,6 @@ package Koha::Template::Plugin::Koha;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Encode qw( encode );
 
 use base qw( Template::Plugin );
 
@@ -43,7 +42,7 @@ is necessary.
 
 sub Preference {
     my ( $self, $pref ) = @_;
-    return encode('UTF-8', C4::Context->preference( $pref ) );
+    return C4::Context->preference( $pref );
 }
 
 sub Version {
