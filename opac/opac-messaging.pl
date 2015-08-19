@@ -51,8 +51,7 @@ my $messaging_options = C4::Members::Messaging::GetMessagingOptions();
 
 if ( defined $query->param('modify') && $query->param('modify') eq 'yes' ) {
 
-    # If they've modified the SMS number, record it.
-    if ( ( defined $query->param('SMSnumber') ) && ( $query->param('SMSnumber') ne $borrower->{'mobile'} ) ) {
+    if ( $query->param('SMSnumber') ne $borrower->{'mobile'} )  {
         ModMember( borrowernumber => $borrowernumber,
                    smsalertnumber => $query->param('SMSnumber') );
         $borrower = GetMemberDetails( $borrowernumber );
@@ -66,7 +65,7 @@ C4::Form::MessagingPreferences::set_form_values({ borrowernumber     => $borrowe
 # warn( Data::Dumper->Dump( [ $messaging_options ], [ 'messaging_options' ] ) );
 $template->param( BORROWER_INFO         => [ $borrower ],
                   messagingview         => 1,
-                  SMSnumber => defined $borrower->{'smsalertnumber'} ? $borrower->{'smsalertnumber'} : $borrower->{'mobile'},
+                  SMSnumber => $borrower->{'smsalertnumber'} ? $borrower->{'smsalertnumber'} : $borrower->{'mobile'},
                   SMSSendDriver                =>  C4::Context->preference("SMSSendDriver"),
                   TalkingTechItivaPhone        =>  C4::Context->preference("TalkingTechItivaPhoneNotification") );
 
