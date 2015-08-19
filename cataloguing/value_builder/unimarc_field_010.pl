@@ -23,6 +23,7 @@ use warnings;
 use C4::Auth;
 use CGI qw ( -utf8 );
 use C4::Context;
+use C4::Output;
 
 
 sub plugin_javascript {
