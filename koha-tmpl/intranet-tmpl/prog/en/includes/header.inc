@@ -40,9 +40,9 @@
             </li>
         </ul>
         <ul class="nav pull-right">
+            [% IF ( loggedinusername ) %]
             <li class="dropdown">
                 <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">
-                    [% IF ( loggedinusername ) %]
                     <span class="loggedinusername">[% loggedinusername %]</span>
                     <span class="separator">|</span>
                     [% IF ( AutoLocation ) %]
@@ -89,13 +89,20 @@
                     <li>
                         <a id="logout" class="toplinks" href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log out</a>
                     </li>
-                    [% ELSE %]
-                    You are not logged in |
-                    [% END %]
+                    <li>
+                        <a class="toplinks" href="/cgi-bin/koha/help.pl" id="helper">Help</a>
+                    </li>
                 </ul>
-            <li>
-                <a class="toplinks" href="/cgi-bin/koha/help.pl" id="helper">Help</a>
             </li>
+            [% ELSE %]
+            <li class="loggedout">
+                <span>
+                    <a href="/cgi-bin/koha/mainpage.pl" id="login">Log in</a>
+                    <span class="separator">|</span>
+                    <a class="toplinks" href="/cgi-bin/koha/help.pl" id="helper">Help</a>
+                </span>
+            </li>
+            [% END %]
         </ul>
     </div>
     [% IF ( intranetbookbag ) %]<div id="cartDetails">Your cart is empty.</div>[% END %]
