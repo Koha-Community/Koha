@@ -71,7 +71,7 @@ Gets the last precedence value for audio alerts
 sub get_last_precedence {
     my ($self) = @_;
 
-    return $self->_resultset()->get_column('precedence')->max();
+    return $self->_resultset()->get_column('precedence')->max() || 0;
 }
 
 =head3 move
