@@ -9678,11 +9678,11 @@ if ( CheckVersion($DBversion) ) {
 
     $dbh->do(q{
         CREATE TABLE audio_alerts (
-            audio_alert_id int(11) NOT NULL AUTO_INCREMENT,
+            id int(11) NOT NULL AUTO_INCREMENT,
             precedence smallint(5) unsigned NOT NULL,
             selector varchar(255) NOT NULL,
             sound varchar(255) NOT NULL,
-            PRIMARY KEY (audio_alert_id),
+            PRIMARY KEY (id),
             KEY precedence (precedence)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
     });
