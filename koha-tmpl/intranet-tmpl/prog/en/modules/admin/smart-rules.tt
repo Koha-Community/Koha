@@ -176,7 +176,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
 							<td>[% IF ( rule.default_humanitemtype ) %]
 									<em>All</em>
 								[% ELSE %]
-									[% rule.humanitemtype %]
+									[% rule.translated_description %]
 								[% END %]
 							</td>
 							<td>[% IF ( rule.unlimited_maxissueqty ) %]
@@ -251,7 +251,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                         <select name="itemtype" id="matrixitemtype" style="width:13em;">
                             <option value="*">All</option>
                         [% FOREACH itemtypeloo IN itemtypeloop %]
-                            <option value="[% itemtypeloo.itemtype %]">[% itemtypeloo.description %]</option>
+                            <option value="[% itemtypeloo.itemtype %]">[% itemtypeloo.translated_description %]</option>
                         [% END %]
                         </select>
                     </td>
@@ -530,7 +530,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                         <td>[% IF ( branch_item_rule_loo.default_humanitemtype ) %]
                                 <em>Default</em>
                             [% ELSE %]
-                                [% branch_item_rule_loo.humanitemtype %]
+                                [% branch_item_rule_loo.translated_description %]
                             [% END %]
                         </td>
                         <td>[% IF ( branch_item_rule_loo.holdallowed_any ) %]
@@ -560,7 +560,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                     <td>
                         <select name="itemtype">
                         [% FOREACH itemtypeloo IN itemtypeloop %]
-                            <option value="[% itemtypeloo.itemtype %]">[% itemtypeloo.description %]</option>
+                            <option value="[% itemtypeloo.itemtype %]">[% itemtypeloo.translated_description %]</option>
                         [% END %]
                         </select>
                     </td>

@@ -134,20 +134,9 @@ if ($do_it) {
         values   => \@selectc,
         labels   => \%labelsc,
     };
-    
-    $req = $dbh->prepare( "select distinctrow itemtype,description from itemtypes order by description");
-    $req->execute;
-    my @selecti;
-    my %labelsi;
-    while (my ($value,$desc) =$req->fetchrow) {
-        push @selecti, $value;
-        $labelsi{$value}=$desc;
-    }
-    my $ItemTypes = {
-        values   => \@selecti,
-        labels    => \%labelsi,
-    };
-    
+
+    my $itemtypes = GetItemTypes( style => 'array' );
+
     $req = $dbh->prepare("select distinctrow sort1 from borrowers where sort1 is not null order by sort1");
     $req->execute;
     my @selects1;
@@ -178,7 +167,7 @@ if ($do_it) {
     
     $template->param(
                     BorCat       => $BorCat,
-                    ItemType     => $ItemTypes,
+                    itemtypes    => $itemtypes,
                     branchloop   => GetBranchesLoop(),
                     hassort1     => $hassort1,
                     hassort2     => $hassort2,

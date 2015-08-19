@@ -214,7 +214,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
         <li><span class="label">Collection title:</span>[% collectiontitle |html %]</li>
         <li><span class="label">Document type:</span>
             [% FOREACH itemtypeloo IN itemtypeloop %]
-                [% IF ( itemtypeloo.selected ) %][% itemtypeloo.description %][% END %]
+                [% IF ( itemtypeloo.selected ) %][% itemtypeloo.translated_description %][% END %]
             [% END %]
         </li>
         [% IF ( patron_reason_loop ) %]
@@ -339,7 +339,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
             <select id="itemtype" name="itemtype" >
             [% FOREACH itemtypeloo IN itemtypeloop %]
                 [% IF ( itemtypeloo.selected ) %]<option selected="selected" value="[% itemtypeloo.itemtype %]">[% ELSE %]<option value="[% itemtypeloo.itemtype %]">[% END %]
-                [% itemtypeloo.description %]</option>
+                [% itemtypeloo.translated_description %]</option>
             [% END %]
             </select>
         </li>

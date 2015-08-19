@@ -127,7 +127,7 @@ my $ccodes= GetKohaAuthorisedValues('items.ccode',$fw);
 my $copynumbers = GetKohaAuthorisedValues('items.copynumber',$fw);
 my $itemtypes = GetItemTypes;
 
-$data->{'itemtypename'} = $itemtypes->{$data->{'itemtype'}}->{'description'};
+$data->{'itemtypename'} = $itemtypes->{$data->{'itemtype'}}->{'translated_description'};
 $data->{'rentalcharge'} = sprintf( "%.2f", $data->{'rentalcharge'} );
 foreach ( keys %{$data} ) {
     $template->param( "$_" => defined $data->{$_} ? $data->{$_} : '' );
@@ -138,7 +138,7 @@ foreach my $item (@items){
     $item->{itemlostloop}= GetAuthorisedValues(GetAuthValCode('items.itemlost',$fw),$item->{itemlost}) if GetAuthValCode('items.itemlost',$fw);
     $item->{itemdamagedloop}= GetAuthorisedValues(GetAuthValCode('items.damaged',$fw),$item->{damaged}) if GetAuthValCode('items.damaged',$fw);
     $item->{'collection'}              = $ccodes->{ $item->{ccode} } if ($ccodes);
-    $item->{'itype'}                   = $itemtypes->{ $item->{'itype'} }->{'description'};
+    $item->{'itype'}                   = $itemtypes->{ $item->{'itype'} }->{'translated_description'};
     $item->{'replacementprice'}        = sprintf( "%.2f", $item->{'replacementprice'} );
     if ( defined $item->{'copynumber'} ) {
         $item->{'displaycopy'} = 1;

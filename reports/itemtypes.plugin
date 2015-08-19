@@ -49,7 +49,7 @@ sub calculate {
 	if ($branch) {
 		if (C4::Context->preference('item-level_itypes')) {
 		$sth = $dbh->prepare("
-        SELECT description, items.itype as itemtype, COUNT(*) AS total 
+        SELECT itemtype, description, items.itype as itemtype, COUNT(*) AS total
 			FROM itemtypes,items         
 		WHERE items.itype=itemtypes.itemtype         
 		AND items.holdingbranch=?            
@@ -59,7 +59,7 @@ sub calculate {
 		}
 		else {
 		$sth = $dbh->prepare("
-		SELECT description, biblioitems.itemtype, COUNT(*) AS total 
+        SELECT itemtype, description, biblioitems.itemtype, COUNT(*) AS total
 			FROM itemtypes, biblioitems, items 
 		WHERE biblioitems.itemtype=itemtypes.itemtype 
 		AND items.biblioitemnumber=biblioitems.biblioitemnumber
@@ -71,14 +71,14 @@ sub calculate {
 	} else {
 		if (C4::Context->preference('item-level_itypes')) {
 		$sth = $dbh->prepare("
-		SELECT description,items.itype AS itemtype, COUNT(*) AS total 
+        SELECT itemtype, description,items.itype AS itemtype, COUNT(*) AS total
 			FROM itemtypes,items
 		WHERE items.itype=itemtypes.itemtype
 			GROUP BY items.itype
 			ORDER BY itemtypes.description");
 		}
 		else {
-		$sth = $dbh->prepare("SELECT description, biblioitems.itemtype, COUNT(*) AS total
+        $sth = $dbh->prepare("SELECT itemtype, description, biblioitems.itemtype, COUNT(*) AS total
 			FROM itemtypes, biblioitems,items 
 		WHERE biblioitems.itemtype=itemtypes.itemtype 
 		AND biblioitems.biblioitemnumber = items.biblioitemnumber
@@ -87,17 +87,17 @@ sub calculate {
 		}
 		$sth->execute;
 	}
-	my ($description,$biblioitems,$total);
+    my ($itemtype, $description,$biblioitems,$total);
 	my $grantotal = 0;
 	my $count = 0;
-	while (($description,$biblioitems,$total) = $sth->fetchrow) {
+    while (($itemtype, $description,$biblioitems,$total) = $sth->fetchrow) {
 		my %line;
 		if($count % 2){
 			$line{toggle} = 1;
 			} else {
 				$line{toggle} = 0;
 			}
-		$line{itemtype} = $description;
+        $line{itemtype} = $itemtype;
 		$line{count} = $total;
 		$grantotal += $total;
 		push @results,\%line;

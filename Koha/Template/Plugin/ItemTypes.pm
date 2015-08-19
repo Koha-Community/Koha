@@ -27,7 +27,7 @@ use C4::Koha;
 sub GetDescription {
     my ( $self, $itemtype ) = @_;
 
-    my $itemtype = C4::Koha::getitemtypeinfo( $itemtype );
+    $itemtype = C4::Koha::getitemtypeinfo( $itemtype );
     return $itemtype->{translated_description};
 
 }

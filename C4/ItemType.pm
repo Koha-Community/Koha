@@ -21,6 +21,7 @@ package C4::ItemType;
 use strict;
 use warnings;
 use C4::Context;
+use C4::Languages;
 use Encode qw( encode );
 
 our $AUTOLOAD;
@@ -78,9 +79,17 @@ sub all {
     my ($class) = @_;
     my $dbh = C4::Context->dbh;
 
+    my $language = C4::Languages::getlanguage();
     my @itypes;
-    for ( @{$dbh->selectall_arrayref(
-        "SELECT * FROM itemtypes ORDER BY description", { Slice => {} })} )
+    for ( @{$dbh->selectall_arrayref(q|
+        SELECT *,
+            COALESCE( localization.translation, itemtypes.description ) AS translated_description
+        FROM itemtypes
+        LEFT JOIN localization ON itemtypes.itemtype = localization.code
+            AND localization.entity = 'itemtypes'
+            AND localization.lang = ?
+        ORDER BY description
+    |, { Slice => {} }, $language)} )
     {
         push @itypes, $class->new($_);
     }

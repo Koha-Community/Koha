@@ -487,7 +487,7 @@ else {
     foreach my $thisitemtype ( sort keys %$itemtypes ) {
         my %row = (
             value       => $thisitemtype,
-            description => $itemtypes->{$thisitemtype}->{'description'},
+            description => $itemtypes->{$thisitemtype}->{translated_description},
         );
         push @itemtypesloop, \%row;
     }

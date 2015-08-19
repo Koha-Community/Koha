@@ -223,8 +223,8 @@
                 <td>
                     <select name="Filter" size="1" id="itemtypes">
                         <option value="">All item types</option>
-                        [% FOREACH value IN ItemTypes.values %]
-                        <option value="[% value %]">[% ItemTypes.labels.$value %]</option>
+                        [% FOREACH itemtype IN itemtypes %]
+                        <option value="[% itemtype.itemtype %]">[% itemtype.translated_description %]</option>
                         [% END %]
                     </select>
                 </td>

@@ -402,7 +402,7 @@ function verify_images() {
     [% FOREACH subtitl IN subtitle %]
     	<h4>[% subtitl.subfield %]</h4>
     [% END %]
-            [% UNLESS ( item_level_itypes ) %]<img src="[% imageurl %]" alt="[% description %]" title="[% description %]">[% END %]
+            [% UNLESS ( item_level_itypes ) %]<img src="[% imageurl %]" alt="[% translated_description %]" title="[% translated_description %]">[% END %]
             [% IF ( unititle ) %]<p>[% unititle |html %]</p>[% END %]
             [% IF ( author ) %]<p>By <a href="/cgi-bin/koha/catalogue/search.pl?q=au:[% author |url %]">[% author %]</a></p>[% END %]
         <ul>
@@ -619,9 +619,9 @@ function verify_images() {
                     [% IF ( item_level_itypes ) %]
                         <td class="itype">
                             [% IF !noItemTypeImages && item.imageurl %]
-                                <img src="[% item.imageurl %]" alt="[% item.description %]" title="[% item.description %]" />
+                                <img src="[% item.imageurl %]" alt="[% item.translated_description %]" title="[% item.translated_description %]" />
                             [% END %]
-                            [% item.description %]
+                            [% item.translated_description %]
                         </td>
                     [% END %]
                     <td class="location">[% UNLESS ( singlebranchmode ) %][% item.branchname %] [% END %]</td>

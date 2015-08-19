@@ -521,7 +521,7 @@ my $itemtypes = GetItemTypes();
 my $itemtype = $dat->{'itemtype'};
 if ( $itemtype ) {
     $dat->{'imageurl'}    = getitemtypeimagelocation( 'opac', $itemtypes->{$itemtype}->{'imageurl'} );
-    $dat->{'description'} = $itemtypes->{$itemtype}->{'description'};
+    $dat->{'description'} = $itemtypes->{$itemtype}->{translated_description};
 }
 my $shelflocations =GetKohaAuthorisedValues('items.location',$dat->{'frameworkcode'}, 'opac');
 my $collections =  GetKohaAuthorisedValues('items.ccode',$dat->{'frameworkcode'}, 'opac');
@@ -647,7 +647,7 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
     }
     if (exists $itm->{itype} && defined($itm->{itype}) && exists $itemtypes->{ $itm->{itype} }) {
         $itm->{'imageurl'}    = getitemtypeimagelocation( 'opac', $itemtypes->{ $itm->{itype} }->{'imageurl'} );
-        $itm->{'description'} = $itemtypes->{ $itm->{itype} }->{'description'};
+        $itm->{'description'} = $itemtypes->{ $itm->{itype} }->{translated_description};
     }
     foreach (qw(ccode enumchron copynumber itemnotes uri)) {
         $itemfields{$_} = 1 if ($itm->{$_});

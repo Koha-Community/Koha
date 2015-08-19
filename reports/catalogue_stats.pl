@@ -146,9 +146,7 @@ if ($do_it) {
     my $hascote = 1;
     my $highcote = 5;
 
-	$req = $dbh->prepare("select itemtype, description from itemtypes order by description");
-	$req->execute;
-	my $CGIitemtype = $req->fetchall_arrayref({});
+    my $itemtypes = GetItemTypes( style => 'array' );
 
 	my $authvals = GetKohaAuthorisedValues("items.ccode");
 	my @authvals;
@@ -167,7 +165,7 @@ if ($do_it) {
 	$template->param(hasdewey=>$hasdewey,
 					haslccn   => $haslccn,
 					hascote   => $hascote,
-					CGIItemType => $CGIitemtype,
+                    itemtypes => $itemtypes,
 					CGIBranch    => GetBranchesLoop(C4::Context->userenv->{'branch'}),
 					locationloop => \@locations,
 					authvals     => \@authvals,

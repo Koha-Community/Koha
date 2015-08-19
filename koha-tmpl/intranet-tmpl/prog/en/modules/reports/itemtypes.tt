@@ -1,3 +1,4 @@
+[% USE ItemTypes %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Catalog by item types</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -47,7 +48,7 @@ $(document).ready(function(){
 		<tbody>
 			[% FOREACH loopitemtyp IN mainloo.loopitemtype %]
 				<tr>
-					<td>[% loopitemtyp.itemtype %]</td>
+                    <td>[% ItemTypes.GetDescription( loopitemtyp.itemtype ) %]</td>
 					<td>[% loopitemtyp.count %]</td>
 				</tr>
 			[% END %]

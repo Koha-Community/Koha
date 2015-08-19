@@ -1301,6 +1301,7 @@ sub GetItemsInfo {
     my ( $biblionumber ) = @_;
     my $dbh   = C4::Context->dbh;
     # note biblioitems.* must be avoided to prevent large marc and marcxml fields from killing performance.
+    my $language = C4::Languages::getlanguage();
     my $query = "
     SELECT items.*,
            biblio.*,
@@ -1326,6 +1327,7 @@ sub GetItemsInfo {
            serial.serialseq,
            serial.publisheddate,
            itemtypes.description,
+           COALESCE( localization.translation, itemtypes.description ) AS translated_description,
            itemtypes.notforloan as notforloan_per_itemtype,
            holding.branchurl,
            holding.branchname,
@@ -1344,9 +1346,15 @@ sub GetItemsInfo {
      LEFT JOIN serial USING (serialid)
      LEFT JOIN itemtypes   ON   itemtypes.itemtype         = "
      . (C4::Context->preference('item-level_itypes') ? 'items.itype' : 'biblioitems.itemtype');
+    $query .= q|
+    LEFT JOIN localization ON itemtypes.itemtype = localization.code
+        AND localization.entity = 'itemtypes'
+        AND localization.lang = ?
+    |;
+
     $query .= " WHERE items.biblionumber = ? ORDER BY home.branchname, items.enumchron, LPAD( items.copynumber, 8, '0' ), items.dateaccessioned DESC" ;
     my $sth = $dbh->prepare($query);
-    $sth->execute($biblionumber);
+    $sth->execute($language, $biblionumber);
     my $i = 0;
     my @results;
     my $serial;

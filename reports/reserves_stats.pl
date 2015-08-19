@@ -139,8 +139,8 @@ my %select;
 
 # create itemtype arrayref for <select>.
 my @itemtypeloop;
-for my $itype ( sort {$itemtypes->{$a}->{description} cmp $itemtypes->{$b}->{description}} keys(%$itemtypes)) {
-	push @itemtypeloop, { code => $itype , description => $itemtypes->{$itype}->{description} } ;
+for my $itype ( sort {$itemtypes->{$a}->{translated_description} cmp $itemtypes->{$b}->{translated_description}} keys(%$itemtypes)) {
+	push @itemtypeloop, { code => $itype , description => $itemtypes->{$itype}->{translated_description} } ;
 }
 
     # location list

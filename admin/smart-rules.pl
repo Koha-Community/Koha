@@ -46,6 +46,7 @@ my ($template, $loggedinuser, $cookie)
 my $type=$input->param('type');
 my $branch = $input->param('branch') || ( C4::Branch::onlymine() ? ( C4::Branch::mybranch() || '*' ) : '*' );
 my $op = $input->param('op') || q{};
+my $language = C4::Languages::getlanguage();
 
 if ($op eq 'delete') {
     my $itemtype     = $input->param('itemtype');
@@ -419,25 +420,25 @@ while (my $data=$sth->fetchrow_hashref){
 }
 
 $sth->finish;
-$sth=$dbh->prepare("SELECT description,itemtype FROM itemtypes ORDER BY description");
-$sth->execute;
-# $i=0;
 my @row_loop;
-my @itemtypes;
-while (my $row=$sth->fetchrow_hashref){
-    push @itemtypes,$row;
-}
+my @itemtypes = @{ GetItemTypes( style => 'array' ) };
 
 my $sth2 = $dbh->prepare("
-    SELECT issuingrules.*, itemtypes.description AS humanitemtype, categories.description AS humancategorycode
+    SELECT  issuingrules.*,
+            itemtypes.description AS humanitemtype,
+            categories.description AS humancategorycode,
+            COALESCE( localization.translation, itemtypes.description ) AS translated_description
     FROM issuingrules
     LEFT JOIN itemtypes
         ON (itemtypes.itemtype = issuingrules.itemtype)
     LEFT JOIN categories
         ON (categories.categorycode = issuingrules.categorycode)
+    LEFT JOIN localization ON issuingrules.itemtype = localization.code
+        AND localization.entity = 'itemtypes'
+        AND localization.lang = ?
     WHERE issuingrules.branchcode = ?
 ");
-$sth2->execute($branch);
+$sth2->execute($language, $branch);
 
 while (my $row = $sth2->fetchrow_hashref) {
     $row->{'current_branch'} ||= $row->{'branchcode'};

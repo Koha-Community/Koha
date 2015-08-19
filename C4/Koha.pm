@@ -194,14 +194,7 @@ build a HTML select with the following code :
 sub GetSupportList{
 	my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes");
     if (!$advanced_search_types or $advanced_search_types =~ /itemtypes/) {
-		my $query = qq|
-			SELECT *
-			FROM   itemtypes
-			order by description
-		|;
-		my $sth = C4::Context->dbh->prepare($query);
-		$sth->execute;
-		return $sth->fetchall_arrayref({});
+        return GetItemTypes( style => 'array' );
 	} else {
 		my $advsearchtypes = GetAuthorisedValues($advanced_search_types);
 		my @results= map {{itemtype=>$$_{authorised_value},description=>$$_{lib},imageurl=>$$_{imageurl}}} @$advsearchtypes;

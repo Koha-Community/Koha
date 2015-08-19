@@ -124,18 +124,7 @@ else {
     $req->execute;
     my $booksellers = $req->fetchall_arrayref({});
 
-    $req = $dbh->prepare("SELECT DISTINCTROW itemtype,description FROM itemtypes ORDER BY description");
-    $req->execute;
-    my @iselect;
-    my %iselect;
-    while ( my ( $value, $desc ) = $req->fetchrow ) {
-        push @iselect, $value;
-        $iselect{$value} = $desc;
-    }
-    my $ItemTypes = {
-        values  => \@iselect,
-        labels  => \%iselect,
-   };
+    my $itemtypes = GetItemTypes( style => 'array' );
 
     $req = $dbh->prepare("SELECT DISTINCTROW budget_code, budget_name FROM aqbudgets ORDER BY budget_name");
     $req->execute;
@@ -212,7 +201,7 @@ else {
 
     $template->param(
         booksellers   => $booksellers,
-        ItemTypes     => $ItemTypes,
+        itemtypes     => $itemtypes,
         Budgets       => $Budgets,
         hassort1      => $hassort1,
         hassort2      => $hassort2,

@@ -123,9 +123,9 @@ foreach (sort keys %$branches) {
 
 my $itemtypes = GetItemTypes;
 my @itemtypeloop;
-foreach (sort {$itemtypes->{$a}->{description} cmp $itemtypes->{$b}->{description}} keys %$itemtypes) {
+foreach (sort {$itemtypes->{$a}->{translated_description} cmp $itemtypes->{$b}->{translated_description}} keys %$itemtypes) {
 	my %row = (value => $_,
-               description => $itemtypes->{$_}->{description},
+               description => $itemtypes->{$_}->{translated_description},
               );
     push @itemtypeloop, \%row;
 }

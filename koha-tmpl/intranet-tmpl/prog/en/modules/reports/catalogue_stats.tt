@@ -164,11 +164,9 @@
 				<td><input type="radio" name="Column" value="[% item_itype %]" /></td>
 				<td><select name="Filter" id="[% item_itype %]">
 					<option value=""> </option>
-					[% FOREACH CGIItemTyp IN CGIItemType %]
-					[% IF ( CGIItemTyp.selected ) %]
-					<option value="[% CGIItemTyp.itemtype %]" selected="selected">[% CGIItemTyp.description %]</option>[% ELSE %]<option value="[% CGIItemTyp.itemtype %]">[% CGIItemTyp.description %]</option>[% END %]
-
-					[% END %]
+                    [% FOREACH itemtype IN itemtypes %]
+                        <option value="[% itemtype.itemtype %]">[% itemtype.translated_description %]</option>
+                    [% END %]
 					</select>
 				</td>
 			</tr>

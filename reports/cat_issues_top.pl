@@ -123,9 +123,9 @@ if ($do_it) {
     #doctype
     my $itemtypes = GetItemTypes;
     my @itemtypeloop;
-    foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'}} keys %$itemtypes) {
+    foreach my $thisitemtype ( sort {$itemtypes->{$a}->{translated_description} cmp $itemtypes->{$b}->{translated_description}} keys %$itemtypes) {
             my %row =(value => $thisitemtype,
-                      description => $itemtypes->{$thisitemtype}->{'description'},
+                      description => $itemtypes->{$thisitemtype}->{translated_description},
                             );
             push @itemtypeloop, \%row;
     }
