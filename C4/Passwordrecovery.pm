@@ -153,6 +153,7 @@ sub SendPasswordRecoveryEmail {
 
     return 1;
 }
+
 =head2 CompletePasswordRecovery
 
     $bool = CompletePasswordRevovery($uuid);
@@ -160,6 +161,7 @@ sub SendPasswordRecoveryEmail {
     Deletes a password recovery entry.
 
 =cut
+
 sub CompletePasswordRecovery{
     my $uniqueKey = shift;
     my $model = Koha::Database->new->schema->resultset('BorrowerPasswordRecovery');
