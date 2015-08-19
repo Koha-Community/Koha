@@ -150,7 +150,6 @@ use C4::Members qw(GetMember);
 use C4::VirtualShelves;
 use URI::Escape;
 use POSIX qw(ceil floor);
-use String::Random;
 use C4::Branch; # GetBranches
 use C4::Search::History;
 
