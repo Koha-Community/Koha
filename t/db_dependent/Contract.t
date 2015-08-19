@@ -18,8 +18,12 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
 use C4::Context;
 use C4::Bookseller;
+use Koha::DateUtils;
+
+use DateTime::Duration;
 
 use Test::More tests => 43;
 
@@ -70,10 +74,12 @@ is( $contract->{contractname}, $my_contract1->{contractname}, 'AddContract store
 is( $contract->{contractdescription}, $my_contract1->{contractdescription}, 'AddContract stores the contract description correctly.' );
 is( $contract->{booksellerid}, $my_contract1->{booksellerid}, 'AddContract stores the bookseller id correctly.' );
 
+my $now = dt_from_string;
+my $three_more_days = $now + DateTime::Duration->new( days => 3 );
 
 $my_contract1 = {
-    contractstartdate   => '2015-07-02',
-    contractenddate     => '2015-07-31',
+    contractstartdate   => $now->ymd,
+    contractenddate     => $three_more_days->ymd,
     contractname        => 'My modified contract name',
     contractdescription => 'My modified contract description',
     booksellerid        => $bookseller_id2,
