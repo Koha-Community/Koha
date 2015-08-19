@@ -20,17 +20,17 @@
 #
 #
 
-use strict;
-use warnings;
+use Modern::Perl;
 
-use CGI qw ( -utf8 ); #qw(:standard escapeHTML);
+use CGI qw ( -utf8 );
+use C4::Auth qw( check_api_auth );
 use C4::Context;
 use C4::Members;
 
 $|=1;
 
 my $DEBUG = 0;
-my $data = new CGI;
+my $query = new CGI;
 my $borrowernumber;
 
 =head1 NAME
@@ -47,8 +47,17 @@ This script, when called from within HTML and passed a valid patron borrowernumb
 
 =cut
 
-if ($data->param('borrowernumber')) {
-    $borrowernumber = $data->param('borrowernumber');
+my ($status, $cookie, $sessionID) = check_api_auth($query, { borrowers => 1} );
+
+unless ( $status eq 'ok' ) {
+    print $query->header(-type => 'text/plain', -status => '403 Forbidden');
+    exit 0;
+}
+
+
+
+if ($query->param('borrowernumber')) {
+    $borrowernumber = $query->param('borrowernumber');
 } else {
     $borrowernumber = shift;
 }
@@ -67,7 +76,7 @@ if ($dberror) {
 # things will result... you have been warned!
 
 if ($imagedata) {
-    print $data->header (-type => $imagedata->{'mimetype'}, -'Cache-Control' => 'no-store', -Content_Length => length ($imagedata->{'imagefile'})), $imagedata->{'imagefile'};
+    print $query->header (-type => $imagedata->{'mimetype'}, -'Cache-Control' => 'no-store', -Content_Length => length ($imagedata->{'imagefile'})), $imagedata->{'imagefile'};
     exit;
 } else {
     warn "No image exists for $borrowernumber";
