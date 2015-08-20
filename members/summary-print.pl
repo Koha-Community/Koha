@@ -131,13 +131,13 @@ sub build_reserve_data {
 
     while ( my $reserve = $reserves->next() ) {
 
-my $row = {
-    title          => $reserve->biblio()->title(),
-    author         => $reserve->biblio()->author(),
-    reservedate    => $reserve->reservedate(),
-    expirationdate => $reserve->expirationdate(),
-    waiting_at     => $reserve->branch()->branchname(),
-    };
+        my $row = {
+            title          => $reserve->biblio()->title(),
+            author         => $reserve->biblio()->author(),
+            reservedate    => $reserve->reservedate(),
+            expirationdate => $reserve->expirationdate(),
+            waiting_at     => $reserve->branch()->branchname(),
+        };
 
         push( @{$return}, $row );
     }

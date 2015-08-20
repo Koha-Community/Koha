@@ -67,27 +67,27 @@
         </table>
     [% END %]
 
-        [% IF ( reserves ) %]
-            <table>
-                <caption>Pending holds</caption>
-                <tr>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Placed on</th>
-                    <th>Expires on</th>
-                    <th>Pick up location</th>
-                </tr>
+    [% IF ( reserves ) %]
+        <table>
+            <caption>Pending holds</caption>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Placed on</th>
+                <th>Expires on</th>
+                <th>Pick up location</th>
+            </tr>
 
-                [% FOREACH reserve IN reserves %]
-                    <tr>
-                        <td>[% reserve.title %]</td>
-                        <td>[% reserve.author %]</td>
-                        <td>[% reserve.reservedate | $KohaDates %]</td>
-                        <td>[% reserve.expirationdate | $KohaDates %]</td>
-                        <td>[% reserve.waiting_at %]</td>
-                    </tr>
-                [% END %]
-    </table>
+            [% FOREACH reserve IN reserves %]
+                <tr>
+                    <td>[% reserve.title %]</td>
+                    <td>[% reserve.author %]</td>
+                    <td>[% reserve.reservedate | $KohaDates %]</td>
+                    <td>[% reserve.expirationdate | $KohaDates %]</td>
+                    <td>[% reserve.waiting_at %]</td>
+                </tr>
+            [% END %]
+        </table>
     [% END %]
 
     [% IF ( accounts && ( totaldue != '0.00' ) ) %]
