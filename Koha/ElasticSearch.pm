@@ -321,6 +321,30 @@ sub _foreach_mapping {
     }
 }
 
+=head2 process_error
+
+    die process_error($@);
+
+This parses an Elasticsearch error message and produces a human-readable
+result from it. This result is probably missing all the useful information
+that you might want in diagnosing an issue, so the warning is also logged.
+
+Note that currently the resulting message is not internationalised. This
+will happen eventually by some method or other.
+
+=cut
+
+sub process_error {
+    my ($self, $msg) = @_;
+
+    warn $msg; # simple logging
+
+    # This is super-primitive
+    return "Unable to understand your search query, please rephrase and try again.\n" if $msg =~ /ParseException/;
+
+    return "Unable to perform your search. Please try again.\n";
+}
+
 1;
 
 __END__

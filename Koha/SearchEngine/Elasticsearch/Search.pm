@@ -89,7 +89,13 @@ sub search {
             %$params, trace_calls => 1,
         )
     ) unless $self->store;
-    my $results = $self->store->bag->search( %$query, %paging );
+    my $error;
+    my $results = eval {
+        $self->store->bag->search( %$query, %paging );
+    };
+    if ($@) {
+        die $self->process_error($@);
+    }
     return $results;
 }
 
