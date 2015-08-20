@@ -229,11 +229,9 @@ foreach my $r (@{$budgets}) {
         b_sort2_authcat => $r->{'sort2_authcat'},
         b_active => $r->{budget_period_active},
         b_sel => ( $r->{budget_id} == $budget_id ) ? 1 : 0,
+        b_level => $r->{budget_level},
     };
 }
-
-@{$budget_loop} =
-  sort { uc( $a->{b_txt}) cmp uc( $b->{b_txt}) } @{$budget_loop};
 
 if ($close) {
     $budget_id      =  $data->{'budget_id'};

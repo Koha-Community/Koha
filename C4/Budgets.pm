@@ -547,7 +547,7 @@ sub GetBudgetHierarchy {
 
     my @sort = ();
     foreach my $first_parent (@first_parents) {
-        _add_budget_children(\@sort, $first_parent);
+        _add_budget_children(\@sort, $first_parent, 0);
     }
 
     foreach my $budget (@sort) {
@@ -563,11 +563,12 @@ sub GetBudgetHierarchy {
 sub _add_budget_children {
     my $res = shift;
     my $budget = shift;
+    $budget->{budget_level} = shift;
     push @$res, $budget;
     my $children = $budget->{'children'} || [];
     return unless @$children; # break recursivity
     foreach my $child (@$children) {
-        _add_budget_children($res, $child);
+        _add_budget_children($res, $child, $budget->{budget_level} + 1);
     }
 }
 
