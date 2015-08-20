@@ -24,6 +24,9 @@ use C4::Output;
 use C4::Members;
 use C4::Koha qw( getitemtypeinfo );
 use C4::Circulation qw( GetIssuingCharges );
+use C4::Reserves;
+use C4::Items;
+use Koha::Holds;
 
 my $input          = CGI->new;
 my $borrowernumber = $input->param('borrowernumber');
@@ -56,12 +59,16 @@ foreach my $accountline (@$accts) {
 }
 
 my $roadtype =
-  C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $data->{streettype} );
+  C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $data->{streettype} ) // '';
 $roadtype = '' if ( ! $roadtype );
 
 our $totalprice = 0;
 my $total_format = '';
 $total_format = sprintf( "%.2f", $total ) if ($total);
+
+my $holds_rs = Koha::Holds->search(
+    { borrowernumber => $borrowernumber },
+);
 
 $template->param(
     %$data,
@@ -74,6 +81,8 @@ $template->param(
 
     issues     => build_issue_data( GetPendingIssues($borrowernumber) ),
     totalprice => $totalprice,
+
+    reserves => build_reserve_data( $holds_rs ),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
@@ -107,6 +116,33 @@ sub build_issue_data {
     }
 
     @{$return} = sort { $a->{date_due} eq $b->{date_due} } @{$return};
+
+    return $return;
+
+}
+
+sub build_reserve_data {
+    my $reserves = shift;
+
+    my $return = [];
+
+    my $today = DateTime->now( time_zone => C4::Context->tz );
+    $today->truncate( to => 'day' );
+
+    while ( my $reserve = $reserves->next() ) {
+
+my $row = {
+    title          => $reserve->biblio()->title(),
+    author         => $reserve->biblio()->author(),
+    reservedate    => $reserve->reservedate(),
+    expirationdate => $reserve->expirationdate(),
+    waiting_at     => $reserve->branch()->branchname(),
+    };
+
+        push( @{$return}, $row );
+    }
+
+    @{$return} = sort { $a->{reservedate} <=> $b->{reservedate} } @{$return};
 
     return $return;
 }
