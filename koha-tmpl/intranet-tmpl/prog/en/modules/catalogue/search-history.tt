@@ -23,33 +23,60 @@ $(document).ready(function() {
 
     $('#tabs').tabs();
 
+    // DataTables removes hidden rows from the DOM, so we can't expect a
+    // "regular" submit to work and we need to build another form containing
+    // all form elements, and then submit this form.
+    $('form').submit(function(e) {
+        e.preventDefault();
+
+        var form = $(this);
+        var table = form.find('table').dataTable();
+
+        var new_form = $('<form>')
+            .attr('action', form.attr('action'))
+            .attr('method', form.attr('method'));
+        form.find('input[type="hidden"]')
+            .add(table.$('input:checkbox:checked'))
+            .each(function() {
+                var input = $('<input type="hidden">')
+                    .attr('name', $(this).attr('name'))
+                    .attr('value', $(this).attr('value'));
+                new_form.append(input);
+            });
+        $(document.body).append(new_form);
+        new_form.submit();
+    });
+
     $(".CheckNone").click(function(e){
         e.preventDefault();
-        var form = $(this).parents("form").get(0);
-        $(form).unCheckCheckboxes();
+        var form = $(this).parents("form").first();
+        var table = form.find('table').dataTable();
+        table.$('input[type="checkbox"]').attr('checked', false);
         enableCheckboxActions(form);
     });
     $(".CheckAll").click(function(e){
         e.preventDefault();
-        var form = $(this).parents("form").get(0);
-        $(form).checkCheckboxes();
+        var form = $(this).parents("form").first();
+        var table = form.find('table').dataTable();
+        table.$('input[type="checkbox"]').attr('checked', true);
         enableCheckboxActions(form);
     });
 
     $("input:checkbox").click(function(){
-        var form = $(this).parents("form").get(0);
+        var form = $(this).parents("form").first();
         enableCheckboxActions(form);
     });
 
     $(".action_delete").click(function(e){
         e.preventDefault();
-        var form = $(this).parents("form").get(0);
-        var ids = $(form).find("input:checkbox:checked");
+        var form = $(this).parents("form").first();
+        var table = form.find('table').dataTable();
+        var ids = table.$("input:checkbox:checked");
         if ( $(ids).length < 1 ) {
             return false;
         }
         if ( confirm(MSG_CONFIRM_DELETE_HISTORY) ) {
-            $(form).submit();
+            form.submit();
         }
         return false;
     });
@@ -58,13 +85,14 @@ $(document).ready(function() {
 
 function enableCheckboxActions(form){
     // Enable/disable controls if checkboxes are checked
-    var checkedBoxes = $(form).find("input:checkbox:checked");
-    if ($(checkedBoxes).size()) {
-      $(form).find(".selections").html(_("With selected searches: "));
-      $(form).find(".selections-toolbar .links a").removeClass("disabled");
+    var table = form.find('table').dataTable();
+    var checkedBoxes = table.$("input:checkbox:checked");
+    if (checkedBoxes.size()) {
+      form.find(".selections").html(_("With selected searches: "));
+      form.find(".selections-toolbar .links a").removeClass("disabled");
     } else {
-      $(form).find(".selections").html(_("Select searches to: "));
-      $(form).find(".selections-toolbar .links a").addClass("disabled");
+      form.find(".selections").html(_("Select searches to: "));
+      form.find(".selections-toolbar .links a").addClass("disabled");
     }
 }
 
