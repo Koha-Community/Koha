@@ -50,7 +50,8 @@ Returns undef if the hold is not waiting ( found = 'W' ).
 sub waiting_expires_on {
     my ($self) = @_;
 
-    return unless $self->found() eq 'W';
+    my $found = $self->found;
+    return unless $found && $found eq 'W';
 
     my $ReservesMaxPickUpDelay = C4::Context->preference('ReservesMaxPickUpDelay');
     return unless $ReservesMaxPickUpDelay;
@@ -71,7 +72,8 @@ Returns true if hold is a waiting hold
 sub is_waiting {
     my ($self) = @_;
 
-    return $self->found() eq 'W';
+    my $found = $self->found;
+    return $found && $found eq 'W';
 }
 
 =head3 biblio
