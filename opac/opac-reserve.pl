@@ -410,13 +410,6 @@ foreach my $biblioNum (@biblionumbers) {
     }
 
     foreach my $itemInfo (@{$biblioData->{itemInfos}}) {
-        $debug and warn $itemInfo->{'notforloan'};
-
-        # Get reserve fee.
-        my $fee = GetReserveFee(undef, $borrowernumber, $itemInfo->{'biblionumber'}, 'a',
-                                ( $itemInfo->{'biblioitemnumber'} ) );
-        $itemInfo->{'reservefee'} = sprintf "%.02f", ($fee ? $fee : 0.0);
-
         if ($itemLevelTypes && $itemInfo->{itype}) {
             $itemInfo->{description} = $itemTypes->{$itemInfo->{itype}}{description};
             $itemInfo->{imageurl} = getitemtypeimagesrc() . "/". $itemTypes->{$itemInfo->{itype}}{imageurl};
