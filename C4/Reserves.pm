@@ -103,7 +103,6 @@ BEGIN {
         &GetReservesForBranch
         &GetReservesToBranch
         &GetReserveCount
-        &GetReserveFee
         &GetReserveInfo
         &GetReserveStatus
 
@@ -156,9 +155,6 @@ sub AddReserve {
         $bibitems,  $priority, $resdate, $expdate, $notes,
         $title,      $checkitem, $found
     ) = @_;
-    my $fee =
-          GetReserveFee($borrowernumber, $biblionumber,
-            $bibitems );
     my $dbh     = C4::Context->dbh;
     $resdate = format_date_in_iso( $resdate ) if ( $resdate );
     $resdate = C4::Dates->today( 'iso' ) unless ( $resdate );
@@ -178,21 +174,7 @@ sub AddReserve {
         $waitingdate = $resdate;
     }
 
-    #eval {
     # updates take place here
-    if ( $fee > 0 ) {
-        my $nextacctno = &getnextacctno( $borrowernumber );
-        my $query      = qq{
-        INSERT INTO accountlines
-            (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)
-        VALUES
-            (?,?,now(),?,?,'Res',?)
-    };
-        my $usth = $dbh->prepare($query);
-        $usth->execute( $borrowernumber, $nextacctno, $fee,
-            "Reserve Charge - $title", $fee );
-    }
-
     my $query = qq{
         INSERT INTO reserves
             (borrowernumber,biblionumber,reservedate,branchcode,
@@ -207,6 +189,9 @@ sub AddReserve {
         $notes,          $checkitem,    $found,   $waitingdate, $expdate
     );
     my $reserve_id = $sth->{mysql_insertid};
+    # add a reserve fee if needed
+    my $fee = GetReserveFee( $borrowernumber, $biblionumber );
+    ChargeReserveFee( $borrowernumber, $fee, $title );
 
     # Send e-mail to librarian if syspref is active
     if(C4::Context->preference("emailLibrarianWhenHoldIsPlaced")){
@@ -655,91 +640,50 @@ sub GetOtherReserves {
     return ( $messages, $nextreservinfo );
 }
 
+=head2 ChargeReserveFee
+
+    $fee = ChargeReserveFee( $borrowernumber, $fee, $title );
+
+    Charge the fee for a reserve (if $fee > 0)
+
+=cut
+
+sub ChargeReserveFee {
+    my ( $borrowernumber, $fee, $title ) = @_;
+    return if !$fee;
+    my $accquery = qq{
+INSERT INTO accountlines ( borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding ) VALUES (?, ?, NOW(), ?, ?, 'Res', ?)
+    };
+    my $dbh = C4::Context->dbh;
+    my $nextacctno = &getnextacctno( $borrowernumber );
+    $dbh->do( $accquery, undef, ( $borrowernumber, $nextacctno, $fee, "Reserve Charge - $title", $fee ) );
+}
+
 =head2 GetReserveFee
 
-  $fee = GetReserveFee($borrowernumber,$biblionumber,$biblionumber);
+    $fee = GetReserveFee( $borrowernumber, $biblionumber );
 
-Calculate the fee for a reserve
+    Calculate the fee for a reserve (if applicable).
 
 =cut
 
 sub GetReserveFee {
-    my ($borrowernumber, $biblionumber, $bibitems ) = @_;
-
-    #check for issues;
-    my $dbh   = C4::Context->dbh;
-    my $query = qq{
-      SELECT * FROM borrowers
-    LEFT JOIN categories ON borrowers.categorycode = categories.categorycode
-    WHERE borrowernumber = ?
+    my ( $borrowernumber, $biblionumber ) = @_;
+    my $borquery = qq{
+SELECT reservefee FROM borrowers LEFT JOIN categories ON borrowers.categorycode = categories.categorycode WHERE borrowernumber = ?
     };
-    my $sth = $dbh->prepare($query);
-    $sth->execute($borrowernumber);
-    my $data = $sth->fetchrow_hashref;
-    my $fee      = $data->{'reservefee'};
-    my $cntitems = @- > $bibitems;
 
-    if ( $fee > 0 ) {
-
-        # check for items on issue
-        # first find biblioitem records
-        my @biblioitems;
-        my $sth1 = $dbh->prepare(
-            "SELECT * FROM biblio LEFT JOIN biblioitems on biblio.biblionumber = biblioitems.biblionumber
-                   WHERE (biblio.biblionumber = ?)"
-        );
-        $sth1->execute($biblionumber);
-        while ( my $data1 = $sth1->fetchrow_hashref ) {
-            my $found = 0;
-            my $x     = 0;
-            while ( $x < $cntitems ) {
-                if ( @$bibitems->{'biblioitemnumber'} ==
-                    $data->{'biblioitemnumber'} )
-                {
-                    $found = 1;
-                }
-                $x++;
-            }
-
-            if ( $found == 0 ) {
-                push @biblioitems, $data1;
-            }
-        }
-        my $cntitemsfound = @biblioitems;
-        my $issues        = 0;
-        my $x             = 0;
-        my $allissued     = 1;
-        while ( $x < $cntitemsfound ) {
-            my $bitdata = $biblioitems[$x];
-            my $sth2    = $dbh->prepare(
-                "SELECT * FROM items
-                     WHERE biblioitemnumber = ?"
-            );
-            $sth2->execute( $bitdata->{'biblioitemnumber'} );
-            while ( my $itdata = $sth2->fetchrow_hashref ) {
-                my $sth3 = $dbh->prepare(
-                    "SELECT * FROM issues
-                       WHERE itemnumber = ?"
-                );
-                $sth3->execute( $itdata->{'itemnumber'} );
-                if ( my $isdata = $sth3->fetchrow_hashref ) {
-                }
-                else {
-                    $allissued = 0;
-                }
-            }
-            $x++;
-        }
-        if ( $allissued == 0 ) {
-            my $rsth =
-              $dbh->prepare("SELECT * FROM reserves WHERE biblionumber = ?");
-            $rsth->execute($biblionumber);
-            if ( my $rdata = $rsth->fetchrow_hashref ) {
-            }
-            else {
-                $fee = 0;
-            }
-        }
+    my $dbh = C4::Context->dbh;
+    my ( $fee ) = $dbh->selectrow_array( $borquery, undef, ($borrowernumber) );
+    if( $fee && $fee > 0 ) {
+        # This is a reconstruction of the old code:
+        # Calculate number of items, items issued and holds
+        my ( $cnt1 ) = $dbh->selectrow_array( "SELECT COUNT(*) FROM items WHERE biblionumber=?", undef, ( $biblionumber ) );
+        my ( $cnt2 ) = $dbh->selectrow_array( "SELECT COUNT(*) FROM issues LEFT JOIN items USING (itemnumber) WHERE biblionumber=?", undef, ( $biblionumber ));
+        my ( $cnt3 ) = $dbh->selectrow_array( "SELECT COUNT(*) FROM reserves WHERE biblionumber=? AND borrowernumber<>?", undef, ( $biblionumber, $borrowernumber ) );
+        # If not all items are issued and there are no holds: charge no fee
+        # NOTE: Lost, damaged, not-for-loan, etc. are just ignored here
+        $fee = 0 if $cnt1 - $cnt2 > 0 && $cnt3 == 0;
     }
     return $fee;
 }
