@@ -125,7 +125,7 @@
             <div class="container-fluid">
                 <div class="row-fluid">
                     <div id="opacheader">
-                        [% opacheader %]
+                        [% opacheader.raw %]
                     </div>
                 </div>
             </div>
@@ -259,7 +259,7 @@
 
                             </form>
                         [% ELSE # / Koha.Preference('OpacCustomSearch') == '' %]
-                            [% Koha.Preference('OpacCustomSearch') %]
+                            [% Koha.Preference('OpacCustomSearch').raw %]
                         [% END # / Koha.Preference('OpacCustomSearch') == '' %]
                         </div> <!-- / .mastheadsearch -->
                     [% END # / UNLESS advsearch %]
@@ -323,7 +323,7 @@
                     [% END %]
                     [% IF Koha.Preference( 'NoLoginInstructions' ) %]
                         <div id="nologininstructions-modal">
-                            [% Koha.Preference( 'NoLoginInstructions' ) %]
+                            [% Koha.Preference( 'NoLoginInstructions' ).raw %]
                         </div>
                     [% END %]
                         [% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]<div id="mpatronregistration"><p>Don't have an account? <a href="/cgi-bin/koha/opac-memberentry.pl">Register here.</a></p></div>[% END %]

@@ -38,7 +38,7 @@
                     [% IF Koha.Preference('RestrictedPageTitle') %]
                         <h1>[% Koha.Preference('RestrictedPageTitle') %]</h1>
                     [% END %]
-                    [% Koha.Preference('RestrictedPageContent') %]
+                    [% Koha.Preference('RestrictedPageContent').raw %]
                 </div>
             </div> <!-- / .span10 -->
         </div> <!-- / .row-fluid -->

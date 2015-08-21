@@ -104,8 +104,7 @@
                         </div>
                     [% END # / IF patron_flagged %]
 
-                    [% SET OPACMySummaryNote = Koha.Preference('OPACMySummaryNote') %]
-                    [% IF OPACMySummaryNote %][% OPACMySummaryNote %][% END %]
+                    [% IF OPACMySummaryNote %][% Koha.Preference('OPACMySummaryNote').raw %][% END %]
 
                     <div id="opac-user-views" class="toptabs">
                         <ul>
@@ -261,7 +260,7 @@
                                                     </td>
                                                 [% END %]
                                                 [% IF ( OPACMySummaryHTML ) %]
-                                                    <td class="links">[% ISSUE.MySummaryHTML %]</td>
+                                                    <td class="links">[% ISSUE.MySummaryHTML.raw %]</td>
                                                 [% END %]
                                             </tr>
                                         [% END # /FOREACH ISSUES %]

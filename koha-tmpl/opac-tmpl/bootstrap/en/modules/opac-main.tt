@@ -65,7 +65,7 @@
             </div>
         [% END %]
 
-        [% IF ( OpacMainUserBlock ) %]<div id="opacmainuserblock">[% OpacMainUserBlock %]</div>[% END %]
+        [% IF ( OpacMainUserBlock ) %]<div id="opacmainuserblock">[% OpacMainUserBlock.raw %]</div>[% END %]
         </div> <!-- / .span 7/9 -->
 
         [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) || OpacNavRight ) %]
@@ -92,7 +92,7 @@
                                 [% END %]
                                 [% IF Koha.Preference( 'NoLoginInstructions' ) %]
                                     <div id="nologininstructions-main">
-                                        [% Koha.Preference( 'NoLoginInstructions' ) %]
+                                        [% Koha.Preference( 'NoLoginInstructions' ).raw %]
                                     </div>
                                 [% END %]
                                 </form>
@@ -105,7 +105,7 @@
                 [% END # /opacuserlogin %]
                 [% IF ( OpacNavRight ) %]
                     <div id="opacnavright">
-                        [% OpacNavRight %]
+                        [% OpacNavRight.raw %]
                     </div>
                 [% END # /OpacNavRight %]
             </div> <!-- / .span3 -->

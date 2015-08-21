@@ -5,7 +5,7 @@
             <div class="row-fluid">
                 <div class="span12">
                     <div id="opaccredits" class="noprint">
-                        [% opaccredits %]
+                        [% opaccredits.raw %]
                     </div>
                 </div>
             </div>

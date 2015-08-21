@@ -71,7 +71,7 @@
                     <a id="furthersearches" class="dropdown-toggle" data-toggle="dropdown" href="#">More searches <b class="caret"></b></a>
                         <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="furthersearches">
                             <li><a href="#" class="menu-inactive">Search for this title in:</a></li>
-                            [% OPACSearchForTitleIn %]
+                            [% OPACSearchForTitleIn.raw %]
                         </ul>
                 </div>
             </div>

@@ -63,7 +63,7 @@
 
     [% IF ( OPACResultsSidebar ) %]
         <div id="opacresultssidebar">
-            [% OPACResultsSidebar %]
+            [% OPACResultsSidebar.raw %]
         </div>
     [% END %]
 [% END # / IF opacfacets && facets_loop %]
