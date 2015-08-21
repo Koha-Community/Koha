@@ -17,104 +17,37 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use CGI qw ( -utf8 );
 use MARC::File::XML;
 use List::MoreUtils qw(uniq);
-use Getopt::Long;
-use CGI qw ( -utf8 );
 use C4::Auth;
-use C4::AuthoritiesMarc;    # GetAuthority
-use C4::Biblio;             # GetMarcBiblio
 use C4::Branch;             # GetBranches
 use C4::Csv;
 use C4::Koha;               # GetItemTypes
 use C4::Output;
-use C4::Record;
-use Koha::DateUtils;
+
+use Koha::Biblioitems;
+use Koha::Database;
+use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Exporter::Record;
 
 my $query = new CGI;
 
-my $clean;
-my $dont_export_items;
-my $deleted_barcodes;
-my $timestamp;
-my $record_type;
-my $id_list_file;
-my $help;
-my $op       = $query->param("op")       || '';
-my $filename = $query->param("filename") || 'koha.mrc';
-my $dbh      = C4::Context->dbh;
-my $marcflavour = C4::Context->preference("marcflavour");
-my $output_format = $query->param("format") || $query->param("output_format") || 'iso2709';
+my $dont_export_items = $query->param("dont_export_item") || 0;
+my $record_type       = $query->param("record_type");
+my $op                = $query->param("op") || '';
+my $output_format     = $query->param("format") || $query->param("output_format") || 'iso2709';
+my $backupdir         = C4::Context->config('backupdir');
+my $filename          = $query->param("filename") || 'koha.mrc';
+$filename =~ s/(\r|\n)//;
 
-# Checks if the script is called from commandline
-my $commandline = not defined $ENV{GATEWAY_INTERFACE};
+my $dbh = C4::Context->dbh;
 
-
-# @biblionumbers is only use for csv export from circulation.pl
-my @biblionumbers = uniq $query->param("biblionumbers");
-
-if ( $commandline ) {
-
-    # Getting parameters
-    $op = 'export';
-    GetOptions(
-        'format=s'          => \$output_format,
-        'date=s'            => \$timestamp,
-        'dont_export_items' => \$dont_export_items,
-        'deleted_barcodes'  => \$deleted_barcodes,
-        'clean'             => \$clean,
-        'filename=s'        => \$filename,
-        'record-type=s'     => \$record_type,
-        'id_list_file=s'    => \$id_list_file,
-        'help|?'            => \$help
-    );
-
-    if ($help) {
-        print <<_USAGE_;
-export.pl [--format=format] [--date=date] [--record-type=TYPE] [--dont_export_items] [--deleted_barcodes] [--clean] [--id_list_file=PATH] --filename=outputfile
-
-
- --format=FORMAT        FORMAT is either 'xml' or 'marc' (default)
-
- --date=DATE            DATE should be entered as the 'dateformat' syspref is
-                        set (dd/mm/yyyy for metric, yyyy-mm-dd for iso,
-                        mm/dd/yyyy for us) records exported are the ones that
-                        have been modified since DATE
-
- --record-type=TYPE     TYPE is 'bibs' or 'auths'
-
- --deleted_barcodes     If used, a list of barcodes of items deleted since DATE
-                        is produced (or from all deleted items if no date is
-                        specified). Used only if TYPE is 'bibs'
-
- --clean                removes NSE/NSB
-
- --id_list_file=PATH    PATH is a path to a file containing a list of
-                        IDs (biblionumber or authid) with one ID per line.
-                        This list works as a filter; it is compatible with
-                        other parameters for selecting records
-_USAGE_
-        exit;
-    }
-
-    # Default parameters values :
-    $timestamp         ||= '';
-    $dont_export_items ||= 0;
-    $deleted_barcodes  ||= 0;
-    $clean             ||= 0;
-    $record_type       ||= "bibs";
-    $id_list_file       ||= 0;
-
-    # Redirect stdout
-    open STDOUT, '>', $filename if $filename;
-
-}
-else {
-
-    $op       = $query->param("op")       || '';
-    $filename = $query->param("filename") || 'koha.mrc';
-    $filename =~ s/(\r|\n)//;
-
+my @record_ids;
+# biblionumbers is sent from circulation.pl only
+if ( $query->param("biblionumbers") ) {
+    $record_type = 'bibs';
+    @record_ids = $query->param("biblionumbers");
 }
 
 # Default value for output_format is 'iso2709'
@@ -127,358 +60,198 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
         template_name   => "tools/export.tt",
         query           => $query,
         type            => "intranet",
-        authnotrequired => $commandline,
+        authnotrequired => 0,
         flagsrequired   => { tools => 'export_catalog' },
         debug           => 1,
     }
 );
 
-my $limit_ind_branch =
-  (      C4::Context->preference('IndependentBranches')
-      && C4::Context->userenv
-      && !C4::Context->IsSuperLibrarian()
-      && C4::Context->userenv->{branch} ) ? 1 : 0;
-
 my @branch = $query->param("branch");
-if (   C4::Context->preference("IndependentBranches")
-    && C4::Context->userenv
-    && !C4::Context->IsSuperLibrarian() )
-{
+my $only_my_branch;
+# Limit to local branch if IndependentBranches and not superlibrarian
+if (
+    (
+          C4::Context->preference('IndependentBranches')
+        && C4::Context->userenv
+        && !C4::Context->IsSuperLibrarian()
+        && C4::Context->userenv->{branch}
+    )
+    # Limit result to local branch strip_nonlocal_items
+    or $query->param('strip_nonlocal_items')
+) {
+    $only_my_branch = 1;
     @branch = ( C4::Context->userenv->{'branch'} );
 }
-# if stripping nonlocal items, use loggedinuser's branch
-my $localbranch = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
 
 my %branchmap = map { $_ => 1 } @branch; # for quick lookups
 
-my $backupdir = C4::Context->config('backupdir');
-
 if ( $op eq "export" ) {
-    if (
-        $output_format eq "iso2709"
-            or $output_format eq "xml"
-            or (
-                $output_format eq 'csv'
-                    and not @biblionumbers
-            )
-    ) {
-        my $charset  = 'utf-8';
-        my $mimetype = 'application/octet-stream';
 
-        binmode STDOUT, ':encoding(UTF-8)'
-            if $filename =~ m/\.gz$/
-               or $filename =~ m/\.bz2$/
-               or $output_format ne 'csv';
+    my $export_remove_fields = $query->param("export_remove_fields") || q||;
+    my @biblionumbers      = $query->param("biblionumbers");
+    my @itemnumbers        = $query->param("itemnumbers");
+    my @sql_params;
+    my $sql_query;
 
-        if ( $filename =~ m/\.gz$/ ) {
-            $mimetype = 'application/x-gzip';
-            $charset  = '';
-            binmode STDOUT;
+    if ( $record_type eq 'bibs' or $record_type eq 'auths' ) {
+        # No need to retrieve the record_ids if we already get them
+        unless ( @record_ids ) {
+            if ( $record_type eq 'bibs' ) {
+                my $starting_biblionumber = $query->param("StartingBiblionumber");
+                my $ending_biblionumber   = $query->param("EndingBiblionumber");
+                my $itemtype             = $query->param("itemtype");
+                my $start_callnumber     = $query->param("start_callnumber");
+                my $end_callnumber       = $query->param("end_callnumber");
+                my $start_accession =
+                  ( $query->param("start_accession") )
+                  ? dt_from_string( $query->param("start_accession") )
+                  : '';
+                my $end_accession =
+                  ( $query->param("end_accession") )
+                  ? dt_from_string( $query->param("end_accession") )
+                  : '';
+
+
+                my $conditions = {
+                    ( $starting_biblionumber or $ending_biblionumber )
+                        ? (
+                            "me.biblionumber" => {
+                                ( $starting_biblionumber ? ( '>=' => $starting_biblionumber ) : () ),
+                                ( $ending_biblionumber   ? ( '<=' => $ending_biblionumber   ) : () ),
+                            }
+                        )
+                        : (),
+                    ( $start_callnumber or $end_callnumber )
+                        ? (
+                            callnumber => {
+                                ( $start_callnumber ? ( '>=' => $start_callnumber ) : () ),
+                                ( $end_callnumber   ? ( '<=' => $end_callnumber   ) : () ),
+                            }
+                        )
+                        : (),
+                    ( $start_accession or $end_accession )
+                        ? (
+                            dateaccessioned => {
+                                ( $start_accession ? ( '>=' => $start_accession ) : () ),
+                                ( $end_accession   ? ( '<=' => $end_accession   ) : () ),
+                            }
+                        )
+                        : (),
+                    ( @branch ? ( 'items.homebranch' => { in => \@branch } ) : () ),
+                    ( $itemtype
+                        ?
+                          C4::Context->preference('item-level_itypes')
+                            ? ( 'items.itype' => $itemtype )
+                            : ( 'biblioitems.itemtype' => $itemtype )
+                        : ()
+                    ),
+
+                };
+                my $biblioitems = Koha::Biblioitems->search( $conditions, { join => 'items' } );
+                while ( my $biblioitem = $biblioitems->next ) {
+                    push @record_ids, $biblioitem->biblionumber;
+                }
+            }
+            elsif ( $record_type eq 'auths' ) {
+                my $starting_authid = $query->param('starting_authid');
+                my $ending_authid   = $query->param('ending_authid');
+                my $authtype        = $query->param('authtype');
+
+                my $conditions = {
+                    ( $starting_authid or $ending_authid )
+                        ? (
+                            authid => {
+                                ( $starting_authid ? ( '>=' => $starting_authid ) : () ),
+                                ( $ending_authid   ? ( '<=' => $ending_authid   ) : () ),
+                            }
+                        )
+                        : (),
+                    ( $authtype ? ( authtypecode => $authtype ) : () ),
+                };
+                # Koha::Authority is not a Koha::Object...
+                my $authorities = Koha::Database->new->schema->resultset('AuthHeader')->search( $conditions );
+                @record_ids = map { $_->authid } $authorities->all;
+            }
         }
-        elsif ( $filename =~ m/\.bz2$/ ) {
-            $mimetype = 'application/x-bzip2';
-            binmode STDOUT;
-            $charset = '';
+
+        @record_ids = uniq @record_ids;
+        if ( @record_ids and my $filefh = $query->upload("id_list_file") ) {
+            my @filter_record_ids = <$filefh>;
+            @filter_record_ids = map { my $id = $_; $id =~ s/[\r\n]*$// } @filter_record_ids;
+            # intersection
+            my %record_ids = map { $_ => 1 } @record_ids;
+            @record_ids = grep $record_ids{$_}, @filter_record_ids;
         }
-        print $query->header(
-            -type       => $mimetype,
-            -charset    => $charset,
+
+        print CGI->new->header(
+            -type       => 'application/octet-stream',
+            -charset    => 'utf-8',
             -attachment => $filename,
-        ) unless ($commandline);
+        );
 
-        $record_type = $query->param("record_type") unless ($commandline);
-        my $export_remove_fields = $query->param("export_remove_fields");
-        my @biblionumbers      = $query->param("biblionumbers");
-        my @itemnumbers        = $query->param("itemnumbers");
-        my @sql_params;
-        my $sql_query;
-        my @recordids;
-
-        my $StartingBiblionumber = $query->param("StartingBiblionumber");
-        my $EndingBiblionumber   = $query->param("EndingBiblionumber");
-        my $itemtype             = $query->param("itemtype");
-        my $start_callnumber     = $query->param("start_callnumber");
-        my $end_callnumber       = $query->param("end_callnumber");
-        if ( $commandline ) {
-            $timestamp = eval { output_pref( { dt => dt_from_string( $timestamp ), dateonly => 1 }); };
-            $timestamp = '' unless ( $timestamp );
-        }
-
-        my $start_accession =
-          ( $query->param("start_accession") )
-          ? eval { output_pref( { dt => dt_from_string( $query->param("start_accession") ), dateonly => 1, dateformat => 'iso' } ); }
-          : '';
-        my $end_accession =
-          ( $query->param("end_accession") )
-          ? eval { output_pref( { dt => dt_from_string( $query->param("end_accession") ), dateonly => 1, dateformat => 'iso' } ); }
-          : '';
-        $dont_export_items = $query->param("dont_export_item")
-          unless ($commandline);
-
-        my $strip_nonlocal_items = $query->param("strip_nonlocal_items");
-
-        my $biblioitemstable =
-          ( $commandline and $deleted_barcodes )
-          ? 'deletedbiblioitems'
-          : 'biblioitems';
-        my $itemstable =
-          ( $commandline and $deleted_barcodes )
-          ? 'deleteditems'
-          : 'items';
-
-        my $starting_authid = $query->param('starting_authid');
-        my $ending_authid   = $query->param('ending_authid');
-        my $authtype        = $query->param('authtype');
-        my $filefh;
-        if ($commandline) {
-            open $filefh,"<", $id_list_file or die "cannot open $id_list_file: $!" if $id_list_file;
-        } else {
-            $filefh = $query->upload("id_list_file");
-        }
-        my %id_filter;
-        if ($filefh) {
-            while (my $number=<$filefh>){
-                $number=~s/[\r\n]*$//;
-                $id_filter{$number}=1 if $number=~/^\d+$/;
+        Koha::Exporter::Record::export(
+            {   record_type        => $record_type,
+                record_ids         => \@record_ids,
+                format             => $output_format,
+                filename           => $filename,
+                itemnumbers        => \@itemnumbers,
+                dont_export_fields => $export_remove_fields,
+                csv_profile_id     => ( $query->param('csv_profile_id') || GetCsvProfileId( C4::Context->preference('ExportWithCsvProfile') ) || undef ),
+                export_items       => (not $dont_export_items),
             }
-        }
+        );
+    }
+    elsif ( $record_type eq 'db' or $record_type eq 'conf' ) {
+        my $successful_export;
 
-        if ( $record_type eq 'bibs' and not @biblionumbers ) {
-            if ($timestamp) {
+        if ( $flags->{superlibrarian}
+            and (
+                    $record_type eq 'db' and C4::Context->config('backup_db_via_tools')
+                 or
+                    $record_type eq 'conf' and C4::Context->config('backup_conf_via_tools')
+            )
+        ) {
+            binmode STDOUT, ':encoding(UTF-8)';
 
-            # Specific query when timestamp is used
-            # Actually it's used only with CLI and so all previous filters
-            # are not used.
-            # If one day timestamp is used via the web interface, this part will
-            # certainly have to be rewrited
-                my ( $query, $params ) = construct_query(
-                    {
-                        recordtype       => $record_type,
-                        timestamp        => $timestamp,
-                        biblioitemstable => $biblioitemstable,
-                    }
-                );
-                $sql_query  = $query;
-                @sql_params = @$params;
-
+            my $charset  = 'utf-8';
+            my $mimetype = 'application/octet-stream';
+            if ( $filename =~ m/\.gz$/ ) {
+                $mimetype = 'application/x-gzip';
+                $charset  = '';
+                binmode STDOUT;
             }
-            else {
-                my ( $query, $params ) = construct_query(
-                    {
-                        recordtype           => $record_type,
-                        biblioitemstable     => $biblioitemstable,
-                        itemstable           => $itemstable,
-                        StartingBiblionumber => $StartingBiblionumber,
-                        EndingBiblionumber   => $EndingBiblionumber,
-                        branch               => \@branch,
-                        start_callnumber     => $start_callnumber,
-                        end_callnumber       => $end_callnumber,
-                        start_accession      => $start_accession,
-                        end_accession        => $end_accession,
-                        itemtype             => $itemtype,
-                    }
-                );
-                $sql_query  = $query;
-                @sql_params = @$params;
+            elsif ( $filename =~ m/\.bz2$/ ) {
+                $mimetype = 'application/x-bzip2';
+                binmode STDOUT;
+                $charset = '';
             }
-        }
-        elsif ( $record_type eq 'auths' ) {
-            my ( $query, $params ) = construct_query(
+            print $query->header(
+                -type       => $mimetype,
+                -charset    => $charset,
+                -attachment => $filename,
+            );
+
+            my $extension = $record_type eq 'db' ? 'sql' : 'tar';
+
+            $successful_export = download_backup(
                 {
-                    recordtype      => $record_type,
-                    starting_authid => $starting_authid,
-                    ending_authid   => $ending_authid,
-                    authtype        => $authtype,
+                    directory => $backupdir,
+                    extension => $extension,
+                    filename  => $filename,
                 }
             );
-            $sql_query  = $query;
-            @sql_params = @$params;
-
-        }
-        elsif ( $record_type eq 'db' ) {
-            my $successful_export;
-            if ( $flags->{superlibrarian}
-                && C4::Context->config('backup_db_via_tools') )
-            {
-                $successful_export = download_backup(
-                    {
-                        directory => "$backupdir",
-                        extension => 'sql',
-                        filename  => "$filename"
-                    }
-                );
-            }
             unless ($successful_export) {
                 my $remotehost = $query->remote_host();
                 $remotehost =~ s/(\n|\r)//;
                 warn
-"A suspicious attempt was made to download the db at '$filename' by someone at "
+    "A suspicious attempt was made to download the " . ( $record_type eq 'db' ? 'db' : 'configuration' ) . "at '$filename' by someone at "
                   . $remotehost . "\n";
             }
-            exit;
         }
-        elsif ( $record_type eq 'conf' ) {
-            my $successful_export;
-            if ( $flags->{superlibrarian}
-                && C4::Context->config('backup_conf_via_tools') )
-            {
-                $successful_export = download_backup(
-                    {
-                        directory => "$backupdir",
-                        extension => 'tar',
-                        filename  => "$filename"
-                    }
-                );
-            }
-            unless ($successful_export) {
-                my $remotehost = $query->remote_host();
-                $remotehost =~ s/(\n|\r)//;
-                warn
-"A suspicious attempt was made to download the configuration at '$filename' by someone at "
-                  . $remotehost . "\n";
-            }
-            exit;
-        }
-        elsif (@biblionumbers) {
-            push @recordids, (@biblionumbers);
-        }
-        else {
-
-            # Someone is trying to mess us up
-            exit;
-        }
-        unless (@biblionumbers) {
-            my $sth = $dbh->prepare($sql_query);
-            $sth->execute(@sql_params);
-            push @recordids, map {
-                map { $$_[0] } $_
-            } @{ $sth->fetchall_arrayref };
-            @recordids = grep { exists($id_filter{$_}) } @recordids if scalar(%id_filter);
-        }
-
-        my $xml_header_written = 0;
-        for my $recordid ( uniq @recordids ) {
-            if ($deleted_barcodes) {
-                my $q = "
-                    SELECT DISTINCT barcode
-                    FROM deleteditems
-                    WHERE deleteditems.biblionumber = ?
-                ";
-                my $sth = $dbh->prepare($q);
-                $sth->execute($recordid);
-                while ( my $row = $sth->fetchrow_array ) {
-                    print "$row\n";
-                }
-            }
-            else {
-                my $record;
-                if ( $record_type eq 'bibs' ) {
-                    $record = eval { GetMarcBiblio($recordid); };
-
-                    next if $@;
-                    next if not defined $record;
-                    C4::Biblio::EmbedItemsInMarcBiblio( $record, $recordid,
-                        \@itemnumbers )
-                      unless $dont_export_items;
-                    if (   $strip_nonlocal_items
-                        || $limit_ind_branch
-                        || $dont_export_items )
-                    {
-                        my ( $homebranchfield, $homebranchsubfield ) =
-                          GetMarcFromKohaField( 'items.homebranch', '' );
-                        for my $itemfield ( $record->field($homebranchfield) ) {
-                            $record->delete_field($itemfield)
-                              if ( $dont_export_items
-                                || $localbranch ne $itemfield->subfield(
-                                        $homebranchsubfield) );
-                        }
-                    }
-                }
-                elsif ( $record_type eq 'auths' ) {
-                    $record = C4::AuthoritiesMarc::GetAuthority($recordid);
-                    next if not defined $record;
-                }
-
-                if ($export_remove_fields) {
-                    for my $f ( split / /, $export_remove_fields ) {
-                        if ( $f =~ m/^(\d{3})(.)?$/ ) {
-                            my ( $field, $subfield ) = ( $1, $2 );
-
-                            # skip if this record doesn't have this field
-                            if ( defined $record->field($field) ) {
-                                if ( defined $subfield ) {
-                                    my @tags = $record->field($field);
-                                    foreach my $t (@tags) {
-                                        $t->delete_subfields($subfield);
-                                    }
-                                }
-                                else {
-                                    $record->delete_fields($record->field($field));
-                                }
-                            }
-                        }
-                    }
-                }
-                RemoveAllNsb($record) if ($clean);
-                if ( $output_format eq "xml" ) {
-                    unless ($xml_header_written) {
-                        MARC::File::XML->default_record_format(
-                            (
-                                     $marcflavour eq 'UNIMARC'
-                                  && $record_type eq 'auths'
-                            ) ? 'UNIMARCAUTH' : $marcflavour
-                        );
-                        print MARC::File::XML::header();
-                        print "\n";
-                        $xml_header_written = 1;
-                    }
-                    print MARC::File::XML::record($record);
-                    print "\n";
-                }
-                elsif ( $output_format eq 'iso2709' ) {
-                    my $errorcount_on_decode = eval { scalar(MARC::File::USMARC->decode( $record->as_usmarc )->warnings()) };
-                    if ($errorcount_on_decode or $@){
-                        warn $@ if $@;
-                        warn "record (number $recordid) is invalid and therefore not exported because its reopening generates warnings above";
-                        next;
-                    }
-                    print $record->as_usmarc();
-                }
-            }
-        }
-        if ($xml_header_written) {
-            print MARC::File::XML::footer();
-            print "\n";
-        }
-        if ( $output_format eq 'csv' ) {
-            my $csv_profile_id = $query->param('csv_profile')
-                || GetCsvProfileId( C4::Context->preference('ExportWithCsvProfile') );
-            my $output =
-              marc2csv( \@recordids,
-                $csv_profile_id );
-
-            print $output;
-        }
-
-        exit;
     }
-    elsif ( $output_format eq "csv" ) {
-        my @biblionumbers = uniq $query->param("biblionumbers");
-        my @itemnumbers   = $query->param("itemnumbers");
-        my $csv_profile_id = $query->param('csv_profile') || GetCsvProfileId( C4::Context->preference('ExportWithCsvProfile') );
-        my $output =
-          marc2csv( \@biblionumbers,
-            $csv_profile_id,
-            \@itemnumbers, );
-        print $query->header(
-            -type                        => 'application/octet-stream',
-            -'Content-Transfer-Encoding' => 'binary',
-            -attachment                  => "export.csv"
-        );
-        print $output;
-        exit;
-    }
-}    # if export
+
+    exit;
+}
 
 else {
 
@@ -491,7 +264,7 @@ else {
         );
         push @itemtypesloop, \%row;
     }
-    my $branches = GetBranches($limit_ind_branch);
+    my $branches = GetBranches($only_my_branch);
     my @branchloop;
     for my $thisbranch (
         sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} }
@@ -546,128 +319,6 @@ else {
     );
 
     output_html_with_http_headers $query, $cookie, $template->output;
-}
-
-sub construct_query {
-    my ($params) = @_;
-
-    my ( $sql_query, @sql_params );
-
-    if ( $params->{recordtype} eq "bibs" ) {
-        if ( $params->{timestamp} ) {
-            my $biblioitemstable = $params->{biblioitemstable};
-            $sql_query = " (
-                SELECT biblionumber
-                FROM $biblioitemstable
-                  LEFT JOIN items USING(biblionumber)
-                WHERE $biblioitemstable.timestamp >= ?
-                  OR items.timestamp >= ?
-            ) UNION (
-                SELECT biblionumber
-                FROM $biblioitemstable
-                  LEFT JOIN deleteditems USING(biblionumber)
-                WHERE $biblioitemstable.timestamp >= ?
-                  OR deleteditems.timestamp >= ?
-            ) ";
-            my $ts = eval { output_pref( { dt => dt_from_string( $timestamp ), dateonly => 1, dateformat => 'iso' }); };
-            @sql_params = ( $ts, $ts, $ts, $ts );
-        }
-        else {
-            my $biblioitemstable     = $params->{biblioitemstable};
-            my $itemstable           = $params->{itemstable};
-            my $StartingBiblionumber = $params->{StartingBiblionumber};
-            my $EndingBiblionumber   = $params->{EndingBiblionumber};
-            my @branch               = @{ $params->{branch} };
-            my $start_callnumber     = $params->{start_callnumber};
-            my $end_callnumber       = $params->{end_callnumber};
-            my $start_accession      = $params->{start_accession};
-            my $end_accession        = $params->{end_accession};
-            my $itemtype             = $params->{itemtype};
-            my $items_filter =
-                 @branch
-              || $start_callnumber
-              || $end_callnumber
-              || $start_accession
-              || $end_accession
-              || ( $itemtype && C4::Context->preference('item-level_itypes') );
-            $sql_query = $items_filter
-              ? "SELECT DISTINCT $biblioitemstable.biblionumber
-                FROM $biblioitemstable JOIN $itemstable
-                USING (biblionumber) WHERE 1"
-              : "SELECT $biblioitemstable.biblionumber FROM $biblioitemstable WHERE biblionumber >0 ";
-
-            if ($StartingBiblionumber) {
-                $sql_query .= " AND $biblioitemstable.biblionumber >= ? ";
-                push @sql_params, $StartingBiblionumber;
-            }
-
-            if ($EndingBiblionumber) {
-                $sql_query .= " AND $biblioitemstable.biblionumber <= ? ";
-                push @sql_params, $EndingBiblionumber;
-            }
-
-            if (@branch) {
-                $sql_query .= " AND homebranch IN (".join(',',map({'?'} @branch)).")";
-                push @sql_params, @branch;
-            }
-
-            if ($start_callnumber) {
-                $sql_query .= " AND itemcallnumber >= ? ";
-                push @sql_params, $start_callnumber;
-            }
-
-            if ($end_callnumber) {
-                $sql_query .= " AND itemcallnumber <= ? ";
-                push @sql_params, $end_callnumber;
-            }
-            if ($start_accession) {
-                $sql_query .= " AND dateaccessioned >= ? ";
-                push @sql_params, $start_accession;
-            }
-
-            if ($end_accession) {
-                $sql_query .= " AND dateaccessioned <= ? ";
-                push @sql_params, $end_accession;
-            }
-
-            if ($itemtype) {
-                $sql_query .=
-                  ( C4::Context->preference('item-level_itypes') )
-                  ? " AND items.itype = ? "
-                  : " AND biblioitems.itemtype = ?";
-                push @sql_params, $itemtype;
-            }
-        }
-    }
-    elsif ( $params->{recordtype} eq "auths" ) {
-        if ( $params->{timestamp} ) {
-
-            #TODO
-        }
-        else {
-            my $starting_authid = $params->{starting_authid};
-            my $ending_authid   = $params->{ending_authid};
-            my $authtype        = $params->{authtype};
-            $sql_query =
-              "SELECT DISTINCT auth_header.authid FROM auth_header WHERE 1";
-
-            if ($starting_authid) {
-                $sql_query .= " AND auth_header.authid >= ? ";
-                push @sql_params, $starting_authid;
-            }
-
-            if ($ending_authid) {
-                $sql_query .= " AND auth_header.authid <= ? ";
-                push @sql_params, $ending_authid;
-            }
-
-            if ($authtype) {
-                $sql_query .= " AND auth_header.authtypecode = ? ";
-                push @sql_params, $authtype;
-            }
-        }
-    }
-    return ( $sql_query, \@sql_params );
 }
 
 sub getbackupfilelist {
