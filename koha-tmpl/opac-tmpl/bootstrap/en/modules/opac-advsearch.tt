@@ -133,7 +133,7 @@
                                     <legend>Limit to any of the following:</legend>
                                     <div class="row-fluid">
                                         [% FOREACH itemtypeloo IN advsearchloo.code_loop %]
-                                            [% IF ((!itemtypeloo.searchcategory) AND (itemtypeloo.cat == 0)) OR (itemtypeloo.cat == 1) %]
+                                            [% IF (advsearchloo.advanced_search_type != 'itemtypes') OR (((!itemtypeloo.searchcategory) AND (itemtypeloo.cat == 0)) OR (itemtypeloo.cat == 1)) %]
                                                 <div class="span3">
                                                     <input type="checkbox"
                                                         id="[% itemtypeloo.ccl FILTER remove(',') %]-[% itemtypeloo.number %]"
