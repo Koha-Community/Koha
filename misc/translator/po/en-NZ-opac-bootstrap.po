@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.2.0\n"
 "Report-Msgid-Bugs-To: koha-translate@lists.koha-community.org\n"
-"POT-Creation-Date: 2015-07-14 21:47-0300\n"
+"POT-Creation-Date: 2015-08-17 17:13-0300\n"
 "PO-Revision-Date: 2015-07-20 10:30+0000\n"
 "Last-Translator: chrisc <chris@bigballofwax.co.nz>\n"
 "Language-Team: en_NZ <koha-translate@lists.koha-community.org>\n"
@@ -1438,8 +1438,8 @@ msgid ""
 "%s&nbsp;with limit(s):&nbsp;'%s'%s %s You did not specify any search "
 "criteria. %s"
 msgstr ""
-"%s%s%sKoha online%s catalogue &rsaquo; %s Results of search %sfor "
-"'%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s %s You did not specify any search "
+"%s%s%sKoha online%s catalogue &rsaquo; %s Results of search %sfor '%s'%s"
+"%s&nbsp;with limit(s):&nbsp;'%s'%s %s You did not specify any search "
 "criteria. %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -1485,8 +1485,8 @@ msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %sEnter a new purchase suggestion%s "
 "%sPurchase Suggestions%s"
 msgstr ""
-"%s%s%sKoha online%s catalogue &rsaquo; %sEnter a new purchase suggestion%s %"
-"sPurchase Suggestions%s"
+"%s%s%sKoha online%s catalogue &rsaquo; %sEnter a new purchase suggestion%s "
+"%sPurchase Suggestions%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1501,8 +1501,8 @@ msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %sSubscribe to a subscription alert %s "
 "Unsubscribe from a subscription alert %s"
 msgstr ""
-"%s%s%sKoha online%s catalogue &rsaquo; %sSubscribe to a subscription alert %"
-"s Unsubscribe from a subscription alert %s"
+"%s%s%sKoha online%s catalogue &rsaquo; %sSubscribe to a subscription alert "
+"%s Unsubscribe from a subscription alert %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1517,8 +1517,8 @@ msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %sUpdate your personal details"
 "%sRegister a new account%s"
 msgstr ""
-"%s%s%sKoha online%s catalogue &rsaquo; %sUpdate your personal details%"
-"sRegister a new account%s"
+"%s%s%sKoha online%s catalogue &rsaquo; %sUpdate your personal details"
+"%sRegister a new account%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1674,7 +1674,8 @@ msgstr "%s%s%sKoha online%s catalogue &rsaquo; Entry %s"
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:5
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Full subscription history for %s"
-msgstr "%s%s%sKoha online%s catalogue &rsaquo; Full subscription history for %s"
+msgstr ""
+"%s%s%sKoha online%s catalogue &rsaquo; Full subscription history for %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1749,7 +1750,8 @@ msgstr "%s%s%sKoha online%s catalogue &rsaquo; Placing a reserve"
 #: opac-tmpl/bootstrap/en/modules/opac-registration-email-sent.tt:3
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Please confirm your registration"
-msgstr "%s%s%sKoha online%s catalogue &rsaquo; Please confirm your registration"
+msgstr ""
+"%s%s%sKoha online%s catalogue &rsaquo; Please confirm your registration"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -2134,7 +2136,7 @@ msgstr "%sThis record has no items.%s "
 #. %1$s:  IF ( ISSUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:261
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:271
 #, c-format
 msgid "%sYes%sNo%s "
 msgstr "%sYes%sNo%s "
@@ -3866,7 +3868,7 @@ msgstr "Call Number"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:72
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:380
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:217
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:220
 #, c-format
 msgid "Call no."
 msgstr "Call no."
@@ -4027,7 +4029,7 @@ msgid "Change your password "
 msgstr "Change your password "
 
 #. INPUT type=submit name=confirm
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:243
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:253
 msgid "Check in item"
 msgstr "Return item"
 
@@ -4059,6 +4061,11 @@ msgstr "Issued"
 #, c-format
 msgid "Checked out (%s)"
 msgstr "Issued (%s)"
+
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:218
+#, fuzzy, c-format
+msgid "Checked out on"
+msgstr "Issued"
 
 #. %1$s:  item.firstname 
 #. %2$s:  item.surname 
@@ -4791,7 +4798,7 @@ msgstr "Download list "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:128
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:381
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:217
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, c-format
 msgid "Due"
 msgstr "Due"
@@ -5181,7 +5188,7 @@ msgstr "Fine amount"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:140
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:386
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:217
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:224
 #, c-format
 msgid "Fines"
 msgstr "Fines"
@@ -6326,7 +6333,7 @@ msgstr "Locations"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:704
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:73
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:284
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:294
 #, c-format
 msgid "Log in"
 msgstr "Log in"
@@ -6353,7 +6360,7 @@ msgstr "Log in to see your own saved tags."
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:285
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:37
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:953
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:278
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:288
 #, c-format
 msgid "Log in to your account"
 msgstr "Log in to your account"
@@ -6377,7 +6384,7 @@ msgstr "Login"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:303
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:70
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:279
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:289
 #, c-format
 msgid "Login:"
 msgstr "Login:"
@@ -6890,7 +6897,7 @@ msgstr "No public lists"
 msgid "No public lists."
 msgstr "No public lists."
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:247
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:257
 #, c-format
 msgid "No renewals allowed"
 msgstr "No renewals allowed"
@@ -7280,7 +7287,7 @@ msgstr "Password updated"
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:81
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:42
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:71
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:281
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:291
 #, c-format
 msgid "Password:"
 msgstr "Password:"
@@ -7427,7 +7434,7 @@ msgstr "Please contact your librarian if you wish to renew your card."
 msgid "Please contact your librarian, or use the "
 msgstr "Please contact your librarian, or use the "
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:288
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:298
 #, c-format
 msgid "Please enter your card number:"
 msgstr "Please enter your card number:"
@@ -7890,7 +7897,7 @@ msgstr "Remove share"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:228
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:383
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:463
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:217
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:222
 #, c-format
 msgid "Renew"
 msgstr "Renew"
@@ -7903,8 +7910,8 @@ msgstr "Renew all"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:118
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:126
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:253
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:255
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:263
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:265
 #, c-format
 msgid "Renew item"
 msgstr "Renew item"
@@ -8904,7 +8911,7 @@ msgstr "Subject: %s "
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:781
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:152
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:186
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:290
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:300
 #, c-format
 msgid "Submit"
 msgstr "Submit"
@@ -9642,7 +9649,7 @@ msgstr "Thursday"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:377
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:498
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:58
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:217
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:219
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:119
 #, c-format
 msgid "Title"
@@ -10061,7 +10068,7 @@ msgid "Wk"
 msgstr "Wk"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:312
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:322
 msgid "Would you like to print a receipt?"
 msgstr "Would you like to print a receipt?"
 
@@ -10177,7 +10184,7 @@ msgstr "You cannot renew this item again. %s "
 msgid "You cannot share a public list."
 msgstr "You cannot share a public list."
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:270
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:280
 #, c-format
 msgid "You currently have nothing checked out."
 msgstr "You currently have nothing on issue."
@@ -10645,8 +10652,8 @@ msgid ""
 "OpacAdvSearchMoreOptions.grep('itemtype').size > 0 and expanded_options ) ) "
 "%%] "
 msgstr ""
-"[%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('itemtype')"
-".size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and "
+"[%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('itemtype')."
+"size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and "
 "OpacAdvSearchMoreOptions.grep('itemtype').size > 0 and expanded_options ) ) "
 "%%] "
 
@@ -10658,8 +10665,8 @@ msgid ""
 "OpacAdvSearchMoreOptions.grep('pubdate').size > 0 and expanded_options ) ) "
 "%%] "
 msgstr ""
-"[%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('pubdate')"
-".size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and "
+"[%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('pubdate')."
+"size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and "
 "OpacAdvSearchMoreOptions.grep('pubdate').size > 0 and expanded_options ) ) "
 "%%] "
 

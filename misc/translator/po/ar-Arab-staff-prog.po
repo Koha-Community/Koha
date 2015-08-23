@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.14\n"
-"POT-Creation-Date: 2015-07-14 21:05-0300\n"
-"PO-Revision-Date: 2015-06-05 13:44+0000\n"
+"POT-Creation-Date: 2015-08-17 16:59-0300\n"
+"PO-Revision-Date: 2015-08-06 10:47+0000\n"
 "Last-Translator: KnowledgeWare <massoudalshareef@kwareict.com>\n"
 "Language-Team: za\n"
 "Language: ar\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1433511892.000000\n"
+"X-POOTLE-MTIME: 1438858026.000000\n"
 
 #. %1$s:  data.borrowernumber 
 #. %2$s:  UNLESS loop.last 
@@ -37,19 +37,18 @@ msgstr ""
 #. %16$s: ~ To.json( address ) ~
 #. %17$s:  END 
 #: intranet-tmpl/prog/en/modules/members/tables/members_results.tt:31
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\", \"borrowernumber\": \"%s\" }%s,%s %s ] } %s %s %s%s%s %s%s%s %s%s%s %s "
 "%s "
 msgstr ""
-"%s%s\", \"borrowernumber\": \"%s\" }%s,%s %s ] } %s %s %s%s%s %s%s%s %s%s%s "
-"%s %s"
+"\", \"borrowernumber\": \"%s\" }%s,%s %s ] } %s %s %s%s%s %s%s%s %s%s%s %s %s"
 
 #. %1$s:  data.borrowernotes.replace('\\\\' , '\\\\') |html |html_line_break |collapse 
 #: intranet-tmpl/prog/en/modules/members/tables/members_results.tt:27
-#, fuzzy, c-format
+#, c-format
 msgid "\", \"dt_borrowernotes\": \"%s\", \"dt_action\": \""
-msgstr "\", \"dt_borrowernotes\": \"%s\", \"dt_action\": \"%s"
+msgstr "\", \"dt_borrowernotes\": \"%s\", \"dt_action\": \""
 
 #. %1$s:  data.branchname |html 
 #: intranet-tmpl/prog/en/modules/serials/tables/members_results.tt:12
@@ -187,13 +186,13 @@ msgstr "%% يطابق أي عدد من الأحرف"
 #. %19$s:  (item.issues || 0) |html 
 #. %20$s:  INCLUDE 'empty_line.inc' 
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.csv.inc:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s \"%s %sby %s%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s"
 "\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\"%s "
 msgstr ""
-"%s %s %s \"%s بواسطة%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", "
-"\"%s\", \"%s\", \"%s\", \"%s\", \"%s\""
+"%s %s %s %s \"%s %sبواسطة %s%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", "
+"\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\"%s"
 
 #. %1$s:  END 
 #. %2$s:  BLOCK form_field_select_text_block 
@@ -1120,9 +1119,9 @@ msgstr "%s %s لا %s"
 #. %4$s: # display the search results 
 #. %5$s:  IF ( total ) 
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:97
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s No results found %s %s %s "
-msgstr "%s لم يتم العثور على نتائج %s "
+msgstr "%s %s لم يتم العثور على نتائج %s %s %s"
 
 #. %1$s:  END 
 #. %2$s: - ELSE -
@@ -1763,7 +1762,7 @@ msgstr "%s %sجديد %sمطلوب%sجزئي %sكامل%sملغي%s "
 #. %6$s:  CASE 'cancelled' 
 #. %7$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:180
-#, fuzzy, c-format
+#, c-format
 msgid "%s %sNew %sOrdered %sPartially received %sReceived %sCancelled %s "
 msgstr "%s %sجديد%sمعلق %sمستلم جزئياً %sمستلم%sملغي %s "
 
@@ -4537,9 +4536,9 @@ msgstr "%s النتائج التي تم العثور عليها %sلـِ "
 
 #. %1$s:  total 
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:107
-#, fuzzy, c-format
+#, c-format
 msgid "%s result(s) found in catalog, "
-msgstr "%s النتائج التي تم العثور عليها %sلـِ "
+msgstr "%s النتائج التي تم العثور عليها في الفهرس،"
 
 #. %1$s:  breeding_count 
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:109
@@ -4894,7 +4893,7 @@ msgstr "%s%s%s / %s\", \"dt_fines\": \"%s"
 msgid "%s%s%s%s %s%sNo name%s"
 msgstr "%s%s%s%s %s%sلا اسم%s"
 
-#. %1$s:  IF letter.content.length > 0 
+#. %1$s:  IF letter.content && letter.content.length > 0 
 #. %2$s:  letter.content.length 
 #. %3$s:  ELSE 
 #. %4$s:  END 
@@ -5612,9 +5611,9 @@ msgstr "%sمخفي%sمعروض%s"
 #. %1$s:  BLOCK subject 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:73
-#, fuzzy, c-format
+#, c-format
 msgid "%sHold:%s "
-msgstr "%s الحجز-الحجوزات"
+msgstr "%sحجز:%s"
 
 #. %1$s:  IF humanbranch 
 #. %2$s:  humanbranch 
@@ -5780,9 +5779,9 @@ msgstr "%sالتأخر!%s&nbsp;%s"
 #. %1$s: - BLOCK subject -
 #. %2$s: - END -
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:108
-#, fuzzy, c-format
+#, c-format
 msgid "%sOverdue:%s "
-msgstr "متأخرات"
+msgstr "%sمتأخر:%s"
 
 #. %1$s:  IF ( FEEDBAC.filename ) 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:51
@@ -5983,9 +5982,9 @@ msgstr "%sb - رأس لاحق"
 #. %3$s:  END 
 #. %4$s:  IF ( reser.itemtype ) 
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:63
-#, fuzzy, c-format
+#, c-format
 msgid "%sby %s%s %s ("
-msgstr "%s, بواسطة%s%s%s-"
+msgstr "%sبواسطة %s%s %s ("
 
 #. %1$s:  IF ( result_se.author ) 
 #. %2$s:  result_se.author 
@@ -6366,16 +6365,16 @@ msgid "&nbsp;&nbsp;(format: yyyy-yyyy)"
 msgstr "&nbsp;&nbsp;(التنسيق: السنة-السنة)"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:176
-#, fuzzy, c-format
+#, c-format
 msgid "&nbsp;Show inactive funds:"
-msgstr "&nbsp;عرض كل التمويلات:"
+msgstr "&nbsp;عرض التمويلات غير النشطة:"
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:516
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:194
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:350
-#, fuzzy, c-format
+#, c-format
 msgid "&nbsp;Show inactive:"
-msgstr "&nbsp;عرض الكل:"
+msgstr "&nbsp;عرض غير النشط:"
 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:202
 #, c-format
@@ -10138,9 +10137,9 @@ msgid "Age restricted"
 msgstr "قيد العمر"
 
 #: intranet-tmpl/prog/en/columns.def:144
-#, fuzzy, c-format
+#, c-format
 msgid "Age restriction"
-msgstr "قيود العمر %s."
+msgstr "قيد العمر"
 
 #. %1$s:  AGE_RESTRICTION 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:463
@@ -13177,9 +13176,9 @@ msgstr "يمكن للجميع رؤيتها، لكنها تدار بواسطتك 
 #. %3$s:  END 
 #. %4$s:  error.borrowernumber 
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:202
-#, fuzzy, c-format
+#, c-format
 msgid "Can not update patron. %s Cardnumber: %s %s (Borrowernumber: %s) "
-msgstr " لا يمكن تحديث المستفيد ذي رقم المستعير %s"
+msgstr "لا يمكن تحديث المستفيد. %s رقم البطاقة: %s %s (رقم المستعير: %s)"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:436
 #, c-format
@@ -21160,7 +21159,7 @@ msgstr "Frederic Durand"
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:203
 #, c-format
 msgid "Free"
-msgstr ""
+msgstr "حر / مجاني"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:85
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:156
@@ -23142,9 +23141,9 @@ msgid "Ignored the following common words: \"%s\""
 msgstr "تجاهل الكلمات التالية: \"%s\""
 
 #: intranet-tmpl/prog/en/columns.def:137
-#, fuzzy, c-format
+#, c-format
 msgid "Illustrations"
-msgstr "الإيضاح"
+msgstr "الرسوم التوضيحية"
 
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:260
 #, c-format
@@ -23616,7 +23615,7 @@ msgid "Internal Server Error, please reload the page"
 msgstr "خطأ داخلي للخادم، يرجى إعادة تحميل الصفحة."
 
 #: intranet-tmpl/prog/en/columns.def:93
-#, fuzzy, c-format
+#, c-format
 msgid "Internal note"
 msgstr "ملاحظة داخلية"
 
@@ -24962,9 +24961,9 @@ msgstr ""
 #. %4$s:  basketno 
 #. %5$s:  name|html 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Acquisitions &rsaquo; %sNew %sBasket %s (%s) for %s"
-msgstr "كوها &rsaquo; تزويد &rsaquo; %sجديد %s%sحذف %sسلة %s (%s) ل %s"
+msgstr "كوها&rsaquo; التزويد &rsaquo; %sجديد %sالسلة %s (%s) لـ%s"
 
 #. %1$s:  IF ( opsearch ) 
 #. %2$s:  ELSE 
@@ -28212,9 +28211,9 @@ msgid "Lost items in staff client: "
 msgstr "المواد الضائعة في برنامج العميل:"
 
 #: intranet-tmpl/prog/en/columns.def:84
-#, fuzzy, c-format
+#, c-format
 msgid "Lost on"
-msgstr "ضائع في:"
+msgstr "ضائع في"
 
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:131
 #, c-format
@@ -28357,9 +28356,9 @@ msgid "MARC View"
 msgstr "عرض مارك"
 
 #: intranet-tmpl/prog/en/columns.def:145
-#, fuzzy, c-format
+#, c-format
 msgid "MARC XML blob"
-msgstr "كتلة مارك"
+msgstr "كتلة MARC XML"
 
 #. %1$s:  biblionumber 
 #. %2$s:  bibliotitle |html 
@@ -32927,7 +32926,7 @@ msgstr "عرض الصفحة:"
 #: intranet-tmpl/prog/en/columns.def:95
 #, c-format
 msgid "Paid for (unused)"
-msgstr ""
+msgstr "مدفوع (غير مستخدم)"
 
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:222
 #, c-format
@@ -33815,9 +33814,9 @@ msgid "Permanent library"
 msgstr "المكتبة الدائمة"
 
 #: intranet-tmpl/prog/en/columns.def:98
-#, fuzzy, c-format
+#, c-format
 msgid "Permanent shelving location"
-msgstr "كل مواقع الرفوف "
+msgstr "موقع الترفيف الدائم"
 
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:98
 #, c-format
@@ -39327,9 +39326,9 @@ msgid "Staff client"
 msgstr "عميل الموظفين"
 
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:52
-#, fuzzy, c-format
+#, c-format
 msgid "Staff members are not allowed to access patron's checkout history"
-msgstr "قم بالتأكيد إذا كنت ترغب في عدم تعريف سِجل إعارة المستفيد."
+msgstr "غير مسموح للموظفين بالوصول إلى سجل إعارة المستفيد"
 
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:63
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:82
@@ -41599,6 +41598,8 @@ msgid ""
 "The system preference OPACPrivacy is set but AnonymousPatron is not! Please "
 "correct this before continuing circulation."
 msgstr ""
+"تم ضبط تفضيل النظام OPACPrivacy  لكن لم يتم ضبط AnonymousPatron ! يردى تصحيح "
+"ذلك قبل الاستمرار في الإعارة"
 
 #. SPAN
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:104
@@ -42539,14 +42540,14 @@ msgid "Title phrase"
 msgstr "عبارة العنوان"
 
 #: intranet-tmpl/prog/en/includes/csv_headers/catalogue/itemsearch.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Title, Publication Date, Publisher, Collection, Barcode, Call number, Home "
 "library, Current location, Shelving location, Inventory number, Status, "
 "Checkouts "
 msgstr ""
 "العنوان، تاريخ النشر، الناشر، المجموعة، الباركود، رقم الطلب، المكتبة "
-"الرئيسية، الموقع الحالي، موقع الرف، رقم المستودع، الحالة، الإعارات  %s %s %s"
+"الرئيسية، الموقع الحالي، موقع الرف، رقم المستودع، الحالة، الإعارات  "
 
 #: intranet-tmpl/prog/en/includes/suggestions-add-search.inc:8
 #: intranet-tmpl/prog/en/includes/subscriptions-search.inc:12
@@ -44911,9 +44912,9 @@ msgid "Withdrawn"
 msgstr "مسحوب"
 
 #: intranet-tmpl/prog/en/columns.def:86
-#, fuzzy, c-format
+#, c-format
 msgid "Withdrawn on"
-msgstr "مسحوب في:"
+msgstr "مسحوب في"
 
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:182
 #, c-format
