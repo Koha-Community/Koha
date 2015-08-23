@@ -1,0 +1,54 @@
+[% USE Koha %]
+[% USE KohaDates %]
+[% USE Branches %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your library home</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+[% INCLUDE 'bodytag.inc' bodyid='opac-issue-note' %]
+[% INCLUDE 'masthead.inc' %]
+
+<div class="main">
+    <ul class="breadcrumb">
+        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+        <li><a href="/cgi-bin/koha/opac-user.pl">[% firstname %] [% surname %]</a><span class="divider">&rsaquo;</span></li>
+        <li><a href="#">Editing issue note for [% ISSUE.title %] - [% ISSUE.author %]</a></li>
+    </ul>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span2">
+                <div id="navigation">
+                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
+                </div>
+            </div>
+            <div class="span10">
+                <div id="issuenote" class="maincontent">
+                    <h3>Editing issue note for [% title %] [% author %]</h3>
+                        [% IF not(Koha.Preference("AllowIssueNotes")) %]
+                            Issue notes have not been enabled. Please contact the library.
+                        [% ELSE %]
+                            <form id="issue-note" action="/cgi-bin/koha/opac-issue-note.pl" method="post">
+                                <fieldset>
+                                    <label for="note" class="required">Note:</label>
+                                    <input type="text" name="note" value="[% note %]">
+                                    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]">
+                                    <input type="hidden" name="itemnumber" value="[% itemnumber %]">
+                                    <input type="hidden" name="issue_id" value="[% issue_id %]">
+                                    <input type="hidden" name="action" value="issuenote">
+                                </fieldset>
+                                <fieldset class="action">
+                                    <input type="submit" value="Submit note" class="btn btn-default btn-sm"><a href="/cgi-bin/koha/opac-user.pl" class="cancel">Cancel</a>
+                                </fieldset>
+                            </form> <!-- issue-note -->
+                        [% END %]
+                </div> <!-- issuenote -->
+            </div> <!-- span10 -->
+        </div> <!-- row-fluid -->
+    </div> <!-- container-fluid -->
+
+</div> <!-- main -->
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %][% END %]

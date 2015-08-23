@@ -1,0 +1,108 @@
+#!/usr/bin/perl
+
+# This file is part of Koha.
+#
+# Copyright 2014 BibLibre
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+
+use C4::Service;
+use C4::Auth qw /check_cookie_auth/;
+use C4::Letters;
+use CGI;
+use C4::Output qw(:DEFAULT :ajax);
+use C4::Scrubber;
+use C4::Circulation;
+use C4::Members;
+use C4::Biblio;
+use Koha::Checkouts;
+use Koha::DateUtils;
+
+=head1 NAME
+
+svc/patron_notes - Web service for setting patron notes on items
+
+=head1 DESCRIPTION
+
+=cut
+
+# AJAX requests
+my $is_ajax = is_ajax();
+my $query = new CGI;
+my ( $auth_status, $sessionID ) = check_cookie_auth( $query->cookie('CGISESSID'), {} );
+if ( $auth_status ne "ok" ) {
+    exit 0;
+}
+if ($is_ajax) {
+    my $action = $query->param('action');
+
+    # Issue Note
+    if ( $action eq 'issuenote' && C4::Context->preference('AllowIssueNotes') ) {
+        my $scrubber = C4::Scrubber->new();
+        my $note = $query->param('note');
+        my $issue_id = $query->param('issue_id');
+        my $clean_note = $scrubber->scrub($note);
+        my $status = "saved";
+        my $error = "";
+        my ($member, $issue);
+
+        my ( $template, $borrowernumber, $cookie ) = C4::Auth::get_template_and_user({
+            template_name   => "opac-user.tt",
+            query           => $query,
+            type            => "opac",
+            authnotrequired => 1,
+        });
+
+        # verify issue_id
+        if ( $issue_id =~ /\d+/ ) {
+            $member = GetMember(borrowernumber => $borrowernumber);
+            $issue = Koha::Checkouts->find($issue_id);
+            if ( $issue->borrowernumber != $borrowernumber ) {
+                $status = "fail";
+                $error = "Invalid issue id!";
+            }
+        } else {
+            $status = "fail";
+            $error = "Invalid issue id!";
+        }
+
+        if ( (not $error) && $issue->set({ notedate => dt_from_string(), note => $clean_note })->store ) {
+            if($clean_note) { # only send email if note not empty
+                my $branch = Koha::Libraries->find( $issue->branchcode );
+                my $biblio = GetBiblioFromItemNumber($issue->itemnumber);
+                my $letter = C4::Letters::GetPreparedLetter (
+                    module => 'circulation',
+                    letter_code => 'PATRON_NOTE',
+                    branchcode => $branch,
+                    tables => {
+                        'biblio' => $biblio->{biblionumber},
+                        'borrowers' => $member->{borrowernumber},
+                    },
+                );
+                C4::Message->enqueue($letter, $member, 'email');
+            } else { # note empty, i.e removed
+                $status = "removed";
+            }
+        } else {
+            $status = "fail";
+            $error = "Perhaps the item has already been checked in?";
+        }
+
+        my $response = "{\"status\": \"$status\", \"note\": \"$clean_note\", \"issue_id\": \"$issue_id\", \"error\": \"$error\"}";
+        output_with_http_headers($query, undef, $response, 'js');
+        exit;
+    } # END Issue Note
+}

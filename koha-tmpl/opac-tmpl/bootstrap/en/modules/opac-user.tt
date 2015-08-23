@@ -123,6 +123,8 @@ Using this account is not recommended because some parts of Koha will not functi
                         </div>
                     [% END # / IF patron_flagged %]
 
+                    <div class="alert alert-info" id="notesaved" style="display:none;"></div>
+
                     [% SET OPACMySummaryNote = Koha.Preference('OPACMySummaryNote') %]
                     [% IF OPACMySummaryNote %][% OPACMySummaryNote %][% END %]
 
@@ -182,6 +184,9 @@ Using this account is not recommended because some parts of Koha will not functi
                                                 [% END %]
                                                 [% IF ( OPACMySummaryHTML ) %]
                                                     <th class="nosort">Links</th>
+                                                [% END %]
+                                                [% IF ( Koha.Preference('AllowIssueNotes') ) %]
+                                                    <th class="nosort">Note</th>
                                                 [% END %]
                                             </tr>
                                         </thead>
@@ -303,6 +308,13 @@ Using this account is not recommended because some parts of Koha will not functi
                                                 [% END %]
                                                 [% IF ( OPACMySummaryHTML ) %]
                                                     <td class="links">[% ISSUE.MySummaryHTML %]</td>
+                                                [% END %]
+                                                [% IF ( Koha.Preference('AllowIssueNotes') ) %]
+                                                    <td class="note">
+                                                        <input type="text" name="note" data-issue_id="[% ISSUE.issue_id %]" data-origvalue="[% ISSUE.note %]" value="[% ISSUE.note %]" readonly>
+                                                        <a class="btn" name="js_submitnote" id="save_[% ISSUE.issue_id %]" style="display:none;">Submit note</a>
+                                                        <a class="btn" name="nonjs_submitnote" href="/cgi-bin/koha/opac-issue-note.pl?issue_id=[% ISSUE.issue_id | url %]">Edit / Create note</a>
+                                                    </td>
                                                 [% END %]
                                             </tr>
                                         [% END # /FOREACH ISSUES %]
@@ -920,6 +932,88 @@ Using this account is not recommended because some parts of Koha will not functi
                 [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( borrower.is_expired && borrower.category.effective_BlockExpiredPatronOpacActions ) ) %]
                     $("#checkoutst caption").append("<div id=\"renewcontrols\"><a id=\"renewselected_link\" href=\"#\">"+_("Renew selected")+"</a> <a id=\"renewall_link\" href=\"#\">"+_("Renew all")+"</a></div>");
                 [% END %]
+            [% END %]
+
+            [% IF ( Koha.Preference('AllowIssueNotes') ) %]
+
+                /* If JS enabled, show button, otherwise show link to redirect to a page where note can be submitted */
+                $("a[name='nonjs_submitnote']").hide();
+
+                $("input[name='note']").prop('readonly', false);
+                $("input[name='note']").keyup(function(e){
+                    /* prevent submitting of renewselected form */
+                    if(e.which == 13)
+                        e.preventDefault();
+
+                    var $btn_save = $('#save_'+$(this).data('issue_id'));
+                    var origvalue = $(this).data('origvalue');
+                    var value = $(this).val();
+
+                    if(origvalue != value) {
+                        if(origvalue != "")
+                            $btn_save.text('Submit changes');
+                        else
+                            $btn_save.text('Submit note');
+                        $btn_save.show();
+                    } else {
+                        $btn_save.hide();
+                    }
+                });
+
+                $("a[name='js_submitnote']").click(function(e){
+                    var $self = $(this);
+                    var title = $(this).parent().siblings('.title').html();
+                    var $noteinput = $(this).siblings('input[name="note"]').first();
+
+                    var ajaxData = {
+                        'action': 'issuenote',
+                        'issue_id': $noteinput.data('issue_id'),
+                        'note': $noteinput.val(),
+                    };
+
+                    $.ajax({
+                        url: '/cgi-bin/koha/svc/patron_notes/',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: ajaxData,
+                    })
+                    .done(function(data) {
+                        var message = "";
+                        if(data.status == 'saved') {
+                            $("#notesaved").removeClass("alert-error");
+                            $("#notesaved").addClass("alert-info");
+                            $noteinput.data('origvalue', data.note);
+                            $noteinput.val(data.note);
+                            message = "<p>Your note about " + title + " has been saved and sent to the library.</p>";
+                            $self.hide();
+                        } else if(data.status == 'removed') {
+                            $("#notesaved").removeClass("alert-error");
+                            $("#notesaved").addClass("alert-info");
+                            $noteinput.data('origvalue', "");
+                            $noteinput.val("");
+                            message = "<p>Your note about " + title + " was removed.</p>";
+                            $self.hide();
+                        } else {
+                            $("#notesaved").removeClass("alert-info");
+                            $("#notesaved").addClass("alert-error");
+                            message = "<p>Your note about " + title + " could not be saved.</p>" +
+                                      "<p style=\"font-weight:bold;\">" + data.error + "</p>";
+                        }
+
+                        message += "<p style=\"font-style:italic;\">" + data.note + "</p>";
+                        $("#notesaved").html(message);
+                    })
+                    .fail(function(data) {
+                        $("#notesaved").removeClass("alert-info");
+                        $("#notesaved").addClass("alert-error");
+                        var message = "<p>Your note about " + title + " could not be saved.</p>" +
+                                      "<p style=\"font-weight:bold;\">Ajax request has failed.</p>";
+                        $("#notesaved").html(message);
+                    })
+                    .always(function() {
+                        $("#notesaved").show();
+                    });
+                });
             [% END %]
 
             $( ".suspend-until" ).datepicker({ minDate: 1 }); // Require that "until date" be in the future

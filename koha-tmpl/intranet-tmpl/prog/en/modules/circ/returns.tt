@@ -190,6 +190,16 @@ $(document).ready(function () {
 </div>
 [% END %]
 
+<!-- Patron has added an issue note -->
+[% IF ( issue.note) %]
+    <div class="dialog message">
+        <h1>Patron note</h1>
+        <p>[% issue.notedate | $KohaDates %]</p>
+        <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itembiblionumber %]"> [% title |html %]</a> [% author %]</p>
+        <p>[% issue.note %]</p>
+    </div>
+[% END %]
+
 <!-- Patron has fines -->
 [% IF ( fines ) %]
     <div class="dialog alert">

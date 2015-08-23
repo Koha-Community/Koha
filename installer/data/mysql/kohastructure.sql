@@ -1753,6 +1753,8 @@ CREATE TABLE `issues` ( -- information related to check outs or issues
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
   `issuedate` datetime default NULL, -- date the item was checked out or issued
   `onsite_checkout` int(1) NOT NULL default 0, -- in house use flag
+  `note` mediumtext default NULL, -- issue note text
+  `notedate` datetime default NULL, -- datetime of issue note (yyyy-mm-dd hh:mm::ss)
   PRIMARY KEY (`issue_id`),
   UNIQUE KEY `itemnumber` (`itemnumber`),
   KEY `issuesborridx` (`borrowernumber`),
@@ -1781,6 +1783,8 @@ CREATE TABLE `old_issues` ( -- lists items that were checked out and have been r
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
   `issuedate` datetime default NULL, -- date the item was checked out or issued
   `onsite_checkout` int(1) NOT NULL default 0, -- in house use flag
+  `note` mediumtext default NULL, -- issue note text
+  `notedate` datetime default NULL, -- datetime of issue note (yyyy-mm-dd hh:mm::ss)
   PRIMARY KEY (`issue_id`),
   KEY `old_issuesborridx` (`borrowernumber`),
   KEY `old_issuesitemidx` (`itemnumber`),

@@ -33,6 +33,7 @@ use C4::Output;
 use C4::Biblio;
 use C4::Items;
 use C4::Letters;
+use Koha::Libraries;
 use Koha::DateUtils;
 use Koha::Holds;
 use Koha::Database;
@@ -268,6 +269,7 @@ if ($issues){
 }
 my $overduesblockrenewing = C4::Context->preference('OverduesBlockRenewing');
 $canrenew = 0 if ($overduesblockrenewing ne 'allow' and $overdues_count == $count);
+
 $template->param( ISSUES       => \@issuedat );
 $template->param( issues_count => $count );
 $template->param( canrenew     => $canrenew );
