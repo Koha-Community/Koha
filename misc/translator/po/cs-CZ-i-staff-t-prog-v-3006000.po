@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-07-20 20:53-0300\n"
-"PO-Revision-Date: 2015-05-28 18:54+0000\n"
+"POT-Creation-Date: 2015-08-17 18:40-0300\n"
+"PO-Revision-Date: 2015-07-23 13:43+0000\n"
 "Last-Translator: Josef <josef.moravec@knihovna-uo.cz>\n"
 "Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/"
 ">\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1432839292.000000\n"
+"X-POOTLE-MTIME: 1437659019.000000\n"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slimUtils-MODS31.xsl:12
 #, c-format
@@ -182,11 +182,12 @@ msgstr "%% pro libovolné množství znaků"
 #. %14$s:  item.stocknumber |html 
 #. %15$s:  item.status |html 
 #. %16$s:  (item.issues || 0) |html 
+#. %17$s:  INCLUDE 'empty_line.inc' 
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.csv.inc:1
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s %s %s \"%s by %s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s"
-"\", \"%s\", \"%s\", \"%s\", \"%s\" "
+"\", \"%s\", \"%s\", \"%s\", \"%s\"%s "
 msgstr ""
 "%s %s %s \"%s od %s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s"
 "\", \"%s\", \"%s\", \"%s\", \"%s\" "
@@ -2133,10 +2134,10 @@ msgstr "%s (%s ) %s %ssignatura: %s%s"
 msgid "%s (%s days)"
 msgstr "%s (%s dní)"
 
-#. %1$s:  issue.item.biblio.title 
+#. %1$s:  issue.item.biblio.title | $EncodeUTF8 
 #. %2$s:  issue.item.barcode 
 #. %3$s:  issue.date_due | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:599
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:600
 #, c-format
 msgid "%s (%s). Due on %s"
 msgstr "%s (%s). Půjčeno do %s"
@@ -2472,7 +2473,7 @@ msgstr "%s Vypůjčeno %s %s "
 
 #. For the first occurrence,
 #. %1$s:  issuecount 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:774
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:775
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:421
 #, c-format
 msgid "%s Checkout(s)"
@@ -2734,7 +2735,7 @@ msgstr "%s Prostředky pro '%s' %s Všechny prostředky %s "
 
 #. For the first occurrence,
 #. %1$s:  holds_count 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:786
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:787
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:428
 #, c-format
 msgid "%s Hold(s)"
@@ -2814,7 +2815,7 @@ msgstr "%s Jednotka se vrací do původní pobočky "
 #. %7$s:  END 
 #. %8$s:  IF CAN_user_circulate_force_checkout 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:226
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:227
 #, c-format
 msgid ""
 "%s Item type is normally not for loan. %s %s Item is normally not for loan "
@@ -2830,7 +2831,7 @@ msgstr ""
 #. %5$s:  item_notforloan_lib 
 #. %6$s:  END 
 #. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:390
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:391
 #, c-format
 msgid "%s Item type not for loan. %s %s Item not for loan %s(%s)%s. %s "
 msgstr ""
@@ -3283,7 +3284,7 @@ msgstr "%s Nalezena rezervace pro %s ("
 
 #. For the first occurrence,
 #. %1$s:  debarments.size 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:792
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:793
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:433
 #, c-format
 msgid "%s Restrictions"
@@ -4793,7 +4794,7 @@ msgstr "%s%s%s / %s\", \"dt_fines\": \"%s"
 msgid "%s%s%s%s %s%sNo name%s"
 msgstr "%s%s%s%s %s%sBez jména%s"
 
-#. %1$s:  IF letter.content.length > 0 
+#. %1$s:  IF letter.content && letter.content.length > 0 
 #. %2$s:  letter.content.length 
 #. %3$s:  ELSE 
 #. %4$s:  END 
@@ -5828,7 +5829,7 @@ msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  WaitingReserveLoo.waitingat 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:717
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:718
 #, c-format
 msgid "%sWaiting at %s"
 msgstr "%sČeká v %s"
@@ -7922,8 +7923,8 @@ msgstr "domovská knihovna (%s / %s )"
 #. %1$s:  rescardnumber 
 #. %2$s:  resbranchname 
 #. %3$s:  reswaitingdate 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:198
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:202
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:199
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:203
 #, c-format
 msgid "(%s) at %s since %s"
 msgstr "(%s) v %s od %s"
@@ -7941,25 +7942,25 @@ msgid "(%s) from "
 msgstr "(%s) od "
 
 #. %1$s:  getBarcodeMessageIteminfo 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:202
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:203
 #, c-format
 msgid "(%s) has been on hold for "
 msgstr "(%s) bylo rezervováno pro "
 
 #. %1$s:  getBarcodeMessageIteminfo 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:198
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:199
 #, c-format
 msgid "(%s) has been waiting for "
 msgstr "(%s) byla připravena pro "
 
 #. %1$s:  getBarcodeMessageIteminfo 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:206
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:207
 #, c-format
 msgid "(%s) is checked out to "
 msgstr "(%s) je půjčena čtenáři "
 
 #. %1$s:  getBarcodeMessageIteminfo 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:194
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:195
 #, c-format
 msgid "(%s) is currently checked out to this patron. Renew?"
 msgstr "(%s) má tento uživatel již půjčeno. Prodloužit?"
@@ -7979,7 +7980,7 @@ msgstr "(%s) pro "
 #. %7$s:  END 
 #. %8$s:  WaitingReserveLoo.reservedate 
 #. %9$s:  IF ( WaitingReserveLoo.waitingat ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:715
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:716
 #, c-format
 msgid "(%s), %sby %s%s %s[%s] %sHold placed on %s. %s "
 msgstr "(%s), %sod %s%s %s[%s] %sRezervace ze dne %s. %s "
@@ -7987,7 +7988,7 @@ msgstr "(%s), %sod %s%s %s[%s] %sRezervace ze dne %s. %s "
 #. %1$s:  issued_cardnumber 
 #. %2$s:  IF CAN_user_circulate_force_checkout 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:206
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:207
 #, c-format
 msgid "(%s). %s Check in and check out? %s "
 msgstr "(%s). %s Vrátit a vypůjčit? %s "
@@ -8031,11 +8032,6 @@ msgstr "(3.12 Údržba vydání)"
 
 #: intranet-tmpl/prog/en/modules/about.tt:283
 #, c-format
-msgid "(3.12)"
-msgstr "(3.12)"
-
-#: intranet-tmpl/prog/en/modules/about.tt:282
-#, c-format
 msgid "(3.14)"
 msgstr "(3.14)"
 
@@ -8044,10 +8040,15 @@ msgstr "(3.14)"
 msgid "(3.14, 3.16 Translation Manager, 3.10 Release Maintainer)"
 msgstr "(3.14, 3.16 Správce překladu, 3.10 Údržba vydání)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:281
+#: intranet-tmpl/prog/en/modules/about.tt:282
 #, c-format
 msgid "(3.16)"
 msgstr "(3.16)"
+
+#: intranet-tmpl/prog/en/modules/about.tt:281
+#, fuzzy, c-format
+msgid "(3.18)"
+msgstr "(3.12)"
 
 #: intranet-tmpl/prog/en/modules/about.tt:303
 #, c-format
@@ -8914,7 +8915,7 @@ msgid "--- - Unknown"
 msgstr "--- - Neznámé"
 
 #. %1$s:  IF ( charges_is_blocker ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:692
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:693
 #, c-format
 msgid ". %s Checkouts are "
 msgstr ". %s Půjčování je "
@@ -8993,7 +8994,7 @@ msgstr ". Prosím, zadejte znovu nové heslo."
 msgid ". Please retain this item and check it in to process the hold. "
 msgstr ". Pro vyřízení rezervace musí být jednotka nejprve vrácena. "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:687
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:688
 #, c-format
 msgid ". See highlighted items "
 msgstr ". Viz zvýrazněné položky "
@@ -9263,7 +9264,7 @@ msgstr "0 - chybí index"
 msgid "0 - not a festschrift"
 msgstr "0 - nesvázaný výtisk"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:776
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:777
 #, c-format
 msgid "0 Checkouts"
 msgstr "Výpůjčky (0)"
@@ -9274,7 +9275,7 @@ msgstr "Výpůjčky (0)"
 msgid "0 Fullstendig beskrivelse"
 msgstr "0 Fullstendig beskrivelse"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:788
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:789
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:430
 #, c-format
 msgid "0 Holds"
@@ -11935,7 +11936,7 @@ msgstr "Přidat smlouvu"
 msgid "Add a mapping"
 msgstr "Přidat mapování"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:120
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:121
 #, c-format
 msgid "Add a message for:"
 msgstr "Přidat mapování"
@@ -11962,7 +11963,7 @@ msgstr "Přidat novou skupinu"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:28
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:29
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:26
 msgid "Add a new message"
 msgstr "Přidat novou zprávu"
@@ -12479,7 +12480,7 @@ msgstr "2. řádek adresy: "
 msgid "Address line 3: "
 msgstr "3. řádek adresy: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:658
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:659
 #, c-format
 msgid "Address:"
 msgstr "Adresa:"
@@ -12650,7 +12651,7 @@ msgid "Age restriction"
 msgstr "Věkové omezení %s."
 
 #. %1$s:  AGE_RESTRICTION 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:425
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:426
 #, c-format
 msgid "Age restriction %s."
 msgstr "Věkové omezení %s."
@@ -12658,7 +12659,7 @@ msgstr "Věkové omezení %s."
 #. %1$s:  AGE_RESTRICTION 
 #. %2$s:  IF CAN_user_circulate_force_checkout 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:179
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:180
 #, c-format
 msgid "Age restriction %s. %s Check out anyway? %s "
 msgstr "Věkové omezení %s. %s Přesto vypůjčit? %s "
@@ -14129,7 +14130,7 @@ msgstr "Připojit jednotku"
 msgid "Attach this basket to a new basket group with the same name"
 msgstr "Připoj tento košík k nové skupině košíků pod stejným názvem"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:632
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:633
 #, c-format
 msgid "Attention:"
 msgstr "Pozor:"
@@ -14521,7 +14522,7 @@ msgstr "Vlastní životopis"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:157
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:302
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:550
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:551
 #, c-format
 msgid "Automatic renewal"
 msgstr "Automatické prodloužení"
@@ -14677,7 +14678,7 @@ msgstr "BIBTEX"
 msgid "BK"
 msgstr "BK"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:694
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:695
 #, c-format
 msgid "BLOCKED"
 msgstr "ZABLOKOVÁNO"
@@ -14754,7 +14755,7 @@ msgstr "Pásmo"
 #: intranet-tmpl/prog/en/modules/labels/search.tt:62
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:76
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:61
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:832
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:833
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:715
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:733
@@ -16356,7 +16357,7 @@ msgid "Call Number (0-9 to A-Z)"
 msgstr "Signatura (0-9 až A-Z)"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:20
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:810
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:811
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:719
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:737
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:448
@@ -16381,7 +16382,7 @@ msgstr "Signatura"
 #: intranet-tmpl/prog/en/modules/labels/search.tt:45
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:77
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:58
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:831
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:832
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:564
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:146
@@ -16669,7 +16670,7 @@ msgstr "Záznam není možné uložit, protože nebyla vyplněna následující 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:609
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:122
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:64
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:142
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:143
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:83
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:114
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:42
@@ -16766,8 +16767,8 @@ msgstr "Zrušit a vrátit se k objednávce"
 msgid "Cancel filter"
 msgstr "Zrušit filtr"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:285
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:291
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:286
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:292
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:115
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:173
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:479
@@ -16787,7 +16788,7 @@ msgid "Cancel hold and return to : [% reserveloo.branchname %]"
 msgstr "Zrušit rezervaci a vrátit do : [% reserveloo.branchname %]"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:841
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:842
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:487
 msgid "Cancel marked holds"
 msgstr "Zrušit označené rezervace"
@@ -16891,13 +16892,13 @@ msgstr "Účtenku nelze stornovat. Možné důvody: "
 msgid "Cannot check in"
 msgstr "Nelze vrátit"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:174
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:175
 #, c-format
 msgid "Cannot check out"
 msgstr "Nelze vypůjčit"
 
 #. %1$s:  IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:624
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:625
 #, c-format
 msgid "Cannot check out! %s "
 msgstr "Nelze vypůjčit! %s "
@@ -17615,7 +17616,7 @@ msgstr "Znaková sada (povinné) 2"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:21
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:265
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:811
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:720
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:738
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:449
@@ -17744,7 +17745,7 @@ msgstr "Pro podrobnosti zkontrolujte, prosím, přehled chyb."
 #: intranet-tmpl/prog/en/includes/patron-search.inc:131
 #: intranet-tmpl/prog/en/includes/checkin-search.inc:15
 #: intranet-tmpl/prog/en/includes/patrons-admin-search.inc:22
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:542
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:543
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:605
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:20
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:44
@@ -17753,7 +17754,7 @@ msgid "Check out"
 msgstr "Půjčování"
 
 #. INPUT type=submit name=x
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:378
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:379
 msgid "Check out [% book.barcode %]: [% book.title %]"
 msgstr "Vypůjčit [% book.barcode %]: [% book.title %]"
 
@@ -17894,7 +17895,7 @@ msgid "Checked out %s times"
 msgstr "Vypůjčeno %s krát"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:19
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:809
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:810
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:718
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:736
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:45
@@ -17905,7 +17906,7 @@ msgid "Checked out from"
 msgstr "Vypůjčeno z"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:18
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:809
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:717
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:735
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:446
@@ -17919,7 +17920,7 @@ msgstr "Datum půjčení"
 msgid "Checked out today"
 msgstr "Vypůjčeno dnes"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:599
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:600
 #, c-format
 msgid "Checked out: "
 msgstr "Vypůjčeno: "
@@ -17962,8 +17963,8 @@ msgstr "Půjčování čtenáři "
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'patron-title.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:533
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:621
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:534
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:622
 #, c-format
 msgid "Checking out to %s"
 msgstr "Půjčování čtenáři %s"
@@ -18041,8 +18042,8 @@ msgstr "Výpůjčka na"
 msgid "Checkout status:"
 msgstr "Stav výpůjčky:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:90
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:92
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:91
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:93
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:704
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:166
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:64
@@ -18051,7 +18052,7 @@ msgstr "Stav výpůjčky:"
 msgid "Checkouts"
 msgstr "Půjčování"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:449
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:450
 #, c-format
 msgid "Checkouts are BLOCKED because patron has overdue items."
 msgstr ""
@@ -18354,7 +18355,7 @@ msgstr "Poznámka"
 #: intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:44
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:31
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:30
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:88
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:89
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:38
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:14
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:30
@@ -18690,7 +18691,7 @@ msgstr "Vyčištěná dávka importu #%s"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:282
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:568
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:569
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:696
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:523
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1302
@@ -18765,7 +18766,7 @@ msgid "Clear on loan"
 msgstr "Odebrat označení u vypůjčených"
 
 #. A
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:528
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:529
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:685
 msgid "Clear screen"
 msgstr "Vymazat zobrazení"
@@ -20003,7 +20004,7 @@ msgid "Contents:"
 msgstr "Obsahuje:"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:333
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:334
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:43
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:140
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:169
@@ -20808,7 +20809,7 @@ msgstr "Druh kreditu: "
 msgid "Credits"
 msgstr "Kredit"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:701
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:702
 #, c-format
 msgid "Credits:"
 msgstr "Kredit:"
@@ -22530,7 +22531,7 @@ msgstr "Smazat předchozí historii hledání v autoritních záznamech"
 msgid "Delete your previous catalog search history"
 msgstr "Smazat vaši předešlou historii hledání v katalogu"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:835
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:836
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:602
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:481
 #, c-format
@@ -23511,8 +23512,8 @@ msgstr "Půjčeno do %s"
 #: intranet-tmpl/prog/en/columns.def:79
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:14
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:15
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:305
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:805
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:306
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:806
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:713
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:731
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:564
@@ -23523,7 +23524,7 @@ msgstr "Půjčeno do %s"
 msgid "Due date"
 msgstr "Půjčeno do"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:804
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:805
 #, c-format
 msgid "Due date (unformatted, hidden)"
 msgstr "Půjčeno do (neformátováno, skryté)"
@@ -23804,8 +23805,8 @@ msgstr "Upravit"
 msgid "Edit "
 msgstr "Upravit "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:639
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:652
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:640
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:653
 #, c-format
 msgid "Edit Details"
 msgstr "Upravit podrobnosti"
@@ -24427,7 +24428,7 @@ msgid "Enter cover biblionumber: "
 msgstr "Zadejte číslo katalogizačního záznamu: "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:44
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:535
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:536
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:687
 #, c-format
 msgid "Enter item barcode:"
@@ -24974,7 +24975,7 @@ msgid "Expected on"
 msgstr "Očekáváno dne"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:33
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:833
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:834
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:607
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1222
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:479
@@ -25004,8 +25005,8 @@ msgid "Expiration date: %s"
 msgstr "Datum konce platnosti registrace: %s"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:75
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:638
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:651
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:639
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:652
 #, c-format
 msgid "Expiration:"
 msgstr "Vypršení registrace:"
@@ -25373,7 +25374,7 @@ msgstr "Fantazie"
 msgid "Fantasikart"
 msgstr "Fantasikart"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:362
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:363
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:29
 #, c-format
 msgid "Fast cataloging"
@@ -25441,7 +25442,7 @@ msgstr "Účtenka za platbu"
 msgid "Feedback:"
 msgstr "Odezva:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:692
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:693
 #, c-format
 msgid "Fees &amp; Charges:"
 msgstr "Platby &amp; Poplatky:"
@@ -26527,7 +26528,7 @@ msgstr "Pátek"
 msgid "Fridays"
 msgstr "Pátek"
 
-#: intranet-tmpl/prog/en/modules/about.tt:282
+#: intranet-tmpl/prog/en/modules/about.tt:283
 #, c-format
 msgid "Fridolin Somers"
 msgstr "Fridolin Somers"
@@ -26620,7 +26621,7 @@ msgstr "Z libovolné knihovny:"
 #: intranet-tmpl/prog/en/modules/tools/export.tt:152
 #, c-format
 msgid "From authid: "
-msgstr "Z authid: "
+msgstr "Od authid: "
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:45
 #, c-format
@@ -26923,7 +26924,6 @@ msgid "Galego (Galician) Ignacio Javier"
 msgstr "Galego (Galicijština) Ignacio Javier"
 
 #: intranet-tmpl/prog/en/modules/about.tt:269
-#: intranet-tmpl/prog/en/modules/about.tt:281
 #: intranet-tmpl/prog/en/modules/about.tt:303
 #, c-format
 msgid "Galen Charlton"
@@ -27644,7 +27644,7 @@ msgstr "Skrýt okno"
 
 #. %1$s:  HIGHHOLDS.duration 
 #. %2$s:  HIGHHOLDS.returndate 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:256
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:257
 #, c-format
 msgid ""
 "High demand item. Loan period shortened to %s days (due %s). Check out "
@@ -27734,7 +27734,7 @@ msgstr "Datum rezervace"
 msgid "Hold at"
 msgstr "Rezervace v"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:829
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:830
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:475
 #: intranet-tmpl/prog/en/modules/reports/reservereport.tt:18
 #, c-format
@@ -27951,7 +27951,7 @@ msgstr "Objednávky ke stažení z regálu"
 msgid "Holds to pull%s placed between %s and %s%s"
 msgstr "Rezervace k vyzvednutí%s objednané mezi %s a %s%s"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:712
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:713
 #, c-format
 msgid "Holds waiting:"
 msgstr "Čekající rezervace:"
@@ -28107,7 +28107,7 @@ msgstr "Hologram"
 #: intranet-tmpl/prog/en/modules/plugins/plugins-disabled.tt:12
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:12
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:29
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:88
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:89
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:583
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:38
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:13
@@ -28684,7 +28684,7 @@ msgstr "JEDNOTKA"
 msgid "ITEMS"
 msgstr "JEDNOTKY"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:687
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:688
 #, c-format
 msgid "ITEMS OVERDUE"
 msgstr "Výpůjčky s PŘEKROČENOU výpůjční lhůtou"
@@ -29969,10 +29969,10 @@ msgstr ""
 msgid "Item"
 msgstr "Jednotka"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:194
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:198
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:202
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:206
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:195
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:199
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:203
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:207
 #, c-format
 msgid "Item "
 msgstr "Jednotka "
@@ -30006,7 +30006,7 @@ msgstr "Signatura jednotky mezi: "
 msgid "Item callnumber:"
 msgstr "Signatura jednotky:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:470
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:471
 #, c-format
 msgid "Item checked out"
 msgstr "Jednotka vypůjčena"
@@ -30046,7 +30046,7 @@ msgid "Item has been lost (transaction recorded anyway)"
 msgstr ""
 "Jednotka je označena jako ztracená (transakce byla ale přesto zaznamenána)"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:401
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:402
 #, c-format
 msgid "Item has been withdrawn"
 msgstr "Jednotka byla stažena z oběhu"
@@ -30106,7 +30106,7 @@ msgstr "Jednotka je zvukovou nahrávkou"
 msgid "Item is already at destination library."
 msgstr "Jednotka již je v cílové knihovně."
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:405
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:406
 #, c-format
 msgid "Item is restricted"
 msgstr "Výtisk je omezen"
@@ -30245,7 +30245,7 @@ msgstr "Tag jednotky"
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:651
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:653
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:57
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:716
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:734
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:589
@@ -32164,7 +32164,7 @@ msgstr "Koha &rsaquo; Výpůjčky"
 #. %1$s:  IF borrowernumber 
 #. %2$s:  INCLUDE 'patron-title.inc' invert_name = 1 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:10
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:11
 #, c-format
 msgid "Koha &rsaquo; Circulation %s &rsaquo; Checking out to %s %s "
 msgstr "Koha &rsaquo; Výpůjčky %s &rsaquo; Půjčování čtenáři %s %s "
@@ -33474,7 +33474,6 @@ msgid "Kunstreproduksjon"
 msgstr "Kunstreproduksjon"
 
 #: intranet-tmpl/prog/en/modules/about.tt:272
-#: intranet-tmpl/prog/en/modules/about.tt:283
 #: intranet-tmpl/prog/en/modules/about.tt:435
 #, c-format
 msgid "Kyle Hall"
@@ -33918,7 +33917,7 @@ msgstr "Právní předpisy a souhrny"
 msgid "Layout name: "
 msgstr "Název rozložení: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:117
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:118
 #, c-format
 msgid "Leave a message"
 msgstr "Vložit zprávu"
@@ -34522,6 +34521,7 @@ msgstr "Literatura:"
 msgid "Live action"
 msgstr "Probíhající akce"
 
+#: intranet-tmpl/prog/en/modules/about.tt:281
 #: intranet-tmpl/prog/en/modules/about.tt:515
 #, c-format
 msgid "Liz Rea"
@@ -34581,7 +34581,7 @@ msgid "Loading..."
 msgstr "Načítá se..."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:28
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:29
 msgid "Loading... you may continue scanning."
 msgstr "Nahrává se... můžete pokračovat v načítání kódů."
 
@@ -34630,7 +34630,7 @@ msgstr "Místní nastavení"
 msgid "Local use preferences"
 msgstr "Místní nastavení"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:351
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:352
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:439
 #, c-format
 msgid "Local use recorded"
@@ -34822,7 +34822,7 @@ msgstr "Stav ztrát:"
 msgid "Lost status: "
 msgstr "Stav ztrát: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:662
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:663
 #, c-format
 msgid "Lost: "
 msgstr "Ztráta: "
@@ -35330,7 +35330,7 @@ msgstr ""
 msgid "Make budget active: "
 msgstr "Učinit rozpočet aktivním: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:696
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:697
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:130
 #, c-format
 msgid "Make payment"
@@ -35769,6 +35769,7 @@ msgstr "Martin Renvoize"
 msgid "Maskinlesbare filer"
 msgstr "Maskinlesbare filer"
 
+#: intranet-tmpl/prog/en/modules/about.tt:282
 #: intranet-tmpl/prog/en/modules/about.tt:459
 #, c-format
 msgid "Mason James"
@@ -36147,7 +36148,7 @@ msgstr "Zpráva odeslána"
 msgid "Message subject:"
 msgstr "Předmět:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:734
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:735
 #, c-format
 msgid "Messages:"
 msgstr "Zprávy:"
@@ -38571,7 +38572,7 @@ msgstr "Nenalezeny žádné jednotky."
 
 #. %1$s:  END 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:382
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:383
 #, c-format
 msgid "No items were found by searching. %s %s "
 msgstr "Nebyly nalezeny žádné jednotky. %s %s "
@@ -38645,7 +38646,7 @@ msgstr "Nebyly nalezeny žádné odpovídající výstupy"
 msgid "No missing issues found."
 msgstr "Chybějící čísla nenalezena."
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:421
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:422
 #, c-format
 msgid "No more renewals possible"
 msgstr "Další prodloužení není možné"
@@ -38692,7 +38693,7 @@ msgid "No patron cardnumber in offline database (proceeding anyway): %s"
 msgstr ""
 "Číslo průkazu nebylo nalezeno v offline databázi (přesto bude použito): %s"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:475
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:476
 #, c-format
 msgid "No patron matched "
 msgstr "Žádný čtenář neodpovídá výrazu "
@@ -38959,7 +38960,7 @@ msgid "No, don't cancel"
 msgstr "Ne, neodstraňovat"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:330
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:331
 msgid "No, don't check out (N)"
 msgstr "Ne, nepůjčovat (N)"
 
@@ -38980,7 +38981,7 @@ msgid "No, don't delete (N)"
 msgstr "Ne, neodstraňovat (N)"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:328
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:329
 msgid "No, don't renew (N)"
 msgstr "Ne, neprodlužovat (N)"
 
@@ -39390,7 +39391,7 @@ msgid "Note : This export file will be very large, and is generated nightly."
 msgstr ""
 "Poznámka: Tento soubor exportu bude velmi rozsáhlý a je generován v noci."
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:154
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:155
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:117
 #, c-format
 msgid "Note about the accompanying materials: "
@@ -39516,7 +39517,7 @@ msgstr "Poznámky/Komentáře"
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:82
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:227
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:349
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:726
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:727
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:46
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:336
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:698
@@ -40166,7 +40167,7 @@ msgstr ""
 msgid "OS version ('uname -a'): "
 msgstr "Verze operačního systému ('uname -a'): "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:694
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:695
 #, c-format
 msgid "OVER THE LIMIT"
 msgstr "NAD LIMIT"
@@ -40308,7 +40309,7 @@ msgstr "Dokument "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:582
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:583
 #, c-format
 msgid "On-site checkout"
 msgstr "Prezenční výpůjčka"
@@ -40318,7 +40319,7 @@ msgstr "Prezenční výpůjčka"
 msgid "On-site checkouts"
 msgstr "Prezenční výpůjčky"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:577
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:578
 #, c-format
 msgid "On-site checkouts only. Automatic due date: "
 msgstr "Lze půjčovat pouze prezenčně. Automatické datum pro vrácení: "
@@ -40862,7 +40863,7 @@ msgstr "Pouze jednotka "
 msgid "Only items currently available"
 msgstr "Pouze momentálně dostupné jednotky"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:627
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:628
 #, c-format
 msgid "Only on-site checkouts are allowed"
 msgstr "Jsou možné pouze prezenční výpůjčky"
@@ -41394,7 +41395,7 @@ msgstr "Další výtisky"
 msgid "Other holdings:"
 msgstr "Další rezervace:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:122
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:123
 #, c-format
 msgid "Other librarians"
 msgstr "Ostatní knihovníky"
@@ -41521,7 +41522,7 @@ msgstr "Nezaplacené"
 #. %1$s:  IF ( chargesamount ) 
 #. %2$s:  chargesamount 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:692
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:693
 #, c-format
 msgid "Outstanding fees &amp; charges%s of %s%s"
 msgstr "Nezaplacené platby &amp; poplatky%s ve výši %s%s"
@@ -41570,7 +41571,7 @@ msgstr "Překročené lhůty"
 msgid "Overdues with fines"
 msgstr "Překročené lhůty s účtovaným poplatkem (upomínky)"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:687
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:688
 #, c-format
 msgid "Overdues:"
 msgstr "Upomínky:"
@@ -41593,7 +41594,7 @@ msgstr "Ignorovat omezení a prodloužit"
 msgid "Override renewal limit:"
 msgstr "Přepsat limit prodloužení:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:681
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:682
 #, c-format
 msgid "Override restriction temporarily"
 msgstr "Jednorázově umožnit půjčení"
@@ -41855,7 +41856,7 @@ msgid "Patent information: "
 msgstr "Patentová informace: "
 
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:62
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:813
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:814
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:83
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:143
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:564
@@ -41990,8 +41991,8 @@ msgstr "Dluh čtenáře překročil maximální dovolenou částku: %s"
 msgid "Patron flags:"
 msgstr "Příznaky uživatele:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:687
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:692
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:688
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:693
 #, c-format
 msgid "Patron has "
 msgstr "Čtenář má "
@@ -42011,7 +42012,7 @@ msgstr "Uživatel má vypůjčených %s položek."
 #. %1$s:  USERBLOCKEDOVERDUE 
 #. %2$s:  IF CAN_user_circulate_force_checkout 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:240
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:241
 #, c-format
 msgid "Patron has %s overdue item(s). %s Check out anyway? %s "
 msgstr "Čtenář má %s výpůjček nevrácených v termínu. %s I přesto půjčit? %s "
@@ -42019,20 +42020,20 @@ msgstr "Čtenář má %s výpůjček nevrácených v termínu. %s I přesto půj
 #. %1$s:  IF ( creditsamount ) 
 #. %2$s:  creditsamount 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:701
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:702
 #, c-format
 msgid "Patron has a credit%s of %s%s "
 msgstr "Čtenář má kredit%s ve výši %s%s "
 
 #. %1$s:  USERBLOCKEDWITHENDDATE | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:441
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:442
 #, c-format
 msgid "Patron has a restriction until %s."
 msgstr "Čtenáři byly omezeny služby do %s"
 
 #. %1$s:  IF CAN_user_circulate_force_checkout 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:260
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:261
 #, c-format
 msgid ""
 "Patron has already checked out another item from this record. %s Check out "
@@ -42045,7 +42046,7 @@ msgstr ""
 msgid "Patron has an indefinite restriction"
 msgstr "Čtenáři byly omezeny služby do odvolání"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:445
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:446
 #, c-format
 msgid "Patron has an indefinite restriction."
 msgstr "Čtenáři byly omezeny služby do odvolání."
@@ -42062,7 +42063,7 @@ msgstr ""
 msgid "Patron has nothing checked out."
 msgstr "Čtenář nemá žádné výpůjčky."
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:871
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:872
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:516
 #, c-format
 msgid "Patron has nothing on hold."
@@ -42120,7 +42121,7 @@ msgstr "Čtenář je dospělý"
 msgid "Patron is currently unrestricted."
 msgstr "Čtenář nemá v současnosti omezené služby knihovny."
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:417
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:418
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
 #, c-format
 msgid "Patron is restricted"
@@ -42202,7 +42203,7 @@ msgstr "Vyhledat čtenáře"
 msgid "Patron search: "
 msgstr "Vyhledat čtenáře: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:486
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:487
 #, c-format
 msgid "Patron selection"
 msgstr "Výběr čtenáře"
@@ -42246,7 +42247,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  expiry 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:151
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:152
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:165
 #, c-format
 msgid "Patron's account has been renewed until %s"
@@ -42257,18 +42258,18 @@ msgstr "Registrace čtenáře byla prodloužena do %s"
 #. %2$s:  userdebarreddate 
 #. %3$s:  END 
 #. %4$s:  IF ( debarredcomment ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:667
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:668
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:171
 #, c-format
 msgid "Patron's account is restricted %s until %s %s %s with the explanation: "
 msgstr "Účet čtenáře je omezený %s do %s %s %s z důvodu: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:658
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:659
 #, c-format
 msgid "Patron's address in doubt"
 msgstr "Adresa čtenáře je nejistá"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:409
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:410
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:207
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:253
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:373
@@ -42301,12 +42302,12 @@ msgstr "Čtenářský průkaz byl nahlášen jako ztracený."
 #. %1$s:  IF ( expiry ) 
 #. %2$s:  expiry 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:651
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:652
 #, c-format
 msgid "Patron's card has expired. %sPatron's card expired on %s%s "
 msgstr "Platnost registrace vypršela. %s Registrace vypršela dne %s%s "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:429
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:430
 #, c-format
 msgid "Patron's card is expired"
 msgstr "Platnost registrace vypršela."
@@ -42316,15 +42317,15 @@ msgstr "Platnost registrace vypršela."
 msgid "Patron's card is expired (%s)"
 msgstr "Platnost registrace vypršela (%s)"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:413
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:662
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:414
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:663
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
 #, c-format
 msgid "Patron's card is lost"
 msgstr "Čtenářský průkaz je ztracený"
 
 #. %1$s:  expiry 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:638
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:639
 #, c-format
 msgid "Patron's card will expire soon. Patron's card expires on %s "
 msgstr "Platnost registrace brzy vyprší. Registrace vyprší dne %s "
@@ -43214,7 +43215,7 @@ msgstr "Použijte, prosím, před uložením možnost 'Otestovat schéma číslo
 msgid "Please click on one of the tabs at the left side of this form."
 msgstr "Klikněte na jednu záložku na levé straně tohoto tormuláře."
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:172
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:173
 #, c-format
 msgid "Please confirm checkout"
 msgstr "Potvrďte výpůjčku, prosím"
@@ -43790,7 +43791,7 @@ msgstr "Děti 9-13 let"
 msgid "Pre-adolescent; "
 msgstr "Pre-adolescent; "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:128
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:129
 #, c-format
 msgid "Predefined notes: "
 msgstr "Předdefinované poznámky: "
@@ -43938,7 +43939,7 @@ msgstr "Předchozí záznamy"
 
 #: intranet-tmpl/prog/en/columns.def:73
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:23
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:813
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:106
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:450
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:40
@@ -44210,7 +44211,7 @@ msgstr "Tiskárna: "
 msgid "Printers"
 msgstr "Tiskárny"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:834
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:835
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:505
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:599
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:480
@@ -45329,7 +45330,7 @@ msgstr "Informace o vztahu"
 msgid "Relationship: "
 msgstr "Vztah: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:781
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:782
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:423
 #, c-format
 msgid "Relatives' checkouts"
@@ -45381,7 +45382,7 @@ msgstr "Reliéfní kódy 4:"
 msgid "Remember for next check in:"
 msgstr "Pamatovat pro příští sezení:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:562
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:563
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:694
 #, c-format
 msgid "Remember for session:"
@@ -45529,8 +45530,8 @@ msgstr "Odstranit?"
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:146
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:148
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:112
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:639
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:652
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:640
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:653
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:22
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:141
 #, c-format
@@ -45617,7 +45618,7 @@ msgid "Rental charge"
 msgstr "Poplatek za půjčení"
 
 #. %1$s:  RENTALCHARGE 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:190
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:191
 #, c-format
 msgid "Rental charge for this item: %s"
 msgstr "Poplatek za půjčení této jednotky: %s"
@@ -46091,17 +46092,17 @@ msgstr "Omezeno"
 msgid "Restricted [until] flag"
 msgstr "Omezeno [do]"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:667
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:668
 #, c-format
 msgid "Restricted:"
 msgstr "Omezení:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:464
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:465
 #, c-format
 msgid "Restriction overridden temporarily"
 msgstr "Omezení jsou dočasně vypnutá"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:454
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:455
 #, c-format
 msgid "Restriction overridden temporarily."
 msgstr "Půjčeno i přes omezení služeb."
@@ -46190,7 +46191,7 @@ msgid "Results per page :"
 msgstr "Výsledků na stránku :"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:865
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:866
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:511
 msgid "Resume all suspended holds"
 msgstr "Obnovit všechny přerušené rezervace"
@@ -46298,7 +46299,7 @@ msgstr "Vrací"
 msgid "Reverse"
 msgstr "Zrušit"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:293
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:294
 #, c-format
 msgid "Revert waiting status"
 msgstr "Zrušit status \"čeká\""
@@ -46810,7 +46811,7 @@ msgstr "Sobota"
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:460
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:445
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:63
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:142
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:143
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:10
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:179
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:387
@@ -47683,7 +47684,7 @@ msgstr "Vybrat&amp;zavřít"
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:51
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/labs_theses.tt:66
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/labs_theses.tt:78
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:503
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:504
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:240
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:189
 #: intranet-tmpl/prog/en/modules/patroncards/members-search.tt:89
@@ -47809,7 +47810,7 @@ msgstr "Vyberte knihovnu: "
 msgid "Select a library:"
 msgstr "Vybrat knihovnu:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:495
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:496
 #, c-format
 msgid "Select a patron: "
 msgstr "Vybrat čtenáře: "
@@ -47913,7 +47914,7 @@ msgstr "Vyberte měsíc:"
 msgid "Select none to see all libraries"
 msgstr "Nevybírejte nic, abyste viděli všechny knihovny"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:130
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:131
 #, c-format
 msgid "Select note"
 msgstr "Vyberte poznámku"
@@ -48383,7 +48384,7 @@ msgstr "Vynulovat všechny fondy"
 msgid "Set back to"
 msgstr "Nastavit zpět na"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:645
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:646
 #, c-format
 msgid "Set due date to expiry:"
 msgstr "Nastavit datum vypršení výpůjčky:"
@@ -49290,7 +49291,7 @@ msgstr "Určitý poměr redukce"
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:855
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:856
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:501
 #, c-format
 msgid "Specify date on which to resume %s: "
@@ -49298,7 +49299,7 @@ msgstr "Určete datum pro obnovení %s "
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:556
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:557
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:692
 #, c-format
 msgid "Specify due date %s: "
@@ -50847,7 +50848,7 @@ msgid "Surveys of literature in a subject area"
 msgstr "Průzkum literatury v oblasti předmětu"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:850
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:851
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:496
 msgid "Suspend all holds"
 msgstr "Přerušit všechny rezervace"
@@ -51802,7 +51803,7 @@ msgstr "Čárový kód %s nebyl nalezen."
 #. %1$s:  barcode |html 
 #. %2$s:  IF ( fast_cataloging ) 
 #. %3$s:  IF ( CAN_user_editcatalogue_fast_cataloging ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:359
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:360
 #, c-format
 msgid "The barcode was not found %s %s %s "
 msgstr "Čárový kód '%s' nebyl nalezen %s %s "
@@ -51883,7 +51884,7 @@ msgstr ""
 "na vylepšení, stejně jako ohlásit jakékoli chyby pomocí "
 
 #. %1$s:  INVALID_DATE 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:355
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:356
 #, c-format
 msgid "The due date &quot;%s&quot; is invalid"
 msgstr "Datum vrácení &quot;%s&quot; je neplatné"
@@ -51987,7 +51988,7 @@ msgstr ""
 "vracení výpůjček."
 
 #. %1$s:  FOREACH book IN options 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:368
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:369
 #, c-format
 msgid "The following items were found by searching: %s "
 msgstr "Byly nalezeny následující jednotky: %s "
@@ -52177,13 +52178,13 @@ msgid "The passwords entered do not match"
 msgstr "Zadaná hesla nejsou shodná"
 
 #. %1$s:  DEBT 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:187
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:188
 #, c-format
 msgid "The patron has a debt of %s."
 msgstr "Čtenář má dluh ve výši %s."
 
 #. %1$s:  alert.OTHER_CHARGES 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:164
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:165
 #, c-format
 msgid "The patron has unpaid charges for reserves, rentals etc of %s"
 msgstr "Čtenář má neuhrazené poplatky za rezervace, pronájmy, atd. ve výši %s"
@@ -52685,7 +52686,7 @@ msgstr ""
 "K výpisu anonymizovaných výpůjček je třeba použít modul Výstupy."
 
 #. %1$s:  Branches.GetName( itemhomebranch ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:437
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:438
 #, c-format
 msgid "This item belongs to %s and cannot be checked out from this location."
 msgstr "Tato jednotka patří do knihovny %s a tady nemůže být půjčována."
@@ -52696,7 +52697,7 @@ msgid "This item has been added to your cart"
 msgstr "Jednotka byla vložena do košíku"
 
 #. %1$s:  alert.ITEM_LOST 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:160
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:161
 #, c-format
 msgid "This item has been lost with a status of \"%s\"."
 msgstr "Tato jednotka byla ztracena s tímto statusem: \"%s\"."
@@ -52704,7 +52705,7 @@ msgstr "Tato jednotka byla ztracena s tímto statusem: \"%s\"."
 #. %1$s:  ITEM_LOST 
 #. %2$s:  IF CAN_user_circulate_force_checkout 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:248
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:249
 #, c-format
 msgid ""
 "This item has been lost with a status of \"%s\". %s Check out anyway? %s "
@@ -52777,7 +52778,7 @@ msgstr "Tato zpráva se objeví ve čtenářském kontě on-line katalogu"
 msgid "This message displays when checking out to this patron"
 msgstr "Tato zpráva se zobrazí výpůjčce pro tohoto čtenáře"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:222
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:223
 #, c-format
 msgid "This patron can't check out this item per library circulation policy"
 msgstr ""
@@ -52804,7 +52805,7 @@ msgid "This patron has not submitted any purchase suggestions"
 msgstr "Tento čtenář neodeslal žádné návrhy na zakoupení"
 
 #. %1$s:  BORRNOTSAMEBRANCH 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:218
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:219
 #, c-format
 msgid "This patrons is from a different library (%s)"
 msgstr "Tento čtenář je z jiné knihovny (%s)"
@@ -53203,8 +53204,8 @@ msgstr "Tissotovo konformní kónické"
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:94
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:180
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:55
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:806
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:830
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:831
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:714
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:732
@@ -53313,15 +53314,12 @@ msgstr "Název (přesně)"
 msgid "Title translated: "
 msgstr "Překlad názvu: "
 
-#. %1$s:  FOREACH item IN results -
-#. %2$s: - INCLUDE 'catalogue/itemsearch_item.csv.inc' item = item -
-#. %3$s: - END -
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch_csv.tt:1
-#, c-format
+#: intranet-tmpl/prog/en/includes/csv_headers/catalogue/itemsearch.tt:1
+#, fuzzy, c-format
 msgid ""
 "Title, Publication Date, Publisher, Collection, Barcode, Call number, Home "
 "library, Current location, Shelving location, Inventory number, Status, "
-"Checkouts %s %s %s "
+"Checkouts "
 msgstr ""
 "Název, Datum vydání, Vydavatel, Fond, Čárový kód, Signatura, Domovská "
 "knihovna, Aktuální umístění, Umístění na regále, Přírůstkové číslo, Status, "
@@ -53432,7 +53430,7 @@ msgstr "To a file: "
 #: intranet-tmpl/prog/en/modules/tools/export.tt:156
 #, c-format
 msgid "To authid: "
-msgstr "Pro authid: "
+msgstr "Do authid: "
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:49
 #, c-format
@@ -53605,8 +53603,8 @@ msgstr "Tomás Cohen Arazi"
 #. For the first occurrence,
 #. %1$s:  current_loan_count 
 #. %2$s:  max_loans_allowed 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:214
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:433
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:215
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:434
 #, c-format
 msgid "Too many checked out. %s checked out, only %s are allowed."
 msgstr ""
@@ -56378,7 +56376,7 @@ msgstr "Zobrazit nezpracované offline výpůjčky"
 msgid "View record"
 msgstr "Zobrazit záznam"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:678
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:679
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:179
 #, c-format
 msgid "View restrictions"
@@ -57259,7 +57257,7 @@ msgid "Yes, cancel"
 msgstr "Ano, zrušit"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:315
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:316
 msgid "Yes, check out (Y)"
 msgstr "Ano, vypůjčit (Y)"
 
@@ -57308,7 +57306,7 @@ msgid "Yes, delete this tag"
 msgstr "Ano, odstranit toto pole"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:313
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:314
 msgid "Yes, renew (Y)"
 msgstr "Ano, prodloužit (Y)"
 
@@ -57636,7 +57634,7 @@ msgstr ""
 "%s Nastavení 'queryparser_config' nebylo ve vašem konfiguračním souboru "
 "nalezeno. "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:645
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:646
 #, c-format
 msgid ""
 "You have the ReturnBeforeExpiry system preference enabled this means if the "
@@ -57729,7 +57727,7 @@ msgstr "Je nutné vybrat alespoň dva doklady pro sloučení."
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:28
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:29
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:26
 msgid "You must select checkout(s) to export"
 msgstr "Je nutné vybrat výpůjčky, které chcete exportovat"
@@ -58310,10 +58308,10 @@ msgstr ""
 msgid "[Clear all]"
 msgstr "[Odebrat označení]"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:744
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:747
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:753
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:755
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:745
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:748
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:754
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:756
 #, c-format
 msgid "[Delete]"
 msgstr "[Odstranit]"
@@ -60677,7 +60675,7 @@ msgstr ""
 "být doplněno o nuly, např. '01/02/2008'. Alternativně můžete datum zadat i v "
 "ISO formátu (např., '2010-10-28'). "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:694
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:695
 #, c-format
 msgid "because fine balance is "
 msgstr "protože výše dlužených poplatků/upomínek je "
@@ -60687,7 +60685,7 @@ msgstr "protože výše dlužených poplatků/upomínek je "
 msgid "begins with "
 msgstr "začíná na "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:687
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:688
 #, c-format
 msgid "below"
 msgstr "níže"
@@ -69952,8 +69950,8 @@ msgid "or"
 msgstr "nebo"
 
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:203
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:639
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:652
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:640
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:653
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:159
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:201
 #: intranet-tmpl/prog/en/modules/about.tt:151
@@ -74567,7 +74565,7 @@ msgstr "pokud neplatí, že"
 msgid "unspecified/unknown"
 msgstr "neupřesněno/neznámé"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:853
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:854
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:499
 #, c-format
 msgid "until"
