@@ -1,0 +1,315 @@
+RELEASE NOTES FOR KOHA 3.20.3
+23 Aug 2015
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.20.3 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.20.03.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+
+Koha 3.20.3 is a bugfix/maintenance release.
+
+
+
+New features in 3.20.3
+======================
+
+
+----------
+
+
+Enhancements in 3.20.3
+======================
+
+
+----------
+
+
+Critical bugs fixed in 3.20.3
+======================
+
+
+Acquisitions
+----------
+	8684	major	Duplicate check for creating items on order broken
+
+Architecture, internals, and plumbing
+----------
+	10961	critical	Error in GetMarcBiblio can cause severe data loss
+
+Cataloging
+----------
+	14660	major	Cataloguing plugins for generating inventory numbers are broken
+
+Lists
+----------
+	14517	major	Private lists browsing broken in translated staff interface
+
+Searching
+----------
+	14456	major	EmbedSeeFromHeadings record filter shouldn't process MARC holding fields
+
+SIP2
+----------
+	14644	critical	SIP2 terminal authentication via telnet transport broken
+
+Tools
+----------
+	14592	major	Export data bad encoding
+
+
+Other bugs fixed in 3.20.3
+======================
+
+
+Architecture, internals, and plumbing
+----------
+	14494	normal	Terribly slow checkout caused by DateTime->new in far future
+
+Cataloging
+----------
+	14387	normal	Merge reference selection has no effect when merging authorities.
+
+Circulation
+----------
+	13663	normal	Offline circ permission issue
+	14534	minor	Stop overdue_notices.pl from issuing the warning: Use of uninitialized value $borrowernumber
+	14487	trivial	Warns from returns.pl during checkin
+
+Documentation
+----------
+	14545	trivial	Typo in help file for 3.20 (stage-marc-import.tt)
+	14547	trivial	Typo in help file for 3.20 (basket.tt)
+	14548	trivial	Typo in help file for 3.20 (batch_record_modification.tt)
+
+OPAC
+----------
+	11693	normal	Default emailing preferences not loaded for self registering patron
+
+Patrons
+----------
+	14569	trivial	Typo for borrowers
+
+Self checkout
+----------
+	14404	normal	Checkouts default sort order for Self Checkout (SCO) confusing for patrons
+
+Tools
+----------
+	14445	minor	Noisy warns in Notices (letter.tt) module
+
+
+New sysprefs in 3.20.3
+======================
+
+
+
+System requirements
+======================
+
+    Important notes:
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+The Koha manual is maintained in DocBook.The home page for Koha 
+documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.20/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+
+  * English (USA)
+  * Arabic (99%)
+  * Armenian (99%)
+  * Chinese (China) (87%)
+  * Chinese (Taiwan) (100%)
+  * Czech (98%)
+  * Danish (83%)
+  * English (New Zealand) (97%)
+  * French (95%)
+  * French (Canada) (90%)
+  * German (100%)
+  * German (Switzerland) (100%)
+  * Italian (99%)
+  * Kurdish (60%)
+  * Norwegian Bokmål (61%)
+  * Polish (97%)
+  * Portuguese (98%)
+  * Portuguese (Brazil) (85%)
+  * Slovak (97%)
+  * Spanish (100%)
+  * Swedish (90%)
+  * Turkish (97%)
+  * Vietnamese (85%)
+
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+
+Release Team
+======================
+
+The release team for Koha 3.20.3 is
+
+  Release Manager:       Tomás Cohen Arazi <tomascohen@gmail.com>
+  QA Manager:            Katrin Fischer <Katrin.Fischer@bsz-bw.de>
+  Documentation Manager: Nicole C. Engard <nengard@gmail.com>
+  Translation Manager:   Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  QA Team:               Jonathan Druart <jonathan.druart@biblibre.com>
+                         Brendan Gallagher <brendan@bywatersolutions.com>
+                         Kyle Hall <kyle@bywatersolutions.com>
+                         Paul Poulain <paul.poulain@biblibre.com>
+                         Martin Renvoize <martin.renvoize@ptfs-europe.com>
+                         Marcel de Rooy <m.de.rooy@rijksmuseum.nl>
+  Bug Wrangler:          Magnus Enger <magnus@enger.priv.no>
+  Packaging Manager:     Robin Sheat <robin@catalyst.net.nz>
+
+  Release Maintainer (3.18.x): Chris Cormack <chrisc@catalyst.net.nz>
+  Release Maintainer (3.16.x): Mason James <mtj@kohaaloha.com>
+  Release Maintainer (3.14.x): Fridolin Somers <fridolin.somers@biblibre.com>
+
+Credits
+======================
+
+
+We thank the following libraries who are known to have sponsored
+new features in Koha 3.20.3:
+  * Universidad de El Salvador
+
+We thank the following individuals who contributed patches to Koha 3.20.3.
+
+  * mxbeaulieu (1)
+  * Aleisha (2)
+  * Jacek Ablewicz (1)
+  * Alex Arnaud (1)
+  * Hector Castro (3)
+  * Galen Charlton (1)
+  * Tomás Cohen Arazi (1)
+  * Chris Cormack (1)
+  * Indranil Das Gupta (2)
+  * Stéphane Delaune (1)
+  * Frédéric Demians (1)
+  * Marcel de Rooy (4)
+  * Jonathan Druart (8)
+  * Katrin Fischer (2)
+  * Bernardo González Kriegel (1)
+  * Ulrich Kleiber (1)
+  * Kyle M Hall (2)
+  * Mark Tompsett (1)
+
+
+We thank the following libraries, companies, and other institutions who contributed
+patches to Koha 3.20.3
+
+
+  * BSZ BW (3)
+  * BibLibre (4)
+  * ByWater-Solutions (2)
+  * Catalyst (1)
+  * Equinox (1)
+  * Rijksmuseum (4)
+  * Solutions inLibro inc (1)
+  * Tamil (1)
+  * Theke Solutions (1)
+  * Universidad Nacional de Córdoba (1)
+  * biblos.pk.edu.pl (1)
+  * bugs.koha-community.org (3)
+  * koha-community.org (3)
+  * unidentified (8)
+
+We also especially thank the following individuals who tested patches
+for Koha 3.20.3.
+
+  * Aleisha (2)
+  * Amit Gupta (2)
+  * Chris Cormack (34)
+  * Colin Campbell (1)
+  * Galen Charlton (1)
+  * Hector Castro (1)
+  * Jonathan Druart (17)
+  * Josef Moravec (2)
+  * Katrin Fischer (8)
+  * Marc Véron (1)
+  * Mark Tompsett (4)
+  * Nick Clemens (4)
+  * Tomas Cohen Arazi (34)
+  * Indranil Das Gupta (L2C2 Technologies) (3)
+  * Kyle M Hall (11)
+  * Marcel de Rooy (2)
+
+We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release line is 3.20.x.
+
+The last Koha release was 3.16.9, which was released on March 29, 2015.
+
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+He rau ringa e oti ai.
+(Many hands finish the work)
+
+##### Autogenerated release notes updated last on 23 Aug 2015 23:42:21 Z #####
