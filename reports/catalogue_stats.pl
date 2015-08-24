@@ -30,6 +30,8 @@ use C4::Reports;
 use C4::Circulation;
 use C4::Biblio qw/GetMarcSubfieldStructureFromKohaField/;
 
+use Koha::DateUtils;
+
 =head1 NAME
 
 plugin that shows a stats on borrowers
@@ -81,7 +83,7 @@ if ($do_it) {
         exit;
     } else {
         print $input->header(
-            -type       => 'application/vnd.sun.xml.calc',
+            -type       => 'text/csv',
             -encoding   => 'utf-8',
             -attachment => "$basename.csv",
             -name       => "$basename.csv"
@@ -231,10 +233,10 @@ sub calculate {
         }
     }
 
-    @$filters[13] = C4::Dates->new(@$filters[13])->output('iso') if @$filters[13];
-    @$filters[14] = C4::Dates->new(@$filters[14])->output('iso') if @$filters[14];
-    @$filters[15] = C4::Dates->new(@$filters[15])->output('iso') if @$filters[15];
-    @$filters[16] = C4::Dates->new(@$filters[16])->output('iso') if @$filters[16];
+    @$filters[13] = dt_from_string(@$filters[13])->date() if @$filters[13];
+    @$filters[14] = dt_from_string(@$filters[14])->date() if @$filters[14];
+    @$filters[15] = dt_from_string(@$filters[15])->date() if @$filters[15];
+    @$filters[16] = dt_from_string(@$filters[16])->date() if @$filters[16];
 
     my @linefilter;
     $linefilter[0] = @$filters[0] if ( $line =~ /items\.itemcallnumber/ );
@@ -427,84 +429,101 @@ sub calculate {
         LEFT JOIN biblioitems ON ($itemstable.biblioitemnumber = biblioitems.biblioitemnumber)
         LEFT JOIN biblio ON (biblioitems.biblionumber = biblio.biblionumber)
         WHERE 1 ";
-    $strcalc .= "AND barcode $not like ? " if ($barcodefilter);
+
+    my @sqlargs;
+
+    if ($barcodefilter) {
+        $strcalc .= "AND barcode $not like ? ";
+        push @sqlargs, $barcodefilter;
+    }
 
     if ( @$filters[0] ) {
+        $strcalc .= " AND $itemstable.itemcallnumber >= ? ";
         @$filters[0] =~ s/\*/%/g;
-        $strcalc .= " AND $itemstable.itemcallnumber >=" . $dbh->quote( @$filters[0] );
+        push @sqlargs, @$filters[0];
     }
 
     if ( @$filters[1] ) {
+        $strcalc .= " AND $itemstable.itemcallnumber <= ? ";
         @$filters[1] =~ s/\*/%/g;
-        $strcalc .= " AND $itemstable.itemcallnumber <=" . $dbh->quote( @$filters[1] );
+        push @sqlargs, @$filters[1];
     }
 
     if ( @$filters[2] ) {
+        $strcalc .= " AND " . ( C4::Context->preference('item-level_itypes') ? "$itemstable.itype" : 'biblioitems.itemtype' ) . " LIKE ? ";
         @$filters[2] =~ s/\*/%/g;
-        $strcalc .= " AND " . ( C4::Context->preference('item-level_itypes') ? "$itemstable.itype" : 'biblioitems.itemtype' ) . " LIKE '" . @$filters[2] . "'";
+        push @sqlargs, @$filters[2];
     }
 
     if ( @$filters[3] ) {
+        $strcalc .= " AND biblioitems.publishercode LIKE ? ";
         @$filters[3] =~ s/\*/%/g;
         @$filters[3] .= "%" unless @$filters[3] =~ /%/;
-        $strcalc .= " AND biblioitems.publishercode LIKE \"" . @$filters[3] . "\"";
+        push @sqlargs, @$filters[3];
     }
     if ( @$filters[4] ) {
-        @$filters[4] =~ s/\*/%/g;
         $strcalc .= " AND " .
         (C4::Context->preference('marcflavour') eq 'UNIMARC' ? 'publicationyear' : 'copyrightdate')
-        . ">" . @$filters[4];
+        . "> ? ";
+        @$filters[4] =~ s/\*/%/g;
+        push @sqlargs, @$filters[4];
     }
     if ( @$filters[5] ) {
         @$filters[5] =~ s/\*/%/g;
         $strcalc .= " AND " .
         (C4::Context->preference('marcflavour') eq 'UNIMARC' ? 'publicationyear' : 'copyrightdate')
-        . "<" . @$filters[5];
+        . "< ? ";
+        push @sqlargs, @$filters[5];
     }
     if ( @$filters[6] ) {
+        $strcalc .= " AND $itemstable.homebranch LIKE ? ";
         @$filters[6] =~ s/\*/%/g;
-        $strcalc .= " AND $itemstable.homebranch LIKE '" . @$filters[6] . "'";
+        push @sqlargs, @$filters[6];
     }
     if ( @$filters[7] ) {
+        $strcalc .= " AND $itemstable.location LIKE ? ";
         @$filters[7] =~ s/\*/%/g;
-        $strcalc .= " AND $itemstable.location LIKE '" . @$filters[7] . "'";
+        push @sqlargs, @$filters[7];
     }
     if ( @$filters[8] ) {
+        $strcalc .= " AND $itemstable.ccode  LIKE ? ";
         @$filters[8] =~ s/\*/%/g;
-        $strcalc .= " AND $itemstable.ccode  LIKE '" . @$filters[8] . "'";
+        push @sqlargs, @$filters[8];
     }
     if ( defined @$filters[9] and @$filters[9] ne '' ) {
+        $strcalc .= " AND $itemstable.notforloan  LIKE ? ";
         @$filters[9] =~ s/\*/%/g;
-        $strcalc .= " AND $itemstable.notforloan  LIKE '" . @$filters[9] . "'";
+        push @sqlargs, @$filters[9];
     }
     if ( defined @$filters[10] and @$filters[10] ne '' ) {
+        $strcalc .= " AND $itemstable.materials  LIKE ? ";
         @$filters[10] =~ s/\*/%/g;
-        $strcalc .= " AND $itemstable.materials  LIKE '" . @$filters[10] . "'";
+        push @sqlargs, @$filters[10];
     }
     if ( @$filters[13] ) {
+        $strcalc .= " AND $itemstable.dateaccessioned >= ? ";
         @$filters[13] =~ s/\*/%/g;
-        $strcalc .= " AND $itemstable.dateaccessioned >= '@$filters[13]' ";
+        push @sqlargs, @$filters[13];
     }
     if ( @$filters[14] ) {
+        $strcalc .= " AND $itemstable.dateaccessioned <= ? ";
         @$filters[14] =~ s/\*/%/g;
-        $strcalc .= " AND $itemstable.dateaccessioned <= '@$filters[14]' ";
+        push @sqlargs, @$filters[14];
     }
     if ( $cellvalue eq 'deleteditems' and @$filters[15] ) {
+        $strcalc .= " AND DATE(deleteditems.timestamp) >= ? ";
         @$filters[15] =~ s/\*/%/g;
-        $strcalc .= " AND DATE(deleteditems.timestamp) >= '@$filters[15]' ";
+        push @sqlargs, @$filters[15];
     }
     if ( $cellvalue eq 'deleteditems' and @$filters[16] ) {
         @$filters[16] =~ s/\*/%/g;
-        $strcalc .= " AND DATE(deleteditems.timestamp) <= '@$filters[16]' ";
+        $strcalc .= " AND DATE(deleteditems.timestamp) <= ?";
+        push @sqlargs, @$filters[16];
     }
     $strcalc .= " group by $linefield, $colfield order by $linefield,$colfield";
     $debug and warn "SQL: $strcalc";
     my $dbcalc = $dbh->prepare($strcalc);
-    if ($barcodefilter) {
-        $dbcalc->execute($barcodefilter);
-    } else {
-        $dbcalc->execute();
-    }
+    $dbcalc->execute(@sqlargs);
 
     while ( my ( $row, $col, $value ) = $dbcalc->fetchrow ) {
 

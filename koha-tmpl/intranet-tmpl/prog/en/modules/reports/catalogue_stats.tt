@@ -20,19 +20,17 @@
     }
 
     $(document).ready(function() {
-        var datesRO = $( "#fromRO, #toRO" ).datepicker({
-            changeMonth: true,
-            numberOfMonths: 1,
-            onSelect: function( selectedDate ) {
-                var option = this.id == "fromRO" ? "minDate" : "maxDate",
-                    instance = $( this ).data( "datepicker" );
-                    date = $.datepicker.parseDate(
-                        instance.settings.dateFormat ||
-                        $.datepicker._defaults.dateFormat,
-                        selectedDate, instance.settings );
-                datesRO.not( this ).datepicker( "option", option, date );
-            }
-        });
+        $('#acqdateFrom, #deldateFrom')
+          .datepicker('option', 'onSelect', function(selectedDate) {
+            var id = $(this).attr('id').replace('From', 'To');
+            $('#' + id).datepicker('option', 'minDate', selectedDate);
+          });
+        $('#acqdateTo, #deldateTo')
+          .datepicker('option', 'onSelect', function(selectedDate) {
+            var id = $(this).attr('id').replace('To', 'From');
+            $('#' + id).datepicker('option', 'maxDate', selectedDate);
+          });
+
         $("input[name='Cellvalue']").change(function() {
             changeRemovedDateTrStatus();
         });
@@ -259,9 +257,9 @@
                 <td><input type="radio" name="Line" value="items.dateaccessioned" /></td>
                 <td><input type="radio" name="Column" value="items.dateaccessioned" /></td>
                 <td>
-                    <label for="acqdateFrom">From:</label>
+                    <label for="acqdateFrom">From</label>
                     <input type="text" name="Filter" id="acqdateFrom" class="datepicker" />
-                    <label for="acqdateTo">To:</label>
+                    <label for="acqdateTo">To</label>
                     <input type="text" name="Filter" id="acqdateTo" class="datepicker" />
                 </td>
             </tr>
@@ -270,9 +268,9 @@
                 <td><input type="radio" name="Line" value="deleteditems.timestamp" /></td>
                 <td><input type="radio" name="Column" value="deleteditems.timestamp" /></td>
                 <td>
-                    <label for="deldateFrom">From:</label>
+                    <label for="deldateFrom">From</label>
                     <input type="text" name="Filter" id="deldateFrom" class="datepicker" />
-                    <label for="deldateTo">To:</label>
+                    <label for="deldateTo">To</label>
                     <input type="text" name="Filter" id="deldateTo" class="datepicker"/>
                 </td>
             </tr>
