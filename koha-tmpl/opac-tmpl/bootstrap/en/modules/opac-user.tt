@@ -537,8 +537,8 @@
                                             <td class="title">
                                                 <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% RESERVE.biblionumber %]">
                                                     [% RESERVE.biblio.title %]
-                                                    [% FOREACH subtitl IN RESERVE.biblio.subtitle %]
-                                                        [% subtitl.subfield %]
+                                                    [% FOREACH s IN RESERVE.biblio.subtitles %]
+                                                        [% s %]
                                                     [% END %]
                                                     [% RESERVE.item.enumchron %]
                                                 </a>
@@ -622,9 +622,9 @@
                                                                         <div class="modal-header">
                                                                             <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
                                                                             [% IF RESERVE.suspend %]
-                                                                                <h3 id="suspendModal[% RESERVE.reserve_id %]Label">Resume your hold on <i>[% RESERVE.reserves_title %]</i></h3>
+                                                                                <h3 id="suspendModal[% RESERVE.reserve_id %]Label">Resume your hold on <i>[% RESERVE.biblio.title %]</i></h3>
                                                                             [% ELSE %]
-                                                                                <h3 id="suspendModal[% RESERVE.reserve_id %]Label">Suspend your hold on <i>[% RESERVE.reserves_title %]</i></h3>
+                                                                                <h3 id="suspendModal[% RESERVE.reserve_id %]Label">Suspend your hold on <i>[% RESERVE.biblio.title %]</i></h3>
                                                                             [% END %]
                                                                         </div>
                                                                         <div class="modal-body">

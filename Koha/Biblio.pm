@@ -37,14 +37,20 @@ Koha::Biblio - Koha Biblio Object class
 
 =cut
 
-=head3 subtitle
+=head3 subtitles
+
+my @subtitles = $biblio->subtitles();
+
+Returns list of subtitles for a record.
+
+Keyword to MARC mapping for subtitle must be set for this method to return any possible values.
 
 =cut
 
-sub subtitle {
+sub subtitles {
     my ( $self ) = @_;
 
-    return GetRecordValue( 'subtitle', GetMarcBiblio( $self->id() ), GetFrameworkCode( $self->id() ) );
+    return map { $_->{subfield} } @{ GetRecordValue( 'subtitle', GetMarcBiblio( $self->id ), $self->frameworkcode ) };
 }
 
 
