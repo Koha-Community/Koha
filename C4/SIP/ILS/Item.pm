@@ -47,7 +47,6 @@ our $VERSION = 3.07.00.049;
             itemnumber => '823',
             priority => '1',
             reservenotes => undef,
-            constrainttype => 'a',
             reservedate => '2008-10-09',
             found => undef,
             rtimestamp => '2008-10-09 11:15:06',
