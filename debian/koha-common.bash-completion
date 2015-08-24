@@ -43,6 +43,21 @@ _build_substract_instances()
     echo "$substract"
 }
 
+_koha_single_instance()
+{
+    local filter=$1
+
+    cur=${COMP_WORDS[COMP_CWORD]}
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+    if [ $COMP_CWORD -eq 1 ]; then
+        COMPREPLY=( $( compgen -W "$(koha-list $filter)" $cur ) )
+    else
+        COMPREPLY=()
+    fi
+
+    return 0
+}
+
 _koha_list_cmd()
 {
     local filter=$1
@@ -119,6 +134,9 @@ complete -F _koha_enabled_instances koha-disable
 complete -F _koha_enabled_instances koha-start-zebra
 complete -F _koha_enabled_instances koha-restart-zebra
 complete -F _koha_enabled_instances koha-stop-zebra
+
+# koha-mysql autocompletes with a single instance name
+complete -F _koha_single_instance koha-mysql
 
 _koha_list()
 {
