@@ -280,7 +280,6 @@ my $reserves = Koha::Holds->search( { borrowernumber => $borrowernumber } );
 
 $template->param(
     RESERVES       => $reserves,
-    reserves_count => $reserves->count(),
     showpriority   => $show_priority,
     WAITING        => $reserves->waiting()
 );

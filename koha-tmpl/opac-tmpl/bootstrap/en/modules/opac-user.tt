@@ -117,7 +117,7 @@
                                 [% IF ( BORROWER_INF.amountlessthanzero ) %]<li><a href="#opac-user-fines">Credits ([% BORROWER_INF.amountoutstanding %])</a></li>[% END %]
                             [% END %]
                             [% IF ( waiting_count ) %][% IF ( BORROWER_INF.atdestination ) %]<li><a href="#opac-user-waiting">Waiting ([% waiting_count %])</a></li>[% END %][% END %]
-                            [% IF ( reserves_count ) %]<li><a href="#opac-user-holds">Holds ([% reserves_count %])</a></li>[% END %]
+                            [% IF ( RESERVES.count ) %]<li><a href="#opac-user-holds">Holds ([% RESERVES.count %])</a></li>[% END %]
                         </ul>
 
                         <div id="opac-user-checkouts">
@@ -498,10 +498,10 @@
                         [% END # /overdues_count %]
 
 
-                        [% IF ( reserves_count ) %]
+                        [% IF ( RESERVES.count ) %]
                             <div id="opac-user-holds">
                                 <table id="holdst" class="table table-bordered table-striped">
-                                    <caption>Holds <span class="count">([% reserves_count %] total)</span></caption>
+                                    <caption>Holds <span class="count">([% RESERVES.count %] total)</span></caption>
                                     <!-- RESERVES TABLE ROWS -->
                                     <thead>
                                         <tr>
@@ -686,7 +686,7 @@
                                 </div>
                             [% END %]
                         </div> <!-- / #opac-user-holds -->
-                        [% END # / #reserves_count %]
+                        [% END # / #RESERVES.count %]
                     </div> <!-- /#opac-user-views -->
                 </div> <!-- /#userdetails -->
             </div> <!-- /.span10 -->
