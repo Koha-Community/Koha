@@ -374,7 +374,10 @@ $(document).ready(function() {
                     "bVisible": exports_enabled ? true : false,
                     "bSortable": false,
                     "mDataProp": function ( oObj ) {
-                        return "<input type='checkbox' class='export' id='export_" + oObj.biblionumber + "' name='biblionumbers' value='" + oObj.biblionumber + "' />";
+                        var s = "<input type='checkbox' name='itemnumbers' value='" + oObj.itemnumber + "' style='visibility:hidden;' />";
+
+                        s += "<input type='checkbox' class='export' id='export_" + oObj.biblionumber + "' name='biblionumbers' value='" + oObj.biblionumber + "' />";
+                        return s;
                     }
                 }
             ],
