@@ -39,7 +39,6 @@ use C4::Installer;
 use C4::Dates;
 use Koha::Database;
 use Koha;
-use C4::Koha qw/GetSupportList/;
 
 use MARC::Record;
 use MARC::File::XML ( BinaryEncoding => 'utf8' );
@@ -11321,14 +11320,21 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.19.00.XXX";
+$DBversion = "3.21.00.XXX";
 if ( CheckVersion($DBversion) ) {
-    foreach my $format (@{ GetSupportList() }) {
-        $dbh->do(q|
+    my $query = q{ SELECT * FROM itemtypes ORDER BY description };
+    my $sth   = C4::Context->dbh->prepare($query);
+    $sth->execute;
+    my $suggestion_formats = $sth->fetchall_arrayref( {} );
+
+    foreach my $format (@$suggestion_formats) {
+        $dbh->do(
+            q|
             INSERT IGNORE INTO authorised_values (category, authorised_value, lib, lib_opac, imageurl)
             VALUES (?, ?, ?, ?, ?)
         |, {},
-            'SUGGEST_FORMAT', $format->{itemtype}, $format->{description}, $format->{description}, $format->{imageurl}
+            'SUGGEST_FORMAT', $format->{itemtype}, $format->{description}, $format->{description},
+            $format->{imageurl}
         );
     }
     print "Upgrade to $DBversion done (Bug 9468: create new SUGGEST_FORMAT authorised_value list)\n";
