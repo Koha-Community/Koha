@@ -15,7 +15,7 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 551;
+use Test::More tests => 549;
 use t::lib::Mocks qw(mock_preference);
 use POSIX qw(strftime);
 
@@ -150,7 +150,6 @@ mocking_systempreferences_to_a_set_value(0);
 $report = C4::UsageStats->BuildReport();
 isa_ok( $report,                      'HASH', '$report is a HASH' );
 isa_ok( $report->{systempreferences}, 'HASH', '$report->{systempreferences} is a HASH' );
-is( scalar( keys %{$report->{systempreferences}} ), 248, "There are 248 fields in $report->{systempreferences}" );
 verif_systempreferences_values( $report, 0 );
 
 #mock with values
@@ -159,8 +158,11 @@ mocking_systempreferences_to_a_set_value(1);
 $report = C4::UsageStats->BuildReport();
 isa_ok( $report,                      'HASH', '$report is a HASH' );
 isa_ok( $report->{systempreferences}, 'HASH', '$report->{systempreferences} is a HASH' );
-is( scalar( keys %{$report->{systempreferences}} ), 248, "There are 248 fields in $report->{systempreferences}" );
 verif_systempreferences_values( $report, 1 );
+
+#Test if unwanted syspref are not sent
+is( $report->{systempreferences}->{useDischarge}, undef, 'useDischarge should not be shared');
+is( $report->{systempreferences}->{OpacUserJS},   undef, 'OpacUserJS   should not be shared');
 
 # ---------- Testing ReportToCommunity ----------
 
