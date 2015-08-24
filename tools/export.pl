@@ -146,7 +146,7 @@ if (   C4::Context->preference("IndependentBranches")
     @branch = ( C4::Context->userenv->{'branch'} );
 }
 # if stripping nonlocal items, use loggedinuser's branch
-my $localbranch = C4::Context->userenv->{'branch'};
+my $localbranch = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
 
 my %branchmap = map { $_ => 1 } @branch; # for quick lookups
 
