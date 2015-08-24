@@ -759,7 +759,10 @@ sub AddMember {
 
     # create a disabled account if no password provided
     $data{'password'} = ($data{'password'})? hash_password($data{'password'}) : '!';
+
+    # we don't want invalid dates in the db (mysql has a bad habit of inserting 0000-00-00
     $data{'dateofbirth'} = undef if( not $data{'dateofbirth'} );
+    $data{'debarred'} = undef if ( not $data{'debarred'} );
 
     # get only the columns of Borrower
     my @columns = $schema->source('Borrower')->columns;
