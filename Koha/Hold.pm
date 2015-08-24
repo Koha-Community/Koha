@@ -109,18 +109,26 @@ sub is_in_transit {
 
 Returns true if hold is a cancelable hold
 
+Holds may be canceled if they not found, or
+are found and waiting. A hold found but in
+transit cannot be canceled.
+
 =cut
 
 sub is_cancelable {
     my ($self) = @_;
 
-    return ( $self->is_waiting() && !$self->is_found() )
-      || ( !$self->is_waiting() && !$self->is_in_transit() );
+    return 1 unless $self->is_found();
+    return 0 if $self->is_in_transit();
+    return 1 if $self->is_waiting();
+    return 0;
 }
 
 =head3 is_at_destination
 
-Returns true if hold is a in_transit hold
+Returns true if hold is waiting
+and the hold's pickup branch matches
+the hold item's holding branch
 
 =cut
 
