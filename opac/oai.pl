@@ -353,6 +353,14 @@ sub new {
         ) );
     }
 
+    # Return error if no results
+    unless ($count) {
+        return HTTP::OAI::Response->new(
+            requestURL => $repository->self_url(),
+            errors     => [ new HTTP::OAI::Error( code => 'noRecordsMatch' ) ],
+        );
+    }
+
     return $self;
 }
 
@@ -514,6 +522,14 @@ sub new {
             identifier      => $repository->{ koha_identifier } . ':' . $biblionumber,
             metadataPrefix  => $token->{metadata_prefix}
         ) );
+    }
+
+    # Return error if no results
+    unless ($count) {
+        return HTTP::OAI::Response->new(
+            requestURL => $repository->self_url(),
+            errors     => [ new HTTP::OAI::Error( code => 'noRecordsMatch' ) ],
+        );
     }
 
     return $self;
