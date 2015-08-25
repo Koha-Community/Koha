@@ -161,7 +161,7 @@ sub search_compat {
     my %result;
     $result{biblioserver}{hits} = $results->total;
     $result{biblioserver}{RECORDS} = \@records;
-    return (undef, \%result, $self->_convert_facets($results->{facets}));
+    return (undef, \%result, $self->_convert_facets($results->{facets}, $expanded_facet));
 }
 
 =head2 search_auth_compat
@@ -368,16 +368,19 @@ sub json2marc {
 
 =head2 _convert_facets
 
-    my $koha_facets = _convert_facets($es_facets);
+    my $koha_facets = _convert_facets($es_facets, $expanded_facet);
 
 Converts elasticsearch facets types to the form that Koha expects.
 It expects the ES facet name to match the Koha type, for example C<itype>,
 C<au>, C<su-to>, etc.
 
+C<$expanded_facet> is the facet that we want to show 10 entries for, rather
+than just 5 like normal.
+
 =cut
 
 sub _convert_facets {
-    my ( $self, $es ) = @_;
+    my ( $self, $es, $exp_facet ) = @_;
 
     return undef if !$es;
 
@@ -397,16 +400,22 @@ sub _convert_facets {
     my $itypes = Koha::ItemTypes->new();
     my %special = ( itype => sub { $itypes->get_description_for_code(@_) }, );
     my @res;
+    $exp_facet //= '';
     while ( ( $type, $data ) = each %$es ) {
         next if !exists( $type_to_label{$type} );
+
+        # We restrict to the most popular $limit results
+        my $limit = ( $type eq $exp_facet ) ? 10 : 5;
+        $limit = $#{ $data->{terms} } if ( $limit > @{ $data->{terms} } );
         my $facet = {
-            type_id => $type . '_id',
-            expand  => $type,
-            expandable => 1,    # TODO figure how that's supposed to work
+            type_id    => $type . '_id',
+            expand     => $type,
+            expandable => ( $type ne $exp_facet )
+              && ( @{ $data->{terms} } > $limit ),
             "type_label_$type_to_label{$type}" => 1,
             type_link_value                    => $type,
         };
-        foreach my $term ( @{ $data->{terms} } ) {
+        foreach my $term ( @{ $data->{terms} }[ 0 .. $limit ] ) {
             my $t = $term->{term};
             my $c = $term->{count};
             if ( exists( $special{$type} ) ) {
@@ -419,7 +428,7 @@ sub _convert_facets {
                 facet_count       => $c,
                 facet_link_value  => $t,
                 facet_title_value => $t . " ($c)",
-                facet_label_value => $label,    # TODO either truncate this,
+                facet_label_value => $label,        # TODO either truncate this,
                      # or make the template do it like it should anyway
                 type_link_value => $type,
             };
