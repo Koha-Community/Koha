@@ -2163,11 +2163,7 @@ sub MoveReserve {
             RevertWaitingStatus({ itemnumber => $itemnumber });
         }
         elsif ( $cancelreserve eq 'cancel' || $cancelreserve ) { # cancel reserves on this item
-            CancelReserve({
-                biblionumber   => $res->{'biblionumber'},
-                itemnumber     => $res->{'itemnumber'},
-                borrowernumber => $res->{'borrowernumber'}
-            });
+            CancelReserve( { reserve_id => $res->{'reserve_id'} } );
         }
     }
 }
