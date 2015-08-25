@@ -654,7 +654,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 
     AddReserve(
         'MPL', $borrowernumber2, $biblionumber,
-        'a', '',  1, undef, undef, '',
+        '',  1, undef, undef, '',
         undef, undef, undef
     );
 
