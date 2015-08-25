@@ -396,7 +396,7 @@ sub GetReservesFromBorrowernumber {
     my $data = $sth->fetchall_arrayref({});
     return @$data;
 }
-#-------------------------------------------------------------------------------------
+
 =head2 CanBookBeReserved
 
   $canReserve = &CanBookBeReserved($borrowernumber, $biblionumber)
@@ -577,7 +577,6 @@ sub CanReserveBeCanceledFromOpac {
 
 }
 
-#--------------------------------------------------------------------------------
 =head2 GetReserveCount
 
   $number = &GetReserveCount($borrowernumber);
