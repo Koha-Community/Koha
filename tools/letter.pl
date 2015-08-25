@@ -245,7 +245,8 @@ sub add_form {
             add_fields('items'),
             {value => 'items.content', text => 'items.content'},
             {value => 'items.fine',    text => 'items.fine'},
-            add_fields('borrowers');
+            add_fields('borrowers'),
+            {value => 'borrowers.totalfine', text => 'borrowers.totalfine' };
         if ($module eq 'circulation') {
             push @{$field_selection}, add_fields('opac_news');
 

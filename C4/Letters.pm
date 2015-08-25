@@ -725,6 +725,10 @@ sub GetPreparedLetter {
     my $OPACBaseURL = C4::Context->preference('OPACBaseURL');
     $letter->{content} =~ s/<<OPACBaseURL>>/$OPACBaseURL/go;
 
+    my ($totalfine) = C4::Members::GetMemberAccountRecords($tables->{borrowers});
+    $totalfine = sprintf("%.2f", $totalfine);
+    $letter->{content} =~ s/<<borrowers.totalfine>>/$totalfine/go;
+
     if ($want_librarian) {
         # parsing librarian name
         my $userenv = C4::Context->userenv;
