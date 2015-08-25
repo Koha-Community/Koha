@@ -41,6 +41,7 @@ provides something that can be given to elasticsearch to get answers.
 
 use base qw(Class::Accessor);
 use Carp;
+use JSON;
 use List::MoreUtils qw/ each_array /;
 use Modern::Perl;
 use URI::Escape;
@@ -87,8 +88,9 @@ sub build_query {
         query_string => {
             query            => $query,
             fuzziness        => $fuzzy_enabled ? 'auto' : '0',
-            default_operator => "AND",
-            default_field    => "_all",
+            default_operator => 'AND',
+            default_field    => '_all',
+            lenient          => JSON::true,
         }
     };
 

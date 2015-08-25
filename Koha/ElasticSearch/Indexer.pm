@@ -76,7 +76,6 @@ sub update_index {
                 %$params,
                 index_settings => $self->get_elasticsearch_settings(),
                 index_mappings => $self->get_elasticsearch_mappings(),
-                #trace_calls => 1,
             )
         );
     }
@@ -119,7 +118,6 @@ sub delete_index {
                 %$params,
                 index_settings => $self->get_elasticsearch_settings(),
                 index_mappings => $self->get_elasticsearch_mappings(),
-                trace_calls => 1,
             )
         );
     }
@@ -159,7 +157,6 @@ sub drop_index {
                 %$params,
                 index_settings => $self->get_elasticsearch_settings(),
                 index_mappings => $self->get_elasticsearch_mappings(),
-                #trace_calls => 1,
             )
         );
     }

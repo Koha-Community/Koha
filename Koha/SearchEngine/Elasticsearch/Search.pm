@@ -86,7 +86,7 @@ sub search {
     }
     $self->store(
         Catmandu::Store::ElasticSearch->new(
-            %$params, trace_calls => 1,
+            %$params,
         )
     ) unless $self->store;
     my $error;
