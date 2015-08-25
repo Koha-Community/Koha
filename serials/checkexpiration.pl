@@ -107,7 +107,7 @@ if ($date) {
 
 my $branchname;
 my $branches_loop;
-if (   $flags->{superlibrarian}
+if (   C4::Context->IsSuperLibrarian()
     or ( ref $flags->{serials}  and $flags->{serials}->{superserials} )
     or ( !ref $flags->{serials} and $flags->{serials} == 1 ) )
 {
