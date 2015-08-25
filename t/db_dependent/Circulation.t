@@ -27,7 +27,7 @@ use C4::Overdues qw(UpdateFine);
 use Koha::DateUtils;
 use Koha::Database;
 
-use Test::More tests => 65;
+use Test::More tests => 67;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -658,14 +658,25 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         undef, undef, undef
     );
 
+    C4::Context->dbh->do("UPDATE issuingrules SET onshelfholds = 0");
+    C4::Context->set_preference( 'AllowRenewalIfOtherItemsAvailable', 0 );
     ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $itemnumber1 );
-    is( $renewokay, 0, 'Bug 14337 - Verify the borrower cannot renew with a hold on the record' );
+    is( $renewokay, 0, 'Bug 14337 - Verify the borrower cannot renew with a hold on the record if AllowRenewalIfOtherItemsAvailable and onshelfholds are disabled' );
+
+    C4::Context->dbh->do("UPDATE issuingrules SET onshelfholds = 0");
+    C4::Context->set_preference( 'AllowRenewalIfOtherItemsAvailable', 1 );
+    ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $itemnumber1 );
+    is( $renewokay, 0, 'Bug 14337 - Verify the borrower cannot renew with a hold on the record if AllowRenewalIfOtherItemsAvailable is enabled and onshelfholds is disabled' );
+
+    C4::Context->dbh->do("UPDATE issuingrules SET onshelfholds = 1");
+    C4::Context->set_preference( 'AllowRenewalIfOtherItemsAvailable', 0 );
+    ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $itemnumber1 );
+    is( $renewokay, 0, 'Bug 14337 - Verify the borrower cannot renew with a hold on the record if AllowRenewalIfOtherItemsAvailable is disabled and onshelfhold is enabled' );
 
     C4::Context->dbh->do("UPDATE issuingrules SET onshelfholds = 1");
     C4::Context->set_preference( 'AllowRenewalIfOtherItemsAvailable', 1 );
-
     ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $itemnumber1 );
-    is( $renewokay, 1, 'Bug 14337 - Verify the borrower can renew with a hold on the record if AllowRenewalIfOtherItemsAvailable is enabled' );
+    is( $renewokay, 1, 'Bug 14337 - Verify the borrower can renew with a hold on the record if AllowRenewalIfOtherItemsAvailable and onshelfhold are enabled' );
 
     # Setting item not checked out to be not for loan but holdable
     ModItem({ notforloan => -1 }, $biblionumber, $itemnumber2);
