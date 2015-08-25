@@ -390,7 +390,12 @@ if (@$barcodes) {
         my $confirm_required = 0;
         unless($issueconfirmed){
             #  Get the item title for more information
-            $template_params->{additional_materials} = $iteminfo->{'materials'};
+            my $materials = $iteminfo->{'materials'};
+            my $avcode = GetAuthValCode('items.materials');
+            if ($avcode) {
+                $materials = GetKohaAuthorisedValueLib($avcode, $materials);
+            }
+            $template_params->{additional_materials} = $materials;
             $template_params->{itemhomebranch} = $iteminfo->{'homebranch'};
 
             # pass needsconfirmation to template if issuing is possible and user hasn't yet confirmed.

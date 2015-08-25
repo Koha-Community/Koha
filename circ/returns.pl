@@ -277,6 +277,12 @@ if ($barcode) {
     my $hbr = GetBranchItemRule($biblio->{'homebranch'}, $itemtype ? $itemtype->itemtype : undef )->{'returnbranch'} || "homebranch";
     my $returnbranch = $biblio->{$hbr} ;
 
+    my $materials = $biblio->{'materials'};
+    my $avcode = GetAuthValCode('items.materials');
+    if ($avcode) {
+        $materials = GetKohaAuthorisedValueLib($avcode, $materials);
+    }
+
     $template->param(
         title            => $biblio->{'title'},
         homebranch       => $biblio->{'homebranch'},
@@ -289,7 +295,7 @@ if ($barcode) {
         itembiblionumber => $biblio->{'biblionumber'},
         biblionumber     => $biblio->{'biblionumber'},
         borrower         => $borrower,
-        additional_materials => $biblio->{'materials'},
+        additional_materials => $materials,
     );
 
     my %input = (
