@@ -193,6 +193,8 @@ sub AddReserve {
     my $fee = GetReserveFee( $borrowernumber, $biblionumber );
     ChargeReserveFee( $borrowernumber, $fee, $title );
 
+    _FixPriority({ biblionumber => $biblionumber});
+
     # Send e-mail to librarian if syspref is active
     if(C4::Context->preference("emailLibrarianWhenHoldIsPlaced")){
         my $borrower = C4::Members::GetMember(borrowernumber => $borrowernumber);
