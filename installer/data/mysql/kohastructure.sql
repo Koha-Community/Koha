@@ -2297,7 +2297,7 @@ CREATE TABLE `virtualshelves` ( -- information about lists (or virtual shelves)
   `shelfname` varchar(255) default NULL, -- name of the list
   `owner` int default NULL, -- foreign key linking to the borrowers table (using borrowernumber) for the creator of this list (changed from varchar(80) to int)
   `category` varchar(1) default NULL, -- type of list (private [1], public [2])
-  `sortfield` varchar(16) default NULL, -- the field this list is sorted on
+  `sortfield` varchar(16) default 'title', -- the field this list is sorted on
   `lastmodified` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time the list was last modified
   `created_on` TIMESTAMP NOT NULL, -- creation time
   `allow_add` tinyint(1) default 0, -- permission for adding entries to list
