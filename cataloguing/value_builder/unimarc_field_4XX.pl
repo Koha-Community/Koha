@@ -241,6 +241,18 @@ sub plugin {
             $subfield_value_i = $marcrecord->field('500')->subfield("i");
         }
 
+        my $subfield_value_l;
+        $subfield_value_l = $marcrecord->field('200')->subfield("d")
+            if ( $marcrecord->field('200') );
+
+        my $subfield_value_n;
+        $subfield_value_n = $marcrecord->field('210')->subfield("c")
+            if ( $marcrecord->field('210') );
+
+        my $subfield_value_o;
+        $subfield_value_o = $marcrecord->field('200')->subfield("e")
+            if ( $marcrecord->field('200') );
+
         my $subfield_value_p;
 	$subfield_value_p = $marcrecord->field('215')->subfield("a")
           if ( $marcrecord->field('215') );
@@ -301,6 +313,9 @@ sub plugin {
         $subfield_value_e =~ s/'/\\'/g;
         $subfield_value_h =~ s/'/\\'/g;
         $subfield_value_i =~ s/'/\\'/g;
+        $subfield_value_l =~ s/'/\\'/g;
+        $subfield_value_n =~ s/'/\\'/g;
+        $subfield_value_o =~ s/'/\\'/g;
         $subfield_value_p =~ s/'/\\'/g;
         $subfield_value_t =~ s/'/\\'/g;
         $subfield_value_u =~ s/'/\\'/g;
@@ -319,6 +334,9 @@ sub plugin {
             subfield_value_e => "$subfield_value_e",
             subfield_value_h => "$subfield_value_h",
             subfield_value_i => "$subfield_value_i",
+            subfield_value_l => "$subfield_value_l",
+            subfield_value_n => "$subfield_value_n",
+            subfield_value_o => "$subfield_value_o",
             subfield_value_p => "$subfield_value_p",
             subfield_value_t => "$subfield_value_t",
             subfield_value_u => "$subfield_value_u",
