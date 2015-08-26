@@ -214,18 +214,16 @@ sub run_tests {
     } else {
         $biblioitemnumbertotest = $updatedrecord->field($biblioitem_tag)->subfield($biblioitem_subfield);
     }
-    is ($newincbiblioitemnumber, $biblioitemnumbertotest);
+    is ($newincbiblioitemnumber, $biblioitemnumbertotest, 'Check newincbiblioitemnumber');
 
     # test for GetMarcNotes
     my $a1= GetMarcNotes( $marc_record, $marcflavour );
     my $field2 = MARC::Field->new( $marcflavour eq 'UNIMARC'? 300: 555, 0, '', a=> 'Some text', u=> 'http://url-1.com', u=> 'nohttp://something_else' );
     $marc_record->append_fields( $field2 );
     my $a2= GetMarcNotes( $marc_record, $marcflavour );
-    my $last= @$a2? $a2->[@$a2-1]->{marcnote}: '';
-    is( @$a2 == @$a1 + 1 && (
-        ( $marcflavour eq 'UNIMARC' && $last eq $field2->as_string() ) ||
-        ( $marcflavour ne 'UNIMARC' && $last =~ /\<a href=/ )),
-        1, 'Test for GetMarcNotes' );
+    is( ( $marcflavour eq 'UNIMARC' && @$a2 == @$a1 + 1 ) ||
+        ( $marcflavour ne 'UNIMARC' && @$a2 == @$a1 + 3 ), 1,
+        'Check the number of returned notes of GetMarcNotes' );
 }
 
 sub mock_marcfromkohafield {

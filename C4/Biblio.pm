@@ -1790,10 +1790,11 @@ sub GetMarcISSN {
 
 =head2 GetMarcNotes
 
-  $marcnotesarray = GetMarcNotes( $record, $marcflavour );
+    $marcnotesarray = GetMarcNotes( $record, $marcflavour );
 
-Get all notes from the MARC record and returns them in an array.
-The note are stored in different fields depending on MARC flavour
+    Get all notes from the MARC record and returns them in an array.
+    The notes are stored in different fields depending on MARC flavour.
+    MARC21 field 555 gets special attention for the $u subfields.
 
 =cut
 
@@ -1803,34 +1804,28 @@ sub GetMarcNotes {
         carp 'GetMarcNotes called on undefined record';
         return;
     }
-    my $scope;
-    if ( $marcflavour eq "UNIMARC" ) {
-        $scope = '3..';
-    } else {    # assume marc21 if not unimarc
-        $scope = '5..';
-    }
+
+    my $scope = $marcflavour eq "UNIMARC"? '3..': '5..';
     my @marcnotes;
-    my $note = "";
-    my $tag  = "";
-    my $marcnote;
-    my %blacklist = map { $_ => 1 } split(/,/,C4::Context->preference('NotesBlacklist'));
+    my %blacklist = map { $_ => 1 }
+        split( /,/, C4::Context->preference('NotesBlacklist'));
     foreach my $field ( $record->field($scope) ) {
         my $tag = $field->tag();
-        next if $blacklist{$tag};
-
-        my $value = $field->as_string();
+        next if $blacklist{ $tag };
         if( $marcflavour ne 'UNIMARC' && $tag =~ /555/ ) {
-            my @sub= $field->subfield('u');
-            foreach my $s (@sub) {
-                next if $s !~ /^http/;
-                my $i= index( $value, $s);
-                $value= substr( $value,0, $i) . "<a href=\"$s\" target=\"_blank\">$s</a>" . substr( $value, $i + length($s) );
+            # Field 555$u contains URLs
+            # We first push the regular subfields and all $u's separately
+            # Leave further actions to the template
+            push @marcnotes, { marcnote => $field->as_string('abcd') };
+            foreach my $sub ( $field->subfield('u') ) {
+                push @marcnotes, { marcnote => $sub };
             }
+        } else {
+            push @marcnotes, { marcnote => $field->as_string() };
         }
-        push @marcnotes, { marcnote => $value };
     }
     return \@marcnotes;
-}    # end GetMarcNotes
+}
 
 =head2 GetMarcSubjects
 
