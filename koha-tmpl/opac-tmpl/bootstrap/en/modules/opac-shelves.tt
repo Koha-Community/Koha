@@ -132,6 +132,8 @@
                         This item does not exist.
                     [% CASE 'unauthorized_on_view' %]
                         You do not have permission to view this list.
+                    [% CASE 'unauthorized_on_insert' %]
+                        You do not have permission to insert a new list.
                     [% CASE 'unauthorized_on_update' %]
                         You do not have permission to update this list.
                     [% CASE 'unauthorized_on_delete' %]
@@ -638,8 +640,15 @@
                             <div id="publicshelves" class="ui-tabs-panel ui-widget-content ui-corner-bottom" style="display:block;">
                         [% END %]
 
-                            <div id="toolbar" class="toolbar"><a class="newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form">New list</a></div>
-                            [% IF shelves %]
+                            [% IF loggedinusername %]
+                                <div id="toolbar" class="toolbar"><a class="newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form">New list</a></div>
+                            [% ELSE %]
+                                [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                                    <div class="alert alert-info"><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to create new lists.</div>
+                                [% END %]
+                            [% END %]
+
+                            [% IF shelves.count %]
                                 <table class="table">
                                     <thead>
                                         <tr>
@@ -702,7 +711,7 @@
                             [% ELSE %]
                                 [% IF category == PUBLIC %]
                                     <p>No public lists.</p>
-                                [% ELSE %]
+                                [% ELSIF loggedinusernumber %]
                                     <p>No private lists.</p>
                                 [% END %]
                             [% END %]

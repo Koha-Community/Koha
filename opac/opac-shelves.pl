@@ -63,27 +63,32 @@ if ( $op eq 'add_form' ) {
         push @messages, { type => 'error', code => 'does_not_exist' };
     }
 } elsif ( $op eq 'add' ) {
-    eval {
-        $shelf = Koha::Virtualshelf->new(
-            {   shelfname          => $query->param('shelfname'),
-                sortfield          => $query->param('sortfield'),
-                category           => $query->param('category') || 1,
-                allow_add          => $query->param('allow_add'),
-                allow_delete_own   => $query->param('allow_delete_own'),
-                allow_delete_other => $query->param('allow_delete_other'),
-                owner              => $query->param('owner'),
-            }
-        );
-        $shelf->store;
-        $shelfnumber = $shelf->shelfnumber;
-    };
-    if ($@) {
-        push @messages, { type => 'error', code => ref($@), msg => $@ };
-    } elsif ( not $shelf ) {
-        push @messages, { type => 'error', code => 'error_on_insert' };
+    if ( $loggedinuser ) {
+        eval {
+            $shelf = Koha::Virtualshelf->new(
+                {   shelfname          => $query->param('shelfname'),
+                    sortfield          => $query->param('sortfield'),
+                    category           => $query->param('category') || 1,
+                    allow_add          => $query->param('allow_add'),
+                    allow_delete_own   => $query->param('allow_delete_own'),
+                    allow_delete_other => $query->param('allow_delete_other'),
+                    owner              => $loggedinuser,
+                }
+            );
+            $shelf->store;
+            $shelfnumber = $shelf->shelfnumber;
+        };
+        if ($@) {
+            push @messages, { type => 'error', code => ref($@), msg => $@ };
+        } elsif ( not $shelf ) {
+            push @messages, { type => 'error', code => 'error_on_insert' };
+        } else {
+            push @messages, { type => 'message', code => 'success_on_insert' };
+            $op = 'view';
+        }
     } else {
-        push @messages, { type => 'message', code => 'success_on_insert' };
-        $op = 'view';
+        push @messages, { type => 'error', code => 'unauthorized_on_insert' };
+        $op = 'list';
     }
 } elsif ( $op eq 'edit' ) {
     $shelfnumber = $query->param('shelfnumber');
