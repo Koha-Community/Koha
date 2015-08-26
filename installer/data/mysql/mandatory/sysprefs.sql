@@ -389,6 +389,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OAI-PMH:DeletedRecord','persistent','Koha\'s deletedbiblio table will never be deleted (persistent), might be deleted (transient), or will never have any data in it (no)','transient|persistent|no','Choice'),
 ('OAI-PMH:MaxCount','50',NULL,'OAI-PMH maximum number of records by answer to ListRecords and ListIdentifiers queries','Integer'),
 ('OPACAcquisitionDetails','0','','Show the acquisition details at the OPAC','YesNo'),
+('OPACSuggestionAutoFill','0',NULL,'Automatically fill OPAC suggestion form with data from Google Books API','YesNo'),
 ('OpacAddMastheadLibraryPulldown','0','','Adds a pulldown menu to select the library to search on the opac masthead.','YesNo'),
 ('OpacAdvSearchMoreOptions','pubdate,itemtype,language,subtype,sorting,location','Show search options for the expanded view (More options)','pubdate|itemtype|language|subtype|sorting|location','multiple'),
 ('OpacAdvSearchOptions','pubdate,itemtype,language,sorting,location','Show search options','pubdate|itemtype|language|subtype|sorting|location','multiple'),

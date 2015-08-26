@@ -75,6 +75,12 @@
                             <form action="/cgi-bin/koha/opac-suggestions.pl" method="post" id="add_suggestion_form">
                                 <fieldset class="rows">
                                     <ol>
+                                        [% IF Koha.Preference( 'OPACSuggestionAutoFill' ) %]
+                                            <li>
+                                                <label for="isbn">Standard number (ISBN, ISSN or other):</label>
+                                                <input type="text" id="isbn" name="isbn" maxlength="80" style="margin-right:10px;margin-top:10px;" size="15"/>
+                                            </li>
+                                        [% END %]
                                         <li>
                                             [% IF ( title_required ) %]
                                                 <label for="title" class="required">Title:</label>
@@ -101,17 +107,18 @@
                                             <li>
                                                 <div title="Copyright or publication year, for example: 2016">
                                                     [% IF ( copyrightdate_required ) %]
-                                                        <label for="copyrightdate" class="required">Copyright date:</label>
-                                                        <input type="text" id="copyrightdate" name="copyrightdate" pattern="[12]\d{3}" size="4" maxlength="4" value="[% copyrightdate | html %]" required="required" />
-                                                    <div class="required_label required">Required</div>
+                                                        <label for="copyrightdate" class="required">Publication year:</label>
+                                                        <input type="text" id="copyrightdate" name="copyrightdate" pattern="[12]\d{3}" size="10" maxlength="4" value="[% copyrightdate | html %]" required="required" />
+                                                        <div class="required_label required">Required</div>
                                                     [% ELSE %]
-                                                        <label for="copyrightdate">Copyright date:</label>
-                                                        <input type="text" id="copyrightdate" name="copyrightdate" pattern="[12]\d{3}" size="4" maxlength="4" value="[% copyrightdate | html %]" />
+                                                        <label for="copyrightdate">Publication year:</label>
+                                                        <input type="text" id="copyrightdate" name="copyrightdate" pattern="[12]\d{3}" size="10" maxlength="4" value="[% copyrightdate | html %]" />
                                                     [% END %]
+                                                    <span class="hint">Copyright or publication year, for example: 2016</span>
                                                 </div>
                                             </li>
                                         [% END %]
-                                        [% UNLESS ( isbn_hidden )%]
+                                        [% UNLESS ( isbn_hidden or Koha.Preference('OPACSuggestionAutoFill') ) %]
                                             <li>
                                                 [% IF ( isbn_required ) %]
                                                     <label for="isbn" class="required">Standard number (ISBN, ISSN or other):</label>
@@ -490,6 +497,9 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
+[% IF ( Koha.Preference("OPACSuggestionAutoFill") ) %]
+    [% Asset.js("js/autofill.js") | $raw %]
+[% END %]
 [% INCLUDE 'datatables.inc' %]
 <script>
     [% IF ( loggedinusername ) %]
@@ -504,6 +514,20 @@
               $(".selections-toolbar .links a").addClass("disabled");
             }
         }
+    [% END %]
+
+    [% IF Koha.Preference( 'OPACSuggestionAutoFill' ) %]
+    $(function() {
+        $('#isbn').autofill({
+            'volumeInfo.title': {target: 'title', effect: 'flash'},
+            'volumeInfo.authors': {target: 'author', effect: 'flash'},
+            'volumeInfo.publisher': {target: 'publishercode', effect: 'flash'},
+            'volumeInfo.publishedDate': {target: 'copyrightdate', effect: 'flash'},
+            /* google books api seem to only have books, so if we got a result
+             * item, type will be a book, so set to BK (book). */
+            'kind': {target: 'itemtype', handle: function(t,v) { t.val('BK'); },},
+        });
+    });
     [% END %]
 
     $(function() {
