@@ -113,4 +113,26 @@ sub navigateToDetails {
     return t::lib::Page::Members::Moremember->rebrandFromPageObject($self);
 }
 
+sub navigateToNotices {
+    my ($self) = @_;
+    my $d = $self->getDriver();
+    $self->debugTakeSessionSnapshot();
+
+    my $elements = $self->_getLeftNavigationActionElements();
+    my $func = sub {
+        $elements->{notices}->click();
+    };
+    my $success = sub {
+        return $self->getDriver()->get_title() =~ m/Sent notices/;
+    };
+
+    $self->poll($func, $success, 20, 50);
+    $self->debugTakeSessionSnapshot();
+
+    ok($d->get_title() =~ m/Sent notices/i,
+       "Intra Navigate to Notices");
+
+    return t::lib::Page::Members::Notices->rebrandFromPageObject($self);
+}
+
 1; #Make the compiler happy!
