@@ -334,7 +334,7 @@ sub new {
     # We fetch it using this method, rather than the database directly,
     # so it'll include the item data
     my $marcxml;
-    $marcxml = $repository->get_biblio_marcxml->($biblionumber, $args{metadataPrefix})
+    $marcxml = $repository->get_biblio_marcxml($biblionumber, $args{metadataPrefix})
         unless $deleted;
     my $oai_sets = GetOAISetsBiblio($biblionumber);
     my @setSpecs;
