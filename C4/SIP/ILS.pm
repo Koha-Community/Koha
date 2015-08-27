@@ -175,34 +175,39 @@ sub checkout {
 }
 
 sub checkin {
-    my ($self, $item_id, $trans_date, $return_date,
-	$current_loc, $item_props, $cancel) = @_;
-    my ($patron, $item, $circ);
+    my ( $self, $item_id, $trans_date, $return_date, $current_loc, $item_props, $cancel, $checked_in_ok ) = @_;
+    my ( $patron, $item, $circ );
 
     $circ = C4::SIP::ILS::Transaction::Checkin->new();
+
     # BEGIN TRANSACTION
-    $circ->item($item = C4::SIP::ILS::Item->new( $item_id));
+    $circ->item( $item = C4::SIP::ILS::Item->new($item_id) );
 
     if ($item) {
-        $circ->do_checkin($current_loc, $return_date);
-    } else {
+        $circ->do_checkin( $current_loc, $return_date );
+    }
+    else {
         $circ->alert(1);
         $circ->alert_type(99);
         $circ->screen_msg('Invalid Item');
     }
-	# It's ok to check it in if it exists, and if it was checked out
-	$circ->ok($item && $item->{patron});
 
-	if (!defined($item->{patron})) {
-		$circ->screen_msg("Item not checked out");
-	} else {
-		if ($circ->ok) {
-			$circ->patron($patron = C4::SIP::ILS::Patron->new( $item->{patron}));
-			delete $item->{patron};
-			delete $item->{due_date};
-			$patron->{items} = [ grep {$_ ne $item_id} @{$patron->{items}} ];
-		}
-	}
+    # It's ok to check it in if it exists, and if it was checked out
+    # or it was not checked out but the checked_in_ok flag was set
+    $circ->ok( ( $checked_in_ok && $item ) || ( $item && $item->{patron} ) );
+
+    if ( !defined( $item->{patron} ) ) {
+        $circ->screen_msg("Item not checked out") unless $checked_in_ok;
+    }
+    else {
+        if ( $circ->ok ) {
+            $circ->patron( $patron = C4::SIP::ILS::Patron->new( $item->{patron} ) );
+            delete $item->{patron};
+            delete $item->{due_date};
+            $patron->{items} = [ grep { $_ ne $item_id } @{ $patron->{items} } ];
+        }
+    }
+
     # END TRANSACTION
 
     return $circ;
