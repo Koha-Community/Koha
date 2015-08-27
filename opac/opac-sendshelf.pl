@@ -90,7 +90,6 @@ if ( $email ) {
         my $fw               = GetFrameworkCode($biblionumber);
         my $dat              = GetBiblioData($biblionumber);
         my $record           = GetMarcBiblio($biblionumber, 1);
-        my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
         my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
         my $subtitle         = GetRecordValue('subtitle', $record, $fw);
@@ -98,7 +97,6 @@ if ( $email ) {
         my @items = GetItemsInfo( $biblionumber );
 
         $dat->{ISBN}           = GetMarcISBN($record, $marcflavour);
-        $dat->{MARCNOTES}      = $marcnotesarray;
         $dat->{MARCSUBJCTS}    = $marcsubjctsarray;
         $dat->{MARCAUTHORS}    = $marcauthorsarray;
         $dat->{'biblionumber'} = $biblionumber;
