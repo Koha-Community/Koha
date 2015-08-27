@@ -1,6 +1,6 @@
 package Koha::ElasticSearch;
 
-# Copyright 2013 Catalyst IT
+# Copyright 2015 Catalyst IT
 #
 # This file is part of Koha.
 #
@@ -177,7 +177,7 @@ sub get_elasticsearch_mappings {
     my $marcflavour = lc C4::Context->preference('marcflavour');
     $self->_foreach_mapping(
         sub {
-            my ( $name, $type, $facet, $marc_type ) = @_;
+            my ( $name, $type, $facet, $suggestible, $marc_type ) = @_;
             return if $marc_type ne $marcflavour;
             # TODO if this gets any sort of complexity to it, it should
             # be broken out into its own function.
@@ -199,6 +199,10 @@ sub get_elasticsearch_mappings {
                         type            => "string",
                         copy_to         => "_all.phrase",
                     },
+                    raw => {
+                        "type" => "string",
+                        "index" => "not_analyzed",
+                    }
                 },
             };
             $mappings->{data}{properties}{$name}{null_value} = 0
@@ -207,6 +211,13 @@ sub get_elasticsearch_mappings {
                 $mappings->{data}{properties}{ $name . '__facet' } = {
                     type  => "string",
                     index => "not_analyzed",
+                };
+            }
+            if ($suggestible) {
+                $mappings->{data}{properties}{ $name . '__suggestion' } = {
+                    type => 'completion',
+                    index_analyzer => 'simple',
+                    search_analyzer => 'simple',
                 };
             }
         }
@@ -222,7 +233,7 @@ sub get_fixer_rules {
     my @rules;
     $self->_foreach_mapping(
         sub {
-            my ( $name, $type, $facet, $marc_type, $marc_field ) = @_;
+            my ( $name, $type, $facet, $suggestible, $marc_type, $marc_field ) = @_;
             return if $marc_type ne $marcflavour;
             my $options = '';
 
@@ -234,6 +245,10 @@ sub get_fixer_rules {
             push @rules, "marc_map('$marc_field','${name}', $options)";
             if ($facet) {
                 push @rules, "marc_map('$marc_field','${name}__facet', $options)";
+            }
+            if ($suggestible) {
+                push @rules,
+"marc_map('$marc_field','${name}__suggestion.input.\$append', $options)";
             }
             if ( $type eq 'boolean' ) {
 
@@ -254,7 +269,7 @@ sub get_fixer_rules {
 
     $self->_foreach_mapping(
         sub {
-            my ( $name, $type, $facet, $marc_type, $marc_field ) = @_;
+            my ( $name, $type, $facet, $suggestible, $marc_type, $marc_field ) = @_;
             return unless $marc_type eq 'marc21';
             print "Data comes from: " . $marc_field . "\n";
         }
@@ -308,12 +323,14 @@ sub _foreach_mapping {
         my $marc_type = $row->marc_type;
         my $marc_field = $row->marc_field;
         my $facet = $row->facet;
+        my $suggestible = $row->suggestible;
         my $search_field = $row->search_fields();
         for my $sf ( $search_field->all ) {
             $sub->(
                 $sf->name,
                 $sf->type,
                 $facet,
+                $suggestible,
                 $marc_type,
                 $marc_field,
             );
