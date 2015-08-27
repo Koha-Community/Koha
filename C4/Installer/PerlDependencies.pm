@@ -4,6 +4,11 @@ use warnings;
 use strict;
 
 our $PERL_DEPS = {
+    'Plack::Middleware::ReverseProxy' => {
+        'usage'    => 'Plack',
+        'required' => '1',
+        'min_ver'  => '0.14'
+    },
     'XML::LibXSLT' => {
         'usage'    => 'Core',
         'required' => '1',
