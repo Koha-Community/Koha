@@ -242,8 +242,14 @@ function batchDelete(){
             <th scope="row">Notes</th>
             <td>
             [% FOREACH MARCNOTE IN BIBLIO_RESULT.MARCNOTES %]
-                <p>- [% MARCNOTE.marcnote %]</p>
-            [% END %]</td>
+                <p>
+                [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
+                    - <a target="_blank" href="[% MARCNOTE.marcnote %]">[% MARCNOTE.marcnote %]</a>
+                [% ELSE %]
+                    - [% MARCNOTE.marcnote %]
+                [% END %]
+            [% END %]
+            </td>
         </tr>
         [% END %]
 

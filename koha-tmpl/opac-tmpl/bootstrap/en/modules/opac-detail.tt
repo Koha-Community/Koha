@@ -717,7 +717,13 @@
                             [% IF ( MARCNOTES ) %]
                                 <div id="marcnotes">
                                 [% FOREACH MARCNOTE IN MARCNOTES %]
-                                    <p>[% MARCNOTE.marcnote FILTER html_line_break %]</p>
+                                    <p>
+                                    [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
+                                        <a target="_blank" href="[% MARCNOTE.marcnote %]">[% MARCNOTE.marcnote %]</a>
+                                    [% ELSE %]
+                                        [% MARCNOTE.marcnote FILTER html_line_break %]
+                                    [% END %]
+                                    </p>
                                 [% END %]
                                 </div>
                             [% ELSE %]
