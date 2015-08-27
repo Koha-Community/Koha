@@ -12,7 +12,7 @@ use C4::Context;
 
 use Data::Dumper;
 
-use Test::More tests => 21;
+use Test::More tests => 22;
 
 
 use C4::Branch;
@@ -296,6 +296,65 @@ C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
 ok( @$holds_queue == 3, "Holds queue filling correct number for holds for default holds policy 'from any library'" );
 #warn "HOLDS QUEUE: " . Data::Dumper::Dumper( $holds_queue );
+
+# Bug 14297
+$borrowernumber = AddMember(%data);
+$borrower = GetMember( borrowernumber => $borrowernumber );
+$borrower_branchcode = $borrower->{branchcode};
+$itemtype = $item_types[0]->{itemtype};
+my $library_A = 'CPL';
+my $library_B = 'FFL';
+my $library_C = 'MPL'; # Same as our borrower's home library
+$dbh->do("DELETE FROM reserves");
+$dbh->do("DELETE FROM issues");
+$dbh->do("DELETE FROM items");
+$dbh->do("DELETE FROM biblio");
+$dbh->do("DELETE FROM biblioitems");
+$dbh->do("DELETE FROM transport_cost");
+$dbh->do("DELETE FROM tmp_holdsqueue");
+$dbh->do("DELETE FROM hold_fill_targets");
+$dbh->do("DELETE FROM default_branch_circ_rules");
+$dbh->do("DELETE FROM default_branch_item_rules");
+$dbh->do("DELETE FROM default_circ_rules");
+$dbh->do("DELETE FROM branch_item_rules");
+
+$dbh->do("
+    INSERT INTO biblio (frameworkcode, author, title, datecreated) VALUES ('', 'Koha test', '$TITLE', '2011-02-01')
+");
+
+$biblionumber = $dbh->selectrow_array("SELECT biblionumber FROM biblio WHERE title = '$TITLE'")
+  or BAIL_OUT("Cannot find newly created biblio record");
+
+$dbh->do("INSERT INTO biblioitems (biblionumber, marcxml, itemtype) VALUES ($biblionumber, '', '$itemtype')");
+
+$biblioitemnumber =
+  $dbh->selectrow_array("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber = $biblionumber")
+  or BAIL_OUT("Cannot find newly created biblioitems record");
+
+$dbh->do("
+    INSERT INTO items (biblionumber, biblioitemnumber, homebranch, holdingbranch, notforloan, damaged, itemlost, withdrawn, onloan, itype)
+    VALUES ($biblionumber, $biblioitemnumber, '$library_A', '$library_A', 0, 0, 0, 0, NULL, '$itemtype')
+");
+
+$dbh->do("
+    INSERT INTO items (biblionumber, biblioitemnumber, homebranch, holdingbranch, notforloan, damaged, itemlost, withdrawn, onloan, itype)
+    VALUES ($biblionumber, $biblioitemnumber, '$library_B', '$library_B', 0, 0, 0, 0, NULL, '$itemtype')
+");
+
+$dbh->do("
+    INSERT INTO branch_item_rules ( branchcode, itemtype, holdallowed, returnbranch ) VALUES
+    ( '$library_A', '$itemtype', 2, 'homebranch' ), ( '$library_B', '$itemtype', 1, 'homebranch' );
+");
+
+$dbh->do( "UPDATE systempreferences SET value = ? WHERE variable = 'StaticHoldsQueueWeight'",
+    undef, join( ',', $library_B, $library_A, $library_C ) );
+$dbh->do( "UPDATE systempreferences SET value = 0 WHERE variable = 'RandomizeHoldsQueueWeight'" );
+
+my $reserve_id = AddReserve ( $library_C, $borrowernumber, $biblionumber, '', 1 );
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
+is( @$holds_queue, 1, "Bug 14297 - Holds Queue building ignoring holds where pickup & home branch don't match and item is not from least cost branch" );
+# End Bug 14297
 
 # Cleanup
 $dbh->rollback;
