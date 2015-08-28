@@ -216,12 +216,12 @@ sub build_query_compat {
 
     #die Dumper($query);
     # We roughly emulate the CGI parameters of the zebra query builder
-    my $query_cgi = 'idx=kw&q=' . uri_escape( $operands->[0] ) if @$operands;
+    my $query_cgi = 'idx=kw&q=' . uri_escape_utf8( $operands->[0] ) if @$operands;
     my $simple_query = $operands->[0] if @$operands == 1;
     my $query_desc   = $simple_query;
     my $limit        = $self->_join_queries( $self->_convert_index_strings(@$limits));
     my $limit_cgi =
-      '&limit=' . join( '&limit=', map { uri_escape($_) } @$orig_limits );
+      '&limit=' . join( '&limit=', map { uri_escape_utf8($_) } @$orig_limits );
     my $limit_desc = "$limit" if $limit;
     return (
         undef,  $query,     $simple_query, $query_cgi, $query_desc,
