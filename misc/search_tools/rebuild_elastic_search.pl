@@ -40,7 +40,7 @@ B<rebuild_elastic_search.pl>
 =item B<-c|--commit>=C<count>
 
 Specify how many records will be batched up before they're added to Elasticsearch.
-Higher should be faster, but will cause more RAM usage. Default is 100.
+Higher should be faster, but will cause more RAM usage. Default is 5000.
 
 =item B<-d|--delete>
 
@@ -90,7 +90,7 @@ use Pod::Usage;
 use Data::Dumper; # TODO remove
 
 my $verbose = 0;
-my $commit = 100;
+my $commit = 5000;
 my ($delete, $help, $man);
 my ($index_biblios, $index_authorities);
 my (@biblionumbers);
