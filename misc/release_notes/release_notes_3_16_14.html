@@ -1,0 +1,264 @@
+<h1>RELEASE NOTES FOR KOHA 3.16.14</h1>
+<p>28 Aug 2015</p>
+
+<p>Koha is the first free and open source software library automation package  (ILS). Development is sponsored by libraries of varying types and sizes,  volunteers, and support companies from around the world.</p>
+<p>The website for the Koha project is <a href="http://koha-community.org/">http://koha-community.org</a> and Koha 3.16.14 can be downloaded from: <a href="http://download.koha-community.org/koha-3.16.14.tar.gz">http://download.koha-community.org/koha-3.16.14.tar.gz</a></p>
+
+<p>Installation instructions can be found at <a href="http://wiki.koha-community.org/wiki/Installation_Documentation">http://wiki.koha-community.org/wiki/Installation_Documentation</a> or in the INSTALL files that come in the tarball</p>
+
+
+Koha 3.16.14 is a bugfix/maintenance release.
+
+
+<h4>Table of contents</h4>
+<nav>
+    <ul>        <li><a href="#koha-features">New features</a></li>        <li><a href="#koha-enhancements">Enhancements</a></li>        <li><a href="#koha-other">Other bugfixes</a></li>        <li><a href="#koha-sysprefs">Changes on system preferences</a></li>        <li><a href="#koha-requirements">System requirements</a></li>
+        <li><a href="#koha-docs">Documentation</a></li>        <li><a href="#koha-translations">Translations</a></li>        <li><a href="#koha-release-team">Release team</a></li>        <li><a href="#koha-credits">Credits</a></li>
+        <li><a href="#koha-git">Revision control</a></li>
+        <li><a href="#koha-report-bugs">Bug and feature requests</a></li>
+    </ul>
+</nav>
+    <h3 id="koha-features">New features in Koha 3.16.14</h3>
+    
+    <h4></h4>
+    <ul>
+        
+    </ul>
+        <h3 id="koha-enhancements">Enhancements in Koha 3.16.14</h3>    <h4></h4>
+    <ul>    </ul>    <h3 id="koha-critical">Critical bugs fixed in Koha 3.16.14</h3>    <h4>Architecture, internals, and plumbing</h4>
+    <ul>        <li>
+            Error in GetMarcBiblio can cause severe data loss <i>(critical - bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=10961">10961</a>)</i>
+        </li>    </ul>    <h4>Searching</h4>
+    <ul>        <li>
+            EmbedSeeFromHeadings record filter shouldn't process MARC holding fields <i>(major - bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14456">14456</a>)</i>
+        </li>    </ul>    <h3 id="koha-other">Other bugs fixed in Koha 3.16.14</h3>    <h4>Architecture, internals, and plumbing</h4>
+    <ul>          <li>
+            Terribly slow checkout caused by DateTime->new in far future <i>(normal - bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14494">14494</a>)</i>
+          </li>    </ul>    <h4>Cataloging</h4>
+    <ul>          <li>
+            Merge reference selection has no effect when merging authorities. <i>(normal - bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14387">14387</a>)</i>
+          </li>    </ul>    <h4>Circulation</h4>
+    <ul>          <li>
+            Offline circ permission issue <i>(normal - bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13663">13663</a>)</i>
+          </li>    </ul>    <h4>OPAC</h4>
+    <ul>          <li>
+            Default emailing preferences not loaded for self registering patron <i>(normal - bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=11693">11693</a>)</i>
+          </li>    </ul>    <h4>Patrons</h4>
+    <ul>          <li>
+            Typo for borrowers <i>(trivial - bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14569">14569</a>)</i>
+          </li>    </ul>    <h4>Self checkout</h4>
+    <ul>          <li>
+            Checkouts default sort order for Self Checkout (SCO) confusing for patrons <i>(normal - bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14404">14404</a>)</i>
+          </li>    </ul>    <h4>Tools</h4>
+    <ul>          <li>
+            Noisy warns in Notices (letter.tt) module <i>(minor - bug <a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14445">14445</a>)</i>
+          </li>    </ul>    <h3 id="koha-sysprefs">New system preferences in Koha 3.16.14</h3>
+    <ul>    </ul>
+
+
+<h3 id="koha-requirements">System requirements</h3>
+<p>Important notes:</p>
+<ul>
+    <li>Perl 5.10 is required</li>
+    <li>Zebra is required</li>
+</ul>
+
+
+<h3 id="koha-docs">Documentation</h3>
+
+<p>The Koha manual is maintained in DocBook. The home page for Koha documentation is <a href="http://koha-community.org/documentation/">http://koha-community.org/documentation</a></p>
+<p>As of the date of these release notes, only the English version of the Koha manual is available at <a href="http://manual.koha-community.org/3.16.14/en/">http://manual.koha-community.org/3.16.14/en/</a></p>
+<p>The Git repository for the Koha manual can be found at  <a href="http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary">http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary</a></p>
+
+<h3 id="koha-translations">Translations</h3>
+<p>Complete or near-complete translations of the OPAC and staff interface are available in this release for the following languages:</p>
+<ul>
+
+<li>English (USA)</li>
+
+<li>Arabic (99%)</li>
+
+<li>Armenian (99%)</li>
+
+<li>Czech (99%)</li>
+
+<li>Danish (86%)</li>
+
+<li>French (96%)</li>
+
+<li>German (100%)</li>
+
+<li>Italian (100%)</li>
+
+<li>Kurdish (67%)</li>
+
+<li>Polish (100%)</li>
+
+<li>Portuguese (99%)</li>
+
+<li>Slovak (99%)</li>
+
+<li>Spanish (100%)</li>
+
+<li>Swedish (86%)</li>
+
+<li>Turkish (99%)</li>
+
+<li>Vietnamese (94%)</li>
+
+</ul>
+
+
+<p>Partial translations are available for various other languages.</p>
+<p>The Koha team welcomes additional translations; please see <a href="http://wiki.koha-community.org/wiki/Translating_Koha">http://wiki.koha-community.org/wiki/Translating_Koha</a></p>
+
+<p>For information about translating Koha, and join the <a href="http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate">koha-translate list</a> to volunteer </p>
+
+<p>The most up-to-date translations can be found at <a href="http://translate.koha-community.org/">http://translate.koha-community.org</a></p>
+
+
+<h3 id="koha-release-team">Release Team</h3>
+
+The release team for Koha 3.16.14 is
+
+<ul>
+    <li>Release Manager:       Galen Charlton <gmc@esilibrary.com></li>
+    <li>Documentation Manager: Nicole C Engard <nengard@gmail.com></li>
+    <li>Translation Manager:   Bernardo Gonzalez Kriegel <bgkriegel@gmail.com></li>
+    <li>QA Manager:            Katrin Fischer <Katrin.Fischer@bsz-bw.de></li>
+    <li>QA Team:
+        <ul>
+            <li>Ruth Bavousett <druthb@gmail.com></li>
+            <li>Chris Cormack <chrisc@catalyst.net.nz></li>
+            <li>Marcel de Rooy <M.de.Rooy@rijksmuseum.nl>,</li>
+            <li>Jonathan Druart <jonathan.druart@biblibre.com>,</li>
+            <li>Brendan Gallagher <brendan@bywatersolutions.com></li>
+            <li>Kyle Hall <kyle@bywatersolutions.com></li>
+            <li>Paul Poulain <paul.poulain@biblibre.com></li>
+            <li>Martin Renvoize <martin.renvoize@ptfs-europe.com></li>
+        </ul>
+    </li>
+    <li>Bug Wranglers:
+        <ul>
+            <li>Chris Cormack <chrisc@catalyst.net.nz></li>
+-           <li>Magnus Enger <magnus@enger.priv.no></li>
+        </ul>
+    </li>
+
+    <li>Packaging Manager: Robin Sheat <robin@catalyst.net.nz></li>
+    <li>Release Maintainer (3.8.x):  Kyle Hall <kyle@bywatersolutions.com></li>
+    <li>Release Maintainer (3.10.x): Bernardo Gonzalez Kriegel <bgkriegel@gmail.com></li>
+    <li>Release Maintainer (3.12.x): Tomás Cohen Arazi <tomascohen@gmail.com></li>
+    <li>Release Maintainer (3.14.x): Fridolin Somers <fridolin.somers@biblibre.com></li>
+    <li>Release Maintainer (3.16.x): Mason James <mtj@kohaaloha.com></li>
+<ul>
+
+
+
+<h3 id="koha-credits">Credits</h3>
+
+
+<p>We thank the following libraries who are known to have sponsored new features in Koha 3.16.14:</p>
+<ul>
+
+</ul>
+
+
+
+<p>We thank the following individuals who contributed patches to Koha 3.16.14:</p>
+<ul>
+
+<li>mxbeaulieu (1)</li>
+
+<li>Aleisha (2)</li>
+
+<li>Jacek Ablewicz (1)</li>
+
+<li>Alex Arnaud (1)</li>
+
+<li>Stéphane Delaune (1)</li>
+
+<li>Marcel de Rooy (3)</li>
+
+<li>Jonathan Druart (3)</li>
+
+<li>Kyle M Hall (2)</li>
+
+<li>Liz Rea (1)</li>
+
+</ul>
+
+
+
+
+
+<p>We thank the following libraries, companies, and other institutions who contributed patches to Koha 3.16.14:</p>
+<ul>
+
+<li>BibLibre (2)</li>
+
+<li>ByWater-Solutions (2)</li>
+
+<li>Rijksmuseum (3)</li>
+
+<li>Solutions inLibro inc (1)</li>
+
+<li>biblos.pk.edu.pl (1)</li>
+
+<li>bugs.koha-community.org (1)</li>
+
+<li>koha-community.org (2)</li>
+
+<li>unidentified (3)</li>
+
+</ul>
+
+
+
+<p>We also especially thank the following individuals who tested patches for Koha 3.16.14:</p>
+<ul>
+
+<li>Chris Cormack (14)</li>
+
+<li>Hector Castro (1)</li>
+
+<li>Jonathan Druart (9)</li>
+
+<li>Katrin Fischer (3)</li>
+
+<li>Liz Rea (14)</li>
+
+<li>Marc Véron (1)</li>
+
+<li>Mark Tompsett (3)</li>
+
+<li>Nick Clemens (1)</li>
+
+<li>Tomas Cohen Arazi (14)</li>
+
+<li>Indranil Das Gupta (L2C2 Technologies) (2)</li>
+
+<li>Kyle M Hall (4)</li>
+
+<li>Marcel de Rooy (1)</li>
+
+</ul>
+
+
+<p>We regret any omissions.  If a contributor has been inadvertently missed, please send a patch against these release notes to  koha-patches@lists.koha-community.org.</p>
+
+<h3 id="koha-git">Revision control notes</h3>
+
+<p>The Koha project uses Git for version control.  The current development version of Koha can be retrieved by checking out the master branch of <a href="git://git.koha-community.org/koha.git">git://git.koha-community.org/koha.git</a></p>
+
+<p>The branch for this version of Koha and future bugfixes in this release line is 3.16.x.</p>
+
+
+<p>The last Koha release was 3.18.10, which was released on August 10, 2015.</p>
+
+<h3 id="koha-report-bugs">Bugs and feature requests</h3>
+
+<p>Bug reports and feature requests can be filed at the Koha bug tracker at <a href="http://bugs.koha-community.org/">http://bugs.koha-community.org</a></p>
+
+<p>He rau ringa e oti ai. (Many hands finish the work)</p>
+##### Autogenerated release notes updated last on 28 Aug 2015 03:37:16 Z #####
