@@ -101,7 +101,7 @@ GetOptions(
     'a|authorities' => \$index_authorities,
     'b|biblios' => \$index_biblios,
     'bn|bnumber=i' => \@biblionumbers,
-    'v|verbose!'       => \$verbose,
+    'v|verbose+'       => \$verbose,
     'h|help'           => \$help,
     'man'              => \$man,
 );
@@ -194,5 +194,5 @@ sub do_reindex {
 sub _log {
     my ($level, $msg) = @_;
 
-    print $msg if ($verbose <= $level);
+    print $msg if ($verbose >= $level);
 }
