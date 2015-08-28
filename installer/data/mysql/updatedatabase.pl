@@ -10780,9 +10780,9 @@ $DBversion = "3.19.00.XXX";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         INSERT INTO `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`)
-        VALUES ('FeeOnChangePatronCategory','1','','If set, when a patron changes to a category with enrolment fee, a fee is added','YesNo')
+        VALUES ('FeeOnChangePatronCategory','1','','If set, when a patron changes to a category with enrolment fee, a fee is charged','YesNo')
     });
-    print "Upgrade to $DBversion done (Bug 13697 - Option to don't add a fee, if the patron changes to a category with enrolment fee)\n";
+    print "Upgrade to $DBversion done (Bug 13697: Option to don't charge a fee, if the patron changes to a category with enrolment fee)\n";
     SetVersion($DBversion);
 }
 
