@@ -421,7 +421,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('RoutingSerials','1',NULL,'If ON, serials routing is enabled','YesNo'),
 ('SCOUserCSS','',NULL,'Add CSS to be included in the SCO module in an embedded <style> tag.','free'),
 ('SCOUserJS','',NULL,'Define custom javascript for inclusion in the SCO module','free'),
-('SearchEngine','Zebra','Elasticsearch|Solr|Zebra','Search Engine','Choice'),
+('SearchEngine','Zebra','Elasticsearch|Zebra','Search Engine','Choice'),
 ('SearchMyLibraryFirst','0',NULL,'If ON, OPAC searches return results limited by the user\'s library by default if they are logged in','YesNo'),
 ('SearchWithISBNVariations','0',NULL,'If enabled, search on all variations of the ISBN','YesNo'),
 ('SelfCheckHelpMessage','','70|10','Enter HTML to include under the basic Web-based Self Checkout instructions on the Help page','Textarea'),
