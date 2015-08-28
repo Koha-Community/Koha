@@ -33,6 +33,8 @@ B<rebuild_elastic_search.pl>
 
 =head1 DESCRIPTION
 
+Inserts records from a Koha database into Elasticsearch.
+
 =head1 OPTIONS
 
 =over
@@ -74,6 +76,8 @@ Help!
 =item B<--man>
 
 Full documentation.
+
+=back
 
 =cut
 
