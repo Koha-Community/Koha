@@ -408,7 +408,6 @@ sub _convert_facets {
 
         # We restrict to the most popular $limit results
         my $limit = ( $type eq $exp_facet ) ? 10 : 5;
-        $limit = $#{ $data->{terms} } if ( $limit > @{ $data->{terms} } );
         my $facet = {
             type_id    => $type . '_id',
             expand     => $type,
@@ -417,6 +416,7 @@ sub _convert_facets {
             "type_label_$type_to_label{$type}" => 1,
             type_link_value                    => $type,
         };
+        $limit = $#{ $data->{terms} } if ( $limit > @{ $data->{terms} } );
         foreach my $term ( @{ $data->{terms} }[ 0 .. $limit - 1 ] ) {
             my $t = $term->{term};
             my $c = $term->{count};
