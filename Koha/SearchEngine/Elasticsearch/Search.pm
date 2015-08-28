@@ -417,7 +417,7 @@ sub _convert_facets {
             "type_label_$type_to_label{$type}" => 1,
             type_link_value                    => $type,
         };
-        foreach my $term ( @{ $data->{terms} }[ 0 .. $limit ] ) {
+        foreach my $term ( @{ $data->{terms} }[ 0 .. $limit - 1 ] ) {
             my $t = $term->{term};
             my $c = $term->{count};
             if ( exists( $special{$type} ) ) {
