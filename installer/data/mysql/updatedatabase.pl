@@ -10779,10 +10779,20 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.21.00.020";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
-        INSERT INTO `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`)
+        INSERT IGNORE INTO `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`)
         VALUES ('FeeOnChangePatronCategory','1','','If set, when a patron changes to a category with enrolment fee, a fee is charged','YesNo')
     });
     print "Upgrade to $DBversion done (Bug 13697: Option to don't charge a fee, if the patron changes to a category with enrolment fee)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.21.00.021";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
+        VALUES ('UseWYSIWYGinSystemPreferences','0','','Show WYSIWYG editor when editing certain HTML system preferences.','YesNo')
+    });
+    print "Upgrade to $DBversion done (Bug 11584: Add wysiwyg editor to system preferences dealing with HTML)\n";
     SetVersion($DBversion);
 }
 
