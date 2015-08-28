@@ -5,7 +5,7 @@ use DateTime;
 use DateTime::TimeZone;
 
 use C4::Context;
-use Test::More tests => 36;
+use Test::More tests => 37;
 use Test::MockModule;
 
 BEGIN { use_ok('Koha::DateUtils'); }
