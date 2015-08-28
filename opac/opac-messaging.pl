@@ -49,10 +49,10 @@ my $borrower = GetMemberDetails( $borrowernumber );
 my $messaging_options = C4::Members::Messaging::GetMessagingOptions();
 
 if ( defined $query->param('modify') && $query->param('modify') eq 'yes' ) {
-
-    if ( $query->param('SMSnumber') ne $borrower->{'mobile'} )  {
+    my $sms = $query->param('SMSnumber');
+    if ( defined $sms && ( $borrower->{'smsalertnumber'} // '' ) ne $sms ) {
         ModMember( borrowernumber => $borrowernumber,
-                   smsalertnumber => $query->param('SMSnumber') );
+                   smsalertnumber => $sms );
         $borrower = GetMemberDetails( $borrowernumber );
     }
 
@@ -61,10 +61,9 @@ if ( defined $query->param('modify') && $query->param('modify') eq 'yes' ) {
 
 C4::Form::MessagingPreferences::set_form_values({ borrowernumber     => $borrower->{'borrowernumber'} }, $template);
 
-# warn( Data::Dumper->Dump( [ $messaging_options ], [ 'messaging_options' ] ) );
 $template->param( BORROWER_INFO         => [ $borrower ],
                   messagingview         => 1,
-                  SMSnumber => $borrower->{'smsalertnumber'} ? $borrower->{'smsalertnumber'} : $borrower->{'mobile'},
+                  SMSnumber => $borrower->{'smsalertnumber'},
                   SMSSendDriver                =>  C4::Context->preference("SMSSendDriver"),
                   TalkingTechItivaPhone        =>  C4::Context->preference("TalkingTechItivaPhoneNotification") );
 
