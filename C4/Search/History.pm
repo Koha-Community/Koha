@@ -73,8 +73,8 @@ sub delete {
         $id = $id ? [ $id ] : [];
     }
 
-    unless ( $userid or @$id ) {
-        warn "ERROR: userid or id is required for history deletion";
+    unless ( $userid or @$id or $interval ) {
+        warn "ERROR: userid, id or interval is required for history deletion";
         return;
     }
 
