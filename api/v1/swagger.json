@@ -31,6 +31,12 @@
                 "$ref": "#/definitions/borrower"
               }
             }
+          },
+          "403": {
+            "description": "Access forbidden",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
           }
         }
       }
@@ -53,6 +59,12 @@
             "description": "A borrower",
             "schema": {
               "$ref": "#/definitions/borrower"
+            }
+          },
+          "403": {
+            "description": "Access forbidden",
+            "schema": {
+              "$ref": "#/definitions/error"
             }
           },
           "404": {

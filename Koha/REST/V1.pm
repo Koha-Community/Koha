@@ -3,15 +3,23 @@ package Koha::REST::V1;
 use Modern::Perl;
 use Mojo::Base 'Mojolicious';
 
+use C4::Auth qw( check_cookie_auth get_session );
+use Koha::Borrowers;
+
 sub startup {
     my $self = shift;
 
     my $route = $self->routes->under->to(
         cb => sub {
             my $c = shift;
-            my $user = $c->param('user');
-            # Do the authentication stuff here...
-            $c->stash('user', $user);
+
+            my ($status, $sessionID) = check_cookie_auth($c->cookie('CGISESSID'));
+            if ($status eq "ok") {
+                my $session = get_session($sessionID);
+                my $user = Koha::Borrowers->find($session->param('number'));
+                $c->stash('koha.user' => $user);
+            }
+
             return 1;
         }
     );
