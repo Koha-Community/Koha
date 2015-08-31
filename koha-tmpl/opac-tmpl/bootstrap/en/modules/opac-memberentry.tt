@@ -1,3 +1,4 @@
+[% USE Categories %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% SET userupdateview = 1 %]
@@ -53,7 +54,7 @@
                     <div class="alert">You have not filled out all required fields. Please fill in all missing fields and resubmit.</div>
                 [% END %]
 
-                [%  IF invalid_form_fields %]
+                [% IF invalid_form_fields %]
                     <div class="alert alert-error"><strong>The following fields contain invalid information:</strong>
                         <ul>
                             [% FOREACH field IN invalid_form_fields %]
@@ -66,6 +67,17 @@
                             [% END %]
                         </ul>
                         Please correct the errors and resubmit.
+                    </div>
+                [% END %]
+
+                [% IF cardnumber_wrong_length || cardnumber_already_exists %]
+                    <div class="alert alert-error">
+                        [% IF cardnumber_wrong_length %]
+                        <strong>The entered <a href="#borrower_cardnumber">card number</a> is the wrong length.</strong>
+                        [% ELSIF cardnumber_already_exists %]
+                        <strong>The entered <a href="#borrower_cardnumber">card number</a> is already in use.</strong>
+                        [% END %]
+                        Please correct this and resubmit.
                     </div>
                 [% END %]
 
@@ -106,10 +118,21 @@
 
                         <legend id="library_legend">Library</legend>
                             <ol>
-                                [% UNLESS hidden.defined('cardnumber') %]
+                                [% UNLESS hidden.defined('cardnumber') || Koha.Preference('autoMemberNum') %]
                                 <li>
-                                    <label>Card number:</label>
-                                    [% borrower.cardnumber %]
+                                    [% IF mandatory.defined('cardnumber') %]
+                                        <label for="borrower_cardnumber" class="required">
+                                    [% ELSE %]
+                                        <label for="borrower_cardnumber">
+                                    [% END %]
+                                    Library card number:
+                                    </label>
+                                    [% IF borrower %]
+                                        <input type="text" id="borrower_cardnumber" name="borrower_cardnumber" value="[% borrower.cardnumber %]" />
+                                        [% IF mandatory.defined('cardnumber') %]<span class="required">Required</span>[% END %]
+                                    [% ELSE %]
+                                        [% borrower.cardnumber %]
+                                    [% END %]
                                 </li>
                                 [% END %]
 
@@ -138,6 +161,27 @@
                                                 [% END %]
                                             [% END %]
                                         </select>
+                                    </li>
+                                [% END %]
+
+                                [% UNLESS hidden.defined('categorycode') %]
+                                    <li>
+                                        <label for="borrower_categorycode">
+                                        Category:</label>
+
+                                        [% IF borrower %]
+                                            <select id="borrower_categorycode" name="borrower_categorycode">
+                                                [% FOREACH c IN Categories.all() %]
+                                                    [% IF c.categorycode == Koha.Preference('PatronSelfRegistrationDefaultCategory') %]
+                                                        <option value="[% c.categorycode %]" selected="selected">[% c.description %]</option>
+                                                    [% ELSE %]
+                                                        <option value="[% c.categorycode %]">[% c.description %]</option>
+                                                    [% END %]
+                                                [% END %]
+                                            </select>
+                                        [% ELSE %]
+                                            [% Categories.GetName( borrower.categorycode ) %]
+                                        [% END %]
                                     </li>
                                 [% END %]
                             </ol>

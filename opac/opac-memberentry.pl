@@ -80,8 +80,20 @@ if ( $action eq 'create' ) {
     my @empty_mandatory_fields = CheckMandatoryFields( \%borrower, $action );
     my $invalidformfields = CheckForInvalidFields(\%borrower);
     delete $borrower{'password2'};
+    my $cardnumber_error_code;
+    if ( !grep { $_ eq 'cardnumber' } @empty_mandatory_fields ) {
+        # No point in checking the cardnumber if it's missing and mandatory, it'll just generate a
+        # spurious length warning.
+        $cardnumber_error_code = checkcardnumber( $borrower{cardnumber}, $borrower{borrowernumber} );
+    }
 
-    if (@empty_mandatory_fields || @$invalidformfields) {
+    if ( @empty_mandatory_fields || @$invalidformfields || $cardnumber_error_code ) {
+        if ( $cardnumber_error_code == 1 ) {
+            $template->param( cardnumber_already_exists => 1 );
+        } elsif ( $cardnumber_error_code == 2 ) {
+            $template->param( cardnumber_wrong_length => 1 );
+        }
+
         $template->param(
             empty_mandatory_fields => \@empty_mandatory_fields,
             invalid_form_fields    => $invalidformfields,
