@@ -28,7 +28,7 @@ has url => ( is => 'rw', );
 
 has dir => (
     is => 'rw',
-    default => '.',
+    default => sub { '.' },
     trigger => sub {
         my ($self, $dir) = @_;
         unless (-d $dir) {
@@ -38,15 +38,15 @@ has dir => (
     }
 );
 
-has short => ( is => 'rw', default => 1 );
+has short => ( is => 'rw', default => sub { 1 } );
 
-has verbose => ( is => 'rw', default => 0 );
+has verbose => ( is => 'rw', default => sub { 0 } );
 
 has sth => ( is => 'rw' );
 
 has writer => ( is => 'rw', );
 
-has count => ( is => 'rw', default => 0);
+has count => ( is => 'rw', default => sub { 0 } );
 
 
 sub run {

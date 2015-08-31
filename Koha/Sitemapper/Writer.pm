@@ -31,9 +31,9 @@ my $MAX = 50000;
 
 has sitemapper => (is => 'rw', );
 
-has current => ( is => 'rw', default => $MAX );
+has current => ( is => 'rw', default => sub { $MAX } );
 
-has count => ( is => 'rw', default => 0 );
+has count => ( is => 'rw', default => sub { 0 } );
 
 has writer => ( is => 'rw',  );
 
