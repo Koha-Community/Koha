@@ -27,7 +27,6 @@ use C4::Members qw(AddMember changepassword);
 use C4::Members::Attributes;
 use C4::Members::AttributeTypes;
 use C4::Members::Messaging;
-use C4::Dates;
 use C4::Auth qw(checkpw_internal);
 use Koha::AuthUtils qw(hash_password);
 use List::MoreUtils qw( any );
@@ -266,11 +265,7 @@ sub ldap_entry_2_hash {
   		. substr($borrower{ 'surname' },0,1)
   		. " ");
 
-    # Date and categorycode conversions
-    $borrower{'dateexpiry'} = C4::Dates->new($borrower{'dateexpiry'},'sql')->output('iso') if $borrower{'dateexpiry'};
-    $borrower{'dateofbirth'} = C4::Dates->new($borrower{'dateofbirth'},'sql')->output('iso') if $borrower{'dateofbirth'};
-    $borrower{'dateenrolled'} = C4::Dates->new($borrower{'dateenrolled'},'sql')->output('iso') if $borrower{'dateenrolled'};
-
+    # categorycode conversions
     if(defined $categorycode_conversions{$borrower{categorycode}}) {
         $borrower{categorycode} = $categorycode_conversions{$borrower{categorycode}};
     }
