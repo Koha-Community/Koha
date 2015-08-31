@@ -1304,14 +1304,16 @@
                         <td>
                             [% IF ITEM_RESULT.course_reserves %]
                                 [% FOREACH r IN ITEM_RESULT.course_reserves %]
-                                    <p>
-                                        <a href="opac-course-details.pl?course_id=[% r.course.course_id %]">
-                                        [% r.course.course_name %]
-                                        <!--[% IF r.course.course_number %] [% r.course.course_number %] [% END %]-->
-                                        [% IF r.course.section %] [% r.course.section %] [% END %]
-                                        [% IF r.course.term %] [% AuthorisedValues.GetByCode( 'TERM', r.course.term ) %] [% END %]
-                                        </a>
-                                    </p>
+                                    [% IF r.course.enabled == 'yes' %]
+                                        <p>
+                                            <a href="opac-course-details.pl?course_id=[% r.course.course_id %]">
+                                            [% r.course.course_name %]
+                                            <!--[% IF r.course.course_number %] [% r.course.course_number %] [% END %]-->
+                                            [% IF r.course.section %] [% r.course.section %] [% END %]
+                                            [% IF r.course.term %] [% AuthorisedValues.GetByCode( 'TERM', r.course.term ) %] [% END %]
+                                            </a>
+                                        </p>
+                                    [% END %]
                                 [% END %]
                             [% END %]
                         </td>
