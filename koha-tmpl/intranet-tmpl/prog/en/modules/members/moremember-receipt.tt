@@ -61,7 +61,7 @@ Date due: [% issueloo.date_due %]</p>
                        <!-- [% koha_news_count %] recent news item(s) -->
             [% FOREACH koha_new IN koha_news %]
                     <div class="newsitem" id="news[% koha_new.idnew %]"><h5 style="margin-bottom: 1px; margin-top: 1px"><b>[% koha_new.title %]</b></h5>
-                                        <p style="margin-bottom: 1px; margin-top: 1px">[% koha_new.new %]</p>
+                                        <p style="margin-bottom: 1px; margin-top: 1px">[% koha_new.new.raw %]</p>
                                        <p class="newsfooter" style="font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px"> Posted on [% koha_new.newdate %]
 
 </p><hr /></div>

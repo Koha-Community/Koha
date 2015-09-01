@@ -145,7 +145,7 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                 [% END %]
             </li>
             <li><label for="new">News: </label>
-            <textarea name="new" id="new"  cols="75" rows="10">[% new_detail.new %]</textarea>
+            <textarea name="new" id="new"  cols="75" rows="10">[% new_detail.new.raw %]</textarea>
             </li>
             </ol>
 			</fieldset>
@@ -247,7 +247,7 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                             <td>[% opac_new.title %]</td>
                             <td>[% opac_new.author_title %] [% opac_new.author_firstname %] [% opac_new.author_surname %]</td>
                            <td>
-                                [% opac_new.new %]
+                                [% opac_new.new.raw %]
                             </td>
                             <td><a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=[% opac_new.idnew %]">Edit</a></td>
                         </tr>
