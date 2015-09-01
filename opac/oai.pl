@@ -225,7 +225,15 @@ sub new {
     }
 
     my $parser = XML::LibXML->new();
-    my $record_dom = $parser->parse_string( $marcxml );
+    my $record_dom;
+    eval {
+        $record_dom = $parser->parse_string( $marcxml );
+    };
+    if ($@) {
+        warn "OAI-PMH: No marcxml for record " . $args{identifier};
+        return $self;
+    }
+
     my $format =  $args{metadataPrefix};
     if ( $format ne 'marcxml' ) {
         my %args = (
