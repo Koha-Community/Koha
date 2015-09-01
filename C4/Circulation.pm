@@ -2693,6 +2693,7 @@ sub CanBookBeRenewed {
                 {
                     biblionumber => $resrec->{biblionumber},
                     onloan       => undef,
+                    notforloan   => 0,
                     -not         => { itemnumber => $itemnumber }
                 },
                 { columns => 'itemnumber' }

@@ -627,7 +627,7 @@ sub HoldTitle {
     #    $constraint, $bibitems,  $priority, $resdate, $expdate, $notes,
     #    $title,      $checkitem, $found
     my $priority= C4::Reserves::CalculatePriority( $biblionumber );
-    AddReserve( $branch, $borrowernumber, $biblionumber, 'a', undef, $priority, undef, undef, undef, $title, undef, undef );
+    AddReserve( $branch, $borrowernumber, $biblionumber, undef, $priority, undef, undef, undef, $title, undef, undef );
 
     # Hashref building
     my $out;
@@ -704,7 +704,7 @@ sub HoldItem {
     #    $constraint, $bibitems,  $priority, $resdate, $expdate, $notes,
     #    $title,      $checkitem, $found
     my $priority= C4::Reserves::CalculatePriority( $biblionumber );
-    AddReserve( $branch, $borrowernumber, $biblionumber, 'a', undef, $priority, undef, undef, undef, $title, $itemnumber, undef );
+    AddReserve( $branch, $borrowernumber, $biblionumber, undef, $priority, undef, undef, undef, $title, $itemnumber, undef );
 
     # Hashref building
     my $out;

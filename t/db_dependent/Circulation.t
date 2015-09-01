@@ -27,7 +27,7 @@ use C4::Overdues qw(UpdateFine);
 use Koha::DateUtils;
 use Koha::Database;
 
-use Test::More tests => 61;
+use Test::More tests => 67;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -37,8 +37,8 @@ my $dbh = C4::Context->dbh;
 my $schema = Koha::Database->new()->schema();
 
 # Start transaction
-$dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
+$schema->storage->txn_begin();
 
 # Start with a clean slate
 $dbh->do('DELETE FROM issues');
@@ -262,7 +262,6 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 
     my $renewing_borrower = GetMember( borrowernumber => $renewing_borrowernumber );
 
-    my $constraint     = 'a';
     my $bibitems       = '';
     my $priority       = '1';
     my $resdate        = undef;
@@ -289,7 +288,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     # Biblio-level hold, renewal test
     AddReserve(
         $branch, $reserving_borrowernumber, $biblionumber,
-        $constraint, $bibitems,  $priority, $resdate, $expdate, $notes,
+        $bibitems,  $priority, $resdate, $expdate, $notes,
         $title, $checkitem, $found
     );
 
@@ -354,7 +353,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     # Item-level hold, renewal test
     AddReserve(
         $branch, $reserving_borrowernumber, $biblionumber,
-        $constraint, $bibitems,  $priority, $resdate, $expdate, $notes,
+        $bibitems,  $priority, $resdate, $expdate, $notes,
         $title, $itemnumber, $found
     );
 
@@ -594,6 +593,97 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     is ( $count, 0, "Calling UpdateFine on non-existant fine with an amount of 0 does not result in an empty fine" );
 }
 
-$dbh->rollback;
+{
+    $dbh->do('DELETE FROM issues');
+    $dbh->do('DELETE FROM items');
+    $dbh->do('DELETE FROM issuingrules');
+    $dbh->do(
+        q{
+        INSERT INTO issuingrules ( categorycode, branchcode, itemtype, reservesallowed, maxissueqty, issuelength, lengthunit, renewalsallowed, renewalperiod,
+                    norenewalbefore, auto_renew, fine, chargeperiod ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
+        },
+        {},
+        '*', '*', '*', 25,
+        20,  14,  'days',
+        1,   7,
+        '',  0,
+        .10, 1
+    );
+    my $biblio = MARC::Record->new();
+    my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $biblio, '' );
 
+    my $barcode1 = '1234';
+    my ( undef, undef, $itemnumber1 ) = AddItem(
+        {
+            homebranch    => 'MPL',
+            holdingbranch => 'MPL',
+            barcode       => $barcode1,
+        },
+        $biblionumber
+    );
+    my $barcode2 = '4321';
+    my ( undef, undef, $itemnumber2 ) = AddItem(
+        {
+            homebranch    => 'MPL',
+            holdingbranch => 'MPL',
+            barcode       => $barcode2,
+        },
+        $biblionumber
+    );
+
+    my $borrowernumber1 = AddMember(
+        firstname    => 'Kyle',
+        surname      => 'Hall',
+        categorycode => 'S',
+        branchcode   => 'MPL',
+    );
+    my $borrowernumber2 = AddMember(
+        firstname    => 'Chelsea',
+        surname      => 'Hall',
+        categorycode => 'S',
+        branchcode   => 'MPL',
+    );
+
+    my $borrower1 = GetMember( borrowernumber => $borrowernumber1 );
+    my $borrower2 = GetMember( borrowernumber => $borrowernumber2 );
+
+    my $issue = AddIssue( $borrower1, $barcode1 );
+
+    my ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $itemnumber1 );
+    is( $renewokay, 1, 'Bug 14337 - Verify the borrower can renew with no hold on the record' );
+
+    AddReserve(
+        'MPL', $borrowernumber2, $biblionumber,
+        '',  1, undef, undef, '',
+        undef, undef, undef
+    );
+
+    C4::Context->dbh->do("UPDATE issuingrules SET onshelfholds = 0");
+    C4::Context->set_preference( 'AllowRenewalIfOtherItemsAvailable', 0 );
+    ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $itemnumber1 );
+    is( $renewokay, 0, 'Bug 14337 - Verify the borrower cannot renew with a hold on the record if AllowRenewalIfOtherItemsAvailable and onshelfholds are disabled' );
+
+    C4::Context->dbh->do("UPDATE issuingrules SET onshelfholds = 0");
+    C4::Context->set_preference( 'AllowRenewalIfOtherItemsAvailable', 1 );
+    ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $itemnumber1 );
+    is( $renewokay, 0, 'Bug 14337 - Verify the borrower cannot renew with a hold on the record if AllowRenewalIfOtherItemsAvailable is enabled and onshelfholds is disabled' );
+
+    C4::Context->dbh->do("UPDATE issuingrules SET onshelfholds = 1");
+    C4::Context->set_preference( 'AllowRenewalIfOtherItemsAvailable', 0 );
+    ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $itemnumber1 );
+    is( $renewokay, 0, 'Bug 14337 - Verify the borrower cannot renew with a hold on the record if AllowRenewalIfOtherItemsAvailable is disabled and onshelfhold is enabled' );
+
+    C4::Context->dbh->do("UPDATE issuingrules SET onshelfholds = 1");
+    C4::Context->set_preference( 'AllowRenewalIfOtherItemsAvailable', 1 );
+    ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $itemnumber1 );
+    is( $renewokay, 1, 'Bug 14337 - Verify the borrower can renew with a hold on the record if AllowRenewalIfOtherItemsAvailable and onshelfhold are enabled' );
+
+    # Setting item not checked out to be not for loan but holdable
+    ModItem({ notforloan => -1 }, $biblionumber, $itemnumber2);
+
+    ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $itemnumber1 );
+    is( $renewokay, 0, 'Bug 14337 - Verify the borrower can not renew with a hold on the record if AllowRenewalIfOtherItemsAvailable is enabled but the only available item is notforloan' );
+}
+
+$schema->storage->txn_rollback();
 1;

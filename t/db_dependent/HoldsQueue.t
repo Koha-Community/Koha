@@ -95,11 +95,10 @@ foreach ( $borrower_branchcode, $least_cost_branch_code, @other_branches ) {
 
 # Remove existing reserves, makes debugging easier
 $dbh->do("DELETE FROM reserves");
-my $constraint = undef;
 my $bibitems = undef;
 my $priority = 1;
 # Make a reserve
-AddReserve ( $borrower_branchcode, $borrowernumber, $biblionumber, $constraint, $bibitems,  $priority );
+AddReserve ( $borrower_branchcode, $borrowernumber, $biblionumber, $bibitems,  $priority );
 #                           $resdate, $expdate, $notes, $title, $checkitem, $found
 $dbh->do("UPDATE reserves SET reservedate = DATE_SUB( reservedate, INTERVAL 1 DAY )");
 

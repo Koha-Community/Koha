@@ -339,57 +339,83 @@
     <xsl:choose>
     <xsl:when test="marc:datafield[@tag=100] or marc:datafield[@tag=110] or marc:datafield[@tag=111] or marc:datafield[@tag=700] or marc:datafield[@tag=710] or marc:datafield[@tag=711]">
     <p class="author">by
-    <xsl:for-each select="marc:datafield[(@tag=100 or @tag=700) and @ind1!='z']">
-    <a>
-    <xsl:choose>
-        <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
-            <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
-        </xsl:when>
-        <xsl:otherwise>
-        <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=au:"<xsl:value-of select="marc:subfield[@code='a']"/>"</xsl:attribute>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:call-template name="nameABCQ"/></a>
-    <xsl:choose>
-    <xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
-    </xsl:for-each>
-
-    <xsl:for-each select="marc:datafield[(@tag=110 or @tag=710) and @ind1!='z']">
-    <a>
-    <xsl:choose>
-        <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
-            <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
-        </xsl:when>
-        <xsl:otherwise>
-        <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=au:"<xsl:value-of select="marc:subfield[@code='a']"/>"</xsl:attribute>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:call-template name="nameABCDN"/></a>
-    <xsl:choose><xsl:when test="position()=last()"><xsl:text> </xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
-    </xsl:for-each>
-
-    <xsl:for-each select="marc:datafield[(@tag=111 or @tag=711) and @ind1!='z']">
-        <xsl:choose>
-        <xsl:when test="marc:subfield[@code='n']">
-           <xsl:text> </xsl:text>
-           <xsl:call-template name="subfieldSelect">
-              <xsl:with-param name="codes">n</xsl:with-param>                              </xsl:call-template>
-           <xsl:text> </xsl:text>
-        </xsl:when>
-        </xsl:choose>
-    <a>
-    <xsl:choose>
-        <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
-            <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
-        </xsl:when>
-        <xsl:otherwise>
-        <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=au:"<xsl:value-of select="marc:subfield[@code='a']"/>"</xsl:attribute>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:call-template name="nameACDEQ"/></a>
-    <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
-
-    </xsl:for-each>
+        <!-- #13383 -->
+        <xsl:for-each select="marc:datafield[(@tag=100 or @tag=700 or @tag=110 or @tag=710 or @tag=111 or @tag=711) and @ind1!='z']">
+            <xsl:if test="@tag=111 or @tag=711 and marc:subfield[@code='n']">
+                <xsl:text> </xsl:text>
+                <xsl:call-template name="subfieldSelect">
+                    <xsl:with-param name="codes">n</xsl:with-param>
+                </xsl:call-template>
+                <xsl:text> </xsl:text>
+            </xsl:if>
+            <a>
+                <xsl:choose>
+                    <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
+                        <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=au:"<xsl:value-of select="marc:subfield[@code='a']"/>"</xsl:attribute>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:call-template name="chopPunctuation">
+                    <xsl:with-param name="chopString">
+                        <xsl:call-template name="subfieldSelect">
+                            <xsl:with-param name="codes">
+                                <xsl:choose>
+                                    <!-- #13383 include subfield e for field 111  -->
+                                    <xsl:when test="@tag=111">abcdeqt</xsl:when>
+                                    <xsl:otherwise>abcdjqt</xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:with-param>
+                    <xsl:with-param name="punctuation">
+                        <xsl:text>:,;/ </xsl:text>
+                    </xsl:with-param>
+                </xsl:call-template>
+            </a>
+            <xsl:if test="marc:subfield[@code='4' or @code='e'][not(parent::*[@tag=111])] or (self::*[@tag=111] and marc:subfield[@code='4' or @code='j'][. != ''])">
+                <span class="relatorcode">
+                    <xsl:text> [</xsl:text>
+                    <xsl:choose>
+                        <xsl:when test="@tag=111">
+                            <xsl:choose>
+                                <!-- Prefer j over 4 -->
+                                <xsl:when test="marc:subfield[@code='j']">
+                                    <xsl:for-each select="marc:subfield[@code='j']">
+                                        <xsl:value-of select="."/>
+                                        <xsl:if test="position() != last()">, </xsl:if>
+                                    </xsl:for-each>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:for-each select="marc:subfield[@code=4]">
+                                        <xsl:value-of select="."/>
+                                        <xsl:if test="position() != last()">, </xsl:if>
+                                    </xsl:for-each>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:when>
+                        <!-- Prefer e over 4 -->
+                        <xsl:when test="marc:subfield[@code='e']">
+                            <xsl:for-each select="marc:subfield[@code='e']">
+                                <xsl:value-of select="."/>
+                                <xsl:if test="position() != last()">, </xsl:if>
+                            </xsl:for-each>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:for-each select="marc:subfield[@code=4]">
+                                <xsl:value-of select="."/>
+                                <xsl:if test="position() != last()">, </xsl:if>
+                            </xsl:for-each>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:text>]</xsl:text>
+                </span>
+            </xsl:if>
+            <xsl:choose>
+                <xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise>
+            </xsl:choose>
+        </xsl:for-each>
     </p>
     </xsl:when>
     </xsl:choose>

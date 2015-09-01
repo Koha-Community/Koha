@@ -201,6 +201,7 @@ foreach my $biblionumber (@biblionumbers) {
     my $dat = GetBiblioData($biblionumber);
 
     my $canReserve = CanBookBeReserved( $borrowerinfo->{borrowernumber}, $biblionumber );
+    $canReserve //= '';
     if ( $canReserve eq 'OK' ) {
 
         #All is OK and we can continue
@@ -526,8 +527,6 @@ foreach my $biblionumber (@biblionumbers) {
         $reserve{'notes'}          = $res->{'reservenotes'};
         $reserve{'wait'}           =
           ( ( defined $res->{'found'} and $res->{'found'} eq 'W' ) or ( $res->{'priority'} eq '0' ) );
-        $reserve{'constrainttypea'} = ( $res->{'constrainttype'} eq 'a' );
-        $reserve{'constrainttypeo'} = ( $res->{'constrainttype'} eq 'o' );
         $reserve{'voldesc'}         = $res->{'volumeddesc'};
         $reserve{'ccode'}           = $res->{'ccode'};
         $reserve{'barcode'}         = $res->{'barcode'};

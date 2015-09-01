@@ -46,12 +46,6 @@ __PACKAGE__->table("old_reserves");
   is_foreign_key: 1
   is_nullable: 1
 
-=head2 constrainttype
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 1
-
 =head2 branchcode
 
   data_type: 'varchar'
@@ -146,8 +140,6 @@ __PACKAGE__->add_columns(
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "biblionumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "constrainttype",
-  { data_type => "varchar", is_nullable => 1, size => 1 },
   "branchcode",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "notificationdate",
@@ -262,8 +254,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-18 13:01:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bCHe3BGidrVm0LIlC6h+ow
+# Created by DBIx::Class::Schema::Loader v0.07040 @ 2015-06-30 08:51:40
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wGi7SO5Sz+IwuvqaAyQDbg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

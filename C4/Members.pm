@@ -683,7 +683,9 @@ sub ModMember {
 
         # If the patron changes to a category with enrollment fee, we add a fee
         if ( $data{categorycode} and $data{categorycode} ne $old_categorycode ) {
-            AddEnrolmentFeeIfNeeded( $data{categorycode}, $data{borrowernumber} );
+            if ( C4::Context->preference('FeeOnChangePatronCategory') ) {
+                AddEnrolmentFeeIfNeeded( $data{categorycode}, $data{borrowernumber} );
+            }
         }
 
         # If NorwegianPatronDBEnable is enabled, we set syncstatus to something that a

@@ -38,7 +38,7 @@ Staff Client:
         -
             - "Show the following HTML in its own column on the main page of the staff client:"
             - pref: IntranetmainUserblock
-              type: textarea
+              type: htmlarea
               class: code
         -
             - "Show the following HTML to the left of the More menu at the top of each page on the staff client (should be a list of links or blank):"
@@ -128,3 +128,9 @@ Staff Client:
                   yes: Enable
                   no: Disable
             - item selection in record detail page.
+        -
+            - pref: UseWYSIWYGinSystemPreferences
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - WYSIWYG editor when editing certain HTML system preferences.

@@ -38,36 +38,36 @@ sub queue_position {
 }
 
 sub do_hold {
-	my $self = shift;
-	unless ($self->{patron}) {
-		$self->screen_msg('do_hold called with undefined patron');
-		$self->ok(0);
-		return $self;
-	}
-	my $borrower = GetMember( 'cardnumber'=>$self->{patron}->id);
-	unless ($borrower) {
-		$self->screen_msg('No borrower matches cardnumber "' . $self->{patron}->id . '".');
-		$self->ok(0);
-		return $self;
-	}
-	my $bib = GetBiblioFromItemNumber(undef, $self->{item}->id);
-	unless ($bib) {
-		$self->screen_msg('No biblio record matches barcode "' . $self->{item}->id . '".');
-		$self->ok(0);
-		return $self;
-	}
-	my $branch = ($self->pickup_location || $self->{patron}->branchcode);
-	unless ($branch) {
-		$self->screen_msg('No branch specified (or found w/ patron).');
-		$self->ok(0);
-		return $self;
-	}
-	my $bibno = $bib->{biblionumber};
-	AddReserve($branch, $borrower->{borrowernumber}, 
-				$bibno, 'a', GetBiblioItemByBiblioNumber($bibno)) ;
-		# unfortunately no meaningful return value
-	$self->ok(1);
-	return $self;
+    my $self = shift;
+    unless ( $self->{patron} ) {
+        $self->screen_msg('do_hold called with undefined patron');
+        $self->ok(0);
+        return $self;
+    }
+    my $borrower = GetMember( 'cardnumber' => $self->{patron}->id );
+    unless ($borrower) {
+        $self->screen_msg( 'No borrower matches cardnumber "' . $self->{patron}->id . '".' );
+        $self->ok(0);
+        return $self;
+    }
+    my $bib = GetBiblioFromItemNumber( undef, $self->{item}->id );
+    unless ($bib) {
+        $self->screen_msg( 'No biblio record matches barcode "' . $self->{item}->id . '".' );
+        $self->ok(0);
+        return $self;
+    }
+    my $branch = ( $self->pickup_location || $self->{patron}->branchcode );
+    unless ($branch) {
+        $self->screen_msg('No branch specified (or found w/ patron).');
+        $self->ok(0);
+        return $self;
+    }
+    my $bibno = $bib->{biblionumber};
+    AddReserve( $branch, $borrower->{borrowernumber}, $bibno, GetBiblioItemByBiblioNumber($bibno) );
+
+    # unfortunately no meaningful return value
+    $self->ok(1);
+    return $self;
 }
 
 sub drop_hold {

@@ -130,6 +130,11 @@ sub GetPrefParams {
         $data->{options} =~ /(.*)\|(.*)/;
         $params->{'cols'} = $1;
         $params->{'rows'} = $2;
+    } elsif ( $data->{'type'} eq 'Htmlarea' ) {
+        $params->{'type_htmlarea'} = 1;
+        $data->{options} =~ /(.*)\|(.*)/;
+        $params->{'cols'} = $1;
+        $params->{'rows'} = $2;
     } elsif ( $data->{'type'} eq 'Themes' ) {
         $params->{'type_choice'} = 1;
         my $type = '';

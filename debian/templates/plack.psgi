@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+use Modern::Perl;
+
 use lib("/usr/share/koha/lib");
 use lib("/usr/share/koha/lib/installer");
 

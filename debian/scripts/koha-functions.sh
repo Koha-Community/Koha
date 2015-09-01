@@ -100,6 +100,7 @@ is_zebra_running()
     local instancename=$1
 
     if daemon --name="$instancename-koha-zebra" \
+            --pidfiles="/var/run/koha/$instancename/" \
             --user="$instancename-koha.$instancename-koha" \
             --running ; then
         return 0
@@ -113,6 +114,7 @@ is_indexer_running()
     local instancename=$1
 
     if daemon --name="$instancename-koha-indexer" \
+            --pidfiles="/var/run/koha/$instancename/" \
             --user="$instancename-koha.$instancename-koha" \
             --running ; then
         return 0

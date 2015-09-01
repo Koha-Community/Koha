@@ -1,7 +1,10 @@
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; [% IF ( add_form ) %] System preferences &rsaquo; [% IF ( modify ) %]Modify system preference '[% searchfield %]'[% ELSE %]Add a system preference[% END %][% END %][% IF ( add_validate ) %] System preferences &rsaquo; Data added[% END %]
 [% IF ( delete_confirm ) %] System preferences &rsaquo; [% searchfield %] &rsaquo; Confirm deletion of parameter '[% searchfield %]'[% END %][% IF ( delete_confirmed ) %] System preferences &rsaquo; Parameter deleted[% END %][% IF ( else ) %]System preferences[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[%# Add WYSIWYG editor for htmlarea system preferences %]
+[% INCLUDE 'wysiwyg-systempreferences.inc' %]
 [% IF ( else ) %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
@@ -108,8 +111,12 @@
                     <textarea id="value" name="value" cols="[% fieldlength %]">[% value |html %]</textarea>
                 [% ELSIF ( type_upload ) %]
                     <input type="file" name="value" />
-                [% ELSIF ( type_textarea ) %]
+                [% ELSIF ( type_textarea || type_htmlarea ) %]
+                    [% IF ( type_htmlarea ) && ( Koha.Preference('UseWYSIWYGinSystemPreferences') ) %]
+                        <textarea class="mce" name="value" id="value" rows="[% rows %]" cols="[% cols %]">[% value |html %]</textarea>
+                    [% ELSE %]
                     <textarea name="value" id="value" rows="[% rows %]" cols="[% cols %]">[% value |html %]</textarea>
+                    [% END %]
                 [% ELSIF ( type_choice ) %]
                     <select name="value" id="value">
                         [% FOREACH option IN options %]
@@ -226,6 +233,11 @@
         [%- ELSE -%]
             <option value="Textarea">Textarea</option>
         [% END %]
+        [%- IF (preftype && preftype == 'Htmlarea') -%]
+            <option value="Htmlarea" selected>Htmlarea</option>
+        [%- ELSE -%]
+            <option value="Htmlarea">Htmlarea</option>
+        [% END %]
         [%- IF (preftype && preftype == 'Float') -%]
             <option value="Float" selected>Float</option>
         [%- ELSE -%]
@@ -333,9 +345,13 @@
                 [% IF ( loo.type_upload ) %]
                 <input type="file" name="value" value="[% loo.value |html %]" />
                 [% END %]
-                [% IF ( loo.type_textarea ) %]
-                <a class="expand-textarea" style="display: none" href="#">Click to edit</a>
-                <textarea name="value" rows="[% loo.rows %]" cols="[% loo.cols %]">[% loo.value |html %]</textarea>
+                [% IF ( loo.type_textarea ) || ( loo.type_htmlarea ) %]
+                    [% IF ( loo.type_htmlarea ) && ( Koha.Preference('UseWYSIWYGinSystemPreferences') ) %]
+                        <textarea class="mce" name="value" rows="[% loo.rows %]" cols="[% loo.cols %]">[% loo.value |html %]</textarea>
+                    [% ELSE %]
+                        <a class="expand-textarea" style="display: none" href="#">Click to edit</a>
+                        <textarea name="value" rows="[% loo.rows %]" cols="[% loo.cols %]">[% loo.value |html %]</textarea>
+                    [% END %]
                 [% END %]
                 [% IF ( loo.type_choice ) %]
                 <select name="value">

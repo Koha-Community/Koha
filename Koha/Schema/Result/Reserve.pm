@@ -49,12 +49,6 @@ __PACKAGE__->table("reserves");
   is_foreign_key: 1
   is_nullable: 0
 
-=head2 constrainttype
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 1
-
 =head2 branchcode
 
   data_type: 'varchar'
@@ -160,8 +154,6 @@ __PACKAGE__->add_columns(
     is_foreign_key => 1,
     is_nullable    => 0,
   },
-  "constrainttype",
-  { data_type => "varchar", is_nullable => 1, size => 1 },
   "branchcode",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
   "notificationdate",
@@ -286,8 +278,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-18 13:01:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jzng9D1Pns0I2PUF7Wssiw
+# Created by DBIx::Class::Schema::Loader v0.07040 @ 2015-06-30 08:51:40
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uHHqseJ56g3nDyKnNncyUA
 
 __PACKAGE__->belongs_to(
   "item",

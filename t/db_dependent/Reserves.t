@@ -100,7 +100,6 @@ my $borrower = GetMember( borrowernumber => $borrowernumber );
 my $biblionumber   = $bibnum;
 my $barcode        = $testbarcode;
 
-my $constraint     = 'a';
 my $bibitems       = '';
 my $priority       = '1';
 my $resdate        = undef;
@@ -113,7 +112,7 @@ my @branches = GetBranchesLoop();
 my $branch = $branches[0][0]{value};
 
 AddReserve($branch,    $borrowernumber, $biblionumber,
-        $constraint, $bibitems,  $priority, $resdate, $expdate, $notes,
+        $bibitems,  $priority, $resdate, $expdate, $notes,
         $title,      $checkitem, $found);
 
 my ($status, $reserve, $all_reserves) = CheckReserves($itemnumber, $barcode);
@@ -224,13 +223,13 @@ my ($itemnum_cpl, $itemnum_fpl);
 # (bug 11947)
 $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum2));
 AddReserve('RPL',  $requesters{'RPL'}, $bibnum2,
-           $constraint, $bibitems,  1, $resdate, $expdate, $notes,
+           $bibitems,  1, $resdate, $expdate, $notes,
            $title,      $checkitem, $found);
 AddReserve('FPL',  $requesters{'FPL'}, $bibnum2,
-           $constraint, $bibitems,  2, $resdate, $expdate, $notes,
+           $bibitems,  2, $resdate, $expdate, $notes,
            $title,      $checkitem, $found);
 AddReserve('CPL',  $requesters{'CPL'}, $bibnum2,
-           $constraint, $bibitems,  3, $resdate, $expdate, $notes,
+           $bibitems,  3, $resdate, $expdate, $notes,
            $title,      $checkitem, $found);
 ModReserveAffect($itemnum_cpl, $requesters{'RPL'}, 0);
 
@@ -249,13 +248,13 @@ is( $reserves[0]->borrowernumber(), $requesters{'RPL'}, 'GetWaiting got the rese
 
 $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum2));
 AddReserve('RPL',  $requesters{'RPL'}, $bibnum2,
-           $constraint, $bibitems,  1, $resdate, $expdate, $notes,
+           $bibitems,  1, $resdate, $expdate, $notes,
            $title,      $checkitem, $found);
 AddReserve('FPL',  $requesters{'FPL'}, $bibnum2,
-           $constraint, $bibitems,  2, $resdate, $expdate, $notes,
+           $bibitems,  2, $resdate, $expdate, $notes,
            $title,      $checkitem, $found);
 AddReserve('CPL',  $requesters{'CPL'}, $bibnum2,
-           $constraint, $bibitems,  3, $resdate, $expdate, $notes,
+           $bibitems,  3, $resdate, $expdate, $notes,
            $title,      $checkitem, $found);
 
 # Ensure that the item's home library controls hold policy lookup
@@ -305,7 +304,7 @@ $resdate= undef; #defaults to today in AddReserve
 $expdate= undef; #no expdate
 $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
 AddReserve('CPL',  $requesters{'CPL'}, $bibnum,
-           $constraint, $bibitems,  1, $resdate, $expdate, $notes,
+           $bibitems,  1, $resdate, $expdate, $notes,
            $title,      $checkitem, $found);
 ($status)=CheckReserves($itemnumber,undef,undef);
 is( $status, 'Reserved', 'CheckReserves returns reserve without lookahead');
@@ -320,7 +319,7 @@ $resdate->add_duration(DateTime::Duration->new(days => 4));
 $resdate=output_pref($resdate);
 $expdate= undef; #no expdate
 AddReserve('CPL',  $requesters{'CPL'}, $bibnum,
-           $constraint, $bibitems,  1, $resdate, $expdate, $notes,
+           $bibitems,  1, $resdate, $expdate, $notes,
            $title,      $checkitem, $found);
 ($status)=CheckReserves($itemnumber,undef,undef);
 is( $status, '', 'CheckReserves returns no future reserve without lookahead');
@@ -377,14 +376,14 @@ $resdate= dt_from_string();
 $resdate->add_duration(DateTime::Duration->new(days => 2));
 $resdate=output_pref($resdate);
 AddReserve('CPL',  $requesters{'CPL'}, $bibnum,
-           $constraint, $bibitems,  1, $resdate, $expdate, $notes,
+           $bibitems,  1, $resdate, $expdate, $notes,
            $title,      $checkitem, $found);
 my @results= GetReservesFromItemnumber($itemnumber);
 is(defined $results[3]?1:0, 0, 'GetReservesFromItemnumber does not return a future next available hold');
 # 9788b: GetReservesFromItemnumber does not return future item level hold
 $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
 AddReserve('CPL',  $requesters{'CPL'}, $bibnum,
-           $constraint, $bibitems,  1, $resdate, $expdate, $notes,
+           $bibitems,  1, $resdate, $expdate, $notes,
            $title,      $itemnumber, $found); #item level hold
 @results= GetReservesFromItemnumber($itemnumber);
 is(defined $results[3]?1:0, 0, 'GetReservesFromItemnumber does not return a future item level hold');
@@ -399,7 +398,7 @@ my $p = C4::Reserves::CalculatePriority($bibnum2);
 is($p, 4, 'CalculatePriority should now return priority 4');
 $resdate=undef;
 AddReserve('CPL',  $requesters{'CPL'}, $bibnum2,
-           $constraint, $bibitems,  $p, $resdate, $expdate, $notes,
+           $bibitems,  $p, $resdate, $expdate, $notes,
            $title,      $checkitem, $found);
 $p = C4::Reserves::CalculatePriority($bibnum2);
 is($p, 5, 'CalculatePriority should now return priority 5');
@@ -409,7 +408,7 @@ $p = C4::Reserves::CalculatePriority($bibnum);
 is($p, 1, 'CalculatePriority should now return priority 1');
 #add a new reserve and confirm it to waiting
 AddReserve('CPL',  $requesters{'CPL'}, $bibnum,
-           $constraint, $bibitems,  $p, $resdate, $expdate, $notes,
+           $bibitems,  $p, $resdate, $expdate, $notes,
            $title,      $itemnumber, $found);
 $p = C4::Reserves::CalculatePriority($bibnum);
 is($p, 2, 'CalculatePriority should now return priority 2');
@@ -418,7 +417,7 @@ $p = C4::Reserves::CalculatePriority($bibnum);
 is($p, 1, 'CalculatePriority should now return priority 1');
 #add another biblio hold, no resdate
 AddReserve('CPL',  $requesters{'CPL'}, $bibnum,
-           $constraint, $bibitems,  $p, $resdate, $expdate, $notes,
+           $bibitems,  $p, $resdate, $expdate, $notes,
            $title,      $checkitem, $found);
 $p = C4::Reserves::CalculatePriority($bibnum);
 is($p, 2, 'CalculatePriority should now return priority 2');
@@ -427,7 +426,7 @@ C4::Context->set_preference('AllowHoldDateInFuture', 1);
 $resdate= dt_from_string();
 $resdate->add_duration(DateTime::Duration->new(days => 1));
 AddReserve('CPL',  $requesters{'CPL'}, $bibnum,
-           $constraint, $bibitems,  $p, output_pref($resdate), $expdate, $notes,
+           $bibitems,  $p, output_pref($resdate), $expdate, $notes,
            $title,      $checkitem, $found);
 $p = C4::Reserves::CalculatePriority($bibnum);
 is($p, 2, 'CalculatePriority should now still return priority 2');
@@ -439,7 +438,7 @@ is($p, 3, 'CalculatePriority should now return priority 3');
 # Tests for cancel reserves by users from OPAC.
 $dbh->do('DELETE FROM reserves', undef, ($bibnum));
 AddReserve('CPL',  $requesters{'CPL'}, $item_bibnum,
-           $constraint, $bibitems,  1, undef, $expdate, $notes,
+           $bibitems,  1, undef, $expdate, $notes,
            $title,      $checkitem, '');
 my (undef, $canres, undef) = CheckReserves($itemnumber);
 
@@ -469,7 +468,7 @@ is($cancancel, 0, 'Reserve in transfer status cant be canceled');
 
 $dbh->do('DELETE FROM reserves', undef, ($bibnum));
 AddReserve('CPL',  $requesters{'CPL'}, $item_bibnum,
-           $constraint, $bibitems,  1, undef, $expdate, $notes,
+           $bibitems,  1, undef, $expdate, $notes,
            $title,      $checkitem, '');
 (undef, $canres, undef) = CheckReserves($itemnumber);
 
@@ -546,7 +545,6 @@ my $bz14464_reserve = AddReserve(
     'CPL',
     $borrowernumber,
     $bibnum,
-    'a',
     undef,
     '1',
     undef,
@@ -571,7 +569,6 @@ $bz14464_reserve = AddReserve(
     'CPL',
     $borrowernumber,
     $bibnum,
-    'a',
     undef,
     '1',
     undef,
@@ -594,7 +591,6 @@ $bz14464_reserve = AddReserve(
     'CPL',
     $borrowernumber,
     $bibnum,
-    'a',
     undef,
     '1',
     undef,

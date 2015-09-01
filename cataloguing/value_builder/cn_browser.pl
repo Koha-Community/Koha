@@ -37,7 +37,7 @@ sub plugin {
             query           => $cgi,
             type            => "intranet",
             authnotrequired => 0,
-            flagsrequired   => { tools => 'cn_browser', catalogue => 1 },
+            flagsrequired   => { catalogue => 1 },
         }
     );
 

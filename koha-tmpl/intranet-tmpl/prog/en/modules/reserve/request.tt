@@ -769,7 +769,6 @@ function checkMultiHold() {
                 [% END %]
           </a>
     [% ELSE %]
-      [% IF ( reserveloo.constrainttypea ) %]
             [% IF ( reserveloo.item_level_hold ) %]
                 <i>Only item
                 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% reserveloo.biblionumber %]">
@@ -785,11 +784,6 @@ function checkMultiHold() {
                 <i>Next available</i>
                  <input type="hidden" name="itemnumber" value="" />
             [% END %]
-      [% ELSE %]
-        [% IF ( reserveloo.constrainttypeo ) %]
-          only this type :<b>[% reserveloo.volumeddesc %] [% reserveloo.itemtype %]</b>
-        [% END %]
-      [% END %]
     [% END %]
         </td>
 

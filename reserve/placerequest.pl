@@ -38,10 +38,6 @@ my $input = CGI->new();
 checkauth($input, 0, { reserveforothers => 'place_holds' }, 'intranet');
 
 my @bibitems=$input->param('biblioitem');
-# FIXME I think reqbib does not exist anymore, it's used in line 82, to AddReserve of contraint type 'o'
-#       I bet it's a 2.x feature, reserving a given biblioitem, that is useless in Koha 3.0
-#       we can remove this line, the AddReserve of constrainttype 'o',
-#       and probably remove the reserveconstraint table as well, I never could fill anything in this table.
 my @reqbib=$input->param('reqbib'); 
 my $biblionumber=$input->param('biblionumber');
 my $borrowernumber=$input->param('borrowernumber');
@@ -109,19 +105,11 @@ if ($type eq 'str8' && $borrower){
 
         if ($multi_hold) {
             my $bibinfo = $bibinfos{$biblionumber};
-            AddReserve($branch,$borrower->{'borrowernumber'},$biblionumber,'a',[$biblionumber],
+            AddReserve($branch,$borrower->{'borrowernumber'},$biblionumber,[$biblionumber],
                        $bibinfo->{rank},$startdate,$expirationdate,$notes,$bibinfo->{title},$checkitem,$found);
         } else {
-            if ($input->param('request') eq 'any'){
-                # place a request on 1st available
-                AddReserve($branch,$borrower->{'borrowernumber'},$biblionumber,'a',\@realbi,$rank[0],$startdate,$expirationdate,$notes,$title,$checkitem,$found);
-            } elsif ($reqbib[0] ne ''){
-                # FIXME : elsif probably never reached, (see top of the script)
-                # place a request on a given item
-                AddReserve($branch,$borrower->{'borrowernumber'},$biblionumber,'o',\@reqbib,$rank[0],$startdate,$expirationdate,$notes,$title,$checkitem, $found);
-            } else {
-                AddReserve($branch,$borrower->{'borrowernumber'},$biblionumber,'a',\@realbi,$rank[0],$startdate,$expirationdate,$notes,$title,$checkitem, $found);
-            }
+            # place a request on 1st available
+            AddReserve($branch,$borrower->{'borrowernumber'},$biblionumber,\@realbi,$rank[0],$startdate,$expirationdate,$notes,$title,$checkitem,$found);
         }
     }
 
