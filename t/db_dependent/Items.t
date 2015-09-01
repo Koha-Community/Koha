@@ -40,7 +40,7 @@ my $location = 'My Location';
 
 subtest 'General Add, Get and Del tests' => sub {
 
-    plan tests => 16;
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
@@ -92,6 +92,14 @@ subtest 'General Add, Get and Del tests' => sub {
     $getitem = GetItem($itemnumber);
     is( $getitem->{location}, 'CART', "The location should have been set to CART" );
     is( $getitem->{permanent_location}, $location, "The permanent_location should not have been set to CART" );
+
+    ModItem({ sub_location => 'NEW' }, $bibnum, $itemnumber);
+    $getitem = GetItem($itemnumber);
+    is( $getitem->{sub_location}, 'NEW', "The sub location should have been set to NEW" );
+
+    ModItem({ genre => 'SCI' }, $bibnum, $itemnumber);
+    $getitem = GetItem($itemnumber);
+    is( $getitem->{genre}, 'SCI', "The genre should have been set to SCI" );
 
     t::lib::Mocks::mock_preference('item-level_itypes', '1');
     $getitem = GetItem($itemnumber);

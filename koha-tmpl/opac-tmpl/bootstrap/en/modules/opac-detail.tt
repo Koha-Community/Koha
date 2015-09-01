@@ -1241,6 +1241,7 @@
 
                                 [% IF ( OpacLocationBranchToDisplayShelving == 'holding' || OpacLocationBranchToDisplayShelving == 'both' ) %]
                                     <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
+                                    <span class="genre">[% ITEM_RESULT.genre %]</span>
                                 [% END %]
 
                             </td>
@@ -1266,17 +1267,18 @@
 
                                 [% IF ( OpacLocationBranchToDisplayShelving == 'home' || OpacLocationBranchToDisplayShelving == 'both' ) %]
                                     <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
+                                    <span class="genre">[% ITEM_RESULT.genre %]</span>
                                 [% END %]
 
                             </td>
                         [% END %]
 
                     [% ELSE %]
-                         <td class="location"><span class="shelvingloc">[% ITEM_RESULT.location_description %]</span></td>
+                         <td class="location"><span class="shelvingloc">[% ITEM_RESULT.location_description %]</span><span class="genre">[% ITEM_RESULT.genre %]</span></td>
                     [% END %]
 
                     [% IF ( itemdata_ccode ) %]
-                        <td class="collection">[% ITEM_RESULT.ccode %]</td>
+                        <td class="collection">[% ITEM_RESULT.ccode %]<br/><span class="sub_location">[% ITEM_RESULT.sub_location %]</span></td>
                     [% END %]
                     <td class="call_no" property="sku">
                         [% IF ( ITEM_RESULT.itemcallnumber ) %]

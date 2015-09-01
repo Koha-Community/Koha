@@ -550,6 +550,10 @@ if ( $itemtype ) {
 
 my $shelflocations =
   { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.location' } ) };
+my $genre =
+  { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.genre' } ) };
+my $sub_location =
+  { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.sub_location' } ) };
 my $collections =
   { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.ccode' } ) };
 my $copynumbers =
@@ -678,6 +682,12 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
     $itm->{'copynumber'} = $copynumbers->{$copynumber} if ( defined($copynumbers) && defined($copynumber) && exists( $copynumbers->{$copynumber} ) );
     if ( defined $itm->{'location'} ) {
         $itm->{'location_description'} = $shelflocations->{ $itm->{'location'} };
+    }
+    if ( defined $itm->{'genre'} ) {
+        $itm->{'genre'} = $genre->{ $itm->{'genre'} };
+    }
+    if ( defined $itm->{'sub_location'} ) {
+        $itm->{'sub_location'} = $sub_location->{ $itm->{'sub_location'} };
     }
     if (exists $itm->{itype} && defined($itm->{itype}) && exists $itemtypes->{ $itm->{itype} }) {
         $itm->{'imageurl'}    = getitemtypeimagelocation( 'opac', $itemtypes->{ $itm->{itype} }->{'imageurl'} );

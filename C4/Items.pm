@@ -479,6 +479,8 @@ sub _build_default_values_for_mod_marc {
         stocknumber              => undef,
         uri                      => undef,
         withdrawn                => 0,
+        genre                    => undef,
+        sub_location             => undef,
     };
     my %default_values_for_mod_from_marc;
     while ( my ( $field, $default_value ) = each %$default_values ) {

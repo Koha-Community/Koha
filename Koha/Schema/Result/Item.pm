@@ -280,6 +280,18 @@ __PACKAGE__->table("items");
   is_nullable: 1
   size: 32
 
+=head2 genre
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 10
+
+=head2 sub_location
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 10
+
 =head2 datereceived
 
   data_type: 'timestamp'
@@ -400,6 +412,10 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "new_status",
   { data_type => "varchar", is_nullable => 1, size => 32 },
+  "genre",
+  { data_type => "varchar", is_nullable => 1, size => 10 },
+  "sub_location",
+  { data_type => "varchar", is_nullable => 1, size => 10 },
   "datereceived",
   {
     data_type => "timestamp",

@@ -197,6 +197,10 @@ $dat->{'hiddencount'} = scalar @all_items + @hostitems - scalar @items;
 
 my $shelflocations =
   { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $fw, kohafield => 'items.location' } ) };
+my $genre =
+  { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $fw, kohafield => 'items.genre' } ) };
+my $sub_location =
+  { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $fw, kohafield => 'items.sub_location' } ) };
 my $collections =
   { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $fw, kohafield => 'items.ccode' } ) };
 my $copynumbers =
@@ -246,6 +250,10 @@ foreach my $item (@items) {
     # same thing for copy number
     my $shelfcode = $item->{'location'};
     $item->{'location'} = $shelflocations->{$shelfcode} if ( defined( $shelfcode ) && defined($shelflocations) && exists( $shelflocations->{$shelfcode} ) );
+    my $genrecode = $item->{'genre'};
+    $item->{'genre'} = $genre->{$genrecode} if ( defined( $genrecode ) && defined($genre) && exists( $genre->{$genrecode} ) );
+    my $subcode = $item->{'sub_location'};
+    $item->{'sub_location'} = $sub_location->{$subcode} if ( defined( $subcode) && defined($sub_location) && exists( $sub_location->{$subcode} ) );
     my $ccode = $item->{'ccode'};
     $item->{'ccode'} = $collections->{$ccode} if ( defined( $ccode ) && defined($collections) && exists( $collections->{$ccode} ) );
     my $copynumber = $item->{'copynumber'};

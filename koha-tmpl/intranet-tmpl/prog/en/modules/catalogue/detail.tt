@@ -677,7 +677,7 @@ function verify_images() {
                         </td>
                     [% END %]
                     <td class="location">[% UNLESS ( singlebranchmode ) %][% Branches.GetName( item.branchcode ) %] [% END %]</td>
-                    <td class="homebranch">[% Branches.GetName(item.homebranch) %]<span class="shelvingloc">[% item.location %]</span>
+                    <td class="homebranch">[% item.homebranch %]<span class="shelvingloc">[% item.location %][% IF ( item.sub_location ) %] ([% item.sub_location %])[% END %]</span><span class="genre">[% item.genre %]</span>
                     [% IF item.itemsCollection %]
                         <span class="shelvingloc">(Col.: <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% item.itemsCollection %]">[% item.itemsCollection%]</a>)</span> </td>
                     [% END %]
