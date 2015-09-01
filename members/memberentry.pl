@@ -364,14 +364,10 @@ if ( ($op eq 'modify' || $op eq 'insert' || $op eq 'save'|| $op eq 'duplicate') 
     }
 }
 
-if (
-        defined $input->param('SMSnumber')
-    &&  (
-           $input->param('SMSnumber') eq ""
-        or $input->param('SMSnumber') ne $newdata{'mobile'}
-        )
-) {
-    $newdata{smsalertnumber} = $input->param('SMSnumber');
+# BZ 14683: Do not mixup mobile [read: other phone] with smsalertnumber
+my $sms = $input->param('SMSnumber');
+if ( defined $sms ) {
+    $newdata{smsalertnumber} = $sms;
 }
 
 ###  Error checks should happen before this line.
@@ -687,7 +683,7 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
         C4::Form::MessagingPreferences::set_form_values({ borrowernumber => $borrowernumber }, $template);
     }
     $template->param(SMSSendDriver => C4::Context->preference("SMSSendDriver"));
-    $template->param(SMSnumber     => defined $data{'smsalertnumber'} ? $data{'smsalertnumber'} : $data{'mobile'});
+    $template->param(SMSnumber     => $data{'smsalertnumber'} );
     $template->param(TalkingTechItivaPhone => C4::Context->preference("TalkingTechItivaPhoneNotification"));
 }
 
