@@ -45,6 +45,7 @@ my $input_file = "";
 my $batch_comment = "";
 my $want_help = 0;
 my $no_replace ;
+my $no_create;
 my $item_action = 'always_add';
 
 my $result = GetOptions(
