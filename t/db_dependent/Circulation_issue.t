@@ -25,8 +25,9 @@ use C4::Branch;
 use C4::Circulation;
 use C4::Items;
 use C4::Context;
+use C4::Reserves;
 
-use Test::More tests => 30;
+use Test::More tests => 32;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -149,9 +150,11 @@ $record->append_fields(
     MARC::Field->new( '952', '0', '0', a => $samplebranch1->{branchcode} ) );
 my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( $record, '' );
 
+my $barcode_1 = 'barcode_1';
+my $barcode_2 = 'barcode_2';
 my @sampleitem1 = C4::Items::AddItem(
     {
-        barcode        => 'barcode_1',
+        barcode        => $barcode_1,
         itemcallnumber => 'callnumber1',
         homebranch     => $samplebranch1->{branchcode},
         holdingbranch  => $samplebranch1->{branchcode},
@@ -163,7 +166,7 @@ my @sampleitem1 = C4::Items::AddItem(
 my $item_id1    = $sampleitem1[2];
 my @sampleitem2 = C4::Items::AddItem(
     {
-        barcode        => 'barcode_2',
+        barcode        => $barcode_2,
         itemcallnumber => 'callnumber2',
         homebranch     => $samplebranch2->{branchcode},
         holdingbranch  => $samplebranch2->{branchcode},
@@ -209,7 +212,7 @@ my $sth = $dbh->prepare($query);
 $sth->execute;
 my $countissue = $sth -> fetchrow_array;
 is ($countissue ,0, "there is no issue");
-my $issue1 = C4::Circulation::AddIssue( $borrower_1, 'barcode_1', $daysago10,0, $today, '' );
+my $issue1 = C4::Circulation::AddIssue( $borrower_1, $barcode_1, $daysago10,0, $today, '' );
 is( ref $issue1, 'Koha::Schema::Result::Issue',
        'AddIssue returns a Koha::Schema::Result::Issue object' );
 my $datedue1 = dt_from_string( $issue1->date_due() );
@@ -271,7 +274,7 @@ my $openissue = GetOpenIssue($borrower_id1, $item_id1);
 
 my @renewcount;
 #Test GetRenewCount
-my $issue3 = C4::Circulation::AddIssue( $borrower_1, 'barcode_1' );
+my $issue3 = C4::Circulation::AddIssue( $borrower_1, $barcode_1 );
 #Without anything in DB
 @renewcount = C4::Circulation::GetRenewCount();
 is_deeply(
@@ -350,13 +353,13 @@ is_deeply(
 );
 
 $dbh->do("DELETE FROM old_issues");
-AddReturn('barcode_1');
+AddReturn($barcode_1);
 my $return = $dbh->selectrow_hashref("SELECT DATE(returndate) AS return_date, CURRENT_DATE() AS today FROM old_issues LIMIT 1" );
 ok( $return->{return_date} eq $return->{today}, "Item returned with no return date specified has todays date" );
 
 $dbh->do("DELETE FROM old_issues");
-C4::Circulation::AddIssue( $borrower_1, 'barcode_1', $daysago10, 0, $today );
-AddReturn('barcode_1', undef, undef, undef, '2014-04-01 23:42');
+C4::Circulation::AddIssue( $borrower_1, $barcode_1, $daysago10, 0, $today );
+AddReturn($barcode_1, undef, undef, undef, '2014-04-01 23:42');
 $return = $dbh->selectrow_hashref("SELECT * FROM old_issues LIMIT 1" );
 ok( $return->{returndate} eq '2014-04-01 23:42:00', "Item returned with a return date of '2014-04-01 23:42' has that return date" );
 
@@ -386,6 +389,13 @@ AddReturn( 'barcode_3', $samplebranch1->{branchcode} );
 $item = GetItem( $itemnumber );
 ok( $item->{notforloan} eq 9, q{UpdateNotForLoanStatusOnCheckin does not update notforloan value from 9 with setting "1: 9"} );
 
+# Bug 14640 - Cancel the hold on checking out if asked
+my $reserve_id = AddReserve('CPL', $borrower_id1, $biblionumber,
+    undef,  1, undef, undef, "a note", "a title", undef, '');
+ok( $reserve_id, 'The reserve should have been inserted' );
+AddIssue( $borrower_2, $barcode_1, dt_from_string, 'cancel' );
+my $reserve = GetReserve( $reserve_id );
+is( $reserve, undef, 'The reserve should have been correctly cancelled' );
 
 #End transaction
 $dbh->rollback;
