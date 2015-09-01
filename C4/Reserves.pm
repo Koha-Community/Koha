@@ -672,18 +672,30 @@ sub GetReserveFee {
     my $borquery = qq{
 SELECT reservefee FROM borrowers LEFT JOIN categories ON borrowers.categorycode = categories.categorycode WHERE borrowernumber = ?
     };
+    my $issue_qry = qq{
+SELECT COUNT(*) FROM items
+LEFT JOIN issues USING (itemnumber)
+WHERE items.biblionumber=? AND issues.issue_id IS NULL
+    };
+    my $holds_qry = qq{
+SELECT COUNT(*) FROM reserves WHERE biblionumber=? AND borrowernumber<>?
+    };
 
     my $dbh = C4::Context->dbh;
     my ( $fee ) = $dbh->selectrow_array( $borquery, undef, ($borrowernumber) );
     if( $fee && $fee > 0 ) {
         # This is a reconstruction of the old code:
-        # Calculate number of items, items issued and holds
-        my ( $cnt1 ) = $dbh->selectrow_array( "SELECT COUNT(*) FROM items WHERE biblionumber=?", undef, ( $biblionumber ) );
-        my ( $cnt2 ) = $dbh->selectrow_array( "SELECT COUNT(*) FROM issues LEFT JOIN items USING (itemnumber) WHERE biblionumber=?", undef, ( $biblionumber ));
-        my ( $cnt3 ) = $dbh->selectrow_array( "SELECT COUNT(*) FROM reserves WHERE biblionumber=? AND borrowernumber<>?", undef, ( $biblionumber, $borrowernumber ) );
+        # Compare number of items with items issued, and optionally check holds
         # If not all items are issued and there are no holds: charge no fee
         # NOTE: Lost, damaged, not-for-loan, etc. are just ignored here
-        $fee = 0 if $cnt1 - $cnt2 > 0 && $cnt3 == 0;
+        my ( $notissued, $reserved );
+        ( $notissued ) = $dbh->selectrow_array( $issue_qry, undef,
+            ( $biblionumber ) );
+        if( $notissued ) {
+            ( $reserved ) = $dbh->selectrow_array( $holds_qry, undef,
+                ( $biblionumber, $borrowernumber ) );
+            $fee = 0 if $reserved == 0;
+        }
     }
     return $fee;
 }
