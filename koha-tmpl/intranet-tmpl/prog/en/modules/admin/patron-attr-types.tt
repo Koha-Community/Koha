@@ -20,6 +20,14 @@ $(document).ready(function() {
     if ( $("#branches option:selected").length < 1 ) {
         $("#branches option:first").attr("selected", "selected");
     }
+
+    $("#opac_display").change( function() {
+        if ( this.checked ) {
+            $("#opac_editable").removeAttr('disabled').parent().removeAttr('aria-disabled');
+        } else {
+            $("#opac_editable").attr('disabled', true).parent().attr('aria-disabled', 'true');
+        }
+    } ).change();
 } );
 //]]>
 </script>
@@ -122,6 +130,14 @@ $(document).ready(function() {
             <input type="checkbox" id="opac_display" name="opac_display" />
           [% END %]
             <span>Check to display this attribute on a patron's details page in the OPAC.</span>
+       </li>
+       <li><label for="opac_editable">Editable in OPAC: </label>
+          [% IF ( opac_editable_checked ) %]
+            <input type="checkbox" id="opac_editable" name="opac_editable" checked="checked" />
+          [% ELSE %]
+            <input type="checkbox" id="opac_editable" name="opac_editable" />
+          [% END %]
+            <span>Check to allow patrons to edit this attribute from their details page in the OPAC. (Requires above, does not work with <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=PatronSelfRegistrationVerifyByEmail" target="_blank">PatronSelfRegistrationVerifyByEmail</a>.)</span>
        </li>
        <li><label for="staff_searchable">Searchable: </label>
           [% IF ( staff_searchable_checked ) %]

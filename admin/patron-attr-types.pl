@@ -40,14 +40,15 @@ our $input = new CGI;
 my $op = $input->param('op') || '';
 
 
-our ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "admin/patron-attr-types.tt",
-                 query => $input,
-                 type => "intranet",
-                 authnotrequired => 0,
-                 flagsrequired => {parameters => 'parameters_remaining_permissions'},
-                 debug => 1,
-                 });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {   template_name   => "admin/patron-attr-types.tt",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired => { parameters => 'parameters_remaining_permissions' }
+    }
+);
+
 
 $template->param(script_name => $script_name);
 
@@ -118,6 +119,9 @@ sub error_add_attribute_type_form {
     if ($input->param('opac_display')) {
         $template->param(opac_display_checked => 1);
     }
+    if ($input->param('opac_editable')) {
+        $template->param(opac_editable_checked => 1);
+    }
     if ($input->param('staff_searchable')) {
         $template->param(staff_searchable_checked => 1);
     }
@@ -162,6 +166,8 @@ sub add_update_attribute_type {
 
     my $opac_display = $input->param('opac_display');
     $attr_type->opac_display($opac_display);
+    my $opac_editable = $input->param('opac_editable');
+    $attr_type->opac_editable($opac_editable);
     my $staff_searchable = $input->param('staff_searchable');
     $attr_type->staff_searchable($staff_searchable);
     my $authorised_value_category = $input->param('authorised_value_category');
@@ -241,6 +247,9 @@ sub edit_attribute_type_form {
     $template->param(unique_id_disabled => 1);
     if ($attr_type->opac_display()) {
         $template->param(opac_display_checked => 1);
+    }
+    if ($attr_type->opac_editable()) {
+        $template->param(opac_editable_checked => 1);
     }
     if ($attr_type->staff_searchable()) {
         $template->param(staff_searchable_checked => 1);

@@ -37,6 +37,7 @@ C4::Members::AttributeTypes - mananage extended patron attribute types
   $attr_type->repeatable($repeatable);
   $attr_type->unique_id($unique_id);
   $attr_type->opac_display($opac_display);
+  $attr_type->opac_editable($opac_editable);
   $attr_type->staff_searchable($staff_searchable);
   $attr_type->authorised_value_category($authorised_value_category);
   $attr_type->store();
@@ -122,6 +123,7 @@ sub new {
     $self->{'repeatable'} = 0;
     $self->{'unique_id'} = 0;
     $self->{'opac_display'} = 0;
+    $self->{'opac_editable'} = 0;
     $self->{'staff_searchable'} = 0;
     $self->{'display_checkout'} = 0;
     $self->{'authorised_value_category'} = '';
@@ -163,6 +165,7 @@ sub fetch {
     $self->{'repeatable'}                = $row->{'repeatable'};
     $self->{'unique_id'}                 = $row->{'unique_id'};
     $self->{'opac_display'}              = $row->{'opac_display'};
+    $self->{'opac_editable'}             = $row->{'opac_editable'};
     $self->{'staff_searchable'}          = $row->{'staff_searchable'};
     $self->{'display_checkout'}          = $row->{'display_checkout'};
     $self->{'authorised_value_category'} = $row->{'authorised_value_category'};
@@ -203,6 +206,7 @@ sub store {
                                          repeatable = ?,
                                          unique_id = ?,
                                          opac_display = ?,
+                                         opac_editable = ?,
                                          staff_searchable = ?,
                                          authorised_value_category = ?,
                                          display_checkout = ?,
@@ -211,22 +215,33 @@ sub store {
                                      WHERE code = ?");
     } else {
         $sth = $dbh->prepare_cached("INSERT INTO borrower_attribute_types 
-                                        (description, repeatable, unique_id, opac_display,
-                                         staff_searchable, authorised_value_category, display_checkout, category_code, class, code)
-                                        VALUES (?, ?, ?, ?,
-                                                ?, ?, ?, ?, ?, ?)");
+                                        ( description,
+                                          repeatable,
+                                          unique_id,
+                                          opac_display,
+                                          opac_editable,
+                                          staff_searchable,
+                                          authorised_value_category,
+                                          display_checkout,
+                                          category_code,
+                                          class,
+                                          code
+                                        )
+                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     }
+
     $sth->execute(
-        $self->{description},
-        $self->{repeatable},
-        $self->{unique_id},
-        $self->{opac_display},
-        $self->{staff_searchable},
-        $self->{authorised_value_category},
-        $self->{display_checkout},
-        $self->{category_code} || undef,
-        $self->{class},
-        $self->{code},
+        $self->{'description'},
+        $self->{'repeatable'},
+        $self->{'unique_id'},
+        $self->{'opac_display'},
+        $self->{'opac_editable'},
+        $self->{'staff_searchable'} || 0,
+        $self->{'authorised_value_category'},
+        $self->{'display_checkout'},
+        $self->{'category_code'} || undef,
+        $self->{'class'},
+        $self->{'code'}
     );
 
     if ( defined $$self{branches} ) {
@@ -333,6 +348,21 @@ is interpreted as a Perl boolean.
 sub opac_display {
     my $self = shift;
     @_ ? $self->{'opac_display'} = ((shift) ? 1 : 0) : $self->{'opac_display'};
+}
+
+=head2 opac_editable
+
+  my $opac_editable = $attr_type->opac_editable();
+  $attr_type->opac_editable($opac_editable);
+
+Accessor.  The C<$opac_editable> argument
+is interpreted as a Perl boolean.
+
+=cut
+
+sub opac_editable {
+    my $self = shift;
+    @_ ? $self->{'opac_editable'} = ((shift) ? 1 : 0) : $self->{'opac_editable'};
 }
 
 =head2 staff_searchable
