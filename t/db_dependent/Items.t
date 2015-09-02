@@ -32,10 +32,11 @@ BEGIN {
 my $dbh = C4::Context->dbh;
 my $branches = GetBranches;
 my ($branch1, $branch2) = keys %$branches;
+my $location = 'My Location';
 
 subtest 'General Add, Get and Del tests' => sub {
 
-    plan tests => 6;
+    plan tests => 10;
 
     # Start transaction
     $dbh->{AutoCommit} = 0;
@@ -46,7 +47,7 @@ subtest 'General Add, Get and Del tests' => sub {
     my ($bibnum, $bibitemnum) = get_biblio();
 
     # Add an item.
-    my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch1, holdingbranch => $branch1 } , $bibnum);
+    my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch1, holdingbranch => $branch1, location => $location } , $bibnum);
     cmp_ok($item_bibnum, '==', $bibnum, "New item is linked to correct biblionumber.");
     cmp_ok($item_bibitemnum, '==', $bibitemnum, "New item is linked to correct biblioitemnumber.");
 
@@ -54,6 +55,8 @@ subtest 'General Add, Get and Del tests' => sub {
     my $getitem = GetItem($itemnumber);
     cmp_ok($getitem->{'itemnumber'}, '==', $itemnumber, "Retrieved item has correct itemnumber.");
     cmp_ok($getitem->{'biblioitemnumber'}, '==', $item_bibitemnum, "Retrieved item has correct biblioitemnumber.");
+    is( $getitem->{location}, $location, "The location should not have been modified" );
+    is( $getitem->{permanent_location}, $location, "The permanent_location should have been set to the location value" );
 
     # Modify item; setting barcode.
     ModItem({ barcode => '987654321' }, $bibnum, $itemnumber);
@@ -64,6 +67,11 @@ subtest 'General Add, Get and Del tests' => sub {
     DelItem({ biblionumber => $bibnum, itemnumber => $itemnumber });
     my $getdeleted = GetItem($itemnumber);
     is($getdeleted->{'itemnumber'}, undef, "Item deleted as expected.");
+
+    ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch1, holdingbranch => $branch1, location => $location, permanent_location => 'my permanent location' } , $bibnum);
+    $getitem = GetItem($itemnumber);
+    is( $getitem->{location}, $location, "The location should not have been modified" );
+    is( $getitem->{permanent_location}, 'my permanent location', "The permanent_location should not have modified" );
 
     $dbh->rollback;
 };
