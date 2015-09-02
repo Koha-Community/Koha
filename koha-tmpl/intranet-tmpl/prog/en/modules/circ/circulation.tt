@@ -671,7 +671,7 @@ No patron matched <span class="ex">[% message %]</span>
 </fieldset>
 [% IF ( issue ) %]
     <div class="lastchecked">
-        <p><strong>Checked out: </strong>[% issue.item.biblio.title %] ([% issue.item.barcode %]). Due on [% issue.date_due | $KohaDates %]</p>
+        <p><strong>Checked out: </strong>[% issue.item.biblioitemnumber.biblionumber.title %] ([% issue.item.barcode %]). Due on [% issue.date_due | $KohaDates %]</p>
     </div>
 [% END %]
 </form></div>
