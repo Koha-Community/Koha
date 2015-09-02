@@ -360,7 +360,11 @@ canned reports and writing custom SQL reports.</p>
                         <td>No</td>
                         [% END %]
                         [% IF (usecache) %] <td>[% savedreport.cache_expiry %]</td> [% END %]
-                        <td>[% IF ( savedreport.date_run ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&amp;id=[% savedreport.id %]">[% savedreport.date_run %]</a>[% END %]
+                        <td>
+                            [% FOR result IN savedreport.results %]
+                                <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&amp;id=[% result.id %]">[% result.date_run %]</a>
+                                <br/>
+                            [% END %]
                         </td>
                         <td>
                             <div class="dropup">
@@ -920,13 +924,17 @@ Sub report:<select name="subreport">
 [% END %]
 
 
-[% IF ( retresults ) %]
+[% IF saved_results %]
 <h1>Saved report results</h1>
 <h2>[% name %]</h2>
 <p>[% notes %]</p>
 <table>
-[% FOREACH result IN results %]
-[% result.row %]
+[% FOREACH rows IN saved_results %]
+<tr>
+[% FOREACH col IN rows %]
+<td>[% col %]</td>
+[% END %]
+<tr>
 [% END %]
 </table>
 [% END %]

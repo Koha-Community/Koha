@@ -112,9 +112,13 @@ elsif ( $phase eq 'Build new' ) {
     my $subgroup = $input->param('subgroup');
     $filter->{group} = $group;
     $filter->{subgroup} = $subgroup;
+    my $reports = get_saved_reports($filter);
+    for my $report ( @$reports ) {
+        $report->{results} = C4::Reports::Guided::get_results( $report->{id} );
+    }
     $template->param(
         'saved1' => 1,
-        'savedreports' => get_saved_reports($filter),
+        'savedreports' => $reports,
         'usecache' => $usecache,
         'groups_with_subgroups'=> groups_with_subgroups($group, $subgroup),
         filters => $filter,
@@ -260,14 +264,13 @@ elsif ( $phase eq 'Update SQL'){
 }
 
 elsif ($phase eq 'retrieve results') {
-	my $id = $input->param('id');
-	my ($results,$name,$notes) = format_results($id);
-	# do something
-	$template->param(
-		'retresults' => 1,
-		'results' => $results,
-		'name' => $name,
-		'notes' => $notes,
+    my $id = $input->param('id');
+    my $result = format_results( $id );
+    $template->param(
+        report_name   => $result->{report_name},
+        notes         => $result->{notes},
+        saved_results => $result->{results},
+        date_run      => $result->{date_run},
     );
 }
 

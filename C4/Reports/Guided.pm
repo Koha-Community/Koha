@@ -20,6 +20,7 @@ package C4::Reports::Guided;
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use Carp;
+use JSON qw( from_json );
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use C4::Context;
@@ -27,8 +28,6 @@ use C4::Templates qw/themelanguage/;
 use C4::Koha;
 use Koha::DateUtils;
 use C4::Output;
-use XML::Simple;
-use XML::Dumper;
 use C4::Debug;
 use C4::Log;
 
@@ -536,10 +535,6 @@ sub execute_query {
     $sth->execute(@$sql_params, $offset, $limit);
     return ( $sth, { queryerr => $sth->errstr } ) if ($sth->err);
     return ( $sth );
-    # my @xmlarray = ... ;
-    # my $url = "/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&id=$id";
-    # my $xml = XML::Dumper->new()->pl2xml( \@xmlarray );
-    # store_results($id,$xml);
 }
 
 =head2 save_report($sql,$name,$type,$notes)
@@ -594,47 +589,29 @@ sub update_sql {
 }
 
 sub store_results {
-	my ($id,$xml)=@_;
-	my $dbh = C4::Context->dbh();
-	my $query = "SELECT * FROM saved_reports WHERE report_id=?";
-	my $sth = $dbh->prepare($query);
-	$sth->execute($id);
-	if (my $data=$sth->fetchrow_hashref()){
-		my $query2 = "UPDATE saved_reports SET report=?,date_run=now() WHERE report_id=?";
-		my $sth2 = $dbh->prepare($query2);
-	    $sth2->execute($xml,$id);
-	}
-	else {
-		my $query2 = "INSERT INTO saved_reports (report_id,report,date_run) VALUES (?,?,now())";
-		my $sth2 = $dbh->prepare($query2);
-		$sth2->execute($id,$xml);
-	}
+    my ( $id, $json ) = @_;
+    my $dbh = C4::Context->dbh();
+    $dbh->do(q|
+        INSERT INTO saved_reports ( report_id, report, date_run ) VALUES ( ?, ?, NOW() );
+    |, undef, $id, $json );
 }
 
 sub format_results {
-	my ($id) = @_;
-	my $dbh = C4::Context->dbh();
-	my $query = "SELECT * FROM saved_reports WHERE report_id = ?";
-	my $sth = $dbh->prepare($query);
-	$sth->execute($id);
-	my $data = $sth->fetchrow_hashref();
-	my $dump = new XML::Dumper;
-	my $perl = $dump->xml2pl( $data->{'report'} );
-	foreach my $row (@$perl) {
-		my $htmlrow="<tr>";
-		foreach my $key (keys %$row){
-			$htmlrow .= "<td>$row->{$key}</td>";
-		}
-		$htmlrow .= "</tr>";
-		$row->{'row'} = $htmlrow;
-	}
-	$sth->finish;
-	$query = "SELECT * FROM saved_sql WHERE id = ?";
-	$sth = $dbh->prepare($query);
-	$sth->execute($id);
-	$data = $sth->fetchrow_hashref();
-	return ($perl,$data->{'report_name'},$data->{'notes'});	
-}	
+    my ( $id ) = @_;
+    my $dbh = C4::Context->dbh();
+    my ( $report_name, $notes, $json, $date_run ) = $dbh->selectrow_array(q|
+       SELECT ss.report_name, ss.notes, sr.report, sr.date_run
+       FROM saved_sql ss
+       LEFT JOIN saved_reports sr ON sr.report_id = ss.id
+       WHERE sr.id = ?
+    |, undef, $id);
+    return {
+        report_name => $report_name,
+        notes => $notes,
+        results => from_json( $json ),
+        date_run => $date_run,
+    };
+}
 
 sub delete_report {
     my (@ids) = @_;
@@ -652,10 +629,9 @@ sub delete_report {
 sub get_saved_reports_base_query {
     my $area_name_sql_snippet = get_area_name_sql_snippet;
     return <<EOQ;
-SELECT s.*, r.report, r.date_run, $area_name_sql_snippet, av_g.lib AS groupname, av_sg.lib AS subgroupname,
+SELECT s.*, $area_name_sql_snippet, av_g.lib AS groupname, av_sg.lib AS subgroupname,
 b.firstname AS borrowerfirstname, b.surname AS borrowersurname
 FROM saved_sql s
-LEFT JOIN saved_reports r ON r.report_id = s.id
 LEFT OUTER JOIN authorised_values av_g ON (av_g.category = 'REPORT_GROUP' AND av_g.authorised_value = s.report_group)
 LEFT OUTER JOIN authorised_values av_sg ON (av_sg.category = 'REPORT_SUBGROUP' AND av_sg.lib_opac = s.report_group AND av_sg.authorised_value = s.report_subgroup)
 LEFT OUTER JOIN borrowers b USING (borrowernumber)
@@ -675,11 +651,9 @@ sub get_saved_reports {
     if ($filter) {
         if (my $date = $filter->{date}) {
             $date = eval { output_pref( { dt => dt_from_string( $date ), dateonly => 1, dateformat => 'iso' }); };
-            push @cond, "DATE(date_run) = ? OR
-                         DATE(date_created) = ? OR
-                         DATE(last_modified) = ? OR
+            push @cond, "DATE(last_modified) = ? OR
                          DATE(last_run) = ?";
-            push @args, $date, $date, $date, $date;
+            push @args, $date, $date, $date;
         }
         if (my $author = $filter->{author}) {
             $author = "%$author%";
@@ -869,6 +843,17 @@ sub get_sql {
 	$sth->execute($id);
 	my $data=$sth->fetchrow_hashref();
 	return $data->{'savedsql'};
+}
+
+sub get_results {
+    my ( $report_id ) = @_;
+    my $dbh = C4::Context->dbh;
+    warn $report_id;
+    return $dbh->selectall_arrayref(q|
+        SELECT id, report, date_run
+        FROM saved_reports
+        WHERE report_id = ?
+    |, { Slice => {} }, $report_id);
 }
 
 sub _get_column_defs {

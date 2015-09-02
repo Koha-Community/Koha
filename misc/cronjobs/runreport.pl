@@ -18,8 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use C4::Reports::Guided; # 0.12
 use C4::Context;
@@ -34,6 +33,7 @@ use Text::CSV_XS;
 use CGI qw ( -utf8 );
 use Carp;
 use Encode;
+use JSON qw( to_json );
 
 BEGIN {
     # find Koha's Perl modules
@@ -55,7 +55,7 @@ runreport.pl [ -h | -m ] [ -v ] reportID [ reportID ... ]
    -m --man        full documentation, same as --help --verbose
    -v --verbose    verbose output
 
-   --format=s      selects format. Choice of text, html, csv, or tsv
+   --format=s      selects format. Choice of text, html, csv or tsv
 
    -e --email      whether to use e-mail (implied by --to or --from)
    -a --attachment additionally attach the report as a file. cannot be used with html format
@@ -65,6 +65,7 @@ runreport.pl [ -h | -m ] [ -v ] reportID [ reportID ... ]
    --to=s          e-mail address to send report to
    --from=s        e-mail address to send report from
    --subject=s     subject for the e-mail
+   --store-results store the result of the report
 
 
  Arguments:
@@ -118,6 +119,12 @@ E-mail address to send report from. Defaults to KohaAdminEmailAddress.
 
 Subject for the e-mail message. Defaults to "Koha Saved Report"
 
+=item B<--store-results>
+
+Store the result of the report into the saved_reports DB table.
+
+To access the results, go on Reports > Guided reports > Saved report.
+
 =back
 
 =head1 DESCRIPTION
@@ -167,6 +174,7 @@ my $from    = "";
 my $subject = "";
 my $separator = ',';
 my $quote = '"';
+my $store_results = 0;
 
 my $username = undef;
 my $password = undef;
@@ -185,6 +193,7 @@ GetOptions(
     'username:s'        => \$username,
     'password:s'        => \$password,
     'method:s'          => \$method,
+    'store-results'     => \$store_results,
 
 ) or pod2usage(2);
 pod2usage( -verbose => 2 ) if ($man);
@@ -242,7 +251,6 @@ foreach my $report_id (@ARGV) {
     }
     # my $results = execute_query($sql, undef, 0, 99999, $format, $report_id);
     my ($sth) = execute_query($sql);
-    # execute_query(sql, , 0, 20, , )
     my $count = scalar($sth->rows);
     unless ($count) {
         print "NO OUTPUT: 0 results from execute_query\n";
@@ -251,12 +259,14 @@ foreach my $report_id (@ARGV) {
     $verbose and print "$count results from execute_query\n";
 
     my $message;
+    my @rows_to_store;
     if ($format eq 'html') {
         my $cgi = CGI->new();
-        my @rows = ();
+        my @rows;
         while (my $line = $sth->fetchrow_arrayref) {
             foreach (@$line) { defined($_) or $_ = ''; }    # catch undef values, replace w/ ''
             push @rows, $cgi->TR( join('', $cgi->td($line)) ) . "\n";
+            push @rows_to_store, [@$line] if $store_results;
         }
         $message = $cgi->table(join "", @rows);
     } elsif ($format eq 'csv') {
@@ -266,16 +276,14 @@ foreach my $report_id (@ARGV) {
             });
         while (my $line = $sth->fetchrow_arrayref) {
             $csv->combine(@$line);
-#            foreach (@$line) {
-#                defined($_) or $_ = '';
-#                $_ =~ s/$quote/\\$quote/g;
-#                $_ = "$quote$_$quote";
-#            }    # catch undef values, replace w/ ''
-#            $message .= join ($separator, @$line) . "\n";
             $message .= $csv->string() . "\n";
+            push @rows_to_store, [@$line] if $store_results;
         }
     }
-
+    if ( $store_results ) {
+        my $json = to_json( \@rows_to_store );
+        C4::Reports::Guided::store_results( $report_id, $json );
+    }
     if ($email) {
         my $args = { to => $to, from => $from, subject => $subject };
         if ( $format eq 'html' ) {
