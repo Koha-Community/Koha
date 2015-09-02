@@ -51,6 +51,10 @@ our $PUBLIC = 2;
 sub store {
     my ( $self ) = @_;
 
+    unless ( $self->owner ) {
+        Koha::Exceptions::Virtualshelves::UseDbAdminAccount->throw;
+    }
+
     unless ( $self->is_shelfname_valid ) {
         Koha::Exceptions::Virtualshelves::DuplicateObject->throw;
     }

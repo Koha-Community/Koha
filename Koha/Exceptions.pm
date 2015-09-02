@@ -28,6 +28,10 @@ use Exception::Class (
     'Koha::Exceptions::Virtualshelves::ShareHasExpired' => {
         isa => 'Koha::Exceptions::Exception',
         description=> 'Cannot share this shelf, the share has expired',
+    },
+    'Koha::Exceptions::Virtualshelves::UseDbAdminAccount' => {
+        isa => 'Koha::Exceptions::Exception',
+        description => "Invalid use of database administrator account",
     }
 );
 

@@ -351,6 +351,8 @@ function placeHold () {
             No biblio has been removed.
         [% CASE 'Koha::Exceptions::Virtualshelves::DuplicateObject' %]
             An error occurred when inserting this list. The name already [% shelfname %] exists.
+        [% CASE 'Koha::Exceptions::Virtualshelves::UseDbAdminAccount' %]
+            List could not be created. (Do not use the database administrator account.).
         [% CASE 'DBIx::Class::Exception' %]
             [% m.msg %]
         [% CASE %]
