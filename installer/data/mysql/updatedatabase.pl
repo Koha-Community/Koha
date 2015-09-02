@@ -10573,7 +10573,23 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-
+$DBversion = "3.20.03.001";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        DELETE cr.*
+        FROM course_reserves AS cr
+        LEFT JOIN course_items USING(ci_id)
+        WHERE course_items.ci_id IS NULL
+    });
+    $dbh->do(q{
+        ALTER IGNORE TABLE course_reserves
+            add CONSTRAINT course_reserves_ibfk_2
+                FOREIGN KEY (ci_id) REFERENCES course_items (ci_id)
+                ON DELETE CASCADE ON UPDATE CASCADE
+    });
+    print "Upgrade to $DBversion done (Bug 14205: Deleting an Item/Record does not remove link to course reserve)\n";
+    SetVersion($DBversion);
+}
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
