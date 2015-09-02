@@ -250,6 +250,8 @@ subtest 'SearchItems test' => sub {
     $dbh->{RaiseError} = 1;
 
     C4::Context->set_preference('marcflavour', 'MARC21');
+    my $cpl_items_before = SearchItemsByField( 'homebranch', 'CPL');
+
     my ($biblionumber) = get_biblio();
 
     # Add branches if they don't exist
@@ -398,8 +400,8 @@ subtest 'SearchItems test' => sub {
     ($items, $total_results) = SearchItems($filter);
     ok(scalar @$items == 1, 'found 1 item with itemnotes = "foobar"');
 
-    my $cpl_items = SearchItemsByField( 'homebranch', 'CPL');
-    is( ( $cpl_items and scalar( @$cpl_items ) ), 1, 'SearchItemsByField should return something' );
+    my $cpl_items_after = SearchItemsByField( 'homebranch', 'CPL');
+    is( ( scalar( @$cpl_items_after ) - scalar ( @$cpl_items_before ) ), 1, 'SearchItemsByField should return something' );
 
     $dbh->rollback;
 };
