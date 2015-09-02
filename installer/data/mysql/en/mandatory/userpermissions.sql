@@ -4,6 +4,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'overdues_report', 'Execute overdue items report'),
    ( 1, 'force_checkout', 'Force checkout if a limitation exists'),
    ( 1, 'manage_restrictions', 'Manage restrictions for accounts'),
+   ( 1, 'self_checkout', 'Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID'),
    ( 3, 'parameters_remaining_permissions', 'Remaining system parameters permissions'),
    ( 3, 'manage_circ_rules', 'manage circulation rules'),
    ( 6, 'place_holds', 'Place holds for patrons'),
