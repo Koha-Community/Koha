@@ -35,7 +35,7 @@ my ($template, $borrowernumber, $cookie) = get_template_and_user({
      type => "opac",
     debug => 1,
     authnotrequired => 1,
-      flagsrequired => {circulate => "circulate_remaining_permissions"},
+    flagsrequired => {circulate => "self_checkout"},
 });
 
 if (C4::Context->preference('SelfCheckoutByLogin')) {

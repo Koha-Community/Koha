@@ -65,11 +65,12 @@ if (C4::Context->preference('AutoSelfCheckAllowed'))
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
     template_name   => "sco/sco-main.tt",
     authnotrequired => 0,
-    flagsrequired => { circulate => "circulate_remaining_permissions" },
+    flagsrequired => { circulate => "self_checkout" },
     query => $query,
     type  => "opac",
     debug => 1,
 });
+
 if (C4::Context->preference('SelfCheckoutByLogin'))
 {
     $template->param(authbylogin  => 1);
