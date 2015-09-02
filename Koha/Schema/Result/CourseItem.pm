@@ -133,6 +133,21 @@ __PACKAGE__->add_unique_constraint("itemnumber", ["itemnumber"]);
 
 =head1 RELATIONS
 
+=head2 course_reserves
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::CourseReserve>
+
+=cut
+
+__PACKAGE__->has_many(
+  "course_reserves",
+  "Koha::Schema::Result::CourseReserve",
+  { "foreign.ci_id" => "self.ci_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 holdingbranch
 
 Type: belongs_to
@@ -169,8 +184,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iVWZfUWcPfrLdLdvjyvbow
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-09-02 09:46:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:g5lEeHNvnM4KIb6AJUxDOw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
