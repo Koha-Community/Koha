@@ -38,6 +38,7 @@ __PACKAGE__->table("course_reserves");
 =head2 ci_id
 
   data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 0
 
 =head2 staff_note
@@ -65,7 +66,7 @@ __PACKAGE__->add_columns(
   "course_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "ci_id",
-  { data_type => "integer", is_nullable => 0 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "staff_note",
   { data_type => "mediumtext", is_nullable => 1 },
   "public_note",
@@ -109,6 +110,21 @@ __PACKAGE__->add_unique_constraint("pseudo_key", ["course_id", "ci_id"]);
 
 =head1 RELATIONS
 
+=head2 ci
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::CourseItem>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "ci",
+  "Koha::Schema::Result::CourseItem",
+  { ci_id => "ci_id" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
 =head2 course
 
 Type: belongs_to
@@ -125,8 +141,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SSTJhsNOuUlxr/CsDs08pQ
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-09-02 09:46:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4RbSgGvSM5wH1jpE+deLlA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
