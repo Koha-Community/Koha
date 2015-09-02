@@ -22,7 +22,7 @@ use warnings;
 use C4::Service;
 use C4::Members;
 
-my ($query, $response) = C4::Service->init(circulate => 'circulate_remaining_permissions');
+my ($query, $response) = C4::Service->init(circulate => 'self_checkout');
 
 unless (C4::Context->preference('WebBasedSelfCheck')) {
     print $query->header(status => '403 Forbidden - web-based self-check not enabled');
