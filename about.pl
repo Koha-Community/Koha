@@ -190,6 +190,34 @@ if ( !defined C4::Context->config('use_zebra_facets') ) {
     }
 }
 
+# Sco Patron should not contain any other perms than circulate => self_checkout
+if (  C4::Context->preference('WebBasedSelfCheck')
+      and C4::Context->preference('AutoSelfCheckAllowed')
+) {
+    my $userid = C4::Context->preference('AutoSelfCheckID');
+    my $all_permissions = C4::Auth::get_user_subpermissions( $userid );
+    my ( $has_self_checkout_perm, $has_other_permissions );
+    while ( my ( $module, $permissions ) = each %$all_permissions ) {
+        if ( $module eq 'circulate' ) {
+            while ( my ( $permission, $flag ) = each %$permissions ) {
+                if ( $permission eq 'self_checkout' ) {
+                    $has_self_checkout_perm = 1;
+                } else {
+                    $has_other_permissions = 1;
+                }
+            }
+        } else {
+            $has_other_permissions = 1;
+        }
+    }
+    $template->param(
+        AutoSelfCheckPatronDoesNotHaveSelfCheckPerm => not ( $has_self_checkout_perm ),
+        AutoSelfCheckPatronHasTooManyPerm => $has_other_permissions,
+    );
+
+
+}
+
 $template->param(
     kohaVersion   => $kohaVersion,
     osVersion     => $osVersion,
