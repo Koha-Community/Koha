@@ -2144,6 +2144,7 @@ sub _koha_new_item {
     my ( $item, $barcode ) = @_;
     my $dbh=C4::Context->dbh;  
     my $error;
+    $item->{permanent_location} //= $item->{location};
     my $query =
            "INSERT INTO items SET
             biblionumber        = ?,
