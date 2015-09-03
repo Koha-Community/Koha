@@ -1839,10 +1839,9 @@ this function deletes subscription which has $subscriptionid as id.
 sub DelSubscription {
     my ($subscriptionid) = @_;
     my $dbh = C4::Context->dbh;
-    $subscriptionid = $dbh->quote($subscriptionid);
-    $dbh->do("DELETE FROM subscription WHERE subscriptionid=$subscriptionid");
-    $dbh->do("DELETE FROM subscriptionhistory WHERE subscriptionid=$subscriptionid");
-    $dbh->do("DELETE FROM serial WHERE subscriptionid=$subscriptionid");
+    $dbh->do("DELETE FROM subscription WHERE subscriptionid=?", undef, $subscriptionid);
+    $dbh->do("DELETE FROM subscriptionhistory WHERE subscriptionid=?", undef, $subscriptionid);
+    $dbh->do("DELETE FROM serial WHERE subscriptionid=?", undef, $subscriptionid);
 
     my $afs = Koha::AdditionalField->all({tablename => 'subscription'});
     foreach my $af (@$afs) {
