@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 68;
+use Test::More tests => 69;
 use Test::MockModule;
 use Test::Warn;
 
@@ -136,6 +136,11 @@ is(
     'failed',
     'message marked failed if tried to send SMS message for borrower with no smsalertnumber set (bug 11208)'
 );
+
+# ResendMessage
+C4::Letters::ResendMessage($messages->[0]->{message_id});
+$messages = C4::Letters::GetQueuedMessages({ borrowernumber => $borrowernumber });
+is($messages->[0]->{status},'pending', 'ResendMessage sets status to pending correctly (bug 12426)');
 
 # GetLetters
 my $letters = C4::Letters::GetLetters();

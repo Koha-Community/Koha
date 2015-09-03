@@ -1094,6 +1094,28 @@ sub GetMessageTransportTypes {
     return $mtts;
 }
 
+=head2 ResendMessage
+
+  Attempt to resend a message.
+
+  my $message_id = C4::Letters::ResendMessage(123);
+
+  Updates the message to 'pending' status so that
+  it will be resent later on.
+
+  returns 1 on success, 0 on failure
+
+=cut
+
+sub ResendMessage {
+    my $message_id = shift;
+
+    return ((C4::Letters::_set_message_status( {
+                message_id => $message_id,
+                status => 'pending',
+         } ) > 0) ? 1:0);
+}
+
 =head2 _add_attachements
 
 named parameters:
