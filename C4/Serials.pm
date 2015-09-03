@@ -1844,6 +1844,11 @@ sub DelSubscription {
     $dbh->do("DELETE FROM subscriptionhistory WHERE subscriptionid=$subscriptionid");
     $dbh->do("DELETE FROM serial WHERE subscriptionid=$subscriptionid");
 
+    my $afs = Koha::AdditionalField->all({tablename => 'subscription'});
+    foreach my $af (@$afs) {
+        $af->delete_values({record_id => $subscriptionid});
+    }
+
     logaction( "SERIAL", "DELETE", $subscriptionid, "" ) if C4::Context->preference("SubscriptionLog");
 }
 

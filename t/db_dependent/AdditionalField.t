@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 37;
+use Test::More tests => 40;
 
 use C4::Bookseller qw( AddBookseller );
 use C4::Context;
@@ -287,6 +287,18 @@ $exists = grep /$subscriptionid2/, @$matching_record_ids;
 is ( $exists, 1, "get_matching_record_ids: field common: common% matches subscription2 too" );
 $exists = grep /not_existent_id/, @$matching_record_ids;
 is ( $exists, 0, "get_matching_record_ids: field common: common% does not inexistent id" );
+
+# delete_values
+$af1 = Koha::AdditionalField->new({ id => $af1->id })->fetch;
+
+$af1->fetch_values;
+is_deeply ( $af1->values, {$subscriptionid1 => qq|value_for_af1_$subscriptionid1|, $subscriptionid2 => qq|value_for_af1_$subscriptionid2| }, "fetch_values: without argument, returns 2 records" );
+$af1->delete_values({record_id => $subscriptionid1});
+$af1->fetch_values;
+is_deeply ( $af1->values, {$subscriptionid2 => qq|value_for_af1_$subscriptionid2|}, "fetch_values: values for af2 and subscription2" );
+$af1->delete_values;
+$af1->fetch_values;
+is_deeply ( $af1->values, {}, "fetch_values: no values" );
 
 
 $dbh->rollback;

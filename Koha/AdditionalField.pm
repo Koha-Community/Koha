@@ -134,6 +134,29 @@ sub fetch_values {
     }
 }
 
+sub delete_values {
+    my ($self, $args) = @_;
+
+    my $record_id = $args->{record_id};
+
+    my $dbh = C4::Context->dbh;
+
+    my @where_strs = ('field_id = ?');
+    my @where_args = ($self->{id});
+
+    if ($record_id) {
+        push @where_strs, 'record_id = ?';
+        push @where_args, $record_id;
+    }
+
+    my $query = q{
+        DELETE FROM additional_field_values
+        WHERE
+    } . join (' AND ', @where_strs);
+
+    $dbh->do($query, undef, @where_args);
+}
+
 sub all {
     my ( $class, $args ) = @_;
     die "BAD CALL: Don't use fetch_all_values as an instance method"
@@ -330,6 +353,14 @@ The record_id argument is optional.
             field_name2 => 'value2',
         }
     }
+
+=head2 delete_values
+
+Delete values from the database for a given record_id.
+The record_id argument is optional.
+
+    my $af = Koha::AdditionalField({ id => $id })->fetch;
+    $af->delete_values({record_id => $record_id});
 
 =head2 all
 
