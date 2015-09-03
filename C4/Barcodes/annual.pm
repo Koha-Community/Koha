@@ -48,7 +48,7 @@ sub db_max ($;$) {
         $iso = output_pref({ dt => dt_from_string( $input, 'iso' ), dateformat => 'iso', dateonly => 1 }); # try to set the date w/ 2nd arg
 		unless ($iso) {
 			warn "Failed to create 'iso' Dates object with input '$input'.  Reverting to today's date.";
-            $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });	# failover back to today
+            $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }); # failover back to today
 		}
 	} else {
         $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
@@ -83,7 +83,7 @@ sub width ($;$) {
 sub process_head($$;$$) {	# (self,head,whole,specific)
 	my ($self,$head,$whole,$specific) = @_;
 	$specific and return $head;	# if this is built off an existing barcode, just return the head unchanged.
-    return substr(output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }), 0, 4 ) . '-';	# else get new YYYY-
+    return substr(output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }), 0, 4 ) . '-'; # else get new YYYY-
 }
 
 sub new_object {

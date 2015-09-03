@@ -75,7 +75,7 @@ sub db_max {
 sub initial {
 	my $self = shift;
 	# FIXME: populated branch?
-    my $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }); 	# like "2008-07-02"
+    my $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }); # like "2008-07-02"
 	return $self->branch . substr($iso,2,2) . substr($iso,5,2) . sprintf('%' . "$width.$width" . 'd',1);
 }
 
@@ -105,7 +105,7 @@ sub process_head {	# (self,head,whole,specific)
 	my ($self,$head,$whole,$specific) = @_;
 	$specific and return $head;	# if this is built off an existing barcode, just return the head unchanged.
 	$head =~ s/\d{4}$//;		# else strip the old yymm
-    my $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }); 	# like "2008-07-02"
+    my $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }); # like "2008-07-02"
 	return $head . substr($iso,2,2) . substr($iso,5,2);
 }
 
