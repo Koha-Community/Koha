@@ -26,7 +26,7 @@ INSERT INTO matchpoint_component_norms (matchpoint_component_id, sequence, norm_
 
 INSERT INTO marc_matchers (code, description, record_type, threshold)
     VALUES ('ISSN', '011$a', 'biblio', 1000);
-INSERT INTO matchpoints (matcher_id, search_index, score) SELECT MAX(matcher_id), 'isbn', 1000 FROM marc_matchers;
+INSERT INTO matchpoints (matcher_id, search_index, score) SELECT MAX(matcher_id), 'issn', 1000 FROM marc_matchers;
 INSERT INTO matcher_matchpoints SELECT MAX(matcher_id), MAX(matchpoint_id) FROM matchpoints;
 INSERT INTO matchpoint_components (matchpoint_id, sequence, tag, subfields)
     SELECT MAX(matchpoint_id), 1, '011', 'a' FROM matchpoints;
