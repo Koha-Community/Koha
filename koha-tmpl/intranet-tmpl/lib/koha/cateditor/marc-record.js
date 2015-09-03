@@ -61,6 +61,10 @@ define( function() {
     }
 
     $.extend( MARC.Record.prototype, {
+        clone: function() {
+            return new MARC.Record( $.map( this.fields(), function( field ) { return field.clone() } ) );
+        },
+
         leader: function(val) {
             var field = this.field('000');
 
@@ -271,6 +275,15 @@ define( function() {
     };
 
     $.extend( MARC.Field.prototype, {
+        clone: function() {
+            return new MARC.Field(
+                this._tagnumber,
+                this._indicators[0],
+                this._indicators[1],
+                $.extend( true, [], this._subfields ) // Deep copy
+            );
+        },
+
         tagnumber: function() {
             return this._tagnumber;
         },

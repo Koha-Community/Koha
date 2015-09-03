@@ -842,6 +842,9 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                         case 'unrepeatableSubfield':
                             editor.addError( error.line, _("Subfield $") + error.subfield + _(" cannot be repeated") );
                             break;
+                        case 'itemTagUnsupported':
+                            editor.addError( error.line, _("Item tags cannot currently be saved") );
+                            break;
                     }
                 } );
 

@@ -17,7 +17,7 @@
  * along with Koha; if not, see <http://www.gnu.org/licenses>.
  */
 
-define( [ 'marc-record' ], function( MARC ) {
+define( [ 'koha-backend', 'marc-record' ], function( KohaBackend, MARC ) {
     var _options;
     var _records = {};
     var _last;
@@ -71,6 +71,8 @@ define( [ 'marc-record' ], function( MARC ) {
                 options: options,
             };
 
+            var itemTag = KohaBackend.GetSubfieldForKohaField('items.itemnumber')[0];
+
             $.each( servers, function ( id, info ) {
                 if ( info.checked ) Search.includedServers.push( id );
             } );
@@ -95,6 +97,11 @@ define( [ 'marc-record' ], function( MARC ) {
                         var record = new MARC.Record();
                         record.loadMARCXML( hit.record );
                         hit.record = record;
+
+                        if ( hit.server == 'koha:biblioserver' ) {
+                            // Remove item tags
+                            while ( record.removeField(itemTag) );
+                        }
                     } );
 
                     _options.onresults( data );

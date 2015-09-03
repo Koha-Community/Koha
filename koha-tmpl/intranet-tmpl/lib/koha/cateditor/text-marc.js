@@ -72,7 +72,7 @@ define( [ 'marc-record' ], function( MARC ) {
                     field.sourceLine = i;
                     record.addField( field );
                 } else {
-                    var indicators = line.match( /^... ([0-9A-Za-z_]) ([0-9A-Za-z_])/ );
+                    var indicators = line.match( /^... ([0-9A-Za-z_ ]) ([0-9A-Za-z_ ])/ );
                     if ( !indicators ) {
                         errors.push( { type: 'noIndicators', line: i } );
                         return;

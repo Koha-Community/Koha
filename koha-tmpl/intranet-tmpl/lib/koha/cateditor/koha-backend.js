@@ -21,6 +21,7 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
     var _authorised_values = defaultFramework.authorised_values;
     var _frameworks = {};
     var _framework_mappings = {};
+    var _framework_kohafields = {};
 
     function _fromXMLStruct( data ) {
         result = {};
@@ -48,13 +49,24 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
 
             $.each( taginfo.subfields, function( i, subfield ) {
                 subfields[ subfield[0] ] = subfield[1];
+                if ( frameworkcode == '' && subfield[1].kohafield ) {
+                    _framework_kohafields[ subfield[1].kohafield ] = [ tagnum, subfield[0] ];
+                }
             } );
 
             _framework_mappings[frameworkcode][tagnum] = $.extend( {}, taginfo, { subfields: subfields } );
         } );
+
+        console.dir( _framework_kohafields );
     }
 
     _importFramework( '', defaultFramework.framework );
+
+    function _removeBiblionumberFields( record ) {
+        var bibnumTag = KohaBackend.GetSubfieldForKohaField('biblio.biblionumber')[0];
+
+        while ( record.removeField(bibnumTag) );
+    }
 
     var KohaBackend = {
         NOT_EMPTY: {}, // Sentinel value
@@ -72,6 +84,10 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
             return _framework_mappings[frameworkcode][tagnumber];
         },
 
+        GetSubfieldForKohaField: function( kohafield ) {
+            return _framework_kohafields[kohafield];
+        },
+
         GetRecord: function( id, callback ) {
             $.get(
                 '/cgi-bin/koha/svc/bib/' + id
@@ -85,6 +101,9 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
         },
 
         CreateRecord: function( record, callback ) {
+            record = record.clone();
+            _removeBiblionumberFields( record );
+
             $.ajax( {
                 type: 'POST',
                 url: '/cgi-bin/koha/svc/new_bib',
@@ -98,6 +117,9 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
         },
 
         SaveRecord: function( id, record, callback ) {
+            record = record.clone();
+            _removeBiblionumberFields( record );
+
             $.ajax( {
                 type: 'POST',
                 url: '/cgi-bin/koha/svc/bib/' + id,
@@ -186,8 +208,14 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
             } );
 
             var seenTags = {};
+            var itemTag = KohaBackend.GetSubfieldForKohaField('items.itemnumber')[0];
 
             $.each( record.fields(), function( undef, field ) {
+                if ( field.tagnumber() == itemTag ) {
+                    errors.push( { type: 'itemTagUnsupported', line: field.sourceLine } );
+                    return;
+                }
+
                 if ( seenTags[ field.tagnumber() ] && nonRepeatableTags[ field.tagnumber() ] ) {
                     errors.push( { type: 'unrepeatableTag', line: field.sourceLine, tag: field.tagnumber() } );
                     return;

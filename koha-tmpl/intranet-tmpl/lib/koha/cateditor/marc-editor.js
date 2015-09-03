@@ -76,6 +76,12 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
         cm.marceditor.startNotify();
     }
 
+    function editorSetOverwriteMode( cm, newState ) {
+        var editor = cm.marceditor;
+
+        editor.overwriteMode = newState;
+    }
+
     // Editor helper functions
     function activateTabPosition( cm, pos, idx ) {
         // Allow tabbing to as-yet-nonexistent positions
@@ -131,6 +137,12 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             var cursor = cm.getCursor();
             cm.replaceRange( '\n', { line: cursor.line }, null, 'marcAware' );
             cm.setCursor( { line: cursor.line + 1, ch: 0 } );
+        },
+
+        'Shift-Enter': function( cm ) {
+            var cur = cm.getCursor();
+
+            cm.replaceRange( "\n", cur, null );
         },
 
         'Ctrl-X': function( cm ) {
@@ -450,6 +462,7 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
         this.cm.on( 'beforeChange', editorBeforeChange );
         this.cm.on( 'changes', editorChanges );
         this.cm.on( 'cursorActivity', editorCursorActivity );
+        this.cm.on( 'overwriteToggle', editorSetOverwriteMode );
 
         this.onCursorActivity = options.onCursorActivity;
 
