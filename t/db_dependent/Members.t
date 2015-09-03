@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 61;
+use Test::More tests => 62;
 use Test::MockModule;
 use Data::Dumper;
 use C4::Context;
@@ -217,7 +217,9 @@ is( $borrower, undef, 'DelMember should remove the patron' );
     categorycode => "S",
     branchcode   => "MPL",
     dateofbirth  => '',
-    dateexpiry   => '9999-12-31',
+    debarred     => '',
+    dateexpiry   => '',
+    dateenrolled => '',
 );
 # Add a new borrower
 my $borrowernumber = AddMember( %data );
@@ -229,6 +231,26 @@ is( Check_Userid( 'tomasito.none', '' ), 0,
     'userid exists (blank borrowernumber)' );
 is( Check_Userid( 'tomasitoxxx', '' ), 1,
     'non-existent userid -> unique (blank borrowernumber)' );
+
+$borrower = GetMember( borrowernumber => $borrowernumber );
+is( $borrower->{dateofbirth}, undef, 'AddMember should undef dateofbirth if empty string is given');
+is( $borrower->{debarred}, undef, 'AddMember should undef debarred if empty string is given');
+isnt( $borrower->{dateexpiry}, '0000-00-00', 'AddMember should not set dateexpiry to 0000-00-00 if empty string is given');
+isnt( $borrower->{dateenrolled}, '0000-00-00', 'AddMember should not set dateenrolled to 0000-00-00 if empty string is given');
+
+ModMember( borrowernumber => $borrowernumber, dateofbirth => '', debarred => '', dateexpiry => '', dateenrolled => '' );
+$borrower = GetMember( borrowernumber => $borrowernumber );
+is( $borrower->{dateofbirth}, undef, 'ModMember should undef dateofbirth if empty string is given');
+is( $borrower->{debarred}, undef, 'ModMember should undef debarred if empty string is given');
+isnt( $borrower->{dateexpiry}, '0000-00-00', 'ModMember should not set dateexpiry to 0000-00-00 if empty string is given');
+isnt( $borrower->{dateenrolled}, '0000-00-00', 'ModMember should not set dateenrolled to 0000-00-00 if empty string is given');
+
+ModMember( borrowernumber => $borrowernumber, dateofbirth => '1970-01-01', debarred => '2042-01-01', dateexpiry => '9999-12-31', dateenrolled => '2015-09-06' );
+$borrower = GetMember( borrowernumber => $borrowernumber );
+is( $borrower->{dateofbirth}, '1970-01-01', 'ModMember should correctly set dateofbirth if a valid date is given');
+is( $borrower->{debarred}, '2042-01-01', 'ModMember should correctly set debarred if a valid date is given');
+is( $borrower->{dateexpiry}, '9999-12-31', 'ModMember should correctly set dateexpiry if a valid date is given');
+is( $borrower->{dateenrolled}, '2015-09-06', 'ModMember should correctly set dateenrolled if a valid date is given');
 
 # Add a new borrower with the same userid but different cardnumber
 $data{ cardnumber } = "987654321";
