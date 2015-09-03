@@ -48,11 +48,53 @@ __PACKAGE__->mk_accessors(qw( ));
 sub _new_schema {
 
     require Koha::Schema;
+
     my $context = C4::Context->new();
 
-    # we are letting C4::Context->dbh not set the RaiseError handle attribute
-    # for now for compatbility purposes
-    my $schema = Koha::Schema->connect( sub { C4::Context->dbh }, { unsafe => 1 } );
+    my $db_driver = $context->{db_driver};
+
+    my $db_name   = $context->config("database");
+    my $db_host   = $context->config("hostname");
+    my $db_port   = $context->config("port") || '';
+    my $db_user   = $context->config("user");
+    my $db_passwd = $context->config("pass");
+
+    my ( %encoding_attr, $encoding_query, $tz_query );
+    my $tz = $ENV{TZ};
+    if ( $db_driver eq 'mysql' ) {
+        %encoding_attr = ( mysql_enable_utf8 => 1 );
+        $encoding_query = "set NAMES 'utf8'";
+        $tz_query = qq(SET time_zone = "$tz") if $tz;
+    }
+    elsif ( $db_driver eq 'Pg' ) {
+        $encoding_query = "set client_encoding = 'UTF8';";
+        $tz_query = qq(SET TIME ZONE = "$tz") if $tz;
+    }
+    my $schema = Koha::Schema->connect(
+        {
+            dsn => "dbi:$db_driver:database=$db_name;host=$db_host;port=$db_port",
+            user => $db_user,
+            password => $db_passwd,
+            %encoding_attr,
+            RaiseError => $ENV{DEBUG} ? 1 : 0,
+            unsafe => 1,
+            on_connect_do => [
+                $encoding_query || (),
+                $tz_query || (),
+            ]
+        }
+    );
+
+    my $dbh = $schema->storage->dbh;
+    eval {
+        $dbh->{RaiseError} = 1;
+        $dbh->do(q|
+            SELECT * FROM systempreferences WHERE 1 = 0 |
+        );
+        $dbh->{RaiseError} = $ENV{DEBUG} ? 1 : 0;
+    };
+    $dbh->{RaiseError} = 0 if $@;
+
     return $schema;
 }
 
