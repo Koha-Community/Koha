@@ -82,8 +82,13 @@ sub new {
         return;
     }
 
+    if (!defined $params->{ schema }) {
+        carp 'No schema passed';
+        return;
+    }
+
     my $record = $params->{ record };
-    my $schema = $params->{ schema } // 'marc21';
+    my $schema = $params->{ schema };
     my $format = $params->{ format } // 'MARC';
     my $id     = $params->{ id };
 

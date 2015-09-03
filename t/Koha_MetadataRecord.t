@@ -100,17 +100,26 @@ is($dupkeys, 0, 'No duplicate keys');
 
 subtest "new() tests" => sub {
 
-    plan tests => 12;
+    plan tests => 14;
 
     # Test default values with a MARC::Record record
     my $record = MARC::Record->new();
-    my $metadata_record = new Koha::MetadataRecord({
-        record => $record
+    my $metadata_record;
+
+    warning_is { $metadata_record = new Koha::MetadataRecord({
+                        record => $record }) }
+               { carped => 'No schema passed' },
+        "Metadata schema is mandatory, raise a carped warning if omitted";
+    is( $metadata_record, undef, "Metadata schema is mandatory, return undef if omitted");
+
+    $metadata_record = new Koha::MetadataRecord({
+        record => $record,
+        schema => 'marc21'
     });
 
     is( ref($metadata_record), 'Koha::MetadataRecord', 'Type correct');
     is( ref($metadata_record->record), 'MARC::Record', 'Record type preserved');
-    is( $metadata_record->schema, 'marc21', 'Metadata schema defaults to marc21');
+    is( $metadata_record->schema, 'marc21', 'Metadata schema is set to marc21');
     is( $metadata_record->format, 'MARC', 'Serializacion format defaults to marc');
     is( $metadata_record->id, undef, 'id is optional, undef if unspecifid');
 
