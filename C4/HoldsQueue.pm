@@ -492,7 +492,6 @@ sub MapItemsToHoldRequests {
                     my $holding_branch_items = $items_by_branch{$branch}
                       or next;
 
-                    $holdingbranch ||= $branch;
                     foreach my $item (@$holding_branch_items) {
                         next if ( $item->{holdallowed} == 1 && $item->{homebranch} ne $request->{borrowerbranch} );
 
