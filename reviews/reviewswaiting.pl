@@ -41,8 +41,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $op       = $query->param('op') || '';
 my $status   = $query->param('status') || 0;
 my $reviewid = $query->param('reviewid');
-my $offset   = $query->param('offset') || 0;
+my $page     = $query->param('page') || 1;
 my $count    = C4::Context->preference('numSearchResults') || 20;
+my $offset   = ($page-1) * $count;
 my $total    = numberofreviews($status);
 
 if ( $op eq 'approve' ) {
@@ -72,7 +73,7 @@ my $url = "/cgi-bin/koha/reviews/reviewswaiting.pl?status=$status";
 $template->param(
     status => $status,
     reviews => $reviews,
-    pagination_bar => pagination_bar( $url, ( int( $total / $count ) ) + ( ( $total % $count ) > 0 ? 1 : 0 ), $offset, "offset" )
+    pagination_bar => pagination_bar( $url, ( int( $total / $count ) ) + ( ( $total % $count ) > 0 ? 1 : 0 ), $page, "page" )
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
