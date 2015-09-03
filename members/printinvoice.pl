@@ -89,7 +89,7 @@ for ( my $i = 0 ; $i < $numaccts ; $i++ ) {
     }
 
     my %row = (
-        'date'                    => output_pref({ dt => dt_from_string( $accts->[$i]{'date'}, 'iso' ), dateonly => 1 }),
+        'date'                    => output_pref({ dt => dt_from_string( $accts->[$i]{'date'} ), dateonly => 1 }),
         'amountcredit'            => $accts->[$i]{'amountcredit'},
         'amountoutstandingcredit' => $accts->[$i]{'amountoutstandingcredit'},
         'toggle'                  => $accts->[$i]{'toggle'},

@@ -119,7 +119,7 @@ foreach my $br ( keys %$branches ) {
 
 $template->param(
     branchesloop => \@branchesloop,
-    show_date    => output_pref({ dt => dt_from_string, dateonly => 1 }),
+    show_date    => output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }),
 	TransfersMaxDaysWarning => C4::Context->preference('TransfersMaxDaysWarning'),
 	latetransfers => $latetransfers ? 1 : 0,
 );

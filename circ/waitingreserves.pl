@@ -157,7 +157,7 @@ $template->param(
     reservecount => $reservcount,
     overloop    => \@overloop,
     overcount   => $overcount,
-    show_date   => output_pref({ dt => dt_from_string, dateonly => 1 }),
+    show_date   => output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }),
     ReservesMaxPickUpDelay => C4::Context->preference('ReservesMaxPickUpDelay')
 );
 
