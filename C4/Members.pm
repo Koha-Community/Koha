@@ -667,6 +667,7 @@ sub ModMember {
     $new_borrower->{dateofbirth}  ||= undef if exists $new_borrower->{dateofbirth};
     $new_borrower->{dateenrolled} ||= undef if exists $new_borrower->{dateenrolled};
     $new_borrower->{dateexpiry}   ||= undef if exists $new_borrower->{dateexpiry};
+    $new_borrower->{debarred}     ||= undef if exists $new_borrower->{debarred};
     my $rs = $schema->resultset('Borrower')->search({
         borrowernumber => $new_borrower->{borrowernumber},
      });
