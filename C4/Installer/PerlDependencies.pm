@@ -782,6 +782,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '1.10',
     },
+    'URL::Encode' => {
+        'usage'    => 'PayPal',
+        'required' => '0',
+        'min_ver'  => '0.03',
+    },
 };
 
 1;
