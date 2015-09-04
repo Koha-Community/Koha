@@ -125,7 +125,7 @@ if ($index_biblios) {
         $next = sub {
             my $r = shift @biblionumbers;
             return () unless defined $r;
-            return ($r, Koha::Biblio->get_marc_biblio($r, item_data => 1));
+            return ($r, Koha::Biblio->get_from_biblionumber($r, item_data => 1 ));
         };
     } else {
         my $records = Koha::Biblio->get_all_biblios_iterator();
