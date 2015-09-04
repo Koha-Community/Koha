@@ -95,6 +95,7 @@ BEGIN {
 		&AnonymiseIssueHistory
         &CheckIfIssuedToPatron
         &IsItemIssued
+        GetTopIssues
 	);
 
 	# subs to deal with returns
@@ -4035,6 +4036,66 @@ sub GetPendingOnSiteCheckouts {
         LEFT JOIN borrowers ON issues.borrowernumber = borrowers.borrowernumber
         WHERE issues.onsite_checkout = 1
     |, { Slice => {} } );
+}
+
+sub GetTopIssues {
+    my ($params) = @_;
+
+    my ($count, $branch, $itemtype, $ccode, $newness)
+        = @$params{qw(count branch itemtype ccode newness)};
+
+    my $dbh = C4::Context->dbh;
+    my $query = q{
+        SELECT b.biblionumber, b.title, b.author, bi.itemtype, bi.publishercode,
+          bi.place, bi.publicationyear, b.copyrightdate, bi.pages, bi.size,
+          i.ccode, SUM(i.issues) AS count
+        FROM biblio b
+        LEFT JOIN items i ON (i.biblionumber = b.biblionumber)
+        LEFT JOIN biblioitems bi ON (bi.biblionumber = b.biblionumber)
+    };
+
+    my (@where_strs, @where_args);
+
+    if ($branch) {
+        push @where_strs, 'i.homebranch = ?';
+        push @where_args, $branch;
+    }
+    if ($itemtype) {
+        if (C4::Context->preference('item-level_itypes')){
+            push @where_strs, 'i.itype = ?';
+            push @where_args, $itemtype;
+        } else {
+            push @where_strs, 'bi.itemtype = ?';
+            push @where_args, $itemtype;
+        }
+    }
+    if ($ccode) {
+        push @where_strs, 'i.ccode = ?';
+        push @where_args, $ccode;
+    }
+    if ($newness) {
+        push @where_strs, 'TO_DAYS(NOW()) - TO_DAYS(b.datecreated) <= ?';
+        push @where_args, $newness;
+    }
+
+    if (@where_strs) {
+        $query .= 'WHERE ' . join(' AND ', @where_strs);
+    }
+
+    $query .= q{
+        GROUP BY b.biblionumber
+        HAVING count > 0
+        ORDER BY count DESC
+    };
+
+    $count = int($count);
+    if ($count > 0) {
+        $query .= "LIMIT $count";
+    }
+
+    my $rows = $dbh->selectall_arrayref($query, { Slice => {} }, @where_args);
+
+    return @$rows;
 }
 
 __END__

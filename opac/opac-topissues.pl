@@ -29,6 +29,7 @@ use C4::Search;
 use C4::Output;
 use C4::Koha;
 use C4::Branch;
+use C4::Circulation;
 use Date::Manip;
 
 =head1 NAME
@@ -73,75 +74,29 @@ my $itemtype = $input->param('itemtype') || '';
 my $timeLimit = $input->param('timeLimit') || 3;
 my $advanced_search_types = C4::Context->preference('AdvancedSearchTypes');
 
-my $whereclause = '';
-$whereclause .= ' AND items.homebranch='.$dbh->quote($branch) if ($branch);
-$whereclause .= ' AND TO_DAYS(NOW()) - TO_DAYS(biblio.datecreated) <= '.($timeLimit*30) if $timeLimit < 999;
-$whereclause =~ s/ AND $// if $whereclause;
-my $query;
+
+my $params = {
+    count => $limit,
+    branch => $branch,
+    newness => $timeLimit < 999 ? $timeLimit * 30 : undef,
+};
 
 if($advanced_search_types eq 'ccode'){
-    $whereclause .= ' AND authorised_values.authorised_value='.$dbh->quote($itemtype) if $itemtype;
-    $query = "SELECT datecreated, biblio.biblionumber, title,
-                    author, sum( items.issues ) AS tot, biblioitems.itemtype,
-                    biblioitems.publishercode, biblioitems.place, biblioitems.publicationyear, biblio.copyrightdate,
-                    authorised_values.lib as description, biblioitems.pages, biblioitems.size
-                    FROM biblio
-                    LEFT JOIN items USING (biblionumber)
-                    LEFT JOIN biblioitems USING (biblionumber)
-                    LEFT JOIN authorised_values ON items.ccode = authorised_values.authorised_value
-                    WHERE 1
-                    $whereclause
-                    AND authorised_values.category = 'ccode' 
-                    GROUP BY biblio.biblionumber
-                    HAVING tot >0
-                    ORDER BY tot DESC
-                    LIMIT ?
-                    ";
+    $params->{ccode} = $itemtype;
     $template->param(ccodesearch => 1);
-}else{
-    if ($itemtype){
-	if (C4::Context->preference('item-level_itypes')){
-	    $whereclause .= ' AND items.itype = ' . $dbh->quote($itemtype);
-	}
-	else {
-	    $whereclause .= ' AND biblioitems.itemtype='.$dbh->quote($itemtype);
-        }
-    }
-    $query = "SELECT datecreated, biblio.biblionumber, title,
-                    author, sum( items.issues ) AS tot, biblioitems.itemtype,
-                    biblioitems.publishercode, biblioitems.place, biblioitems.publicationyear, biblio.copyrightdate,
-                    itemtypes.description, biblioitems.pages, biblioitems.size
-                    FROM biblio
-                    LEFT JOIN items USING (biblionumber)
-                    LEFT JOIN biblioitems USING (biblionumber)
-                    LEFT JOIN itemtypes ON itemtypes.itemtype = biblioitems.itemtype
-                    WHERE 1
-                    $whereclause
-                    GROUP BY biblio.biblionumber
-                    HAVING tot >0
-                    ORDER BY tot DESC
-                    LIMIT ?
-                    ";
-     $template->param(itemtypesearch => 1);
+} else {
+    $params->{itemtype} = $itemtype;
+    $template->param(itemtypesearch => 1);
 }
 
-my $sth = $dbh->prepare($query);
-$sth->execute($limit);
-my @results;
-while (my $line= $sth->fetchrow_hashref) {
-    push @results, $line;
-}
-
-my $timeLimitFinite = $timeLimit;
-if($timeLimit eq 999){ $timeLimitFinite = 0 };
+my @results = GetTopIssues($params);
 
 $template->param(do_it => 1,
                 limit => $limit,
                 branch => $branches->{$branch}->{branchname},
                 itemtype => $itemtypes->{$itemtype}->{description},
                 timeLimit => $timeLimit,
-                timeLimitFinite => $timeLimitFinite,
-                results_loop => \@results,
+                results => \@results,
                 );
 
 $template->param( branchloop => GetBranchesLoop($branch));
