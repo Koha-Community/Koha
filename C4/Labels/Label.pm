@@ -547,7 +547,7 @@ sub barcode {
             PDF::Reuse::Barcode::COOP2of5(
                 x                   => $params{'llx'},
                 y                   => $params{'lly'},
-                value               => "*$params{barcode_data}*",
+                value               => $params{barcode_data},
                 xSize               => $x_scale_factor,
                 ySize               => $params{'y_scale_factor'},
                 mode                    => 'graphic',
@@ -565,7 +565,7 @@ sub barcode {
             PDF::Reuse::Barcode::Industrial2of5(
                 x                   => $params{'llx'},
                 y                   => $params{'lly'},
-                value               => "*$params{barcode_data}*",
+                value               => $params{barcode_data},
                 xSize               => $x_scale_factor,
                 ySize               => $params{'y_scale_factor'},
                 mode                    => 'graphic',
