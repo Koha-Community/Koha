@@ -364,7 +364,6 @@ sub new {
     warn "read_config_file($conf_fname) returned undef" if !defined($self->{"config"});
     return if !defined($self->{"config"});
 
-    $self->{"dbh"} = undef;        # Database handle
     $self->{"Zconn"} = undef;    # Zebra Connections
     $self->{"stopwords"} = undef; # stopwords list
     $self->{"marcfromkohafield"} = undef; # the hash with relations between koha table fields and MARC field/subfield
@@ -725,7 +724,7 @@ sub _new_Zconn {
 sub _new_dbh
 {
 
-    Koha::Database->schema->storage->dbh;
+    Koha::Database->schema({ new => 1 })->storage->dbh;
 }
 
 =head2 dbh
@@ -751,17 +750,10 @@ sub dbh
     my $sth;
 
     unless ( $params->{new} ) {
-        if ( defined($context->{db_driver}) && $context->{db_driver} eq 'mysql' && $context->{"dbh"} ) {
-            return $context->{"dbh"};
-        } elsif ( defined($context->{"dbh"}) && $context->{"dbh"}->ping() ) {
-            return $context->{"dbh"};
-        }
+        return Koha::Database->schema->storage->dbh;
     }
 
-    # No database handle or it died . Create one.
-    $context->{"dbh"} = &_new_dbh();
-
-    return $context->{"dbh"};
+    return Koha::Database->schema({ new => 1 })->storage->dbh;
 }
 
 =head2 new_dbh
@@ -782,7 +774,7 @@ sub new_dbh
 {
     my $self = shift;
 
-    return &_new_dbh();
+    return &dbh({ new => 1 });
 }
 
 =head2 set_dbh

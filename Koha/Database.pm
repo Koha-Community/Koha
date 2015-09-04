@@ -115,13 +115,12 @@ possibly C<&set_schema>.
 
 sub schema {
     my $self = shift;
-    my $sth;
+    my $params = shift;
 
-    if ( defined( $database->{schema} ) and $database->{schema}->storage->connected() ) {
-        return $database->{schema};
+    unless ( $params->{new} ) {
+        return $database->{schema} if defined $database->{schema};
     }
 
-    # No database handle or it died . Create one.
     $database->{schema} = &_new_schema();
     return $database->{schema};
 }
