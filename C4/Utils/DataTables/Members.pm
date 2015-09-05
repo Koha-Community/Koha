@@ -61,9 +61,10 @@ sub search {
     # split on coma
     $searchmember =~ s/,/ /g if $searchmember;
     my $searchfields = {
-        standard => 'surname,firstname,othernames,cardnumber',
+        standard => 'surname,firstname,othernames,cardnumber,userid',
         email => 'email,emailpro,B_email',
         borrowernumber => 'borrowernumber',
+        userid => 'userid',
         phone => 'phone,phonepro,B_phone,altcontactphone,mobile',
         address => 'streettype,address,address2,city,state,zipcode,country',
         dateofbirth => 'dateofbirth',

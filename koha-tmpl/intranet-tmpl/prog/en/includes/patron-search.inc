@@ -32,6 +32,11 @@
               [% ELSE %]
                 <option value='borrowernumber'>Borrower number</option>
               [% END %]
+              [% IF searchfieldstype == "userid" %]
+                <option selected="selected" value='userid'>Username</option>
+              [% ELSE %]
+                <option value='userid'>Username</option>
+              [% END %]
               [% IF searchfieldstype == "phone" %]
                 <option selected="selected" value='phone'>Phone number</option>
               [% ELSE %]
