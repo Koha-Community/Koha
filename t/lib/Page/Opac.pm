@@ -160,6 +160,23 @@ sub doPasswordLogin {
     return $self; #After a succesfull password login, we are directed to the same page we tried to access.
 }
 
+sub failPasswordLogin {
+    my ($self, $username, $password) = @_;
+    my $d = $self->getDriver();
+    $self->debugTakeSessionSnapshot();
+
+    my ($submitButton, $useridInput, $passwordInput) = $self->_getPasswordLoginElements();
+    $useridInput->send_keys($username);
+    $passwordInput->send_keys($password);
+    $submitButton->click();
+    $self->debugTakeSessionSnapshot();
+
+    ok($d->get_title() =~ /Log in to your account/ #Still in the login page
+       , "Opac PasswordLogin failed");
+
+    return $self; #After a successful password login, we are directed to the same page we tried to access.
+}
+
 sub doPasswordLogout {
     my ($self, $username, $password) = @_;
     my $d = $self->getDriver();
@@ -172,11 +189,9 @@ sub doPasswordLogout {
     $self->debugTakeSessionSnapshot();
 
     $headerElements = $self->_getHeaderRegionActionElements(); #Take the changed header elements
-    my $txt = $headerElements->{login}->get_text();
     ok(($headerElements->{login}->get_text() =~ /Log in/ ||
         $d->get_title() =~ /Log in to your account/), "Opac Header PasswordLogout succeeded");
-    return t::lib::Page::Opac::OpacMain->rebrandFromPageObject($self);
-        ok((), "PasswordLogout succeeded");
+
     return t::lib::Page::Opac::OpacMain->rebrandFromPageObject($self);
 }
 

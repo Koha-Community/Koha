@@ -179,6 +179,26 @@ sub doPasswordLogin {
     return $self; #After a succesfull password login, we are directed to the same page we tried to access.
 }
 
+sub failPasswordLogin {
+    my ($self, $username, $password) = @_;
+    my $d = $self->getDriver();
+    $self->debugTakeSessionSnapshot();
+
+    my ($submitButton, $useridInput, $passwordInput) = $self->_getPasswordLoginElements();
+    $useridInput->send_keys($username);
+    $passwordInput->send_keys($password);
+    $submitButton->click();
+    $self->debugTakeSessionSnapshot();
+
+    my $cookies = $d->get_all_cookies();
+    my @cgisessid = grep {$_->{name} eq 'CGISESSID'} @$cookies;
+
+    ok($d->get_title() =~ /Log in to Koha/ #Still in the login page
+       , "Intra PasswordLogin failed");
+
+    return $self; #After a successful password login, we are directed to the same page we tried to access.
+}
+
 sub doPasswordLogout {
     my ($self, $username, $password) = @_;
     my $d = $self->getDriver();
