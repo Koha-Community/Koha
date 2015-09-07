@@ -10832,6 +10832,17 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.21.00.024";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        ALTER TABLE marc_modification_template_actions
+        MODIFY COLUMN action
+            ENUM('delete_field','update_field','move_field','copy_field','copy_and_replace_field')
+    });
+    print "Upgrade to $DBversion done (Bug 14098: Regression in Marc Modification Templates)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
