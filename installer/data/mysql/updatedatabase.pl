@@ -10591,6 +10591,24 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.20.03.002";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        UPDATE borrowers SET debarred=NULL WHERE debarred='0000-00-00'
+    });
+    $dbh->do(q{
+        UPDATE borrowers SET dateexpiry=NULL where dateexpiry='0000-00-00'
+    });
+    $dbh->do(q{
+        UPDATE borrowers SET dateofbirth=NULL where dateofbirth='0000-00-00'
+    });
+    $dbh->do(q{
+        UPDATE borrowers SET dateenrolled=NULL where dateenrolled='0000-00-00'
+    });
+    print "Upgrade to $DBversion done (Bug 14717: Prevent 0000-00-00 dates in patron data)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
