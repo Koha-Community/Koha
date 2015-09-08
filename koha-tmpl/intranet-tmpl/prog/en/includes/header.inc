@@ -89,10 +89,10 @@
                     <li>
                         <a id="logout" class="toplinks" href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log out</a>
                     </li>
-                    <li>
-                        <a class="toplinks" href="/cgi-bin/koha/help.pl" id="helper">Help</a>
-                    </li>
                 </ul>
+            </li>
+            <li>
+                <a class="toplinks" href="/cgi-bin/koha/help.pl" id="helper">Help</a>
             </li>
             [% ELSE %]
             <li class="loggedout">
