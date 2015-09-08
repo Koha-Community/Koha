@@ -8,7 +8,6 @@
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-var MSG_CONFIRM_DELETE_HISTORY = _("Are you sure you want to delete selected search history entries?");
 $(document).ready(function() {
     // We show table ordered by descending dates by default
     // (so that the more recent query is shown first)
@@ -75,7 +74,15 @@ $(document).ready(function() {
         if ( $(ids).length < 1 ) {
             return false;
         }
-        if ( confirm(MSG_CONFIRM_DELETE_HISTORY) ) {
+
+        var msg;
+        if (ids.length == 1) {
+          msg = _("Are you sure you want to delete the selected search history entry?");
+        } else {
+          msg = _("Are you sure you want to delete the %s selected search history entries?").format(ids.length);
+        }
+
+        if ( confirm(msg) ) {
             form.submit();
         }
         return false;
@@ -86,9 +93,13 @@ $(document).ready(function() {
 function enableCheckboxActions(form){
     // Enable/disable controls if checkboxes are checked
     var table = form.find('table').dataTable();
-    var checkedBoxes = table.$("input:checkbox:checked");
-    if (checkedBoxes.size()) {
-      form.find(".selections").html(_("With selected searches: "));
+    var checked_count = table.$("input:checkbox:checked").length;
+    if (checked_count) {
+      if (checked_count == 1) {
+        form.find(".selections").html(_("With selected search: "));
+      } else {
+        form.find(".selections").html(_("With %s selected searches: ").format(checked_count));
+      }
       form.find(".selections-toolbar .links a").removeClass("disabled");
     } else {
       form.find(".selections").html(_("Select searches to: "));
