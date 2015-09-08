@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 82;
+use Test::More tests => 84;
 use Test::MockModule;
 use Test::Warn;
 
@@ -154,6 +154,16 @@ is( $resent, undef, 'ResendMessage should return undef if not message_id given' 
 # Delivery notes
 is($messages->[0]->{delivery_note}, 'Missing SMS number',
    'Delivery note for no smsalertnumber correctly set');
+
+# Test connectivity Exception (Bug 14791)
+t::lib::Mocks::mock_preference('SMSSendDriver', 'Example::ExceptionExample');
+ModMember(borrowernumber => $borrowernumber, smsalertnumber => "+1234567890");
+$messages_processed = C4::Letters::SendQueuedMessages();
+$messages = C4::Letters::GetQueuedMessages();
+is( $messages->[0]->{status}, 'pending',
+    'Message is still pending after SendQueuedMessages() because of network failure (bug 14791)' );
+is( $messages->[0]->{delivery_note}, 'Connection failed. Attempting to resend.',
+    'Message has correct delivery note about resending' );
 
 
 # GetLetters

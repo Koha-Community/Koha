@@ -38,6 +38,9 @@ use Koha::SMS::Providers;
 use Koha::Email;
 use Koha::DateUtils qw( format_sqldatetime dt_from_string );
 
+use Scalar::Util qw ( blessed );
+use Try::Tiny;
+
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
@@ -1044,30 +1047,35 @@ sub SendQueuedMessages {
           if $params->{'verbose'} or $debug;
         # This is just begging for subclassing
         next MESSAGE if ( lc($message->{'message_transport_type'}) eq 'rss' );
-        if ( lc( $message->{'message_transport_type'} ) eq 'email' ) {
-            _send_message_by_email( $message, $params->{'username'}, $params->{'password'}, $params->{'method'} );
-        }
-        elsif ( lc( $message->{'message_transport_type'} ) eq 'sms' ) {
-            if ( C4::Context->preference('SMSSendDriver') eq 'Email' ) {
-                my $member = C4::Members::GetMember( 'borrowernumber' => $message->{'borrowernumber'} );
-                my $sms_provider = Koha::SMS::Providers->find( $member->{'sms_provider_id'} );
-                unless ( $sms_provider ) {
-                    warn sprintf( "Patron %s has no sms provider id set!", $message->{'borrowernumber'} ) if $params->{'verbose'} or $debug;
-                    _set_message_status( { message_id => $message->{'message_id'}, status => 'failed' } );
-                    next MESSAGE;
-                }
-                $message->{to_address} ||= $member->{'smsalertnumber'};
-                unless ( $message->{to_address} && $member->{'smsalertnumber'} ) {
-                    _set_message_status( { message_id => $message->{'message_id'}, status => 'failed' } );
-                    warn sprintf( "No smsalertnumber found for patron %s!", $message->{'borrowernumber'} ) if $params->{'verbose'} or $debug;
-                    next MESSAGE;
-                }
-                $message->{to_address} .= '@' . $sms_provider->domain();
-                _update_message_to_address($message->{'message_id'},$message->{to_address});
+        eval {
+            if ( lc( $message->{'message_transport_type'} ) eq 'email' ) {
                 _send_message_by_email( $message, $params->{'username'}, $params->{'password'}, $params->{'method'} );
-            } else {
-                _send_message_by_sms( $message );
             }
+            elsif ( lc( $message->{'message_transport_type'} ) eq 'sms' ) {
+                if ( C4::Context->preference('SMSSendDriver') eq 'Email' ) {
+                    my $member = C4::Members::GetMember( 'borrowernumber' => $message->{'borrowernumber'} );
+                    my $sms_provider = Koha::SMS::Providers->find( $member->{'sms_provider_id'} );
+                    unless ( $sms_provider ) {
+                        warn sprintf( "Patron %s has no sms provider id set!", $message->{'borrowernumber'} ) if $params->{'verbose'} or $debug;
+                        _set_message_status( { message_id => $message->{'message_id'}, status => 'failed' } );
+                        next MESSAGE;
+                    }
+                    $message->{to_address} ||= $member->{'smsalertnumber'};
+                    unless ( $message->{to_address} && $member->{'smsalertnumber'} ) {
+                        _set_message_status( { message_id => $message->{'message_id'}, status => 'failed' } );
+                        warn sprintf( "No smsalertnumber found for patron %s!", $message->{'borrowernumber'} ) if $params->{'verbose'} or $debug;
+                        next MESSAGE;
+                    }
+                    $message->{to_address} .= '@' . $sms_provider->domain();
+                    _update_message_to_address($message->{'message_id'},$message->{to_address});
+                    _send_message_by_email( $message, $params->{'username'}, $params->{'password'}, $params->{'method'} );
+                } else {
+                    _send_message_by_sms( $message );
+                }
+            }
+        };
+        if ($@) {
+            warn $@;
         }
     }
     return scalar( @$unsent_messages );
@@ -1428,12 +1436,40 @@ sub _send_message_by_sms {
         return;
     }
 
-    my $success = C4::SMS->send_sms( { destination => $member->{'smsalertnumber'},
-                                       message     => $message->{'content'},
-                                     } );
-    _set_message_status( { message_id => $message->{'message_id'},
-                           status     => ($success ? 'sent' : 'failed'),
-                           delivery_note => ($success ? '' : 'No notes from SMS driver') } );
+    my $success;
+    try {
+        $success = C4::SMS->send_sms( { destination => $member->{'smsalertnumber'},
+                                           message     => $message->{'content'},
+                                         } );
+        _set_message_status( { message_id => $message->{'message_id'},
+                               status     => ($success ? 'sent' : 'failed'),
+                               delivery_note => ($success ? '' : 'No notes from SMS driver') } );
+
+    } catch {
+        if (blessed($_)){
+            if ($_->isa('Koha::Exception::ConnectionFailed')){
+                # Keep the message in pending status but
+                # add a delivery note explaining what happened
+                _set_message_status ( { message_id => $message->{'message_id'},
+                                        status     => 'pending',
+                                        delivery_note => 'Connection failed. Attempting to resend.' } );
+            }
+            else {
+                # failsafe: if we catch and unknown exception, set message status to failed
+                _set_message_status( { message_id => $message->{'message_id'},
+                               status     => 'failed',
+                               delivery_note => 'Unknown exception.' } );
+                $_->rethrow();
+            }
+        }
+        else {
+            # failsafe
+            _set_message_status( { message_id => $message->{'message_id'},
+                               status     => 'failed',
+                               delivery_note => 'Unknown non-blessed exception.' } );
+            die $_;
+        }
+    };
 
     return $success;
 }

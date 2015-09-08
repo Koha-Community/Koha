@@ -56,6 +56,8 @@ use warnings;
 use C4::Context;
 use File::Spec;
 
+use Try::Tiny;
+use Scalar::Util qw ( blessed );
 
 
 =head1 METHODS
@@ -107,7 +109,10 @@ sub send_sms {
         %args = map { q{_} . $_ => $conf->{$_} } keys %$conf;
     }
 
-    eval {
+
+    #We might die because SMS::Send $driver is not defined or the sms-number has a bad format
+    #Catch those errors and fail the sms-sending gracefully.
+    try {
         # Create a sender
         $sender = SMS::Send->new(
             $driver,
@@ -121,15 +126,16 @@ sub send_sms {
             to   => $params->{destination},
             text => $params->{message},
         );
+        return $sent;
+    } catch {
+        if (blessed($_) && $_->can('rethrow')) {
+            $_->rethrow();
+        }
+        else {
+            die $_;
+        }
     };
 
-    #We might die because SMS::Send $driver is not defined or the sms-number has a bad format
-    #Catch those errors and fail the sms-sending gracefully.
-    if ($@) {
-        warn $@;
-        return;
-    }
-    # warn 'failure' unless $sent;
     return $sent;
 }
 
