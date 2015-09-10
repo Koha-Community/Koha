@@ -64,14 +64,20 @@
                 }
             };
             function Add() {
-                var barcodes = document.getElementById("barcode");
-                if (barcodes.value == '') {
+                var number_list = document.getElementById("number_list");
+                if (number_list.value == '') {
                     window.open("/cgi-bin/koha/labels/label-item-search.pl?batch_id=[% batch_id %]&amp;type=labels",'FindABibIndex','width=875,height=400,toolbar=no,scrollbars=yes');
                 }
                 else {
-                    document.forms["add_by_barcode"].submit();
+                    document.forms["add_by_number"].submit();
                 }
             };
+
+            function add_item(item_number) {
+                $("#itemnum_enter").prop("checked",true);
+                $("#number_list").val($("#number_list").val()+item_number+"\r\n");
+            };
+
             function DeDuplicate() {
                 window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=de_duplicate&amp;batch_id=[% batch_id %]";
             };
@@ -195,17 +201,25 @@
 
                         <div id="manage-label-batches">
                             <div class="hint">Current library: [% LoginBranchname %]</div>
-                            <form name="add_by_barcode" action="/cgi-bin/koha/labels/label-edit-batch.pl" method="post">
+                            <form name="add_by_number" action="/cgi-bin/koha/labels/label-edit-batch.pl" method="post">
                                 <div>
                                     <fieldset class="rows" style="border-bottom: 0px; border: 0px;">
                                     <ol><li>
-                                    <input type="hidden" name="op" value="add" />
-                                    <input type="hidden" name="batch_id" value="[% batch_id %]" />
-                                    <label for="barcode">Add by barcode(s):
-                                        <br /> <span class="hint">One barcode per line.</span>
-                                        <br /> <span class="hint">Leave empty to add via item search.</span>
-                                    </label>
-                                    <textarea rows="5" id="barcode" name="barcode" tabindex="1" class="focus"></textarea>
+                                        <input type="hidden" name="op" value="add" />
+                                        <input type="hidden" name="batch_id" value="[% batch_id %]" />
+                                    </li>
+                                    <li>
+                                        <input type="radio" name="number_type" id="barcode_enter" value="barcode" checked />
+                                        <label for="barcode_enter">Enter by barcode</label><br/>
+                                        <input type="radio" name="number_type" id="itemnum_enter" value="itemnumber" />
+                                        <label for="itemnum_enter">Enter by itemnumber</label>
+                                    </li>
+                                    <li>
+                                        <label for="number_list">Add by barcode(s) or itemnumbers(s):
+                                            <br /> <span class="hint">One number per line.</span>
+                                            <br /> <span class="hint">Leave empty to add via item search (itemnunber).</span>
+                                        </label>
+                                        <textarea rows="5" id="number_list" name="number_list" tabindex="1" class="focus"></textarea>
                                     </li></ol>
                                     </fieldset>
                                 </div>
@@ -263,7 +277,7 @@
                                 <ol><li>
                                     <div class="dialog message">
                                         <h4>There are no items in this batch yet</h4>
-                                        <p>Add items by barcode using the text area above or leave empty to add via item search.</p>
+                                        <p>Add items by using the text area above or leave empty to add via item search.</p>
                                     </div>
                                 </li></ol>
                                 </fieldset>

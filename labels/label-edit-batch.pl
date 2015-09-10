@@ -26,7 +26,7 @@ use CGI qw ( -utf8 );
 
 use C4::Auth qw(get_template_and_user);
 use C4::Output qw(output_html_with_http_headers);
-use C4::Items qw(GetItemnumberFromBarcode);
+use C4::Items qw(GetItem GetItemnumberFromBarcode);
 use C4::Creators;
 use C4::Labels;
 
@@ -57,11 +57,12 @@ my $display_columns = [ {_label_number  => {label => 'Label Number', link_field 
 my $op = $cgi->param('op') || 'edit';
 my @label_ids;
 my @item_numbers;
-my $barcode;
-my $batch_id = $cgi->param('element_id') || $cgi->param('batch_id') || undef;
+my $number_list;
+my $number_type = $cgi->param('number_type') || "barcode";
+my $batch_id = $cgi->param('element_id') || $cgi->param('batch_id') || 0;
 @label_ids = $cgi->param('label_id') if $cgi->param('label_id');
 @item_numbers = $cgi->param('item_number') if $cgi->param('item_number');
-$barcode = $cgi->param('barcode') if $cgi->param('barcode');
+$number_list = $cgi->param('number_list') if $cgi->param('number_list');
 
 my $branch_code = C4::Context->userenv->{'branch'};
 
@@ -80,17 +81,22 @@ elsif ($op eq 'delete') {
     $errstr = "batch $batch_id was not deleted." if $err;
 }
 elsif ($op eq 'add') {
-    if ($barcode) {
-        my @barcodes = split /\n/, $barcode; # $barcode is effectively passed in as a <cr> separated list
-        foreach my $number (@barcodes) {
+    if ($number_list) {
+        my @numbers_list = split /\n/, $number_list; # Entries are effectively passed in as a <cr> separated list
+        foreach my $number (@numbers_list) {
             $number =~ s/\r$//; # strip any naughty return chars
-            if (my $item_number = GetItemnumberFromBarcode($number)) {  # we must test in case an invalid barcode is passed in; we effectively disgard them atm
-                push @item_numbers, $item_number;
+            if( $number_type eq "itemnumber" && GetItem($number) ) {
+                push @item_numbers, $number;
+            }
+            elsif ($number_type eq "barcode" ) {  # we must test in case an invalid barcode is passed in; we effectively disgard them atm
+                if( my $item_number = GetItemnumberFromBarcode($number) ){
+                    push @item_numbers, $item_number;
+                }
             }
         }
     }
-    $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
-    $batch = C4::Labels::Batch->new(branch_code => $branch_code) if $batch == -2;
+    if ($batch_id != 0) {$batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);}
+    if ($batch_id == 0 || $batch == -2) {$batch = C4::Labels::Batch->new(branch_code => $branch_code);}
     if ($branch_code){
         foreach my $item_number (@item_numbers) {
             $err = $batch->add_item($item_number);
