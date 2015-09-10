@@ -536,7 +536,7 @@ ok( !C4::Reserves::OnShelfHoldsAllowed($item, $borrower), "OnShelfHoldsAllowed()
 
 $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
 my ( undef, undef, $bz14464_fines ) = GetMemberIssuesAndFines( $borrowernumber );
-ok( !$bz14464_fines, 'Bug 14464 - No fines at beginning' );
+is( !$bz14464_fines || $bz14464_fines==0, 1, 'Bug 14464 - No fines at beginning' );
 
 # First, test cancelling a reserve when there's no charge configured.
 t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelayCharge', 0);
@@ -560,7 +560,7 @@ ok( $bz14464_reserve, 'Bug 14464 - 1st reserve correctly created' );
 CancelReserve({ reserve_id => $bz14464_reserve, charge_cancel_fee => 1 });
 
 ( undef, undef, $bz14464_fines ) = GetMemberIssuesAndFines( $borrowernumber );
-ok( !$bz14464_fines, 'Bug 14464 - No fines after cancelling reserve with no charge configured' );
+is( !$bz14464_fines || $bz14464_fines==0, 1, 'Bug 14464 - No fines after cancelling reserve with no charge configured' );
 
 # Then, test cancelling a reserve when there's no charge desired.
 t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelayCharge', 42);
@@ -584,7 +584,7 @@ ok( $bz14464_reserve, 'Bug 14464 - 2nd reserve correctly created' );
 CancelReserve({ reserve_id => $bz14464_reserve });
 
 ( undef, undef, $bz14464_fines ) = GetMemberIssuesAndFines( $borrowernumber );
-ok( !$bz14464_fines, 'Bug 14464 - No fines after cancelling reserve with no charge desired' );
+is( !$bz14464_fines || $bz14464_fines==0, 1, 'Bug 14464 - No fines after cancelling reserve with no charge desired' );
 
 # Finally, test cancelling a reserve when there's a charge desired and configured.
 $bz14464_reserve = AddReserve(
