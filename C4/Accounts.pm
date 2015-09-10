@@ -829,9 +829,14 @@ sub WriteOffFee {
 
   purge_zero_balance_fees( $days );
 
-Delete accountlines entries where amountoutstanding is 0 which are more than a given number of days old.
+Delete accountlines entries where amountoutstanding is 0 or NULL which are more than a given number of days old.
 
 B<$days> -- Zero balance fees older than B<$days> days old will be deleted.
+
+B<Warning:> Because fines and payments are not linked in accountlines, it is
+possible for a fine to be deleted without the accompanying payment,
+or vise versa. This won't affect the account balance, but might be
+confusing to staff.
 
 =cut
 
@@ -844,7 +849,7 @@ sub purge_zero_balance_fees {
         q{
             DELETE FROM accountlines
             WHERE date < date_sub(curdate(), INTERVAL ? DAY)
-              AND amountoutstanding = 0;
+              AND ( amountoutstanding = 0 or amountoutstanding IS NULL );
         }
     );
     $sth->execute($days) or die $dbh->errstr;

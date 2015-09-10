@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 18;
+use Test::More tests => 19;
 use Test::MockModule;
 use Test::Warn;
 
@@ -94,16 +94,17 @@ $sth = $dbh->prepare(
 my $days = 5;
 
 my @test_data = (
-    { amount => 0  , days_ago => 0         , description =>'purge_zero_balance_fees should not delete 0 balance fees with date today'                     , delete => 0 } ,
-    { amount => 0  , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete 0 balance fees with date before threshold day'      , delete => 0 } ,
-    { amount => 0  , days_ago => $days     , description =>'purge_zero_balance_fees should not delete 0 balance fees with date on threshold day'          , delete => 0 } ,
-    { amount => 0  , days_ago => $days + 1 , description =>'purge_zero_balance_fees should delete 0 balance fees with date after threshold day'           , delete => 1 } ,
-    { amount => 5  , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete fees with postive amout owed before threshold day'  , delete => 0 } ,
-    { amount => 5  , days_ago => $days     , description =>'purge_zero_balance_fees should not delete fees with postive amout owed on threshold day'      , delete => 0 } ,
-    { amount => 5  , days_ago => $days + 1 , description =>'purge_zero_balance_fees should not delete fees with postive amout owed after threshold day'   , delete => 0 } ,
-    { amount => -5 , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete fees with negative amout owed before threshold day' , delete => 0 } ,
-    { amount => -5 , days_ago => $days     , description =>'purge_zero_balance_fees should not delete fees with negative amout owed on threshold day'     , delete => 0 } ,
-    { amount => -5 , days_ago => $days + 1 , description =>'purge_zero_balance_fees should not delete fees with negative amout owed after threshold day'  , delete => 0 }
+    { amount => 0     , days_ago => 0         , description =>'purge_zero_balance_fees should not delete 0 balance fees with date today'                     , delete => 0 } ,
+    { amount => 0     , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete 0 balance fees with date before threshold day'      , delete => 0 } ,
+    { amount => 0     , days_ago => $days     , description =>'purge_zero_balance_fees should not delete 0 balance fees with date on threshold day'          , delete => 0 } ,
+    { amount => 0     , days_ago => $days + 1 , description =>'purge_zero_balance_fees should delete 0 balance fees with date after threshold day'           , delete => 1 } ,
+    { amount => undef , days_ago => $days + 1 , description =>'purge_zero_balance_fees should delete NULL balance fees with date after threshold day'        , delete => 1 } ,
+    { amount => 5     , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete fees with postive amout owed before threshold day'  , delete => 0 } ,
+    { amount => 5     , days_ago => $days     , description =>'purge_zero_balance_fees should not delete fees with postive amout owed on threshold day'      , delete => 0 } ,
+    { amount => 5     , days_ago => $days + 1 , description =>'purge_zero_balance_fees should not delete fees with postive amout owed after threshold day'   , delete => 0 } ,
+    { amount => -5    , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete fees with negative amout owed before threshold day' , delete => 0 } ,
+    { amount => -5    , days_ago => $days     , description =>'purge_zero_balance_fees should not delete fees with negative amout owed on threshold day'     , delete => 0 } ,
+    { amount => -5    , days_ago => $days + 1 , description =>'purge_zero_balance_fees should not delete fees with negative amout owed after threshold day'  , delete => 0 }
 );
 
 for my $data  ( @test_data ) {

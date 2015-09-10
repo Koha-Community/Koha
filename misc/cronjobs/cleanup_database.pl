@@ -63,7 +63,10 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
    --z3950            purge records from import tables that are the result
                       of Z39.50 searches
    --fees DAYS        purge entries accountlines older than DAYS days, where
-                      amountoutstanding is 0.
+                      amountoutstanding is 0 or NULL.
+                      WARNING: Fees and payments may not be deleted together.
+                      This will not affect the account balance but may be
+                      confusing to staff.
    --logs DAYS        purge entries from action_logs older than DAYS days.
                       Defaults to 180 days if no days specified.
    --searchhistory DAYS  purge entries from search_history older than DAYS days.
