@@ -29,7 +29,7 @@ use C4::Auth qw(get_template_and_user);
 use C4::Output qw(output_html_with_http_headers);
 use C4::Creators;
 use C4::Patroncards;
-
+use C4::Members qw(GetMember);
 my $cgi = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -53,12 +53,13 @@ my $display_columns = [ {_card_number   => {label => 'Card Number', link_field =
                         {select         => {label => 'Select', value => '_label_id'}},
                       ];
 my $op = $cgi->param('op') || 'new';
-my $batch_id = $cgi->param('element_id') || $cgi->param('batch_id') || undef;
-my @label_ids = $cgi->param('label_id') if $cgi->param('label_id');
-my @item_numbers = $cgi->param('item_number') if $cgi->param('item_number');
-my @borrower_numbers = $cgi->param('borrower_number') if $cgi->param('borrower_number');
+my $batch_id = $cgi->param('element_id') || $cgi->param('batch_id') || 0;
+my ( @label_ids, @item_numbers, @borrower_numbers );
+@label_ids = $cgi->param('label_id') if $cgi->param('label_id');
+@item_numbers = $cgi->param('item_number') if $cgi->param('item_number');
+@borrower_numbers = $cgi->param('borrower_number') if $cgi->param('borrower_number');
 my $errstr = $cgi->param('error') || '';
-
+my $bor_num_list = $cgi->param('bor_num_list') || undef;
 my $branch_code = C4::Context->userenv->{'branch'};
 
 if ($op eq 'remove') {
@@ -79,12 +80,23 @@ elsif ($op eq 'delete') {
     }
 }
 elsif ($op eq 'add') {
-    $batch = C4::Patroncards::Batch->retrieve(batch_id => $batch_id);
-    $batch = C4::Patroncards::Batch->new(branch_code => $branch_code) if $batch == -2;
+if ($bor_num_list) {
+        my @bor_nums_unchecked = split /\n/, $bor_num_list; # $bor_num_list is effectively passed in as a <cr> separated list
+        foreach my $number (@bor_nums_unchecked) {
+            $number =~ s/\r$//; # strip any naughty return chars
+            if ( GetMember(borrowernumber => $number)) {  # we must test in case an invalid borrowernumber is passed in; we effectively disgard them atm
+                my $borrower_number = $number;
+                push @borrower_numbers, $borrower_number;
+            }
+        }
+    }
+    if ($batch_id != 0) {$batch = C4::Patroncards::Batch->retrieve(batch_id => $batch_id);}
+    if ($batch_id == 0 || $batch == -2) {$batch = C4::Patroncards::Batch->new(branch_code => $branch_code);}
     if ($branch_code){
         foreach my $borrower_number (@borrower_numbers) {
             $err = $batch->add_item($borrower_number);
         }
+        $batch_id = $batch->get_attr('batch_id') if $batch_id == 0; #update batch_id if we added to a new batch
         if ($err) {
             print $cgi->redirect("edit-batch.pl?op=edit&batch_id=$batch_id&error=401");
             exit;

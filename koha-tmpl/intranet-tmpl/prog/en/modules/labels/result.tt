@@ -16,27 +16,22 @@
                 });
             });
             function add_item(item_number,batch_id,type_id){
-                var getstr='';
+                var p = window.opener;
                 if (item_number == 'checked') {
                     items= new Array;
                     if(document.resultform.action.length > 0) {
                         for (var i=0; i < document.resultform.action.length; i++) {
                             if (document.resultform.action[i].checked) {
-                                items.push("item_number=" +  document.resultform.action[i].value);
+                                p.add_item(document.resultform.action[i].value);
                             }
                         }
-                        getstr = items.join("&");
                     } else {
-                        getstr = "item_number="+document.resultform.action.value;
+                        p.add_item(document.resultform.action.value);
                     }
                 }
                 else {
-                    getstr = "item_number="+item_number;
+                    p.add_item(item_number);
                 }
-                var myurl = "label-edit-batch.pl?op=add&batch_id="+batch_id+
-                "&"+getstr;
-                window.opener.location.href = myurl;
-                //top.location.href=myurl;
             }
             //]]>
     </script>
