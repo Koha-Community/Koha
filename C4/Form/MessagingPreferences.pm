@@ -20,6 +20,7 @@ package C4::Form::MessagingPreferences;
 use strict;
 use warnings;
 
+use Data::Dumper;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Members::Messaging;
@@ -76,12 +77,15 @@ sub handle_form_action {
     my $messaging_options = C4::Members::Messaging::GetMessagingOptions();
     # TODO: If a "NONE" box and another are checked somehow (javascript failed), we should pay attention to the "NONE" box
     my $prefs_set = 0;
+    my $borrowernumber;
+    my $logEntries = [];
     OPTION: foreach my $option ( @$messaging_options ) {
         my $updater = {
             message_attribute_id  => $option->{'message_attribute_id'}
         };
 
         $updater->{borrowernumber} = $target_params->{borrowernumber};
+        $borrowernumber            = $target_params->{borrowernumber};
         if ($target_params->{categorycode} && !$target_params->{borrowernumber}) {
             $updater->{categorycode} = $target_params->{categorycode};
             delete $updater->{borrowernumber};
@@ -134,6 +138,8 @@ sub handle_form_action {
 
         C4::Members::Messaging::SetMessagingPreference( $updater );
 
+        _pushToActionLogBuffer($logEntries, $updater, $option);
+
 	if ($query->param( $option->{'message_attribute_id'})){
 	    $prefs_set = 1;
 	}
@@ -145,6 +151,8 @@ sub handle_form_action {
     }
     # show the success message
     $template->param( settings_updated => 1 );
+
+    _writeActionLogBuffer($logEntries, $borrowernumber);
 }
 
 =head2 set_form_values
@@ -203,6 +211,37 @@ sub _transport_set {
     my ($name, @transport_methods) = @_;
 
     return List::MoreUtils::firstidx { $_ eq $name } @transport_methods;
+}
+
+sub _pushToActionLogBuffer {
+    return unless C4::Context->preference("BorrowersLog");
+    my ($logEntries, $updater, $option) = @_;
+
+    if ($updater->{message_transport_types} && scalar(@{$updater->{message_transport_types}})) {
+        my $entry = {};
+        $entry->{cc}   = $updater->{categorycode}    if $updater->{categorycode};
+        $entry->{dig}  = $updater->{wants_digest}    if $updater->{wants_digest};
+        $entry->{da}   = $updater->{days_in_advance} if $updater->{days_in_advance};
+        $entry->{mtt}  = $updater->{message_transport_types};
+        $entry->{_name} = $option->{message_name};
+        push(@$logEntries, $entry);
+    }
+}
+
+sub _writeActionLogBuffer {
+    return unless C4::Context->preference("BorrowersLog");
+    my ($logEntries, $borrowernumber) = @_;
+
+    if (scalar(@$logEntries)) {
+        my $d = Data::Dumper->new([$logEntries]);
+        $d->Indent(0);
+        $d->Purity(0);
+        $d->Terse(1);
+        C4::Log::logaction('MEMBERS', 'MOD MTT', $borrowernumber, $d->Dump($logEntries));
+    }
+    else {
+        C4::Log::logaction('MEMBERS', 'MOD MTT', $borrowernumber, 'All message_transports removed')
+    }
 }
 
 =head1 TODO
