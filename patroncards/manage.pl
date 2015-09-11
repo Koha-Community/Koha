@@ -80,11 +80,14 @@ my $branch_code = ($card_element eq 'batch' ? C4::Context->userenv->{'branch'} :
 
 if ($op eq 'delete') {
     my $err = 0;
-    if          ($card_element eq 'layout')    {$err = C4::Patroncards::Layout::delete(layout_id => $element_id);}
-    elsif       ($card_element eq 'template')  {$err = C4::Patroncards::Template::delete(template_id => $element_id);}
-    elsif       ($card_element eq 'profile')   {$err = C4::Patroncards::Profile::delete(profile_id => $element_id);}
-    elsif       ($card_element eq 'batch')     {$err = C4::Labels::Batch::delete(batch_id => $element_id, branch_code => $branch_code);}
-    else                                       {warn sprintf("Unknown card element passed in for delete operation: %s.",$card_element); $errstr = 202;}
+    my @element_ids = split(/,/, $element_id);
+    foreach my $element_id (@element_ids) {
+        if          ($card_element eq 'layout')    {$err = C4::Patroncards::Layout::delete(layout_id => $element_id);}
+        elsif       ($card_element eq 'template')  {$err = C4::Patroncards::Template::delete(template_id => $element_id);}
+        elsif       ($card_element eq 'profile')   {$err = C4::Patroncards::Profile::delete(profile_id => $element_id);}
+        elsif       ($card_element eq 'batch')     {$err = C4::Labels::Batch::delete(batch_id => $element_id, branch_code => $branch_code);}
+        else                                       {warn sprintf("Unknown card element passed in for delete operation: %s.",$card_element); $errstr = 202;}
+    }
     print $cgi->redirect("manage.pl?card_element=$card_element" . ($err ? "&error=102" : ''));
     exit;
 }
