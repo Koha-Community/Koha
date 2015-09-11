@@ -1152,14 +1152,16 @@
                         <b><xsl:text>Items available for reference: </xsl:text></b>
                         <xsl:variable name="reference_items" select="key('item-by-status', 'reference')"/>
                         <xsl:for-each select="$reference_items[generate-id() = generate-id(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch))[1])]">
-                            <xsl:if test="$singleBranchMode=0">
-                                <xsl:value-of select="items:homebranch"/>
-                            </xsl:if>
-                            <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber"> [<xsl:value-of select="items:itemcallnumber"/>]</xsl:if>
-                            <xsl:text> (</xsl:text>
-                            <xsl:value-of select="count(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch)))"/>
-                            <xsl:text> )</xsl:text>
-                            <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>
+                            <span class="CommasWithLinebreaks">
+                                <xsl:if test="$singleBranchMode=0">
+                                    <xsl:value-of select="items:homebranch"/>
+                                </xsl:if>
+                                <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber"> [<span class="LabelCallNumber">Call number: </span><xsl:value-of select="items:itemcallnumber"/>]</xsl:if>
+                                <xsl:text> (</xsl:text>
+                                <xsl:value-of select="count(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch)))"/>
+                                <xsl:text>)</xsl:text>
+                                <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>
+                            </span>
                         </xsl:for-each>
                     </span>
                 </xsl:when>
