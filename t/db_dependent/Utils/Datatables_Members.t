@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 13;
+use Test::More tests => 15;
 
 use C4::Context;
 use C4::Branch;
@@ -171,6 +171,29 @@ is( $search_results->{ patrons }[0]->{ cardnumber },
 is( $search_results->{ patrons }[1]->{ cardnumber },
     $jane_doe{ cardnumber },
     "Jane Doe is the second result");
+
+# Search by userid
+$search_results = C4::Utils::DataTables::Members::search({
+    searchmember     => "john.doe",
+    searchfieldstype => 'standard',
+    searchtype       => 'contains',
+    branchcode       => $branchcode,
+    dt_params        => \%dt_params
+});
+
+is( $search_results->{ iTotalDisplayRecords }, 1,
+    "John Doe is found by userid, standard search (Bug 14782)");
+
+$search_results = C4::Utils::DataTables::Members::search({
+    searchmember     => "john.doe",
+    searchfieldstype => 'userid',
+    searchtype       => 'contains',
+    branchcode       => $branchcode,
+    dt_params        => \%dt_params
+});
+
+is( $search_results->{ iTotalDisplayRecords }, 1,
+    "John Doe is found by userid, userid search (Bug 14782)");
 
 my $attribute_type = C4::Members::AttributeTypes->new( 'ATM_1', 'my attribute type' );
 $attribute_type->{staff_searchable} = 1;
