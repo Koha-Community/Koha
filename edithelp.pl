@@ -17,12 +17,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
+use Modern::Perl;
 use C4::Output;
 use C4::Templates;
 use C4::Auth;
 use CGI qw ( -utf8 );
-use warnings;
 
 use vars qw($debug);
 
@@ -77,7 +76,7 @@ sub _get_filepath ($;$) {
 $type = 'create' if $type eq 'addnew';
 if ( $type eq 'create' || $type eq 'save' ) {
 	my $file = _get_filepath($referer);
-    open my $fh, ">", $file;
+    open my $fh, ">:encoding(utf-8)", $file;
     if ( $fh ) {
         # file is open write to it
         print $fh
@@ -99,13 +98,13 @@ elsif ( $type eq 'modify' ) {
 	} else {
 		(-w $file) or $error = 
 			"WARNING: You will not be able to save, because your webserver cannot write to '$file'. Contact your admin about help file permissions.";
-    	open (my $fh, '<', $file) or die "Cannot read file '$file'";		# unlikely death, since we just checked
-		my $help = '';
+        open (my $fh, '<:encoding(utf-8)', $file) or die "Cannot read file '$file'";    # unlikely death, since we just checked
+        my $help = '';
         while ( <$fh> ) {
             $help .= /\[% INCLUDE .* %\](.*)$/ ? $1 : $_;
-		}
-		close $fh;
-    	$template->param( 'help' => $help );
+        }
+        close $fh;
+        $template->param( 'help' => $help );
 		$type = 'save';
 	}
 }
