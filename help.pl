@@ -39,6 +39,10 @@ sub _help_template_file_of_url {
 
 my $query = new CGI;
 
+# Init the interface to get the correct language.
+# This is usually set by get_template_and_user
+C4::Context->interface('intranet');
+
 # find the script that called the online help using the CGI referer()
 our $refer = $query->param('url');
 $refer = $query->referer()  if !$refer || $refer eq 'undefined';
