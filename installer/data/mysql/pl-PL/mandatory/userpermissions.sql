@@ -4,6 +4,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'overdues_report', 'Uruchamianie raportu o przetrzymanych egzemplarzach'),
    ( 1, 'force_checkout', 'Pozwolenie na wypożyczenie, pomimo ograniczeń'),
    ( 1, 'manage_restrictions', 'Zarządzanie ograniczeniami dla kont'),
+   ( 1, 'self_checkout', 'Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID'),
    ( 3, 'parameters_remaining_permissions', 'Pozostałe ustawienia systemowe'),
    ( 3, 'manage_circ_rules', 'Zarządzanie zasadami wypożyczeń'),
    ( 6, 'place_holds', 'Składanie zamówień w imieniu użytkownika'),
