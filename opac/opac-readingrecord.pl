@@ -97,7 +97,7 @@ foreach my $issue ( @{$issues} ) {
             C4::Context->preference('marcflavour') );
         $issue->{subtitle} =
           GetRecordValue( 'subtitle', $marc_rec, $issue->{frameworkcode} );
-        $issue->{normalized_upc} = GetNormalizedUPC( $marc_rec, $issue->{frameworkcode} );
+        $issue->{normalized_upc} = GetNormalizedUPC( $marc_rec, C4::Context->preference('marcflavour') );
     }
     # My Summary HTML
     if ($opac_summary_html) {

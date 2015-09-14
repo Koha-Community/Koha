@@ -183,7 +183,8 @@ if ($issues){
             }
         }
         $issue->{'charges'} = $charges;
-        $issue->{'subtitle'} = GetRecordValue('subtitle', GetMarcBiblio($issue->{'biblionumber'}), GetFrameworkCode($issue->{'biblionumber'}));
+        my $marcrecord = GetMarcBiblio( $issue->{'biblionumber'} );
+        $issue->{'subtitle'} = GetRecordValue('subtitle', $marcrecord, GetFrameworkCode($issue->{'biblionumber'}));
         # check if item is renewable
         my ($status,$renewerror) = CanBookBeRenewed( $borrowernumber, $issue->{'itemnumber'} );
         ($issue->{'renewcount'},$issue->{'renewsallowed'},$issue->{'renewsleft'}) = GetRenewCount($borrowernumber, $issue->{'itemnumber'});
@@ -229,6 +230,7 @@ if ($issues){
 
         my $isbn = GetNormalizedISBN($issue->{'isbn'});
         $issue->{normalized_isbn} = $isbn;
+        $issue->{normalized_upc} = GetNormalizedUPC( $marcrecord, C4::Context->preference('marcflavour') );
 
                 # My Summary HTML
                 if (my $my_summary_html = C4::Context->preference('OPACMySummaryHTML')){
