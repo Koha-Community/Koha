@@ -2083,7 +2083,7 @@ sub MarkIssueReturned {
         # We need to check if the anonymous patron exist, Koha will fail loudly if it does not
         # Note that a warning should appear on the about page (System information tab).
         $anonymouspatron = C4::Context->preference('AnonymousPatron');
-        die "Fatal error: the patron ($borrowernumber) has requested a privacy on returning item but the AnonymousPatron pref is not set correctly"
+        die "Fatal error: the patron ($borrowernumber) has requested their circulation history be anonymized on check-in, but the AnonymousPatron system preference is empty or not set correctly."
             unless C4::Members::GetMember( borrowernumber => $anonymouspatron );
     }
     my $dbh   = C4::Context->dbh;

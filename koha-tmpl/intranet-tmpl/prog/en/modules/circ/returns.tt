@@ -109,7 +109,7 @@ $(document).ready(function () {
 <div class="yui-g">
 
 [% IF privacy == 2 AND NOT Koha.Preference('AnonymousPatron') %]
-    <div class="dialog alert"><strong>Error:</strong> This patron has requested a privacy on returning item but the AnonymousPatron pref is not set correctly.</div>
+    <div class="dialog alert"><strong>Error:</strong> This patron has requested their circulation history be anonymized on check-in, but the AnonymousPatron system preference is empty or incorrect.</div>
 [% ELSIF NOT Koha.Preference('AnonymousPatron') AND Koha.Preference('OPACPrivacy') %]
     <div class="dialog alert"><strong>Error:</strong> The system preference OPACPrivacy is set but AnonymousPatron is not! Please correct this before continuing circulation.</div>
 [% END %]
