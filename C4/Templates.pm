@@ -332,7 +332,7 @@ sub GetColumnDefs {
     # Build columns.def path
     my $path = "$htdocs/$theme/$lang/$columns_file";
     my $fh;
-    if ( ! open ( $fh, q{<}, $path ) )  {
+    if ( ! open ( $fh, q{<:encoding(utf-8)}, $path ) )  {
         carp "Error opening $path. Check your templates.";
         return;
     }
