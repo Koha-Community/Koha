@@ -2029,7 +2029,11 @@ sub _do_column_fixes_for_mod {
         (not defined $item->{'withdrawn'} or $item->{'withdrawn'} eq '')) {
         $item->{'withdrawn'} = 0;
     }
-    if (exists $item->{'location'} && !$item->{'permanent_location'}) {
+    if (exists $item->{location}
+        and $item->{location} ne 'CART'
+        and $item->{location} ne 'PROC'
+        and not $item->{permanent_location}
+    ) {
         $item->{'permanent_location'} = $item->{'location'};
     }
     if (exists $item->{'timestamp'}) {
