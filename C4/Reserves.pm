@@ -650,7 +650,7 @@ sub GetOtherReserves {
 
 sub ChargeReserveFee {
     my ( $borrowernumber, $fee, $title ) = @_;
-    return if !$fee;
+    return if !$fee || $fee==0; # the last test is needed to include 0.00
     my $accquery = qq{
 INSERT INTO accountlines ( borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding ) VALUES (?, ?, NOW(), ?, ?, 'Res', ?)
     };
