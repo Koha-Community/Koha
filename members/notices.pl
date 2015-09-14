@@ -49,24 +49,18 @@ $template->param( $borrower );
 my ($picture, $dberror) = GetPatronImage($borrower->{'borrowernumber'});
 $template->param( picture => 1 ) if $picture;
 
-# Getting the messages
-my $queued_messages = C4::Letters::GetQueuedMessages({borrowernumber => $borrowernumber});
-
-# Bug 12426 - Allow resending of messages in Notices tab
-if ($input->param('resendnotice')) {
-    foreach my $message (@$queued_messages){
-        # resendnotice must be in this borrower's queue - we don't want to make it
-        # possible to change any message just by changing resendnotice id.
-        if ($message->{message_id} == $input->param('resendnotice')) {
-            # We also only want to resend messages in failed status
-            last unless $message->{status} eq "failed";
-
-            # Modify the message in $queued_message to have its new pending status
-            $message->{status} = 'pending' if (C4::Letters::ResendMessage($message->{message_id}));
-            last;
-        }
+# Allow resending of messages in Notices tab
+my $op = $input->param('op') || q{};
+if ( $op eq 'resend_notice' ) {
+    my $message_id = $input->param('message_id');
+    my $message = C4::Letters::GetMessage( $message_id );
+    if ( $message->{borrowernumber} = $borrowernumber ) {
+        C4::Letters::ResendMessage( $message_id );
     }
 }
+
+# Getting the messages
+my $queued_messages = C4::Letters::GetQueuedMessages({borrowernumber => $borrowernumber});
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
     my $attributes = GetBorrowerAttributes($borrowernumber);

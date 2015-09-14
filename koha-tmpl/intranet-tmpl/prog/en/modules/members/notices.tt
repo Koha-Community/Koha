@@ -71,7 +71,7 @@
 		<td>
             [% IF ( QUEUED_MESSAGE.status == 'sent' ) %]sent
             [% ELSIF ( QUEUED_MESSAGE.status == 'pending' ) %]pending
-            [% ELSIF ( QUEUED_MESSAGE.status == 'failed' ) %]failed <div class="notice"><a href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber %]&resendnotice=[% QUEUED_MESSAGE.message_id %]" title="Attempt to resend the notice">Resend</a></div>
+            [% ELSIF ( QUEUED_MESSAGE.status == 'failed' ) %]failed <div class="notice"><a href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber %]&amp;op=resend_notice&amp;message_id=[% QUEUED_MESSAGE.message_id %]" title="Attempt to resend the notice">Resend</a></div>
             [% ELSIF ( QUEUED_MESSAGE.status == 'deleted' ) %]deleted
             [% ELSE %][% QUEUED_MESSAGE.status %][% END %]
         </td>

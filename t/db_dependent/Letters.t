@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 69;
+use Test::More tests => 72;
 use Test::MockModule;
 use Test::Warn;
 
@@ -138,9 +138,14 @@ is(
 );
 
 # ResendMessage
-C4::Letters::ResendMessage($messages->[0]->{message_id});
-$messages = C4::Letters::GetQueuedMessages({ borrowernumber => $borrowernumber });
-is($messages->[0]->{status},'pending', 'ResendMessage sets status to pending correctly (bug 12426)');
+my $resent = C4::Letters::ResendMessage($messages->[0]->{message_id});
+my $message = C4::Letters::GetMessage( $messages->[0]->{message_id});
+is( $resent, 1, 'The message should have been resent' );
+is($message->{status},'pending', 'ResendMessage sets status to pending correctly (bug 12426)');
+$resent = C4::Letters::ResendMessage($messages->[0]->{message_id});
+is( $resent, 0, 'The message should not have been resent again' );
+$resent = C4::Letters::ResendMessage();
+is( $resent, undef, 'ResendMessage should return undef if not message_id given' );
 
 # GetLetters
 my $letters = C4::Letters::GetLetters();

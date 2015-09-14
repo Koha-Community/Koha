@@ -1094,11 +1094,28 @@ sub GetMessageTransportTypes {
     return $mtts;
 }
 
+=head2 GetMessage
+
+    my $message = C4::Letters::Message($message_id);
+
+=cut
+
+sub GetMessage {
+    my ( $message_id ) = @_;
+    return unless $message_id;
+    my $dbh = C4::Context->dbh;
+    return $dbh->selectrow_hashref(q|
+        SELECT message_id, borrowernumber, subject, content, metadata, letter_code, message_transport_type, status, time_queued, to_address, from_address, content_type
+        FROM message_queue
+        WHERE message_id = ?
+    |, {}, $message_id );
+}
+
 =head2 ResendMessage
 
-  Attempt to resend a message.
+  Attempt to resend a message which has failed previously.
 
-  my $message_id = C4::Letters::ResendMessage(123);
+  my $has_been_resent = C4::Letters::ResendMessage($message_id);
 
   Updates the message to 'pending' status so that
   it will be resent later on.
@@ -1109,11 +1126,17 @@ sub GetMessageTransportTypes {
 
 sub ResendMessage {
     my $message_id = shift;
+    return unless $message_id;
 
-    return ((C4::Letters::_set_message_status( {
-                message_id => $message_id,
-                status => 'pending',
-         } ) > 0) ? 1:0);
+    my $message = GetMessage( $message_id );
+    return unless $message;
+    if ( $message->{status} eq 'failed' ) {
+        return ((C4::Letters::_set_message_status( {
+                    message_id => $message_id,
+                    status => 'pending',
+             } ) > 0) ? 1:0);
+    }
+    return 0;
 }
 
 =head2 _add_attachements
