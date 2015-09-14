@@ -41,7 +41,7 @@ my $location = 'My Location';
 
 subtest 'General Add, Get and Del tests' => sub {
 
-    plan tests => 10;
+    plan tests => 14;
 
     # Start transaction
     $dbh->{AutoCommit} = 0;
@@ -77,6 +77,16 @@ subtest 'General Add, Get and Del tests' => sub {
     $getitem = GetItem($itemnumber);
     is( $getitem->{location}, $location, "The location should not have been modified" );
     is( $getitem->{permanent_location}, 'my permanent location', "The permanent_location should not have modified" );
+
+    ModItem({ location => $location }, $bibnum, $itemnumber);
+    $getitem = GetItem($itemnumber);
+    is( $getitem->{location}, $location, "The location should have been set to correct location" );
+    is( $getitem->{permanent_location}, $location, "The permanent_location should have been set to location" );
+
+    ModItem({ location => 'CART' }, $bibnum, $itemnumber);
+    $getitem = GetItem($itemnumber);
+    is( $getitem->{location}, 'CART', "The location should have been set to CART" );
+    is( $getitem->{permanent_location}, $location, "The permanent_location should not have been set to CART" );
 
     $dbh->rollback;
 };
