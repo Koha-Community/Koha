@@ -4,6 +4,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'overdues_report', 'Esegui report per prestiti scaduti'),
    ( 1, 'force_checkout', 'Sblocca il prestito'),
    ( 1, 'manage_restrictions', 'Gestisci restrizioni per utenti'),
+   ( 1, 'self_checkout', 'Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID'),
    ( 3, 'parameters_remaining_permissions', 'Permessi rimanenti'),
    ( 3, 'manage_circ_rules', 'Gestisci regole circolazione'),
    ( 6, 'place_holds', 'Fai prenotazioni per gli utenti'),

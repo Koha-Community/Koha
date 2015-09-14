@@ -4,6 +4,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'overdues_report', 'Überfälligkeiten-Report ausführen'),
    ( 1, 'force_checkout', 'Ausleihsperren übergehen'),
    ( 1, 'manage_restrictions', 'Kontosperre "Gesperrt" aufheben'),
+   ( 1, 'self_checkout', 'Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID'),
    ( 3, 'parameters_remaining_permissions', 'Übrige Administrationsberechtigungen'),
    ( 3, 'manage_circ_rules', 'Ausleihkonditionen verwalten'),
    ( 6, 'place_holds', 'Vormerkungen für Benutzer setzen'),
