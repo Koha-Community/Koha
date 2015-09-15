@@ -1,9 +1,5 @@
 package Koha::ItemType;
 
-# This represents a single itemtype
-
-# Copyright 2014 Catalyst IT
-#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
@@ -90,6 +86,10 @@ sub translated_descriptions {
 =cut
 
 sub _type {
+    return 'Itemtype';
+}
+
+sub type {
     return 'Itemtype';
 }
 
