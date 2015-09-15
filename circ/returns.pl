@@ -331,12 +331,6 @@ if ($barcode) {
             }
         }
     }
-    elsif ( !$messages->{'BadBarcode'} ) {
-        $input{duedate}   = 0;
-        $returneditems{0} = $barcode;
-        $riduedate{0}     = 0;
-        push( @inputloop, \%input );
-    }
     $template->param( privacy => $borrower->{privacy} );
 }
 $template->param( inputloop => \@inputloop );
