@@ -1,17 +1,19 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Reports [% IF ( do_it ) %]&rsaquo; Cash Register Statistics &rsaquo; Results[% ELSE %]&rsaquo; Cash Register Statistics[% END %]</title>
+<title>Koha &rsaquo; Reports [% IF ( do_it ) %]&rsaquo; Cash register statistics &rsaquo; Results[% ELSE %]&rsaquo; Cash register statistics[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
 [% INCLUDE 'datatables-strings.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
-<script type="text/javascript" id="js">$(document).ready(function() {
+<script type="text/javascript" id="js">
  $(document).ready(function() {
     $("#tbl_cash_register_stats").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "iDisplayLength": 50
+        "iDisplayLength": 50,
+        "sPaginationType": "full_numbers"
     }));
  });
-}); </script>
+</script>
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
 //<![CDATA[
@@ -25,7 +27,6 @@ function isNull(f,noalert) {
 }
 
 $(document).ready(function() {
-
     // http://jqueryui.com/demos/datepicker/#date-range
     var dates = $( "#filter_date_begin, #filter_date_end" ).datepicker({
         changeMonth: true,
@@ -56,8 +57,6 @@ $(document).ready(function() {
            alert(alertString);
            return false;
         }
-
-        $(this).submit();
     });
 });
 
@@ -73,9 +72,9 @@ $(document).ready(function() {
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
     &rsaquo;
     [% IF ( do_it ) %]
-        <a href="/cgi-bin/koha/reports/cash_register_stats.pl">Cash Register Statistics</a> &rsaquo; Results
+        <a href="/cgi-bin/koha/reports/cash_register_stats.pl">Cash register statistics</a> &rsaquo; Results
     [% ELSE %]
-        Cash Register Statistics
+        Cash register statistics
     [% END %]
 </div>
 
@@ -88,7 +87,7 @@ $(document).ready(function() {
     <h1>Cash register statistics</h1>
     <form method="post" action="/cgi-bin/koha/reports/cash_register_stats.pl" id="frmCashRegister">
         <fieldset class="rows">
-        <legend>Cash Register statistics [% beginDate %] to [% endDate %]</legend>
+        <legend>Cash register statistics [% beginDate | $KohaDates %] to [% endDate | $KohaDates %]</legend>
         <table>
             <thead>
                 <tr>
@@ -99,9 +98,9 @@ $(document).ready(function() {
                 <tr>
                     <td>
                         <label for="filter_date_begin">From</label>
-                        <input type="text" size="10" id="filter_date_begin" name="filter_date_begin" value="[% beginDate %]" />
+                        <input type="text" size="10" id="filter_date_begin" name="filter_date_begin" value="[% beginDate | $KohaDates %]" />
                         <label for="filter_date_end">To</label>
-                        <input type="text" size="10" id="filter_date_end" name="filter_date_end" value="[% endDate %]" />
+                        <input type="text" size="10" id="filter_date_end" name="filter_date_end" value="[% endDate | $KohaDates %]" />
                     </td>
                 </tr>
             </tbody>
@@ -144,9 +143,9 @@ $(document).ready(function() {
                         [% END %]
 
                         [% IF transaction_type == "FU" %]
-                        <option value="FU" selected="selected">Fine - long period</option>
+                        <option value="FU" selected="selected">Accruing fine</option>
                         [% ELSE %]
-                        <option value="FU">Fine - long period</option>
+                        <option value="FU">Accruing fine</option>
                         [% END %]
 
                         [% IF transaction_type == "PAY" %]
@@ -156,7 +155,7 @@ $(document).ready(function() {
                         [% END %]
 
                         [% IF transaction_type == "A" %]
-                        <option value="A" selected="selected">Account Management Fee</option>
+                        <option value="A" selected="selected">Account management fee</option>
                         [% ELSE %]
                         <option value="A">Account Management Fee</option>
                         [% END %]
@@ -218,6 +217,17 @@ $(document).ready(function() {
                     <label for="outputfile">To a file:</label>
                     <input type="radio" name="output" value="file" id="outputfile" />
                     <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" />
+                    <label class="inline" for="sep">Delimiter: </label>
+                    <select name="sep" id="sep" size="1">
+                        [% FOREACH value IN CGIsepChoice.values.sort() %]
+                           [% IF ( value == CGIsepChoice.default ) %]
+                               <option value="[% value %]" selected="selected">[% value %]</option>
+                           [% ELSE %]
+                              <option value="[% value %]">[% value %]</option>
+                           [% END %]
+                        [% END %]
+                    </select>
+
                 </li>
             </ol>
         </fieldset>
@@ -233,15 +243,15 @@ $(document).ready(function() {
         <thead>
         <tr>
             <th>Manager name</th>
-            <th>Borrower cardnumber</th>
-            <th>Borrower name</th>
-            <th>Branch</th>
+            <th>Patron cardnumber</th>
+            <th>Patron name</th>
+            <th>Library</th>
             <th>Transaction date</th>
             <th>Transaction type</th>
             <th>Amount</th>
             <th>Biblio title</th>
             <th>Barcode</th>
-            <th>Document type</th>
+            <th>Item type</th>
         </tr>
         </thead>
         [% FOREACH loopresul IN loopresult %]
@@ -250,7 +260,7 @@ $(document).ready(function() {
                 <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopresul.borrowernumber %]">[% loopresul.cardnumber %]</a></td>
                 <td>[% loopresul.bfirstname %] [% loopresul.bsurname %]</td>
                 <td>[% loopresul.branchname %]</td>
-                <td>[% loopresul.date %]</td>
+                <td>[% loopresul.date | $KohaDates %]</td>
                 <td>
                     [% IF loopresul.accounttype == "ACT" %]
                         <span>Active transactions</span>
@@ -261,7 +271,7 @@ $(document).ready(function() {
                     [% ELSIF loopresul.accounttype == "F" %]
                         <span>Fine</span>
                     [% ELSIF loopresul.accounttype == "FU" %]
-                        <span>Fine - long period</span>
+                        <span>Accruing fine</span>
                     [% ELSIF loopresul.accounttype == "Pay" %]
                         <span>Payment</span>
                     [% ELSIF loopresul.accounttype == "A" %]

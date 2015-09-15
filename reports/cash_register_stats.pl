@@ -14,8 +14,7 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use strict;
-use warnings;
+use Modern::Perl;
 use C4::Auth;
 use CGI;
 use C4::Context;
@@ -23,7 +22,8 @@ use C4::Reports;
 use C4::Output;
 use C4::Koha;
 use C4::Circulation;
-use C4::Dates qw/format_date format_date_in_iso/;
+use DateTime;
+use Koha::DateUtils;
 use C4::Budgets qw/GetCurrency GetCurrencies/;
 #use Data::Dumper;
 #use Smart::Comments;
@@ -46,18 +46,17 @@ my $output           = $input->param("output");
 my $basename         = $input->param("basename");
 my $transaction_type = $input->param("transaction_type") || 'ACT';
 my $branchcode       = $input->param("branch") || C4::Context->userenv->{'branch'};
-our $sep = ",";
+our $sep = $input->param("sep") // ',';
+$sep = "\t" if ($sep eq 'tabulation');
 
 $template->param(
     do_it => $do_it,
-    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+    CGIsepChoice => GetDelimiterChoices,
 );
 
 #Initialize date pickers to today
-my $today = C4::Dates->today('iso');
-my $fromDate = $today;
-my $toDate   = $today;
-
+my $fromDate = dt_from_string;
+my $toDate   = dt_from_string;
 ### fromdate today: $fromDate
 
 my $query_manualinv = "SELECT id, authorised_value FROM authorised_values WHERE category = 'MANUAL_INV'";
@@ -69,8 +68,10 @@ my $manualinv_types = $sth_manualinv->fetchall_arrayref({});
 
 if ($do_it) {
 
-    $fromDate = format_date_in_iso($input->param("filter_date_begin"));
-    $toDate   = format_date_in_iso($input->param("filter_date_end"));
+    $fromDate = output_pref({ dt => eval { dt_from_string($input->param("filter_date_begin")) } || dt_from_string,
+            dateformat => 'sql', dateonly => 1 }); #for sql query
+    $toDate   = output_pref({ dt => eval { dt_from_string($input->param("filter_date_end")) } || dt_from_string,
+            dateformat => 'sql', dateonly => 1 }); #for sql query
 
     my $whereTType = '';
 
@@ -119,7 +120,7 @@ if ($do_it) {
         $row->{amountoutstanding} = 0 if (!$row->{amountoutstanding});
         #if ((abs($row->{amount}) - $row->{amountoutstanding}) > 0) {
             $row->{amount} = sprintf("%.2f", abs ($row->{amount}));
-            $row->{date} = format_date($row->{date});
+            $row->{date} = dt_from_string($row->{date}, 'sql');
             ### date : $row->{date}
 
             push (@loopresult, $row);
@@ -178,12 +179,14 @@ if ($do_it) {
 ### fromdate final: $fromDate
 ### toDate final: $toDate
 $template->param(
-    beginDate        => format_date($fromDate),
-    endDate          => format_date($toDate),
+    beginDate        => dt_from_string($fromDate),
+    endDate          => dt_from_string($toDate),
     transaction_type => $transaction_type,
     branchloop       => C4::Branch::GetBranchesLoop($branchcode),
     manualinv_types  => $manualinv_types,
+    CGIsepChoice => GetDelimiterChoices,
 );
+
 output_html_with_http_headers $input, $cookie, $template->output;
 
 1;
