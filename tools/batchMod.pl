@@ -198,7 +198,7 @@ if ($op eq "action") {
                 if ( $modified ) {
                     eval {
                         if ( my $item = ModItemFromMarc( $localmarcitem, $itemdata->{biblionumber}, $itemnumber ) ) {
-                            LostItem($itemnumber, 'MARK RETURNED') if $item->{itemlost};
+                            LostItem($itemnumber, 'MARK RETURNED') if $item->{itemlost} and not $itemdata->{itemlost};
                         }
                     };
                 }
