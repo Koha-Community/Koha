@@ -81,7 +81,7 @@ $context->mock( 'userenv', sub {
 # 1 => yesterday
 # etc.
 
-$sth = $dbh->prepare(
+my $sth = $dbh->prepare(
     "INSERT INTO accountlines (
          borrowernumber,
          amountoutstanding,
@@ -99,15 +99,17 @@ my @test_data = (
     { amount => 0     , days_ago => $days     , description =>'purge_zero_balance_fees should not delete 0 balance fees with date on threshold day'          , delete => 0 } ,
     { amount => 0     , days_ago => $days + 1 , description =>'purge_zero_balance_fees should delete 0 balance fees with date after threshold day'           , delete => 1 } ,
     { amount => undef , days_ago => $days + 1 , description =>'purge_zero_balance_fees should delete NULL balance fees with date after threshold day'        , delete => 1 } ,
-    { amount => 5     , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete fees with postive amout owed before threshold day'  , delete => 0 } ,
-    { amount => 5     , days_ago => $days     , description =>'purge_zero_balance_fees should not delete fees with postive amout owed on threshold day'      , delete => 0 } ,
-    { amount => 5     , days_ago => $days + 1 , description =>'purge_zero_balance_fees should not delete fees with postive amout owed after threshold day'   , delete => 0 } ,
+    { amount => 5     , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete fees with positive amout owed before threshold day'  , delete => 0 } ,
+    { amount => 5     , days_ago => $days     , description =>'purge_zero_balance_fees should not delete fees with positive amout owed on threshold day'      , delete => 0 } ,
+    { amount => 5     , days_ago => $days + 1 , description =>'purge_zero_balance_fees should not delete fees with positive amout owed after threshold day'   , delete => 0 } ,
     { amount => -5    , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete fees with negative amout owed before threshold day' , delete => 0 } ,
     { amount => -5    , days_ago => $days     , description =>'purge_zero_balance_fees should not delete fees with negative amout owed on threshold day'     , delete => 0 } ,
     { amount => -5    , days_ago => $days + 1 , description =>'purge_zero_balance_fees should not delete fees with negative amout owed after threshold day'  , delete => 0 }
 );
 
-for my $data  ( @test_data ) {
+my $borrower = Koha::Borrower->new( { firstname => 'Test', surname => 'Patron', categorycode => 'PT', branchcode => 'MPL' } )->store();
+
+for my $data ( @test_data ) {
     $sth->execute($borrower->borrowernumber, $data->{amount}, $data->{days_ago}, $data->{description});
 }
 
@@ -131,6 +133,8 @@ sub is_delete_correct {
 for my $data  (@test_data) {
     is_delete_correct( $data->{delete}, $data->{description});
 }
+
+$dbh->do(q|DELETE FROM accountlines|);
 
 subtest "recordpayment() tests" => sub {
 
