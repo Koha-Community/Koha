@@ -27,9 +27,9 @@ use C4::Items;
 use C4::Biblio;
 use C4::Branch;
 use C4::Koha;
-use C4::ItemType;
 
 use Koha::Item::Search::Field qw(GetItemSearchFields);
+use Koha::ItemTypes;
 
 my $cgi = new CGI;
 my %params = $cgi->Vars;
@@ -262,10 +262,12 @@ if ($format eq 'html') {
             label => $location->{lib} // $location->{authorised_value},
         };
     }
-    my @itemtypes = C4::ItemType->all();
-    foreach my $itemtype (@itemtypes) {
-        $itemtype->{value} = $itemtype->{itemtype};
-        $itemtype->{label} = $itemtype->{translated_description};
+    my @itemtypes;
+    foreach my $itemtype ( Koha::ItemTypes->search ) {
+        push @itemtypes, {
+            value => $itemtype->itemtype,
+            label => $itemtype->translated_description,
+        };
     }
     my $ccode_avcode = GetAuthValCode('items.ccode') || 'CCODE';
     my $ccodes = GetAuthorisedValues($ccode_avcode);

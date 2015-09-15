@@ -89,6 +89,7 @@ use C4::Search qw/FindDuplicate/;
 use C4::ImportBatch qw/GetImportRecordMarc SetImportRecordStatus/;
 
 use Koha::Acquisition::Bookseller;
+use Koha::ItemTypes;
 
 our $input           = new CGI;
 my $booksellerid    = $input->param('booksellerid');	# FIXME: else ERROR!
@@ -303,7 +304,7 @@ if (C4::Context->preference('AcqCreateItem') eq 'ordering' && !$ordernumber) {
 }
 # Get the item types list, but only if item_level_itype is YES. Otherwise, it will be in the item, no need to display it in the biblio
 my @itemtypes;
-@itemtypes = C4::ItemType->all unless C4::Context->preference('item-level_itypes');
+@itemtypes = Koha::ItemTypes->search unless C4::Context->preference('item-level_itypes');
 
 if ( defined $subscriptionid ) {
     my $lastOrderReceived = GetLastOrderReceivedFromSubscriptionid $subscriptionid;

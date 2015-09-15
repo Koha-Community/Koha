@@ -21,8 +21,9 @@ use strict;
 use warnings;
 use C4::Context;
 use C4::Category;
-use C4::ItemType;
 use Carp qw(carp croak);
+
+use Koha::ItemTypes;
 
 our $AUTOLOAD;
 
@@ -331,7 +332,7 @@ sub grid {
     my @branch_prefs = $class->find($where);
     my @default_prefs = $class->find({ branchcode => '*', notification => $where->{notification} });
     my @cc = C4::Category->all;
-    my @it = C4::ItemType->all;
+    my @it = Koha::ItemTypes->search;
     my $notification = $where->{notification};
     my %disabled = map {
         my $key = $_->categorycode . "-" . $_->item_type . "-" . $notification;

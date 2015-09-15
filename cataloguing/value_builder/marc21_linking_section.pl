@@ -32,7 +32,8 @@ use C4::Biblio;
 use C4::Koha;
 use MARC::Record;
 use C4::Branch;
-use C4::ItemType;
+
+use Koha::ItemTypes;
 
 my $builder = sub {
     my ( $params ) = @_;
@@ -303,7 +304,7 @@ my $launcher = sub {
             }
         );
 
-        my @itemtypes = C4::ItemType->all;
+        my @itemtypes = Koha::ItemTypes->search;
 
         $template->param(
             itypeloop => \@itemtypes,

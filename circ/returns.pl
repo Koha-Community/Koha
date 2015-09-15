@@ -265,16 +265,16 @@ if ($barcode) {
 
     # Check if we should display a checkin message, based on the the item
     # type of the checked in item
-    my $itemtype = C4::ItemType->get( $biblio->{'itemtype'} );
-    if ( $itemtype->{'checkinmsg'} ) {
+    my $itemtype = Koha::ItemTypes->find( $biblio->{'itemtype'} );
+    if ( $itemtype->checkinmsg ) {
         $template->param(
-            checkinmsg     => $itemtype->{'checkinmsg'},
-            checkinmsgtype => $itemtype->{'checkinmsgtype'},
+            checkinmsg     => $itemtype->checkinmsg,
+            checkinmsgtype => $itemtype->checkinmsgtype,
         );
     }
 
     # make sure return branch respects home branch circulation rules, default to homebranch
-    my $hbr = GetBranchItemRule($biblio->{'homebranch'}, $itemtype->{itemtype})->{'returnbranch'} || "homebranch";
+    my $hbr = GetBranchItemRule($biblio->{'homebranch'}, $itemtype->itemtype)->{'returnbranch'} || "homebranch";
     my $returnbranch = $biblio->{$hbr} ;
 
     $template->param(

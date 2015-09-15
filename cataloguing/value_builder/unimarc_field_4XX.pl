@@ -32,7 +32,8 @@ use C4::Biblio;
 use C4::Koha;
 use MARC::Record;
 use C4::Branch;    # GetBranches
-use C4::ItemType;
+
+use Koha::ItemTypes;
 
 sub plugin_javascript {
     my ( $dbh, $record, $tagslib, $field_number, $tabloop ) = @_;
@@ -507,7 +508,7 @@ sub plugin {
             }
         );
 
-        my @itemtypes = C4::ItemType->all;
+        my @itemtypes = Koha::ItemTypes->search;
 
         $template->param(    #classlist => $classlist,
             itypeloop    => \@itemtypes,

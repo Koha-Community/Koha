@@ -15,11 +15,12 @@ use Data::Dumper;
 use Test::More tests => 23;
 
 use C4::Branch;
-use C4::ItemType;
 use C4::Members;
 use Koha::Database;
 
 use t::lib::TestBuilder;
+
+use Koha::ItemTypes;
 
 BEGIN {
     use FindBin;
@@ -60,10 +61,8 @@ my $borrower_branchcode = $borrower->{branchcode};
 my @branchcodes = ( $library1->{branchcode}, $library2->{branchcode}, $library3->{branchcode} );
 my @other_branches = ( $library2->{branchcode}, $library3->{branchcode} );
 my $least_cost_branch_code = pop @other_branches;
-my @item_types = C4::ItemType->all;
-my @for_loan = grep { $_->{notforloan} == 0 } @item_types
-  or BAIL_OUT("No adequate itemtype");
-my $itemtype = $for_loan[0]->{itemtype};
+my $itemtype = Koha::ItemTypes->search({ notforloan => 1 })->next;
+$itemtype or BAIL_OUT("No adequate itemtype"); #FIXME Should be $itemtype = $itemtype->itemtype
 
 #Set up the stage
 # Sysprefs and cost matrix
@@ -179,7 +178,7 @@ $dbh->do("DELETE FROM default_circ_rules");
 
 C4::Context->set_preference('UseTransportCostMatrix', 0);
 
-( $itemtype ) = @{ $dbh->selectrow_arrayref("SELECT itemtype FROM itemtypes LIMIT 1") };
+$itemtype = Koha::ItemTypes->search->next->itemtype;
 
 $library1 = $builder->build({
     source => 'Branch',
@@ -309,7 +308,7 @@ is( @$holds_queue, 3, "Holds queue filling correct number for holds for default 
 #warn "HOLDS QUEUE: " . Data::Dumper::Dumper( $holds_queue );
 
 # Bug 14297
-$itemtype = $item_types[0]->{itemtype};
+$itemtype = Koha::ItemTypes->search->next->itemtype;
 $borrowernumber = $borrower3->{borrowernumber};
 my $library_A = $library1->{branchcode};
 my $library_B = $library2->{branchcode};
@@ -366,7 +365,7 @@ is( @$holds_queue, 1, "Bug 14297 - Holds Queue building ignoring holds where pic
 # End Bug 14297
 
 # Bug 15062
-$itemtype = $item_types[0]->{itemtype};
+$itemtype = Koha::ItemTypes->search->next->itemtype;
 $borrowernumber = $borrower2->{borrowernumber};
 $library_A = $library1->{branchcode};
 $library_B = $library2->{branchcode};
