@@ -388,6 +388,8 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('singleBranchMode','0',NULL,'Operate in Single-branch mode, hide branch selection in the OPAC','YesNo'),
 ('SlipCSS','',NULL,'Slips CSS url.','free'),
 ('SMSSendDriver','','','Sets which SMS::Send driver is used to send SMS messages.','free'),
+('SMSSendPassword', '', '', 'Password used to send SMS messages', 'free'),
+('SMSSendUsername', '', '', 'Username/Login used to send SMS messages', 'free'),
 ('SocialNetworks','0','','Enable/Disable social networks links in opac detail pages','YesNo'),
 ('soundon','0','','Enable circulation sounds during checkin and checkout in the staff interface.  Not supported by all web browsers yet.','YesNo'),
 ('SpecifyDueDate','1','','Define whether to display \"Specify Due Date\" form in Circulation','YesNo'),
