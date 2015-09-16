@@ -83,7 +83,7 @@ This script takes the following parameters :
     -c --confirm            Confirms you want to really run this script ( otherwise print help )
     -t --test               Runs the script in test mode ( no changes will be made to your database )
     -f --file               CSV file of lexile scores ( acquired from Lexile.com )
-    -v --verbose            Print data on found matches
+    -v --verbose            Print data on found matches. Use -v -v for more data, and -v -v -v will give the most data.
     --field                 Defines the field number for the Lexile data ( default: 521 )
     --target-audience-note  Defines the subfield for the lexile score ( default: a )
     --source                Defines the "Source" subfield ( default: b )
@@ -142,7 +142,7 @@ while ( my $row = $csv->getline_hr($fh) ) {
     my @likes = map { { isbn => { like => '%' . $_ . '%' } } } @isbns;
 
     my @biblionumbers =
-      $schema->resultset('Biblioitem')->search( -or => \@likes )
+      $schema->resultset('Biblioitem')->search( { -or => \@likes } )
       ->get_column('biblionumber')->all();
 
     say "Found matching records! Biblionumbers: " . join( " ,", @biblionumbers )
