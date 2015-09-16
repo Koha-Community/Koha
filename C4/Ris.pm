@@ -99,7 +99,7 @@ sub marc2ris {
     open my $oldout, ">&STDOUT";
     my $outvar;
     close STDOUT;
-    open STDOUT,'>', \$outvar;
+    open STDOUT,'>:encoding(utf8)', \$outvar;
 
 
 	## First we should check the character encoding. This may be
