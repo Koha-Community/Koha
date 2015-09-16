@@ -122,7 +122,7 @@ sub cgi {
 
 sub count {
     my ( $self ) = @_;
-    return scalar grep { !exists $self->{files}->{$_}->{errcode} } keys $self->{files};
+    return scalar grep { !exists $self->{files}->{$_}->{errcode} } keys %{ $self->{files} };
 }
 
 =head2 result
@@ -135,7 +135,7 @@ sub result {
     my ( $self ) = @_;
     my @a = map { $self->{files}->{$_}->{id} }
         grep { !exists $self->{files}->{$_}->{errcode} }
-        keys $self->{files};
+        keys %{ $self->{files} };
     return @a? ( join ',', @a ): undef;
 }
 
@@ -149,7 +149,7 @@ sub result {
 sub err {
     my ( $self ) = @_;
     my $err;
-    foreach my $f ( keys $self->{files} ) {
+    foreach my $f ( keys %{ $self->{files} } ) {
         my $e = $self->{files}->{$f}->{errcode};
         $err->{ $f } = $e if $e;
     }
@@ -328,7 +328,7 @@ sub _hook {
 sub _done {
     my ( $self ) = @_;
     $self->{done} = 1;
-    foreach my $f ( keys $self->{files} ) {
+    foreach my $f ( keys %{ $self->{files} } ) {
         my $fh = $self->_fh($f);
         $self->_register( $f, $fh? tell( $fh ): undef )
             if !$self->{files}->{$f}->{errcode};
