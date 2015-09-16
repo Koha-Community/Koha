@@ -10,6 +10,8 @@
             </form>
         </div>
 
+        [% INCLUDE 'patron-search-box.inc' %]
+
         [% IF ( CAN_user_circulate ) %]
         <div id="checkin_search" class="residentsearch">
             <p class="tip">Scan a barcode to check in:</p>
@@ -28,7 +30,6 @@
             </form>
         </div>
 
-        [% INCLUDE 'patron-search-box.inc' %]
         <ul>
             <li><a onclick="keep_text(0)" href="#addbooks_search">Cataloging search</a></li>
             [% IF ( CAN_user_circulate ) %]<li><a onclick="keep_text(1)" href="#circ_search">Check out</a></li>[% END %]

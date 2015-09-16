@@ -114,14 +114,6 @@
 </div>
     [% INCLUDE 'patron-search-box.inc' %]
 
-    [% IF ( CAN_user_catalogue ) %]
-    <div id="catalog_search" class="residentsearch">
-    <p class="tip">Enter search keywords:</p>
-        <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
-             <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="head-searchbox form-text" />
-                <input type="submit" name="op" id="opac-submit" value="Submit" class="submit" />
-        </form>
-    </div>[% END %]
     [% IF ( CAN_user_circulate ) %]
     <div id="checkin_search" class="residentsearch">
     <p class="tip">Scan a barcode to check in:</p>
@@ -131,6 +123,16 @@
     </form>
     </div>
     [% END %]
+
+    [% IF ( CAN_user_catalogue ) %]
+    <div id="catalog_search" class="residentsearch">
+    <p class="tip">Enter search keywords:</p>
+        <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
+             <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="head-searchbox form-text" />
+                <input type="submit" name="op" id="opac-submit" value="Submit" class="submit" />
+        </form>
+    </div>[% END %]
+
     <ul>
         <li><a onclick="keep_text(0)" href="#patron_search">Search patrons</a></li>
         [% IF ( CAN_user_circulate ) %]<li><a onclick="keep_text(1)" href="#circ_search">Check out</a></li>[% END %]
