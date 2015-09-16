@@ -35,7 +35,6 @@ use Koha::DateUtils qw( dt_from_string );
 my $input           = new CGI;
 my $op              = $input->param('op');
 my $suggestion      = $input->Vars;
-delete $suggestion->{negcap};
 my $negcaptcha      = $input->param('negcap');
 my $suggested_by_anyone = $input->param('suggested_by_anyone') || 0;
 
@@ -43,6 +42,10 @@ my $suggested_by_anyone = $input->param('suggested_by_anyone') || 0;
 if ($negcaptcha ) {
     print $input->redirect("/cgi-bin/koha/opac-suggestions.pl");
     exit;
+} else {
+    # don't pass 'negcap' column to DB, else DBI::Class will error
+    # DBIx::Class::Row::store_column(): No such column 'negcap' on Koha::Schema::Result::Suggestion at  Koha/C4/Suggestions.pm
+    delete $suggestion->{negcap};
 }
 
 #If suggestions are turned off we redirect to 404 error. This will also redirect guest suggestions
