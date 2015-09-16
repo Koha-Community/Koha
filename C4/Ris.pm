@@ -106,7 +106,7 @@ sub marc2ris {
     open my $oldout, ">&STDOUT";
     my $outvar;
     close STDOUT;
-    open STDOUT,'>', \$outvar;
+    open STDOUT,'>:encoding(utf8)', \$outvar;
 
     ## First we should check the character encoding. This may be
     ## MARC-8 or UTF-8. The former is indicated by a blank, the latter
