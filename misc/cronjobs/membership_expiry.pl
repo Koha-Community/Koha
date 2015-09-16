@@ -19,7 +19,7 @@
 
 =head1 NAME
 
-membership_expiry.pl - cron script to put membership expiry reminder into message queues
+membership_expiry.pl - cron script to put membership expiry reminders into the message queue
 
 =head1 SYNOPSIS
 
@@ -34,34 +34,6 @@ or, in crontab:
 This script sends membership expiry reminder notices to patrons.
 It queues them in the message queue, which is processed by
 the process_message_queue.pl cronjob.
-
-=cut
-
-
-use Modern::Perl;
-use Getopt::Long;
-use Pod::Usage;
-use Data::Dumper;
-BEGIN {
-    # find Koha's Perl modules
-    # test carefully before changing this
-    use FindBin;
-    eval { require "$FindBin::Bin/../kohalib.pl" };
-}
-
-use C4::Context;
-use C4::Letters;
-use C4::Dates qw/format_date/;
-use C4::Log;
-
-
-=head1 NAME
-
-membership_expiry.pl - prepare messages to be sent to membership expiry reminder notices to patrons.
-
-=head1 SYNOPSIS
-
-membership_expiry.pl [-c]
 
 =head1 OPTIONS
 
@@ -91,19 +63,11 @@ statement otherwise.
 
 =back
 
-=head1 DESCRIPTION
+=head1 CONFIGURATION
 
-This script is designed to alert send membership expire notices
+The content of the messages is configured in Tools -> Notices and slips. Use the MEMBERSHIP_EXPIRY notice.
 
-=head2 Configuration
-
-This script pays attention to send the membership expire notices
-The content of the messages is configured in Tools -> Notices and slips. Use the MEMBERSHIP_EXPIRY template
-
-=head2 Outgoing emails
-
-Typically, messages are prepared for each patron when the memberships are going to expire
-
+Typically, messages are prepared for each patron when the memberships are going to expire.
 
 These emails are staged in the outgoing message queue, as are messages
 produced by other features of Koha. This message queue must be
@@ -114,11 +78,9 @@ In the event that the C<-n> flag is passed to this program, no emails
 are sent. Instead, messages are sent on standard output from this
 program.
 
-=head2 Templates
-
-Templates can contain variables enclosed in double angle brackets like
+Notices can contain variables enclosed in double angle brackets like
 E<lt>E<lt>thisE<gt>E<gt>. Those variables will be replaced with values
-specific to the members there membership expiry date is coming.
+specific to the soon expiring members.
 Available variables are:
 
 =over
@@ -133,84 +95,80 @@ any field from the branches table
 
 =back
 
-=head1 SEE ALSO
-
-The F<misc/cronjobs/membership_expiry.pl> program allows you to send
-messages to patrons when the membership are going to expires.
 =cut
 
-# These are defaults for command line options.
+use Modern::Perl;
+use Getopt::Long;
+use Pod::Usage;
+use Data::Dumper;
+BEGIN {
+    # find Koha's Perl modules
+    # test carefully before changing this
+    use FindBin;
+    eval { require "$FindBin::Bin/../kohalib.pl" };
+}
 
+use C4::Context;
+use C4::Letters;
+use C4::Log;
+
+# These are defaults for command line options.
 my $confirm;                              # -c: Confirm that the user has read and configured this script.
 my $nomail;                               # -n: No mail. Will not send any emails.
 my $verbose= 0;                           # -v: verbose
-
 my $help    = 0;
 my $man     = 0;
 
 GetOptions(
-            'help|?'         => \$help,
-            'man'            => \$man,
-            'c'              => \$confirm,
-            'n'              => \$nomail,
-            'v'              => \$verbose,
-       ) or pod2usage(2);
-pod2usage(1) if $help;
-pod2usage( -verbose => 2 ) if $man;;
+    'help|?'         => \$help,
+    'man'            => \$man,
+    'c'              => \$confirm,
+    'n'              => \$nomail,
+    'v'              => \$verbose,
+) or pod2usage(2);
 
-my $usage = << 'ENDUSAGE';
-This script prepares for membership expiry reminders to be sent to
-patrons. It queues them in the message queue, which is processed by
-the process_message_queue.pl cronjob.
-See the comments in the script for directions on changing the script.
-This script has the following parameters :
-    -c Confirm and remove this help & warning
-    -n send No mail. Instead, all mail messages are printed on screen. Useful for testing purposes.
-    -v verbose
-ENDUSAGE
-
-unless ($confirm) {
-    print $usage;
-    print "Do you wish to continue? (y/n)";
-    chomp($_ = <STDIN>);
-    exit unless (/^y/i);
-}
+pod2usage( -verbose => 2 ) if $man;
+pod2usage(1) if $help || !$confirm;
 
 cronlogaction();
 
 my $admin_adress = C4::Context->preference('KohaAdminEmailAddress');
 warn 'getting upcoming membership expires' if $verbose;
 my $upcoming_mem_expires = C4::Members::GetUpcomingMembershipExpires();
-warn 'found ' . scalar( @$upcoming_mem_expires ) . ' issues' if $verbose;
+warn 'found ' . scalar( @$upcoming_mem_expires ) . ' soon expiring members'
+    if $verbose;
 
-
-UPCOMINGMEMEXP: foreach my $recent ( @$upcoming_mem_expires ) {
+# main loop
+foreach my $recent ( @$upcoming_mem_expires ) {
     my $from_address = $recent->{'branchemail'} || $admin_adress;
     my $letter_type = 'MEMBERSHIP_EXPIRY';
-    my $letter = C4::Letters::getletter( 'members', $letter_type, $recent->{'branchcode'} );
-    die "no letter of type '$letter_type' found. Please see sample_notices.sql" unless $letter;
+    my $letter = C4::Letters::getletter( 'members', $letter_type,
+        $recent->{'branchcode'} );
+    die "no letter of type '$letter_type' found. Please see sample_notices.sql"
+        unless $letter;
 
-    $letter = parse_letter({  letter    => $letter,
-                              borrowernumber => $recent->{'borrowernumber'},
-                              firstname => $recent->{'firstname'},
-                              categorycode  => $recent->{'categorycode'},
-                              branchcode => $recent->{'branchcode'},
-                          });
+    $letter = parse_letter({
+        letter         => $letter,
+        borrowernumber => $recent->{'borrowernumber'},
+        firstname      => $recent->{'firstname'},
+        categorycode   => $recent->{'categorycode'},
+        branchcode     => $recent->{'branchcode'},
+    });
     if ($letter) {
         if ($nomail) {
             print $letter->{'content'};
         } else {
-             C4::Letters::EnqueueLetter( {  letter               => $letter,
-                                            borrowernumber       =>  $recent->{'borrowernumber'},
-                                            from_address           => $from_address,
-                                            message_transport_type => 'email',
-                                        } );
-         }
-       }
+            C4::Letters::EnqueueLetter({
+                letter                 => $letter,
+                borrowernumber         =>  $recent->{'borrowernumber'},
+                from_address           => $from_address,
+                message_transport_type => 'email',
+            });
+        }
     }
+}
 
-
-=head1 METHODS
+=head1 SUBROUTINES
 
 =head2 parse_letter
 
@@ -222,12 +180,11 @@ sub parse_letter {
         return unless exists $params->{$required};
     }
     my $letter =  C4::Letters::GetPreparedLetter (
-            module => 'members',
-            letter_code => 'MEMBERSHIP_EXPIRY',
-            tables => {'borrowers', $params->{'borrowernumber'}, 'branches', $params->{'branchcode'}},
+        module => 'members',
+        letter_code => 'MEMBERSHIP_EXPIRY',
+        tables => {
+            'borrowers', $params->{'borrowernumber'},
+            'branches', $params->{'branchcode'}
+        },
     );
 }
-
-1;
-
-__END__
