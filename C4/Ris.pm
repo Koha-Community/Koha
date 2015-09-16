@@ -94,8 +94,6 @@ C<$record> - a MARC::Record object
 
 =cut
 
-my $intype;
-
 sub marc2ris {
     my ($record) = @_;
     my $output;
