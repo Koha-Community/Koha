@@ -211,10 +211,7 @@ sub delete {
     return @res;
 }
 
-sub DESTROY {
-}
-
-# **************  HELPER ROUTINES / CLASS METHODS ******************************
+=head1 CLASS METHODS
 
 =head2 getCategories
 
@@ -243,7 +240,9 @@ sub httpheaders {
     );
 }
 
-# **************  INTERNAL ROUTINES ********************************************
+=head1 INTERNAL ROUTINES
+
+=cut
 
 sub _init {
     my ( $self, $params ) = @_;
@@ -310,9 +309,11 @@ sub _full_fname {
     my ( $self, $rec ) = @_;
     my $p;
     if( ref $rec ) {
-        $p= $rec->{permanent}? $self->{rootdir}: $self->{tmpdir};
-        $p.= '/';
-        $p.= $rec->{dir}. '/'. $rec->{hashvalue}. '_'. $rec->{filename};
+        $p = File::Spec->catfile(
+            $rec->{permanent}? $self->{rootdir}: $self->{tmpdir},
+            $rec->{dir},
+            $rec->{hashvalue}. '_'. $rec->{filename}
+        );
     }
     return $p;
 }
@@ -359,7 +360,7 @@ sub _register {
 sub _lookup {
     my ( $self, $params ) = @_;
     my $dbh = C4::Context->dbh;
-    my $sql = qq|
+    my $sql = q|
 SELECT id,hashvalue,filename,dir,filesize,categorycode,public,permanent
 FROM uploaded_files
     |;

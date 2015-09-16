@@ -81,7 +81,8 @@ sub send_reply {    # response will be sent back as JSON
    });
 }
 
-sub upload_pars {
+sub upload_pars { # this sub parses QUERY_STRING in order to build the
+                  # parameter hash for Koha::Upload
     my ( $qstr ) = @_;
     $qstr = Encode::decode_utf8( uri_unescape( $qstr ) );
     # category could include a utf8 character
