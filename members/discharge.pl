@@ -100,6 +100,7 @@ if ( $input->param('borrowernumber') ) {
 
     # Already generated discharges
     my $validated_discharges = Koha::Borrower::Discharge::get_validated({
+        borrowernumber => $borrowernumber,
         branchcode => $data->{'branchcode'},
     });
 
