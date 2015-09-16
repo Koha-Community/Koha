@@ -1,3 +1,4 @@
+[% USE Koha %]
 <!-- snippet for form to set borrower and patron category messaging preferences -->
 <script type="text/javascript">//<![CDATA[
 	$(document).ready(function(){
@@ -22,8 +23,8 @@
   <table>
     <tr><th></th>
         <th>Days in advance</th>
-        [% IF ( SMSSendDriver ) %]<th>SMS</th>[% END %]
-        [% IF ( TalkingTechItivaPhone ) %]<th>Phone</th>[% END %]
+        [% IF Koha.Preference('SMSSendDriver') %]<th>SMS</th>[% END %]
+        [% IF Koha.Preference('TalkingTechItivaPhoneNotification') %]<th>Phone</th>[% END %]
         <th>Email</th>
         <th>Digests only <i id="info_digests" data-toggle="tooltip" title="You can ask for a digest to reduce the number of messages. Messages will be saved and sent as a single message." data-placement="right" class="icon fa fa-info-sign"></i></th>
         <!-- <th>RSS</th> -->
@@ -56,7 +57,7 @@
       <td>-</td>
       [% END %]
 
-      [% IF ( SMSSendDriver ) %]<td>
+      [% IF Koha.Preference('SMSSendDriver') %]<td>
           [% IF ( messaging_form_inactive ) %]
               [% IF ( messaging_preference.transports_sms ) %]
                  <input type="checkbox"
@@ -84,7 +85,7 @@
           [% END %]
       </td>[% END %]
 
-      [% IF ( TalkingTechItivaPhone ) %]<td>
+      [% IF Koha.Preference('TalkingTechItivaPhoneNotification') %]<td>
           [% IF ( messaging_form_inactive ) %]
               [% IF ( messaging_preference.transports_phone ) %]
                  <input type="checkbox"
