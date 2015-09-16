@@ -71,9 +71,19 @@
 		<td>
             [% IF ( QUEUED_MESSAGE.status == 'sent' ) %]sent
             [% ELSIF ( QUEUED_MESSAGE.status == 'pending' ) %]pending
-            [% ELSIF ( QUEUED_MESSAGE.status == 'failed' ) %]failed <div class="notice"><a href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber %]&amp;op=resend_notice&amp;message_id=[% QUEUED_MESSAGE.message_id %]" title="Attempt to resend the notice">Resend</a></div>
+            [% ELSIF ( QUEUED_MESSAGE.status == 'failed' ) %]failed
             [% ELSIF ( QUEUED_MESSAGE.status == 'deleted' ) %]deleted
             [% ELSE %][% QUEUED_MESSAGE.status %][% END %]
+            [% IF ( QUEUED_MESSAGE.status != 'pending' ) %]
+            <div class="notice">
+                <form action="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber %]" method="POST">
+                    <input type="hidden" name="op" value="resend_notice" />
+                    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                    <input type="hidden" name="message_id" value="[% QUEUED_MESSAGE.message_id %]" />
+                    <a href="#" onclick="$(this).closest('form').submit();return false;" title="Attempt to resend the notice">Resend</a>
+                </form>
+            </div>
+            [% END %]
         </td>
         <td><span title="[% QUEUED_MESSAGE.time_queued %]">[% QUEUED_MESSAGE.time_queued | $KohaDates with_hours => 1 %]</span></td>
 	    </tr>

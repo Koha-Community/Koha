@@ -56,6 +56,8 @@ if ( $op eq 'resend_notice' ) {
     my $message = C4::Letters::GetMessage( $message_id );
     if ( $message->{borrowernumber} = $borrowernumber ) {
         C4::Letters::ResendMessage( $message_id );
+        # redirect to self to avoid form submission on refresh
+        print $input->redirect("/cgi-bin/koha/members/notices.pl?borrowernumber=$borrowernumber");
     }
 }
 

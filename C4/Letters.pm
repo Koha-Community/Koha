@@ -1130,7 +1130,7 @@ sub ResendMessage {
 
     my $message = GetMessage( $message_id );
     return unless $message;
-    if ( $message->{status} eq 'failed' ) {
+    if ( $message->{status} ne 'pending' ) {
         return ((C4::Letters::_set_message_status( {
                     message_id => $message_id,
                     status => 'pending',
