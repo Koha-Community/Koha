@@ -53,8 +53,9 @@ is(Koha::Borrower::Discharge::generate_as_pdf,undef,"Confirm failure when lackin
 Koha::Borrower::Discharge::discharge({ borrowernumber => $borrowernumber });
 is( Koha::Borrower::Discharge::is_discharged({ borrowernumber => $borrowernumber }), 1, 'The patron has been discharged' );
 is(Koha::Borrower::Debarments::IsDebarred($borrowernumber), '9999-12-31', 'The patron has been debarred after discharge');
-Koha::Borrower::Debarments::DelDebarment($borrowernumber);
-is( Koha::Borrower::Discharge::is_discharged({ borrowernumber => $borrowernumber }), 1, 'The patron is not discharged after the restriction has been lifted' );
+Koha::Borrower::Debarments::DelUniqueDebarment({'borrowernumber' => $borrowernumber, 'type' => 'DISCHARGE'});
+ok(! Koha::Borrower::Debarments::IsDebarred($borrowernumber), 'The debarment has been lifted');
+ok(! Koha::Borrower::Discharge::is_discharged({ borrowernumber => $borrowernumber }), 'The patron is not discharged after the restriction has been lifted' );
 
 # Check if PDF::FromHTML is installed.
 my $check = eval { require PDF::FromHTML; };
