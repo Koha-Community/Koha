@@ -337,51 +337,45 @@
 
         <!-- Publisher info and RDA related info from tags 260, 264 -->
         <xsl:choose>
-        <xsl:when test="marc:datafield[@tag=260]">
-        <span class="results_summary publisher"><span class="label">Publisher: </span>
-            <xsl:for-each select="marc:datafield[@tag=260]">
-                <span property="publisher" typeof="Organization">
-                <xsl:if test="marc:subfield[@code='a']">
-                    <span property="location">
-                    <xsl:call-template name="subfieldSelect">
-                        <xsl:with-param name="codes">a</xsl:with-param>
-                    </xsl:call-template>
-                    </span>
-                </xsl:if>
-                <xsl:text> </xsl:text>
-                <xsl:if test="marc:subfield[@code='b']">
-                <span property="name"><a href="/cgi-bin/koha/opac-search.pl?q=pb:{marc:subfield[@code='b']}">
-                    <xsl:call-template name="subfieldSelect">
-                        <xsl:with-param name="codes">b</xsl:with-param>
-                    </xsl:call-template>
-                </a></span>
-                </xsl:if>
-                </span>
-                <xsl:text> </xsl:text>
-                <xsl:if test="marc:subfield[@code='c' or @code='g']">
-                <span property="datePublished">
-                    <xsl:call-template name="chopPunctuation">
-                      <xsl:with-param name="chopString">
-                        <xsl:call-template name="subfieldSelect">
-                            <xsl:with-param name="codes">cg</xsl:with-param>
+            <xsl:when test="marc:datafield[@tag=264]">
+                <xsl:call-template name="showRDAtag264"/>
+            </xsl:when>
+            <xsl:when test="marc:datafield[@tag=260]">
+             <span class="results_summary publisher"><span class="label">Publisher: </span>
+                 <xsl:for-each select="marc:datafield[@tag=260]">
+                     <span property="publisher" typeof="Organization">
+                     <xsl:if test="marc:subfield[@code='a']">
+                         <span property="location">
+                         <xsl:call-template name="subfieldSelect">
+                             <xsl:with-param name="codes">a</xsl:with-param>
+                         </xsl:call-template>
+                         </span>
+                     </xsl:if>
+                     <xsl:text> </xsl:text>
+                     <xsl:if test="marc:subfield[@code='b']">
+                     <span property="name"><a href="/cgi-bin/koha/opac-search.pl?q=pb:{marc:subfield[@code='b']}">
+                         <xsl:call-template name="subfieldSelect">
+                             <xsl:with-param name="codes">b</xsl:with-param>
+                         </xsl:call-template>
+                     </a></span>
+                     </xsl:if>
+                     </span>
+                     <xsl:text> </xsl:text>
+                     <xsl:if test="marc:subfield[@code='c' or @code='g']">
+                     <span property="datePublished">
+                         <xsl:call-template name="chopPunctuation">
+                           <xsl:with-param name="chopString">
+                             <xsl:call-template name="subfieldSelect">
+                                 <xsl:with-param name="codes">cg</xsl:with-param>
+                             </xsl:call-template>
+                            </xsl:with-param>
                         </xsl:call-template>
-                       </xsl:with-param>
-                   </xsl:call-template>
-                </span>
-                </xsl:if>
-                <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
-            </xsl:for-each>
-            <xsl:if test="marc:datafield[@tag=264]">
-                <xsl:text>; </xsl:text>
-                <xsl:call-template name="showRDAtag264"/>
-            </xsl:if>
-        </span>
-        </xsl:when>
-        <xsl:when test="marc:datafield[@tag=264]">
-            <span class="results_summary">
-                <xsl:call-template name="showRDAtag264"/>
-            </span>
-        </xsl:when>
+                     </span>
+                     </xsl:if>
+                     <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+                 </xsl:for-each>
+             </span>
+            </xsl:when>
         </xsl:choose>
 
         <!-- Edition Statement: Alternate Graphic Representation (MARC 880) -->
