@@ -2517,6 +2517,7 @@ sub TransformHtmlToMarc {
     my $record = MARC::Record->new();
     my $i      = 0;
     my @fields;
+    my ( $biblionumbertagfield, $biblionumbertagsubfield ) = &GetMarcFromKohaField( "biblio.biblionumber", '' );
 #FIXME This code assumes that the CGI params will be in the same order as the fields in the template; this is no absolute guarantee!
     while ( $params[$i] ) {    # browse all CGI params
         my $param    = $params[$i];
@@ -2524,7 +2525,6 @@ sub TransformHtmlToMarc {
 
         # if we are on biblionumber, store it in the MARC::Record (it may not be in the edited fields)
         if ( $param eq 'biblionumber' ) {
-            my ( $biblionumbertagfield, $biblionumbertagsubfield ) = &GetMarcFromKohaField( "biblio.biblionumber", '' );
             if ( $biblionumbertagfield < 10 ) {
                 $newfield = MARC::Field->new( $biblionumbertagfield, $cgi->param($param), );
             } else {
@@ -2541,6 +2541,7 @@ sub TransformHtmlToMarc {
 
             if ( $tag < 10 ) {                              # no code for theses fields
                                                             # in MARC editor, 000 contains the leader.
+                next if $tag == $biblionumbertagfield;
                 if ( $tag eq '000' ) {
                     # Force a fake leader even if not provided to avoid crashing
                     # during decoding MARC record containing UTF-8 characters
@@ -2560,6 +2561,7 @@ sub TransformHtmlToMarc {
                 # browse subfields for this tag (reason for _code_ match)
                 while(defined $params[$j] && $params[$j] =~ /_code_/) {
                     last unless defined $params[$j+1];
+                    $j += 2 and next if $tag == $biblionumbertagfield and $cgi->param($params[$j]) eq $biblionumbertagsubfield;
                     #if next param ne subfield, then it was probably empty
                     #try next param by incrementing j
                     if($params[$j+1]!~/_subfield_/) {$j++; next; }
