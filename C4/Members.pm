@@ -1353,25 +1353,48 @@ sub GetExpiryDate {
 
 =head2 GetUpcomingMembershipExpires
 
-  my $upcoming_mem_expires = GetUpcomingMembershipExpires();
+    my $expires = GetUpcomingMembershipExpires({
+        branch => $branch, before => $before, after => $after,
+    });
+
+    $branch is an optional branch code.
+    $before/$after is an optional number of days before/after the date that
+    is set by the preference MembershipExpiryDaysNotice.
+    If the pref would be 14, before 2 and after 3, you will get all expires
+    from 12 to 17 days.
 
 =cut
 
 sub GetUpcomingMembershipExpires {
+    my ( $params ) = @_;
+    my $before = $params->{before} || 0;
+    my $after  = $params->{after} || 0;
+    my $branch = $params->{branch};
+
     my $dbh = C4::Context->dbh;
     my $days = C4::Context->preference("MembershipExpiryDaysNotice") || 0;
-    my $dateexpiry = output_pref({ dt => (dt_from_string()->add( days => $days)), dateformat => 'iso', dateonly => 1 });
+    my $date1 = dt_from_string->add( days => $days - $before );
+    my $date2 = dt_from_string->add( days => $days + $after );
+    $date1= output_pref({ dt => $date1, dateformat => 'iso', dateonly => 1 });
+    $date2= output_pref({ dt => $date2, dateformat => 'iso', dateonly => 1 });
 
-    my $query = "
+    my $query = q|
         SELECT borrowers.*, categories.description,
         branches.branchname, branches.branchemail FROM borrowers
-        LEFT JOIN branches on borrowers.branchcode = branches.branchcode
-        LEFT JOIN categories on borrowers.categorycode = categories.categorycode
-        WHERE dateexpiry = ?;
-    ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($dateexpiry);
-    my $results = $sth->fetchall_arrayref({});
+        LEFT JOIN branches USING (branchcode)
+        LEFT JOIN categories USING (categorycode)
+    |;
+    if( $branch ) {
+        $query.= 'WHERE branchcode=? AND dateexpiry BETWEEN ? AND ?';
+    } else {
+        $query.= 'WHERE dateexpiry BETWEEN ? AND ?';
+    }
+
+    my $sth = $dbh->prepare( $query );
+    my @pars = $branch? ( $branch ): ();
+    push @pars, $date1, $date2;
+    $sth->execute( @pars );
+    my $results = $sth->fetchall_arrayref( {} );
     return $results;
 }
 

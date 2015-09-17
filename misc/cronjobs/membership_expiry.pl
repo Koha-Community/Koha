@@ -61,6 +61,20 @@ the patrons are printed to standard out.
 Confirm flag: Add this option. The script will only print a usage
 statement otherwise.
 
+=item B<-branch>
+
+Optional branchcode to restrict the cronjob to that branch.
+
+=item B<-before>
+
+Optional parameter to extend the selection with a number of days BEFORE
+the date set by the preference.
+
+=item B<-after>
+
+Optional parameter to extend the selection with a number of days AFTER
+the date set by the preference.
+
 =back
 
 =head1 CONFIGURATION
@@ -115,9 +129,12 @@ use C4::Log;
 # These are defaults for command line options.
 my $confirm;                              # -c: Confirm that the user has read and configured this script.
 my $nomail;                               # -n: No mail. Will not send any emails.
-my $verbose= 0;                           # -v: verbose
+my $verbose = 0;                           # -v: verbose
 my $help    = 0;
 my $man     = 0;
+my $before  = 0;
+my $after   = 0;
+my $branch;
 
 GetOptions(
     'help|?'         => \$help,
@@ -125,6 +142,9 @@ GetOptions(
     'c'              => \$confirm,
     'n'              => \$nomail,
     'v'              => \$verbose,
+    'branch:s'       => \$branch,
+    'before:i'       => \$before,
+    'after:i'        => \$after,
 ) or pod2usage(2);
 
 pod2usage( -verbose => 2 ) if $man;
@@ -142,7 +162,7 @@ if( !$expdays ) {
 
 my $admin_adress = C4::Context->preference('KohaAdminEmailAddress');
 warn 'getting upcoming membership expires' if $verbose;
-my $upcoming_mem_expires = C4::Members::GetUpcomingMembershipExpires();
+my $upcoming_mem_expires = C4::Members::GetUpcomingMembershipExpires({ branch => $branch, before => $before, after => $after });
 warn 'found ' . scalar( @$upcoming_mem_expires ) . ' soon expiring members'
     if $verbose;
 
@@ -164,7 +184,7 @@ foreach my $recent ( @$upcoming_mem_expires ) {
     });
     if ($letter) {
         if ($nomail) {
-            print $letter->{'content'};
+            print $letter->{'content'}."\n";
         } else {
             C4::Letters::EnqueueLetter({
                 letter                 => $letter,
