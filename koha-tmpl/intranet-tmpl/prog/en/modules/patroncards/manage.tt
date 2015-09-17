@@ -24,7 +24,7 @@
 
                 var msg;
                 if (element_ids.length > 1) {
-                    msg = _("Are you sure you want to delete %s batches?").format(element_ids.length);
+                    msg = _("Are you sure you want to delete %s items?").format(element_ids.length, element_ids.length);
                 } else if (element_ids.length == 1) {
                     msg = _("Are you sure you want to delete %s %s?").format("[% PROCESS translate_card_element element=card_element %]", element_ids[0]);
                 }
@@ -81,8 +81,8 @@
                 return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?" + getstr, 700, 800);
             };
             function selected_layouts(op) {
-                var selected = new Array;
                 if (document.layouts.action.length) {
+                    var selected = new Array();
                     for (i=0;i<document.layouts.action.length;i++){
                         if (document.layouts.action[i].checked){
                             selected.push(i);
@@ -115,7 +115,7 @@
                 }
                 else {
                     if (document.layouts.action.checked){
-                        return(document.layouts.action.value);
+                        return([document.layouts.action.value]);
                     }
                 };
                 alert(_("Please select a %s.").format("[% PROCESS translate_card_element element=card_element %]"));
