@@ -22,16 +22,14 @@
             function DeleteConfirm() {
                 var element_ids = selected_layouts("delete");
 
-                var answer;
+                var msg;
                 if (element_ids.length > 1) {
-                    var msg = _("Are you sure you want to delete %s batches?").format(element_ids.length);
-                    answer = confirm(msg);
+                    msg = _("Are you sure you want to delete %s batches?").format(element_ids.length);
                 } else if (element_ids.length == 1) {
-                    var msg = _("Are you sure you want to delete %s %s?").format("[% PROCESS translate_card_element element=card_element %]", element_ids[0]);
-                    answer = confirm(msg);
+                    msg = _("Are you sure you want to delete %s %s?").format("[% PROCESS translate_card_element element=card_element %]", element_ids[0]);
                 }
 
-                if (answer) {
+                if (msg && confirm(msg)) {
                     var elements = "";
                     for (var i = 0; i < element_ids.length; i++) {
                         if (element_ids[i] > -1) {
@@ -105,11 +103,10 @@
                     else if (selected.length < 1) {
                         if (op == "edit") {
                             alert(_("Please select one %s to %s.").format("[% PROCESS translate_card_element element=card_element %]", op));
-                            return (-1);
                         } else {
                             alert(_("Please select at least one %s to %s.").format("[% PROCESS translate_card_element element=card_element %]", op));
-                            return (-1);
                         }
+                        return (-1);
                     }
                     else {
                         alert(_("Please select only one %s to %s.").format("[% PROCESS translate_card_element element=card_element %]", op));
