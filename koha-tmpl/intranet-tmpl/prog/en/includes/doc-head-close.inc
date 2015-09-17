@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE AudioAlerts %]
 [% USE String %]
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% interface %]/[% theme %]/img/favicon.ico[% END %]" type="image/x-icon" />
@@ -68,7 +69,7 @@
     <script type="text/javascript">
         //<![CDATA[
             var AUDIO_ALERT_PATH = '[% interface %]/[% theme %]/sound/';
-            var AUDIO_ALERTS = JSON.parse( '[% Koha.AudioAlerts | replace( "'", "\\'" ) %]' );
+            var AUDIO_ALERTS = JSON.parse( '[% AudioAlerts.AudioAlerts | replace( "'", "\\'" ) %]' );
         //]]>
 
         $( document ).ready(function() {

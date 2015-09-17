@@ -18,8 +18,6 @@ package Koha::Template::Plugin::Koha;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Encode qw( encode );
-use JSON;
 
 use base qw( Template::Plugin );
 
@@ -57,12 +55,6 @@ sub Version {
         maintenance => $major . "." . $minor . "." . $maintenance,
         development => ( $development ne '000' ) ? $development : undef,
     };
-}
-
-sub AudioAlerts {
-    my $dbh = C4::Context->dbh;
-    my $audio_alerts = $dbh->selectall_arrayref( 'SELECT * FROM audio_alerts ORDER BY precedence', { Slice => {} } );
-    return encode_json($audio_alerts);
 }
 
 1;
