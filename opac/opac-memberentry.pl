@@ -231,7 +231,7 @@ $template->param(
     captcha_digest => md5_base64($captcha)
 );
 
-output_html_with_http_headers $cgi, $cookie, $template->output;
+output_html_with_http_headers $cgi, $cookie, $template->output, undef, { force_no_caching => 1 };
 
 sub GetHiddenFields {
     my ($mandatory) = @_;
