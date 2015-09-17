@@ -276,7 +276,7 @@ if ($barcode) {
     }
 
     # make sure return branch respects home branch circulation rules, default to homebranch
-    my $hbr = GetBranchItemRule($biblio->{'homebranch'}, $itemtype)->{'returnbranch'} || "homebranch";
+    my $hbr = GetBranchItemRule($biblio->{'homebranch'}, $itemtype->{itemtype})->{'returnbranch'} || "homebranch";
     my $returnbranch = $biblio->{$hbr} ;
 
     $template->param(
