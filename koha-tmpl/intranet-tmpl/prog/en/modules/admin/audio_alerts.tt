@@ -4,19 +4,6 @@
 
 <script type="text/javascript">
 $( document ).ready(function() {
-    $.ajax({
-        //This will retrieve the contents of the folder if the folder is configured as 'browsable'
-        url: AUDIO_ALERT_PATH,
-        success: function (data) {
-            $("#fileNames").html('<ul>');
-            //List all png or jpg or gif file names in the page
-            $(data).find('a:contains("ogg")').each(function () {
-                var filename = this.href.split('/').pop();
-                $('#koha-sounds').append($('<option>', { value : filename }).text(filename));
-            });
-        }
-    });
-
     $('#koha-sounds').on('change', function() {
         $('#sound').val( this.value );
     });
@@ -72,6 +59,24 @@ $( document ).ready(function() {
 
                         <select id="koha-sounds">
                             <option value="">Select built-in sound</option>
+                            <option value="beep.ogg">beep.ogg</option>
+                            <option value="call.ogg">call.ogg</option>
+                            <option value="critical.ogg">critical.ogg</option>
+                            <option value="device_connect.ogg">device_connect.ogg</option>
+                            <option value="device_disconnect.ogg">device_disconnect.ogg</option>
+                            <option value="ending.ogg">ending.ogg</option>
+                            <option value="fail.ogg">fail.ogg</option>
+                            <option value="IM_notification.ogg">IM_notification.ogg</option>
+                            <option value="incoming_call.ogg">incoming_call.ogg</option>
+                            <option value="loading.ogg">loading.ogg</option>
+                            <option value="loading_2.ogg">loading_2.ogg</option>
+                            <option value="maximize.ogg">maximize.ogg</option>
+                            <option value="minimize.ogg">minimize.ogg</option>
+                            <option value="new_mail_notification.ogg">new_mail_notification.ogg</option>
+                            <option value="opening.ogg">opening.ogg</option>
+                            <option value="panic.ogg">panic.ogg</option>
+                            <option value="popup.ogg">popup.ogg</option>
+                            <option value="warning.ogg">warning.ogg</option>
                         </select>
 
                         <button id="save-alert" type="submit" class="btn"><i class="icon-hdd"></i> Save alert</button>
