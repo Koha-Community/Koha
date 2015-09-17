@@ -129,7 +129,7 @@ while ( my $h = $holds_rs->next() ) {
             $hold->{date_sent} = output_pref( dt_from_string($transferred_when) );
             $hold->{from_branch} = GetBranchName($transferred_from);
         }
-        elsif ( $item->holding_branch()->branchcode() ne
+        elsif ( $item->holding_branch() && $item->holding_branch()->branchcode() ne
             $h->branch()->branchcode() )
         {
             $hold->{not_transferred}    = 1;
