@@ -47,4 +47,4 @@ my $messages = C4::Letters::GetRSSMessages( { borrowernumber => $borrowernumber,
 $template->param( message_list => $messages,
              );
 
-output_html_with_http_headers $query, $cookie, $template->output;
+output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
