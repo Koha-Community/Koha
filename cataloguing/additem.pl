@@ -417,9 +417,15 @@ if ($prefillitem) {
     my $lastitemcookie = $input->cookie('LastCreatedItem');
     if ($lastitemcookie) {
         $lastitemcookie = uri_unescape($lastitemcookie);
-        if ( thaw($lastitemcookie) ) {
-            $cookieitemrecord = thaw($lastitemcookie) ;
-            $cookieitemrecord = removeFieldsForPrefill($cookieitemrecord);
+        eval {
+            if ( thaw($lastitemcookie) ) {
+                $cookieitemrecord = thaw($lastitemcookie);
+                $cookieitemrecord = removeFieldsForPrefill($cookieitemrecord);
+            }
+        };
+        if ($@) {
+            $lastitemcookie = 'undef' unless $lastitemcookie;
+            warn "Storable::thaw failed to thaw LastCreatedItem-cookie. Cookie value '$lastitemcookie'. Caught error follows: '$@'";
         }
     }
 }
