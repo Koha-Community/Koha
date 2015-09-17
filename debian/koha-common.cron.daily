@@ -18,6 +18,7 @@
 koha-foreach --enabled --email /usr/share/koha/bin/cronjobs/overdue_notices.pl -t
 koha-foreach --enabled /usr/share/koha/bin/cronjobs/fines.pl
 koha-foreach --enabled --email /usr/share/koha/bin/cronjobs/advance_notices.pl -c
+koha-foreach --enabled /usr/share/koha/bin/cronjobs/membership_expiry.pl -c
 koha-foreach --enabled /usr/share/koha/bin/cronjobs/holds/cancel_expired_holds.pl >/dev/null 2>&1
 koha-foreach --enabled /usr/share/koha/bin/cronjobs/services_throttle.pl > /dev/null 2>&1
 koha-foreach --enabled /usr/share/koha/bin/cronjobs/cleanup_database.pl --sessions --zebraqueue 10 --list-invites
