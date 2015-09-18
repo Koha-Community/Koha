@@ -42,6 +42,24 @@
                         </div>
                     [% END %]
 
+                    [% IF payment_error %]
+                        <div id="error" class="dialog alert">
+                            <p><strong>Error:</strong> there was an problem processing your payment</p>
+
+                            [% IF payment_error == "PAYPAL_UNABLE_TO_CONNECT" %]
+                                <p>Unable to connect to PayPal.</p>
+                                <p>Please contact a librarian to verify your payment.</p>
+                            [% ELSIF payment_error == "PAYPAL_ERROR_PROCESSING" %]
+                                <p>Unable to verify payment.</p>
+                                <p>Please contact a librarian to verify your payment.</p>
+                            [% END %]
+                        </div>
+                    [% ELSIF payment %]
+                        <div class="alert alert-info">
+                            <p><strong>Payment applied:</strong> your payment of [% payment %] has been applied to your account</p>
+                        </div>
+                    [% END %]
+
                     <h3>Fines and charges</h3>
 
                     [% IF ( ACCOUNT_LINES ) %]

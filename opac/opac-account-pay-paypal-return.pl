@@ -79,12 +79,12 @@ my $nvp_params = {
 
 my $response = $ua->request( POST $url, $nvp_params );
 
+my $error;
 if ( $response->is_success ) {
     my $params = url_params_mixed( $response->decoded_content );
 
     if ( $params->{ACK} eq "Success" ) {
         $amount = $params->{PAYMENTINFO_0_AMT};
-        $template->param( amount => $amount );
 
         my $accountlines_rs = Koha::Database->new()->schema()->resultset('Accountline');
         foreach my $accountlines_id ( @accountlines ) {
@@ -93,12 +93,12 @@ if ( $response->is_success ) {
         }
     }
     else {
-        $template->param( error => "PAYPAL_ERROR_PROCESSING" );
+       $error = "PAYPAL_ERROR_PROCESSING";
     }
 
 }
 else {
-    $template->param( error => "PAYPAL_UNABLE_TO_CONNECT" );
+    $error => "PAYPAL_UNABLE_TO_CONNECT";
 }
 
 $template->param(
@@ -106,4 +106,4 @@ $template->param(
     accountview => 1
 );
 
-output_html_with_http_headers( $cgi, $cookie, $template->output );
+print $cgi->redirect("/cgi-bin/koha/opac-account.pl?payment=$amount&payment-error=$error");
