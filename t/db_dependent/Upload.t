@@ -96,7 +96,7 @@ sub test01 {
     is( $upl->count, 2, 'Count returns 2 also' );
     foreach my $r ( $upl->get({ id => $res }) ) {
         if( $r->{name} eq 'file1' ) {
-            is( $r->{categorycode}, 'A', 'Check category A' );
+            is( $r->{uploadcategorycode}, 'A', 'Check category A' );
             is( $r->{filesize}, 6000, 'Check size of file1' );
         } elsif( $r->{name} eq 'file2' ) {
             is( $r->{filesize}, 8000, 'Check size of file2' );
@@ -115,7 +115,7 @@ sub test02 {
     is( $upl->count, 1, 'Upload 2 includes one file' );
     my $res= $upl->result;
     my $r = $upl->get({ id => $res, filehandle => 1 });
-    is( $r->{categorycode}, 'B', 'Check category B' );
+    is( $r->{uploadcategorycode}, 'B', 'Check category B' );
     is( $r->{public}, 1, 'Check public == 1' );
     is( ref($r->{fh}) eq 'IO::File' && $r->{fh}->opened, 1, 'Get returns a file handle' );
 }
@@ -125,7 +125,7 @@ sub test03 {
     my $cgi= $upl->cgi;
     is( $upl->count, 1, 'Upload 3 includes one temporary file' );
     my $r = $upl->get({ id => $upl->result });
-    is( $r->{categorycode}, 'koha_upload', 'Check category temp file' );
+    is( $r->{uploadcategorycode}, 'koha_upload', 'Check category temp file' );
 }
 
 sub test04 { # Fail on a file already there

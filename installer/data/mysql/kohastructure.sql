@@ -3359,7 +3359,7 @@ CREATE TABLE uploaded_files (
     dir TEXT NOT NULL,
     filesize int(11),
     dtcreated timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    categorycode tinytext,
+    uploadcategorycode tinytext,
     owner int(11),
     public tinyint,
     permanent tinyint,

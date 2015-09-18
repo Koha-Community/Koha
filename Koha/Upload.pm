@@ -170,7 +170,7 @@ sub get {
     my ( @rv, $res);
     foreach my $r ( @$temp ) {
         undef $res;
-        foreach( qw[id hashvalue filesize categorycode public permanent] ) {
+        foreach( qw[id hashvalue filesize uploadcategorycode public permanent] ) {
             $res->{$_} = $r->{$_};
         }
         $res->{name} = $r->{filename};
@@ -340,8 +340,8 @@ sub _done {
 sub _register {
     my ( $self, $filename, $size ) = @_;
     my $dbh= C4::Context->dbh;
-    my $sql= "INSERT INTO uploaded_files (hashvalue, filename, dir, filesize,
-        owner, categorycode, public, permanent) VALUES (?,?,?,?,?,?,?,?)";
+    my $sql= 'INSERT INTO uploaded_files (hashvalue, filename, dir, filesize,
+        owner, uploadcategorycode, public, permanent) VALUES (?,?,?,?,?,?,?,?)';
     my @pars= (
         $self->{files}->{$filename}->{hash},
         $filename,
@@ -361,24 +361,24 @@ sub _lookup {
     my ( $self, $params ) = @_;
     my $dbh = C4::Context->dbh;
     my $sql = q|
-SELECT id,hashvalue,filename,dir,filesize,categorycode,public,permanent
+SELECT id,hashvalue,filename,dir,filesize,uploadcategorycode,public,permanent
 FROM uploaded_files
     |;
     my @pars;
     if( $params->{id} ) {
         return [] if $params->{id} !~ /^\d+(,\d+)*$/;
-        $sql.= "WHERE id IN ($params->{id})";
+        $sql.= 'WHERE id IN ('.$params->{id}.')';
         @pars = ();
     } elsif( $params->{hashvalue} ) {
-        $sql.= "WHERE hashvalue=?";
+        $sql.= 'WHERE hashvalue=?';
         @pars = ( $params->{hashvalue} );
     } elsif( $params->{term} ) {
-        $sql.= "WHERE (filename LIKE ? OR hashvalue LIKE ?)";
+        $sql.= 'WHERE (filename LIKE ? OR hashvalue LIKE ?)';
         @pars = ( '%'.$params->{term}.'%', '%'.$params->{term}.'%' );
     } else {
         return [];
     }
-    $sql.= $self->{public}? " AND public=1": '';
+    $sql.= $self->{public}? ' AND public=1': '';
     $sql.= ' ORDER BY id';
     my $temp= $dbh->selectall_arrayref( $sql, { Slice => {} }, @pars );
     return $temp;

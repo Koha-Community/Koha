@@ -70,9 +70,8 @@
             [% IF plugin %]
                 <input type="hidden" id="public" name="public" value="1"/>
             [% ELSE %]
-                <label>&nbsp;</label>
+                <label id="public_cb">Allow public downloads:</label>
                 <input type="checkbox" id="public" name="public">
-                    Allow public downloads
                 </input>
             [% END %]
         </li>
@@ -133,6 +132,16 @@
     [% END %]
 [% END %]
 
+[% BLOCK back %]
+    [% IF !plugin %]
+        <form id="back">
+            <fieldset class="action">
+                <button class="submit">Back</button>
+            </fieldset>
+        </form>
+    [% END %]
+[% END %]
+
 [% BLOCK newsearch %]
     <form id="newsearch">
         <fieldset class="action">
@@ -163,7 +172,7 @@
         <td>[% record.name %]</td>
         <td>[% record.filesize %]</td>
         <td>[% record.hashvalue %]</td>
-        <td>[% record.categorycode %]</td>
+        <td>[% record.uploadcategorycode %]</td>
         [% IF !plugin %]
             <td>[% IF record.public %]Yes[% ELSE %]No[% END %]</td>
             <td>[% IF record.permanent %]No[% ELSE %]Yes[% END %]</td>
@@ -173,7 +182,7 @@
                 <a href="" onclick="Choose('[% record.hashvalue %]'); return false;">Choose</a>&nbsp;
             [% END %]
             <a href="" onclick="SubmitMe( 'download', [% record.id %] ); return false;">Download</a>&nbsp;
-            <a href="" onclick="ClearField(); SubmitMe( 'delete', [% record.id %] ); return false;">Delete</a>
+            <a href="" onclick="DeleteEntry( [% record.id %] ); return false;">Delete</a>
         </td>
    </tr>
    [% END %]
@@ -279,6 +288,12 @@ function SubmitMe(op, id, msg ) {
     $("#submitter #msg").val( msg );
     $("#submitter").submit();
 }
+function DeleteEntry(id) {
+    if( !confirm( _("Do you really want to delete this upload?") ))
+        return false;
+    ClearField();
+    SubmitMe( 'delete', id );
+}
 function ClearField() {
     [% IF plugin %]
         $(window.opener.document).find('#[% index %]').val( '' );
@@ -298,6 +313,9 @@ $(document).ready(function() {
         ShowAlerts( [% msg %] );
     [% END %]
     $("#fileuploadcancel").hide();
+    $("#public_cb").click(function() {
+        $("#public").click();
+    });
 });
 //]]>
 </script>
@@ -329,6 +347,7 @@ $(document).ready(function() {
         <h3>Your request gave the following results:</h3>
         [% PROCESS table_results %]
         [% PROCESS closer %]
+        [% PROCESS back %]
     [% ELSE %]
         <h4>Sorry, your request had no results.</h4>
         [% PROCESS newsearch %]
