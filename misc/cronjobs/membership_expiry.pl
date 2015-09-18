@@ -132,6 +132,14 @@ pod2usage(1) if $help || !$confirm;
 
 cronlogaction();
 
+my $expdays = C4::Context->preference('MembershipExpiryDaysNotice');
+if( !$expdays ) {
+    #If the pref is not set, we will exit
+    warn 'Exiting membership_expiry.pl: MembershipExpiryDaysNotice not set'
+        if $verbose;
+    exit;
+}
+
 my $admin_adress = C4::Context->preference('KohaAdminEmailAddress');
 warn 'getting upcoming membership expires' if $verbose;
 my $upcoming_mem_expires = C4::Members::GetUpcomingMembershipExpires();
