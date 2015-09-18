@@ -10862,7 +10862,7 @@ if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         UPDATE matchpoints
         SET search_index='issn'
-        WHERE matcher_id=(SELECT matcher_id FROM marc_matchers WHERE code = 'ISSN')
+        WHERE matcher_id IN (SELECT matcher_id FROM marc_matchers WHERE code = 'ISSN')
     });
     print "Upgrade to $DBversion done (Bug 14472: Wrong ISSN search index in record matching rules)\n";
     SetVersion($DBversion);
