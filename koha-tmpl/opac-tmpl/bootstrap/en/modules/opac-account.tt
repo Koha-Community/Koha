@@ -76,6 +76,7 @@
                                             <td>
                                                 [% IF ACCOUNT_LINE.amountoutstanding > 0 %]
                                                     <input name="accountline" type="checkbox" class="checkbox-pay" id="checkbox-pay-[% ACCOUNT_LINE.accountlines_id %]" value="[% ACCOUNT_LINE.accountlines_id %]">
+                                                    <input type="hidden" id="amount-[% ACCOUNT_LINE.accountlines_id %]" value="[% ACCOUNT_LINE.amountoutstanding %]" />
                                                 [% END %]
                                             </td>
                                         [% END %]
@@ -135,6 +136,9 @@
                                         <div class="control-group">
                                             <input type="hidden" id="payment-amount" name="payment_amount" value="0" />
                                             <button id="submit-pay" type="submit" class="btn" disabled="disabled">Make payment</button>
+                                            <span id="amount-to-pay-label">
+                                                Amount to pay: <span id="amount-to-pay">0.00</span>
+                                            </span>
                                         </div>
                                 </fieldset>
                             [% END %]
@@ -152,8 +156,27 @@
 [% BLOCK jsinclude %]
 <script type="text/javascript">
 $( document ).ready(function() {
-    $('.checkbox-pay').change( function() {
-        $("#submit-pay").prop('disabled', ! $('.checkbox-pay:checked').length );
+    $("#amount-to-pay-label").hide();
+
+    $(".checkbox-pay").change( function() {
+        // Disable the pay button if no fees are selected
+        $("#submit-pay").prop("disabled", ! $(".checkbox-pay:checked").length );
+
+        // Calculate the total amount to be paid based on selected fees
+        var total = 0;
+        $(".checkbox-pay").each( function() {
+            if ( $(this).is(":checked") ) {
+                var id = this.id.split("checkbox-pay-")[1];
+                total += parseFloat( $("#amount-" + id).val() );
+            }
+        });
+
+        if ( total ) {
+            $("#amount-to-pay").html( total.toFixed(2) );
+            $("#amount-to-pay-label").show();
+        } else {
+            $("#amount-to-pay-label").hide();
+        }
     });
 });
 </script>
