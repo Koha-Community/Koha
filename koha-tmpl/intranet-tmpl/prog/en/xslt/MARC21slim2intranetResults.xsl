@@ -281,6 +281,11 @@
 -->
         </xsl:variable>
 
+        <!-- Indicate if record is suppressed in OPAC -->
+        <xsl:if test="marc:datafield[@tag=942][marc:subfield[@code='n'] = '1']">
+            <span class="results_summary suppressed_opac"><xsl:value-of select="concat('#',marc:datafield[@tag=999]/marc:subfield[@code='c'])"/> - Suppressed in OPAC</span>
+        </xsl:if>
+
         <!-- Title Statement: Alternate Graphic Representation (MARC 880) -->
         <xsl:if test="$display880">
            <xsl:call-template name="m880Select">
