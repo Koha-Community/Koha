@@ -83,6 +83,8 @@ BEGIN {
 	);
 }
 
+our $logger = Koha::Logger->get( { category => 'C4.ImportBatch' } );
+
 =head1 NAME
 
 C4::ImportBatch - manage batches of imported MARC records
@@ -813,7 +815,6 @@ sub BatchCommitItems {
 sub BatchRevertRecords {
     my $batch_id = shift;
 
-    my $logger = Koha::Logger->get( { category => 'C4.ImportBatch.BatchRevertRecords' } );
     $logger->trace("C4::ImportBatch::BatchRevertRecords( $batch_id )");
 
     my $record_type;
@@ -872,7 +873,7 @@ sub BatchRevertRecords {
                 my $biblionumber = $rowref->{'matched_biblionumber'};
                 my $oldbiblio = GetBiblio($biblionumber);
 
-                $logger->info("Biblio record $biblionumber does not exist, restoration of this record was skipped") unless $oldbiblio;
+                $logger->info("C4::ImportBatch::BatchRevertRecords: Biblio record $biblionumber does not exist, restoration of this record was skipped") unless $oldbiblio;
                 next unless $oldbiblio; # Record has since been deleted. Deleted records should stay deleted.
 
                 $num_items_deleted += BatchRevertItems($rowref->{'import_record_id'}, $rowref->{'matched_biblionumber'});
