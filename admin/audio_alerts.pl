@@ -49,7 +49,10 @@ if ( $selector && $sound ) {
     Koha::AudioAlert->new( { selector => $selector, sound => $sound } )->store();
 }
 
-map { Koha::AudioAlerts->find($_)->delete() } @delete;
+if (@delete) {
+    map { Koha::AudioAlerts->find($_)->delete() } @delete;
+    Koha::AudioAlerts->fix_precedences();
+}
 
 if ( $id && $action && $where && $action eq 'move' ) {
     Koha::AudioAlerts->find($id)->move($where);
