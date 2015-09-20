@@ -22,7 +22,6 @@ use warnings;
 use CGI qw ( -utf8 );
 use C4::Acquisition qw( GetHistory );
 use C4::Auth;
-use C4::Dates qw/format_date/;
 use C4::Koha;
 use C4::Serials;    #uses getsubscriptionfrom biblionumber
 use C4::Output;
@@ -206,8 +205,8 @@ foreach my $item (@items) {
     $item->{imageurl} = defined $item->{itype} ? getitemtypeimagelocation('intranet', $itemtypes->{ $item->{itype} }{imageurl})
                                                : '';
 
-	foreach (qw(datelastseen onloan)) {
-		$item->{$_} = format_date($item->{$_});
+    foreach (qw(datelastseen onloan)) {
+        $item->{$_} = output_pref({ dt => dt_from_string( $item->{$_} ), dateonly => 1 });
     }
     $item->{datedue} = format_sqldatetime($item->{datedue});
     # item damaged, lost, withdrawn loops
@@ -237,7 +236,7 @@ foreach my $item (@items) {
 
     if ( defined $reservedate ) {
         $item->{backgroundcolor} = 'reserved';
-        $item->{reservedate}     = format_date($reservedate);
+        $item->{reservedate}     = output_pref({ dt => dt_from_string($reservedate ), dateonly => 1 });
         $item->{ReservedForBorrowernumber}     = $reservedfor;
         $item->{ReservedForSurname}     = $ItemBorrowerReserveInfo->{'surname'};
         $item->{ReservedForFirstname}   = $ItemBorrowerReserveInfo->{'firstname'};
@@ -251,7 +250,7 @@ foreach my $item (@items) {
 	# Check the transit status
     my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($item->{itemnumber});
     if ( defined( $transfertwhen ) && ( $transfertwhen ne '' ) ) {
-        $item->{transfertwhen} = format_date($transfertwhen);
+        $item->{transfertwhen} = output_pref({ dt => dt_from_string($transfertwhen ), dateonly => 1 });
         $item->{transfertfrom} = $branches->{$transfertfrom}{branchname};
         $item->{transfertto}   = $branches->{$transfertto}{branchname};
         $item->{nocancel} = 1;
