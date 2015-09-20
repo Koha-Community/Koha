@@ -39,7 +39,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::Koha;
 use C4::Circulation;
-use C4::Dates qw/format_date/;
+use Koha::DateUtils;
 use C4::Utils::DataTables::Members;
 use C4::Members;
 use C4::Search;		# enabled_staff_search_views
@@ -82,7 +82,7 @@ my $maxreserves;
 my $warnings;
 my $messages;
 
-my $date = C4::Dates->today('iso');
+my $date = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
 my $action = $input->param('action');
 $action ||= q{};
 
@@ -358,7 +358,7 @@ foreach my $biblionumber (@biblionumbers) {
                 my $ItemBorrowerReserveInfo = GetMember( borrowernumber => $reservedfor );
 
                 $item->{backgroundcolor} = 'reserved';
-                $item->{reservedate}     = format_date($reservedate);
+                $item->{reservedate}     = output_pref({ dt => dt_from_string( $reservedate ), dateonly => 1 });
                 $item->{ReservedForBorrowernumber}     = $reservedfor;
                 $item->{ReservedForSurname}     = $ItemBorrowerReserveInfo->{'surname'};
                 $item->{ReservedForFirstname}     = $ItemBorrowerReserveInfo->{'firstname'};
@@ -393,7 +393,7 @@ foreach my $biblionumber (@biblionumbers) {
               GetTransfers($itemnumber);
 
             if ( defined $transfertwhen && $transfertwhen ne '' ) {
-                $item->{transfertwhen} = format_date($transfertwhen);
+                $item->{transfertwhen} = output_pref({ dt => dt_from_string( $transfertwhen ), dateonly => 1 });
                 $item->{transfertfrom} =
                   $branches->{$transfertfrom}{branchname};
                 $item->{transfertto} = $branches->{$transfertto}{branchname};
@@ -516,9 +516,9 @@ foreach my $biblionumber (@biblionumbers) {
 	    $reserve{'hidename'} = 1;
 	    $reserve{'cardnumber'} = $reserveborrowerinfo->{'cardnumber'};
 	}
-        $reserve{'expirationdate'} = format_date( $res->{'expirationdate'} )
+        $reserve{'expirationdate'} = output_pref({ dt => dt_from_string( $res->{'expirationdate'} ), dateonly => 1 })
             unless ( !defined($res->{'expirationdate'}) || $res->{'expirationdate'} eq '0000-00-00' );
-        $reserve{'date'}           = format_date( $res->{'reservedate'} );
+        $reserve{'date'}           = output_pref({ dt => dt_from_string( $res->{'reservedate'} ), dateonly => 1 });
         $reserve{'borrowernumber'} = $res->{'borrowernumber'};
         $reserve{'biblionumber'}   = $res->{'biblionumber'};
         $reserve{'borrowernumber'} = $res->{'borrowernumber'};
