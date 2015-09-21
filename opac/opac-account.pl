@@ -69,8 +69,8 @@ $template->param(
     accountview   => 1,
     message       => $query->param('message') || q{},
     message_value => $query->param('message_value') || q{},
-    payment       => $query->param('payment'),
-    payment_error => $query->param('payment-error'),
+    payment       => $query->param('payment') || q{},
+    payment_error => $query->param('payment-error') || q{},
 );
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
