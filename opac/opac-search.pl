@@ -526,7 +526,8 @@ my @results;
 
 sub _input_cgi_parse {
     my @elements;
-    for my $this_cgi ( split('&',shift) ) {
+    my $query_cgi = shift or return @elements;
+    for my $this_cgi ( split('&',$query_cgi) ) {
         next unless $this_cgi;
         $this_cgi =~ /(.*?)=(.*)/;
         push @elements, { input_name => $1, input_value => Encode::decode_utf8( uri_unescape($2) ) };
