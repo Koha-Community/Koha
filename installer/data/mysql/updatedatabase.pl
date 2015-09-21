@@ -9854,7 +9854,24 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
     print "Done (3.18.10 release)\n";
 }
-
+$DBversion = "3.18.10.001";
+if ( CheckVersion($DBversion) ) {
+    print "Bug 14205: Deleting an Item/Record does not remove link to course reserve\n";
+    $dbh->do(q{
+        DELETE cr.*
+        FROM course_reserves AS cr
+        LEFT JOIN course_items USING(ci_id)
+        WHERE course_items.ci_id IS NULL
+    });
+    $dbh->do(q{
+        ALTER IGNORE TABLE course_reserves
+            add CONSTRAINT course_reserves_ibfk_2
+                FOREIGN KEY (ci_id) REFERENCES course_items (ci_id)
+                ON DELETE CASCADE ON UPDATE CASCADE
+    });
+    print "Upgrade to $DBversion done";
+    SetVersion($DBversion);
+}
 
 
 =head1 FUNCTIONS
