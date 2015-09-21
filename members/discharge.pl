@@ -67,9 +67,8 @@ if ( $input->param('borrowernumber') ) {
 
     # Generating discharge if needed
     if ( $input->param('discharge') and $can_be_discharged ) {
-        my $is_discharged = Koha::Borrower::Discharge::count({
+        my $is_discharged = Koha::Borrower::Discharge::is_discharged({
             borrowernumber => $borrowernumber,
-            validated      => 1,
         });
         unless ($is_discharged) {
             Koha::Borrower::Discharge::discharge({

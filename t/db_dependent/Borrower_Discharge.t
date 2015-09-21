@@ -1,7 +1,7 @@
 #!/usr/bin/perl;
 
 use Modern::Perl;
-use Test::More tests => 15;
+use Test::More tests => 17;
 use Test::Warn;
 use MARC::Record;
 
@@ -72,6 +72,12 @@ is( scalar( @{ Koha::Borrower::Discharge::get_validated( { branchcode => 'CPL' }
 Koha::Borrower::Debarments::DelUniqueDebarment( { 'borrowernumber' => $borrower->{borrowernumber}, 'type' => 'DISCHARGE' } );
 ok( !Koha::Borrower::Debarments::IsDebarred( $borrower->{borrowernumber} ), 'The debarment has been lifted' );
 ok( !Koha::Borrower::Discharge::is_discharged( { borrowernumber => $borrower->{borrowernumber} } ), 'The patron is not discharged after the restriction has been lifted' );
+
+# Verify that the discharge works multiple times
+Koha::Borrower::Discharge::request({ borrowernumber => $borrower->{borrowernumber} });
+is(scalar( @{ Koha::Borrower::Discharge::get_pendings() }), 1, 'There is a pending discharge request (second time)');
+Koha::Borrower::Discharge::discharge( { borrowernumber => $borrower->{borrowernumber} } );
+is_deeply( Koha::Borrower::Discharge::get_pendings(), [], 'There is no pending discharge request (second time)');
 
 # Check if PDF::FromHTML is installed.
 my $check = eval { require PDF::FromHTML; };
