@@ -70,7 +70,6 @@ while ( my ( $biblionumber, $biblioitemnumber, $frameworkcode ) = $sth->fetchrow
     my $record = GetMarcBiblio($biblionumber,1);
     unless ($record){ push @errors, "bad record biblionumber $biblionumber"; next; }
     my ($tmptestfields,$tmptestdirectory,$reclen,$tmptestbaseaddress) = MARC::File::USMARC::_build_tag_directory($record);
-    if ($reclen > 99999) { push @errors,  "bad record length for biblionumber $biblionumber (length : $reclen) "; next; }
     #print "\n################################ record before ##################################\n".$record->as_formatted;#!test
     unless ($test_parameter) {
         my $rqitemnumber=$dbh->prepare("SELECT itemnumber, biblionumber from items where itemnumber = ? and biblionumber = ?");
