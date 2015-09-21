@@ -11,6 +11,14 @@
 [%-  CASE 'Actions'   -%]Actions
 [%-  END -%]
 [% END %]
+[% BLOCK translate_card_elements %]
+[%-  SWITCH element -%]
+[%-  CASE 'layout'    -%]layouts
+[%-  CASE 'template'  -%]templates
+[%-  CASE 'profile'   -%]profiles
+[%-  CASE 'batch'     -%]batches
+[%-  END -%]
+[% END %]
 
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Patron card creator &rsaquo; [% PROCESS translate_card_element element=card_element_title %]</title>
@@ -24,7 +32,7 @@
 
                 var msg;
                 if (element_ids.length > 1) {
-                    msg = _("Are you sure you want to delete %s items?").format(element_ids.length, element_ids.length);
+                    msg = _("Are you sure you want to delete %s %s?").format(element_ids.length, "[% PROCESS translate_card_elements element=card_element %]");
                 } else if (element_ids.length == 1) {
                     msg = _("Are you sure you want to delete %s %s?").format("[% PROCESS translate_card_element element=card_element %]", element_ids[0]);
                 }
