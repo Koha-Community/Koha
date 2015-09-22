@@ -89,10 +89,10 @@ if ($input->param('newflags')) {
     my $dbh=C4::Context->dbh();
     my $all_perms  = get_all_subpermissions();
     my $user_perms = get_user_subpermissions($bor->{'userid'});
-    my $sth=$dbh->prepare("SELECT bit,flag,flagdesc FROM userflags ORDER BY bit");
+    my $sth=$dbh->prepare("SELECT bit, flag FROM userflags ORDER BY bit");
     $sth->execute;
     my @loop;
-    while (my ($bit, $flag, $flagdesc) = $sth->fetchrow) {
+    while (my ($bit, $flag) = $sth->fetchrow) {
 	    my $checked='';
 	    if ($accessflags->{$flag}) {
 	        $checked= 1;
@@ -101,7 +101,7 @@ if ($input->param('newflags')) {
 	    my %row = ( bit => $bit,
 		    flag => $flag,
 		    checked => $checked,
-		    flagdesc => $flagdesc );
+        );
 
         my @sub_perm_loop = ();
         my $expand_parent = 0;
@@ -113,7 +113,6 @@ if ($input->param('newflags')) {
                         id => "${flag}_$sub_perm",
                         perm => "$flag:$sub_perm",
                         code => $sub_perm,
-                        description => $all_perms->{$flag}->{$sub_perm},
                         checked => 1
                     };
                 }
@@ -127,7 +126,6 @@ if ($input->param('newflags')) {
                         id => "${flag}_$sub_perm",
                         perm => "$flag:$sub_perm",
                         code => $sub_perm,
-                        description => $all_perms->{$flag}->{$sub_perm},
                         checked => 1
                     };
                 }
@@ -139,7 +137,6 @@ if ($input->param('newflags')) {
                         id => "${flag}_$sub_perm",
                         perm => "$flag:$sub_perm",
                         code => $sub_perm,
-                        description => $all_perms->{$flag}->{$sub_perm},
                         checked => 0
                     } unless exists $user_perms->{$flag} and exists $user_perms->{$flag}->{$sub_perm};
                 }

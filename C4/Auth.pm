@@ -1900,14 +1900,14 @@ of the subpermission.
 
 sub get_all_subpermissions {
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare( "SELECT flag, code, description
+    my $sth = $dbh->prepare( "SELECT flag, code
                              FROM permissions
                              JOIN userflags ON (module_bit = bit)" );
     $sth->execute();
 
     my $all_perms = {};
     while ( my $perm = $sth->fetchrow_hashref ) {
-        $all_perms->{ $perm->{'flag'} }->{ $perm->{'code'} } = $perm->{'description'};
+        $all_perms->{ $perm->{'flag'} }->{ $perm->{'code'} } = 1;
     }
     return $all_perms;
 }
