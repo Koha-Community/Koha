@@ -7,7 +7,9 @@ use MARC::Record;
 
 use C4::Biblio qw( AddBiblio );
 use C4::Members qw( AddMember );
+use Koha::Database;
 use t::lib::Mocks;
+use t::lib::TestBuilder;
 use_ok('C4::Serials');
 use_ok('C4::Budgets');
 
@@ -16,18 +18,26 @@ local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /redefined/ };
 my $userenv;
 *C4::Context::userenv = \&Mock_userenv;
 
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
+my $library1 = $builder->build({
+    source => 'Branch',
+});
+my $library2 = $builder->build({
+    source => 'Branch',
+});
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 my $record = MARC::Record->new();
 $record->append_fields(
-    MARC::Field->new( '952', '0', '0', a => 'CPL', b => 'CPL' )
+    MARC::Field->new( '952', '0', '0', a => $library1->{branchcode}, b => $library1->{branchcode} )
 );
 my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio($record, '');
 
-my $my_branch = 'CPL';
-my $another_branch = 'MPL';
+my $my_branch = $library1->{branchcode};
+my $another_branch = $library2->{branchcode};
 my $budgetid;
 my $bpid = AddBudgetPeriod({
     budget_period_startdate   => '2015-01-01',
@@ -234,7 +244,7 @@ is( C4::Serials::can_show_subscription($subscription_from_another_branch), 1,
 "Without IndependentBranches, renew_subscription cannot show a subscription from another branch"
 );
 
-$dbh->rollback;
+$schema->storage->txn_rollback;
 
 # C4::Context->userenv
 sub Mock_userenv {

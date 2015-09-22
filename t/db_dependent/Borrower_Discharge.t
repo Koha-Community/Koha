@@ -25,9 +25,10 @@ use C4::Context;
 use C4::Items qw( AddItem );
 use C4::Members qw( AddMember GetMember );
 
-use t::lib::TestBuilder;
 use Koha::Borrower::Discharge;
 use Koha::Database;
+
+use t::lib::TestBuilder;
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -37,33 +38,38 @@ my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
 $dbh->do(q|DELETE FROM discharges|);
 
+my $library = $builder->build({
+    source => 'Branch',
+});
+my $another_library = $builder->build({
+    source => 'Branch',
+});
+
 C4::Context->_new_userenv('xxx');
-C4::Context->set_userenv(0, 0, 0, 'firstname', 'surname', 'CPL', 'CPL', '', '', '', '', '');
-my $branchcode = 'CPL';
-my $another_branchcode = 'MPL';
+C4::Context->set_userenv(0, 0, 0, 'firstname', 'surname', $library->{branchcode}, $library->{branchcode}, '', '', '', '', '');
 my $borrower = $builder->build({
     source => 'Borrower',
     value => {
-        branchcode => $branchcode,
+        branchcode => $library->{branchcode},
     }
 });
 my $borrower2 = $builder->build({
     source => 'Borrower',
     value => {
-        branchcode => $branchcode,
+        branchcode => $library->{branchcode},
     }
 });
 my $borrower3 = $builder->build({
     source => 'Borrower',
     value => {
-        branchcode => $another_branchcode,
+        branchcode => $another_library->{branchcode},
     }
 });
 
 # Discharge not possible with issues
 my ( $biblionumber ) = AddBiblio( MARC::Record->new, '');
 my $barcode = 'BARCODE42';
-my ( undef, undef, $itemnumber ) = AddItem({ homebranch => 'CPL', holdingbranch => 'CPL', barcode => $barcode }, $biblionumber);
+my ( undef, undef, $itemnumber ) = AddItem({ homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, barcode => $barcode }, $biblionumber);
 AddIssue( $borrower, $barcode );
 is( Koha::Borrower::Discharge::can_be_discharged({ borrowernumber => $borrower->{borrowernumber} }), 0, 'A patron with issues cannot be discharged' );
 
@@ -87,7 +93,7 @@ is( Koha::Borrower::Discharge::is_discharged( { borrowernumber => $borrower->{bo
 is( Koha::Borrower::Debarments::IsDebarred( $borrower->{borrowernumber} ), '9999-12-31', 'The patron has been debarred after discharge' );
 is( scalar( @{ Koha::Borrower::Discharge::get_validated() } ),             3,            'There are 3 validated discharges' );
 is( scalar( @{ Koha::Borrower::Discharge::get_validated( { borrowernumber => $borrower->{borrowernumber} } ) } ), 1, 'There is 1 validated discharge for a given patron' );
-is( scalar( @{ Koha::Borrower::Discharge::get_validated( { branchcode => 'CPL' } ) } ), 2, 'There is 2 validated discharges for a given branchcode' );    # This is not used in the code yet
+is( scalar( @{ Koha::Borrower::Discharge::get_validated( { branchcode => $library->{branchcode} } ) } ), 2, 'There is 2 validated discharges for a given branchcode' );    # This is not used in the code yet
 Koha::Borrower::Debarments::DelUniqueDebarment( { 'borrowernumber' => $borrower->{borrowernumber}, 'type' => 'DISCHARGE' } );
 ok( !Koha::Borrower::Debarments::IsDebarred( $borrower->{borrowernumber} ), 'The debarment has been lifted' );
 ok( !Koha::Borrower::Discharge::is_discharged( { borrowernumber => $borrower->{borrowernumber} } ), 'The patron is not discharged after the restriction has been lifted' );

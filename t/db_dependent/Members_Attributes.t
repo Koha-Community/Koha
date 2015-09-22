@@ -22,13 +22,18 @@ use Modern::Perl;
 use C4::Context;
 use C4::Members;
 use C4::Members::AttributeTypes;
+use Koha::Database;
 
 use Test::More tests => 60;
 
+use t::lib::TestBuilder;
+
 use_ok('C4::Members::Attributes');
 
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 $dbh->do(q|DELETE FROM issues|);
@@ -36,11 +41,14 @@ $dbh->do(q|DELETE FROM borrowers|);
 $dbh->do(q|DELETE FROM borrower_attributes|);
 $dbh->do(q|DELETE FROM borrower_attribute_types|);
 
+my $library = $builder->build({
+    source => 'Branch',
+});
 my $borrowernumber = AddMember(
     firstname =>  'my firstname',
     surname => 'my surname',
     categorycode => 'S',
-    branchcode => 'CPL',
+    branchcode => $library->{branchcode},
 );
 
 
@@ -196,5 +204,3 @@ is( $borrower_attributes->[0]->{password}, $attributes->[1]->{password}, 'Delete
 C4::Members::Attributes::DeleteBorrowerAttribute($borrowernumber, $attributes->[1]);
 $borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
 is( @$borrower_attributes, 0, 'DeleteBorrowerAttribute deletes a borrower attribute' );
-
-$dbh->rollback;

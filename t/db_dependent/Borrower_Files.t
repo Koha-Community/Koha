@@ -22,23 +22,31 @@ use Modern::Perl;
 use C4::Context;
 use C4::Members;
 
+use Koha::Database;
+use t::lib::TestBuilder;
+
 use Test::More tests => 23;
 
 use_ok('Koha::Borrower::Files');
 
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM borrowers|);
 $dbh->do(q|DELETE FROM borrower_files|);
 
+my $library = $builder->build({
+    source => 'Branch',
+});
+
 my $borrowernumber = AddMember(
     firstname =>  'my firstname',
     surname => 'my surname',
     categorycode => 'S',
-    branchcode => 'CPL',
+    branchcode => $library->{branchcode},
 );
 
 my $bf = Koha::Borrower::Files->new(
@@ -118,5 +126,3 @@ $bf->DelFile(
 );
 $files = $bf->GetFilesInfo();
 is( @$files, 0, 'DelFile delete a file' );
-
-$dbh->rollback;

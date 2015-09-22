@@ -10,13 +10,23 @@ use C4::Biblio qw( AddBiblio );
 use C4::Circulation qw( AddIssue AddReturn );
 use C4::Items qw( AddItem );
 use C4::Members qw( AddMember GetMember );
+use Koha::Database;
 use Koha::DateUtils;
 use Koha::Borrower::Debarments qw( GetDebarments DelDebarment );
+
+use t::lib::TestBuilder;
+
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
 
-my $branchcode = 'CPL';
+my $library = $builder->build({
+    source => 'Branch',
+});
+
+my $branchcode = $library->{branchcode};
 local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /redefined/ };
 my $userenv->{branch} = $branchcode;
 *C4::Context::userenv = \&Mock_userenv;

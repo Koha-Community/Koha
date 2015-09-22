@@ -23,18 +23,27 @@ use C4::Biblio qw/AddBiblio/;
 use C4::Members;
 use C4::Context;
 use C4::Category;
+use Koha::Database;
+
+use t::lib::TestBuilder;
 
 use_ok('C4::Ratings');
 
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
+
+my $library = $builder->build({
+    source => 'Branch',
+});
 
 my ($biblionumber) = AddBiblio( MARC::Record->new, '' );
 
 my @categories   = C4::Category->all;
 my $categorycode = $categories[0]->categorycode;
-my $branchcode   = 'CPL';
+my $branchcode   = $library->{branchcode};
 
 my %john_doe = (
     cardnumber   => '123456',

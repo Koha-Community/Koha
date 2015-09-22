@@ -32,12 +32,15 @@ use Koha::Database;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
+my $builder = t::lib::TestBuilder->new();
+my $library = $builder->build({
+    source => 'Branch',
+});
 my $mContext = new Test::MockModule('C4::Context');
 $mContext->mock( 'userenv', sub {
-    return { branch => 'CPL' };
+    return { branch => $library->{branchcode} };
 });
 
-my $builder = t::lib::TestBuilder->new();
 my $dbh = C4::Context->dbh; # after start transaction of testbuilder
 
 # Category with hold fee, two patrons
@@ -116,7 +119,7 @@ sub acctlines { #calculate number of accountlines for a patron
 
 sub addreserve {
     return AddReserve(
-        'CPL',
+        $library->{branchcode},
         $_[0],
         $biblio->{biblionumber},
         undef,

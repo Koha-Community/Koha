@@ -11,23 +11,27 @@ use C4::Acquisition;
 use C4::Members qw( AddMember );
 
 use Koha::Acquisition::Order;
-use Koha::Database;
+
+use t::lib::TestBuilder;
 
 use YAML;
-my $dbh = C4::Context->dbh;
-my $database = Koha::Database->new();
-my $schema = $database->schema();
-$schema->storage->txn_begin();
-$dbh->{RaiseError} = 1;
 
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
+my $dbh = C4::Context->dbh;
 $dbh->do(q|DELETE FROM aqbudgetperiods|);
 $dbh->do(q|DELETE FROM aqbudgets|);
+
+my $library = $builder->build({
+    source => 'Branch',
+});
 
 # Mock userenv
 local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /redefined/ };
 my $userenv;
 *C4::Context::userenv = \&Mock_userenv;
-$userenv = { flags => 1, id => 'my_userid', branch => 'CPL' };
+$userenv = { flags => 1, id => 'my_userid', branch => $library->{branchcode} };
 
 #
 # Budget Periods :
@@ -530,7 +534,7 @@ for my $new_budget ( @new_budgets ) {
 # Test SetOwnerToFundHierarchy
 
 my $categorycode = 'S';
-my $branchcode = 'CPL';
+my $branchcode = $library->{branchcode};
 my $john_doe = C4::Members::AddMember(
     cardnumber   => '123456',
     firstname    => 'John',
@@ -580,8 +584,6 @@ is( C4::Budgets::GetBudget($budget_id2)->{budget_owner_id},
     undef, "SetOwnerToFundHierarchy should have set John Doe $john_doe for budget 2 ($budget_id2)" );
 is( C4::Budgets::GetBudget($budget_id21)->{budget_owner_id},
     undef, "SetOwnerToFundHierarchy should have set John Doe $john_doe for budget 21 ($budget_id21)" );
-
-$schema->storage->txn_rollback();
 
 sub _get_dependencies {
     my ($budget_hierarchy) = @_;

@@ -49,17 +49,19 @@ can_ok( 'C4::Accounts',
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
+my $dbh = C4::Context->dbh;
 
 my $builder = t::lib::TestBuilder->new();
 
-my $dbh = C4::Context->dbh;
-$dbh->{RaiseError}=1;
-$dbh->{AutoCommit}=0;
+my $library = $builder->build({
+    source => 'Branch',
+});
+
 $dbh->do(q|DELETE FROM accountlines|);
 $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM borrowers|);
 
-my $branchcode = 'CPL';
+my $branchcode = $library->{branchcode};
 my $borrower_number;
 
 my $context = new Test::MockModule('C4::Context');
@@ -292,7 +294,5 @@ subtest "makepartialpayment() tests" => sub {
         is( $stat->value, "$partialamount" . "\.0000", "Correct amount logged to statistics" );
     }
 };
-
-$dbh->rollback;
 
 1;

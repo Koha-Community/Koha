@@ -24,6 +24,7 @@ use C4::Branch;
 use Koha::Database;
 
 use t::lib::Mocks;
+use t::lib::TestBuilder;
 
 use Test::More tests => 9;
 
@@ -34,10 +35,7 @@ BEGIN {
     use_ok('Koha::Items');
 }
 
-my $schema  = Koha::Database->new->schema;
-
-my $branches = GetBranches;
-my ($branch1, $branch2) = keys %$branches;
+my $schema = Koha::Database->new->schema;
 my $location = 'My Location';
 
 subtest 'General Add, Get and Del tests' => sub {
@@ -46,12 +44,17 @@ subtest 'General Add, Get and Del tests' => sub {
 
     $schema->storage->txn_begin;
 
+    my $builder = t::lib::TestBuilder->new;
+    my $library = $builder->build({
+        source => 'Branch',
+    });
+
     # Create a biblio instance for testing
     C4::Context->set_preference('marcflavour', 'MARC21');
     my ($bibnum, $bibitemnum) = get_biblio();
 
     # Add an item.
-    my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch1, holdingbranch => $branch1, location => $location } , $bibnum);
+    my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, location => $location } , $bibnum);
     cmp_ok($item_bibnum, '==', $bibnum, "New item is linked to correct biblionumber.");
     cmp_ok($item_bibitemnum, '==', $bibitemnum, "New item is linked to correct biblioitemnumber.");
 
@@ -72,7 +75,7 @@ subtest 'General Add, Get and Del tests' => sub {
     my $getdeleted = GetItem($itemnumber);
     is($getdeleted->{'itemnumber'}, undef, "Item deleted as expected.");
 
-    ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch1, holdingbranch => $branch1, location => $location, permanent_location => 'my permanent location' } , $bibnum);
+    ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, location => $location, permanent_location => 'my permanent location' } , $bibnum);
     $getitem = GetItem($itemnumber);
     is( $getitem->{location}, $location, "The location should not have been modified" );
     is( $getitem->{permanent_location}, 'my permanent location', "The permanent_location should not have modified" );
@@ -98,28 +101,29 @@ subtest 'GetHiddenItemnumbers tests' => sub {
 
     $schema->storage->txn_begin;
 
+    my $builder = t::lib::TestBuilder->new;
+    my $library1 = $builder->build({
+        source => 'Branch',
+    });
+
+    my $library2 = $builder->build({
+        source => 'Branch',
+    });
+
     # Create a new biblio
     C4::Context->set_preference('marcflavour', 'MARC21');
     my ($biblionumber, $biblioitemnumber) = get_biblio();
 
-    # Add branches if they don't exist
-    if (not defined GetBranchDetail('CPL')) {
-        ModBranch({add => 1, branchcode => 'CPL', branchname => 'Centerville'});
-    }
-    if (not defined GetBranchDetail('MPL')) {
-        ModBranch({add => 1, branchcode => 'MPL', branchname => 'Midway'});
-    }
-
     # Add two items
     my ($item1_bibnum, $item1_bibitemnum, $item1_itemnumber) = AddItem(
-            { homebranch => $branch1,
-              holdingbranch => $branch1,
+            { homebranch => $library1->{branchcode},
+              holdingbranch => $library1->{branchcode},
               withdrawn => 1 },
             $biblionumber
     );
     my ($item2_bibnum, $item2_bibitemnum, $item2_itemnumber) = AddItem(
-            { homebranch => $branch2,
-              holdingbranch => $branch2,
+            { homebranch => $library2->{branchcode},
+              holdingbranch => $library2->{branchcode},
               withdrawn => 0 },
             $biblionumber
     );
@@ -160,12 +164,12 @@ subtest 'GetHiddenItemnumbers tests' => sub {
     # Two variables, a value each
     $opachiddenitems = "
         withdrawn: [1]
-        homebranch: [$branch2]
+        homebranch: [$library2->{branchcode}]
     ";
     C4::Context->set_preference( 'OpacHiddenItems', $opachiddenitems );
     @hidden = GetHiddenItemnumbers( @items );
     ok( scalar @hidden == 2, "Two items hidden");
-    is_deeply( \@hidden, \@itemnumbers, "withdrawn=1 and homebranch=MPL hidden");
+    is_deeply( \@hidden, \@itemnumbers, "withdrawn=1 and homebranch library2 hidden");
 
     # Valid OpacHiddenItems, empty list
     @items = ();
@@ -181,20 +185,28 @@ subtest 'GetItemsInfo tests' => sub {
 
     $schema->storage->txn_begin;
 
+    my $builder = t::lib::TestBuilder->new;
+    my $library1 = $builder->build({
+        source => 'Branch',
+    });
+    my $library2 = $builder->build({
+        source => 'Branch',
+    });
+
     # Add a biblio
     my ($biblionumber, $biblioitemnumber) = get_biblio();
     # Add an item
     my ($item_bibnum, $item_bibitemnum, $itemnumber)
         = AddItem({
-                homebranch    => $branch1,
-                holdingbranch => $branch2
+                homebranch    => $library1->{branchcode},
+                holdingbranch => $library2->{branchcode},
             }, $biblionumber );
 
-    my $branch = GetBranchDetail( $branch1 );
+    my $branch = GetBranchDetail( $library1->{branchcode} );
     $branch->{ opac_info } = "homebranch OPAC info";
     ModBranch($branch);
 
-    $branch = GetBranchDetail( $branch2 );
+    $branch = GetBranchDetail( $library2->{branchcode} );
     $branch->{ opac_info } = "holdingbranch OPAC info";
     ModBranch($branch);
 
@@ -259,30 +271,30 @@ subtest 'SearchItems test' => sub {
 
     $schema->storage->txn_begin;
     my $dbh = C4::Context->dbh;
+    my $builder = t::lib::TestBuilder->new;
+
+    my $library1 = $builder->build({
+        source => 'Branch',
+    });
+    my $library2 = $builder->build({
+        source => 'Branch',
+    });
 
     C4::Context->set_preference('marcflavour', 'MARC21');
-    my $cpl_items_before = SearchItemsByField( 'homebranch', 'CPL');
+    my $cpl_items_before = SearchItemsByField( 'homebranch', $library1->{branchcode});
 
     my ($biblionumber) = get_biblio();
-
-    # Add branches if they don't exist
-    if (not defined GetBranchDetail('CPL')) {
-        ModBranch({add => 1, branchcode => 'CPL', branchname => 'Centerville'});
-    }
-    if (not defined GetBranchDetail('MPL')) {
-        ModBranch({add => 1, branchcode => 'MPL', branchname => 'Midway'});
-    }
 
     my (undef, $initial_items_count) = SearchItems(undef, {rows => 1});
 
     # Add two items
     my (undef, undef, $item1_itemnumber) = AddItem({
-        homebranch => 'CPL',
-        holdingbranch => 'CPL',
+        homebranch => $library1->{branchcode},
+        holdingbranch => $library1->{branchcode},
     }, $biblionumber);
     my (undef, undef, $item2_itemnumber) = AddItem({
-        homebranch => 'MPL',
-        holdingbranch => 'MPL',
+        homebranch => $library2->{branchcode},
+        holdingbranch => $library2->{branchcode},
     }, $biblionumber);
 
     my ($items, $total_results);
@@ -298,14 +310,14 @@ subtest 'SearchItems test' => sub {
     # Search all items where homebranch = 'CPL'
     my $filter = {
         field => 'homebranch',
-        query => 'CPL',
+        query => $library1->{branchcode},
         operator => '=',
     };
     ($items, $total_results) = SearchItems($filter);
     ok($total_results > 0, "There is at least one CPL item");
     my $all_items_are_CPL = 1;
     foreach my $item (@$items) {
-        if ($item->{homebranch} ne 'CPL') {
+        if ($item->{homebranch} ne $library1->{branchcode}) {
             $all_items_are_CPL = 0;
             last;
         }
@@ -315,14 +327,14 @@ subtest 'SearchItems test' => sub {
     # Search all items where homebranch != 'CPL'
     $filter = {
         field => 'homebranch',
-        query => 'CPL',
+        query => $library1->{branchcode},
         operator => '!=',
     };
     ($items, $total_results) = SearchItems($filter);
     ok($total_results > 0, "There is at least one non-CPL item");
     my $all_items_are_not_CPL = 1;
     foreach my $item (@$items) {
-        if ($item->{homebranch} eq 'CPL') {
+        if ($item->{homebranch} eq $library1->{branchcode}) {
             $all_items_are_not_CPL = 0;
             last;
         }
@@ -350,7 +362,7 @@ subtest 'SearchItems test' => sub {
             },
             {
                 field => 'homebranch',
-                query => 'CPL',
+                query => $library1->{branchcode},
                 operator => '=',
             },
         ],
@@ -411,7 +423,7 @@ subtest 'SearchItems test' => sub {
     ($items, $total_results) = SearchItems($filter);
     ok(scalar @$items == 1, 'found 1 item with itemnotes = "foobar"');
 
-    my $cpl_items_after = SearchItemsByField( 'homebranch', 'CPL');
+    my $cpl_items_after = SearchItemsByField( 'homebranch', $library1->{branchcode});
     is( ( scalar( @$cpl_items_after ) - scalar ( @$cpl_items_before ) ), 1, 'SearchItemsByField should return something' );
 
     $schema->storage->txn_rollback;
@@ -423,10 +435,18 @@ subtest 'Koha::Item(s) tests' => sub {
 
     $schema->storage->txn_begin();
 
+    my $builder = t::lib::TestBuilder->new;
+    my $library1 = $builder->build({
+        source => 'Branch',
+    });
+    my $library2 = $builder->build({
+        source => 'Branch',
+    });
+
     # Create a biblio and item for testing
     C4::Context->set_preference('marcflavour', 'MARC21');
     my ($bibnum, $bibitemnum) = get_biblio();
-    my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch1, holdingbranch => $branch2 } , $bibnum);
+    my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $library1->{branchcode}, holdingbranch => $library2->{branchcode} } , $bibnum);
 
     # Get item.
     my $item = Koha::Items->find( $itemnumber );
@@ -434,11 +454,13 @@ subtest 'Koha::Item(s) tests' => sub {
 
     my $homebranch = $item->home_branch();
     is( ref($homebranch), 'Koha::Branch', "Got Koha::Branch from home_branch method" );
-    is( $homebranch->branchcode(), $branch1, "Home branch code matches homebranch" );
+    is( $homebranch->branchcode(), $library1->{branchcode}, "Home branch code matches homebranch" );
 
     my $holdingbranch = $item->holding_branch();
     is( ref($holdingbranch), 'Koha::Branch', "Got Koha::Branch from holding_branch method" );
-    is( $holdingbranch->branchcode(), $branch2, "Home branch code matches holdingbranch" );
+    is( $holdingbranch->branchcode(), $library2->{branchcode}, "Home branch code matches holdingbranch" );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
@@ -446,20 +468,28 @@ subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
 
     $schema->storage->txn_begin();
 
+    my $builder = t::lib::TestBuilder->new;
+    my $library1 = $builder->build({
+        source => 'Branch',
+    });
+    my $library2 = $builder->build({
+        source => 'Branch',
+    });
+
     my ( $biblionumber, $biblioitemnumber ) = get_biblio();
     my $item_infos = [
-        { homebranch => 'CPL', holdingbranch => 'CPL' },
-        { homebranch => 'CPL', holdingbranch => 'CPL' },
-        { homebranch => 'CPL', holdingbranch => 'CPL' },
-        { homebranch => 'MPL', holdingbranch => 'MPL' },
-        { homebranch => 'MPL', holdingbranch => 'MPL' },
-        { homebranch => 'CPL', holdingbranch => 'MPL' },
-        { homebranch => 'CPL', holdingbranch => 'MPL' },
-        { homebranch => 'CPL', holdingbranch => 'MPL' },
+        { homebranch => $library1->{branchcode}, holdingbranch => $library1->{branchcode} },
+        { homebranch => $library1->{branchcode}, holdingbranch => $library1->{branchcode} },
+        { homebranch => $library1->{branchcode}, holdingbranch => $library1->{branchcode} },
+        { homebranch => $library2->{branchcode}, holdingbranch => $library2->{branchcode} },
+        { homebranch => $library2->{branchcode}, holdingbranch => $library2->{branchcode} },
+        { homebranch => $library1->{branchcode}, holdingbranch => $library2->{branchcode} },
+        { homebranch => $library1->{branchcode}, holdingbranch => $library2->{branchcode} },
+        { homebranch => $library1->{branchcode}, holdingbranch => $library2->{branchcode} },
     ];
     my $number_of_items = scalar @$item_infos;
     my $number_of_items_with_homebranch_is_CPL =
-      grep { $_->{homebranch} eq 'CPL' } @$item_infos;
+      grep { $_->{homebranch} eq $library1->{branchcode} } @$item_infos;
 
     my @itemnumbers;
     for my $item_info (@$item_infos) {
@@ -497,7 +527,7 @@ subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
     is( scalar @items, $number_of_items, 'Should return all items for opac' );
 
     my $opachiddenitems = "
-        homebranch: ['CPL']";
+        homebranch: ['$library1->{branchcode}']";
     t::lib::Mocks::mock_preference( 'OpacHiddenItems', $opachiddenitems );
 
     C4::Biblio::EmbedItemsInMarcBiblio( $record, $biblionumber );
@@ -515,7 +545,7 @@ subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
     );
 
     $opachiddenitems = "
-        homebranch: ['CPL', 'MPL']";
+        homebranch: ['$library1->{branchcode}', '$library2->{branchcode}']";
     t::lib::Mocks::mock_preference( 'OpacHiddenItems', $opachiddenitems );
     C4::Biblio::EmbedItemsInMarcBiblio( $record, $biblionumber, undef, 1 );
     @items = $record->field($itemfield);
@@ -524,6 +554,8 @@ subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
         0,
 'For OPAC, If all items are hidden, no item should have been embeded'
     );
+
+    $schema->storage->txn_rollback;
 };
 
 # Helper method to set up a Biblio.

@@ -13,20 +13,26 @@ use C4::Items;
 use C4::Members;
 use C4::Reserves;
 
-my $dbh = C4::Context->dbh;
+use t::lib::TestBuilder;
 
-# Start transaction
-$dbh->{AutoCommit} = 0;
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
+my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 
 $dbh->do("DELETE FROM reserves");
 $dbh->do("DELETE FROM old_reserves");
 
+my $library = $builder->build({
+    source => 'Branch',
+});
+
 local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /redefined/ };
 *C4::Context::userenv = \&Mock_userenv;
 
 sub Mock_userenv {
-    my $userenv = { flags => 1, id => '1', branch => 'CPL' };
+    my $userenv = { flags => 1, id => '1', branch => $library->{branchcode} };
     return $userenv;
 }
 
@@ -41,7 +47,7 @@ my ( $bibnum, $title, $bibitemnum ) = create_helper_biblio();
 diag("Creating item instance for testing.");
 my $item_barcode = 'my_barcode';
 my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
-    { homebranch => 'CPL', holdingbranch => 'CPL', barcode => $item_barcode },
+    { homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, barcode => $item_barcode },
     $bibnum );
 
 # Create some borrowers
@@ -51,7 +57,7 @@ foreach my $i ( 1 .. $borrowers_count ) {
         firstname    => 'my firstname',
         surname      => 'my surname ' . $i,
         categorycode => 'S',
-        branchcode   => 'CPL',
+        branchcode   => $library->{branchcode},
     );
     push @borrowernumbers, $borrowernumber;
 }

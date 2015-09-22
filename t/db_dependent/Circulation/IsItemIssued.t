@@ -5,21 +5,29 @@ use C4::Biblio;
 use C4::Circulation;
 use C4::Items;
 use C4::Members;
+use Koha::Database;
 use Koha::DateUtils;
+
+use t::lib::TestBuilder;
 
 use MARC::Record;
 
 *C4::Context::userenv = \&Mock_userenv;
 
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+
+my $library = $builder->build({
+    source => 'Branch',
+});
 
 my $borrowernumber = AddMember(
     firstname =>  'my firstname',
     surname => 'my surname',
     categorycode => 'S',
-    branchcode => 'CPL',
+    branchcode => $library->{branchcode},
 );
 
 
@@ -27,7 +35,7 @@ my $borrower = GetMember( borrowernumber => $borrowernumber );
 my $record = MARC::Record->new();
 my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, '' );
 
-my ( undef, undef, $itemnumber ) = AddItem( { homebranch => 'CPL', holdingbranch => 'CPL', barcode => 'i_dont_exist' }, $biblionumber );
+my ( undef, undef, $itemnumber ) = AddItem( { homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, barcode => 'i_dont_exist' }, $biblionumber );
 my $item = GetItem( $itemnumber );
 
 is ( IsItemIssued( $item->{itemnumber} ), 0, "item is not on loan at first" );
@@ -41,7 +49,7 @@ is(
     'item that is on loan cannot be deleted',
 );
 
-AddReturn('i_dont_exist', 'CPL');
+AddReturn('i_dont_exist', $library->{branchcode});
 is ( IsItemIssued( $item->{itemnumber} ), 0, "item has been returned" );
 
 is(
@@ -50,9 +58,7 @@ is(
     'item that is not on loan can be deleted',
 );
 
-$dbh->rollback;
-
 # C4::Context->userenv
 sub Mock_userenv {
-    return { branch => 'CPL' };
+    return { branch => $library->{branchcode} };
 }

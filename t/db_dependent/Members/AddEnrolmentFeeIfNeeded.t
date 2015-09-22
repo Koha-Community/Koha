@@ -3,10 +3,19 @@ use Test::More tests => 4;
 
 use C4::Context;
 use C4::Members;
+use Koha::Database;
 
+use t::lib::TestBuilder;
+
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
+
+my $library = $builder->build({
+    source => 'Branch',
+});
 
 my $enrolmentfee_K = 5;
 my $enrolmentfee_J = 10;
@@ -34,7 +43,7 @@ my %borrower_data = (
     firstname =>  'my firstname',
     surname => 'my surname',
     categorycode => 'K',
-    branchcode => 'CPL',
+    branchcode => $library->{branchcode},
 );
 
 my $borrowernumber = C4::Members::AddMember( %borrower_data );
@@ -62,5 +71,3 @@ is( $total, $enrolmentfee_K + $enrolmentfee_J, "Kid growing and become a juvenil
 C4::Members::AddEnrolmentFeeIfNeeded( 'YA', $borrowernumber );
 ( $total ) = C4::Members::GetMemberAccountRecords( $borrowernumber );
 is( $total, $enrolmentfee_K + $enrolmentfee_J + $enrolmentfee_YA, "Juvenile growing and become an young adult, he should pay " . ( $enrolmentfee_K + $enrolmentfee_J + $enrolmentfee_YA ) );
-
-$dbh->rollback;

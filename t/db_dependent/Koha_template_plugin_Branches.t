@@ -21,15 +21,26 @@ use Modern::Perl;
 use Test::More tests => 7;
 
 use C4::Context;
+use Koha::Database;
+
+use t::lib::TestBuilder;
+
 BEGIN {
     use_ok('Koha::Template::Plugin::Branches');
 }
 
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
+my $library = $builder->build({
+    source => 'Branch',
+});
+
 my $plugin = Koha::Template::Plugin::Branches->new();
 ok($plugin, "initialized Branches plugin");
 
-my $name = $plugin->GetName('CPL');
-is($name, 'Centerville', 'retrieved expected name for CPL');
+my $name = $plugin->GetName($library->{branchcode});
+is($name, $library->{branchname}, 'retrieved expected name for library');
 
 $name = $plugin->GetName('__ANY__');
 is($name, '', 'received empty string as name of the "__ANY__" placeholder library code');
@@ -37,7 +48,7 @@ is($name, '', 'received empty string as name of the "__ANY__" placeholder librar
 $name = $plugin->GetName(undef);
 is($name, '', 'received empty string as name of NULL/undefined library code');
 
-my $library = $plugin->GetLoggedInBranchcode();
+$library = $plugin->GetLoggedInBranchcode();
 is($library, '', 'no active library if there is no active user session');
 
 C4::Context->_new_userenv('DUMMY_SESSION_ID');

@@ -42,30 +42,31 @@ use_ok('C4::Biblio');
 use_ok('C4::Bookseller');
 use_ok('C4::Letters');
 use t::lib::Mocks;
+use t::lib::TestBuilder;
+use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Order;
 use Koha::Acquisition::Bookseller;
-use Koha::Database;
-
-my $dbh = C4::Context->dbh;
-
-my $database = Koha::Database->new();
-my $schema = $database->schema();
+my $schema = Koha::Database->schema;
 $schema->storage->txn_begin();
 
-# Start transaction
+my $builder = t::lib::TestBuilder->new;
+my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 
 $dbh->do(q|DELETE FROM letter|);
 $dbh->do(q|DELETE FROM message_queue|);
 $dbh->do(q|DELETE FROM message_transport_types|);
 
+my $library = $builder->build({
+    source => 'Branch',
+});
 my $date = dt_from_string;
 my $borrowernumber = AddMember(
     firstname    => 'Jane',
     surname      => 'Smith',
     categorycode => 'PT',
-    branchcode   => 'CPL',
+    branchcode   => $library->{branchcode},
     dateofbirth  => $date,
 );
 
@@ -157,18 +158,18 @@ Don't forget your date of birth: <<borrowers.dateofbirth>>.
 Look at this wonderful biblio timestamp: <<biblio.timestamp>>.
 };
 
-$dbh->do( q|INSERT INTO letter(branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES ('CPL','my module','my code','my name',1,?,?,'email')|, undef, $title, $content );
+$dbh->do( q|INSERT INTO letter(branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES (?,'my module','my code','my name',1,?,?,'email')|, undef, $library->{branchcode}, $title, $content );
 $letters = C4::Letters::GetLetters();
 is( @$letters, 1, 'GetLetters returns the correct number of letters' );
-is( $letters->[0]->{branchcode}, 'CPL', 'GetLetters gets the branch code correctly' );
+is( $letters->[0]->{branchcode}, $library->{branchcode}, 'GetLetters gets the branch code correctly' );
 is( $letters->[0]->{module}, 'my module', 'GetLetters gets the module correctly' );
 is( $letters->[0]->{code}, 'my code', 'GetLetters gets the code correctly' );
 is( $letters->[0]->{name}, 'my name', 'GetLetters gets the name correctly' );
 
 
 # getletter
-my $letter = C4::Letters::getletter('my module', 'my code', 'CPL', 'email');
-is( $letter->{branchcode}, 'CPL', 'GetLetters gets the branch code correctly' );
+my $letter = C4::Letters::getletter('my module', 'my code', $library->{branchcode}, 'email');
+is( $letter->{branchcode}, $library->{branchcode}, 'GetLetters gets the branch code correctly' );
 is( $letter->{module}, 'my module', 'GetLetters gets the module correctly' );
 is( $letter->{code}, 'my code', 'GetLetters gets the code correctly' );
 is( $letter->{name}, 'my name', 'GetLetters gets the name correctly' );
@@ -234,11 +235,11 @@ is( @$alerts, 0, 'delalert removes an alert' );
 t::lib::Mocks::mock_preference('OPACBaseURL', 'http://thisisatest.com');
 
 my $sms_content = 'This is a SMS for an <<status>>';
-$dbh->do( q|INSERT INTO letter(branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES ('CPL','my module','my code','my name',1,'my title',?,'sms')|, undef, $sms_content );
+$dbh->do( q|INSERT INTO letter(branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES (?,'my module','my code','my name',1,'my title',?,'sms')|, undef, $library->{branchcode}, $sms_content );
 
 my $tables = {
     borrowers => $borrowernumber,
-    branches => 'CPL',
+    branches => $library->{branchcode},
     biblio => $biblionumber,
 };
 my $substitute = {
@@ -256,13 +257,13 @@ my $repeat = [
 ];
 my $prepared_letter = GetPreparedLetter((
     module      => 'my module',
-    branchcode  => 'CPL',
+    branchcode  => $library->{branchcode},
     letter_code => 'my code',
     tables      => $tables,
     substitute  => $substitute,
     repeat      => $repeat,
 ));
-my $branch = GetBranchDetail('CPL');
+my $branch = GetBranchDetail($library->{branchcode});
 my $my_title_letter = qq|$branch->{branchname} - $substitute->{status}|;
 my $my_content_letter = qq|Dear Jane Smith,
 According to our current records, you have items that are overdue.Your library does not charge late fines, but please return or renew them at the branch below as soon as possible.
@@ -285,7 +286,7 @@ is( $prepared_letter->{content}, $my_content_letter, 'GetPreparedLetter returns 
 
 $prepared_letter = GetPreparedLetter((
     module                 => 'my module',
-    branchcode             => 'CPL',
+    branchcode             => $library->{branchcode},
     letter_code            => 'my code',
     tables                 => $tables,
     substitute             => $substitute,
@@ -418,7 +419,7 @@ my $borrowernumber = AddMember(
     firstname    => 'John',
     surname      => 'Smith',
     categorycode => 'PT',
-    branchcode   => 'CPL',
+    branchcode   => $library->{branchcode},
     dateofbirth  => $date,
     email        => 'john.smith@test.de',
 );
@@ -434,6 +435,3 @@ is($err2, "", "Successfully sent serial notification");
 is($mail{'To'}, 'john.smith@test.de', "mailto correct in sent serial notification");
 is($mail{'Message'}, 'Silence in the library,'.$subscriptionid.',No. 0', 'Serial notification text constructed successfully');
 }
-
-
-$schema->storage->txn_rollback();

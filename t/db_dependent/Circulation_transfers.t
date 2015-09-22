@@ -6,8 +6,11 @@ use C4::Context;
 use C4::Items;
 use C4::Branch;
 use C4::Circulation;
+use Koha::Database;
 use Koha::DateUtils;
 use DateTime::Duration;
+
+use t::lib::TestBuilder;
 
 use Test::More tests => 22;
 use Test::Deep;
@@ -26,11 +29,11 @@ can_ok(
       )
 );
 
-#Start transaction
-my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
 
+my $dbh = C4::Context->dbh;
 $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM borrowers|);
 $dbh->do(q|DELETE FROM items|);
@@ -40,46 +43,12 @@ $dbh->do(q|DELETE FROM branchtransfers|);
 
 #Add sample datas
 #Add branches
-my $samplebranch1 = {
-    add            => 1,
-    branchcode     => 'SAB1',
-    branchname     => 'Sample Branch',
-    branchaddress1 => 'sample adr1',
-    branchaddress2 => 'sample adr2',
-    branchaddress3 => 'sample adr3',
-    branchzip      => 'sample zip',
-    branchcity     => 'sample city',
-    branchstate    => 'sample state',
-    branchcountry  => 'sample country',
-    branchphone    => 'sample phone',
-    branchfax      => 'sample fax',
-    branchemail    => 'sample email',
-    branchurl      => 'sample url',
-    branchip       => 'sample ip',
-    branchprinter  => undef,
-    opac_info      => 'sample opac',
-};
-my $samplebranch2 = {
-    add            => 1,
-    branchcode     => 'SAB2',
-    branchname     => 'Sample Branch2',
-    branchaddress1 => 'sample adr1_2',
-    branchaddress2 => 'sample adr2_2',
-    branchaddress3 => 'sample adr3_2',
-    branchzip      => 'sample zip2',
-    branchcity     => 'sample city2',
-    branchstate    => 'sample state2',
-    branchcountry  => 'sample country2',
-    branchphone    => 'sample phone2',
-    branchfax      => 'sample fax2',
-    branchemail    => 'sample email2',
-    branchurl      => 'sample url2',
-    branchip       => 'sample ip2',
-    branchprinter  => undef,
-    opac_info      => 'sample opac2',
-};
-ModBranch($samplebranch1);
-ModBranch($samplebranch2);
+my $samplebranch1 = $builder->build({
+    source => 'Branch',
+});
+my $samplebranch2 = $builder->build({
+    source => 'Branch',
+});
 
 #Add biblio and items
 my $record = MARC::Record->new();
@@ -208,6 +177,3 @@ cmp_deeply(
     C4::Circulation::TransferSlip($samplebranch1->{branchcode}, undef, 1, $samplebranch2->{branchcode}),
     "Barcode and itemnumber for same item both generate same TransferSlip"
     );
-
-#End transaction
-$dbh->rollback;

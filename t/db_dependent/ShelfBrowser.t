@@ -9,16 +9,25 @@ use MARC::Record;
 use C4::Biblio;
 use C4::Context;
 use C4::Items;
+use Koha::Database;
+
+use t::lib::TestBuilder;
 
 use_ok('C4::ShelfBrowser');
 
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 $dbh->do(q|DELETE FROM reserves|);
 $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM items|);
+
+my $library = $builder->build({
+    source => 'Branch',
+});
 
 my $cn;
 
@@ -54,8 +63,8 @@ my ( $biblionumber, undef, undef ) = C4::Biblio::AddBiblio($record, '');
 
 for my $callnumber ( shuffle @callnumbers ) {
     my ( $biblionumber, undef, $itemnumber ) = C4::Items::AddItem({
-        homebranch => 'CPL',
-        holdingbranch => 'CPL',
+        homebranch => $library->{branchcode},
+        holdingbranch => $library->{branchcode},
         itemcallnumber => $callnumber,
     }, $biblionumber);
     $cn->{$callnumber} = {
@@ -208,5 +217,3 @@ is( $nearby->{prev_item}{itemnumber}, $cn->{'600.000'}{itemnumber}, "Test last i
 is( $nearby->{next_item}, undef, "Test end of the shelf: no next link" );
 
 is( scalar( @{$nearby->{items}} ), 4, "Test last item of the shelf: got 4 items" );
-
-$dbh->rollback;

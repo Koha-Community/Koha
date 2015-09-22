@@ -7,6 +7,9 @@ use Modern::Perl;
 
 use Test::More tests => 21;
 
+use Koha::Database;
+use t::lib::TestBuilder;
+
 BEGIN {
     use_ok('C4::Biblio');
     use_ok('C4::Context');
@@ -16,11 +19,15 @@ BEGIN {
     use_ok('MARC::Record');
 }
 
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
-
-# Start transaction
-$dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
+
+my $library = $builder->build({
+    source => 'Branch',
+});
 
 my $sth = $dbh->prepare("SELECT * FROM borrowers ORDER BY RAND() LIMIT 10");
 $sth->execute();
@@ -29,10 +36,10 @@ my @borrowers = @{ $sth->fetchall_arrayref( {} ) };
 # Create the item
 my $record = MARC::Record->new();
 $record->append_fields(
-    MARC::Field->new( '952', '0', '0', a => 'CPL', b => 'CPL' )
+    MARC::Field->new( '952', '0', '0', a => $library->{branchcode}, b => $library->{branchcode} )
 );
 my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio($record, '');
-my @iteminfo = C4::Items::AddItem( { homebranch => 'CPL', holdingbranch => 'CPL' }, $biblionumber );
+my @iteminfo = C4::Items::AddItem( { homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode} }, $biblionumber );
 my $itemnumber = $iteminfo[2];
 
 my $course_id = ModCourse(
@@ -90,5 +97,3 @@ ok( !defined( $course_reserve->{'cr_id'} ), "DelCourseReserve functions correctl
 DelCourse($course_id);
 $course = GetCourse($course_id);
 ok( !defined( $course->{'course_id'} ), "DelCourse deleted course successfully" );
-
-$dbh->rollback;

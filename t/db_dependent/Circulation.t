@@ -27,32 +27,42 @@ use C4::Overdues qw(UpdateFine);
 use Koha::DateUtils;
 use Koha::Database;
 
+use t::lib::TestBuilder;
+
 use Test::More tests => 78 ;
 
 BEGIN {
     use_ok('C4::Circulation');
 }
 
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
-my $schema = Koha::Database->new()->schema();
 
 # Start transaction
 $dbh->{RaiseError} = 1;
-$schema->storage->txn_begin();
 
 # Start with a clean slate
 $dbh->do('DELETE FROM issues');
+
+my $library = $builder->build({
+    source => 'Branch',
+});
+my $library2 = $builder->build({
+    source => 'Branch',
+});
 
 my $CircControl = C4::Context->preference('CircControl');
 my $HomeOrHoldingBranch = C4::Context->preference('HomeOrHoldingBranch');
 
 my $item = {
-    homebranch => 'MPL',
-    holdingbranch => 'MPL'
+    homebranch => $library2->{branchcode},
+    holdingbranch => $library2->{branchcode}
 };
 
 my $borrower = {
-    branchcode => 'MPL'
+    branchcode => $library2->{branchcode}
 };
 
 # No userenv, PickupLibrary
@@ -96,8 +106,8 @@ is(
 
 # Now, set a userenv
 C4::Context->_new_userenv('xxx');
-C4::Context->set_userenv(0,0,0,'firstname','surname', 'MPL', 'Midway Public Library', '', '', '');
-is(C4::Context->userenv->{branch}, 'MPL', 'userenv set');
+C4::Context->set_userenv(0,0,0,'firstname','surname', $library2->{branchcode}, 'Midway Public Library', '', '', '');
+is(C4::Context->userenv->{branch}, $library2->{branchcode}, 'userenv set');
 
 # Userenv set, PickupLibrary
 C4::Context->set_preference('CircControl', 'PickupLibrary');
@@ -108,7 +118,7 @@ is(
 );
 is(
     C4::Circulation::_GetCircControlBranch($item, $borrower),
-    'MPL',
+    $library2->{branchcode},
     '_GetCircControlBranch returned current branch'
 );
 
@@ -174,7 +184,7 @@ my $sth = C4::Context->dbh->prepare("SELECT COUNT(*) FROM accountlines WHERE amo
 $sth->execute();
 my ( $original_count ) = $sth->fetchrow_array();
 
-C4::Context->dbh->do("INSERT INTO borrowers ( cardnumber, surname, firstname, categorycode, branchcode ) VALUES ( '99999999999', 'Hall', 'Kyle', 'S', 'MPL' )");
+C4::Context->dbh->do("INSERT INTO borrowers ( cardnumber, surname, firstname, categorycode, branchcode ) VALUES ( '99999999999', 'Hall', 'Kyle', 'S', ? )", undef, $library2->{branchcode} );
 
 C4::Circulation::ProcessOfflinePayment({ cardnumber => '99999999999', amount => '123.45' });
 
@@ -200,7 +210,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my ($biblionumber, $biblioitemnumber) = AddBiblio($biblio, '');
 
     my $barcode = 'R00000342';
-    my $branch = 'MPL';
+    my $branch = $library2->{branchcode};
 
     my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
         {
@@ -502,7 +512,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 
     LostItem( $itemnumber, 1 );
 
-    my $item = $schema->resultset('Item')->find( $itemnumber );
+    my $item = Koha::Database->new()->schema()->resultset('Item')->find($itemnumber);
     ok( !$item->onloan(), "Lost item marked as returned has false onloan value" );
 
     my $total_due = $dbh->selectrow_array(
@@ -522,7 +532,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 
     LostItem( $itemnumber2, 0 );
 
-    my $item2 = $schema->resultset('Item')->find( $itemnumber2 );
+    my $item2 = Koha::Database->new()->schema()->resultset('Item')->find($itemnumber2);
     ok( $item2->onloan(), "Lost item *not* marked as returned has true onloan value" );
 
     $total_due = $dbh->selectrow_array(
@@ -535,7 +545,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my $now = dt_from_string();
     my $future = dt_from_string();
     $future->add( days => 7 );
-    my $units = C4::Overdues::get_chargeable_units('days', $future, $now, 'MPL');
+    my $units = C4::Overdues::get_chargeable_units('days', $future, $now, $library2->{branchcode});
     ok( $units == 0, '_get_chargeable_units returns 0 for items not past due date (Bug 12596)' );
 
     # Users cannot renew any item if there is an overdue item
@@ -552,7 +562,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my $barcode  = 'R00000342';
     my $barcode2 = 'R00000343';
     my $barcode3 = 'R00000344';
-    my $branch   = 'MPL';
+    my $branch   = $library2->{branchcode};
 
     #Create another record
     my $biblio2 = MARC::Record->new();
@@ -637,7 +647,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 
 {
     my $barcode  = '1234567890';
-    my $branch   = 'MPL';
+    my $branch   = $library2->{branchcode};
 
     my $biblio = MARC::Record->new();
     my ($biblionumber, $biblioitemnumber) = AddBiblio($biblio, '');
@@ -692,8 +702,8 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my $barcode1 = '1234';
     my ( undef, undef, $itemnumber1 ) = AddItem(
         {
-            homebranch    => 'MPL',
-            holdingbranch => 'MPL',
+            homebranch    => $library2->{branchcode},
+            holdingbranch => $library2->{branchcode},
             barcode       => $barcode1,
         },
         $biblionumber
@@ -701,8 +711,8 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my $barcode2 = '4321';
     my ( undef, undef, $itemnumber2 ) = AddItem(
         {
-            homebranch    => 'MPL',
-            holdingbranch => 'MPL',
+            homebranch    => $library2->{branchcode},
+            holdingbranch => $library2->{branchcode},
             barcode       => $barcode2,
         },
         $biblionumber
@@ -712,13 +722,13 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         firstname    => 'Kyle',
         surname      => 'Hall',
         categorycode => 'S',
-        branchcode   => 'MPL',
+        branchcode   => $library2->{branchcode},
     );
     my $borrowernumber2 = AddMember(
         firstname    => 'Chelsea',
         surname      => 'Hall',
         categorycode => 'S',
-        branchcode   => 'MPL',
+        branchcode   => $library2->{branchcode},
     );
 
     my $borrower1 = GetMember( borrowernumber => $borrowernumber1 );
@@ -730,7 +740,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     is( $renewokay, 1, 'Bug 14337 - Verify the borrower can renew with no hold on the record' );
 
     AddReserve(
-        'MPL', $borrowernumber2, $biblionumber,
+        $library2->{branchcode}, $borrowernumber2, $biblionumber,
         '',  1, undef, undef, '',
         undef, undef, undef
     );
@@ -765,7 +775,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 {
     # Don't allow renewing onsite checkout
     my $barcode  = 'R00000XXX';
-    my $branch   = 'CPL';
+    my $branch   = $library->{branchcode};
 
     #Create another record
     my $biblio = MARC::Record->new();
@@ -798,5 +808,4 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     is( $error, 'onsite_checkout', 'A correct error code should be returned by CanBookBeRenewed for on-site checkout' );
 }
 
-$schema->storage->txn_rollback();
 1;

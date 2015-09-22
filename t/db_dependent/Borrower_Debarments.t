@@ -4,20 +4,28 @@ use Modern::Perl;
 
 use C4::Context;
 use C4::Members;
+use Koha::Database;
+
+use t::lib::TestBuilder;
 
 use Test::More tests => 31;
 
 use_ok('Koha::Borrower::Debarments');
 
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+
+my $library = $builder->build({
+    source => 'Branch',
+});
 
 my $borrowernumber = AddMember(
     firstname =>  'my firstname',
     surname => 'my surname',
     categorycode => 'S',
-    branchcode => 'CPL',
+    branchcode => $library->{branchcode},
 );
 
 my $success = AddDebarment({
@@ -153,5 +161,3 @@ is( IsDebarred( $borrowernumber ), undef, 'A patron without a debarred date is n
 
 $dbh->do(q|UPDATE borrowers SET debarred = '9999-12-31'|); # Note: Change this test before the first of January 10000!
 is( IsDebarred( $borrowernumber ), '9999-12-31', 'A patron with a debarred date in the future is debarred' );
-
-$dbh->rollback;

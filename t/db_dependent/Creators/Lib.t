@@ -21,6 +21,8 @@ use Graphics::Magick;
 use Test::More tests => 644;
 use Test::MockModule;
 use t::lib::Mocks;
+use t::lib::TestBuilder;
+use Koha::Database;
 use Test::Warn;
 
 BEGIN {
@@ -50,9 +52,11 @@ can_ok(
       html_table )
 );
 
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
+
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 $dbh->do('DELETE FROM issues');
 $dbh->do('DELETE FROM creator_templates');
 $dbh->do('DELETE FROM creator_layouts');
@@ -66,6 +70,16 @@ $dbh->do('DELETE FROM biblioitems');
 ###########################################################
 #                     Inserted data
 ###########################################################
+
+my $library1 = $builder->build({
+    source => 'Branch',
+});
+my $library2 = $builder->build({
+    source => 'Branch',
+});
+my $library3 = $builder->build({
+    source => 'Branch',
+});
 
 # ---------- Some Templates  --------------------
 my $query = '
@@ -226,11 +240,11 @@ $query = '
      timestamp, branch_code, creator)
   VALUES (?,?,?,?,?,?)';
 $insert_sth = $dbh->prepare($query);
-$insert_sth->execute( 11, $item_number1, $borrowernumber1, 'now()', 'CPL', 'Labels' );
+$insert_sth->execute( 11, $item_number1, $borrowernumber1, 'now()', $library1->{branchcode}, 'Labels' );
 
-$insert_sth->execute( 12, $item_number2, $borrowernumber2, 'now()', 'MPL', 'Labels' );
+$insert_sth->execute( 12, $item_number2, $borrowernumber2, 'now()', $library2->{branchcode}, 'Labels' );
 
-$insert_sth->execute( 12, $item_number3, $borrowernumber3, 'now()', 'PVL', 'Labels' );
+$insert_sth->execute( 12, $item_number3, $borrowernumber3, 'now()', $library3->{branchcode}, 'Labels' );
 
 ###########################################################
 #                     Testing Subs
@@ -792,7 +806,7 @@ is( $batches->[1]->{batch_id},    12,     'batch_id      is good' );
 is( $batches->[1]->{_item_count}, $count, 'item_number   is good for this batch_id' );
 
 # Without filter & creator params -----
-$batches = get_batch_summary( filter => 'branch_code=\'MPL\'', creator => 'Labels' );
+$batches = get_batch_summary( filter => "branch_code='$library1->{branchcode}'", creator => 'Labels' );
 is( @$batches, 1, 'There is 1 batch matching' );
 
 $query = '
@@ -802,7 +816,7 @@ $query = '
     AND    branch_code = ?
   GROUP BY batch_id
   ';
-my ( $id, $nb ) = $dbh->selectrow_array( $query, {}, 'Labels', 'MPL' );
+my ( $id, $nb ) = $dbh->selectrow_array( $query, {}, 'Labels', $library1->{branchcode} );
 
 is( $batches->[0]->{batch_id},    $id, 'batch_id    is good' );
 is( $batches->[0]->{_item_count}, $nb, 'item_number is good for this batch_id' );
@@ -1443,5 +1457,3 @@ sub mock_preference {
         }
     );
 }
-
-$dbh->rollback;

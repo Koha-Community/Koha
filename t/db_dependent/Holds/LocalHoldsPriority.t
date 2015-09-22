@@ -11,6 +11,9 @@ use MARC::Record;
 use C4::Biblio;
 use C4::Items;
 use C4::Members;
+use Koha::Database;
+
+use t::lib::TestBuilder;
 
 BEGIN {
     use FindBin;
@@ -18,11 +21,23 @@ BEGIN {
     use_ok('C4::Reserves');
 }
 
-my $dbh = C4::Context->dbh;
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
 
-# Start transaction
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+my $builder = t::lib::TestBuilder->new;
+
+my $library1 = $builder->build({
+    source => 'Branch',
+});
+my $library2 = $builder->build({
+    source => 'Branch',
+});
+my $library3 = $builder->build({
+    source => 'Branch',
+});
+my $library4 = $builder->build({
+    source => 'Branch',
+});
 
 my $borrowers_count = 5;
 
@@ -30,9 +45,9 @@ my $borrowers_count = 5;
 my ( $bibnum, $title, $bibitemnum ) = create_helper_biblio();
 # Create a helper item for the biblio.
 my ( $item_bibnum, $item_bibitemnum, $itemnumber ) =
-  AddItem( { homebranch => 'MPL', holdingbranch => 'CPL' }, $bibnum );
+  AddItem( { homebranch => $library4->{branchcode}, holdingbranch => $library3->{branchcode} }, $bibnum );
 
-my @branchcodes = qw{XXX RPL CPL MPL CPL MPL};
+my @branchcodes = ( $library1->{branchcode}, $library2->{branchcode}, $library3->{branchcode}, $library4->{branchcode}, $library3->{branchcode}, $library4->{branchcode} );
 
 # Create some borrowers
 my @borrowernumbers;
