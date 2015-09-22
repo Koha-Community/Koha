@@ -304,6 +304,8 @@ sub load_sql_in_order {
     # Make sure the global sysprefs.sql file is loaded first
     my $globalsysprefs = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/sysprefs.sql";
     unshift(@fnames, $globalsysprefs);
+    push @fnames, C4::Context->config('intranetdir') . "/installer/data/mysql/userflags.sql";
+    push @fnames, C4::Context->config('intranetdir') . "/installer/data/mysql/userpermissions.sql";
     foreach my $file (@fnames) {
         #      warn $file;
         undef $/;
