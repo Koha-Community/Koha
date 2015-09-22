@@ -27,7 +27,7 @@ use C4::Context;
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 9;
+        plan tests => 11;
     } else {
         plan skip_all => "Need Test::DBIx::Class"
     }
