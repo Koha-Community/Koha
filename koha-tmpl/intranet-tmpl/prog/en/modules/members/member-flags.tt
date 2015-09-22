@@ -1,3 +1,4 @@
+[% PROCESS 'permissions.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Set permissions for [% surname %], [% firstname %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/treeview/jquery.treeview.css"/>
@@ -131,7 +132,7 @@
 				<input type="checkbox" id="flag-[% loo.bit %]" name="flag" value="[% loo.flag %]"  onclick="toggleChildren(this)" />
 			[% END %]
                 <label class="permissioncode" for="flag-[% loo.bit %]">[% loo.flag %]</label>
-                <span class="permissiondesc">[% loo.flagdesc %]</span>
+                <span class="permissiondesc">[% PROCESS main_permissions name=loo.flag %]</span>
             [% IF ( loo.sub_perm_loop ) %]
                 <ul id="flag-[% loo.bit %]-children">
                     [% FOREACH sub_perm_loo IN loo.sub_perm_loop %]
@@ -142,7 +143,7 @@
 			                <input type="checkbox" id="[% sub_perm_loo.id %]" name="flag" value="[% sub_perm_loo.perm %]" onclick="toggleParent(this)" />
 			            [% END %]
                     <label class="permissioncode" for="[% sub_perm_loo.id %]">[% sub_perm_loo.code %]</label>
-                             <span class="permissiondesc">[% sub_perm_loo.description %]</span>
+                             <span class="permissiondesc">[% PROCESS sub_permissions name=sub_perm_loo.code %]</span>
                         </li>
                     [% END %]
                 </ul>
