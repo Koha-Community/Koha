@@ -257,8 +257,9 @@ $newdata{'city'}    = $input->param('city')    if defined($input->param('city'))
 $newdata{'zipcode'} = $input->param('zipcode') if defined($input->param('zipcode'));
 $newdata{'country'} = $input->param('country') if defined($input->param('country'));
 
-#builds default userid
-if ( (defined $newdata{'userid'}) && ($newdata{'userid'} eq '')){
+# builds default userid
+# userid input text may be empty or missing because of syspref BorrowerUnwantedField
+if ( ( defined $newdata{'userid'} && $newdata{'userid'} eq '' ) || $check_BorrowerUnwantedField =~ /userid/ ) {
     if ( ( defined $newdata{'firstname'} ) && ( defined $newdata{'surname'} ) ) {
         # Full page edit, firstname and surname input zones are present
         $newdata{'userid'} = Generate_Userid( $borrowernumber, $newdata{'firstname'}, $newdata{'surname'} );
