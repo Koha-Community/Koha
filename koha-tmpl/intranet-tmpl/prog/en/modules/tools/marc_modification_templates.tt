@@ -442,7 +442,7 @@ function setSelectByValue( selectId, value ) {
                                                     "[% ActionsLoo.conditional_value |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
                                                     "[% ActionsLoo.conditional_regex |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
                                                     "[% ActionsLoo.description |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"
-                                                )'>Edit</a></td>
+                                                );updateAllEvery();'>Edit</a></td>
                                 <td><a href="marc_modification_templates.pl?template_id=[% ActionsLoo.template_id %]&op=delete_action&mmta_id=[% ActionsLoo.mmta_id %]">Delete</a></td>
                             </tr>
                         [% END %]
