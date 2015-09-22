@@ -57,8 +57,8 @@ foreach my $p (@parts) {
     push(
         @params,
         -or => [
-            surname    => { -like => "$p%" },
-            firstname  => { -like => "$p%" },
+            surname    => { -like => "%$p%" },
+            firstname  => { -like => "%$p%" },
             cardnumber => { -like => "$p%" },
         ]
     );
