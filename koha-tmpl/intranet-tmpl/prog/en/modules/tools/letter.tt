@@ -286,6 +286,7 @@ $(document).ready(function() {
                     [% END %]
                     </select>
                 [% ELSE %]
+                    <input type="hidden" id="branch" name="branchcode" value="[% branchcode %]" />
                     [% Branches.GetName( branchcode ) %]
                 [% END %]
             </li>
