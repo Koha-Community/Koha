@@ -250,6 +250,7 @@ if ($findborrower) {
         my $results = C4::Utils::DataTables::Members::search(
             {
                 searchmember => $findborrower,
+                searchtype => 'contain',
                 dt_params => $dt_params,
             }
         );
