@@ -175,7 +175,8 @@ if ($borrowernumber_hold && !$action) {
                 expiry              => $expiry,
                 diffbranch          => $diffbranch,
                 messages            => $messages,
-                warnings            => $warnings
+                warnings            => $warnings,
+                amount_outstanding  => GetMemberAccountRecords($borrowerinfo->{borrowernumber}),
     );
 }
 
