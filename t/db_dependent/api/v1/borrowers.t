@@ -17,9 +17,10 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 10;
 use Test::Mojo;
 
+use C4::Auth;
 use C4::Context;
 
 use Koha::Database;
@@ -29,6 +30,7 @@ my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
+$ENV{REMOTE_ADDR} = '127.0.0.1';
 my $t = Test::Mojo->new('Koha::REST::V1');
 
 my $categorycode = Koha::Database->new()->schema()->resultset('Category')->first()->categorycode();
@@ -42,9 +44,34 @@ $borrower->store;
 my $borrowernumber = $borrower->borrowernumber;
 
 $t->get_ok('/api/v1/borrowers')
-  ->status_is(200);
+  ->status_is(403);
 
 $t->get_ok("/api/v1/borrowers/$borrowernumber")
+  ->status_is(403);
+
+my $loggedinuser = Koha::Borrower->new;
+$loggedinuser->categorycode($categorycode);
+$loggedinuser->branchcode($branchcode);
+$loggedinuser->userid('test_rest_api_user');
+$loggedinuser->flags(16); # flags for 'borrowers' permission only
+$loggedinuser->store;
+
+my $session = C4::Auth::get_session('');
+$session->param('number', $loggedinuser->borrowernumber);
+$session->param('id', $loggedinuser->userid);
+$session->param('ip', '127.0.0.1');
+$session->param('lasttime', time());
+$session->flush;
+
+my $tx = $t->ua->build_tx(GET => '/api/v1/borrowers');
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+$t->request_ok($tx)
+  ->status_is(200);
+
+$tx = $t->ua->build_tx(GET => "/api/v1/borrowers/$borrowernumber");
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
   ->status_is(200)
   ->json_is('/borrowernumber' => $borrowernumber)
   ->json_is('/surname' => "Test Surname");
