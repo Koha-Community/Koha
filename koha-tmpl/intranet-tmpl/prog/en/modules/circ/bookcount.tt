@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Circulation statistics for [% title |html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -28,7 +29,7 @@ $(document).ready(function(){
 		
 		<tr><td>[% homebranch %]</td>
             <td>[% holdingbranch %]</td>
-            <td>[% IF ( lastdate ) %][% lastdate %][% ELSE %]Item has no transfer record[% END %]</td>
+            <td>[% IF ( lastdate ) %][% lastdate | $KohaDates %][% ELSE %]Item has no transfer record[% END %]</td>
             <td>[% count %]</td>
         </tr>
 </table>

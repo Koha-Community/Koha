@@ -31,7 +31,7 @@ use C4::Koha;
 use C4::Auth;
 use C4::Branch; # GetBranches
 use C4::Biblio; # GetBiblioItemData
-use C4::Dates qw/format_date/;
+use Koha::DateUtils;
 
 my $input        = new CGI;
 my $itm          = $input->param('itm');
@@ -86,7 +86,7 @@ $template->param(
     biblioitemnumber        => $bi,
     homebranch              => $homebranch,
     holdingbranch           => $holdingbranch,
-    lastdate                => $lastdate ?  format_date($lastdate) : 0,
+    lastdate                => $lastdate ? $lastdate : 0,
     count                   => $count,
     branchloop              => $branchloop,
 );
@@ -177,7 +177,7 @@ sub slashdate {
     my ($date) = @_;
     $date or return;
     return (
-        format_date($date),
+        output_pref({ dt => dt_from_string( $date ), dateonly => 1 }),
         substr($date,11,5)
     );
 }
