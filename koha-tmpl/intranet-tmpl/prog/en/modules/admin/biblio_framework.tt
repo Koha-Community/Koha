@@ -1,18 +1,29 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; MARC frameworks
-[% IF ( add_form ) %]
-&rsaquo; [% IF ( frameworkcode ) %]Modify framework text[% ELSE %]Add framework[% END %]
-[% ELSIF ( delete_confirm ) %]
-&rsaquo; Delete framework for [% frameworktext %] ([% frameworkcode %])?
+[% IF op == 'add_form' %]
+&rsaquo; [% IF framework %]Modify framework text[% ELSE %]Add framework[% END %]
+[% ELSIF op == 'delete_confirm' %]
+&rsaquo; Delete framework for [% framework.frameworktext %] ([% framework.frameworkcode %])?
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 /* Import/Export from/to spreadsheet */
 
     var importing = false;
 
     $(document).ready(function() {
+        $("#table_biblio_frameworks").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+                { "aTargets": [ -1, -2, -3, -4, -5 ], "bSortable": false, "bSearchable": false },
+                { "aTargets": [ 0, 1 ], "sType": "natural" },
+            ],
+            "bSort": false,
+            "sPaginationType": "four_button"
+        }));
+
         $("body").css("cursor", "auto");
         $('.import_export_options').hide();
         $('a.import_export_fw').click(function() {
@@ -87,10 +98,10 @@
         <a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
 &rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a>
-[% IF ( add_form ) %]
-&rsaquo; [% IF ( frameworkcode ) %]Modify framework text[% ELSE %]Add framework[% END %]
-[% ELSIF ( delete_confirm ) %]
-&rsaquo; Delete framework for [% frameworktext %] ([% frameworkcode %])?
+[% IF op == 'add_form' %]
+&rsaquo; [% IF framework %]Modify framework text[% ELSE %]Add framework[% END %]
+[% ELSIF op == 'delete_confirm' %]
+&rsaquo; Delete framework for [% framework.frameworktext %] ([% framework.frameworkcode %])?
 [% END %]
 </div>
 
@@ -99,56 +110,90 @@
     <div id="yui-main">
       <div class="yui-b">
 
-[% IF ( else ) %]
-<div id="toolbar" class="btn-toolbar">
-    <a class="btn btn-small" id="newframework" href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form"><i class="fa fa-plus"></i> New framework</a>
-</div>
+[% FOR m IN messages %]
+    <div class="dialog [% m.type %]">
+        [% SWITCH m.code %]
+        [% CASE 'error_on_update' %]
+            An error occurred when updating this framework. Perhaps it already exists.
+        [% CASE 'error_on_insert' %]
+            An error occurred when inserting this framework. The framework might already exist.
+        [% CASE 'error_on_delete' %]
+            An error occurred when deleting this framework. Check the logs.
+        [% CASE 'success_on_update' %]
+            Framework updated successfully.
+        [% CASE 'success_on_insert' %]
+            Framework inserted successfully.
+        [% CASE 'success_on_delete' %]
+            Framework deleted successfully.
+        [% CASE 'already_exists' %]
+            This framework code already exists.
+        [% CASE %]
+            [% m.code %]
+        [% END %]
+    </div>
 [% END %]
 
-[% IF ( add_form ) %]
-    <h1>[% IF ( frameworkcode ) %]Modify framework text[% ELSE %]Add framework[% END %]</h1>
-    <form action="[% script_name %]" name="Aform" method="post" class="validated">
+
+
+[% IF op == 'list'%]
+    <div id="toolbar" class="btn-toolbar">
+        <a class="btn btn-small" id="newframework" href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form"><i class="fa fa-plus"></i> New framework</a>
+    </div>
+[% END %]
+
+[% IF op == 'add_form' %]
+    <h1>[% IF framework %]Modify framework text[% ELSE %]Add framework[% END %]</h1>
+    <form action="/cgi-bin/koha/admin/biblio_framework.pl" name="Aform" method="post" class="validated">
         <input type="hidden" name="op" value="add_validate" />
-    <fieldset class="rows">
-    <ol>
-	[% IF ( frameworkcode ) %]
-        <li><span class="label">Framework code: </span><input type="hidden" id="frameworkcode" name="frameworkcode" value="[% frameworkcode %]" />[% frameworkcode %]
-            <input type="hidden" name="modif" value="1" />
-        </li>
-	[% ELSE %]
-        <li>
-            <label for="frameworkcode" class="required">Framework code: </label>
-            <input type="text" id="frameworkcode" name="frameworkcode" size="4" maxlength="4" onblur="toUC(this)" required="required" class="required" />
-            <span class="required">Required</span>
-    </li>
-	[% END %]
-        <li>
-            <label for="description" class="required">Description: </label>
-            <input type="text" name="frameworktext" id="description" size="40" maxlength="80" value="[% frameworktext |html %]" required="required" class="required" />
-            <span class="required">Required</span>
-        </li>
-    </ol>
-    </fieldset>
-    <fieldset class="action"><input type="submit" value="Submit" class="submit" /></fieldset>
+        <fieldset class="rows">
+            <ol>
+                [% IF framework %]
+                    <li>
+                        <span class="label">Framework code: </span>
+                        <input type="hidden" id="frameworkcode" name="frameworkcode" value="[% framework.frameworkcode %]" />[% framework.frameworkcode %]
+                    </li>
+                [% ELSE %]
+                    <li>
+                        <label for="frameworkcode" class="required">Framework code: </label>
+                        <input type="text" id="frameworkcode" name="frameworkcode" size="4" maxlength="4" onblur="toUC(this)" required="required" class="required" />
+                        <span class="required">Required</span>
+                    </li>
+                [% END %]
+                <li>
+                    <label for="description" class="required">Description: </label>
+                    <input type="text" name="frameworktext" id="description" size="40" maxlength="80" value="[% framework.frameworktext |html %]" required="required" class="required" />
+                    <span class="required">Required</span>
+                </li>
+            </ol>
+        </fieldset>
+        <fieldset class="action">
+            <input type="submit" value="Submit" class="submit" />
+        </fieldset>
     </form>
 [% END %]
 
-[% IF ( delete_confirm ) %]
-<div class="dialog alert">
-    <h3>Delete framework for [% frameworktext %] ([% frameworkcode %])?</h3>
-    [% IF ( total ) %]
-       <p><strong>This framework is used [% total %] times</strong>.</p>
-    [% END %]
-    <form class="inline" action="[% script_name %]" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="frameworkcode" value="[% frameworkcode %]" /><input type="submit" class="approve" value="Yes, delete this framework!" />
-    </form>
-    <form class="inline" action="[% script_name %]" method="get"><input type="submit" class="deny" value="No, do not delete!" /></form>
-</div>
+[% IF op == 'delete_confirm' %]
+    <div class="dialog alert">
+        <h3>Delete framework for [% framework.frameworktext %] ([% framework.frameworkcode %])?</h3>
+        [% IF biblios_use_this_framework %]
+           <p><strong>This framework is used [% biblios_use_this_framework %] times</strong>.</p>
+        [% END %]
+        <form class="inline" action="/cgi-bin/koha/admin/biblio_framework.pl" method="post">
+            <input type="hidden" name="op" value="delete_confirmed" />
+            <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode %]" />
+            <input type="submit" class="approve" value="Yes, delete this framework!" />
+        </form>
+        <form class="inline" action="/cgi-bin/koha/admin/biblio_framework.pl" method="get">
+            <input type="submit" class="deny" value="No, do not delete!" />
+        </form>
+    </div>
 [% END %]
 
-[% IF ( else ) %]
+[% IF op == 'list' %]
 <h1>MARC frameworks</h1>
 <p>Framework name, then go to MARC biblio to set MARC editor parameters</p>
-<table>
+<table id="table_biblio_frameworks">
+    <thead>
     <tr>
         <th>Code</th>
         <th>Description</th>
@@ -158,29 +203,31 @@
         <th title="Export framework structure (fields, subfields) to a spreadsheet file (.csv, .xml, .ods)">Export</th>
         <th title="Import framework structure (fields, subfields) from a spreadsheet file (.csv, .xml, .ods)">Import</th>
     </tr>
+    </thead>
+    <tbody>
     <tr>
         <td>&nbsp;</td>
         <td>Default framework</td>
-        <td><a href="marctagstructure.pl?frameworkcode=[% frameworkcode %]">MARC structure</a></td>
+        <td><a href="marctagstructure.pl?frameworkcode=">MARC structure</a></td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td>
 
             <!-- Button to trigger modal -->
-            <a href="#" data-toggle="modal" data-target="#exportModal_[% frameworkcode %]">Export</a>
+            <a href="#" data-toggle="modal" data-target="#exportModal_default">Export</a>
             <!-- Modal -->
-            <div class="modal hide" id="exportModal_[% frameworkcode %]" tabindex="-1" role="dialog" aria-labelledby="exportLabelexportModal_[% frameworkcode %]" aria-hidden="true">
+            <div class="modal hide" id="exportModal_default" tabindex="-1" role="dialog" aria-labelledby="exportLabelexportModal_default" aria-hidden="true">
                 <div class="modal-header">
                     <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="exportLabelexportModal_[% frameworkcode %]">Export default framework</h3>
+                    <h3 id="exportLabelexportModal_default">Export default framework</h3>
                 </div>
-                <form action="import_export_framework.pl" name="form_[% frameworkcode %]" method="get" target="_blank"  class="form_export">
+                <form action="import_export_framework.pl" name="form_defaul" method="get" target="_blank"  class="form_export">
                     <div class="modal-body">
                         <fieldset>
-                            <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
-                            <p><label for="csv_type_export_[% frameworkcode %]"><input type="radio" name="type_export_[% frameworkcode %]" value="csv" id="csv_type_export_[% frameworkcode %]" checked="checked" /> Export to CSV spreadsheet</label></p>
-                            <p><label for="xml_type_export_[% frameworkcode %]"><input type="radio" name="type_export_[% frameworkcode %]" value="excel" id="xml_type_export_[% frameworkcode %]" /> Export to Excel with XML format, compatible with OpenOffice/LibreOffice as well</label></p>
-                            <p><label for="ods_type_export_[% frameworkcode %]"><input type="radio" name="type_export_[% frameworkcode %]" value="ods" id="ods_type_export_[% frameworkcode %]" /> Export to OpenDocument spreadsheet format</label></p>
+                            <input type="hidden" name="frameworkcode" value="" />
+                            <p><label for="csv_type_export_default"><input type="radio" name="type_export_defaul" value="csv" id="csv_type_export_default" checked="checked" /> Export to CSV spreadsheet</label></p>
+                            <p><label for="xml_type_export_default"><input type="radio" name="type_export_default" value="excel" id="xml_type_export_default" /> Export to Excel with XML format, compatible with OpenOffice/LibreOffice as well</label></p>
+                            <p><label for="ods_type_export_default"><input type="radio" name="type_export_default" value="ods" id="ods_type_export_default" /> Export to OpenDocument spreadsheet format</label></p>
 
                         </fieldset>
                     </div>
@@ -195,19 +242,19 @@
         <td>
 
             <!-- Button to trigger modal -->
-            <a href="#" data-toggle="modal" data-target="#importModal_[% frameworkcode %][% loop.count %]">Import</a>
+            <a href="#" data-toggle="modal" data-target="#importModal_[% framework.frameworkcode %][% frameworks.count %]">Import</a>
             <!-- Modal -->
-            <div class="modal hide" id="importModal_[% frameworkcode %][% loop.count %]" tabindex="-1" role="dialog" aria-labelledby="importLabelexportModal_[% frameworkcode %][% loop.count %]" aria-hidden="true">
+            <div class="modal hide" id="importModal_[% framework.frameworkcode %][% frameworks.count %]" tabindex="-1" role="dialog" aria-labelledby="importLabelexportModal_default[% frameworks.count %]" aria-hidden="true">
                 <div class="modal-header">
                     <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="importLabelexportModal_[% frameworkcode %][% loop.count %]">Import default framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods)</h3>
+                    <h3 id="importLabelexportModal_[% framework.frameworkcode %][% frameworks.count %]">Import default framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods)</h3>
                 </div>
-                <form action="/cgi-bin/koha/admin/import_export_framework.pl" name="form_i_[% frameworkcode %]" id="form_i_[% frameworkcode %]" method="post" enctype="multipart/form-data" class="form_import">
+                <form action="/cgi-bin/koha/admin/import_export_framework.pl" name="form_i_default" id="form_i_default" method="post" enctype="multipart/form-data" class="form_import">
                     <div class="modal-body">
-                            <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
+                            <input type="hidden" name="frameworkcode" value="default" />
                             <input type="hidden" name="action" value="import" />
-                            <p><label for="file_import_[% frameworkcode %]">Upload file:</label> <input type="file" name="file_import_[% frameworkcode %]" id="file_import_[% frameworkcode %]" class="input_import" /></p>
-                            <div id="importing_[% frameworkcode %]" style="display:none" class="importing"><img src="[% interface %]/[% theme %]/img/loading-small.gif" alt="" /><span class="importing_msg"></span></div>
+                            <p><label for="file_import_default">Upload file:</label> <input type="file" name="file_import_default" id="file_import_default" class="input_import" /></p>
+                            <div id="importing_default" style="display:none" class="importing"><img src="[% interface %]/[% theme %]/img/loading-small.gif" alt="" /><span class="importing_msg"></span></div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn">Import</button>
@@ -219,13 +266,13 @@
         </td>
     </tr>
     <!-- note highlight assignment appears backwards because we already have a normal row for Default -->
-    [% FOREACH loo IN loop %]
+    [% FOREACH loo IN frameworks %]
         <tr>
             <td>[% loo.frameworkcode %]</td>
             <td>[% loo.frameworktext %]</td>
             <td><a href="marctagstructure.pl?frameworkcode=[% loo.frameworkcode %]" >MARC structure</a></td>
-            <td><a href="[% loo.script_name %]?op=add_form&amp;frameworkcode=[% loo.frameworkcode |html %]">Edit</a></td>
-            <td><a href="[% loo.script_name %]?op=delete_confirm&amp;frameworkcode=[% loo.frameworkcode |html %]">Delete</a></td>
+            <td><a href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form&amp;frameworkcode=[% loo.frameworkcode |html %]">Edit</a></td>
+            <td><a href="/cgi-bin/koha/admin/biblio_framework.pl?op=delete_confirm&amp;frameworkcode=[% loo.frameworkcode |html %]">Delete</a></td>
             <td>
 
                 <!-- Button to trigger modal -->
@@ -280,8 +327,6 @@
         </tr>
     [% END %]
 </table>
-    [% IF ( previous ) %]<a href="[% previous %]">&lt;&lt; Previous</a>[% END %]
-    [% IF ( next ) %]<a href="[% next %]">Next &gt;&gt;</a>[% END %]
 
 [% END %]
     </div>

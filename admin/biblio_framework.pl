@@ -1,10 +1,7 @@
 #!/usr/bin/perl
-# NOTE: 4-character tabs
-
-#written 20/02/2002 by paul.poulain@free.fr
-# This software is placed under the gnu General Public License, v2 (http://www.gnu.org/licenses/gpl.html)
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2002 Paul Poulain
 #
 # This file is part of Koha.
 #
@@ -21,131 +18,108 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Auth;
 use C4::Output;
+use Koha::Biblios;
+use Koha::BiblioFramework;
+use Koha::BiblioFrameworks;
 use Koha::Cache;
 
-sub StringSearch  {
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("Select * from biblio_framework where (frameworkcode like ?) order by frameworktext");
-	$sth->execute((shift || '') . '%');
-    return $sth->fetchall_arrayref({});
-}
-
-my $input = new CGI;
-my $script_name   = "/cgi-bin/koha/admin/biblio_framework.pl";
-my $frameworkcode = $input->param('frameworkcode') || '';
-my $offset        = $input->param('offset') || 0;
-my $op            = $input->param('op') || '';
-my $pagesize      = 20;
+my $input         = new CGI;
+my $frameworkcode = $input->param('frameworkcode') || q||;
+my $op            = $input->param('op') || q|list|;
 my $cache         = Koha::Cache->get_instance();
+my @messages;
 
-my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "admin/biblio_framework.tt",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-                 flagsrequired => {parameters => 'parameters_remaining_permissions'},
-			     debug => 1,
-			     });
-
-$template->param( script_name  => $script_name);
-$template->param(($op||'else') => 1);
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {   template_name   => "admin/biblio_framework.tt",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { parameters => 'parameters_remaining_permissions' },
+        debug           => 1,
+    }
+);
 
 my $dbh = C4::Context->dbh;
-################## ADD_FORM ##################################
-# called by default. Used to create form to add or  modify a record
-if ($op eq 'add_form') {
-	#start the page and read in includes
-	#---- if primkey exists, it's a modify action, so read values to modify...
-	my $data;
-	if ($frameworkcode) {
-		my $sth=$dbh->prepare("select * from biblio_framework where frameworkcode=?");
-		$sth->execute($frameworkcode);
-		$data=$sth->fetchrow_hashref;
-	}
-	$template->param(
-        frameworkcode => $frameworkcode,
-        frameworktext => $data->{'frameworktext'},
-    );
-													# END $OP eq ADD_FORM
-################## ADD_VALIDATE ##################################
-# called by add_form, used to insert/modify data in DB
-} elsif ($op eq 'add_validate') {
-    my $dbh = C4::Context->dbh;
-    if ( $input->param('frameworktext') and $frameworkcode ) {
-        if ($input->param('modif')) {
-            my $sth=$dbh->prepare("UPDATE biblio_framework SET frameworktext=? WHERE frameworkcode=?");
-            $sth->execute( $input->param('frameworktext'), $frameworkcode );
+if ( $op eq 'add_form' ) {
+    my $framework;
+    if ($frameworkcode) {
+        $framework = Koha::BiblioFrameworks->find($frameworkcode);
+    }
+    $template->param( framework => $framework );
+} elsif ( $op eq 'add_validate' ) {
+    my $frameworkcode = $input->param('frameworkcode');
+    my $frameworktext = $input->param('frameworktext');
+
+    my $framework = Koha::BiblioFrameworks->find($frameworkcode);
+    if ($framework) {
+        $framework->frameworktext($frameworktext);
+        eval { $framework->store; };
+        if ($@) {
+            push @messages, { type => 'error', code => 'error_on_update' };
         } else {
-            my $sth=$dbh->prepare("INSERT into biblio_framework (frameworkcode,frameworktext) values (?,?)");
-            $sth->execute( $frameworkcode, $input->param('frameworktext') );
+            push @messages, { type => 'message', code => 'success_on_update' };
         }
-        $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
-        $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
-	}
-	print $input->redirect($script_name);   # FIXME: unnecessary redirect
-	exit;
-													# END $OP eq ADD_VALIDATE
-################## DELETE_CONFIRM ##################################
-# called by default form, used to confirm deletion of data in DB
-} elsif ($op eq 'delete_confirm') {
-	# Check both categoryitem and biblioitems, see Bug 199
-    my $sth = $dbh->prepare("select count(*) as total from biblio where frameworkcode=?");
-    $sth->execute($frameworkcode);
-    my $total = $sth->fetchrow_hashref->{total};
+    } else {
+        $framework = Koha::BiblioFramework->new(
+            {   frameworkcode => $frameworkcode,
+                frameworktext => $frameworktext,
+            }
+        );
+        eval { $framework->store; };
+        if ($@) {
+            push @messages, { type => 'error', code => 'error_on_insert' };
+        } else {
+            push @messages, { type => 'message', code => 'success_on_insert' };
+        }
+    }
+    $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
+    $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
+    $op = 'list';
+} elsif ( $op eq 'delete_confirm' ) {
+    my $framework = Koha::BiblioFrameworks->find($frameworkcode);
+    my $count = Koha::Biblios->search( { frameworkcode => $frameworkcode, } )->count;
 
-	$sth = $dbh->prepare("select * from biblio_framework where frameworkcode=?");
-	$sth->execute($frameworkcode);
-	my $data = $sth->fetchrow_hashref;
-
-	$template->param(
-        frameworkcode => $frameworkcode,
-        frameworktext => $data->{'frameworktext'},
-        total => $total
+    $template->param(
+        framework                  => $framework,
+        biblios_use_this_framework => $count,
     );
-													# END $OP eq DELETE_CONFIRM
-################## DELETE_CONFIRMED ##################################
-# called by delete_confirm, used to effectively confirm deletion of data in DB
-} elsif ($op eq 'delete_confirmed') {
-    if ($frameworkcode) { 
-		my $sth=$dbh->prepare("delete from marc_tag_structure where frameworkcode=?");
-		$sth->execute($frameworkcode);
-		$sth=$dbh->prepare("delete from marc_subfield_structure where frameworkcode=?");
-		$sth->execute($frameworkcode);
-		$sth=$dbh->prepare("delete from biblio_framework where frameworkcode=?");
-		$sth->execute($frameworkcode);
-        $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
-        $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
-	}
-	print $input->redirect($script_name);   # FIXME: unnecessary redirect
-	exit;
-													# END $OP eq DELETE_CONFIRMED
-################## DEFAULT ##################################
-} else { # DEFAULT
-	my $results = StringSearch($frameworkcode);
-    my $count = scalar(@$results);
-	my @loop_data;
-	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-		push @loop_data, {
-            frameworkcode => $results->[$i]{'frameworkcode'},
-            frameworktext => $results->[$i]{'frameworktext'},
+} elsif ( $op eq 'delete_confirmed' ) {
+    my $framework = Koha::BiblioFrameworks->find($frameworkcode);
+    my $deleted = eval { $framework->delete; };
+
+    if ( $@ or not $deleted ) {
+        push @messages, { type => 'error', code => 'error_on_delete' };
+    } else {
+        eval {
+            my $dbh = C4::Context->dbh;
+            $dbh->do( q|DELETE FROM marc_tag_structure WHERE frameworkcode=?|,      undef, $frameworkcode );
+            $dbh->do( q|DELETE FROM marc_subfield_structure WHERE frameworkcode=?|, undef, $frameworkcode );
         };
-	}
-	$template->param(loop => \@loop_data);
-	if ($offset>0) {
-		my $prevpage = $offset-$pagesize;
-		$template->param(previous => "$script_name?offset=".$prevpage);
-	}
-	if ($offset+$pagesize<$count) {
-		my $nextpage =$offset+$pagesize;
-		$template->param(next => "$script_name?offset=".$nextpage);
-	}
-} #---- END $OP eq DEFAULT
+        if ($@) {
+            push @messages, { type => 'error', code => 'error_on_delete_fk' };
+        } else {
+            push @messages, { type => 'message', code => 'success_on_delete' };
+        }
+    }
+    $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
+    $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
+    $op = 'list';
+}
+
+if ( $op eq 'list' ) {
+    my $frameworks = Koha::BiblioFrameworks->search( {}, { order_by => ['frameworktext'], } );
+    $template->param( frameworks => $frameworks, );
+}
+
+$template->param(
+    messages => \@messages,
+    op       => $op,
+);
 
 output_html_with_http_headers $input, $cookie, $template->output;
 
