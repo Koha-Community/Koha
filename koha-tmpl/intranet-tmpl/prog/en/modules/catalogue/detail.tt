@@ -652,7 +652,7 @@ function verify_images() {
                                 : due [% item.datedue %]
                             </span>
                         [% ELSIF ( item.transfertwhen ) %]
-                            <span class="intransit">In transit from [% item.transfertfrom %] to [% item.transfertto %] since [% item.transfertwhen %]</span>
+                            <span class="intransit">In transit from [% item.transfertfrom %] to [% item.transfertto %] since [% item.transfertwhen | $KohaDates %]</span>
                         [% END %]
 
                         [% IF ( item.itemlost ) %]
@@ -713,7 +713,7 @@ function verify_images() {
                                 since [% item.waitingdate | $KohaDates %]
                             [% ELSE %]
                                 [% IF ( item.reservedate ) %]
-                                    (placed [% item.reservedate %])
+                                    (placed [% item.reservedate | $KohaDates %])
                                 [% END %]
                             [% END %]
                         [% END %]
@@ -735,7 +735,7 @@ function verify_images() {
                         [% END %]
 
                     </td>
-                    <td class="datelastseen">[% item.datelastseen %]</td>
+                    <td class="datelastseen">[% item.datelastseen | $KohaDates %]</td>
                     <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=[% item.type %]&amp;itemnumber=[% item.itemnumber %]&amp;biblionumber=[% item.biblionumber %]&amp;bi=[% item.biblioitemnumber %]#item[% item.itemnumber %]">[% item.barcode %]</a></td>
                     [% IF ( volinfo ) %]
                         <td class="enumchron">

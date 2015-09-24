@@ -205,9 +205,6 @@ foreach my $item (@items) {
     $item->{imageurl} = defined $item->{itype} ? getitemtypeimagelocation('intranet', $itemtypes->{ $item->{itype} }{imageurl})
                                                : '';
 
-    foreach (qw(datelastseen onloan)) {
-        $item->{$_} = output_pref({ dt => dt_from_string( $item->{$_} ), dateonly => 1 });
-    }
     $item->{datedue} = format_sqldatetime($item->{datedue});
     # item damaged, lost, withdrawn loops
     $item->{itemlostloop} = GetAuthorisedValues($authvalcode_items_itemlost, $item->{itemlost}) if $authvalcode_items_itemlost;
@@ -236,7 +233,7 @@ foreach my $item (@items) {
 
     if ( defined $reservedate ) {
         $item->{backgroundcolor} = 'reserved';
-        $item->{reservedate}     = output_pref({ dt => dt_from_string($reservedate ), dateonly => 1 });
+        $item->{reservedate}     = $reservedate;
         $item->{ReservedForBorrowernumber}     = $reservedfor;
         $item->{ReservedForSurname}     = $ItemBorrowerReserveInfo->{'surname'};
         $item->{ReservedForFirstname}   = $ItemBorrowerReserveInfo->{'firstname'};
@@ -250,7 +247,7 @@ foreach my $item (@items) {
 	# Check the transit status
     my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($item->{itemnumber});
     if ( defined( $transfertwhen ) && ( $transfertwhen ne '' ) ) {
-        $item->{transfertwhen} = output_pref({ dt => dt_from_string($transfertwhen ), dateonly => 1 });
+        $item->{transfertwhen} = $transfertwhen;
         $item->{transfertfrom} = $branches->{$transfertfrom}{branchname};
         $item->{transfertto}   = $branches->{$transfertto}{branchname};
         $item->{nocancel} = 1;
