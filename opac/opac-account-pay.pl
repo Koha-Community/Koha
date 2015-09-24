@@ -42,7 +42,7 @@ unless ( C4::Context->preference('EnablePayPalOpacPayments') ) {
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-account-pay-return.tt",
+        template_name   => "opac-account-pay-error.tt",
         query           => $cgi,
         type            => "opac",
         authnotrequired => 0,

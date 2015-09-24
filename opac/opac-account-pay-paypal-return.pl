@@ -30,6 +30,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Accounts;
 use C4::Members;
+use C4::Budgets qw(GetCurrency);
 use Koha::Database;
 
 my $cgi = new CGI;
@@ -48,6 +49,8 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+
+my $active_currency = GetCurrency();
 
 my $token    = $cgi->param('token');
 my $payer_id = $cgi->param('PayerID');
@@ -75,11 +78,12 @@ my $nvp_params = {
     'PAYERID'                        => $payer_id,
     'TOKEN'                          => $token,
     'PAYMENTREQUEST_0_AMT'           => $amount,
+    'PAYMENTREQUEST_0_CURRENCYCODE'  => $active_currency->{currency},
 };
 
 my $response = $ua->request( POST $url, $nvp_params );
 
-my $error;
+my $error = q{};
 if ( $response->is_success ) {
     my $params = url_params_mixed( $response->decoded_content );
 
@@ -98,7 +102,7 @@ if ( $response->is_success ) {
 
 }
 else {
-    $error => "PAYPAL_UNABLE_TO_CONNECT";
+    $error = "PAYPAL_UNABLE_TO_CONNECT";
 }
 
 $template->param(

@@ -1,0 +1,48 @@
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your payment
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+
+<body id="opac-account-pay-return" class="scrollto">
+[% INCLUDE 'masthead.inc' %]
+
+<div class="main">
+    <ul class="breadcrumb">
+        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+        <li><a href="/cgi-bin/koha/opac-user.pl">[% borrower.firstname %] [% borrower.surname %]</a> <span class="divider">&rsaquo;</span></li>
+        <li><a href="#">Your payment</a></li>
+    </ul>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span2">
+                <div id="navigation">
+                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
+                </div>
+            </div>
+            <div class="span10">
+                <div id="useraccount" class="maincontent">
+                    [% IF error %]
+                        <div id="error" class="dialog alert">
+                            <p><strong>Error:</strong> there was an problem processing your payment</p>
+
+                            [% IF error == "PAYPAL_UNABLE_TO_CONNECT" %]
+                                <p>Unable to connect to PayPal.</p>
+                                <p>Please try again later.</p>
+                            [% ELSIF error == "PAYPAL_ERROR_PROCESSING" %]
+                                <p>Unable to verify payment.</p>
+                                <p>Please contact the library to verify your payment.</p>
+                            [% END %]
+                        </div>
+                    [% END %]
+
+                    <a href="/cgi-bin/koha/opac-account.pl">Return to fine details</a>
+                </div> <!-- / #useraccount -->
+            </div> <!-- / .span10 -->
+        </div> <!-- / .row-fluid -->
+    </div> <!-- / .container-fluid -->
+</div> <!-- / .main -->
+
+[% INCLUDE 'opac-bottom.inc' %]
+
+[% BLOCK jsinclude %][% END %]
