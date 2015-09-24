@@ -1,6 +1,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% SET ENABLE_OPAC_PAYMENTS = Koha.Preference('EnablePayPalOpacPayments') %]
+[% SET DISPLAY_PAYMENT_BLOCK = 0 %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your fines and charges</title>
@@ -93,6 +94,7 @@
                                         [% IF ENABLE_OPAC_PAYMENTS %]
                                             <td>
                                                 [% IF ACCOUNT_LINE.amountoutstanding > 0 %]
+                                                    [% SET DISPLAY_PAYMENT_BLOCK = 1 %]
                                                     <input class="checkbox-pay pay-online hidden" name="accountline" type="checkbox" id="checkbox-pay-[% ACCOUNT_LINE.accountlines_id %]" value="[% ACCOUNT_LINE.accountlines_id %]">
                                                     <input type="hidden" id="amount-[% ACCOUNT_LINE.accountlines_id %]" value="[% ACCOUNT_LINE.amountoutstanding %]" />
                                                 [% END %]
@@ -132,7 +134,7 @@
 
                         </table>
 
-                            [% IF ENABLE_OPAC_PAYMENTS %]
+                            [% IF ENABLE_OPAC_PAYMENTS && DISPLAY_PAYMENT_BLOCK %]
                                 <fieldset class="pay-online hidden">
                                     <legend>Pay selected fines and charges</legend>
                                         <span class="help-block"><h3>Payment method</h3></span>
