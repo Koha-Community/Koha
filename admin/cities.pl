@@ -17,97 +17,99 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Auth;
 use C4::Output;
 
-sub StringSearch {
-	my $sth = C4::Context->dbh->prepare("SELECT * FROM cities WHERE (city_name LIKE ?)");
-	$sth->execute("%" . (shift || '') . "%");
-    return $sth->fetchall_arrayref({});
-}
+use Koha::Cities;
 
-my $input = new CGI;
-my $script_name = "/cgi-bin/koha/admin/cities.pl";
-my $searchfield = $input->param('city_name');
+my $input       = new CGI;
+my $searchfield = $input->param('city_name') // q||;
 my $cityid      = $input->param('cityid');
-my $op          = $input->param('op') || '';
+my $op          = $input->param('op') || 'list';
+my @messages;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "admin/cities.tt",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-                 flagsrequired => {parameters => 'parameters_remaining_permissions'},
-			     debug => 1,
-			     });
-
-$template->param(	script_name => $script_name,
-		 	cityid     => $cityid ,
-		 	searchfield => $searchfield);
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {   template_name   => "admin/cities.tt",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { parameters => 'parameters_remaining_permissions' },
+        debug           => 1,
+    }
+);
 
 my $dbh = C4::Context->dbh;
-################## ADD_FORM ##################################
-# called by default. Used to create form to add or  modify a record
-if ($op eq 'add_form') {
-	$template->param(add_form => 1);
-	
-	#---- if primkey exists, it's a modify action, so read values to modify...
-	my $data;
-	if ($cityid) {
-		my $sth=$dbh->prepare("select cityid,city_name,city_state,city_zipcode,city_country from cities where  cityid=?");
-		$sth->execute($cityid);
-		$data=$sth->fetchrow_hashref;
-	}
+if ( $op eq 'add_form' ) {
+    my $city;
+    if ($cityid) {
+        $city = Koha::Cities->find($cityid);
+    }
 
-	$template->param(	
-				city_name       => $data->{'city_name'},
-				city_state      => $data->{'city_state'},
-				city_zipcode    => $data->{'city_zipcode'},
-				city_country    => $data->{'city_country'});
-# END $OP eq ADD_FORM
-################## ADD_VALIDATE ##################################
-# called by add_form, used to insert/modify data in DB
-} elsif ($op eq 'add_validate') {
- 	my $sth;
-	
-	if ($input->param('cityid') ){
-		$sth=$dbh->prepare("UPDATE cities SET city_name=?,city_state=?,city_zipcode=?,city_country=? WHERE cityid=?");
-		$sth->execute($input->param('city_name'),$input->param('city_state'),$input->param('city_zipcode'),$input->param('city_country'),$input->param('cityid'));
-	}
-	else{	
-		$sth=$dbh->prepare("INSERT INTO cities (city_name,city_state,city_zipcode,city_country) values (?,?,?,?)");
-		$sth->execute($input->param('city_name'),$input->param('city_state'),$input->param('city_zipcode'),$input->param('city_country'));
-	}
-	print $input->redirect($script_name);
-	exit;
-################## DELETE_CONFIRM ##################################
-# called by default form, used to confirm deletion of data in DB
-} elsif ($op eq 'delete_confirm') {
-	$template->param(delete_confirm => 1);
-	my $sth=$dbh->prepare("select cityid,city_name,city_state,city_zipcode,city_country from cities where  cityid=?");
-	$sth->execute($cityid);
-	my $data=$sth->fetchrow_hashref;
-    $template->param(
-        city_name    =>	$data->{'city_name'},
-        city_state   =>	$data->{'city_state'},
-        city_zipcode => $data->{'city_zipcode'},
-        city_country => $data->{'city_country'},
-    );
-################## DELETE_CONFIRMED ##################################
-# called by delete_confirm, used to effectively confirm deletion of data in DB
-} elsif ($op eq 'delete_confirmed') {
-	my $sth=$dbh->prepare("delete from cities where cityid=?");
-	$sth->execute($cityid);
-	print $input->redirect($script_name);
-	exit;   # FIXME: what's the point of redirecting to this same page?
-													# END $OP eq DELETE_CONFIRMED
-} else { # DEFAULT
-	$template->param(else => 1);
-	$template->param(loop => StringSearch($searchfield));
+    $template->param( city => $city, );
+} elsif ( $op eq 'add_validate' ) {
+    my $cityid       = $input->param('cityid');
+    my $city_name    = $input->param('city_name');
+    my $city_state   = $input->param('city_state');
+    my $city_zipcode = $input->param('city_zipcode');
+    my $city_country = $input->param('city_country');
 
-} #---- END $OP eq DEFAULT
+    if ($cityid) {
+        my $city = Koha::Cities->find($cityid);
+        $city->city_name($city_name);
+        $city->city_state($city_state);
+        $city->city_zipcode($city_zipcode);
+        $city->city_country($city_country);
+        eval { $city->store; };
+        if ($@) {
+            push @messages, { type => 'error', code => 'error_on_update' };
+        } else {
+            push @messages, { type => 'message', code => 'success_on_update' };
+        }
+    } else {
+        my $city = Koha::City->new(
+            {   city_name    => $city_name,
+                city_state   => $city_state,
+                city_zipcode => $city_zipcode,
+                city_country => $city_country,
+            }
+        );
+        eval { $city->store; };
+        if ($@) {
+            push @messages, { type => 'error', code => 'error_on_insert' };
+        } else {
+            push @messages, { type => 'message', code => 'success_on_insert' };
+        }
+    }
+    $searchfield = q||;
+    $op          = 'list';
+} elsif ( $op eq 'delete_confirm' ) {
+    my $city = Koha::Cities->find($cityid);
+    $template->param( city => $city, );
+} elsif ( $op eq 'delete_confirmed' ) {
+    my $city = Koha::Cities->find($cityid);
+    my $deleted = eval { $city->delete; };
+
+    if ( $@ or not $deleted ) {
+        push @messages, { type => 'error', code => 'error_on_delete' };
+    } else {
+        push @messages, { type => 'message', code => 'success_on_delete' };
+    }
+    $op = 'list';
+}
+
+if ( $op eq 'list' ) {
+    my $cities = Koha::Cities->search( { city_name => { -like => "%$searchfield%" } } );
+    $template->param( cities => $cities, );
+}
+
+$template->param(
+    cityid      => $cityid,
+    searchfield => $searchfield,
+    messages    => \@messages,
+    op          => $op,
+);
+
 output_html_with_http_headers $input, $cookie, $template->output;
