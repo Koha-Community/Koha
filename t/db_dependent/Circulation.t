@@ -596,8 +596,6 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 
 $dbh->rollback;
 
-<<<<<<< HEAD
-=======
 {
     # Don't allow renewing onsite checkout
     my $barcode  = 'R00000XXX';
@@ -635,5 +633,4 @@ $dbh->rollback;
 }
 
 $schema->storage->txn_rollback();
->>>>>>> ea92a92... Bug 14470: Do not allow renew for on-site checkouts
 1;
