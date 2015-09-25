@@ -85,6 +85,10 @@
                     <dd>Manage OAI Sets</dd>
                     <dt><a href="/cgi-bin/koha/admin/items_search_fields.pl">Item search fields</a></dt>
                     <dd>Manage custom fields for item search.</dd>
+                    [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' %]
+                        <dt><a href="/cgi-bin/koha/admin/searchengine/elasticsearch/mappings.pl">Search engine configuration</a></dt>
+                        <dd>Manage indexes, facets, and their mappings to MARC fields and subfields.</dd>
+                    [% END %]
                 </dl>
 
                 <h3>Acquisition parameters</h3>
