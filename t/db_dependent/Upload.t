@@ -125,7 +125,7 @@ sub test03 {
     my $cgi= $upl->cgi;
     is( $upl->count, 1, 'Upload 3 includes one temporary file' );
     my $r = $upl->get({ id => $upl->result });
-    is( $r->{uploadcategorycode}, 'koha_upload', 'Check category temp file' );
+    is( $r->{uploadcategorycode} =~ /_upload$/, 1, 'Check category temp file' );
 }
 
 sub test04 { # Fail on a file already there
