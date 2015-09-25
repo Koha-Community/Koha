@@ -10868,6 +10868,34 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.21.00.027";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        INSERT INTO permissions (module_bit, code, description)
+        VALUES (1, 'self_checkout', 'Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID')
+    |);
+
+    my $AutoSelfCheckID = C4::Context->preference('AutoSelfCheckID');
+
+    $dbh->do(q|
+        UPDATE borrowers
+        SET flags=0
+        WHERE userid=?
+    |, undef, $AutoSelfCheckID);
+
+    $dbh->do(q|
+        DELETE FROM user_permissions
+        WHERE borrowernumber=(SELECT borrowernumber FROM borrowers WHERE userid=?)
+    |, undef, $AutoSelfCheckID);
+
+    $dbh->do(q|
+        INSERT INTO user_permissions(borrowernumber, module_bit, code)
+        SELECT borrowernumber, 1, 'self_checkout' FROM borrowers WHERE userid=?
+    |, undef, $AutoSelfCheckID);
+    print "Upgrade to $DBversion done (Bug 14298: AutoSelfCheckID user should only be able to access SCO)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
