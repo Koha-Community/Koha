@@ -115,24 +115,6 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("id");
 
-=head1 UNIQUE CONSTRAINTS
-
-=head2 C<index_name_2>
-
-=over 4
-
-=item * L</index_name>
-
-=item * L</marc_type>
-
-=item * L</marc_field>
-
-=back
-
-=cut
-
-__PACKAGE__->add_unique_constraint("index_name_2", ["index_name", "marc_type", "marc_field"]);
-
 =head1 RELATIONS
 
 =head2 search_marc_to_fields
@@ -161,8 +143,8 @@ Composing rels: L</search_marc_to_fields> -> search_field
 __PACKAGE__->many_to_many("search_fields", "search_marc_to_fields", "search_field");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-09-01 16:56:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Vo1uboO+iKCunqfpetswDg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-09-25 15:20:52
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:o579otqUGA8XhO+NYv99dw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

@@ -37,6 +37,12 @@ __PACKAGE__->table("search_field");
 
 the name of the field as it will be stored in the search engine
 
+=head2 label
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
 =head2 type
 
   data_type: 'enum'
@@ -52,6 +58,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "name",
   { data_type => "varchar", is_nullable => 0, size => 255 },
+  "label",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "type",
   {
     data_type => "enum",
@@ -114,8 +122,8 @@ Composing rels: L</search_marc_to_fields> -> search_marc_map
 __PACKAGE__->many_to_many("search_marc_maps", "search_marc_to_fields", "search_marc_map");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-09-01 16:56:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VN1BPJJTnr7p+I2bRZoBEA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-09-25 15:21:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HD0m5hWYi/GXgz1rvk+Ipw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
