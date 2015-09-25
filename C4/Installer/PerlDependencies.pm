@@ -757,11 +757,6 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '1.29',
     },
-    'Test::CGI::Multipart' => {
-        'usage'    => 'Tests',
-        'required' => '0',
-        'min_ver'  => '0.0.3',
-    },
     'XML::Writer' => {
         'usage'    => 'Command line scripts',
         'required' => '0',
