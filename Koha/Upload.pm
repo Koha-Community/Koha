@@ -252,8 +252,13 @@ sub _init {
 
     $params->{tmp} = $params->{temp} if !exists $params->{tmp};
     $self->{temporary} = $params->{tmp}? 1: 0; #default false
-    $self->{category} = $params->{tmp}? KOHA_UPLOAD:
-        ( $params->{category} || KOHA_UPLOAD );
+    if( $params->{tmp} ) {
+        my $db =  C4::Context->config('database');
+        $self->{category} = KOHA_UPLOAD;
+        $self->{category} =~ s/koha/$db/;
+    } else {
+        $self->{category} = $params->{category} || KOHA_UPLOAD;
+    }
 
     $self->{files} = {};
     $self->{uid} = C4::Context->userenv->{number} if C4::Context->userenv;
