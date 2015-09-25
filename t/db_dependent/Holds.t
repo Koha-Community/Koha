@@ -3,6 +3,8 @@
 use Modern::Perl;
 
 use t::lib::Mocks;
+use t::lib::TestBuilder;
+
 use C4::Context;
 use C4::Branch;
 
@@ -23,11 +25,16 @@ BEGIN {
     use_ok('C4::Reserves');
 }
 
+my $builder = t::lib::TestBuilder->new();
 my $dbh = C4::Context->dbh;
 
 # Start transaction
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
+
+# Create two random branches
+my $branch_1 = $builder->build({ source => 'Branch' })->{ branchcode };
+my $branch_2 = $builder->build({ source => 'Branch' })->{ branchcode };
 
 my $borrowers_count = 5;
 
@@ -44,7 +51,8 @@ $insert_sth->execute('ONLY1');
 my ($bibnum, $title, $bibitemnum) = create_helper_biblio('DUMMY');
 
 # Create item instance for testing.
-my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => 'CPL', holdingbranch => 'CPL' } , $bibnum);
+my ($item_bibnum, $item_bibitemnum, $itemnumber)
+    = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $bibnum);
 
 # Create some borrowers
 my @borrowernumbers;
@@ -53,20 +61,17 @@ foreach (1..$borrowers_count) {
         firstname =>  'my firstname',
         surname => 'my surname ' . $_,
         categorycode => 'S',
-        branchcode => 'CPL',
+        branchcode => $branch_1,
     );
     push @borrowernumbers, $borrowernumber;
 }
 
-my $biblionumber   = $bibnum;
-
-my @branches = GetBranchesLoop();
-my $branch = $branches[0][0]{value};
+my $biblionumber = $bibnum;
 
 # Create five item level holds
 foreach my $borrowernumber ( @borrowernumbers ) {
     AddReserve(
-        $branch,
+        $branch_1,
         $borrowernumber,
         $biblionumber,
         my $bibitems = q{},
@@ -89,10 +94,10 @@ is( $reserves->[2]->{priority}, 3, "Reserve 3 has a priority of 3" );
 is( $reserves->[3]->{priority}, 4, "Reserve 4 has a priority of 4" );
 is( $reserves->[4]->{priority}, 5, "Reserve 5 has a priority of 5" );
 
-my ( $reservedate, $borrowernumber, $branchcode, $reserve_id ) = GetReservesFromItemnumber($itemnumber);
+my ( $reservedate, $borrowernumber, $branch_1code, $reserve_id ) = GetReservesFromItemnumber($itemnumber);
 is( $reservedate, output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }), "GetReservesFromItemnumber should return a valid reserve date");
 is( $borrowernumber, $borrowernumbers[0], "GetReservesFromItemnumber should return a valid borrowernumber");
-is( $branchcode, 'CPL', "GetReservesFromItemnumber should return a valid branchcode");
+is( $branch_1code, $branch_1, "GetReservesFromItemnumber should return a valid branchcode");
 ok($reserve_id, "Test GetReservesFromItemnumber()");
 
 my $hold = Koha::Holds->find( $reserve_id );
@@ -122,11 +127,11 @@ $reserves = GetReservesFromBiblionumber({ biblionumber => $biblionumber });
 is( scalar(@$reserves), $borrowers_count - 1, "Test CancelReserve()" );
 
 
-( $reservedate, $borrowernumber, $branchcode, $reserve_id ) = GetReservesFromItemnumber($itemnumber);
+( $reservedate, $borrowernumber, $branch_1code, $reserve_id ) = GetReservesFromItemnumber($itemnumber);
 ModReserve({
     reserve_id    => $reserve_id,
     rank          => '4',
-    branchcode    => $branch,
+    branchcode    => $branch_1,
     itemnumber    => $itemnumber,
     suspend_until => C4::Dates->new("2013-01-01","iso")->output(),
 });
@@ -149,7 +154,7 @@ ok( !$reserve->{'suspend'}, "Test AutoUnsuspendReserves()" );
 
 # Add a new hold for the borrower whose hold we canceled earlier, this time at the bib level
 AddReserve(
-    $branch,
+    $branch_1,
     $borrowernumber,
     $biblionumber,
     my $bibitems = q{},
@@ -209,7 +214,7 @@ ok( $reserve->{'priority'} eq '5', "Test AlterPriority(), move to bottom" );
 
 my ($foreign_bibnum, $foreign_title, $foreign_bibitemnum) = create_helper_biblio('DUMMY');
 my ($foreign_item_bibnum, $foreign_item_bibitemnum, $foreign_itemnumber)
-  = AddItem({ homebranch => 'MPL', holdingbranch => 'MPL' } , $foreign_bibnum);
+  = AddItem({ homebranch => $branch_2, holdingbranch => $branch_2 } , $foreign_bibnum);
 $dbh->do('DELETE FROM issuingrules');
 $dbh->do(
     q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
@@ -228,19 +233,19 @@ $dbh->do(
 t::lib::Mocks::mock_preference('ReservesControlBranch', 'ItemHomeLibrary');
 t::lib::Mocks::mock_preference('item-level_itypes', 1);
 
-# if IndependentBranches is OFF, a CPL patron can reserve an MPL item
+# if IndependentBranches is OFF, a $branch_1 patron can reserve an $branch_2 item
 t::lib::Mocks::mock_preference('IndependentBranches', 0);
 ok(
     CanItemBeReserved($borrowernumbers[0], $foreign_itemnumber) eq 'OK',
-    'CPL patron allowed to reserve MPL item with IndependentBranches OFF (bug 2394)'
+    '$branch_1 patron allowed to reserve $branch_2 item with IndependentBranches OFF (bug 2394)'
 );
 
-# if IndependentBranches is OFF, a CPL patron cannot reserve an MPL item
+# if IndependentBranches is OFF, a $branch_1 patron cannot reserve an $branch_2 item
 t::lib::Mocks::mock_preference('IndependentBranches', 1);
 t::lib::Mocks::mock_preference('canreservefromotherbranches', 0);
 ok(
     CanItemBeReserved($borrowernumbers[0], $foreign_itemnumber) eq 'cannotReserveFromOtherBranches',
-    'CPL patron NOT allowed to reserve MPL item with IndependentBranches ON ... (bug 2394)'
+    '$branch_1 patron NOT allowed to reserve $branch_2 item with IndependentBranches ON ... (bug 2394)'
 );
 
 # ... unless canreservefromotherbranches is ON
@@ -252,9 +257,9 @@ ok(
 
 # Regression test for bug 11336
 ($bibnum, $title, $bibitemnum) = create_helper_biblio('DUMMY');
-($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => 'CPL', holdingbranch => 'CPL' } , $bibnum);
+($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $bibnum);
 AddReserve(
-    $branch,
+    $branch_1,
     $borrowernumbers[0],
     $bibnum,
     '',
@@ -268,9 +273,9 @@ my $reserveid1 = C4::Reserves::GetReserveId(
     }
 );
 
-($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => 'CPL', holdingbranch => 'CPL' } , $bibnum);
+($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $bibnum);
 AddReserve(
-    $branch,
+    $branch_1,
     $borrowernumbers[1],
     $bibnum,
     '',
@@ -288,9 +293,9 @@ CancelReserve({ reserve_id => $reserveid1 });
 $reserve2 = GetReserve( $reserveid2 );
 is( $reserve2->{priority}, 1, "After cancelreserve, the 2nd reserve becomes the first on the waiting list" );
 
-($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => 'CPL', holdingbranch => 'CPL' } , $bibnum);
+($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $bibnum);
 AddReserve(
-    $branch,
+    $branch_1,
     $borrowernumbers[0],
     $bibnum,
     '',
@@ -320,9 +325,9 @@ ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for d
 
 # Regression test for bug 9532
 ($bibnum, $title, $bibitemnum) = create_helper_biblio('CANNOT');
-($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => 'CPL', holdingbranch => 'CPL', itype => 'CANNOT' } , $bibnum);
+($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CANNOT' } , $bibnum);
 AddReserve(
-    $branch,
+    $branch_1,
     $borrowernumbers[0],
     $bibnum,
     '',
@@ -362,25 +367,25 @@ $dbh->do('DELETE FROM default_circ_rules');
 $dbh->do(q{
     INSERT INTO branch_item_rules (branchcode, itemtype, holdallowed, returnbranch)
     VALUES (?, ?, ?, ?)
-}, {}, 'CPL', 'CANNOT', 0, 'homebranch');
+}, {}, $branch_1, 'CANNOT', 0, 'homebranch');
 $dbh->do(q{
     INSERT INTO branch_item_rules (branchcode, itemtype, holdallowed, returnbranch)
     VALUES (?, ?, ?, ?)
-}, {}, 'CPL', 'CAN', 1, 'homebranch');
+}, {}, $branch_1, 'CAN', 1, 'homebranch');
 ($bibnum, $title, $bibitemnum) = create_helper_biblio('CANNOT');
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
-    { homebranch => 'CPL', holdingbranch => 'CPL', itype => 'CANNOT' } , $bibnum);
+    { homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CANNOT' } , $bibnum);
 is(CanItemBeReserved($borrowernumbers[0], $itemnumber), 'notReservable',
     "CanItemBeReserved should returns 'notReservable'");
 
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
-    { homebranch => 'MPL', holdingbranch => 'CPL', itype => 'CAN' } , $bibnum);
+    { homebranch => $branch_2, holdingbranch => $branch_1, itype => 'CAN' } , $bibnum);
 is(CanItemBeReserved($borrowernumbers[0], $itemnumber),
     'cannotReserveFromOtherBranches',
     "CanItemBeReserved should returns 'cannotReserveFromOtherBranches'");
 
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
-    { homebranch => 'CPL', holdingbranch => 'CPL', itype => 'CAN' } , $bibnum);
+    { homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CAN' } , $bibnum);
 is(CanItemBeReserved($borrowernumbers[0], $itemnumber), 'OK',
     "CanItemBeReserved should returns 'OK'");
 
@@ -431,7 +436,8 @@ $dbh->do('DELETE FROM items');
 $dbh->do('DELETE FROM biblio');
 
 ( $bibnum, $title, $bibitemnum ) = create_helper_biblio('ONLY1');
-( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem( { homebranch => 'CPL', holdingbranch => 'CPL' }, $bibnum );
+( $item_bibnum, $item_bibitemnum, $itemnumber )
+    = AddItem( { homebranch => $branch_1, holdingbranch => $branch_1 }, $bibnum );
 
 $dbh->do(
     q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
@@ -442,7 +448,7 @@ $dbh->do(
 is( CanItemBeReserved( $borrowernumbers[0], $itemnumber ),
     'OK', 'Patron can reserve item with hold limit of 1, no holds placed' );
 
-my $res_id = AddReserve( $branch, $borrowernumbers[0], $bibnum, '', 1, );
+my $res_id = AddReserve( $branch_1, $borrowernumbers[0], $bibnum, '', 1, );
 
 is( CanItemBeReserved( $borrowernumbers[0], $itemnumber ),
     'tooManyReserves', 'Patron cannot reserve item with hold limit of 1, 1 bib level hold placed' );
