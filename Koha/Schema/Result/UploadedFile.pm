@@ -57,7 +57,7 @@ __PACKAGE__->table("uploaded_files");
   default_value: current_timestamp
   is_nullable: 0
 
-=head2 categorycode
+=head2 uploadcategorycode
 
   data_type: 'tinytext'
   is_nullable: 1
@@ -65,6 +65,16 @@ __PACKAGE__->table("uploaded_files");
 =head2 owner
 
   data_type: 'integer'
+  is_nullable: 1
+
+=head2 public
+
+  data_type: 'tinyint'
+  is_nullable: 1
+
+=head2 permanent
+
+  data_type: 'tinyint'
   is_nullable: 1
 
 =cut
@@ -87,10 +97,14 @@ __PACKAGE__->add_columns(
     default_value => \"current_timestamp",
     is_nullable => 0,
   },
-  "categorycode",
+  "uploadcategorycode",
   { data_type => "tinytext", is_nullable => 1 },
   "owner",
   { data_type => "integer", is_nullable => 1 },
+  "public",
+  { data_type => "tinyint", is_nullable => 1 },
+  "permanent",
+  { data_type => "tinyint", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -106,8 +120,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-08-07 16:06:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ox6orH0SkhCfPdjX24fnZw
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-09-25 15:20:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Cq/HSuTaBxZH2qSGEddoaQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
