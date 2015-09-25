@@ -33,7 +33,7 @@ and just get whatever querybuilder you need.
 =head1 SYNOPSIS
 
     use Koha::SearchEngine::QueryBuilder;
-    my $qb = Koha::SearchEngine::QueryBuilder->new();
+    my $qb = Koha::SearchEngine::QueryBuilder->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
 
 =head1 METHODS
 

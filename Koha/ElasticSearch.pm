@@ -20,14 +20,18 @@ package Koha::ElasticSearch;
 use base qw(Class::Accessor);
 
 use C4::Context;
-use Carp;
+
 use Koha::Database;
+
+use Carp;
+use JSON;
 use Modern::Perl;
 use Readonly;
 
 use Data::Dumper;    # TODO remove
 
 __PACKAGE__->mk_ro_accessors(qw( index ));
+__PACKAGE__->mk_accessors(qw( sort_fields ));
 
 # Constants to refer to the standard index names
 Readonly our $BIBLIOS_INDEX     => 'biblios';
@@ -158,12 +162,13 @@ created.
 sub get_elasticsearch_mappings {
     my ($self) = @_;
 
+    # TODO cache in the object?
     my $mappings = {
         data => {
             properties => {
                 record => {
                     store          => "yes",
-                    include_in_all => "false",
+                    include_in_all => JSON::false,
                     type           => "string",
                 },
                 '_all.phrase' => {
@@ -174,10 +179,11 @@ sub get_elasticsearch_mappings {
             }
         }
     };
+    my %sort_fields;
     my $marcflavour = lc C4::Context->preference('marcflavour');
     $self->_foreach_mapping(
         sub {
-            my ( $name, $type, $facet, $suggestible, $marc_type ) = @_;
+            my ( $name, $type, $facet, $suggestible, $sort, $marc_type ) = @_;
             return if $marc_type ne $marcflavour;
             # TODO if this gets any sort of complexity to it, it should
             # be broken out into its own function.
@@ -220,9 +226,45 @@ sub get_elasticsearch_mappings {
                     search_analyzer => 'simple',
                 };
             }
+            # Sort may be true, false, or undef. Here we care if it's
+            # anything other than undef.
+            if (defined $sort) {
+                $mappings->{data}{properties}{ $name . '__sort' } = {
+                    search_analyzer => "analyser_phrase",
+                    index_analyzer  => "analyser_phrase",
+                    type            => "string",
+                    include_in_all  => JSON::false,
+                    fields          => {
+                        phrase => {
+                            search_analyzer => "analyser_phrase",
+                            index_analyzer  => "analyser_phrase",
+                            type            => "string",
+                        },
+                    },
+                };
+                $sort_fields{$name} = 1;
+            }
         }
     );
+    $self->sort_fields(\%sort_fields);
     return $mappings;
+}
+
+# This overrides the accessor provided by Class::Accessor so that if
+# sort_fields isn't set, then it'll generate it.
+sub sort_fields {
+    my $self = shift;
+
+    if (@_) {
+        $self->_sort_fields_accessor(@_);
+        return;
+    }
+    my $val = $self->_sort_fields_accessor();
+    return $val if $val;
+
+    # This will populate the accessor as a side effect
+    $self->get_elasticsearch_mappings();
+    return $self->_sort_fields_accessor();
 }
 
 # Provides the rules for data conversion.
@@ -233,7 +275,7 @@ sub get_fixer_rules {
     my @rules;
     $self->_foreach_mapping(
         sub {
-            my ( $name, $type, $facet, $suggestible, $marc_type, $marc_field ) = @_;
+            my ( $name, $type, $facet, $suggestible, $sort, $marc_type, $marc_field ) = @_;
             return if $marc_type ne $marcflavour;
             my $options = '';
 
@@ -260,6 +302,15 @@ sub get_fixer_rules {
             if ($type eq 'sum' ) {
                 push @rules, "sum('$name')";
             }
+            # Sort is a bit special as it can be true, false, undef. For
+            # fixer rules, we care about "true", or "undef" if there is
+            # special handling of this field from other one. "undef" means
+            # to do the default thing, which is make it sortable.
+            if ($self->sort_fields()->{$name}) {
+                if ($sort || !defined $sort) {
+                    push @rules, "marc_map('$marc_field','${name}__sort', $options)";
+                }
+            }
         }
     );
     return \@rules;
@@ -269,7 +320,9 @@ sub get_fixer_rules {
 
     $self->_foreach_mapping(
         sub {
-            my ( $name, $type, $facet, $suggestible, $marc_type, $marc_field ) = @_;
+            my ( $name, $type, $facet, $suggestible, $sort, $marc_type,
+                $marc_field )
+              = @_;
             return unless $marc_type eq 'marc21';
             print "Data comes from: " . $marc_field . "\n";
         }
@@ -295,6 +348,13 @@ The type for this value, e.g. 'string'.
 
 True if this value should be facetised. This only really makes sense if the
 field is understood by the facet processing code anyway.
+
+=item C<$sort>
+
+True if this is a field that a) needs special sort handling, and b) if it
+should be sorted on. False if a) but not b). Undef if not a). This allows,
+for example, author to be sorted on but not everything marked with "author"
+to be included in that sort.
 
 =item C<$marc_type>
 
@@ -325,12 +385,14 @@ sub _foreach_mapping {
         my $facet = $row->facet;
         my $suggestible = $row->suggestible;
         my $search_field = $row->search_fields();
+        my $sort = $row->sort();
         for my $sf ( $search_field->all ) {
             $sub->(
                 $sf->name,
                 $sf->type,
                 $facet,
                 $suggestible,
+                $sort,
                 $marc_type,
                 $marc_field,
             );

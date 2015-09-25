@@ -23,8 +23,10 @@ Koha::SearchEngine::ElasticSearch::Search - search functions for Elasticsearch
 
 =head1 SYNOPSIS
 
-    my $searcher = Koha::SearchEngine::ElasticSearch::Search->new();
-    my $builder = Koha::SearchEngine::Elasticsearch::QueryBuilder->new();
+    my $searcher =
+      Koha::SearchEngine::ElasticSearch::Search->new( { index => $index } );
+    my $builder = Koha::SearchEngine::Elasticsearch::QueryBuilder->new(
+        { index => $index } );
     my $query = $builder->build_query('perl');
     my $results = $searcher->search($query);
     print "There were " . $results->total . " results.\n";
@@ -321,7 +323,7 @@ sub simple_search_compat {
 
     unless (ref $query) {
         # We'll push it through the query builder to sanitise everything.
-        my $qb = Koha::SearchEngine::QueryBuilder->new();
+        my $qb = Koha::SearchEngine::QueryBuilder->new({index => $self->index});
         (undef,$query) = $qb->build_query_compat(undef, [$query]);
     }
     my $results = $self->search($query, undef, $max_results, %options);

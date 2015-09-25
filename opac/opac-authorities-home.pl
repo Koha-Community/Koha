@@ -60,8 +60,10 @@ if ( $op eq "do_search" ) {
     $resultsperpage = $query->param('resultsperpage');
     $resultsperpage = 20 if ( !defined $resultsperpage );
     my @tags;
-    my $builder  = Koha::SearchEngine::QueryBuilder->new();
-    my $searcher = Koha::SearchEngine::Search->new({index => 'authorities'});
+    my $builder = Koha::SearchEngine::QueryBuilder->new(
+        { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
+    my $searcher = Koha::SearchEngine::Search->new(
+        { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
     my $search_query = $builder->build_authorities_query_compat( \@marclist, \@and_or,
         \@excluding, \@operator, \@value, $authtypecode, $orderby );
 #    use Data::Dumper;

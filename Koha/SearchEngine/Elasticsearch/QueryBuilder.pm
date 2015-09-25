@@ -29,8 +29,8 @@ provides something that can be given to elasticsearch to get answers.
 
 =head1 SYNOPSIS
 
-    use Koha::SearchEngine::Elasticsearch;
-    $builder = Koha::SearchEngine::Elasticsearch->new();
+    use Koha::SearchEngine::Elasticsearch::QueryBuilder;
+    $builder = Koha::SearchEngine::Elasticsearch->new({ index => $index });
     my $simple_query = $builder->build_query("hello");
     # This is currently undocumented because the original code is undocumented
     my $adv_query = $builder->build_advanced_query($indexes, $operands, $operators);
@@ -39,7 +39,7 @@ provides something that can be given to elasticsearch to get answers.
 
 =cut
 
-use base qw(Class::Accessor);
+use base qw(Koha::ElasticSearch);
 use Carp;
 use JSON;
 use List::MoreUtils qw/ each_array /;
@@ -102,6 +102,8 @@ sub build_query {
             $d = 'asc' unless $d;
 
             # TODO account for fields that don't have a 'phrase' type
+
+            $f = $self->_sort_field($f);
             push @{ $res->{sort} }, { "$f.phrase" => { order => $d } };
         }
     }
@@ -139,7 +141,7 @@ sub build_browse_query {
         author => 1,
     );
     $field = 'title' if !exists $field_whitelist{$field};
-
+    my $sort = $self->_sort_field($field);
     my $res = {
         query => {
             match_phrase_prefix => {
@@ -150,7 +152,7 @@ sub build_browse_query {
                 }
             }
         },
-        sort => [ { "$field.phrase" => { order => "asc" } } ],
+        sort => [ { "$sort.phrase" => { order => "asc" } } ],
     };
 }
 
@@ -303,7 +305,8 @@ sub build_authorities_query {
     if ( exists $search->{sort} ) {
         my %s;
         foreach my $k ( keys %{ $search->{sort} } ) {
-            $s{"$k.phrase"} = $search->{sort}{$k};
+            my $f = $self->_sort_field($k);
+            $s{"$f.phrase"} = $search->{sort}{$k};
         }
         $search->{sort} = \%s;
     }
@@ -731,6 +734,24 @@ sub _fix_limit_special_cases {
         }
     }
     return \@new_lim;
+}
+
+=head2 _sort_field
+
+    my $field = $self->_sort_field($field);
+
+Given a field name, this works out what the actual name of the version to sort
+on should be. Often it's the same, sometimes it involves sticking "__sort" on
+the end. Maybe it'll be something else in the future, who knows?
+
+=cut
+
+sub _sort_field {
+    my ($self, $f) = @_;
+    if ($self->sort_fields()->{$f}) {
+        $f .= '__sort';
+    }
+    return $f;
 }
 
 1;
