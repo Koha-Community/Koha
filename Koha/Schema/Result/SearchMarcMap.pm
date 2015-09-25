@@ -61,6 +61,21 @@ the MARC specifier for this field
 
 true if a facet field should be generated for this
 
+=head2 suggestible
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 1
+
+true if this field can be used to generate suggestions for browse
+
+=head2 sort
+
+  data_type: 'tinyint'
+  is_nullable: 1
+
+true/false creates special sort handling, null doesn't
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -82,6 +97,10 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "facet",
   { data_type => "tinyint", default_value => 0, is_nullable => 1 },
+  "suggestible",
+  { data_type => "tinyint", default_value => 0, is_nullable => 1 },
+  "sort",
+  { data_type => "tinyint", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -142,8 +161,8 @@ Composing rels: L</search_marc_to_fields> -> search_field
 __PACKAGE__->many_to_many("search_fields", "search_marc_to_fields", "search_field");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-06-10 14:32:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9Xz04ajKUJXxwJ5pdo+cUQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-09-01 16:56:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Vo1uboO+iKCunqfpetswDg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

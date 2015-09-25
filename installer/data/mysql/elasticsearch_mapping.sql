@@ -11,6 +11,7 @@ CREATE TABLE `elasticsearch_mapping` (
   `type` varchar(255) NOT NULL,
   `facet` boolean DEFAULT FALSE,
   `suggestible` boolean DEFAULT FALSE,
+  `sort` boolean DEFAULT NULL,
   `marc21` varchar(255) DEFAULT NULL,
   `unimarc` varchar(255) DEFAULT NULL,
   `normarc` varchar(255) DEFAULT NULL,
@@ -28,13 +29,22 @@ CREATE TABLE `search_field` (
 
 -- This contains a MARC field specifier for a given index, marc type, and marc
 -- field.
+--
+-- a note about the sort field:
+-- * if all the entries for a mapping are 'null', nothing special is done with that mapping.
+-- * if any of the entries are not null, then a __sort field is created in ES for this mapping. In this case:
+--   * any mapping with sort == false WILL NOT get copied into a __sort field
+--   * any mapping with sort == true or is null WILL get copied into a __sort field
+--   * any sorts on the field name will be applied to $fieldname.'__sort' instead.
+-- this means that we can have search for author that includes 1xx, 245$c, and 7xx, but the sort only applies to 1xx.
 CREATE TABLE `search_marc_map` (
     id int(11) NOT NULL AUTO_INCREMENT,
     index_name ENUM('biblios','authorities') NOT NULL COMMENT 'what storage index this map is for',
     marc_type ENUM('marc21', 'unimarc', 'normarc') NOT NULL COMMENT 'what MARC type this map is for',
     marc_field VARCHAR(255) NOT NULL COMMENT 'the MARC specifier for this field',
     `facet` boolean DEFAULT FALSE COMMENT 'true if a facet field should be generated for this',
-    `suggestible` boolean DEFAULT FALSE COMMENT 'true if this field can be used to generate suggestions',
+    `suggestible` boolean DEFAULT FALSE COMMENT 'true if this field can be used to generate suggestions for browse',
+    `sort` boolean DEFAULT NULL COMMENT 'true/false creates special sort handling, null doesn''t',
     PRIMARY KEY(`id`),
     INDEX (`index_name`),
     UNIQUE KEY (index_name, marc_type, marc_field)
@@ -95,8 +105,8 @@ INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestib
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestible`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','author',TRUE,TRUE,'string','100a','200f','100a');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestible`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','author',TRUE,TRUE,'string','110a','200g','110a');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestible`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','author',TRUE,TRUE,'string','111a',NULL,'111a');
-INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestible`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','author',TRUE,TRUE,'string','700a','700a','700a');
-INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestible`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','author',FALSE,FALSE,'string','245c','701','245c');
+INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestible`, `sort`,`type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','author',TRUE,TRUE,FALSE,'string','700a','700a','700a'); -- no sorting on the
+INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestible`, `sort`,`type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','author',FALSE,FALSE,FALSE,'string','245c','701','245c'); -- extra author fields
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestible`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','title',FALSE,TRUE,'string','245a','200a','245a');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestible`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','title',FALSE,TRUE,'string','246','200c','246');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestible`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','title',FALSE,TRUE,'string','247','200d','247');
@@ -280,9 +290,9 @@ INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestib
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestible`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('authorities','Match',FALSE,FALSE,'','511acdefghjklnpqstvxyz',NULL,'511acdefghjklnpqstvxyz');
 
 -- temporary to convert into new table form
-insert into search_marc_map(index_name, marc_type, marc_field, facet, suggestible) select distinct indexname, 'marc21', marc21, facet, suggestible from elasticsearch_mapping where marc21 is not null;
-insert into search_marc_map(index_name, marc_type, marc_field, facet, suggestible) select distinct indexname, 'unimarc', unimarc, facet, suggestible from elasticsearch_mapping where unimarc is not null;
-insert into search_marc_map(index_name, marc_type, marc_field, facet, suggestible) select distinct indexname, 'normarc', normarc, facet, suggestible from elasticsearch_mapping where normarc is not null;
+insert into search_marc_map(index_name, marc_type, marc_field, facet, suggestible, sort) select distinct indexname, 'marc21', marc21, facet, suggestible, sort from elasticsearch_mapping where marc21 is not null;
+insert into search_marc_map(index_name, marc_type, marc_field, facet, suggestible, sort) select distinct indexname, 'unimarc', unimarc, facet, suggestible, sort from elasticsearch_mapping where unimarc is not null;
+insert into search_marc_map(index_name, marc_type, marc_field, facet, suggestible, sort) select distinct indexname, 'normarc', normarc, facet, suggestible, sort from elasticsearch_mapping where normarc is not null;
 insert into search_field (name, type) select distinct mapping, type from elasticsearch_mapping;
 
 insert into search_marc_to_field(search_marc_map_id, search_field_id) select search_marc_map.id,search_field.id from search_field, search_marc_map, elasticsearch_mapping where elasticsearch_mapping.mapping=search_field.name AND elasticsearch_mapping.marc21=search_marc_map.marc_field AND search_marc_map.marc_type='marc21' AND indexname='biblios' AND index_name='biblios';

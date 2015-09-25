@@ -43,7 +43,7 @@ the name of the field as it will be stored in the search engine
   extra: {list => ["string","date","number","boolean","sum"]}
   is_nullable: 0
 
-what type of data this holds, relevant when storing it
+what type of data this holds, relevant when storing it in the search engine
 
 =cut
 
@@ -114,8 +114,8 @@ Composing rels: L</search_marc_to_fields> -> search_marc_map
 __PACKAGE__->many_to_many("search_marc_maps", "search_marc_to_fields", "search_marc_map");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-06-10 14:32:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1pj98qkKkP9g0hJYExud0A
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-09-01 16:56:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VN1BPJJTnr7p+I2bRZoBEA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

@@ -77,8 +77,10 @@ if ($query) {
     my $QParser;
     $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
     my $builtquery;
-    my $builder  = Koha::SearchEngine::QueryBuilder->new();
-    my $searcher = Koha::SearchEngine::Search->new({index => 'biblios'});
+    my $builder = Koha::SearchEngine::QueryBuilder->new(
+        { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+    my $searcher = Koha::SearchEngine::Search->new(
+        { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
     if ($QParser) {
         $builtquery = $query;
     } else {
