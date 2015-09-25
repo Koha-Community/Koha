@@ -10896,6 +10896,24 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.21.00.028";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        ALTER TABLE uploaded_files
+            ADD COLUMN public tinyint,
+            ADD COLUMN permanent tinyint
+    });
+    $dbh->do(q{
+        UPDATE uploaded_files SET public=1, permanent=1
+    });
+    $dbh->do(q{
+        ALTER TABLE uploaded_files
+            CHANGE COLUMN categorycode uploadcategorycode tinytext
+    });
+    print "Upgrade to $DBversion done (Bug 14321: Merge UploadedFile and UploadedFiles into Koha::Upload)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
