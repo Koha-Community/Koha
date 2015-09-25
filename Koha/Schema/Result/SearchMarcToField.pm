@@ -87,12 +87,12 @@ __PACKAGE__->belongs_to(
   "search_marc_map",
   "Koha::Schema::Result::SearchMarcMap",
   { id => "search_marc_map_id" },
-  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-06-10 14:32:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZNdjnjdGpK+5P478RkCWnA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-09-25 15:19:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:h9oY2xOGibcnsriEfcFe8A
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

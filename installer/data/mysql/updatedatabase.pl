@@ -12266,6 +12266,29 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(q|
+        ALTER TABLE search_marc_to_field DROP FOREIGN KEY search_marc_to_field_ibfk_1
+    |);
+    $dbh->do(q|
+        ALTER TABLE search_marc_to_field
+        ADD CONSTRAINT search_marc_to_field_ibfk_1 FOREIGN KEY (`search_marc_map_id`) REFERENCES `search_marc_map` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    |);
+    $dbh->do(q|
+        ALTER TABLE search_marc_map DROP KEY index_name_2
+    |);
+    $dbh->do(q|
+        ALTER TABLE search_field ADD COLUMN label VARCHAR(255) AFTER name
+    |);
+    $dbh->do(q|
+        UPDATE search_field SET label=name
+    |);
+
+    print "Upgrade to $DBversion done (Bug 12478/14899 - DB Changes to the elasticsearch tables)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
