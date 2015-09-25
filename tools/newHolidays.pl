@@ -12,7 +12,7 @@ use C4::Output;
 
 use Koha::Cache;
 
-
+use C4::Dates;
 use C4::Calendar;
 use DateTime;
 
