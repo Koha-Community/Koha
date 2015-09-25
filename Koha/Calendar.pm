@@ -95,7 +95,7 @@ sub single_holidays {
     my $cache           = Koha::Cache->get_instance();
     my $single_holidays = $cache->get_from_cache('single_holidays');
 
-=c
+=for
 $single_holidays looks like this..
 
 \ {
