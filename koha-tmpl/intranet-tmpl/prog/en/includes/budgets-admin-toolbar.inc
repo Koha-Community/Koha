@@ -1,7 +1,7 @@
 <div id="toolbar" class="btn-toolbar">
     [% IF ( budget_period_id ) %]
         <div class="btn-group">
-            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="icon-plus"></i> New <span class="caret"></span></button>
+            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     <li><a href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form">New budget</a></li>
                     [% IF ( budget_period_locked || !CAN_user_acquisition_budget_add_del ) %]
@@ -14,7 +14,7 @@
         </div>
 
         <div class="btn-group">
-            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="icon-pencil"></i> Edit <span class="caret"></span></button>
+            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil"></i> Edit <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     <li><a href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form&amp;budget_period_id=[% budget_period_id %]">Edit budget [% budget_period_description %]</a></li>
                     <li><a href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=duplicate_form&amp;budget_period_id=[% budget_period_id %]">Duplicate budget [% budget_period_description %]</a></li>
@@ -22,7 +22,7 @@
         </div>
 
         <div class="btn-group">
-            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="icon-pencil"></i> Planning <span class="caret"></span></button>
+            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil"></i> Planning <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     [% IF ( CAN_user_acquisition_planning_manage ) %]
                     <li>
@@ -55,7 +55,7 @@
         </div>
 
     [% ELSE %]
-        <div class="btn-group"><a class="btn btn-small" id="newrootbudget" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form"><i class="icon-plus"></i> New budget</a></div>
+        <div class="btn-group"><a class="btn btn-small" id="newrootbudget" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form"><i class="fa fa-plus"></i> New budget</a></div>
     [% END %]
 
 </div>

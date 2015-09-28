@@ -82,13 +82,13 @@ $(document).ready(function() {
                 <span class="action">
                     [% IF ( CAN_user_acquisition_order_manage ) %]
                         [% IF ( supplier.active ) %]
-                            <a class="btn btn-small" href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% supplier.booksellerid %]&amp;op=add_form"><i class="icon-plus"></i> New basket</a>
+                            <a class="btn btn-small" href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% supplier.booksellerid %]&amp;op=add_form"><i class="fa fa-plus"></i> New basket</a>
                         [% ELSE %]
                             (inactive)
                         [% END %]
                     [% END %]
                         [% IF ( supplier.loop_basket.size ) %]
-                    <a class="btn btn-small" href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% supplier.booksellerid %]"><i class="icon-inbox"></i> Receive shipment</a>
+                    <a class="btn btn-small" href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% supplier.booksellerid %]"><i class="fa fa-inbox"></i> Receive shipment</a>
                         [% END %]
                 </span>
                 <div class="baskets">

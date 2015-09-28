@@ -141,12 +141,12 @@ function submitForm(form) {
                 [% IF ( grouping ) %]
                     [% IF (closedbg) %]
                         <div id="toolbar" class="btn-toolbar">
-                            <div class="btn-group"><a href="[% script_name %]?op=reopen&amp;basketgroupid=[% basketgroupid %]&amp;booksellerid=[% booksellerid %]&amp;mode=singlebg" class="btn btn-small" id="reopenbutton"><i class="icon-download"></i> Reopen this basket group</a></div>
-                            <div class="btn-group"><a href="[% script_name %]?op=export&amp;basketgroupid=[% basketgroupid %]&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="exportbutton"><i class="icon-download"></i> Export this basket group as CSV</a></div>
-                            <div class="btn-group"><a href="[% script_name %]?op=print&amp;basketgroupid=[% basketgroupid %]&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="printbutton"><i class="icon-download"></i> Print this basket group in PDF</a></div>
+                            <div class="btn-group"><a href="[% script_name %]?op=reopen&amp;basketgroupid=[% basketgroupid %]&amp;booksellerid=[% booksellerid %]&amp;mode=singlebg" class="btn btn-small" id="reopenbutton"><i class="fa fa-download"></i> Reopen this basket group</a></div>
+                            <div class="btn-group"><a href="[% script_name %]?op=export&amp;basketgroupid=[% basketgroupid %]&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="exportbutton"><i class="fa fa-download"></i> Export this basket group as CSV</a></div>
+                            <div class="btn-group"><a href="[% script_name %]?op=print&amp;basketgroupid=[% basketgroupid %]&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="printbutton"><i class="fa fa-download"></i> Print this basket group in PDF</a></div>
                         </div>
                     [% ELSE %]
-                        <div class="btn-group"><a href="[% script_name %]?op=delete&amp;basketgroupid=[% basketgroupid %]&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="delbutton"><i class="icon-remove"></i> Delete basket group</a></div>
+                        <div class="btn-group"><a href="[% script_name %]?op=delete&amp;basketgroupid=[% basketgroupid %]&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="delbutton"><i class="fa fa-remove"></i> Delete basket group</a></div>
                     [% END %]
                     [% IF (name && closedbg) %]
                         <h1>Basket group [% name %] ([% basketgroupid %]) for <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername |html %]</a></h1>
@@ -301,7 +301,7 @@ function submitForm(form) {
                     </div>
                 [% ELSE %]
                     <div id="toolbar" class="btn-toolbar">
-                        <div class="btn-group"><a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="newbasketgroup"><i class="icon-plus"></i> New basket group</a></div>
+                        <div class="btn-group"><a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="newbasketgroup"><i class="fa fa-plus"></i> New basket group</a></div>
                     </div>
                     <h1>Basket grouping for <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername |html %]</a></h1>
                     <div id="basket_groups" class="toptabs">

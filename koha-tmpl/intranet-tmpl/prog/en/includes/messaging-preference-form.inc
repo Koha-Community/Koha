@@ -25,7 +25,7 @@
         [% IF ( SMSSendDriver ) %]<th>SMS</th>[% END %]
         [% IF ( TalkingTechItivaPhone ) %]<th>Phone</th>[% END %]
         <th>Email</th>
-        <th>Digests only <i id="info_digests" data-toggle="tooltip" title="You can ask for a digest to reduce the number of messages. Messages will be saved and sent as a single message." data-placement="right" class="icon icon-info-sign"></i></th>
+        <th>Digests only <i id="info_digests" data-toggle="tooltip" title="You can ask for a digest to reduce the number of messages. Messages will be saved and sent as a single message." data-placement="right" class="icon fa fa-info-sign"></i></th>
         <!-- <th>RSS</th> -->
         [% UNLESS ( messaging_form_inactive ) %]<th>Do not notify</th>[% END %]
     </tr>

@@ -763,7 +763,7 @@ No patron matched <span class="ex">[% message %]</span>
                    [% END %]
 
                    <br/>
-                   <a class="btn btn-small" href="#reldebarments" onclick="$('#debarments-tab-link').click()"><i class="icon-ban-circle"></i> View restrictions</a>
+                   <a class="btn btn-small" href="#reldebarments" onclick="$('#debarments-tab-link').click()"><i class="fa fa-ban"></i> View restrictions</a>
                     [% IF (noissues && borrowernumber && CAN_user_circulate_force_checkout) %]
                         <span class="override_debarment">
                             <a href="/cgi-bin/koha/circ/circulation.pl?forceallow=1&amp;borrowernumber=[% borrowernumber %]" class="btn btn-small">Override restriction temporarily</a>

@@ -34,7 +34,7 @@
         <h1>Your patron lists</h1>
 
         <div class="btn-group">
-            <a class="btn btn-small" href="add-modify.pl"><i class="icon-plus"></i> New patron list</a>
+            <a class="btn btn-small" href="add-modify.pl"><i class="fa fa-plus"></i> New patron list</a>
         </div>
 
         <table id="patron-lists-table">
@@ -55,17 +55,17 @@
                         <td>[% l.patron_list_patrons_rs.count || 0 %]</td>
                         <td>
                             <a class="btn btn-mini" href="list.pl?patron_list_id=[% l.patron_list_id %]">
-                                <i class="icon-plus-sign"></i> Add patrons <i class="icon-user"></i>
+                                <i class="fa fa-plus-sign"></i> Add patrons <i class="fa fa-user"></i>
                             </a>
                         </td>
                         <td>
                             <a class="btn btn-mini" href="add-modify.pl?patron_list_id=[% l.patron_list_id %]">
-                                <i class="icon-edit"></i> Edit
+                                <i class="fa fa-edit"></i> Edit
                             </a>
                         </td>
                         <td>
                             <a class="btn btn-mini" href="delete.pl?patron_list_id=[% l.patron_list_id %]" onclick='return ConfirmDelete("[% l.name | html %]")'>
-                                <i class="icon-trash"></i> Delete
+                                <i class="fa fa-trash"></i> Delete
                             </a>
                         </td>
                     </tr>

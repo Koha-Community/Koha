@@ -45,7 +45,7 @@
             [% END %]
             <input type="hidden" class="contact_claimissues_hidden" name="contact_claimissues" value="[% contact.claimissues %]"></input>
         </li>
-        [% IF contact.id %]<li><button class="btn delete-contact"><i class="icon-remove"></i> Delete contact</li>[% END %]
+        [% IF contact.id %]<li><button class="btn delete-contact"><i class="fa fa-remove"></i> Delete contact</li>[% END %]
     </ol>
 [% END %]
 
@@ -204,7 +204,7 @@ function delete_contact(ev) {
                     [% INCLUDE edit_contact %]
                 </fieldset>
             [% END %]
-            <button id="add-contact" class="btn"><i class="icon-plus"></i> Add another contact</button>
+            <button id="add-contact" class="btn"><i class="fa fa-plus"></i> Add another contact</button>
         </fieldset>
     </div>
         <div class="yui-g">

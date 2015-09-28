@@ -162,20 +162,20 @@
             [% UNLESS ( closedate ) %]
                 <div id="toolbar" class="btn-toolbar">
                     [% IF active %]
-                        <div class="btn-group"><a href="#addtoBasket" role="button" class="btn btn-small" data-toggle="modal"><i class="icon-plus"></i> Add to basket</a></div>
+                        <div class="btn-group"><a href="#addtoBasket" role="button" class="btn btn-small" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a></div>
                     [% END %]
-                    <div class="btn-group"><a href="basketheader.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;op=add_form" class="btn btn-small" id="basketheadbutton"><i class="icon-pencil"></i> Edit basket</a></div>
+                    <div class="btn-group"><a href="basketheader.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;op=add_form" class="btn btn-small" id="basketheadbutton"><i class="fa fa-pencil"></i> Edit basket</a></div>
                     [%# FIXME This action should not be available for everyone %]
-                    <div class="btn-group"><a href="#deleteBasketModal" role="button" class="btn btn-small" data-toggle="modal" id="delbasketbutton"><i class="icon-remove"></i> Delete this basket</a></div>
+                    <div class="btn-group"><a href="#deleteBasketModal" role="button" class="btn btn-small" data-toggle="modal" id="delbasketbutton"><i class="fa fa-remove"></i> Delete this basket</a></div>
                    [% IF ( unclosable ) %]
                     [% ELSIF ( uncertainprices ) %]
                         <div class="btn-group"><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% booksellerid %]&amp;owner=1" class="btn btn-small" id="uncertpricesbutton">Uncertain prices</a></div>
                     [% ELSE %]
                         <div class="btn-group">
-                            <a href="[% script_name %]?op=close&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="closebutton"><i class="icon-remove-sign"></i> Close this basket</a>
+                            <a href="[% script_name %]?op=close&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="closebutton"><i class="fa fa-remove-sign"></i> Close this basket</a>
                         </div>
                     [% END %]
-                        <div class="btn-group"><a href="[% script_name %]?op=export&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="exportbutton"><i class="icon-download"></i> Export this basket as CSV</a></div>
+                        <div class="btn-group"><a href="[% script_name %]?op=export&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="exportbutton"><i class="fa fa-download"></i> Export this basket as CSV</a></div>
                 </div>
 <!-- Modal for confirm deletion box-->
                 <div class="modal hide" id="deleteBasketModal" tabindex="-1" role="dialog" aria-labelledby="delbasketModalLabel" aria-hidden="true">
@@ -210,8 +210,8 @@
             [% ELSE %]
                 [% UNLESS ( grouped ) %]
                 <div id="toolbar" class="btn-toolbar">
-                    <div class="btn-group"><a href="#" class="btn btn-small" id="reopenbutton"><i class="icon-refresh"></i> Reopen this basket</a></div>
-                    <div class="btn-group"><a href="[% script_name %]?op=export&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="exportbutton"><i class="icon-download"></i> Export this basket as CSV</a></div>
+                    <div class="btn-group"><a href="#" class="btn btn-small" id="reopenbutton"><i class="fa fa-refresh"></i> Reopen this basket</a></div>
+                    <div class="btn-group"><a href="[% script_name %]?op=export&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="exportbutton"><i class="fa fa-download"></i> Export this basket as CSV</a></div>
                 </div>
                 [% END %]
             [% END %]

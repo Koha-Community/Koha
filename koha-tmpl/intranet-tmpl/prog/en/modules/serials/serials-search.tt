@@ -231,22 +231,22 @@
                                         [% ELSE %]
                                             [% IF ( subscription.routingedit ) %]
                                                 <li>
-                                                    <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]"><i class="icon-pencil"></i> Edit routing list ([% subscription.routingedit %])</a>
+                                                    <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]"><i class="fa fa-pencil"></i> Edit routing list ([% subscription.routingedit %])</a>
                                                 </li>
                                             [% ELSE %]
                                                 <li>
-                                                    <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=new"> <i class="icon-plus"></i> New routing list</a>
+                                                    <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=new"> <i class="fa fa-plus"></i> New routing list</a>
                                                 </li>
                                             [% END %]
                                         [% END %]
                                     [% END # IF ( routing && CAN_user_serials_routing ) %]
 
                                     <li>
-                                        <a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]"><i class="icon-list-alt"></i> Issue history</a>
+                                        <a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]"><i class="fa fa-list-alt"></i> Issue history</a>
                                     </li>
                                     [% IF ( CAN_user_serials_receive_serials ) %]
                                         <li>
-                                            <a href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=[% subscription.subscriptionid %]&amp;serstatus=1,3,7"> <i class="icon-inbox"></i> Serial receive</a>
+                                            <a href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=[% subscription.subscriptionid %]&amp;serstatus=1,3,7"> <i class="fa fa-inbox"></i> Serial receive</a>
                                         </li>
                                     [% END %]
                                 </ul>
@@ -338,13 +338,13 @@
                                     [% IF ( routing && CAN_user_serials_routing ) %]
                                         [% UNLESS ( subscription.cannotedit ) %]
                                             <li>
-                                                <a href="/cgi-bin/koha/serials/serials-search.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=reopen&amp;routing=[% subscription.routing %]&amp;searched=1&amp;title_filter=[% title_filter | uri %]&amp;ISSN_filter=[% ISSN_filter | uri %]&amp;EAN_filter=[% EAN_filter | uri %]&amp;published_filter=[% publisher_filter | uri %]&amp;bookseller_filter=[% bookseller_filter | uri %]&amp;branch_filter=[% branch_filter | uri %]" id="reopensub"> <i class="icon-repeat"></i> Reopen</a>
+                                                <a href="/cgi-bin/koha/serials/serials-search.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=reopen&amp;routing=[% subscription.routing %]&amp;searched=1&amp;title_filter=[% title_filter | uri %]&amp;ISSN_filter=[% ISSN_filter | uri %]&amp;EAN_filter=[% EAN_filter | uri %]&amp;published_filter=[% publisher_filter | uri %]&amp;bookseller_filter=[% bookseller_filter | uri %]&amp;branch_filter=[% branch_filter | uri %]" id="reopensub"> <i class="fa fa-repeat"></i> Reopen</a>
                                             </li>
                                         [% END %]
                                     [% END # IF ( routing && CAN_user_serials_routing ) %]
 
                                     <li>
-                                        <a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]"><i class="icon-list-alt"></i> Issue history</a>
+                                        <a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]"><i class="fa fa-list-alt"></i> Issue history</a>
                                     </li>
 
                                 </ul>

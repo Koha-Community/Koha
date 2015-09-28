@@ -28,15 +28,15 @@
 
 [% IF ( authid ) %]
     [% IF ( CAN_user_editauthorities ) %]
-        <div class="btn-group"><a class="btn btn-small" id="editAuth" href="authorities.pl?authid=[% authid %]"><i class="icon-pencil"></i> Edit</a></div>
-        <div class="btn-group"><a class="btn btn-small" id="dupAuth" href="authorities.pl?authid=[% authid %]&amp;op=duplicate"><i class="icon-copy"></i> Duplicate</a></div>
+        <div class="btn-group"><a class="btn btn-small" id="editAuth" href="authorities.pl?authid=[% authid %]"><i class="fa fa-pencil"></i> Edit</a></div>
+        <div class="btn-group"><a class="btn btn-small" id="dupAuth" href="authorities.pl?authid=[% authid %]&amp;op=duplicate"><i class="fa fa-copy"></i> Duplicate</a></div>
         [% UNLESS ( count ) %]
-            <div class="btn-group"><a href="#" class="btn btn-small" id="delAuth"><i class="icon-remove"></i> Delete</a></div>
+            <div class="btn-group"><a href="#" class="btn btn-small" id="delAuth"><i class="fa fa-remove"></i> Delete</a></div>
         [% END %]
     [% END %]
 
     <div class="btn-group">
-        <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-download-alt"></i> Save
+        <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-download-alt"></i> Save
         <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
@@ -50,7 +50,7 @@
 
 [% IF ( CAN_user_editauthorities ) %]
     <div class="btn-group">
-        <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-plus"></i> New authority
+        <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-plus"></i> New authority
         <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
@@ -60,7 +60,7 @@
         </ul>
     </div>
     <div class="btn-group">
-        <a class="btn btn-small" id="z3950submit" href="#"><i class="icon-search"></i> New from Z39.50</a>
+        <a class="btn btn-small" id="z3950submit" href="#"><i class="fa fa-search"></i> New from Z39.50</a>
     </div>
 [% END %]
 </div>

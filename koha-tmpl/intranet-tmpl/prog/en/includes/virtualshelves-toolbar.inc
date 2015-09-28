@@ -27,12 +27,12 @@
 </script>
 
 <div id="toolbar" class="btn-toolbar">
-    <div class="btn-group"><a id="newshelf" class="btn btn-small" href="/cgi-bin/koha/virtualshelves/shelves.pl?shelves=1"><i class="icon-plus"></i> New list</a></div>
+    <div class="btn-group"><a id="newshelf" class="btn btn-small" href="/cgi-bin/koha/virtualshelves/shelves.pl?shelves=1"><i class="fa fa-plus"></i> New list</a></div>
 
     [% IF ( viewshelf ) %]
         [% IF ( manageshelf ) %]
         <div class="btn-group">
-            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="icon-pencil"></i> Edit <span class="caret"></span></button>
+            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil"></i> Edit <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl?shelfnumber=[% shelfnumber %]&amp;op=modif&amp;display=viewshelf">Edit list</a></li>
                     [% IF ( showprivateshelves ) %]
@@ -45,7 +45,7 @@
         [% END %]
 
         <div class="btn-group">
-            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="icon-download"></i> Download list <span class="caret"></span></button>
+            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download"></i> Download list <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     <li><a href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=iso2709&amp;shelfid=[% shelfnumber %]">iso2709</a></li>
                     <li><a href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=ris&amp;shelfid=[% shelfnumber %]">RIS</a></li>
@@ -55,7 +55,7 @@
                     [% END %]
                 </ul>
         </div>
-        <div class="btn-group"><a class="btn btn-small" href="#" id="sendlist"><i class="icon-envelope"></i> Send list</a></div>
-        <div class="btn-group"><a class="btn btn-small" id="printlist" target="_blank" href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&amp;print=1"><i class="icon-print"></i> Print list</a></div>
+        <div class="btn-group"><a class="btn btn-small" href="#" id="sendlist"><i class="fa fa-envelope"></i> Send list</a></div>
+        <div class="btn-group"><a class="btn btn-small" id="printlist" target="_blank" href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% shelfnumber %]&amp;print=1"><i class="fa fa-print"></i> Print list</a></div>
     [% END %]
 </div>
