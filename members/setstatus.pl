@@ -37,7 +37,6 @@ my $input = new CGI;
 checkauth($input, 0, { borrowers => 1 }, 'intranet');
 
 my $destination = $input->param("destination") || '';
-my $cardnumber = $input->param("cardnumber");
 my $borrowernumber=$input->param('borrowernumber');
 my $status = $input->param('status');
 my $reregistration = $input->param('reregistration') || '';
@@ -55,15 +54,15 @@ if ( $reregistration eq 'y' ) {
 	}
 
 if($destination eq "circ"){
-	if($dateexpiry){
-        print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$cardnumber&was_renewed=1");
-	} else {
-		print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$cardnumber");
-	}
+    if($dateexpiry){
+        print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber&was_renewed=1");
+    } else {
+        print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
+    }
 } else {
-	if($dateexpiry){
+    if($dateexpiry){
         print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber&was_renewed=1");
-	} else {
+    } else {
         print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
-	}
+    }
 }
