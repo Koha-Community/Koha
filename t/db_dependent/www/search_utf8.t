@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use utf8;
-use Test::More tests => 64;
+use Test::More tests => 66;
 use Test::WWW::Mechanize;
 use Data::Dumper;
 use XML::Simple;
@@ -249,7 +249,7 @@ sub test_search{
     my $expected_base = q|search.pl\?idx=kw&q=| . uri_escape_utf8( $publisher );
     $agent->base_like(qr|$expected_base|, );
 
-    ok ( ( length(Encode::encode('UTF-8', $intra_text)) != length($intra_text) ) , 'UTF-8 are multi-byte. Goog') ;
+    ok ( ( length(Encode::encode('UTF-8', $intra_text)) != length($intra_text) ) , 'UTF-8 are multi-byte. Good') ;
     ok ($intra_text =~  $utf8_reg, 'UTF-8 chars are correctly present. Good');
     # -------------------------------------------------- TEST ON OPAC
 
@@ -269,10 +269,14 @@ sub test_search{
     $opac_text = $agent->text();
 
     like( $opac_text, qr|Publisher: $publisher|, );
-    $expected_base = q|opac-search.pl\?idx=&q=| . uri_escape_utf8( $publisher );
+    $expected_base = q|opac-search.pl\?(idx=&)?q=| . uri_escape_utf8( $publisher );
     $agent->base_like(qr|$expected_base|, );
+    # Test added on BZ 14909 in addition to making the empty idx= optional
+    # in the previous regex
+    $agent->base_unlike( qr|idx=\w+|, 'Base does not contain an idx' );
 
-    ok ( ( length(Encode::encode('UTF-8', $opac_text)) != length($opac_text) ) , 'UTF-8 are multi-byte. Goog') ;
+
+    ok ( ( length(Encode::encode('UTF-8', $opac_text)) != length($opac_text) ) , 'UTF-8 are multi-byte. Good') ;
     ok ($opac_text =~  $utf8_reg, 'UTF-8 chars are correctly present. Good');
 
     #-------------------------------------------------- REVERT
