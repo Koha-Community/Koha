@@ -19,15 +19,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 use C4::Context;
 use C4::Output;
 use CGI qw(-oldstyle_urls -utf8);
 use C4::Auth;
 use C4::Branch;
 use C4::Debug;
-use C4::Dates qw/format_date format_date_in_iso/;
 use Text::CSV_XS;
 use Koha::DateUtils;
 use DateTime;
@@ -43,16 +41,15 @@ my $branchfilter    = $input->param('branch') || '';
 my $homebranchfilter    = $input->param('homebranch') || '';
 my $holdingbranchfilter = $input->param('holdingbranch') || '';
 my $op              = $input->param('op') || '';
-my $dateduefrom = format_date_in_iso($input->param( 'dateduefrom' )) || '';
-my $datedueto   = format_date_in_iso($input->param( 'datedueto' )) || '';
-# FIXME This is a kludge to include times
-if ($datedueto) {
-    $datedueto .= ' 23:59';
+
+my ($dateduefrom, $datedueto);
+if ( $dateduefrom = $input->param('dateduefrom') ) {
+    $dateduefrom = dt_from_string( $dateduefrom );
 }
-if ($dateduefrom) {
-    $dateduefrom .= ' 00:00';
+if ( $datedueto = $input->param('datedueto') ) {
+    $datedueto = dt_from_string( $datedueto )->set_hour(23)->set_minute(59);
 }
-# kludge end
+
 my $isfiltered      = $op =~ /apply/i && $op =~ /filter/i;
 my $noreport        = C4::Context->preference('FilterBeforeOverdueReport') && ! $isfiltered && $op ne "csv";
 
@@ -228,8 +225,8 @@ $template->param(
     borname => $bornamefilter,
     order => $order,
     showall => $showall,
-    dateduefrom => $input->param( 'dateduefrom' ) || '',
-    datedueto   => $input->param( 'datedueto' ) || '',
+    dateduefrom => $dateduefrom,
+    datedueto   => $datedueto,
 );
 
 if ($noreport) {
@@ -307,8 +304,8 @@ if ($noreport) {
     $strsth.=" AND borrowers.branchcode   = '" . $branchfilter   . "' " if $branchfilter;
     $strsth.=" AND items.homebranch       = '" . $homebranchfilter . "' " if $homebranchfilter;
     $strsth.=" AND items.holdingbranch    = '" . $holdingbranchfilter . "' " if $holdingbranchfilter;
-    $strsth.=" AND date_due < '" . $datedueto . "' "  if $datedueto;
-    $strsth.=" AND date_due > '" . $dateduefrom . "' " if $dateduefrom;
+    $strsth.=" AND date_due >= ?" if $dateduefrom;
+    $strsth.=" AND date_due <= ?" if $datedueto;
     # restrict patrons (borrowers) to those matching the patron attribute filter(s), if any
     my $bnlist = $have_pattr_filter_data ? join(',',keys %borrowernumber_to_attributes) : '';
     $strsth =~ s/WHERE 1=1/WHERE 1=1 AND borrowers.borrowernumber IN ($bnlist)/ if $bnlist;
@@ -323,8 +320,10 @@ if ($noreport) {
     );
     $template->param(sql=>$strsth);
     my $sth=$dbh->prepare($strsth);
-    #warn "overdue.pl : query string ".$strsth;
-    $sth->execute();
+    $sth->execute(
+        ($dateduefrom ? output_pref({ dt => $dateduefrom, dateformat => 'iso' }) : ()),
+        ($datedueto ? output_pref({ dt => $datedueto, dateformat => 'iso' }) : ()),
+    );
 
     my @overduedata;
     while (my $data = $sth->fetchrow_hashref) {
@@ -348,7 +347,7 @@ if ($noreport) {
             barcode                => $data->{barcode},
             cardnumber             => $data->{cardnumber},
             itemnum                => $data->{itemnumber},
-            issuedate              => format_date($data->{issuedate}),
+            issuedate              => output_pref({ dt => dt_from_string( $data->{issuedate} ), dateonly => 1 }),
             borrowertitle          => $data->{borrowertitle},
             surname                => $data->{surname},
             firstname              => $data->{firstname},

@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Items overdue as of [% todaysdate %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -137,11 +138,11 @@ overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%
 	<fieldset><legend>Date due:</legend>
 	<ol>
     <li><label for="from">From:</label>
-    <input type="text" id="from" name="dateduefrom" size="10" value="[% dateduefrom %]" class="datepickerfrom" />
+    <input type="text" id="from" name="dateduefrom" size="10" value="[% dateduefrom | $KohaDates %]" class="datepickerfrom" />
 	</li>
 	<li>
     <label for="to">To:</label>
-    <input type="text" id="to" name="datedueto" size="10" value="[% datedueto %]" class="datepickerto" />
+    <input type="text" id="to" name="datedueto" size="10" value="[% datedueto | $KohaDates %]" class="datepickerto" />
     </li>
     </ol></fieldset>
     <ol>
