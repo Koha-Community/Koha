@@ -23,6 +23,12 @@ __PACKAGE__->table("discharges");
 
 =head1 ACCESSORS
 
+=head2 discharge_id
+
+  data_type: 'integer'
+  is_auto_increment: 1
+  is_nullable: 0
+
 =head2 borrower
 
   data_type: 'integer'
@@ -44,6 +50,8 @@ __PACKAGE__->table("discharges");
 =cut
 
 __PACKAGE__->add_columns(
+  "discharge_id",
+  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "borrower",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "needed",
@@ -59,6 +67,18 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
   },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</discharge_id>
+
+=back
+
+=cut
+
+__PACKAGE__->set_primary_key("discharge_id");
 
 =head1 RELATIONS
 
@@ -83,8 +103,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-01-08 18:15:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uq7Zb0SNf2mD3cpC4oub9A
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-09-28 12:09:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Wc3EkS92v98jXtena5VaUQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
