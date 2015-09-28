@@ -10924,6 +10924,27 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.21.00.030";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        UPDATE marc_subfield_structure
+        SET value_builder='marc21_leader.pl'
+        WHERE value_builder='marc21_leader_book.pl'
+    });
+    $dbh->do(q{
+        UPDATE marc_subfield_structure
+        SET value_builder='marc21_leader.pl'
+        WHERE value_builder='marc21_leader_computerfile.pl'
+    });
+    $dbh->do(q{
+        UPDATE marc_subfield_structure
+        SET value_builder='marc21_leader.pl'
+        WHERE value_builder='marc21_leader_video.pl'
+    });
+    print "Upgrade to $DBversion done (Bug 14201: Remove unused code or template from some MARC21 leader plugins )\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
