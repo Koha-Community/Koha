@@ -128,7 +128,7 @@ sub test_search{
         'go to stage MARC' );
 
     $agent->post(
-        "$intranet/cgi-bin/koha/tools/upload-file.pl",
+        "$intranet/cgi-bin/koha/tools/upload-file.pl?temp=1",
         [ 'fileToUpload' => [$file], ],
         'Content_Type' => 'form-data',
     );
