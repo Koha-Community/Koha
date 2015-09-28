@@ -59,7 +59,7 @@ sub _init {
 # 3.16, bug 8089 will be fixed and we can switch the caching over
 # to Koha::Cache.
 
-our ( $exception_holidays, $single_holidays ); ## no need for $single_holidays now, surely?
+our $exception_holidays;
 
 sub exception_holidays {
     my ( $self ) = @_;
