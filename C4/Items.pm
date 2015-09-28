@@ -3005,6 +3005,10 @@ sub PrepareItemrecordDisplay {
                             push @authorised_values, $itemtype->{itemtype};
                             $authorised_lib{$itemtype->{itemtype}} = $itemtype->{translated_description};
                         }
+                        if ($defaultvalues && $defaultvalues->{'itemtype'}) {
+                            $defaultvalue = $defaultvalues->{'itemtype'};
+                        }
+
                         #---- class_sources
                     } elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "cn_source" ) {
                         push @authorised_values, "" unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );

@@ -256,13 +256,7 @@ if ( $op and $op eq 'serialchangestatus' ) {
             my $previous = GetPreviousSerialid($subscriptionids[$i]);
             if ($previous) {
 
-                # Getting the itemnumber matching the serialid
-                my $query = "SELECT itemnumber FROM serialitems WHERE serialid=?";
-                my $sth = $dbh->prepare($query);
-                $sth->execute($previous);
-                my @row = $sth->fetchrow_array;
-                if ($row[0]) {
-                    my $itemnumber = $row[0];
+                if (my $itemnumber = GetItemnumberFromSerialId($previous)) {
 
                     # Getting the itemtype to set from the database
                     my $subscriptioninfos = GetSubscription($subscriptionids[$i]);
