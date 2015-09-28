@@ -10914,6 +10914,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.21.00.029";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        ALTER IGNORE TABLE discharges
+            ADD COLUMN discharge_id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST
+    });
+    print "Upgrade to $DBversion done (Bug 14368: Add discharges history)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
