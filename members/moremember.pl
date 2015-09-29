@@ -42,7 +42,6 @@ use C4::Output;
 use C4::Members;
 use C4::Members::Attributes;
 use C4::Members::AttributeTypes;
-use C4::Dates;
 use C4::Reserves;
 use C4::Circulation;
 use C4::Koha;
@@ -136,7 +135,7 @@ foreach (qw(dateenrolled dateexpiry dateofbirth)) {
 			$data->{$_} = '';
 			next;
 		}
-		$userdate = C4::Dates->new($userdate,'iso')->output('syspref');
+                $userdate =  output_pref({ dt => dt_from_string( $userdate ), dateonly => 1 });
 		$data->{$_} = $userdate || '';
 		$template->param( $_ => $userdate );
 }
@@ -150,7 +149,7 @@ if ( IsDebarred($borrowernumber) ) {
     $template->param( 'userdebarred' => 1, 'flagged' => 1 );
     my $debar = $data->{'debarred'};
     if ( $debar ne "9999-12-31" ) {
-        $template->param( 'userdebarreddate' => C4::Dates::format_date($debar) );
+        $template->param( 'userdebarreddate' => output_pref( { dt => dt_from_string( $debar ), dateonly => 1 } ) );
         $template->param( 'debarredcomment'  => $data->{debarredcomment} );
     }
 }
@@ -344,7 +343,7 @@ $template->param(
     categoryname    => $data->{'description'},
     was_renewed     => $input->param('was_renewed') ? 1 : 0,
     branch          => $branch,
-    todaysdate      => C4::Dates->today(),
+    todaysdate      =>  output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }),
     totalprice      => sprintf("%.2f", $totalprice),
     totaldue        => sprintf("%.2f", $total),
     totaldue_raw    => $total,
