@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Hold ratios</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -42,8 +43,8 @@
     <div id="yui-main">
     <div class="yui-b">
 <h1>Hold ratios to calculate items needed</h1>
-   <h3>Calculated on [% todaysdate %]. From [% from %]
-    to [% to %]</h3>
+   <h3>Calculated on [% todaysdate | $KohaDates %]. From [% from | $KohaDates %]
+    to [% to | $KohaDates %]</h3>
 <p>These items have a hold ratio &ge; [% ratio %].</p>
 <div class="sql">[% sql %]</div>
 
@@ -108,12 +109,12 @@
 
     <li>
         <label for="from">Start date:</label>
-        <input type="text" size="10" id="from" name="from" value="[% from %]" class="datepickerfrom" />
+        <input type="text" size="10" id="from" name="from" value="[% from | $KohaDates %]" class="datepickerfrom" />
     </li>
 
     <li>
         <label for="to">End date:</label>
-        <input size="10" id="to" name="to" value="[% to %]" type="text" class="datepickerto" />
+        <input size="10" id="to" name="to" value="[% to | $KohaDates %]" type="text" class="datepickerto" />
     </li>
 </ol>
 (inclusive)
