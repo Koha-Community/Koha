@@ -35,7 +35,6 @@ use C4::Members;
 use C4::Members::Attributes;
 use C4::Members::AttributeTypes;
 use C4::Koha;
-use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Log;
 use C4::Letters;
 use C4::Branch; # GetBranches
@@ -167,19 +166,16 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
         }
     }
 
-    my $dateobject = C4::Dates->new();
-    my $syspref = $dateobject->regexp();		# same syspref format for all 3 dates
-    my $iso     = $dateobject->regexp('iso');	#
     foreach (qw(dateenrolled dateexpiry dateofbirth)) {
         next unless exists $newdata{$_};
         my $userdate = $newdata{$_} or next;
-        if ($userdate =~ /$syspref/) {
-            $newdata{$_} = format_date_in_iso($userdate);	# if they match syspref format, then convert to ISO
-        } elsif ($userdate =~ /$iso/) {
-            warn "Date $_ ($userdate) is already in ISO format";
+
+        my $formatteddate = eval { output_pref({ dt => dt_from_string( $userdate ), dateformat => 'iso', dateonly => 1 } ); };
+        if ( $formatteddate ) {
+            $newdata{$_} = $formatteddate;
         } else {
             ($userdate eq '0000-00-00') and warn "Data error: $_ is '0000-00-00'";
-            $template->param( "ERROR_$_" => 1 );	# else ERROR!
+            $template->param( "ERROR_$_" => 1 );
             push(@errors,"ERROR_$_");
         }
     }
@@ -360,7 +356,7 @@ if ($op eq 'save' || $op eq 'insert'){
 
 if ( ($op eq 'modify' || $op eq 'insert' || $op eq 'save'|| $op eq 'duplicate') and ($step == 0 or $step == 3 )){
     unless ($newdata{'dateexpiry'}){
-        my $arg2 = $newdata{'dateenrolled'} || C4::Dates->today('iso');
+        my $arg2 = $newdata{'dateenrolled'} || output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
         $newdata{'dateexpiry'} = GetExpiryDate($newdata{'categorycode'},$arg2);
     }
 }
@@ -643,10 +639,10 @@ if ($nok) {
   #Formatting data for display    
   
 if (!defined($data{'dateenrolled'}) or $data{'dateenrolled'} eq ''){
-  $data{'dateenrolled'}=C4::Dates->today('iso');
+  $data{'dateenrolled'} = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
 }
 if ( $op eq 'duplicate' ) {
-    $data{'dateenrolled'} = C4::Dates->today('iso');
+    $data{'dateenrolled'} = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
     $data{'dateexpiry'} = GetExpiryDate( $data{'categorycode'}, $data{'dateenrolled'} );
 }
 if (C4::Context->preference('uppercasesurnames')) {
@@ -655,8 +651,10 @@ if (C4::Context->preference('uppercasesurnames')) {
 }
 
 foreach (qw(dateenrolled dateexpiry dateofbirth)) {
-	$data{$_} = format_date($data{$_});	# back to syspref for display
-	$template->param( $_ => $data{$_});
+    if ( $data{$_} ) {
+       $data{$_} = eval { output_pref({ dt => dt_from_string( $data{$_} ), dateonly => 1 } ); };  # back to syspref for display
+    }
+    $template->param( $_ => $data{$_});
 }
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
