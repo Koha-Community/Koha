@@ -52,6 +52,7 @@ use Koha::Patrons;
 use Koha::Patron::Debarments;
 use Koha::Database;
 use Koha::Libraries;
+use Koha::Holds;
 use Carp;
 use List::MoreUtils qw( uniq );
 use Date::Calc qw(
@@ -1069,16 +1070,14 @@ sub CanBookBeIssued {
     }
 
     ## check for high holds decreasing loan period
-    my $decrease_loan = C4::Context->preference('decreaseLoanHighHolds');
-    if ( $decrease_loan && $decrease_loan == 1 ) {
-        my ( $reserved, $num, $duration, $returndate ) =
-          checkHighHolds( $item, $borrower );
+    if ( C4::Context->preference('decreaseLoanHighHolds') ) {
+        my $check = checkHighHolds( $item, $borrower );
 
-        if ( $num >= C4::Context->preference('decreaseLoanHighHoldsValue') ) {
+        if ( $check->{exceeded} ) {
             $needsconfirmation{HIGHHOLDS} = {
-                num_holds  => $num,
-                duration   => $duration,
-                returndate => output_pref($returndate),
+                num_holds  => $check->{outstanding},
+                duration   => $check->{duration},
+                returndate => output_pref( $check->{due_date} ),
             };
         }
     }
@@ -1173,13 +1172,60 @@ sub checkHighHolds {
     my ( $item, $borrower ) = @_;
     my $biblio = GetBiblioFromItemNumber( $item->{itemnumber} );
     my $branch = _GetCircControlBranch( $item, $borrower );
-    my $dbh    = C4::Context->dbh;
-    my $sth    = $dbh->prepare(
-'select count(borrowernumber) as num_holds from reserves where biblionumber=?'
-    );
-    $sth->execute( $item->{'biblionumber'} );
-    my ($holds) = $sth->fetchrow_array;
-    if ($holds) {
+
+    my $return_data = {
+        exceeded    => 0,
+        outstanding => 0,
+        duration    => 0,
+        due_date    => undef,
+    };
+
+    my $holds = Koha::Holds->search( { biblionumber => $item->{'biblionumber'} } );
+
+    if ( $holds->count() ) {
+        $return_data->{outstanding} = $holds->count();
+
+        my $decreaseLoanHighHoldsControl        = C4::Context->preference('decreaseLoanHighHoldsControl');
+        my $decreaseLoanHighHoldsValue          = C4::Context->preference('decreaseLoanHighHoldsValue');
+        my $decreaseLoanHighHoldsIgnoreStatuses = C4::Context->preference('decreaseLoanHighHoldsIgnoreStatuses');
+
+        my @decreaseLoanHighHoldsIgnoreStatuses = split( /,/, $decreaseLoanHighHoldsIgnoreStatuses );
+
+        if ( $decreaseLoanHighHoldsControl eq 'static' ) {
+
+            # static means just more than a given number of holds on the record
+
+            # If the number of holds is less than the threshold, we can stop here
+            if ( $holds->count() < $decreaseLoanHighHoldsValue ) {
+                return $return_data;
+            }
+        }
+        elsif ( $decreaseLoanHighHoldsControl eq 'dynamic' ) {
+
+            # dynamic means X more than the number of holdable items on the record
+
+            # let's get the items
+            my @items = $holds->next()->biblio()->items();
+
+            # Remove any items with status defined to be ignored even if the would not make item unholdable
+            foreach my $status (@decreaseLoanHighHoldsIgnoreStatuses) {
+                @items = grep { !$_->$status } @items;
+            }
+
+            # Remove any items that are not holdable for this patron
+            @items = grep { CanItemBeReserved( $borrower->{borrowernumber}, $_->itemnumber ) eq 'OK' } @items;
+
+            my $items_count = scalar @items;
+
+            my $threshold = $items_count + $decreaseLoanHighHoldsValue;
+
+            # If the number of holds is less than the count of items we have
+            # plus the number of holds allowed above that count, we can stop here
+            if ( $holds->count() <= $threshold ) {
+                return $return_data;
+            }
+        }
+
         my $issuedate = DateTime->now( time_zone => C4::Context->tz() );
 
         my $calendar = Koha::Calendar->new( branchcode => $branch );
@@ -1188,21 +1234,21 @@ sub checkHighHolds {
           ( C4::Context->preference('item-level_itypes') )
           ? $biblio->{'itype'}
           : $biblio->{'itemtype'};
-        my $orig_due =
-          C4::Circulation::CalcDateDue( $issuedate, $itype, $branch,
-            $borrower );
 
-        my $reduced_datedue =
-          $calendar->addDate( $issuedate,
-            C4::Context->preference('decreaseLoanHighHoldsDuration') );
+        my $orig_due = C4::Circulation::CalcDateDue( $issuedate, $itype, $branch, $borrower );
+
+        my $decreaseLoanHighHoldsDuration = C4::Context->preference('decreaseLoanHighHoldsDuration');
+
+        my $reduced_datedue = $calendar->addDate( $issuedate, $decreaseLoanHighHoldsDuration );
 
         if ( DateTime->compare( $reduced_datedue, $orig_due ) == -1 ) {
-            return ( 1, $holds,
-                C4::Context->preference('decreaseLoanHighHoldsDuration'),
-                $reduced_datedue );
+            $return_data->{exceeded} = 1;
+            $return_data->{duration} = $decreaseLoanHighHoldsDuration;
+            $return_data->{due_date} = $reduced_datedue;
         }
     }
-    return ( 0, 0, 0, undef );
+
+    return $return_data;
 }
 
 =head2 AddIssue

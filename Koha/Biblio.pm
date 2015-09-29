@@ -53,6 +53,20 @@ sub subtitles {
     return map { $_->{subfield} } @{ GetRecordValue( 'subtitle', GetMarcBiblio( $self->id ), $self->frameworkcode ) };
 }
 
+=head3 items
+
+Returns the related Koha::Items object for this biblio in scalar context,
+or list of Koha::Item objects in list context.
+
+=cut
+
+sub items {
+    my ($self) = @_;
+
+    $self->{_items} ||= Koha::Items->search( { biblionumber => $self->biblionumber() } );
+
+    return wantarray ? $self->{_items}->as_list : $self->{_items};
+}
 
 =head3 type
 

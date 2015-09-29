@@ -591,7 +591,18 @@ Circulation:
             - days for items with more than
             - pref: decreaseLoanHighHoldsValue
               class: integer
-            - holds.
+            - holds
+            - pref: decreaseLoanHighHoldsControl
+              choices:
+                  static: "on the record"
+                  dynamic: "over the number of holdable items on the record"
+            - . Ignore items with the following statuses when counting items
+            - pref: decreaseLoanHighHoldsIgnoreStatuses
+              multiple:
+                damaged: Damaged
+                itemlost: Lost
+                withdrawn: Withdrawn
+                notforloan: Not for loan
         -
             - pref: AllowHoldsOnPatronsPossessions
               choices:
