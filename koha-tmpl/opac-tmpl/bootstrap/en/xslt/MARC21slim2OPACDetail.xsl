@@ -176,6 +176,8 @@
             <!-- #13382 suppress 700$i and 7xx/@ind2=2 -->
             <xsl:with-param name="authorfield" select="marc:datafield[(@tag=700 or @tag=710 or @tag=711) and not(@ind2=2) and not(marc:subfield[@code='i'])]"/>
             <xsl:with-param name="UseAuthoritiesForTracings" select="$UseAuthoritiesForTracings"/>
+            <xsl:with-param name="materialTypeLabel" select="$materialTypeLabel"/>
+            <xsl:with-param name="theme" select="$theme"/>
         </xsl:call-template>
 
    <xsl:if test="$DisplayOPACiconsXSLT!='0'">
