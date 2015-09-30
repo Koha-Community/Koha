@@ -31,7 +31,7 @@ use C4::Circulation;
 use C4::Koha; # XXX subfield_is_koha_internal_p
 use C4::Branch; # XXX subfield_is_koha_internal_p
 use C4::ClassSource;
-use C4::Dates;
+use Koha::DateUtils;
 use List::MoreUtils qw/any/;
 use C4::Search;
 use Storable qw(thaw freeze);
@@ -104,7 +104,7 @@ sub _increment_barcode {
 
 
 sub generate_subfield_form {
-        my ($tag, $subfieldtag, $value, $tagslib,$subfieldlib, $branches, $today_iso, $biblionumber, $temp, $loop_data, $i, $restrictededition) = @_;
+        my ($tag, $subfieldtag, $value, $tagslib,$subfieldlib, $branches, $biblionumber, $temp, $loop_data, $i, $restrictededition) = @_;
   
         my $frameworkcode = &GetFrameworkCode($biblionumber);
 
@@ -129,10 +129,10 @@ sub generate_subfield_form {
         if ( ! defined( $value ) || $value eq '')  {
             $value = $subfieldlib->{defaultvalue};
             # get today date & replace YYYY, MM, DD if provided in the default value
-            my ( $year, $month, $day ) = split ',', $today_iso;     # FIXME: iso dates don't have commas!
-            $value =~ s/YYYY/$year/g;
-            $value =~ s/MM/$month/g;
-            $value =~ s/DD/$day/g;
+            my $today = dt_from_string;
+            $value =~ s/YYYY/$today->year/g;
+            $value =~ s/MM/$today->month/g;
+            $value =~ s/DD/$today->day/g;
         }
         
         $subfield_data{visibility} = "display:none;" if (($subfieldlib->{hidden} > 4) || ($subfieldlib->{hidden} <= -4));
@@ -402,7 +402,6 @@ $restrictededition = 0 if ($restrictededition != 0 &&  C4::Context->IsSuperLibra
 # In case user has fast cataloging permission (and we're in fast cataloging), editing is not restricted
 $restrictededition = 0 if ($restrictededition != 0 && $frameworkcode eq 'FA' && haspermission($uid, {'editcatalogue' => 'fast_cataloging'}));
 
-my $today_iso = C4::Dates->today('iso');
 my $tagslib = &GetMarcStructure(1,$frameworkcode);
 my $record = GetMarcBiblio($biblionumber);
 my $oldrecord = TransformMarcToKoha($dbh,$record);
@@ -841,7 +840,7 @@ if($itemrecord){
             next if subfield_is_koha_internal_p($subfieldtag);
             next if ($tagslib->{$tag}->{$subfieldtag}->{'tab'} ne "10");
 
-            my $subfield_data = generate_subfield_form($tag, $subfieldtag, $value, $tagslib, $subfieldlib, $branches, $today_iso, $biblionumber, $temp, \@loop_data, $i, $restrictededition);
+            my $subfield_data = generate_subfield_form($tag, $subfieldtag, $value, $tagslib, $subfieldlib, $branches, $biblionumber, $temp, \@loop_data, $i, $restrictededition);
             push @fields, "$tag$subfieldtag";
             push (@loop_data, $subfield_data);
             $i++;
@@ -865,7 +864,7 @@ foreach my $tag ( keys %{$tagslib}){
         my @values = (undef);
         @values = $itemrecord->field($tag)->subfield($subtag) if ($itemrecord && defined($itemrecord->field($tag)) && defined($itemrecord->field($tag)->subfield($subtag)));
         for my $value (@values){
-            my $subfield_data = generate_subfield_form($tag, $subtag, $value, $tagslib, $tagslib->{$tag}->{$subtag}, $branches, $today_iso, $biblionumber, $temp, \@loop_data, $i, $restrictededition);
+            my $subfield_data = generate_subfield_form($tag, $subtag, $value, $tagslib, $tagslib->{$tag}->{$subtag}, $branches, $biblionumber, $temp, \@loop_data, $i, $restrictededition);
             push (@loop_data, $subfield_data);
             $i++;
         }
