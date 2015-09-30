@@ -26,7 +26,7 @@ use Koha::Holds;
 use Koha::Hold;
 use t::lib::TestBuilder;
 
-use Test::More tests => 12;
+use Test::More tests => 14;
 
 my $dbh    = C4::Context->dbh;
 my $schema = Koha::Database->new()->schema();
@@ -63,7 +63,13 @@ my $biblioitem =
 
 my @items;
 for my $i ( 1 .. 10 ) {
-    my $item = Koha::Item->new( { biblionumber => $biblio->id(), biblioitemnumber => $biblioitem->id(), } )->store();
+    my $item = Koha::Item->new(
+        {
+            biblionumber     => $biblio->id(),
+            biblioitemnumber => $biblioitem->id(),
+            barcode          => $i
+        }
+    )->store();
     push( @items, $item );
 }
 
@@ -101,7 +107,7 @@ C4::Context->set_preference( 'decreaseLoanHighHoldsValue',          1 );
 C4::Context->set_preference( 'decreaseLoanHighHoldsControl',        'static' );
 C4::Context->set_preference( 'decreaseLoanHighHoldsIgnoreStatuses', 'damaged,itemlost,notforloan,withdrawn' );
 
-my $item_hr = { itemnumber => $item->id, biblionumber => $biblio->id, homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode} };
+my $item_hr = { itemnumber => $item->id, biblionumber => $biblio->id, homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, barcode => $item->barcode };
 my $patron_hr = { borrower => $patron->id, branchcode => $library->{branchcode} };
 
 my $data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
@@ -159,6 +165,14 @@ $unholdable->store();
 
 $data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
 is( $data->{exceeded}, 1, "Should exceed threshold with one withdrawn item" );
+
+C4::Context->set_preference('CircControl', 'PatronLibrary');
+
+my ( undef, $needsconfirmation ) = CanBookBeIssued( $patron_hr, $item->barcode );
+ok( $needsconfirmation->{HIGHHOLDS}, "High holds checkout needs confirmation" );
+
+( undef, $needsconfirmation ) = CanBookBeIssued( $patron_hr, $item->barcode, undef, undef, undef, { override_high_holds => 1 } );
+ok( !$needsconfirmation->{HIGHHOLDS}, "High holds checkout does not need confirmation" );
 
 $schema->storage->txn_rollback();
 1;

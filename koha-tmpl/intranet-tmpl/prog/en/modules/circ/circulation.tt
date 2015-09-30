@@ -213,6 +213,10 @@ $(document).ready(function() {
     <div class="dialog message">The patron has unpaid charges for holds, rentals etc of [% alert.OTHER_CHARGES %]</div>
 [% END %]
 
+[% IF alert.HIGHHOLDS %]
+    <div class="dialog message">High demand item. Loan period <i>not</i> shortened to [% alert.HIGHHOLDS.duration %] days (due [% alert.HIGHHOLDS.returndate %]) due to override.</div>
+[% END %]
+
 [% IF ( NEEDSCONFIRMATION ) %]
 <div class="yui-g">
 
@@ -310,7 +314,7 @@ $(document).ready(function() {
     </li>
 [% END %]
 
-[% IF  HIGHHOLDS %]
+[% IF HIGHHOLDS %]
     <li>High demand item. Loan period shortened to [% HIGHHOLDS.duration %] days (due [% HIGHHOLDS.returndate %]). Check out anyway?</li>
 [% END %]
 
@@ -325,16 +329,24 @@ $(document).ready(function() {
 </ul>
 
 [% IF HIGHHOLDS %]
-	<script language="JavaScript" type="text/javascript">
-	$(document).ready(function() {
-            $("input[name=duedatespec]:hidden").val('[% HIGHHOLDS.returndate %]');
-            if ('[% duedatespec %]' === '') {
-                $("input[name=restoreduedatespec]:hidden").val('highholds_empty');
-            } else {
-                $("input[name=restoreduedatespec]:hidden").val('[% duedatespec %]');
-            }
-	});
-	</script>
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function() {
+    [% IF !override_high_holds %]
+        $("input[name=duedatespec]:hidden").val('[% HIGHHOLDS.returndate %]');
+        if ('[% duedatespec %]' === '') {
+            $("input[name=restoreduedatespec]:hidden").val('highholds_empty');
+        } else {
+            $("input[name=restoreduedatespec]:hidden").val('[% duedatespec %]');
+        }
+    [% END %]
+
+    $("#override_high_holds_tmp").on( 'change', function() {
+        if ( this.checked ) {
+            $("input[name=duedatespec]:hidden").val('');
+        }
+    });
+});
+</script>
 [% END %]
 
 [% IF CAN_user_circulate_force_checkout or HIGHHOLDS %]
@@ -342,6 +354,13 @@ $(document).ready(function() {
     <input type="hidden" name="restoreduedatespec" />
 
 [% IF (forceallow) %]<input type="hidden" name="forceallow" value="1">[% END %]
+
+[% IF HIGHHOLDS %]
+    <p>
+    <input type="checkbox" name="override_high_holds_tmp" id="override_high_holds_tmp" value="1" />
+    <label for="override_high_holds_tmp">Don't decrease loan length based on holds</label>
+    </p>
+[% END %]
 
 [% IF ( RESERVED ) %]
     <p>
@@ -362,6 +381,7 @@ $(document).ready(function() {
     <input type="hidden" name="barcode" value="[% barcode |html %]" />
     <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
     <input type="hidden" name="issueconfirmed" value="1" />
+    <input type="hidden" name="override_high_holds" value="[% override_high_holds %]"/>
     [% IF ( DEBT ) %]<input type="hidden" name="debt_confirmed" value="1" />[% END %]
     [% IF ( INVALID_DATE ) %]
     <p>
@@ -650,6 +670,23 @@ No patron matched <span class="ex">[% message %]</span>
             [% END %]
 
             <label for="auto_renew">Automatic renewal</label>
+
+            [% IF Koha.Preference('decreaseLoanHighHolds') %]
+                [% IF NEEDSCONFIRMATION %]
+                    [% IF override_high_holds %]
+                        <input type="checkbox" name="override_high_holds" id="override_high_holds" value="1" disabled="disabled" checked="checked"/>
+                    [% ELSE %]
+                        <input type="checkbox" name="override_high_holds" id="override_high_holds" value="1" disabled="disabled"/>
+                    [% END %]
+                [% ELSE %]
+                    [% IF override_high_holds %]
+                        <input type="checkbox" name="override_high_holds" id="override_high_holds" value="1" checked="checked" />
+                    [% ELSE %]
+                        <input type="checkbox" name="override_high_holds" id="override_high_holds" value="1" />
+                    [% END %]
+                [% END %]
+                <label for="override_high_holds">Don't decrease loan length based on holds</label>
+            [% END %]
         </div>
     [% END %]
 
