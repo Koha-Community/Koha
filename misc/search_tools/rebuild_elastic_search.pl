@@ -84,7 +84,7 @@ Full documentation.
 use autodie;
 use Getopt::Long;
 use Koha::Authority;
-use Koha::Biblio;
+use Koha::BiblioUtils;
 use Koha::ElasticSearch::Indexer;
 use MARC::Field;
 use MARC::Record;
@@ -125,10 +125,10 @@ if ($index_biblios) {
         $next = sub {
             my $r = shift @biblionumbers;
             return () unless defined $r;
-            return ($r, Koha::Biblio->get_from_biblionumber($r, item_data => 1 ));
+            return ($r, Koha::BiblioUtils->get_from_biblionumber($r, item_data => 1 ));
         };
     } else {
-        my $records = Koha::Biblio->get_all_biblios_iterator();
+        my $records = Koha::BiblioUtils->get_all_biblios_iterator();
         $next = sub {
             $records->next();
         }

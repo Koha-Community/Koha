@@ -1,4 +1,4 @@
-package Koha::Biblio::Iterator;
+package Koha::BiblioUtils::Iterator;
 
 # This contains an iterator over biblio records
 
@@ -21,7 +21,7 @@ package Koha::Biblio::Iterator;
 
 =head1 NAME
 
-Koha::Biblio::Iterator - iterates over biblios provided by a DBIx::Class::ResultSet
+Koha::BiblioUtils::Iterator - iterates over biblios provided by a DBIx::Class::ResultSet
 
 =head1 DESCRIPTION
 
@@ -31,9 +31,9 @@ C<marc> or C<marcxml> column from the biblioitems table.
 
 =head1 SYNOPSIS
 
-  use Koha::Biblio::Iterator;
+  use Koha::BiblioUtils::Iterator;
   my $rs = $schema->resultset('biblioitems');
-  my $iterator = Koha::Biblio::Iterator->new($rs);
+  my $iterator = Koha::BiblioUtils::Iterator->new($rs);
   while (my $record = $iterator->next()) {
       // do something with $record
   }
@@ -108,7 +108,7 @@ sub next {
         confess "No biblionumber column returned in the request."
           if ( !defined($bibnum) );
 
-        # TODO this should really be in Koha::Biblio or something similar.
+        # TODO this should really be in Koha::BiblioUtils or something similar.
         C4::Biblio::EmbedItemsInMarcBiblio( $marc, $bibnum );
     }
 

@@ -10355,7 +10355,7 @@ if ( CheckVersion($DBversion) ) {
     |);
 
     print "Upgrade to $DBversion done (Bug 8007: Add System Preferences useDischarge, the discharge notice and the new table discharges)\n";
-    SetVersion ($DBversion);
+    SetVersion($DBversion);
 }
 
 $DBversion = "3.19.00.036";
