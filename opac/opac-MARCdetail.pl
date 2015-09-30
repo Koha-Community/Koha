@@ -57,6 +57,7 @@ use C4::Biblio qw(
     GetMarcStructure
     TransformMarcToKoha
 );
+use C4::Record;
 use C4::Reserves qw( IsAvailableForItemLevelRequest );
 use C4::Members;
 use C4::Koha qw( GetNormalizedISBN );
@@ -387,5 +388,8 @@ $template->param(
     norequests          => $norequests,
     borrowernumber      => $loggedinuser,
 );
+
+# Cites
+$template->{VARS}->{'cites'} = marc2cites($record);
 
 output_html_with_http_headers $query, $cookie, $template->output;

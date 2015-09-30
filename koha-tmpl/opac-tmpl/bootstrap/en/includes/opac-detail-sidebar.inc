@@ -1,5 +1,21 @@
 [% USE raw %]
 [% USE Biblio %]
+
+<div id="citemodal" class="modal hide" role="dialog" aria-labelledby="citeLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">Ã—</button>
+        <h2 id="citeLabel">[% title OR 'Citation' | html %]</h2>
+    </div>
+    <div class="modal-body">
+        [% FOREACH system IN cites.keys.sort %]
+        <h3>[% system %]</h3>
+        <p>[% cites.$system | html %]</p>
+        [% END %]
+    </div>
+    <div class="modal-footer">
+    </div>
+</div>
+
 <ul id="action">
     [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
         [% IF Koha.Preference( 'OPACHoldRequests' ) == 1 %]
@@ -15,6 +31,7 @@
     [% END %]
 
     <li><a class="print-large btn btn-link btn-lg" href="#"><i class="fa fa-fw fa-print" aria-hidden="true"></i> Print</a></li>
+    <li><a href="#citemodal" id="cite" data-toggle="modal">Cite</a></li>
 
     [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
         [% IF artreqpossible %]
