@@ -356,7 +356,7 @@ $(document).ready(function() {
 [% IF (forceallow) %]<input type="hidden" name="forceallow" value="1">[% END %]
 
 [% IF HIGHHOLDS %]
-    <p>
+    <p class="circ-override-high-holds">
     <input type="checkbox" name="override_high_holds_tmp" id="override_high_holds_tmp" value="1" />
     <label for="override_high_holds_tmp">Don't decrease loan length based on holds</label>
     </p>
@@ -671,22 +671,24 @@ No patron matched <span class="ex">[% message %]</span>
 
             <label for="auto_renew">Automatic renewal</label>
 
-            [% IF Koha.Preference('decreaseLoanHighHolds') %]
-                [% IF NEEDSCONFIRMATION %]
-                    [% IF override_high_holds %]
-                        <input type="checkbox" name="override_high_holds" id="override_high_holds" value="1" disabled="disabled" checked="checked"/>
+            <span class="circ-override-high-holds">
+                [% IF Koha.Preference('decreaseLoanHighHolds') %]
+                    [% IF NEEDSCONFIRMATION %]
+                        [% IF override_high_holds %]
+                            <input type="checkbox" name="override_high_holds" id="override_high_holds" value="1" disabled="disabled" checked="checked"/>
+                        [% ELSE %]
+                            <input type="checkbox" name="override_high_holds" id="override_high_holds" value="1" disabled="disabled"/>
+                        [% END %]
                     [% ELSE %]
-                        <input type="checkbox" name="override_high_holds" id="override_high_holds" value="1" disabled="disabled"/>
+                        [% IF override_high_holds %]
+                            <input type="checkbox" name="override_high_holds" id="override_high_holds" value="1" checked="checked" />
+                        [% ELSE %]
+                            <input type="checkbox" name="override_high_holds" id="override_high_holds" value="1" />
+                        [% END %]
                     [% END %]
-                [% ELSE %]
-                    [% IF override_high_holds %]
-                        <input type="checkbox" name="override_high_holds" id="override_high_holds" value="1" checked="checked" />
-                    [% ELSE %]
-                        <input type="checkbox" name="override_high_holds" id="override_high_holds" value="1" />
-                    [% END %]
+                    <label for="override_high_holds">Don't decrease loan length based on holds</label>
                 [% END %]
-                <label for="override_high_holds">Don't decrease loan length based on holds</label>
-            [% END %]
+            </span>
         </div>
     [% END %]
 
