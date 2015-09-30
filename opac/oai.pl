@@ -577,6 +577,7 @@ sub new {
     $sth->execute( @bind_params );
 
     my $count = 0;
+    my $format = $args{metadataPrefix} || $token->{metadata_prefix};
     while ( my ($biblionumber, $timestamp) = $sth->fetchrow ) {
         $count++;
         if ( $count > $max ) {
@@ -591,7 +592,7 @@ sub new {
             );
             last;
         }
-        my $marcxml = $repository->get_biblio_marcxml($biblionumber, $args{metadataPrefix});
+        my $marcxml = $repository->get_biblio_marcxml($biblionumber, $format);
         my $oai_sets = GetOAISetsBiblio($biblionumber);
         my @setSpecs;
         foreach (@$oai_sets) {
