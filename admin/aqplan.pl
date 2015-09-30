@@ -26,7 +26,6 @@ use CGI qw ( -utf8 );
 use List::Util qw/min/;
 use Date::Calc qw/Delta_YMD Easter_Sunday Today Decode_Date_EU/;
 use Date::Manip qw/ ParseDate UnixDate DateCalc/;
-use C4::Dates qw/format_date format_date_in_iso/;
 use Text::CSV_XS;
 
 use C4::Acquisition;
