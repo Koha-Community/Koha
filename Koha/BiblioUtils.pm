@@ -1,4 +1,4 @@
-package Koha::BiblioUtils;
+package Koha::BiblioUtilsUtils;
 
 # This contains functions to do with managing biblio records.
 
@@ -21,36 +21,90 @@ package Koha::BiblioUtils;
 
 =head1 NAME
 
-Koha::BiblioUtils - contains some handy biblio-related functions
+Koha::BiblioUtils - contains fundamental biblio-related functions
 
 =head1 DESCRIPTION
 
-This contains functions for operations on biblio records.
+This contains functions for normal operations on biblio records.
 
-Note: really, C4::Biblio does the main functions, but the Koha namespace is
+Note: really, C4::BiblioUtils does the main functions, but the Koha namespace is
 the new thing that should be used.
 
 =cut
 
-use C4::Biblio; # EmbedItemsInMarcBiblio
-use Koha::Biblio::Iterator;
+use C4::BiblioUtils; # EmbedItemsInMarcBiblio
+use Koha::MetadataIterator;
 use Koha::Database;
 use Modern::Perl;
 
-use base qw(Class::Accessor);
+use base qw(Koha::MetadataRecord);
 
-__PACKAGE__->mk_accessors(qw());
+__PACKAGE__->mk_accessors(qw( record schema idnumber datatype ));
 
 =head1 FUNCTIONS
 
+=head2 new
+
+    my $biblio = Koha::BiblioUtils->new($marc_record, [$biblionumber]);
+
+Creates an instance of C<Koha::BiblioUtils> based on the marc record. If known,
+the biblionumber can be provided too.
+
+=cut
+
+sub new {
+    my $class = shift;
+    my $record = shift;
+    my $biblionumber = shift;
+
+    my $self = $class->SUPER::new(
+        {
+            'record'   => $record,
+            'schema'   => lc C4::Context->preference("marcflavour"),
+            'idnumber' => $biblionumber,
+            'datatype' => 'biblio',
+        }
+    );
+    bless $self, $class;
+    return $self;
+}
+
+=head2 get_from_biblionumber
+
+    my $biblio = Koha::BiblioUtils->get_from_biblionumber($biblionumber, %options);
+
+This will give you an instance of L<Koha::BiblioUtils> that is the biblio that
+you requested.
+
+Options are:
+
+=over 4
+
+=item C<$item_data>
+
+If true, then the item data will be merged into the record when it's loaded.
+
+=back
+
+It will return C<undef> if the biblio doesn't exist.
+
+=cut
+
+sub get_from_biblionumber {
+    my ($class, $bibnum, %options) = @_;
+
+    my $marc = $class->get_marc_biblio($bibnum, %options);
+    return $class->new($marc, $bibnum);
+}
+
 =head2 get_all_biblios_iterator
 
-    my $it = get_all_biblios_iterator();
+    my $it = Koha::BiblioUtils->get_all_biblios_iterator();
 
 This will provide an iterator object that will, one by one, provide the
-MARC::Record of each biblio. This will include the item data.
+Koha::BiblioUtils of each biblio. This will include the item data.
 
-The iterator is a Koha::Biblio::Iterator object.
+The iterator is a Koha::MetadataIterator object.
 
 =cut
 
@@ -58,17 +112,24 @@ sub get_all_biblios_iterator {
     my $database = Koha::Database->new();
     my $schema   = $database->schema();
     my $rs =
-      $schema->resultset('Biblioitem')->search( { marc => { '!=', undef } },
-        { columns => [qw/ biblionumber marc /] } );
-    return Koha::Biblio::Iterator->new($rs, items => 1);
+      $schema->resultset('Biblio')->search( {},
+        { columns => [qw/ biblionumber /] } );
+    my $next_func = sub {
+        my $row = $rs->next();
+        return undef if !$row;
+        my $marc = C4::Biblio::GetMarcBiblio( $row->biblionumber, 1 );
+        return __PACKAGE__->new($marc, $row->biblionumber);
+    };
+    return Koha::MetadataIterator->new($next_func);
 }
 
 =head2 get_marc_biblio
 
-    my $marc = get_marc_biblio($bibnum, %options);
+    my $marc = Koha::BiblioUtils->get_marc_biblio($bibnum, %options);
 
-This fetches the MARC::Record for the given biblio number. Nothing is returned
-if the biblionumber couldn't be found (or it somehow has no MARC data.)
+This non-class function fetches the MARC::Record for the given biblio number.
+Nothing is returned if the biblionumber couldn't be found (or it somehow has no
+MARC data.)
 
 Options are:
 
@@ -83,23 +144,9 @@ If set to true, item data is embedded in the record. Default is to not do this.
 =cut
 
 sub get_marc_biblio {
-    my ($class,$bibnum, %options) = @_;
+    my ($class, $bibnum, %options) = @_;
 
-    my $database = Koha::Database->new();
-    my $schema   = $database->schema();
-    my $rs =
-      $schema->resultset('Biblioitem')
-      ->search( { marc => { '!=', undef }, biblionumber => $bibnum },
-        { columns => [qw/ marc /] } );
-
-    my $row = $rs->next();
-    return unless $row;
-    my $marc = MARC::Record->new_from_usmarc($row->marc);
-
-    # TODO implement this in this module
-    C4::Biblio::EmbedItemsInMarcBiblio($marc, $bibnum) if $options{item_data};
-
-    return $marc;
+    return C4::Biblio::GetMarcBiblio( $bibnum, ($options{item_data} ? 1 : 0 ) );
 }
 
 1;
