@@ -1,4 +1,4 @@
-package Koha::BiblioUtilsUtils;
+package Koha::BiblioUtils;
 
 # This contains functions to do with managing biblio records.
 
@@ -27,19 +27,21 @@ Koha::BiblioUtils - contains fundamental biblio-related functions
 
 This contains functions for normal operations on biblio records.
 
-Note: really, C4::BiblioUtils does the main functions, but the Koha namespace is
+Note: really, C4::Biblio does the main functions, but the Koha namespace is
 the new thing that should be used.
 
 =cut
 
-use C4::BiblioUtils; # EmbedItemsInMarcBiblio
+use C4::Biblio; # EmbedItemsInMarcBiblio
 use Koha::MetadataIterator;
 use Koha::Database;
 use Modern::Perl;
 
+use Data::Dumper; # TODO remove
+
 use base qw(Koha::MetadataRecord);
 
-__PACKAGE__->mk_accessors(qw( record schema idnumber datatype ));
+__PACKAGE__->mk_accessors(qw( record schema id datatype ));
 
 =head1 FUNCTIONS
 
@@ -61,7 +63,7 @@ sub new {
         {
             'record'   => $record,
             'schema'   => lc C4::Context->preference("marcflavour"),
-            'idnumber' => $biblionumber,
+            'id'       => $biblionumber,
             'datatype' => 'biblio',
         }
     );
@@ -115,10 +117,20 @@ sub get_all_biblios_iterator {
       $schema->resultset('Biblio')->search( {},
         { columns => [qw/ biblionumber /] } );
     my $next_func = sub {
-        my $row = $rs->next();
-        return undef if !$row;
-        my $marc = C4::Biblio::GetMarcBiblio( $row->biblionumber, 1 );
-        return __PACKAGE__->new($marc, $row->biblionumber);
+        # Warn and skip bad records, otherwise we break the loop
+        while (1) {
+            my $row = $rs->next();
+            return undef if !$row;
+            my $marc = C4::Biblio::GetMarcBiblio( $row->biblionumber, 1 );
+            my $next = eval {
+                __PACKAGE__->new($marc, $row->biblionumber);
+            };
+            if ($@) {
+                warn "Something went wrong reading record for biblio $row->biblionumber: $@\n";
+                next;
+            }
+            return $next;
+        }
     };
     return Koha::MetadataIterator->new($next_func);
 }
