@@ -168,7 +168,7 @@ sub do_reindex {
     my $commit_count = $commit;
     my ( @id_buffer, @commit_buffer );
     while ( my $record = $next->() ) {
-        my $id     = $record->idnumber;
+        my $id     = $record->id;
         my $record = $record->record;
         _log( 1, "$id\n" );
         $count++;
