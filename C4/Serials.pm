@@ -343,8 +343,9 @@ sub GetFullSubscription {
     my $sth = $dbh->prepare($query);
     $sth->execute($subscriptionid);
     my $subscriptions = $sth->fetchall_arrayref( {} );
+    my $cannotedit = not can_edit_subscription( $subscriptions->[0] ) if ref($subscriptions) eq 'ARRAY';
     for my $subscription ( @$subscriptions ) {
-        $subscription->{cannotedit} = not can_edit_subscription( $subscription );
+        $subscription->{cannotedit} = $cannotedit;
     }
     return $subscriptions;
 }
@@ -502,8 +503,9 @@ sub GetFullSubscriptionsFromBiblionumber {
     my $sth = $dbh->prepare($query);
     $sth->execute($biblionumber);
     my $subscriptions = $sth->fetchall_arrayref( {} );
+    my $cannotedit = not can_edit_subscription( $subscriptions->[0] ) if ref($subscriptions) eq 'ARRAY';
     for my $subscription ( @$subscriptions ) {
-        $subscription->{cannotedit} = not can_edit_subscription( $subscription );
+        $subscription->{cannotedit} = $cannotedit;
     }
     return $subscriptions;
 }
