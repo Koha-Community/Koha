@@ -35,4 +35,10 @@ sub GetDescription {
 
 }
 
+sub Get {
+    my @itemtypes = @{ GetItemTypes(style => 'array') };
+    @itemtypes = sort { $a->{description} cmp $b->{description} } @itemtypes;
+    return \@itemtypes;
+}
+
 1;

@@ -1,3 +1,5 @@
+[% USE Koha %]
+
 <div id="search-facets">
     <form method="get" action="/cgi-bin/koha/opac-topissues.pl">
     <h4><a href="#" class="menu-collapse-toggle">Refine your search</a></h4>
@@ -27,23 +29,42 @@
                                 [% END %]
                             </select></li>
 
-                <li><label for="itemtype">Limit to: </label>
-                            <select name="itemtype" id="itemtype">
-                                [% IF ( ccodesearch ) %]
-                                    <option value="">All collections</option>
+                [% AdvancedSearchTypes = Koha.Preference('AdvancedSearchTypes').split('\|') %]
+                [% IF AdvancedSearchTypes.grep('^itemtypes$').size %]
+                    <li>
+                        <label for="itemtype">Limit to: </label>
+                        <select name="itemtype" id="itemtype">
+                            <option value="">All item types</option>
+                            [% FOREACH itemtype IN ItemTypes.Get() %]
+                                [% IF itemtype.itemtype == selected_itemtype %]
+                                    <option value="[% itemtype.itemtype %]" selected="selected">
                                 [% ELSE %]
-                                    <option value="">All item types</option>
+                                    <option value="[% itemtype.itemtype %]">
                                 [% END %]
-                                [% FOREACH itemtypeloo IN itemtypeloop %]
-                                    [% IF ( itemtypeloo.selected ) %]
-                                        <option value="[% itemtypeloo.value %]" selected="selected">
-                                    [% ELSE %]
-                                        <option value="[% itemtypeloo.value %]">
-                                    [% END %]
-                                        [% itemtypeloo.description %]
-                                    </option>
+                                    [% itemtype.description %]
+                                </option>
+                            [% END %]
+                        </select>
+                    </li>
+                [% END %]
+
+                [% IF AdvancedSearchTypes.grep('^ccode$').size %]
+                    <li>
+                        <label for="ccode">Limit to:</label>
+                        <select name="ccode" id="ccode">
+                            <option value="">All collections</option>
+                            [% FOREACH ccode IN AuthorisedValues.Get('CCODE', selected_ccode, 1) %]
+                                [% IF ccode.selected %]
+                                    <option value="[% ccode.authorised_value %]" selected="selected">
+                                [% ELSE %]
+                                    <option value="[% ccode.authorised_value %]">
                                 [% END %]
-                            </select></li>
+                                    [% ccode.lib %]
+                                </option>
+                            [% END %]
+                        </select>
+                    </li>
+                [% END %]
 
                 <li><label for="timeLimit">Acquired in the last:</label>
                             <select name="timeLimit" id="timeLimit">

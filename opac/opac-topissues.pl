@@ -73,7 +73,7 @@ if (!$do_it && C4::Context->userenv && C4::Context->userenv->{'branch'} ) {
 my $itemtype = $input->param('itemtype') || '';
 my $timeLimit = $input->param('timeLimit') || 3;
 my $advanced_search_types = C4::Context->preference('AdvancedSearchTypes');
-
+my @advanced_search_types = split /\|/, $advanced_search_types;
 
 my $params = {
     count => $limit,
@@ -81,53 +81,24 @@ my $params = {
     newness => $timeLimit < 999 ? $timeLimit * 30 : undef,
 };
 
-if($advanced_search_types eq 'ccode'){
-    $params->{ccode} = $itemtype;
-    $template->param(ccodesearch => 1);
-} else {
-    $params->{itemtype} = $itemtype;
-    $template->param(itemtypesearch => 1);
+@advanced_search_types = grep /^(ccode|itemtypes)$/, @advanced_search_types;
+foreach my $type (@advanced_search_types) {
+    if ($type eq 'itemtypes') {
+        $type = 'itemtype';
+    }
+    $params->{$type} = $input->param($type);
+    $template->param('selected_' . $type => $input->param($type));
 }
 
 my @results = GetTopIssues($params);
 
-$template->param(do_it => 1,
-                limit => $limit,
-                branch => $branches->{$branch}->{branchname},
-                itemtype => $itemtypes->{$itemtype}->{description},
-                timeLimit => $timeLimit,
-                results => \@results,
-                );
-
-$template->param( branchloop => GetBranchesLoop($branch));
-
-# the index parameter is different for item-level itemtypes
-my $itype_or_itemtype = (C4::Context->preference("item-level_itypes"))?'itype':'itemtype';
-$itemtypes = GetItemTypes;
-my @itemtypesloop;
-if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
-        foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
-        my %row =( value => $thisitemtype,
-                   description => $itemtypes->{$thisitemtype}->{'description'},
-                   selected    => $thisitemtype eq $itemtype,
-            );
-        push @itemtypesloop, \%row;
-        }
-} else {
-    my $advsearchtypes = GetAuthorisedValues($advanced_search_types, '', 'opac');
-        for my $thisitemtype (@$advsearchtypes) {
-                my $selected;
-            $selected = 1 if $thisitemtype->{authorised_value} eq $itemtype;
-                my %row =( value => $thisitemtype->{authorised_value},
-                selected    => $thisitemtype eq $itemtype,
-                description => $thisitemtype->{'lib'},
-            );
-                push @itemtypesloop, \%row;
-        }
-}
-
 $template->param(
-                 itemtypeloop =>\@itemtypesloop,
-                );
-output_html_with_http_headers $input, $cookie, $template->output;
+    limit => $limit,
+    branch => $branches->{$branch}->{branchname},
+    timeLimit => $timeLimit,
+    results => \@results,
+);
 
+$template->param(branchloop => GetBranchesLoop($branch));
+
+output_html_with_http_headers $input, $cookie, $template->output;
