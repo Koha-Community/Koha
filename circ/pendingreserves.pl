@@ -27,15 +27,14 @@ use strict;
 #use warnings; FIXME - Bug 2505
 
 use constant TWO_DAYS => 2;
-use constant TWO_DAYS_AGO => -2;
 
 use C4::Context;
 use C4::Output;
 use CGI qw ( -utf8 );
 use C4::Auth;
-use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Debug;
-use Date::Calc qw/Today Add_Delta_YMD/;
+use Koha::DateUtils;
+use DateTime::Duration;
 
 my $input = new CGI;
 my $startdate=$input->param('from');
@@ -68,39 +67,44 @@ my $biblionumber;
 my $title;
 my $author;
 
-my ( $year, $month, $day ) = Today();
-my $todaysdate     = sprintf("%-04.4d-%-02.2d-%02.2d", $year, $month, $day);
+my $today = dt_from_string;
 $startdate =~ s/^\s+//;
 $startdate =~ s/\s+$//;
 $enddate =~ s/^\s+//;
 $enddate =~ s/\s+$//;
 
-if (!defined($startdate) or $startdate eq "") {
+if ( $startdate ) {
+    $startdate = eval{dt_from_string( $startdate )};
+}
+unless ( $startdate ){
     # changed from delivered range of 10 years-yesterday to 2 days ago-today
     # Find two days ago for the default shelf pull start date, unless HoldsToPullStartDate sys pref is set.
-    my $pastdate= sprintf("%-04.4d-%-02.2d-%02.2d", Add_Delta_YMD($year, $month, $day, 0, 0, -C4::Context->preference('HoldsToPullStartDate')||TWO_DAYS_AGO ));
-    $startdate = format_date($pastdate);
+    $startdate = $today - DateTime::Duration->new( days => C4::Context->preference('HoldsToPullStartDate') || 2 );
 }
 
-if (!defined($enddate) or $enddate eq "") {
+if ( $enddate ) {
+    $enddate = eval{dt_from_string( $enddate )};
+}
+unless ( $enddate ) {
     #similarly: calculate end date with ConfirmFutureHolds (days)
-    my $d=sprintf("%-04.4d-%-02.2d-%02.2d", Add_Delta_YMD($year, $month, $day, 0, 0, C4::Context->preference('ConfirmFutureHolds')||0 ));
-    $enddate = format_date($d);
+    $enddate = $today - DateTime::Duration->new( days => C4::Context->preference('ConfirmFutureHolds') || 0 );
 }
 
 my @reservedata;
 if ( $run_report ) {
     my $dbh    = C4::Context->dbh;
     my $sqldatewhere = "";
-    $debug and warn format_date_in_iso($startdate) . "\n" . format_date_in_iso($enddate);
+    my $startdate_iso = output_pref({ dt => $startdate, dateformat => 'iso', dateonly => 1 });
+    my $enddate_iso   = output_pref({ dt => $enddate, dateformat => 'iso', dateonly => 1 });
+    $debug and warn $startdate_iso. "\n" . $enddate_iso;
     my @query_params = ();
-    if ($startdate) {
+    if ($startdate_iso) {
         $sqldatewhere .= " AND reservedate >= ?";
-        push @query_params, format_date_in_iso($startdate);
+        push @query_params, $startdate_iso;
     }
-    if ($enddate) {
+    if ($enddate_iso) {
         $sqldatewhere .= " AND reservedate <= ?";
-        push @query_params, format_date_in_iso($enddate);
+        push @query_params, $enddate_iso;
     }
 
     my $strsth =
@@ -196,7 +200,7 @@ if ( $run_report ) {
 }
 
 $template->param(
-    todaysdate          => $todaysdate,
+    todaysdate          => $today,
     from                => $startdate,
     to                  => $enddate,
     run_report          => $run_report,

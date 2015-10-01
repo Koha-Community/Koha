@@ -82,7 +82,7 @@ $(document).ready(function() {
     <div id="yui-main">
     <div class="yui-b">
 
-<h2>Holds to pull[% IF ( run_report ) %] placed between [% from %] and [% to %][% END %]</h2>
+<h2>Holds to pull[% IF ( run_report ) %] placed between [% from | $KohaDates %] and [% to | $KohaDates %][% END %]</h2>
 [% IF ( run_report ) %]
 <h3>Reported on [% todaysdate | $KohaDates %]</h3>
 <p>The following holds have not been filled. Please retrieve them and check them in.</p>
@@ -171,12 +171,12 @@ $(document).ready(function() {
 <label for="from">
     Start date:
 </label>
-<input type="text" size="10" id="from" name="from" value="[% from %]" class="datepickerfrom" />
+<input type="text" size="10" id="from" name="from" value="[% from | $KohaDates %]" class="datepickerfrom" />
 </li>
 <li><label for="to">
     End date:
 </label>
-<input type="text" size="10" id="to" name="to" value="[% to %]" class="datepickerto" />
+<input type="text" size="10" id="to" name="to" value="[% to | $KohaDates %]" class="datepickerto" />
 </li>
 </ol>
 <p><i>(Inclusive, default is [% HoldsToPullStartDate %] days ago to [% IF ( HoldsToPullEndDate ) %][% HoldsToPullEndDate %] days ahead[% ELSE %]today[% END %], set other date ranges as needed. )</i></p>
