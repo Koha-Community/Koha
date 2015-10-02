@@ -787,6 +787,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '0.03',
     },
+    'Capture::Tiny' => {
+        'usage'    => 'Core',
+        'required' => '0',
+        'min_ver'  => '0.18',
+    },
 };
 
 1;
