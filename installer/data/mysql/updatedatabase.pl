@@ -9916,6 +9916,35 @@ if ( CheckVersion($DBversion) ) {
     print "Done (3.18.11 release)\n";
 }
 
+$DBversion = "3.18.11.001";
+if ( CheckVersion($DBversion) ) {
+    print "Upgrade to $DBversion\n";
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
+        VALUES
+            ('SMSSendPassword', '', '', 'Password used to send SMS messages', 'free'),
+            ('SMSSendUsername', '', '', 'Username/Login used to send SMS messages', 'free')
+    });
+    print "Done (Bug 14820: SMSSendUsername and SMSSendPassword are not listed in the system preferences)\n";
+    SetVersion($DBversion);
+}
+
+# DEVELOPER PROCESS, search for anything to execute in the db_update directory
+# SEE bug 13068
+# if there is anything in the atomicupdate, read and execute it.
+
+my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
+opendir( my $dirh, $update_dir );
+foreach my $file ( sort readdir $dirh ) {
+    next if $file !~ /\.(sql|perl)$/;  #skip other files
+    print "DEV atomic update: $file\n";
+    if ( $file =~ /\.sql$/ ) {
+        my $installer = C4::Installer->new();
+        my $rv = $installer->load_sql( $update_dir . $file ) ? 0 : 1;
+    } elsif ( $file =~ /\.perl$/ ) {
+        do $update_dir . $file;
+    }
+}
 
 =head1 FUNCTIONS
 
