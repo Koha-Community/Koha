@@ -54,9 +54,10 @@ my $display_columns = [ {_card_number   => {label => 'Card Number', link_field =
                       ];
 my $op = $cgi->param('op') || 'new';
 my $batch_id = $cgi->param('element_id') || $cgi->param('batch_id') || 0;
-my @label_ids = $cgi->param('label_id') if $cgi->param('label_id');
-my @item_numbers = $cgi->param('item_number') if $cgi->param('item_number');
-my @borrower_numbers = $cgi->param('borrower_number') if $cgi->param('borrower_number');
+my ( @label_ids, @item_numbers, @borrower_numbers );
+@label_ids = $cgi->param('label_id') if $cgi->param('label_id');
+@item_numbers = $cgi->param('item_number') if $cgi->param('item_number');
+@borrower_numbers = $cgi->param('borrower_number') if $cgi->param('borrower_number');
 my $errstr = $cgi->param('error') || '';
 my $bor_num_list = $cgi->param('bor_num_list') || undef;
 my $branch_code = C4::Context->userenv->{'branch'};
