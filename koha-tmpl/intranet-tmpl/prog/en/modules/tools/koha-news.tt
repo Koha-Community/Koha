@@ -213,6 +213,7 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                         <th class="title-string">Publication date</th>
                         <th class="title-string">Expiration date</th>
                         <th>Title</th>
+                        <th>Author</th>
                         <th>News</th>
                         <th>&nbsp;</th>
                     </tr></thead>
@@ -244,6 +245,7 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                             <td><span title="[% opac_new.newdate %]">[% opac_new.newdate | $KohaDates %]</span></td>
                             <td><span title="[% opac_new.expirationdate %]">[% opac_new.expirationdate | $KohaDates %] [% IF ( opac_new.expired ) %](<span class="expired">expired</span>)[% END %]</span></td>
                             <td>[% opac_new.title %]</td>
+                            <td>[% opac_new.author_title %] [% opac_new.author_firstname %] [% opac_new.author_surname %]</td>
                            <td>
                                 [% opac_new.new %]
                             </td>

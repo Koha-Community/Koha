@@ -146,9 +146,13 @@ sub get_opac_news {
     my $dbh = C4::Context->dbh;
     my $query = q{
                   SELECT opac_news.*, branches.branchname,
-                         timestamp AS newdate
+                         timestamp AS newdate,
+                         borrowers.title AS author_title,
+                         borrowers.firstname AS author_firstname,
+                         borrowers.surname AS author_surname
                   FROM opac_news LEFT JOIN branches
                       ON opac_news.branchcode=branches.branchcode
+                  LEFT JOIN borrowers on borrowers.borrowernumber = opac_news.borrowernumber
                 };
     $query .= ' WHERE 1';
     if ($lang) {
@@ -190,8 +194,12 @@ sub GetNewsToDisplay {
     my $dbh = C4::Context->dbh;
     # SELECT *,DATE_FORMAT(timestamp, '%d/%m/%Y') AS newdate
     my $query = q{
-     SELECT *,timestamp AS newdate
+     SELECT opac_news.*,timestamp AS newdate,
+     borrowers.title AS author_title,
+     borrowers.firstname AS author_firstname,
+     borrowers.surname AS author_surname
      FROM   opac_news
+     LEFT JOIN borrowers on borrowers.borrowernumber = opac_news.borrowernumber
      WHERE   (
         expirationdate >= CURRENT_DATE()
         OR    expirationdate IS NULL
@@ -199,7 +207,7 @@ sub GetNewsToDisplay {
      )
      AND   DATE(timestamp) < DATE_ADD(CURDATE(), INTERVAL 1 DAY)
      AND   (lang = '' OR lang = ?)
-     AND   (branchcode IS NULL OR branchcode = ?)
+     AND   (opac_news.branchcode IS NULL OR opac_news.branchcode = ?)
      ORDER BY number
     }; # expirationdate field is NOT in ISO format?
        # timestamp has HH:mm:ss, CURRENT_DATE generates 00:00:00

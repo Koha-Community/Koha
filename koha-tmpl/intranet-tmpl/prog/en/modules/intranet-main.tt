@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha staff client</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/mainpage.css" />
@@ -170,10 +171,11 @@
     [% IF ( koha_news_count ) %]
         <div id="area-news">
             <h3><span="news_title">News</span></h3>
+            [% SET newsdisp = Koha.Preference('NewsAuthorDisplay') %]
             [% FOREACH koha_new IN koha_news %]
                 <div class="newsitem" id="news[% koha_new.idnew %]"><h4>[% koha_new.title %]</h4>
                     <p>[% koha_new.new %]</p>
-                    <p class="newsfooter"> Posted on [% koha_new.newdate %]
+                    <p class="newsfooter"> Posted on [% koha_new.newdate %][% IF( ( newsdisp == 'staff' || newsdisp == 'both' ) && koha_new.borrowernumber ) %] by [% koha_new.author_title %] [% koha_new.author_firstname %] [% koha_new.author_surname %]<br />[% END %]
                         [% IF ( CAN_user_tools ) %]
                             <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=[% koha_new.idnew %]">Edit</a>
                              | <a href="/cgi-bin/koha/tools/koha-news.pl?op=del&amp;ids=[% koha_new.idnew %]">Delete</a>
