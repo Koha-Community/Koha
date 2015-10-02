@@ -150,44 +150,42 @@ sub _formatSource {
 
 sub _buildColumnValues {
     my ($self, $params) = @_;
-    my $source = _formatSource( { source => $params->{source} } );
-    my $original_value = $params->{value};
+    my $source  = _formatSource( { source => $params->{source} } );
+    my $value   = $params->{value};
 
     my $col_values;
     my @columns = $self->schema->source($source)->columns;
     my %unique_constraints = $self->schema->source($source)->unique_constraints();
 
-    my $build_value = 1;
-    BUILD_VALUE: while ( $build_value ) {
-        # generate random values for all columns
+    my $values_ok = 0;
+    my $at_least_one_constraint_failed;
+
+    while ( not $values_ok ) {
+
+        $at_least_one_constraint_failed = 0;
+        # generate random values
         for my $col_name( @columns ) {
             my $col_value = $self->_buildColumnValue({
                 source      => $source,
                 column_name => $col_name,
-                value       => $original_value,
+                value       => $value,
             });
             $col_values->{$col_name} = $col_value if( defined( $col_value ) );
         }
-        $build_value = 0;
 
         # If default values are set, maybe the data exist in the DB
         # But no need to wait for another value
-        # FIXME this can be wrong if a default value is defined for a field
-        # which is not a constraint and that the generated value for the
-        # constraint already exists.
-        last BUILD_VALUE if exists( $default_value->{$source} );
+        last if exists( $default_value->{$source} );
 
-        # If there is no original value given and unique constraints exist,
-        # check if the generated values do not exist yet.
-        if ( not defined $original_value and scalar keys %unique_constraints > 0 ) {
+        if ( scalar keys %unique_constraints > 0 ) {
 
             # verify the data would respect each unique constraint
-            CONSTRAINTS: foreach my $constraint (keys %unique_constraints) {
+            foreach my $constraint (keys %unique_constraints) {
 
                 my $condition;
-                my $constraint_columns = $unique_constraints{$constraint};
+                my @constraint_columns = $unique_constraints{$constraint};
                 # loop through all constraint columns and build the condition
-                foreach my $constraint_column ( @$constraint_columns ) {
+                foreach my $constraint_column ( @constraint_columns ) {
                     # build the filter
                     $condition->{ $constraint_column } =
                             $col_values->{ $constraint_column };
@@ -198,11 +196,20 @@ sub _buildColumnValues {
                                  ->search( $condition )
                                  ->count();
                 if ( $count > 0 ) {
+                    $at_least_one_constraint_failed = 1;
                     # no point checking more stuff, exit the loop
-                    $build_value = 1;
-                    last CONSTRAINTS;
+                    last;
                 }
             }
+
+            if ( $at_least_one_constraint_failed ) {
+                $values_ok = 0;
+            } else {
+                $values_ok = 1;
+            }
+
+        } else {
+            $values_ok = 1;
         }
     }
     return $col_values;
@@ -276,7 +283,7 @@ sub _buildColumnValue {
     if( exists( $value->{$col_name} ) ) {
         $col_value = $value->{$col_name};
     }
-    elsif( exists $default_value->{$source} and exists $default_value->{$source}->{$col_name} ) {
+    elsif( exists( $default_value->{$source}->{$col_name} ) ) {
         $col_value = $default_value->{$source}->{$col_name};
     }
     elsif( not $col_info->{default_value} and not $col_info->{is_auto_increment} and not $col_info->{is_foreign_key} ) {
