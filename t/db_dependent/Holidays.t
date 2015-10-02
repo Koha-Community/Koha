@@ -97,6 +97,9 @@ is( $koha_calendar->is_holiday($monday),    0, 'Monday is not a closed day' );
 is( $koha_calendar->is_holiday($christmas), 1, 'Christmas is a closed day' );
 is( $koha_calendar->is_holiday($newyear),   1, 'New Years day is a closed day' );
 
+$dbh->do("DELETE FROM repeatable_holidays");
+$dbh->do("DELETE FROM special_holidays");
+
 my $custom_holiday = DateTime->new(
     year  => 2013,
     month => 11,

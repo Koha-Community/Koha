@@ -95,23 +95,14 @@ sub single_holidays {
     my $cache           = Koha::Cache->get_instance();
     my $single_holidays = $cache->get_from_cache('single_holidays');
 
-=for
-$single_holidays looks like this..
-
-\ {
-   CPL   [
-        [0] 20131122,
-        [1] 20131123,
-        [2] 20131124
-    ],
-   MPL   [
-        [0] 20131122,
-        [1] 20131123,
-        [2] 20131124
-    ]
-}
-
-=cut
+    # $single_holidays looks like:
+    # {
+    #   CPL =>  [
+    #        [0] 20131122,
+    #         ...
+    #    ],
+    #   ...
+    # }
 
     unless ($single_holidays) {
         my $dbh = C4::Context->dbh;
