@@ -86,7 +86,7 @@
                                                     [% results_loo.description %]
                                                 [% END %]
                                             </td>
-                                            <td><span class="tdlabel">Checkouts: </span> [% results_loo.tot %]</td>
+                                            <td><span class="tdlabel">Checkouts: </span> <span title="[% results_loo.tot %]">[% results_loo.tot %]</span></td>
                                             [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]<td>[% IF Koha.Preference( 'RequestOnOpac' ) == 1 %][% UNLESS ( results_loo.norequests ) %]<a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% results_loo.biblionumber %]">Place hold</a>[% END %][% END %]</td>[% END %]
                                             </tr>
                                     [% END %]
@@ -172,7 +172,7 @@
             "aoColumns": [
                 { "sType": "anti-the" },
                 null,
-                null,
+                { "sType": "title-numeric" },
                 [% IF ( opacuserlogin ) %]null,[% END %]
             ]
         }));
