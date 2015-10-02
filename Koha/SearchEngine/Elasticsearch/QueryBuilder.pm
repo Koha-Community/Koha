@@ -111,9 +111,12 @@ sub build_query {
     # See _convert_facets in Search.pm for how these get turned into
     # things that Koha can use.
     $res->{facets} = {
-        author  => { terms => { field => "author__facet" } },
-        subject => { terms => { field => "subject__facet" } },
-        itype   => { terms => { field => "itype__facet" } },
+        author   => { terms => { field => "author__facet" } },
+        subject  => { terms => { field => "subject__facet" } },
+        itype    => { terms => { field => "itype__facet" } },
+        location => { terms => { field => "homebranch__facet" } },
+        'su-geo' => { terms => { field => "su-geo__facet" } },
+        se       => { terms => { field => "se__facet" } },
     };
     return $res;
 }
