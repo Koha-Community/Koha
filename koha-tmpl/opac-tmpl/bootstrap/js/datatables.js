@@ -55,6 +55,32 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     }
 } );
 
+/* Plugin to allow sorting numerically on data stored in a span's title attribute
+ *
+ * Ex: <td><span title="[% total %]">Total: [% total %]</span></td>
+ *
+ * In DataTables config:
+ *     "aoColumns": [
+ *        { "sType": "title-numeric" }
+ *     ]
+ * http://legacy.datatables.net/plug-ins/sorting#hidden_title
+ */
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    "title-numeric-pre": function ( a ) {
+        console.log(a);
+        var x = a.match(/title="*(-?[0-9\.]+)/)[1];
+        return parseFloat( x );
+    },
+
+    "title-numeric-asc": function ( a, b ) {
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+
+    "title-numeric-desc": function ( a, b ) {
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    }
+} );
+
 (function() {
 
     /* Plugin to allow text sorting to ignore articles
