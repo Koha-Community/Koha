@@ -383,28 +383,6 @@ sub clear_weekly_closed_days {
     return;
 }
 
-
-sub add_dummy_holiday {
-    my ( $self, $new_dt ) = @_;
-
-    my $cache           = Koha::Cache->get_instance();
-    my $single_holidays = $cache->get_from_cache('single_holidays');
-
-    # add a dummy holiday to the holiday cache...
-    my $ymd = $new_dt->ymd('');
-    $single_holidays->{'MPL'} = [$ymd];
-    $cache->set_in_cache( 'single_holidays', $single_holidays, 76800 );
-
-    # ...but *dont* reset the cache, as this holiday was not really written to the db
-    # its only used to mock a holiday insert for 1 test in t/db_dependent/Holidays.t
-
-    #   is( $koha_calendar->is_holiday($custom_holiday), 0, '2013-11-10 does not start off as a holiday' );
-    #   $koha_calendar->add_dummy_holiday($custom_holiday );
-    #   is( $koha_calendar->is_holiday($custom_holiday), 1, 'able to add holiday for testing' );
-
-}
-
-
 1;
 __END__
 
