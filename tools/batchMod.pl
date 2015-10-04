@@ -31,11 +31,11 @@ use C4::Koha; # XXX subfield_is_koha_internal_p
 use C4::Branch; # XXX subfield_is_koha_internal_p
 use C4::BackgroundJob;
 use C4::ClassSource;
-use C4::Dates;
 use C4::Debug;
 use C4::Members;
 use MARC::File::XML;
 use List::MoreUtils qw/uniq/;
+use Koha::DateUtils;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
@@ -76,7 +76,7 @@ my $restrictededition = $uid ? haspermission($uid,  {'tools' => 'items_batchmod_
 # In case user is a superlibrarian, edition is not restricted
 $restrictededition = 0 if ($restrictededition != 0 && C4::Context->IsSuperLibrarian());
 
-my $today_iso = C4::Dates->today('iso');
+my $today_iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
 $template->param(today_iso => $today_iso);
 $template->param(del       => $del);
 
@@ -334,10 +334,13 @@ foreach my $tag (sort keys %{$tagslib}) {
    if ( !$value && $use_default_values) {
 	    $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
 	    # get today date & replace YYYY, MM, DD if provided in the default value
-	    my ( $year, $month, $day ) = split ',', $today_iso;     # FIXME: iso dates don't have commas!
-	    $value =~ s/YYYY/$year/g;
-	    $value =~ s/MM/$month/g;
-	    $value =~ s/DD/$day/g;
+            my $today = dt_from_string;
+            my $year  = $today->year;
+            my $month = $today->month;
+            my $day   = $today->day;
+            $value =~ s/YYYY/$year/g;
+            $value =~ s/MM/$month/g;
+            $value =~ s/DD/$day/g;
 	}
 	$subfield_data{visibility} = "display:none;" if (($tagslib->{$tag}->{$subfield}->{hidden} > 4) || ($tagslib->{$tag}->{$subfield}->{hidden} < -4));
     # testing branch value if IndependentBranches.
