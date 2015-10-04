@@ -24,7 +24,7 @@
                 "dt_od_checkouts":
                     "[% IF data.overdues %]<span class='overdue'><strong>[% data.overdues %]</strong></span>[% ELSE %][% data.overdues %][% END %] / [% data.issues %]",
                 "dt_fines":
-                    "[% IF data.fines < 0 %]<span class='credit'>[% data.fines |html %]</span> [% ELSIF data.fines > 0 %] <span class='debit'><strong>[% data.fines |html %]</strong></span> [% ELSE %] [% data.fines |html%] [% END %]</td>",
+                    "<span style='text-align: right; display: block;'>[% IF data.fines < 0 %]<span class='credit'>[% data.fines |html %]</span> [% ELSIF data.fines > 0 %] <span class='debit'><strong>[% data.fines |html %]</strong></span> [% ELSE %] [% data.fines |html%] [% END %]</span>",
                 "dt_borrowernotes":
                     "[% data.borrowernotes.replace('\\\\' , '\\\\') |html |html_line_break |collapse %]",
                 "dt_action":

@@ -85,7 +85,7 @@ function enableCheckboxActions(){
 <tfoot>
 <tr>
     <td class="total" colspan="8">Total due:</td>
-    <td>[% total | format('%.2f') %]</td>
+    <td style="text-align: right;">[% total | format('%.2f') %]</td>
 </tr>
 </tfoot>
 <tbody>
@@ -142,15 +142,15 @@ function enableCheckboxActions(){
     <td>[% line.accounttype %]</td>
     <td>[% line.notify_id %]</td>
     <td>[% line.notify_level %]</td>
-    <td class="debit">[% line.amount | format('%.2f') %]</td>
-    <td class="debit">[% line.amountoutstanding | format('%.2f') %]</td>
+    <td class="debit" style="text-align: right;">[% line.amount | format('%.2f') %]</td>
+    <td class="debit" style="text-align: right;">[% line.amountoutstanding | format('%.2f') %]</td>
 </tr>
 [% END %]
 [% IF ( account_grp.total ) %]
 <tr>
 
-    <td class="total" colspan="8">Sub total:</td>
-    <td>[% account_grp.total | format('%.2f') %]</td>
+    <td class="total" colspan="8" style="text-align: right;">Sub total:</td>
+    <td style="text-align: right;">[% account_grp.total | format('%.2f') %]</td>
 </tr>
 [% END %]
 [% END %]
