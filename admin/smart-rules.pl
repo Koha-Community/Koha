@@ -26,7 +26,7 @@ use C4::Auth;
 use C4::Koha;
 use C4::Debug;
 use C4::Branch; # GetBranches
-use C4::Dates qw/format_date format_date_in_iso/;
+use Koha::DateUtils;
 use Koha::Database;
 
 my $input = CGI->new;
@@ -126,8 +126,8 @@ elsif ($op eq 'add') {
     $maxonsiteissueqty = undef if $maxonsiteissueqty !~ /^\d+/;
     my $issuelength  = $input->param('issuelength');
     my $lengthunit  = $input->param('lengthunit');
-    my $hardduedate = $input->param('hardduedate');
-    $hardduedate = format_date_in_iso($hardduedate);
+    my $hardduedate = eval { dt_from_string( $input->param('hardduedate') ) };
+    $hardduedate = output_pref( { dt => $hardduedate, dateonly => 1, dateformat => 'iso' } ) if ( $hardduedate );
     my $hardduedatecompare = $input->param('hardduedatecompare');
     my $rentaldiscount = $input->param('rentaldiscount');
     my $opacitemholds = $input->param('opacitemholds') || 0;
@@ -446,7 +446,8 @@ while (my $row = $sth2->fetchrow_hashref) {
     $row->{'default_humancategorycode'} = 1 if $row->{'humancategorycode'} eq '*';
     $row->{'fine'} = sprintf('%.2f', $row->{'fine'});
     if ($row->{'hardduedate'} && $row->{'hardduedate'} ne '0000-00-00') {
-       $row->{'hardduedate'} = format_date( $row->{'hardduedate'});
+       my $harddue_dt = eval { dt_from_string( $row->{'hardduedate'} ) };
+       $row->{'hardduedate'} = eval { output_pref( { dt => $harddue_dt, dateonly => 1 } ) } if ( $harddue_dt );
        $row->{'hardduedatebefore'} = 1 if ($row->{'hardduedatecompare'} == -1);
        $row->{'hardduedateexact'} = 1 if ($row->{'hardduedatecompare'} ==  0);
        $row->{'hardduedateafter'} = 1 if ($row->{'hardduedatecompare'} ==  1);

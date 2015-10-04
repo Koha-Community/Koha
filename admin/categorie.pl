@@ -42,9 +42,9 @@ use C4::Context;
 use C4::Auth;
 use C4::Branch;
 use C4::Output;
-use C4::Dates;
 use C4::Form::MessagingPreferences;
 use Koha::Database;
+use Koha::DateUtils;
 
 sub StringSearch {
     my ( $searchstring, $type ) = @_;
@@ -172,11 +172,9 @@ elsif ( $op eq 'add_validate' ) {
     my $dbh = C4::Context->dbh;
 
     if ( $input->param('enrolmentperioddate') ) {
-        $input->param(
-            'enrolmentperioddate' => C4::Dates::format_date_in_iso(
-                $input->param('enrolmentperioddate')
-            )
-        );
+        my $enrolment_dt = eval { dt_from_string( $input->param('enrolmentperioddate') ) };
+        $enrolment_dt = eval { output_pref( { dt => $enrolment_dt, dateonly => 1, dateformat => 'iso' } ) } if ( $enrolment_dt );
+        $input->param( 'enrolmentperioddate' => $enrolment_dt );
     }
 
     if ($is_a_modif) {
