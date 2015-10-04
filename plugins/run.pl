@@ -25,7 +25,6 @@ use CGI qw ( -utf8 );
 use Koha::Plugins::Handler;
 use C4::Auth;
 use C4::Output;
-use C4::Dates;
 use C4::Debug;
 use C4::Context;
 
