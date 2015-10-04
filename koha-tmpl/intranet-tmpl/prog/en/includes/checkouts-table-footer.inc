@@ -1,9 +1,9 @@
 <tfoot>
 	<tr>
         <td colspan="10" style="text-align: right; font-weight:bold;">Totals:</td>
-        <td id="totaldue">[% totaldue %]</td>
-        <td id="totalfine">[% finetotal %]</td>
-        <td id="totalprice">[% totalprice %]</td>
+        <td id="totaldue" style="text-align: right;">[% totaldue %]</td>
+        <td id="totalfine" style="text-align: right;">[% finetotal %]</td>
+        <td id="totalprice" style="text-align: right;">[% totalprice %]</td>
                 <td colspan="3"><div class="date-select">
             <p><label for="newduedate">Renewal due date:</label> <input type="text" size="12" id="newduedate" name="newduedate" value="[% newduedate %]" readonly="readonly" />
 </p>
