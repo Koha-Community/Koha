@@ -12,9 +12,9 @@ use C4::Output;
 
 use Koha::Cache;
 
-use C4::Dates;
 use C4::Calendar;
 use DateTime;
+use Koha::DateUtils;
 
 my $input               = new CGI;
 my $dbh                 = C4::Context->dbh();
@@ -25,33 +25,18 @@ our $weekday             = $input->param('newWeekday');
 our $day                 = $input->param('newDay');
 our $month               = $input->param('newMonth');
 our $year                = $input->param('newYear');
-my $day1;
-my $month1;
-my $year1;
 my $dateofrange         = $input->param('dateofrange');
 our $title               = $input->param('newTitle');
 our $description         = $input->param('newDescription');
 our $newoperation        = $input->param('newOperation');
 my $allbranches         = $input->param('allBranches');
 
-my $calendardate        = sprintf("%04d-%02d-%02d", $year, $month, $day);
-my $isodate             = C4::Dates->new($calendardate, 'iso');
-$calendardate           = $isodate->output('syspref');
 
-my @dateend = split(/[\/-]/, $dateofrange);
-if (C4::Context->preference("dateformat") eq "metric") {
-    $day1 = $dateend[0];
-    $month1 = $dateend[1];
-    $year1 = $dateend[2];
-}elsif (C4::Context->preference("dateformat") eq "us") {
-    $month1 = $dateend[0];
-    $day1 = $dateend[1];
-    $year1 = $dateend[2];
-} else {
-    $year1 = $dateend[0];
-    $month1 = $dateend[1];
-    $day1 = $dateend[2];
-}
+my $first_dt = DateTime->new(year => $year, month  => $month,  day => $day);
+my $end_dt   = eval { dt_from_string( $dateofrange ); };
+
+my $calendardate = output_pref( { dt => $first_dt, dateonly => 1, dateformat => 'iso' } );
+
 $title || ($title = '');
 if ($description) {
 	$description =~ s/\r/\\r/g;
@@ -62,16 +47,13 @@ if ($description) {
 
 # We make an array with holiday's days
 our @holiday_list;
-if ($year1 && $month1 && $day1){
-            my $first_dt = DateTime->new(year => $year, month  => $month,  day => $day);
-            my $end_dt   = DateTime->new(year => $year1, month  => $month1,  day => $day1);
-
-            for (my $dt = $first_dt->clone();
-                $dt <= $end_dt;
-                $dt->add(days => 1) )
-                {
-                push @holiday_list, $dt->clone();
-                }
+if ($end_dt){
+    for (my $dt = $first_dt->clone();
+    $dt <= $end_dt;
+    $dt->add(days => 1) )
+    {
+        push @holiday_list, $dt->clone();
+    }
 }
 
 if($allbranches) {

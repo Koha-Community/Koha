@@ -10,6 +10,7 @@ use C4::Output;
 use DateTime;
 
 use C4::Calendar;
+use Koha::DateUtils;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh();
@@ -19,16 +20,11 @@ my $weekday = $input->param('showWeekday');
 my $day = $input->param('showDay');
 my $month = $input->param('showMonth');
 my $year = $input->param('showYear');
-my $day1;
-my $month1;
-my $year1;
 my $title = $input->param('showTitle');
 my $description = $input->param('showDescription');
 my $holidaytype = $input->param('showHolidayType');
-my $datecancelrange = $input->param('datecancelrange');
+my $datecancelrange_dt = eval { dt_from_string( $input->param('datecancelrange') ) };
 my $calendardate = sprintf("%04d-%02d-%02d", $year, $month, $day);
-my $isodate = C4::Dates->new($calendardate, 'iso');
-$calendardate = $isodate->output('syspref');
 
 my $calendar = C4::Calendar->new(branchcode => $branchcode);
 
@@ -40,30 +36,13 @@ if ($description) {
     $description = '';
 }   
 
-# We format the date
-my @dateend = split(/[\/-]/, $datecancelrange);
-if (C4::Context->preference("dateformat") eq "metric") {
-    $day1 = $dateend[0];
-    $month1 = $dateend[1];
-    $year1 = $dateend[2];
-}elsif (C4::Context->preference("dateformat") eq "us") {
-    $month1 = $dateend[0];
-    $day1 = $dateend[1];
-    $year1 = $dateend[2];
-} else {
-    $year1 = $dateend[0];
-    $month1 = $dateend[1];
-    $day1 = $dateend[2];
-}
-
 # We make an array with holiday's days
 my @holiday_list;
-if ($year1 && $month1 && $day1){
+if ($datecancelrange_dt){
             my $first_dt = DateTime->new(year => $year, month  => $month,  day => $day);
-            my $end_dt   = DateTime->new(year => $year1, month  => $month1,  day => $day1);
 
             for (my $dt = $first_dt->clone();
-                $dt <= $end_dt;
+                $dt <= $datecancelrange_dt;
                 $dt->add(days => 1) )
                 {
                 push @holiday_list, $dt->clone();

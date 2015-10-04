@@ -26,6 +26,7 @@ use C4::Output;
 
 use C4::Branch; # GetBranches
 use C4::Calendar;
+use Koha::DateUtils;
 
 my $input = new CGI;
 
@@ -44,15 +45,10 @@ my ($template, $loggedinuser, $cookie)
 my $keydate;
 # calendardate - date passed in url for human readability (syspref)
 my $calendardate;
-my $today = C4::Dates->new();
-my $calendarinput = C4::Dates->new($input->param('calendardate')) || $today;
+my $calendarinput_dt = eval { dt_from_string( $input->param('calendardate') ); } || dt_from_string;
 # if the url has an invalid date default to 'now.'
-unless($calendardate = $calendarinput->output('syspref')) {
-  $calendardate = $today->output('syspref');
-}
-unless($keydate = $calendarinput->output('iso')) {
-  $keydate = $today->output('iso');
-}
+$calendardate = output_pref( { dt => $calendarinput_dt, dateonly => 1 } );
+$keydate = output_pref( { dt => $calendarinput_dt, dateonly => 1, dateformat => 'iso' } );
 $keydate =~ s/-/\//g;
 
 my $branch= $input->param('branch') || C4::Context->userenv->{'branch'};
@@ -123,11 +119,11 @@ foreach my $monthDay (keys %$day_month_holidays) {
 my $exception_holidays = $calendar->get_exception_holidays();
 my @exception_holidays;
 foreach my $yearMonthDay (keys %$exception_holidays) {
-    my $exceptiondate = C4::Dates->new($exception_holidays->{$yearMonthDay}{date}, "iso");
+    my $exceptiondate = eval { dt_from_string( $exception_holidays->{$yearMonthDay}{date} ) };
     my %exception_holiday;
     %exception_holiday = (KEY => $yearMonthDay,
                           DATE_SORT => $exception_holidays->{$yearMonthDay}{date},
-                          DATE => $exceptiondate->output("syspref"),
+                          DATE => output_pref( { dt => $exceptiondate, dateonly => 1, dateformat => 'iso' } ),
                           TITLE => $exception_holidays->{$yearMonthDay}{title},
                           DESCRIPTION => $exception_holidays->{$yearMonthDay}{description});
     push @exception_holidays, \%exception_holiday;
@@ -136,11 +132,11 @@ foreach my $yearMonthDay (keys %$exception_holidays) {
 my $single_holidays = $calendar->get_single_holidays();
 my @holidays;
 foreach my $yearMonthDay (keys %$single_holidays) {
-    my $holidaydate = C4::Dates->new($single_holidays->{$yearMonthDay}{date}, "iso");
+    my $holidaydate = eval { dt_from_string( $single_holidays->{$yearMonthDay}{date} ) };
     my %holiday;
     %holiday = (KEY => $yearMonthDay,
                 DATE_SORT => $single_holidays->{$yearMonthDay}{date},
-                DATE => $holidaydate->output("syspref"),
+                DATE => output_pref( { dt => $holidaydate, dateonly => 1, dateformat => 'iso' } ),
                 TITLE => $single_holidays->{$yearMonthDay}{title},
                 DESCRIPTION => $single_holidays->{$yearMonthDay}{description});
     push @holidays, \%holiday;

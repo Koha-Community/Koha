@@ -644,7 +644,6 @@ C<$year> Is the year to check whether if is a holiday or not.
 sub isHoliday {
     my ($self, $day, $month, $year) = @_;
 	# FIXME - date strings are stored in non-padded metric format. should change to iso.
-	# FIXME - should change arguments to accept C4::Dates object
 	$month=$month+0;
 	$year=$year+0;
 	$day=$day+0;
@@ -700,7 +699,7 @@ sub copy_to_branch {
 
     my ($day, $month, $year) = $calendar->addDate($date, $offset)
 
-C<$date> is a C4::Dates object representing the starting date of the interval.
+C<$startdate> is the starting date of the interval.
 
 C<$offset> Is the number of days that this function has to count from $date.
 
@@ -708,7 +707,8 @@ C<$offset> Is the number of days that this function has to count from $date.
 
 sub addDate {
     my ($self, $startdate, $offset) = @_;
-    my ($year,$month,$day) = split("-",$startdate->output('iso'));
+    $startdate = eval { output_pref( { dt => dt_from_string( $startdate ), dateonly => 1, dateformat => 'iso' } ); };
+    my ( $year, $month, $day) = split( "-", $startdate );
 	my $daystep = 1;
 	if ($offset < 0) { # In case $offset is negative
        # $offset = $offset*(-1);
@@ -730,14 +730,16 @@ sub addDate {
 	} else { ## ($daysMode eq 'Days') 
         ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, $offset );
     }
-    return(C4::Dates->new( sprintf(ISO_DATE_FORMAT,$year,$month,$day),'iso'));
+    my $date_ret = sprintf(ISO_DATE_FORMAT,$year,$month,$day);
+    $date_ret =  eval { output_pref( { dt => dt_from_string( $date_ret), dateonly => 1, dateformat => 'iso' } ); };
+    return($date_ret);
 }
 
 =head2 daysBetween
 
     my $daysBetween = $calendar->daysBetween($startdate, $enddate)
 
-C<$startdate> and C<$enddate> are C4::Dates objects that define the interval.
+C<$startdate> and C<$enddate> define the interval.
 
 Returns the number of non-holiday days in the interval.
 useDaysMode syspref has no effect here.
@@ -747,8 +749,10 @@ sub daysBetween {
     my $self      = shift or return;
     my $startdate = shift or return;
     my $enddate   = shift or return;
-    my ($yearFrom,$monthFrom,$dayFrom) = split("-",$startdate->output('iso'));
-    my ($yearTo,  $monthTo,  $dayTo  ) = split("-",  $enddate->output('iso'));
+    $startdate = eval { output_pref( { dt => dt_from_string( $startdate ), dateonly => 1, dateformat => 'iso' } ); };
+    $enddate = eval { output_pref( { dt => dt_from_string( $enddate ), dateonly => 1, dateformat => 'iso' } ); };
+    my ( $yearFrom, $monthFrom, $dayFrom) = split( "-", $startdate);
+    my ( $yearTo,  $monthTo,  $dayTo  ) = split( "-",  $enddate);
     if (Date_to_Days($yearFrom,$monthFrom,$dayFrom) > Date_to_Days($yearTo,$monthTo,$dayTo)) {
         return 0;
         # we don't go backwards  ( FIXME - handle this error better )
