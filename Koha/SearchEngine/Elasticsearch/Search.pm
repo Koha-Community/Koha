@@ -148,6 +148,7 @@ sub search_compat {
 
     my %options;
     $options{offset} = $offset;
+    $options{expanded_facet} = $expanded_facet;
     my $results = $self->search($query, undef, $results_per_page, %options);
 
     # Convert each result into a MARC::Record
@@ -378,7 +379,7 @@ Converts elasticsearch facets types to the form that Koha expects.
 It expects the ES facet name to match the Koha type, for example C<itype>,
 C<au>, C<su-to>, etc.
 
-C<$expanded_facet> is the facet that we want to show 10 entries for, rather
+C<$expanded_facet> is the facet that we want to show FacetMaxCount entries for, rather
 than just 5 like normal.
 
 =cut
@@ -415,7 +416,7 @@ sub _convert_facets {
         next if !exists( $type_to_label{$type} );
 
         # We restrict to the most popular $limit !results
-        my $limit = ( $type eq $exp_facet ) ? 10 : 5;
+        my $limit = ( $type eq $exp_facet ) ? C4::Context->preference('FacetMaxCount') : 5;
         my $facet = {
             type_id    => $type . '_id',
             expand     => $type,

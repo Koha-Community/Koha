@@ -536,7 +536,7 @@ my ($error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_
 my @results;
 
 ## I. BUILD THE QUERY
-( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type) = $builder->build_query_compat(\@operators,\@operands,\@indexes,\@limits,\@sort_by, 0, $lang);
+( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type) = $builder->build_query_compat(\@operators,\@operands,\@indexes,\@limits,\@sort_by, 0, $lang, { expanded_facet => $expanded_facet });
 
 sub _input_cgi_parse {
     my @elements;

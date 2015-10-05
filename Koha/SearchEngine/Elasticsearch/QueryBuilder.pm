@@ -46,6 +46,7 @@ use List::MoreUtils qw/ each_array /;
 use Modern::Perl;
 use URI::Escape;
 
+use C4::Context;
 use Data::Dumper;    # TODO remove
 
 =head2 build_query
@@ -118,6 +119,9 @@ sub build_query {
         'su-geo' => { terms => { field => "su-geo__facet" } },
         se       => { terms => { field => "se__facet" } },
     };
+    if ( my $ef = $options{expanded_facet} ) {
+        $res->{facets}{$ef}{terms}{size} = C4::Context->preference('FacetMaxCount');
+    };
     return $res;
 }
 
@@ -181,7 +185,7 @@ reproduce this search, and C<$query_desc> set to something else.
 
 sub build_query_compat {
     my ( $self, $operators, $operands, $indexes, $orig_limits, $sort_by, $scan,
-        $lang )
+        $lang, $params )
       = @_;
 
 #die Dumper ( $self, $operators, $operands, $indexes, $orig_limits, $sort_by, $scan, $lang );
@@ -215,6 +219,7 @@ sub build_query_compat {
     $query_str =~ s/^ AND //;
     my %options;
     $options{sort} = \@sort_params;
+    $options{expanded_facet} = $params->{expanded_facet};
     my $query = $self->build_query( $query_str, %options );
 
     #die Dumper($query);
