@@ -31,8 +31,8 @@ use C4::Koha;
 use C4::Output;
 use C4::Circulation;
 use C4::Reports;
-use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Members;
+use Koha::DateUtils;
 
 =head1 NAME
 
@@ -51,8 +51,10 @@ my $do_it    = $input->param('do_it');
 my $line     = $input->param("Line");
 my $column   = $input->param("Column");
 my @filters  = $input->param("Filter");
-$filters[0]=format_date_in_iso($filters[0]);
-$filters[1]=format_date_in_iso($filters[1]);
+$filters[0] = eval { output_pref( { dt => dt_from_string( $filters[0]), dateonly => 1, dateformat => 'iso' } ); }
+    if ( $filters[0] );
+$filters[1] = eval { output_pref( { dt => dt_from_string( $filters[1]), dateonly => 1, dateformat => 'iso' } ); }
+    if ( $filters[1] );
 my $podsp    = $input->param("DisplayBy");
 my $type     = $input->param("PeriodTypeSel");
 my $daysel   = $input->param("PeriodDaySel");
@@ -189,7 +191,8 @@ sub calculate {
         if ($i>=2) {
           	$cell{filter} = @$filters[$i];
         } else {
-          	$cell{filter} = format_date(@$filters[$i]);
+                $cell{filter} = eval { output_pref( { dt => dt_from_string( @$filters[$i] ), dateonly => 1 }); }
+                   if ( @$filters[$i] );
 		}
 		$cell{crit} = 
             ( $i == 0 )  ? "Period From"
@@ -261,7 +264,7 @@ sub calculate {
 		$linefield = ($dsp == 1) ? "  dayname($line)" :
 					 ($dsp == 2) ? "monthname($line)" :
 					 ($dsp == 3) ? "     Year($line)" :
-					'date_format(`datetime`,"%Y-%m-%d")'; # Probably should be left alone or passed through C4::Dates
+                                         'date_format(`datetime`,"%Y-%m-%d")'; # Probably should be left alone or passed through Koha::DateUtils
 	} else {
 		$linefield = $line;
 	}
@@ -336,7 +339,7 @@ sub calculate {
 		$colfield = ($dsp == 1) ? "  dayname($column)" :
 					($dsp == 2) ? "monthname($column)" :
 					($dsp == 3) ? "     Year($column)" :
-					'date_format(`datetime`,"%Y-%m-%d")'; # Probably should be left alone or passed through C4::Dates
+                                        'date_format(`datetime`,"%Y-%m-%d")'; # Probably should be left alone or passed through Koha::DateUtils
 	} else {
 		$colfield = $column;
 	}

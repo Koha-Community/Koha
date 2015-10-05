@@ -23,7 +23,6 @@ use C4::Auth;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Branch; # GetBranches
-use C4::Dates qw/format_date/;
 use C4::Output;
 use C4::Koha;
 use C4::Reports;
@@ -34,8 +33,6 @@ use C4::Serials;
 plugin that shows a stats on serials
 
 =head1 DESCRIPTION
-
-=over 2
 
 =cut
 

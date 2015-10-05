@@ -28,7 +28,7 @@ use C4::Output;
 use C4::Koha;
 use C4::Circulation;
 use C4::Reports;
-use C4::Dates qw/format_date format_date_in_iso/;
+use Koha::DateUtils;
 use Date::Calc qw(Delta_Days);
 
 =head1 NAME
@@ -47,10 +47,16 @@ my $fullreportname = "reports/issues_avg_stats.tt";
 my $line = $input->param("Line");
 my $column = $input->param("Column");
 my @filters = $input->param("Filter");
-$filters[0]=format_date_in_iso($filters[0]);
-$filters[1]=format_date_in_iso($filters[1]);
-$filters[2]=format_date_in_iso($filters[2]);
-$filters[3]=format_date_in_iso($filters[3]);
+$filters[0] = eval { output_pref( { dt => dt_from_string( $filters[0]), dateonly => 1, dateformat => 'iso' } ); }
+    if ( $filters[0] );
+$filters[1] = eval { output_pref( { dt => dt_from_string( $filters[1]), dateonly => 1, dateformat => 'iso' } ); }
+    if ( $filters[1] );
+$filters[2] = eval { output_pref( { dt => dt_from_string( $filters[2]), dateonly => 1, dateformat => 'iso' } ); }
+    if ( $filters[2] );
+$filters[3] = eval { output_pref( { dt => dt_from_string( $filters[3]), dateonly => 1, dateformat => 'iso' } ); }
+    if ( $filters[3] );
+
+
 my $podsp = $input->param("IssueDisplay");
 my $rodsp = $input->param("ReturnDisplay");
 my $calc = $input->param("Cellvalue");
@@ -213,7 +219,8 @@ sub calculate {
             if ($i>=4) {
                 $cell{filter} .= @$filters[$i];
             } else {
-                $cell{filter} .= format_date(@$filters[$i]);
+                $cell{filter} .= eval { output_pref( { dt => dt_from_string( @$filters[$i] ), dateonly => 1 }); }
+                   if ( @$filters[$i] );
             }
             $cell{crit} .="Issue From" if ($i==0);
             $cell{crit} .="Issue To" if ($i==1);

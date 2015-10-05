@@ -31,8 +31,8 @@ use C4::Koha;
 use C4::Output;
 use C4::Reports;
 use C4::Members;
-use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Category;
+use Koha::DateUtils;
 use List::MoreUtils qw/any/;
 use YAML;
 
@@ -190,9 +190,10 @@ sub calculate {
     my @loopfilter;
     foreach my $filter ( keys %$filters_hashref ) {
         $filters_hashref->{$filter} =~ s/\*/%/;
-        $filters_hashref->{$filter} =
-          format_date_in_iso( $filters_hashref->{$filter} )
-          if ( $filter =~ /date/ );
+        if ( $filter =~ /date/ ) {
+            $filters_hashref->{$filter} =
+                eval { output_pref( { dt => dt_from_string( $filters_hashref->{$filter} ), dateonly => 1, dateformat => 'iso' }); };
+        }
     }
 
     #display
@@ -201,7 +202,7 @@ sub calculate {
             crit   => $_,
             filter => (
                 $_ =~ /date/
-                ? format_date( $filters_hashref->{$_} )
+                ? eval { output_pref( { dt => dt_from_string( $filters_hashref->{$_} ), dateonly => 1 }); }
                 : $filters_hashref->{$_}
             )
         }
