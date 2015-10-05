@@ -399,8 +399,10 @@ sub _convert_facets {
 
     # We also have some special cases, e.g. itypes that need to show the
     # value rather than the code.
-    my $itypes = Koha::ItemTypes->new();
-    my %special = ( itype => sub { $itypes->get_description_for_code(@_) }, );
+    my @itypes = Koha::ItemTypes->search;
+    my %special = (
+        itype => { map { $_->itemtype => $_->description } @itypes },
+    );
     my @res;
     $exp_facet //= '';
     while ( ( $type, $data ) = each %$es ) {
@@ -421,7 +423,7 @@ sub _convert_facets {
             my $t = $term->{term};
             my $c = $term->{count};
             if ( exists( $special{$type} ) ) {
-                $label = $special{$type}->($t);
+                $label = $special{$type}->{$t} // $t;
             }
             else {
                 $label = $t;
