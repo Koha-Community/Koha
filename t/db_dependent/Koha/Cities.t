@@ -21,7 +21,9 @@ use Modern::Perl;
 use Test::More tests => 4;
 use Koha::City;
 use Koha::Cities;
+use t::lib::TestBuilder;
 
+my $builder = t::lib::TestBuilder->new;
 my $nb_of_cities = Koha::Cities->search->count;
 my $new_city_1 = Koha::City->new({
     city_name => 'my_city_name_for_test_1',
