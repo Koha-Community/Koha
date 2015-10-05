@@ -83,6 +83,7 @@ Full documentation.
 
 use autodie;
 use Getopt::Long;
+use C4::Context;
 use Koha::Authority;
 use Koha::BiblioUtils;
 use Koha::ElasticSearch::Indexer;
@@ -117,6 +118,8 @@ unless ($index_authorities || $index_biblios) {
 
 pod2usage(1) if $help;
 pod2usage( -exitstatus => 0, -verbose => 2 ) if $man;
+
+sanity_check();
 
 my $next;
 if ($index_biblios) {
@@ -187,6 +190,13 @@ sub do_reindex {
     # There are probably uncommitted records
     $indexer->update_index( \@id_buffer, \@commit_buffer );
     _log( 1, "$count records indexed.\n" );
+}
+
+# Checks some basic stuff to ensure that it's sane before we start.
+sub sanity_check {
+    # Do we have an elasticsearch block defined?
+    my $conf = C4::Context->config('elasticsearch');
+    die "No 'elasticsearch' block is defined in koha-conf.xml.\n" if ( !$conf );
 }
 
 # Output progress information.
