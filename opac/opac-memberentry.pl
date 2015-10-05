@@ -29,6 +29,7 @@ use Koha::Borrower::Modifications;
 use C4::Branch qw(GetBranchesLoop);
 use C4::Scrubber;
 use Email::Valid;
+use Koha::DateUtils;
 
 my $cgi = new CGI;
 my $dbh = C4::Context->dbh;
@@ -331,9 +332,12 @@ sub ParseCgiForBorrower {
         }
     }
 
-    $borrower{'dateofbirth'} =
-      C4::Dates->new( $borrower{'dateofbirth'} )->output("iso")
-      if ( defined( $borrower{'dateofbirth'} ) );
+    my $dob_dt;
+    $dob_dt = eval { dt_from_string( $borrower{'dateofbirth'} ); }
+        if ( defined( $borrower{'dateofbirth'} ) );
+
+    $borrower{'dateofbirth'} = output_pref ( { dt => $dob_dt, dateonly => 1, dateformat => 'iso' })
+        if ( $dob_dt );
 
     return %borrower;
 }

@@ -26,8 +26,8 @@ use C4::Output;
 use C4::Log;
 use C4::Items;
 use C4::Debug;
-use C4::Dates;
 use C4::Search::History;
+
 use URI::Escape;
 use POSIX qw(strftime);
 

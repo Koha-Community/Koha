@@ -28,8 +28,8 @@ use C4::Output;
 use C4::Circulation;
 use C4::Review;
 use C4::Biblio;
-use C4::Dates;
 use C4::Members qw/GetMemberDetails/;
+use Koha::DateUtils;
 use POSIX qw(ceil strftime);
 
 my $template_name;
@@ -57,8 +57,8 @@ my ( $template, $borrowernumber, $cookie ) = &get_template_and_user(
 );
 
 if($format eq "rss"){
-    my $lastbuilddate = C4::Dates->new();
-    my $lastbuilddate_output = $lastbuilddate->output("rfc822");
+    my $lastbuilddate = dt_from_string;
+    my $lastbuilddate_output = $lastbuilddate->strftime("%a, %d %b %Y %H:%M:%S %z");
     $template->param(
         rss => 1,
         timestamp => $lastbuilddate_output
@@ -114,8 +114,9 @@ for my $result (@$reviews){
 	}
 
     if($format eq "rss"){
-        my $rsstimestamp = C4::Dates->new($result->{datereviewed},"iso");
-        my $rsstimestamp_output = $rsstimestamp->output("rfc822");
+        my $rsstimestamp = eval { dt_from_string( $result->{datereviewed} ); };
+        $rsstimestamp = dt_from_string unless ( $rsstimestamp ); #default to today if something went wrong
+        my $rsstimestamp_output = $rsstimestamp->strftime("%a, %d %b %Y %H:%M:%S %z");
         $result->{timestamp} = $rsstimestamp_output;
     }
 }

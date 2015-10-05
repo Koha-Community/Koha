@@ -27,7 +27,6 @@ use C4::Koha;
 use C4::Output;
 use C4::Suggestions;
 use C4::Koha;
-use C4::Dates;
 use C4::Scrubber;
 
 use Koha::DateUtils qw( dt_from_string );

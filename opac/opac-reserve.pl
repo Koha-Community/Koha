@@ -28,7 +28,6 @@ use C4::Reserves;
 use C4::Biblio;
 use C4::Items;
 use C4::Output;
-use C4::Dates qw/format_date/;
 use C4::Context;
 use C4::Members;
 use C4::Branch; # GetBranches
@@ -467,7 +466,7 @@ foreach my $biblioNum (@biblionumbers) {
 
         if ( defined $reservedate ) {
             $itemLoopIter->{backgroundcolor} = 'reserved';
-            $itemLoopIter->{reservedate}     = format_date($reservedate);
+            $itemLoopIter->{reservedate}     = output_pref({ dt => dt_from_string($reservedate), dateonly => 1 });
             $itemLoopIter->{ReservedForBorrowernumber} = $reservedfor;
             $itemLoopIter->{ReservedForSurname}        = $ItemBorrowerReserveInfo->{'surname'};
             $itemLoopIter->{ReservedForFirstname}      = $ItemBorrowerReserveInfo->{'firstname'};
@@ -501,7 +500,7 @@ foreach my $biblioNum (@biblionumbers) {
         my ( $transfertwhen, $transfertfrom, $transfertto ) =
           GetTransfers($itemNum);
         if ( $transfertwhen && ($transfertwhen ne '') ) {
-            $itemLoopIter->{transfertwhen} = format_date($transfertwhen);
+            $itemLoopIter->{transfertwhen} = output_pref({ dt => dt_from_string($transfertwhen), dateonly => 1 });
             $itemLoopIter->{transfertfrom} =
               $branches->{$transfertfrom}{branchname};
             $itemLoopIter->{transfertto} = $branches->{$transfertto}{branchname};
