@@ -22,6 +22,7 @@ CREATE TABLE `elasticsearch_mapping` (
 CREATE TABLE `search_field` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL COMMENT 'the name of the field as it will be stored in the search engine',
+  `label` varchar(255) NOT NULL COMMENT 'the human readable name of the field, for display',
   `type` ENUM('string', 'date', 'number', 'boolean', 'sum') NOT NULL COMMENT 'what type of data this holds, relevant when storing it in the search engine',
   PRIMARY KEY (`id`),
   UNIQUE KEY (`name`)
@@ -46,8 +47,7 @@ CREATE TABLE `search_marc_map` (
     `suggestible` boolean DEFAULT FALSE COMMENT 'true if this field can be used to generate suggestions for browse',
     `sort` boolean DEFAULT NULL COMMENT 'true/false creates special sort handling, null doesn''t',
     PRIMARY KEY(`id`),
-    INDEX (`index_name`),
-    UNIQUE KEY (index_name, marc_type, marc_field)
+    INDEX (`index_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- This joins the two search tables together. We can have any combination:
@@ -59,7 +59,7 @@ CREATE TABLE `search_marc_to_field` (
     search_marc_map_id int(11) NOT NULL,
     search_field_id int(11) NOT NULL,
     PRIMARY KEY(search_marc_map_id, search_field_id),
-    FOREIGN KEY(search_marc_map_id) REFERENCES search_marc_map(id),
+    FOREIGN KEY(search_marc_map_id) REFERENCES search_marc_map(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY(search_field_id) REFERENCES search_field(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -294,7 +294,7 @@ INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestib
 insert into search_marc_map(index_name, marc_type, marc_field, facet, suggestible, sort) select distinct indexname, 'marc21', marc21, facet, suggestible, sort from elasticsearch_mapping where marc21 is not null;
 insert into search_marc_map(index_name, marc_type, marc_field, facet, suggestible, sort) select distinct indexname, 'unimarc', unimarc, facet, suggestible, sort from elasticsearch_mapping where unimarc is not null;
 insert into search_marc_map(index_name, marc_type, marc_field, facet, suggestible, sort) select distinct indexname, 'normarc', normarc, facet, suggestible, sort from elasticsearch_mapping where normarc is not null;
-insert into search_field (name, type) select distinct mapping, type from elasticsearch_mapping;
+insert into search_field (name, label, type) select distinct mapping, mapping, type from elasticsearch_mapping;
 
 insert into search_marc_to_field(search_marc_map_id, search_field_id) select search_marc_map.id,search_field.id from search_field, search_marc_map, elasticsearch_mapping where elasticsearch_mapping.mapping=search_field.name AND elasticsearch_mapping.marc21=search_marc_map.marc_field AND search_marc_map.marc_type='marc21' AND indexname='biblios' AND index_name='biblios';
 insert into search_marc_to_field(search_marc_map_id, search_field_id) select search_marc_map.id,search_field.id from search_field, search_marc_map, elasticsearch_mapping where elasticsearch_mapping.mapping=search_field.name AND elasticsearch_mapping.unimarc=search_marc_map.marc_field AND search_marc_map.marc_type='unimarc' AND indexname='biblios' AND index_name='biblios';
