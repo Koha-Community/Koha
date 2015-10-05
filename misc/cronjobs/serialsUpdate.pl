@@ -29,10 +29,10 @@ BEGIN {
 }
 
 use C4::Context;
-use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Debug;
 use C4::Serials;
 use C4::Log;
+use Koha::DateUtils;
 
 use Date::Calc qw/Date_to_Days check_date/;
 use Getopt::Long;
@@ -119,7 +119,7 @@ while ( my $issue = $sth->fetchrow_hashref ) {
 
     if ( $subscription && $publisheddate && $publisheddate ne "0000-00-00" ) {
         my $nextpublisheddate = GetNextDate( $subscription, $publisheddate );
-        my $today = format_date_in_iso( C4::Dates->new()->output() );
+        my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
 
         if ( $nextpublisheddate && $today ) {
             my ( $year,  $month,  $day )  = split( /-/, $nextpublisheddate );

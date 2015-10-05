@@ -103,7 +103,7 @@ foreach (@pcategories) {
 }
 
 use vars qw(@borrower_fields @item_fields @other_fields);
-use vars qw($fldir $libname $control $mode $delim $dbname $today $today_iso $today_days);
+use vars qw($fldir $libname $control $mode $delim $dbname $today_iso $today_days);
 use vars qw($filename);
 
 CHECK {
@@ -135,8 +135,7 @@ if (defined $borrowernumberlimit) {
 }
 my $overdueItemsCounted = 0;
 my %calendars           = ();
-$today      = C4::Dates->new();
-$today_iso  = $today->output('iso');
+$today_iso  = output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } );
 my ($tyear, $tmonth, $tday) = split( /-/, $today_iso );
 $today_days = Date_to_Days( $tyear, $tmonth, $tday );
 
@@ -145,14 +144,14 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
     my $datedue;
     my $datedue_days;
     eval {
-    $datedue = C4::Dates->new( $data->[$i]->{'date_due'}, 'iso' );
-    $datedue_days = Date_to_Days( split( /-/, $datedue->output('iso') ) );
+    $datedue = eval { output_pref( { dt => dt_from_string( $data->[$i]->{'date_due'} ), dateonly => 1, dateformat => 'iso' } ); };
+    $datedue_days = Date_to_Days( split( /-/, $datedue ) );
     };
     if ($@) {
     warn "Error on date for borrower " . $data->[$i]->{'borrowernumber'} .  ": $@date_due: " . $data->[$i]->{'date_due'} . "\ndatedue_days: " . $datedue_days . "\nSkipping";
     next;
     }
-    my $due_str = $datedue->output();
+    my $due_str = eval { output_pref( { dt => dt_from_string( $datedue ), dateonly => 1 } ); };
     unless ( defined $data->[$i]->{'borrowernumber'} ) {
         print STDERR "ERROR in Getoverdues line $i: issues.borrowernumber IS NULL.  Repair 'issues' table now!  Skipping record.\n";
         next;    # Note: this doesn't solve everything.  After NULL borrowernumber, multiple issues w/ real borrowernumbers can pile up.
@@ -192,8 +191,8 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
         $data->[$i],
         $borrower->{'categorycode'},
         $branchcode,
-        dt_from_string($datedue->output('iso')),
-        dt_from_string($today->output('iso')),
+        dt_from_string( $datedue ),
+        dt_from_string( $today_iso ),
     );
 
     # Reassign fine's amount if specified in command-line

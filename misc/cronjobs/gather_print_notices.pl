@@ -11,7 +11,6 @@ BEGIN {
 
 use CGI qw( utf8 ); # NOT a CGI script, this is just to keep C4::Templates::gettemplate happy
 use C4::Context;
-use C4::Dates;
 use C4::Debug;
 use C4::Letters;
 use C4::Templates;
@@ -82,7 +81,9 @@ $delimiter ||= q|,|;
 
 cronlogaction();
 
-my $today        = C4::Dates->new();
+my $today_iso     = output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } ) ;
+my $today_syspref = output_pref( { dt => dt_from_string, dateonly => 1 } );
+
 my @all_messages = @{ GetPrintMessages() };
 
 # Filter by letter_code
@@ -166,8 +167,8 @@ sub print_notices {
     while ( my ( $branchcode, $branch_messages ) = each %$messages_by_branch ) {
         my $letter_codes = @letter_codes == 0 ? 'all' : join '_', @letter_codes;
         my $filename = $split
-            ? "notices_$letter_codes-" . $today->output('iso') . "-$branchcode.$format"
-            : "notices_$letter_codes-" . $today->output('iso') . ".$format";
+            ? "notices_$letter_codes-" . $today_iso . "-$branchcode.$format"
+            : "notices_$letter_codes-" . $today_iso . ".$format";
         my $filepath = File::Spec->catdir( $output_directory, $filename );
         if ( $format eq 'html' ) {
             generate_html({
@@ -212,7 +213,7 @@ sub generate_html {
 
     $template->param(
         stylesheet => C4::Context->preference("NoticeCSS"),
-        today      => $today->output(),
+        today      => $today_syspref,
         messages   => $messages,
     );
 
@@ -310,7 +311,7 @@ sub send_files {
     my $mail = MIME::Lite->new(
         From     => $from,
         To       => $to,
-        Subject  => 'Print notices for ' . $today->output(),
+        Subject  => 'Print notices for ' . $today_syspref,
         Type     => 'multipart/mixed',
     );
 

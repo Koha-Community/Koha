@@ -38,7 +38,6 @@ use DateTime;
 use DateTime::Duration;
 
 use C4::Context;
-use C4::Dates qw/format_date/;
 use C4::Debug;
 use C4::Letters;
 use C4::Overdues qw(GetFine GetOverdueMessageTransportTypes);
@@ -527,7 +526,7 @@ END_SQL
             my $borrowernumber;
             while ( my $data = $sth->fetchrow_hashref ) {
 
-                next unless ( DateTime->compare( $date_to_run,  dt_from_string($data->{date_due})) ) == 1;
+                next unless ( DateTime->compare( $date_to_run, dt_from_string($data->{date_due})) ) == 1;
 
                 # check the borrower has at least one item that matches
                 my $days_between;
@@ -536,12 +535,12 @@ END_SQL
                     my $calendar =
                       Koha::Calendar->new( branchcode => $branchcode );
                     $days_between =
-                      $calendar->days_between(  dt_from_string($data->{date_due}),
+                      $calendar->days_between( dt_from_string($data->{date_due}),
                         $date_to_run );
                 }
                 else {
                     $days_between =
-                      $date_to_run->delta_days(  dt_from_string($data->{date_due}) );
+                      $date_to_run->delta_days( dt_from_string($data->{date_due}) );
                 }
                 $days_between = $days_between->in_units('days');
                 if ($triggered) {
@@ -657,7 +656,10 @@ END_SQL
                       last;
                     }
                     $j++;
-                    my @item_info = map { $_ =~ /^date|date$/ ? format_date( $item_info->{$_} ) : $item_info->{$_} || '' } @item_content_fields;
+                    my @item_info = map { $_ =~ /^date|date$/ ?
+                                           eval { output_pref( { dt => dt_from_string( $item_info->{$_} ), dateonly => 1 } ); }
+                                           :
+                                           $item_info->{$_} || '' } @item_content_fields;
                     $titles .= join("\t", @item_info) . "\n";
                     $itemcount++;
                     push @items, $item_info;

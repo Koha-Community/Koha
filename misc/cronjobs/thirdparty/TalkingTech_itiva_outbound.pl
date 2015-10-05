@@ -36,8 +36,8 @@ use C4::Context;
 use C4::Items;
 use C4::Letters;
 use C4::Overdues;
-use C4::Dates;
 use C4::Calendar;
+use Koha::DateUtils;
 
 sub usage {
     pod2usage( -verbose => 2 );
@@ -124,8 +124,8 @@ foreach my $type (@types) {
     }
 
     foreach my $issues (@loop) {
-        my $date = C4::Dates->new( $issues->{'date_due'}, 'iso' );
-        my $due_date = $date->output('metric');
+        my $date_dt = dt_from_string ( $issues->{'date_due'} );
+        my $due_date = output_pref( { dt => $date_dt, dateonly => 1, dateformat =>'metric' } );
 
         my $letter = C4::Letters::GetPreparedLetter(
             module      => $module,

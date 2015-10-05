@@ -35,7 +35,6 @@ BEGIN {
 }
 
 use C4::Context;
-use C4::Dates;
 use C4::Search;
 use C4::Search::History;
 use Getopt::Long;
