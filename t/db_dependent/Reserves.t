@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 71;
+use Test::More tests => 72;
 
 use MARC::Record;
 use DateTime::Duration;
@@ -153,6 +153,13 @@ $requesters{'CPL'} = AddMember(
     categorycode => 'PT',
     surname      => 'borrower from CPL',
 );
+for my $i ( 2 .. 5 ) {
+    $requesters{"CPL$i"} = AddMember(
+        branchcode   => 'CPL',
+        categorycode => 'PT',
+        surname      => 'borrower $i from CPL',
+    );
+}
 $requesters{'FPL'} = AddMember(
     branchcode   => 'FPL',
     categorycode => 'PT',
@@ -393,11 +400,12 @@ ModReserveAffect( $itemnumber,  $requesters{'CPL'} , 0); #confirm hold
 is(defined $results[3]?1:0, 1, 'GetReservesFromItemnumber returns a future wait (confirmed future hold)');
 # End of tests for bug 9788
 
+$dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
 # Tests for CalculatePriority (bug 8918)
 my $p = C4::Reserves::CalculatePriority($bibnum2);
 is($p, 4, 'CalculatePriority should now return priority 4');
 $resdate=undef;
-AddReserve('CPL',  $requesters{'CPL'}, $bibnum2,
+AddReserve('CPL',  $requesters{'CPL2'}, $bibnum2,
            $bibitems,  $p, $resdate, $expdate, $notes,
            $title,      $checkitem, $found);
 $p = C4::Reserves::CalculatePriority($bibnum2);
@@ -416,7 +424,7 @@ ModReserveAffect( $itemnumber,  $requesters{'CPL'} , 0);
 $p = C4::Reserves::CalculatePriority($bibnum);
 is($p, 1, 'CalculatePriority should now return priority 1');
 #add another biblio hold, no resdate
-AddReserve('CPL',  $requesters{'CPL'}, $bibnum,
+AddReserve('CPL',  $requesters{'CPL2'}, $bibnum,
            $bibitems,  $p, $resdate, $expdate, $notes,
            $title,      $checkitem, $found);
 $p = C4::Reserves::CalculatePriority($bibnum);
@@ -425,7 +433,7 @@ is($p, 2, 'CalculatePriority should now return priority 2');
 C4::Context->set_preference('AllowHoldDateInFuture', 1);
 $resdate= dt_from_string();
 $resdate->add_duration(DateTime::Duration->new(days => 1));
-AddReserve('CPL',  $requesters{'CPL'}, $bibnum,
+AddReserve('CPL',  $requesters{'CPL3'}, $bibnum,
            $bibitems,  $p, output_pref($resdate), $expdate, $notes,
            $title,      $checkitem, $found);
 $p = C4::Reserves::CalculatePriority($bibnum);
@@ -434,6 +442,12 @@ is($p, 2, 'CalculatePriority should now still return priority 2');
 $p = C4::Reserves::CalculatePriority($bibnum, $resdate);
 is($p, 3, 'CalculatePriority should now return priority 3');
 # End of tests for bug 8918
+
+# Test for bug 5144
+$reserve_id = AddReserve('CPL',  $requesters{'CPL3'}, $bibnum,
+           $bibitems,  $p, output_pref($resdate), $expdate, $notes,
+           $title,      $checkitem, $found);
+is( $reserve_id, undef, 'Attempt to add a second reserve on a given record for the same patron fails.' );
 
 # Tests for cancel reserves by users from OPAC.
 $dbh->do('DELETE FROM reserves', undef, ($bibnum));

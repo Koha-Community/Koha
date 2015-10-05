@@ -155,7 +155,7 @@ ok( !$reserve->{'suspend'}, "Test AutoUnsuspendReserves()" );
 # Add a new hold for the borrower whose hold we canceled earlier, this time at the bib level
 AddReserve(
     $branch_1,
-    $borrowernumber,
+    $borrowernumbers[0],
     $biblionumber,
     my $bibitems = q{},
     my $priority,
@@ -187,19 +187,19 @@ $reserves = GetReservesFromBiblionumber({ biblionumber => $biblionumber, all_dat
 $reserve = $reserves->[1];
 AlterPriority( 'top', $reserve->{'reserve_id'} );
 $reserve = GetReserve( $reserve->{'reserve_id'} );
-ok( $reserve->{'priority'} eq '1', "Test AlterPriority(), move to top" );
+is( $reserve->{'priority'}, '1', "Test AlterPriority(), move to top" );
 
 AlterPriority( 'down', $reserve->{'reserve_id'} );
 $reserve = GetReserve( $reserve->{'reserve_id'} );
-ok( $reserve->{'priority'} eq '2', "Test AlterPriority(), move down" );
+is( $reserve->{'priority'}, '2', "Test AlterPriority(), move down" );
 
 AlterPriority( 'up', $reserve->{'reserve_id'} );
 $reserve = GetReserve( $reserve->{'reserve_id'} );
-ok( $reserve->{'priority'} eq '1', "Test AlterPriority(), move up" );
+is( $reserve->{'priority'}, '1', "Test AlterPriority(), move up" );
 
 AlterPriority( 'bottom', $reserve->{'reserve_id'} );
 $reserve = GetReserve( $reserve->{'reserve_id'} );
-ok( $reserve->{'priority'} eq '5', "Test AlterPriority(), move to bottom" );
+is( $reserve->{'priority'}, '5', "Test AlterPriority(), move to bottom" );
 
 # Regression test for bug 2394
 #
