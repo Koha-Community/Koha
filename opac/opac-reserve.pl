@@ -221,6 +221,7 @@ if ( $query->param('place_reserve') ) {
         &get_out($query, $cookie, $template->output);
     }
 
+    my $failed_holds = 0;
     while (@selectedItems) {
         my $biblioNum = shift(@selectedItems);
         my $itemNum   = shift(@selectedItems);
@@ -283,7 +284,7 @@ if ( $query->param('place_reserve') ) {
 
         # Here we actually do the reserveration. Stage 3.
         if ($canreserve) {
-            AddReserve(
+            my $reserve_id = AddReserve(
                 $branch,      $borrowernumber,
                 $biblioNum,
                 [$biblioNum], $rank,
@@ -291,11 +292,12 @@ if ( $query->param('place_reserve') ) {
                 $notes,       $biblioData->{title},
                 $itemNum,     $found
             );
+            $failed_holds++ unless $reserve_id;
             ++$reserve_cnt;
         }
     }
 
-    print $query->redirect("/cgi-bin/koha/opac-user.pl#opac-user-holds");
+    print $query->redirect("/cgi-bin/koha/opac-user.pl?failed_holds=$failed_holds#opac-user-holds");
     exit;
 }
 

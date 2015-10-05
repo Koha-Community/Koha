@@ -48,6 +48,13 @@
 
                     [% IF ( patronupdate ) %]<div class="alert alert-info"><h3>Thank you!</h3><p>Your corrections have been submitted to the library, and a staff member will update your record as soon as possible.</p></div>[% END %]
 
+                    [% IF failed_holds %]
+                        <div class="alert alert-info">
+                            <h3>Notice:</h3>
+                            <p>One or more holds were not placed due to existing holds.</p>
+                        </div>
+                    [% END %]
+
                     [% IF ( BORROWER_INF.warndeparture ) %]
                         <div class="alert" id="warndeparture">
                             <strong>Please note:</strong><span> Your card will expire on <span id="warndeparture_date">[% BORROWER_INF.warndeparture | $KohaDates %]</span>. Please contact the library for more information.</span>

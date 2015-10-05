@@ -40,8 +40,11 @@ use C4::Dates qw( format_date_in_iso );
 use Koha::DateUtils;
 use Koha::Calendar;
 use Koha::Database;
+use Koha::Hold;
+use Koha::Holds;
 
 use List::MoreUtils qw( firstidx any );
+use Carp;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -155,18 +158,29 @@ sub AddReserve {
         $bibitems,  $priority, $resdate, $expdate, $notes,
         $title,      $checkitem, $found
     ) = @_;
+
+    if ( Koha::Holds->search( { borrowernumber => $borrowernumber, biblionumber => $biblionumber } )->count() > 0 ) {
+        carp("AddReserve: borrower $borrowernumber already has a hold for biblionumber $biblionumber");
+        return;
+    }
+
     my $dbh     = C4::Context->dbh;
+
     $resdate = format_date_in_iso( $resdate ) if ( $resdate );
     $resdate = C4::Dates->today( 'iso' ) unless ( $resdate );
+
     if ($expdate) {
         $expdate = format_date_in_iso( $expdate );
     } else {
         undef $expdate; # make reserves.expirationdate default to null rather than '0000-00-00'
     }
-    if ( C4::Context->preference( 'AllowHoldDateInFuture' ) ) {
-	# Make room in reserves for this before those of a later reserve date
-	$priority = _ShiftPriorityByDateAndPriority( $biblionumber, $resdate, $priority );
+
+    if ( C4::Context->preference('AllowHoldDateInFuture') ) {
+
+        # Make room in reserves for this before those of a later reserve date
+        $priority = _ShiftPriorityByDateAndPriority( $biblionumber, $resdate, $priority );
     }
+
     my $waitingdate;
 
     # If the reserv had the waiting status, we had the value of the resdate
@@ -175,20 +189,22 @@ sub AddReserve {
     }
 
     # updates take place here
-    my $query = qq{
-        INSERT INTO reserves
-            (borrowernumber,biblionumber,reservedate,branchcode,
-            priority,reservenotes,itemnumber,found,waitingdate,expirationdate)
-        VALUES
-             (?,?,?,?,?,
-             ?,?,?,?,?)
-             };
-    my $sth = $dbh->prepare($query);
-    $sth->execute(
-        $borrowernumber, $biblionumber, $resdate, $branch,      $priority,
-        $notes,          $checkitem,    $found,   $waitingdate, $expdate
-    );
-    my $reserve_id = $sth->{mysql_insertid};
+    my $hold = Koha::Hold->new(
+        {
+            borrowernumber => $borrowernumber,
+            biblionumber   => $biblionumber,
+            reservedate    => $resdate,
+            branchcode     => $branch,
+            priority       => $priority,
+            reservenotes   => $notes,
+            itemnumber     => $checkitem,
+            found          => $found,
+            waitingdate    => $waitingdate,
+            expirationdate => $expdate
+        }
+    )->store();
+    my $reserve_id = $hold->id();
+
     # add a reserve fee if needed
     my $fee = GetReserveFee( $borrowernumber, $biblionumber );
     ChargeReserveFee( $borrowernumber, $fee, $title );

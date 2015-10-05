@@ -385,17 +385,15 @@ if ( $borr->{'opacnote'} ) {
 }
 
 $template->param(
-    bor_messages_loop    => GetMessages( $borrowernumber, 'B', 'NONE' ),
-    waiting_count      => $wcount,
-    patronupdate => $patronupdate,
-    OpacRenewalAllowed => C4::Context->preference("OpacRenewalAllowed"),
-    userview => 1,
-);
-
-$template->param(
-    SuspendHoldsOpac => C4::Context->preference('SuspendHoldsOpac'),
+    bor_messages_loop        => GetMessages( $borrowernumber, 'B', 'NONE' ),
+    waiting_count            => $wcount,
+    patronupdate             => $patronupdate,
+    OpacRenewalAllowed       => C4::Context->preference("OpacRenewalAllowed"),
+    userview                 => 1,
+    SuspendHoldsOpac         => C4::Context->preference('SuspendHoldsOpac'),
     AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
-    OpacHoldNotes => C4::Context->preference('OpacHoldNotes'),
+    OpacHoldNotes            => C4::Context->preference('OpacHoldNotes'),
+    failed_holds             => $query->param('failed_holds'),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
