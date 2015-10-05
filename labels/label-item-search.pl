@@ -28,13 +28,13 @@ use POSIX qw(ceil);
 use C4::Auth qw(get_template_and_user);
 use C4::Output qw(output_html_with_http_headers);
 use C4::Context;
-use C4::Dates;
 use C4::Search qw(SimpleSearch);
 use C4::Biblio qw(TransformMarcToKoha);
 use C4::Items qw(GetItemInfosOf get_itemnumbers_of);
 use C4::Koha qw(GetItemTypes);    # XXX subfield_is_koha_internal_p
 use C4::Creators::Lib qw(html_table);
 use C4::Debug;
+use Koha::DateUtils;
 
 BEGIN {
     $debug = $debug || $cgi_debug;
@@ -78,26 +78,31 @@ if ( $op eq "do_search" ) {
     $dateto   = $query->param('dateto');
 
     if ($datefrom) {
-        $datefrom = C4::Dates->new($datefrom);
-        if ($QParser) {
-            $ccl_query .= ' && ' if $ccl_textbox;
-            $ccl_query .=
-                "acqdate(" . $datefrom->output("iso") . '-)';
-        } else {
-            $ccl_query .= ' and ' if $ccl_textbox;
-            $ccl_query .=
-                "acqdate,st-date-normalized,ge=" . $datefrom->output("iso");
+        $datefrom = eval { dt_from_string ( $datefrom ) };
+        if ($datefrom) {
+            $datefrom = output_pref( { dt => $datefrom, dateonly => 1, dateformat => 'iso' } );
+            if ($QParser) {
+                $ccl_query .= ' && ' if $ccl_textbox;
+                $ccl_query .=
+                    "acqdate(" . $datefrom . '-)';
+            } else {
+                $ccl_query .= ' and ' if $ccl_textbox;
+                $ccl_query .= "acqdate,st-date-normalized,ge=" . $datefrom;
+            }
         }
     }
 
     if ($dateto) {
-        $dateto = C4::Dates->new($dateto);
-        if ($QParser) {
-            $ccl_query .= ' && ' if ( $ccl_textbox || $datefrom );
-            $ccl_query .= "acqdate(-" . $dateto->output("iso") . ')';
-        } else {
-            $ccl_query .= ' and ' if ( $ccl_textbox || $datefrom );
-            $ccl_query .= "acqdate,st-date-normalized,le=" . $dateto->output("iso");
+        $dateto = eval { dt_from_string ( $dateto ) };
+        if ($dateto) {
+           $dateto = output_pref( { dt => $dateto, dateonly => 1, dateformat => 'iso' } );
+            if ($QParser) {
+                $ccl_query .= ' && ' if ( $ccl_textbox || $datefrom );
+                $ccl_query .= "acqdate(-" . $dateto . ')';
+            } else {
+                $ccl_query .= ' and ' if ( $ccl_textbox || $datefrom );
+                $ccl_query .= "acqdate,st-date-normalized,le=" . $dateto;
+            }
         }
     }
 
