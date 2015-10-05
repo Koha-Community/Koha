@@ -1,4 +1,20 @@
 Enhanced Content:
+    Adlibris:
+        -
+            - <strong>NOTE:</strong> Using resources such as external images might leak sensitive data to third parties.
+        -
+            - pref: AdlibrisCoversEnabled
+              default: 0
+              choices:
+                  no: "Don't show"
+                  yes: "Show"
+            - cover images in OPAC results and detail listing from Swedish retailer <a href="https://www.adlibris.com/se">Adlibris</a>.
+        -
+            - Use base URL:
+            - pref: AdlibrisCoversURL
+              class: url
+              default: "http://www.adlibris.com/se/organisationer/showimagesafe.aspx"
+            - for the <a href="https://www.adlibris.com/se">Adlibris</a> cover service.
     All:
         -
             - <strong>NOTE:</strong> you can only choose one source of cover images from below, otherwise Koha will show the images from all sources selected.

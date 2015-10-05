@@ -8,6 +8,8 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AcqWarnOnDuplicateInvoice','0','','Warn librarians when they try to create a duplicate invoice','YesNo'),
 ('AdditionalFieldsInZ3950ResultSearch', '', NULL, 'Determines which MARC field/subfields are displayed in -Additional field- column in the result of a search Z3950', 'Free'),
 ('AddressFormat','us','us|de|fr','Choose format to display postal addresses', 'Choice'),
+('AdlibrisCoversEnabled','0',NULL,'Display cover images in OPAC results and detail listing from Swedish retailer Adlibris.','YesNo'),
+('AdlibrisCoversURL','http://www.adlibris.com/se/organisationer/showimagesafe.aspx',NULL,'Base URL for Adlibris cover image web service.','Free'),
 ('advancedMARCeditor','0','','If ON, the MARC editor won\'t display field/subfield descriptions','YesNo'),
 ('AdvancedSearchLanguages','','','ISO 639-2 codes of languages you wish to see appear as an Advanced search option.  Example: eng|fre|ita','Textarea'),
 ('AdvancedSearchTypes','itemtypes','itemtypes|ccode','Select which set of fields comprise the Type limit in the advanced search','Choice'),
