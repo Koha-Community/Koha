@@ -3239,8 +3239,8 @@ CREATE TABLE categories_branches( -- association table between categories and br
 
 DROP TABLE IF EXISTS authorised_values_branches;
 CREATE TABLE authorised_values_branches( -- association table between authorised_values and branches
-    av_id INTEGER,
-    branchcode VARCHAR(10),
+    av_id INT(11) NOT NULL,
+    branchcode VARCHAR(10) NOT NULL,
     FOREIGN KEY (av_id) REFERENCES authorised_values(id) ON DELETE CASCADE,
     FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON DELETE CASCADE
 ) ENGINE=INNODB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
