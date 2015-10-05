@@ -39,7 +39,9 @@ Koha::SearchEngine::ElasticSearch::Search - search functions for Elasticsearch
 =cut
 
 use base qw(Koha::ElasticSearch);
+use C4::Context;
 use Koha::ItemTypes;
+use Koha::AuthorisedValues;
 use Koha::SearchEngine::QueryBuilder;
 
 use Catmandu::Store::ElasticSearch;
@@ -400,8 +402,11 @@ sub _convert_facets {
     # We also have some special cases, e.g. itypes that need to show the
     # value rather than the code.
     my @itypes = Koha::ItemTypes->search;
+    my @locations = Koha::AuthorisedValues->search( { category => 'LOC' } );
+    my $opac = C4::Context->interface eq 'opac' ;
     my %special = (
-        itype => { map { $_->itemtype => $_->description } @itypes },
+        itype    => { map { $_->itemtype         => $_->description } @itypes },
+        location => { map { $_->authorised_value => ( $opac ? ( $_->lib_opac || $_->lib ) : $_->lib ) } @locations },
     );
     my @res;
     $exp_facet //= '';
