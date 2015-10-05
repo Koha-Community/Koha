@@ -641,6 +641,14 @@ sub GetFacets {
         $facets = _get_facets_from_records( $rs );
     }
 
+    # This sorts the facets into alphabetical order
+    if ($facets && @$facets) {
+        foreach my $f (@$facets) {
+            $f->{facets} = [ sort { uc($a->{facet_label_value}) cmp uc($b->{facet_label_value}) } @{ $f->{facets} } ];
+        }
+        @$facets = sort {$a->{expand} cmp $b->{expand}} @$facets;
+    }
+
     return $facets;
 }
 
