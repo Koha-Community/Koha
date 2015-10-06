@@ -297,7 +297,7 @@ if ( $query->param('place_reserve') ) {
         }
     }
 
-    print $query->redirect("/cgi-bin/koha/opac-user.pl?failed_holds=$failed_holds#opac-user-holds");
+    print $query->redirect("/cgi-bin/koha/opac-user.pl?" . ( $failed_holds ? "failed_holds=$failed_holds" : q|| ) . "#opac-user-holds");
     exit;
 }
 
