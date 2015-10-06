@@ -140,10 +140,31 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
         </z:index>
       </xslo:if>
     </xslo:for-each>
+    <xslo:for-each select="marc:subfield">
+      <xslo:if test="contains('z', @code)">
+        <z:index name="ISBN:w Identifier-standard:w">
+          <xslo:value-of select="."/>
+        </z:index>
+      </xslo:if>
+    </xslo:for-each>
   </xslo:template>
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='022']">
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('a', @code)">
+        <z:index name="ISSN:w Identifier-standard:w">
+          <xslo:value-of select="."/>
+        </z:index>
+      </xslo:if>
+    </xslo:for-each>
+    <xslo:for-each select="marc:subfield">
+      <xslo:if test="contains('y', @code)">
+        <z:index name="ISSN:w Identifier-standard:w">
+          <xslo:value-of select="."/>
+        </z:index>
+      </xslo:if>
+    </xslo:for-each>
+    <xslo:for-each select="marc:subfield">
+      <xslo:if test="contains('z', @code)">
         <z:index name="ISSN:w Identifier-standard:w">
           <xslo:value-of select="."/>
         </z:index>
