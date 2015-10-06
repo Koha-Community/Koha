@@ -126,7 +126,8 @@ elsif ($op eq 'add') {
     $maxonsiteissueqty = undef if $maxonsiteissueqty !~ /^\d+/;
     my $issuelength  = $input->param('issuelength');
     my $lengthunit  = $input->param('lengthunit');
-    my $hardduedate = eval { dt_from_string( $input->param('hardduedate') ) };
+    my $hardduedate = $input->param('hardduedate');
+    $hardduedate = eval { dt_from_string( $input->param('hardduedate') ) } if ( $hardduedate );
     $hardduedate = output_pref( { dt => $hardduedate, dateonly => 1, dateformat => 'iso' } ) if ( $hardduedate );
     my $hardduedatecompare = $input->param('hardduedatecompare');
     my $rentaldiscount = $input->param('rentaldiscount');
