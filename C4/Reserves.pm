@@ -1055,7 +1055,6 @@ sub CancelReserve {
         my $query = "
             UPDATE reserves
             SET    cancellationdate = now(),
-                   found            = Null,
                    priority         = 0
             WHERE  reserve_id = ?
         ";
