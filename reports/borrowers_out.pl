@@ -28,7 +28,7 @@ use C4::Output;
 use C4::Circulation;
 use C4::Reports;
 use C4::Members;
-use C4::Dates qw/format_date_in_iso/;
+use Koha::DateUtils;
 
 =head1 NAME
 
@@ -46,7 +46,9 @@ my $fullreportname = "reports/borrowers_out.tt";
 my $limit = $input->param("Limit");
 my $column = $input->param("Criteria");
 my @filters = $input->param("Filter");
-$filters[1] = format_date_in_iso($filters[1]) if $filters[1];
+$filters[1] = eval { output_pref( { dt => dt_from_string( $filters[1]), dateonly => 1, dateformat => 'iso' } ); }
+    if ( $filters[1] );
+
 my $output = $input->param("output");
 my $basename = $input->param("basename");
 our $sep     = $input->param("sep") || '';
@@ -230,7 +232,7 @@ sub calculate {
     }
     $strcalc .= " AND NOT EXISTS (SELECT * FROM issues WHERE issues.borrowernumber=borrowers.borrowernumber ";
     if ( @$filters[1] ) {
-        $strcalc .= " AND issues.timestamap > ?";
+        $strcalc .= " AND issues.timestamp > ?";
         push @query_args, @$filters[1];
     }
     $strcalc .= ") ";

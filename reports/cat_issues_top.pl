@@ -28,8 +28,8 @@ use C4::Output;
 use C4::Koha;
 use C4::Circulation;
 use C4::Reports;
-use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Members;
+use Koha::DateUtils;
 
 =head1 NAME
 
@@ -47,10 +47,10 @@ my $fullreportname = "reports/cat_issues_top.tt";
 my $limit = $input->param("Limit");
 my $column = $input->param("Criteria");
 my @filters = $input->param("Filter");
-$filters[0]=format_date_in_iso($filters[0]);
-$filters[1]=format_date_in_iso($filters[1]);
-$filters[2]=format_date_in_iso($filters[2]);
-$filters[3]=format_date_in_iso($filters[3]);
+foreach ( @filters[0..3] ) {
+    $_ and $_ = eval { output_pref( { dt => dt_from_string ( $_ ), dateonly => 1, dateformat => 'iso' } ); };
+}
+
 my $output = $input->param("output");
 my $basename = $input->param("basename");
 #warn "calcul : ".$calc;
@@ -181,8 +181,10 @@ sub calculate {
             if ($i>=2) {
                 $cell{filter} .= @$filters[$i];
             } else {
-                $cell{filter} .= format_date(@$filters[$i]);
-            }            $cell{crit} .="Issue From" if ($i==0);
+                $cell{filter} .= eval { output_pref( { dt => dt_from_string( @$filters[$i] ), dateonly => 1 }); }
+                   if ( @$filters[$i] );
+            }
+            $cell{crit} .="Issue From" if ($i==0);
             $cell{crit} .="Issue To" if ($i==1);
             $cell{crit} .="Return From" if ($i==2);
             $cell{crit} .="Return To" if ($i==3);

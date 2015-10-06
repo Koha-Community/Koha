@@ -29,7 +29,7 @@ use C4::Circulation;
 use C4::Members;
 use C4::Reports;
 use C4::Debug;
-use C4::Dates qw(format_date format_date_in_iso);
+use Koha::DateUtils;
 
 =head1 NAME
 
@@ -51,7 +51,7 @@ my $limit   = $input->param("Limit");
 my $column  = $input->param("Criteria");
 my @filters = $input->param("Filter");
 foreach ( @filters[0..3] ) {
-	$_ and $_ = format_date_in_iso($_);	
+    $_ and $_ = eval { output_pref( { dt => dt_from_string ( $_ ), dateonly => 1, dateformat => 'iso' }); };
 }
 my $output   = $input->param("output");
 my $basename = $input->param("basename");
