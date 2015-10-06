@@ -10986,7 +10986,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.19.00.XXX";
+$DBversion = "3.21.00.033";
 if ( CheckVersion($DBversion) ) {
 
     my $done = 0;
@@ -11039,7 +11039,6 @@ if ( CheckVersion($DBversion) ) {
 
     SetVersion ($DBversion);
 }
-
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
