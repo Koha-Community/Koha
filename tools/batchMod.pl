@@ -76,8 +76,6 @@ my $restrictededition = $uid ? haspermission($uid,  {'tools' => 'items_batchmod_
 # In case user is a superlibrarian, edition is not restricted
 $restrictededition = 0 if ($restrictededition != 0 && C4::Context->IsSuperLibrarian());
 
-my $today_iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
-$template->param(today_iso => $today_iso);
 $template->param(del       => $del);
 
 my $itemrecord;
