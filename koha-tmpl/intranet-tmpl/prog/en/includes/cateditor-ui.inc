@@ -437,9 +437,24 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
 
         $('#searchresults thead tr').append('<th>' + _("Tools") + '</th>');
 
+        var bibnumMap = KohaBackend.GetSubfieldForKohaField('biblio.biblionumber');
         $.each( data.hits, function( undef, hit ) {
             backends.search.records[ hit.server + ':' + hit.index ] = hit.record;
-            hit.id = 'search/' + hit.server + ':' + hit.index;
+
+            switch ( hit.server ) {
+                case 'koha:biblioserver':
+                    var bibnumField = hit.record.field( bibnumMap[0] );
+
+                    if ( bibnumField && bibnumField.hasSubfield( bibnumMap[1] ) ) {
+                        hit.id = 'catalog/' + bibnumField.subfield( bibnumMap[1] );
+                        break;
+                    }
+
+                    // Otherwise, fallthrough
+
+                default:
+                    hit.id = 'search/' + hit.server + ':' + hit.index;
+            }
 
             var result = '<tr>';
             result += '<td class="sourcecol">' + z3950Servers[ hit.server ].name + '</td>';
@@ -455,7 +470,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             } );
 
             result += '<td class="toolscol"><ul><li><a href="#" class="marc-link">' + _("View MARC") + '</a></li>';
-            result += '<li><a href="#" class="open-link">' + _("Import") + '</a></li>';
+            result += '<li><a href="#" class="open-link">' + ( hit.server == 'koha:biblioserver' ? _("Edit") : _("Import") ) + '</a></li>';
             if ( state.canSave ) result += '<li><a href="#" class="substitute-link" title="' + _("Replace the current record's contents") + '">' + _("Substitute") + '</a></li>';
             result += '</ul></td></tr>';
 
@@ -670,7 +685,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             var modified = macro.modified && new Date(macro.modified);
             $li.find( '.macro-info' ).append(
                 '<li><span class="label">' + _("Last changed:") + '</span>' +
-                ( modified ? modified.toLocaleFormat() : _("never") ) + '</li>'
+                ( modified ? ( modified.toLocaleDateString() + ', ' + modified.toLocaleTimeString() ) : _("never") ) + '</li>'
             );
             $('#macro-list').append($li);
         } );
@@ -721,7 +736,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                     if ( !subfield ) return;
 
                     var subfieldinfo = taginfo.subfields[ subfield.code ];
-                    $('#status-subfield-info').html( '<strong>$' + subfield.code + ':</strong> ' );
+                    $('#status-subfield-info').html( '<strong>‡' + subfield.code + ':</strong> ' );
 
                     if ( subfieldinfo ) {
                         $('#status-subfield-info').append( subfieldinfo.lib );
@@ -833,14 +848,14 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                             if ( error.subfield == '@' ) {
                                 editor.addError( error.line, _("Missing control field contents") );
                             } else {
-                                editor.addError( error.line, _("Missing mandatory subfield: $") + error.subfield );
+                                editor.addError( error.line, _("Missing mandatory subfield: ‡") + error.subfield );
                             }
                             break;
                         case 'unrepeatableTag':
                             editor.addError( error.line, _("Tag ") + error.tag + _(" cannot be repeated") );
                             break;
                         case 'unrepeatableSubfield':
-                            editor.addError( error.line, _("Subfield $") + error.subfield + _(" cannot be repeated") );
+                            editor.addError( error.line, _("Subfield ‡") + error.subfield + _(" cannot be repeated") );
                             break;
                         case 'itemTagUnsupported':
                             editor.addError( error.line, _("Item tags cannot currently be saved") );
@@ -1030,7 +1045,18 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 return '<div id="alerts-container"><ul>' + prevAlerts.join('') + '</ul></div>';
             },
         });
+
+        $('#show-shortcuts').popover({
+            html: true,
+            placement: 'bottom',
+            content: function() {
+                return '<div id="shortcuts-container">' + $('#shortcuts-contents').html() + '</div>';
+            },
+        });
+
         $('#new-record' ).click( function() {
+            if ( editor.modified && !confirm( _("Are you sure you want to erase your changes?") ) ) return;
+
             openRecord( 'new/', editor );
             return false;
         } );

@@ -17,7 +17,7 @@
  * along with Koha; if not, see <http://www.gnu.org/licenses>.
  */
 
-// Expected format: 245 _ 1 $a Pizza |c 34ars
+// Expected format: 245 _ 1 ‡aPizza ‡c34ars
 
 CodeMirror.defineMode( 'marc', function( config, modeConfig ) {
     modeConfig.nonRepeatableTags = modeConfig.nonRepeatableTags || {};
@@ -130,14 +130,14 @@ CodeMirror.defineMode( 'marc', function( config, modeConfig ) {
                     // matching.
                     if ( stream.match( /[ \t]+$/ ) ) {
                         return 'end-space';
-                    } else if ( stream.match( /[^ \t$|ǂ‡]+/ ) || stream.match( /[ \t]+/ ) ) {
+                    } else if ( stream.match( /[^ \t‡]+/ ) || stream.match( /[ \t]+/ ) ) {
                         return;
                     }
                 }
 
-                if ( stream.eat( /[$|ǂ‡]/ ) ) {
+                if ( stream.eat( '‡' ) ) {
                     var subfieldCode;
-                    if ( ( subfieldCode = stream.eat( /[a-zA-Z0-9%]/ ) ) && stream.eat( ' ' ) ) {
+                    if ( ( subfieldCode = stream.eat( /[a-zA-Z0-9%]/ ) ) ) {
                         state.subfieldCode = subfieldCode;
                         if ( state.seenSubfields[state.subfieldCode] && ( modeConfig.nonRepeatableSubfields[state.tagNumber] || {} )[state.subfieldCode] ) {
                             return 'bad-subfieldcode';

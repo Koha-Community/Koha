@@ -236,8 +236,13 @@ define( function() {
         },
 
         loadISO2709: function(data) {
-            // The underlying offsets work on bytes, not characters
-            data = _encode_utf8(data);
+            // The underlying offsets work on bytes, not characters, so we have to encode back into
+            // UTF-8 before we try to use the directory.
+            //
+            // The substr is a performance optimization; we can only load the first record, so we
+            // extract only the first record. We may get some of the next record, because the substr
+            // happens before UTF-8 encoding, but that won't cause any issues.
+            data = _encode_utf8(data.substr(0, parseInt(data.substr(0, 5))));
 
             this._fieldlist.length = 0;
             this.leader(data.substr(0, 24));

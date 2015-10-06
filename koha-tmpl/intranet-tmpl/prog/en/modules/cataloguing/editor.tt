@@ -57,7 +57,8 @@
                 <li><a class="set-font" style="font-family: peep" href="#">peep</a></li>
             </ul>
         </div>
-        <button class="btn btn-small" id="show-alerts" title="Previous alerts"><i class="icon-info-sign"></i> Alerts <span class="caret"></span></button>
+        <button class="btn btn-small" id="show-alerts" title="Previous alerts"><i class="icon-bell"></i> Alerts <span class="caret"></span></button>
+        <button class="btn btn-small" id="show-shortcuts" title="Supported keyboard shortcuts"><i class="icon-list-alt"></i> Keyboard shortcuts <span class="caret"></span></button>
     </div>
     [%# CodeMirror instance will be inserted here %]
     <div id="statusbar">
@@ -226,6 +227,55 @@
             <div id="macro-save-message"></div>
         </div>
     </div>
+</div>
+
+<div id="shortcuts-contents">
+<table class="table table-condensed">
+    <thead>
+        <tr>
+            <th>Shortcut</th>
+            <th>Behavior</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Ctrl-D</td>
+            <td>Insert delimiter (‡)</td>
+        </tr>
+        <tr>
+            <td>Ctrl-H</td>
+            <td>Get help on current subfield</td>
+        </tr>
+        <tr>
+            <td>Ctrl-S</td>
+            <td>Save record</td>
+        </tr>
+        <tr>
+            <td>Ctrl-X</td>
+            <td>Delete current field</td>
+        </tr>
+        <tr>
+            <td>Ctrl-Shift-X</td>
+            <td>Delete current field</td>
+        </tr>
+        <tr>
+            <td>Enter</td>
+            <td>New field on next line</td>
+        </tr>
+        <tr>
+            <td>Shift-Enter</td>
+            <td>Insert line break</td>
+        </tr>
+        <tr>
+            <td>Tab</td>
+            <td>Move to next position</td>
+        </tr>
+        <tr>
+            <td>Shift-Tab</td>
+            <td>Move to previous position</td>
+        </tr>
+    </tbody>
+</table>
 </div>
 
 </div>

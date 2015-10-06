@@ -250,7 +250,7 @@ define( [ 'resources' ], function( Resources ) {
             } else {
                 for ( var i = 0; i < info.subfields.length; i++ ) {
                     var next = ( i < info.subfields.length - 1 ) ? info.subfields[i + 1].ch : end;
-                    subfields.push( { code: info.subfields[i].code, from: info.subfields[i].ch + 3, to: next } );
+                    subfields.push( { code: info.subfields[i].code, from: info.subfields[i].ch + 2, to: next } );
                 }
                 // If not a fixed field, and we didn't find any subfields, we need to throw in the
                 // '@' subfield so we can properly remove it

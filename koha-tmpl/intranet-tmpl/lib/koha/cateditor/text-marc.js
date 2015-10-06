@@ -18,15 +18,6 @@
  */
 
 define( [ 'marc-record' ], function( MARC ) {
-    // Convert any characters for display
-    function _sanitize( text ) {
-        return text.replace( '$', '{dollar}' );
-    }
-
-    // Undo conversion
-    function _desanitize( text ) {
-        return text.replace( '{dollar}', '$' );
-    }
     return {
         RecordToText: function( record ) {
             var lines = [];
@@ -36,7 +27,7 @@ define( [ 'marc-record' ], function( MARC ) {
                 var field = fields[i];
 
                 if ( field.isControlField() ) {
-                    lines.push( field.tagnumber() + ' ' + _sanitize( field.subfield( '@' ) ) );
+                    lines.push( field.tagnumber() + ' ' + field.subfield('@') );
                 } else {
                     var result = [ field.tagnumber() + ' ' ];
 
@@ -44,7 +35,7 @@ define( [ 'marc-record' ], function( MARC ) {
                     result.push( field.indicator(1) == ' ' ? '_' : field.indicator(1), ' ' );
 
                     $.each( field.subfields(), function( i, subfield ) {
-                        result.push( '$' + subfield[0] + ' ' + _sanitize( subfield[1] ) );
+                        result.push( '‡' + subfield[0] + subfield[1] );
                     } );
 
                     lines.push( result.join('') );
@@ -68,7 +59,7 @@ define( [ 'marc-record' ], function( MARC ) {
                 tagNumber = tagNumber[1];
 
                 if ( tagNumber < '010' ) {
-                    var field = new MARC.Field( tagNumber, ' ', ' ', [ [ '@', _desanitize( line.substring( 4 ) ) ] ] );
+                    var field = new MARC.Field( tagNumber, ' ', ' ', [ [ '@', line.substring( 4 ) ] ] );
                     field.sourceLine = i;
                     record.addField( field );
                 } else {
@@ -80,7 +71,7 @@ define( [ 'marc-record' ], function( MARC ) {
 
                     var field = new MARC.Field( tagNumber, ( indicators[1] == '_' ? ' ' : indicators[1] ), ( indicators[2] == '_' ? ' ' : indicators[2] ), [] );
 
-                    var matcher = /[$|ǂ‡]([a-zA-Z0-9%]) /g;
+                    var matcher = /‡([a-zA-Z0-9%])/g;
                     var match;
 
                     var subfields = [];
@@ -97,7 +88,7 @@ define( [ 'marc-record' ], function( MARC ) {
                     $.each( subfields, function( i, subfield ) {
                         var next = subfields[ i + 1 ];
 
-                        field.addSubfield( [ subfield.code, _desanitize( line.substring( subfield.ch + 3, next ? next.ch : line.length ) ) ] );
+                        field.addSubfield( [ subfield.code, line.substring( subfield.ch + 3, next ? next.ch : line.length ) ] );
                     } );
 
                     field.sourceLine = i;

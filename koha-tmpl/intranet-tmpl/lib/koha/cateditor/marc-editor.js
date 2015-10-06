@@ -47,7 +47,7 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
 
         if ( change.from.ch == change.to.ch - 1 && cm.findMarksAt( { line: change.from.line, ch: change.from.ch + 1 } ).length ) {
             change.cancel();
-        } else if ( change.from.ch == change.to.ch && cm.findMarksAt(change.from).length && !change.text[0].match(/^[$|ǂ‡]$/) ) {
+        } else if ( change.from.ch == change.to.ch && cm.findMarksAt(change.from).length && !change.text[0] == '‡' ) {
             change.cancel();
         }
     }
@@ -68,7 +68,10 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
 
             for (var line = origin; line <= newTo.line; line++) {
                 if ( Preferences.user.fieldWidgets ) Widget.UpdateLine( cm.marceditor, line );
-                if ( change.origin != 'setValue' && change.origin != 'marcWidgetPrefill' && change.origin != 'widget.clearToText' ) cm.addLineClass( line, 'wrapper', 'modified-line' );
+                if ( change.origin != 'setValue' && change.origin != 'marcWidgetPrefill' && change.origin != 'widget.clearToText' ) {
+                    cm.addLineClass( line, 'wrapper', 'modified-line' );
+                    editor.modified = true;
+                }
             }
         }
 
@@ -206,7 +209,7 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             // make it be the double cross.
             var cur = cm.getCursor();
 
-            cm.replaceRange( "$", cur, null );
+            cm.replaceRange( "‡", cur, null );
         },
     };
 
@@ -244,7 +247,7 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             this.contentsStart = start;
             this.code = '@';
         } else {
-            this.contentsStart = start + 3;
+            this.contentsStart = start + 2;
             this.code =  this.field.contents.substr( this.start + 1, 1 );
         }
 
@@ -350,7 +353,7 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             var result = '';
 
             $.each( this.getSubfields(), function() {
-                if ( this.code != '@' ) result += '$' + this.code + ' ';
+                if ( this.code != '@' ) result += '‡' + this.code;
 
                 result += this.getText();
             } );
@@ -358,7 +361,7 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             return result;
         },
         setText: function( text ) {
-            var indicator_match = /^([_ 0-9])([_ 0-9])\$/.exec( text );
+            var indicator_match = /^([_ 0-9])([_ 0-9])\‡/.exec( text );
             if ( indicator_match ) {
                 text = text.substr(2);
                 this.setIndicator1( indicator_match[1] );
@@ -398,7 +401,7 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             if ( this.isControlField ) throw new FieldError('Cannot add subfields to control field');
 
             this._invalidateSubfields();
-            this.cm.replaceRange( '$' + code + ' ', { line: this.line }, null, 'marcAware' );
+            this.cm.replaceRange( '‡' + code, { line: this.line }, null, 'marcAware' );
             var subfields = this.getSubfields();
 
             return subfields[ subfields.length - 1 ];
@@ -410,7 +413,7 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
 
             var subfields = this.getSubfields();
             this._invalidateSubfields();
-            this.cm.replaceRange( '$' + code + ' ', { line: this.line, ch: subfields[position] ? subfields[position].start : null }, null, 'marcAware' );
+            this.cm.replaceRange( '‡' + code, { line: this.line, ch: subfields[position] ? subfields[position].start : null }, null, 'marcAware' );
             subfields = this.getSubfields();
 
             return subfields[ position ];
@@ -501,6 +504,7 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
 
         displayRecord: function( record ) {
             this.cm.setValue( TextMARC.RecordToText(record) );
+            this.modified = false;
         },
 
         getRecord: function() {
@@ -530,7 +534,7 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
 
             if ( tagNumber < '010' ) return { tagNumber: tagNumber, contents: contents }; // No current subfield
 
-            var matcher = /[$|ǂ‡]([a-z0-9%]) /g;
+            var matcher = /‡([a-z0-9%])/g;
             var match;
 
             var subfields = [];

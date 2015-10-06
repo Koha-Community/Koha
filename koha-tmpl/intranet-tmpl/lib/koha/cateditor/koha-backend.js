@@ -56,8 +56,6 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
 
             _framework_mappings[frameworkcode][tagnum] = $.extend( {}, taginfo, { subfields: subfields } );
         } );
-
-        console.dir( _framework_kohafields );
     }
 
     _importFramework( '', defaultFramework.framework );
@@ -138,7 +136,7 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
             $.each( _frameworks[frameworkcode], function( undef, tag ) {
                 var tagnum = tag[0], taginfo = tag[1];
 
-                if ( taginfo[field] == value ) result[tagnum] = true;
+                if ( taginfo[field] == value && taginfo.tab != '-1' ) result[tagnum] = true;
             } );
 
             return result;
