@@ -1,1 +1,0 @@
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('MembershipExpiryDaysNotice',NULL,'Send an account expiration notice that a patron''s card is about to expire after',NULL,'Integer')

@@ -11040,6 +11040,20 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.21.00.034";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
+        VALUES('MembershipExpiryDaysNotice',NULL,'Send an account expiration notice that a patron''s card is about to expire after',NULL,'Integer')
+    });
+    $dbh->do(q{
+        INSERT IGNORE INTO letter (module, code, branchcode, name, title, content, message_transport_type)
+        VALUES('members','MEMBERSHIP_EXPIRY','','Account expiration','Account expiration','Dear <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nYour library card will expire soon, on:\r\n\r\n<<borrowers.dateexpiry>>\r\n\r\nThank you,\r\n\r\nLibrarian\r\n\r\n<<branches.branchname>>', 'email')
+    });
+    print "Upgrade to $DBversion done (Bug 6810: Send membership expiry reminder notices)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
