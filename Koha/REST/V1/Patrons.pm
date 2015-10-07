@@ -1,4 +1,4 @@
-package Koha::REST::V1::Borrowers;
+package Koha::REST::V1::Patrons;
 
 # This file is part of Koha.
 #
@@ -22,7 +22,7 @@ use Mojo::Base 'Mojolicious::Controller';
 use C4::Auth qw( haspermission );
 use Koha::Borrowers;
 
-sub list_borrowers {
+sub list_patrons {
     my ($c, $args, $cb) = @_;
 
     my $user = $c->stash('koha.user');
@@ -30,12 +30,12 @@ sub list_borrowers {
         return $c->$cb({error => "You don't have the required permission"}, 403);
     }
 
-    my $borrowers = Koha::Borrowers->search;
+    my $patrons = Koha::Borrowers->search;
 
-    $c->$cb($borrowers->unblessed, 200);
+    $c->$cb($patrons->unblessed, 200);
 }
 
-sub get_borrower {
+sub get_patron {
     my ($c, $args, $cb) = @_;
 
     my $user = $c->stash('koha.user');
@@ -47,12 +47,12 @@ sub get_borrower {
         return $c->$cb({error => "You don't have the required permission"}, 403);
     }
 
-    my $borrower = Koha::Borrowers->find($args->{borrowernumber});
-    unless ($borrower) {
-        return $c->$cb({error => "Borrower not found"}, 404);
+    my $patron = Koha::Borrowers->find($args->{borrowernumber});
+    unless ($patron) {
+        return $c->$cb({error => "Patron not found"}, 404);
     }
 
-    return $c->$cb($borrower->unblessed, 200);
+    return $c->$cb($patron->unblessed, 200);
 }
 
 1;

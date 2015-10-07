@@ -14,21 +14,21 @@
   },
   "basePath": "/api/v1",
   "paths": {
-    "/borrowers": {
+    "/patrons": {
       "get": {
-        "x-mojo-controller": "Koha::REST::V1::Borrowers",
-        "operationId": "listBorrowers",
-        "tags": ["borrowers"],
+        "x-mojo-controller": "Koha::REST::V1::Patrons",
+        "operationId": "listPatrons",
+        "tags": ["patrons"],
         "produces": [
           "application/json"
         ],
         "responses": {
           "200": {
-            "description": "A list of borrowers",
+            "description": "A list of patrons",
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/borrower"
+                "$ref": "#/definitions/patron"
               }
             }
           },
@@ -41,11 +41,11 @@
         }
       }
     },
-    "/borrowers/{borrowernumber}": {
+    "/patrons/{borrowernumber}": {
       "get": {
-        "x-mojo-controller": "Koha::REST::V1::Borrowers",
-        "operationId": "getBorrower",
-        "tags": ["borrowers"],
+        "x-mojo-controller": "Koha::REST::V1::Patrons",
+        "operationId": "getPatron",
+        "tags": ["patrons"],
         "parameters": [
           {
             "$ref": "#/parameters/borrowernumberPathParam"
@@ -56,9 +56,9 @@
         ],
         "responses": {
           "200": {
-            "description": "A borrower",
+            "description": "A patron",
             "schema": {
-              "$ref": "#/definitions/borrower"
+              "$ref": "#/definitions/patron"
             }
           },
           "403": {
@@ -68,7 +68,7 @@
             }
           },
           "404": {
-            "description": "Borrower not found",
+            "description": "Patron not found",
             "schema": {
               "$ref": "#/definitions/error"
             }
@@ -78,25 +78,214 @@
     }
   },
   "definitions": {
-    "borrower": {
+    "patron": {
       "type": "object",
       "properties": {
         "borrowernumber": {
           "$ref": "#/definitions/borrowernumber"
         },
         "cardnumber": {
-          "description": "library assigned ID number for borrowers"
+          "description": "library assigned ID number for patrons"
         },
         "surname": {
-          "description": "borrower's last name"
+          "description": "patron's last name"
         },
         "firstname": {
-          "description": "borrower's first name"
+          "description": "patron's first name"
+        },
+        "title": {
+          "description": "patron's title"
+        },
+        "othernames": {
+          "description": "any other names associated with the patron"
+        },
+        "initials": {
+          "description": "initials of the patron"
+        },
+        "streetnumber": {
+          "description": "street number of patron's primary address"
+        },
+        "streettype": {
+          "description": "street type of patron's primary address"
+        },
+        "address": {
+          "description": "first address line of patron's primary address"
+        },
+        "address2": {
+          "description": "second address line of patron's primary address"
+        },
+        "city": {
+          "description": "city or town of patron's primary address"
+        },
+        "state": {
+          "description": "state or province of patron's primary address"
+        },
+        "zipcode": {
+          "description": "zip or postal code of patron's primary address"
+        },
+        "country": {
+          "description": "country of patron's primary address"
+        },
+        "email": {
+          "description": "primary email address for patron's primary address"
+        },
+        "phone": {
+          "description": "primary phone number for patron's primary address"
+        },
+        "mobile": {
+          "description": "the other phone number for patron's primary address"
+        },
+        "fax": {
+          "description": "fax number for patron's primary address"
+        },
+        "emailpro": {
+          "description": "secondary email address for patron's primary address"
+        },
+        "phonepro": {
+          "description": "secondary phone number for patron's primary address"
+        },
+        "B_streetnumber": {
+          "description": "street number of patron's alternate address"
+        },
+        "B_streettype": {
+          "description": "street type of patron's alternate address"
+        },
+        "B_address": {
+          "description": "first address line of patron's alternate address"
+        },
+        "B_address2": {
+          "description": "second address line of patron's alternate address"
+        },
+        "B_city": {
+          "description": "city or town of patron's alternate address"
+        },
+        "B_state": {
+          "description": "state or province of patron's alternate address"
+        },
+        "B_zipcode": {
+          "description": "zip or postal code of patron's alternate address"
+        },
+        "B_country": {
+          "description": "country of patron's alternate address"
+        },
+        "B_email": {
+          "description": "email address for patron's alternate address"
+        },
+        "B_phone": {
+          "description": "phone number for patron's alternate address"
+        },
+        "dateofbirth": {
+          "description": "patron's date of birth"
+        },
+        "branchcode": {
+          "description": "code of patron's home branch"
+        },
+        "categorycode": {
+          "description": "code of patron's category"
+        },
+        "dateenrolled": {
+          "description": "date the patron was added to Koha"
+        },
+        "dateexpiry": {
+          "description": "date the patron's card is set to expire"
+        },
+        "gonenoaddress": {
+          "description": "set to 1 if library marked this patron as having an unconfirmed address"
+        },
+        "lost": {
+          "description": "set to 1 if library marked this patron as having lost his card"
+        },
+        "debarred": {
+          "description": "until this date the patron can only check-in"
+        },
+        "debarredcomment": {
+          "description": "comment on the stop of the patron"
+        },
+        "contactname": {
+          "description": "used for children and professionals to include surname or last name of guarantor or organization name"
+        },
+        "contactfirstname": {
+          "description": "used for children to include first name of guarantor"
+        },
+        "contacttitle": {
+          "description": "used for children to include title of guarantor"
+        },
+        "guarantorid": {
+          "description": "borrowernumber used for children or professionals to link them to guarantor or organizations"
+        },
+        "borrowernotes": {
+          "description": "a note on the patron's account"
+        },
+        "relationship": {
+          "description": "used for children to include the relationship to their guarantor"
+        },
+        "ethnicity": {
+          "description": "unused"
+        },
+        "ethnotes": {
+          "description": "unused"
+        },
+        "sex": {
+          "description": "patron's gender"
+        },
+        "password": {
+          "description": "patron's encrypted password"
+        },
+        "flags": {
+          "description": "a number associated with the patron's permissions"
+        },
+        "userid": {
+          "description": "patron's login"
+        },
+        "opacnote": {
+          "description": "a note on the patron's account visible in OPAC and staff client"
+        },
+        "contactnote": {
+          "description": "a note related to patron's alternate address"
+        },
+        "sort1": {
+          "description": "a field that can be used for any information unique to the library"
+        },
+        "sort2": {
+          "description": "a field that can be used for any information unique to the library"
+        },
+        "altcontactfirstname": {
+          "description": "first name of alternate contact for the patron"
+        },
+        "altcontactsurname": {
+          "description": "surname or last name of the alternate contact for the patron"
+        },
+        "altcontactaddress1": {
+          "description": "the first address line for the alternate contact for the patron"
+        },
+        "altcontactaddress2": {
+          "description": "the second address line for the alternate contact for the patron"
+        },
+        "altcontactaddress3": {
+          "description": "the city for the alternate contact for the patron"
+        },
+        "altcontactstate": {
+          "description": "the state for the alternate contact for the patron"
+        },
+        "altcontactzipcode": {
+          "description": "the zipcode for the alternate contact for the patron"
+        },
+        "altcontactcountry": {
+          "description": "the country for the alternate contact for the patron"
+        },
+        "altcontactphone": {
+          "description": "the phone number for the alternate contact for the patron"
+        },
+        "smsalertnumber": {
+          "description": "the mobile phone number where the patron would like to receive notices (if SMS turned on)"
+        },
+        "privacy": {
+          "description": "patron's privacy settings related to their reading history"
         }
       }
     },
     "borrowernumber": {
-      "description": "Borrower internal identifier"
+      "description": "Patron internal identifier"
     },
     "error": {
       "type": "object",
@@ -112,7 +301,7 @@
     "borrowernumberPathParam": {
       "name": "borrowernumber",
       "in": "path",
-      "description": "Internal borrower identifier",
+      "description": "Internal patron identifier",
       "required": true,
       "type": "integer"
     }
