@@ -64,13 +64,9 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
     elsif ($email) {
         $search_results = [ Koha::Borrowers->search( { -or => { email => $email, emailpro => $email, B_email  => $email } } ) ];
     }
-    if ( not $search_results ) {
+    if ( not $search_results || scalar @$search_results > 1 ) {
         $hasError           = 1;
         $errNoBorrowerFound = 1;
-    }
-    elsif ( scalar @$search_results > 1 ) {    # Many matching borrowers
-        $hasError             = 1;
-        $errTooManyEmailFound = 1;
     }
     elsif ( $borrower = shift @$search_results ) {    # One matching borrower
         $username ||= $borrower->userid;
@@ -79,7 +75,7 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
         # Is the given email one of the borrower's ?
         if ( $email && !( grep { $_ eq $email } @emails ) ) {
             $hasError    = 1;
-            $errBadEmail = 1;
+            $errNoBorrowerFound = 1;
         }
 
 # If we dont have an email yet. Get one of the borrower's email or raise an error.
@@ -88,7 +84,7 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
 # It's supposed to get a non-empty string from the @emails array. There's surely a simpler way
         elsif ( !$email && !( $email = shift [ grep { length() } @emails ] ) ) {
             $hasError           = 1;
-            $errNoBorrowerEmail = 1;
+            $errNoBorrowerFound = 1;
         }
 
 # Check if a password reset already issued for this borrower AND we are not asking for a new email

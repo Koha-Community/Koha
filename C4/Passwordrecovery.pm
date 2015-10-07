@@ -19,7 +19,7 @@ package C4::Passwordrecovery;
 
 use Modern::Perl;
 use C4::Context;
-use Math::Random::Secure;
+use Crypt::Eksblowfish::Bcrypt qw(en_base64);
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -111,8 +111,7 @@ sub SendPasswordRecoveryEmail {
 
     # generate UUID
     my @chars = ( "A" .. "Z", "a" .. "z", "0" .. "9" );
-    my $uuid_str;
-    $uuid_str .= $chars[ rand @chars ] for 1 .. 32;
+    my $uuid_str = '$2a$08$'.en_base64(Koha::AuthUtils::generate_salt('weak', 16));
 
     # insert into database
     my $expirydate =
