@@ -16,7 +16,6 @@
   "paths": {
     "/patrons": {
       "get": {
-        "x-mojo-controller": "Koha::REST::V1::Patrons",
         "operationId": "listPatrons",
         "tags": ["patrons"],
         "produces": [
@@ -43,7 +42,6 @@
     },
     "/patrons/{borrowernumber}": {
       "get": {
-        "x-mojo-controller": "Koha::REST::V1::Patrons",
         "operationId": "getPatron",
         "tags": ["patrons"],
         "parameters": [

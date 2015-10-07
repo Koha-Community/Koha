@@ -1,4 +1,4 @@
-package Koha::REST::V1::Patrons;
+package Koha::REST::V1::Patron;
 
 # This file is part of Koha.
 #
@@ -22,7 +22,7 @@ use Mojo::Base 'Mojolicious::Controller';
 use C4::Auth qw( haspermission );
 use Koha::Patrons;
 
-sub list_patrons {
+sub list {
     my ($c, $args, $cb) = @_;
 
     my $user = $c->stash('koha.user');
@@ -35,7 +35,7 @@ sub list_patrons {
     $c->$cb($patrons->unblessed, 200);
 }
 
-sub get_patron {
+sub get {
     my ($c, $args, $cb) = @_;
 
     my $user = $c->stash('koha.user');
