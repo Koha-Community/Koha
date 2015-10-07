@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use DateTime::Duration;
-use Test::More tests => 110;
+use Test::More tests => 113;
 use Test::Warn;
 
 use t::lib::Mocks;
@@ -422,6 +422,24 @@ $my_suggestion->{budgetid} = ''; # If budgetid == '', NULL should be set in DB
 ModSuggestion( $my_suggestion );
 $suggestion = GetSuggestion($my_suggestionid_test_budgetid);
 is( $suggestion->{budgetid}, undef, 'NewSuggestion Should set budgetid to NULL if equals an empty string' );
+
+my $suggestion2 = {
+    title => "Cuisine d'automne",
+    author => "Catherine",
+    itemtype => "LIV"
+};
+
+my $record = MarcRecordFromNewSuggestion($suggestion2);
+
+is("MARC::Record", ref($record), "MarcRecordFromNewSuggestion should return a MARC::Record object");
+
+my ($title_tag, $title_subfield) = C4::Biblio::GetMarcFromKohaField('biblio.title', '');
+
+is($record->field( $title_tag )->subfield( $title_subfield ), "Cuisine d'automne", "Record from suggestion title should be 'Cuisine d'automne'");
+
+my ($author_tag, $author_subfield) = C4::Biblio::GetMarcFromKohaField('biblio.author', '');
+
+is($record->field( $author_tag )->subfield( $author_subfield ), "Catherine", "Record from suggestion author should be 'Catherine'");
 
 subtest 'GetUnprocessedSuggestions' => sub {
     plan tests => 11;

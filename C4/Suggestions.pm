@@ -27,6 +27,7 @@ use C4::Context;
 use C4::Output;
 use C4::Debug;
 use C4::Letters;
+use C4::Biblio qw( GetMarcFromKohaField );
 use Koha::DateUtils;
 use Koha::Suggestions;
 
@@ -48,6 +49,7 @@ our @EXPORT  = qw(
   SearchSuggestion
   DelSuggestionsOlderThan
   GetUnprocessedSuggestions
+  MarcRecordFromNewSuggestion
 );
 
 =head1 NAME
@@ -653,6 +655,46 @@ sub GetUnprocessedSuggestions {
             AND CAST(NOW() AS DATE) - INTERVAL ? DAY = CAST(suggesteddate AS DATE)
     |, { Slice => {} }, $number_of_days_since_the_last_modification );
     return $s;
+}
+
+=head2 MarcRecordFromNewSuggestion
+
+    $record = MarcRecordFromNewSuggestion ( $suggestion )
+
+This function build a marc record object from a suggestion
+
+=cut
+
+sub MarcRecordFromNewSuggestion {
+    my ($suggestion) = @_;
+    my $record = MARC::Record->new();
+
+    my ($title_tag, $title_subfield) = GetMarcFromKohaField('biblio.title', '');
+    $record->append_fields(
+        MARC::Field->new($title_tag, ' ', ' ', $title_subfield => $suggestion->{title})
+    );
+
+    my ($author_tag, $author_subfield) = GetMarcFromKohaField('biblio.author', '');
+    if ($record->field( $author_tag )) {
+        $record->field( $author_tag )->add_subfields( $author_subfield => $suggestion->{author} );
+    }
+    else {
+        $record->append_fields(
+            MARC::Field->new($author_tag, ' ', ' ', $author_subfield => $suggestion->{author})
+        );
+    }
+
+    my ($it_tag, $it_subfield) = GetMarcFromKohaField('biblioitems.itemtype', '');
+    if ($record->field( $it_tag )) {
+        $record->field( $it_tag )->add_subfields( $it_subfield => $suggestion->{itemtype} );
+    }
+    else {
+        $record->append_fields(
+            MARC::Field->new($it_tag, ' ', ' ', $it_subfield => $suggestion->{author})
+        );
+    }
+
+    return $record;
 }
 
 1;

@@ -27,6 +27,7 @@ use C4::Output;
 use C4::Suggestions;
 use C4::Koha;
 use C4::Scrubber;
+use C4::Search qw( FindDuplicate );
 
 use Koha::AuthorisedValues;
 use Koha::Libraries;
@@ -39,6 +40,7 @@ my $op              = $input->param('op');
 my $suggestion      = $input->Vars;
 my $negcaptcha      = $input->param('negcap');
 my $suggested_by_anyone = $input->param('suggested_by_anyone') || 0;
+my $need_confirm    = 0;
 
 # If a spambot accidentally populates the 'negcap' field in the sugesstions form, then silently skip and return.
 if ($negcaptcha ) {
@@ -56,7 +58,7 @@ if ( ! C4::Context->preference('suggestion') ) {
     exit;
 }
 
-delete $suggestion->{$_} foreach qw<op suggested_by_anyone>;
+delete $suggestion->{$_} foreach qw<op suggested_by_anyone confirm>;
 $op = 'else' unless $op;
 
 my ( $template, $borrowernumber, $cookie, @messages );
@@ -114,6 +116,16 @@ if ( $op eq 'else' ) {
     }
 }
 
+if ( $op eq "add_validate" ) {
+    $op = 'add_confirm';
+    my $biblio = MarcRecordFromNewSuggestion($suggestion);
+    if ( my ($duplicatebiblionumber, $duplicatetitle) = FindDuplicate($biblio) ) {
+        push @messages, { type => 'error', code => 'biblio_exists', id => $duplicatebiblionumber, title => $duplicatetitle };
+        $need_confirm = 1;
+        $op = 'add';
+    }
+}
+
 my $patrons_pending_suggestions_count = 0;
 if ( $borrowernumber && C4::Context->preference("MaxOpenSuggestions") ne '' ) {
     $patrons_pending_suggestions_count = scalar @{ SearchSuggestion( { suggestedby => $borrowernumber, STATUS => 'ASKED' } ) } ;
@@ -164,6 +176,7 @@ if ( $op eq "add_confirm" ) {
     $op = 'else';
 }
 
+my $suggestions_loop = &SearchSuggestion({suggestedby => $suggestion->{suggestedby}});
 if ( $op eq "delete_confirm" ) {
     my @delete_field = $input->multi_param("delete_field");
     foreach my $delete_field (@delete_field) {
@@ -228,6 +241,7 @@ $template->param(
     suggestionsview       => 1,
     suggested_by_anyone   => $suggested_by_anyone,
     patrons_pending_suggestions_count => $patrons_pending_suggestions_count,
+    need_confirm => $need_confirm,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output, undef, { force_no_caching => 1 };
