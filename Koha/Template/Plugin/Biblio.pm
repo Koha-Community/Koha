@@ -23,6 +23,10 @@ use Template::Plugin;
 use base qw( Template::Plugin );
 
 use Koha::Holds;
+use Koha::Biblios;
+use Koha::Patrons;
+use Koha::ArticleRequests;
+use Koha::ArticleRequest::Status;
 
 sub HoldsCount {
     my ( $self, $biblionumber ) = @_;
@@ -30,6 +34,33 @@ sub HoldsCount {
     my $holds = Koha::Holds->search( { biblionumber => $biblionumber } );
 
     return $holds->count();
+}
+
+sub ArticleRequestsActiveCount {
+    my ( $self, $biblionumber ) = @_;
+
+    my $ar = Koha::ArticleRequests->search(
+        {
+            biblionumber => $biblionumber,
+            status       => [
+                -or => [
+                    status => Koha::ArticleRequest::Status::Pending,
+                    status => Koha::ArticleRequest::Status::Processing
+                ]
+            ]
+        }
+    );
+
+    return $ar->count();
+}
+
+sub CanArticleRequest {
+    my ( $self, $biblionumber, $borrowernumber ) = @_;
+
+    my $biblio = Koha::Biblios->find( $biblionumber );
+    my $borrower = Koha::Patrons->find( $borrowernumber );
+
+    return $biblio ? $biblio->can_article_request( $borrower ) : 0;
 }
 
 1;

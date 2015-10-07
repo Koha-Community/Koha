@@ -359,6 +359,73 @@ sub move_to_deleted {
     return Koha::Database->new->schema->resultset('Deletedborrower')->create($patron_infos);
 }
 
+=head3 article_requests
+
+my @requests = $borrower->article_requests();
+my $requests = $borrower->article_requests();
+
+Returns either a list of ArticleRequests objects,
+or an ArtitleRequests object, depending on the
+calling context.
+
+=cut
+
+sub article_requests {
+    my ( $self ) = @_;
+
+    $self->{_article_requests} ||= Koha::ArticleRequests->search({ borrowernumber => $self->borrowernumber() });
+
+    return $self->{_article_requests};
+}
+
+=head3 article_requests_current
+
+my @requests = $patron->article_requests_current
+
+Returns the article requests associated with this patron that are incomplete
+
+=cut
+
+sub article_requests_current {
+    my ( $self ) = @_;
+
+    $self->{_article_requests_current} ||= Koha::ArticleRequests->search(
+        {
+            borrowernumber => $self->id(),
+            -or          => [
+                { status => Koha::ArticleRequest::Status::Pending },
+                { status => Koha::ArticleRequest::Status::Processing }
+            ]
+        }
+    );
+
+    return $self->{_article_requests_current};
+}
+
+=head3 article_requests_finished
+
+my @requests = $biblio->article_requests_finished
+
+Returns the article requests associated with this patron that are completed
+
+=cut
+
+sub article_requests_finished {
+    my ( $self, $borrower ) = @_;
+
+    $self->{_article_requests_finished} ||= Koha::ArticleRequests->search(
+        {
+            borrowernumber => $self->id(),
+            -or          => [
+                { status => Koha::ArticleRequest::Status::Completed },
+                { status => Koha::ArticleRequest::Status::Canceled }
+            ]
+        }
+    );
+
+    return $self->{_article_requests_finished};
+}
+
 =head3 type
 
 =cut

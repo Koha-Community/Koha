@@ -23,6 +23,8 @@ use Carp;
 
 use Koha::Database;
 
+use C4::Context;
+use C4::Circulation qw(GetIssuingRule);
 use Koha::Item::Transfer;
 use Koha::Patrons;
 use Koha::Libraries;
@@ -121,6 +123,50 @@ sub last_returned_by {
 
         return $self->{_last_returned_by};
     }
+}
+
+=head3 can_article_request
+
+my $bool = $item->can_article_request( $borrower )
+
+Returns true if item can be specifically requested
+
+$borrower must be a Koha::Patron object
+
+=cut
+
+sub can_article_request {
+    my ( $self, $borrower ) = @_;
+
+    my $rule = $self->article_request_type($borrower);
+
+    return 1 if $rule && $rule ne 'no' && $rule ne 'bib_only';
+    return q{};
+}
+
+=head3 article_request_type
+
+my $type = $item->article_request_type( $borrower )
+
+returns 'yes', 'no', 'bib_only', or 'item_only'
+
+$borrower must be a Koha::Patron object
+
+=cut
+
+sub article_request_type {
+    my ( $self, $borrower ) = @_;
+
+    my $branch_control = C4::Context->preference('HomeOrHoldingBranch');
+    my $branchcode =
+        $branch_control eq 'homebranch'    ? $self->homebranch
+      : $branch_control eq 'holdingbranch' ? $self->holdingbranch
+      :                                      undef;
+    my $borrowertype = $borrower->categorycode;
+    my $itemtype = $self->effective_itemtype();
+    my $rules = GetIssuingRule( $borrowertype, $itemtype, $branchcode );
+
+    return $rules->{article_requests} || q{};
 }
 
 =head3 type

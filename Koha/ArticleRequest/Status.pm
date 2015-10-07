@@ -1,4 +1,4 @@
-package Koha::Biblios;
+package Koha::ArticleRequest::Status;
 
 # Copyright ByWater Solutions 2015
 #
@@ -19,38 +19,20 @@ package Koha::Biblios;
 
 use Modern::Perl;
 
-use Carp;
-
-use Koha::Database;
-
-use Koha::Biblio;
-
-use base qw(Koha::Objects);
-
-=head1 NAME
-
-Koha::Biblios - Koha Biblio object set class
-
-=head1 API
-
-=head2 Class Methods
-
-=cut
-
-=head3 type
-
-=cut
-
-sub _type {
-    return 'Biblio';
+sub Pending {
+    return 'PENDING';
 }
 
-=head3 object_class
+sub Processing {
+    return 'PROCESSING';
+}
 
-=cut
+sub Completed {
+    return 'COMPLETED';
+}
 
-sub object_class {
-    return 'Koha::Biblio';
+sub Canceled {
+    return 'CANCELED';
 }
 
 =head1 AUTHOR
