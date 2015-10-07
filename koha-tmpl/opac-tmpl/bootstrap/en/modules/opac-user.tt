@@ -134,6 +134,7 @@ Using this account is not recommended because some parts of Koha will not functi
                                 [% IF ( BORROWER_INFO.amountlessthanzero ) %]<li><a href="#opac-user-fines">Credits ([% BORROWER_INFO.amountoutstanding | $Price %])</a></li>[% END %]
                             [% END %]
                             [% IF ( RESERVES.count ) %]<li><a href="#opac-user-holds">Holds ([% RESERVES.count %])</a></li>[% END %]
+                            [% IF Koha.Preference('ArticleRequests') && borrower.article_requests_current %]<li><a href="#opac-user-article-requests">Article requests ([% borrower.article_requests_current.count %])</a></li>[% END %]
                         </ul>
 
                         <div id="opac-user-checkouts">
@@ -716,6 +717,105 @@ Using this account is not recommended because some parts of Koha will not functi
                             [% END %]
                         </div> <!-- / #opac-user-holds -->
                         [% END # / #RESERVES.count %]
+
+                        [% IF Koha.Preference('ArticleRequests') && borrower.article_requests_current.count %]
+                            <div id="opac-user-article-requests">
+                                <table id="article-requests-table" class="table table-bordered table-striped">
+                                    <caption>Article requests <span class="count">([% borrower.article_requests_current.count %] total)</span></caption>
+                                    <!-- RESERVES TABLE ROWS -->
+                                    <thead>
+                                        <tr>
+                                            <th class="anti-the">Record title</th>
+                                            <th class="psort">Placed on</th>
+                                            <th class="anti-the">Title</th>
+                                            <th>Author</th>
+                                            <th>Volume</th>
+                                            <th>Issue</th>
+                                            <th>Date</th>
+                                            <th>Pages</th>
+                                            <th>Chapters</th>
+                                            <th>Notes</th>
+                                            <th>Status</th>
+                                            <th>Pickup library</th>
+                                            <th class="nosort">&nbsp;</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    [% FOREACH ar IN borrower.article_requests_current %]
+                                            <td class="article-request-title">
+                                                <a class="article-request-title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ar.biblionumber %]">
+                                                    [% ar.biblio.title %]
+                                                    [% ar.item.enumchron %]
+                                                </a>
+                                                [% ar.biblio.author %]
+                                                [% IF ar.itemnumber %] <i>(only [% ar.item.barcode %])</i>[% END %]
+                                            </td>
+
+                                            <td class="article-request-created_on">
+                                                [% ar.created_on | $KohaDates %]
+                                            </td>
+
+                                            <td class="article-request-title">
+                                                [% ar.title %]
+                                            </td>
+
+                                            <td class="article-request-author">
+                                                [% ar.author %]
+                                            </td>
+
+                                            <td class="article-request-volume">
+                                                [% ar.volume %]
+                                            </td>
+
+                                            <td class="article-request-issue">
+                                                [% ar.issue %]
+                                            </td>
+
+                                            <td class="article-request-date">
+                                                [% ar.date %]
+                                            </td>
+
+                                            <td class="article-request-pages">
+                                                [% ar.pages %]
+                                            </td>
+
+                                            <td class="article-request-chapters">
+                                                [% ar.chapters %]
+                                            </td>
+
+                                            <td class="article-request-patron-notes">
+                                                [% ar.patron_notes %]
+                                            </td>
+
+                                            <td class="article-request-status">
+                                                [% IF ar.status == 'PENDING' %]
+                                                    Pending
+                                                [% ELSIF ar.status == 'PROCESSING' %]
+                                                    Processing
+                                                [% ELSIF ar.status == 'COMPLETED' %]
+                                                    Completed
+                                                [% ELSIF ar.status == 'CANCELED' %]
+                                                    Canceled
+                                                [% END %]
+                                            </td>
+
+                                            <td class="article-request-branchcode">
+                                                [% ar.branch.branchname %]
+                                            </td>
+
+                                            <td class="article-request-cancel">
+                                                <span class="tdlabel">Cancel:</span>
+                                                <a class="btn btn-mini btn-danger" href="opac-article-request-cancel.pl?id=[% ar.id %]" onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);"><i class="icon-remove icon-white"></i> Cancel</a>
+                                                <!-- TODO: replace MSG_CONFIRM_DELETE_HOLD with correct message -->
+                                            </td>
+                                        </tr>
+                                    [% END %]
+                                </tbody>
+                            </table>
+                        </div> <!-- / #opac-user-article-requests -->
+                    [% END %]
+
                     </div> <!-- /#opac-user-views -->
                 </div> <!-- /#userdetails -->
             </div> <!-- /.span10 -->

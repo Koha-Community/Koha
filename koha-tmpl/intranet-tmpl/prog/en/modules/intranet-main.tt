@@ -124,8 +124,17 @@ var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this news item? This
                     || ( CAN_user_borrowers && pending_borrower_modifications )
                     || ( CAN_user_acquisition && pendingsuggestions )
                     || ( CAN_user_borrowers && pending_discharge_requests )
+                    || pending_article_requests
             ) %]
                 <div id="area-pending">
+                    [% IF pending_article_requests %]
+                    <div class="pending-info" id="article_requests_pending">
+
+                        <a href="/cgi-bin/koha/circ/article-requests.pl">Article requests</a>:
+                        <span class="pending-number-link">[% pending_article_requests %]</span>
+                    </div>
+                    [% END %]
+
                     [% IF ( CAN_user_acquisition && pendingsuggestions ) %]
                     <div class="pending-info" id="suggestions_pending">
 

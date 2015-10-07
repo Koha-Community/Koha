@@ -1,5 +1,7 @@
+[% USE Koha %]
 [% USE Biblio %]
 [% SET biblio_object_id = object || biblionumber %]
+
 <div id="menu">
 <ul>
     [% IF ( detailview ) %]<li class="active">[% ELSE %]<li>[% END %]
@@ -26,6 +28,11 @@
     [% IF ( holdsview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblio_object_id | url  %]">Holds ([% Biblio.HoldsCount( biblio_object_id ) %])</a></li>
     [% END %]
     [% IF ( EasyAnalyticalRecords ) %][% IF ( analyze ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio_object_id | url  %]&amp;analyze=1">Analytics</a></li>[% END %]
+
+    [% IF Koha.Preference('ArticleRequests') %]
+        [% IF ( article_requests_view ) %]<li class="active">[% ELSE %]<li>[% END %]
+        <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% IF ( object ) %][% object %][% ELSE %][% biblionumber %][% END %]">Article requests ([% Biblio.ArticleRequestsActiveCount( biblio_object_id ) %])</a></li>
+    [% END %]
 
     [% IF ( subscriptionsnumber ) %]<li><a href="/cgi-bin/koha/serials/serials-search.pl?searched=1&amp;biblionumber=[% biblio_object_id | url  %]">Subscription(s)</a></li>[% END %]
 </ul>

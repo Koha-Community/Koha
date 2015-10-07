@@ -164,7 +164,7 @@ sub article_request_type {
       :                                      undef;
     my $borrowertype = $borrower->categorycode;
     my $itemtype = $self->effective_itemtype();
-    my $rules = GetIssuingRule( $borrowertype, $itemtype, $branchcode );
+    my $rules = C4::Circulation::GetIssuingRule( $borrowertype, $itemtype, $branchcode );
 
     return $rules->{article_requests} || q{};
 }

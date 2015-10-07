@@ -30,6 +30,7 @@ use C4::Tags qw/get_count_by_tag_status/;
 use Koha::Patron::Modifications;
 use Koha::Patron::Discharge;
 use Koha::Reviews;
+use Koha::ArticleRequests;
 
 my $query = new CGI;
 
@@ -67,6 +68,12 @@ my $pendingtags        = get_count_by_tag_status(0);
 my $pendingsuggestions = CountSuggestion("ASKED");
 my $pending_borrower_modifications = Koha::Patron::Modifications->pending_count( $branch );
 my $pending_discharge_requests = Koha::Patron::Discharge::count({ pending => 1 });
+my $pending_article_requests = Koha::ArticleRequests->count(
+    {
+        status => Koha::ArticleRequest::Status::Pending,
+        $branch ? ( branchcode => $branch ) : (),
+    }
+);
 
 $template->param(
     pendingcomments                => $pendingcomments,
@@ -74,6 +81,7 @@ $template->param(
     pendingsuggestions             => $pendingsuggestions,
     pending_borrower_modifications => $pending_borrower_modifications,
     pending_discharge_requests     => $pending_discharge_requests,
+    pending_article_requests       => $pending_article_requests,
 );
 
 #

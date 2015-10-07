@@ -261,6 +261,10 @@ CAN_user_serials_create_subscription ) %]
     [% END %]
 [% END %]
 
+[% IF Koha.Preference('ArticleRequests') %]
+    <div class="btn-group"><a id="placehold" class="btn btn-small" href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% biblionumber %]"><i class="fa fa-file-text-o"></i> Request article</a></div>
+[% END %]
+
 </div>
 
     <!--Modal for Dublin Core-->

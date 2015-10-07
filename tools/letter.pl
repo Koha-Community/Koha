@@ -234,6 +234,10 @@ sub add_form {
         } else {
             push @{$field_selection}, add_fields('issues');
         }
+
+        if ( $module eq 'circulation' and $code =~ /^AR_/  ) {
+            push @{$field_selection}, add_fields('article_requests');
+        }
     }
 
     $template->param(

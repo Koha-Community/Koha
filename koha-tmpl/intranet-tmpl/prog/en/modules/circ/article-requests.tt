@@ -1,0 +1,409 @@
+[% USE KohaDates %]
+[% USE ItemTypes %]
+[% USE Branches %]
+[% USE AuthorisedValues %]
+
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Circulation &rsaquo; Article requests</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<style type="text/css"> p { margin-top: 0; }</style>
+</head>
+
+<body id="circ_view_holdsqueue" class="circ">
+    [% INCLUDE 'header.inc' %]
+    [% INCLUDE 'cat-search.inc' %]
+
+    <script type="text/javascript">//<![CDATA[
+        $(document).ready(function() {
+            $('#article-request-tabs').tabs();
+
+            [% IF article_requests_pending.count %]
+                $(".ar-pending-none").hide();
+            [% END %]
+
+            [% IF article_requests_processing.count %]
+                $(".ar-processing-none").hide();
+            [% END %]
+        });
+
+        function PrintSlip(link) {
+            window.open(link, 'popup', 'width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');
+        }
+
+        function Cancel( id, a ) {
+            notes = prompt(_("Reason for cancelation:"));
+            if ( notes == null ) {
+                return;
+            }
+
+            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/loading-small.gif"/>');
+            a.closest('div').hide();
+            $.ajax({
+                type: "POST",
+                url: '/cgi-bin/koha/svc/article_request',
+                data: {
+                    action: 'cancel',
+                    id: id,
+                    notes: notes
+                },
+                success: function( data ) {
+                    a.closest('tr').remove();
+                    UpdateTabCounts()
+                },
+                dataType: 'json'
+            });
+        }
+
+        function Process( id, a ) {
+            var table_row = a.closest('tr').clone();
+            table_row.find('.ar-process-request').remove();
+
+            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/loading-small.gif"/>');
+            a.closest('div').hide();
+            $.ajax({
+                type: "POST",
+                url: '/cgi-bin/koha/svc/article_request',
+                data: {
+                    action: 'process',
+                    id: id,
+                },
+                success: function( data ) {
+                    a.closest('tr').remove();
+                    $("#article-requests-processing-table").append( table_row );
+                    $("#article-requests-processing-table .ar-processing-none").hide();
+                    UpdateTabCounts()
+                },
+                dataType: 'json'
+            });
+        }
+
+        function Complete( id, a ) {
+            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/loading-small.gif"/>');
+            a.closest('div').hide();
+            $.ajax({
+                type: "POST",
+                url: '/cgi-bin/koha/svc/article_request',
+                data: {
+                    action: 'complete',
+                    id: id,
+                },
+                success: function( data ) {
+                    a.closest('tr').remove();
+                    UpdateTabCounts()
+                },
+                dataType: 'json'
+            });
+        }
+
+        function UpdateTabCounts() {
+            var pending_count = $('#article-requests-pending-table tbody tr.ar-row').length;
+            $("#ar_pending_count").html( pending_count );
+            if ( pending_count == 0 ) $(".ar-pending-none").show();
+
+            var processing_count = $('#article-requests-processing-table tbody tr.ar-row').length;
+            $("#ar_processing_count").html( processing_count );
+            if ( processing_count == 0 ) $(".ar-processing-none").show();
+        }
+    //]]></script>
+
+    <div id="breadcrumbs">
+        <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        &rsaquo;
+        <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
+        &rsaquo;
+        <a href="/cgi-bin/koha/circ/article-requests.pl">Article requests</a>
+    </div>
+
+<div id="doc" class="yui-t7">
+    <div id="bd">
+        <div id="yui-main">
+            <div class="yui-g">
+
+                <h1>Article requests</h1>
+
+                <form id="ar-branchcode-form" method="post">
+                    <select name="branchcode" id="branchcode">
+                        <option value="">All libraries</option>
+                        [% FOREACH b IN Branches.all %]
+                            [% IF b.branchcode == branchcode %]
+                                <option value="[% b.branchcode %]" selected="selected">[% b.branchname %]</option>
+                            [% ELSE %]
+                                <option value="[% b.branchcode %]">[% b.branchname %]</option>
+                            [% END %]
+                        [% END %]
+                    </select>
+                    <button type="submit" class="btn btn-small" type="submit">
+                        <i class="fa fa-refresh"></i> Update
+                    </button>
+                </form>
+
+                <div id="article-request-tabs" class="toptabs">
+                    <ul>
+                        <li>
+                            <a href="#article-requests-pending">
+                                Pending (<span id="ar_pending_count">[% article_requests_pending.count %]</span>)
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#article-requests-processing">
+                                Processing (<span id="ar_processing_count">[% article_requests_processing.count %]</span>)
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div id="article-requests-pending">
+                        <table id="article-requests-pending-table">
+                            <thead>
+                                <tr>
+                                    <th class="ar-title">Title</th>
+                                    <th class="ar-request">Requested article</th>
+                                    <th class="ar-collection">Collection</th>
+                                    <th class="ar-itemtype">Item type</th>
+                                    <th class="ar-callnumber">Call number</th>
+                                    <th class="ar-copynumber">Copy number</th>
+                                    <th class="ar-enumchron">Enumeration</th>
+                                    <th class="ar-barcode">Barcode</th>
+                                    <th class="ar-patron">Patron</th>
+                                    <th class="ar-date">Date</th>
+                                    <th class="ar-actions">Actions</th>
+                                </tr>
+                            </thead>
+
+                             <tbody>
+                                <tr class="ar-pending-none">
+                                    <td colspan="11">
+                                        There are no pending article requests at this time.
+                                    </td>
+                                </tr>
+
+                                [% FOREACH ar IN article_requests_pending %]
+                                    <tr class="ar-row ar-pending">
+                                        <td class="ar-title">
+                                            <p>
+                                                <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% ar.biblionumber %]">
+                                                    <strong>[% ar.biblio.title | html %]</strong>
+                                                    [% FOREACH s IN itemsloo.subtitle %] [% s %][% END %]
+                                                </a>
+                                            </p>
+
+                                            <p>
+                                                <div class="ar-biblionumber content_hidden">[% ar.biblionumber %]</div>
+                                                <div class="ar-author">[% ar.biblio.author %]</div>
+                                                <div class="ar-pubdata">
+                                                    [% ar.biblio.biblioitem.publishercode %]
+
+                                                    [% IF ar.biblio.biblioitem.publicationyear %]
+                                                        , [% ar.biblio.biblioitem.publicationyear %]
+                                                    [% ELSIF ar.biblio.copyrightdate %]
+                                                        , [% ar.biblio.copyrightdate %]
+                                                    [% END %]
+
+                                                    [% IF ar.biblio.biblioitem.pages %]
+                                                        : [% ar.biblio.biblioitem.pages %]
+                                                    [% END %]
+
+                                                    [%  r.biblio.biblioitem.size %]
+
+                                                    [% IF ar.biblio.biblioitem.isbn %]
+                                                        ISBN: [% ar.biblio.biblioitem.isbn %]
+                                                    [% END %]
+                                                </div>
+                                            </p>
+                                        </td>
+                                        <td class="ar-request">
+                                            [% IF ar.title %]        <p><strong>Title:</strong>        [% ar.title %]        </p> [% END %]
+                                            [% IF ar.author %]       <p><strong>Author:</strong>       [% ar.author %]       </p> [% END %]
+                                            [% IF ar.volume %]       <p><strong>Volume:</strong>       [% ar.volume %]       </p> [% END %]
+                                            [% IF ar.issue %]        <p><strong>Issue:</strong>        [% ar.issue %]        </p> [% END %]
+                                            [% IF ar.date %]         <p><strong>Date:</strong>         [% ar.date %]         </p> [% END %]
+                                            [% IF ar.pages %]        <p><strong>Pages:</strong>        [% ar.pages %]        </p> [% END %]
+                                            [% IF ar.chapters %]     <p><strong>Chapters:</strong>     [% ar.chapters %]     </p> [% END %]
+                                            [% IF ar.patron_notes %] <p><strong>Patron notes:</strong> [% ar.patron_notes %] </p> [% END %]
+                                        </td>
+                                        <td class="ar-collection">[% AuthorisedValues.GetByCode( 'CCODE', ar.item.ccode ) %]</td>
+                                        <td class="ar-itemtype">[% ItemTypes.GetDescription( ar.item.effective_itemtype ) %]</td>
+                                        <td class="ar-callnumber">
+                                            [% IF ar.item.location %]
+                                                <em>[% AuthorisedValues.GetByCode( 'LOC', ar.item.location ) %]</em>
+                                            [% END %]
+
+                                            [% ar.item.itemcallnumber %]
+                                        </td>
+                                        <td class="ar-copynumber">[% ar.item.copynumber %]</td>
+                                        <td class="ar-enumchron">[% ar.item.enumchron %]</td>
+                                        <td class="ar-barcode">[% ar.item.barcode %]</td>
+                                        <td class="ar-patron">
+                                            <p>
+                                                <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% ar.borrower.cardnumber %]">
+                                                    [% ar.borrower.surname %][% IF ar.borrower.firstname %], [% ar.borrower.firstname %][% END %] ([% ar.borrower.cardnumber %])
+                                                </a>
+                                            </p>
+
+                                            <p>[% ar.borrower.phone %]</p>
+                                        </td>
+                                        <td class="ar-date"><span title="[% ar.created_on %]">[% ar.created_on | $KohaDates %]</span></td>
+                                        <td class="ar-actions">
+                                            <div class="dropdown">
+                                                <a class="btn btn-mini dropdown-toggle" id="ar-actions" role="button" data-toggle="dropdown" href="#">
+                                                    Actions <b class="caret"></b>
+                                                </a>
+
+                                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="ar-actions">
+                                                    <li>
+                                                        <a class="ar-process-request" href="#" onclick="Process( [% ar.id %], $(this) ); return false;">
+                                                            <i class="icon-ok-circle"></i>
+                                                            Process request
+                                                        </a>
+
+                                                        <a class="ar-complete-request" href="#" onclick="Complete( [% ar.id %], $(this) ); return false;">
+                                                            <i class="icon-ok-circle"></i>
+                                                            Complete request
+                                                        </a>
+
+                                                        <a class="ar-cancel-request" href="#" onclick="Cancel( [% ar.id %], $(this) ); return false;">
+                                                            <i class="icon-remove-circle"></i>
+                                                            Cancel request
+                                                        </a>
+
+                                                        <a class="ar-print-request" href="#" onclick="PrintSlip('article-request-slip.pl?id=[% ar.id %]'); return false;">
+                                                            <i class="icon-print"></i>
+                                                            Print slip
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="article-requests-processing">
+                        <table id="article-requests-processing-table">
+                            <thead>
+                                <tr>
+                                    <th class="ar-title">Title</th>
+                                    <th class="ar-request">Requested article</th>
+                                    <th class="ar-collection">Collection</th>
+                                    <th class="ar-itemtype">Item type</th>
+                                    <th class="ar-callnumber">Call number</th>
+                                    <th class="ar-copynumber">Copy number</th>
+                                    <th class="ar-enumchron">Enumeration</th>
+                                    <th class="ar-barcode">Barcode</th>
+                                    <th class="ar-patron">Patron</th>
+                                    <th class="ar-date">Date</th>
+                                    <th class="ar-actions">Actions</th>
+                                </tr>
+                            </thead>
+
+                             <tbody>
+                                <tr class="ar-processing-none">
+                                    <td colspan="11">
+                                        There are no article requests in processing at this time.
+                                    </td>
+                                </tr>
+
+                                [% FOREACH ar IN article_requests_processing %]
+                                    <tr class="ar-row ar-processing">
+                                        <td class="ar-title">
+                                            <p>
+                                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ar.biblionumber %]">
+                                                    <strong>[% ar.biblio.title | html %]</strong>
+                                                    [% FOREACH s IN itemsloo.subtitle %] [% s %][% END %]
+                                                </a>
+                                            </p>
+
+                                            <p>
+                                                <div class="ar-biblionumber content_hidden">[% ar.biblionumber %]</div>
+                                                <div class="ar-author">[% ar.biblio.author %]</div>
+                                                <div class="ar-pubdata">
+                                                    [% ar.biblio.biblioitem.publishercode %]
+
+                                                    [% IF ar.biblio.biblioitem.publicationyear %]
+                                                        , [% ar.biblio.biblioitem.publicationyear %]
+                                                    [% ELSIF ar.biblio.copyrightdate %]
+                                                        , [% ar.biblio.copyrightdate %]
+                                                    [% END %]
+
+                                                    [% IF ar.biblio.biblioitem.pages %]
+                                                        : [% ar.biblio.biblioitem.pages %]
+                                                    [% END %]
+
+                                                    [%  r.biblio.biblioitem.size %]
+
+                                                    [% IF ar.biblio.biblioitem.isbn %]
+                                                        ISBN: [% ar.biblio.biblioitem.isbn %]
+                                                    [% END %]
+                                                </div>
+                                            </p>
+                                        </td>
+                                        <td class="ar-request">
+                                            [% IF ar.title %]        <p><strong>Title:</strong>        [% ar.title %]        </p> [% END %]
+                                            [% IF ar.author %]       <p><strong>Author:</strong>       [% ar.author %]       </p> [% END %]
+                                            [% IF ar.volume %]       <p><strong>Volume:</strong>       [% ar.volume %]       </p> [% END %]
+                                            [% IF ar.issue %]        <p><strong>Issue:</strong>        [% ar.issue %]        </p> [% END %]
+                                            [% IF ar.date %]         <p><strong>Date:</strong>         [% ar.date %]         </p> [% END %]
+                                            [% IF ar.pages %]        <p><strong>Pages:</strong>        [% ar.pages %]        </p> [% END %]
+                                            [% IF ar.chapters %]     <p><strong>Chapters:</strong>     [% ar.chapters %]     </p> [% END %]
+                                            [% IF ar.patron_notes %] <p><strong>Patron notes:</strong> [% ar.patron_notes %] </p> [% END %]
+                                        </td>
+                                        <td class="ar-collection">[% AuthorisedValues.GetByCode( 'CCODE', ar.item.ccode ) %]</td>
+                                        <td class="ar-itemtype">[% ItemTypes.GetDescription( ar.item.effective_itemtype ) %]</td>
+                                        <td class="ar-callnumber">
+                                            [% IF ar.item.location %]
+                                                <em>[% AuthorisedValues.GetByCode( 'LOC', ar.item.location ) %]</em>
+                                            [% END %]
+
+                                            [% ar.item.itemcallnumber %]
+                                        </td>
+                                        <td class="ar-copynumber">[% ar.item.copynumber %]</td>
+                                        <td class="ar-enumchron">[% ar.item.enumchron %]</td>
+                                        <td class="ar-barcode">[% ar.item.barcode %]</td>
+                                        <td class="ar-patron">
+                                            <p>
+                                                <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% ar.borrower.cardnumber %]">
+                                                    [% ar.borrower.surname %][% IF ar.borrower.firstname %], [% ar.borrower.firstname %][% END %] ([% ar.borrower.cardnumber %])
+                                                </a>
+                                            </p>
+
+                                            <p>[% ar.borrower.phone %]</p>
+                                        </td>
+                                        <td class="ar-date"><span title="[% ar.created_on %]">[% ar.created_on | $KohaDates %]</span></td>
+                                        <td class="ar-actions">
+                                            <div class="dropdown">
+                                                <a class="btn btn-mini dropdown-toggle" id="ar-actions" role="button" data-toggle="dropdown" href="#">
+                                                    Actions <b class="caret"></b>
+                                                </a>
+
+                                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="ar-actions">
+                                                    <li>
+                                                        <a href="#" onclick="Complete( [% ar.id %], $(this) ); return false;">
+                                                            <i class="icon-ok-circle"></i>
+                                                            Complete request
+                                                        </a>
+
+                                                        <a href="#" onclick="Cancel( [% ar.id %], $(this) ); return false;">
+                                                            <i class="icon-remove-circle"></i>
+                                                            Cancel request
+                                                        </a>
+
+                                                        <a href="#" onclick="PrintSlip('article-request-slip.pl?id=[% ar.id %]'); return false;">
+                                                            <i class="icon-print"></i>
+                                                            Print slip
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+[% INCLUDE 'intranet-bottom.inc' %]

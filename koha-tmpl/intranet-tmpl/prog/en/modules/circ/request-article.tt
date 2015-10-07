@@ -1,0 +1,380 @@
+[% USE KohaDates %]
+[% USE Branches %]
+[% USE ItemTypes %]
+[% SET article_requests_view = 1 %]
+[% SET biblionumber = biblio.biblionumber %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Circulation &rsaquo; Request article</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
+
+<script type="text/javascript">
+// <![CDATA[
+$('#current-article-requests').ready(function() {
+    $(".hide").hide();
+});
+
+$(document).ready(function() {
+    $( "#patron" ).autocomplete({
+        source: "/cgi-bin/koha/circ/ysearch.pl",
+        minLength: 3,
+        select: function( event, ui ) {
+            $( "#patron" ).val( ui.item.cardnumber );
+            $( "#holds_patronsearch" ).submit();
+            return false;
+        }
+    })
+    .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+        return $( "<li></li>" )
+        .data( "ui-autocomplete-item", item )
+        .append( "<a>" + item.surname + ", " + item.firstname +
+                 " (" + item.cardnumber + ") <small>" + item.address +
+                 " " + item.city + " " + item.zipcode + " " +
+                 item.country + "</small></a>" )
+        .appendTo( ul );
+    };
+
+    $( ".ar-update-branchcode" ).on('focus', function(){
+        previous_branchcode = this.value;
+    }).on('change', function(){
+        var branchcode = this.value;
+        var c = confirm(_("Are you sure you want to change the pickup library from %s to %s for this request?").format( previous_branchcode, branchcode ));
+
+        if ( c ) {
+            var id = this.id.split("branchcode-")[1];
+            $("#update-processing-" + id ).css({opacity: 0, visibility: "visible"}).animate({opacity: 1.0}, 200);
+
+            $.ajax({
+                type: "POST",
+                url: '/cgi-bin/koha/svc/article_request',
+                data: {
+                    action: 'update_branchcode',
+                    id: id,
+                    branchcode: branchcode,
+                },
+                success: function( data ) {
+                    $("#update-processing-" + id ).css({opacity: 1.0, visibility: "visible"}).animate({opacity: 0}, 200);
+                },
+                dataType: 'json'
+            });
+
+        } else {
+            this.value = previous_branchcode;
+        }
+    });
+
+    $(".ar-cancel-request").on("click", function(){
+        var a = $(this);
+        var notes = prompt(_("Reason for cancellation:"));
+
+        if ( notes != null ) {
+            var id = this.id.split("cancel-")[1];
+            $("#cancel-processing-" + id ).hide('slow');
+            $("#cancel-processing-spinner-" + id ).show('slow');
+
+            $.ajax({
+                type: "POST",
+                url: '/cgi-bin/koha/svc/article_request',
+                data: {
+                    action: 'cancel',
+                    id: id,
+                    notes: notes
+                },
+                success: function( data ) {
+                    a.parents('tr').hide('slow');
+                },
+                dataType: 'json'
+            });
+        }
+    });
+});
+// ]]>
+</script>
+</head>
+
+<body id="circ_article_request" class="catalog">
+    [% INCLUDE 'header.inc' %]
+    [% INCLUDE 'circ-search.inc' %]
+
+    <div id="breadcrumbs">
+        <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        &rsaquo;
+        <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
+        &rsaquo;
+        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]">[% biblio.title | html %]</a>
+        &rsaquo;
+        Request article
+    </div>
+
+    <div id="doc3" class="yui-t2">
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+
+                    <h1>Request article from <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.id %]">[% biblio.title | html %]</a></h1>
+                    [% IF no_patrons_found %]
+                        <div class="dialog alert">
+                            <h3>Patron not found</h3>
+                            <p>No patron with this name, please, try another</p>
+                        </div>
+                    [% ELSIF patrons %]
+                        <form id="article_request_patron_results" method="post">
+                            <fieldset>
+                                <table id="table_borrowers">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Name</th>
+                                            <th>Cardnumber</th>
+                                            <th>Category</th>
+                                            <th>Library</th>
+                                            <th>Address</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        [% FOREACH patron IN patrons %]
+                                            <tr>
+                                                <td><input type="radio" name="patron_id" value="[% patron.borrowernumber %]"/></td>
+                                                <td>[% patron.surname %], [% patron.firstname %]</td>
+                                                <td>[% patron.cardnumber %]</td>
+                                                <td>[% patron.categorycode %]</td>
+                                                <td>[% patron.branchcode %]</td>
+                                                <td>[% patron.address %]</td>
+                                            </tr>
+                                        [% END %]
+                                    </tbody>
+                                </table>
+                                <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+                                <fieldset class="action"><input type="submit" value="Select" /></fieldset>
+                            </fieldset>
+                        </form>
+                    [% ELSIF !patron %]
+                        <form id="article_requests_patronsearch" action="request-article.pl" method="post">
+                            <fieldset class="brief">
+                                <label for="patron">Patron: </label>
+                                <div class="hint">Enter patron card number or partial name:</div>
+                                <input type="text" size="40" id="patron" class="focus" name="patron_cardnumber" />
+                                <input type="submit" value="Search" />
+                                <input type="hidden" name="biblionumber" value="[% biblio.id %]" />
+                            </fieldset>
+                        </form>
+                    [% ELSE %]
+                        [% IF biblio.can_article_request( patron ) %]
+
+                            <form id="place-article-request" method="post" action="/cgi-bin/koha/circ/request-article.pl">
+                                <input type="hidden" name="action" value="create" />
+                                <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblio.biblionumber %]" />
+                                <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.id %]" />
+
+                                <fieldset class="rows">
+                                    <legend>Place article request from [% biblio.title %] for [% patron.firstname %] [% patron.surname %] ( [% patron.cardnumber %] )</legend>
+                                    <p/>
+                                    <ul>
+                                        <li>
+                                            <label for="title">Title:</label>
+                                            <input type="text" name="title" id="title" size="50"/>
+                                        </li>
+
+                                        <li>
+                                            <label for="author">Author:</label>
+                                            <input type="text" name="author" id="author" size="50"/>
+                                        </li>
+
+                                        <li>
+                                            <label for="volume">Volume:</label>
+                                            <input type="text" name="volume" id="volume" size="50"/>
+                                        </li>
+
+                                        <li>
+                                            <label for="issue">Issue:</label>
+                                            <input type="text" name="issue" id="issue" size="50"/>
+                                        </li>
+
+                                        <li>
+                                            <label for="date">Date:</label>
+                                            <input type="text" name="date" id="date" size="50"/>
+                                        </li>
+
+                                        <li>
+                                            <label for="pages">Pages:</label>
+                                            <input type="text" name="pages" id="pages" size="50"/>
+                                        </li>
+
+                                        <li>
+                                            <label for="chapters">Chapters:</label>
+                                            <input type="text" name="chapters" id="chapters" size="50"/>
+                                        </li>
+
+                                        <li>
+                                            <label for="patron_notes">Patron notes:</label>
+                                            <input type="text" name="patron_notes" id="patron_notes" size="50"/>
+                                        </li>
+
+                                        <li>
+                                            <label for="branchcode">Pickup library:</label>
+                                            <select name="branchcode" id="branchcode">
+                                                [% FOREACH b IN Branches.all %]
+                                                    [% IF b.branchcode == Branches.GetLoggedInBranchcode %]
+                                                        <option value="[% b.branchcode %]" selected="selected">[% b.branchname %]</option>
+                                                    [% ELSE %]
+                                                        <option value="[% b.branchcode %]">[% b.branchname %]</option>
+                                                    [% END %]
+                                                [% END %]
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </fieldset>
+
+                                [% SET article_request_type = biblio.article_request_type( patron ) %]
+                                [% IF article_request_type != 'bib_only' %]
+                                    <table id="current-requests-table" class="ar-table table table-bordered table-striped">
+                                        <caption>Select item:</caption>
+                                        <thead>
+                                            <tr>
+                                                <th>&nbsp;</th>
+                                                <th>Item type</th>
+                                                <th>Barcode</th>
+                                                <th>Home library</th>
+                                                <th>Call number</th>
+                                                <th>Enumeration</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            [% FOREACH item IN biblio.items %]
+                                                [% IF item.can_article_request( patron ) %]
+                                                    <tr>
+                                                        <td>
+                                                            [% IF article_request_type == 'item_only' && !checked %]
+                                                                [% SET checked = 1 %]
+                                                                <input type="radio" name="itemnumber" value="[% item.itemnumber %]" checked="checked" />
+                                                            [% ELSE %]
+                                                                <input type="radio" name="itemnumber" value="[% item.itemnumber %]" />
+                                                            [% END %]
+                                                        </td>
+                                                        <td>
+                                                            [% ItemTypes.GetDescription( item.itype ) %]
+                                                        </td>
+                                                        <td>
+                                                            [% item.barcode %]
+                                                        </td>
+                                                        <td>
+                                                            [% Branches.GetName( item.homebranch ) %]
+                                                        </td>
+                                                        <td>
+                                                            [% item.itemcallnumber %]
+                                                        </td>
+                                                        <td>
+                                                            [% item.enumchron %]
+                                                        </td>
+                                                    </tr>
+                                                [% END %]
+                                            [% END %]
+
+                                            [% IF article_request_type != 'item_only' %]
+                                                <tr>
+                                                    <td>
+                                                        <input type="radio" name="itemnumber" value="" checked="checked"/>
+                                                    </td>
+                                                    <td colspan="5">
+                                                        Any item
+                                                    </td>
+                                                </tr>
+                                            [% END %]
+                                        </tbody>
+                                    </table>
+                                [% END %]
+
+                                <p>
+                                    <input type="submit" class="btn" value="Place request" />
+                                </p>
+                            </form>
+                        [% ELSE %]
+                            No article requests can be made for this record.
+                        [% END %]
+
+                    [% END %]
+
+                    [% IF biblio.article_requests_current && !patron %]
+                        <fieldset class="rows left" id="current-article-requests-fieldset">
+                            <legend>Current article requests</legend>
+
+                            <table id="current-article-requests-table">
+                                <tr>
+                                    <th>Placed on</th>
+                                    <th>Patron</th>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Volume</th>
+                                    <th>Issue</th>
+                                    <th>Date</th>
+                                    <th>Pages</th>
+                                    <th>Chapters</th>
+                                    <th>Patron notes</th>
+                                    <th>Item</th>
+                                    <th>Status</th>
+                                    <th>Pickup library</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+
+                                [% FOREACH ar IN biblio.article_requests_current %]
+                                    <tr>
+                                        <td>[% ar.created_on | $KohaDates %]</td>
+                                        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% ar.borrowernumber %]">[% ar.borrower.firstname %] [% ar.borrower.surname %]</a></td>
+                                        <td>[% ar.title %]</td>
+                                        <td>[% ar.author %]</td>
+                                        <td>[% ar.volume %]</td>
+                                        <td>[% ar.issue %]</td>
+                                        <td>[% ar.date %]</td>
+                                        <td>[% ar.pages %]</td>
+                                        <td>[% ar.chapters %]</td>
+                                        <td>[% ar.patron_notes %]</td>
+                                        <td>
+                                            [% IF ar.item %]
+                                                <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% ar.itemnumber %]&biblionumber=[% ar.biblionumber %]">[% ar.item.barcode %]</a>
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            [% IF ar.status == 'PENDING' %]
+                                                Pending
+                                            [% ELSIF ar.status == 'PROCESSING' %]
+                                                Processing
+                                            [% ELSIF ar.status == 'COMPLETED' %]
+                                                Completed
+                                            [% ELSIF ar.status == 'CANCELED' %]
+                                                Canceled
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            <i id="update-processing-[% ar.id %]" class="fa fa-cog fa-spin hidden"></i>
+                                            <select name="branchcode" id="branchcode-[% ar.id %]" class="ar-update-branchcode">
+                                                [% FOREACH b IN Branches.all %]
+                                                    [% IF b.branchcode == ar.branchcode %]
+                                                        <option value="[% b.branchcode %]" selected="selected">[% b.branchname %]</option>
+                                                    [% ELSE %]
+                                                        <option value="[% b.branchcode %]">[% b.branchname %]</option>
+                                                    [% END %]
+                                                [% END %]
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <a title="Cancel article request" href="#" id="cancel-[% ar.id %]" class="ar-cancel-request">
+                                                <i id="cancel-processing-spinner-[% ar.id %]" class="fa fa-cog fa-spin hide"></i>
+                                                <i id="cancel-processing-[% ar.id %]" class="fa fa-times fa-lg" style="color:red"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                [% END %]
+                            </table>
+                        </fieldset>
+                    [% END %]
+                </div>
+            </div>
+
+            <div class="yui-b">
+                [% INCLUDE 'biblio-view-menu.inc' %]
+            </div>
+        </div>
+    </div>
+[% INCLUDE 'intranet-bottom.inc' %]

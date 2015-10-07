@@ -2,6 +2,7 @@
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
+[% USE Biblio %]
 
 [% ShowCourseReserves = 0 %]
 [% IF UseCourseReserves %]
@@ -407,6 +408,24 @@ function verify_images() {
                     </span>
         [% END %]
         <span id="catalogue_detail_marc_preview" class="results_summary"><span class="label">MARC Preview:</span> <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblionumber %]&amp;viewas=html" title="MARC" class="previewMARC">Show</a></span>
+
+        [% IF ( holdcount ) %]
+            <span class="results_summary">
+                <span class="label">Holds:</span>
+                <span class="number_box">
+                    <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]">[% holdcount %]</a>
+                </span>
+            </span>
+        [% END %]
+
+        [% IF ( article_requests_count = Biblio.ArticleRequestsActiveCount( biblionumber ) ) %]
+            <span class="results_summary">
+                <span class="label">Article requests:</span>
+                <span class="number_box">
+                    <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% biblionumber %]">[% article_requests_count %]</a>
+                </span>
+            </span>
+        [% END %]
 
         [% IF ( AmazonCoverImages  || LocalCoverImages ) %]
         </div><div class="yui-u" id="bookcoverimg">

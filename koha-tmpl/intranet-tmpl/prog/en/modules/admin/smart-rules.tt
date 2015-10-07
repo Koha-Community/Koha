@@ -189,6 +189,7 @@ $(document).ready(function() {
                 <th>Holds per record (count)</th>
                 <th>On shelf holds allowed</th>
                 <th>Item level holds</th>
+                <th>Article requests</th>
                 <th>Rental discount (%)</th>
                 <th>Actions</th>
             </tr>
@@ -275,6 +276,17 @@ $(document).ready(function() {
                                                                 If any unavailable
                                                             [% END %]</td>
                                                         <td>[% IF rule.opacitemholds == 'F'%]Force[% ELSIF rule.opacitemholds == 'Y'%]Allow[% ELSE %]Don't allow[% END %]</td>
+                                                        <td>
+                                                            [% IF rule.article_requests == 'no' %]
+                                                                No
+                                                            [% ELSIF rule.article_requests == 'yes' %]
+                                                                Yes
+                                                            [% ELSIF rule.article_requests == 'bib_only' %]
+                                                                Record only
+                                                            [% ELSIF rule.article_requests == 'item_only' %]
+                                                                Item only
+                                                            [% END %]
+                                                        </td>
 							<td>[% rule.rentaldiscount %]</td>
                                                         <td class="actions">
                                                           <a href="#" class="editrule btn btn-mini"><i class="fa fa-pencil"></i> Edit</a>
@@ -355,6 +367,14 @@ $(document).ready(function() {
                             <option value="F">Force</option>
                         </select>
                     </td>
+                    <td>
+                        <select id="article_requests" name="article_requests">
+                            <option value="no">No</option>
+                            <option value="yes">Yes</option>
+                            <option value="bib_only">Record only</option>
+                            <option value="item_only">Item only</option>
+                        </select>
+                    </td>
                     <td><input type="text" name="rentaldiscount" id="rentaldiscount" size="2" /></td>
                     <td class="actions">
                         <input type="hidden" name="branch" value="[% current_branch %]"/>
@@ -387,6 +407,7 @@ $(document).ready(function() {
                       <th>Holds per record (count)</th>
                       <th>On shelf holds allowed</th>
                       <th>Item level holds</th>
+                      <th>Article requests</th>
                       <th>Rental discount (%)</th>
                       <th colspan="2">&nbsp;</th>
                     </tr>

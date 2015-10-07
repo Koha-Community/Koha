@@ -1,0 +1,225 @@
+[% USE Koha %]
+[% USE Branches %]
+[% USE ItemTypes %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Request article</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+
+[% INCLUDE 'bodytag.inc' bodyid='opac-holds' %]
+[% INCLUDE 'masthead.inc' %]
+
+<div class="main">
+    <ul class="breadcrumb">
+        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+        <li><a href="#">Request article</a></li>
+    </ul>
+
+    <div class="container">
+        [% IF biblio.can_article_request( patron ) %]
+            [% SET article_request_type = biblio.article_request_type( patron ) %]
+
+            [% IF article_request_type == 'yes' %]       [% SET mandatory_fields = Koha.Preference('ArticleRequestsMandatoryFields') %]           [% END %]
+            [% IF article_request_type == 'bib_only' %]  [% SET mandatory_fields = Koha.Preference('ArticleRequestsMandatoryFieldsRecordOnly') %] [% END %]
+            [% IF article_request_type == 'item_only' %] [% SET mandatory_fields = Koha.Preference('ArticleRequestsMandatoryFieldsItemOnly') %]   [% END %]
+
+            <h3>Place article request for [% biblio.title %]</h3>
+
+            <form id="place-article-request" method="post" action="/cgi-bin/koha/opac-request-article.pl">
+                <input type="hidden" name="action" value="create" />
+                <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblio.biblionumber %]" />
+
+                <fieldset class="rows">
+                    <ul>
+                        <li>
+                            [% IF mandatory_fields.search('title') %]
+                                <label for="title" class="required">Title:</label>
+                            [% ELSE %]
+                                <label for="title">Title:</label>
+                            [% END %]
+                            <input type="text" name="title" id="title" size="50"/>
+                        </li>
+
+                        <li>
+                            [% IF mandatory_fields.search('author') %]
+                                <label for="author" class="required">Author:</label>
+                            [% ELSE %]
+                                <label for="author">Author:</label>
+                            [% END %]
+                            <input type="text" name="author" id="author" size="50"/>
+                        </li>
+
+                        <li>
+                            [% IF mandatory_fields.search('volume') %]
+                                <label for="volume" class="required">Volume:</label>
+                            [% ELSE %]
+                                <label for="volume">Volume:</label>
+                            [% END %]
+                            <input type="text" name="volume" id="volume" size="50"/>
+                        </li>
+
+                        <li>
+                            [% IF mandatory_fields.search('issue') %]
+                                <label for="issue" class="required">Issue:</label>
+                            [% ELSE %]
+                                <label for="issue">Issue:</label>
+                            [% END %]
+                            <input type="text" name="issue" id="issue" size="50"/>
+                        </li>
+
+                        <li>
+                            [% IF mandatory_fields.search('date') %]
+                                <label for="date" class="required">Date:</label>
+                            [% ELSE %]
+                                <label for="date">Date:</label>
+                            [% END %]
+                            <input type="text" name="date" id="date" size="50"/>
+                        </li>
+
+                        <li>
+                            [% IF mandatory_fields.search('pages') %]
+                                <label for="pages" class="required">Pages:</label>
+                            [% ELSE %]
+                                <label for="pages">Pages:</label>
+                            [% END %]
+                            <input type="text" name="pages" id="pages" size="50"/>
+                        </li>
+
+                        <li>
+                            [% IF mandatory_fields.search('chapters') %]
+                                <label for="chapters" class="required">Chapters:</label>
+                            [% ELSE %]
+                                <label for="chapters">Chapters:</label>
+                            [% END %]
+                            <input type="text" name="chapters" id="chapters" size="50"/>
+                        </li>
+
+                        <li>
+                            <label for="patron_notes">Notes:</label>
+                            <input type="text" name="patron_notes" id="patron_notes" size="50"/>
+                        </li>
+
+                        <li>
+                            <label for="branchcode">Pickup library:</label>
+                            <select name="branchcode" id="branchcode">
+                                [% FOREACH b IN Branches.all %]
+                                    [% IF b.branchcode == Branches.GetLoggedInBranchcode %]
+                                        <option value="[% b.branchcode %]" selected="selected">[% b.branchname %]</option>
+                                    [% ELSE %]
+                                        <option value="[% b.branchcode %]">[% b.branchname %]</option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+                        </li>
+                    </ul>
+                </fieldset>
+
+                [% IF article_request_type != 'bib_only' %]
+                    <table class="copiesrow table table-bordered table-striped">
+                        <caption>Select a specific item:</caption>
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>Item type</th>
+                                <th>Barcode</th>
+                                <th>Home library</th>
+                                <th>Call number</th>
+                                <th>Enumeration</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            [% FOREACH item IN biblio.items %]
+                                [% IF item.can_article_request( patron ) %]
+                                    <tr>
+                                        <td>
+                                            [% IF article_request_type == 'item_only' && !checked %]
+                                                [% SET checked = 1 %]
+                                                <input type="radio" name="itemnumber" value="[% item.itemnumber %]" checked="checked" />
+                                            [% ELSE %]
+                                                <input type="radio" name="itemnumber" value="[% item.itemnumber %]" />
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            [% ItemTypes.GetDescription( item.itype ) %]
+                                        </td>
+                                        <td>
+                                            [% item.barcode %]
+                                        </td>
+                                        <td>
+                                            [% Branches.GetName( item.homebranch ) %]
+                                        </td>
+                                        <td>
+                                            [% item.itemcallnumber %]
+                                        </td>
+                                        <td>
+                                            [% item.enumchron %]
+                                        </td>
+                                    </tr>
+                                [% END %]
+                            [% END %]
+
+                            [% IF article_request_type != 'item_only' %]
+                                <tr>
+                                    <td>
+                                        <input type="radio" name="itemnumber" value="" checked="checked"/>
+                                    </td>
+                                    <td colspan="6">
+                                        Any item
+                                    </td>
+                                </tr>
+                            [% END %]
+                        </tbody>
+                    </table>
+                [% END %]
+
+                <input type="submit" class="btn" value="Place request" />
+            </form>
+        [% ELSE %]
+            No article requests can be made for this record.
+        [% END %]
+
+    </div> <!-- / .container -->
+</div> <!-- / .main -->
+
+[% INCLUDE 'opac-bottom.inc' %]
+
+[% BLOCK jsinclude %]
+<script type="text/javascript">
+// <![CDATA[
+    allow_submit = false;
+    $('#place-article-request').on('submit', function( event ){
+        if ( ! allow_submit ) {
+            event.preventDefault();
+
+            [% IF article_request_type == 'item_only' %]
+                if ( ! $("input:radio[name='itemnumber']").is(":checked") ) {
+                    alert( _("Please select a specific item for this article request.") );
+                    return 0;
+                }
+            [% END %]
+
+            var mandatory_fields = "[% mandatory_fields %]";
+            var m = new Array();
+            if ( mandatory_fields ) m = mandatory_fields.split(",");
+            var f = new Array();
+
+            for (i = 0; i < m.length; i++) {
+                if ( ! $("#" + m[i]).val() ) {
+                    f.push( m[i] );
+                }
+            }
+
+            if ( f.length ) {
+                alert( _("The following fields are required and not filled in: ") + f.join(", ") );
+                return 0;
+            }
+
+            allow_submit = true;
+            $('#place-article-request').submit();
+        }
+    });
+// ]]>
+</script>
+[% END %]

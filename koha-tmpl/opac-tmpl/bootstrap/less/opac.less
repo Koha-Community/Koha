@@ -266,6 +266,14 @@ td {
             padding-left : 21px;
             text-decoration : none;
         }
+        &.article_request {
+            background-image : url("../images/sprite.png"); /* Place hold small */
+            background-position : -2px -26px;
+            background-repeat: no-repeat;
+            margin-right : 1em;
+            padding-left : 21px;
+            text-decoration : none;
+        }
         &.addtocart {
             background-image : url("../images/sprite.png"); /* Cart small */
             background-position : -5px -572px;
@@ -1338,6 +1346,7 @@ a.print-large,
 a.removeitems,
 a.removeitems.disabled,
 a.reserve,
+a.article_request,
 a.send,
 a.tag_add,
 a.removefromlist,
@@ -1463,6 +1472,11 @@ a.deleteshelf.disabled {
 
 a.reserve {
     background-position: -6px -144px; /* Place hold */
+    padding-left : 35px;
+}
+
+a.article_request {
+    background-position: 0px -24px; /* Place article request */
     padding-left : 35px;
 }
 
@@ -2501,6 +2515,10 @@ a.reviewlink:visited {
     padding: 0px;
     margin: 0px;
     cursor: pointer;
+}
+
+.btn-danger {
+    color: white !important;
 }
 
 @import "responsive.less";

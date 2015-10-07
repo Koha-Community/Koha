@@ -1,3 +1,4 @@
+[% USE Biblio %]
 <ul id="action">
     [% UNLESS ( norequests ) %]
         [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
@@ -8,12 +9,21 @@
             [% END %]
         [% END %]
     [% END %]
+
     <li><a class="print-large" href="#">Print</a></li>
+
+    [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+        [% IF Koha.Preference('ArticleRequests') %]
+            <li><a class="article_request" href="/cgi-bin/koha/opac-request-article.pl?biblionumber=[% biblionumber %]">Request article</a></li>
+        [% END %]
+    [% END %]
+
     [% IF Koha.Preference( 'virtualshelves' ) == 1 %]
         [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && loggedinusername ) %]
             <li><a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% biblionumber %]">Save to your lists</a></li>
         [% END %]
     [% END %]
+
     [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
         [% IF ( incart ) %]
             <li><a class="incart cart[% biblionumber %] addrecord" href="#">In your cart</a> <a class="cartRemove cartR[% biblionumber %]" href="#">(remove)</a></li>
@@ -21,6 +31,7 @@
             <li><a class="addtocart cart[% biblionumber %] addrecord" href="#">Add to your cart</a>  <a style="display:none;" class="cartRemove cartR[% biblionumber %]" href="#">(remove)</a></li>
         [% END %]
     [% END %]
+
     [% IF ( OpacHighlightedWords && query_desc ) %]
     <li>
         <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>

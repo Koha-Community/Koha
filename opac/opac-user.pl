@@ -38,6 +38,7 @@ use Koha::Holds;
 use Koha::Database;
 use Koha::Patron::Messages;
 use Koha::Patron::Discharge;
+use Koha::Patrons;
 
 use constant ATTRIBUTE_SHOW_BARCODE => 'SHOW_BCODE';
 
@@ -324,7 +325,7 @@ if (   C4::Context->preference('AllowPatronToSetCheckoutsVisibilityForGuarantor'
 }
 
 $template->param(
-    borrower                 => $borr,
+    borrower                 => Koha::Patrons->find($borrowernumber),
     patron_messages          => $patron_messages,
     opacnote                 => $borr->{opacnote},
     patronupdate             => $patronupdate,

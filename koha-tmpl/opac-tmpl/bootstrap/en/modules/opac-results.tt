@@ -508,6 +508,12 @@
                                                             [% END # UNLESS SEARCH_RESULT.norequests %]
                                                         [% END # IF RequestOnOpac %]
 
+                                                        [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
+                                                            [% IF Koha.Preference('ArticleRequests') %]
+                                                                <span class="actions"><a class="article_request" href="/cgi-bin/koha/opac-request-article.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Request article</a></span>
+                                                            [% END %]
+                                                        [% END %]
+
                                                         [% IF ( TagsInputEnabled ) %]
                                                             [% IF ( loggedinusername ) %]
                                                                 <span class="actions"><a class="tag_add" id="tag_add[% SEARCH_RESULT.biblionumber %]" href="#">Add tag</a></span>

@@ -42,6 +42,11 @@
     <li>    <a href="/cgi-bin/koha/circ/waitingreserves.pl">Holds awaiting pickup</a></li>
 	<li>    <a href="/cgi-bin/koha/circ/reserveratios.pl">Hold ratios</a></li>
 	<li>    <a href="/cgi-bin/koha/circ/transferstoreceive.pl">Transfers to receive</a></li>
+    [% IF Koha.Preference('ArticleRequests') %]
+        <li>
+            <a href="/cgi-bin/koha/circ/article-requests.pl" title="Article requests">Article requests</a>
+        </li>
+    [% END %]
      [% IF ( CAN_user_circulate_overdues_report ) %]<li>    <a href="/cgi-bin/koha/circ/overdue.pl">Overdues</a>
 	- <b>Warning:</b> This report is very resource intensive on
 	systems with large numbers of overdue items.</li>[% END %]

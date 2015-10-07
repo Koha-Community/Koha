@@ -782,3 +782,46 @@ Circulation:
                   yes: Enable
                   no: Disable
             - "housebound module"
+    Article Requests:
+        -
+            - pref: ArticleRequests
+              choices:
+                  yes: Enable
+                  no: "Don't enable"
+            - patrons to place article requests.
+        -
+            - For records that are record level or item level requestable, make the following fields mandatory
+            - pref: ArticleRequestsMandatoryFields
+              multiple:
+                title: Title
+                author: Author
+                volume: Volume
+                issue: Issue
+                date: Date
+                pages: Pages
+                chapters: Chapters
+            -
+        -
+            - For records that are only record level requestable, make the following fields mandatory
+            - pref: ArticleRequestsMandatoryFieldsRecordOnly
+              multiple:
+                title: Title
+                author: Author
+                volume: Volume
+                issue: Issue
+                date: Date
+                pages: Pages
+                chapters: Chapters
+            -
+        -
+            - For records that are only item level requestable, make the following fields mandatory
+            - pref: ArticleRequestsMandatoryFieldsItemOnly
+              multiple:
+                title: Title
+                author: Author
+                volume: Volume
+                issue: Issue
+                date: Date
+                pages: Pages
+                chapters: Chapters
+            -
