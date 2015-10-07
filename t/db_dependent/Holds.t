@@ -133,8 +133,9 @@ ModReserve({
     rank          => '4',
     branchcode    => $branch_1,
     itemnumber    => $itemnumber,
-    suspend_until => C4::Dates->new("2013-01-01","iso")->output(),
+    suspend_until => output_pref( { dt => dt_from_string( "2013-01-01", "iso" ), dateonly => 1 } ),
 });
+
 $reserve = GetReserve( $reserve_id );
 ok( $reserve->{'priority'} eq '4', "Test GetReserve(), priority changed correctly" );
 ok( $reserve->{'suspend'}, "Test GetReserve(), suspend hold" );

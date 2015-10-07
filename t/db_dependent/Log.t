@@ -8,9 +8,9 @@ use strict;
 use warnings;
 use Test::More tests => 7;
 
-# We need C4::Dates to handle the dates
-use C4::Dates;
 use C4::Context;
+use Koha::DateUtils;
+
 use t::lib::Mocks qw/mock_preference/; # to mock CronjobLog
 use Data::Dumper;
 
@@ -43,8 +43,8 @@ ok($success, "GetLogs returns results for an open search");
 
 eval {
     # FIXME: US formatted date hardcoded into test for now
-    my $date = C4::Dates->new();
-    $success = scalar(@{GetLogs($date->today(),$date->today(),"",undef,undef,"","")});
+    my $date = output_pref( { dt => dt_from_string, datenonly => 1, dateformat => 'iso' } );
+    $success = scalar(@{GetLogs( $date, $date, "", undef, undef, "", "") } );
 } or do {
     diag($@);
     $success = 0;

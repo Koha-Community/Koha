@@ -8,7 +8,6 @@ use C4::Context;
 use C4::Biblio;
 use C4::Bookseller;
 use C4::Acquisition;
-use C4::Dates;
 use C4::Members qw( AddMember );
 
 use Koha::Acquisition::Order;
