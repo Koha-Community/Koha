@@ -129,10 +129,11 @@ sub generate_subfield_form {
         if ( ! defined( $value ) || $value eq '')  {
             $value = $subfieldlib->{defaultvalue};
             # get today date & replace YYYY, MM, DD if provided in the default value
-            my $today = dt_from_string;
-            $value =~ s/YYYY/$today->year/g;
-            $value =~ s/MM/$today->month/g;
-            $value =~ s/DD/$today->day/g;
+            my $today_iso = output_pref( { dt=>dt_from_string, dateonly => 1, dateformat => 'iso' } );
+            my ( $year, $month, $day ) = split ('-', $today_iso);
+            $value =~ s/YYYY/$year/g;
+            $value =~ s/MM/$month/g;
+            $value =~ s/DD/$day/g;
         }
         
         $subfield_data{visibility} = "display:none;" if (($subfieldlib->{hidden} > 4) || ($subfieldlib->{hidden} <= -4));
