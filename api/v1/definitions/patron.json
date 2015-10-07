@@ -1,0 +1,273 @@
+{
+      "type": "object",
+      "properties": {
+        "borrowernumber": {
+          "type": "string",
+          "description": "internally assigned user identifier"
+        },
+        "cardnumber": {
+          "type": ["string", "null"],
+          "description": "library assigned user identifier"
+        },
+        "surname": {
+          "type": "string",
+          "description": "patron's last name"
+        },
+        "firstname": {
+          "type": ["string", "null"],
+          "description": "patron's first name"
+        },
+        "title": {
+          "type": ["string", "null"],
+          "description": "patron's title"
+        },
+        "othernames": {
+          "type": ["string", "null"],
+          "description": "any other names associated with the patron"
+        },
+        "initials": {
+          "type": ["string", "null"],
+          "description": "initials of the patron"
+        },
+        "streetnumber": {
+          "type": ["string", "null"],
+          "description": "street number of patron's primary address"
+        },
+        "streettype": {
+          "type": ["string", "null"],
+          "description": "street type of patron's primary address"
+        },
+        "address": {
+          "type": "string",
+          "description": "first address line of patron's primary address"
+        },
+        "address2": {
+          "type": ["string", "null"],
+          "description": "second address line of patron's primary address"
+        },
+        "city": {
+          "type": "string",
+          "description": "city or town of patron's primary address"
+        },
+        "state": {
+          "type": ["string", "null"],
+          "description": "state or province of patron's primary address"
+        },
+        "zipcode": {
+          "type": ["string", "null"],
+          "description": "zip or postal code of patron's primary address"
+        },
+        "country": {
+          "type": ["string", "null"],
+          "description": "country of patron's primary address"
+        },
+        "email": {
+          "type": ["string", "null"],
+          "description": "primary email address for patron's primary address"
+        },
+        "phone": {
+          "type": ["string", "null"],
+          "description": "primary phone number for patron's primary address"
+        },
+        "mobile": {
+          "type": ["string", "null"],
+          "description": "the other phone number for patron's primary address"
+        },
+        "fax": {
+          "type": ["string", "null"],
+          "description": "fax number for patron's primary address"
+        },
+        "emailpro": {
+          "type": ["string", "null"],
+          "description": "secondary email address for patron's primary address"
+        },
+        "phonepro": {
+          "type": ["string", "null"],
+          "description": "secondary phone number for patron's primary address"
+        },
+        "B_streetnumber": {
+          "type": ["string", "null"],
+          "description": "street number of patron's alternate address"
+        },
+        "B_streettype": {
+          "type": ["string", "null"],
+          "description": "street type of patron's alternate address"
+        },
+        "B_address": {
+          "type": ["string", "null"],
+          "description": "first address line of patron's alternate address"
+        },
+        "B_address2": {
+          "type": ["string", "null"],
+          "description": "second address line of patron's alternate address"
+        },
+        "B_city": {
+          "type": ["string", "null"],
+          "description": "city or town of patron's alternate address"
+        },
+        "B_state": {
+          "type": ["string", "null"],
+          "description": "state or province of patron's alternate address"
+        },
+        "B_zipcode": {
+          "type": ["string", "null"],
+          "description": "zip or postal code of patron's alternate address"
+        },
+        "B_country": {
+          "type": ["string", "null"],
+          "description": "country of patron's alternate address"
+        },
+        "B_email": {
+          "type": ["string", "null"],
+          "description": "email address for patron's alternate address"
+        },
+        "B_phone": {
+          "type": ["string", "null"],
+          "description": "phone number for patron's alternate address"
+        },
+        "dateofbirth": {
+          "type": ["string", "null"],
+          "description": "patron's date of birth"
+        },
+        "branchcode": {
+          "type": "string",
+          "description": "code of patron's home branch"
+        },
+        "categorycode": {
+          "type": "string",
+          "description": "code of patron's category"
+        },
+        "dateenrolled": {
+          "type": ["string", "null"],
+          "description": "date the patron was added to Koha"
+        },
+        "dateexpiry": {
+          "type": ["string", "null"],
+          "description": "date the patron's card is set to expire"
+        },
+        "gonenoaddress": {
+          "type": ["string", "null"],
+          "description": "set to 1 if library marked this patron as having an unconfirmed address"
+        },
+        "lost": {
+          "type": ["string", "null"],
+          "description": "set to 1 if library marked this patron as having lost his card"
+        },
+        "debarred": {
+          "type": ["string", "null"],
+          "description": "until this date the patron can only check-in"
+        },
+        "debarredcomment": {
+          "type": ["string", "null"],
+          "description": "comment on the stop of the patron"
+        },
+        "contactname": {
+          "type": ["string", "null"],
+          "description": "used for children and professionals to include surname or last name of guarantor or organization name"
+        },
+        "contactfirstname": {
+          "type": ["string", "null"],
+          "description": "used for children to include first name of guarantor"
+        },
+        "contacttitle": {
+          "type": ["string", "null"],
+          "description": "used for children to include title of guarantor"
+        },
+        "guarantorid": {
+          "type": ["string", "null"],
+          "description": "borrowernumber used for children or professionals to link them to guarantor or organizations"
+        },
+        "borrowernotes": {
+          "type": ["string", "null"],
+          "description": "a note on the patron's account"
+        },
+        "relationship": {
+          "type": ["string", "null"],
+          "description": "used for children to include the relationship to their guarantor"
+        },
+        "ethnicity": {
+          "type": ["string", "null"],
+          "description": "unused"
+        },
+        "ethnotes": {
+          "type": ["string", "null"],
+          "description": "unused"
+        },
+        "sex": {
+          "type": ["string", "null"],
+          "description": "patron's gender"
+        },
+        "password": {
+          "type": ["string", "null"],
+          "description": "patron's encrypted password"
+        },
+        "flags": {
+          "type": ["string", "null"],
+          "description": "a number associated with the patron's permissions"
+        },
+        "userid": {
+          "type": ["string", "null"],
+          "description": "patron's login"
+        },
+        "opacnote": {
+          "type": ["string", "null"],
+          "description": "a note on the patron's account visible in OPAC and staff client"
+        },
+        "contactnote": {
+          "type": ["string", "null"],
+          "description": "a note related to patron's alternate address"
+        },
+        "sort1": {
+          "type": ["string", "null"],
+          "description": "a field that can be used for any information unique to the library"
+        },
+        "sort2": {
+          "type": ["string", "null"],
+          "description": "a field that can be used for any information unique to the library"
+        },
+        "altcontactfirstname": {
+          "type": ["string", "null"],
+          "description": "first name of alternate contact for the patron"
+        },
+        "altcontactsurname": {
+          "type": ["string", "null"],
+          "description": "surname or last name of the alternate contact for the patron"
+        },
+        "altcontactaddress1": {
+          "type": ["string", "null"],
+          "description": "the first address line for the alternate contact for the patron"
+        },
+        "altcontactaddress2": {
+          "type": ["string", "null"],
+          "description": "the second address line for the alternate contact for the patron"
+        },
+        "altcontactaddress3": {
+          "type": ["string", "null"],
+          "description": "the city for the alternate contact for the patron"
+        },
+        "altcontactstate": {
+          "type": ["string", "null"],
+          "description": "the state for the alternate contact for the patron"
+        },
+        "altcontactzipcode": {
+          "type": ["string", "null"],
+          "description": "the zipcode for the alternate contact for the patron"
+        },
+        "altcontactcountry": {
+          "type": ["string", "null"],
+          "description": "the country for the alternate contact for the patron"
+        },
+        "altcontactphone": {
+          "type": ["string", "null"],
+          "description": "the phone number for the alternate contact for the patron"
+        },
+        "smsalertnumber": {
+          "type": ["string", "null"],
+          "description": "the mobile phone number where the patron would like to receive notices (if SMS turned on)"
+        },
+        "privacy": {
+          "type": "string",
+          "description": "patron's privacy settings related to their reading history"
+        }
+      }
+}
