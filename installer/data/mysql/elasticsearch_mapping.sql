@@ -198,6 +198,7 @@ INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestib
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestible`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','onloan',FALSE,FALSE,'boolean','952q','995n','952q');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestible`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','itemnumber',FALSE,FALSE,'number','9529','9959','9529');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestible`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','issues',FALSE,FALSE,'sum','952l',NULL,'952l'); -- Apparently not tracked in unimarc
+INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestible`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','notforloan',FALSE,FALSE,'number','9527','995o','9527');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestible`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','an',FALSE,FALSE,'number','1009','7009','1009');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestible`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','an',FALSE,FALSE,'number','1109','7019','1109');
 INSERT INTO `elasticsearch_mapping` (`indexname`, `mapping`, `facet`, `suggestible`, `type`, `marc21`, `unimarc`, `normarc`) VALUES ('biblios','an',FALSE,FALSE,'number','1119','7029','1119');
