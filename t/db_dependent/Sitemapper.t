@@ -18,18 +18,18 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use Modern::Perl;
-use Test::MockModule;
 use File::Basename;
 use File::Path;
 use DateTime;
-use Test::More tests => 14;
+use Test::MockModule;
+use Test::More tests => 16;
+use Koha::Schema;
 
 
 BEGIN {
     use_ok('Koha::Sitemapper');
     use_ok('Koha::Sitemapper::Writer');
 }
-
 
 sub slurp {
     my $file = shift;
@@ -40,28 +40,38 @@ sub slurp {
     return $cont;
 }
 
+use Test::DBIx::Class {
+    schema_class => 'Koha::Schema',
+    connect_info => ['dbi:SQLite:dbname=:memory:','',''],
+    connect_opts => { name_sep => '.', quote_char => '`', },
+    fixture_class => '::Populate',
+}, 'Biblio' ;
 
-# Create 3 mocked dataset to be used by Koha::Sitemaper in place of DB content
-my $module_context = new Test::MockModule('C4::Context');
-$module_context->mock('_new_dbh', sub {
-    my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
-    || die "Cannot create handle: $DBI::errstr\n";
-    return $dbh
-});
-my $dbh = C4::Context->dbh();
-my $two_bibs = [
-	[ qw/ biblionumber timestamp  / ],
-	[ qw/ 1234         2013-11-15 / ],
-	[ qw/ 9875         2015-08-31 / ],
-];
-my $lotof_bibs = [ [ qw/ biblionumber timestamp / ] ];
-push @$lotof_bibs, [ $_, '2015-08-31' ] for 1..75000;
-$dbh->{mock_add_resultset} = $two_bibs;
-$dbh->{mock_add_resultset} = $two_bibs;
-$dbh->{mock_add_resultset} = $lotof_bibs;
+sub fixtures {
+    my ( $data ) = @_;
+    fixtures_ok [
+        Biblio => [
+            [ qw/ biblionumber datecreated timestamp  / ],
+            @$data,
+        ],
+    ], 'add fixtures';
+}
+
+# Make the code in the module use our mocked Koha::Schema/Koha::Database
+my $db = Test::MockModule->new('Koha::Database');
+$db->mock(
+    # Schema() gives us the DB connection set up by Test::DBIx::Class
+    _new_schema => sub { return Schema(); }
+);
 
 my $dir = File::Spec->rel2abs( dirname(__FILE__) );
 
+
+my $data = [
+    [ qw/ 1         2013-11-15 2013-11-15/ ],
+    [ qw/ 2         2015-08-31 2015-08-31/ ],
+];
+fixtures($data);
 # Create a sitemap for a catalog containg 2 biblios, with option 'long url'
 my $sitemaper = Koha::Sitemapper->new(
     verbose => 0,
@@ -86,7 +96,7 @@ my $expected_content = <<EOS;
 </sitemapindex>
 EOS
 chop $expected_content;
-ok( $file_content eq $expected_content, "Its content is valid" );
+is( $file_content, $expected_content, "Its content is valid" );
 
 $file = "$dir/sitemap0001.xml";
 ok( -e $file, "File sitemap0001.xml created");
@@ -96,16 +106,16 @@ $expected_content = <<EOS;
 
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
   <url>
-    <loc>http://www.mylibrary.org/cgi-bin/koha/opac-detail.pl?biblionumber=1234</loc>
+    <loc>http://www.mylibrary.org/cgi-bin/koha/opac-detail.pl?biblionumber=1</loc>
     <lastmod>2013-11-15</lastmod>
   </url>
   <url>
-    <loc>http://www.mylibrary.org/cgi-bin/koha/opac-detail.pl?biblionumber=9875</loc>
+    <loc>http://www.mylibrary.org/cgi-bin/koha/opac-detail.pl?biblionumber=2</loc>
     <lastmod>2015-08-31</lastmod>
   </url>
 </urlset>
 EOS
-ok( $file_content eq $expected_content, "Its content is valid" );
+is( $file_content, $expected_content, "Its content is valid" );
 
 
 # Create a sitemap for a catalog containg 2 biblios, with option 'short url'.
@@ -126,21 +136,24 @@ $expected_content = <<EOS;
 
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
   <url>
-    <loc>http://www.mylibrary.org/bib/1234</loc>
+    <loc>http://www.mylibrary.org/bib/1</loc>
     <lastmod>2013-11-15</lastmod>
   </url>
   <url>
-    <loc>http://www.mylibrary.org/bib/9875</loc>
+    <loc>http://www.mylibrary.org/bib/2</loc>
     <lastmod>2015-08-31</lastmod>
   </url>
 </urlset>
 EOS
-ok( $file_content eq $expected_content, "Its content is valid" );
+is( $file_content, $expected_content, "Its content is valid" );
 
 
 # Create a sitemap for a catalog containing 75000 biblios, with option 'short
 # url'. Test that 3 files are created: index file + 2 urls file with
 # respectively 50000 et 25000 urls.
+$data = [];
+push @$data, [ $_, '2015-08-31', '2015-08-31'] for 3..75000;
+fixtures($data);
 $sitemaper = Koha::Sitemapper->new(
     verbose => 0,
     url     => 'http://www.mylibrary.org',
@@ -167,7 +180,7 @@ $expected_content = <<EOS;
 </sitemapindex>
 EOS
 chop $expected_content;
-ok( $file_content eq $expected_content, "Its content is valid" );
+is( $file_content, $expected_content, "Its content is valid" );
 
 $file = "$dir/sitemap0001.xml";
 ok( -e $file, "File sitemap0001.xml created");
@@ -177,7 +190,7 @@ my $count = 0;
 while (<$fh>) {
 	$count++ if /<loc>/;
 }
-ok ( $count == 50000, "It contains 50000 URLs");
+is( $count, 50000, "It contains 50000 URLs");
 
 $file = "$dir/sitemap0002.xml";
 ok( -e $file, "File sitemap0002.xml created");
@@ -187,7 +200,7 @@ $count = 0;
 while (<$fh>) {
 	$count++ if /<loc>/;
 }
-ok ( $count == 25000, "It contains 25000 URLs");
+is( $count, 25000, "It contains 25000 URLs");
 
 # Cleanup
 unlink "$dir/$_" for qw / sitemapindex.xml sitemap0001.xml sitemap0002.xml /;
