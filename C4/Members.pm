@@ -23,7 +23,6 @@ package C4::Members;
 use strict;
 #use warnings; FIXME - Bug 2505
 use C4::Context;
-use C4::Dates qw(format_date_in_iso format_date);
 use String::Random qw( random_string );
 use Date::Calc qw/Today Add_Delta_YM check_date Date_to_Days/;
 use C4::Log; # logaction
@@ -738,12 +737,12 @@ sub AddMember {
 
     # add expiration date if it isn't already there
     unless ( $data{'dateexpiry'} ) {
-        $data{'dateexpiry'} = GetExpiryDate( $data{'categorycode'}, C4::Dates->new()->output("iso") );
+        $data{'dateexpiry'} = GetExpiryDate( $data{'categorycode'}, output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } ) );
     }
 
     # add enrollment date if it isn't already there
     unless ( $data{'dateenrolled'} ) {
-        $data{'dateenrolled'} = C4::Dates->new()->output("iso");
+        $data{'dateenrolled'} = output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } );
     }
 
     my $patron_category = $schema->resultset('Category')->find( $data{'categorycode'} );
@@ -1862,8 +1861,9 @@ sub ExtendMemberSubscriptionTo {
     my $borrower = GetMember('borrowernumber'=>$borrowerid);
     unless ($date){
       $date = (C4::Context->preference('BorrowerRenewalPeriodBase') eq 'dateexpiry') ?
-                                        C4::Dates->new($borrower->{'dateexpiry'}, 'iso')->output("iso") :
-                                        C4::Dates->new()->output("iso");
+                                        eval { output_pref( { dt => dt_from_string( $borrower->{'dateexpiry'}  ), dateonly => 1, dateformat => 'iso' } ); }
+                                        :
+                                        output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } );
       $date = GetExpiryDate( $borrower->{'categorycode'}, $date );
     }
     my $sth = $dbh->do(<<EOF);
@@ -2261,8 +2261,7 @@ sub GetMessages {
     my @results;
 
     while ( my $data = $sth->fetchrow_hashref ) {
-        my $d = C4::Dates->new( $data->{message_date}, 'iso' );
-        $data->{message_date_formatted} = $d->output;
+        $data->{message_date_formatted} = output_pref( { dt => dt_from_string( $data->{message_date} ), dateonly => 1, dateformat => 'iso' } );
         push @results, $data;
     }
     return \@results;

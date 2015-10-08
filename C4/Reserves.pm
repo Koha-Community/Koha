@@ -35,7 +35,6 @@ use C4::Members::Messaging;
 use C4::Members qw();
 use C4::Letters;
 use C4::Branch qw( GetBranchDetail );
-use C4::Dates qw( format_date_in_iso );
 
 use Koha::DateUtils;
 use Koha::Calendar;
@@ -166,11 +165,13 @@ sub AddReserve {
 
     my $dbh     = C4::Context->dbh;
 
-    $resdate = format_date_in_iso( $resdate ) if ( $resdate );
-    $resdate = C4::Dates->today( 'iso' ) unless ( $resdate );
+    $resdate = eval { output_pref( { dt => dt_from_string( $resdate ), dateonly => 1, dateformat => 'iso' }); }
+               if ( $resdate );
+    $resdate = eval { output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' }); }
+               unless ( $resdate );
 
     if ($expdate) {
-        $expdate = format_date_in_iso( $expdate );
+        $expdate = eval { output_pref( { dt => dt_from_string( $expdate), dateonly => 1, dateformat => 'iso' } ); };
     } else {
         undef $expdate; # make reserves.expirationdate default to null rather than '0000-00-00'
     }
@@ -1162,7 +1163,7 @@ sub ModReserve {
 
         if ( defined( $suspend_until ) ) {
             if ( $suspend_until ) {
-                $suspend_until = C4::Dates->new( $suspend_until )->output("iso");
+                $suspend_until = eval { output_pref( { dt => dt_from_string( $suspend_until ), dateonly => 1 }); };
                 $dbh->do("UPDATE reserves SET suspend = 1, suspend_until = ? WHERE reserve_id = ?", undef, ( $suspend_until, $reserve_id ) );
             } else {
                 $dbh->do("UPDATE reserves SET suspend_until = NULL WHERE reserve_id = ?", undef, ( $reserve_id ) );
@@ -1655,7 +1656,8 @@ sub SuspendAll {
     my $suspend_until  = $params{'suspend_until'}  || undef;
     my $suspend        = defined( $params{'suspend'} ) ? $params{'suspend'} :  1;
 
-    $suspend_until = C4::Dates->new( $suspend_until )->output("iso") if ( defined( $suspend_until ) );
+    $suspend_until = eval { output_pref( { dt => dt_from_string( $suspend_until), dateonly => 1, dateformat => 'iso' } ); }
+                     if ( defined( $suspend_until ) );
 
     return unless ( $borrowernumber || $biblionumber );
 
@@ -1976,7 +1978,7 @@ sub _koha_notify_reserve {
             'reserves'  => $reserve,
             'items', $reserve->{'itemnumber'},
         },
-        substitute => { today => C4::Dates->new()->output() },
+        substitute => { today => eval { output_pref( { dt => dt_from_string, dateonly => 1 } ); } },
     );
 
     my $notification_sent = 0; #Keeping track if a Hold_filled message is sent. If no message can be sent, then default to a print message.

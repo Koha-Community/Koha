@@ -142,7 +142,7 @@ sub search {
         ($patron->{overdues}, $patron->{issues}, $patron->{fines}) =
             GetMemberIssuesAndFines($patron->{borrowernumber});
         if($patron->{dateexpiry} and $patron->{dateexpiry} ne '0000-00-00') {
-            $patron->{dateexpiry} = C4::Dates->new($patron->{dateexpiry}, "iso")->output();
+            $patron->{dateexpiry} = output_pref( { dt => dt_from_string( $patron->{dateexpiry}), dateonly => 1, dateformat => 'iso' } );
         } else {
             $patron->{dateexpiry} = '';
         }

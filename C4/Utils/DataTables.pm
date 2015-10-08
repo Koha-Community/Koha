@@ -249,11 +249,11 @@ sub dt_build_query_dates {
     my @params;
     if ( $datefrom ) {
         $query .= " AND $field >= ? ";
-        push @params, C4::Dates->new($datefrom)->output('iso');
+        push @params, eval { output_pref( { dt => dt_from_string( $datefrom ), dateonly => 1, dateformat => 'iso' } ); };
     }
     if ( $dateto ) {
         $query .= " AND $field <= ? ";
-        push @params, C4::Dates->new($dateto)->output('iso');
+        push @params, eval { output_pref( { dt => dt_from_string( $dateto ), dateonly => 1, dateformat => 'iso' } ); };
     }
     return ( $query, \@params );
 }

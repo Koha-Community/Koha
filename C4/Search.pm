@@ -21,10 +21,10 @@ require Exporter;
 use C4::Context;
 use C4::Biblio;    # GetMarcFromKohaField, GetBiblioData
 use C4::Koha;      # getFacets
+use Koha::DateUtils;
 use Lingua::Stem;
 use C4::Search::PazPar2;
 use XML::Simple;
-use C4::Dates qw(format_date);
 use C4::Members qw(GetHideLostItemsPreference);
 use C4::XSLT;
 use C4::Branch;
@@ -2094,7 +2094,7 @@ sub searchResults {
             {
                 $onloan_count++;
                 my $key = $prefix . $item->{onloan} . $item->{barcode};
-                $onloan_items->{$key}->{due_date} = format_date( $item->{onloan} );
+                $onloan_items->{$key}->{due_date} = output_pref( { dt => dt_from_string( $item->{onloan} ), dateonly => 1 } );
                 $onloan_items->{$key}->{count}++ if $item->{$hbranch};
                 $onloan_items->{$key}->{branchname}     = $item->{branchname};
                 $onloan_items->{$key}->{location}       = $shelflocations->{ $item->{location} };

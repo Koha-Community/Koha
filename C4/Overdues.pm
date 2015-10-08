@@ -33,6 +33,7 @@ use C4::Accounts;
 use C4::Log; # logaction
 use C4::Debug;
 use C4::Budgets qw(GetCurrency);
+use Koha::DateUtils;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -978,7 +979,7 @@ sub parse_overdues_letter {
     }
 
     my $substitute = $params->{'substitute'} || {};
-    $substitute->{today} ||= C4::Dates->new()->output("syspref");
+    $substitute->{today} ||= output_pref( { dt => dt_from_string, dateonly => 1} );
 
     my %tables = ( 'borrowers' => $params->{'borrowernumber'} );
     if ( my $p = $params->{'branchcode'} ) {
