@@ -21,6 +21,7 @@ use Test::More tests => 18;
 use Test::Warn;
 
 use C4::Context;
+use Koha::Database;
 
 BEGIN {
     use_ok('C4::Reports::Guided');
@@ -30,11 +31,10 @@ can_ok(
     qw(save_report delete_report execute_query)
 );
 
-#Start transaction
-my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
+my $dbh = C4::Context->dbh;
 $dbh->do(q|DELETE FROM saved_sql|);
 $dbh->do(q|DELETE FROM saved_reports|);
 
@@ -118,6 +118,4 @@ ok(
 is_deeply( get_report_areas(), [ 'CIRC', 'CAT', 'PAT', 'ACQ', 'ACC', 'SER' ],
     "get_report_areas returns the correct array of report areas");
 
-#End transaction
-$dbh->rollback;
-
+$schema->storage->txn_rollback;

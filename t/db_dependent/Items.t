@@ -34,7 +34,8 @@ BEGIN {
     use_ok('Koha::Items');
 }
 
-my $dbh = C4::Context->dbh;
+my $schema = Koha::Database->new->schema;
+
 my $branches = GetBranches;
 my ($branch1, $branch2) = keys %$branches;
 my $location = 'My Location';
@@ -43,9 +44,7 @@ subtest 'General Add, Get and Del tests' => sub {
 
     plan tests => 14;
 
-    # Start transaction
-    $dbh->{AutoCommit} = 0;
-    $dbh->{RaiseError} = 1;
+    $schema->storage->txn_begin;
 
     # Create a biblio instance for testing
     C4::Context->set_preference('marcflavour', 'MARC21');
@@ -88,7 +87,7 @@ subtest 'General Add, Get and Del tests' => sub {
     is( $getitem->{location}, 'CART', "The location should have been set to CART" );
     is( $getitem->{permanent_location}, $location, "The permanent_location should not have been set to CART" );
 
-    $dbh->rollback;
+    $schema->storage->txn_rollback;
 };
 
 subtest 'GetHiddenItemnumbers tests' => sub {
@@ -97,9 +96,7 @@ subtest 'GetHiddenItemnumbers tests' => sub {
 
     # This sub is controlled by the OpacHiddenItems system preference.
 
-    # Start transaction
-    $dbh->{AutoCommit} = 0;
-    $dbh->{RaiseError} = 1;
+    $schema->storage->txn_begin;
 
     # Create a new biblio
     C4::Context->set_preference('marcflavour', 'MARC21');
@@ -175,16 +172,14 @@ subtest 'GetHiddenItemnumbers tests' => sub {
     @hidden = GetHiddenItemnumbers( @items );
     ok( scalar @hidden == 0, "Empty items list, no item hidden");
 
-    $dbh->rollback;
+    $schema->storage->txn_rollback;
 };
 
 subtest 'GetItemsInfo tests' => sub {
 
     plan tests => 4;
 
-    # Start transaction
-    $dbh->{AutoCommit} = 0;
-    $dbh->{RaiseError} = 1;
+    $schema->storage->txn_begin;
 
     # Add a biblio
     my ($biblionumber, $biblioitemnumber) = get_biblio();
@@ -212,16 +207,14 @@ subtest 'GetItemsInfo tests' => sub {
     is( exists( $results[0]->{ onsite_checkout } ), 1,
         'GetItemsInfo returns a onsite_checkout key' );
 
-    $dbh->rollback;
+    $schema->storage->txn_rollback;
 };
 
 subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
 
     plan tests => 4;
 
-    # Start transaction
-    $dbh->{AutoCommit} = 0;
-    $dbh->{RaiseError} = 1;
+    $schema->storage->txn_begin;
 
     my $schema = Koha::Database->new()->schema();
 
@@ -260,15 +253,14 @@ subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
                 $effective_itemtype eq 'BIB_LEVEL',
         '$item->effective_itemtype() falls back to biblioitems.itemtype when item-level_itypes is enabled but undef' );
 
-    $dbh->rollback;
+    $schema->storage->txn_rollback;
 };
 
 subtest 'SearchItems test' => sub {
     plan tests => 14;
 
-    # Start transaction
-    $dbh->{AutoCommit} = 0;
-    $dbh->{RaiseError} = 1;
+    $schema->storage->txn_begin;
+    my $dbh = C4::Context->dbh;
 
     C4::Context->set_preference('marcflavour', 'MARC21');
     my $cpl_items_before = SearchItemsByField( 'homebranch', 'CPL');
@@ -424,17 +416,14 @@ subtest 'SearchItems test' => sub {
     my $cpl_items_after = SearchItemsByField( 'homebranch', 'CPL');
     is( ( scalar( @$cpl_items_after ) - scalar ( @$cpl_items_before ) ), 1, 'SearchItemsByField should return something' );
 
-    $dbh->rollback;
+    $schema->storage->txn_rollback;
 };
 
 subtest 'Koha::Item(s) tests' => sub {
 
     plan tests => 5;
 
-    # Start transaction
-    my $schema = Koha::Database->new()->schema();
     $schema->storage->txn_begin();
-    $dbh->{RaiseError} = 1;
 
     # Create a biblio and item for testing
     C4::Context->set_preference('marcflavour', 'MARC21');
@@ -457,8 +446,7 @@ subtest 'Koha::Item(s) tests' => sub {
 subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
     plan tests => 7;
 
-    $dbh->{AutoCommit} = 0;
-    $dbh->{RaiseError} = 1;
+    $schema->storage->txn_begin();
 
     my ( $biblionumber, $biblioitemnumber ) = get_biblio();
     my $item_infos = [
