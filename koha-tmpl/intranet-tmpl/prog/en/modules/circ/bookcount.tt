@@ -48,7 +48,7 @@ $(document).ready(function(){
             <td>[% branchloo.branchname %]</td>
             <td>[% branchloo.issues %]</td>
             <td>[% IF ( branchloo.seen ) %]
-                    [% branchloo.seen %] [% branchloo.seentime %]
+                    [% branchloo.seen | $KohaDates with_hours => 1 %]
                 [% ELSE %]
                     <span>Never</span>
                 [% END %]

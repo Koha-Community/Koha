@@ -71,11 +71,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $branchloop = GetBranchesLoop(C4::Context->userenv->{branch});
 foreach (@$branchloop) {
-    my $date = lastseenat( $itm, $_->{value} );
-    my ($datechunk, $timechunk) =  slashdate($date);
     $_->{issues}     = issuesat($itm, $_->{value});
-    $_->{seen}       = $datechunk;
-    $_->{seentime}   = $timechunk;
+    $_->{seen}       = lastseenat( $itm, $_->{value} ) || undef;
 }
 
 $template->param(
@@ -169,15 +166,4 @@ sub lastseenat {
 
     my $date = ( $date1 lt $date2 ) ? $date2 : $date1 ;
     return ($date);
-}
-
-#####################################################
-# return date and time from timestamp
-sub slashdate {
-    my ($date) = @_;
-    $date or return;
-    return (
-        output_pref({ dt => dt_from_string( $date ), dateonly => 1 }),
-        substr($date,11,5)
-    );
 }
