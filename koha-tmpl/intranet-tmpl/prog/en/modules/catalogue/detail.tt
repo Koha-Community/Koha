@@ -6,6 +6,8 @@
 [% USE Branches %]
 [% USE Biblio %]
 [% USE ColumnsSettings %]
+[% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
+[% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
 
 [% IF Koha.Preference('AmazonAssocTag') %]
     [% AmazonAssocTag = '?tag=' _ Koha.Preference('AmazonAssocTag') %]
@@ -132,10 +134,13 @@
             </span>
         [% END %]
 
-        [% IF ( AmazonCoverImages  || LocalCoverImages ) %]
+        [% IF ( AmazonCoverImages  || LocalCoverImages || AdlibrisEnabled ) %]
         </div><div class="yui-u" id="bookcoverimg">
         [% IF ( LocalCoverImages ) %]
             <div title="[% biblionumber |url %]" class="[% biblionumber | html %]" id="local-thumbnail-preview"></div>
+        [% END %]
+        [% IF ( AdlibrisEnabled && normalized_isbn ) %]
+            <a href="[% AdlibrisURL | html %]?isbn=[% normalized_isbn | html %]"><img src="[% AdlibrisURL | html %]?isbn=[% normalized_isbn | html %]" class="adlibris-cover-big" alt="Adlibris cover image" /></a>
         [% END %]
         [% IF ( AmazonCoverImages ) %]
             <div id="amazon-bookcoverimg">

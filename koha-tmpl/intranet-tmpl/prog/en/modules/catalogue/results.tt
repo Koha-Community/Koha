@@ -5,6 +5,9 @@
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% USE AuthorisedValues %]
+[% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
+[% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
+[% INCLUDE 'browser-strings.inc' %]
 [% IF BiblioDefaultViewmarc %]
     [% SET DetailPage="MARCdetail.pl" %]
 [% ELSIF BiblioDefaultViewlabeled_marc %]
@@ -353,20 +356,23 @@
                     <!-- TABLE RESULTS START -->
                 <table>
                     <tr>
-                        [% IF ( AmazonCoverImages || LocalCoverImages ) %]<th>&nbsp;</th>[% END %]
+                        [% IF ( AmazonCoverImages || LocalCoverImages || AdlibrisEnabled ) %]<th>&nbsp;</th>[% END %]
                         <th colspan="2">Results</th>
                         <th>Location</th>
                     </tr>
                         <!-- Actual Search Results -->
                         [% SET MaxSearchResultsItemsPerRecordStatusCheck = Koha.Preference('MaxSearchResultsItemsPerRecordStatusCheck') %]
                         [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
-                            <tr>
-                            [% IF ( AmazonCoverImages || LocalCoverImages ) %]
+                         [% IF ( loop.odd ) %]<tr>[% ELSE %]<tr class="highlight">[% END %]
+                            [% IF ( AmazonCoverImages || LocalCoverImages || AdlibrisEnabled ) %]
                                 <td>
                                     [% IF ( LocalCoverImages) %]
                                         <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage | html %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
                                         <span title="[% SEARCH_RESULT.biblionumber |url %]" class="[% SEARCH_RESULT.biblionumber | html %]" id="local-thumbnail[% loop.count | html %]"></span>
                                         </a>
+                                    [% END %]
+                                    [% IF ( AdlibrisEnabled && SEARCH_RESULT.normalized_isbn ) %]
+                                        <a href="[% AdlibrisURL | html %]?isbn=[% SEARCH_RESULT.normalized_isbn | html %]"><img src="[% AdlibrisURL | html %]?isbn=[% SEARCH_RESULT.normalized_isbn | html %]" class="adlibris-cover" alt="Adlibris cover image" /></a>
                                     [% END %]
                                     [% IF ( AmazonCoverImages ) %]
                                         [% IF ( SEARCH_RESULT.normalized_isbn ) %]
