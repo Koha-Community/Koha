@@ -27,7 +27,7 @@
 # alternate streetnumber, alternate streettype, alternate address line 1, alternate city,
 # alternate zipcode, alternate country, alternate email, alternate phone, date of birth, branchcode,
 # categorycode, enrollment date, expiry date, noaddress, lost, debarred, contact surname,
-# contact firstname, contact title, borrower notes, contact relationship, ethnicity, ethnicity notes
+# contact firstname, contact title, borrower notes, contact relationship
 # gender, username, opac note, contact note, password, sort one, sort two
 #
 # any fields except cardnumber can be blank but the number of fields must match
