@@ -23,9 +23,9 @@ use Carp;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use C4::Context;
-use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Templates qw/themelanguage/;
 use C4::Koha;
+use Koha::DateUtils;
 use C4::Output;
 use XML::Simple;
 use XML::Dumper;
@@ -675,7 +675,7 @@ sub get_saved_reports {
     my (@cond,@args);
     if ($filter) {
         if (my $date = $filter->{date}) {
-            $date = format_date_in_iso($date);
+            $date = eval { output_pref( { dt => dt_from_string( $date ), dateonly => 1, dateformat => 'iso' }); };
             push @cond, "DATE(date_run) = ? OR
                          DATE(date_created) = ? OR
                          DATE(last_modified) = ? OR

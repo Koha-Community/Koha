@@ -27,7 +27,6 @@ use File::Basename qw( dirname );
 use C4::Reports::Guided;
 use C4::Auth qw/:DEFAULT get_session/;
 use C4::Output;
-use C4::Dates qw/format_date/;
 use C4::Debug;
 use C4::Branch; # XXX subfield_is_koha_internal_p
 use C4::Koha qw/IsAuthorisedValueCategory GetFrameworksLoop/;
