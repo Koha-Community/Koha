@@ -194,6 +194,8 @@ sub getLanguages {
     my $isFiltered = shift;
 
     my @languages_loop;
+    my $languages_hash;
+    my $priority_sorting = C4::Context->preference("AdvancedSearchLanguagesSort");
     my $dbh=C4::Context->dbh;
     my $default_language = 'en';
     my $current_language = $default_language;
@@ -240,7 +242,15 @@ sub getLanguages {
         }
         # Do not push unless valid iso639-2 code
         if ( $language_subtag_registry->{ iso639_2_code } and ( !$language_list || index (  $language_list, $language_subtag_registry->{ iso639_2_code } ) >= 0) ) {
-            push @languages_loop, $language_subtag_registry;
+            $languages_hash->{$language_subtag_registry->{ iso639_2_code }} = $language_subtag_registry;
+            push @languages_loop, $language_subtag_registry if not $language_list or not $priority_sorting;
+        }
+    }
+    if ($language_list and $priority_sorting) {
+        # sort @languages_loop into order defined in AdvancedSearchLanguages preference
+        my @adv_search_languages = split /[,|]+/, $language_list;
+        foreach my $adv_search_lang (@adv_search_languages){
+            push @languages_loop, $languages_hash->{$adv_search_lang} if $languages_hash->{$adv_search_lang};
         }
     }
     return \@languages_loop;

@@ -9,6 +9,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AddressFormat','us','us|de|fr','Choose format to display postal addresses', 'Choice'),
 ('advancedMARCeditor','0','','If ON, the MARC editor won\'t display field/subfield descriptions','YesNo'),
 ('AdvancedSearchLanguages','','','ISO 639-2 codes of languages you wish to see appear as an Advanced search option.  Example: eng|fre|ita','Textarea'),
+('AdvancedSearchLanguagesSort','0',NULL,'Use AdvancedSearchLanguages to sort the drop-down list. The leftmost language has the highest priority and appears on top of the drop-down.','YesNo'),
 ('AdvancedSearchTypes','itemtypes','itemtypes|ccode','Select which set of fields comprise the Type limit in the advanced search','Choice'),
 ('AgeRestrictionMarker','',NULL,'Markers for age restriction indication, e.g. FSK|PEGI|Age|','free'),
 ('AgeRestrictionOverride','0',NULL,'Allow staff to check out an item with age restriction.','YesNo'),

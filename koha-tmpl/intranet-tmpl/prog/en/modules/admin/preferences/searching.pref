@@ -100,6 +100,14 @@ Searching:
             - "ISO 639-2 language codes (separate values with | or ,)."
             - "For example, to limit listing to French and Italian, enter <em>ita|fre</em>."
         -
+            - By default, sort advanced search languages
+            - pref: AdvancedSearchLanguagesSort
+              type: boolean
+              choices:
+                  yes: by priority
+                  no: alphabetically
+            - '. The leftmost language in the AdvancedSearchLanguages preference has the highest priority and appears on top of the drop-down list.'
+        -
             - By default,
             - pref: expandedSearchOption
               type: boolean
