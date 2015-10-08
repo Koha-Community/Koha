@@ -77,6 +77,7 @@ sub _new_schema {
             password => $db_passwd,
             %encoding_attr,
             RaiseError => $ENV{DEBUG} ? 1 : 0,
+            PrintError => 1,
             unsafe => 1,
             on_connect_do => [
                 $encoding_query || (),
