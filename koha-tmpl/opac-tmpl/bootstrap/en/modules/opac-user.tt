@@ -5,6 +5,8 @@
 [% USE Branches %]
 [% USE ItemTypes %]
 [% USE Price %]
+[% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
+[% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
 
 [% SET borrower_club_enrollments =  logged_in_user.get_club_enrollments(1) %]
 [% SET borrower_enrollable_clubs = logged_in_user.get_enrollable_clubs(1,1) %]
@@ -181,7 +183,7 @@
                                         <caption>[% issues_count | html %] Item(s) checked out</caption>
                                         <thead>
                                             <tr>
-                                                [% IF ( JacketImages ) %]<th class="nosort">&nbsp;</th>[% END %]
+                                                [% IF ( JacketImages || AdlibrisEnabled ) %]<th class="nosort">&nbsp;</th>[% END %]
                                                 <th class="anti-the">Title</th>
                                                 <th>Author</th>
                                                 <th class="title-string psort">Due</th>
@@ -209,8 +211,10 @@
                                         <tbody>
                                             [% FOREACH ISSUE IN ISSUES %]
                                                 [% IF ( ISSUE.overdue ) %]<tr class="overdue">[% ELSE %]<tr>[% END %]
-                                                [% IF ( JacketImages ) %]<td class="jacketcell">
-
+                                                [% IF ( JacketImages || AdlibrisEnabled ) %]<td class="jacketcell">
+                                                    [% IF ( AdlibrisEnabled && ISSUE.normalized_isbn ) %]
+                                                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber | html %]"><img src="[% AdlibrisURL | html %]?isbn=[% issue.normalized_isbn | html %]" class="adlibris-cover" alt="Adlibris cover image" /></a>
+                                                    [% END %]
                                                     [% IF ( OPACAmazonCoverImages ) %]
                                                         [% IF ( ISSUE.normalized_isbn ) %]
                                                             <a href="http://www.amazon.com/gp/reader/[% ISSUE.normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link" title="View on Amazon.com"><img src="https://images-na.ssl-images-amazon.com/images/P/[% ISSUE.normalized_isbn | html %].01.THUMBZZZ.jpg" alt="View on Amazon.com" class="item-thumbnail"/></a>
@@ -467,7 +471,7 @@
                                     <!-- OVERDUES TABLE ROWS -->
                                     <thead>
                                         <tr>
-                                            [% IF ( JacketImages ) %]<th class="nosort">&nbsp;</th>[% END %]
+                                            [% IF ( JacketImages || AdlibrisEnabled ) %]<th class="nosort">&nbsp;</th>[% END %]
                                             <th class="anti-the">Title</th>
                                             [% UNLESS ( item_level_itypes ) %]<th>Item type</th> [% END %]
                                             [% IF ( show_barcode ) %]<th>Barcode</th>[% END %]
@@ -484,7 +488,7 @@
                                     <tbody>
                                         [% FOREACH OVERDUE IN OVERDUES %]
                                             <tr>
-                                                [% IF ( JacketImages ) %]
+                                                [% IF ( JacketImages || AdlibrisEnabled ) %]
                                                     <td class="jacketcell">
                                                     [% IF ( OPACAmazonCoverImages ) %]
                                                         [% IF ( OVERDUE.normalized_isbn ) %]

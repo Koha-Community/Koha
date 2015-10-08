@@ -31,6 +31,8 @@
                    <div id="showreviews" class="searchresults maincontent">
                         <h3>Recent comments <a href="[% OPACBaseURL | uri %]/cgi-bin/koha/opac-showreviews.pl?format=rss" class="rsssearchlink"><img src="[% interface | html %]/[% theme | html %]/images/feed-icon-16x16.png" alt="Subscribe to recent comments" title="Subscribe to recent comments" border="0" class="rsssearchicon"/></a></h3>
                         <table class="table table-striped">
+                            [% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
+                            [% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
                             [% FOREACH review IN reviews %]
                                 <tr>
                                     <td>
@@ -116,7 +118,9 @@
                                                 <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber |url %]#comments" title="View details for this title">
                                             [% END %]
                                         [% END %]
-
+                                        [% IF ( AdlibrisEnabled && review.normalized_isbn ) %]
+                                            <img src="[% AdlibrisURL | html %]?isbn=[% review.normalized_isbn | html %]" class="adlibris-cover" alt="Adlibris cover image" />
+                                        [% END %]
                                         [% IF ( OPACAmazonCoverImages ) %]
                                             [% IF ( review.normalized_isbn ) %]
                                                 <img src="https://images-na.ssl-images-amazon.com/images/P/[% review.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" />
@@ -124,7 +128,9 @@
                                                 <span class="no-image">No cover image available</span>
                                             [% END %]
                                         [% END %]
-
+                                        [% IF ( AdlibrisEnabled && SEARCH_RESULT.normalized_isbn ) %]
+                                            <img src="[% AdlibrisURL | html %]?isbn=[% SEARCH_RESULT.normalized_isbn | html %]" alt="Adlibris cover image" />
+                                        [% END %]
                                         [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
                                             <img src="https://secure.syndetics.com/index.aspx?isbn=[% review.normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% review.normalized_upc | html %]&amp;oclc=[% review.normalized_oclc | html %]" alt="" class="thumbnail" />
                                         [% END %]

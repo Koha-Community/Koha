@@ -1,6 +1,8 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
+[% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
+[% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;
 [% IF ( searchdesc ) %]
@@ -158,6 +160,9 @@ href="/cgi-bin/koha/opac-rss.pl?[% query_cgi | html %][% limit_cgi | html %]" />
                                                         <tr>
                                                     [% END %]
                                                         <td>
+                                                            [% IF ( AdlibrisEnabled && GROUP_RESULT.normalized_isbn ) %]
+                                                                <img src="[% AdlibrisURL | html %]?isbn=[% GROUP_RESULT.normalized_isbn | html %]" class="adlibris-cover" alt="Adlibris cover image" />
+                                                            [% END %]
                                                             [% IF ( OPACAmazonCoverImages ) %]
                                                                 <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% GROUP_RESULT.biblionumber |url %]">[% IF ( GROUP_RESULT.isbn ) %]<img src="https://images-na.ssl-images-amazon.com/images/P/[% GROUP_RESULT.isbn | html %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" />[% ELSE %]<img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" class="thumbnail" />[% END %]
                                                             </a>

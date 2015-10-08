@@ -1,5 +1,8 @@
 <?xml version='1.0' encoding='utf-8'  ?>
 [% USE Koha %]
+[% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
+[% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
+
 [% IF ( opensearchdescription ) %]
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
    <ShortName>[% LibraryName | html %] Search</ShortName>
@@ -37,8 +40,12 @@
        <dc:identifier>ISBN [% SEARCH_RESULT.isbn | html %]</dc:identifier>
        <link>[% IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) %][% OPACBaseURL | html %]/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %][% ELSE %][% IF ( SEARCH_RESULT.BiblioDefaultViewisbd ) %][% OPACBaseURL | html %]/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %][% ELSE %][% OPACBaseURL | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %][% END %][% END %]</link>
        <description><![CDATA[
+[% IF ( AdlibrisEnabled && SEARCH_RESULT.normalized_isbn ) %]
+    <img src="[% AdlibrisURL | html %]?isbn=[% SEARCH_RESULT.normalized_isbn | html %]" alt="Adlibris cover image" />
+[% END %]
 [% IF ( OPACAmazonCoverImages ) %][% IF ( SEARCH_RESULT.normalized_isbn ) %]<img src="https://images-na.ssl-images-amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="" />[% END %][% END %]
 [% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( SEARCH_RESULT.content_identifier_exists ) %]<img src="http://www.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn | html %]/SC.GIF&amp;client=[% SEARCH_RESULT.SyndeticsClientCode | html %]&amp;type=xw10[% IF ( SEARCH_RESULT.normalized_upc ) %]&amp;upc=[% SEARCH_RESULT.normalized_upc | html %][% END %][% IF ( SEARCH_RESULT.normalized_oclc ) %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc | html %][% END %]" alt="" />
+
 [% ELSE %]
 <img src="http://www.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% SEARCH_RESULT.normalized_upc | html %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc | html %]" alt="" />
 [% END %][% END %][% END %]

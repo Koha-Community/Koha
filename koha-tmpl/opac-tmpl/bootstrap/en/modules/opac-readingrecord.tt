@@ -10,6 +10,8 @@
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-readingrecord' %]
 [% INCLUDE 'masthead.inc' %]
+[% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
+[% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
 
 [% IF Koha.Preference('AmazonAssocTag') %]
     [% AmazonAssocTag = '?tag=' _ Koha.Preference('AmazonAssocTag') %]
@@ -94,6 +96,16 @@
                                                       [% issuetype | html %]
                                                     </td>
                                                 <td>
+                                                    [% IF ( AdlibrisEnabled && issue.normalized_isbn ) %]
+                                                        [% IF issue.BiblioDefaultViewmarc %]
+                                                            <a href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% issue.biblionumber |url %]">
+                                                        [% ELSIF issue.BiblioDefaultViewisbd %]
+                                                            <a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% issue.biblionumber |url %]">
+                                                        [% ELSE %]
+                                                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% issue.biblionumber |url %]">
+                                                        [% END %]
+                                                        <img src="[% AdlibrisURL | html %]?isbn=[% issue.normalized_isbn | html %]" class="adlibris-cover" alt="Adlibris cover image" /></a>
+                                                    [% END %]
                                                     [% IF  OPACAmazonCoverImages %]
                                                         [% IF  issue.normalized_isbn %]
                                                             <a href="http://www.amazon.com/gp/reader/[% issue.normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"><img border="0" src="https://images-na.ssl-images-amazon.com/images/P/[% issue.normalized_isbn | html %].01.THUMBZZZ.jpg" alt="" class="item-thumbnail" /></a>

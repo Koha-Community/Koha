@@ -5,6 +5,8 @@
 [% SET PUBLIC = 2 %]
 [% SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && Koha.Preference('TagsShowOnList') ) %]
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && Koha.Preference('TagsInputOnList') ) %]
+[% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
+[% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;   [% IF op == 'view' %]Contents of [% shelf.shelfname | html %][% ELSE %]Your lists[% END %]</title>[% INCLUDE 'doc-head-close.inc' %]
@@ -306,7 +308,9 @@
                                                             [% IF ( OPACLocalCoverImages ) %]
                                                                 <span title="[% itemsloo.biblionumber |url %]" class="[% itemsloo.biblionumber | html %]" id="local-thumbnail[% loop.count | html %]"></span>
                                                             [% END %]
-
+                                                            [% IF ( AdlibrisEnabled && itemsloo.normalized_isbn ) %]
+                                                                <img src="[% AdlibrisURL | html %]?isbn=[% itemsloo.normalized_isbn | html %]" class="adlibris-cover" alt="Adlibris cover image" />
+                                                            [% END %]
                                                             [% IF ( OPACAmazonCoverImages ) %]
                                                                 [% IF ( itemsloo.normalized_isbn ) %]
                                                                     <span title="[% itemsloo.biblionumber | html %]" id="amazon-thumbnail[% loop.count | html %]"><img src="https://images-na.ssl-images-amazon.com/images/P/[% itemsloo.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="" /></span>

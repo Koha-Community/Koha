@@ -1,4 +1,4 @@
-[% USE KohaDates # XML declaration should have no white space before it %]<?xml version="1.0" encoding="utf-8"?>
+[% USE KohaDates # XML declaration should have no white space before it %][% USE Koha %]<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
      <title><![CDATA[[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] Catalog Recent Comments]]></title>
@@ -6,11 +6,16 @@
      <description><![CDATA[ The most recent comments from [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] Catalog. Comments can be made by logged in users and are moderated by library staff.]]></description>
      <atom:link href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2" rel="self" type="application/rss+xml" />
      <lastBuildDate>[% timestamp | html %]</lastBuildDate>
+     [% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
+     [% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
 	 [% FOREACH review IN reviews %]
      <item>
        <title>New comment on [% review.title | html %] [% FOREACH subtitl IN review.subtitle %], [% subtitl.subfield | html %][% END %]</title>
        <link>[% OPACBaseURL | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber | html %]#comments</link>
        <description><![CDATA[
+[% IF ( AdlibrisEnabled && review.normalized_isbn ) %]
+    <img src="[% AdlibrisURL | html %]?isbn=[% review.normalized_isbn | html %]" alt="Adlibris cover image" />
+[% END %]
 [% IF ( OPACAmazonCoverImages ) %][% IF ( review.normalized_isbn ) %]<img src="https://images-na.ssl-images-amazon.com/images/P/[% review.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="" />[% END %][% END %]
 
 [% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( review.content_identifier_exists ) %]<img src="https://secure.syndetics.com/index.aspx?isbn=[% review.normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% review.normalized_upc | html %]&amp;oclc=[% review.normalized_oclc | html %]" alt="" />
