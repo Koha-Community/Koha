@@ -28,7 +28,7 @@ use CGI::Cookie; # need to check cookies before having CGI parse the POST reques
 
 use C4::Auth qw(:DEFAULT check_cookie_auth);
 use C4::Context;
-use C4::Dates qw(format_date format_date_in_iso);
+use Koha::DateUtils;
 # use C4::Koha;
 use C4::Output qw(:html :ajax pagination_bar);
 use C4::Debug;
@@ -169,7 +169,8 @@ if ($filter = $input->param('tag')) {
 	$filters{term} = $filter;
 }
 if ($filter = $input->param('from')) {
-	if ($date_from = format_date_in_iso($filter)) {
+        $date_from = eval { output_pref( { dt => dt_from_string( $filter ), dateonly => 1, dateformat => 'iso' } ); };
+        if ( $date_from ) {
 		$template->param(filter_date_approved_from=>$filter);
 		$filters{date_approved} = ">=$date_from";
 	} else {
@@ -177,7 +178,8 @@ if ($filter = $input->param('from')) {
 	}
 }
 if ($filter = $input->param('to')) {
-	if ($date_to = format_date_in_iso($filter)) {
+        $date_to = eval { output_pref( { dt => dt_from_string( $filter ), dateonly => 1, dateformat => 'iso' } ); };
+        if ( $date_to ) {
 		$template->param(filter_date_approved_to=>$filter);
 		$filters{date_approved} = "<=$date_to";
 	} else {
