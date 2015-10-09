@@ -130,15 +130,13 @@ my $category_type = $data->{'category_type'};
 
 $debug and printf STDERR "dates (enrolled,expiry,birthdate) raw: (%s, %s, %s)\n", map {$data->{$_}} qw(dateenrolled dateexpiry dateofbirth);
 foreach (qw(dateenrolled dateexpiry dateofbirth)) {
-		my $userdate = $data->{$_};
-		unless ($userdate) {
-			$debug and warn sprintf "Empty \$data{%12s}", $_;
-			$data->{$_} = '';
-			next;
-		}
-		$userdate = C4::Dates->new($userdate,'iso')->output('syspref');
-		$data->{$_} = $userdate || '';
-		$template->param( $_ => $userdate );
+    my $userdate = $data->{$_};
+    unless ($userdate) {
+        $debug and warn sprintf "Empty \$data{%12s}", $_;
+        $data->{$_} = '';
+        next;
+    }
+    $template->param( $_ => dt_from_string( $userdate ) );
 }
 $data->{'IS_ADULT'} = ( $data->{'categorycode'} ne 'I' );
 
