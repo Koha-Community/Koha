@@ -121,7 +121,7 @@ function finderjumpfull(page)
                     <input type="hidden" name="authtypecode" value="[% authtypecode %]" />
                 </li>
                 <li>
-                    <label for="mainmainentry">Main entry ($a only): </label>
+                    <label for="mainmainentry">Search main heading ($a only): </label>
                     <input type="hidden" name="marclist" value="mainmainentry" />
                     <input type="hidden" name="and_or" value="and" />
                     <input type="hidden" name="excluding" value="" />
@@ -147,7 +147,7 @@ function finderjumpfull(page)
                 </li>
 
                 <li>
-                    <label for="mainentry">Main entry: </label>
+                    <label for="mainentry">Search main heading: </label>
                     <input type="hidden" name="marclist" value="mainentry" />
                     <input type="hidden" name="and_or" value="and" />
                     <input type="hidden" name="excluding" value="" />
@@ -171,9 +171,32 @@ function finderjumpfull(page)
                     <input id="value_main" style="width:400px;" type="text" name="value_main" value="[% value_main |html %]" />
                     <div id="yvaluecontainermainentry"></div>
                 </li>
-
                 <li>
-                    <label for="marclistanywhere">Anywhere: </label>
+                    <label for="marclistheading">Search all headings: </label>
+                    <input type="hidden" name="marclist" value="match" />
+                    <input type="hidden" name="and_or" value="and" />
+                    <input type="hidden" name="excluding" value="" />
+                    <select name="operator" id="marclistheading">
+                        [% IF ( operator_match == 'contains' ) %]
+                        <option value="contains" selected="selected">contains</option>
+                        [% ELSE %]
+                        <option value="contains">contains</option>
+                        [% END %]
+                        [% IF ( operator_match == 'start' ) %]
+                        <option value="start" selected="selected">starts with</option>
+                        [% ELSE %]
+                        <option value="start">starts with</option>
+                        [% END %]
+                        [% IF ( operator_match == 'is' ) %]
+                        <option value="is" selected="selected">is exactly</option>
+                        [% ELSE %]
+                        <option value="is">is exactly</option>
+                        [% END %]
+                    </select>
+                    <input type="text" name="value_match" value="[% value_match |html %]" />
+                </li>
+                <li>
+                    <label for="marclistanywhere">Search entire record: </label>
                     <input type="hidden" name="marclist" value="any" />
                     <input type="hidden" name="and_or" value="and" />
                     <input type="hidden" name="excluding" value="" />
@@ -196,30 +219,6 @@ function finderjumpfull(page)
                     </select>
                     <input id="value_any" style="width:400px;" type="text" name="value_any" value="[% value_any |html %]" />
                     <div id="yvaluecontainermarclist"></div>
-                </li>
-                <li>
-                    <label for="marclistheading">Heading match: </label>
-                    <input type="hidden" name="marclist" value="match" />
-                    <input type="hidden" name="and_or" value="and" />
-                    <input type="hidden" name="excluding" value="" />
-                    <select name="operator" id="marclistheading">
-                        [% IF ( operator_match == 'contains' ) %]
-                        <option value="contains" selected="selected">contains</option>
-                        [% ELSE %]
-                        <option value="contains">contains</option>
-                        [% END %]
-                        [% IF ( operator_match == 'start' ) %]
-                        <option value="start" selected="selected">starts with</option>
-                        [% ELSE %]
-                        <option value="start">starts with</option>
-                        [% END %]
-                        [% IF ( operator_match == 'is' ) %]
-                        <option value="is" selected="selected">is exactly</option>
-                        [% ELSE %]
-                        <option value="is">is exactly</option>
-                        [% END %]
-                    </select>
-                    <input type="text" name="value_match" value="[% value_match |html %]" />
                 </li>
         <li>
         <label for="orderby">Sort by: </label>
