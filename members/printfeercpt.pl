@@ -89,7 +89,8 @@ for (my $i=0;$i<$numaccts;$i++){
     if($accts->[$i]{'amountoutstanding'} <= 0){
         $accts->[$i]{'amountoutstandingcredit'} = 1;
     }
-    my %row = ( 'date'              => output_pref({ dt => dt_from_string( $accts->[$i]{'date'} ), dateformat => 'iso', dateonly => 1 }),
+
+    my %row = ( 'date'         => dt_from_string( $accts->[$i]{'date'} ),
                 'amountcredit' => $accts->[$i]{'amountcredit'},
                 'amountoutstandingcredit' => $accts->[$i]{'amountoutstandingcredit'},
                 'toggle' => $accts->[$i]{'toggle'},

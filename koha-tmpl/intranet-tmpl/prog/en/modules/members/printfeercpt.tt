@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Print Receipt for [% cardnumber %]</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -42,7 +43,7 @@
 
   [% FOREACH account IN accounts %]
 <tr class="highlight">
-      <td>[% account.date %]</td>
+      <td>[% account.date | $KohaDates %]</td>
       <td>
         [% SWITCH account.accounttype %]
           [% CASE 'Pay' %]Payment, thanks
