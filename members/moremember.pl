@@ -129,15 +129,15 @@ my $category_type = $data->{'category_type'};
 
 $debug and printf STDERR "dates (enrolled,expiry,birthdate) raw: (%s, %s, %s)\n", map {$data->{$_}} qw(dateenrolled dateexpiry dateofbirth);
 foreach (qw(dateenrolled dateexpiry dateofbirth)) {
-		my $userdate = $data->{$_};
-		unless ($userdate) {
-			$debug and warn sprintf "Empty \$data{%12s}", $_;
-			$data->{$_} = '';
-			next;
-		}
-                $userdate =  output_pref({ dt => dt_from_string( $userdate ), dateonly => 1 });
-		$data->{$_} = $userdate || '';
-		$template->param( $_ => $userdate );
+    my $userdate = $data->{$_};
+    unless ($userdate) {
+        $debug and warn sprintf "Empty \$data{%12s}", $_;
+        $data->{$_} = '';
+        next;
+    }
+    $userdate = output_pref({ dt => dt_from_string( $userdate ), dateonly => 1 });
+    $data->{$_} = $userdate || '';
+    $template->param( $_ => $userdate );
 }
 $data->{'IS_ADULT'} = ( $data->{'categorycode'} ne 'I' );
 
@@ -343,7 +343,7 @@ $template->param(
     categoryname    => $data->{'description'},
     was_renewed     => $input->param('was_renewed') ? 1 : 0,
     branch          => $branch,
-    todaysdate      =>  output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }),
+    todaysdate      => output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }),
     totalprice      => sprintf("%.2f", $totalprice),
     totaldue        => sprintf("%.2f", $total),
     totaldue_raw    => $total,
