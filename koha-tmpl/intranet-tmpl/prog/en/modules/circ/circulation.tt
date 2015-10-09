@@ -190,7 +190,7 @@ $(document).ready(function() {
 </form>
 </div>
 
-[% IF ( was_renewed ) %]<div class="dialog message">Patron's account has been renewed until [% expiry %]</div>[% END %]
+[% IF ( was_renewed ) %]<div class="dialog message">Patron's account has been renewed until [% expiry | $KohaDates %]</div>[% END %]
 
 [% IF additional_materials %]
     <div id="materials" class="dialog message">Note about the accompanying materials: <br />
@@ -237,11 +237,11 @@ $(document).ready(function() {
 [% END %]
 
 [% IF ( RESERVE_WAITING ) %]
-    <li>Item <i>[% getTitleMessageIteminfo %]</i> ([% getBarcodeMessageIteminfo %]) has been waiting for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber %]">[% resfirstname %] [% ressurname %]</a> ([% rescardnumber %]) at [% resbranchname %] since [% reswaitingdate %]</li>
+    <li>Item <i>[% getTitleMessageIteminfo %]</i> ([% getBarcodeMessageIteminfo %]) has been waiting for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber %]">[% resfirstname %] [% ressurname %]</a> ([% rescardnumber %]) at [% resbranchname %] since [% reswaitingdate | $KohaDates %]</li>
 [% END %]
 
 [% IF ( RESERVED ) %]
-    <li>Item <i>[% getTitleMessageIteminfo %]</i> ([% getBarcodeMessageIteminfo %]) has been on hold for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber %]">[% resfirstname %] [% ressurname %]</a> ([% rescardnumber %]) at [% resbranchname %] since [% resreservedate %]</li>
+    <li>Item <i>[% getTitleMessageIteminfo %]</i> ([% getBarcodeMessageIteminfo %]) has been on hold for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber %]">[% resfirstname %] [% ressurname %]</a> ([% rescardnumber %]) at [% resbranchname %] since [% resreservedate | $KohaDates %]</li>
 [% END %]
 
 [% IF ( ISSUED_TO_ANOTHER ) %]
@@ -724,7 +724,7 @@ No patron matched <span class="ex">[% message %]</span>
 
 			[% IF ( warndeparture ) %]
 			<li><span class="circ-hlt">Expiration:</span> Patron's card will expire soon.
-            Patron's card expires on [% expiry %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% borrowernumber %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]">Edit Details</a>
+            Patron's card expires on [% expiry | $KohaDates %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% borrowernumber %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]">Edit Details</a>
 
 			</li>
 			[% END %]
@@ -737,7 +737,7 @@ No patron matched <span class="ex">[% message %]</span>
 
 			[% IF ( expired ) %]
 			<li><span class="circ-hlt">Expiration:</span> Patron's card has expired.
-            [% IF ( expiry ) %]Patron's card expired on [% expiry %][% END %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% borrowernumber %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]">Edit Details</a>
+            [% IF ( expiry ) %]Patron's card expired on [% expiry | $KohaDates %][% END %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% borrowernumber %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]">Edit Details</a>
 
 			</li>
 			[% END %]
@@ -755,7 +755,7 @@ No patron matched <span class="ex">[% message %]</span>
                    <span class="circ-hlt"> Restricted:</span> Patron's account is restricted
 
                    [% IF ( userdebarreddate ) %]
-                       until [% userdebarreddate %]
+                       until [% userdebarreddate | $KohaDates %]
                    [% END %]
 
                    [% IF ( debarredcomment ) %]

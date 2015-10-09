@@ -30,7 +30,6 @@ use DateTime::Duration;
 use C4::Output;
 use C4::Print;
 use C4::Auth qw/:DEFAULT get_session haspermission/;
-use C4::Dates qw/format_date/;
 use C4::Branch; # GetBranches
 use C4::Koha;   # GetPrinter
 use C4::Circulation;
@@ -175,6 +174,8 @@ for my $barcode ( @$barcodes ) {
 
 my $stickyduedate  = $query->param('stickyduedate') || $session->param('stickyduedate');
 my $duedatespec    = $query->param('duedatespec')   || $session->param('stickyduedate');
+$duedatespec = eval { output_pref( { dt => dt_from_string( $duedatespec ), dateformat => 'iso' }); };
+
 my $issueconfirmed = $query->param('issueconfirmed');
 my $cancelreserve  = $query->param('cancelreserve');
 my $print          = $query->param('print') || q{};
@@ -202,17 +203,14 @@ if( $onsite_checkout && !$duedatespec_allow ) {
     $datedue = output_pref({ dt => dt_from_string, dateonly => 1, dateformat => 'iso' });
     $datedue .= ' 23:59:00';
 } elsif( $duedatespec_allow ) {
-    if ($duedatespec) {
-        if ($duedatespec =~ C4::Dates->regexp('syspref')) {
-                $datedue = dt_from_string($duedatespec);
-        } else {
+    if ($datedue) {
+        $datedue = eval { dt_from_string( $datedue ) };
+        if (! $datedue ) {
             $invalidduedate = 1;
-            $template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);
+            $template->param( IMPOSSIBLE=>1, INVALID_DATE=>$datedue );
         }
     }
 }
-
-our $todaysdate = C4::Dates->new->output('iso');
 
 # check and see if we should print
 if ( @$barcodes == 0 && $print eq 'maybe' ) {
@@ -295,7 +293,7 @@ if ($borrowernumber) {
             noissues => ($force_allow_issue) ? 0 : "1",
             forceallow => $force_allow_issue,
             expired => "1",
-            renewaldate => format_date("$renew_year-$renew_month-$renew_day")
+            renewaldate => "$renew_year-$renew_month-$renew_day",
         );
     }
     # check for NotifyBorrowerDeparture
@@ -304,8 +302,9 @@ if ($borrowernumber) {
             Date_to_Days( $today_year, $today_month, $today_day ) ) 
     {
         # borrower card soon to expire warn librarian
-        $template->param("warndeparture" => format_date($borrower->{dateexpiry}),
-        flagged       => "1",);
+        $template->param( "warndeparture" => $borrower->{dateexpiry} ,
+                          flagged         => "1"
+                        );
         if (C4::Context->preference('ReturnBeforeExpiry')){
             $template->param("returnbeforeexpiry" => 1);
         }
@@ -323,8 +322,7 @@ if ($borrowernumber) {
         );
 
         if ( $borrower->{debarred} ne "9999-12-31" ) {
-            $template->param( 'userdebarreddate' =>
-                  C4::Dates::format_date( $borrower->{debarred} ) );
+            $template->param( 'userdebarreddate' => $borrower->{debarred} );
         }
     }
 
@@ -590,7 +588,7 @@ $template->param(
     printer           => $printer,
     printername       => $printer,
     was_renewed       => $query->param('was_renewed') ? 1 : 0,
-    expiry            => format_date($borrower->{'dateexpiry'}),
+    expiry            => $borrower->{'dateexpiry'},
     roadtype          => $roadtype,
     amountold         => $amountold,
     barcodes          => $barcodes,

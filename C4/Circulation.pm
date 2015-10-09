@@ -22,14 +22,13 @@ package C4::Circulation;
 use strict;
 #use warnings; FIXME - Bug 2505
 use DateTime;
+use Koha::DateUtils;
 use C4::Context;
 use C4::Stats;
 use C4::Reserves;
 use C4::Biblio;
 use C4::Items;
 use C4::Members;
-use C4::Dates;
-use C4::Dates qw(format_date);
 use C4::Accounts;
 use C4::ItemCirculationAlertPreference;
 use C4::Message;
@@ -657,7 +656,7 @@ sub itemissues {
 =head2 CanBookBeIssued
 
   ( $issuingimpossible, $needsconfirmation ) =  CanBookBeIssued( $borrower, 
-                      $barcode, $duedatespec, $inprocess, $ignore_reserves );
+                      $barcode, $duedate, $inprocess, $ignore_reserves );
 
 Check if a book can be issued.
 
@@ -669,7 +668,7 @@ C<$issuingimpossible> and C<$needsconfirmation> are some hashref.
 
 =item C<$barcode> is the bar code of the book being issued.
 
-=item C<$duedatespec> is a C4::Dates object.
+=item C<$duedates> is a DateTime object.
 
 =item C<$inprocess> boolean switch
 =item C<$ignore_reserves> boolean switch
@@ -1035,7 +1034,7 @@ sub CanBookBeIssued {
                     $needsconfirmation{'rescardnumber'} = $resborrower->{'cardnumber'};
                     $needsconfirmation{'resborrowernumber'} = $resborrower->{'borrowernumber'};
                     $needsconfirmation{'resbranchname'} = $branchname;
-                    $needsconfirmation{'reswaitingdate'} = format_date($res->{'waitingdate'});
+                    $needsconfirmation{'reswaitingdate'} = $res->{'waitingdate'};
                 }
                 elsif ( $restype eq "Reserved" ) {
                     # The item is on reserve for someone else.
@@ -1045,7 +1044,7 @@ sub CanBookBeIssued {
                     $needsconfirmation{'rescardnumber'} = $resborrower->{'cardnumber'};
                     $needsconfirmation{'resborrowernumber'} = $resborrower->{'borrowernumber'};
                     $needsconfirmation{'resbranchname'} = $branchname;
-                    $needsconfirmation{'resreservedate'} = format_date($res->{'reservedate'});
+                    $needsconfirmation{'resreservedate'} = $res->{'reservedate'};
                 }
             }
         }
@@ -1212,13 +1211,13 @@ Issue a book. Does no check, they are done in CanBookBeIssued. If we reach this 
 
 =item C<$barcode> is the barcode of the item being issued.
 
-=item C<$datedue> is a C4::Dates object for the max date of return, i.e. the date due (optional).
+=item C<$datedue> is a DateTime object for the max date of return, i.e. the date due (optional).
 Calculated if empty.
 
 =item C<$cancelreserve> is 1 to override and cancel any pending reserves for the item (optional).
 
 =item C<$issuedate> is the date to issue the item in iso (YYYY-MM-DD) format (optional).
-Defaults to today.  Unlike C<$datedue>, NOT a C4::Dates object, unfortunately.
+Defaults to today.  Unlike C<$datedue>, NOT a DateTime object, unfortunately.
 
 AddIssue does the following things :
 
@@ -1905,7 +1904,7 @@ sub AddReturn {
             # define circControlBranch only if dropbox mode is set
             # don't allow dropbox mode to create an invalid entry in issues (issuedate > today)
             # FIXME: check issuedate > returndate, factoring in holidays
-            #$circControlBranch = _GetCircControlBranch($item,$borrower) unless ( $item->{'issuedate'} eq C4::Dates->today('iso') );;
+
             $circControlBranch = _GetCircControlBranch($item,$borrower);
             $issue->{'overdue'} = DateTime->compare($issue->{'date_due'}, $dropboxdate ) == -1 ? 1 : 0;
         }
@@ -2851,7 +2850,7 @@ C<$itemnumber> is the number of the item to renew.
 C<$branch> is the library where the renewal took place (if any).
            The library that controls the circ policies for the renewal is retrieved from the issues record.
 
-C<$datedue> can be a C4::Dates object used to set the due date.
+C<$datedue> can be a DateTime object used to set the due date.
 
 C<$lastreneweddate> is an optional ISO-formatted date used to set issues.lastreneweddate.  If
 this parameter is not supplied, lastreneweddate is set to the current date.
@@ -3435,7 +3434,7 @@ $newdatedue = CalcDateDue($startdate,$itemtype,$branchcode,$borrower);
 
 this function calculates the due date given the start date and configured circulation rules,
 checking against the holidays calendar as per the 'useDaysMode' syspref.
-C<$startdate>   = C4::Dates object representing start date of loan period (assumed to be today)
+C<$startdate>   = DateTime object representing start date of loan period (assumed to be today)
 C<$itemtype>  = itemtype code of item in question
 C<$branch>  = location whose calendar to use
 C<$borrower> = Borrower object
@@ -3876,8 +3875,6 @@ sub TransferSlip {
 
     my $item =  GetItem( $itemnumber, $barcode )
       or return;
-
-    my $pulldate = C4::Dates->new();
 
     return C4::Letters::GetPreparedLetter (
         module => 'circulation',
