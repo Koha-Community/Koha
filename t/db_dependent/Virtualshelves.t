@@ -12,11 +12,11 @@ use Koha::Virtualshelfcontents;
 
 use t::lib::TestBuilder;
 
+my $builder = t::lib::TestBuilder->new;
+
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 teardown();
-
-my $builder = t::lib::TestBuilder->new;
 
 subtest 'CRUD' => sub {
     plan tests => 13;
