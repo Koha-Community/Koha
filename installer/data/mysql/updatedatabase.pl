@@ -36,9 +36,9 @@ use Getopt::Long;
 # Koha modules
 use C4::Context;
 use C4::Installer;
-use C4::Dates;
 use Koha::Database;
 use Koha;
+use Koha::DateUtils;
 
 use MARC::Record;
 use MARC::File::XML ( BinaryEncoding => 'utf8' );
@@ -4170,10 +4170,10 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE `issuingrules` ADD hardduedatecompare tinyint NOT NULL default 0 AFTER hardduedate");
     my $duedate;
     if (C4::Context->preference("globalDueDate")) {
-      $duedate = C4::Dates::format_date_in_iso(C4::Context->preference("globalDueDate"));
+      $duedate = eval { output_pref( { dt => dt_from_string( C4::Context->preference("globalDueDate") ), dateonly => 1, dateformat => 'iso' } ); };
       $dbh->do("UPDATE `issuingrules` SET hardduedate = '$duedate', hardduedatecompare = 0");
     } elsif (C4::Context->preference("ceilingDueDate")) {
-      $duedate = C4::Dates::format_date_in_iso(C4::Context->preference("ceilingDueDate"));
+      $duedate = eval { output_pref( { dt => dt_from_string( C4::Context->preference("ceilingDueDate") ), dateonly => 1, dateformat => 'iso' } ); };
       $dbh->do("UPDATE `issuingrules` SET hardduedate = '$duedate', hardduedatecompare = -1");
     }
     $dbh->do("DELETE FROM `systempreferences` WHERE variable = 'globalDueDate' OR variable = 'ceilingDueDate'");
