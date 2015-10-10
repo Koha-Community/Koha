@@ -29,6 +29,7 @@ use C4::Csv;
 use C4::Koha;               # GetItemTypes
 use C4::Output;
 use C4::Record;
+use Koha::DateUtils;
 
 my $query = new CGI;
 
@@ -198,15 +199,18 @@ if ( $op eq "export" ) {
         my $itemtype             = $query->param("itemtype");
         my $start_callnumber     = $query->param("start_callnumber");
         my $end_callnumber       = $query->param("end_callnumber");
-        $timestamp = ($timestamp) ? C4::Dates->new($timestamp) : ''
-          if ($commandline);
+        if ( $commandline ) {
+            $timestamp = eval { output_pref( { dt => dt_from_string( $timestamp ), dateonly => 1 }); };
+            $timestamp = '' unless ( $timestamp );
+        }
+
         my $start_accession =
           ( $query->param("start_accession") )
-          ? C4::Dates->new( $query->param("start_accession") )
+          ? eval { output_pref( { dt => dt_from_string( $query->param("start_accession") ), dateonly => 1, dateformat => 'iso' } ); }
           : '';
         my $end_accession =
           ( $query->param("end_accession") )
-          ? C4::Dates->new( $query->param("end_accession") )
+          ? eval { output_pref( { dt => dt_from_string( $query->param("end_accession") ), dateonly => 1, dateformat => 'iso' } ); }
           : '';
         $dont_export_items = $query->param("dont_export_item")
           unless ($commandline);
@@ -565,7 +569,7 @@ sub construct_query {
                 WHERE $biblioitemstable.timestamp >= ?
                   OR deleteditems.timestamp >= ?
             ) ";
-            my $ts = $timestamp->output('iso');
+            my $ts = eval { output_pref( { dt => dt_from_string( $timestamp ), dateonly => 1, dateformat => 'iso' }); };
             @sql_params = ( $ts, $ts, $ts, $ts );
         }
         else {
@@ -618,12 +622,12 @@ sub construct_query {
             }
             if ($start_accession) {
                 $sql_query .= " AND dateaccessioned >= ? ";
-                push @sql_params, $start_accession->output('iso');
+                push @sql_params, $start_accession;
             }
 
             if ($end_accession) {
                 $sql_query .= " AND dateaccessioned <= ? ";
-                push @sql_params, $end_accession->output('iso');
+                push @sql_params, $end_accession;
             }
 
             if ($itemtype) {
