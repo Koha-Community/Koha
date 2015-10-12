@@ -33,6 +33,11 @@ Koha::SearchField - Koha SearchField Object class
 
 =cut
 
+sub add_to_search_marc_maps {
+    my ( $self, $search_field, $params ) = @_;
+    return $self->_result()->add_to_search_marc_maps($search_field->_result, $params);
+}
+
 =head3 type
 
 =cut
