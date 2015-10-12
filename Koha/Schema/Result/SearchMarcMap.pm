@@ -53,29 +53,6 @@ what MARC type this map is for
 
 the MARC specifier for this field
 
-=head2 facet
-
-  data_type: 'tinyint'
-  default_value: 0
-  is_nullable: 1
-
-true if a facet field should be generated for this
-
-=head2 suggestible
-
-  data_type: 'tinyint'
-  default_value: 0
-  is_nullable: 1
-
-true if this field can be used to generate suggestions for browse
-
-=head2 sort
-
-  data_type: 'tinyint'
-  is_nullable: 1
-
-true/false creates special sort handling, null doesn't
-
 =cut
 
 __PACKAGE__->add_columns(
@@ -95,12 +72,6 @@ __PACKAGE__->add_columns(
   },
   "marc_field",
   { data_type => "varchar", is_nullable => 0, size => 255 },
-  "facet",
-  { data_type => "tinyint", default_value => 0, is_nullable => 1 },
-  "suggestible",
-  { data_type => "tinyint", default_value => 0, is_nullable => 1 },
-  "sort",
-  { data_type => "tinyint", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -114,6 +85,24 @@ __PACKAGE__->add_columns(
 =cut
 
 __PACKAGE__->set_primary_key("id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<index_name>
+
+=over 4
+
+=item * L</index_name>
+
+=item * L</marc_field>
+
+=item * L</marc_type>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("index_name", ["index_name", "marc_field", "marc_type"]);
 
 =head1 RELATIONS
 
@@ -132,19 +121,9 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 search_fields
 
-Type: many_to_many
-
-Composing rels: L</search_marc_to_fields> -> search_field
-
-=cut
-
-__PACKAGE__->many_to_many("search_fields", "search_marc_to_fields", "search_field");
-
-
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-09-25 15:20:52
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:o579otqUGA8XhO+NYv99dw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-10-12 16:41:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nKMOxnAJST3zNN6Kxj2ynA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

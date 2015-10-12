@@ -40,8 +40,10 @@ the name of the field as it will be stored in the search engine
 =head2 label
 
   data_type: 'varchar'
-  is_nullable: 1
+  is_nullable: 0
   size: 255
+
+the human readable name of the field, for display
 
 =head2 type
 
@@ -59,7 +61,7 @@ __PACKAGE__->add_columns(
   "name",
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "label",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "varchar", is_nullable => 0, size => 255 },
   "type",
   {
     data_type => "enum",
@@ -111,19 +113,9 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 search_marc_maps
 
-Type: many_to_many
-
-Composing rels: L</search_marc_to_fields> -> search_marc_map
-
-=cut
-
-__PACKAGE__->many_to_many("search_marc_maps", "search_marc_to_fields", "search_marc_map");
-
-
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-09-25 15:21:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HD0m5hWYi/GXgz1rvk+Ipw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-10-12 16:41:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4MJO9216VF37w7PlWCcBKg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
