@@ -357,7 +357,7 @@ function verify_images() {
     [% IF ( XSLTDetailsDisplay ) %]
         [% XSLTBloc %]
 
-        [% IF shelves %]
+        [% IF shelves.count %]
             <span class="results_summary"><span class="label">Lists that include this title: </span>
             [% FOREACH s IN shelves %]
                 <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber %]">[% s.shelfname %]</a>

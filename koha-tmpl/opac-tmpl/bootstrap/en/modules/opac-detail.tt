@@ -390,7 +390,7 @@
                     [% END # / LibraryThingForLibrariesID %]
 
                     <!--This grabs all of the lists a bib record appears in -->
-                    [% IF shelves %]
+                    [% IF shelves.count %]
                         <span class="results_summary lists"><span class="label">List(s) this item appears in: </span>
                         [% FOREACH s IN shelves %]
                             <a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber %]">[% s.shelfname %]</a>

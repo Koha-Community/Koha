@@ -222,7 +222,16 @@ if ( $op eq 'view' ) {
                 $rows = C4::Context->preference('OPACnumSearchResults') || 20;
                 $page = ( $query->param('page') ? $query->param('page') : 1 );
             }
-            my $contents = $shelf->get_contents->search({}, { join => [ 'biblionumber' ], page => $page, rows => $rows, order_by => "$sortfield $direction", });
+            my $order_by = $sortfield eq 'itemcallnumber' ? 'items.itemcallnumber' : $sortfield;
+            my $contents = $shelf->get_contents->search(
+                {},
+                {
+                    prefetch => [ { 'biblionumber' => { 'biblioitems' => 'items' } } ],
+                    page     => $page,
+                    rows     => $rows,
+                    order_by => "$order_by $direction",
+                }
+            );
 
             # get biblionumbers stored in the cart
             my @cart_list;

@@ -15,7 +15,7 @@ use Exception::Class (
 
     'Koha::Exceptions::Virtualshelves::DuplicateObject' => {
         isa => 'Koha::Exceptions::DuplicateObject',
-        description => "poeut",
+        description => "Duplicate shelf object",
     },
     'Koha::Exceptions::Virtualshelves::InvalidInviteKey' => {
         isa => 'Koha::Exceptions::Exception',

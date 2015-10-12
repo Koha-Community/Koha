@@ -564,24 +564,30 @@ function placeHold () {
                 [% END %]
                            </select></li>
 
-            [% FOR permission IN ['allow_add', 'allow_delete_own', 'allow_delete_other'] %]
-                <li>
-                    [% IF loop.first %]
-                        <label for="permissions">Permissions: </label>
-                    [% ELSE %]
-                        <label>&nbsp;</label>
-                    [% END %]
-                    <select name="[% permission %]" id="[% permission %]">
-                        [% IF shelf.$permission %]<option value="0">Do not allow</option>[% ELSE %]<option value="0" selected="selected">Do not allow</option>[% END %]
-                        [% IF shelf.$permission %]<option value="1" selected="selected">Allow</option>[% ELSE %]<option value="1">Allow</option>[% END %]
-                    </select>
-                    [% SWITCH permission %]
-                        [% CASE 'allow_add' %]&nbsp;<span>anyone else to add entries.</span>
-                        [% CASE 'allow_delete_own' %]&nbsp;<span>anyone to remove his own contributed entries.</span>
-                        [% CASE 'allow_delete_other' %]&nbsp;<span>anyone to remove other contributed entries.</span>
-                    [% END %]
-                </li>
-            [% END %]
+            <li>
+                <label for="allow_add">Permissions: </label>
+                <select name="allow_add" id="allow_add">
+                    [% IF shelf.allow_add %]<option value="0">Do not allow</option>[% ELSE %]<option value="0" selected="selected">Do not allow</option>[% END %]
+                    [% IF shelf.allow_add %]<option value="1" selected="selected">Allow</option>[% ELSE %]<option value="1">Allow</option>[% END %]
+                </select>
+                &nbsp;<span>anyone else to add entries.</span>
+            </li>
+            <li>
+                <label>&nbsp;</label>
+                <select name="allow_delete_own" id="allow_delete_own">
+                    [% IF shelf and not shelf.allow_delete_own %]<option value="0" selected="selected">Do not allow</option>[% ELSE %]<option value="0">Do not allow</option>[% END %]
+                    [% IF not shelf or shelf.allow_delete_own %]<option value="1" selected="selected">Allow</option>[% ELSE %]<option value="1">Allow</option>[% END %]
+                </select>
+                &nbsp;<span>anyone to remove his own contributed entries.</span>
+            </li>
+            <li>
+                <label>&nbsp;</label>
+                <select name="allow_delete_other" id="allow_delete_other">
+                    [% IF shelf.allow_delete_other %]<option value="0">Do not allow</option>[% ELSE %]<option value="0" selected="selected">Do not allow</option>[% END %]
+                    [% IF shelf.allow_delete_other %]<option value="1" selected="selected">Allow</option>[% ELSE %]<option value="1">Allow</option>[% END %]
+                </select>
+                &nbsp;<span>anyone to remove other contributed entries.</span>
+            </li>
         </ol>
     </fieldset>
 

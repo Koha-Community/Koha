@@ -22,8 +22,8 @@
     <li>
         <label>&nbsp;</label>
         <select name="allow_delete_own" id="allow_delete_own">
-            [% IF shelf.allow_delete_own %]<option value="0">Do not allow</option>[% ELSE %]<option value="0" selected="selected">Do not allow</option>[% END %]
-            [% IF shelf.allow_delete_own %]<option value="1" selected="selected">Allow</option>[% ELSE %]<option value="1">Allow</option>[% END %]
+            [% IF shelf and not shelf.allow_delete_own %]<option value="0" selected="selected">Do not allow</option>[% ELSE %]<option value="0">Do not allow</option>[% END %]
+            [% IF not shelf or shelf.allow_delete_own %]<option value="1" selected="selected">Allow</option>[% ELSE %]<option value="1">Allow</option>[% END %]
         </select>
         &nbsp;<span>anyone to remove his own contributed entries.</span>
     </li>
@@ -168,7 +168,7 @@
                                     <a href="/cgi-bin/koha/opac-downloadshelf.pl?shelfnumber=[% shelf.shelfnumber | html %]" class="download" data-toggle="modal" data-target="#modalWin">Download list</a>
 
                                     [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                        <span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelfnumber | html %]" class="send" onclick="open('/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelfnumber | html %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; ">Send list</a></span>
+                                        <span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | html %]" class="send" onclick="open('/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | html %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; ">Send list</a></span>
                                     [% END %]
 
                                     <a class="print-small" target="_blank" href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber %]&sortfield=[% sortfield %]&direction=[% direction |uri %]&print=1">Print list</a>
@@ -521,7 +521,7 @@
                     [% END %]
 
                     [% IF itemsloop && can_remove_biblios %]
-                        <input type="hidden" name="op" value="view" />
+                        <input type="hidden" name="op" value="remove_biblios" />
                         <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
                         <input type="hidden" name="modifyshelfcontents" value="1" />
                         <input type="submit" value="Remove selected items" id="remove-selected" class="btn btn-danger"/>

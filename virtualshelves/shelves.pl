@@ -201,7 +201,16 @@ if ( $op eq 'view' ) {
                 $page = ( $query->param('page') ? $query->param('page') : 1 );
             }
 
-            my $contents = $shelf->get_contents->search({}, { join => [ 'biblionumber' ], page => $page, rows => $rows, order_by => "$sortfield $direction", });
+            my $order_by = $sortfield eq 'itemcallnumber' ? 'items.itemcallnumber' : $sortfield;
+            my $contents = $shelf->get_contents->search(
+                {},
+                {
+                    prefetch => [ { 'biblionumber' => { 'biblioitems' => 'items' } } ],
+                    page     => $page,
+                    rows     => $rows,
+                    order_by => "$order_by $direction",
+                }
+            );
 
             my $borrower = GetMember( borrowernumber => $loggedinuser );
 
