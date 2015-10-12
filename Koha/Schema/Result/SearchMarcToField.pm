@@ -35,6 +35,29 @@ __PACKAGE__->table("search_marc_to_field");
   is_foreign_key: 1
   is_nullable: 0
 
+=head2 facet
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 1
+
+true if a facet field should be generated for this
+
+=head2 suggestible
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 1
+
+true if this field can be used to generate suggestions for browse
+
+=head2 sort
+
+  data_type: 'tinyint'
+  is_nullable: 1
+
+true/false creates special sort handling, null doesn't
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -42,6 +65,12 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "search_field_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "facet",
+  { data_type => "tinyint", default_value => 0, is_nullable => 1 },
+  "suggestible",
+  { data_type => "tinyint", default_value => 0, is_nullable => 1 },
+  "sort",
+  { data_type => "tinyint", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -72,7 +101,7 @@ __PACKAGE__->belongs_to(
   "search_field",
   "Koha::Schema::Result::SearchField",
   { id => "search_field_id" },
-  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 =head2 search_marc_map
@@ -91,8 +120,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-09-25 15:19:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:h9oY2xOGibcnsriEfcFe8A
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-10-12 16:41:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ccnCYwDdtPGZ/VArAe1kPA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
