@@ -619,6 +619,8 @@ __PACKAGE__->might_have(
 # Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-11-04 12:00:58
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jkgJfulDrGaUpQ6jC40vpQ
 
+__PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
+
 sub effective_itemtype {
     my ( $self ) = @_;
 

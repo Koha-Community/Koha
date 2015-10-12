@@ -344,6 +344,7 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-02-24 14:19:57
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:A/4lKYlKWWd8TcMVzMRtCg
 
+__PACKAGE__->belongs_to( biblio => "Koha::Schema::Result::Biblio", "biblionumber" );
+__PACKAGE__->belongs_to( items  => "Koha::Schema::Result::Item",   "biblioitemnumber" );
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;
