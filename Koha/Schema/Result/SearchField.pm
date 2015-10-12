@@ -117,6 +117,6 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-10-12 16:41:47
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4MJO9216VF37w7PlWCcBKg
 
+__PACKAGE__->many_to_many("search_marc_maps", "search_marc_to_fields", "search_marc_map");
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
