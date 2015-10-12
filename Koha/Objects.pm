@@ -89,6 +89,24 @@ sub find {
     return $object;
 }
 
+=head3 Koha::Objects->find_or_create();
+
+my $object = Koha::Objects->find_or_create( $attrs );
+
+=cut
+
+sub find_or_create {
+    my ( $self, $params ) = @_;
+
+    my $result = $self->_resultset->find_or_create($params);
+
+    return unless $result;
+
+    my $object = $self->object_class->_new_from_dbic($result);
+
+    return $object;
+}
+
 =head3 Koha::Objects->search();
 
 my @objects = Koha::Objects->search($params);

@@ -374,29 +374,38 @@ sub _foreach_mapping {
     my ( $self, $sub ) = @_;
 
     # TODO use a caching framework here
-    my $database = Koha::Database->new();
-    my $schema   = $database->schema();
-    my $rs =
-      $schema->resultset('SearchMarcMap')
-      ->search( { index_name => $self->index } );
-    for my $row ( $rs->all ) {
-        my $marc_type = $row->marc_type;
-        my $marc_field = $row->marc_field;
-        my $facet = $row->facet;
-        my $suggestible = $row->suggestible;
-        my $search_field = $row->search_fields();
-        my $sort = $row->sort();
-        for my $sf ( $search_field->all ) {
-            $sub->(
-                $sf->name,
-                $sf->type,
-                $facet,
-                $suggestible,
-                $sort,
-                $marc_type,
-                $marc_field,
-            );
+    my $search_fields = Koha::Database->schema->resultset('SearchField')->search(
+        {
+            'search_marc_map.index_name' => $self->index,
+        },
+        {   join => { search_marc_to_fields => 'search_marc_map' },
+            '+select' => [
+                'search_marc_to_fields.facet',
+                'search_marc_to_fields.suggestible',
+                'search_marc_to_fields.sort',
+                'search_marc_map.marc_type',
+                'search_marc_map.marc_field',
+            ],
+            '+as'     => [
+                'facet',
+                'suggestible',
+                'sort',
+                'marc_type',
+                'marc_field',
+            ],
         }
+    );
+
+    while ( my $search_field = $search_fields->next ) {
+        $sub->(
+            $search_field->name,
+            $search_field->type,
+            $search_field->get_column('facet'),
+            $search_field->get_column('suggestible'),
+            $search_field->get_column('sort'),
+            $search_field->get_column('marc_type'),
+            $search_field->get_column('marc_field'),
+        );
     }
 }
 
