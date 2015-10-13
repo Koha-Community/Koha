@@ -381,8 +381,6 @@ sub checkauth {
     $template->param( login => 1 );
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
 
-    my $self_url = $query->url( -absolute => 1 );
-    $template->param( url => $self_url, );
     $template->param( \%info );
     $cookie = $query->cookie(
         -name    => 'CGISESSID',

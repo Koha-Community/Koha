@@ -138,7 +138,7 @@
 
                             [% END # / IF casAuthentication %]
 
-                            <form action="[% url %]" name="auth" id="auth" method="post">
+                            <form action="/cgi-bin/koha/opac-user.pl" name="auth" id="auth" method="post">
                                 <input type="hidden" name="koha_login_context" value="opac" />
                                 <fieldset class="brief">
                                     [% FOREACH INPUT IN INPUTS %]

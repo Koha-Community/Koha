@@ -30,7 +30,7 @@
                                 <p><a class="button close" href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% shelfid %]">Back to lists</a></p>
                             [% ELSE %]
                                 <h1>Sending your list</h1>
-                                <form action="[% url %]" method="post" id="sendshelfform">
+                                <form action="/cgi-bin/koha/opac-sendshelf.pl" method="post" id="sendshelfform">
                                     <fieldset>
                                         <label for="email">Email address:</label>
                                         <input type="text" id="email" name="email" size="43" class="focus" />

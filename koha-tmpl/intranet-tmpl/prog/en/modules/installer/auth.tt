@@ -29,7 +29,7 @@
 
 [% IF ( loginprompt ) %]
 <!-- login prompt time-->
-<form action="[% url %]" method="post" name="mainform" id="mainform">
+<form action="/cgi-bin/koha/installer/install.pl" method="post" name="mainform" id="mainform">
 [% FOREACH INPUT IN INPUTS %]
     <input type="hidden" name="[% INPUT.name |html %]" value="[% INPUT.value |html %]" />
 [% END %]
