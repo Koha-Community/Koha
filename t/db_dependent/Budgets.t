@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Test::More tests => 122;
+use Test::More tests => 129;
 
 BEGIN {
     use_ok('C4::Budgets')
@@ -468,6 +468,27 @@ for my $budget (@$budget_hierarchy_cloned) {
 is( $number_of_budgets_not_reset, 0,
     'CloneBudgetPeriod has reset all budgets (funds)' );
 
+
+# CloneBudgetPeriod with param amount_change_*
+$budget_period_id_cloned = C4::Budgets::CloneBudgetPeriod(
+    {
+        budget_period_id        => $budget_period_id,
+        budget_period_startdate => '2014-01-01',
+        budget_period_enddate   => '2014-12-31',
+        amount_change_percentage => 16,
+        amount_change_round_increment => 5,
+    }
+);
+
+$budget_period_cloned = C4::Budgets::GetBudgetPeriod($budget_period_id_cloned);
+cmp_ok($budget_period_cloned->{budget_period_total}, '==', 11600, "CloneBudgetPeriod changed correctly budget amount");
+$budget_hierarchy_cloned     = GetBudgetHierarchy($budget_period_id_cloned);
+cmp_ok($budget_hierarchy_cloned->[0]->{budget_amount}, '==', 1160, "CloneBudgetPeriod changed correctly funds amounts");
+cmp_ok($budget_hierarchy_cloned->[1]->{budget_amount}, '==', 115, "CloneBudgetPeriod changed correctly funds amounts");
+cmp_ok($budget_hierarchy_cloned->[2]->{budget_amount}, '==', 55, "CloneBudgetPeriod changed correctly funds amounts");
+cmp_ok($budget_hierarchy_cloned->[3]->{budget_amount}, '==', 115, "CloneBudgetPeriod changed correctly funds amounts");
+cmp_ok($budget_hierarchy_cloned->[4]->{budget_amount}, '==', 2320, "CloneBudgetPeriod changed correctly funds amounts");
+cmp_ok($budget_hierarchy_cloned->[5]->{budget_amount}, '==', 0, "CloneBudgetPeriod changed correctly funds amounts");
 
 # MoveOrders
 my $number_orders_moved = C4::Budgets::MoveOrders();

@@ -985,6 +985,15 @@ sub ConvertCurrency {
     return ( $price / $cur );
 }
 
+sub _round {
+    my ($value, $increment) = @_;
+
+    if ($increment && $increment != 0) {
+        $value = int($value / $increment) * $increment;
+    }
+
+    return $value;
+}
 
 =head2 CloneBudgetPeriod
 
@@ -1011,6 +1020,8 @@ sub CloneBudgetPeriod {
     my $budget_period_startdate   = $params->{budget_period_startdate};
     my $budget_period_enddate     = $params->{budget_period_enddate};
     my $budget_period_description = $params->{budget_period_description};
+    my $amount_change_percentage  = $params->{amount_change_percentage};
+    my $amount_change_round_increment = $params->{amount_change_round_increment};
     my $mark_original_budget_as_inactive =
       $params->{mark_original_budget_as_inactive} || 0;
     my $reset_all_budgets = $params->{reset_all_budgets} || 0;
@@ -1022,6 +1033,14 @@ sub CloneBudgetPeriod {
     $budget_period->{budget_period_description} = $budget_period_description;
     # The new budget (budget_period) should be active by default
     $budget_period->{budget_period_active}    = 1;
+
+    if ($amount_change_percentage) {
+        my $total = $budget_period->{budget_period_total};
+        $total += $total * $amount_change_percentage / 100;
+        $total = _round($total, $amount_change_round_increment);
+        $budget_period->{budget_period_total} = $total;
+    }
+
     my $original_budget_period_id = $budget_period->{budget_period_id};
     delete $budget_period->{budget_period_id};
     my $new_budget_period_id = AddBudgetPeriod( $budget_period );
@@ -1047,6 +1066,15 @@ sub CloneBudgetPeriod {
         my $budgets = GetBudgets({ budget_period_id => $new_budget_period_id });
         for my $budget ( @$budgets ) {
             $budget->{budget_amount} = 0;
+            ModBudget( $budget );
+        }
+    } elsif ($amount_change_percentage) {
+        my $budgets = GetBudgets({ budget_period_id => $new_budget_period_id });
+        for my $budget ( @$budgets ) {
+            my $amount = $budget->{budget_amount};
+            $amount += $amount * $amount_change_percentage / 100;
+            $amount = _round($amount, $amount_change_round_increment);
+            $budget->{budget_amount} = $amount;
             ModBudget( $budget );
         }
     }
