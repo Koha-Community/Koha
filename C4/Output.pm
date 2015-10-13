@@ -85,7 +85,7 @@ This function returns HTML, without any language dependency.
 =cut
 
 sub pagination_bar {
-	my $base_url = (@_ ? shift : $ENV{SCRIPT_NAME} . $ENV{QUERY_STRING}) or return;
+    my $base_url = (@_ ? shift : return);
     my $nb_pages       = (@_) ? shift : 1;
     my $current_page   = (@_) ? shift : undef;	# delay default until later
     my $startfrom_name = (@_) ? shift : 'page';

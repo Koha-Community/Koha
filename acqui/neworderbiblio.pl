@@ -148,7 +148,7 @@ $template->param(
     resultsloop          => \@results,
     total                => $total_hits,
     query                => $query,
-    pagination_bar       => pagination_bar( "$ENV{'SCRIPT_NAME'}?q=$query&booksellerid=$booksellerid&basketno=$basketno&", getnbpages( $total_hits, $results_per_page ), $page, 'page' ),
+    pagination_bar       => pagination_bar( "/cgi-bin/koha/acqui/neworderbiblio.pl?q=$query&booksellerid=$booksellerid&basketno=$basketno&", getnbpages( $total_hits, $results_per_page ), $page, 'page' ),
 );
 
 # BUILD THE TEMPLATE
