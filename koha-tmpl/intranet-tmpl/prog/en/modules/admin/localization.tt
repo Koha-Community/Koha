@@ -187,6 +187,24 @@
 </head>
 <body id="admin_localization" class="admin">
 <div id="main">
+<form id="add_translation" method="post">
+    <input type="hidden" name="entity" value="[% entity %]" />
+    <input type="hidden" name="code" value="[% code %]" />
+    Lang: <select name="lang">
+        [% FOR language IN languages %]
+            [% FOR sublanguage IN language.sublanguages_loop %]
+                [% IF language.plural %]
+                    <option value="[% sublanguage.rfc4646_subtag %]">[% sublanguage.native_description %] [% sublanguage.region_description %] ([% sublanguage.rfc4646_subtag %])</option>
+                [% ELSE %]
+                    <option value="[% sublanguage.rfc4646_subtag %]">[% sublanguage.native_description %] ([% sublanguage.rfc4646_subtag %])</option>
+                [% END %]
+            [% END %]
+        [% END %]
+    </select>
+    Translation: <input type="text" name="translation" />
+    <input type="submit" value="Add" />
+</form>
+<div id="messages"></div>
 <table id="localization">
     <thead>
         <tr>
@@ -211,24 +229,6 @@
         [% END %]
     </tbody>
 </table>
-<form id="add_translation" method="post">
-    <input type="hidden" name="entity" value="[% entity %]" />
-    <input type="hidden" name="code" value="[% code %]" />
-    Lang: <select name="lang">
-        [% FOR language IN languages %]
-            [% FOR sublanguage IN language.sublanguages_loop %]
-                [% IF language.plural %]
-                    <option value="[% sublanguage.rfc4646_subtag %]">[% sublanguage.native_description %] [% sublanguage.region_description %] ([% sublanguage.rfc4646_subtag %])</option>
-                [% ELSE %]
-                    <option value="[% sublanguage.rfc4646_subtag %]">[% sublanguage.native_description %] ([% sublanguage.rfc4646_subtag %])</option>
-                [% END %]
-            [% END %]
-        [% END %]
-    </select>
-    Translation: <input type="text" name="translation" />
-    <input type="submit" value="Add" />
-</form>
-<div id="messages"></div>
 </div>
 </body>
 </html>
