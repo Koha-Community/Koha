@@ -620,14 +620,6 @@ if ($tag) {
 };
 }
 
-# This sorts the facets into alphabetical order
-if ($facets && @$facets) {
-    foreach my $f (@$facets) {
-        $f->{facets} = [ sort { uc($a->{facet_label_value}) cmp uc($b->{facet_label_value}) } @{ $f->{facets} } ];
-    }
-    @$facets = sort {$a->{expand} cmp $b->{expand}} @$facets;
-}
-
 # use Data::Dumper; print STDERR "-" x 25, "\n", Dumper($results_hashref);
 if ($@ || $error) {
     $template->param(query_error => $error.$@);
