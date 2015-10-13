@@ -72,8 +72,7 @@ unless ( $loggedinuser ) {
         C4::Search::History::set_to_session({ cgi => $cgi, search_history => \@searches });
 
         # Redirecting to this same url so the user won't see the search history link in the header
-        my $uri = $cgi->url();
-        print $cgi->redirect(-uri => $uri);
+        print $cgi->redirect(-uri => '/cgi-bin/koha/opac-search-history.pl');
     # Showing search history
     } else {
         # Getting the searches from session
@@ -115,8 +114,7 @@ unless ( $loggedinuser ) {
             );
         }
         # Redirecting to this same url so the user won't see the search history link in the header
-        my $uri = $cgi->url();
-        print $cgi->redirect($uri);
+        print $cgi->redirect(-uri => '/cgi-bin/koha/opac-search-history.pl');
 
     # Showing search history
     } else {

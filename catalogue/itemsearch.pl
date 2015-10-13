@@ -222,7 +222,7 @@ if (scalar keys %params > 0) {
 
     if ($format eq 'html') {
         # Build pagination bar
-        my $url = $cgi->url(-absolute => 1);
+        my $url = '/cgi-bin/koha/catalogue/itemsearch.pl';
         my @params;
         foreach my $p (keys %params) {
             my @v = $cgi->param($p);

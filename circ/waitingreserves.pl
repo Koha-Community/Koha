@@ -75,7 +75,7 @@ if ($item) {
 if ( C4::Context->preference('IndependentBranches') ) {
     undef $all_branches;
 } else {
-    $template->param( all_branches_link => $input->url . '?allbranches=1' )
+    $template->param( all_branches_link => '/cgi-bin/koha/circ/waitingreserves.pl' . '?allbranches=1' )
       unless $all_branches;
 }
 $template->param( all_branches => 1 ) if $all_branches;

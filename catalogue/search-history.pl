@@ -50,8 +50,7 @@ if ( $action eq 'delete' ) {
         }
     );
     # Redirecting to this same url so the user won't see the search history link in the header
-    my $uri = $cgi->url();
-    print $cgi->redirect($uri);
+    print $cgi->redirect('/cgi-bin/koha/catalogue/search-history.pl');
 
 # Showing search history
 } else {
