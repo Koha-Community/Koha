@@ -11054,7 +11054,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "XXX";
+$DBversion = "3.21.00.035";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
         ALTER TABLE branch_borrower_circ_rules ADD COLUMN maxonsiteissueqty int(4) DEFAULT NULL AFTER maxissueqty;
