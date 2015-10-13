@@ -17,7 +17,11 @@
             message.text("Entity %s (code %s) for lang %s has correctly been updated with '%s'".format(data.entity, data.code, data.lang, data.translation));
         } else if ( type == 'error_on_update' ) {
             message = $('<div class="dialog alert"></div>');
-            message.text("An error occurred when updating this translation");
+            if ( data.error_code == 'already_exists' ) {
+                message.text("A translation already exists for this language.");
+            } else {
+                message.text("An error occurred when updating this translation.");
+            }
         } else if ( type == 'success_on_delete' ) {
             message = $('<div class="dialog message"></div>');
             message.text("The translation (id %s) has been removed successfully".format(data.id));
@@ -29,7 +33,11 @@
             message.text("Translation (id %s) has been added successfully".format(data.id));
         } else if ( type == 'error_on_insert' ) {
             message = $('<div class="dialog alert"></div>');
-            message.text("An error occurred when adding this translation");
+            if ( data.error_code == 'already_exists' ) {
+                message.text("A translation already exists for this language.");
+            } else {
+                message.text("An error occurred when adding this translation");
+            }
         }
 
         $(messages).append(message);
@@ -48,6 +56,8 @@
                 if ( data.is_changed ) {
                     $(cell).css('background-color', '#00FF00');
                     show_message({ type: 'success_on_update', data: data });
+                } else {
+                    show_message({ type: 'error_on_update', data: data });
                 }
                 if ( $(cell).hasClass('lang') ) {
                     $(cell).text(data.lang)
@@ -91,8 +101,16 @@
 
         var languages_select = $('<select name="lang"></select>');
         [% FOR language IN languages %]
-            var option = $('<option value="[% language.lang %]">[% language.description %]</option>');
-            $(languages_select).append(option);
+            [% FOR sublanguage IN language.sublanguages_loop %]
+                var option;
+                [% IF language.plural %]
+                    option = $('<option value="[% sublanguage.rfc4646_subtag %]">[% sublanguage.native_description %] [% sublanguage.region_description %] ([% sublanguage.rfc4646_subtag %])</option>');
+                    $(languages_select).append(option);
+                [% ELSE %]
+                    option = $('<option value="[% sublanguage.rfc4646_subtag %]">[% sublanguage.native_description %] ([% sublanguage.rfc4646_subtag %])</option>');
+                [% END %]
+                $(languages_select).append(option);
+            [% END %]
         [% END %]
 
         $("td.translation").on('focus', function(){
@@ -149,9 +167,13 @@
                 type: 'POST',
                 url: '/cgi-bin/koha/svc/localization',
                 success: function (data) {
-                    // FIXME Should append the delete link
-                    table.row.add( [ data.id, data.entity, data.code, data.lang, data.translation, "" ] ).draw();
-                    show_message({ type: 'success_on_insert', data: data });
+                    if ( data.error ) {
+                        show_message({ type: 'error_on_insert', data: data });
+                    } else {
+                        // FIXME Should append the delete link
+                        table.row.add( [ data.id, data.entity, data.code, data.lang, data.translation, "" ] ).draw();
+                        show_message({ type: 'success_on_insert', data: data });
+                    }
                 },
                 error: function (data) {
                     show_message({ type: 'error_on_insert', data: data });
