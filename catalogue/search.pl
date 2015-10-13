@@ -531,6 +531,12 @@ eval {
     );
 };
 
+# This sorts the facets into alphabetical order
+if ($facets) {
+    foreach my $f (@$facets) {
+        $f->{facets} = [ sort { uc($a->{facet_label_value}) cmp uc($b->{facet_label_value}) } @{ $f->{facets} } ];
+    }
+}
 if ($@ || $error) {
     $template->param(query_error => $error.$@);
     output_html_with_http_headers $cgi, $cookie, $template->output;
