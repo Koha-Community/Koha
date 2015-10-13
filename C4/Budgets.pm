@@ -407,8 +407,8 @@ sub GetBudgetAuthCats  {
     $sth->execute($budget_period_id);
     my %authcats;
     while (my ($sort1_authcat,$sort2_authcat) = $sth->fetchrow) {
-        $authcats{$sort1_authcat}=1;
-        $authcats{$sort2_authcat}=1;
+        $authcats{$sort1_authcat}=1 if $sort1_authcat;
+        $authcats{$sort2_authcat}=1 if $sort2_authcat;
     }
     my @auth_cats_loop;
     foreach (sort keys %authcats) {
