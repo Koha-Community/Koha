@@ -391,13 +391,14 @@ sub _convert_facets {
 
     # These should correspond to the ES field names, as opposed to the CCL
     # things that zebra uses.
+    # TODO let the library define the order using the interface.
     my %type_to_label = (
-        author   => 'Authors',
-        location => 'Location',
-        itype    => 'ItemTypes',
-        se       => 'Series',
-        subject  => 'Topics',
-        'su-geo' => 'Places',
+        author   => { order => 1, label => 'Authors', },
+        itype    => { order => 2, label => 'ItemTypes', },
+        location => { order => 3, label => 'Location', },
+        'su-geo' => { order => 4, label => 'Places', },
+        se       => { order => 5, label => 'Series', },
+        subject  => { order => 6, label => 'Topics', },
     );
 
     # We also have some special cases, e.g. itypes that need to show the
@@ -409,7 +410,7 @@ sub _convert_facets {
         itype    => { map { $_->itemtype         => $_->description } @itypes },
         location => { map { $_->authorised_value => ( $opac ? ( $_->lib_opac || $_->lib ) : $_->lib ) } @locations },
     );
-    my @res;
+    my @facets;
     $exp_facet //= '';
     while ( ( $type, $data ) = each %$es ) {
         next if !exists( $type_to_label{$type} );
@@ -421,8 +422,9 @@ sub _convert_facets {
             expand     => $type,
             expandable => ( $type ne $exp_facet )
               && ( @{ $data->{terms} } > $limit ),
-            "type_label_$type_to_label{$type}" => 1,
+            "type_label_$type_to_label{$type}{label}" => 1,
             type_link_value                    => $type,
+            order      => $type_to_label{$type}{order},
         };
         $limit = @{ $data->{terms} } if ( $limit > @{ $data->{terms} } );
         foreach my $term ( @{ $data->{terms} }[ 0 .. $limit - 1 ] ) {
@@ -443,9 +445,11 @@ sub _convert_facets {
                 type_link_value => $type,
             };
         }
-        push @res, $facet if exists $facet->{facets};
+        push @facets, $facet if exists $facet->{facets};
     }
-    return \@res;
+
+    @facets = sort { $a->{order} cmp $b->{order} } @facets;
+    return \@facets;
 }
 
 
