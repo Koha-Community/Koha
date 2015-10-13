@@ -55,18 +55,14 @@ if ($booksellerid && $basketno) {
      $template->param( booksellerid => $booksellerid, basketno => $basketno );
 }
 
-$startdate = eval { output_pref( { dt => dt_from_string( $startdate ), dateonly => 1, dateformat => 'iso' } ); };
-$enddate = eval { output_pref( { dt => dt_from_string( $enddate ), dateonly => 1, dateformat => 'iso' } ); };
+$startdate = eval { dt_from_string( $startdate ) } if $startdate;
+$enddate = eval { dt_from_string( $enddate ) } if $enddate;
 
-my $todaysdate_dt = dt_from_string;
-my $todaysdate  = output_pref( { dt => $todaysdate_dt, dateonly => 1, dateformat => 'iso' } );
+my $todaysdate = dt_from_string;
 
 #    A default of the prior years's holds is a reasonable way to pull holds
-my $datelastyear_dt = $todaysdate_dt->subtract( days => 1);
-my $datelastyear = output_pref( { dt => $datelastyear_dt, dateonly => 1, dateformat => 'iso' } );
-
-$startdate = $datelastyear unless $startdate;
 $enddate = $todaysdate unless $enddate;
+$startdate = $todaysdate->clone->subtract( years => 1 ) unless $startdate;
 
 if (!defined($ratio)) {
     $ratio = 3;
@@ -79,16 +75,13 @@ if ($ratio <= 0) {
 
 my $dbh    = C4::Context->dbh;
 my $sqldatewhere = "";
-$debug and warn output_pref({ dt => dt_from_string( $startdate ), dateformat => 'iso', dateonly => 1 }) . "\n" . output_pref({ dt => dt_from_string( $enddate ), dateformat => 'iso', dateonly => 1 });
+$debug and warn output_pref({ dt => $startdate, dateformat => 'iso', dateonly => 1 }) . "\n" . output_pref({ dt => $enddate, dateformat => 'iso', dateonly => 1 });
 my @query_params = ();
-if ($startdate) {
-    $sqldatewhere .= " AND reservedate >= ?";
-    push @query_params, $startdate ;
-}
-if ($enddate) {
-    $sqldatewhere .= " AND reservedate <= ?";
-    push @query_params, $enddate;
-}
+
+$sqldatewhere .= " AND reservedate >= ?";
+push @query_params, output_pref({ dt => $startdate, dateformat => 'iso' }) ;
+$sqldatewhere .= " AND reservedate <= ?";
+push @query_params, output_pref({ dt => $enddate, dateformat => 'iso' });
 
 my $nfl_comparison = $include_ordered ? '<=' : '=';
 my $strsth =
