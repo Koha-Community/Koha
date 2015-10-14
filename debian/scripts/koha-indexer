@@ -65,6 +65,7 @@ start_indexer()
             --errlog=/var/log/koha/$name/indexer-error.log \
             --stdout=/var/log/koha/$name/indexer.log \
             --output=/var/log/koha/$name/indexer-output.log \
+            --pidfiles=/var/run/koha/$name/ \
             --verbose=1 --respawn --delay=30 \
             --user=$name-koha.$name-koha"
 
@@ -92,6 +93,7 @@ stop_indexer()
             --errlog=/var/log/koha/$name/indexer-error.log \
             --stdout=/var/log/koha/$name/indexer.log \
             --output=/var/log/koha/$name/indexer-output.log \
+            --pidfiles=/var/run/koha/$name/ \
             --verbose=1 --respawn --delay=30 \
             --user=$name-koha.$name-koha"
 
@@ -119,6 +121,7 @@ restart_indexer()
             --errlog=/var/log/koha/$name/indexer-error.log \
             --stdout=/var/log/koha/$name/indexer.log \
             --output=/var/log/koha/$name/indexer-output.log \
+            --pidfiles=/var/run/koha/$name/ \
             --verbose=1 --respawn --delay=30 \
             --user=$name-koha.$name-koha"
 
