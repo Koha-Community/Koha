@@ -42,18 +42,18 @@ my $shell = $opts{shell} || $ENV{SHELL} || '/bin/sh';
 
 # Now we're set up, build the 'su' command
 my @su_args;
-push @su_args, '/bin/su';
-push @su_args, '--preserve-environment' if $opts{'preserve-environment'};
+push @su_args, '/usr/bin/sudo';
+push @su_args, '--preserve-env' if $opts{'preserve-environment'};
 push @su_args, '--login' if $opts{login};
-push @su_args, '--command',
+push @su_args, "-u", "$instance-koha";
+push @su_args,
     "env "
   . "KOHA_CONF=/etc/koha/sites/$instance/koha-conf.xml "
   . "PERL5LIB=/usr/share/koha/lib $shell"
   . ( $opts{command} ? " -c '$opts{command}'" : '' );
-push @su_args, "$instance-koha";
 
 print "Command: '".join("' '",@su_args)."'\n" if $opts{verbose};
-system(@su_args);
+system("@su_args");
 if ( $? == -1 ) {
     print STDERR "failed to execute: $!\n";
 }
