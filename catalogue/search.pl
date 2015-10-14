@@ -262,7 +262,7 @@ foreach my $advanced_srch_type (@advanced_search_types) {
    if ($advanced_srch_type eq 'itemtypes') {
    # itemtype is a special case, since it's not defined in authorized values
         my @itypesloop;
-	foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
+        foreach my $thisitemtype ( sort {$itemtypes->{$a}->{translated_description} cmp $itemtypes->{$b}->{translated_description} } keys %$itemtypes ) {
 	    my %row =(  number=>$cnt++,
 		ccl => "$itype_or_itemtype,phr",
                 code => $thisitemtype,

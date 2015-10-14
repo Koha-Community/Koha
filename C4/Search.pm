@@ -570,7 +570,7 @@ sub getRecords {
                                     {
                                         $facet_label_value =
                                           $itemtypes->{$one_facet}
-                                          ->{'description'};
+                                          ->{translated_description};
                                     }
                                 }
 
@@ -1948,7 +1948,7 @@ sub searchResults {
 
 		# edition information, if any
         $oldbiblio->{edition} = $oldbiblio->{editionstatement};
-		$oldbiblio->{description} = $itemtypes{ $oldbiblio->{itemtype} }->{description};
+        $oldbiblio->{description} = $itemtypes{ $oldbiblio->{itemtype} }->{translated_description};
  # Build summary if there is one (the summary is defined in the itemtypes table)
  # FIXME: is this used anywhere, I think it can be commented out? -- JF
         if ( $itemtypes{ $oldbiblio->{itemtype} }->{summary} ) {
@@ -2060,7 +2060,7 @@ sub searchResults {
             foreach my $code ( keys %subfieldstosearch ) {
                 $item->{$code} = $field->subfield( $subfieldstosearch{$code} );
             }
-            $item->{description} = $itemtypes{ $item->{itype} }{description};
+            $item->{description} = $itemtypes{ $item->{itype} }{translated_description};
 
 	        # OPAC hidden items
             if ($is_opac) {
