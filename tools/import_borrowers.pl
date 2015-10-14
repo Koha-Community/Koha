@@ -278,7 +278,9 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
                 $template->param('lastinvalid'=>$borrower{'surname'}.' / '.$borrowernumber);
                 next LINE;
             }
-            if ( $borrower{debarred} ) {
+
+            # Don't add a new restriction if the existing 'combined' restriction matches this one
+            if ( $borrower{debarred} && ( ( $borrower{debarred} ne $member->{debarred} ) || ( $borrower{debarredcomment} ne $member->{debarredcomment} ) ) ) {
                 # Check to see if this debarment already exists
                 my $debarrments = GetDebarments(
                     {
@@ -298,6 +300,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
                     );
                 }
             }
+
             if ($extended) {
                 if ($ext_preserve) {
                     my $old_attributes = GetBorrowerAttributes($borrowernumber);
