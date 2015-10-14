@@ -282,10 +282,19 @@ elsif ( $op eq 'delete_confirm' ) {
 
     my $category = $schema->resultset('Category')->find($categorycode);
 
-    $category->enrolmentperioddate(
-        C4::Dates::format_date( $category->enrolmentperioddate() ) );
+    if ( $category->enrolmentperioddate
+        && $category->enrolmentperioddate eq '0000-00-00' )
+    {
+        $category->{'enrolmentperioddate'} = undef;
+    }
 
-    $template->param( category => $category, patrons_in_category => $count );
+    $template->param(
+        category            => $category,
+        description         => $category->description,
+        enrolmentperiod     => $category->enrolmentperiod,
+        enrolmentperioddate => $category->enrolmentperioddate,
+        patrons_in_category => $count,
+    );
 
     # END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################

@@ -1,4 +1,4 @@
-[% USE KohaDates -%]
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Patron categories &rsaquo; [% IF ( add_form ) %][% IF ( categorycode ) %]Modify category '[% categorycode |html %]'[% ELSE %]New category[% END %][% END %]
 [% IF ( delete_confirm ) %][% IF ( patrons_in_category > 0 ) %]Cannot delete: category [% categorycode |html %] in use[% ELSE %]Confirm deletion of category '[% categorycode |html %]'[% END %][% END %]
