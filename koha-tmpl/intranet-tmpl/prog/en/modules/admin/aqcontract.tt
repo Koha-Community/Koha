@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Contracts &rsaquo;
 [% IF ( add_form ) %]
@@ -120,11 +121,11 @@ function Check(ff) {
                                         <input type="text" name="contractdescription" id="contractdescription" size="40" maxlength="80" value="[% contractdescription %]" />
                                 </li>
                                 <li><label for="from" class="required">Start date: *</label> &nbsp;
-                                        <input type="text" name="contractstartdate" id="from" value="[% contractstartdate %]" maxlength="10" size="10" class="datepickerfrom" />
+                                        <input type="text" name="contractstartdate" id="from" value="[% contractstartdate | $KohaDates %]" maxlength="10" size="10" class="datepickerfrom" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                                 </li>
                                 <li><label for="to" class="required">End date: *</label> &nbsp;
-                                        <input type="text" name="contractenddate" id="to" value="[% contractenddate %]" maxlength="10"  size="10" class="datepickerto" />
+                                        <input type="text" name="contractenddate" id="to" value="[% contractenddate | $KohaDates %]" maxlength="10"  size="10" class="datepickerto" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                                 </li>
                             </ol>
@@ -148,8 +149,8 @@ function Check(ff) {
                             <tr><th scope="row">Contract number:</th><td>[% contractnumber %]</td></tr>
                             <tr><th scope="row">Contract name:</th><td>[% contractname %]</td></tr>
                             <tr><th scope="row">Contract description:</th><td>[% contractdescription %]</td></tr>
-                            <tr><th scope="row">Contract start date:</th><td>[% contractstartdate %]</td></tr>
-                            <tr><th scope="row">Contract end date:</th><td>[% contractenddate %]</td></tr>
+                            <tr><th scope="row">Contract start date:</th><td>[% contractstartdate | $KohaDates %]</td></tr>
+                            <tr><th scope="row">Contract end date:</th><td>[% contractenddate | $KohaDates %]</td></tr>
                             <tr><th scope="row">Vendor:</th><td>[% booksellername %]</td></tr>
                         </table>
                         <fieldset class="action">

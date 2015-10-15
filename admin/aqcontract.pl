@@ -71,8 +71,8 @@ if ( $op eq 'add_form' ) {
             contractnumber      => $contract->{contractnumber},
             contractname        => $contract->{contractname},
             contractdescription => $contract->{contractdescription},
-            contractstartdate => output_pref({ dt => dt_from_string( $contract->{contractstartdate} ), dateonly => 1 }),
-            contractenddate   => output_pref({ dt => dt_from_string( $contract->{contractenddate} ), dateonly => 1 }),
+            contractstartdate   => $contract->{contractstartdate},
+            contractenddate     => $contract->{contractenddate},
         );
     } else {
         $template->param(
@@ -93,10 +93,16 @@ elsif ( $op eq 'add_validate' ) {
 
     my $is_a_modif = $input->param("is_a_modif");
 
+    my $contractstart_dt = eval { dt_from_string( $input->param('contractstartdate') ); };
+    $contractstart_dt = dt_from_string if ( ! $contractstart_dt );
+
+    my $contractend_dt = eval { dt_from_string( $input->param('contractenddate') ); };
+    $contractend_dt = dt_from_string if ( ! $contractend_dt );
+
     if ( $is_a_modif ) {
         ModContract({
-            contractstartdate   => output_pref({ dt => dt_from_string( $input->param('contractstartdate') ), dateformat => 'iso', dateonly => 1 }),
-            contractenddate     =>  output_pref({ dt => dt_from_string( $input->param('contractenddate') ), dateformat => 'iso', dateonly => 1 }),
+            contractstartdate   => eval { output_pref({ dt => dt_from_string( $contractstart_dt ), dateformat => 'iso', dateonly => 1 } ); },
+            contractenddate     => eval { output_pref({ dt => dt_from_string( $contractend_dt ), dateformat => 'iso', dateonly => 1 } ); },
             contractname        => $input->param('contractname'),
             contractdescription => $input->param('contractdescription'),
             booksellerid        => $input->param('booksellerid'),
@@ -107,8 +113,8 @@ elsif ( $op eq 'add_validate' ) {
             contractname        => $input->param('contractname'),
             contractdescription => $input->param('contractdescription'),
             booksellerid        => $input->param('booksellerid'),
-            contractstartdate   => output_pref({ dt => dt_from_string( $input->param('contractstartdate') ), dateformat => 'iso', dateonly => 1 }),
-            contractenddate     => output_pref({ dt => dt_from_string( $input->param('contractenddate') ), dateformat => 'iso', dateonly => 1 }),
+            contractstartdate   => eval { output_pref({ dt => dt_from_string( $input->param('contractstartdate') ), dateformat => 'iso', dateonly => 1 } ); },
+            contractenddate     => eval { output_pref({ dt => dt_from_string( $input->param('contractenddate') ), dateformat => 'iso', dateonly => 1 } ); },
         });
     }
 
@@ -127,8 +133,8 @@ elsif ( $op eq 'delete_confirm' ) {
         contractnumber      => $$contract{contractnumber},
         contractname        => $$contract{contractname},
         contractdescription => $$contract{contractdescription},
-        contractstartdate   => output_pref({ dt => dt_from_string( $$contract{contractstartdate} ), dateonly => 1 }),
-        contractenddate     =>  output_pref({ dt => dt_from_string( $$contract{contractenddate} ), dateonly => 1 }),
+        contractstartdate   => $$contract{contractstartdate},
+        contractenddate     => $$contract{contractenddate},
     );
 
     # END $OP eq DELETE_CONFIRM
