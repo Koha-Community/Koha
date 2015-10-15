@@ -1,12 +1,10 @@
 #!/usr/bin/env perl
 
-use strict;
-use warnings;
+use Modern::Perl;
 use DateTime;
 use DateTime::Duration;
-use Test::More tests => 34;
+use Test::More tests => 35;
 use Test::MockModule;
-use DBD::Mock;
 use Koha::Cache;
 use Koha::DateUtils;
 
@@ -17,20 +15,32 @@ BEGIN {
     # Remove when no longer used
     #use_ok('C4::Calendar'); # not used anymore?
 }
+use Test::DBIx::Class {
+    schema_class => 'Koha::Schema',
+    connect_info => ['dbi:SQLite:dbname=:memory:','',''],
+    connect_opts => { name_sep => '.', quote_char => '`', },
+    fixture_class => '::Populate',
+}, 'Biblio' ;
 
-my $module_context = new Test::MockModule('C4::Context');
-$module_context->mock(
-    '_new_dbh',
-    sub {
-        my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
-          || die "Cannot create handle: $DBI::errstr\n";
-        return $dbh;
-    }
+sub fixtures {
+    my ( $data ) = @_;
+    fixtures_ok [
+        Biblio => [
+            [ qw/ biblionumber datecreated timestamp  / ],
+            @$data,
+        ],
+    ], 'add fixtures';
+}
+
+my $db = Test::MockModule->new('Koha::Database');
+$db->mock(
+    _new_schema => sub { return Schema(); }
 );
 
 # We need to mock the C4::Context->preference method for
 # simplicity and re-usability of the session definition. Any
 # syspref fits for syspref-agnostic tests.
+my $module_context = new Test::MockModule('C4::Context');
 $module_context->mock(
     'preference',
     sub {
@@ -38,69 +48,31 @@ $module_context->mock(
     }
 );
 
-SKIP: {
-
-skip "DBD::Mock is too old", 33
-  unless $DBD::Mock::VERSION >= 1.45;
-
-my $holidays_session = DBD::Mock::Session->new('holidays_session' => (
-    { # weekly holidays
-        statement => "SELECT weekday FROM repeatable_holidays WHERE branchcode = ? AND weekday IS NOT NULL",
-        results   => [
-                        ['weekday'],
-                        [0],    # sundays
-                        [6]     # saturdays
-                     ]
-    },
-    { # day and month repeatable holidays
-        statement => "SELECT day, month FROM repeatable_holidays WHERE branchcode = ? AND weekday IS NULL",
-        results   => [
-                        [ 'month', 'day' ],
-                        [ 1, 1 ],   # new year's day
-                        [12,25]     # christmas
-                     ]
-    },
-    { # exception holidays
-        statement => "SELECT day, month, year FROM special_holidays WHERE branchcode = ? AND isexception = 1",
-        results   => [
-                        [ 'day', 'month', 'year' ],
-                        [ 11, 11, 2012 ] # sunday exception
-                     ]
-    },
-
-    { # single holidays1
-        statement => "SELECT distinct(branchcode) FROM special_holidays",
-        results   => [
-                        [ 'branchcode' ],
-                        [ 'MPL']
-                     ]
-    },
-
-    { # single holidays2
-        statement => "SELECT day, month, year FROM special_holidays WHERE branchcode = ? AND isexception = 0",
-        results   => [
-                        [ 'day', 'month', 'year' ],
-                        [ 1, 6, 2011 ],  # single holiday
-                        [ 4, 7, 2012 ]
-                     ]
-    },
-));
-
-# Initialize the global $dbh variable
-my $dbh = C4::Context->dbh();
-# Apply the mock session
-$dbh->{ mock_session } = $holidays_session;
-
+fixtures_ok [
+    # weekly holidays
+    RepeatableHoliday => [
+        [ qw( branchcode day month weekday title description) ],
+        [ 'MPL', undef, undef, 0, '', '' ], # sundays
+        [ 'MPL', undef, undef, 6, '', '' ],# saturdays
+        [ 'MPL', 1, 1, undef, '', ''], # new year's day
+        [ 'MPL', 25, 12, undef, '', ''], # chrismas
+    ],
+    # exception holidays
+    SpecialHoliday => [
+        [qw( branchcode day month year title description isexception )],
+        [ 'MPL', 11, 11, 2012, '', '', 1 ],    # sunday exception
+        [ 'MPL', 1,  6,  2011, '', '', 0 ],
+        [ 'MPL', 4,  7,  2012, '', '', 0 ],
+      ],
+], "add fixtures";
 
 my $cache = Koha::Cache->get_instance();
 $cache->clear_from_cache( 'single_holidays') ;
-
 
 # 'MPL' branch is arbitrary, is not used at all but is needed for initialization
 my $cal = Koha::Calendar->new( branchcode => 'MPL' );
 
 isa_ok( $cal, 'Koha::Calendar', 'Calendar class returned' );
-
 
 my $saturday = DateTime->new(
     year      => 2012,
@@ -224,9 +196,6 @@ my $day_after_christmas = DateTime->new(
             return 'Datedue';
         }
     );
-    # rewind dbh session
-    $holidays_session->reset;
-
 
     $cal = Koha::Calendar->new( branchcode => 'MPL' );
 
@@ -266,8 +235,6 @@ my $day_after_christmas = DateTime->new(
             return 'Calendar';
         }
     );
-    # rewind dbh session
-    $holidays_session->reset;
 
     $cal = Koha::Calendar->new( branchcode => 'MPL' );
 
@@ -303,8 +270,6 @@ my $day_after_christmas = DateTime->new(
             return 'Days';
         }
     );
-    # rewind dbh session
-    $holidays_session->reset;
 
     $cal = Koha::Calendar->new( branchcode => 'MPL' );
 
@@ -333,5 +298,3 @@ my $day_after_christmas = DateTime->new(
                 '==', 40, 'Test parameter order not relevant (Days)' );
 
 }
-
-} # End SKIP block
