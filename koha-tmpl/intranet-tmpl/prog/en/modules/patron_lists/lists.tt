@@ -1,7 +1,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Patron lists</title>
 [% INCLUDE 'doc-head-close.inc' %]
-
+[% INCLUDE 'greybox.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
 
@@ -11,7 +11,7 @@
         $('#patron-lists-table').dataTable($.extend(true, {}, dataTablesDefaults, {
             "autoWidth": false,
             "aoColumnDefs": [
-                { "aTargets": [ -1, -2, -3 ], "bSortable": false, "bSearchable": false },
+                { "aTargets": [ -1, -2, -3, -4 ], "bSortable": false, "bSearchable": false },
             ],
             "sPaginationType": "four_button"
         } ));
@@ -46,6 +46,7 @@
                     <th>&nbsp;</th>
                     <th>&nbsp;</th>
                     <th>&nbsp;</th>
+                    <th>&nbsp;</th>
                 </tr>
             </thead>
 
@@ -67,6 +68,11 @@
                         <td>
                             <a class="btn btn-mini" href="delete.pl?patron_list_id=[% l.patron_list_id %]" onclick='return ConfirmDelete("[% l.name | html %]")'>
                                 <i class="fa fa-trash"></i> Delete
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn btn-mini" href="#" onclick='GB_showCenter(_("Print patron cards from list"), "/cgi-bin/koha/patroncards/print.pl?patronlist_id=[% l.patron_list_id %]", 700, 800);return false;'>
+                                <i class="icon-print"></i> Print patron cards
                             </a>
                         </td>
                     </tr>
