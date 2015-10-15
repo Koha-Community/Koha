@@ -20,21 +20,30 @@ use Modern::Perl;
 use Test::More tests => 46;
 use Test::MockModule;
 use Test::Warn;
-use DBD::Mock;
 
 BEGIN {
         use_ok('C4::Biblio');
 }
 
-my $context = new Test::MockModule('C4::Context');
-$context->mock(
-    '_new_dbh',
-    sub {
-        my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
-          || die "Cannot create handle: $DBI::errstr\n";
-        return $dbh;
-    }
-);
+use Test::DBIx::Class {
+    schema_class => 'Koha::Schema',
+    connect_info => ['dbi:SQLite:dbname=:memory:','',''],
+    connect_opts => { name_sep => '.', quote_char => '`', },
+    fixture_class => '::Populate',
+}, 'Biblio' ;
+
+sub fixtures {
+    my ( $data ) = @_;
+    fixtures_ok [
+        Biblio => [
+            [ qw/ biblionumber datecreated timestamp  / ],
+            @$data,
+        ],
+    ], 'add fixtures';
+}
+
+my $db = Test::MockModule->new('Koha::Database');
+$db->mock( _new_schema => sub { return Schema(); } );
 
 my @arr;
 my $ret;
