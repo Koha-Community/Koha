@@ -332,13 +332,11 @@ foreach my $tag (sort keys %{$tagslib}) {
    if ( !$value && $use_default_values) {
 	    $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
 	    # get today date & replace YYYY, MM, DD if provided in the default value
-            my $today = dt_from_string;
-            my $year  = $today->year;
-            my $month = $today->month;
-            my $day   = $today->day;
-            $value =~ s/YYYY/$year/g;
-            $value =~ s/MM/$month/g;
-            $value =~ s/DD/$day/g;
+        my $today_iso = output_pref( { dt=>dt_from_string, dateonly => 1, dateformat => 'iso' } );
+        my ( $year, $month, $day ) = split ('-', $today_iso);
+        $value =~ s/YYYY/$year/g;
+        $value =~ s/MM/$month/g;
+        $value =~ s/DD/$day/g;
 	}
 	$subfield_data{visibility} = "display:none;" if (($tagslib->{$tag}->{$subfield}->{hidden} > 4) || ($tagslib->{$tag}->{$subfield}->{hidden} < -4));
     # testing branch value if IndependentBranches.
