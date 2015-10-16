@@ -41,6 +41,47 @@ Koha::Hold - Koha Hold object class
 
 =cut
 
+=head3 suspend_hold
+
+my $hold = $hold->suspend_hold( $suspend_until_dt );
+
+=cut
+
+sub suspend_hold {
+    my ( $self, $dt ) = @_;
+
+    if ( $self->is_waiting ) {    # We can't suspend waiting holds
+        carp "Unable to suspend waiting hold!";
+        return $self;
+    }
+
+    $dt ||= undef;
+
+    $self->suspend(1);
+    $self->suspend_until( $dt );
+
+    $self->store();
+
+    return $self;
+}
+
+=head3 resume
+
+my $hold = $hold->resume();
+
+=cut
+
+sub resume {
+    my ( $self ) = @_;
+
+    $self->suspend(0);
+    $self->suspend_until( undef );
+
+    $self->store();
+
+    return $self;
+}
+
 =head3 waiting_expires_on
 
 Returns a DateTime for the date a waiting holds expires on.
