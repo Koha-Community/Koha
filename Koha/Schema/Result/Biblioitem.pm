@@ -345,6 +345,5 @@ __PACKAGE__->has_many(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:A/4lKYlKWWd8TcMVzMRtCg
 
 __PACKAGE__->belongs_to( biblio => "Koha::Schema::Result::Biblio", "biblionumber" );
-__PACKAGE__->belongs_to( items  => "Koha::Schema::Result::Item",   "biblioitemnumber" );
 
 1;
