@@ -182,7 +182,10 @@ END_OF_BODY
         $template->param( error => 1 );
     }
 
-    $template->param( email => $email );
+    $template->param(
+        shelfid => $shelfid,
+        email => $email,
+    );
     output_html_with_http_headers $query, $cookie, $template->output;
 
 
