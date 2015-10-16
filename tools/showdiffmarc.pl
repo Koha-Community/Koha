@@ -85,7 +85,7 @@ if( $importid ) {
 
 
 $template->param(
-    SCRIPT_NAME      => $ENV{'SCRIPT_NAME'},
+    SCRIPT_NAME      => '/cgi-bin/koha/tools/showdiffmarc.pl',
     BIBLIONUMBER     => $biblionumber,
     IMPORTID         => $importid,
     BIBLIOTITLE      => $biblioTitle,

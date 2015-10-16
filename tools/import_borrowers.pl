@@ -106,7 +106,7 @@ if ($matchpoint) {
 }
 my $overwrite_cardnumber = $input->param('overwrite_cardnumber');
 
-$template->param( SCRIPT_NAME => $ENV{'SCRIPT_NAME'} );
+$template->param( SCRIPT_NAME => '/cgi-bin/koha/tools/import_borrowers.pl' );
 
 if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
     push @feedback, {feedback=>1, name=>'filename', value=>$uploadborrowers, filename=>$uploadborrowers};

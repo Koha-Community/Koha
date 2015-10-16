@@ -78,7 +78,7 @@ if ($completedJobID) {
 
     if ($runinbackground) {
         my $job_size = scalar(@input_lines);
-        $job = C4::BackgroundJob->new($sessionID, $filename, $ENV{'SCRIPT_NAME'}, $job_size);
+        $job = C4::BackgroundJob->new($sessionID, $filename, '/cgi-bin/koha/offline_circ/process_koc.pl', $job_size);
         my $jobID = $job->id();
 
         # fork off
@@ -104,7 +104,7 @@ if ($completedJobID) {
         } else {
             # fork failed, so exit immediately
             # fork failed, so exit immediately
-            warn "fork failed while attempting to run $ENV{'SCRIPT_NAME'} as a background job";
+            warn "fork failed while attempting to run offline_circ/process_koc.pl as a background job";
             exit 0;
         }
 

@@ -293,7 +293,7 @@ sub put_in_background {
     my $import_batch_id = shift;
 
     my $batch = GetImportBatch($import_batch_id);
-    my $job = C4::BackgroundJob->new($sessionID, $batch->{'file_name'}, $ENV{'SCRIPT_NAME'}, $batch->{'num_records'});
+    my $job = C4::BackgroundJob->new($sessionID, $batch->{'file_name'}, '/cgi-bin/koha/tools/manage-marc-import.pl', $batch->{'num_records'});
     my $jobID = $job->id();
 
     # fork off
@@ -318,7 +318,7 @@ sub put_in_background {
         close STDERR;
     } else {
         # fork failed, so exit immediately
-        warn "fork failed while attempting to run $ENV{'SCRIPT_NAME'} as a background job";
+        warn "fork failed while attempting to run tools/manage-marc-import.pl as a background job";
         exit 0;
     }
     return $job;

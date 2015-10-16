@@ -671,7 +671,7 @@ sub add_saved_job_results_to_template {
 sub put_in_background {
     my $job_size = shift;
 
-    my $job = C4::BackgroundJob->new($sessionID, "test", $ENV{'SCRIPT_NAME'}, $job_size);
+    my $job = C4::BackgroundJob->new($sessionID, "test", '/cgi-bin/koha/tools/batchMod.pl', $job_size);
     my $jobID = $job->id();
 
     # fork off
@@ -696,7 +696,7 @@ sub put_in_background {
         close STDERR;
     } else {
         # fork failed, so exit immediately
-        warn "fork failed while attempting to run $ENV{'SCRIPT_NAME'} as a background job";
+        warn "fork failed while attempting to run tools/batchMod.pl as a background job";
         exit 0;
     }
     return $job;

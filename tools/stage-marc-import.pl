@@ -72,7 +72,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 $template->param(
-    SCRIPT_NAME => $ENV{'SCRIPT_NAME'},
+    SCRIPT_NAME => '/cgi-bin/koha/tools/stage-marc-import.pl',
     uploadmarc  => $fileID,
     record_type => $record_type,
 );
@@ -102,7 +102,7 @@ if ($completedJobID) {
         my $job_size = () = $marcrecord =~ /\035/g;
         # if we're matching, job size is doubled
         $job_size *= 2 if ($matcher_id ne "");
-        $job = C4::BackgroundJob->new($sessionID, $filename, $ENV{'SCRIPT_NAME'}, $job_size);
+        $job = C4::BackgroundJob->new($sessionID, $filename, '/cgi-bin/koha/tools/stage-marc-import.pl', $job_size);
         my $jobID = $job->id();
 
         # fork off
@@ -121,7 +121,7 @@ if ($completedJobID) {
             # close STDERR; # there is no good reason to close STDERR
         } else {
             # fork failed, so exit immediately
-            warn "fork failed while attempting to run $ENV{'SCRIPT_NAME'} as a background job: $!";
+            warn "fork failed while attempting to run tools/stage-marc-import.pl as a background job: $!";
             exit 0;
         }
 
