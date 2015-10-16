@@ -57,7 +57,8 @@ subtest 'CRUD' => sub {
             }
         )->store;
     };
-    is( ref($@), 'Koha::Exceptions::Virtualshelves::DuplicateObject' );
+    is( ref($@), 'Koha::Exceptions::Virtualshelves::DuplicateObject',
+        'Exception on duplicate name' );
     $number_of_shelves = Koha::Virtualshelves->search->count;
     is( $number_of_shelves, 1, 'To be sure the number of shelves is still 1' );
 
@@ -130,8 +131,8 @@ subtest 'Sharing' => sub {
     $is_accepted = $shared_shelf->accept( 'this is a valid key', $share_with_me->{borrowernumber} );
     ok( defined($is_accepted), 'The share should have been accepted if the key valid' );
 
-    is( $shelf_to_share->is_shared, 1 );
-    is( $shelf_not_to_share->is_shared, 0 );
+    is( $shelf_to_share->is_shared, 1, 'first shelf is shared' );
+    is( $shelf_not_to_share->is_shared, 0, 'second shelf is not shared' );
 
     is( $shelf_to_share->is_shared_with( $patron_wants_to_share->{borrowernumber} ), 0 , "The shelf should not be shared with the owner" );
     is( $shelf_to_share->is_shared_with( $share_with_me->{borrowernumber} ), 1 , "The shelf should be shared with share_with_me" );
@@ -196,9 +197,10 @@ subtest 'Shelf content' => sub {
     # Patron 2 will try to remove a content
     # allow_add = 0, allow_delete_own = 1, allow_delete_other = 0 => Default values
     my $number_of_deleted_biblios = $shelf->remove_biblios( { biblionumbers => [ $biblio1->{biblionumber} ], borrowernumber => $patron2->{borrowernumber} } );
-    is( $number_of_deleted_biblios, 0, );
+    is( $number_of_deleted_biblios, 0, 'Patron 2 removed nothing' );
+    # Now try with patron 1
     $number_of_deleted_biblios = $shelf->remove_biblios( { biblionumbers => [ $biblio1->{biblionumber} ], borrowernumber => $patron1->{borrowernumber} } );
-    is( $number_of_deleted_biblios, 1, );
+    is( $number_of_deleted_biblios, 1, 'Patron 1 removed biblio' );
 
     $number_of_contents = Koha::Virtualshelfcontents->search->count;
     is( $number_of_contents, 1, 'To be sure the content has been deleted' );
@@ -207,7 +209,7 @@ subtest 'Shelf content' => sub {
     $shelf->allow_delete_own(0);
     $shelf->store;
     $number_of_deleted_biblios = $shelf->remove_biblios( { biblionumbers => [ $biblio2->{biblionumber} ], borrowernumber => $patron1->{borrowernumber} } );
-    is( $number_of_deleted_biblios, 1, );
+    is( $number_of_deleted_biblios, 1, 'Patron 1 removed another biblio' );
     $number_of_contents = Koha::Virtualshelfcontents->search->count;
     is( $number_of_contents, 0, 'The biblio should have been deleted to the shelf by the patron, it is his own content (allow_delete_own=0)' );
     $shelf->add_biblio( $biblio2->{biblionumber}, $patron1->{borrowernumber} );
@@ -224,7 +226,7 @@ subtest 'Shelf content' => sub {
     is( $number_of_contents, 3, 'The biblio should have been added to the shelf by the patron 2' );
 
     $number_of_deleted_biblios = $shelf->remove_biblios( { biblionumbers => [ $biblio3->{biblionumber} ], borrowernumber => $patron2->{borrowernumber} } );
-    is( $number_of_deleted_biblios, 1, );
+    is( $number_of_deleted_biblios, 1, 'Biblio 3 deleted by patron 2' );
     $number_of_contents = Koha::Virtualshelfcontents->search->count;
     is( $number_of_contents, 2, 'The biblio should have been deleted to the shelf by the patron, it is his own content (allow_delete_own=1) ' );
 
@@ -233,7 +235,7 @@ subtest 'Shelf content' => sub {
     $shelf->store;
 
     $number_of_deleted_biblios = $shelf->remove_biblios( { biblionumbers => [ $biblio2->{biblionumber} ], borrowernumber => $patron2->{borrowernumber} } );
-    is( $number_of_deleted_biblios, 1, );
+    is( $number_of_deleted_biblios, 1, 'Biblio 2 deleted by patron 2' );
     $number_of_contents = Koha::Virtualshelfcontents->search->count;
     is( $number_of_contents, 1, 'The biblio should have been deleted to the shelf by the patron 2, even if it is not his own content (allow_delete_other=1)' );
 
