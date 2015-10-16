@@ -226,6 +226,8 @@ if ( $op eq 'view' ) {
 
                 my $marcflavour = C4::Context->preference("marcflavour");
                 my $itemtypeinfo = getitemtypeinfo( $content->biblionumber->biblioitems->first->itemtype, 'intranet' );
+                $this_item->{author}            = $content->biblionumber->author;
+                $this_item->{dateadded}         = $content->dateadded;
                 $this_item->{imageurl}          = $itemtypeinfo->{imageurl};
                 $this_item->{description}       = $itemtypeinfo->{description};
                 $this_item->{notforloan}        = $itemtypeinfo->{notforloan};
