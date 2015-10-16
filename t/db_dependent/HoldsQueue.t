@@ -8,19 +8,16 @@
 
 use Modern::Perl;
 
-use Test::More tests => 24;
+use Test::More tests => 26;
 use Data::Dumper;
 
 use C4::Branch;
-use C4::Members;
-use Koha::Database;
-
 use C4::Calendar;
 use C4::Context;
-use C4::Branch;
-use C4::ItemType;
 use C4::Members;
+use Koha::Database;
 use Koha::DateUtils;
+use Koha::ItemType;
 
 use t::lib::TestBuilder;
 
@@ -312,13 +309,16 @@ is( $holds_queue->[1]->{cardnumber}, $borrower2->{cardnumber}, "Holds queue fill
 # have 1 row in the holds queue
 C4::Context->set_preference('HoldsQueueSkipClosed', 1);
 my $today = dt_from_string();
-C4::Calendar->new( branchcode => 'MPL' )->insert_single_holiday(
+C4::Calendar->new( branchcode => $branchcodes[0] )->insert_single_holiday(
     day         => $today->day(),
     month       => $today->month(),
     year        => $today->year(),
     title       => "$today",
     description => "$today",
 );
+# If the test below is removed, aother tests using the holiday will fail. For some reason if we call is_holiday now
+# the holiday will get set in cache correctly, but not if we let C4::HoldsQueue call is_holiday instead.
+is( Koha::Calendar->new( branchcode => $branchcodes[0] )->is_holiday( $today ), 1, 'Is today a holiday for pickup branch' );
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
 is( scalar( @$holds_queue ), 1, "Holds not filled with items from closed libraries" );
@@ -333,12 +333,13 @@ is( @$holds_queue, 3, "Holds queue filling correct number for holds for default 
 # Test skipping hold picks for closed libraries without transport cost matrix
 # At this point in the test, we have 3 rows in the holds queue
 # one of which is coming from MPL. Let's enable HoldsQueueSkipClosed
-# and use our previously created holiday for MPL.
+# and use our previously created holiday for MPL
 # When we run it again we should only have 2 rows in the holds queue
 C4::Context->set_preference( 'HoldsQueueSkipClosed', 1 );
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
 is( scalar( @$holds_queue ), 2, "Holds not filled with items from closed libraries" );
+C4::Context->set_preference( 'HoldsQueueSkipClosed', 0 );
 
 # Bug 14297
 $itemtype = Koha::ItemTypes->search->next->itemtype;
