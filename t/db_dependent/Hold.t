@@ -23,8 +23,9 @@ use Koha::Database;
 use Koha::Borrowers;
 use Koha::Libraries;
 use Koha::Item;
+use Koha::DateUtils;
 
-use Test::More tests => 23;
+use Test::More tests => 31;
 
 use_ok('Koha::Hold');
 
@@ -57,15 +58,31 @@ $item->store();
 
 my $hold = Koha::Hold->new(
     {
-        biblionumber     => $biblionumber,
-        itemnumber => $item->id(),
-        found          => 'W',
+        biblionumber   => $biblionumber,
+        itemnumber     => $item->id(),
         waitingdate    => '2000-01-01',
         borrowernumber => $borrower->borrowernumber(),
         branchcode     => $branches[1]->branchcode(),
+        suspend        => 0,
     }
 );
 $hold->store();
+
+is( $hold->suspend, 0, "Hold is not suspended" );
+$hold->suspend_hold();
+is( $hold->suspend, 1, "Hold is suspended" );
+$hold->resume();
+is( $hold->suspend, 0, "Hold is not suspended" );
+my $dt = dt_from_string();
+$hold->suspend_hold( $dt );
+is( $hold->suspend, 1, "Hold is suspended" );
+is( $hold->suspend_until, "$dt", "Hold is suspended with a date" );
+$hold->resume();
+is( $hold->suspend, 0, "Hold is not suspended" );
+is( $hold->suspend_until, undef, "Hold no longer has suspend_until date" );
+$hold->found('W');
+$hold->suspend_hold();
+is( $hold->suspend, 0, "Waiting hold cannot be suspended" );
 
 $item = $hold->item();
 
@@ -74,7 +91,7 @@ ok( $hold_borrower, 'Got hold borrower' );
 is( $hold_borrower->borrowernumber(), $borrower->borrowernumber(), 'Hold borrower matches correct borrower' );
 
 C4::Context->set_preference( 'ReservesMaxPickUpDelay', '' );
-my $dt = $hold->waiting_expires_on();
+$dt = $hold->waiting_expires_on();
 is( $dt, undef, "Koha::Hold->waiting_expires_on returns undef if ReservesMaxPickUpDelay is not set" );
 
 is( $hold->is_waiting, 1, 'The hold is waiting' );
