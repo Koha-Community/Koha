@@ -62,6 +62,7 @@ $(document).ready(function() {
       <tr>
           <th class="title-string">Date</th>
           <th>Description of charges</th>
+          <th>Item Homebranch</th>
           <th>Note</th>
           <th>Amount</th>
           <th>Outstanding</th>
@@ -101,6 +102,7 @@ $(document).ready(function() {
         [%- END -%]
         [%- IF account.description %], [% account.description %][% END %]
         &nbsp;[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.biblionumber %]&amp;itemnumber=[% account.itemnumber %]">View item</a>&nbsp;[% END %][% account.title |html %]</td>
+      <td>[%- IF account.homebranch %][% account.homebranch %][% END %]</td>
       <td>[% account.note | html_line_break %]</td>
       [% IF ( account.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amount %]</td>
       [% IF ( account.amountoutstandingcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amountoutstanding %]</td>
@@ -125,18 +127,18 @@ $(document).ready(function() {
   [% END %]
 <tfoot>
   <tr>
-    <td colspan="4">Total due</td>
+    <td colspan="5">Total due</td>
     [% IF ( totalcredit ) %]
       [% IF ( reverse_col ) %]
-        <td colspan="3" class="credit">
+        <td colspan="4" class="credit">
       [% ELSE %]
-        <td colspan="2" class="credit">
+        <td colspan="3" class="credit">
       [% END %]
     [% ELSE %]
       [% IF ( reverse_col ) %]
-        <td colspan="3" class="debit">
+        <td colspan="4" class="debit">
       [% ELSE %]
-        <td colspan="2" class="credit">
+        <td colspan="3" class="credit">
       [% END %]
     [% END %]
     [% total %]</td>
