@@ -29,6 +29,7 @@
     [%- CASE 'manage_restrictions' -%]<span>Manage restrictions for accounts</span>
     [%- CASE 'overdues_report' -%]<span>Execute overdue items report</span>
     [%- CASE 'override_renewals' -%]<span>Override blocked renewals</span>
+    [%- CASE 'self_checkout' -%]<span>Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID</span>
     [%- CASE 'manage_circ_rules' -%]<span>manage circulation rules</span>
     [%- CASE 'parameters_remaining_permissions' -%]<span>Remaining system parameters permissions</span>
     [%- CASE 'modify_holds_priority' -%]<span>Modify holds priority</span>
