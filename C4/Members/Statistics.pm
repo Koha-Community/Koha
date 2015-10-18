@@ -43,13 +43,34 @@ BEGIN {
 
 our $fields = get_fields();
 
+
+=head2 get_fields
+  Get fields form syspref 'StatisticsFields'
+  Returns list of valid fields, defaults to 'location|itype|ccode'
+  if syspref is empty or does not contain valid fields
+=cut
+
+
 sub get_fields {
-    my $r = C4::Context->preference('StatisticsFields') || 'location|itype|ccode';
-    unless ( $r =~ m/^(\w|\d|\||-)+$/) {
-        warn "Members/Statistics : Bad value for syspref StatisticsFields" if $debug;
-        $r = 'location|itype|ccode';
+
+    my $syspref = C4::Context->preference('StatisticsFields');
+    my $ret;
+
+    if ( $syspref ) {
+        my @ret;
+        my @spfields = split ('\|', $syspref);
+        my $dbh=C4::Context->dbh;
+        my $sth = $dbh->prepare('SHOW COLUMNS FROM items');
+        $sth->execute;
+        my $dbfields =  $sth->fetchall_hashref('Field');
+        $sth->finish();
+
+        foreach my $fn ( @spfields ) {
+            push ( @ret, $fn ) if ( $dbfields->{ $fn } );
+        }
+        $ret = join( '|', @ret);
     }
-    return $r;
+    return $ret || 'location|itype|ccode';
 }
 
 =head2 construct_query
