@@ -37,6 +37,7 @@ use Koha;
 use Koha::Acquisition::Currencies;
 use Koha::Patrons;
 use Koha::Config::SysPrefs;
+use C4::Members::Statistics;
 
 #use Smart::Comments '####';
 
@@ -70,6 +71,14 @@ if ( any { /(^psgi\.|^plack\.)/i } keys %ENV ) {
 }
 
 # Additional system information for warnings
+
+my $warnStatisticsFieldsError;
+my $prefStatisticsFields = C4::Context->preference('StatisticsFields');
+if ($prefStatisticsFields) {
+    $warnStatisticsFieldsError = $prefStatisticsFields
+        unless ( $prefStatisticsFields eq C4::Members::Statistics->get_fields() );
+}
+
 my $prefAutoCreateAuthorities = C4::Context->preference('AutoCreateAuthorities');
 my $prefBiblioAddsAuthorities = C4::Context->preference('BiblioAddsAuthorities');
 my $warnPrefBiblioAddsAuthorities = ( $prefAutoCreateAuthorities && ( !$prefBiblioAddsAuthorities) );
@@ -270,6 +279,7 @@ $template->param(
     warnIsRootUser => $warnIsRootUser,
     warnNoActiveCurrency => $warnNoActiveCurrency,
     xml_config_warnings => \@xml_config_warnings,
+    warnStatisticsFieldsError => $warnStatisticsFieldsError,
 );
 
 my @components = ();
