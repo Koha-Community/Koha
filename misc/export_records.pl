@@ -209,7 +209,7 @@ export records - This script exports record (biblios or authorities)
 
 =head1 SYNOPSIS
 
-export.pl [-h|--help] [--format=format] [--date=date] [--record-type=TYPE] [--dont_export_items] [--deleted_barcodes] [--clean] [--id_list_file=PATH] --filename=outputfile
+export_records.pl [-h|--help] [--format=format] [--date=date] [--record-type=TYPE] [--dont_export_items] [--deleted_barcodes] [--clean] [--id_list_file=PATH] --filename=outputfile
 
 =head1 OPTIONS
 
