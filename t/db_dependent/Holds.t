@@ -6,7 +6,7 @@ use t::lib::Mocks;
 use C4::Context;
 use C4::Branch;
 
-use Test::More tests => 38;
+use Test::More tests => 43;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
@@ -67,7 +67,7 @@ foreach my $borrowernumber ( @borrowernumbers ) {
         $biblionumber,
         my $constraint = 'a',
         my $bibitems = q{},
-        my $priority,
+        my $priority = 1,
         my $resdate,
         my $expdate,
         my $notes = q{},
@@ -77,10 +77,14 @@ foreach my $borrowernumber ( @borrowernumbers ) {
     );
 }
 
-
 my $reserves = GetReservesFromBiblionumber({ biblionumber => $biblionumber });
 is( scalar(@$reserves), $borrowers_count, "Test GetReserves()" );
 
+is( $reserves->[0]->{priority}, 1, "Reserve 1 has a priority of 1" );
+is( $reserves->[1]->{priority}, 2, "Reserve 2 has a priority of 2" );
+is( $reserves->[2]->{priority}, 3, "Reserve 3 has a priority of 3" );
+is( $reserves->[3]->{priority}, 4, "Reserve 4 has a priority of 4" );
+is( $reserves->[4]->{priority}, 5, "Reserve 5 has a priority of 5" );
 
 my ( $reservedate, $borrowernumber, $branchcode, $reserve_id ) = GetReservesFromItemnumber($itemnumber);
 is( $reservedate, output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }), "GetReservesFromItemnumber should return a valid reserve date");
