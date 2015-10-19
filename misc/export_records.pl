@@ -67,6 +67,10 @@ $record_type ||= 'bibs';
 # Retrocompatibility for the format parameter
 $output_format = 'iso2709' if $output_format eq 'marc';
 
+if ( $output_format eq 'csv' and $record_type eq 'auths' ) {
+    pod2usage(q|CSV output is only available for biblio records|);
+}
+
 
 if ( $timestamp and $record_type ne 'bibs' ) {
     pod2usage(q|--timestamp can only be used with biblios|);
@@ -221,7 +225,7 @@ Print a brief help message.
 
 =item B<--format>
 
- --format=FORMAT        FORMAT is either 'xml', 'csv'  or 'marc' (default).
+ --format=FORMAT        FORMAT is either 'xml', 'csv' (biblio records only) or 'marc' (default).
 
 =item B<--date>
 
@@ -242,6 +246,7 @@ Print a brief help message.
 
  --csv_profile_id=ID    Generate a CSV file with the given CSV profile id (see tools/csv-profiles.pl)
                         Unless provided, the one defined in the system preference 'ExportWithCsvProfile' will be used.
+                        This can only be used to export biblio records.
 
 =item B<--deleted_barcodes>
 
