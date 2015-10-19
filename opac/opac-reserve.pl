@@ -407,13 +407,13 @@ foreach my $biblioNum (@biblionumbers) {
     $biblioLoopIter{mandatorynotes}=0; #FIXME: For future use
 
     if (!$itemLevelTypes && $biblioData->{itemtype}) {
-        $biblioLoopIter{description} = $itemTypes->{$biblioData->{itemtype}}{description};
+        $biblioLoopIter{translated_description} = $itemTypes->{$biblioData->{itemtype}}{translated_description};
         $biblioLoopIter{imageurl} = getitemtypeimagesrc() . "/". $itemTypes->{$biblioData->{itemtype}}{imageurl};
     }
 
     foreach my $itemInfo (@{$biblioData->{itemInfos}}) {
         if ($itemLevelTypes && $itemInfo->{itype}) {
-            $itemInfo->{description} = $itemTypes->{$itemInfo->{itype}}{description};
+            $itemInfo->{translated_description} = $itemTypes->{$itemInfo->{itype}}{translated_description};
             $itemInfo->{imageurl} = getitemtypeimagesrc() . "/". $itemTypes->{$itemInfo->{itype}}{imageurl};
         }
 
@@ -436,7 +436,7 @@ foreach my $biblioNum (@biblionumbers) {
         $itemLoopIter->{enumchron} = $itemInfo->{enumchron};
         $itemLoopIter->{copynumber} = $itemInfo->{copynumber};
         if ($itemLevelTypes) {
-            $itemLoopIter->{description} = $itemInfo->{description};
+            $itemLoopIter->{translated_description} = $itemInfo->{translated_description};
             $itemLoopIter->{imageurl} = $itemInfo->{imageurl};
         }
 

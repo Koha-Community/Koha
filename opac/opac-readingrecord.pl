@@ -84,8 +84,8 @@ my $opac_summary_html = C4::Context->preference('OPACMySummaryHTML');
 foreach my $issue ( @{$issues} ) {
     $issue->{normalized_isbn} = GetNormalizedISBN( $issue->{isbn} );
     if ( $issue->{$itype_attribute} ) {
-        $issue->{description} =
-          $itemtypes->{ $issue->{$itype_attribute} }->{description};
+        $issue->{translated_description} =
+          $itemtypes->{ $issue->{$itype_attribute} }->{translated_description};
         $issue->{imageurl} =
           getitemtypeimagelocation( 'opac',
             $itemtypes->{ $issue->{$itype_attribute} }->{imageurl} );
