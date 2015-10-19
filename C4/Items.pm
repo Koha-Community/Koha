@@ -1035,7 +1035,7 @@ sub GetLostItems {
   branch       => $branch,
   offset       => $offset,
   size         => $size,
-  stautshash   => $statushash
+  statushash   => $statushash,
   interface    => $interface,
 } );
 
