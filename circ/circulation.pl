@@ -114,9 +114,9 @@ my $borrowernumber = $query->param('borrowernumber');
 my $borrower = $borrowernumber ? GetMember( borrowernumber => $borrowernumber ) : undef;
 my $batch = $query->param('batch');
 my $batch_allowed = 0;
-if ( $batch ) {
+if ( $batch && C4::Context->preference('BatchCheckouts') ) {
     $template_name = q|circ/circulation_batch_checkouts.tt|;
-    my @batch_category_codes = split '\|', C4::Context->preference('batch_checkouts');
+    my @batch_category_codes = split '\|', C4::Context->preference('BatchCheckoutsValidCategories');
     if ( grep {/^$borrower->{categorycode}$/} @batch_category_codes ) {
         $batch_allowed = 1;
     } else {

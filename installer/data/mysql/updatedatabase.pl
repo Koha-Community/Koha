@@ -11121,10 +11121,14 @@ if ( CheckVersion($DBversion) ) {
 }
 
 $DBversion = "3.21.00.XXX";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
         INSERT IGNORE INTO systempreferences ( variable, value, options, explanation, type )
-        VALUES ('batch_checkouts','','','Allow patron categories allowed to checkout in a batch','Free')
+        VALUES ('BatchCheckouts','0','','Enable or disable batch checkouts','YesNo')
+    |);
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences ( variable, value, options, explanation, type )
+        VALUES ('BatchCheckoutsValidCategories','',NULL,'Patron categories allowed to checkout in a batch','Free')
     |);
     print "Upgrade to $DBversion done (Bug 11759: Add batch_checkouts system preference)\n";
     SetVersion($DBversion);

@@ -714,6 +714,12 @@ Circulation:
             - course reserves
     Batch checkout:
         -
-            - "Allow some patron categories to checkout in a batch"
-            - pref: batch_checkouts
-            - "(list of patron category separated with a pipe '|')"
+            - pref: BatchCheckouts
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - "batch checkouts"
+        -
+            - "Patron categories allowed to checkout in a batch"
+            - pref: BatchCheckoutsValidCategories
+            - "(list of patron categories separated with a pipe '|')"
