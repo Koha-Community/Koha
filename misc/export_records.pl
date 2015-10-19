@@ -266,23 +266,43 @@ Print a brief help message.
 
 =item B<--starting_authid>
 
+ --starting_authid=ID  Export authorities with authid >= ID
+
 =item B<--ending_authid>
+
+ --ending_authid=ID    Export authorities with authid <= ID
 
 =item B<--authtype>
 
+ --authtype=AUTHTYPE   Export authorities from the given AUTHTYPE
+
 =item B<--starting_biblionumber>
+
+ --starting_biblionumber=ID  Export biblio with biblionumber >= ID
 
 =item B<--ending_biblionumber>
 
+ --ending_biblionumber=ID    Export biblio with biblionumber <= ID
+
 =item B<--itemtype>
+
+ --itemtype=ITEMTYPE         Export biblio from the given ITEMTYPE
 
 =item B<--starting_callnumber>
 
+ --starting_callnumber=CALLNUMBER Export biblio with callnumber >=CALLNUMBER
+
 =item B<--ending_callnumber>
+
+ --ending_callnumber=CALLNUMBER Export biblio with callnumber <=CALLNUMBER
 
 =item B<--start_accession>
 
+ --starting_accession=DATE      Export biblio with an item accessionned after DATE
+
 =item B<--end_accession>
+
+ --end_accession=DATE           Export biblio with an item accessionned after DATE
 
 =back
 
