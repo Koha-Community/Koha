@@ -2931,7 +2931,7 @@ sub PrepareItemrecordDisplay {
                 if (   $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber'
                     && $defaultvalues
                     && $defaultvalues->{'callnumber'} ) {
-                    if( $itemrecord and $defaultvalues and not $itemrecord->field($subfield) ){
+                    if( $itemrecord and $defaultvalues and not $itemrecord->subfield($tag,$subfield) ){
                         # if the item record exists, only use default value if the item has no callnumber
                         $defaultvalue = $defaultvalues->{callnumber};
                     } elsif ( !$itemrecord and $defaultvalues ) {
@@ -2942,7 +2942,7 @@ sub PrepareItemrecordDisplay {
                 if (   ( $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.holdingbranch' || $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.homebranch' )
                     && $defaultvalues
                     && $defaultvalues->{'branchcode'} ) {
-                    if ( $itemrecord and $defaultvalues and not $itemrecord->field($subfield) ) {
+                    if ( $itemrecord and $defaultvalues and not $itemrecord->subfield($tag,$subfield) ) {
                         $defaultvalue = $defaultvalues->{branchcode};
                     }
                 }
@@ -2950,7 +2950,7 @@ sub PrepareItemrecordDisplay {
                     && $defaultvalues
                     && $defaultvalues->{'location'} ) {
 
-                    if ( $itemrecord and $defaultvalues and not $itemrecord->field($subfield) ) {
+                    if ( $itemrecord and $defaultvalues and not $itemrecord->subfield($tag,$subfield) ) {
                         # if the item record exists, only use default value if the item has no locationr
                         $defaultvalue = $defaultvalues->{location};
                     } elsif ( !$itemrecord and $defaultvalues ) {
