@@ -169,7 +169,13 @@ define( [ 'resources' ], function( Resources ) {
 
                 $inputs.each( function( i ) {
                     $(this).on( 'keydown.marc-tab', function( e ) {
-                        if ( e.which != 9 ) return; // Tab
+                        // Cheap hack to disable backspace and special keys
+                        if ( ( this.nodeName.toLowerCase() == 'select' && e.which == 9 ) || e.ctrlKey ) {
+                            e.preventDefault();
+                            return;
+                        } else if ( e.which != 9 ) { // Tab
+                            return;
+                        }
 
                         var span = widget.mark.find();
                         var cur = editor.cm.getCursor();
@@ -210,7 +216,7 @@ define( [ 'resources' ], function( Resources ) {
 
         ActivateAt: function( editor, cur, idx ) {
             var marks = editor.findMarksAt( cur );
-            if ( !marks.length ) return false;
+            if ( !marks.length || !marks[0].widget ) return false;
 
             var $input = $(marks[0].widget.node).find('input, select').eq(idx || 0);
             if ( !$input.length ) return false;
@@ -264,7 +270,7 @@ define( [ 'resources' ], function( Resources ) {
                 if ( marks.length ) {
                     if ( marks[0].id == id ) {
                         return;
-                    } else {
+                    } else if ( marks[0].widget ) {
                         marks[0].widget.clearToText();
                     }
                 }

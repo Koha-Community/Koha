@@ -88,7 +88,7 @@ define( [ 'marc-record' ], function( MARC ) {
                     $.each( subfields, function( i, subfield ) {
                         var next = subfields[ i + 1 ];
 
-                        field.addSubfield( [ subfield.code, line.substring( subfield.ch + 3, next ? next.ch : line.length ) ] );
+                        field.addSubfield( [ subfield.code, line.substring( subfield.ch + 2, next ? next.ch : line.length ) ] );
                     } );
 
                     field.sourceLine = i;

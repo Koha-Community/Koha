@@ -152,8 +152,7 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             // Delete line (or cut)
             if ( cm.somethingSelected() ) return true;
 
-            var field = cm.marceditor.getCurrentField();
-            if ( field ) field.delete();
+            cm.execCommand('deleteLine');
         },
 
         'Shift-Ctrl-X': function( cm ) {
@@ -272,6 +271,9 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             return this.field._subfieldsInvalid();
         },
 
+        delete: function() {
+            this.cm.replaceRange( "", { line: this.field.line, ch: this.start }, { line: this.field.line, ch: this.end }, 'marcAware' );
+        },
         focus: function() {
             this.cm.setCursor( { line: this.field.line, ch: this.contentsStart } );
         },
