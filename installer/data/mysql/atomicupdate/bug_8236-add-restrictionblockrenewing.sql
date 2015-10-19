@@ -1,1 +1,0 @@
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('RestrictionBlockRenewing','0','If patron is restricted, should renewal be allowed or blocked',NULL,'YesNo');

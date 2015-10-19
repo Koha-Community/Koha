@@ -11106,6 +11106,20 @@ if ( CheckVersion($DBversion) ) {
    SetVersion($DBversion);
 }
 
+$DBversion = "3.21.00.037";
+if ( CheckVersion($DBversion) ) {
+   $dbh->do(q{
+       INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
+       VALUES ('OverduesBlockRenewing','allow','If any of a patron checked out documents is late, should renewal be allowed, blocked only on overdue items or blocked on whatever checked out document','allow|blockitem|block','Choice')
+   });
+   $dbh->do(q{
+       INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
+       VALUES ('RestrictionBlockRenewing','0','If patron is restricted, should renewal be allowed or blocked',NULL,'YesNo')
+    });
+   print "Upgrade to $DBversion done (Bug 8236: Prevent renewing if overdue or restriction)\n";
+   SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
