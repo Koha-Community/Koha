@@ -126,6 +126,7 @@ EOS
 
     subtest 'Daily loans' => sub {
         plan tests => 2;
+        skip "It's 23:59!", 2 if $today->hour == 23 and $today->minute == 59;
         # Test 1: No overdue
         my $today_daily = $today->clone->set( hour => 23, minute => 59 );
         my $today_daily_as_formatted = output_pref( $today_daily );
@@ -194,12 +195,13 @@ EOS
 
     subtest 'Hourly loans' => sub {
         plan tests => 2;
+        skip "It's 23:59!", 2 if $today->hour == 23 and $today->minute == 59;
         # Test 1: No overdue
         my ( $date_due_in_time, $date_due_in_time_as_formatted, $date_due_in_late, $date_due_in_late_as_formatted, $issue_date, $slip, $expected_slip );
         # Assuming today is not hour = 23 and minute = 59
-        $date_due_in_time = $today->clone->set(hour => $today->hour + 1);
+        $date_due_in_time = $today->clone->set(hour => ($today->hour < 23 ? $today->hour + 1 : 23), minute => 59);
         $date_due_in_time_as_formatted = output_pref( $date_due_in_time );
-        $issue_date = $today->clone->subtract_duration( DateTime::Duration->new( minutes => 1 ) );
+        $issue_date = $date_due_in_time->clone->subtract_duration( DateTime::Duration->new( minutes => 1 ) );
         AddIssue( $borrower, $barcode1, $date_due_in_time, undef, $issue_date );
         $issue_date = $yesterday->clone;
         AddIssue( $borrower, $barcode2, $date_due_in_time, undef, $issue_date );
@@ -227,9 +229,9 @@ EOS
         AddReturn( $barcode2, $branchcode );
 
         # Test 2: 1 Overdue
-        $date_due_in_time = $today->clone->set(hour => $today->hour + 1);
+        $date_due_in_time = $today->clone->set(hour => ($today->hour < 23 ? $today->hour + 1 : 23), minute => 59);
         $date_due_in_time_as_formatted = output_pref( $date_due_in_time );
-        $issue_date = $today->clone->subtract_duration( DateTime::Duration->new( minutes => 1 ) );
+        $issue_date = $date_due_in_time->clone->subtract_duration( DateTime::Duration->new( minutes => 1 ) );
         AddIssue( $borrower, $barcode1, $date_due_in_time, undef, $issue_date );
         $date_due_in_late = $today->clone->set(hour => $today->hour - 1);
         $date_due_in_late_as_formatted = output_pref( $date_due_in_late );
@@ -275,6 +277,7 @@ EOS
 
     subtest 'Daily loans' => sub {
         plan tests => 2;
+        skip "It's 23:59!", 2 if $today->hour == 23 and $today->minute == 59;
         # Test 1: No overdue
         my $today_daily = $today->clone->set( hour => 23, minute => 59 );
         my $today_daily_as_formatted = output_pref( $today_daily );
@@ -328,9 +331,9 @@ EOS
         # Test 1: No overdue
         my ( $date_due_in_time, $date_due_in_time_as_formatted, $date_due_in_late, $date_due_in_late_as_formatted, $issue_date, $slip, $expected_slip );
         # Assuming today is not hour = 23 and minute = 59
-        $date_due_in_time = $today->clone->set(hour => $today->hour + 1);
+        $date_due_in_time = $today->clone->set(hour => ($today->hour < 23 ? $today->hour + 1 : 23), minute => 59);
         $date_due_in_time_as_formatted = output_pref( $date_due_in_time );
-        $issue_date = $today->clone->subtract_duration( DateTime::Duration->new( minutes => 1 ) );
+        $issue_date = $date_due_in_time->clone->subtract_duration( DateTime::Duration->new( minutes => 1 ) );
         AddIssue( $borrower, $barcode1, $date_due_in_time, undef, $issue_date );
         $issue_date = $yesterday->clone;
         AddIssue( $borrower, $barcode2, $date_due_in_time, undef, $issue_date );
@@ -350,9 +353,9 @@ EOS
         AddReturn( $barcode2, $branchcode );
 
         # Test 2: 1 Overdue
-        $date_due_in_time = $today->clone->set(hour => $today->hour + 1);
+        $date_due_in_time = $today->clone->set(hour => ($today->hour < 23 ? $today->hour + 1 : 23), minute => 59);
         $date_due_in_time_as_formatted = output_pref( $date_due_in_time );
-        $issue_date = $today->clone->subtract_duration( DateTime::Duration->new( minutes => 1 ) );
+        $issue_date = $date_due_in_time->clone->subtract_duration( DateTime::Duration->new( minutes => 1 ) );
         AddIssue( $borrower, $barcode1, $date_due_in_time, undef, $issue_date );
         $date_due_in_late = $today->clone->set(hour => $today->hour - 1);
         $date_due_in_late_as_formatted = output_pref( $date_due_in_late );
