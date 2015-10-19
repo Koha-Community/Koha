@@ -401,6 +401,7 @@ Several letter_code parameters can be given.
 
 =item B<-e|--email>
 
+Repeatable.
 E-mail address to send generated files.
 
 =item B<-h|--help>
