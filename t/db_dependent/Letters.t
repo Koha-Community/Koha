@@ -401,6 +401,7 @@ use C4::Serials;
 
 my $notes = 'notes';
 my $internalnotes = 'intnotes';
+$dbh->do(q|UPDATE subscription_numberpatterns SET numberingmethod='No. {X}' WHERE id=1|);
 my $subscriptionid = NewSubscription(
      undef,      "",     undef, undef, undef, $biblionumber,
     '2013-01-01', 1, undef, undef,  undef,
