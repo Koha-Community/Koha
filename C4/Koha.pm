@@ -1291,7 +1291,7 @@ sub IsAuthorisedValueCategory {
     my $query = '
         SELECT category
         FROM authorised_values
-        WHERE BINARY category=?
+        WHERE category=?
         LIMIT 1
     ';
     my $sth = C4::Context->dbh->prepare($query);
