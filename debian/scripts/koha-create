@@ -69,6 +69,8 @@ Options:
   --database dbname         Enforce the use of the specified DB name (64 char limit)
   --adminuser n             Explicit the admin user ID in the DB. Relevant in
                             conjunction with --defaultsql and --populate-db.
+  --upload-path dir         Set a user defined upload_path. It defaults to
+                            /var/lib/koha/<instance>/uploads
   --help,-h                 Show this help.
 
 Note: the instance name cannot be longer that 11 chars.
@@ -107,6 +109,7 @@ generate_config_file() {
         -e "s/__DB_PASS__/$mysqlpwd/g" \
         -e "s/__UNIXUSER__/$username/g" \
         -e "s/__UNIXGROUP__/$username/g" \
+        -e "s/__UPLOAD_PATH__/$UPLOAD_PATH/g" \
         -e "s/__PLUGINS_DIR__/\/var\/lib\/koha\/$name\/plugins/g" \
         -e "s/__MEMCACHED_NAMESPACE__/$MEMCACHED_NAMESPACE/g" \
         -e "s/__MEMCACHED_SERVERS__/$MEMCACHED_SERVERS/g" \
@@ -286,6 +289,17 @@ set_memcached()
 
 }
 
+set_upload_path()
+{
+    local $instance="$1"
+
+    if [ "$CLO_UPLOAD_PATH" != "" ]; then
+        UPLOAD_PATH=$CLO_UPLOAD_PATH
+    else
+        UPLOAD_PATH="$UPLOAD_PATH_BASE/$instance/$UPLOAD_DIR"
+    fi
+}
+
 enable_sru_server()
 {
     # remove the commenting symbols
@@ -318,6 +332,10 @@ MEMCACHED_PREFIX=""
 # hardcoded memcached defaults
 DEFAULT_MEMCACHED_SERVERS="127.0.0.1:11211"
 DEFAULT_MEMCACHED_PREFIX="koha_"
+# hardcoded upload_path
+UPLOAD_PATH_BASE="/var/lib/koha"
+UPLOAD_DIR="uploads"
+UPLOAD_PATH=""
 
 # SRU server variables
 ENABLE_SRU="no"
@@ -343,7 +361,7 @@ fi
 
 [ $# -ge 1 ] && [ $# -le 16 ] || ( usage ; die "Error: wrong parameters" )
 
-TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,use-memcached,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,database:,adminuser:,memcached-servers:,memcached-prefix:, \
+TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,use-memcached,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,database:,adminuser:,memcached-servers:,memcached-prefix:,upload-path:, \
      -n "$0" -- "$@"`
 
 # Note the quotes around `$TEMP': they are essential!
@@ -358,6 +376,7 @@ CLO_BIBLIOS_INDEXING_MODE=""
 CLO_AUTHORITIES_INDEXING_MODE=""
 CLO_MEMCACHED_SERVERS=""
 CLO_MEMCACHED_PREFIX=""
+CLO_UPLOAD_PATH=""
 
 
 while true ; do
@@ -398,6 +417,8 @@ while true ; do
             ENABLE_SRU="yes" ; shift ;;
         --sru-port)
             SRU_SERVER_PORT="$2" ; shift 2 ;;
+        --upload-path)
+            CLO_UPLOAD_PATH="$2" ; shift 2 ;;
         -h|--help)
             usage ; exit 0 ;;
         --)
@@ -457,6 +478,8 @@ fi
 set_authorities_indexing_mode $AUTHORITIES_INDEXING_MODE $ZEBRA_MARC_FORMAT
 
 name="$1"
+
+set_upload_path $name
 
 if [ "$USE_MEMCACHED" = "yes" ]; then
     set_memcached $name
