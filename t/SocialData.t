@@ -2,51 +2,49 @@
 #
 #Testing C4 SocialData
 
-use strict;
-use warnings;
-use Test::More tests => 5;
+use Modern::Perl;
+use Test::More tests => 6;
 use Test::MockModule;
 
 BEGIN {
     use_ok('C4::SocialData');
 }
 
-my $module = new Test::MockModule('C4::Context');
-$module->mock(
-    '_new_dbh',
-    sub {
-        my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
-          || die "Cannot create handle: $DBI::errstr\n";
-        return $dbh;
-    }
-);
-my $socialdata = [
-    [
-        'isbn',            'num_critics',
-        'num_critics_pro', 'num_quotations',
-        'num_videos',      'score_avg',
-        'num_scores'
-    ],
-    [ '0-596-52674-1', 1, 2, 3, 4, 5.2, 6 ],
-    [ '0-596-00289-0', 2, 3, 4, 5, 6.2, 7 ]
-];
-my $dbh = C4::Context->dbh();
+use Test::DBIx::Class {
+    schema_class => 'Koha::Schema',
+    connect_info => ['dbi:SQLite:dbname=:memory:','',''],
+    connect_opts => { name_sep => '.', quote_char => '`', },
+    fixture_class => '::Populate',
+}, 'SocialData', 'Biblioitem' ;
 
-$dbh->{mock_add_resultset} = $socialdata;
+fixtures_ok [
+    Biblioitem => [
+        ['biblionumber', 'isbn'],
+        [1, '0-596-52674-1'],
+        [2, '0-596-00289-0'],
+    ],
+    SocialData => [
+        [
+            'isbn',            'num_critics',
+            'num_critics_pro', 'num_quotations',
+            'num_videos',      'score_avg',
+            'num_scores'
+        ],
+        [ '0-596-52674-1', 1, 2, 3, 4, 5.2, 6 ],
+        [ '0-596-00289-0', 2, 3, 4, 5, 6.2, 7 ]
+    ],
+], 'add fixtures';
+
+my $db = Test::MockModule->new('Koha::Database');
+$db->mock( _new_schema => sub { return Schema(); } );
 
 my $data = C4::SocialData::get_data();
+is( $data, undef, 'get_data should return undef if no param given');
 
-is( $data->{'isbn'}, '0-596-52674-1', 'First isbn is 0-596-52674-1' );
+$data = C4::SocialData::get_data('0-596-52674-1');
+is( $data->{isbn}, '0-596-52674-1', 'get_data should return the matching row');
 
-my $reportdata =
-  [ [ 'biblionumber', 'isbn' ], [ 1, '0-596-52674-1' ],
-    [ 2, '0-596-00289-0' ] ];
-
-use Data::Dumper;
-
-$dbh->{mock_add_resultset} = $reportdata;
-
-ok( my $report = C4::SocialData::get_report() );
+my $report =  C4::SocialData::get_report('0-596-52674-1');
 
 is( $report->{'without'}->[0]->{'original'},
     '0-596-52674-1', 'testing get_report gives isbn' );
