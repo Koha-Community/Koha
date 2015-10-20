@@ -27,7 +27,7 @@ use C4::Overdues qw(UpdateFine);
 use Koha::DateUtils;
 use Koha::Database;
 
-use Test::More tests => 70 ;
+use Test::More tests => 78 ;
 
 BEGIN {
     use_ok('C4::Circulation');
