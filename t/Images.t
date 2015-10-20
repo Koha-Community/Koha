@@ -2,53 +2,50 @@
 #
 #Testing C4 Images
 
-use strict;
-use warnings;
-use Test::More tests => 7;
+use Modern::Perl;
+use Test::More tests => 8;
 use Test::MockModule;
 
-BEGIN {
-    use_ok('C4::Images');
-}
+use_ok('C4::Images');
 
-my $module = new Test::MockModule('C4::Context');
-$module->mock(
-    '_new_dbh',
-    sub {
-        my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
-          || die "Cannot create handle: $DBI::errstr\n";
-        return $dbh;
-    }
+use Test::DBIx::Class {
+    schema_class => 'Koha::Schema',
+    connect_info => ['dbi:SQLite:dbname=:memory:','',''],
+    connect_opts => { name_sep => '.', quote_char => '`', },
+    fixture_class => '::Populate',
+}, 'Biblioimage' ;
+
+# Make the code in the module use our mocked Koha::Schema/Koha::Database
+my $db = Test::MockModule->new('Koha::Database');
+$db->mock(
+    # Schema() gives us the DB connection set up by Test::DBIx::Class
+    _new_schema => sub { return Schema(); }
 );
+
+my $biblionumber = 2;
 my $images = [
-    [ 'imagenumber', 'biblionumber', 'mimetype', 'imagefile', 'thumbnail' ],
-    [ 1, 2, 'gif',  'red',  001, 000 ],
-    [ 3, 2, 'jpeg', 'blue', 111, 110 ]
+    [ 1, $biblionumber, 'gif',  'imagefile1', 'thumbnail1' ],
+    [ 3, $biblionumber, 'jpeg', 'imagefile3', 'thumbnail3' ],
 ];
-my $dbh = C4::Context->dbh();
+fixtures_ok [
+    Biblioimage => [
+        [ 'imagenumber', 'biblionumber', 'mimetype', 'imagefile', 'thumbnail' ],
+        @$images,
+    ],
+], 'add fixtures';
 
-$dbh->{mock_add_resultset} = $images;
-
-my $image = C4::Images::RetrieveImage();
+my $image = C4::Images::RetrieveImage(1);
 
 is( $image->{'imagenumber'}, 1, 'First imagenumber is 1' );
 
-is( $image->{'mimetype'}, 'gif', 'First mimetype is red' );
+is( $image->{'mimetype'}, 'gif', 'First mimetype is gif' );
 
-is( $image->{'thumbnail'}, 001, 'First thumbnail is 001' );
+is( $image->{'thumbnail'}, 'thumbnail1', 'First thumbnail is correct' );
 
-$image = C4::Images::RetrieveImage();
-
-$image = C4::Images::RetrieveImage();
-
-$dbh->{mock_add_resultset} = $images;
-
-my @imagenumbers = C4::Images::ListImagesForBiblio();
+my @imagenumbers = C4::Images::ListImagesForBiblio($biblionumber);
 
 is( $imagenumbers[0], 1, 'imagenumber is 1' );
 
 is( $imagenumbers[1], 3, 'imagenumber is 3' );
-
-$dbh->{mock_add_resultset} = $images;
 
 is( $imagenumbers[4], undef, 'imagenumber undef' );
