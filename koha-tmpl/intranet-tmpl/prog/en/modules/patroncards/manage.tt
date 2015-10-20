@@ -12,7 +12,7 @@
 [%-  END -%]
 [% END %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>Koha &rsaquo; Tools &rsaquo; Patron cards &rsaquo; Manage patron card elements</title>
+    <title>Koha &rsaquo; Tools &rsaquo; Patron card creator &rsaquo; [% PROCESS translate_card_element element=card_element_title %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
     [% INCLUDE 'greybox.inc' %]
     <script type="text/javascript">
@@ -115,7 +115,7 @@
         <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
         <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
         <a href="/cgi-bin/koha/patroncards/home.pl">Patron card creator</a> &rsaquo;
-        Manage card [% PROCESS translate_card_element element=card_element_title %]
+        [% PROCESS translate_card_element element=card_element_title %]
     </div>
     <div id="doc3" class="yui-t2">
         <div id="bd">
@@ -128,7 +128,7 @@
                             <div class="hint">Current library: [% LoginBranchname %]</div>
                             [% IF ( table_loop ) %]
                             <form name="layouts" action="/cgi-bin/koha/manage.pl?card_element=[% card_element %]">
-                            <h2>Currently Available [% PROCESS translate_card_element element=card_element_title %]</h2>
+                            <h2>Currently available [% PROCESS translate_card_element element=card_element_title %]</h2>
                             <table>
                                 [% FOREACH table_loo IN table_loop %]
                                 [% IF ( table_loo.header_fields ) %]
@@ -174,9 +174,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="yui-b">
-                [% INCLUDE 'patroncards-menu.inc' %]
             </div>
         </div>
     [% INCLUDE 'intranet-bottom.inc' %]
