@@ -81,7 +81,9 @@ if ($date) {
         $subscription->{expirationdate} = $expirationdate;
         next if $expirationdate !~ /\d{4}-\d{2}-\d{2}/; # next if not in ISO format.
         next if $subscription->{closed};
-        if (   ( ref $flags->{serials} and $flags->{serials}->{superserials} )
+        if (   !C4::Context->preference("IndependentBranches")
+            or C4::Context->IsSuperLibrarian()
+            or ( ref $flags->{serials} and $flags->{serials}->{superserials} )
             or ( !ref $flags->{serials} and $flags->{serials} == 1 ) )
         {
             $subscription->{cannotedit} = 0;
@@ -107,7 +109,8 @@ if ($date) {
 
 my $branchname;
 my $branches_loop;
-if (   C4::Context->IsSuperLibrarian()
+if (  !C4::Context->preference("IndependentBranches")
+    or C4::Context->IsSuperLibrarian()
     or ( ref $flags->{serials}  and $flags->{serials}->{superserials} )
     or ( !ref $flags->{serials} and $flags->{serials} == 1 ) )
 {
