@@ -1,3 +1,5 @@
+[% USE Koha %]
+[% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
 <div id="wrap">
     <div class="navbar navbar-inverse navbar-static-top">
         <div class="navbar-inner">
@@ -9,15 +11,13 @@
                     </ul>
                 </div>
 
-                [% IF ( validuser ) %]
+                [% IF ( opaclanguagesdisplay ) %]
                     <div id="members">
                         <ul class="nav pull-right">
-                            <li><p class="members navbar-text">Welcome, <a href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername">[% FOREACH USER_INF IN USER_INFO %][% USER_INF.title %] [% USER_INF.firstname %] [% USER_INF.surname %][% END %]</span></a></p></li>
-                            <li class="divider-vertical"></li>
-                            <li><p class="navbar-text">[% IF persona %]<a class="logout" id="logout" href="/cgi-bin/koha/opac-main.pl?logout.x=1" onclick='navigator.id.logout();'>[% ELSE %]<a class="logout" id="logout" href="/cgi-bin/koha/opac-main.pl?logout.x=1">[% END %]Log out</a></p></li>
+                            [% INCLUDE 'masthead-langmenu.inc' %]
                         </ul>
                     </div> <!-- /members -->
-                [% END # / IF validuser %]
+                [% END # / IF opaclanguagedisplay %]
 
             </div> <!-- /container-fluid -->
         </div> <!-- /navbar-inner -->
