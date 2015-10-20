@@ -1,34 +1,35 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 10;
+use Test::More tests => 7;
 use Test::MockModule;
+use t::lib::TestBuilder;
 
 BEGIN {
     use_ok('C4::Barcodes::ValueBuilder');
-}
+};
 
-use Test::DBIx::Class {
-    schema_class => 'Koha::Schema',
-    connect_info => ['dbi:SQLite:dbname=:memory:','',''],
-    connect_opts => { name_sep => '.', quote_char => '`', },
-    fixture_class => '::Populate',
-}, 'Biblio' ;
-
-sub fixtures {
-    my ( $data ) = @_;
-    fixtures_ok [
-        Item => [
-            @$data
-        ],
-    ], 'add fixtures';
-}
-
-my $db = Test::MockModule->new('Koha::Database');
-$db->mock(
-    _new_schema => sub { return Schema(); }
-);
-
+my $builder = t::lib::TestBuilder->new;
+my $dbh = C4::Context->dbh;
+$dbh->do(q|DELETE FROM items|);
+my $item_1 = $builder->build({
+    source => 'Item',
+    value => {
+        barcode => '33333074344563'
+    }
+});
+my $item_2 = $builder->build({
+    source => 'Item',
+    value => {
+        barcode => 'hb12070890'
+    }
+});
+my $item_3 = $builder->build({
+    source => 'Item',
+    value => {
+        barcode => '2012-0034'
+    }
+});
 
 my %args = (
     year        => '2012',
@@ -40,28 +41,13 @@ my %args = (
     locsubfield => 'a'
 );
 
-fixtures([
-    [ qw/ itemnumber barcode / ],
-    [ 1, 33333074344563 ]
-]);
 my ($nextnum, $scr) = C4::Barcodes::ValueBuilder::incremental::get_barcode(\%args);
 is($nextnum, 33333074344564, 'incremental barcode');
 is($scr, undef, 'incremental javascript');
 
-fixtures([
-    ['barcode'],
-    ['890'],
-]);
-
 ($nextnum, $scr) = C4::Barcodes::ValueBuilder::hbyymmincr::get_barcode(\%args);
 is($nextnum, '12070891', 'hbyymmincr barcode');
 ok(length($scr) > 0, 'hbyymmincr javascript');
-
-fixtures([
-    ['barcode'],
-    #max(cast( substring_index(barcode, \'-\',-1) as signed))'],
-    ['34'],
-]);
 
 ($nextnum, $scr) = C4::Barcodes::ValueBuilder::annual::get_barcode(\%args);
 is($nextnum, '2012-0035', 'annual barcode');
