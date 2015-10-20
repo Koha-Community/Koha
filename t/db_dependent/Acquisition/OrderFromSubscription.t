@@ -94,7 +94,6 @@ my ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
         ecost            => $cost,
         rrp              => $cost,
         budget_id        => $budget_id,
-        datereceived     => '02-01-2013',
         invoiceid        => $invoiceid,
     }
 );
