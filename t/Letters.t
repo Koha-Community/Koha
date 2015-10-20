@@ -19,28 +19,28 @@ use Modern::Perl;
 
 use DBI;
 use Test::MockModule;
-use Test::More tests => 5;
+use Test::More tests => 6;
+
+use Test::DBIx::Class {
+    schema_class => 'Koha::Schema',
+    connect_info => ['dbi:SQLite:dbname=:memory:','',''],
+    connect_opts => { name_sep => '.', quote_char => '`', },
+    fixture_class => '::Populate',
+}, 'Letter' ;
 use t::lib::Mocks;
-my $module = new Test::MockModule('C4::Context');
-$module->mock(
-    '_new_dbh',
-    sub {
-        my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
-          || die "Cannot create handle: $DBI::errstr\n";
-        return $dbh;
-    }
-);
-my $mock_letters = [
-    [ 'module', 'code', 'branchcode', 'name', 'is_html', 'title', 'content' ],
-    [ 'blah',   'ISBN', 'NBSI',       'book', 1,         'green', 'blahblah' ],
-    [ 'bleh',   'ISSN', 'NSSI',       'page', 0,         'blue',  'blehbleh' ]
-];
+
+fixtures_ok [
+    Letter => [
+        [ 'module', 'code', 'branchcode', 'name', 'is_html', 'title', 'content' ],
+        [ 'blah',   'ISBN', 'NBSI',       'book', 1,         'green', 'blahblah' ],
+        [ 'bleh',   'ISSN', 'NSSI',       'page', 0,         'blue',  'blehbleh' ]
+    ],
+], 'add fixtures';
+
+my $db = Test::MockModule->new('Koha::Database');
+$db->mock( _new_schema => sub { return Schema(); } );
 
 use_ok('C4::Letters');
-
-my $dbh = C4::Context->dbh();
-
-$dbh->{mock_add_resultset} = $mock_letters;
 
 t::lib::Mocks::mock_preference('dateformat', 'metric');
 
