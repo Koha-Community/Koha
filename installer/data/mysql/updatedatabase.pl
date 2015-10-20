@@ -11120,7 +11120,7 @@ if ( CheckVersion($DBversion) ) {
    SetVersion($DBversion);
 }
 
-$DBversion = "3.21.00.XXX";
+$DBversion = "3.21.00.038";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
         INSERT IGNORE INTO systempreferences ( variable, value, options, explanation, type )
@@ -11130,7 +11130,7 @@ if ( CheckVersion($DBversion) ) {
         INSERT IGNORE INTO systempreferences ( variable, value, options, explanation, type )
         VALUES ('BatchCheckoutsValidCategories','',NULL,'Patron categories allowed to checkout in a batch','Free')
     |);
-    print "Upgrade to $DBversion done (Bug 11759: Add batch_checkouts system preference)\n";
+    print "Upgrade to $DBversion done (Bug 11759: Add the batch checkout feature)\n";
     SetVersion($DBversion);
 }
 
