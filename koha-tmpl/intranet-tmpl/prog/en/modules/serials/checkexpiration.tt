@@ -2,6 +2,7 @@
 <title>Koha &rsaquo; Serials &rsaquo; Check expiration</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
+[% USE Branches %]
 <script type="text/javascript" language="JavaScript">
 // <![CDATA[
     /**
@@ -43,7 +44,7 @@
 
     <form name="f" action="/cgi-bin/koha/serials/checkexpiration.pl" method="post" onsubmit="return CheckForm(this);">
 <fieldset class="rows">
-    <legend>Filter results :</legend>
+    <legend>Filter results:</legend>
     
          <ol>
         <li><label for="title">Title:</label>
@@ -52,7 +53,7 @@
         <li><label for="issn">ISSN:</label>
         <input id="issn" type="text" name="issn" size="15" value="[% issn %]" /></li>
         [% IF (branches_loop.size) %]
-        <li><label for="branch">Branch:</label>
+        <li><label for="branch">Library:</label>
         <select id="branch" name="branch">
             <option value="">All</option>
             [% FOREACH branch IN branches_loop %]
@@ -94,6 +95,7 @@
         <tr>
             <th>ISSN</th>
             <th>Title</th>
+            [% IF ( branches_loop.size ) %]<th>Library</th>[% END %]
             <th>OPAC note</th>
             <th>Nonpublic note</th>
             <th>Expiration date</th>
@@ -115,6 +117,9 @@
                 [% END %]
                 </a>
             </td>
+            [% IF ( branches_loop.size ) %]<td>
+                [% Branches.GetName( subscriptions_loo.branchcode ) %]
+            </td>[% END %]
             <td>
                 [% subscriptions_loo.notes %]
             </td>
