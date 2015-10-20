@@ -16,18 +16,17 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
-use Test::More tests => 26;
+use Test::More tests => 25;
 use t::lib::Mocks;
+use C4::Circulation;
+use C4::Context;
+
+BEGIN {
+    t::lib::Mocks::mock_dbh;
+};
 
 C4::Context->_new_userenv(123456);
 C4::Context->set_userenv(1,'kmkale' , 1, 'km', 'kale' , 'IMS', 'IMS Branch DEscription', 0, 'kmkale@anantcorp.com');
-
-BEGIN {
-    # Mock the DB connexion and C4::Context
-    my $context = t::lib::Mocks::mock_dbh;
-    use_ok('C4::Circulation');
-}
 
 our %inputs = (
     cuecat     => ["26002315", '.C3nZC3nZC3nYD3b6ENnZCNnY.fHmc.C3D1Dxr2C3nZE3n7.', ".C3nZC3nZC3nYD3b6ENnZCNnY.fHmc.C3D1Dxr2C3nZE3n7.\r\n",
@@ -46,7 +45,7 @@ our %outputs = (
     EAN13      => [qw(0892685001928 0000000695152)],
     other      => [qw(26002315 T0031472 T32 Alphanum123), "Alpha Num 345"],
 );
-    
+
 my @filters = sort keys %inputs;
 foreach my $filter (@filters) {
     foreach my $datum (@{$inputs{$filter}}) {

@@ -3,21 +3,13 @@
 use Modern::Perl;
 use Test::More tests => 23;
 
-use Test::MockModule;
-use DBD::Mock;
 use t::lib::Mocks;
 
 use_ok('C4::Members');
 
-my $module_context = new Test::MockModule('C4::Context');
-$module_context->mock(
-    '_new_dbh',
-    sub {
-        my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
-          || die "Cannot create handle: $DBI::errstr\n";
-        return $dbh;
-    }
-);
+BEGIN {
+    t::lib::Mocks::mock_dbh;
+}
 
 my $dbh = C4::Context->dbh;
 my $rs = [];

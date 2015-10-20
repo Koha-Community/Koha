@@ -19,9 +19,10 @@ use Modern::Perl;
 
 use Test::More tests => 18;
 use Test::Warn;
-use Koha::Database;
+use t::lib::Mocks;
 
 BEGIN {
+    t::lib::Mocks::mock_dbh;
     use_ok('Koha::Object');
     use_ok('Koha::Borrower');
 }

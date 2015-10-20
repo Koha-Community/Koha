@@ -6,13 +6,11 @@ use Test::More tests => 7;
 use Test::MockModule;
 use DBI;
 use DateTime;
+use t::lib::Mocks;
 
-my $contextmodule = new Test::MockModule('C4::Context');
-$contextmodule->mock('_new_dbh', sub {
-    my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
-    || die "Cannot create handle: $DBI::errstr\n";
-    return $dbh
-});
+BEGIN {
+    t::lib::Mocks::mock_dbh;
+}
 
 use_ok('C4::Circulation');
 
@@ -60,16 +58,8 @@ is_deeply($loanlength, $default, 'none matches');
 #=== CalcDateDue
 
 #Set syspref ReturnBeforeExpiry = 1 and useDaysMode = 'Days'
-$contextmodule->mock('preference', sub {
-    my ($self, $syspref) = @_;
-    if ( $syspref eq "ReturnBeforeExpiry" ) {
-        return 1;
-    } elsif ( $syspref eq "useDaysMode" ) {
-        return 'Days';
-    } else {
-        return;
-    }
-});
+t::lib::Mocks::mock_preference('ReturnBeforeExpiry', 1);
+t::lib::Mocks::mock_preference('useDaysMode', 'Days');
 
 my $dateexpiry = '2013-01-01';
 
@@ -83,16 +73,8 @@ $date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $borr
 
 
 #Set syspref ReturnBeforeExpiry = 1 and useDaysMode != 'Days'
-$contextmodule->mock('preference', sub {
-    my ($self, $syspref) = @_;
-    if ( $syspref eq "ReturnBeforeExpiry" ) {
-        return 1;
-    } elsif ( $syspref eq "useDaysMode" ) {
-        return 'noDays';
-    } else {
-        return;
-    }
-});
+t::lib::Mocks::mock_preference('ReturnBeforeExpiry', 1);
+t::lib::Mocks::mock_preference('useDaysMode', 'noDays');
 
 $borrower = {categorycode => 'B', dateexpiry => $dateexpiry};
 $start_date = DateTime->new({year => 2013, month => 2, day => 9});
@@ -105,16 +87,8 @@ $date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $borr
 
 
 #Set syspref ReturnBeforeExpiry = 0 and useDaysMode = 'Days'
-$contextmodule->mock('preference', sub {
-    my ($self, $syspref) = @_;
-    if ( $syspref eq "ReturnBeforeExpiry" ) {
-        return 0;
-    } elsif ( $syspref eq "useDaysMode" ) {
-        return 'Days';
-    } else {
-        return;
-    }
-});
+t::lib::Mocks::mock_preference('ReturnBeforeExpiry', 0);
+t::lib::Mocks::mock_preference('useDaysMode', 'Days');
 
 $borrower = {categorycode => 'B', dateexpiry => $dateexpiry};
 $start_date = DateTime->new({year => 2013, month => 2, day => 9});

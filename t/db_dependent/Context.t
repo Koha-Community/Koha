@@ -6,6 +6,7 @@ use warnings;
 use Test::More;
 use Test::MockModule;
 use vars qw($debug $koha $dbh $config $ret);
+use t::lib::Mocks;
 
 use Koha::Database;
 
@@ -63,15 +64,7 @@ foreach (sort @keys) {
 ok($config = $koha->{config}, 'Getting $koha->{config} ');
 
 # Testing syspref caching
-my $module = new Test::MockModule('C4::Context');
-$module->mock(
-    '_new_dbh',
-    sub {
-        my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
-          || die "Cannot create handle: $DBI::errstr\n";
-        return $dbh;
-    }
-);
+t::lib::Mocks::mock_dbh;
 
 my $history;
 

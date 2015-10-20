@@ -4,22 +4,17 @@ use Modern::Perl;
 
 use Test::More tests => 13;
 use Test::MockModule;
-use DBD::Mock;
+
+use t::lib::Mocks;
 
 use_ok('C4::Reports::Guided');
 
 my $context = new Test::MockModule('C4::Context');
 my $koha = new Test::MockModule('C4::Koha');
 
-$context->mock(
-    '_new_dbh',
-    sub {
-        my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
-          || die "Cannot create handle: $DBI::errstr\n";
-        return $dbh;
-    }
-);
-
+BEGIN {
+    t::lib::Mocks::mock_dbh;
+}
 
 sub MockedIsAuthorisedValueCategory {
     my $authorised_value = shift;
@@ -53,11 +48,7 @@ $koha->mock(
                 'GetReservedAuthorisedValues returns a fixed list');
 }
 
-SKIP: {
-
-    skip "DBD::Mock is too old", 8
-        unless $DBD::Mock::VERSION >= 1.45;
-
+{
     ok( IsAuthorisedValueValid('LOC'),
         'User defined authorised value category is valid');
 
