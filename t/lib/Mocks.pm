@@ -3,7 +3,7 @@ package t::lib::Mocks;
 use Modern::Perl;
 use C4::Context;
 
-use DBD::Mock;
+use Koha::Schema;
 use Test::MockModule;
 
 my %configs;
@@ -39,10 +39,9 @@ sub mock_preference {
 }
 
 sub mock_dbh {
-    my $context = new Test::MockModule('C4::Context');
-    $context->mock( '_new_dbh', sub {
-        my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
-          || die "Cannot create handle: $DBI::errstr\n";
+    our $context = new Test::MockModule('Koha::Database');
+    $context->mock( '_new_schema', sub {
+        my $dbh = Koha::Schema->connect( 'DBI:Mock:', '', '' );
         return $dbh;
     } );
     return $context;
