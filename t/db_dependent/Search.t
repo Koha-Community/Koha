@@ -36,7 +36,8 @@ use File::Find;
 use Test::Warn;
 use File::Temp qw/ tempdir /;
 use File::Path;
-use DBI;
+
+use t::lib::Mocks;
 
 our $child;
 our $datadir;
@@ -83,6 +84,9 @@ sub cleanup {
     }
 }
 
+BEGIN {
+    t::lib::Mocks::mock_dbh;
+}
 # Fall back to make sure that the Zebra process
 # and files get cleaned up
 END {
@@ -97,10 +101,6 @@ our $QueryRemoveStopwords = 0;
 our $UseQueryParser = 0;
 our $marcflavour = 'MARC21';
 our $contextmodule = new Test::MockModule('C4::Context');
-$contextmodule->mock('_new_dbh', sub {
-    my $dbh = DBI->connect( 'DBI:Mock:', '', '' )
-    || die "Cannot create handle: $DBI::errstr\n";
-    return $dbh });
 $contextmodule->mock('preference', sub {
     my ($self, $pref) = @_;
     if ($pref eq 'marcflavour') {
@@ -259,29 +259,6 @@ sub run_marc21_search_tests {
         );
         return \%hash;
     });
-    my $dbh = C4::Context->dbh;
-    $dbh->{mock_add_resultset} = {
-        sql     => 'SHOW COLUMNS FROM items',
-        results => [
-            [ 'rows' ], # seems like $sth->rows is getting called
-                        # implicitly, so we need this to make
-                        # DBD::Mock return all of the results
-            [ 'itemnumber' ], [ 'biblionumber' ], [ 'biblioitemnumber' ],
-            [ 'barcode' ], [ 'dateaccessioned' ], [ 'booksellerid' ],
-            [ 'homebranch' ], [ 'price' ], [ 'replacementprice' ],
-            [ 'replacementpricedate' ], [ 'datelastborrowed' ], [ 'datelastseen' ],
-            [ 'stack' ], [ 'notforloan' ], [ 'damaged' ],
-            [ 'itemlost' ], [ 'withdrawn' ], [ 'itemcallnumber' ],
-            [ 'issues' ], [ 'renewals' ], [ 'reserves' ],
-            [ 'restricted' ], [ 'itemnotes' ], [ 'nonpublicnote' ],
-            [ 'holdingbranch' ], [ 'paidfor' ], [ 'timestamp' ],
-            [ 'location' ], [ 'permanent_location' ], [ 'onloan' ],
-            [ 'cn_source' ], [ 'cn_sort' ], [ 'ccode' ],
-            [ 'materials' ], [ 'uri' ], [ 'itype' ],
-            [ 'more_subfields_xml' ], [ 'enumchron' ], [ 'copynumber' ],
-            [ 'stocknumber' ],
-        ]
-    };
 
     my %branches = (
         'CPL' => { 'branchaddress1' => 'Jefferson Summit', 'branchcode' => 'CPL', 'branchname' => 'Centerville', },
