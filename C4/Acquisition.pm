@@ -226,24 +226,11 @@ close a basket (becomes unmodifiable, except for receives)
 sub CloseBasket {
     my ($basketno) = @_;
     my $dbh        = C4::Context->dbh;
-    my $query = "
-        UPDATE aqbasket
-        SET    closedate=now()
-        WHERE  basketno=?
-    ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($basketno);
+    $dbh->do('UPDATE aqbasket SET closedate=now() WHERE basketno=?', {}, $basketno );
 
-    my @orders = GetOrders($basketno);
-    foreach my $order (@orders) {
-        $query = qq{
-            UPDATE aqorders
-            SET orderstatus = 'ordered'
-            WHERE ordernumber = ?;
-        };
-        $sth = $dbh->prepare($query);
-        $sth->execute($order->{'ordernumber'});
-    }
+    $dbh->do( q{UPDATE aqorders SET orderstatus = 'ordered' WHERE basketno = ? AND orderstatus != 'complete'},
+        {}, $basketno);
+    return;
 }
 
 =head3 ReopenBasket
@@ -257,24 +244,15 @@ reopen a basket
 sub ReopenBasket {
     my ($basketno) = @_;
     my $dbh        = C4::Context->dbh;
-    my $query = "
-        UPDATE aqbasket
-        SET    closedate=NULL
-        WHERE  basketno=?
-    ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($basketno);
+    $dbh->do( q{UPDATE aqbasket SET closedate=NULL WHERE  basketno=?}, {}, $basketno );
 
-    my @orders = GetOrders($basketno);
-    foreach my $order (@orders) {
-        $query = qq{
-            UPDATE aqorders
-            SET orderstatus = 'new'
-            WHERE ordernumber = ?;
-        };
-        $sth = $dbh->prepare($query);
-        $sth->execute($order->{'ordernumber'});
-    }
+    $dbh->do( q{
+        UPDATE aqorders
+        SET orderstatus = 'new'
+        WHERE basketno = ?
+        AND orderstatus != 'complete'
+        }, {}, $basketno);
+    return;
 }
 
 #------------------------------------------------------------#
