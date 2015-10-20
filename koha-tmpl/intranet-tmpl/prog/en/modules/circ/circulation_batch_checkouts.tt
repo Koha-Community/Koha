@@ -8,7 +8,7 @@
 [% SET destination = "circ" %]
 <title>Koha &rsaquo; Circulation
 [% IF borrowernumber %]
-  &rsaquo; Checking out a batch to [% INCLUDE 'patron-title.inc' invert_name = 1 %]
+  &rsaquo; Batch check out &rsaquo; Issuing items to [% INCLUDE 'patron-title.inc' invert_name = 1 %]
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -42,7 +42,7 @@ $(document).ready(function() {
 [% INCLUDE 'circ-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo;
-    <a href="/cgi-bin/koha/circ/circulation.pl">Checkouts a batch</a> &rsaquo; [% INCLUDE 'patron-title.inc' %]
+    <a href="/cgi-bin/koha/circ/circulation.pl">Batch check out</a> &rsaquo; [% INCLUDE 'patron-title.inc' %]
 </div>
 <div id="doc3" class="yui-t2">
 
@@ -57,7 +57,7 @@ $(document).ready(function() {
 [% ELSIF NOT checkout_infos %]
   <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/circ/circulation.pl">
     <fieldset id="circ_circulation_issue">
-      <label for="barcode">Checking out a batch to [% INCLUDE 'patron-title.inc' %]</label>
+      <label for="barcode">Issuing items to [% INCLUDE 'patron-title.inc' %]</label>
       <fieldset class="rows">
         <legend>Use a file</legend>
         <ol>
