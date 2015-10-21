@@ -48,6 +48,7 @@ if (not defined $intranet) {
     plan skip_all => "Tests skip. You must set env. variable KOHA_INTRANET_URL to do tests\n";
 }
 
+my $dbh = C4::Context->dbh;
 
 $intranet =~ s#/$##;
 
@@ -69,6 +70,7 @@ $agent->get_ok( "$intranet/cgi-bin/koha/mainpage.pl", 'load main page' );
 #--------------------------------------------------- Test with corean and greek chars
 
 $category = '学協会μμ';
+$dbh->do(q|DELETE FROM authorised_values WHERE category = ?|, undef, $category);
 
 $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl", 'Connect to Authorized values page' );
 $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?op=add_form", 'Open to create a new category' );
@@ -80,14 +82,14 @@ $agent->field('category', $category);
 $agent->field('branches', '');
 $agent->click_ok( '', "Create new auth category and value" );
 
-$expected_base = q|authorised_values.pl\?searchfield=| . uri_escape_utf8( $category );
+$expected_base = q|authorised_values.pl|;
 $agent->base_like(qr|$expected_base|, "check base");
 $add_form_link_exists = 0;
 $delete_form_link_exists = 0;
 for my $link ( $agent->links() ) {
     if ( $link->url =~ m|authorised_values.pl\?op=add_form&category=$category| ) {
         $add_form_link_exists = 1;
-    }elsif( $link->url =~ m|authorised_values.pl\?op=delete_confirm&searchfield=$category| ) {
+    }elsif( $link->url =~ m|authorised_values.pl\?op=delete&searchfield=$category| ) {
         $delete_form_link_exists = 1;
     }
 }
@@ -105,21 +107,21 @@ my @links = $agent->links;
 my $id_to_del ='';
 foreach my $dato (@links){
     my $link = $dato->url;
-    if ($link =~  m/op=delete_confirm\&searchfield=学協会μμ/){
-        $link =~  m/(.*&id=?)(\d{1,})(&.*)/;
-        $id_to_del = $2;
+    if ($link =~  m/op=delete\&searchfield=学協会μμ\&id=(\d+)/){
+        $id_to_del = $1;
         last;
-    };
+    }
 }
 if ($id_to_del) {
-    $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?op=delete_confirmed&searchfield=学協会μμ&id=$id_to_del", 'UTF_8 auth. value deleted' );
+    $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?op=delete&searchfield=学協会μμ&id=$id_to_del", 'UTF_8 auth. value deleted' );
 }else{
-    ok($id_to_del ne undef, "error, link to delete nor working");
+    ok($id_to_del ne undef, "error, link to delete not working");
 }
 
 #---------------------------------------- Test with only latin utf-8 (could be taken as Latin-1/ISO 8859-1)
 
 $category = 'tòmas';
+$dbh->do(q|DELETE FROM authorised_values WHERE category = ?|, undef, $category);
 
 $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl", 'Connect to Authorized values page' );
 $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?op=add_form", 'Open to create a new category' );
@@ -140,7 +142,7 @@ $delete_form_link_exists = 0;
 for my $link ( $agent->links() ) {
     if ( $link->url =~ m|authorised_values.pl\?op=add_form&category=$category| ) {
         $add_form_link_exists = 1;
-    }elsif( $link->url =~ m|authorised_values.pl\?op=delete_confirm&searchfield=$category| ) {
+    }elsif( $link->url =~ m|authorised_values.pl\?op=delete&searchfield=$category| ) {
         $delete_form_link_exists = 1;
     }
 }
@@ -158,16 +160,15 @@ my @links2 = $agent->links;
 my $id_to_del2 ='';
 foreach my $dato (@links2){
     my $link = $dato->url;
-    if ($link =~  m/op=delete_confirm\&searchfield=tòmas/){
-        $link =~  m/(.*&id=?)(\d{1,})(&.*)/;
-        $id_to_del2 = $2;
+    if ($link =~  m/op=delete\&searchfield=tòmas\&id=(\d+)/){
+        $id_to_del2 = $1;
         last;
-    };
+    }
 }
 if ($id_to_del2) {
-    $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?op=delete_confirmed&searchfield=tòmas&id=$id_to_del2", 'UTF_8 auth. value deleted' );
+    $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?op=delete&searchfield=tòmas&id=$id_to_del2", 'UTF_8 auth. value deleted' );
 }else{
-    ok($id_to_del ne undef, "error, link to delete nor working");
+    ok($id_to_del2 ne undef, "error, link to delete not working");
 }
 
 1;
