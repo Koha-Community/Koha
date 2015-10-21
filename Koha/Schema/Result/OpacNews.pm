@@ -75,6 +75,12 @@ __PACKAGE__->table("opac_news");
   data_type: 'integer'
   is_nullable: 1
 
+=head2 borrowernumber
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -104,6 +110,8 @@ __PACKAGE__->add_columns(
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "number",
   { data_type => "integer", is_nullable => 1 },
+  "borrowernumber",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -119,6 +127,26 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("idnew");
 
 =head1 RELATIONS
+
+=head2 borrowernumber
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Borrower>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "borrowernumber",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "borrowernumber" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
 
 =head2 branchcode
 
@@ -141,8 +169,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-02-16 23:15:22
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/q+riAqsYmCQkUCUL9MU7g
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-10-21 19:50:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QivH1Daozdp0BttbPF6CkA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

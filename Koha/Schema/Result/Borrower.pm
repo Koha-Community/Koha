@@ -902,6 +902,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 opac_news
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::OpacNews>
+
+=cut
+
+__PACKAGE__->has_many(
+  "opac_news",
+  "Koha::Schema::Result::OpacNews",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 patron_list_patrons
 
 Type: has_many
@@ -1138,8 +1153,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-10-06 10:38:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AdaMeazHWWCtMM7rvKX9Lg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-10-21 19:50:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QafovaRBnm36nyoyQTGIgQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
