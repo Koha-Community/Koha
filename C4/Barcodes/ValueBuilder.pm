@@ -62,6 +62,9 @@ sub get_barcode {
     my $scr = "
         var form = document.getElementById('f');
         if ( !form ) {
+            form = document.getElementById('serials_edit');
+        }
+        if ( !form ) {
             form = document.getElementById('Aform');
         }
         for (i=0 ; i<form.field_value.length ; i++) {
