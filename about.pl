@@ -20,10 +20,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use CGI qw ( -utf8 );
+use List::MoreUtils qw/ any /;
 use LWP::Simple;
 use XML::Simple;
 use Config;
@@ -64,6 +64,16 @@ my $apacheVersion = (`apache2ctl -v`)[0];
 $apacheVersion    = `httpd2 -v 2> /dev/null` unless $apacheVersion;
 $apacheVersion    = `httpd -v 2> /dev/null` unless $apacheVersion;
 my $zebraVersion = `zebraidx -V`;
+
+# Check running PSGI env
+if ( any { /(^psgi\.|^plack\.)/i } keys %ENV ) {
+    $template->param(
+        is_psgi => 1,
+        psgi_server => ($ENV{ PLACK_ENV }) ? "Plack ($ENV{PLACK_ENV})" :
+                       ($ENV{ MOD_PERL })  ? "mod_perl ($ENV{MOD_PERL})" :
+                                             'Unknown'
+    );
+}
 
 # Additional system information for warnings
 my $prefAutoCreateAuthorities = C4::Context->preference('AutoCreateAuthorities');

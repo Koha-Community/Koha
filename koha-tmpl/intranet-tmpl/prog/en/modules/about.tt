@@ -48,6 +48,9 @@
             </td></tr>
             <tr><th scope="row">MySQL version: </th><td>[% mysqlVersion |html %]</td></tr>
             <tr><th scope="row">Apache version: </th><td>[% apacheVersion |html %]</td></tr>
+          [% IF (is_psgi) %]
+            <tr><th scope="row">PSGI: </th><td>[% psgi_server |html %]</td></tr>
+          [% END %]
             <tr><th scope="row">Zebra version: </th><td>[% zebraVersion |html %]</td></tr>
             [% IF (errZebraConnection == 10000) %]
             <tr><th scope="row"><b>Error</b> </th><td>Zebra server seems not to be available. Is it started?</td></tr>
