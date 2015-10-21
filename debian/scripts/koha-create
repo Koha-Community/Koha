@@ -109,7 +109,7 @@ generate_config_file() {
         -e "s/__DB_PASS__/$mysqlpwd/g" \
         -e "s/__UNIXUSER__/$username/g" \
         -e "s/__UNIXGROUP__/$username/g" \
-        -e "s/__UPLOAD_PATH__/$UPLOAD_PATH/g" \
+        -e "s#__UPLOAD_PATH__#$UPLOAD_PATH#g" \
         -e "s/__PLUGINS_DIR__/\/var\/lib\/koha\/$name\/plugins/g" \
         -e "s/__MEMCACHED_NAMESPACE__/$MEMCACHED_NAMESPACE/g" \
         -e "s/__MEMCACHED_SERVERS__/$MEMCACHED_SERVERS/g" \
@@ -291,7 +291,7 @@ set_memcached()
 
 set_upload_path()
 {
-    local $instance="$1"
+    local instance="$1"
 
     if [ "$CLO_UPLOAD_PATH" != "" ]; then
         UPLOAD_PATH=$CLO_UPLOAD_PATH
