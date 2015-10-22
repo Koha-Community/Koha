@@ -204,8 +204,6 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
 
         'Ctrl-D': function( cm ) {
             // Insert subfield delimiter
-            // This will be extended later to allow either a configurable subfield delimiter or just
-            // make it be the double cross.
             var cur = cm.getCursor();
 
             cm.replaceRange( "‡", cur, null );

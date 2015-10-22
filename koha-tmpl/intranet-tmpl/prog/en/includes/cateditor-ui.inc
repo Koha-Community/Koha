@@ -531,7 +531,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             pages.push( ' <li><a class="search-nav" href="#" data-offset="' + (data.offset + data.page_size) + '">' + _("Next") + ' &raquo;</a></li>' );
         }
 
-        if ( pages.length > 1 ) $( '#search-top-pages, #search-bottom-pages' ).find( '.pagination' ).html( '<ul>' + pages.join( '' ) + '</ul>');
+        $( '#search-top-pages, #search-bottom-pages' ).find( '.pagination' ).html( pages.length > 1 ? ( '<ul>' + pages.join( '' ) + '</ul>' ) : '' );
 
         var $overlay = $('#search-overlay');
         $overlay.find('span').text(_("Loading"));
@@ -778,6 +778,13 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             macroEditor = CodeMirror(
                 $('#macro-editor')[0],
                 {
+                    extraKeys: {
+                        'Ctrl-D': function( cm ) {
+                            var cur = cm.getCursor();
+
+                            cm.replaceRange( "‡", cur, null );
+                        },
+                    },
                     mode: 'null',
                     lineNumbers: true,
                 }
