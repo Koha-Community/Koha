@@ -62,6 +62,12 @@ __PACKAGE__->table("creator_layouts");
   default_value: 0
   is_nullable: 1
 
+=head2 oblique_title
+
+  data_type: 'integer'
+  default_value: 1
+  is_nullable: 1
+
 =head2 font
 
   data_type: 'char'
@@ -139,6 +145,8 @@ __PACKAGE__->add_columns(
   },
   "guidebox",
   { data_type => "integer", default_value => 0, is_nullable => 1 },
+  "oblique_title",
+  { data_type => "integer", default_value => 1, is_nullable => 1 },
   "font",
   { data_type => "char", default_value => "TR", is_nullable => 0, size => 10 },
   "font_size",
@@ -180,8 +188,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("layout_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MNE/WVsvlJXO5IHiM64yPQ
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-10-22 10:32:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kRzOQpJWvu5ZXfurfpmqzg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
