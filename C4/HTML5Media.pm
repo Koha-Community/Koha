@@ -23,6 +23,7 @@ use warnings;
 use C4::Context;
 use MARC::Field;
 use Koha::Upload;
+use WWW::YouTube::Download qw(playback_url);
 
 =head1 HTML5Media
 
@@ -48,7 +49,9 @@ sub gethtml5media {
     my $HTML5MediaParent;
     my $HTML5MediaWidth;
     my @HTML5MediaExtensions = split( /\|/, C4::Context->preference("HTML5MediaExtensions") );
+    my $HTML5MediaYouTube    = C4::Context->preference("HTML5MediaYouTube");
     my $marcflavour          = C4::Context->preference("marcflavour");
+    my $isyoutube            = 0;
     foreach my $HTML5Media_field (@HTML5Media_fields) {
         my %HTML5Media;
         # protocol
@@ -96,12 +99,27 @@ sub gethtml5media {
         # src
         if ( $HTML5Media_field->subfield('u') ) {
             $HTML5Media{srcblock} = $HTML5Media_field->subfield('u');
+            if (grep /youtube/, $HTML5Media_field->subfield('u') ) { # TODO is there an official YT URL shortener? Can we use that too?
+                if ($HTML5MediaYouTube == 1) {
+                    my $youtube           = WWW::YouTube::Download->new;
+                    $HTML5Media{srcblock} = $youtube->playback_url(
+                        $HTML5Media_field->subfield('u'), {
+                            'fmt' => '43' #webm is the only format compatible to all modern browsers. maybe check for available qualities
+                        }
+                    );
+                    # TODO handle error if format not availabe. Does that ever occur?
+                    $isyoutube = 1;
+                }
+               else {
+                   next; # do not embed youtube videos
+               }
+            }
         }
         elsif ( $HTML5Media_field->subfield('a') && $HTML5Media_field->subfield('d') && $HTML5Media_field->subfield('f') ) {
             $HTML5Media{host}        = $HTML5Media_field->subfield('a');
             $HTML5Media{host}        =~ s/(^\/|\/$)//g;
             $HTML5Media{path}        = $HTML5Media_field->subfield('d');
-            $HTML5Media{path}        =~ s/(^\/|\/$)//g;
+            $HTML5Media{path}        =~ s/(^\/|\/$)//g; # TODO we could check for youtube here too, but nobody uses these fields anyway…
             $HTML5Media{file}        = $HTML5Media_field->subfield('f');
             $HTML5Media{srcblock}    = $HTML5Media{protocol} . '://' . $HTML5Media{loginblock} . $HTML5Media{host} . $HTML5Media{portblock} . '/' . $HTML5Media{path} . '/' . $HTML5Media{file};
         }
@@ -122,8 +140,12 @@ sub gethtml5media {
         else {
             $HTML5Media{extension} = ($HTML5Media{srcblock} =~ m/([^.]+)$/)[0];
         }
-        if ( !grep /\Q$HTML5Media{extension}\E/, @HTML5MediaExtensions ) {
+        if ( ( !grep /\Q$HTML5Media{extension}\E/, @HTML5MediaExtensions ) && ( $isyoutube != 1) ) {
             next; # not a specified media file
+        }
+        # youtube
+        if ($isyoutube == 1) {
+                $HTML5Media{mime} = 'video/webm';
         }
         # mime
         if ( $HTML5Media_field->subfield('c') ) {
@@ -156,7 +178,7 @@ sub gethtml5media {
             }
             if ( $HTML5Media{extension} eq 'oga' ) {
                 $HTML5Media{mime} = 'audio/ogg';
-              $HTML5Media{codecs} = 'vorbis';
+                $HTML5Media{codecs} = 'vorbis';
             }
             elsif ( $HTML5Media{extension} eq 'spx' ) {
                 $HTML5Media{mime} = 'audio/ogg';

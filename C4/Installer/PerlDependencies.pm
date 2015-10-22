@@ -782,6 +782,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '0.03',
     },
+    'WWW::YouTube::Download' => {
+        'usage'    => 'HTML5Media streaming from YouTube',
+        'required' => '0',
+        'min_ver'  => '0.56',
+    },
 };
 
 1;
