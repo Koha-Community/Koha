@@ -56,21 +56,15 @@ $GLOBAL->{sth}->{target_items} = $dbh->prepare( $query->{target_items} . $where_
 $GLOBAL->{sth}->{target_items}->execute();
 
 DELITEM: while ( my $item = $GLOBAL->{sth}->{target_items}->fetchrow_hashref() ) {
-    my $issue = GetOpenIssue( $item->{itemnumber} );
-    my $holds = GetItemHolds( $item->{biblionumber}, $item->{itemnumber} );
-
-    if( defined $issue ) {
-        verbose "Cannot delete '$item->{itemnumber}' -- item is checked out.";
-        next DELITEM;
+    my $del_check_options = $OPTIONS->{flags}->{commit}
+                            ? undef
+                            : { do_not_commit => 1 };
+    my $status = C4::Items::DelItemCheck( $dbh, $item->{itemnumber}, $item->{biblionumber}, $del_check_options );
+    if( $status == 1 )  {
+        verbose "Deleting '$item->{itemnumber}'";
+    } else {
+        verbose "Item '$item->{itemnumber}' not deletd: $status";
     }
-
-    if( $holds ) {
-        verbose "Cannot delete '$item->{itemnumber}' -- item has open holds.";
-        next DELITEM;
-    }
-
-    verbose "Deleting '$item->{itemnumber}' ";
-    C4::Items::DelItem( { itemnumber => $item->{itemnumber} } ) if $OPTIONS->{flags}->{commit} ;
 }
 
 =head1 NAME
