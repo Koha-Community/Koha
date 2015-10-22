@@ -20,7 +20,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 36;
+use Test::More tests => 38;
 use C4::Context;
 use Data::Dumper;
 
@@ -37,6 +37,7 @@ my $default_layout = {
         printing_type   =>      'BAR',
         layout_name     =>      'TEST',
         guidebox        =>      0,
+        oblique_title   =>      1,
         font            =>      'TR',
         font_size       =>      3,
         callnum_split   =>      0,
@@ -65,6 +66,7 @@ my $new_attr = {
         printing_type   =>      'BIBBAR',
         layout_name     =>      'TEST',
         guidebox        =>      1,
+        oblique_title   =>      0,
         font            =>      'TR',
         font_size       =>      10,
         callnum_split   =>      1,
