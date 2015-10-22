@@ -124,7 +124,7 @@ $unholdable->damaged(-1);
 $unholdable->store();
 
 $data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
-is( $data->{exceeded}, 1, "Should exceed threshold with one damanged item" );
+is( $data->{exceeded}, 1, "Should exceed threshold with one damaged item" );
 
 $unholdable->damaged(0);
 $unholdable->itemlost(-1);
@@ -138,7 +138,7 @@ $unholdable->notforloan(-1);
 $unholdable->store();
 
 $data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
-is( $data->{exceeded}, 1, "Should exceed threshold wiht one notforloan item" );
+is( $data->{exceeded}, 1, "Should exceed threshold with one notforloan item" );
 
 $unholdable->notforloan(0);
 $unholdable->withdrawn(-1);
