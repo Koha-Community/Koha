@@ -80,6 +80,7 @@ BEGIN {
         GetItemnumberFromBarcode
         GetBarcodeFromItemnumber
         GetHiddenItemnumbers
+        ItemSafeToDelete
         DelItemCheck
     MoveItemFromBiblio
     GetLatestAcquisitions
@@ -2217,68 +2218,108 @@ sub MoveItemFromBiblio {
     return;
 }
 
-=head2 DelItemCheck
+=head2 ItemSafeToDelete
 
-   DelItemCheck($dbh, $biblionumber, $itemnumber);
+   ItemSafeToDelete($dbh, $biblionumber, $itemnumber);
 
-Exported function (core API) for deleting an item record in Koha if there no current issue.
+Exported function (core API) for checking whether an item record is safe to delete.
+
+returns 1 if the item is safe to delete,
+
+"book_on_loan" if the item is checked out,
+
+"not_same_branch" if the item is blocked by independent branches,
+
+"book_reserved" if the there are holds aganst the item, or
+
+"linked_analytics" if the item has linked analytic records.
 
 =cut
 
-sub DelItemCheck {
+sub ItemSafeToDelete {
     my ( $dbh, $biblionumber, $itemnumber ) = @_;
-
+    my $status;
     $dbh ||= C4::Context->dbh;
 
     my $error;
 
-        my $countanalytics=GetAnalyticsCount($itemnumber);
-
+    my $countanalytics = GetAnalyticsCount($itemnumber);
 
     # check that there is no issue on this item before deletion.
-    my $sth = $dbh->prepare(q{
+    my $sth = $dbh->prepare(
+        q{
         SELECT COUNT(*) FROM issues
         WHERE itemnumber = ?
-    });
+    }
+    );
     $sth->execute($itemnumber);
     my ($onloan) = $sth->fetchrow;
 
     my $item = GetItem($itemnumber);
 
-    if ($onloan){
-        $error = "book_on_loan" 
+    if ($onloan) {
+        $status = "book_on_loan";
     }
     elsif ( defined C4::Context->userenv
         and !C4::Context->IsSuperLibrarian()
         and C4::Context->preference("IndependentBranches")
         and ( C4::Context->userenv->{branch} ne $item->{'homebranch'} ) )
     {
-        $error = "not_same_branch";
+        $status = "not_same_branch";
     }
-	else{
+    else {
         # check it doesn't have a waiting reserve
-        $sth = $dbh->prepare(q{
+        $sth = $dbh->prepare(
+            q{
             SELECT COUNT(*) FROM reserves
             WHERE (found = 'W' OR found = 'T')
             AND itemnumber = ?
-        });
+        }
+        );
         $sth->execute($itemnumber);
         my ($reserve) = $sth->fetchrow;
-        if ($reserve){
-            $error = "book_reserved";
-        } elsif ($countanalytics > 0){
-		$error = "linked_analytics";
-	} else {
-            DelItem(
-                {
-                    biblionumber => $biblionumber,
-                    itemnumber   => $itemnumber
-                }
-            );
-            return 1;
+        if ($reserve) {
+            $status = "book_reserved";
+        }
+        elsif ( $countanalytics > 0 ) {
+            $status = "linked_analytics";
+        }
+        else {
+            $status = 1;
         }
     }
-    return $error;
+    return $status;
+}
+
+=head2 DelItemCheck
+
+   DelItemCheck($dbh, $biblionumber, $itemnumber);
+
+Exported function (core API) for deleting an item record in Koha if there no current issue.
+
+DelItemCheck wraps ItemSafeToDelete around DelItem.
+
+It takes a database handle, biblionumber and itemnumber as arguments, and can optionally take a hashref with a 'do_not_commit' flag:
+
+    DelItemCheck(  $dbh, $biblionumber, $itemnumber, { do_not_commit => 1 } );
+
+This is done so that command line scripts calling DelItemCheck have the option of doing a 'dry-run'.
+=cut
+
+sub DelItemCheck {
+    my ( $dbh, $biblionumber, $itemnumber, $options ) = @_;
+    my $commit = ( defined $options && $options->{do_not_commit} eq 1 ) ? 0 : 1;
+    my $status = ItemSafeToDelete( $dbh, $biblionumber, $itemnumber );
+
+    if ( $status == 1 && $commit ) {
+        DelItem(
+            {
+                biblionumber => $biblionumber,
+                itemnumber   => $itemnumber
+            }
+        );
+    }
+    return $status;
 }
 
 =head2 _koha_modify_item
