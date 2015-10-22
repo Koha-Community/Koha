@@ -779,7 +779,7 @@
                                     <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
                                 </xsl:when>
                                 <xsl:when test="$TraceSubjectSubdivisions='1'">
-                                    <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=<xsl:call-template name="subfieldSelect">
+                                    <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=<xsl:call-template name="subfieldSelectSubject">
                                         <xsl:with-param name="codes">avxyz</xsl:with-param>
                                         <xsl:with-param name="delimeter"> AND </xsl:with-param>
                                         <xsl:with-param name="prefix">(su<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/></xsl:with-param>
@@ -791,12 +791,12 @@
                                     <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=su<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/><xsl:value-of select="marc:subfield[@code='a']"/><xsl:value-of select="$TracingQuotesRight"/></xsl:attribute>
                                 </xsl:otherwise>
                             </xsl:choose>
-                        </a>
                         <xsl:call-template name="subfieldSelect">
                             <xsl:with-param name="codes">avxyz</xsl:with-param>
                             <xsl:with-param name="subdivCodes">vxyz</xsl:with-param>
                             <xsl:with-param name="subdivDelimiter">-- </xsl:with-param>
                         </xsl:call-template>
+                        </a>
                         <xsl:if test="position()!=last()"><span class="separator"> | </span></xsl:if>
                     </xsl:for-each>
                 </span>
