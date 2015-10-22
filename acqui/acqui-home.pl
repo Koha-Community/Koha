@@ -129,4 +129,11 @@ $template->param(
     suggestions_count   => $suggestions_count,
 );
 
+my $cur = GetCurrency();
+if ( $cur ) {
+    $template->param(
+        currency => $cur->{currency},
+    );
+}
+
 output_html_with_http_headers $query, $cookie, $template->output;

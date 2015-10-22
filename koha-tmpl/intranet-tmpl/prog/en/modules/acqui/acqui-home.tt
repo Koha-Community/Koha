@@ -98,6 +98,7 @@ $(document).ready(function() {
 [% INCLUDE 'acquisitions-toolbar.inc' %]
 
 <h1>Acquisitions</h1>
+    [% INCLUDE 'budgets-active-currency.inc' %]
     [% UNLESS ( loop_budget ) %]
         [% IF ( CAN_user_acquisition_period_manage ) %]
         <div class="dialog alert">You must <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">define a budget</a> in Administration</div>
