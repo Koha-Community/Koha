@@ -1,7 +1,7 @@
 -- *******************************************************
 --   KOHA  MARC 21 STANDARD DEFAULT AUTHORITY FRAMEWORKS
 --
---        Revised to Update No. 19 (October 2014)
+--        Revised to Update No. 21 (September 2015)
 -- *******************************************************
 
 -- ******************************************************
@@ -162,6 +162,7 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 		('', '253', 'COMPLEX SEE REFERENCE [CLASSIFICATION FORMAT]', 'COMPLEX SEE REFERENCE [CLASSIFICATION FORMAT]', 1, 0, NULL),
 		('', '260', 'COMPLEX SEE REFERENCE--SUBJECT', 'COMPLEX SEE REFERENCE--SUBJECT', 1, 0, NULL),
 		('', '336', 'CONTENT TYPE', 'CONTENT TYPE', 1, 0, NULL),
+		('', '348', 'FORMAT OF NOTATED MUSIC', 'FORMAT OF NOTATED MUSIC', 1, 0, NULL),
 		('', '353', 'COMPLEX SEE ALSO REFERENCE [CLASSIFICATION FORMAT]', 'COMPLEX SEE ALSO REFERENCE [CLASSIFICATION FORMAT]', 1, 0, NULL),
 		('', '360', 'COMPLEX SEE ALSO REFERENCE--SUBJECT', 'COMPLEX SEE ALSO REFERENCE--SUBJECT', 1, 0, NULL),
 		('', '368', 'OTHER ATTRIBUTES OF PERSON OR CORPORATE BODY', 'OTHER ATTRIBUTES OF PERSON OR CORPORATE BODY', 1, 0, NULL),
@@ -264,6 +265,7 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 		('', '856', 'ELECTRONIC LOCATION AND ACCESS', 'ELECTRONIC LOCATION AND ACCESS', 1, 0, NULL),
 		('', '880', 'ALTERNATE GRAPHIC REPRESENTATION', 'ALTERNATE GRAPHIC REPRESENTATION', 1, 0, NULL),
 		('', '883', 'MACHINE-GENERATED METADATA PROVENANCE', 'MACHINE-GENERATED METADATA PROVENANCE', 1, 0, NULL),
+		('', '884', 'DESCRIPTION CONVERSION INFORMATION', 'DESCRIPTION CONVERSION INFORMATION', 1, 0, NULL),
 		('', '942', 'KOHA INTERNAL USE', 'KOHA INTERNAL USE', 0, 1, NULL);
 
 
@@ -376,6 +378,8 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '046', 'l', 'Ending date created', 'Ending date created', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
         ('', '046', 'o', 'Single or starting date for aggregated content', 'Single or starting date for aggregated content', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
         ('', '046', 'p', 'Ending date for aggregated content', 'Ending date for aggregated content', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '046', 'q', 'Establishment date', 'Establishment date', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '046', 'r', 'Termination date', 'Termination date', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '046', 's', 'Start period', 'Start period', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '046', 't', 'End period', 'End period', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '046', 'u', 'Uniform Resource Identifier', 'Uniform Resource Identifier', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
@@ -776,10 +780,18 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '260', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 2, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '336', 'a', 'Content type term', 'Content type term', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '336', 'b', 'Content type code', 'Content type code', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '336', '0', 'Authority record control number or standard number', 'Authority record control number or standard number', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '336', '2', 'Source', 'Source', 0, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '336', '3', 'Materials specified', 'Materials specified', 0, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '336', '6', 'Linkage', 'Linkage', 0, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '336', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '348', 'a', 'Format of notated music term', 'Format of notated music term', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '348', 'b', 'Format of notated music code', 'Format of notated music code', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '348', '0', 'Authority record control number or standard number', 'Authority record control number or standard number', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '348', '2', 'Source of term', 'Source of term', 0, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '348', '3', 'Materials specified', 'Materials specified', 0, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '348', '6', 'Linkage', 'Linkage', 0, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '348', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '353', 'a', 'Classification number referred to--Single number or beginning number of span', 'Classification number referred to--Single number or beginning number of span', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '353', 'c', 'Classification number referred to--Ending number of span', 'Classification number referred to--Ending number of span', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '353', 'i', 'Explanatory text', 'Explanatory text', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
@@ -903,6 +915,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '382', 'a', 'Medium of performance', 'Medium of performance', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 'b', 'Soloist', 'Soloist', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 'd', 'Doubling instrument', 'Doubling instrument', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '382', 'e', 'Number of ensembles', 'Number of ensembles', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 'n', 'Number of performers of the same medium', 'Number of performers of the same medium', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 'p', 'Alternative medium of performance', 'Alternative medium of performance', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 's', 'Total number of performers', 'Total number of performers', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
@@ -1458,6 +1471,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '670', 'a', 'Source citation', 'Source citation', 0, 0, 6, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '670', 'b', 'Information found', 'Information found', 0, 0, 6, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '670', 'u', 'Uniform Resource Identifier', 'Uniform Resource Identifier', 1, 0, 6, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '670', 'w', 'Bibliographic record control number', 'Bibliographic record control number', 1, 0, 6, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '670', '6', 'Linkage', 'Linkage', 0, 0, 6, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '670', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 6, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '671', 'a', 'Citation', 'Citation', 1, 0, 6, NULL, NULL, NULL, 0, 0, '', '', ''),
@@ -1932,6 +1946,11 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '883', 'w', 'Bibliographic record control number', 'Bibliographic record control number', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '883', '0', 'Authority record control number or standard number', 'Authority record control number or standard number', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '883', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '884', 'a', 'Conversion process', 'Conversion process', 0, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '884', 'g', 'Conversion date', 'Conversion date', 0, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '884', 'k', 'Identifier of source metadata', 'Identifier of source metadata', 0, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '884', 'q', 'Conversion agency', 'Conversion agency', 0, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '884', 'u', 'Uniform Resource Identifier', 'Uniform Resource Identifier', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 8, '', 'auth_header.authtypecode', '');
 
 
