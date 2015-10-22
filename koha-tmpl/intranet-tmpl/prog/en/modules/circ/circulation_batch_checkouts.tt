@@ -129,7 +129,7 @@ $(document).ready(function() {
             [% END %]
             <td>[% checkout_info.barcode %]</td>
             <td>
-              <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% checkout_info.item.biblionumber %]&amp;type=intra"><strong>[% checkout_info.item.title |html %][% FOREACH subtitl IN checkout_info.item.subtitle %] [% subtitl.subfield %][% END %]</strong></a>[% IF checkout_info.item.author %], by [% checkout_info.item.author %][% END %][% IF ( checkout_info.itme.itemnotes ) %]- <span class="circ-hlt">[% checkout_info.item.itemnotes %]</span>[% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% checkout_info.item.biblionumber %]&amp;itemnumber=[% checkout_info.item.itemnumber %]#item[% checkout_info.item.itemnumber %]">[% checkout_info.item.barcode %]</a>
+              <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% checkout_info.item.biblionumber %]&amp;type=intra"><strong>[% checkout_info.item.title %][% FOREACH subtitl IN checkout_info.item.subtitle %] [% subtitl.subfield %][% END %]</strong></a>[% IF checkout_info.item.author %], by [% checkout_info.item.author %][% END %][% IF ( checkout_info.itme.itemnotes ) %]- <span class="circ-hlt">[% checkout_info.item.itemnotes %]</span>[% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% checkout_info.item.biblionumber %]&amp;itemnumber=[% checkout_info.item.itemnumber %]#item[% checkout_info.item.itemnumber %]">[% checkout_info.item.barcode %]</a>
             </td>
             <td>
               [% IF checkout_info.NEEDSCONFIRMATION %]
@@ -255,7 +255,7 @@ $(document).ready(function() {
                     Too many checked out.
                   [% END %]
                   [% IF checkout_info.UNKNOWN_BARCODE %]
-                    <li>The barcode was not found [% checkout_info.barcode |html %]
+                    <li>The barcode was not found [% checkout_info.barcode %]
                   [% END %]
                   [% IF checkout_info.DEBT %]
                     The patron has a debt of [% checkout_info.DEBT %] <!-- Need debt_confirmed -->

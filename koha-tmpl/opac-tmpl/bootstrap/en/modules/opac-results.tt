@@ -751,7 +751,7 @@ $(document).ready(function(){
             [% SET number_of_private_shelves = 0 %]
             [% FOREACH s IN add_to_some_private_shelves %]
                 [% IF shelfnumber != s.shelfnumber %]
-                    param1 += "<option id=\"s[% s.shelfnumber %]\" value=\"addtolist\">[% s.shelfname |html %]<\/option>";
+                    param1 += "<option id=\"s[% s.shelfnumber %]\" value=\"addtolist\">[% s.shelfname %]<\/option>";
                     [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
                     [% IF number_of_private_shelves == 10 %][% LAST %][% END %]
                 [% END %]
@@ -763,7 +763,7 @@ $(document).ready(function(){
             [% SET number_of_public_shelves = 0 %]
             [% FOREACH s IN add_to_some_public_shelves %]
                 [% IF shelfnumber != s.shelfnumber %]
-                    param1 += "<option id=\"s[% s.shelfnumber %]\" value=\"addtolist\">[% s.shelfname |html %]<\/option>";
+                    param1 += "<option id=\"s[% s.shelfnumber %]\" value=\"addtolist\">[% s.shelfname %]<\/option>";
                     [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
                     [% IF number_of_public_shelves == 10 %][% LAST %][% END %]
                 [% END %]
