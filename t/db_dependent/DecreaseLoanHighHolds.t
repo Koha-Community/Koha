@@ -64,7 +64,7 @@ for my $i ( 1 .. 10 ) {
     push( @items, $item );
 }
 
-for my $i ( 0 .. 4 ) {
+for my $i ( 0 .. 5 ) {
     my $patron = $patrons[$i];
     my $hold   = Koha::Hold->new(
         {
@@ -92,8 +92,8 @@ my $item_hr = { itemnumber => $item->id, biblionumber => $biblio->id, homebranch
 my $patron_hr = { borrower => $patron->id, branchcode => 'MPL' };
 
 my $data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
-is( $data->{exceeded},        1,          "Should exceed threshold" );
-is( $data->{outstanding},     5,          "Should have 5 outstanding holds" );
+is( $data->{exceeded},        1,          "Static mode should exceed threshold" );
+is( $data->{outstanding},     6,          "Should have 5 outstanding holds" );
 is( $data->{duration},        1,          "Should have duration of 1" );
 is( ref( $data->{due_date} ), 'DateTime', "due_date should be a DateTime object" );
 
@@ -113,39 +113,39 @@ for my $i ( 5 .. 10 ) {
 }
 
 $data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
-is( $data->{exceeded}, 1, "Should exceed threshold" );
+is( $data->{exceeded}, 1, "Should exceed threshold of 1" );
 
 C4::Context->set_preference( 'decreaseLoanHighHoldsValue', 2 );
 $data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
-is( $data->{exceeded}, 0, "Should not exceed threshold" );
+is( $data->{exceeded}, 0, "Should not exceed threshold of 2" );
 
 my $unholdable = pop(@items);
 $unholdable->damaged(-1);
 $unholdable->store();
 
 $data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
-is( $data->{exceeded}, 1, "Should exceed threshold" );
+is( $data->{exceeded}, 1, "Should exceed threshold with one damanged item" );
 
 $unholdable->damaged(0);
 $unholdable->itemlost(-1);
 $unholdable->store();
 
 $data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
-is( $data->{exceeded}, 1, "Should exceed threshold" );
+is( $data->{exceeded}, 1, "Should exceed threshold with one lost item" );
 
 $unholdable->itemlost(0);
 $unholdable->notforloan(-1);
 $unholdable->store();
 
 $data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
-is( $data->{exceeded}, 1, "Should exceed threshold" );
+is( $data->{exceeded}, 1, "Should exceed threshold wiht one notforloan item" );
 
 $unholdable->notforloan(0);
 $unholdable->withdrawn(-1);
 $unholdable->store();
 
 $data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
-is( $data->{exceeded}, 1, "Should exceed threshold" );
+is( $data->{exceeded}, 1, "Should exceed threshold with one withdrawn item" );
 
 $schema->storage->txn_rollback();
 1;
