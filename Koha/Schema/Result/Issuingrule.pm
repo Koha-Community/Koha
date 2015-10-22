@@ -80,6 +80,12 @@ __PACKAGE__->table("issuingrules");
   data_type: 'integer'
   is_nullable: 1
 
+=head2 chargeperiod_charge_at
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =head2 accountsent
 
   data_type: 'integer'
@@ -202,6 +208,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "chargeperiod",
   { data_type => "integer", is_nullable => 1 },
+  "chargeperiod_charge_at",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "accountsent",
   { data_type => "integer", is_nullable => 1 },
   "chargename",
@@ -260,8 +268,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("branchcode", "categorycode", "itemtype");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-05-13 17:48:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:H6LuTmUWdqmjCc5L4hsTQA
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-10-22 14:50:45
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jTYQaXLtBrSIGEqpFlgIfg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
