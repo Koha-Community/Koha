@@ -28,8 +28,10 @@ function unHideItems(index,labelindex, serialId) {
     item_div = $("fieldset#" + index + " div.cataloguing_additem_itemlist div.items");
     // Getting subfield with enumcron mapping
     subfield_div = $(item_div).find("input[name='kohafield'][value='items.enumchron']").parent();
-    // Setting text field
-    $(subfield_div).children("input[type='text'][name='field_value']").val($("#serialseq" + serialId).val());
+    // Setting text field if no saved default value
+    if(! $(subfield_div).children("input[type='text'][name='field_value']").val() ){
+        $(subfield_div).children("input[type='text'][name='field_value']").val($("#serialseq" + serialId).val());
+    }
 }
 function HideItems(index,labelindex) {
 	subfield = document.getElementById(index);
