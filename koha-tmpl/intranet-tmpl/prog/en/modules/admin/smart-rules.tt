@@ -16,6 +16,9 @@ function clear_edit(){
             $(this).val("");
             $(this).removeAttr("disabled");
         }
+        if ( type == "checkbox" ) {
+            $(this).attr('checked', false);
+        }
     });
     $(edit_row).find("select").removeAttr("disabled");
     $(edit_row).find("select option:first").attr("selected", "selected");
@@ -23,6 +26,9 @@ function clear_edit(){
 }
 
 $(document).ready(function() {
+        $('#cap_fine_to_replacement_price').on('change', function(){
+            $('#overduefinescap').prop('disabled', $(this).is(':checked') );
+        });
         $('#selectlibrary').find("input:submit").hide();
         $('#branch').change(function() {
                 $('#selectlibrary').submit();
@@ -38,7 +44,23 @@ $(document).ready(function() {
                 itm = $(this).text();
                 itm = itm.replace(/^\s*|\s*$/g,'');
                 var current_column = $("#edit_row td:eq("+i+")");
-                if ( i != 6 ) {
+                if ( i == 6 ) {
+                    // specific processing for the Hard due date column
+                    var select_value = $(this).find("input[type='hidden'][name='hardduedatecomparebackup']").val();
+                    var input_value = '';
+                    if (typeof select_value === 'undefined'){
+                        select_value = '-1';
+                    }else {
+                        input_value = itm.split(' ')[1];
+                    }
+                    $(current_column).find("input[type='text']").val(input_value);
+                    $(current_column).find("select").val(select_value);
+                } else if ( i == 12 ) {
+                    // specific processing for cap_fine_to_replacement_price
+                    var cap_fine_to_replacement_price = $(this).find("input[type='checkbox']");
+                    $('#cap_fine_to_replacement_price').attr('checked', cap_fine_to_replacement_price.is(':checked') );
+                    $('#overduefinescap').prop('disabled', cap_fine_to_replacement_price.is(':checked') );
+                } else {
                     $(current_column).find("input[type='text']").val(itm);
                     // select the corresponding option
                     $(current_column).find("select option").each(function(){
@@ -66,17 +88,6 @@ $(document).ready(function() {
                             $(current_column).find("input[type='text']").val("");
                         }
                     }
-                } else {
-                    // specific processing for the Hard due date column
-                    var select_value = $(this).find("input[type='hidden'][name='hardduedatecomparebackup']").val();
-                    var input_value = '';
-                    if (typeof select_value === 'undefined'){
-                        select_value = '-1';
-                    }else {
-                        input_value = itm.split(' ')[1];
-                    }
-                    $(current_column).find("input[type='text']").val(input_value);
-                    $(current_column).find("select").val(select_value);
                 }
             });
             $("#default-circulation-rules tr:last td:eq(0) select").attr('disabled', 'disabled');
@@ -151,6 +162,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                 <th>When to charge</th>
                 <th>Fine grace period</th>
                 <th>Overdue fines cap (amount)</th>
+                <th>Cap fine at replacement price</th>
                 <th>Suspension in days (day)</th>
                 <th>Max. suspension duration (day)</th>
                 <th>Renewals allowed (count)</th>
@@ -216,6 +228,13 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                 <td>[% IF rule.chargeperiod_charge_at %]Start of interval[% ELSE %]End of interval[% END %]</td>
 							<td>[% rule.firstremind %]</td>
                             <td>[% rule.overduefinescap FILTER format("%.2f") %]</td>
+                            <td>
+                                [% IF rule.cap_fine_to_replacement_price %]
+                                    <input type="checkbox" checked="checked" disabled="disabled" />
+                                [% ELSE %]
+                                    <input type="checkbox" disabled="disabled" />
+                                [% END %]
+                            </td>
 							<td>[% rule.finedays %]</td>
                             <td>[% rule.maxsuspensiondays %]</td>
 							<td>[% rule.renewalsallowed %]</td>
@@ -283,6 +302,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                     </td>
                     <td><input type="text" name="firstremind" id="firstremind" size="2" /> </td>
                     <td><input type="text" name="overduefinescap" id="overduefinescap" size="6" /> </td>
+                    <td><input type="checkbox" name="cap_fine_to_replacement_price" id="cap_fine_to_replacement_price" /></td>
                     <td><input type="text" name="finedays" id="fined" size="3" /> </td>
                     <td><input type="text" name="maxsuspensiondays" id="maxsuspensiondays" size="3" /> </td>
                     <td><input type="text" name="renewalsallowed" id="renewalsallowed" size="2" /></td>
@@ -329,6 +349,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                       <th>Charge when?</th>
                       <th>Fine grace period</th>
                       <th>Overdue fines cap (amount)</th>
+                      <th>Cap fine at replacement price</th>
                       <th>Suspension in days (day)</th>
                       <th>Max. suspension duration (day)</th>
                       <th>Renewals allowed (count)</th>

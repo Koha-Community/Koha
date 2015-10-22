@@ -116,14 +116,14 @@ sub Getoverdues {
     my $statement;
     if ( C4::Context->preference('item-level_itypes') ) {
         $statement = "
-   SELECT issues.*, items.itype as itemtype, items.homebranch, items.barcode, items.itemlost
+   SELECT issues.*, items.itype as itemtype, items.homebranch, items.barcode, items.itemlost, items.replacementprice
      FROM issues 
 LEFT JOIN items       USING (itemnumber)
     WHERE date_due < NOW()
 ";
     } else {
         $statement = "
-   SELECT issues.*, biblioitems.itemtype, items.itype, items.homebranch, items.barcode, items.itemlost
+   SELECT issues.*, biblioitems.itemtype, items.itype, items.homebranch, items.barcode, items.itemlost, replacementprice
      FROM issues 
 LEFT JOIN items       USING (itemnumber)
 LEFT JOIN biblioitems USING (biblioitemnumber)
@@ -268,6 +268,7 @@ sub CalcFine {
     } # else { # a zero (or null) chargeperiod or negative units_minus_grace value means no charge. }
 
     $amount = $data->{overduefinescap} if $data->{overduefinescap} && $amount > $data->{overduefinescap};
+    $amount = $item->{replacementprice} if ( $data->{cap_fine_to_replacement_price} && $item->{replacementprice} && $amount > $item->{replacementprice} );
     $debug and warn sprintf("CalcFine returning (%s, %s, %s, %s)", $amount, $data->{'chargename'}, $units_minus_grace, $chargeable_units);
     return ($amount, $data->{'chargename'}, $units_minus_grace, $chargeable_units);
     # FIXME: chargename is NEVER populated anywhere.
