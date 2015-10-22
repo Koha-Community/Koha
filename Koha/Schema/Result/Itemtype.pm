@@ -76,6 +76,18 @@ __PACKAGE__->table("itemtypes");
   is_nullable: 1
   size: 3
 
+=head2 hideinopac
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+=head2 searchcategory
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 80
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -102,6 +114,10 @@ __PACKAGE__->add_columns(
   },
   "sip_media_type",
   { data_type => "varchar", is_nullable => 1, size => 3 },
+  "hideinopac",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "searchcategory",
+  { data_type => "varchar", is_nullable => 1, size => 80 },
 );
 
 =head1 PRIMARY KEY
@@ -149,8 +165,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-04-28 18:01:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:urVYwhpfBgknZLIhjkqhnw
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-10-22 11:11:19
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nknZ3AB923k+tEw7whtzQA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
