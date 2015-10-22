@@ -1331,6 +1331,7 @@ CREATE TABLE `creator_layouts` (
   `printing_type` char(32) NOT NULL DEFAULT 'BAR',
   `layout_name` char(20) NOT NULL DEFAULT 'DEFAULT',
   `guidebox` int(1) DEFAULT '0',
+  `oblique_title` int(1) DEFAULT '1',
   `font` char(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'TR',
   `font_size` int(4) NOT NULL DEFAULT '10',
   `units` char(20) NOT NULL DEFAULT 'POINT',
