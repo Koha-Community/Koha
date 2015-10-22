@@ -11144,7 +11144,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.19.00.XXX";
+$DBversion = "3.21.00.040";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         ALTER TABLE itemtypes
@@ -11153,7 +11153,7 @@ if ( CheckVersion($DBversion) ) {
             ADD searchcategory VARCHAR(20) DEFAULT NULL
               AFTER hideinopac;
     });
-    print "Upgrade to $DBversion done (Bug 10937 - Option to hide and group itemtypes from advanced search)\n";
+    print "Upgrade to $DBversion done (Bug 10937: Option to hide and group itemtypes from advanced search)\n";
     SetVersion($DBversion);
 }
 
