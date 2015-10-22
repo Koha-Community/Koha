@@ -11134,6 +11134,15 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.21.00.039";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        ALTER TABLE creator_layouts ADD COLUMN oblique_title INT(1) NULL DEFAULT 1 AFTER guidebox
+    |);
+    print "Upgrade to $DBversion done (Bug 12194: Add column oblique_title to layouts)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
