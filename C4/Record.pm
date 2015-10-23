@@ -878,7 +878,7 @@ sub marc2cites {
             if($author =~ /([^,]+),?(.*)/) {
                 my %a;
                 ($a{'surname'} = $1) =~ s/$re_clean//g;
-                $a{'forenames'} = [map {s/$re_clean//g;$_} split ' ', $2];
+                $a{'forenames'} = [map {my $t=$_;$t=~s/$re_clean//g;$t} split ' ', $2];
                 push(@authors, \%a);
             }
         }
