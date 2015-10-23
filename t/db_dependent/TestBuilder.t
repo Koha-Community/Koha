@@ -30,12 +30,15 @@ my $builder = t::lib::TestBuilder->new();
 is( $builder->build(), undef, 'build without arguments returns undef' );
 
 my @sources    = $builder->schema->sources;
-my $nb_failure = 0;
+my @source_in_failure;
 for my $source (@sources) {
     eval { $builder->build( { source => $source } ); };
-    $nb_failure++ if ($@);
+    push @source_in_failure, $source if $@;
 }
-is( $nb_failure, 0, 'TestBuilder can create a entry for every sources' );
+is( @source_in_failure, 0, 'TestBuilder should be able to create an object for every sources' );
+if ( @source_in_failure ) {
+    diag ("The following sources have not been generated correctly: " . join ', ', @source_in_failure)
+}
 
 my $my_overduerules_transport_type = {
     message_transport_type => {
