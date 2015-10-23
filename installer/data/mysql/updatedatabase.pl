@@ -11099,9 +11099,16 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.21.00.036";
 if ( CheckVersion($DBversion) ) {
    $dbh->do(q{
-       ALTER TABLE authorised_values_branches
-         CHANGE av_id av_id INT( 11 ) NOT NULL,
-         CHANGE branchcode branchcode VARCHAR( 10 ) NOT NULL
+        ALTER TABLE authorised_values_branches
+        DROP FOREIGN KEY authorised_values_branches_ibfk_1,
+        DROP FOREIGN KEY authorised_values_branches_ibfk_2
+    });
+    $dbh->do(q{
+        ALTER TABLE authorised_values_branches
+        MODIFY av_id INT( 11 ) NOT NULL,
+        MODIFY branchcode VARCHAR( 10 ) NOT NULL,
+        ADD FOREIGN KEY (`av_id`) REFERENCES `authorised_values` (`id`) ON DELETE CASCADE,
+        ADD FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE
    });
    print "Upgrade to $DBversion done (Bug 10363: There is no package for authorised values)\n";
    SetVersion($DBversion);
