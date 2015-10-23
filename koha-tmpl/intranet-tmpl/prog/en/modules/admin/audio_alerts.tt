@@ -4,6 +4,8 @@
 
 <script type="text/javascript">
 $( document ).ready(function() {
+    $(".edit-alert").hide();
+
     $('#koha-sounds').on('change', function() {
         $('#sound').val( this.value );
     });
@@ -14,6 +16,20 @@ $( document ).ready(function() {
 
     $('#play-sound').on('click', function() {
         playSound( $('#sound').val() );
+        return false;
+    });
+
+    $('#cancel-edit').on('click', function() {
+        $("#id").val("");
+        $("#selector").val("");
+        $("#sound").val("");
+
+        $(".edit-alert").hide();
+        $(".create-alert").show();
+
+        $("#audio-alerts-table").find("td").each(function (i) {
+            $(this).removeClass('highlighted-row');
+        });
         return false;
     });
 
@@ -33,6 +49,22 @@ $( document ).ready(function() {
         return confirm(_("Are you sure you want to delete the selected audio alerts?"));
     });
 });
+
+function EditAlert( elt, id, precedence, selector, sound ) {
+    $("#audio-alerts-table").find("td").each(function (i) {
+        $(this).removeClass('highlighted-row');
+    });
+
+    $(".create-alert").hide();
+    $(".edit-alert").show();
+
+    $(elt).parent().parent().find("td").each(function (i) {
+        $(this).addClass('highlighted-row');
+    });
+    $("#id").val(id);
+    $("#selector").val(selector);
+    $("#sound").val(sound);
+}
 </script>
 
 </head>
@@ -48,8 +80,9 @@ $( document ).ready(function() {
             <div class="yui-b">
                 <form id="new-alert-form" action="audio_alerts.pl" method="post">
                     <fieldset class="form-inline">
-                        <legend>Add new alert</legend>
+                        <legend><span class="create-alert">Add new alert</span><span class="edit-alert">Edit alert</span></legend>
 
+                        <input id="id" name="id" type="hidden" value="" />
                         <input id="selector" name="selector" type="text" class="input-large" placeholder="selector" />
                         <input id="sound" name="sound" type="text" class="input-large" placeholder="sound" />
 
@@ -79,23 +112,28 @@ $( document ).ready(function() {
                             <option value="warning.ogg">warning.ogg</option>
                         </select>
 
-                        <button id="save-alert" type="submit" class="btn"><i class="icon-hdd"></i> Save alert</button>
+                        <p>
+                            <button id="save-alert" type="submit" class="btn create-alert"><i class="icon-hdd"></i> Save alert</button>
+                            <button id="save-edit" type="submit" class="btn edit-alert save-edit"><i class="icon-hdd"></i> Update alert</button>
+                            <a id="cancel-edit" class="btn edit-alert cancel-edit"><i class="icon icon-remove-circle"></i> Cancel edit</a>
+                        </p>
                     </fieldset>
                 </form>
 
                 <form id="delete-alert-form" action="audio_alerts.pl" method="post">
-                    <table>
-                        <thead>
+                    <table id="audio-alerts-table">
+                        <thead id="audio-alerts-table-head">
                             <tr>
                                 <th>&nbsp;</th>
                                 <th>Precedence</th>
                                 <th>&nbsp;</th>
                                 <th>Selector</th>
                                 <th>Sound</th>
+                                <th>&nbsp;</th>
                             </tr>
                         </thead>
 
-                        <tbody>
+                        <tbody id="audio-alerts-table-body">
                             [% FOREACH a IN audio_alerts %]
                                 <tr>
                                     <td><input type="checkbox" name="delete" value="[% a.id %]" /></td>
@@ -119,6 +157,7 @@ $( document ).ready(function() {
                                     </td>
                                     <td>[% a.selector %]</td>
                                     <td>[% a.sound %]</td>
+                                    <td><a class="btn btn-small" onclick="EditAlert( this, '[% a.id %]','[% a.precedence %]', '[% a.selector %]', '[% a.sound %]' )" ><i class="icon-pencil"></i> Edit</a></td>
                                 </tr>
                             [% END %]
                         </tbody>

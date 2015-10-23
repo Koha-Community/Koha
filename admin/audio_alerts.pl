@@ -45,17 +45,22 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-if ( $selector && $sound ) {
+if ( $id && $action && $where && $action eq 'move' ) {
+    Koha::AudioAlerts->find($id)->move($where);
+}
+elsif ( $id && $selector && $sound ) {
+    my $alert = Koha::AudioAlerts->find($id);
+    $alert->selector( $selector );
+    $alert->sound( $sound );
+    $alert->store();
+}
+elsif ( $selector && $sound ) {
     Koha::AudioAlert->new( { selector => $selector, sound => $sound } )->store();
 }
 
 if (@delete) {
     map { Koha::AudioAlerts->find($_)->delete() } @delete;
     Koha::AudioAlerts->fix_precedences();
-}
-
-if ( $id && $action && $where && $action eq 'move' ) {
-    Koha::AudioAlerts->find($id)->move($where);
 }
 
 $template->param( AudioAlerts => 1, audio_alerts => scalar Koha::AudioAlerts->search() );
