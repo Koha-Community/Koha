@@ -102,11 +102,11 @@ my $updated_layout = C4::Labels::Layout->retrieve(layout_id => $sav_results);
 is_deeply($updated_layout, $saved_layout, "Updated layout object is the expected");
 
 # Testing Layout->get_text_wrap_cols()
-is($updated_layout->get_text_wrap_cols(label_width => 180, left_text_margin => 18), 23,
+is($updated_layout->get_text_wrap_cols(label_width => 180, left_text_margin => 18), 21,
     "Layout->get_text_wrap_cols()");
 
 # Testing Layout->delete()
 my $del_results = $updated_layout->delete();
-ok($del_results ne -1, "Layout->delete() success");
+ok( ! defined($del_results) , "Layout->delete() success");
 
 1;
