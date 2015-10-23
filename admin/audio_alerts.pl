@@ -58,6 +58,6 @@ if ( $id && $action && $where && $action eq 'move' ) {
     Koha::AudioAlerts->find($id)->move($where);
 }
 
-$template->param( audio_alerts => scalar Koha::AudioAlerts->search() );
+$template->param( AudioAlerts => 1, audio_alerts => scalar Koha::AudioAlerts->search() );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;
