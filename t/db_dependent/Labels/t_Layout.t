@@ -17,12 +17,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use Test::More tests => 38;
 use C4::Context;
-use Data::Dumper;
 
 BEGIN {
     use_ok('C4::Labels::Layout');
@@ -47,16 +45,17 @@ my $default_layout = {
 
 my $layout;
 
-diag "Testing Layout->new() method.";
-ok($layout = C4::Labels::Layout->new(layout_name => 'TEST')) || diag "Layout->new() FAILED";
-is_deeply($layout, $default_layout) || diag "New layout object FAILED to verify.";
+# Testing Layout->new()
+ok($layout = C4::Labels::Layout->new(layout_name => 'TEST'), "Layout->new() success");
+is_deeply($layout, $default_layout, "New layout object is the expected");
 
-diag "Testing Layout->get_attr() method.";
+# Testing Layout->get_attr()
 foreach my $key (keys %{$default_layout}) {
-    ok($default_layout->{$key} eq $layout->get_attr($key)) || diag "Layout->get_attr() FAILED on attribute $key.";
+    ok($default_layout->{$key} eq $layout->get_attr($key),
+        "Layout->get_attr() success on attribute $key.");
 }
 
-diag "Testing Layout->set_attr() method.";
+# Testing Layout->set_attr()
 my $new_attr = {
         creator         =>      'Labels',
         layout_xml      =>      '',
@@ -76,35 +75,38 @@ my $new_attr = {
 
 foreach my $key (keys %{$new_attr}) {
     $layout->set_attr($key => $new_attr->{$key});
-    ok($new_attr->{$key} eq $layout->get_attr($key)) || diag "Layout->set_attr() FAILED on attribute $key.";
+    ok($new_attr->{$key} eq $layout->get_attr($key),
+        "Layout->set_attr() success on attribute $key.");
 }
 
-diag "Testing Layout->save() method with a new object.";
 
+# Testing Layout->save() method with a new object
 my $sav_results = $layout->save();
-ok($sav_results ne -1) || diag "Layout->save() FAILED";
+ok($sav_results ne -1, "Layout->save() success");
 
 my $saved_layout;
 if ($sav_results ne -1) {
-    diag "Testing Layout->retrieve() method.";
+    # Testing Layout->retrieve()
     $new_attr->{'layout_id'} = $sav_results;
-    ok($saved_layout = C4::Labels::Layout->retrieve(layout_id => $sav_results)) || diag "Layout->retrieve() FAILED";
-    is_deeply($saved_layout, $new_attr) || diag "Retrieved layout object FAILED to verify.";
+    ok($saved_layout = C4::Labels::Layout->retrieve(layout_id => $sav_results),
+        "Layout->retrieve() success");
+    is_deeply($saved_layout, $new_attr,
+        "Retrieved layout object is the expected");
 }
 
-diag "Testing Layout->save() method with an updated object.";
-
+# Testing Layout->save() method with an updated object
 $saved_layout->set_attr(font => 'C');
 my $upd_results = $saved_layout->save();
-ok($upd_results ne -1) || diag "Layout->save() FAILED";
+ok($upd_results ne -1, "Layout->save() success");
 my $updated_layout = C4::Labels::Layout->retrieve(layout_id => $sav_results);
-is_deeply($updated_layout, $saved_layout) || diag "Updated layout object FAILED to verify.";
+is_deeply($updated_layout, $saved_layout, "Updated layout object is the expected");
 
-diag "Testing Layout->get_text_wrap_cols() method.";
+# Testing Layout->get_text_wrap_cols()
+is($updated_layout->get_text_wrap_cols(label_width => 180, left_text_margin => 18), 23,
+    "Layout->get_text_wrap_cols()");
 
-is($updated_layout->get_text_wrap_cols(label_width => 180, left_text_margin => 18), 23, "Layout->get_text_wrap_cols()");
-
-diag "Testing Layout->delete() method.";
-
+# Testing Layout->delete()
 my $del_results = $updated_layout->delete();
-ok($del_results ne -1) || diag "Layout->delete() FAILED";
+ok($del_results ne -1, "Layout->delete() success");
+
+1;
