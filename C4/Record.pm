@@ -863,7 +863,6 @@ sub marc2cites {
     my @authors = ();
     my $re_clean = qr/(^[\.,:;\/\-\s]+|[\.,:;\/\-\s]+$)/;
 
-    my @authors;
     my @authorFields = ('100','110','111','700','710','711');
     @authorFields = ('700','701','702','710','711','721') if ( $marcflavour eq "UNIMARC" );
 
