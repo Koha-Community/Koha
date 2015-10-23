@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -26,7 +25,7 @@
 use strict;
 #use warnings; FIXME - Bug 2505
 
-use constant TWO_DAYS => 2;
+use constant PULL_INTERVAL => 2;
 
 use C4::Context;
 use C4::Output;
@@ -79,7 +78,7 @@ if ( $startdate ) {
 unless ( $startdate ){
     # changed from delivered range of 10 years-yesterday to 2 days ago-today
     # Find two days ago for the default shelf pull start date, unless HoldsToPullStartDate sys pref is set.
-    $startdate = $today - DateTime::Duration->new( days => C4::Context->preference('HoldsToPullStartDate') || 2 );
+    $startdate = $today - DateTime::Duration->new( days => C4::Context->preference('HoldsToPullStartDate') || PULL_INTERVAL );
 }
 
 if ( $enddate ) {
@@ -87,7 +86,7 @@ if ( $enddate ) {
 }
 unless ( $enddate ) {
     #similarly: calculate end date with ConfirmFutureHolds (days)
-    $enddate = $today - DateTime::Duration->new( days => C4::Context->preference('ConfirmFutureHolds') || 0 );
+    $enddate = $today + DateTime::Duration->new( days => C4::Context->preference('ConfirmFutureHolds') || 0 );
 }
 
 my @reservedata;
@@ -206,8 +205,8 @@ $template->param(
     run_report          => $run_report,
     reserveloop         => \@reservedata,
     "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
-    HoldsToPullStartDate=> C4::Context->preference('HoldsToPullStartDate')||TWO_DAYS,
-    HoldsToPullEndDate  => C4::Context->preference('ConfirmFutureHolds')||0,
+    HoldsToPullStartDate => C4::Context->preference('HoldsToPullStartDate') || PULL_INTERVAL,
+    HoldsToPullEndDate  => C4::Context->preference('ConfirmFutureHolds') || 0,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
