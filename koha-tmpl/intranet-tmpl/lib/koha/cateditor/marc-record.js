@@ -244,6 +244,11 @@ define( function() {
             // happens before UTF-8 encoding, but that won't cause any issues.
             data = _encode_utf8(data.substr(0, parseInt(data.substr(0, 5))));
 
+            // For now, we can't decode MARC-8, so just mark the record as possibly corrupted.
+            if (data[9] != 'a') {
+                var marc8 = true;
+            }
+
             this._fieldlist.length = 0;
             this.leader(data.substr(0, 24));
             var directory_len = parseInt(data.substring(12, 17), 0) - 25,
@@ -254,6 +259,12 @@ define( function() {
                     len = parseInt(data.substring(off+3, off+7), 0) - 1,
                     pos = parseInt(data.substring(off+7, off+12), 0) + 25 + directory_len,
                     value = data.substring(pos, pos+len);
+
+                // No end-of-field character before this field, corruption!
+                if (marc8 && data[pos - 1] != '\x1E') {
+                    this.marc8_corrupted = true;
+                }
+
                 if ( parseInt(tag) < 10 ) {
                     this.addField( new MARC.Field( tag, '', '', [ [ '@', value ] ] ) );
                 } else {

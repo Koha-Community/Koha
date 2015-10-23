@@ -909,6 +909,8 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                             return;
                         }
 
+                        if (record.marc8_corrupted) humanMsg.displayMsg( '<h3>' + _("Possible record corruption") + '</h3><p>' + _("Record not marked as UTF-8, may be corrupted") + '</p>', { className: 'humanError' } );
+
                         editor.displayRecord( record );
                     };
 
