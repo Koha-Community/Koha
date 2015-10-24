@@ -5,9 +5,9 @@
 [% ELSIF ( caller == 'transfer' ) %]
 <title>Koha &rsaquo; Circulation &rsaquo; Transfers print receipt</title>
 [% ELSIF ( caller == 'members' ) %]
-<title>Koha &rsaquo; Members &rsaquo; Print receipt for [% borrowernumber %]</title>
+<title>Koha &rsaquo; Patrons &rsaquo; Print receipt for [% borrowernumber %]</title>
 [% ELSIF ( title ) %]
-<title>Koha &rsaquo; Members &rsaquo; [% title %]</title>
+<title>Koha &rsaquo; Patrons &rsaquo; [% title %]</title>
 [% END %]
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -24,10 +24,10 @@
 
 [% IF plain %]
 <pre>
-[% IF ( slip ) %][% slip %][% ELSE %]No hold found[% END %]
+[% IF ( slip ) %][% slip %][% ELSE %]No slip template found[% END %]
 </pre>
 [% ELSE %]
-[% IF ( slip ) %][% slip %][% ELSE %]No hold found[% END %]
+[% IF ( slip ) %][% slip %][% ELSE %]No slip template found[% END %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

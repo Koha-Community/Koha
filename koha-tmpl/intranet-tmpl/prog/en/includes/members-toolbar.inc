@@ -159,7 +159,7 @@ function searchToHold(){
             <ul class="dropdown-menu">
                 [% IF ( CAN_user_borrowers ) %]<li><a id="printsummary" href="#">Print summary</a></li>[% END %]
                 <li><a id="printslip" href="#">Print slip</a></li>
-                <li><a id="printquickslip" href="#">Print quick slip[%  Borrowers.HasOverdues( borrowernumber ) %]</a></li>
+                <li><a id="printquickslip" href="#">Print quick slip</a></li>
                 [% IF Borrowers.HasOverdues( borrowernumber ) %]
                     <li><a id="print_overdues" href="#">Print overdues</a></li>
                 [% END %]
