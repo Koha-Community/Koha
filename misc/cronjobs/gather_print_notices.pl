@@ -386,7 +386,7 @@ For example:
 cardnumber:patron:email:item
 <<borrowers.cardnumber>>:<<borrowers.firstname>> <<borrowers.surname>>:<<borrowers.email>>:<<items.barcode>>
 
-You have to combine this option without one (and only one) letter_code.
+You have to combine this option with one (and only one) letter_code.
 
 =item B<--ods>
 
@@ -402,7 +402,7 @@ Several letter_code parameters can be given.
 =item B<-e|--email>
 
 Repeatable.
-E-mail address to send generated files.
+E-mail address to send generated files to.
 
 =item B<-h|--help>
 
