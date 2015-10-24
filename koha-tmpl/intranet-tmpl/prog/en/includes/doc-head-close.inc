@@ -65,7 +65,7 @@
     </script>
 [% END %]
 
-[% IF Koha.Preference('AudioAlerts') || AudioAlerts %]
+[% IF Koha.Preference('AudioAlerts') || AudioAlertsPage %]
     <script type="text/javascript">
         //<![CDATA[
             var AUDIO_ALERT_PATH = '[% interface %]/[% theme %]/sound/';

@@ -63,6 +63,6 @@ if (@delete) {
     Koha::AudioAlerts->fix_precedences();
 }
 
-$template->param( AudioAlerts => 1, audio_alerts => scalar Koha::AudioAlerts->search() );
+$template->param( AudioAlertsPage => 1, audio_alerts => scalar Koha::AudioAlerts->search() );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;
