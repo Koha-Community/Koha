@@ -45,7 +45,7 @@
                     <div class="newsitem">
                         <a name="newsitem[% koha_new.idnew %]"></a><h4 class="newsheader">[% koha_new.title %]</h4>
                         <div class="newsbody">[% koha_new.new %]</div>
-                        <div class="newsfooter">(published on [% koha_new.newdate %][% IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) %] by [% koha_new.author_title %] [% koha_new.author_firstname %] [% koha_new.author_surname %][% END %])</div>
+                        <div class="newsfooter">(published on [% koha_new.newdate %][% IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) %] by <span class="newsauthor_title">[% koha_new.author_title %] </span>[% koha_new.author_firstname %] [% koha_new.author_surname %][% END %])</div>
                     </div>
                 [% END %]
             </div>

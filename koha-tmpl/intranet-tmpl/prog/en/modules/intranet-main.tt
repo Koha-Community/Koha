@@ -175,7 +175,7 @@
             [% FOREACH koha_new IN koha_news %]
                 <div class="newsitem" id="news[% koha_new.idnew %]"><h4>[% koha_new.title %]</h4>
                     <p>[% koha_new.new %]</p>
-                    <p class="newsfooter"> Posted on [% koha_new.newdate %][% IF( ( newsdisp == 'staff' || newsdisp == 'both' ) && koha_new.borrowernumber ) %] by [% koha_new.author_title %] [% koha_new.author_firstname %] [% koha_new.author_surname %]<br />[% END %]
+                    <p class="newsfooter"> Posted on [% koha_new.newdate %][% IF( ( newsdisp == 'staff' || newsdisp == 'both' ) && koha_new.borrowernumber ) %] by <span class="newsauthor_title">[% koha_new.author_title %] </span>[% koha_new.author_firstname %] [% koha_new.author_surname %]<br />[% END %]
                         [% IF ( CAN_user_tools ) %]
                             <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=[% koha_new.idnew %]">Edit</a>
                              | <a href="/cgi-bin/koha/tools/koha-news.pl?op=del&amp;ids=[% koha_new.idnew %]">Delete</a>
