@@ -248,7 +248,7 @@ CAN_user_serials_create_subscription ) %]
         [% IF ( holdfor ) %]
             <div class="btn-group">
                 <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-hold"></i>
+                    <i class="fa fa-sticky-note-o"></i>
                     Place hold
                     <span class="caret"></span>
                 </button>
@@ -258,7 +258,7 @@ CAN_user_serials_create_subscription ) %]
                 </ul>
             </div>
         [% ELSE %]
-            <div class="btn-group"><a id="placehold" class="btn btn-small" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]"><i class="fa fa-hold"></i> Place hold</a></div>
+            <div class="btn-group"><a id="placehold" class="btn btn-small" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]"><i class="fa fa-sticky-note-o"></i> Place hold</a></div>
         [% END %]
     [% END %]
 [% END %]
