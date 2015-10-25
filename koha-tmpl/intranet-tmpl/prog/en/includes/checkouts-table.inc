@@ -61,7 +61,7 @@
                         <input type="hidden" id="output_format" name="output_format" value="iso2709" />
                         <input type="hidden" id="dont_export_item" name="dont_export_item" value="0" />
                         <input type="hidden" id="record_type" name="record_type" value="bibs" />
-                        <button class="btn btn-small" id="export_submit"><i class="fa fa-download-alt"></i> Export</button>
+                        <button class="btn btn-small" id="export_submit"><i class="fa fa-download"></i> Export</button>
                     </fieldset>
                 [% END %]
             </div>

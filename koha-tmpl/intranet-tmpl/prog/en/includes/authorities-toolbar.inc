@@ -36,7 +36,7 @@
     [% END %]
 
     <div class="btn-group">
-        <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-download-alt"></i> Save
+        <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-download"></i> Save
         <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">

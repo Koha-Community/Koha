@@ -214,7 +214,7 @@ CAN_user_serials_create_subscription ) %]
 [% END %]
 
     <div class="btn-group">
-    <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download-alt"></i> Save <span class="caret"></span></button>
+    <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download"></i> Save <span class="caret"></span></button>
     <ul class="dropdown-menu">
         <li><a href="/cgi-bin/koha/catalogue/export.pl?format=bibtex&amp;op=export&amp;bib=[% biblionumber %]">BIBTEX</a></li>
         <li><a href="/cgi-bin/koha/catalogue/export.pl?format=dc&amp;op=export&amp;bib=[% biblionumber %]">Dublin Core (XML)</a></li>
