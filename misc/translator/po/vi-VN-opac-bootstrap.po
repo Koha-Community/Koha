@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-08-17 18:21-0300\n"
+"POT-Creation-Date: 2015-10-18 10:52-0300\n"
 "PO-Revision-Date: 2014-10-08 03:44+0000\n"
 "Last-Translator: dhoang <dung.hoang@dlcorp.com.vn>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -778,13 +778,16 @@ msgstr "%s Tên khác:"
 #. %5$s:  END 
 #. %6$s:  IF ( WrongPass ) 
 #. %7$s:  END 
+#. %8$s:  IF PasswordContainsTrailingSpaces 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:31
 #, fuzzy, c-format
 msgid ""
 "%s Passwords do not match. Please re-type your new password. %s %s Your new "
 "password must be at least %s characters long. %s %s Your current password "
 "was entered incorrectly. If this problem persists, please ask a librarian to "
-"re-set your password for you. %s "
+"re-set your password for you. %s %s Your password contains leading and/or "
+"trailing spaces. %s "
 msgstr ""
 "%s Passwords do not match. Please re-type your new password. %s %s Your new "
 "password must be at least %s characters long. %s %s Your current password "
@@ -3929,7 +3932,7 @@ msgstr "Ký hiệu phân loại: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:803
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:98
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:58
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:54
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:620
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:639
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:62
@@ -4180,7 +4183,7 @@ msgid "Click to expand this role"
 msgstr "Chọn vào đây để mở rộng phần này"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 #, fuzzy
 msgid "Click to forward the list to"
 msgstr "Chuyển giá sách ảo tới"
@@ -4198,7 +4201,7 @@ msgid "Click to open in new window"
 msgstr "Mở trong cửa sổ mới"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 #, fuzzy
 msgid "Click to rewind the list to"
 msgstr "Quay lại giá sách để"
@@ -4471,7 +4474,7 @@ msgstr "Tài khoản trả trước (%s)"
 msgid "Current location"
 msgstr "Thư viện hiện tại"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:50
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
 #, c-format
 msgid "Current password:"
 msgstr "Mật khẩu cũ:"
@@ -5435,7 +5438,7 @@ msgstr "Tìm kiếm"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 #, fuzzy
 msgid "Go to detail"
 msgstr "Tới trang chi tiết"
@@ -6715,7 +6718,7 @@ msgstr "Bình luận mới nhất trên  %s %s, %s%s"
 msgid "New list"
 msgstr "Tạo giá sách ảo"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:51
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:54
 #, c-format
 msgid "New password:"
 msgstr "Mật khẩu (mới):"
@@ -7288,7 +7291,7 @@ msgstr "Các thông số"
 msgid "Password"
 msgstr "Mật khẩu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:63
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:66
 #, c-format
 msgid "Password updated"
 msgstr "Mật khẩu đăng nhập được cập nhật"
@@ -7767,12 +7770,12 @@ msgstr "Đánh giá của bạn:"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:587
 msgid "Rating based on reviews of "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:52
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:55
 #, c-format
 msgid "Re-type new password:"
 msgstr "Nhập lại mật khẩu mới:"
@@ -8085,7 +8088,7 @@ msgid "Return to your lists"
 msgstr "Quay lại giá sách ảo"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:68
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:71
 msgid "Return to your record"
 msgstr "Quay lại tài khoản"
 
@@ -8115,13 +8118,13 @@ msgstr ""
 "fine information, hold request information, loan information, and messages."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 #, fuzzy
 msgid "Review date: "
 msgstr "Bài phê bình"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 #, fuzzy
 msgid "Review result: "
 msgstr "Bài phê bình"
@@ -8346,7 +8349,7 @@ msgid "See also:"
 msgstr "Xem thêm:"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 #, fuzzy
 msgid "See biblio"
 msgstr "Xem biểu ghi"
@@ -8940,7 +8943,7 @@ msgstr "Gửi bình luận và thoát"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:128
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:54
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
 msgid "Submit changes"
 msgstr "Đổi mật khẩu"
 
@@ -10186,7 +10189,7 @@ msgstr ""
 msgid "You can use OAI-PMH ListRecords instead of this service."
 msgstr "You can use OAI-PMH ListRecords instead of this service."
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:58
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:61
 #, c-format
 msgid "You can't change your password."
 msgstr "Bạn không thể thay đổi mật khẩu đăng nhập."
@@ -10363,7 +10366,7 @@ msgstr ""
 "của bạn trong 02 tuần."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid ""
 "Your CGI session cookie is not current. Please refresh the page and try "
 "again."
@@ -10563,13 +10566,13 @@ msgstr "Thiết lập thông báo"
 msgid "Your options are: "
 msgstr "Tùy chọn: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:63
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:66
 #, fuzzy, c-format
 msgid "Your password has been changed "
 msgstr "Bạn đã đổi thành công mật khẩu đăng nhập vào tài khoản."
 
 #. %1$s:  minpasslen 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:49
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:52
 #, c-format
 msgid "Your password must be at least %s characters long."
 msgstr "Mật khẩu mới phải có tối thiểu %s ký tự."
@@ -10791,7 +10794,7 @@ msgid "available"
 msgstr "sẵn sàng"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 #, fuzzy
 msgid "average rating: "
 msgstr "Đánh giá trung bình: "
@@ -10828,12 +10831,12 @@ msgstr "borrowernumber"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "by"
 msgstr "Người liên quan"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:118
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:587
 #, c-format
 msgid "by "
@@ -10963,7 +10966,7 @@ msgid "here"
 msgstr "tại đây"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "iDreamBooks.com rating"
 msgstr ""
 
@@ -11227,7 +11230,7 @@ msgid "purchase suggestion"
 msgstr "đề xuất mua"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 #, fuzzy
 msgid "rating based on reviews at iDreamBooks.com"
 msgstr "Nhận xét về tài liệu tại iDreamBooks.com"
@@ -11527,7 +11530,7 @@ msgid "view plain"
 msgstr "Hiển thị MARC"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "votes"
 msgstr "votes"
 
@@ -11574,7 +11577,7 @@ msgid "will be sent shortly to %s."
 msgstr "đã gửi tới %s."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "with biblionumber"
 msgstr "với số biểu ghi "
 
@@ -11628,7 +11631,7 @@ msgid "your purchase suggestions"
 msgstr "Đề xuất mua của bạn"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 #, fuzzy
 msgid "your rating: "
 msgstr "Đánh giá của bạn:"

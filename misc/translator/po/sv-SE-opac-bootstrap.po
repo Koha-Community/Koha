@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-17 18:09-0300\n"
+"POT-Creation-Date: 2015-10-18 10:47-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -775,13 +775,16 @@ msgstr "%s Annan telefon:"
 #. %5$s:  END 
 #. %6$s:  IF ( WrongPass ) 
 #. %7$s:  END 
+#. %8$s:  IF PasswordContainsTrailingSpaces 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:31
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s Passwords do not match. Please re-type your new password. %s %s Your new "
 "password must be at least %s characters long. %s %s Your current password "
 "was entered incorrectly. If this problem persists, please ask a librarian to "
-"re-set your password for you. %s "
+"re-set your password for you. %s %s Your password contains leading and/or "
+"trailing spaces. %s "
 msgstr ""
 "%s Lösenorden stämmer inte överens. Skriv ditt nya lösenord igen. %s %s Ditt "
 "nya lösenord måste vara minst %s tecken långt. %s %s Ett felaktigt lösenord "
@@ -3944,7 +3947,7 @@ msgstr "Hyllsignatur: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:803
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:98
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:58
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:54
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:620
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:639
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:62
@@ -4195,7 +4198,7 @@ msgid "Click to expand this role"
 msgstr "Klicka för att expandera denna roll"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "Click to forward the list to"
 msgstr "Klicka här för att gå vidare i listan till"
 
@@ -4212,7 +4215,7 @@ msgid "Click to open in new window"
 msgstr "Klicka för att öppna i nytt fönster"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "Click to rewind the list to"
 msgstr "Klicka för att gå tillbaka i listan till"
 
@@ -4485,7 +4488,7 @@ msgstr "Upphovsuppgifter (%s)"
 msgid "Current location"
 msgstr "Aktuell plats"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:50
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
 #, c-format
 msgid "Current password:"
 msgstr "Nuvarande lösenord:"
@@ -5451,7 +5454,7 @@ msgstr "Gå"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "Go to detail"
 msgstr "Gå till detaljvy"
 
@@ -6733,7 +6736,7 @@ msgstr "Ny kommentar på %s %s, %s%s"
 msgid "New list"
 msgstr "Ny lista"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:51
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:54
 #, c-format
 msgid "New password:"
 msgstr "Nytt lösenord:"
@@ -7304,7 +7307,7 @@ msgstr "Parametrar"
 msgid "Password"
 msgstr "Lösenord"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:63
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:66
 #, c-format
 msgid "Password updated"
 msgstr "Lösenordet har uppdaterats"
@@ -7781,12 +7784,12 @@ msgstr "Betygsätt mig"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:587
 msgid "Rating based on reviews of "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:52
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:55
 #, c-format
 msgid "Re-type new password:"
 msgstr "Skriv in ditt nya lösenord igen:"
@@ -8097,7 +8100,7 @@ msgid "Return to your lists"
 msgstr "Återvänd till dina listor"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:68
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:71
 msgid "Return to your record"
 msgstr "Tillbaka till din post"
 
@@ -8128,13 +8131,13 @@ msgstr ""
 "reservationsbeställningar, lån och meddelanden."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 #, fuzzy
 msgid "Review date: "
 msgstr "Recensioner"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 #, fuzzy
 msgid "Review result: "
 msgstr "Recensioner"
@@ -8359,7 +8362,7 @@ msgid "See also:"
 msgstr "Se även:"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "See biblio"
 msgstr "Se biblio"
 
@@ -8953,7 +8956,7 @@ msgstr "Skicka och stäng det här fönstret"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:128
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:54
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
 msgid "Submit changes"
 msgstr "Skicka ändringarna"
 
@@ -10193,7 +10196,7 @@ msgstr "Du kan söka i katalogen med sökformuläret längst upp på denna sida"
 msgid "You can use OAI-PMH ListRecords instead of this service."
 msgstr "Du kan använda OAI-PMH-listposter i stället för den här tjänsten."
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:58
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:61
 #, c-format
 msgid "You can't change your password."
 msgstr "Det går inte att ändra lösenordet."
@@ -10377,7 +10380,7 @@ msgstr ""
 "veckor. "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid ""
 "Your CGI session cookie is not current. Please refresh the page and try "
 "again."
@@ -10579,13 +10582,13 @@ msgstr "Dina meddelandeinställningar"
 msgid "Your options are: "
 msgstr "Dina alternativ är: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:63
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:66
 #, c-format
 msgid "Your password has been changed "
 msgstr "Ditt lösenord har ändrats"
 
 #. %1$s:  minpasslen 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:49
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:52
 #, c-format
 msgid "Your password must be at least %s characters long."
 msgstr "Ditt lösenord måste innehålla minst %s tecken."
@@ -10819,7 +10822,7 @@ msgid "available"
 msgstr "tillgänglig"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "average rating: "
 msgstr "medelbetyg: "
 
@@ -10857,12 +10860,12 @@ msgstr "låntagarnummer"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "by"
 msgstr "av"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:118
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:587
 #, c-format
 msgid "by "
@@ -10992,7 +10995,7 @@ msgid "here"
 msgstr "here"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "iDreamBooks.com rating"
 msgstr ""
 
@@ -11264,7 +11267,7 @@ msgid "purchase suggestion"
 msgstr "inköpsförslag"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 #, fuzzy
 msgid "rating based on reviews at iDreamBooks.com"
 msgstr "Fler bokrecensioner på iDreamBooks.com"
@@ -11561,7 +11564,7 @@ msgid "view plain"
 msgstr "visa ren"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "votes"
 msgstr "röster"
 
@@ -11606,7 +11609,7 @@ msgid "will be sent shortly to %s."
 msgstr "skickas snart till %s."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "with biblionumber"
 msgstr "med biblionummer"
 
@@ -11662,7 +11665,7 @@ msgid "your purchase suggestions"
 msgstr "dina inköpsförslag"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "your rating: "
 msgstr "ditt omdöme: "
 

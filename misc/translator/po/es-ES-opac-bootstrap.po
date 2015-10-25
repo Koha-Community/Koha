@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.14 staff\n"
-"POT-Creation-Date: 2015-08-17 17:16-0300\n"
-"PO-Revision-Date: 2015-08-17 20:25+0000\n"
+"POT-Creation-Date: 2015-10-18 10:27-0300\n"
+"PO-Revision-Date: 2015-10-22 16:23+0000\n"
 "Last-Translator: Héctor <hector.hecaxmmx@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-"
 "community.org>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1439843119.000000\n"
+"X-POOTLE-MTIME: 1445531023.000000\n"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:303
@@ -783,19 +783,22 @@ msgstr "%s Otro teléfono:"
 #. %5$s:  END 
 #. %6$s:  IF ( WrongPass ) 
 #. %7$s:  END 
+#. %8$s:  IF PasswordContainsTrailingSpaces 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:31
 #, c-format
 msgid ""
 "%s Passwords do not match. Please re-type your new password. %s %s Your new "
 "password must be at least %s characters long. %s %s Your current password "
 "was entered incorrectly. If this problem persists, please ask a librarian to "
-"re-set your password for you. %s "
+"re-set your password for you. %s %s Your password contains leading and/or "
+"trailing spaces. %s "
 msgstr ""
-"%s Las contraseñas no coincide. Por favor reingrese su nueva contraseña. %s "
-"%s Su nueva contraseña debe tener al menos %s caracteres de longitud %s %s "
+"%s Las contraseñas no coinciden. Por favor reingrese su nueva contraseña. %s "
+"%s Su nueva contraseña debe tener al menos %s caracteres de longitud. %s %s "
 "Su contraseña actual fue introducida incorrectamente. Si este problema "
 "persiste, por favor pida al bibliotecario que restablezca la contraseña por "
-"usted. %s "
+"usted. %s %s Su contraseña contiene espacios iniciales y/o finales. %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -854,7 +857,7 @@ msgstr "%s Citas"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:122
 #, c-format
 msgid "%s Salutation:"
-msgstr "%s Salutación:"
+msgstr "%s Saludo:"
 
 #. %1$s:  LibraryName |html 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:5
@@ -960,8 +963,8 @@ msgid ""
 "%s Total holds: %s %s %s %s (priority %s) %s Overall queue priority: %s %s "
 "%s "
 msgstr ""
-"%s Reservas Totales: %s %s %s %s (prioridad %s) %s Cola de prioridad total: "
-"%s %s %s "
+"%s Reservas totales: %s %s %s %s (prioridad %s) %s Cola de prioridad total: %"
+"s %s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -1123,6 +1126,7 @@ msgstr ""
 "defined('initials') && hidden.defined('othernames') && hidden.defined('sex') "
 "%%] "
 
+# TRANSLATORS: This is a comment for Template::Toolkit no need to be translated.
 #. %1$s:  BLOCK showreference 
 #. %2$s:  SET authidurl = '/cgi-bin/koha/opac-authoritiesdetail.pl?authid=' 
 #. %3$s:  SET searchurl = '/cgi-bin/koha/opac-authorities-home.pl?op=do_search&type=opac&operator=contains&marclist=mainentry&and_or=and&orderby=HeadingAsc&value=' 
@@ -3943,7 +3947,7 @@ msgstr "Signatura topográfica: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:803
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:98
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:58
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:54
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:620
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:639
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:62
@@ -4193,7 +4197,7 @@ msgid "Click to expand this role"
 msgstr "Haga clic para expandir este rol"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "Click to forward the list to"
 msgstr "Haga clic para avanzar la lista a"
 
@@ -4210,7 +4214,7 @@ msgid "Click to open in new window"
 msgstr "Haga clic para abrir en una nueva ventana"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "Click to rewind the list to"
 msgstr "Haga clic para retroceder la lista a"
 
@@ -4480,7 +4484,7 @@ msgstr "Créditos (%s)"
 msgid "Current location"
 msgstr "Ubicación actual"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:50
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
 #, c-format
 msgid "Current password:"
 msgstr "Contraseña actual:"
@@ -5447,7 +5451,7 @@ msgstr "Ir"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "Go to detail"
 msgstr "Ir a detalles"
 
@@ -5849,7 +5853,7 @@ msgstr "Si usted tiene una "
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:82
 #, c-format
 msgid "If you have a Shibboleth account, please "
-msgstr "Si no tiene una cuenta Shibboleth, por favor, "
+msgstr "Si tiene una cuenta Shibboleth, por favor, "
 
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:616
@@ -6729,7 +6733,7 @@ msgstr "Nuevo comentario sobre %s %s, %s%s"
 msgid "New list"
 msgstr "Nueva lista"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:51
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:54
 #, c-format
 msgid "New password:"
 msgstr "Nueva contraseña:"
@@ -7303,7 +7307,7 @@ msgstr "Parámetros"
 msgid "Password"
 msgstr "Contraseña"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:63
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:66
 #, c-format
 msgid "Password updated"
 msgstr "Contraseña actualizada"
@@ -7781,12 +7785,12 @@ msgstr "Valóreme"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:587
 msgid "Rating based on reviews of "
 msgstr "Valoración basada en la reseña de "
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:52
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:55
 #, c-format
 msgid "Re-type new password:"
 msgstr "Reingrese nueva contraseña:"
@@ -8095,7 +8099,7 @@ msgid "Return to your lists"
 msgstr "Regresar a sus listas"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:68
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:71
 msgid "Return to your record"
 msgstr "Volver a su registro"
 
@@ -8125,12 +8129,12 @@ msgstr ""
 "reservas, préstamos y mensajes del usuario."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "Review date: "
 msgstr "Fecha de la reseña: "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "Review result: "
 msgstr "Resultado de la reseña: "
 
@@ -8356,7 +8360,7 @@ msgid "See also:"
 msgstr "Ver además:"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "See biblio"
 msgstr "Ver registro"
 
@@ -8520,7 +8524,7 @@ msgstr "Información de serie:"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:55
 #, c-format
 msgid "Series title"
-msgstr "Título de publicación periódica"
+msgstr "Título de la serie"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:198
 #, c-format
@@ -8955,7 +8959,7 @@ msgstr "Enviar y cerrar esta ventana"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:128
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:54
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
 msgid "Submit changes"
 msgstr "Enviar cambios"
 
@@ -9898,7 +9902,7 @@ msgstr "Desuscribirse de una alerta de suscripción"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:14
 #, c-format
 msgid "Updates to your record"
-msgstr "Actualizaciones a sus detalles"
+msgstr "Actualizaciones a Sus detalles"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:121
 #, c-format
@@ -10214,7 +10218,7 @@ msgstr ""
 msgid "You can use OAI-PMH ListRecords instead of this service."
 msgstr "Puede usar OAI-PMH ListRecords en lugar de este servicio."
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:58
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:61
 #, c-format
 msgid "You can't change your password."
 msgstr "No puede cambiar su contraseña."
@@ -10403,7 +10407,7 @@ msgstr ""
 "que compartió dentro de dos semanas."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid ""
 "Your CGI session cookie is not current. Please refresh the page and try "
 "again."
@@ -10609,13 +10613,13 @@ msgstr "Sus preferencias de mensajería"
 msgid "Your options are: "
 msgstr "Sus opciones son: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:63
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:66
 #, c-format
 msgid "Your password has been changed "
 msgstr "Su contraseña ha sido cambiada "
 
 #. %1$s:  minpasslen 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:49
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:52
 #, c-format
 msgid "Your password must be at least %s characters long."
 msgstr "Su contraseña debe tener al menos %s caracteres de largo."
@@ -10850,7 +10854,7 @@ msgid "available"
 msgstr "disponible"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "average rating: "
 msgstr "valoración media: "
 
@@ -10886,12 +10890,12 @@ msgstr "borrowernumber"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "by"
 msgstr "por"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:118
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:587
 #, c-format
 msgid "by "
@@ -11021,7 +11025,7 @@ msgid "here"
 msgstr "aquí"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "iDreamBooks.com rating"
 msgstr "Valoración de iDreamBooks.com"
 
@@ -11285,7 +11289,7 @@ msgid "purchase suggestion"
 msgstr "sugerencia de compra"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "rating based on reviews at iDreamBooks.com"
 msgstr "valoración basada en las reseñas de iDreamBooks.com"
 
@@ -11587,7 +11591,7 @@ msgid "view plain"
 msgstr "vista simple"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "votes"
 msgstr "votos"
 
@@ -11632,7 +11636,7 @@ msgid "will be sent shortly to %s."
 msgstr "se enviará en breve a %s."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "with biblionumber"
 msgstr "con biblionumber"
 
@@ -11660,63 +11664,63 @@ msgstr "la página de su cuenta"
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:17
 #, c-format
 msgid "your fines"
-msgstr "sus multas"
+msgstr "Sus multas"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:94
 #, c-format
 msgid "your lists"
-msgstr "sus listas"
+msgstr "Sus listas"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:85
 #, c-format
 msgid "your messaging"
-msgstr "su mensajería"
+msgstr "Su mensajería"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:25
 #, c-format
 msgid "your personal details"
-msgstr "sus detalles personales"
+msgstr "Sus detalles personales"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:66
 #, c-format
 msgid "your privacy"
-msgstr "su privacidad"
+msgstr "Su privacidad"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:76
 #, c-format
 msgid "your purchase suggestions"
-msgstr "sus sugerencias de compra"
+msgstr "Sus sugerencias de compra"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "your rating: "
-msgstr "su valoración: "
+msgstr "Su valoración: "
 
 #. %1$s:  rating_value 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:508
 #, c-format
 msgid "your rating: %s, "
-msgstr "su calificación: %s "
+msgstr "Su valoración: %s "
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:59
 #, c-format
 msgid "your reading history"
-msgstr "su historial de lectura"
+msgstr "Su historial de lectura"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:50
 #, c-format
 msgid "your search history"
-msgstr "su historial de búsqueda"
+msgstr "Su historial de búsqueda"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:10
 #, c-format
 msgid "your summary"
-msgstr "su resumen"
+msgstr "Su resumen"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:32
 #, c-format
 msgid "your tags"
-msgstr "sus etiquetas"
+msgstr "Sus etiquetas"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:284
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:603

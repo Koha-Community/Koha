@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nb-NO-i-staff-prog-v-3000000\n"
-"POT-Creation-Date: 2015-08-17 17:47-0300\n"
-"PO-Revision-Date: 2015-06-16 05:45+0000\n"
+"POT-Creation-Date: 2015-10-18 10:39-0300\n"
+"PO-Revision-Date: 2015-10-21 07:21+0000\n"
 "Last-Translator: Magnus <magnus@enger.priv.no>\n"
 "Language-Team: Norwegian Bokmål <>\n"
 "Language: nb\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1434433522.000000\n"
+"X-POOTLE-MTIME: 1445412076.000000\n"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:303
@@ -785,18 +785,22 @@ msgstr "%s Alternativ telefon:"
 #. %5$s:  END 
 #. %6$s:  IF ( WrongPass ) 
 #. %7$s:  END 
+#. %8$s:  IF PasswordContainsTrailingSpaces 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:31
 #, c-format
 msgid ""
 "%s Passwords do not match. Please re-type your new password. %s %s Your new "
 "password must be at least %s characters long. %s %s Your current password "
 "was entered incorrectly. If this problem persists, please ask a librarian to "
-"re-set your password for you. %s "
+"re-set your password for you. %s %s Your password contains leading and/or "
+"trailing spaces. %s "
 msgstr ""
-"%s Passordene stemmer ikke overens. Vennligst skriv inn passordet på nytt. "
-"%s %s Ditt nye passord må være på minst %s tegn. %s %s Ditt eksisterende "
+"%s Passordene stemmer ikke overens. Vennligst skriv inn passordet på nytt. %"
+"s %s Ditt nye passord må være på minst %s tegn. %s %s Ditt eksisterende "
 "passord ble ikke skrevet riktig. Vennligst be en bibliotekar endre passordet "
-"for deg hvis dette problemet vedvarer. %s "
+"for deg hvis dette problemet vedvarer. %s %s Passordet ditt inneholder "
+"mellomrom på starten og/eller på slutten. %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -1319,21 +1323,19 @@ msgstr "%s%s med kommentaren "
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%s%sKoha online%s%sKoha online%s catalog &rsaquo; Your messaging settings"
-msgstr ""
-"%s %s%s%s%s%sKoha %s%sKoha %s katalog &rsaquo; Dine innstillinger for "
-"meldinger %s %s%s "
+msgstr "%s%s%s%sKoha %s%sKoha %s katalog &rsaquo; Dine meldingsinnstillinger"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha %s &rsaquo; Self checkout "
-msgstr "%s %s %s%s%s%sKoha %s &rsaquo; Selvbetjent utlån "
+msgstr "%s%s%sKoha %s &rsaquo; Selvbetjent utlån"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1341,20 +1343,19 @@ msgstr "%s %s %s%s%s%sKoha %s &rsaquo; Selvbetjent utlån "
 #. %4$s:  END 
 #. %5$s:  borrowernumber 
 #: opac-tmpl/bootstrap/en/modules/sco/printslip.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha %s &rsaquo; Self checkout &rsaquo; Print Receipt for %s"
 msgstr ""
-"%s %s%s%sKoha %s &rsaquo; Selvbetjent utlån &rsaquo; Skriv ut kvittering for "
-"%s"
+"%s%s%sKoha %s &rsaquo; Selvbetjent utlån &rsaquo; Skriv ut kvittering for %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha %s &rsaquo; Self checkout help"
-msgstr "%s %s%s%s%sKoha %s &rsaquo; Hjelp til selvbetjent utlån"
+msgstr "%s%s%sKoha %s &rsaquo; Hjelp til selvbetjent utlån"
 
 #. For the first occurrence,
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -1366,9 +1367,9 @@ msgstr "%s %s%s%s%sKoha %s &rsaquo; Hjelp til selvbetjent utlån"
 #: opac-tmpl/bootstrap/en/modules/opac-registration-invalid.tt:3
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:4
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog"
-msgstr "%s %s%s%sKoha %s katalog %s %s "
+msgstr "%s%s%sKoha %s katalog"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1389,7 +1390,7 @@ msgstr "%s %s%s%sKoha %s katalog %s %s "
 #. %17$s:  ELSE 
 #. %18$s:  END 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %s ILS-DI &rsaquo; GetAvailability %s "
 "ILS-DI &rsaquo; GetRecords %s ILS-DI &rsaquo; GetAuthorityRecords %s ILS-DI "
@@ -1398,12 +1399,12 @@ msgid ""
 "GetServices %s ILS-DI &rsaquo; RenewLoan %s ILS-DI &rsaquo; HoldTitle %s ILS-"
 "DI &rsaquo; HoldItem %s ILS-DI &rsaquo; CancelHold %s ILS-DI %s"
 msgstr ""
-"%s %s %s%s%sKoha %s katalog &rsaquo; %s ILS-DI &rsaquo; GetAvailability %s "
+"%s%s%sKoha online%s catalog &rsaquo; %s ILS-DI &rsaquo; GetAvailability %s "
 "ILS-DI &rsaquo; GetRecords %s ILS-DI &rsaquo; GetAuthorityRecords %s ILS-DI "
 "&rsaquo; LookupPatron %s ILS-DI &rsaquo; AuthenticatePatron %s ILS-DI "
 "&rsaquo; GetPatronInfo %s ILS-DI &rsaquo; GetPatronStatus %s ILS-DI &rsaquo; "
 "GetServices %s ILS-DI &rsaquo; RenewLoan %s ILS-DI &rsaquo; HoldTitle %s ILS-"
-"DI &rsaquo; HoldItem %s ILS-DI &rsaquo; CancelHold %s ILS-DI %s %s %s%s "
+"DI &rsaquo; HoldItem %s ILS-DI &rsaquo; CancelHold %s ILS-DI %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1413,13 +1414,13 @@ msgstr ""
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %s Log in to your account %s Catalog "
 "login disabled %s"
 msgstr ""
-"%s %s %s%s%sKoha %s katalog &rsaquo; %s Logg inn med din konto %s Innlogging "
-"er ikke aktivert %s %s %s%s "
+"%s%s%sKoha %s katalog &rsaquo; %s Logg inn på din konto %s Innlogging i "
+"katalogen er ikke aktivisert %s"
 
 #. For the first occurrence,
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -1437,15 +1438,14 @@ msgstr ""
 #. %13$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:3
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %s Results of search %sfor '%s'%s"
 "%s&nbsp;with limit(s):&nbsp;'%s'%s %s You did not specify any search "
 "criteria. %s"
 msgstr ""
-"%s %s %s%s%sKoha %s katalog &rsaquo; %s Resultat av søk %setter '%s'%s"
-"%s&nbsp;med avgrensningene:&nbsp;'%s'%s %s Du oppgav ikke noen "
-"søkekriterier. %s %s %s%s "
+"%s%s%sKoha %s katalog &rsaquo; %s Resultat av søk %setter '%s'%s%s&nbsp;med "
+"avgrensing(er):&nbsp;'%s'%s %s Du oppgav ingen søkekriterier. %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1455,11 +1455,13 @@ msgstr ""
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:30
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %sAuthority search result%sNo results "
 "found%s"
-msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; Autoritetssøk %s %s%s "
+msgstr ""
+"%s%s%sKoha %s katalog &rsaquo; %sResultat av søk etter autoriteter%sIngen "
+"treff%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1470,11 +1472,9 @@ msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; Autoritetssøk %s %s%s "
 #. %7$s:  ELSE 
 #. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; %sContents of %s%sYour lists%s"
-msgstr ""
-"%s %s %s %s%s%s%sKoha %s katalog &rsaquo; %sInnhold i %s%sDine lister %s%s %s"
-"%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; %sInnhold i %s%sDine lister%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1485,13 +1485,13 @@ msgstr ""
 #. %7$s:  IF ( op_else ) 
 #. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %sEnter a new purchase suggestion%s "
 "%sPurchase Suggestions%s"
 msgstr ""
-"%s %s %s%s%s%sKoha %s katalog &rsaquo; %sLegg inn et nytt innkjøpsforslag%s "
-"%sInnkjøpsforslag%s %s %s%s "
+"%s%s%sKoha %s katalog &rsaquo; %sLegg inn et nytt innkjøpsforslag%s "
+"%sInnkjøpsforslag%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1501,13 +1501,13 @@ msgstr ""
 #. %6$s:  ELSIF ( typeissuecancel ) 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %sSubscribe to a subscription alert %s "
 "Unsubscribe from a subscription alert %s"
 msgstr ""
-"%s %s%s%s%sKoha %s katalog &rsaquo; %sMeld deg på abonnementsvarsel %s Melde "
-"deg av abonnementsvarsel %s %s %s%s "
+"%s%s%sKoha %s katalog &rsaquo; %sMeld deg på et abonnementsvarsel %s Meld "
+"deg av et  abonnementsvarsel %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1517,31 +1517,31 @@ msgstr ""
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %sUpdate your personal details"
 "%sRegister a new account%s"
 msgstr ""
-"%s %s %s %s %s%s%sKoha %s katalog &rsaquo; %sOppdater personopplysningene "
-"dine%sRegistrer en ny konto%s %s %s%s "
+"%s%s%sKoha %s katalog &rsaquo; %sOppdater de personlige detaljene dine%"
+"sRegistrer en ny konto%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Add to your list"
-msgstr "%s %s%s%sKoha %s katalog &rsaquo; Legg til i lista di %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Legg til i lista di"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Advanced search"
-msgstr "%s %s %s%s%sKoha %s katalog &rsaquo; Avansert søk %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Avansert søk"
 
 #. For the first occurrence,
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -1554,18 +1554,18 @@ msgstr "%s %s %s%s%sKoha %s katalog &rsaquo; Avansert søk %s %s%s "
 #: opac-tmpl/bootstrap/en/modules/errors/404.tt:2
 #: opac-tmpl/bootstrap/en/modules/errors/500.tt:2
 #: opac-tmpl/bootstrap/en/modules/errors/403.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; An error has occurred"
-msgstr "%s%s%s%sKoha %s katalog &rsaquo; En feil har oppstått %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; En feil har oppstått"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Authority search"
-msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; Autoritetssøk %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Autoritetssøk"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1576,30 +1576,28 @@ msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; Autoritetssøk %s %s%s "
 #. %7$s:  authtypetext 
 #. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; Authority search &rsaquo; %s%s (%s)%s"
-msgstr ""
-"%s %s %s%s%s%sKoha %s katalog &rsaquo; Autoritetssøk &rsaquo; %s%s (%s)%s %s "
-"%s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Autoritetssøk &rsaquo; %s%s (%s)%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-browser.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Browse our catalog"
-msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; Bla i katalogen %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Bla i katalogen"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Change your password"
-msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; Endre passord %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Endre passord"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1607,9 +1605,9 @@ msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; Endre passord %s %s%s "
 #. %4$s:  END 
 #. %5$s:  title |html 
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Comments on %s"
-msgstr "%s %s%s%sKoha %s katalog &rsaquo; Kommentarer på %s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Kommentarer på %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1617,19 +1615,18 @@ msgstr "%s %s%s%sKoha %s katalog &rsaquo; Kommentarer på %s "
 #. %4$s:  END 
 #. %5$s:  course.course_name 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Course reserves for %s"
-msgstr ""
-"%s %s %s %s %s %s %s%s%sKoha %s katalog &rsaquo; Pensumsamlinger for%s %s %s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Pensumsamlinger for %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Courses"
-msgstr "%s %s %s %s%s%sKoha %s katalog &rsaquo; Emner %s %s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Emner"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1640,18 +1637,18 @@ msgstr "%s %s %s %s%s%sKoha %s katalog &rsaquo; Emner %s %s "
 #. %7$s:  subtitl.subfield |html 
 #. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:27
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s, %s%s"
-msgstr "%s %s %s%s%sKoha %s katalog &rsaquo; Bilder for: %s %s %s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Detaljer for: %s%s, %s%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Download cart"
-msgstr "%s%s%s%sKoha %s katalog &rsaquo; Last ned handlekurv %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Last ned kurv"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1659,9 +1656,9 @@ msgstr "%s%s%s%sKoha %s katalog &rsaquo; Last ned handlekurv %s %s%s "
 #. %4$s:  END 
 #. %5$s:  shelfname 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Download list %s"
-msgstr "%s%s%s%sKoha %s katalog &rsaquo; Last ned handlekurv %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Last ned liste %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1669,9 +1666,9 @@ msgstr "%s%s%s%sKoha %s katalog &rsaquo; Last ned handlekurv %s %s%s "
 #. %4$s:  END 
 #. %5$s:  authtypetext 
 #: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Entry %s"
-msgstr "%s %s %s%s%s%sKoha %s katalog &rsaquo; Innførsel %s %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Innførsel %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1679,20 +1676,18 @@ msgstr "%s %s %s%s%s%sKoha %s katalog &rsaquo; Innførsel %s %s %s%s "
 #. %4$s:  END 
 #. %5$s:  bibliotitle 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Full subscription history for %s"
-msgstr ""
-"%s %s %s %s%s%s%sKoha %s katalog &rsaquo; Full abonnementshistorikk for %s "
-"%s %s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Full abonnementshistorikk for %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; ISBD view"
-msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; ISBD-visning %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; ISBD-visning"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1700,18 +1695,18 @@ msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; ISBD-visning %s %s%s "
 #. %4$s:  END 
 #. %5$s:  biblio.title |html 
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Images for: %s"
-msgstr "%s %s %s%s%sKoha %s katalog &rsaquo; Bilder for: %s %s %s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Bilder for: %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Issues for a subscription"
-msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; Utgaver av et tidsskrift %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Utgaver av et tidsskrift"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1719,19 +1714,18 @@ msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; Utgaver av et tidsskrift %s %s%s "
 #. %4$s:  END 
 #. %5$s:  biblionumber 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; MARC details for record no. %s"
-msgstr ""
-"%s %s%s%s%sKoha %s katalog &rsaquo; MARC-detaljer for post nr. %s %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; MARC-detaljer for post nr. %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Most popular titles"
-msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; Mest populære titler %s %s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Mest populære titler"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1739,140 +1733,135 @@ msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; Mest populære titler %s %s "
 #. %4$s:  END 
 #. %5$s:  q | html 
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; OverDrive search for '%s'"
-msgstr "%s %s %s%s%sKoha %s katalog &rsaquo; OverDrive søk etter '%s' %s %s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; OverDrive søk etter '%s'"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Placing a hold"
-msgstr "%s %s %s %s%s%sKoha %s katalog &rsaquo; Reserverer %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Reserverer"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-email-sent.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Please confirm your registration"
-msgstr ""
-"%s %s %s%s%sKoha %s katalog &rsaquo; Vennligst bekreft registreringen %s %s"
-"%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Vennligst bekreft registreringen"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Recent comments"
-msgstr "%s %s %s%s%s%sKoha %s katalog &rsaquo; De nyeste kommentarene %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; De nyeste kommentarene"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Sending your cart"
-msgstr "%s%s%s%sKoha %s katalog &rsaquo; Sender kurven din %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Sender kurven din"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Sending your list"
-msgstr "%s%s%s%sKoha %s katalog &rsaquo; Sender lista di %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Sender lista di "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Share a list"
-msgstr "%s %s%s%s%sKoha %s katalog &rsaquo; del en liste %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Del en liste"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Subject cloud"
-msgstr "%s %s %s%s%sKoha %s katalog &rsaquo; Emnesky %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Emnesky"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Tags"
-msgstr "%s %s %s%s%s%sKoha %s katalog &rsaquo; Tagger %s %s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Tagger"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Updates submitted"
-msgstr ""
-"%s %s %s%s%sKoha %s katalog &rsaquo; Oppdateringer er sendt inn %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Oppdateringer er sendt inn"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your cart"
-msgstr "%s %s %s %s %s%s%sKoha %s katalog &rsaquo; Din kurv %s %s"
+msgstr "%s%s%sKoha %s katalog &rsaquo; Din kurv "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your checkout history"
-msgstr "%s %s %s %s%s%sKoha %s katalog &rsaquo; Din lånehistorikk %s %s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Din lånehistorikk"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your fines and charges"
-msgstr "%s %s %s%s%s%sKoha %s katalog &rsaquo; Dine gebyrer %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Dine gebyrer"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your library home"
-msgstr "%s %s %s %s%s%sKoha %s katalog &rsaquo; Ditt hjemmebibliotek %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Ditt hjemmebibliotek"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your privacy management"
-msgstr ""
-"%s %s%s%s%sKoha %s katalog &rsaquo; Dine innstillinger for personvern %s %s"
-"%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Dine innstillinger for personvern"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1889,9 +1878,9 @@ msgstr "%s%s%sKoha %s katalog &rsaquo; Ditt søk i IdRef for PPN %s"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your search history"
-msgstr "%s %s %s %s%s%sKoha %s katalog &rsaquo; Din søkehistorikk %s %s%s "
+msgstr "%s%s%sKoha %s katalog &rsaquo; Din søkehistorikk"
 
 #. %1$s:  IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) 
 #. %2$s:  OPACBaseURL 
@@ -3943,7 +3932,7 @@ msgstr "Hyllesignatur: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:803
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:98
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:58
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:54
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:620
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:639
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:62
@@ -4078,9 +4067,9 @@ msgid "Checked out (%s)"
 msgstr "Utlånt (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:218
-#, fuzzy, c-format
+#, c-format
 msgid "Checked out on"
-msgstr "Utlånt"
+msgstr "Utlånt "
 
 #. %1$s:  item.firstname 
 #. %2$s:  item.surname 
@@ -4194,7 +4183,7 @@ msgid "Click to expand this role"
 msgstr "Trykk for å utvide denne rollen"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "Click to forward the list to"
 msgstr "Klikk for å sende lista til"
 
@@ -4211,7 +4200,7 @@ msgid "Click to open in new window"
 msgstr "Trykk her for å åpne i nytt vindu"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "Click to rewind the list to"
 msgstr "Klikk for å gå tilbake til"
 
@@ -4478,7 +4467,7 @@ msgstr "Kreditt (%s)"
 msgid "Current location"
 msgstr "Nåværende plassering"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:50
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
 #, c-format
 msgid "Current password:"
 msgstr "Nåværende passord:"
@@ -5128,9 +5117,9 @@ msgid "Expecting a specific item selection."
 msgstr "Du må velge et bestemt eksemplar."
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:73
-#, fuzzy, c-format
+#, c-format
 msgid "Expiration date:"
-msgstr "Forfall:"
+msgstr "Utløpsdato:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:546
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:550
@@ -5437,7 +5426,7 @@ msgstr "Gå til"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "Go to detail"
 msgstr "Gå til detaljer"
 
@@ -6718,7 +6707,7 @@ msgstr "Ny kommentar til %s %s, %s%s"
 msgid "New list"
 msgstr "Ny liste"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:51
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:54
 #, c-format
 msgid "New password:"
 msgstr "Nytt passord:"
@@ -7289,7 +7278,7 @@ msgstr "Parametere"
 msgid "Password"
 msgstr "Passord"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:63
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:66
 #, c-format
 msgid "Password updated"
 msgstr "Passordet er oppdatert"
@@ -7766,12 +7755,12 @@ msgstr "Vurder meg"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:587
 msgid "Rating based on reviews of "
-msgstr ""
+msgstr "Vurdering basert på omtaler av"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:52
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:55
 #, c-format
 msgid "Re-type new password:"
 msgstr "Skriv det nye passordet en gang til:"
@@ -8080,7 +8069,7 @@ msgid "Return to your lists"
 msgstr "Tilbake til dine lister "
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:68
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:71
 msgid "Return to your record"
 msgstr "Tilbake til posten"
 
@@ -8109,16 +8098,14 @@ msgstr ""
 "forespørselen. Funksjonen kan returnere en låners ko"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
-#, fuzzy
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "Review date: "
-msgstr "Anmeldelser"
+msgstr "Anmeldelsesdato:"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
-#, fuzzy
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "Review result: "
-msgstr "Anmeldelser"
+msgstr "Sjekk resultatet"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:321
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:568
@@ -8341,7 +8328,7 @@ msgid "See also:"
 msgstr "Se også:"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "See biblio"
 msgstr "Se post"
 
@@ -8934,7 +8921,7 @@ msgstr "Send inn og lukk dette vinduet"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:128
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:54
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
 msgid "Submit changes"
 msgstr "Lagre endringer"
 
@@ -10135,9 +10122,9 @@ msgid "You are logging from a different IP address. Please log in again."
 msgstr "Du kobler deg opp fra en annen IP-adresse. Logg inn igjen."
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:249
-#, fuzzy, c-format
+#, c-format
 msgid "You are not authorized to see pending purchase suggestions."
-msgstr "Det er ingen utestående innkjøpsforslag."
+msgstr "Du er ikke autorisert til å se utestående innkjøpsforslag."
 
 #: opac-tmpl/bootstrap/en/modules/opac-blocked.tt:19
 #, c-format
@@ -10174,7 +10161,7 @@ msgstr "Du kan søke i katalogen ved å bruke søkefeltet øverst på denne side
 msgid "You can use OAI-PMH ListRecords instead of this service."
 msgstr "Du kan bruke OAI-PMH ListRecords i stedt for denne tjenesten."
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:58
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:61
 #, c-format
 msgid "You can't change your password."
 msgstr "Du kan ikke endre passordet."
@@ -10357,7 +10344,7 @@ msgstr ""
 "uker. "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid ""
 "Your CGI session cookie is not current. Please refresh the page and try "
 "again."
@@ -10560,13 +10547,13 @@ msgstr "Dine meldingsinnstillinger"
 msgid "Your options are: "
 msgstr "Valgmuligheter: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:63
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:66
 #, c-format
 msgid "Your password has been changed "
 msgstr "Passordet ditt er blitt endret "
 
 #. %1$s:  minpasslen 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:49
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:52
 #, c-format
 msgid "Your password must be at least %s characters long."
 msgstr "Passordet må være på minst %s tegn."
@@ -10797,7 +10784,7 @@ msgid "available"
 msgstr "tilgjengelig"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "average rating: "
 msgstr "gjennomsnittlig vurdering: "
 
@@ -10833,12 +10820,12 @@ msgstr "borrowernumber"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "by"
 msgstr " av"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:118
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:587
 #, c-format
 msgid "by "
@@ -10968,9 +10955,9 @@ msgid "here"
 msgstr "her"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "iDreamBooks.com rating"
-msgstr ""
+msgstr "iDreamBooks.com vurdering"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:113
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:195
@@ -11081,7 +11068,7 @@ msgstr "i hovedinnførsel"
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:62
 #, c-format
 msgid "in the complete record"
-msgstr ""
+msgstr "i den komplette posten"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:61
@@ -11232,10 +11219,9 @@ msgid "purchase suggestion"
 msgstr "innkjøpsforslag"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
-#, fuzzy
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "rating based on reviews at iDreamBooks.com"
-msgstr "Flere bokomtaler hos iDreamBooks.com"
+msgstr "vurdering basert på omtaler hos iDreamBooks.com"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:160
 #, c-format
@@ -11531,7 +11517,7 @@ msgid "view plain"
 msgstr "vis enkel"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "votes"
 msgstr "stemmer"
 
@@ -11576,7 +11562,7 @@ msgid "will be sent shortly to %s."
 msgstr "vil bli sendt om kort tid til %s."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "with biblionumber"
 msgstr "med biblionumber"
 
@@ -11632,7 +11618,7 @@ msgid "your purchase suggestions"
 msgstr "dine innkjøpsforslag"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "your rating: "
 msgstr "din vurdering: "
 
