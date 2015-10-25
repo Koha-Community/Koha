@@ -20,7 +20,7 @@
                 { "aTargets": [ -1, -2, -3, -4, -5 ], "bSortable": false, "bSearchable": false },
                 { "aTargets": [ 0, 1 ], "sType": "natural" },
             ],
-            "bSort": false,
+            "bSort": true,
             "sPaginationType": "four_button"
         }));
 
@@ -116,13 +116,13 @@
         [% CASE 'error_on_update' %]
             An error occurred when updating this framework. Perhaps it already exists.
         [% CASE 'error_on_insert' %]
-            An error occurred when inserting this framework. The framework might already exist.
+            An error occurred when adding this framework. The framework might already exist.
         [% CASE 'error_on_delete' %]
             An error occurred when deleting this framework. Check the logs.
         [% CASE 'success_on_update' %]
             Framework updated successfully.
         [% CASE 'success_on_insert' %]
-            Framework inserted successfully.
+            Framework added successfully.
         [% CASE 'success_on_delete' %]
             Framework deleted successfully.
         [% CASE 'already_exists' %]
