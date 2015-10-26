@@ -1889,10 +1889,9 @@ sub searchResults {
     my ($itemtag, undef) = &GetMarcFromKohaField( "items.itemnumber", "" );
 
     ## find column names of items related to MARC
-    my $sth2 = $dbh->prepare("SHOW COLUMNS FROM items");
-    $sth2->execute;
     my %subfieldstosearch;
-    while ( ( my $column ) = $sth2->fetchrow ) {
+    my @columns = Koha::Database->new()->schema()->resultset('Item')->result_source->columns;
+    for my $column ( @columns ) {
         my ( $tagfield, $tagsubfield ) =
           &GetMarcFromKohaField( "items." . $column, "" );
         if ( defined $tagsubfield ) {
