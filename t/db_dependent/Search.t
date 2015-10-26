@@ -685,8 +685,11 @@ if ( $indexing_mode eq 'dom' ) {
     ( undef, $results_hashref, $facets_loop ) =
         getRecords('ti:punctuation', 'punctuation', [], [ 'biblioserver' ], '19', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
     is($results_hashref->{biblioserver}->{hits}, 1, "search for ti:punctuation returned expected number of records");
-    @newresults = searchResults('intranet', $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 20, 0, 0,
-        $results_hashref->{'biblioserver'}->{"RECORDS"});
+    warning_like { @newresults = searchResults('intranet', $query_desc,
+                    $results_hashref->{'biblioserver'}->{'hits'}, 20, 0, 0,
+                    $results_hashref->{'biblioserver'}->{"RECORDS"}) }
+                qr/^ERROR DECODING RECORD - Tag "50%" is not a valid tag/,
+                "Warning is raised correctly for invalid tags in MARC::Record";
     is(scalar(@newresults), 0, 'a record that cannot be parsed by MARC::Record is simply skipped (bug 10684)');
 
     # Testing exploding indexes
@@ -983,12 +986,12 @@ sub run_unimarc_search_tests {
 }
 
 subtest 'MARC21 + GRS-1' => sub {
-    plan tests => 109;
+    plan tests => 110;
     run_marc21_search_tests('grs1');
 };
 
 subtest 'MARC21 + DOM' => sub {
-    plan tests => 109;
+    plan tests => 110;
     run_marc21_search_tests('dom');
 };
 
