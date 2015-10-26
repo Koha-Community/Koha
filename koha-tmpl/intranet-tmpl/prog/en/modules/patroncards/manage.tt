@@ -147,9 +147,9 @@
                                 [% FOREACH text_field IN table_loo.text_fields %]
                                 [% IF ( text_field.select_field ) %]
                                     <td>
-                                      <a class="btn btn-mini" href="/cgi-bin/koha/patroncards/edit-[% card_element %].pl?op=edit&element_id=[% text_field.field_value %]"><icon class="icon-edit"></icon> Edit</a>
-                                      [% IF ( print ) %]<a class="btn btn-mini" href="#" onclick="GB_showCenter('Export single batch','/cgi-bin/koha/patroncards/print.pl?batch_id=[% text_field.field_value |url %]')"><icon class="icon-share"></icon> Export</a>[% END %]
-                                      <a class="btn btn-mini" onclick="return confirm(MSG_CONFIRM_DELETE);" href="/cgi-bin/koha/patroncards/manage.pl?op=delete&card_element=[% card_element %]&element_id=[% text_field.field_value %]"><icon class="icon-trash"></icon> Delete</a>
+                                      <a class="btn btn-mini" href="/cgi-bin/koha/patroncards/edit-[% card_element %].pl?op=edit&element_id=[% text_field.field_value %]"><icon class="fa fa-edit"></icon> Edit</a>
+                                      [% IF ( print ) %]<a class="btn btn-mini" href="#" onclick="GB_showCenter('Export single batch','/cgi-bin/koha/patroncards/print.pl?batch_id=[% text_field.field_value |url %]')"><icon class="fa fa-share-square-o"></icon> Export</a>[% END %]
+                                      <a class="btn btn-mini" onclick="return confirm(MSG_CONFIRM_DELETE);" href="/cgi-bin/koha/patroncards/manage.pl?op=delete&card_element=[% card_element %]&element_id=[% text_field.field_value %]"><icon class="fa fa-trash"></icon> Delete</a>
                                     </td>
                                     [% IF ( print ) %]<td align="center"><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>[% END %]
                                 [% ELSIF ( text_field.field_value ) %]

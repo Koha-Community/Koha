@@ -200,11 +200,11 @@
                                 </div>
                             </form>
                             <div id="batch-manage" class="action">
-                                <a class="btn btn-small" id="additems" href="#"><icon class="icon-plus"></icon> Add patron(s)</a>[% IF ( table_loop ) %]
-                                <a class="btn btn-small" id="removeitems" href="#"><icon class="icon-trash"></icon> Remove selected patrons</a>
-                                <a class="btn btn-small" id="deduplicate" href="#"><icon class="icon-minus"></icon> Remove duplicates</a>
-                                <a class="btn btn-small" id="exportitems" href="#"><icon class="icon-share"></icon> Export selected card(s)</a>
-                                <a class="btn btn-small" id="exportbatch" href="#"><icon class="icon-share"></icon> Export card batch</a>[% END %]
+                                <a class="btn btn-small" id="additems" href="#"><icon class="fa fa-plus"></icon> Add patron(s)</a>[% IF ( table_loop ) %]
+                                <a class="btn btn-small" id="removeitems" href="#"><icon class="fa fa-trash"></icon> Remove selected patrons</a>
+                                <a class="btn btn-small" id="deduplicate" href="#"><icon class="fa fa-minus"></icon> Remove duplicates</a>
+                                <a class="btn btn-small" id="exportitems" href="#"><icon class="fa fa-share-square-o"></icon> Export selected card(s)</a>
+                                <a class="btn btn-small" id="exportbatch" href="#"><icon class="fa fa-share-square-o"></icon> Export card batch</a>[% END %]
                             </div>
                             [% IF ( table_loop ) %]
                             <form name="items" class="checkboxed">
@@ -236,8 +236,8 @@
                                                 [% FOREACH text_field IN table_loo.text_fields %]
                                                     [% IF ( text_field.select_field ) %]
                                                         <td>
-                                                            <a class="btn btn-mini" onclick="return confirm(MSG_CONFIRM_DELETE);" href="/cgi-bin/koha/patroncards/edit-batch.pl?op=remove&amp;batch_id=[% batch_id %]&amp;label_id=[% text_field.field_value %]"><icon class="icon-trash"></icon> Delete</a>
-                                                            <a class="btn btn-mini" href="#" onclick="GB_showCenter('Export single card','/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id %]&label_id=[% text_field.field_value %]')"><icon class="icon-share"></icon> Export</a>
+                                                            <a class="btn btn-mini" onclick="return confirm(MSG_CONFIRM_DELETE);" href="/cgi-bin/koha/patroncards/edit-batch.pl?op=remove&amp;batch_id=[% batch_id %]&amp;label_id=[% text_field.field_value %]"><icon class="fa fa-trash"></icon> Delete</a>
+                                                            <a class="btn btn-mini" href="#" onclick="GB_showCenter('Export single card','/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id %]&label_id=[% text_field.field_value %]')"><icon class="fa fa-share-square-o"></icon> Export</a>
                                                         </td>
                                                         <td><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>
                                                     [% ELSE %]
