@@ -753,7 +753,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
 
         // Automatically detect resizes and change the height of the editor and position of modals.
         var resizeTimer = null;
-        $( window ).resize( function() {
+        function onResize() {
             if ( resizeTimer == null ) resizeTimer = setTimeout( function() {
                 resizeTimer = null;
 
@@ -770,8 +770,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                     return -($(this).width() / 2);
                 }
             } );
-
-        } ).resize();
+        }
 
         $( '#macro-ui' ).on( 'shown', function() {
             if ( macroEditor ) return;
@@ -1087,6 +1086,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
 
             Resources.GetAll().done( function() {
                 $("#loading").hide();
+                $( window ).resize( onResize ).resize();
                 editor.focus();
             } );
         }

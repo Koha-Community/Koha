@@ -51,7 +51,7 @@ sub add_bib {
 
     my $result = {};
     my $inxml = $query->param('POSTDATA');
-    print $query->header(-type => 'text/xml');
+    print $query->header(-type => 'text/xml', -charset => 'utf-8');
 
     my $marcflavour = C4::Context->preference('marcflavour') || 'MARC21';
     my $record = eval {MARC::Record::new_from_xml( $inxml, "utf8", $marcflavour)};

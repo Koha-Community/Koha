@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 #
 
-use Modern::Perl '2009';
+use Modern::Perl;
 
 use CGI;
 use MARC::Record;
