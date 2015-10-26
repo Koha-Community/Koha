@@ -30,5 +30,10 @@
     var NO = _("No");
     var YES = _("Yes");
     var INHOUSE_USE = _("On-site checkout");
+    var CANCEL = _("Cancel");
+    var RESUME = _("Resume");
+    var SUSPEND = _("Suspend");
+    var SUSPEND_HOLD_ON = _("Suspend hold on");
+    var CLEAR_DATE_TO_SUSPEND_INDEFINITELY = _("Clear date to suspend indefinitely");
 //]]>
 </script>

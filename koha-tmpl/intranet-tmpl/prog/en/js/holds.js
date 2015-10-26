@@ -130,10 +130,10 @@ $(document).ready(function() {
                                 return "";
                             } else if ( oObj.suspend == 1 ) {
                                 return "<a class='hold-resume btn btn-link' id='resume" + oObj.reserve_id + "' style='display: inline; white-space: nowrap;'>"
-                                     + "<i class='icon-play'></i> " + _("Resume") + "</a>";
+                                     + "<i class='icon-play'></i> " + RESUME + "</a>";
                             } else {
                                 return "<a class='hold-suspend btn btn-link' id='suspend" + oObj.reserve_id + "' style='display: inline; white-space: nowrap;'>"
-                                     + "<i class='icon-pause'></i> " + _("Suspend") + "</a>";
+                                     + "<i class='icon-pause'></i> " + SUSPEND + "</a>";
                             }
                         }
                     }
@@ -181,7 +181,7 @@ $(document).ready(function() {
             <form id='suspend-modal-form' class='form-inline'>\
                 <div class='modal-header'>\
                     <button type='button' class='closebtn' data-dismiss='modal' aria-hidden='true'>×</button>\
-                    <h3 id='suspend-modal-label'>" + _("Suspend hold on") + " <i><span id='suspend-modal-title'></span></i></h3>\
+                    <h3 id='suspend-modal-label'>" + SUSPEND_HOLD_ON + " <i><span id='suspend-modal-title'></span></i></h3>\
                 </div>\
 \
                 <div class='modal-body'>\
@@ -190,13 +190,13 @@ $(document).ready(function() {
                     <label for='suspend-modal-until'>Suspend until:</label>\
                     <input name='suspend_until' id='suspend-modal-until' class='suspend-until' size='10' />\
 \
-                    <p/><a class='btn btn-link' id='suspend-modal-clear-date' >" + _("Clear date to suspend indefinitely") + "</a></p>\
+                    <p/><a class='btn btn-link' id='suspend-modal-clear-date' >" + CLEAR_DATE_TO_SUSPEND_INDEFINITELY + "</a></p>\
 \
                 </div>\
 \
                 <div class='modal-footer'>\
-                    <button id='suspend-modal-submit' class='btn btn-primary' type='submit' name='submit'>" + _("Suspend") + "</button>\
-                    <a href='#' data-dismiss='modal' aria-hidden='true' class='cancel'>" + _("Cancel") + "</a>\
+                    <button id='suspend-modal-submit' class='btn btn-primary' type='submit' name='submit'>" + SUSPEND + "</button>\
+                    <a href='#' data-dismiss='modal' aria-hidden='true' class='cancel'>" + CANCEL + "</a>\
                 </div>\
             </form>\
         </div>\
