@@ -2299,19 +2299,17 @@ Exported function (core API) for deleting an item record in Koha if there no cur
 
 DelItemCheck wraps ItemSafeToDelete around DelItem.
 
-It takes a database handle, biblionumber and itemnumber as arguments, and can optionally take a hashref with a 'do_not_commit' flag:
+It takes a database handle, biblionumber and itemnumber as arguments:
 
-    DelItemCheck(  $dbh, $biblionumber, $itemnumber, { do_not_commit => 1 } );
+    DelItemCheck(  $dbh, $biblionumber, $itemnumber );
 
-This is done so that command line scripts calling DelItemCheck have the option of doing a 'dry-run'.
 =cut
 
 sub DelItemCheck {
-    my ( $dbh, $biblionumber, $itemnumber, $options ) = @_;
-    my $commit = ( defined $options && $options->{do_not_commit} eq 1 ) ? 0 : 1;
+    my ( $dbh, $biblionumber, $itemnumber ) = @_;
     my $status = ItemSafeToDelete( $dbh, $biblionumber, $itemnumber );
 
-    if ( $status == 1 && $commit ) {
+    if ( $status == 1 ) {
         DelItem(
             {
                 biblionumber => $biblionumber,

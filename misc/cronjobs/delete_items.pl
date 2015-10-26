@@ -56,11 +56,10 @@ $GLOBAL->{sth}->{target_items} = $dbh->prepare( $query->{target_items} . $where_
 $GLOBAL->{sth}->{target_items}->execute();
 
 DELITEM: while ( my $item = $GLOBAL->{sth}->{target_items}->fetchrow_hashref() ) {
-    my $del_check_options = $OPTIONS->{flags}->{commit}
-                            ? undef
-                            : { do_not_commit => 1 };
-    my $status = C4::Items::DelItemCheck( $dbh, $item->{itemnumber}, $item->{biblionumber}, $del_check_options );
+
+    my $status = C4::Items::ItemSafeToDelete( $dbh, $item->{itemnumber}, $item->{biblionumber} );
     if( $status == 1 )  {
+        C4::Items::DelItemCheck( $dbh, $item->{itemnumber}, $item->{biblionumber} );
         verbose "Deleting '$item->{itemnumber}'";
     } else {
         verbose "Item '$item->{itemnumber}' not deletd: $status";
