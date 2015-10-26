@@ -77,11 +77,9 @@
                             Mail
                         [% END %]
                             &nbsp;|&nbsp;
-                            <a href="branchoverdues.pl?action=add&amp;borrowernumber=[% overduesloo.borrowernumber %]&amp;itemnumber=[% overduesloo.itemnumber %]&amp;method=phone&amp;location=[% overduesloo.location %]&amp;overduelevel=[% overduesloo.overdueLevel %]&amp;notifyId=[% overduesloo.notify_id %]
-                            ">Phone</a>
+                            <a href="branchoverdues.pl?action=add&amp;borrowernumber=[% overduesloo.borrowernumber %]&amp;itemnumber=[% overduesloo.itemnumber %]&amp;method=phone&amp;location=[% overduesloo.location %]&amp;overduelevel=[% overduesloo.overdueLevel %]&amp;notifyId=[% overduesloo.notify_id %]">Phone</a>
                             &nbsp;|&nbsp;
-                            <a href="branchoverdues.pl?action=add&amp;borrowernumber=[% overduesloo.borrowernumber %]&amp;itemnumber=[% overduesloo.itemnumber %]&amp;method=letter&amp;location=[% overduesloo.location %]&amp;overduelevel=[% overduesloo.overdueLevel %]
-                            &amp;notifyId=[% overduesloo.notify_id %]">Notice</a>
+                            <a href="branchoverdues.pl?action=add&amp;borrowernumber=[% overduesloo.borrowernumber %]&amp;itemnumber=[% overduesloo.itemnumber %]&amp;method=letter&amp;location=[% overduesloo.location %]&amp;overduelevel=[% overduesloo.overdueLevel %]&amp;notifyId=[% overduesloo.notify_id %]">Notice</a>
                     [% END %]
 
                     [% IF ( overduesloo.overdue2 ) %]
@@ -89,8 +87,7 @@
                     [% END %]
 
                     [% IF ( overduesloo.overdue3 ) %]
-                    <a href="branchoverdues.pl?action=add&amp;borrowernumber=[% overduesloo.borrowernumber %]&amp;itemnumber=[% overduesloo.itemnumber %]&amp;method=lost&amp;location=[% overduesloo.location %]&amp;overduelevel=[% overduesloo.overdueLevel %]
-                    &amp;notifyId=[% overduesloo.notify_id %]">Considered lost</a>
+                    <a href="branchoverdues.pl?action=add&amp;borrowernumber=[% overduesloo.borrowernumber %]&amp;itemnumber=[% overduesloo.itemnumber %]&amp;method=lost&amp;location=[% overduesloo.location %]&amp;overduelevel=[% overduesloo.overdueLevel %]&amp;notifyId=[% overduesloo.notify_id %]">Considered lost</a>
                     [% END %]
 
                     </td>
