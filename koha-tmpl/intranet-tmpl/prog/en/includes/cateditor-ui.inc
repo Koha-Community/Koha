@@ -652,6 +652,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         $( '#macro-list li[data-name="' + name + '"]' ).addClass( 'active' );
         var macro = Preferences.user.macros[name];
         macroEditor.setValue( macro.contents );
+        macroEditor.setOption( 'readOnly', false );
         $( '#macro-format' ).val( macro.format || 'its' );
         if ( macro.history ) macroEditor.setHistory( macro.history );
     }
@@ -787,6 +788,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                     },
                     mode: 'null',
                     lineNumbers: true,
+                    readOnly: true,
                 }
             );
             var saveTimeout;
