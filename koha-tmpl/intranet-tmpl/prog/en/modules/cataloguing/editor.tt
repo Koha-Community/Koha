@@ -3,7 +3,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" href="[% themelang %]/css/cateditor.css" />
 <link rel="stylesheet" href="[% themelang %]/css/datatables.css" />
-<link rel="stylesheet" href="/intranet-tmpl/lib/codemirror/codemirror.css" />
+<link rel="stylesheet" href="[% interface %]/lib/codemirror/codemirror.css" />
 <link rel="stylesheet" href="[% themelang %]/css/humanmsg.css" />
 <script src="[% interface %]/lib/jquery/plugins/humanmsg.js" type="text/javascript"></script>
 [% IF ( bidi ) %]
@@ -116,8 +116,32 @@
         </div>
         <ul id="advanced-search-fields">
             <li>
+                <label for="advanced-search-by-isbn">ISBN:</label>
+                <input class="search-box" data-qualifier="isbn" id="advanced-search-by-isbn" />
+            </li>
+            <li>
+                <label for="advanced-search-by-issn">ISSN:</label>
+                <input class="search-box" data-qualifier="issn" id="advanced-search-by-issn" />
+            </li>
+            <li>
+                <label for="advanced-search-by-title">Title:</label>
+                <input class="search-box" data-qualifier="title" id="advanced-search-by-title" />
+            </li>
+            <li>
                 <label for="advanced-search-by-author">Author:</label>
                 <input class="search-box" data-qualifier="author" id="advanced-search-by-author" />
+            </li>
+            <li>
+                <label for="advanced-search-by-subject">Subject:</label>
+                <input class="search-box" data-qualifier="subject" id="advanced-search-by-subject" />
+            </li>
+            <li>
+                <label for="advanced-search-by-lc-number">LC call number:</label>
+                <input class="search-box" data-qualifier="cn_lc" id="advanced-search-by-lc-number" />
+            </li>
+            <li>
+                <label for="advanced-search-by-lccn">LCCN:</label>
+                <input class="search-box" data-qualifier="lccn" id="advanced-search-by-lccn" />
             </li>
             <li>
                 <label for="advanced-search-by-control-number">Control number:</label>
@@ -128,40 +152,16 @@
                 <input class="search-box" data-qualifier="cn_dewey" id="advanced-search-by-dewey" />
             </li>
             <li>
-                <label for="advanced-search-by-isbn">ISBN:</label>
-                <input class="search-box" data-qualifier="isbn" id="advanced-search-by-isbn" />
-            </li>
-            <li>
-                <label for="advanced-search-by-issn">ISSN:</label>
-                <input class="search-box" data-qualifier="issn" id="advanced-search-by-issn" />
-            </li>
-            <li>
-                <label for="advanced-search-by-lccn">LCCN:</label>
-                <input class="search-box" data-qualifier="lccn" id="advanced-search-by-lccn" />
-            </li>
-            <li>
-                <label for="advanced-search-by-lc-number">LC call number:</label>
-                <input class="search-box" data-qualifier="cn_lc" id="advanced-search-by-lc-number" />
+                <label for="advanced-search-by-standard-number">Standard number:</label>
+                <input class="search-box" data-qualifier="standard_identifier" id="advanced-search-by-standard-number" />
             </li>
             <li>
                 <label for="advanced-search-by-publisher-number">Publisher number:</label>
                 <input class="search-box" data-qualifier="music_identifier" id="advanced-search-by-publisher-number" />
             </li>
             <li>
-                <label for="advanced-search-by-standard-number">Standard number:</label>
-                <input class="search-box" data-qualifier="standard_identifier" id="advanced-search-by-standard-number" />
-            </li>
-            <li>
-                <label for="advanced-search-by-subject">Subject:</label>
-                <input class="search-box" data-qualifier="subject" id="advanced-search-by-subject" />
-            </li>
-            <li>
                 <label for="advanced-search-by-publication-date">Publication date:</label>
                 <input class="search-box" data-qualifier="date" id="advanced-search-by-publication-date" />
-            </li>
-            <li>
-                <label for="advanced-search-by-title">Title:</label>
-                <input class="search-box" data-qualifier="title" id="advanced-search-by-title" />
             </li>
         </ul>
     </div>

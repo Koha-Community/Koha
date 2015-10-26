@@ -1,10 +1,10 @@
-<script src="/intranet-tmpl/lib/codemirror/codemirror-compressed.js"></script>
-<script src="/intranet-tmpl/lib/filesaver.js"></script>
-<script src="/intranet-tmpl/lib/koha/cateditor/marc-mode.js"></script>
-<script src="/intranet-tmpl/lib/require.js"></script>
+<script src="[% interface %]/lib/codemirror/codemirror-compressed.js"></script>
+<script src="[% interface %]/lib/filesaver.js"></script>
+<script src="[% interface %]/lib/koha/cateditor/marc-mode.js"></script>
+<script src="[% interface %]/lib/require.js"></script>
 <script>
 require.config( {
-    baseUrl: '/intranet-tmpl/lib/koha/cateditor/',
+    baseUrl: '[% interface %]/lib/koha/cateditor/',
     config: {
         resources: {
             marcflavour: '[% marcflavour %]',
@@ -40,16 +40,16 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
 
     // The columns that should show up in a search, in order, and keyed by the corresponding <metadata> tag in the XSL and Pazpar2 config
     var z3950Labels = [
-		[ "local_number", _("Local number") ],
-		[ "title", _("Title") ],
-		[ "series", _("Series title") ],
-		[ "author", _("Author") ],
-		[ "lccn", _("LCCN") ],
-		[ "isbn", _("ISBN") ],
-		[ "issn", _("ISSN") ],
-		[ "medium", _("Medium") ],
-		[ "edition", _("Edition") ],
-		[ "notes", _("Notes") ],
+        [ "local_number", _("Local number") ],
+        [ "title", _("Title") ],
+        [ "series", _("Series title") ],
+        [ "author", _("Author") ],
+        [ "lccn", _("LCCN") ],
+        [ "isbn", _("ISBN") ],
+        [ "issn", _("ISSN") ],
+        [ "medium", _("Medium") ],
+        [ "edition", _("Edition") ],
+        [ "notes", _("Notes") ],
     ];
 
     var state = {
