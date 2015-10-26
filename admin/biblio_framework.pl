@@ -54,9 +54,10 @@ if ( $op eq 'add_form' ) {
 } elsif ( $op eq 'add_validate' ) {
     my $frameworkcode = $input->param('frameworkcode');
     my $frameworktext = $input->param('frameworktext');
+    my $is_a_modif    = $input->param('is_a_modif');
 
-    my $framework = Koha::BiblioFrameworks->find($frameworkcode);
-    if ($framework) {
+    if ($is_a_modif) {
+        my $framework = Koha::BiblioFrameworks->find($frameworkcode);
         $framework->frameworktext($frameworktext);
         eval { $framework->store; };
         if ($@) {
@@ -65,7 +66,7 @@ if ( $op eq 'add_form' ) {
             push @messages, { type => 'message', code => 'success_on_update' };
         }
     } else {
-        $framework = Koha::BiblioFramework->new(
+        my $framework = Koha::BiblioFramework->new(
             {   frameworkcode => $frameworkcode,
                 frameworktext => $frameworktext,
             }
