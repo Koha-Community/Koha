@@ -446,7 +446,7 @@ sub MapItemsToHoldRequests {
                 }
             }
             else {
-                warn "No transport costs for $pickup_branch";
+                next;
             }
         }
 
@@ -618,7 +618,7 @@ sub least_cost_branch {
 
     # Nothing really spectacular: supply to branch, a list of potential from branches
     # and find the minimum from - to value from the transport_cost_matrix
-    return $from->[0] if @$from == 1;
+    return $from->[0] if ( @$from == 1 && $transport_cost_matrix->{$to}{$from->[0]}->{disable_transfer} != 1 );
 
     # If the pickup library is in the list of libraries to pull from,
     # return that library right away, it is obviously the least costly
