@@ -1,141 +1,88 @@
 INSERT IGNORE INTO biblio_framework VALUES
 		('FA', 'Plantilla de carga rápida');
 
-INSERT IGNORE INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`, `frameworkcode`) VALUES
-		('000', 'CABECERA', 'CABECERA', 0, 1, '', 'FA'),
-		('008', 'DATOS DE LONGITUD FIJA--INFORMACIÓN GENERAL', 'DATOS DE LONGITUD FIJA--INFORMACIÓN GENERAL', 0, 1, '', 'FA'),
-		('010', 'NÚMERO DE CONTROL DE LA BIBLIOTECA DEL CONGRESO', 'NÚMERO DE CONTROL DE LA BIBLIOTECA DEL CONGRESO', 0, 0, '', 'FA'),
-		('020', 'NÚMERO INTERNACIONAL ESTÁNDAR DEL LIBRO', 'NÚMERO INTERNACIONAL ESTÁNDAR DEL LIBRO', 1, 0, NULL, 'FA'),
-		('022', 'NÚMERO INTERNACIONAL NORMALIZADO PARA PUBLICACIONES SERIADAS', 'NÚMERO INTERNACIONAL NORMALIZADO PARA PUBLICACIONES SERIADAS', 1, 0, NULL, 'FA'),
-		('050', 'SIGNATURA TOPOGRÁFICA DE LA BIBLIOTECA DEL CONGRESO', 'SIGNATURA TOPOGRÁFICA DE LA BIBLIOTECA DEL CONGRESO', 1, 0, NULL, 'FA'),
-		('090', 'LOCALMENTE ASIGNADO TIPO-LC NÚMERO DE CLASIFICACIÓN (OCLC); NÚMERO DE CLASIFICACIÓN LOCAL (RLIN)', 'LOCALMENTE ASIGNADO TIPO-LC NÚMERO DE CLASIFICACIÓN (OCLC); NÚMERO DE CLASIFICACIÓN LOCAL (RLIN)', 1, 0, '', 'FA'),
-		('099', 'TEXTO-LIBRO SIGNATURA TOPOGRÁFICA LOCAL (OCLC)', 'TEXTO-LIBRO SIGNATURA TOPOGRÁFICA LOCAL (OCLC)', 1, 0, '', 'FA'),
-		('100', 'ENTRADA PRINCIPAL--NOMBRE DE PERSONA', 'ENTRADA PRINCIPAL--NOMBRE DE PERSONA', 0, 0, NULL, 'FA'),
-		('245', 'MENCIÓN DE TÍTULO', 'MENCIÓN DE TÍTULO', 0, 1, '', 'FA'),
-		('250', 'MENCIÓN DE EDICIÓN', 'MENCIÓN DE EDICIÓN', 0, 0, NULL, 'FA'),
-		('260', 'PUBLICACIÓN, DISTRIBUCIÓN, ETC. (PIE DE IMPRENTA)', 'PUBLICACIÓN, DISTRIBUCIÓN, ETC. (PIE DE IMPRENTA)', 1, 0, NULL, 'FA'),
-		('300', 'DESCRIPCIÓN FÍSICA', 'DESCRIPCIÓN FÍSICA', 1, 0, NULL, 'FA'),
-		('500', 'NOTA GENERAL', 'NOTA GENERAL', 1, 0, NULL, 'FA'),
-		('942', 'ELEMENTOS DE PUNTO DE ACCESO ADICIONAL (KOHA)', 'ELEMENTOS DE PUNTO DE ACCESO ADICIONAL (KOHA)', 0, 0, '', 'FA'),
-		('952', 'LOCALIZACIÓN E INFORMACIÓN DEL ÍTEM/UNIDAD FÍSICA (KOHA)', 'LOCALIZACIÓN E INFORMACIÓN DEL ÍTEM/UNIDAD FÍSICA (KOHA)', 1, 0, '', 'FA'),
-		('999', 'NÚMEROS DE CONTROL DE SISTEMA (KOHA)', 'NÚMEROS DE CONTROL DE SISTEMA (KOHA)', 1, 0, '', 'FA');
+INSERT IGNORE INTO marc_tag_structure (tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, frameworkcode)
+SELECT tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, 'FA'
+FROM marc_tag_structure
+WHERE frameworkcode = '' AND
+tagfield IN ('000', '008', '010', '020', '022', '050', '082', '090', '099', '100', '245', '250', '260', '300', '500', '942', '952', '999');
 
-INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
-		('000', '@', 'campo de control de longitud fija', 'campo de control de longitud fija', 0, 1, '', 0, '', '', 'marc21_leader.pl', NULL, 0, 'FA', '', NULL, NULL),
-		('008', '@', 'campo de control de longitud fija', 'campo de control de longitud fija', 0, 1, '', 0, '', '', 'marc21_field_008.pl', NULL, 0, 'FA', '', NULL, NULL),
-		('010', '8', 'Enlace entre campo y número de secuencia', 'Enlace entre campo y número de secuencia', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('010', 'a', 'Número de control de LC', 'Número de control de LC', 0, 0, 'biblioitems.lccn', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('010', 'b', 'Número de control de NUCMC', 'Número de control de NUCMC', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('010', 'z', 'Número de control de LC cancelado o no válido', 'Número de control de LC cancelado o no válido', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('020', '6', 'Enlace', 'Enlace', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('020', '8', 'Enlace entre campo y número de secuencia', 'Enlace entre campo y número de secuencia', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('020', 'a', 'Número Internacional Estándar del Libro', 'Número Internacional Estándar del Libro', 0, 0, 'biblioitems.isbn', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('020', 'c', 'Condiciones de disponibilidad', 'Condiciones de disponibilidad', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('020', 'z', 'ISBN cancelado o inválido', 'ISBN cancelado o inválido', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('050', 'a', 'Número de clasificación', 'Número de clasificación', 1, 0, '', 0, '', '', '', 0, 0, 'FA', '', '', NULL),
-		('050', 'b', 'Número de documento/Ítem', 'Número de documento/Ítem', 0, 0, '', 0, '', '', '', 0, 0, 'FA', '', '', NULL),
-		('082', '2', 'Número de edición', 'Número de edición', 0, 0, '', 0, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('082', '6', 'Enlace', 'Enlace', 0, 0, '', 0, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('082', '8', 'Enlace entre campo y número de secuencia', 'Enlace entre campo y número de secuencia', 1, 0, '', 0, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('082', 'a', 'Número de clasificación', 'Número de clasificación', 1, 0, '', 0, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('082', 'b', 'Número de documento/Ítem', 'Número de documento/Ítem', 0, 0, '', 0, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('090', 'a', 'Número de clasificación (OCLC) (R) ; Numero de clasificación, CALL (RLIN) (NR)', 'Número de clasificación (OCLC) (R) ; Numero de clasificación, CALL (RLIN) (NR)', 1, 0, '', 0, '', '', '', 0, 5, 'FA', '', '', NULL),
-		('090', 'b', 'Número cutter local (OCLC) ; Número de libro/Signatura topográfica íntegra, CALL (RLIN)', 'Número cutter local (OCLC) ; Número de libro/Signatura topográfica íntegra, CALL (RLIN)', 0, 0, '', 0, '', '', '', 0, 5, 'FA', '', '', NULL),
-		('100', '4', 'Código de función/relación', 'Código de función/relación', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('100', '6', 'Enlace', 'Enlace', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('100', '8', 'Enlace entre campo y número de secuencia', 'Enlace entre campo y número de secuencia', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('100', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-        ('100', 'a', 'Personal name', 'Personal name', 0, 0, 'biblio.author', 0, '', 'PERSO_NAME', '', 0, 0, 'FA', NULL, '', ''),
-		('100', 'b', 'Numeración', 'Numeración', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('100', 'c', 'Títulos y otros términos asociados al nombre', 'Títulos y otros términos asociados al nombre', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('100', 'd', 'Fechas asociadas al nombre', 'Fechas asociadas al nombre', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('100', 'e', 'Término indicativo de función/relación', 'Término indicativo de función/relación', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('100', 'f', 'Fecha de publicación/de la obra', 'Fecha de publicación/de la obra', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('100', 'g', 'Información miscelánea', 'Información miscelánea', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('100', 'j', 'Calificador de atribución', 'Calificador de atribución', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('100', 'k', 'Subencabezamiento de forma', 'Subencabezamiento de forma', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('100', 'l', 'Lenguaje de la obra', 'Lenguaje de la obra', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('100', 'n', 'Número de parte o sección de la obra', 'Número de parte o sección de la obra', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('100', 'p', 'Nombre de parte o sección de la obra', 'Nombre de parte o sección de la obra', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('100', 'q', 'Forma completa/desarrollada del nombre', 'Forma completa/desarrollada del nombre', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('100', 't', 'Título de la obra', 'Título de la obra', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('100', 'u', 'Filiación', 'Filiación', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('245', '6', 'Enlace', 'Enlace', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('245', '8', 'Enlace entre campo y número de secuencia', 'Enlace entre campo y número de secuencia', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('245', 'a', 'Título', 'Título', 0, 1, 'biblio.title', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('245', 'b', 'Resto del título', 'Resto del título', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('245', 'c', 'Mención de responsabilidad, etc.', 'Mención de responsabilidad, etc.', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('245', 'd', 'Designación de sección/parte/serie (SE) [OBSOLETO]', 'Designación de sección/parte/serie (SE) [OBSOLETO]', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('245', 'e', 'Nombre de parte/sección/serie', 'Nombre de parte/sección/serie', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('245', 'f', 'Fechas extremas/inclusivas', 'Fechas extremas/inclusivas', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('245', 'g', 'Fechas predominantes', 'Fechas predominantes', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('245', 'h', 'Medio', 'Medio', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('245', 'k', 'Forma', 'Forma', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('245', 'n', 'Número de parte o sección de la obra', 'Número de parte o sección de la obra', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('245', 'p', 'Nombre de parte o sección de la obra', 'Nombre de parte o sección de la obra', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('245', 's', 'Versión', 'Versión', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('250', '6', 'Enlace', 'Enlace', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('250', '8', 'Enlace entre campo y número de secuencia', 'Enlace entre campo y número de secuencia', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('250', 'a', 'Mención de edición', 'Mención de edición', 0, 0, 'biblioitems.editionstatement', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('250', 'b', 'Resto de la mención de edición', 'Resto de la mención de edición', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('260', '6', 'Enlace', 'Enlace', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('260', '8', 'Enlace entre campo y número de secuencia', 'Enlace entre campo y número de secuencia', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('260', 'a', 'Lugar de publicación, distribución, etc.', 'Lugar de publicación, distribución, etc.', 1, 0, 'biblioitems.place', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('260', 'b', 'Nombre del editor, distribuidor, etc.', 'Nombre del editor, distribuidor, etc.', 1, 0, 'biblioitems.publishercode', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('260', 'c', 'Fecha de publicación, distribución, etc.', 'Fecha de publicación, distribución, etc.', 1, 0, 'biblio.copyrightdate', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('260', 'd', 'Lamina o número del editor para música (Pre-RCAA 2) [OBSOLETO, CAN/MARC], [LOCAL, USA]', 'Lamina o número del editor para música (Pre-RCAA 2) [OBSOLETO, CAN/MARC], [LOCAL, USA]', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('260', 'e', 'Lugar de fabricación/manufactura', 'Lugar de fabricación/manufactura', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('260', 'f', 'Fabricante', 'Fabricante', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('260', 'g', 'Fecha de fabricación/manufactura', 'Fecha de fabricación/manufactura', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('260', 'k', 'Identificación/número de fabricación/manufactura [OBSOLETO, CAN/MARC]', 'Identificación/número de fabricación/manufactura [OBSOLETO, CAN/MARC]', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('260', 'l', 'Matriz y/o número tomado [OBSOLETO, CAN/MARC]', 'Matriz y/o número tomado [OBSOLETO, CAN/MARC]', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('500', '3', 'Especificación de materiales', 'Especificación de materiales', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('500', '5', 'Institución que aplica el campo', 'Institución que aplica el campo', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('500', '6', 'Enlace', 'Enlace', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('500', '8', 'Enlace entre campo y número de secuencia', 'Enlace entre campo y número de secuencia', 1, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('500', 'a', 'Nota general', 'Nota general', 0, 0, 'biblio.notes', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('500', 'l', 'Signatura topográfica de la Biblioteca del Congreso (SE) [OBSOLETO]', 'Signatura topográfica de la Biblioteca del Congreso (SE) [OBSOLETO]', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('500', 'n', 'n (RLIN) [OBSOLETO]', 'n (RLIN) [OBSOLETO]', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('500', 'x', 'Número Internacional Normalizado para Publicaciones Seriadas (SE) [OBSOLETO]', 'Número Internacional Normalizado para Publicaciones Seriadas (SE) [OBSOLETO]', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('500', 'z', 'Fuente de nota de información (AM SE) [OBSOLETO]', 'Fuente de nota de información (AM SE) [OBSOLETO]', 0, 0, '', 0, '', '', '', 0, 0, 'FA', NULL, '', ''),
-		('942', '0', 'Préstamos Koha (prestado), todas las copias', 'Préstamos Koha (prestado), todas las copias', 0, 0, 'biblioitems.totalissues', 9, '', '', '', NULL, 5, 'FA', '', '', NULL),
-		('942', 'c', 'Tipo de ítem Koha', 'Tipo de ítem Koha', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 5, 'FA', '', '', NULL),
-		('942', 'n', 'Suprimir en OPAC', 'Suprimir en OPAC', 0, 0, NULL, 9, '', '', '', 0, 5, 'FA', '', '', NULL),
-		('942', 's', 'Indicador de registro de publicación seriada', 'Indicador de registro de publicación seriada', 0, 0, 'biblio.serial', 9, '', '', '', NULL, 5, 'FA', '', '', NULL),
-		('952', '0', 'Estado de retiro', 'Estado de retiro', 0, 0, 'items.withdrawn', 10, 'WITHDRAWN', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', '1', 'Estado de pérdida', 'Estado de pérdida', 0, 0, 'items.itemlost', 10, 'LOST', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', '2', 'Fuente del sistema de clasificación o colocación', 'Fuente del sistema de clasificación o colocación', 0, 0, 'items.cn_source', 10, 'cn_source', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', '3', 'Especificación de materiales (volumen encuadernado u otra parte)', 'Especificación de materiales (volumen encuadernado u otra parte)', 0, 0, 'items.materials', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', '4', 'Estado dañado', 'Estado dañado', 0, 0, 'items.damaged', 10, 'DAMAGED', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', '5', 'Restricciones de uso', 'Restricciones de uso', 0, 0, 'items.restricted', 10, 'RESTRICTED', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', '6', 'Koha clasificación normalizada para ordenar', 'Koha clasificación normalizada para ordenar', 0, 0, 'items.cn_sort', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', '7', 'No para préstamo', 'No para préstamo', 0, 0, 'items.notforloan', 10, 'NOT_LOAN', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', '8', 'Código de colección', 'Código de colección', 0, 0, 'items.ccode', 10, 'CCODE', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', '9', 'Koha itemnumber (autogenerado)', 'Koha itemnumber (autogenerado)', 0, 0, 'items.itemnumber', -1, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'a', 'Localización permanente', 'Localización permanente', 0, 0, 'items.homebranch', 10, 'branches', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'b', 'Ubicación/localización actual', 'Ubicación/localización actual', 0, 0, 'items.holdingbranch', 10, 'branches', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'c', 'Ubicación en estantería', 'Ubicación en estantería', 0, 0, 'items.location', 10, 'LOC', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'd', 'Fecha de adquisición', 'Fecha de adquisición', 0, 0, 'items.dateaccessioned', 10, '', '', 'dateaccessioned.pl', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'e', 'Fuente de adquisición', 'Fuente de adquisición', 0, 0, 'items.booksellerid', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'f', 'Información codificada de la localización en otra ubicación', 'Información codificada de la localización en otra ubicación', 0, 0, 'items.coded_location_qualifier', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'g', 'Coste, precio normal de compra', 'Coste, precio normal de compra', 0, 0, 'items.price', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'h', 'Enumeración/cronología de publicación seriada', 'Enumeración/cronología de publicación seriada', 0, 0, 'items.enumchron', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'i', 'Número de inventario', 'Número de inventario', 0, 0, 'items.stocknumber', 10, '', '', '', 0, 0, 'FA', '', NULL, NULL),
-		('952', 'j', 'Número de control en estantería', 'Número de control en estantería', 0, 0, 'items.stack', 10, 'STACK', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'l', 'Total de préstamos', 'Total de préstamos', 0, 0, 'items.issues', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'm', 'Renovaciones totales', 'Renovaciones totales', 0, 0, 'items.renewals', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'n', 'Fondos totales', 'Fondos totales', 0, 0, 'items.reserves', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'o', 'Signatura topográfica completa', 'Signatura topográfica completa', 0, 0, 'items.itemcallnumber', 10, '', '', NULL, NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'p', 'Código de barras', 'Código de barras', 0, 0, 'items.barcode', 10, '', '', 'barcode.pl', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'q', 'En préstamo', 'En préstamo', 0, 0, 'items.onloan', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'r', 'Fecha visto por última vez', 'Fecha visto por última vez', 0, 0, 'items.datelastseen', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 's', 'Fecha del último préstamo', 'Fecha del último préstamo', 0, 0, 'items.datelastborrowed', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 't', 'Número de copia', 'Número de copia', 0, 0, 'items.copynumber', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'u', 'Identificador Uniforme del Recurso', 'Identificador Uniforme del Recurso', 0, 0, 'items.uri', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'v', 'Coste, precio de reemplazo', 'Coste, precio de reemplazo', 0, 0, 'items.replacementprice', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'w', 'Precio válido a partir de', 'Precio válido a partir de', 0, 0, 'items.replacementpricedate', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'x', 'Nota no pública', 'Nota no pública', 1, 0, 'items.itemnotes_nonpublic', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'y', 'Tipo de ítem Koha', 'Tipo de ítem Koha', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('952', 'z', 'Nota pública', 'Nota pública', 0, 0, 'items.itemnotes', 10, '', '', '', NULL, 0, 'FA', '', NULL, NULL),
-		('999', 'c', 'Koha biblionumber', 'Koha biblionumber', 0, 0, 'biblio.biblionumber', -1, NULL, NULL, '', NULL, -5, 'FA', '', '', NULL),
-		('999', 'd', 'Koha biblioitemnumber', 'Koha biblioitemnumber', 0, 0, 'biblioitems.biblioitemnumber', -1, NULL, NULL, '', NULL, -5, 'FA', '', '', NULL);
+INSERT IGNORE INTO marc_subfield_structure (tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, frameworkcode, seealso, link, defaultvalue)
+SELECT tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, kohafield, 0, authorised_value, authtypecode, value_builder, isurl, hidden, 'FA', seealso, link, defaultvalue
+FROM marc_subfield_structure
+WHERE frameworkcode = '' AND
+tagfield IN ('000', '008', '010', '020', '022', '050', '082', '090', '099', '100', '245', '250', '260', '300', '500', '942', '952', '999');
+
+-- **************************************************
+-- REVERT HIDDEN FIELD TO ORIGINAL (pre copy ) VALUES
+-- **************************************************
+
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '010' AND tagsubfield = '8' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '010' AND tagsubfield = 'b' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '010' AND tagsubfield = 'z' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '020' AND tagsubfield = '6' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '020' AND tagsubfield = '8' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '020' AND tagsubfield = 'z' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '082' AND tagsubfield = '6' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '082' AND tagsubfield = '8' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='5' WHERE tagfield = '090' AND tagsubfield = 'a' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='5' WHERE tagfield = '090' AND tagsubfield = 'b' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '100' AND tagsubfield = '6' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '100' AND tagsubfield = '8' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '100' AND tagsubfield = '9' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '100' AND tagsubfield = 'b' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '100' AND tagsubfield = 'c' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '100' AND tagsubfield = 'f' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '100' AND tagsubfield = 'g' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '100' AND tagsubfield = 'j' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '100' AND tagsubfield = 'k' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '100' AND tagsubfield = 'l' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '100' AND tagsubfield = 'n' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '100' AND tagsubfield = 'p' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '100' AND tagsubfield = 't' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '100' AND tagsubfield = 'u' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '245' AND tagsubfield = '6' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '245' AND tagsubfield = '8' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '245' AND tagsubfield = 'd' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '245' AND tagsubfield = 'e' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '245' AND tagsubfield = 'f' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '245' AND tagsubfield = 'g' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '245' AND tagsubfield = 'k' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '245' AND tagsubfield = 'n' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '245' AND tagsubfield = 'p' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '245' AND tagsubfield = 's' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '250' AND tagsubfield = '6' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '250' AND tagsubfield = '8' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '260' AND tagsubfield = '6' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '260' AND tagsubfield = '8' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '260' AND tagsubfield = 'd' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '260' AND tagsubfield = 'e' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '260' AND tagsubfield = 'f' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '260' AND tagsubfield = 'g' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '260' AND tagsubfield = 'k' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '260' AND tagsubfield = 'l' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '500' AND tagsubfield = '3' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '500' AND tagsubfield = '5' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '500' AND tagsubfield = '6' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '500' AND tagsubfield = '8' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '500' AND tagsubfield = 'l' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '500' AND tagsubfield = 'n' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '500' AND tagsubfield = 'x' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '500' AND tagsubfield = 'z' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='5' WHERE tagfield = '942' AND tagsubfield = '0' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='5' WHERE tagfield = '942' AND tagsubfield = 'c' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='5' WHERE tagfield = '942' AND tagsubfield = 'n' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='5' WHERE tagfield = '942' AND tagsubfield = 's' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = '1' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = '3' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = '6' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = '9' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = 'j' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = 'l' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = 'm' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = 'n' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = 'q' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = 'r' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = 's' AND frameworkcode = 'FA';
+UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = 'x' AND frameworkcode = 'FA';
+
