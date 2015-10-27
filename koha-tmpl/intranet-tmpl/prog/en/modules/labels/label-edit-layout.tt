@@ -8,7 +8,7 @@
 [%  END %]
 [% END %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Manage label layouts</title>
+    <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Layouts &rsaquo; [% IF ( layout_id ) %]Edit ([% layout_id %])[% ELSE %]Create[% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
     <script type="text/JavaScript" language="JavaScript">
         //<![CDATA[
@@ -51,8 +51,8 @@
         <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
         <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
         <a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a> &rsaquo;
-        <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=layout">Manage label layouts</a> &rsaquo;
-        [% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] Label layout
+        <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=layout">Layouts</a> &rsaquo;
+        [% IF ( layout_id ) %]Edit ([% layout_id %])[% ELSE %]Create[% END %]
     </div>
     <div id="doc3" class="yui-t2">
         <div id="bd">
@@ -66,7 +66,7 @@
                     </div>
                     <form name="input" action="/cgi-bin/koha/labels/label-edit-layout.pl" method="get">
                         <fieldset class="rows">
-                            <legend>[% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] Label layout</legend>
+                            <legend>[% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] label layout</legend>
                             <ol>
                                 <li>
                                     <label for="layout_name">Layout name: </label>

@@ -18,8 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
+
 use vars qw($debug);
 
 use CGI qw ( -utf8 );
@@ -98,10 +98,16 @@ my $table = html_table($display_columns->{$label_element}, $db_rows);
 $template->param(error => $error) if ($error) && ($error ne 0);
 $template->param(print => 1) if ($label_element eq 'batch');
 $template->param(
-                op              => $op,
-                element_id      => $element_id,
-                table_loop      => $table,
-                label_element   => $label_element,
+    op              => $op,
+    element_id      => $element_id,
+    table_loop      => $table,
+    label_element   => $label_element,
+    label_element_title => (
+        $label_element eq 'layout'   ? 'Layouts' :
+        $label_element eq 'template' ? 'Templates' :
+        $label_element eq 'profile'  ? 'Profiles' :
+        $label_element eq 'batch'    ? 'Batches' :
+        '' )
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;
