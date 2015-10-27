@@ -11227,6 +11227,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.21.00.046";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( variable, value, options, explanation, type )
+        VALUES ('NewsAuthorDisplay','none','none|opac|staff|both','Display the author name for news items.','Choice')
+    });
+    print "Upgrade to $DBversion done (Bug 14247: (newsauthor) System preference for news author display)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
