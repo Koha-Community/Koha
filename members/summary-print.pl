@@ -43,9 +43,10 @@ my $data = GetMember( 'borrowernumber' => $borrowernumber );
 
 my ( $total, $accts, $numaccts ) = GetMemberAccountRecords($borrowernumber);
 foreach my $accountline (@$accts) {
-    $accountline->{amount} = sprintf '%.2f', $accountline->{amount};
-    $accountline->{amountoutstanding} = sprintf '%.2f',
-      $accountline->{amountoutstanding};
+    $accountline->{amount} = sprintf( '%.2f', $accountline->{amount} )
+        if ( $accountline->{amount} ) ;
+    $accountline->{amountoutstanding} = sprintf( '%.2f', $accountline->{amountoutstanding} )
+        if ( $accountline->{amountoutstanding} );
 
     if (   $accountline->{accounttype} ne 'F'
         && $accountline->{accounttype} ne 'FU' )
@@ -56,8 +57,12 @@ foreach my $accountline (@$accts) {
 
 my $roadtype =
   C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $data->{streettype} );
+$roadtype = '' if ( ! $roadtype );
 
 our $totalprice = 0;
+my $total_format = '';
+$total_format = sprintf( "%.2f", $total ) if ($total);
+
 $template->param(
     %$data,
 
@@ -65,7 +70,7 @@ $template->param(
     address => $data->{'streetnumber'} . " $roadtype " . $data->{'address'},
 
     accounts => $accts,
-    totaldue => sprintf( "%.2f", $total ),
+    totaldue => $total_format,
 
     issues     => build_issue_data( GetPendingIssues($borrowernumber) ),
     totalprice => $totalprice,
@@ -84,7 +89,8 @@ sub build_issue_data {
     foreach my $issue ( @{$issues} ) {
 
         my %row = %{$issue};
-        $totalprice += $issue->{replacementprice};
+        $totalprice += $issue->{replacementprice}
+            if ( $issue->{replacementprice} );
 
         #find the charge for an item
         my ( $charge, $itemtype ) =
@@ -100,7 +106,7 @@ sub build_issue_data {
         push( @{$return}, \%row );
     }
 
-    @{$return} = sort { $a->{date_due} <=> $b->{date_due} } @{$return};
+    @{$return} = sort { $a->{date_due} eq $b->{date_due} } @{$return};
 
     return $return;
 }
