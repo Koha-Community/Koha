@@ -123,10 +123,10 @@ $rv                   = upd_opac_new($href_entry2);
 ok( $rv == 1, 'Successfully updated second dummy news item!' );
 
 # Test get_opac_new (single news item)
-$timestamp1      = output_pref( { dt => dt_from_string( $timestamp1 ), dateonly => 1, dateformat => 'iso' } );
-$expirationdate1 = output_pref( { dt => dt_from_string( $expirationdate1 ), dateonly => 1, dateformat => 'iso' } );
-$timestamp2      = output_pref( { dt => dt_from_string( $timestamp2 ), dateonly => 1, dateformat => 'iso' } );
-$expirationdate2 = output_pref( { dt => dt_from_string( $expirationdate2) , dateonly => 1, dateformat => 'iso' } );
+$timestamp1      = output_pref( { dt => dt_from_string( $timestamp1 ), dateonly => 1 } );
+$expirationdate1 = output_pref( { dt => dt_from_string( $expirationdate1 ), dateonly => 1 } );
+$timestamp2      = output_pref( { dt => dt_from_string( $timestamp2 ), dateonly => 1 } );
+$expirationdate2 = output_pref( { dt => dt_from_string( $expirationdate2) , dateonly => 1 } );
 
 is_deeply(
     get_opac_new($idnew1),
