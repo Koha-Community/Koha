@@ -125,7 +125,7 @@ delete_all( $userid );
 
 add( $userid, $current_sessionid, $previous_sessionid, $total, $query_cgi_b, $query_cgi_a );
 warning_like { C4::Search::History::delete({}) }
-          qr/^ERROR: userid or id is required for history deletion/,
+          qr/^ERROR: userid, id or interval is required for history deletion/,
           'Calling delete without userid raises warning';
 $all = C4::Search::History::get({userid => $userid});
 is( scalar(@$all), 9, 'There are still 9 searches after calling delete without userid' );
