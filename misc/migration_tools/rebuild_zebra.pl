@@ -340,7 +340,8 @@ sub check_zebra_dirs {
         my $bdir = $base . $dir;
         if (! -d $bdir) {
             $needed_repairing = 1;
-            mkdir $bdir || die "Unable to create '$bdir': $!\n";
+            mkdir($bdir) || die "Unable to create '$bdir': $!\n";
+
             print "$0: needed to create '$bdir'\n";
         }
     }
