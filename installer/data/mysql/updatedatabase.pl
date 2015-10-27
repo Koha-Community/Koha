@@ -11174,6 +11174,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.21.00.042";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        ALTER TABLE items_search_fields
+            MODIFY COLUMN authorised_values_category VARCHAR(32) DEFAULT NULL
+    |);
+    print "Upgrade to $DBversion done (Bug 15069: items_search_fields.authorised_values_category is still a varchar(32))\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
