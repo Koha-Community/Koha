@@ -447,8 +447,8 @@ sub TransferCollection {
     my @results;
     while ( my $item = $sth->fetchrow_hashref ) {
         my ($status) = CheckReserves( $item->{itemnumber} );
-        my @transfers = GetTransfers( $item->{itemnumber} );
-        transferbook( $colBranchcode, $item->{barcode}, my $ignore_reserves = 1 ) unless ( $status eq 'Waiting' || @transfers );
+        my @transfers = C4::Circulation::GetTransfers( $item->{itemnumber} );
+        C4::Circulation::transferbook( $colBranchcode, $item->{barcode}, my $ignore_reserves = 1 ) unless ( $status eq 'Waiting' || @transfers );
     }
 
     return 1;
