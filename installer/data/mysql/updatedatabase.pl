@@ -11192,6 +11192,23 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.21.00.044";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        CREATE TABLE localization (
+            localization_id int(11) NOT NULL AUTO_INCREMENT,
+            entity varchar(16) COLLATE utf8_unicode_ci NOT NULL,
+            code varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+            lang varchar(25) COLLATE utf8_unicode_ci NOT NULL,
+            translation text COLLATE utf8_unicode_ci,
+            PRIMARY KEY (localization_id),
+            UNIQUE KEY entity_code_lang (entity,code,lang)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+    |);
+    print "Upgrade to $DBversion done (Bug 14100: Generic solution for language overlay)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
