@@ -17,12 +17,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use Test::More tests => 54;
 use C4::Context;
-use Data::Dumper;
 
 BEGIN {
     use_ok('C4::Labels::Template');
@@ -51,16 +49,18 @@ my $expect_template = {
 
 my $template;
 
-diag "Testing Template->new() method.";
-ok($template = C4::Labels::Template->new(page_width => 8.5,cols => 3))  || diag "Template->new() FAILED.";
-is_deeply($template, $expect_template) || diag "New template object FAILED to verify.";
+# Testing Template->new()
+ok($template = C4::Labels::Template->new(page_width => 8.5,cols => 3),
+    "Template->new() success.");
+is_deeply($template, $expect_template,  "New template object verify success");
 
-diag "Testing Template->get_attr() method.";
+# Testing Template->get_attr()
 foreach my $key (keys %{$expect_template}) {
-    ok($expect_template->{$key} eq $template->get_attr($key)) || diag "Template->get_attr() FAILED on attribute $key.";
+    ok($expect_template->{$key} eq $template->get_attr($key),
+        "Template->get_attr() success on attribute $key");
 }
 
-diag "Testing Template->set_attr() method.";
+# Testing Template->set_attr()
 my $new_attr = {
     creator             => 'Labels',
     profile_id          => 0,
@@ -85,32 +85,32 @@ my $new_attr = {
 foreach my $key (keys %{$new_attr}) {
     next if ($key eq 'template_stat');
     $template->set_attr($key, $new_attr->{$key});
-    ok($new_attr->{$key} eq $template->get_attr($key)) || diag "Template->set_attr() FAILED on attribute $key.";
+    ok($new_attr->{$key} eq $template->get_attr($key),
+       "Template->set_attr() success on attribute $key");
 }
 
-diag "Testing Template->save() method with a new object.";
-
+# Testing Template->save() with a new object
 my $sav_results = $template->save();
-ok($sav_results ne -1) || diag "Template->save() FAILED.";
+ok($sav_results ne -1, "Template->save() success");
 
 my $saved_template;
 if ($sav_results ne -1) {
-    diag "Testing Template->retrieve() method.";
+    # Testing Template->retrieve()
     $new_attr->{'template_id'} = $sav_results;
-    ok($saved_template = C4::Labels::Template->retrieve(template_id => $sav_results))  || diag "Template->retrieve() FAILED.";
-    is_deeply($saved_template, $new_attr) || diag "Retrieved template object FAILED to verify.";
+    ok($saved_template = C4::Labels::Template->retrieve(template_id => $sav_results),
+       "Template->retrieve() success");
+    is_deeply($saved_template, $new_attr,
+              "Retrieved template object verify success");
 }
 
-diag "Testing Template->save method with an updated object.";
-
+# Testing Template->save with an updated object
 $saved_template->set_attr(template_desc => 'A test template');
 my $upd_results = $saved_template->save();
-ok($upd_results ne -1) || diag "Template->save() FAILED.";
+ok($upd_results ne -1, "Template->save() success");
 my $updated_template = C4::Labels::Template->retrieve(template_id => $sav_results);
-is_deeply($updated_template, $saved_template) || diag "Updated template object FAILED to verify.";
+is_deeply($updated_template, $saved_template, "Updated template object verify success");
 
-diag "Testing Template->retrieve() convert points option.";
-
+# Testing Template->retrieve() convert points option
 my $conv_template = C4::Labels::Template->retrieve(template_id => $sav_results, convert => 1);
 my $expect_conv = {
     page_width          => 612,
@@ -126,10 +126,13 @@ my $expect_conv = {
 };
 
 foreach my $key (keys %{$expect_conv}) {
-    ok($expect_conv->{$key} eq $conv_template->get_attr($key)) || diag "Template->retrieve() convert points option FAILED. Expected " . $expect_conv->{$key} . " but got " . $conv_template->get_attr($key) . ".";
+    ok($expect_conv->{$key} eq $conv_template->get_attr($key),
+       "Template->retrieve() convert points option success ($expect_conv->{$key})")
+       || diag("Expected " . $expect_conv->{$key} . " but got " . $conv_template->get_attr($key) . ".");
 }
 
-diag "Testing Template->delete() method.";
-
+# Testing Template->delete()
 my $del_results = $updated_template->delete();
-ok($del_results ne -1) || diag "Template->delete() FAILED.";
+ok($del_results ne -1, "Template->delete() success");
+
+1;
