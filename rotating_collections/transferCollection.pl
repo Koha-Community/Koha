@@ -72,7 +72,8 @@ foreach my $br ( keys %$branches ) {
 @branchoptionloop = sort {$a->{name} cmp $b->{name}} @branchoptionloop;
 
 ## Get data about collection
-my ( $colId, $colTitle, $colDesc, $colBranchcode ) = GetCollection($colId);
+my ( $colTitle, $colDesc, $colBranchcode );
+( $colId, $colTitle, $colDesc, $colBranchcode ) = GetCollection($colId);
 $template->param(
     colId            => $colId,
     colTitle         => $colTitle,
