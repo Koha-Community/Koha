@@ -174,7 +174,8 @@ for my $barcode ( @$barcodes ) {
 
 my $stickyduedate  = $query->param('stickyduedate') || $session->param('stickyduedate');
 my $duedatespec    = $query->param('duedatespec')   || $session->param('stickyduedate');
-$duedatespec = eval { output_pref( { dt => dt_from_string( $duedatespec ), dateformat => 'iso' }); };
+$duedatespec = eval { output_pref( { dt => dt_from_string( $duedatespec ), dateformat => 'iso' }); }
+    if ( $duedatespec );
 
 my $issueconfirmed = $query->param('issueconfirmed');
 my $cancelreserve  = $query->param('cancelreserve');
@@ -203,11 +204,11 @@ if( $onsite_checkout && !$duedatespec_allow ) {
     $datedue = output_pref({ dt => dt_from_string, dateonly => 1, dateformat => 'iso' });
     $datedue .= ' 23:59:00';
 } elsif( $duedatespec_allow ) {
-    if ($datedue) {
-        $datedue = eval { dt_from_string( $datedue ) };
+    if ( $duedatespec ) {
+        $datedue = eval { dt_from_string( $duedatespec ) };
         if (! $datedue ) {
             $invalidduedate = 1;
-            $template->param( IMPOSSIBLE=>1, INVALID_DATE=>$datedue );
+            $template->param( IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec );
         }
     }
 }
