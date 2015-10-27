@@ -11209,6 +11209,24 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.21.00.045";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q|
+        ALTER TABLE opac_news
+            ADD borrowernumber int(11) default NULL
+                AFTER number
+    |);
+    $dbh->do(q|
+        ALTER TABLE opac_news
+            ADD CONSTRAINT borrowernumber_fk
+                FOREIGN KEY (borrowernumber)
+                REFERENCES borrowers (borrowernumber)
+                ON DELETE SET NULL ON UPDATE CASCADE
+    |);
+    print "Upgrade to $DBversion done (Bug 14246: (newsauthor) Add borrowernumber to koha_news)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
