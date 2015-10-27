@@ -363,6 +363,10 @@ my @expectedfields = qw(
   subscriptionid
   parent_ordernumber
   orderstatus
+  line_item_id
+  suppliers_reference_number
+  suppliers_reference_qualifier
+  suppliers_report
   title
   author
   basketname
@@ -458,6 +462,10 @@ my @base_expectedfields = qw(
   biblioitemnumber
   datereceived
   orderstatus
+  line_item_id
+  suppliers_reference_number
+  suppliers_reference_qualifier
+  suppliers_report
   agerestriction
   budget_branchcode
   gstrate
@@ -575,6 +583,10 @@ ok(
   creationdate
   datereceived
   orderstatus
+  line_item_id
+  suppliers_reference_number
+  suppliers_reference_qualifier
+  suppliers_report
   isbn
   copyrightdate
   gstrate
