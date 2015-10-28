@@ -707,7 +707,7 @@ C<$offset> Is the number of days that this function has to count from $date.
 
 sub addDate {
     my ($self, $startdate, $offset) = @_;
-    $startdate = eval { output_pref( { dt => dt_from_string( $startdate ), dateonly => 1, dateformat => 'iso' } ); };
+    $startdate = eval { output_pref( { dt => $startdate, dateonly => 1, dateformat => 'iso' } ); };
     my ( $year, $month, $day) = split( "-", $startdate );
 	my $daystep = 1;
 	if ($offset < 0) { # In case $offset is negative
@@ -731,41 +731,7 @@ sub addDate {
         ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, $offset );
     }
     my $date_ret = sprintf(ISO_DATE_FORMAT,$year,$month,$day);
-    $date_ret =  eval { output_pref( { dt => dt_from_string( $date_ret), dateonly => 1, dateformat => 'iso' } ); };
     return($date_ret);
-}
-
-=head2 daysBetween
-
-    my $daysBetween = $calendar->daysBetween($startdate, $enddate)
-
-C<$startdate> and C<$enddate> define the interval.
-
-Returns the number of non-holiday days in the interval.
-useDaysMode syspref has no effect here.
-=cut
-
-sub daysBetween {
-    my $self      = shift or return;
-    my $startdate = shift or return;
-    my $enddate   = shift or return;
-    $startdate = eval { output_pref( { dt => dt_from_string( $startdate ), dateonly => 1, dateformat => 'iso' } ); };
-    $enddate = eval { output_pref( { dt => dt_from_string( $enddate ), dateonly => 1, dateformat => 'iso' } ); };
-    my ( $yearFrom, $monthFrom, $dayFrom) = split( "-", $startdate);
-    my ( $yearTo,  $monthTo,  $dayTo  ) = split( "-",  $enddate);
-    if (Date_to_Days($yearFrom,$monthFrom,$dayFrom) > Date_to_Days($yearTo,$monthTo,$dayTo)) {
-        return 0;
-        # we don't go backwards  ( FIXME - handle this error better )
-    }
-    my $count = 0;
-    while (1) {
-        ($yearFrom != $yearTo or $monthFrom != $monthTo or $dayFrom != $dayTo) or last; # if they all match, it's the last day
-        unless ($self->isHoliday($dayFrom, $monthFrom, $yearFrom)) {
-            $count++;
-        }
-        ($yearFrom, $monthFrom, $dayFrom) = &Date::Calc::Add_Delta_Days($yearFrom, $monthFrom, $dayFrom, 1);
-    }
-    return($count);
 }
 
 1;

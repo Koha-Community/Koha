@@ -41,14 +41,13 @@ my ($template, $loggedinuser, $cookie)
                              debug => 1,
                            });
 
-# keydate - date passed to calendar.js.  calendar.js does not process dashes within a date.
-my $keydate;
 # calendardate - date passed in url for human readability (syspref)
-my $calendardate;
-my $calendarinput_dt = eval { dt_from_string( $input->param('calendardate') ); } || dt_from_string;
 # if the url has an invalid date default to 'now.'
-$calendardate = output_pref( { dt => $calendarinput_dt, dateonly => 1 } );
-$keydate = output_pref( { dt => $calendarinput_dt, dateonly => 1, dateformat => 'iso' } );
+my $calendarinput_dt = eval { dt_from_string( $input->param('calendardate') ); } || dt_from_string;
+my $calendardate = output_pref( { dt => $calendarinput_dt, dateonly => 1 } );
+
+# keydate - date passed to calendar.js.  calendar.js does not process dashes within a date.
+my $keydate = output_pref( { dt => $calendarinput_dt, dateonly => 1, dateformat => 'iso' } );
 $keydate =~ s/-/\//g;
 
 my $branch= $input->param('branch') || C4::Context->userenv->{'branch'};
@@ -132,11 +131,11 @@ foreach my $yearMonthDay (keys %$exception_holidays) {
 my $single_holidays = $calendar->get_single_holidays();
 my @holidays;
 foreach my $yearMonthDay (keys %$single_holidays) {
-    my $holidaydate = eval { dt_from_string( $single_holidays->{$yearMonthDay}{date} ) };
+    my $holidaydate_dt = eval { dt_from_string( $single_holidays->{$yearMonthDay}{date} ) };
     my %holiday;
     %holiday = (KEY => $yearMonthDay,
                 DATE_SORT => $single_holidays->{$yearMonthDay}{date},
-                DATE => output_pref( { dt => $holidaydate, dateonly => 1, dateformat => 'iso' } ),
+                DATE => output_pref( { dt => $holidaydate_dt, dateonly => 1 } ),
                 TITLE => $single_holidays->{$yearMonthDay}{title},
                 DESCRIPTION => $single_holidays->{$yearMonthDay}{description});
     push @holidays, \%holiday;
