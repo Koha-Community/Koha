@@ -247,6 +247,7 @@ sub GetItemTypes {
     my ( %params ) = @_;
     my $style = defined( $params{'style'} ) ? $params{'style'} : 'hash';
 
+    require C4::Languages;
     my $language = C4::Languages::getlanguage();
     # returns a reference to a hash of references to itemtypes...
     my %itemtypes;
@@ -549,6 +550,7 @@ Defaults to intranet.
 sub getitemtypeinfo {
     my ($itemtype, $interface) = @_;
     my $dbh      = C4::Context->dbh;
+    require C4::Languages;
     my $language = C4::Languages::getlanguage();
     my $it = $dbh->selectrow_hashref(q|
         SELECT
