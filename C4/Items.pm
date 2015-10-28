@@ -1301,6 +1301,7 @@ sub GetItemsInfo {
     my ( $biblionumber ) = @_;
     my $dbh   = C4::Context->dbh;
     # note biblioitems.* must be avoided to prevent large marc and marcxml fields from killing performance.
+    require C4::Languages;
     my $language = C4::Languages::getlanguage();
     my $query = "
     SELECT items.*,
