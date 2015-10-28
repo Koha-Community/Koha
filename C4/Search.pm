@@ -1870,13 +1870,8 @@ sub searchResults {
     # get notforloan authorised value list (see $shelflocations  FIXME)
     my $notforloan_authorised_value = GetAuthValCode('items.notforloan','');
 
-    #Build itemtype hash
-    #find itemtype & itemtype image
-    my %itemtypes;
-    my $itemtypes = GetItemTypes( style => 'array' );
-    for my $itemtype ( @$itemtypes ) {
-        $itemtypes{ $itemtype->{itemtype} } = $itemtype;
-    }
+    #Get itemtype hash
+    my %itemtypes = %{ GetItemTypes() };
 
     #search item field code
     my ($itemtag, undef) = &GetMarcFromKohaField( "items.itemnumber", "" );
