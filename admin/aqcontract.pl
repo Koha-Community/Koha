@@ -94,10 +94,12 @@ elsif ( $op eq 'add_validate' ) {
     my $is_a_modif = $input->param("is_a_modif");
 
     my $contractstart_dt = eval { dt_from_string( $input->param('contractstartdate') ); };
-    $contractstart_dt = dt_from_string if ( ! $contractstart_dt );
-
     my $contractend_dt = eval { dt_from_string( $input->param('contractenddate') ); };
-    $contractend_dt = dt_from_string if ( ! $contractend_dt );
+    unless ( $contractstart_dt and $contractend_dt ) {
+        my $today = dt_from_string;
+        $contractstart_dt ||= $today;
+        $contractend_dt   ||= $today;
+    }
 
     if ( $is_a_modif ) {
         ModContract({
@@ -161,9 +163,9 @@ if ( $op eq 'list' ) {
     my @contracts = @{GetContracts( { booksellerid => $booksellerid } )};
 
     # format dates
-    for ( @contracts ) {
-        $$_{contractstartdate} =  output_pref({ dt => dt_from_string( $$_{contractstartdate} ), dateonly => 1 });
-        $$_{contractenddate}   =  output_pref({ dt => dt_from_string( $$_{contractenddate} ), dateonly => 1 }),
+    for my $contract ( @contracts ) {
+        $contract->{contractstartdate} =  output_pref({ dt => dt_from_string( $contract->{contractstartdate} ), dateonly => 1 });
+        $contract->{contractenddate}   =  output_pref({ dt => dt_from_string( $contract->{contractenddate} ), dateonly => 1 }),
     }
 
     $template->param(loop => \@contracts);
