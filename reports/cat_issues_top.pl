@@ -129,7 +129,31 @@ if ($do_it) {
                             );
             push @itemtypeloop, \%row;
     }
-    
+
+    #ccode
+    my $ccodes = GetAuthorisedValues('CCODE');
+    my @ccodeloop;
+    for my $thisccode (@$ccodes) {
+            my %row = (value => $thisccode->{authorised_value},
+                       description => $thisccode->{lib},
+                            );
+            push @ccodeloop, \%row;
+    }
+
+    @ccodeloop = sort {$a->{value} cmp $b->{value}} @ccodeloop;
+
+    #shelvingloc
+    my $shelvinglocs = GetAuthorisedValues('LOC');
+    my @shelvinglocloop;
+    for my $thisloc (@$shelvinglocs) {
+            my %row = (value => $thisloc->{authorised_value},
+                       description => $thisloc->{lib},
+                            );
+            push @shelvinglocloop, \%row;
+    }
+
+    @shelvinglocloop = sort {$a->{value} cmp $b->{value}} @shelvinglocloop;
+
     #borcat
     my ($codes,$labels) = GetborCatFromCatType(undef,undef);
     my @borcatloop;
@@ -147,6 +171,8 @@ if ($do_it) {
                     CGIsepChoice => $CGIsepChoice,
                     branchloop => GetBranchesLoop(C4::Context->userenv->{'branch'}),
                     itemtypeloop =>\@itemtypeloop,
+                    ccodeloop =>\@ccodeloop,
+                    shelvinglocloop =>\@shelvinglocloop,
                     borcatloop =>\@borcatloop,
                     );
 output_html_with_http_headers $input, $cookie, $template->output;
@@ -171,7 +197,7 @@ sub calculate {
 # Checking filters
 #
     my @loopfilter;
-    for (my $i=0;$i<=6;$i++) {
+    for (my $i=0;$i<=12;$i++) {
         my %cell;
         if ( @$filters[$i] ) {
             if (($i==1) and (@$filters[$i-1])) {
@@ -190,10 +216,13 @@ sub calculate {
             $cell{crit} .="Return To" if ($i==3);
             $cell{crit} .="Branch" if ($i==4);
             $cell{crit} .="Doc Type" if ($i==5);
-            $cell{crit} .="Bor Cat" if ($i==6);
-            $cell{crit} .="Day" if ($i==7);
-            $cell{crit} .="Month" if ($i==8);
-            $cell{crit} .="Year" if ($i==9);
+            $cell{crit} .="Call number" if ($i==6);
+            $cell{crit} .="Collection code" if ($i==7);
+            $cell{crit} .="Shelving location" if ($i==8);
+            $cell{crit} .="Bor Cat" if ($i==9);
+            $cell{crit} .="Day" if ($i==10);
+            $cell{crit} .="Month" if ($i==11);
+            $cell{crit} .="Year" if ($i==12);
             push @loopfilter, \%cell;
         }
     }
@@ -212,11 +241,15 @@ sub calculate {
         $colfilter[1] = @$filters[3] if ($column =~ /returndate/ )  ;
         $colfilter[0] = @$filters[4] if ($column =~ /branch/ )  ;
         $colfilter[0] = @$filters[5] if ($column =~ /itemtype/ )  ;
-        $colfilter[0] = @$filters[6] if ($column =~ /category/ )  ;
-    # 	$colfilter[0] = @$filters[11] if ($column =~ /sort2/ ) ;
-        $colfilter[0] = @$filters[7] if ($column =~ /timestamp/ ) ;
-        $colfilter[0] = @$filters[8] if ($column =~ /timestamp/ ) ;
+      # These limits does not currently exist, maybe later?
+      # $colfilter[0] = @$filters[6] if ($column =~ /ccode/ )  ;
+      # $colfilter[0] = @$filters[7] if ($column =~ /location/ )  ;
+        $colfilter[0] = @$filters[8] if ($column =~ /category/ )  ;
+      # This commented out row (sort2) was not removed when adding new filters for ccode, shelving location and call number
+      # $colfilter[0] = @$filters[11] if ($column =~ /sort2/ ) ;
         $colfilter[0] = @$filters[9] if ($column =~ /timestamp/ ) ;
+        $colfilter[0] = @$filters[10] if ($column =~ /timestamp/ ) ;
+        $colfilter[0] = @$filters[11] if ($column =~ /timestamp/ ) ;
     #warn "filtre col ".$colfilter[0]." ".$colfilter[1];
                                                 
     # loop cols.
@@ -301,6 +334,9 @@ sub calculate {
     
 # Processing average loanperiods
     $strcalc .= "SELECT DISTINCT biblio.title, COUNT(biblio.biblionumber) AS RANK, biblio.biblionumber AS ID";
+    $strcalc .= ", itemcallnumber as CALLNUM";
+    $strcalc .= ", ccode as CCODE";
+    $strcalc .= ", location as LOC";
     $strcalc .= " , $colfield " if ($colfield);
     $strcalc .= " FROM `old_issues` 
                   LEFT JOIN items USING(itemnumber) 
@@ -329,13 +365,19 @@ sub calculate {
         $strcalc .= "'" . @$filters[5] ."'" ;
     }
     @$filters[6]=~ s/\*/%/g if (@$filters[6]);
-    $strcalc .= " AND borrowers.categorycode like '" . @$filters[6] ."'" if ( @$filters[6] );
+    $strcalc .= " AND itemcallnumber like '" . @$filters[6] ."'" if ( @$filters[6] );
     @$filters[7]=~ s/\*/%/g if (@$filters[7]);
-    $strcalc .= " AND dayname(old_issues.timestamp) like '" . @$filters[7]."'" if (@$filters[7]);
+    $strcalc .= " AND ccode like '" . @$filters[7] ."'" if ( @$filters[7] );
     @$filters[8]=~ s/\*/%/g if (@$filters[8]);
-    $strcalc .= " AND monthname(old_issues.timestamp) like '" . @$filters[8]."'" if (@$filters[8]);
+    $strcalc .= " AND location like '" . @$filters[8] ."'" if ( @$filters[8] );
     @$filters[9]=~ s/\*/%/g if (@$filters[9]);
-    $strcalc .= " AND year(old_issues.timestamp) like '" . @$filters[9] ."'" if ( @$filters[9] );
+    $strcalc .= " AND borrowers.categorycode like '" . @$filters[9] ."'" if ( @$filters[9] );
+    @$filters[10]=~ s/\*/%/g if (@$filters[10]);
+    $strcalc .= " AND dayname(old_issues.timestamp) like '" . @$filters[10]."'" if (@$filters[10]);
+    @$filters[11]=~ s/\*/%/g if (@$filters[11]);
+    $strcalc .= " AND monthname(old_issues.timestamp) like '" . @$filters[11]."'" if (@$filters[11]);
+    @$filters[12]=~ s/\*/%/g if (@$filters[12]);
+    $strcalc .= " AND year(old_issues.timestamp) like '" . @$filters[12] ."'" if ( @$filters[12] );
     
     $strcalc .= " group by biblio.biblionumber";
     $strcalc .= ", $colfield" if ($column);
@@ -347,7 +389,7 @@ sub calculate {
     my $previous_col;
     my %indice;
     while (my  @data = $dbcalc->fetchrow) {
-        my ($row, $rank, $id, $col )=@data;
+        my ($row, $rank, $id, $callnum, $ccode, $loc, $col )=@data;
         $col = "zzEMPTY" if (!defined($col));
         $indice{$col}=1 if (not($indice{$col}));
         $table[$indice{$col}]->{$col}->{'name'}=$row;

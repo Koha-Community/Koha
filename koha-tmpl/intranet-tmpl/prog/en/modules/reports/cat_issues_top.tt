@@ -125,6 +125,23 @@
     </select>
       </li>
       <li> 
+        <label for="itemcallnumber">Call number: </label><input type="text" name="Filter" id="itemcallnumber" value="" />
+      </li>
+      <li>
+        <label for="ccode">Collection code: </label><select name="Filter" id="ccode"><option value="" > Any collection code</option>
+    [% FOREACH ccodeloo IN ccodeloop %]
+        <option value="[% ccodeloo.value %]" >[% ccodeloo.description %] </option>
+     [% END %]
+    </select>
+      </li>
+      <li>
+        <label for="shelvingloc">Shelving location: </label><select name="Filter" id="shelvingloc"><option value="" > Any shelving location</option>
+    [% FOREACH shelvinglocloo IN shelvinglocloop %]
+        <option value="[% shelvinglocloo.value %]" >[% shelvinglocloo.description %] </option>
+     [% END %]
+    </select>
+      </li>
+      <li>
         <label for="patroncategory">Patron category: </label><select name="Filter" id="patroncategory"><option value="" > Any Category code</option>
     [% FOREACH borcatloo IN borcatloop %]
         <option value="[% borcatloo.value %]" >[% borcatloo.description %] </option>  
