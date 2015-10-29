@@ -1376,7 +1376,7 @@ CREATE TABLE `creator_layouts` (
   `barcode_type` char(100) NOT NULL DEFAULT 'CODE39',
   `start_label` int(2) NOT NULL DEFAULT '1',
   `printing_type` char(32) NOT NULL DEFAULT 'BAR',
-  `layout_name` char(20) NOT NULL DEFAULT 'DEFAULT',
+  `layout_name` char(25) NOT NULL DEFAULT 'DEFAULT',
   `guidebox` int(1) DEFAULT '0',
   `oblique_title` int(1) DEFAULT '1',
   `font` char(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'TR',
