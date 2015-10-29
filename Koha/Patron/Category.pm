@@ -1,4 +1,4 @@
-package Koha::PatronCategory;
+package Koha::Patron::Category;
 
 # This file is part of Koha.
 #
@@ -27,7 +27,7 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::PatronCategory - Koha PatronCategory Object class
+Koha::Patron;;Category - Koha Patron;;Category Object class
 
 =head1 API
 

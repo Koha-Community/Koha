@@ -29,7 +29,7 @@ use C4::Form::MessagingPreferences;
 use Koha::Borrowers;
 use Koha::Database;
 use Koha::DateUtils;
-use Koha::PatronCategories;
+use Koha::Patron::Categories;
 
 my $input         = new CGI;
 my $searchfield   = $input->param('description') // q||;
@@ -51,7 +51,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 if ( $op eq 'add_form' ) {
     my ( $category, $selected_branches );
     if ($categorycode) {
-        $category          = Koha::PatronCategories->find($categorycode);
+        $category          = Koha::Patron::Categories->find($categorycode);
         $selected_branches = $category->branch_limitations;
     }
 
@@ -100,7 +100,7 @@ elsif ( $op eq 'add_validate' ) {
     }
 
     if ($is_a_modif) {
-        my $category = Koha::PatronCategories->find( $categorycode );
+        my $category = Koha::Patron::Categories->find( $categorycode );
         $category->categorycode($categorycode);
         $category->description($description);
         $category->enrolmentperiod($enrolmentperiod);
@@ -125,7 +125,7 @@ elsif ( $op eq 'add_validate' ) {
         }
     }
     else {
-        my $category = Koha::PatronCategory->new({
+        my $category = Koha::Patron::Category->new({
             categorycode => $categorycode,
             description => $description,
             enrolmentperiod => $enrolmentperiod,
@@ -166,7 +166,7 @@ elsif ( $op eq 'delete_confirm' ) {
         categorycode => $categorycode
     })->count;
 
-    my $category = Koha::PatronCategories->find($categorycode);
+    my $category = Koha::Patron::Categories->find($categorycode);
 
     $template->param(
         category => $category,
@@ -177,7 +177,7 @@ elsif ( $op eq 'delete_confirm' ) {
 elsif ( $op eq 'delete_confirmed' ) {
     my $categorycode = uc( $input->param('categorycode') );
 
-    my $category = Koha::PatronCategories->find( $categorycode );
+    my $category = Koha::Patron::Categories->find( $categorycode );
     my $deleted = eval { $category->delete; };
 
     if ( $@ or not $deleted ) {
@@ -190,7 +190,7 @@ elsif ( $op eq 'delete_confirmed' ) {
 }
 
 if ( $op eq 'list' ) {
-    my $categories = Koha::PatronCategories->search(
+    my $categories = Koha::Patron::Categories->search(
         {
             description => { -like => "$searchfield%" }
         },

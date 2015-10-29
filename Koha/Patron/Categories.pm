@@ -1,4 +1,4 @@
-package Koha::PatronCategories;
+package Koha::Patron::Categories;
 
 # This file is part of Koha.
 #
@@ -21,13 +21,13 @@ use Carp;
 
 use Koha::Database;
 
-use Koha::PatronCategory;
+use Koha::Patron::Category;
 
 use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::PatronCategories - Koha PatronCategory Object set class
+Koha::Patron::Categories - Koha Patron Category Object set class
 
 =head1 API
 
@@ -44,7 +44,7 @@ sub type {
 }
 
 sub object_class {
-    return 'Koha::PatronCategory';
+    return 'Koha::Patron::Category';
 }
 
 1;
