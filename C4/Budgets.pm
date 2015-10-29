@@ -59,8 +59,6 @@ BEGIN {
 
         &ModBudgetPlan
 
-        &ConvertCurrency
-        
 		&GetBudgetsPlanCell
         &AddBudgetPlanValue
         &GetBudgetAuthCats
@@ -911,36 +909,6 @@ sub CanUserModifyBudget {
     }
 
     return 1;
-}
-
-# -------------------------------------------------------------------
-
-=head2 ConvertCurrency
-
-  $foreignprice = &ConvertCurrency($currency, $localprice);
-
-Converts the price C<$localprice> to foreign currency C<$currency> by
-dividing by the exchange rate, and returns the result.
-
-If no exchange rate is found, e is one to one.
-
-=cut
-
-sub ConvertCurrency {
-    my ( $currency, $price ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = "
-        SELECT rate
-        FROM   currency
-        WHERE  currency=?
-    ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($currency);
-    my $cur = ( $sth->fetchrow_array() )[0];
-    unless ($cur) {
-        $cur = 1;
-    }
-    return ( $price / $cur );
 }
 
 sub _round {

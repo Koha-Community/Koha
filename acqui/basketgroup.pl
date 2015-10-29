@@ -51,7 +51,6 @@ use C4::Auth;
 use C4::Output;
 use CGI qw ( -utf8 );
 
-use C4::Budgets qw/ConvertCurrency/;
 use C4::Acquisition qw/CloseBasketgroup ReOpenBasketgroup GetOrders GetBasketsByBasketgroup GetBasketsByBookseller ModBasketgroup NewBasketgroup DelBasketgroup GetBasketgroups ModBasket GetBasketgroup GetBasket GetBasketGroupAsCSV/;
 use C4::Branch qw/GetBranches/;
 use C4::Members qw/GetMember/;
