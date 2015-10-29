@@ -1,1 +1,14 @@
-[% IF ( currency ) %]<p><b>Currency = [% currency %]</b></p>[% ELSE %]<div class="dialog alert"><h3>No active currency is defined</h3><p>[% IF CAN_user_parameters_parameters_remaining_permissions %]Please <a href="/cgi-bin/koha/admin/currency.pl">specify an active currency</a>.[% ELSE %]Your administrator must specify an active currency.[% END %]</p></div>[% END %]
+[% IF ( currency ) %]
+    [% IF ( not hide ) %]
+        <p><b>Currency = [% currency %]</b></p>
+    [% END %]
+[% ELSE %]
+    <div class="dialog alert">
+        <h3>No active currency is defined</h3>
+        [% IF CAN_user_parameters_parameters_remaining_permissions %]
+            <p>Please <a href="/cgi-bin/koha/admin/currency.pl">specify an active currency</a>.</p>
+        [% ELSE %]
+            <p>Your administrator must specify an active currency.</p>
+        [% END %]
+    </div>
+[% END %]
