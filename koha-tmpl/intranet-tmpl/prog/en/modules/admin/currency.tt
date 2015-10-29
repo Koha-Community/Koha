@@ -2,10 +2,9 @@
 [% USE ColumnsSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Currencies &amp; Exchange rates &rsaquo;
-[% IF ( add_form ) %][% IF ( searchfield ) %]Modify currency '[% searchfield %]'[% ELSE %]New currency[% END %][% END %]
-[% IF ( delete_confirm ) %]Confirm deletion of currency '[% searchfield %]'[% END %]
-[% IF ( delete_confirmed ) %]Currency deleted[% END %]
-[% IF ( else ) %]Currencies[% END %]</title>
+[% IF op == 'add_form' %][% IF currency %]Modify currency '[% currency.currency %]'[% ELSE %]New currency[% END %][% END %]
+[% IF op == 'delete_' %]Confirm deletion of currency '[% searchfield %]'[% END %]
+[% IF op == 'list' %]Currencies[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
@@ -49,10 +48,10 @@
 
 
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <a href="/cgi-bin/koha/admin/currency.pl">Currencies &amp; Exchange rates</a> &rsaquo; [% IF ( add_form ) %][% IF ( searchfield ) %]Modify currency '[% searchfield %]'[% ELSE %]New currency[% END %][% END %]
-[% IF ( delete_confirm ) %]Confirm deletion of currency '<span class="ex">[% searchfield %]</span>'[% END %]
-[% IF ( delete_confirmed ) %]Currency deleted[% END %]
-[% IF ( else ) %]Currencies[% END %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <a href="/cgi-bin/koha/admin/currency.pl">Currencies &amp; Exchange rates</a> &rsaquo; [% IF op == 'add_form' %][% IF currency %]Modify currency '[% currency.currency %]'[% ELSE %]New currency[% END %][% END %]
+[% IF op == 'delete_confirm' %]Confirm deletion of currency '<span class="ex">[% searchfield %]</span>'
+[% ELSIF op == 'list' %]Currencies
+[% END %]
 </div>
 
 <div id="doc3" class="yui-t2">
@@ -60,59 +59,61 @@
 <div id="bd">
     <div id="yui-main">
     <div class="yui-b">
-[% IF ( else ) %]
+[% IF op == 'list' %]
 <div id="toolbar" class="btn-toolbar">
-    <a class="btn btn-small" id="newcurrency" href="[% script_name %]?op=add_form"><i class="fa fa-plus"></i> New currency</a>
+    <a class="btn btn-small" id="newcurrency" href="/cgi-bin/koha/admin/currency.pl?op=add_form"><i class="fa fa-plus"></i> New currency</a>
 </div>
 [% END %]
 
-[% IF ( add_form ) %]
+[% IF op == 'add_form' %]
 
-<form action="[% script_name %]" name="Aform" method="post" class="validated">
-    <input type="hidden" name="op" value="save" />
+<form action="/cgi-bin/koha/admin/currency.pl" name="Aform" method="post" class="validated">
+    <input type="hidden" name="op" value="add_validate" />
     <fieldset class="rows">
-    <legend>[% IF ( searchfield ) %]
-        Modify currency
-    [% ELSE %]
-        New currency
-    [% END %]</legend>
-    <ol>
-        <li>
-    [% IF ( searchfield ) %]
-            <span class="label">Currency: </span>
-            <input type="hidden" name="currency" id="currency" value="[% searchfield %]" />[% searchfield %]
-    [% ELSE %]
-            <label for="currency" class="required">Currency: </label>
-            <input type="text" name="currency" id="currency" size="50" maxlength="50" onblur="toUC(this);" required="required" class="required" /> <span class="required">Required</span>
-    [% END %]
-        </li>
-        <li>
-            <label for="rate" class="required">Rate: </label>
-            <input type="text" name="rate" id="rate" size="10" maxlength="10" value="[% rate %]" required="required" class="required" /> <span class="required">Required</span>
-        </li>
-        <li>
-            <label for="symbol" class="required">Symbol: </label>
-            <input type="text" name="symbol" id="symbol" size="5" maxlength="5" value="[% symbol %]" required="required" class="required" /> <span class="required">Required</span>
-        </li>
-        <li>
-            <label for="isocode">ISO code: </label>
-            <input type="text" name="isocode" id="isocode" size="5" maxlength="5" value="[% isocode %]" />
-        </li>
-        <li>
-            <span class="label">Last updated: </span>[% timestamp | $KohaDates %]
-        </li>
-        <li>
-            <label for="active">Active: </label>
-            [% IF ( active ) %]
-            <input type="checkbox" id="active" name="active" value="1" checked="checked" />
+        <legend>
+            [% IF currency %]
+                Modify currency
             [% ELSE %]
-            <input type="checkbox" id="active" name="active" value="1" />
+                New currency
             [% END %]
-            <span id="hint" class="hint"></span>
-        </li>
-
+        </legend>
+        <ol>
+            <li>
+                [% IF currency %]
+                    <span class="label">Currency: </span>
+                    <input type="hidden" name="is_a_modif" value="1" />
+                    <input type="hidden" name="currency_code" id="currency" value="[% currency.currency %]" />[% currency.currency %]
+                [% ELSE %]
+                    <label for="currency_code" class="required">Currency: </label>
+                    <input type="text" name="currency_code" id="currency_code" size="50" maxlength="50" onblur="toUC(this);" required="required" class="required" /> <span class="required">Required</span>
+                [% END %]
+            </li>
+            <li>
+                <label for="rate" class="required">Rate: </label>
+                <input type="text" name="rate" id="rate" size="10" maxlength="10" value="[% currency.rate %]" required="required" class="required" /> <span class="required">Required</span>
+            </li>
+            <li>
+                <label for="symbol" class="required">Symbol: </label>
+                <input type="text" name="symbol" id="symbol" size="5" maxlength="5" value="[% currency.symbol %]" required="required" class="required" /> <span class="required">Required</span>
+            </li>
+            <li>
+                <label for="isocode">ISO code: </label>
+                <input type="text" name="isocode" id="isocode" size="5" maxlength="5" value="[% currency.isocode %]" />
+            </li>
+            <li>
+                <span class="label">Last updated: </span>[% currency.timestamp | $KohaDates %]
+            </li>
+            <li>
+                <label for="active">Active: </label>
+                [% IF currency.active %]
+                <input type="checkbox" id="active" name="active" value="1" checked="checked" />
+                [% ELSE %]
+                <input type="checkbox" id="active" name="active" value="1" />
+                [% END %]
+                <span id="hint" class="hint"></span>
+            </li>
         </ol>
-        </fieldset>
+    </fieldset>
 
     <fieldset class="action">
         <input type="submit" value="Submit" />
@@ -122,53 +123,47 @@
 
 [% END %]
 
-[% IF ( delete_confirm ) %]
-    [% IF ( totalgtzero ) %]
-    <div class="dialog message">
-        <h3>Cannot delete currency <span class="ex">'[% searchfield %]'</span></h3>
-        <p>This currency is used [% total %] times. Deletion not possible</p>
-        <form action="[% script_name %]" method="post">
+[% IF op =='delete_confirm' %]
+    [% IF nb_of_orders %]
+    <div class="dialog alert">
+        <h3>Cannot delete currency <span class="ex">'[% currency.currency %]'</span></h3>
+        <p>This currency is used by [% nb_of_orders %] orders. Deletion not possible</p>
+        <form action="/cgi-bin/koha/admin/currency.pl" method="post">
             <input type="submit" value="OK" class="approve" />
         </form>
     </div>
     [% ELSE %]
     <div class="dialog alert">
-        <h3>Confirm deletion of currency <span class="ex">'[% searchfield %]'</span></h3>
+        <h3>Confirm deletion of currency <span class="ex">'[% currency.currency %]'</span></h3>
         <table>
             <tr><th>Currency</th>
-                <td>[% searchfield %]</td>
+                <td>[% currency.currency %]</td>
             </tr>
             <tr><th>Rate</th>
-                <td>[% rate %]</td>
+                <td>[% currency.rate %]</td>
             </tr>
         </table>
-        <form action="[% script_name %]" method="post">
+        <form action="/cgi-bin/koha/admin/currency.pl" method="post">
             <input type="hidden" name="op" value="delete_confirmed" />
-            <input type="hidden" name="searchfield" value="[% searchfield %]" />
+            <input type="hidden" name="currency_code" value="[% currency.currency_code %]" />
             <input type="submit" class="approve" value="Delete this currency" />
         </form>
-        <form action="[% script_name %]" method="post">
+        <form action="/cgi-bin/koha/admin/currency.pl" method="post">
             <input type="submit" class="deny" value="No, do not delete" />
         </form>
     </div>
     [% END %]
 [% END %]
 
-[% IF ( delete_confirmed ) %]
-<div class="dialog message"><h3>Currency deleted</h3>
-<form action="[% script_name %]" method="post">
-    <input type="submit" class="approve" value="OK" />
-</form></div>
-[% END %]
-
-[% IF ( else ) %]
+[% IF op == 'list' %]
 
 <h2>Currencies and exchange rates</h2>
 
-[% IF ( loop ) %][% UNLESS ( activecurrency ) %]<div class="dialog alert"><h3>No active currency is defined</h3><p>Please edit one currency and mark it as active.</p></div>[% END %][% END %]
+    [% IF currencies and no_active_currency %]
+        <div class="dialog alert"><h3>No active currency is defined</h3><p>Please edit one currency and mark it as active.</p></div>
+    [% END %]
 
-
-    [% IF ( searchfield ) %]
+    [% IF searchfield %]
         You searched for [% searchfield %]</span>
     [% END %]
 
@@ -185,33 +180,25 @@
         </tr>
       </thead>
       <tbody>
-        [% FOREACH loo IN loop %]
+        [% FOREACH currency IN currencies %]
           <tr>
-            <td>[% loo.currency %]</td>
-            <td>[% loo.rate %]</td>
-            <td>[% loo.symbol |html %]</td>
-            <td>[% loo.isocode |html %]</td>
-            <td><span title="[% loo.timestamp %]">[% loo.timestamp | $KohaDates %]</span></td>
-            <td style="color:green;">[% IF ( loo.active ) %]✓[% END %]</td>
+            <td>[% currency.currency %]</td>
+            <td>[% currency.rate %]</td>
+            <td>[% currency.symbol |html %]</td>
+            <td>[% currency.isocode |html %]</td>
+            <td><span title="[% currency.timestamp %]">[% currency.timestamp | $KohaDates %]</span></td>
+            <td style="color:green;">[% IF currency.active %]✓[% END %]</td>
             <td>
-              <a href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.currency %]">Edit</a>
+              <a href="/cgi-bin/koha/admin/currency.pl?op=add_form&amp;currency_code=[% currency.currency %]">Edit</a>
               |
-              <a href="[% loo.script_name %]?op=delete_confirm&amp;searchfield=[% loo.currency %]">Delete</a>
+              <a href="/cgi-bin/koha/admin/currency.pl?op=delete_confirm&amp;currency_code=[% currency.currency %]">Delete</a>
             </td>
           </tr>
         [% END %]
       </tbody>
     </table>
-<br />
 
-    [% IF ( offsetgtzero ) %]
-        <a href="[% script_name %]?offset=[% prevpage %]">&lt;&lt; Previous</a>
-    [% END %]
-
-    [% IF ( ltcount ) %]
-        <a href="[% script_name %]?offset=[% nextpage %]">Next &gt;&gt;</a>
-    [% END %]
-
+    <br />
     <div class="hint">
         <p>
             When importing MARC files via the staging tools, the tool will attempt to find and use the price of the currently active currency.

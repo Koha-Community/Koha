@@ -1,26 +1,8 @@
 #!/usr/bin/perl
 
-#script to administer the aqbudget table
-#written 20/02/2002 by paul.poulain@free.fr
-# This software is placed under the gnu General Public License, v2 (http://www.gnu.org/licenses/gpl.html)
-
-# ALGO :
-# this script use an $op to know what to do.
-# if $op is empty or none of the above values,
-#	- the default screen is build (with all records, or filtered datas).
-#	- the   user can clic on add, modify or delete record.
-# if $op=add_form
-#	- if primkey exists, this is a modification,so we read the $primkey record
-#	- builds the add/modify form
-# if $op=add_validate
-#	- the user has just send datas, so we create/modify the record
-# if $op=delete_form
-#	- we show the record having primkey=$primkey and ask for deletion validation form
-# if $op=delete_confirm
-#	- we delete the record having primkey=$primkey
-
-
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2002 Paul Poulain
+# Copyright Koha Development Team
 #
 # This file is part of Koha.
 #
@@ -37,180 +19,112 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 use CGI qw ( -utf8 );
-use C4::Context;
 use C4::Auth;
+use C4::Context;
 use C4::Output;
-use C4::Budgets qw/GetCurrency GetCurrencies/;
 
-our $input = CGI->new;
-my $searchfield = $input->param('searchfield') || $input->param('description') || q{};
-our $offset      = $input->param('offset') || 0;
-my $op          = $input->param('op')     || q{};
-my $script_name = '/cgi-bin/koha/admin/currency.pl';
-our $pagesize = 20;
+use Koha::Acquisition::Currency;
+use Koha::Acquisition::Currencies;
 
-our ($template, $loggedinuser, $cookie) = get_template_and_user({
-    template_name => 'admin/currency.tt',
-    query => $input,
-    type => 'intranet',
-    flagsrequired => {parameters => 'parameters_remaining_permissions'},
-    authnotrequired => 0,
-});
+my $input         = CGI->new;
+my $searchfield   = $input->param('searchfield') || $input->param('description') || q{};
+my $currency_code = $input->param('currency_code');
+my $op            = $input->param('op') || 'list';
+my @messages;
 
-$searchfield=~ s/\,//g;
-
-
-$template->param(searchfield => $searchfield,
-        script_name => $script_name);
-
-our $dbh = C4::Context->dbh;
+our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {   template_name   => 'admin/currency.tt',
+        query           => $input,
+        type            => 'intranet',
+        authnotrequired => 0,
+        flagsrequired   => { parameters => 'parameters_remaining_permissions' },
+    }
+);
 
 if ( $op eq 'add_form' ) {
-    add_form($searchfield);
-} elsif ( $op eq 'save' ) {
-    add_validate();
-    print $input->redirect('/cgi-bin/koha/admin/currency.pl');
-} elsif ( $op eq 'delete_confirm' ) {
-    delete_confirm($searchfield);
-} elsif ( $op eq 'delete_confirmed' ) {
-    delete_currency($searchfield);
-} else {
-    default_path($searchfield);
-}
-
-output_html_with_http_headers $input, $cookie, $template->output;
-
-sub default_path {
-    my $searchfield = shift;
-    $template->param( else => 1 );
-
-    my @currencies = GetCurrencies();
-    if ($searchfield) {
-        @currencies = grep { $_->{currency} =~ m/^$searchfield/o } @currencies;
+    my $currency;
+    if ($currency_code) {
+        $currency = Koha::Acquisition::Currencies->find($currency_code);
     }
-    my $end_of_page = $offset + $pagesize;
-    if ( $end_of_page > @currencies ) {
-        $end_of_page = @currencies;
+
+    $template->param( currency => $currency, );
+} elsif ( $op eq 'add_validate' ) {
+    my $currency_code = $input->param('currency_code');
+    my $symbol        = $input->param('symbol');
+    my $isocode       = $input->param('isocode');
+    my $rate          = $input->param('rate');
+    my $active        = $input->param('active');
+    my $is_a_modif    = $input->param('is_a_modif');
+
+    if ($is_a_modif) {
+        my $currency = Koha::Acquisition::Currencies->find($currency_code);
+        $currency->symbol($symbol);
+        $currency->isocode($isocode);
+        $currency->rate($rate);
+        $currency->active($active);
+        eval { $currency->store; };
+        if ($@) {
+            push @messages, { type => 'error', code => 'error_on_update' };
+        } else {
+            push @messages, { type => 'message', code => 'success_on_update' };
+        }
     } else {
-        $template->param(
-            ltcount  => 1,
-            nextpage => $end_of_page
+        my $currency = Koha::Acquisition::Currency->new(
+            {   currency => $currency_code,
+                symbol   => $symbol,
+                isocode  => $isocode,
+                rate     => $rate,
+                active   => $active,
+            }
         );
-    }
-    $end_of_page--;
-    my @display_curr = @currencies[ $offset .. $end_of_page ];
-    my $activecurrency = GetCurrency();
-
-    $template->param(
-        loop           => \@display_curr,
-        activecurrency => defined $activecurrency,
-    );
-
-    if ( $offset > 0 ) {
-        $template->param(
-            offsetgtzero => 1,
-            prevpage     => $offset - $pagesize
-        );
-    }
-    return;
-}
-
-sub delete_currency {
-    my $curr = shift;
-
-    # TODO This should be a method of Currency
-    # also what about any orders using this currency
-    $template->param( delete_confirmed => 1 );
-    $dbh->do( 'delete from currency where currency=?', {}, $curr );
-    return;
-}
-
-sub delete_confirm {
-    my $curr = shift;
-
-    $template->param( delete_confirm => 1 );
-    my $total_row = $dbh->selectrow_hashref(
-        'select count(*) as total from aqbooksellers where currency=?',
-        {}, $curr );
-
-    my $curr_ref = $dbh->selectrow_hashref(
-        'select currency,rate from currency where currency=?',
-        {}, $curr );
-
-    if ( $total_row->{total} ) {
-        $template->param( totalgtzero => 1 );
-    }
-
-    $template->param(
-        rate  => $curr_ref->{rate},
-        total => $total_row->{total}
-    );
-
-    return;
-}
-
-sub add_form {
-    my $curr = shift;
-
-    $template->param( add_form => 1 );
-
-    #---- if primkey exists, it's a modify action, so read values to modify...
-    my $date;
-    if ($curr) {
-        my $curr_rec =
-          $dbh->selectrow_hashref( 'select * from currency where currency=?',
-            {}, $curr );
-        for ( keys %{$curr_rec} ) {
-            if($_ eq "timestamp"){ $date = $curr_rec->{$_}; }
-            $template->param( $_ => $curr_rec->{$_} );
+        eval { $currency->store; };
+        if ($@) {
+            push @messages, { type => 'error', code => 'error_on_insert' };
+        } else {
+            push @messages, { type => 'message', code => 'success_on_insert' };
         }
     }
+    $searchfield = q||;
+    $op          = 'list';
+} elsif ( $op eq 'delete_confirm' ) {
+    my $currency = Koha::Acquisition::Currencies->find($currency_code);
 
-    return;
-}
+    # TODO rewrite the following when Koha::Acquisition::Orders will use Koha::Objects
+    my $schema = Koha::Database->schema;
+    my $nb_of_orders = $schema->resultset('Aqorder')->search( { currency => $currency->currency } )->count;
+    $template->param(
+        currency     => $currency,
+        nb_of_orders => $nb_of_orders,
+    );
+} elsif ( $op eq 'delete' ) {
+    my $currency = Koha::Acquisition::Currencies->find($currency_code);
+    my $deleted = eval { $currency->delete; };
 
-sub add_validate {
-    $template->param( add_validate => 1 );
-
-    my $rec = {
-        rate     => $input->param('rate'),
-        symbol   => $input->param('symbol') || q{},
-        isocode  => $input->param('isocode') || q{},
-        active   => $input->param('active') || 0,
-        currency => $input->param('currency'),
-    };
-
-    if ( $rec->{active} == 1 ) {
-        $dbh->do('UPDATE currency SET active = 0');
-    }
-
-    my ($row_count) = $dbh->selectrow_array(
-        'select count(*) as count from currency where currency = ?',
-        {}, $input->param('currency') );
-    if ($row_count) {
-        $dbh->do(
-q|UPDATE currency SET rate = ?, symbol = ?, isocode = ?, active = ? WHERE currency = ? |,
-            {},
-            $rec->{rate},
-            $rec->{symbol},
-            $rec->{isocode},
-            $rec->{active},
-            $rec->{currency}
-        );
+    if ( $@ or not $deleted ) {
+        push @messages, { type => 'error', code => 'error_on_delete' };
     } else {
-        $dbh->do(
-q|INSERT INTO currency (currency, rate, symbol, isocode, active) VALUES (?,?,?,?,?) |,
-            {},
-            $rec->{currency},
-            $rec->{rate},
-            $rec->{symbol},
-            $rec->{isocode},
-            $rec->{active}
-        );
-
+        push @messages, { type => 'message', code => 'success_on_delete' };
     }
-    return;
+    $op = 'list';
 }
+
+if ( $op eq 'list' ) {
+    $searchfield =~ s/\,//g;
+    my $currencies = Koha::Acquisition::Currencies->search( { currency => { -like => "$searchfield%" } } );
+
+    my $no_active_currency = not Koha::Acquisition::Currencies->search( { active => 1 } )->count;
+    $template->param(
+        currencies         => $currencies,
+        no_active_currency => $no_active_currency,
+    );
+}
+
+$template->param(
+    searchfield => $searchfield,
+    messages    => \@messages,
+    op          => $op,
+);
+
+output_html_with_http_headers $input, $cookie, $template->output;
