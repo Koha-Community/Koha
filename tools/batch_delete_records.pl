@@ -159,7 +159,7 @@ if ( $op eq 'form' ) {
             # Delete items
             my @itemnumbers = @{ C4::Items::GetItemnumbersForBiblio( $biblionumber ) };
             ITEMNUMBER: for my $itemnumber ( @itemnumbers ) {
-                my $error = eval { C4::Items::DelItemCheck( $dbh, $biblionumber, $itemnumber ) };
+                my $error = eval { C4::Items::DelItemCheck( $biblionumber, $itemnumber ) };
                 if ( $error != 1 or $@ ) {
                     push @messages, {
                         type => 'error',

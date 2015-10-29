@@ -44,7 +44,7 @@ AddIssue($borrower, 'i_dont_exist');
 is ( IsItemIssued( $item->{itemnumber} ), 1, "item is now on loan" );
 
 is(
-    DelItemCheck($dbh, $biblionumber, $itemnumber),
+    DelItemCheck( $biblionumber, $itemnumber),
     'book_on_loan',
     'item that is on loan cannot be deleted',
 );
@@ -53,7 +53,7 @@ AddReturn('i_dont_exist', $library->{branchcode});
 is ( IsItemIssued( $item->{itemnumber} ), 0, "item has been returned" );
 
 is(
-    DelItemCheck($dbh, $biblionumber, $itemnumber),
+    DelItemCheck( $biblionumber, $itemnumber),
     1,
     'item that is not on loan can be deleted',
 );

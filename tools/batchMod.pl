@@ -166,7 +166,7 @@ if ($op eq "action") {
 		$job->progress($i) if $runinbackground;
 		my $itemdata = GetItem($itemnumber);
         if ( $del ){
-			my $return = DelItemCheck(C4::Context->dbh, $itemdata->{'biblionumber'}, $itemdata->{'itemnumber'});
+            my $return = DelItemCheck( $itemdata->{'biblionumber'}, $itemdata->{'itemnumber'});
 			if ($return == 1) {
 			    $deleted_items++;
 			} else {

@@ -72,13 +72,13 @@ my $item = $builder->build(
 AddIssue( $patron, $item->{barcode} );
 
 is(
-    ItemSafeToDelete($dbh, $biblio->{biblionumber}, $item->{itemnumber} ),
+    ItemSafeToDelete( $biblio->{biblionumber}, $item->{itemnumber} ),
     'book_on_loan',
     'ItemSafeToDelete reports item on loan',
 );
 
 is(
-    DelItemCheck($dbh, $biblio->{biblionumber}, $item->{itemnumber} ),
+    DelItemCheck( $biblio->{biblionumber}, $item->{itemnumber} ),
     'book_on_loan',
     'item that is on loan cannot be deleted',
 );
@@ -92,13 +92,13 @@ t::lib::Mocks::mock_preference('IndependentBranches', 1);
 ModItem( { homebranch => $branch2->{branchcode}, holdingbranch => $branch2->{branchcode} }, $biblio->{biblionumber}, $item->{itemnumber} );
 
 is(
-    ItemSafeToDelete($dbh, $biblio->{biblionumber}, $item->{itemnumber} ),
+    ItemSafeToDelete( $biblio->{biblionumber}, $item->{itemnumber} ),
     'not_same_branch',
     'ItemSafeToDelete reports IndependentBranches restriction',
 );
 
 is(
-    DelItemCheck($dbh, $biblio->{biblionumber}, $item->{itemnumber} ),
+    DelItemCheck( $biblio->{biblionumber}, $item->{itemnumber} ),
     'not_same_branch',
     'IndependentBranches prevents deletion at another branch',
 );
@@ -113,13 +113,13 @@ ModItem( { homebranch => $branch->{branchcode}, holdingbranch => $branch->{branc
     $module->mock( GetAnalyticsCount => sub { return 1 } );
 
     is(
-        ItemSafeToDelete($dbh, $biblio->{biblionumber}, $item->{itemnumber} ),
+        ItemSafeToDelete( $biblio->{biblionumber}, $item->{itemnumber} ),
         'linked_analytics',
         'ItemSafeToDelete reports linked analytics',
     );
 
     is(
-        DelItemCheck($dbh, $biblio->{biblionumber}, $item->{itemnumber} ),
+        DelItemCheck( $biblio->{biblionumber}, $item->{itemnumber} ),
         'linked_analytics',
         'Linked analytics prevents deletion of item',
     );
@@ -127,17 +127,17 @@ ModItem( { homebranch => $branch->{branchcode}, holdingbranch => $branch->{branc
 }
 
 is(
-    ItemSafeToDelete($dbh, $biblio->{biblionumber}, $item->{itemnumber} ),
+    ItemSafeToDelete( $biblio->{biblionumber}, $item->{itemnumber} ),
     1,
     'ItemSafeToDelete shows item safe to delete'
 );
 
-DelItemCheck( $dbh, $biblio->{biblionumber}, $item->{itemnumber} );
+DelItemCheck( $biblio->{biblionumber}, $item->{itemnumber} );
 
 my $test_item = GetItem( $item->{itemnumber} );
 
 is( $test_item->{itemnumber}, undef,
-    "DelItemCheck should delete item if 'do_not_commit' not set"
+    "DelItemCheck should delete item if ItemSafeToDelete returns true"
 );
 
 # End of testing

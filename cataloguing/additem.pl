@@ -628,7 +628,7 @@ if ($op eq "additem") {
 } elsif ($op eq "delitem") {
 #-------------------------------------------------------------------------------
     # check that there is no issue on this item before deletion.
-    $error = &DelItemCheck($dbh,$biblionumber,$itemnumber);
+    $error = &DelItemCheck( $biblionumber,$itemnumber);
     if($error == 1){
         print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode&searchid=$searchid");
     }else{
@@ -645,7 +645,7 @@ if ($op eq "additem") {
         my $items = &GetItemsByBiblioitemnumber( $biblioitem->{biblioitemnumber} );
 
         foreach my $item (@$items) {
-            $error =&DelItemCheck( $dbh, $biblionumber, $item->{itemnumber} );
+            $error =&DelItemCheck( $biblionumber, $item->{itemnumber} );
             $itemfail =$item;
         if($error == 1){
             next

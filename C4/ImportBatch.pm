@@ -924,7 +924,7 @@ sub BatchRevertItems {
     $sth->bind_param(1, $import_record_id);
     $sth->execute();
     while (my $row = $sth->fetchrow_hashref()) {
-        my $error = DelItemCheck($dbh, $biblionumber, $row->{'itemnumber'});
+        my $error = DelItemCheck( $biblionumber, $row->{'itemnumber'});
         if ($error == 1){
             my $updsth = $dbh->prepare("UPDATE import_items SET status = ? WHERE import_items_id = ?");
             $updsth->bind_param(1, 'reverted');

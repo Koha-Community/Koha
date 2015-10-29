@@ -2220,7 +2220,7 @@ sub MoveItemFromBiblio {
 
 =head2 ItemSafeToDelete
 
-   ItemSafeToDelete($dbh, $biblionumber, $itemnumber);
+   ItemSafeToDelete( $biblionumber, $itemnumber);
 
 Exported function (core API) for checking whether an item record is safe to delete.
 
@@ -2237,9 +2237,9 @@ returns 1 if the item is safe to delete,
 =cut
 
 sub ItemSafeToDelete {
-    my ( $dbh, $biblionumber, $itemnumber ) = @_;
+    my ( $biblionumber, $itemnumber ) = @_;
     my $status;
-    $dbh ||= C4::Context->dbh;
+    my $dbh = C4::Context->dbh;
 
     my $error;
 
@@ -2293,21 +2293,17 @@ sub ItemSafeToDelete {
 
 =head2 DelItemCheck
 
-   DelItemCheck($dbh, $biblionumber, $itemnumber);
+   DelItemCheck( $biblionumber, $itemnumber);
 
 Exported function (core API) for deleting an item record in Koha if there no current issue.
 
 DelItemCheck wraps ItemSafeToDelete around DelItem.
 
-It takes a database handle, biblionumber and itemnumber as arguments:
-
-    DelItemCheck(  $dbh, $biblionumber, $itemnumber );
-
 =cut
 
 sub DelItemCheck {
-    my ( $dbh, $biblionumber, $itemnumber ) = @_;
-    my $status = ItemSafeToDelete( $dbh, $biblionumber, $itemnumber );
+    my ( $biblionumber, $itemnumber ) = @_;
+    my $status = ItemSafeToDelete( $biblionumber, $itemnumber );
 
     if ( $status == 1 ) {
         DelItem(

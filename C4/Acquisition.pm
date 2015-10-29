@@ -1800,7 +1800,7 @@ sub DelOrder {
 
     my @itemnumbers = GetItemnumbersFromOrder( $ordernumber );
     foreach my $itemnumber (@itemnumbers){
-        my $delcheck = C4::Items::DelItemCheck( $dbh, $bibnum, $itemnumber );
+        my $delcheck = C4::Items::DelItemCheck( $bibnum, $itemnumber );
 
         if($delcheck != 1) {
             $error->{'delitem'} = 1;

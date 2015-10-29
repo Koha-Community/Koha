@@ -371,7 +371,7 @@ is($new_count, $hold_notice_count + 1, 'patron not notified a second time (bug 1
 # avoiding the not_same_branch error
 t::lib::Mocks::mock_preference('IndependentBranches', 0);
 is(
-    DelItemCheck($dbh, $bibnum, $itemnumber),
+    DelItemCheck( $bibnum, $itemnumber),
     'book_reserved',
     'item that is captured to fill a hold cannot be deleted',
 );
