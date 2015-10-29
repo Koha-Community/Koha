@@ -61,7 +61,6 @@ BEGIN {
 
         &GetCurrency
         &GetCurrencies
-        &ModCurrencies
         &ConvertCurrency
         
 		&GetBudgetsPlanCell
@@ -954,25 +953,6 @@ sub GetCurrency {
     $sth->execute;
     my $r = $sth->fetchrow_hashref;
     return $r;
-}
-
-=head2 ModCurrencies
-
-&ModCurrencies($currency, $newrate);
-
-Sets the exchange rate for C<$currency> to be C<$newrate>.
-
-=cut
-
-sub ModCurrencies {
-    my ( $currency, $rate ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = qq|
-        UPDATE currency
-        SET    rate=?
-        WHERE  currency=? |;
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $rate, $currency );
 }
 
 # -------------------------------------------------------------------
