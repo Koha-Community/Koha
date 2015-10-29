@@ -1,11 +1,14 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
+
 use File::Copy;
 use File::Path qw(make_path);
 use File::Find;
 use File::Basename;
 use File::Spec;
+
+use C4::Context;
 
 my $source = File::Spec->rel2abs('.');
 my $destination = $ARGV[0];
@@ -47,6 +50,13 @@ make_path("$destination/var/run/zebradb");
 
 $ENV{'INSTALL_BASE'} = $destination;
 $ENV{'__INSTALL_BASE__'} = $destination;
+
+$ENV{'__DB_TYPE__'} = C4::Context->config('db_scheme') // 'mysql';
+$ENV{'__DB_NAME__'} = C4::Context->config('database')  // 'koha';
+$ENV{'__DB_HOST__'} = C4::Context->config('hostname')  // 'localhost';
+$ENV{'__DB_PORT__'} = C4::Context->config('port')      // '3306';
+$ENV{'__DB_USER__'} = C4::Context->config('user')      // 'kohaadmin';
+$ENV{'__DB_PASS__'} = C4::Context->config('pass')      // 'katikoan';
 
 my @files = ( "$source/etc/koha-conf.xml",
               "$source/etc/searchengine/queryparser.yaml",

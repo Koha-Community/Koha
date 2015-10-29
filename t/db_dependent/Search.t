@@ -37,8 +37,6 @@ use Test::Warn;
 use File::Temp qw/ tempdir /;
 use File::Path;
 
-use t::lib::Mocks;
-
 our $child;
 our $datadir;
 
@@ -84,9 +82,6 @@ sub cleanup {
     }
 }
 
-BEGIN {
-    t::lib::Mocks::mock_dbh;
-}
 # Fall back to make sure that the Zebra process
 # and files get cleaned up
 END {
