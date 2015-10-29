@@ -33,6 +33,26 @@ Koha::Acquisition::Currency - Koha Acquisition Currency Object class
 
 =cut
 
+=head3 store
+
+=cut
+
+sub store {
+    my ( $self ) = @_;
+    my $result;
+    $self->_result->result_source->schema->txn_do( sub {
+        if ( $self->active ) {
+            my @currencies = Koha::Acquisition::Currencies->search;
+            for my $currency ( @currencies ) {
+                $currency->active(0);
+                $currency->store;
+            }
+        }
+        $result = $self->SUPER::store;
+    });
+    return $result;
+}
+
 =head3 type
 
 =cut
