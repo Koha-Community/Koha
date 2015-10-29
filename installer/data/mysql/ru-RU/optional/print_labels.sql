@@ -1,4 +1,6 @@
--- Label Templates
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+
 LOCK TABLES `creator_templates` WRITE;
 INSERT INTO `creator_templates`
 (template_id,template_code,template_desc,page_width,page_height,label_width,label_height,top_margin,left_margin,cols,rows,col_gap,row_gap,
@@ -11,14 +13,13 @@ VALUES
 (5,'Avery 8163','2 ряда x 5 рядов',8.5,11,4,2,0.5,0.17,2,5,0.2,0.01,'INCH'),
 (6,'cards','Avery 5160 | 1 x 2-5/8 : 1 x 2-5/8\"  [3x10] : эквивалент: Gaylord JD-ML3000',8.5,11,2.75,1.05,0.25,0,3,10,0.2,0.01,'INCH'),
 (7,'HB-PC0001','Шаблон для карточек посетителей домашнего изготовления',8.5,11,3.125,1.875,0.375,0.5625,2,5,1.125,0.1875,'INCH');
-
 UNLOCK TABLES; 
 
 LOCK TABLES `creator_layouts` WRITE;
-/*!40000 ALTER TABLE `creator_layouts` DISABLE KEYS */;
 INSERT INTO `creator_layouts` VALUES
 (1,'CODE39',1,'BIBBAR','библио-запись и штрих-код',0,1,'TR',7,'POINT',0,'L','title, author, itemcallnumber', '<opt></opt>', 'Labels'),
 (2,'CODE39',1,'BAR','переменный',0,1,'TR',3,'POINT',0,'L','','','Labels');
-/*!40000 ALTER TABLE `creator_layouts` ENABLE KEYS */;
-
 UNLOCK TABLES;
+
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
