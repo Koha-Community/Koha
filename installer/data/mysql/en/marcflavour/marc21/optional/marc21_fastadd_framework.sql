@@ -7,7 +7,7 @@ WHERE frameworkcode = '' AND
 tagfield IN ('000', '008', '010', '020', '022', '050', '082', '090', '099', '100', '245', '250', '260', '300', '500', '942', '952', '999');
 
 INSERT IGNORE INTO marc_subfield_structure (tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, frameworkcode, seealso, link, defaultvalue)
-SELECT tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, kohafield, 0, authorised_value, authtypecode, value_builder, isurl, hidden, 'FA', seealso, link, defaultvalue
+SELECT tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, 'FA', seealso, link, defaultvalue
 FROM marc_subfield_structure
 WHERE frameworkcode = '' AND
 tagfield IN ('000', '008', '010', '020', '022', '050', '082', '090', '099', '100', '245', '250', '260', '300', '500', '942', '952', '999');
@@ -16,6 +16,7 @@ tagfield IN ('000', '008', '010', '020', '022', '050', '082', '090', '099', '100
 -- REVERT HIDDEN FIELD TO ORIGINAL (pre copy ) VALUES
 -- **************************************************
 
+UPDATE marc_subfield_structure SET tab = 0 WHERE tagfield IN ('100','245','250','260','300','500','942') AND frameworkcode = 'FA';
 UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '010' AND tagsubfield = '8' AND frameworkcode = 'FA';
 UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '010' AND tagsubfield = 'b' AND frameworkcode = 'FA';
 UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '010' AND tagsubfield = 'z' AND frameworkcode = 'FA';
