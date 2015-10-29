@@ -169,7 +169,7 @@ if ( $op eq 'form' ) {
                         error => ($@ ? $@ : $error),
                     };
                     $dbh->rollback;
-                    next BIBLIONUMBER;
+                    next RECORD_IDS;
                 }
             }
 
