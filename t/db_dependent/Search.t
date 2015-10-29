@@ -125,6 +125,10 @@ $contextmodule->mock('preference', sub {
         return 20;
     } elsif ($pref eq 'OpacHiddenItems') {
         return '';
+    } elsif ($pref eq 'opacthemes') {
+        return 'bootstrap';
+    } elsif ($pref eq 'opaclanguages') {
+        return 'en';
     } elsif ($pref eq 'AlternateHoldingsField') {
         return '490av';
     } elsif ($pref eq 'AuthoritySeparator') {
