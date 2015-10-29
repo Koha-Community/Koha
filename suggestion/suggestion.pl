@@ -32,6 +32,7 @@ use C4::Members;
 use C4::Debug;
 
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Acquisition::Currencies;
 
 use URI::Escape;
 
@@ -352,28 +353,10 @@ foreach my $budget ( @{$budgets} ) {
 $template->param( budgetsloop => \@budgets_loop);
 $template->param( "statusselected_$$suggestion_ref{'STATUS'}" =>1) if ($$suggestion_ref{'STATUS'});
 
-# get currencies and rates
-my @rates = GetCurrencies();
-my $count = scalar @rates;
-my $active_currency = GetCurrency();
-my $selected_currency;
-if ($$suggestion_ref{'currency'}) {
-    $selected_currency = $$suggestion_ref{'currency'};
-}
-else {
-    $selected_currency = $active_currency->{currency};
-}
-
-my @loop_currency = ();
-for ( my $i = 0 ; $i < $count ; $i++ ) {
-    my %line;
-    $line{currcode} = $rates[$i]->{'currency'};
-    $line{rate}     = $rates[$i]->{'rate'};
-    $line{selected} = 1 if ($line{'currcode'} eq $selected_currency);
-    push @loop_currency, \%line;
-}
+my @currencies = Koha::Acquisition::Currencies->search;
 $template->param(
-    loop_currency => \@loop_currency,
+    currencies   => \@currencies,
+    suggestion   => $suggestion_ref,
     price        => sprintf("%.2f", $$suggestion_ref{'price'}||0),
     total            => sprintf("%.2f", $$suggestion_ref{'total'}||0),
 );

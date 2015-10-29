@@ -5,10 +5,10 @@ use Test::More tests => 19;
 use Test::MockModule;
 use t::lib::Mocks;
 
-use C4::Budgets;
-my $budget_module = Test::MockModule->new('C4::Budgets');
+use Koha::Acquisition::Currencies;
+my $budget_module = Test::MockModule->new('Koha::Acquisition::Currencies');
 my $currency;
-$budget_module->mock( 'GetCurrency', sub { return $currency; } );
+$budget_module->mock( 'get_active', sub { return $currency; } );
 use_ok('Koha::Number::Price');
 
 my $format = {
@@ -16,12 +16,12 @@ my $format = {
     p_sep_by_space => 0, # Force to not add a space between the symbol and the number
 };
 t::lib::Mocks::mock_preference( 'CurrencyFormat', 'US' );
-$currency = {
+$currency = Koha::Acquisition::Currency->new({
     currency => 'USD',
     symbol   => '$',
     rate     => 1,
     active   => 1,
-};
+});
 
 is( Koha::Number::Price->new->format( $format ),    '0.00', 'US: format 0' );
 is( Koha::Number::Price->new(3)->format( $format ), '3.00', 'US: format 3' );
@@ -45,12 +45,12 @@ is( Koha::Number::Price->new(1234567890)->unformat,
     '1234567890', 'US: unformat 1234567890' );
 
 t::lib::Mocks::mock_preference( 'CurrencyFormat', 'FR' );
-$currency = {
+$currency = Koha::Acquisition::Currency->new({
     currency => 'EUR',
     symbol   => '€',
     rate     => 1,
     active   => 1,
-};
+});
 
 # Actually,the price formating for France is 3,00€
 # How put the symbol at the end with Number::Format?

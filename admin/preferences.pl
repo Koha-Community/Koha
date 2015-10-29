@@ -28,7 +28,7 @@ use C4::ClassSource;
 use C4::Log;
 use C4::Output;
 use C4::Templates;
-use C4::Budgets qw(GetCurrency);
+use Koha::Acquisition::Currencies;
 use File::Spec;
 use IO::File;
 use YAML::Syck qw();
@@ -45,10 +45,10 @@ sub GetTab {
 
     my $tab_template = C4::Templates::gettemplate( 'admin/preferences/' . $tab . '.pref', 'intranet', $input );
 
-    my $active_currency = GetCurrency();
+    my $active_currency = Koha::Acquisition::Currencies->get_active;
     my $local_currency;
     if ($active_currency) {
-        $local_currency = $active_currency->{currency};
+        $local_currency = $active_currency->currency;
     }
     $tab_template->param(
         local_currency => $local_currency, # currency code is used, because we do not know how a given currency is formatted.

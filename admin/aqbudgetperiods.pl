@@ -57,6 +57,7 @@ use C4::Output;
 use C4::Acquisition;
 use C4::Budgets;
 use C4::Debug;
+use Koha::Acquisition::Currencies;
 
 my $dbh = C4::Context->dbh;
 
@@ -91,9 +92,9 @@ my ($template, $borrowernumber, $cookie, $staff_flags ) = get_template_and_user(
 
 
 # This is used in incbudgets-active-currency.inc
-my $cur = GetCurrency();
-$template->param( symbol => $cur->{symbol},
-                  currency => $cur->{currency}
+my $active_currency = Koha::Acquisition::Currencies->get_active;
+$template->param( symbol => $active_currency->symbol,
+                  currency => $active_currency->currency
                );
 
 # ADD OR MODIFY A BUDGET PERIOD - BUILD SCREEN

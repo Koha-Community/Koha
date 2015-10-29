@@ -176,6 +176,7 @@
             <th>ISO code</th>
             <th class="title-string">Last updated</th>
             <th>Active</th>
+            <th>Archived</th>
             <th>Actions</th>
         </tr>
       </thead>
@@ -188,6 +189,7 @@
             <td>[% currency.isocode |html %]</td>
             <td><span title="[% currency.timestamp %]">[% currency.timestamp | $KohaDates %]</span></td>
             <td style="color:green;">[% IF currency.active %]✓[% END %]</td>
+            <td>[% IF currency.archived %]Yes[% END %]</td>
             <td>
               <a href="/cgi-bin/koha/admin/currency.pl?op=add_form&amp;currency_code=[% currency.currency %]">Edit</a>
               |

@@ -37,11 +37,19 @@ my $context = new Test::MockModule('C4::Context');
 
 mock_marcfromkohafield();
 
-my $currency = new Test::MockModule('C4::Budgets');
-$currency->mock( 'GetCurrency', sub {
-    return { symbol   => '$',   isocode  => 'USD',
-             currency => 'USD', active => 1 };
-});
+my $currency = new Test::MockModule('Koha::Acquisition::Currencies');
+$currency->mock(
+    'get_active',
+    sub {
+        return Koha::Acquisition::Currency->new(
+            {   symbol   => '$',
+                isocode  => 'USD',
+                currency => 'USD',
+                active   => 1,
+            }
+        );
+    }
+);
 
 sub run_tests {
 

@@ -290,9 +290,7 @@ if ( $op eq 'delete_confirm' ) {
         push @basketusers, $basketuser if $basketuser;
     }
 
-    #to get active currency
-    my $cur = GetCurrency();
-
+    my $active_currency = Koha::Acquisition::Currencies->get_active;
 
     my @orders = GetOrders( $basketno );
     my @books_loop;
@@ -384,7 +382,7 @@ if ( $op eq 'delete_confirm' ) {
         total_gste           => sprintf( "%.2f", $total_gste ),
         total_gsti           => sprintf( "%.2f", $total_gsti ),
         total_gstvalue       => sprintf( "%.2f", $total_gstvalue ),
-        currency             => $cur->{'currency'},
+        currency             => $active_currency->currency,
         listincgst           => $bookseller->{listincgst},
         basketgroups         => $basketgroups,
         basketgroup          => $basketgroup,

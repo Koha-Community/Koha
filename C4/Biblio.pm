@@ -40,6 +40,7 @@ use C4::OAI::Sets;
 
 use Koha::Cache;
 use Koha::Authority::Types;
+use Koha::Acquisition::Currencies;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -1531,10 +1532,10 @@ sub MungeMarcPrice {
     my ( $price ) = @_;
     return unless ( $price =~ m/\d/ ); ## No digits means no price.
     # Look for the currency symbol and the normalized code of the active currency, if it's there,
-    my $active_currency = C4::Budgets->GetCurrency();
-    my $symbol = $active_currency->{'symbol'};
-    my $isocode = $active_currency->{'isocode'};
-    $isocode = $active_currency->{'currency'} unless defined $isocode;
+    my $active_currency = Koha::Acquisition::Currencies->get_active;
+    my $symbol = $active_currency->symbol;
+    my $isocode = $active_currency->isocode;
+    $isocode = $active_currency->currency unless defined $isocode;
     my $localprice;
     if ( $symbol ) {
         my @matches =($price=~ /

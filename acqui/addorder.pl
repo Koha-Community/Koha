@@ -129,6 +129,7 @@ use C4::Biblio;         # AddBiblio TransformKohaToMarc
 use C4::Budgets;
 use C4::Items;
 use C4::Output;
+use Koha::Acquisition::Currencies;
 
 ### "-------------------- addorder.pl ----------"
 
@@ -188,11 +189,11 @@ unless($confirm_budget_exceeding) {
         if( ($budget_expenditure+0) && ($budget_used + $total) > $budget_expenditure
           && $total <= $budget_remaining )
         {
-            my $currency = GetCurrency;
+            my $currency = Koha::Acquisition::Currencies->get_active;
             $template->param(
                 expenditure_exceeded => 1,
                 expenditure => sprintf("%.2f", $budget_expenditure),
-                currency => ($currency) ? $currency->{'symbol'} : '',
+                currency => ($currency) ? $currency->symbol : '',
             );
         }
         if($total > $budget_remaining){

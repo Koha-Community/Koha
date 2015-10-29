@@ -199,10 +199,6 @@
                         <input type="hidden" name="import_batch_id" value="[%import_batch_id %]" />
                         <input type="hidden" name="ordernumber" value="[% ordernumber %]" />
 
-                        [% FOREACH cur IN loop_currencies %]
-                            <input type="hidden" name="[% cur.currency %]" value="[% cur.rate %]" />
-                        [% END %]
-
                         [% FOREACH biblio IN biblio_list %]
                         <fieldset class="biblio unselected rows" style="float:none;">
                           <legend>
@@ -358,11 +354,11 @@
                                         <li>
                                             <label for="all_currency">Currency:</label>
                                             <select name="all_currency" id="all_currency">
-                                            [% FOREACH loop_currencie IN loop_currencies %]
-                                                [% IF ( loop_currencie.selected ) %]
-                                                    <option value="[% loop_currencie.currcode %]" selected="selected">[% loop_currencie.currcode %]</option>
-                                                [% ELSE %]
-                                                    <option value="[% loop_currencie.currcode %]">[% loop_currencie.currcode %]</option>
+                                            [% FOREACH currency IN currencies %]
+                                                [% IF currency.currency == bookseller.listprice %]
+                                                    <option value="[% currency.currency %]" selected="selected">[% currency.currency %]</option>
+                                                [% ELSIF not currency.archived %]
+                                                    <option value="[% currency.currency %]">[% currency.currency %]</option>
                                                 [% END %]
                                             [% END %]
                                             </select>

@@ -34,6 +34,7 @@ use C4::Context;
 use C4::Installer;
 
 use Koha;
+use Koha::Acquisition::Currencies;
 use Koha::Borrowers;
 use Koha::Config::SysPrefs;
 
@@ -88,7 +89,7 @@ my $errZebraConnection = C4::Context->Zconn("biblioserver",0)->errcode();
 
 my $warnIsRootUser   = (! $loggedinuser);
 
-my $warnNoActiveCurrency = (! defined C4::Budgets->GetCurrency());
+my $warnNoActiveCurrency = (! defined Koha::Acquisition::Currencies->get_active);
 my @xml_config_warnings;
 
 my $context = new C4::Context;

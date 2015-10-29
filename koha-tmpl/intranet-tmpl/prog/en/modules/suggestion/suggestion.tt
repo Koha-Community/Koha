@@ -420,16 +420,25 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
             </select>
 		</li><li><label for="quantity">Copies:</label>
 			<input type="text" size="10" id="quantity" name="quantity" value="[% quantity %]" onchange="calcNewsuggTotal();" />
-                </li><li><label for="currency">Currency:</label>
-		        [% FOREACH loop_currenc IN loop_currency %]
-                    <input type="hidden" value="[% loop_currenc.rate %]" id="currency_rate_[% loop_currenc.currcode %]" name="currency_rate_[% loop_currenc.currcode %]" />
-		            <input type="hidden" id="[% loop_currenc.currcode %]" name="[% loop_currenc.currcode %]" value="[% loop_currenc.rate %]" />
-		        [% END %]
-            <select name="currency" id="currency" onchange="calcNewsuggTotal();">
-                [% FOREACH loop_currenc IN loop_currency %]
-                [% IF ( loop_currenc.selected ) %]<option value="[% loop_currenc.currcode %]" selected="selected">[% loop_currenc.currcode %]</option>[% ELSE %]<option value="[% loop_currenc.currcode %]">[% loop_currenc.currcode %]</option>[% END %][% END %]
-            </select>
-                </li><li><label for="price">Price:</label>
+                </li>
+                <li>
+                    <label for="currency">Currency:</label>
+                    [% FOREACH c IN currencies %]
+                        <input type="hidden" value="[% c.rate %]" id="currency_rate_[% c.currency %]" name="currency_rate_[% c.currency %]" />
+                        <input type="hidden" id="[% c.currency %]" name="[% c.currency %]" value="[% c.rate %]" />
+                    [% END %]
+
+                    <select name="currency" id="currency" onchange="calcNewsuggTotal();">
+                        [% FOREACH c IN currencies %]
+                            [% IF suggestionid and suggestion.currency == c.currency or not suggestionid and c.active %]
+                                <option value="[% c.currency %]" selected="selected">[% c.currency %]</option>
+                            [% ELSIF not c.archived %]
+                                <option value="[% c.currency %]">[% c.currency %]</option>
+                            [% END %]
+                        [% END %]
+                    </select>
+                </li>
+                <li><label for="price">Price:</label>
 			<input type="text" size="20" name="price" id="price" value="[% price %]" onchange="calcNewsuggTotal();" />
                 </li><li><label for="total">Total: </label>
 			<input type="text" readonly="readonly" id="total" name="total" size="10" value="[% total %]"/>

@@ -53,6 +53,7 @@ use C4::Bookseller::Contact;
 use C4::Budgets;
 
 use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Currencies;
 
 my $query    = CGI->new;
 my $op = $query->param('op') || 'display';
@@ -76,7 +77,6 @@ if ($booksellerid) {
 }
 $template->{'VARS'}->{'contacts'} = C4::Bookseller::Contact->new() unless $template->{'VARS'}->{'contacts'};
 
-#build array for currencies
 if ( $op eq 'display' ) {
     my $contracts = GetContracts( { booksellerid => $booksellerid } );
 
@@ -98,25 +98,7 @@ if ( $op eq 'display' ) {
     print $query->redirect('/cgi-bin/koha/acqui/acqui-home.pl');
     exit;
 } else {
-    my @currencies = GetCurrencies();
-    my $loop_currency;
-    my $active_currency = GetCurrency();
-    my $active_listprice = $supplier->{'listprice'};
-    my $active_invoiceprice = $supplier->{'invoiceprice'};
-    if (!$supplier->{listprice}) {
-        $active_listprice =  $active_currency->{currency};
-    }
-    if (!$supplier->{invoiceprice}) {
-        $active_invoiceprice =  $active_currency->{currency};
-    }
-    for (@currencies) {
-        push @{$loop_currency},
-            { 
-            currency     => $_->{currency},
-            listprice    => ( $_->{currency} eq $active_listprice ),
-            invoiceprice => ( $_->{currency} eq $active_invoiceprice ),
-            };
-    }
+    my @currencies = Koha::Acquisition::Currencies->search;
 
     # get option values from gist syspref
     my @gst_values = map {
@@ -128,7 +110,7 @@ if ( $op eq 'display' ) {
         active       => $booksellerid ? $supplier->{'active'} : 1,
         gstrate       => $supplier->{gstrate} ? $supplier->{'gstrate'}+0.0 : 0,
         gst_values    => \@gst_values,
-        loop_currency => $loop_currency,
+        currencies    => \@currencies,
         enter         => 1,
     );
 }

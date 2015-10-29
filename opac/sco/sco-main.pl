@@ -45,6 +45,7 @@ use C4::Output;
 use C4::Members;
 use C4::Biblio;
 use C4::Items;
+use Koha::Acquisition::Currencies;
 
 my $query = new CGI;
 
@@ -113,8 +114,8 @@ if (C4::Context->preference('SelfCheckoutByLogin') && !$patronid) {
 my $borrower = GetMemberDetails(undef,$patronid);
 
 my $currencySymbol = "";
-if ( defined C4::Budgets->GetCurrency() ) {
-    $currencySymbol = C4::Budgets->GetCurrency()->{symbol};
+if ( my $active_currency = Koha::Acquisition::Currencies->get_active ) {
+    $currencySymbol = $active_currency->symbol;
 }
 
 my $branch = $issuer->{branchcode};

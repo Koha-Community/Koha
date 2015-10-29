@@ -89,6 +89,7 @@ use C4::Search qw/FindDuplicate/;
 use C4::ImportBatch qw/GetImportRecordMarc SetImportRecordStatus/;
 
 use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Currencies;
 use Koha::ItemTypes;
 
 our $input           = new CGI;
@@ -206,37 +207,8 @@ else {    #modify order
 my $suggestion;
 $suggestion = GetSuggestionInfo($suggestionid) if $suggestionid;
 
-# get currencies (for change rates calcs if needed)
-my $active_currency = GetCurrency();
-my $default_currency;
-if (! $data->{currency} ) { # New order no currency set
-    if ( $bookseller->{listprice} ) {
-        $default_currency = $bookseller->{listprice};
-    }
-    else {
-        $default_currency = $active_currency->{currency};
-    }
-}
-
-my @rates = GetCurrencies();
-
-# ## @rates
-
-my @loop_currency = ();
-for my $curr ( @rates ) {
-    my $selected;
-    if ($data->{currency} ) {
-        $selected = $curr->{currency} eq $data->{currency};
-    }
-    else {
-        $selected = $curr->{currency} eq $default_currency;
-    }
-    push @loop_currency, {
-        currcode => $curr->{currency},
-        rate     => $curr->{rate},
-        selected => $selected,
-    }
-}
+my @currencies = Koha::Acquisition::Currencies->search;
+my $active_currency = Koha::Acquisition::Currencies->get_active;
 
 # build branches list
 my $onlymine =
@@ -377,9 +349,9 @@ $template->param(
     listincgst       => $bookseller->{'listincgst'},
     invoiceincgst    => $bookseller->{'invoiceincgst'},
     name             => $bookseller->{'name'},
-    cur_active_sym   => $active_currency->{'symbol'},
-    cur_active       => $active_currency->{'currency'},
-    loop_currencies  => \@loop_currency,
+    cur_active_sym   => $active_currency->symbol,
+    cur_active       => $active_currency->currency,
+    currencies       => \@currencies,
     orderexists      => ( $new eq 'yes' ) ? 0 : 1,
     title            => $data->{'title'},
     author           => $data->{'author'},

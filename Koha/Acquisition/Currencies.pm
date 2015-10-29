@@ -35,6 +35,15 @@ Koha::Acquisition::Currencies - Koha Acquisition Currency Object set class
 
 =cut
 
+=head3 get_active
+
+=cut
+
+sub get_active {
+    my ( $self ) = @_;
+    return $self->SUPER::search( { active => 1 } )->next;
+}
+
 =head3 type
 
 =cut

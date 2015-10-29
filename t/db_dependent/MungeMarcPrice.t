@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use C4::Biblio;
-use C4::Budgets;
+use Koha::Acquisition::Currencies;
 use Test::More;
 use utf8;
 
@@ -39,10 +39,10 @@ my $ISOCODE = 'USD';
 my $RATE= 1;
 
 # disables existing active currency if necessary.
-my $active_currency = C4::Budgets->GetCurrency();
+my $active_currency = Koha::Acquisition::Currencies->get_active;
 my $curr;
 if ($active_currency) {
-    $curr = $active_currency->{'currency'};
+    $curr = $active_currency->currency;
     $dbh->do("UPDATE currency set active = 0 where currency = '$curr'");
 }
 

@@ -35,6 +35,7 @@ use C4::Output;
 use C4::Koha;
 use C4::Auth;
 use C4::Debug;
+use Koha::Acquisition::Currencies;
 
 my $input = new CGI;
 ####  $input
@@ -56,9 +57,9 @@ my $budget_period_id = $input->param('budget_period_id');
 # IF PERIOD_ID IS DEFINED,  GET THE PERIOD - ELSE GET THE ACTIVE PERIOD BY DEFAULT
 my $period = GetBudgetPeriod($budget_period_id);
 my $count  = GetPeriodsCount();
-my $cur    = GetCurrency;
-$template->param( symbol => $cur->{symbol},
-                  currency => $cur->{currency}
+my $active_currency = Koha::Acquisition::Currencies->get_active;
+$template->param( symbol => $active_currency->symbol,
+                  currency => $active_currency->currency,
                );
 $template->param( period_button_only => 1 ) if $count == 0;
 

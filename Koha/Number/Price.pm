@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use Number::Format qw( format_price );
 use C4::Context;
-use C4::Budgets qw( GetCurrency );
+use Koha::Acquisition::Currencies;
 
 use base qw( Class::Accessor );
 __PACKAGE__->mk_accessors(qw( value ));
@@ -82,7 +82,7 @@ sub _format_params {
     my $with_symbol = $params->{with_symbol} || 0;
     my $p_cs_precedes = $params->{p_cs_precedes};
     my $p_sep_by_space = $params->{p_sep_by_space};
-    my $currency        = GetCurrency();
+    my $currency        = Koha::Acquisition::Currencies->get_active;
     my $currency_format = C4::Context->preference("CurrencyFormat");
 
     my $int_curr_symbol = q||;
@@ -94,7 +94,7 @@ sub _format_params {
 
     if ( $currency_format eq 'FR' ) {
         # FIXME This test should be done for all currencies
-        $int_curr_symbol = $currency->{symbol} if $with_symbol;
+        $int_curr_symbol = $currency->symbol if $with_symbol;
         %format_params = (
             decimal_fill      => '2',
             decimal_point     => ',',

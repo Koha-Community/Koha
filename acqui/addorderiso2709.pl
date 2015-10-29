@@ -43,6 +43,7 @@ use C4::Branch;         # GetBranches
 use C4::Members;
 
 use Koha::Number::Price;
+use Koha::Acquisition::Currencies;
 use Koha::Acquisition::Order;
 use Koha::Acquisition::Bookseller;
 
@@ -61,7 +62,6 @@ my $op = $cgiparams->{'op'} || '';
 my $booksellerid  = $input->param('booksellerid');
 my $allmatch = $input->param('allmatch');
 my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
-my $data;
 
 $template->param(scriptname => "/cgi-bin/koha/acqui/addorderiso2709.pl",
                 booksellerid => $booksellerid,
@@ -90,39 +90,12 @@ if ($op eq ""){
 } elsif ($op eq "batch_details"){
 #display lines inside the selected batch
     # get currencies (for change rates calcs if needed)
-    my $active_currency = GetCurrency();
-    my $default_currency;
-    if (! $data->{currency} ) { # New order no currency set
-        if ( $bookseller->{listprice} ) {
-            $default_currency = $bookseller->{listprice};
-        }
-        else {
-            $default_currency = $active_currency->{currency};
-        }
-    }
-    my @rates = GetCurrencies();
-
-    # ## @rates
-
-    my @loop_currency = ();
-    for my $curr ( @rates ) {
-        my $selected;
-        if ($data->{currency} ) {
-            $selected = $curr->{currency} eq $data->{currency};
-        }
-        else {
-            $selected = $curr->{currency} eq $default_currency;
-        }
-        push @loop_currency, {
-            currcode => $curr->{currency},
-            rate     => $curr->{rate},
-            selected => $selected,
-        }
-    }
+    my @currencies = Koha::Acquisition::Currencies->search;
 
     $template->param("batch_details" => 1,
                      "basketno"      => $cgiparams->{'basketno'},
-                     loop_currencies  => \@loop_currency,
+                     currencies => \@currencies,
+                     bookseller => $bookseller,
                      "allmatch" => $allmatch,
                      );
     import_biblios_list($template, $cgiparams->{'import_batch_id'});
@@ -167,7 +140,7 @@ if ($op eq ""){
     my @discount = $input->param('discount');
     my @sort1 = $input->param('sort1');
     my @sort2 = $input->param('sort2');
-    my $cur = GetCurrency();
+    my $active_currency = Koha::Acquisition::Currencies->get_active;
     for my $biblio (@$biblios){
         # Check if this import_record_id was selected
         next if not grep { $_ eq $$biblio{import_record_id} } @import_record_id_selected;
@@ -251,7 +224,7 @@ if ($op eq ""){
                     $orderinfo{ecost} = $orderinfo{rrp} * ( 1 - $c );
                 }
             }
-            $orderinfo{listprice} = $orderinfo{rrp} / $cur->{rate};
+            $orderinfo{listprice} = $orderinfo{rrp} / $active_currency->rate;
             $orderinfo{unitprice} = $orderinfo{ecost};
             $orderinfo{total} = $orderinfo{ecost} * $c_quantity;
         } else {

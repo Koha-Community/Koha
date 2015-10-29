@@ -221,20 +221,26 @@ function delete_contact(ev) {
             </ol>
             <ol>
             <li><label for="list_currency">List prices are: </label>
-                    <select name="list_currency" id="list_currency">
-                    [% FOREACH loop_currenc IN loop_currency %]
-                        [% IF ( loop_currenc.listprice ) %]<option value="[% loop_currenc.currency %]" selected="selected">[% loop_currenc.currency %]</option>
-                        [% ELSE %]<option value="[% loop_currenc.currency %]">[% loop_currenc.currency %]</option>[% END %]
+                <select name="list_currency" id="list_currency">
+                    [% FOREACH currency IN currencies %]
+                        [% IF booksellerid and currency.currency == listprice or not booksellerid and currency.active %]
+                            <option value="[% currency.currency %]" selected="selected">[% currency.currency %]</option>
+                        [% ELSIF not currency.archived %]
+                            <option value="[% currency.currency %]" selected="selected">[% currency.currency %]</option>
+                        [% END %]
                     [% END %]
-                    </select>
+                </select>
             </li>
             <li><label for="invoice_currency">Invoice prices are: </label>
-                    <select name="invoice_currency" id="invoice_currency">
-                    [% FOREACH loop_currenc IN loop_currency %]
-                        [% IF ( loop_currenc.invoiceprice ) %]<option value="[% loop_currenc.currency %]" selected="selected">[% loop_currenc.currency %]</option>
-                        [% ELSE %]<option value="[% loop_currenc.currency %]">[% loop_currenc.currency %]</option>[% END %]
+                <select name="invoice_currency" id="invoice_currency">
+                    [% FOREACH currency IN currencies %]
+                        [% IF booksellerid and currency.currency == invoiceprice or not booksellerid and currency.active %]
+                            <option value="[% currency.currency %]" selected="selected">[% currency.currency %]</option>
+                        [% ELSIF not currency.archived %]
+                            <option value="[% currency.currency %]" selected="selected">[% currency.currency %]</option>
+                        [% END %]
                     [% END %]
-                    </select>
+                </select>
             </li>
             </ol>
             <ol class="radio">

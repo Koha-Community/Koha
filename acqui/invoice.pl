@@ -36,6 +36,7 @@ use C4::Acquisition;
 use C4::Budgets;
 
 use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Currencies;
 use Koha::DateUtils;
 use Koha::Misc::Files;
 
@@ -177,7 +178,7 @@ $template->param(
     total_gste_shipment => sprintf( $format, $total_gste + $details->{shipmentcost}),
     total_gsti_shipment => sprintf( $format, $total_gsti + $details->{shipmentcost}),
     invoiceincgst    => $bookseller->{invoiceincgst},
-    currency         => GetCurrency()->{currency},
+    currency         => Koha::Acquisition::Currency->get_active->currency,
     budgets_loop     => \@budgets_loop,
 );
 

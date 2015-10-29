@@ -35,6 +35,7 @@ use C4::Context;
 use C4::Output;
 use C4::Koha;
 use C4::Debug;
+use Koha::Acquisition::Currencies;
 
 my $input = new CGI;
 my $dbh     = C4::Context->dbh;
@@ -49,9 +50,9 @@ my ($template, $borrowernumber, $cookie, $staffflags ) = get_template_and_user(
     }
 );
 
-my $cur = GetCurrency();
-$template->param( symbol => $cur->{symbol},
-                  currency => $cur->{currency}
+my $active_currency = Koha::Acquisition::Currencies->get_active;
+$template->param( symbol => $active_currency->symbol,
+                  currency => $active_currency->currency
                );
 
 my $op = $input->param('op') || 'list';

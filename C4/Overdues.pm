@@ -33,7 +33,6 @@ use C4::Context;
 use C4::Accounts;
 use C4::Log; # logaction
 use C4::Debug;
-use C4::Budgets qw(GetCurrency);
 use Koha::DateUtils;
 use Koha::Account::Line;
 use Koha::Account::Lines;
@@ -1004,9 +1003,10 @@ sub parse_overdues_letter {
         $tables{'branches'} = $p;
     }
 
-    my $currencies = GetCurrency();
+    my $active_currency = Koha::Acquisition::Currencies->get_active;
+
     my $currency_format;
-    $currency_format = $currencies->{currency} if defined($currencies);
+    $currency_format = $active_currency->currency if defined($active_currency);
 
     my @item_tables;
     if ( my $i = $params->{'items'} ) {

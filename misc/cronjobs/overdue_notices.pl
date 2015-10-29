@@ -42,6 +42,7 @@ use Koha::Borrower::Debarments qw(AddUniqueDebarment);
 use Koha::DateUtils;
 use Koha::Calendar;
 use Koha::Libraries;
+use Koha::Acquisition::Currencies;
 
 =head1 NAME
 
