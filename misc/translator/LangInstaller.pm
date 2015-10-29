@@ -76,6 +76,10 @@ sub new {
     chomp $self->{xgettext};
     chomp $self->{sed};
 
+    unless ($self->{xgettext}) {
+        die "Missing 'xgettext' executable. Have you installed the gettext package?\n";
+    }
+
     # Get all .pref file names
     opendir my $fh, $self->{path_pref_en};
     my @pref_files = grep { /.pref/ } readdir($fh);
