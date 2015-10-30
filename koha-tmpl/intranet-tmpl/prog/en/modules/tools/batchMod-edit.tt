@@ -197,12 +197,6 @@ $(document).ready(function(){
                 [% ite.subfield %] - [% ite.marc_lib %]
               </label>
 
-              [% UNLESS ( ite.mandatory ) %]
-                <input type="checkbox" id="row[% ite.tag %][% ite.subfield %][% ite.random %]" title="Check to delete subfield [% ite.subfield %]" name="disable_input" value="[% ite.subfield %]" />
-              [% ELSE %]
-                <span class="required">Required</span>
-              [% END %]
-
               [% SET mv = ite.marc_value %]
               [% IF ( mv.type == 'select' ) -%]
                 <select name="[%- mv.name -%]" id="[%- mv.id -%]" size="1" tabindex="1" class="input_marceditor">
@@ -232,6 +226,12 @@ $(document).ready(function(){
               [% ELSIF ( mv.type == 'textarea' ) %]
                 <textarea tabindex="1" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="255">[%- mv.value -%]"</textarea>
               [%- END -%]
+
+              [% UNLESS ( ite.mandatory ) %]
+                <input type="checkbox" id="row[% ite.tag %][% ite.subfield %][% ite.random %]" title="Check to delete subfield [% ite.subfield %]" name="disable_input" value="[% ite.subfield %]" />
+              [% ELSE %]
+                <span class="required">Required</span>
+              [% END %]
 
               <input type="hidden" name="tag"       value="[% ite.tag %]" />
               <input type="hidden" name="subfield"       value="[% ite.subfield %]" />
