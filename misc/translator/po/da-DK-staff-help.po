@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Danish Koha Translation\n"
-"POT-Creation-Date: 2015-08-17 18:42-0300\n"
+"POT-Creation-Date: 2015-10-30 10:37-0300\n"
 "PO-Revision-Date: 2015-03-17 23:49+0000\n"
 "Last-Translator: Poul <poul@wachmann.dk>\n"
 "Language-Team: -\n"
@@ -738,6 +738,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/serials/claims.tt:15
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:37
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:91
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:21
@@ -849,7 +850,6 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:68
 #: intranet-tmpl/prog/en/modules/help/acqui/lateorders.tt:19
 #: intranet-tmpl/prog/en/modules/help/acqui/uncertainprice.tt:7
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/acqui/neworderbiblio.tt:12
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:109
 #: intranet-tmpl/prog/en/modules/help/acqui/invoice.tt:11
@@ -1775,7 +1775,7 @@ msgstr "Tilføj citat"
 msgid "Add a Batch"
 msgstr "Tilføje en stabel"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:7
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:7
 #, c-format
 msgid "Add a Contract"
 msgstr "Tilføj en kontrakt"
@@ -2541,19 +2541,6 @@ msgstr "Svar:"
 msgid "Any"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/mainpage.tt:24
-#, c-format
-msgid ""
-"As part of the upgrade process your online help will be overwritten with the "
-"new Help as part of the install. If you want to keep a copy of your online "
-"help, you should instruct your System Administrator to upgrade the Online "
-"Help directory in the Koha file tree."
-msgstr ""
-"I løbet af opgraderings-processen overskrives din online-hjælp med en ny "
-"version, som er del af installationen. Hvis du vil beholde en version af "
-"online-hjælpen, skal du bede din system-administator om at opgradere online-"
-"hjælpe-folderen i Koha filtræet."
-
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:29
 #, c-format
 msgid ""
@@ -2564,7 +2551,7 @@ msgstr ""
 "Ved skærmens nederste kant findes en oversigt over lånerens udlån med "
 "afleveringsdato og en liste med udlån i dag vil blive vist øverst."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:9
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:9
 #, c-format
 msgid ""
 "At the top of a Vendor Information Page, you will see a 'New Contract' "
@@ -7611,10 +7598,10 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/mainpage.tt:5
 #, fuzzy, c-format
 msgid ""
-"If this is your first time logging into Koha, you should now got to Koha "
-"Administration and setup all system preferences, patron categories, item "
+"If this is your first time logging into Koha, you should now go to Koha "
+"Administration and set up all system preferences, patron categories, item "
 "types and libraries. You should also review the other settings found in "
-"administration."
+"Administration."
 msgstr ""
 "Hvis det er første gang, du logger ind i Koha, bør du nu gå til Koha-"
 "administration og lave alle systemindstillinger, især lånertyperne."
@@ -9508,7 +9495,7 @@ msgid ""
 "to enter an owner as well as choose a restriction"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:13
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:13
 #, c-format
 msgid ""
 "Important: You cannot enter a contract retrospectively. The end date must "
@@ -9912,7 +9899,7 @@ msgstr ""
 msgid "It will also appear on the main staff dashboard under the module labels"
 msgstr "Det vises også på hoved admin-opslagstavlen under modulet etiketter"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:17
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:17
 #, c-format
 msgid "It will also be an option when creating a basket."
 msgstr "Det er også en option, når man opretter en kurv."
@@ -11596,7 +11583,7 @@ msgstr ""
 "Når CSV-filen er indlæst i den midlertidige editerings-tabel, kan du editere "
 "citaterne, før de gemmes."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:15
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:15
 #, c-format
 msgid "Once the contract is saved it will appear below the vendor information."
 msgstr "Når kontrakten er gemt, vises den under leverandør-informationen"
@@ -11899,9 +11886,9 @@ msgstr ""
 #, fuzzy, c-format
 msgid ""
 "Once you have set up patron categories, you should create a new user in the "
-"Patrons module with superlibrarian permissions. Once that user is set you "
-"should use that user to log in rather than the root user set up as part of "
-"installation."
+"Patrons module with superlibrarian permissions. Once that user is created, "
+"you should log in as that user rather than the root user which is set up as "
+"part of installation."
 msgstr ""
 "Når du har indrettet lånerkategorierne, skal du lave en ny bruger i &quot;"
 "Lånere&quot; med superbibliotekar privilegier. Brug så denne bruger til at "
@@ -13718,7 +13705,7 @@ msgid ""
 "See the full documentation for Uploading the Offline Circulation File in the "
 msgstr "Se hele dokumentationen for opload af offline-udlånsfil i "
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:19
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:19
 #, c-format
 msgid "See the full documentation for Vendor Contracts in the "
 msgstr "Se hele dokumentationen for leverandørkontrakter i "
@@ -15255,7 +15242,7 @@ msgstr ""
 "'Tillad' og låneren har bestemt, at biblioteket ikke må bevare denne "
 "information, vil denne fane kun vise de aktuelt udlånte eksemplarer."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:11
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:11
 #, c-format
 msgid ""
 "The contract form will ask for some very basic information about the "
@@ -18467,7 +18454,7 @@ msgstr "VANCOUVER PUBLIC LIBRARY z3950.vpl.ca:210 Horizon"
 msgid "Values that are pre-configured in Koha are:"
 msgstr "Værdier som er forkonfigurerede i Koha er:"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:3
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:3
 #, c-format
 msgid "Vendor Contracts"
 msgstr "Leverandørkontrakter"
@@ -19388,7 +19375,7 @@ msgid ""
 "follow the rule set in the BlockExpiredPatronOpacActions preference"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:5
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:5
 #, c-format
 msgid ""
 "You can define contracts (with a start and end date) and attach them to a "
@@ -19934,6 +19921,19 @@ msgstr ""
 #, c-format
 msgid "Your new item type will now appear on the list"
 msgstr "Din nye eksemplartype vises nu på listen"
+
+#: intranet-tmpl/prog/en/modules/help/mainpage.tt:24
+#, fuzzy, c-format
+msgid ""
+"Your online help will be overwritten by the new Help when there is an "
+"upgrade. If you want to keep a copy of your online help, you should instruct "
+"your System Administrator to upgrade the Online Help directory in the Koha "
+"file tree."
+msgstr ""
+"I løbet af opgraderings-processen overskrives din online-hjælp med en ny "
+"version, som er del af installationen. Hvis du vil beholde en version af "
+"online-hjælpen, skal du bede din system-administator om at opgradere online-"
+"hjælpe-folderen i Koha filtræet."
 
 #: intranet-tmpl/prog/en/modules/help/suggestion/suggestion.tt:11
 #, c-format
@@ -20717,6 +20717,7 @@ msgstr "forvaltning "
 #: intranet-tmpl/prog/en/modules/help/serials/claims.tt:15
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:37
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:91
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:21
@@ -20827,7 +20828,6 @@ msgstr "forvaltning "
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:68
 #: intranet-tmpl/prog/en/modules/help/acqui/lateorders.tt:19
 #: intranet-tmpl/prog/en/modules/help/acqui/uncertainprice.tt:7
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/acqui/neworderbiblio.tt:12
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:109
 #: intranet-tmpl/prog/en/modules/help/acqui/invoice.tt:11

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.14\n"
-"POT-Creation-Date: 2015-08-17 18:32-0300\n"
+"POT-Creation-Date: 2015-10-30 10:35-0300\n"
 "PO-Revision-Date: 2015-08-03 17:51+0000\n"
 "Last-Translator: KnowledgeWare <massoudalshareef@kwareict.com>\n"
 "Language-Team: Arabic <dina@kwareict.com>\n"
@@ -1618,13 +1618,16 @@ msgstr "%s هاتف آخر:"
 #. %5$s:  END 
 #. %6$s:  IF ( WrongPass ) 
 #. %7$s:  END 
+#. %8$s:  IF PasswordContainsTrailingSpaces 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:30
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s Passwords do not match. Please re-type your new password. %s %s Your new "
 "password must be at least %s characters long. %s %s Your current password "
 "was entered incorrectly. If this problem persists, please ask a librarian to "
-"re-set your password for you. %s "
+"re-set your password for you. %s %s Your password contains leading and/or "
+"trailing spaces. %s "
 msgstr ""
 "%s كلمة المرور غير متطابقة. يرجى إعادة كتابة كلمة مرورك الجديدة %s %s يجب أن "
 "يكون طول كلمة مرورك الجديدة على الأقل %s أحرف. %s %s تم إدخال كلمة مرورك "
@@ -4876,7 +4879,7 @@ msgstr "رقم الطلب: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:796
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:97
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:58
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:614
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:633
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:61
@@ -5153,7 +5156,7 @@ msgid "Click to add to cart"
 msgstr "انقر هنا للاضافة الى سلة التسوق"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "Click to forward the list to"
 msgstr "إنقر هنا للذهاب للقائمة"
 
@@ -5170,7 +5173,7 @@ msgid "Click to open in new window"
 msgstr "انقر لفتح نافذة جديدة"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "Click to rewind the list to"
 msgstr "انقر لتجديد القائمة ل"
 
@@ -5526,7 +5529,7 @@ msgstr "الاعتمادات (%s)"
 msgid "Current location"
 msgstr "الموقع الحالي"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:49
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:52
 #, c-format
 msgid "Current password:"
 msgstr "كلمة المرور الحالية:"
@@ -6809,7 +6812,7 @@ msgstr "اذهب"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "Go to detail"
 msgstr "إذهب للتفاصيل"
 
@@ -8564,7 +8567,7 @@ msgstr "تعليقات جديدة على  %s %s, %s%s"
 msgid "New list"
 msgstr "قائمة جديدة"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:50
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
 #, c-format
 msgid "New password:"
 msgstr "كلمة المرور الجديدة:"
@@ -9261,7 +9264,7 @@ msgstr "محتويات جزئية:"
 msgid "Password"
 msgstr "كلمة المرور:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:65
 #, c-format
 msgid "Password updated"
 msgstr "كلمة المرور تم تحديثها"
@@ -9882,12 +9885,12 @@ msgstr "قيِّمني"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 msgid "Rating based on reviews of "
 msgstr "التقييم بناء على مراجعات"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:51
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:54
 #, c-format
 msgid "Re-type new password:"
 msgstr "أعد كتابة كلمة المرور الجديدة:"
@@ -10207,7 +10210,7 @@ msgid "Return to your lists"
 msgstr "العودة إلى قوائمك"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:67
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:70
 msgid "Return to your record"
 msgstr "العودة إلى سجلِّك"
 
@@ -10235,12 +10238,12 @@ msgstr ""
 "الحجز، معلومات الإعارة والرسائل."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "Review date: "
 msgstr "تاريخ المراجعة:"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "Review result: "
 msgstr "نتيجة المراجعة:"
 
@@ -10533,7 +10536,7 @@ msgid "See also:"
 msgstr "أنظر أيضا :"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "See biblio"
 msgstr "انظر البيبليوغرافيا"
 
@@ -11341,7 +11344,7 @@ msgstr "أرسل و أغلق هذه النافذة"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:127
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:56
 msgid "Submit changes"
 msgstr "أرسل التغييرات"
 
@@ -12872,7 +12875,7 @@ msgstr "يمكنك بحث فهرسنا باستخدام نموذج البحث أ
 msgid "You can use OAI-PMH ListRecords instead of this service."
 msgstr "يمكنك استخدام قائمة تسجيلات OAI-PMH بدلا من هذه الخدمة."
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:60
 #, c-format
 msgid "You can't change your password."
 msgstr "لا تستطيع تغيير كلمة مرورك"
@@ -13044,7 +13047,7 @@ msgstr ""
 "أسبوعين."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid ""
 "Your CGI session cookie is not current. Please refresh the page and try "
 "again."
@@ -13228,13 +13231,13 @@ msgstr "إعدادات الرسائل الخاصة بك"
 msgid "Your options are: "
 msgstr "الخيارات المتاحة أمامك "
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:65
 #, c-format
 msgid "Your password has been changed "
 msgstr "لقد تمّ تغيير كلمة المرور الخاصة بك "
 
 #. %1$s:  minpasslen 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:48
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:51
 #, c-format
 msgid "Your password must be at least %s characters long."
 msgstr "كلمة المرور يجب أن تكون على الأقل %s من طول الحروف."
@@ -13698,7 +13701,7 @@ msgid "available online "
 msgstr "متوفّر على الخط "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "average rating: "
 msgstr "التقييم المتوسط:"
 
@@ -13793,14 +13796,14 @@ msgstr "منتدى بريستول"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "by"
 msgstr "بواسطة"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:163
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:462
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:108
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 #, c-format
 msgid "by "
@@ -14396,7 +14399,7 @@ msgid "humour, satire"
 msgstr "الفكاهه ,  الهجاء"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "iDreamBooks.com rating"
 msgstr "تقييم iDreamBooks.com"
 
@@ -15248,7 +15251,7 @@ msgid "purchase suggestion"
 msgstr "اقتراح شراء"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "rating based on reviews at iDreamBooks.com"
 msgstr "تقييم بناء على المراجعات في iDreamBooks.com"
 
@@ -15966,7 +15969,7 @@ msgid "visual projection"
 msgstr "عرض مرئي"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "votes"
 msgstr "التصويتات"
 
@@ -16027,7 +16030,7 @@ msgid "wire recording "
 msgstr "تسجيل سلكي"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "with biblionumber"
 msgstr "بالرقم البيبلوغرافي"
 
@@ -16104,7 +16107,7 @@ msgid "your purchase suggestions"
 msgstr "مقترحات الشراء الخاصة بك"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "your rating: "
 msgstr "تقييمك:"
 

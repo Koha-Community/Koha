@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: opac_bootstrap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-17 18:35-0300\n"
+"POT-Creation-Date: 2015-10-30 10:51-0300\n"
 "PO-Revision-Date: 2014-03-17 10:34+0000\n"
 "Last-Translator: Serhij <dubyk@ukr.net>\n"
 "Language-Team: none\n"
@@ -1630,13 +1630,16 @@ msgstr "%s Другие используемые имена:"
 #. %5$s:  END 
 #. %6$s:  IF ( WrongPass ) 
 #. %7$s:  END 
+#. %8$s:  IF PasswordContainsTrailingSpaces 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:30
 #, fuzzy, c-format
 msgid ""
 "%s Passwords do not match. Please re-type your new password. %s %s Your new "
 "password must be at least %s characters long. %s %s Your current password "
 "was entered incorrectly. If this problem persists, please ask a librarian to "
-"re-set your password for you. %s "
+"re-set your password for you. %s %s Your password contains leading and/or "
+"trailing spaces. %s "
 msgstr ""
 "%s Пароли не совпадают.  Пожалуйста, ещё раз введите новый пароль.  %s %s "
 "Ваш пароль должен содержать не менее %s символов %s %s Ваш действующий "
@@ -5032,7 +5035,7 @@ msgstr "Шифр хранения: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:796
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:97
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:58
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:614
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:633
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:61
@@ -5316,7 +5319,7 @@ msgid "Click to add to cart"
 msgstr "Щелкните, чтобы добавить в корзину"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "Click to forward the list to"
 msgstr "Щёлкните, чтобы перемотать список вперёд к"
 
@@ -5333,7 +5336,7 @@ msgid "Click to open in new window"
 msgstr "Щелкните, чтобы открыть в новом окне"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "Click to rewind the list to"
 msgstr "Щёлкните, чтобы перемотать список обратно к"
 
@@ -5694,7 +5697,7 @@ msgstr "Кредиты"
 msgid "Current location"
 msgstr "Текущий сеанс"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:49
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:52
 #, c-format
 msgid "Current password:"
 msgstr "Текущий пароль:"
@@ -7001,7 +7004,7 @@ msgstr "Вперёд"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "Go to detail"
 msgstr "Перейти к деталям"
 
@@ -8778,7 +8781,7 @@ msgstr "Новый комментарий на заглавие: %s %s, %s%s"
 msgid "New list"
 msgstr "Новый список"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:50
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
 #, c-format
 msgid "New password:"
 msgstr "Новый пароль:"
@@ -9483,7 +9486,7 @@ msgstr "Выборочное содержание:"
 msgid "Password"
 msgstr "Пароль"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:65
 #, c-format
 msgid "Password updated"
 msgstr "Пароль обновлен"
@@ -10117,12 +10120,12 @@ msgstr "Оцените меня"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 msgid "Rating based on reviews of "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:51
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:54
 #, c-format
 msgid "Re-type new password:"
 msgstr "Еще раз введите новый пароль:"
@@ -10450,7 +10453,7 @@ msgid "Return to your lists"
 msgstr "Сохранить в Ваших списках "
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:67
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:70
 msgid "Return to your record"
 msgstr "Вернуться к Вашей записи"
 
@@ -10481,13 +10484,13 @@ msgstr ""
 "сообщения."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 #, fuzzy
 msgid "Review date: "
 msgstr "Обзор: "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 #, fuzzy
 msgid "Review result: "
 msgstr "Обзор: "
@@ -10788,7 +10791,7 @@ msgid "See also:"
 msgstr "См. также:"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "See biblio"
 msgstr "См..  биб.  запись"
 
@@ -11599,7 +11602,7 @@ msgstr "Принять и закрыть это окно"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:127
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:56
 msgid "Submit changes"
 msgstr "Принять изменения"
 
@@ -13171,7 +13174,7 @@ msgstr ""
 msgid "You can use OAI-PMH ListRecords instead of this service."
 msgstr "Вы можете использовать ListRecords OAI-PMH вместо этого сервиса."
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:60
 #, c-format
 msgid "You can't change your password."
 msgstr "Вы не можете изменить свой пароль."
@@ -13344,7 +13347,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid ""
 "Your CGI session cookie is not current. Please refresh the page and try "
 "again."
@@ -13528,13 +13531,13 @@ msgstr "&#8674; Ваши настройки сообщений"
 msgid "Your options are: "
 msgstr "Возможные варианты: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:65
 #, fuzzy, c-format
 msgid "Your password has been changed "
 msgstr "Ваш пароль был изменен "
 
 #. %1$s:  minpasslen 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:48
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:51
 #, c-format
 msgid "Your password must be at least %s characters long."
 msgstr "Ваш пароль должен состоять не менее чем из %s символов."
@@ -13985,7 +13988,7 @@ msgid "available online "
 msgstr "доступно в Интернете "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 #, fuzzy
 msgid "average rating: "
 msgstr "средняя оценка: "
@@ -14084,14 +14087,14 @@ msgstr "бристольский картон"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "by"
 msgstr " /"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:163
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:462
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:108
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 #, c-format
 msgid "by "
@@ -14695,7 +14698,7 @@ msgid "humour, satire"
 msgstr "юмор, сатира"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "iDreamBooks.com rating"
 msgstr ""
 
@@ -15564,7 +15567,7 @@ msgid "purchase suggestion"
 msgstr "предложение о приобретении"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 #, fuzzy
 msgid "rating based on reviews at iDreamBooks.com"
 msgstr "Болбше обзоров книг на сайте iDreamBooks.com"
@@ -16314,7 +16317,7 @@ msgid "visual projection"
 msgstr "визуально-проекционный материал"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 #, fuzzy
 msgid "votes"
 msgstr "Заметки"
@@ -16377,7 +16380,7 @@ msgid "wire recording "
 msgstr "звукозапись на магнитную проволоку "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "with biblionumber"
 msgstr " с биб-записью с №"
 
@@ -16452,7 +16455,7 @@ msgid "your purchase suggestions"
 msgstr "мои предложения о приобретении"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 #, fuzzy
 msgid "your rating: "
 msgstr "Ваша оценка: "

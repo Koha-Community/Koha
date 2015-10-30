@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh-Hans-TW-i-opac-t-prog-v-3000000\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-17 20:05-0300\n"
-"PO-Revision-Date: 2015-07-03 06:43+0000\n"
-"Last-Translator: Frank <frank@sris.com.tw>\n"
+"POT-Creation-Date: 2015-10-30 10:41-0300\n"
+"PO-Revision-Date: 2015-08-31 03:46+0000\n"
+"Last-Translator: Anthony <mao@lins.fju.edu.tw>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1435905820.000000\n"
+"X-POOTLE-MTIME: 1440992816.000000\n"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:111
 #, c-format
@@ -1573,13 +1573,16 @@ msgstr "%s 其他電話："
 #. %5$s:  END 
 #. %6$s:  IF ( WrongPass ) 
 #. %7$s:  END 
+#. %8$s:  IF PasswordContainsTrailingSpaces 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:30
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s Passwords do not match. Please re-type your new password. %s %s Your new "
 "password must be at least %s characters long. %s %s Your current password "
 "was entered incorrectly. If this problem persists, please ask a librarian to "
-"re-set your password for you. %s "
+"re-set your password for you. %s %s Your password contains leading and/or "
+"trailing spaces. %s "
 msgstr ""
 "%s 密碼錯誤，請重新輸入新密碼。 %s %s 新密碼至少應有 %s 字元。 %s %s 您現在的"
 "密碼不符。還有問題，請洽館員協助。 %s "
@@ -4809,7 +4812,7 @@ msgstr "索書號：%s"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:796
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:97
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:58
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:614
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:633
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:61
@@ -4965,9 +4968,9 @@ msgid "Checked out (%s)"
 msgstr "借出 (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:217
-#, fuzzy, c-format
+#, c-format
 msgid "Checked out on"
-msgstr "借出 ("
+msgstr "借出日為"
 
 #. %1$s:  item.firstname 
 #. %2$s:  item.surname 
@@ -5086,7 +5089,7 @@ msgid "Click to add to cart"
 msgstr "點選，新增到書目清單"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "Click to forward the list to"
 msgstr "點選，新增到書目清單"
 
@@ -5103,7 +5106,7 @@ msgid "Click to open in new window"
 msgstr "點選，打開新的視窗"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "Click to rewind the list to"
 msgstr "點選，將清單復原至"
 
@@ -5455,7 +5458,7 @@ msgstr "額度(%s)"
 msgid "Current location"
 msgstr "目前位置"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:49
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:52
 #, c-format
 msgid "Current password:"
 msgstr "目前密碼："
@@ -6719,7 +6722,7 @@ msgstr "搜尋"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "Go to detail"
 msgstr "聯絡詳情"
 
@@ -8457,7 +8460,7 @@ msgstr "對 %s %s, %s%s的評論"
 msgid "New list"
 msgstr "新增虛擬書架"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:50
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
 #, c-format
 msgid "New password:"
 msgstr "新密碼："
@@ -9143,7 +9146,7 @@ msgstr "部份內容："
 msgid "Password"
 msgstr "密碼"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:65
 #, c-format
 msgid "Password updated"
 msgstr "更新密碼"
@@ -9755,12 +9758,12 @@ msgstr "評鑑我"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 msgid "Rating based on reviews of "
-msgstr ""
+msgstr "依照評論評分 "
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:51
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:54
 #, c-format
 msgid "Re-type new password:"
 msgstr "再輸入新密碼："
@@ -10080,7 +10083,7 @@ msgid "Return to your lists"
 msgstr "回到您的虛擬書架"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:67
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:70
 msgid "Return to your record"
 msgstr "返回您的記錄"
 
@@ -10107,16 +10110,14 @@ msgstr ""
 "預約資訊與訊息。"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
-#, fuzzy
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "Review date: "
-msgstr "評論："
+msgstr "評論日期："
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
-#, fuzzy
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "Review result: "
-msgstr "評論："
+msgstr "評論內容："
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:836
 #, c-format
@@ -10406,7 +10407,7 @@ msgid "See also:"
 msgstr "參見："
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "See biblio"
 msgstr "見書目"
 
@@ -11205,7 +11206,7 @@ msgstr "送出並關閉此視窗"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:127
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:56
 msgid "Submit changes"
 msgstr "送出改變"
 
@@ -12680,9 +12681,9 @@ msgid "You are logging from a different IP address. Please log in again."
 msgstr "您以不同的 IP 位址登入。請重新登入。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:248
-#, fuzzy, c-format
+#, c-format
 msgid "You are not authorized to see pending purchase suggestions."
-msgstr "無待決的採訪建議。"
+msgstr "無權檢視待決的採訪建議。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-blocked.tt:19
 #, c-format
@@ -12717,7 +12718,7 @@ msgstr "您可使用此頁面上端的搜尋表格搜尋我們的目錄"
 msgid "You can use OAI-PMH ListRecords instead of this service."
 msgstr "可以用 OAI-PMH ListRecords 取代此服務。"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:60
 #, c-format
 msgid "You can't change your password."
 msgstr "不能修改您的密碼。"
@@ -12882,7 +12883,7 @@ msgid ""
 msgstr "若有人在兩週內接受您的共享邀請，將以電子郵件通知您。"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid ""
 "Your CGI session cookie is not current. Please refresh the page and try "
 "again."
@@ -13058,13 +13059,13 @@ msgstr "您的訊息設定"
 msgid "Your options are: "
 msgstr "您的選項是："
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:65
 #, c-format
 msgid "Your password has been changed "
 msgstr "您已變更密碼 "
 
 #. %1$s:  minpasslen 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:48
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:51
 #, c-format
 msgid "Your password must be at least %s characters long."
 msgstr "您的密碼長度至少應有 %s 字元。"
@@ -13521,7 +13522,7 @@ msgid "available online "
 msgstr "線上可取得 "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "average rating: "
 msgstr "平均評分："
 
@@ -13616,14 +13617,14 @@ msgstr "點字板"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "by"
 msgstr "著者"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:163
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:462
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:108
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 #, c-format
 msgid "by "
@@ -14219,9 +14220,9 @@ msgid "humour, satire"
 msgstr "幽默、諷刺"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "iDreamBooks.com rating"
-msgstr ""
+msgstr "iDreamBooks.com 評分"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:511
 #, c-format
@@ -14352,7 +14353,7 @@ msgstr "在主要款目"
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:61
 #, c-format
 msgid "in the complete record"
-msgstr ""
+msgstr "在完整記錄內"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:90
 #, c-format
@@ -15071,10 +15072,9 @@ msgid "purchase suggestion"
 msgstr "採訪建議"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
-#, fuzzy
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "rating based on reviews at iDreamBooks.com"
-msgstr "更多的評論在iDreamBooks.com"
+msgstr "依照 iDreamBooks.com 的評論評分"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:851
 #, c-format
@@ -15788,7 +15788,7 @@ msgid "visual projection"
 msgstr "視覺投影"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "votes"
 msgstr "投票"
 
@@ -15849,7 +15849,7 @@ msgid "wire recording "
 msgstr "鋼線錄音 "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "with biblionumber"
 msgstr "包括biblionumber"
 
@@ -15924,7 +15924,7 @@ msgid "your purchase suggestions"
 msgstr "您的採訪建議"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "your rating: "
 msgstr "您的評分："
 

@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-08-17 19:07-0300\n"
-"PO-Revision-Date: 2015-07-23 05:48+0000\n"
+"POT-Creation-Date: 2015-10-30 10:51-0300\n"
+"PO-Revision-Date: 2015-10-26 19:13+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hy\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1437630488.000000\n"
+"X-POOTLE-MTIME: 1445886837.000000\n"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:111
 #, c-format
@@ -1625,18 +1625,22 @@ msgstr "%s Այլ հեռախոս։"
 #. %5$s:  END 
 #. %6$s:  IF ( WrongPass ) 
 #. %7$s:  END 
+#. %8$s:  IF PasswordContainsTrailingSpaces 
+#. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:30
 #, c-format
 msgid ""
 "%s Passwords do not match. Please re-type your new password. %s %s Your new "
 "password must be at least %s characters long. %s %s Your current password "
 "was entered incorrectly. If this problem persists, please ask a librarian to "
-"re-set your password for you. %s "
+"re-set your password for you. %s %s Your password contains leading and/or "
+"trailing spaces. %s "
 msgstr ""
 "%s Գաղտնաբառերը չեն համընկնում։ Նորից մուտք արա նոր գաղտնաբառը։ %s %s Քո նոր "
 "գաղտնաբառը առնվազն պետք է լինի %s նիշ երկարությամբ։ %s %s Քո ընթացիկ "
 "գաղտնաբառը սխալ է մուտք արված։ Եթե խնդիրը առկա է, տեղեկացրու գրադարանավարին "
-"նոր գաղտնաբառ տրամադրելու համար։ %s "
+"նոր գաղտնաբառ տրամադրելու համար։ %s %s Քո գաղտնաբառը պարունակում է առաջնային "
+"և/կամ պոչային բացատներ։ %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -4900,7 +4904,7 @@ msgstr "Դասիչ: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:796
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:97
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:58
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:614
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:633
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:61
@@ -5056,9 +5060,9 @@ msgid "Checked out (%s)"
 msgstr "Դուրս տրված (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:217
-#, fuzzy, c-format
+#, c-format
 msgid "Checked out on"
-msgstr "Դուրս տրված ("
+msgstr "Դուրս է տրված"
 
 #. %1$s:  item.firstname 
 #. %2$s:  item.surname 
@@ -5177,7 +5181,7 @@ msgid "Click to add to cart"
 msgstr "Սեղմիր զամբյուղին ավելացնելու համար"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "Click to forward the list to"
 msgstr "Սեղմիր` ցուցակը ուղարկելու համար"
 
@@ -5194,7 +5198,7 @@ msgid "Click to open in new window"
 msgstr "Սեղմիր նոր պատուհանում բացելու համար"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "Click to rewind the list to"
 msgstr "Սեղմիր՝ ցուցակը վերափաթաթելու համար"
 
@@ -5552,7 +5556,7 @@ msgstr "Կրեդիտներ (%s)"
 msgid "Current location"
 msgstr "Ընթացիկ տեղաբաշխում"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:49
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:52
 #, c-format
 msgid "Current password:"
 msgstr "Ընթացիկ գաղտնաբառ"
@@ -6845,7 +6849,7 @@ msgstr "Գնա"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "Go to detail"
 msgstr "Գնա մանրամասներին"
 
@@ -8596,7 +8600,7 @@ msgstr "Նոր մեկնաբանություն սրա վերաբերյալ %s %s,
 msgid "New list"
 msgstr "Նոր ցուցակ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:50
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
 #, c-format
 msgid "New password:"
 msgstr "Նոր գաղտնաբառ։"
@@ -9296,7 +9300,7 @@ msgstr "Մասնակի բովանդակություն։"
 msgid "Password"
 msgstr "Գաղտնաբառ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:65
 #, c-format
 msgid "Password updated"
 msgstr "Գաղտնաբառը թարմացվել է"
@@ -9919,12 +9923,12 @@ msgstr "Գնահատի ինձ"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 msgid "Rating based on reviews of "
 msgstr "Գնահատումը հիմնված է այս դիտարկումների վրա "
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:51
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:54
 #, c-format
 msgid "Re-type new password:"
 msgstr "Նորից մուտք արա գաղտնաբառը։"
@@ -10245,7 +10249,7 @@ msgid "Return to your lists"
 msgstr "Վերադարձիր քո ցուցակներին"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:67
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:70
 msgid "Return to your record"
 msgstr "Վերադարձիր քո գրառմանը"
 
@@ -10276,12 +10280,12 @@ msgstr ""
 "տվյալներ, տեղեկատվություն պահման հարցումների մասին, և հաղորդագրություններ։"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "Review date: "
 msgstr "Գրախոսման ամսաթիվ։ "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "Review result: "
 msgstr "Գրախոսման արդյունք։ "
 
@@ -10574,7 +10578,7 @@ msgid "See also:"
 msgstr "Տես նաև։"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "See biblio"
 msgstr "Տես մատենները"
 
@@ -11389,7 +11393,7 @@ msgstr "Հաստատիր և փակիր այս պատուհանը"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:127
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:56
 msgid "Submit changes"
 msgstr "Հաստատիր փոփոխությունները"
 
@@ -12936,7 +12940,7 @@ msgstr ""
 msgid "You can use OAI-PMH ListRecords instead of this service."
 msgstr "Այս ծառայության փոխարեն դու կարող ես օգտագործել OAI-PMH ListRecords"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:60
 #, c-format
 msgid "You can't change your password."
 msgstr "Դու չես կարող փոխել քո գաղտնաբառը։"
@@ -13108,7 +13112,7 @@ msgstr ""
 "կընդունի քո համատեղումը։"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid ""
 "Your CGI session cookie is not current. Please refresh the page and try "
 "again."
@@ -13294,13 +13298,13 @@ msgstr "Քո հաղորդագրության կարգաբերումները"
 msgid "Your options are: "
 msgstr "Քո հնարավորություններն են։ "
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:65
 #, c-format
 msgid "Your password has been changed "
 msgstr "Քո գաղտնաբառը փոխված է "
 
 #. %1$s:  minpasslen 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:48
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:51
 #, c-format
 msgid "Your password must be at least %s characters long."
 msgstr "Քո գաղտնաբառը առնվազն պետք է լինի %s նիշ։"
@@ -13762,7 +13766,7 @@ msgid "available online "
 msgstr "մատչելի առցանց "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "average rating: "
 msgstr "միջին քաշ: "
 
@@ -13857,14 +13861,14 @@ msgstr "bristol board"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "by"
 msgstr "կողմից"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:163
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:462
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:108
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 #, c-format
 msgid "by "
@@ -14463,7 +14467,7 @@ msgid "humour, satire"
 msgstr "հումոր, սատիրա"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "iDreamBooks.com rating"
 msgstr "iDreamBooks.com գնահատում"
 
@@ -15315,7 +15319,7 @@ msgid "purchase suggestion"
 msgstr "գնման առաջարկ"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "rating based on reviews at iDreamBooks.com"
 msgstr "գնահատումը հիմնված է iDreamBooks.com գրախոսությունների վրա"
 
@@ -16044,7 +16048,7 @@ msgid "visual projection"
 msgstr "տեսողական պրոյեկցիա"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "votes"
 msgstr "քվեներ"
 
@@ -16110,7 +16114,7 @@ msgid "wire recording "
 msgstr "լարային գրանցում "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "with biblionumber"
 msgstr "with biblionumber"
 
@@ -16187,7 +16191,7 @@ msgid "your purchase suggestions"
 msgstr "քո գնման առաջարկները"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 msgid "your rating: "
 msgstr "քո քաշը։ "
 
