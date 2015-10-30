@@ -162,7 +162,14 @@ $(document).ready(function() {
                     var id = $(this).attr("id").replace("resume", "");
                     var hold = holds[id];
                     $.post('/cgi-bin/koha/svc/hold/resume', { "reserve_id": hold.reserve_id }, function( data ){
-                      holdsTable.api().ajax.reload();
+                      if ( data.success ) {
+                          holdsTable.api().ajax.reload();
+                      } else {
+                        if ( data.error == "HOLD_NOT_FOUND" ) {
+                            alert ( RESUME_HOLD_ERROR_NOT_FOUND );
+                            holdsTable.api().ajax.reload();
+                        }
+                      }
                     });
                 });
             });
@@ -209,7 +216,17 @@ $(document).ready(function() {
         e.preventDefault();
         $.post('/cgi-bin/koha/svc/hold/suspend', $('#suspend-modal-form').serialize(), function( data ){
           $('#suspend-modal').modal('hide');
-          holdsTable.api().ajax.reload();
+          if ( data.success ) {
+              holdsTable.api().ajax.reload();
+          } else {
+            if ( data.error == "INVALID_DATE" ) {
+                alert( SUSPEND_HOLD_ERROR_DATE );
+            }
+            else if ( data.error == "HOLD_NOT_FOUND" ) {
+                alert ( SUSPEND_HOLD_ERROR_NOT_FOUND );
+                holdsTable.api().ajax.reload();
+            }
+          }
         });
     });
 

@@ -38,11 +38,17 @@ if ( $auth_status ne "ok" ) {
 }
 
 binmode STDOUT, ":encoding(UTF-8)";
-print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
+print $input->header( -type => 'text/json', -charset => 'UTF-8' );
 
 my $reserve_id = $input->param('reserve_id');
 
 my $hold = Koha::Holds->find( $reserve_id );
+
+unless ( $hold ) {
+    print to_json( { success => 0, error => "HOLD_NOT_FOUND" } );
+    exit;
+}
+
 $hold->resume();
 
 print to_json( { success => !$hold->suspend() } );

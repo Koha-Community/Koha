@@ -35,5 +35,8 @@
     var SUSPEND = _("Suspend");
     var SUSPEND_HOLD_ON = _("Suspend hold on");
     var CLEAR_DATE_TO_SUSPEND_INDEFINITELY = _("Clear date to suspend indefinitely");
+    var SUSPEND_HOLD_ERROR_DATE = _("Unable to suspend hold, invalid date");
+    var SUSPEND_HOLD_ERROR_NOT_FOUND = _("Unable to suspend hold, hold not found");
+    var RESUME_HOLD_ERROR_NOT_FOUND = _("Unable to resume, hold not found");
 //]]>
 </script>
