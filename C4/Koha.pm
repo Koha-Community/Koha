@@ -263,6 +263,8 @@ sub GetItemTypes {
                itemtypes.checkinmsg,
                itemtypes.checkinmsgtype,
                itemtypes.sip_media_type,
+               itemtypes.hideinopac,
+               itemtypes.searchcategory,
                COALESCE( localization.translation, itemtypes.description ) AS translated_description
         FROM   itemtypes
         LEFT JOIN localization ON itemtypes.itemtype = localization.code
