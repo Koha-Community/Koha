@@ -38,13 +38,13 @@ t::lib::Mocks::mock_preference('opacisbd', $opac_template);
 
 my $record = MARC::Record->new();
 $record->append_fields(
-    MARC::Field->new('200', '', '', 'a' => 'Montains'),
+    MARC::Field->new('200', '', '', 'a' => 'Mountains'),
     MARC::Field->new('200', '', '', 'f' => 'Keith Lye'),
 );
 my ($bibnum, $title, $bibitemnum) = AddBiblio($record, '');
 
 my $isbd = GetISBDView($bibnum);
-is($isbd, '<h2>Title : Montains by Keith Lye</h2>', 'ISBD is correct');
+is($isbd, '<h2>Title : Mountains by Keith Lye</h2>', 'ISBD is correct');
 
 my $opacisbd = GetISBDView($bibnum, 'opac');
-is($opacisbd, '<h2>Title : Montains (Keith Lye)</h2>', 'OPAC ISBD is correct');
+is($opacisbd, '<h2>Title : Mountains (Keith Lye)</h2>', 'OPAC ISBD is correct');
