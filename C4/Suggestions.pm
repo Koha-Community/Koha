@@ -177,10 +177,15 @@ sub SearchSuggestion {
     foreach my $field (qw( suggesteddate manageddate accepteddate )) {
         my $from = $field . "_from";
         my $to   = $field . "_to";
+        my $from_dt;
+        $from_dt = eval { dt_from_string( $suggestion->{$from} ) } if ( $suggestion->{$from} );
+        my $from_sql = '0000-00-00';
+        $from_sql = output_pref({ dt => $from_dt, dateformat => 'iso', dateonly => 1 })
+            if ($from_dt);
+        $debug && warn "SQL for start date ($field): $from_sql";
         if ( $suggestion->{$from} || $suggestion->{$to} ) {
             push @query, qq{ AND suggestions.$field BETWEEN ? AND ? };
-            push @sql_params,
-              output_pref({ dt => dt_from_string( $suggestion->{$from} ), dateformat => 'iso', dateonly => 1 }) || '0000-00-00';
+            push @sql_params, $from_sql;
             push @sql_params,
               output_pref({ dt => dt_from_string( $suggestion->{$to} ), dateformat => 'iso', dateonly => 1 }) || output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
         }
