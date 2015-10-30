@@ -46,10 +46,10 @@ my $borrower = $builder->build({
     }
 });
 
-$t->get_ok('/api/v1/borrowers')
+$t->get_ok('/api/v1/patrons')
   ->status_is(403);
 
-$t->get_ok("/api/v1/borrowers/" . $borrower->{ borrowernumber })
+$t->get_ok("/api/v1/patrons/" . $borrower->{ borrowernumber })
   ->status_is(403);
 
 my $loggedinuser = $builder->build({
@@ -68,13 +68,13 @@ $session->param('ip', '127.0.0.1');
 $session->param('lasttime', time());
 $session->flush;
 
-my $tx = $t->ua->build_tx(GET => '/api/v1/borrowers');
+my $tx = $t->ua->build_tx(GET => '/api/v1/patrons');
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
 $t->request_ok($tx)
   ->status_is(200);
 
-$tx = $t->ua->build_tx(GET => "/api/v1/borrowers/" . $borrower->{ borrowernumber });
+$tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . $borrower->{ borrowernumber });
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200)
