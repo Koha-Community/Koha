@@ -10835,6 +10835,7 @@ if ( CheckVersion($DBversion) ) {
         ALTER TABLE marc_modification_template_actions
         MODIFY COLUMN action
             ENUM('delete_field','update_field','move_field','copy_field','copy_and_replace_field')
+            NOT NULL
     });
     print "Upgrade to $DBversion done (Bug 14098: Regression in Marc Modification Templates)\n";
     SetVersion($DBversion);
