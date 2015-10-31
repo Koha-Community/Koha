@@ -18,12 +18,17 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
 use Test::More tests => 41;
+
+use Koha::Database;
 
 BEGIN {
     use_ok('t::lib::TestBuilder');
 }
 
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new();
 
@@ -251,3 +256,7 @@ $bookseller = $builder->build({
 delete $bookseller->{_fk};
 $bookseller_from_db = $rs_aqbookseller->find($bookseller);
 is( $bookseller_from_db->in_storage, 1, 'build with only_fk = 0 stores the entry correctly' );
+
+$schema->storage->txn_rollback;
+
+1;
