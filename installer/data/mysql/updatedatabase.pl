@@ -11155,7 +11155,7 @@ if ( CheckVersion($DBversion) ) {
         ALTER TABLE itemtypes
             ADD hideinopac TINYINT(1) NOT NULL DEFAULT 0
               AFTER sip_media_type,
-            ADD searchcategory VARCHAR(20) DEFAULT NULL
+            ADD searchcategory VARCHAR(80) DEFAULT NULL
               AFTER hideinopac;
     });
     print "Upgrade to $DBversion done (Bug 10937: Option to hide and group itemtypes from advanced search)\n";
