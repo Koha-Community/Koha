@@ -211,6 +211,10 @@ $template->param(search_languages_loop => $languages_limit_loop,);
 
 # load the Type stuff
 my $itemtypes = GetItemTypesCategorized;
+# add translated_description to itemtypes
+foreach my $itemtype ( keys %{$itemtypes} ) {
+    $itemtypes->{$itemtype}->{translated_description} = getitemtypeinfo( $itemtype, 'opac' )->{translated_description};
+}
 # the index parameter is different for item-level itemtypes
 my $itype_or_itemtype = (C4::Context->preference("item-level_itypes"))?'itype':'itemtype';
 my @advancedsearchesloop;
