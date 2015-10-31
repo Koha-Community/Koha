@@ -38,7 +38,7 @@ $(document).ready(function(){
             $(".btn-group").removeClass("open");
         });[% END %]
     [% END %]
-    $("#updatechild, #patronflags, #renewpatron, #deletepatron").tooltip();
+    $("#updatechild, #patronflags, #renewpatron, #deletepatron, #exportbarcodes").tooltip();
     $("#exportcheckins").click(function(){
         export_barcodes();
         $(".btn-group").removeClass("open");
@@ -199,7 +199,13 @@ function searchToHold(){
                 [% ELSE %]
                     <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="Patron is an adult" id="updatechild" href="#">Update child to adult patron</a></li></li>
                 [% END %]
-                <li><a id="exportcheckins" href="#">Export today's checked in barcodes</a></li>
+                [% IF Koha.Preference('intranetreadinghistory') %]
+                    [%IF ( privacy == 2 ) %]
+                        <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="Not allowed by patron's privacy settings" id="exportbarcodes" href="#">Export today's checked in barcodes</a></li>
+                    [% ELSE %]
+                        <li><a id="exportcheckins" href="#">Export today's checked in barcodes</a></li>
+                    [% END %]
+                [% END %]
             </ul>
     </div>
 </div>
