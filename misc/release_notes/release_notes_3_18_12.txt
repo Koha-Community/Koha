@@ -1,0 +1,276 @@
+RELEASE NOTES FOR KOHA 3.18.12
+01 Nov 2015
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.18.12 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.18.12.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+
+Koha 3.18.12 is a bugfix/maintenance release.
+
+
+
+Architecture, internals, and plumbing
+----------
+	14820	major	SMSSendUsername and SMSSendPassword are not listed in the system preferences
+	15029	major	Tests fail if launched after 23:00
+
+Authentication
+----------
+	10177	critical	Koha Accepts Seven "Space" Characters as a Valid Password
+	14509	major	Koha still allows spaces at the end, beginning or as your password
+
+Circulation
+----------
+	14811	major	Don't set permanent_location to CART or PROC
+
+Hold requests
+----------
+	14733	major	Prevent a record from having holds with duplicate priorities
+
+Notices
+----------
+	14141	major	Changing the Library for a notice duplicates the notice instead of updating it
+
+Serials
+----------
+	15042	major	Barcode <branchcode>yymm0001 does not work when receiving serials
+
+Tools
+----------
+	12311	critical	Batch modification of checked out and lost items checks them in
+	6756	major	Patron anonymizing tool reports false success in anonymous patron not defined
+
+
+Other bugs fixed in 3.18.12
+======================
+
+
+Acquisitions
+----------
+	13675	normal	The budget of an order is set to null if not changed on receiving
+	14929	trivial	Fix missing display of help page in contract management
+
+Architecture, internals, and plumbing
+----------
+	14990	normal	Make the date formatting template side - moremember.pl
+	15012	normal	Koha-shell raises " no job control in shell" error
+
+Circulation
+----------
+	11298	normal	Renewal due date won't take specified time into account
+
+Notices
+----------
+	14937	minor	Expiration date for holds based onReservesMaxPickUpDelay should not require ExpireReservesMaxPickUpDelay
+
+OPAC
+----------
+	14940	minor	Opac-topissues.pl sort is broken
+
+Patrons
+----------
+	14562	normal	[3.18.x] Patron with empty card number will be only result returned by patron datatables search
+	14910	normal	Renew a patron does not redirect to the correct module
+
+Searching
+----------
+	14861	normal	Accession date comparison does not work in advanced search
+	14154	minor	608$9 defined twice in UNIMARC biblio-koha-indexdefs.xml
+
+Templates
+----------
+	14812	normal	Help could not be displayed in the correct language
+	14966	trivial	Table header broken at detail.tt
+
+
+New sysprefs in 3.18.12
+======================
+
+  * SMSSendPassword
+  * SMSSendUsername
+
+
+System requirements
+======================
+
+    Important notes:
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+The Koha manual is maintained in DocBook.The home page for Koha 
+documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.18/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+
+  * English (USA)
+
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+
+Release Team
+======================
+
+The release team for Koha 3.18.12 is
+
+  Release Manager:       Tomás Cohen Arazi <tomascohen@gmail.com>
+  Documentation Manager: Nicole C Engard <nengard@gmail.com>
+  Translation Manager:   Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  QA Manager:            Katrin Fischer <Katrin.Fischer@bsz-bw.de>
+  QA Team:               Galen Charlton <gmc@esilibrary.com>
+                         Jonathan Druart <jonathan.druart@biblibre.com>
+                         Brendan Gallagher <brendan@bywatersolutions.com>
+                         Kyle Hall <kyle@bywatersolutions.com>
+                         Julian Maurice <julian.maurice@biblibre.com>
+                         Paul Poulain <paul.poulain@biblibre.com>
+                         Martin Renvoize <martin.renvoize@ptfs-europe.com>
+                         Marcel de Rooy <M.de.Rooy@rijksmuseum.nl>
+  Bug Wranglers:         Alex Sassmannshausen <alex.sassmannshausen@ptfs-europe.com>
+                         Zeno Tajoli <z.tajoli@cineca.it>
+  Packaging Manager:     Robin Sheat <robin@catalyst.net.nz>
+
+  Release Maintainer (3.18.x): Liz Rea <wizzyrea@gmail.com>
+  Release Maintainer (3.16.x): Mason James <mtj@kohaaloha.co.nz>
+  Release Maintainer (3.14.x): Fridolin Somers <fridolin.somers@biblibre.com>
+
+Credits
+======================
+
+
+We thank the following libraries who are known to have sponsored
+new features in Koha 3.18.12:
+
+We thank the following individuals who contributed patches to Koha 3.18.12.
+
+  * Brandon (2)
+  * Tomas Cohen Arazi (1)
+  * David Cook (1)
+  * Jonathan Druart (15)
+  * Magnus Enger (1)
+  * Bernardo González Kriegel (1)
+  * Rafal Kopaczka (1)
+  * Julian Maurice (1)
+  * Kyle M Hall (3)
+  * Liz Rea (3)
+  * Fridolin Somers (1)
+  * Marc Véron (1)
+
+
+We thank the following libraries, companies, and other institutions who contributed
+patches to Koha 3.18.12
+
+
+  * BibLibre (4)
+  * ByWater-Solutions (3)
+  * Prosentient Systems (1)
+  * Theke Solutions (1)
+  * Universidad Nacional de Córdoba (1)
+  * bugs.koha-community.org (13)
+  * libriotech.no (1)
+  * poczta.onet.pl (1)
+  * unidentified (5)
+  * veron.ch (1)
+
+We also especially thank the following individuals who tested patches
+for Koha 3.18.12.
+
+  * Amit Gupta (1)
+  * Barton Chittenden (1)
+  * Chris Cormack (20)
+  * Frederic Demians (1)
+  * Heather Braum (2)
+  * Hector Castro (1)
+  * Jonathan Druart (9)
+  * Joonas Kylmälä (1)
+  * Josef Moravec (1)
+  * Karl Holton (1)
+  * Katrin Fischer (15)
+  * Liz Rea (26)
+  * Magnus Enger (3)
+  * Marc Véron (7)
+  * Nick Clemens (2)
+  * Robin Sheat (1)
+  * Tomas Cohen Arazi (27)
+  * Kyle M Hall (1)
+  * Marcel de Rooy (2)
+
+We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release line is 3.18.x
+
+The last Koha release was 3.14.10, which was released on September 4, 2014.
+
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+He rau ringa e oti ai.
+(Many hands finish the work)
+
+##### Autogenerated release notes updated last on 01 Nov 2015 23:25:29 Z #####
