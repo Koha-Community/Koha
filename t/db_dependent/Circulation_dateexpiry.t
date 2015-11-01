@@ -22,10 +22,18 @@ use Time::HiRes qw/gettimeofday time/;
 use Test::More tests => 2;
 use C4::Members;
 use Koha::DateUtils;
+use Koha::Database;
+
 use t::lib::TestBuilder;
 use t::lib::Mocks qw( mock_preference );
 
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+
 my $builder = t::lib::TestBuilder->new();
+
+$ENV{ DEBUG } = 0;
+
 subtest 'Tests for CanBookBeIssued related to dateexpiry' => sub {
     plan tests => 4;
     can_book_be_issued();
@@ -109,3 +117,7 @@ sub calc_date_due {
     my $t2 = time;
     is( ref $d eq "DateTime" && $t2 - $t1 < 1, 1, "CalcDateDue with expiry in year 9876 in " . sprintf( "%6.4f", $t2 - $t1 ) . " seconds." );
 }
+
+$schema->storage->txn_rollback;
+
+1;

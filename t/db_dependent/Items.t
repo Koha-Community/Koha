@@ -34,7 +34,7 @@ BEGIN {
     use_ok('Koha::Items');
 }
 
-my $schema = Koha::Database->new->schema;
+my $schema  = Koha::Database->new->schema;
 
 my $branches = GetBranches;
 my ($branch1, $branch2) = keys %$branches;
@@ -215,8 +215,6 @@ subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
     plan tests => 4;
 
     $schema->storage->txn_begin;
-
-    my $schema = Koha::Database->new()->schema();
 
     my $biblio =
     $schema->resultset('Biblio')->create(

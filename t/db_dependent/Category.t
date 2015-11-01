@@ -18,14 +18,21 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
 use t::lib::TestBuilder;
 use Test::More tests => 3;
+
+use Koha::Database;
 
 BEGIN {
     use_ok('C4::Category');
 }
 
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+
 my $builder = t::lib::TestBuilder->new();
+
 my $nonexistent_categorycode = 'NONEXISTEN';
 $builder->build({
     source => 'Category',
@@ -49,3 +56,7 @@ ok( @categories, 'all returns categories' );
 
 my $match = grep {$_->{categorycode} eq $nonexistent_categorycode } @categories;
 is( $match, 1, 'all returns the inserted category');
+
+$schema->storage->txn_rollback;
+
+1;

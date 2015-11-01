@@ -22,6 +22,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 use C4::Branch;
+use Koha::Database;
 use Koha::DateUtils;
 
 use DateTime;
@@ -32,10 +33,10 @@ BEGIN {
     use_ok('C4::Calendar');
 }
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+
 my $dbh = C4::Context->dbh();
-# Start transaction
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 my $builder = t::lib::TestBuilder->new();
 # Create two fresh branches for the tests
@@ -118,6 +119,6 @@ C4::Calendar->new( branchcode => $branch_2 )->insert_single_holiday(
 is( Koha::Calendar->new( branchcode => $branch_2 )->is_holiday( $today ), 1, "Today is a holiday for $branch_2" );
 is( Koha::Calendar->new( branchcode => $branch_1 )->is_holiday( $today ), 0, "Today is not a holiday for $branch_1");
 
-$dbh->rollback;
+$schema->storage->txn_rollback;
 
 1;

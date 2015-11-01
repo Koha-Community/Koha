@@ -18,17 +18,21 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use C4::Members;
+
+use Test::More tests => 5;
 use Test::MockModule;
 use t::lib::TestBuilder;
 use t::lib::Mocks qw( mock_preference );
 
-use Test::More tests => 5;
-use Test::MockModule;
+use C4::Members;
+use Koha::Database;
 
 BEGIN {
     use_ok('C4::Members');
 }
+
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 my $date_time = new Test::MockModule('DateTime');
 $date_time->mock(
@@ -115,3 +119,7 @@ t::lib::Mocks::mock_preference('MembershipExpiryDaysNotice', undef);
 
 $upcoming_mem_expires = C4::Members::GetUpcomingMembershipExpires();
 is(scalar(@$upcoming_mem_expires), 0, 'Get upcoming membership expires without MembershipExpiryDaysNotice should return 0.');
+
+$schema->storage->txn_rollback;
+
+1;

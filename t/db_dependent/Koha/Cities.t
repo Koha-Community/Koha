@@ -18,10 +18,17 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
 use Test::More tests => 4;
+
 use Koha::City;
 use Koha::Cities;
+use Koha::Database;
+
 use t::lib::TestBuilder;
+
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new;
 my $nb_of_cities = Koha::Cities->search->count;
@@ -46,3 +53,7 @@ is( $retrieved_city_1->city_name, $new_city_1->city_name, 'Find a city by id sho
 
 $retrieved_city_1->delete;
 is( Koha::Cities->search->count, $nb_of_cities + 1, 'Delete should have deleted the city' );
+
+$schema->storage->txn_rollback;
+
+1;

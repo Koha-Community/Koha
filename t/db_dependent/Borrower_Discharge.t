@@ -1,4 +1,18 @@
-#!/usr/bin/perl;
+#!/usr/bin/perl
+
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
 use Test::More tests => 17;
@@ -13,8 +27,13 @@ use C4::Members qw( AddMember GetMember );
 
 use t::lib::TestBuilder;
 use Koha::Borrower::Discharge;
+use Koha::Database;
+
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new;
+
 my $dbh = C4::Context->dbh;
 $dbh->do(q|DELETE FROM discharges|);
 
@@ -102,3 +121,7 @@ else {
 # The error is:
 # DBIx::Class::ResultSet::create(): DBI Exception: DBD::mysql::st execute failed: Lock wait timeout exceeded; try restarting transaction [for Statement "INSERT INTO discharges ( borrower, needed, validated) VALUES ( ?, ?, ? )" with ParamValues: 0='121', 1='2014-01-08T16:38:29', 2=undef] at /home/koha/src/Koha/DataObject/Discharge.pm line 33
 #is( Koha::Service::Borrower::Discharge::request({ borrowernumber => $borrower->{borrowernumber} }), 1, 'Discharge request sent' );
+
+$schema->storage->txn_rollback;
+
+1;

@@ -1,32 +1,43 @@
+#!/usr/bin/perl
+
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
+
 use Test::More tests => 3;
+use t::lib::TestBuilder;
+
 use MARC::Record;
 use MARC::File::USMARC;
-use MARC::File::XML;# ( BinaryEncoding => 'utf-8' );
-#use XML::Simple;
+use MARC::File::XML;
 use MARC::Batch;
-use t::lib::TestBuilder;
 use File::Slurp;
-#use utf8;
 use Encode;
 
 use C4::Biblio;
 use C4::Context;
-
+use Koha::Database;
 use Koha::Exporter::Record;
 
-my $dbh = C4::Context->dbh;
-#$dbh->{AutoCommit} = 0;
-#$dbh->{RaiseError} = 1;
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
-#$dbh->do(q|DELETE FROM issues|);
-#$dbh->do(q|DELETE FROM reserves|);
-#$dbh->do(q|DELETE FROM items|);
-#$dbh->do(q|DELETE FROM biblio|);
-#$dbh->do(q|DELETE FROM auth_header|);
+my $dbh = C4::Context->dbh;
 
 my $biblio_1_title = 'Silence in the library';
-#my $biblio_2_title = Encode::encode('UTF-8', 'The art of computer programming ກ ຂ ຄ ງ ຈ ຊ ຍ é');
 my $biblio_2_title = 'The art of computer programming ກ ຂ ຄ ງ ຈ ຊ ຍ é';
 my $biblio_1 = MARC::Record->new();
 $biblio_1->leader('00266nam a22001097a 4500');
@@ -164,3 +175,7 @@ subtest 'export iso2709' => sub {
     $title = Encode::encode('UTF-8', $title);
     is( $title, $biblio_2_title, 'Export ISO2709: The title is correctly encoded' );
 };
+
+$schema->storage->txn_rollback;
+
+1;

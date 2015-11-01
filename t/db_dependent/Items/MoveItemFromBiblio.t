@@ -20,9 +20,12 @@ use Test::More tests => 8;
 
 use C4::Items;
 use C4::Reserves;
+use Koha::Database;
 
 use t::lib::TestBuilder;
 
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 
 # NOTE This is a trick, if we want to populate the biblioitems table, we should not create a Biblio but a Biblioitem
@@ -82,3 +85,7 @@ my $get_item_level_hold_2 = C4::Reserves::GetReserve( $item_level_hold_to_move->
 is( $get_bib_level_hold->{biblionumber},    $from_biblio->{biblionumber}, 'MoveItemFromBiblio should not have moved the biblio-level hold' );
 is( $get_item_level_hold_1->{biblionumber}, $from_biblio->{biblionumber}, 'MoveItemFromBiblio should not have moved the item-level hold placed on item 1' );
 is( $get_item_level_hold_2->{biblionumber}, $to_biblio->{biblionumber},   'MoveItemFromBiblio should have moved the item-level hold placed on item 2' );
+
+$schema->storage->txn_rollback;
+
+1;

@@ -47,8 +47,10 @@ can_ok( 'C4::Accounts',
         WriteOffFee )
 );
 
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+
 my $builder = t::lib::TestBuilder->new();
-my $schema  = Koha::Database->new()->schema();
 
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError}=1;

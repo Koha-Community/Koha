@@ -1,5 +1,19 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
 use Test::More tests => 6;
 use C4::Context;
@@ -12,13 +26,15 @@ use C4::Items;
 use C4::Context;
 
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Database;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+
 our $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM items|);
@@ -389,7 +405,11 @@ subtest '1 BranchBorrowerCircRule exist: 1 CO allowed, 1 OSCO allowed' => sub {
     teardown();
 };
 
+$schema->storage->txn_rollback;
+
 sub teardown {
     $dbh->do(q|DELETE FROM issues|);
     $dbh->do(q|DELETE FROM issuingrules|);
 }
+
+1;

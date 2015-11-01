@@ -20,12 +20,17 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
 use Test::More tests => 5;
 use Test::MockModule;
+use t::lib::TestBuilder;
 
 use C4::Circulation;
 use C4::Reserves qw|AddReserve|;
-use t::lib::TestBuilder;
+use Koha::Database;
+
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 my $mContext = new Test::MockModule('C4::Context');
 $mContext->mock( 'userenv', sub {
@@ -104,7 +109,6 @@ $fee = C4::Reserves::GetReserveFee( $patron2->{borrowernumber}, $biblio->{biblio
 is( $fee > 0, 1, 'Patron 2 should be charged again this time' );
 # End of tests
 
-
 sub acctlines { #calculate number of accountlines for a patron
     my @temp = $dbh->selectrow_array( "SELECT COUNT(*) FROM accountlines WHERE borrowernumber=?", undef, ( $_[0] ) );
     return $temp[0];
@@ -125,3 +129,7 @@ sub addreserve {
         ''
     );
 }
+
+$schema->storage->txn_rollback;
+
+1;

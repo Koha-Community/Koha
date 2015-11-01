@@ -14,10 +14,9 @@ use C4::Biblio;
 use C4::Items;
 use C4::Members;
 use C4::Calendar;
-
-use Koha::Holds;
-
+use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Holds;
 
 BEGIN {
     use FindBin;
@@ -25,12 +24,11 @@ BEGIN {
     use_ok('C4::Reserves');
 }
 
-my $builder = t::lib::TestBuilder->new();
-my $dbh = C4::Context->dbh;
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
-# Start transaction
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+my $builder = t::lib::TestBuilder->new();
+my $dbh     = C4::Context->dbh;
 
 # Create two random branches
 my $branch_1 = $builder->build({ source => 'Branch' })->{ branchcode };
