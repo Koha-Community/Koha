@@ -9928,6 +9928,12 @@ if ( CheckVersion($DBversion) ) {
     print "Done (Bug 14820: SMSSendUsername and SMSSendPassword are not listed in the system preferences)\n";
     SetVersion($DBversion);
 }
+$DBversion = "3.18.12.000";
+if ( CheckVersion($DBversion) ) {
+    print "Upgrade to $DBversion\n";
+    SetVersion ($DBversion);
+    print "Done ($DBversion release)\n";
+}
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
