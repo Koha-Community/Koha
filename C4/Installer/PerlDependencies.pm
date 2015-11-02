@@ -765,12 +765,12 @@ our $PERL_DEPS = {
     'Mojolicious' => {
         'usage'    => 'REST API',
         'required' => '0',
-        'min_ver'  => '5.54',
+        'min_ver'  => '6.0',
     },
     'Swagger2' => {
         'usage'    => 'REST API',
         'required' => '0',
-        'min_ver'  => '0.28',
+        'min_ver'  => '0.59',
     },
     'UNIVERSAL::can' => {
         'usage'    => 'SIP',
