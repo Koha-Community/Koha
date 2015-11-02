@@ -264,11 +264,12 @@ sub output_with_http_headers {
     my $cache_policy = 'no-cache';
     $cache_policy .= ', no-store, max-age=0' if $extra_options->{force_no_caching};
     my $options = {
-        type    => $content_type_map{$content_type},
-        status  => $status,
-        charset => 'UTF-8',
-        Pragma          => 'no-cache',
-        'Cache-Control' => $cache_policy,
+        type              => $content_type_map{$content_type},
+        status            => $status,
+        charset           => 'UTF-8',
+        Pragma            => 'no-cache',
+        'Cache-Control'   => $cache_policy,
+        'X-Frame-Options' => 'DENY',
     };
     $options->{expires} = 'now' if $extra_options->{force_no_caching};
 
