@@ -11237,13 +11237,13 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.21.00.XXX";
+$DBversion = "3.21.00.047";
 if(CheckVersion($DBversion)) {
     $dbh->do(q{
         INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
-        VALUES ('IndependentBranchesPatronModifications',0,'Show only modification request for the logged in branch','','YesNo')
+        VALUES ('IndependentBranchesPatronModifications','0','Show only modification request for the logged in branch','','YesNo')
     });
-    print "Upgrade to $DBversion done (Bug 10904 - would like to limit patron update request management by branch)\n";
+    print "Upgrade to $DBversion done (Bug 10904: Limit patron update request management by branch)\n";
     SetVersion($DBversion);
 }
 
