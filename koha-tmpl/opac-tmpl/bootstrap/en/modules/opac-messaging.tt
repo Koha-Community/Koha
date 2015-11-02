@@ -22,6 +22,7 @@
                 </div>
             </div>
             <div class="span10">
+                [% IF Koha.Preference( 'OPACEnhancedMessagingPreferences' )  %]
                 <div id="usermessaging">
                     <h3>Your messaging settings</h3>
                     [% IF ( settings_updated ) %]
@@ -150,7 +151,10 @@
                         </fieldset>
                     </form>
                 </div> <!-- / #usermessaging -->
-            </div> <!-- / .span10 -->
+                [% ELSE %]
+                    <h4>You are not allowed to call this page directly</h4>
+                [% END %]
+           </div> <!-- / .span10 -->
         </div> <!-- / .row-fluid -->
     </div> <!-- / .container-fluid -->
 </div> <!-- / .main -->

@@ -77,12 +77,14 @@
             [% END %]
 
             [% IF ( EnhancedMessagingPreferences ) %]
-                [% IF ( messagingview ) %]
-                    <li class="active">
-                [% ELSE %]
-                    <li>
-                [% END %]
-                <a href="/cgi-bin/koha/opac-messaging.pl">your messaging</a></li>
+                [% IF Koha.Preference( 'OPACEnhancedMessagingPreferences' ) %]
+                    [% IF ( messagingview ) %]
+                        <li class="active">
+                    [% ELSE %]
+                        <li>
+                    [% END %]
+                    <a href="/cgi-bin/koha/opac-messaging.pl">your messaging</a></li>
+                 [% END %]
             [% END %]
 
             [% IF Koha.Preference( 'virtualshelves' ) == 1 %]

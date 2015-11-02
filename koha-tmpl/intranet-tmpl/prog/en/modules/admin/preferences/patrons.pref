@@ -54,7 +54,7 @@ Patrons:
            choices:
                yes: Allow
                no: "Don't allow"
-         - patrons to choose which notices they receive and when they receive them. Note that this only applies to certain kinds of notices.
+         - "Staff to manage which notices patrons will receive and when they will receive them. Note: this only applies to courtesy notices. To manage if patrons have also access to these settings, use OPACEnhancedMessagingPreferences."
      -
          - pref: ExtendedPatronAttributes
            choices:
@@ -159,6 +159,13 @@ Patrons:
                yes: Do
                no: "Don't"
          - charge a fee when a patron changes to a category with an enrollment fee.
+     -
+         - pref: OPACEnhancedMessagingPreferences
+           choices:
+               yes: Show
+               no: "Don't show"
+         - "patron messaging setting on the OPAC (NOTE: EnhancedMessagingPreferences must be enabled)."
+
     "Norwegian patron database":
      -
          - pref: NorwegianPatronDBEnable

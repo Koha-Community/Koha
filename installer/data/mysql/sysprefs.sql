@@ -291,6 +291,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OPACdefaultSortOrder','dsc','asc|dsc|za|az','Specify the default sort order','Choice'),
 ('OPACdidyoumean','',NULL,'Did you mean? configuration for the OPAC. Do not change, as this is controlled by /cgi-bin/koha/admin/didyoumean.pl.','Free'),
 ('OPACDisplay856uAsImage','OFF','OFF|Details|Results|Both','Display the URI in the 856u field as an image, the corresponding OPACXSLT option must be on','Choice'),
+('OPACEnhancedMessagingPreferences', '1', NULL, 'If ON, show patrons messaging setting on the OPAC.', 'YesNo'),
 ('OpacExportOptions','bibtex,dc,marcxml,marc8,utf8,marcstd,mods,ris,isbd','','Define export options available on OPAC detail page.','multiple'),
 ('OPACFallback', 'prog', 'bootstrap|prog', 'Define the fallback theme for the OPAC interface.', 'Themes'),
 ('OpacFavicon','','','Enter a complete URL to an image to replace the default Koha favicon on the OPAC','free'),
