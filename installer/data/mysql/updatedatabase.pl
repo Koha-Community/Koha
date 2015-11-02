@@ -11247,7 +11247,7 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
-$DBversion = 'XXX';
+$DBversion = '3.21.00.048';
 if ( CheckVersion($DBversion) ) {
     my $create_table_issues = @{ $dbh->selectall_arrayref(q|SHOW CREATE TABLE issues|) }[0]->[1];
     if ($create_table_issues !~ m|UNIQUE KEY.*itemnumber| ) {
