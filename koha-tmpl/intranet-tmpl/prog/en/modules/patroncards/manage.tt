@@ -86,7 +86,7 @@
                     alert(_("Please select at least one batch to export."));
                     return;     // no batch selected
                 }
-                return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?" + getstr, 700, 800);
+                return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?" + getstr, 400, 800);
             };
             function selected_layouts(op) {
                 if (document.layouts.action.length) {
@@ -187,7 +187,7 @@
                                 [% IF ( text_field.select_field ) %]
                                     <td>
                                       <a class="btn btn-mini" href="/cgi-bin/koha/patroncards/edit-[% card_element %].pl?op=edit&element_id=[% text_field.field_value %]"><icon class="fa fa-edit"></icon> Edit</a>
-                                      [% IF ( print ) %]<a class="btn btn-mini" href="#" onclick="GB_showCenter('Export single batch','/cgi-bin/koha/patroncards/print.pl?batch_id=[% text_field.field_value |url %]')"><icon class="fa fa-share-square-o"></icon> Export</a>[% END %]
+                                      [% IF ( print ) %]<a class="btn btn-mini" href="#" onclick="GB_showCenter('Export single batch','/cgi-bin/koha/patroncards/print.pl?batch_id=[% text_field.field_value |url %]', 400, 800)"><icon class="fa fa-share-square-o"></icon> Export</a>[% END %]
                                       <a class="btn btn-mini" onclick="return confirm(MSG_CONFIRM_DELETE);" href="/cgi-bin/koha/patroncards/manage.pl?op=delete&card_element=[% card_element %]&element_id=[% text_field.field_value %]"><icon class="fa fa-trash"></icon> Delete</a>
                                     </td>
                                     [% IF ( print ) %]<td align="center"><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>[% END %]

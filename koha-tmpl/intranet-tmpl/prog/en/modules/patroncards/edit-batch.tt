@@ -89,10 +89,10 @@
                         alert(_("Please select at least one card to export."));
                         return;     // no batch selected
                     }
-                    return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id %]&" + getstr, 700, 800);
+                    return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id %]&" + getstr, 400, 800);
                 }
                 else if (mode == 'batch') {
-                    return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id %]", 700, 800);
+                    return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id %]", 400, 800);
                 }
                 else {
                     // some pass-thru error trapping just in case...
@@ -121,7 +121,8 @@
                     { "aTargets": [ -2, -1 ], "bSortable": false, "bSearchable": false }
                 ],
                 "aaSorting": [[ 0, "asc" ]],
-                "sPaginationType": "four_button"
+                "sPaginationType": "four_button",
+                "autoWidth": false
             }));
             $("#additems").click(function(){
                 Add();
