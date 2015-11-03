@@ -20,8 +20,13 @@
         <div id="yui-main">
             <div class="yui-b">
 
+              [% IF ( ! colId ) %]
+                <div class="dialog message">
+                    <p>Invalid collection id</p>
+                    <p><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Return to rotating collections home</a></p>
+                </div>
+              [% ELSE %]
               [% INCLUDE 'rotating-collections-toolbar.inc' %]
-
               <h1>Collection <i>[% colTitle %]</i></h1>
 
               [% IF ( previousActionAdd ) %]
@@ -112,7 +117,7 @@
                   <div class="dialog message">There are no items in this collection.</div>
                 [% END %]
               </div>
-
+            [% END %]
             </div> <!-- /.yui-b -->
         </div> <!-- /#yui-main -->
         <div class="yui-b">
