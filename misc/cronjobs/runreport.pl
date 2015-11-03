@@ -23,12 +23,13 @@ use warnings;
 
 use C4::Reports::Guided; # 0.12
 use C4::Context;
-use Koha::Email;
 use C4::Log;
+use Koha::Email;
+use Koha::DateUtils;
 
 use Getopt::Long qw(:config auto_help auto_version);
 use Pod::Usage;
-use Mail::Sendmail;
+use MIME::Lite;
 use Text::CSV_XS;
 use CGI qw ( -utf8 );
 use Carp;
@@ -60,6 +61,7 @@ runreport.pl [ -h | -m ] [ -v ] reportID [ reportID ... ]
    --format=s      selects format. Choice of text, html, csv, or tsv
 
    -e --email      whether to use e-mail (implied by --to or --from)
+   -a --attachment additionally attach the report as a file. cannot be used with html format
    --username      username to pass to the SMTP server for authentication
    --password      password to pass to the SMTP server for authentication
    --method        method is the type of authentication. Ie. LOGIN, DIGEST-MD5, etc.
@@ -161,6 +163,7 @@ my $help    = 0;
 my $man     = 0;
 my $verbose = 0;
 my $email   = 0;
+my $attachment = 0;
 my $format  = "text";
 my $to      = "";
 my $from    = "";
@@ -181,6 +184,7 @@ GetOptions(
     'from=s'            => \$from,
     'subject=s'         => \$subject,
     'email'             => \$email,
+    'a|attachment'      => \$attachment,
     'username:s'        => \$username,
     'password:s'        => \$password,
     'method:s'          => \$method,
@@ -214,6 +218,8 @@ unless (scalar(@ARGV)) {
 }
 ($verbose) and print scalar(@ARGV), " argument(s) after options: " . join(" ", @ARGV) . "\n";
 
+my $today = dt_from_string();
+my $date = $today->ymd();
 
 foreach my $report_id (@ARGV) {
     my $report = get_saved_report($report_id);
@@ -272,22 +278,31 @@ foreach my $report_id (@ARGV) {
             $message .= $csv->string() . "\n";
         }
     }
-    if ($email){
+
+    if ($email) {
         my $args = { to => $to, from => $from, subject => $subject };
-        if ($format eq 'html') {
+        if ( $format eq 'html' ) {
             $message = "<html><head><style>tr:nth-child(2n+1) { background-color: #ccc;}</style></head><body>$message</body></html>";
             $args->{contenttype} = 'text/html';
         }
-        $args->{message} = $message;
         my $email = Koha::Email->new();
-        my %mail = $email->create_message_headers($args);
-        $mail{'Auth'} = {user => $username, pass => $password, method => $method} if $username;
-        sendmail(%mail) or carp 'mail not sent:' . $Mail::Sendmail::error;
-    } else {
+        my %mail  = $email->create_message_headers($args);
+        $mail{Data} = $message;
+        $mail{Auth} = { user => $username, pass => $password, method => $method } if $username;
+
+        my $msg = MIME::Lite->new(%mail);
+
+        $msg->attach(
+            Type        => "text/$format",
+            Data        => encode( 'utf8', $message ),
+            Filename    => "report$report_id-$date.$format",
+            Disposition => 'attachment',
+        ) if $attachment;
+
+        $msg->send();
+        carp "Mail not sent" unless $msg->last_send_successful();
+    }
+    else {
         print $message;
     }
-    # my @xmlarray = ... ;
-    # my $url = "/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&id=$id";
-    # my $xml = XML::Dumper->new()->pl2xml( \@xmlarray );
-    # store_results($id,$xml);
 }
