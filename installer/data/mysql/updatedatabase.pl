@@ -11253,7 +11253,7 @@ if ( CheckVersion($DBversion) ) {
     if ($create_table_issues !~ m|UNIQUE KEY.*itemnumber| ) {
         $dbh->do(q|ALTER TABLE issues ADD CONSTRAINT UNIQUE KEY (itemnumber)|);
     }
-    print "Update to $DBversion done (Bug 14978: Make sure issues.itemnumber is a unique key)\n";
+    print "Upgrade to $DBversion done (Bug 14978: Make sure issues.itemnumber is a unique key)\n";
     SetVersion($DBversion);
 }
 
