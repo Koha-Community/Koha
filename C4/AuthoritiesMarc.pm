@@ -1515,7 +1515,7 @@ sub merge {
     # BulkEdit marc records
     # May be used as a template for a bulkedit field  
     foreach my $marcrecord(@reccache){
-        my $update;           
+        my $update = 0;
         foreach my $tagfield (@tags_using_authtype){
 #             warn "tagfield : $tagfield ";
             foreach my $field ($marcrecord->field($tagfield)){
