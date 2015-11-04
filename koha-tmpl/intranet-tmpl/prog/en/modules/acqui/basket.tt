@@ -478,8 +478,8 @@
                               [% basket = books_loo.transferred_from.basket %]
                               [% bookseller = books_loo.transferred_from.bookseller %]
                               [% timestamp = books_loo.transferred_from.timestamp %]
-                              <p>Transferred from
-                                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]">basket: [% basket.basketname %]</a>
+                              <p>Transferred from basket:
+                                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]"> [% basket.basketname %]</a>
                                 (<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% bookseller.id %]">[% bookseller.name %]</a>)
                                 on <span title="[% timestamp | $KohaDates with_hours = 1 %]">
                                   [% timestamp | $KohaDates %]
@@ -592,8 +592,8 @@
                         [% basket = order.transferred_to.basket %]
                         [% bookseller = order.transferred_to.bookseller %]
                         [% timestamp = order.transferred_to.timestamp %]
-                        <p>Transferred to
-                          <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]">basket: [% basket.basketname %]</a>
+                        <p>Transferred to basket:
+                          <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]"> [% basket.basketname %]</a>
                           (<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% bookseller.id %]">[% bookseller.name %]</a>)
                           on <span title="[% timestamp | $KohaDates with_hours = 1%]">
                             [% timestamp | $KohaDates %]
