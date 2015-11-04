@@ -307,6 +307,7 @@ sub load_sql_in_order {
     unshift(@fnames, $globalsysprefs);
     push @fnames, C4::Context->config('intranetdir') . "/installer/data/mysql/userflags.sql";
     push @fnames, C4::Context->config('intranetdir') . "/installer/data/mysql/userpermissions.sql";
+    push @fnames, C4::Context->config('intranetdir') . "/installer/data/mysql/audio_alerts.sql";
     foreach my $file (@fnames) {
         #      warn $file;
         undef $/;
