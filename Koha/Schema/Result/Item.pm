@@ -540,16 +540,16 @@ __PACKAGE__->belongs_to(
   },
 );
 
-=head2 issues
+=head2 issue
 
-Type: has_many
+Type: might_have
 
 Related object: L<Koha::Schema::Result::Issue>
 
 =cut
 
-__PACKAGE__->has_many(
-  "issues",
+__PACKAGE__->might_have(
+  "issue",
   "Koha::Schema::Result::Issue",
   { "foreign.itemnumber" => "self.itemnumber" },
   { cascade_copy => 0, cascade_delete => 0 },
@@ -616,8 +616,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-04-23 12:42:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:urSpNt7LBda4T5Plhi6cPw
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-11-04 12:00:58
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jkgJfulDrGaUpQ6jC40vpQ
 
 sub effective_itemtype {
     my ( $self ) = @_;
