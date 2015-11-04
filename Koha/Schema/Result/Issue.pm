@@ -165,6 +165,20 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("issue_id");
 
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<itemnumber>
+
+=over 4
+
+=item * L</itemnumber>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("itemnumber", ["itemnumber"]);
+
 =head1 RELATIONS
 
 =head2 borrowernumber
@@ -208,8 +222,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-04-23 13:04:51
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3JH0+3CuwwhPyebyt/z+uw
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-11-04 12:00:58
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kREecsHr6wZPiokS946BHw
 
 __PACKAGE__->belongs_to(
     "borrower",
