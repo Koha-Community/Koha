@@ -11282,6 +11282,19 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.21.00.050";
+if(CheckVersion($DBversion)) {
+    $dbh->do(q{
+        INSERT INTO letter ( module, code, branchcode, name, is_html, title, content, message_transport_type )
+        VALUES ( 'circulation', 'OVERDUES_SLIP', '', 'Overdues Slip', '0', 'OVERDUES_SLIP', 'The following item(s) is/are currently overdue:
+
+<item>"<<biblio.title>>" by <<biblio.author>>, <<items.itemcallnumber>>, Barcode: <<items.barcode>> Fine: <<items.fine>></item>
+', 'print' )
+    });
+    print "Upgrade to $DBversion done (Bug 12933: Add ability to print overdue slip from staff intranet)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
