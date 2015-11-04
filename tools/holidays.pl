@@ -122,7 +122,7 @@ foreach my $yearMonthDay (keys %$exception_holidays) {
     my %exception_holiday;
     %exception_holiday = (KEY => $yearMonthDay,
                           DATE_SORT => $exception_holidays->{$yearMonthDay}{date},
-                          DATE => output_pref( { dt => $exceptiondate, dateonly => 1, dateformat => 'iso' } ),
+                          DATE => output_pref( { dt => $exceptiondate, dateonly => 1 } ),
                           TITLE => $exception_holidays->{$yearMonthDay}{title},
                           DESCRIPTION => $exception_holidays->{$yearMonthDay}{description});
     push @exception_holidays, \%exception_holiday;
