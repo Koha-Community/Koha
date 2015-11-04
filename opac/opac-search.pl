@@ -218,6 +218,8 @@ foreach my $itemtype ( keys %{$itemtypes} ) {
     $itemtypes->{$itemtype}->{translated_description} =
             ( $translated_description ) ? $translated_description : $itemtypes->{$itemtype}->{description};
 }
+# Load the Type stuff without search categories for facets
+my $itemtypes_nocategory = GetItemTypes;
 # the index parameter is different for item-level itemtypes
 my $itype_or_itemtype = (C4::Context->preference("item-level_itypes"))?'itype':'itemtype';
 my @advancedsearchesloop;
@@ -599,7 +601,7 @@ if ($tag) {
     $pasarParams .= '&amp;simple_query=' . uri_escape_utf8($simple_query);
     $pasarParams .= '&amp;query_type=' . uri_escape_utf8($query_type) if ($query_type);
     eval {
-        ($error, $results_hashref, $facets) = getRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$itemtypes,$query_type,$scan,1);
+        ($error, $results_hashref, $facets) = getRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$itemtypes_nocategory,$query_type,$scan,1);
     };
 }
 # This sorts the facets into alphabetical order
