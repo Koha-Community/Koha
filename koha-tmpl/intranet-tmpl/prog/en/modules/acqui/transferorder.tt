@@ -12,6 +12,18 @@
     //]]>
     </script>
 [% END %]
+
+[% IF ( bookselleridfrom ) %]
+    <script type="text/javascript">
+    //<![CDATA[
+        function confirmtransfer() {
+            return confirm( _("Transfer order to this basket?") );
+        }
+    //]]>
+    </script>
+[% END %]
+
+
 </head>
 <body id="acq_transferorder" class="acq">
 
@@ -20,6 +32,13 @@
     <div class="yui-g">
         [% IF ( bookselleridfrom ) %]
             <h3>Search for a vendor to transfer to</h3>
+              <div class="transferinfo">
+                <ul>
+                  <li><span class="label">From vendor: </span>[% booksellerfromname %]</li>
+                  <li><span class="label">Basket: </span>[% basketfromname %]</li>
+                  <li><span class="label">Order: </span>[% ordernumber %]</li>
+                </ol>
+              </div>
         [% ELSE %]
             <h3>Search for a vendor to transfer from</h3>
         [% END %]
@@ -53,7 +72,7 @@
                             <td>[% basket.basketname %] (#[% basket.basketno %])</td>
                             <td>[% basket.createdby %]</td>
                             <td>[% basket.creationdate %]</td>
-                            <td><a href="transferorder.pl?basketno=[% basket.basketno %]&ordernumber=[% ordernumber %]" onclick="return confirm('Do you want to transfer order [% ordernumber %] from basket [% basketfromname %] ([% booksellerfromname %]) to basket [% basket.basketname %] ([% booksellertoname %]) ?');">Choose</a>
+                            <td><a href="transferorder.pl?basketno=[% basket.basketno %]&ordernumber=[% ordernumber %]" onclick="return confirmtransfer();">Choose</a>
                           </tr>
                         [% END %]
                     </tbody>
