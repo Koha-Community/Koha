@@ -163,7 +163,7 @@ my $email   = 0;
 my $format  = "text";
 my $to      = "";
 my $from    = "";
-my $subject = 'Koha Saved Report';
+my $subject = "";
 my $separator = ',';
 my $quote = '"';
 
@@ -223,13 +223,16 @@ foreach my $report_id (@ARGV) {
     my $type        = $report->{type};
 
     $verbose and print "SQL: $sql\n\n";
-    if (defined($report_name) and $report_name ne "")
+    if ( $subject eq "" )
     {
-        $subject = $report_name ;
-    }
-    else
-    {
-        $subject = 'Koha Saved Report';
+        if ( defined($report_name) and $report_name ne "")
+        {
+            $subject = $report_name ;
+        }
+        else
+        {
+            $subject = 'Koha Saved Report';
+        }
     }
     # my $results = execute_query($sql, undef, 0, 99999, $format, $report_id);
     my ($sth) = execute_query($sql);
