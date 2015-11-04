@@ -49,8 +49,10 @@ my $op              = $input->param('op');
 my $query           = $input->param('query');
 
 my $order = GetOrder($ordernumber);
+my $basketfromname = '';
 if($order) {
     my $basket = GetBasket($order->{basketno});
+    $basketfromname = $basket->{basketname};
     $bookselleridfrom = $basket->{booksellerid} if $basket;
 }
 
@@ -64,6 +66,7 @@ my $booksellertoname;
 if($booksellerto){
     $booksellertoname = $booksellerto->{name};
 }
+
 
 if( $basketno && $ordernumber) {
     # Transfer order and exit
@@ -132,6 +135,7 @@ $template->param(
     booksellertoname    => $booksellertoname,
     ordernumber         => $ordernumber,
     basketno            => $basketno,
+    basketfromname      => $basketfromname,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
