@@ -82,9 +82,7 @@
     [% IF ( CAN_user_parameters ) %]
         [% IF ( logview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&amp;modules=MEMBERS&amp;modules=circulation&amp;object=[% borrowernumber %]&amp;src=circ">Modification log</a></li>
     [% END %]
-    [% IF ( EnhancedMessagingPreferences ) %]
 	[% IF ( sentnotices ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber %]">Notices</a></li>
-    [% END %]
     <!-- Added IF statement to check if user has borrowers permission. The menu item will not be shown unless user has borrowers permission  -->
     [% IF ( CAN_user_borrowers ) %]
         [% IF (  statisticsview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/statistics.pl?borrowernumber=[% borrowernumber %]">Statistics</a></li>
