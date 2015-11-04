@@ -32,6 +32,7 @@ $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 
 my $dbh = C4::Context->dbh;
+$dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM items|);
 my $item_1 = $builder->build({
     source => 'Item',
