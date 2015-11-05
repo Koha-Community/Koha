@@ -50,6 +50,7 @@ __PACKAGE__->table("virtualshelves");
 =head2 sortfield
 
   data_type: 'varchar'
+  default_value: 'title'
   is_nullable: 1
   size: 16
 
@@ -97,7 +98,12 @@ __PACKAGE__->add_columns(
   "category",
   { data_type => "varchar", is_nullable => 1, size => 1 },
   "sortfield",
-  { data_type => "varchar", is_nullable => 1, size => 16 },
+  {
+    data_type => "varchar",
+    default_value => "title",
+    is_nullable => 1,
+    size => 16,
+  },
   "lastmodified",
   {
     data_type => "timestamp",
@@ -185,8 +191,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-05-14 11:27:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WVMPB7DvigdoNQ07kaT0lA
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-11-05 10:39:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:O3y89+0IUoePtcIHAqR+oA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
