@@ -230,7 +230,7 @@ sub calculate {
     }
     $strcalc .= " AND NOT EXISTS (SELECT * FROM issues WHERE issues.borrowernumber=borrowers.borrowernumber ";
     if ( @$filters[1] ) {
-        $strcalc .= " AND issues.timestamap > ?";
+        $strcalc .= " AND issues.timestamp > ?";
         push @query_args, @$filters[1];
     }
     $strcalc .= ") ";
