@@ -18,10 +18,16 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
 use Test::More tests => 5;
+
+use Koha::Database;
 use Koha::Patron::Category;
 use Koha::Patron::Categories;
 use t::lib::TestBuilder;
+
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new;
 my $branch = $builder->build({ source => 'Branch', });
@@ -45,3 +51,7 @@ is_deeply( $retrieved_category_1->default_messaging, [], 'By default there is no
 
 $retrieved_category_1->delete;
 is( Koha::Patron::Categories->search->count, $nb_of_categories + 1, 'Delete should have deleted the patron category' );
+
+$schema->storage->txn_rollback;
+
+1;
