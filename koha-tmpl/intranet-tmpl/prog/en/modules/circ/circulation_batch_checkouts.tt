@@ -63,6 +63,13 @@ $(document).ready(function() {
 
 [% IF NOT batch_allowed %]
   <div class="dialog message">You are not allowed to use batch checkout for this patron</div>
+[% ELSIF noissues and not checkout_infos %]
+  <div class="dialog message">
+    Cannot check out!
+    [% IF charges_is_blocker %]
+      Checkouts are <span class="circ-hlt">BLOCKED</span> because fine balance is <span class="circ-hlt">OVER THE LIMIT</span>.
+    [% END %]
+  </div>
 [% ELSIF NOT checkout_infos %]
   <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/circ/circulation.pl">
     <fieldset id="circ_circulation_issue">
