@@ -273,27 +273,14 @@ foreach my $report_id (@ARGV) {
         }
     }
     if ($email){
-        my $email = Koha::Email->new();
-        my %mail;
+        my $args = { to => $to, from => $from, subject => $subject };
         if ($format eq 'html') {
-                $message = "<html><head><style>tr:nth-child(2n+1) { background-color: #ccc;}</style></head><body>$message</body></html>";
-           %mail = $email->create_message_headers({
-              to      => $to,
-              from    => $from,
-              contenttype => 'text/html',
-              subject => encode('utf8', $subject ),
-              message => encode('utf8', $message )
-           }
-          );
-        } else {
-          %mail = $email->create_message_headers ({
-              to      => $to,
-              from    => $from,
-              subject => encode('utf8', $subject ),
-              message => encode('utf8', $message )
-          }
-          );
+            $message = "<html><head><style>tr:nth-child(2n+1) { background-color: #ccc;}</style></head><body>$message</body></html>";
+            $args->{contenttype} = 'text/html';
         }
+        $args->{message} = $message;
+        my $email = Koha::Email->new();
+        my %mail = $email->create_message_headers($args);
         $mail{'Auth'} = {user => $username, pass => $password, method => $method} if $username;
         sendmail(%mail) or carp 'mail not sent:' . $Mail::Sendmail::error;
     } else {
