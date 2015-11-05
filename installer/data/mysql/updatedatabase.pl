@@ -11320,7 +11320,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.21.00.XXX";
+$DBversion = "3.21.00.053";
 if ( CheckVersion($DBversion) ) {
     my $query = q{ SELECT * FROM itemtypes ORDER BY description };
     my $sth   = C4::Context->dbh->prepare($query);
