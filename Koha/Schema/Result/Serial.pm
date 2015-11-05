@@ -73,6 +73,12 @@ __PACKAGE__->table("serial");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+=head2 publisheddatetext
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 100
+
 =head2 claimdate
 
   data_type: 'date'
@@ -109,6 +115,8 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "publisheddate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  "publisheddatetext",
+  { data_type => "varchar", is_nullable => 1, size => 100 },
   "claimdate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "claims_count",
@@ -147,8 +155,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-10-28 10:10:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xscBtY2sJRoXXw7hVPTqCQ
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-11-05 10:45:52
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cZDEO4olHbgGR1gmn5qgCw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
