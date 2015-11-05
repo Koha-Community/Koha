@@ -43,7 +43,7 @@ __PACKAGE__->table("marc_modification_template_actions");
 =head2 action
 
   data_type: 'enum'
-  extra: {list => ["delete_field","update_field","move_field","copy_field"]}
+  extra: {list => ["delete_field","update_field","move_field","copy_field","copy_and_replace_field"]}
   is_nullable: 0
 
 =head2 field_number
@@ -152,7 +152,13 @@ __PACKAGE__->add_columns(
   {
     data_type => "enum",
     extra => {
-      list => ["delete_field", "update_field", "move_field", "copy_field"],
+      list => [
+        "delete_field",
+        "update_field",
+        "move_field",
+        "copy_field",
+        "copy_and_replace_field",
+      ],
     },
     is_nullable => 0,
   },
@@ -228,8 +234,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-31 22:03:59
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sl0AD0sWPYcKRjHN3l3eFg
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-11-05 10:39:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mIif3RU6QvUc0xJepUQZjw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
