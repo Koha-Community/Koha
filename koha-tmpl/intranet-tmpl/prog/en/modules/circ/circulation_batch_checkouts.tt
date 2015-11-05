@@ -137,9 +137,6 @@ $(document).ready(function() {
                   [% IF checkout_info.AGE_RESTRICTION %]
                     Age restriction [% checkout_info.AGE_RESTRICTION %]
                   [% END %]
-                  [% IF checkout_info.DEBT %]
-                    The patron has a debt of [% checkout_info.DEBT %] <!-- Need debt_confirmed -->
-                  [% END %]
                   [% IF checkout_info.RENEW_ISSUE %]
                     This Item is currently checked out to this patron. Renew?
                   [% END %]
@@ -259,6 +256,9 @@ $(document).ready(function() {
                   [% END %]
                   [% IF checkout_info.UNKNOWN_BARCODE %]
                     <li>The barcode was not found [% checkout_info.barcode |html %]
+                  [% END %]
+                  [% IF checkout_info.DEBT %]
+                    The patron has a debt of [% checkout_info.DEBT %] <!-- Need debt_confirmed -->
                   [% END %]
                 </p>
               [% END %]
