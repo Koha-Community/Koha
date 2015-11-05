@@ -21,6 +21,11 @@
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
+        if($('#barcodelist').length) {
+            $('#barcodelist').focus();
+        } else if ($('#checkoutrenew').length) {
+            $('#checkoutrenew').focus();
+        }
         $("#issuest").dataTable($.extend(true, {}, dataTablesDefaults, {
             "sDom": 't',
             "aaSorting": [],
@@ -51,6 +56,10 @@ $(document).ready(function() {
 <div class="yui-b">
 
 <div class="yui-g">
+
+[% IF ( borrowernumber ) %]
+[% INCLUDE 'members-toolbar.inc' %]
+[% END %]
 
 [% IF NOT batch_allowed %]
   <div class="dialog message">You are not allowed to use batch checkout for this patron</div>
@@ -256,7 +265,7 @@ $(document).ready(function() {
       <input type="hidden" name="debt_confirmed" value="1" />
       <input type="hidden" name="branch" value="[% branch %]" />
       <input type="hidden" name="batch" value="1" />
-      <input type="submit" class="approve" value="Checkout or renew" />
+      <input type="submit" id="checkoutrenew" class="approve" value="Checkout or renew" />
     </form>
     [% END %]
 
