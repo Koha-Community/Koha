@@ -334,10 +334,15 @@ sub ParseCgiForBorrower {
 
     my $dob_dt;
     $dob_dt = eval { dt_from_string( $borrower{'dateofbirth'} ); }
-        if ( defined( $borrower{'dateofbirth'} ) );
+        if ( $borrower{'dateofbirth'} );
 
-    $borrower{'dateofbirth'} = output_pref ( { dt => $dob_dt, dateonly => 1, dateformat => 'iso' })
-        if ( $dob_dt );
+    if ( $dob_dt ) {
+        $borrower{'dateofbirth'} = output_pref ( { dt => $dob_dt, dateonly => 1, dateformat => 'iso' } );
+    }
+    else {
+        # Trigger validation
+        $borrower{'dateofbirth'} = undef;
+    }
 
     return %borrower;
 }
