@@ -38,13 +38,10 @@ sub Mock_userenv {
 
 my $borrowers_count = 3;
 
-# Setup Test------------------------
-# Helper biblio.
-diag("Creating biblio instance for testing.");
+# Create a biblio instance
 my ( $bibnum, $title, $bibitemnum ) = create_helper_biblio();
 
-# Helper item for that biblio.
-diag("Creating item instance for testing.");
+# Create an item
 my $item_barcode = 'my_barcode';
 my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
     { homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, barcode => $item_barcode },
