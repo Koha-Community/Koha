@@ -16,14 +16,12 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 25;
-use t::lib::Mocks;
-use C4::Circulation;
+
+use Test::More tests => 26;
+
 use C4::Context;
 
-BEGIN {
-    t::lib::Mocks::mock_dbh;
-};
+use_ok( 'C4::Circulation' );
 
 C4::Context->_new_userenv(123456);
 C4::Context->set_userenv(1,'kmkale' , 1, 'km', 'kale' , 'IMS', 'IMS Branch DEscription', 0, 'kmkale@anantcorp.com');
@@ -49,25 +47,18 @@ our %outputs = (
 my @filters = sort keys %inputs;
 foreach my $filter (@filters) {
     foreach my $datum (@{$inputs{$filter}}) {
-        my $expect = shift @{$outputs{$filter}} or die "Internal Test Error: missing expected output for filter '$filter' on input '$datum'";
+        my $expect = shift @{$outputs{$filter}}
+            or die "Internal Test Error: missing expected output for filter '$filter' on input '$datum'";
         my $output = C4::Circulation::barcodedecode($datum, $filter);
         ok($output eq $expect, sprintf("%12s: %20s => %15s", $filter, "'$datum'", "'$expect'")); 
         ($output eq $expect) or diag  "Bad output: '$output'";
     }
 }
 
-__END__
+# T-prefix style is derived from zero-padded "Follett Classic Code 3 of 9".  From:
+#     www.fsc.follett.com/_file/File/pdf/Barcode%20Symbology%20Q%20%20A%203_05.pdf
+#  ~ 1 to 7 characters
+#  ~ T, P or X followed by numeric characters
+#  ~ No checkdigit
 
-=head2 C4::Circulation::barcodedecode()
-
-This tests avoids being dependent on the database by using the optional
-second argument to barcodedecode.
-
-T-prefix style is derived from zero-padded "Follett Classic Code 3 of 9".  From:
-    www.fsc.follett.com/_file/File/pdf/Barcode%20Symbology%20Q%20%20A%203_05.pdf
- 
- ~ 1 to 7 characters
- ~ T, P or X followed by numeric characters
- ~ No checkdigit
-
-=cut
+1;
