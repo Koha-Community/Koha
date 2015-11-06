@@ -1,8 +1,34 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
-use Test::More tests => 25;
+
+use Test::More;
 use t::lib::Mocks;
+
+use Module::Load::Conditional qw/check_install/;
+
+BEGIN {
+    if ( check_install( module => 'Test::DBIx::Class' ) ) {
+        plan tests => 25;
+    } else {
+        plan skip_all => "Need Test::DBIx::Class"
+    }
+}
 
 use_ok('C4::ItemType');
 
@@ -90,3 +116,5 @@ is( $itemtype->checkinmsg, 'foo', 'checkinmsg is foo' );
 
 $itemtype = C4::ItemType->get;
 is( $itemtype, undef, 'C4::ItemType->get should return unless if no parameter is given' );
+
+1;

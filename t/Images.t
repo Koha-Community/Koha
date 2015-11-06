@@ -1,10 +1,34 @@
 #!/usr/bin/perl
+
+# This file is part of Koha.
 #
-#Testing C4 Images
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 8;
+
+use Test::More;
 use Test::MockModule;
+
+use Module::Load::Conditional qw/check_install/;
+
+BEGIN {
+    if ( check_install( module => 'Test::DBIx::Class' ) ) {
+        plan tests => 8;
+    } else {
+        plan skip_all => "Need Test::DBIx::Class"
+    }
+}
 
 use_ok('C4::Images');
 
@@ -49,3 +73,5 @@ is( $imagenumbers[0], 1, 'imagenumber is 1' );
 is( $imagenumbers[1], 3, 'imagenumber is 3' );
 
 is( $imagenumbers[4], undef, 'imagenumber undef' );
+
+1;

@@ -1,20 +1,42 @@
-#!/usr/bin/env perl
+#!/usr/bin/perl
+
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
+use Test::More;
+use Test::MockModule;
+
 use DateTime;
 use DateTime::Duration;
-use Test::More tests => 35;
-use Test::MockModule;
 use Koha::Cache;
 use Koha::DateUtils;
 
-BEGIN {
-    use_ok('Koha::Calendar');
+use Module::Load::Conditional qw/check_install/;
 
-    # This was the only test C4 had
-    # Remove when no longer used
-    #use_ok('C4::Calendar'); # not used anymore?
+BEGIN {
+    if ( check_install( module => 'Test::DBIx::Class' ) ) {
+        plan tests => 35;
+    } else {
+        plan skip_all => "Need Test::DBIx::Class"
+    }
 }
+
+use_ok('Koha::Calendar');
+
 use Test::DBIx::Class {
     schema_class => 'Koha::Schema',
     connect_info => ['dbi:SQLite:dbname=:memory:','',''],
@@ -298,3 +320,5 @@ my $day_after_christmas = DateTime->new(
                 '==', 40, 'Test parameter order not relevant (Days)' );
 
 }
+
+1;

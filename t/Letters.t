@@ -17,9 +17,18 @@
 
 use Modern::Perl;
 
-use DBI;
 use Test::MockModule;
-use Test::More tests => 6;
+use Test::More;
+
+use Module::Load::Conditional qw/check_install/;
+
+BEGIN {
+    if ( check_install( module => 'Test::DBIx::Class' ) ) {
+        plan tests => 6;
+    } else {
+        plan skip_all => "Need Test::DBIx::Class"
+    }
+}
 
 use Test::DBIx::Class {
     schema_class => 'Koha::Schema',

@@ -1,15 +1,36 @@
 #!/usr/bin/perl
-#
-#testing C4 matcher
 
-use strict;
-use warnings;
-use Test::More tests => 11;
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+
+use Test::More;
 use Test::MockModule;
 
+use Module::Load::Conditional qw/check_install/;
+
 BEGIN {
-    use_ok('C4::Matcher');
+    if ( check_install( module => 'Test::DBIx::Class' ) ) {
+        plan tests => 11;
+    } else {
+        plan skip_all => "Need Test::DBIx::Class"
+    }
 }
+
+use_ok('C4::Matcher');
 
 use Test::DBIx::Class {
     schema_class => 'Koha::Schema',
@@ -60,3 +81,5 @@ is( $testmatcher->code(), 'match on ISBN', 'testing code accessor' );
 $testmatcher->description('match on ISSN');
 
 is( $testmatcher->description(), 'match on ISSN', 'testing code accessor' );
+
+1;

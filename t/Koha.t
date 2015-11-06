@@ -18,8 +18,18 @@
 use Modern::Perl;
 
 use C4::Context;
-use Test::More tests => 30;
+use Test::More;
 use Test::MockModule;
+
+use Module::Load::Conditional qw/check_install/;
+
+BEGIN {
+    if ( check_install( module => 'Test::DBIx::Class' ) ) {
+        plan tests => 30;
+    } else {
+        plan skip_all => "Need Test::DBIx::Class"
+    }
+}
 
 use_ok('C4::Koha');
 

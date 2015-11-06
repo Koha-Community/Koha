@@ -17,13 +17,21 @@
 
 use Modern::Perl;
 
-use Test::More tests => 46;
+use Test::More;
 use Test::MockModule;
 use Test::Warn;
 
+use Module::Load::Conditional qw/check_install/;
+
 BEGIN {
-        use_ok('C4::Biblio');
+    if ( check_install( module => 'Test::DBIx::Class' ) ) {
+        plan tests => 46;
+    } else {
+        plan skip_all => "Need Test::DBIx::Class"
+    }
 }
+
+use_ok('C4::Biblio');
 
 use Test::DBIx::Class {
     schema_class => 'Koha::Schema',
