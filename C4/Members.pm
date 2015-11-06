@@ -43,10 +43,7 @@ use Koha::Borrower::Debarments qw(IsDebarred);
 use Text::Unaccent qw( unac_string );
 use Koha::AuthUtils qw(hash_password);
 use Koha::Database;
-use Module::Load;
-if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
-    load Koha::NorwegianPatronDB, qw( NLUpdateHashedPIN NLEncryptPIN NLSync );
-}
+require Koha::NorwegianPatronDB;
 
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 
@@ -792,7 +789,7 @@ sub ModMember {
         } else {
             if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
                 # Update the hashed PIN in borrower_sync.hashed_pin, before Koha hashes it
-                NLUpdateHashedPIN( $data{'borrowernumber'}, $data{password} );
+                Koha::NorwegianPatronDB::NLUpdateHashedPIN( $data{'borrowernumber'}, $data{password} );
             }
             $data{password} = hash_password($data{password});
         }
@@ -830,7 +827,7 @@ sub ModMember {
             # Set the value of 'sync'
             $borrowersync->update( { 'sync' => $data{'sync'} } );
             # Try to do the live sync
-            NLSync({ 'borrowernumber' => $data{'borrowernumber'} });
+            Koha::NorwegianPatronDB::NLSync({ 'borrowernumber' => $data{'borrowernumber'} });
         }
 
         logaction("MEMBERS", "MODIFY", $data{'borrowernumber'}, "UPDATE (executed w/ arg: $data{'borrowernumber'})") if C4::Context->preference("BorrowersLog");
@@ -896,7 +893,7 @@ sub AddMember {
             'synctype'       => 'norwegianpatrondb',
             'sync'           => 1,
             'syncstatus'     => 'new',
-            'hashed_pin'     => NLEncryptPIN( $plain_text_password ),
+            'hashed_pin'     => Koha::NorwegianPatronDB::NLEncryptPIN( $plain_text_password ),
         });
     }
 

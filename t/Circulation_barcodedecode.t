@@ -18,16 +18,13 @@
 use Modern::Perl;
 
 use Test::More tests => 26;
-use t::lib::Mocks;
+
+use C4::Context;
+
+use_ok( 'C4::Circulation' );
 
 C4::Context->_new_userenv(123456);
 C4::Context->set_userenv(1,'kmkale' , 1, 'kk1' , 'IMS', 0, 'kmkale@anantcorp.com');
-
-BEGIN {
-    # Mock the DB connexion and C4::Context
-    my $context = t::lib::Mocks::mock_dbh;
-    use_ok('C4::Circulation');
-}
 
 our %inputs = (
     cuecat     => ["26002315", '.C3nZC3nZC3nYD3b6ENnZCNnY.fHmc.C3D1Dxr2C3nZE3n7.', ".C3nZC3nZC3nYD3b6ENnZCNnY.fHmc.C3D1Dxr2C3nZE3n7.\r\n",
@@ -50,25 +47,18 @@ our %outputs = (
 my @filters = sort keys %inputs;
 foreach my $filter (@filters) {
     foreach my $datum (@{$inputs{$filter}}) {
-        my $expect = shift @{$outputs{$filter}} or die "Internal Test Error: missing expected output for filter '$filter' on input '$datum'";
+        my $expect = shift @{$outputs{$filter}}
+            or die "Internal Test Error: missing expected output for filter '$filter' on input '$datum'";
         my $output = C4::Circulation::barcodedecode($datum, $filter);
         ok($output eq $expect, sprintf("%12s: %20s => %15s", $filter, "'$datum'", "'$expect'")); 
         ($output eq $expect) or diag  "Bad output: '$output'";
     }
 }
 
-__END__
+# T-prefix style is derived from zero-padded "Follett Classic Code 3 of 9".  From:
+#     www.fsc.follett.com/_file/File/pdf/Barcode%20Symbology%20Q%20%20A%203_05.pdf
+#  ~ 1 to 7 characters
+#  ~ T, P or X followed by numeric characters
+#  ~ No checkdigit
 
-=head2 C4::Circulation::barcodedecode()
-
-This tests avoids being dependent on the database by using the optional
-second argument to barcodedecode.
-
-T-prefix style is derived from zero-padded "Follett Classic Code 3 of 9".  From:
-    www.fsc.follett.com/_file/File/pdf/Barcode%20Symbology%20Q%20%20A%203_05.pdf
- 
- ~ 1 to 7 characters
- ~ T, P or X followed by numeric characters
- ~ No checkdigit
-
-=cut
+1;
