@@ -48,6 +48,7 @@ $dbh->do(q|DELETE FROM branch_borrower_circ_rules|);
 $dbh->do(q|DELETE FROM default_branch_circ_rules|);
 $dbh->do(q|DELETE FROM default_circ_rules|);
 $dbh->do(q|DELETE FROM default_branch_item_rules|);
+$dbh->do(q|DELETE FROM issuingrules|);
 
 my $builder = t::lib::TestBuilder->new();
 
