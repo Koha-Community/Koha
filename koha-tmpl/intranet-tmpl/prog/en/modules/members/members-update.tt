@@ -1,4 +1,5 @@
 [% USE Branches %]
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Update patron records</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -104,8 +105,13 @@
                                                     [% IF ( ( pm.$key OR borrowers.$borrowernumber.$key ) && ( pm.$key != borrowers.$borrowernumber.$key ) ) %]
                                                         <tr>
                                                             <td>[% PROCESS display_names field = key %]</td>
-                                                            <td>[% borrowers.$borrowernumber.$key %]</td>
-                                                            <td>[% pm.$key %]</td>
+                                                            [% IF ( key == "dateofbirth" ) %]
+                                                                <td>[% borrowers.$borrowernumber.$key | $KohaDates %]</td>
+                                                                <td>[% pm.$key | $KohaDates %]</td>
+                                                            [% ELSE %]
+                                                                <td>[% borrowers.$borrowernumber.$key %]</td>
+                                                                <td>[% pm.$key %]</td>
+                                                            [% END %]
                                                         </tr>
                                                     [% END %]
                                                 [% END %]
