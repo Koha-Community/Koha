@@ -84,8 +84,8 @@ function verify_images() {
         var no_images_msg = _("No images have been uploaded for this bibliographic record yet.");
         no_images_msg = '<p>' + no_images_msg + '</p>';
     [% IF ( CAN_user_tools_upload_local_cover_images ) %]
-        var please_upload = _("Please %supload%s one.").format(
-            "<a href='/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber %]&amp;filetype=image'>",
+        var please_upload = _("Please select the image file to upload. %sUpload%s").format(
+            "<a class='btn' href='/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber %]&amp;filetype=image'>",
             "</a>");
         no_images_msg += "<p id='upload_image'>" + please_upload + '</p>';
     [% END %]
