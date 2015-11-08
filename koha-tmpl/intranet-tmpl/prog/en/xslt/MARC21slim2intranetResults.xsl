@@ -430,16 +430,16 @@
                 <xsl:when test="$leader6='a'">
                     <xsl:choose>
                         <xsl:when test="$leader7='c' or $leader7='d' or $leader7='m'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/book.png" alt="book" title="book" class="materialtype"/> Book</xsl:when>
-                        <xsl:when test="$leader7='i' or $leader7='s'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/newspaper.png" alt="serial" title="serial" class="materialtype"/> Continuing Resource</xsl:when>
+                        <xsl:when test="$leader7='i' or $leader7='s'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/newspaper.png" alt="serial" title="serial" class="materialtype"/> Continuing resource</xsl:when>
                         <xsl:when test="$leader7='a' or $leader7='b'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/book_open.png" alt="article" title="article" class="materialtype"/> Article</xsl:when>
                     </xsl:choose>
                 </xsl:when>
                 <xsl:when test="$leader6='t'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/book.png" alt="book" title="book" class="materialtype"/> Book</xsl:when>
                 <xsl:when test="$leader6='o'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/report_disk.png" alt="kit" title="kit" class="materialtype"/> Kit</xsl:when>
-                <xsl:when test="$leader6='p'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/report_disk.png" alt="mixed materials" title="mixed materials" class="materialtype"/>Mixed Materials</xsl:when>
-                <xsl:when test="$leader6='m'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/computer_link.png" alt="computer file" title="computer file" class="materialtype"/> Computer File</xsl:when>
+                <xsl:when test="$leader6='p'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/report_disk.png" alt="mixed materials" title="mixed materials" class="materialtype"/>Mixed materials</xsl:when>
+                <xsl:when test="$leader6='m'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/computer_link.png" alt="computer file" title="computer file" class="materialtype"/> Computer file</xsl:when>
                 <xsl:when test="$leader6='e' or $leader6='f'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/map.png" alt="map" title="map" class="materialtype"/> Map</xsl:when>
-                <xsl:when test="$leader6='g' or $leader6='k' or $leader6='r'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/film.png" alt="visual material" title="visual material" class="materialtype"/> Visual Material</xsl:when>
+                <xsl:when test="$leader6='g' or $leader6='k' or $leader6='r'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/film.png" alt="visual material" title="visual material" class="materialtype"/> Visual material</xsl:when>
                 <xsl:when test="$leader6='c' or $leader6='d'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/music.png" alt="score" title="score" class="materialtype"/> Score</xsl:when>
                 <xsl:when test="$leader6='i'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/sound.png" alt="sound" title="sound" class="materialtype"/> Sound</xsl:when>
                 <xsl:when test="$leader6='j'"><img src="/intranet-tmpl/prog/img/famfamfam/silk/sound.png" alt="music" title="music" class="materialtype"/> Music</xsl:when>
@@ -880,7 +880,7 @@
          <xsl:with-param name="basetags">246</xsl:with-param>
          <xsl:with-param name="codes">ab</xsl:with-param>
          <xsl:with-param name="class">results_summary</xsl:with-param>
-         <xsl:with-param name="label">Other Title: </xsl:with-param>
+         <xsl:with-param name="label">Other title: </xsl:with-param>
        </xsl:call-template>
     </xsl:if>
 
@@ -898,7 +898,7 @@
     </xsl:if>
     <xsl:if test="marc:datafield[@tag=856]">
          <span class="results_summary">
-			   <span class="label">Online Access: </span>
+			   <span class="label">Online access: </span>
                             <xsl:for-each select="marc:datafield[@tag=856]">
                             <xsl:variable name="SubqText"><xsl:value-of select="marc:subfield[@code='q']"/></xsl:variable>
 				   <a><xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>

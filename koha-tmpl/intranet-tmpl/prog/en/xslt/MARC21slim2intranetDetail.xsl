@@ -400,7 +400,7 @@
         <xsl:if test="marc:datafield[@tag=336] or marc:datafield[@tag=337] or marc:datafield[@tag=338]">
             <span class="results_summary" id="content_type">
                 <xsl:if test="marc:datafield[@tag=336]">
-                    <span class="label">Content Type: </span>
+                    <span class="label">Content type: </span>
                     <xsl:for-each select="marc:datafield[@tag=336]">
                         <xsl:call-template name="subfieldSelect">
                             <xsl:with-param name="codes">a</xsl:with-param>
@@ -412,7 +412,7 @@
                 <xsl:text> </xsl:text>
                 <!-- Media Type -->
                 <xsl:if test="marc:datafield[@tag=337]">
-                    <span class="label">Media Type: </span>
+                    <span class="label">Media type: </span>
                     <xsl:for-each select="marc:datafield[@tag=337]">
                         <xsl:call-template name="subfieldSelect">
                             <xsl:with-param name="codes">a</xsl:with-param>
@@ -424,7 +424,7 @@
                 <xsl:text> </xsl:text>
                 <!-- Media Type -->
                 <xsl:if test="marc:datafield[@tag=338]">
-                    <span class="label">Carrier Type: </span>
+                    <span class="label">Carrier type: </span>
                     <xsl:for-each select="marc:datafield[@tag=338]">
                         <xsl:call-template name="subfieldSelect">
                             <xsl:with-param name="codes">a</xsl:with-param>
@@ -585,7 +585,7 @@
 
         <!-- #13382 Added Related works 700$i -->
         <xsl:if test="marc:datafield[@tag=700][marc:subfield[@code='i']] or marc:datafield[@tag=710][marc:subfield[@code='i']] or marc:datafield[@tag=711][marc:subfield[@code='i']]">
-            <span class="results_summary related_works"><span class="label">Related Works: </span>
+            <span class="results_summary related_works"><span class="label">Related works: </span>
                 <xsl:for-each select="marc:datafield[@tag=700][marc:subfield[@code='i']] | marc:datafield[@tag=710][marc:subfield[@code='i']] | marc:datafield[@tag=711][marc:subfield[@code='i']]">
                     <xsl:variable name="str">
                         <xsl:call-template name="subfieldSelect">
@@ -627,7 +627,7 @@
 
         <!-- #13382 Added Contained Works 7xx@ind2=2 -->
         <xsl:if test="marc:datafield[@tag=700][@ind2=2 and not(marc:subfield[@code='i'])] or marc:datafield[@tag=710][@ind2=2 and not(marc:subfield[@code='i'])] or marc:datafield[@tag=711][@ind2=2 and not(marc:subfield[@code='i'])]">
-            <span class="results_summary contained_works"><span class="label">Contained Works: </span>
+            <span class="results_summary contained_works"><span class="label">Contained works: </span>
                 <xsl:for-each select="marc:datafield[@tag=700][@ind2=2][not(marc:subfield[@code='i'])] | marc:datafield[@tag=710][@ind2=2][not(marc:subfield[@code='i'])] | marc:datafield[@tag=711][@ind2=2][not(marc:subfield[@code='i'])]">
                     <xsl:variable name="str">
                         <xsl:call-template name="subfieldSelect">
@@ -842,7 +842,7 @@
         <!-- 508 -->
         <xsl:if test="marc:datafield[@tag=508]">
             <div class="results_summary prod_credits">
-                <span class="label">Production Credits: </span>
+                <span class="label">Production credits: </span>
                 <xsl:for-each select="marc:datafield[@tag=508]">
                     <xsl:call-template name="subfieldSelectSpan">
                         <xsl:with-param name="codes">a</xsl:with-param>

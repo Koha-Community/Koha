@@ -251,7 +251,7 @@
                     <span class="label">Manufacturer: </span>
                 </xsl:when>
                 <xsl:when test="$ind2='4'">
-                    <span class="label">Copyright Date: </span>
+                    <span class="label">Copyright date: </span>
                 </xsl:when>
             </xsl:choose>
             <xsl:call-template name="subfieldSelect">
