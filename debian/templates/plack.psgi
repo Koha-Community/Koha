@@ -29,13 +29,13 @@ use Plack::App::URLMap;
 use C4::Boolean;
 use C4::Branch;
 use C4::Category;
-use C4::Dates;
 use C4::Koha;
 use C4::Languages;
 use C4::Letters;
 use C4::Members;
 use C4::XSLT;
 use Koha::Database;
+use Koha::DateUtils;
 
 use CGI qw(-utf8 ); # we will loose -utf8 under plack, otherwise
 {
