@@ -9935,23 +9935,6 @@ if ( CheckVersion($DBversion) ) {
     print "Done ($DBversion release)\n";
 }
 
-# DEVELOPER PROCESS, search for anything to execute in the db_update directory
-# SEE bug 13068
-# if there is anything in the atomicupdate, read and execute it.
-
-my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
-opendir( my $dirh, $update_dir );
-foreach my $file ( sort readdir $dirh ) {
-    next if $file !~ /\.(sql|perl)$/;  #skip other files
-    print "DEV atomic update: $file\n";
-    if ( $file =~ /\.sql$/ ) {
-        my $installer = C4::Installer->new();
-        my $rv = $installer->load_sql( $update_dir . $file ) ? 0 : 1;
-    } elsif ( $file =~ /\.perl$/ ) {
-        do $update_dir . $file;
-    }
-}
-
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
