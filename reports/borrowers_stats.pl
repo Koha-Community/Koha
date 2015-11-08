@@ -31,7 +31,6 @@ use C4::Output;
 use C4::Reports;
 use C4::Circulation;
 use C4::Members::AttributeTypes;
-use C4::Dates qw/format_date format_date_in_iso/;
 use Date::Calc qw(
   Today
   Add_Delta_YM
@@ -42,8 +41,6 @@ use Date::Calc qw(
 plugin that shows a stats on borrowers
 
 =head1 DESCRIPTION
-
-=over 2
 
 =cut
 

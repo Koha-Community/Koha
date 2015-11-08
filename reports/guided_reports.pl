@@ -357,9 +357,13 @@ elsif ( $phase eq 'Choose these criteria' ) {
             my $tovalue   = $input->param( "to_"   . $crit . "_value" );
 
             # If the range values are dates
-            if ($fromvalue =~ C4::Dates->regexp('syspref') && $tovalue =~ C4::Dates->regexp('syspref')) {
-                $fromvalue = C4::Dates->new($fromvalue)->output("iso");
-                $tovalue = C4::Dates->new($tovalue)->output("iso");
+            my $fromvalue_dt;
+            $fromvalue_dt = eval { dt_from_string( $fromvalue ); } if ( $fromvalue );
+            my $tovalue_dt;
+            $tovalue_dt = eval { dt_from_string( $tovalue ); } if ($tovalue);
+            if ( $fromvalue_dt && $tovalue_dt ) {
+                $fromvalue = output_pref( { dt => dt_from_string( $fromvalue_dt ), dateonly => 1, dateformat => 'iso' } );
+                $tovalue   = output_pref( { dt => dt_from_string( $tovalue_dt ), dateonly => 1, dateformat => 'iso' } );
             }
 
             if ($fromvalue && $tovalue) {
@@ -369,8 +373,10 @@ elsif ( $phase eq 'Choose these criteria' ) {
         } else {
 
             # If value is a date
-            if ($value =~ C4::Dates->regexp('syspref')) {
-                $value = C4::Dates->new($value)->output("iso");
+            my $value_dt;
+            $value_dt  =  eval { dt_from_string( $value ); } if ( $value );
+            if ( $value_dt ) {
+                $value = output_pref( { dt => dt_from_string( $value_dt ), dateonly => 1, dateformat => 'iso' } );
             }
             # don't escape runtime parameters, they'll be at runtime
             if ($value =~ /<<.*>>/) {
