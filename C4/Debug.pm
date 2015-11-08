@@ -127,7 +127,6 @@ command with ERROR_LOG enabled for your VirtualHost.  Not intended for productio
 =item You can force the value from perl directly, like:
 
 	use C4::Debug;
-	use C4::Dates;
 	BEGIN { $C4::Debug::debug = 1; }
 	# now any other dependencies that also use C4::Debug will have debugging ON.
 
