@@ -1,8 +1,25 @@
-#!/usr/bin/env perl
+#!/usr/bin/perl
+
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
 use Test::More tests => 14;
 use Test::MockModule;
+use t::lib::TestBuilder;
 
 use C4::Context;
 use C4::Circulation;
@@ -12,41 +29,42 @@ use C4::Members;
 
 use Koha::Database;
 
-my $dbh = C4::Context->dbh;
-my $schema = Koha::Database->new()->schema();
+my $schema  = Koha::Database->new()->schema();
+my $dbh     = $schema->storage->dbh;
+my $builder = t::lib::TestBuilder->new();
 
 # Start transaction
 $dbh->{RaiseError} = 1;
 $schema->storage->txn_begin();
 
-$dbh->do(q{INSERT INTO itemtypes (itemtype) VALUES ('GTI_I_TEST')});
-$schema->resultset('Category')->create({ categorycode => 'GTI_C_TEST' });
-$schema->resultset('Branch')->create({ branchcode => 'GTI_B_1', branchname => 'GTI_B_1' });
-$schema->resultset('Branch')->create({ branchcode => 'GTI_B_2', branchname => 'GTI_B_2' });
+my $itemtype = $builder->build({ source => 'Itemtype' })->{ itemtype };
+my $category = $builder->build({ source => 'Category' })->{ categorycode };
+my $branch_1 = $builder->build({ source => 'Branch' });
+my $branch_2 = $builder->build({ source => 'Branch' });
 
 my $c4_context = Test::MockModule->new('C4::Context');
 $c4_context->mock('userenv', sub {
-    { branch => 'GTI_B_1' }
+    { branch => $branch_1->{ branchcode } }
 });
 C4::Context->set_preference('item-level_itypes', '0');
 
-my $biblionumber = create_biblio('Test 1', 'GTI_I_TEST');
+my $biblionumber = create_biblio('Test 1', $itemtype);
 AddItem({
     barcode => 'GTI_BARCODE_001',
-    homebranch => 'GTI_B_1',
+    homebranch => $branch_1->{ branchcode },
     ccode => 'GTI_CCODE',
 }, $biblionumber);
 
-$biblionumber = create_biblio('Test 2', 'GTI_I_TEST');
+$biblionumber = create_biblio('Test 2', $itemtype);
 AddItem({
     barcode => 'GTI_BARCODE_002',
-    homebranch => 'GTI_B_2',
+    homebranch => $branch_2->{ branchcode },
 }, $biblionumber);
 
 my $borrowernumber = AddMember(
     userid => 'gti.test',
-    categorycode => 'GTI_C_TEST',
-    branchcode => 'GTI_B_1'
+    categorycode => $category,
+    branchcode => $branch_1->{ branchcode }
 );
 my $borrower = GetMember(borrowernumber => $borrowernumber);
 
@@ -57,16 +75,16 @@ AddIssue($borrower, 'GTI_BARCODE_002');
 # Start of tests
 #
 
-my @issues = GetTopIssues({count => 10, itemtype => 'GTI_I_TEST'});
+my @issues = GetTopIssues({count => 10, itemtype => $itemtype});
 is(scalar @issues, 2);
 is($issues[0]->{title}, 'Test 1');
 is($issues[1]->{title}, 'Test 2');
 
-@issues = GetTopIssues({count => 1, itemtype => 'GTI_I_TEST'});
+@issues = GetTopIssues({count => 1, itemtype => $itemtype});
 is(scalar @issues, 1);
 is($issues[0]->{title}, 'Test 1');
 
-@issues = GetTopIssues({count => 10, branch => 'GTI_B_2'});
+@issues = GetTopIssues({count => 10, branch => $branch_2->{ branchcode }});
 is(scalar @issues, 1);
 is($issues[0]->{title}, 'Test 2');
 
@@ -74,7 +92,7 @@ is($issues[0]->{title}, 'Test 2');
 is(scalar @issues, 1);
 is($issues[0]->{title}, 'Test 1');
 
-@issues = GetTopIssues({count => 10, itemtype => 'GTI_I_TEST', newness => 1});
+@issues = GetTopIssues({count => 10, itemtype => $itemtype, newness => 1});
 is(scalar @issues, 2);
 is($issues[0]->{title}, 'Test 1');
 is($issues[1]->{title}, 'Test 2');
@@ -85,7 +103,7 @@ $dbh->do(q{
     WHERE biblionumber = ?
 }, undef, $biblionumber);
 
-@issues = GetTopIssues({count => 10, itemtype => 'GTI_I_TEST', newness => 1});
+@issues = GetTopIssues({count => 10, itemtype => $itemtype, newness => 1});
 is(scalar @issues, 1);
 is($issues[0]->{title}, 'Test 1');
 
