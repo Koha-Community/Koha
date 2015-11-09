@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 use MARC::Record;
 
 use C4::Context;
@@ -50,32 +50,37 @@ is ($marcxml, $testxml, "testing marc2xml");
 my $marcconvert=marcxml2marc($marcxml);
 is ($marcconvert->as_xml,$marc->as_xml, "testing xml2marc");
 
-my $marcdc=marc2dcxml($marc);
+my $marcsrwdc=marc2dcxml( $marc, undef, undef, "srwdc" );
 my $test2xml=qq(<?xml version="1.0" encoding="UTF-8"?>
-<metadata
-  xmlns="http://example.org/myapp/"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://example.org/myapp/ http://example.org/myapp/schema.xsd"
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:dcterms="http://purl.org/dc/terms/">
-</metadata>);
+<srw_dc:dc xmlns:srw_dc="info:srw/schema/1/dc-schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="info:srw/schema/1/dc-schema http://www.loc.gov/z3950/agency/zing/srw/dc-schema.xsd">
+  <type xmlns="http://purl.org/dc/elements/1.1/"/>
+</srw_dc:dc>
+);
 
-is ($marcdc, $test2xml, "testing marc2dcxml");
+is ($marcsrwdc, $test2xml, "testing SRWDC Metadata");
 
-my $marcqualified=marc2dcxml($marc,1);
+my $marcoaidc=marc2dcxml( $marc, undef, undef, "oaidc" );
 my $test3xml=qq(<?xml version="1.0" encoding="UTF-8"?>
-<metadata
-  xmlns="http://example.org/myapp/"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://example.org/myapp/ http://example.org/myapp/schema.xsd"
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:dcterms="http://purl.org/dc/terms/">
-</metadata>);
+<oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:type/>
+  <dc:language/>
+</oai_dc:dc>
+);
 
-is ($marcqualified, $test3xml, "testing marcQualified");
+is ($marcoaidc, $test3xml, "testing OAIDC Metadata");
+
+my $marcrdfdc=marc2dcxml( $marc, undef, undef, "rdfdc" );
+my $test4xml=qq(<?xml version="1.0" encoding="UTF-8"?>
+<rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <dc:type/>
+  <dc:language/>
+</rdf:Description>
+);
+
+is ($marcrdfdc, $test4xml, "testing OAIDC Metadata");
 
 my $mods=marc2modsxml($marc);
-my $test4xml=qq(<?xml version="1.0" encoding="UTF-8"?>
+my $test5xml=qq(<?xml version="1.0" encoding="UTF-8"?>
 <mods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.1" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-1.xsd">
   <typeOfResource/>
   <originInfo>
@@ -85,7 +90,7 @@ my $test4xml=qq(<?xml version="1.0" encoding="UTF-8"?>
 </mods>
 );
 
-is ($mods, $test4xml, "testing marc2modsxml");
+is ($mods, $test5xml, "testing marc2modsxml");
 
 $marc->append_fields(MARC::Field->new(
     '100', ' ', ' ', a => 'Rowling, J.K.'
@@ -100,7 +105,7 @@ $marc->append_fields(MARC::Field->new(
 #print $endnote;
 
 my $bibtex=marc2bibtex($marc, 'testID');
-my $test5xml=qq(\@book{testID,
+my $test6xml=qq(\@book{testID,
 	author = {Rowling, J.K.},
 	title = {Harry potter},
 	publisher = {Scholastic},
@@ -108,11 +113,11 @@ my $test5xml=qq(\@book{testID,
 }
 );
 
-is ($bibtex, $test5xml, "testing bibtex");
+is ($bibtex, $test6xml, "testing bibtex");
 
 C4::Context->set_preference( "BibtexExportAdditionalFields", "'\@': 260\$b\ntest: 260\$b" );
 $bibtex = marc2bibtex( $marc, 'testID' );
-my $test6xml = qq(\@Scholastic{testID,
+my $test7xml = qq(\@Scholastic{testID,
 \tauthor = {Rowling, J.K.},
 \ttitle = {Harry potter},
 \tpublisher = {Scholastic},
@@ -120,7 +125,7 @@ my $test6xml = qq(\@Scholastic{testID,
 \ttest = {Scholastic}
 }
 );
-is( $bibtex, $test6xml, "testing bibtex" );
+is( $bibtex, $test7xml, "testing bibtex" );
 C4::Context->set_preference( "BibtexExportAdditionalFields", q{} );
 
 $marc->append_fields(MARC::Field->new(

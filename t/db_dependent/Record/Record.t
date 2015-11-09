@@ -113,8 +113,9 @@ ok (!$error, 'no errors in conversion');
 ok (($error,$marcxml) = marc2marcxml($marc21_utf8_combining_chars,'UTF-8','MARC21'), 'marc2marcxml - from UTF-8 to UTF-8 with combining characters (MARC21)');
 ok (!$error, 'no errors in conversion');
 
-ok (($error,$dcxml) = marc2dcxml($marc21_utf8), 'marc2dcxml - from ISO-2709 to Dublin Core');
-ok (!$error, 'no errors in conversion');
+ok (eval{marc2dcxml($marc21_utf8, undef, undef, 'oaidc')}, 'marc2dcxml - from ISO-2709 to Dublin Core');
+$error = $@;
+ok (!$error, 'no errors in conversion to DublinCore');
 
 print "\n3. checking ability to alter encoding\n";
 ok (($error,$marc) = changeEncoding($marc21_marc8,'MARC','MARC21','UTF-8'), 'changeEncoding - MARC21 from MARC-8 to UTF-8');
