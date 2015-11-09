@@ -223,10 +223,10 @@ sub calculate {
               : ( $i == 10 ) ? "Materials"
               : ( $i == 12 and $filters->[11] == 0 ) ? "Barcode (not like)"
               : ( $i == 12 and $filters->[11] == 1 ) ? "Barcode (like)"
-              : ( $i == 13 ) ? "Acquired date from"
-              : ( $i == 14 ) ? "Acquired date to"
-              : ( $i == 15 ) ? "Removed date from"
-              : ( $i == 16 ) ? "Removed date to"
+              : ( $i == 13 ) ? "Date acquired (item) from"
+              : ( $i == 14 ) ? "Date acquired (item) to"
+              : ( $i == 15 ) ? "Date deleted (item) from"
+              : ( $i == 16 ) ? "Date deleted (item) to"
               :                '';
 
             push @loopfilter, \%cell;
