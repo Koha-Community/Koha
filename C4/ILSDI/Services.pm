@@ -34,6 +34,7 @@ use HTML::Entities;
 use CGI qw ( -utf8 );
 use DateTime;
 use C4::Auth;
+use C4::Members::Attributes qw(GetBorrowerAttributes);
 
 =head1 NAME
 
@@ -426,6 +427,11 @@ sub GetPatronInfo {
             $issue->{'date_due'} = $issue->{'date_due'}->strftime('%Y-%m-%d %H:%M');
         }
         $borrower->{'loans'}->{'loan'} = $issues;
+    }
+
+    if ( $cgi->param('show_attributes') eq "1" ) {
+        my $attrs = GetBorrowerAttributes( $borrowernumber, 0, 1 );
+        $borrower->{'attributes'} = $attrs;
     }
 
     return $borrower;
