@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 41;
+use Test::More tests => 42;
 
 use Koha::Database;
 
@@ -256,6 +256,29 @@ $bookseller = $builder->build({
 delete $bookseller->{_fk};
 $bookseller_from_db = $rs_aqbookseller->find($bookseller);
 is( $bookseller_from_db->in_storage, 1, 'build with only_fk = 0 stores the entry correctly' );
+
+subtest 'Auto-increment values tests' => sub {
+
+    plan tests => 2;
+
+    # Pick a table with AI PK
+    my $source  = 'Biblio'; # table
+    my $column  = 'biblionumber'; # ai column
+
+    my $col_info = $schema->source( $source )->column_info( $column );
+    is( $col_info->{is_auto_increment}, 1, "biblio.biblionumber is detected as autoincrement");
+
+    # Create a biblio
+    my $biblio_1 = $builder->build({ source => $source });
+    # Get the AI value
+    my $ai_value = $biblio_1->{ biblionumber };
+    # Create a biblio
+    my $biblio_2 = $builder->build({ source => $source });
+    # Get the next AI value
+    my $next_ai_value = $biblio_2->{ biblionumber };
+    is( $ai_value + 1, $next_ai_value, "AI values are consecutive");
+
+};
 
 $schema->storage->txn_rollback;
 
