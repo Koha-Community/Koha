@@ -85,6 +85,18 @@
 				<xsl:value-of select="."/>
 			</dc:date>
 		</xsl:for-each>
+                <xsl:for-each select="marc:datafield[@tag=264]">
+                        <dc:publisher>
+                                <xsl:call-template name="subfieldSelect">
+                                        <xsl:with-param name="codes">ab</xsl:with-param>
+                                </xsl:call-template>
+                        </dc:publisher>
+                </xsl:for-each>
+                        <xsl:for-each select="marc:datafield[@tag=264]/marc:subfield[@code='c']">
+                                <dc:date>
+                                        <xsl:value-of select="."/>
+                                </dc:date>
+                        </xsl:for-each>
 		<dc:language>
 			<xsl:value-of select="substring($controlField008,36,3)"/>
 		</dc:language>
