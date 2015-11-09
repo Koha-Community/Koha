@@ -1,5 +1,6 @@
 [% USE Asset %]
 [% USE Koha %]
+[% USE Branches %]
 [% USE KohaDates %]
 [% USE ColumnsSettings %]
 [% USE AuthorisedValues %]
@@ -19,6 +20,7 @@
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Account for [% INCLUDE 'patron-title.inc' %]</div>
 
 <div id="doc3" class="yui-t2">
+
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
@@ -40,6 +42,7 @@
       <tr>
           <th class="title-string">Date</th>
           <th>Description of charges</th>
+          <th>Home library</th>
           <th>Note</th>
           <th>Amount</th>
           <th>Outstanding</th>
@@ -61,6 +64,7 @@
         [%- IF account.payment_type %], [% AuthorisedValues.GetByCode('PAYMENT_TYPE', account.payment_type) %][% END %]
         [%- IF account.description %], [% account.description %][% END %]
         &nbsp;[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber %]&amp;itemnumber=[% account.itemnumber %]">[% account.item.biblio.title |html %]</a>[% END %]</td>
+      <td>[% IF account.itemnumber %][% Branches.GetName( account.item.homebranch ) %][% END %]</td>
       <td>[% account.note | html_line_break %]</td>
       [% IF ( account.amountcredit ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amount | $Price %]</td>
       [% IF ( account.amountoutstandingcredit ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amountoutstanding | $Price %]</td>
@@ -89,7 +93,7 @@
   [% END %]
 <tfoot>
   <tr>
-    <td colspan="4">Total due</td>
+    <td colspan="5">Total due</td>
     [% IF ( totalcredit ) %]
         <td class="credit" style="text-align: right;">[% total | $Price %]</td>
     [% ELSE %]
