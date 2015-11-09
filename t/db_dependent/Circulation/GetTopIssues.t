@@ -107,5 +107,7 @@ sub create_biblio {
         MARC::Field->new($it_tag, ' ', ' ', $it_subfield => $itemtype),
     );
 
-    return AddBiblio($record, '');
+    my ($biblionumber) = AddBiblio($record, '');
+
+    return $biblionumber;
 }
