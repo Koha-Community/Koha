@@ -60,8 +60,8 @@ elsif ($format =~ /bibtex/) {
     $marc = marc2bibtex(C4::Biblio::GetMarcBiblio($biblionumber),$biblionumber);
     $format = 'bibtex';
 }
-elsif ($format =~ /dc/) {
-    ($error,$marc) = marc2dcxml($marc,1);
+elsif ($format =~ /dc$/) {
+    $marc = marc2dcxml(undef, undef, $biblionumber, $format);
     $format = "dublin-core.xml";
 }
 elsif ($format =~ /marc8/) {

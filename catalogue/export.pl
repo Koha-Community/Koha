@@ -50,8 +50,8 @@ if ($op eq "export") {
                 $marc = marc2bibtex($marc);
                 $format = "bibtex";
             }
-            elsif ($format =~ /dc/) {
-                ($error,$marc) = marc2dcxml($marc,1);
+            elsif ($format =~ /dc$/) {
+                $marc = marc2dcxml(undef, undef, $biblionumber, $format);
                 $format = "dublin-core.xml";
             }
             elsif ($format =~ /marc8/) {

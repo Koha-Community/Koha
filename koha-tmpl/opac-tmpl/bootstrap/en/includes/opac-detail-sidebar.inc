@@ -38,11 +38,13 @@
                     <a id="format" class="dropdown-toggle" data-toggle="dropdown" href="#">Save record <b class="caret"></b></a>
                         <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="format">
                             [% FOREACH option IN export_options %]
+                                [% IF option == 'dc' %]
+                                    <li><a role="menuitem" href="#" data-toggle="modal" data-target="#exportModal_">Dublin Core</a></li>
+                                [% ELSE %]
                                 <li>
                                     <a role="menuitem" href="/cgi-bin/koha/opac-export.pl?op=export&amp;bib=[% biblionumber %]&amp;format=[% option %]">
                                         [% SWITCH option %]
                                             [% CASE 'bibtex' %]BIBTEX
-                                            [% CASE 'dc' %]Dublin Core (XML)
                                             [% CASE 'endnote' %]EndNote
                                             [% CASE 'marcxml' %]MARCXML
                                             [% CASE 'marc8' %]MARC (non-Unicode/MARC-8)
@@ -54,6 +56,7 @@
                                         [% END %]
                                     </a>
                                 </li>
+                                [% END %]
                             [% END %]
                         </ul>
                 </div>

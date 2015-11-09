@@ -2,6 +2,7 @@ package C4::Record;
 #
 # Copyright 2006 (C) LibLime
 # Parts copyright 2010 BibLibre
+# Part copyright 2015 Universidad de El Salvador
 #
 # This file is part of Koha.
 #
@@ -25,7 +26,6 @@ use strict;
 # please specify in which methods a given module is used
 use MARC::Record; # marc2marcxml, marcxml2marc, changeEncoding
 use MARC::File::XML; # marc2marcxml, marcxml2marc, changeEncoding
-use MARC::Crosswalk::DublinCore; # marc2dcxml
 use Biblio::EndnoteStyle;
 use Unicode::Normalize; # _entity_encode
 use C4::Biblio; #marc2bibtex
@@ -36,6 +36,8 @@ use YAML; #marcrecords2csv
 use Template;
 use Text::CSV::Encoded; #marc2csv
 use Koha::SimpleMARC qw(read_field);
+use Koha::XSLT_Handler;
+use Carp;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -220,51 +222,92 @@ sub marcxml2marc {
 
 =head2 marc2dcxml - Convert from ISO-2709 to Dublin Core
 
-  my ($error,$dcxml) = marc2dcxml($marc,$qualified);
+    my dcxml = marc2dcxml ($marc, $xml, $biblionumber, $format);
 
-Returns a DublinCore::Record object, will eventually return a Dublin Core scalar
+EXAMPLE
 
-FIXME: should return actual XML, not just an object
+    my dcxml = marc2dcxml (undef, undef, 1, "oaidc");
+
+Convert MARC or MARCXML to Dublin Core metadata (XSLT Transformation),
+optionally can get an XML directly from database (biblioitems.marcxml)
+without item information. This method take into consideration the syspref
+'marcflavour' (UNIMARC, MARC21 and NORMARC).
+Return an XML file with the format defined in C<$format>
 
 C<$marc> - an ISO-2709 scalar or MARC::Record object
 
-C<$qualified> - specify whether qualified Dublin Core should be used in the input or output [0]
+C<$xml> - a MARCXML file
+
+C<$biblionumber> - obtain the record directly from database (biblioitems.marcxml)
+
+C<$format> - accept three type of DC formats (oaidc, srwdc, and rdfdc )
 
 =cut
 
 sub marc2dcxml {
-	my ($marc,$qualified) = @_;
-	my $error;
-    # test if it's already a MARC::Record object, if not, make it one
-    my $marc_record_obj;
-    if ($marc =~ /^MARC::Record/) { # it's already a MARC::Record object
-        $marc_record_obj = $marc;
-    } else { # it's not a MARC::Record object, make it one
-		eval { $marc_record_obj = MARC::Record->new_from_usmarc($marc) }; # handle exceptions
+    my ( $marc, $xml, $biblionumber, $format ) = @_;
 
-		# conversion to MARC::Record object failed, populate $error
-		if ($@) {
-			$error .="\nCreation of MARC::Record object failed: ".$MARC::File::ERROR;
-		}
-	}
-	my $crosswalk = MARC::Crosswalk::DublinCore->new;
-	if ($qualified) {
-		$crosswalk = MARC::Crosswalk::DublinCore->new( qualified => 1 );
-	}
-	my $dcxml = $crosswalk->as_dublincore($marc_record_obj);
-	my $dcxmlfinal = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-	$dcxmlfinal .= "<metadata
-  xmlns=\"http://example.org/myapp/\"
-  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
-  xsi:schemaLocation=\"http://example.org/myapp/ http://example.org/myapp/schema.xsd\"
-  xmlns:dc=\"http://purl.org/dc/elements/1.1/\"
-  xmlns:dcterms=\"http://purl.org/dc/terms/\">";
+    # global variables
+    my ( $marcxml, $record, $output );
 
-	foreach my $element ( $dcxml->elements() ) {
-                $dcxmlfinal.="<"."dc:".$element->name().">".$element->content()."</"."dc:".$element->name().">\n";
+    # set the default path for intranet xslts
+    # differents xslts to process (OAIDC, SRWDC and RDFDC)
+    my $xsl = C4::Context->config('intrahtdocs') . '/prog/en/xslt/' .
+              C4::Context->preference('marcflavour') . 'slim2' . uc ( $format ) . '.xsl';
+
+    if ( defined $marc ) {
+        # no need to catch errors or warnings marc2marcxml do it instead
+        $marcxml = C4::Record::marc2marcxml( $marc );
+    } elsif ( not defined $xml and defined $biblionumber ) {
+        # get MARCXML biblio directly from biblioitems.marcxml without item information
+        $marcxml = C4::Biblio::GetXmlBiblio( $biblionumber );
+    } else {
+        $marcxml = $xml;
     }
-	$dcxmlfinal .= "\n</metadata>";
-	return ($error,$dcxmlfinal);
+
+    # only proceed if MARC21 or UNIMARC; else clause is executed if marcflavour set it to NORMARC
+    # generate MARC::Record object to see if not a marcxml record
+    unless ( C4::Context->preference('marcflavour') eq 'NORMARC' ) {
+        eval { $record = MARC::Record->new_from_xml(
+                         $marcxml,
+                         'UTF-8',
+                         C4::Context->preference('marcflavour')
+               );
+        };
+    } else {
+        eval { $record = MARC::Record->new_from_xml(
+                         $marcxml,
+                        'UTF-8',
+                        'MARC21'
+               );
+        };
+    }
+
+    # conversion to MARC::Record object failed
+    if ( $@ ) {
+        croak "Creation of MARC::Record object failed.";
+    } elsif ( $record->warnings() ) {
+        carp "Warnings encountered while processing ISO-2709 record.\n";
+        my @warnings = $record->warnings();
+        foreach my $warn (@warnings) {
+            carp "\t". $warn;
+        };
+    } elsif ( $record =~ /^MARC::Record/ ) { # if OK makes xslt transformation
+        my $xslt_engine = Koha::XSLT_Handler->new;
+        if ( $format =~ /oaidc|srwdc|rdfdc/ ) {
+            $output = $xslt_engine->transform( $marcxml, $xsl );
+        } else {
+            croak "The format argument ($format) not accepted.\n" .
+                  "Please pass a valid format (oaidc, srwdc, or rdfdc)\n";
+        }
+        my $err = $xslt_engine->err; # error number
+        my $errstr = $xslt_engine->errstr; # error message
+        if ( $err ) {
+            croak "Error when processing $errstr Error number: $err\n";
+        } else {
+            return $output;
+        }
+    }
 }
 
 =head2 marc2modsxml - Convert from ISO-2709 to MODS

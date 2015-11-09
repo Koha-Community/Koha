@@ -217,7 +217,7 @@ CAN_user_serials_create_subscription ) %]
     <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download"></i> Save <span class="caret"></span></button>
     <ul class="dropdown-menu">
         <li><a href="/cgi-bin/koha/catalogue/export.pl?format=bibtex&amp;op=export&amp;bib=[% biblionumber %]">BIBTEX</a></li>
-        <li><a href="/cgi-bin/koha/catalogue/export.pl?format=dc&amp;op=export&amp;bib=[% biblionumber %]">Dublin Core (XML)</a></li>
+        <li><a href="#" data-toggle="modal" data-target="#exportModal_">Dublin Core</a></li>
         <li><a href="/cgi-bin/koha/catalogue/export.pl?format=marcxml&amp;op=export&amp;bib=[% biblionumber %]">MARCXML</a></li>
         <li><a href="/cgi-bin/koha/catalogue/export.pl?format=marc8&amp;op=export&amp;bib=[% biblionumber %]">MARC (non-Unicode/MARC-8)</a></li>
         <li><a href="/cgi-bin/koha/catalogue/export.pl?format=utf8&amp;op=export&amp;bib=[% biblionumber %]">MARC (Unicode/UTF-8)</a></li>
@@ -266,3 +266,31 @@ CAN_user_serials_create_subscription ) %]
 </form>
 </div>
 
+    <!--Modal for Dublin Core-->
+    <div class="modal hide" id="exportModal_" tabindex="-1" role="dialog" aria-labelledby="exportLabelexportModal_" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 id="exportLabelexportModal_">Exporting to Dublin Core...</h3>
+        </div>
+        <form method="get" action="/cgi-bin/koha/catalogue/export.pl">
+        <div class="modal-body">
+            <fieldset>
+                <input id="input-simple" type="radio" name="format" value="rdfdc">
+                <label for="input-simple">Simple DC-RDF</label>
+                <br>
+                <input id="input-oai" type="radio" name="format" value="oaidc" checked>
+                <label for="input-oai">OAI-DC</label>
+                <br>
+                <input id="input-srw" type="radio" name="format" value="srwdc">
+                <label for="input-srw">SRW-DC</label>
+                <br>
+            </fieldset>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn">Export</button>
+            <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        </div>
+        <input type="hidden" name="op" value="export" />
+        <input type="hidden" name="bib" value="[% biblionumber %]" />
+        </form>
+    </div>
