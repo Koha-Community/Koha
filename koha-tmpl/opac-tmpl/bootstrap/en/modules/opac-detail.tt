@@ -53,7 +53,7 @@
                         <div title="[% biblionumber |url %]" class="[% biblionumber %]" id="local-thumbnail-preview"></div>
                     [% END %]
                     [% IF ( OPACAmazonCoverImages ) %]
-                        [% IF ( OPACurlOpenInNewWindow ) %]
+                        [% IF ( OPACURLOpenInNewWindow ) %]
                             <a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link" target="_blank">
                         [% ELSE %]
                             <a href="http://www.amazon[% AmazonTld %]/dp/[% normalized_isbn %]">
@@ -90,8 +90,8 @@
                     [% END %]
                     [% IF ( BakerTaylorEnabled && normalized_isbn ) %]
                         [% IF BakerTaylorBookstoreURL %]
-                            [% IF ( OPACurlOpenInNewWindow ) %]
-                                <a href="https://[% BakerTaylorBookstoreURL |html %][% normalized_isbn %]" target="_blank"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% normalized_isbn %]" /></a>
+                            [% IF ( OPACURLOpenInNewWindow ) %]
+                                <a href="https://[% BakerTaylorBookstoreURL |html %][% bt_id %]" target="_blank"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" /></a>
                             [% ELSE %]
                                 <a href="https://[% BakerTaylorBookstoreURL |html %][% normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% normalized_isbn %]" /></a>
                             [% END %]
@@ -338,7 +338,7 @@
                                     [% FOREACH MARCurl IN MARCURLS %]
                                         <li>[% IF ( MARCurl.part ) %][% MARCurl.part %]<br />[% END %]
 
-                                        [% IF ( OPACurlOpenInNewWindow ) %]
+                                        [% IF ( OPACURLOpenInNewWindow ) %]
                                             [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
                                                 <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]&amp;biblionumber=[% biblionumber | url %]" title="[% MARCurl.MARCURL %]" target="_blank">
                                             [% ELSE %]
@@ -518,7 +518,7 @@
                     [% IF ( BakerTaylorContentURL ) %]
                         <span class="results_summary">
                         <span class="label">Enhanced content: </span>
-                              [% IF ( OPACurlOpenInNewWindow ) %]<a href="[% BakerTaylorContentURL |html %]" target="_blank">Content Cafe</a>[% ELSE %]<a href="[% BakerTaylorContentURL |html %]">Content Cafe</a>[% END %]
+                              [% IF ( OPACURLOpenInNewWindow ) %]<a href="[% BakerTaylorContentURL |html %]" target="_blank">Content Cafe</a>[% ELSE %]<a href="[% BakerTaylorContentURL |html %]">Content Cafe</a>[% END %]
                         </span>
                     [% END # / IF BakerTaylorContentURL %]
 
