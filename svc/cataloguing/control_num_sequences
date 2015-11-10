@@ -1,0 +1,59 @@
+#!/usr/bin/perl
+#
+# Copyright 2015 ByWater Solutions
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+use Modern::Perl;
+
+use C4::Service;
+use Koha::Database;
+use MARC::Record;
+
+our ( $query, $response ) = C4::Service->init( editcatalogue => 'edit_catalogue' );
+
+sub get_and_increment {
+    my ( $control_num_sequence ) = @_;
+
+    my $schema = Koha::Database->new->schema();
+    my $authval = $schema->resultset( 'AuthorisedValue' )->find(
+        {
+            category => 'CONTROL_NUM_SEQUENCE',
+            lib => $control_num_sequence
+        }
+    );
+
+    if ( !$authval ) {
+        C4::Service->return_error( 'not_found' );
+    }
+
+    my $value = $authval->authorised_value;
+
+    $response->param( next_value => $value );
+
+    my ( $prefix, $num ) = ( $value =~ /(.+?)(\d+)$/ );
+
+    $value = $prefix . sprintf( '%0*d', length( $num ), $num + 1 );
+
+    $authval->authorised_value( $value );
+    $authval->update();
+
+    C4::Service->return_success( $response );
+}
+
+C4::Service->dispatch(
+    [ 'POST /(.*)', [], \&get_and_increment ],
+);
