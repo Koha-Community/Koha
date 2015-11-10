@@ -82,7 +82,7 @@ dump_instance()
     [ "$quiet" = "no" ] && echo "* configs, logs to $metadump"
 
     zebra_files=""
-    if [ "$exclude_indexes" = "no" ]
+    if [ "$exclude_indexes" = "no" ]; then
         zebra_files="var/lib/koha/$name"
     fi
 
