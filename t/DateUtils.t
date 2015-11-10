@@ -3,8 +3,9 @@ use DateTime;
 use DateTime::TimeZone;
 
 use C4::Context;
-use Test::More tests => 55;
+use Test::More tests => 58;
 use Test::MockModule;
+use Test::Warn;
 use Time::HiRes qw/ gettimeofday /;
 use t::lib::Mocks;
 
@@ -215,3 +216,10 @@ is( output_pref( { dt => $dt, dateonly => 1 } ), '01/01/1900', 'dt_from_string s
 # fallback
 $dt = dt_from_string('2015-01-31 01:02:03');
 is( output_pref( {dt => $dt} ), '31/01/2015 01:02', 'dt_from_string should fallback to sql format' );
+
+# output_pref with str parameter
+is( output_pref( { 'str' => $testdate_iso,  dateformat => 'iso', dateonly => 1 } ), $testdate_iso, 'output_pref should handle correctly the iso parameter' );
+is( output_pref( { 'str' => 'invalid_date', dateformat => 'iso', dateonly => 1 } ), undef,         'output_pref should return undef if an invalid date is passed' );
+warning_is { output_pref( { 'str' => $testdate_iso, dt => $dt, dateformat => 'iso', dateonly => 1 } ) }
+           { carped => 'output_pref should not be called with both dt and str parameters' },
+           'output_pref should carp if str and dt parameters are passed together';
