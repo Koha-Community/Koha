@@ -198,7 +198,7 @@
                                                    [% FOREACH MARCurl IN BIBLIO_RESULT.MARCURLS %]
                                                         [% IF MARCurl.part %]<p>[% MARCurl.part %]</p>[% END %]
 
-                                                        [% IF OPACurlOpenInNewWindow %]
+                                                        [% IF OPACURLOpenInNewWindow %]
                                                             <a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]" target="_blank">[% MARCurl.linktext %]</a>
                                                         [% ELSE %]
                                                             <a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]">[% MARCurl.linktext %]</a>
