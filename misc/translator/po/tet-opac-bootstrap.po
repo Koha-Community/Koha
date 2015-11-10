@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-10-19 17:10-0300\n"
+"POT-Creation-Date: 2015-11-10 15:12-0300\n"
 "PO-Revision-Date: 2015-04-25 06:42+0000\n"
 "Last-Translator: kaz <karenmyers1@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,7 +34,7 @@ msgstr "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
 #. %8$s:  ITEM_RESULT.priority 
 #. %9$s:  END 
 #. %10$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1293
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1301
 #, c-format
 msgid "%s %s %s %s %s (priority %s) %s %s %s %s "
 msgstr "%s %s %s %s %s (prioridade %s) %s %s %s %s "
@@ -48,7 +48,7 @@ msgstr "%s %s %s %s %s (prioridade %s) %s %s %s %s "
 #. %7$s:  FOREACH subtitl IN itemsloo.subtitle 
 #. %8$s:  subtitl.subfield|html 
 #. %9$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:354
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:358
 #, c-format
 msgid "%s %s %s %s %s No title %s %s %s %s "
 msgstr "%s %s %s %s %s Titulu ne'e la iha %s %s %s %s "
@@ -92,7 +92,7 @@ msgstr "%s %s %s %s %s faz favor "
 #. %13$s:  END 
 #. %14$s:  ELSE 
 #. %15$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:395
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:399
 #, c-format
 msgid ""
 "%s %s %s %s , %s %s %s (%s) %s.%s,%s %s %s %s This record has no items. %s "
@@ -138,6 +138,54 @@ msgstr ""
 "%s %s %s %s Ita asina ona ba notifikasaun liu husi email kona-ba kopia foun "
 
 #. %1$s:  END 
+#. %2$s:  SWITCH m.code 
+#. %3$s:  CASE 'error_on_update' 
+#. %4$s:  CASE 'error_on_insert' 
+#. %5$s:  CASE 'error_on_delete' 
+#. %6$s:  CASE 'error_on_add_biblio' 
+#. %7$s:  CASE 'error_on_remove_share' 
+#. %8$s:  CASE 'success_on_update' 
+#. %9$s:  CASE 'success_on_insert' 
+#. %10$s:  CASE 'success_on_delete' 
+#. %11$s:  CASE 'success_on_add_biblio' 
+#. %12$s:  CASE 'success_on_remove_biblios' 
+#. %13$s:  CASE 'success_on_remove_share' 
+#. %14$s:  CASE 'does_not_exist' 
+#. %15$s:  CASE 'item_does_not_exist' 
+#. %16$s:  CASE 'unauthorized_on_view' 
+#. %17$s:  CASE 'unauthorized_on_insert' 
+#. %18$s:  CASE 'unauthorized_on_update' 
+#. %19$s:  CASE 'unauthorized_on_delete' 
+#. %20$s:  CASE 'unauthorized_on_add_biblio' 
+#. %21$s:  CASE 'no_biblio_removed' 
+#. %22$s:  CASE 'Koha::Exceptions::Virtualshelves::DuplicateObject' 
+#. %23$s:  shelfname 
+#. %24$s:  CASE 'DBIx::Class::Exception' 
+#. %25$s:  m.msg 
+#. %26$s:  CASE 
+#. %27$s:  m.code 
+#. %28$s:  m.msg 
+#. %29$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:104
+#, c-format
+msgid ""
+"%s %s %s An error occurred when updating this list. Perhaps the value "
+"already exists. %s An error occurred when inserting this list. Perhaps the "
+"name already exists. %s An error occurred when deleteing this list. Check "
+"the logs. %s The item has not been added to the list. Please check it's not "
+"in this list yet. %s The share has not been removed. %s List updated with "
+"success. %s List inserted with success. %s List deleted with success. %s The "
+"item has been added to the list. %s The item has been removed from the list. "
+"%s The share has been removed. %s This list does not exist. %s This item "
+"does not exist. %s You do not have permission to view this list. %s You do "
+"not have permission to insert a new list. %s You do not have permission to "
+"update this list. %s You do not have permission to delete this list. %s You "
+"do not have permission to add a biblio to this list. %s No biblio has been "
+"removed. %s An error occurred when inserting this list. The name already %s "
+"exists. %s %s %s %s %s %s "
+msgstr ""
+
+#. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( RESERVE.intransit ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:588
@@ -172,7 +220,7 @@ msgstr "%s %s %s Koha online%s "
 #: opac-tmpl/bootstrap/en/modules/opac-restrictedpage.tt:4
 #, fuzzy, c-format
 msgid "%s %s %s Koha online %s catalog %s &rsaquo; %s %s "
-msgstr "%s %s %s%s%s%sKoha online%s katalogu &rsaquo; Tags %s %s "
+msgstr "%s %s %s%s%s%sKoha online%s katalogu &rsaquo; Tama %s %s %s%s "
 
 #. %1$s:  IF (otheritemloop.size) 
 #. %2$s:  INCLUDE items_table items=otheritemloop tab="otherholdings" 
@@ -262,7 +310,7 @@ msgstr ""
 #. %4$s:  CASE 
 #. %5$s:  m.code 
 #. %6$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:116
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:105
 #, c-format
 msgid ""
 "%s %s The suggestion has not been added. A suggestion with this title "
@@ -462,14 +510,16 @@ msgid ""
 "%sCredit %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
 
-#. %1$s:  shelvesloo.count 
-#. %2$s:  IF ( shelvesloo.single ) 
+#. %1$s:  IF s.category == PRIVATE 
+#. %2$s:  IF s.is_shared 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:722
-#, c-format
-msgid "%s %sitem%sitem(s)%s"
-msgstr "%s %sitem%sitem(s)%s"
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:667
+#, fuzzy, c-format
+msgid "%s %sShared%sPrivate%s %s Public %s "
+msgstr "%sPrivadu%s %sPubliku%s "
 
 #. %1$s:  IF loop.index == 0 
 #. %2$s:  ELSE 
@@ -631,14 +681,6 @@ msgstr ""
 msgid "%s City:"
 msgstr "%s Sidade:"
 
-#. %1$s:  IF ( ccodesearch ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:80
-#, c-format
-msgid "%s Collection %s Item type %s: "
-msgstr "%s Kolesaun %s Tipu Item %s: "
-
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:602
 #, fuzzy, c-format
@@ -648,7 +690,7 @@ msgstr "%s Nota Kontaktu:"
 #. %1$s:  IF (errcode==1) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:94
+#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:100
 #, c-format
 msgid ""
 "%s Could not create new list. Please check if the name is unique. %s Sorry, "
@@ -740,7 +782,7 @@ msgid "%s Item(s) checked out"
 msgstr "%s Item(s) ne'ebe empresta ona"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:135
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:112
 #, c-format
 msgid "%s Log out"
 msgstr "%s Vista MARC"
@@ -758,6 +800,13 @@ msgstr "%s Labele empresta fali %s La bele empresta tan molok %s "
 #, c-format
 msgid "%s No results found for that in %s catalog. "
 msgstr "%s La hetan rezultadu husi %s katalogu. "
+
+#. %1$s:  ELSE 
+#. %2$s:  END # / IF results 
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:86
+#, fuzzy, c-format
+msgid "%s No results, try to change filters. %s "
+msgstr "%s %s La hetan rezultadu. %s "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:476
@@ -853,7 +902,7 @@ msgstr "%s Kritik professional"
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #. %6$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:104
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:93
 #, c-format
 msgid ""
 "%s Purchase suggestions %s %s Your purchase suggestions %s Purchase "
@@ -1050,7 +1099,7 @@ msgid "%s Zip/Postal code:"
 msgstr "%s Kódigu postal:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:161
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:177
 #, c-format
 msgid ""
 "%s [%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('language')."
@@ -1125,6 +1174,19 @@ msgid ""
 "is a linked authority, its authid %%] %s %s %s %s %s "
 msgstr ""
 
+#. %1$s:  USE AuthorisedValues 
+#. %2$s:  SET avs = AuthorisedValues.GetAuthValueDropbox( category, default ) 
+#. %3$s:  IF avs 
+#: opac-tmpl/bootstrap/en/includes/av-build-dropbox.inc:1
+#, c-format
+msgid ""
+"%s [%%# Parameters: name: the name of the select element category: the "
+"authorised value category default: the default authorised value to select "
+"class: the CSS class of the select element size: the size to use for the "
+"input (generated if the authorised value category does not exist). %%] %s "
+"[%% DEFAULT class = '' size = 20 %%] %s "
+msgstr ""
+
 #. For the first occurrence,
 #. %1$s:  ind.label 
 #: opac-tmpl/bootstrap/en/includes/search/resort_form.inc:14
@@ -1142,7 +1204,7 @@ msgstr "%s biblios"
 #. For the first occurrence,
 #. %1$s:  IF ( review.author ) 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:49
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:367
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:371
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:348
 #, c-format
 msgid "%s by "
@@ -1208,7 +1270,7 @@ msgid "%s since %s%s "
 msgstr "%s dezde %s%s "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:54
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:55
 #, c-format
 msgid "%s system-wide library news. "
 msgstr ""
@@ -1255,14 +1317,14 @@ msgid ""
 "%sBroader heading %sNarrower heading %s%s %s%s"
 msgstr ""
 
-#. %1$s:  IF ( shelveslooppri.count ) 
-#. %2$s:  shelveslooppri.count 
-#. %3$s:  IF ( shelveslooppri.single ) 
+#. %1$s:  IF contents.count 
+#. %2$s:  contents.count 
+#. %3$s:  IF contents.count == 1 
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #. %6$s:  ELSE 
 #. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:648
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:666
 #, c-format
 msgid "%s%s %sitem%sitems%s%sEmpty%s"
 msgstr "%s%s %sitem%sitems%s%sMamuk%s"
@@ -1441,11 +1503,11 @@ msgstr "%s %s%s%s%sKoha online%s katalogu &rsaquo; Peskiza avansadu %s %s%s "
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  IF ( viewshelf ) 
-#. %6$s:  shelfname |html 
+#. %5$s:  IF op == 'view' 
+#. %6$s:  shelf.shelfname |html 
 #. %7$s:  ELSE 
 #. %8$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:6
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:8
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; %sContents of %s%sYour lists%s"
 msgstr ""
@@ -1636,7 +1698,7 @@ msgstr "%s%s%s%sKoha online%s katalogu &rsaquo; Download karriñu%s %s%s "
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  shelfname 
+#. %5$s:  shelf.shelfname 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:4
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Download list %s"
@@ -1708,7 +1770,7 @@ msgstr ""
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:3
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:5
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Most popular titles"
 msgstr "%s %s%s%s%sKoha online%s katalogu &rsaquo; Titulu popular Liu %s %s "
@@ -1907,16 +1969,6 @@ msgstr ""
 "ISBDdetail.pl?biblionumber=%s%s%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
 "%s%s"
 
-#. %1$s:  IF ( shelveslooppri.viewcategory1 ) 
-#. %2$s:  IF !shelveslooppri.shares 
-#. %3$s:  ELSE 
-#. %4$s:  END 
-#. %5$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:649
-#, fuzzy, c-format
-msgid "%s%sPrivate%sShared%s%s "
-msgstr "%sPrivadu%s %sPubliku%s "
-
 #. %1$s:  IF ( dateformat == "us" ) 
 #. %2$s:  ELSIF ( dateformat == "metric" ) 
 #. %3$s:  ELSE 
@@ -1990,7 +2042,7 @@ msgid "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=rss2"
 msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=rss2"
 
 #. %1$s:  OPACBaseURL 
-#. %2$s:  shelfnumber 
+#. %2$s:  shelf.shelfnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:7
 #, fuzzy, c-format
 msgid "%s/cgi-bin/koha/opac-shelves.pl?rss=1&amp;viewshelf=%s"
@@ -2023,7 +2075,7 @@ msgstr ""
 #. %1$s:  IF ( ccodesearch ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:59
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:53
 #, c-format
 msgid "%sCollection%sItem type%s"
 msgstr "%sKolesaun%sTipu Item%s"
@@ -2044,7 +2096,7 @@ msgstr "%sKolesaun%sTipu Item%s"
 #. %14$s:  END 
 #. %15$s:  IF ( serial.status8 ) 
 #. %16$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:104
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:110
 #, c-format
 msgid ""
 "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sNot available%s %sDelete%s "
@@ -2080,19 +2132,6 @@ msgstr ""
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
 msgstr "%stipu item %sKolesaun %sFatin iha armariu %sBuat ruma tan %s "
 
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/includes/masthead-sco.inc:17
-#, c-format
-msgid "%sLog out"
-msgstr "%sLog out"
-
-#. %1$s:  IF ( shelvesloo.viewcategory2 ) 
-#. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:723
-#, fuzzy, c-format
-msgid "%sPublic%s "
-msgstr "Publiku"
-
 #. %1$s:  IF ( suggestions_loo.ASKED ) 
 #. %2$s:  ELSIF ( suggestions_loo.CHECKED ) 
 #. %3$s:  ELSIF ( suggestions_loo.ACCEPTED ) 
@@ -2105,7 +2144,7 @@ msgstr "Publiku"
 #. %10$s:  IF ( suggestions_loo.reason ) 
 #. %11$s:  suggestions_loo.reason |html 
 #. %12$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:226
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:215
 #, fuzzy, c-format
 msgid ""
 "%sRequested %sChecked by the library %sAccepted by the library %sOrdered by "
@@ -2158,14 +2197,6 @@ msgid ""
 msgstr ""
 "%sinformasaun kontaktu%s iha file. Favor kontakta staf biblioteka nian%s ka "
 "uza "
-
-#. %1$s:  IF ( paramsloo.single ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:120
-#, c-format
-msgid "%sentry%sentries%s. "
-msgstr "%sentrada%sentradas%s. "
 
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:5
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
@@ -2814,7 +2845,7 @@ msgstr "(%s total)"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:130
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:136
 msgid "(All)"
 msgstr ""
 
@@ -2914,7 +2945,7 @@ msgstr "(Uza OPAC envés)"
 msgid "(Use SRU instead)"
 msgstr "(Uza SRU envés)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:447
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:451
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:427
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:172
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:521
@@ -2942,9 +2973,10 @@ msgid "(overdue)"
 msgstr "Livru sira tarde (%s)"
 
 #. %1$s:  koha_new.newdate 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:47
-#, c-format
-msgid "(published on %s)"
+#. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:48
+#, fuzzy, c-format
+msgid "(published on %s%s by "
 msgstr "(publika ona iha %s)"
 
 #. %1$s:  FOREACH relate IN related 
@@ -2957,8 +2989,8 @@ msgstr "(peskiza relevante: %s%s%s)"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:21
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:23
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:467
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:469
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:471
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:473
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:537
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:539
 #, c-format
@@ -3008,16 +3040,16 @@ msgstr ""
 "molok empresta fali."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:269
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:258
 msgid "- You must enter a Title"
 msgstr "- Ita tenke hatama Títulu ida"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:833
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
 msgid "- You must enter a list name"
 msgstr "- Ita tenke hatama naran ba lista ida"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:76
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:65
 #, c-format
 msgid "-- Choose --"
 msgstr "-- Hili --"
@@ -3028,7 +3060,7 @@ msgstr "-- Hili --"
 msgid "-- Choose format --"
 msgstr "-- Hili formatu ida --"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:213
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:229
 #, c-format
 msgid "-- none -- "
 msgstr "-- la iha -- "
@@ -3043,7 +3075,7 @@ msgstr ". Molok ita konfirma hamoos ona, labele hetan fali lista ne'e!"
 msgid ". Please contact the library for more information."
 msgstr ". Faz favor kontakta biblioteka ne'e atu hetan informasaun tan."
 
-#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:52
+#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:57
 #, c-format
 msgid "...or..."
 msgstr "...ka..."
@@ -3053,71 +3085,61 @@ msgstr "...ka..."
 msgid "000 "
 msgstr "000 "
 
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:7
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:102
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:9
 #, c-format
 msgid "10 titles"
 msgstr "titulu 10"
 
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:13
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:108
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:15
 #, c-format
 msgid "100 titles"
 msgstr "titulu 100"
 
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:61
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:63
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:144
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:82
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:84
 #, c-format
 msgid "12 months"
 msgstr "fulan 12"
 
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:8
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:103
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:10
 #, c-format
 msgid "15 titles"
 msgstr "titulu 15"
 
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:9
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:104
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:11
 #, c-format
 msgid "20 titles"
 msgstr "titulu 20"
 
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:51
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:53
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:142
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:72
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:74
 #, c-format
 msgid "3 months"
 msgstr "fulan 3"
 
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:10
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:105
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:12
 #, c-format
 msgid "30 titles"
 msgstr "titulu 30"
 
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:11
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:106
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:13
 #, c-format
 msgid "40 titles"
 msgstr "titulu 40"
 
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:12
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:107
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:14
 #, c-format
 msgid "50 titles"
 msgstr "titulu 50"
 
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:56
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:58
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:143
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:77
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:79
 #, c-format
 msgid "6 months"
 msgstr "fulan 6"
 
 #. SPAN
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:100
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:106
 msgid "9999-12-31"
 msgstr ""
 
@@ -3156,16 +3178,6 @@ msgstr ""
 msgid "A confirmation email will be sent shortly to the email address "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112
-#, c-format
-msgid "A list named "
-msgstr "Lista ida ho naran "
-
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:131
-#, c-format
-msgid "A record matching barcode "
-msgstr "Rejistu ida hanesan barcode "
-
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:266
 #, fuzzy, c-format
 msgid "A specific item"
@@ -3176,7 +3188,7 @@ msgstr "Kopia espesifiku ida"
 msgid "About the author"
 msgstr "Kona ba autor nee"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:308
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:324
 #, c-format
 msgid "Abstracts/summaries"
 msgstr "Rezumu / sumariu"
@@ -3193,7 +3205,7 @@ msgstr "Labele tama"
 msgid "According to our records, we don't have up-to-date %s"
 msgstr "Tuir ami nia informasaun, la iha atualiza %s"
 
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:48
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:69
 #, c-format
 msgid "Acquired in the last:"
 msgstr "Simu tiona iha:"
@@ -3211,8 +3223,8 @@ msgid "Acquisition date: Oldest to newest"
 msgstr "Data simu tiona: Tuan liu ba foun liu"
 
 #. INPUT type=submit name=tagsel_button
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:266
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:446
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:270
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:450
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:426
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:171
@@ -3232,7 +3244,7 @@ msgstr "Aumenta %s item sira ba %s"
 msgid "Add another field"
 msgstr "Aumenta kampu ida tan"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:442
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:446
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:516
 #, fuzzy, c-format
 msgid "Add tag"
@@ -3254,14 +3266,13 @@ msgstr "Aumenta ba %s"
 msgid "Add to a list"
 msgstr "Aumenta ba lista ida"
 
-#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:73
+#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:78
 #, c-format
 msgid "Add to a new list:"
 msgstr "Aumenta ba lista foun:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:469
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:473
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:539
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
 #, c-format
 msgid "Add to cart"
 msgstr "Aumenta ba kareta"
@@ -3270,11 +3281,6 @@ msgstr "Aumenta ba kareta"
 #, c-format
 msgid "Add to list:"
 msgstr "Aumenta ba lista ida:"
-
-#. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
-msgid "Add to list: "
-msgstr "Aumenta ba lista ida: "
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:23
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:108
@@ -3299,7 +3305,7 @@ msgstr "Aumenta %s %s ba "
 msgid "Additional authors:"
 msgstr "Autor adisional:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:305
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:321
 #, c-format
 msgid "Additional content types for books/printed materials"
 msgstr "Tipu konteudu adisionál ba livru/material impresus"
@@ -3309,17 +3315,17 @@ msgstr "Tipu konteudu adisionál ba livru/material impresus"
 msgid "Additional information"
 msgstr "Informasaun kontaktu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:261
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:277
 #, c-format
 msgid "Adolescent"
 msgstr "Joven"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:262
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:278
 #, c-format
 msgid "Adult"
 msgstr "Adultu"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:293
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:270
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:13
 #, c-format
 msgid "Advanced search"
@@ -3337,29 +3343,26 @@ msgstr "Hotu"
 msgid "All Tags"
 msgstr "Tags Hotu"
 
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:33
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:128
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:55
 #, c-format
 msgid "All collections"
 msgstr "Kolesaun sira hotu"
 
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:35
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:130
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:37
 #, c-format
 msgid "All item types"
 msgstr "Item tipu hotu hotu"
 
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:18
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:250
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:200
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:114
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:20
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:227
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:216
 #, c-format
 msgid "All libraries"
 msgstr "Biblioteka hotu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:16
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:24
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:32
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:18
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:26
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:34
 #, c-format
 msgid "Allow"
 msgstr "Husik"
@@ -3427,22 +3430,22 @@ msgstr ""
 msgid "An invitation to share list "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:307
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:323
 #, c-format
 msgid "Any"
 msgstr "Kualkér"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:257
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:273
 #, c-format
 msgid "Any audience"
 msgstr "Kualkér audiensia"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:274
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:290
 #, c-format
 msgid "Any content"
 msgstr "Kualkér konteudu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:288
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:304
 #, c-format
 msgid "Any format"
 msgstr "Kualkér formatu"
@@ -3457,8 +3460,8 @@ msgstr "Kualkér fraze"
 msgid "Any word"
 msgstr "Kualkér liafuan"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:142
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:145
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:131
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:134
 #, c-format
 msgid "Anyone"
 msgstr "Ema ruma"
@@ -3485,7 +3488,7 @@ msgid "Are you sure you want to delete selected search history entries?"
 msgstr "Ita hakarak hamoos istoria peskiza ne'e ka lae?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:833
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
 msgid "Are you sure you want to delete this list?"
 msgstr "Ita hakarak hamoos lista ne'e ka lae?"
 
@@ -3505,18 +3508,18 @@ msgid "Are you sure you want to remove the selected items?"
 msgstr "Ita hakarak hasai items ne'ebe hili tiona ka lae?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:833
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
 msgid "Are you sure you want to remove these items from the list?"
 msgstr "Ita hakarak hasai items ne'ebe hili tiona ka lae?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:833
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
 #, fuzzy
 msgid "Are you sure you want to remove this item from the list?"
 msgstr "Ita hakarak hamoos item sira ne'ebe hili tiona ka?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:833
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
 #, fuzzy
 msgid "Are you sure you want to remove this share?"
 msgstr "Ita hakarak hamoos lista ne'e ka?"
@@ -3538,8 +3541,8 @@ msgstr "Ita hakarak kansela ita nia rezerva ne'e ka?"
 msgid "As owner of a list you cannot accept an invitation for sharing it."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:235
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:237
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:239
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:241
 #, c-format
 msgid "Ascending"
 msgstr ""
@@ -3557,7 +3560,7 @@ msgstr ""
 msgid "At library: %s"
 msgstr "Iha biblioteka: %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:255
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:271
 #, c-format
 msgid "Audience"
 msgstr "Audiensia"
@@ -3595,14 +3598,13 @@ msgstr ""
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:14
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:199
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:201
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:176
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:178
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:78
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:209
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:211
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:553
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:555
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:782
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:213
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:215
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:565
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:567
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:63
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:245
 #, c-format
@@ -3663,7 +3665,7 @@ msgstr "Autor:"
 msgid "Authority"
 msgstr "Autoridade"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:296
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:273
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:40
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:13
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:33
@@ -3775,12 +3777,12 @@ msgstr "BibTex"
 msgid "Biblio records"
 msgstr "Rejistu sira biblio"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:309
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:325
 #, c-format
 msgid "Bibliographies"
 msgstr "Bibliografias"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:277
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:293
 #, c-format
 msgid "Biography"
 msgstr "Bibliografia"
@@ -3800,7 +3802,7 @@ msgstr "Rejistu sira biblio"
 msgid "Book reviews by critics ( XXX )"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:291
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:307
 #, c-format
 msgid "Braille"
 msgstr "Braile"
@@ -3816,7 +3818,7 @@ msgstr "Haree badak"
 msgid "Brief history"
 msgstr "Istoria badak"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:295
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:272
 #, c-format
 msgid "Browse by hierarchy"
 msgstr "Haree tuir ierarkia"
@@ -3844,12 +3846,12 @@ msgstr "Haree estante"
 msgid "CAS login"
 msgstr "Login cas"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:293
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:309
 #, c-format
 msgid "CD audio"
 msgstr "Audio CD"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:297
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:313
 #, c-format
 msgid "CD software"
 msgstr "Software CD"
@@ -3884,17 +3886,16 @@ msgstr "Kota"
 msgid "Call no."
 msgstr "Kota."
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:220
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:222
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:226
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:228
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:197
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:199
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:203
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:205
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:289
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:56
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:221
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:223
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:563
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:565
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:784
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:225
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:227
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:575
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:577
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:59
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1175
@@ -3929,15 +3930,14 @@ msgstr "Kota:"
 msgid "Call number: %s"
 msgstr "Kota: %s"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:352
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:329
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:128
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:27
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:40
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:267
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:599
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:601
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:804
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:98
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:271
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:611
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:613
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:87
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:633
@@ -3947,9 +3947,9 @@ msgstr "Kota: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:294
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:69
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:50
-#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:49
-#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:63
-#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:89
+#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:54
+#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:68
+#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:95
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:45
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:133
 #, c-format
@@ -4000,7 +4000,7 @@ msgstr "Card number:"
 msgid "Cart"
 msgstr "Kareta"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:294
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:310
 #, c-format
 msgid "Cassette recording"
 msgstr "Gravasaun kasete"
@@ -4010,14 +4010,13 @@ msgstr "Gravasaun kasete"
 msgid "Catalog"
 msgstr "Katalogu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:310
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:326
 #, c-format
 msgid "Catalogs"
 msgstr "Katalogu sira"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:571
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:789
-#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:76
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:583
+#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:81
 #, c-format
 msgid "Category:"
 msgstr "Kategoria:"
@@ -4088,7 +4087,7 @@ msgid "Checkout history"
 msgstr "Lista ba livru ne'ebe empresta ona"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:60
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:60
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:54
 #, c-format
 msgid "Checkouts"
 msgstr "Checkouts"
@@ -4099,7 +4098,7 @@ msgstr "Checkouts"
 msgid "Checkouts for %s "
 msgstr "Livru sira ne'ebe fo empresta ona ba %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:81
 #, c-format
 msgid "Checkouts: "
 msgstr "Livru ne'ebe empresta ona: "
@@ -4129,8 +4128,8 @@ msgstr "Hamoos"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:833
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:269
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:258
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:36
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:88
@@ -4184,7 +4183,7 @@ msgid "Click to expand this role"
 msgstr "Klik atu haboot seksaun ne'e"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1342
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 #, fuzzy
 msgid "Click to forward the list to"
 msgstr "Klik atu aumenta ba karriñu"
@@ -4202,7 +4201,7 @@ msgid "Click to open in new window"
 msgstr "Klik atu loke iha janela foun"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1342
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 #, fuzzy
 msgid "Click to rewind the list to"
 msgstr "Klik atu loke iha janela foun"
@@ -4228,7 +4227,7 @@ msgstr "Taka haree estante"
 msgid "Close this window"
 msgstr "Taka janela ne'e"
 
-#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:102
+#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:108
 #, c-format
 msgid "Close this window."
 msgstr "Taka janela ne'e."
@@ -4247,6 +4246,7 @@ msgstr "Hili items ita hakarak verifika"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:127
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1174
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:74
 #, c-format
 msgid "Collection"
 msgstr "Kolesaun"
@@ -4310,12 +4310,6 @@ msgstr "Komentariu ( %s )"
 msgid "Comments on "
 msgstr "Komentariu sira "
 
-#. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:667
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:739
-msgid "Confirm"
-msgstr "Konfirma"
-
 #. %1$s:  FOREACH USER_INF IN USER_INFO 
 #. %2$s:  USER_INF.firstname 
 #. %3$s:  USER_INF.surname 
@@ -4337,7 +4331,7 @@ msgstr "Information kontaktu"
 msgid "Contact information: "
 msgstr "Information kontaktu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:272
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:288
 #, c-format
 msgid "Content"
 msgstr "Konteúdu"
@@ -4347,13 +4341,12 @@ msgstr "Konteúdu"
 msgid "Content Cafe"
 msgstr "Content Café"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:639
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:714
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:656
 #, c-format
 msgid "Contents"
 msgstr "Konteúdu sira"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:80
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:69
 #, c-format
 msgid "Contents of "
 msgstr "Konteúdu sira husi "
@@ -4370,8 +4363,8 @@ msgstr "Numeru kopia"
 msgid "Copyright"
 msgstr "Kopirraite"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:227
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:229
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:231
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:233
 #, c-format
 msgid "Copyright date"
 msgstr "Data kopirraite"
@@ -4410,7 +4403,7 @@ msgstr "Kursus #"
 msgid "Course number:"
 msgstr "Numeru kursus:"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:294
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:271
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:20
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1188
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:18
@@ -4435,12 +4428,12 @@ msgstr "Kursus"
 msgid "Cover image"
 msgstr "Imajen husi livru nia oin"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:766
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:543
 #, c-format
 msgid "Create a new list"
 msgstr "Kria lista foun ida"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:84
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:73
 #, c-format
 msgid "Create new list"
 msgstr "Halo lista foun"
@@ -4510,7 +4503,7 @@ msgstr "Uza hela lokalmente husi %s %s %s(%s)%s"
 msgid "Curriculum"
 msgstr "Kurríkulu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:296
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:312
 #, c-format
 msgid "DVD video / Videodisc"
 msgstr "DVD video / Videodisc"
@@ -4550,7 +4543,7 @@ msgstr "Data atu fo fali"
 msgid "Date due:"
 msgstr "Data atu fo fali:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:155
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:171
 #, c-format
 msgid "Date range:"
 msgstr ""
@@ -4588,12 +4581,11 @@ msgstr "Dezembru"
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:60
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:47
 #, c-format
 msgid "Default"
 msgstr "Default"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:206
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:210
 #, fuzzy, c-format
 msgid "Default sorting"
 msgstr "Default"
@@ -4617,9 +4609,8 @@ msgid ""
 msgstr "Define esquema metadata ne'ebe rejistu ne'e hatudu, valor posivel: "
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:669
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:741
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:269
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:690
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:258
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:92
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:138
@@ -4632,22 +4623,22 @@ msgstr "Hamoos"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:189
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:506
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:508
 msgid "Delete list"
 msgstr "Hamoos lista"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:243
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:232
 msgid "Delete selected"
 msgstr "Hamoos item ne'ebe hili tiona"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:531
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:534
 msgid "Delete this list"
 msgstr "Hamoos lista ne'e"
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:126
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:103
 msgid "Delete your search history"
 msgstr "Hamoos ita nia istoria peskiza"
 
@@ -4666,8 +4657,8 @@ msgstr "Departamentu:"
 msgid "Dept."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:241
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:243
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:245
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:247
 #, c-format
 msgid "Descending"
 msgstr ""
@@ -4713,7 +4704,7 @@ msgstr "Dewey"
 msgid "Dewey: %s "
 msgstr "Dewey: %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:311
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:327
 #, c-format
 msgid "Dictionaries"
 msgstr "Disionariu sira"
@@ -4728,7 +4719,7 @@ msgstr "Ita dehan hanesan ne'e:"
 msgid "Digests only "
 msgstr "Dijest deit?"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:324
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:340
 #, c-format
 msgid "Directories"
 msgstr "Diretoriu sira"
@@ -4739,14 +4730,14 @@ msgstr "Diretoriu sira"
 msgid "Discharge"
 msgstr "Taxa"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:317
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:333
 #, c-format
 msgid "Discographies"
 msgstr "Diskografie sira"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:15
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:23
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:31
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:17
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:25
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:33
 #, c-format
 msgid "Do not allow"
 msgstr "Labele husik"
@@ -4773,8 +4764,8 @@ msgstr "Seidauk iha kartaun biblioteka?"
 msgid "Don't have a password yet?"
 msgstr "Seidauk iha password?"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:347
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:85
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:324
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:75
 #, fuzzy, c-format
 msgid "Don't have an account? "
@@ -4795,7 +4786,7 @@ msgstr "Download"
 msgid "Download cart"
 msgstr "Download kareta"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:166
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:168
 #, c-format
 msgid "Download list"
 msgstr "Download lista"
@@ -4819,27 +4810,10 @@ msgstr "Fo fali"
 msgid "Due %s"
 msgstr "Fo fali %s"
 
-#. %1$s:  paramsloo.delete_fail |html 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:137
-#, c-format
-msgid "ERROR: Database error. Delete (list number %s) failed."
-msgstr "ERROR: Database sala. Hamoos (numeru lista %s) la konsege."
-
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:77
 #, c-format
 msgid "ERROR: Internal error: incomplete hold request."
 msgstr "ERROR: Sala internu : rezerva la kompletu."
-
-#. %1$s:  paramsloo.unrecognized 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:140
-#, c-format
-msgid "ERROR: List number %s unrecognized."
-msgstr "ERROR: La hatene numeru lista %s."
-
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:115
-#, c-format
-msgid "ERROR: No barcode given."
-msgstr "SALA: La fo barcode."
 
 #. %1$s:  bad_biblionumber 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:56
@@ -4852,34 +4826,8 @@ msgstr "ERROR: La hetan rejistu biblio ba biblionumber %s."
 msgid "ERROR: No biblionumber received."
 msgstr "ERROR: La simu biblionumber."
 
-#. %1$s:  paramsloo.failgetitem 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:128
-#, c-format
-msgid "ERROR: No item found with barcode %s."
-msgstr "SALA: La hetan item ida ho barcode %s."
-
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:116
-#, c-format
-msgid "ERROR: No shelfnumber given."
-msgstr "ERROR: La fo ona shelfnumber."
-
-#. %1$s:  paramsloo.modifyfailure 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:143
-#, c-format
-msgid ""
-"ERROR: Shelf could not be renamed to %s. This name may not be unique for "
-"this type of list. Please check."
-msgstr ""
-
-#. %1$s:  paramsloo.nopermission |html
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:125
-#, c-format
-msgid "ERROR: You do not have adequate permission for that action on list %s."
-msgstr "SALA: La iha permisaun atu hala'o asaun ida ne'e iha lista %s."
-
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:658
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:732
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:681
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:910
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:61
 #, c-format
@@ -4887,17 +4835,17 @@ msgid "Edit"
 msgstr "Edita"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:180
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:497
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:182
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:501
 msgid "Edit list"
 msgstr "Edita lista"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:88
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:77
 #, c-format
 msgid "Edit list "
 msgstr "Edita lista "
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:541
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:546
 #, c-format
 msgid "Editing "
 msgstr "Edita hela "
@@ -4930,7 +4878,7 @@ msgstr "Email:"
 msgid "Empty and close"
 msgstr "Hamamuk no taka"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:312
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:328
 #, c-format
 msgid "Encyclopedias "
 msgstr "Ensiklopedia sira "
@@ -4952,7 +4900,7 @@ msgstr "Hatama sujestaun ida ba livru foun"
 
 #. INPUT type=text name=q
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:93
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:156
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:172
 msgid "Enter search terms"
 msgstr "Hatama termu peskiza"
 
@@ -5169,12 +5117,12 @@ msgstr "Fevereiru"
 msgid "Female:"
 msgstr "Feto:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:370
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:386
 #, fuzzy, c-format
 msgid "Fewer options"
 msgstr "[Opsaun hamenus]"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:275
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:291
 #, c-format
 msgid "Fiction"
 msgstr "Fiksaun"
@@ -5184,7 +5132,7 @@ msgstr "Fiksaun"
 msgid "Fiction notes:"
 msgstr "Nota fiksaun:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:323
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:339
 #, c-format
 msgid "Filmographies"
 msgstr "Filmografia"
@@ -5232,7 +5180,7 @@ msgstr "Ramata"
 msgid "First"
 msgstr "Primeiru"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:157
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:173
 #, fuzzy, c-format
 msgid ""
 "For example: 1999-2001. You could also use \"-1987\" for everything "
@@ -5268,12 +5216,12 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:833
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:269
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:258
 msgid "Form not submitted because of the following problem(s)"
 msgstr "Formulariu la tama tanba problema(s) tuirmai"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:286
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:302
 #, c-format
 msgid "Format"
 msgstr "Formatu"
@@ -5301,8 +5249,7 @@ msgstr "Ses"
 msgid "Friday"
 msgstr "Sesta"
 
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:16
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:112
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:18
 #, c-format
 msgid "From: "
 msgstr "Husi: "
@@ -5329,7 +5276,7 @@ msgstr "Istoria kompletu"
 msgid "Full subscription history for %s"
 msgstr "Informasaun asinatura ba %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:264
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:280
 #, c-format
 msgid "General"
 msgstr "Jeral"
@@ -5418,12 +5365,12 @@ msgstr ""
 "Given a set of bibliographic or item identifiers, returns a list with "
 "availability of the items associated with the identifiers."
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:243
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:269
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:220
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:246
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:42
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:26
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:138
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:148
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:137
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:148
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:68
 #, c-format
@@ -5432,7 +5379,7 @@ msgstr "Ba"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1342
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 #, fuzzy
 msgid "Go to detail"
 msgstr "Detalle kontaktu"
@@ -5443,16 +5390,16 @@ msgid "GoToBibliographicRequestPage "
 msgstr "GoToBibliographicRequestPage "
 
 #. OPTGROUP
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:258
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:235
 msgid "Groups"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:211
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:227
 #, c-format
 msgid "Groups of libraries"
 msgstr "Grupu biblioteka"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:313
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:329
 #, c-format
 msgid "Handbooks"
 msgstr "Manuál"
@@ -5493,7 +5440,7 @@ msgstr "Kapsaun hatuun"
 msgid "Hello, %s "
 msgstr "Bondia, %s "
 
-#: opac-tmpl/bootstrap/en/includes/masthead-sco.inc:8
+#: opac-tmpl/bootstrap/en/includes/masthead-sco.inc:10
 #, c-format
 msgid "Help"
 msgstr "Ajuda"
@@ -5571,7 +5518,7 @@ msgstr "Biblioteka ne'ebe kaer livru"
 msgid "Holdings"
 msgstr "Kopia sira"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:395
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:399
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:682
 #, c-format
 msgid "Holdings:"
@@ -5620,7 +5567,7 @@ msgstr "Livru ita rezerva ona ne'ebe hein hela"
 #: opac-tmpl/bootstrap/en/modules/opac-registration-email-sent.tt:12
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:15
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:12
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:48
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:43
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:11
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:13
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:12
@@ -5639,7 +5586,7 @@ msgstr "Livru ita rezerva ona ne'ebe hein hela"
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:13
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:27
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:11
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:16
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:18
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:12
 #: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:13
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:31
@@ -5696,8 +5643,8 @@ msgstr "ISBD"
 msgid "ISBD view"
 msgstr "Vista ISBD"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:209
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:211
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:186
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:188
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:85
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:89
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:85
@@ -5828,7 +5775,7 @@ msgstr ""
 msgid "If you have a CAS account, %s please "
 msgstr "konta, %s faz favor "
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:334
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:311
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:82
 #, c-format
 msgid "If you have a Shibboleth account, please "
@@ -5873,7 +5820,7 @@ msgstr "Iha transitu husi %s to'o %s dezde %s"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:21
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:108
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:467
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:471
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:537
 #, c-format
 msgid "In your cart"
@@ -5884,7 +5831,7 @@ msgstr "Iha ita nia karriñu"
 msgid "Indexed in:"
 msgstr "Indise ona iha:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:315
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:331
 #, c-format
 msgid "Indexes"
 msgstr "Indise sira"
@@ -5925,11 +5872,6 @@ msgstr "Kopia sira ba asinatura ida"
 msgid "Issues summary"
 msgstr "Rezumu kopia sira"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:120
-#, c-format
-msgid "It has "
-msgstr "Iha "
-
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:636
 #, c-format
 msgid "Item call number"
@@ -5966,6 +5908,7 @@ msgstr "Hatuur rezerva"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:137
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:388
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1165
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:77
 #, c-format
 msgid "Item type"
 msgstr "Tipu item"
@@ -6047,7 +5990,7 @@ msgstr "Jun"
 msgid "June"
 msgstr "Juni"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:265
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:281
 #, c-format
 msgid "Juvenile"
 msgstr "Juvenil"
@@ -6099,17 +6042,17 @@ msgstr "LCCN:"
 msgid "LCCN: %s "
 msgstr "LCCN: %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:169
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:185
 #, c-format
 msgid "Language"
 msgstr "Lian"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:172
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:188
 #, c-format
 msgid "Language: "
 msgstr "Lian: "
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:80
+#: opac-tmpl/bootstrap/en/includes/masthead-langmenu.inc:8
 #, fuzzy, c-format
 msgid "Languages"
 msgstr "Lian"
@@ -6119,7 +6062,7 @@ msgstr "Lian"
 msgid "Languages:&nbsp;"
 msgstr "Lian sira:&nbsp;"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:290
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:306
 #, c-format
 msgid "Large print"
 msgstr "Testu bo'ot"
@@ -6134,22 +6077,22 @@ msgstr "Ikus"
 msgid "Last location"
 msgstr "Lokalizasaun ikus"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:328
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:344
 #, c-format
 msgid "Law reports and digests"
 msgstr "Relatoriu lei no dijestu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:314
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:330
 #, c-format
 msgid "Legal articles"
 msgstr "Artigu sira legal"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:327
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:343
 #, c-format
 msgid "Legal cases and case notes"
 msgstr "Prosesu legál no nota kuazu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:318
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:334
 #, c-format
 msgid "Legislation"
 msgstr "Lejizlasaun"
@@ -6175,7 +6118,7 @@ msgid "Level 4: Robust/domain specific discovery platforms"
 msgstr "Nivel 4: Deskoberta domain espesifiku"
 
 #. OPTGROUP
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:251
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:228
 msgid "Libraries"
 msgstr "Biblioteka sira"
 
@@ -6186,14 +6129,14 @@ msgstr "Biblioteka sira"
 msgid "Library"
 msgstr "Biblioteka"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:189
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:191
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:166
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:168
 #, c-format
 msgid "Library catalog"
 msgstr "Katalogu biblioteka"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:198
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:60
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:214
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:49
 #, c-format
 msgid "Library:"
 msgstr "Biblioteka:"
@@ -6213,13 +6156,18 @@ msgstr "Limita ba kualker tuirmai:"
 msgid "Limit to currently available items."
 msgstr "Limite to'o item sira ne'ebe disponivel agora daudauk."
 
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:30
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:125
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:53
+#, fuzzy, c-format
+msgid "Limit to:"
+msgstr "Limita ba: "
+
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:35
 #, c-format
 msgid "Limit to: "
 msgstr "Limita ba: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1280
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1281
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1283
 #, c-format
 msgid "Link to resource "
 msgstr "Liga ba rekursus "
@@ -6235,35 +6183,18 @@ msgstr "Ligasaun"
 msgid "Links"
 msgstr "Ligasaun"
 
-#. %1$s:  paramsloo.delete_ok |html 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:134
-#, c-format
-msgid "List %s Deleted."
-msgstr "Lista %s Hamoos tiona."
-
-#. %1$s:  IF loggedinuser==0 
-#. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:113
-#, c-format
-msgid ""
-"List could not be created. %s(Do not use the database administrator "
-"account.)%s"
-msgstr ""
-
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:638
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:713
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:655
 #, c-format
 msgid "List name"
 msgstr "Lista nia naran"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:770
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:53
-#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:74
+#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:79
 #, c-format
 msgid "List name:"
 msgstr "Lista nia naran:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:543
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:554
 #, c-format
 msgid "List name: "
 msgstr "Naran lista: "
@@ -6274,7 +6205,9 @@ msgid "List(s) this item appears in: "
 msgstr "Lista (s) ne'ebe item ne'e hatama ona: "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:38
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:611
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:49
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:51
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:620
 #, c-format
 msgid "Lists"
 msgstr "Lista sira"
@@ -6284,7 +6217,7 @@ msgstr "Lista sira"
 msgid "Loading"
 msgstr "Tula hela tab"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:820
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:735
 #, c-format
 msgid "Loading "
 msgstr "Tula hela tab "
@@ -6296,7 +6229,7 @@ msgstr "Tula hela tab "
 msgid "Loading..."
 msgstr "Karga hela..."
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:335
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:312
 #, fuzzy, c-format
 msgid "Local Login"
 msgstr "Login lokal"
@@ -6317,7 +6250,7 @@ msgstr "Lokalizasaun"
 msgid "Location (Status)"
 msgstr "Fatin (Estado)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:197
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:213
 #, c-format
 msgid "Location and availability: "
 msgstr "Fatin no disponibilidade: "
@@ -6333,26 +6266,26 @@ msgid "Locations"
 msgstr "Lokalizasaun"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:351
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:328
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:18
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:152
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:693
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:705
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:83
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:647
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:722
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:84
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:73
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:294
 #, c-format
 msgid "Log in"
 msgstr "Log in"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:453
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:457
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:433
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:527
 #, c-format
 msgid "Log in to add tags."
 msgstr "Log in atu aumenta tags."
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:63
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:73
 #, c-format
 msgid "Log in to create your own lists"
 msgstr "Log in atu kria ita-nia lista sira"
@@ -6362,9 +6295,9 @@ msgstr "Log in atu kria ita-nia lista sira"
 msgid "Log in to see your own saved tags."
 msgstr "Log in hodi haree ita nia tags rai tiona."
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:115
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:117
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:322
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:92
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:94
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:299
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:37
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:954
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:288
@@ -6372,7 +6305,7 @@ msgstr "Log in hodi haree ita nia tags rai tiona."
 msgid "Log in to your account"
 msgstr "Log in ba ita-nia konta"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:79
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:69
 #, c-format
 msgid "Log in to your account:"
@@ -6388,8 +6321,8 @@ msgstr "Logging in ba katalogu la lao."
 msgid "Login"
 msgstr "Login"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:340
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:80
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:317
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:81
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:70
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:289
 #, c-format
@@ -6543,12 +6476,12 @@ msgstr "Halo "
 msgid "Male:"
 msgstr "Mane:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:177
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:166
 #, c-format
 msgid "Managed by"
 msgstr "Jerir husi"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:218
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:207
 #, c-format
 msgid "Managed by:"
 msgstr "Jerir husi:"
@@ -6574,8 +6507,8 @@ msgstr "Han-malu:"
 msgid "May"
 msgstr "Maiu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:141
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:144
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:130
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:133
 #, c-format
 msgid "Me"
 msgstr "Hau"
@@ -6634,7 +6567,7 @@ msgstr "Detalle sira tan"
 msgid "More lists"
 msgstr "Lista tan"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:372
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:388
 #, fuzzy, c-format
 msgid "More options"
 msgstr "[Opsaun tan]"
@@ -6644,17 +6577,17 @@ msgstr "[Opsaun tan]"
 msgid "More searches "
 msgstr "Peskiza tan "
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:300
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:277
 #, c-format
 msgid "Most popular"
 msgstr "Popular liu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:17
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:19
 #, c-format
 msgid "Most popular titles"
 msgstr "Haree titulu popular liu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:278
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:294
 #, c-format
 msgid "Musical recording"
 msgstr "Gravasaun muzika"
@@ -6700,12 +6633,10 @@ msgstr ""
 msgid "New comment on %s %s, %s%s"
 msgstr "Komentariu foun kona-ba %s %s, %s%s"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:60
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:165
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:490
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:632
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:702
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:70
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:167
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:494
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:644
 #, c-format
 msgid "New list"
 msgstr "Lista foun"
@@ -6715,19 +6646,19 @@ msgstr "Lista foun"
 msgid "New password:"
 msgstr "Password foun:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:158
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:254
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:147
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:243
 #, c-format
 msgid "New purchase suggestion"
 msgstr "Sujestaun ida foun"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:376
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:392
 #, fuzzy, c-format
 msgid "New search"
 msgstr "[Peskiza foun]"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:264
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:444
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:268
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:448
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:424
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:518
 #, c-format
@@ -6807,10 +6738,10 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:120
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:136
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:145
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:306
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:322
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:330
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:340
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:310
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:326
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:334
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:344
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:163
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:171
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:180
@@ -6863,10 +6794,9 @@ msgstr "La iha item disponivel."
 msgid "No items available:"
 msgstr "Item la disponivel:"
 
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:66
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:68
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:174
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:145
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:87
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:89
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:190
 #, c-format
 msgid "No limit"
 msgstr "Limite la iha"
@@ -6886,22 +6816,22 @@ msgstr ""
 msgid "No physical items for this record"
 msgstr "La iha item atual husi rejistu ne'e"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:59
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:69
 #, c-format
 msgid "No private lists"
 msgstr "Lista privadu la iha"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:688
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:715
 #, c-format
 msgid "No private lists."
 msgstr "Lista privadu la iha."
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:47
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:52
 #, c-format
 msgid "No public lists"
 msgstr "Lista publiku la iha"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:752
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:713
 #, c-format
 msgid "No public lists."
 msgstr "La lista públiku."
@@ -6942,12 +6872,12 @@ msgstr "La espesifika tag ida."
 msgid "No tags from this library for this title."
 msgstr "La iha tag ida ba titulu ne'e husi biblioteka ida ne'e."
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:276
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:292
 #, c-format
 msgid "Non fiction"
 msgstr "La fiksaun"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:279
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:295
 #, c-format
 msgid "Non-musical recording"
 msgstr "Gravasaun la muzikal"
@@ -7005,13 +6935,13 @@ msgstr "La iha rezerva"
 msgid "Not what you expected? Check for "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:175
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:164
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:836
 #, c-format
 msgid "Note"
 msgstr "Nota"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:203
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:192
 #, c-format
 msgid "Note: "
 msgstr "Nota: "
@@ -7105,7 +7035,7 @@ msgid "Notes/Comments"
 msgstr "Nota/Komentariu sira"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:44
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:84
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:73
 #, c-format
 msgid "Notes:"
 msgstr "Nota sira:"
@@ -7164,7 +7094,7 @@ msgstr ""
 msgid "OK"
 msgstr "OK"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:210
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:226
 #, c-format
 msgid "OR"
 msgstr "KA"
@@ -7204,7 +7134,7 @@ msgstr ""
 msgid "Online resources:"
 msgstr "Rekursus online:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:220
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:236
 #, c-format
 msgid "Only items currently available for loan or reference"
 msgstr "Item sira ne'ebe disponivel deit atu empresta ka referensia"
@@ -7306,8 +7236,8 @@ msgstr "Password"
 msgid "Password updated"
 msgstr "Password atualiza ona"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:341
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:81
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:318
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:82
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:42
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:71
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:291
@@ -7315,7 +7245,7 @@ msgstr "Password atualiza ona"
 msgid "Password:"
 msgstr "Password:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:316
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:332
 #, c-format
 msgid "Patent document"
 msgstr "Dokumentu patente"
@@ -7326,7 +7256,7 @@ msgstr "Dokumentu patente"
 msgid "Patron comment on %s"
 msgstr "Komentariu konaba %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:13
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:15
 #, c-format
 msgid "Permissions: "
 msgstr "Permisaun: "
@@ -7376,14 +7306,14 @@ msgstr "Hatuur rezervasaun ba: "
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:6
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:385
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:231
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:430
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:433
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:833
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:434
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:437
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:509
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:91
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:82
 #, c-format
 msgid "Place hold"
 msgstr "Rezerva"
@@ -7553,7 +7483,7 @@ msgstr "Hakerek ka edita ita-nia komentariu kona ba livru ne'e. "
 msgid "Powered by %s "
 msgstr "Powered husi %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:260
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:276
 #, c-format
 msgid "Pre-adolescent"
 msgstr "Pré-adolescentes"
@@ -7563,7 +7493,7 @@ msgstr "Pré-adolescentes"
 msgid "Preferred form: "
 msgstr "Forma ne'ebe ita gosta liu: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:258
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:274
 #, c-format
 msgid "Preschool"
 msgstr "Pre-eskola"
@@ -7593,7 +7523,7 @@ msgstr "Anterior"
 msgid "Previous sessions"
 msgstr "Sesaun anterior"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:259
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:275
 #, c-format
 msgid "Primary"
 msgstr "Primáriu"
@@ -7604,7 +7534,7 @@ msgstr "Primáriu"
 msgid "Print"
 msgstr "Print"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:172
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:174
 #, c-format
 msgid "Print list"
 msgstr "Print lista"
@@ -7619,61 +7549,58 @@ msgstr "Prioridade"
 msgid "Priority:"
 msgstr "Prioridade:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:574
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:576
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:791
-#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:78
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:586
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:588
+#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:83
 #, c-format
 msgid "Private"
 msgstr "Privadu"
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:31
-msgid "Private Lists"
+#, fuzzy
+msgid "Private lists"
 msgstr "Lista Privadu"
+
+#. OPTGROUP
+#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:36
+msgid "Private lists shared with me"
+msgstr ""
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "Processing..."
 msgstr "Hala'o hela..."
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:322
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:338
 #, c-format
 msgid "Programmed texts"
 msgstr "Programmed texts"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:579
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:581
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:792
-#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:80
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:591
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:593
+#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:85
 #, c-format
 msgid "Public"
 msgstr "Públiku"
 
-#. OPTGROUP
-#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:36
-msgid "Public Lists"
-msgstr "Lista Publiku"
-
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:41
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:61
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:63
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:73
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:75
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:622
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:624
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:64
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:631
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:633
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:19
+#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:41
 #, c-format
 msgid "Public lists"
 msgstr "Lista publiku"
 
-#. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
 msgid "Public lists:"
 msgstr "Lista publiku:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:154
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:170
 #, c-format
 msgid "Publication date range"
 msgstr "Tinan publikasaun nia data"
@@ -7696,7 +7623,7 @@ msgid "Publication/Copyright date: Oldest to newest"
 msgstr "Data Publikasaun/Kopirraite: Tuan liu ba Foun liu"
 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:56
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:376
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:380
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:357
 #, c-format
 msgid "Publication:"
@@ -7741,13 +7668,13 @@ msgstr "Fatin editór nian"
 msgid "Publisher:"
 msgstr "Editór:"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:303
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:305
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:280
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:282
 #, c-format
 msgid "Purchase suggestions"
 msgstr "Sujestaun ida kona-ba livru ida biblioteka mak sosa"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:60
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:61
 #, c-format
 msgid "Quote of the Day"
 msgstr ""
@@ -7760,12 +7687,12 @@ msgstr ""
 
 #. %1$s:  IF ( loggedinusername ) 
 #. %2$s:  Branches.GetName( branchcode ) 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:54
 #, fuzzy, c-format
 msgid "RSS feed for %s%s "
 msgstr "Lista publiku la iha"
 
-#. %1$s:  shelfname | html 
+#. %1$s:  shelf.shelfname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:8
 #, fuzzy, c-format
 msgid "RSS feed for public list %s"
@@ -7784,7 +7711,7 @@ msgstr "Avalia hau"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1342
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
 msgid "Rating based on reviews of "
 msgstr ""
@@ -7794,7 +7721,7 @@ msgstr ""
 msgid "Re-type new password:"
 msgstr "Tama fali password foun:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:74
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:63
 #, c-format
 msgid "Reason for suggestion: "
 msgstr "Razaun ba sujestaun: "
@@ -7804,7 +7731,7 @@ msgstr "Razaun ba sujestaun: "
 msgid "RecallItem "
 msgstr "RecallItem "
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:297
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:274
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:16
 #, c-format
 msgid "Recent comments"
@@ -7821,7 +7748,7 @@ msgid "Record not found"
 msgstr "La hetan rejistu"
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:3
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:3
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:5
 #: opac-tmpl/bootstrap/en/includes/search/facets.inc:3
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:28
 #, c-format
@@ -7835,8 +7762,8 @@ msgstr "Refina ita nia peskiza"
 msgid "Register a new account"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:347
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:85
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:324
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:75
 #, c-format
 msgid "Register here."
@@ -7857,7 +7784,7 @@ msgstr "Rejistrasaun kompletu"
 msgid "Registration invalid!"
 msgstr "Rejistrasaun invalidu!"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:289
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:305
 #, c-format
 msgid "Regular print"
 msgstr "Print regulár"
@@ -7897,17 +7824,17 @@ msgid "Remove field"
 msgstr "Kampu kodifikadu"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:833
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
 msgid "Remove from list"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:462
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:466
 #, fuzzy, c-format
 msgid "Remove from this list"
 msgstr "Hamoos lista ne'e"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:524
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:527
 #, fuzzy
 msgid "Remove selected items"
 msgstr "Hamoos items ne'ebe hili ona"
@@ -7922,7 +7849,8 @@ msgid "Remove selected searches"
 msgstr "Hasai rejistu ne'ebe hili tiona"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:42
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:199
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:702
 #, fuzzy
 msgid "Remove share"
 msgstr "Kampu kodifikadu"
@@ -8016,7 +7944,7 @@ msgid "Required"
 msgstr "Presiza"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:247
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:251
 msgid "Resort list"
 msgstr "Lista ida organiza fali"
 
@@ -8134,18 +8062,18 @@ msgstr ""
 "sira."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1342
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 #, fuzzy
 msgid "Review date: "
 msgstr "Komentariu sira"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1342
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 #, fuzzy
 msgid "Review result: "
 msgstr "Komentariu sira"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:321
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:337
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:569
 #, c-format
 msgid "Reviews"
@@ -8188,12 +8116,11 @@ msgid "Saturday"
 msgstr "Sabadu"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:597
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:803
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:609
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
-#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:48
-#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:88
+#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:67
+#: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:94
 msgid "Save"
 msgstr "Grava"
 
@@ -8207,7 +8134,7 @@ msgstr "Rai rejistu "
 msgid "Save to Lists"
 msgstr "Grava ba Lista"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:458
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:462
 #, c-format
 msgid "Save to another list"
 msgstr "Grava ba lista seluk"
@@ -8249,7 +8176,7 @@ msgid "Scan index:"
 msgstr "Scan Indise:"
 
 #. INPUT type=submit name=do
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:366
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:382
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:168
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:293
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:62
@@ -8270,7 +8197,7 @@ msgstr "Peskiza "
 #. %3$s:  mylibraryfirst 
 #. %4$s:  END 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:179
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:156
 #, c-format
 msgid "Search %s %s (in %s only) %s %s "
 msgstr "Peskiza %s %s (iha %s deit) %s %s "
@@ -8283,18 +8210,18 @@ msgstr "Peskiza ba titulu ida ne'e iha:"
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:187
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:51
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:370
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:374
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:351
 msgid "Search for works by this author"
 msgstr "Peskiza ba livru husi autor ne'e"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:22
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:133
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:122
 #, c-format
 msgid "Search for:"
 msgstr "Peskiza ba:"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:126
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:103
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:17
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:34
 #, c-format
@@ -8349,7 +8276,7 @@ msgstr "Seksaun:"
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:63
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:109
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:338
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:342
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:178
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:424
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:95
@@ -8366,14 +8293,9 @@ msgid "See also:"
 msgstr "Haree mos:"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1342
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 msgid "See biblio"
 msgstr "Haree biblios"
-
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:99
-#, c-format
-msgid "See the most popular titles"
-msgstr "Haree titulu popular liu"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1082
@@ -8405,8 +8327,8 @@ msgstr "Hili kopia espesifiku:"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:833
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:269
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:258
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:35
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:87
@@ -8426,8 +8348,8 @@ msgstr "Hili hotu"
 msgid "Select searches to: "
 msgstr "Hili titulu hodi: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:165
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:269
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:154
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:258
 #, c-format
 msgid "Select suggestions to: "
 msgstr "Hili sujestaun hodi: "
@@ -8442,8 +8364,8 @@ msgstr "Item(s) ne'ebe hili ona atu peskiza"
 msgid "Select the term(s) to search"
 msgstr "Hili termu(s) hodi peskiza"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:255
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:833
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:259
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:39
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:318
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
@@ -8465,7 +8387,7 @@ msgstr "Ajuda ho sistema auto empresta"
 msgid "Send"
 msgstr "Haruka"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:169
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:171
 #, c-format
 msgid "Send list"
 msgstr "Haruka lista"
@@ -8510,8 +8432,8 @@ msgid "Serial: %s "
 msgstr "Kontinuasaun: %s "
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:25
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:214
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:216
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:191
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:193
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:81
 #, c-format
 msgid "Series"
@@ -8547,7 +8469,7 @@ msgstr "Sesaun lakon"
 msgid "Settings updated"
 msgstr "Konfigurasaun atualiza tiona"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:673
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:694
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1120
 #, fuzzy, c-format
 msgid "Share"
@@ -8593,7 +8515,7 @@ msgstr ""
 msgid "Shelving location"
 msgstr "Lokalizasaun iha estante"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:333
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:310
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:80
 #, c-format
 msgid "Shibboleth Login"
@@ -8626,7 +8548,7 @@ msgstr "Hatudu hela item 50 ikus"
 msgid "Show lists"
 msgstr "Hatudu items hotu"
 
-#: opac-tmpl/bootstrap/en/includes/opac-facets.inc:55
+#: opac-tmpl/bootstrap/en/includes/opac-facets.inc:54
 #, c-format
 msgid "Show more"
 msgstr "Hatudu tan"
@@ -8644,8 +8566,7 @@ msgid ""
 msgstr ""
 "Show pagination list ([% indexPag %]-[% indexPagEnd %] / [% totalPag %])"
 
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:5
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:101
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:7
 #, c-format
 msgid "Show the top "
 msgstr "Hatudu leten liu "
@@ -8682,7 +8603,7 @@ msgstr "Hatudu hela item 50 ikus. "
 msgid "Sign in with your Email"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:96
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:97
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:81
 #, c-format
 msgid "Sign in with your email"
@@ -8804,7 +8725,7 @@ msgstr "Deskulpa, ita boot labele rezerva livru tanba iha ona multa %s. "
 msgid "Sorry, you cannot place more than %s holds. "
 msgstr "Deskulpa, ita boot labele rezerva livru liu %s. "
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:330
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:307
 #, c-format
 msgid ""
 "Sorry, your Shibboleth identity does not match a valid library identity. If "
@@ -8816,28 +8737,27 @@ msgstr ""
 msgid "Sorry, your session has timed out. Please log in again."
 msgstr "Deskulpa, sesaun ida ne'e espira tiona. Favor tama fali."
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:236
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:252
 #, c-format
 msgid "Sort by:"
 msgstr "Organiza tuir:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:204
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:208
 #, c-format
 msgid "Sort by: "
 msgstr "Organiza tuir: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:545
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:779
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:557
 #, c-format
 msgid "Sort this list by: "
 msgstr "Organiza lista ne'e tuir: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:235
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:251
 #, c-format
 msgid "Sorting: "
 msgstr "Organiza hela: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:263
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:279
 #, c-format
 msgid "Specialized"
 msgstr "Specializados"
@@ -8853,14 +8773,14 @@ msgstr "Numeru padraun"
 msgid "Standard number (ISBN, ISSN or other):"
 msgstr "Numeru Padraun (ISBN, ISSN ka Seluk):"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:325
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:341
 #, c-format
 msgid "Statistics"
 msgstr "Estatistika sira"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:80
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:178
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:167
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:518
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:835
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1179
@@ -8868,7 +8788,7 @@ msgstr "Estatistika sira"
 msgid "Status"
 msgstr "Estatutu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:226
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:215
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:578
 #, c-format
 msgid "Status:"
@@ -8897,15 +8817,15 @@ msgstr "Etapa Segundu: Scan kada item nia barcode, ida-idak"
 msgid "Su"
 msgstr "Dom"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:204
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:206
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:181
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:183
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:45
 #, c-format
 msgid "Subject"
 msgstr "Asuntu"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:299
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:276
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:13
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:32
 #, c-format
@@ -8937,11 +8857,10 @@ msgid "Subject: %s "
 msgstr "Materia: %s "
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:73
+#: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:94
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:70
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:797
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:152
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:186
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:300
 #, c-format
@@ -8965,7 +8884,7 @@ msgid "Submit update request"
 msgstr "Hatama ita nia pedido atualizasaun"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:98
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:87
 msgid "Submit your suggestion"
 msgstr "Hatama ita nia sujestaun"
 
@@ -8991,7 +8910,7 @@ msgid "Subscribe to recent comments"
 msgstr "Komentariu sira foun daudaun"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:158
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:160
 #, fuzzy
 msgid "Subscribe to this list"
 msgstr "Asina ba peskiza ida ne'e"
@@ -9041,17 +8960,17 @@ msgstr "Asinatura sira"
 msgid "Sudoc"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:137
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:126
 #, c-format
 msgid "Suggested by:"
 msgstr "Sujestaun husi:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:176
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:165
 #, c-format
 msgid "Suggested for"
 msgstr "Sujestaun ba"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:210
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:199
 #, fuzzy, c-format
 msgid "Suggested for:"
 msgstr "Sujestaun ba:"
@@ -9061,7 +8980,7 @@ msgstr "Sujestaun ba:"
 msgid "Suggestions"
 msgstr "Sujestaun sira"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:174
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:163
 #, c-format
 msgid "Summary"
 msgstr "Rezumu"
@@ -9076,7 +8995,7 @@ msgstr "Dom"
 msgid "Sunday"
 msgstr "Domingu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:320
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:336
 #, c-format
 msgid "Surveys"
 msgstr "Levantamentu"
@@ -9106,7 +9025,7 @@ msgid "Suspend your hold on "
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:80
+#: opac-tmpl/bootstrap/en/includes/masthead-langmenu.inc:8
 msgid "Switch languages"
 msgstr ""
 
@@ -9125,7 +9044,7 @@ msgstr "TOC"
 msgid "Table of contents provided by Syndetics"
 msgstr "Kontuedu nia tabela fornese husi Syndetics"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:261
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:265
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:166
 #, c-format
@@ -9137,7 +9056,7 @@ msgstr "Tag"
 msgid "Tag browser"
 msgstr "Tag browser"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:298
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:275
 #, c-format
 msgid "Tag cloud"
 msgstr "Kalohan tag"
@@ -9147,7 +9066,7 @@ msgstr "Kalohan tag"
 msgid "Tag status here."
 msgstr "Estatus tag iha-ne'e."
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:449
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:453
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:429
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:174
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:523
@@ -9177,13 +9096,13 @@ msgstr "Tags aumenta tiona: "
 msgid "Tags from this library:"
 msgstr "Tags husi biblioteka ne'e:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:415
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:419
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:465
 #, c-format
 msgid "Tags:"
 msgstr "Tag sira:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:326
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:342
 #, c-format
 msgid "Technical reports"
 msgstr "Relatoriu tekniku"
@@ -9234,17 +9153,17 @@ msgid "The %s latest issues for this subscription:"
 msgstr "Kopia %s foun liu ba asinatura ida ne'e:"
 
 #. %1$s:  limit 
-#. %2$s:  IF ( itemtype ) 
-#. %3$s:  itemtype 
+#. %2$s:  IF selected_itemtype 
+#. %3$s:  ItemTypes.GetDescription(selected_itemtype) 
 #. %4$s:  END 
 #. %5$s:  IF ( branch ) 
 #. %6$s:  branch 
 #. %7$s:  END 
-#. %8$s:  IF ( timeLimitFinite ) 
-#. %9$s:  timeLimitFinite |html 
+#. %8$s:  IF ( timeLimit != 999 ) 
+#. %9$s:  timeLimit |html 
 #. %10$s:  ELSE 
 #. %11$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:43
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:37
 #, c-format
 msgid ""
 "The %s most checked-out %s %s %s %s at %s %s %s in the past %s months %s of "
@@ -9393,17 +9312,12 @@ msgstr "Item ida ne'e aumenta tiona ba ita-nia karriñu"
 msgid "The item is already in your cart"
 msgstr "Item ida ne'e iha ona iha ita nia karriñu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:585
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:597
 #, c-format
 msgid ""
 "The library has disabled the ability for patrons to create new public lists. "
 "If you make your list private, you will not be able to make it public again."
 msgstr ""
-
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:118
-#, c-format
-msgid "The list "
-msgstr "Lista ida "
 
 #. %1$s:  email 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:16
@@ -9417,7 +9331,7 @@ msgstr "Lista ne'e haruka tiona ba: %s"
 msgid "The operation %s is not supported."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:128
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:117
 #, c-format
 msgid "The selected suggestions have been deleted."
 msgstr "Sujestaun sira ne'ebe hili tiha hamoos tiona."
@@ -9461,7 +9375,7 @@ msgstr "Iha asinatura(s) %s ne'ebe relevante ba titulu ne'e."
 msgid "There are no comments for this item."
 msgstr "La iha komentaruiu kona ba item ne'e."
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:251
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:240
 #, c-format
 msgid "There are no pending purchase suggestions."
 msgstr "La iha sujesaun atu sosa livru foun."
@@ -9511,7 +9425,7 @@ msgid ""
 "library for help."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:319
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:335
 #, c-format
 msgid "Theses"
 msgstr "Teze sira"
@@ -9595,7 +9509,7 @@ msgid "This item is on hold for another patron. %s "
 msgstr "Item ne'e rezerva ona ba kliente seluk. %s "
 
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:512
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:514
 #, c-format
 msgid ""
 "This list is empty. %s You can add to your lists from the results of any "
@@ -9667,23 +9581,22 @@ msgstr "Kinta"
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:60
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:194
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:196
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:171
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:173
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:70
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:52
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:215
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:217
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:548
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:550
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:781
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:219
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:221
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:560
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:562
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:244
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:134
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:345
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:387
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:511
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:58
+#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:52
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:219
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:119
 #, c-format
@@ -9768,7 +9681,7 @@ msgstr "a- Tópiku"
 msgid "Total due"
 msgstr "Total devidu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:329
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:345
 #, c-format
 msgid "Treaties "
 msgstr "Tratadu sira "
@@ -9800,8 +9713,7 @@ msgid "Tweet"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:68
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:640
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:715
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:657
 #, c-format
 msgid "Type"
 msgstr "Tipu"
@@ -9812,8 +9724,8 @@ msgid "Type of heading"
 msgstr "Kapsaun nia tipu"
 
 #. INPUT type=text name=q
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:237
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:239
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:214
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:216
 #, fuzzy
 msgid "Type search term"
 msgstr "Hatama termu sira atu buka"
@@ -9892,11 +9804,6 @@ msgstr "Kopia sira ba asinatura ida"
 msgid "Updates to your record"
 msgstr "Troka ita-nia password"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:121
-#, c-format
-msgid "Use the \"Confirm\" button below to confirm deletion. "
-msgstr "Uza butaun \"Konfirma\" iha kraik atu konfirma hamoos. "
-
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:169
 #, c-format
 msgid "Use top menu bar to navigate to another part of Koha."
@@ -9925,7 +9832,7 @@ msgid ""
 "If "
 msgstr "Baibain konta ida taka tanba Ita iha multa nafatin. Se "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:295
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:311
 #, c-format
 msgid "VHS tape / Videocassette"
 msgstr "VHS fita / Videocassete"
@@ -9935,15 +9842,11 @@ msgstr "VHS fita / Videocassete"
 msgid "Verification:"
 msgstr "Verificasaun:"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:45
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:49
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:66
 #, c-format
 msgid "View All"
 msgstr "Haree Hotu"
-
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:57
-#, c-format
-msgid "View all"
-msgstr "Haree hotu"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:174
@@ -9958,9 +9861,9 @@ msgstr "Haree hotu"
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:71
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:76
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:349
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:352
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:354
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:353
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:356
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:358
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:331
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:334
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:336
@@ -9980,7 +9883,7 @@ msgid "View on Amazon.com"
 msgstr "Haree iha Amazon.com"
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:126
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:103
 msgid "View your search history"
 msgstr "Haree ita nia istoria peskiza"
 
@@ -10011,16 +9914,6 @@ msgstr "Avisu"
 msgid "Warning: Cannot be undone. Please confirm once again"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:149
-#, c-format
-msgid "Warning: You could not delete all selected items from this shelf."
-msgstr ""
-
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:146
-#, c-format
-msgid "Warning: You could not delete any selected items from this shelf."
-msgstr ""
-
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 #, fuzzy
@@ -10036,7 +9929,7 @@ msgstr ""
 "Ami hakarak proteje ita nia privasidade. Iha janela ne'e ita bele define "
 "tempu atu rai ita nia istoria le'e."
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:298
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:314
 #, c-format
 msgid "Website"
 msgstr "Website"
@@ -10051,8 +9944,7 @@ msgstr "Kua"
 msgid "Wednesday"
 msgstr "Kuarta"
 
-#: opac-tmpl/bootstrap/en/includes/masthead-sco.inc:15
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:121
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:98
 #, c-format
 msgid "Welcome, "
 msgstr "Bemvindo, "
@@ -10088,13 +9980,13 @@ msgid "With selected searches: "
 msgstr "Titulu ne'ebe hili ona: "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:269
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:258
 msgid "With selected suggestions: "
 msgstr "Sujestaun ne'ebe hili ona: "
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:833
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:318
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
 msgid "With selected titles: "
@@ -10118,9 +10010,8 @@ msgstr ""
 msgid "Written on %s by %s"
 msgstr "Hakerek ona ba %s husi %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:558
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:560
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:783
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:570
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:572
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:246
 #, c-format
 msgid "Year"
@@ -10157,7 +10048,7 @@ msgstr "Ita nia log in nudar %s."
 msgid "You are logging from a different IP address. Please log in again."
 msgstr "Log in mai husi IP diferente. Favor, log in fali."
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:249
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:238
 #, fuzzy, c-format
 msgid "You are not authorized to see pending purchase suggestions."
 msgstr "La iha sujesaun atu sosa livru foun."
@@ -10369,7 +10260,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1342
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 msgid ""
 "Your CGI session cookie is not current. Please refresh the page and try "
 "again."
@@ -10517,19 +10408,16 @@ msgstr ""
 msgid "Your list : %s "
 msgstr "Ita nia lista : %s "
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:51
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:55
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:57
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:67
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:69
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:616
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:618
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:56
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:56
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:58
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:625
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:627
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:17
 #, c-format
 msgid "Your lists"
 msgstr "Ita nia lista"
 
-#. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
 msgid "Your lists:"
@@ -10644,6 +10532,12 @@ msgstr ""
 msgid "Your userid was not found in the database. Please try again."
 msgstr "La hetan Ita nia userid iha database. Favor tenta fali."
 
+#. SCRIPT
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
+#, fuzzy
+msgid "[ New list ]"
+msgstr "Lista foun"
+
 #. LINK
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:8
 #, fuzzy
@@ -10674,13 +10568,21 @@ msgid ""
 "%%] "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:147
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:163
 #, c-format
 msgid ""
 "[%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('pubdate')."
 "size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and "
 "OpacAdvSearchMoreOptions.grep('pubdate').size > 0 and expanded_options ) ) "
 "%%] "
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/includes/masthead-langmenu.inc:1
+#, c-format
+msgid ""
+"[%% IF ( ( opaclanguagesdisplay ) && ( ! one_language_enabled ) && "
+"( languages_loop ) && ( OpacLangSelectorMode == 'both' || "
+"OpacLangSelectorMode == 'top') ) %%] "
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:107
@@ -10703,11 +10605,6 @@ msgstr ""
 msgid "a an the"
 msgstr "motete"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112
-#, c-format
-msgid "already exists!"
-msgstr "iha ona!"
-
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:108
 msgid "already in your cart"
@@ -10725,25 +10622,23 @@ msgstr "identifikator ida ne'ebe lokalizasaun atu entrega item ida ba atu foti"
 msgid "an identifier used to look up the patron in Koha"
 msgstr "identifka ida ne'ebe hetan kliente ida iha Koha"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:54
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:28
 #, c-format
 msgid "and"
 msgstr "no"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:18
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:20
 #, c-format
-msgid ""
-"anyone else to add entries. (The owner of a list is always allowed to add "
-"entries, but needs permission to remove.)"
+msgid "anyone else to add entries."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:26
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:28
 #, c-format
 msgid "anyone to remove his own contributed entries."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:34
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:36
 #, c-format
 msgid "anyone to remove other contributed entries."
 msgstr ""
@@ -10769,7 +10664,7 @@ msgid "available"
 msgstr "disponivel"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1342
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 msgid "average rating: "
 msgstr "klassifikasaun média: "
 
@@ -10806,12 +10701,12 @@ msgstr "borrowernumber"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1342
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 msgid "by"
 msgstr "husi"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:119
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1342
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
 #, c-format
 msgid "by "
@@ -10841,7 +10736,7 @@ msgstr "katalogu"
 msgid "change your password"
 msgstr "troka hau nia password"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:334
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:311
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:98
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:119
@@ -10929,11 +10824,6 @@ msgstr "email ba Administrador Koha"
 msgid "for more information on what it does and how to configure it."
 msgstr "ba informasaun tan kona ba ne'e no mos halo konfigurasaun."
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:131
-#, c-format
-msgid "has already been added."
-msgstr "aumenta tiona."
-
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:573
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:576
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1137
@@ -10943,7 +10833,7 @@ msgid "here"
 msgstr "iha ne'e"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1342
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 msgid "iDreamBooks.com rating"
 msgstr ""
 
@@ -11070,11 +10960,6 @@ msgstr "hatama hela komentariu TUAN: "
 msgid "is exactly"
 msgstr "iha exactamente"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:119
-#, c-format
-msgid "is not empty. "
-msgstr "la'os mamuk. "
-
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:119
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:126
 #, c-format
@@ -11131,7 +11016,7 @@ msgstr "lista sistema rejistu nia identifikador"
 msgid "needed_before_date"
 msgstr "needed_before_date"
 
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:89
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:78
 #, c-format
 msgid "negcap "
 msgstr ""
@@ -11140,11 +11025,6 @@ msgstr ""
 #, c-format
 msgid "not"
 msgstr "la'os"
-
-#: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:140
-#, c-format
-msgid "of the last:"
-msgstr "husi ikus:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:24
 #, c-format
@@ -11209,7 +11089,7 @@ msgid "purchase suggestion"
 msgstr "sujestaun ida atu sosa material foun"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1342
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 msgid "rating based on reviews at iDreamBooks.com"
 msgstr ""
 
@@ -11264,7 +11144,7 @@ msgstr "return_type"
 msgid "schema"
 msgstr "esquema"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:515
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:517
 #, c-format
 msgid "search"
 msgstr "peskiza"
@@ -11368,7 +11248,7 @@ msgid "system item identifier"
 msgstr "sistema item identifika"
 
 #. INPUT type=submit name=tagsel_button
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:266
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:270
 msgid "tagsel_button"
 msgstr "tagsel_button"
 
@@ -11437,8 +11317,8 @@ msgid "there may be a delay in restoring your account if you submit online)%s."
 msgstr ""
 "karik iha atrazu iha restabelecimento ita nia konta se ita hato’o online)%s."
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:693
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:705
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:647
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:722
 #, c-format
 msgid "to create new lists."
 msgstr "atu halo lista foun."
@@ -11506,7 +11386,7 @@ msgid "view plain"
 msgstr "vista simples"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1342
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 msgid "votes"
 msgstr "vota"
 
@@ -11551,7 +11431,7 @@ msgid "will be sent shortly to %s."
 msgstr "sei haruka lalais ba %s."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1342
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 msgid "with biblionumber"
 msgstr "ho biblionumber"
 
@@ -11605,7 +11485,7 @@ msgid "your purchase suggestions"
 msgstr "hau nia sujestaun kona-ba livru atu sosa"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1342
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 msgid "your rating: "
 msgstr "ita nia evalusaun: "
 
@@ -11635,7 +11515,7 @@ msgstr "hau nia rezumu"
 msgid "your tags"
 msgstr "hau nia tag sira"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:321
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:298
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:616
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:139
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:266

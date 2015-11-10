@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 3.2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-02 08:01+0200\n"
-"PO-Revision-Date: 2015-05-18 21:46+0000\n"
+"PO-Revision-Date: 2015-07-20 10:10+0000\n"
 "Last-Translator: chrisc <chris@bigballofwax.co.nz>\n"
 "Language-Team: en_NZ <koha-translate@lists.koha-community.org>\n"
 "Language: en_NZ\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-Bookmarks: -1,-1,-1,867,-1,-1,-1,-1,-1,-1\n"
-"X-POOTLE-MTIME: 1431985583.000000\n"
+"X-POOTLE-MTIME: 1437387037.000000\n"
 
 # Acquisitions
 # Acquisitions
@@ -198,12 +198,12 @@ msgstr "The following <a href='http://schema.koha-community.org/tables/items.htm
 # Acquisitions > Policy
 # Acquisitions > Policy
 msgid "acquisitions.pref#gist# . Enter in numeric form, 0.12 for 12%. The first item in the list will be selected by default. For more than one value, separate with | (pipe)."
-msgstr ""
+msgstr " . Enter in numeric form, 0.12 for 12%. The first item in the list will be selected by default. For more than one value, separate with | (pipe)."
 
 # Acquisitions > Policy
 # Acquisitions > Policy
 msgid "acquisitions.pref#gist# Tax rates are"
-msgstr ""
+msgstr " Tax rates are"
 
 # Administration
 # Administration
@@ -314,6 +314,21 @@ msgstr "Prevent"
 # Administration > Login options
 msgid "admin.pref#IndependentBranches# staff (but not superlibrarians) from modifying objects (holds, items, patrons, etc.) belonging to other libraries."
 msgstr "staff (but not superlibrarians) from modifying objects (reserves, items, patrons, etc.) belonging to other libraries."
+
+# Administration > Login options
+# Administration > Login options
+msgid "admin.pref#IndependentBranchesPatronModifications# Don't prevent"
+msgstr ""
+
+# Administration > Login options
+# Administration > Login options
+msgid "admin.pref#IndependentBranchesPatronModifications# Prevent"
+msgstr ""
+
+# Administration > Login options
+# Administration > Login options
+msgid "admin.pref#IndependentBranchesPatronModifications# staff (but not superlibrarians) from viewing and approving/denying patron modification requests for patrons belonging to other libraries."
+msgstr ""
 
 # Administration > Interface options
 # Administration > Interface options
@@ -573,7 +588,7 @@ msgstr "#'s"
 # Administration > Interface options
 # Administration > Interface options
 msgid "admin.pref#delimiter# Separate columns in an exported CSV file with"
-msgstr ""
+msgstr " Separate columns in an exported CSV file with"
 
 # Administration > Interface options
 # Administration > Interface options
@@ -1054,6 +1069,41 @@ msgstr "Fill in the <a href=\"http://www.loc.gov/marc/organizations/orgshome.htm
 msgid "cataloguing.pref#MARCOrgCode# by default in new MARC21 records (leave blank to disable)."
 msgstr "by default in new MARC21 records (leave blank to disable)."
 
+# Cataloging > Display
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# <br />example: '001,245ab,600'"
+msgstr ""
+
+# Cataloging > Display
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# <li>all subfields of fields 600</li>"
+msgstr ""
+
+# Cataloging > Display
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# <li>subfields a and b of fields 245</li>"
+msgstr ""
+
+# Cataloging > Display
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# <li>value of 001</li>"
+msgstr ""
+
+# Cataloging > Display
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# <ul>"
+msgstr ""
+
+# Cataloging > Display
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# displays:"
+msgstr ""
+
+# Cataloging > Display
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# fields to display for deleted records after merge"
+msgstr ""
+
 # Cataloging > Record Structure
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# (should be a location code, or blank to disable)."
@@ -1483,6 +1533,11 @@ msgstr "tags (separated by commas) to the correct author tags when importing a r
 msgid "circulation.pref"
 msgstr "circulation.pref"
 
+# Circulation > Batch checkout
+# Circulation > Batch checkout
+msgid "circulation.pref Batch checkout"
+msgstr ""
+
 # Circulation > Checkin Policy
 # Circulation > Checkin Policy
 msgid "circulation.pref Checkin Policy"
@@ -1862,6 +1917,31 @@ msgstr "Don't"
 # Circulation > Checkout Policy
 msgid "circulation.pref#AutomaticItemReturn# automatically transfer items to their home library when they are returned."
 msgstr " automatically transfer items to their home library when they are returned."
+
+# Circulation > Batch checkout
+# Circulation > Batch checkout
+msgid "circulation.pref#BatchCheckouts# Allow"
+msgstr ""
+
+# Circulation > Batch checkout
+# Circulation > Batch checkout
+msgid "circulation.pref#BatchCheckouts# Don't allow"
+msgstr ""
+
+# Circulation > Batch checkout
+# Circulation > Batch checkout
+msgid "circulation.pref#BatchCheckouts# batch checkouts"
+msgstr ""
+
+# Circulation > Batch checkout
+# Circulation > Batch checkout
+msgid "circulation.pref#BatchCheckoutsValidCategories# (list of patron categories separated with a pipe '|')"
+msgstr ""
+
+# Circulation > Batch checkout
+# Circulation > Batch checkout
+msgid "circulation.pref#BatchCheckoutsValidCategories# Patron categories allowed to checkout in a batch"
+msgstr ""
 
 # Circulation > Checkin Policy
 # Circulation > Checkin Policy
@@ -3063,7 +3143,7 @@ msgstr "not including days the library is closed."
 # Circulation > Fines Policy
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# <br><b>Note:</b> Fines can also be charged by the CalculateFinesOnReturn system preference."
-msgstr ""
+msgstr " <br><b>Note:</b> Fines can also be charged by the CalculateFinesOnReturn system preference."
 
 # Circulation > Fines Policy
 # Circulation > Fines Policy
@@ -3194,21 +3274,6 @@ msgstr "earliest to latest"
 # Circulation > Interface
 msgid "circulation.pref#previousIssuesDefaultSortOrder# latest to earliest"
 msgstr " latest to earliest"
-
-# Circulation > Interface
-# Circulation > Interface
-msgid "circulation.pref#soundon# Don't enable"
-msgstr "Don't enable"
-
-# Circulation > Interface
-# Circulation > Interface
-msgid "circulation.pref#soundon# Enable"
-msgstr "Enable"
-
-# Circulation > Interface
-# Circulation > Interface
-msgid "circulation.pref#soundon# circulation sounds during checkin and checkout in the staff interface.  Not supported by all web browsers yet."
-msgstr "circulation sounds during return and issue in the staff interface.  Not supported by all web browsers yet."
 
 # Circulation > Interface
 # Circulation > Interface
@@ -4310,6 +4375,41 @@ msgstr " Don't allow"
 msgid "i18n_l10n.pref#opaclanguagesdisplay# patrons to change the language they see on the OPAC."
 msgstr " borrowers to change the language they see on the OPAC."
 
+# Labs
+# Labs
+msgid "labs.pref"
+msgstr ""
+
+# Labs > All
+# Labs > All
+msgid "labs.pref All"
+msgstr ""
+
+# Labs > All
+# Labs > All
+msgid "labs.pref#EnableAdvancedCatalogingEditor# <br/> NOTE:"
+msgstr ""
+
+# Labs > All
+# Labs > All
+msgid "labs.pref#EnableAdvancedCatalogingEditor# Don't enable"
+msgstr ""
+
+# Labs > All
+# Labs > All
+msgid "labs.pref#EnableAdvancedCatalogingEditor# Enable"
+msgstr ""
+
+# Labs > All
+# Labs > All
+msgid "labs.pref#EnableAdvancedCatalogingEditor# This feature is currently experimental, and may have bugs that cause corruption of records. It also does not include any support for UNIMARC or NORMARC fixed fields. Please help us test it and report any bugs, but do so at your own risk."
+msgstr ""
+
+# Labs > All
+# Labs > All
+msgid "labs.pref#EnableAdvancedCatalogingEditor# the advanced cataloging editor."
+msgstr ""
+
 # Local Use
 # Local Use
 msgid "local_use.pref"
@@ -4773,12 +4873,12 @@ msgstr "the acquisition details on OPAC detail pages."
 # OPAC > Appearance
 # OPAC > Appearance
 msgid "opac.pref#OPACBaseURL# . This should be a complete URL, starting with <code>http://</code> or <code>https://</code>. Do not include a trailing slash in the URL. (This must be filled in correctly for RSS, unAPI, and search plugins to work.)"
-msgstr ""
+msgstr " . This should be a complete URL, starting with <code>http://</code> or <code>https://</code>. Do not include a trailing slash in the URL. (This must be filled in correctly for RSS, unAPI, and search plugins to work.)"
 
 # OPAC > Appearance
 # OPAC > Appearance
 msgid "opac.pref#OPACBaseURL# The OPAC is located at "
-msgstr ""
+msgstr " The OPAC is located at "
 
 # OPAC > Appearance
 # OPAC > Appearance
@@ -5238,7 +5338,7 @@ msgstr "Replace the search box at the top of OPAC pages with the following HTML:
 # OPAC > Appearance
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# Select export options that should be available from OPAC detail page:"
-msgstr ""
+msgstr " Select export options that should be available from OPAC detail page:"
 
 # OPAC > Appearance
 # OPAC > Appearance
@@ -5253,7 +5353,7 @@ msgstr "for the OPAC's favicon. (This should be a complete URL, starting with <c
 # OPAC > Policy
 # OPAC > Policy
 msgid "opac.pref#OpacHiddenItems# Define custom rules to hide specific items from search and view on the OPAC. How to write these rules is documented on the <a href=\"http://wiki.koha-community.org/wiki/OpacHiddenItems\" target=\"_blank\">Koha wiki</a>."
-msgstr ""
+msgstr "Define custom rules to hide specific items from search and view on the OPAC. How to write these rules is documented on the <a href=\"http://wiki.koha-community.org/wiki/OpacHiddenItems\" target=\"_blank\">Koha wiki</a>."
 
 # OPAC > Appearance
 # OPAC > Appearance
@@ -5868,7 +5968,7 @@ msgstr "Show"
 # OPAC > Features
 # OPAC > Features
 msgid "opac.pref#ShowReviewerPhoto# reviewer's avatar beside comments in OPAC. The avatar will be searched on www.libravatar.org using the patron's e-mail address."
-msgstr ""
+msgstr " reviewer's avatar beside comments in OPAC. The avatar will be searched on www.libravatar.org using the patron's e-mail address."
 
 # OPAC > Features
 # OPAC > Features
@@ -6220,19 +6320,19 @@ msgstr "Enable"
 msgid "patrons.pref#ExtendedPatronAttributes# searching, editing and display of custom attributes on patrons."
 msgstr "searching, editing and display of custom attributes on members."
 
-# Patrons > Norwegian patron database
-# Patrons > Norwegian patron database
+# Patrons > General
+# Patrons > General
 msgid "patrons.pref#FeeOnChangePatronCategory# Do"
 msgstr ""
 
-# Patrons > Norwegian patron database
-# Patrons > Norwegian patron database
+# Patrons > General
+# Patrons > General
 msgid "patrons.pref#FeeOnChangePatronCategory# Don't"
 msgstr ""
 
-# Patrons > Norwegian patron database
-# Patrons > Norwegian patron database
-msgid "patrons.pref#FeeOnChangePatronCategory# charge a fee when a patron changes to a category with enrolment fee."
+# Patrons > General
+# Patrons > General
+msgid "patrons.pref#FeeOnChangePatronCategory# charge a fee when a patron changes to a category with an enrollment fee."
 msgstr ""
 
 # Patrons > General
@@ -7170,6 +7270,21 @@ msgstr " Appearance"
 msgid "staff_client.pref Options"
 msgstr " Options"
 
+# Staff Client > Options
+# Staff Client > Options
+msgid "staff_client.pref#AudioAlerts# Don't enable"
+msgstr ""
+
+# Staff Client > Options
+# Staff Client > Options
+msgid "staff_client.pref#AudioAlerts# Enable"
+msgstr ""
+
+# Staff Client > Options
+# Staff Client > Options
+msgid "staff_client.pref#AudioAlerts# audio alerts for events defined in the audio alerts section of administration."
+msgstr ""
+
 # Staff Client > Appearance
 # Staff Client > Appearance
 msgid "staff_client.pref#Display856uAsImage# . Note: The corresponding XSLT option must be turned on."
@@ -7460,6 +7575,11 @@ msgstr "tools.pref"
 msgid "tools.pref Batch item modification"
 msgstr " Batch item modification"
 
+# Tools > News
+# Tools > News
+msgid "tools.pref News"
+msgstr ""
+
 # Tools > Patron cards
 # Tools > Patron cards
 msgid "tools.pref Patron cards"
@@ -7484,6 +7604,31 @@ msgstr "Process up to"
 # Tools > Batch item modification
 msgid "tools.pref#MaxItemsForBatch# items in a single modification or deletion batch."
 msgstr " items in a single modification or deletion batch."
+
+# Tools > News
+# Tools > News
+msgid "tools.pref#NewsAuthorDisplay# Both OPAC and staff client"
+msgstr ""
+
+# Tools > News
+# Tools > News
+msgid "tools.pref#NewsAuthorDisplay# Not at all"
+msgstr ""
+
+# Tools > News
+# Tools > News
+msgid "tools.pref#NewsAuthorDisplay# OPAC only"
+msgstr ""
+
+# Tools > News
+# Tools > News
+msgid "tools.pref#NewsAuthorDisplay# Show the author for news items:"
+msgstr ""
+
+# Tools > News
+# Tools > News
+msgid "tools.pref#NewsAuthorDisplay# Staff client only"
+msgstr ""
 
 # Web services
 # Web services
@@ -7548,7 +7693,7 @@ msgstr " Enable"
 # Web services > IdRef
 # Web services > IdRef
 msgid "web_services.pref#IdRef# Please note that this feature is available only for UNIMARC."
-msgstr ""
+msgstr " Please note that this feature is available only for UNIMARC."
 
 # Web services > IdRef
 # Web services > IdRef
