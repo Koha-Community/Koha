@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 22;
 use Test::Mojo;
 use t::lib::TestBuilder;
 
@@ -25,6 +25,7 @@ use C4::Auth;
 use C4::Context;
 
 use Koha::Database;
+use Koha::Account::Line;
 
 my $builder = t::lib::TestBuilder->new();
 
@@ -40,6 +41,9 @@ my $branchcode = $builder->build({ source => 'Branch' })->{ branchcode };
 
 $t->get_ok('/api/v1/accountlines')
   ->status_is(401);
+
+$t->put_ok("/api/v1/accountlines/11224409" => json => {'amount' => -5})
+    ->status_is(401);
 
 my $loggedinuser = $builder->build({
     source => 'Borrower',
@@ -114,5 +118,45 @@ $t->request_ok($tx)
 $json = $t->tx->res->json;
 ok(ref $json eq 'ARRAY', 'response is a JSON array');
 ok(scalar @$json == 4, 'response array contains 3 elements');
+
+# Editing accountlines tests
+my $put_data = {
+    'amount' => -19,
+    'amountoutstanding' => -19
+};
+
+$tx = $t->ua->build_tx(
+    PUT => "/api/v1/accountlines/11224409"
+        => {Accept => '*/*'}
+        => json => $put_data);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+$t->request_ok($tx)
+    ->status_is(404);
+
+my $accountline_to_edit = Koha::Account::Lines->search({'borrowernumber' => $borrowernumber2})->unblessed()->[0];
+
+$tx = $t->ua->build_tx(PUT => "/api/v1/accountlines/$accountline_to_edit->{accountlines_id}" => json => $put_data);
+$tx->req->cookies({name => 'CGISESSID', value => $borrowersession->id});
+$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+$t->request_ok($tx)
+  ->status_is(403);
+
+$tx = $t->ua->build_tx(
+    PUT => "/api/v1/accountlines/$accountline_to_edit->{accountlines_id}"
+        => {Accept => '*/*'}
+        => json => $put_data);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+$t->request_ok($tx)
+    ->status_is(200);
+
+my $accountline_edited = Koha::Account::Lines->search({'borrowernumber' => $borrowernumber2})->unblessed()->[0];
+
+is($accountline_edited->{amount}, '-19.000000');
+is($accountline_edited->{amountoutstanding}, '-19.000000');
+
+
+# Payment tests
 
 $dbh->rollback;

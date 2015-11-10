@@ -34,5 +34,67 @@
         }
       }
     }
+  },
+  "/accountlines/{accountlines_id}": {
+    "put": {
+      "operationId": "editAccountlines",
+      "tags": ["accountlines"],
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        { "$ref": "../parameters.json#/accountlinesIdPathParam" },
+        {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing fields to modify",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "description": "Amount"
+              },
+              "amountoutstanding": {
+                "description": "Amount outstanding"
+              },
+              "note": {
+                "description": "Accountline note"
+              },
+              "meansofpayment": {
+                "description": "Means of payment"
+              }
+            }
+          }
+        }
+      ],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Updated accountline",
+          "schema": { "$ref": "../definitions.json#/accountline" }
+        },
+        "400": {
+          "description": "Missing or wrong parameters",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Accountline not found",
+          "schema": { "$ref": "../definitions.json#/error" }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "updatecharges": "1"
+        }
+      }
+    }
   }
 }

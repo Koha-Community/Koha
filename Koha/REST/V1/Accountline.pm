@@ -31,4 +31,21 @@ sub list {
     return $c->$cb($accountlines->unblessed, 200);
 }
 
+
+sub edit {
+    my ($c, $args, $cb) = @_;
+
+    my $accountline = Koha::Account::Lines->find($args->{accountlines_id});
+    unless ($accountline) {
+        return $c->$cb({error => "Accountline not found"}, 404);
+    }
+
+    my $body = $c->req->json;
+
+    $accountline->set( $body );
+    $accountline->store();
+
+    return $c->$cb($accountline->unblessed(), 200);
+}
+
 1;
