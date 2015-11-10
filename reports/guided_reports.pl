@@ -233,6 +233,7 @@ elsif ( $phase eq 'Update SQL'){
                     subgroup => $subgroup,
                     notes => $notes,
                     public => $public,
+                    cache_expiry => $cache_expiry,
                 } );
             $template->param(
                 'save_successful'       => 1,
