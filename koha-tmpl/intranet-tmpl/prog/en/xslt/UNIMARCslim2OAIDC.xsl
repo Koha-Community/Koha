@@ -162,11 +162,9 @@
         <xsl:value-of select="marc:subfield[@code='a']"/>
       </dc:identifier>
     </xsl:for-each>
-    <xsl:for-each select="marc:datafield[@tag=090]">
+    <xsl:for-each select="marc:controlfield[@tag=001]">
       <dc:identifier>
-        <xsl:value-of select="$OPACBaseURL" />
-        <xsl:text>/bib/</xsl:text>
-        <xsl:value-of select="marc:subfield[@code='a']"/>
+        <xsl:value-of select="."/>
       </dc:identifier>
     </xsl:for-each>
     <xsl:for-each select="marc:datafield[@tag=995]">
