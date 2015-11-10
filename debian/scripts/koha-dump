@@ -90,7 +90,7 @@ dump_instance()
         "etc/koha/sites/$name" \
         "etc/apache2/sites-available/$instancefile" \
         "etc/apache2/sites-enabled/$instancefile" \
-        "var/log/koha/$name" "$zebra_files"
+        "var/log/koha/$name" ${zebra_files:+"$zebra_files"}
 
     [ "$quiet" = "no" ] && echo "Done."
 }
