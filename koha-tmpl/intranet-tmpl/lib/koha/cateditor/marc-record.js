@@ -37,7 +37,7 @@ define( function() {
     };
 
     function _escape(str) {
-        return str.replace( /[<&"]/, function (c) { return _escape_map[c] } );
+        return str.replace( /[<&"]/g, function (c) { return _escape_map[c] } );
     }
 
     function _intpadded(i, digits) {
