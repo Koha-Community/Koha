@@ -136,6 +136,14 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
     }
 
     var _editorKeys = {
+        'Alt-C': function( cm ) {
+            cm.replaceRange( '©', cm.getCursor() );
+        },
+
+        'Alt-P': function( cm ) {
+            cm.replaceRange( '℗', cm.getCursor() );
+        },
+
         Enter: function( cm ) {
             var cursor = cm.getCursor();
             cm.replaceRange( '\n', { line: cursor.line }, null, 'marcAware' );
