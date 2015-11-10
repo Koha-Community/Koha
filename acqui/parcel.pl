@@ -64,11 +64,11 @@ use C4::Biblio;
 use C4::Items;
 use CGI qw ( -utf8 );
 use C4::Output;
-use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Suggestions;
 use C4::Reserves qw/GetReservesFromBiblionumber/;
 
 use Koha::Acquisition::Bookseller;
+use Koha::DateUtils;
 
 use JSON;
 
@@ -112,7 +112,6 @@ unless( $invoiceid and $invoice->{invoiceid} ) {
 my $booksellerid = $invoice->{booksellerid};
 my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 my $gst = $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
-my $datereceived = C4::Dates->new();
 
 my @orders        = @{ $invoice->{orders} };
 my $countlines    = scalar @orders;
@@ -282,9 +281,7 @@ $template->param(
     invoiceid             => $invoice->{invoiceid},
     invoice               => $invoice->{invoicenumber},
     invoiceclosedate      => $invoice->{closedate},
-    datereceived          => $datereceived->output('iso'),
-    invoicedatereceived   => $datereceived->output('iso'),
-    formatteddatereceived => $datereceived->output(),
+    datereceived          => dt_from_string,
     name                  => $bookseller->{'name'},
     booksellerid          => $bookseller->{id},
     loop_received         => \@loop_received,

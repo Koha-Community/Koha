@@ -55,10 +55,10 @@ use CGI qw ( -utf8 );
 use C4::Auth;    # get_template_and_user
 use C4::Output;
 use C4::Acquisition;
-use C4::Dates;
 use C4::Debug;
 use C4::Branch;
 use C4::Koha;
+use Koha::DateUtils;
 
 my $input = new CGI;
 my $title                   = $input->param( 'title');
@@ -70,18 +70,17 @@ my $basket                  = $input->param( 'basket' );
 my $basketgroupname             = $input->param('basketgroupname');
 my $booksellerinvoicenumber = $input->param( 'booksellerinvoicenumber' );
 my $do_search               = $input->param('do_search') || 0;
-my $from_placed_on          = C4::Dates->new($input->param('from'));
-my $to_placed_on            = C4::Dates->new($input->param('to'));
 my $budget                  = $input->param( 'budget' );
 my $orderstatus             = $input->param( 'orderstatus' );
 my $ordernumber             = $input->param( 'ordernumber' );
 my $search_children_too     = $input->param( 'search_children_too' );
 my @created_by              = $input->param('created_by');
 
-if ( not $input->param('from') ) {
-    # FIXME Dirty but we can't sent a Date::Calc to C4::Dates ?
-    # We would use a function like Add_Delta_YM(-1, 0, 0);
-    $$from_placed_on{dmy_arrayref}[5] -= 1;
+my $from_placed_on = eval { dt_from_string( $input->param('from') ) } || dt_from_string;
+my $to_placed_on   = eval { dt_from_string( $input->param('to')   ) } || dt_from_string;
+unless ( $input->param('from') ) {
+    # Fill the form with year-1
+    $from_placed_on->subtract( years => 1 );
 }
 
 my $dbh = C4::Context->dbh;
@@ -96,14 +95,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my ( $from_iso, $to_iso, $d );
-if ( $d = $input->param('from') ) {
-    $from_iso = C4::Dates->new($d)->output('iso');
-}
-if ( $d = $input->param('iso') ) {
-    $to_iso = C4::Dates->new($d)->output('iso');
-}
-
 my $order_loop;
 # If we're supplied any value then we do a search. Otherwise we don't.
 if ($do_search) {
@@ -113,8 +104,8 @@ if ($do_search) {
         isbn   => $isbn,
         ean   => $ean,
         name => $name,
-        from_placed_on => $from_iso,
-        to_placed_on => $to_iso,
+        from_placed_on => output_pref( { dt => $from_placed_on, dateformat => 'iso', dateonly => 1 } ),
+        to_placed_on   => output_pref( { dt => $to_placed_on,   dateformat => 'iso', dateonly => 1 } ),
         basket => $basket,
         booksellerinvoicenumber => $booksellerinvoicenumber,
         basketgroupname => $basketgroupname,
@@ -125,9 +116,6 @@ if ($do_search) {
         created_by => \@created_by,
     );
 }
-
-my $from_date = $from_placed_on ? $from_placed_on->output('syspref') : undef;
-my $to_date = $to_placed_on ? $to_placed_on->output('syspref') : undef;
 
 my $budgetperiods = C4::Budgets::GetBudgetPeriods;
 my $bp_loop = $budgetperiods;
@@ -152,8 +140,8 @@ $template->param(
     basketgroupname         => $basketgroupname,
     ordernumber             => $ordernumber,
     search_children_too     => $search_children_too,
-    from_placed_on          => $from_date,
-    to_placed_on            => $to_date,
+    from_placed_on          => $from_placed_on,
+    to_placed_on            => $to_placed_on,
     orderstatus             => $orderstatus,
     budget_id               => $budget,
     bp_loop                 => $bp_loop,

@@ -27,8 +27,6 @@ use C4::Output;
 use C4::Context;
 use C4::Acquisition;
 use C4::Members;
-use C4::Dates qw/format_date_in_iso/;
-use Date::Calc qw/Today/;
 
 my $input = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

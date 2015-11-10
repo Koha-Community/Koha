@@ -36,6 +36,7 @@ use C4::Acquisition;
 use C4::Budgets;
 
 use Koha::Acquisition::Bookseller;
+use Koha::DateUtils;
 use Koha::Misc::Files;
 
 my $input = new CGI;
@@ -76,14 +77,12 @@ elsif ( $op && $op eq 'reopen' ) {
     }
 }
 elsif ( $op && $op eq 'mod' ) {
-    my $shipmentdate       = $input->param('shipmentdate');
-    my $billingdate        = $input->param('billingdate');
     my $shipmentcost       = $input->param('shipmentcost');
     my $shipment_budget_id = $input->param('shipment_budget_id');
     ModInvoice(
         invoiceid             => $invoiceid,
-        shipmentdate          => C4::Dates->new($shipmentdate)->output("iso"),
-        billingdate           => C4::Dates->new($billingdate)->output("iso"),
+        shipmentdate          => output_pref( { str => $input->param('shipmentdate'), dateformat => 'iso', dateonly => 1 } ),
+        billingdate           => output_pref( { str => $input->param('billingdate'),  dateformat => 'iso', dateonly => 1 } ),
         shipmentcost          => $shipmentcost,
         shipmentcost_budgetid => $shipment_budget_id
     );

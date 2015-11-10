@@ -36,6 +36,7 @@ use C4::Output;
 use C4::Acquisition qw/GetInvoices/;
 use C4::Branch qw/GetBranches/;
 use C4::Budgets;
+use Koha::DateUtils;
 
 my $input = CGI->new;
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
@@ -63,19 +64,20 @@ my $publicationyear  = $input->param('publicationyear');
 my $branch           = $input->param('branch');
 my $op               = $input->param('op');
 
+$shipmentdatefrom and $shipmentdatefrom = eval { dt_from_string( $shipmentdatefrom ) };
+$shipmentdateto   and $shipmentdateto   = eval { dt_from_string( $shipmentdateto ) };
+$billingdatefrom  and $billingdatefrom  = eval { dt_from_string( $billingdatefrom ) };
+$billingdateto    and $billingdateto    = eval { dt_from_string( $billingdateto ) };
+
 my $invoices = [];
 if ( $op and $op eq 'do_search' ) {
-    my $shipmentdatefrom_iso = C4::Dates->new($shipmentdatefrom)->output('iso');
-    my $shipmentdateto_iso   = C4::Dates->new($shipmentdateto)->output('iso');
-    my $billingdatefrom_iso  = C4::Dates->new($billingdatefrom)->output('iso');
-    my $billingdateto_iso    = C4::Dates->new($billingdateto)->output('iso');
     @{$invoices} = GetInvoices(
         invoicenumber    => $invoicenumber,
         supplierid       => $supplierid,
-        shipmentdatefrom => $shipmentdatefrom_iso,
-        shipmentdateto   => $shipmentdateto_iso,
-        billingdatefrom  => $billingdatefrom_iso,
-        billingdateto    => $billingdateto_iso,
+        shipmentdatefrom => $shipmentdatefrom ? output_pref( { str => $shipmentdatefrom, dateformat => 'iso' } ) : undef,
+        shipmentdateto   => $shipmentdateto   ? output_pref( { str => $shipmentdateto,   dateformat => 'iso' } ) : undef,
+        billingdatefrom  => $billingdatefrom  ? output_pref( { str => $billingdatefrom,  dateformat => 'iso' } ) : undef,
+        billingdateto    => $billingdateto    ? output_pref( { str => $billingdateto,    dateformat => 'iso' } ) : undef,
         isbneanissn      => $isbneanissn,
         title            => $title,
         author           => $author,
@@ -135,6 +137,8 @@ $template->param(
     invoicenumber   => $invoicenumber,
     booksellerid    => $supplierid,
     suppliername    => $suppliername,
+    shipmentdatefrom => $shipmentdatefrom,
+    shipmentdateto   => $shipmentdateto,
     billingdatefrom => $billingdatefrom,
     billingdateto   => $billingdateto,
     isbneanissn     => $isbneanissn,

@@ -153,12 +153,12 @@ $(document).ready(function() {
                           <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="invoiceactions[% invoice.invoiceid %]">
                               <li><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoice.invoiceid %]"><i class="fa fa-search"></i> Details</a></li>
                             [% IF invoice.closedate %]
-                                <li><a href="invoice.pl?op=reopen&amp;invoiceid=[% invoice.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% booksellerid %]%26billingdatefrom=[% billingdatefrom %]%26billingdateto=[% billingdateto %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]"><i class="fa fa-refresh"></i> Reopen</a></li>
+                                <li><a href="invoice.pl?op=reopen&amp;invoiceid=[% invoice.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% booksellerid %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]"><i class="fa fa-refresh"></i> Reopen</a></li>
                             [% ELSE %]
-                                <li><a href="invoice.pl?op=close&amp;invoiceid=[% invoice.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% booksellerid %]%26billingdatefrom=[% billingdatefrom %]%26billingdateto=[% billingdateto %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]"><i class="fa fa-times-circle"></i> Close</a></li>
+                                <li><a href="invoice.pl?op=close&amp;invoiceid=[% invoice.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% booksellerid %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]"><i class="fa fa-times-circle"></i> Close</a></li>
                             [% END %]
                             [% UNLESS invoice.receivedbiblios || invoice.receiveditems %]
-                                <li><a href="invoice.pl?op=delete&amp;invoiceid=[% invoice.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% booksellerid %]%26billingdatefrom=[% billingdatefrom %]%26billingdateto=[% billingdateto %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]"><i class="fa fa-remove"></i> Delete</a></li>
+                                <li><a href="invoice.pl?op=delete&amp;invoiceid=[% invoice.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% booksellerid %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]"><i class="fa fa-remove"></i> Delete</a></li>
                             [% END %]
                           </ul>
                       </div>
@@ -214,19 +214,35 @@ $(document).ready(function() {
               [% IF booksellerid %]
                 <li>Vendor: [% suppliername %]</li>
               [% END %]
-              [% IF ( billingdatefrom ) %]
-                <li>Billing date:
-                [% IF ( billingdateto ) %]
-                  From [% billingdatefrom %]
-                  To [% billingdateto %]
+              [% IF shipmentdatefrom %]
+                <li>Shipment date:
+                [% IF shipmentdateto %]
+                  From [% shipmentdatefrom | $KohaDates %]
+                  To [% shipmentdateto | $KohaDates %]
                 [% ELSE %]
-                  All since [% billingdatefrom %]
+                  All since [% shipmentdatefrom | $KohaDates %]
                 [% END %]
                 </li>
               [% ELSE %]
-                [% IF ( billingdateto ) %]
+                [% IF shipmentdateto %]
+                  <li>Shipment date:
+                    All until [% shipmentdateto | $KohaDates %]
+                  </li>
+                [% END %]
+              [% END %]
+              [% IF billingdatefrom %]
+                <li>Billing date:
+                [% IF billingdateto %]
+                  From [% billingdatefrom | $KohaDates %]
+                  To [% billingdateto | $KohaDates %]
+                [% ELSE %]
+                  All since [% billingdatefrom | $KohaDates %]
+                [% END %]
+                </li>
+              [% ELSE %]
+                [% IF billingdateto %]
                   <li>Billing date:
-                    All until [% billingdateto %]
+                    All until [% billingdateto | $KohaDates %]
                   </li>
                 [% END %]
               [% END %]
@@ -284,11 +300,11 @@ $(document).ready(function() {
               <ol>
                 <li>
                   <label for="shipmentdatefrom">From:</label>
-                  <input type="text" id="shipmentdatefrom" name="shipmentdatefrom" size="10" value="[% shipmentdatefrom %]" class="datepicker" />
+                  <input type="text" id="shipmentdatefrom" name="shipmentdatefrom" size="10" value="[% shipmentdatefrom | $KohaDates %]" class="datepicker" />
                 </li>
                 <li>
                   <label for="shipmentdateto">To:</label>
-                  <input type="text" id="shipmentdateto" name="shipmentdateto" size="10" value="[% shipmentdateto %]" class="datepicker" />
+                  <input type="text" id="shipmentdateto" name="shipmentdateto" size="10" value="[% shipmentdateto | $KohaDates %]" class="datepicker" />
                 </li>
               </ol>
             </fieldset>
@@ -299,11 +315,11 @@ $(document).ready(function() {
               <ol>
                 <li>
                   <label for="billingdatefrom">From:</label>
-                  <input type="text" id="billingdatefrom" name="billingdatefrom" size="10" value="[% billingdatefrom %]" class="datepicker" />
+                  <input type="text" id="billingdatefrom" name="billingdatefrom" size="10" value="[% billingdatefrom | $KohaDates %]" class="datepicker" />
                 </li>
                 <li>
                   <label for="billingdateto">To:</label>
-                  <input type="text" id="billingdateto" name="billingdateto" size="10" value="[% billingdateto %]" class="datepicker" />
+                  <input type="text" id="billingdateto" name="billingdateto" size="10" value="[% billingdateto | $KohaDates %]" class="datepicker" />
                 </li>
               </ol>
             </fieldset>

@@ -100,12 +100,10 @@ our ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
 );
 
 my $invoicenumber = $input->param('invoice');
-my $shipmentdate = $input->param('shipmentdate');
 my $shipmentcost = $input->param('shipmentcost');
 my $shipmentcost_budgetid = $input->param('shipmentcost_budgetid');
-if($shipmentdate) {
-    $shipmentdate = C4::Dates->new($shipmentdate)->output('iso');
-}
+my $shipmentdate = $input->param('shipmentdate');
+$shipmentdate and $shipmentdate = output_pref({ str => $shipmentdate, dateformat => 'iso', dateonly => 1 });
 
 if ( $op and $op eq 'new' ) {
     if ( C4::Context->preference('AcqWarnOnDuplicateInvoice') ) {
@@ -206,7 +204,7 @@ $template->param(
     dateto                   => $dateto,
     resultsperpage           => $resultsperpage,
     name                     => $bookseller->{'name'},
-    shipmentdate_today       => C4::Dates->new()->output(),
+    shipmentdate_today       => dt_from_string,
     booksellerid             => $booksellerid,
     GST                      => C4::Context->preference('gist'),
     budgets                  => $budget_loop,

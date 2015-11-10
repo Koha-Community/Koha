@@ -1,9 +1,10 @@
 [% USE Koha %]
+[% USE KohaDates %]
 [% USE Price %]
 [% USE currency = format('%.2f') -%]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( date ) %]
-            Receipt summary for [% name %] [% IF ( invoice ) %]invoice [% invoice %][% END %] on [% formatteddatereceived %][% ELSE %]Receive orders from [% name %][% END %]</title>
+            Receipt summary for [% name %] [% IF ( invoice ) %]invoice [% invoice %][% END %] on [% datereceived | $KohaDates %][% ELSE %]Receive orders from [% name %][% END %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'datatables.inc' %]
@@ -133,12 +134,12 @@
 [% INCLUDE 'acquisitions-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
-    [% IF ( datereceived ) %]
+    [% IF datereceived %]
         Receipt summary for <i>[% name %]</i>
         [% IF ( invoice ) %]
             <i>[ [% invoice %] ]</i>
         [% END %]
-        on <i>[% formatteddatereceived %]</i>
+        on <i>[% datereceived | $KohaDates %]</i>
     [% ELSE %]
         Receive orders from [% name %]
     [% END %]
@@ -160,8 +161,8 @@
 	</div>
 	[% END %]
     <h1>
-        [% IF ( datereceived ) %]
-            Receipt summary for <i>[% name %]</i> [% IF ( invoice ) %] <i> [ [% invoice %] ] </i>[% END %] on <i>[% formatteddatereceived %]</i>
+        [% IF datereceived %]
+            Receipt summary for <i>[% name %]</i> [% IF ( invoice ) %] <i> [ [% invoice %] ] </i>[% END %] on <i>[% datereceived | $KohaDates %]</i>
         [% ELSE %]
             Receive orders from [% name %]
         [% END %]
@@ -204,7 +205,7 @@
 
 [% UNLESS no_orders_to_display %]
 <div id="acqui_receive_summary">
-<p><strong>Invoice number:</strong> [% invoice %] <strong>Received by:</strong> [% loggedinusername %] <strong>On:</strong> [% formatteddatereceived %]</p>
+<p><strong>Invoice number:</strong> [% invoice %] <strong>Received by:</strong> [% loggedinusername %] <strong>On:</strong> [% datereceived | $KohaDates %]</p>
 </div>
 [% UNLESS (invoiceclosedate) %]
   <div id="acqui_receive_search">
