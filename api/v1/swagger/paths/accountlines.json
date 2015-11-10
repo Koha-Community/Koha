@@ -1,0 +1,38 @@
+{
+  "/accountlines": {
+    "get": {
+      "operationId": "listAccountlines",
+      "tags": ["accountlines"],
+      "parameters": [
+        { "$ref": "../parameters.json#/borrowernumberQueryParam"}
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A list of accountlines",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "../definitions.json#/accountline"
+            }
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "permissions": {
+            "updatecharges": "1"
+        }
+      }
+    }
+  }
+}
