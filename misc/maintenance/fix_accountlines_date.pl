@@ -146,14 +146,14 @@ while (my $accountline = $sth->fetchrow_hashref) {
 
     if ($mode eq 'us') {
         if ($description =~ /$US_DATE/) { # mm/dd/yyyy
-            my $date = eval { output_pref( { dt => dt_from_string( $1 ), dateonly => 1, dateformat => 'us' } ); };
+            my $date = output_pref( { dt => dt_from_string( $1, 'us' ), dateonly => 1} );
             print "Converting $1 (us) to " . $date . "\n" if $DEBUG;i
             $description =~ s/$US_DATE/$date/;
             $updated = 1;
         }
     } elsif ($mode eq 'metric') {
         if ($description =~ /$METRIC_DATE/) { # dd/mm/yyyy
-            my $date = eval { output_pref( { dt => dt_from_string( $1 ), dateonly => 1, dateformat => 'metric' } ); };
+            my $date = output_pref( { dt => dt_from_string( $1, 'metric' ), dateonly => 1} );
             print "Converting $1 (metric) to " . $date . "\n" if $DEBUG;
             $description =~ s/$METRIC_DATE/$date/;
             $updated = 2;
