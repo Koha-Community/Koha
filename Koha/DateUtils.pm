@@ -205,6 +205,7 @@ sub output_pref {
             if $dt and $str;
 
     $dt = eval { dt_from_string( $str ) } if $str;
+    carp "Invalid date '$str' passed to output_pref\n" if $@;
 
     return unless defined $dt;
 

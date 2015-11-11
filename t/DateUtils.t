@@ -3,7 +3,7 @@ use DateTime;
 use DateTime::TimeZone;
 
 use C4::Context;
-use Test::More tests => 58;
+use Test::More tests => 59;
 use Test::MockModule;
 use Test::Warn;
 use Time::HiRes qw/ gettimeofday /;
@@ -218,8 +218,12 @@ $dt = dt_from_string('2015-01-31 01:02:03');
 is( output_pref( {dt => $dt} ), '31/01/2015 01:02', 'dt_from_string should fallback to sql format' );
 
 # output_pref with str parameter
-is( output_pref( { 'str' => $testdate_iso,  dateformat => 'iso', dateonly => 1 } ), $testdate_iso, 'output_pref should handle correctly the iso parameter' );
-is( output_pref( { 'str' => 'invalid_date', dateformat => 'iso', dateonly => 1 } ), undef,         'output_pref should return undef if an invalid date is passed' );
+is( output_pref( { 'str' => $testdate_iso, dateformat => 'iso', dateonly => 1 } ), $testdate_iso, 'output_pref should handle correctly the iso parameter' );
+my $output_for_invalid_date;
+warning_like { $output_for_invalid_date = output_pref( { str => 'invalid_date' } ) }
+             { carped => qr[^Invalid date 'invalid_date' passed to output_pref] },
+             'output_pref should carp if an invalid date is passed for the str parameter';
+is( $output_for_invalid_date, undef, 'output_pref should return undef if an invalid date is passed' );
 warning_is { output_pref( { 'str' => $testdate_iso, dt => $dt, dateformat => 'iso', dateonly => 1 } ) }
            { carped => 'output_pref should not be called with both dt and str parameters' },
            'output_pref should carp if str and dt parameters are passed together';
