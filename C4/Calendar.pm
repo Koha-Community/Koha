@@ -695,45 +695,6 @@ sub copy_to_branch {
     return 1;
 }
 
-=head2 addDate
-
-    my ($day, $month, $year) = $calendar->addDate($date, $offset)
-
-C<$startdate> is the starting date of the interval.
-
-C<$offset> Is the number of days that this function has to count from $date.
-
-=cut
-
-sub addDate {
-    my ($self, $startdate, $offset) = @_;
-    $startdate = eval { output_pref( { dt => $startdate, dateonly => 1, dateformat => 'iso' } ); };
-    my ( $year, $month, $day) = split( "-", $startdate );
-	my $daystep = 1;
-	if ($offset < 0) { # In case $offset is negative
-       # $offset = $offset*(-1);
-		$daystep = -1;
-    }
-	my $daysMode = C4::Context->preference('useDaysMode');
-    if ($daysMode eq 'Datedue') {
-        ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, $offset );
-	 	while ($self->isHoliday($day, $month, $year)) {
-            ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, $daystep);
-        }
-    } elsif($daysMode eq 'Calendar') {
-        while ($offset !=  0) {
-            ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, $daystep);
-            if (!($self->isHoliday($day, $month, $year))) {
-                $offset = $offset - $daystep;
-			}
-        }
-	} else { ## ($daysMode eq 'Days') 
-        ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, $offset );
-    }
-    my $date_ret = sprintf(ISO_DATE_FORMAT,$year,$month,$day);
-    return($date_ret);
-}
-
 1;
 
 __END__
