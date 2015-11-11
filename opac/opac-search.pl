@@ -962,7 +962,6 @@ my $some_public_shelves = Koha::Virtualshelves->get_some_shelves(
         category       => 2,
     }
 );
-while(my$s = $some_public_shelves->next){warn $s->shelfnumber;};
 
 $template->param(
     add_to_some_private_shelves => $some_private_shelves,
