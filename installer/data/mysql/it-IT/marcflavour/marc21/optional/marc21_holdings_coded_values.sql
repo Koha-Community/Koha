@@ -6,7 +6,7 @@
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('HINGS_UT','0','Informazione non disponibile, non applicabile');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('HINGS_UT','a','Record bibliografico di base');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('HINGS_UT','c','Record secondario: supplementi, fascicoli speciali, materiale di accompagnamento, altre forme secondarie');
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('HINGS_UT','d','Indexes');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('HINGS_UT','d','Indici');
 
 -- Physical Form Designators
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('HINGS_PF','au' ,'Materiale cartografico');
