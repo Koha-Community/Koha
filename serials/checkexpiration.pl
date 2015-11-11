@@ -50,7 +50,7 @@ use C4::Serials; # GetExpirationDate
 use C4::Output;
 use C4::Context;
 use C4::Dates qw/format_date format_date_in_iso/;
-use Date::Calc qw/Today Date_to_Days/;
+use Date::Calc qw/Date_to_Days/;
 
 my $query = new CGI;
 
@@ -81,7 +81,7 @@ if ($date) {
         next if $expirationdate !~ /\d{4}-\d{2}-\d{2}/; # next if not in ISO format.
         next if $subscription->{closed};
         if ( Date_to_Days(split "-",$expirationdate) < Date_to_Days(split "-",$date) &&
-			 Date_to_Days(split "-",$expirationdate) > Date_to_Days(&Today) ) {
+             ( !$branch || ($subscription->{'branchcode'} eq $branch) ) ) {
             $subscription->{expirationdate}=format_date($subscription->{expirationdate});
             push @subscriptions_loop,$subscription;
         }
@@ -94,6 +94,7 @@ if ($date) {
         date => format_date($date),
         subscriptions_loop => \@subscriptions_loop,
         "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
+        searched => 1,
     );
 }
 $template->param (
