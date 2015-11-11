@@ -15,7 +15,7 @@ use C4::Bookseller;
 use C4::Biblio;
 use C4::Budgets;
 use Koha::DateUtils;
-use Test::More tests => 46;
+use Test::More tests => 45;
 
 BEGIN {
     use_ok('C4::Serials');
@@ -174,8 +174,6 @@ is(C4::Serials::ModSubscriptionHistory(), undef, 'test modding subscription hist
 is(C4::Serials::ModSerialStatus(),undef, 'test modding serials');
 
 is(C4::Serials::NewIssue(), undef, 'test getting 0 when nothing is entered');
-
-is(C4::Serials::ItemizeSerials(),undef, 'test getting nothing when nothing is entered');
 
 is(C4::Serials::HasSubscriptionStrictlyExpired(), undef, 'test if the subscriptions has expired');
 is(C4::Serials::HasSubscriptionExpired(), undef, 'test if the subscriptions has expired');
