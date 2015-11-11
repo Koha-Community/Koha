@@ -1,10 +1,11 @@
 package C4::Utils::DataTables::Members;
 
+use Modern::Perl;
 use C4::Branch qw/onlymine/;
 use C4::Context;
 use C4::Members qw/GetMemberIssuesAndFines/;
 use C4::Utils::DataTables;
-use Modern::Perl;
+use Koha::DateUtils;
 
 sub search {
     my ( $params ) = @_;
@@ -142,7 +143,7 @@ sub search {
         ($patron->{overdues}, $patron->{issues}, $patron->{fines}) =
             GetMemberIssuesAndFines($patron->{borrowernumber});
         if($patron->{dateexpiry} and $patron->{dateexpiry} ne '0000-00-00') {
-            $patron->{dateexpiry} = output_pref( { dt => dt_from_string( $patron->{dateexpiry}), dateonly => 1, dateformat => 'iso' } );
+            $patron->{dateexpiry} = output_pref( { dt => dt_from_string( $patron->{dateexpiry}, 'iso'), dateonly => 1} );
         } else {
             $patron->{dateexpiry} = '';
         }
