@@ -21,11 +21,11 @@ use C4::Acquisition;
 use C4::Auth;
 use C4::Budgets;
 use C4::Koha;
-use C4::Dates qw/format_date/;
 use C4::Serials;
 use C4::Output;
 use C4::Context;
 use C4::Search qw/enabled_staff_search_views/;
+use Koha::DateUtils;
 
 use Koha::Acquisition::Bookseller;
 
@@ -100,7 +100,8 @@ my $hasRouting = check_routing($subscriptionid);
 # COMMENT hdl : IMHO, we should think about passing more and more data hash to template->param rather than duplicating code a new coding Guideline ?
 
 for my $date ( qw(startdate enddate firstacquidate histstartdate histenddate) ) {
-    $$subs{$date}      = format_date($$subs{$date}) if $date && $$subs{$date};
+    $subs->{$date} = output_pref( { str => $subs->{$date}, dateonly => 1 } )
+        if $subs->{$date};
 }
 $subs->{location} = GetKohaAuthorisedValueLib("LOC",$subs->{location});
 $subs->{abouttoexpire}  = abouttoexpire($subs->{subscriptionid});

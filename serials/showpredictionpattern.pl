@@ -36,6 +36,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Serials;
 use C4::Serials::Frequency;
+use Koha::DateUtils;
 
 my $input = new CGI;
 my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
@@ -76,19 +77,13 @@ my %pattern = (
     every3          => $input->param('every3') // '',
 );
 
-if(!defined $firstacquidate || $firstacquidate eq ''){
-    my ($year, $month, $day) = Today();
-    $firstacquidate = sprintf "%04d-%02d-%02d", $year, $month, $day;
-} else {
-    $firstacquidate = C4::Dates->new($firstacquidate)->output('iso');
-}
+$firstacquidate = eval { output_pref( { str => $firstacquidate, dateonly => 1, dateformat => 'iso' } ); }
+    or output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } );
 
-if($enddate){
-    $enddate = C4::Dates->new($enddate)->output('iso');
-}
+$enddate = eval { output_pref( { str => $enddate, dateonly => 1, dateformat => 'iso' } ); };
 
 if($nextacquidate) {
-    $nextacquidate = C4::Dates->new($nextacquidate)->output('iso');
+    $nextacquidate =  eval { output_pref( { str => $nextacquidate, dateonly => 1, dateformat => 'iso' } ); };
 } else {
     $nextacquidate = $firstacquidate;
 }

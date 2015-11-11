@@ -34,8 +34,8 @@ use C4::Auth;
 use C4::Output;
 
 use C4::Biblio;
-use C4::Dates qw(format_date_in_iso);
 use C4::Serials;
+use Koha::DateUtils;
 
 my $input = new CGI;
 my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
@@ -63,9 +63,10 @@ if($op && $op eq 'mod') {
     my $opacnote        = $input->param('opacnote');
     my $librariannote   = $input->param('librariannote');
 
-    ModSubscriptionHistory( $subscriptionid, format_date_in_iso($histstartdate),
-        format_date_in_iso($histenddate), $receivedlist, $missinglist, $opacnote,
-        $librariannote );
+    $histstartdate = output_pref( { str => $histstartdate, dateonly => 1, dateformat => 'iso' } );
+    $histenddate   = output_pref( { str => $histenddate,   dateonly => 1, dateformat => 'iso' } );
+
+    ModSubscriptionHistory( $subscriptionid, $histstartdate, $histenddate, $receivedlist, $missinglist, $opacnote, $librariannote );
 
     print $input->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
     exit;

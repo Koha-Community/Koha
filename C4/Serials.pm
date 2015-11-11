@@ -22,7 +22,6 @@ use Modern::Perl;
 
 use C4::Auth qw(haspermission);
 use C4::Context;
-use C4::Dates qw(format_date format_date_in_iso);
 use DateTime;
 use Date::Calc qw(:all);
 use POSIX qw(strftime);
@@ -32,6 +31,7 @@ use C4::Debug;
 use C4::Serials::Frequency;
 use C4::Serials::Numberpattern;
 use Koha::AdditionalField;
+use Koha::DateUtils;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -467,9 +467,9 @@ sub GetSubscriptionsFromBiblionumber {
     $sth->execute($biblionumber);
     my @res;
     while ( my $subs = $sth->fetchrow_hashref ) {
-        $subs->{startdate}     = format_date( $subs->{startdate} );
-        $subs->{histstartdate} = format_date( $subs->{histstartdate} );
-        $subs->{histenddate}   = format_date( $subs->{histenddate} );
+        $subs->{startdate}     = output_pref( { dt => dt_from_string( $subs->{startdate} ),     dateonly => 1 } );
+        $subs->{histstartdate} = output_pref( { dt => dt_from_string( $subs->{histstartdate} ), dateonly => 1 } );
+        $subs->{histenddate}   = output_pref( { dt => dt_from_string( $subs->{histenddate} ),   dateonly => 1 } );
         $subs->{opacnote}     =~ s/\n/\<br\/\>/g;
         $subs->{missinglist}  =~ s/\n/\<br\/\>/g;
         $subs->{recievedlist} =~ s/\n/\<br\/\>/g;
@@ -480,7 +480,7 @@ sub GetSubscriptionsFromBiblionumber {
         if ( $subs->{enddate} eq '0000-00-00' ) {
             $subs->{enddate} = '';
         } else {
-            $subs->{enddate} = format_date( $subs->{enddate} );
+            $subs->{enddate} = output_pref( { dt => dt_from_string( $subs->{enddate}), dateonly => 1 } );
         }
         $subs->{'abouttoexpire'}       = abouttoexpire( $subs->{'subscriptionid'} );
         $subs->{'subscriptionexpired'} = HasSubscriptionExpired( $subs->{'subscriptionid'} );
@@ -710,7 +710,7 @@ sub GetSerials {
         $line->{ "status" . $line->{status} } = 1;                                         # fills a "statusX" value, used for template status select list
         for my $datefield ( qw( planneddate publisheddate) ) {
             if ($line->{$datefield} && $line->{$datefield}!~m/^00/) {
-                $line->{$datefield} = format_date( $line->{$datefield});
+                $line->{$datefield} =  output_pref( { dt => dt_from_string( $line->{$datefield} ), dateonly => 1 } );
             } else {
                 $line->{$datefield} = q{};
             }
@@ -733,7 +733,7 @@ sub GetSerials {
         $line->{ "status" . $line->{status} } = 1;                                         # fills a "statusX" value, used for template status select list
         for my $datefield ( qw( planneddate publisheddate) ) {
             if ($line->{$datefield} && $line->{$datefield}!~m/^00/) {
-                $line->{$datefield} = format_date( $line->{$datefield});
+                $line->{$datefield} = output_pref( { dt => dt_from_string( $line->{$datefield} ), dateonly => 1 } );
             } else {
                 $line->{$datefield} = q{};
             }
@@ -788,7 +788,7 @@ sub GetSerials2 {
                 $line->{$datefield} = q{};
             }
             else {
-                $line->{$datefield} = format_date( $line->{$datefield} );
+                $line->{$datefield} = output_pref( { dt => dt_from_string( $line->{$datefield} ), dateonly => 1 } );
             }
         }
         push @serials, $line;
@@ -824,8 +824,8 @@ sub GetLatestSerials {
     my @serials;
     while ( my $line = $sth->fetchrow_hashref ) {
         $line->{ "status" . $line->{status} } = 1;                        # fills a "statusX" value, used for template status select list
-        $line->{"planneddate"} = format_date( $line->{"planneddate"} );
-        $line->{"publisheddate"} = format_date( $line->{"publisheddate"} );
+        $line->{planneddate}   = output_pref( { dt => dt_from_string( $line->{planneddate} ),   dateonly => 1 } );
+        $line->{publisheddate} = output_pref( { dt => dt_from_string( $line->{publisheddate} ), dateonly => 1 } );
         push @serials, $line;
     }
 
@@ -1848,11 +1848,11 @@ sub GetLateOrMissingIssues {
 
         if ($line->{planneddate} && $line->{planneddate} !~/^0+\-/) {
             $line->{planneddateISO} = $line->{planneddate};
-            $line->{planneddate} = format_date( $line->{planneddate} );
+            $line->{planneddate} = output_pref( { dt => dt_from_string( $line->{"planneddate"} ), dateonly => 1 } );
         }
         if ($line->{claimdate} && $line->{claimdate} !~/^0+\-/) {
             $line->{claimdateISO} = $line->{claimdate};
-            $line->{claimdate}   = format_date( $line->{claimdate} );
+            $line->{claimdate}   = output_pref( { dt => dt_from_string( $line->{"claimdate"} ), dateonly => 1 } );
         }
         $line->{"status".$line->{status}}   = 1;
 

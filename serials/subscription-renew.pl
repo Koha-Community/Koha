@@ -50,11 +50,11 @@ use CGI qw ( -utf8 );
 use Carp;
 use C4::Koha;
 use C4::Auth;
-use C4::Dates qw/format_date/;
 use C4::Context;
 use C4::Auth;
 use C4::Output;
 use C4::Serials;
+use Koha::DateUtils;
 
 my $query = new CGI;
 my $dbh   = C4::Context->dbh;
@@ -74,9 +74,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 if ( $op eq "renew" ) {
+    my $startdate = output_pref( { str => $query->param('startdate'), dateonly => 1, dateformat => 'iso' } );
     ReNewSubscription(
-        $subscriptionid,             $loggedinuser,
-        C4::Dates->new($query->param('startdate'))->output('iso'),  $query->param('numberlength'),
+        $subscriptionid, $loggedinuser,
+        $startdate, $query->param('numberlength'),
         $query->param('weeklength'), $query->param('monthlength'),
         $query->param('note')
     );
@@ -88,11 +89,11 @@ if ($subscription->{'cannotedit'}){
   print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
 }
 
+my $newstartdate = output_pref( { str => $subscription->{enddate}, dateonly => 1 } )
+    or output_pref( { dt => dt_from_string, dateonly => 1 } );
+
 $template->param(
-    startdate => format_date(
-             $subscription->{enddate}
-          || POSIX::strftime( "%Y-%m-%d", localtime )
-    ),
+    startdate      => $newstartdate,
     numberlength   => $subscription->{numberlength},
     weeklength     => $subscription->{weeklength},
     monthlength    => $subscription->{monthlength},

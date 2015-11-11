@@ -23,7 +23,6 @@ use Date::Calc qw(Today Day_of_Year Week_of_Year Add_Delta_Days Add_Delta_YM);
 use C4::Koha;
 use C4::Biblio;
 use C4::Auth;
-use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Acquisition;
 use C4::Output;
 use C4::Context;
@@ -33,6 +32,7 @@ use C4::Serials::Frequency;
 use C4::Serials::Numberpattern;
 use C4::Letters;
 use Koha::AdditionalField;
+use Koha::DateUtils;
 use Carp;
 
 #use Smart::Comments;
@@ -322,14 +322,16 @@ sub redirect_add_subscription {
     my $opacdisplaycount  = $query->param('opacdisplaycount');
     my $location          = $query->param('location');
     my $skip_serialseq    = $query->param('skip_serialseq');
-    my $startdate = format_date_in_iso( $query->param('startdate') );
-    my $enddate = format_date_in_iso( $query->param('enddate') );
-    my $firstacquidate  = format_date_in_iso($query->param('firstacquidate'));
+
+    my $startdate      = output_pref( { str => $query->param('startdate'),      dateonly => 1, dateformat => 'iso' } );
+    my $enddate        = output_pref( { str => $query->param('enddate'),        dateonly => 1, dateformat => 'iso' } );
+    my $firstacquidate = output_pref( { str => $query->param('firstacquidate'), dateonly => 1, dateformat => 'iso' } );
+
     if(!defined $enddate || $enddate eq '') {
         if($subtype eq "issues") {
-            $enddate = _guess_enddate($firstacquidate, $periodicity, $numberlength, $weeklength, $monthlength);
+            $enddate = _guess_enddate($firstacquidate, $periodicity, $numberlength, $weeklength, $monthlength)
         } else {
-            $enddate = _guess_enddate($startdate, $periodicity, $numberlength, $weeklength, $monthlength);
+            $enddate = _guess_enddate($startdate, $periodicity, $numberlength, $weeklength, $monthlength)
         }
     }
 
@@ -361,12 +363,16 @@ sub redirect_mod_subscription {
     my $aqbooksellerid = $query->param('aqbooksellerid');
     my $biblionumber = $query->param('biblionumber');
     my $aqbudgetid = $query->param('aqbudgetid');
-    my $startdate = format_date_in_iso($query->param('startdate'));
-    my $firstacquidate = format_date_in_iso( $query->param('firstacquidate') );
-    my $nextacquidate = $query->param('nextacquidate') ?
-                            format_date_in_iso($query->param('nextacquidate')):
-                            $firstacquidate;
-    my $enddate = format_date_in_iso($query->param('enddate'));
+
+    my $startdate      = output_pref( { str => $query->param('startdate'),      dateonly => 1, dateformat => 'iso' } );
+    my $enddate        = output_pref( { str => $query->param('enddate'),        dateonly => 1, dateformat => 'iso' } );
+    my $firstacquidate = output_pref( { str => $query->param('firstacquidate'), dateonly => 1, dateformat => 'iso' } );
+
+    my $nextacquidate  = $query->param('nextacquidate');
+    $nextacquidate = $nextacquidate
+        ? output_pref( { str => $nextacquidate, dateonly => 1, dateformat => 'iso' } )
+        : $firstacquidate;
+
     my $periodicity = $query->param('frequency');
 
     my $subtype = $query->param('subtype');

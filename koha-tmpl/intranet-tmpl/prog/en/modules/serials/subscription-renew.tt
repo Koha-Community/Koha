@@ -1,6 +1,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials subscription renew #[% subscriptionid %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
 <style type="text/css">
    #custom-doc { width:39.85em;*width:38.86em;min-width:531px; margin:auto; text-align:left; }
    </style>
@@ -23,7 +24,12 @@
 		<input type="hidden" name="op" value="renew" />
 		<input type="hidden" name="subscriptionid" value="[% subscriptionid %]" />
 		<fieldset class="rows"><legend>Subscription renewal for [% bibliotitle %]</legend>
-		<ol><li><label for="startdate">Start date: </label><input type="text" id="startdate" name="startdate" value="[% startdate %]" /></li>
+        <ol>
+            <li>
+                <label for="startdate">Start date: </label>
+                <input type="text" size="10" id="startdate" name="startdate" value="[% startdate %]" class="datepicker"/>
+                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+            </li>
 		<li><fieldset>
 		<legend>Subscription length:</legend>
 		<ol><li><label for="numberlength">Number of num:</label><input type="text" id="numberlength" name="numberlength" value="[% numberlength %]" /></li>

@@ -24,11 +24,11 @@ use warnings;
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Koha;
-use C4::Dates qw/format_date/;
 use C4::Serials;
 use C4::Letters;
 use C4::Output;
 use C4::Context;
+
 use List::MoreUtils qw/uniq/;
 
 
@@ -114,15 +114,8 @@ if (@subscriptionid){
     $subs->{opacnote}     =~ s/\n/\<br\/\>/g;
     $subs->{missinglist}  =~ s/\n/\<br\/\>/g;
     $subs->{recievedlist} =~ s/\n/\<br\/\>/g;
+
     ##these are display information
-    $subs->{startdate}     = format_date( $subs->{startdate} );
-    $subs->{histstartdate} = format_date( $subs->{histstartdate} );
-    if ( !defined $subs->{enddate} || $subs->{enddate} eq '0000-00-00' ) {
-        $subs->{enddate} = '';
-    }
-    else {
-        $subs->{enddate} = format_date( $subs->{enddate} );
-    }
     $subs->{'abouttoexpire'}=abouttoexpire($subs->{'subscriptionid'});
     $subs->{'subscriptionexpired'}=HasSubscriptionExpired($subs->{'subscriptionid'});
     $subs->{'subscriptionid'} = $subscriptionid;  # FIXME - why was this lost ?

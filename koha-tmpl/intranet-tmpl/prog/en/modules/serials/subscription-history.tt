@@ -3,6 +3,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Subscription history</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
 </head>
 
 <body id="ser_subscription_history" class="ser">
@@ -25,11 +26,17 @@
             <table>
               <tr>
                 <td>Subscription start date</td>
-                <td><input type="text" name="histstartdate" value="[% histstartdate | $KohaDates %]" /> (start date of the 1st subscription)</td>
+                <td>
+                    <input type="text" size="10" name="histstartdate" value="[% histstartdate | $KohaDates %]" class="datepickerfrom" /> (start date of the 1st subscription)
+                    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                </td>
               </tr>
               <tr>
                 <td>Subscription end date</td>
-                <td><input type="text" name="histenddate" value="[% histenddate | $KohaDates %]" />(if empty, subscription is still active)</td>
+                <td>
+                    <input type="text" size="10" name="histenddate" value="[% histenddate | $KohaDates %]" class="datepickerto" />(if empty, subscription is still active)
+                    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                </td>
               </tr>
               <tr>
                 <td>Received issues</td>

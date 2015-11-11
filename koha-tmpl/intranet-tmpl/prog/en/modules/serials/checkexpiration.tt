@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Check expiration</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -70,7 +71,7 @@
         [% END %]
 
         <li><label for="date" class="required" title="Required field">Expiring before:</label>
-        <input id="date" type="text" name="date" size="10" value="[% date %]" class="focus datepicker" />
+        <input id="date" type="text" name="date" size="10" value="[% date | $KohaDates %]" class="focus datepicker" />
         <span class="required">Required</span>
 			<div class="hint">[% INCLUDE 'date-format.inc' %]</div></li>
 			</ol>
@@ -89,7 +90,7 @@
     [% IF ( issn ) %]
         with ISSN matching <b>[% issn %]</b>
     [% END %]
-        will expire before <b>[% date %]</b>
+        will expire before <b>[% date | $KohaDates %]</b>
 </p>
 <table>
         <tr>
@@ -127,7 +128,7 @@
                 [% subscriptions_loo.internalnotes %]
             </td>
             <td>
-                [% subscriptions_loo.expirationdate %]
+                [% subscriptions_loo.expirationdate | $KohaDates %]
             </td>
             <td><a href="/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptions_loo.subscriptionid %]">Edit</a></td>
 			<td><a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscriptions_loo.subscriptionid %]" onclick="popup([% subscriptions_loo.subscriptionid %]); return false;">Renew</a></td>
