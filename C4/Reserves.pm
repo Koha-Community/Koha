@@ -1157,7 +1157,7 @@ sub ModReserve {
 
         if ( defined( $suspend_until ) ) {
             if ( $suspend_until ) {
-                $suspend_until = eval { output_pref( { dt => dt_from_string( $suspend_until ), dateonly => 1 }); };
+                $suspend_until = eval { output_pref( { dt => dt_from_string( $suspend_until ), dateonly => 1, dateformat => 'iso' }); };
                 $dbh->do("UPDATE reserves SET suspend = 1, suspend_until = ? WHERE reserve_id = ?", undef, ( $suspend_until, $reserve_id ) );
             } else {
                 $dbh->do("UPDATE reserves SET suspend_until = NULL WHERE reserve_id = ?", undef, ( $reserve_id ) );

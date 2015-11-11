@@ -137,7 +137,7 @@ ModReserve({
 $reserve = GetReserve( $reserve_id );
 ok( $reserve->{'priority'} eq '4', "Test GetReserve(), priority changed correctly" );
 ok( $reserve->{'suspend'}, "Test GetReserve(), suspend hold" );
-ok( $reserve->{'suspend_until'} eq '2013-01-01 00:00:00', "Test GetReserve(), suspend until date" );
+is( $reserve->{'suspend_until'}, '2013-01-01 00:00:00', "Test GetReserve(), suspend until date" );
 
 ToggleSuspend( $reserve_id );
 $reserve = GetReserve( $reserve_id );
