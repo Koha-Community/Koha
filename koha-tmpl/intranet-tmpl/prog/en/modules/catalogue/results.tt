@@ -3,6 +3,16 @@
 <title>Koha &rsaquo; Catalog &rsaquo; [% IF ( searchdesc ) %]Results of search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %][% ELSE %]You did not specify any search criteria[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'browser-strings.inc' %]
+[% IF BiblioDefaultViewmarc %]
+    [% SET DetailPage="MARCdetail.pl" %]
+[% ELSIF BiblioDefaultViewlabeled_marc %]
+    [% SET DetailPage="labeledMARCdetail.pl" %]
+[% ELSIF BiblioDefaultViewisbd %]
+    [% SET DetailPage="ISBDdetail.pl" %]
+[% ELSE %]
+    [% SET DetailPage="detail.pl" %]
+[% END %]
+
 <!--[if lt IE 9]>
 <script type="text/javascript" src="[% interface %]/lib/shims/json2.min.js"></script>
 <![endif]-->
@@ -447,16 +457,16 @@ var holdForPatron = function () {
                             [% IF ( AmazonCoverImages || LocalCoverImages ) %]
                                 <td>
                                     [% IF ( LocalCoverImages) %]
-                                        <a class="p1" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
+                                        <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
                                         <span title="[% SEARCH_RESULT.biblionumber |url %]" class="[% SEARCH_RESULT.biblionumber %]" id="local-thumbnail[% loop.count %]"></span>
                                         </a>
                                     [% END %]
                                     [% IF ( AmazonCoverImages ) %]
                                         [% IF ( SEARCH_RESULT.normalized_isbn ) %]
-                                            <a class="p1" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
+                                            <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
                                             <img src="https://images-na.ssl-images-amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" />
                                         [% ELSIF ( !LocalCoverImages ) %]
-                                            <a class="p1 no-amazon-cover" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
+                                            <a class="p1 no-amazon-cover" href="/cgi-bin/koha/catalogue/[% DetailPage %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
                                             <img src="https://images-na.ssl-images-amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" class="thumbnail" />
                                         [% END %]
                                         </a>
