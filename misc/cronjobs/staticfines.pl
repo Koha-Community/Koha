@@ -103,7 +103,7 @@ foreach (@pcategories) {
 }
 
 use vars qw(@borrower_fields @item_fields @other_fields);
-use vars qw($fldir $libname $control $mode $delim $dbname $today_iso $today_days);
+use vars qw($fldir $libname $control $mode $delim $dbname $today $today_iso $today_days);
 use vars qw($filename);
 
 CHECK {
@@ -135,23 +135,24 @@ if (defined $borrowernumberlimit) {
 }
 my $overdueItemsCounted = 0;
 my %calendars           = ();
-$today_iso  = output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } );
+$today      = dt_from_string;
+$today_iso  = output_pref( { dt => $today, dateonly => 1, dateformat => 'iso' } );
 my ($tyear, $tmonth, $tday) = split( /-/, $today_iso );
 $today_days = Date_to_Days( $tyear, $tmonth, $tday );
 
 for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
     next if $data->[$i]->{'itemlost'};
-    my $datedue;
-    my $datedue_days;
+    my ( $datedue, $datedue_days );
     eval {
-    $datedue = eval { output_pref( { dt => dt_from_string( $data->[$i]->{'date_due'} ), dateonly => 1, dateformat => 'iso' } ); };
-    $datedue_days = Date_to_Days( split( /-/, $datedue ) );
+        $datedue = dt_from_string( $data->[$i]->{'date_due'} );
+        my $datedue_iso = output_pref( { dt => $datedue, dateonly => 1, dateformat => 'iso' } );
+        $datedue_days = Date_to_Days( split( /-/, $datedue_iso ) );
     };
     if ($@) {
     warn "Error on date for borrower " . $data->[$i]->{'borrowernumber'} .  ": $@date_due: " . $data->[$i]->{'date_due'} . "\ndatedue_days: " . $datedue_days . "\nSkipping";
     next;
     }
-    my $due_str = eval { output_pref( { dt => dt_from_string( $datedue ), dateonly => 1 } ); };
+    my $due_str = output_pref( { dt => $datedue, dateonly => 1 } );
     unless ( defined $data->[$i]->{'borrowernumber'} ) {
         print STDERR "ERROR in Getoverdues line $i: issues.borrowernumber IS NULL.  Repair 'issues' table now!  Skipping record.\n";
         next;    # Note: this doesn't solve everything.  After NULL borrowernumber, multiple issues w/ real borrowernumbers can pile up.
@@ -191,8 +192,8 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
         $data->[$i],
         $borrower->{'categorycode'},
         $branchcode,
-        dt_from_string( $datedue ),
-        dt_from_string( $today_iso ),
+        $datedue,
+        $today,
     );
 
     # Reassign fine's amount if specified in command-line
