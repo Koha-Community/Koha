@@ -165,16 +165,10 @@ sub AddReserve {
 
     my $dbh     = C4::Context->dbh;
 
-    $resdate = eval { output_pref( { dt => dt_from_string( $resdate ), dateonly => 1, dateformat => 'iso' }); }
-               if ( $resdate );
-    $resdate = eval { output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' }); }
-               unless ( $resdate );
+    $resdate = output_pref( { str => dt_from_string( $resdate ), dateonly => 1, dateformat => 'iso' })
+        or output_pref({ dt => dt_from_string, dateonly => 1, dateformat => 'iso' });
 
-    if ($expdate) {
-        $expdate = eval { output_pref( { dt => dt_from_string( $expdate), dateonly => 1, dateformat => 'iso' } ); };
-    } else {
-        undef $expdate; # make reserves.expirationdate default to null rather than '0000-00-00'
-    }
+    $expdate = output_pref({ str => $expdate, dateonly => 1, dateformat => 'iso' });
 
     if ( C4::Context->preference('AllowHoldDateInFuture') ) {
 
@@ -1978,7 +1972,7 @@ sub _koha_notify_reserve {
             'reserves'  => $reserve,
             'items', $reserve->{'itemnumber'},
         },
-        substitute => { today => eval { output_pref( { dt => dt_from_string, dateonly => 1 } ); } },
+        substitute => { today => output_pref( { dt => dt_from_string, dateonly => 1 } ) },
     );
 
     my $notification_sent = 0; #Keeping track if a Hold_filled message is sent. If no message can be sent, then default to a print message.
