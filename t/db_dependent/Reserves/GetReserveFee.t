@@ -21,9 +21,10 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::MockModule;
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 use C4::Circulation;
 use C4::Reserves qw|AddReserve|;
@@ -48,7 +49,7 @@ $builder->build({
     source => 'Category',
     value  => {
         categorycode          => 'XYZ1',
-        reservefee            => 2.5,
+        reservefee            => 2,
     },
 });
 my $patron1 = $builder->build({
@@ -96,6 +97,7 @@ is( acctlines( $patron1->{borrowernumber} ), $acc1, 'No fee charged for patron 1
 # expect a charge for patron2.
 C4::Circulation::AddIssue( $patron1, $item1->{barcode}, '2015-12-31', 0, undef, 0, {} ); # the date does not really matter
 my $acc2 = acctlines( $patron2->{borrowernumber} );
+t::lib::Mocks::mock_preference('HoldFeeMode', 'not_always');
 my $fee = C4::Reserves::GetReserveFee( $patron2->{borrowernumber}, $biblio->{biblionumber} );
 is( $fee > 0, 1, 'Patron 2 should be charged cf GetReserveFee' );
 C4::Reserves::ChargeReserveFee( $patron2->{borrowernumber}, $fee, $biblio->{title} );
@@ -104,12 +106,16 @@ is( acctlines( $patron2->{borrowernumber} ), $acc2 + 1, 'Patron 2 has been charg
 # If we delete the reserve, there should be no charge
 $dbh->do( "DELETE FROM reserves WHERE reserve_id=?", undef, ( $res1 ) );
 $fee = C4::Reserves::GetReserveFee( $patron2->{borrowernumber}, $biblio->{biblionumber} );
-is( $fee, 0, 'Patron 2 will not be charged now' );
+is( $fee, 0, 'HoldFeeMode=not_always, Patron 2 should not be charged' );
+
+t::lib::Mocks::mock_preference('HoldFeeMode', 'always');
+$fee = C4::Reserves::GetReserveFee( $patron2->{borrowernumber}, $biblio->{biblionumber} );
+is( int($fee), 2, 'HoldFeeMode=always, Patron 2 should be charged' );
 
 # If we delete the second item, there should be a charge
 $dbh->do( "DELETE FROM items WHERE itemnumber=?", undef, ( $item2->{itemnumber} ) );
 $fee = C4::Reserves::GetReserveFee( $patron2->{borrowernumber}, $biblio->{biblionumber} );
-is( $fee > 0, 1, 'Patron 2 should be charged again this time' );
+is( int($fee), 2, 'Patron 2 should be charged again this time' );
 # End of tests
 
 sub acctlines { #calculate number of accountlines for a patron
