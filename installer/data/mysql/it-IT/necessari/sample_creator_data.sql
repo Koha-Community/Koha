@@ -3,7 +3,8 @@
 
 LOCK TABLES `creator_layouts` WRITE;
 /*!40000 ALTER TABLE `creator_layouts` DISABLE KEYS */;
-INSERT INTO `creator_layouts` (`layout_id`, `barcode_type`, `start_label`, `printing_type`, `layout_name`, `guidebox`, `font`, `font_size`, `units`, `callnum_split`, `text_justify`, `format_string`, `layout_xml`, `creator`) VALUES (1,'CODE39',1,'BIBBAR','Test etic. (BIBBAR)',0,'TR',3,'POINT',0,'L','title, author, isbn, issn, itemtype, barcode, itemcallnumber','<opt></opt>','Labels'),
+INSERT INTO `creator_layouts` (`layout_id`, `barcode_type`, `start_label`, `printing_type`, `layout_name`, `guidebox`, `font`, `font_size`, `units`, `callnum_split`, `text_justify`, `format_string`, `layout_xml`, `creator`) VALUES
+(1,'CODE39',1,'BIBBAR','Test etic. (BIBBAR)',0,'TR',3,'POINT',0,'L','title, author, isbn, issn, itemtype, barcode, itemcallnumber','<opt></opt>','Labels'),
 (2,'CODE39',1,'BAR','Test etic. (BAR)',0,'TR',3,'POINT',0,'L','title, author, isbn, issn, itemtype, barcode, itemcallnumber','<opt></opt>','Labels'),
 (3,'CODE39',1,'BAR','Test tessere',0,'TR',10,'POINT',0,'L','barcode','<opt page_side="F" units="POINT">
   <images name="image_1" Dx="72" Ox="0" Oy="0" Sx="0" Sy="0" Tx="4.5" Ty="63">

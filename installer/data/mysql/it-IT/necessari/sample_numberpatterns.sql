@@ -9,7 +9,7 @@ VALUES
     NULL, NULL, NULL, NULL, NULL, NULL,
     NULL, NULL, NULL, NULL, NULL, NULL),
 
-    ('Volume, Number, Issue', 2, 'Volume Numero Copia 1', 'Vol.{X}, Number {Y}, Issue {Z}',
+    ('Volume, Number, Issue', 2, 'Volume Numero Copia 1', 'Vol.{X}, Num. {Y}, Fasc. {Z}',
     'Volume', 1, 48, 99999, 1, NULL,
     'Number', 1, 4, 12, 1, NULL,
     'Issue', 1, 1, 4, 1, NULL),

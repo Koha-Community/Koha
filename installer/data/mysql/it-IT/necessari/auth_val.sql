@@ -30,6 +30,8 @@ INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('LOC','S
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('LOC','GEN','Sezione generale');
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('LOC','AV','Audiovideo');
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('LOC','REF','Strumenti di reference');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('LOC','CART','Scaffale smistamento');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('LOC','PROC','Centro lavorazione');
 
 -- collection codes for an item
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('CCODE','FIC','Fiction');
@@ -85,7 +87,7 @@ INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'PAT', 'Utenti');
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'ACQ', 'Acquisizione');
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'ACC', 'Accounts');
-INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'SER', 'Serials');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('REPORT_GROUP', 'SER', 'Seriali');
 
 -- SIP2 media types
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MEDIA_TYPE', '000', 'Other');
@@ -101,15 +103,15 @@ INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MED
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SIP_MEDIA_TYPE', '010', 'Libro con audiocassette');
 
 -- order cancellation reasons
-INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('ORDER_CANCELLATION_REASON', 0, 'No reason provided');
-INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('ORDER_CANCELLATION_REASON', 1, 'Out of stock');
-INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('ORDER_CANCELLATION_REASON', 2, 'Restocking');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('ORDER_CANCELLATION_REASON', 0, 'Nessuna ragione fornita');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('ORDER_CANCELLATION_REASON', 1, 'Fuori mercato');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('ORDER_CANCELLATION_REASON', 2, 'In ristampa');
 
 -- Desired formats for requesting new materials
-INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES ('SUGGEST_FORMAT', 'BOOK', 'Book', 'Book');
-INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES ('SUGGEST_FORMAT', 'LP', 'Large print', 'Large print');
-INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES ('SUGGEST_FORMAT', 'EBOOK', 'EBook', 'Ebook');
-INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES ('SUGGEST_FORMAT', 'AUDIOBOOK', 'Audiobook', 'Audiobook');
+INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES ('SUGGEST_FORMAT', 'BOOK', 'Libro', 'Libro');
+INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES ('SUGGEST_FORMAT', 'LP', 'A caratteri ingranditi', 'A caratteri ingranditi');
+INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES ('SUGGEST_FORMAT', 'EBOOK', 'Ebook', 'Ebook');
+INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES ('SUGGEST_FORMAT', 'AUDIOBOOK', 'Audiolibro', 'Audiolibro');
 INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES ('SUGGEST_FORMAT', 'DVD', 'DVD', 'DVD');
 
 SET FOREIGN_KEY_CHECKS=1;
