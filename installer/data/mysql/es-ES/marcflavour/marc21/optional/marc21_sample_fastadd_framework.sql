@@ -85,4 +85,3 @@ UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsub
 UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = 'r' AND frameworkcode = 'FA';
 UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = 's' AND frameworkcode = 'FA';
 UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = 'x' AND frameworkcode = 'FA';
-

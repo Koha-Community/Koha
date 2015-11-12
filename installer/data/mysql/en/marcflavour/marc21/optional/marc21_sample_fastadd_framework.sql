@@ -1,5 +1,5 @@
 INSERT IGNORE INTO biblio_framework VALUES
-		('FA', 'Schnellaufnahme');
+		('FA', 'Fast Add Framework');
 
 INSERT IGNORE INTO marc_tag_structure (tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, frameworkcode)
 SELECT tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, 'FA'
@@ -86,4 +86,3 @@ UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsub
 UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = 'r' AND frameworkcode = 'FA';
 UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = 's' AND frameworkcode = 'FA';
 UPDATE marc_subfield_structure SET hidden ='0' WHERE tagfield = '952' AND tagsubfield = 'x' AND frameworkcode = 'FA';
-
