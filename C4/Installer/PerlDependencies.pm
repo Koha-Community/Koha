@@ -317,11 +317,6 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '5.43'
     },
-    'MARC::Crosswalk::DublinCore' => {
-        'usage'    => 'Core',
-        'required' => '1',
-        'min_ver'  => '0.02'
-    },
     'CGI::Session::Serialize::yaml' => {
         'usage'    => 'Core',
         'required' => '1',
