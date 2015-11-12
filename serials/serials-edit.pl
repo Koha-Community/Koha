@@ -128,7 +128,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my @serialdatalist;
 my %processedserialid;
 
-my $today = output_pref( dt_from_string );
+my $today = output_pref( { dt => dt_from_string, dateonly => 1 } );
+
 foreach my $serialid (@serialids) {
 
     #filtering serialid for duplication
