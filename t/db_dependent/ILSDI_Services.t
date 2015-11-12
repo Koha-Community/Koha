@@ -6,7 +6,9 @@ use C4::Members qw/AddMember GetMember GetBorrowercategory/;
 use Koha::Libraries;
 use CGI qw ( -utf8 );
 
-use Test::More tests => 15;
+use Test::More tests => 16;
+use t::lib::Mocks;
+use t::lib::TestBuilder;
 
 BEGIN {
     use_ok('C4::ILSDI::Services');
@@ -90,3 +92,109 @@ my $borrower = GetMember( borrowernumber => $borrowernumber );
 
 }
 
+# End transaction
+$dbh->rollback;
+$dbh->{AutoCommit} = 1;
+$dbh->{RaiseError} = 0;
+
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
+
+$schema->resultset( 'Borrower' )->delete_all;
+$schema->resultset( 'BorrowerAttribute' )->delete_all;
+$schema->resultset( 'BorrowerAttributeType' )->delete_all;
+$schema->resultset( 'Category' )->delete_all;
+$schema->resultset( 'Item' )->delete_all; # 'Branch' deps. on this
+$schema->resultset( 'Branch' )->delete_all;
+
+
+{ # GetPatronInfo/GetBorrowerAttributes test for extended patron attributes:
+
+    # Configure Koha to enable ILS-DI server and extended attributes:
+    t::lib::Mocks::mock_preference( 'ILS-DI', 1 );
+    t::lib::Mocks::mock_preference( 'ExtendedPatronAttributes', 1 );
+
+    my $builder = t::lib::TestBuilder->new;
+
+    # Set up a library/branch for our user to belong to:
+    my $lib = $builder->build( {
+        source => 'Branch',
+        value => {
+            branchcode => 'T_ILSDI',
+        }
+    } );
+
+    # Create a new category for user to belong to:
+    my $cat = $builder->build( {
+        source => 'Category',
+        value  => {
+            category_type                 => 'A',
+            BlockExpiredPatronOpacActions => -1,
+        }
+    } );
+
+    # Create a new attribute type:
+    my $attr_type = $builder->build( {
+        source => 'BorrowerAttributeType',
+        value  => {
+            code                      => 'DOORCODE',
+            opac_display              => 0,
+            authorised_value_category => '',
+            class                     => '',
+        }
+    } );
+
+    # Create a new user:
+    my $brwr = $builder->build( {
+        source => 'Borrower',
+        value  => {
+            categorycode => $cat->{'categorycode'},
+            branchcode   => $lib,
+        }
+    } );
+
+    # Authorised value:
+    my $auth = $builder->build( {
+        source => 'AuthorisedValue',
+        value  => {
+            category => $cat->{'categorycode'}
+        }
+    } );
+
+    # Set the new attribute for our user:
+    my $attr = $builder->build( {
+        source => 'BorrowerAttribute',
+        value  => {
+            borrowernumber => $brwr->{'borrowernumber'},
+            code           => $attr_type->{'code'},
+            attribute      => '1337',
+            password       => undef,
+        }
+    } );
+
+    # Prepare and send web request for IL-SDI server:
+    my $query = new CGI;
+    $query->param( 'service', 'GetPatronInfo' );
+    $query->param( 'patron_id', $brwr->{'borrowernumber'} );
+    $query->param( 'show_attributes', '1' );
+
+    my $reply = C4::ILSDI::Services::GetPatronInfo( $query );
+
+    # Build a structure for comparision:
+    my $cmp = {
+        category_code     => $attr_type->{'category_code'},
+        class             => $attr_type->{'class'},
+        code              => $attr->{'code'},
+        description       => $attr_type->{'description'},
+        display_checkout  => $attr_type->{'display_checkout'},
+        password          => undef,
+        value             => $attr->{'attribute'},
+        value_description => undef,
+    };
+
+    # Check results:
+    is_deeply( $reply->{'attributes'}, [ $cmp ] );
+}
+
+# Cleanup
+$schema->storage->txn_rollback;
