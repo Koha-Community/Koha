@@ -14,9 +14,10 @@ use C4::Debug;
 use C4::Bookseller;
 use C4::Biblio;
 use C4::Budgets;
+use C4::Items;
 use Koha::DateUtils;
 use t::lib::Mocks;
-use Test::More tests => 48;
+use Test::More tests => 49;
 
 BEGIN {
     use_ok('C4::Serials');
@@ -31,6 +32,8 @@ $dbh->{RaiseError} = 1;
 # This could/should be used for all untested methods
 my @methods = ('updateClaim');
 can_ok('C4::Serials', @methods);
+
+$dbh->do(q|UPDATE marc_subfield_structure SET value_builder="callnumber.pl" where kohafield="items.itemcallnumber" and frameworkcode=''|);
 
 my $booksellerid = C4::Bookseller::AddBookseller(
     {
@@ -111,6 +114,7 @@ if (not $frequency->{unit}) {
     $frequency->{issuesperunit} = 1;
     $frequency->{description} = "Frequency created by t/db_dependant/Serials.t";
     $subscriptioninformation->{periodicity} = AddSubscriptionFrequency($frequency);
+    $subscriptioninformation->{serialsadditems} = 1;
 
     ModSubscription( @$subscriptioninformation{qw(
         librarian branchcode aqbooksellerid cost aqbudgetid startdate
@@ -135,6 +139,21 @@ ok(C4::Serials::GetSerialStatusFromSerialId($serial->{serialid}), 'test getting 
 
 isa_ok(C4::Serials::GetSerialInformation($serial->{serialid}), 'HASH', 'test getting Serial Information');
 
+subtest 'Values should not be erased on editing' => sub {
+    plan tests => 1;
+    ( $biblionumber, $biblioitemnumber ) = get_biblio();
+    my ( $icn_tag, $icn_sf ) = GetMarcFromKohaField( 'items.itemcallnumber', '' );
+    my $item_record    = new MARC::Record;
+    my $itemcallnumber = 'XXXmy itemcallnumberXXX';
+    $item_record->append_fields( MARC::Field->new( '080', '', '', "a" => "default" ), MARC::Field->new( $icn_tag, '', '', $icn_sf => $itemcallnumber ), );
+    my ( undef, undef, $itemnumber ) = C4::Items::AddItemFromMarc( $item_record, $biblionumber );
+    my $serialid = C4::Serials::NewIssue( "serialseq", $subscriptionid, $biblionumber, 1, undef, undef, "publisheddatetext", "notes" );
+    C4::Serials::AddItem2Serial( $serialid, $itemnumber );
+    my $serial_info = C4::Serials::GetSerialInformation($serialid);
+    my ($itemcallnumber_info) = grep { $_->{kohafield} eq 'items.itemcallnumber' } @{ $serial_info->{items}[0]->{iteminformation} };
+    like( $itemcallnumber_info->{marc_value}, qr|value="$itemcallnumber"| );
+};
+
 # Delete created frequency
 if ($old_frequency) {
     my $freq_to_delete = $subscriptioninformation->{periodicity};
@@ -152,7 +171,6 @@ if ($old_frequency) {
 
     DelSubscriptionFrequency($freq_to_delete);
 }
-
 
 # Test calling subs without parameters
 is(C4::Serials::AddItem2Serial(), undef, 'test adding item to serial');
@@ -317,3 +335,13 @@ subtest "Do not generate an expected if one already exists" => sub {
 };
 
 $dbh->rollback;
+
+sub get_biblio {
+    my $bib = MARC::Record->new();
+    $bib->append_fields(
+        MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
+        MARC::Field->new('245', ' ', ' ', a => 'Silence in the library'),
+    );
+    my ($bibnum, $bibitemnum) = AddBiblio($bib, '');
+    return ($bibnum, $bibitemnum);
+}
