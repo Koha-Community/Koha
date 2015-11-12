@@ -1,5 +1,6 @@
 [% USE To %]
 [% USE AuthorisedValues %]
+[% USE KohaDates %]
 {
     "sEcho": [% sEcho %],
     "iTotalRecords": [% iTotalRecords %],
@@ -15,6 +16,8 @@
                     "[% data.cardnumber | html %]",
                 "dt_name":
                     "<span style='white-space:nowrap'><a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.borrowernumber %]'>[% INCLUDE 'patron-title.inc' borrowernumber = data.borrowernumber category_type = data.category_type firstname = data.firstname surname = data.surname othernames = data.othernames invert_name = 1 %]</a><br />[% INCLUDE escape_address data = data %]</span>",
+		"dt_dateofbirth":
+		    "[% data.dateofbirth | $KohaDates %]",
                 "dt_category":
                     "[% data.category_description |html %] ([% data.category_type |html %])",
                 "dt_branch":

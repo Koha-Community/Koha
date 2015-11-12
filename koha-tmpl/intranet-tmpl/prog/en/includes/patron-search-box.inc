@@ -14,7 +14,7 @@ $(document).ready(function(){
     .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
         return $( "<li></li>" )
         .data( "ui-autocomplete-item", item )
-        .append( "<a>" + item.surname + ", " + item.firstname + " (" + item.cardnumber + ") <small>" + item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>" )
+        .append( "<a>" + item.surname + ", " + item.firstname + " (" + item.cardnumber + ") <small>" + item.dateofbirth + " " + item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>" )
         .appendTo( ul );
     };
 

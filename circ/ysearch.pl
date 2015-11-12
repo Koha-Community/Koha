@@ -29,6 +29,7 @@ use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Auth qw/check_cookie_auth/;
 use Koha::Borrowers;
+use Koha::DateUtils qw/format_sqldatetime/;
 
 use JSON qw( to_json );
 
@@ -83,6 +84,7 @@ while ( my $b = $borrowers_rs->next ) {
         surname        => $b->surname    // '',
         firstname      => $b->firstname  // '',
         cardnumber     => $b->cardnumber // '',
+	dateofbirth    => format_sqldatetime($b->dateofbirth, undef, undef, 1) // '',
         address        => $b->address    // '',
         city           => $b->city       // '',
         zipcode        => $b->zipcode    // '',
