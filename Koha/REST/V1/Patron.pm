@@ -18,12 +18,13 @@ package Koha::REST::V1::Patron;
 use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
+use Koha::Account;
 use Koha::AuthUtils qw(hash_password);
 use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::Libraries;
 
-use Scalar::Util qw(blessed);
+use Scalar::Util qw(blessed looks_like_number);
 use Try::Tiny;
 
 sub list {
@@ -142,6 +143,36 @@ sub delete {
     } else {
         return $c->$cb({}, 400);
     }
+}
+
+sub pay {
+    my ($c, $args, $cb) = @_;
+
+    my $patron = Koha::Patrons->find($args->{borrowernumber});
+    unless ($patron) {
+        return $c->$cb({error => "Patron not found"}, 404);
+    }
+
+    my $body = $c->req->json;
+    my $amount = $body->{amount};
+    my $note = $body->{note} || '';
+
+    unless ($amount && looks_like_number($amount)) {
+        return $c->$cb({error => "Invalid amount"}, 400);
+    }
+
+    Koha::Account->new(
+        {
+            patron_id => $args->{borrowernumber},
+        }
+      )->pay(
+        {
+            amount => $amount,
+            note => $note,
+        }
+      );
+
+    return $c->$cb('', 204);
 }
 
 1;

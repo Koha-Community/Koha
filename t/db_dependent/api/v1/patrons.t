@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 78;
+use Test::More tests => 89;
 use Test::Mojo;
 use t::lib::TestBuilder;
 
@@ -25,6 +25,8 @@ use C4::Auth;
 use C4::Context;
 
 use Koha::Database;
+use Koha::Patron;
+use Koha::Account::Lines;
 
 BEGIN {
     use_ok('Koha::Object');
@@ -116,7 +118,7 @@ my $loggedinuser = $builder->build({
     value => {
         branchcode   => $branchcode,
         categorycode => $categorycode,
-        flags        => 16 # borrowers flag
+        flags        => 1040 # borrowers and updatecharges (2^4 | 2^10)
     }
 });
 
@@ -272,5 +274,56 @@ $tx = $t->ua->build_tx(DELETE => "/api/v1/patrons/" . $newpatron->{ borrowernumb
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200, 'Patron deleted successfully');
+
+# Payment tests
+my $borrower2 = $builder->build({
+    source => 'Borrower',
+    value => {
+        branchcode   => $branchcode,
+        categorycode => $categorycode,
+    }
+});
+my $borrowernumber2 = $borrower2->{borrowernumber};
+
+$dbh->do(q|
+    INSERT INTO accountlines (borrowernumber, amount, accounttype, amountoutstanding)
+    VALUES (?, 26, 'A', 26)
+    |, undef, $borrowernumber2);
+
+$t->post_ok("/api/v1/patrons/$borrowernumber2/payment" => json => {'amount' => 8})
+    ->status_is(401);
+
+my $post_data2 = {
+    'amount' => 24,
+    'note' => 'Partial payment'
+};
+
+$tx = $t->ua->build_tx(POST => "/api/v1/patrons/8789798797/payment" => json => $post_data2);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+$t->request_ok($tx)
+  ->status_is(404);
+
+$tx = $t->ua->build_tx(POST => "/api/v1/patrons/$borrowernumber2/payment" => json => {amount => 0});
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+$t->request_ok($tx)
+  ->status_is(400);
+
+$tx = $t->ua->build_tx(POST => "/api/v1/patrons/$borrowernumber2/payment" => json => {amount => 'foo'});
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+$t->request_ok($tx)
+  ->status_is(400);
+
+$tx = $t->ua->build_tx(POST => "/api/v1/patrons/$borrowernumber2/payment" => json => $post_data2);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+$t->request_ok($tx)
+  ->status_is(204);
+
+my $accountline_partiallypaid = Koha::Account::Lines->search({'borrowernumber' => $borrowernumber2, 'amount' => 26})->unblessed()->[0];
+
+is($accountline_partiallypaid->{amountoutstanding}, '2.000000');
 
 $schema->storage->txn_rollback;

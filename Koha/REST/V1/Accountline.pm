@@ -19,8 +19,11 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
+use Scalar::Util qw( looks_like_number );
+
 use C4::Auth qw( haspermission );
 use Koha::Account::Lines;
+use Koha::Account;
 
 sub list {
     my ($c, $args, $cb) = @_;
@@ -47,5 +50,39 @@ sub edit {
 
     return $c->$cb($accountline->unblessed(), 200);
 }
+
+
+sub pay {
+    my ($c, $args, $cb) = @_;
+
+    my $accountline = Koha::Account::Lines->find($args->{accountlines_id});
+    unless ($accountline) {
+        return $c->$cb({error => "Accountline not found"}, 404);
+    }
+
+    my $body = $c->req->json;
+    my $amount = defined $body->{amount};
+    my $note = $body->{note} || '';
+
+    if ($amount && !looks_like_number($amount)) {
+        return $c->$cb({error => "Invalid amount"}, 400);
+    }
+
+    Koha::Account->new(
+        {
+            patron_id => $accountline->borrowernumber,
+        }
+      )->pay(
+        {
+            lines  => [$accountline],
+            amount => $amount,
+            note => $note,
+        }
+      );
+
+    $accountline = Koha::Account::Lines->find($args->{accountlines_id});
+    return $c->$cb($accountline->unblessed(), 200);
+}
+
 
 1;
