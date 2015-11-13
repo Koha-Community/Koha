@@ -45,7 +45,7 @@ my $do_it            = $input->param('do_it');
 my $output           = $input->param("output");
 my $basename         = $input->param("basename");
 my $transaction_type = $input->param("transaction_type") || 'ACT';
-my $branchcode       = $input->param("branch") || C4::Context->userenv->{'branch'};
+my $manager_branchcode       = $input->param("branch") || C4::Context->userenv->{'branch'};
 our $sep = $input->param("sep") // ',';
 $sep = "\t" if ($sep eq 'tabulation');
 
@@ -88,8 +88,8 @@ if ($do_it) {
     }
 
     my $whereBranchCode = '';
-    if ($branchcode ne 'ALL') {
-        $whereBranchCode = "AND bo.branchcode = '$branchcode'";
+    if ($manager_branchcode ne 'ALL') {
+        $whereBranchCode = "AND m.branchcode = '$manager_branchcode'";
     }
 
     ### $transaction_type;
@@ -98,7 +98,7 @@ if ($do_it) {
     SELECT round(amount,2) AS amount, description,
         bo.surname AS bsurname, bo.firstname AS bfirstname, m.surname AS msurname, m.firstname AS mfirstname,
         bo.cardnumber, br.branchname, bo.borrowernumber,
-        al.borrowernumber, DATE(al.date) as date, al.accounttype, al.amountoutstanding,
+        al.borrowernumber, DATE(al.date) as date, al.accounttype, al.amountoutstanding, al.note,
         bi.title, bi.biblionumber, i.barcode, i.itype
         FROM accountlines al
         LEFT JOIN borrowers bo ON (al.borrowernumber = bo.borrowernumber)
@@ -124,7 +124,17 @@ if ($do_it) {
             ### date : $row->{date}
 
             push (@loopresult, $row);
-            $grantotal += abs($row->{amount});
+            if($transaction_type eq 'ACT' && ($row->{accounttype} !~ /^C$|^CR$|^LR$|^Pay$/)){
+                pop @loopresult;
+                next;
+            }
+            if($row->{accounttype} =~ /^C$|^CR$|^LR$/){
+                $grantotal -= abs($row->{amount});
+                $row->{amount} = '-' . $row->{amount};
+            }elsif($row->{accounttype} eq 'FORW' || $row->{accounttype} eq 'W'){
+            }else{
+                $grantotal += abs($row->{amount});
+            }
         #}
     }
 
@@ -182,7 +192,7 @@ $template->param(
     beginDate        => dt_from_string($fromDate),
     endDate          => dt_from_string($toDate),
     transaction_type => $transaction_type,
-    branchloop       => C4::Branch::GetBranchesLoop($branchcode),
+    branchloop       => C4::Branch::GetBranchesLoop($manager_branchcode),
     manualinv_types  => $manualinv_types,
     CGIsepChoice => GetDelimiterChoices,
 );

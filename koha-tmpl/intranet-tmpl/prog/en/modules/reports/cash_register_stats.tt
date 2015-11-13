@@ -130,6 +130,12 @@ $(document).ready(function() {
                         <option value="C">Credit</option>
                         [% END %]
 
+                        [% IF transaction_type == "CR" %]
+                        <option value="CR" selected="selected">Credit (item returned)</option>
+                        [% ELSE %]
+                        <option value="CR">Credit (item returned)</option>
+                        [% END %]
+
                         [% IF transaction_type == "FORW" %]
                         <option value="FORW" selected="selected">Write off</option>
                         [% ELSE %]
@@ -189,7 +195,7 @@ $(document).ready(function() {
                     </select>
                 </li>
                 <li>
-                    <label>Library</label>
+                    <label>Transaction branch</label>
                     <select name="branch" id="branch">
                         <option value="ALL">All</option>
                         [% FOREACH branchloo IN branchloop %]
@@ -245,9 +251,10 @@ $(document).ready(function() {
             <th>Manager name</th>
             <th>Patron cardnumber</th>
             <th>Patron name</th>
-            <th>Library</th>
+            <th>Transaction branch</th>
             <th>Transaction date</th>
             <th>Transaction type</th>
+            <th>Notes</th>
             <th>Amount</th>
             <th>Biblio title</th>
             <th>Barcode</th>
@@ -292,6 +299,7 @@ $(document).ready(function() {
                         [% END %]
                     [% END %]
                 </td>
+                <td>[% loopresul.note %]</td>
                 <td style="text-align:right;">[% loopresul.amount %]</td>
                 <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopresul.biblionumber %]">[% loopresul.title %]</a></td>
                 <td>[% loopresul.barcode %]</td>
@@ -300,9 +308,11 @@ $(document).ready(function() {
         [% END %]
         <tfoot>
         <tr>
-            <th colspan="6" style="text-align:right;">TOTAL</th>
+            [% IF transaction_type == "ACT" %]
+            <th colspan="7" style="text-align:right;">TOTAL</th>
             <th style="text-align:right;">[% total %]</th>
             <th colspan="3">&nbsp;</th>
+            [% END %]
         </tr>
         </tfoot>
     </table>
