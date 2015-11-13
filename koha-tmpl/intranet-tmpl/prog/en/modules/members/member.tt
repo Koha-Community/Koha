@@ -222,9 +222,9 @@ $(document).ready(function() {
         'bFilter': false,
         'bAutoWidth': false,
         [% IF CAN_user_tools_manage_patron_lists %]
-            'aaSorting': [[1, 'asc']],
+            'aaSorting': [[2, 'asc']],
         [% ELSE %]
-            'aaSorting': [[0, 'asc']],
+            'aaSorting': [[1, 'asc']],
         [% END %]
         "aLengthMenu": [aLengthMenu, aLengthMenuLabel],
         'sPaginationType': 'full_numbers',
