@@ -90,6 +90,7 @@ $(document).ready(function(){
             'sPaginationType': 'full_numbers',
             "iDisplayLength": [% Koha.Preference('PatronsPerPage') %],
         [% END %]
+        'aaSorting': [[[% aaSorting || 0 %], 'asc']],
         'bFilter': false,
         'bProcessing': true,
     }));

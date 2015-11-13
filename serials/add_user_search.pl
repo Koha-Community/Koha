@@ -55,5 +55,6 @@ $template->param(
     alphabet        => ( C4::Context->preference('alphabet') || join ' ', 'A' .. 'Z' ),
     categories      => [ C4::Category->all ],
     branches        => [ map { { branchcode => $_->{branchcode}, branchname => $_->{branchname} } } values %$branches ],
+    aaSorting       => 1,
 );
 output_html_with_http_headers( $input, $cookie, $template->output );
