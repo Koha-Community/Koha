@@ -269,7 +269,7 @@ sub output_with_http_headers {
         charset           => 'UTF-8',
         Pragma            => 'no-cache',
         'Cache-Control'   => $cache_policy,
-        'X-Frame-Options' => 'DENY',
+        'X-Frame-Options' => 'SAMEORIGIN',
     };
     $options->{expires} = 'now' if $extra_options->{force_no_caching};
 
