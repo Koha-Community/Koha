@@ -167,7 +167,6 @@ if ( $op eq 'form' ) {
             exit 0;
         } elsif (defined $pid) {
             close STDOUT;
-            close STDERR;
         } else {
             warn "fork failed while attempting to run $ENV{'SCRIPT_NAME'} as a background job";
             exit 0;
