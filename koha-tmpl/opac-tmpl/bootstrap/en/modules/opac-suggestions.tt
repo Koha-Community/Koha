@@ -234,7 +234,7 @@
                                     [% END %]
                                 </form>
                             [% ELSE %]
-                                [% UNLESS Koha.Preference( 'OPACViewOthersSuggestions' ) or $loggedinusername %]
+                                [% UNLESS Koha.Preference( 'OPACViewOthersSuggestions' ) or loggedinusername %]
                                     <p>You are not authorized to see pending purchase suggestions.</p>
                                 [% ELSE %]
                                     <p>There are no pending purchase suggestions.</p>
