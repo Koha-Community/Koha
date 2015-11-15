@@ -1,0 +1,164 @@
+{
+  "/serialitems": {
+    "get": {
+      "x-mojo-to": "Serials#get_serial_items",
+      "operationId": "getSerialItems",
+      "tags": ["serials"],
+      "summary": "Fetches SerialItems representing Serials (without an Item-object) and Magazines (with an Item-object)",
+      "description": "You cannot return all SerialItems, but you must filter your search with GET-parameters.",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "name": "biblionumber",
+          "in": "query",
+          "description": "Internal biblio identifier",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "name": "holdingbranch",
+          "in": "query",
+          "description": "Internal holding branch (library) identifier",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "serialseq_x",
+          "in": "query",
+          "description": "The first serial issue enumeration field, typically the year.",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "serialseq_y",
+          "in": "query",
+          "description": "the second enumeration, eg volume.",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "serialseq_z",
+          "in": "query",
+          "description": "the third enumeration field.",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "serialStatus",
+          "in": "query",
+          "description": "Status of a serial. 1 = Expected, 2 = Received, 3 = Late, 4 = Not issued, 7 = Claimed.",
+          "required": false,
+          "type": "integer"
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "description": "Limit the resultset to this many results.",
+          "required": false,
+          "type": "integer"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Fetching the objects succeeded.",
+          "schema": {
+            "type": "object"
+          }
+        },
+        "400": {
+          "description": "Bad search parameters.",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "No objects match the search request",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
+  "/serials/collection": {
+    "get": {
+      "x-mojo-to": "Serials#get_collection",
+      "operationId": "getCollection",
+      "tags": ["serials"],
+      "summary": "Fetches a volume overview of all serials in the system, and a count of how many have been received.",
+      "description": "Fetches a volume overview of all serials in the system, and a count of how many have been received.",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "name": "biblionumber",
+          "in": "query",
+          "description": "Internal biblio identifier",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "name": "holdingbranch",
+          "in": "query",
+          "description": "Internal holding branch (library) identifier",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "serialStatus",
+          "in": "query",
+          "description": "Status of a serial. 1 = Expected, 2 = Received, 3 = Late, 4 = Not issued, 7 = Claimed.",
+          "required": false,
+          "type": "integer"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Fetching the objects succeeded.",
+          "schema": {
+            "type": "object"
+          }
+        },
+        "400": {
+          "description": "Bad search parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "No objects match the search request",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  }
+}

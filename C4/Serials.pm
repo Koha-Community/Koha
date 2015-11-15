@@ -36,6 +36,7 @@ use Koha::DateUtils;
 use Koha::Serial;
 use Koha::Subscriptions;
 use Koha::Subscription::Histories;
+use Koha::Subscription::Numberpatterns;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -135,6 +136,141 @@ sub GetSuppliersWithLateIssues {
         AND subscription.closed = 0
     ORDER BY name|;
     return $dbh->selectall_arrayref($query, { Slice => {} });
+}
+
+=head GetSerialItems
+
+    my $serialItems = C4::Serials::GetSerialItems({
+            biblionumber => 2323, #MANDATORY
+            serialseq_x => '2015',#OPTIONAL
+            serialseq_y => '12',  #OPTIONAL
+            serialseq_z => 'abba',#OPTIONAL
+            serialStatus => 2,    #OPTIONAL, koha.serial.status, 2 == received
+            limit => 100,         #OPTIONAL
+    });
+
+=cut
+
+sub GetSerialItems {
+    my ($params) = @_;
+    my $dbh = C4::Context->dbh;
+
+    my @params = ($params->{biblionumber});
+    my $serialitems_sql = "
+SELECT i.*,
+  (SELECT lib FROM authorised_values WHERE category = 'LOC' AND authorised_value = i.location) as c_location,
+  (SELECT lib FROM authorised_values WHERE category = 'LOC' AND authorised_value = i.permanent_location) as c_permanent_location,
+  (SELECT lib FROM authorised_values WHERE category = 'NOT_LOAN' AND authorised_value = i.notforloan) as c_notforloan,
+  (SELECT lib FROM authorised_values WHERE category = 'DAMAGED' AND authorised_value = i.damaged) as c_damaged,
+  (SELECT lib FROM authorised_values WHERE category = 'LOST' AND authorised_value = i.itemlost) as c_itemlost,
+  (SELECT lib FROM authorised_values WHERE category = 'WITHDRAWN' AND authorised_value = i.withdrawn) as c_withdrawn,
+  (SELECT description FROM itemtypes WHERE itemtype = i.itype) as c_itype,
+  (SELECT lib FROM authorised_values WHERE category = 'CCODE' AND authorised_value = i.ccode) as c_ccode,
+  (SELECT branchname FROM branches WHERE branchcode = holdingbranch) as c_holdingbranch,
+  (SELECT branchname FROM branches WHERE branchcode = homebranch) as c_homebranch,
+  s.*,
+  iss.date_due as iss_date_due,
+  issb.borrowernumber as iss_borrowernumber,
+  issb.cardnumber as iss_cardnumber,
+  resbor.cardnumber as res_cardnumber,
+  resbor.borrowernumber as res_borrowernumber,
+  resbor.waitingdate as res_waitingdate,
+  bt.transfertfrom,
+  bt.transfertto,
+  bt.transfertwhen,
+  itps.imageurl
+FROM serial s
+    LEFT JOIN subscription sub ON sub.subscriptionid = s.subscriptionid
+    LEFT JOIN serialitems si ON s.serialid = si.serialid
+    LEFT JOIN items i ON i.itemnumber = si.itemnumber
+    LEFT JOIN issues iss ON i.itemnumber = iss.itemnumber
+    LEFT JOIN borrowers issb ON issb.borrowernumber = iss.borrowernumber
+    LEFT JOIN (SELECT bt.itemnumber, bt.frombranch as transfertfrom, bt.tobranch as transfertto, bt.datesent as transfertwhen FROM branchtransfers bt WHERE bt.datearrived IS NULL) as bt ON bt.itemnumber = i.itemnumber
+    LEFT JOIN itemtypes itps ON itps.itemtype = i.itype
+    LEFT JOIN (SELECT resb.cardnumber, resb.borrowernumber, r.itemnumber, r.waitingdate FROM reserves r LEFT JOIN borrowers resb ON resb.borrowernumber = r.borrowernumber ORDER BY priority ASC) as resbor ON resbor.itemnumber = i.itemnumber
+WHERE s.biblionumber = ?
+AND i.itemnumber IS NOT NULL
+";
+    if ($params->{serialseq_x}) {
+        $serialitems_sql .= "AND s.serialseq_x = ? ";
+        push @params, $params->{serialseq_x};
+    }
+    if ($params->{serialseq_y}) {
+        $serialitems_sql .= "AND s.serialseq_y = ? ";
+        push @params, $params->{serialseq_y};
+    }
+    if ($params->{serialseq_z}) {
+        $serialitems_sql .= "AND s.serialseq_z = ? ";
+        push @params, $params->{serialseq_z};
+    }
+    if ($params->{serialStatus}) {
+        $serialitems_sql .= "AND s.status = ? ";
+        push @params, $params->{serialStatus};
+    }
+    if ($params->{holdingbranch}) {
+        $serialitems_sql .= "AND i.holdingbranch = ? ";
+        push @params, $params->{holdingbranch};
+    }
+    $serialitems_sql .= " GROUP BY i.itemnumber ";
+    $serialitems_sql .= " ORDER BY CAST(s.serialseq_x AS UNSIGNED INTEGER) DESC, CAST(s.serialseq_y AS UNSIGNED INTEGER) DESC, CAST(s.serialseq_z AS UNSIGNED INTEGER) DESC ";
+    if ($params->{limit}) {
+        $serialitems_sql .= "LIMIT ? ";
+        push @params, $params->{limit};
+    }
+
+    my $serialitems_sth = $dbh->prepare($serialitems_sql);
+    $serialitems_sth->execute( @params );
+    if ($serialitems_sth->errstr) {
+        die $serialitems_sth->errstr;
+    }
+
+    my $serialItems = $serialitems_sth->fetchall_arrayref({});
+
+    return $serialItems;
+}
+
+sub GetCollectionMap {
+    my ($params) = @_;
+
+    my $collection_ary = _getCollection($params);
+    my $collectionMap = {};
+    foreach my $colle (@$collection_ary) {
+        my $x = $colle->{serialseq_x};
+        my $y = $colle->{serialseq_y};
+        my $z = $colle->{serialseq_z};
+        if (defined $x && defined $y && defined $z) {
+            $collectionMap->{$colle->{serialseq_x}}->{childs}->{$colle->{serialseq_y}}->{childs}->{$colle->{serialseq_z}} = $colle;
+        }
+        elsif (defined $x && defined $y) {
+            $collectionMap->{$colle->{serialseq_x}}->{childs}->{$colle->{serialseq_y}} = $colle;
+        }
+        elsif (defined $x) {
+            $collectionMap->{$colle->{serialseq_x}} = $colle;
+        }
+    }
+
+    return $collectionMap;
+}
+
+sub _getCollection {
+    my ($params) = @_;
+    my $dbh = C4::Context->dbh;
+
+    my @params = ($params->{biblionumber});
+    my $sql = "SELECT sum(IF(status = 2, 1, 0)) as arrived, serialseq_x, serialseq_y, serialseq_z FROM serial s WHERE s.biblionumber = ?";
+    if ($params->{serialStatus}) {
+        push @params, $params->{serialStatus};
+        $sql .= " AND s.status = ? ";
+    }
+    $sql .= " GROUP BY serialseq_x, serialseq_y, serialseq_z ";
+    my $collection_sth = $dbh->prepare( $sql );
+    $collection_sth->execute( @params );
+    if ($collection_sth->errstr) {
+        die $collection_sth->errstr;
+    }
+
+    my $collection_ary = $collection_sth->fetchall_arrayref({});
+    return $collection_ary;
 }
 
 =head2 GetSubscriptionHistoryFromSubscriptionId
@@ -1574,12 +1710,34 @@ sub NewIssue {
 
     my $subscription = Koha::Subscriptions->find( $subscriptionid );
 
+    my $serialseq_x = $subscription->lastvalue1;
+    my $serialseq_y = $subscription->lastvalue2;
+    my $serialseq_z = $subscription->lastvalue3;
+    unless ($serialseq_x || $serialseq_y || $serialseq_z) {
+        #Because the subcription's lastvalues are not updated yet, we need to find
+        #them the hard way.
+        my $pattern = Koha::Subscriptions::Numberpatterns->find(
+            $subscription->numberpattern
+        );
+        my ($calculated,
+            $newlastvalue1, $newlastvalue2, $newlastvalue3,
+            $newinnerloop1, $newinnerloop2, $newinnerloop3) =
+                C4::Serials::GetNextSeq(XYZ
+                    $subscription->unblessed(),
+                    $pattern->unblessed(),
+                    $planneddate
+                );
+        $serialseq_x = $newlastvalue1;
+        $serialseq_y = $newlastvalue2;
+        $serialseq_z = $newlastvalue3;
+    }
+
     my $serial = Koha::Serial->new(
         {
             serialseq         => $serialseq,
-            serialseq_x       => $subscription->lastvalue1(),
-            serialseq_y       => $subscription->lastvalue2(),
-            serialseq_z       => $subscription->lastvalue3(),
+            serialseq_x       => $serialseq_x,
+            serialseq_y       => $serialseq_y,
+            serialseq_z       => $serialseq_z,
             subscriptionid    => $subscriptionid,
             biblionumber      => $biblionumber,
             status            => $status,
