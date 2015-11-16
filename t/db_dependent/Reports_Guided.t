@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Test::More tests => 18;
 use Test::Warn;
+use t::lib::TestBuilder;
 
 use C4::Context;
 use Koha::Database;
@@ -33,6 +34,7 @@ can_ok(
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
 
 my $dbh = C4::Context->dbh;
 $dbh->do(q|DELETE FROM saved_sql|);
@@ -45,7 +47,8 @@ my $count = scalar( @{ get_saved_reports() } );
 is( $count, 0, "There is no report" );
 
 my @report_ids;
-for my $id ( 1 .. 3 ) {
+foreach ( 1..3 ) {
+    my $id = $builder->build({ source => 'Borrower' })->{ borrowernumber };
     push @report_ids, save_report({
         borrowernumber => $id,
         sql            => "SQL$id",
