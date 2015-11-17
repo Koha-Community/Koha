@@ -83,19 +83,19 @@ foreach my $key (qw(label add every setto whenmorethan numbering)) {
 @numberpatterns = GetSubscriptionNumberpatterns();
 is(scalar @numberpatterns, 1, "There is one numberpattern");
 
-diag("Add another numberpattern");
+# Add another numberpattern
 undef $numberpattern->{id};
 my $id2 = AddSubscriptionNumberpattern($numberpattern);
 
 @numberpatterns = GetSubscriptionNumberpatterns();
 is(scalar @numberpatterns, 2, "There are two numberpatterns");
 
-diag("Delete one numberpattern");
+# Delete one numberpattern
 DelSubscriptionNumberpattern($id);
 @numberpatterns = GetSubscriptionNumberpatterns();
 is(scalar @numberpatterns, 1, "There is one numberpattern");
 
-diag("Delete the other numberpattern");
+# Delete the other numberpattern
 DelSubscriptionNumberpattern($id2);
 @numberpatterns = GetSubscriptionNumberpatterns();
 is(scalar @numberpatterns, 0, "There is no numberpattern");

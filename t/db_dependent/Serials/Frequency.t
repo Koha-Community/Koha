@@ -70,19 +70,19 @@ is($frequency->{displayorder}, 1, "displayorder OK");
 @frequencies = GetSubscriptionFrequencies();
 is(scalar @frequencies, 1, "There is one frequency");
 
-diag("Add another frequency");
+# Add another frequency
 undef $frequency->{id};
 my $id2 = AddSubscriptionFrequency($frequency);
 
 @frequencies = GetSubscriptionFrequencies();
 is(scalar @frequencies, 2, "There are two frequencies");
 
-diag("Delete one frequency");
+# Delete one frequency
 DelSubscriptionFrequency($id);
 @frequencies = GetSubscriptionFrequencies();
 is(scalar @frequencies, 1, "There is one frequency");
 
-diag("Delete the other frequency");
+# Delete the other frequency
 DelSubscriptionFrequency($id2);
 @frequencies = GetSubscriptionFrequencies();
 is(scalar @frequencies, 0, "There is no frequency");
