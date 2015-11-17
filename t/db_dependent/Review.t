@@ -17,7 +17,11 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
 use Test::More tests => 117;
+use t::lib::TestBuilder;
+
+use Koha::Database;
 use Time::Piece;
 
 BEGIN {
@@ -41,16 +45,19 @@ can_ok(
       deletereview )
 );
 
-my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+our $dbh = C4::Context->dbh;
+
 $dbh->do('DELETE FROM reviews');
 $dbh->do('DELETE FROM issues');
 $dbh->do('DELETE FROM borrowers');
 
+my $builder = t::lib::TestBuilder->new;
+
 # ---------- Some borrowers for testing -------------------
-my $categorycode = Koha::Database->new()->schema()->resultset('Category')->first()->categorycode();
-my $branchcode   = Koha::Database->new()->schema()->resultset('Branch')->first()->branchcode();
+my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
+my $branchcode   = $builder->build({ source => 'Branch' })->{ branchcode };
 
 my $b1 = Koha::Borrower->new(
     {   surname      => 'Borrower 1',
@@ -383,4 +390,6 @@ ok( !defined($review3), 'Review3 is no longer defined' );
 $numberOfReviews = numberofreviews($status0) + numberofreviews($status1);
 is( $numberOfReviews, 0, 'There is no review left in database' );
 
-$dbh->rollback;
+$schema->storage->txn_rollback;
+
+1;
