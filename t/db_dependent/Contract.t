@@ -73,7 +73,7 @@ is( $contract->{booksellerid}, $my_contract1->{booksellerid}, 'AddContract store
 
 $my_contract1 = {
     contractstartdate   => '2015-07-02',
-    contractenddate     => '2015-07-31',
+    contractenddate     => '2020-07-31',
     contractname        => 'My modified contract name',
     contractdescription => 'My modified contract description',
     booksellerid        => $bookseller_id2,
