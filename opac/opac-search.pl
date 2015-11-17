@@ -555,7 +555,7 @@ if (C4::Context->preference('OpacSuppression')) {
         my $IPRange = C4::Context->preference('OpacSuppressionByIPRange');
         if ($IPAddress !~ /^$IPRange/)  {
             if ( $query_type eq 'pqf' ) {
-                $query = '@not '.$query.' @attr 1=9011 1';
+                $query = '@not '.$query.' @attr 14=1 @attr 1=9011 1';
             } else {
                 $query = "($query) not Suppress=1";
             }
@@ -564,7 +564,7 @@ if (C4::Context->preference('OpacSuppression')) {
     else {
         if ( $query_type eq 'pqf' ) {
             #$query = "($query) && -(suppress:1)"; #QP syntax
-            $query = '@not '.$query.' @attr 1=9011 1'; #PQF syntax
+            $query = '@not '.$query.' @attr 14=1 @attr 1=9011 1'; #PQF syntax
         } else {
             $query = "($query) not Suppress=1";
         }
