@@ -41,7 +41,11 @@ use Koha::Borrower::Debarments qw(IsDebarred);
 use Text::Unaccent qw( unac_string );
 use Koha::AuthUtils qw(hash_password);
 use Koha::Database;
-require Koha::NorwegianPatronDB;
+
+use Module::Load::Conditional qw( can_load );
+if ( ! can_load( modules => { 'Koha::NorwegianPatronDB' => undef } ) ) {
+   warn "Unable to load Koha::NorwegianPatronDB";
+}
 
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 
