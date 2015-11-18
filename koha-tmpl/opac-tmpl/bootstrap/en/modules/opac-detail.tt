@@ -523,7 +523,7 @@
                         </span>
                     [% END # / IF BakerTaylorContentURL %]
 
-                    [% IF ( NovelistSelectProfile ) %]
+                    [% IF ( NovelistSelectProfile && normalized_isbn ) %]
                         [% IF ( NovelistSelectView == 'above') %]
                             <span class="results_summary">
                             <span class="label">Novelist Select: </span>
@@ -597,7 +597,7 @@
                             <li id="tab_comments"><a href="#comments">Comments ( [% reviews.size || 0 %] )</a></li>
                         [% END %]
 
-                        [% IF ( NovelistSelectProfile ) %]
+                        [% IF ( NovelistSelectProfile && normalized_isbn ) %]
                             [% IF ( NovelistSelectView == 'tab') %]
                                 <li id="tab_NovelistSelect"> <a href="#NovelistSelect">Novelist Select</a></li>
                             [% END %]
@@ -791,7 +791,7 @@
                         [% END # / IF SyndeticsReviews && SYNDETICS_REVIEWS %]
                     [% END # / IF SyndeticsEnabled %]
 
-                    [% IF ( NovelistSelectProfile && NovelistSelectView == 'tab') %]
+                    [% IF ( NovelistSelectProfile && NovelistSelectView == 'tab' && normalized_isbn ) %]
                        <div id="NovelistSelect">
                             <div data-novelist-novelistselect=[% normalized_isbn %]></div>
                        </div>
@@ -1032,7 +1032,7 @@
                         [% END %]
                 </div> <!-- / #bibliodescriptions -->
 
-                [% IF ( NovelistSelectProfile && NovelistSelectView == 'below' ) %]
+                [% IF ( NovelistSelectProfile && NovelistSelectView == 'below' && normalized_isbn ) %]
                     <div id="NovelistSelect">
                         <h3>Novelist Select</h3>
                         <div data-novelist-novelistselect="[% normalized_isbn %]"></div>
@@ -1101,7 +1101,7 @@
 
                 [% INCLUDE 'opac-detail-sidebar.inc' %]
 
-                [% IF ( NovelistSelectProfile && NovelistSelectView == 'right') %]
+                [% IF ( NovelistSelectProfile && NovelistSelectView == 'right' && normalized_isbn ) %]
                     <div id="NovelistSelect">
                         <h4>Novelist Select</h4>
                         <div data-novelist-novelistselect=[% normalized_isbn %]></div>
@@ -1143,7 +1143,7 @@
             [% END %]
         [% END %]
 
-        [% IF ( NovelistSelectProfile ) %]
+        [% IF ( NovelistSelectProfile && normalized_isbn ) %]
             <script type="text/javascript" src="https://imageserver.ebscohost.com/novelistselect/ns2init.js"></script>
         [% END %]
 
@@ -1474,7 +1474,7 @@
     [% IF OPACLocalCoverImages %]
         KOHA.LocalCover.GetCoverFromBibnumber(true);
     [% END %]
-    [% IF ( NovelistSelectProfile ) %]
+    [% IF ( NovelistSelectProfile && normalized_isbn ) %]
         novSelect.loadContentForISBN('[% normalized_isbn %]','[% NovelistSelectProfile %]', '[% NovelistSelectPassword %]', function(d){});
     [% END %]
 
