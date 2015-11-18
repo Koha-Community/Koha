@@ -143,7 +143,7 @@
                     [% CASE 'no_biblio_removed' %]
                         <span>No biblio has been removed.</span>
                     [% CASE 'Koha::Exceptions::Virtualshelves::DuplicateObject' %]
-                        <span>An error occurred when inserting this list. The name already [% shelfname %] exists.</span>
+                        <span>An error occurred when inserting this list. The name [% shelfname %] already exists.</span>
                     [% CASE 'DBIx::Class::Exception' %]
                         [% m.msg %]
                     [% CASE %]
