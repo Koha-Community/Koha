@@ -160,6 +160,8 @@ $(document).ready(function() {
               var MSG_DATE_FORMAT = _("Dates of birth should be entered in the format 'YYYY-MM-DD'");
           [% ELSIF dateformat == 'metric' %]
               var MSG_DATE_FORMAT = _("Dates of birth should be entered in the format 'DD/MM/YYYY'");
+          [% ELSIF dateformat == 'dmydot' %]
+              var MSG_DATE_FORMAT = _("Dates of birth should be entered in the format 'DD.MM.YYYY'");
           [% END %]
           $('#searchmember').attr("title",MSG_DATE_FORMAT).tooltip('show');
       } else {

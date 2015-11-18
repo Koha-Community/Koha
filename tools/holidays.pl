@@ -99,7 +99,10 @@ foreach my $monthDay (keys %$day_month_holidays) {
     if (C4::Context->preference("dateformat") eq "metric") {
       $day_monthdate_sort = "$day_month_holidays->{$monthDay}{month}-$day_month_holidays->{$monthDay}{day}";
       $day_monthdate = "$day_month_holidays->{$monthDay}{day}/$day_month_holidays->{$monthDay}{month}";
-    } elsif (C4::Context->preference("dateformat") eq "us") {
+    } elsif (C4::Context->preference("dateformat") eq "dmydot") {
+      $day_monthdate_sort = "$day_month_holidays->{$monthDay}{month}.$day_month_holidays->{$monthDay}{day}";
+      $day_monthdate = "$day_month_holidays->{$monthDay}{day}.$day_month_holidays->{$monthDay}{month}";
+    }elsif (C4::Context->preference("dateformat") eq "us") {
       $day_monthdate = "$day_month_holidays->{$monthDay}{month}/$day_month_holidays->{$monthDay}{day}";
       $day_monthdate_sort = $day_monthdate;
     } else {
