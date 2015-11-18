@@ -1446,7 +1446,7 @@ MARC field, replacing any blanks with '#'.
 sub display_marc_indicators {
     my $field = shift;
     my $indicators = '';
-    if ($field->tag() >= 10) {
+    if ($field && $field->tag() >= 10) {
         $indicators = $field->indicator(1) . $field->indicator(2);
         $indicators =~ s/ /#/g;
     }
@@ -1454,111 +1454,107 @@ sub display_marc_indicators {
 }
 
 sub GetNormalizedUPC {
- my ($record,$marcflavour) = @_;
-    my (@fields,$upc);
+    my ($marcrecord,$marcflavour) = @_;
 
-    if ($marcflavour eq 'UNIMARC') {
-        @fields = $record->field('072');
-        foreach my $field (@fields) {
-            my $upc = _normalize_match_point($field->subfield('a'));
-            if ($upc ne '') {
-                return $upc;
+    if ($marcrecord) {
+        if ($marcflavour eq 'UNIMARC') {
+            my @fields = $marcrecord->field('072');
+            foreach my $field (@fields) {
+                my $upc = _normalize_match_point($field->subfield('a'));
+                if ($upc) {
+                    return $upc;
+                }
+            }
+
+        }
+        else { # assume marc21 if not unimarc
+            my @fields = $marcrecord->field('024');
+            foreach my $field (@fields) {
+                my $indicator = $field->indicator(1);
+                my $upc = _normalize_match_point($field->subfield('a'));
+                if ($upc && $indicator == 1 ) {
+                    return $upc;
+                }
             }
         }
-
     }
-    else { # assume marc21 if not unimarc
-        @fields = $record->field('024');
-        foreach my $field (@fields) {
-            my $indicator = $field->indicator(1);
-            my $upc = _normalize_match_point($field->subfield('a'));
-            if ($indicator == 1 and $upc ne '') {
-                return $upc;
-            }
-        }
-    }
+    return;
 }
 
 # Normalizes and returns the first valid ISBN found in the record
 # ISBN13 are converted into ISBN10. This is required to get some book cover images.
 sub GetNormalizedISBN {
-    my ($isbn,$record,$marcflavour) = @_;
-    my @fields;
+    my ($isbn,$marcrecord,$marcflavour) = @_;
     if ($isbn) {
         # Koha attempts to store multiple ISBNs in biblioitems.isbn, separated by " | "
         # anything after " | " should be removed, along with the delimiter
         ($isbn) = split(/\|/, $isbn );
         return _isbn_cleanup($isbn);
     }
-    return unless $record;
+    if ($marcrecord) {
 
-    if ($marcflavour eq 'UNIMARC') {
-        @fields = $record->field('010');
-        foreach my $field (@fields) {
-            my $isbn = $field->subfield('a');
-            if ($isbn) {
-                return _isbn_cleanup($isbn);
-            } else {
-                return;
+        if ($marcflavour eq 'UNIMARC') {
+            my @fields = $marcrecord->field('010');
+            foreach my $field (@fields) {
+                my $isbn = $field->subfield('a');
+                if ($isbn) {
+                    return _isbn_cleanup($isbn);
+                }
+            }
+        }
+        else { # assume marc21 if not unimarc
+            my @fields = $marcrecord->field('020');
+            foreach my $field (@fields) {
+                $isbn = $field->subfield('a');
+                if ($isbn) {
+                    return _isbn_cleanup($isbn);
+                }
             }
         }
     }
-    else { # assume marc21 if not unimarc
-        @fields = $record->field('020');
-        foreach my $field (@fields) {
-            $isbn = $field->subfield('a');
-            if ($isbn) {
-                return _isbn_cleanup($isbn);
-            } else {
-                return;
-            }
-        }
-    }
+    return;
 }
 
 sub GetNormalizedEAN {
-    my ($record,$marcflavour) = @_;
-    my (@fields,$ean);
+    my ($marcrecord,$marcflavour) = @_;
 
-    if ($marcflavour eq 'UNIMARC') {
-        @fields = $record->field('073');
-        foreach my $field (@fields) {
-            $ean = _normalize_match_point($field->subfield('a'));
-            if ($ean ne '') {
-                return $ean;
+    if ($marcrecord) {
+        if ($marcflavour eq 'UNIMARC') {
+            my @fields = $marcrecord->field('073');
+            foreach my $field (@fields) {
+                my $ean = _normalize_match_point($field->subfield('a'));
+                if ( $ean ) {
+                    return $ean;
+                }
+            }
+        }
+        else { # assume marc21 if not unimarc
+            my @fields = $marcrecord->field('024');
+            foreach my $field (@fields) {
+                my $indicator = $field->indicator(1);
+                my $ean = _normalize_match_point($field->subfield('a'));
+                if ( $ean && $indicator == 3  ) {
+                    return $ean;
+                }
             }
         }
     }
-    else { # assume marc21 if not unimarc
-        @fields = $record->field('024');
-        foreach my $field (@fields) {
-            my $indicator = $field->indicator(1);
-            $ean = _normalize_match_point($field->subfield('a'));
-            if ($indicator == 3 and $ean ne '') {
-                return $ean;
-            }
-        }
-    }
+    return;
 }
-sub GetNormalizedOCLCNumber {
-    my ($record,$marcflavour) = @_;
-    my (@fields,$oclc);
 
-    if ($marcflavour eq 'UNIMARC') {
-        # TODO: add UNIMARC fields
-    }
-    else { # assume marc21 if not unimarc
-        @fields = $record->field('035');
+sub GetNormalizedOCLCNumber {
+    my ($marcrecord,$marcflavour) = @_;
+    if ($marcrecord && $marcflavour ne 'UNIMARC' ) {
+        my @fields = $marcrecord->field('035');
         foreach my $field (@fields) {
-            $oclc = $field->subfield('a');
+            my $oclc = $field->subfield('a');
             if ($oclc =~ /OCoLC/) {
                 $oclc =~ s/\(OCoLC\)//;
                 return $oclc;
-            } else {
-                return;
             }
         }
     }
+    return;
 }
 
 sub GetAuthvalueDropbox {
