@@ -29,7 +29,6 @@ BEGIN {
 
 use C4::Context;
 use C4::Installer;
-use C4::Dates;
 
 use Getopt::Long;
 use Data::Dumper;
