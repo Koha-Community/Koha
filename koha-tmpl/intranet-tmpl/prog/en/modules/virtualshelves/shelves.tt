@@ -322,41 +322,41 @@ function placeHold () {
     <div class="dialog [% m.type %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
-            An error occurred when updating this list. Perhaps the value already exists.
+            <span>An error occurred when updating this list. Perhaps the value already exists.</span>
         [% CASE 'error_on_insert' %]
-            An error occurred when inserting this list. Perhaps the name already exists.
+            <span>An error occurred when inserting this list. Perhaps the name already exists.</span>
         [% CASE 'error_on_delete' %]
-            An error occurred when deleting this list. Check the logs.
+            <span>An error occurred when deleting this list. Check the logs.</span>
         [% CASE 'error_on_add_biblio' %]
-            The item has not been added to the list. Please check it's not in this list yet.
+           <span>The item has not been added to the list. Please check it's not in this list yet.</span>
         [% CASE 'success_on_update' %]
-            List updated with success.
+            <span>List updated with success.</span>
         [% CASE 'success_on_insert' %]
-            List inserted with success.
+            <span>List inserted with success.</span>
         [% CASE 'success_on_delete' %]
-            List deleted with success.
+            <span>List deleted with success.</span>
         [% CASE 'success_on_add_biblio' %]
-            The item has been added to the list.
+            <span>The item has been added to the list.</span>
         [% CASE 'success_on_remove_biblios' %]
-            The item has been removed from the list.
+            <span>The item has been removed from the list.</span>
         [% CASE 'does_not_exist' %]
-            This list does not exist.
+            <span>This list does not exist.</span>
         [% CASE 'item_does_not_exist' %]
-            This item does not exist.
+            <span>This item does not exist.</span>
         [% CASE 'unauthorized_on_view' %]
-            You do not have permission to view this list.
+            <span>You do not have permission to view this list.</span>
         [% CASE 'unauthorized_on_update' %]
-            You do not have permission to update this list.
+            <span>You do not have permission to update this list.</span>
         [% CASE 'unauthorized_on_delete' %]
-            You do not have permission to delete this list.
+           <span>You do not have permission to delete this list.</span>
         [% CASE 'unauthorized_on_add_biblio' %]
-            You do not have permission to add a biblio to this list.
+            <span>You do not have permission to add a biblio to this list.</span>
         [% CASE 'no_biblio_removed' %]
-            No biblio has been removed.
+            <span>No biblio has been removed.</span>
         [% CASE 'Koha::Exceptions::Virtualshelves::DuplicateObject' %]
-            An error occurred when inserting this list. The name already [% shelfname %] exists.
+            <span>An error occurred when inserting this list. The name already [% shelfname %] exists.</span>
         [% CASE 'Koha::Exceptions::Virtualshelves::UseDbAdminAccount' %]
-            List could not be created. (Do not use the database administrator account.).
+            <span>List could not be created. (Do not use the database administrator account.)</span>
         [% CASE 'DBIx::Class::Exception' %]
             [% m.msg %]
         [% CASE %]
