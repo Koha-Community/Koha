@@ -863,7 +863,7 @@ $subscription is a hashref containing all the attributes of the table
 'subscription'.
 $pattern is a hashref containing all the attributes of the table
 'subscription_numberpatterns'.
-$planneddate is a C4::Dates object.
+$planneddate is a date sting in iso format.
 This function get the next issue for the subscription given on input arg
 
 =cut

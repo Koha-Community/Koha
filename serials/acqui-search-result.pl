@@ -47,7 +47,7 @@ use C4::Biblio;
 use C4::Output;
 use CGI qw ( -utf8 );
 use C4::Acquisition qw( SearchOrders );
-use C4::Dates qw/format_date/;
+use Koha::DateUtils;
 
 use Koha::Acquisition::Bookseller;
 
@@ -79,8 +79,8 @@ for my $s (@suppliers) {
             basketno     => $ord->{'basketno'},
             total        => $ord->{'count(*)'},
             authorisedby => $ord->{'authorisedby'},
-            creationdate => format_date($ord->{'creationdate'}),
-            closedate    => format_date($ord->{'closedate'}),
+            creationdate => output_pref( { str => $ord->{'creationdate'} } ),
+            closedate    => output_pref( { str => $ord->{'closedate'} } ),
         };
     }
     push @{$loop_suppliers}, {

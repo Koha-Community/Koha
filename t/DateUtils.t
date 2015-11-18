@@ -91,8 +91,6 @@ cmp_ok( $new_dt->ymd(), 'eq', $testdate_iso, 'sql returns correct date' );
 $new_dt = dt_from_string( $dt, 'iso' );
 isa_ok( $new_dt, 'DateTime', 'Passed a DateTime dt_from_string returns it' );
 
-# C4::Dates allowed 00th of the month
-
 my $ymd = '2012-01-01';
 my $dt0 = dt_from_string( '00/01/2012', 'metric' );
 isa_ok( $dt0, 'DateTime',

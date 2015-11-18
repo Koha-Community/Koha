@@ -1101,7 +1101,7 @@ sub GetItemsForInventory {
     }
 
     if ($datelastseen) {
-        $datelastseen = format_date_in_iso($datelastseen);  
+        $datelastseen = output_pref({ str => $datelastseen, dateformat => 'iso', dateonly => 1 });
         push @where_strings, '(datelastseen < ? OR datelastseen IS NULL)';
         push @bind_params, $datelastseen;
     }

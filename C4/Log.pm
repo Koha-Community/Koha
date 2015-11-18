@@ -194,7 +194,7 @@ sub displaylog {
     while (my $data = $sth->fetchrow_hashref){
     	$data->{hilighted} = ($hilighted>0);
         $data->{info} =~ s/\n/<br\/>/g;
-        $data->{day} = format_date($data->{timestamp});
+        $data->{day} = output_pref({ str => $data->{timestamp} });
         push @results, $data;
         $count++;
         $hilighted = -$hilighted;
