@@ -12,7 +12,7 @@ use C4::Context;
 
 use Data::Dumper;
 
-use Test::More tests => 22;
+use Test::More tests => 23;
 
 use C4::Branch;
 use C4::ItemType;
@@ -364,6 +364,53 @@ $holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice 
 is( @$holds_queue, 1, "Bug 14297 - Holds Queue building ignoring holds where pickup & home branch don't match and item is not from le");
 # End Bug 14297
 
+# Bug 15062
+$itemtype = $item_types[0]->{itemtype};
+$borrowernumber = $borrower2->{borrowernumber};
+$library_A = $library1->{branchcode};
+$library_B = $library2->{branchcode};
+$dbh->do("DELETE FROM reserves");
+$dbh->do("DELETE FROM issues");
+$dbh->do("DELETE FROM items");
+$dbh->do("DELETE FROM biblio");
+$dbh->do("DELETE FROM biblioitems");
+$dbh->do("DELETE FROM transport_cost");
+$dbh->do("DELETE FROM tmp_holdsqueue");
+$dbh->do("DELETE FROM hold_fill_targets");
+$dbh->do("DELETE FROM default_branch_circ_rules");
+$dbh->do("DELETE FROM default_branch_item_rules");
+$dbh->do("DELETE FROM default_circ_rules");
+$dbh->do("DELETE FROM branch_item_rules");
+
+C4::Context->set_preference("UseTransportCostMatrix",1);
+
+my $tc_rs = $schema->resultset('TransportCost');
+$tc_rs->create({ frombranch => $library_A, tobranch => $library_B, cost => 0, disable_transfer => 1 });
+$tc_rs->create({ frombranch => $library_B, tobranch => $library_A, cost => 0, disable_transfer => 1 });
+
+$dbh->do("
+    INSERT INTO biblio (frameworkcode, author, title, datecreated) VALUES ('', 'Koha test', '$TITLE', '2011-02-01')
+");
+
+$biblionumber = $dbh->selectrow_array("SELECT biblionumber FROM biblio WHERE title = '$TITLE'")
+  or BAIL_OUT("Cannot find newly created biblio record");
+
+$dbh->do("INSERT INTO biblioitems (biblionumber, marcxml, itemtype) VALUES ($biblionumber, '', '$itemtype')");
+
+$biblioitemnumber =
+  $dbh->selectrow_array("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber = $biblionumber")
+  or BAIL_OUT("Cannot find newly created biblioitems record");
+
+$dbh->do("
+    INSERT INTO items (biblionumber, biblioitemnumber, homebranch, holdingbranch, notforloan, damaged, itemlost, withdrawn, onloan, itype)
+    VALUES ($biblionumber, $biblioitemnumber, '$library_A', '$library_A', 0, 0, 0, 0, NULL, '$itemtype')
+");
+
+$reserve_id = AddReserve ( $library_B, $borrowernumber, $biblionumber, '', 1 );
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
+is( @$holds_queue, 0, "Bug 15062 - Holds queue with Transport Cost Matrix will transfer item even if transfers disabled");
+# End Bug 15062
 
 # Cleanup
 $schema->storage->txn_rollback;
