@@ -341,6 +341,7 @@ RECORD: while (  ) {
                             push @subfields, map { ( $_->[0] =~ /[a-z]/ ? $_->[1] : () ) } $field->subfields();
                         }
                         $yamlhash->{$originalid}->{'subfields'} = \@subfields;
+                        $yamlhash->{$originalid}->{'updated'} = 0;
                     }
                     next;
                 }
@@ -424,6 +425,7 @@ RECORD: while (  ) {
                 push @subfields, map { ( $_->[0] =~ /[a-z]/ ? $_->[1] : () ) } $field->subfields();
             }
             $yamlhash->{$originalid}->{'subfields'} = \@subfields;
+            $yamlhash->{$originalid}->{'updated'} = 1;
             }
         }
         else {
