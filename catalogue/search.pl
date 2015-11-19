@@ -162,7 +162,6 @@ my $DisplayMultiPlaceHold = C4::Context->preference("DisplayMultiPlaceHold");
 use CGI qw('-no_undef_params' -utf8 );
 my $cgi = new CGI;
 
-my ($template,$borrowernumber,$cookie);
 # decide which template to use
 my $template_name;
 my $template_type;
@@ -484,8 +483,6 @@ my $expanded_facet = $params->{'expand'};
 # Define some global variables
 my ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type);
 
-my @results;
-
 ## I. BUILD THE QUERY
 ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by,$scan,$lang);
 
@@ -526,7 +523,6 @@ $template->param ( LIMIT_INPUTS => \@limit_inputs );
 ## II. DO THE SEARCH AND GET THE RESULTS
 my $total; # the total results for the whole set
 my $facets; # this object stores the faceted results that display on the left-hand of the results page
-my @results_array;
 my $results_hashref;
 
 eval {
