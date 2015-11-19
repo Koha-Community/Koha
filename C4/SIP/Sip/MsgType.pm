@@ -19,7 +19,7 @@ use Data::Dumper;
 use CGI qw ( -utf8 );
 use C4::Auth qw(&check_api_auth);
 
-use UNIVERSAL qw(can);	# make sure this is *after* C4 modules.
+use UNIVERSAL::can;
 
 use vars qw(@ISA $VERSION @EXPORT_OK);
 

@@ -732,6 +732,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '0.31',
     },
+    'UNIVERSAL::can' => {
+        'usage'    => 'SIP',
+        'required' => '1',
+        'min_ver'  => '1.10',
+    },
 };
 
 1;
