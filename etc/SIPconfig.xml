@@ -32,7 +32,15 @@
       port="127.0.0.1:6001/tcp"
       transport="RAW" 
       protocol="SIP/2.00"
+      client_timeout="600"
       timeout="60" />
+<!--- client_timeout times out active connections which have not received
+     input from the client. Many persistent connections will send a status request
+     every 5-7 mins so setting this to less than that will add instability to the connection
+     if explicitly set to zero, no timeout is applied to the connection.
+     NB the parameter timeout applies to the login process only and should be set to a lower value
+     to time out failed connections
+-->
   </listeners>
 
   <accounts>
