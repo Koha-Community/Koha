@@ -96,8 +96,8 @@
   [% END %]
 [% ELSE %]
 <ul>
-	<li>Select a file to import into the borrowers table</li>
-	<li>If a cardnumber exists in the table, you can choose whether to ignore the new one or overwrite the old one.</li>
+    <li>Select a file to import into the borrowers table.</li>
+    <li>If a cardnumber exists in the table, you can choose whether to ignore the new one or overwrite the old one.</li>
 </ul>
 <form method="post" action="[% SCRIPT_NAME %]" enctype="multipart/form-data">
 <fieldset class="rows">
@@ -193,19 +193,29 @@
 <div class="yui-u">
 <h2>Notes:</h2>
 <ul>
-<li>The first line in the file must be a header row defining which columns you are supplying in the import file.</li>
-<li><b>Download a starter CSV file with all the columns <a href="?sample=1">here</a>.</b>  Values are comma-separated.</li>
-<li>OR choose which fields you want to supply from the following list:<ul><li>
-    [% FOREACH columnkey IN borrower_fields %]'[% columnkey.field %]', [% END %]
-</li></ul></li>
-[% IF ( ExtendedPatronAttributes ) %]
-<li>If loading patron attributes, the 'patron_attributes' field should contain a comma-separated list of attribute types and values. The attribute type code and a colon should precede each value. For example: <b>INSTID:12345,LANG:fr</b> or <b>STARTDATE:January 1 2010,TRACK:Day</b>. If an input record has more than one attribute, the fields should either be entered as an unquoted string (previous examples), or with each field wrapped in separate double quotes and delimited by a comma: <b>&quot;STARTDATE:January 1, 2010&quot;,&quot;TRACK:Day&quot;</b>.  The second syntax would be required if the data might have a comma in it, like a date string.
+<li><b>Header: </b>The first line in the file must be a header row defining which columns you are supplying in the import file.</li>
+<li><b>Separator: </b>Values are comma-separated.</li>
+<li><b>Starter CSV: </b> Koha provides a starter CSV with all the columns.
+    <ul><li><a href="?sample=1">Download starter CSV</a></li></ul>
 </li>
+<li><b>Field list: </b>Alternatively, you can create your own CSV and choose which fields you want to supply from the following list:
+    <ul><li>
+       [% FOREACH columnkey IN borrower_fields %]'[% columnkey.field %]', [% END %]
+    </li></ul>
+</li>
+[% IF ( Koha.Preference('ExtendedPatronAttributes') == 1 ) %]
+<li><b>Extended patron attributes: </b>If loading patron attributes, the 'patron_attributes' field should contain a comma-separated list of attribute types and values. The attribute type code and a colon should precede each value.
+    <ul><li>Example 1: INSTID:12345,LANG:fr</b></li><li> Example 2: STARTDATE:January 1 2010,TRACK:Day</li></ul>
+If an input record has more than one attribute, the fields should either be entered as an unquoted string (previous examples), or with each field wrapped in separate double quotes and delimited by a comma:
+    <ul><li>Example 3: &quot;STARTDATE:January 1, 2010&quot;,&quot;TRACK:Day&quot;</li></ul>
+The second syntax would be required if the data might have a comma in it, like a date string.</li>
 [% END %]
-<li>The fields 'branchcode' and 'categorycode' are <b>required</b> and <b>must match</b> valid entries in your database.</li>
-<li>'password' should be stored in plaintext, and will be converted to a Bcrypt hash (if your passwords are already encrypted, talk to your system administrator about options).</li>
-<li>Date formats should match your system preference, and <b>must</b> be zero-padded, e.g. '01/02/2008'.  Alternatively,
-you can supply dates in ISO format (e.g., '2010-10-28').
+<li><b>Required fields: </b>The fields 'branchcode' and 'categorycode' are required and must match valid entries in your database.</li>
+<li><b>Password: </b>Values for the field 'password' should be stored in plaintext, and will be converted to a Bcrypt hash (if your passwords are already encrypted, talk to your system administrator about options).</li>
+<li><b>Date formats: </b> Date values should match your system preference, and must be zero-padded.
+    <ul><li>Example: '01/02/2008'</li></ul>
+Alternatively, you can supply dates in ISO format.
+    <ul><li>Example: '2010-10-28'</li></ul>
 </li>
 </ul>
 
