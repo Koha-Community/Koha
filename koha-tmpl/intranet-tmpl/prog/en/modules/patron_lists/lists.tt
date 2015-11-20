@@ -9,6 +9,7 @@
 //<![CDATA[
     $(document).ready(function() {
         $('#patron-lists-table').dataTable($.extend(true, {}, dataTablesDefaults, {
+            "autoWidth": false,
             "aoColumnDefs": [
                 { "aTargets": [ -1, -2, -3 ], "bSortable": false, "bSearchable": false },
             ],
