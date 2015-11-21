@@ -469,8 +469,8 @@
                         <xsl:with-param name="codes">
                             <xsl:choose>
                                 <!-- #13383 include subfield e for field 111  -->
-                                <xsl:when test="@tag=111">abcdeqt</xsl:when>
-                                <xsl:otherwise>abcdjqt</xsl:otherwise>
+                                <xsl:when test="@tag=111">abceqt</xsl:when>
+                                <xsl:otherwise>abcjqt</xsl:otherwise>
                             </xsl:choose>
                         </xsl:with-param>
                     </xsl:call-template>
@@ -479,6 +479,12 @@
                     <xsl:text>:,;/ </xsl:text>
                 </xsl:with-param>
             </xsl:call-template>
+            <xsl:if test="marc:subfield[@code='d']">
+                <span class="authordates">
+                    <xsl:text> </xsl:text>
+                    <xsl:value-of select="marc:subfield[@code='d']"/>
+                </span>
+            </xsl:if>
             <xsl:if test="marc:subfield[@code='4' or @code='e'][not(parent::*[@tag=111])] or (self::*[@tag=111] and marc:subfield[@code='4' or @code='j'][. != ''])">
                 <span class="relatorcode">
                     <xsl:text> [</xsl:text>
