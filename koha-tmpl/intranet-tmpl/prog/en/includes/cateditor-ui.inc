@@ -559,7 +559,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             invalidateSearchResults();
             Search.Reconnect();
         } else {
-            humanMsg.displayMsg( _("<h3>Internal search error</h3>") + '<p>' + error + '</p>' + _("<p>Please <b>refresh</b> the page and try again."), { className: 'humanError' } );
+            humanMsg.displayMsg( '<h3>' + _("Internal search error") + '</h3><p>' + error + '</p><p>' + _("Please refresh the page and try again.") + '</p>', { className: 'humanError' } );
         }
     }
 
@@ -948,7 +948,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 errors.push(error);
             } );
 
-            humanMsg.displayMsg( _("<h3>Failed to run macro:</h3>") + '<ul><li>' + errors.join('</li><li>') + '</li></ul>', { className: 'humanError' } );
+            humanMsg.displayMsg( '<h3>' + _("Failed to run macro:") + '</h3><ul><li>' + errors.join('</li><li>') + '</li></ul>', { className: 'humanError' } );
 
             return false;
         } );
