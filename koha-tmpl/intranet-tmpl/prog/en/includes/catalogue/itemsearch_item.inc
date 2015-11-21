@@ -1,12 +1,13 @@
 [%- USE Branches -%]
+[%- USE Koha -%]
 [% biblio = item.biblio %]
 [% biblioitem = item.biblioitem %]
 <tr>
   <td>
     <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber %]" title="Go to record detail page">[% biblio.title %]</a>
-    by [% biblio.author %]
+    [% IF ( Koha.Preference( 'marcflavour' ) == 'UNIMARC' && biblio.author ) %] by[% END %] [% biblio.author |html %]
   </td>
-  <td>[% biblioitem.publicationyear %]</td>
+  <td>[% biblioitem.publicationyear || biblio.copyrightdate %]</td>
   <td>[% biblioitem.publishercode %]</td>
   <td>[% biblioitem.collectiontitle %]</td>
   <td>
