@@ -1292,8 +1292,8 @@
                                     <xsl:with-param name="codes">
                                         <xsl:choose>
                                             <!-- #13383 include subfield e for field 111  -->
-                                            <xsl:when test="@tag=111">abcdeqt</xsl:when>
-                                            <xsl:otherwise>abcdjqt</xsl:otherwise>
+                                            <xsl:when test="@tag=111">abceqt</xsl:when>
+                                            <xsl:otherwise>abcjqt</xsl:otherwise>
                                         </xsl:choose>
                                     </xsl:with-param>
                                 </xsl:call-template>
@@ -1304,11 +1304,11 @@
                         </xsl:call-template>
                     </xsl:when>
                     <!-- #13382 excludes 700$i and ind2=2, displayed as Related Works -->
-                    <!--#13382 Added all relevant subfields 4, e, are handled separately -->
+                    <!--#13382 Added all relevant subfields 4, e, and d are handled separately -->
                     <xsl:when test="@tag=700 or @tag=710 or @tag=711">
                         <xsl:variable name="str">
                             <xsl:call-template name="subfieldSelect">
-                                <xsl:with-param name="codes">abcdfghiklmnoprstux</xsl:with-param>
+                                <xsl:with-param name="codes">abcfghiklmnoprstux</xsl:with-param>
                             </xsl:call-template>
                         </xsl:variable>
                         <xsl:call-template name="chopPunctuation">
@@ -1322,6 +1322,12 @@
                     </xsl:when>
                 </xsl:choose>
                 </span></span></span>
+                <xsl:if test="marc:subfield[@code='d']">
+                    <span class="authordates">
+                        <xsl:text> </xsl:text>
+                        <xsl:value-of select="marc:subfield[@code='d']"/>
+                    </span>
+                </xsl:if>
                 <!-- #13383 include relator code j for field 111 -->
                 <xsl:if test="marc:subfield[@code='4' or @code='e'][not(parent::*[@tag=111])] or (self::*[@tag=111] and marc:subfield[@code='4' or @code='j'][. != ''])">
                     <span class="relatorcode">
