@@ -128,6 +128,9 @@ if (scalar keys %params > 0) {
         my $op = shift @op;
         if (defined $q and $q ne '') {
             if ($i == 0) {
+                if (C4::Context->preference("marcflavor") ne "UNIMARC" && $field eq 'publicationdate') {
+                    $field = 'copyrightdate';
+                }
                 $f = {
                     field => $field,
                     query => $q,
@@ -181,10 +184,15 @@ if (scalar keys %params > 0) {
         };
     }
 
+    my $sortby = $cgi->param('sortby') || 'itemnumber';
+    if (C4::Context->preference("marcflavor") ne "UNIMARC" && $sortby eq 'publicationyear') {
+        $sortby = 'copyrightdate';
+    }
+    warn $sortby;
     my $search_params = {
         rows => $cgi->param('rows') // 20,
         page => $cgi->param('page') || 1,
-        sortby => $cgi->param('sortby') || 'itemnumber',
+        sortby => $sortby,
         sortorder => $cgi->param('sortorder') || 'asc',
     };
 
