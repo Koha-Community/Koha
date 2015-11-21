@@ -27,7 +27,8 @@
 
 [% IF ( add_form ) %]
 <h1>Connect [% tablename %].[% kohafield %] to a MARC subfield</h1>
-    <p>Choose and validate 1 MARC subfield for <strong>[% tablename %].[% kohafield %]</strong>. That will modify <b>all frameworks</b> which is usually what you need, but you have been warned.</p>
+    <p>Choose and validate 1 MARC subfield for <strong>[% tablename %].[% kohafield %]</strong>.</p>
+    <p><b>Note: </b>All frameworks will be modified which is usually what you need, but you have been warned.</p>
     <fieldset class="rows">
         <ol>
         [% FOR i IN [ 0 .. 9 ] %]
