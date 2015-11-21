@@ -34,7 +34,7 @@ listed, please inform your systems administrator.</p>
   <p>All required Perl modules appear to be installed.<br />
   [% ELSE %]
   [% IF ( missing_modules ) %]
-  <p>Some Perl modules are missing. Modules in red <b>must</b> be installed before you may continue.<br />
+  <p><b>Warning: </b>Some Perl modules are missing.<br />Modules in red must be installed before you may continue.<br />
   <ul>
   [% FOREACH missing_module IN missing_modules %]
     [% IF ( missing_module.require ) %]
