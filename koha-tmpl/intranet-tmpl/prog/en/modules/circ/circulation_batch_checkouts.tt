@@ -138,16 +138,16 @@ $(document).ready(function() {
                     Age restriction [% checkout_info.AGE_RESTRICTION %]
                   [% END %]
                   [% IF checkout_info.RENEW_ISSUE %]
-                    This Item is currently checked out to this patron. Renew?
+                    This item is currently checked out to this patron. Renew?
                   [% END %]
                   [% IF checkout_info.RESERVE_WAITING %]
-                    This Item has been waiting for another patron.
+                    This item has been waiting for another patron.
                   [% END %]
                   [% IF checkout_info.RESERVED %]
-                    This Item has been on hold for another patron.
+                    This item has been on hold for another patron.
                   [% END %]
                   [% IF checkout_info.ISSUED_TO_ANOTHER %]
-                    This Item is checked out to another patron.
+                    This item is checked out to another patron.
                     [% IF CAN_user_circulate_force_checkout %]
                       Check in and check out?
                     [% END %]
@@ -156,7 +156,7 @@ $(document).ready(function() {
                     Too many checked out.
                   [% END %]
                   [% IF checkout_info.BORRNOTSAMEBRANCH %]
-                    This patrons is from a different library ([% checkout_info.BORRNOTSAMEBRANCH %])</li>
+                    This patron is from a different library ([% checkout_info.BORRNOTSAMEBRANCH %])</li>
                   [% END %]
                   [% IF checkout_ino.PATRON_CANT %]
                     This patron can't check out this item per library circulation policy.
@@ -201,7 +201,7 @@ $(document).ready(function() {
                     This item has been lost with a status of "[% checkout_info.alert.ITEM_LOST %]".
                   [% END %]
                   [% IF checkout_info.alert.OTHER_CHARGES %]
-                    The patron has unpaid charges for reserves, rentals etc of [% checkout_info.alert.OTHER_CHARGES %].
+                    The patron has unpaid charges for holds, rentals etc of [% checkout_info.alert.OTHER_CHARGES %].
                   [% END %]
                 </p>
               [% END %]
