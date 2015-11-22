@@ -1,4 +1,6 @@
 [% USE KohaDates %]
+[%- USE Branches -%]
+[%- USE ItemTypes -%]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Holds to pull</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -123,14 +125,14 @@ $(document).ready(function() {
             <td>"</td>
             <td>"</td>
         [% END %]
-        <td>[% reserveloo.holdingbranch %]</td>
+        <td>[% Branches.GetName ( reserveloo.holdingbranch ) %]</td>
         <td><p>[% reserveloo.itemcallnumber %]</p></td>
         <td><p>[% reserveloo.copyno %]</p></td>
         <td><p>[% reserveloo.enumchron %]</p></td>
-        <td>[% reserveloo.itype %]</td>
+        <td>[% ItemTypes.GetDescription( reserveloo.itype ) %]</td>
         <td>[% reserveloo.location %]</td>
         <td>
-            <span title="[% reserveloo.reservedate %]">[% reserveloo.reservedate | $KohaDates %] in [% reserveloo.branch %]</span>
+            <span title="[% reserveloo.reservedate %]">[% reserveloo.reservedate | $KohaDates %] in [% Branches.GetName ( reserveloo.branch ) %]</span>
             [% IF ( reserveloo.statusw ) %]<p>Waiting</p>[% END %][% IF ( reserveloo.statusf ) %]<p>Fullfilled</p>[% END %]
         </td>
         </tr>
