@@ -1,5 +1,6 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Transfer order</title>
+[%- USE KohaDates -%]
 [% INCLUDE 'doc-head-close.inc' %]
     <style type="text/css">
     #custom-doc { width:44.46em;*width:43.39em;min-width:578px; margin:auto; text-align:left; }
@@ -71,14 +72,14 @@
                           <tr>
                             <td>[% basket.basketname %] (#[% basket.basketno %])</td>
                             <td>[% basket.createdby %]</td>
-                            <td>[% basket.creationdate %]</td>
+                            <td>[% basket.creationdate | $KohaDates %]</td>
                             <td><a href="transferorder.pl?basketno=[% basket.basketno %]&ordernumber=[% ordernumber %]" onclick="return confirmtransfer();">Choose</a>
                           </tr>
                         [% END %]
                     </tbody>
                 </table>
             [% ELSE %]
-                <p>There is no open baskets for this supplier.</p>
+                <p>There are no open baskets for this vendor.</p>
             [% END %]
         [% END %]
         [% IF ( ordersloop ) %]
