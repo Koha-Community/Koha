@@ -117,7 +117,7 @@ CREATE TABLE `authorised_values` ( -- stores values for authorized values catego
 DROP TABLE IF EXISTS `biblio`;
 CREATE TABLE `biblio` ( -- table that stores bibliographic information
   `biblionumber` int(11) NOT NULL auto_increment, -- unique identifier assigned to each bibliographic record
-  `frameworkcode` varchar(4) NOT NULL default '', -- foriegn key from the biblio_framework table to identify which framework was used in cataloging this record
+  `frameworkcode` varchar(4) NOT NULL default '', -- foreign key from the biblio_framework table to identify which framework was used in cataloging this record
   `author` mediumtext, -- statement of responsibility from MARC record (100$a in MARC21)
   `title` mediumtext, -- title (without the subtitle) from the MARC record (245$a in MARC21)
   `unititle` mediumtext, -- uniform title (without the subtitle) from the MARC record (240$a in MARC21)
