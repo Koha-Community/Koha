@@ -32,7 +32,7 @@
                     item_msg = item_num.join(", ");
                     var msg = _("Are you sure you want to remove card number(s): %s from this batch?").format(item_msg);
                 } else if (document.items.action.checked) {
-                    alert(_("Deletion of item from a batch with only one item will delete the batch.\n\nIf this is what you want, select 'Delete batch' option from toolbar"));
+                    alert(_("Deletion of patron from a batch with only one patron will delete the batch.") + "\n\n" + _("If this is what you want, select the 'Delete batch' option from the toolbar"));
                     return; // no deletion for single item batch
                 }
                 else {
@@ -179,7 +179,7 @@
 
                 [% IF ( duplicate_message ) %]
                     <div class="dialog message">
-                        <strong>[% duplicate_count %] duplicate item(s) found</strong> and removed from batch [% batch_id %].
+                        <strong>[% duplicate_count %] duplicate patron(s) found</strong> and removed from batch [% batch_id %].
                     </div>
                 [% END %]
 
@@ -256,8 +256,8 @@
                                 <fieldset class="rows" style="border-bottom: 0px; border: 0px;">
                                 <ol><li>
                                     <div class="dialog message">
-                                        <h4>There are no items in this batch yet</h4>
-                                        <p>Add items by borrowernumber using the text area above or leave empty to add via patron search.</p>
+                                        <h4>There are no patrons in this batch yet</h4>
+                                        <p>Add patrons by borrowernumber using the text area above or leave empty to add via patron search.</p>
                                     </div>
                                 </li></ol>
                                 </fieldset>
