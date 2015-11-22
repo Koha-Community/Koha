@@ -2,6 +2,7 @@
 [% USE Branches %]
 [% USE Koha %]
 [% USE Borrowers %]
+[% USE ItemTypes %]
 [% USE AuthorisedValues %]
 
 [% INCLUDE 'doc-head-open.inc' %]
@@ -583,11 +584,11 @@ $(document).ready(function () {
                     [% riloo.itemtitle |html %]</a></td>
             <td class="ci-author">[% riloo.itemauthor %]</td>
             <td class="ci-barcode"><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% riloo.itembiblionumber %]&amp;itemnumber=[% riloo.itemnumber %]#item[% riloo.itemnumber %]">[% riloo.barcode %]</a></td>
-            <td class="ci-homelibrary">[% riloo.homebranch %]</td>
-            <td class="ci-holdinglibrary">[% riloo.holdingbranch %]</td>
+            <td class="ci-homelibrary">[% Branches.GetName( riloo.homebranch ) %]</td>
+            <td class="ci-holdinglibrary">[% Branches.GetName( riloo.holdingbranch ) %]</td>
             <td class="ci-shelvinglocation">[% riloo.location %]</td>
             <td class="ci-callnumber">[% riloo.itemcallnumber %]</td>
-            <td class="ci-type">[% riloo.itemtype %] [% riloo.ccode %]</td>
+            <td class="ci-type">[% ItemTypes.GetDescription( riloo.itemtype ) %] [% riloo.ccode %]</td>
             <td class="ci-patron">[% IF ( riloo.duedate ) %]
                 <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% riloo.borrowernumber %]">
                     [% riloo.borsurname %], [% riloo.borfirstname %] ([% riloo.borcategorycode %])
