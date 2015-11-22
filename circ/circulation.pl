@@ -542,6 +542,7 @@ $template->param(
     findborrower      => $findborrower,
     borrower          => $borrower,
     borrowernumber    => $borrowernumber,
+    categoryname      => $borrower->{'description'},
     branch            => $branch,
     branchname        => GetBranchName($borrower->{'branchcode'}),
     printer           => $printer,

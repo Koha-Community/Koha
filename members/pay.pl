@@ -139,6 +139,7 @@ sub add_accounts_to_template {
     $template->param(
         accounts => $accounts,
         borrower => $borrower,
+        categoryname => $borrower->{'description'},
         total    => $total,
     );
     return;
