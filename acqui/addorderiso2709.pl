@@ -338,7 +338,7 @@ sub import_batches_list {
 
     my @list = ();
     foreach my $batch (@$batches) {
-        if ( $batch->{'import_status'} =~ /^staged$|^reverted$/ ) {
+        if ( $batch->{'import_status'} =~ /^staged$|^reverted$/ && $batch->{'record_type'} eq 'biblio') {
             # check if there is at least 1 line still staged
             my $stagedList=GetImportRecordsRange($batch->{'import_batch_id'}, undef, 1, $batch->{import_status}, { order_by_direction => 'ASC' });
             if (scalar @$stagedList) {
