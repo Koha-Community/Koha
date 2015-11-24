@@ -40,7 +40,7 @@ use DateTime::Duration;
 use C4::Context;
 use C4::Debug;
 use C4::Letters;
-use C4::Overdues qw(GetFine GetOverdueMessageTransportTypes);
+use C4::Overdues qw(GetFine GetOverdueMessageTransportTypes parse_overdues_letter);
 use C4::Budgets qw(GetCurrency);
 use C4::Log;
 use Koha::Borrower::Debarments qw(AddUniqueDebarment);
