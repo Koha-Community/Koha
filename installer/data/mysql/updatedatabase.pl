@@ -10869,7 +10869,7 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.21.00.027";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
-        INSERT INTO permissions (module_bit, code, description)
+        INSERT IGNORE INTO permissions (module_bit, code, description)
         VALUES (1, 'self_checkout', 'Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID')
     |);
 
