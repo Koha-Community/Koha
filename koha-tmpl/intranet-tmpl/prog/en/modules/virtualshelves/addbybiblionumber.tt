@@ -17,13 +17,13 @@
 <div id="custom-doc" class="yui-t7">
    <div id="bd">
                 [% IF ( multiple ) %]
-		    <h1>Add [% total %] items to [% IF ( singleshelf ) %]<em>[% shelfname%]</em>: [% ELSE %]a list:[% END %]</h1>
+                        <h1>Add [% total %] items to [% IF ( singleshelf ) %]<em>[% shelfname%]</em>: [% ELSE %]a list:[% END %]</h1>
                 [% ELSE %]
                         <h1>Add to [% IF ( singleshelf ) %]<em>[% shelfname %]</em>[% ELSE %]a list:[% END %]</h1>
                 [% END %]
 		<ul>
 		    [% FOREACH biblio IN biblios %]
-			<li> <span class="title">[% biblio.title %]</span>
+            <li> <span class="title">[% biblio.title %]</span>
 			    [% IF ( biblio.author ) %]<span class="author"> [% biblio.author %] </span>[% END %]
 			</li>
 		    [% END %]

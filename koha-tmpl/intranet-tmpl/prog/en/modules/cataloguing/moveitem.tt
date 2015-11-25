@@ -52,7 +52,7 @@
 
 	[% ELSE %]
 	    [% IF ( success ) %]
-			<div class="dialog message">The item has successfully been attached to [% INCLUDE 'biblio-default-view.inc' %]<i>[% bibliotitle %]</i></a>.
+            <div class="dialog message">The item has successfully been attached to [% INCLUDE 'biblio-default-view.inc' %]<i>[% bibliotitle %]</i></a>.
 			<p>
 			[% INCLUDE actions %]
 		                <input type="submit" class="approve" value="OK" />
@@ -79,7 +79,7 @@
 	    [% END %]
 
 		[% IF ( missingbarcode ) %]
-		<h3>Attach an item[% IF ( bibliotitle ) %] to <i>[% bibliotitle %]</i>[% END %]</h3>
+        <h3>Attach an item[% IF ( bibliotitle ) %] to <i>[% bibliotitle %]</i>[% END %]</h3>
 	    <fieldset id="barcode_fieldset">
 		<label for="barcode">Enter the barcode of the item to attach:</label>
 		    <p class="hint">The item you select will be moved to the target record.</p>

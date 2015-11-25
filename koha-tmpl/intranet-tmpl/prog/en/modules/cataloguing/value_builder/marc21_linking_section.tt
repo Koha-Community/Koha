@@ -173,7 +173,8 @@
                                                             [% IF ( resul.MARC_ON ) %]
                                                                     <a_class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.title %]</a>
                                                             [% ELSE %]
-                                                                    <a_class="transparent resultlist" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.title %]</a>				[% END %]
+                                                                    <a_class="transparent resultlist" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.title %]</a>
+                                                            [% END %]
                                                     <p>[% resul.author %]
                                                     [% IF ( resul.publishercode ) %]- [% resul.publishercode %][% END %]
                                                     [% IF ( resul.place ) %] ; [% resul.place %][% END %]

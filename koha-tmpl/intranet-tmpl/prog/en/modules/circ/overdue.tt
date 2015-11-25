@@ -172,11 +172,11 @@ overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%
                 <script type="text/javascript" x-code="[% patron_attr_filter_loo.code %]">create_auto_completion_responder([% patron_attr_filter_loo.domid %],"[% patron_attr_filter_loo.code %]");</script>
 				<span id="pattrodue-getready-[% patron_attr_filter_loo.domid %]">
 						<div class="pattrodue-autocomplete">
-							<input autocomplete="off" id="pattrodue-input-[% patron_attr_filter_loo.domid %]" name="patron_attr_filter_[% patron_attr_filter_loo.code %]" value="[% patron_attr_filter_loo.cgivalue %]"  class="pattrodue-input" type="text" />
+                            <input autocomplete="off" id="pattrodue-input-[% patron_attr_filter_loo.domid %]" name="patron_attr_filter_[% patron_attr_filter_loo.code %]" value="[% patron_attr_filter_loo.cgivalue %]"  class="pattrodue-input" type="text" />
 						</div>
 				</span>
 			[% ELSE %]
-				<input type="text" name="patron_attr_filter_[% patron_attr_filter_loo.code %]" value="[% patron_attr_filter_loo.cgivalue %]"/>
+                <input type="text" name="patron_attr_filter_[% patron_attr_filter_loo.code %]" value="[% patron_attr_filter_loo.cgivalue %]"/>
 			[% END %]
 			[% IF ( patron_attr_filter_loo.repeatable ) %]
                 <a href="#" onclick="clone_parent(this); return false;">Add</a>
