@@ -807,8 +807,12 @@ function verify_images() {
                        [% END %]
                     </td>
                 [% END %]
-                [% IF CAN_user_editcatalogue_edit_items and not item.cannot_be_edited %]
-                    <td><a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber %]&itemnumber=[% item.itemnumber %]#edititem">Edit</a></td>
+                [% IF CAN_user_editcatalogue_edit_items %]
+                    <td>
+                        [% UNLESS item.cannot_be_edited %]
+                            <a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber %]&itemnumber=[% item.itemnumber %]#edititem">Edit</a>
+                        [% END %]
+                    </td>
                 [% END %]
                 </tr>
             [% END %]
