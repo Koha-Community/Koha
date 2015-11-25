@@ -6,7 +6,7 @@ use_ok( "C4::Utils::DataTables::Members" );
 my $patrons = C4::Utils::DataTables::Members::search({
     searchmember => "Doe",
     searchfieldstype => 'standard',
-    searchtype => 'contains'
+    searchtype => 'contain'
 });
 
 isnt( $patrons->{iTotalDisplayRecords}, undef, "The iTotalDisplayRecords key is defined");
