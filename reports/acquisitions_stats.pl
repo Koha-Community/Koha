@@ -284,7 +284,7 @@ sub calculate {
             } elsif ( $rodsp == 3 ) {
                 $field{$a} = "Year($a)";
             } else {
-                field{$a} = $a;
+                $field{$a} = $a;
             }
         }
         elsif ( $_ =~ /bookseller/ ) {
