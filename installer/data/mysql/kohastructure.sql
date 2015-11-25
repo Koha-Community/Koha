@@ -3594,7 +3594,7 @@ CREATE TABLE audio_alerts (
   sound varchar(255) NOT NULL,
   PRIMARY KEY (id),
   KEY precedence (precedence)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8  COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

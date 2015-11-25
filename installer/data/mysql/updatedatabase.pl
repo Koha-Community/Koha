@@ -11268,11 +11268,11 @@ if ( CheckVersion($DBversion) ) {
             sound varchar(255) NOT NULL,
             PRIMARY KEY (id),
             KEY precedence (precedence)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
     });
 
     $dbh->do(q{
-        INSERT INTO audio_alerts VALUES
+        INSERT IGNORE INTO audio_alerts VALUES
         (1, 1, '.audio-alert-action', 'opening.ogg'),
         (2, 2, '.audio-alert-warning', 'critical.ogg'),
         (3, 3, '.audio-alert-success', 'beep.ogg');
