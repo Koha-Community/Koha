@@ -84,7 +84,7 @@ sub BuildReport {
         OrderPdfFormat
         casAuthentication
         casLogout
-        AllowPkiAuth
+        AllowPKIAuth
         DebugLevel
         delimiter
         noItemTypeImages
