@@ -10801,9 +10801,17 @@ if ( CheckVersion($DBversion) ) {
         LEFT JOIN course_items USING(ci_id)
         WHERE course_items.ci_id IS NULL
     });
+
+    my ($print_error) = $dbh->{PrintError};
+    $dbh->{RaiseError} = 0;
+    $dbh->{PrintError} = 0;
+    $dbh->do(q{ALTER TABLE course_reserves DROP FOREIGN KEY course_reserves_ibfk_2});
+    $dbh->do(q{ALTER TABLE course_reserves DROP INDEX course_reserves_ibfk_2});
+    $dbh->{PrintError} = $print_error;
+
     $dbh->do(q{
         ALTER IGNORE TABLE course_reserves
-            add CONSTRAINT course_reserves_ibfk_2
+            ADD CONSTRAINT course_reserves_ibfk_2
                 FOREIGN KEY (ci_id) REFERENCES course_items (ci_id)
                 ON DELETE CASCADE ON UPDATE CASCADE
     });
