@@ -104,7 +104,7 @@ my %dt_params = (
 my $search_results = C4::Utils::DataTables::Members::search({
     searchmember     => "John Doe",
     searchfieldstype => 'standard',
-    searchtype       => 'contains',
+    searchtype       => 'contain',
     branchcode       => $branchcode,
     dt_params        => \%dt_params
 });
@@ -120,7 +120,7 @@ ok( $search_results->{ patrons }[0]->{ cardnumber } eq $john_doe{ cardnumber }
 $search_results = C4::Utils::DataTables::Members::search({
     searchmember     => "Jane Doe",
     searchfieldstype => 'standard',
-    searchtype       => 'contains',
+    searchtype       => 'contain',
     branchcode       => $branchcode,
     dt_params        => \%dt_params
 });
@@ -136,7 +136,7 @@ is( $search_results->{ patrons }[0]->{ cardnumber },
 $search_results = C4::Utils::DataTables::Members::search({
     searchmember     => "John",
     searchfieldstype => 'standard',
-    searchtype       => 'contains',
+    searchtype       => 'contain',
     branchcode       => $branchcode,
     dt_params        => \%dt_params
 });
@@ -156,7 +156,7 @@ is( $search_results->{ patrons }[1]->{ cardnumber },
 $search_results = C4::Utils::DataTables::Members::search({
     searchmember     => "Doe",
     searchfieldstype => 'standard',
-    searchtype       => 'contains',
+    searchtype       => 'contain',
     branchcode       => $branchcode,
     dt_params        => \%dt_params
 });
@@ -176,7 +176,7 @@ is( $search_results->{ patrons }[1]->{ cardnumber },
 $search_results = C4::Utils::DataTables::Members::search({
     searchmember     => "john.doe",
     searchfieldstype => 'standard',
-    searchtype       => 'contains',
+    searchtype       => 'contain',
     branchcode       => $branchcode,
     dt_params        => \%dt_params
 });
@@ -187,7 +187,7 @@ is( $search_results->{ iTotalDisplayRecords }, 1,
 $search_results = C4::Utils::DataTables::Members::search({
     searchmember     => "john.doe",
     searchfieldstype => 'userid',
-    searchtype       => 'contains',
+    searchtype       => 'contain',
     branchcode       => $branchcode,
     dt_params        => \%dt_params
 });
@@ -211,7 +211,7 @@ t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 1);
 $search_results = C4::Utils::DataTables::Members::search({
     searchmember     => "common user",
     searchfieldstype => 'standard',
-    searchtype       => 'contains',
+    searchtype       => 'contain',
     branchcode       => $branchcode,
     dt_params        => \%dt_params
 });
@@ -222,7 +222,7 @@ t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 0);
 $search_results = C4::Utils::DataTables::Members::search({
     searchmember     => "common user",
     searchfieldstype => 'standard',
-    searchtype       => 'contains',
+    searchtype       => 'contain',
     branchcode       => $branchcode,
     dt_params        => \%dt_params
 });

@@ -13,7 +13,7 @@ sub search {
     my $firstletter = $params->{firstletter};
     my $categorycode = $params->{categorycode};
     my $branchcode = $params->{branchcode};
-    my $searchtype = $params->{searchtype};
+    my $searchtype = $params->{searchtype} || 'start_with';
     my $searchfieldstype = $params->{searchfieldstype} || 'standard';
     my $dt_params = $params->{dt_params};
 
@@ -59,8 +59,6 @@ sub search {
         push @where_args, $branchcode;
     }
 
-    # split on coma
-    $searchmember =~ s/,/ /g if $searchmember;
     my $searchfields = {
         standard => 'surname,firstname,othernames,cardnumber,userid',
         email => 'email,emailpro,B_email',
@@ -72,14 +70,28 @@ sub search {
         sort1 => 'sort1',
         sort2 => 'sort2',
     };
-    foreach my $term ( split / /, $searchmember) {
+
+    # * is replaced with % for sql
+    $searchmember =~ s/\*/%/g;
+
+    # split into search terms
+    my @terms;
+    # consider coma as space
+    $searchmember =~ s/,/ /g;
+    if ( $searchtype eq 'contain' ) {
+       @terms = split / /, $searchmember;
+    } else {
+       @terms = ($searchmember);
+    }
+
+    foreach my $term (@terms) {
         next unless $term;
-        $searchmember =~ s/\*/%/g; # * is replaced with % for sql
+
         $term .= '%' # end with anything
             if $term !~ /%$/;
         $term = "%$term" # begin with anythin unless start_with
-            if (defined $searchtype) && $searchtype eq "contain"
-                && $term !~ /^%/;
+            if $searchtype eq 'contain' && $term !~ /^%/;
+
         my @where_strs_or;
         for my $searchfield ( split /,/, $searchfields->{$searchfieldstype} ) {
             push @where_strs_or, "borrowers." . $dbh->quote_identifier($searchfield) . " LIKE ?";
@@ -197,11 +209,11 @@ $params is a hashref with some keys:
 
 =item searchtype
 
-  Can be 'contain' or 'start_with'. Used for the searchmember parameter.
+  Can be 'contain' or 'start_with' (default value). Used for the searchmember parameter.
 
 =item searchfieldstype
 
-  Can be 'standard', 'email', 'borrowernumber', 'phone', 'address' or 'dateofbirth', 'sort1', 'sort2'
+  Can be 'standard' (default value), 'email', 'borrowernumber', 'phone', 'address' or 'dateofbirth', 'sort1', 'sort2'
 
 =item dt_params
 
