@@ -199,7 +199,7 @@ $(document).ready(function() {
 [% END %]
 
 [% IF ( alert.OTHER_CHARGES ) %]
-    <div class="dialog message">The patron has unpaid charges for reserves, rentals etc of [% alert.OTHER_CHARGES %]</div>
+    <div class="dialog message">The patron has unpaid charges for holds, rentals etc of [% alert.OTHER_CHARGES %]</div>
 [% END %]
 
 [% IF ( NEEDSCONFIRMATION ) %]
@@ -253,7 +253,7 @@ $(document).ready(function() {
 [% END %]
 
 [% IF ( BORRNOTSAMEBRANCH ) %]
-    <li>This patrons is from a different library ([% BORRNOTSAMEBRANCH %])</li>
+    <li>This patron is from a different library ([% BORRNOTSAMEBRANCH %])</li>
 [% END %]
 
 [% IF ( PATRON_CANT ) %]
