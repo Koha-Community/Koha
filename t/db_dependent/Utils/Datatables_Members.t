@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 15;
+use Test::More tests => 19;
 
 use C4::Context;
 use C4::Branch;
@@ -87,12 +87,25 @@ my %jane_doe = (
     userid       => 'jane.doe'
 );
 
+my %jeanpaul_dupont = (
+    cardnumber   => '456789',
+    firstname    => 'Jean Paul',
+    surname      => 'Dupont',
+    categorycode => $categorycode,
+    branchcode   => $branchcode,
+    dateofbirth  => '',
+    dateexpiry   => '9999-12-31',
+    userid       => 'jeanpaul.dupont'
+);
+
 $john_doe{borrowernumber} = AddMember( %john_doe );
 warn "Error adding John Doe, check your tests" unless $john_doe{borrowernumber};
 $john_smith{borrowernumber} = AddMember( %john_smith );
 warn "Error adding John Smith, check your tests" unless $john_smith{borrowernumber};
 $jane_doe{borrowernumber} = AddMember( %jane_doe );
 warn "Error adding Jane Doe, check your tests" unless $jane_doe{borrowernumber};
+$jeanpaul_dupont{borrowernumber} = AddMember( %jeanpaul_dupont );
+warn "Error adding Jean Paul Dupont, check your tests" unless $jeanpaul_dupont{borrowernumber};
 
 # Set common datatables params
 my %dt_params = (
@@ -228,6 +241,51 @@ $search_results = C4::Utils::DataTables::Members::search({
 });
 is( $search_results->{ iTotalDisplayRecords}, 0, "There are still 2 common users, but the patron attribute is not searchable " );
 
+$search_results = C4::Utils::DataTables::Members::search({
+    searchmember     => "Jean Paul",
+    searchfieldstype => 'standard',
+    searchtype       => 'start_with',
+    branchcode       => $branchcode,
+    dt_params        => \%dt_params
+});
+
+is( $search_results->{ iTotalDisplayRecords }, 1,
+    "Jean Paul Dupont is found using start with and two terms search 'Jean Paul' (Bug 15252)");
+
+$search_results = C4::Utils::DataTables::Members::search({
+    searchmember     => "Jean Pau",
+    searchfieldstype => 'standard',
+    searchtype       => 'start_with',
+    branchcode       => $branchcode,
+    dt_params        => \%dt_params
+});
+
+is( $search_results->{ iTotalDisplayRecords }, 1,
+    "Jean Paul Dupont is found using start with and two terms search 'Jean Pau' (Bug 15252)");
+
+$search_results = C4::Utils::DataTables::Members::search({
+    searchmember     => "Jea Pau",
+    searchfieldstype => 'standard',
+    searchtype       => 'start_with',
+    branchcode       => $branchcode,
+    dt_params        => \%dt_params
+});
+
+is( $search_results->{ iTotalDisplayRecords }, 0,
+    "Jean Paul Dupont is not found using start with and two terms search 'Jea Pau' (Bug 15252)");
+
+$search_results = C4::Utils::DataTables::Members::search({
+    searchmember     => "Jea Pau",
+    searchfieldstype => 'standard',
+    searchtype       => 'contain',
+    branchcode       => $branchcode,
+    dt_params        => \%dt_params
+});
+
+is( $search_results->{ iTotalDisplayRecords }, 1,
+    "Jean Paul Dupont is found using contains and two terms search 'Jea Pau' (Bug 15252)");
+
+# End
 $dbh->rollback;
 
 1;
