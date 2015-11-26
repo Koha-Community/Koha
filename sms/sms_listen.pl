@@ -10,9 +10,7 @@ use C4::Members;
 use C4::Circulation;
 
 my ($res,$ua);
-my %commands;
 my $message;
-my $phone;
 my $result;
 my $errorcode;
 my $smsid;

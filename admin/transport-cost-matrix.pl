@@ -55,7 +55,7 @@ my @branchloop = map { code => $_,
                        name => $branches->{$_}->{'branchname'} },
                  sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} }
                  keys %$branches;
-my (@branchfromloop, @cost, @errors);
+my (@branchfromloop, @errors);
 foreach my $branchfrom ( @branchloop ) {
     my $fromcode = $branchfrom->{code};
 

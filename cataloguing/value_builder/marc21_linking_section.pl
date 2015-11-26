@@ -64,7 +64,6 @@ my $launcher = sub {
     $startfrom = 0 if ( !defined $startfrom );
     my ( $template, $loggedinuser, $cookie );
     my $resultsperpage;
-    my $searchdesc;
 
     if ( $op eq "fillinput" ) {
         my $biblionumber = $query->param('biblionumber');

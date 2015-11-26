@@ -42,7 +42,6 @@ my $op = $query->param('op') || '';
 my $dbh = C4::Context->dbh;
 my $sub_length;
 
-my @budgets;
 
 # Permission needed if it is a modification : edit_subscription
 # Permission needed otherwise (nothing or dup) : create_subscription
@@ -437,7 +436,6 @@ sub redirect_mod_subscription {
 
 sub insert_additional_fields {
     my ( $additional_fields, $biblionumber, $subscriptionid ) = @_;
-    my @additional_field_values;
     my $record = GetMarcBiblio( $biblionumber, 1 );
     for my $field ( @$additional_fields ) {
         my $af = Koha::AdditionalField->new({ id => $field->{id} })->fetch;

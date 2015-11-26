@@ -121,7 +121,6 @@ if ($merge) {
             my @marcfields = $marcrecord->field($field->{tag});
             foreach my $marcfield (@marcfields) {
                 my $tag = $marcfield->tag();
-                my %subfields;
                 if (scalar @{$field->{subfields}}) {
                     foreach my $subfield (@{$field->{subfields}}) {
                         my @values = $marcfield->subfield($subfield);

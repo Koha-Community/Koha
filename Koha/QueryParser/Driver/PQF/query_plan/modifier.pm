@@ -41,7 +41,6 @@ not have a reference to their parent query_plan.
 sub target_syntax {
     my ($self, $server, $query_plan) = @_;
     my $pqf = '';
-    my @fields;
 
     my $attributes = $query_plan->QueryParser->bib1_mapping_by_name('modifier', $self->name, $server);
     $pqf = ($attributes->{'op'} ? $attributes->{'op'} . ' ' : '') . ($self->negate ? '@not @attr 1=_ALLRECORDS @attr 2=103 "" ' : '') . $attributes->{'attr_string'};

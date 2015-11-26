@@ -53,7 +53,7 @@ my $ccl_query = $query->param('ccl_query');
 my $startfrom = $query->param('startfrom') || 1;
 my ($template, $loggedinuser, $cookie) = (undef, undef, undef);
 my (
-    $total_hits,  $orderby, $results,  $total,  $error,
+    $total_hits,  $total,  $error,
     $marcresults, $idx,     $datefrom, $dateto, $ccl_textbox
 );
 my $resultsperpage = C4::Context->preference('numSearchResults') || '20';
@@ -174,7 +174,7 @@ if ($show_results) {
     );
 
     # build page nav stuff.
-    my ( @field_data, @numbers );
+    my @numbers;
     $total = $total_hits;
 
     my ( $from, $to, $startfromnext, $startfromprev, $displaynext,

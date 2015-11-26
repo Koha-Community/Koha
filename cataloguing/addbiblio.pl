@@ -178,7 +178,6 @@ sub build_authorized_values_list {
           && !C4::Context->IsSuperLibrarian()
           && C4::Context->userenv->{branch};
         my $branches = GetBranches($onlymine);
-        my @branchloop;
         foreach my $thisbranch ( sort keys %$branches ) {
             push @authorised_values, $thisbranch;
             $authorised_lib{$thisbranch} = $branches->{$thisbranch}->{'branchname'};
@@ -777,7 +776,6 @@ my (
 	$biblionumbertagsubfield,
 	$biblioitemnumtagfield,
 	$biblioitemnumtagsubfield,
-	$bibitem,
 	$biblioitemnumber
 );
 
@@ -845,7 +843,6 @@ if ( $op eq "addbiblio" ) {
     my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
     # it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)
     if ( !$duplicatebiblionumber or $confirm_not_duplicate ) {
-        my $oldbibnum;
         my $oldbibitemnum;
         if (C4::Context->preference("BiblioAddsAuthorities")){
             BiblioAutoLink( $record, $frameworkcode );

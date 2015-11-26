@@ -89,7 +89,6 @@ if ( $sth->err ) {
     die "An error occurred fetching records: " . $sth->errstr;
 }
 my $subtotal = 0;
-my $toggle;
 my @spent;
 while ( my $data = $sth->fetchrow_hashref ) {
     my $recv = $data->{'quantityreceived'};

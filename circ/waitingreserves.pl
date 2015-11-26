@@ -48,8 +48,6 @@ my $all_branches   = $input->param('allbranches') || '';
 my $cancelall      = $input->param('cancelall');
 my $tab            = $input->param('tab');
 
-my $cancel;
-
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "circ/waitingreserves.tt",
