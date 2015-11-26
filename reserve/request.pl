@@ -47,7 +47,6 @@ use Koha::DateUtils;
 use Koha::Borrower::Debarments qw(IsDebarred);
 
 my $dbh = C4::Context->dbh;
-my $sth;
 my $input = new CGI;
 my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
     {
@@ -140,7 +139,6 @@ if ($multihold) {
 if ($borrowernumber_hold && !$action) {
     my $borrowerinfo = GetMember( borrowernumber => $borrowernumber_hold );
     my $diffbranch;
-    my @getreservloop;
 
     # we check the reserves of the borrower, and if he can reserv a document
     # FIXME At this time we have a simple count of reservs, but, later, we could improve the infos "title" ...
@@ -283,7 +281,6 @@ foreach my $biblionumber (@biblionumbers) {
     # adding a fixed value for priority options
     my $fixedRank = $count+1;
 
-    my @branchcodes;
     my %itemnumbers_of_biblioitem;
     my @itemnumbers;
 

@@ -106,7 +106,6 @@ sub search {
     };
     my $start = clock_gettime( CLOCK_MONOTONIC );
     my $select = IO::Select->new;
-    my @worker_fhs;
 
     my @cached_sets;
     my @servers;

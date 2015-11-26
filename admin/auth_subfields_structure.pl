@@ -273,7 +273,6 @@ if ($op eq 'add_form') {
 	my @kohafield		= ''.$input->param('kohafield');
 	my @tab				= $input->param('tab');
 	my @seealso		= $input->param('seealso');
-	my @hidden;
 	my @ohidden		= $input->param('ohidden');
 	#my @ihidden		= $input->param('ihidden');
 	#my @ehidden		= $input->param('ehidden');

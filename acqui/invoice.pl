@@ -112,7 +112,6 @@ my $details = GetInvoiceDetails($invoiceid);
 my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $details->{booksellerid} });
 my @orders_loop = ();
 my $orders = $details->{'orders'};
-my $qty_total;
 my @foot_loop;
 my %foot;
 my $total_quantity = 0;

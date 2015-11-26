@@ -129,7 +129,6 @@ if ( $op eq 'add_form' ) {
     my $deliveryplace = $basket->{'deliveryplace'} || C4::Context->userenv->{"branch"};
 
     # Build the combobox to select the billing place
-    my @billingplaceloop;
 
     my $branches = C4::Branch::GetBranchesLoop( $billingplace );
     $template->param( billingplaceloop => $branches );

@@ -310,7 +310,7 @@ sub new {
 
 sub _initialize {
 	my ($self, $msg, $control_block) = @_;
-	my ($fs, $fn, $fe);
+	my $fn;
 	my $proto = $control_block->{protocol}->{$protocol_version};
 
 	$self->{name}    = $control_block->{name};
@@ -931,7 +931,7 @@ sub handle_patron_info {
     my ($lang, $trans_date, $summary) = @{$self->{fixed_fields}};
     my $fields = $self->{fields};
     my ($inst_id, $patron_id, $terminal_pwd, $patron_pwd, $start, $end);
-    my ($resp, $patron, $count);
+    my ($resp, $patron);
 
     $inst_id      = $fields->{(FID_INST_ID)};
     $patron_id    = $fields->{(FID_PATRON_ID)};

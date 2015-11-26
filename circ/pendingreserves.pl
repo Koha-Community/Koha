@@ -53,19 +53,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $duedate;
-my $borrowernumber;
-my $itemnum;
-my $data1;
-my $data2;
-my $data3;
-my $name;
-my $phone;
-my $email;
-my $biblionumber;
-my $title;
-my $author;
-
 my $today = dt_from_string;
 $startdate =~ s/^\s+//;
 $startdate =~ s/\s+$//;

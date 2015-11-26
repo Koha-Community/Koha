@@ -64,7 +64,6 @@ my $cache = Koha::Cache->get_instance();
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ( $op eq 'add_form' ) {
-    my $data;
     my $sth =
       $dbh->prepare(
 "select tagfield,tagsubfield,liblibrarian as lib,tab from marc_subfield_structure where kohafield=? AND frameworkcode=''"

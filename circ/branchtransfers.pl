@@ -106,7 +106,6 @@ elsif ( $request eq 'KillReserved' ) {
 
 # collect the stack of books already transfered so they can printed...
 my @trsfitemloop;
-my %transfereditems;
 my $transfered;
 my $barcode = $query->param('barcode');
 # strip whitespace

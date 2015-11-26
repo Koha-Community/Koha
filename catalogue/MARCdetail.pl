@@ -130,7 +130,6 @@ foreach my $thisframeworkcode ( keys %$frameworks ) {
 $template->param( frameworkcodeloop => \@frameworkcodeloop, );
 # fill arrays
 my @loop_data = ();
-my $tag;
 
 # loop through each tab 0 through 9
 for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {

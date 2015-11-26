@@ -51,7 +51,6 @@ return ($function_name,$res);
 
 sub plugin {
 my ($input) = @_;
-	my %env;
 
 #	my $input = new CGI;
 	my $index= $input->param('index');
@@ -62,8 +61,7 @@ my ($input) = @_;
     #tabs
     $rq->execute;
     my @BIGLOOP;
-    my @innerloop;
-    my (%numbers,%cells,@colhdr,@rowhdr,@multiplelines,@lists,$table);
+    my (%numbers,@lists,$table);
     while (my $tab = $rq->fetchrow_hashref){
       my $number=substr($tab->{authorised_value},0,1);
       if ($tab->{authorised_value}=~/[0-9]XX/){

@@ -41,7 +41,6 @@ Convert a hashref with a Bib-1 mapping into its PQF string representation.
 sub attributes_to_attr_string {
     my ($attributes) = @_;
     my $attr_string = '';
-    my $value;
     foreach my $key ( sort keys %{$attributes} ) {
         next unless looks_like_number($key);
         $attr_string .= ' @attr ' . $key . '=' . $attributes->{ $key } . ' ';

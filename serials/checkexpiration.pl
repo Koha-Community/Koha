@@ -113,7 +113,6 @@ if ($date) {
     );
 }
 
-my $branchname;
 my $branches_loop;
 if (  !C4::Context->preference("IndependentBranches")
     or C4::Context->IsSuperLibrarian()

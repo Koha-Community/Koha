@@ -92,7 +92,6 @@ if ($type eq 'str8' && $borrower){
                 $i2++;
             }
         }
-        my $const;
 
     if (defined $checkitem && $checkitem ne ''){
 		my $item = GetItem($checkitem);

@@ -154,7 +154,6 @@ if ( IsDebarred($borrowernumber) ) {
 
 $data->{ "sex_".$data->{'sex'}."_p" } = 1 if defined $data->{sex};
 
-my $catcode;
 if ( $category_type eq 'C') {
    my  ( $catcodes, $labels ) =  GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
    my $cnt = scalar(@$catcodes);
@@ -252,7 +251,6 @@ my $relatives_issues_count =
 my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $data->{streettype} );
 my $today       = DateTime->now( time_zone => C4::Context->tz);
 $today->truncate(to => 'day');
-my @borrowers_with_issues;
 my $overdues_exist = 0;
 my $totalprice = 0;
 
