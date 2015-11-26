@@ -5,18 +5,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-11-10 15:00-0300\n"
-"PO-Revision-Date: 2015-10-30 08:26+0000\n"
-"Last-Translator: m23 <black23@gmail.com>\n"
-"Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/"
-">\n"
+"POT-Creation-Date: 2015-11-19 22:59-0300\n"
+"PO-Revision-Date: 2015-11-24 15:06+0000\n"
+"Last-Translator: Josef <josef.moravec@knihovna-uo.cz>\n"
+"Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1446193581.000000\n"
+"X-POOTLE-MTIME: 1448377581.000000\n"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:304
@@ -138,54 +138,6 @@ msgid "%s %s %s %s You have subscribed to email notification on new issues "
 msgstr ""
 "%s %s %s %s Přihlásili jste se k odběru e-mailových oznámení o novinkách ve "
 "fondu knihovny "
-
-#. %1$s:  END 
-#. %2$s:  SWITCH m.code 
-#. %3$s:  CASE 'error_on_update' 
-#. %4$s:  CASE 'error_on_insert' 
-#. %5$s:  CASE 'error_on_delete' 
-#. %6$s:  CASE 'error_on_add_biblio' 
-#. %7$s:  CASE 'error_on_remove_share' 
-#. %8$s:  CASE 'success_on_update' 
-#. %9$s:  CASE 'success_on_insert' 
-#. %10$s:  CASE 'success_on_delete' 
-#. %11$s:  CASE 'success_on_add_biblio' 
-#. %12$s:  CASE 'success_on_remove_biblios' 
-#. %13$s:  CASE 'success_on_remove_share' 
-#. %14$s:  CASE 'does_not_exist' 
-#. %15$s:  CASE 'item_does_not_exist' 
-#. %16$s:  CASE 'unauthorized_on_view' 
-#. %17$s:  CASE 'unauthorized_on_insert' 
-#. %18$s:  CASE 'unauthorized_on_update' 
-#. %19$s:  CASE 'unauthorized_on_delete' 
-#. %20$s:  CASE 'unauthorized_on_add_biblio' 
-#. %21$s:  CASE 'no_biblio_removed' 
-#. %22$s:  CASE 'Koha::Exceptions::Virtualshelves::DuplicateObject' 
-#. %23$s:  shelfname 
-#. %24$s:  CASE 'DBIx::Class::Exception' 
-#. %25$s:  m.msg 
-#. %26$s:  CASE 
-#. %27$s:  m.code 
-#. %28$s:  m.msg 
-#. %29$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:104
-#, c-format
-msgid ""
-"%s %s %s An error occurred when updating this list. Perhaps the value "
-"already exists. %s An error occurred when inserting this list. Perhaps the "
-"name already exists. %s An error occurred when deleteing this list. Check "
-"the logs. %s The item has not been added to the list. Please check it's not "
-"in this list yet. %s The share has not been removed. %s List updated with "
-"success. %s List inserted with success. %s List deleted with success. %s The "
-"item has been added to the list. %s The item has been removed from the list. "
-"%s The share has been removed. %s This list does not exist. %s This item "
-"does not exist. %s You do not have permission to view this list. %s You do "
-"not have permission to insert a new list. %s You do not have permission to "
-"update this list. %s You do not have permission to delete this list. %s You "
-"do not have permission to add a biblio to this list. %s No biblio has been "
-"removed. %s An error occurred when inserting this list. The name already %s "
-"exists. %s %s %s %s %s %s "
-msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -540,9 +492,9 @@ msgstr ""
 #. %5$s:  ELSE 
 #. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:667
-#, fuzzy, c-format
+#, c-format
 msgid "%s %sShared%sPrivate%s %s Public %s "
-msgstr "%s%sSoukromé%sSdílené%s%s "
+msgstr "%s %sSdílený%sSoukromý%s %s Veřejný %s "
 
 #. %1$s:  IF loop.index == 0 
 #. %2$s:  ELSE 
@@ -829,9 +781,9 @@ msgstr "%s V katalogu knihovny %s nebyly nalezeny žádné záznamy. "
 #. %1$s:  ELSE 
 #. %2$s:  END # / IF results 
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:86
-#, fuzzy, c-format
+#, c-format
 msgid "%s No results, try to change filters. %s "
-msgstr "%s %s Žádné výsledky. %s "
+msgstr "%s Žádné výsledky. %s "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:476
@@ -1244,6 +1196,11 @@ msgid ""
 "input (generated if the authorised value category does not exist). %%] %s "
 "[%% DEFAULT class = '' size = 20 %%] %s "
 msgstr ""
+"%s [%%# Parameters: name: the name of the select element category: the "
+"authorised value category default: the default authorised value to select "
+"class: the CSS class of the select element size: the size to use for the "
+"input (generated if the authorised value category does not exist). %%] %s "
+"[%% DEFAULT class = '' size = 20 %%] %s "
 
 #. For the first occurrence,
 #. %1$s:  ind.label 
@@ -3024,9 +2981,9 @@ msgstr "(po termínu)"
 #. %1$s:  koha_new.newdate 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:48
-#, fuzzy, c-format
+#, c-format
 msgid "(published on %s%s by "
-msgstr "(vydáno %s)"
+msgstr "(vydáno %s%s, napsal(a) "
 
 #. %1$s:  FOREACH relate IN related 
 #. %2$s:  relate.related_search 
@@ -3461,6 +3418,34 @@ msgstr "Neuhrazená částka"
 #, c-format
 msgid "An error has occurred"
 msgstr "Došlo k chybě"
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112
+#, c-format
+msgid "An error occurred when deleting this list. Check the logs."
+msgstr "Došlo k chybě při pokusu o smazání seznamu."
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:110
+#, c-format
+msgid ""
+"An error occurred when inserting this list. Perhaps the name already exists."
+msgstr ""
+"Při vytváření seznamu se vyskytla chyba. Pravděpodobně již existuje seznam "
+"se stejným názvem."
+
+#. %1$s:  shelfname 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:146
+#, c-format
+msgid "An error occurred when inserting this list. The name %s already exists."
+msgstr ""
+"Při vytváření seznamu se vyskytla chyba. Seznam s názvem %s již existuje."
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:108
+#, c-format
+msgid ""
+"An error occurred when updating this list. Perhaps the value already exists."
+msgstr ""
+"Při aktualizaci seznamu se vyskytla chyba. Zadaná hodnota již pravděpodobně "
+"existuje."
 
 #: opac-tmpl/bootstrap/en/modules/errors/500.tt:31
 #, c-format
@@ -4438,7 +4423,7 @@ msgstr "Počet"
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:32
 #, c-format
 msgid "Course #"
-msgstr "Kurz č. "
+msgstr "Kurz č."
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:33
 #, c-format
@@ -6205,9 +6190,9 @@ msgid "Limit to currently available items."
 msgstr "Zobrazit pouze právě dostupné dokumenty."
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:53
-#, fuzzy, c-format
+#, c-format
 msgid "Limit to:"
-msgstr "Omezit na: "
+msgstr "Omezit na:"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:35
 #, c-format
@@ -6231,6 +6216,16 @@ msgstr "LinkedIn"
 msgid "Links"
 msgstr "Odkazy"
 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:122
+#, c-format
+msgid "List deleted with success."
+msgstr "Seznam byl odstraněn."
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:120
+#, c-format
+msgid "List inserted with success."
+msgstr "Seznam byl úspěšně vytvořen."
+
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:655
 #, c-format
 msgid "List name"
@@ -6246,6 +6241,11 @@ msgstr "Název seznamu:"
 #, c-format
 msgid "List name: "
 msgstr "Název seznamu: "
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:118
+#, c-format
+msgid "List updated with success."
+msgstr "Seznam byl úspěšně aktualizován."
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:394
 #, c-format
@@ -6763,6 +6763,11 @@ msgstr "Ne"
 #, c-format
 msgid "No available items."
 msgstr "Žádné jednotky nejsou dostupné."
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:144
+#, c-format
+msgid "No biblio has been removed."
+msgstr "Žádný záznam nebyl odstraněn."
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:48
 #, c-format
@@ -7609,14 +7614,13 @@ msgstr "Soukromý"
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:31
-#, fuzzy
 msgid "Private lists"
 msgstr "Soukromé seznamy"
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:36
 msgid "Private lists shared with me"
-msgstr ""
+msgstr "Soukromé seznamy sdílené se mnou"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
@@ -9349,15 +9353,34 @@ msgstr "První předplatné začalo %s"
 msgid "The following fields contain invalid information:"
 msgstr "Následující pole obsahují nesprávné informace:"
 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:124
+#, c-format
+msgid "The item has been added to the list."
+msgstr "Položka byla vložena do seznamu."
+
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:108
 msgid "The item has been added to your cart"
 msgstr "Jednotka byla vložena do košíku"
 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:126
+#, c-format
+msgid "The item has been removed from the list."
+msgstr "Položka byla odstraněna ze seznamu."
+
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:108
 msgid "The item has been removed from your cart"
 msgstr "Jednotka byla vyjmuta z košíku"
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:114
+#, c-format
+msgid ""
+"The item has not been added to the list. Please check it's not in this list "
+"yet."
+msgstr ""
+"Položka nebyla přidána do seznamu. Zkontrolujte, jestli se v seznamu již "
+"nenachází."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:108
@@ -9389,6 +9412,16 @@ msgstr "Operace %s není podporována."
 #, c-format
 msgid "The selected suggestions have been deleted."
 msgstr "Vybrané návrhy byly odstraněny."
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:128
+#, c-format
+msgid "The share has been removed."
+msgstr "Sdílení bylo zrušeno."
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:116
+#, c-format
+msgid "The share has not been removed."
+msgstr "Sdílení nebylo zrušeno."
 
 #. %1$s:  subscription_LOO.histenddate 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:112
@@ -9539,6 +9572,11 @@ msgstr ""
 msgid "This is a serial"
 msgstr "Toto je periodikum"
 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:132
+#, c-format
+msgid "This item does not exist."
+msgstr "Tato položka neexistuje."
+
 #. %1$s:  ELSIF ( circ_error_RESTRICTED ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:57
 #, c-format
@@ -9567,6 +9605,11 @@ msgstr "Tato jednotka není určena k půjčování. %s "
 #, c-format
 msgid "This item is on hold for another patron. %s "
 msgstr "Tato jednotka je rezervována jiným uživatelem. %s "
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:130
+#, c-format
+msgid "This list does not exist."
+msgstr "Tento seznam neexistuje."
 
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:514
@@ -10198,15 +10241,40 @@ msgstr "Nezadali jste žádné podmínky vyhledávání."
 msgid "You did not specify any search criteria."
 msgstr "Nezadali jste žádné vyhledávací kritériia."
 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:142
+#, c-format
+msgid "You do not have permission to add a biblio to this list."
+msgstr "Nemáte oprávnění pro přidávání záznamů do tohoto seznamu."
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:140
+#, c-format
+msgid "You do not have permission to delete this list."
+msgstr "Nemáte oprávnění pro odstranění tohoto seznamu."
+
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:93
 #, c-format
 msgid "You do not have permission to download this list."
 msgstr "Nemáte oprávnění ke stažení tohoto seznamu."
 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:136
+#, c-format
+msgid "You do not have permission to insert a new list."
+msgstr "Nemáte oprávnění pro vytváření seznamů."
+
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:28
 #, c-format
 msgid "You do not have permission to send this list."
 msgstr "K odeslání tohoto seznamu nemáte oprávnění."
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:138
+#, c-format
+msgid "You do not have permission to update this list."
+msgstr "Nemáte oprávnění pro úpravu tohoto seznamu."
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:134
+#, c-format
+msgid "You do not have permission to view this list."
+msgstr "Nemáte oprávnění pro zobrazení tohoto seznamu."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:56
 #, c-format
@@ -10622,7 +10690,6 @@ msgstr "Vaše uživatelské číslo nebylo nalezeno. Zkuste to znovu."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
-#, fuzzy
 msgid "[ New list ]"
 msgstr "Nový seznam"
 
@@ -10678,6 +10745,9 @@ msgid ""
 "( languages_loop ) && ( OpacLangSelectorMode == 'both' || "
 "OpacLangSelectorMode == 'top') ) %%] "
 msgstr ""
+"[%% IF ( ( opaclanguagesdisplay ) && ( ! one_language_enabled ) && "
+"( languages_loop ) && ( OpacLangSelectorMode == 'both' || "
+"OpacLangSelectorMode == 'top') ) %%] "
 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:107
 #, c-format
@@ -10726,9 +10796,9 @@ msgid "and"
 msgstr "a"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid "anyone else to add entries."
-msgstr "komukoliv odstraňovat záznamy ostatních."
+msgstr "komukoliv přidávat záznamy."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:28
 #, c-format

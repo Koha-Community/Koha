@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0\n"
-"POT-Creation-Date: 2015-11-10 15:00-0300\n"
+"POT-Creation-Date: 2015-11-19 23:26-0300\n"
 "PO-Revision-Date: 2015-09-27 06:30+0000\n"
 "Last-Translator: niknia <massoomeh.niknia@gmail.com>\n"
 "Language-Team: Pendar <ebrahimi_info@yahoo.com>\n"
@@ -136,54 +136,6 @@ msgid "%s %s %s %s You have subscribed to email notification on new issues "
 msgstr ""
 "%s %s %s شما برای دریافت ایمیل اطلاع رسانی برای دریافت شماره جدید مشترک شده "
 "اید "
-
-#. %1$s:  END 
-#. %2$s:  SWITCH m.code 
-#. %3$s:  CASE 'error_on_update' 
-#. %4$s:  CASE 'error_on_insert' 
-#. %5$s:  CASE 'error_on_delete' 
-#. %6$s:  CASE 'error_on_add_biblio' 
-#. %7$s:  CASE 'error_on_remove_share' 
-#. %8$s:  CASE 'success_on_update' 
-#. %9$s:  CASE 'success_on_insert' 
-#. %10$s:  CASE 'success_on_delete' 
-#. %11$s:  CASE 'success_on_add_biblio' 
-#. %12$s:  CASE 'success_on_remove_biblios' 
-#. %13$s:  CASE 'success_on_remove_share' 
-#. %14$s:  CASE 'does_not_exist' 
-#. %15$s:  CASE 'item_does_not_exist' 
-#. %16$s:  CASE 'unauthorized_on_view' 
-#. %17$s:  CASE 'unauthorized_on_insert' 
-#. %18$s:  CASE 'unauthorized_on_update' 
-#. %19$s:  CASE 'unauthorized_on_delete' 
-#. %20$s:  CASE 'unauthorized_on_add_biblio' 
-#. %21$s:  CASE 'no_biblio_removed' 
-#. %22$s:  CASE 'Koha::Exceptions::Virtualshelves::DuplicateObject' 
-#. %23$s:  shelfname 
-#. %24$s:  CASE 'DBIx::Class::Exception' 
-#. %25$s:  m.msg 
-#. %26$s:  CASE 
-#. %27$s:  m.code 
-#. %28$s:  m.msg 
-#. %29$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:104
-#, c-format
-msgid ""
-"%s %s %s An error occurred when updating this list. Perhaps the value "
-"already exists. %s An error occurred when inserting this list. Perhaps the "
-"name already exists. %s An error occurred when deleteing this list. Check "
-"the logs. %s The item has not been added to the list. Please check it's not "
-"in this list yet. %s The share has not been removed. %s List updated with "
-"success. %s List inserted with success. %s List deleted with success. %s The "
-"item has been added to the list. %s The item has been removed from the list. "
-"%s The share has been removed. %s This list does not exist. %s This item "
-"does not exist. %s You do not have permission to view this list. %s You do "
-"not have permission to insert a new list. %s You do not have permission to "
-"update this list. %s You do not have permission to delete this list. %s You "
-"do not have permission to add a biblio to this list. %s No biblio has been "
-"removed. %s An error occurred when inserting this list. The name already %s "
-"exists. %s %s %s %s %s %s "
-msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -3432,6 +3384,29 @@ msgstr "مبلغ واریز نشده"
 msgid "An error has occurred"
 msgstr "خطایی رخ داده است"
 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112
+#, fuzzy, c-format
+msgid "An error occurred when deleting this list. Check the logs."
+msgstr "هنگامی که برای پردازش درخواست شما تلاش می شد خطایی رخ داده است."
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:110
+#, c-format
+msgid ""
+"An error occurred when inserting this list. Perhaps the name already exists."
+msgstr ""
+
+#. %1$s:  shelfname 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:146
+#, c-format
+msgid "An error occurred when inserting this list. The name %s already exists."
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:108
+#, c-format
+msgid ""
+"An error occurred when updating this list. Perhaps the value already exists."
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/errors/500.tt:31
 #, c-format
 msgid "An error occurred while try to process your request."
@@ -6216,6 +6191,16 @@ msgstr "لينكيدن"
 msgid "Links"
 msgstr "پیوندها"
 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:122
+#, c-format
+msgid "List deleted with success."
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:120
+#, c-format
+msgid "List inserted with success."
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:655
 #, c-format
 msgid "List name"
@@ -6231,6 +6216,11 @@ msgstr "فهرست نام:"
 #, c-format
 msgid "List name: "
 msgstr "فهرست نام:"
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:118
+#, c-format
+msgid "List updated with success."
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:394
 #, c-format
@@ -6748,6 +6738,11 @@ msgstr "خیر"
 #, c-format
 msgid "No available items."
 msgstr "منبعی در دسترس نیست."
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:144
+#, fuzzy, c-format
+msgid "No biblio has been removed."
+msgstr "خطا: هیچ شماره کتابشناسی دریافت نشد."
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:48
 #, c-format
@@ -9328,17 +9323,34 @@ msgstr "اولین اشتراک شروع شد در %s"
 msgid "The following fields contain invalid information:"
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:124
+#, fuzzy, c-format
+msgid "The item has been added to the list."
+msgstr "این منبع به سبد شما اضافه شده است"
+
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:108
 #, fuzzy
 msgid "The item has been added to your cart"
 msgstr "این منبع به سبد شما اضافه شده است"
 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:126
+#, fuzzy, c-format
+msgid "The item has been removed from the list."
+msgstr "این منبع از سبد شما حذف شده است"
+
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:108
 #, fuzzy
 msgid "The item has been removed from your cart"
 msgstr "این منبع از سبد شما حذف شده است"
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:114
+#, c-format
+msgid ""
+"The item has not been added to the list. Please check it's not in this list "
+"yet."
+msgstr ""
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:108
@@ -9369,6 +9381,16 @@ msgstr "معلومات المورد غير مطلوبة"
 #, c-format
 msgid "The selected suggestions have been deleted."
 msgstr "پیشنهادهای انتخاب شده، حذف شد."
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:128
+#, fuzzy, c-format
+msgid "The share has been removed."
+msgstr "این منبع از سبد شما حذف شده است"
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:116
+#, fuzzy, c-format
+msgid "The share has not been removed."
+msgstr "این منبع از سبد شما حذف شده است"
 
 #. %1$s:  subscription_LOO.histenddate 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:112
@@ -9516,6 +9538,11 @@ msgstr "این خطا نشان می دهد که به شما دلایلی از د
 msgid "This is a serial"
 msgstr "این یک پیایند است."
 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:132
+#, fuzzy, c-format
+msgid "This item does not exist."
+msgstr "این منبع برای امانت نیست. %s "
+
 #. %1$s:  ELSIF ( circ_error_RESTRICTED ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:57
 #, c-format
@@ -9544,6 +9571,11 @@ msgstr "این منبع برای امانت نیست. %s "
 #, c-format
 msgid "This item is on hold for another patron. %s "
 msgstr "این منبع در رزرو کاربر دیگری است. %s "
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:130
+#, fuzzy, c-format
+msgid "This list does not exist."
+msgstr "این عنوان نمی تواند درخواست شود"
 
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:514
@@ -10161,14 +10193,39 @@ msgstr "لم تقم بتحديد أي معايير للبحث"
 msgid "You did not specify any search criteria."
 msgstr "لم تقم بتحديد أي معايير للبحث"
 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:142
+#, fuzzy, c-format
+msgid "You do not have permission to add a biblio to this list."
+msgstr "شما اجازه دانلود این فهرست را ندارید."
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:140
+#, fuzzy, c-format
+msgid "You do not have permission to delete this list."
+msgstr "شما اجازه ارسال این فهرست را ندارید."
+
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:93
 #, c-format
 msgid "You do not have permission to download this list."
 msgstr "شما اجازه دانلود این فهرست را ندارید."
 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:136
+#, fuzzy, c-format
+msgid "You do not have permission to insert a new list."
+msgstr "شما اجازه ارسال این فهرست را ندارید."
+
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:28
 #, c-format
 msgid "You do not have permission to send this list."
+msgstr "شما اجازه ارسال این فهرست را ندارید."
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:138
+#, fuzzy, c-format
+msgid "You do not have permission to update this list."
+msgstr "شما اجازه ارسال این فهرست را ندارید."
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:134
+#, fuzzy, c-format
+msgid "You do not have permission to view this list."
 msgstr "شما اجازه ارسال این فهرست را ندارید."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:56
