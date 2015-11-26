@@ -1,6 +1,4 @@
 #!/usr/bin/env perl
-use strict;
-use warnings;
 
 # This script can be used to run perlcritic on perl files in koha
 # It calls its own custom perlcriticrc
@@ -8,16 +6,33 @@ use warnings;
 # and the environment variable TEST_QA to be set
 # At present only the directories in @dirs will pass the tests in 'Gentle' mode
 
+use Modern::Perl;
 use File::Spec;
 use Test::More;
 use English qw(-no_match_vars);
 
-my @all_koha_dirs = qw( acqui admin authorities basket C4 catalogue cataloguing circ course_reserves debian errors
-labels members misc offline_circ opac patroncards patron_lists reports reserve reviews rotating_collections
-serials sms suggestion t tags test tools virtualshelves Koha);
-
-my @dirs = qw( acqui admin authorities basket catalogue cataloguing circ debian errors labels
-    members offline_circ reserve reviews rotating_collections serials sms virtualshelves Koha C4/SIP);
+my @dirs = qw(
+    acqui
+    admin
+    authorities
+    basket
+    catalogue
+    cataloguing
+    circ
+    debian
+    errors
+    labels
+    members
+    offline_circ
+    reserve
+    reviews
+    rotating_collections
+    serials
+    sms
+    virtualshelves
+    Koha
+    C4/SIP
+);
 
 if ( not $ENV{TEST_QA} ) {
     my $msg = 'Author test. Set $ENV{TEST_QA} to a true value to run';
