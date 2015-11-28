@@ -10,7 +10,6 @@
 <link rel="stylesheet" type="text/css" media="print" href="[% themelang %]/css/print.css" />
 [% INCLUDE intranetstylesheet.inc %]
 [% IF ( bidi )            %]<link rel="stylesheet" type="text/css" href="[% themelang %]/css/right-to-left.css" />[% END %]
-[% IF ( IntranetUserCSS ) %]<style type="text/css">[% IntranetUserCSS %]</style>[% END %]
 
 <script type="text/javascript" src="[% interface %]/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/jquery-ui.js"></script>
@@ -23,6 +22,7 @@
 [% IF ( login ) %]
     <link rel="stylesheet" type="text/css" href="[% themelang %]/css/login.css" />
 [% END %]
+[% IF ( IntranetUserCSS ) %]<style type="text/css">[% IntranetUserCSS %]</style>[% END %]
 
 <!-- koha core js -->
 <script type="text/javascript" src="[% themelang %]/js/staff-global.js"></script>
