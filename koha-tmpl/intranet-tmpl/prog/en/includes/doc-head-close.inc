@@ -19,6 +19,7 @@
 [% IF ( login ) %]
     <link rel="stylesheet" type="text/css" href="[% themelang %]/css/login.css" />
 [% END %]
+[% IF ( IntranetUserCSS ) %]<style type="text/css">[% IntranetUserCSS %]</style>[% END %]
 
 <!-- koha core js -->
 <script type="text/javascript" src="[% themelang %]/js/staff-global.js"></script>

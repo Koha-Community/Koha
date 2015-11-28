@@ -1220,6 +1220,7 @@ sub checkauth {
         IntranetNav                           => C4::Context->preference("IntranetNav"),
         IntranetFavicon                       => C4::Context->preference("IntranetFavicon"),
         intranetuserjs                        => C4::Context->preference("intranetuserjs"),
+        IntranetUserJS                        => C4::Context->preference("IntranetUserJS"),
         IndependentBranches                   => C4::Context->preference("IndependentBranches"),
         AutoLocation                          => C4::Context->preference("AutoLocation"),
         wrongip                               => $info{'wrongip'},
