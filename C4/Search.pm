@@ -1882,6 +1882,13 @@ sub searchResults {
     # We get the biblionumber position in MARC
     my ($bibliotag,$bibliosubf)=GetMarcFromKohaField('biblio.biblionumber','');
 
+    # set stuff for XSLT processing here once, not later again for every record we retrieved
+    my $interface = $search_context eq 'opac' ? 'OPAC' : '';
+    my $xslsyspref = $interface . "XSLTResultsDisplay";
+    my $xslfile = C4::Context->preference($xslsyspref);
+    my $lang = C4::Languages::getlanguage();
+    my ($sysxml) = C4::XSLT::_get_xslt_sysprefs();
+
     # loop through all of the records we've retrieved
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
 
@@ -2209,9 +2216,9 @@ sub searchResults {
         }
 
         # XSLT processing of some stuff
-        my $interface = $search_context eq 'opac' ? 'OPAC' : '';
-        if (!$scan && C4::Context->preference($interface . "XSLTResultsDisplay")) {
-            $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, $interface."XSLTResultsDisplay", 1, \@hiddenitems);
+        # we fetched the sysprefs already before the loop through all retrieved record!
+        if (!$scan && $xslfile) {
+            $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, $xslsyspref, 1, \@hiddenitems, $sysxml, $xslfile);
         # the last parameter tells Koha to clean up the problematic ampersand entities that Zebra outputs
         }
 
