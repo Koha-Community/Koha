@@ -128,7 +128,7 @@
         <label for="itemcallnumber">Call number: </label><input type="text" name="Filter" id="itemcallnumber" value="" />
       </li>
       <li>
-        <label for="ccode">Collection code: </label><select name="Filter" id="ccode"><option value="" > Any collection code</option>
+        <label for="ccode">Collection: </label><select name="Filter" id="ccode"><option value="" > Any collection</option>
     [% FOREACH ccodeloo IN ccodeloop %]
         <option value="[% ccodeloo.value %]" >[% ccodeloo.description %] </option>
      [% END %]
@@ -142,7 +142,7 @@
     </select>
       </li>
       <li>
-        <label for="patroncategory">Patron category: </label><select name="Filter" id="patroncategory"><option value="" > Any Category code</option>
+        <label for="patroncategory">Patron category: </label><select name="Filter" id="patroncategory"><option value="" > Any category code</option>
     [% FOREACH borcatloo IN borcatloop %]
         <option value="[% borcatloo.value %]" >[% borcatloo.description %] </option>  
      [% END %] 
