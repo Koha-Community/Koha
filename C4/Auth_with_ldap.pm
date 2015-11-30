@@ -350,7 +350,16 @@ sub update_local {
     my $borrowerid = shift or croak "No borrowerid";
     my $borrower   = shift or croak "No borrower record";
 
+    # skip extended patron attributes in 'borrowers' attribute update
     my @keys = keys %$borrower;
+    if (C4::Context->preference('ExtendedPatronAttributes')) {
+        foreach my $attribute_type ( C4::Members::AttributeTypes::GetAttributeTypes() ) {
+           my $code = $attribute_type->{code};
+           @keys = grep { $_ ne $code } @keys;
+           $debug and printf STDERR "ignoring extended patron attribute '%s' in update_local()\n", $code;
+        }
+    }
+
     my $dbh = C4::Context->dbh;
     my $query = "UPDATE  borrowers\nSET     " .
         join(',', map {"$_=?"} @keys) .
