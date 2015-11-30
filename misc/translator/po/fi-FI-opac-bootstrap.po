@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-10-18 10:28-0300\n"
-"PO-Revision-Date: 2015-10-23 11:33+0000\n"
+"POT-Creation-Date: 2015-11-20 10:18-0300\n"
+"PO-Revision-Date: 2015-10-29 12:40+0000\n"
 "Last-Translator: Päivi <paivi.knuutinen@jns.fi>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fi\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1445599984.000000\n"
+"X-POOTLE-MTIME: 1446122459.000000\n"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:303
@@ -127,8 +127,8 @@ msgstr ""
 #, c-format
 msgid "%s %s %s %s 1 item is on order. %s %s items are on order. %s %s %s "
 msgstr ""
-"%s %s %s %s 1 nimeke on tilauksessa. %s %s nimekkeitä on tilauksessa. %s %s %"
-"s "
+"%s %s %s %s 1 nimeke on tilauksessa. %s %s nimekkeitä on tilauksessa. %s %s "
+"%s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( subscription_LOO.letter ) 
@@ -417,9 +417,9 @@ msgid ""
 "MARC-8) %sMARC (Unicode/UTF-8) %sMARC (Unicode/UTF-8, Standard) %sMODS (XML) "
 "%sRIS %sISBD %s "
 msgstr ""
-"%s %sBIBTEX %sDublin Core (XML) %sEndNote %sMARCXML %sMARC (non-"
-"Unicode/MARC-8) %sMARC (Unicode/UTF-8) %sMARC (Unicode/UTF-8, Standard) %"
-"sMODS (XML) %sRIS %sISBD %s "
+"%s %sBIBTEX %sDublin Core (XML) %sEndNote %sMARCXML %sMARC (non-Unicode/"
+"MARC-8) %sMARC (Unicode/UTF-8) %sMARC (Unicode/UTF-8, Standard) %sMODS (XML) "
+"%sRIS %sISBD %s "
 
 #. %1$s:  SWITCH ACCOUNT_LINE.accounttype 
 #. %2$s:  CASE 'Pay' 
@@ -459,8 +459,8 @@ msgid ""
 "%sCredit %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
 "%s %sMaksettu, kiitos %sMaksettu, kiitos (käteinen, SIP2) %sMaksettu, kiitos "
-"(VISA, SIP2) %sMaksettu, kiitos (luottokortti, SIP2) %sUusi kortti %sMaksu %"
-"sTilinhoitomaksu %sMuu maksu %sKadonnut nide %sAnnettu anteeksi %sKertyvä "
+"(VISA, SIP2) %sMaksettu, kiitos (luottokortti, SIP2) %sUusi kortti %sMaksu "
+"%sTilinhoitomaksu %sMuu maksu %sKadonnut nide %sAnnettu anteeksi %sKertyvä "
 "maksu %sLain ausmaksu %sAnnettu anteeksi %sKadonneen aineiston palautusmaksu "
 "%sMaksu %sAnnettu anteeksi %sCredit %sCredit %s%s %s %s, %s%s %s(%s)%s "
 
@@ -701,10 +701,17 @@ msgid "%s Home library:"
 msgstr "%s Kotikirjasto:"
 
 #. %1$s:  ELSE 
+#. %2$s:  END 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:70
-#, c-format
-msgid "%s If you have a "
-msgstr "%s Jos sinulla on "
+#, fuzzy, c-format
+msgid ""
+"%s If you have a CAS account, you may use that below. %s %s If you have a "
+"local account, you may use that below. %s "
+msgstr ""
+"käyttäjätunnus, jota käytät alapuolella. %s %s Jos sinulla on paikallinen "
+"tili, voit käyttää sitä alapuolella. %s "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:192
@@ -789,7 +796,7 @@ msgstr "%s Muu puhelin:"
 #. %8$s:  IF PasswordContainsTrailingSpaces 
 #. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:31
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Passwords do not match. Please re-type your new password. %s %s Your new "
 "password must be at least %s characters long. %s %s Your current password "
@@ -800,7 +807,8 @@ msgstr ""
 "%s Salasanat eivät täsmää. Ole hyvä ja anna uusi salasanasi uudelleen. %s %s "
 "Uuden salasanan on oltava vähintään %s merkkiä pitkä. %s %s Väärä salasana. "
 "Jos ongelma toistuu, ole hyvä ja pyydä kirjastonhoitajaa päivittämään "
-"salasanasi. %s"
+"salasanasi. %s %s Salasanassasi on tyhjä merkki ennen ja/tai jälkeen "
+"salasanan. %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -1047,8 +1055,8 @@ msgid ""
 "OpacAdvSearchMoreOptions.grep('language').size > 0 and expanded_options ) ) "
 "%%] "
 msgstr ""
-"%s [%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('language')"
-".size > 0 and not expanded_options ) tai ( OpacAdvSearchMoreOptions and "
+"%s [%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('language')."
+"size > 0 and not expanded_options ) tai ( OpacAdvSearchMoreOptions and "
 "OpacAdvSearchMoreOptions.grep('language').size > 0 and expanded_options ) ) "
 "%%] "
 
@@ -1063,10 +1071,10 @@ msgid ""
 "defined('contactnote') %%] "
 msgstr ""
 "%s [%% UNLESS hidden.defined('B_address') && hidden.defined('B_address2') && "
-"hidden.defined('B_city') && hidden.defined('B_state') && "
-"hidden.defined('B_zipcode') && hidden.defined('B_country') && "
-"hidden.defined('B_phone') && hidden.defined('B_email') && "
-"hidden.defined('contactnote') %%] "
+"hidden.defined('B_city') && hidden.defined('B_state') && hidden."
+"defined('B_zipcode') && hidden.defined('B_country') && hidden."
+"defined('B_phone') && hidden.defined('B_email') && hidden."
+"defined('contactnote') %%] "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:596
@@ -1079,12 +1087,12 @@ msgid ""
 "&& hidden.defined('altcontactcountry') && hidden.defined('altcontactphone') "
 "%%] "
 msgstr ""
-"%s [%% UNLESS hidden.defined('altcontactsurname') && "
-"hidden.defined('altcontactfirstname') && hidden.defined('altcontactaddress1')"
-" && hidden.defined('altcontactaddress2') && "
-"hidden.defined('altcontactaddress3') && hidden.defined('altcontactstate') && "
-"hidden.defined('altcontactzipcode') && hidden.defined('altcontactcountry') "
-"&& hidden.defined('altcontactphone') %%] "
+"%s [%% UNLESS hidden.defined('altcontactsurname') && hidden."
+"defined('altcontactfirstname') && hidden.defined('altcontactaddress1') && "
+"hidden.defined('altcontactaddress2') && hidden.defined('altcontactaddress3') "
+"&& hidden.defined('altcontactstate') && hidden.defined('altcontactzipcode') "
+"&& hidden.defined('altcontactcountry') && hidden.defined('altcontactphone') "
+"%%] "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:362
@@ -1095,8 +1103,8 @@ msgid ""
 "defined('emailpro') && hidden.defined('fax') %%] "
 msgstr ""
 "%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
-"hidden.defined('mobile') && hidden.defined('email') && "
-"hidden.defined('emailpro') && hidden.defined('fax') %%] "
+"hidden.defined('mobile') && hidden.defined('email') && hidden."
+"defined('emailpro') && hidden.defined('fax') %%] "
 
 #. %1$s:  END # /UNLESS fields hidden 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:251
@@ -1108,9 +1116,9 @@ msgid ""
 "%%] "
 msgstr ""
 "%s [%% UNLESS hidden.defined('streetnumber') && hidden.defined('address') && "
-"hidden.defined('address2') && hidden.defined('city') && "
-"hidden.defined('state') && hidden.defined('zipcode') && "
-"hidden.defined('country') %%] "
+"hidden.defined('address2') && hidden.defined('city') && hidden."
+"defined('state') && hidden.defined('zipcode') && hidden.defined('country') "
+"%%] "
 
 #. %1$s:  END # / defined 'branchcode' 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:99
@@ -1121,10 +1129,10 @@ msgid ""
 "defined('initials') && hidden.defined('othernames') && hidden.defined('sex') "
 "%%] "
 msgstr ""
-"%s [%% UNLESS hidden.defined('title') && hidden.defined('surname') && "
-"hidden.defined('firstname') && hidden.defined('dateofbirth') && "
-"hidden.defined('initials') && hidden.defined('othernames') && "
-"hidden.defined('sex') %%] "
+"%s [%% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden."
+"defined('firstname') && hidden.defined('dateofbirth') && hidden."
+"defined('initials') && hidden.defined('othernames') && hidden.defined('sex') "
+"%%] "
 
 #. %1$s:  BLOCK showreference 
 #. %2$s:  SET authidurl = '/cgi-bin/koha/opac-authoritiesdetail.pl?authid=' 
@@ -1416,7 +1424,8 @@ msgstr ""
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %s Log in to your account %s Catalog "
 "login disabled %s"
-msgstr "%s%s%sKoha %s luettelo &rsaquo; %s Kirjaudu %s Kirjautuminen estetty %s"
+msgstr ""
+"%s%s%sKoha %s luettelo &rsaquo; %s Kirjaudu %s Kirjautuminen estetty %s"
 
 #. For the first occurrence,
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -1440,8 +1449,8 @@ msgid ""
 "%s&nbsp;with limit(s):&nbsp;'%s'%s %s You did not specify any search "
 "criteria. %s"
 msgstr ""
-"%s%s%sKoha %s luettelo &rsaquo; %s Hakutulokset %shaulle "
-"'%s'%s%s&nbsp;rajoituksin:&nbsp;'%s'%s %s Et rajoittanut hakua. %s "
+"%s%s%sKoha %s luettelo &rsaquo; %s Hakutulokset %shaulle '%s'%s%s&nbsp;"
+"rajoituksin:&nbsp;'%s'%s %s Et rajoittanut hakua. %s "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -2176,9 +2185,8 @@ msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;"
 "AuthenticatePatron&gt; &lt;id&gt;419&lt;/id&gt; &lt;/AuthenticatePatron&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; "
-"&lt;AuthenticatePatron&gt; &lt;id&gt;419&lt;/id&gt; "
-"&lt;/AuthenticatePatron&gt;"
+"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;"
+"AuthenticatePatron&gt; &lt;id&gt;419&lt;/id&gt; &lt;/AuthenticatePatron&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:774
 #, c-format
@@ -2271,10 +2279,10 @@ msgid ""
 "status&gt;0&lt;/status&gt; &lt;type&gt;ADUEXT&lt;/type&gt; &lt;/"
 "GetPatronStatus&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; "
-"&lt;GetPatronStatus&gt; &lt;expiry&gt;2010-03-04&lt;/expiry&gt; "
-"&lt;status&gt;0&lt;/status&gt; &lt;type&gt;ADUEXT&lt;/type&gt; "
-"&lt;/GetPatronStatus&gt;"
+"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;"
+"GetPatronStatus&gt; &lt;expiry&gt;2010-03-04&lt;/expiry&gt; &lt;"
+"status&gt;0&lt;/status&gt; &lt;type&gt;ADUEXT&lt;/type&gt; &lt;/"
+"GetPatronStatus&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:210
 #, c-format
@@ -2396,8 +2404,8 @@ msgid ""
 "AvailableFor&gt;item level hold&lt;/AvailableFor&gt; &lt;/GetServices&gt;"
 msgstr ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetServices&gt; "
-"&lt;AvailableFor&gt;title level hold&lt;/AvailableFor&gt; "
-"&lt;AvailableFor&gt;item level hold&lt;/AvailableFor&gt; &lt;/GetServices&gt;"
+"&lt;AvailableFor&gt;title level hold&lt;/AvailableFor&gt; &lt;"
+"AvailableFor&gt;item level hold&lt;/AvailableFor&gt; &lt;/GetServices&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:720
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:751
@@ -3583,13 +3591,6 @@ msgstr "Selaa"
 msgid "Browse shelf"
 msgstr "Selaa"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "CAS"
-msgstr "CAS "
-
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:110
 #, c-format
@@ -3774,13 +3775,6 @@ msgstr "Luettelot, kuvastot"
 #, c-format
 msgid "Category:"
 msgstr "Luokka:"
-
-#. ABBR
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-msgid "Central Authentication Service"
-msgstr "Tunnistautumispalvelu"
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:14
 #, c-format
@@ -5523,9 +5517,11 @@ msgid ""
 "log in: "
 msgstr "Voit kirjautua ilman CAS-tiliä paikallisella tililläsi: "
 
+#. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, c-format
-msgid "If you do not have a Shibboleth account, but you do have a "
+#, fuzzy, c-format
+msgid ""
+"If you do not have a Shibboleth account, but you do have a CAS account, %s "
 msgstr "Jos sinulla ei ole Shibboleth-tiliä, mutta sinulla on "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
@@ -5549,10 +5545,11 @@ msgid ""
 msgstr ""
 "Jos sinulla ei ole salasanaa, pyydä se kirjaston asiakaspalvelupisteestä. "
 
+#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "If you have a "
-msgstr "Jos sinulla on "
+#, fuzzy, c-format
+msgid "If you have a CAS account, %s please "
+msgstr "Jos sinulla on Shibboleth-tili, ole hyvä "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:297
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:82
@@ -8490,6 +8487,8 @@ msgid ""
 "Sorry, your Shibboleth identity does not match a valid library identity. If "
 "you have a local login, you may use that below."
 msgstr ""
+"Valitan, Shibboleth-identiteettisi ei vastaa kirjastossa olevaa "
+"identiteettiä. Käytä paikallista kirjautumista alla."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:42
 #, c-format
@@ -8775,12 +8774,12 @@ msgstr "Keskeytä kaikki varaukset"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:612
 #, c-format
 msgid "Suspend until:"
-msgstr "Keskeytä varaus:"
+msgstr "Keskeytä varaus tähän saakka:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:607
 #, c-format
 msgid "Suspend your hold on "
-msgstr "Keskeytä varaus "
+msgstr "Keskeytä varaus nimekkeestä "
 
 #: opac-tmpl/bootstrap/en/modules/maintenance.tt:29
 #, c-format
@@ -10053,7 +10052,7 @@ msgstr "Istuntosi keksi on vanhentunut. Lataa sivu uudelleen."
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:86
 #, c-format
 msgid "Your account has been frozen%s until "
-msgstr "Käyttäjätunnuksesi on lukittu %s"
+msgstr "Käyttäjätunnuksesi on lukittu%s tähän saakka "
 
 #. %1$s:  ELSIF ( circ_error_CARD_LOST ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:67
@@ -10345,8 +10344,8 @@ msgid ""
 "OpacAdvSearchMoreOptions.grep('itemtype').size > 0 and expanded_options ) ) "
 "%%] "
 msgstr ""
-"[%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('itemtype')"
-".size > 0 and not expanded_options ) tai ( OpacAdvSearchMoreOptions and "
+"[%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('itemtype')."
+"size > 0 and not expanded_options ) tai ( OpacAdvSearchMoreOptions and "
 "OpacAdvSearchMoreOptions.grep('itemtype').size > 0 and expanded_options ) ) "
 "%%] "
 
@@ -10358,8 +10357,8 @@ msgid ""
 "OpacAdvSearchMoreOptions.grep('pubdate').size > 0 and expanded_options ) ) "
 "%%] "
 msgstr ""
-"[%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('pubdate')"
-".size > 0 and not expanded_options ) tai ( OpacAdvSearchMoreOptions and "
+"[%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('pubdate')."
+"size > 0 and not expanded_options ) tai ( OpacAdvSearchMoreOptions and "
 "OpacAdvSearchMoreOptions.grep('pubdate').size > 0 and expanded_options ) ) "
 "%%] "
 
@@ -10369,8 +10368,8 @@ msgid ""
 "[%% PROCESS showreference heading=seeals.heading linkType='seealso' "
 "type=seeals.type authid=seeals.authid %%] "
 msgstr ""
-"[%% PROCESS showreference heading=seeals.heading linkType='seealso' type="
-"seeals.type authid=seeals.authid %%] "
+"[%% PROCESS showreference heading=seeals.heading linkType='seealso' "
+"type=seeals.type authid=seeals.authid %%] "
 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:95
 #, c-format
@@ -10378,37 +10377,13 @@ msgid ""
 "[%% PROCESS showreference heading=seefro.heading linkType='seefrom' "
 "type=seefro.type %%] "
 msgstr ""
-"[%% PROCESS showreference heading=seefro.heading linkType='seefrom' type="
-"seefro.type %%] "
+"[%% PROCESS showreference heading=seefro.heading linkType='seefrom' "
+"type=seefro.type %%] "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "a an the"
 msgstr ""
-
-#. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, c-format
-msgid "account, %s "
-msgstr "käyttäjätunnus, %s "
-
-#. %1$s:  IF ( casServerUrl ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "account, %s please "
-msgstr "käyttäjätunnus, %s olkaa hyvä "
-
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#, c-format
-msgid ""
-"account, you may use that below. %s %s If you have a local account, you may "
-"use that below. %s "
-msgstr ""
-"käyttäjätunnus, jota käytät alapuolella. %s %s Jos sinulla on paikallinen "
-"tili, voit käyttää sitä alapuolella. %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112
 #, c-format
@@ -10581,13 +10556,13 @@ msgid ""
 "%]&rft.edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT."
 "series %]&rft.genre="
 msgstr ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft.au=[%"
-" BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url "
-"%]&rft.date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% "
-"BIBLIO_RESULT.item('size') %]&rft.isbn=[% BIBLIO_RESULT.isbn |url "
-"%]&rft.aucorp=&rft.place=[% BIBLIO_RESULT.place %]&rft.pub=[% "
-"BIBLIO_RESULT.publisher |url %]&rft.edition=[% BIBLIO_RESULT.edition "
-"%]&rft.series=[% BIBLIO_RESULT.series %]&rft.genre="
+"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
+"au=[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
+"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT."
+"item('size') %]&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft."
+"place=[% BIBLIO_RESULT.place %]&rft.pub=[% BIBLIO_RESULT.publisher |url "
+"%]&rft.edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT."
+"series %]&rft.genre="
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:711
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:742
@@ -10695,8 +10670,8 @@ msgid ""
 "ilsdi.pl?service=GetPatronInfo&amp;patron_id=1&amp;show_contact=0&amp;"
 "show_loans=1 "
 msgstr ""
-"ilsdi.pl?service=GetPatronInfo&amp;patron_id=1&amp;show_contact=0&amp;show_lo"
-"ans=1 "
+"ilsdi.pl?service=GetPatronInfo&amp;patron_id=1&amp;show_contact=0&amp;"
+"show_loans=1 "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:638
 #, c-format
@@ -11015,7 +10990,7 @@ msgstr "on tyhjä, ole hyvä ja ota yhteys kirjastonhoitajaan"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:579
 #, c-format
 msgid "since %s %s Suspended %s until %s %s %s Pending %s %s "
-msgstr "%s lähtien. %s Viivytetty %s%s asti. %s %s Voimassa %s %s "
+msgstr "%s lähtien. %s Keskeytetty %s%s asti. %s %s Odottaa %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/maintenance.tt:30
 #, c-format
@@ -11160,7 +11135,7 @@ msgstr "unAPI"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:654
 #, c-format
 msgid "until "
-msgstr "kunnes "
+msgstr "tähän saakka "
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:39
 #, c-format
@@ -11307,7 +11282,7 @@ msgstr "hankintaehdotukset"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1341
 msgid "your rating: "
-msgstr "arviosi:"
+msgstr "arviosi: "
 
 #. %1$s:  rating_value 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:508
@@ -11318,12 +11293,12 @@ msgstr "arviosi: %s, "
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:59
 #, c-format
 msgid "your reading history"
-msgstr "lainahistoria"
+msgstr "lainahistoriasi"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:50
 #, c-format
 msgid "your search history"
-msgstr "hakuhistoria"
+msgstr "hakuhistoriasi"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:10
 #, c-format

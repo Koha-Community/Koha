@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nn-NO-i-staff-prog-v-3000000\n"
-"POT-Creation-Date: 2015-10-18 10:41-0300\n"
+"POT-Creation-Date: 2015-11-20 11:56-0300\n"
 "PO-Revision-Date: 2011-11-04 09:04+0200\n"
 "Last-Translator: gangagiri <amsvrama@gmail.com>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.pping.uio.no>\n"
@@ -665,10 +665,15 @@ msgid "%s Home library:"
 msgstr "Ditt vanlege bibliotek"
 
 #. %1$s:  ELSE 
+#. %2$s:  END 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:70
-#, fuzzy, c-format
-msgid "%s If you have a "
-msgstr "Meinte du: "
+#, c-format
+msgid ""
+"%s If you have a CAS account, you may use that below. %s %s If you have a "
+"local account, you may use that below. %s "
+msgstr ""
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:192
@@ -3481,13 +3486,6 @@ msgstr "(<a1>Sjå på hylla</a>)"
 msgid "Browse shelf"
 msgstr "(<a1>Sjå på hylla</a>)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "CAS"
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:110
 #, fuzzy, c-format
@@ -3673,13 +3671,6 @@ msgstr "Katalogar"
 #, c-format
 msgid "Category:"
 msgstr "Kategori:"
-
-#. ABBR
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-msgid "Central Authentication Service"
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:14
 #, fuzzy, c-format
@@ -5437,9 +5428,11 @@ msgid ""
 "log in: "
 msgstr ""
 
+#. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
 #, c-format
-msgid "If you do not have a Shibboleth account, but you do have a "
+msgid ""
+"If you do not have a Shibboleth account, but you do have a CAS account, %s "
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
@@ -5465,9 +5458,10 @@ msgid ""
 msgstr ""
 "Dersom du ikkje har eit passord, kontakt biblioteket for å få dette ordna."
 
+#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
 #, c-format
-msgid "If you have a "
+msgid "If you have a CAS account, %s please "
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:297
@@ -10307,28 +10301,6 @@ msgstr ""
 #, fuzzy
 msgid "a an the"
 msgstr "Sluttdato:"
-
-#. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, c-format
-msgid "account, %s "
-msgstr ""
-
-#. %1$s:  IF ( casServerUrl ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "account, %s please "
-msgstr ""
-
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#, c-format
-msgid ""
-"account, you may use that below. %s %s If you have a local account, you may "
-"use that below. %s "
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112
 #, c-format

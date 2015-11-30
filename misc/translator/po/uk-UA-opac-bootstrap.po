@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: uk-UA-i-staff-t-prog-v-3002000\n"
-"POT-Creation-Date: 2015-10-18 10:51-0300\n"
+"POT-Creation-Date: 2015-11-20 13:27-0300\n"
 "PO-Revision-Date: 2014-09-11 06:00+0000\n"
 "Last-Translator: Serhij <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
@@ -707,10 +707,17 @@ msgid "%s Home library:"
 msgstr "%s Джерельна бібліотека: "
 
 #. %1$s:  ELSE 
+#. %2$s:  END 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:70
 #, fuzzy, c-format
-msgid "%s If you have a "
-msgstr "Якщо у Вас є обліковий запис "
+msgid ""
+"%s If you have a CAS account, you may use that below. %s %s If you have a "
+"local account, you may use that below. %s "
+msgstr ""
+"Якщо у Вас немає облікового запису у CAS, лише локальний обліковий запис, Ви "
+"все ще можете увійти у систему: "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:192
@@ -4030,13 +4037,6 @@ msgstr "Оглядач результатів"
 msgid "Browse shelf"
 msgstr "Огляд полиці"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "CAS"
-msgstr "CAS"
-
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:110
 #, c-format
@@ -4223,13 +4223,6 @@ msgstr "каталоги"
 #, c-format
 msgid "Category:"
 msgstr "Категорія: "
-
-#. ABBR
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-msgid "Central Authentication Service"
-msgstr "Центральна служба автентифікації"
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:14
 #, c-format
@@ -6029,9 +6022,11 @@ msgstr ""
 "Якщо у Вас немає облікового запису у CAS, лише локальний обліковий запис, Ви "
 "все ще можете увійти у систему: "
 
+#. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
 #, fuzzy, c-format
-msgid "If you do not have a Shibboleth account, but you do have a "
+msgid ""
+"If you do not have a Shibboleth account, but you do have a CAS account, %s "
 msgstr ""
 "Якщо у Вас немає облікового запису у CAS, лише локальний обліковий запис, Ви "
 "все ще можете увійти у систему: "
@@ -6062,10 +6057,11 @@ msgstr ""
 "Якщо Ви ще не маєте пароля, зупиніться наступного разу біля обмінного столу "
 "бібліотеки. Ми успішно встановимо його для Вас."
 
+#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "If you have a "
-msgstr "Якщо у Вас є обліковий запис "
+#, fuzzy, c-format
+msgid "If you have a CAS account, %s please "
+msgstr ", %s будь ласка, "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:297
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:82
@@ -10990,28 +10986,6 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "a an the"
 msgstr " "
-
-#. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, fuzzy, c-format
-msgid "account, %s "
-msgstr ", %s будь ласка, "
-
-#. %1$s:  IF ( casServerUrl ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "account, %s please "
-msgstr ", %s будь ласка, "
-
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#, c-format
-msgid ""
-"account, you may use that below. %s %s If you have a local account, you may "
-"use that below. %s "
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112
 #, c-format

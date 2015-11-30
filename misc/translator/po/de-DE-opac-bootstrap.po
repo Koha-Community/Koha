@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: German Koha Translation\n"
-"POT-Creation-Date: 2015-10-18 10:25-0300\n"
-"PO-Revision-Date: 2015-10-19 08:40+0000\n"
-"Last-Translator: Marc <veron@veron.ch>\n"
+"POT-Creation-Date: 2015-11-20 09:53-0300\n"
+"PO-Revision-Date: 2015-11-20 21:16+0000\n"
+"Last-Translator: Katrin <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: \n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1445244007.000000\n"
+"X-POOTLE-MTIME: 1448054185.000000\n"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:303
@@ -699,12 +699,18 @@ msgstr "%s Vorname:"
 msgid "%s Home library:"
 msgstr "%s Heimatbibliothek:"
 
-# Nachfolgend ein acron<m-Tag für CAS, dann Konto
 #. %1$s:  ELSE 
+#. %2$s:  END 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:70
 #, c-format
-msgid "%s If you have a "
-msgstr "%s Wenn Sie ein  "
+msgid ""
+"%s If you have a CAS account, you may use that below. %s %s If you have a "
+"local account, you may use that below. %s "
+msgstr ""
+"%s Wenn Sie ein CAS-Konto haben, können Sie dies unten verwenden. %s %s Wenn "
+"Sie ein lokales Konto haben, können Sie dies unten verwenden. %s "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:192
@@ -3834,13 +3840,6 @@ msgstr "Trefferliste durchstöbern"
 msgid "Browse shelf"
 msgstr "Regal durchstöbern"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "CAS"
-msgstr "CAS"
-
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:110
 #, c-format
@@ -4024,13 +4023,6 @@ msgstr "Kataloge"
 #, c-format
 msgid "Category:"
 msgstr "Kategorie:"
-
-#. ABBR
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-msgid "Central Authentication Service"
-msgstr "Zentraler Authentifizierungsdienst"
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:14
 #, c-format
@@ -5813,10 +5805,12 @@ msgstr ""
 "Wenn Sie kein CAS-Konto, aber ein lokales Benutzerkonto haben, können Sie "
 "sich ebenfalls anmelden: "
 
+#. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
 #, c-format
-msgid "If you do not have a Shibboleth account, but you do have a "
-msgstr "Wenn Sie kein Shibboleth-Konto, aber ein "
+msgid ""
+"If you do not have a Shibboleth account, but you do have a CAS account, %s "
+msgstr "Wenn Sie kein Shibboleth-Konto, aber ein CAS-Konto haben, %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
 #, c-format
@@ -5845,10 +5839,11 @@ msgstr ""
 "Biblioheksbesuch an die Ausleihtheke. Wir werden Ihnen gerne eines "
 "einrichten."
 
+#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
 #, c-format
-msgid "If you have a "
-msgstr "Wenn Sie ein "
+msgid "If you have a CAS account, %s please "
+msgstr "Wenn Sie ein Shibboleth-Konto, %s "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:297
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:82
@@ -10774,30 +10769,6 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "a an the"
 msgstr "ein eine einer eines einem einen der die das"
-
-#. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, c-format
-msgid "account, %s "
-msgstr "-Konto haben, %s "
-
-#. %1$s:  IF ( casServerUrl ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "account, %s please "
-msgstr "Konto haben, %s bitte "
-
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#, c-format
-msgid ""
-"account, you may use that below. %s %s If you have a local account, you may "
-"use that below. %s "
-msgstr ""
-"Konto, verwenden Sie die Eingabemöglichkeit unten. %s %s Wenn Sie über ein "
-"lokales Konto verfügen, verwenden Sie dieses unten. %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112
 #, c-format

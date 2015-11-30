@@ -17,8 +17,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha\n"
-"POT-Creation-Date: 2015-10-18 10:30-0300\n"
-"PO-Revision-Date: 2015-10-14 12:52+0000\n"
+"POT-Creation-Date: 2015-11-20 10:28-0300\n"
+"PO-Revision-Date: 2015-11-04 13:24+0000\n"
 "Last-Translator: Fridolin <fridolin.somers@biblibre.com>\n"
 "Language-Team: French (France) (http://www.transifex.com/projects/p/koha/"
 "language/fr_FR/)\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1444827135.000000\n"
+"X-POOTLE-MTIME: 1446643450.000000\n"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:303
@@ -719,10 +719,17 @@ msgid "%s Home library:"
 msgstr "%s Site de rattachement&nbsp;:"
 
 #. %1$s:  ELSE 
+#. %2$s:  END 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:70
-#, c-format
-msgid "%s If you have a "
-msgstr "%s Si vous avez un compte "
+#, fuzzy, c-format
+msgid ""
+"%s If you have a CAS account, you may use that below. %s %s If you have a "
+"local account, you may use that below. %s "
+msgstr ""
+"vous pouvez l'utilisez ci-dessous. %s %s Si vous avez un compte local, vous "
+"pouvez l'utilisez ci-dessous. %s "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:192
@@ -3885,13 +3892,6 @@ msgstr "Parcourir le résultat"
 msgid "Browse shelf"
 msgstr "Parcourir l'étagère"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "CAS"
-msgstr "CAS"
-
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:110
 #, c-format
@@ -4075,13 +4075,6 @@ msgstr "Catalogues"
 #, c-format
 msgid "Category:"
 msgstr "Catégorie&nbsp;:"
-
-#. ABBR
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-msgid "Central Authentication Service"
-msgstr "Central Authentication Service (Service d'Identification Centralisé)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:14
 #, c-format
@@ -5861,9 +5854,11 @@ msgstr ""
 "Si vous n'avez pas de compte CAS mais avez un compte local, vous pouvez vous "
 "connecter : "
 
+#. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, c-format
-msgid "If you do not have a Shibboleth account, but you do have a "
+#, fuzzy, c-format
+msgid ""
+"If you do not have a Shibboleth account, but you do have a CAS account, %s "
 msgstr "Si vous n'avez pas de compte Shibboleth, mais si vous avez un "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
@@ -5893,10 +5888,11 @@ msgstr ""
 "prochaine fois que vous viendrez à la bibliothèque. Nous serons ravis de "
 "vous en attribuer un."
 
+#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "If you have a "
-msgstr "Si vous avez un compte "
+#, fuzzy, c-format
+msgid "If you have a CAS account, %s please "
+msgstr "Si vous avez un compte Shibboleth, veuillez "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:297
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:82
@@ -9824,7 +9820,7 @@ msgstr "Niveau supérieur"
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:23
 #, c-format
 msgid "Topics"
-msgstr "Sujets (autres)"
+msgstr "Sujets"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:44
 #, c-format
@@ -10806,30 +10802,6 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "a an the"
 msgstr "un une l' le la les d' du de des"
-
-#. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, c-format
-msgid "account, %s "
-msgstr "compte, %s "
-
-#. %1$s:  IF ( casServerUrl ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "account, %s please "
-msgstr "compte, %s s'il vous plait "
-
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#, c-format
-msgid ""
-"account, you may use that below. %s %s If you have a local account, you may "
-"use that below. %s "
-msgstr ""
-"vous pouvez l'utilisez ci-dessous. %s %s Si vous avez un compte local, vous "
-"pouvez l'utilisez ci-dessous. %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112
 #, c-format

@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-10-18 10:47-0300\n"
+"POT-Creation-Date: 2015-11-20 12:53-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -662,10 +662,15 @@ msgid "%s Home library:"
 msgstr "Osnovna stranica"
 
 #. %1$s:  ELSE 
+#. %2$s:  END 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:70
-#, fuzzy, c-format
-msgid "%s If you have a "
-msgstr "Da niste mozda mislili: "
+#, c-format
+msgid ""
+"%s If you have a CAS account, you may use that below. %s %s If you have a "
+"local account, you may use that below. %s "
+msgstr ""
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:192
@@ -3471,13 +3476,6 @@ msgstr "(<a1>Pregledaj policu</a>)"
 msgid "Browse shelf"
 msgstr "(<a1>Pregledaj policu</a>)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "CAS"
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:110
 #, fuzzy, c-format
@@ -3662,13 +3660,6 @@ msgstr "Katalozi"
 #, c-format
 msgid "Category:"
 msgstr "Kategorija:"
-
-#. ABBR
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-msgid "Central Authentication Service"
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:14
 #, fuzzy, c-format
@@ -5414,9 +5405,11 @@ msgid ""
 "log in: "
 msgstr ""
 
+#. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
 #, c-format
-msgid "If you do not have a Shibboleth account, but you do have a "
+msgid ""
+"If you do not have a Shibboleth account, but you do have a CAS account, %s "
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
@@ -5443,9 +5436,10 @@ msgstr ""
 "Ukoliko jos uvek nemate sifru, svratite do stola za cirkulaciju sledeci out "
 "kada budete u biblioteci. Rado cemo vam napraviti jednu."
 
+#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
 #, c-format
-msgid "If you have a "
+msgid "If you have a CAS account, %s please "
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:297
@@ -10232,28 +10226,6 @@ msgstr ""
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "a an the"
-msgstr ""
-
-#. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, c-format
-msgid "account, %s "
-msgstr ""
-
-#. %1$s:  IF ( casServerUrl ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "account, %s please "
-msgstr ""
-
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#, c-format
-msgid ""
-"account, you may use that below. %s %s If you have a local account, you may "
-"use that below. %s "
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112

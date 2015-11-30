@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-10-18 10:36-0300\n"
-"PO-Revision-Date: 2015-10-08 08:45+0000\n"
-"Last-Translator: Vinea-SP_Hwang <snowfox8629@gmail.com>\n"
+"POT-Creation-Date: 2015-11-20 11:14-0300\n"
+"PO-Revision-Date: 2015-10-27 14:14+0000\n"
+"Last-Translator: Vinea-bybak <bybak@vinea.co.kr>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1444293941.000000\n"
+"X-POOTLE-MTIME: 1445955281.000000\n"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:303
@@ -694,10 +694,17 @@ msgid "%s Home library:"
 msgstr "%s 도서관 본관:"
 
 #. %1$s:  ELSE 
+#. %2$s:  END 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:70
-#, c-format
-msgid "%s If you have a "
-msgstr "%s 가지고 계시다면"
+#, fuzzy, c-format
+msgid ""
+"%s If you have a CAS account, you may use that below. %s %s If you have a "
+"local account, you may use that below. %s "
+msgstr ""
+"사용하실 수 있는 계정입니다. %s %s 지역 도서관 계정이 있으시다면 해당 계정을 "
+"사용하실 수 있습니다. %s "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:192
@@ -3813,13 +3820,6 @@ msgstr "찾아보기 결과"
 msgid "Browse shelf"
 msgstr "책장 보기"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "CAS"
-msgstr "CAS"
-
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:110
 #, c-format
@@ -4003,13 +4003,6 @@ msgstr "도서목록"
 #, c-format
 msgid "Category:"
 msgstr "분류: "
-
-#. ABBR
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-msgid "Central Authentication Service"
-msgstr "중앙 인증 서비스"
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:14
 #, c-format
@@ -5783,9 +5776,11 @@ msgstr ""
 "만약 CAS 계정은 없지만 지역 도서관 계정을 가지고 있으시다면, 계속 로그인이 가"
 "능합니다"
 
+#. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, c-format
-msgid "If you do not have a Shibboleth account, but you do have a "
+#, fuzzy, c-format
+msgid ""
+"If you do not have a Shibboleth account, but you do have a CAS account, %s "
 msgstr "만약 예전 계정은 없지만 다음을 가지고 계시다면:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
@@ -5812,10 +5807,11 @@ msgstr ""
 "아직 비밀번호가 없으시다면, 다음번 도서관 방문시 데스크에 들려 주세요. 저희"
 "가 친절하게 설정을 도와드리겠습니다."
 
+#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "If you have a "
-msgstr "If you have a "
+#, fuzzy, c-format
+msgid "If you have a CAS account, %s please "
+msgstr "만약 예전 계정을 가지고 계시다면, 다음과 같이 해주세요:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:297
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:82
@@ -6141,7 +6137,7 @@ msgstr "법전"
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:781
 #, c-format
 msgid "Level 1: Basic discovery interfaces"
-msgstr "레벨 1: 기본 탐색 인터페이스"
+msgstr "레벨 1: 기본 디스커버리 인터페이스"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:788
 #, c-format
@@ -6154,9 +6150,9 @@ msgid "Level 3: Elementary OPAC alternative"
 msgstr "레벨 3: 초급 OPAC 대안"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:813
-#, fuzzy, c-format
+#, c-format
 msgid "Level 4: Robust/domain specific discovery platforms"
-msgstr "Level 4: Robust/domain specific discovery platforms"
+msgstr "레벨 4: 강화/분야 특화 디스커버리 플랫폼"
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:214
@@ -10693,30 +10689,6 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "a an the"
 msgstr "a an the"
-
-#. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, c-format
-msgid "account, %s "
-msgstr "계정, %s"
-
-#. %1$s:  IF ( casServerUrl ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, fuzzy, c-format
-msgid "account, %s please "
-msgstr "account, %s please "
-
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#, c-format
-msgid ""
-"account, you may use that below. %s %s If you have a local account, you may "
-"use that below. %s "
-msgstr ""
-"사용하실 수 있는 계정입니다. %s %s 지역 도서관 계정이 있으시다면 해당 계정을 "
-"사용하실 수 있습니다. %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112
 #, c-format

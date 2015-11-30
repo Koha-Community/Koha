@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-10-18 10:34-0300\n"
+"POT-Creation-Date: 2015-11-20 11:02-0300\n"
 "PO-Revision-Date: 2013-02-18 04:51+0200\n"
 "Last-Translator: munro <munro@dsty.ac.jp>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha.org>\n"
@@ -712,10 +712,15 @@ msgid "%s Home library:"
 msgstr "いかなる分館"
 
 #. %1$s:  ELSE 
+#. %2$s:  END 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:70
-#, fuzzy, c-format
-msgid "%s If you have a "
-msgstr "%s もしかして: "
+#, c-format
+msgid ""
+"%s If you have a CAS account, you may use that below. %s %s If you have a "
+"local account, you may use that below. %s "
+msgstr ""
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:192
@@ -4093,13 +4098,6 @@ msgstr "館所蔵のディレクトリの検索結果"
 msgid "Browse shelf"
 msgstr "館所蔵のディレクトリの検索結果"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "CAS"
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:110
 #, fuzzy, c-format
@@ -4284,13 +4282,6 @@ msgstr "%1$s 館所蔵のディレクトリ --"
 #, c-format
 msgid "Category:"
 msgstr "分類："
-
-#. ABBR
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-msgid "Central Authentication Service"
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:14
 #, fuzzy, c-format
@@ -6041,9 +6032,11 @@ msgid ""
 "log in: "
 msgstr ""
 
+#. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
 #, c-format
-msgid "If you do not have a Shibboleth account, but you do have a "
+msgid ""
+"If you do not have a Shibboleth account, but you do have a CAS account, %s "
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
@@ -6069,10 +6062,11 @@ msgstr ""
 " もしもあなたはパスワードがないなら、あなたは次回流通するカウンターの館員に "
 "あ なたに設定するように手伝ってもらうことができる。"
 
+#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "If you have a "
-msgstr ""
+#, fuzzy, c-format
+msgid "If you have a CAS account, %s please "
+msgstr "私のアカウント "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:297
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:82
@@ -10906,28 +10900,6 @@ msgstr ""
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "a an the"
-msgstr ""
-
-#. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, fuzzy, c-format
-msgid "account, %s "
-msgstr "私のアカウント "
-
-#. %1$s:  IF ( casServerUrl ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, fuzzy, c-format
-msgid "account, %s please "
-msgstr "私のアカウント "
-
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#, c-format
-msgid ""
-"account, you may use that below. %s %s If you have a local account, you may "
-"use that below. %s "
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112

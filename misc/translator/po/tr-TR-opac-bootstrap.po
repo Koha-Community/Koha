@@ -4,17 +4,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-18 10:50-0300\n"
-"PO-Revision-Date: 2015-08-24 12:09+0000\n"
+"POT-Creation-Date: 2015-11-20 13:23-0300\n"
+"PO-Revision-Date: 2015-11-23 08:22+0000\n"
 "Last-Translator: Onur <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
-"Language: tr\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1440418179.000000\n"
+"X-POOTLE-MTIME: 1448266934.000000\n"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:303
@@ -464,9 +464,9 @@ msgstr ""
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:721
-#, c-format
+#, fuzzy, c-format
 msgid "%s %sitem%sitem(s)%s"
-msgstr "%s %smateryal%smateryal(ler)%s"
+msgstr "%s%s %smateryal%smateryaller%s%sBoş%s"
 
 #. %1$s:  IF loop.index == 0 
 #. %2$s:  ELSE 
@@ -626,9 +626,9 @@ msgstr "%s İl:"
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:80
-#, c-format
+#, fuzzy, c-format
 msgid "%s Collection %s Item type %s: "
-msgstr "%s Koleksiyon %s Materyal Türü %s: "
+msgstr "%sKoleksiyon%sMateryal Türü%s"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:586
@@ -696,10 +696,17 @@ msgid "%s Home library:"
 msgstr "%s Ana kütüphane:"
 
 #. %1$s:  ELSE 
+#. %2$s:  END 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:70
 #, c-format
-msgid "%s If you have a "
-msgstr "%s Varsa "
+msgid ""
+"%s If you have a CAS account, you may use that below. %s %s If you have a "
+"local account, you may use that below. %s "
+msgstr ""
+"%s Bir CAS hesabınız varsa, bunu aşağıda kullanabilirsiniz. %s %s Bir yerel "
+"hesabınız varsa, bunu aşağıda kullanabilirsiniz. %s"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:192
@@ -748,9 +755,9 @@ msgstr "%s kataloğunda %s sonuç bulunamadı. "
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:230
-#, c-format
+#, fuzzy, c-format
 msgid "%s Not renewable %s Automatic renewal "
-msgstr "%s Süresi uzatılamaz %s Otomatik süre uzatma"
+msgstr "%s Süresi uzatılamaz %s İzin verilmedi"
 
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
@@ -782,7 +789,7 @@ msgstr "%s Diğer telefon:"
 #. %8$s:  IF PasswordContainsTrailingSpaces 
 #. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:31
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Passwords do not match. Please re-type your new password. %s %s Your new "
 "password must be at least %s characters long. %s %s Your current password "
@@ -793,7 +800,8 @@ msgstr ""
 "%s Şifreniz eşleşmiyor. Lütfen yeni şifrenizi yeniden giriniz. %s %s Yeni "
 "şifreniz en az %s karakter uzunluğunda olmalıdır %s %s mevcut şifreniz "
 "yanlış girildi. Eğer sorun devam ederse, lütfen bir kütüphaneciden "
-"şifrenizin sıfırlanarak yenilenmesini isteyin. %s "
+"şifrenizin yenilenmesini isteyin. %s %s Parolanız başta ve/veya sonda boşluk "
+"içermektedir. %s"
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -1918,9 +1926,9 @@ msgstr ""
 #. %4$s:  END 
 #. %5$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:648
-#, c-format
+#, fuzzy, c-format
 msgid "%s%sPrivate%sShared%s%s "
-msgstr "%s%sÖzel%sPaylaşılan%s%s "
+msgstr "%s %sPaylaşılmış%sÖzel%s %s Genel %s"
 
 #. %1$s:  IF ( dateformat == "us" ) 
 #. %2$s:  ELSIF ( dateformat == "metric" ) 
@@ -2088,16 +2096,16 @@ msgstr "%s Materyal türü %s Koleksiyon %s Raf yeri %s Başka bir şey %s "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/includes/masthead-sco.inc:17
-#, c-format
+#, fuzzy, c-format
 msgid "%sLog out"
-msgstr "%sOturumu sonlandır"
+msgstr "%s Oturumu sonlandır"
 
 #. %1$s:  IF ( shelvesloo.viewcategory2 ) 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:722
-#, c-format
+#, fuzzy, c-format
 msgid "%sPublic%s "
-msgstr "%sGenel%s"
+msgstr "Açık"
 
 #. %1$s:  IF ( suggestions_loo.ASKED ) 
 #. %2$s:  ELSIF ( suggestions_loo.CHECKED ) 
@@ -2943,9 +2951,9 @@ msgstr "(%s tarihinde değiştirildi)"
 
 #. %1$s:  koha_new.newdate 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:47
-#, c-format
+#, fuzzy, c-format
 msgid "(published on %s)"
-msgstr "(%s tarihinde yayınlanmıştır)"
+msgstr "tarafından %s%s tarihinde yayımlanmıştır"
 
 #. %1$s:  FOREACH relate IN related 
 #. %2$s:  relate.related_search 
@@ -3162,14 +3170,14 @@ msgstr ""
 "Kısa bir süre sonra e-posta adresinize bir onay e-postası gönderilecektir"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112
-#, c-format
+#, fuzzy, c-format
 msgid "A list named "
-msgstr "olarak adlandırılmış liste "
+msgstr "Liste adı: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:131
-#, c-format
+#, fuzzy, c-format
 msgid "A record matching barcode "
-msgstr "Kayıt eşleme barkodu "
+msgstr "Eşleştirme kuralı ekle"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:266
 #, c-format
@@ -3278,8 +3286,9 @@ msgstr "Listeye ekleyin:"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:587
+#, fuzzy
 msgid "Add to list: "
-msgstr "Listeye ekleyin: "
+msgstr "Listeye ekleyin:"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:23
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:106
@@ -3837,13 +3846,6 @@ msgstr "Sonuçlara gözat"
 msgid "Browse shelf"
 msgstr "Rafa Gözat"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "CAS"
-msgstr "CAS"
-
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:110
 #, c-format
@@ -4027,13 +4029,6 @@ msgstr "Kataloglar"
 #, c-format
 msgid "Category:"
 msgstr "Kategori:"
-
-#. ABBR
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-msgid "Central Authentication Service"
-msgstr "Merkezi Kimlik Doğrulama Hizmeti"
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:14
 #, c-format
@@ -4835,14 +4830,14 @@ msgstr "HATA: Internal hata: ayırma isteği tamamlanamadı."
 
 #. %1$s:  paramsloo.unrecognized 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:140
-#, c-format
+#, fuzzy, c-format
 msgid "ERROR: List number %s unrecognized."
-msgstr "HATA: %s sayılı liste tanınmıyor."
+msgstr "HATA: Hiç bir bibliyografik kayıt numarası gelmedi."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:115
-#, c-format
+#, fuzzy, c-format
 msgid "ERROR: No barcode given."
-msgstr "HATA: Barkod verilmemiş."
+msgstr "HATA: Hiç bir bibliyografik kayıt numarası gelmedi."
 
 #. %1$s:  bad_biblionumber 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:56
@@ -4859,14 +4854,14 @@ msgstr "HATA: Hiç bir bibliyografik kayıt numarası gelmedi."
 
 #. %1$s:  paramsloo.failgetitem 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:128
-#, c-format
+#, fuzzy, c-format
 msgid "ERROR: No item found with barcode %s."
-msgstr "HATA: %s barkodlu bir materyal bulunamadı."
+msgstr "%s barkodlu bir materyal bulunamadı"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:116
-#, c-format
+#, fuzzy, c-format
 msgid "ERROR: No shelfnumber given."
-msgstr "HATA: Yer numarası verilmemiş."
+msgstr "HATA: Hiç bir bibliyografik kayıt numarası gelmedi."
 
 #. %1$s:  paramsloo.modifyfailure 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:143
@@ -4880,10 +4875,9 @@ msgstr ""
 
 #. %1$s:  paramsloo.nopermission |html
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:125
-#, c-format
+#, fuzzy, c-format
 msgid "ERROR: You do not have adequate permission for that action on list %s."
-msgstr ""
-"HATA: %s listesinde bu işlemi yapmak için yeterli düzeyde yetkiniz yok."
+msgstr "Bu listeyi güncelleme izniniz yok."
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:657
@@ -5808,10 +5802,12 @@ msgstr ""
 "Bir CAS hesabınız yoksa, ancak yerel bir hesabınız varsa, bu hesabınızla "
 "oturum açabilirsiniz:"
 
+#. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
 #, c-format
-msgid "If you do not have a Shibboleth account, but you do have a "
-msgstr "Bir Shibboleth hesabınız yoksa, ancak"
+msgid ""
+"If you do not have a Shibboleth account, but you do have a CAS account, %s "
+msgstr "Bir Shibboleth hesabınız yok, ancak bir CAS hesabınız varsa, %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
 #, c-format
@@ -5839,10 +5835,11 @@ msgstr ""
 "Henüz şifrenizi almadıysanız, kütüphane ödünç verme servisinden "
 "alabilirsiniz."
 
+#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
 #, c-format
-msgid "If you have a "
-msgstr "Varsa "
+msgid "If you have a CAS account, %s please "
+msgstr "Bir CAS hesabınız varsa, %s lütfen"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:297
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:82
@@ -5943,9 +5940,9 @@ msgid "Issues summary"
 msgstr "Sayıların özet bilgisi"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:120
-#, c-format
+#, fuzzy, c-format
 msgid "It has "
-msgstr "Mevcut "
+msgstr "mevcut "
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:635
 #, c-format
@@ -6249,9 +6246,9 @@ msgstr "Linkler"
 
 #. %1$s:  paramsloo.delete_ok |html 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:134
-#, c-format
+#, fuzzy, c-format
 msgid "List %s Deleted."
-msgstr "%s Listesi Silindi."
+msgstr "%s %s Veri silindi "
 
 #. %1$s:  IF loggedinuser==0 
 #. %2$s:  END 
@@ -7626,8 +7623,9 @@ msgstr "Özel"
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:31
+#, fuzzy
 msgid "Private Lists"
-msgstr "Özel Listeler"
+msgstr "Özel listeler"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
@@ -7649,8 +7647,9 @@ msgstr "Açık"
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:36
+#, fuzzy
 msgid "Public Lists"
-msgstr "Genel Listeler"
+msgstr "Açık listeler"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:40
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:61
@@ -8360,9 +8359,9 @@ msgid "See biblio"
 msgstr "Bibliyografik kayda bakınız"
 
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:99
-#, c-format
+#, fuzzy, c-format
 msgid "See the most popular titles"
-msgstr "En çok ödünç alınan eser adlarını görün"
+msgstr "En çok ödünç alınan materyaller"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1081
@@ -9385,9 +9384,9 @@ msgstr ""
 "listeleri genel durumuna getiremeyeceksiniz."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:118
-#, c-format
+#, fuzzy, c-format
 msgid "The list "
-msgstr "Liste "
+msgstr "Liste paylaşın"
 
 #. %1$s:  email 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:16
@@ -9936,9 +9935,9 @@ msgid "View All"
 msgstr "Hepsini gör"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:56
-#, c-format
+#, fuzzy, c-format
 msgid "View all"
-msgstr "Tümünü görüntüle"
+msgstr "Hepsini gör"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:174
@@ -10729,34 +10728,10 @@ msgstr ""
 msgid "a an the"
 msgstr "a an the"
 
-#. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, c-format
-msgid "account, %s "
-msgstr "hesap, %s"
-
-#. %1$s:  IF ( casServerUrl ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "account, %s please "
-msgstr "hesap, %s lütfen "
-
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#, c-format
-msgid ""
-"account, you may use that below. %s %s If you have a local account, you may "
-"use that below. %s "
-msgstr ""
-"hesabınız varsa, bunu aşağıda kullanabilirsiniz. %s %s Bir yerel hesabınız "
-"varsa, bunu aşağıda kullanabilirsiniz. %s"
-
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112
-#, c-format
+#, fuzzy, c-format
 msgid "already exists!"
-msgstr "zaten var!"
+msgstr "halen veri tabanında mevcut"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:106
@@ -10977,9 +10952,9 @@ msgid "for more information on what it does and how to configure it."
 msgstr "görev ve yapılandırma hakkında daha fazla bilgi için."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:131
-#, c-format
+#, fuzzy, c-format
 msgid "has already been added."
-msgstr "zaten eklenmiş durumda."
+msgstr "İşler halen girilmiş"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:572
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:575
@@ -11121,9 +11096,9 @@ msgid "is exactly"
 msgstr "aynen"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:119
-#, c-format
+#, fuzzy, c-format
 msgid "is not empty. "
-msgstr "boş değil. "
+msgstr "Başlık bilgisi boş bırakılamaz"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:119
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:126
@@ -11193,9 +11168,9 @@ msgid "not"
 msgstr "değil"
 
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:140
-#, c-format
+#, fuzzy, c-format
 msgid "of the last:"
-msgstr "sonuncunun:"
+msgstr "to the"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:24
 #, c-format

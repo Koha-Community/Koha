@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2015-10-18 10:42-0300\n"
-"PO-Revision-Date: 2015-10-20 20:20+0000\n"
+"POT-Creation-Date: 2015-11-20 12:05-0300\n"
+"PO-Revision-Date: 2015-11-02 12:45+0000\n"
 "Last-Translator: Ilona <szczudlo@biblos.pk.edu.pl>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1445372410.000000\n"
+"X-POOTLE-MTIME: 1446468354.000000\n"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:303
@@ -700,10 +700,17 @@ msgid "%s Home library:"
 msgstr "%s Biblioteka macierzysta:"
 
 #. %1$s:  ELSE 
+#. %2$s:  END 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:70
-#, c-format
-msgid "%s If you have a "
-msgstr "%s Jeśli masz "
+#, fuzzy, c-format
+msgid ""
+"%s If you have a CAS account, you may use that below. %s %s If you have a "
+"local account, you may use that below. %s "
+msgstr ""
+"konto, możesz użyć danych poniżej. %s %s Jeśli posiadasz konto lokalne, "
+"możesz użyć danych poniżej. %s "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:192
@@ -3825,13 +3832,6 @@ msgstr "Przeglądaj wyniki wyszukiwania"
 msgid "Browse shelf"
 msgstr "Przeglądaj półkę"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "CAS"
-msgstr "CAS"
-
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:110
 #, c-format
@@ -4015,13 +4015,6 @@ msgstr "Katalogi"
 #, c-format
 msgid "Category:"
 msgstr "Kategoria:"
-
-#. ABBR
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-msgid "Central Authentication Service"
-msgstr "Central Authentication Service"
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:14
 #, c-format
@@ -5789,9 +5782,11 @@ msgid ""
 msgstr ""
 "Jeśli nie posiadasz konta CAS, tylko konto lokalne, możesz się zalogować w: "
 
+#. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, c-format
-msgid "If you do not have a Shibboleth account, but you do have a "
+#, fuzzy, c-format
+msgid ""
+"If you do not have a Shibboleth account, but you do have a CAS account, %s "
 msgstr ""
 "Jeśli nie posiadasz konta Shibboleth, tylko konto lokalne, możesz się "
 "zalogować w: "
@@ -5818,10 +5813,11 @@ msgid ""
 "you're in the library. We'll happily set one up for you."
 msgstr "Jeśli nie posiadasz hasła, skontaktuj się z bibliotekarzem."
 
+#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "If you have a "
-msgstr "Jeśli masz "
+#, fuzzy, c-format
+msgid "If you have a CAS account, %s please "
+msgstr "Jeżeli posiadasz konto Shibboleth, proszę "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:297
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:82
@@ -9952,7 +9948,7 @@ msgstr "Przeglądaj historię wyszukiwania"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1175
 #, c-format
 msgid "Vol info"
-msgstr "Informacja o numerach"
+msgstr "Numeracja"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:356
 #, c-format
@@ -10685,30 +10681,6 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "a an the"
 msgstr "a an the"
-
-#. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, c-format
-msgid "account, %s "
-msgstr "konto, %s "
-
-#. %1$s:  IF ( casServerUrl ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "account, %s please "
-msgstr "konto, %s proszę "
-
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#, c-format
-msgid ""
-"account, you may use that below. %s %s If you have a local account, you may "
-"use that below. %s "
-msgstr ""
-"konto, możesz użyć danych poniżej. %s %s Jeśli posiadasz konto lokalne, "
-"możesz użyć danych poniżej. %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112
 #, c-format

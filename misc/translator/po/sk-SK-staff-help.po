@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOHA 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-18 10:46-0300\n"
-"PO-Revision-Date: 2015-10-22 00:49+0200\n"
+"POT-Creation-Date: 2015-11-20 12:34-0300\n"
+"PO-Revision-Date: 2015-11-16 22:14+0200\n"
 "Last-Translator: Paul <paul.vilhan@gmail.com>\n"
 "Language-Team: Paul Vilhan\n"
 "Language: sk\n"
@@ -767,6 +767,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/serials/claims.tt:15
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:200
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:91
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:21
@@ -880,7 +881,6 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:68
 #: intranet-tmpl/prog/en/modules/help/acqui/lateorders.tt:19
 #: intranet-tmpl/prog/en/modules/help/acqui/uncertainprice.tt:7
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/acqui/neworderbiblio.tt:12
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:122
 #: intranet-tmpl/prog/en/modules/help/acqui/invoice.tt:11
@@ -1801,7 +1801,7 @@ msgstr "Pridať citát"
 msgid "Add a Batch"
 msgstr "Pridať dávku"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:7
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:7
 #, c-format
 msgid "Add a Contract"
 msgstr "Pridať zmluvu"
@@ -2641,7 +2641,7 @@ msgstr ""
 "spolu s termínom návratu (a časom, ak sa exemplár požičiava na hodiny), "
 "exempláre vypožičané dnes sa objavia navrchu."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:9
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:9
 #, c-format
 msgid ""
 "At the top of a Vendor Information Page, you will see a 'New Contract' "
@@ -5256,7 +5256,7 @@ msgid ""
 "100 is set "
 msgstr ""
 "Zobraziť prvé podpole a pre prvé pole 245, ak ukazovateľ 1 nastavený pre "
-"pole 100"
+"pole 100 "
 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:127
 #, c-format
@@ -6584,6 +6584,12 @@ msgid ""
 "will look at the itemnumbers and barcodes to match on for items. Itemnumbers "
 "take precedence over barcodes), or Ignore items and not add them."
 msgstr ""
+"Odtiaľto si môžete zvoliť vždy pridávať exempláre bez ohľadu na ich stav "
+"zhody, pridať ich iba ak sa našiel zhodný knižničný záznam, pridať exempláre "
+"iba ak sa nenašiel zhodný knižničný záznam, nahradiť exempláre ak sa našiel "
+"zhodný knižničný záznam (Zhoda zasiahne itemnumbers a čiarové kódy, ktoré sa "
+"majú u exemplárov zhodovať. Itemnumbers majú prednosť pred čiarovými kódmi), "
+"alebo ignorovať exempláre a nepridať ich."
 
 #: intranet-tmpl/prog/en/modules/help/serials/serials-collection.tt:7
 #, c-format
@@ -9760,10 +9766,10 @@ msgid ""
 "branch pull down would be generated like this &lt;&lt;Branch|branches&gt;&gt;"
 msgstr ""
 "Dôležité: Navyše k použitiu ktoréhokoľvek kódu povolenej hodnoty na tvorbu "
-"rozbaľovacej ponuky, môžete použiť aj nasledovné hodnoty: Pobočky (branches)"
-", Typy exemplárov (itemtypes) a Kategórie čitateľov (categorycode). "
-"Napríklad, ponuka pobočiek sa vygeneruje takto: "
-"&lt;&lt;Pobočky|branches&gt;&gt;"
+"rozbaľovacej ponuky, môžete použiť aj nasledovné hodnoty: Pobočky "
+"(branches), Typy exemplárov (itemtypes) a Kategórie čitateľov "
+"(categorycode). Napríklad, ponuka pobočiek sa vygeneruje takto: &lt;&lt;"
+"Pobočky|branches&gt;&gt;"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:7
 #, c-format
@@ -9995,6 +10001,8 @@ msgid ""
 "Important: This feature needs to have the \"no renewal before\" column "
 "filled in or it will auto renew everyday after the due date."
 msgstr ""
+"Dôležité: Táto funkcia musí mať naplnený stĺpec \"bez obnovenia pred\" alebo "
+"sa to automaticky obnoví každý deň po dátume termínu."
 
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:20
 #, c-format
@@ -10061,7 +10069,7 @@ msgstr ""
 "Dôležité: Bez vlastníka, obmedzenie prístupu bude ignorované, uistite sa, či "
 "ste zadali vlastníka ako aj zvolili obmedzenie"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:13
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:13
 #, c-format
 msgid ""
 "Important: You cannot enter a contract retrospectively. The end date must "
@@ -10135,17 +10143,17 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:164
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "In UNIMARC there are plugins for every 1xx fields that are coded fields. The "
 "plugin is a huge help for cataloger! There are also two plugins "
 "(unimarc_plugin_210c and unimarc_plugin_225a that can \"magically\" find the "
 "editor from an ISBN, and the collection list for the editor)"
 msgstr ""
-"Napríklad, v UNIMARCu jestvujú pluginy pre všetkých 1xx polí, ktoré sú "
-"kódované ako polia. Plugin významne pomáha zapisovateľovi! Jestvujú aj dva "
-"pluginy (unimarc_plugin_210c a unimarc_plugin_225a, ktoré dokážu \"čarovne\" "
-"nájsť vydavateľa z ISBN, a zoznam zbierky pre vydavateľa)"
+"V UNIMARCu jestvujú pluginy pre všetkých 1xx polí, ktoré sú kódované ako "
+"polia. Plugin významne pomáha zapisovateľovi! Jestvujú aj dva pluginy "
+"(unimarc_plugin_210c a unimarc_plugin_225a, ktoré dokážu \"čarovne\" nájsť "
+"vydavateľa z ISBN, a zoznam zbierky pre vydavateľa)"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:28
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbooks.tt:25
@@ -10422,12 +10430,12 @@ msgstr ""
 "katalógu."
 
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:64
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "In the window that pops up search for the patrons you'd like to notify and "
 "click 'Select'"
 msgstr ""
-"Jednoducho zadajte čiarový kód pre exemplár, ktorý chcete premiestniť a "
+"V okne, ktoré vyskočí, hľadajte čitateľov, ktorých chcete kontaktovať a "
 "kliknite na 'Vybrať'"
 
 #: intranet-tmpl/prog/en/modules/help/serials/checkexpiration.tt:9
@@ -10465,9 +10473,9 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:123
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:69
-#, fuzzy, c-format
+#, c-format
 msgid "Is a URL "
-msgstr "Je url "
+msgstr "Je URL "
 
 #: intranet-tmpl/prog/en/modules/help/serials/serials-edit.tt:5
 #, c-format
@@ -10481,14 +10489,14 @@ msgstr ""
 "vyhľadanie periodika, ktorého čísla chcete dostať"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/merge.tt:18
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "It is important to rebuild your zebra index immediately after merging "
 "records. If a search is performed for a record which has been deleted Koha "
 "will present the patrons with an error in the OPAC."
 msgstr ""
-"Dôležité: Je dôležité obnoviť Váš zebra index okamžite po zlúčení záznamov. "
-"Ak hľadáte odstránený záznam, Koha zobrazí čitateľom v OPACu chybu."
+"Je dôležité obnoviť Váš zebra index okamžite po zlúčení záznamov. Ak hľadáte "
+"odstránený záznam, Koha zobrazí čitateľom v OPACu chybu."
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-numberpatterns.tt:9
 #, c-format
@@ -10506,7 +10514,7 @@ msgstr ""
 msgid "It will also appear on the main staff dashboard under the module labels"
 msgstr "Objaví sa to aj na hlavnom paneli intranetu pod modulom etikiet"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:17
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:17
 #, c-format
 msgid "It will also be an option when creating a basket."
 msgstr "Bude to tiež možnosťou pri vytváraní košíka."
@@ -10717,9 +10725,9 @@ msgid "Koha %s manual"
 msgstr "Manuál Kohy %s"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:130
-#, fuzzy, c-format
+#, c-format
 msgid "Koha Lists"
-msgstr "Zoznamy"
+msgstr "Zoznamy Kohy"
 
 #: intranet-tmpl/prog/en/modules/help/admin/itemtypes.tt:5
 #, c-format
@@ -11150,6 +11158,8 @@ msgid ""
 "Limit batch item modification to subfields defined in the "
 "SubfieldsToAllowForRestrictedBatchmod preference"
 msgstr ""
+"Obmedzite hromadnú zmenu exemplárov na podpolia definované v nastavení "
+"SubfieldsToAllowForRestrictedBatchmod"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:224
 #, c-format
@@ -11157,6 +11167,8 @@ msgid ""
 "Limit item modification to subfields defined in the "
 "SubfieldsToAllowForRestrictedEditing preference"
 msgstr ""
+"Obmedzite zmenu exemplárov na podpolia definované v nastavení "
+"SubfieldsToAllowForRestrictedEditing"
 
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:5
 #, c-format
@@ -11192,9 +11204,9 @@ msgid "Limit to a specific item type"
 msgstr "Obmedziť na špecifický typ exemplárov"
 
 #: intranet-tmpl/prog/en/modules/help/tools/export.tt:18
-#, fuzzy, c-format
+#, c-format
 msgid "Limit to a specific library or group of libraries"
-msgstr "Obmedziť na špecifickú sadu knižníc"
+msgstr "Obmedziť na špecifickú knižnicu alebo skupinu knižníc"
 
 #: intranet-tmpl/prog/en/modules/help/tools/export.tt:20
 #, c-format
@@ -11736,7 +11748,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Next to each framework is a link to either import or export the framework."
-msgstr ""
+msgstr "Vedľa každého rámca je odkaz na import alebo export toho rámca."
 
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:49
 #, c-format
@@ -11809,13 +11821,13 @@ msgid ""
 msgstr "Ďalej si môžete zvoliť, či sa nový exemplár vytvára pri prijatí čísla"
 
 #: intranet-tmpl/prog/en/modules/help/tools/stage-marc-import.tt:26
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Next you can choose whether or not to import the item data found in the MARC "
 "records (if the file you're loading is a bibliographic file) "
 msgstr ""
 "Ďalej si môžete zvoliť, či nahrať údaje exemplára nájdené v záznamoch MARC "
-"alebo nie (pokiaľ vami načítavaný súbor obsahuje bibliografické údaje)"
+"alebo nie (pokiaľ vami načítavaný súbor obsahuje bibliografické údaje) "
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:29
 #, c-format
@@ -11829,6 +11841,10 @@ msgid ""
 "items that are on the shelf (or available in the library) or not. If you "
 "choose 'no' then items can only be placed on hold if checked out"
 msgstr ""
+"Ďalej sa môžete rozhodnúť, či táto kombinácia čitateľ/exemplár môže "
+"zarezervovať exempláre, ktoré sú na polici (alebo dostupné v knižnici) alebo "
+"nie. Ak si zvolíte 'nie', exempláre bude možné zarezervovať iba ak sú "
+"vypožičané"
 
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:22
 #, c-format
@@ -11928,6 +11944,8 @@ msgid ""
 "Note: Academic libraries often require that you have a clear record at the "
 "library before you can graduate."
 msgstr ""
+"Poznámka: Akademické knižnice často vyžadujú, aby ste mali čistý záznam v "
+"knižnici skôr, ako budete promovať."
 
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:17
 #, c-format
@@ -11958,6 +11976,8 @@ msgid ""
 "Note: If you would like you can also use the Lists tool for merging records "
 "together."
 msgstr ""
+"Poznámka: Ak chcete, môžete pre zlučovanie záznamov použiť aj nástroj "
+"Zoznamy."
 
 #: intranet-tmpl/prog/en/modules/help/members/discharge.tt:7
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:77
@@ -11966,16 +11986,22 @@ msgid ""
 "Note: In France a \"quitus\" (\"discharge\") is needed if you want to "
 "register for an account in a library or a university)."
 msgstr ""
+"Poznámka: Vo Francúzsku \"quitus\" (\"priepustka\") sa vyžaduje vtedy, keď "
+"sa chcete vytvoriť účet v knižnici alebo na univerzite)."
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:225
 #, c-format
 msgid "Note: Please note that edit_items permission is still required"
 msgstr ""
+"Poznámka: Všimnite si prosím, že povolenie upraviť_exempláre sa ešte stále "
+"vyžaduje"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:432
 #, c-format
 msgid "Note: Please note that items_batchmod permission is still required"
 msgstr ""
+"Poznámka: Všimnite si prosím, že povolenie úprava_dávky_exemp sa ešte stále "
+"vyžaduje"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/supplier.tt:33
 #, c-format
@@ -12283,7 +12309,7 @@ msgstr ""
 "Len čo sa súbor CSV natiahne do dočasnej editovacej tabuľky, môžete upraviť "
 "citáty prv, ako ich uložíte."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:15
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:15
 #, c-format
 msgid "Once the contract is saved it will appear below the vendor information."
 msgstr "Po uložení zmluvy, táto sa objaví pod informáciou o predajcovi."
@@ -12330,7 +12356,7 @@ msgstr "Po výpožičke exemplára sa tento objaví pod informáciou o predajcov
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:87
 #, c-format
 msgid "Once the letter is generated you will have a PDF to download"
-msgstr ""
+msgstr "Po vygenerovaní listu bude k dispozícii PDF na stiahnutie"
 
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:36
 #, c-format
@@ -12361,12 +12387,12 @@ msgstr ""
 "nástrojovej lište a citáty budú uložené."
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:79
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Once you choose that you will be brought to a Z39.50/SRU search window to "
 "search other libraries for the record in question."
 msgstr ""
-"Len čo to zvolíte, prejdete do okna hľadania v Z39.50, kde môžete hľadať "
+"Len čo to zvolíte, prejdete do okna hľadania v Z39.50/SRU, kde môžete hľadať "
 "dotyčný záznam v iných knižniciach."
 
 #: intranet-tmpl/prog/en/modules/help/acqui/lateorders.tt:11
@@ -12418,16 +12444,16 @@ msgstr ""
 "oznámenie s použitím šablóny, ktorá zodpovedá Vami vybranému stavu."
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/merge.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Once you have completed your selections click the 'merge' button. The "
 "primary record will now CONTAIN the data you chose for it as well as all of "
 "the items/holdings from both bib records, and the second record will be "
 "deleted."
 msgstr ""
-"Po skončení výberu, kliknite na tlačidlo 'Zlúčiť'. Primárny záznam Vám teraz "
-"zobrazí údaje, ktoré ste preň vybrali, ako aj všetky záznamy/exempláre u "
-"obidvoch knižničných záznamov, a druhý záznam bude odstránený."
+"Po skončení výberu, kliknite na tlačidlo 'Zlúčiť'. Primárny záznam teraz "
+"bude obsahovať údaje, ktoré ste preň vybrali, ako aj všetky záznamy/"
+"exempláre u obidvoch knižničných záznamov, a druhý záznam bude odstránený."
 
 #: intranet-tmpl/prog/en/modules/help/authorities/merge.tt:11
 #, c-format
@@ -12592,7 +12618,7 @@ msgstr ""
 "Rámec by ste chceli použiť pre nový zlučovaný záznam."
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/merge.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Once you have selected the records you want to merge, click the 'Merge "
 "selected' button at the top of the list. You will be asked which of the two "
@@ -12602,13 +12628,13 @@ msgid ""
 "merged record to use."
 msgstr ""
 "Hneď po vybraní záznamov, ktoré chcete zlúčiť, kliknite na tlačidlo 'Zlúčiť "
-"vybrané záznamy'. Následne si budete musieť vybrať ktorý z dvoch záznamov "
-"chcete uchovať ako primárny záznam a ktorý chcete dať po zlúčení odstrániť. "
-"Ak boli záznamy vytvorené pomocou iných rámcov, Koha sa Vás tiež opýta, aký "
-"Rámec by ste chceli použiť pre nový zlučovaný záznam."
+"vybrané' na vrchu zoznamu. Následne si budete musieť vybrať ktorý z dvoch "
+"záznamov chcete uchovať ako primárny záznam a ktorý chcete dať po zlúčení "
+"odstrániť. Ak boli záznamy vytvorené pomocou iných rámcov, Koha sa Vás tiež "
+"opýta, aký Rámec by ste chceli použiť pre nový zlučovaný záznam."
 
 #: intranet-tmpl/prog/en/modules/help/mainpage.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Once you have set up patron categories, you should create a new user in the "
 "Patrons module with superlibrarian permissions. Once that user is created, "
@@ -12653,6 +12679,8 @@ msgid ""
 "Once you're done you can close the window and you'll see the list of patrons "
 "under the 'Patrons' section"
 msgstr ""
+"Po skončení môžete okno zatvoriť a zobrazí sa vám zoznam čitateľov v sekcii "
+"'Čitatelia'"
 
 #: intranet-tmpl/prog/en/modules/help/tools/batch_record_modification.tt:26
 #, c-format
@@ -12660,6 +12688,8 @@ msgid ""
 "Once you're sure everything is the way you want you can click the 'Modify "
 "selected records' button and your records will be modified."
 msgstr ""
+"Len čo sa uistíte, že všetko je tak, ako chcete, môžete kliknúť na tlačidlo "
+"'Upraviť vybrané záznamy' a vaše záznamy budú upravené."
 
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:106
 #, c-format
@@ -12673,9 +12703,9 @@ msgstr ""
 "zaslaný predajcovi."
 
 #: intranet-tmpl/prog/en/modules/help/tools/batch_record_modification.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid "Once you've entered your criteria click 'Continue'"
-msgstr "Len čo máte zadanú Vašu informáciu, môžete kliknúť na 'Uložiť'"
+msgstr "Len čo ste zadali vaše požiadavky, kliknite na 'Ďalej'"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:64
 #, c-format
@@ -12699,12 +12729,12 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:36
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbooks.tt:31
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Once you've opened a blank framework or imported a record via Z39.50/SRU you "
 "will be presented with the form to continue cataloging"
 msgstr ""
-"Len čo ste otvorili prázdny rámec alebo naimportovali záznam cez Z39.50, "
+"Len čo ste otvorili prázdny rámec alebo naimportovali záznam cez Z39.50/SRU, "
 "predstaví sa Vám formulár na pokračovanie v katalogizácii"
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:28
@@ -12800,6 +12830,8 @@ msgid ""
 "Once your import is complete you will be brought to the framework edit tool "
 "where you can make any changes you need to the framework you imported."
 msgstr ""
+"Po dokončení vášho importu sa vám zobrazí nástroj úpravy rámca, kde môžete "
+"uskutočniť ľubovoľné zmeny potrebné pre vami importovaný rámec."
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:121
 #, c-format
@@ -12883,9 +12915,9 @@ msgid "Order from a Staged File"
 msgstr "Objednať z pripraveného súboru"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Order from a subscription"
-msgstr "Obnoviť zápisné"
+msgstr "Objednať z predplatného"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/neworderbiblio.tt:3
 #, c-format
@@ -13078,9 +13110,9 @@ msgstr "Detaily o čitateľovi"
 
 #: intranet-tmpl/prog/en/modules/help/members/discharge.tt:3
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:73
-#, fuzzy, c-format
+#, c-format
 msgid "Patron discharges"
-msgstr "Oznámenia pre čitateľov"
+msgstr "Prepustenie čitateľov"
 
 #: intranet-tmpl/prog/en/modules/help/members/files.tt:3
 #, c-format
@@ -13287,9 +13319,9 @@ msgid "Pay and Writeoff Fines"
 msgstr "Zaplatiť a odpísať položky"
 
 #: intranet-tmpl/prog/en/modules/help/circ/on-site_checkouts.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Pending on-site checkouts"
-msgstr "Čitatelia bez výpožičiek"
+msgstr "Nevybavené výpožičky na mieste"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:419
 #, c-format
@@ -13297,9 +13329,9 @@ msgid "Perform batch deletion of items"
 msgstr "Vykonať hromadné odstránenie exemplárov"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:467
-#, fuzzy, c-format
+#, c-format
 msgid "Perform batch deletion of records (bibliographic or authority)"
-msgstr "Povedzte Koha, o aký typ súboru ide, či knižničný alebo autority"
+msgstr "Vykonať hromadné odstránenie záznamov (knižničných alebo autorít)"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:425
 #, c-format
@@ -13891,10 +13923,10 @@ msgstr "Hľadať v indexe: kontrolné číslo"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:25
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbooks.tt:22
-#, fuzzy, c-format
+#, c-format
 msgid "Search targets can be altered by using the Z39.50/SRU Admin area."
 msgstr ""
-"Hľadanie cieľov môže byť zmenené s použitím oblasti administrácie Z39.50."
+"Hľadanie cieľov môže byť zmenené s použitím oblasti administrácie Z39.50/SRU."
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:3
 #, c-format
@@ -13999,9 +14031,9 @@ msgid "See the full documentation for Batch Patron Modification in the "
 msgstr "Pozrite si kompletnú dokumentáciu o hromadnej zmene čitateľov v "
 
 #: intranet-tmpl/prog/en/modules/help/tools/batch_record_modification.tt:28
-#, fuzzy, c-format
+#, c-format
 msgid "See the full documentation for Batch Record Modification in the "
-msgstr "Pozrite si kompletnú dokumentáciu o hromadnej zmene čitateľov v "
+msgstr "Pozrite si kompletnú dokumentáciu o hromadnej zmene záznamov v "
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqplan.tt:15
 #, c-format
@@ -14386,9 +14418,10 @@ msgid "See the full documentation for Paying Fines in the "
 msgstr "Pozrite si kompletnú dokumentáciu o platbách pokút v "
 
 #: intranet-tmpl/prog/en/modules/help/circ/on-site_checkouts.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid "See the full documentation for Pending on-site checkouts in the "
-msgstr "Pozrite si kompletnú dokumentáciu o zmluvách predajcov v "
+msgstr ""
+"Pozrite si kompletnú dokumentáciu o nevybavných výpožičkách na mieste v "
 
 #: intranet-tmpl/prog/en/modules/help/suggestion/suggestion.tt:41
 #, c-format
@@ -14525,7 +14558,7 @@ msgid ""
 msgstr ""
 "Pozrite si kompletnú dokumentáciu o načítavaní súborov obehu offline v "
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:19
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:19
 #, c-format
 msgid "See the full documentation for Vendor Contracts in the "
 msgstr "Pozrite si kompletnú dokumentáciu o zmluvách predajcov v "
@@ -14683,9 +14716,9 @@ msgid "See the full documentation for the Patron Image Uploader in the "
 msgstr "Pozrite si kompletnú dokumentáciu o načítavači obrázkov čitateľov v "
 
 #: intranet-tmpl/prog/en/modules/help/members/discharge.tt:19
-#, fuzzy, c-format
+#, c-format
 msgid "See the full documentation for the Patron discharges in the "
-msgstr "Pozrite si kompletnú dokumentáciu o dávkach čitateľských preukazov v "
+msgstr "Pozrite si kompletnú dokumentáciu o prepustení čitateľov v "
 
 #: intranet-tmpl/prog/en/modules/help/members/purchase-suggestions.tt:11
 #, c-format
@@ -14859,14 +14892,14 @@ msgstr ""
 "zvoliť pole 245 z oboch záznamov #1 a #2), bude sa Vám hlásiť chyba"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/merge.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Should you try to add a field that is not repeatable two times (like "
 "choosing the 245 field from both record #1 and #2) you will be presented "
 "with an error."
 msgstr ""
 "Ak sa pokúsite pridať pole, ktoré nie je opakovateľné dvakrát (napríklad "
-"zvoliť pole 245 z oboch záznamov #1 a #2), bude sa Vám hlásiť chyba"
+"zvoliť pole 245 z oboch záznamov #1 a #2), bude sa Vám hlásiť chyba."
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/moveitem.tt:9
 #, c-format
@@ -14881,6 +14914,8 @@ msgstr ""
 msgid ""
 "Since values can contain spaces, additional doubled-quotes may be required: "
 msgstr ""
+"Keďže hodnoty môžu obsahovať medzery, môžu byť potrebné dodatočné dvojité "
+"úvodzovky: "
 
 #: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:46
 #, c-format
@@ -14927,7 +14962,7 @@ msgid "Some tips"
 msgstr "Zopár tipov"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:85
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Sometimes a copy of the record you need to catalog can't be found via Z39.50/"
 "SRU. In these cases you can create a duplicate of similar record and edit "
@@ -14935,11 +14970,11 @@ msgid ""
 "click 'Edit as new (duplicate)' from the 'Edit' menu on the bibliographic "
 "record"
 msgstr ""
-"Niekedy sa kópia záznamu, ktorý potrebujete zapísať nedá nájsť cez Z39.50. V "
-"tom prípade môžete vytvoriť duplikát podobného záznamu a upraviť potrebné "
-"detaily, a tak vytvoríte nový záznam. Pre zdvojenie jestvujúceho záznamu, "
-"kliknite na 'Upraviť ako nový (Duplikát)' z ponuky 'Upraviť' pri knižničnom "
-"zázname"
+"Niekedy sa kópia záznamu, ktorý potrebujete zapísať nedá nájsť cez Z39.50/"
+"SRU. V tom prípade môžete vytvoriť duplikát podobného záznamu a upraviť "
+"potrebné detaily, a tak vytvoríte nový záznam. Pre zdvojenie jestvujúceho "
+"záznamu, kliknite na 'Upraviť ako nový (duplikát)' z ponuky 'Upraviť' pri "
+"knižničnom zázname"
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:100
 #, c-format
@@ -14972,16 +15007,17 @@ msgstr ""
 "katalógu, môžete ísť do modulu Obehu a kliknúť na 'Rýchlu katalogizáciu.'"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:46
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Sometimes fields may not be editable due to the value in your "
 "BiblioAddsAuthorities system preference. If you have this preference set to "
 "not allow catalogers to type in fields controlled by authorities you may see "
 "a lock symbol to the left of the field. "
 msgstr ""
-"systémové nastavenie. Ak je toto nastavenie zapnuté tak, aby bránilo "
-"katalogizátorom vpisovať do políčok riadených autoritami, uvidíte symbol "
-"zámku naľavo od políčka. "
+"Niekedy sa polia nemusia dať upraviť kvôli hodnote vo vašom systémovom "
+"nastavení BiblioAddsAuthorities. Ak je toto nastavenie zapnuté tak, aby "
+"bránilo katalogizátorom vpisovať do políčok riadených autoritami, uvidíte "
+"symbol zámku naľavo od políčka. "
 
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:129
 #, c-format
@@ -15010,13 +15046,13 @@ msgstr "Sort 1 a 2 sa používajú pre štatistické účely vnútri knižnice"
 #: intranet-tmpl/prog/en/modules/help/members/members-home.tt:47
 #, c-format
 msgid "Sort field 1 "
-msgstr ""
+msgstr "Pole triedenia 1 "
 
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:50
 #: intranet-tmpl/prog/en/modules/help/members/members-home.tt:52
 #, c-format
 msgid "Sort field 2 "
-msgstr ""
+msgstr "Pole triedenia 2 "
 
 #: intranet-tmpl/prog/en/modules/help/admin/classsources.tt:5
 #, c-format
@@ -16068,15 +16104,15 @@ msgstr ""
 "systém. Nastavenia sa rozdeľujú do niekoľkých kategórií, priblížených dole."
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:77
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The alternative is to search via Z39.50/SRU to overlay your record with a "
 "fuller record found at another library. You can do this by choosing 'Replace "
 "record via Z39.50/SRU' from the 'Edit' menu."
 msgstr ""
-"Alternatívne môžete hľadaním cez Z39.50 prekryť Váš záznam úplnejším "
+"Alternatívne môžete hľadaním cez Z39.50/SRU prekryť Váš záznam úplnejším "
 "záznamom nachádzajúcim sa v inej knižnici. Môžete tak urobiť voľbou "
-"'Nahradiť záznam cez Z39.50' v ponuke Upraviť."
+"'Nahradiť záznam cez Z39.50/SRU' v ponuke Upraviť."
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:25
 #, c-format
@@ -16104,8 +16140,8 @@ msgstr ""
 "ničoho v pracovnom čase pravdepodobne nebude fungovať ako očakávate. Bude sa "
 "to považovať za \"prázdnu hodnotu\" a nie za \"ignorovať tento parameter\". "
 "Napríklad zadaním ničoho pre : \"title=&lt;&lt;Zadať názov&gt;&gt;\" zobrazí "
-"výsledok s title='' (bez názvu). Ak chcete mať niečo nepovinné, použite \""
-"názov ako &lt;&lt;Zadať názov&gt;&gt;\" a zadajte %% v pracovnom čase "
+"výsledok s title='' (bez názvu). Ak chcete mať niečo nepovinné, použite "
+"\"názov ako &lt;&lt;Zadať názov&gt;&gt;\" a zadajte %% v pracovnom čase "
 "namiesto ničoho"
 
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:56
@@ -16164,7 +16200,7 @@ msgstr ""
 "rozhodol, že knižnica tento údaj nemôže uchovávať, táto záložka sa zobrazí "
 "iba pre momentálne vypožičané exempláre."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:11
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:11
 #, c-format
 msgid ""
 "The contract form will ask for some very basic information about the "
@@ -17129,24 +17165,23 @@ msgstr ""
 "obsah vlastný ich knižniciam."
 
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This administration area will help you hide or display columns on fixed "
 "tables throughout the staff client."
 msgstr ""
 "Táto oblasť administrácie vám pomôže skryť alebo zobraziť stĺpce v pevných "
-"tabuľkách v celom intranete. Momentálne jestvuje iba jedna tabuľka, tabuľka "
-"mien, ktorú takto môžete ovládať, no pribudnú ďalšie."
+"tabuľkách v celom intranete."
 
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This area lets you control the columns that show several of the modules in "
 "Koha. If nothing is hidden you will see no check marks and will see all of "
 "the columns when viewing the table."
 msgstr ""
-"Táto oblasť vám umožňuje ovládať stĺpce, ktoré zobrazujú administrátorskú "
-"oblast Meny. Ak nič nie je skryté, neuvidíte žiadne políčka zaškrtnuté a pri "
+"Táto oblasť vám umožňuje ovládať stĺpce, ktoré zobrazujú niekoľko modulov v "
+"Kohe. Ak nič nie je skryté, neuvidíte žiadne políčka na zaškrtnutie a pri "
 "prezeraní tabuľky uvidíte všetky stĺpce."
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:19
@@ -17199,6 +17234,7 @@ msgstr ""
 #, c-format
 msgid "This field must be wrapped in quotes if multiple values are defined."
 msgstr ""
+"Toto pole musí byť zahrnuté v úvodzovkách, ak sa definujú viaceré hodnoty."
 
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:113
 #, c-format
@@ -17245,6 +17281,8 @@ msgid ""
 "This is a custom field that libraries can use for any type of data about the "
 "patron."
 msgstr ""
+"Toto je vlastné pole, ktoré môžu knižnice používať pre ľubovoľný typ dát o "
+"čitateľovi."
 
 #: intranet-tmpl/prog/en/modules/help/circ/selectbranchprinter.tt:7
 #, c-format
@@ -17752,6 +17790,9 @@ msgid ""
 "records using MARC Modification Templates. Before visiting this tool you "
 "will want to set up at least one MARC modification template."
 msgstr ""
+"Tento nástroj vám umožní upravovať dávky knižničných záznamov a/alebo "
+"autorít pomocou Šablón úpravy MARC. Pred začatím používania tohto nástroja "
+"budete potrebovať nastaviť aspoň jednu šablónu úpravy MARC."
 
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:5
 #, c-format
@@ -17843,6 +17884,8 @@ msgid ""
 "This will list the due date (overdues in red), who has the item, item "
 "information and what library the item is at."
 msgstr ""
+"Toto vypíše zoznam termínu (omeškania červenou), kto má exemplár, informáciu "
+"o exemplári a v ktorej knižnici sa exemplár nachádza."
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:45
 #, c-format
@@ -17906,7 +17949,7 @@ msgid "Tip"
 msgstr "Tip"
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:23
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Tip : If loading patron attributes, the 'patron_attributes' field should "
 "contain a comma-separated list of attribute types and values."
@@ -17952,13 +17995,13 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:22
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbooks.tt:21
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Tip: If no results are found, try searching for fewer fields, not all Z39.50/"
 "SRU targets can search all of the fields above."
 msgstr ""
 "Tip: Ak sa nenachádzajú žiadne výsledky, skúste vyhľadávať v menšom počte "
-"polí, nie všetky ciele Z39.50 dokážu hľadať naraz vo všetkých vyššie "
+"polí, nie všetky ciele Z39.50/SRU dokážu hľadať naraz vo všetkých vyššie "
 "uvedených poliach."
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:128
@@ -18582,15 +18625,13 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:73
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:19
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "To edit the subfields associated with the tag, click 'Subfields' to the "
 "right of the tag on the 'MARC Structure' listing"
 msgstr ""
-"'Povolená hodnota' je tam, kde si zvolíte zoznam povolených hodnôt, z "
-"ktorých si vaši zapisovatelia môžu vybrať hodnotu pre toto pole. Pre úpravu "
-"podpoľa súvisiacu so menovkou, kliknite na 'Podpolia' napravo od menovky v "
-"zozname 'štruktúry MARC'."
+"Pre úpravu podpoľa súvisiacu so menovkou, kliknite na 'Podpolia' napravo od "
+"menovky v zozname 'štruktúry MARC'"
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:77
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:23
@@ -18636,13 +18677,13 @@ msgstr ""
 "kliknite na elipsu (...) napravo od poľa."
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:180
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "To export a framework simply click the 'Export' link to the right of "
 "framework title."
 msgstr ""
-"Pre odstránenie menovky zo špecifického titulu, jednoducho klinite na "
-"tladičlo 'Odobrať menovku' napravo od titulu."
+"Pre export rámca jednoducho klinite na tladičlo 'Exportovať' napravo od "
+"titulu rámca."
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:9
 #, c-format
@@ -18685,13 +18726,13 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/discharge.tt:11
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:81
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "To generate a discharge for a patron click the 'Discharge' tab on the left "
 "of the patron record"
 msgstr ""
-"Pre úpravu celého záznamu o čitateľovi, jednoducho kliknite na tlačidlo "
-"'Upraviť' navrchu tohto záznamu."
+"Pre vytvorenie priepustky čitateľovi kliknite na záložku 'Prepustiť' vľavo "
+"od záznamu čitateľa"
 
 #: intranet-tmpl/prog/en/modules/help/circ/view_holdsqueue.tt:7
 #, c-format
@@ -18708,12 +18749,12 @@ msgstr ""
 "rezervačnej požiadavky."
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:41
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "To get help from the Library of Congress on a MARC tag click the question "
 "mark (?) to the right of each field number "
 msgstr ""
-"Pre získanie pomoci z Kongresovej knižnice o menovke Marc, kliknite na "
+"Pre získanie pomoci z Kongresovej knižnice o menovke MARC, kliknite na "
 "otáznik (?) napravo od každého čísla poľa "
 
 #: intranet-tmpl/prog/en/modules/help/reserve/request.tt:31
@@ -18742,6 +18783,8 @@ msgid ""
 "To import a framework you first need to create a new framework. Once you "
 "have that framework, click 'Import' to the right of the new framework."
 msgstr ""
+"Pre import rámca najprv musíte vytvoriť nový rámec. Keď už ten rámec máte, "
+"kliknite na 'Importovať' napravo od nového rámca."
 
 #: intranet-tmpl/prog/en/modules/help/tools/export.tt:27
 #, c-format
@@ -18793,6 +18836,8 @@ msgid ""
 "To merge bibliographic records together you will want to go to the "
 "Cataloging module and perform a search."
 msgstr ""
+"Pre zlúčenie knižničných záznamov musíte ísť do modulu Katalogizácia a "
+"spustiť hľadanie."
 
 #: intranet-tmpl/prog/en/modules/help/reviews/reviewswaiting.tt:7
 #, c-format
@@ -19103,7 +19148,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:55
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:21
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "To the right of the new field is a link to 'Subfields,' you will need to add "
 "subfields before this tag will appear in your MARC editor. The process of "
@@ -19111,7 +19156,9 @@ msgid ""
 "editing subfields in frameworks section of the manual."
 msgstr ""
 "Napravo od nového poľa je odkaz na 'Podpolia'. Skôr ako sa táto menovka "
-"objaví vo Vašom editore MARC, musíte pridať podpolia."
+"objaví vo vašom editore MARC, musíte pridať podpolia. Proces vkladania a "
+"nastavení pre nové podpolia je totožný s tým, ktorý sa nachádza v sekcii "
+"manuálu o úprave podpolí v rámci."
 
 #: intranet-tmpl/prog/en/modules/help/admin/auth_tag_structure.tt:20
 #, c-format
@@ -19243,6 +19290,7 @@ msgstr ""
 #, c-format
 msgid "Unique attributes can be used as match points on the patron import tool"
 msgstr ""
+"Jedinečné vlastnosti možno použiť ako body zhody nástroji importu čitateľov"
 
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:69
 #, c-format
@@ -19595,7 +19643,7 @@ msgstr "VANCOUVER PUBLIC LIBRARY z3950.vpl.ca:210 Horizon"
 msgid "Values that are pre-configured in Koha are:"
 msgstr "Prednastavené hodnoty v Kohe sú:"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:3
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:3
 #, c-format
 msgid "Vendor Contracts"
 msgstr "Zmluvy predajcu"
@@ -19717,14 +19765,15 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:136
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:82
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: This value should not change after data has been added to your "
 "catalog. If you need to change this value you must ask your system "
 "administrator to run misc/batchRebuildBiblioTables.pl."
 msgstr ""
-"POZNÁMKA: ak zmeníte túto hodnotu, musíte požiadať svojho administrátora, "
-"aby spustil skript misc/batchRebuildBiblioTables.pl."
+"Upozornenie: Táto hodnota by sa nemala meniť po pridaní údajov do vášho "
+"katalógu. Ak potrebujete túto hodnotu zmeniť, musíte požiadať svojho "
+"administrátora, aby spustil skript misc/batchRebuildBiblioTables.pl."
 
 #: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:32
 #, c-format
@@ -19929,6 +19978,9 @@ msgid ""
 "replace all of the attribute values of any type that were previously "
 "assigned to the patron record."
 msgstr ""
+"Pri výmene záznamu čitateľa ľubovoľné vlastnosti určené vo vstupnom súbore "
+"nahradia všetky hodnoty vlastností ľubovoľného typu, ktoré boli predtým "
+"priradené k záznamu čitateľa."
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:32
 #, c-format
@@ -20008,6 +20060,9 @@ msgid ""
 "find that the ISBN match is not working to your satisfaction you can change "
 "the AggressiveMatchOnISBN preference to 'Do' and then run your import again."
 msgstr ""
+"Pri použití pravidla zhody ISBN Koha nájde iba presné zhody. Ak zistíte, že "
+"zhoda ISBN nefunguje k vašej spokojnosti, môžete zmeniť nastavenie "
+"AggressiveMatchOnISBN na 'vykonať' a potom znova spustiť váš import."
 
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:5
 #, c-format
@@ -20100,6 +20155,7 @@ msgid ""
 "When you click 'Export' you will be prompted to choose what format to export "
 "the file in."
 msgstr ""
+"Keď kliknete na 'Export', budete vyzvaní vybrať si formát exportu pre súbor."
 
 #: intranet-tmpl/prog/en/modules/help/members/members-update.tt:7
 #, c-format
@@ -20150,7 +20206,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/tools/batch_record_modification.tt:7
 #, c-format
 msgid "When you visit the tool it will ask you:"
-msgstr ""
+msgstr "Pri návšteve nástroja sa vás opýta:"
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:63
 #, c-format
@@ -20254,6 +20310,11 @@ msgid ""
 "to 'Add user'. Click that button to add patrons who will be notified of the "
 "new issue."
 msgstr ""
+"S ľubovoľnou vyššie uvedenou možnosťou objednávania sa vám predstaví možnosť "
+"upovedomiť čitateľov o prijatí nového exemplára. Obsah tohto oznámenia možno "
+"upraviť v nástroji Oznámenia & Ústrižky a bude mať kód ACQ_NOTIF_ON_RECEIV. "
+"V sekcii 'Čitatelia' uvidíte možnosť 'Pridať čitateľa'. Kliknutím na toto "
+"tlačidlo pridajte čitateľov, ktorí budú upovedomení o tomto novom prírastku."
 
 #: intranet-tmpl/prog/en/modules/help/tools/modborrowers.tt:5
 #, c-format
@@ -20427,6 +20488,8 @@ msgid ""
 "You can also decide if patrons are allowed to place item specific holds on "
 "the item type in question. The options are: "
 msgstr ""
+"Môžete sa tiež rozhodnúť, či čitateľlia majú povolené vkladať špecifické "
+"rezervácie na predmetný typ exemplára. Možnosti sú: "
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:45
 #, c-format
@@ -20462,12 +20525,13 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/members-home.tt:11
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You can also filter your patron results using the search options on the left "
 "hand side of the page."
 msgstr ""
-"Môžete obmedziť zobrazené výsledky pomocou ponuky Zúžiť v ľavej časti stránky"
+"Môžete tiež filtrovať výsledky vašich čitateľov pomocou možnosti hľadania na "
+"ľavej strane stránky."
 
 #: intranet-tmpl/prog/en/modules/help/acqui/parcel.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/orderreceive.tt:15
@@ -20532,13 +20596,13 @@ msgstr ""
 "> Zostávajúce úkony obehu offline."
 
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You can also toggle columns using the 'Show/Hide Columns' button in the top "
 "right of the page you altered the columns for."
 msgstr ""
 "Môžete tiež prepínať stĺpce pomocou tlačidla 'Zobraziť/Skryť stĺpce' v "
-"pravom hornom rohu stránky."
+"pravom hornom rohu stránky, pre ktorú ste zmenili stĺpce."
 
 #: intranet-tmpl/prog/en/modules/help/tools/manage-marc-import.tt:27
 #, c-format
@@ -20618,7 +20682,7 @@ msgstr ""
 "zablokovaná na vykonávanie akcií v OPACu, ak ich preukaz vypršal. Predvolene "
 "sa použije pravidlo nastavené v BlockExpiredPatronOpacActions"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:5
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:5
 #, c-format
 msgid ""
 "You can define contracts (with a start and end date) and attach them to a "
@@ -20721,14 +20785,14 @@ msgstr ""
 "nastavenia systému noissuescharge"
 
 #: intranet-tmpl/prog/en/modules/help/tools/stage-marc-import.tt:17
-#, fuzzy, c-format
+#, c-format
 msgid "You can set up record matching rules through the administration area "
-msgstr "Môžete nastaviť pravidlá zhody záznamov v oblasti administrácie"
+msgstr "Môžete nastaviť pravidlá zhody záznamov v oblasti administrácie "
 
 #: intranet-tmpl/prog/en/modules/help/tools/batch_record_modification.tt:13
 #, c-format
 msgid "You can upload a file of these numbers or"
-msgstr ""
+msgstr "Môžete načítať súbor týchto čísel alebo"
 
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:47
 #, c-format
@@ -20856,9 +20920,10 @@ msgstr ""
 "rámec; toto Vám padne ľahšie ako začínať od základu"
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:194
-#, fuzzy, c-format
+#, c-format
 msgid "You will be asked to confirm your actions before the file is imported."
-msgstr "Predstaví sa Vám potvrdenie o Vašom importe MARC"
+msgstr ""
+"Dostanete výzvu, aby ste potvrdili vaše zmeny pred importovaním súboru."
 
 #: intranet-tmpl/prog/en/modules/help/reserve/request.tt:11
 #, c-format
@@ -20943,6 +21008,9 @@ msgid ""
 "each one is a checkbox so you can uncheck any items you would rather not "
 "edit at this time."
 msgstr ""
+"Predstaví sa vám zoznam záznamov, ktoré sa budú upravovať. Vedľa každého je "
+"políčko, takže môžete odškrtnúť ľubovoľné exempláre, ktoré si v tejto chvíli "
+"neželáte upravovať."
 
 #: intranet-tmpl/prog/en/modules/help/tools/batchMod.tt:9
 #, c-format
@@ -21034,7 +21102,7 @@ msgstr "Budete vyzvaní potvrdiť načítanie súborov väčších ako 512KB."
 msgid ""
 "You will be prompted to find a file on your computer to import into the "
 "framework."
-msgstr ""
+msgstr "Budete vyzvaní nájsť súbor vo vašom počítači na import do rámca."
 
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:72
 #, c-format
@@ -21206,7 +21274,7 @@ msgid "Your new item type will now appear on the list"
 msgstr "Váš nový typ exemplára sa teraz objaví na zozname"
 
 #: intranet-tmpl/prog/en/modules/help/mainpage.tt:24
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your online help will be overwritten by the new Help when there is an "
 "upgrade. If you want to keep a copy of your online help, you should instruct "
@@ -21214,9 +21282,9 @@ msgid ""
 "file tree."
 msgstr ""
 "Ako súčasť procesu aktualizácie bude Vaša pomoc online prepísaná novou "
-"Pomocou z inštalácie. Ak si chcete uchovať kópiu Vašej vlastnej pomoci "
-"online, mali by ste upovedomiť Administrátora systému, aby aktualizoval "
-"adresár pomoci online v adresári Koha."
+"Pomocou. Ak si chcete uchovať kópiu Vašej vlastnej pomoci online, mali by "
+"ste upovedomiť Administrátora systému, aby aktualizoval adresár pomoci "
+"online v adresári Koha."
 
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:27
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:11
@@ -21225,6 +21293,8 @@ msgid ""
 "Your results will appear to the right of the form and each subscription will "
 "have an 'Order' link to the right"
 msgstr ""
+"Vaše výsledky sa objavia napravo od formulára a každé predplatné bude mať "
+"napravo odkaz 'Order'"
 
 #: intranet-tmpl/prog/en/modules/help/suggestion/suggestion.tt:11
 #, c-format
@@ -21310,6 +21380,9 @@ msgid ""
 "check the boxes where you would like the field to show and uncheck the boxes "
 "where you would like it hidden."
 msgstr ""
+"umožňuje vám zvoliť si, odkiaľ toto podpole je viditeľné/skryté, jednoducho "
+"zaškrtnite políčka, kde by ste chceli zobraziť pole a odškrtnite políčka "
+"tam, kde by ste ich chceli mať skryté."
 
 #: intranet-tmpl/prog/en/modules/help/tools/batchMod.tt:33
 #, c-format
@@ -21422,7 +21495,7 @@ msgid "budget_modify "
 msgstr "úprava_rozpočtu "
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:11
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "cardnumber, surname, firstname, title, othernames, initials, streetnumber, "
 "streettype, address, address2, city, state, zipcode, country, email, phone, "
@@ -21447,7 +21520,7 @@ msgstr ""
 "password, flags, userid, opacnote, contactnote, sort1, sort2, "
 "altcontactfirstname, altcontactsurname, altcontactaddress1, "
 "altcontactaddress2, altcontactaddress3, altcontactzipcode, "
-"altcontactcountry, altcontactphone, smsalertnumber, patron_attributes"
+"altcontactcountry, altcontactphone, smsalertnumber, patron_attributes "
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:36
 #, c-format
@@ -21664,9 +21737,9 @@ msgstr ""
 "alebo často rovnakú hodnotu v poli."
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:204
-#, fuzzy, c-format
+#, c-format
 msgid "delete_all_items "
-msgstr "upraviť_exempláre "
+msgstr "odstrániť_všetky_exempláre "
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:369
 #, c-format
@@ -21674,9 +21747,9 @@ msgid "delete_anonymize_patrons "
 msgstr "odstrániť_anonymizáciu_čitateľov "
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:521
-#, fuzzy, c-format
+#, c-format
 msgid "delete_public_lists "
-msgstr "odstrániť_zápisné "
+msgstr "odstrániť_verejné_zoznamy "
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:323
 #, c-format
@@ -21699,9 +21772,9 @@ msgid "edit_items "
 msgstr "upraviť_exempláre "
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:222
-#, fuzzy, c-format
+#, c-format
 msgid "edit_items_restricted "
-msgstr "upraviť_exempláre "
+msgstr "upraviť_vyhradené_exempláre "
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:381
 #, c-format
@@ -21894,7 +21967,7 @@ msgstr "https://addons.mozilla.org/en/firefox/addon/koct/"
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:125
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:71
-#, fuzzy, c-format
+#, c-format
 msgid "if checked, it means that the subfield is a URL and can be clicked"
 msgstr ""
 "ak je zaškrtnuté, znamená to, že podpole je odkaz URL a možno naň kliknúť"
@@ -21935,9 +22008,9 @@ msgid "items_batchmod "
 msgstr "úprava_dávky_exemp "
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:429
-#, fuzzy, c-format
+#, c-format
 msgid "items_batchmod_restricted "
-msgstr "úprava_dávky_exemp "
+msgstr "úprava_dávky_vyhradené "
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation-home.tt:12
 #, c-format
@@ -22010,9 +22083,9 @@ msgid "lcc - Library of Congress Classification"
 msgstr "lcc - Library of Congress Classification"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:128
-#, fuzzy, c-format
+#, c-format
 msgid "lists "
-msgstr "Zoznamy"
+msgstr "zoznamy "
 
 #: intranet-tmpl/prog/en/modules/help/reports/reports-home.tt:12
 #, c-format
@@ -22060,6 +22133,7 @@ msgstr "spracovanie "
 #: intranet-tmpl/prog/en/modules/help/serials/claims.tt:15
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:200
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:91
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:21
@@ -22172,7 +22246,6 @@ msgstr "spracovanie "
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:68
 #: intranet-tmpl/prog/en/modules/help/acqui/lateorders.tt:19
 #: intranet-tmpl/prog/en/modules/help/acqui/uncertainprice.tt:7
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/acqui/neworderbiblio.tt:12
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:122
 #: intranet-tmpl/prog/en/modules/help/acqui/invoice.tt:11
@@ -22406,7 +22479,7 @@ msgid "receive_serials "
 msgstr "prijať_periodiká "
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:465
-#, fuzzy, c-format
+#, c-format
 msgid "records_batchdel "
 msgstr "odstránenie_dávky_exemp "
 
@@ -22574,9 +22647,9 @@ msgstr "zobraziť_denníky_systému "
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:87
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:33
-#, fuzzy, c-format
+#, c-format
 msgid "what appears before the field in the OPAC. "
-msgstr "čo sa objavuje pred poľom v OPACu."
+msgstr "čo sa objavuje pred poľom v OPACu. "
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:82
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:28

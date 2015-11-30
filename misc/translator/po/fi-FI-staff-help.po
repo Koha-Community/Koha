@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-10-18 10:28-0300\n"
-"PO-Revision-Date: 2015-10-23 11:51+0000\n"
+"POT-Creation-Date: 2015-11-20 10:18-0300\n"
+"PO-Revision-Date: 2015-10-26 12:26+0000\n"
 "Last-Translator: Päivi <paivi.knuutinen@jns.fi>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fi\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1445601071.000000\n"
+"X-POOTLE-MTIME: 1445862391.000000\n"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:82
 #, c-format
@@ -83,9 +83,9 @@ msgid ""
 "&gt;, &lt;&lt;items.itemcallnumber&gt;&gt;, Barcode: &lt;&lt;items."
 "barcode&gt;&gt; Fine: &lt;&lt;items.fine&gt;&gt;&lt;/item&gt;"
 msgstr ""
-"&lt;item&gt;\"&lt;&lt;biblio.title&gt;&gt;\" by &lt;&lt;biblio.author&gt;&gt;"
-", &lt;&lt;items.itemcallnumber&gt;&gt;, Viivakoodi: "
-"&lt;&lt;items.barcode&gt;&gt; Fine: &lt;&lt;items.fine&gt;&gt;&lt;/item&gt;"
+"&lt;item&gt;\"&lt;&lt;biblio.title&gt;&gt;\" / &lt;&lt;biblio.author&gt;"
+"&gt;, &lt;&lt;items.itemcallnumber&gt;&gt;, Viivakoodi: &lt;&lt;items."
+"barcode&gt;&gt; Maksu: &lt;&lt;items.fine&gt;&gt;&lt;/item&gt;"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:33
 #, c-format
@@ -739,6 +739,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/serials/claims.tt:15
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:200
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:91
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:21
@@ -852,7 +853,6 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:68
 #: intranet-tmpl/prog/en/modules/help/acqui/lateorders.tt:19
 #: intranet-tmpl/prog/en/modules/help/acqui/uncertainprice.tt:7
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/acqui/neworderbiblio.tt:12
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:122
 #: intranet-tmpl/prog/en/modules/help/acqui/invoice.tt:11
@@ -1199,8 +1199,8 @@ msgid ""
 "statement (or any other number above 10,000."
 msgstr ""
 "Kohassa on 10 000 tietueen rajoitus SQL-lausekkeen hakutuloksessa. Jos "
-"haluat tulokseen rajaksi enemmän, lisää 'LIMIT 100000' SQL-lauseen loppuun ("
-"tai mikä tahansa numero yli 10 000."
+"haluat tulokseen rajaksi enemmän, lisää 'LIMIT 100000' SQL-lauseen loppuun "
+"(tai mikä tahansa numero yli 10 000."
 
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:162
 #, c-format
@@ -1451,8 +1451,8 @@ msgid ""
 "A public report is accessible via a URL that looks like this: http://MYOPAC/"
 "cgi-bin/koha/svc/report?id=REPORTID"
 msgstr ""
-"Julkinen raportti on nähtävissä tämänkaltaisen URLin kautta: http://MYOPAC"
-"/cgi-bin/koha/svc/report?id=REPORTID"
+"Julkinen raportti on nähtävissä tämänkaltaisen URLin kautta: http://MYOPAC/"
+"cgi-bin/koha/svc/report?id=REPORTID"
 
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:5
 #, c-format
@@ -1550,8 +1550,8 @@ msgid ""
 "Ability to use the 'Delete all items' option found under the 'Edit' menu in "
 "cataloging"
 msgstr ""
-"Oikeus käyttää 'Poista kaikki niteet' -toimintoa luetteloinnin "
-"'Muokkaa'-valikossa"
+"Oikeus käyttää 'Poista kaikki niteet' -toimintoa luetteloinnin 'Muokkaa'-"
+"valikossa"
 
 #: intranet-tmpl/prog/en/modules/help/about.tt:3
 #, c-format
@@ -1564,8 +1564,8 @@ msgid ""
 "Accept the deletion and the records will be removed from the reservoir and "
 "the status will be changed to 'cleaned'"
 msgstr ""
-"Hyväksy poisto ja tietueet poistetaan varastosta ja tila muuttuu 'siivottu' "
-"-tilaksi"
+"Hyväksy poisto ja tietueet poistetaan varastosta ja tila muuttuu 'siivottu' -"
+"tilaksi"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:23
 #, c-format
@@ -1761,7 +1761,7 @@ msgstr "Lisää sitaatti"
 msgid "Add a Batch"
 msgstr "Lisää eräajo"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:7
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:7
 #, c-format
 msgid "Add a Contract"
 msgstr "Lisää sopimus"
@@ -2144,8 +2144,8 @@ msgid ""
 "'Manage Templates' page."
 msgstr ""
 "Jos löydät jotain virheitä tulosteessa, luo profiili, jonka yhdistät "
-"tallennuspohjaan. Tallennuksen jälkeen pohjasi näkyy 'Pohjien hallinta' "
-"-sivulla."
+"tallennuspohjaan. Tallennuksen jälkeen pohjasi näkyy 'Pohjien hallinta' -"
+"sivulla."
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:5
 #, c-format
@@ -2190,19 +2190,21 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-layout.tt:32
 #, c-format
 msgid "After saving, your layouts will appear on the 'Manage Layouts' page."
-msgstr "Tallennuksen jälkeen asettelusi näkyvät 'Hallitse asetteluja' -sivulla."
+msgstr ""
+"Tallennuksen jälkeen asettelusi näkyvät 'Hallitse asetteluja' -sivulla."
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:27
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:27
 #, c-format
 msgid "After saving, your profiles will appear on the 'Manage Profiles' page."
 msgstr ""
+"Tallennuksen jälkeen profiilisi näkyvät 'Hallitse profiileja' -sivulla."
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:31
 #, c-format
 msgid ""
 "After saving, your templates will appear on the 'Manage Templates' page."
-msgstr ""
+msgstr "Tallennuksen jälkeen pohjasi näkyy 'Pohjien hallinta' -sivulla."
 
 #: intranet-tmpl/prog/en/modules/help/acqui/invoice.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:7
@@ -2402,8 +2404,8 @@ msgid ""
 "Allow: Will allow patrons the option to choose next available or item "
 "specific"
 msgstr ""
-"Salli: Sallii asiakkaalle mahdollisuuden valita nimekevaraus tai nidevaraus ("
-"tietty nide)"
+"Salli: Sallii asiakkaalle mahdollisuuden valita nimekevaraus tai nidevaraus "
+"(tietty nide)"
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:37
 #, c-format
@@ -2576,7 +2578,7 @@ msgstr ""
 "eräpäivistä (ja aika, jos on kyseessä tuntilaina), tänään lainatut niteet "
 "näkyvät yläpuolella."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:9
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:9
 #, c-format
 msgid ""
 "At the top of a Vendor Information Page, you will see a 'New Contract' "
@@ -2969,7 +2971,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:15
 #, c-format
 msgid "Below is a summary of the various pieces of the advanced search limit: "
-msgstr "Alla on yhteenveto tarkan haun hakutulosten rajoitusmahdollisuuksista: "
+msgstr ""
+"Alla on yhteenveto tarkan haun hakutulosten rajoitusmahdollisuuksista: "
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/moredetail.tt:19
 #: intranet-tmpl/prog/en/modules/help/catalogue/issuehistory.tt:7
@@ -3392,8 +3395,8 @@ msgid ""
 "Check the 'Verify' box on the task you would like to complete (Delete or "
 "Anonymize)"
 msgstr ""
-"Valitse 'Vahvista' sen toiminnon kohdalla jonka haluat tehdä loppuun ("
-"Poistaa tai hämärtää)"
+"Valitse 'Vahvista' sen toiminnon kohdalla jonka haluat tehdä loppuun "
+"(Poistaa tai hämärtää)"
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:41
 #, c-format
@@ -5572,7 +5575,8 @@ msgstr ""
 msgid ""
 "Enter the amount you are collecting from the patron in the \"Collect From "
 "Patron\" box"
-msgstr "Syötä summa, jonka veloitat asiakkaalta \"Peri asiakkaalta\"-kenttään. "
+msgstr ""
+"Syötä summa, jonka veloitat asiakkaalta \"Peri asiakkaalta\"-kenttään. "
 
 #: intranet-tmpl/prog/en/modules/help/tools/upload-cover-image.tt:13
 #, c-format
@@ -5656,8 +5660,8 @@ msgid ""
 "Enter the total number of renewals allowed for the item type in the "
 "'Renewals' box"
 msgstr ""
-"Syötä sallittujen uusintojen määrä kullekin aineistolajille "
-"'Uusinnat'-laatikkoon"
+"Syötä sallittujen uusintojen määrä kullekin aineistolajille 'Uusinnat'-"
+"laatikkoon"
 
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:16
 #, c-format
@@ -5936,7 +5940,8 @@ msgstr "Valitse, mitä tehdään niille tietueille, jotka ovat yksilöllisiä"
 msgid ""
 "Finally decide if this event should be applied to all libraries or just the "
 "one you have originally selected "
-msgstr "Päätä, koskeeko kiinniolo kaikkia kirjastoja vai vain ensiksi valittua "
+msgstr ""
+"Päätä, koskeeko kiinniolo kaikkia kirjastoja vai vain ensiksi valittua "
 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:29
 #, c-format
@@ -7808,7 +7813,8 @@ msgstr "Jos tämä asiakas on lapsi, hänelle pitää liittää huoltaja "
 msgid ""
 "If this patron is a professional, you will be asked to attach the patron to "
 "an organizational patron "
-msgstr "Jos tämä asiakas on professional, asiakas pitää liittää organisaatioon "
+msgstr ""
+"Jos tämä asiakas on professional, asiakas pitää liittää organisaatioon "
 
 #: intranet-tmpl/prog/en/modules/help/tools/upload-cover-image.tt:22
 #, c-format
@@ -8542,8 +8548,8 @@ msgid ""
 "Profile or ISO2709 (MARC21) format."
 msgstr ""
 "Jos ExportWithCsvProfile-asetus on tehty, näet myös vaihtoehdon viedä "
-"asiakkaan olemassa olevien lainojen tiedot CSV-profiilin tai ISO2709 (MARC21)"
-" formaatin kautta."
+"asiakkaan olemassa olevien lainojen tiedot CSV-profiilin tai ISO2709 "
+"(MARC21) formaatin kautta."
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:65
 #, c-format
@@ -9488,7 +9494,7 @@ msgid ""
 "Important: In order to have overdue notices sent to your patrons, you need "
 "to set that patron category to require overdue notices."
 msgstr ""
-"Tärkeää: Jos asiakkaille halutaan lähettää myöhästysmismuistutus, täytyy "
+"Tärkeää: Jos asiakkaille halutaan lähettää myöhästymismuistutus, täytyy "
 "asiakastyyppiin asettaa myöhästymismuistutusten lähetys."
 
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:66
@@ -9556,8 +9562,8 @@ msgid ""
 "Important: Overdue notices can use &lt;&lt;items.content&gt;&gt; tags by "
 "themselves, or use &lt;item&gt;&lt;/item&gt; to span all of the tags."
 msgstr ""
-"Tärkeää: Myöhästymismuistutukset voivat käyttää &lt;&lt;items.content&gt;&gt;"
-" kenttiä, tai käyttää &lt;item&gt;&lt;/item&gt; muihin kenttiin."
+"Tärkeää: Myöhästymismuistutukset voivat käyttää &lt;&lt;items.content&gt;"
+"&gt; kenttiä, tai käyttää &lt;item&gt;&lt;/item&gt; muihin kenttiin."
 
 #: intranet-tmpl/prog/en/modules/help/tools/cleanborrowers.tt:7
 #, c-format
@@ -9631,6 +9637,8 @@ msgid ""
 "it is recommended that the image be 200x300 pixels, but smaller images will "
 "work as well."
 msgstr ""
+"Tärkeää: Ladattavan kuvan koon yläraja on 520K ja suositus on, että kuva "
+"olisi 200x300 pikselin kokoinen, mutta pienemmätkin kuvat toimivat hyvin."
 
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:86
 #, c-format
@@ -9763,7 +9771,7 @@ msgstr ""
 "Tärkeää: Ilman omistajaa pääsyrajoitusta ei huomioida, joten varmista, että "
 "syötät omistajan ja määrität rajoituksen"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:13
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:13
 #, c-format
 msgid ""
 "Important: You cannot enter a contract retrospectively. The end date must "
@@ -9987,7 +9995,8 @@ msgstr ""
 msgid ""
 "In the Email filed enter the email of the person you want to receive your "
 "report"
-msgstr "Syötä sähköpostiosoitekenttään sen henkilön osoite, joka saa raporttisi"
+msgstr ""
+"Syötä sähköpostiosoitekenttään sen henkilön osoite, joka saa raporttisi"
 
 #: intranet-tmpl/prog/en/modules/help/tools/upload-cover-image.tt:41
 #, c-format
@@ -10064,8 +10073,8 @@ msgid ""
 "(for more info on each option click the question mark [?] to the right of "
 "the option) "
 msgstr ""
-"Kalenterin yläpuolelle avautuvaan lomakkeeseen syötät tiedot kiinniolosta ("
-"jokaisesta vaihtoehdosta saat lisätietoja klikkaamalla kysymysmerkkiä [?] "
+"Kalenterin yläpuolelle avautuvaan lomakkeeseen syötät tiedot kiinniolosta "
+"(jokaisesta vaihtoehdosta saat lisätietoja klikkaamalla kysymysmerkkiä [?] "
 "vaihtoehdon oikealla puolella "
 
 #: intranet-tmpl/prog/en/modules/help/serials/checkexpiration.tt:7
@@ -10189,7 +10198,7 @@ msgstr ""
 msgid "It will also appear on the main staff dashboard under the module labels"
 msgstr "Se näkyy myös virkailijatyökalun etusivulla modulikuvakkeiden alla"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:17
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:17
 #, c-format
 msgid "It will also be an option when creating a basket."
 msgstr "Se on myös vaihtoehto tilausta tehtäessä."
@@ -10253,7 +10262,8 @@ msgstr "Lainattua nidettä ei suositella tämän ikäiselle asiakkaalle"
 msgid ""
 "Item being checked out meets the decreaseLoanHighHolds system preference "
 "criteria"
-msgstr "Lainattuun niteeseen kohdistuu decreaseLoanHighHolds järjestelmäasetus "
+msgstr ""
+"Lainattuun niteeseen kohdistuu decreaseLoanHighHolds järjestelmäasetus "
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:110
 #, c-format
@@ -10344,8 +10354,8 @@ msgid ""
 "Items can be moved from one bibliographic record to another using the "
 "'Attach item' option"
 msgstr ""
-"Niteitä voi siirtää nimeketietueesta toiseen käyttämällä 'Liitä nide' "
-"-toimintoa"
+"Niteitä voi siirtää nimeketietueesta toiseen käyttämällä 'Liitä nide' -"
+"toimintoa"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:71
 #, c-format
@@ -11241,8 +11251,8 @@ msgid ""
 "More &gt; Administration &gt; Patrons &amp; Circulation &gt; Patron "
 "attribute types"
 msgstr ""
-"Muita toimintoja &gt; Ylläpito &gt; Asiakkaat &amp; Lainaus ja palautus  &gt;"
-" Asiakasryhmien määreet"
+"Muita toimintoja &gt; Ylläpito &gt; Asiakkaat &amp; Lainaus ja palautus  "
+"&gt; Asiakasryhmien määreet"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:245
 #, c-format
@@ -11455,8 +11465,8 @@ msgid ""
 "Next you can choose whether or not to import the item data found in the MARC "
 "records (if the file you're loading is a bibliographic file) "
 msgstr ""
-"Seuraavaksi valitset, tuodaanko vai ei niteen tiedot MARC-tietueen mukana ("
-"jos ladattava tietue on nimeketietue) "
+"Seuraavaksi valitset, tuodaanko vai ei niteen tiedot MARC-tietueen mukana "
+"(jos ladattava tietue on nimeketietue) "
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:29
 #, c-format
@@ -11753,9 +11763,9 @@ msgid ""
 "On overdue notices make sure to use &lt;&lt;items.content&gt;&gt; tags to "
 "print out the data related to all items that are overdue."
 msgstr ""
-"Varmista, että myöhästymismuistutuksissa käytetään "
-"&lt;&lt;items.content&gt;&gt; -kenttiä, jotta tiedot myöhässä olevista "
-"niteistä tulostuvat ilmoitukseen."
+"Varmista, että myöhästymismuistutuksissa käytetään &lt;&lt;items.content&gt;"
+"&gt; -kenttiä, jotta tiedot myöhässä olevista niteistä tulostuvat "
+"ilmoitukseen."
 
 #: intranet-tmpl/prog/en/modules/help/offline_circ/process_koc.tt:9
 #, c-format
@@ -11910,7 +11920,7 @@ msgid ""
 "edit the quotes prior to saving them."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:15
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:15
 #, c-format
 msgid "Once the contract is saved it will appear below the vendor information."
 msgstr "Kun sopimus on tallennettu, se näkyy toimittajan tietojen alapuolella."
@@ -12439,7 +12449,8 @@ msgstr ""
 msgid ""
 "One you click Submit, your city will be saved and will be listed on the "
 "Cities and Towns page."
-msgstr "Kun klikkaat OK, kaupunki tallennetaan ja se näkyy Kaupunkien listalla."
+msgstr ""
+"Kun klikkaat OK, kaupunki tallennetaan ja se näkyy Kaupunkien listalla."
 
 #: intranet-tmpl/prog/en/modules/help/edithelp.tt:28
 #, c-format
@@ -12656,8 +12667,8 @@ msgid ""
 "Patron categories can also have a maximum age (in years) associated with "
 "them (such as children), enter this age in the 'Upperage limit' "
 msgstr ""
-"Asiakaskategorialla voi olla yläikä (vuosissa) määriteltynä (esim. lapsilla)"
-", syötä tämä ikä 'Yläikäraja' -kenttään "
+"Asiakaskategorialla voi olla yläikä (vuosissa) määriteltynä (esim. "
+"lapsilla), syötä tämä ikä 'Yläikäraja' -kenttään "
 
 #: intranet-tmpl/prog/en/modules/help/members/readingrec.tt:3
 #, c-format
@@ -13043,7 +13054,8 @@ msgstr "Profiilit"
 #, c-format
 msgid ""
 "Properties are then applied to libraries via the add or edit library form."
-msgstr "Ominaisuudet liitetään kirjastoon lisäys- tai muokkauslomakkeen kautta."
+msgstr ""
+"Ominaisuudet liitetään kirjastoon lisäys- tai muokkauslomakkeen kautta."
 
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:17
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:31
@@ -13072,7 +13084,8 @@ msgstr "Hankintaehdotukset"
 #, c-format
 msgid ""
 "Quantity is populated by the number of items you've added to the order above."
-msgstr "Määrässä ilmoitetaan niteiden lukumäärä, jonka lisäsit tilaukseen yllä."
+msgstr ""
+"Määrässä ilmoitetaan niteiden lukumäärä, jonka lisäsit tilaukseen yllä."
 
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:151
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:162
@@ -13307,8 +13320,8 @@ msgstr "Vaadittu vastaavuustarkistus: ei yhtään (poista tyhjä)"
 msgid ""
 "Required fields are defined in the BorrowerMandatoryField system preference"
 msgstr ""
-"Vaadittavat kentät on määritelty BorrowerMandatoryField "
-"-järjestelmäasetuksessa"
+"Vaadittavat kentät on määritelty BorrowerMandatoryField -"
+"järjestelmäasetuksessa"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:38
 #, c-format
@@ -14092,7 +14105,7 @@ msgid ""
 "See the full documentation for Uploading the Offline Circulation File in the "
 msgstr "Katso koko dokumentaatio yhteydettömän tilan lainauksen lataukselle "
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:19
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:19
 #, c-format
 msgid "See the full documentation for Vendor Contracts in the "
 msgstr "Katso koko dokumentaatio toimittajan sopimukselle "
@@ -14199,7 +14212,8 @@ msgstr "Katso koko dokumentaatio lainatuimpien niteiden raportista "
 #, c-format
 msgid ""
 "See the full documentation for the Overdue Notice/Status Triggers in the "
-msgstr "Katso koko dokumentaatio myöhästymismuistutuksista/tilan laukaisimista "
+msgstr ""
+"Katso koko dokumentaatio myöhästymismuistutuksista/tilan laukaisimista "
 
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-batch.tt:11
 #, c-format
@@ -14960,7 +14974,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/patroncards/manage.tt:11
 #, c-format
 msgid "Templates"
-msgstr ""
+msgstr "Pohjat"
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:85
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:31
@@ -15671,7 +15685,7 @@ msgstr ""
 "päättänyt, että kirjasto ei voi säilyttää tätä tietoa, tämä välilehti "
 "näyttää vain tällä hetkellä lainassa olevat niteet."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:11
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:11
 #, c-format
 msgid ""
 "The contract form will ask for some very basic information about the "
@@ -15843,7 +15857,8 @@ msgstr "Maksu poistetaan maksamattomista maksuista ja näkyy täysin maksettuna.
 msgid ""
 "The fine will be removed from outstanding fines, and displayed as written "
 "off."
-msgstr "Maksu poistetaan maksamattomista maksuista ja näkyy anteeksi annettuna."
+msgstr ""
+"Maksu poistetaan maksamattomista maksuista ja näkyy anteeksi annettuna."
 
 #: intranet-tmpl/prog/en/modules/help/members/pay.tt:22
 #: intranet-tmpl/prog/en/modules/help/members/paycollect.tt:22
@@ -16016,7 +16031,7 @@ msgstr "Lista päivittyy ja uuden sitaatin pitäisi olla näkyvissä."
 #, c-format
 msgid ""
 "The measurements can be found on the vendor product packaging or website."
-msgstr ""
+msgstr "Mitat löydät toimittajan tuotteen pakkauksesta tai nettisivuilta. "
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:18
 #, c-format
@@ -16129,15 +16144,14 @@ msgid ""
 "&gt; Fine: &lt;&lt;items.fine&gt;&gt; Due date: &lt;&lt;issues.date_due&gt;"
 "&gt; &lt;/item&gt;"
 msgstr ""
-"Toinen vaihtoehto, vain myöhästymismuistutuksille, on käyttää "
-"&lt;item&gt;&lt;/item&gt; merkkejä jaksottamaan riviä, jotta se tulostuu "
-"useille riveille. Yksi esimerkki &lt;item&gt;&lt;/item&gt;merkkivaihtoehto "
-"on:&lt;item&gt;\"&lt;&lt;biblio.title&gt;&gt;\" / "
-"&lt;&lt;biblio.author&gt;&gt;, &lt;&lt;items.itemcallnumber&gt;&gt;, "
-"Viivakoodi: &lt;&lt;items.barcode&gt;&gt; , Lainauspvm: "
-"&lt;&lt;issues.issuedate&gt;&gt;, Eräpäivä: &lt;&lt;issues.date_due&gt;&gt; "
-"Maksu: &lt;&lt;items.fine&gt;&gt; Eräpäivä: &lt;&lt;issues.date_due&gt;&gt; "
-"&lt;/item&gt;"
+"Toinen vaihtoehto, vain myöhästymismuistutuksille, on käyttää &lt;item&gt;"
+"&lt;/item&gt; merkkejä jaksottamaan riviä, jotta se tulostuu useille "
+"riveille. Yksi esimerkki &lt;item&gt;&lt;/item&gt;merkkivaihtoehto on:&lt;"
+"item&gt;\"&lt;&lt;biblio.title&gt;&gt;\" / &lt;&lt;biblio.author&gt;&gt;, "
+"&lt;&lt;items.itemcallnumber&gt;&gt;, Viivakoodi: &lt;&lt;items.barcode&gt;"
+"&gt; , Lainauspvm: &lt;&lt;issues.issuedate&gt;&gt;, Eräpäivä: &lt;&lt;"
+"issues.date_due&gt;&gt; Maksu: &lt;&lt;items.fine&gt;&gt; Eräpäivä: &lt;&lt;"
+"issues.date_due&gt;&gt; &lt;/item&gt;"
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:137
 #, c-format
@@ -16379,8 +16393,8 @@ msgstr ""
 "Päivityksen arvo voi sisältää muuttujan joka kerta, kun pohjaa käytetään. "
 "Tällä hetkellä järjestelmä tukee kahta muuttujaa, __BRANCHCODE__ joka "
 "korvataan sen kirjaston kirjastokoodilla, joka käyttää pohjaa ja "
-"__CURRENTDATE__, joka korvataan kuluvan päivän ISO-muotoisella päiväyksellä ("
-" VVVV-KK-PP )."
+"__CURRENTDATE__, joka korvataan kuluvan päivän ISO-muotoisella päiväyksellä "
+"( VVVV-KK-PP )."
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:134
 #, c-format
@@ -16625,8 +16639,8 @@ msgid ""
 "on the subscription information page and changing only the 'Library' field"
 msgstr ""
 "Tämä voidaan tehdä helposti käyttämällä 'Muokkaa uutena (kopioi)' valintaa, "
-"joka löytyy lehtitilauksen tietosivulta, ja vaihtamalla vain "
-"'Kirjasto'-kentän"
+"joka löytyy lehtitilauksen tietosivulta, ja vaihtamalla vain 'Kirjasto'-"
+"kentän"
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:112
 #, c-format
@@ -16939,8 +16953,8 @@ msgid ""
 msgstr ""
 "Tämä raportti käyttää 'Jakso', tai päiväys, suodattimena joka sallii "
 "rajoittaa kuukauteen yksinkertaisesti valitsemalla ensimmäinen päivä "
-"ensimmäisestä kuukaudesta seuraavan kuukauden ensimmäiseen päivään. Esim. 10/"
-"1 - 11/1 löytää tilaston lokakuulta."
+"ensimmäisestä kuukaudesta seuraavan kuukauden ensimmäiseen päivään. Esim. "
+"10/1 - 11/1 löytää tilaston lokakuulta."
 
 #: intranet-tmpl/prog/en/modules/help/circ/overdue.tt:5
 #, c-format
@@ -17491,8 +17505,8 @@ msgid ""
 "you can click on 'define a notice' which will take you to the 'Notices' tool"
 msgstr ""
 "Vinkki: Huomioi myös, että jos haluat ilmoittaa asiakkaalle uudesta "
-"lehtinumerosta, klikkaa 'määrittele ilmoitus' joka vie sinut "
-"'Ilmoitukset'-työkaluun"
+"lehtinumerosta, klikkaa 'määrittele ilmoitus' joka vie sinut 'Ilmoitukset'-"
+"työkaluun"
 
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:52
 #, c-format
@@ -17522,8 +17536,8 @@ msgstr ""
 #, c-format
 msgid "Tip: To add today's date you can use the &lt;&lt;today&gt;&gt; syntax"
 msgstr ""
-"Vinkki: Lisätäksesi tämän päivän päiväyksen, voit käyttää "
-"&lt;&lt;today&gt;&gt;-syntaksia"
+"Vinkki: Lisätäksesi tämän päivän päiväyksen, voit käyttää &lt;&lt;today&gt;"
+"&gt;-syntaksia"
 
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:73
 #, c-format
@@ -17968,8 +17982,8 @@ msgid ""
 "To edit a specific section of the patron record (for example the Library Use "
 "section) click the 'Edit' link below the section"
 msgstr ""
-"Muokataksesi tiettyä aluetta asiakkaan tiedoissa (esim. kirjaston käyttö "
-"-alue) klikkaa 'Muokkaa'-linkkiä alueen alapuolella"
+"Muokataksesi tiettyä aluetta asiakkaan tiedoissa (esim. kirjaston käyttö -"
+"alue) klikkaa 'Muokkaa'-linkkiä alueen alapuolella"
 
 #: intranet-tmpl/prog/en/modules/help/tools/holidays.tt:52
 #, c-format
@@ -18246,7 +18260,8 @@ msgstr ""
 #, c-format
 msgid ""
 "To only change the patron's password, click the 'Change Password' button "
-msgstr "Jos haluat vain vaihtaa asiakkaan salasanan, klikkaa 'Vaihda salasana' "
+msgstr ""
+"Jos haluat vain vaihtaa asiakkaan salasanan, klikkaa 'Vaihda salasana' "
 
 #: intranet-tmpl/prog/en/modules/help/acqui/neworderempty.tt:5
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:5
@@ -18758,8 +18773,8 @@ msgid ""
 "(OPAC)'"
 msgstr ""
 "Käytä Kuvaus-kenttää siihen tekstiin, mikä pitää näkyä. Jos haluat, että "
-"asiakasliittymässä näkyy eri teksti, syötä 'Kuvaus (asiakasliittymä) "
-"-kenttään"
+"asiakasliittymässä näkyy eri teksti, syötä 'Kuvaus (asiakasliittymä) -"
+"kenttään"
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:19
 #, c-format
@@ -18988,7 +19003,7 @@ msgstr ""
 msgid "Values that are pre-configured in Koha are:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:3
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:3
 #, c-format
 msgid "Vendor Contracts"
 msgstr "Toimittajan sopimukset"
@@ -19555,7 +19570,8 @@ msgstr ""
 msgid ""
 "When you're finished, click 'Save Changes' and you will be presented with "
 "your new field"
-msgstr "Kun olet valmis, klikkaa 'Tallenna muutokset' ja pääset uuteen kenttään"
+msgstr ""
+"Kun olet valmis, klikkaa 'Tallenna muutokset' ja pääset uuteen kenttään"
 
 #: intranet-tmpl/prog/en/modules/help/admin/auth_tag_structure.tt:18
 #, c-format
@@ -19917,8 +19933,8 @@ msgid ""
 "You can also undo your import by clicking the 'Undo import into catalog' "
 "button"
 msgstr ""
-"Voit myös peruuttaa tuonnin klikkaamalla 'Peruuta tuonti luetteloon' "
-"-painiketta"
+"Voit myös peruuttaa tuonnin klikkaamalla 'Peruuta tuonti luetteloon' -"
+"painiketta"
 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:32
 #, c-format
@@ -19987,7 +20003,7 @@ msgstr ""
 "valintaa. Oletuksena on, että se menee BlockExpiredPatronOpacActions-"
 "asetuksen mukaan."
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:5
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:5
 #, c-format
 msgid ""
 "You can define contracts (with a start and end date) and attach them to a "
@@ -20434,7 +20450,8 @@ msgstr "Et voi poistaa aineistolajia, joka on käytössä järjestelmäsi niteis
 msgid ""
 "You will not be able to edit the code you assigned as the 'Item Type' but "
 "you will be able to edit the description for the item."
-msgstr "Et voi muokata 'Aineistolajin' koodia, mutta voit muokata sen kuvausta."
+msgstr ""
+"Et voi muokata 'Aineistolajin' koodia, mutta voit muokata sen kuvausta."
 
 #: intranet-tmpl/prog/en/modules/help/tools/manage-marc-import.tt:10
 #, c-format
@@ -21364,6 +21381,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/serials/claims.tt:15
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:200
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:91
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:21
@@ -21476,7 +21494,6 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:68
 #: intranet-tmpl/prog/en/modules/help/acqui/lateorders.tt:19
 #: intranet-tmpl/prog/en/modules/help/acqui/uncertainprice.tt:7
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/acqui/neworderbiblio.tt:12
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:122
 #: intranet-tmpl/prog/en/modules/help/acqui/invoice.tt:11

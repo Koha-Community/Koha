@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-10-18 10:39-0300\n"
+"POT-Creation-Date: 2015-11-20 11:39-0300\n"
 "PO-Revision-Date: 2012-06-21 08:52+0200\n"
 "Last-Translator: ude <whizkidz_crew@yahoo.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -681,10 +681,17 @@ msgid "%s Home library:"
 msgstr "Perpustakaan peribadi:"
 
 #. %1$s:  ELSE 
+#. %2$s:  END 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:70
 #, fuzzy, c-format
-msgid "%s If you have a "
-msgstr "Sekiranya anda mempunyai "
+msgid ""
+"%s If you have a CAS account, you may use that below. %s %s If you have a "
+"local account, you may use that below. %s "
+msgstr ""
+"Sekiranya anda tidak mempunyai akaun CAS, anda masih lagi boleh login "
+"menggunakan akaun local : "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:192
@@ -3813,13 +3820,6 @@ msgstr "Tampilkan hasil carian"
 msgid "Browse shelf"
 msgstr "Telusuri rak"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "CAS"
-msgstr "CAS"
-
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:110
 #, fuzzy, c-format
@@ -4006,13 +4006,6 @@ msgstr "Katalog"
 #, c-format
 msgid "Category:"
 msgstr "Kategori:"
-
-#. ABBR
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-msgid "Central Authentication Service"
-msgstr "Servis Pengesahan Berpusat"
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:14
 #, fuzzy, c-format
@@ -5820,9 +5813,11 @@ msgstr ""
 "Sekiranya anda tidak mempunyai akaun CAS, anda masih lagi boleh login "
 "menggunakan akaun local : "
 
+#. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
 #, fuzzy, c-format
-msgid "If you do not have a Shibboleth account, but you do have a "
+msgid ""
+"If you do not have a Shibboleth account, but you do have a CAS account, %s "
 msgstr ""
 "Sekiranya anda tidak mempunyai akaun CAS, anda masih lagi boleh login "
 "menggunakan akaun local : "
@@ -5853,10 +5848,11 @@ msgstr ""
 "Sekiranya anda masih belum ada sebarang password. Sila lawati kaunter "
 "sirkulasi perpustakaan untuk membolehkan kami membantu anda membuatnya."
 
+#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "If you have a "
-msgstr "Sekiranya anda mempunyai "
+#, fuzzy, c-format
+msgid "If you have a CAS account, %s please "
+msgstr "Akaun, %s tolong "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:297
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:82
@@ -10751,28 +10747,6 @@ msgstr ""
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "a an the"
-msgstr ""
-
-#. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, fuzzy, c-format
-msgid "account, %s "
-msgstr "Akaun, %s tolong "
-
-#. %1$s:  IF ( casServerUrl ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "account, %s please "
-msgstr "Akaun, %s tolong "
-
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#, c-format
-msgid ""
-"account, you may use that below. %s %s If you have a local account, you may "
-"use that below. %s "
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112

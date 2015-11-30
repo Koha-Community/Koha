@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nb-NO-i-staff-prog-v-3000000\n"
-"POT-Creation-Date: 2015-10-18 10:39-0300\n"
+"POT-Creation-Date: 2015-11-20 11:42-0300\n"
 "PO-Revision-Date: 2015-10-21 07:21+0000\n"
 "Last-Translator: Magnus <magnus@enger.priv.no>\n"
 "Language-Team: Norwegian Bokmål <>\n"
@@ -702,10 +702,17 @@ msgid "%s Home library:"
 msgstr "%s Hjemmebibliotek:"
 
 #. %1$s:  ELSE 
+#. %2$s:  END 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:70
-#, c-format
-msgid "%s If you have a "
-msgstr "%s Hvis du har en "
+#, fuzzy, c-format
+msgid ""
+"%s If you have a CAS account, you may use that below. %s %s If you have a "
+"local account, you may use that below. %s "
+msgstr ""
+"konto, kan du bruke denne nedenfor. %s %s Dersom du har en lokal konto kan "
+"du bruke denne nedenfor. %s"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:192
@@ -796,8 +803,8 @@ msgid ""
 "re-set your password for you. %s %s Your password contains leading and/or "
 "trailing spaces. %s "
 msgstr ""
-"%s Passordene stemmer ikke overens. Vennligst skriv inn passordet på nytt. %"
-"s %s Ditt nye passord må være på minst %s tegn. %s %s Ditt eksisterende "
+"%s Passordene stemmer ikke overens. Vennligst skriv inn passordet på nytt. "
+"%s %s Ditt nye passord må være på minst %s tegn. %s %s Ditt eksisterende "
 "passord ble ikke skrevet riktig. Vennligst be en bibliotekar endre passordet "
 "for deg hvis dette problemet vedvarer. %s %s Passordet ditt inneholder "
 "mellomrom på starten og/eller på slutten. %s "
@@ -1522,8 +1529,8 @@ msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %sUpdate your personal details"
 "%sRegister a new account%s"
 msgstr ""
-"%s%s%sKoha %s katalog &rsaquo; %sOppdater de personlige detaljene dine%"
-"sRegistrer en ny konto%s"
+"%s%s%sKoha %s katalog &rsaquo; %sOppdater de personlige detaljene dine"
+"%sRegistrer en ny konto%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -3824,13 +3831,6 @@ msgstr "Bla i resultatene"
 msgid "Browse shelf"
 msgstr "Se i hylla"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "CAS"
-msgstr "CAS"
-
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:110
 #, c-format
@@ -4014,13 +4014,6 @@ msgstr "Kataloger"
 #, c-format
 msgid "Category:"
 msgstr "Kategori:"
-
-#. ABBR
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-msgid "Central Authentication Service"
-msgstr "Central Authentication Service"
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:14
 #, c-format
@@ -5789,9 +5782,11 @@ msgstr ""
 "Dersom du ikke har en CAS-konto, men bare en lokale konto, kan du allikevel "
 "logge inn: "
 
+#. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, c-format
-msgid "If you do not have a Shibboleth account, but you do have a "
+#, fuzzy, c-format
+msgid ""
+"If you do not have a Shibboleth account, but you do have a CAS account, %s "
 msgstr "Dersom du ikke har en Shibboleth-konto, men du har en "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
@@ -5820,10 +5815,11 @@ msgstr ""
 "Hvis du ikke har passord, gå innom utlånsskranken neste gang du er i "
 "biblioteket. Vi vil med glede gi deg det."
 
+#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "If you have a "
-msgstr "Hvis du har en "
+#, fuzzy, c-format
+msgid "If you have a CAS account, %s please "
+msgstr "Dersom du har en Shibboleth-konto, vennligst"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:297
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:82
@@ -10691,30 +10687,6 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "a an the"
 msgstr "en den det"
-
-#. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, c-format
-msgid "account, %s "
-msgstr "konto, %s "
-
-#. %1$s:  IF ( casServerUrl ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "account, %s please "
-msgstr "konto, %s vennligst "
-
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#, c-format
-msgid ""
-"account, you may use that below. %s %s If you have a local account, you may "
-"use that below. %s "
-msgstr ""
-"konto, kan du bruke denne nedenfor. %s %s Dersom du har en lokal konto kan "
-"du bruke denne nedenfor. %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112
 #, c-format

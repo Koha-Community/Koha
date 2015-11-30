@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh-Hans-TW-i-staff-t-prog-v-3004000\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-18 10:52-0300\n"
+"POT-Creation-Date: 2015-11-20 13:36-0300\n"
 "PO-Revision-Date: 2014-09-08 11:50+0000\n"
 "Last-Translator: Anthony <mao@lins.fju.edu.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
@@ -679,10 +679,15 @@ msgid "%s Home library:"
 msgstr "%s 所属图书馆："
 
 #. %1$s:  ELSE 
+#. %2$s:  END 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:70
 #, fuzzy, c-format
-msgid "%s If you have a "
-msgstr "若您有 "
+msgid ""
+"%s If you have a CAS account, you may use that below. %s %s If you have a "
+"local account, you may use that below. %s "
+msgstr "除了 CAS 帐号，还可以在地帐号登录："
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:192
@@ -3765,13 +3770,6 @@ msgstr "浏览结果"
 msgid "Browse shelf"
 msgstr "浏览书架"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "CAS"
-msgstr "CAS"
-
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:110
 #, c-format
@@ -3955,13 +3953,6 @@ msgstr "目录"
 #, c-format
 msgid "Category:"
 msgstr "范围："
-
-#. ABBR
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-msgid "Central Authentication Service"
-msgstr "CAS 认证服务"
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:14
 #, c-format
@@ -5699,9 +5690,11 @@ msgid ""
 "log in: "
 msgstr "除了 CAS 帐号，还可以在地帐号登录："
 
+#. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
 #, fuzzy, c-format
-msgid "If you do not have a Shibboleth account, but you do have a "
+msgid ""
+"If you do not have a Shibboleth account, but you do have a CAS account, %s "
 msgstr "除了 CAS 帐号，还可以在地帐号登录："
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
@@ -5724,10 +5717,11 @@ msgid ""
 "you're in the library. We'll happily set one up for you."
 msgstr "还没有口令的话，下次到图书馆时，可向柜台申请，我们乐于为您服务。"
 
+#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "If you have a "
-msgstr "若您有 "
+#, fuzzy, c-format
+msgid "If you have a CAS account, %s please "
+msgstr "帐号，%s 请 "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:297
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:82
@@ -10488,28 +10482,6 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "a an the"
 msgstr "a an the"
-
-#. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, fuzzy, c-format
-msgid "account, %s "
-msgstr "帐号，%s 请 "
-
-#. %1$s:  IF ( casServerUrl ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "account, %s please "
-msgstr "帐号，%s 请 "
-
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#, c-format
-msgid ""
-"account, you may use that below. %s %s If you have a local account, you may "
-"use that below. %s "
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112
 #, c-format

@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.14 staff\n"
-"POT-Creation-Date: 2015-10-18 10:27-0300\n"
-"PO-Revision-Date: 2015-10-22 16:23+0000\n"
-"Last-Translator: Héctor <hector.hecaxmmx@gmail.com>\n"
+"POT-Creation-Date: 2015-11-20 10:09-0300\n"
+"PO-Revision-Date: 2015-11-21 10:46+0000\n"
+"Last-Translator: Bernardo <bgkriegel@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-"
 "community.org>\n"
 "Language: es\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1445531023.000000\n"
+"X-POOTLE-MTIME: 1448102815.000000\n"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:303
@@ -700,10 +700,17 @@ msgid "%s Home library:"
 msgstr "%s Biblioteca de origen:"
 
 #. %1$s:  ELSE 
+#. %2$s:  END 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:70
 #, c-format
-msgid "%s If you have a "
-msgstr "%s Si usted tiene una "
+msgid ""
+"%s If you have a CAS account, you may use that below. %s %s If you have a "
+"local account, you may use that below. %s "
+msgstr ""
+"%s Si tiene una cuenta CAS, puede utilizarla a continuación. %s %s Si tiene "
+"una cuenta local, puede utilizarla a continuación. %s "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:192
@@ -963,8 +970,8 @@ msgid ""
 "%s Total holds: %s %s %s %s (priority %s) %s Overall queue priority: %s %s "
 "%s "
 msgstr ""
-"%s Reservas totales: %s %s %s %s (prioridad %s) %s Cola de prioridad total: %"
-"s %s %s "
+"%s Reservas totales: %s %s %s %s (prioridad %s) %s Cola de prioridad total: "
+"%s %s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -3839,13 +3846,6 @@ msgstr "Navegar resultados"
 msgid "Browse shelf"
 msgstr "Navegar estantería"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "CAS"
-msgstr "CAS"
-
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:110
 #, c-format
@@ -4029,13 +4029,6 @@ msgstr "Catálogos"
 #, c-format
 msgid "Category:"
 msgstr "Categoría:"
-
-#. ABBR
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-msgid "Central Authentication Service"
-msgstr "Servicio de Autenticación Central"
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:14
 #, c-format
@@ -5813,10 +5806,12 @@ msgstr ""
 "Si no tiene una cuenta CAS, pero sí tienen una cuenta local, usted todavía "
 "puede iniciar sesión: "
 
+#. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
 #, c-format
-msgid "If you do not have a Shibboleth account, but you do have a "
-msgstr "Si no tiene una cuenta Shibboleth, pero usted tiene una "
+msgid ""
+"If you do not have a Shibboleth account, but you do have a CAS account, %s "
+msgstr "Si no tiene una cuenta Shibboleth, pero tiene una una cuenta CAS, %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
 #, c-format
@@ -5844,10 +5839,11 @@ msgstr ""
 "Si no tiene contraseña, pase por la administración de la biblioteca la "
 "próxima vez que venga. Se le proporcionará una."
 
+#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
 #, c-format
-msgid "If you have a "
-msgstr "Si usted tiene una "
+msgid "If you have a CAS account, %s please "
+msgstr "Si tiene una cuenta CAS, %s por favor "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:297
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:82
@@ -10758,30 +10754,6 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 msgid "a an the"
 msgstr "el la los"
-
-#. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, c-format
-msgid "account, %s "
-msgstr "cuenta, %s "
-
-#. %1$s:  IF ( casServerUrl ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "account, %s please "
-msgstr "cuenta, %s por favor "
-
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#, c-format
-msgid ""
-"account, you may use that below. %s %s If you have a local account, you may "
-"use that below. %s "
-msgstr ""
-"cuenta, usted puede utilizar esa a continuación. %s %s Si usted tiene una "
-"cuenta local, puede utilizar esa a continuación. %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112
 #, c-format

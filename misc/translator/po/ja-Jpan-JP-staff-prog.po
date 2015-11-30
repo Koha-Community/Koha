@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-10-18 10:34-0300\n"
+"POT-Creation-Date: 2015-11-20 11:02-0300\n"
 "PO-Revision-Date: 2013-02-18 04:51+0200\n"
 "Last-Translator: munro <munro@dsty.ac.jp>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha.org>\n"
@@ -620,7 +620,7 @@ msgstr "%s %s %s %s %s %s %s "
 #. %2$s:  PROCESS items_table items=otheritemloop 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:849
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:847
 #, fuzzy, c-format
 msgid "%s %s %s No other items. %s "
 msgstr "%s %s %s%s%sタイトルなし%s %s %s%s "
@@ -1002,14 +1002,14 @@ msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  IF ( delete_confirmed ) 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:464
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:470
 #, c-format
 msgid "%s %s Data deleted "
 msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  IF ( add_validate or copy_validate) 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:424
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:430
 #, fuzzy, c-format
 msgid "%s %s Data recorded "
 msgstr "%s 個のレコード "
@@ -1057,7 +1057,7 @@ msgstr ""
 #. %8$s:  mtt 
 #. %9$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:96
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:359
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:365
 #, fuzzy, c-format
 msgid "%s %s Email %s Print %s SMS %s Feed %s Phone %s %s %s "
 msgstr "%s %s - %s%s %s- %s%s %s(%s)%s %s ; %s%s %s - %s%s %s ; %s%s "
@@ -1789,7 +1789,7 @@ msgstr "%s %s %s (%s) %s %s %s %s %s "
 #. %5$s:  CASE 'complete' 
 #. %6$s:  CASE 'cancelled' 
 #. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:967
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:965
 #, c-format
 msgid "%s %sNew %sOrdered %sPartial %sComplete %sCancelled %s "
 msgstr ""
@@ -2345,19 +2345,23 @@ msgstr ""
 
 #. %1$s:  IF ( books_loo.order_received ) 
 #. %2$s:  END 
+#. %3$s:  IF books_loo.title 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:448
 #, fuzzy, c-format
-msgid "%s (rcvd)%s "
+msgid "%s (rcvd)%s %s "
 msgstr "%s (%s)%s "
 
 #. %1$s:  IF ( order.order_received ) 
 #. %2$s:  END 
 #. %3$s:  IF (order.title) 
 #. %4$s:  order.title |html 
-#. %5$s:  order.author 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:568
+#. %5$s:  IF order.author 
+#. %6$s:  order.author 
+#. %7$s:  END 
+#. %8$s:  ELSE 
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:572
 #, fuzzy, c-format
-msgid "%s (rcvd)%s %s %s by %s"
+msgid "%s (rcvd)%s %s %s%s by %s%s %s "
 msgstr "%s %s %s %s %s"
 
 #. %1$s:  booksellerphone 
@@ -3699,7 +3703,7 @@ msgstr "%s %s %s (%s) %s %s %s %s %s "
 # %9$s: END
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:980
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:978
 #, fuzzy, c-format
 msgid "%s There is no order for this biblio. %s "
 msgstr "%s %s %s (%s) %s %s %s %s %s "
@@ -3968,6 +3972,20 @@ msgstr "%s著者: %s%s"
 msgid "%s by %s%s "
 msgstr "%s著者: %s%s "
 
+# %1$s: IF ( bibitemloo.author )
+# %2$s: bibitemloo.author
+# %3$s: END
+# %4$s: UNLESS ( bibitemloo.holdable )
+# %5$s: IF ( bibitemloo.already_reserved )
+#. %1$s:  IF books_loo.author 
+#. %2$s:  books_loo.author 
+#. %3$s:  END 
+#. %4$s:  ELSE 
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:451
+#, fuzzy, c-format
+msgid "%s by %s%s %s "
+msgstr "%s, 著者: %s%s %s %s "
+
 #. For the first occurrence,
 #. %1$s:  IF ( ordersloo.author ) 
 #. %2$s:  ordersloo.author 
@@ -4150,7 +4168,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  books_loo.holds 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:528
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:532
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:308
 #, c-format
 msgid "%s hold(s) left"
@@ -4296,7 +4314,7 @@ msgstr "%s アイテムが貸出中"
 
 #. For the first occurrence,
 #. %1$s:  books_loo.items 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:519
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:523
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:299
 #, fuzzy, c-format
 msgid "%s item(s) left"
@@ -4439,7 +4457,7 @@ msgstr "%s 個のレコード"
 
 #. For the first occurrence,
 #. %1$s:  books_loo.biblios 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:522
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:526
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:302
 #, c-format
 msgid "%s order(s) left"
@@ -4608,7 +4626,7 @@ msgstr "陳述"
 
 #. For the first occurrence,
 #. %1$s:  books_loo.subscriptions 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:525
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:529
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:305
 #, fuzzy, c-format
 msgid "%s subscription(s) left"
@@ -4921,7 +4939,7 @@ msgstr "%s %s %s %s %s %s %s"
 #. %2$s:  letter.content.length 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:400
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:406
 #, fuzzy, c-format
 msgid "%s%s%s%s/160 characters"
 msgstr "図表"
@@ -5598,7 +5616,7 @@ msgstr ""
 #. %24$s:  END 
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:275
 #: intranet-tmpl/prog/en/modules/serials/serial-issues-full.tt:70
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:906
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:904
 #, fuzzy, c-format
 msgid ""
 "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
@@ -5617,7 +5635,7 @@ msgstr ""
 #. %3$s:  ELSE 
 #. %4$s:  sex 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:51
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:52
 #, fuzzy, c-format
 msgid "%sFemale%sMale%s%s%s"
 msgstr "%s女性%s %s男性%s"
@@ -8363,7 +8381,7 @@ msgid "(Tax inc.)"
 msgstr "共に借りがある"
 
 #. %1$s:  subscriptionsnumber 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:882
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:880
 #, fuzzy, c-format
 msgid "(There are %s subscriptions associated with this title)."
 msgstr "この今期刊行物館は全部で予約した %s 組、これはその中の1部だ。"
@@ -8599,8 +8617,8 @@ msgstr "いかなる館所蔵を貸し出していない"
 msgid ") now due on %s "
 msgstr "%s %s ; %s "
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:479
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:592
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:483
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:597
 #, c-format
 msgid ") on "
 msgstr ""
@@ -8627,7 +8645,7 @@ msgstr ""
 msgid "). %s %s Item is marked waiting at %s for %s ("
 msgstr "%s %s %s 待機中のアイテム:"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:538
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:542
 #, c-format
 msgid "** Vendor's listings already include tax."
 msgstr ""
@@ -9151,7 +9169,7 @@ msgstr "%s アイテムが貸出中"
 #. %5$s:  HTML5MediaSet.typeblock 
 #. %6$s:  END 
 #. %7$s:  HTML5MediaParent 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1029
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1027
 #, c-format
 msgid ""
 "<%s controls preload=none> %s <%s src=\"%s\"%s /> %s [%s tag not supported "
@@ -9399,8 +9417,8 @@ msgstr "方法を連絡する"
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:112
 #: intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:9
 #: intranet-tmpl/prog/en/modules/acqui/modordernotes.tt:15
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:293
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:295
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:299
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:301
 #, fuzzy, c-format
 msgid "Acquisition"
 msgstr "アクション:"
@@ -9831,7 +9849,7 @@ msgstr ""
 msgid "Add fund"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:466
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:470
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:269
 #, fuzzy, c-format
 msgid "Add internal note"
@@ -10100,7 +10118,7 @@ msgstr ""
 msgid "Add vendor"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:471
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:475
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:274
 #, fuzzy, c-format
 msgid "Add vendor note"
@@ -10587,7 +10605,7 @@ msgstr "全種類のアイテム"
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:188
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:141
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:165
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:277
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:279
 #, c-format
 msgid "All libraries"
 msgstr "すべての図書館"
@@ -11215,7 +11233,7 @@ msgid "Are you sure you want to cancel your changes?"
 msgstr "この取り置きを本当にキャンセルしますか?"
 
 #. %1$s:  basketname|html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:635
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:640
 #, fuzzy, c-format
 msgid "Are you sure you want to close basket %s?"
 msgstr "このリストを本当に削除しますか?"
@@ -11568,8 +11586,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  subscription.branchname 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:884
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:885
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:882
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:883
 #, fuzzy, c-format
 msgid "At library: %s"
 msgstr "いかなる分館"
@@ -11634,7 +11652,7 @@ msgstr "他のフィールドを追加"
 msgid "Attach item"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:638
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:643
 #, c-format
 msgid "Attach this basket to a new basket group with the same name"
 msgstr ""
@@ -12287,7 +12305,7 @@ msgstr "2 季"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:18
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:476
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:939
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:937
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:124
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:98
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:230
@@ -12346,7 +12364,7 @@ msgstr "選ぶ館所蔵を除いて移す"
 msgid "Basket details"
 msgstr "もっと多い資料"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:938
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:936
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:125
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:231
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:333
@@ -12858,7 +12876,7 @@ msgstr ""
 msgid "Borrower number"
 msgstr "あなたの図書貸し出し証の番号"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:75
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:76
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:342
 #, fuzzy, c-format
 msgid "Borrowernumber: "
@@ -13202,11 +13220,6 @@ msgstr ""
 msgid "CANMARC"
 msgstr "MARC"
 
-#: intranet-tmpl/prog/en/modules/auth.tt:79
-#, c-format
-msgid "CAS"
-msgstr ""
-
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:163
 #, fuzzy, c-format
 msgid "CATMARC"
@@ -13403,7 +13416,7 @@ msgid "Callnumber"
 msgstr "ロープの書籍コード"
 
 #. %1$s:  subscription.callnumber 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:887
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:885
 #, fuzzy, c-format
 msgid "Callnumber: %s "
 msgstr "ロープの書籍コード "
@@ -13438,13 +13451,13 @@ msgid "Can't cancel receipt "
 msgstr ""
 
 #. B
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:528
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:532
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:308
 msgid "Can't delete catalog record or order, cancel holds first"
 msgstr ""
 
 #. B
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:519
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:523
 msgid ""
 "Can't delete catalog record, because of [% books_loo.items %] existing "
 "hold(s)"
@@ -13458,37 +13471,37 @@ msgid ""
 msgstr ""
 
 #. B
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:522
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:526
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:302
 msgid "Can't delete catalog record, delete other orders linked to it first"
 msgstr ""
 
 #. B
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:525
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:529
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:305
 msgid "Can't delete catalog record, delete subscriptions first"
 msgstr ""
 
 #. SPAN
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:516
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:520
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:296
 msgid "Can't delete catalog record, see constraints below"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:509
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:513
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:289
 #, c-format
 msgid "Can't delete order"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:516
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:520
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:296
 #, c-format
 msgid "Can't delete order and catalog record"
 msgstr ""
 
 #. SPAN
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:509
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:513
 msgid ""
 "Can't delete order, ([% books_loo.holds_on_order %]) holds are linked with "
 "this order cancel holds first"
@@ -13610,7 +13623,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/sms/sms-home.tt:26
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:189
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:201
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:622
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:627
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:116
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:145
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:121
@@ -13638,7 +13651,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:233
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:141
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:212
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:422
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:428
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:170
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:367
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:153
@@ -13740,7 +13753,7 @@ msgstr "号を分類する： %s"
 
 #. %1$s:  AuthorisedValues.GetByCode( 'ORDER_CANCELLATION_REASON', order.cancellationreason ) 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:582
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:587
 #, fuzzy, c-format
 msgid "Cancellation reason: %s %s "
 msgstr "号を分類する： %s"
@@ -13756,7 +13769,7 @@ msgstr "館所蔵を取り消す "
 msgid "Cancelled "
 msgstr "館所蔵を取り消す "
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:543
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:547
 #, fuzzy, c-format
 msgid "Cancelled orders"
 msgstr "館所蔵を取り消す"
@@ -13973,7 +13986,7 @@ msgstr "図書貸し出し証の番号："
 msgid "Card number list (one cardnumber per line): "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:74
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:75
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:341
 #, fuzzy, c-format
 msgid "Card number: "
@@ -14062,8 +14075,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:215
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:34
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:117
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:298
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:300
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:304
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:306
 #, fuzzy, c-format
 msgid "Catalog"
 msgstr "%1$s 館所蔵のディレクトリ --"
@@ -14209,7 +14222,7 @@ msgstr "分類："
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:79
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:209
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:628
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:76
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:77
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:343
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:531
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:558
@@ -14250,11 +14263,6 @@ msgstr ""
 msgid "Cells contain estimated values only."
 msgstr ""
 
-#. ACRONYM
-#: intranet-tmpl/prog/en/modules/auth.tt:79
-msgid "Central Authentication Service"
-msgstr ""
-
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:7
@@ -14279,7 +14287,7 @@ msgstr ""
 msgid "Change framework: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:464
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:468
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:267
 #, fuzzy, c-format
 msgid "Change internal note"
@@ -14324,7 +14332,7 @@ msgstr "パスワードを改正する"
 msgid "Change username and/or password for %s %s"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:469
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:473
 #, fuzzy, c-format
 msgid "Change vendor note"
 msgstr "%s の図書目録は記録する"
@@ -15049,8 +15057,8 @@ msgstr "館所蔵"
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:9
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:27
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:35
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:303
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:305
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:309
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:311
 #, fuzzy, c-format
 msgid "Circulation"
 msgstr "館所蔵を選ぶ"
@@ -15189,8 +15197,8 @@ msgstr "典拠検索の結果は"
 msgid "City: "
 msgstr "金額 "
 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:308
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:310
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:314
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:316
 #, c-format
 msgid "Claim acquisition"
 msgstr ""
@@ -15206,8 +15214,8 @@ msgstr "全てを明らかに示す"
 msgid "Claim order"
 msgstr "全てを明らかに示す"
 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:313
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:315
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:319
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:321
 #, c-format
 msgid "Claim serial issue"
 msgstr ""
@@ -15473,7 +15481,7 @@ msgstr ""
 msgid "Click on 'Finish' to complete and load the Koha Staff Interface. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1007
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1005
 #, c-format
 msgid "Click on an image to view it in the image viewer"
 msgstr ""
@@ -15668,7 +15676,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:214
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:275
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:20
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1071
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1069
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:150
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:500
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:230
@@ -15716,7 +15724,7 @@ msgid "Close this window."
 msgstr "ウィンドウズを閉鎖する"
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:92
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:93
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:10
 #: intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:11
 #, fuzzy, c-format
@@ -15774,13 +15782,13 @@ msgstr "%1$s 館所蔵のディレクトリ --"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1098
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1125
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:196
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:442
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:448
 #, c-format
 msgid "Code"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:341
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:345
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:347
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:351
 #, c-format
 msgid "Code:"
 msgstr ""
@@ -16925,7 +16933,7 @@ msgid "Created by: "
 msgstr "提案者 "
 
 #: intranet-tmpl/prog/en/columns.def:120
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:941
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:939
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:618
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:315
 #, fuzzy, c-format
@@ -17328,7 +17336,7 @@ msgid "Date added"
 msgstr "期日"
 
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:27
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:896
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:894
 #, fuzzy, c-format
 msgid "Date arrived"
 msgstr "期日まで受け取る"
@@ -17394,7 +17402,7 @@ msgstr ""
 msgid "Date of birth is invalid."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:50
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:51
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:228
 #, c-format
 msgid "Date of birth:"
@@ -17422,7 +17430,7 @@ msgid "Date ordered "
 msgstr "期日 "
 
 # %1$s: koha_new.newdate 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:897
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:895
 #, fuzzy, c-format
 msgid "Date published"
 msgstr "(発行日: %s)"
@@ -18082,7 +18090,7 @@ msgstr ""
 msgid "Delete fund %s?"
 msgstr "この仮定の本棚を削除する"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1015
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1013
 #, fuzzy, c-format
 msgid "Delete image"
 msgstr "この仮定の本棚を削除する"
@@ -18115,18 +18123,18 @@ msgstr "選択"
 msgid "Delete local and remote"
 msgstr "選択"
 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:436
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:442
 #, fuzzy, c-format
 msgid "Delete notice?"
 msgstr "この仮定の本棚を削除する"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:511
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:515
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:291
 #, fuzzy, c-format
 msgid "Delete order"
 msgstr "選択"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:514
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:518
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:294
 #, c-format
 msgid "Delete order and catalog record"
@@ -18332,7 +18340,9 @@ msgstr "選ぶ館所蔵を除いて移す"
 msgid "Delete?"
 msgstr "選択"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:573
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:453
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:577
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:156
 #, c-format
 msgid "Deleted bibliographic record, can't find title"
 msgstr ""
@@ -18452,7 +18462,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/files.tt:33
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:63
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:55
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:222
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:226
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:363
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:68
 #: intranet-tmpl/prog/en/modules/reports/stats_screen.tt:38
@@ -18995,7 +19005,7 @@ msgid "Download "
 msgstr "ダウンロード "
 
 #. INPUT type=submit name=save
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1053
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1051
 #, fuzzy
 msgid "Download Record"
 msgstr "ダウンロード"
@@ -19089,7 +19099,7 @@ msgid "Draw guide boxes: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:224
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1049
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1047
 #, c-format
 msgid "Dublin Core (XML)"
 msgstr "Dublin Core (XML)"
@@ -19650,7 +19660,7 @@ msgid "Edition: %s"
 msgstr "待つことの中"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:565
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:988
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:986
 #, c-format
 msgid "Editions"
 msgstr ""
@@ -20241,13 +20251,13 @@ msgstr "館所蔵 "
 msgid "Ethnicity notes"
 msgstr "館所蔵 "
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:54
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:55
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:234
 #, fuzzy, c-format
 msgid "Ethnicity notes: "
 msgstr "館所蔵 "
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:53
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:54
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:233
 #, c-format
 msgid "Ethnicity:"
@@ -20357,7 +20367,7 @@ msgstr "有効な期日："
 msgid "Expiration date"
 msgstr "待つことの中"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:78
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:79
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:346
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:135
 #, fuzzy, c-format
@@ -20427,8 +20437,8 @@ msgstr "待つことの中 "
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:188
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:232
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:250
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:295
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:297
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:299
 #: intranet-tmpl/prog/en/modules/labels/label-print.tt:99
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:153
 #: intranet-tmpl/prog/en/modules/patroncards/card-print.tt:158
@@ -20714,7 +20724,7 @@ msgid "Fax"
 msgstr "ファックス： "
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:139
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:44
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:45
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:222
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:13
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:57
@@ -20932,7 +20942,7 @@ msgstr "- %s"
 msgid "Files"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:216
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:220
 #, c-format
 msgid "Files attached to invoice"
 msgstr ""
@@ -21614,7 +21624,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:510
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:127
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:388
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:558
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:562
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:143
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:238
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:339
@@ -21758,14 +21768,14 @@ msgid "GPL License"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:387
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:557
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:561
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:142
 #, c-format
 msgid "GST"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:386
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:556
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:560
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:141
 #, c-format
 msgid "GST %%"
@@ -21821,7 +21831,7 @@ msgstr ""
 msgid "Gender"
 msgstr "持つ者："
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:51
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:52
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:229
 #, c-format
 msgid "Gender:"
@@ -22036,7 +22046,7 @@ msgstr ""
 msgid "Groups of libraries: "
 msgstr "いかなる分館 "
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:58
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:59
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:238
 #, c-format
 msgid "Guarantees:"
@@ -22052,7 +22062,7 @@ msgstr "あなたの図書貸し出し証の番号"
 msgid "Guarantor information"
 msgstr "館所蔵"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:62
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:63
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:242
 #, c-format
 msgid "Guarantor:"
@@ -22089,7 +22099,7 @@ msgstr ""
 msgid "H. Passini"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:387
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:393
 #, c-format
 msgid "HTML message:"
 msgstr ""
@@ -22436,7 +22446,7 @@ msgstr "あなたの分館："
 msgid "Holdings"
 msgstr "待つことの中"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:840
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:838
 #, fuzzy, c-format
 msgid "Holdings:"
 msgstr "待つことの中"
@@ -22449,8 +22459,8 @@ msgstr "待つことの中"
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:335
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:37
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:161
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:318
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:320
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:324
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:326
 #, c-format
 msgid "Holds"
 msgstr ""
@@ -23307,10 +23317,11 @@ msgid ""
 "If you delete this fund, all orders linked to this fund will be deleted! "
 msgstr ""
 
+#. %1$s:  IF ( casServerUrl ) 
 #: intranet-tmpl/prog/en/modules/auth.tt:79
-#, c-format
-msgid "If you have a "
-msgstr ""
+#, fuzzy, c-format
+msgid "If you have a CAS account, %s please "
+msgstr "私のアカウント "
 
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:39
 #, c-format
@@ -23755,7 +23766,7 @@ msgstr "館所蔵 "
 msgid "Initials"
 msgstr "定期刊行物："
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:49
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:50
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:227
 #, c-format
 msgid "Initials: "
@@ -23774,7 +23785,7 @@ msgid "Inner counter "
 msgstr ""
 
 #. INPUT type=button name=insert
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:411
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:417
 msgid "Insert"
 msgstr ""
 
@@ -23833,7 +23844,7 @@ msgstr "%s の図書目録は記録する"
 msgid "Internal note:"
 msgstr "%s の図書目録は記録する"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:464
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:468
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:267
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:95
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:615
@@ -23848,7 +23859,7 @@ msgstr "%s の図書目録は記録する "
 msgid "Internationalization and localization"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:298
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:300
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:264
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:342
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:123
@@ -24095,7 +24106,7 @@ msgstr "定期刊行物の数量"
 msgid "Issue "
 msgstr "定期刊行物の数量 "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:895
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:893
 #, fuzzy, c-format
 msgid "Issue #"
 msgstr "定期刊行物の数量"
@@ -26086,7 +26097,7 @@ msgstr ""
 msgid "Koha &rsaquo; Cataloguing &rsaquo; Framework plugin example"
 msgstr "%s %s%s%sKoha オンライン%s カタログ &rsaquo; 高度な検索 %s"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:2
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:3
 #, c-format
 msgid "Koha &rsaquo; Check duplicate patron"
 msgstr ""
@@ -27217,7 +27228,7 @@ msgstr "全種類のアイテム"
 msgid "Koha link:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:285
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:291
 #, c-format
 msgid "Koha module:"
 msgstr ""
@@ -27734,7 +27745,7 @@ msgstr "%1$s -- 館所蔵のディレクトリ "
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:211
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:248
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:194
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:440
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:446
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:234
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:217
 #, fuzzy, c-format
@@ -27834,7 +27845,7 @@ msgstr "%1$s -- 館所蔵のディレクトリ"
 msgid "Library transfer limits"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:71
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:72
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:338
 #, fuzzy, c-format
 msgid "Library use"
@@ -27858,7 +27869,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/member.tt:485
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:280
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:324
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:275
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:276
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:256
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:326
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:175
@@ -27872,7 +27883,7 @@ msgstr "%1$s -- 館所蔵のディレクトリ"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:521
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:654
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:118
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:85
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:86
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:354
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:93
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:114
@@ -28072,7 +28083,7 @@ msgstr "号を分類する： %s"
 msgid "Loading"
 msgstr "館所蔵"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1068
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1066
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:497
 #, fuzzy, c-format
 msgid "Loading "
@@ -28403,7 +28414,7 @@ msgstr "MARC"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:227
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:46
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1052
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1050
 #, c-format
 msgid "MARC (Unicode/UTF-8)"
 msgstr ""
@@ -28415,7 +28426,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:226
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:45
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1051
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1049
 #, c-format
 msgid "MARC (non-Unicode/MARC-8)"
 msgstr ""
@@ -28521,7 +28532,7 @@ msgstr "館所蔵"
 
 # %1$s: INCLUDE 'doc-head-open.inc'
 # %2$s: INCLUDE 'doc-head-close.inc' 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1065
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1063
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:494
 #, fuzzy, c-format
 msgid "MARC preview"
@@ -28569,7 +28580,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:225
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:44
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1050
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1048
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
@@ -28591,7 +28602,7 @@ msgid "MJ Ray (2.0 Release Maintainer)"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:229
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1048
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1046
 #, c-format
 msgid "MODS (XML)"
 msgstr "MODS (XML)"
@@ -29228,8 +29239,8 @@ msgstr ""
 msgid "Melia Meggs"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:323
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:325
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:329
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:331
 #, fuzzy, c-format
 msgid "Members"
 msgstr "定期刊行物の番号"
@@ -29294,7 +29305,7 @@ msgstr ""
 msgid "Message"
 msgstr "火曜日"
 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:398
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:404
 #, fuzzy, c-format
 msgid "Message body:"
 msgstr "定期刊行物の数量"
@@ -29305,7 +29316,7 @@ msgstr "定期刊行物の数量"
 msgid "Message sent"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:395
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:401
 #, c-format
 msgid "Message subject:"
 msgstr ""
@@ -29459,7 +29470,7 @@ msgid "Missing issues:"
 msgstr ""
 
 #. %1$s:  subscription.missinglist 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:889
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:887
 #, c-format
 msgid "Missing issues: %s "
 msgstr ""
@@ -29528,7 +29539,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:194
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:105
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:391
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:501
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:505
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:130
 #, c-format
 msgid "Modify"
@@ -29682,7 +29693,7 @@ msgstr "改正"
 
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:159
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:195
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:441
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:447
 #, c-format
 msgid "Module"
 msgstr ""
@@ -29980,7 +29991,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/files.tt:31
 #: intranet-tmpl/prog/en/modules/members/member.tt:383
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:53
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:220
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:224
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:98
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:362
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:318
@@ -29991,7 +30002,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1099
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1126
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:197
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:443
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:449
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:216
 #, fuzzy, c-format
 msgid "Name"
@@ -30053,7 +30064,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:51
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:180
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:242
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:351
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:357
 #, c-format
 msgid "Name:"
 msgstr "姓名："
@@ -31033,7 +31044,7 @@ msgstr ""
 msgid "No order selected"
 msgstr "(未サポート)"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:212
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:216
 #, fuzzy, c-format
 msgid "No orders yet"
 msgstr "(未サポート)"
@@ -31094,7 +31105,7 @@ msgstr "（貸し出す）"
 msgid "No phone stored."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:843
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:841
 #, c-format
 msgid "No physical items for this record"
 msgstr ""
@@ -31252,7 +31263,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:148
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:198
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:211
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:462
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:468
 msgid "No, do not delete"
 msgstr ""
 
@@ -31274,7 +31285,7 @@ msgid "No, don't check out (N)"
 msgstr "（貸し出す）"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:648
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:653
 msgid "No, don't close (N)"
 msgstr ""
 
@@ -31298,7 +31309,7 @@ msgstr "選択"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:505
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:377
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:547
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:551
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:99
 #, fuzzy, c-format
 msgid "No."
@@ -31520,7 +31531,7 @@ msgid "Not renewable"
 msgstr "共に借りがある"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:565
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:899
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:897
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:65
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:46
 #, c-format
@@ -32106,8 +32117,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:27
 #: intranet-tmpl/prog/en/modules/tags/review.tt:241
 #: intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:55
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:430
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:470
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:436
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:476
 #, c-format
 msgid "OK"
 msgstr "OK"
@@ -32552,7 +32563,7 @@ msgstr "新しい仮定の本棚を作り上げる"
 
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:99
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:378
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:548
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:552
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:75
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:77
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:69
@@ -32624,7 +32635,7 @@ msgstr "進んで検索する"
 msgid "Order line:"
 msgstr "ソートの方式："
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:940
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:938
 #, fuzzy, c-format
 msgid "Order number"
 msgstr "図書貸し出し証の番号："
@@ -32715,7 +32726,7 @@ msgstr "館所蔵"
 msgid "Organization #:"
 msgstr "館所蔵"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:33
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:34
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:211
 #, c-format
 msgid "Organization email: "
@@ -32726,7 +32737,7 @@ msgstr ""
 msgid "Organization name: "
 msgstr "姓 "
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:32
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:33
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:210
 #, c-format
 msgid "Organization phone: "
@@ -32805,8 +32816,8 @@ msgstr "待つことの中"
 msgid "Other phone"
 msgstr "本棚の名称を仮想する： "
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:37
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:42
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:38
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:43
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:215
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:220
 #, fuzzy, c-format
@@ -32848,7 +32859,7 @@ msgstr ""
 msgid "Output format:"
 msgstr "本棚の名称を仮想する："
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:297
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:299
 #, c-format
 msgid "Output to a file named: "
 msgstr ""
@@ -35024,7 +35035,7 @@ msgstr ""
 msgid "Primary email"
 msgstr "列印"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:46
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:47
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:224
 #, fuzzy, c-format
 msgid "Primary email:"
@@ -35036,8 +35047,8 @@ msgstr "列印"
 msgid "Primary phone"
 msgstr "列印 "
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:35
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:41
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:36
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:42
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:213
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:219
 #, fuzzy, c-format
@@ -35601,7 +35612,7 @@ msgid "Purchase suggestions"
 msgstr "提案を買う"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:383
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:553
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:557
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:138
 #, c-format
 msgid "Qty."
@@ -35617,7 +35628,7 @@ msgstr ""
 msgid "Quality assurance team:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:944
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:942
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:103
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:235
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:338
@@ -35707,13 +35718,13 @@ msgid "RIS"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:379
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:549
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:553
 #, c-format
 msgid "RRP tax exc."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:381
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:551
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:555
 #, c-format
 msgid "RRP tax inc."
 msgstr ""
@@ -35801,7 +35812,7 @@ msgstr "期日まで受け取る"
 msgid "Receive a new shipment"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:942
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:940
 #, fuzzy, c-format
 msgid "Receive date"
 msgstr "期日まで受け取る "
@@ -36006,7 +36017,7 @@ msgstr ""
 msgid "Registration date"
 msgstr "館所蔵"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:77
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:78
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:344
 #, fuzzy, c-format
 msgid "Registration date: "
@@ -36721,8 +36732,8 @@ msgstr "名"
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:368
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:127
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:179
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:343
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:353
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:349
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:359
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:73
 #: intranet-tmpl/prog/en/modules/services/itemrecorddisplay.tt:32
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:108
@@ -37412,7 +37423,7 @@ msgstr "貯蔵 "
 msgid "Save Changes"
 msgstr "改正"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1046
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1044
 #, fuzzy, c-format
 msgid "Save Record"
 msgstr "図書目録は番号を記録する："
@@ -38094,7 +38105,7 @@ msgstr ""
 msgid "Secondary email"
 msgstr "列印 "
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:47
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:48
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:225
 #, fuzzy, c-format
 msgid "Secondary email: "
@@ -38106,7 +38117,7 @@ msgstr "列印 "
 msgid "Secondary phone"
 msgstr "仕事の電話/ファックス "
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:36
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:37
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:214
 #, fuzzy, c-format
 msgid "Secondary phone: "
@@ -38340,7 +38351,7 @@ msgstr ""
 msgid "Select day: "
 msgstr "選択 "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1047
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1045
 #, c-format
 msgid "Select download format: "
 msgstr ""
@@ -38695,8 +38706,8 @@ msgstr "定期刊行物："
 msgid "Serials"
 msgstr "定期刊行物："
 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:328
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:330
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:334
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:336
 #, c-format
 msgid "Serials (routing list)"
 msgstr ""
@@ -39032,7 +39043,7 @@ msgstr "複本がない。"
 
 #. For the first occurrence,
 #. %1$s:  hiddencount 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:827
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:825
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:550
 #, fuzzy, c-format
 msgid "Show all items (%s hidden)"
@@ -39312,7 +39323,7 @@ msgstr "すみません "
 msgid "Sort field 1"
 msgstr "姓"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:87
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:88
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:361
 #, c-format
 msgid "Sort field 1:"
@@ -39326,7 +39337,7 @@ msgstr ""
 msgid "Sort field 2"
 msgstr "姓"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:88
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:89
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:362
 #, c-format
 msgid "Sort field 2:"
@@ -39810,8 +39821,8 @@ msgstr "狀態"
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:645
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:647
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:595
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:898
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:943
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:896
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:941
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:24
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:166
 #: intranet-tmpl/prog/en/modules/tags/review.tt:224
@@ -40254,7 +40265,7 @@ msgstr "テーマ"
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:86
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:120
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:289
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:311
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:313
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:104
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:614
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:69
@@ -40293,7 +40304,7 @@ msgstr "テーマ"
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:384
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:153
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:225
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:422
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:428
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:85
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:125
 #, fuzzy
@@ -40346,7 +40357,7 @@ msgid "Subscription closed %s "
 msgstr "陳述 "
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:487
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:925
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:923
 #, fuzzy, c-format
 msgid "Subscription details"
 msgstr "陳述"
@@ -40531,7 +40542,7 @@ msgstr "提案者 "
 #. %2$s:  IF ( books_loo.firstnamesuggestedby ) 
 #. %3$s:  books_loo.firstnamesuggestedby 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:458
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:462
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:261
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:408
 #, fuzzy, c-format
@@ -40581,8 +40592,8 @@ msgstr "陳述"
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:185
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:188
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:38
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:333
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:335
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:339
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:341
 #, fuzzy, c-format
 msgid "Suggestions"
 msgstr "陳述"
@@ -41250,7 +41261,7 @@ msgid "The "
 msgstr "新しく増加して本棚を仮想する "
 
 #. %1$s:  subscription.staffdisplaycount 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:892
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:890
 #, fuzzy, c-format
 msgid "The %s latest issues related to this subscription:"
 msgstr "この購読は3つの最新の定期刊行物と関係がある："
@@ -42216,7 +42227,7 @@ msgid ""
 "existing invoice?"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:881
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:879
 #, fuzzy, c-format
 msgid "This is a serial subscription"
 msgstr "定期刊行物の数量を購読する"
@@ -42469,7 +42480,7 @@ msgstr ""
 msgid "This subscription depends on another supplier"
 msgstr "%s の購読の資料"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:886
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:884
 #, fuzzy, c-format
 msgid "This subscription is closed."
 msgstr "陳述"
@@ -43189,13 +43200,13 @@ msgstr "共に借りがある "
 #. For the first occurrence,
 #. %1$s:  currency 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:422
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:189
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:193
 #, fuzzy, c-format
 msgid "Total (%s)"
 msgstr "共に借りがある"
 
 #. %1$s:  tf.gstrate * 100 | $Price 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:178
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:182
 #, fuzzy, c-format
 msgid "Total (GST %s %%)"
 msgstr "共に借りがある"
@@ -43213,7 +43224,7 @@ msgid "Total (GST %s)"
 msgstr ""
 
 #. %1$s:  currency 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:199
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:203
 #, fuzzy, c-format
 msgid "Total + Shipment cost (%s)"
 msgstr "期日"
@@ -43378,7 +43389,7 @@ msgstr "共に借りがある"
 #. For the first occurrence,
 #. %1$s:  currency 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:384
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:554
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:558
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:139
 #, c-format
 msgid "Total tax exc. (%s)"
@@ -43392,7 +43403,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  currency 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:385
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:555
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:559
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:140
 #, c-format
 msgid "Total tax inc. (%s)"
@@ -43433,7 +43444,7 @@ msgstr "館所蔵"
 #: intranet-tmpl/prog/en/includes/rotating-collections-toolbar.inc:8
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:25
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:131
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:504
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:508
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:83
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:285
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:52
@@ -43476,7 +43487,7 @@ msgstr ""
 msgid "Transfer to:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:477
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:481
 #, fuzzy, c-format
 msgid "Transferred from "
 msgstr "ソートの方式： "
@@ -43486,7 +43497,7 @@ msgstr "ソートの方式： "
 msgid "Transferred items"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:590
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:595
 #, fuzzy, c-format
 msgid "Transferred to "
 msgstr "期日まで受け取る "
@@ -43604,7 +43615,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:72
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:613
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:54
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:221
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:225
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:310
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:418
 #, c-format
@@ -44145,7 +44156,7 @@ msgstr "館所蔵"
 
 #: intranet-tmpl/prog/en/modules/members/files.tt:34
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:56
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:223
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:227
 #, c-format
 msgid "Uploaded"
 msgstr ""
@@ -44517,7 +44528,7 @@ msgstr ""
 msgid "Vendor note:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:469
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:473
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:272
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:99
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:619
@@ -44864,7 +44875,7 @@ msgstr ""
 msgid "Warning, the following cardnumbers were not found:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:421
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:427
 #, c-format
 msgid ""
 "Warning, this is a template for a Digest, as such, any references to branch "
@@ -45360,7 +45371,7 @@ msgid "Yes, check out (Y)"
 msgstr "（貸し出す）"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:647
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:652
 msgid "Yes, close (Y)"
 msgstr ""
 
@@ -45373,7 +45384,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:90
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:104
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:147
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:458
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:464
 msgid "Yes, delete"
 msgstr ""
 
@@ -45890,13 +45901,13 @@ msgstr ""
 msgid "You should "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:377
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:383
 #, c-format
 msgid ""
 "You should enable the SMSSendDriver preference to use the SMS templates."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:380
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:386
 #, c-format
 msgid ""
 "You should enable the TalkingTechItivaPhoneNotification preference to use "
@@ -46460,12 +46471,6 @@ msgstr ""
 msgid "account has expired"
 msgstr "私のアカウント"
 
-#. %1$s:  IF ( casServerUrl ) 
-#: intranet-tmpl/prog/en/modules/auth.tt:79
-#, fuzzy, c-format
-msgid "account, %s please "
-msgstr "私のアカウント "
-
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:103
 #, c-format
 msgid "active"
@@ -46679,8 +46684,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  basket.basketname 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:478
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:591
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:482
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:596
 #, fuzzy, c-format
 msgid "basket: %s"
 msgstr "性別"
@@ -46768,7 +46773,7 @@ msgid "biblionumber and biblioitemnumber mapped correctly"
 msgstr "検索 <!-- TMPL_VAR name=\"marc_value\" -->"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:51
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:152
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:153
 #, fuzzy, c-format
 msgid "by"
 msgstr "作者 %s"
@@ -46794,10 +46799,8 @@ msgstr "%s著者: %s%s"
 # %1$s: IF ( author )
 # %2$s: author
 # %3$s: END
-#. For the first occurrence,
 #. %1$s:  biblio.author 
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.inc:6
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:450
 #, fuzzy, c-format
 msgid "by %s "
 msgstr "%s著者: %s%s "
@@ -46851,7 +46854,7 @@ msgstr "%s著者: %s%s "
 #. %24$s:  IF ( XISBN.size ) 
 #. %25$s:  END 
 #. %26$s:  XISBN.size 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:992
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:990
 #, fuzzy, c-format
 msgid ""
 "by %s &copy;%s %s %s %s(%s)%s %s, %s%s %s%s%s %s%s%s %s %s %s%s %s%s%s %s, %s"
@@ -47188,13 +47191,13 @@ msgid "déselectionner tout"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:380
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:550
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:554
 #, c-format
 msgid "ecost tax exc."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:382
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:552
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:556
 #, c-format
 msgid "ecost tax inc."
 msgstr ""
@@ -47725,12 +47728,12 @@ msgstr "予約する"
 msgid "item type not defined"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:833
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:831
 #, c-format
 msgid "itemdata_copynumber"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:832
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:830
 #, c-format
 msgid "itemdata_enumchron"
 msgstr ""
@@ -48381,8 +48384,8 @@ msgid "rejected %s"
 msgstr "テーマ："
 
 #. IMG
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1011
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1013
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1015
 #, fuzzy
 msgid "remove this image"
 msgstr "館所蔵の表紙のピクチャー"
@@ -48490,7 +48493,7 @@ msgstr "館所蔵"
 msgid "separate by a blank. (e.g., 100a 200 606) "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:834
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:832
 #, fuzzy, c-format
 msgid "serial"
 msgstr "定期刊行物："
@@ -48639,7 +48642,7 @@ msgstr "提案を買う"
 #. For the first occurrence,
 #. %1$s:  m.id 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:462
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:460
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:464
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:263
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:410
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:411
@@ -49049,7 +49052,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:202
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:236
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:263
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1064
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1062
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:181
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:493
 #, c-format

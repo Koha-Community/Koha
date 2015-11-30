@@ -6,18 +6,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.14\n"
-"POT-Creation-Date: 2015-10-18 10:21-0300\n"
-"PO-Revision-Date: 2015-10-21 16:24+0000\n"
+"POT-Creation-Date: 2015-11-20 09:11-0300\n"
+"PO-Revision-Date: 2015-11-29 17:42+0000\n"
 "Last-Translator: KnowledgeWare <massoudalshareef@kwareict.com>\n"
 "Language-Team: za\n"
-"Language: ar\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1445444640.000000\n"
+"X-POOTLE-MTIME: 1448818955.000000\n"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:303
@@ -465,9 +465,9 @@ msgstr ""
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:721
-#, c-format
+#, fuzzy, c-format
 msgid "%s %sitem%sitem(s)%s"
-msgstr "%s %sمادة%sمادة(مواد)%s"
+msgstr "%s%s %sمادة%sمواد%s%sفارغ%s"
 
 #. %1$s:  IF loop.index == 0 
 #. %2$s:  ELSE 
@@ -624,9 +624,9 @@ msgstr "%s مدينة:"
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:80
-#, c-format
+#, fuzzy, c-format
 msgid "%s Collection %s Item type %s: "
-msgstr "%s المجموعة %s نوع المادة %s: "
+msgstr "%sالمجموعة%sنوع المادة%s"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:586
@@ -694,10 +694,17 @@ msgid "%s Home library:"
 msgstr "%s المكتبة الرئيسية:"
 
 #. %1$s:  ELSE 
+#. %2$s:  END 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:70
 #, c-format
-msgid "%s If you have a "
-msgstr "%s إذا كان لديك"
+msgid ""
+"%s If you have a CAS account, you may use that below. %s %s If you have a "
+"local account, you may use that below. %s "
+msgstr ""
+"%s إذا كان لديك حساب  CAS ، يمكنك استخدامه أدناه. %s %s إذا كان لديك حساب "
+"محلي، يمكنك استخدامه أدناه  %s"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:192
@@ -746,9 +753,9 @@ msgstr "%s لم يتم العثور على نتائج لذلك في %s الفه�
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:230
-#, c-format
+#, fuzzy, c-format
 msgid "%s Not renewable %s Automatic renewal "
-msgstr "%s غير قابل للتجديد %s تجديد تلقائي"
+msgstr "%s غير قابل للتجديد %s غير مسموح"
 
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
@@ -781,6 +788,7 @@ msgstr "%s هاتف آخر:"
 #. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:31
 #, c-format
+#, fuzzy, c-format
 msgid ""
 "%s Passwords do not match. Please re-type your new password. %s %s Your new "
 "password must be at least %s characters long. %s %s Your current password "
@@ -791,8 +799,8 @@ msgstr ""
 "%s كلمة المرور غير متطابقة. يرجى إعادة كتابة كلمة مرورك الجديدة %s %s يجب أن "
 "يكون طول كلمة مرورك الجديدة على الأقل %s أحرف. %s %s تم إدخال كلمة مرورك "
 "الحالية بطريقة خاطئة. إذا استمرت هذه المشكلة، يرجى أن تطلب من موظف المكتبة "
-"إعادة تعيين كلمة مرور لك %s %s تحتوي كلمة مرورك على مسافات أمامية و/أو "
-"خلفية. %s"
+"إعادة تعيين كلمة مرور لك%s  %s %s تحتوي كلمة مرورك على مسافات في بدايتها أو/ "
+"نهايتها %s"
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -1430,6 +1438,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:3
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:6
 #, c-format
+#, fuzzy, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %s Results of search %sfor '%s'%s"
 "%s&nbsp;with limit(s):&nbsp;'%s'%s %s You did not specify any search "
@@ -1905,9 +1914,9 @@ msgstr ""
 #. %4$s:  END 
 #. %5$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:648
-#, c-format
+#, fuzzy, c-format
 msgid "%s%sPrivate%sShared%s%s "
-msgstr "%s%sخاص%sمشارَك%s%s "
+msgstr "%s %sمشارك%sخاص%s %s عام%s"
 
 #. %1$s:  IF ( dateformat == "us" ) 
 #. %2$s:  ELSIF ( dateformat == "metric" ) 
@@ -2074,16 +2083,16 @@ msgstr "%sنوع المادة%sالمجموعة %sمكان الترفيف %sشي
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/includes/masthead-sco.inc:17
-#, c-format
+#, fuzzy, c-format
 msgid "%sLog out"
 msgstr "%sتسجيل الخروج"
 
 #. %1$s:  IF ( shelvesloo.viewcategory2 ) 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:722
-#, c-format
+#, fuzzy, c-format
 msgid "%sPublic%s "
-msgstr "%sعام%s "
+msgstr "عام"
 
 #. %1$s:  IF ( suggestions_loo.ASKED ) 
 #. %2$s:  ELSIF ( suggestions_loo.CHECKED ) 
@@ -2926,9 +2935,9 @@ msgstr "(معدل في %s)"
 
 #. %1$s:  koha_new.newdate 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:47
-#, c-format
+#, fuzzy, c-format
 msgid "(published on %s)"
-msgstr "(نشر في %s)"
+msgstr "(نشر في %s%s بواسطة"
 
 #. %1$s:  FOREACH relate IN related 
 #. %2$s:  relate.related_search 
@@ -3140,14 +3149,14 @@ msgstr ""
 "الالكتروني"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112
-#, c-format
+#, fuzzy, c-format
 msgid "A list named "
-msgstr "قائمة تُدعى"
+msgstr "اسم القائمة:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:131
-#, c-format
+#, fuzzy, c-format
 msgid "A record matching barcode "
-msgstr " تسجيلة تتوافق مع الباركود"
+msgstr "أضف تسجيلة تتوافق مع القاعدة"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:266
 #, c-format
@@ -3256,8 +3265,9 @@ msgstr ":اضف الى القائمة"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:587
+#, fuzzy
 msgid "Add to list: "
-msgstr ":اضف للقائمة "
+msgstr ":اضف الى القائمة"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:23
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:106
@@ -3806,13 +3816,6 @@ msgstr "تصفح نتائج البحث"
 msgid "Browse shelf"
 msgstr "إستعراض الرف"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "CAS"
-msgstr "CAS"
-
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:110
 #, c-format
@@ -3996,13 +3999,6 @@ msgstr "الفهارس"
 #, c-format
 msgid "Category:"
 msgstr "فئة:"
-
-#. ABBR
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-msgid "Central Authentication Service"
-msgstr "خدمة تأكيد الثقة المركزية"
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:14
 #, c-format
@@ -4803,14 +4799,14 @@ msgstr "خطأ: خطأ داخلي: طلب حجز غير مكتمل."
 
 #. %1$s:  paramsloo.unrecognized 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:140
-#, c-format
+#, fuzzy, c-format
 msgid "ERROR: List number %s unrecognized."
-msgstr "خطأ: قامة رقم %s غير متعرف عليها."
+msgstr "خطأ: لم يتم استلام أي رقم بيبلوغرافي ."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:115
-#, c-format
+#, fuzzy, c-format
 msgid "ERROR: No barcode given."
-msgstr "خطأ. لا يعطى باركود"
+msgstr "خطأ: لم يتم استلام أي رقم بيبلوغرافي ."
 
 #. %1$s:  bad_biblionumber 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:56
@@ -4827,14 +4823,14 @@ msgstr "خطأ: لم يتم استلام أي رقم بيبلوغرافي ."
 
 #. %1$s:  paramsloo.failgetitem 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:128
-#, c-format
+#, fuzzy, c-format
 msgid "ERROR: No item found with barcode %s."
-msgstr "لا مادة  موجودة مع الباركود: %s"
+msgstr "بم يتم العثور على مادة بالباركود %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:116
-#, c-format
+#, fuzzy, c-format
 msgid "ERROR: No shelfnumber given."
-msgstr "خطأ: لم يعطى رقم الرف."
+msgstr "خطأ: لم يتم استلام أي رقم بيبلوغرافي ."
 
 #. %1$s:  paramsloo.modifyfailure 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:143
@@ -4848,9 +4844,9 @@ msgstr ""
 
 #. %1$s:  paramsloo.nopermission |html
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:125
-#, c-format
+#, fuzzy, c-format
 msgid "ERROR: You do not have adequate permission for that action on list %s."
-msgstr "خطأ:  ليس لديك تصريح الكافي لذلك الفعل على القائمة  %s."
+msgstr "أنت لا تملك الصلاحيات لتحميل هذه القائمة"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:657
@@ -5770,10 +5766,12 @@ msgstr ""
 "إذا لم يكن لديك حساب CAS، لكن يوجد لديك حساب محلي، لا يزال بإمكانك تسجيل "
 "الدخول:"
 
+#. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
 #, c-format
-msgid "If you do not have a Shibboleth account, but you do have a "
-msgstr "إذا لم يكن لديك حساب Shibboleth،لكن لديك"
+msgid ""
+"If you do not have a Shibboleth account, but you do have a CAS account, %s "
+msgstr "إذا لم يكن لديك حساب Shibboleth ، لكن لديك حساب CAS ، %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
 #, c-format
@@ -5799,10 +5797,11 @@ msgstr ""
 "إذا لم يكن لديك كلمة سر بعد ، إطلبها من مكتب الإعارة في المرة القادمة التي "
 "ستزور بها المكتبة . وسنكون سعداء ﻹعداد واحدة لك ."
 
+#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
 #, c-format
-msgid "If you have a "
-msgstr "إذا كان لديك "
+msgid "If you have a CAS account, %s please "
+msgstr "إذا كان لديك حساب CAS ، %s يرجى"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:297
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:82
@@ -5903,9 +5902,9 @@ msgid "Issues summary"
 msgstr "ملخص الأعداد"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:120
-#, c-format
+#, fuzzy, c-format
 msgid "It has "
-msgstr "يحتوي "
+msgstr "لديه"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:635
 #, c-format
@@ -6209,18 +6208,18 @@ msgstr "روابط"
 
 #. %1$s:  paramsloo.delete_ok |html 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:134
-#, c-format
+#, fuzzy, c-format
 msgid "List %s Deleted."
-msgstr "القائمة %s حذفت"
+msgstr "%s %s تم حذف البيانات "
 
 #. %1$s:  IF loggedinuser==0 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:113
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "List could not be created. %s(Do not use the database administrator "
 "account.)%s"
-msgstr "لم يتم إنشاء القائمة. %s( لا تستخدم حساب مدير قاعدة البيانات)%s"
+msgstr "لا يمكن إنشاء القائمة. (لا تستخدم حساب مدير قاعدة البيانات)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:637
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:712
@@ -6266,7 +6265,7 @@ msgstr "تحميل"
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
 msgid "Loading..."
-msgstr "التحميل..."
+msgstr "جاري التحميل..."
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:298
 #, c-format
@@ -7577,6 +7576,7 @@ msgstr "خاص"
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:31
+#, fuzzy
 msgid "Private Lists"
 msgstr "قوائم خاصة"
 
@@ -7600,8 +7600,9 @@ msgstr "عام"
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:36
+#, fuzzy
 msgid "Public Lists"
-msgstr "القوائم العامة"
+msgstr "قوائم عامة"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:40
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:61
@@ -8308,9 +8309,9 @@ msgid "See biblio"
 msgstr "انظر البيبليوغرافيا"
 
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:99
-#, c-format
+#, fuzzy, c-format
 msgid "See the most popular titles"
-msgstr "انظر العناوين الأكثر شعبيّة"
+msgstr "العناوين الأكثر شعبية"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1081
@@ -9326,9 +9327,9 @@ msgstr ""
 "قائمتك خاصة فلن تتمكن من إعادتها عامة مرة أخرى."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:118
-#, c-format
+#, fuzzy, c-format
 msgid "The list "
-msgstr "القائمة"
+msgstr "مشاركة القائمة"
 
 #. %1$s:  email 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:16
@@ -9865,7 +9866,7 @@ msgid "View All"
 msgstr "عرض الكل"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:56
-#, c-format
+#, fuzzy, c-format
 msgid "View all"
 msgstr "عرض الكل"
 
@@ -10641,34 +10642,10 @@ msgstr ""
 msgid "a an the"
 msgstr "a an the"
 
-#. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, c-format
-msgid "account, %s "
-msgstr "الحساب، %s"
-
-#. %1$s:  IF ( casServerUrl ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "account, %s please "
-msgstr "الحساب, %s رجاءاً "
-
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#, c-format
-msgid ""
-"account, you may use that below. %s %s If you have a local account, you may "
-"use that below. %s "
-msgstr ""
-"الحساب، يمكنك استخدام ذلك أدناه. %s %s إذا كان لديك حساباً محلياً، يمكنك "
-"استخدام ذلك أدناه. %s"
-
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112
-#, c-format
+#, fuzzy, c-format
 msgid "already exists!"
-msgstr "موجود بالفعل!"
+msgstr "متواجد من قبل في قاعدة البيانات"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:106
@@ -10888,9 +10865,9 @@ msgid "for more information on what it does and how to configure it."
 msgstr "لمزيد من المعلومات حول ما تقوم به وكيفية تكوينه."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:131
-#, c-format
+#, fuzzy, c-format
 msgid "has already been added."
-msgstr "تمّت إضافته فعلاً."
+msgstr "تم إدخال الوظائف"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:572
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:575
@@ -11032,9 +11009,9 @@ msgid "is exactly"
 msgstr "بالضبط"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:119
-#, c-format
+#, fuzzy, c-format
 msgid "is not empty. "
-msgstr "ليس فارغا "
+msgstr "العنوان لا يمكن أن يكون فارغاً"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:119
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:126
@@ -11103,9 +11080,9 @@ msgid "not"
 msgstr "ليس"
 
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:140
-#, c-format
+#, fuzzy, c-format
 msgid "of the last:"
-msgstr "من اﻷخير  :"
+msgstr "إلى ال"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:24
 #, c-format

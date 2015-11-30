@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-10-18 10:49-0300\n"
+"POT-Creation-Date: 2015-11-20 13:13-0300\n"
 "PO-Revision-Date: 2015-04-25 06:42+0000\n"
 "Last-Translator: kaz <karenmyers1@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -679,10 +679,15 @@ msgid "%s Home library:"
 msgstr "%s Uma Biblioteka:"
 
 #. %1$s:  ELSE 
+#. %2$s:  END 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:70
 #, fuzzy, c-format
-msgid "%s If you have a "
-msgstr "Se iha ona "
+msgid ""
+"%s If you have a CAS account, you may use that below. %s %s If you have a "
+"local account, you may use that below. %s "
+msgstr "La iha konta CAS, maibe iha ona konta lokal, ita bele sei log in: "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:192
@@ -3790,13 +3795,6 @@ msgstr "Haree rezultadu sira"
 msgid "Browse shelf"
 msgstr "Haree estante"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "CAS"
-msgstr "CAS"
-
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:110
 #, fuzzy, c-format
@@ -3980,13 +3978,6 @@ msgstr "Katalogu sira"
 #, c-format
 msgid "Category:"
 msgstr "Kategoria:"
-
-#. ABBR
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-msgid "Central Authentication Service"
-msgstr "Servisu Autentikasaun Sentral"
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:14
 #, c-format
@@ -5752,9 +5743,11 @@ msgid ""
 "log in: "
 msgstr "La iha konta CAS, maibe iha ona konta lokal, ita bele sei log in: "
 
+#. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, c-format
-msgid "If you do not have a Shibboleth account, but you do have a "
+#, fuzzy, c-format
+msgid ""
+"If you do not have a Shibboleth account, but you do have a CAS account, %s "
 msgstr "La iha konta Shibboleth, maibe iha ona "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
@@ -5779,10 +5772,11 @@ msgstr ""
 "La iha password ona, husu Biblioteka nia staf atu halo. Ami kontente atu "
 "halo password ida."
 
+#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "If you have a "
-msgstr "Se iha ona "
+#, fuzzy, c-format
+msgid "If you have a CAS account, %s please "
+msgstr "konta, %s faz favor "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:297
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:82
@@ -10615,28 +10609,6 @@ msgstr ""
 #, fuzzy
 msgid "a an the"
 msgstr "motete"
-
-#. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, fuzzy, c-format
-msgid "account, %s "
-msgstr "konta, %s faz favor "
-
-#. %1$s:  IF ( casServerUrl ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, c-format
-msgid "account, %s please "
-msgstr "konta, %s faz favor "
-
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
-#, c-format
-msgid ""
-"account, you may use that below. %s %s If you have a local account, you may "
-"use that below. %s "
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:112
 #, c-format

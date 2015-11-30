@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zh-Hans-TW-i-staff-t-prog-v-3004000\n"
-"POT-Creation-Date: 2015-10-18 10:53-0300\n"
+"POT-Creation-Date: 2015-11-20 13:39-0300\n"
 "PO-Revision-Date: 2015-10-20 23:18+0000\n"
 "Last-Translator: Anthony <mao@lins.fju.edu.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
@@ -673,6 +673,7 @@ msgstr "( ! 表示 '不可見' 或在折疊時為 '不可收疊')"
 #: intranet-tmpl/prog/en/modules/help/serials/claims.tt:15
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:200
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:91
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:21
@@ -786,7 +787,6 @@ msgstr "( ! 表示 '不可見' 或在折疊時為 '不可收疊')"
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:68
 #: intranet-tmpl/prog/en/modules/help/acqui/lateorders.tt:19
 #: intranet-tmpl/prog/en/modules/help/acqui/uncertainprice.tt:7
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/acqui/neworderbiblio.tt:12
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:122
 #: intranet-tmpl/prog/en/modules/help/acqui/invoice.tt:11
@@ -1654,7 +1654,7 @@ msgstr "新增引句"
 msgid "Add a Batch"
 msgstr "新增批次"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:7
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:7
 #, c-format
 msgid "Add a Contract"
 msgstr "新增合約"
@@ -2200,7 +2200,8 @@ msgid ""
 "'Professional' and their Guarantors additional information will appear on "
 "their record."
 msgstr ""
-"所有的讀者資訊將顯示在詳情分頁。包括新增讀者的所有連絡資訊、說明、訊息偏好等。'兒童' 或 '專業讀者' 及其保證人的其他資訊將顯示在其紀錄內。"
+"所有的讀者資訊將顯示在詳情分頁。包括新增讀者的所有連絡資訊、說明、訊息偏好"
+"等。'兒童' 或 '專業讀者' 及其保證人的其他資訊將顯示在其紀錄內。"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:518
 #, c-format
@@ -2217,7 +2218,9 @@ msgid ""
 "Follow the steps in Add a Patron to add a staff member. To give the staff "
 "member permissions to access the staff client, follow the steps in Patron "
 "Permissions"
-msgstr "所有的館員必須以 '館員' 類型登入 Koha。在新增讀者時選擇館員類型。在館員權限裡，給近用館員介面的權限"
+msgstr ""
+"所有的館員必須以 '館員' 類型登入 Koha。在新增讀者時選擇館員類型。在館員權限"
+"裡，給近用館員介面的權限"
 
 #: intranet-tmpl/prog/en/modules/help/serials/serials-edit.tt:13
 #, c-format
@@ -2286,7 +2289,9 @@ msgid ""
 "Koha. All of these notices can be customized by altering their text via the "
 "Notices &amp; Slips tool and their style using the NoticeCSS preference to "
 "define a stylesheet. Here are some of what those notices do"
-msgstr "預設通知裡包括幾種常用的通知。可以經由通知 &amp;收條工具客製化也可以用 NoticeCSS 偏好設定它們的格式。以下是若干通知"
+msgstr ""
+"預設通知裡包括幾種常用的通知。可以經由通知 &amp;收條工具客製化也可以用 "
+"NoticeCSS 偏好設定它們的格式。以下是若干通知"
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgets.tt:22
 #, c-format
@@ -2403,7 +2408,7 @@ msgstr ""
 "頁面下方有個讀者借出館藏的摘要以及到期日(若為指定參考書則為時間)，今天借出的"
 "館藏在最前面。"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:9
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:9
 #, c-format
 msgid ""
 "At the top of a Vendor Information Page, you will see a 'New Contract' "
@@ -2558,7 +2563,9 @@ msgid ""
 "Authority records are a way of controlling fields in your MARC records. "
 "Using authority records will provide you with control over subject headings, "
 "personal names and places."
-msgstr "權威紀錄是一種控制 MARC 紀錄欄位的方法。以權威紀錄控制主題標目、個人名稱與地名。"
+msgstr ""
+"權威紀錄是一種控制 MARC 紀錄欄位的方法。以權威紀錄控制主題標目、個人名稱與地"
+"名。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:3
 #, c-format
@@ -2608,7 +2615,9 @@ msgid ""
 "Based on your selections, you may see some query information above your "
 "results table. You can also choose to export to a file that you can "
 "manipulate to your needs."
-msgstr "根據你的選擇，可在搜尋表單之上看到部份查詢資訊。也可選擇匯出至檔案再編輯成您的需要。"
+msgstr ""
+"根據你的選擇，可在搜尋表單之上看到部份查詢資訊。也可選擇匯出至檔案再編輯成您"
+"的需要。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/admin-home.tt:15
 #, c-format
@@ -2677,7 +2686,9 @@ msgstr "把列印的條碼匯成批次。在此工具裡可以搜尋館藏條碼
 msgid ""
 "Batches can be created in one of two ways. The first is to click the 'Create "
 "Label Batch' link on the 'Staged MARC Management' page"
-msgstr "有兩種方式新增批次。第一種方法是點選 '待處理 MARC 管理' 頁面裡的 '新增書標批次' 連結"
+msgstr ""
+"有兩種方式新增批次。第一種方法是點選 '待處理 MARC 管理' 頁面裡的 '新增書標批"
+"次' 連結"
 
 #: intranet-tmpl/prog/en/modules/help/tools/holidays.tt:22
 #, c-format
@@ -2761,7 +2772,8 @@ msgid ""
 "you will not be able to add or remove fields and subfields so your "
 "frameworks must be ready before you start cataloging."
 msgstr ""
-"在 Koha 編目之前應先完成若干基本設定。參照應用核對清單先處理這些設定。最重要的是確認您的框架已設定完成。進入編目模組後就不能新增或移除欄位與分欄。"
+"在 Koha 編目之前應先完成若干基本設定。參照應用核對清單先處理這些設定。最重要"
+"的是確認您的框架已設定完成。進入編目模組後就不能新增或移除欄位與分欄。"
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:15
 #, c-format
@@ -8865,7 +8877,7 @@ msgid ""
 "to enter an owner as well as choose a restriction"
 msgstr "重畏：沒有擁有者，則忽略近用限制，選定限制時必須鍵入擁有者"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:13
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:13
 #, c-format
 msgid ""
 "Important: You cannot enter a contract retrospectively. The end date must "
@@ -9244,7 +9256,7 @@ msgstr ""
 msgid "It will also appear on the main staff dashboard under the module labels"
 msgstr "同時顯示在模組分頁的館員儀表板"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:17
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:17
 #, c-format
 msgid "It will also be an option when creating a basket."
 msgstr "新增採購項目時，有個選項。"
@@ -10865,7 +10877,7 @@ msgid ""
 "edit the quotes prior to saving them."
 msgstr "將CSV檔案上傳至暫存編輯表單，就能編輯引句的順序。"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:15
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:15
 #, c-format
 msgid "Once the contract is saved it will appear below the vendor information."
 msgstr "合約儲存後，將出現於供應商資訊下方。"
@@ -12945,7 +12957,7 @@ msgid ""
 "See the full documentation for Uploading the Offline Circulation File in the "
 msgstr "見上傳離線流通檔案的完整檔案 "
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:19
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:19
 #, c-format
 msgid "See the full documentation for Vendor Contracts in the "
 msgstr "見代理商合約的完整文件 "
@@ -14425,7 +14437,7 @@ msgstr ""
 "OPACPrivacy 系統偏好為 '允許' 讀者可以決定不讓圖書館保留流通紀錄祗顯示尚未還"
 "入的館藏。"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:11
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:11
 #, c-format
 msgid ""
 "The contract form will ask for some very basic information about the "
@@ -17369,7 +17381,7 @@ msgstr "VANCOUVER PUBLIC LIBRARY z3950.vpl.ca:210 Horizon"
 msgid "Values that are pre-configured in Koha are:"
 msgstr "預先組態的值是："
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:3
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:3
 #, c-format
 msgid "Vendor Contracts"
 msgstr "供應商合約"
@@ -17842,8 +17854,8 @@ msgid ""
 "uploading your Koha offline circulation transactions you will come to this "
 "page to manage the data."
 msgstr ""
-"在 Firefox 外掛程式使用 '送入 Koha' 選項，上傳您的 *.koc 檔案或離線流通交易檔案後將進入此頁管理這些資料 "
-"'檢視待處理離線流通工作'。"
+"在 Firefox 外掛程式使用 '送入 Koha' 選項，上傳您的 *.koc 檔案或離線流通交易檔"
+"案後將進入此頁管理這些資料 '檢視待處理離線流通工作'。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/batch_record_modification.tt:7
 #, c-format
@@ -17890,7 +17902,8 @@ msgstr "完成後，按 '儲存改變' 鈕，出現新的欄位。"
 msgid ""
 "When your system goes offline visit the Offline Circulation page in Koha and "
 "click 'Check out' or 'Check in' to perform offline actions."
-msgstr "系統離線時進入Koha的離線流通頁面勾選 '借出' 或 '還入' 執行離線流通作業。"
+msgstr ""
+"系統離線時進入Koha的離線流通頁面勾選 '借出' 或 '還入' 執行離線流通作業。"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:50
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:55
@@ -18189,7 +18202,9 @@ msgid ""
 "You can also use your own headers (instead of the ones from Koha) by "
 "prefixing the field number with an header, followed by the equal sign. "
 "Example : Personal name=100|title=245$a|300"
-msgstr "在欄號前加入標題後面加個等號，就能加入自己的標題 (不使用 Koha 的)。如：個人名稱=100|題名=245$a|300"
+msgstr ""
+"在欄號前加入標題後面加個等號，就能加入自己的標題 (不使用 Koha 的)。如：個人名"
+"稱=100|題名=245$a|300"
 
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:76
 #, c-format
@@ -18216,7 +18231,8 @@ msgid ""
 "You can choose to create your own numbering pattern by choosing 'None of the "
 "above' and clicking the 'Show/Hide Advanced Pattern' button at the bottom of "
 "the form"
-msgstr "選擇 '以上皆非' 再點選表單下方的 '顯示/隱藏進階模式' 鈕就能新增自己的編碼模式"
+msgstr ""
+"選擇 '以上皆非' 再點選表單下方的 '顯示/隱藏進階模式' 鈕就能新增自己的編碼模式"
 
 #: intranet-tmpl/prog/en/modules/help/admin/itemtypes.tt:16
 #, c-format
@@ -18240,7 +18256,7 @@ msgstr ""
 "若讀者證已到期可禁止其執行若干 OPAC 的功能，預設係遵守 "
 "BlockExpiredPatronOpacActions 偏好的設定"
 
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:5
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:5
 #, c-format
 msgid ""
 "You can define contracts (with a start and end date) and attach them to a "
@@ -18764,7 +18780,9 @@ msgid ""
 "Checked, Ordered and/or Rejected. Each accepted or rejected suggestion will "
 "show the name of the librarian who managed the suggestion and the reason "
 "they gave for accepting or rejecting it (found under 'Status')."
-msgstr "您的建議分別納入不同的分頁：接受、待決、檢查中、訂閱與拒絕。接受與拒絕建議時，將顯示管理該建議的館員姓名與理由 (在 '狀態' 中)。"
+msgstr ""
+"您的建議分別納入不同的分頁：接受、待決、檢查中、訂閱與拒絕。接受與拒絕建議"
+"時，將顯示管理該建議的館員姓名與理由 (在 '狀態' 中)。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:5
 #, c-format
@@ -19559,6 +19577,7 @@ msgstr "管理 "
 #: intranet-tmpl/prog/en/modules/help/serials/claims.tt:15
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:200
+#: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:91
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:21
@@ -19671,7 +19690,6 @@ msgstr "管理 "
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:68
 #: intranet-tmpl/prog/en/modules/help/acqui/lateorders.tt:19
 #: intranet-tmpl/prog/en/modules/help/acqui/uncertainprice.tt:7
-#: intranet-tmpl/prog/en/modules/help/acqui/acqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/acqui/neworderbiblio.tt:12
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:122
 #: intranet-tmpl/prog/en/modules/help/acqui/invoice.tt:11
@@ -19807,7 +19825,9 @@ msgstr "在著者欄位(UNIMARC 的 200f)裡，可看到同著者的所有記錄
 msgid ""
 "on a field that is a link (4xx) to reach another bib record. For example, "
 "put 011a in 464$x, will find the serials that are with this ISSN."
-msgstr "在欄位裡是連結 (4xx) 至其他書目記錄。如，在 464$x 欄位裡鍵入 011a，將找到有此 ISSN 的期刊。"
+msgstr ""
+"在欄位裡是連結 (4xx) 至其他書目記錄。如，在 464$x 欄位裡鍵入 011a，將找到有"
+"此 ISSN 的期刊。"
 
 #: intranet-tmpl/prog/en/modules/help/offline_circ/list.tt:5
 #, c-format
