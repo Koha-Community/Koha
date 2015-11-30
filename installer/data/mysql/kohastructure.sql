@@ -357,6 +357,18 @@ CREATE TABLE `branch_item_rules` ( -- information entered in the circulation and
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
+-- Table structure for table `borrower_password_recovery`
+--
+
+DROP TABLE IF EXISTS `borrower_password_recovery`;
+CREATE TABLE IF NOT EXISTS `borrower_password_recovery` ( -- holds information about password recovery attempts
+  `borrowernumber` int(11) NOT NULL, -- the user asking a password recovery
+  `uuid` varchar(128) NOT NULL, -- a unique string to identify a password recovery attempt
+  `valid_until` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, -- a time limit on the password recovery attempt
+  KEY borrowernumber (borrowernumber)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+--
 -- Table structure for table borrower_sync
 --
 
