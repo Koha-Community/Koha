@@ -547,6 +547,8 @@ sub SendAlerts {
           if C4::Context->preference('ReplytoDefault');
         $mail{'Sender'} = C4::Context->preference('ReturnpathDefault')
           if C4::Context->preference('ReturnpathDefault');
+        $mail{'Bcc'} = $userenv->{emailaddress}
+          if C4::Context->preference("ClaimsBccCopy");
 
         unless ( sendmail(%mail) ) {
             carp $Mail::Sendmail::error;

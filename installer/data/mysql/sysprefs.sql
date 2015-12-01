@@ -93,6 +93,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('CircAutocompl','1',NULL,'If ON, autocompletion is enabled for the Circulation input','YesNo'),
 ('CircAutoPrintQuickSlip','qslip',NULL,'Choose what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window, Display a print slip window or Clear the screen.','Choice'),
 ('CircControl','ItemHomeLibrary','PickupLibrary|PatronLibrary|ItemHomeLibrary','Specify the agency that controls the circulation and fines policy','Choice'),
+('ClaimsBccCopy','0','','Bcc the ClaimAcquisition and ClaimIssues alerts','YesNo'),
 ('Coce','0', NULL, 'If on, enables cover retrieval from the configured Coce server', 'YesNo'),
 ('CoceHost', NULL, NULL, 'Coce server URL', 'Free'),
 ('CoceProviders', NULL, 'aws,gb,ol', 'Coce providers', 'multiple'),
