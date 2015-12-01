@@ -2993,7 +2993,7 @@ sub AddRenewal {
     }
 
     # Remove any OVERDUES related debarment if the borrower has no overdues
-    my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
+    $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
     if ( $borrowernumber
       && $borrower->{'debarred'}
       && !C4::Members::HasOverdues( $borrowernumber )
