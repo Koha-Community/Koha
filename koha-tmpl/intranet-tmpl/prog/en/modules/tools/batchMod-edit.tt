@@ -174,7 +174,7 @@ $(document).ready(function(){
               <label for="tag_[% ite.tag %]_subfield_[% ite.subfield %]_[% ite.random %]">
               [% END %]
               [% ite.subfield %] -
-          [% ite.marc_lib %]
+          [% ite.marc_lib.raw %]
          </label>
                 [% UNLESS ( ite.mandatory ) %]<input type="checkbox" id="row[% ite.tag %][% ite.subfield %][% ite.random %]" title="Check to delete subfield [% ite.subfield %]" name="disable_input" value="[% ite.subfield %]" />[% ELSE %]<span class="required">Required</span>[% END %]
 
@@ -199,7 +199,7 @@ $(document).ready(function(){
                     [% ELSE %]
                         <a href="#" id="buttonDot_[% mv.id %]" class="buttonDot" title="Tag editor">...</a>
                     [% END %]
-                    [% mv.javascript %]
+                    [% mv.javascript.raw %]
                 [% ELSIF ( mv.type == 'text' ) %]
                     <input type="text" tabindex="1" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value -%]" />
                 [% ELSIF ( mv.type == 'hidden' ) %]

@@ -225,9 +225,9 @@ function confirm_deletion() {
         [% FOREACH ite IN item %]
                <li><div class="subfield_line" style="[% ite.visibility %]" id="subfield[% ite.tag %][% ite.subfield %][% ite.random %]">
                 [% IF ( ite.mandatory ) %]
-               <label class="required">[% ite.subfield %] - [% ite.marc_lib %]</label>
+               <label class="required">[% ite.subfield %] - [% ite.marc_lib.raw %]</label>
                [% ELSE %]
-               <label>[% ite.subfield %] - [% ite.marc_lib %]</label>
+               <label>[% ite.subfield %] - [% ite.marc_lib.raw %]</label>
                [% END %]
 
                 [% SET mv = ite.marc_value %]
@@ -258,7 +258,7 @@ function confirm_deletion() {
                     [% ELSE  %]
                         <a href="#" id="buttonDot_[%- mv.id -%]" class="[%- mv.class -%]" title="Tag editor">...</a>
                     [% END %]
-                    [%- mv.javascript -%]
+                    [%- mv.javascript.raw -%]
                 [% ELSIF ( mv.type == 'text' ) %]
                     <input type="text" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" />
                 [% ELSIF ( mv.type == 'textarea' ) %]

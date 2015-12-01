@@ -253,7 +253,7 @@ function AreMandatoriesNotOk(){
     		[% FOREACH subfield_loo IN innerloo.subfield_loop %]
     			[% IF ( subfield_loo.mandatory ) %]mandatories.push("[% subfield_loo.id %]");
                    	tab.push("[% BIG_LOO.number %]");
-                   	label.push("[% subfield_loo.marc_lib %]");
+                    label.push("[% subfield_loo.marc_lib.raw %]");
                 [% END %]
             [% END %]
         [% END %]
@@ -619,7 +619,7 @@ function Changefwk(FwkList) {
                         <img class="buttonUp" src="[% interface %]/[% theme %]/img/up.png" onclick="upSubfield('subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]')" alt="Move Up" title="Move Up" />
                     [% END %]
                         <input type="text"
-                            title="[% subfield_loo.marc_lib %]"
+                            title="[% subfield_loo.marc_lib.raw %]"
                             style=" [% IF ( subfield_loo.fixedfield ) %]display:none; [% END %]border:0;"
                             name="tag_[% subfield_loo.tag %]_code_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]"
                             value="[% subfield_loo.subfield %]"
@@ -631,7 +631,7 @@ function Changefwk(FwkList) {
 
                 [% UNLESS advancedMARCEditor %]
                     [% IF ( subfield_loo.mandatory ) %]<span class="subfield subfield_mandatory">[% ELSE %]<span class="subfield">[% END %]
-                        [% subfield_loo.marc_lib %]
+                        [% subfield_loo.marc_lib.raw %]
                         [% IF ( subfield_loo.mandatory ) %]<span class="mandatory_marker" title="This field is mandatory">*</span>[% END %]
                     </span>
                     </label>
@@ -656,7 +656,7 @@ function Changefwk(FwkList) {
                             <a href="#" id="buttonDot_[% mv.id %]" class="buttonDot tag_editor framework_plugin" tabindex="1" title="Tag editor">Tag editor</a>
                         [% END %]
                     </span>
-                    [% mv.javascript %]
+                    [% mv.javascript.raw %]
                 [% ELSIF ( mv.type == 'hidden' ) %]
                     <input tabindex="1" type="hidden" id="[%- mv.id -%]" name="[%- mv.name -%]" size="[%- mv.size -%]" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" />
                 [% ELSIF ( mv.type == 'textarea' ) %]
