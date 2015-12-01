@@ -24,13 +24,13 @@ use C4::Branch;
 use C4::Items;
 use C4::Members;
 use C4::Reserves;
-use C4::Overdues qw(UpdateFine);
+use C4::Overdues qw(UpdateFine CalcFine);
 use Koha::DateUtils;
 use Koha::Database;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 86;
+use Test::More tests => 87;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -442,9 +442,28 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my $datedue6 = AddIssue( $renewing_borrower, $barcode6);
     is (defined $datedue6, 1, "Item 2 checked out, due date: $datedue6");
 
-    my $passeddatedue1 = AddIssue($renewing_borrower, $barcode7, DateTime->from_epoch(epoch => 1));
-    is (defined $passeddatedue1, 1, "Item with passed date due checked out, due date: $passeddatedue1");
+    my $now = dt_from_string();
+    my $five_weeks = DateTime::Duration->new(weeks => 5);
+    my $five_weeks_ago = $now - $five_weeks;
 
+    my $passeddatedue1 = AddIssue($renewing_borrower, $barcode7, $five_weeks_ago);
+    is (defined $passeddatedue1, 1, "Item with passed date due checked out, due date: " . $passeddatedue1->date_due);
+
+    my ( $fine ) = CalcFine( GetItem(undef, $barcode7), $renewing_borrower->{categorycode}, $branch, $five_weeks_ago, $now );
+    C4::Overdues::UpdateFine(
+        {
+            issue_id       => $passeddatedue1->id(),
+            itemnumber     => $itemnumber7,
+            borrowernumber => $renewing_borrower->{borrowernumber},
+            amount         => $fine,
+            type           => 'FU',
+            due            => Koha::DateUtils::output_pref($five_weeks_ago)
+        }
+    );
+    AddRenewal( $renewing_borrower->{borrowernumber}, $itemnumber7, $branch );
+    $fine = $schema->resultset('Accountline')->single( { borrowernumber => $renewing_borrower->{borrowernumber}, itemnumber => $itemnumber7 } );
+    is( $fine->accounttype, 'F', 'Fine on renewed item is closed out properly' );
+    $fine->delete();
 
     t::lib::Mocks::mock_preference('OverduesBlockRenewing','blockitem');
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber6);
@@ -596,7 +615,6 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 
     ok( $total_due == 15, 'Borrower only charged fine with both WhenLostForgiveFine and WhenLostChargeReplacementFee disabled' );
 
-    my $now = dt_from_string();
     my $future = dt_from_string();
     $future->add( days => 7 );
     my $units = C4::Overdues::get_chargeable_units('days', $future, $now, $library2->{branchcode});
