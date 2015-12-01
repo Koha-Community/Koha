@@ -8,9 +8,8 @@ var sentmsg = 0;
 if (debug > 1) {alert("dateformat: " + dformat + "\ndebug is on (level " + debug + ")");}
 var MSG_PLEASE_ENTER_A_VALID_DATE = _("Please enter a valid date (should match %s).");
 
-function validate_date (dateText, inst) {
-    var dateformat = '[% Koha.Preference('dateformat') %]';
-    var dateformat_str = dateformat
+function is_valid_date(date) {
+    var dateformat = dateformat_str = '[% Koha.Preference('dateformat') %]';
     if ( dateformat == 'us' ) {
         dateformat = 'mm/dd/yy';
         dateformat_str = 'mm/dd/yyyy';
@@ -22,11 +21,19 @@ function validate_date (dateText, inst) {
         dateformat_str = 'yyyy-mm-dd';
     }
     try {
-        $.datepicker.parseDate(dateformat, dateText);
+        $.datepicker.parseDate(dateformat, date);
     } catch (e) {
+        return 0;
+    };
+    return 1;
+}
+
+function validate_date (dateText, inst) {
+    if ( !is_valid_date(dateText) ) {
+        var dateformat_str = '[% Koha.Preference('dateformat') %]';
         alert(MSG_PLEASE_ENTER_A_VALID_DATE.format(dateformat_str));
         $('#'+inst.id).val('');
-    };
+    }
 }
 
 function Date_from_syspref(dstring) {
@@ -115,6 +122,8 @@ $.datepicker.setDefaults({
         onClose: function(dateText, inst) {
             validate_date(dateText, inst);
         },
+    }).on("change", function(e, value) {
+        if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
     });
     // http://jqueryui.com/demos/datepicker/#date-range
     var dates = $( ".datepickerfrom, .datepickerto" ).datepicker({
@@ -132,6 +141,8 @@ $.datepicker.setDefaults({
         onClose: function(dateText, inst) {
             validate_date(dateText, inst);
         },
+    }).on("change", function(e, value) {
+        if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
     });
 });
 //]]>
