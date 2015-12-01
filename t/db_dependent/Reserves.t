@@ -280,6 +280,10 @@ is( $messages->{ResFound}->{borrowernumber},
 # Return the FPL item at FPL.  The hold that should be triggered is
 # the one placed by the RPL patron, as that patron is first in line
 # and RPL imposes no restrictions on whose holds its items can fill.
+
+# Ensure that the preference 'LocalHoldsPriority' is not set (Bug 15244):
+C4::Context->set_preference( 'LocalHoldsPriority', '' );
+
 (undef, $messages, undef, undef) = AddReturn('bug10272_FPL', 'FPL');
 is( $messages->{ResFound}->{borrowernumber},
     $requesters{'RPL'},
