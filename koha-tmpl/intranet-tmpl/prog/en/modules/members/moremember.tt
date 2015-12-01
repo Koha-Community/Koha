@@ -88,6 +88,8 @@ $(document).ready(function() {
             validate_date(dateText, inst);
         },
         minDate: 1, // require that hold suspended until date is after today
+    }).on("change", function(e, value) {
+        if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
     });
 
     $("#view_restrictions").on("click",function(){

@@ -35,6 +35,8 @@ $(document).ready(function() {
         minDate: 1, // require that renewal date is after today
         hour: 23,
         minute: 59
+    }).on("change", function(e) {
+        if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
     });
     $("#duedatespec").datetimepicker({
         onClose: function(dateText, inst) {
@@ -44,6 +46,8 @@ $(document).ready(function() {
         },
         hour: 23,
         minute: 59
+    }).on("change", function(e, value) {
+        if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
     });
     $("#export_submit").on("click",function(){
         var output_format = $("#output_format").val();

@@ -78,6 +78,8 @@ function toggle_onsite_checkout(){
             },
             hour: 23,
             minute: 59
+        }).on("change", function(e, value) {
+            if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
         });
     }
 }
