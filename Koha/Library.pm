@@ -1,6 +1,6 @@
-package Koha::Branches;
+package Koha::Library;
 
-# Copyright ByWater Solutions 2014
+# Copyright 2015 Koha Development team
 #
 # This file is part of Koha.
 #
@@ -23,19 +23,36 @@ use Carp;
 
 use Koha::Database;
 
-use Koha::Branch;
-
-use base qw(Koha::Objects);
+use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Branches - Koha Branch object set class
+Koha::Library - Koha Library Object class
 
 =head1 API
 
 =head2 Class Methods
 
 =cut
+
+sub get_categories {
+    my ( $self, $params ) = @_;
+    # TODO This should return Koha::LibraryCategories
+    return $self->{_result}->categorycodes( $params );
+}
+
+sub update_categories {
+    my ( $self, $categories ) = @_;
+    $self->_result->delete_related( 'branchrelations' );
+    $self->add_to_categories( $categories );
+}
+
+sub add_to_categories {
+    my ( $self, $categories ) = @_;
+    for my $category ( @$categories ) {
+        $self->_result->add_to_categorycodes( $category->_result );
+    }
+}
 
 =head3 type
 
@@ -44,19 +61,5 @@ Koha::Branches - Koha Branch object set class
 sub type {
     return 'Branch';
 }
-
-=head3 object_class
-
-=cut
-
-sub object_class {
-    return 'Koha::Branch';
-}
-
-=head1 AUTHOR
-
-Kyle M Hall <kyle@bywatersolutions.com>
-
-=cut
 
 1;

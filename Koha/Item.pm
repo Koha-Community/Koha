@@ -23,8 +23,8 @@ use Carp;
 
 use Koha::Database;
 
-use Koha::Branches;
 use Koha::Borrowers;
+use Koha::Libraries;
 
 use base qw(Koha::Object);
 
@@ -57,7 +57,7 @@ sub effective_itemtype {
 sub home_branch {
     my ($self) = @_;
 
-    $self->{_home_branch} ||= Koha::Branches->find( $self->homebranch() );
+    $self->{_home_branch} ||= Koha::Libraries->find( $self->homebranch() );
 
     return $self->{_home_branch};
 }
@@ -69,7 +69,7 @@ sub home_branch {
 sub holding_branch {
     my ($self) = @_;
 
-    $self->{_holding_branch} ||= Koha::Branches->find( $self->holdingbranch() );
+    $self->{_holding_branch} ||= Koha::Libraries->find( $self->holdingbranch() );
 
     return $self->{_holding_branch};
 }

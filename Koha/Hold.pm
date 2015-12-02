@@ -22,12 +22,12 @@ use Modern::Perl;
 use Carp;
 
 use C4::Context qw(preference);
-use Koha::DateUtils qw(dt_from_string);
 
+use Koha::DateUtils qw(dt_from_string);
 use Koha::Borrowers;
 use Koha::Biblios;
-use Koha::Branches;
 use Koha::Items;
+use Koha::Libraries;
 
 use base qw(Koha::Object);
 
@@ -168,14 +168,14 @@ sub item {
 
 =head3 branch
 
-Returns the related Koha::Branch object for this Hold
+Returns the related Koha::Library object for this Hold
 
 =cut
 
 sub branch {
     my ($self) = @_;
 
-    $self->{_branch} ||= Koha::Branches->find( $self->branchcode() );
+    $self->{_branch} ||= Koha::Libraries->find( $self->branchcode() );
 
     return $self->{_branch};
 }

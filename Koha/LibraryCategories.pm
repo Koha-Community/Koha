@@ -1,6 +1,6 @@
-package Koha::Branch;
+package Koha::LibraryCategories;
 
-# Copyright ByWater Solutions 2014
+# Copyright 2015 Koha Development team
 #
 # This file is part of Koha.
 #
@@ -23,11 +23,13 @@ use Carp;
 
 use Koha::Database;
 
-use base qw(Koha::Object);
+use Koha::LibraryCategory;
+
+use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Branch - Koha Branch object class
+Koha::LibraryCategories - Koha Library Category Object set class
 
 =head1 API
 
@@ -40,13 +42,11 @@ Koha::Branch - Koha Branch object class
 =cut
 
 sub type {
-    return 'Branch';
+    return 'Branchcategory';
 }
 
-=head1 AUTHOR
-
-Kyle M Hall <kyle@bywatersolutions.com>
-
-=cut
+sub object_class {
+    return 'Koha::LibraryCategory';
+}
 
 1;

@@ -453,11 +453,11 @@ subtest 'Koha::Item(s) tests' => sub {
     is( ref($item), 'Koha::Item', "Got Koha::Item" );
 
     my $homebranch = $item->home_branch();
-    is( ref($homebranch), 'Koha::Branch', "Got Koha::Branch from home_branch method" );
+    is( ref($homebranch), 'Koha::Library', "Got Koha::Library from home_branch method" );
     is( $homebranch->branchcode(), $library1->{branchcode}, "Home branch code matches homebranch" );
 
     my $holdingbranch = $item->holding_branch();
-    is( ref($holdingbranch), 'Koha::Branch', "Got Koha::Branch from holding_branch method" );
+    is( ref($holdingbranch), 'Koha::Library', "Got Koha::Library from holding_branch method" );
     is( $holdingbranch->branchcode(), $library2->{branchcode}, "Home branch code matches holdingbranch" );
 
     $schema->storage->txn_rollback;
