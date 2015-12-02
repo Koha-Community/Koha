@@ -163,7 +163,7 @@ sub set_form_values {
 
 =head1 SEE ALSO
 
-L<C4::Members::Messaging>, F<admin/categorie.pl>, F<opac/opac-messaging.pl>, F<members/messaging.pl>
+L<C4::Members::Messaging>, F<admin/categories.pl>, F<opac/opac-messaging.pl>, F<members/messaging.pl>
 
 =head1 AUTHOR
 
