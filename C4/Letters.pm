@@ -22,6 +22,11 @@ use warnings;
 
 use MIME::Lite;
 use Mail::Sendmail;
+use Date::Calc qw( Add_Delta_Days );
+use Encode;
+use Carp;
+use Template;
+use Module::Load::Conditional qw(can_load);
 
 use C4::Koha qw(GetAuthorisedValueByCode);
 use C4::Members;
@@ -33,11 +38,8 @@ use C4::Debug;
 use Koha::DateUtils;
 use Koha::SMS::Providers;
 
-use Date::Calc qw( Add_Delta_Days );
-use Encode;
-use Carp;
 use Koha::Email;
-use Koha::DateUtils qw( format_sqldatetime );
+use Koha::DateUtils qw( format_sqldatetime dt_from_string );
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -704,8 +706,14 @@ sub GetPreparedLetter {
         }
     }
 
+    $letter->{content} = _process_tt(
+        {
+            content => $letter->{content},
+            tables  => $tables,
+        }
+    );
+
     $letter->{content} =~ s/<<\S*>>//go; #remove any stragglers
-#   $letter->{content} =~ s/<<[^>]*>>//go;
 
     return $letter;
 }
@@ -1361,6 +1369,151 @@ sub _set_message_status {
     my $result = $sth->execute( $params->{'status'},
                                 $params->{'message_id'} );
     return $result;
+}
+
+sub _process_tt {
+    my ( $params ) = @_;
+
+    my $content = $params->{content};
+    my $tables = $params->{tables};
+
+    my $use_template_cache = C4::Context->config('template_cache_dir') && defined $ENV{GATEWAY_INTERFACE};
+    my $template           = Template->new(
+        {
+            EVAL_PERL    => 1,
+            ABSOLUTE     => 1,
+            PLUGIN_BASE  => 'Koha::Template::Plugin',
+            COMPILE_EXT  => $use_template_cache ? '.ttc' : '',
+            COMPILE_DIR  => $use_template_cache ? C4::Context->config('template_cache_dir') : '',
+            FILTERS      => {},
+            ENCODING     => 'UTF-8',
+        }
+    ) or die Template->error();
+
+    my $tt_params = _get_tt_params( $tables );
+
+    my $output;
+    $template->process( \$content, $tt_params, \$output ) || croak "ERROR PROCESSING TEMPLATE: " . $template->error();
+
+    return $output;
+}
+
+sub _get_tt_params {
+    my ($tables) = @_;
+
+    my $params;
+
+    my $config = {
+        biblio => {
+            module   => 'Koha::Biblios',
+            singular => 'biblio',
+            plural   => 'biblios',
+            pk       => 'biblionumber',
+        },
+        borrowers => {
+            module   => 'Koha::Patrons',
+            singular => 'borrower',
+            plural   => 'borrowers',
+            pk       => 'borrowernumber',
+        },
+        branches => {
+            module   => 'Koha::Libraries',
+            singular => 'branch',
+            plural   => 'branches',
+            pk       => 'branchcode',
+        },
+        items => {
+            module   => 'Koha::Items',
+            singular => 'item',
+            plural   => 'items',
+            pk       => 'itemnumber',
+        },
+        opac_news => {
+            module   => 'Koha::News',
+            singular => 'news',
+            plural   => 'news',
+            pk       => 'idnew',
+        },
+        reserves => {
+            module   => 'Koha::Holds',
+            singular => 'hold',
+            plural   => 'holds',
+            fk       => [ 'borrowernumber', 'biblionumber' ],
+        },
+        serial => {
+            module   => 'Koha::Serials',
+            singular => 'serial',
+            plural   => 'serials',
+            pk       => 'serialid',
+        },
+        subscription => {
+            module   => 'Koha::Subscriptions',
+            singular => 'subscription',
+            plural   => 'subscriptions',
+            pk       => 'subscriptionid',
+        },
+        suggestions => {
+            module   => 'Koha::Suggestions',
+            singular => 'suggestion',
+            plural   => 'suggestions',
+            pk       => 'suggestionid',
+        },
+        issues => {
+            module   => 'Koha::Checkouts',
+            singular => 'checkout',
+            plural   => 'checkouts',
+            fk       => 'itemnumber',
+        },
+        borrower_modifications => {
+            module   => 'Koha::Patron::Modifications',
+            singular => 'patron_modification',
+            plural   => 'patron_modifications',
+            fk       => 'verification_token',
+        },
+    };
+
+    foreach my $table ( keys %$tables ) {
+        next unless $config->{$table};
+
+        my $ref = ref( $tables->{$table} ) || q{};
+        my $module = $config->{$table}->{module};
+
+        if ( can_load( modules => { $module => undef } ) ) {
+            my $pk = $config->{$table}->{pk};
+            my $fk = $config->{$table}->{fk};
+
+            if ( $ref eq q{} || $ref eq 'HASH' ) {
+                my $id = ref $ref eq 'HASH' ? $tables->{$table}->{$pk} : $tables->{$table};
+                my $object;
+                if ( $fk ) { # Using a foreign key for lookup
+                    $object = $module->search( { $fk => $id } )->next();
+                } else { # using the table's primary key for lookup
+                    $object = $module->find($id);
+                }
+                $params->{ $config->{$table}->{singular} } = $object;
+            }
+            else {    # $ref eq 'ARRAY'
+                my $object;
+                if ( @{ $tables->{$table} } == 1 ) {    # Param is a single key
+                    $object = $module->search( { $pk => $tables->{$table} } )->next();
+                }
+                else {                                  # Params are mutliple foreign keys
+                    my @values = @{ $tables->{$table} };
+                    my @keys   = @{ $config->{$table}->{fk} };
+                    my %params = map { $_ => shift(@values) } @keys;
+                    $object = $module->search( \%params )->next();
+                }
+                $params->{ $config->{$table}->{singular} } = $object;
+            }
+        }
+        else {
+            croak "ERROR LOADING MODULE $module: $Module::Load::Conditional::ERROR";
+        }
+    }
+
+    $params->{today} = dt_from_string();
+
+    return $params;
 }
 
 

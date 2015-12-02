@@ -27,10 +27,18 @@ use Modern::Perl;
 use C4::Context;
 use C4::Debug;
 
-sub new {
-    my ( $class, %args ) = @_;
+use base qw(Koha::Objects);
 
-    return bless( \%args, $class );
+sub new {
+    my ( $self, %args ) = @_;
+
+    $self = $self->SUPER::new(@_);
+
+    foreach my $key ( keys %args ) {
+        $self->{$key} = $args{$key};
+    }
+
+    return $self;
 }
 
 =head2 AddModifications
@@ -302,6 +310,18 @@ sub GetModifications {
     }
 
     return $data;
+}
+
+sub _type {
+    return 'BorrowerModification';
+}
+
+=head3 object_class
+
+=cut
+
+sub object_class {
+    return 'Koha::Patron::Modification';
 }
 
 1;
