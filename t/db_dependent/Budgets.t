@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Test::More tests => 129;
+use Test::More tests => 130;
 
 BEGIN {
     use_ok('C4::Budgets')
@@ -489,6 +489,19 @@ cmp_ok($budget_hierarchy_cloned->[2]->{budget_amount}, '==', 55, "CloneBudgetPer
 cmp_ok($budget_hierarchy_cloned->[3]->{budget_amount}, '==', 115, "CloneBudgetPeriod changed correctly funds amounts");
 cmp_ok($budget_hierarchy_cloned->[4]->{budget_amount}, '==', 2320, "CloneBudgetPeriod changed correctly funds amounts");
 cmp_ok($budget_hierarchy_cloned->[5]->{budget_amount}, '==', 0, "CloneBudgetPeriod changed correctly funds amounts");
+
+$budget_period_id_cloned = C4::Budgets::CloneBudgetPeriod(
+    {
+        budget_period_id        => $budget_period_id,
+        budget_period_startdate => '2014-01-01',
+        budget_period_enddate   => '2014-12-31',
+        amount_change_percentage => 16,
+        amount_change_round_increment => 5,
+        reset_all_budgets => 1,
+    }
+);
+$budget_hierarchy_cloned     = GetBudgetHierarchy($budget_period_id_cloned);
+cmp_ok($budget_hierarchy_cloned->[0]->{budget_amount}, '==', 0, "CloneBudgetPeriod reset all fund amounts");
 
 # MoveOrders
 my $number_orders_moved = C4::Budgets::MoveOrders();
