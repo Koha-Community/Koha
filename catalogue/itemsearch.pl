@@ -188,7 +188,6 @@ if (scalar keys %params > 0) {
     if (C4::Context->preference("marcflavour") ne "UNIMARC" && $sortby eq 'publicationyear') {
         $sortby = 'copyrightdate';
     }
-    warn $sortby;
     my $search_params = {
         rows => $cgi->param('rows') // 20,
         page => $cgi->param('page') || 1,
