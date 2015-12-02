@@ -28,12 +28,15 @@ my $query = new CGI;
 my $admin = C4::Context->preference('KohaAdminEmailAddress');
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "errors/404.tt",
+        template_name   => "errors/errorpage.tt",
         query           => $query,
         type            => "opac",
         authnotrequired => 1,
         debug           => 1,
     }
 );
-$template->param( admin => $admin );
+$template->param (
+    admin => $admin,
+    errno => 404,
+);
 output_html_with_http_headers $query, $cookie, $template->output, '404 Not Found';

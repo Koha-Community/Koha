@@ -27,12 +27,15 @@ my $query = CGI->new;
 my $admin = C4::Context->preference('KohaAdminEmailAddress');
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => 'errors/400.tt',
+        template_name   => 'errors/errorpage.tt',
         query           => $query,
         type            => 'intranet',
         authnotrequired => 1,
         debug           => 1,
     }
 );
-$template->param( admin => $admin );
+$template->param (
+    admin => $admin,
+    errno => 400,
+);
 output_with_http_headers $query, $cookie, $template->output, 'html', '400 Bad Request';

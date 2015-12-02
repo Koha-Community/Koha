@@ -28,12 +28,15 @@ my $query = new CGI;
 my $admin = C4::Context->preference('KohaAdminEmailAddress');
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "errors/401.tt",
+        template_name   => "errors/errorpage.tt",
         query           => $query,
         type            => "opac",
         authnotrequired => 1,
         debug           => 1,
     }
 );
-$template->param( admin => $admin );
+$template->param (
+    admin => $admin,
+    errno => 401,
+);
 output_with_http_headers $query, $cookie, $template->output, 'html', '401 Unauthorized';
