@@ -56,7 +56,7 @@ INSERT INTO `letter` (module, code, name, title, content, message_transport_type
  'email'),
 
 ('circulation','CHECKOUT','видача примірників (збірка)', 'Видача',
- 'Наступні примірники були видані:\r\n----\r\n„<<biblio.title>>“\r\n----\r\n Спасибі, що відвідали бібліотеку – „<<branches.branchname>>“.',
+ 'Наступні примірники були видані:\r\n----\r\n„[% biblio.title %]“\r\n----\r\n Спасибі, що відвідали бібліотеку – „[% branches.branchname %]“.',
  'email'),
 
 ('reserves', 'HOLDPLACED', 'на примірник встановлено резервування', 'На примірник встановлено резервування',
