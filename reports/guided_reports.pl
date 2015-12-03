@@ -809,6 +809,7 @@ elsif ($phase eq 'Export'){
         if ($format eq 'tab') {
             $type = 'application/octet-stream';
             $content .= join("\t", header_cell_values($sth)) . "\n";
+            $content = Encode::decode('UTF-8', $content);
             while (my $row = $sth->fetchrow_arrayref()) {
                 $content .= join("\t", @$row) . "\n";
             }
@@ -816,10 +817,10 @@ elsif ($phase eq 'Export'){
             my $delimiter = C4::Context->preference('delimiter') || ',';
             if ( $format eq 'csv' ) {
                 $type = 'application/csv';
-                my $csv = Text::CSV::Encoded->new({ encoding_out => 'utf8', sep_char => $delimiter});
+                my $csv = Text::CSV::Encoded->new({ encoding_out => 'UTF-8', sep_char => $delimiter});
                 $csv or die "Text::CSV::Encoded->new({binary => 1}) FAILED: " . Text::CSV::Encoded->error_diag();
                 if ($csv->combine(header_cell_values($sth))) {
-                    $content .= $csv->string(). "\n";
+                    $content .= Encode::decode('UTF-8', $csv->string()) . "\n";
                 } else {
                     push @$q_errors, { combine => 'HEADER ROW: ' . $csv->error_diag() } ;
                 }
