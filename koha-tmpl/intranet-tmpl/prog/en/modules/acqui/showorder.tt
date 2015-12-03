@@ -1,38 +1,33 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<style>
-  td {
-    padding: 0 1em;
-  }
-  td:first-child {
-    font-weight: bold;
-    text-align: right;
-  }
-</style>
+<title>Koha &rsaquo; Acquisitions &rsaquo; Order details</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body id="acq_showorder" class="acq">
-  [% IF order %]
-    <table>
-      <tbody>
-        <tr>
-          <td>Creation date</td>
-          <td>[% order.entrydate %]</td>
-        </tr>
-        <tr>
-          <td>Creator</td>
-          <td>[% creator.firstname %] [% creator.surname %]</td>
-        </tr>
-        <tr>
-          <td>Claims count</td>
-          <td>[% order.claims_count %]</td>
-        </tr>
-        <tr>
-          <td>Last claim date</td>
-          <td>[% order.claimed_date %]</td>
-        </tr>
-      </tbody>
-    </table>
-  [% ELSE %]
-    No order found.
-  [% END %]
+    <div id="main">
+        [% IF order %]
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <span class="label">Creation date: </span>
+                        [% order.entrydate %]
+                    </li>
+                    <li>
+                        <span class="label">Creator: </span>
+                        [% creator.firstname %] [% creator.surname %]
+                    </li>
+                    <li>
+                        <span class="label">Claims count: </span>
+                        [% order.claims_count %]
+                    </li>
+                    <li>
+                        <span class="label">Last claim date: </span>
+                        [% order.claimed_date %]
+                    </li>
+            </ol>
+          </fieldset>
+        [% ELSE %]
+            No order found
+        [% END %]
+    </div>
 </body>
 </html>
