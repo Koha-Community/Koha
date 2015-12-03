@@ -45,7 +45,7 @@ can_ok(
       GetBranchesInCategory
       ModBranchCategoryInfo
       mybranch
-      GetBranchesCount)
+      )
 );
 
 
@@ -59,7 +59,7 @@ $dbh->do('DELETE FROM branchcategories');
 
 # Start test
 
-my $count = GetBranchesCount();
+my $count = Koha::Libraries->search->count;
 like( $count, '/^\d+$/', "the count is a number" );
 
 #add 2 branches
@@ -111,10 +111,10 @@ is( ModBranch($b2), undef, 'the field add is missing' );
 
 $b2->{add} = 1;
 ModBranch($b2);
-is( GetBranchesCount(), $count + 2, "two branches added" );
+is( Koha::Libraries->search->count, $count + 2, "two branches added" );
 
 is( Koha::Libraries->find( $b2->{branchcode} )->delete, 1,          "One row affected" );
-is( GetBranchesCount(),             $count + 1, "branch BRB deleted" );
+is( Koha::Libraries->search->count,             $count + 1, "branch BRB deleted" );
 
 #Test GetBranchName
 is( GetBranchName( $b1->{branchcode} ),
@@ -129,7 +129,7 @@ is_deeply( $branchdetail, $b1, 'branchdetail is right' );
 #Test Getbranches
 my $branches = GetBranches();
 is( scalar( keys %$branches ),
-    GetBranchesCount(), "GetBranches returns the right number of branches" );
+    Koha::Libraries->search->count, "GetBranches returns the right number of branches" );
 
 #Test ModBranch
 
@@ -156,7 +156,7 @@ $b1 = {
 };
 
 ModBranch($b1);
-is( GetBranchesCount(), $count + 1,
+is( Koha::Libraries->search->count, $count + 1,
     "A branch has been modified, no new branch added" );
 $branchdetail = GetBranchDetail( $b1->{branchcode} );
 $b1->{issuing} = undef;
@@ -211,7 +211,7 @@ is( Koha::LibraryCategories->search->count, $count_cat + 2, "Category CAT 2 dele
 
 $b2->{CAT1} = 1;
 ModBranch($b2);
-is( GetBranchesCount(), $count + 2, 'BRB added' );
+is( Koha::Libraries->search->count, $count + 2, 'BRB added' );
 
 #Test GetBranchInfo
 my $b1info = GetBranchInfo( $b1->{branchcode} );
@@ -297,7 +297,7 @@ is_deeply( $brCat1, \@b, 'CAT1 has branch BRB and BRC' );
 
 #Test GetBranchesLoop
 my $loop = GetBranchesLoop;
-is( scalar(@$loop), GetBranchesCount(), 'There is the right number of branches' );
+is( scalar(@$loop), Koha::Libraries->search->count, 'There is the right number of branches' );
 
 # End transaction
 $dbh->rollback;

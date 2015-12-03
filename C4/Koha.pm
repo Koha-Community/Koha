@@ -24,9 +24,10 @@ use strict;
 #use warnings; FIXME - Bug 2505
 
 use C4::Context;
-use C4::Branch qw(GetBranchesCount);
+use C4::Branch; # Can be removed?
 use Koha::Cache;
 use Koha::DateUtils qw(dt_from_string);
+use Koha::Libraries;
 use DateTime::Format::MySQL;
 use Business::ISBN;
 use autouse 'Data::cselectall_arrayref' => qw(Dumper);
@@ -794,7 +795,7 @@ sub getFacets {
             ];
 
             unless ( C4::Context->preference("singleBranchMode")
-                || GetBranchesCount() == 1 )
+                || Koha::Libraries->search->count == 1 )
             {
                 my $DisplayLibraryFacets = C4::Context->preference('DisplayLibraryFacets');
                 if (   $DisplayLibraryFacets eq 'both'
@@ -876,7 +877,7 @@ sub getFacets {
             ];
 
             unless ( C4::Context->preference("singleBranchMode")
-                || GetBranchesCount() == 1 )
+                || Koha::Libraries->search->count == 1 )
             {
                 my $DisplayLibraryFacets = C4::Context->preference('DisplayLibraryFacets');
                 if (   $DisplayLibraryFacets eq 'both'

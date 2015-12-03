@@ -40,7 +40,6 @@ BEGIN {
 		&GetBranchesInCategory
 		&ModBranchCategoryInfo
 		&mybranch
-		&GetBranchesCount
 	);
     @EXPORT_OK = qw( &onlymine &mybranch );
 }
@@ -403,15 +402,6 @@ sub ModBranchCategoryInfo {
         $sth->execute($data->{'categoryname'}, $data->{'codedescription'},$data->{'categorytype'},$data->{'show_in_pulldown'},uc( $data->{'categorycode'} ) );
     }
 }
-sub GetBranchesCount {
-    my $dbh = C4::Context->dbh();
-    my $query = "SELECT COUNT(*) AS branches_count FROM branches";
-    my $sth = $dbh->prepare( $query );
-    $sth->execute();
-    my $row = $sth->fetchrow_hashref();
-    return $row->{'branches_count'};
-}
-
 1;
 __END__
 
