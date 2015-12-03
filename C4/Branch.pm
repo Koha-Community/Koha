@@ -37,7 +37,6 @@ BEGIN {
 		&get_branchinfos_of
 		&ModBranch
 		&GetBranchInfo
-		&GetCategoryTypes
 		&GetBranchesInCategory
 		&ModBranchCategoryInfo
 		&mybranch
@@ -281,24 +280,6 @@ sub ModBranch {
           );
         $sth->execute( $branchcode, $cat );
     }
-}
-
-=head2 GetCategoryTypes
-
-$categorytypes = GetCategoryTypes;
-returns a list of category types.
-Currently these types are HARDCODED.
-type: 'searchdomain' defines a group of agencies that the calling library may search in.
-Other usage of agency categories falls under type: 'properties'.
-	to allow for other uses of categories.
-The searchdomain bit may be better implemented as a separate module, but
-the categories were already here, and minimally used.
-
-=cut
-
-	#TODO  manage category types.  rename possibly to 'agency domains' ? as borrowergroups are called categories.
-sub GetCategoryTypes {
-	return ( 'searchdomain','properties');
 }
 
 =head2 GetBranch

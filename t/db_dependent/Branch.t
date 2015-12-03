@@ -21,7 +21,7 @@ use Modern::Perl;
 use C4::Context;
 use Data::Dumper;
 
-use Test::More tests => 24;
+use Test::More tests => 23;
 
 use C4::Branch;
 use Koha::Libraries;
@@ -42,7 +42,6 @@ can_ok(
       get_branchinfos_of
       ModBranch
       GetBranchInfo
-      GetCategoryTypes
       GetBranchesInCategory
       ModBranchCategoryInfo
       mybranch
@@ -292,10 +291,6 @@ ModBranch($b3);
 $brCat1 = GetBranchesInCategory( $cat1->{categorycode} );
 push( @b, $b3->{branchcode} );
 is_deeply( $brCat1, \@b, 'CAT1 has branch BRB and BRC' );
-
-#Test GetCategoryTypes
-my @category_types = GetCategoryTypes();
-is_deeply(\@category_types, [ 'searchdomain', 'properties' ], 'received expected library category types');
 
 #TODO later: test mybranchine and onlymine
 # Actually we cannot mock C4::Context->userenv in unit tests
