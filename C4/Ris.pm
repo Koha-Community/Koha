@@ -614,7 +614,7 @@ sub print_isbn {
 	    warn("truncated isbn") if $marcprint;
 	}
 
-	my $isbn = substr($isbnfield->subfield('a'), 0, 10);
+    my $isbn = $isbnfield->subfield('a');
 	print "SN  - ", &charconv($isbn), "\r\n";
     }
 }
