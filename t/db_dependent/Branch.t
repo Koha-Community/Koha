@@ -24,6 +24,8 @@ use Data::Dumper;
 use Test::More tests => 36;
 
 use C4::Branch;
+use Koha::Libraries;
+use Koha::LibraryCategories;
 
 BEGIN {
     use FindBin;
@@ -46,8 +48,6 @@ can_ok(
       GetBranchCategories
       GetBranchesInCategory
       ModBranchCategoryInfo
-      DelBranch
-      DelBranchCategory
       CheckCategoryUnique
       mybranch
       GetBranchesCount)
@@ -118,9 +118,7 @@ $b2->{add} = 1;
 ModBranch($b2);
 is( GetBranchesCount(), $count + 2, "two branches added" );
 
-#Test DelBranch
-
-is( DelBranch( $b2->{branchcode} ), 1,          "One row affected" );
+is( Koha::Libraries->find( $b2->{branchcode} )->delete, 1,          "One row affected" );
 is( GetBranchesCount(),             $count + 1, "branch BRB deleted" );
 
 #Test GetBranchName
@@ -220,8 +218,7 @@ is_deeply( $cat1detail, $cat1, 'CAT1 details are right' );
 my $category = GetBranchCategory('LIBCATCODE');
 is_deeply($category, \%new_category, 'fetched newly added library category');
 
-#Test DelBranchCategory
-my $del = DelBranchCategory( $cat2->{categorycode} );
+my $del = Koha::LibraryCategories->find( $cat2->{categorycode} )->delete;
 is( $del, 1, 'One row affected' );
 
 $categories = GetBranchCategories();

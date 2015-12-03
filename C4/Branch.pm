@@ -42,8 +42,6 @@ BEGIN {
 		&GetBranchCategories
 		&GetBranchesInCategory
 		&ModBranchCategoryInfo
-		&DelBranch
-		&DelBranchCategory
 	        &CheckCategoryUnique
 		&mybranch
 		&GetBranchesCount
@@ -472,19 +470,6 @@ sub GetBranchInfo {
     return \@results;
 }
 
-=head2 DelBranch
-
-&DelBranch($branchcode);
-
-=cut
-
-sub DelBranch {
-    my ($branchcode) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("delete from branches where branchcode = ?");
-    $sth->execute($branchcode);
-}
-
 =head2 ModBranchCategoryInfo
 
 &ModBranchCategoryInfo($data);
@@ -526,20 +511,6 @@ sub CheckCategoryUnique {
     else {
 	return 1;
     }
-}
-
-    
-=head2 DeleteBranchCategory
-
-DeleteBranchCategory($categorycode);
-
-=cut
-
-sub DelBranchCategory {
-    my ($categorycode) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("delete from branchcategories where categorycode = ?");
-    $sth->execute($categorycode);
 }
 
 =head2 CheckBranchCategorycode
