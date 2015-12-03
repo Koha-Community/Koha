@@ -20,6 +20,7 @@ use strict;
 #use warnings; FIXME - Bug 2505
 require Exporter;
 use C4::Context;
+use Koha::LibraryCategories;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -37,7 +38,6 @@ BEGIN {
 		&ModBranch
 		&GetBranchInfo
 		&GetCategoryTypes
-		&GetBranchCategories
 		&GetBranchesInCategory
 		&ModBranchCategoryInfo
 		&mybranch
@@ -243,9 +243,9 @@ sub ModBranch {
     }
     # sort out the categories....
     my @checkedcats;
-    my $cats = GetBranchCategories();
-    foreach my $cat (@$cats) {
-        my $code = $cat->{'categorycode'};
+    my @cats = Koha::LibraryCategories->search;
+    foreach my $cat (@cats) {
+        my $code = $cat->categorycode;
         if ( $data->{$code} ) {
             push( @checkedcats, $code );
         }
@@ -281,48 +281,6 @@ sub ModBranch {
           );
         $sth->execute( $branchcode, $cat );
     }
-}
-
-=head2 GetBranchCategories
-
-  my $categories = GetBranchCategories($categorytype,$show_in_pulldown,$selected_in_pulldown);
-
-Returns a list ref of anon hashrefs with keys eq columns of branchcategories table,
-i.e. categorydescription, categorytype, categoryname.
-
-=cut
-
-sub GetBranchCategories {
-    my ( $categorytype, $show_in_pulldown, $selected_in_pulldown ) = @_;
-    my $dbh = C4::Context->dbh();
-
-    my $query = "SELECT * FROM branchcategories ";
-
-    my ( @where, @bind );
-    if ( $categorytype ) {
-        push @where, " categorytype = ? ";
-        push @bind, $categorytype;
-    }
-
-    if ( defined( $show_in_pulldown ) ) {
-        push( @where, " show_in_pulldown = ? " );
-        push( @bind, $show_in_pulldown );
-    }
-
-    $query .= " WHERE " . join(" AND ", @where) if(@where);
-    $query .= " ORDER BY categorytype, categorycode";
-    my $sth=$dbh->prepare( $query);
-    $sth->execute(@bind);
-
-    my $branchcats = $sth->fetchall_arrayref({});
-
-    if ( $selected_in_pulldown ) {
-        foreach my $bc ( @$branchcats ) {
-            $bc->{selected} = 1 if $bc->{categorycode} eq $selected_in_pulldown;
-        }
-    }
-
-    return $branchcats;
 }
 
 =head2 GetCategoryTypes

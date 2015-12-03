@@ -32,6 +32,7 @@ use C4::Branch;       # GetBranches
 use C4::Search::History;
 use Koha;
 use Koha::AuthUtils qw(hash_password);
+use Koha::LibraryCategories;
 use POSIX qw/strftime/;
 use List::MoreUtils qw/ any /;
 use Encode qw( encode is_utf8);
@@ -501,12 +502,14 @@ sub get_template_and_user {
             $opac_name = C4::Context->userenv->{'branch'};
         }
 
+        my $library_categories = Koha::LibraryCategories->search({categorytype => 'searchdomain', show_in_pulldown => 1}, { order_by => ['categorytype', 'categorycode']});
         $template->param(
             OpacAdditionalStylesheet                   => C4::Context->preference("OpacAdditionalStylesheet"),
             AnonSuggestions                       => "" . C4::Context->preference("AnonSuggestions"),
             AuthorisedValueImages                 => C4::Context->preference("AuthorisedValueImages"),
             BranchesLoop                          => GetBranchesLoop($opac_name),
-            BranchCategoriesLoop                  => GetBranchCategories( 'searchdomain', 1, $opac_name ),
+            BranchCategoriesLoop                  => $library_categories,
+            opac_name                             => $opac_name,
             LibraryName                           => "" . C4::Context->preference("LibraryName"),
             LibraryNameTitle                      => "" . $LibraryNameTitle,
             LoginBranchname                       => C4::Context->userenv ? C4::Context->userenv->{"branchname"} : "",

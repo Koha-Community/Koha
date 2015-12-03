@@ -21,7 +21,7 @@ use Modern::Perl;
 use C4::Context;
 use Data::Dumper;
 
-use Test::More tests => 26;
+use Test::More tests => 24;
 
 use C4::Branch;
 use Koha::Libraries;
@@ -43,7 +43,6 @@ can_ok(
       ModBranch
       GetBranchInfo
       GetCategoryTypes
-      GetBranchCategories
       GetBranchesInCategory
       ModBranchCategoryInfo
       mybranch
@@ -165,8 +164,7 @@ $b1->{issuing} = undef;
 is_deeply( $branchdetail, $b1 , "GetBranchDetail gives the details of BRA");
 
 #Test categories
-my $categories = GetBranchCategories();
-my $count_cat  = scalar( @$categories );
+my $count_cat  = Koha::LibraryCategories->search->count;
 
 my $cat1 = {
     add              => 1,
@@ -201,18 +199,16 @@ ModBranchCategoryInfo({
 ModBranchCategoryInfo($cat1);
 ModBranchCategoryInfo($cat2);
 
-$categories = GetBranchCategories();
-is( scalar( @$categories ), $count_cat + 3, "Two categories added" );
+my $categories = Koha::LibraryCategories->search;
+is( $categories->count, $count_cat + 3, "Two categories added" );
 delete $cat1->{add};
 delete $cat2->{add};
 delete $new_category{add};
-is_deeply($categories, [ $cat1,$cat2,\%new_category ], 'retrieve all expected library categories (bug 10515)');
 
 my $del = Koha::LibraryCategories->find( $cat2->{categorycode} )->delete;
 is( $del, 1, 'One row affected' );
 
-$categories = GetBranchCategories();
-is( scalar( @$categories ), $count_cat + 2, "Category  CAT2 deleted" );
+is( Koha::LibraryCategories->search->count, $count_cat + 2, "Category CAT 2 deleted" );
 
 $b2->{CAT1} = 1;
 ModBranch($b2);
@@ -232,8 +228,7 @@ $b2->{categories} = \@cat;
 is_deeply( @$b2info[0], $b2, 'BRB has the category CAT1' );
 
 ModBranchCategoryInfo({add => 1,%$cat2});
-$categories = GetBranchCategories();
-is( scalar( @$categories ), $count_cat + 3, "Two categories added" );
+is( Koha::LibraryCategories->search->count, $count_cat + 3, "Two catgories added" );
 $b2 = {
     branchcode     => 'BRB',
     branchname     => 'BranchB',
@@ -301,9 +296,6 @@ is_deeply( $brCat1, \@b, 'CAT1 has branch BRB and BRC' );
 #Test GetCategoryTypes
 my @category_types = GetCategoryTypes();
 is_deeply(\@category_types, [ 'searchdomain', 'properties' ], 'received expected library category types');
-
-$categories = GetBranchCategories(undef, undef, 'LIBCATCODE');
-is_deeply($categories, [ {%$cat1}, {%$cat2},{ %new_category, selected => 1 } ], 'retrieve expected, eselected library category (bug 10515)');
 
 #TODO later: test mybranchine and onlymine
 # Actually we cannot mock C4::Context->userenv in unit tests

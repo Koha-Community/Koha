@@ -152,6 +152,7 @@ use POSIX qw(ceil floor);
 use C4::Branch; # GetBranches
 use C4::Search::History;
 
+use Koha::LibraryCategories;
 use Koha::Virtualshelves;
 
 use URI::Escape;
@@ -243,7 +244,7 @@ my @branch_loop = map {
     $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname}
 } keys %$branches;
 
-my $categories = GetBranchCategories('searchdomain');
+my $categories = Koha::LibraryCategories->search( { categorytype => 'searchdomain' }, { order_by => [ 'categorytype', 'categorycode' ] } );
 
 $template->param(branchloop => \@branch_loop, searchdomainloop => $categories);
 

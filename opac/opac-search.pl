@@ -43,6 +43,8 @@ use C4::SocialData;
 use C4::Ratings;
 use C4::External::OverDrive;
 
+use Koha::LibraryCategories;
+
 use POSIX qw(ceil floor strftime);
 use URI::Escape;
 use JSON qw/decode_json encode_json/;
@@ -201,9 +203,8 @@ if ($cgi->cookie("search_path_code")) {
 }
 
 my $branches = GetBranches();   # used later in *getRecords, probably should be internalized by those functions after caching in C4::Branch is established
-$template->param(
-    searchdomainloop => GetBranchCategories('searchdomain'),
-);
+my $library_categories = Koha::LibraryCategories->search( { categorytype => 'searchdomain' }, { order_by => [ 'categorytype', 'categorycode' ] } );
+$template->param( searchdomainloop => $library_categories );
 
 # load the language limits (for search)
 my $languages_limit_loop = getLanguages($lang, 1);

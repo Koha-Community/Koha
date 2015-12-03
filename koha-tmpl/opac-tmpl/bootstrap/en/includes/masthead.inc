@@ -234,7 +234,7 @@
                                                 </optgroup>
                                                 <optgroup label="Groups">
                                                     [% FOREACH bc IN BranchCategoriesLoop %]
-                                                        [% IF ( bc.selected ) %]
+                                                        [% IF bc.categorycode == opac_name %]
                                                             <option selected="selected" value="multibranchlimit-[% bc.categorycode %]">[% bc.categoryname %]</option>
                                                         [% ELSE %]
                                                             <option value="multibranchlimit-[% bc.categorycode %]">[% bc.categoryname %]</option>
