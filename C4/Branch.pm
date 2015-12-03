@@ -38,7 +38,6 @@ BEGIN {
 		&ModBranch
 		&GetBranchInfo
 		&GetBranchesInCategory
-		&ModBranchCategoryInfo
 		&mybranch
 	);
     @EXPORT_OK = qw( &onlymine &mybranch );
@@ -381,27 +380,6 @@ sub GetBranchInfo {
     return \@results;
 }
 
-=head2 ModBranchCategoryInfo
-
-&ModBranchCategoryInfo($data);
-sets the data from the editbranch form, and writes to the database...
-
-=cut
-
-sub ModBranchCategoryInfo {
-    my ($data) = @_;
-    my $dbh    = C4::Context->dbh;
-    if ($data->{'add'}){
-	# we are doing an insert
-  my $sth   = $dbh->prepare("INSERT INTO branchcategories (categorycode,categoryname,codedescription,categorytype,show_in_pulldown) VALUES (?,?,?,?,?)");
-        $sth->execute(uc( $data->{'categorycode'} ),$data->{'categoryname'}, $data->{'codedescription'},$data->{'categorytype'},$data->{'show_in_pulldown'} );
-    }
-    else {
-	# modifying
-        my $sth = $dbh->prepare("UPDATE branchcategories SET categoryname=?,codedescription=?,categorytype=?,show_in_pulldown=? WHERE categorycode=?");
-        $sth->execute($data->{'categoryname'}, $data->{'codedescription'},$data->{'categorytype'},$data->{'show_in_pulldown'},uc( $data->{'categorycode'} ) );
-    }
-}
 1;
 __END__
 

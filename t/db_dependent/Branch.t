@@ -43,7 +43,6 @@ can_ok(
       ModBranch
       GetBranchInfo
       GetBranchesInCategory
-      ModBranchCategoryInfo
       mybranch
       )
 );
@@ -166,7 +165,6 @@ is_deeply( $branchdetail, $b1 , "GetBranchDetail gives the details of BRA");
 my $count_cat  = Koha::LibraryCategories->search->count;
 
 my $cat1 = {
-    add              => 1,
     categorycode     => 'CAT1',
     categoryname     => 'catname1',
     codedescription  => 'catdesc1',
@@ -174,7 +172,6 @@ my $cat1 = {
     show_in_pulldown => 1
 };
 my $cat2 = {
-    add              => 1,
     categorycode     => 'CAT2',
     categoryname     => 'catname2',
     categorytype     => 'catype2',
@@ -190,19 +187,12 @@ my %new_category = (
     show_in_pulldown => 1,
 );
 
-ModBranchCategoryInfo({
-    add => 1,
-    %new_category,
-});
-
-ModBranchCategoryInfo($cat1);
-ModBranchCategoryInfo($cat2);
+Koha::LibraryCategory->new(\%new_category)->store;
+Koha::LibraryCategory->new($cat1)->store;
+Koha::LibraryCategory->new($cat2)->store;
 
 my $categories = Koha::LibraryCategories->search;
 is( $categories->count, $count_cat + 3, "Two categories added" );
-delete $cat1->{add};
-delete $cat2->{add};
-delete $new_category{add};
 
 my $del = Koha::LibraryCategories->find( $cat2->{categorycode} )->delete;
 is( $del, 1, 'One row affected' );
@@ -226,8 +216,8 @@ $b2->{issuing}    = undef;
 $b2->{categories} = \@cat;
 is_deeply( @$b2info[0], $b2, 'BRB has the category CAT1' );
 
-ModBranchCategoryInfo({add => 1,%$cat2});
-is( Koha::LibraryCategories->search->count, $count_cat + 3, "Two catgories added" );
+Koha::LibraryCategory->new($cat2)->store;
+is( Koha::LibraryCategories->search->count, $count_cat + 3, "Two categories added" );
 $b2 = {
     branchcode     => 'BRB',
     branchname     => 'BranchB',
