@@ -21,7 +21,7 @@ use Modern::Perl;
 use C4::Context;
 use Data::Dumper;
 
-use Test::More tests => 34;
+use Test::More tests => 30;
 
 use C4::Branch;
 use Koha::Libraries;
@@ -42,7 +42,6 @@ can_ok(
       GetBranchDetail
       get_branchinfos_of
       ModBranch
-      CheckBranchCategorycode
       GetBranchInfo
       GetCategoryTypes
       GetBranchCategories
@@ -229,19 +228,9 @@ is( $cat2detail, undef, 'CAT2 doesnt exist' );
 $category = GetBranchCategory();
 is($category, undef, 'retrieve library category only if code is supplied (bug 10515)');
 
-#Test CheckBranchCategoryCode
-my $check1 = CheckBranchCategorycode( $cat1->{categorycode} );
-my $check2 = CheckBranchCategorycode( $cat2->{categorycode} );
-like( $check1, '/^\d+$/', "CheckBranchCategorycode returns a number" );
-
 $b2->{CAT1} = 1;
 ModBranch($b2);
 is( GetBranchesCount(), $count + 2, 'BRB added' );
-is(
-    CheckBranchCategorycode( $cat1->{categorycode} ),
-    $check1 + 1,
-    'BRB added to CAT1'
-);
 
 #Test GetBranchInfo
 my $b1info = GetBranchInfo( $b1->{branchcode} );
@@ -284,11 +273,6 @@ $b2 = {
 };
 ModBranch($b2);
 $b2info = GetBranchInfo( $b2->{branchcode} );
-is(
-    CheckBranchCategorycode( $cat2->{categorycode} ),
-    $check2 + 1,
-    'BRB added to CAT2'
-);
 push( @cat, $cat2->{categorycode} );
 delete $b2->{CAT1};
 delete $b2->{CAT2};
@@ -327,11 +311,6 @@ ModBranch($b3);
 $brCat1 = GetBranchesInCategory( $cat1->{categorycode} );
 push( @b, $b3->{branchcode} );
 is_deeply( $brCat1, \@b, 'CAT1 has branch BRB and BRC' );
-is(
-    CheckBranchCategorycode( $cat1->{categorycode} ),
-    $check1 + 2,
-    'BRC has been added to CAT1'
-);
 
 #Test GetCategoryTypes
 my @category_types = GetCategoryTypes();

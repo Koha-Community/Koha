@@ -36,7 +36,6 @@ BEGIN {
 		&GetBranchDetail
 		&get_branchinfos_of
 		&ModBranch
-		&CheckBranchCategorycode
 		&GetBranchInfo
 		&GetCategoryTypes
 		&GetBranchCategories
@@ -490,26 +489,6 @@ sub ModBranchCategoryInfo {
         $sth->execute($data->{'categoryname'}, $data->{'codedescription'},$data->{'categorytype'},$data->{'show_in_pulldown'},uc( $data->{'categorycode'} ) );
     }
 }
-
-=head2 CheckBranchCategorycode
-
-$number_rows_affected = CheckBranchCategorycode($categorycode);
-
-=cut
-
-sub CheckBranchCategorycode {
-
-    # check to see if the branchcode is being used in the database somewhere....
-    my ($categorycode) = @_;
-    my $dbh            = C4::Context->dbh;
-    my $sth            =
-      $dbh->prepare(
-        "select count(*) from branchrelations where categorycode=?");
-    $sth->execute($categorycode);
-    my ($total) = $sth->fetchrow_array;
-    return $total;
-}
-
 sub GetBranchesCount {
     my $dbh = C4::Context->dbh();
     my $query = "SELECT COUNT(*) AS branches_count FROM branches";
