@@ -21,7 +21,7 @@ use Modern::Perl;
 use C4::Context;
 use Data::Dumper;
 
-use Test::More tests => 30;
+use Test::More tests => 26;
 
 use C4::Branch;
 use Koha::Libraries;
@@ -34,7 +34,6 @@ BEGIN {
 }
 can_ok(
     'C4::Branch', qw(
-      GetBranchCategory
       GetBranchName
       GetBranch
       GetBranches
@@ -209,24 +208,11 @@ delete $cat2->{add};
 delete $new_category{add};
 is_deeply($categories, [ $cat1,$cat2,\%new_category ], 'retrieve all expected library categories (bug 10515)');
 
-#test GetBranchCategory
-my $cat1detail = GetBranchCategory( $cat1->{categorycode} );
-delete $cat1->{add};
-is_deeply( $cat1detail, $cat1, 'CAT1 details are right' );
-my $category = GetBranchCategory('LIBCATCODE');
-is_deeply($category, \%new_category, 'fetched newly added library category');
-
 my $del = Koha::LibraryCategories->find( $cat2->{categorycode} )->delete;
 is( $del, 1, 'One row affected' );
 
 $categories = GetBranchCategories();
 is( scalar( @$categories ), $count_cat + 2, "Category  CAT2 deleted" );
-
-my $cat2detail = GetBranchCategory( $cat2->{categorycode} );
-is( $cat2detail, undef, 'CAT2 doesnt exist' );
-
-$category = GetBranchCategory();
-is($category, undef, 'retrieve library category only if code is supplied (bug 10515)');
 
 $b2->{CAT1} = 1;
 ModBranch($b2);

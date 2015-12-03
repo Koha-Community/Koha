@@ -28,7 +28,6 @@ BEGIN {
     $VERSION = 3.07.00.049;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
-		&GetBranchCategory
 		&GetBranchName
 		&GetBranch
 		&GetBranches
@@ -282,30 +281,6 @@ sub ModBranch {
           );
         $sth->execute( $branchcode, $cat );
     }
-}
-
-=head2 GetBranchCategory
-
-$results = GetBranchCategory($categorycode);
-
-C<$results> is an hashref
-
-=cut
-
-sub GetBranchCategory {
-    my ($catcode) = @_;
-    return unless $catcode;
-
-    my $dbh = C4::Context->dbh;
-    my $sth;
-
-    $sth = $dbh->prepare(q{
-        SELECT *
-        FROM branchcategories
-        WHERE categorycode = ?
-    });
-    $sth->execute( $catcode );
-    return $sth->fetchrow_hashref;
 }
 
 =head2 GetBranchCategories
