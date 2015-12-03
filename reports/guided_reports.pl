@@ -771,7 +771,7 @@ elsif ($phase eq 'Run this report'){
             unless ($sth) {
                 die "execute_query failed to return sth for report $report_id: $sql";
             } else {
-                my $headers= header_cell_loop($sth);
+                my $headers = header_cell_loop($sth);
                 $template->param(header_row => $headers);
                 while (my $row = $sth->fetchrow_arrayref()) {
                     my @cells = map { +{ cell => $_ } } @$row;
@@ -949,7 +949,7 @@ sub header_cell_values {
 
 # pass $sth, get back a TMPL_LOOP-able set of names for the column headers
 sub header_cell_loop {
-    my @headers = map { +{ cell => $_ } } header_cell_values (shift);
+    my @headers = map { +{ cell => decode('UTF-8',$_) } } header_cell_values (shift);
     return \@headers;
 }
 
