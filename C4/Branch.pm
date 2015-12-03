@@ -42,7 +42,6 @@ BEGIN {
 		&GetBranchCategories
 		&GetBranchesInCategory
 		&ModBranchCategoryInfo
-	        &CheckCategoryUnique
 		&mybranch
 		&GetBranchesCount
 	);
@@ -489,27 +488,6 @@ sub ModBranchCategoryInfo {
 	# modifying
         my $sth = $dbh->prepare("UPDATE branchcategories SET categoryname=?,codedescription=?,categorytype=?,show_in_pulldown=? WHERE categorycode=?");
         $sth->execute($data->{'categoryname'}, $data->{'codedescription'},$data->{'categorytype'},$data->{'show_in_pulldown'},uc( $data->{'categorycode'} ) );
-    }
-}
-
-=head2 CheckCategoryUnique
-
-if (CheckCategoryUnique($categorycode)){
-  # do something
-}
-
-=cut
-
-sub CheckCategoryUnique {
-    my $categorycode = shift;
-    my $dbh    = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT categorycode FROM branchcategories WHERE categorycode = ?");
-    $sth->execute(uc( $categorycode) );
-    if (my $data = $sth->fetchrow_hashref){
-	return 0;
-    }
-    else {
-	return 1;
     }
 }
 

@@ -21,7 +21,7 @@ use Modern::Perl;
 use C4::Context;
 use Data::Dumper;
 
-use Test::More tests => 36;
+use Test::More tests => 34;
 
 use C4::Branch;
 use Koha::Libraries;
@@ -48,7 +48,6 @@ can_ok(
       GetBranchCategories
       GetBranchesInCategory
       ModBranchCategoryInfo
-      CheckCategoryUnique
       mybranch
       GetBranchesCount)
 );
@@ -333,10 +332,6 @@ is(
     $check1 + 2,
     'BRC has been added to CAT1'
 );
-
-#Test CheckCategoryUnique
-is( CheckCategoryUnique('CAT2'),          0, 'CAT2 exists' );
-is( CheckCategoryUnique('CAT_NO_EXISTS'), 1, 'CAT_NO_EXISTS doesnt exist' );
 
 #Test GetCategoryTypes
 my @category_types = GetCategoryTypes();
