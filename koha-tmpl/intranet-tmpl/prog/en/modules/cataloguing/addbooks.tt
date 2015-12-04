@@ -1,7 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging</title>
-[% INCLUDE 'greybox.inc' %]
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript">
     //<![CDATA[
@@ -28,6 +27,20 @@
             $.cookie( 'catalogue_editor_[% USER_INFO.borrowernumber %]', 'advanced', { expires: 365, path: '/' } );
             return true;
         });
+
+        $(".previewData").on("click", function(e){
+            e.preventDefault();
+            var ltitle = $(this).text();
+            var page = $(this).attr("href");
+            $("#dataPreviewLabel").text(ltitle);
+            $("#dataPreview .modal-body").load(page + " div");
+            $('#dataPreview').modal({show:true});
+        });
+        $("#dataPreview").on("hidden", function(){
+            $("#dataPreviewLabel").html("");
+            $("#dataPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/loading-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+        });
+
      });
 
     /* this function open a popup to search on z3950 server.  */
@@ -186,7 +199,7 @@
                         [% IF ( resultsloo.notforloancount ) %] Not for loan ([% resultsloo.notforloancount %])[% END %]
                     </span>
                 </td>
-                    <td> <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% resultsloo.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% resultsloo.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">Card</a>
+                    <td> <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% resultsloo.biblionumber %]" class="previewData">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% resultsloo.biblionumber %]" class="previewData">Card</a>
                 </td>
                 [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<td><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% resultsloo.biblionumber %]">Edit biblio</a></td>[% END %]
                 [% IF ( CAN_user_editcatalogue_edit_items ) %]<td><a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% resultsloo.biblionumber %]">Add/Edit items</a></td>[% END %]
@@ -229,7 +242,7 @@
                 <td>[% breeding_loo.copyrightdate %]</td>
                 <td>[% breeding_loo.edition %]</td>
                 <td>[% breeding_loo.file %]</td>
-                <td> <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.id %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.id %]" title="MARC" rel="gb_page_center[600,500]">Card</a>
+                <td> <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.id %]" class="previewData">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.id %]" class="previewData">Card</a>
                     </td>
                 [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<td>
                     <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?breedingid=[% breeding_loo.id %]">Add biblio</a>
@@ -242,6 +255,20 @@
     [% END %]
 </div>
 [% END %]
+
+<div id="dataPreview" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="dataPreviewLabel">Preview</h3>
+    </div>
+    <div class="modal-body">
+        <div id="loading"> <img src="[% interface %]/[% theme %]/img/loading-small.gif" alt="" /> Loading </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+</div>
+
 </div>
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]
