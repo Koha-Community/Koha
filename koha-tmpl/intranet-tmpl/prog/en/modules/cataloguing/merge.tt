@@ -2,7 +2,6 @@
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; Merging records</title>
-[% INCLUDE 'greybox.inc' %]
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/merge-record.js"></script>
 [% INCLUDE 'merge-record-strings.inc' %]
@@ -10,6 +9,7 @@
 div.record ul, div.record li { float:none; display:block; }
 div#result { margin-top: 1em; }
 /* We use this style "against" the li ui-tabs-nav style automatically applied */
+#dataPreview { width : 80%; margin-left : -40%; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }
 </style>
 <script type="text/javascript">
 //<![CDATA[
@@ -18,6 +18,20 @@ div#result { margin-top: 1em; }
     function changeFramework(fw) {
         $("#frameworkcode").val(fw);
     }
+    $(document).ready(function(){
+            $(".previewData").on("click", function(e){
+            e.preventDefault();
+            var ltitle = $(this).text();
+            var page = $(this).attr("href");
+            $("#dataPreviewLabel").text(ltitle);
+            $("#dataPreview .modal-body").load(page + " div");
+            $('#dataPreview').modal({show:true});
+        });
+        $("#dataPreview").on("hidden", function(){
+            $("#dataPreviewLabel").html("");
+            $("#dataPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/loading-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+        });
+    });
   [% ELSE %]
     function check_mandatory () {
         var missing = {
@@ -106,7 +120,6 @@ $(document).ready(function(){
 
   [% END %]
 [% END %]
-
 //]]>
 </script>
 </head>
@@ -201,7 +214,7 @@ $(document).ready(function(){
                     [% FOREACH subtitle IN record.subtitles %]
                         [% subtitle.subfield %]
                     [% END %]
-                    (<a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% record.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">[% record.biblionumber %]</a>)
+                    ([% record.biblionumber %]) <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% record.biblionumber %]" class="previewData">View MARC</a>
                 </label>
             </li>
         [% END %]
@@ -233,6 +246,20 @@ $(document).ready(function(){
     </fieldset>
     </fieldset>
 </form>
+
+<div id="dataPreview" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="dataPreviewLabel">Preview</h3>
+    </div>
+    <div class="modal-body">
+        <div id="loading"> <img src="[% interface %]/[% theme %]/img/loading-small.gif" alt="" /> Loading </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+</div>
+
 [% ELSE %]
 [% IF ( errors.size ) %]
     <div class="dialog alert">
