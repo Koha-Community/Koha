@@ -85,7 +85,7 @@ sub get_suggestions {
     my @results;
     foreach my $index (@indexes) {
         my $thissearch = $search;
-        $thissearch = "$index=$thissearch"
+        $thissearch = "$index:$thissearch"
           unless ( $thissearch =~ s/OP!/$index=/g );
         $template->{VARS}->{index} = $index;
         my $label = $template->output;
