@@ -94,7 +94,7 @@ sub get_suggestions {
     foreach my $auth (@$searchresults) {
         push @results,
           {
-            'search'  => "an=$auth->{'authid'}",
+            'search'  => "an:$auth->{'authid'}",
             relevance => $count--,
             label     => $auth->{summary}->{authorized}->[0]->{heading}
           };
