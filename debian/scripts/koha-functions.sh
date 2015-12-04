@@ -84,6 +84,17 @@ is_email_enabled()
     fi
 }
 
+is_letsencrypt_enabled()
+{
+    local instancename=$1
+
+    if [ -e /var/lib/koha/$instancename/letsencrypt.enabled ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 is_sip_enabled()
 {
     local instancename=$1

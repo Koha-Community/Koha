@@ -36,24 +36,27 @@ show_instances()
     for instance in $( get_instances ); do
         case $show in
           "all")
-              if instance_filter_email $instance $show_email && \
-                 instance_filter_plack $instance $show_plack && \
-                 instance_filter_sip   $instance $show_sip; then
+              if instance_filter_email       $instance $show_email && \
+                 instance_filter_letsencrypt $instance $show_letsencrypt && \
+                 instance_filter_plack       $instance $show_plack && \
+                 instance_filter_sip         $instance $show_sip; then
                     echo $instance
               fi ;;
           "enabled")
               if is_enabled $instance; then
-                  if instance_filter_email $instance $show_email && \
-                     instance_filter_plack $instance $show_plack && \
-                     instance_filter_sip   $instance $show_sip; then
+                  if instance_filter_email       $instance $show_email && \
+                     instance_filter_letsencrypt $instance $show_letsencrypt && \
+                     instance_filter_plack       $instance $show_plack && \
+                     instance_filter_sip         $instance $show_sip; then
                       echo $instance
                   fi
               fi ;;
           "disabled")
               if ! is_enabled $instance; then
-                  if instance_filter_email $instance $show_email && \
-                     instance_filter_plack $instance $show_plack && \
-                     instance_filter_sip   $instance $show_sip; then
+                  if instance_filter_email       $instance $show_email && \
+                     instance_filter_letsencrypt $instance $show_letsencrypt && \
+                     instance_filter_plack       $instance $show_plack && \
+                     instance_filter_sip         $instance $show_sip; then
                       echo $instance
                   fi
               fi ;;
@@ -106,6 +109,28 @@ instance_filter_plack()
     return 1
 }
 
+instance_filter_letsencrypt()
+{
+    local instancename=$1
+    local show_letsencrypt=$2;
+
+    case $show_letsencrypt in
+        "all")
+            return 0 ;;
+        "enabled")
+            if is_letsencrypt_enabled $instancename; then
+                return 0
+            fi ;;
+        "disabled")
+            if ! is_letsencrypt_enabled $instancename; then
+                return 0
+            fi ;;
+    esac
+
+    # Didn't match any criteria
+    return 1
+}
+
 instance_filter_email()
 {
     local instancename=$1
@@ -150,6 +175,17 @@ set_show_email()
     fi
 }
 
+set_show_letsencrypt()
+{
+    local letsencrypt_param=$1
+
+    if [ "$show_letsencrypt" = "all" ]; then
+        show_letsencrypt=$letsencrypt_param
+    else
+        die "Error: --letsencrypt and --noletsencrypt are mutually exclusive."
+    fi
+}
+
 set_show_plack()
 {
     local plack_param=$1
@@ -190,6 +226,8 @@ Options:
     --nosip         Show instances with SIP disabled
     --plack         Show instances with Plack enabled
     --noplack       Show instances with Plack disabled
+    --letsencrypt   Show instances with letsencrypt enabled
+    --noletsencrypt Show instances with letsencrypt disabled
     --help | -h     Show this help
 
 The filtering options can be combined, and you probably want to do this
@@ -201,23 +239,26 @@ show="all"
 show_email="all"
 show_sip="all"
 show_plack="all"
+show_letsencrypt="all"
 
-args=$(getopt -l help,enabled,disabled,email,noemail,sip,nosip,plack,noplack -o h -n $0 -- "$@")
+args=$(getopt -l help,enabled,disabled,email,noemail,sip,nosip,plack,noplack,letsencrypt,noletsencrypt -o h -n $0 -- "$@")
 set -- $args
 
 while [ ! -z "$1" ]
 do
     case "$1" in
-  -h|--help) usage; exit;;
-    --email) set_show_email "enabled" ;;
-  --noemail) set_show_email "disabled" ;;
-      --sip) set_show_sip "enabled" ;;
-    --nosip) set_show_sip "disabled" ;;
-    --plack) set_show_plack "enabled" ;;
-  --noplack) set_show_plack "disabled" ;;
-  --enabled) set_show "enabled" ;;
- --disabled) set_show "disabled" ;;
-          *) break;;
+      -h|--help) usage; exit;;
+        --email) set_show_email "enabled" ;;
+      --noemail) set_show_email "disabled" ;;
+          --sip) set_show_sip "enabled" ;;
+        --nosip) set_show_sip "disabled" ;;
+        --plack) set_show_plack "enabled" ;;
+      --noplack) set_show_plack "disabled" ;;
+  --letsencrypt) set_show_letsencrypt "enabled" ;;
+--noletsencrypt) set_show_letsencrypt "disabled" ;;
+      --enabled) set_show "enabled" ;;
+     --disabled) set_show "disabled" ;;
+              *) break;;
     esac
     shift
 done

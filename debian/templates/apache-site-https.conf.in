@@ -1,0 +1,70 @@
+# Koha instance __KOHASITE__ Apache config.
+
+# redirect http to https
+#<VirtualHost *:80> #nohttps
+#   ServerName __OPACSERVER__ #nohttps
+#   ServerAlias __INTRASERVER__ #nohttps
+#   RewriteEngine On #nohttps
+#   RewriteCond %{HTTPS} !=on #nohttps
+#   RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L] #nohttps
+#</VirtualHost> #nohttps
+
+# OPAC
+<VirtualHost *:80> #https
+#  SSLEngine on
+#  SSLProtocol +TLSv1.2 +TLSv1.1 +TLSv1
+#  SSLCompression off
+#  SSLHonorCipherOrder on
+#  SSLCipherSuite "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-SA-
+#  SSLCertificateKeyFile   /etc/letsencrypt/live/__OPACSERVER__/privkey.pem
+#  SSLCertificateFile      /etc/letsencrypt/live/__OPACSERVER__/cert.pem
+#  SSLCertificateChainFile /etc/letsencrypt/live/__OPACSERVER__/chain.pem
+
+  <IfVersion >= 2.4>
+   Define instance "__KOHASITE__"
+  </IfVersion>
+   Include /etc/koha/apache-shared.conf
+#  Include /etc/koha/apache-shared-disable.conf
+#  Include /etc/koha/apache-shared-opac-plack.conf
+   Include /etc/koha/apache-shared-opac.conf
+
+   ServerName __OPACSERVER__
+   SetEnv KOHA_CONF "/etc/koha/sites/__KOHASITE__/koha-conf.xml"
+   SetEnv MEMCACHED_SERVERS "__MEMCACHED_SERVERS__"
+   SetEnv MEMCACHED_NAMESPACE "__MEMCACHED_NAMESPACE__"
+   AssignUserID __UNIXUSER__ __UNIXGROUP__
+
+   ErrorLog    /var/log/koha/__KOHASITE__/opac-error.log
+#  TransferLog /var/log/koha/__KOHASITE__/opac-access.log
+#  RewriteLog  /var/log/koha/__KOHASITE__/opac-rewrite.log
+</VirtualHost>
+
+# Intranet
+<VirtualHost *:80> #https
+#  SSLEngine on
+#  SSLProtocol +TLSv1.2 +TLSv1.1 +TLSv1
+#  SSLCompression off
+#  SSLHonorCipherOrder on
+#  SSLCipherSuite "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES
+#  SSLCertificateKeyFile   /etc/letsencrypt/live/__OPACSERVER__/privkey.pem
+#  SSLCertificateFile      /etc/letsencrypt/live/__OPACSERVER__/cert.pem
+#  SSLCertificateChainFile /etc/letsencrypt/live/__OPACSERVER__/chain.pem
+
+  <IfVersion >= 2.4>
+   Define instance "__KOHASITE__"
+  </IfVersion>
+   Include /etc/koha/apache-shared.conf
+#  Include /etc/koha/apache-shared-disable.conf
+#  Include /etc/koha/apache-shared-intranet-plack.conf
+   Include /etc/koha/apache-shared-intranet.conf
+
+   ServerName __INTRASERVER__
+   SetEnv KOHA_CONF "/etc/koha/sites/__KOHASITE__/koha-conf.xml"
+   SetEnv MEMCACHED_SERVERS "__MEMCACHED_SERVERS__"
+   SetEnv MEMCACHED_NAMESPACE "__MEMCACHED_NAMESPACE__"
+   AssignUserID __UNIXUSER__ __UNIXGROUP__
+
+   ErrorLog    /var/log/koha/__KOHASITE__/intranet-error.log
+#  TransferLog /var/log/koha/__KOHASITE__/intranet-access.log
+#  RewriteLog  /var/log/koha/__KOHASITE__/intranet-rewrite.log
+</VirtualHost>

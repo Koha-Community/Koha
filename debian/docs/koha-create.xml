@@ -40,6 +40,7 @@
       <arg><option>--enable-sru</option></arg>
       <arg><option>--sru-port</option> port</arg>
       <arg><option>--upload-path</option> directory</arg>
+      <arg><option>--letsencrypt</option></arg>
       <arg><option>--help</option>|<option>-h</option></arg>
 
       <arg choice="req" rep="norepeat"><replaceable>instancename</replaceable></arg>
@@ -173,6 +174,13 @@
       <listitem>
         <para>Specify a <option>directory</option> for storing the permanently uploaded files of the instance.
               It defaults to <filename>/var/lib/koha/instance/uploads</filename>.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--letsencrypt</option></term>
+      <listitem>
+        <para>Set up a https-only website with letsencrypt certificates</para>
       </listitem>
     </varlistentry>
 

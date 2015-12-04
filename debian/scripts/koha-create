@@ -71,6 +71,7 @@ Options:
                             conjunction with --defaultsql and --populate-db.
   --upload-path dir         Set a user defined upload_path. It defaults to
                             /var/lib/koha/<instance>/uploads
+  --letsencrypt             Set up a https-only site with letsencrypt certificates
   --help,-h                 Show this help.
 
 Note: the instance name cannot be longer that 11 chars.
@@ -194,6 +195,20 @@ EOM
         die
     fi
 
+    # Check that mod_ssl is installed and enabled.
+    if [ "$CLO_LETSENCRYPT" = "yes" ]; then
+        if ! /usr/sbin/apachectl -M 2> /dev/null | grep -q 'ssl_module'; then
+            cat 1>&2  <<EOM
+
+Koha requires mod_ssl to be enabled within Apache in order to run with --letsencrypt.
+Typically this can be enabled with:
+
+    sudo a2enmod ssl
+EOM
+            die
+        fi
+    fi
+
 }
 
 set_biblios_indexing_mode()
@@ -313,6 +328,44 @@ enable_sru_server()
     fi
 }
 
+check_letsencrypt()
+{
+    if [ $(dpkg-query -W -f='${Status}' letsencrypt 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+        apt-cache show letsencrypt &>/dev/null
+        if [ $? -eq 0 ]; then
+                read -r -p "The letsencrypt package is not installed. Do it now?  [y/N] " response
+                if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+                    apt-get install -y letsencrypt
+                else
+                    die "You have to install letsencrypt to use the --letsencrypt parameter."
+                fi
+        else
+            echo "No installation candidate available for package letsencrypt."
+            read -r -p "If you have a symlink from /usr/bin/letsencrypt to letsencrypt-auto, it should work. [y/N] " response
+            if [[ ! $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+                die "You have to install letsencrypt to use the --letsencrypt parameter."
+            fi
+        fi
+    fi
+}
+
+letsencrypt_instance()
+{
+    # Get letsencrypt certificates
+    letsencrypt --agree-tos --renew-by-default --webroot --staging certonly \
+        -w /usr/share/koha/opac/htdocs/ -d $opacdomain -w /usr/share/koha/intranet/htdocs/ -d $intradomain
+    # enable all ssl settings (apache won't start with these before certs are present)
+    sed -i "s:^\s*#\(\s*SSL.*\)$:\1:" "/etc/apache2/sites-available/$name.conf"
+    # change port from 80 to 443. (apache won't start if it is 443 without certs present)
+    sed -i "s:^\s*\(<VirtualHost \*\:\)80> #https$:\1443>:" "/etc/apache2/sites-available/$name.conf"
+    # enable redirect from http to https on port 80
+    sed -i "s:^\s*#\(.*\)#nohttps$:\1:" "/etc/apache2/sites-available/$name.conf"
+    # make koha-list --letsencrypt aware of this instance # could be done by checking apache conf instead
+    touch /var/lib/koha/$name/letsencrypt.enabled
+    # restart apache with working certs
+    service apache2 restart
+}
+
 # Set defaults and read config file, if it exists.
 DOMAIN=""
 OPACPORT="80"
@@ -356,6 +409,8 @@ END_BIBLIOS_RETRIEVAL_INFO=""
 START_AUTHORITIES_RETRIEVAL_INFO=""
 END_AUTHORITIES_RETRIEVAL_INFO=""
 
+APACHE_CONFIGFILE=""
+
 if [ -e /etc/koha/koha-sites.conf ]
 then
     . /etc/koha/koha-sites.conf
@@ -363,7 +418,7 @@ fi
 
 [ $# -ge 1 ] && [ $# -le 16 ] || ( usage ; die "Error: wrong parameters" )
 
-TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,use-memcached,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,database:,adminuser:,memcached-servers:,memcached-prefix:,upload-path:, \
+TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,use-memcached,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,database:,adminuser:,memcached-servers:,memcached-prefix:,upload-path:,letsencrypt, \
      -n "$0" -- "$@"`
 
 # Note the quotes around `$TEMP': they are essential!
@@ -379,7 +434,7 @@ CLO_AUTHORITIES_INDEXING_MODE=""
 CLO_MEMCACHED_SERVERS=""
 CLO_MEMCACHED_PREFIX=""
 CLO_UPLOAD_PATH=""
-
+CLO_LETSENCRYPT=""
 
 while true ; do
     case "$1" in
@@ -421,6 +476,8 @@ while true ; do
             SRU_SERVER_PORT="$2" ; shift 2 ;;
         --upload-path)
             CLO_UPLOAD_PATH="$2" ; shift 2 ;;
+        --letsencrypt)
+            CLO_LETSENCRYPT="yes" ; shift ;;
         -h|--help)
             usage ; exit 0 ;;
         --)
@@ -516,6 +573,8 @@ check_apache_config
 opacdomain="$OPACPREFIX$name$OPACSUFFIX$DOMAIN"
 intradomain="$INTRAPREFIX$name$INTRASUFFIX$DOMAIN"
 
+# Check everything is ok with letsencrypt, die otherwise
+check_letsencrypt
 
 if [ -f $PASSWDFILE ] && [ `cat $PASSWDFILE | grep "^$name:"` ]
 then
@@ -600,8 +659,13 @@ FLUSH PRIVILEGES;
 eof
     fi #`
 
+    if [ "$CLO_LETSENCRYPT" = "yes" ]; then
+        APACHE_CONFIGFILE="apache-site-https.conf.in"
+    else
+        APACHE_CONFIGFILE="apache-site.conf.in"
+    fi
     # Generate and install Apache site-available file and log dir.
-    generate_config_file apache-site.conf.in \
+    generate_config_file $APACHE_CONFIGFILE \
         "/etc/apache2/sites-available/$name.conf"
     mkdir "/var/log/koha/$name"
     chown "$username:$username" "/var/log/koha/$name"
@@ -709,6 +773,11 @@ then
     if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
         # Start Indexer daemon
         koha-indexer --start "$name"
+    fi
+
+    if [ "$CLO_LETSENCRYPT" = "yes" ]; then
+        # Get letsencrypt certificates
+        letsencrypt_instance
     fi
 fi
 
