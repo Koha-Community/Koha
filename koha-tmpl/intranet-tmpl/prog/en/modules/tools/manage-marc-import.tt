@@ -90,7 +90,7 @@ $(document).ready(function(){
             [% END %]
 
             $('td:eq(1)', nRow).html(
-                '<a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=' + aData['import_record_id'] + '" class="previewMARC">' + aData['citation'] + '</a>'
+                '<a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=' + aData['import_record_id'] + '&viewas=html" class="previewMARC">' + aData['citation'] + '</a>'
             );
 
             $('td:eq(2)', nRow).html(
@@ -123,7 +123,7 @@ $(document).ready(function(){
             }
             if (aData['diff_url']){
                 $('td:eq(5)', nRow).html(
-                    '<a rel="gb_page_center[960,600]" href="'+aData['diff_url']+'">View</a>'
+                    '<a href="'+aData['diff_url']+'">View</a>'
                 );
             }
             $('td:eq(6)', nRow).html(
@@ -138,7 +138,7 @@ $(document).ready(function(){
         var ltitle = $(this).text();
         var page = $(this).attr("href");
         $("#marcPreviewLabel").text(ltitle);
-        $("#marcPreview .modal-body").load(page + " pre");
+        $("#marcPreview .modal-body").load(page + " table");
         $('#marcPreview').modal({show:true});
     });
     $("#marcPreview").on("hidden", function(){
