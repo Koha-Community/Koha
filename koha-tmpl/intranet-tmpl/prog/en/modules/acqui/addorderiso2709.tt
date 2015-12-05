@@ -7,8 +7,8 @@
  &rsaquo; Batch list
 [% END %]
 </title>
-[% INCLUDE 'greybox.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<style type="text/css">#dataPreview { width : 80%; margin-left : -40%; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }</style>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
@@ -139,6 +139,18 @@
             return disableUnchecked($(this));
         });
         $('#tabs').tabs();
+        $(".previewData").on("click", function(e){
+            e.preventDefault();
+            var ltitle = $(this).text();
+            var page = $(this).attr("href");
+            $("#dataPreviewLabel").text(ltitle);
+            $("#dataPreview .modal-body").load(page + " div");
+            $('#dataPreview').modal({show:true});
+        });
+        $("#dataPreview").on("hidden", function(){
+            $("#dataPreviewLabel").html("");
+            $("#dataPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/loading-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+        });
     });
 
     function disableUnchecked(form){
@@ -199,7 +211,7 @@
                               <span class="citation">[% biblio.citation %]</span>
                             </label>
                             <span class="links" style="font-weight: normal;">
-                              ( <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% biblio.import_record_id %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% biblio.import_record_id %]" title="Card" rel="gb_page_center[600,500]">Card</a> | <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;breedingid=[% biblio.import_record_id %]&amp;import_batch_id=[% biblio.import_batch_id %]&amp;biblionumber=[% biblio.match_biblionumber %]">Add order</a> )
+                              ( <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% biblio.import_record_id %]" class="previewData">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% biblio.import_record_id %]" class="previewData">Card</a> | <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;breedingid=[% biblio.import_record_id %]&amp;import_batch_id=[% biblio.import_batch_id %]&amp;biblionumber=[% biblio.match_biblionumber %]">Add order</a> )
                             </span>
                           </legend>
                           <ol>
@@ -265,6 +277,18 @@
                             </li>
                           </ol>
                         </fieldset>
+                            <div id="dataPreview" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
+                                <div class="modal-header">
+                                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <h3 id="dataPreviewLabel">MARC preview</h3>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="loading"> <img src="[% interface %]/[% theme %]/img/loading-small.gif" alt="" /> Loading </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                                </div>
+                            </div>
                         [% END %]
                       </div>
                       <div id="items_info">
