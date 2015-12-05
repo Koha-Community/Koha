@@ -747,11 +747,6 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '0.614',
     },
-    'XML::Writer' => {
-        'usage'    => 'Command line scripts',
-        'required' => '0',
-        'min_ver'  => '0.614',
-    },
 };
 
 1;
