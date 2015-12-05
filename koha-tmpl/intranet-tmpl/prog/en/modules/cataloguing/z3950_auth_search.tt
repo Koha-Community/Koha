@@ -1,6 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Z39.50 search results</title>
-[% INCLUDE 'greybox.inc' %]
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
@@ -62,6 +61,18 @@ $(document).ready(function(){
         e.preventDefault();
         $("form[name='f']").find("input[type=text]").val("");
     });
+    $(".previewMARC").on("click", function(e){
+        e.preventDefault();
+        var ltitle = $(this).text();
+        var page = $(this).attr("href");
+        $("#marcPreviewLabel").text(ltitle);
+        $("#marcPreview .modal-body").load(page + " pre");
+        $('#marcPreview').modal({show:true});
+    });
+    $("#marcPreview").on("hidden", function(){
+        $("#marcPreviewLabel").html("");
+        $("#marcPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/loading-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+    });
 });
 
 [% IF ( total_pages ) %]
@@ -87,7 +98,7 @@ function validate_goto_page(){
 .linktools { background-color:#FFF;border-top:1px solid #DDD; border-left: 1px solid #DDD; border-right: 1px solid #666; border-bottom:1px solid #666;display: none; white-space: nowrap;}
 .linktools a { font-size : 85%; text-decoration:none; padding:.3em;;background-color:#FFF; display:block;float:left;border-right:1px solid #DDD;}
 .linktools a:hover { background-color:#EEE;color:#CC3300;border-right:1px solid #CCC;}
-tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : transparent; }
+tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : transparent; } #marcPreview { width : 90%; margin-left : -45%; top: 5%; } .modal-body { max-height: 380px; } .modal-header { padding: 0 14px; } @media (max-width: 767px) { #marcPreview { margin: 0; width : auto; } }
 </style>
 
     [% IF ( opsearch ) %]
@@ -164,16 +175,26 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
     <tbody>[% FOREACH breeding_loo IN breeding_loop %]
         [% IF ( breeding_loo.breedingid ) %]
         <tr id="row[% breeding_loo.breedingid %]">
-            <td>[% breeding_loo.server %] <div class="linktools"><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" rel="gb_page_center[600,500]">Preview MARC</a> <a href="#" onclick="Import([% breeding_loo.breedingid %],'[% breeding_loo.heading_code %]','[% breeding_loo.authid %]'); return false">Import</a><a href="#" onclick="closemenu();return false;" title="Close this menu"> X </a></div> </td>
+            <td>[% breeding_loo.server %] <div class="linktools"><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" class="previewMARC">Preview MARC</a> <a href="#" onclick="Import([% breeding_loo.breedingid %],'[% breeding_loo.heading_code %]','[% breeding_loo.authid %]'); return false">Import</a><a href="#" onclick="closemenu();return false;" title="Close this menu"> X </a></div> </td>
             <td>[% breeding_loo.heading %]</td>
             <td>[% breeding_loo.heading_code %]</td>
-            <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" title="MARC" rel="gb_page_center[600,500]">MARC</a></td>
+            <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" class="previewMARC">MARC</a></td>
             <!-- <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid %]" title="MARC" rel="gb_page_center[600,500]">Card</a></td> -->
             <td><a href="#" onclick="Import([% breeding_loo.breedingid %],'[% breeding_loo.heading_code %]','[% breeding_loo.authid %]'); return false">Import</a></td>
         </tr>
         [% END %]
     [% END %]</tbody>
 </table>
+
+    <div id="marcPreview" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="marcPreviewLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="marcPreviewLabel">MARC preview</h3>
+        </div>
+        <div class="modal-body">
+            <div id="loading"> <img src="[% interface %]/[% theme %]/img/loading-small.gif" alt="" /> Loading </div>
+        </div>
+    </div>
 
     <form method="post" action="z3950_auth_search.pl" id="page_form" name="page_form" class="checkboxed">
         <input type="hidden" name="op" id="op" value="do_search" />
