@@ -2,7 +2,6 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Batch record modification</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'greybox.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
@@ -55,15 +54,23 @@ $(document).ready(function() {
   $("#marc_modification_template_id").change(function(){
     var url = "/cgi-bin/koha/svc/records/preview?"
     var mmtid = $(this).val();
-    $("a.preview").each(function(){
+    $("a.previewMARC").each(function(){
       $(this).attr("href", url + "record_type=" + $(this).attr("data-record_type") + "&record_id=" + $(this).attr("data-record_id") + "&mmtid=" + mmtid);
     });
   });
 
-  $("a.preview").click(function(){
-    // Equivalent to rel="gb_page_center[600,500]"
-    return GB_showCenter(_("Preview MARC"), this.href , 600, 500);
-  });
+    $("body").on("click",".previewMARC", function(e){
+        e.preventDefault();
+        var ltitle = $(this).text();
+        var page = $(this).attr("href");
+        $("#marcPreviewLabel").text(ltitle);
+        $("#marcPreview .modal-body").load(page + " div");
+        $('#marcPreview').modal({show:true});
+    });
+    $("#marcPreview").on("hidden", function(){
+        $("#marcPreviewLabel").html("");
+        $("#marcPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/loading-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+    });
 
 });
 //]]>
@@ -191,12 +198,26 @@ $(document).ready(function() {
                   <td><input type="checkbox" name="record_id" value="[% biblio.biblionumber %]" data-items="[% biblio.itemnumbers.size %]" data-issues="[% biblio.issues_count %]" data-reserves="[% biblio.reserves.size %]" /></td>
                   <td>[% biblio.biblionumber %]</td>
                   <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber %]">[% biblio.title %]</a></td>
-                  <td><a href="/cgi-bin/koha/svc/records/preview?record_type=biblio&record_id=[% biblio.biblionumber %]&mmtid=[% mmtid %]" class="preview" data-record_type="biblio" data-record_id="[% biblio.biblionumber %]" data-mmtid="[% mmtid %]" title="Preview MARC" >Preview MARC</a>
+                  <td><a href="/cgi-bin/koha/svc/records/preview?record_type=biblio&record_id=[% biblio.biblionumber %]&mmtid=[% mmtid %]" class="previewMARC" data-record_type="biblio" data-record_id="[% biblio.biblionumber %]" data-mmtid="[% mmtid %]" title="Preview MARC" >Preview MARC</a>
                 </tr>
               [% END %]
             </tbody>
           </table>
           <div class="note">Reminder: this action will modify all selected biblios!</div>
+
+          <div id="marcPreview" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="marcPreviewLabel" aria-hidden="true">
+              <div class="modal-header">
+                  <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 id="marcPreviewLabel">MARC preview</h3>
+              </div>
+              <div class="modal-body">
+                  <div id="loading"> <img src="[% interface %]/[% theme %]/img/loading-small.gif" alt="" /> Loading </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+              </div>
+          </div>
+
         [% ELSE %]
           <div id="toolbar">
             <a id="selectall" href="#">Select all</a>
@@ -217,13 +238,27 @@ $(document).ready(function() {
                   <td><input type="checkbox" name="record_id" value="[% authority.authid %]" data-usage="[% authority.count_usage %]" /></td>
                   <td><a href="/cgi-bin/koha/authorities/detail.pl?authid=[% authority.authid %]">[% authority.authid %]</a></td>
                   <td>[% PROCESS authresult summary=authority.summary %]</td>
-                  <td><a href="/cgi-bin/koha/svc/records/preview?record_type=authority&record_id=[% authority.authid %]&mmtid=[% mmtid %]" class="preview" data-record_type="authority" data-record_id="[% authority.authid %]" data-mmtid="[% mmtid %]" title="Preview MARC" rel="gb_page_center[600,500]">Preview MARC</a>
+                  <td><a href="/cgi-bin/koha/svc/records/preview?record_type=authority&record_id=[% authority.authid %]&mmtid=[% mmtid %]" data-record_type="authority" data-record_id="[% authority.authid %]" data-mmtid="[% mmtid %]" class="previewMARC">Preview MARC</a>
                 </tr>
               [% END %]
             </tbody>
           </table>
           <div class="note">Reminder: this action will modify all selected authorities!</div>
         [% END %]
+
+        <div id="marcPreview" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="marcPreviewLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="marcPreviewLabel">MARC preview</h3>
+            </div>
+            <div class="modal-body">
+                <div id="loading"> <img src="[% interface %]/[% theme %]/img/loading-small.gif" alt="" /> Loading </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            </div>
+        </div>
+
         <fieldset class="action">
           <input type="hidden" name="op" value="modify" />
           <input type="hidden" name="recordtype" value="[% recordtype %]" />
