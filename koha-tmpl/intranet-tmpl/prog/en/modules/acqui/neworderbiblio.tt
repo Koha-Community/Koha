@@ -1,7 +1,6 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Search existing records</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
-[% INCLUDE 'greybox.inc' %]
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
@@ -14,6 +13,18 @@
         'bInfo': false,
         'bSort': false,
     } ) );
+    $(".previewMARC").on("click", function(e){
+        e.preventDefault();
+        var ltitle = $(this).text();
+        var page = $(this).attr("href");
+        $("#marcPreviewLabel").text(ltitle);
+        $("#marcPreview .modal-body").load(page + " table");
+        $('#marcPreview').modal({show:true});
+    });
+    $("#marcPreview").on("hidden", function(){
+        $("#marcPreviewLabel").html("");
+        $("#marcPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/loading-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+    });
  });
  //]]>
 </script>
@@ -79,7 +90,7 @@
                 [% biblio.copyrightdate %]
             </td>
         <td>
-        <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblio.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">View MARC</a>
+        <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblio.biblionumber %]&amp;viewas=html" class="previewMARC">View MARC</a>
         </td>
             <td>
             <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;biblionumber=[% biblio.biblionumber %]" title="Order this one">
@@ -90,6 +101,18 @@
       [% END %]
     </tbody>
     </table>
+    <div id="marcPreview" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="marcPreviewLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="marcPreviewLabel">MARC preview</h3>
+        </div>
+        <div class="modal-body">
+            <div id="loading"> <img src="[% interface %]/[% theme %]/img/loading-small.gif" alt="" /> Loading </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        </div>
+    </div>
 </div>
 [% END %]
 
