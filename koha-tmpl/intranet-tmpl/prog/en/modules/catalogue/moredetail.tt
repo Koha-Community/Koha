@@ -162,25 +162,41 @@
                 [% END %]
             </li>
             [% END %]
-            <li><span class="label">Withdrawn?:</span>[% IF ( ITEM_DAT.withdrawn ) %]Yes[% ELSE %]No[% END %]
-                [% IF ( CAN_user_circulate ) %]
-                    <form action="updateitem.pl" method="post">
-                    <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber %]" />
-                    <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber %]" />
-                    <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber %]" />
-                    <input type="hidden" name="itemlost" value="[% ITEM_DAT.itemlost %]" />
-                    <input type="hidden" name="damaged" value="[% ITEM_DAT.damaged %]" />
 
-            [% IF ( ITEM_DAT.withdrawn ) %]
-                    <input type="hidden" name="withdrawn" value="0" />[% ELSE %]<input type="hidden" name="withdrawn" value="1" />
-            [% END %]
-            [% IF ( ITEM_DAT.withdrawn ) %]
-                    <input type="submit" name="submit" class="submit" value="Restore" />[% ELSE %]<input type="submit" name="submit" class="submit" value="Withdraw" />
-            [% END %]
-                    </form>
+            [% IF ( ITEM_DAT.itemwithdrawnloop ) %]
+                <li><span class="label">Withdrawn status:</span>
+                    [% IF ( CAN_user_circulate ) %]
+                        <form action="updateitem.pl" method="post">
+                            <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber %]" />
+                            <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber %]" />
+                            <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber %]" />
+                            <select name="withdrawn" >
+                                <option value="">Choose</option>
+                                [% FOREACH itemwithdrawn IN ITEM_DAT.itemwithdrawnloop %]
+                                    [% IF ( itemwithdrawn.selected ) %]
+                                        <option value="[% itemwithdrawn.authorised_value %]" selected="selected">[% itemwithdrawn.lib %]</option>
+                                    [% ELSE %]
+                                        <option value="[% itemwithdrawn.authorised_value %]">[% itemwithdrawn.lib %]</option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+                            <input type="hidden" name="itemlost" value="[% ITEM_DAT.itemlost %]" />
+                            <input type="hidden" name="damaged" value="[% ITEM_DAT.damaged %]" />
+                            <input type="submit" name="submit" class="submit" value="Set status" /></form>
+                    [% ELSE %]
+                        [% FOREACH itemwithdrawn IN ITEM_DAT.itemwithdrawnloop %]
+                            [% IF ( itemwithdrawn.selected ) %]
+                                [% itemwithdrawn.lib %]
+                            [% END %]
+                        [% END %]
+                        &nbsp;
+                    [% END %]
+                </li>
+                [% IF ITEM_DAT.withdrawn != "" && ITEM_DAT.withdrawn_on %]
+                    <li><span class="label">Withdrawn on:</span>[% ITEM_DAT.withdrawn_on | $KohaDates %] &nbsp;</li>
                 [% END %]
-            </li>
-            [% IF ITEM_DAT.withdrawn_on %]<li><span class="label">Withdrawn on:</span>[% ITEM_DAT.withdrawn_on | $KohaDates %] &nbsp;</li>[% END %]
+            [% END %]
+
             </ol></div>
             <div class="listgroup"><h4>History</h4>
             <ol class="bibliodetails">
