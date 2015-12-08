@@ -89,6 +89,9 @@ sub build {
     my $source  = $params->{source} || return;
     my $value   = $params->{value};
 
+    my @unknowns = grep( !/source|value|only_fk/, keys %{ $params });
+    carp "Unknown parameter(s): ", join( ', ', @unknowns ) if scalar @unknowns;
+
     my $col_values = $self->_buildColumnValues({
         source  => $source,
         value   => $value,
