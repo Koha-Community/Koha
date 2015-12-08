@@ -55,6 +55,8 @@
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 
+[% INCLUDE 'overdrive-checkout.inc' %]
+
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
 <script type="text/javascript" src="[% interface %]/[% theme %]/js/overdrive.js"></script>
@@ -80,7 +82,9 @@ function fetch_availability( prod, $tr ) {
                 $availability_summary.find( '.available' ).append( ', ' + _("waiting holds:") + ' <strong>' + data.numberOfHolds + '</strong>' );
             }
 
-            $tr.find( '.info' ).append( '<div class="actions-menu"><span class="actions"><a href="' + prod.contentDetails[0].href + '" ' + ( data.copiesAvailable ? ( ' class="addtocart">' + _("Check out") ) : ( ' class="hold">' + _("Place hold") ) ) + '</a></span></div>' );
+            $tr.find( '.info' ).each(function() {
+                KOHA.OverDriveCirculation.add_actions(this, data.id, data.copiesAvailable);
+            });
         }
     );
 }
@@ -179,7 +183,16 @@ $( document ).ready( function() {
         return false;
     });
 
-    search( 0 );
+    [% IF ( overdrive_error ) %]
+    KOHA.OverDriveCirculation.display_error("#breadcrumbs", "[% overdrive_error.dquote %]");
+    [% END %]
+    [% IF ( loggedinusername ) %]
+    KOHA.OverDriveCirculation.with_account_details("#breadcrumbs", function() {
+        search( 0 );
+    });
+    [% ELSE %]
+        search( 0 );
+    [% END %]
 } );
 </script>
 [% END %]

@@ -1,0 +1,150 @@
+#!/usr/bin/perl
+
+# script to action OverDrive API calls
+
+# Copyright 2015 Catalyst IT
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+use CGI qw ( -utf8 );
+use JSON qw(encode_json);
+use C4::Auth qw(checkauth);
+use C4::Output;
+use Koha::Logger;
+use Koha::ExternalContent::OverDrive;
+
+my $logger = Koha::Logger->get({ interface => 'opac' });
+our $cgi = new CGI;
+my $page_url = $cgi->referer();
+
+my ( $user, $cookie, $sessionID, $flags ) = checkauth( $cgi, 1, {}, 'opac' );
+$user && $sessionID or response_bad_request("User not logged in");
+
+my $action = $cgi->param('action') or response_bad_request("No 'action' specified");
+
+my $od = Koha::ExternalContent::OverDrive->new({ koha_session_id => $sessionID });
+my %data = (
+   is_logged_in => JSON::false,
+);
+local $@;
+eval {
+        {
+            $action eq 'login' && do {
+                $data{login_url} = $od->auth_url($page_url);
+                last;
+            };
+
+            if ($od->is_logged_in) {
+                $data{is_logged_in} = JSON::true;
+
+                $action eq 'logout' && do {
+                    $od->forget();
+                    $data{login_url} = $od->auth_url($page_url);
+                    $data{is_logged_in} = JSON::false;
+                    last;
+                };
+
+                $action eq 'account' && do {
+                    $data{account} = $od->patron;
+                    $data{checkouts} = $od->checkouts;
+                    $data{holds} = $od->holds;
+                    last;
+                };
+
+                $action eq 'checkout' && do {
+                    my $id = $cgi->param('id')
+                      or response_bad_request("No 'id' specified");
+                    my $format = $cgi->param('format');
+                    $data{action} = $od->checkout($id, $format);
+                    $data{checkouts} = $od->checkouts;
+                    $data{holds} = $od->holds;
+                    last;
+                };
+
+                $action eq 'checkout-format' && do {
+                    my $id = $cgi->param('id')
+                      or response_bad_request("No 'id' specified");
+                    my $format = $cgi->param('format')
+                      or response_bad_request("No 'format' specified");
+                    $data{action} = $od->lock_format($id, $format);
+                    $data{checkouts} = $od->checkouts;
+                    last;
+                };
+
+                $action eq 'download-url' && do {
+                    my $id = $cgi->param('id')
+                      or response_bad_request("No 'id' specified");
+                    my $format = $cgi->param('format')
+                      or response_bad_request("No 'format' specified");
+                    $data{action} = $od->checkout_download_url($id, $format, $page_url, $page_url);
+                    last;
+                };
+
+                $action eq 'return' && do {
+                    my $id = $cgi->param('id')
+                      or response_bad_request("No 'id' specified");
+                    local $@;
+                    $data{action} = eval { $od->return($id) };
+                    $data{action} = $@ if $@;
+                    $data{checkouts} = $od->checkouts;
+                    last;
+                };
+
+                $action eq 'place-hold' && do {
+                    my $id = $cgi->param('id')
+                      or response_bad_request("No 'id' specified");
+                    $data{action} = $od->place_hold($id);
+                    $data{holds} = $od->holds;
+                    last;
+                };
+
+                $action eq 'remove-hold' && do {
+                    my $id = $cgi->param('id')
+                      or response_bad_request("No 'id' specified");
+                    local $@;
+                    $data{action} = eval { $od->remove_hold($id) };
+                    $data{action} = $@ if $@;
+                    $data{holds} = $od->holds;
+                    last;
+                };
+
+                response_bad_request("Invalid 'action': $action");
+            }
+        }
+};
+if ($@) {
+    if ($od->is_not_authenticated_error("$@")) {
+        $logger->debug("OverDrive session timeout");
+        $data{is_logged_in} = JSON::false;
+    } else {
+        $logger->error($@);
+        $data{error} = $od->error_message("$@");
+    }
+}
+
+response(\%data);
+
+
+sub response_bad_request {
+    my ($error) = @_;
+    response({error => $error}, "400 $error");
+}
+sub response {
+    my ($data, $status_line) = @_;
+    $status_line ||= "200 OK";
+    output_with_http_headers $cgi, undef, encode_json($data), 'json', $status_line;
+    exit;
+}

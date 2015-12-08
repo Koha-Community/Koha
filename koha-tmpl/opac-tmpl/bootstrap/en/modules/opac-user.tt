@@ -135,8 +135,13 @@ Using this account is not recommended because some parts of Koha will not functi
                             [% END %]
                             [% IF ( RESERVES.count ) %]<li><a href="#opac-user-holds">Holds ([% RESERVES.count %])</a></li>[% END %]
                             [% IF Koha.Preference('ArticleRequests') && borrower.article_requests_current %]<li><a href="#opac-user-article-requests">Article requests ([% borrower.article_requests_current.count %])</a></li>[% END %]
+                            [% IF ( OverDriveCirculation ) %]
+                            <li><a href="#opac-user-overdrive">OverDrive Account</a></li>
+                            [% END %]
                         </ul>
 
+                        <div id="opac-user-overdrive">
+                        </div>
                         <div id="opac-user-checkouts">
                             [% IF ( issues_count ) %]
                                 <form id="renewselected" action="/cgi-bin/koha/opac-renew.pl" method="post">
@@ -824,6 +829,10 @@ Using this account is not recommended because some parts of Koha will not functi
     </div> <!-- /.container-fluid -->
 </div> <!-- /#main -->
 
+[% IF ( OverDriveCirculation ) %]
+[% INCLUDE 'overdrive-checkout.inc' %]
+[% END %]
+
 [% INCLUDE 'opac-bottom.inc' %]
 
 
@@ -886,5 +895,19 @@ Using this account is not recommended because some parts of Koha will not functi
             $( ".suspend-until" ).datepicker({ minDate: 1 }); // Require that "until date" be in the future
         });
         //]]>
+    </script>
+    <script type="text/javascript" src="[% interface %]//[% theme %]/js/overdrive.js"></script>
+    <script type="text/JavaScript">
+    $(document).ready(function() {
+    [% IF ( overdrive_error ) %]
+        KOHA.OverDriveCirculation.display_error("#opac-user-overdrive", "[% overdrive_error.dquote %]");
+    [% END %]
+    [% IF ( overdrive_tab ) %]
+        $("#opac-user-views").tabs("select", "#opac-user-overdrive");
+    [% END %]
+        $("#opac-user-overdrive").each( function() {
+            KOHA.OverDriveCirculation.display_account_details(this);
+        } );
+    });
     </script>
 [% END %]
