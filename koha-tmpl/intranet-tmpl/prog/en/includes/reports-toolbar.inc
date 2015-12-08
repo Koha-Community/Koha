@@ -20,6 +20,14 @@
             [% END %]
         [% END %]
 
+        [% IF ( CAN_user_reports_create_reports ) %]
+            <div class="btn-group">
+                <a class="confirmdelete btn btn-small" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id %]&phase=Delete%20Saved">
+                    <i class="fa fa-remove"></i> Delete
+                </a>
+            </div>
+        [% END %]
+
         [% UNLESS ( errors ) # Unless there are errors saving a report %]
             <div class="btn-group">
                 <a id="runreport" class="btn btn-small" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id %]&amp;phase=Run%20this%20report">
