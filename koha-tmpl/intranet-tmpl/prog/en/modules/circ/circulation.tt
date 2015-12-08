@@ -797,7 +797,7 @@ No patron matched <span class="ex">[% message %]</span>
 			</ul>
         </div>
 
-            [% IF ( WaitingHolds ) %]
+            [% IF WaitingHolds.count %]
                 <div id="holdswaiting" class="circmessage">
                     <h4>Holds waiting:</h4>
                     [% FOREACH w IN WaitingHolds %]

@@ -457,9 +457,10 @@ if ($borrowernumber) {
 # show all reserves of this borrower, and the position of the reservation ....
 if ($borrowernumber) {
     my $holds = Koha::Holds->search( { borrowernumber => $borrowernumber } );
+    my $waiting_holds = $holds->waiting;
     $template->param(
         holds_count  => $holds->count(),
-        WaitingHolds => scalar $holds->waiting(),
+        WaitingHolds => $waiting_holds,
     );
 
     $template->param( adultborrower => 1 ) if ( $borrower->{category_type} eq 'A' || $borrower->{category_type} eq 'I' );
