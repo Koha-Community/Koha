@@ -616,6 +616,8 @@ __PACKAGE__->add_columns(
     datetime_undef_if_invalid => 1,
     is_nullable => 1,
   },
+  "overdrive_auth_token",
+  { data_type => "text", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
