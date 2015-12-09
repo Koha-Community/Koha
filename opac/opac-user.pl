@@ -123,9 +123,6 @@ if ( $borr->{'amountoutstanding'} < 0 ) {
 
 $borr->{'amountoutstanding'} = sprintf "%.02f", $borr->{'amountoutstanding'};
 
-my @bordat;
-$bordat[0] = $borr;
-
 # Warningdate is the date that the warning starts appearing
 if ( $borr->{'dateexpiry'} && C4::Context->preference('NotifyBorrowerDeparture') ) {
     my $days_to_expiry = Date_to_Days( $warning_year, $warning_month, $warning_day ) - Date_to_Days( $today_year, $today_month, $today_day );
@@ -144,12 +141,11 @@ if ( $borr->{'dateexpiry'} && C4::Context->preference('NotifyBorrowerDeparture')
 # pass on any renew errors to the template for displaying
 my $renew_error = $query->param('renew_error');
 
-$template->param(   BORROWER_INFO     => \@bordat,
+$template->param(   BORROWER_INFO     => $borr,
                     borrowernumber    => $borrowernumber,
                     patron_flagged    => $borr->{flagged},
                     OPACMySummaryHTML => (C4::Context->preference("OPACMySummaryHTML")) ? 1 : 0,
                     surname           => $borr->{surname},
-                    showname          => $borr->{showname},
                     RENEW_ERROR       => $renew_error,
                     borrower          => $borr,
                 );

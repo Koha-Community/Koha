@@ -242,16 +242,6 @@ sub GetMemberDetails {
     $borrower->{'flags'}     = $flags;
     $borrower->{'authflags'} = $accessflagshash;
 
-    # For the purposes of making templates easier, we'll define a
-    # 'showname' which is the alternate form the user's first name if 
-    # 'other name' is defined.
-    if ($borrower->{category_type} eq 'I') {
-        $borrower->{'showname'} = $borrower->{'othernames'};
-        $borrower->{'showname'} .= " $borrower->{'firstname'}" if $borrower->{'firstname'};
-    } else {
-        $borrower->{'showname'} = $borrower->{'firstname'};
-    }
-
     # Handle setting the true behavior for BlockExpiredPatronOpacActions
     $borrower->{'BlockExpiredPatronOpacActions'} =
       C4::Context->preference('BlockExpiredPatronOpacActions')

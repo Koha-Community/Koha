@@ -163,7 +163,7 @@ if ( $query->param('resbarcode') ) {
 #   check if we have other reserves for this document, if we have a return send the message of transfer
     my ( $messages, $nextreservinfo ) = GetOtherReserves($item);
 
-    my ($borr) = GetMemberDetails( $nextreservinfo, 0 );
+    my $borr = GetMember( borrowernumber => $nextreservinfo );
     my $name   = $borr->{'surname'} . ", " . $borr->{'title'} . " " . $borr->{'firstname'};
     if ( $messages->{'transfert'} ) {
         $template->param(
@@ -388,7 +388,7 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
 
     my $reserve    = $messages->{'ResFound'};
     my $branchname = $branches->{ $reserve->{'branchcode'} }->{'branchname'};
-    my ($borr) = GetMemberDetails( $reserve->{'borrowernumber'}, 0 );
+    my $borr = C4::Members::GetMember( borrowernumber => $reserve->{'borrowernumber'} );
     my $name = $borr->{'surname'} . ", " . $borr->{'title'} . " " . $borr->{'firstname'};
     $template->param(
             wname           => $name,
@@ -414,7 +414,7 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
 if ( $messages->{'ResFound'}) {
     my $reserve    = $messages->{'ResFound'};
     my $branchname = $branches->{ $reserve->{'branchcode'} }->{'branchname'};
-    my ($borr) = GetMemberDetails( $reserve->{'borrowernumber'}, 0 );
+    my $borr = C4::Members::GetMember( borrowernumber => $reserve->{'borrowernumber'} );
 
     if ( $reserve->{'ResFound'} eq "Waiting" or $reserve->{'ResFound'} eq "Reserved" ) {
         if ( $reserve->{'ResFound'} eq "Waiting" ) {
@@ -554,7 +554,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
             $ri{hour}   = $duedate->hour();
             $ri{minute}   = $duedate->minute();
             $ri{duedate} = output_pref($duedate);
-            my ($b)      = GetMemberDetails( $riborrowernumber{$_}, 0 );
+            my $b      = C4::Members::GetMember( borrowernumber => $riborrowernumber{$_} );
             unless ( $dropboxmode ) {
                 $ri{return_overdue} = 1 if (DateTime->compare($duedate, DateTime->now()) == -1);
             } else {
