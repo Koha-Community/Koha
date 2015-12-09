@@ -46,7 +46,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $borrower = GetMemberDetails( $borrowernumber );
+my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
 my $messaging_options = C4::Members::Messaging::GetMessagingOptions();
 
 if ( defined $query->param('modify') && $query->param('modify') eq 'yes' ) {
@@ -54,7 +54,7 @@ if ( defined $query->param('modify') && $query->param('modify') eq 'yes' ) {
     if ( defined $sms && ( $borrower->{'smsalertnumber'} // '' ) ne $sms ) {
         ModMember( borrowernumber => $borrowernumber,
                    smsalertnumber => $sms );
-        $borrower = GetMemberDetails( $borrowernumber );
+        $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
     }
 
     C4::Form::MessagingPreferences::handle_form_action($query, { borrowernumber => $borrowernumber }, $template);
@@ -62,7 +62,7 @@ if ( defined $query->param('modify') && $query->param('modify') eq 'yes' ) {
 
 C4::Form::MessagingPreferences::set_form_values({ borrowernumber     => $borrower->{'borrowernumber'} }, $template);
 
-$template->param( BORROWER_INFO         => [ $borrower ],
+$template->param( BORROWER_INFO         => $borrower,
                   messagingview         => 1,
                   SMSnumber => $borrower->{'smsalertnumber'},
                   SMSSendDriver                =>  C4::Context->preference("SMSSendDriver"),
