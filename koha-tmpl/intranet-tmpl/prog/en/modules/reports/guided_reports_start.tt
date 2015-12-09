@@ -156,7 +156,7 @@ $(document).ready(function(){
         $(this).select();
     });
 [% END %]
-[% IF ( saved1 || showsql || execute || editsql || save_successful ) %]
+
     $(".confirmdelete").click(function(){
         $(this).parents('tr').attr("class","warn");
         if(confirm(_("Are you sure you want to delete this saved report?"))){
@@ -166,7 +166,6 @@ $(document).ready(function(){
             return false;
         }
     });
-[% END %]
 
 [% IF (create || editsql || save) %]
     $("#select_group").change(function() {
