@@ -89,7 +89,7 @@ if ( $budget_period_id ) {
 # ------- get periods stuff ------------------
 
 # USED FOR PERMISSION COMPARISON LATER
-my $borrower_id         = $template->{VARS}->{'USER_INFO'}[0]->{'borrowernumber'};
+my $borrower_id         = $template->{VARS}->{'USER_INFO'}->{'borrowernumber'};
 my $user                = GetMemberDetails($borrower_id);
 my $user_branchcode     = $user->{'branchcode'};
 
