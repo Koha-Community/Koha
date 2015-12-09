@@ -1545,13 +1545,6 @@ sub ReNewSubscription {
     |;
     $sth = $dbh->prepare($query);
     $sth->execute( $enddate, $subscriptionid );
-    $query = qq|
-        UPDATE subscriptionhistory
-        SET    histenddate=?
-        WHERE  subscriptionid=?
-    |;
-    $sth = $dbh->prepare($query);
-    $sth->execute( $enddate, $subscriptionid );
 
     logaction( "SERIAL", "RENEW", $subscriptionid, "" ) if C4::Context->preference("SubscriptionLog");
     return;
