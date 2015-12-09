@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::Warn;
 use File::Basename qw(dirname);
 
@@ -332,7 +332,6 @@ subtest 'Date handling' => sub {
     my $patron = $builder->build( { source => 'Borrower' } );
     is( length( $patron->{updated_on} ),  19, 'A timestamp column value should be YYYY-MM-DD HH:MM:SS' );
     is( length( $patron->{dateofbirth} ), 10, 'A date column value should be YYYY-MM-DD' );
-
 };
 
 subtest 'Default values' => sub {
@@ -389,6 +388,27 @@ subtest 'build_object() tests' => sub {
             is( ref($object), $module->object_class, "Testing $module" );
         }
     };
+};
+
+subtest '->build parameter' => sub {
+    plan tests => 2;
+
+    # Test to make sure build() warns user of unknown parameters.
+    warnings_are {
+        $builder->build({
+            source => 'Branch',
+            values => {
+                branchcode => 'BRANCH_1'
+            }
+        })
+    } [], "No warnings on correct use";
+
+    warnings_like {
+        $builder->build({
+            source     => 'Branch',
+            branchcode => 'BRANCH_2' # This is wrong!
+        })
+    } qr/unknown param/i, "Carp unknown parameters";
 };
 
 $schema->storage->txn_rollback;
