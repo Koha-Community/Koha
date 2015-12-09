@@ -601,7 +601,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             $( sel ).on( event, function (e) {
                 e.preventDefault();
                 handler( e, Preferences.user[pref] );
-                Preferences.Save( [% USER_INFO.0.borrowernumber %] );
+                Preferences.Save( [% USER_INFO.borrowernumber %] );
                 showPreference(pref);
             } );
         }
@@ -626,7 +626,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 $( document ).on( 'change', 'input.search-toggle-server', function() {
                     var server_id = $( this ).closest('li').data('server-id');
                     Preferences.user.selected_search_targets[server_id] = this.checked;
-                    Preferences.Save( [% USER_INFO.0.borrowernumber %] );
+                    Preferences.Save( [% USER_INFO.borrowernumber %] );
                 } );
                 break;
         }
@@ -664,7 +664,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             delete Preferences.user.macros[name];
         }
 
-        Preferences.Save( [% USER_INFO.0.borrowernumber %] );
+        Preferences.Save( [% USER_INFO.borrowernumber %] );
     }
 
     function showSavedMacros( macros ) {
@@ -966,7 +966,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         $( '#switch-editor' ).click( function() {
             if ( !confirm( _("Any changes will not be saved. Continue?") ) ) return;
 
-            $.cookie( 'catalogue_editor_[% USER_INFO.0.borrowernumber %]', 'basic', { expires: 365, path: '/' } );
+            $.cookie( 'catalogue_editor_[% USER_INFO.borrowernumber %]', 'basic', { expires: 365, path: '/' } );
 
             if ( state.backend == 'catalog' ) {
                 window.location = '/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=' + state.recordID;
@@ -1072,7 +1072,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         } );
 
         // Start editor
-        Preferences.Load( [% USER_INFO.0.borrowernumber || 0 %] );
+        Preferences.Load( [% USER_INFO.borrowernumber || 0 %] );
         displayPreferences(editor);
         makeAuthorisedValueWidgets( '' );
         Search.Init( {
