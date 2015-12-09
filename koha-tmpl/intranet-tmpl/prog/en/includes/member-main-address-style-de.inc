@@ -80,7 +80,7 @@
       [% END %]
       City: </label>
         <input type="text" id="city" name="city" size="20" value="[% city %]" />
-        [% IF ( city_cgipopup ) %]or <strong>choose</strong>
+        [% IF ( city_cgipopup ) %]or choose
         <select id="select_city" name="select_city">
         [% FOREACH city_loo IN city_loop %]
             [% IF ( city_loo.selected ) %]
