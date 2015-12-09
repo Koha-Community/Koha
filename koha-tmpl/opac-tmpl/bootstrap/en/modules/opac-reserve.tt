@@ -92,11 +92,7 @@
 
                     [% UNLESS ( message ) %]
                         [% UNLESS ( none_available ) %]
-                            <h3>Confirm holds for:
-                                [% FOREACH USER_INF IN USER_INFO %]
-                                    [% USER_INF.firstname %] [% USER_INF.surname %] ([% USER_INF.cardnumber %])
-                                [% END %]
-                            </h3>
+                            <h3>Confirm holds for:[% USER_INFO.firstname %] [% USER_INFO.surname %] ([% USER_INFO.cardnumber %])</h3>
                         [% END # / UNLESS none_available %]
 
                         [% IF (RESERVE_CHARGE) %]

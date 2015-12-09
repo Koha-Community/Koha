@@ -25,7 +25,7 @@
         });
 
         $("#useadvanced").click(function(){
-            $.cookie( 'catalogue_editor_[% USER_INFO.0.borrowernumber %]', 'advanced', { expires: 365, path: '/' } );
+            $.cookie( 'catalogue_editor_[% USER_INFO.borrowernumber %]', 'advanced', { expires: 365, path: '/' } );
             return true;
         });
      });
