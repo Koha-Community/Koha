@@ -164,7 +164,7 @@ subtest 'AnonymousPatron is not defined' => sub {
 };
 
 subtest 'Test StoreLastBorrower' => sub {
-    plan tests => 4;
+    plan tests => 6;
 
     t::lib::Mocks::mock_preference( 'StoreLastBorrower', '1' );
 
@@ -241,6 +241,32 @@ subtest 'Test StoreLastBorrower' => sub {
     my $patron_object2 = $item_object->last_returned_by();
     is( $patron_object->id, $patron_object2->id,
         'Calling last_returned_by with Borrower object sets last_returned_by to that borrower' );
+
+    $patron_object->delete;
+    $item_object = Koha::Items->find( $item->{itemnumber} );
+    is( $item_object->last_returned_by, undef, 'last_returned_by should return undef if the last patron to return the item has been deleted' );
+
+    t::lib::Mocks::mock_preference( 'StoreLastBorrower', '0' );
+    $patron = $builder->build(
+        {
+            source => 'Borrower',
+            value  => { privacy => 1, }
+        }
+    );
+
+    $issue = $builder->build(
+        {
+            source => 'Issue',
+            value  => {
+                borrowernumber => $patron->{borrowernumber},
+                itemnumber     => $item->{itemnumber},
+            },
+        }
+    );
+    ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, undef, undef, undef, '2010-10-10' );
+
+    $item_object   = Koha::Items->find( $item->{itemnumber} );
+    is( $item_object->last_returned_by, undef, 'Last patron to return item should not be stored if StoreLastBorrower if off' );
 };
 
 $schema->storage->txn_rollback;
