@@ -455,6 +455,7 @@ SELECT biblio.*, items.*, issues.*, biblioitems.itemtype, TO_DAYS($date)-TO_DAYS
     AND b.branchcode = items.homebranch
     AND biblio.biblionumber   = biblioitems.biblionumber
     AND issues.borrowernumber = ?
+    AND TO_DAYS($date)-TO_DAYS(issues.date_due) >= 0
 END_SQL
 
     my $query = "SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = ? ";
@@ -500,15 +501,14 @@ END_SQL
 	    # itemcount is interpreted here as the number of items in the overdue range defined by the current notice or all overdues < max if(-list-all).
             # <date> <itemcount> <firstname> <lastname> <address1> <address2> <address3> <city> <postcode> <country>
 
-            my $borrower_sql = <<'END_SQL';
-SELECT issues.borrowernumber, firstname, surname, address, address2, city, zipcode, country, email, emailpro, B_email, smsalertnumber, phone, cardnumber,
-TO_DAYS(?)-TO_DAYS(date_due) as difference, date_due
+            my $borrower_sql = <<"END_SQL";
+SELECT issues.borrowernumber, firstname, surname, address, address2, city, zipcode, country, email, emailpro, B_email, smsalertnumber, phone, cardnumber, date_due
 FROM   issues,borrowers,categories
 WHERE  issues.borrowernumber=borrowers.borrowernumber
 AND    borrowers.categorycode=categories.categorycode
+AND    TO_DAYS($date)-TO_DAYS(issues.date_due) >= 0
 END_SQL
             my @borrower_parameters;
-            push @borrower_parameters, $date_to_run->datetime();
             if ($branchcode) {
                 $borrower_sql .= ' AND issues.branchcode=? ';
                 push @borrower_parameters, $branchcode;
@@ -526,8 +526,6 @@ END_SQL
             $verbose and warn $borrower_sql . "\n $branchcode | " . $overdue_rules->{'categorycode'} . "\n ($mindays, $maxdays, ".  $date_to_run->datetime() .")\nreturns " . $sth->rows . " rows";
             my $borrowernumber;
             while ( my $data = $sth->fetchrow_hashref ) {
-
-                next unless ( DateTime->compare( $date_to_run,  dt_from_string($data->{date_due})) ) == 1;
 
                 # check the borrower has at least one item that matches
                 my $days_between;
@@ -617,8 +615,6 @@ END_SQL
                 my $j = 0;
                 my $exceededPrintNoticesMaxLines = 0;
                 while ( my $item_info = $sth2->fetchrow_hashref() ) {
-                    next unless ( DateTime->compare( $date_to_run,  dt_from_string($item_info->{date_due})) ) == 1;
-
                     if ( C4::Context->preference('OverdueNoticeCalendar') ) {
                         my $calendar =
                           Koha::Calendar->new( branchcode => $branchcode );
