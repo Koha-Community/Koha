@@ -188,7 +188,7 @@ sub cancel {
     # if we have a result
     if ($nextreservinfo) {
         my %res;
-        my $borrowerinfo = GetMemberDetails( $nextreservinfo );
+        my $borrowerinfo = C4::Members::GetMember( borrowernumber => $nextreservinfo );
         my $iteminfo = GetBiblioFromItemNumber($item);
         if ( $messages->{'transfert'} ) {
             $res{messagetransfert} = $messages->{'transfert'};

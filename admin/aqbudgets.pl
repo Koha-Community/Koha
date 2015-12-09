@@ -89,7 +89,7 @@ if ( $budget_period_id ) {
 
 # USED FOR PERMISSION COMPARISON LATER
 my $borrower_id         = $template->{VARS}->{'USER_INFO'}->{'borrowernumber'};
-my $user                = GetMemberDetails($borrower_id);
+my $user                = C4::Members::GetMember( borrowernumber => $borrower_id );
 my $user_branchcode     = $user->{'branchcode'};
 
 $template->param(

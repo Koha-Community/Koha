@@ -226,7 +226,7 @@ foreach my $item (@items) {
 
     # checking for holds
     my ($reservedate,$reservedfor,$expectedAt,undef,$wait) = GetReservesFromItemnumber($item->{itemnumber});
-    my $ItemBorrowerReserveInfo = GetMemberDetails( $reservedfor, 0);
+    my $ItemBorrowerReserveInfo = C4::Members::GetMember( borrowernumber => $reservedfor);
     
     if (C4::Context->preference('HidePatronName')){
 	$item->{'hidepatronname'} = 1;

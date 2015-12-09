@@ -47,7 +47,7 @@ for (@$operations) {
     my $biblio             = GetBiblioFromItemNumber(undef, $_->{'barcode'});
     $_->{'bibliotitle'}    = $biblio->{'title'};
     $_->{'biblionumber'}   = $biblio->{'biblionumber'};
-    my $borrower           = GetMemberDetails(undef,$_->{'cardnumber'});
+    my $borrower           = C4::Members::GetMember( cardnumber => $_->{'cardnumber'} );
     if ($borrower) {
         $_->{'borrowernumber'} = $borrower->{'borrowernumber'};
         $_->{'borrower'}       = ($borrower->{'firstname'}?$borrower->{'firstname'}:'').' '.$borrower->{'surname'};

@@ -65,8 +65,9 @@ if ($op eq "delete_record") {
         $template->param( 'err_history_not_deleted' => 1 );
     }
 }
+
 # get borrower privacy ....
-my ( $borr ) = GetMemberDetails( $borrowernumber );
+my $borr = C4::Members::GetMember( borrowernumber => $borrowernumber );
 
 $template->param( 'Ask_data'       => '1',
                     'privacy'.$borr->{'privacy'} => 1,

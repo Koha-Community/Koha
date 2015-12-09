@@ -101,7 +101,7 @@ foreach my $br ( keys %$branches ) {
             # we check if we have a reserv for this transfer
             my @checkreserv = GetReservesFromItemnumber($num->{'itemnumber'});
             if ( $checkreserv[0] ) {
-                my $getborrower = GetMemberDetails( $checkreserv[1] );
+                my $getborrower = C4::Members::GetMember( borrowernumber => $checkreserv[1] );
                 $getransf{'borrowernum'}       = $getborrower->{'borrowernumber'};
                 $getransf{'borrowername'}      = $getborrower->{'surname'};
                 $getransf{'borrowerfirstname'} = $getborrower->{'firstname'};
