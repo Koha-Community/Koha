@@ -25,7 +25,6 @@ use Test::More tests => 13;
 use Test::MockModule;
 use Test::Warn;
 use DateTime;
-use Capture::Tiny ':all';
 use XML::Simple;
 use t::lib::Mocks;
 
@@ -74,8 +73,15 @@ t::lib::Mocks::mock_preference('OAI-PMH:MaxCount', 3);
 t::lib::Mocks::mock_preference('OAI-PMH:DeletedRecord', 'persistent');
 
 %param = ( verb => 'ListMetadataFormats' );
-my ($response) = capture { Koha::OAI::Server::Repository->new(); };
-$response = XMLin($response);
+my $response;
+my $get_response = sub {
+    my $stdout;
+    local *STDOUT;
+    open STDOUT, '>', \$stdout;
+    Koha::OAI::Server::Repository->new();
+    $response = XMLin($stdout);
+};
+$get_response->();
 my $now = DateTime->now . 'Z';
 my $expected = {
     request => 'http://localhost',
@@ -101,8 +107,7 @@ my $expected = {
 is_deeply($response, $expected, "ListMetadataFormats");
 
 %param = ( verb => 'ListIdentifiers' );
-($response) = capture { Koha::OAI::Server::Repository->new(); };
-$response = XMLin($response);
+$get_response->();
 $now = DateTime->now . 'Z';
 $expected = {
     request => 'http://localhost',
