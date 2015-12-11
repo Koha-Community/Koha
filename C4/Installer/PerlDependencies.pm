@@ -908,6 +908,16 @@ our $PERL_DEPS = {
         required => '1',
         min_ver  => '0.37',
     },
+    'Path::Tiny' => {
+        usage => 'core',
+        required => 1,
+        min_ver => '0.058',
+    },
+    'Net::Z3950::SimpleServer' => {
+        'usage'    => 'Z39.50 responder',
+        'required' => '0',
+        'min_ver'  => '1.15',
+    },
 };
 
 1;
