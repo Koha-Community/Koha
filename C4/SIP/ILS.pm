@@ -199,7 +199,7 @@ sub checkin {
 
     if ( !defined( $item->{patron} ) ) {
         $circ->screen_msg("Item not checked out") unless $checked_in_ok;
-	syslog("LOG_DEBUG", "C4::SIP::ILS::checkin - item not checked out");
+        syslog("LOG_DEBUG", "C4::SIP::ILS::checkin - item not checked out");
     }
     else {
         if ( $circ->ok ) {
