@@ -133,7 +133,11 @@ $(document).ready(function () {
 [% END %]
 
 [% IF ( collectionItemNeedsTransferred ) %]
- <div id="rotating-collection" class="dialog message">This item is part of a rotating collection and needs to be transferred to [% collectionBranch %]</div>
+ <div id="rotating-collection" class="dialog message">
+        <h3>Please transfer item to: [% collectionBranch %]</h3>
+            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
+            <p>This item is part of a rotating collection.</p>
+</div>
 [% END %]
 
 <!-- Patron has fines -->
@@ -165,11 +169,19 @@ $(document).ready(function () {
 [% END %]
 
 [% IF ( wrongbranch ) %]
-<div class="dialog alert"><h3>Cannot check in</h3><p>This item must be checked in at its home library. <strong>NOT CHECKED IN</strong></p>
-</div>
+    <div class="dialog alert"><h3>Cannot check in</h3>
+        <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
+        </p><strong>NOT CHECKED IN</strong></p>
+        <p>This item must be checked in at following library: <strong>[% Branches.GetName( rightbranch ) %]</strong></p>
+    </div>
 [% END %]
 <!-- case of a mistake in transfer loop -->
-[% IF ( WrongTransfer ) %]<div id="return2" class="dialog message"><!-- WrongTransfer --><h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% title |html %]</a> to [% Branches.GetName( TransferWaitingAt ) %]</h3><h3><a href="#" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;&amp;branchcode=[% homebranch %]&amp;op=slip'); return true;">Print slip</a> or <a href="/cgi-bin/koha/circ/returns.pl?itemnumber=[% itemnumber %]&amp;canceltransfer=1">Cancel transfer</a></h3>
+[% IF ( WrongTransfer ) %]
+    <div id="return2" class="dialog message">
+        <!-- WrongTransfer -->
+        <h3>Please return item to: [% Branches.GetName( TransferWaitingAt ) %]</h3>
+            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
+        <ul><li><a href="#" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;&amp;branchcode=[% homebranch %]&amp;op=slip'); return true;">Print transfer slip</a></li><li><a href="/cgi-bin/koha/circ/returns.pl?itemnumber=[% itemnumber %]&amp;canceltransfer=1">Cancel transfer</a></li></ul>
 [% IF ( wborcnum ) %]<h5>Hold for:</h5>
         <ul><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
             [% borsurname %], [% borfirstname %]</a> ([% borcnum %])</li>
@@ -202,7 +214,8 @@ $(document).ready(function () {
 	<!-- waiting -->
 
     <div id="hold-found1" class="dialog message audio-alert-action">
-        <h3>Hold found (item is already waiting):  <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itembiblionumber %]">[% title |html %]</a></h3>
+        <h3>Hold found (item is already waiting)</h3>
+        <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
         [% IF ( reservenotes ) %]<h4>Notes: [% reservenotes %]</h4>[% END %]
         <h4>Hold for:</h4>
 			<ul>
@@ -250,7 +263,8 @@ $(document).ready(function () {
     [% IF ( diffbranch ) %]
 		<!-- diffbranch -->
         <div id="transfer-needed" class="dialog message audio-alert-action">
-		<h3>Hold needing transfer found: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itembiblionumber %]">[% title |html %]</a></h3>
+            <h3>Hold needing transfer found</h3>
+                <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
                 <h4>Hold for: </h4>
                     <ul>
                         <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borsurname %], [% borfirstname %]</a> ([% borcnum %])</li>
@@ -294,7 +308,9 @@ $(document).ready(function () {
     [% IF ( transfer ) %]
     <!-- transfer: item with no reservation, must be returned according to home library circulation rules -->
         <div id="return1" class="dialog message audio-alert-action">
-            <h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% title or "item" |html %]</a> to [% Branches.GetName( returnbranch ) %]<br/>( <a href="#" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;branchcode=[% returnbranch %]&amp;op=slip'); return true;">Print slip</a> )</h3>
+            <h3>Please return item to: [% Branches.GetName( returnbranch ) %]</h3>
+            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
+            <ul><li><a href="#" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;branchcode=[% returnbranch %]&amp;op=slip'); return true;">Print slip</a> )</li></ul>
         </div>
     [% END %]
 
@@ -356,7 +372,8 @@ $(document).ready(function () {
 	<!--  reserved  -->
 
     <div id="hold-found2" class="dialog message audio-alert-action">
-      <h3>Hold found: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itembiblionumber %]">[% title |html %]</a></h3>
+      <h3>Hold found</h3>
+          <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
         [% IF ( reservenotes ) %]<h4>Notes: [% reservenotes %]</h4>[% END %]
         <h5>Hold for:</h5>
 		<ul>
@@ -408,21 +425,24 @@ $(document).ready(function () {
 [% IF ( errmsgloop ) %]
     <div class="dialog alert audio-alert-warning">
         <h3>Check in message</h3>
+        [% IF itembiblionumber %]
+            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
+        [% END %]
         [% FOREACH errmsgloo IN errmsgloop %]
                     [% IF ( errmsgloo.NotForLoanStatusUpdated ) %]
                         <p class="problem">
-                            Not for loan status updated
-                            from
+                            Not for loan status updated.
+                            <br />Old value:
                             [% IF errmsgloo.NotForLoanStatusUpdated.from %]
-                                [% AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.from ) %]
+                                [% AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.from ) %].
                             [% ELSE %]
-                                being available for loan
+                                Available for loan.
                             [% END %]
-                            to
+                            <br />New value:
                             [% IF errmsgloo.NotForLoanStatusUpdated.to %]
-                                [% AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.to ) %]
+                                [% AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.to ) %].
                             [% ELSE %]
-                                being available for loan
+                                Available for loan.
                             [% END %]
                         </p>
                     [% END %]
@@ -430,7 +450,7 @@ $(document).ready(function () {
                         <p class="problem">No item with barcode: [% errmsgloo.msg %]</p>
                     [% END %]
                     [% IF ( errmsgloo.ispermanent ) %]
-                        <p class="problem">Please return to  [% errmsgloo.msg %]</p>
+                        <p class="problem">Please return item to: [% errmsgloo.msg %]</p>
                     [% END %]
                     [% IF ( errmsgloo.notissued ) %]
                         <p class="problem">Not checked out.</p>
@@ -443,25 +463,26 @@ $(document).ready(function () {
                         [% IF ( LostItemFeeRefunded ) %]
                             <p class="problem">A refund has been applied to the borrowing patron's account.</p>
                         [% ELSE %]
-                            <p class="problem">Any lost item fees for this item will remain on the patron's account</p>
+                            <p class="problem">Any lost item fees for this item will remain on the patron's account.</p>
                         [% END %]
                     [% END %]
                     [% IF ( errmsgloo.withdrawn ) %]
                         [% IF BlockReturnOfWithdrawnItems %]
                            <h5>Cannot check in</h5>
-                           <p class="problem">Item is withdrawn. <strong>NOT CHECKED IN</strong></p>
+                           <p><strong>NOT CHECKED IN</strong></p>
+                           <p class="problem">Item is withdrawn.</p>
                         [% ELSE %]
                            <p class="problem">Item is withdrawn.</p>
                         [% END %]
                     [% END %]
                     [% IF ( errmsgloo.debarred ) %]
-                        <p class="problem"><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% errmsgloo.debarborrowernumber %]">[% errmsgloo.debarname %]([% errmsgloo.debarcardnumber %])</a> is now debarred until [% errmsgloo.debarred | $KohaDates %] </p>
+                        <p class="problem"><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% errmsgloo.debarborrowernumber %]">[% errmsgloo.debarname %]([% errmsgloo.debarcardnumber %])</a> is now debarred until [% errmsgloo.debarred | $KohaDates %].</p>
                     [% END %]
                     [% IF ( errmsgloo.prevdebarred ) %]
-                        <p class="problem"><b>Reminder: </b>Patron was earlier restricted until [% errmsgloo.prevdebarred | $KohaDates %]</p>
+                        <p class="problem"><b>Reminder: </b>Patron was earlier restricted until [% errmsgloo.prevdebarred | $KohaDates %].</p>
                     [% END %]
                     [% IF ( errmsgloo.foreverdebarred ) %]
-                        <p class="problem"><b>Reminder: </b>Patron has an indefinite restriction</p>
+                        <p class="problem"><b>Reminder: </b>Patron has an indefinite restriction.</p>
                     [% END %]
 
             [% END %]

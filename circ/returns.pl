@@ -280,6 +280,7 @@ if ($barcode) {
     $template->param(
         title            => $biblio->{'title'},
         homebranch       => $biblio->{'homebranch'},
+        holdingbranch    => $biblio->{'holdingbranch'},
         returnbranch     => $returnbranch,
         author           => $biblio->{'author'},
         itembarcode      => $biblio->{'barcode'},
@@ -373,6 +374,7 @@ if ( $messages->{'NeedsTransfer'} ){
 if ( $messages->{'Wrongbranch'} ){
     $template->param(
         wrongbranch => 1,
+        rightbranch => $messages->{'Wrongbranch'}->{'Rightbranch'},
     );
 }
 
