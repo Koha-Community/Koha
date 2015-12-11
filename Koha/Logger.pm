@@ -222,6 +222,30 @@ sub _checkLoggerOverloads {
     }
 }
 
+=head2 debug_to_screen
+
+Adds a new appender for the given logger that will log all DEBUG-and-higher messages to stderr.
+Useful for daemons.
+
+=cut
+
+sub debug_to_screen {
+    my $self = shift;
+
+    return unless ( $self->{logger} );
+
+    my $appender = Log::Log4perl::Appender->new(
+        'Log::Log4perl::Appender::Screen',
+        stderr => 1,
+        utf8 => 1,
+        name => 'debug_to_screen' # We need a specific name to prevent duplicates
+    );
+
+    $appender->threshold( $Log::Log4perl::DEBUG );
+    $self->{logger}->add_appender( $appender );
+    $self->{logger}->level( $Log::Log4perl::DEBUG );
+}
+
 =head2 AUTOLOAD
 
     Prevent a crash when log4perl is invoked improperly.

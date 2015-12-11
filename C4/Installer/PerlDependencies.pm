@@ -1058,6 +1058,11 @@ our $PERL_DEPS = {
         'min_ver'  => '5.01',
         # also required for Zebra installs: about page: bug 20061
     },
+    'Net::Z3950::SimpleServer' => {
+        'usage'    => 'Z39.50 responder',
+        'required' => '0',
+        'min_ver'  => '1.15',
+    },
 
 };
 
