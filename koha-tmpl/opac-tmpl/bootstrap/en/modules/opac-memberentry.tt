@@ -60,6 +60,8 @@
                                 [% IF field == "email" %]<li>Contact information: <a href="#borrower_email">primary email address</a></li>[% END %]
                                 [% IF field == "emailpro" %]<li>Contact information: <a href="#borrower_emailpro">secondary email address</a></li>[% END %]
                                 [% IF field == "B_email" %]<li>Alternate address information: <a href="#borrower_B_email">email address</a></li>[% END %]
+                                [% IF field == "password_match" %]<li>Passwords do not match! <a href="#password">password</a></li>[% END %]
+                                [% IF field == "password_invalid" %]<li>Password does not meet minium requirements! <a href="#password">password</a></li>[% END %]
                             [% END %]
                         </ul>
                         Please correct the errors and resubmit.
@@ -777,8 +779,37 @@
                 [% END %]
 
                 [% UNLESS action == 'edit' %]
+                    <fieldset class="rows" id="memberentry_password">
+                        <legend id="contact_legend">Contact information</legend>
+                    [% UNLESS hidden.defined('password') %]
+                        <div class="alert alert-info">Your password must be at least [% minpassw %] characters long.
+                        [% IF mandatory.defined('password') %]
+                            <br>You must enter a password!</div>
+                            <ol>
+                                <li><label for="borrower_password" class="required">Password</label>
+                                    <input type="text" name="borrower_password" id="password" />
+                                </li>
+                                <li><label for="borrower_password2" class="required">Confirm password</label>
+                                    <input type="text" name="borrower_password2" id="password2" />
+                                </li>
+                            </ol>
+                        [% ELSE %]
+                            <br>If you do not enter a password a system generated password will be created</div>
+                            <ol>
+                                <li><label for="borrower_password">Password</label>
+                                    <input type="text" name="borrower_password" id="password" />
+                                </li>
+                                <li><label for="borrower_password2">Confirm password</label>
+                                    <input type="text" name="borrower_password2" id="password2" />
+                                </li>
+                            </ol>
+                        [% END %]
+                    [% END %]
+                    </fieldset>
+
                     <fieldset class="rows" id="memberentry_captcha">
                         <ol>
+
                             <li>
                                 <label for="captcha" class="required">Verification:</label>
 

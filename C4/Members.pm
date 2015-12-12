@@ -2411,17 +2411,18 @@ sub AddMember_Opac {
     my ( %borrower ) = @_;
 
     $borrower{'categorycode'} = C4::Context->preference('PatronSelfRegistrationDefaultCategory');
-
-    my $sr = new String::Random;
-    $sr->{'A'} = [ 'A'..'Z', 'a'..'z' ];
-    my $password = $sr->randpattern("AAAAAAAAAA");
-    $borrower{'password'} = $password;
+    if (not defined $borrower{'password'}){
+        my $sr = new String::Random;
+        $sr->{'A'} = [ 'A'..'Z', 'a'..'z' ];
+        my $password = $sr->randpattern("AAAAAAAAAA");
+        $borrower{'password'} = $password;
+    }
 
     $borrower{'cardnumber'} = fixup_cardnumber();
 
     my $borrowernumber = AddMember(%borrower);
 
-    return ( $borrowernumber, $password );
+    return ( $borrowernumber, $borrower{'password'} );
 }
 
 =head2 AddEnrolmentFeeIfNeeded
