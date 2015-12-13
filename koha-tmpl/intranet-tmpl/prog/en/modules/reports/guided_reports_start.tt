@@ -12,22 +12,21 @@
 [%- END -%]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Reports &rsaquo; Guided reports wizard
-[% IF ( saved1 ) %]&rsaquo; Saved reports
-[% ELSIF ( create ) %]&rsaquo; Create from SQL
-[% ELSIF ( showsql ) %]&rsaquo; Saved reports &rsaquo; SQL view
-[% ELSIF ( execute ) %]&rsaquo; Saved reports &rsaquo; [% name %] Report
-[% ELSIF ( editsql ) %]&rsaquo; Saved reports &rsaquo; Edit SQL report
-[% ELSIF ( buildx ) %]&rsaquo; Build a report, step [% buildx %] of 6:
-[% IF ( build1 ) %]Choose a module
-[% ELSIF ( build2 ) %]Pick a report type
-[% ELSIF ( build3 ) %]Select columns for display
-[% ELSIF ( build4 ) %]Select criteria to limit on
-[% ELSIF ( build5 ) %]Pick which columns to total
-[% ELSIF ( build6 ) %]Select how you want the report ordered
-[% END %]
-[% END %]
-</title>
+
+<title>Koha &rsaquo; Reports &rsaquo; Guided reports wizard [%- IF ( saved1 ) -%]&rsaquo; Saved reports
+[%- ELSIF ( create ) -%]&rsaquo; Create from SQL
+[%- ELSIF ( showsql ) -%]&rsaquo; Saved reports &rsaquo; SQL view
+[%- ELSIF ( execute ) -%]&rsaquo; Saved reports &rsaquo; [% name %] Report
+[%- ELSIF ( editsql ) -%]&rsaquo; Saved reports &rsaquo; Edit SQL report
+[%- END -%]
+[%- IF ( build1 ) -%]&rsaquo; Build a report, step 1 of 6: Choose a module
+[%- ELSIF ( build2 ) -%]&rsaquo; Build a report, step 2 of 6: Pick a report type
+[%- ELSIF ( build3 ) -%]&rsaquo; Build a report, step 3 of 6: Select columns for display
+[%- ELSIF ( build4 ) -%]&rsaquo; Build a report, step 4 of 6: Select criteria to limit on
+[%- ELSIF ( build5 ) -%]&rsaquo; Build a report, step 5 of 6: Pick which columns to total
+[%- ELSIF ( build6 ) -%]&rsaquo; Build a report, step 6 of 6: Select how you want the report ordered
+[%- END -%]</title>
+
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <style type="text/css">
@@ -226,19 +225,19 @@ $(document).ready(function(){
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
 &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided reports wizard</a>
-&rsaquo; 
-[% IF ( saved1 ) %]Saved reports
-[% ELSIF ( create ) %]Create from SQL
-[% ELSIF ( showsql ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; SQL view
-[% ELSIF ( editsql ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; Edit SQL report
-[% ELSIF ( execute ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; <em>[% name %]</em> Report
-[% ELSIF ( buildx ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build a report</a> &rsaquo; Step [% buildx %] of 6:
-    [% IF ( build1 ) %]Choose a module
-    [% ELSIF ( build2 ) %]Pick a report type
-    [% ELSIF ( build3 ) %]Select columns for display
-    [% ELSIF ( build4 ) %]Select criteria to limit on
-    [% ELSIF ( build5 ) %]Pick which columns to total
-    [% ELSIF ( build6 ) %]Select how you want the report ordered
+
+[% IF ( saved1 ) %]&rsaquo; Saved reports
+[% ELSIF ( create ) %]&rsaquo; Create from SQL
+[% ELSIF ( showsql ) %]&rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; SQL view
+[% ELSIF ( editsql ) %]&rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; Edit SQL report
+[% ELSIF ( execute ) %]&rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; <em>[% name %]</em> Report
+[% ELSIF ( build1 || build2 || build3 || build4 || build5 || build6 ) %]&rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build a report</a>
+    [% IF ( build1 ) %]&rsaquo; Step 1 of 6: Choose a module
+    [% ELSIF ( build2 ) %]&rsaquo; Step 2 of 6: Pick a report type
+    [% ELSIF ( build3 ) %]&rsaquo; Step 3 of 6: Select columns for display
+    [% ELSIF ( build4 ) %]&rsaquo; Step 4 of 6: Select criteria to limit on
+    [% ELSIF ( build5 ) %]&rsaquo; Step 5 of 6: Pick which columns to total
+    [% ELSIF ( build6 ) %]&rsaquo; Step 6 of 6: Select how you want the report ordered
     [% END %]
 [% END %]
 </div>
