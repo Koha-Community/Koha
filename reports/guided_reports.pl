@@ -954,7 +954,7 @@ sub header_cell_loop {
 }
 
 foreach (1..6) {
-     $template->{VARS}->{'build' . $_} and $template->{VARS}->{'buildx' . $_} and last;
+     $template->{VARS}->{'build' . $_} and last;
 }
 $template->param(   'referer' => $input->referer(),
                 );
