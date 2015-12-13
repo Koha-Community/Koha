@@ -13,7 +13,7 @@
         [% IF tables.$pagename.keys and tables.$pagename.keys.size > 0 %]
           [% FOR tablename IN tables.$pagename.keys.sort %]
             [% IF pagename == 'additem' AND tablename == 'itemst' %]
-              <div class="alert">Changes made below will only apply to item subfields that are <a href="/cgi-bin/koha/admin/koha2marclinks.pl?tablename=items">mapped</a> to the <code>items</code> table.</div>
+              <div class="alert">Changes made below will only apply to item subfields that are mapped to the 'items' table. <a href="/cgi-bin/koha/admin/koha2marclinks.pl?tablename=items">Go to Koha to MARC mapping</a></div>
             [% END %]
             <table>
               <caption>
