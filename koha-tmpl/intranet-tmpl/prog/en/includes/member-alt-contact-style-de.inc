@@ -55,7 +55,7 @@
                                 [% ELSE %]
                                 <label for="altcontactzipcode">
                                 [% END %]
-                                Zip/Postal code:</label>
+                                ZIP/Postal code:</label>
                     <input type="text" name="altcontactzipcode" id="altcontactzipcode" value="[% altcontactzipcode %]" size="5" />
                                 [% IF ( mandatoryaltcontactzipcode ) %]<span class="required">Required</span>[% END %]
                         </li>
