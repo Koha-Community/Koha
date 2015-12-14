@@ -66,7 +66,7 @@
       [% ELSE %]
         <label for="zipcode">
       [% END %]
-      Zip/Postal code: </label>
+      ZIP/Postal code: </label>
             <input type="text" name="zipcode" id="zipcode" size="10" value="[% zipcode %]" />
           [% IF ( mandatoryzipcode ) %]<span class="required">Required</span>[% END %]
     </li>
