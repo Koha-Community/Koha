@@ -346,6 +346,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OPACXSLTDetailsDisplay','default','','Enable XSL stylesheet control over details page display on OPAC','Free'),
 ('OPACXSLTResultsDisplay','default','','Enable XSL stylesheet control over results page display on OPAC','Free'),
 ('OpenLibraryCovers','0',NULL,'If ON Openlibrary book covers will be show','YesNo'),
+('OpenLibrarySearch','0',NULL,'If Yes Open Library search results will show in OPAC','YesNo'),
 ('OrderPdfFormat','pdfformat::layout3pages','Controls what script is used for printing (basketgroups)','','free'),
 ('OverDriveClientKey','','Client key for OverDrive integration','30','Free'),
 ('OverDriveClientSecret','','Client key for OverDrive integration','30','YesNo'),
