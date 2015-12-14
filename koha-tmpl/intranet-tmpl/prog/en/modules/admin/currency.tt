@@ -27,14 +27,12 @@
     $(document).ready(function() {
         columns_settings = [% ColumnsSettings.GetColumns( 'admin', 'currency', 'currencies-table', 'json' ) %]
         var issuest = KohaTable("#currencies-table", {
-            "sDom": 'C<"clearfix">t',
-            "aaSorting": [],
-            "aoColumnDefs": [
+            dom: 'B<"clearfix">t',
+            "columnDefs": [
                 { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
                 { "sType": "title-string", "aTargets" : [ "title-string" ] }
-            ],
-            "bPaginate": false,
-        }, columns_settings);
+                ],
+        }, columns_settings );
 
         // prevents users to check active with a currency != 1
         $("#rate").keyup(function() {

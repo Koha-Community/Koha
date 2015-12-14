@@ -11,7 +11,7 @@
     $(document).ready(function() {
         var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'lostitems', 'lostitems-table', 'json' ) %];
         var lostitems_table = KohaTable("#lostitems-table", {
-            "sDom": 'C<"clearfix">t',
+            "dom": 'B<"clearfix">t',
             "aaSorting": [],
             "aoColumnDefs": [
                 { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },

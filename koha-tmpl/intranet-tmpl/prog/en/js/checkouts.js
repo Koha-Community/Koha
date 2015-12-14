@@ -174,7 +174,7 @@ $(document).ready(function() {
                 "sProcessing": MSG_DT_LOADING_RECORDS,
             },
             "bAutoWidth": false,
-            "sDom": 'C<"clearfix">rt',
+            "dom": 'B<"clearfix">rt',
             "aoColumns": [
                 {
                     "mDataProp": function( oObj ) {
