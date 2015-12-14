@@ -1049,7 +1049,14 @@
                         <div id="BW_videos"></div>
                     </div>
                 [% END # / IF Babeltheque %]
-        </div> <!-- /.span8 -->
+
+            [% INCLUDE "openlibrary-readapi.inc" bib = {
+                normalized_isbn => normalized_isbn,
+                lccn => lccn,
+                normalized_oclc => normalized_oclc
+            } %]
+
+        </div> <!-- /.span9 -->
 
         <div class="span3">
             <div id="ulactioncontainer">

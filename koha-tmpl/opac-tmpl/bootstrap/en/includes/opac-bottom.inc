@@ -179,7 +179,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
     </script>
 [% END %]
 
-[% IF OpenLibraryCovers %]
+[% IF OpenLibraryCovers || OpenLibrarySearch %]
     <script type="text/javascript" src="[% interface %]/[% theme %]/js/openlibrary.js"></script>
     <script type="text/javascript">
     //<![CDATA[

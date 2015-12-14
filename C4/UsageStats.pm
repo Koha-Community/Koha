@@ -203,6 +203,7 @@ sub BuildReport {
         NovelistSelectEnabled
         XISBN
         OpenLibraryCovers
+        OpenLibrarySearch
         UseKohaPlugins
         SyndeticsEnabled
         TagsEnabled

@@ -549,6 +549,7 @@ sub get_template_and_user {
             opacreadinghistory                    => C4::Context->preference("opacreadinghistory"),
             OPACUserJS                            => C4::Context->preference("OPACUserJS"),
             opacuserlogin                         => "" . C4::Context->preference("opacuserlogin"),
+            OpenLibrarySearch                     => C4::Context->preference("OpenLibrarySearch"),
             ShowReviewer                          => C4::Context->preference("ShowReviewer"),
             ShowReviewerPhoto                     => C4::Context->preference("ShowReviewerPhoto"),
             suggestion                            => "" . C4::Context->preference("suggestion"),
