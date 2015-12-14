@@ -173,7 +173,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
 									[% rule.humancategorycode %]
 								[% END %]
 							</td>
-							<td>[% IF ( rule.default_humanitemtype ) %]
+							<td>[% IF rule.default_translated_description %]
 									<em>All</em>
 								[% ELSE %]
 									[% rule.translated_description %]
@@ -524,7 +524,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                     [% ELSE %]
                     <tr>
                     [% END %]
-                        <td>[% IF ( branch_item_rule_loo.default_humanitemtype ) %]
+                        <td>[% IF ( branch_item_rule_loo.default_translated_description ) %]
                                 <em>Default</em>
                             [% ELSE %]
                                 [% branch_item_rule_loo.translated_description %]
