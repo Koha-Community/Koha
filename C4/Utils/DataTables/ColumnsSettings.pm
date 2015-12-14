@@ -44,7 +44,18 @@ sub get_columns {
         $column->{cannot_be_toggled} = $c->cannot_be_toggled;
     }
 
-    return $list->{modules}{$module}{$page}{$tablename} || [];
+    my $columns = $list->{modules}{$module}{$page}{$tablename} || [];
+
+    # Assign default value if does not exist
+    $columns = [ map {
+        {
+            cannot_be_toggled => exists $_->{cannot_be_toggled} ? $_->{cannot_be_toggled} : 0,
+            is_hidden => exists $_->{is_hidden} ? $_->{is_hidden} : 0,
+            columnname => $_->{columnname},
+        }
+    } @$columns ];
+
+    return $columns;
 }
 
 sub get_modules {
