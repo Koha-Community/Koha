@@ -228,8 +228,9 @@ function checkMultiHold() {
     [% ELSE %]
         <strong>Cannot place hold:</strong> this record has no items attached.
     [% END %]
-    </ div>
-[% ELSE %]
+    </div>
+[% END %]
+
   [% IF ( messagetransfert ) %]
 		<div class="dialog message">
 				<h2>Hold found for ([% nextreservtitle %]), please transfer</h2>
@@ -247,7 +248,7 @@ function checkMultiHold() {
     <h1>Confirm holds</h1>
   [% END %]
 
-  [% UNLESS ( borrowernumber ) %]
+  [% UNLESS borrowernumber OR noitems %]
     [% IF ( messageborrower ) %]
       <div class="dialog alert"><h3>Patron not found</h3><p>No patron with this name, please, try another</p> </div>
     [% END %]
@@ -296,7 +297,7 @@ function checkMultiHold() {
             <input type="hidden" name="biblionumbers" value="[% biblionumbers %]"/>
         [% END %]
     </form>
-  [% ELSE %]
+  [% ELSIF NOT noitems %]
 
 [% IF ( exceeded_maxreserves || alreadyreserved || none_available || alreadypossession || ageRestricted ) %]
     <div class="dialog alert">
@@ -849,7 +850,6 @@ function checkMultiHold() {
 </fieldset>
 </fieldset>
 </form>
-[% END %]
 [% END %]
 [% END %]
 </div>
