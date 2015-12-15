@@ -29,7 +29,7 @@ use C4::AuthoritiesMarc qw( BuildSummary GetAuthTypeCode ModAuthority );
 use C4::BackgroundJob;
 use C4::Biblio qw( GetMarcBiblio ModBiblio );
 use C4::MarcModificationTemplates qw( GetModificationTemplateActions GetModificationTemplates ModifyRecordWithTemplate );
-use Koha::Authority;
+use Koha::MetadataRecord::Authority;
 
 my $input = new CGI;
 our $dbh = C4::Context->dbh;
@@ -128,7 +128,7 @@ if ( $op eq 'form' ) {
             push @records, $biblio;
         } else {
             # Retrieve authority information
-            my $authority = Koha::Authority->get_from_authid( $record_id );
+            my $authority = Koha::MetadataRecord::Authority->get_from_authid( $record_id );
             unless ( $authority ) {
                 push @messages, {
                     type => 'warning',
@@ -213,7 +213,7 @@ if ( $op eq 'form' ) {
             # Authorities
             my $authid = $record_id;
             my $error = eval {
-                my $authority = Koha::Authority->get_from_authid( $authid );
+                my $authority = Koha::MetadataRecord::Authority->get_from_authid( $authid );
                 my $record = $authority->record;
                 ModifyRecordWithTemplate( $mmtid, $record );
                 ModAuthority( $authid, $record, GetAuthTypeCode( $authid ) );

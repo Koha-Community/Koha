@@ -24,7 +24,7 @@ use C4::Context;
 use Test::More;
 
 BEGIN {
-        use_ok('Koha::Authority');
+        use_ok('Koha::MetadataRecord::Authority');
 }
 
 my $record = MARC::Record->new;
@@ -34,9 +34,9 @@ $record->add_fields(
         [ '150', ' ', ' ', a => 'Cooking' ],
         [ '450', ' ', ' ', a => 'Cookery' ],
         );
-my $authority = Koha::Authority->new($record);
+my $authority = Koha::MetadataRecord::Authority->new($record);
 
-is(ref($authority), 'Koha::Authority', 'Created valid Koha::Authority object');
+is(ref($authority), 'Koha::MetadataRecord::Authority', 'Created valid Koha::MetadataRecord::Authority object');
 
 is($authority->authorized_heading(), 'Cooking', 'Authorized heading was correct');
 
@@ -53,15 +53,15 @@ SKIP:
         $authid = $row->{'authid'};
     }
     skip 'No authorities', 3 unless $authid;
-    $authority = Koha::Authority->get_from_authid($authid);
+    $authority = Koha::MetadataRecord::Authority->get_from_authid($authid);
 
-    is(ref($authority), 'Koha::Authority', 'Retrieved valid Koha::Authority object');
+    is(ref($authority), 'Koha::MetadataRecord::Authority', 'Retrieved valid Koha::MetadataRecord::Authority object');
 
     is($authority->authid, $authid, 'Object authid is correct');
 
     is($authority->record->field('001')->data(), $authid, 'Retrieved correct record');
 
-    $authority = Koha::Authority->get_from_authid('alphabetsoup');
+    $authority = Koha::MetadataRecord::Authority->get_from_authid('alphabetsoup');
     is($authority, undef, 'No invalid record is retrieved');
 }
 
@@ -77,15 +77,15 @@ SKIP:
     }
 
     skip 'No authorities in reservoir', 3 unless $import_record_id;
-    $authority = Koha::Authority->get_from_breeding($import_record_id);
+    $authority = Koha::MetadataRecord::Authority->get_from_breeding($import_record_id);
 
-    is(ref($authority), 'Koha::Authority', 'Retrieved valid Koha::Authority object');
+    is(ref($authority), 'Koha::MetadataRecord::Authority', 'Retrieved valid Koha::MetadataRecord::Authority object');
 
     is($authority->authid, undef, 'Records in reservoir do not have an authid');
 
     is(ref($authority->record), 'MARC::Record', 'MARC record attached to authority');
 
-    $authority = Koha::Authority->get_from_breeding('alphabetsoup');
+    $authority = Koha::MetadataRecord::Authority->get_from_breeding('alphabetsoup');
     is($authority, undef, 'No invalid record is retrieved from reservoir');
 }
 

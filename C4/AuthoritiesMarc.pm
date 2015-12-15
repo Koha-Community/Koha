@@ -26,7 +26,7 @@ use C4::AuthoritiesMarc::MARC21;
 use C4::AuthoritiesMarc::UNIMARC;
 use C4::Charset;
 use C4::Log;
-use Koha::Authority;
+use Koha::MetadataRecord::Authority;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -801,7 +801,7 @@ Returns MARC::Record of the authority passed in parameter.
 
 sub GetAuthority {
     my ($authid)=@_;
-    my $authority = Koha::Authority->get_from_authid($authid);
+    my $authority = Koha::MetadataRecord::Authority->get_from_authid($authid);
     return unless $authority;
     return ($authority->record);
 }

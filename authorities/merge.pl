@@ -23,7 +23,7 @@ use CGI qw ( -utf8 );
 use C4::Output;
 use C4::Auth;
 use C4::AuthoritiesMarc;
-use Koha::Authority;
+use Koha::MetadataRecord::Authority;
 use C4::Koha;
 use C4::Biblio;
 
@@ -92,13 +92,13 @@ else {
         push @errors, { code => "WRONG_COUNT", value => scalar(@authid) };
     }
     else {
-        my $recordObj1 = Koha::Authority->get_from_authid($authid[0]) || Koha::Authority->new();
+        my $recordObj1 = Koha::MetadataRecord::Authority->get_from_authid($authid[0]) || Koha::MetadataRecord::Authority->new();
         my $recordObj2;
 
         if (defined $mergereference && $mergereference eq 'breeding') {
-            $recordObj2 =  Koha::Authority->get_from_breeding($authid[1]) || Koha::Authority->new();
+            $recordObj2 =  Koha::MetadataRecord::Authority->get_from_breeding($authid[1]) || Koha::MetadataRecord::Authority->new();
         } else {
-            $recordObj2 =  Koha::Authority->get_from_authid($authid[1]) || Koha::Authority->new();
+            $recordObj2 =  Koha::MetadataRecord::Authority->get_from_authid($authid[1]) || Koha::MetadataRecord::Authority->new();
         }
 
         if ($mergereference) {

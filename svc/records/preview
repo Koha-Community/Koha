@@ -23,7 +23,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Biblio qw( GetMarcBiblio );
 use C4::MarcModificationTemplates qw( ModifyRecordWithTemplate );
 use C4::Output qw( output_html_with_http_headers );
-use Koha::Authority;
+use Koha::MetadataRecord::Authority;
 
 my $query = CGI->new();
 my $record_id = $query->param('record_id');
@@ -34,7 +34,7 @@ my $record;
 if ( $record_type eq 'biblio' ) {
     $record = GetMarcBiblio( $record_id );
 } else {
-    my $authority = Koha::Authority->get_from_authid( $record_id );
+    my $authority = Koha::MetadataRecord::Authority->get_from_authid( $record_id );
     $record = $authority->record;
 }
 

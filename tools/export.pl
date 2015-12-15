@@ -168,7 +168,7 @@ if ( $op eq "export" ) {
                         : (),
                     ( $authtype ? ( authtypecode => $authtype ) : () ),
                 };
-                # Koha::Authority is not a Koha::Object...
+                # Koha::MetadataRecord::Authority is not a Koha::Object...
                 my $authorities = Koha::Database->new->schema->resultset('AuthHeader')->search( $conditions );
                 @record_ids = map { $_->authid } $authorities->all;
             }

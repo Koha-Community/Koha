@@ -1,4 +1,4 @@
-package Koha::Authority;
+package Koha::MetadataRecord::Authority;
 
 # Copyright 2012 C & P Bibliography Services
 #
@@ -19,7 +19,7 @@ package Koha::Authority;
 
 =head1 NAME
 
-Koha::Authority - class to encapsulate authority records in Koha
+Koha::MetadataRecord::Authority - class to encapsulate authority records in Koha
 
 =head1 SYNOPSIS
 
@@ -45,9 +45,9 @@ __PACKAGE__->mk_accessors(qw( authid authtype ));
 
 =head2 new
 
-    my $auth = Koha::Authority->new($record);
+    my $auth = Koha::MetadataRecord::Authority->new($record);
 
-Create a new Koha::Authority object based on the provided record.
+Create a new Koha::MetadataRecord::Authority object based on the provided record.
 
 =cut
 
@@ -69,9 +69,9 @@ sub new {
 
 =head2 get_from_authid
 
-    my $auth = Koha::Authority->get_from_authid($authid);
+    my $auth = Koha::MetadataRecord::Authority->get_from_authid($authid);
 
-Create the Koha::Authority object associated with the provided authid.
+Create the Koha::MetadataRecord::Authority object associated with the provided authid.
 Note that this routine currently retrieves a MARC record because
 authorities in Koha are MARC records by definition. This is an
 unfortunate but unavoidable fact.
@@ -92,7 +92,7 @@ sub get_from_authid {
     return if ($@);
     $record->encoding('UTF-8');
 
-    # NOTE: GuessAuthTypeCode has no business in Koha::Authority, which is an
+    # NOTE: GuessAuthTypeCode has no business in Koha::MetadataRecord::Authority, which is an
     #       object-oriented class. Eventually perhaps there will be utility
     #       classes in the Koha:: namespace, but there are not at the moment,
     #       so this shim seems like the best option all-around.
@@ -110,9 +110,9 @@ sub get_from_authid {
 
 =head2 get_from_breeding
 
-    my $auth = Koha::Authority->get_from_authid($authid);
+    my $auth = Koha::MetadataRecord::Authority->get_from_authid($authid);
 
-Create the Koha::Authority object associated with the provided authid.
+Create the Koha::MetadataRecord::Authority object associated with the provided authid.
 
 =cut
 
@@ -130,7 +130,7 @@ sub get_from_breeding {
     return if ($@);
     $record->encoding('UTF-8');
 
-    # NOTE: GuessAuthTypeCode has no business in Koha::Authority, which is an
+    # NOTE: GuessAuthTypeCode has no business in Koha::MetadataRecord::Authority, which is an
     #       object-oriented class. Eventually perhaps there will be utility
     #       classes in the Koha:: namespace, but there are not at the moment,
     #       so this shim seems like the best option all-around.

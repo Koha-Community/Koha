@@ -33,7 +33,7 @@ Filter to embed see from headings into MARC records.
 use strict;
 use warnings;
 use Carp;
-use Koha::Authority;
+use Koha::MetadataRecord::Authority;
 use C4::Biblio qw/GetMarcFromKohaField/;
 
 use base qw(Koha::RecordProcessor::Base);
@@ -83,7 +83,7 @@ sub _processrecord {
 
         next unless $authid;
 
-        my $authority = Koha::Authority->get_from_authid($authid);
+        my $authority = Koha::MetadataRecord::Authority->get_from_authid($authid);
         next unless $authority;
         my $auth_marc = $authority->record;
         my @seefrom = $auth_marc->field('4..');

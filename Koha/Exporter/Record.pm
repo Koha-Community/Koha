@@ -52,7 +52,7 @@ sub _get_record_for_export {
 sub _get_authority_for_export {
     my ($params) = @_;
     my $authid = $params->{authid} || return;
-    my $authority = Koha::Authority->get_from_authid($authid);
+    my $authority = Koha::MetadataRecord::Authority->get_from_authid($authid);
     return unless $authority;
     return $authority->record;
 }

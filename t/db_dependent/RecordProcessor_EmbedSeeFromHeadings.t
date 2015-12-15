@@ -21,7 +21,7 @@ use strict;
 use warnings;
 use File::Spec;
 use MARC::Record;
-use Koha::Authority;
+use Koha::MetadataRecord::Authority;
 
 use Test::More;
 use Test::MockModule;
@@ -82,7 +82,7 @@ subtest "EmbedSeeFromHeadings should skip holdings fields" => sub {
     );
 
 
-    my $koha_authority = new Test::MockModule('Koha::Authority');
+    my $koha_authority = new Test::MockModule('Koha::MetadataRecord::Authority');
     $koha_authority->mock( 'get_from_authid', sub {
 
         my $auth_record = MARC::Record->new;
