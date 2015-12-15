@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Placing a hold</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -16,79 +17,92 @@
     </ul>
 
     <div class="container">
-
-                <div id="holds">
-                    [% IF ( message ) %]
+        <div id="holds">
+            [% IF ( message ) %]
+                <div id="holdmessages" class="alert">
+                    <p><strong>Sorry</strong>, you cannot place holds.</strong></p>
+                    <ul>
                         [% IF ( GNA ) %]
-                            <div id="gna" class="alert">
-                                <p><strong>Sorry</strong>, you cannot place holds because the library doesn't have up-to-date <a href="/cgi-bin/koha/opac-memberentry.pl">contact information</a> on file.</p>
-                                <p>Please contact your librarian, or use the <a href="/cgi-bin/koha/opac-memberentry.pl">online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)</p>
-                            </div>
+                            <li id="gna">
+                                According to our records, we don't have up-to-date contact information. Please contact the library.
+                                <a href="/cgi-bin/koha/opac-memberentry.pl">[% IF ( Koha.Preference('OPACPatronDetails') ) %]Update your contact information[% ELSE %]Go to your contact information[% END %]</a>
+                                [% IF ( Koha.Preference('OPACPatronDetails') ) %]<em>(Please note: there may be a delay in restoring your account if you submit online.)</em>[% END %]
+                            </li>
                         [% END %]
 
                         [% IF ( lost ) %]
-                            <div id="lost" class="alert">
-                                <p><strong>Sorry</strong>, you cannot place holds because your library card has been marked as lost or stolen.</p>
-                                <p>If this is an error, please take your card to the circulation desk at your local library and the error will be corrected.</p>
-                            </div>
+                            <li id="lost">
+                                Your library card has been marked as lost or stolen.<br />
+                                <em>If this is an error, please take your card to the circulation desk at your local library and the error will be corrected.</em>
+                            </li>
                         [% END %]
 
                         [% IF ( debarred ) %]
-                            <div id="debarred" class="alert">
-                                <p><strong>Sorry</strong>, you cannot place holds because your account has been frozen.</p>
-                                <p>Usually the reason for freezing an account is old overdues or damage fees.   If <a href="/cgi-bin/koha/opac-user.pl">your account page</a> shows your account to be clear, please consult a librarian.</p>
-                            </div>
+                            <li id="debarred">
+                                Your account has been frozen.
+                                [% IF ( BORROWER_INF.debarredcomment ) %] Comment: <span id="userdebarred_comment">"[% BORROWER_INF.debarredcomment %]"</span>[% END %]
+                                [% IF ( BORROWER_INF.userdebarreddate ) %] End date: <span id="userdebarred_date">[% BORROWER_INF.userdebarreddate | $KohaDates %]</span>[% END %]
+                                <br /><em>Usually the reason for freezing an account is old overdues or damage fees. If shows your account to be clear, please contact the library.</em> <a href="/cgi-bin/koha/opac-account.pl">Go to your account page</a>
+                            </li>
                         [% END %]
 
                         [% IF ( too_much_oweing ) %]
-                            <div id="too_much_oweing" class="alert">
-                                Sorry, you cannot place holds because you owe [% too_much_oweing %].
-                            </div>
+                            <li id="too_much_oweing">
+                                You have unpaid fines. Amount: [% too_much_oweing | $Price %].
+                            </li>
                         [% END %]
 
                         [% IF ( too_many_reserves ) %]
-                            <div id="too_many_reserves" class="alert">
+                            <li id="too_many_reserves">
                                 Sorry, you cannot place more than [% too_many_reserves %] holds.
-                            </div>
+                            </li>
                         [% END %]
 
                         [% IF ( bad_biblionumber ) %]
-                            <div id="bad_biblionumber" class="alert">
-                                ERROR: No biblio record found for biblionumber [% bad_biblionumber %].</div>
+                            <li id="bad_biblionumber">
+                                ERROR: No biblio record found for biblionumber [% bad_biblionumber %].
+                            </li>
                         [% END %]
 
                         [% IF ( no_items_selected ) %]
-                            <div id="no_items_selected" class="alert">
+                            <li id="no_items_selected">
                                 You must select at least one item.
-                            </div>
+                            </li>
                         [% END %]
 
                         [% IF ( no_branch_selected ) %]
-                            <div id="no_branch_selected" class="alert">
+                            <li id="no_branch_selected">
                                 You must select a library for pickup.
-                            </div>
+                            </li>
                         [% END %]
 
                         [% IF ( no_biblionumber ) %]
-                            <div id="no_biblionumber" class="alert">ERROR: No biblionumber received.</div>
+                            <li id="no_biblionumber">
+                               ERROR: No biblionumber received.
+                           </li>
                         [% END %]
 
                         [% IF ( bad_data ) %]
-                            <div id="bad_data" class="alert">ERROR: Internal error: incomplete hold request.</div>
+                            <li id="bad_data">
+                                ERROR: Internal error: incomplete hold request.
+                            </li>
                         [% END %]
 
                         [% IF ( expired_patron ) %]
-                            <div id="expired_patron" class="alert"><strong>Sorry</strong>, you cannot place holds because your library card has expired.</p><p>Please contact your librarian if you wish to renew your card.</div>
+                            <li id="expired_patron">
+                                Your library card has expired. Please contact your librarian if you wish to renew your card.
+                            </li>
                         [% END %]
 
                     [% ELSE %]
 
                         [% IF ( none_available ) %]
-                            <div id="none_available" class="alert"><strong>Sorry</strong>, none of these items can be placed on hold.
+                            <div id="none_available" class="alert">
+                                <strong>Sorry</strong>, none of these items can be placed on hold.
                             </div>
                         [% END %]
-
-                    [% END # / IF message %]
+                </div>
+            [% END # / IF message %]
 
                     [% UNLESS ( message ) %]
                         [% UNLESS ( none_available ) %]
