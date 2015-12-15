@@ -968,12 +968,12 @@ sub run_unimarc_search_tests {
 }
 
 subtest 'MARC21 + GRS-1' => sub {
-    plan tests => 110;
+    plan tests => 107;
     run_marc21_search_tests('grs1');
 };
 
 subtest 'MARC21 + DOM' => sub {
-    plan tests => 110;
+    plan tests => 107;
     run_marc21_search_tests('dom');
 };
 

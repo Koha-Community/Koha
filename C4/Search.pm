@@ -1451,10 +1451,10 @@ sub buildQuery {
         if ( @limits ) {
             $q .= ' and '.join(' and ', @limits);
         }
-        return ( undef, $q, $q, "q=ccl=".uri_escape_utf8($q), $q, '', '', '', '', 'ccl' );
+        return ( undef, $q, $q, "q=ccl=".uri_escape_utf8($q), $q, '', '', '', 'ccl' );
     }
     if ( $query =~ /^cql=/ ) {
-        return ( undef, $', $', "q=cql=".uri_escape_utf8($'), $', '', '', '', '', 'cql' );
+        return ( undef, $', $', "q=cql=".uri_escape_utf8($'), $', '', '', '', 'cql' );
     }
     if ( $query =~ /^pqf=/ ) {
         if ($query_desc) {
@@ -1463,7 +1463,7 @@ sub buildQuery {
             $query_desc = $';
             $query_cgi = "q=pqf=".uri_escape_utf8($');
         }
-        return ( undef, $', $', $query_cgi, $query_desc, '', '', '', '', 'pqf' );
+        return ( undef, $', $', $query_cgi, $query_desc, '', '', '', 'pqf' );
     }
 
     # pass nested queries directly
