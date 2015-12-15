@@ -48,6 +48,8 @@ use CGI qw ( -utf8 );
 use MARC::Record;
 use C4::Koha;
 
+use Koha::Authority::Types;
+
 our ($tagslib);
 
 sub build_tabs {
@@ -178,16 +180,7 @@ my $authtypecode = GetAuthTypeCode($authid);
 $tagslib = &GetTagsLabels(1,$authtypecode);
 
 # Build list of authtypes for showing them
-my $authtypes = getauthtypes;
-my @authtypesloop;
-
-foreach my $thisauthtype (sort { $authtypes->{$b} cmp $authtypes->{$a} } keys %$authtypes) {
-    my %row =(value => $thisauthtype,
-                selected => $thisauthtype eq $authtypecode,
-                authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
-            );
-    push @authtypesloop, \%row;
-}
+my $authority_types = Koha::Authority::Types->search({}, { order_by => ['authtypecode']});
 
 my $record=GetAuthority($authid);
 
@@ -195,7 +188,7 @@ if (not defined $record) {
     # authid invalid
     $template->param ( errauthid => $authid,
                        unknownauthid => 1,
-                       authtypesloop => \@authtypesloop );
+                       authority_types => $authority_types, );
     output_html_with_http_headers $query, $cookie, $template->output;
     exit;
 }
@@ -218,12 +211,14 @@ chop $biblio_fields;
 
 build_tabs ($template, $record, $dbh,"",$query);
 
-$template->param(authid => $authid,
-		count => $count,
-		biblio_fields => $biblio_fields,
-		authtypetext => $authtypes->{$authtypecode}{'authtypetext'},
-		authtypesloop => \@authtypesloop,
-		);
+$template->param(
+    authid          => $authid,
+    count           => $count,
+    biblio_fields   => $biblio_fields,
+    authtypetext    => $authority_types->find($authtypecode)->authtypetext,
+    authtypecode    => $authtypecode,
+    authority_types => $authority_types,
+);
 
 $template->{VARS}->{marcflavour} = C4::Context->preference("marcflavour");
 output_html_with_http_headers $query, $cookie, $template->output;

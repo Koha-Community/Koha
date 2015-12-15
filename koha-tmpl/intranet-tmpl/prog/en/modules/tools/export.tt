@@ -172,12 +172,8 @@ $(document).ready(function() {
             <label for="authtype">Authority type: </label>
             <select name="authtype" id="authtype">
                 <option value="">-- All --</option>
-                [% FOREACH authtypeloo IN authtypeloop %]
-                [% IF ( authtypeloo.selected ) %]
-                <option value="[% authtypeloo.value %]" selected="selected">[% authtypeloo.description %]</option>
-[% ELSE %]
-                <option value="[% authtypeloo.value %]">[% authtypeloo.description %]</option>
-[% END %]
+                [% FOREACH authority_type IN authority_types %]
+                    <option value="[% authtypeloo.value %]">[% authtypeloo.description %]</option>
                 [% END %]
             </select>
         </li>

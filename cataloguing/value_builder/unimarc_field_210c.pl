@@ -69,21 +69,6 @@ my ($input) = @_;
     my ($template, $loggedinuser, $cookie);
     my $resultsperpage;
 
-    my $authtypes = getauthtypes;
-    my @authtypesloop;
-    foreach my $thisauthtype (keys %$authtypes) {
-        my $selected;
-        if ($thisauthtype eq $authtypecode) {
-            $selected=1;
-        }
-        my %row =(value => $thisauthtype,
-                    selected => $selected,
-                    authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
-                index => $index,
-                );
-        push @authtypesloop, \%row;
-    }
-
     if ($op eq "do_search") {
         my @marclist = $query->param('marclist');
         my @and_or = $query->param('and_or');
@@ -186,7 +171,6 @@ my ($input) = @_;
                         );
     }
 
-    $template->param(authtypesloop => \@authtypesloop);
     $template->param(category => $category);
 
     # Print the page

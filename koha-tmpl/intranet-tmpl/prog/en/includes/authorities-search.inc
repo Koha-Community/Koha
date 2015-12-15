@@ -25,11 +25,11 @@
         <input type="hidden" name="type" value="intranet" />
         <select name="authtypecode">
         [% IF (marcflavour == 'UNIMARC' ) %]<option value="">All authority types</option>[% END %]
-        [% FOREACH authtypesloo IN authtypesloop %]
-            [% IF ( authtypesloo.selected ) %]
-            <option value="[% authtypesloo.value %]" selected="selected">[% authtypesloo.authtypetext %]</option>
+        [% FOREACH authority_type IN authority_types %]
+            [% IF authority_type.authtypecode == authtypecode %]
+            <option value="[% authority_type.value %]" selected="selected">[% authority_type.authtypetext %]</option>
             [% ELSE %]
-            <option value="[% authtypesloo.value %]">[% authtypesloo.authtypetext %]</option>
+            <option value="[% authority_type.value %]">[% authority_type.authtypetext %]</option>
             [% END %]
         [% END %]
         </select>
@@ -81,11 +81,11 @@
         <input type="hidden" name="type" value="intranet" />
         <select name="authtypecode">
         [% IF (marcflavour == 'UNIMARC' ) %]<option value="">All authority types</option>[% END %]
-        [% FOREACH authtypesloo IN authtypesloop %]
-            [% IF ( authtypesloo.selected ) %]
-            <option value="[% authtypesloo.value %]" selected="selected">[% authtypesloo.authtypetext %]</option>
+        [% FOREACH authority_type IN authority_types %]
+            [% IF authority_type.authtypecode == authtypecode %]
+            <option value="[% authority_type.value %]" selected="selected">[% authority_type.authtypetext %]</option>
             [% ELSE %]
-            <option value="[% authtypesloo.value %]">[% authtypesloo.authtypetext %]</option>
+            <option value="[% authority_type.value %]">[% authority_type.authtypetext %]</option>
             [% END %]
         [% END %]
         </select>
@@ -135,13 +135,13 @@
     <form action="/cgi-bin/koha/authorities/authorities-home.pl" method="get">
         <input type="hidden" name="op" value="do_search" />
         <input type="hidden" name="type" value="intranet" />
-        <select  name="authtypecode">
+        <select name="authtypecode">
         [% IF (marcflavour == 'UNIMARC' ) %]<option value="">All authority types</option>[% END %]
-        [% FOREACH authtypesloo IN authtypesloop %]
-            [% IF ( authtypesloo.selected ) %]
-            <option value="[% authtypesloo.value %]" selected="selected">[% authtypesloo.authtypetext %]</option>
+        [% FOREACH authority_type IN authority_types %]
+            [% IF authority_type.authtypecode == authtypecode %]
+            <option value="[% authority_type.value %]" selected="selected">[% authority_type.authtypetext %]</option>
             [% ELSE %]
-            <option value="[% authtypesloo.value %]">[% authtypesloo.authtypetext %]</option>
+            <option value="[% authority_type.value %]">[% authority_type.authtypetext %]</option>
             [% END %]
         [% END %]
         </select>

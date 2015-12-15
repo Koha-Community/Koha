@@ -26,6 +26,7 @@ use C4::Csv;
 use C4::Koha;               # GetItemTypes
 use C4::Output;
 
+use Koha::Authority::Types;
 use Koha::Biblioitems;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -279,16 +280,7 @@ else {
           };
     }
 
-    my $authtypes = getauthtypes;
-    my @authtypesloop;
-    foreach my $thisauthtype ( sort keys %$authtypes ) {
-        next unless $thisauthtype;
-        my %row = (
-            value       => $thisauthtype,
-            description => $authtypes->{$thisauthtype}->{'authtypetext'},
-        );
-        push @authtypesloop, \%row;
-    }
+    my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authtypecode'] } );
 
     if (   $flags->{superlibrarian}
         && C4::Context->config('backup_db_via_tools')
@@ -313,7 +305,7 @@ else {
     $template->param(
         branchloop               => \@branchloop,
         itemtypeloop             => \@itemtypesloop,
-        authtypeloop             => \@authtypesloop,
+        authority_types          => $authority_types,
         export_remove_fields     => C4::Context->preference("ExportRemoveFields"),
         csv_profiles             => C4::Csv::GetCsvProfiles('marc'),
     );

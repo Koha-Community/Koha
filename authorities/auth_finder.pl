@@ -29,6 +29,8 @@ use C4::AuthoritiesMarc;
 use C4::Acquisition;
 use C4::Koha;
 
+use Koha::Authority::Types;
+
 my $query        = new CGI;
 my $op           = $query->param('op') || '';
 my $authtypecode = $query->param('authtypecode') || '';
@@ -49,18 +51,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-# Authority types loop
-my $authtypes = C4::Koha::getauthtypes();
-my @authtypesloop;
-foreach my $thisauthtype ( keys %$authtypes ) {
-    my %row = (
-        value        => $thisauthtype,
-        selected     => ( $thisauthtype eq $authtypecode ),
-        authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
-        index        => $index,
-    );
-    push @authtypesloop, \%row;
-}
+my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authtypetext'] } );
 
 # If search form posted
 if ( $op eq "do_search" ) {
@@ -173,7 +164,7 @@ $template->param(
     value_match   => $query->param('value_match') || '',
     tagid         => $tagid,
     index         => $index,
-    authtypesloop => \@authtypesloop,
+    authority_types  => $authority_types,
     authtypecode  => $authtypecode,
     source        => $source,
     relationship  => $relationship,

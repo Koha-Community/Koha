@@ -156,17 +156,13 @@ else {
                 title2          => $recordObj2->authorized_heading,
             );
             if ( $recordObj1->authtype ne $recordObj2->authtype ) {
-                my $frameworks = getauthtypes;
+                my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authtypecode'] } );
                 my @frameworkselect;
-                foreach my $thisframeworkcode ( keys %$frameworks ) {
+                while ( my $authority_type = $authority_types->next ) {
                     my %row = (
-                        value => $thisframeworkcode,
-                        frameworktext =>
-                          $frameworks->{$thisframeworkcode}->{'authtypetext'},
+                        value => $authority_type->authtypecode,
+                        frameworktext => $authority_type->authtypetext,
                     );
-                    if ( $recordObj1->authtype eq $thisframeworkcode ) {
-                        $row{'selected'} = 1;
-                    }
                     push @frameworkselect, \%row;
                 }
                 $template->param(
@@ -181,22 +177,8 @@ else {
     }
 }
 
-my $authtypes = getauthtypes;
-my @authtypesloop;
-foreach my $thisauthtype (
-    sort {
-        $authtypes->{$a}{'authtypetext'} cmp $authtypes->{$b}{'authtypetext'}
-    }
-    keys %$authtypes
-  )
-{
-    my %row = (
-        value        => $thisauthtype,
-        authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
-    );
-    push @authtypesloop, \%row;
-}
-$template->{VARS}->{authtypesloop} = \@authtypesloop;
+my $authority_types = Koha::Authority::Types->search({}, { order_by => ['authtypetext']});
+$template->param( authority_types => $authority_types );
 
 if (@errors) {
 

@@ -47,7 +47,6 @@ BEGIN {
 		&get_itemtypeinfos_of
 		&getframeworks &getframeworkinfo
         &GetFrameworksLoop
-		&getauthtypes &getauthtype
 		&getallthemes
 		&getFacets
 		&displayServers
@@ -353,68 +352,6 @@ SELECT itemtype,
 END_SQL
 
     return get_infos_of( $query, 'itemtype', undef, \@itemtypes );
-}
-
-=head2 getauthtypes
-
-  $authtypes = &getauthtypes();
-
-Returns information about existing authtypes.
-
-build a HTML select with the following code :
-
-=head3 in PERL SCRIPT
-
-   my $authtypes = getauthtypes;
-   my @authtypesloop;
-   foreach my $thisauthtype (keys %$authtypes) {
-       my $selected = 1 if $thisauthtype eq $authtype;
-       my %row =(value => $thisauthtype,
-                selected => $selected,
-                authtypetext => $authtypes->{$thisauthtype}->{'authtypetext'},
-            );
-        push @authtypesloop, \%row;
-    }
-    $template->param(itemtypeloop => \@itemtypesloop);
-
-=head3 in TEMPLATE
-
-  <form action='<!-- TMPL_VAR name="script_name" -->' method=post>
-    <select name="authtype">
-    <!-- TMPL_LOOP name="authtypeloop" -->
-        <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="authtypetext" --></option>
-    <!-- /TMPL_LOOP -->
-    </select>
-    <input type=text name=searchfield value="<!-- TMPL_VAR name="searchfield" -->">
-    <input type="submit" value="OK" class="button">
-  </form>
-
-
-=cut
-
-sub getauthtypes {
-
-    # returns a reference to a hash of references to authtypes...
-    my %authtypes;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("select * from auth_types order by authtypetext");
-    $sth->execute;
-    while ( my $IT = $sth->fetchrow_hashref ) {
-        $authtypes{ $IT->{'authtypecode'} } = $IT;
-    }
-    return ( \%authtypes );
-}
-
-sub getauthtype {
-    my ($authtypecode) = @_;
-
-    # returns a reference to a hash of references to authtypes...
-    my %authtypes;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("select * from auth_types where authtypecode=?");
-    $sth->execute($authtypecode);
-    my $res = $sth->fetchrow_hashref;
-    return $res;
 }
 
 =head2 getframework

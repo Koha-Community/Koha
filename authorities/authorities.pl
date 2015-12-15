@@ -31,6 +31,7 @@ use Date::Calc qw(Today);
 use MARC::File::USMARC;
 use MARC::File::XML;
 use C4::Biblio;
+use Koha::Authority::Types;
 use vars qw( $tagslib);
 use vars qw( $authorised_values_sth);
 use vars qw( $is_a_modif );
@@ -659,23 +660,14 @@ if ($op eq "duplicate")
                         authid                      => $authid , authtypecode=>$authtypecode,	);
 }
 
-$template->param(authid                       => $authid,
-                 authtypecode => $authtypecode,
-                 linkid=>$linkid,
+my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authtypetext'] } );
+
+$template->param(
+    authority_types => $authority_types,
+    authtypecode    => $authtypecode,
+    authid          => $authid,
+    linkid          => $linkid,
+    authtypetext    => $authority_types->find($authtypecode)->authtypetext,
+    hide_marc       => C4::Context->preference('hide_marc'),
 );
-
-my $authtypes = getauthtypes;
-my @authtypesloop;
-foreach my $thisauthtype (keys %$authtypes) {
-    my %row =(value => $thisauthtype,
-                selected => $thisauthtype eq $authtypecode,
-                authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
-            );
-    push @authtypesloop, \%row;
-}
-
-$template->param(authtypesloop => \@authtypesloop,
-                authtypetext => $authtypes->{$authtypecode}{'authtypetext'},
-                hide_marc => C4::Context->preference('hide_marc'),
-                );
 output_html_with_http_headers $input, $cookie, $template->output;

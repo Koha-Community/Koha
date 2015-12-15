@@ -50,6 +50,7 @@ use C4::Koha;
 # use C4::Biblio;
 # use C4::Catalogue;
 
+use Koha::Authority::Types;
 
 my $query=new CGI;
 
@@ -119,18 +120,12 @@ my @fields = $record->fields();
 	}
 	$template->param("0XX" =>\@loop_data);
 
-my $authtypes = getauthtypes;
-my @authtypesloop;
-foreach my $thisauthtype (keys %$authtypes) {
-	my %row =(value => $thisauthtype,
-				selected => $thisauthtype eq $authtypecode,
-				authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
-			);
-	push @authtypesloop, \%row;
-}
+my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authtypetext'] } );
 
-$template->param(authid => $authid,
-		authtypesloop => \@authtypesloop, index => $index,
-		);
+$template->param(
+    authid          => $authid,
+    authority_types => $authority_types,
+    index           => $index,
+);
 output_html_with_http_headers $query, $cookie, $template->output;
 

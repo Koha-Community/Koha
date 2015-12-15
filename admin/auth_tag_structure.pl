@@ -27,13 +27,13 @@ use C4::Context;
 use C4::Output;
 use C4::Context;
 
+use Koha::Authority::Types;
 
 # retrieve parameters
 my $input = new CGI;
 my $authtypecode         = $input->param('authtypecode')         || '';    # set to select framework
 my $existingauthtypecode = $input->param('existingauthtypecode') || '';    # set when we have to create a new framework (in authtype) by copying an old one (in existingauthtype)
 
-# my $authtypeinfo = getauthtypeinfo($authtype);
 my $searchfield = $input->param('searchfield') || 0;
 my $offset      = $input->param('offset') || 0;
 my $op          = $input->param('op')     || '';
@@ -54,16 +54,7 @@ my ($template, $loggedinuser, $cookie)
                  debug => 1,
                  });
 
-# get authtype list
-my $authtypes     = getauthtypes;
-my @authtypesloop = ();
-foreach my $thisauthtype ( sort keys %{$authtypes} ) {
-    push @authtypesloop,
-      { value        => $thisauthtype,
-        selected     => $thisauthtype eq $authtypecode,
-        authtypetext => $authtypes->{$thisauthtype}->{'authtypetext'},
-      };
-}
+my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authtypecode'] } );
 
 my $sth;
 # check that authtype framework is defined in auth_tag_structure if we are on a default action
@@ -83,7 +74,7 @@ if (!$op or $op eq 'authtype_create_confirm') {
     }
 }
 $template->param(script_name  => $script_name);
-$template->param(authtypeloop => \@authtypesloop);
+$template->param(authority_types => $authority_types );
 if ($op && $op ne 'authtype_create_confirm') {
     $template->param($op  => 1);
 } else {

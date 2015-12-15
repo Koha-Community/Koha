@@ -47,6 +47,7 @@ use CGI qw ( -utf8 );
 use MARC::Record;
 use C4::Koha;
 
+use Koha::Authority::Types;
 
 my $query = new CGI;
 
@@ -83,20 +84,13 @@ if ($display_hierarchy){
 
 my $count = CountUsage($authid);
 
-
-my $authtypes     = getauthtypes();
-my @authtypesloop = ();
-foreach my $thisauthtype ( keys %{$authtypes} ) {
-    push @authtypesloop,
-         { value        => $thisauthtype,
-           selected     => $thisauthtype eq $authtypecode,
-           authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
-         };
-}
-$template->{VARS}->{'authtypesloop'} = \@authtypesloop;
-$template->{VARS}->{'authtypetext'}  = $authtypes->{$authtypecode}{'authtypetext'};
-$template->{VARS}->{'authid'}        = $authid;
-$template->{VARS}->{'count'}         = $count;
+my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authtypecode'] } );
+$template->param(
+    authority_types => $authority_types,
+    authtypetext    => $authority_types->find($authtypecode)->authtypetext,
+    authid          => $authid,
+    count           => $count,
+);
 
 # find the marc field/subfield used in biblio by this authority
 if ($show_marc) {

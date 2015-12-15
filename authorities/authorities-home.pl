@@ -33,6 +33,8 @@ use C4::Koha;    # XXX subfield_is_koha_internal_p
 use C4::Biblio;
 use C4::Search::History;
 
+use Koha::Authority::Types;
+
 my $query = new CGI;
 my $dbh   = C4::Context->dbh;
 my $op           = $query->param('op')           || '';
@@ -41,22 +43,7 @@ my $authid       = $query->param('authid')       || '';
 
 my ( $template, $loggedinuser, $cookie );
 
-my $authtypes = getauthtypes;
-my @authtypesloop;
-foreach my $thisauthtype (
-    sort {
-        $authtypes->{$a}{'authtypetext'} cmp $authtypes->{$b}{'authtypetext'}
-    }
-    keys %$authtypes
-  )
-{
-    my %row = (
-        value        => $thisauthtype,
-        selected     => $thisauthtype eq $authtypecode,
-        authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
-    );
-    push @authtypesloop, \%row;
-}
+my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authtypetext'] } );
 
 if ( $op eq "delete" ) {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -201,7 +188,7 @@ if ( $op eq '' ) {
 }
 
 $template->param(
-    authtypesloop => \@authtypesloop,
+    authority_types => $authority_types,
     op            => $op,
 );
 

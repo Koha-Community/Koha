@@ -31,6 +31,8 @@ use C4::AuthoritiesMarc;
 use C4::Koha;    # XXX subfield_is_koha_internal_p
 use C4::Search::History;
 
+use Koha::Authority::Types;
+
 my $query        = new CGI;
 my $op           = $query->param('op') || '';
 my $authtypecode = $query->param('authtypecode') || '';
@@ -42,21 +44,7 @@ $startfrom = 0 if ( !defined $startfrom );
 my ( $template, $loggedinuser, $cookie );
 my $resultsperpage;
 
-my $authtypes     = getauthtypes();
-my @authtypesloop = ();
-foreach my $thisauthtype (
-    sort {
-        $authtypes->{$a}->{'authtypetext'}
-          cmp $authtypes->{$b}->{'authtypetext'}
-    }
-    keys %{$authtypes}
-  ) {
-    push @authtypesloop,
-      { value        => $thisauthtype,
-        selected     => $thisauthtype eq $authtypecode,
-        authtypetext => $authtypes->{$thisauthtype}->{'authtypetext'},
-      };
-}
+my $authority_types = Koha::Authority::Types->search({}, { order_by => ['authtypetext']});
 
 if ( $op eq "do_search" ) {
     my @marclist = ($query->param('marclist'));
@@ -179,7 +167,7 @@ if ( $op eq "do_search" ) {
         resultcount    => scalar @$results,
         numbers        => \@numbers,
         authtypecode   => $authtypecode,
-        authtypetext   => $authtypes->{$authtypecode}{'authtypetext'},
+        authtypetext   => $authority_types->find($authtypecode)->authtypetext,
         isEDITORS      => $authtypecode eq 'EDITORS',
     );
 
@@ -197,7 +185,10 @@ else {
 
 }
 
-$template->param( authtypesloop => \@authtypesloop );
+$template->param(
+    authority_types => $authority_types,
+    authtypecode    => $authtypecode,
+);
 
 # Print the page
 output_html_with_http_headers $query, $cookie, $template->output;

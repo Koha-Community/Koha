@@ -27,6 +27,7 @@ use C4::AuthoritiesMarc::UNIMARC;
 use C4::Charset;
 use C4::Log;
 use Koha::MetadataRecord::Authority;
+use Koha::Authority::Types;
 
 use vars qw($VERSION @ISA @EXPORT);
 

@@ -54,8 +54,8 @@
         <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-            [% FOREACH authtypesloo IN authtypesloop %]
-            <li><a href="/cgi-bin/koha/authorities/authorities.pl?authtypecode=[% authtypesloo.value %]">[% authtypesloo.authtypetext %]</a></li>
+            [% FOREACH authority_type IN authority_types %]
+                <li><a href="/cgi-bin/koha/authorities/authorities.pl?authtypecode=[% authority_type.authtypecode %]">[% authority_type.authtypetext %]</a></li>
             [% END %]
         </ul>
     </div>

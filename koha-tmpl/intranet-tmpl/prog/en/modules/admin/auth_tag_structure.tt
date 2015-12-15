@@ -187,13 +187,12 @@
 <h2>Select an authority framework</h2>
 <form action="[% script_name %]" method="post">
     <select name="authtypecode">
-    [% FOREACH authtypeloo IN authtypeloop %]
-        [% IF ( authtypeloo.selected ) %]
-        <option value="[% authtypeloo.value %]" selected="selected">[% authtypeloo.authtypetext %]</option>
+    [% FOREACH authority_type IN authority_types%]
+        [% IF authority_type.authtypecode == authtypecode%]
+        <option value="[% authority_type.value %]" selected="selected">[% authority_type.authtypetext %]</option>
         [% ELSE %]
-        <option value="[% authtypeloo.value %]">[% authtypeloo.authtypetext %]</option>
+        <option value="[% authority_type.value %]">[% authority_type.authtypetext %]</option>
         [% END %]
-            
     [% END %]
     </select>
     <input type="text" name="searchfield" value="[% searchfield %]" />
