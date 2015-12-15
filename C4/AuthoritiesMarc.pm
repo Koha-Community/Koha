@@ -27,6 +27,7 @@ use C4::AuthoritiesMarc::UNIMARC;
 use C4::Charset;
 use C4::Log;
 use Koha::MetadataRecord::Authority;
+use Koha::Authorities;
 use Koha::Authority::Types;
 
 use vars qw($VERSION @ISA @EXPORT);
@@ -39,8 +40,6 @@ BEGIN {
 	@ISA = qw(Exporter);
 	@EXPORT = qw(
 	    &GetTagsLabels
-	    &GetAuthType
-	    &GetAuthTypeCode
     	&GetAuthMARCFromKohaField 
 
     	&AddAuthority
@@ -300,16 +299,17 @@ sub SearchAuthorities {
                     $reported_tag .= '$' . $_->[0] . $_->[1];
                 }
             }
-            my $thisauthtypecode = GetAuthTypeCode($authid);
-            my $thisauthtype = GetAuthType($thisauthtypecode);
+
+            my $thisauthtypecode = Koha::Authorities->find($authid)->authtypecode;
+            my $thisauthtype = Koha::Authority::Types->find($thisauthtypecode);
             unless (defined $thisauthtype) {
                 $thisauthtypecode = $authtypecode;
-                $thisauthtype = GetAuthType($authtypecode);
+                $thisauthtype = Koha::Authority::Types->find($thisauthtypecode);
             }
             my $summary = BuildSummary( $authrecord, $authid, $thisauthtypecode );
 
             $newline{authtype}     = defined($thisauthtype) ?
-                                        $thisauthtype->{'authtypetext'} : '';
+                                        $thisauthtype->authtypetext : '';
             $newline{summary}      = $summary;
             $newline{even}         = $counter % 2;
             $newline{reported_tag} = $reported_tag;
@@ -367,24 +367,6 @@ sub CountUsageChildren {
   my ($authid) = @_;
 }
 
-=head2 GetAuthTypeCode
-
-  $authtypecode= &GetAuthTypeCode($authid)
-
-returns authtypecode of an authid
-
-=cut
-
-sub GetAuthTypeCode {
-#AUTHfind_authtypecode
-  my ($authid) = @_;
-  my $dbh=C4::Context->dbh;
-  my $sth = $dbh->prepare("select authtypecode from auth_header where authid=?");
-  $sth->execute($authid);
-  my $authtypecode = $sth->fetchrow;
-  return $authtypecode;
-}
- 
 =head2 GuessAuthTypeCode
 
   my $authtypecode = GuessAuthTypeCode($record);
@@ -803,32 +785,6 @@ sub GetAuthority {
     return ($authority->record);
 }
 
-=head2 GetAuthType 
-
-  $result = &GetAuthType($authtypecode)
-
-If the authority type specified by C<$authtypecode> exists,
-returns a hashref of the type's fields.  If the type
-does not exist, returns undef.
-
-=cut
-
-sub GetAuthType {
-    my ($authtypecode) = @_;
-    my $dbh=C4::Context->dbh;
-    my $sth;
-    if (defined $authtypecode){ # NOTE - in MARC21 framework, '' is a valid authority 
-                                # type (FIXME but why?)
-        $sth=$dbh->prepare("select * from auth_types where authtypecode=?");
-        $sth->execute($authtypecode);
-        if (my $res = $sth->fetchrow_hashref) {
-            return $res; 
-        }
-    }
-    return;
-}
-
-
 =head2 FindDuplicateAuthority
 
   $record= &FindDuplicateAuthority( $record, $authtypecode)
@@ -896,16 +852,16 @@ sub BuildSummary {
     my $summary_template;
     # handle $authtypecode is NULL or eq ""
     if ($authtypecode) {
-        my $authref = GetAuthType($authtypecode);
-        $summary{authtypecode} = $authref->{authtypecode};
-        $summary{type} = $authref->{authtypetext};
-        $summary_template = $authref->{summary};
+        my $authref = Koha::Authority::Types->find($authtypecode);
+        $summary{authtypecode} = $authref->authtypecode;
+        $summary{type} = $authref->authtypetext;
+        $summary_template = $authref->summary;
         # for MARC21, the authority type summary displays a label meant for
         # display
         if (C4::Context->preference('marcflavour') ne 'UNIMARC') {
-            $summary{label} = $authref->{summary};
+            $summary{label} = $authref->summary;
         } else {
-            $summary{summary} = $authref->{summary};
+            $summary{summary} = $authref->summary;
         }
     }
     my $marc21subfields = 'abcdfghjklmnopqrstuvxyz68';
@@ -1443,15 +1399,14 @@ sub merge {
     my ($mergefrom,$MARCfrom,$mergeto,$MARCto) = @_;
     my ($counteditedbiblio,$countunmodifiedbiblio,$counterrors)=(0,0,0);        
     my $dbh=C4::Context->dbh;
-    my $authtypecodefrom = GetAuthTypeCode($mergefrom);
-    my $authtypecodeto = GetAuthTypeCode($mergeto);
-#     warn "mergefrom : $authtypecodefrom $mergefrom mergeto : $authtypecodeto $mergeto ";
-    # return if authority does not exist
+    my $authtypefrom = Koha::Authority::Types->find($mergefrom);
+    my $authtypeto   = Koha::Authority::Types->find($mergeto);
+
     return "error MARCFROM not a marcrecord ".Data::Dumper::Dumper($MARCfrom) if scalar($MARCfrom->fields()) == 0;
     return "error MARCTO not a marcrecord".Data::Dumper::Dumper($MARCto) if scalar($MARCto->fields()) == 0;
     # search the tag to report
-    my $auth_tag_to_report_from = Koha::Authority::Types->find($authtypecodefrom)->auth_tag_to_report;
-    my $auth_tag_to_report_to = Koha::Authority::Types->find($authtypecodeto)->auth_tag_to_report;
+    my $auth_tag_to_report_from = $authtypefrom->auth_tag_to_report;
+    my $auth_tag_to_report_to   = $authtypeto->auth_tag_to_report;
 
     my @record_to;
     @record_to = $MARCto->field($auth_tag_to_report_to)->subfields() if $MARCto->field($auth_tag_to_report_to);
@@ -1491,15 +1446,15 @@ sub merge {
     # Get All candidate Tags for the change 
     # (This will reduce the search scope in marc records).
     my $sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=?");
-    $sth->execute($authtypecodefrom);
+    $sth->execute($authtypefrom->authtypecode);
     my @tags_using_authtype;
     while (my ($tagfield) = $sth->fetchrow) {
         push @tags_using_authtype,$tagfield ;
     }
     my $tag_to=0;  
-    if ($authtypecodeto ne $authtypecodefrom){  
+    if ($authtypeto->authtypecode ne $authtypefrom->authtypecode){
         # If many tags, take the first
-        $sth->execute($authtypecodeto);    
+        $sth->execute($authtypeto->authtypecode);
         $tag_to=$sth->fetchrow;
         #warn $tag_to;    
     }  

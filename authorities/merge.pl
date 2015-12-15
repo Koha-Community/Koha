@@ -104,12 +104,12 @@ else {
         if ($mergereference) {
 
             my $framework;
-            if ( $recordObj1->authtype ne $recordObj2->authtype && $mergereference ne 'breeding' ) {
+            if ( $recordObj1->authtypecode ne $recordObj2->authtypecode && $mergereference ne 'breeding' ) {
                 $framework = $input->param('frameworkcode')
                   or push @errors, { code => 'FRAMEWORK_NOT_SELECTED' };
             }
             else {
-                $framework = $recordObj1->authtype;
+                $framework = $recordObj1->authtypecode;
             }
             if ($mergereference eq 'breeding') {
                 $mergereference = $authid[0];
@@ -155,7 +155,7 @@ else {
                 title1          => $recordObj1->authorized_heading,
                 title2          => $recordObj2->authorized_heading,
             );
-            if ( $recordObj1->authtype ne $recordObj2->authtype ) {
+            if ( $recordObj1->authtypecode ne $recordObj2->authtypecode ) {
                 my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authtypecode'] } );
                 my @frameworkselect;
                 while ( my $authority_type = $authority_types->next ) {
@@ -167,10 +167,10 @@ else {
                 }
                 $template->param(
                     frameworkselect => \@frameworkselect,
-                    frameworkcode1  => $recordObj1->authtype,
-                    frameworkcode2  => $recordObj2->authtype,
-                    frameworklabel1 => $frameworks->{$recordObj1->authtype}->{'authtypetext'},
-                    frameworklabel2 => $frameworks->{$recordObj2->authtype}->{'authtypetext'},
+                    frameworkcode1  => $recordObj1->authtypecode,
+                    frameworkcode2  => $recordObj2->authtypecode,
+                    frameworklabel1 => $recordObj1->authtypetext,
+                    frameworklabel2 => $recordObj2->authtypetext,
                 );
             }
         }

@@ -75,7 +75,7 @@ if ( ! $record ) {
     exit;
 }
 
-my $authtypecode = &GetAuthTypeCode( $authid );
+my $authtypecode = $record->authtypecode;
 
 if ($display_hierarchy){
     $template->{VARS}->{'displayhierarchy'} = $display_hierarchy;

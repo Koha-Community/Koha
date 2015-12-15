@@ -41,7 +41,7 @@ use Koha::Util::MARC;
 
 use base qw(Koha::MetadataRecord);
 
-__PACKAGE__->mk_accessors(qw( authid authtype ));
+__PACKAGE__->mk_accessors(qw( authid authtypecode ));
 
 =head2 new
 
@@ -100,7 +100,7 @@ sub get_from_authid {
     $authtypecode ||= C4::AuthoritiesMarc::GuessAuthTypeCode($record);
 
     my $self = $class->SUPER::new( { authid => $authid,
-                                     authtype => $authtypecode,
+                                     authtypecode => $authtypecode,
                                      schema => $marcflavour,
                                      record => $record });
 
@@ -139,7 +139,7 @@ sub get_from_breeding {
 
     my $self = $class->SUPER::new( {
                                      schema => $marcflavour,
-                                     authtype => $authtypecode,
+                                     authtypecode => $authtypecode,
                                      record => $record });
 
     bless $self, $class;

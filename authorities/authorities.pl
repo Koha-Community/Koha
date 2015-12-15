@@ -568,7 +568,7 @@ my $breedingid    = $input->param('breedingid');
 
 my $dbh = C4::Context->dbh;
 if(!$authtypecode) {
-  $authtypecode = $authid? &GetAuthTypeCode($authid): '';
+    $authtypecode = $authid ? Koha::Authorities->find($authid)->authtypecode : '';
 }
 
 my ($template, $loggedinuser, $cookie)

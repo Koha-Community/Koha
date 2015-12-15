@@ -55,8 +55,8 @@ $|=1; # flushes output
 my $authfrom = GetAuthority($mergefrom);
 my $authto = GetAuthority($mergeto);
 
-my $authtypecodefrom = GetAuthTypeCode($mergefrom);
-my $authtypecodeto = GetAuthTypeCode($mergeto);
+my $authtypecodefrom = $mergefrom->authtypecode;
+my $authtypecodeto   = $mergeto->authtypecode;
 
 unless ($noconfirm || $batch) {
     print "************\n";

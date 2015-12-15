@@ -50,6 +50,7 @@ use C4::Koha;
 # use C4::Biblio;
 # use C4::Catalogue;
 
+use Koha::Authorities;
 use Koha::Authority::Types;
 
 my $query=new CGI;
@@ -58,7 +59,7 @@ my $dbh=C4::Context->dbh;
 
 my $authid = $query->param('authid');
 my $index = $query->param('index');
-my $authtypecode = &GetAuthTypeCode($authid);
+my $authtypecode = Koha::Authorities->find($authid)->authtypecode;
 my $tagslib = &GetTagsLabels(1,$authtypecode);
 
 my $record =GetAuthority($authid);

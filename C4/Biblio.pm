@@ -39,6 +39,7 @@ use C4::Linker;
 use C4::OAI::Sets;
 
 use Koha::Cache;
+use Koha::Authority::Types;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -572,8 +573,7 @@ sub LinkBibHeadingsToAuthorities {
                     $results{'linked'}->{ $heading->display_form() }++;
                 }
                 else {
-                    my $authtypedata =
-                      C4::AuthoritiesMarc::GetAuthType( $heading->auth_type() );
+                    my $authority_type = Koha::Authority::Types->find( $heading->auth_type() );
                     my $marcrecordauth = MARC::Record->new();
                     if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
                         $marcrecordauth->leader('     nz  a22     o  4500');
@@ -582,7 +582,7 @@ sub LinkBibHeadingsToAuthorities {
                     $field->delete_subfield( code => '9' )
                       if defined $current_link;
                     my $authfield =
-                      MARC::Field->new( $authtypedata->{auth_tag_to_report},
+                      MARC::Field->new( $authority_type->auth_tag_to_report,
                         '', '', "a" => "" . $field->subfield('a') );
                     map {
                         $authfield->add_subfields( $_->[0] => $_->[1] )

@@ -47,6 +47,7 @@ use C4::Output;
 use CGI qw ( -utf8 );
 use MARC::Record;
 use C4::Koha;
+use Koha::Authorities;
 
 use Koha::Authority::Types;
 
@@ -176,7 +177,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
 
 my $authid = $query->param('authid');
 
-my $authtypecode = GetAuthTypeCode($authid);
+my $authtypecode = Koha::Authorities->find($authid)->authtypecode;
 $tagslib = &GetTagsLabels(1,$authtypecode);
 
 # Build list of authtypes for showing them

@@ -47,6 +47,9 @@ use CGI qw ( -utf8 );
 use MARC::Record;
 use C4::Koha;
 
+use Koha::Authorities;
+use Koha::Authority::Types;
+
 my $query = new CGI;
 
 my $dbh = C4::Context->dbh;
@@ -55,10 +58,10 @@ my $authid       = $query->param('authid');
 my $index        = $query->param('index');
 my $tagid        = $query->param('tagid');
 my $relationship = $query->param('relationship');
-my $authtypecode = &GetAuthTypeCode($authid);
+my $authtypecode = Koha::Authorities->find($authid)->authtypecode;
 my $tagslib      = &GetTagsLabels( 1, $authtypecode );
 
-my $auth_type = GetAuthType($authtypecode);
+my $auth_type = Koha::Authority::Types->find($authtypecode);
 my $record;
 if ($authid) {
     $record = GetAuthority($authid);
@@ -79,7 +82,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my @subfield_loop;
 my ($indicator1, $indicator2);
 if ($authid) {
-    my @fields = $record->field( $auth_type->{auth_tag_to_report} );
+    my @fields = $record->field( $auth_type->auth_tag_to_report );
     my $repet = ($query->param('repet') || 1) - 1;
     my $field = $fields[$repet];
 
@@ -104,7 +107,7 @@ if ($authid) {
         $indicator1 = $field->indicator('1');
         $indicator2 = $field->indicator('2');
     } elsif (C4::Context->preference('marcflavour') eq 'MARC21') {
-        my $tag_from = $auth_type->{auth_tag_to_report};
+        my $tag_from = $auth_type->auth_tag_to_report;
         my $tag_to = $index;
         $tag_to =~ s/^tag_(\d*)_.*$/$1/;
         if ($tag_to =~ /^6/) {  # subject heading
