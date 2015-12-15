@@ -41,8 +41,10 @@
                             <input type="checkbox" name="override_limit" id="override_limit" value="1" />
                         [% END %]
                     [% END %]
-                    <button class="btn" id="RenewCheckinChecked"><i class="fa fa-check"></i> Renew or check in selected items</button>
-                    <button class="btn" id="RenewAll"><i class="fa fa-book"></i> Renew all</button>
+                    [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
+                        <button class="btn" id="RenewCheckinChecked"><i class="fa fa-check"></i> Renew or check in selected items</button>
+                        <button class="btn" id="RenewAll"><i class="fa fa-book"></i> Renew all</button>
+                    [% END %]
                 </fieldset>
 
                 [% IF ( exports_enabled ) %]
