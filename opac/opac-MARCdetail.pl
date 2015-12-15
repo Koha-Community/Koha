@@ -100,9 +100,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my ($bt_tag,$bt_subtag) = GetMarcFromKohaField('biblio.title',$itemtype);
 $template->param(
     bibliotitle => $biblio->{title},
-);
+) if $tagslib->{$bt_tag}->{$bt_subtag}->{hidden} <= 0; #<=0 is OPAC visible.
 
 # get biblionumbers stored in the cart
 if(my $cart_list = $query->cookie("bib_list")){
