@@ -291,11 +291,7 @@ sub SearchAuthorities {
         my %newline;
         $newline{authid} = $authid;
         if ( !$skipmetadata ) {
-            my $query_auth_tag =
-"SELECT auth_tag_to_report FROM auth_types WHERE authtypecode=?";
-            my $sth = $dbh->prepare($query_auth_tag);
-            $sth->execute($authtypecode);
-            my $auth_tag_to_report = $sth->fetchrow;
+            my $auth_tag_to_report = Koha::Authority::Types->find($authtypecode)->auth_tag_to_report;
             my $reported_tag;
             my $mainentry = $authrecord->field($auth_tag_to_report);
             if ($mainentry) {
@@ -848,10 +844,7 @@ sub FindDuplicateAuthority {
 #    warn "IN for ".$record->as_formatted;
     my $dbh = C4::Context->dbh;
 #    warn "".$record->as_formatted;
-    my $sth = $dbh->prepare("select auth_tag_to_report from auth_types where authtypecode=?");
-    $sth->execute($authtypecode);
-    my ($auth_tag_to_report) = $sth->fetchrow;
-    $sth->finish;
+    my $auth_tag_to_report = Koha::Authority::Types->find($authtypecode)->auth_tag_to_report;
 #     warn "record :".$record->as_formatted."  auth_tag_to_report :$auth_tag_to_report";
     # build a request for SearchAuthorities
     my $QParser;
@@ -1456,12 +1449,9 @@ sub merge {
     return "error MARCFROM not a marcrecord ".Data::Dumper::Dumper($MARCfrom) if scalar($MARCfrom->fields()) == 0;
     return "error MARCTO not a marcrecord".Data::Dumper::Dumper($MARCto) if scalar($MARCto->fields()) == 0;
     # search the tag to report
-    my $sth = $dbh->prepare("select auth_tag_to_report from auth_types where authtypecode=?");
-    $sth->execute($authtypecodefrom);
-    my ($auth_tag_to_report_from) = $sth->fetchrow;
-    $sth->execute($authtypecodeto);
-    my ($auth_tag_to_report_to) = $sth->fetchrow;
-    
+    my $auth_tag_to_report_from = Koha::Authority::Types->find($authtypecodefrom)->auth_tag_to_report;
+    my $auth_tag_to_report_to = Koha::Authority::Types->find($authtypecodeto)->auth_tag_to_report;
+
     my @record_to;
     @record_to = $MARCto->field($auth_tag_to_report_to)->subfields() if $MARCto->field($auth_tag_to_report_to);
     my @record_from;
@@ -1499,7 +1489,7 @@ sub merge {
     #warn scalar(@reccache)." biblios to update";
     # Get All candidate Tags for the change 
     # (This will reduce the search scope in marc records).
-    $sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=?");
+    my $sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=?");
     $sth->execute($authtypecodefrom);
     my @tags_using_authtype;
     while (my ($tagfield) = $sth->fetchrow) {

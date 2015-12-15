@@ -25,6 +25,9 @@ use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Koha;
 
+use Koha::Authority::Types;
+
+use List::MoreUtils qw( uniq );
 
 sub string_search  {
 	my ($searchstring,$authtypecode)=@_;
@@ -99,7 +102,7 @@ if ($op eq 'add_form') {
         push @$authorised_values, 'itemtypes';
 
         # build thesaurus categories list
-        my @authtypes = (sort keys %{C4::Koha::getauthtypes()});
+        my @authtypes = uniq( "", map { $_->authtypecode } Koha::Authority::Types->search );
 
 	# build value_builder list
 	my @value_builder=('');
