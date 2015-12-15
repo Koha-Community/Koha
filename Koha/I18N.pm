@@ -18,41 +18,186 @@ package Koha::I18N;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use base qw(Locale::Maketext Exporter);
 
 use CGI;
 use C4::Languages;
+use C4::Context;
 
-use Locale::Maketext::Lexicon {
-    'en' => ['Auto'],
-    '*' => [
-        Gettext =>
-            C4::Context->config('intranetdir')
-            . '/misc/translator/po/*-messages.po'
-    ],
-    '_AUTO' => 1,
-    '_style' => 'gettext',
-};
+use Encode;
+use Locale::Messages qw(:locale_h nl_putenv setlocale LC_MESSAGES);
+use Koha::Cache::Memory::Lite;
 
-our @EXPORT = qw( gettext );
+use parent 'Exporter';
+our @EXPORT = qw(
+    __
+    __x
+    __n
+    __nx
+    __xn
+    __p
+    __px
+    __np
+    __npx
+    N__
+    N__n
+    N__p
+    N__np
+);
 
-my %language_handles;
+our $textdomain = 'Koha';
 
-sub get_language_handle {
-    my $cgi = new CGI;
-    my $language = C4::Languages::getlanguage;
+sub init {
+    my $cache = Koha::Cache::Memory::Lite->get_instance();
+    my $cache_key = 'i18n:initialized';
+    unless ($cache->get_from_cache($cache_key)) {
+        my @system_locales = grep { chomp; not (/^C/ || $_ eq 'POSIX') } qx/locale -a/;
+        if (@system_locales) {
+            # LANG needs to be set to a valid locale,
+            # otherwise LANGUAGE is ignored
+            nl_putenv('LANG=' . $system_locales[0]);
+            setlocale(LC_MESSAGES, '');
 
-    if (not exists $language_handles{$language}) {
-        $language_handles{$language} = __PACKAGE__->get_handle($language)
-            or die "No language handle for '$language'";
+            my $langtag = C4::Languages::getlanguage;
+            my @subtags = split /-/, $langtag;
+            my ($language, $region) = @subtags;
+            if ($region && length $region == 4) {
+                $region = $subtags[2];
+            }
+            my $locale = $language;
+            if ($region) {
+                $locale .= '_' . $region;
+            }
+
+            nl_putenv("LANGUAGE=$locale");
+            nl_putenv('OUTPUT_CHARSET=UTF-8');
+
+            my $directory = _base_directory();
+            textdomain($textdomain);
+            bindtextdomain($textdomain, $directory);
+        } else {
+            warn "No locale installed. Localization cannot work and is therefore disabled";
+        }
+
+        $cache->set_in_cache($cache_key, 1);
     }
-
-    return $language_handles{$language};
 }
 
-sub gettext {
-    my $lh = get_language_handle;
-    $lh->maketext(@_);
+sub __ {
+    my ($msgid) = @_;
+
+    $msgid = Encode::encode_utf8($msgid);
+
+    return _gettext(\&gettext, [ $msgid ]);
+}
+
+sub __x {
+    my ($msgid, %vars) = @_;
+
+    $msgid = Encode::encode_utf8($msgid);
+
+    return _gettext(\&gettext, [ $msgid ], %vars);
+}
+
+sub __n {
+    my ($msgid, $msgid_plural, $count) = @_;
+
+    $msgid = Encode::encode_utf8($msgid);
+    $msgid_plural = Encode::encode_utf8($msgid_plural);
+
+    return _gettext(\&ngettext, [ $msgid, $msgid_plural, $count ]);
+}
+
+sub __nx {
+    my ($msgid, $msgid_plural, $count, %vars) = @_;
+
+    $msgid = Encode::encode_utf8($msgid);
+    $msgid_plural = Encode::encode_utf8($msgid_plural);
+
+    return _gettext(\&ngettext, [ $msgid, $msgid_plural, $count ], %vars);
+}
+
+sub __xn {
+    return __nx(@_);
+}
+
+sub __p {
+    my ($msgctxt, $msgid) = @_;
+
+    $msgctxt = Encode::encode_utf8($msgctxt);
+    $msgid = Encode::encode_utf8($msgid);
+
+    return _gettext(\&pgettext, [ $msgctxt, $msgid ]);
+}
+
+sub __px {
+    my ($msgctxt, $msgid, %vars) = @_;
+
+    $msgctxt = Encode::encode_utf8($msgctxt);
+    $msgid = Encode::encode_utf8($msgid);
+
+    return _gettext(\&pgettext, [ $msgctxt, $msgid ], %vars);
+}
+
+sub __np {
+    my ($msgctxt, $msgid, $msgid_plural, $count) = @_;
+
+    $msgctxt = Encode::encode_utf8($msgctxt);
+    $msgid = Encode::encode_utf8($msgid);
+    $msgid_plural = Encode::encode_utf8($msgid_plural);
+
+    return _gettext(\&npgettext, [ $msgctxt, $msgid, $msgid_plural, $count ]);
+}
+
+sub __npx {
+    my ($msgctxt, $msgid, $msgid_plural, $count, %vars) = @_;
+
+    $msgctxt = Encode::encode_utf8($msgctxt);
+    $msgid = Encode::encode_utf8($msgid);
+    $msgid_plural = Encode::encode_utf8($msgid_plural);
+
+    return _gettext(\&npgettext, [ $msgctxt, $msgid, $msgid_plural, $count], %vars);
+}
+
+sub N__ {
+    return @_;
+}
+
+sub N__n {
+    return @_;
+}
+
+sub N__p {
+    return @_;
+}
+
+sub N__np {
+    return @_;
+}
+
+sub _base_directory {
+    return C4::Context->config('intranetdir') . '/misc/translator/po';
+}
+
+sub _gettext {
+    my ($sub, $args, %vars) = @_;
+
+    init();
+
+    my $text = Encode::decode_utf8($sub->(@$args));
+    if (%vars) {
+        $text = _expand($text, %vars);
+    }
+
+    return $text;
+}
+
+sub _expand {
+    my ($text, %vars) = @_;
+
+    my $re = join '|', map { quotemeta $_ } keys %vars;
+    $text =~ s/\{($re)\}/defined $vars{$1} ? $vars{$1} : "{$1}"/ge;
+
+    return $text;
 }
 
 1;

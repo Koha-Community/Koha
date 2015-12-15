@@ -25,6 +25,13 @@ use C4::Context;
 use YAML::Syck qw( Dump LoadFile );
 use Locale::PO;
 use FindBin qw( $Bin );
+use File::Basename;
+use File::Find;
+use File::Path qw( make_path );
+use File::Slurp;
+use File::Temp qw( tempdir );
+use Template::Parser;
+use PPI;
 
 $YAML::Syck::ImplicitTyping = 1;
 
@@ -66,13 +73,17 @@ sub new {
     $self->{process}         = "$Bin/tmpl_process3.pl " . ($verbose ? '' : '-q');
     $self->{path_po}         = "$Bin/po";
     $self->{po}              = { '' => $default_pref_po_header };
-    $self->{domain}          = 'messages';
+    $self->{domain}          = 'Koha';
     $self->{cp}              = `which cp`;
     $self->{msgmerge}        = `which msgmerge`;
+    $self->{msgfmt}          = `which msgfmt`;
+    $self->{msginit}         = `which msginit`;
     $self->{xgettext}        = `which xgettext`;
     $self->{sed}             = `which sed`;
     chomp $self->{cp};
     chomp $self->{msgmerge};
+    chomp $self->{msgfmt};
+    chomp $self->{msginit};
     chomp $self->{xgettext};
     chomp $self->{sed};
 
@@ -456,29 +467,133 @@ sub create_tmpl {
     }
 }
 
+sub locale_name {
+    my $self = shift;
+
+    my ($language, $region, $country) = split /-/, $self->{lang};
+    $country //= $region;
+    my $locale = $language;
+    if ($country && length($country) == 2) {
+        $locale .= '_' . $country;
+    }
+
+    return $locale;
+}
+
 sub create_messages {
     my $self = shift;
 
-    print "Create messages ($self->{lang})\n" if $self->{verbose};
-    system
-        "$self->{cp} $self->{domain}.pot " .
-        "$self->{path_po}/$self->{lang}-$self->{domain}.po";
+    my $pot = "$self->{domain}.pot";
+    my $po = "$self->{path_po}/$self->{lang}-messages.po";
+
+    unless ( -f $pot ) {
+        $self->extract_messages();
+    }
+
+    say "Create messages ($self->{lang})" if $self->{verbose};
+    my $locale = $self->locale_name();
+    system "$self->{msginit} -i $pot -o $po -l $locale --no-translator";
+
+    # If msginit failed to correctly set Plural-Forms, set a default one
+    system "$self->{sed} --in-place $po "
+        . "--expression='s/Plural-Forms: nplurals=INTEGER; plural=EXPRESSION/Plural-Forms: nplurals=2; plural=(n != 1)/'";
 }
 
 sub update_messages {
     my $self = shift;
 
-    my $pofile = "$self->{path_po}/$self->{lang}-$self->{domain}.po";
-    print "Update messages ($self->{lang})\n" if $self->{verbose};
-    if ( not -f $pofile ) {
-        print "File $pofile does not exist\n" if $self->{verbose};
+    my $pot = "$self->{domain}.pot";
+    my $po = "$self->{path_po}/$self->{lang}-messages.po";
+
+    unless ( -f $pot ) {
+        $self->extract_messages();
+    }
+
+    if ( -f $po ) {
+        say "Update messages ($self->{lang})" if $self->{verbose};
+        system "$self->{msgmerge} -U $po $pot";
+    } else {
         $self->create_messages();
     }
-    system "$self->{msgmerge} -U $pofile $self->{domain}.pot";
+}
+
+sub extract_messages_from_templates {
+    my ($self, $tempdir, @files) = @_;
+
+    my $intranetdir = $self->{context}->config('intranetdir');
+    my @keywords = qw(t tx tn txn tnx tp tpx tnp tnpx);
+    my $parser = Template::Parser->new();
+
+    foreach my $file (@files) {
+        say "Extract messages from $file" if $self->{verbose};
+        my $template = read_file("$intranetdir/$file");
+        my $data = $parser->parse($template);
+        unless ($data) {
+            warn "Error at $file : " . $parser->error();
+            next;
+        }
+
+        make_path(dirname("$tempdir/$file"));
+        open my $fh, '>', "$tempdir/$file";
+
+        my @blocks = ($data->{BLOCK}, values %{ $data->{DEFBLOCKS} });
+        foreach my $block (@blocks) {
+            my $document = PPI::Document->new(\$block);
+
+            # [% t('foo') %] is compiled to
+            # $output .= $stash->get(['t', ['foo']]);
+            # We try to find all nodes corresponding to keyword (here 't')
+            my $nodes = $document->find(sub {
+                my ($topnode, $element) = @_;
+
+                # Filter out non-valid keywords
+                return 0 unless ($element->isa('PPI::Token::Quote::Single'));
+                return 0 unless (grep {$element->content eq qq{'$_'}} @keywords);
+
+                # keyword (e.g. 't') should be the first element of the arrayref
+                # passed to $stash->get()
+                return 0 if $element->sprevious_sibling;
+
+                return 0 unless $element->snext_sibling
+                    && $element->snext_sibling->snext_sibling
+                    && $element->snext_sibling->snext_sibling->isa('PPI::Structure::Constructor');
+
+                # Check that it's indeed a call to $stash->get()
+                my $statement = $element->statement->parent->statement->parent->statement;
+                return 0 unless grep { $_->isa('PPI::Token::Symbol') && $_->content eq '$stash' } $statement->children;
+                return 0 unless grep { $_->isa('PPI::Token::Operator') && $_->content eq '->' } $statement->children;
+                return 0 unless grep { $_->isa('PPI::Token::Word') && $_->content eq 'get' } $statement->children;
+
+                return 1;
+            });
+
+            next unless $nodes;
+
+            # Write the Perl equivalent of calls to t* functions family, so
+            # xgettext can extract the strings correctly
+            foreach my $node (@$nodes) {
+                my @args = map {
+                    $_->significant && !$_->isa('PPI::Token::Operator') ? $_->content : ()
+                } $node->snext_sibling->snext_sibling->find_first('PPI::Statement')->children;
+
+                my $keyword = $node->content;
+                $keyword =~ s/^'t(.*)'$/__$1/;
+
+                say $fh "$keyword(" . join(', ', @args) . ");";
+            }
+
+        }
+
+        close $fh;
+    }
+
+    return $tempdir;
 }
 
 sub extract_messages {
     my $self = shift;
+
+    say "Extract messages into POT file" if $self->{verbose};
 
     my $intranetdir = $self->{context}->config('intranetdir');
     my @files_to_scan;
@@ -499,26 +614,53 @@ sub extract_messages {
         }
     }
 
-    my $xgettext_cmd = "$self->{xgettext} -L Perl --from-code=UTF-8 " .
-        "-o $Bin/$self->{domain}.pot -D $intranetdir";
+    my @tt_files;
+    find(sub {
+        if ($File::Find::dir =~ m|/en/| && $_ =~ m/\.(tt|inc)$/) {
+            my $filename = $File::Find::name;
+            $filename =~ s|^$intranetdir/||;
+            push @tt_files, $filename;
+        }
+    }, "$intranetdir/koha-tmpl");
+
+    my $tempdir = tempdir('Koha-translate-XXXX', TMPDIR => 1, CLEANUP => 1);
+    $self->extract_messages_from_templates($tempdir, @tt_files);
+    push @files_to_scan, @tt_files;
+
+    my $xgettext_cmd = "$self->{xgettext} -L Perl --from-code=UTF-8 "
+        . "--package-name=Koha --package-version='' "
+        . "-k -k__ -k__x -k__n:1,2 -k__nx:1,2 -k__xn:1,2 -k__p:1c,2 "
+        . "-k__px:1c,2 -k__np:1c,2,3 -k__npx:1c,2,3 -kN__ -kN__n:1,2 "
+        . "-kN__p:1c,2 -kN__np:1c,2,3 "
+        . "-o $Bin/$self->{domain}.pot -D $tempdir -D $intranetdir";
     $xgettext_cmd .= " $_" foreach (@files_to_scan);
 
     if (system($xgettext_cmd) != 0) {
         die "system call failed: $xgettext_cmd";
     }
 
-    if ( -f "$Bin/$self->{domain}.pot" ) {
-        my $replace_charset_cmd = "$self->{sed} --in-place " .
-            "$Bin/$self->{domain}.pot " .
-            "--expression='s/charset=CHARSET/charset=UTF-8/'";
-        if (system($replace_charset_cmd) != 0) {
-            die "system call failed: $replace_charset_cmd";
-        }
-    } else {
-        print "No messages found\n" if $self->{verbose};
-        return;
+    my $replace_charset_cmd = "$self->{sed} --in-place " .
+        "$Bin/$self->{domain}.pot " .
+        "--expression='s/charset=CHARSET/charset=UTF-8/'";
+    if (system($replace_charset_cmd) != 0) {
+        die "system call failed: $replace_charset_cmd";
     }
-    return 1;
+}
+
+sub install_messages {
+    my ($self) = @_;
+
+    my $locale = $self->locale_name();
+    my $modir = "$self->{path_po}/$locale/LC_MESSAGES";
+    my $pofile = "$self->{path_po}/$self->{lang}-messages.po";
+    my $mofile = "$modir/$self->{domain}.mo";
+
+    if ( not -f $pofile ) {
+        $self->create_messages();
+    }
+    say "Install messages ($locale)" if $self->{verbose};
+    make_path($modir);
+    system "$self->{msgfmt} -o $mofile $pofile";
 }
 
 sub remove_pot {
@@ -532,6 +674,8 @@ sub install {
     return unless $self->{lang};
     $self->install_tmpl($files) unless $self->{pref_only};
     $self->install_prefs();
+    $self->install_messages();
+    $self->remove_pot();
 }
 
 
@@ -547,14 +691,13 @@ sub get_all_langs {
 sub update {
     my ($self, $files) = @_;
     my @langs = $self->{lang} ? ($self->{lang}) : $self->get_all_langs();
-    my $extract_ok = $self->extract_messages();
     for my $lang ( @langs ) {
         $self->set_lang( $lang );
         $self->update_tmpl($files) unless $self->{pref_only};
         $self->update_prefs();
-        $self->update_messages() if $extract_ok;
+        $self->update_messages();
     }
-    $self->remove_pot() if $extract_ok;
+    $self->remove_pot();
 }
 
 
@@ -563,10 +706,8 @@ sub create {
     return unless $self->{lang};
     $self->create_tmpl($files) unless $self->{pref_only};
     $self->create_prefs();
-    if ($self->extract_messages()) {
-        $self->create_messages();
-        $self->remove_pot();
-    }
+    $self->create_messages();
+    $self->remove_pot();
 }
 
 
