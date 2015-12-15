@@ -295,6 +295,7 @@ $(document).ready(function() {
                 },
                 {
                     "bSortable": false,
+                    "bVisible": AllowCirculate ? true : false,
                     "mDataProp": function ( oObj ) {
                         var content = "";
                         var span_style = "";
@@ -388,6 +389,7 @@ $(document).ready(function() {
                 },
                 {
                     "bSortable": false,
+                    "bVisible": AllowCirculate ? true : false,
                     "mDataProp": function ( oObj ) {
                         if ( oObj.can_renew_error == "on_reserve" ) {
                             return "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + ON_HOLD + "</a>";
