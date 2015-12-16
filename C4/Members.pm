@@ -1183,6 +1183,7 @@ sub GetMemberAccountRecords {
             my $biblio = GetBiblioFromItemNumber( $data->{itemnumber} );
             $data->{biblionumber} = $biblio->{biblionumber};
             $data->{title}        = $biblio->{title};
+            $data->{homebranch}   = $biblio->{homebranch};
         }
         $acctlines[$numlines] = $data;
         $numlines++;

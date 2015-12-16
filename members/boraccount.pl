@@ -89,6 +89,9 @@ foreach my $accountline ( @{$accts}) {
         $accountline->{payment} = 1;
         $reverse_col = 1;
     }
+    if ($accountline->{homebranch}) {
+        $accountline->{homebranch} = C4::Branch::GetBranchName($accountline->{homebranch});
+    }
 }
 
 $template->param( adultborrower => 1 ) if ( $data->{'category_type'} eq 'A' );
