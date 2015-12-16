@@ -3,6 +3,7 @@
 [% USE Koha %]
 [% USE Biblio %]
 [% USE KohaDates %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% USE AuthorisedValues %]
 [% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
@@ -489,7 +490,7 @@
                                                 <span class="blocker inaccurate-item-statuses" title="Item statuses may be inaccurate. Please view the record details for accurate item statuses">
                                             [% END %]
 
-                                            [% SEARCH_RESULT.items_count | html %] [% IF ( SEARCH_RESULT.itemsplural ) %]items[% ELSE %]item[% END %][% IF ( SEARCH_RESULT.availablecount ) %], [% SEARCH_RESULT.availablecount | html %] available:[% ELSE %], None available[% END %]
+                                            [% tnx('{count} item', '{count} items', SEARCH_RESULT.items_count, {count = SEARCH_RESULT.items_count}) | html %][% IF ( SEARCH_RESULT.availablecount ) %], [% SEARCH_RESULT.availablecount | html %] available:[% ELSE %], None available[% END %]
 
                                             [% IF MaxSearchResultsItemsPerRecordStatusCheck && SEARCH_RESULT.items_count > MaxSearchResultsItemsPerRecordStatusCheck %]
                                                 </span>

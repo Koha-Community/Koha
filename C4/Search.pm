@@ -2259,7 +2259,6 @@ sub searchResults {
             }
         }
         $oldbiblio->{norequests} = 1 unless $can_place_holds;
-        $oldbiblio->{itemsplural}          = 1 if $items_count > 1;
         $oldbiblio->{items_count}          = $items_count;
         $oldbiblio->{available_items_loop} = \@available_items_loop;
         $oldbiblio->{onloan_items_loop}    = \@onloan_items_loop;
