@@ -1,0 +1,1 @@
+INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES ('OpacMaintenanceNotice','','','A user-defined block of HTML to appear on screen when OpacMaintenace is enabled','Textarea');

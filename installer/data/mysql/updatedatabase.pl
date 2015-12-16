@@ -11870,6 +11870,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.23.00.XXX";
+if(CheckVersion($DBversion)) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
+        VALUES ('OpacMaintenanceNotice','','','A user-defined block of HTML to appear on screen when OpacMaintenace is enabled','Textarea')
+    });
+    print "Upgrade to $DBversion done (Bug 15311: Let libraries set text to display when OpacMaintenance = on)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
