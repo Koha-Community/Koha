@@ -111,7 +111,12 @@ sub gethtml5media {
         # extension
         # check uploaded files
         if ( $HTML5Media{srcblock} =~ /\Qopac-retrieve-file.pl\E/ ) {
-            $HTML5Media{extension} = (Koha::Upload->new->get({ hashvalue => (split(/id=/, $HTML5Media{srcblock}))[1] })->{name} =~ m/([^.]+)$/)[0];
+            my ( undef, $id ) = split /id=/, $HTML5Media{srcblock};
+            next if !$id;
+            my $public = ( ( caller )[1] =~ /opac/ ) ? { public => 1 }: {};
+            my $upl = Koha::Upload->new( $public )->get({ hashvalue => $id });
+            next if !$upl || $upl->{name} !~ /\./;
+            $HTML5Media{extension} = ( $upl->{name} =~ m/([^.]+)$/ )[0];
         }
         # check remote files
         else {
