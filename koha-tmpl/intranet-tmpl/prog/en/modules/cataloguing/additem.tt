@@ -48,7 +48,7 @@ $(document).ready(function(){
                 });
             });
 
-    var columns_settings = [% ColumnsSettings.GetColumns( 'cataloguing', 'additem', 'itemst', 'json' ) %]
+    var columns_settings = [% ColumnsSettings.GetColumns( 'cataloguing', 'additem', 'itemst', 'json' ).raw %]
     // Skip the first column
     columns_settings.unshift( { cannot_be_toggled: "1" } );
 
