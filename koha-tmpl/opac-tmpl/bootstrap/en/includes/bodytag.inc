@@ -1,15 +1,15 @@
 [% classprop  = 'class="' %]
 [% IF LoginBranchcode.defined %]
-    [% classprop = classprop _ 'branch-' _ LoginBranchcode %]
+    [% classprop = classprop.raw _ 'branch-' _ LoginBranchcode %]
 [% ELSE %]
-    [% classprop = classprop _ 'branch-default' %]
+    [% classprop = classprop.raw _ 'branch-default' %]
 [% END %]
 [% IF bodyclass.defined %]
-    [% classprop = classprop _ ' ' _ bodyclass %]
+    [% classprop = classprop.raw _ ' ' _ bodyclass %]
 [% END %]
-[% classprop = classprop _ '"' %]
+[% classprop = classprop.raw _ '"' %]
 
 [% IF bodyid.defined %]
     [% idprop = 'ID="' _ bodyid _ '" ' %]
 [% END %]
-<body [%idprop%][% classprop %] >
+<body [%idprop%][% classprop.raw %] >

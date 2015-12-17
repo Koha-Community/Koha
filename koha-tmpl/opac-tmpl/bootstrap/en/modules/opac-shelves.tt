@@ -157,6 +157,13 @@
                         <h3>
                             [% shelf.shelfname %]
                             <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-shelves.pl?rss=1&amp;op=view&amp;shelfnumber=[% shelf.shelfnumber %]" class="rss-list-link noprint">
+                                <img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png" alt="Subscribe to this list" title="Subscribe to this list" border="0" class="rsssearchicon"/>
+                            </a>
+                        </h3>
+
+                         [% IF ( itemsloop ) %]
+                             <div id="toolbar" class="toolbar clearfix">
+                                 <div class="list-actions">
                                     <a class="newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form">New list</a> <span class="sep">|</span>
                                     <a href="/cgi-bin/koha/opac-downloadshelf.pl?shelfnumber=[% shelf.shelfnumber %]" class="download" data-toggle="modal" data-target="#modalWin">Download list</a>
 
@@ -514,7 +521,7 @@
                                 [% END %]
                             </div>
                         [% END # / IF itemsloop %]
-
+                      [% END %]
                     [% IF itemsloop && can_remove_biblios %]
                         <input type="hidden" name="op" value="remove_biblios" />
                         <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber %]" />
