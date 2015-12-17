@@ -474,13 +474,42 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     </xslo:for-each>
   </xslo:template>
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='521']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="lex:w lex:p lex:n">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
+    <xslo:if test="@ind1='0'">
+      <xslo:for-each select="marc:subfield">
+        <xslo:if test="contains('a', @code)">
+          <z:index name="Reading-grade-level:w Reading-grade-level:p Reading-grade-level:n">
+            <xslo:value-of select="."/>
+          </z:index>
+        </xslo:if>
+      </xslo:for-each>
+    </xslo:if>
+    <xslo:if test="@ind1='1'">
+      <xslo:for-each select="marc:subfield">
+        <xslo:if test="contains('a', @code)">
+          <z:index name="Interest-age-level:w Interest-age-level:p Interest-age-level:n">
+            <xslo:value-of select="."/>
+          </z:index>
+        </xslo:if>
+      </xslo:for-each>
+    </xslo:if>
+    <xslo:if test="@ind1='2'">
+      <xslo:for-each select="marc:subfield">
+        <xslo:if test="contains('a', @code)">
+          <z:index name="Interest-grade-level:w Interest-grade-level:p Interest-grade-level:n">
+            <xslo:value-of select="."/>
+          </z:index>
+        </xslo:if>
+      </xslo:for-each>
+    </xslo:if>
+    <xslo:if test="@ind1='8'">
+      <xslo:for-each select="marc:subfield">
+        <xslo:if test="contains('a', @code)">
+          <z:index name="lexile-number:w lexile-number:p lexile-number:n">
+            <xslo:value-of select="."/>
+          </z:index>
+        </xslo:if>
+      </xslo:for-each>
+    </xslo:if>
   </xslo:template>
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='526']">
     <xslo:for-each select="marc:subfield">

@@ -1020,6 +1020,11 @@ sub _build_weighted_query {
         $weighted_query .= "an=\"$operand\"";
     }
 
+    # If the index is numeric, don't autoquote it.
+    elsif ( $index =~ /,st-numeric$/ ) {
+        $weighted_query .= " $index=$operand";
+    }
+
     # If the index already has more than one qualifier, wrap the operand
     # in quotes and pass it back (assumption is that the user knows what they
     # are doing and won't appreciate us mucking up their query
@@ -1125,6 +1130,8 @@ sub getIndexes{
                     'Illustration-code',
                     'Index-term-genre',
                     'Index-term-uncontrolled',
+                    'Interest-age-level',
+                    'Interest-grade-level',
                     'ISBN',
                     'isbn',
                     'ISSN',
@@ -1139,6 +1146,7 @@ sub getIndexes{
                     'LC-card-number',
                     'lcn',
                     'lex',
+                    'lexile-number',
                     'llength',
                     'ln',
                     'ln-audio',
@@ -1175,6 +1183,7 @@ sub getIndexes{
                     'Publisher',
                     'Provider',
                     'pv',
+                    'Reading-grade-level',
                     'Record-control-number',
                     'rcn',
                     'Record-type',
@@ -1516,8 +1525,8 @@ sub buildQuery {
                 #which is processed higher up in this sub. Other than that, year searches are typically
                 #handled as limits which are not processed her either.
 
-                # Date of Publication
-                if ( $index =~ /yr/ ) {
+                # Search ranges: Date of Publication, st-numeric
+                if ( $index =~ /(yr|st-numeric)/ ) {
                     #weight_fields/relevance search causes errors with date ranges
                     #In the case of YYYY-, it will only return records with a 'yr' of YYYY (not the range)
                     #In the case of YYYY-YYYY, it will return no results
@@ -1746,6 +1755,7 @@ sub buildQuery {
         warn "LIMIT DESC:" . $limit_desc;
         warn "---------\nLeave buildQuery\n---------";
     }
+
     return (
         undef,              $query, $simple_query, $query_cgi,
         $query_desc,        $limit, $limit_cgi,    $limit_desc,

@@ -570,11 +570,25 @@
     <target_index>Abstract:w</target_index>
     <target_index>Abstract:p</target_index>
   </index_data_field>
-  <!--record.abs line 153: melm 521$a      lex:n-->
-  <index_subfields tag="521" subfields="a">
-    <target_index>lex:w</target_index>
-    <target_index>lex:p</target_index>
-    <target_index>lex:n</target_index>
+  <index_subfields tag="521" subfields="a" condition="@ind1='0'">
+    <target_index>Reading-grade-level:w</target_index>
+    <target_index>Reading-grade-level:p</target_index>
+    <target_index>Reading-grade-level:n</target_index>
+  </index_subfields>
+  <index_subfields tag="521" subfields="a" condition="@ind1='1'">
+    <target_index>Interest-age-level:w</target_index>
+    <target_index>Interest-age-level:p</target_index>
+    <target_index>Interest-age-level:n</target_index>
+  </index_subfields>
+  <index_subfields tag="521" subfields="a" condition="@ind1='2'">
+    <target_index>Interest-grade-level:w</target_index>
+    <target_index>Interest-grade-level:p</target_index>
+    <target_index>Interest-grade-level:n</target_index>
+  </index_subfields>
+  <index_subfields tag="521" subfields="a" condition="@ind1='8'">
+    <target_index>lexile-number:w</target_index>
+    <target_index>lexile-number:p</target_index>
+    <target_index>lexile-number:n</target_index>
   </index_subfields>
   <!--record.abs line 154: melm 526$c      arl,arl:n-->
   <index_subfields tag="526" subfields="c">
