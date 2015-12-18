@@ -101,7 +101,7 @@ $(document).ready(function() {
     [% INCLUDE 'budgets-active-currency.inc' hide = 'yes' %]
     [% UNLESS ( loop_budget ) %]
         [% IF ( CAN_user_acquisition_period_manage ) %]
-        <div class="dialog alert">You must <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">define a budget</a> in Administration</div>
+        <div class="dialog alert"><a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">You must define a budget in Administration</a></div>
         [% ELSE %]
         <div class="dialog alert">Your administrator must define a budget in Administration</div>
         [% END %]
