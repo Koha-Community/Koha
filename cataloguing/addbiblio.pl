@@ -305,6 +305,7 @@ sub create_input {
         marc_lib       => $tagslib->{$tag}->{$subfield}->{lib},
         tag_mandatory  => $tagslib->{$tag}->{mandatory},
         mandatory      => $tagslib->{$tag}->{$subfield}->{mandatory},
+        important      => $tagslib->{$tag}->{$subfield}->{important},
         repeatable     => $tagslib->{$tag}->{$subfield}->{repeatable},
         kohafield      => $tagslib->{$tag}->{$subfield}->{kohafield},
         index          => $index_tag,
@@ -318,13 +319,15 @@ sub create_input {
         $subfield_data{z3950_mandatory} = $mandatory_z3950->{$tag.$subfield};
     }
     # Subfield is hidden depending of hidden and mandatory flag, and is always
-    # shown if it contains anything or if its field is mandatory.
+    # shown if it contains anything or if its field is mandatory or important.
     my $tdef = $tagslib->{$tag};
     $subfield_data{visibility} = "display:none;"
         if $tdef->{$subfield}->{hidden} % 2 == 1 &&
            $value eq '' &&
            !$tdef->{$subfield}->{mandatory} &&
-           !$tdef->{mandatory};
+           !$tdef->{mandatory} &&
+           !$tdef->{$subfield}->{important} &&
+           !$tdef->{important};
     # expand all subfields of 773 if there is a host item provided in the input
     $subfield_data{visibility} ="" if ($tag eq 773 and $cgi->param('hostitemnumber'));
 
@@ -607,6 +610,7 @@ sub build_tabs {
                             tag_lib       => $tagslib->{$tag}->{lib},
                             repeatable       => $tagslib->{$tag}->{repeatable},
                             mandatory       => $tagslib->{$tag}->{mandatory},
+                            important       => $tagslib->{$tag}->{important},
                             subfield_loop => \@subfields_data,
                             fixedfield    => $tag < 10?1:0,
                             random        => CreateKey,
@@ -653,6 +657,7 @@ sub build_tabs {
                         tag_lib          => $tagslib->{$tag}->{lib},
                         repeatable       => $tagslib->{$tag}->{repeatable},
                         mandatory       => $tagslib->{$tag}->{mandatory},
+                        important       => $tagslib->{$tag}->{important},
                         indicator1       => ( $indicator1 || $tagslib->{$tag}->{ind1_defaultvalue} ), #if not set, try to load the default value
                         indicator2       => ( $indicator2 || $tagslib->{$tag}->{ind2_defaultvalue} ), #use short-circuit operator for efficiency
                         subfield_loop    => \@subfields_data,

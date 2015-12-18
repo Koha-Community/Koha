@@ -89,7 +89,7 @@ if ($op eq 'add_form') {
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $data;
 	if ($searchfield) {
-        $sth=$dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value,ind1_defaultvalue,ind2_defaultvalue from marc_tag_structure where tagfield=? and frameworkcode=?");
+        $sth=$dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,important,authorised_value,ind1_defaultvalue,ind2_defaultvalue from marc_tag_structure where tagfield=? and frameworkcode=?");
 		$sth->execute($searchfield,$frameworkcode);
 		$data=$sth->fetchrow_hashref;
 	}
@@ -107,6 +107,7 @@ if ($op eq 'add_form') {
 			libopac => $data->{'libopac'},
             repeatable => $data->{'repeatable'},
             mandatory => $data->{'mandatory'},
+            important => $data->{'important'},
             authorised_value => $data->{authorised_value},
             ind1_defaultvalue => $data->{'ind1_defaultvalue'},
             ind2_defaultvalue => $data->{'ind2_defaultvalue'}
@@ -120,17 +121,19 @@ if ($op eq 'add_form') {
 	my $libopac          = $input->param('libopac');
 	my $repeatable       = $input->param('repeatable') ? 1 : 0;
 	my $mandatory        = $input->param('mandatory')  ? 1 : 0;
+    my $important        = $input->param('important')  ? 1 : 0;
 	my $authorised_value = $input->param('authorised_value');
     my $ind1_defaultvalue = $input->param('ind1_defaultvalue');
     my $ind2_defaultvalue = $input->param('ind2_defaultvalue');
     if ($input->param('modif')) {
         $sth = $dbh->prepare(
-        "UPDATE marc_tag_structure SET liblibrarian=? ,libopac=? ,repeatable=? ,mandatory=? ,authorised_value=?, ind1_defaultvalue=?, ind2_defaultvalue=? WHERE frameworkcode=? AND tagfield=?"
+        "UPDATE marc_tag_structure SET liblibrarian=? ,libopac=? ,repeatable=? ,mandatory=? ,important=? ,authorised_value=?, ind1_defaultvalue=?, ind2_defaultvalue=? WHERE frameworkcode=? AND tagfield=?"
         );
         $sth->execute(  $liblibrarian,
                         $libopac,
                         $repeatable,
                         $mandatory,
+                        $important,
                         $authorised_value,
                         $ind1_defaultvalue,
                         $ind2_defaultvalue,
@@ -139,13 +142,14 @@ if ($op eq 'add_form') {
         );
     } else {
         $sth = $dbh->prepare(
-        "INSERT INTO marc_tag_structure (tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value,ind1_defaultvalue,ind2_defaultvalue,frameworkcode) values (?,?,?,?,?,?,?,?,?)"
+        "INSERT INTO marc_tag_structure (tagfield,liblibrarian,libopac,repeatable,mandatory,important,authorised_value,ind1_defaultvalue,ind2_defaultvalue,frameworkcode) values (?,?,?,?,?,?,?,?,?,?)"
         );
         $sth->execute($tagfield,
                       $liblibrarian,
                       $libopac,
                       $repeatable,
                       $mandatory,
+                      $important,
                       $authorised_value,
                       $ind1_defaultvalue,
                       $ind2_defaultvalue,
@@ -216,6 +220,7 @@ if ($op eq 'add_form') {
 		              marc_tag_structure.libopac as mts_libopac,
 		              marc_tag_structure.repeatable as mts_repeatable,
 		              marc_tag_structure.mandatory as mts_mandatory,
+                      marc_tag_structure.important as mts_important,
 		              marc_tag_structure.authorised_value as mts_authorized_value,
                   marc_tag_structure.ind1_defaultvalue as mts_ind1_defaultvalue,
                   marc_tag_structure.ind1_defaultvalue as mts_ind2_defaultvalue,
@@ -239,6 +244,7 @@ if ($op eq 'add_form') {
 			$row_data{liblibrarian}     = $results[$i]->{'mts_liblibrarian'};
 			$row_data{repeatable}       = $results[$i]->{'mts_repeatable'};
 			$row_data{mandatory}        = $results[$i]->{'mts_mandatory'};
+            $row_data{important}        = $results[$i]->{'mts_important'};
 			$row_data{authorised_value} = $results[$i]->{'mts_authorised_value'};
             $row_data{ind1_defaultvalue} = $results[$i]->{'mts_ind1_defaultvalue'};
             $row_data{ind2_defaultvalue} = $results[$i]->{'mts_ind2_defaultvalue'};
@@ -251,6 +257,7 @@ if ($op eq 'add_form') {
 				$subfield_data{kohafield}        = $results[$j]->{'kohafield'};
 				$subfield_data{repeatable}       = $results[$j]->{'repeatable'};
 				$subfield_data{mandatory}        = $results[$j]->{'mandatory'};
+                $subfield_data{important}        = $results[$j]->{'important'};
 				$subfield_data{tab}              = $results[$j]->{'tab'};
 				$subfield_data{seealso}          = $results[$j]->{'seealso'};
 				$subfield_data{authorised_value} = $results[$j]->{'authorised_value'};
@@ -283,6 +290,7 @@ if ($op eq 'add_form') {
 			$row_data{liblibrarian}     = $results->[$i]{'liblibrarian'};
 			$row_data{repeatable}       = $results->[$i]{'repeatable'};
 			$row_data{mandatory}        = $results->[$i]{'mandatory'};
+            $row_data{important}        = $results->[$i]{'important'};
 			$row_data{authorised_value} = $results->[$i]{'authorised_value'};
             $row_data{ind1_defaultvalue} = $results->[$i]{'ind1_defaultvalue'};
             $row_data{ind2_defaultvalue} = $results->[$i]{'ind2_defaultvalue'};
@@ -313,7 +321,7 @@ output_html_with_http_headers $input, $cookie, $template->output;
 sub StringSearch  {
 	my ($searchstring,$frameworkcode)=@_;
 	my $sth = C4::Context->dbh->prepare("
-    SELECT tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value,ind1_defaultvalue,ind2_defaultvalue
+    SELECT tagfield,liblibrarian,libopac,repeatable,mandatory,important,authorised_value,ind1_defaultvalue,ind2_defaultvalue
      FROM  marc_tag_structure
      WHERE (tagfield >= ? and frameworkcode=?)
     ORDER BY tagfield

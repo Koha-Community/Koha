@@ -862,25 +862,26 @@ sub GetMarcStructure {
 
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
-        "SELECT tagfield,liblibrarian,libopac,mandatory,repeatable,ind1_defaultvalue,ind2_defaultvalue
+        "SELECT tagfield,liblibrarian,libopac,mandatory,repeatable,important,ind1_defaultvalue,ind2_defaultvalue
         FROM marc_tag_structure 
         WHERE frameworkcode=? 
         ORDER BY tagfield"
     );
     $sth->execute($frameworkcode);
-    my ( $liblibrarian, $libopac, $tag, $res, $tab, $mandatory, $repeatable, $ind1_defaultvalue, $ind2_defaultvalue );
+    my ( $liblibrarian, $libopac, $tag, $res, $tab, $mandatory, $repeatable, $important, $ind1_defaultvalue, $ind2_defaultvalue );
 
-    while ( ( $tag, $liblibrarian, $libopac, $mandatory, $repeatable, $ind1_defaultvalue, $ind2_defaultvalue ) = $sth->fetchrow ) {
+    while ( ( $tag, $liblibrarian, $libopac, $mandatory, $repeatable, $important, $ind1_defaultvalue, $ind2_defaultvalue ) = $sth->fetchrow ) {
         $res->{$tag}->{lib}        = ( $forlibrarian or !$libopac ) ? $liblibrarian : $libopac;
         $res->{$tag}->{tab}        = "";
         $res->{$tag}->{mandatory}  = $mandatory;
+        $res->{$tag}->{important}  = $important;
         $res->{$tag}->{repeatable} = $repeatable;
     $res->{$tag}->{ind1_defaultvalue} = $ind1_defaultvalue;
     $res->{$tag}->{ind2_defaultvalue} = $ind2_defaultvalue;
     }
 
     $sth = $dbh->prepare(
-        "SELECT tagfield,tagsubfield,liblibrarian,libopac,tab,mandatory,repeatable,authorised_value,authtypecode,value_builder,kohafield,seealso,hidden,isurl,link,defaultvalue,maxlength
+        "SELECT tagfield,tagsubfield,liblibrarian,libopac,tab,mandatory,repeatable,authorised_value,authtypecode,value_builder,kohafield,seealso,hidden,isurl,link,defaultvalue,maxlength,important
          FROM   marc_subfield_structure 
          WHERE  frameworkcode=? 
          ORDER BY tagfield,tagsubfield
@@ -904,13 +905,14 @@ sub GetMarcStructure {
     while (
         (   $tag,          $subfield,      $liblibrarian, $libopac, $tab,    $mandatory, $repeatable, $authorised_value,
             $authtypecode, $value_builder, $kohafield,    $seealso, $hidden, $isurl,     $link,       $defaultvalue,
-            $maxlength
+            $maxlength, $important
         )
         = $sth->fetchrow
       ) {
         $res->{$tag}->{$subfield}->{lib}              = ( $forlibrarian or !$libopac ) ? $liblibrarian : $libopac;
         $res->{$tag}->{$subfield}->{tab}              = $tab;
         $res->{$tag}->{$subfield}->{mandatory}        = $mandatory;
+        $res->{$tag}->{$subfield}->{important}        = $important;
         $res->{$tag}->{$subfield}->{repeatable}       = $repeatable;
         $res->{$tag}->{$subfield}->{authorised_value} = $authorised_value;
         $res->{$tag}->{$subfield}->{authtypecode}     = $authtypecode;

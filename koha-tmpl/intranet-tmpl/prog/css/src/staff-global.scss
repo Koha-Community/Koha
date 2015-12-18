@@ -1534,6 +1534,10 @@ input[type='text']:read-only:focus {
     background-color: #FFFF99;
 }
 
+.important_subfield_not_filled {
+    background-color : #FFFFCC;
+}
+
 .content_hidden {
     display: none;
     visibility: hidden; // you propably don't need to change this one
@@ -3431,6 +3435,12 @@ span {
 
     &.required {
         color: #C00;
+        font-style: italic;
+        margin-left: .5em;
+    }
+
+    &.important {
+        color: #EAC117;
         font-style: italic;
         margin-left: .5em;
     }

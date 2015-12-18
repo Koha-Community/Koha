@@ -547,7 +547,19 @@ function CheckMandatorySubfields(p){
     return total;
 }
 
-$(document).ready(function() {
+function CheckImportantSubfields(p){
+    var total = 0;
+    $(p).find(".subfield_line input[name='important'][value='1']").each(function(i){
+        var editor = $(this).siblings("[name='field_value']");
+        if (!editor.val()) {
+            editor.addClass("missing");
+            total++;
+        }
+    });
+    return total;
+}
+
+ $(document).ready(function() {
     $("input.input_marceditor, input.indicator").addClass('noEnterSubmit');
     $(document).ajaxSuccess(function() {
         $("input.input_marceditor, input.indicator").addClass('noEnterSubmit');

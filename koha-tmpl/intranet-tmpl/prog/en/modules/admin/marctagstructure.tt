@@ -80,6 +80,13 @@
             <input type="checkbox" name="mandatory" id="mandatory" value="1" />
         [% END %]
     </li>
+    <li><label for="important">Important: </label>
+        [% IF ( important ) %]
+            <input type="checkbox" name="important" id="important" value="1" checked="checked" />
+        [% ELSE %]
+            <input type="checkbox" name="important" id="important" value="1" />
+        [% END %]
+    </li>
     <li><label for="ind1_defaultvalue">First indicator default value: </label>
         <input id="ind1_defaultvalue" type="text" name="ind1_defaultvalue" value="[% ind1_defaultvalue | html %]" maxlength="1" size="1" />
     </li>
@@ -176,6 +183,7 @@
         <th>Lib</th>
         <th>Repeatable</th>
         <th>Mandatory</th>
+        <th>Important</th>
         <th>Auth value</th>
         <th>Indicator 1</th>
         <th>Indicator 2</th>
@@ -199,6 +207,7 @@
             </td>
             <td>[% IF ( loo.repeatable ) %]Yes[% ELSE %]No[% END %]</td>
             <td>[% IF ( loo.mandatory ) %]Yes[% ELSE %]No[% END %]</td>
+            <td>[% IF ( loo.important ) %]Yes[% ELSE %]No[% END %]</td>
             <td>[% loo.authorised_value | html %]</td>
             <td>[% loo.ind1_defaultvalue | html %]</td>
             <td>[% loo.ind2_defaultvalue | html %]</td>

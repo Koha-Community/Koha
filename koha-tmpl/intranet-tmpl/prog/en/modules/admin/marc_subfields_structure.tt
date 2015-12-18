@@ -88,6 +88,14 @@
                                 <input type="checkbox" id="mandatory[% loo.row | html %]" name="mandatory[% loo.row | html %]" value="1" />
                             [% END %]
                         </li>
+                        <li>
+                            <label for="important[% loo.row | html %]">Important: </label>
+                            [% IF loo.important %]
+                                <input type="checkbox" id="important[% loo.row | html %]" name="important[% loo.row | html %]" checked="checked" value="1" />
+                            [% ELSE %]
+                                <input type="checkbox" id="important[% loo.row | html %]" name="important[% loo.row | html %]" value="1" />
+                            [% END %]
+                        </li>
                         <li><label for="tab[% loo.row | html %]">Managed in tab: </label>
                             <select name="tab" tabindex="" size="1" id="tab[% loo.row | html %]">
                             [%- IF ( loo.tab ==  -1 ) -%]
@@ -283,6 +291,7 @@
             [% IF ( loo.kohafield ) %] | Koha field: [% loo.kohafield | html %], [% END %]
             [% IF ( loo.repeatable ) %]Repeatable, [% ELSE %]Not repeatable,[% END %]
             [% IF ( loo.mandatory ) %]Mandatory, [% ELSE %]Not mandatory,[% END %]
+            [% IF ( loo.important ) %]Important, [% ELSE %]Not important,[% END %]
             [% IF ( loo.seealso ) %] | See Also: [% loo.seealso | html %],[% END %]
             [% IF ( loo.hidden ) %]hidden,[% END %]
             [% IF ( loo.isurl ) %]is a URL,[% END %]

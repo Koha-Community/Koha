@@ -130,6 +130,7 @@ sub generate_subfield_form {
         $subfield_data{subfield}   = $subfieldtag;
         $subfield_data{marc_lib}   ="<span id=\"error$i\" title=\"".$subfieldlib->{lib}."\">".$subfieldlib->{lib}."</span>";
         $subfield_data{mandatory}  = $subfieldlib->{mandatory};
+        $subfield_data{important}  = $subfieldlib->{important};
         $subfield_data{repeatable} = $subfieldlib->{repeatable};
         $subfield_data{maxlength}  = $subfieldlib->{maxlength};
         

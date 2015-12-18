@@ -187,6 +187,7 @@ if ( $op eq 'add_form' ) {
         $row_data{authtypecode}      = $data->{'authtypecode'};
         $row_data{repeatable}        = $data->{repeatable};
         $row_data{mandatory}         = $data->{mandatory};
+        $row_data{important}         = $data->{important};
         $row_data{hidden}            = $data->{hidden};
         $row_data{isurl}             = $data->{isurl};
         $row_data{row}               = $i;
@@ -208,6 +209,7 @@ if ( $op eq 'add_form' ) {
     $row_data{hidden}            = "";
     $row_data{repeatable}        = 0;
     $row_data{mandatory}         = 0;
+    $row_data{important}         = 0;
     $row_data{isurl}             = 0;
     $row_data{kohafields}        = \@kohafields;
     $row_data{authorised_values} = \@authorised_values;
@@ -234,7 +236,7 @@ elsif ( $op eq 'add_validate' ) {
     my $dbh = C4::Context->dbh;
     $template->param( tagfield => "$input->param('tagfield')" );
     my $sth_update = $dbh->prepare(qq{
-        update marc_subfield_structure set tagfield=?, tagsubfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, kohafield=?, tab=?, seealso=?, authorised_value=?, authtypecode=?, value_builder=?, hidden=?, isurl=?, frameworkcode=?,  link=?, defaultvalue=?, maxlength=?
+        update marc_subfield_structure set tagfield=?, tagsubfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, important=?, kohafield=?, tab=?, seealso=?, authorised_value=?, authtypecode=?, value_builder=?, hidden=?, isurl=?, frameworkcode=?,  link=?, defaultvalue=?, maxlength=?
         where tagfield=? and tagsubfield=? and frameworkcode=?
     });
     my @tagsubfield       = $input->multi_param('tagsubfield');
@@ -259,6 +261,7 @@ elsif ( $op eq 'add_validate' ) {
         my $libopac          = $libopac[$i];
         my $repeatable       = $input->param("repeatable$i") ? 1 : 0;
         my $mandatory        = $input->param("mandatory$i") ? 1 : 0;
+        my $important        = $input->param("important$i") ? 1 : 0;
         my $kohafield        = $kohafield[$i];
         my $tab              = $tab[$i];
         my $seealso          = $seealso[$i];
@@ -280,6 +283,7 @@ elsif ( $op eq 'add_validate' ) {
                     $libopac,
                     $repeatable,
                     $mandatory,
+                    $important,
                     $kohafield,
                     $tab,
                     $seealso,
@@ -312,6 +316,7 @@ elsif ( $op eq 'add_validate' ) {
                         libopac          => $libopac,
                         repeatable       => $repeatable,
                         mandatory        => $mandatory,
+                        important        => $important,
                         kohafield        => $kohafield,
                         tab              => $tab,
                         seealso          => $seealso,
@@ -394,6 +399,7 @@ else {    # DEFAULT
         $row_data{kohafield}        = $results->[$i]{'kohafield'};
         $row_data{repeatable}       = $results->[$i]{'repeatable'};
         $row_data{mandatory}        = $results->[$i]{'mandatory'};
+        $row_data{important}        = $results->[$i]{'important'};
         $row_data{tab}              = $results->[$i]{'tab'};
         $row_data{seealso}          = $results->[$i]{'seealso'};
         $row_data{authorised_value} = $results->[$i]{'authorised_value'};

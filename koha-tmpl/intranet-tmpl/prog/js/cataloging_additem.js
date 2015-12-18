@@ -76,8 +76,10 @@ $(document).ready(function(){
 });
 
 function Check(f) {
-    var total_errors = CheckMandatorySubfields(f);
-    if (total_errors==0) {
+    var total_mandatory = CheckMandatorySubfields(f);
+    var total_important = CheckImportantSubfields(f);
+    var alertString2;
+    if (total_mandatory==0) {
         // Explanation about this line:
         // In case of limited edition permission, we have to prevent user from modifying some fields.
         // But there is no such thing as readonly attribute for select elements.
@@ -85,14 +87,30 @@ function Check(f) {
         // So we "un-disable" the elements just before submitting.
         // That's a bit clumsy, and if someone comes up with a better solution, feel free to improve that.
         $("select[name=field_value]").prop('disabled', false);
-        return true;
     } else {
-        var alertString2 = MSG_FORM_NOT_SUBMITTED;
+        alertString2 = MSG_FORM_NOT_SUBMITTED;
         alertString2 += "\n------------------------------------------------------------------------------------\n";
-        alertString2 += "\n- " + "%s " + MSG_MANDATORY_FIELDS_EMPTY.format(total_errors);
-        alert(alertString2);
+        alertString2 += "\n- " + "%s " + MSG_MANDATORY_FIELDS_EMPTY.format(total_mandatory);
+    }
+    if(total_important > 0){
+        if( !alertString2 ){
+            alertString2 = "";
+        }
+        alertString2 += "\n\n " + MSG_IMPORTANT_FIELDS_EMPTY.format(total_important);
+        alertString2 += "\n\n " + MSG_CONFIRM_SAVE;
+    }
+    if(alertString2){
+        if(total_mandatory){
+             alert(alertString2);
+        }else{
+            var a = confirm(alertString2);
+            if( a ){
+                return true;
+            }
+        }
         return false;
     }
+    return true;
 }
 
 function CheckMultipleAdd(f) {

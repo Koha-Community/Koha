@@ -196,12 +196,15 @@
                 <input type="hidden" name="tag"       value="[% ite.tag | html %]" />
                 <input type="hidden" name="subfield"  value="[% ite.subfield | html %]" />
                 <input type="hidden" name="mandatory" value="[% ite.mandatory | html %]" />
+                <input type="hidden" name="important" value="[% ite.important | html %]" />
                 [% IF ( ite.repeatable ) %]
                     <a href="#" class="buttonPlus" onclick="CloneItemSubfield(this.parentNode); return false;">
                         <img src="[% interface | html %]/[% theme | html %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
                     </a>
                 [% END %]
-                [% IF ( ite.mandatory ) %] <span class="required">Required</span>[% END %]
+                [% IF ( ite.mandatory ) %] <span class="required">Required</span>
+                [% ELSIF ( ite.important ) %] <span class="important">Important</span>
+                [% END %]
             </div></li>
         [% END %]
     </ol>
