@@ -156,38 +156,25 @@ names to values.  If C<$serial> is true, include serial publication data.
 sub GetItem {
     my ($itemnumber,$barcode, $serial) = @_;
     my $dbh = C4::Context->dbh;
-	my $data;
 
+    my $item;
     if ($itemnumber) {
-        my $sth = $dbh->prepare("
-            SELECT * FROM items 
-            WHERE itemnumber = ?");
-        $sth->execute($itemnumber);
-        $data = $sth->fetchrow_hashref;
+        $item = Koha::Items->find( $itemnumber );
     } else {
-        my $sth = $dbh->prepare("
-            SELECT * FROM items 
-            WHERE barcode = ?"
-            );
-        $sth->execute($barcode);		
-        $data = $sth->fetchrow_hashref;
+        $item = Koha::Items->find( { barcode => $barcode } );
     }
 
-    return unless ( $data );
+    return unless ( $item );
 
-    if ( $serial) {      
-    my $ssth = $dbh->prepare("SELECT serialseq,publisheddate from serialitems left join serial on serialitems.serialid=serial.serialid where serialitems.itemnumber=?");
-        $ssth->execute($data->{'itemnumber'}) ;
-        ($data->{'serialseq'} , $data->{'publisheddate'}) = $ssth->fetchrow_array();
+    my $data = $item->unblessed();
+    $data->{itype} = $item->effective_itemtype(); # set the correct itype
+
+    if ($serial) {
+        my $ssth = $dbh->prepare("SELECT serialseq,publisheddate from serialitems left join serial on serialitems.serialid=serial.serialid where serialitems.itemnumber=?");
+        $ssth->execute( $data->{'itemnumber'} );
+        ( $data->{'serialseq'}, $data->{'publisheddate'} ) = $ssth->fetchrow_array();
     }
-	#if we don't have an items.itype, use biblioitems.itemtype.
-    # FIXME this should respect the itypes systempreference
-    # if (C4::Context->preference('item-level_itypes')) {
-	if( ! $data->{'itype'} ) {
-		my $sth = $dbh->prepare("SELECT itemtype FROM biblioitems  WHERE biblionumber = ?");
-		$sth->execute($data->{'biblionumber'});
-		($data->{'itype'}) = $sth->fetchrow_array;
-	}
+
     return $data;
 }    # sub GetItem
 
