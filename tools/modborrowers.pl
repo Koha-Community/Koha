@@ -35,6 +35,7 @@ use C4::Members::Attributes;
 use C4::Members::AttributeTypes qw/GetAttributeTypes_hashref/;
 use C4::Output;
 use List::MoreUtils qw /any uniq/;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::List::Patron;
 
 my $input = new CGI;
@@ -259,6 +260,10 @@ if ( $op eq 'do' ) {
         my $value = $input->param($field);
         $infos->{$field} = $value if $value;
         $infos->{$field} = "" if grep { /^$field$/ } @disabled;
+    }
+
+    for my $field ( qw( dateenrolled dateexpiry ) ) {
+        $infos->{$field} = dt_from_string($infos->{$field});
     }
 
     my @attributes = $input->param('patron_attributes');
