@@ -40,7 +40,7 @@ my $location = 'My Location';
 
 subtest 'General Add, Get and Del tests' => sub {
 
-    plan tests => 14;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -48,13 +48,16 @@ subtest 'General Add, Get and Del tests' => sub {
     my $library = $builder->build({
         source => 'Branch',
     });
+    my $itemtype = $builder->build({
+        source => 'Itemtype',
+    });
 
     # Create a biblio instance for testing
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     my ($bibnum, $bibitemnum) = get_biblio();
 
     # Add an item.
-    my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, location => $location } , $bibnum);
+    my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, location => $location, itype => $itemtype->{itemtype} } , $bibnum);
     cmp_ok($item_bibnum, '==', $bibnum, "New item is linked to correct biblionumber.");
     cmp_ok($item_bibitemnum, '==', $bibitemnum, "New item is linked to correct biblioitemnumber.");
 
@@ -75,7 +78,7 @@ subtest 'General Add, Get and Del tests' => sub {
     my $getdeleted = GetItem($itemnumber);
     is($getdeleted->{'itemnumber'}, undef, "Item deleted as expected.");
 
-    ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, location => $location, permanent_location => 'my permanent location' } , $bibnum);
+    ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, location => $location, permanent_location => 'my permanent location', itype => $itemtype->{itemtype} } , $bibnum);
     $getitem = GetItem($itemnumber);
     is( $getitem->{location}, $location, "The location should not have been modified" );
     is( $getitem->{permanent_location}, 'my permanent location', "The permanent_location should not have modified" );
@@ -89,6 +92,13 @@ subtest 'General Add, Get and Del tests' => sub {
     $getitem = GetItem($itemnumber);
     is( $getitem->{location}, 'CART', "The location should have been set to CART" );
     is( $getitem->{permanent_location}, $location, "The permanent_location should not have been set to CART" );
+
+    C4::Context->set_preference('item-level_itypes', '1');
+    $getitem = GetItem($itemnumber);
+    is( $getitem->{itype}, $itemtype->{itemtype}, "Itemtype set correctly when using item_level-itypes" );
+    C4::Context->set_preference('item-level_itypes', '0');
+    $getitem = GetItem($itemnumber);
+    is( $getitem->{itype}, undef, "Itemtype set correctly when not using item_level-itypes" );
 
     $schema->storage->txn_rollback;
 };
@@ -109,23 +119,32 @@ subtest 'GetHiddenItemnumbers tests' => sub {
     my $library2 = $builder->build({
         source => 'Branch',
     });
+    my $itemtype = $builder->build({
+        source => 'Itemtype',
+    });
 
     # Create a new biblio
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     my ($biblionumber, $biblioitemnumber) = get_biblio();
 
     # Add two items
-    my ($item1_bibnum, $item1_bibitemnum, $item1_itemnumber) = AddItem(
-            { homebranch => $library1->{branchcode},
-              holdingbranch => $library1->{branchcode},
-              withdrawn => 1 },
-            $biblionumber
+    my ( $item1_bibnum, $item1_bibitemnum, $item1_itemnumber ) = AddItem(
+        {
+            homebranch    => $library1->{branchcode},
+            holdingbranch => $library1->{branchcode},
+            withdrawn     => 1,
+            itype         => $itemtype->{itemtype},
+        },
+        $biblionumber
     );
-    my ($item2_bibnum, $item2_bibitemnum, $item2_itemnumber) = AddItem(
-            { homebranch => $library2->{branchcode},
-              holdingbranch => $library2->{branchcode},
-              withdrawn => 0 },
-            $biblionumber
+    my ( $item2_bibnum, $item2_bibitemnum, $item2_itemnumber ) = AddItem(
+        {
+            homebranch    => $library2->{branchcode},
+            holdingbranch => $library2->{branchcode},
+            withdrawn     => 0,
+            itype         => $itemtype->{itemtype},
+        },
+        $biblionumber
     );
 
     my $opachiddenitems;
@@ -192,15 +211,21 @@ subtest 'GetItemsInfo tests' => sub {
     my $library2 = $builder->build({
         source => 'Branch',
     });
+    my $itemtype = $builder->build({
+        source => 'Itemtype',
+    });
 
     # Add a biblio
     my ($biblionumber, $biblioitemnumber) = get_biblio();
     # Add an item
-    my ($item_bibnum, $item_bibitemnum, $itemnumber)
-        = AddItem({
-                homebranch    => $library1->{branchcode},
-                holdingbranch => $library2->{branchcode},
-            }, $biblionumber );
+    my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
+        {
+            homebranch    => $library1->{branchcode},
+            holdingbranch => $library2->{branchcode},
+            itype         => $itemtype->{itemtype},
+        },
+        $biblionumber
+    );
 
     my $library = Koha::Libraries->find( $library1->{branchcode} );
     $library->opac_info("homebranch OPAC info");
@@ -274,6 +299,9 @@ subtest 'SearchItems test' => sub {
     my $library2 = $builder->build({
         source => 'Branch',
     });
+    my $itemtype = $builder->build({
+        source => 'Itemtype',
+    });
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     my $cpl_items_before = SearchItemsByField( 'homebranch', $library1->{branchcode});
@@ -286,10 +314,12 @@ subtest 'SearchItems test' => sub {
     my (undef, undef, $item1_itemnumber) = AddItem({
         homebranch => $library1->{branchcode},
         holdingbranch => $library1->{branchcode},
+        itype => $itemtype->{itemtype},
     }, $biblionumber);
     my (undef, undef, $item2_itemnumber) = AddItem({
         homebranch => $library2->{branchcode},
         holdingbranch => $library2->{branchcode},
+        itype => $itemtype->{itemtype},
     }, $biblionumber);
 
     my ($items, $total_results);
@@ -443,11 +473,21 @@ subtest 'Koha::Item(s) tests' => sub {
     my $library2 = $builder->build({
         source => 'Branch',
     });
+    my $itemtype = $builder->build({
+        source => 'Itemtype',
+    });
 
     # Create a biblio and item for testing
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     my ($bibnum, $bibitemnum) = get_biblio();
-    my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $library1->{branchcode}, holdingbranch => $library2->{branchcode} } , $bibnum);
+    my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
+        {
+            homebranch    => $library1->{branchcode},
+            holdingbranch => $library2->{branchcode},
+            itype         => $itemtype->{itemtype},
+        },
+        $bibnum
+    );
 
     # Get item.
     my $item = Koha::Items->find( $itemnumber );
@@ -476,6 +516,9 @@ subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
     my $library2 = $builder->build({
         source => 'Branch',
     });
+    my $itemtype = $builder->build({
+        source => 'Itemtype',
+    });
 
     my ( $biblionumber, $biblioitemnumber ) = get_biblio();
     my $item_infos = [
@@ -497,7 +540,8 @@ subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
         my ( undef, undef, $itemnumber ) = AddItem(
             {
                 homebranch    => $item_info->{homebranch},
-                holdingbranch => $item_info->{holdingbanch}
+                holdingbranch => $item_info->{holdingbanch},
+                itype         => $itemtype->{itemtype},
             },
             $biblionumber
         );
