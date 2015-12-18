@@ -638,11 +638,11 @@ Circulation:
                   no: "Don't Charge"
             - the replacement price when a patron loses an item.
         -
+            - Charge a hold fee
             - pref: HoldFeeMode
               choices:
-                  always: Always
-                  not_always: "Don't always"
-            - Charge fee when a hold is placed.
+                  always: "any time a hold is placed."
+                  not_always: "only if all items are checked out and the record has at least one hold already."
     Self Checkout:
         -
             - "Include the following JavaScript on all pages in the web-based self checkout:"
