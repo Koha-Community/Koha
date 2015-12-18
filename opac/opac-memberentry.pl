@@ -254,8 +254,9 @@ sub GetHiddenFields {
     my ( $mandatory, $action ) = @_;
     my %hidden_fields;
 
-    my $BorrowerUnwantedField =
-      C4::Context->preference( "PatronSelf" . ucfirst($action) . "BorrowerUnwantedField" );
+    my $BorrowerUnwantedField = $action eq 'modification' ?
+      C4::Context->preference( "PatronSelfModificationBorrowerUnwantedField" ) :
+      C4::Context->preference( "PatronSelfRegistrationBorrowerUnwantedField" );
 
     my @fields = split( /\|/, $BorrowerUnwantedField );
     foreach (@fields) {
