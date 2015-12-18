@@ -4,7 +4,7 @@
     [%- CASE 'circulate' -%]<span>Check out and check in items</span>
     [%- CASE 'catalogue' -%]<span><b>Required for staff login.</b> Staff access, allows viewing of catalogue in staff client.</span>
     [%- CASE 'parameters' -%]<span>Manage Koha system settings (Administration panel)</span>
-    [%- CASE 'borrowers' -%]<span>Add, modify and view patrons information</span>
+    [%- CASE 'borrowers' -%]<span>Add, modify and view patron information</span>
     [%- CASE 'permissions' -%]<span>Set user permissions</span>
     [%- CASE 'reserveforothers' -%]<span>Place and modify holds for patrons</span>
     [%- CASE 'editcatalogue' -%]<span>Edit catalog (Modify bibliographic/holdings data)</span>
