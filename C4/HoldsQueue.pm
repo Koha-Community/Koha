@@ -355,6 +355,7 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
     return [ grep {
         my $rule = GetBranchItemRule($_->{homebranch}, $_->{itype});
         $_->{holdallowed} = $rule->{holdallowed};
+        $_->{hold_fulfillment_policy} = $rule->{hold_fulfillment_policy};
     } @items ];
 }
 
@@ -393,18 +394,27 @@ sub MapItemsToHoldRequests {
         # is this an item-level request?
         if (defined($request->{itemnumber})) {
             # fill it if possible; if not skip it
-            if (exists $items_by_itemnumber{$request->{itemnumber}} and
-                not exists $allocated_items{$request->{itemnumber}}) {
-                $item_map{$request->{itemnumber}} = {
+            if (
+                    exists $items_by_itemnumber{ $request->{itemnumber} }
+                and not exists $allocated_items{ $request->{itemnumber} }
+                and ( # Don't fill item level holds that contravene the hold pickup policy at this time
+                    ( $items_by_itemnumber{ $request->{itemnumber} }->{hold_fulfillment_policy} eq 'any' )
+                    || ( $request->{branchcode} eq $items_by_itemnumber{ $request->{itemnumber} }->{ $items_by_itemnumber{ $request->{itemnumber} }->{hold_fulfillment_policy} }  )
+                )
+
+              )
+            {
+
+                $item_map{ $request->{itemnumber} } = {
                     borrowernumber => $request->{borrowernumber},
-                    biblionumber => $request->{biblionumber},
-                    holdingbranch =>  $items_by_itemnumber{$request->{itemnumber}}->{holdingbranch},
-                    pickup_branch => $request->{branchcode} || $request->{borrowerbranch},
-                    item_level => 1,
-                    reservedate => $request->{reservedate},
-                    reservenotes => $request->{reservenotes},
+                    biblionumber   => $request->{biblionumber},
+                    holdingbranch  => $items_by_itemnumber{ $request->{itemnumber} }->{holdingbranch},
+                    pickup_branch  => $request->{branchcode} || $request->{borrowerbranch},
+                    item_level     => 1,
+                    reservedate    => $request->{reservedate},
+                    reservenotes   => $request->{reservenotes},
                 };
-                $allocated_items{$request->{itemnumber}}++;
+                $allocated_items{ $request->{itemnumber} }++;
                 $num_items_remaining--;
             }
         } else {
@@ -437,7 +447,12 @@ sub MapItemsToHoldRequests {
         my $holding_branch_items = $items_by_branch{$pickup_branch};
         if ( $holding_branch_items ) {
             foreach my $item (@$holding_branch_items) {
-                if ( $request->{borrowerbranch} eq $item->{homebranch} ) {
+                if (
+                    $request->{borrowerbranch} eq $item->{homebranch}
+                    && ( ( $item->{hold_fulfillment_policy} eq 'any' ) # Don't fill item level holds that contravene the hold pickup policy at this time
+                        || $request->{branchcode} eq $item->{ $item->{hold_fulfillment_policy} } )
+                  )
+                {
                     $itemnumber = $item->{itemnumber};
                     last;
                 }
@@ -452,6 +467,10 @@ sub MapItemsToHoldRequests {
                 my $holding_branch_items = $items_by_branch{$holdingbranch};
                 foreach my $item (@$holding_branch_items) {
                     next if $request->{borrowerbranch} ne $item->{homebranch};
+
+                    # Don't fill item level holds that contravene the hold pickup policy at this time
+                    next unless $item->{hold_fulfillment_policy} eq 'any'
+                        || $request->{branchcode} eq $item->{ $item->{hold_fulfillment_policy} };
 
                     $itemnumber = $item->{itemnumber};
                     last;
@@ -481,6 +500,10 @@ sub MapItemsToHoldRequests {
                     next if $pickup_branch ne $item->{homebranch};
                     next if ( $item->{holdallowed} == 1 && $item->{homebranch} ne $request->{borrowerbranch} );
 
+                    # Don't fill item level holds that contravene the hold pickup policy at this time
+                    next unless $item->{hold_fulfillment_policy} eq 'any'
+                        || $request->{branchcode} eq $item->{ $item->{hold_fulfillment_policy} };
+
                     $itemnumber = $item->{itemnumber};
                     $holdingbranch = $branch;
                     last PULL_BRANCHES;
@@ -491,6 +514,11 @@ sub MapItemsToHoldRequests {
             unless ( $itemnumber ) {
                 foreach my $current_item ( @{ $items_by_branch{$holdingbranch} } ) {
                     if ( $holdingbranch && ( $current_item->{holdallowed} == 2 || $request->{borrowerbranch} eq $current_item->{homebranch} ) ) {
+
+                        # Don't fill item level holds that contravene the hold pickup policy at this time
+                        next unless $current_item->{hold_fulfillment_policy} eq 'any'
+                            || $request->{branchcode} eq $current_item->{ $current_item->{hold_fulfillment_policy} };
+
                         $itemnumber = $current_item->{itemnumber};
                         last; # quit this loop as soon as we have a suitable item
                     }
@@ -506,6 +534,10 @@ sub MapItemsToHoldRequests {
 
                     foreach my $item (@$holding_branch_items) {
                         next if ( $item->{holdallowed} == 1 && $item->{homebranch} ne $request->{borrowerbranch} );
+
+                        # Don't fill item level holds that contravene the hold pickup policy at this time
+                        next unless $item->{hold_fulfillment_policy} eq 'any'
+                            || $request->{branchcode} eq $item->{ $item->{hold_fulfillment_policy} };
 
                         $itemnumber = $item->{itemnumber};
                         $holdingbranch = $branch;

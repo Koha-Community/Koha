@@ -348,6 +348,7 @@ CREATE TABLE `branch_item_rules` ( -- information entered in the circulation and
   `branchcode` varchar(10) NOT NULL, -- the branch this rule is for (branches.branchcode)
   `itemtype` varchar(10) NOT NULL, -- the item type this rule applies to (items.itype)
   `holdallowed` tinyint(1) default NULL, -- the number of holds allowed
+  hold_fulfillment_policy ENUM('any', 'homebranch', 'holdingbranch') NOT NULL DEFAULT 'any', -- limit trapping of holds by branchcode
   `returnbranch` varchar(15) default NULL, -- the branch the item returns to (homebranch, holdingbranch, noreturn)
   PRIMARY KEY  (`itemtype`,`branchcode`),
   KEY `branch_item_rules_ibfk_2` (`branchcode`),
@@ -681,6 +682,7 @@ CREATE TABLE `default_branch_circ_rules` (
   `maxissueqty` int(4) default NULL,
   `maxonsiteissueqty` int(4) default NULL,
   `holdallowed` tinyint(1) default NULL,
+  hold_fulfillment_policy ENUM('any', 'homebranch', 'holdingbranch') NOT NULL DEFAULT 'any', -- limit trapping of holds by branchcode
   `returnbranch` varchar(15) default NULL,
   PRIMARY KEY (`branchcode`),
   CONSTRAINT `default_branch_circ_rules_ibfk_1` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`)
@@ -694,6 +696,7 @@ DROP TABLE IF EXISTS `default_branch_item_rules`;
 CREATE TABLE `default_branch_item_rules` (
   `itemtype` varchar(10) NOT NULL,
   `holdallowed` tinyint(1) default NULL,
+  hold_fulfillment_policy ENUM('any', 'homebranch', 'holdingbranch') NOT NULL DEFAULT 'any', -- limit trapping of holds by branchcode
   `returnbranch` varchar(15) default NULL,
   PRIMARY KEY  (`itemtype`),
   CONSTRAINT `default_branch_item_rules_ibfk_1` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`)
@@ -710,6 +713,7 @@ CREATE TABLE `default_circ_rules` (
     `maxissueqty` int(4) default NULL,
     `maxonsiteissueqty` int(4) default NULL,
     `holdallowed` int(1) default NULL,
+    hold_fulfillment_policy ENUM('any', 'homebranch', 'holdingbranch') NOT NULL DEFAULT 'any', -- limit trapping of holds by branchcode
     `returnbranch` varchar(15) default NULL,
     PRIMARY KEY (`singleton`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

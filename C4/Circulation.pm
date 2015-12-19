@@ -1724,17 +1724,17 @@ sub GetBranchItemRule {
     my $result = {};
 
     my @attempts = (
-        ['SELECT holdallowed, returnbranch
+        ['SELECT holdallowed, returnbranch, hold_fulfillment_policy
             FROM branch_item_rules
             WHERE branchcode = ?
               AND itemtype = ?', $branchcode, $itemtype],
-        ['SELECT holdallowed, returnbranch
+        ['SELECT holdallowed, returnbranch, hold_fulfillment_policy
             FROM default_branch_circ_rules
             WHERE branchcode = ?', $branchcode],
-        ['SELECT holdallowed, returnbranch
+        ['SELECT holdallowed, returnbranch, hold_fulfillment_policy
             FROM default_branch_item_rules
             WHERE itemtype = ?', $itemtype],
-        ['SELECT holdallowed, returnbranch
+        ['SELECT holdallowed, returnbranch, hold_fulfillment_policy
             FROM default_circ_rules'],
     );
 
@@ -1747,11 +1747,13 @@ sub GetBranchItemRule {
         # defaults tables, we have to check that the key we want is set, not
         # just that a row was returned
         $result->{'holdallowed'}  = $search_result->{'holdallowed'}  unless ( defined $result->{'holdallowed'} );
+        $result->{'hold_fulfillment_policy'} = $search_result->{'hold_fulfillment_policy'} unless ( defined $result->{'hold_fulfillment_policy'} );
         $result->{'returnbranch'} = $search_result->{'returnbranch'} unless ( defined $result->{'returnbranch'} );
     }
     
     # built-in default circulation rule
     $result->{'holdallowed'} = 2 unless ( defined $result->{'holdallowed'} );
+    $result->{'hold_fulfillment_policy'} = 'any' unless ( defined $result->{'hold_fulfillment_policy'} );
     $result->{'returnbranch'} = 'homebranch' unless ( defined $result->{'returnbranch'} );
 
     return $result;

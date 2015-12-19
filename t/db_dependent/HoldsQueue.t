@@ -8,8 +8,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 26;
+use Test::More tests => 35;
 use Data::Dumper;
+
 
 use C4::Branch;
 use C4::Calendar;
@@ -51,7 +52,6 @@ my $TITLE = "Test Holds Queue XXX";
 my $borrower = $builder->build({
     source => 'Borrower',
     value => {
-        categorycode => 'S',
         branchcode => $library1->{branchcode},
     }
 });
@@ -196,21 +196,18 @@ $library3 = $builder->build({
 my $borrower1 = $builder->build({
     source => 'Borrower',
     value => {
-        categorycode => 'S',
         branchcode => $branchcodes[0],
     },
 });
 my $borrower2 = $builder->build({
     source => 'Borrower',
     value => {
-        categorycode => 'S',
         branchcode => $branchcodes[1],
     },
 });
 my $borrower3 = $builder->build({
     source => 'Borrower',
     value => {
-        categorycode => 'S',
         branchcode => $branchcodes[2],
     },
 });
@@ -445,6 +442,118 @@ C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
 is( @$holds_queue, 0, "Bug 15062 - Holds queue with Transport Cost Matrix will transfer item even if transfers disabled");
 # End Bug 15062
+
+# Test hold_fulfillment_policy
+C4::Context->set_preference( "UseTransportCostMatrix", 0 );
+$borrowernumber = $borrower3->{borrowernumber};
+$library_A = $library1->{branchcode};
+$library_B = $library2->{branchcode};
+$library_C = $library3->{branchcode};
+$dbh->do("DELETE FROM reserves");
+$dbh->do("DELETE FROM issues");
+$dbh->do("DELETE FROM items");
+$dbh->do("DELETE FROM biblio");
+$dbh->do("DELETE FROM biblioitems");
+$dbh->do("DELETE FROM transport_cost");
+$dbh->do("DELETE FROM tmp_holdsqueue");
+$dbh->do("DELETE FROM hold_fill_targets");
+$dbh->do("DELETE FROM default_branch_circ_rules");
+$dbh->do("DELETE FROM default_branch_item_rules");
+$dbh->do("DELETE FROM default_circ_rules");
+$dbh->do("DELETE FROM branch_item_rules");
+
+$dbh->do("INSERT INTO biblio (frameworkcode, author, title, datecreated) VALUES ('', 'Koha test', '$TITLE', '2011-02-01')");
+
+$biblionumber = $dbh->selectrow_array("SELECT biblionumber FROM biblio WHERE title = '$TITLE'")
+  or BAIL_OUT("Cannot find newly created biblio record");
+
+$dbh->do("INSERT INTO biblioitems (biblionumber, marcxml, itemtype) VALUES ($biblionumber, '', '$itemtype')");
+
+$biblioitemnumber =
+  $dbh->selectrow_array("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber = $biblionumber")
+  or BAIL_OUT("Cannot find newly created biblioitems record");
+
+$dbh->do("
+    INSERT INTO items (biblionumber, biblioitemnumber, homebranch, holdingbranch, notforloan, damaged, itemlost, withdrawn, onloan, itype)
+    VALUES ($biblionumber, $biblioitemnumber, '$library_A', '$library_B', 0, 0, 0, 0, NULL, '$itemtype')
+");
+
+# With hold_fulfillment_policy = homebranch, hold should only be picked up if pickup branch = homebranch
+$dbh->do("DELETE FROM default_circ_rules");
+$dbh->do("INSERT INTO default_circ_rules ( holdallowed, hold_fulfillment_policy ) VALUES ( 2, 'homebranch' )");
+
+# Home branch matches pickup branch
+$reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1 );
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
+is( @$holds_queue, 1, "Hold where pickup branch matches home branch targeted" );
+CancelReserve( { reserve_id => $reserve_id } );
+
+# Holding branch matches pickup branch
+$reserve_id = AddReserve( $library_B, $borrowernumber, $biblionumber, '', 1 );
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
+is( @$holds_queue, 0, "Hold where pickup ne home, pickup eq home not targeted" );
+CancelReserve( { reserve_id => $reserve_id } );
+
+# Neither branch matches pickup branch
+$reserve_id = AddReserve( $library_C, $borrowernumber, $biblionumber, '', 1 );
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
+is( @$holds_queue, 0, "Hold where pickup ne home, pickup ne holding not targeted" );
+CancelReserve( { reserve_id => $reserve_id } );
+
+# With hold_fulfillment_policy = holdingbranch, hold should only be picked up if pickup branch = holdingbranch
+$dbh->do("DELETE FROM default_circ_rules");
+$dbh->do("INSERT INTO default_circ_rules ( holdallowed, hold_fulfillment_policy ) VALUES ( 2, 'holdingbranch' )");
+
+# Home branch matches pickup branch
+$reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1 );
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
+is( @$holds_queue, 0, "Hold where pickup eq home, pickup ne holding not targeted" );
+CancelReserve( { reserve_id => $reserve_id } );
+
+# Holding branch matches pickup branch
+$reserve_id = AddReserve( $library_B, $borrowernumber, $biblionumber, '', 1 );
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
+is( @$holds_queue, 1, "Hold where pickup ne home, pickup eq holding targeted" );
+CancelReserve( { reserve_id => $reserve_id } );
+
+# Neither branch matches pickup branch
+$reserve_id = AddReserve( $library_C, $borrowernumber, $biblionumber, '', 1 );
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
+is( @$holds_queue, 0, "Hold where pickup ne home, pickup ne holding not targeted" );
+CancelReserve( { reserve_id => $reserve_id } );
+
+# With hold_fulfillment_policy = any, hold should be pikcup up reguardless of matching home or holding branch
+$dbh->do("DELETE FROM default_circ_rules");
+$dbh->do("INSERT INTO default_circ_rules ( holdallowed, hold_fulfillment_policy ) VALUES ( 2, 'any' )");
+
+# Home branch matches pickup branch
+$reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1 );
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
+is( @$holds_queue, 1, "Hold where pickup eq home, pickup ne holding targeted" );
+CancelReserve( { reserve_id => $reserve_id } );
+
+# Holding branch matches pickup branch
+$reserve_id = AddReserve( $library_B, $borrowernumber, $biblionumber, '', 1 );
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
+is( @$holds_queue, 1, "Hold where pickup ne home, pickup eq holding targeted" );
+CancelReserve( { reserve_id => $reserve_id } );
+
+# Neither branch matches pickup branch
+$reserve_id = AddReserve( $library_C, $borrowernumber, $biblionumber, '', 1 );
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
+is( @$holds_queue, 1, "Hold where pickup ne home, pickup ne holding targeted" );
+CancelReserve( { reserve_id => $reserve_id } );
+
+# End testing hold_fulfillment_policy
 
 # Cleanup
 $schema->storage->txn_rollback;

@@ -379,6 +379,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                     <th>Total current checkouts allowed</th>
                     <th>Total current on-site checkouts allowed</th>
                     <th>Hold policy</th>
+                    <th>Hold pickup library match</th>
                     <th>Return policy</th>
                     <th>&nbsp;</th>
                     <th>&nbsp;</th>
@@ -410,6 +411,39 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                             [% END %]
                                 No holds allowed
                             </option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="hold_fulfillment_policy">
+                            [% IF default_hold_fulfillment_policy == 'any' %]
+                                <option value="any" selected="selected">
+                                    any library
+                                </option>
+                            [% ELSE %]
+                                <option value="any">
+                                    any library
+                                </option>
+                            [% END %]
+
+                            [% IF default_hold_fulfillment_policy == 'homebranch' %]
+                                <option value="homebranch" selected="selected">
+                                    item's home library
+                                </option>
+                            [% ELSE %]
+                                <option value="homebranch">
+                                    item's home library
+                                </option>
+                            [% END %]
+
+                            [% IF default_hold_fulfillment_policy == 'holdingbranch' %]
+                                <option value="holdingbranch" selected="selected">
+                                    item's holding library
+                                </option>
+                            [% ELSE %]
+                                <option value="holdingbranch">
+                                    item's holding library
+                                </option>
+                            [% END %]
                         </select>
                     </td>
                     <td>
@@ -536,6 +570,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                 <tr>
                     <th>Item type</th>
                     <th>Hold policy</th>
+                    <th>Hold pickup library match</th>
                     <th>Return policy</th>
                     <th>&nbsp;</th>
                 </tr>
@@ -557,6 +592,14 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                                 From home library
                             [% ELSE %]
                                 No holds allowed
+                            [% END %]
+                        </td>
+                        <td>[% IF ( branch_item_rule_loo.hold_fulfillment_policy == 'any' ) %]
+                                any library
+                            [% ELSIF ( branch_item_rule_loo.hold_fulfillment_policy == 'homebranch' ) %]
+                                item's home library
+                            [% ELSIF ( branch_item_rule_loo.hold_fulfillment_policy == 'holdingbranch' ) %]
+                                item's holding library
                             [% END %]
                         </td>
                         <td>[% IF ( branch_item_rule_loo.returnbranch == 'homebranch' ) %]
@@ -587,6 +630,21 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                             <option value="2">From any library</option>
                             <option value="1">From home library</option>
                             <option value="0">No holds allowed</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="hold_fulfillment_policy">
+                            <option value="any">
+                                any library
+                            </option>
+
+                            <option value="homebranch">
+                                item's home library
+                            </option>
+
+                            <option value="holdingbranch">
+                                item's holding library
+                            </option>
                         </select>
                     </td>
                     <td>
