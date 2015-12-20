@@ -291,7 +291,9 @@ sub SearchAuthorities {
         my %newline;
         $newline{authid} = $authid;
         if ( !$skipmetadata ) {
-            my $auth_tag_to_report = Koha::Authority::Types->find($authtypecode)->auth_tag_to_report;
+            my $auth_tag_to_report;
+            $auth_tag_to_report = Koha::Authority::Types->find($authtypecode)->auth_tag_to_report
+                if $authtypecode;
             my $reported_tag;
             my $mainentry = $authrecord->field($auth_tag_to_report);
             if ($mainentry) {
