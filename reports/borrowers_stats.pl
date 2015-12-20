@@ -227,7 +227,7 @@ sub calculate {
             }
 
             if    ( $i == 0)  { $cell{crit} = "Cat code"; }
-            elsif ( $i == 1 ) { $cell{crit} = "Zip code"; }
+            elsif ( $i == 1 ) { $cell{crit} = "ZIP/Postal code"; }
             elsif ( $i == 2 ) { $cell{crit} = "Branch code"; }
             elsif ( $i == 3 ||
                     $i == 4 ) { $cell{crit} = "Date of birth"; }
