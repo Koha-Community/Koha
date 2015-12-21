@@ -129,8 +129,8 @@ if ($op eq 'save') {
 
     foreach my $bor (keys %temphash){
         # get category name if we need it for an error message
-        my $bor_category = GetBorrowercategory($bor);
-        my $bor_category_name = defined($bor_category) ? $bor_category->{description} : $bor;
+        my $bor_category = Koha::Patron::Categories->find($bor);
+        my $bor_category_name = $bor_category ? $bor_category->description : $bor;
 
         # Do some Checking here : delay1 < delay2 <delay3 all of them being numbers
         # Raise error if not true

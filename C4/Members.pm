@@ -79,7 +79,6 @@ BEGIN {
         &GetBorNotifyAcctRecord
 
         &GetborCatFromCatType
-        &GetBorrowercategory
         GetBorrowerCategorycode
         &GetBorrowercategoryList
 
@@ -1350,34 +1349,6 @@ sub GetborCatFromCatType {
     $sth->finish;
     return ( \@codes, \%labels );
 }
-
-=head2 GetBorrowercategory
-
-  $hashref = &GetBorrowercategory($categorycode);
-
-Given the borrower's category code, the function returns the corresponding
-data hashref for a comprehensive information display.
-
-=cut
-
-sub GetBorrowercategory {
-    my ($catcode) = @_;
-    my $dbh       = C4::Context->dbh;
-    if ($catcode){
-        my $sth       =
-        $dbh->prepare(
-    "SELECT description,dateofbirthrequired,upperagelimit,category_type 
-    FROM categories 
-    WHERE categorycode = ?"
-        );
-        $sth->execute($catcode);
-        my $data =
-        $sth->fetchrow_hashref;
-        return $data;
-    } 
-    return;  
-}    # sub getborrowercategory
-
 
 =head2 GetBorrowerCategorycode
 

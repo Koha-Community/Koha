@@ -33,6 +33,7 @@ use Koha::Holds;
 use t::lib::Mocks;
 
 use Koha::DateUtils;
+use Koha::Patron::Categories;
 
 use Data::Dumper;
 BEGIN {
@@ -63,7 +64,7 @@ foreach my $addbra ('CPL', 'FPL', 'RPL') {
 
 # Add categories if not existing
 foreach my $addcat ('S', 'PT') {
-    $dbh->do("INSERT INTO categories (categorycode,hidelostitems,category_type) VALUES (?,?,?)",undef,($addcat, 0, $addcat eq 'S'? 'S': 'A')) unless GetBorrowercategory($addcat);
+    $dbh->do("INSERT INTO categories (categorycode,hidelostitems,category_type) VALUES (?,?,?)",undef,($addcat, 0, $addcat eq 'S'? 'S': 'A')) unless Koha::Patron::Categories->find($addcat);
 }
 
 # Create a helper biblio

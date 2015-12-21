@@ -42,6 +42,7 @@ use C4::Form::MessagingPreferences;
 use Koha::Patron::Debarments;
 use Koha::Cities;
 use Koha::DateUtils;
+use Koha::Patron::Categories;
 use Koha::Token;
 use Email::Valid;
 use Module::Load;
@@ -153,9 +154,9 @@ $template->param( "checked" => 1 ) if ( defined($nodouble) && $nodouble eq 1 );
 my $categorycode  = $input->param('categorycode') || $borrower_data->{'categorycode'};
 my $category_type = $input->param('category_type') || '';
 unless ($category_type or !($categorycode)){
-    my $borrowercategory = GetBorrowercategory($categorycode);
-    $category_type    = $borrowercategory->{'category_type'};
-    my $category_name = $borrowercategory->{'description'}; 
+    my $borrowercategory = Koha::Patron::Categories->find($categorycode);
+    $category_type    = $borrowercategory->category_type;
+    my $category_name = $borrowercategory->description;
     $template->param("categoryname"=>$category_name);
 }
 $category_type="A" unless $category_type; # FIXME we should display a error message instead of a 500 error !
@@ -303,8 +304,8 @@ if ($op eq 'save' || $op eq 'insert'){
 
     if ( $newdata{dateofbirth} ) {
         my $age = GetAge($newdata{dateofbirth});
-        my $borrowercategory=GetBorrowercategory($newdata{'categorycode'});   
-        my ($low,$high) = ($borrowercategory->{'dateofbirthrequired'}, $borrowercategory->{'upperagelimit'});
+        my $borrowercategory = Koha::Patron::Categories->find($newdata{categorycode});
+        my ($low,$high) = ($borrowercategory->dateofbirthrequired, $borrowercategory->upperagelimit);
         if (($high && ($age > $high)) or ($age < $low)) {
             push @errors, 'ERROR_age_limitations';
             $template->param( age_low => $low);

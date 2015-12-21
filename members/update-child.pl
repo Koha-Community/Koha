@@ -33,6 +33,7 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 use C4::Members;
+use Koha::Patron::Categories;
 
 # use Smart::Comments;
 
@@ -66,8 +67,8 @@ if ( $op eq 'multi' ) {
         my $row;
         $row->{catcode} = $k;
         $row->{catdesc} = $labels->{$k};
-        my $borcat = GetBorrowercategory( $row->{catcode} );
-        $row->{cattype} = $borcat->{'category_type'};
+        my $borcat = Koha::Patron::Categories->find($row->{catcode});
+        $row->{cattype} = $borcat->category_type;
         push @rows, $row;
     }
     $template->param(
@@ -83,9 +84,9 @@ elsif ( $op eq 'update' ) {
     my $member = GetMember('borrowernumber'=>$borrowernumber);
     $member->{'guarantorid'}  = 0;
     $member->{'categorycode'} = $catcode;
-    my $borcat = GetBorrowercategory($catcode);
-    $member->{'category_type'} = $borcat->{'category_type'};
-    $member->{'description'}   = $borcat->{'description'};
+    my $borcat = Koha::Patron::Categories->find($catcode);
+    $member->{'category_type'} = $borcat->category_type;
+    $member->{'description'}   = $borcat->description;
     delete $member->{password};
     ModMember(%$member);
 

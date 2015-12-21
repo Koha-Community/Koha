@@ -51,6 +51,7 @@ use Koha::Patron::Debarments;
 use Koha::Patrons;
 use Koha::DateUtils;
 use Koha::Token;
+use Koha::Patron::Categories;
 
 use Text::CSV;
 # Text::CSV::Unicode, even in binary mode, fails to parse lines with these diacriticals:
@@ -188,7 +189,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
         #warn join(':',%borrower);
         if ($borrower{categorycode}) {
             push @missing_criticals, {key=>'categorycode', line=>$. , lineraw=>$borrowerline, value=>$borrower{categorycode}, category_map=>1}
-                unless GetBorrowercategory($borrower{categorycode});
+                unless Koha::Patron::Categories->find($borrower{categorycode});
         } else {
             push @missing_criticals, {key=>'categorycode', line=>$. , lineraw=>$borrowerline};
         }
