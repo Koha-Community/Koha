@@ -110,6 +110,7 @@ if ( $op eq 'show' ) {
         # TODO Repeatable attributes are not correctly managed and can cause data lost.
         # This should be implemented.
         next if $attr_type->{repeatable};
+        next if $attr_type->{unique_id}; # Don't display patron attributes that must be unqiue
         my $options = $attr_type->authorised_value_category
             ? GetAuthorisedValues( $attr_type->authorised_value_category )
             : undef;
