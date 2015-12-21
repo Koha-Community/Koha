@@ -66,7 +66,22 @@ for my $acct (@edi_accts) {
     }
 
     if ( $acct->invoices_enabled ) {
-        my $downloader = Koha::Edifact::Transport->new( $acct->id );
+        my $downloader;
+
+        if ( $acct->plugin ) {
+            $downloader = Koha::Plugins::Handler->run(
+                {
+                    class  => $acct->plugin,
+                    method => 'edifact_transport',
+                    params => {
+                        vendor_edi_account_id => $acct->id,
+                    }
+                }
+            );
+        }
+
+        $downloader ||= Koha::Edifact::Transport->new( $acct->id );
+
         $downloader->download_messages('INVOICE');
 
     }
@@ -116,7 +131,25 @@ my @downloaded_invoices = $schema->resultset('EdifactMessage')->search(
 foreach my $invoice (@downloaded_invoices) {
     my $filename = $invoice->filename();
     $logger->trace("Processing invoice $filename");
-    process_invoice($invoice);
+
+    my $plugin_used = 0;
+    if ( my $plugin_class = $invoice->edi_acct->plugin ) {
+        my $plugin = $plugin_class->new();
+        if ( $plugin->can('edifact_process_invoice') ) {
+            $plugin_used = 1;
+            Koha::Plugins::Handler->run(
+                {
+                    class  => $plugin_class,
+                    method => 'edifact_process_invoice',
+                    params => {
+                        invoice => $invoice,
+                    }
+                }
+            );
+        }
+    }
+
+    process_invoice($invoice) unless $plugin_used;
 }
 
 my @downloaded_responses = $schema->resultset('EdifactMessage')->search(

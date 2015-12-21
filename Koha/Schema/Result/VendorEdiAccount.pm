@@ -130,6 +130,13 @@ __PACKAGE__->table("vendor_edi_accounts");
   is_foreign_key: 1
   is_nullable: 1
 
+=head2 plugin
+
+  data_type: 'varchar'
+  default_value: (empty string)
+  is_nullable: 0
+  size: 256
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -169,6 +176,8 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "shipment_budget",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "plugin",
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 256 },
 );
 
 =head1 PRIMARY KEY
@@ -215,8 +224,8 @@ __PACKAGE__->belongs_to(
   {
     is_deferrable => 1,
     join_type     => "LEFT",
-    on_delete     => "RESTRICT",
-    on_update     => "RESTRICT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
   },
 );
 
@@ -235,14 +244,14 @@ __PACKAGE__->belongs_to(
   {
     is_deferrable => 1,
     join_type     => "LEFT",
-    on_delete     => "RESTRICT",
-    on_update     => "RESTRICT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
   },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-08-19 11:41:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0CgJuFAItI71dfSG88NWhg
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2015-12-21 12:59:02
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xPfUnPxnQOmWWX3shkTVRA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

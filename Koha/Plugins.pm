@@ -20,7 +20,7 @@ package Koha::Plugins;
 use Modern::Perl;
 
 use Module::Load::Conditional qw(can_load);
-use Module::Pluggable search_path => ['Koha::Plugin'];
+use Module::Pluggable search_path => ['Koha::Plugin'], except => qr/::Edifact(|::Line|::Message|::Order|::Segment|::Transport)$/;
 
 use C4::Context;
 use C4::Output;

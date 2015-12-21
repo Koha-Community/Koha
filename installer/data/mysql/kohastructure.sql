@@ -3197,6 +3197,7 @@ CREATE TABLE IF NOT EXISTS vendor_edi_accounts (
   responses_enabled TINYINT(1) not null default 0,
   auto_orders TINYINT(1) not null default 0,
   shipment_budget INTEGER(11) REFERENCES aqbudgets( budget_id ),
+  plugin varchar(256) NOT NULL DEFAULT "",
   PRIMARY KEY  (id),
   KEY vendorid (vendor_id),
   KEY shipmentbudget (shipment_budget),

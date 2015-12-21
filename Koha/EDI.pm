@@ -35,6 +35,7 @@ use Koha::Edifact::Order;
 use Koha::Edifact;
 use Log::Log4perl;
 use Text::Unidecode;
+use Koha::Plugins::Handler;
 
 our $VERSION = 1.1;
 our @EXPORT_OK =
@@ -86,17 +87,30 @@ sub create_edi_order {
     );
     my $response = @{$arr_ref} ? 1 : 0;
 
-    my $edifact = Koha::Edifact::Order->new(
-        {
-            orderlines  => \@orderlines,
-            vendor      => $vendor,
-            ean         => $ean_obj,
-            is_response => $response,
-        }
-    );
-    if ( !$edifact ) {
-        return;
+    my $edifact_order_params = {
+        orderlines  => \@orderlines,
+        vendor      => $vendor,
+        ean         => $ean_obj,
+        is_response => $response,
+    };
+
+    my $edifact;
+    if ( $vendor->plugin ) {
+        $edifact = Koha::Plugins::Handler->run(
+            {
+                class  => $vendor->plugin,
+                method => 'edifact_order',
+                params => {
+                    params => $edifact_order_params,
+                }
+            }
+        );
     }
+    else {
+        $edifact = Koha::Edifact::Order->new($edifact_order_params);
+    }
+
+    return unless $edifact;
 
     my $order_file = $edifact->encode();
 
@@ -185,8 +199,25 @@ sub process_invoice {
     my $schema = Koha::Database->new()->schema();
     my $logger = Log::Log4perl->get_logger();
     my $vendor_acct;
-    my $edi =
+
+    my $plugin = $invoice_message->edi_acct()->plugin();
+    my $edi_plugin;
+    if ( $plugin ) {
+        $edi_plugin = Koha::Plugins::Handler->run(
+            {
+                class  => $plugin,
+                method => 'edifact',
+                params => {
+                    invoice_message => $invoice_message,
+                    transmission => $invoice_message->raw_msg,
+                }
+            }
+        );
+    }
+
+    my $edi = $edi_plugin ||
       Koha::Edifact->new( { transmission => $invoice_message->raw_msg, } );
+
     my $messages = $edi->message_array();
 
     if ( @{$messages} ) {

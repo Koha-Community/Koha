@@ -23,6 +23,7 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 use Koha::Database;
+use Koha::Plugins;
 
 my $input = CGI->new();
 
@@ -51,6 +52,9 @@ if ( $op eq 'acct_form' ) {
         }
     );
     $template->param( vendors => \@vendors );
+
+    my @plugins = Koha::Plugins->new()->GetPlugins('edifact');
+    $template->param( plugins => \@plugins );
 }
 elsif ( $op eq 'delete_confirm' ) {
     show_account();
@@ -77,6 +81,7 @@ else {
             responses_enabled  => defined $input->param('responses_enabled'),
             auto_orders        => defined $input->param('auto_orders'),
             id_code_qualifier  => $input->param('id_code_qualifier'),
+            plugin             => $input->param('plugin'),
         };
 
         if ($id) {

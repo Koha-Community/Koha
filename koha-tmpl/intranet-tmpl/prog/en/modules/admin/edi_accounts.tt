@@ -77,6 +77,19 @@
      </select>
   </li>
   <li>
+     <label for="plugin">Plugin: </label>
+     <select name="plugin" id="plugin">
+        <option value="">Do not use plugin</option>
+        [% FOREACH plugin IN plugins %]
+            [% IF account.plugin == plugin.class %]
+                <option value="[% plugin.class %]" selected="selected">[% plugin.metadata.name %]</option>
+            [% ELSE %]
+                <option value="[% plugin.class %]">[% plugin.metadata.name %]</option>
+            [% END %]
+        [% END %]
+     </select>
+  </li>
+  <li>
      <label for="description">Description: </label>
      <input type="text" name="description" id="description" size="20" maxlength="90" value="[% account.description %]" />
   </li>
