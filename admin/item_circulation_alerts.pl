@@ -27,11 +27,11 @@ use JSON;
 use C4::Auth;
 use C4::Context;
 use C4::Branch;
-use C4::Category;
 use C4::ItemCirculationAlertPreference;
 use C4::Output;
 
 use Koha::ItemTypes;
+use Koha::Patron::Categories;
 
 # shortcut for long package name
 our $preferences = 'C4::ItemCirculationAlertPreference';
@@ -65,9 +65,7 @@ sub show {
     }
     my $branch_name = exists($br->{$branch}) && $br->{$branch}->{branchname};
 
-    my @categories = (
-        C4::Category->all
-    );
+    my @categories = Koha::Patron::Categories->search_limited;
     my @item_types = Koha::ItemTypes->search;
     my $grid_checkout = $preferences->grid({ branchcode => $branch, notification => 'CHECKOUT' });
     my $grid_checkin  = $preferences->grid({ branchcode => $branch, notification => 'CHECKIN' });

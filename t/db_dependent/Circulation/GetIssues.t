@@ -8,9 +8,9 @@ use C4::Biblio;
 use C4::Items;
 use C4::Members;
 use C4::Branch;
-use C4::Category;
 use C4::Circulation;
 use Koha::Library;
+use Koha::Patron::Categories;
 use MARC::Record;
 
 my $dbh = C4::Context->dbh;
@@ -44,9 +44,9 @@ my $itemnumber3 = AddItem({ barcode => '0203', %item_branch_infos }, $biblionumb
 
 my $categorycode;
 my $category_created;
-my @categories = C4::Category->all;
+my @categories = Koha::Patron::Categories->search_limited;
 if (@categories) {
-    $categorycode = $categories[0]->{categorycode}
+    $categorycode = $categories[0]->categorycode
 } else {
     $categorycode = 'C';
     C4::Context->dbh->do(

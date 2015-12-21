@@ -20,28 +20,10 @@ use Modern::Perl;
 use Template::Plugin;
 use base qw( Template::Plugin );
 
-use C4::Category;
 use Koha::Patron::Categories;
 
-sub GetName {
-    my ( $self, $categorycode ) = @_;
-
-    return Koha::Patron::Categories->find( $categorycode )->description;
-}
-
 sub all {
-    my ( $self, $params ) = @_;
-    my $selected = $params->{selected};
-
-    my @categories = C4::Category->all;
-    if ( $selected ) {
-        for my $category ( @categories ) {
-            if ( $category->{categorycode} eq $selected ) {
-                $category->{selected} = 1;
-            }
-        }
-    }
-    return @categories;
+    return Koha::Patron::Categories->search_limited;
 }
 
 1;

@@ -487,11 +487,11 @@ function filterByFirstLetterSurname(letter) {
             </li>
             <li>
               <label for="categorycode_filter">Category:</label>
-              [% SET categories = Categories.all( selected => categorycode_filter ) %]
+              [% SET categories = Categories.all() %]
               <select id="categorycode_filter">
                 <option value="">Any</option>
                 [% FOREACH cat IN categories %]
-                  [% IF cat.selected %]
+                  [% IF cat.categorycode == categorycode_filter %]
                     <option selected="selected" value="[% cat.categorycode %]">[% cat.description %]</option>
                   [% ELSE %]
                     <option value="[% cat.categorycode %]">[% cat.description %]</option>

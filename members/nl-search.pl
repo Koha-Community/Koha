@@ -37,7 +37,6 @@ See http://www.lanekortet.no/ for more information (in Norwegian).
 use Modern::Perl;
 use CGI;
 use C4::Auth;
-use C4::Category;
 use C4::Context;
 use C4::Output;
 use C4::Members;
@@ -46,6 +45,7 @@ use C4::Utils::DataTables::Members;
 use Koha::NorwegianPatronDB qw( NLCheckSysprefs NLSearch NLDecodePin NLGetFirstname NLGetSurname NLSync );
 use Koha::Database;
 use Koha::DateUtils;
+use Koha::Patron::Categories;
 
 my $cgi = CGI->new;
 my $dbh = C4::Context->dbh;
@@ -92,11 +92,10 @@ if ( $op && $op eq 'search' ) {
             my $result = NLSearch( $identifier );
             unless ($result->fault) {
                 my $r = $result->result();
-                # Send the data to the template
-                my @categories = C4::Category->all;
+                my $categories = Koha::Patron::Categories->search_limited;
                 $template->param(
                     'result'     => $r,
-                    'categories' => \@categories,
+                    'categories' => $categories,
                 );
             } else {
                 $template->param( 'error' => join ', ', $result->faultcode, $result->faultstring, $result->faultdetail );

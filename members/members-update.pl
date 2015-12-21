@@ -25,7 +25,6 @@ use C4::Output;
 use C4::Context;
 use C4::Members;
 use C4::Branch;
-use C4::Category;
 use Koha::Patron::Modifications;
 
 my $query = new CGI;

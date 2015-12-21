@@ -26,6 +26,7 @@ use C4::Members::Attributes;
 use C4::Members::AttributeTypes;
 
 use Koha::Library;
+use Koha::Patron::Categories;
 
 use t::lib::Mocks;
 
@@ -38,7 +39,7 @@ $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 # Pick a categorycode from the DB
-my @categories   = C4::Category->all;
+my @categories   = Koha::Patron::Categories->search_limited;
 my $categorycode = $categories[0]->categorycode;
 # Add a new branch so we control what borrowers it has
 my $branchcode   = "UNC";

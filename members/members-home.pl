@@ -25,10 +25,10 @@ use C4::Output;
 use C4::Context;
 use C4::Members;
 use C4::Branch;
-use C4::Category;
 use Koha::Patron::Modifications;
 use Koha::Libraries;
 use Koha::List::Patron;
+use Koha::Patron::Categories;
 
 my $query = new CGI;
 my $branch = $query->param('branchcode');
@@ -68,7 +68,6 @@ if ( C4::Branch::onlymine ) {
     }
 }
 
-my @categories;
 my $no_add = 0;
 if(scalar(@branchloop) < 1){
     $no_add = 1;
@@ -78,7 +77,7 @@ else {
     $template->param(branchloop=>\@branchloop);
 }
 
-@categories=C4::Category->all;
+my @categories = Koha::Patron::Categories->search_limited;
 if(scalar(@categories) < 1){
     $no_add = 1;
     $template->param(no_categories => 1);

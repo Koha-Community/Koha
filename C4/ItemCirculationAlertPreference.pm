@@ -20,10 +20,10 @@ package C4::ItemCirculationAlertPreference;
 use strict;
 use warnings;
 use C4::Context;
-use C4::Category;
 use Carp qw(carp croak);
 
 use Koha::ItemTypes;
+use Koha::Patron::Categories;
 
 our $AUTOLOAD;
 
@@ -331,7 +331,7 @@ sub grid {
     my ($class, $where) = @_;
     my @branch_prefs = $class->find($where);
     my @default_prefs = $class->find({ branchcode => '*', notification => $where->{notification} });
-    my @cc = C4::Category->all;
+    my @cc = Koha::Patron::Categories->search_limited;
     my @it = Koha::ItemTypes->search;
     my $notification = $where->{notification};
     my %disabled = map {

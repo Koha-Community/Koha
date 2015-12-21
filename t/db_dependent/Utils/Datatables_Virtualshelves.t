@@ -24,6 +24,7 @@ use C4::Context;
 use C4::Members;
 
 use Koha::Library;
+use Koha::Patron::Categories;
 use Koha::Virtualshelf;
 use Koha::Virtualshelves;
 
@@ -38,7 +39,7 @@ $dbh->{RaiseError} = 1;
 $dbh->do(q|DELETE FROM virtualshelves|);
 
 # Pick a categorycode from the DB
-my @categories   = C4::Category->all;
+my @categories   = Koha::Patron::Categories->search_limited;
 my $categorycode = $categories[0]->categorycode;
 my $branchcode   = "ABC";
 my $branch_data = {

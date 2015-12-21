@@ -31,7 +31,6 @@ use C4::Koha;
 use C4::Output;
 use C4::Reports;
 use C4::Members;
-use C4::Category;
 use Koha::DateUtils;
 use List::MoreUtils qw/any/;
 use YAML;

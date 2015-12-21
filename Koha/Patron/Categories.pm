@@ -19,6 +19,8 @@ use Modern::Perl;
 
 use Carp;
 
+use C4::Context; # Sigh...
+
 use Koha::Database;
 
 use Koha::Patron::Category;
@@ -34,6 +36,19 @@ Koha::Patron::Categories - Koha Patron Category Object set class
 =head2 Class Methods
 
 =cut
+
+sub search_limited {
+    my ( $self ) = @_;
+    my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
+    return $self->search({}, {order_by => ['description']}) unless $branch_limit;
+    return $self->search({
+        'categories_branches.branchcode' => [$branch_limit, undef]},
+        {
+            join => 'categories_branches',
+            order_by => ['description'],
+        }
+    );
+}
 
 =head3 type
 

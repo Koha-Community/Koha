@@ -8,7 +8,6 @@ use Test::MockModule;
 use C4::Biblio;
 use C4::Items;
 use C4::Members;
-use C4::Category;
 use C4::Circulation;
 use Koha::Libraries;
 use MARC::Record;

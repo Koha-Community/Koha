@@ -22,8 +22,8 @@ use Test::More tests => 14;
 use C4::Biblio qw/AddBiblio/;
 use C4::Members;
 use C4::Context;
-use C4::Category;
 use Koha::Database;
+use Koha::Patron::Categories;
 
 use t::lib::TestBuilder;
 
@@ -41,7 +41,7 @@ my $library = $builder->build({
 
 my ($biblionumber) = AddBiblio( MARC::Record->new, '' );
 
-my @categories   = C4::Category->all;
+my @categories   = Koha::Patron::Categories->search_limited;
 my $categorycode = $categories[0]->categorycode;
 my $branchcode   = $library->{branchcode};
 

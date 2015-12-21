@@ -102,14 +102,14 @@
 
         <p>
             <label for="categorycode">Category: </label>
-            [% SET categories = Categories.all( selected => categorycode_filter ) %]
+            [% SET categories = Categories.all() %]
             <select name="categorycode_filter" id="categorycode">
                 <option value="">Any</option>
-                [% FOREACH categorie IN categories %]
-                    [% IF ( categorie.selected ) %]
-                        <option value="[% categorie.categorycode %]" selected="selected">[% categorie.description %]</option>
+                [% FOREACH category IN categories %]
+                    [% IF category.categorycode == categorycode_filter %]
+                        <option value="[% category.categorycode %]" selected="selected">[% category.description %]</option>
                     [% ELSE %]
-                        <option value="[% categorie.categorycode %]">[% categorie.description %]</option>
+                        <option value="[% category.categorycode %]">[% category.description %]</option>
                     [% END %]
                 [% END %]
             </select>
