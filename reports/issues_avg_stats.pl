@@ -29,6 +29,7 @@ use C4::Koha;
 use C4::Circulation;
 use C4::Reports;
 use Koha::DateUtils;
+use Koha::Patron::Categories;
 use Date::Calc qw(Delta_Days);
 
 =head1 NAME
@@ -36,8 +37,6 @@ use Date::Calc qw(Delta_Days);
 plugin that shows a stats on borrowers
 
 =head1 DESCRIPTION
-
-=over 2
 
 =cut
 
@@ -119,25 +118,12 @@ if ($do_it) {
     }
 # Displaying choices
 } else {
-    my $dbh = C4::Context->dbh;
-    my @values;
-    my $req;
-    $req = $dbh->prepare("select distinctrow categorycode,description from categories order by description");
-    $req->execute;
-    my %labelsc;
-    my @selectc;
-    while (my ($value, $desc) =$req->fetchrow) {
-        push @selectc, $value;
-        $labelsc{$value} = $desc;
-    }
-    my $BorCat = {
-        values   => \@selectc,
-        labels   => \%labelsc,
-    };
+    my $patron_categories = Koha::Patron::Categories->search({}, {order_by => ['description']});
 
     my $itemtypes = GetItemTypes( style => 'array' );
 
-    $req = $dbh->prepare("select distinctrow sort1 from borrowers where sort1 is not null order by sort1");
+    my $dbh = C4::Context->dbh;
+    my $req = $dbh->prepare("select distinctrow sort1 from borrowers where sort1 is not null order by sort1");
     $req->execute;
     my @selects1;
     my $hassort1;
@@ -166,7 +152,7 @@ if ($do_it) {
     my $CGIsepChoice=GetDelimiterChoices;
     
     $template->param(
-                    BorCat       => $BorCat,
+                    patron_categories => $patron_categories,
                     itemtypes    => $itemtypes,
                     branchloop   => GetBranchesLoop(),
                     hassort1     => $hassort1,

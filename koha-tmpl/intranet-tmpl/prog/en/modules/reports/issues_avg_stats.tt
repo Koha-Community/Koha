@@ -155,8 +155,8 @@
                 <td>
                     <select name="Filter" size="1" id="borcat">
                         <option value=""></option>
-                        [% FOREACH value IN BorCat.values %]
-                        <option value="[%- value -%]">[%- BorCat.labels.$value -%]</option>
+                        [% FOREACH patron_category IN patron_categories %]
+                            <option value="[%- patron_category.categorycode -%]">[%- patron_category.description-%]</option>
                         [% END %]
                     </select>
                 </td>

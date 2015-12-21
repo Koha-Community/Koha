@@ -30,14 +30,13 @@ use C4::Members;
 use C4::Overdues;
 use Koha::Libraries;
 
+use Koha::Patron::Categories;
+
 our $input = new CGI;
 my $dbh = C4::Context->dbh;
 
-my @categories = @{$dbh->selectall_arrayref(
-    'SELECT description, categorycode FROM categories WHERE overduenoticerequired > 0',
-    { Slice => {} }
-)};
-my @category_codes  = map { $_->{categorycode} } @categories;
+my @patron_categories = Koha::Patron::Categories->search( { overduenoticerequired => { '>' => 0 } } );
+my @category_codes  = map { $_->categorycode } @patron_categories;
 our @rule_params     = qw(delay letter debarred);
 
 # blank_row($category_code) - return true if the entire row is blank.
@@ -224,7 +223,7 @@ my @line_loop;
 
 my $message_transport_types = C4::Letters::GetMessageTransportTypes();
 my ( @first, @second, @third );
-for my $data (@categories) {
+for my $patron_category (@patron_categories) {
     if (%temphash and not $input_saved){
         # if we managed to save the form submission, don't
         # reuse %temphash, but take the values from the
@@ -232,13 +231,13 @@ for my $data (@categories) {
         # bugs where the form submission was not correctly saved
         for my $i ( 1..3 ){
             my %row = (
-                overduename => $data->{'categorycode'},
-                line        => $data->{'description'}
+                overduename => $patron_category->categorycode,
+                line        => $patron_category->description,
             );
-            $row{delay}=$temphash{$data->{'categorycode'}}->{"delay$i"};
-            $row{debarred}=$temphash{$data->{'categorycode'}}->{"debarred$i"};
-            $row{selected_lettercode} = $temphash{ $data->{categorycode} }->{"letter$i"};
-            my @selected_mtts = @{ GetOverdueMessageTransportTypes( $branch, $data->{'categorycode'}, $i) };
+            $row{delay}=$temphash{$patron_category->categorycode}->{"delay$i"};
+            $row{debarred}=$temphash{$patron_category->categorycode}->{"debarred$i"};
+            $row{selected_lettercode} = $temphash{ $patron_category->categorycode }->{"letter$i"};
+            my @selected_mtts = @{ GetOverdueMessageTransportTypes( $branch, $patron_category->categorycode, $i) };
             my @mtts;
             for my $mtt ( @$message_transport_types ) {
                 push @mtts, {
@@ -258,19 +257,19 @@ for my $data (@categories) {
     } else {
     #getting values from table
         my $sth2=$dbh->prepare("SELECT * from overduerules WHERE branchcode=? AND categorycode=?");
-        $sth2->execute($branch,$data->{'categorycode'});
+        $sth2->execute($branch,$patron_category->categorycode);
         my $dat=$sth2->fetchrow_hashref;
         for my $i ( 1..3 ){
             my %row = (
-                overduename => $data->{'categorycode'},
-                line        => $data->{'description'}
+                overduename => $patron_category->categorycode,
+                line        => $patron_category->description,
             );
 
             $row{selected_lettercode} = $dat->{"letter$i"};
 
             if ($dat->{"delay$i"}){$row{delay}=$dat->{"delay$i"};}
             if ($dat->{"debarred$i"}){$row{debarred}=$dat->{"debarred$i"};}
-            my @selected_mtts = @{ GetOverdueMessageTransportTypes( $branch, $data->{'categorycode'}, $i) };
+            my @selected_mtts = @{ GetOverdueMessageTransportTypes( $branch, $patron_category->categorycode, $i) };
             my @mtts;
             for my $mtt ( @$message_transport_types ) {
                 push @mtts, {

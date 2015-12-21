@@ -77,13 +77,14 @@
 			<td>Patron category</td>
 			<td><input type="radio" name="Line" value="categorycode" /></td>
 			<td><input type="radio" name="Column" value="categorycode" /></td>
-			<td><select name="Filter"  size="1" id="catcode">
-				<option value=""></option>
-				[% FOREACH CAT_LOO IN CAT_LOOP %]
-				<option value="[% CAT_LOO.categorycode %]">[% CAT_LOO.description %]</option>
-				[% END %]
-				</select>
-			</td>
+            <td>
+                <select name="Filter"  size="1" id="catcode">
+                    <option value=""></option>
+                    [% FOREACH patron_category IN patron_categories %]
+                        <option value="[% patron_category.categorycode %]">[% patron_category.description %]</option>
+                    [% END %]
+                </select>
+            </td>
 			</tr>
 			<tr>
 			<td>Patron status</td>

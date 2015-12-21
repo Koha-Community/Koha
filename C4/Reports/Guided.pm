@@ -30,11 +30,10 @@ use C4::Output;
 use XML::Simple;
 use XML::Dumper;
 use C4::Debug;
-# use Smart::Comments;
-# use Data::Dumper;
 use C4::Log;
 
 use Koha::AuthorisedValues;
+use Koha::Patron::Categories;
 
 BEGIN {
     require Exporter;

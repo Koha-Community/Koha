@@ -36,6 +36,7 @@ use C4::Log;
 use Koha::DateUtils qw/dt_from_string output_pref/;
 use Koha::AuthorisedValue;
 use Koha::AuthorisedValues;
+use Koha::Patron::Categories;
 
 =head1 NAME
 
@@ -698,14 +699,9 @@ elsif ($phase eq 'Run this report'){
                         }
                     }
                     elsif ( $authorised_value eq "categorycode" ) {
-                        my $sth = $dbh->prepare("SELECT categorycode, description FROM categories ORDER BY description");
-                        $sth->execute;
-                        while ( my ( $categorycode, $description ) = $sth->fetchrow_array ) {
-                            push @authorised_values, $categorycode;
-                            $authorised_lib{$categorycode} = $description;
-                        }
-
-                        #---- "true" authorised value
+                        my @patron_categories = Koha::Patron::Categories->search({}, { order_by => ['description']});
+                        %authorised_lib = map { $_->categorycode => $_->description } @patron_categories;
+                        push @authorised_values, $_->categorycode for @patron_categories;
                     }
                     else {
                         if ( Koha::AuthorisedValues->search({ category => $authorised_value })->count ) {

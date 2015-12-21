@@ -34,6 +34,7 @@ use Koha::Logger;
 use Koha::RefundLostItemFeeRule;
 use Koha::RefundLostItemFeeRules;
 use Koha::Libraries;
+use Koha::Patron::Categories;
 
 my $input = CGI->new;
 my $dbh = C4::Context->dbh;
@@ -470,14 +471,8 @@ for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{b
     };
 }
 
-my $sth=$dbh->prepare("SELECT description,categorycode FROM categories ORDER BY description");
-$sth->execute;
-my @category_loop;
-while (my $data=$sth->fetchrow_hashref){
-    push @category_loop,$data;
-}
+my $patron_categories = Koha::Patron::Categories->search({}, { order_by => ['description'] });
 
-$sth->finish;
 my @row_loop;
 my @itemtypes = @{ GetItemTypes( style => 'array' ) };
 @itemtypes = sort { lc $a->{translated_description} cmp lc $b->{translated_description} } @itemtypes;
@@ -517,7 +512,6 @@ while (my $row = $sth2->fetchrow_hashref) {
     }
     push @row_loop, $row;
 }
-$sth->finish;
 
 my @sorted_row_loop = sort by_category_and_itemtype @row_loop;
 
@@ -626,7 +620,8 @@ if ($defaults) {
 
 $template->param(default_rules => ($defaults ? 1 : 0));
 
-$template->param(categoryloop => \@category_loop,
+$template->param(
+    patron_categories => $patron_categories,
                         itemtypeloop => \@itemtypes,
                         rules => \@sorted_row_loop,
                         branchloop => \@branchloop,

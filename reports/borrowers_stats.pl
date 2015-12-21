@@ -31,6 +31,9 @@ use C4::Output;
 use C4::Reports;
 use C4::Circulation;
 use C4::Members::AttributeTypes;
+
+use Koha::Patron::Categories;
+
 use Date::Calc qw(
   Today
   Add_Delta_YM
@@ -116,7 +119,8 @@ if ($do_it) {
 } else {
 	my $dbh = C4::Context->dbh;
 	my $req;
-	$template->param(  CAT_LOOP => &catcode_aref);
+    my $patron_categories = Koha::Patron::Categories->search({}, {order_by => ['description']});
+    $template->param( patron_categories => $patron_categories );
 	my @branchloop;
 	foreach (sort {$branches->{$a}->{branchname} cmp $branches->{$b}->{branchname}} keys %$branches) {
 		my $line = {branchcode => $_, branchname => $branches->{$_}->{branchname} || 'UNKNOWN'};
@@ -147,20 +151,6 @@ if ($do_it) {
     }
 }
 output_html_with_http_headers $input, $cookie, $template->output;
-
-sub catcode_aref {
-	my $req = C4::Context->dbh->prepare("SELECT categorycode, description FROM categories ORDER BY description");
-	$req->execute;
-	return $req->fetchall_arrayref({});
-}
-sub catcodes_hash {
-	my %cathash;
-	my $catcodes = &catcode_aref;
-	foreach (@$catcodes) {
-		$cathash{$_->{categorycode}} = ($_->{description} || 'NO_DESCRIPTION') . " ($_->{categorycode})";
-	}
-	return %cathash;
-}
 
 sub calculate {
 	my ($line, $column, $digits, $status, $activity, $filters, $attr_filters) = @_;
@@ -269,9 +259,8 @@ sub calculate {
     } else {
         $linefield = $line;
     }
-
-	my %cathash = ($line eq 'categorycode' or $column eq 'categorycode') ? &catcodes_hash : ();
-	push @loopfilter, {debug=>1, crit=>"\%cathash", filter=>join(", ", map {$cathash{$_}} sort keys %cathash)};
+    my $patron_categories = Koha::Patron::Categories->search({}, {order_by => ['categorycode']});
+    push @loopfilter, {debug=>1, crit=>"\%cathash", filter=>join(", ", map { $_->categorycode . ' (' . ( $_->description || 'NO_DESCRIPTION' ) . ')'} $patron_categories->as_list )};
 
     my $strsth;
     my @strparams; # bind parameters for the query
@@ -299,8 +288,7 @@ sub calculate {
  		my %cell;
 		if ($celvalue) {
 			$cell{rowtitle} = $celvalue;
-			# $cell{rowtitle_display} = ($linefield eq 'branchcode') ? $branches->{$celvalue}->{branchname} : $celvalue;
-			$cell{rowtitle_display} = ($cathash{$celvalue} || "$celvalue\*") if ($line eq 'categorycode');
+            $cell{rowtitle_display} = ($patron_categories->find($celvalue)->description || "$celvalue\*") if ($line eq 'categorycode');
 		}
  		$cell{totalrow} = 0;
 		push @loopline, \%cell;
@@ -348,7 +336,7 @@ sub calculate {
              if (defined $celvalue) {
 			$cell{coltitle} = $celvalue;
 			# $cell{coltitle_display} = ($colfield eq 'branchcode') ? $branches->{$celvalue}->{branchname} : $celvalue;
-			$cell{coltitle_display} = $cathash{$celvalue} if ($column eq 'categorycode');
+            $cell{coltitle_display} = $patron_categories->find($celvalue)->description if ($column eq 'categorycode');
 		}
 		push @loopcol, \%cell;
  	}

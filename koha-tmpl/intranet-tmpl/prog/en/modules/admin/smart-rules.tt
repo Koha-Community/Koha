@@ -277,8 +277,8 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                     <td>
                         <select name="categorycode" id="categorycode">
                             <option value="*">All</option>
-                        [% FOREACH categoryloo IN categoryloop %]
-                            <option value="[% categoryloo.categorycode %]">[% categoryloo.description %]</option>
+                        [% FOREACH patron_category IN patron_categories%]
+                            <option value="[% patron_category.categorycode %]">[% patron_category.description %]</option>
                         [% END %]
                         </select>
                     </td>
@@ -549,8 +549,8 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                 <tr>
                     <td>
                         <select name="categorycode">
-                        [% FOREACH categoryloo IN categoryloop %]
-                            <option value="[% categoryloo.categorycode %]">[% categoryloo.description %]</option>
+                        [% FOREACH patron_category IN patron_categories%]
+                            <option value="[% patron_category.categorycode %]">[% patron_category.description %]</option>
                         [% END %]
                         </select>
                     </td>
