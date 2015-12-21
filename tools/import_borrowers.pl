@@ -88,8 +88,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
 my $branches = GetBranchesLoop();
 $template->param( branches => $branches ) if ( $branches );
 # get the patron categories and pass them to the template
-my $categories = GetBorrowercategoryList();
-$template->param( categories => $categories ) if ( $categories );
+my @patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['description']});
+$template->param( categories => \@patron_categories );
 my $columns = C4::Templates::GetColumnDefs( $input )->{borrowers};
 $columns = [ grep { $_->{field} ne 'borrowernumber' ? $_ : () } @$columns ];
 $template->param( borrower_fields => $columns );

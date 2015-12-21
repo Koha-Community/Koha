@@ -76,7 +76,7 @@ $template->param(do_it => $do_it,
 );
 
 our $itemtypes = GetItemTypes();
-our $categoryloop = GetBorrowercategoryList;
+our @patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['description']});
 
 our $ccodes    = GetKohaAuthorisedValues("items.ccode");
 our $locations = GetKohaAuthorisedValues("items.location");
@@ -152,7 +152,7 @@ my $CGIextChoice = ( 'CSV' ); # FIXME translation
 my $CGIsepChoice=GetDelimiterChoices;
  
 $template->param(
-	categoryloop => $categoryloop,
+    categoryloop => \@patron_categories,
 	itemtypeloop => \@itemtypeloop,
 	locationloop => \@locations,
 	   ccodeloop => \@ccodes,
@@ -322,12 +322,12 @@ sub calculate {
 				($celvalue eq $_->{authorised_value}) or next;
 				$cell{rowtitle_display} = $_->{lib} and last;
 			}
-		} elsif ($line =~ /category/) {
-			foreach (@$categoryloop) {
-				($celvalue eq $_->{categorycode}) or next;
-				$cell{rowtitle_display} = $_->{description} and last;
-			}
-		}
+        } elsif ($line =~ /category/) {
+            foreach my $patron_category ( @patron_categories ) {
+                ($celvalue eq $patron_category->categorycode) or next;
+                $cell{rowtitle_display} = $patron_category->description and last;
+            }
+        }
 		push @loopline, \%cell;
 	}
 
@@ -396,12 +396,12 @@ sub calculate {
 				($celvalue eq $_->{authorised_value}) or next;
 				$cell{coltitle_display} = $_->{lib} and last;
 			}
-		} elsif ($column =~ /category/) {
-			foreach (@$categoryloop) {
-				($celvalue eq $_->{categorycode}) or next;
-				$cell{coltitle_display} = $_->{description} and last;
-			}
-		}
+        } elsif ($column =~ /category/) {
+            foreach my $patron_category ( @patron_categories ) {
+                ($celvalue eq $patron_category->categorycode) or next;
+                $cell{coltitle_display} = $patron_category->description and last;
+            }
+        }
 		push @loopcol, \%cell;
 	}
 

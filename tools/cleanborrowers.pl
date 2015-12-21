@@ -39,6 +39,7 @@ use C4::Output;
 use C4::Members;        # GetBorrowersWhoHavexxxBorrowed.
 use C4::Circulation;    # AnonymiseIssueHistory.
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Patron::Categories;
 use Date::Calc qw/Today Add_Delta_YM/;
 use Koha::List::Patron;
 
@@ -171,12 +172,14 @@ elsif ( $step == 3 ) {
     $template->param( patron_lists => [ @non_empty_lists ] );
 }
 
+my $patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['description']});
+
 $template->param(
     step                   => $step,
     not_borrowed_since   => $not_borrowed_since,
     borrower_dateexpiry    => $borrower_dateexpiry,
     last_issue_date        => $last_issue_date,
-    borrower_categorycodes => GetBorrowercategoryList(),
+    borrower_categorycodes => $patron_categories,
     borrower_categorycode  => $borrower_categorycode,
 );
 

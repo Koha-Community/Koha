@@ -105,7 +105,7 @@ if ( $op eq 'show' ) {
     my @patron_attributes_values;
     my @patron_attributes_codes;
     my $patron_attribute_types = C4::Members::AttributeTypes::GetAttributeTypes_hashref('all');
-    my $patron_categories = C4::Members::GetBorrowercategoryList;
+    my @patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['description']});
     for ( values %$patron_attribute_types ) {
         my $attr_type = C4::Members::AttributeTypes->fetch( $_->{code} );
         # TODO Repeatable attributes are not correctly managed and can cause data lost.
@@ -123,8 +123,8 @@ if ( $op eq 'show' ) {
 
         my $category_code = $_->{category_code};
         my ( $category_lib ) = map {
-            ( defined $category_code and $_->{categorycode} eq $category_code ) ? $_->{description} : ()
-        } @$patron_categories;
+            ( defined $category_code and $_->categorycode eq $category_code ) ? $_->description : ()
+        } @patron_categories;
         push @patron_attributes_codes,
             {
                 attribute_code => $_->{code},
@@ -149,9 +149,8 @@ if ( $op eq 'show' ) {
     my @branches_option;
     push @branches_option, { value => $_->{value}, lib => $_->{branchname} } for @$branches;
     unshift @branches_option, { value => "", lib => "" };
-    my $categories = GetBorrowercategoryList;
     my @categories_option;
-    push @categories_option, { value => $_->{categorycode}, lib => $_->{description} } for @$categories;
+    push @categories_option, { value => $_->categorycode, lib => $_->description } for @patron_categories;
     unshift @categories_option, { value => "", lib => "" };
     my $bsort1 = GetAuthorisedValues("Bsort1");
     my @sort1_option;

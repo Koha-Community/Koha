@@ -80,7 +80,6 @@ BEGIN {
 
         &GetborCatFromCatType
         GetBorrowerCategorycode
-        &GetBorrowercategoryList
 
         &GetBorrowersToExpunge
         &GetBorrowersWhoHaveNeverBorrowed
@@ -1369,32 +1368,6 @@ sub GetBorrowerCategorycode {
     $sth->execute( $borrowernumber );
     return $sth->fetchrow;
 }
-
-=head2 GetBorrowercategoryList
-
-  $arrayref_hashref = &GetBorrowercategoryList;
-If no category code provided, the function returns all the categories.
-
-=cut
-
-sub GetBorrowercategoryList {
-    my $no_branch_limit = @_ ? shift : 0;
-    my $branch_limit = $no_branch_limit
-        ? 0
-        : C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
-    my $dbh       = C4::Context->dbh;
-    my $query = "SELECT categories.* FROM categories";
-    $query .= qq{
-        LEFT JOIN categories_branches ON categories.categorycode = categories_branches.categorycode
-        WHERE branchcode = ? OR branchcode IS NULL GROUP BY description
-    } if $branch_limit;
-    $query .= " ORDER BY description";
-    my $sth = $dbh->prepare( $query );
-    $sth->execute( $branch_limit ? $branch_limit : () );
-    my $data = $sth->fetchall_arrayref( {} );
-    $sth->finish;
-    return $data;
-}    # sub getborrowercategory
 
 =head2 GetAge
 

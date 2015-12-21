@@ -32,6 +32,7 @@ use C4::Output;
 use C4::Reports;
 use C4::Members;
 use Koha::DateUtils;
+use Koha::Patron::Categories;
 use List::MoreUtils qw/any/;
 use YAML;
 
@@ -80,7 +81,7 @@ $template->param(do_it => $do_it,
 );
 
 my $itemtypes = GetItemTypes();
-my $categoryloop = GetBorrowercategoryList;
+my @patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['description']});
 
 my $ccodes    = GetKohaAuthorisedValues("items.ccode");
 my $locations = GetKohaAuthorisedValues("items.location");
@@ -158,7 +159,7 @@ my $CGIextChoice = ( 'CSV' ); # FIXME translation
 my $CGIsepChoice=GetDelimiterChoices;
  
 $template->param(
-	categoryloop => $categoryloop,
+    categoryloop => \@patron_categories,
 	itemtypeloop => \@itemtypeloop,
 	locationloop => \@locations,
 	   ccodeloop => \@ccodes,
@@ -353,9 +354,9 @@ sub display_value {
         }
     }
     elsif ( $crit =~ /category/ ) {
-        foreach (@$categoryloop) {
-            ( $value eq $_->{categorycode} ) or next;
-            $display_value = $_->{description} and last;
+        foreach my $patron_category ( @patron_categories ) {
+            ( $value eq $patron_category->categorycode ) or next;
+            $display_value = $patron_category->description and last;
         }
     }
     return $display_value;
