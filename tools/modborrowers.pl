@@ -107,6 +107,9 @@ if ( $op eq 'show' ) {
     my $patron_categories = C4::Members::GetBorrowercategoryList;
     for ( values %$patron_attribute_types ) {
         my $attr_type = C4::Members::AttributeTypes->fetch( $_->{code} );
+        # TODO Repeatable attributes are not correctly managed and can cause data lost.
+        # This should be implemented.
+        next if $attr_type->{repeatable};
         my $options = $attr_type->authorised_value_category
             ? GetAuthorisedValues( $attr_type->authorised_value_category )
             : undef;
