@@ -143,9 +143,9 @@
       </li>
       <li>
         <label for="patroncategory">Patron category: </label><select name="Filter" id="patroncategory"><option value="" > Any category code</option>
-    [% FOREACH borcatloo IN borcatloop %]
-        <option value="[% borcatloo.value %]" >[% borcatloo.description %] </option>  
-     [% END %] 
+    [% FOREACH patron_category IN patron_categories %]
+        <option value="[% patron_category.categorycode %]" >[% patron_category.description %] </option>
+     [% END %]
     </select>
         </li>
 				<li><label for="day">Day: </label> <input type="text" name="Filter" id="day" value="" /></li>

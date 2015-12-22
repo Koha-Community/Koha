@@ -29,15 +29,15 @@ use C4::Circulation;
 use C4::Members;
 use C4::Reports;
 use C4::Debug;
+
 use Koha::DateUtils;
+use Koha::Patron::Categories;
 
 =head1 NAME
 
 plugin that shows a stats on borrowers
 
 =head1 DESCRIPTION
-
-=over 2
 
 =cut
 
@@ -129,22 +129,15 @@ foreach (sort {$itemtypes->{$a}->{translated_description} cmp $itemtypes->{$b}->
               );
     push @itemtypeloop, \%row;
 }
-    
-my ($codes,$labels) = GetborCatFromCatType(undef,undef);
-my @borcatloop;
-foreach (sort keys %$labels) {
-	my %row =(value => $_,
-              description => $labels->{$_},
-             );
-    push @borcatloop, \%row;
-}
-    
+
+my $patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['categorycode']});
+
 $template->param(
 	    mimeloop => \@mime,
 	  CGIseplist => $delims,
 	  branchloop => \@branchloop,
 	itemtypeloop => \@itemtypeloop,
-	  borcatloop => \@borcatloop,
+patron_categories => $patron_categories,
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 

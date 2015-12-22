@@ -35,6 +35,8 @@ use C4::Branch;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Patron::Images;
 
+use Koha::Patron::Categories;
+
 my $input=new CGI;
 my $flagsrequired = { borrowers => 1 };
 
@@ -100,10 +102,9 @@ if ($add){
   $template->param( invoice_types_loop => \@invoice_types );
 
     if ( $data->{'category_type'} eq 'C') {
-        my  ( $catcodes, $labels ) =  GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
-        my $cnt = scalar(@$catcodes);
-        $template->param( 'CATCODE_MULTI' => 1) if $cnt > 1;
-        $template->param( 'catcode' =>    $catcodes->[0])  if $cnt == 1;
+        my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
+        $template->param( 'CATCODE_MULTI' => 1) if $patron_categories->count > 1;
+        $template->param( 'catcode' => $patron_categories->next )  if $patron_categories->count == 1;
     }
 
     $template->param( adultborrower => 1 ) if ( $data->{'category_type'} eq 'A' );

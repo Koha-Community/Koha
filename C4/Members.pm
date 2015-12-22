@@ -78,7 +78,6 @@ BEGIN {
         &GetMemberAccountRecords
         &GetBorNotifyAcctRecord
 
-        &GetborCatFromCatType
         GetBorrowerCategorycode
 
         &GetBorrowersToExpunge
@@ -1293,60 +1292,6 @@ sub GetUpcomingMembershipExpires {
     $sth->execute( @pars );
     my $results = $sth->fetchall_arrayref( {} );
     return $results;
-}
-
-=head2 GetborCatFromCatType
-
-  ($codes_arrayref, $labels_hashref) = &GetborCatFromCatType();
-
-Looks up the different types of borrowers in the database. Returns two
-elements: a reference-to-array, which lists the borrower category
-codes, and a reference-to-hash, which maps the borrower category codes
-to category descriptions.
-
-=cut
-
-#'
-sub GetborCatFromCatType {
-    my ( $category_type, $action, $no_branch_limit ) = @_;
-
-    my $branch_limit = $no_branch_limit
-        ? 0
-        : C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
-
-    # FIXME - This API  seems both limited and dangerous.
-    my $dbh     = C4::Context->dbh;
-
-    my $request = qq{
-        SELECT DISTINCT categories.categorycode, categories.description
-        FROM categories
-    };
-    $request .= qq{
-        LEFT JOIN categories_branches ON categories.categorycode = categories_branches.categorycode
-    } if $branch_limit;
-    if($action) {
-        $request .= " $action ";
-        $request .= " AND (branchcode = ? OR branchcode IS NULL)" if $branch_limit;
-    } else {
-        $request .= " WHERE branchcode = ? OR branchcode IS NULL" if $branch_limit;
-    }
-    $request .= " ORDER BY categorycode";
-
-    my $sth = $dbh->prepare($request);
-    $sth->execute(
-        $action ? $category_type : (),
-        $branch_limit ? $branch_limit : ()
-    );
-
-    my %labels;
-    my @codes;
-
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push @codes, $data->{'categorycode'};
-        $labels{ $data->{'categorycode'} } = $data->{'description'};
-    }
-    $sth->finish;
-    return ( \@codes, \%labels );
 }
 
 =head2 GetBorrowerCategorycode

@@ -19,6 +19,8 @@ use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Patron::Images;
 use Koha::Token;
 
+use Koha::Patron::Categories;
+
 use Digest::MD5 qw(md5_base64);
 
 my $input = new CGI;
@@ -101,11 +103,10 @@ else {
     $template->param( defaultnewpassword => $defaultnewpassword );
 }
 
-if ( $bor->{'category_type'} eq 'C' ) {
-    my ( $catcodes, $labels ) = GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
-    my $cnt = scalar(@$catcodes);
-    $template->param( 'CATCODE_MULTI' => 1 ) if $cnt > 1;
-    $template->param( 'catcode' => $catcodes->[0] ) if $cnt == 1;
+if ( $bor->{'category_type'} eq 'C') {
+    my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
+    $template->param( 'CATCODE_MULTI' => 1) if $patron_categories->count > 1;
+    $template->param( 'catcode' => $patron_categories->next )  if $patron_categories->count == 1;
 }
 
 $template->param( adultborrower => 1 ) if ( $bor->{'category_type'} eq 'A' );

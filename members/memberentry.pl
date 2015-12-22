@@ -521,27 +521,31 @@ if(!defined($data{'sex'})){
 my @typeloop;
 my $no_categories = 1;
 my $no_add;
-foreach (qw(C A S P I X)) {
-    my $action="WHERE category_type=?";
-    my ($categories,$labels)=GetborCatFromCatType($_,$action);
-    if(scalar(@$categories) > 0){ $no_categories = 0; }
-	my @categoryloop;
-	foreach my $cat (@$categories){
-		push @categoryloop,{'categorycode' => $cat,
-			  'categoryname' => $labels->{$cat},
-			  'categorycodeselected' => ((defined($borrower_data->{'categorycode'}) && 
-                                                     $cat eq $borrower_data->{'categorycode'}) 
-                                                     || (defined($categorycode) && $cat eq $categorycode)),
-		};
-	}
-	my %typehash;
-	$typehash{'typename'}=$_;
-    my $typedescription = "typename_".$typehash{'typename'};
-	$typehash{'categoryloop'}=\@categoryloop;
-	push @typeloop,{'typename' => $_,
+foreach my $category_type (qw(C A S P I X)) {
+    my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => $category_type }, {order_by => ['categorycode']});
+    $no_categories = 0 if $patron_categories->count > 0;
+    $template->param( 'catcode' => $patron_categories->next ) if $patron_categories->count == 1;
+
+    my @categoryloop;
+    while ( my $patron_category = $patron_categories->next ) {
+        push @categoryloop,
+          { 'categorycode' => $patron_category->categorycode,
+            'categoryname' => $patron_category->description,
+            'categorycodeselected' =>
+              ( ( defined( $borrower_data->{'categorycode'} ) && $patron_category->categorycode eq $borrower_data->{'categorycode'} ) || ( defined($categorycode) && $patron_category->categorycode eq $categorycode ) ),
+          };
+    }
+    my %typehash;
+    $typehash{'typename'} = $category_type;
+    my $typedescription = "typename_" . $typehash{'typename'};
+    $typehash{'categoryloop'} = \@categoryloop;
+    push @typeloop,
+      { 'typename'       => $category_type,
         $typedescription => 1,
-	  'categoryloop' => \@categoryloop};
+        'categoryloop'   => \@categoryloop
+      };
 }
+
 $template->param('typeloop' => \@typeloop,
         no_categories => $no_categories);
 if($no_categories){ $no_add = 1; }

@@ -49,40 +49,43 @@ window.close();
 
 [% IF ( MULTI ) %]
 
-<h3> Choose Adult category </h3>
+    <h3> Choose Adult category </h3>
 
-[% IF ( CAT_LOOP ) %]
-
-<form method="post" action="update-child.pl">
-<fieldset>
-<table id="catst">
-<thead>
-<tr>
-<th>&nbsp;</th>
-<th>Code</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-[% FOREACH CAT_LOO IN CAT_LOOP %]
-<tr>
-<td>
-<input type="radio" id="catcode[% CAT_LOO.catcode %]" name="catcode" value="[% CAT_LOO.catcode %]" /></td>
-<td>[% CAT_LOO.catcode %]</td>
-<td><label for="catcode[% CAT_LOO.catcode %]"><strong>[% CAT_LOO.catdesc %]</strong></label></td> 
-</tr>
-[% END %]
-</tbody>
-</table>
-<input type="hidden" name="op" value="update" />
-<input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
-<input type="hidden" name="catcode" value="[% catcode %]" />
-<input type="hidden" name="cattype" value="[% cattype %]" />
-<input type="hidden" name="catcode_multi" value="[% CATCODE_MULTI %]" />
-<fieldset class="action"><input class="submit" type="submit" value="Submit" /> <a href="#" class="cancel close">Cancel</a></fieldset>
-[% END %]
-</fieldset>
-</form>
+    [% IF patron_categories %]
+        <form method="post" action="update-child.pl">
+            <fieldset>
+                <table id="catst">
+                    <thead>
+                        <tr>
+                        <th>&nbsp;</th>
+                        <th>Code</th>
+                        <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [% FOREACH patron_category IN patron_categories %]
+                            <tr>
+                                <td>
+                                    <input type="radio" id="catcode[% patron_category.categorycode %]" name="catcode" value="[% patron_category.categorycode %]" />
+                                </td>
+                                <td>[% patron_category.categorycode  %]</td>
+                                <td><label for="catcode[% patron_category.categorycode %]"><strong>[% patron_category.description %]</strong></label></td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+                <input type="hidden" name="op" value="update" />
+                <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                <input type="hidden" name="catcode" value="[% catcode %]" />
+                <input type="hidden" name="cattype" value="[% cattype %]" />
+                <input type="hidden" name="catcode_multi" value="[% CATCODE_MULTI %]" />
+                <fieldset class="action">
+                    <input class="submit" type="submit" value="Submit" />
+                    <a href="#" class="cancel close">Cancel</a>
+                </fieldset>
+            </fieldset>
+        </form>
+    [% END %]
 [% END %]
 
 

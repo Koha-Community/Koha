@@ -43,6 +43,8 @@ use C4::Branch;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Patron::Images;
 
+use Koha::Patron::Categories;
+
 our $input = CGI->new;
 
 my $updatecharges_permissions = $input->param('woall') ? 'writeoff' : 'remaining_permissions';
@@ -215,15 +217,9 @@ sub borrower_add_additional_fields {
 # in a number of templates. It should not be the business of this script but in lieu of
 # a revised api here it is ...
     if ( $b_ref->{category_type} eq 'C' ) {
-        my ( $catcodes, $labels ) =
-          GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
-        if ( @{$catcodes} ) {
-            if ( @{$catcodes} > 1 ) {
-                $b_ref->{CATCODE_MULTI} = 1;
-            } elsif ( @{$catcodes} == 1 ) {
-                $b_ref->{catcode} = $catcodes->[0];
-            }
-        }
+        my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
+        $template->param( 'CATCODE_MULTI' => 1) if $patron_categories->count > 1;
+        $template->param( 'catcode' => $patron_categories->next )  if $patron_categories->count == 1;
     } elsif ( $b_ref->{category_type} eq 'A' ) {
         $b_ref->{adultborrower} = 1;
     }

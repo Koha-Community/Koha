@@ -154,18 +154,8 @@ if ($do_it) {
 
     @shelvinglocloop = sort {$a->{value} cmp $b->{value}} @shelvinglocloop;
 
-    #borcat
-    my ($codes,$labels) = GetborCatFromCatType(undef,undef);
-    my @borcatloop;
-    foreach my $thisborcat (sort {$labels->{$a} cmp $labels->{$b}} keys %$labels) {
-            my %row =(value => $thisborcat,
-                      description => $labels->{$thisborcat},
-                            );
-            push @borcatloop, \%row;
-    }
-    
-    #Day
-    #Month
+    my $patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['categorycode']});
+
     $template->param(
                     CGIextChoice => $CGIextChoice,
                     CGIsepChoice => $CGIsepChoice,
@@ -173,7 +163,7 @@ if ($do_it) {
                     itemtypeloop =>\@itemtypeloop,
                     ccodeloop =>\@ccodeloop,
                     shelvinglocloop =>\@shelvinglocloop,
-                    borcatloop =>\@borcatloop,
+                    patron_categories => $patron_categories,
                     );
 output_html_with_http_headers $input, $cookie, $template->output;
 }

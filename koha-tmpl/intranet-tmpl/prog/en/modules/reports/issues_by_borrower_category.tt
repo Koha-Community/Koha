@@ -59,8 +59,8 @@
                 <label for="borrowercategory">Select a borrower category</label>
                 <select name="value" id="borrowercategory">
                   <option value="">Any Category code</option>
-                [%- FOREACH loopcategorie IN loopcategories %]
-                  <option value="[% loopcategorie.value %]" >[% loopcategorie.description %]</option>
+                [%- FOREACH patron_category IN patron_categories %]
+                  <option value="[% patron_category.categorycode %]" >[% patron_category.description %]</option>
                 [%- END %]
                 </select>
               </li>

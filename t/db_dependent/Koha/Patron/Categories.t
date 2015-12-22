@@ -35,11 +35,13 @@ my $branch = $builder->build({ source => 'Branch', });
 my $nb_of_categories = Koha::Patron::Categories->search->count;
 my $new_category_1 = Koha::Patron::Category->new({
     categorycode => 'mycatcodeX',
+    category_type => 'A',
     description  => 'mycatdescX',
 })->store;
 $new_category_1->add_branch_limitation( $branch->{branchcode} );
 my $new_category_2 = Koha::Patron::Category->new({
     categorycode => 'mycatcodeY',
+    category_type => 'S',
     description  => 'mycatdescY',
     checkprevcheckout => undef,
 })->store;
@@ -60,6 +62,7 @@ C4::Context->_new_userenv('my_new_userenv');
 C4::Context->set_userenv( 0, 0, 'usercnum', 'firstname', 'surname', $another_branch->{branchcode}, 'My wonderful library', '', '', '' );
 my $new_category_3 = Koha::Patron::Category->new(
     {   categorycode => 'mycatcodeZ',
+        category_type => 'A',
         description  => 'mycatdescZ',
     }
 )->store;
@@ -70,6 +73,11 @@ my @limited_category_codes = map { $_->categorycode } @limited_categories;
 is( scalar( grep { $_ eq $new_category_1->categorycode } @limited_category_codes ), 0, 'The first category is limited to another branch' );
 is( scalar( grep { $_ eq $new_category_2->categorycode } @limited_category_codes ), 1, 'The second category is not limited' );
 is( scalar( grep { $_ eq $new_category_3->categorycode } @limited_category_codes ), 1, 'The third category is limited to my branch ' );
+
+my @limited_categories_for_A = Koha::Patron::Categories->search_limited({ category_type => 'A' });
+my @limited_category_codes_for_A = map { $_->categorycode } @limited_categories_for_A;
+is( scalar( grep { $_ eq $new_category_2->categorycode } @limited_category_codes_for_A ), 0, 'The second category is not limited but has a category_type S' );
+is( scalar( grep { $_ eq $new_category_3->categorycode } @limited_category_codes_for_A ), 1, 'The third category is limited to my branch and has a category_type A' );
 
 $retrieved_category_1->delete;
 is( Koha::Patron::Categories->search->count, $nb_of_categories + 2, 'Delete should have deleted the patron category' );

@@ -62,6 +62,7 @@ if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preferen
 use DateTime;
 use Koha::DateUtils;
 use Koha::Database;
+use Koha::Patron::Categories;
 
 use vars qw($debug);
 
@@ -156,11 +157,9 @@ if ( Koha::Patrons->find( $borrowernumber )->is_debarred ) {
 $data->{ "sex_".$data->{'sex'}."_p" } = 1 if defined $data->{sex};
 
 if ( $category_type eq 'C') {
-   my  ( $catcodes, $labels ) =  GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
-   my $cnt = scalar(@$catcodes);
-
-   $template->param( 'CATCODE_MULTI' => 1) if $cnt > 1;
-   $template->param( 'catcode' =>    $catcodes->[0])  if $cnt == 1;
+    my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
+    $template->param( 'CATCODE_MULTI' => 1) if $patron_categories->count > 1;
+    $template->param( 'catcode' => $patron_categories->next )  if $patron_categories->count == 1;
 }
 
 my $patron = Koha::Patrons->find($data->{borrowernumber});

@@ -56,9 +56,9 @@ $(document).ready(function(){
     <fieldset class="rows">
 		<ol>
             <li><label for="patroncategory">Patron category: </label> <select name="Filter" id="patroncategory"><option value="" > Any category code</option>
-    [% FOREACH borcatloo IN borcatloop %]
-        <option value="[% borcatloo.value %]" >[% borcatloo.description %] </option>  
-     [% END %] 
+    [% FOREACH patron_category IN patron_categories %]
+        <option value="[% patron_category.categorycode %]" >[% patron_category.description %] </option>
+    [% END %]
     </select>
 </li>
     <li><label for="to">Not checked out since: </label> <input size="10" id="to" name="Filter" value="" type="text" />
