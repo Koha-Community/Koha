@@ -770,7 +770,7 @@ function select_user(borrowernumber, borrower) {
 			[% ELSE %]
             <label for="to">
 			[% END %]
-			Expiry date (leave blank for auto calc) </label>
+			Expiry date (leave blank for auto calc): </label>
             [% IF ( dateformat == "metric" ) %]
 				[% UNLESS ( opadd ) %]
                     <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" value="[% UNLESS opduplicate %][% dateexpiry %][% END %]" class="datepickerto" />

@@ -16,14 +16,14 @@
             <input type="text" size="40" id="contact_email[% contact.id %]" name="contact_email" value="[% contact.email %]" /></li>
         <li><label for="contact_notes[% contact.id %]">Notes: </label>
             <textarea id="contact_notes[% contact.id %]" name="contact_notes" cols="40" rows="4">[% contact.notes %]</textarea></li>
-        <li><label for="contact_acqprimary[% contact.id %]">Primary acquisitions contact</label>
+        <li><label for="contact_acqprimary[% contact.id %]">Primary acquisitions contact:</label>
             [% IF contact.acqprimary %]
                 <input type="checkbox" id="contact_acqprimary[% contact.id %]" class="contact_acqprimary" checked="checked"></input>
             [% ELSE %]
                 <input type="checkbox" id="contact_acqprimary[% contact.id %]" class="contact_acqprimary"></input>
             [% END %]
             <input type="hidden" class="contact_acqprimary_hidden" name="contact_acqprimary" value="[% contact.acqprimary %]"></input>
-        <li><label for="contact_serialsprimary[% contact.id %]">Primary serials contact</label>
+        <li><label for="contact_serialsprimary[% contact.id %]">Primary serials contact:</label>
             [% IF contact.serialsprimary %]
                 <input type="checkbox" id="contact_serialsprimary[% contact.id %]" class="contact_serialsprimary" checked="checked"></input>
             [% ELSE %]

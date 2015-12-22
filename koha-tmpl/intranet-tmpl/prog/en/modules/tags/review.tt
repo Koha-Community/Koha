@@ -334,9 +334,9 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 <fieldset class="brief">
   <h4>Filters</h4>
 	<ol>
-	    <li><label for="tag">Term</label> <input type="text" name="tag" id="tag" value="[% filter_tag %]" />
+	    <li><label for="tag">Term:</label> <input type="text" name="tag" id="tag" value="[% filter_tag %]" />
 	    </li>
-	    <li><label for="approved">Status</label> 
+	    <li><label for="approved">Status:</label>
             <select name="approved" id="approved">
             [% IF ( filter_approved_all ) %]<option selected="selected" value="all">all</option>
             [% ELSE %]<option value="all">all</option>[% END %]
@@ -348,7 +348,7 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
             [% ELSE %]<option value="-1">rejected</option>[% END %]
 			</select>
 	    </li>
-	    <li><label for="approver">Reviewer</label> <input type="text" name="approver" id="approver" value="[% filter_approver %]" />
+	    <li><label for="approver">Reviewer:</label> <input type="text" name="approver" id="approver" value="[% filter_approver %]" />
 	    </li>
 	    <li>
 			<label for="from">Date: from </label>

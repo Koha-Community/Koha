@@ -414,7 +414,7 @@ canned reports and writing custom SQL reports.</p>
 <h1>Build a report</h1>
 <form action="/cgi-bin/koha/reports/guided_reports.pl">
 <fieldset class="rows">
-<legend>Step 1 of 6: Choose a module to report on,[% IF (usecache) %] Set cache expiry, [% END %] and Choose report visibility </legend>
+<legend>Step 1 of 6: Choose a module to report on,[% IF (usecache) %] Set cache expiry, [% END %] and choose report visibility </legend>
 <ol>
   <li>
     <label for="area">Choose: </label>
@@ -1086,7 +1086,7 @@ $("#column_submit").submit(function() {
             [% END %]
         </select>
         <input type="radio" name="select_or_create_group" id="create_group" />
-        <label for="create_group" style="float:none">or create</label>
+        <label for="create_group" style="float:none">or create:</label>
         <input type="text" name="group" id="group_input" title="Group code" placeholder="Code" />
         <input type="text" name="groupdesc" id="groupdesc_input" title="Group name" placeholder="Name" />
     </li>
