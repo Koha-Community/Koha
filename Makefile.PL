@@ -240,6 +240,10 @@ Directory for external Koha plugins.
 
 Directory for PazPar2 configuration files.
 
+=item FONT_DIR
+
+Directory where DejaVu fonts are installed.
+
 =item NONE
 
 This is a dummy target used to explicitly state
@@ -442,7 +446,8 @@ my %config_defaults = (
   'PATH_TO_ZEBRA' => '',
   'USE_MEMCACHED'     => 'no',
   'MEMCACHED_SERVERS' => '127.0.0.1:11211',
-  'MEMCACHED_NAMESPACE' => 'KOHA'
+  'MEMCACHED_NAMESPACE' => 'KOHA',
+  'FONT_DIR'          => '/usr/share/fonts/truetype/ttf-dejavu'
 );
 
 # set some default configuration options based on OS
@@ -1082,6 +1087,8 @@ Memcached namespace?);
       $config{'MEMCACHED_NAMESPACE'} = _get_value('MEMCACHED_NAMESPACE', $msg, $defaults->{'MEMCACHED_NAMESPACE'}, $valid_values, $install_log_values);
   }
 
+  $msg = q(Path to DejaVu fonts?);
+  $config{'FONT_DIR'} = _get_value('FONT_DIR', $msg, $defaults->{'FONT_DIR'}, $valid_values, $install_log_values);
 
 
   $msg = q(
