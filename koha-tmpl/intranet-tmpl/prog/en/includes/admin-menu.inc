@@ -56,6 +56,14 @@
     <li><a href="/cgi-bin/koha/admin/aqbudgets.pl">Funds</a></li>
 </ul>
 
+[% IF CAN_user_plugins %]
+<h5>Plugins</h5>
+
+<ul>
+    <li><a href="/cgi-bin/koha/plugins/plugins-home.pl">Manage plugins</a></li>
+</ul>
+[% END %]
+
 <h5>Additional parameters</h5>
 
 <ul>
