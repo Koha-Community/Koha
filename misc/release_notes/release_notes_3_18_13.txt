@@ -1,0 +1,343 @@
+RELEASE NOTES FOR KOHA 3.18.13
+23 Dec 2015
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.18.13 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.18.13.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+
+Koha 3.18.13 is a bugfix/maintenance release.
+
+
+Critical bugs fixed in 3.18.13
+======================
+
+
+Acquisitions
+----------
+	14264	major	Export of CSV from late orders form does only work in English
+
+Authentication
+----------
+	5371	major	Back-button in OPAC shows previous user's details, after logout
+
+Cataloging
+----------
+	6657	major	Making 999 visible in framework duplicates 999 entry and affects index
+	15256	major	Items table on detail page can be broken
+
+Installation and upgrade (command-line installer)
+----------
+	15182	blocker	Make test fails immediately on 3.22.00-beta due to missing Crypt::GCrypt which is optional
+
+Label/patron card printing
+----------
+	14739	major	Add several patrons to a new batch will create a new batch per patron added
+
+Reports
+----------
+	14735	critical	Cache_expiry is not saved when updating a SQL report
+	15250	major	Software error: Can't locate object method "field" via package "aqorders.datereceived" in reports/acquisitions_stats.pl
+
+SIP2
+----------
+	13411	major	Koha's SIP server returns not ok for checking in items that are not checked out
+	14673	major	Renewals cause Sipserver  to crash
+
+Templates
+----------
+	14632	major	Incorrect alert while deleting single item in batch
+
+Test Suite
+----------
+	15151	blocker	T/Circulation_barcodedecode.t fails if no DB present
+
+Tools
+----------
+	15061	critical	Can't add item to rotating collection
+	15079	major	Batch Delete Records Error
+
+
+Other bugs fixed in 3.18.13
+======================
+
+
+Acquisitions
+----------
+	4502	normal	Perl error in acq budget planning
+	14388	normal	Add sorting to funds
+	15036	normal	Closing and reopening a basket should not alter status of completed orders
+
+Architecture, internals, and plumbing
+----------
+	15068	trivial	Get rid of warnings in members/summary-print.pl
+
+Cataloging
+----------
+	14078	normal	Converting from ISO5426 is not complete
+
+Circulation
+----------
+	15094	normal	Update link to offline circ for windows
+
+Command-line Utilities
+----------
+	15120	normal	Runreport.pl doesn't allow custom subjects anymore
+	15133	normal	Runreport.pl badly encode accented characters
+
+I18N/L10N
+----------
+	15117	normal	There is no translation of confirm dialog when transfering a basket
+	15154	minor	Allow correct translation for upload local cover image
+
+Label/patron card printing
+----------
+	14781	normal	Creation of barcode types 2of5 not functional
+
+Lists
+----------
+	15137	normal	List email sent from staff is missing ISBN and author information
+
+MARC Bibliographic record staging/import
+----------
+	15130	minor	Useless unitialization warnings when updating authorities
+
+OPAC
+----------
+	14553	minor	Warns when clearing a rating on an item on OPAC
+	14575	minor	OPACURLOpenInNewWindow should apply to item-level urls too
+
+Patrons
+----------
+	14867	normal	Userid not generated when defined in BorrowerUnwantedField
+	15010	normal	Import patron tool creates 'duplicate' restrictions ( debarments )
+	15109	normal	Regression in patron search results ordering
+	14157	minor	Show notices tab with EnhancedMessagingPreferences deactivated
+	14687	minor	Patron's transaction history changes items' order after paying fines
+
+Searching
+----------
+	14542	normal	Transliterate rule for all single quote forms
+	15175	minor	IntranetBiblioDefaultView syspref is not respected when XSLTResultsDisplay is empty
+	15198	minor	Make OpacSuppression work even if there are no records suppressed
+
+Staff Client
+----------
+	14773	normal	Move help link back out of the dropdown menu
+
+Templates
+----------
+	10181	normal	Improve message shown for deleted records in basket summary page
+	15114	normal	Warning on purchase suggestions is inaccurate
+	12152	minor	Holds to pull report should show library and itype description instead of their codes
+	15059	minor	Line break in html attribute
+
+Tools
+----------
+	12540	minor	Batch modifications for records - unavailable "Every" option
+
+
+System requirements
+======================
+
+    Important notes:
+    
+    * Perl 5.10 is required
+    * Zebra is required
+
+
+Documentation
+======================
+
+The Koha manual is maintained in DocBook.The home page for Koha 
+documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.18/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+
+  * English (USA)
+
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+
+Release Team
+======================
+
+The release team for Koha 3.18.13 is
+
+  Release Manager:       Tomás Cohen Arazi <tomascohen@gmail.com>
+  Documentation Manager: Nicole C Engard <nengard@gmail.com>
+  Translation Manager:   Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>
+  QA Manager:            Katrin Fischer <Katrin.Fischer@bsz-bw.de>
+  QA Team:               Galen Charlton <gmc@esilibrary.com>
+                         Jonathan Druart <jonathan.druart@biblibre.com>
+                         Brendan Gallagher <brendan@bywatersolutions.com>
+                         Kyle Hall <kyle@bywatersolutions.com>
+                         Julian Maurice <julian.maurice@biblibre.com>
+                         Paul Poulain <paul.poulain@biblibre.com>
+                         Martin Renvoize <martin.renvoize@ptfs-europe.com>
+                         Marcel de Rooy <M.de.Rooy@rijksmuseum.nl>
+  Bug Wranglers:         Alex Sassmannshausen <alex.sassmannshausen@ptfs-europe.com>
+                         Zeno Tajoli <z.tajoli@cineca.it>
+  Packaging Manager:     Galen Charlton <gmcharlt@gmail.com> 
+
+  Release Maintainer (3.18.x): Liz Rea <wizzyrea@gmail.com>
+
+Credits
+======================
+
+
+We thank the following libraries who are known to have sponsored
+new features in Koha 3.18.13:
+  * Vaara-kirjastot
+
+We thank the following individuals who contributed patches to Koha 3.18.13.
+
+  * Aleisha (1)
+  * Colin Campbell (2)
+  * Hector Castro (1)
+  * Nicole C. Engard (1)
+  * Galen Charlton (1)
+  * Nick Clemens (1)
+  * Tomas Cohen Arazi (1)
+  * David Cook (4)
+  * Indranil Das Gupta (1)
+  * Frédéric Demians (2)
+  * Jonathan Druart (18)
+  * Katrin Fischer (2)
+  * Bernardo González Kriegel (2)
+  * Mason James (1)
+  * Joonas Kylmälä (2)
+  * Sophie Meynieux (1)
+  * Kyle M Hall (4)
+  * Liz Rea (7)
+  * Fridolin Somers (5)
+  * Lyon3 Team (1)
+  * Mark Tompsett (1)
+  * Marc Véron (3)
+
+
+We thank the following libraries, companies, and other institutions who contributed
+patches to Koha 3.18.13
+
+
+  * BSZ BW (2)
+  * BibLibre (9)
+  * ByWater-Solutions (5)
+  * Catalyst (1)
+  * KohaAloha (1)
+  * PTFS-Europe (2)
+  * Prosentient Systems (4)
+  * Tamil (2)
+  * Theke Solutions (1)
+  * Universidad Nacional de Córdoba (2)
+  * Université Jean Moulin Lyon 3 (1)
+  * bugs.koha-community.org (13)
+  * koha-community.org (2)
+  * quecheelibrary.org (1)
+  * unidentified (13)
+  * veron.ch (3)
+
+We also especially thank the following individuals who tested patches
+for Koha 3.18.13.
+
+  * Alex Arnaud (1)
+  * Barton Chittenden (1)
+  * Benjamin Rokseth (1)
+  * Brendan Gallagher (1)
+  * Chris Cormack (2)
+  * Daniel Grobani (1)
+  * David Cook (1)
+  * Frederic Demians (12)
+  * Frédéric Demians (49)
+  * Galen Charlton (1)
+  * Hector Castro (5)
+  * Jonathan Druart (13)
+  * Joonas Kylmälä (2)
+  * Julian Maurice (4)
+  * Katrin Fischer (27)
+  * Laurence Lefaucheur (1)
+  * Liz Rea (56)
+  * Marc Véron (7)
+  * Mark Tompsett (1)
+  * Martin Renvoize (1)
+  * Nicole Engard (3)
+  * Tomas Cohen Arazi (49)
+  * Brendan A Gallagher (2)
+  * Kyle M Hall (15)
+  * Bernardo Gonzalez Kriegel (8)
+
+We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for this version of Koha and future bugfixes in this release line is 3.18.x. 
+
+The last Koha release was 3.14.10, which was released on September 4, 2014.
+
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+He rau ringa e oti ai.
+(Many hands finish the work)
+
+##### Autogenerated release notes updated last on 23 Dec 2015 23:21:29 Z #####
