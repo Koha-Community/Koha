@@ -130,6 +130,7 @@ use C4::Budgets;
 use C4::Items;
 use C4::Output;
 use Koha::Acquisition::Currencies;
+use C4::Barcodes;
 
 ### "-------------------- addorder.pl ----------"
 
@@ -307,7 +308,6 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
             push @{$itemhash{$itemid[$i]}->{'indicator'}},$indicator[$i];
         }
         foreach my $item (keys %itemhash){
-
             my $xml = TransformHtmlToXml( $itemhash{$item}->{'tags'},
                                     $itemhash{$item}->{'subfields'},
                                     $itemhash{$item}->{'field_values'},
@@ -315,6 +315,22 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
                                     $itemhash{$item}->{'ind_tag'},
                                     'ITEM');
             my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
+            my ($barcodefield,$barcodesubfield) = GetMarcFromKohaField('items.barcode');
+            my $barcode = $record->subfield($barcodefield,$barcodesubfield);
+            my $aBpref = C4::Context->preference('autoBarcode');
+            if( $barcode eq '' && $aBpref ne 'OFF'){
+                my $barcodeobj;
+                if ( $aBpref eq 'hbyymmincr'){
+                    my ($homebranchfield,$homebranchsubfield) = GetMarcFromKohaField('items.homebranch');
+                    my $homebranch = $record->subfield($homebranchfield,$homebranchsubfield);
+                    $barcodeobj = C4::Barcodes->new($aBpref, $homebranch);
+                } else {
+                    $barcodeobj = C4::Barcodes->new($aBpref);
+                }
+                $barcode = $barcodeobj->value();
+                $record->field($barcodefield)->delete_subfield( code => $barcodesubfield);
+                $record->field($barcodefield)->add_subfields($barcodesubfield => $barcode);
+            }
             my ($biblionumber,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$$orderinfo{biblionumber});
             $order->add_item($itemnumber);
         }

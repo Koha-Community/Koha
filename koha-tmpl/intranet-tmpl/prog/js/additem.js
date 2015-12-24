@@ -12,7 +12,9 @@ function addItem( node, unique_item_fields ) {
             if ( current_qty < max_qty - 1 )
                 cloneItemBlock(index, unique_item_fields);
             addItemInList(index, unique_item_fields);
-            $("#" + index).find("input[name='buttonPlus']").val( (window.MSG_ADDITEM_JS_UPDATEITEM || "Update item") );
+            $("#" + index).find("input[name='buttonPlus']").val( (window.MSG_ADDITEM_JS_UPDATEITEM ) );
+            $("#"+ index).find("input[name='buttonPlusMulti']").remove();
+            $("#" + index).find("input[name='multiValue']").remove();
             $("#quantity").val(current_qty + 1).change();
         } else if ( current_qty >= max_qty ) {
             alert(window.MSG_ADDITEM_JS_CANT_RECEIVE_MORE_ITEMS
@@ -25,6 +27,44 @@ function addItem( node, unique_item_fields ) {
         $("#items_list table").find('tr[idblock="' + index + '"]:first').replaceWith(tr);
     }
     $("#" + index).hide();
+}
+
+function addMulti( count, node, unique_item_fields){
+    var index = $(node).closest("div").attr('id');
+    var countItemsBefore = $("#items_list tbody tr").length;
+    var current_qty = parseInt( $('#quantity').val(), 10 );
+    $("#procModal").modal('show');
+    $("#" + index).hide();
+    for(var i=0;i<count;i++){
+       cloneItemBlock(index, unique_item_fields, function(cloneIndex){
+            addItemInList(cloneIndex,unique_item_fields, function(){
+                    if( ($("#items_list tbody tr").length-countItemsBefore)==(count)){
+                        $("#multiValue").val('');
+                        $('#'+index).appendTo('#outeritemblock');
+                        $('#'+index).show();
+                        $('#'+index + ' #add_multiple_copies' ).css("visibility","hidden");
+                        $("#procModal").modal('hide');
+                    }
+            });
+            $("#" + cloneIndex).find("input[name='buttonPlus']").val( (window.MSG_ADDITEM_JS_UPDATEITEM ) );
+            $("#" + cloneIndex).find("input[name='buttonPlusMulti']").remove();
+            $("#" + cloneIndex).find("input[name='multiValue']").remove();
+            $("#" + cloneIndex).hide();
+            current_qty++;
+            $('#quantity').val( current_qty );
+       });
+    }
+}
+
+
+function checkCount(node, unique_item_fields){
+    var count = parseInt( $("#multiValue").val(), 10 );
+    if ( isNaN( count ) || count <=0) {
+        $("#multiCountModal").modal('show');
+    }
+    else{
+        addMulti( count, node, unique_item_fields);
+    }
 }
 
 function showItem(index) {
@@ -75,10 +115,13 @@ function constructTrNode(index, unique_item_fields) {
     return result;
 }
 
-function addItemInList(index, unique_item_fields) {
+function addItemInList(index, unique_item_fields, callback) {
     $("#items_list").show();
     var tr = constructTrNode(index, unique_item_fields);
     $("#items_list table tbody").append(tr);
+    if (typeof callback === "function"){
+        callback();
+    }
 }
 
 function deleteItemBlock(node_a, index, unique_item_fields) {
@@ -105,7 +148,7 @@ function deleteItemBlock(node_a, index, unique_item_fields) {
     }
 }
 
-function cloneItemBlock(index, unique_item_fields) {
+function cloneItemBlock(index, unique_item_fields, callback) {
     var original;
     if(index) {
         original = $("#" + index); //original <div>
@@ -136,7 +179,9 @@ function cloneItemBlock(index, unique_item_fields) {
             /* Add buttons + and Clear */
             var buttonPlus = "<fieldset class=\"action\">";
                 buttonPlus += '<input type="button" class="addItemControl" name="buttonPlus" style="cursor:pointer; margin:0 1em;" onclick="addItem(this,\'' + unique_item_fields + '\')" value="' + (window.MSG_ADDITEM_JS_ADDITEM || 'Add item')+ '" />';
-                buttonPlus += '<a class="addItemControl cancel" name="buttonClear" style="cursor:pointer;" onclick="clearItemBlock(this)">' + (window.MSG_ADDITEM_JS_CLEAR || 'Clear') + '</a>';
+                buttonPlus += '<input type="button" class="addItemControl cancel" name="buttonClear" style="cursor:pointer;" onclick="clearItemBlock(this)" value="' + (window.MSG_ADDITEM_JS_CLEAR || 'Clear')+ '" />';
+                buttonPlus += '<input type="button" class="addItemControl" name="buttonPlusMulti" data-toggle="modal" data-target="#uniqueFieldsModal" onclick="javascript:this.nextSibling.style.visibility=\'visible\'; return false;" style="cursor:pointer; margin:0 1em;" value="' + (window.MSG_ADDITEM_JS_ADDMULTI || 'Add multiple items')+ '" />';
+                buttonPlus +='<span id="add_multiple_copies" style="visibility:hidden"><input type="number" class="addItemControl" id="multiValue" name="multiValue" placeholder="'+window.MSG_ADDITEM_JS_MULTIVAL+'" /><input type="button" class="addItemControl" name=buttonAddMulti" style="cursor:pointer; margin:0 1em;" onclick="checkCount( this ,\'' + unique_item_fields + '\')" value="' + (window.MSG_ADDITEM_JS_SUBMITMULTI || 'Add') + '" /></span>';
                 buttonPlus += "</fieldset>";
             $(clone).append(buttonPlus);
             /* Copy values from the original block (input) */
@@ -161,6 +206,10 @@ function cloneItemBlock(index, unique_item_fields) {
             });
 
             $("#outeritemblock").append(clone);
+            if (typeof callback === "function"){
+                var cloneIndex = "itemblock"+random;
+                callback(cloneIndex);
+            }
             BindPluginEvents(data);
         }
     });

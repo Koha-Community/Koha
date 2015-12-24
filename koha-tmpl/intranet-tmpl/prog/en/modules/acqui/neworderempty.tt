@@ -1,5 +1,6 @@
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
+[% USE Koha %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Basket [% basketno %] &rsaquo; [% IF ( ordernumber ) %]Modify order details (line #[% ordernumber %])[% ELSE %]New order[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
@@ -451,6 +452,10 @@ $(document).ready(function()
               <div class="dialog message">No ACQ framework, using default. You should create a framework with code ACQ, the items framework would be used</div>
           [% END %]
 
+          [% UNLESS Koha.Preference('autoBarcode') == 'OFF' %]
+              <div class="dialog message">The autoBarcode system preference is set to [% Koha.Preference('autoBarcode') %] and items with blank barcodes will have barcodes generated upon save to database</div>
+          [% END %]
+
           <div id="outeritemblock"></div>
 
       </fieldset>
@@ -646,6 +651,34 @@ $(document).ready(function()
         [% END %]
     </fieldset>
 </form>
+
+<div id="procModal" data-backdrop="static" class="modal hide fade" aria-labelledby="procModal" aria-hidden="true">
+    <div class="modal-body">
+    <h3>Processing multiple items</h3>
+    </div>
+</div>
+
+[% IF UniqueItemFields %]
+<div id="uniqueFieldsModal" class="modal hide fade" aria-labelledby="uniqueFieldsModal" aria-hidden="true">
+    <div class="modal-body">
+    <h3>The following fields are listed in the UniqueItemFields system preference and will not be copied</h3>
+    <ul id="uniqueItemFields">
+    [% FOREACH uniqueField IN UniqueItemFields.split(" ") %]
+        <li>[% uniqueField %]</li>
+    [% END %]
+    </ul>
+    [% UNLESS Koha.Preference('autoBarcode') == 'OFF' %]
+    <h3>If barcode is blank and/or listed in UniqueItemFields barcodes will be generate using the autoBarcode preference setting ([% Koha.Preference('autoBarcode') %]) when saved</h3>
+    [% END %]
+    </div>
+</div>
+[% END %]
+
+<div id="multiCountModal" class="modal hide fade" aria-labelledby="multiCountModal" aria-hidden="true">
+    <h3>Invalid number of copies</h3>
+    <p>Please enter a <b>number</b>, greater than or equal to 1</p>
+</div>
+
 </div>
 </div>
 <div class="yui-b">

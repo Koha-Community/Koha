@@ -1,6 +1,9 @@
 <script type="text/javascript">
 //<![CDATA[
 var MSG_ADDITEM_JS_ADDITEM = _("Add item");
+var MSG_ADDITEM_JS_ADDMULTI = _("Add multiple items");
+var MSG_ADDITEM_JS_MULTIVAL = _("Number of items to add");
+var MSG_ADDITEM_JS_SUBMITMULTI = _("Add");
 var MSG_ADDITEM_JS_UPDATEITEM = _("Update item");
 var MSG_ADDITEM_JS_EDIT = _("Edit");
 var MSG_ADDITEM_JS_DELETE = _("Delete");
