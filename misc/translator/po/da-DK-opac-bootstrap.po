@@ -2,8 +2,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Danish Koha Translation\n"
-"POT-Creation-Date: 2015-11-19 23:01-0300\n"
-"PO-Revision-Date: 2015-07-24 10:09+0000\n"
+"POT-Creation-Date: 2015-12-17 14:36-0300\n"
+"PO-Revision-Date: 2015-12-19 23:43+0000\n"
 "Last-Translator: Poul <poul@wachmann.dk>\n"
 "Language-Team: -\n"
 "Language: da\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1437732578.000000\n"
+"X-POOTLE-MTIME: 1450568624.000000\n"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:304
@@ -168,9 +168,9 @@ msgstr "%s %s %s Koha online %s "
 #. %6$s:  RestrictedPageTitle 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-restrictedpage.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s Koha online %s catalog %s &rsaquo; %s %s "
-msgstr "%s%s%sKoha online%s katalog &rsaquo; Titel %s"
+msgstr "%s%s%s Koha online %s katalog %s &rsaquo; %s %s "
 
 #. %1$s:  IF (otheritemloop.size) 
 #. %2$s:  INCLUDE items_table items=otheritemloop tab="otherholdings" 
@@ -225,7 +225,7 @@ msgstr "%s %s %s%s%sIngen titel%s %s %s%s "
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:126
 #, c-format
 msgid "%s %s (not approved) %s "
-msgstr ""
+msgstr "%s %s (ikke godkendt) %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -486,9 +486,9 @@ msgstr ""
 #. %5$s:  ELSE 
 #. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:667
-#, fuzzy, c-format
+#, c-format
 msgid "%s %sShared%sPrivate%s %s Public %s "
-msgstr "%s%sPrivat%sDelt%s%s "
+msgstr "%s %sDelt%sPrivat%s %s Offentlig %s "
 
 #. %1$s:  IF loop.index == 0 
 #. %2$s:  ELSE 
@@ -554,9 +554,9 @@ msgstr ""
 
 #. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:242
-#, fuzzy, c-format
+#, c-format
 msgid "%s Automatic renewal "
-msgstr "%s Kan ikke fornys %s Automatisk fornyelse "
+msgstr "%s Automatisk fornyelse "
 
 #. %1$s:  IF ( latestserial.status1 ) 
 #. %2$s:  ELSE 
@@ -720,13 +720,13 @@ msgstr "%s Hjemmebibliotek:"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:70
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s If you have a CAS account, you may use that below. %s %s If you have a "
 "local account, you may use that below. %s "
 msgstr ""
-"konto, kan du benytte den nedenfor. %s %s Hvis du har en lokal konto, kan du "
-"benytte den nedenfor. %s "
+"%s Hvis du har en CAS konto, kan du benytte den nedenfor. %s %s Hvis du har "
+"en lokal konto, kan du benytte den nedenfor. %s "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:208
@@ -775,22 +775,22 @@ msgstr "%s Fandt ingen resultater for det i %s katalog. "
 #. %1$s:  ELSE 
 #. %2$s:  END # / IF results 
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:86
-#, fuzzy, c-format
+#, c-format
 msgid "%s No results, try to change filters. %s "
-msgstr "%s %s Ingen resultater fundet. %s "
+msgstr "%s Ingen resultater, prøv at ænre filtre. %s "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:476
-#, fuzzy, c-format
+#, c-format
 msgid "%s Not allowed"
-msgstr "Tillad ikke"
+msgstr "%s Ikke tilladt"
 
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.norenew_overdue ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:238
-#, fuzzy, c-format
+#, c-format
 msgid "%s Not renewable %s Not allowed "
-msgstr "Ikke flere forlængelser tilladt"
+msgstr "%s Kan ikke fornys %s Ikke tilladt "
 
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
@@ -822,7 +822,7 @@ msgstr "%s Anden telefon:"
 #. %8$s:  IF PasswordContainsTrailingSpaces 
 #. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:31
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Passwords do not match. Please re-type your new password. %s %s Your new "
 "password must be at least %s characters long. %s %s Your current password "
@@ -833,7 +833,8 @@ msgstr ""
 "%s Adgangskoderne er ikke ens. Indtast din nye adgangskode igen. %s %s Din "
 "nye adgangskode skal have mindst %s tegn %s %s Din nuværende adgangskode "
 "blev indtastet forkert. Hvis problemet fortsætter, så tag kontakt til en "
-"bibliotekar, så vedkommende kan lave en ny adgangskode til dig. %s "
+"bibliotekar for at få en ny adgangskode. %s %s Din adgangskode indeholder "
+"mellemrum først eller sidst %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -1868,7 +1869,7 @@ msgstr "%s%s%sKoha online%s katalog &rsaquo; Opdateringer sendt"
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:6
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your cart"
-msgstr " %s%s%sKoha online%s katalog &rsaquo; Din kurv"
+msgstr "%s%s%sKoha online%s katalog &rsaquo; Din kurv"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -2947,16 +2948,16 @@ msgstr "(ændret den %s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:242
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:478
-#, fuzzy, c-format
+#, c-format
 msgid "(overdue)"
-msgstr "Overskredet (%s)"
+msgstr "(forsinket)"
 
 #. %1$s:  koha_new.newdate 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:48
-#, fuzzy, c-format
+#, c-format
 msgid "(published on %s%s by "
-msgstr "(publiceret %s)"
+msgstr "(publiceret på %s%s af "
 
 #. %1$s:  FOREACH relate IN related 
 #. %2$s:  relate.related_search 
@@ -5747,12 +5748,10 @@ msgstr ""
 
 #. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you do not have a Shibboleth account, but you do have a CAS account, %s "
-msgstr ""
-"Hvis du ikke har en CAS-konto men en lokal konto, kan du alligevel logge "
-"på : "
+msgstr "Hvis du ikke har en Shibboleth-konto, men du har en CAS konto, %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
 #, c-format
@@ -5781,9 +5780,9 @@ msgstr ""
 
 #. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
-#, fuzzy, c-format
+#, c-format
 msgid "If you have a CAS account, %s please "
-msgstr "Hvis du har en Shibboleth konto, "
+msgstr "Hvis du har en CAS konto, %s venligst  "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:311
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:82
@@ -6598,7 +6597,7 @@ msgid "More options"
 msgstr "Flere valg"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:68
-#, fuzzy, c-format
+#, c-format
 msgid "More searches "
 msgstr "Flere søgninger "
 
@@ -7873,9 +7872,8 @@ msgstr "Fjern de valgte eksemplarer"
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:117
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:162
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:199
-#, fuzzy
 msgid "Remove selected searches"
-msgstr "Fjerne valgte poster"
+msgstr "Fjern valgte søgninger"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:199
@@ -9554,9 +9552,9 @@ msgid "This is a serial"
 msgstr "Dette er et abonnement på periodika"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:132
-#, fuzzy, c-format
+#, c-format
 msgid "This item does not exist."
-msgstr "Dette eksemplar udlånes ikke. %s "
+msgstr "Dette eksemplar eksisterer ikke."
 
 #. %1$s:  ELSIF ( circ_error_RESTRICTED ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:57
@@ -10059,9 +10057,8 @@ msgstr "Hvor:"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:219
-#, fuzzy
 msgid "With selected searches: "
-msgstr "Med valgte titler : "
+msgstr "Med valgte søgninger : "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:258
@@ -11290,9 +11287,9 @@ msgid "search"
 msgstr "søg"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:61
-#, fuzzy, c-format
+#, c-format
 msgid "secondary email address"
-msgstr "%s Sekundær email:"
+msgstr "alternativ email adresse"
 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:105
 #, c-format

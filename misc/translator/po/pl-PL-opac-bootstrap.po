@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2015-11-20 00:50-0300\n"
-"PO-Revision-Date: 2015-10-20 20:20+0000\n"
-"Last-Translator: Ilona <szczudlo@biblos.pk.edu.pl>\n"
+"POT-Creation-Date: 2015-12-17 15:01-0300\n"
+"PO-Revision-Date: 2015-12-14 14:03+0000\n"
+"Last-Translator: Rafal <rafalkopaczka@gmail.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1445372410.000000\n"
+"X-POOTLE-MTIME: 1450101784.000000\n"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:304
@@ -173,9 +173,9 @@ msgstr "%s %s %s Koha online %s "
 #. %6$s:  RestrictedPageTitle 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-restrictedpage.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s Koha online %s catalog %s &rsaquo; %s %s "
-msgstr "%s%s%sKoha online%s katalog &rsaquo; Pozycja %s"
+msgstr "%s%s%s Koha online %s katalog %s &rsaquo; %s %s  "
 
 #. %1$s:  IF (otheritemloop.size) 
 #. %2$s:  INCLUDE items_table items=otheritemloop tab="otherholdings" 
@@ -491,7 +491,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:667
 #, fuzzy, c-format
 msgid "%s %sShared%sPrivate%s %s Public %s "
-msgstr "%s%sPrywatne%sPubliczne%s%s "
+msgstr "%s %sWspółdzielone%sPrywatne%s %s Publiczne %s "
 
 #. %1$s:  IF loop.index == 0 
 #. %2$s:  ELSE 
@@ -558,9 +558,9 @@ msgstr ""
 
 #. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:242
-#, fuzzy, c-format
+#, c-format
 msgid "%s Automatic renewal "
-msgstr "%s Brak możliwości prolongaty %s Automatyczne odnowienie prolongaty "
+msgstr "%s Automatyczne odnowienie prolongaty "
 
 #. %1$s:  IF ( latestserial.status1 ) 
 #. %2$s:  ELSE 
@@ -729,8 +729,8 @@ msgid ""
 "%s If you have a CAS account, you may use that below. %s %s If you have a "
 "local account, you may use that below. %s "
 msgstr ""
-"konto, możesz użyć danych poniżej. %s %s Jeśli posiadasz konto lokalne, "
-"możesz użyć danych poniżej. %s "
+"%s Jeśli posiadasz konto CAS, możesz użyć danych poniżej. %s %s Jeśli "
+"posiadasz konto lokalne, możesz użyć danych poniżej. %s "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:208
@@ -781,20 +781,20 @@ msgstr "%s Brak wyników wyszukiwania w katalogu %s. "
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:86
 #, fuzzy, c-format
 msgid "%s No results, try to change filters. %s "
-msgstr "%s %s Brak wyników. %s "
+msgstr "%s Brak wyników. %s "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:476
-#, fuzzy, c-format
+#, c-format
 msgid "%s Not allowed"
-msgstr "Nie zezwalaj"
+msgstr "%s Niedozwolone"
 
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.norenew_overdue ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:238
 #, fuzzy, c-format
 msgid "%s Not renewable %s Not allowed "
-msgstr "Brak możliwości prolongowania"
+msgstr "%s Brak możliwości prolongowania %s Niedozwolone"
 
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
@@ -1179,6 +1179,7 @@ msgstr ""
 "'seefrom' or 'seealso', controls the label for the entry type: authid: if it "
 "is a linked authority, its authid %%] %s %s %s %s %s "
 
+# Nie tłumaczyć. 
 #. %1$s:  USE AuthorisedValues 
 #. %2$s:  SET avs = AuthorisedValues.GetAuthValueDropbox( category, default ) 
 #. %3$s:  IF avs 
@@ -2964,14 +2965,14 @@ msgstr "(zmodyfikowano %s)"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:478
 #, fuzzy, c-format
 msgid "(overdue)"
-msgstr "Przetrzymania (%s)"
+msgstr "Przetrzymanie"
 
 #. %1$s:  koha_new.newdate 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:48
 #, fuzzy, c-format
 msgid "(published on %s%s by "
-msgstr "(opublikowano %s)"
+msgstr "(opublikowano %s "
 
 #. %1$s:  FOREACH relate IN related 
 #. %2$s:  relate.related_search 
@@ -3376,9 +3377,9 @@ msgid "Alternate address"
 msgstr "Dodatkowy adres"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:62
-#, fuzzy, c-format
+#, c-format
 msgid "Alternate address information: "
-msgstr "Dodatkowy adres"
+msgstr "Dodatkowy adres: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:621
 #, c-format
