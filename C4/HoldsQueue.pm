@@ -278,7 +278,7 @@ sub GetPendingHoldRequestsForBib {
     my $dbh = C4::Context->dbh;
 
     my $request_query = "SELECT biblionumber, borrowernumber, itemnumber, priority, reserves.branchcode,
-                                reservedate, reservenotes, borrowers.branchcode AS borrowerbranch
+                                reservedate, reservenotes, borrowers.branchcode AS borrowerbranch, itemtype
                          FROM reserves
                          JOIN borrowers USING (borrowernumber)
                          WHERE biblionumber = ?
@@ -368,6 +368,7 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
 sub MapItemsToHoldRequests {
     my ($hold_requests, $available_items, $branches_to_use, $transport_cost_matrix) = @_;
 
+
     # handle trival cases
     return unless scalar(@$hold_requests) > 0;
     return unless scalar(@$available_items) > 0;
@@ -400,6 +401,8 @@ sub MapItemsToHoldRequests {
                 and ( # Don't fill item level holds that contravene the hold pickup policy at this time
                     ( $items_by_itemnumber{ $request->{itemnumber} }->{hold_fulfillment_policy} eq 'any' )
                     || ( $request->{branchcode} eq $items_by_itemnumber{ $request->{itemnumber} }->{ $items_by_itemnumber{ $request->{itemnumber} }->{hold_fulfillment_policy} }  )
+                and ( !$request->{itemtype} # If hold itemtype is set, item's itemtype must match
+                    || $items_by_itemnumber{ $request->{itemnumber} }->{itype} eq $request->{itemtype} )
                 )
 
               )
@@ -451,6 +454,8 @@ sub MapItemsToHoldRequests {
                     $request->{borrowerbranch} eq $item->{homebranch}
                     && ( ( $item->{hold_fulfillment_policy} eq 'any' ) # Don't fill item level holds that contravene the hold pickup policy at this time
                         || $request->{branchcode} eq $item->{ $item->{hold_fulfillment_policy} } )
+                    && ( !$request->{itemtype} # If hold itemtype is set, item's itemtype must match
+                        || $items_by_itemnumber{ $request->{itemnumber} }->{itype} eq $request->{itemtype} )
                   )
                 {
                     $itemnumber = $item->{itemnumber};
@@ -471,6 +476,10 @@ sub MapItemsToHoldRequests {
                     # Don't fill item level holds that contravene the hold pickup policy at this time
                     next unless $item->{hold_fulfillment_policy} eq 'any'
                         || $request->{branchcode} eq $item->{ $item->{hold_fulfillment_policy} };
+
+                    # If hold itemtype is set, item's itemtype must match
+                    next unless ( !$request->{itemtype}
+                        || $item->{itype} eq $request->{itemtype} );
 
                     $itemnumber = $item->{itemnumber};
                     last;
@@ -504,6 +513,10 @@ sub MapItemsToHoldRequests {
                     next unless $item->{hold_fulfillment_policy} eq 'any'
                         || $request->{branchcode} eq $item->{ $item->{hold_fulfillment_policy} };
 
+                    # If hold itemtype is set, item's itemtype must match
+                    next unless ( !$request->{itemtype}
+                        || $item->{itype} eq $request->{itemtype} );
+
                     $itemnumber = $item->{itemnumber};
                     $holdingbranch = $branch;
                     last PULL_BRANCHES;
@@ -518,6 +531,10 @@ sub MapItemsToHoldRequests {
                         # Don't fill item level holds that contravene the hold pickup policy at this time
                         next unless $current_item->{hold_fulfillment_policy} eq 'any'
                             || $request->{branchcode} eq $current_item->{ $current_item->{hold_fulfillment_policy} };
+
+                        # If hold itemtype is set, item's itemtype must match
+                        next unless ( !$request->{itemtype}
+                            || $current_item->{itype} eq $request->{itemtype} );
 
                         $itemnumber = $current_item->{itemnumber};
                         last; # quit this loop as soon as we have a suitable item
@@ -538,6 +555,10 @@ sub MapItemsToHoldRequests {
                         # Don't fill item level holds that contravene the hold pickup policy at this time
                         next unless $item->{hold_fulfillment_policy} eq 'any'
                             || $request->{branchcode} eq $item->{ $item->{hold_fulfillment_policy} };
+
+                        # If hold itemtype is set, item's itemtype must match
+                        next unless ( !$request->{itemtype}
+                            || $item->{itype} eq $request->{itemtype} );
 
                         $itemnumber = $item->{itemnumber};
                         $holdingbranch = $branch;

@@ -161,9 +161,9 @@ The following tables are available witin the HOLDPLACED message:
 
 sub AddReserve {
     my (
-        $branch,    $borrowernumber, $biblionumber,
-        $bibitems,  $priority, $resdate, $expdate, $notes,
-        $title,      $checkitem, $found
+        $branch,   $borrowernumber, $biblionumber, $bibitems,
+        $priority, $resdate,        $expdate,      $notes,
+        $title,    $checkitem,      $found,        $itemtype
     ) = @_;
 
     if ( Koha::Holds->search( { borrowernumber => $borrowernumber, biblionumber => $biblionumber } )->count() > 0 ) {
@@ -191,6 +191,9 @@ sub AddReserve {
         $waitingdate = $resdate;
     }
 
+    # Don't add itemtype limit if specific item is selected
+    $itemtype = undef if $checkitem;
+
     # updates take place here
     my $hold = Koha::Hold->new(
         {
@@ -203,7 +206,8 @@ sub AddReserve {
             itemnumber     => $checkitem,
             found          => $found,
             waitingdate    => $waitingdate,
-            expirationdate => $expdate
+            expirationdate => $expdate,
+            itemtype       => $itemtype,
         }
     )->store();
     my $reserve_id = $hold->id();
@@ -310,7 +314,8 @@ sub GetReservesFromBiblionumber {
                 expirationdate,
                 lowestPriority,
                 suspend,
-                suspend_until
+                suspend_until,
+                itemtype
         FROM     reserves
         WHERE biblionumber = ? ";
     push( @params, $biblionumber );
@@ -946,8 +951,9 @@ sub CheckReserves {
 
                 # See if this item is more important than what we've got so far
                 if ( ( $res->{'priority'} && $res->{'priority'} < $priority ) || $local_hold_match ) {
-                    $borrowerinfo ||= C4::Members::GetMember( borrowernumber => $res->{'borrowernumber'} );
                     $iteminfo ||= C4::Items::GetItem($itemnumber);
+                    next if $res->{itemtype} && $res->{itemtype} ne _get_itype( $iteminfo );
+                    $borrowerinfo ||= C4::Members::GetMember( borrowernumber => $res->{'borrowernumber'} );
                     my $branch = GetReservesControlBranch( $iteminfo, $borrowerinfo );
                     my $branchitemrule = C4::Circulation::GetBranchItemRule($branch,$iteminfo->{'itype'});
                     next if ($branchitemrule->{'holdallowed'} == 0);
@@ -1833,7 +1839,8 @@ sub _Findgroupreserve {
                reserves.timestamp           AS timestamp,
                biblioitems.biblioitemnumber AS biblioitemnumber,
                reserves.itemnumber          AS itemnumber,
-               reserves.reserve_id          AS reserve_id
+               reserves.reserve_id          AS reserve_id,
+               reserves.itemtype            AS itemtype
         FROM reserves
         JOIN biblioitems USING (biblionumber)
         JOIN hold_fill_targets USING (biblionumber, borrowernumber, itemnumber)
@@ -1867,7 +1874,8 @@ sub _Findgroupreserve {
                reserves.timestamp           AS timestamp,
                biblioitems.biblioitemnumber AS biblioitemnumber,
                reserves.itemnumber          AS itemnumber,
-               reserves.reserve_id          AS reserve_id
+               reserves.reserve_id          AS reserve_id,
+               reserves.itemtype            AS itemtype
         FROM reserves
         JOIN biblioitems USING (biblionumber)
         JOIN hold_fill_targets USING (biblionumber, borrowernumber)
@@ -1900,7 +1908,8 @@ sub _Findgroupreserve {
                reserves.priority                   AS priority,
                reserves.timestamp                  AS timestamp,
                reserves.itemnumber                 AS itemnumber,
-               reserves.reserve_id                 AS reserve_id
+               reserves.reserve_id                 AS reserve_id,
+               reserves.itemtype                   AS itemtype
         FROM reserves
         WHERE reserves.biblionumber = ?
           AND (reserves.itemnumber IS NULL OR reserves.itemnumber = ?)

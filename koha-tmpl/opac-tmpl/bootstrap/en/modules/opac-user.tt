@@ -1,6 +1,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% USE ItemTypes %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your library home</title>
@@ -608,7 +609,11 @@
                                                     [% ELSIF ( RESERVE.suspend ) %]
                                                         Suspended [% IF ( RESERVE.suspend_until ) %] until [% RESERVE.suspend_until %] [% END %]
                                                     [% ELSE %]
-                                                        Pending
+                                                        [% IF RESERVE.itemtype %]
+                                                            Pending for next available <i>[% ItemTypes.GetDescription( RESERVE.itemtype ) %]</i> item
+                                                        [% ELSE %]
+                                                            Pending
+                                                        [% END %]
                                                     [% END %]
                                                 [% END %]
                                             </td>

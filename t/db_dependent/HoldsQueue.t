@@ -8,9 +8,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 35;
+use Test::More tests => 38;
 use Data::Dumper;
-
 
 use C4::Branch;
 use C4::Calendar;
@@ -554,6 +553,69 @@ is( @$holds_queue, 1, "Hold where pickup ne home, pickup ne holding targeted" );
 CancelReserve( { reserve_id => $reserve_id } );
 
 # End testing hold_fulfillment_policy
+
+# Test hold itemtype limit
+C4::Context->set_preference( "UseTransportCostMatrix", 0 );
+my @itemtypes = Koha::ItemTypes->search();
+my $wrong_itemtype = $itemtypes[0]->itemtype;
+my $right_itemtype = $itemtypes[1]->itemtype;
+$borrowernumber = $borrower3->{borrowernumber};
+my $branchcode = $library1->{branchcode};
+$dbh->do("DELETE FROM reserves");
+$dbh->do("DELETE FROM issues");
+$dbh->do("DELETE FROM items");
+$dbh->do("DELETE FROM biblio");
+$dbh->do("DELETE FROM biblioitems");
+$dbh->do("DELETE FROM transport_cost");
+$dbh->do("DELETE FROM tmp_holdsqueue");
+$dbh->do("DELETE FROM hold_fill_targets");
+$dbh->do("DELETE FROM default_branch_circ_rules");
+$dbh->do("DELETE FROM default_branch_item_rules");
+$dbh->do("DELETE FROM default_circ_rules");
+$dbh->do("DELETE FROM branch_item_rules");
+
+$dbh->do("INSERT INTO biblio (frameworkcode, author, title, datecreated) VALUES ('', 'Koha test', '$TITLE', '2011-02-01')");
+
+$biblionumber = $dbh->selectrow_array("SELECT biblionumber FROM biblio WHERE title = '$TITLE'")
+  or BAIL_OUT("Cannot find newly created biblio record");
+
+$dbh->do("INSERT INTO biblioitems (biblionumber, marcxml, itemtype) VALUES ($biblionumber, '', '$itemtype')");
+
+$biblioitemnumber =
+  $dbh->selectrow_array("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber = $biblionumber")
+  or BAIL_OUT("Cannot find newly created biblioitems record");
+
+$dbh->do("
+    INSERT INTO items (biblionumber, biblioitemnumber, homebranch, holdingbranch, notforloan, damaged, itemlost, withdrawn, onloan, itype)
+    VALUES ($biblionumber, $biblioitemnumber, '$library_A', '$library_B', 0, 0, 0, 0, NULL, '$right_itemtype')
+");
+
+# With hold_fulfillment_policy = homebranch, hold should only be picked up if pickup branch = homebranch
+$dbh->do("DELETE FROM default_circ_rules");
+$dbh->do("INSERT INTO default_circ_rules ( holdallowed, hold_fulfillment_policy ) VALUES ( 2, 'any' )");
+
+# Home branch matches pickup branch
+$reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1, undef, undef, undef, undef, undef, undef, $wrong_itemtype );
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
+is( @$holds_queue, 0, "Item with incorrect itemtype not targeted" );
+CancelReserve( { reserve_id => $reserve_id } );
+
+# Holding branch matches pickup branch
+$reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1, undef, undef, undef, undef, undef, undef, $right_itemtype );
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
+is( @$holds_queue, 1, "Item with matching itemtype is targeted" );
+CancelReserve( { reserve_id => $reserve_id } );
+
+# Neither branch matches pickup branch
+$reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1, undef, undef, undef, undef, undef, undef, undef );
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
+is( @$holds_queue, 1, "Item targeted when hold itemtype is not set" );
+CancelReserve( { reserve_id => $reserve_id } );
+
+# End testing hold itemtype limit
 
 # Cleanup
 $schema->storage->txn_rollback;

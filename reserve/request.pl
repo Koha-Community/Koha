@@ -321,6 +321,7 @@ foreach my $biblionumber (@biblionumbers) {
 
     my @bibitemloop;
 
+    my @available_itemtypes;
     foreach my $biblioitemnumber (@biblioitemnumbers) {
         my $biblioitem = $biblioiteminfos_of->{$biblioitemnumber};
         my $num_available = 0;
@@ -454,6 +455,8 @@ foreach my $biblionumber (@biblionumbers) {
             {
                 $item->{available} = 1;
                 $num_available++;
+
+                push( @available_itemtypes, $item->{itype} );
             }
             elsif ( C4::Context->preference('AllowHoldPolicyOverride') ) {
                 # If AllowHoldPolicyOverride is set, it should override EVERY restriction, not just branch item rules
@@ -482,6 +485,9 @@ foreach my $biblionumber (@biblionumbers) {
 
         push @bibitemloop, $biblioitem;
     }
+
+    @available_itemtypes = uniq( @available_itemtypes );
+    $template->param( available_itemtypes => \@available_itemtypes );
 
     # existingreserves building
     my @reserveloop;
@@ -561,6 +567,7 @@ foreach my $biblionumber (@biblionumbers) {
         $reserve{'suspend'}        = $res->suspend();
         $reserve{'suspend_until'}  = $res->suspend_until();
         $reserve{'reserve_id'}     = $res->reserve_id();
+        $reserve{itemtype}         = $res->{itemtype};
 
         if ( C4::Context->preference('IndependentBranches') && $flags->{'superlibrarian'} != 1 ) {
             $reserve{'branchloop'} = [ Koha::Libraries->find( $res->branchcode() ) ];

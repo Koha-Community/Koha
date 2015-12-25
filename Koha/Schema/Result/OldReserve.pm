@@ -129,6 +129,13 @@ __PACKAGE__->table("old_reserves");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+=head2 itemtype
+
+  data_type: 'varchar'
+  is_foreign_key: 1
+  is_nullable: 1
+  size: 10
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -177,6 +184,8 @@ __PACKAGE__->add_columns(
     datetime_undef_if_invalid => 1,
     is_nullable => 1,
   },
+  "itemtype",
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
 );
 
 =head1 PRIMARY KEY
@@ -253,9 +262,29 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 itemtype
 
-# Created by DBIx::Class::Schema::Loader v0.07040 @ 2015-06-30 08:51:40
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wGi7SO5Sz+IwuvqaAyQDbg
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Itemtype>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "itemtype",
+  "Koha::Schema::Result::Itemtype",
+  { itemtype => "itemtype" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-12-26 12:22:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:34jZVAc6xF4/49hChXdSEg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

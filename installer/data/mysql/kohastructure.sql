@@ -1705,16 +1705,20 @@ CREATE TABLE `old_reserves` ( -- this table holds all holds/reserves that have b
   `lowestPriority` tinyint(1) NOT NULL, -- has this hold been pinned to the lowest priority in the holds queue (1 for yes, 0 for no)
   `suspend` BOOLEAN NOT NULL DEFAULT 0, -- in this hold suspended (1 for yes, 0 for no)
   `suspend_until` DATETIME NULL DEFAULT NULL, -- the date this hold is suspended until (NULL for infinitely)
+  `itemtype` VARCHAR(10) NULL DEFAULT NULL, -- If record level hold, the optional itemtype of the item the patron is requesting
   PRIMARY KEY (`reserve_id`),
   KEY `old_reserves_borrowernumber` (`borrowernumber`),
   KEY `old_reserves_biblionumber` (`biblionumber`),
   KEY `old_reserves_itemnumber` (`itemnumber`),
   KEY `old_reserves_branchcode` (`branchcode`),
+  KEY `old_reserves_itemtype` (`itemtype`),
   CONSTRAINT `old_reserves_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
     ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT `old_reserves_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`)
     ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT `old_reserves_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`)
+    ON DELETE SET NULL ON UPDATE SET NULL,
+  CONSTRAINT `old_reserves_ibfk_4` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`)
     ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -1882,16 +1886,19 @@ CREATE TABLE `reserves` ( -- information related to holds/reserves in Koha
   `lowestPriority` tinyint(1) NOT NULL,
   `suspend` BOOLEAN NOT NULL DEFAULT 0,
   `suspend_until` DATETIME NULL DEFAULT NULL,
+  `itemtype` VARCHAR(10) NULL DEFAULT NULL, -- If record level hold, the optional itemtype of the item the patron is requesting
   PRIMARY KEY (`reserve_id`),
   KEY priorityfoundidx (priority,found),
   KEY `borrowernumber` (`borrowernumber`),
   KEY `biblionumber` (`biblionumber`),
   KEY `itemnumber` (`itemnumber`),
   KEY `branchcode` (`branchcode`),
+  KEY `itemtype` (`itemtype`),
   CONSTRAINT `reserves_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `reserves_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `reserves_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `reserves_ibfk_4` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `reserves_ibfk_4` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `reserves_ibfk_5` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --

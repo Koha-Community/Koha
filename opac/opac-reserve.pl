@@ -37,6 +37,7 @@ use Koha::DateUtils;
 use Koha::Libraries;
 use Koha::Patron::Debarments qw(IsDebarred);
 use Date::Calc qw/Today Date_to_Days/;
+use List::MoreUtils qw/uniq/;
 
 my $maxreserves = C4::Context->preference("maxreserves");
 
@@ -281,15 +282,16 @@ if ( $query->param('place_reserve') ) {
             $canreserve = 0;
         }
 
+        my $itemtype = $query->param('itemtype') || undef;
+        $itemtype = undef if $itemNum;
+
         # Here we actually do the reserveration. Stage 3.
         if ($canreserve) {
             my $reserve_id = AddReserve(
-                $branch,      $borrowernumber,
-                $biblioNum,
-                [$biblioNum], $rank,
-                $startdate,   $expiration_date,
-                $notes,       $biblioData->{title},
-                $itemNum,     $found
+                $branch,          $borrowernumber, $biblioNum,
+                [$biblioNum],     $rank,           $startdate,
+                $expiration_date, $notes,          $biblioData->{title},
+                $itemNum,         $found,          $itemtype,
             );
             $failed_holds++ unless $reserve_id;
             ++$reserve_cnt;
@@ -381,6 +383,7 @@ unless ($noreserves) {
 #
 my $notforloan_label_of = get_notforloan_label_of();
 
+my @available_itemtypes;
 my $biblioLoop = [];
 my $numBibsAvailable = 0;
 my $itemdata_enumchron = 0;
@@ -534,6 +537,7 @@ foreach my $biblioNum (@biblionumbers) {
                 $itemLoopIter->{available} = 1;
                 $numCopiesOPACAvailable++;
                 $biblioLoopIter{force_hold} = 1 if $hold_allowed eq 'F';
+                push( @available_itemtypes, $itemInfo->{itype} );
             }
             $numCopiesAvailable++;
         }
@@ -570,6 +574,9 @@ foreach my $biblioNum (@biblionumbers) {
 
     $anyholdable = 1 if $biblioLoopIter{holdable};
 }
+
+@available_itemtypes = uniq( @available_itemtypes );
+$template->param( available_itemtypes => \@available_itemtypes );
 
 if ( $numBibsAvailable == 0 || $anyholdable == 0) {
     $template->param( none_available => 1 );

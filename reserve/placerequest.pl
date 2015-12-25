@@ -37,19 +37,21 @@ my $input = CGI->new();
 
 checkauth($input, 0, { reserveforothers => 'place_holds' }, 'intranet');
 
-my @bibitems=$input->multi_param('biblioitem');
-my @reqbib=$input->multi_param('reqbib');
-my $biblionumber=$input->param('biblionumber');
-my $borrowernumber=$input->param('borrowernumber');
-my $notes=$input->param('notes');
-my $branch=$input->param('pickup');
-my $startdate=$input->param('reserve_date') || '';
-my @rank=$input->multi_param('rank-request');
-my $type=$input->param('type');
-my $title=$input->param('title');
-my $borrower=GetMember('borrowernumber'=>$borrowernumber);
-my $checkitem=$input->param('checkitem');
+my @bibitems       = $input->multi_param('biblioitem');
+my @reqbib         = $input->multi_param('reqbib');
+my $biblionumber   = $input->param('biblionumber');
+my $borrowernumber = $input->param('borrowernumber');
+my $notes          = $input->param('notes');
+my $branch         = $input->param('pickup');
+my $startdate      = $input->param('reserve_date') || '';
+my @rank           = $input->multi_param('rank-request');
+my $type           = $input->param('type');
+my $title          = $input->param('title');
+my $checkitem      = $input->param('checkitem');
 my $expirationdate = $input->param('expiration_date');
+my $itemtype       = $input->param('itemtype') || undef;
+
+my $borrower = GetMember( 'borrowernumber' => $borrowernumber );
 
 my $multi_hold = $input->param('multi_hold');
 my $biblionumbers = $multi_hold ? $input->param('biblionumbers') : ($biblionumber . '/');
@@ -108,7 +110,7 @@ if ($type eq 'str8' && $borrower){
                        $bibinfo->{rank},$startdate,$expirationdate,$notes,$bibinfo->{title},$checkitem,$found);
         } else {
             # place a request on 1st available
-            AddReserve($branch,$borrower->{'borrowernumber'},$biblionumber,\@realbi,$rank[0],$startdate,$expirationdate,$notes,$title,$checkitem,$found);
+            AddReserve($branch,$borrower->{'borrowernumber'},$biblionumber,\@realbi,$rank[0],$startdate,$expirationdate,$notes,$title,$checkitem,$found, $itemtype);
         }
     }
 

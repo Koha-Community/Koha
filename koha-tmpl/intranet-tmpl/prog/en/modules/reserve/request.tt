@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE ItemTypes %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% UNLESS ( multi_hold ) %]
     <title>Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Place a hold on [% title |html %]</title>
@@ -410,6 +411,18 @@ function checkMultiHold() {
             </select>
         </li>
 
+        [% UNLESS ( multi_hold ) %]
+            <li>
+                <label for="itemtype">Request specific item type:</label>
+                <select name="itemtype" size="1" id="itemtype">
+                    <option value="">Any item type</option>
+                    [%- FOREACH itemtype IN available_itemtypes %]
+                        <option value="[% itemtype %]">[% ItemTypes.GetDescription( itemtype ) %]</option>
+                    [%- END %]
+                </select>
+            </li>
+        [% END %]
+
 	[% IF ( reserve_in_future ) %]
 	<li>
         <label for="from">Hold starts on date:</label>
@@ -798,7 +811,11 @@ function checkMultiHold() {
                 </a>
                 </i>
             [% ELSE %]
-                <i>Next available</i>
+                [% IF reserveloo.itemtype %]
+                    <i>Next available <b>[% ItemTypes.GetDescription( reserveloo.itemtype ) %]</b> item</i>
+                [% ELSE %]
+                    <i>Next available</i>
+                [% END %]
                  <input type="hidden" name="itemnumber" value="" />
             [% END %]
     [% END %]

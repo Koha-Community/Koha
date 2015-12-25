@@ -1,6 +1,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Price %]
+[% USE ItemTypes %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Placing a hold</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -247,6 +248,18 @@
                                                             <input name="expiration_date_[% bibitemloo.biblionumber %]" id="to[% bibitemloo.biblionumber %]" size="10" class="holddateto" />
                                                             <span class="date-format to" data-biblionumber="[% bibitemloo.biblionumber %]">[% INCLUDE 'date-format.inc' %]</span>
                                                         </li>
+
+                                                        [% UNLESS ( multi_hold ) %]
+                                                            <li>
+                                                                <label for="itemtype">Request specific item type:</label>
+                                                                <select name="itemtype" size="1" id="itemtype">
+                                                                    <option value="">Any item type</option>
+                                                                    [%- FOREACH itemtype IN available_itemtypes %]
+                                                                        <option value="[% itemtype %]">[% ItemTypes.GetDescription( itemtype ) %]</option>
+                                                                    [%- END %]
+                                                                </select>
+                                                            </li>
+                                                        [% END %]
 
                                                         [% IF ( OpacHoldNotes ) %]
                                                             <li>
