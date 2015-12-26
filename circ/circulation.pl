@@ -424,10 +424,15 @@ if (@$barcodes) {
 
     if ($question->{RESERVE_WAITING} or $question->{RESERVED}){
         $template->param(
-            reserveborrowernumber => $question->{'resborrowernumber'},
-            itembiblionumber => $getmessageiteminfo->{'biblionumber'}
+            reserveborrowernumber => $question->{'resborrowernumber'}
         );
     }
+
+    $template->param(
+        itembiblionumber => $getmessageiteminfo->{'biblionumber'}
+    );
+
+
 
     $template_params->{issuecount} = $issue;
 

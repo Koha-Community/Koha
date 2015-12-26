@@ -408,6 +408,11 @@ $(document).ready(function() {
     [% END %]
 </form>
 
+[% IF ( RESERVED || ISSUED_TO_ANOTHER ) && (CAN_user_reserveforothers_place_holds ) %]
+    [% UNLESS flagged && noissues %]
+        <div class="circ-checkoutplacehold"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% itembiblionumber %]&borrowernumber=[% borrowernumber %]">Click here to place a hold for [% INCLUDE 'patron-title.inc' %]</a></div>
+    [% END %]
+[% END %]
 </div></div>
 [% END %] <!-- NEEDSCONFIRMATION -->
 
