@@ -58,6 +58,16 @@ sub _new_schema {
     my $db_port   = $context->config("port") || '';
     my $db_user   = $context->config("user");
     my $db_passwd = $context->config("pass");
+    my $tls = $context->config("tls");
+    my $tls_options;
+    if ($tls eq 'yes'){
+        my $ca = $context->config('ca');
+        my $cert = $context->config('cert');
+        my $key = $context->config('key');
+        $tls_options = ";mysql_ssl=1;mysql_ssl_client_key=".$key.";mysql_ssl_client_cert=".$cert.";mysql_ssl_ca_file=".$ca;
+    }
+
+
 
     my ( %encoding_attr, $encoding_query, $tz_query );
     my $tz = $ENV{TZ};
@@ -72,7 +82,7 @@ sub _new_schema {
     }
     my $schema = Koha::Schema->connect(
         {
-            dsn => "dbi:$db_driver:database=$db_name;host=$db_host;port=$db_port",
+            dsn => "dbi:$db_driver:database=$db_name;host=$db_host;port=$db_port".($tls_options? $tls_options : ""),
             user => $db_user,
             password => $db_passwd,
             %encoding_attr,

@@ -456,6 +456,10 @@ my %config_defaults = (
   'DB_NAME'           => 'koha',
   'DB_USER'           => 'kohaadmin',
   'DB_PASS'           => 'katikoan',
+  'DB_USE_TLS'	      => 'no',
+  'DB_TLS_CA_CERTIFICATE'  => '/etc/mysql-ssl/server-ca.pem',
+  'DB_TLS_CLIENT_CERTIFICATE'  => '/etc/mysql-ssl/client-cert.pem',
+  'DB_TLS_CLIENT_KEY' => '/etc/mysql-ssl/client-key.pem',
   'INSTALL_SRU'       => 'yes',
   'INSTALL_PAZPAR2'   => 'no',
   'AUTH_INDEX_MODE'   => 'dom',
@@ -502,6 +506,7 @@ else {
 my %valid_config_values = (
   'INSTALL_MODE'  => { 'standard' => 1, 'single' => 1, 'dev' => 1 },
   'DB_TYPE' => { 'mysql' => 1, 'Pg' => 1 },
+  'DB_USE_TLS' => {'yes', 'no'},
   'INSTALL_SRU' => { 'yes' => 1, 'no' => 1 },
   'AUTH_INDEX_MODE' => { 'grs1' => 1, 'dom' => 1 },
   'BIB_INDEX_MODE'  => { 'grs1' => 1, 'dom' => 1 },
@@ -1032,6 +1037,27 @@ DMBS);
 Please specify the name of the database to be
 used by Koha);
     $config{'DB_NAME'} = _get_value('DB_NAME', $msg, $defaults->{'DB_NAME'}, $valid_values, $install_log_values);
+    if ($config{'DB_TYPE'} eq 'mysql'){
+        $msg = q(
+Please specify whether the connection to MySQL will use TLS
+        );
+        $config{'DB_USE_TLS'} = _get_value('DB_USE_TLS', $msg, $defaults->{'DB_USE_TLS'}, $valid_values, $install_log_values);
+    }
+    if ($config{'DB_USE_TLS'} eq 'yes'){
+        $msg = q(
+Please enter the path to the CA certificate for TLS
+        );
+        $config{'DB_TLS_CA_CERTIFICATE'} = _get_value('DB_TLS_CA_CERTIFICATE', $msg, $defaults->{'DB_TLS_CA_CERTIFICATE'}, $valid_values, $install_log_values);
+
+        $msg = q(
+Please enter the path to the client certificate for TLS
+        );
+        $config{'DB_TLS_CLIENT_CERTIFICATE'} = _get_value('DB_TLS_CLIENT_CERTIFICATE', $msg, $defaults->{'DB_TLS_CLIENT_CERTIFICATE'}, $valid_values, $install_log_values);
+        $msg = q(
+Please enter the path to the client key for TLS
+        );
+        $config{'DB_TLS_CLIENT_KEY'} = _get_value('DB_TLS_CLIENT_KEY', $msg, $defaults->{'DB_TLS_CLIENT_KEY'}, $valid_values, $install_log_values);
+    }
 
     $msg = q(
 Please specify the user that owns the database to be

@@ -48,9 +48,19 @@ $info{'hostname'} = C4::Context->config("hostname");
 $info{'port'}     = C4::Context->config("port");
 $info{'user'}     = C4::Context->config("user");
 $info{'password'} = C4::Context->config("pass");
+$info{'tls'} = C4::Context->config("tls");
+    if ($info{'tls'} eq 'yes'){
+        $info{'ca'} = C4::Context->config('ca');
+        $info{'cert'} = C4::Context->config('cert');
+        $info{'key'} = C4::Context->config('key');
+        $info{'tlsoptions'} = ";mysql_ssl=1;mysql_ssl_client_key=".$info{key}.";mysql_ssl_client_cert=".$info{cert}.";mysql_ssl_ca_file=".$info{ca};
+        $info{'tlscmdline'} =  " --ssl-cert ". $info{cert} . " --ssl-key " . $info{key} . " --ssl-ca ".$info{ca}." "
+    }
+
 my $dbh = DBI->connect(
     "DBI:$info{dbms}:dbname=$info{dbname};host=$info{hostname}"
-      . ( $info{port} ? ";port=$info{port}" : "" ),
+      . ( $info{port} ? ";port=$info{port}" : "" )
+      . ( $info{tlsoptions} ? $info{tlsoptions} : "" ),
     $info{'user'}, $info{'password'}
 );
 
@@ -370,7 +380,8 @@ elsif ( $step && $step == 3 ) {
         #I put it there because it implied a data import if condition was not satisfied.
         my $dbh = DBI->connect(
     		"DBI:$info{dbms}:dbname=$info{dbname};host=$info{hostname}"
-      		. ( $info{port} ? ";port=$info{port}" : "" ),
+		. ( $info{port} ? ";port=$info{port}" : "" )
+                . ( $info{tlsoptions} ? $info{tlsoptions} : "" ),
             	$info{'user'}, $info{'password'}
         );
 	my $rq;

@@ -75,8 +75,17 @@ sub new {
     $self->{'port'}     = C4::Context->config("port");
     $self->{'user'}     = C4::Context->config("user");
     $self->{'password'} = C4::Context->config("pass");
+    $self->{'tls'} = C4::Context->config("tls");
+    if ($self->{'tls'} eq 'yes'){
+        $self->{'ca'} = C4::Context->config('ca');
+        $self->{'cert'} = C4::Context->config('cert');
+        $self->{'key'} = C4::Context->config('key');
+        $self->{'tlsoptions'} = ";mysql_ssl=1;mysql_ssl_client_key=".$self->{key}.";mysql_ssl_client_cert=".$self->{cert}.";mysql_ssl_ca_file=".$self->{ca};
+        $self->{'tlscmdline'} =  " --ssl-cert ". $self->{cert} . " --ssl-key " . $self->{key} . " --ssl-ca ".$self->{ca}." "
+    }
     $self->{'dbh'} = DBI->connect("DBI:$self->{dbms}:dbname=$self->{dbname};host=$self->{hostname}" .
-                                  ( $self->{port} ? ";port=$self->{port}" : "" ),
+                                  ( $self->{port} ? ";port=$self->{port}" : "" ).
+                                  ( $self->{tlsoptions} ? $self->{tlsoptions} : ""),
                                   $self->{'user'}, $self->{'password'});
     $self->{'language'} = undef;
     $self->{'marcflavour'} = undef;
@@ -454,7 +463,6 @@ sub load_sql {
     if( $dup_stderr ) {
         warn "C4::Installer::load_sql returned the following errors while attempting to load $filename:\n";
         $error = $dup_stderr;
-
     }
 
     return $error;
