@@ -85,21 +85,13 @@
 
     [% IF ( budget_lines ) %]
 
-    [% IF ( currency ) %]<p><b>Currency = [% currency %].</b>
+        [% INCLUDE 'budgets-active-currency.inc' %]
         [% IF ( show_actual ) %]
-            <b>Each cell contain both actual and estimated values.</b>
+            <p><b>Each cell contain both actual and estimated values.</b></p>
         [% ELSE %]
-            <b>Cells contain estimated values only.</b>
+            <p><b>Cells contain estimated values only.</b></p>
         [% END %]
-        </p>
-    [% ELSE %]
-        [% INCLUDE 'budgets-active-currency.inc' hide = 'yes' %]
-[% IF ( show_actual ) %]
-        <p><b>Each cell contain both actual and estimated values.</b></p>
-    [% ELSE %]
-        <p><b>Cells contain estimated values only.</b></p>
-    [% END %]
-    [% END %]
+
     <p id="selections">
         <strong>Show/hide columns:</strong> <span class="selected"><input type="checkbox" checked="checked" id="showall"/><label for="showall">Show all columns</label></span> <span><input type="checkbox" id="hideall"/><label for="hideall">Hide all columns</label></span>
         [% FOREACH authvals_ro IN authvals_row %]
