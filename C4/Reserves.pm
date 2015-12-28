@@ -459,74 +459,80 @@ sub CanBookBeReserved{
 
 =cut
 
-sub CanItemBeReserved{
-    my ($borrowernumber, $itemnumber) = @_;
+sub CanItemBeReserved {
+    my ( $borrowernumber, $itemnumber ) = @_;
 
-    my $dbh             = C4::Context->dbh;
-    my $ruleitemtype; # itemtype of the matching issuing rule
+    my $dbh = C4::Context->dbh;
+    my $ruleitemtype;    # itemtype of the matching issuing rule
     my $allowedreserves = 0;
-            
+
     # we retrieve borrowers and items informations #
     # item->{itype} will come for biblioitems if necessery
-    my $item = GetItem($itemnumber);
+    my $item       = GetItem($itemnumber);
     my $biblioData = C4::Biblio::GetBiblioData( $item->{biblionumber} );
-    my $borrower = C4::Members::GetMember('borrowernumber'=>$borrowernumber);
+    my $borrower   = C4::Members::GetMember( 'borrowernumber' => $borrowernumber );
 
     # If an item is damaged and we don't allow holds on damaged items, we can stop right here
-    return 'damaged' if ( $item->{damaged} && !C4::Context->preference('AllowHoldsOnDamagedItems') );
+    return 'damaged'
+      if ( $item->{damaged}
+        && !C4::Context->preference('AllowHoldsOnDamagedItems') );
 
     #Check for the age restriction
-    my ($ageRestriction, $daysToAgeRestriction) = C4::Circulation::GetAgeRestriction( $biblioData->{agerestriction}, $borrower );
+    my ( $ageRestriction, $daysToAgeRestriction ) =
+      C4::Circulation::GetAgeRestriction( $biblioData->{agerestriction}, $borrower );
     return 'ageRestricted' if $daysToAgeRestriction && $daysToAgeRestriction > 0;
 
     my $controlbranch = C4::Context->preference('ReservesControlBranch');
 
     # we retrieve user rights on this itemtype and branchcode
-    my $sth = $dbh->prepare("SELECT categorycode, itemtype, branchcode, reservesallowed
-                             FROM issuingrules
-                             WHERE (categorycode in (?,'*') )
-                             AND (itemtype IN (?,'*'))
-                             AND (branchcode IN (?,'*'))
-                             ORDER BY
-                               categorycode DESC,
-                               itemtype     DESC,
-                               branchcode   DESC;"
-                           );
+    my $sth = $dbh->prepare(
+        q{
+         SELECT categorycode, itemtype, branchcode, reservesallowed
+           FROM issuingrules
+          WHERE (categorycode in (?,'*') )
+            AND (itemtype IN (?,'*'))
+            AND (branchcode IN (?,'*'))
+       ORDER BY categorycode DESC,
+                itemtype     DESC,
+                branchcode   DESC
+        }
+    );
 
-    my $querycount ="SELECT
-                            count(*) as count
-                            FROM reserves
-                                LEFT JOIN items USING (itemnumber)
-                                LEFT JOIN biblioitems ON (reserves.biblionumber=biblioitems.biblionumber)
-                                LEFT JOIN borrowers USING (borrowernumber)
-                            WHERE borrowernumber = ?
-                                ";
-    
-    
-    my $branchcode   = "";
-    my $branchfield  = "reserves.branchcode";
+    my $querycount = q{
+        SELECT count(*) AS count
+          FROM reserves
+     LEFT JOIN items USING (itemnumber)
+     LEFT JOIN biblioitems ON (reserves.biblionumber=biblioitems.biblionumber)
+     LEFT JOIN borrowers USING (borrowernumber)
+         WHERE borrowernumber = ?
+    };
 
-    if( $controlbranch eq "ItemHomeLibrary" ){
+    my $branchcode  = "";
+    my $branchfield = "reserves.branchcode";
+
+    if ( $controlbranch eq "ItemHomeLibrary" ) {
         $branchfield = "items.homebranch";
-        $branchcode = $item->{homebranch};
-    }elsif( $controlbranch eq "PatronLibrary" ){
-        $branchfield = "borrowers.branchcode";
-        $branchcode = $borrower->{branchcode};
+        $branchcode  = $item->{homebranch};
     }
-    
-    # we retrieve rights 
-    $sth->execute($borrower->{'categorycode'}, $item->{'itype'}, $branchcode);
-    if(my $rights = $sth->fetchrow_hashref()){
+    elsif ( $controlbranch eq "PatronLibrary" ) {
+        $branchfield = "borrowers.branchcode";
+        $branchcode  = $borrower->{branchcode};
+    }
+
+    # we retrieve rights
+    $sth->execute( $borrower->{'categorycode'}, $item->{'itype'}, $branchcode );
+    if ( my $rights = $sth->fetchrow_hashref() ) {
         $ruleitemtype    = $rights->{itemtype};
-        $allowedreserves = $rights->{reservesallowed}; 
-    }else{
+        $allowedreserves = $rights->{reservesallowed};
+    }
+    else {
         $ruleitemtype = '*';
     }
 
     # we retrieve count
 
     $querycount .= "AND $branchfield = ?";
-    
+
     # If using item-level itypes, fall back to the record
     # level itemtype if the hold has no associated item
     $querycount .=
@@ -536,26 +542,28 @@ sub CanItemBeReserved{
       if ( $ruleitemtype ne "*" );
 
     my $sthcount = $dbh->prepare($querycount);
-    
-    if($ruleitemtype eq "*"){
-        $sthcount->execute($borrowernumber, $branchcode);
-    }else{
-        $sthcount->execute($borrowernumber, $branchcode, $ruleitemtype);
+
+    if ( $ruleitemtype eq "*" ) {
+        $sthcount->execute( $borrowernumber, $branchcode );
+    }
+    else {
+        $sthcount->execute( $borrowernumber, $branchcode, $ruleitemtype );
     }
 
     my $reservecount = "0";
-    if(my $rowcount = $sthcount->fetchrow_hashref()){
+    if ( my $rowcount = $sthcount->fetchrow_hashref() ) {
         $reservecount = $rowcount->{count};
     }
+
     # we check if it's ok or not
-    if( $reservecount >= $allowedreserves ){
+    if ( $reservecount >= $allowedreserves ) {
         return 'tooManyReserves';
     }
 
-    my $circ_control_branch = C4::Circulation::_GetCircControlBranch($item,
-        $borrower);
-    my $branchitemrule = C4::Circulation::GetBranchItemRule($circ_control_branch,
-        $item->{itype});
+    my $circ_control_branch =
+      C4::Circulation::_GetCircControlBranch( $item, $borrower );
+    my $branchitemrule =
+      C4::Circulation::GetBranchItemRule( $circ_control_branch, $item->{itype} );
 
     if ( $branchitemrule->{holdallowed} == 0 ) {
         return 'notReservable';
@@ -564,7 +572,7 @@ sub CanItemBeReserved{
     if (   $branchitemrule->{holdallowed} == 1
         && $borrower->{branchcode} ne $item->{homebranch} )
     {
-          return 'cannotReserveFromOtherBranches';
+        return 'cannotReserveFromOtherBranches';
     }
 
     # If reservecount is ok, we check item branch if IndependentBranches is ON
@@ -573,7 +581,7 @@ sub CanItemBeReserved{
         and !C4::Context->preference('canreservefromotherbranches') )
     {
         my $itembranch = $item->{homebranch};
-        if ($itembranch ne $borrower->{branchcode}) {
+        if ( $itembranch ne $borrower->{branchcode} ) {
             return 'cannotReserveFromOtherBranches';
         }
     }
