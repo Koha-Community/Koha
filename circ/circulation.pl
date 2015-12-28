@@ -88,7 +88,9 @@ if (!C4::Context->userenv && !$branch){
 }
 
 my $barcodes = [];
-if ( my $barcode = $query->param('barcode') ) {
+my $barcode =  $query->param('barcode');
+# Barcode given by user could be '0'
+if ( $barcode || $barcode eq '0' ) {
     $barcodes = [ $barcode ];
 } else {
     my $filefh = $query->upload('uploadfile');
