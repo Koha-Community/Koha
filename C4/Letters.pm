@@ -790,14 +790,18 @@ sub _parseletter_sth {
     parameters :
     - $letter : a hash to letter fields (title & content useful)
     - $table : the Koha table to parse.
-    - $values : table record hashref
+    - $values_in : table record hashref
     parse all fields from a table, and replace values in title & content with the appropriate value
     (not exported sub, used only internally)
 
 =cut
 
 sub _parseletter {
-    my ( $letter, $table, $values ) = @_;
+    my ( $letter, $table, $values_in ) = @_;
+
+    # Work on a local copy of $values_in (passed by reference) to avoid side effects
+    # in callers ( by changing / formatting values )
+    my $values = { %$values_in };
 
     if ( $table eq 'borrowers' && $values->{'dateexpiry'} ){
         $values->{'dateexpiry'} = format_sqldatetime( $values->{'dateexpiry'} );
