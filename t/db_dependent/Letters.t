@@ -393,6 +393,9 @@ $bookseller->contacts->[0]->email('testemail@mydomain.com');
 C4::Bookseller::ModBookseller($bookseller);
 $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 
+# Ensure that the preference 'LetterLog' is set to logging
+C4::Context->set_preference( 'LetterLog', 'on' );
+
 {
 warning_is {
     $err = SendAlerts( 'claimacquisition', [ $ordernumber ], 'TESTACQCLAIM' ) }
