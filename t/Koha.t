@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use C4::Context;
-use Test::More tests => 29;
+use Test::More tests => 33;
 use Test::MockModule;
 use DBD::Mock;
 
@@ -109,5 +109,10 @@ is( C4::Koha::GetNormalizedISBN('9780062349859 | 0062349856 | 9780062391308 | 00
 is( C4::Koha::GetNormalizedISBN('9781250075345 (hardcover) | 1250075343 (hardcover) | 9781250049872 (trade pbk.) | 1250049873 (trade pbk.)'), '1250075343', 'Test GetNormalizedISBN' );
 is( C4::Koha::GetNormalizedISBN('9781250067128 | 125006712X'), '125006712X', 'Test GetNormalizedISBN' );
 is( C4::Koha::GetNormalizedISBN('9780373211463 | 0373211465'), '0373211465', 'Test GetNormalizedISBN' );
+
+is( C4::Koha::GetNormalizedUPC(), undef, 'GetNormalizedUPC should return undef if no record is passed' );
+is( C4::Koha::GetNormalizedISBN(), undef, 'GetNormalizedISBN should return undef if no record and no isbn are passed' );
+is( C4::Koha::GetNormalizedEAN(), undef, 'GetNormalizedEAN should return undef if no record and no isbn are passed' );
+is( C4::Koha::GetNormalizedOCLCNumber(), undef, 'GetNormalizedOCLCNumber should return undef if no record and no isbn are passed' );
 
 1;
