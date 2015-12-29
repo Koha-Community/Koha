@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 41;
+use Test::More;
 
 BEGIN {
     use_ok('t::lib::TestBuilder');
@@ -30,12 +30,10 @@ my $builder = t::lib::TestBuilder->new();
 is( $builder->build(), undef, 'build without arguments returns undef' );
 
 my @sources    = $builder->schema->sources;
-my $nb_failure = 0;
 for my $source (@sources) {
     eval { $builder->build( { source => $source } ); };
-    $nb_failure++ if ($@);
+    ok( !$@, "create an entry for source '$source'");
 }
-is( $nb_failure, 0, 'TestBuilder can create a entry for every sources' );
 
 my $my_overduerules_transport_type = {
     message_transport_type => {
@@ -248,3 +246,5 @@ $bookseller = $builder->build({
 delete $bookseller->{_fk};
 $bookseller_from_db = $rs_aqbookseller->find($bookseller);
 is( $bookseller_from_db->in_storage, 1, 'build with only_fk = 0 stores the entry correctly' );
+
+done_testing;
