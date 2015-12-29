@@ -20,6 +20,7 @@
 use Modern::Perl;
 use C4::Context;
 use C4::Bookseller;
+use DateTime;
 
 use Test::More tests => 43;
 
@@ -70,13 +71,14 @@ is( $contract->{contractname}, $my_contract1->{contractname}, 'AddContract store
 is( $contract->{contractdescription}, $my_contract1->{contractdescription}, 'AddContract stores the contract description correctly.' );
 is( $contract->{booksellerid}, $my_contract1->{booksellerid}, 'AddContract stores the bookseller id correctly.' );
 
-
+my $now = DateTime->now;
+my $three_more_days = $now + DateTime::Duration->new( days => 3 );
 $my_contract1 = {
-    contractstartdate   => '2015-07-02',
-    contractenddate     => '2015-07-31',
-    contractname        => 'My modified contract name',
-    contractdescription => 'My modified contract description',
-    booksellerid        => $bookseller_id2,
+     contractstartdate   => $now->ymd,
+     contractenddate     => $three_more_days->ymd,
+     contractname        => 'My modified contract name',
+     contractdescription => 'My modified contract description',
+     booksellerid        => $bookseller_id2,
 };
 my $mod_status = ModContract($my_contract1);
 is( $mod_status, undef, 'ModContract without the contract number returns 0E0' );

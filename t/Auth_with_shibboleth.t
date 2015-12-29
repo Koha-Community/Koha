@@ -244,10 +244,8 @@ is( C4::Auth_with_shibboleth::_get_uri(),
 
 $OPACBaseURL = "http://testopac.com";
 my $result;
-warnings_are { $result = C4::Auth_with_shibboleth::_get_uri() }
-             [ { carped =>
-                 'Shibboleth requires OPACBaseURL to use the https protocol!' },
-             ],
+warning_is { $result = C4::Auth_with_shibboleth::_get_uri() }
+             'Shibboleth requires OPACBaseURL to use the https protocol!',
              "improper protocol - received expected warning";
 is( $result, "https://testopac.com", "https opac uri returned" );
 
@@ -256,10 +254,9 @@ is( C4::Auth_with_shibboleth::_get_uri(),
     "https://testopac.com", "https opac uri returned" );
 
 $OPACBaseURL = undef;
-warnings_are { $result = C4::Auth_with_shibboleth::_get_uri() }
-             [ { carped => 'OPACBaseURL not set!' },
-             ],
-             "undefined OPACBaseURL - received expected warning";
+warning_is{ $result = C4::Auth_with_shibboleth::_get_uri() }
+            'OPACBaseURL not set!',
+            "undefined OPACBaseURL - received expected warning";
 is( $result, "https://", "https opac uri returned" );
 
 ## _get_shib_config

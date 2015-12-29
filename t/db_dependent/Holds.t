@@ -6,7 +6,7 @@ use t::lib::Mocks;
 use C4::Context;
 use C4::Branch;
 
-use Test::More tests => 51;
+use Test::More tests => 43;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;

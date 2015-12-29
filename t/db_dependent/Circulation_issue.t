@@ -27,7 +27,7 @@ use C4::Items;
 use C4::Context;
 use C4::Reserves;
 
-use Test::More tests => 32;
+use Test::More tests => 30;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -388,14 +388,6 @@ ok( $item->{notforloan} eq 9, q{UpdateNotForLoanStatusOnCheckin updates notforlo
 AddReturn( 'barcode_3', $samplebranch1->{branchcode} );
 $item = GetItem( $itemnumber );
 ok( $item->{notforloan} eq 9, q{UpdateNotForLoanStatusOnCheckin does not update notforloan value from 9 with setting "1: 9"} );
-
-# Bug 14640 - Cancel the hold on checking out if asked
-my $reserve_id = AddReserve('CPL', $borrower_id1, $biblionumber,
-    undef,  1, undef, undef, "a note", "a title", undef, '');
-ok( $reserve_id, 'The reserve should have been inserted' );
-AddIssue( $borrower_2, $barcode_1, dt_from_string, 'cancel' );
-my $reserve = GetReserve( $reserve_id );
-is( $reserve, undef, 'The reserve should have been correctly cancelled' );
 
 #End transaction
 $dbh->rollback;
