@@ -944,9 +944,7 @@
               <fieldset class="rows">
                 <legend>Patron restrictions</legend>
 
-                [% IF ( debarments.size < 1 ) %]
-                    <p>Patron is currently unrestricted.</p>
-                [% ELSE %]
+                [% IF ( debarments ) %]
                     <table>
                         <thead>
                             <tr>
@@ -974,7 +972,10 @@
                             [% END %]
                         </tbody>
                     </table>
+                [% ELSE %]
+                    <p>Patron is currently unrestricted.</p>
                 [% END %]
+
                 [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
                     <p><a href="#" id="add_manual_restriction">Add manual restriction</a></p>
                     <fieldset id="manual_restriction_form">
