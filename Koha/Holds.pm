@@ -49,6 +49,38 @@ sub waiting {
     return $self->search( { found => 'W' } );
 }
 
+=head3 forced_hold_level
+
+If a patron has multiple holds for a single record,
+those holds must be either all record level holds,
+or they must all be item level holds.
+
+This method should be used with Hold sets where all
+Hold objects share the same patron and record.
+
+This method will return 'item' if the patron has
+at least one item level hold. It will return 'record'
+if the patron has holds but none are item level,
+Finally, if the patron has no holds, it will return
+undef which indicateds the patron may select either
+record or item level holds, barring any other rules
+that would prevent one or the other.
+=cut
+
+sub forced_hold_level {
+    my ($self) = @_;
+
+    my $force_hold_level;
+
+    if ( $self->count() ) {
+        my $has_item_level_holds;
+        map { $has_item_level_holds ||= $_->itemnumber } $self->as_list();
+        $force_hold_level = $has_item_level_holds ? 'item' : 'record';
+    }
+
+    return $force_hold_level;
+}
+
 =head3 type
 
 =cut

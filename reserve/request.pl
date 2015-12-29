@@ -26,8 +26,8 @@ script to place reserves/requests
 
 =cut
 
-use strict;
-use warnings;
+use Modern::Perl;
+
 use C4::Branch;
 use CGI qw ( -utf8 );
 use List::MoreUtils qw/uniq/;
@@ -235,38 +235,44 @@ foreach my $biblionumber (@biblionumbers) {
         $biblioloopiter{$canReserve} = 1;
     }
 
+    my $force_hold_level;
+    if ( $borrowerinfo->{borrowernumber} ) {
+        # For multiple holds per record, if a patron has previously placed a hold,
+        # the patron can only place more holds of the same type. That is, if the
+        # patron placed a record level hold, all the holds the patron places must
+        # be record level. If the patron placed an item level hold, all holds
+        # the patron places must be item level
+        my $holds = Koha::Holds->search(
+            {
+                borrowernumber => $borrowerinfo->{borrowernumber},
+                biblionumber   => $biblionumber,
+                found          => undef,
+            }
+        );
+        $force_hold_level = $holds->forced_hold_level();
+        $biblioloopiter{force_hold_level} = $force_hold_level;
+        $template->param( force_hold_level => $force_hold_level );
+
+        # For a librarian to be able to place multiple record holds for a patron for a record,
+        # we must find out what the maximum number of holds they can place for the patron is
+        my $max_holds_for_record = GetMaxPatronHoldsForRecord( $borrowerinfo->{borrowernumber}, $biblionumber );
+        $max_holds_for_record = $max_holds_for_record - $holds->count();
+        $biblioloopiter{max_holds_for_record} = $max_holds_for_record;
+        $template->param( max_holds_for_record => $max_holds_for_record );
+    }
+
+    # Check to see if patron is allowed to place holds on records where the
+    # patron already has an item from that record checked out
     my $alreadypossession;
-    if (not C4::Context->preference('AllowHoldsOnPatronsPossessions') and CheckIfIssuedToPatron($borrowerinfo->{borrowernumber},$biblionumber)) {
-        $alreadypossession = 1;
+    if ( !C4::Context->preference('AllowHoldsOnPatronsPossessions')
+        && CheckIfIssuedToPatron( $borrowerinfo->{borrowernumber}, $biblionumber ) )
+    {
+        $template->param( alreadypossession => $alreadypossession, );
     }
 
-    # get existing reserves .....
-    my $reserves = GetReservesFromBiblionumber({ biblionumber => $biblionumber, all_dates => 1 });
-    my $count = scalar( @$reserves );
+
+    my $count = Koha::Holds->search( { biblionumber => $biblionumber } )->count();
     my $totalcount = $count;
-    my $holds_count = 0;
-    my $alreadyreserved = 0;
-
-    foreach my $res (@$reserves) {
-        if ( defined $res->{found} ) { # found can be 'W' or 'T'
-            $count--;
-        }
-
-        if ( defined $borrowerinfo && defined($borrowerinfo->{borrowernumber}) && ($borrowerinfo->{borrowernumber} eq $res->{borrowernumber}) ) {
-            $holds_count++;
-        }
-    }
-
-    if ( $holds_count ) {
-            $alreadyreserved = 1;
-            $biblioloopiter{warn} = 1;
-            $biblioloopiter{alreadyres} = 1;
-    }
-
-    $template->param(
-        alreadyreserved => $alreadyreserved,
-        alreadypossession => $alreadypossession,
-    );
 
     # FIXME think @optionloop, is maybe obsolete, or  must be switchable by a systeme preference fixed rank or not
     # make priorities options
@@ -329,6 +335,8 @@ foreach my $biblionumber (@biblionumbers) {
         my $num_override  = 0;
         my $hiddencount   = 0;
 
+        $biblioitem->{force_hold_level} = $force_hold_level;
+
         if ( $biblioitem->{biblioitemnumber} ne $biblionumber ) {
             $biblioitem->{hostitemsflag} = 1;
         }
@@ -347,6 +355,8 @@ foreach my $biblionumber (@biblionumbers) {
 
         foreach my $itemnumber ( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} } )    {
             my $item = $iteminfos_of->{$itemnumber};
+
+            $item->{force_hold_level} = $force_hold_level;
 
             unless (C4::Context->preference('item-level_itypes')) {
                 $item->{itype} = $biblioitem->{itemtype};
@@ -445,13 +455,14 @@ foreach my $biblionumber (@biblionumbers) {
 
             $item->{'holdallowed'} = $branchitemrule->{'holdallowed'};
 
+            my $can_item_be_reserved = CanItemBeReserved( $borrowerinfo->{borrowernumber}, $itemnumber );
+            $item->{not_holdable} = $can_item_be_reserved unless ( $can_item_be_reserved eq 'OK' );
+
             if (
                    !$item->{cantreserve}
                 && !$exceeded_maxreserves
                 && IsAvailableForItemLevelRequest($item, $borrowerinfo)
-                && CanItemBeReserved(
-                    $borrowerinfo->{borrowernumber}, $itemnumber
-                ) eq 'OK'
+                && $can_item_be_reserved eq 'OK'
               )
             {
                 $item->{available} = 1;

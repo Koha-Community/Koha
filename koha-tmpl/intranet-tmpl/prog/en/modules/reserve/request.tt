@@ -49,49 +49,39 @@ $(document).ready(function() {
 });
 
 function check() {
-	var msg = "";
-	var count_reserv = 0;
-	var alreadyreserved = 0;
+    var msg = "";
+    var count_reserv = 0;
 
     // check if we have checkitem form
     if (document.form.checkitem){
         for (i=0;i<document.form.checkitem.length;i++){
             if (document.form.checkitem[i].checked == true) {
-				count_reserv++ ;
-			}
+                count_reserv++ ;
+            }
         }
         // for only one item, check the checkitem without consider the loop checkitem
         if (i==0){
-		    if (document.form.checkitem.checked == true) {
-			    count_reserv++;
-		    }
-	    }
+            if (document.form.checkitem.checked == true) {
+                count_reserv++;
+            }
+        }
     }
 
-    if (document.form.request.checked == true){
-		count_reserv++ ;
-    }
-
-    if (document.form.alreadyreserved && document.form.alreadyreserved.value == "1"){
-		 alreadyreserved++ ;
+    if (document.form.requestany.checked == true){
+        count_reserv++ ;
     }
 
     if (count_reserv == "0"){
-		msg += (_("- Please select an item to place a hold") + "\n");
-    }
-    if (count_reserv >= "2"){
-		msg += (_("- You may only place a hold on one item at a time") + "\n");
+        msg += (_("- Please select an item to place a hold") + "\n");
     }
 
-    if (alreadyreserved > "0"){
-		msg += (_("- This patron had already placed a hold on this item") + "\n" + _("Please cancel the previous hold first") + "\n");
+    if (msg == "") {
+        $('#hold-request-form').preventDoubleFormSubmit();
+        return(true);
+    } else {
+        alert(msg);
+        return(false);
     }
-
-	if (msg == "") return(true);
-	else	{
-		alert(msg);
-		return(false);
-	}
 }
 
 function checkMultiHold() {
@@ -116,6 +106,8 @@ function checkMultiHold() {
 
     $("#multi_hold_bibs").val(biblionumbers);
     $("#bad_bibs").val(badBibs);
+
+    $('#hold-request-form').preventDoubleFormSubmit();
 
     return true;
 }
@@ -164,7 +156,6 @@ function checkMultiHold() {
         $("#" + fieldID).val("");
     });
 
-    $('#hold-request-form').preventDoubleFormSubmit();
 
 [% UNLESS ( borrowernumber || borrowers || noitems ) %]
     [% IF ( CircAutocompl ) %]
@@ -271,7 +262,7 @@ function checkMultiHold() {
         [% IF ( exceeded_maxreserves ) %]
           <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> can only place a maximum of [% maxreserves %] total holds.</li>
         [% ELSIF ( alreadypossession ) %]
-          <li> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>is already in possession</strong> of one item</li>
+          <li> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>is already in possession</strong> of one item</lie
         [% ELSIF ( alreadyreserved ) %]
           <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>already has a hold</strong> on this item </li>
         [% ELSIF ( ageRestricted ) %]
@@ -402,11 +393,34 @@ function checkMultiHold() {
 	</li>
 
         [% UNLESS ( multi_hold ) %]
-          <li> <label for="requestany">Place a hold on the next available item </label>
-               <input type="checkbox" id="requestany" name="request" checked="checked" value="Any" />
+          <li> <label for="requestany">Hold next available item </label>
+               [% IF force_hold_level == 'item' %]
+                   <input type="checkbox" id="requestany" name="request" disabled="true" />
+               [% ELSIF force_hold_level == 'record' %]
+                   <input type="checkbox" id="requestany" checked="checked" value="Any" disabled="true"/>
+                   <input type="hidden" name="request" value="Any"/>
+               [% ELSE %]
+                   <input type="checkbox" id="requestany" name="request" checked="checked" value="Any" />
+                [% END %]
                <input type="hidden" name="biblioitem" value="[% biblioitemnumber %]" />
                <input type="hidden" name="alreadyreserved" value="[% alreadyreserved %]" />
           </li>
+
+          [% IF max_holds_for_record > 1 %]
+              [% SET count = 1 %]
+              <li>
+                   <label for="holds_to_place_count">Holds to place (count)</label>
+                   <select name="holds_to_place_count" id="holds_to_place_count">
+                   [% WHILE count <= max_holds_for_record %]
+                        <option value="[% count %]">[% count %]</option>
+                        [% SET count = count + 1 %]
+                   [% END %]
+
+                   </select>
+              </li>
+            [% ELSE %]
+                <input type="hidden" name="holds_to_place_count" value="1";
+            [% END %]
         [% END %]
 
 </ol>
@@ -431,7 +445,12 @@ function checkMultiHold() {
             [% IF ( bibitemloo.publicationyear ) %]<li><span class="label">Publication year:</span> [% bibitemloo.publicationyear %]</li>[% END %]
           </ol>
 
-        <h2 style="padding: 0 1em;">Place a hold on a specific item</h2>
+        <h2 style="padding: 0 1em;">
+            Place a hold on a specific item
+            [% IF bibitemloo.force_hold_level == 'item' %]
+                <span class="error"><i>(Required)</i></span>
+            [% END %]
+        </h2>
         <table id="requestspecific">
             <thead>
                 <tr>
@@ -451,18 +470,44 @@ function checkMultiHold() {
                 </tr>
             </thead>
             <tbody>
+            [% SET selected = 0 %]
             [% FOREACH itemloo IN bibitemloo.itemloop %]
             [% UNLESS ( itemloo.hide ) %]
                 <tr class="[% itemloo.backgroundcolor %]">
                     <td>
-                [% IF ( itemloo.available ) %]
+                [% IF itemloo.force_hold_level == 'record' # Patron has placed a record level hold previously for this record %]
+                    <span class="error">
+                        <i class="fa fa-times fa-lg" alt="Cannot be put on hold"></i>
+                        Hold must be record level
+                    </span>
+                [% ELSIF ( itemloo.available ) %]
                     <input type="radio" name="checkitem" value="[% itemloo.itemnumber %]" />
                 [% ELSIF ( itemloo.override ) %]
                     <input type="radio" name="checkitem" class="needsoverride" value="[% itemloo.itemnumber %]" />
-                    <img src="[% interface %]/[% theme %]/img/famfamfam/silk/error.png" alt="Requires override of hold policy" />
+                    <i class="fa fa-exclamation-triangle fa-lg" style="color:gold" alt="Requires override of hold policy"/></i>
                 [% ELSE %]
-                    <input disabled="disabled" type="radio" name="checkitem" value="[% itemloo.itemnumber %]" />
-                    <img src="[% interface %]/[% theme %]/img/famfamfam/silk/cross.png" alt="Cannot be put on hold" />
+                    <span class="error">
+                        <i class="fa fa-times fa-lg" alt="Cannot be put on hold"></i>
+                        [% IF itemloo.not_holdable %]
+                            [% IF itemloo.not_holdable == 'damaged' %]
+                                Item damaged
+                            [% ELSIF itemloo.not_holdable == 'ageRestricted' %]
+                                Age restricted
+                            [% ELSIF itemloo.not_holdable == 'tooManyHoldsForThisRecord' %]
+                                Exceeded max holds per record
+                            [% ELSIF itemloo.not_holdable == 'tooManyReserves' %]
+                                Too many holds
+                            [% ELSIF itemloo.not_holdable == 'notReservable' %]
+                                Not holdable
+                            [% ELSIF itemloo.not_holdable == 'cannotReserveFromOtherBranches' %]
+                                Patron is from different library
+                            [% ELSIF itemloo.not_holdable == 'itemAlreadyOnHold' %]
+                                Patron already has hold for this item
+                            [% ELSE %]
+                                [% itemloo.not_holdable %]
+                            [% END %]
+                        [% END %]
+                    </span>
                 [% END %]
                     </td>
                 [% IF ( item_level_itypes ) %]
