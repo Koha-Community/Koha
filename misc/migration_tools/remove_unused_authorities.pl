@@ -45,6 +45,10 @@ if ($test) {
     print "testing only, authorities will not be deleted.\n";
 }
 
+if (C4::Context->Zconn("biblioserver",0)->errcode() == 10000) {
+    die "Zebra server seems not to be available. This script needs Zebra runs."
+}
+
 my $dbh=C4::Context->dbh;
 my $thresholdmin=0;
 my $thresholdmax=0;
