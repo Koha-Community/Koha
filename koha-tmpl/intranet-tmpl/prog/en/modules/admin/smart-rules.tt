@@ -177,6 +177,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                 <th>No renewal before</th>
                 <th>Automatic renewal</th>
                 <th>Holds allowed (count)</th>
+                <th>Holds per record (count)</th>
                 <th>On shelf holds allowed</th>
                 <th>Item level holds</th>
                 <th>Rental discount (%)</th>
@@ -255,6 +256,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                                 [% END %]
                             </td>
 							<td>[% rule.reservesallowed %]</td>
+                                                        <td>[% rule.holds_per_record %]</td>
                                                         <td>
                                                             [% IF rule.onshelfholds == 1 %]
                                                                 Yes
@@ -329,6 +331,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                         </select>
                     </td>
                     <td><input type="text" name="reservesallowed" id="reservesallowed" size="2" /></td>
+                    <td><input type="text" name="holds_per_record" id="holds_per_record" size="2" /></td>
                     <td>
                         <select name="onshelfholds" id="onshelfholds">
                             <option value="1">Yes</option>
@@ -372,6 +375,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                       <th>No renewal before</th>
                       <th>Automatic renewal</th>
                       <th>Holds allowed (count)</th>
+                      <th>Holds per record (count)</th>
                       <th>On shelf holds allowed</th>
                       <th>Item level holds</th>
                       <th>Rental discount (%)</th>

@@ -137,6 +137,7 @@ elsif ($op eq 'add') {
     $norenewalbefore = undef if $norenewalbefore =~ /^\s*$/;
     my $auto_renew = $input->param('auto_renew') eq 'yes' ? 1 : 0;
     my $reservesallowed  = $input->param('reservesallowed');
+    my $holds_per_record  = $input->param('holds_per_record');
     my $onshelfholds     = $input->param('onshelfholds') || 0;
     $maxissueqty =~ s/\s//g;
     $maxissueqty = undef if $maxissueqty !~ /^\d+/;
@@ -172,6 +173,7 @@ elsif ($op eq 'add') {
         norenewalbefore               => $norenewalbefore,
         auto_renew                    => $auto_renew,
         reservesallowed               => $reservesallowed,
+        holds_per_record              => $holds_per_record,
         issuelength                   => $issuelength,
         lengthunit                    => $lengthunit,
         hardduedate                   => $hardduedate,
