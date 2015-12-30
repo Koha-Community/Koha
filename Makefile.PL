@@ -497,6 +497,7 @@ my $pl_files = {
       'rewrite-config.PL' => [
          'blib/KOHA_CONF_DIR/koha-conf.xml',
          'blib/KOHA_CONF_DIR/koha-httpd.conf',
+         'blib/KOHA_CONF_DIR/log4perl.conf',
          'blib/ZEBRA_CONF_DIR/etc/default.idx',
          'blib/MISC_DIR/koha-install-log'
          ],
