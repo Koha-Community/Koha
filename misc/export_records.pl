@@ -29,6 +29,7 @@ use C4::Record;
 
 use Koha::Biblioitems;
 use Koha::Database;
+use Koha::CsvProfiles;
 use Koha::Exporter::Record;
 use Koha::DateUtils qw( dt_from_string output_pref );
 
@@ -195,11 +196,15 @@ if ($deleted_barcodes) {
     }
 }
 else {
+    unless ( $csv_profile_id ) {
+        my $default_csv_profile = Koha::CsvProfiles->search({ profile => C4::Context->preference('ExportWithCsvProfile') });
+        $csv_profile_id = $default_csv_profile ? $default_csv_profile->export_format_id : undef;
+    }
     Koha::Exporter::Record::export(
         {   record_type        => $record_type,
             record_ids         => \@record_ids,
             format             => $output_format,
-            csv_profile_id     => ( $csv_profile_id || GetCsvProfileId( C4::Context->preference('ExportWithCsvProfile') ) || undef ),
+            csv_profile_id     => $csv_profile_id,
             export_items       => (not $dont_export_items),
             clean              => $clean || 0,
         }

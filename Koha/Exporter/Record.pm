@@ -7,6 +7,7 @@ use MARC::File::USMARC;
 use C4::AuthoritiesMarc;
 use C4::Biblio;
 use C4::Record;
+use Koha::CsvProfiles;
 
 sub _get_record_for_export {
     my ($params)           = @_;
@@ -133,7 +134,7 @@ sub export {
         print MARC::File::XML::footer();
         print "\n";
     } elsif ( $format eq 'csv' ) {
-        $csv_profile_id ||= C4::Csv::GetCsvProfileId( C4::Context->preference('ExportWithCsvProfile') );
+        $csv_profile_id ||= Koha::CsvProfiles->search({ profile => C4::Context->preference('ExportWithCsvProfile') })->export_format_id;
         print marc2csv( $record_ids, $csv_profile_id, $itemnumbers );
     }
 
