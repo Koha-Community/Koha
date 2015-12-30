@@ -401,7 +401,7 @@ Returns a CSV scalar
 
 C<$biblio> - a list of biblionumbers
 
-C<$csvprofileid> - the id of the CSV profile to use for the export (see export_format.export_format_id and the GetCsvProfiles function in C4::Csv)
+C<$csvprofileid> - the id of the CSV profile to use for the export (see export_format.export_format_id)
 
 C<$itemnumbers> - a list of itemnumbers to export
 
@@ -451,7 +451,7 @@ Returns a CSV scalar
 
 C<$biblio> - a biblionumber
 
-C<$csvprofileid> - the id of the CSV profile to use for the export (see export_format.export_format_id and the GetCsvProfiles function in C4::Csv)
+C<$csvprofileid> - the id of the CSV profile to use for the export (see export_format.export_format_id)
 
 C<$header> - true if the headers are to be printed (typically at first pass)
 
