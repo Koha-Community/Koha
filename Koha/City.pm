@@ -37,7 +37,7 @@ Koha::City - Koha City Object class
 
 =cut
 
-sub type {
+sub _type {
     return 'City';
 }
 

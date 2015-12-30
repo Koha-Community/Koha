@@ -181,7 +181,7 @@ sub _catb_resultset {
 
 =cut
 
-sub type {
+sub _type {
     return 'Category';
 }
 

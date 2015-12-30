@@ -122,7 +122,7 @@ sub branch {
 
 =cut
 
-sub type {
+sub _type {
     return 'Reserve';
 }
 

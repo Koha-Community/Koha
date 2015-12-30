@@ -39,7 +39,7 @@ Koha::Branch - Koha Branch object class
 
 =cut
 
-sub type {
+sub _type {
     return 'Branch';
 }
 

@@ -273,7 +273,7 @@ sub can_biblios_be_removed {
     return 0;
 }
 
-sub type {
+sub _type {
     return 'Virtualshelve';
 }
 

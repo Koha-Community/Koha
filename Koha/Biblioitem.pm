@@ -37,7 +37,7 @@ Koha::Biblioitem - Koha Biblioitem Object class
 
 =cut
 
-sub type {
+sub _type {
     return 'Biblioitem';
 }
 

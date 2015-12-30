@@ -164,7 +164,7 @@ sub _avb_resultset {
 
 =cut
 
-sub type {
+sub _type {
     return 'AuthorisedValue';
 }
 

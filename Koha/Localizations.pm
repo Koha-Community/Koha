@@ -23,7 +23,7 @@ use Koha::Localization;
 
 use base qw(Koha::Objects);
 
-sub type {
+sub _type {
     return 'Localization';
 }
 

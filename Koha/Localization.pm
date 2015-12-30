@@ -21,7 +21,7 @@ use Koha::Database;
 
 use base qw(Koha::Object);
 
-sub type {
+sub _type {
     return 'Localization';
 }
 

@@ -39,7 +39,7 @@ Koha::Biblio - Koha Biblio Object class
 
 =cut
 
-sub type {
+sub _type {
     return 'Biblio';
 }
 

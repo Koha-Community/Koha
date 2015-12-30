@@ -41,7 +41,7 @@ Koha::Biblios - Koha Biblio object set class
 
 =cut
 
-sub type {
+sub _type {
     return 'Biblio';
 }
 

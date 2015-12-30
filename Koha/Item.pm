@@ -78,7 +78,7 @@ sub holding_branch {
 
 =cut
 
-sub type {
+sub _type {
     return 'Item';
 }
 
