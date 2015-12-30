@@ -224,6 +224,14 @@ Cataloging:
                   yes: "do"
                   no: "don't"
             - attempt to match aggressively by trying all variations of the ISBNs in the imported record as a phrase in the ISBN fields of already cataloged records.  Note that this preference has no effect if UseQueryParser is on.
+        -
+            - When matching on ISSN with the record import tool,
+            - pref: AggressiveMatchOnISSN
+              choices:
+                  yes: "do"
+                  no: "don't"
+            - attempt to match aggressively by trying all variations of the ISSNs in the imported record as a phrase in the ISSN fields of already cataloged records.  Note that this preference has no effect if UseQueryParser is on.
+
     Exporting:
         -
             - Include following fields when exporting BibTeX,

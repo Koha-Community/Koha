@@ -637,6 +637,11 @@ sub get_matches {
             && C4::Context->preference('AggressiveMatchOnISBN') )
             && !C4::Context->preference('UseQueryParser');
 
+        @source_keys = C4::Koha::GetVariationsOfISSNs(@source_keys)
+          if ( $matchpoint->{index} =~ /^issn$/i
+            && C4::Context->preference('AggressiveMatchOnISSN') )
+            && !C4::Context->preference('UseQueryParser');
+
         # build query
         my $query;
         my $error;
@@ -649,7 +654,7 @@ sub get_matches {
                     map { "$matchpoint->{'index'}:$_" } @source_keys );
             }
             else {
-                my $phr = C4::Context->preference('AggressiveMatchOnISBN') ? ',phr' : q{};
+                my $phr = ( C4::Context->preference('AggressiveMatchOnISBN') || C4::Context->preference('AggressiveMatchOnISSN') )  ? ',phr' : q{};
                 $query = join( " or ",
                     map { "$matchpoint->{'index'}$phr=\"$_\"" } @source_keys );
                     #NOTE: double-quote the values so you don't get a "Embedded truncation not supported" error when a term has a ? in it.

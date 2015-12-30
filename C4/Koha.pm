@@ -31,6 +31,7 @@ use Koha::Libraries;
 use Koha::MarcSubfieldStructures;
 use DateTime::Format::MySQL;
 use Business::ISBN;
+use Business::ISSN;
 use autouse 'Data::cselectall_arrayref' => qw(Dumper);
 use DBI qw(:sql_types);
 use vars qw(@ISA @EXPORT @EXPORT_OK $DEBUG);
@@ -63,6 +64,9 @@ BEGIN {
         &GetVariationsOfISBN
         &GetVariationsOfISBNs
         &NormalizeISBN
+        &GetVariationsOfISSN
+        &GetVariationsOfISSNs
+        &NormalizeISSN
 
 		$DEBUG
 	);
@@ -1336,6 +1340,91 @@ sub GetVariationsOfISBNs {
 
     return wantarray ? @isbns : join( " | ", @isbns );
 }
+
+=head2 NormalizedISSN
+
+  my $issns = NormalizedISSN({
+          issn => $issn,
+          strip_hyphen => [0,1]
+          });
+
+  Returns an issn validated by Business::ISSN.
+  Optionally strips hyphen.
+
+  If the string cannot be validated as an issn,
+  it returns nothing.
+
+=cut
+
+sub NormalizeISSN {
+    my ($params) = @_;
+
+    my $string        = $params->{issn};
+    my $strip_hyphen  = $params->{strip_hyphen};
+
+    my $issn = Business::ISSN->new($string);
+
+    if ( $issn && $issn->is_valid ){
+
+        if ($strip_hyphen) {
+            $string = $issn->_issn;
+        }
+        else {
+            $string = $issn->as_string;
+        }
+        return $string;
+    }
+
+}
+
+=head2 GetVariationsOfISSN
+
+  my @issns = GetVariationsOfISSN( $issn );
+
+  Returns a list of variations of the given issn in
+  with and without a hyphen.
+
+  In a scalar context, the issns are returned as a
+  string delimited by ' | '.
+
+=cut
+
+sub GetVariationsOfISSN {
+    my ($issn) = @_;
+
+    return unless $issn;
+
+    my @issns;
+
+    push( @issns, NormalizeISSN({ issn => $issn }) );
+    push( @issns, NormalizeISSN({ issn => $issn, strip_hyphen => 1 }) );
+
+    # Strip out any "empty" strings from the array
+    @issns = grep { defined($_) && $_ =~ /\S/ } @issns;
+
+    return wantarray ? @issns : join( " | ", @issns );
+}
+
+=head2 GetVariationsOfISSNs
+
+  my @issns = GetVariationsOfISSNs( @issns );
+
+  Returns a list of variations of the given issns in
+  with and without a hyphen.
+
+  In a scalar context, the issns are returned as a
+  string delimited by ' | '.
+
+=cut
+
+sub GetVariationsOfISSNs {
+    my (@issns) = @_;
+
+    @issns = map { GetVariationsOfISSN( $_ ) } @issns;
+
+    return wantarray ? @issns : join( " | ", @issns );
+}
+
 
 =head2 IsKohaFieldLinked
 

@@ -522,6 +522,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '2.05',
     },
+    'Business::ISSN' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.91',
+    },
     'Template' => {
         'usage'    => 'Core',
         'required' => '1',

@@ -1,0 +1,1 @@
+INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('AggressiveMatchOnISSN','0','If enabled, attempt to match aggressively by trying all variations of the ISSNs in the imported record as a phrase in the ISSN fields of already cataloged records when matching on ISSN with the record import tool','','YesNo')

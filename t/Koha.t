@@ -25,7 +25,7 @@ use Module::Load::Conditional qw/check_install/;
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 31;
+        plan tests => 37;
     } else {
         plan skip_all => "Need Test::DBIx::Class"
     }
@@ -137,5 +137,21 @@ subtest 'getFacets() tests' => sub {
         'location facet present with singleBranchMode off (bug 10078)'
     );
 };
+
+is(C4::Koha::NormalizeISSN({ issn => '0024-9319', strip_hyphen => 1 }), '00249319', 'Test NormalizeISSN with all features enabled' );
+is(C4::Koha::NormalizeISSN({ issn => '0024-9319', strip_hyphen => 0 }), '0024-9319', 'Test NormalizeISSN with all features enabled' );
+
+my @issns = qw/ 0024-9319 00249319 /;
+is( join('|', @issns), join('|', GetVariationsOfISSN('0024-9319')), 'GetVariationsOfISSN returns all variations' );
+is( join('|', @issns), join('|', GetVariationsOfISSNs('0024-9319')), 'GetVariationsOfISSNs returns all variations' );
+
+my $issn;
+eval {
+    $issn = C4::Koha::NormalizeISSN({ issn => '1234-5678', strip_hyphen => 1 });
+};
+ok($@ eq '', 'NormalizeISSN does not throw exception when parsing invalid ISSN');
+
+@issns = GetVariationsOfISSNs('abc');
+is(scalar(@issns), 0, 'zero variations returned of invalid ISSN');
 
 1;
