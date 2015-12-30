@@ -32,7 +32,6 @@ use vars qw(@ISA @EXPORT);
 
 @EXPORT = qw(
   &GetCsvProfile
-  &GetCsvProfileId
   &GetMarcFieldsForCsv
 );
 
@@ -47,18 +46,6 @@ sub GetCsvProfile {
     $sth->execute($id);
 
     return ($sth->fetchrow_hashref);
-}
-
-# Returns id of csv profile about a given csv profile name
-sub GetCsvProfileId {
-    my ($name)  = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = "SELECT export_format_id FROM export_format WHERE profile=?";
-
-    $sth = $dbh->prepare($query);
-    $sth->execute($name);
-
-    return ( $sth->fetchrow );
 }
 
 # Returns fields to extract for the given csv profile

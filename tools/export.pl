@@ -193,6 +193,12 @@ if ( $op eq "export" ) {
             -attachment => $filename,
         );
 
+        my $csv_profile_id = $query->param('csv_profile_id');
+        unless ( $csv_profile_id ) {
+            my $default_csv_profile = Koha::CsvProfiles->search({ profile => C4::Context->preference('ExportWithCsvProfile') });
+            $csv_profile_id = $default_csv_profile ? $default_csv_profile->export_format_id : undef;
+        }
+
         Koha::Exporter::Record::export(
             {   record_type        => $record_type,
                 record_ids         => \@record_ids,
@@ -200,7 +206,7 @@ if ( $op eq "export" ) {
                 filename           => $filename,
                 itemnumbers        => \@itemnumbers,
                 dont_export_fields => $export_remove_fields,
-                csv_profile_id     => ( $query->param('csv_profile_id') || GetCsvProfileId( C4::Context->preference('ExportWithCsvProfile') ) || undef ),
+                csv_profile_id     => $csv_profile_id,
                 export_items       => (not $dont_export_items),
             }
         );
@@ -310,7 +316,7 @@ else {
         itemtypeloop             => \@itemtypesloop,
         authority_types          => $authority_types,
         export_remove_fields     => C4::Context->preference("ExportRemoveFields"),
-        csv_profiles             => [ Koha::CsvProfiles->search({ type => 'marc' }),
+        csv_profiles             => [ Koha::CsvProfiles->search({ type => 'marc' }) ],
     );
 
     output_html_with_http_headers $query, $cookie, $template->output;
