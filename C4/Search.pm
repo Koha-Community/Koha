@@ -1530,7 +1530,6 @@ sub buildQuery {
                       #top of the results just because they have lots of item records matching that date.
                     #Fuzzy actually only applies during _build_weighted_query, and is reset there anyway, so
                       #irrelevant here
-                    #remove_stopwords doesn't function anymore so is irrelevant
                     $stemming = $auto_truncation = $weight_fields = $fuzzy_enabled = 0;
                 }
                 # ISBN,ISSN,Standard Number, don't need special treatment
