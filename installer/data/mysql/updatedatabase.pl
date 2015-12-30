@@ -11434,7 +11434,7 @@ if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         DROP TABLE IF EXISTS `stopwords`;
     });
-    print "Upgrade to $DBversion done (Removed obsolete 'stopwords' table)\n";
+    print "Upgrade to $DBversion done (Bug 9819 - stopwords related code should be removed)\n";
     SetVersion($DBversion);
 }
 
