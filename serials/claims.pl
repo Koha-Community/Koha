@@ -27,9 +27,9 @@ use C4::Context;
 use C4::Letters;
 use C4::Branch;    # GetBranches GetBranchesLoop
 use C4::Koha qw( GetAuthorisedValues );
+
 use Koha::AdditionalField;
 use Koha::CsvProfiles;
-use C4::Csv;
 
 my $input = CGI->new;
 

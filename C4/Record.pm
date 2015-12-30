@@ -29,7 +29,6 @@ use MARC::File::XML; # marc2marcxml, marcxml2marc, changeEncoding
 use Biblio::EndnoteStyle;
 use Unicode::Normalize; # _entity_encode
 use C4::Biblio; #marc2bibtex
-use C4::Csv; #marc2csv
 use C4::Koha; #marc2csv
 use C4::XSLT ();
 use YAML; #marcrecords2csv

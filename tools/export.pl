@@ -22,7 +22,6 @@ use MARC::File::XML;
 use List::MoreUtils qw(uniq);
 use C4::Auth;
 use C4::Branch;             # GetBranches
-use C4::Csv;
 use C4::Koha;               # GetItemTypes
 use C4::Output;
 

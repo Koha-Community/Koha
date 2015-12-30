@@ -24,7 +24,6 @@ use Pod::Usage;
 
 use C4::Auth;
 use C4::Context;
-use C4::Csv;
 use C4::Record;
 
 use Koha::Biblioitems;
