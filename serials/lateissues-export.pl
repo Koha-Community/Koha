@@ -22,7 +22,9 @@ use C4::Serials;
 use C4::Acquisition;
 use C4::Output;
 use C4::Context;
-use C4::Csv qw( GetCsvProfile );
+use C4::Csv;
+
+use Koha::CsvProfiles;
 
 use Text::CSV_XS;
 
@@ -32,17 +34,17 @@ my @serialids = $query->multi_param('serialid');
 my $op = $query->param('op') || q{};
 
 my $csv_profile_id = $query->param('csv_profile');
-my $csv_profile = C4::Csv::GetCsvProfile( $csv_profile_id );
+my $csv_profile = Koha::CsvProfiles->find( $csv_profile_id );
 die "There is no valid csv profile given" unless $csv_profile;
 
 my $csv = Text::CSV_XS->new({
     'quote_char'  => '"',
     'escape_char' => '"',
-    'sep_char'    => $csv_profile->{csv_separator},
+    'sep_char'    => $csv_profile->csv_separator,
     'binary'      => 1
 });
 
-my $content = $csv_profile->{content};
+my $content = $csv_profile->content;
 my ( @headers, @fields );
 while ( $content =~ /
     ([^=]+) # header
@@ -75,7 +77,7 @@ print $query->header(
     -attachment => "serials-claims.csv",
 );
 
-print join( $csv_profile->{csv_separator}, @headers ) . "\n";
+print join( $csv_profile->csv_separator, @headers ) . "\n";
 
 for my $row ( @rows ) {
     $csv->combine(@$row);
