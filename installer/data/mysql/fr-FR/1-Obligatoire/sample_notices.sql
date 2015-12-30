@@ -71,7 +71,7 @@ Code à barres : <<items.barcode>><br />
 Retour le : <<issues.date_due>><br />
 </p>
 </checkedout>', 1),
-('circulation','RESERVESLIP','Ticket de réservation','Ticket de réservation', '<h5>Date : <<today>></h5>
+('circulation','HOLD_SLIP','Ticket de réservation','Ticket de réservation', '<h5>Date : <<today>></h5>
 
 <h3> Transfert vers/Réservé à <<branches.branchname>></h3>
 

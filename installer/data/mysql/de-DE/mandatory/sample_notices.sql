@@ -71,7 +71,7 @@ Signatur: <<items.itemcallnumber>><br/>
 Fällig am: <<issues.date_due>><br />
 </p>
 </checkedout>', 1),
-('circulation','RESERVESLIP','Vormerkquittung','Vormerkquittung', '<h2>Vormerkung</h2>
+('circulation','HOLD_SLIP','Vormerkquittung','Vormerkquittung', '<h2>Vormerkung</h2>
 <h4>Abholbereit seit: <<today>></h4>
 <br/>
 Bibliothek: <<branches.branchname>> <br/>

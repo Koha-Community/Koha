@@ -92,7 +92,7 @@ Strekkode: <<items.barcode>><br />
 Innleveringsfrist: <<issues.date_due>><br />
 </p>
 </checkedout>', 1),
-('circulation','RESERVESLIP','Reservasjon','Reservasjon', '<h5>Dato: <<today>></h5>
+('circulation','HOLD_SLIP','Reservasjon','Reservasjon', '<h5>Dato: <<today>></h5>
 
 <h3> Overfør til/Reservasjon hos <<branches.branchname>></h3>
 

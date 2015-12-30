@@ -71,7 +71,7 @@ Codice a barre: <<items.barcode>><br />
 Data di scadenza: <<issues.date_due>><br />
 </p>
 </checkedout>', 1),
-('circulation','RESERVESLIP','Hold Slip','Ricevuta (prenotazione)', '<h5>Data: <<today>></h5>
+('circulation','HOLD_SLIP','Hold Slip','Ricevuta (prenotazione)', '<h5>Data: <<today>></h5>
 
 <h3> Trasferita a/Prenotata in <<branches.branchname>></h3>
 

@@ -1,0 +1,1 @@
+UPDATE letter SET code = "HOLD_SLIP" WHERE code = "RESERVESLIP";

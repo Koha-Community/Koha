@@ -69,7 +69,7 @@ Barcode: <<items.barcode>><br />
 Date due: <<issues.date_due>><br />
 </p>
 </checkedout>', 1),
-('circulation','RESERVESLIP','Hold Slip','Hold Slip', '<h5>Date: <<today>></h5>
+('circulation','HOLD_SLIP','Hold Slip','Hold Slip', '<h5>Date: <<today>></h5>
 
 <h3> Transfer to/Hold in <<branches.branchname>></h3>
 

@@ -2338,7 +2338,7 @@ sub GetReserveId {
 
 Returns letter hash ( see C4::Letters::GetPreparedLetter ) or undef
 
-The letter code will be RESERVESLIP, and the following tables are
+The letter code will be HOLD_SLIP, and the following tables are
 available within the slip:
 
     reserves
@@ -2363,7 +2363,7 @@ sub ReserveSlip {
 
     return  C4::Letters::GetPreparedLetter (
         module => 'circulation',
-        letter_code => 'RESERVESLIP',
+        letter_code => 'HOLD_SLIP',
         branchcode => $branch,
         tables => {
             'reserves'    => $reserve,
