@@ -11429,7 +11429,7 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
-$DBversion = "XXX";
+$DBversion = "3.23.00.004";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         DROP TABLE IF EXISTS `stopwords`;
