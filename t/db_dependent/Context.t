@@ -119,6 +119,11 @@ is($oConnection->option('async'), 1, "ZOOM connection is asynchronous");
 
 $silly_preference->delete();
 
+# AutoEmailOpacUser should be a YesNo pref
+C4::Context->set_preference('AutoEmailOpacUser', '');
+my $yesno_pref = Koha::Config::SysPrefs->find('AutoEmailOpacUser');
+is( $yesno_pref->value(), 0, 'set_preference should have set the value to 0, instead of an empty string' );
+
 done_testing();
 
 sub TransformVersionToNum {
