@@ -17,8 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Serials;
@@ -29,7 +28,8 @@ use C4::Letters;
 use C4::Branch;    # GetBranches GetBranchesLoop
 use C4::Koha qw( GetAuthorisedValues );
 use Koha::AdditionalField;
-use C4::Csv qw( GetCsvProfiles );
+use Koha::CsvProfiles;
+use C4::Csv;
 
 my $input = CGI->new;
 
@@ -107,7 +107,7 @@ $template->param(
         claimletter => $claimletter,
         branchloop   => $branchloop,
         additional_fields_for_subscription => $additional_fields,
-        csv_profiles => C4::Csv::GetCsvProfiles( "sql" ),
+        csv_profiles => [ Koha::CsvProfiles->search({ type => 'sql' }) ],
         letters => $letters,
         (uc(C4::Context->preference("marcflavour"))) => 1
         );

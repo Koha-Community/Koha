@@ -28,6 +28,7 @@ use C4::Output;
 
 use Koha::Authority::Types;
 use Koha::Biblioitems;
+use Koha::CsvProfiles;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Exporter::Record;
@@ -309,7 +310,7 @@ else {
         itemtypeloop             => \@itemtypesloop,
         authority_types          => $authority_types,
         export_remove_fields     => C4::Context->preference("ExportRemoveFields"),
-        csv_profiles             => C4::Csv::GetCsvProfiles('marc'),
+        csv_profiles             => [ Koha::CsvProfiles->search({ type => 'marc' }),
     );
 
     output_html_with_http_headers $query, $cookie, $template->output;

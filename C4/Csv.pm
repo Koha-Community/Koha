@@ -31,28 +31,11 @@ use vars qw(@ISA @EXPORT);
 # only export API methods
 
 @EXPORT = qw(
-  &GetCsvProfiles
   &GetCsvProfile
   &GetCsvProfileId
   &GetMarcFieldsForCsv
 );
 
-
-# Returns all informations about csv profiles
-sub GetCsvProfiles {
-    my ( $type ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query = "SELECT * FROM export_format";
-    if ( $type ) {
-        $query .= " WHERE type = ?";
-    }
-
-    $sth = $dbh->prepare($query);
-    $sth->execute( $type ? $type : () );
-
-    $sth->fetchall_arrayref({});
-
-}
 
 # Returns all informations about a given csv profile
 sub GetCsvProfile {
