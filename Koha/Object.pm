@@ -57,12 +57,12 @@ sub new {
 
     if ($attributes) {
         $self->{_result} =
-          Koha::Database->new()->schema()->resultset( $class->type() )
+          Koha::Database->new()->schema()->resultset( $class->_type() )
           ->new($attributes);
     }
 
-    croak("No type found! Koha::Object must be subclassed!")
-      unless $class->type();
+    croak("No _type found! Koha::Object must be subclassed!")
+      unless $class->_type();
 
     bless( $self, $class );
 
@@ -81,11 +81,11 @@ sub _new_from_dbic {
     # DBIC result row
     $self->{_result} = $dbic_row;
 
-    croak("No type found! Koha::Object must be subclassed!")
-      unless $class->type();
+    croak("No _type found! Koha::Object must be subclassed!")
+      unless $class->_type();
 
-    croak( "DBIC result type " . ref( $self->{_result} ) . " isn't of the type " . $class->type() )
-      unless ref( $self->{_result} ) eq "Koha::Schema::Result::" . $class->type();
+    croak( "DBIC result _type " . ref( $self->{_result} ) . " isn't of the _type " . $class->_type() )
+      unless ref( $self->{_result} ) eq "Koha::Schema::Result::" . $class->_type();
 
     bless( $self, $class );
 
@@ -230,7 +230,7 @@ sub _result {
 
     # If we don't have a dbic row at this point, we need to create an empty one
     $self->{_result} ||=
-      Koha::Database->new()->schema()->resultset( $self->type() )->new({});
+      Koha::Database->new()->schema()->resultset( $self->_type() )->new({});
 
     return $self->{_result};
 }
@@ -279,14 +279,14 @@ sub AUTOLOAD {
     return;
 }
 
-=head3 type
+=head3 _type
 
 This method must be defined in the child class. The value is the name of the DBIC resultset.
-For example, for borrowers, the type method will return "Borrower".
+For example, for borrowers, the _type method will return "Borrower".
 
 =cut
 
-sub type { }
+sub _type { }
 
 sub DESTROY { }
 

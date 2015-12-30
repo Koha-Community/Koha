@@ -58,7 +58,7 @@ sub subtitles {
 
 =cut
 
-sub type {
+sub _type {
     return 'Biblio';
 }
 

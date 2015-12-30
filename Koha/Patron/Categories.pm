@@ -39,7 +39,7 @@ Koha::Patron::Categories - Koha Patron Category Object set class
 
 =cut
 
-sub type {
+sub _type {
     return 'Category';
 }
 

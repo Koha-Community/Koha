@@ -39,7 +39,7 @@ Koha::Virtualshelfshares - Koha Virtualshelfshares Object class
 
 =cut
 
-sub type {
+sub _type {
     return 'Virtualshelfshare';
 }
 

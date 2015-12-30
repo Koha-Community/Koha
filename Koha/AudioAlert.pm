@@ -66,7 +66,7 @@ sub move {
 
 =cut
 
-sub type {
+sub _type {
     return 'AudioAlert';
 }
 

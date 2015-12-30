@@ -111,7 +111,7 @@ sub last_returned_by {
 
 =cut
 
-sub type {
+sub _type {
     return 'Item';
 }
 

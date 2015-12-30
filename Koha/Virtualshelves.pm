@@ -119,7 +119,7 @@ sub get_some_shelves {
     );
 }
 
-sub type {
+sub _type {
     return 'Virtualshelve';
 }
 

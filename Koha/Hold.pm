@@ -251,7 +251,7 @@ sub is_suspended {
 
 =cut
 
-sub type {
+sub _type {
     return 'Reserve';
 }
 

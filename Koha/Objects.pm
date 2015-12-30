@@ -23,8 +23,6 @@ use Carp;
 
 use Koha::Database;
 
-our $type;
-
 =head1 NAME
 
 Koha::Objects - Koha Object set base class
@@ -229,24 +227,24 @@ sub _resultset {
 
     if ( ref($self) ) {
         $self->{_resultset} ||=
-          Koha::Database->new()->schema()->resultset( $self->type() );
+          Koha::Database->new()->schema()->resultset( $self->_type() );
 
         return $self->{_resultset};
     }
     else {
-        return Koha::Database->new()->schema()->resultset( $self->type() );
+        return Koha::Database->new()->schema()->resultset( $self->_type() );
     }
 }
 
-=head3 type
+=head3 _type
 
-The type method must be set for all child classes.
+The _type method must be set for all child classes.
 The value returned by it should be the DBIC resultset name.
-For example, for holds, type should return 'Reserve'.
+For example, for holds, _type should return 'Reserve'.
 
 =cut
 
-sub type { }
+sub _type { }
 
 =head3 object_class
 

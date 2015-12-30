@@ -41,7 +41,7 @@ Koha::Config::SysPrefs - Koha System Preference object set class
 
 =cut
 
-sub type {
+sub _type {
     return 'Systempreference';
 }
 

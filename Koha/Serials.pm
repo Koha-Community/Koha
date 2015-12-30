@@ -41,7 +41,7 @@ Koha::Serial - Koha Serial Object class
 
 =cut
 
-sub type {
+sub _type {
     return 'Serial';
 }
 

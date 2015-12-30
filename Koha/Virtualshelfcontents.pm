@@ -39,7 +39,7 @@ Koha::Virtualshelfcontents - Koha Virtualshelfcontents Object class
 
 =cut
 
-sub type {
+sub _type {
     return 'Virtualshelfcontent';
 }
 

@@ -41,7 +41,7 @@ Koha::Items - Koha Item object set class
 
 =cut
 
-sub type {
+sub _type {
     return 'Item';
 }
 

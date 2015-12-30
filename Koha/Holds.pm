@@ -53,7 +53,7 @@ sub waiting {
 
 =cut
 
-sub type {
+sub _type {
     return 'Reserve';
 }
 

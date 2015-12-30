@@ -67,7 +67,7 @@ sub has_expired {
     return $has_expired == 1 ? 1 : 0
 }
 
-sub type {
+sub _type {
     return 'Virtualshelfshare';
 }
 

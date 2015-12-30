@@ -51,7 +51,7 @@ sub guarantor {
 
 =cut
 
-sub type {
+sub _type {
     return 'Borrower';
 }
 
