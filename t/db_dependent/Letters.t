@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 61;
+use Test::More tests => 62;
 use Test::MockModule;
 use Test::Warn;
 
@@ -291,6 +291,13 @@ $my_content_letter = qq|This is a SMS for an $substitute->{status}|;
 is( $prepared_letter->{content}, $my_content_letter, 'GetPreparedLetter returns the content correctly' );
 
 $dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('claimacquisition','TESTACQCLAIM','Acquisition Claim','Item Not Received','<<aqbooksellers.name>>|<<aqcontacts.name>>|<order>Ordernumber <<aqorders.ordernumber>> (<<biblio.title>>) (<<aqorders.quantity>> ordered)</order>');});
+
+# Test that _parseletter doesn't modify its parameters bug 15429
+{
+    my $values = { dateexpiry => '2015-12-13', };
+    C4::Letters::_parseletter($prepared_letter, 'borrowers', $values);
+    is( $values->{dateexpiry}, '2015-12-13', "_parseletter doesn't modify its parameters" );
+}
 
 my $booksellerid = C4::Bookseller::AddBookseller(
     {
