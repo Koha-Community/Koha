@@ -79,11 +79,11 @@ for ( qw/ 2014-01-01 2100-01-01 9999-01-01 / ) {
     my $duration = gettimeofday();
     $new_dt = dt_from_string($_, 'iso', $dear_dirty_dublin);
     $duration = gettimeofday() - $duration;
-    cmp_ok $duration, '<', 1, "Create DateTime with dt_from_string() for $_ with TZ in less than 1s";
+    cmp_ok $duration, '<', 2, "Create DateTime with dt_from_string() for $_ with TZ in less than 2s";
     $duration = gettimeofday();
     output_pref( { dt => $new_dt } );
     $duration = gettimeofday() - $duration;
-    cmp_ok $duration, '<', 1, "Create DateTime with output_pref() for $_ with TZ in less than 1s";
+    cmp_ok $duration, '<', 2, "Create DateTime with output_pref() for $_ with TZ in less than 2s";
 }
 
 $new_dt = dt_from_string( '2011-06-16 12:00', 'sql' );
