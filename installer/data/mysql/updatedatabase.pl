@@ -11390,7 +11390,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.21.00.XXX";
+$DBversion = "3.23.00.001";
 if(CheckVersion($DBversion)) {
     $dbh->do(q{
         INSERT IGNORE INTO systempreferences ( variable, value, options, explanation, type )
