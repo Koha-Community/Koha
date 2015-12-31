@@ -1396,8 +1396,11 @@ sub GetVariationsOfISSN {
 
     my @issns;
 
-    push( @issns, NormalizeISSN({ issn => $issn }) );
-    push( @issns, NormalizeISSN({ issn => $issn, strip_hyphen => 1 }) );
+    if( NormalizeISSN({issn => $issn}) ){
+        push( @issns, NormalizeISSN({ issn => $issn }) );
+        push( @issns, NormalizeISSN({ issn => $issn, strip_hyphen => 1 }) );
+    }
+    else { push( @issns, $issn) }
 
     # Strip out any "empty" strings from the array
     @issns = grep { defined($_) && $_ =~ /\S/ } @issns;
