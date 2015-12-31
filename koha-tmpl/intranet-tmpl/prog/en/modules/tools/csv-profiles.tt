@@ -2,395 +2,263 @@
 <script type="text/javascript">
 //<![CDATA[
 function reloadPage(p) {
-	var id = p.value;
-	if (id != 0) { document.location = "/cgi-bin/koha/tools/csv-profiles.pl?id=" + id; }
+    var id = p.value;
+    if (id != 0) { document.location = "/cgi-bin/koha/tools/csv-profiles.pl?op=add_form&amp;export_format_id=" + id; }
 }
      $(document).ready(function() {
-        $('#csvexporttabs').tabs();
-
-        $("#profile_type").find("option:first").attr("selected", "selected");
-        $("#csvnew").find("li.marc_specific").show();
-        $("#csvnew").find("li.sql_specific").hide();
-
-        $("#profile_type").change(function(){
+        $("#type").change(function(){
             if ( $(this).find("option:selected").val() == "marc" ) {
-                $("#csvnew li.marc_specific").show();
-                $("#new_profile_marc_content").attr("required", "required");
-                $("#csvnew li.sql_specific").hide();
-                $("#new_profile_sql_content").removeAttr("required");
+                $("li.marc_specific").show();
+                $("#marc_content").attr("required", "required");
+                $("li.sql_specific").hide();
+                $("#sql_content").removeAttr("required");
             } else {
-                $("#csvnew li.marc_specific").hide();
-                $("#new_profile_marc_content").removeAttr("required");
-                $("#csvnew li.sql_specific").show();
-                $("#new_profile_sql_content").attr("required", "required");
+                $("li.marc_specific").hide();
+                $("#marc_content").removeAttr("required");
+                $("li.sql_specific").show();
+                $("#sql_content").attr("required", "required");
             }
         });
-        $("#modify_profile_type").change(function(){
-            if ( $(this).find("option:selected").val() == "marc" ) {
-                $("#csvedit li.marc_specific").show();
-                $("#modify_profile_marc_content").attr("required", "required");
-                $("#csvedit li.sql_specific").hide();
-                $("#modify_profile_sql_content").removeAttr("required");
-            } else {
-                $("#csvedit li.marc_specific").hide();
-                $("#modify_profile_marc_content").removeAttr("required");
-                $("#csvedit li.sql_specific").show();
-                $("#modify_profile_sql_content").attr("required", "required");
-            }
-        });
-        $("#profile_type").change();
-        $("#modify_profile_type").change();
+        $("#type").change();
      });
 //]]>
 </script>
 </head>
 
 <body id="tools_csv-profiles" class="tools">
-	[% INCLUDE 'header.inc' %]
-	[% INCLUDE 'cat-search.inc' %]
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
 
-	<div id="breadcrumbs">
-		<a href="/cgi-bin/koha/mainpage.pl">Home</a>
-		&rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
-		&rsaquo; CSV export profiles
-	</div>
-
-	<div id="doc3" class="yui-t2">
-		<div id="bd">
-			<div id="yui-main">
-				<div class="yui-b">
-				    [% IF ( success || error ) %]
-					    [% IF ( success ) %]
-        [% IF ( action == 'create' ) %]<div class="dialog message">The new CSV profile "[% profile_name %]" has been successfully created.</div>[% END %]
-        [% IF ( action == 'edit' ) %]<div class="dialog message">The CSV profile has been successfully modified.</div>[% END %]
-        [% IF ( action == 'delete' ) %]<div class="dialog message">The CSV profile has been successfully deleted.</div>[% END %]
-                        [% ELSE %]
-        [% IF ( action == 'create' ) %]<div class="dialog alert">The new CSV profile "[% profile_name %]" has not been created.</div>[% END %]
-        [% IF ( action == 'edit' ) %]<div class="dialog alert">The CSV profile has not been modified.</div>[% END %]
-        [% IF ( action == 'delete' ) %]<div class="dialog alert">The CSV profile has not been deleted.</div>[% END %]
-					    [% END %]
-				    [% END %]
-<div id="csvexporttabs" class="toptabs">
-<ul>
-    <li><a href="#csvnew">New profile</a></li>
-	[% IF ( existing_profiles ) %]
-	[% IF ( selected_profile_id ) %]
-    <li class="ui-tabs-active">
-	[% ELSE %]
-	<li>
-	 [% END %]
-    <a href="#csvedit">Edit existing profile</a></li> [% END %]
-</ul>
-	<div id="csvnew">
-					<h3>New CSV export profile</h3>
-
-                        <form action="/cgi-bin/koha/tools/csv-profiles.pl" class="validated" method="post">
-						<fieldset class="rows">
-                          <ol>
-                            <li>
-                                <label for="profile_name" class="required">Profile name: </label>
-                                <input type="text" id="profile_name" name="profile_name" required="required" />
-                                <span class="required">Required</span>
-                            </li>
-
-                            <li>
-                              <label for="profile_type" class="required">Profile type: </label>
-                              <select id="profile_type" name="profile_type">
-                                <option value="marc" selected="selected">MARC</option>
-                                <option value="sql">SQL</option>
-                              </select>
-                              <span class="required">Required</span>
-                            </li>
-
-						    <li><label for="profile_description">Profile description: </label>
-						    <textarea cols="50" rows="2" name="profile_description" id="profile_description"></textarea></li>
-
-						    <li><label for="new_csv_separator">CSV separator: </label>
-						    <select name="csv_separator" id="new_csv_separator">
-							<option value=":">Colon (:)</option>
-							<option value="," selected="selected">Comma (,)</option>
-							<option value="|">Pipe (|)</option>
-							<option value=";">Semi-colon (;)</option>
-							<option value="#">Sharp (#)</option>
-							<option value=" ">Space ( )</option>
-							<option value="\t">Tabulation (\t)</option>
-							<option value="\n">New line (\n)</option>
-						    </select>
-                            </li>
-
-                            <li class="marc_specific"><label for="new_field_separator">Field separator: </label>
-						    <select name="field_separator" id="new_field_separator">
-							<option value=":">Colon (:)</option>
-							<option value=",">Comma (,)</option>
-							<option value="|">Pipe (|)</option>
-							<option value=";">Semi-colon (;)</option>
-							<option value="#" selected="selected">Sharp (#)</option>
-							<option value=" ">Space ( )</option>
-							<option value="\t">Tabulation (\t)</option>
-							<option value="\n">New line (\n)</option>
-						    </select>
-                            </li>
-
-                            <li class="marc_specific"><label for="new_subfield_separator">Subfield separator: </label>
-						    <select name="subfield_separator" id="new_subfield_separator">
-							<option value=":">Colon (:)</option>
-							<option value=",">Comma (,)</option>
-							<option value="|" selected="selected">Pipe (|)</option>
-							<option value=";">Semi-colon (;)</option>
-							<option value="#">Sharp (#)</option>
-							<option value=" ">Space ( )</option>
-							<option value="\t">Tabulation (\t)</option>
-							<option value="\n">New line (\n)</option>
-						    </select>
-                            </li>
-					
-                            <li class="marc_specific"><label for="new_encoding">Encoding: </label>
-						    <select name="encoding" id="new_encoding">
-							[% FOREACH encoding IN encodings %]
-                                [% IF ( encoding.encoding == 'utf8' ) %]
-									<option selected="selected">[% encoding.encoding %]</option>
-								[% ELSE %]
-									<option>[% encoding.encoding %]</option>
-								[% END %]
-							[% END %]
-						    </select></li>
-
-
-                            <li class="marc_specific">
-                                <label for="new_profile_marc_content" class="required">Profile MARC fields: </label>
-                                <textarea cols="50" rows="2" name="profile_marc_content" id="new_profile_marc_content"></textarea>
-                                <span class="required">Required</span>
-						    <p>You have to define which fields or subfields you want to export, separated by pipes.</p>
-                            <p>You can also use your own headers (instead of the ones from Koha) by prefixing the field number with an header, followed by the equal sign.</p>
-						    <p>Example: Personal name=200|Entry element=210$a|300|009</p>
-                            <p>You can use Template Toolkit tags too. See the help page for more information.</p>
-						    </li>
-                            <li class="sql_specific">
-                              <label for="new_profile_sql_content" class="required">Profile SQL fields: </label>
-                              <textarea cols="50" rows="2" name="profile_sql_content" id="new_profile_sql_content"></textarea>
-                              <p>You have to define which fields you want to export, separated by pipes.</p>
-                              <p>You can also use your own headers (instead of the ones from Koha) by prefixing the field name with an header, followed by the equal sign.</p>
-                              <p>Example: Name=subscription.name|Title=subscription.title|Issue number=serial.serialseq</p>
-                            </li>
-						    </ol>
-						</fieldset>
-						<fieldset class="action"><input type="hidden" name="action" value="create" />
-						<input type="submit" value="Submit" /></fieldset>
-					    </form>
-					    <br style="clear:both;" />
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+    &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
+    &rsaquo; CSV export profiles
 </div>
-					[% IF ( existing_profiles ) %]
-<div id="csvedit">
-					<h3>Modify or delete a CSV export profile</h3>
 
-                        <form action="/cgi-bin/koha/tools/csv-profiles.pl" class="validated" method="post">
-						<fieldset class="rows">
-                            <ol>
-                            <li><label for="modify_profile_name" class="required">Profile name: </label>
-                                <select id="modify_profile_name" name="profile_name" required="required" class="required" onchange="reloadPage(this)">
-							<option value="0">-- Choose One --</option>
-							[% FOREACH existing_profile IN existing_profiles %]
-							[% IF ( existing_profile.export_format_id == selected_profile_id ) %]
-							<option value="[% existing_profile.export_format_id %]" selected="selected">[% existing_profile.profile %]</option>
-							[% ELSE %]
-							<option value="[% existing_profile.export_format_id %]">[% existing_profile.profile %]</option>
-							[% END %]
-							[% END %]
-                            </select>
-                            <span class="required">Required</span>
-                            </li>
+<div id="doc3" class="yui-t2">
+   <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
 
-                            <li>
-                              <label for="modify_profile_type" class="required">Profile type: </label>
-                              <select id="modify_profile_type" name="profile_type" class="required" required="required">
-                                <option value="marc">MARC</option>
-                                [% IF selected_profile_type == "sql" %]
-                                  <option value="sql" selected="selected">SQL</option>
-                                [% ELSE %]
-                                  <option value="sql">SQL</option>
-                                [% END %]
-                              </select>
-                                <span class="required">Required</span>
-                            </li>
-
-
-						    <li><label for="modify_profile_description">Profile description: </label>
-						    <textarea cols="50" rows="2" name="profile_description" id="modify_profile_description">[% selected_profile_description %]</textarea></li>
-
-						    <li><label for="csv_separator">CSV separator: </label>
-						    <select name="csv_separator" id="csv_separator">
-								<option value=":">Colon (:)</option>
-								[% IF ( selected_csv_separator == ',' ) %]
-								<option value="," selected="selected">Comma (,)</option>
-								[% ELSE %]
-								<option value=",">Comma (,)</option>
-								[% END %]
-								[% IF ( selected_csv_separator == '|' ) %]
-								<option value="|" selected="selected">Pipe (|)</option>
-								[% ELSE %]
-								<option value="|">Pipe (|)</option>
-								[% END %]
-								[% IF ( selected_csv_separator == ';' ) %]
-								<option value=";" selected="selected">Semi-colon (;)</option>
-								[% ELSE %]
-								<option value=";">Semi-colon (;)</option>
-								[% END %]
-								[% IF ( selected_csv_separator == '#' ) %]
-								<option value="#" selected="selected">Sharp (#)</option>
-								[% ELSE %]
-								<option value="#">Sharp (#)</option>
-								[% END %]
-								[% IF ( selected_csv_separator == ' ' ) %]
-								<option value=" " selected="selected">Space ( )</option>
-								[% ELSE %]
-								<option value=" ">Space ( )</option>
-								[% END %]
-								[% IF ( selected_csv_separator == '\t' ) %]
-								<option value="\t" selected="selected">Tabulation (\t)</option>
-								[% ELSE %]
-								<option value="\t">Tabulation (\t)</option>
-								[% END %]
-						    	[% IF ( selected_csv_separator == '\n' ) %]
-								<option value="\n" selected="selected">New line (\n)</option>
-								[% ELSE %]
-								<option value="\n">New line (\n)</option>
-								[% END %]
-                            </select></li>
-
-                            <li class="marc_specific"><label for="field_separator">Field separator: </label>
-						    <select name="field_separator" id="field_separator">
-                                <option value=":">Colon (:)</option>
-
-                                [% IF ( selected_field_separator == ',' ) %]
-                                <option value="," selected="selected">Comma (,)</option>
-                                [% ELSE %]
-                                <option value=",">Comma (,)</option>
-								[% END %]
-
-                                [% IF ( selected_field_separator == '|' ) %]
-                                <option value="|" selected="selected">Pipe (|)</option>
-                                [% ELSE %]
-                                <option value="|">Pipe (|)</option>
-                                [% END %]
-
-                                [% IF ( selected_field_separator == ';' ) %]
-                                <option value=";" selected="selected">Semi-colon (;)</option>
-                                [% ELSE %]
-                                <option value=";">Semi-colon (;)</option>
-                                [% END %]
-
-                                [% IF ( selected_field_separator == '#' ) %]
-                                <option value="#" selected="selected">Sharp (#)</option>
-                                [% ELSE %]
-                                <option value="#">Sharp (#)</option>
-                                [% END %]
-
-                                [% IF ( selected_field_separator == ' ' ) %]
-                                <option value=" " selected="selected">Space ( )</option>
-                                [% ELSE %]
-                                <option value=" ">Space ( )</option>
-                                [% END %]
-
-                                [% IF ( selected_field_separator == '\t' ) %]
-                                <option value="\t" selected="selected">Tabulation (\t)</option>
-                                [% ELSE %]
-                                <option value="\t">Tabulation (\t)</option>
-                                [% END %]
-						    	[% IF ( selected_field_separator == '\n' ) %]
-								<option value="\n" selected="selected">New line (\n)</option>
-								[% ELSE %]
-								<option value="\n">New line (\n)</option>
-								[% END %]
-						    </select></li>
-
-
-                            <li class="marc_specific"><label for="subfield_separator">Subfield separator: </label>
-						    <select name="subfield_separator" id="subfield_separator">
-                                <option value=":">Colon (:)</option>
-
-                                [% IF ( selected_subfield_separator == ',' ) %]
-                                <option value="," selected="selected">Comma (,)</option>
-                                [% ELSE %]
-                                <option value=",">Comma (,)</option>
-                                [% END %]
-
-                                [% IF ( selected_subfield_separator == '|' ) %]
-                                <option value="|" selected="selected">Pipe (|)</option>
-                                [% ELSE %]
-                                <option value="|">Pipe (|)</option>
-                                [% END %]
-
-								[% IF ( selected_subfield_separator == ';' ) %]
-                                <option value=";" selected="selected">Semi-colon (;)</option>
-                                [% ELSE %]
-                                <option value=";">Semi-colon (;)</option>
-                                [% END %]
-
-								[% IF ( selected_subfield_separator == '#' ) %]
-                                <option value="#" selected="selected">Sharp (#)</option>
-                                [% ELSE %]
-                                <option value="#">Sharp (#)</option>
-                                [% END %]
-
-								[% IF ( selected_subfield_separator == ' ' ) %]
-                                <option value=" " selected="selected">Space ( )</option>
-                                [% ELSE %]
-                                <option value=" ">Space ( )</option>
-                                [% END %]
-
-								[% IF ( selected_subfield_separator == '\t' ) %]
-                                <option value="\t" selected="selected">Tabulation (\t)</option>
-                                [% ELSE %]
-                                <option value="\t">Tabulation (\t)</option>
-                                [% END %]
-						    	[% IF ( selected_subfield_separator == '\n' ) %]
-								<option value="\n" selected="selected">New line (\n)</option>
-								[% ELSE %]
-								<option value="\n">New line (\n)</option>
-                                [% END %]
-	
-						    </select></li>
-
-                            <li class="marc_specific"><label for="encoding">Encoding: </label>
-						    <select name="encoding" id="encoding">
-							[% FOREACH encoding IN encodings %]
-                                [% IF ( selected_encoding == encoding.encoding ) %]
-							    <option selected="selected">[% encoding.encoding %]</option>
-							    [% ELSE %]
-							    <option>[% encoding.encoding %]</option>
-							    [% END %]
-							[% END %]
-						    </select></li>
-
-                            <li class="marc_specific">
-                                <label for="modify_profile_marc_content" class="required">Profile MARC fields: </label>
-                                <textarea cols="50" rows="2" name="profile_marc_content" id="modify_profile_marc_content" class="required" required="required">[% selected_profile_content %]</textarea>
-                                <span class="required">Required</span>
-                            </li>
-
-                            <li class="sql_specific">
-                              <label for="modify_profile_sql_content" class="required">Profile SQL fields: </label>
-                              <textarea cols="50" rows="2" name="profile_sql_content" id="modify_profile_sql_content">[% selected_profile_content %]</textarea>
-                            </li>
-
-						   <li class="radio"> <label for="delete">Delete selected profile?</label>
-						    <input type="checkbox" name="delete" id="delete" /></li>
-						    </ol>
-
-						</fieldset>
-
-						<fieldset class="action"><input type="hidden" name="modify_profile_id" value="[% selected_profile_id %]" />
-						<input type="hidden" name="action" value="edit" />
-						<input type="submit" value="Submit" /> <a href="/cgi-bin/koha/tools/csv-profiles.pl" class="cancel">Cancel</a></fieldset>
-					    </form>
-</div>
-					[% END %]
-
-				</div>
-			</div>
-			</div>
-		    <div class="yui-b noprint">
-        [% INCLUDE 'tools-menu.inc' %]
+[% FOR m IN messages %]
+    <div class="dialog [% m.type %]">
+        [% SWITCH m.code %]
+        [% CASE 'error_on_update' %]
+            An error occurred when updating this CSV profile. Perhaps it already exists.
+        [% CASE 'error_on_insert' %]
+            An error occurred when adding this CSV profile.
+        [% CASE 'error_on_delete' %]
+            An error occurred when deleting this CSV profile. Check the logs.
+        [% CASE 'success_on_update' %]
+            CSV profile updated successfully.
+        [% CASE 'success_on_insert' %]
+            CSV profile added successfully.
+        [% CASE 'success_on_delete' %]
+            CSV profile deleted successfully.
+        [% CASE 'already_exists' %]
+            This CSV profile already exists.
+        [% CASE %]
+            [% m.code %]
+        [% END %]
     </div>
-	</div>
-	[% INCLUDE 'intranet-bottom.inc' %]
+[% END %]
+
+[% BLOCK list_separator_options %]
+    [% IF selected_separator == ',' %]
+        <option value="," selected="selected">Comma (,)</option>
+    [% ELSE %]
+        <option value=",">Comma (,)</option>
+    [% END %]
+    [% IF selected_separator == '|' %]
+        <option value="|" selected="selected">Pipe (|)</option>
+    [% ELSE %]
+        <option value="|">Pipe (|)</option>
+    [% END %]
+    [% IF selected_separator == ';' %]
+        <option value=";" selected="selected">Semi-colon (;)</option>
+    [% ELSE %]
+        <option value=";">Semi-colon (;)</option>
+    [% END %]
+    [% IF selected_separator == '#' %]
+        <option value="#" selected="selected">Sharp (#)</option>
+    [% ELSE %]
+        <option value="#">Sharp (#)</option>
+    [% END %]
+    [% IF selected_separator == ' ' %]
+        <option value=" " selected="selected">Space ( )</option>
+    [% ELSE %]
+        <option value=" ">Space ( )</option>
+    [% END %]
+    [% IF selected_separator == '\t' %]
+        <option value="\t" selected="selected">Tabulation (\t)</option>
+    [% ELSE %]
+        <option value="\t">Tabulation (\t)</option>
+    [% END %]
+    [% IF selected_separator == '\n' %]
+        <option value="\n" selected="selected">New line (\n)</option>
+    [% ELSE %]
+        <option value="\n">New line (\n)</option>
+    [% END %]
+[% END %]
+
+[% IF op == 'add_form' %]
+    [% IF csv_profile %]
+        <h1>Modify a CSV profile</h1>
+    [% ELSE %]
+        <h1>New CSV profile</h1>
+    [% END %]
+
+    <form action="/cgi-bin/koha/tools/csv-profiles.pl" class="validated" method="post">
+        <input type="hidden" name="op" value="add_validate" />
+        <input type="hidden" name="export_format_id" value="[% csv_profile.export_format_id %]" />
+        <fieldset class="rows">
+            <ol>
+                [% IF csv_profile %]
+                    <li><span class="label">Profile ID: </span>[% csv_profile.export_format_id %]</li>
+                [% END %]
+                <li>
+                    <label for="profile" class="required">Profile name: </label>
+                    <input type="text" name="profile" id="profile" value="[% csv_profile.profile %]" class="required">
+                    <span class="required">Required</span>
+                </li>
+                <li>
+                    <label for="type" class="required">Profile type: </label>
+                    <select id="type" name="type">
+                        [% IF csv_profile.type == 'sql' %]
+                            <option value="marc">MARC</option>
+                            <option value="sql" selected="selected">SQL</option>
+                        [% ELSE %]
+                            <option value="marc" selected="selected">MARC</option>
+                            <option value="sql">SQL</option>
+                        [% END %]
+                    </select>
+                    <span class="required">Required</span>
+                </li>
+                <li>
+                    <label for="description">Profile description: </label>
+                    <textarea cols="50" rows="2" name="description" id="description">[% csv_profile.description %]</textarea>
+                </li>
+                <li>
+                    <label for="csv_separator">CSV separator: </label>
+                    <select name="csv_separator" id="csv_separator">
+                        [% PROCESS list_separator_options selected_separator=csv_profile.csv_separator || ',' %]
+                    </select>
+                </li>
+
+                <li class="marc_specific">
+                    <label for="field_separator">Field separator: </label>
+                    <select name="field_separator" id="field_separator">
+                        [% PROCESS list_separator_options selected_separator=csv_profile.field_separator || '#' %]
+                    </select>
+                </li>
+
+                <li class="marc_specific"><label for="subfield_separator">Subfield separator: </label>
+                    <select name="subfield_separator" id="subfield_separator">
+                        [% PROCESS list_separator_options selected_separator=csv_profile.subfield_separator || '|'%]
+                    </select>
+                </li>
+
+                <li class="marc_specific"><label for="encoding">Encoding: </label>
+                    <select name="encoding" id="encoding">
+                        [% FOREACH encoding IN encodings %]
+                            [% IF csv_profile.encoding == encoding
+                                OR NOT csv_profile AND encoding == 'utf8' %]
+                                <option selected="selected">[% encoding %]</option>
+                            [% ELSE %]
+                                <option>[% encoding %]</option>
+                            [% END %]
+                        [% END %]
+                    </select>
+                </li>
+
+                <li class="marc_specific">
+                    <label for="marc_content" class="required">Profile MARC fields: </label>
+                    <textarea cols="50" rows="2" name="marc_content" id="marc_content">[% csv_profile.content %]</textarea>
+                    <span class="required">Required</span>
+                    <p>You have to define which fields or subfields you want to export, separated by pipes.</p>
+                    <p>You can also use your own headers (instead of the ones from Koha) by prefixing the field number with an header, followed by the equal sign.</p>
+                    <p>Example: Personal name=200|Entry element=210$a|300|009</p>
+                    <p>You can use Template Toolkit tags too. See the help page for more information.</p>
+                </li>
+
+                <li class="sql_specific">
+                  <label for="sql_content" class="required">Profile SQL fields: </label>
+                  <textarea cols="50" rows="2" name="sql_content" id="sql_content">[% csv_profile.content %]</textarea>
+                  <p>You have to define which fields you want to export, separated by pipes.</p>
+                  <p>You can also use your own headers (instead of the ones from Koha) by prefixing the field name with an header, followed by the equal sign.</p>
+                  <p>Example: Name=subscription.name|Title=subscription.title|Issue number=serial.serialseq</p>
+                </li>
+            </ol>
+        </fieldset>
+        <fieldset class="action">
+            <input type="submit" value="Submit" />
+            <a class="cancel" href="/cgi-bin/koha/tools/csv-profiles.pl">Cancel</a>
+        </fieldset>
+    </form>
+[% END %]
+
+[% IF op == 'delete_confirm' %]
+    <div class="dialog alert">
+        <h3>Delete CSV Profile "[% csv_profile.profile %]?"</h3>
+        <form action="/cgi-bin/koha/tools/csv-profiles.pl" method="post">
+            <input type="hidden" name="op" value="delete_confirmed" />
+            <input type="hidden" name="export_format_id" value="[% csv_profile.export_format_id %]" />
+            <input type="submit" class="approve" value="Yes, delete" />
+        </form>
+        <form action="/cgi-bin/koha/tools/csv-profiles.pl" method="get">
+            <input type="submit" class="deny" value="No, do not Delete" />
+        </form>
+    </div>
+[% END %]
+
+[% IF op == 'list' %]
+
+    <div id="toolbar" class="btn-toolbar">
+        <a class="btn btn-small" id="newcsvprofile" href="/cgi-bin/koha/tools/csv-profiles.pl?op=add_form"><i class="fa fa-plus"></i> New CSV profile</a>
+    </div>
+
+    <h2>CSV profiles</h2>
+
+    [% IF csv_profiles%]
+        <table id="table_csv_profiles">
+            <thead>
+                <th>CSV profile ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Content</th>
+                <th>CSV separator</th>
+                <th>CSV type</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+            </thead>
+            <tbody>
+                [% FOREACH csv_profile IN csv_profiles %]
+                <tr>
+                    <td>[% csv_profile.export_format_id %]</td>
+                    <td>[% csv_profile.profile %]</td>
+                    <td>[% csv_profile.description %]</td>
+                    <td>[% csv_profile.content %]</td>
+                    <td>[% csv_profile.csv_separator %]</td>
+                    [% IF csv_profile.type == 'sql' %]
+                        <td>SQL</td>
+                    [% ELSE %]
+                        <td>MARC</td>
+                    [% END %]
+                    <td><a href="/cgi-bin/koha/tools/csv-profiles.pl?op=add_form&amp;export_format_id=[% csv_profile.export_format_id %]">Edit</a></td>
+                    <td><a href="/cgi-bin/koha/tools/csv-profiles.pl?op=delete_confirm&amp;export_format_id=[% csv_profile.export_format_id %]">Delete</a></td>
+                </tr>
+                [% END %]
+            </tbody>
+        </table>
+    [% ELSE %]
+        There is no CSV profile defined. <a href="/cgi-bin/koha/tools/csv-profiles.pl?op=add_form">Create a new CSV profile</a>.
+    [% END %]
+[% END %]
+
+</div>
+</div>
+<div class="yui-b noprint">
+[% INCLUDE 'tools-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]
