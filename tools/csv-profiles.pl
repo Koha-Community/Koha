@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2009 BibLibre
+# Copyright 2015 Koha Development Team
 #
 # This file is part of Koha.
 #
@@ -33,9 +34,7 @@ This script allow the user to define a new profile for CSV export
 
 =cut
 
-use strict;
-#use warnings; FIXME - Bug 2505
-use Data::Dumper;
+use Modern::Perl;
 use Encode;
 
 use C4::Auth;
@@ -43,15 +42,15 @@ use C4::Context;
 use C4::Output;
 use CGI qw ( -utf8 );
 use C4::Koha;
-use C4::Csv;
+use Koha::CsvProfiles;
 
-my $input        = new CGI;
-my $dbh          = C4::Context->dbh;
+my $input            = new CGI;
+my $export_format_id = $input->param('export_format_id');
+my $op               = $input->param('op') || 'list';
+my @messages;
 
-# open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {
-        template_name   => "tools/csv-profiles.tt",
+    {   template_name   => "tools/csv-profiles.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
@@ -61,78 +60,87 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 # Getting available encodings list
-my @encodings = Encode->encodings();
-my @encodings_loop = map{{encoding => $_}} @encodings;
-$template->param(encodings => \@encodings_loop);
+$template->param( encodings => [ Encode->encodings ] );
 
-my $profile_name        = $input->param("profile_name");
-my $profile_description = $input->param("profile_description");
-my $csv_separator       = $input->param("csv_separator");
-my $field_separator     = $input->param("field_separator");
-my $subfield_separator  = $input->param("subfield_separator");
-my $encoding            = $input->param("encoding");
-my $type                = $input->param("profile_type");
-my $action              = $input->param("action");
-my $delete              = $input->param("delete");
-my $id                  = $input->param("id");
-if ($delete) { $action = "delete"; }
-
-my $profile_content = $type eq "marc"
-    ? $input->param("profile_marc_content")
-    : $input->param("profile_sql_content");
-
-if ($profile_name && $profile_content && $action) {
-    my $rows;
-
-    if ($action eq "create") {
-    my $query = "INSERT INTO export_format(export_format_id, profile, description, content, csv_separator, field_separator, subfield_separator, encoding, type) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)";
-	my $sth   = $dbh->prepare($query);
-    $rows  = $sth->execute($profile_name, $profile_description, $profile_content, $csv_separator, $field_separator, $subfield_separator, $encoding, $type);
-    
+if ( $op eq 'add_form' ) {
+    my $csv_profile;
+    if ($export_format_id) {
+        $csv_profile = Koha::CsvProfiles->find($export_format_id);
     }
+    $template->param( csv_profile => $csv_profile, );
+} elsif ( $op eq 'add_validate' ) {
+    my $profile     = $input->param("profile");
+    my $description = $input->param("description");
+    my $type        = $input->param("type");
+    my $content =
+        $type eq "marc"
+      ? $input->param("marc_content")
+      : $input->param("sql_content");
+    my $csv_separator      = $input->param("csv_separator");
+    my $field_separator    = $input->param("field_separator");
+    my $subfield_separator = $input->param("subfield_separator");
+    my $encoding           = $input->param("encoding");
 
-    if ($action eq "edit") {
-    my $query = "UPDATE export_format SET description=?, content=?, csv_separator=?, field_separator=?, subfield_separator=?, encoding=?, type=? WHERE export_format_id=? LIMIT 1";
-	my $sth   = $dbh->prepare($query);
-    $rows  = $sth->execute($profile_description, $profile_content, $csv_separator, $field_separator, $subfield_separator, $encoding, $type, $profile_name);
+    if ($export_format_id) {
+        my $csv_profile = Koha::CsvProfiles->find($export_format_id);
+        $csv_profile->profile($profile);
+        $csv_profile->description($description);
+        $csv_profile->content($content);
+        $csv_profile->csv_separator($csv_separator);
+        $csv_profile->field_separator($field_separator);
+        $csv_profile->subfield_separator($subfield_separator);
+        $csv_profile->encoding($encoding);
+        $csv_profile->type($type);
+        eval { $csv_profile->store; };
+
+        if ($@) {
+            push @messages, { type => 'error', code => 'error_on_update' };
+        } else {
+            push @messages, { type => 'message', code => 'success_on_update' };
+        }
+    } else {
+        my $csv_profile = Koha::CsvProfile->new(
+            {   profile            => $profile,
+                description        => $description,
+                content            => $content,
+                csv_separator      => $csv_separator,
+                field_separator    => $field_separator,
+                subfield_separator => $subfield_separator,
+                encoding           => $encoding,
+                type               => $type,
+            }
+        );
+        eval { $csv_profile->store; };
+        if ($@) {
+            push @messages, { type => 'error', code => 'error_on_insert' };
+        } else {
+            push @messages, { type => 'message', code => 'success_on_insert' };
+        }
     }
+    $op = 'list';
+} elsif ( $op eq 'delete_confirm' ) {
+    my $csv_profile = Koha::CsvProfiles->find($export_format_id);
+    $template->param( csv_profile => $csv_profile, );
+} elsif ( $op eq 'delete_confirmed' ) {
+    my $csv_profile = Koha::CsvProfiles->find($export_format_id);
+    my $deleted = eval { $csv_profile->delete; };
 
-    if ($action eq "delete") {
-	my $query = "DELETE FROM export_format WHERE export_format_id=? LIMIT 1";
-	my $sth   = $dbh->prepare($query);
-	$rows  = $sth->execute($profile_name);
-
+    if ( $@ or not $deleted ) {
+        push @messages, { type => 'error', code => 'error_on_delete' };
+    } else {
+        push @messages, { type => 'message', code => 'success_on_delete' };
     }
-
-    $rows ? $template->param(success => 1) : $template->param(error => 1);
-    $template->param(profile_name => $profile_name);
-    $template->param(action => $action);
-
+    $op = 'list';
 }
 
-    # If a profile has been selected for modification
-    if ($id) {
-    my $query = "SELECT export_format_id, profile, description, content, csv_separator, field_separator, subfield_separator, encoding, type FROM export_format WHERE export_format_id = ?";
-	my $sth;
-	$sth = $dbh->prepare($query);
+if ( $op eq 'list' ) {
+    my $csv_profiles = Koha::CsvProfiles->search;
+    $template->param( csv_profiles => $csv_profiles, );
+}
 
-	$sth->execute($id);
-	my $selected_profile = $sth->fetchrow_arrayref();
-	$template->param(
-	    selected_profile_id          => $selected_profile->[0],
-	    selected_profile_name        => $selected_profile->[1],
-	    selected_profile_description => $selected_profile->[2],
-        selected_profile_content     => $selected_profile->[3],
-	    selected_csv_separator       => $selected_profile->[4],
-	    selected_field_separator     => $selected_profile->[5],
-	    selected_subfield_separator  => $selected_profile->[6],
-        selected_encoding            => $selected_profile->[7],
-        selected_profile_type        => $selected_profile->[8]
-	);
-
-    }
-
-    # List of existing profiles
-    $template->param(existing_profiles => GetCsvProfilesLoop());
+$template->param(
+    messages => \@messages,
+    op       => $op,
+);
 
 output_html_with_http_headers $input, $cookie, $template->output;
