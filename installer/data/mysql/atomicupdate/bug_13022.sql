@@ -1,1 +1,0 @@
-INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('MaxSearchResultsItemsPerRecordStatusCheck','20','Max number of items per record for which to check transit and hold status','','Integer');
