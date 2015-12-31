@@ -11642,6 +11642,21 @@ if ( CheckVersion($DBversion) ) {
   CONSTRAINT `items_last_borrower_ibfk_1` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
     });
+
+    print "Upgrade to $DBversion done (Bug 14945 - Add the ability to store the last patron to return an item)\n";
+    SetVersion($DBversion);
+
+}
+
+$DBversion = "3.23.00.014";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+	INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` )
+VALUES ('ClaimsBccCopy','0','','Bcc the ClaimAcquisition and ClaimIssues alerts','YesNo')
+    });
+
+    print "Upgrade to $DBversion done (Bug 10076 - Add Bcc syspref for claimacquisition and clamissues)\n";
+    SetVersion($DBversion);
 }
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
