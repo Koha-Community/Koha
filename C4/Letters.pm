@@ -787,7 +787,7 @@ sub _parseletter {
 
     # Work on a local copy of $values_in (passed by reference) to avoid side effects
     # in callers ( by changing / formatting values )
-    my $values = { %$values_in };
+    my $values = $values_in ? { %$values_in } : {};
 
     if ( $table eq 'reserves' && $values->{'waitingdate'} ) {
         my @waitingdate = split /-/, $values->{'waitingdate'};
