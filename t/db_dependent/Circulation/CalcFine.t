@@ -85,13 +85,13 @@ subtest 'Test basic functionality' => sub {
 
     my $start_dt = DateTime->new(
         year       => 2000,
-        month      => 01,
-        day        => 01,
+        month      => 1,
+        day        => 1,
     );
 
     my $end_dt = DateTime->new(
         year       => 2000,
-        month      => 01,
+        month      => 1,
         day        => 30,
     );
 
@@ -124,13 +124,13 @@ subtest 'Test cap_fine_to_replacement_price' => sub {
 
     my $start_dt = DateTime->new(
         year       => 2000,
-        month      => 01,
-        day        => 01,
+        month      => 1,
+        day        => 1,
     );
 
     my $end_dt = DateTime->new(
         year       => 2000,
-        month      => 01,
+        month      => 1,
         day        => 30,
     );
 
