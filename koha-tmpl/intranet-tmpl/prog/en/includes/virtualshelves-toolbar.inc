@@ -43,11 +43,11 @@
         <div class="btn-group">
             <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download"></i> Download list <span class="caret"></span></button>
                 <ul class="dropdown-menu">
-                    <li><a href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=iso2709&amp;shelfid=[% shelfnumber %]">iso2709</a></li>
-                    <li><a href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=ris&amp;shelfid=[% shelfnumber %]">RIS</a></li>
-                    <li><a href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=bibtex&amp;shelfid=[% shelfnumber %]">BibTex</a></li>
+                    <li><a href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=iso2709&amp;shelfid=[% shelf.shelfnumber %]">iso2709</a></li>
+                    <li><a href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=ris&amp;shelfid=[% shelf.shelfnumber %]">RIS</a></li>
+                    <li><a href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=bibtex&amp;shelfid=[% shelf.shelfnumber %]">BibTex</a></li>
                     [% FOREACH csv_profile IN csv_profiles %]
-                        <li><a href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=[% csv_profile.export_format_id %]&amp;shelfid=[% shelfnumber %]">CSV - [% csv_profile.profile %]</a></li>
+                        <li><a href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=[% csv_profile.export_format_id %]&amp;shelfid=[% shelf.shelfnumber %]">CSV - [% csv_profile.profile %]</a></li>
                     [% END %]
                 </ul>
         </div>
