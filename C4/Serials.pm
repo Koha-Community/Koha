@@ -32,7 +32,9 @@ use C4::Serials::Frequency;
 use C4::Serials::Numberpattern;
 use Koha::AdditionalField;
 use Koha::DateUtils;
-use Koha::Database;
+use Koha::Serial;
+use Koha::Subscriptions;
+use Koha::Subscription::Histories;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -1447,8 +1449,7 @@ sub NewSubscription {
     # calculate issue number
     my $serialseq = GetSeq($subscription, $pattern) || q{};
 
-    my $serial_rs = Koha::Database->new()->schema()->resultset('Serial');
-    $serial_rs->create(
+    Koha::Serial->new(
         {
             serialseq      => $serialseq,
             serialseq_x    => $subscription->{'lastvalue1'},
@@ -1460,7 +1461,7 @@ sub NewSubscription {
             planneddate    => $firstacquidate,
             publisheddate  => $firstacquidate,
         }
-    );
+    )->store();
 
     logaction( "SERIAL", "ADD", $subscriptionid, "" ) if C4::Context->preference("SubscriptionLog");
 
@@ -1560,27 +1561,27 @@ sub NewIssue {
 
     my $schema = Koha::Database->new()->schema();
 
-    my $subscription = $schema->resultset('Subscription')->find( $subscriptionid );
+    my $subscription = Koha::Subscriptions->find( $subscriptionid );
 
-    my $serial = $schema->resultset('Serial')->create(
+    my $serial = Koha::Serial->new(
         {
-            serialseq      => $serialseq,
-            serialseq_x    => $subscription->lastvalue1(),
-            serialseq_y    => $subscription->lastvalue2(),
-            serialseq_z    => $subscription->lastvalue3(),
-            subscriptionid => $subscriptionid,
-            biblionumber   => $biblionumber,
-            status         => $status,
-            planneddate    => $planneddate,
-            publisheddate  => $publisheddate,
+            serialseq         => $serialseq,
+            serialseq_x       => $subscription->lastvalue1(),
+            serialseq_y       => $subscription->lastvalue2(),
+            serialseq_z       => $subscription->lastvalue3(),
+            subscriptionid    => $subscriptionid,
+            biblionumber      => $biblionumber,
+            status            => $status,
+            planneddate       => $planneddate,
+            publisheddate     => $publisheddate,
             publisheddatetext => $publisheddatetext,
-            notes => $notes,
+            notes             => $notes,
         }
-    );
+    )->store();
 
     my $serialid = $serial->id();
 
-    my $subscription_history = $schema->resultset('Subscriptionhistory')->find($subscriptionid);
+    my $subscription_history = Koha::Subscription::Histories->find($subscriptionid);
     my $missinglist = $subscription_history->missinglist();
     my $recievedlist = $subscription_history->recievedlist();
 
