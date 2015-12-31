@@ -17,8 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use Encode qw(encode);
@@ -30,6 +29,9 @@ use C4::Output;
 use C4::Record;
 use C4::Ris;
 use C4::Csv;
+
+use Koha::CsvProfiles;
+
 use utf8;
 my $query = new CGI;
 
@@ -89,7 +91,7 @@ if ($bib_list && $format) {
     print $output;
 
 } else { 
-    $template->param(csv_profiles => GetCsvProfilesLoop('marc'));
+    $template->param(csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc' }) ]);
     $template->param(bib_list => $bib_list); 
     output_html_with_http_headers $query, $cookie, $template->output;
 }

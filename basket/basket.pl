@@ -16,15 +16,15 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 
-use strict;
-use warnings;
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Koha;
 use C4::Biblio;
 use C4::Items;
 use C4::Auth;
 use C4::Output;
-use C4::Csv;
+
+use Koha::CsvProfiles;
 
 my $query = new CGI;
 
@@ -121,7 +121,7 @@ my $resultsarray = \@results;
 
 $template->param(
     BIBLIO_RESULTS => $resultsarray,
-    csv_profiles => GetCsvProfilesLoop('marc'),
+    csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc' }) ],
     bib_list => $bib_list,
 );
 
