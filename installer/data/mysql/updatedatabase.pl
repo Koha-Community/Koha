@@ -11593,6 +11593,18 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 11622 - Add ability to pay fees and fines from OPAC via PayPal)\n";
     SetVersion($DBversion);
 }
+
+$DBversion = "3.23.00.010";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        ALTER TABLE issuingrules ADD cap_fine_to_replacement_price BOOLEAN NOT NULL DEFAULT '0' AFTER overduefinescap
+    });
+
+    print "Upgrade to $DBversion done (Bug 9129 - Add the ability to set the maximum fine for an item to its replacement price)\n";
+    SetVersion($DBversion);
+}
+
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
