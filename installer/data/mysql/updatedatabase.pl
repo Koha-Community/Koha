@@ -11449,7 +11449,7 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 11569 - Typo in userpermissions.sql)\n";
     SetVersion($DBversion);
 }
-$DBversion = "XXX";
+$DBversion = "3.23.00.006";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
    $dbh->do("
        ALTER TABLE serial
