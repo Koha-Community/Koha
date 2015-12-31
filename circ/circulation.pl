@@ -270,7 +270,7 @@ if ($findborrower) {
 
 # get the borrower information.....
 if ($borrowernumber) {
-    $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
+    $borrower = GetMemberDetails( $borrowernumber, 0 );
     my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrowernumber );
 
     # Warningdate is the date that the warning starts appearing
