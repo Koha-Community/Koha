@@ -281,7 +281,6 @@ my $reserves = Koha::Holds->search( { borrowernumber => $borrowernumber } );
 $template->param(
     RESERVES       => $reserves,
     showpriority   => $show_priority,
-    WAITING        => $reserves->waiting()
 );
 
 # current alert subscriptions

@@ -116,7 +116,6 @@
                                 [% IF ( BORROWER_INF.amountoverzero ) %]<li><a href="#opac-user-fines">Fines ([% BORROWER_INF.amountoutstanding %])</a></li>[% END %]
                                 [% IF ( BORROWER_INF.amountlessthanzero ) %]<li><a href="#opac-user-fines">Credits ([% BORROWER_INF.amountoutstanding %])</a></li>[% END %]
                             [% END %]
-                            [% IF ( waiting_count ) %][% IF ( BORROWER_INF.atdestination ) %]<li><a href="#opac-user-waiting">Waiting ([% waiting_count %])</a></li>[% END %][% END %]
                             [% IF ( RESERVES.count ) %]<li><a href="#opac-user-holds">Holds ([% RESERVES.count %])</a></li>[% END %]
                         </ul>
 
@@ -332,46 +331,6 @@
                                 </div>
                             [% END %]
                         [% END # / OPACFinesTab %]
-
-                        [% IF ( waiting_count && atdestination ) %]
-                            <div id="opac-user-waiting">
-                                <table id="waitingt" class="table table-bordered table-striped">
-                                    <caption>Holds waiting</caption>
-                                    <thead>
-                                        <tr>
-                                            <th class="anti-the">Title</th>
-                                            <th>Hold date</th>
-                                            <th>Pick up library</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        [% FOREACH WAITIN IN WAITING %]
-                                            <tr>
-                                                <td><img src="[% themelang %]/images/[% WAITIN.itemtype %].gif" alt="[% WAITIN.itemtype %]" title="[% WAITIN.itemtype %]" /></td>
-                                                <td>
-                                                    <a class="title" href="opac-detail.pl?biblionumber=[% WAITIN.biblionumber %]">
-                                                        [% WAITIN.waiting_title %] [% FOREACH subtitl IN WAITIN.subtitle %] [% subtitl.subfield %][% END %]
-                                                    </a>
-                                                    <span class="item-details">
-                                                        [% WAITIN.author %]
-                                                    </span></td>
-                                                <td>
-                                                    <span class="tdlabel">Hold date:</span>
-                                                    [% WAITIN.reservedate | $KohaDates %]</td>
-                                                <td>
-                                                    [% IF ( WAITIN.atdestination ) %]
-                                                        <strong>Waiting</strong> at [% WAITIN.branch %]
-                                                    [% ELSE %]
-                                                        In transit from [% WAITIN.holdingbranch %] to [% WAITIN.branch %]
-                                                    [% END %]
-                                                </td>
-                                            </tr>
-                                        [% END %]
-                                    </tbody>
-                                </table>
-                            </div> <!-- /#opac-user-waiting -->
-                        [% END # waiting_count && atdestination %]
-
 
                         [% IF ( overdues_count ) %]
                             <div id="opac-user-overdues">
