@@ -11556,6 +11556,28 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.23.00.008";
+if ( CheckVersion($DBversion) ) {
+
+    $dbh->do(q{ALTER TABLE borrowers ADD privacy_guarantor_checkouts BOOLEAN NOT NULL DEFAULT '0' AFTER privacy});
+
+    $dbh->do(q{ALTER TABLE deletedborrowers ADD privacy_guarantor_checkouts BOOLEAN NOT NULL DEFAULT '0' AFTER privacy});
+
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type )
+        VALUES (
+            'AllowStaffToSetCheckoutsVisibilityForGuarantor',  '0', NULL,
+            'If enabled, library staff can set a patron''s checkouts to be visible to linked patrons from the opac.',  'YesNo'
+        ), (
+            'AllowPatronToSetCheckoutsVisibilityForGuarantor',  '0', NULL,
+            'If enabled, the patron can set checkouts to be visible to  his or her guarantor',  'YesNo'
+        )
+    });
+
+    print "Upgrade to $DBversion done (Bug 9303 - relative's checkouts in the opac)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
