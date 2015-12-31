@@ -389,6 +389,12 @@ __PACKAGE__->table("borrowers");
   is_nullable: 1
   size: 50
 
+=head2 sms_provider_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
 =head2 privacy
 
   data_type: 'integer'
@@ -564,6 +570,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "smsalertnumber",
   { data_type => "varchar", is_nullable => 1, size => 50 },
+  "sms_provider_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "privacy",
   { data_type => "integer", default_value => 1, is_nullable => 0 },
   "privacy_guarantor_checkouts",
@@ -1030,6 +1038,26 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 sms_provider
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::SmsProvider>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "sms_provider",
+  "Koha::Schema::Result::SmsProvider",
+  { id => "sms_provider_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "RESTRICT",
+    on_update     => "RESTRICT",
+  },
+);
+
 =head2 subscriptionroutinglists
 
 Type: has_many
@@ -1176,8 +1204,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-01-06 11:59:52
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0nIBbkzhb+Yfp6qpSLo51A
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-12-31 16:48:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dd1tdtsFTruFwsmCZU6ogQ
 
 __PACKAGE__->belongs_to(
     "guarantor",
