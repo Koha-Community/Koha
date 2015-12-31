@@ -27,6 +27,8 @@ use C4::Items;
 use C4::Members;
 use C4::Output;
 use C4::XSLT;
+
+use Koha::CsvProfiles;
 use Koha::Virtualshelves;
 
 my $query = new CGI;
@@ -309,7 +311,7 @@ $template->param(
     messages => \@messages,
     category => $category,
     print    => scalar $query->param('print') || 0,
-    csv_profiles => GetCsvProfilesLoop('marc'),
+    csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc' }) ],
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
