@@ -1,5 +1,3 @@
-truncate message_attributes;
-
 insert into `message_attributes`
 (`message_attribute_id`, message_name, `takes_days`)
 values
