@@ -812,14 +812,16 @@ sub CanBookBeIssued {
         ModDateLastSeen( $item->{'itemnumber'} );
         return( { STATS => 1 }, {});
     }
-    if ( $borrower->{flags}->{GNA} ) {
-        $issuingimpossible{GNA} = 1;
-    }
-    if ( $borrower->{flags}->{'LOST'} ) {
-        $issuingimpossible{CARD_LOST} = 1;
-    }
-    if ( $borrower->{flags}->{'DBARRED'} ) {
-        $issuingimpossible{DEBARRED} = 1;
+    if ( ref $borrower->{flags} ) {
+        if ( $borrower->{flags}->{GNA} ) {
+            $issuingimpossible{GNA} = 1;
+        }
+        if ( $borrower->{flags}->{'LOST'} ) {
+            $issuingimpossible{CARD_LOST} = 1;
+        }
+        if ( $borrower->{flags}->{'DBARRED'} ) {
+            $issuingimpossible{DEBARRED} = 1;
+        }
     }
     if ( !defined $borrower->{dateexpiry} || $borrower->{'dateexpiry'} eq '0000-00-00') {
         $issuingimpossible{EXPIRED} = 1;
