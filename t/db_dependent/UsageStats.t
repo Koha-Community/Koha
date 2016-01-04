@@ -335,7 +335,7 @@ sub mocking_systempreferences_to_a_set_value {
         OrderPdfFormat
         casAuthentication
         casLogout
-        AllowPkiAuth
+        AllowPKIAuth
         DebugLevel
         delimiter
         noItemTypeImages
@@ -576,6 +576,7 @@ sub mocking_systempreferences_to_a_set_value {
         ILS-DI
         OAI-PMH
         version
+        AudioAlerts
         /
       ) {
         t::lib::Mocks::mock_preference( $_, $set_value );
