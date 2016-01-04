@@ -709,6 +709,7 @@
                     <xsl:call-template name="subfieldSelectSpan">
                         <xsl:with-param name="codes">a</xsl:with-param>
                     </xsl:call-template>
+                    <xsl:if test="position()!=last()"><span class="separator"><xsl:text> | </xsl:text></span></xsl:if>
                 </xsl:for-each>
             </div>
         </xsl:if>
