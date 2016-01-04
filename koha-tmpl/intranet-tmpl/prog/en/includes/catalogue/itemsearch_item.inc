@@ -5,7 +5,7 @@
 <tr>
   <td>
     <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber %]" title="Go to record detail page">[% biblio.title %]</a>
-    [% IF ( Koha.Preference( 'marcflavour' ) == 'UNIMARC' && biblio.author ) %] by[% END %] [% biblio.author |html %]
+    [% IF ( Koha.Preference( 'marcflavour' ) == 'UNIMARC' && biblio.author ) %] by[% END %] [% biblio.author %]
   </td>
   <td>[% biblioitem.publicationyear || biblio.copyrightdate %]</td>
   <td>[% biblioitem.publishercode %]</td>
