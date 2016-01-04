@@ -11651,11 +11651,21 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.23.00.014";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
-	INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` )
+        INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` )
 VALUES ('ClaimsBccCopy','0','','Bcc the ClaimAcquisition and ClaimIssues alerts','YesNo')
     });
 
     print "Upgrade to $DBversion done (Bug 10076 - Add Bcc syspref for claimacquisition and clamissues)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.23.00.015";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        UPDATE letter SET code = "HOLD_SLIP" WHERE code = "RESERVESLIP";
+    });
+
+    print "Upgrade to $DBversion done (Bug 15443 - Re-code RESERVESLIP as HOLD_SLIP)\n";
     SetVersion($DBversion);
 }
 
