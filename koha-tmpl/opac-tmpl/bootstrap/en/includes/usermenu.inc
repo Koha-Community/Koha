@@ -77,7 +77,7 @@
             [% END %]
 
             [% IF ( EnhancedMessagingPreferences ) %]
-                [% IF Koha.Preference( 'OPACEnhancedMessagingPreferences' ) %]
+                [% IF Koha.Preference( 'EnhancedMessagingPreferencesOPAC' ) %]
                     [% IF ( messagingview ) %]
                         <li class="active">
                     [% ELSE %]
