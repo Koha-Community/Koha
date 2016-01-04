@@ -35,6 +35,12 @@ use Koha::SMS::Providers;
 
 my $query = CGI->new();
 
+unless ( C4::Context->preference('EnhancedMessagingPreferencesOPAC') and
+         C4::Context->preference('EnhancedMessagingPreferences') ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
+
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => 'opac-messaging.tt',
