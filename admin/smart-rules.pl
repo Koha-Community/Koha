@@ -440,6 +440,7 @@ while (my $data=$sth->fetchrow_hashref){
 $sth->finish;
 my @row_loop;
 my @itemtypes = @{ GetItemTypes( style => 'array' ) };
+@itemtypes = sort { lc $a->{translated_description} cmp lc $b->{translated_description} } @itemtypes;
 
 my $sth2 = $dbh->prepare("
     SELECT  issuingrules.*,
@@ -543,7 +544,7 @@ my @branch_item_rules = ();
 while (my $row = $sth_branch_item->fetchrow_hashref) {
     push @branch_item_rules, $row;
 }
-my @sorted_branch_item_rules = sort { $a->{translated_description} cmp $b->{translated_description} } @branch_item_rules;
+my @sorted_branch_item_rules = sort { lc $a->{translated_description} cmp lc $b->{translated_description} } @branch_item_rules;
 
 # note undef holdallowed so that template can deal with them
 foreach my $entry (@sorted_branch_item_rules) {
@@ -622,6 +623,6 @@ sub by_itemtype {
     } elsif ($b->{'default_translated_description'}) {
         return -1;
     } else {
-        return $a->{'translated_description'} cmp $b->{'translated_description'};
+        return lc $a->{'translated_description'} cmp lc $b->{'translated_description'};
     }
 }
