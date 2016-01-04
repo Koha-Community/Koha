@@ -142,7 +142,7 @@ our $PERL_DEPS = {
     'Locale::PO' => {
         'usage'    => 'Core',
         'required' => '1',
-        'min_ver'  => '0.17'
+        'min_ver'  => '0.24'
     },
     'LWP::Simple' => {
         'usage'    => 'Core',

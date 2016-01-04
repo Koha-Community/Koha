@@ -22,6 +22,14 @@
 [% INCLUDE intranetstylesheet.inc %]
 [% IF ( bidi ) %][% Asset.css("css/right-to-left.css") | $raw %][% END %]
 
+<script>
+var Koha = {};
+</script>
+
+<script src="[% themelang %]/js/locale_data.js"></script>
+<script src="[% interface %]/js/Gettext.js"></script>
+<script src="[% interface %]/js/i18n.js"></script>
+
 [% IF ( login ) %]
     [% Asset.css("css/login.css") | $raw %]
 [% END %]

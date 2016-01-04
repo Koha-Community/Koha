@@ -81,6 +81,7 @@ sub new {
     $self->{msginit}         = `which msginit`;
     $self->{xgettext}        = `which xgettext`;
     $self->{sed}             = `which sed`;
+    $self->{po2json}         = "$Bin/po2json";
     chomp $self->{cp};
     chomp $self->{msgmerge};
     chomp $self->{msgfmt};
@@ -486,8 +487,10 @@ sub create_messages {
 
     my $pot = "$Bin/$self->{domain}.pot";
     my $po = "$self->{path_po}/$self->{lang}-messages.po";
+    my $js_pot = "$self->{domain}-js.pot";
+    my $js_po = "$self->{path_po}/$self->{lang}-messages-js.po";
 
-    unless ( -f $pot ) {
+    unless ( -f $pot && -f $js_pot ) {
         $self->extract_messages();
     }
 
@@ -495,10 +498,13 @@ sub create_messages {
     my $locale = $self->locale_name();
     system "$self->{msginit} -i $pot -o $po -l $locale --no-translator 2> /dev/null";
     warn "Problems creating $pot ".$? if ( $? == -1 );
+    system "$self->{msginit} -i $js_pot -o $js_po -l $locale --no-translator 2> /dev/null";
+    warn "Problems creating $js_pot ".$? if ( $? == -1 );
 
     # If msginit failed to correctly set Plural-Forms, set a default one
-    system "$self->{sed} --in-place $po "
-        . "--expression='s/Plural-Forms: nplurals=INTEGER; plural=EXPRESSION/Plural-Forms: nplurals=2; plural=(n != 1)/'";
+    system "$self->{sed} --in-place "
+        . "--expression='s/Plural-Forms: nplurals=INTEGER; plural=EXPRESSION/Plural-Forms: nplurals=2; plural=(n != 1)/' "
+        . "$po $js_po";
 }
 
 sub update_messages {
@@ -506,14 +512,17 @@ sub update_messages {
 
     my $pot = "$Bin/$self->{domain}.pot";
     my $po = "$self->{path_po}/$self->{lang}-messages.po";
+    my $js_pot = "$self->{domain}-js.pot";
+    my $js_po = "$self->{path_po}/$self->{lang}-messages-js.po";
 
-    unless ( -f $pot ) {
+    unless ( -f $pot && -f $js_pot ) {
         $self->extract_messages();
     }
 
-    if ( -f $po ) {
+    if ( -f $po && -f $js_pot ) {
         say "Update messages ($self->{lang})" if $self->{verbose};
         system "$self->{msgmerge} --backup=off --quiet -U $po $pot";
+        system "$self->{msgmerge} --backup=off --quiet -U $js_po $js_pot";
     } else {
         $self->create_messages();
     }
@@ -674,11 +683,12 @@ sub extract_messages {
 
     push @files_to_scan, @tt_files;
 
-    my $xgettext_cmd = "$self->{xgettext} --force-po -L Perl --from-code=UTF-8 "
+    my $xgettext_common_args = "--force-po --from-code=UTF-8 "
         . "--package-name=Koha --package-version='' "
         . "-k -k__ -k__x -k__n:1,2 -k__nx:1,2 -k__xn:1,2 -k__p:1c,2 "
         . "-k__px:1c,2 -k__np:1c,2,3 -k__npx:1c,2,3 -kN__ -kN__n:1,2 "
-        . "-kN__p:1c,2 -kN__np:1c,2,3 "
+        . "-kN__p:1c,2 -kN__np:1c,2,3 ";
+    my $xgettext_cmd = "$self->{xgettext} -L Perl $xgettext_common_args "
         . "-o $Bin/$self->{domain}.pot -D $tempdir -D $basedir";
     $xgettext_cmd .= " $_" foreach (@files_to_scan);
 
@@ -686,9 +696,31 @@ sub extract_messages {
         die "system call failed: $xgettext_cmd";
     }
 
+    my @js_dirs = (
+        "$intranetdir/koha-tmpl/intranet-tmpl/prog/js",
+        "$intranetdir/koha-tmpl/opac-tmpl/bootstrap/js",
+    );
+
+    my @js_files;
+    find(sub {
+        if ($_ =~ m/\.js$/) {
+            my $filename = $File::Find::name;
+            $filename =~ s|^$intranetdir/||;
+            push @js_files, $filename;
+        }
+    }, @js_dirs);
+
+    $xgettext_cmd = "$self->{xgettext} -L JavaScript $xgettext_common_args "
+        . "-o $Bin/$self->{domain}-js.pot -D $intranetdir";
+    $xgettext_cmd .= " $_" foreach (@js_files);
+
+    if (system($xgettext_cmd) != 0) {
+        die "system call failed: $xgettext_cmd";
+    }
+
     my $replace_charset_cmd = "$self->{sed} --in-place " .
-        "$Bin/$self->{domain}.pot " .
-        "--expression='s/charset=CHARSET/charset=UTF-8/'";
+        "--expression='s/charset=CHARSET/charset=UTF-8/' " .
+        "$Bin/$self->{domain}.pot $Bin/$self->{domain}-js.pot";
     if (system($replace_charset_cmd) != 0) {
         die "system call failed: $replace_charset_cmd";
     }
@@ -701,19 +733,37 @@ sub install_messages {
     my $modir = "$self->{path_po}/$locale/LC_MESSAGES";
     my $pofile = "$self->{path_po}/$self->{lang}-messages.po";
     my $mofile = "$modir/$self->{domain}.mo";
+    my $js_pofile = "$self->{path_po}/$self->{lang}-messages-js.po";
 
-    if ( not -f $pofile ) {
+    unless ( -f $pofile && -f $js_pofile ) {
         $self->create_messages();
     }
     say "Install messages ($locale)" if $self->{verbose};
     make_path($modir);
     system "$self->{msgfmt} -o $mofile $pofile";
+
+    my $js_locale_data = 'var json_locale_data = {"Koha":' . `$self->{po2json} $js_pofile` . '};';
+    my $progdir = $self->{context}->config('intrahtdocs') . '/prog';
+    mkdir "$progdir/$self->{lang}/js";
+    open my $fh, '>', "$progdir/$self->{lang}/js/locale_data.js";
+    print $fh $js_locale_data;
+    close $fh;
+
+    my $opachtdocs = $self->{context}->config('opachtdocs');
+    opendir(my $dh, $opachtdocs);
+    for my $theme ( grep { not /^\.|lib|xslt/ } readdir($dh) ) {
+        mkdir "$opachtdocs/$theme/$self->{lang}/js";
+        open my $fh, '>', "$opachtdocs/$theme/$self->{lang}/js/locale_data.js";
+        print $fh $js_locale_data;
+        close $fh;
+    }
 }
 
 sub remove_pot {
     my $self = shift;
 
     unlink "$Bin/$self->{domain}.pot";
+    unlink "$Bin/$self->{domain}-js.pot";
 }
 
 sub install {
