@@ -19,6 +19,9 @@ function is_valid_date(date) {
     } else if (dateformat == 'iso' ) {
         dateformat = 'yy-mm-dd';
         dateformat_str = 'yyyy-mm-dd';
+    } else if ( dateformat == 'dmydot' ) {
+        dateformat = 'dd.mm.yy';
+        dateformat_str = 'dd.mm.yyyy';
     }
     try {
         $.datepicker.parseDate(dateformat, date);
