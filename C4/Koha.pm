@@ -250,7 +250,6 @@ sub GetItemTypes {
     require C4::Languages;
     my $language = C4::Languages::getlanguage();
     # returns a reference to a hash of references to itemtypes...
-    my %itemtypes;
     my $dbh   = C4::Context->dbh;
     my $query = q|
         SELECT
@@ -276,12 +275,13 @@ sub GetItemTypes {
     $sth->execute( $language );
 
     if ( $style eq 'hash' ) {
+        my %itemtypes;
         while ( my $IT = $sth->fetchrow_hashref ) {
             $itemtypes{ $IT->{'itemtype'} } = $IT;
         }
         return ( \%itemtypes );
     } else {
-        return $sth->fetchall_arrayref({});
+        return [ sort { lc $a->{translated_description} cmp lc $b->{translated_description} } @{ $sth->fetchall_arrayref( {} ) } ];
     }
 }
 
