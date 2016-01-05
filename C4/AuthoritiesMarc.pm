@@ -855,15 +855,17 @@ sub BuildSummary {
     # handle $authtypecode is NULL or eq ""
     if ($authtypecode) {
         my $authref = Koha::Authority::Types->find($authtypecode);
-        $summary{authtypecode} = $authref->authtypecode;
-        $summary{type} = $authref->authtypetext;
-        $summary_template = $authref->summary;
-        # for MARC21, the authority type summary displays a label meant for
-        # display
-        if (C4::Context->preference('marcflavour') ne 'UNIMARC') {
-            $summary{label} = $authref->summary;
-        } else {
-            $summary{summary} = $authref->summary;
+        if ( $authref ) {
+            $summary{authtypecode} = $authref->authtypecode;
+            $summary{type} = $authref->authtypetext;
+            $summary_template = $authref->summary;
+            # for MARC21, the authority type summary displays a label meant for
+            # display
+            if (C4::Context->preference('marcflavour') ne 'UNIMARC') {
+                $summary{label} = $authref->summary;
+            } else {
+                $summary{summary} = $authref->summary;
+            }
         }
     }
     my $marc21subfields = 'abcdfghjklmnopqrstuvxyz68';
