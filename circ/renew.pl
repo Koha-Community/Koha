@@ -54,7 +54,7 @@ if ($barcode) {
 
     if ($item) {
 
-        $issue = $item->issues()->single();
+        $issue = $item->issue();
 
         if ($issue) {
 
