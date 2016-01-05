@@ -2,29 +2,49 @@
 [% USE ItemTypes %]
 [% USE Branches %]
 [% USE AuthorisedValues %]
+[% USE ColumnsSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Holds queue</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style type="text/css"> p { margin-top: 0; }</style>
-</head>
-<body id="circ_view_holdsqueue" class="circ">
-[% INCLUDE 'header.inc' %]
-[% INCLUDE 'cat-search.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
+[% INCLUDE 'columns_settings.inc' %]
 <script type="text/javascript">//<![CDATA[
 $(document).ready(function() {
-    $("#holdst").dataTable({
+    var holdst;
+
+    // Setup filters before DataTables initialisation, in case some columns are
+    // hidden by default
+    var filterColumnTimeoutId;
+    var filterColumn = function(e) {
+        clearTimeout(filterColumnTimeoutId);
+        filterColumnTimeoutId = setTimeout(function() {
+            var input = $(e.target);
+            var idx = input.parents('td').index();
+            holdst.api().column(idx + ':visible').search(input.val()).draw();
+        }, 200);
+    };
+    $('#holdst thead input').on('change keyup keydown', filterColumn);
+
+    var columns_settings = [% ColumnsSettings.GetColumns('circ', 'view_holdsqueue', 'holds-table', 'json') %];
+    var holdst = KohaTable("#holdst", {
         "aaSorting": [[ 3, "asc" ]],
         "aoColumns": [
             { "sType": "anti-the" },null,null,null,null,null,null,null,null,{ "sType": "title-string" },null
         ],
-        "sDom": 't',
+        "sDom": 'B<"clearfix">t',
+        "bSortCellsTop": true,
         "bPaginate": false
-    });
+    }, columns_settings);
+
 });
 //]]>
 </script>
+</head>
+<body id="circ_view_holdsqueue" class="circ">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
@@ -32,7 +52,7 @@ $(document).ready(function() {
 [% IF ( run_report ) %] &rsaquo; Results[% END %]
 </div>
 
-<div id="doc" class="yui-t7">
+<div id="doc2" class="yui-t7">
 
    <div id="bd">
 	<div id="yui-main">
@@ -51,7 +71,7 @@ $(document).ready(function() {
     [% IF ( itemsloop ) %]
 <table id="holdst">
 	<thead>
-	<tr>
+    <tr>
         <th class="hq-title">Title</th>
         <th class="hq-collection">Collection</th>
         <th class="hq-itemtype">Item type</th>
@@ -63,6 +83,63 @@ $(document).ready(function() {
         <th class="hq-sendto">Send to</th>
         <th class="hq-date">Date</th>
         <th class="hq-notes">Notes</th>
+    </tr>
+    <tr>
+        <td class="hq-title">
+            <span class="filter_column filter_text">
+                <input class="text_filter" type="text" placeholder="Title">
+            </span>
+        </td>
+        <td class="hq-collection">
+            <span class="filter_column filter_text">
+                <input type="text" placeholder="Collection">
+            </span>
+        </td>
+        <td class="hq-itemtype">
+            <span class="filter_column filter_text">
+                <input type="text" placeholder="Item type">
+            </span>
+        </td>
+        <td class="hq-callnumber">
+            <span class="filter_column filter_text">
+                <input type="text" placeholder="Call number">
+            </span>
+        </td>
+        <td class="hq-copynumber">
+            <span class="filter_column filter_text">
+                <input type="text" placeholder="Copy number">
+            </span>
+        </td>
+        <td class="hq-enumchron">
+            <span class="filter_column filter_text">
+                <input type="text" placeholder="Enumeration">
+            </span>
+        </td>
+        <td class="hq-barcode">
+            <span class="filter_column filter_text">
+                <input type="text" placeholder="Barcode">
+            </span>
+        </td>
+        <td class="hq-patron">
+            <span class="filter_column filter_text">
+                <input type="text" placeholder="Patron">
+            </span>
+        </td>
+        <td class="hq-sendto">
+            <span class="filter_column filter_text">
+                <input type="text" placeholder="Send to">
+            </span>
+        </td>
+        <td class="hq-date">
+            <span class="filter_column filter_text">
+                <input type="text" placeholder="Date">
+            </span>
+        </td>
+        <td class="hq-notes">
+            <span class="filter_column filter_text">
+                <input type="text" placeholder="Notes">
+            </span>
+        </td>
     </tr>
 	</thead>
      <tbody>[% FOREACH itemsloo IN itemsloop %]
