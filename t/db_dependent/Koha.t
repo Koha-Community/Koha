@@ -8,7 +8,7 @@ use warnings;
 use C4::Context;
 use Koha::DateUtils qw(dt_from_string);
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use DateTime::Format::MySQL;
 
 BEGIN {
@@ -146,20 +146,6 @@ subtest 'Itemtype info Tests' => sub {
     like ( getitemtypeinfo('BK', 'intranet')->{'imageurl'}, qr/intranet-tmpl/, 'getitemtypeinfo on "intranet" interface returns intranet imageurl' );
     like ( getitemtypeinfo('BK', 'opac')->{'imageurl'}, qr/opac-tmpl/, 'getitemtypeinfo on "opac" interface returns opac imageurl' );
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ### test for C4::Koha->GetDailyQuote()
 SKIP:
@@ -353,4 +339,14 @@ subtest 'GetItemTypesByCategory GetItemTypesCategorized test' => sub{
     @expected = ( 'BKghjklo1', 'Qwertyware', 'Veryheavybook' );
     is_deeply(\@results,\@expected, 'GetItemTypesCategorized: grouped and ungrouped items returned as expected.');
 };
+
+subtest 'GetItemTypes test' => sub {
+    plan tests => 1;
+    $dbh->do(q|DELETE FROM itemtypes|);
+    $dbh->do(q|INSERT INTO itemtypes(itemtype, description) VALUES ('a', 'aa desc'), ('b', 'zz desc'), ('d', 'dd desc'), ('c', 'yy desc')|);
+    my $itemtypes = C4::Koha::GetItemTypes( style => 'array' );
+    $itemtypes = [ map { $_->{itemtype} } @$itemtypes ];
+    is_deeply( $itemtypes, [ 'a', 'd', 'c', 'b' ], 'GetItemTypes(array) should return itemtypes ordered by description');
+};
+
 $dbh->rollback();
