@@ -102,6 +102,9 @@ if ( $input->param('borrowernumber') ) {
         borrowernumber => $borrowernumber,
     });
 
+    my ($picture, $dberror) = GetPatronImage($borrowernumber);
+    $template->param( picture => 1 ) if $picture;
+
     $template->param(
         borrowernumber    => $borrowernumber,
         biblionumber      => $data->{'biblionumber'},
