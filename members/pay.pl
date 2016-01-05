@@ -136,6 +136,8 @@ sub add_accounts_to_template {
 
     $template->param(%$borrower);
 
+    my ($picture, $dberror) = GetPatronImage($borrower->{'borrowernumber'});
+    $template->param( picture => 1 ) if $picture;
     $template->param(
         accounts => $accounts,
         borrower => $borrower,
@@ -224,6 +226,7 @@ sub borrower_add_additional_fields {
     } elsif ( $b_ref->{category_type} eq 'A' ) {
         $b_ref->{adultborrower} = 1;
     }
+
     my ( $picture, $dberror ) = GetPatronImage( $b_ref->{borrowernumber} );
     if ($picture) {
         $b_ref->{has_picture} = 1;
