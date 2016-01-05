@@ -80,7 +80,7 @@ my $object = Koha::Objects->find( { keypart1 => $keypart1, keypart2 => $keypart2
 sub find {
     my ( $self, $id ) = @_;
 
-    return unless $id;
+    return unless defined($id);
 
     my $result = $self->_resultset()->find($id);
 
