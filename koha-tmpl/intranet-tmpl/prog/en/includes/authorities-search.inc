@@ -27,9 +27,9 @@
         [% IF (marcflavour == 'UNIMARC' ) %]<option value="">All authority types</option>[% END %]
         [% FOREACH authority_type IN authority_types %]
             [% IF authority_type.authtypecode == authtypecode %]
-            <option value="[% authority_type.value %]" selected="selected">[% authority_type.authtypetext %]</option>
+            <option value="[% authority_type.authtypecode%]" selected="selected">[% authority_type.authtypetext %]</option>
             [% ELSE %]
-            <option value="[% authority_type.value %]">[% authority_type.authtypetext %]</option>
+            <option value="[% authority_type.authtypecode %]">[% authority_type.authtypetext %]</option>
             [% END %]
         [% END %]
         </select>
@@ -83,9 +83,9 @@
         [% IF (marcflavour == 'UNIMARC' ) %]<option value="">All authority types</option>[% END %]
         [% FOREACH authority_type IN authority_types %]
             [% IF authority_type.authtypecode == authtypecode %]
-            <option value="[% authority_type.value %]" selected="selected">[% authority_type.authtypetext %]</option>
+            <option value="[% authority_type.authtypecode %]" selected="selected">[% authority_type.authtypetext %]</option>
             [% ELSE %]
-            <option value="[% authority_type.value %]">[% authority_type.authtypetext %]</option>
+            <option value="[% authority_type.authtypecode %]">[% authority_type.authtypetext %]</option>
             [% END %]
         [% END %]
         </select>
@@ -139,9 +139,9 @@
         [% IF (marcflavour == 'UNIMARC' ) %]<option value="">All authority types</option>[% END %]
         [% FOREACH authority_type IN authority_types %]
             [% IF authority_type.authtypecode == authtypecode %]
-            <option value="[% authority_type.value %]" selected="selected">[% authority_type.authtypetext %]</option>
+            <option value="[% authority_type.authtypecode %]" selected="selected">[% authority_type.authtypetext %]</option>
             [% ELSE %]
-            <option value="[% authority_type.value %]">[% authority_type.authtypetext %]</option>
+            <option value="[% authority_type.authtypecode %]">[% authority_type.authtypetext %]</option>
             [% END %]
         [% END %]
         </select>
