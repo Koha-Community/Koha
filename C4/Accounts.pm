@@ -379,6 +379,80 @@ sub purge_zero_balance_fees {
     $sth->execute($days) or die $dbh->errstr;
 }
 
+##KohaSuomi HACK to survive Ceepos-integration. Rewrite this POS accounts module plzzz.
+sub getOutstandingPositiveDebit {
+    my ($borrowernumber) = @_;
+    my $dbh = C4::Context->dbh();
+    my $sql = "SELECT * FROM accountlines WHERE amountoutstanding < 0";
+    my @params;
+    if ($borrowernumber) {
+        $sql .= " AND borrowernumber = ?";
+        push(@params, $borrowernumber);
+    }
+    my $sth = $dbh->prepare($sql);
+    $sth->execute(@params);
+    my $positiveAccountlines = $sth->fetchall_arrayref({});
+    return $positiveAccountlines;
+}
+sub getOutstandingPayments {
+    my ($borrowernumber) = @_;
+
+    my $dbh = C4::Context->dbh();
+    my $sth = $dbh->prepare("SELECT * FROM accountlines WHERE amountoutstanding > 0 AND borrowernumber = ?");
+    $sth->execute($borrowernumber);
+    my $accountlines = $sth->fetchall_arrayref({});
+    return $accountlines;
+}
+sub updateAccountline {
+    my ($accountlines_id, $amountoutstanding) = @_;
+
+    my $dbh = C4::Context->dbh();
+    my $sth = $dbh->prepare("UPDATE accountlines SET amountoutstanding = ? WHERE accountlines_id = ?");
+    $sth->execute($amountoutstanding, $accountlines_id);
+
+    if ($sth->errstr) {
+        die $sth->errstr;
+    }
+}
+sub depleteDebits {
+    my ($borrowernumber, $verboseConsoleOutput, $dryRun) = @_;
+    my $positiveAccountlines = getOutstandingPositiveDebit($borrowernumber);
+    if (not(ref $positiveAccountlines eq 'ARRAY')) {
+        print "Nothing to deplete\n" if $verboseConsoleOutput;
+        return;
+    }
+
+    foreach my $posActl (@$positiveAccountlines) {
+        my $outstandingPayments = getOutstandingPayments($posActl->{borrowernumber});
+        if (not(ref $outstandingPayments eq 'ARRAY')) {
+            next;
+        }
+
+        foreach my $outActl (@$outstandingPayments) {
+            print "----------NEXT accountline_id ".$outActl->{accountlines_id}.", borrowernumber ".$outActl->{borrowernumber}."--------\n" if $verboseConsoleOutput;
+            print "Positive balance: ".$posActl->{amountoutstanding}."\n" if $verboseConsoleOutput;
+            print "Payment         : ".$outActl->{amountoutstanding}."\n" if $verboseConsoleOutput;
+            #Can we pay this fine
+            if ($posActl->{amountoutstanding} + $outActl->{amountoutstanding} <= 0) {
+                $posActl->{amountoutstanding} += $outActl->{amountoutstanding};
+                $outActl->{amountoutstanding} = 0;
+            }
+            #Then pay as much as we can.
+            elsif ($outActl->{amountoutstanding} + $posActl->{amountoutstanding} > 0) {
+                $outActl->{amountoutstanding} += $posActl->{amountoutstanding};
+                $posActl->{amountoutstanding} = 0;
+            }
+            #UPDATE changes. Remove negative balance first, so if there is an error we fail to the benefit of the borrower.
+            print "Negative payment now: ".$outActl->{amountoutstanding}."\n" if $verboseConsoleOutput;
+            print "Positive balance now: ".$posActl->{amountoutstanding}."\n" if $verboseConsoleOutput;
+            if (not($dryRun)) {
+                updateAccountline($outActl->{accountlines_id}, $outActl->{amountoutstanding});
+                updateAccountline($posActl->{accountlines_id}, $posActl->{amountoutstanding});
+            }
+        }
+    }
+}
+
 END { }    # module clean-up code here (global destructor)
 
 1;

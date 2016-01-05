@@ -65,6 +65,9 @@ if ( !$borrowernumber ) {
     $borrowernumber = $input->param('borrowernumber0');
 }
 
+##!!  KohaSuomi HACK  !! Encumber positive balance to fines so Ceepos integration wont get totally crazy and duplicate positive outstanding balances as fines.
+C4::Accounts::depleteDebits($borrowernumber, undef, undef);
+
 # get borrower details
 our $borrower = GetMember( borrowernumber => $borrowernumber );
 our $user = $input->remote_user;
