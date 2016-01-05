@@ -2,7 +2,7 @@
 <div id="header" class="navbar navbar-static-top">
     <div class="navbar-inner">
         <ul id="toplevelmenu" class="nav">
-            [% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a></li>[% END %]
+            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a></li>[% END %]
             [% IF ( CAN_user_borrowers ) %]<li><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a></li>[% END %]
             [% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl">Search</a></li>[% END %]
             [% IF ( intranetbookbag ) %]
