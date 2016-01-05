@@ -41,7 +41,7 @@ Koha::Subscription::Histories - Koha Subscription Histories Object class
 
 =cut
 
-sub type {
+sub _type {
     return 'Subscriptionhistory';
 }
 

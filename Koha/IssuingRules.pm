@@ -35,7 +35,7 @@ Koha::IssuingRules - Koha IssuingRules object set class
 
 =cut
 
-sub type {
+sub _type {
     return 'Issuingrule';
 }
 

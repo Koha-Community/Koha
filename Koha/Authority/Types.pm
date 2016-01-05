@@ -39,7 +39,7 @@ Koha::Authority::Types - Koha Authority Type Object set class
 
 =cut
 
-sub type {
+sub _type {
     return 'AuthType';
 }
 

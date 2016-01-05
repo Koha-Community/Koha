@@ -42,7 +42,7 @@ sub auth_tag_structures {
 
 =cut
 
-sub type {
+sub _type {
     return 'AuthType';
 }
 

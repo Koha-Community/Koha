@@ -41,7 +41,7 @@ Koha::Subscription - Koha Subscription Object class
 
 =cut
 
-sub type {
+sub _type {
     return 'Subscription';
 }
 

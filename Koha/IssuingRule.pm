@@ -35,7 +35,7 @@ Koha::Hold - Koha Hold object class
 
 =cut
 
-sub type {
+sub _type {
     return 'Issuingrule';
 }
 

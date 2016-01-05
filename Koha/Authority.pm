@@ -39,7 +39,7 @@ Koha::Authority - Koha Authority Object class
 
 =cut
 
-sub type {
+sub _type {
     return 'AuthHeader';
 }
 
