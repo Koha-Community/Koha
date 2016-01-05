@@ -82,7 +82,7 @@
                     <select id="borrower_categorycode" name="borrower_categorycode">
                         <option value="" selected="selected">Any</option>
                         [% FOREACH bc IN borrower_categorycodes %]
-                            [% UNLESS ( bc.categorycode == 'S' || bc.category_type == 'S' ) %]
+                            [% UNLESS bc.category_type == 'S' %]
                                 <option value="[% bc.categorycode %]">[% bc.description %]</option>
                             [% END %]
                         [% END %]
