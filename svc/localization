@@ -37,7 +37,9 @@ sub update_translation {
         $localization->translation( $translation )
     }
     my %params;
+    my $is_changed;
     if ( $localization->is_changed ) {
+        $is_changed = 1;
         unless ( Koha::Localizations->search( { entity => $localization->entity, code => $localization->code, lang => $lang, localization_id => { '!=' => $localization->localization_id }, } )->count ) {
             $localization->store;
         } else {
@@ -52,6 +54,7 @@ sub update_translation {
         code        => $localization->code,
         lang        => $localization->lang,
         translation => $localization->translation,
+        is_changed  => $is_changed,
     );
     C4::Service->return_success( $response );
 }
