@@ -29,28 +29,6 @@ __PACKAGE__->table("overduerules_transport_types");
   is_auto_increment: 1
   is_nullable: 0
 
-=head2 branchcode
-
-  data_type: 'varchar'
-  default_value: (empty string)
-  is_foreign_key: 1
-  is_nullable: 0
-  size: 10
-
-=head2 categorycode
-
-  data_type: 'varchar'
-  default_value: (empty string)
-  is_foreign_key: 1
-  is_nullable: 0
-  size: 10
-
-=head2 letternumber
-
-  data_type: 'integer'
-  default_value: 1
-  is_nullable: 0
-
 =head2 message_transport_type
 
   data_type: 'varchar'
@@ -59,29 +37,17 @@ __PACKAGE__->table("overduerules_transport_types");
   is_nullable: 0
   size: 20
 
+=head2 overduerules_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "branchcode",
-  {
-    data_type => "varchar",
-    default_value => "",
-    is_foreign_key => 1,
-    is_nullable => 0,
-    size => 10,
-  },
-  "categorycode",
-  {
-    data_type => "varchar",
-    default_value => "",
-    is_foreign_key => 1,
-    is_nullable => 0,
-    size => 10,
-  },
-  "letternumber",
-  { data_type => "integer", default_value => 1, is_nullable => 0 },
   "message_transport_type",
   {
     data_type => "varchar",
@@ -90,6 +56,8 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 20,
   },
+  "overduerules_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -132,13 +100,13 @@ Related object: L<Koha::Schema::Result::Overduerule>
 __PACKAGE__->belongs_to(
   "overduerule",
   "Koha::Schema::Result::Overduerule",
-  { branchcode => "branchcode", categorycode => "categorycode" },
+  { overduerules_id => "overduerules_id" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-05-02 18:04:32
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mNvLssJ8h9WFNQaB+YCGYg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-01-06 12:00:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KYpSfCfzkLxRYI2pQY5Htg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
