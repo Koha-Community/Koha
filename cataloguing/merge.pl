@@ -203,7 +203,7 @@ if ($merge) {
             my $frameworkcode = GetFrameworkCode($biblionumber);
             my $recordObj = new Koha::MetadataRecord({'record' => $marcrecord, schema => $marcflavour});
             my $record = {
-                biblionumber => $biblionumber,
+                recordid => $biblionumber,
                 record => $marcrecord,
                 frameworkcode => $frameworkcode,
                 display => $recordObj->createMergeHash($tagslib),

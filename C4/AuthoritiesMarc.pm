@@ -1403,8 +1403,10 @@ sub merge {
     my ($mergefrom,$MARCfrom,$mergeto,$MARCto) = @_;
     my ($counteditedbiblio,$countunmodifiedbiblio,$counterrors)=(0,0,0);        
     my $dbh=C4::Context->dbh;
-    my $authtypefrom = Koha::Authority::Types->find($mergefrom);
-    my $authtypeto   = Koha::Authority::Types->find($mergeto);
+    my $authfrom = Koha::Authorities->find($mergefrom);
+    my $authto = Koha::Authorities->find($mergeto);
+    my $authtypefrom = Koha::Authority::Types->find($authfrom->authtypecode);
+    my $authtypeto   = Koha::Authority::Types->find($authto->authtypecode);
 
     return "error MARCFROM not a marcrecord ".Data::Dumper::Dumper($MARCfrom) if scalar($MARCfrom->fields()) == 0;
     return "error MARCTO not a marcrecord".Data::Dumper::Dumper($MARCto) if scalar($MARCto->fields()) == 0;

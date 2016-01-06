@@ -133,15 +133,27 @@ else {
 
             # Creating a loop for display
 
-            my @record1 = $recordObj1->createMergeHash($tagslib);
-            my @record2 = $recordObj2->createMergeHash($tagslib);
+            my @records = (
+                {
+                    recordid => $mergereference,
+                    record => $recordObj1->record,
+                    frameworkcode => $recordObj1->authtypecode,
+                    display => $recordObj1->createMergeHash($tagslib),
+                    reference => 1,
+                },
+                {
+                    recordid => $notreference,
+                    record => $recordObj2->record,
+                    frameworkcode => $recordObj2->authtypecode,
+                    display => $recordObj2->createMergeHash($tagslib),
+                },
+            );
 
             # Parameters
             $template->param(
                 recordid1        => $mergereference,
                 recordid2        => $notreference,
-                record1        => @record1,
-                record2        => @record2,
+                records        => \@records,
                 framework      => $framework,
             );
         }
@@ -169,8 +181,6 @@ else {
                     frameworkselect => \@frameworkselect,
                     frameworkcode1  => $recordObj1->authtypecode,
                     frameworkcode2  => $recordObj2->authtypecode,
-                    frameworklabel1 => $recordObj1->authtypetext,
-                    frameworklabel2 => $recordObj2->authtypetext,
                 );
             }
         }
