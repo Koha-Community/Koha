@@ -53,12 +53,14 @@
             type: 'PUT',
             url: '/cgi-bin/koha/svc/localization',
             success: function (data) {
-                if ( data.is_changed ) {
+                if ( data.error ) {
+                    $(cell).css('background-color', '#FF0000');
+                    show_message({ type: 'error_on_update', data: data });
+                } else if ( data.is_changed == 1 ) {
                     $(cell).css('background-color', '#00FF00');
                     show_message({ type: 'success_on_update', data: data });
-                } else {
-                    show_message({ type: 'error_on_update', data: data });
                 }
+
                 if ( $(cell).hasClass('lang') ) {
                     $(cell).text(data.lang)
                 } else if ( $(cell).hasClass('translation') ) {
