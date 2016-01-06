@@ -177,6 +177,7 @@
                                         <span class="sep">|</span>
                                         <form method="get" action="/cgi-bin/koha/opac-shelves.pl" class="form-inline">
                                             <input type="hidden" name="op" value="edit_form" />
+                                            <input type="hidden" name="referer" value="view" />
                                             <input type='hidden' name='category' value='[% category %]' />
                                             <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
                                             <input type="submit" class="editshelf" value="Edit list" />
@@ -184,6 +185,7 @@
 
                                         <form method="post" action="/cgi-bin/koha/opac-shelves.pl" class="form-inline">
                                             <input type="hidden" name="op" value="delete" />
+                                            <input type="hidden" name="referer" value="list" />
                                             <input type='hidden' name='category' value='[% category %]' />
                                             <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
                                             <input type="submit" class="deleteshelf" value="Delete list" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"/>
@@ -194,6 +196,7 @@
                                     [% ELSIF category == PRIVATE # not manageshelf and private means shared %]
                                         <form action="/cgi-bin/koha/opac-shelves.pl" method="post" class="form-inline">
                                             <input type="hidden" name="op" value="remove_share" />
+                                            <input type="hidden" name="referer" value="list" />
                                             <input type='hidden' name='category' value='[% category %]' />
                                             <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
                                             <input type="submit" class="deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_REMOVE_SHARE);" value="Remove share" />
@@ -545,7 +548,7 @@
                                 [% ELSE %]
                                     <legend>Editing <em>[% shelf.shelfname |html %]</em></legend>
                                     <input type="hidden" name="op" value="edit" />
-                                    <input type="hidden" name="referer" value="view" />
+                                    <input type="hidden" name="referer" value="[% referer %]" />
                                     <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
                                 [% END %]
                                 <input type="hidden" name="owner" id="owner" value="[% loggedinusernumber %]" />
