@@ -268,7 +268,6 @@ sub BuildReport {
         OpacRenewalBranch
         OPACViewOthersSuggestions
         SearchMyLibraryFirst
-        singleBranchMode
         AnonSuggestions
         EnableOpacSearchHistory
         OPACPrivacy

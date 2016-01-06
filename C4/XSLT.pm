@@ -204,7 +204,7 @@ sub XSLTParse4Display {
                               UseAuthoritiesForTracings TraceSubjectSubdivisions
                               Display856uAsImage OPACDisplay856uAsImage 
                               UseControlNumber IntranetBiblioDefaultView BiblioDefaultView
-                              singleBranchMode OPACItemLocation DisplayIconsXSLT
+                              OPACItemLocation DisplayIconsXSLT
                               AlternateHoldingsField AlternateHoldingsSeparator
                               TrackClicks opacthemes IdRef / )
     {

@@ -423,7 +423,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ShowPatronImageInWebBasedSelfCheck','0','','If ON, displays patron image when a patron uses web-based self-checkout','YesNo'),
 ('ShowReviewer','full','none|full|first|surname|firstandinitial|username','Choose how a commenter\'s identity is presented alongside comments in the OPAC','Choice'),
 ('ShowReviewerPhoto','1','','If ON, photo of reviewer will be shown beside comments in OPAC','YesNo'),
-('singleBranchMode','0',NULL,'Operate in Single-branch mode, hide branch selection in the OPAC','YesNo'),
 ('SlipCSS','',NULL,'Slips CSS url.','free'),
 ('SMSSendDriver','','','Sets which SMS::Send driver is used to send SMS messages.','free'),
 ('SMSSendPassword', '', '', 'Password used to send SMS messages', 'free'),

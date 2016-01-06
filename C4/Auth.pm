@@ -34,6 +34,7 @@ use C4::Search::History;
 use Koha;
 use Koha::AuthUtils qw(hash_password);
 use Koha::LibraryCategories;
+use Koha::Libraries;
 use POSIX qw/strftime/;
 use List::MoreUtils qw/ any /;
 use Encode qw( encode is_utf8);
@@ -422,7 +423,7 @@ sub get_template_and_user {
         hide_marc       => C4::Context->preference("hide_marc"),
         item_level_itypes  => C4::Context->preference('item-level_itypes'),
         patronimages       => C4::Context->preference("patronimages"),
-        singleBranchMode   => C4::Context->preference("singleBranchMode"),
+        singleBranchMode   => ( Koha::Libraries->search->count == 1 ),
         XSLTDetailsDisplay => C4::Context->preference("XSLTDetailsDisplay"),
         XSLTResultsDisplay => C4::Context->preference("XSLTResultsDisplay"),
         using_https        => $using_https,

@@ -31,6 +31,7 @@ use C4::Branch;
 use C4::Reserves;    # GetReserveStatus
 use C4::Debug;
 use C4::Charset;
+use Koha::Libraries;
 use YAML;
 use URI::Escape;
 use Business::ISBN;
@@ -618,7 +619,7 @@ sub getRecords {
                                 $facets_info->{$link_value}->{'label_value'} =~
                                 /Libraries/
                             )
-                            and ( C4::Context->preference('singleBranchMode') )
+                            and ( Koha::Libraries->search->count == 1 )
                           );
                     }
                 }

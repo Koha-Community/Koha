@@ -756,8 +756,7 @@ sub getFacets {
             }
             ];
 
-            unless ( C4::Context->preference("singleBranchMode")
-                || Koha::Libraries->search->count == 1 )
+            unless ( Koha::Libraries->search->count == 1 )
             {
                 my $DisplayLibraryFacets = C4::Context->preference('DisplayLibraryFacets');
                 if (   $DisplayLibraryFacets eq 'both'
@@ -838,8 +837,7 @@ sub getFacets {
             },
             ];
 
-            unless ( C4::Context->preference("singleBranchMode")
-                || Koha::Libraries->search->count == 1 )
+            unless ( Koha::Libraries->search->count == 1 )
             {
                 my $DisplayLibraryFacets = C4::Context->preference('DisplayLibraryFacets');
                 if (   $DisplayLibraryFacets eq 'both'

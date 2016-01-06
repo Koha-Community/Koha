@@ -35,8 +35,8 @@ use C4::Overdues;
 use C4::Debug;
 use Koha::DateUtils;
 use Koha::Borrower::Debarments qw(IsDebarred);
+use Koha::Libraries;
 use Date::Calc qw/Today Date_to_Days/;
-# use Data::Dumper;
 
 my $maxreserves = C4::Context->preference("maxreserves");
 
@@ -228,7 +228,7 @@ if ( $query->param('place_reserve') ) {
 
         my $canreserve = 0;
 
-        my $singleBranchMode = C4::Context->preference("singleBranchMode");
+        my $singleBranchMode = Koha::Libraries->search->count == 1;
         if ( $singleBranchMode || !$OPACChooseBranch )
         {    # single branch mode or disabled user choosing
             $branch = $borr->{'branchcode'};
