@@ -1958,6 +1958,9 @@ CREATE TABLE `serial` ( -- issues related to subscriptions
   `biblionumber` varchar(100) NOT NULL default '', -- foreign key for the biblio.biblionumber that this issue is attached to
   `subscriptionid` varchar(100) NOT NULL default '', -- foreign key to the subscription.subscriptionid that this issue is part of
   `serialseq` varchar(100) NOT NULL default '', -- issue information (volume, number, etc)
+  `serialseq_x` varchar( 100 ) NULL DEFAULT NULL, -- first part of issue information
+  `serialseq_y` varchar( 100 ) NULL DEFAULT NULL, -- second part of issue information
+  `serialseq_z` varchar( 100 ) NULL DEFAULT NULL, -- third part of issue information
   `status` tinyint(4) NOT NULL default 0, -- status code for this issue (see manual for full descriptions)
   `planneddate` date default NULL, -- date expected
   `notes` text, -- notes
