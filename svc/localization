@@ -13,11 +13,11 @@ sub get_translations {
     my @translations;
     while ( my $s = $rs->next ) {
         push @translations, {
-              id          => Encode::encode( 'utf-8', $s->localization_id ),
-              entity      => Encode::encode( 'utf-8', $s->entity ),
-              code        => Encode::encode( 'utf-8', $s->code ),
-              lang        => Encode::encode( 'utf-8', $s->lang ),
-              translation => Encode::encode( 'utf-8', $s->translation ),
+              id          => $s->localization_id,
+              entity      => $s->entity,
+              code        => $s->code,
+              lang        => $s->lang,
+              translation => $s->translation,
         }
     }
     $response->param( translations => \@translations );
@@ -47,11 +47,11 @@ sub update_translation {
     }
     $response->param(
         %params,
-        id          => Encode::encode('utf-8', $localization->localization_id),
-        entity      => Encode::encode('utf-8', $localization->entity),
-        code        => Encode::encode('utf-8', $localization->code),
-        lang        => Encode::encode('utf-8', $localization->lang),
-        translation => Encode::encode('utf-8', $localization->translation),
+        id          => $localization->localization_id,
+        entity      => $localization->entity,
+        code        => $localization->code,
+        lang        => $localization->lang,
+        translation => $localization->translation,
     );
     C4::Service->return_success( $response );
 }
@@ -73,11 +73,11 @@ sub add_translation {
         );
         $localization->store;
         $response->param(
-            id          => Encode::encode('utf-8', $localization->localization_id),
-            entity      => Encode::encode('utf-8', $localization->entity),
-            code        => Encode::encode('utf-8', $localization->code),
-            lang        => Encode::encode('utf-8', $localization->lang),
-            translation => Encode::encode('utf-8', $localization->translation),
+            id          => $localization->localization_id,
+            entity      => $localization->entity,
+            code        => $localization->code,
+            lang        => $localization->lang,
+            translation => $localization->translation,
         );
 
     } else {
