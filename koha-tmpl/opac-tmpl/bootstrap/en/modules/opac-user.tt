@@ -112,9 +112,9 @@
                             <li><a href="#opac-user-checkouts">Checked out ([% issues_count %])</a></li>
                             [% IF ( overdues_count ) %]<li><a href="#opac-user-overdues">Overdue ([% overdues_count %])</a></li>[% END %]
                             [% IF ( OPACFinesTab ) %]
-                                [% IF ( BORROWER_INF.amountoverfive ) %]<li><a href="#opac-user-fines">Fines ([% BORROWER_INF.amountoutstanding %])</a></li>[% END %]
-                                [% IF ( BORROWER_INF.amountoverzero ) %]<li><a href="#opac-user-fines">Fines ([% BORROWER_INF.amountoutstanding %])</a></li>[% END %]
-                                [% IF ( BORROWER_INF.amountlessthanzero ) %]<li><a href="#opac-user-fines">Credits ([% BORROWER_INF.amountoutstanding %])</a></li>[% END %]
+                                [% IF ( BORROWER_INFO.amountoverfive ) %]<li><a href="#opac-user-fines">Fines ([% BORROWER_INFO.amountoutstanding %])</a></li>[% END %]
+                                [% IF ( BORROWER_INFO.amountoverzero ) %]<li><a href="#opac-user-fines">Fines ([% BORROWER_INFO.amountoutstanding %])</a></li>[% END %]
+                                [% IF ( BORROWER_INFO.amountlessthanzero ) %]<li><a href="#opac-user-fines">Credits ([% BORROWER_INFO.amountoutstanding %])</a></li>[% END %]
                             [% END %]
                             [% IF ( waiting_count ) %][% IF ( BORROWER_INF.atdestination ) %]<li><a href="#opac-user-waiting">Waiting ([% waiting_count %])</a></li>[% END %][% END %]
                             [% IF ( reserves_count ) %]<li><a href="#opac-user-holds">Holds ([% reserves_count %])</a></li>[% END %]
