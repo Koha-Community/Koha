@@ -113,9 +113,9 @@
                             [% IF relatives %]<li><a href="#opac-user-relative-issues">Relatives' checkouts</a></li>[% END %]
                             [% IF ( overdues_count ) %]<li><a href="#opac-user-overdues">Overdue ([% overdues_count %])</a></li>[% END %]
                             [% IF ( OPACFinesTab ) %]
-                                [% IF ( BORROWER_INF.amountoverfive ) %]<li><a href="#opac-user-fines">Fines ([% BORROWER_INF.amountoutstanding %])</a></li>[% END %]
-                                [% IF ( BORROWER_INF.amountoverzero ) %]<li><a href="#opac-user-fines">Fines ([% BORROWER_INF.amountoutstanding %])</a></li>[% END %]
-                                [% IF ( BORROWER_INF.amountlessthanzero ) %]<li><a href="#opac-user-fines">Credits ([% BORROWER_INF.amountoutstanding %])</a></li>[% END %]
+                                [% IF ( BORROWER_INFO.amountoverfive ) %]<li><a href="#opac-user-fines">Fines ([% BORROWER_INFO.amountoutstanding %])</a></li>[% END %]
+                                [% IF ( BORROWER_INFO.amountoverzero ) %]<li><a href="#opac-user-fines">Fines ([% BORROWER_INFO.amountoutstanding %])</a></li>[% END %]
+                                [% IF ( BORROWER_INFO.amountlessthanzero ) %]<li><a href="#opac-user-fines">Credits ([% BORROWER_INFO.amountoutstanding %])</a></li>[% END %]
                             [% END %]
                             [% IF ( RESERVES.count ) %]<li><a href="#opac-user-holds">Holds ([% RESERVES.count %])</a></li>[% END %]
                         </ul>
