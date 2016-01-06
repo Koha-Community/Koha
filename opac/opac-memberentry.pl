@@ -227,7 +227,7 @@ elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
 
     $template->param(
         borrower  => $borrower,
-        guarantor => Koha::Borrowers->find($borrowernumber)->guarantor(),
+        guarantor => scalar Koha::Borrowers->find($borrowernumber)->guarantor(),
     );
 
     if (C4::Context->preference('OPACpatronimages')) {
