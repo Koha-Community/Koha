@@ -1,16 +1,16 @@
 [% BLOCK sourcetab %]
-    <div id="tabrecord[% record.biblionumber %]">
+    <div id="tabrecord[% record.recordid %]">
         <div class="record">
-            <ul id="ulrecord[% record.biblionumber %]">
+            <ul id="ulrecord[% record.recordid %]">
                 [% FOREACH field IN record.display %]
                   [% IF field.tag != biblionumbertag %]
                     <li id="k[% field.key %]">
                         [% IF (tabrecord.reference) %]
-                            <input type="checkbox" checked="checked" class="fieldpick" id="rec_[% record.biblionumber %]_[% field.key %]" />
+                            <input type="checkbox" checked="checked" class="fieldpick" id="rec_[% record.recordid %]_[% field.key %]" />
                         [% ELSE %]
-                            <input type="checkbox" class="fieldpick" id="rec_[% record.biblionumber %]_[% field.key %]" />
+                            <input type="checkbox" class="fieldpick" id="rec_[% record.recordid %]_[% field.key %]" />
                         [% END %]
-                        <label for="rec_[% record.biblionumber %]_[% field.key %]"><span class="field">[% field.tag %]</span></label>
+                        <label for="rec_[% record.recordid %]_[% field.key %]"><span class="field">[% field.tag %]</span></label>
 
                         <input type="hidden" name="tag_[% field.tag %]_indicator1_[% field.key %]" value="[% field.indicator1 %]" />
                         <input type="hidden" name="tag_[% field.tag %]_indicator2_[% field.key %]" value="[% field.indicator2 %]" />
@@ -25,11 +25,11 @@
                                 [% FOREACH subfield IN field.subfield %]
                                     <li id="k[% subfield.subkey %]">
                                         [% IF (tabrecord.reference) %]
-                                            <input type="checkbox" checked="checked" class="subfieldpick" id="rec_[% record.biblionumber %]_[% subfield.subkey %]" />
+                                            <input type="checkbox" checked="checked" class="subfieldpick" id="rec_[% record.recordid %]_[% subfield.subkey %]" />
                                         [% ELSE %]
-                                            <input type="checkbox" class="subfieldpick" id="rec_[% record.biblionumber %]_[% subfield.subkey %]" />
+                                            <input type="checkbox" class="subfieldpick" id="rec_[% record.recordid %]_[% subfield.subkey %]" />
                                         [% END %]
-                                        <label for="rec_[% record.biblionumber %]_[% subfield.subkey %]"><span class="subfield">[% subfield.subtag %]</span> / [% subfield.value %]</label>
+                                        <label for="rec_[% record.recordid %]_[% subfield.subkey %]"><span class="subfield">[% subfield.subtag %]</span> / [% subfield.value %]</label>
                                         <input type="hidden" name="tag_[% field.tag %]_code_[% subfield.subtag %]_[% field.key %]_[% subfield.subkey %]" value="[% subfield.subtag %]" />
                                         <input type="hidden" name="tag_[% field.tag %]_subfield_[% subfield.subtag %]_[% subfield.key %]_[% subfield.subkey %]" value="[% subfield.value |html%]" />
                                     </li>
@@ -50,8 +50,8 @@
     <ul>
         [% FOREACH record IN sourcerecords %]
             <li>
-                <a href="#tabrecord[% record.biblionumber %]">
-                    [% record.biblionumber %]
+                <a href="#tabrecord[% record.recordid %]">
+                    [% record.recordid %]
                     [% IF record.reference %](ref)[% END %]
                 </a>
             </li>
