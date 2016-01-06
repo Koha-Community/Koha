@@ -196,8 +196,9 @@ if ($deleted_barcodes) {
 }
 else {
     unless ( $csv_profile_id ) {
-        my $default_csv_profile = Koha::CsvProfiles->search({ profile => C4::Context->preference('ExportWithCsvProfile') });
-        $csv_profile_id = $default_csv_profile ? $default_csv_profile->export_format_id : undef;
+        # FIXME export_format.profile should be a unique key
+        my $default_csv_profiles = Koha::CsvProfiles->search({ profile => C4::Context->preference('ExportWithCsvProfile') });
+        $csv_profile_id = $default_csv_profiles->count ? $default_csv_profiles->next->export_format_id : undef;
     }
     Koha::Exporter::Record::export(
         {   record_type        => $record_type,
