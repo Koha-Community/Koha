@@ -34,6 +34,8 @@ $.fn.selectTabByID = function (tabID) {
     if($("#header_search #catalog_search").length > 0){ shortcut.add('Alt+q',function (){ $("#header_search").selectTabByID("#catalog_search"); $("#search-form").focus(); }); } else { shortcut.add('Alt+q',function(){ location.href="/cgi-bin/koha/catalogue/search.pl"; }); }
     if($("#header_search #renew_search").length > 0){ shortcut.add('Alt+y',function (){ $("#header_search").selectTabByID("#renew_search"); $("#ren_barcode").focus(); }); } else { shortcut.add('Alt+y',function(){ location.href="/cgi-bin/koha/circ/renew.pl"; }); }
 
+    $("#header_search > ul > li").show();
+
     $(".focus").focus();
     $(".validated").each(function() {
         $(this).validate();
