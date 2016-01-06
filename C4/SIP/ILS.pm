@@ -146,8 +146,7 @@ sub checkout {
     # holds checked inside do_checkout
     # } elsif ($item->hold_queue && @{$item->hold_queue} && ! $item->barcode_is_borrowernumber($patron_id, $item->hold_queue->[0]->{borrowernumber})) {
 	#	$circ->screen_msg("Item on Hold for Another User");
-    } elsif ($item->{patron} && ($item->{patron} ne $patron_id)) {
-	# I can't deal with this right now
+    } elsif ($item->{patron} && !_ci_cardnumber_cmp($item->{patron},$patron_id)) {
 		$circ->screen_msg("Item checked out to another patron");
     } else {
 		$circ->do_checkout();
@@ -155,7 +154,7 @@ sub checkout {
 			$debug and warn "circ is ok";
 			# If the item is already associated with this patron, then
 			# we're renewing it.
-			$circ->renew_ok($item->{patron} && ($item->{patron} eq $patron_id));
+			$circ->renew_ok($item->{patron} && _ci_cardnumber_cmp($item->{patron}, $patron_id));
 		
 			$item->{patron} = $patron_id;
 			$item->{due_date} = $circ->{due};
@@ -172,6 +171,13 @@ sub checkout {
     # END TRANSACTION
 
     return $circ;
+}
+
+sub _ci_cardnumber_cmp {
+    my ( $s1, $s2) = @_;
+    # As the database is case insensitive we need to normalize two strings
+    # before comparing them
+    return ( uc($s1) eq uc($s2) );
 }
 
 sub checkin {
