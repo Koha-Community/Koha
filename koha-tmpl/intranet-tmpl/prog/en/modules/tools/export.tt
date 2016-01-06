@@ -139,7 +139,7 @@ $(document).ready(function() {
         </li>
         <li class="csv_profiles">
             <label for="bibs_csv_profile">CSV profile: </label>
-            <select id="bibs_csv_profile" name="csv_profile">
+            <select id="bibs_csv_profile" name="csv_profile_id">
                 [% FOR csv_profile IN csv_profiles %]
                     <option value="[% csv_profile.export_format_id %]">[% csv_profile.profile %]</option>
                 [% END %]
