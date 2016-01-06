@@ -1,4 +1,4 @@
-NCLUDE 'doc-head-open.inc' %]
+[% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  An error has occurred</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
@@ -27,23 +27,22 @@ NCLUDE 'doc-head-open.inc' %]
                     <div id="errormsg[% errno %]">
                         <h3>Sorry, the requested page is not available</h3>
                         <h4>Error [% errno %]</h4>
-                        <h3>This message can have following reason(s)</h3>
+                        <h3>This message can have the following reason(s):</h3>
                         <ul>
                             [% IF ( errno == 400 ) %]
-                                <li>Koha is pointed an invalid link.</li>
+                                <li>The link is broken and the page does not exist.</li>
                             [% END %]
 
                             [% IF ( errno == 401 ) %]
-                                <li>You are trying to access a link that you're not authorized to see.</li>
-                                <li>Try logging in to the catalog.</li>
+                                <li>You are not authorized to view this page.</li>
                             [% END %]
 
                             [% IF ( errno == 402 ) %]
-                               <li>Koha is pointed an invalid link.</li>
+                               <li>The link is invalid.</li>
                             [% END %]
 
                             [% IF ( errno == 403 ) %]
-                                <li>You are forbidden for some reason to see this page.</li>
+                                <li>You are forbidden to view this page.</li>
                             [% END %]
 
                             [% IF ( errno == 404 ) %]
@@ -53,13 +52,13 @@ NCLUDE 'doc-head-open.inc' %]
                                 <li>An internal link in our catalog home page is broken and the page does not exist.</li>
                             [% END %]
                             [% IF ( errno == 500 ) %]
-                                <li>An error occurred while try to process your request.</li>
+                                <li>An error occurred while processing your request.</li>
                             [% END %]
                         </ul>
                         <h3>What's next?</h3>
                         <ul>
-                            [% IF ( errno == 401 ) %]
-                                <li>Try logging in to the catalog.</li>
+                            [% IF ( errno == 401 ) && ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
+                                <li>Please log in to the catalog and try again. <a href="/cgi-bin/koha/opac-user.pl">Login page</a></li>
                             [% END %]
                             <li>You can use the menu and links at the top of the page</li>
                             <li>You can search our catalog using the search form at the top of this page.</li>
