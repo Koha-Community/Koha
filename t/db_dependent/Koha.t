@@ -8,7 +8,7 @@ use C4::Context;
 use Koha::DateUtils qw(dt_from_string);
 use Koha::AuthorisedValue;
 
-use Test::More tests => 10;
+use Test::More tests => 9;
 use DateTime::Format::MySQL;
 
 BEGIN {
@@ -256,25 +256,6 @@ subtest 'ISBN tests' => sub {
     is( C4::Koha::_isbn_cleanup('978-0-321-49694-2'),
         '0321496949', '_isbn_cleanup converts ISBN-13 to ISBN-10' );
 
-};
-
-subtest 'getFacets() tests' => sub {
-    plan tests => 2;
-
-    C4::Context->set_preference('singleBranchMode', 0);
-    my $facets = C4::Koha::getFacets();
-    is(
-        scalar( grep { defined $_->{idx} && $_->{idx} eq 'location' } @$facets ),
-        1,
-        'location facet present with singleBranchMode off (bug 10078)'
-    );
-    C4::Context->set_preference('singleBranchMode', 1);
-    $facets = C4::Koha::getFacets();
-    is(
-        scalar( grep { defined $_->{idx} && $_->{idx} eq 'location' } @$facets ),
-        1,
-        'location facet present with singleBranchMode on (bug 10078)'
-    );
 };
 
 subtest 'GetFrameworksLoop() tests' => sub {

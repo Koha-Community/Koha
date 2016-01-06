@@ -25,7 +25,7 @@ use Module::Load::Conditional qw/check_install/;
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 33;
+        plan tests => 34;
     } else {
         plan skip_all => "Need Test::DBIx::Class"
     }
@@ -38,15 +38,19 @@ use Test::DBIx::Class {
     connect_info => ['dbi:SQLite:dbname=:memory:','',''],
     connect_opts => { name_sep => '.', quote_char => '`', },
     fixture_class => '::Populate',
-}, 'AuthorisedValue' ;
+}, 'AuthorisedValue', 'Branch' ;
 
 sub fixtures {
-    my ( $data ) = @_;
+    my ( $av, $libraries ) = @_;
     fixtures_ok [
         AuthorisedValue => [
             [ 'category', 'authorised_value' ],
-            @$data,
+            @$av,
         ],
+        Branch => [
+            ['branchcode', 'branchname'],
+            @$libraries,
+        ]
     ], 'add fixtures';
 }
 
@@ -57,7 +61,10 @@ my $authorised_values = [
     ['LOC', 'LOC'],
     ['RELTERMS', 'RELTERMS'],
 ];
-fixtures($authorised_values);
+my $libraries = [
+    ['XXX_test', 'my branchname XXX'],
+];
+fixtures($authorised_values, $libraries);
 
 is ( IsAuthorisedValueCategory('LOC'), 1, 'LOC is a valid authorized value category');
 is ( IsAuthorisedValueCategory('something'), 0, 'something is not a valid authorized value category');
@@ -116,5 +123,31 @@ is( C4::Koha::GetNormalizedUPC(), undef, 'GetNormalizedUPC should return undef i
 is( C4::Koha::GetNormalizedISBN(), undef, 'GetNormalizedISBN should return undef if no record and no isbn are passed' );
 is( C4::Koha::GetNormalizedEAN(), undef, 'GetNormalizedEAN should return undef if no record and no isbn are passed' );
 is( C4::Koha::GetNormalizedOCLCNumber(), undef, 'GetNormalizedOCLCNumber should return undef if no record and no isbn are passed' );
+
+subtest 'getFacets() tests' => sub {
+    plan tests => 5;
+
+    is ( Koha::Libraries->search->count, 1, 'There should be only 1 library (singleBranchMode on)' );
+    my $facets = C4::Koha::getFacets();
+    is(
+        scalar( grep { defined $_->{idx} && $_->{idx} eq 'location' } @$facets ),
+        1,
+        'location facet present with singleBranchMode on (bug 10078)'
+    );
+
+    $libraries = [
+        ['YYY_test', 'my branchname YYY'],
+        ['ZZZ_test', 'my branchname XXX'],
+    ];
+    fixtures($authorised_values, $libraries);
+    is ( Koha::Libraries->search->count, 3, 'There should be only more than 1 library (singleBranchMode off)' );
+
+    $facets = C4::Koha::getFacets();
+    is(
+        scalar( grep { defined $_->{idx} && $_->{idx} eq 'location' } @$facets ),
+        1,
+        'location facet present with singleBranchMode off (bug 10078)'
+    );
+};
 
 1;
