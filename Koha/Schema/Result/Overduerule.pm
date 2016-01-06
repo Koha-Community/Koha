@@ -23,12 +23,6 @@ __PACKAGE__->table("overduerules");
 
 =head1 ACCESSORS
 
-=head2 overduerules_id
-
-  data_type: 'integer'
-  is_auto_increment: 1
-  is_nullable: 0
-
 =head2 branchcode
 
   data_type: 'varchar'
@@ -99,8 +93,6 @@ __PACKAGE__->table("overduerules");
 =cut
 
 __PACKAGE__->add_columns(
-  "overduerules_id",
-  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "branchcode",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
   "categorycode",
@@ -129,20 +121,6 @@ __PACKAGE__->add_columns(
 
 =over 4
 
-=item * L</overduerules_id>
-
-=back
-
-=cut
-
-__PACKAGE__->set_primary_key("overduerules_id");
-
-=head1 UNIQUE CONSTRAINTS
-
-=head2 C<overduerules_branch_cat>
-
-=over 4
-
 =item * L</branchcode>
 
 =item * L</categorycode>
@@ -151,7 +129,7 @@ __PACKAGE__->set_primary_key("overduerules_id");
 
 =cut
 
-__PACKAGE__->add_unique_constraint("overduerules_branch_cat", ["branchcode", "categorycode"]);
+__PACKAGE__->set_primary_key("branchcode", "categorycode");
 
 =head1 RELATIONS
 
@@ -166,13 +144,16 @@ Related object: L<Koha::Schema::Result::OverduerulesTransportType>
 __PACKAGE__->has_many(
   "overduerules_transport_types",
   "Koha::Schema::Result::OverduerulesTransportType",
-  { "foreign.overduerules_id" => "self.overduerules_id" },
+  {
+    "foreign.branchcode"   => "self.branchcode",
+    "foreign.categorycode" => "self.categorycode",
+  },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-01-06 12:00:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Opfa1YZ3IeQRRbyrbKAkNQ
+# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-05-02 18:04:32
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zQK4gTxkrPPwJzujbZxxdg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
