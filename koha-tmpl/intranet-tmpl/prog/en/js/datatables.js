@@ -135,34 +135,6 @@ jQuery.fn.dataTableExt.oApi.fnAddFilters = function ( oSettings, sClass, iDelay 
     });
 }
 
-// Useful if you want to filter on dates with 2 inputs (start date and end date)
-// You have to include calendar.inc to use it
-function dt_add_rangedate_filter(begindate_id, enddate_id, dateCol) {
-    $.fn.dataTableExt.afnFiltering.push(
-        function( oSettings, aData, iDataIndex ) {
-
-            var beginDate = Date_from_syspref($("#"+begindate_id).val()).getTime();
-            var endDate   = Date_from_syspref($("#"+enddate_id).val()).getTime();
-
-            var data = Date_from_syspref(aData[dateCol]).getTime();
-
-            if ( !parseInt(beginDate) && ! parseInt(endDate) ) {
-                return true;
-            }
-            else if ( beginDate <= data && !parseInt(endDate) ) {
-                return true;
-            }
-            else if ( data <= endDate && !parseInt(beginDate) ) {
-                return true;
-            }
-            else if ( beginDate <= data && data <= endDate) {
-                return true;
-            }
-            return false;
-        }
-    );
-}
-
 // Sorting on html contains
 // <a href="foo.pl">bar</a> sort on 'bar'
 function dt_overwrite_html_sorting_localeCompare() {
@@ -201,65 +173,6 @@ function dt_overwrite_html_sorting_localeCompare() {
         y = parseFloat( y );
         return ((x < y) ?  1 : ((x > y) ? -1 : 0));
     };
-}
-
-// Sorting on string without accentued characters
-function dt_overwrite_string_sorting_localeCompare() {
-    jQuery.fn.dataTableExt.oSort['string-asc']  = function(a,b) {
-        a = a.replace(/<.*?>/g, "").replace(/\s+/g, " ");
-        b = b.replace(/<.*?>/g, "").replace(/\s+/g, " ");
-        if (typeof(a.localeCompare == "function")) {
-           return a.localeCompare(b);
-        } else {
-           return (a > b) ? 1 : ((a < b) ? -1 : 0);
-        }
-    };
-
-    jQuery.fn.dataTableExt.oSort['string-desc'] = function(a,b) {
-        a = a.replace(/<.*?>/g, "").replace(/\s+/g, " ");
-        b = b.replace(/<.*?>/g, "").replace(/\s+/g, " ");
-        if(typeof(b.localeCompare == "function")) {
-            return b.localeCompare(a);
-        } else {
-            return (b > a) ? 1 : ((b < a) ? -1 : 0);
-        }
-    };
-}
-
-// Replace a node with a html and js contain.
-function replace_html( original_node, type ) {
-    switch ( $(original_node).attr('data-type') ) {
-        case "range_dates":
-            var id = $(original_node).attr("data-id");
-            var format = $(original_node).attr("data-format");
-            replace_html_date( original_node, id, format );
-            break;
-        default:
-            alert(_("This node can't be replaced"));
-    }
-}
-
-// Replace a node with a "From [date] To [date]" element
-// Used on tfoot > td
-function replace_html_date( original_node, id, format ) {
-    var node = $('<span style="white-space:nowrap">' + _("From") + '<input type="text" id="' + id + 'from" readonly="readonly" placeholder=\'' + _("Pick date") + '\' size="7" /><a title="' + _("Delete this filter") + '" style="cursor:pointer" onclick=\'$("#' + id + 'from").val("").change();\' >&times;</a></span><br/><span style="white-space:nowrap">' + _("To") + '<input type="text" id="' + id + 'to" readonly="readonly" placeholder=\'' + _("Pick date") + '\' size="7" /><a title="' + _("Delete this filter") + '" style="cursor:pointer" onclick=\'$("#' + id + 'to").val("").change();\' >&times;</a></span>');
-    $(original_node).replaceWith(node);
-    var script = document.createElement( 'script' );
-    script.type = 'text/javascript';
-    var script_content = "Calendar.setup({";
-    script_content += "    inputField: \"" + id + "from\",";
-    script_content += "    ifFormat: \"" + format + "\",";
-    script_content += "    button: \"" + id + "from\",";
-    script_content += "    onClose: function(){ $(\"#" + id + "from\").change(); this.hide();}";
-    script_content += "  });";
-    script_content += "  Calendar.setup({";
-    script_content += "    inputField: \"" + id + "to\",";
-    script_content += "    ifFormat: \"" + format + "\",";
-    script_content += "    button: \"" + id + "to\",";
-    script_content += "    onClose: function(){ $(\"#" + id + "to\").change(); this.hide();}";
-    script_content += "  });";
-    script.text = script_content;
-    $(original_node).append( script );
 }
 
 $.fn.dataTableExt.oPagination.four_button = {
