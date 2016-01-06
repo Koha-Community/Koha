@@ -50,24 +50,6 @@ __PACKAGE__->table("serial");
   is_nullable: 0
   size: 100
 
-=head2 serialseq_x
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 100
-
-=head2 serialseq_y
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 100
-
-=head2 serialseq_z
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 100
-
 =head2 status
 
   data_type: 'tinyint'
@@ -125,12 +107,6 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 100 },
   "serialseq",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 100 },
-  "serialseq_x",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
-  "serialseq_y",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
-  "serialseq_z",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
   "status",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "planneddate",
@@ -179,8 +155,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-12-31 11:56:58
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nJ8tcbP/wWWbIic0hSUmBA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-01-06 12:00:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gzIArotxwioI0xaXtwMINw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
