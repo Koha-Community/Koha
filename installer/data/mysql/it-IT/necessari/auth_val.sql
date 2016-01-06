@@ -36,7 +36,7 @@ INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('LOC','P
 -- collection codes for an item
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('CCODE','FIC','Fiction');
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('CCODE','REF','Strumenti di reference');
-INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('CCODE','NFIC','Non Fiction');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('CCODE','NFIC','Non-fiction');
 
 -- withdrawn status of an item, linked to items.withdrawn
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('WITHDRAWN','0','Non ritirata');
