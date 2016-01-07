@@ -897,9 +897,9 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `borrowernotes` mediumtext, -- a note on the patron/borrower's account that is only visible in the staff client
   `relationship` varchar(100) default NULL, -- used for children to include the relationship to their guarentor
   `sex` varchar(1) default NULL, -- patron/borrower's gender
-  `password` varchar(30) default NULL, -- patron/borrower's encrypted password
+  `password` varchar(60) default NULL, -- patron/borrower's encrypted password
   `flags` int(11) default NULL, -- will include a number associated with the staff member's permissions
-  `userid` varchar(30) default NULL, -- patron/borrower's opac and/or staff client log in
+  `userid` varchar(75) default NULL, -- patron/borrower's opac and/or staff client log in
   `opacnote` mediumtext, -- a note on the patron/borrower's account that is visible in the OPAC and staff client
   `contactnote` varchar(255) default NULL, -- a note related to the patron/borrower's alternate address
   `sort1` varchar(80) default NULL, -- a field that can be used for any information unique to the library
