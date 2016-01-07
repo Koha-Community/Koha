@@ -121,6 +121,7 @@ if ( $op eq 'add_form' ) {
     }
 
     my $searchcategory = GetAuthorisedValues("ITEMTYPECAT", $data->{'searchcategory'});
+    my $translated_languages = C4::Languages::getTranslatedLanguages( undef , C4::Context->preference('template') );
 
     $template->param(
         itemtype        => $itemtype,
@@ -137,6 +138,7 @@ if ( $op eq 'add_form' ) {
         sip_media_type  => $data->{sip_media_type},
         hideinopac      => $data->{'hideinopac'},
         searchcategory  => $searchcategory,
+        can_be_translated => ( scalar(@$translated_languages) > 1 ? 1 : 0 ),
     );
 
     # END $OP eq ADD_FORM
