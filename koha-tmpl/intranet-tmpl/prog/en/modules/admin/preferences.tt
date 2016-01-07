@@ -116,7 +116,7 @@
                 <td><div>
                     [% FOREACH CHUNK IN LINE.CHUNKS %]
                     [% IF ( CHUNK.type_text ) %]
-                    [% CHUNK.contents %]
+                    [% CHUNK.contents.raw %]
                     [% ELSIF ( CHUNK.type_input ) %]
                     <input type="[%IF CHUNK.input_type %][% CHUNK.input_type %][% ELSE %]text[% END %]" name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% CHUNK.class or "short" %]" value="[% CHUNK.value %]" autocomplete="off" /> [% IF ( CHUNK.dateinput ) %]<span class="hint">[% INCLUDE 'date-format.inc' %]</span>[% END %]
                     [% ELSIF ( CHUNK.type_select ) %]
