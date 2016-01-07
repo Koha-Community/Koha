@@ -180,7 +180,7 @@ function validate1(date) {
                [% END %]
 
                [% IF ( debarredcomment ) %]
-                   with the explanation: <i>[% debarredcomment | html_line_break %]</i>
+                   with the explanation: <i>[% debarredcomment.raw | html_line_break %]</i>
                [% END %]
                 <a href="#reldebarments" onclick="$('#debarments-tab-link').click()">View restrictions</a>
             </li>
