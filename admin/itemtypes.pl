@@ -60,10 +60,12 @@ if ( $op eq 'add_form' ) {
     my $itemtype = Koha::ItemTypes->find($itemtype_code);
     my $imagesets = C4::Koha::getImageSets( checked => ( $itemtype ? $itemtype->imageurl : undef ) );
     my $searchcategory = GetAuthorisedValues("ITEMTYPECAT", ( $itemtype ? $itemtype->searchcategory : '' ) );
+    my $translated_languages = C4::Languages::getTranslatedLanguages( undef , C4::Context->preference('template') );
     $template->param(
         itemtype  => $itemtype,
         imagesets => $imagesets,
         searchcategory => $searchcategory,
+        can_be_translated => ( scalar(@$translated_languages) > 1 ? 1 : 0 ),
     );
 } elsif ( $op eq 'add_validate' ) {
     my $is_a_modif   = $input->param('is_a_modif');
