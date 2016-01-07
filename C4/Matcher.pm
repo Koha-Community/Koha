@@ -717,7 +717,7 @@ sub get_matches {
 
     # get rid of any that don't meet the required checks
     %matches = map { _passes_required_checks($source_record, $matches{$_}->{record}, $self->{'required_checks'}) ?  ($_ => $matches{$_}) : () }
-                keys %matches unless ($self->{'record_type'} eq 'auth');
+                keys %matches unless ($self->{'record_type'} eq 'authority');
 
     my @results = ();
     if ($self->{'record_type'} eq 'biblio') {
@@ -727,7 +727,7 @@ sub get_matches {
             my $record_number;
             my $result = C4::Biblio::TransformMarcToKoha($target_record, '');
             $record_number = $result->{'biblionumber'};
-            push @results, { 'record_id' => $record_number, 'score' => $matches{$hashkey}->{score}, 'target_record' => $target_record, 'target_biblio' => $result };
+            push @results, { 'record_id' => $record_number, 'score' => $matches{$hashkey}->{score}, };
         }
     } elsif ($self->{'record_type'} eq 'authority') {
         require C4::AuthoritiesMarc;
