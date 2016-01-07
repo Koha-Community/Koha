@@ -230,7 +230,12 @@
       $('#results-wrapper').empty().html(results_heading + table);
 
       var params = [];
-      $form.find('select,input[type="text"],input[type="hidden"]').not('[disabled]').each(function () {
+      $form.find('select').not('[disabled]').find('option:selected').each(function () {
+        var name = $(this).parent('select').attr('name');
+        var value = $(this).val();
+        params.push({ 'name': name, 'value': value });
+      });
+      $form.find('input[type="text"],input[type="hidden"]').not('[disabled]').each(function () {
         params.push({ 'name': $(this).attr('name'), 'value': $(this).val() });
       });
       $form.find('input[type="radio"]:checked').each(function() {
