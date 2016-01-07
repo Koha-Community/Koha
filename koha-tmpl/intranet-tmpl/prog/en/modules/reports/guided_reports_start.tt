@@ -157,7 +157,7 @@ $(document).ready(function(){
     });
 [% END %]
 
-    $(".confirmdelete").click(function(){
+    $("#table_reports").delegate(".confirmdelete", 'click', function(){
         $(this).parents('tr').attr("class","warn");
         if(confirm(_("Are you sure you want to delete this saved report?"))){
             return true;
