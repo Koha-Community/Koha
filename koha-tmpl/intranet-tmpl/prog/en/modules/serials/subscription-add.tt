@@ -17,6 +17,7 @@ var globalnumpatterndata;
 var globalfreqdata;
 var advancedpatternlocked;
 var patternneedtobetested = 0;
+[% IF ( irregularity ) %]patternneedtobetested=1[% END %]
 
 function check_issues(){
     if (globalfreqdata.unit.length >0) {
@@ -86,7 +87,9 @@ function Check_page2(){
         return false;
     }
     if(patternneedtobetested){
-        alert(_("Please click on 'Test prediction pattern' before saving subscription."));
+        [% IF (irregularity) %]
+           alert(_("Warning ! Present pattern has planned irregularities. Click on 'Test prediction pattern' to check if it's still valid"));
+        [% ELSE %]alert(_("Please click on 'Test prediction pattern' before saving subscription."));[% END %]
         return false;
     }
 
