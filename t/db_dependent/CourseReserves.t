@@ -5,7 +5,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 21;
+use Test::More tests => 26;
 
 use Koha::Database;
 use t::lib::TestBuilder;
@@ -53,12 +53,14 @@ ok( $course_id, "ModCourse created course successfully" );
 $course_id = ModCourse(
     course_id  => $course_id,
     staff_note => "Test staff note 2",
+    enabled   => 'no',
 );
 
 my $course = GetCourse($course_id);
 
 ok( $course->{'course_name'} eq "Test Course",       "GetCourse returned correct course" );
 ok( $course->{'staff_note'}  eq "Test staff note 2", "ModCourse updated course succesfully" );
+is( $course->{'enabled'}, 'no', "Test Course is disabled" );
 
 my $courses = GetCourses();
 is( ref($courses), 'ARRAY', "GetCourses returns an array" );
@@ -86,6 +88,26 @@ ok( $course_reserve->{'cr_id'} eq $cr_id, "GetCourseReserve returns valid data" 
 
 my $course_reserves = GetCourseReserves( 'course_id' => $course_id );
 ok( $course_reserves->[0]->{'ci_id'} eq $ci_id, "GetCourseReserves returns valid data." );
+
+## Check for regression of Bug 15530
+$course_id = ModCourse(
+    course_id  => $course_id,
+    enabled   => 'yes',
+);
+$course = GetCourse($course_id);
+is( $course->{'enabled'}, 'yes', "Test Course is enabled" );
+$course_item = GetCourseItem( 'ci_id' => $ci_id );
+is( $course_item->{enabled}, 'yes', "Course item is enabled after modding disabled course" );
+my $disabled_course_id = ModCourse(
+    course_name => "Disabled Course",
+    enabled     => 'no',
+);
+my $disabled_course = GetCourse( $disabled_course_id );
+is( $disabled_course->{'enabled'}, 'no', "Disabled Course is disabled" );
+my $cr_id2 = ModCourseReserve( 'course_id' => $disabled_course_id, 'ci_id' => $ci_id );
+$course_item = GetCourseItem( 'ci_id' => $ci_id );
+is( $course_item->{enabled}, 'yes', "Course item is enabled after modding disabled course" );
+## End check for regression of Bug 15530
 
 my $info = GetItemCourseReservesInfo( itemnumber => $itemnumber );
 ok( $info->[0]->{'itemnumber'} eq $itemnumber, "GetItemReservesInfo returns valid data." );
