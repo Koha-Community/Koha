@@ -17,6 +17,8 @@ package C4::CourseReserves;
 
 use Modern::Perl;
 
+use List::MoreUtils qw(any);
+
 use C4::Context;
 use C4::Items qw(GetItem ModItem);
 use C4::Biblio qw(GetBiblioFromItemNumber);
@@ -259,7 +261,6 @@ sub EnableOrDisableCourseItems {
               ) {
                 EnableOrDisableCourseItem(
                     ci_id   => $course_reserve->{'ci_id'},
-                    enabled => 'yes',
                 );
             }
         }
@@ -274,7 +275,6 @@ sub EnableOrDisableCourseItems {
               ) {
                 EnableOrDisableCourseItem(
                     ci_id   => $course_reserve->{'ci_id'},
-                    enabled => 'no',
                 );
             }
         }
@@ -283,10 +283,7 @@ sub EnableOrDisableCourseItems {
 
 =head2 EnableOrDisableCourseItem
 
-    EnableOrDisableCourseItem( ci_id => $ci_id, enabled => $enabled );
-
-    enabled => 'yes' to enable course items
-    enabled => 'no' to disable course items
+    EnableOrDisableCourseItem( ci_id => $ci_id );
 
 =cut
 
@@ -295,12 +292,15 @@ sub EnableOrDisableCourseItem {
     warn identify_myself(%params) if $DEBUG;
 
     my $ci_id   = $params{'ci_id'};
-    my $enabled = $params{'enabled'};
 
-    return unless ( $ci_id && $enabled );
-    return unless ( $enabled eq 'yes' || $enabled eq 'no' );
+    return unless ( $ci_id );
 
     my $course_item = GetCourseItem( ci_id => $ci_id );
+
+    my $info = GetItemCourseReservesInfo( itemnumber => $course_item->{itemnumber} );
+
+    my $enabled = any { $_->{course}->{enabled} eq 'yes' } @$info;
+    $enabled = $enabled ? 'yes' : 'no';
 
     ## We don't want to 'enable' an already enabled item,
     ## or disable and already disabled item,
@@ -828,10 +828,8 @@ sub ModCourseReserve {
         $cr_id = $dbh->last_insert_id( undef, undef, 'course_reserves', 'cr_id' );
     }
 
-    my $course = GetCourse($course_id);
     EnableOrDisableCourseItem(
         ci_id   => $params{'ci_id'},
-        enabled => $course->{'enabled'}
     );
 
     return $cr_id;
@@ -932,7 +930,7 @@ sub DelCourseReserve {
 
 }
 
-=head2 GetReservesInfo
+=head2 GetItemCourseReservesInfo
 
     my $arrayref = GetItemCourseReservesInfo( itemnumber => $itemnumber );
 
