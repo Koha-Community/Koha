@@ -364,7 +364,7 @@ sub PurgeZ3950 {
 }
 
 sub PurgeDebarments {
-    require Koha::Borrower::Debarments;
+    require Koha::Patron::Debarments;
     my $days = shift;
     $count = 0;
     $sth   = $dbh->prepare(
@@ -376,7 +376,7 @@ sub PurgeDebarments {
     );
     $sth->execute($days) or die $dbh->errstr;
     while ( my ($borrower_debarment_id) = $sth->fetchrow_array ) {
-        Koha::Borrower::Debarments::DelDebarment($borrower_debarment_id);
+        Koha::Patron::Debarments::DelDebarment($borrower_debarment_id);
         $count++;
     }
     return $count;

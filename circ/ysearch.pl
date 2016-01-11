@@ -28,7 +28,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Auth qw/check_cookie_auth/;
-use Koha::Borrowers;
+use Koha::Patrons;
 use Koha::DateUtils qw/format_sqldatetime/;
 
 use JSON qw( to_json );
@@ -67,7 +67,7 @@ foreach my $p (@parts) {
 
 push( @params, { branchcode => C4::Context->userenv->{branch} } ) if $limit_on_branch;
 
-my $borrowers_rs = Koha::Borrowers->search(
+my $borrowers_rs = Koha::Patrons->search(
     { -and => \@params },
     {
         # Get the first 10 results

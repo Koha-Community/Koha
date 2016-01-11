@@ -23,7 +23,7 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 use C4::Context;
-use Koha::Borrower::Discharge;
+use Koha::Patron::Discharge;
 
 my $input = new CGI;
 my $op = $input->param('op') // 'list';
@@ -44,12 +44,12 @@ my $branchcode =
 
 if( $op eq 'allow' ) {
     my $borrowernumber = $input->param('borrowernumber');
-    Koha::Borrower::Discharge::discharge({
+    Koha::Patron::Discharge::discharge({
         borrowernumber => $borrowernumber
     }) if $borrowernumber;
 }
 
-my $pending_discharges = Koha::Borrower::Discharge::get_pendings({
+my $pending_discharges = Koha::Patron::Discharge::get_pendings({
     branchcode => $branchcode
 });
 

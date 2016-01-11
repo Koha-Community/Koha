@@ -1,4 +1,4 @@
-package Koha::Borrower::Discharge;
+package Koha::Patron::Discharge;
 
 use Modern::Perl;
 use CGI;
@@ -51,7 +51,7 @@ sub is_discharged {
     my $borrowernumber = $params->{borrowernumber};
 
 
-    my $restricted = Koha::Borrower::Debarments::IsDebarred($borrowernumber);
+    my $restricted = Koha::Patron::Debarments::IsDebarred($borrowernumber);
     my $validated = get_validated({borrowernumber => $borrowernumber});
 
     if ($restricted && $validated) {
@@ -85,7 +85,7 @@ sub discharge {
     }
 
     # Debar the member
-    Koha::Borrower::Debarments::AddDebarment({
+    Koha::Patron::Debarments::AddDebarment({
         borrowernumber => $borrowernumber,
         type           => 'DISCHARGE',
     });

@@ -29,7 +29,7 @@ BEGIN {
     use_ok('C4::Creators::Lib');
     use_ok('C4::Biblio');
     use_ok('C4::Context');
-    use_ok('Koha::Borrower');
+    use_ok('Koha::Patron');
     use_ok('MARC::Record');
 }
 

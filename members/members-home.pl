@@ -26,7 +26,7 @@ use C4::Context;
 use C4::Members;
 use C4::Branch;
 use C4::Category;
-use Koha::Borrower::Modifications;
+use Koha::Patron::Modifications;
 use Koha::Libraries;
 use Koha::List::Patron;
 
@@ -89,7 +89,7 @@ else {
 
 
 my $pending_borrower_modifications =
-  Koha::Borrower::Modifications->GetPendingModificationsCount( $branch );
+  Koha::Patron::Modifications->GetPendingModificationsCount( $branch );
 
 $template->param( 
         no_add => $no_add,

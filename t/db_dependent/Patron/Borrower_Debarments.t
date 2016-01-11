@@ -10,7 +10,7 @@ use t::lib::TestBuilder;
 
 use Test::More tests => 31;
 
-use_ok('Koha::Borrower::Debarments');
+use_ok('Koha::Patron::Debarments');
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
@@ -65,9 +65,9 @@ $debarments = GetDebarments({ borrowernumber => $borrowernumber });
 is( $debarments->[1]->{'comment'}, 'Test 3', "ModDebarment functions correctly" );
 
 
-my $borrower = GetMember( borrowernumber => $borrowernumber );
-is( $borrower->{'debarred'}, '9999-06-10', "Field borrowers.debarred set correctly" );
-is( $borrower->{'debarredcomment'}, "Test 1\nTest 3", "Field borrowers.debarredcomment set correctly" );
+my $patron = GetMember( borrowernumber => $borrowernumber );
+is( $patron->{'debarred'}, '9999-06-10', "Field borrowers.debarred set correctly" );
+is( $patron->{'debarredcomment'}, "Test 1\nTest 3", "Field borrowers.debarredcomment set correctly" );
 
 
 AddUniqueDebarment({

@@ -255,7 +255,7 @@ __END__
 
 =head1 SEE ALSO
 
-Koha::Borrower::Files
+Koha::Patron::Files
 
 =head1 AUTHOR
 

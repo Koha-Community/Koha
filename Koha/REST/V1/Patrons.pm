@@ -20,7 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use C4::Auth qw( haspermission );
-use Koha::Borrowers;
+use Koha::Patrons;
 
 sub list_patrons {
     my ($c, $args, $cb) = @_;
@@ -30,7 +30,7 @@ sub list_patrons {
         return $c->$cb({error => "You don't have the required permission"}, 403);
     }
 
-    my $patrons = Koha::Borrowers->search;
+    my $patrons = Koha::Patrons->search;
 
     $c->$cb($patrons->unblessed, 200);
 }
@@ -47,7 +47,7 @@ sub get_patron {
         return $c->$cb({error => "You don't have the required permission"}, 403);
     }
 
-    my $patron = Koha::Borrowers->find($args->{borrowernumber});
+    my $patron = Koha::Patrons->find($args->{borrowernumber});
     unless ($patron) {
         return $c->$cb({error => "Patron not found"}, 404);
     }

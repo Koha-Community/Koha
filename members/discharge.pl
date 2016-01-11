@@ -36,7 +36,7 @@ use C4::Output;
 use C4::Members;
 use C4::Reserves;
 use C4::Letters;
-use Koha::Borrower::Discharge;
+use Koha::Patron::Discharge;
 
 use Koha::DateUtils;
 
@@ -57,7 +57,7 @@ if ( $input->param('borrowernumber') ) {
     # Getting member data
     $data = GetMember( borrowernumber => $borrowernumber );
 
-    my $can_be_discharged = Koha::Borrower::Discharge::can_be_discharged({
+    my $can_be_discharged = Koha::Patron::Discharge::can_be_discharged({
         borrowernumber => $borrowernumber
     });
 
@@ -67,16 +67,16 @@ if ( $input->param('borrowernumber') ) {
 
     # Generating discharge if needed
     if ( $input->param('discharge') and $can_be_discharged ) {
-        my $is_discharged = Koha::Borrower::Discharge::is_discharged({
+        my $is_discharged = Koha::Patron::Discharge::is_discharged({
             borrowernumber => $borrowernumber,
         });
         unless ($is_discharged) {
-            Koha::Borrower::Discharge::discharge({
+            Koha::Patron::Discharge::discharge({
                 borrowernumber => $borrowernumber
             });
         }
         eval {
-            my $pdf_path = Koha::Borrower::Discharge::generate_as_pdf(
+            my $pdf_path = Koha::Patron::Discharge::generate_as_pdf(
                 { borrowernumber => $borrowernumber, branchcode => $data->{'branchcode'} } );
 
             binmode(STDOUT);
@@ -98,7 +98,7 @@ if ( $input->param('borrowernumber') ) {
     }
 
     # Already generated discharges
-    my $validated_discharges = Koha::Borrower::Discharge::get_validated({
+    my $validated_discharges = Koha::Patron::Discharge::get_validated({
         borrowernumber => $borrowernumber,
     });
 

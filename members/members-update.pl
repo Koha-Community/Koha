@@ -26,7 +26,7 @@ use C4::Context;
 use C4::Members;
 use C4::Branch;
 use C4::Category;
-use Koha::Borrower::Modifications;
+use Koha::Patron::Modifications;
 
 my $query = new CGI;
 
@@ -49,7 +49,7 @@ my $branch =
   : undef;
 
 my $pending_modifications =
-  Koha::Borrower::Modifications->GetPendingModifications($branch);
+  Koha::Patron::Modifications->GetPendingModifications($branch);
 
 my $borrowers;
 foreach my $pm (@$pending_modifications) {

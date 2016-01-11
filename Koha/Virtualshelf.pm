@@ -21,7 +21,7 @@ use Carp;
 
 use C4::Auth;
 
-use Koha::Borrowers;
+use Koha::Patrons;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
@@ -238,7 +238,7 @@ sub can_be_deleted {
     return 0 unless $borrowernumber;
     return 1 if $self->owner == $borrowernumber;
 
-    my $patron = Koha::Borrowers->find( $borrowernumber );
+    my $patron = Koha::Patrons->find( $borrowernumber );
 
     return 1 if $self->category == $PUBLIC and C4::Auth::haspermission( $patron->userid, { lists => 'delete_public_lists' } );
 

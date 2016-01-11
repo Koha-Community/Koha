@@ -23,7 +23,7 @@ use CGI qw ( -utf8 );
 
 use C4::Auth;
 use Koha::DateUtils;
-use Koha::Borrower::Debarments;
+use Koha::Patron::Debarments;
 
 my $cgi = new CGI;
 

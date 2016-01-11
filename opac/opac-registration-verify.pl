@@ -23,7 +23,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Members;
 use C4::Form::MessagingPreferences;
-use Koha::Borrower::Modifications;
+use Koha::Patron::Modifications;
 
 my $cgi = new CGI;
 my $dbh = C4::Context->dbh;
@@ -34,7 +34,7 @@ unless ( C4::Context->preference('PatronSelfRegistration') ) {
 }
 
 my $token = $cgi->param('token');
-my $m = Koha::Borrower::Modifications->new( verification_token => $token );
+my $m = Koha::Patron::Modifications->new( verification_token => $token );
 
 my ( $template, $borrowernumber, $cookie );
 if ( $m->Verify() ) {
@@ -50,13 +50,13 @@ if ( $m->Verify() ) {
     $template->param(
         OpacPasswordChange => C4::Context->preference('OpacPasswordChange') );
 
-    my $borrower = Koha::Borrower::Modifications->GetModifications({ verification_token => $token });
+    my $borrower = Koha::Patron::Modifications->GetModifications({ verification_token => $token });
 
     my $password;
     ( $borrowernumber, $password ) = AddMember_Opac(%$borrower);
 
     if ($borrowernumber) {
-        Koha::Borrower::Modifications->DelModifications({ verification_token => $token });
+        Koha::Patron::Modifications->DelModifications({ verification_token => $token });
         C4::Form::MessagingPreferences::handle_form_action($cgi, { borrowernumber => $borrowernumber }, $template, 1, C4::Context->preference('PatronSelfRegistrationDefaultCategory') ) if C4::Context->preference('EnhancedMessagingPreferences');
 
         $template->param( password_cleartext => $password );

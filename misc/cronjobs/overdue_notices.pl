@@ -38,7 +38,7 @@ use C4::Context;
 use C4::Letters;
 use C4::Overdues qw(GetFine GetOverdueMessageTransportTypes parse_overdues_letter);
 use C4::Log;
-use Koha::Borrower::Debarments qw(AddUniqueDebarment);
+use Koha::Patron::Debarments qw(AddUniqueDebarment);
 use Koha::DateUtils;
 use Koha::Calendar;
 use Koha::Libraries;

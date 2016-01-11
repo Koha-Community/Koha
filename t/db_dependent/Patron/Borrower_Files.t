@@ -27,7 +27,7 @@ use t::lib::TestBuilder;
 
 use Test::More tests => 23;
 
-use_ok('Koha::Borrower::Files');
+use_ok('Koha::Patron::Files');
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
@@ -49,7 +49,7 @@ my $borrowernumber = AddMember(
     branchcode => $library->{branchcode},
 );
 
-my $bf = Koha::Borrower::Files->new(
+my $bf = Koha::Patron::Files->new(
     borrowernumber => $borrowernumber,
 );
 

@@ -34,8 +34,8 @@ use C4::Branch; # GetBranches
 use C4::Overdues;
 use C4::Debug;
 use Koha::DateUtils;
-use Koha::Borrower::Debarments qw(IsDebarred);
 use Koha::Libraries;
+use Koha::Patron::Debarments qw(IsDebarred);
 use Date::Calc qw/Today Date_to_Days/;
 
 my $maxreserves = C4::Context->preference("maxreserves");

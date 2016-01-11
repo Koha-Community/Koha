@@ -47,7 +47,7 @@ use C4::Members::AttributeTypes;
 use C4::Members::Messaging;
 use C4::Reports::Guided;
 use C4::Templates;
-use Koha::Borrower::Debarments;
+use Koha::Patron::Debarments;
 use Koha::DateUtils;
 
 use Text::CSV;

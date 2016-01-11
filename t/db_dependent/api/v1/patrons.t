@@ -25,7 +25,7 @@ use C4::Auth;
 use C4::Context;
 
 use Koha::Database;
-use Koha::Borrower;
+use Koha::Patron;
 
 my $builder = t::lib::TestBuilder->new();
 

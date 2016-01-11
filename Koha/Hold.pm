@@ -24,7 +24,7 @@ use Carp;
 use C4::Context qw(preference);
 
 use Koha::DateUtils qw(dt_from_string);
-use Koha::Borrowers;
+use Koha::Patrons;
 use Koha::Biblios;
 use Koha::Items;
 use Koha::Libraries;
@@ -223,14 +223,14 @@ sub branch {
 
 =head3 borrower
 
-Returns the related Koha::Borrower object for this Hold
+Returns the related Koha::Patron object for this Hold
 
 =cut
 
 sub borrower {
     my ($self) = @_;
 
-    $self->{_borrower} ||= Koha::Borrowers->find( $self->borrowernumber() );
+    $self->{_borrower} ||= Koha::Patrons->find( $self->borrowernumber() );
 
     return $self->{_borrower};
 }

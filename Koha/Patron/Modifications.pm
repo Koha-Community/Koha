@@ -1,4 +1,4 @@
-package Koha::Borrower::Modifications;
+package Koha::Patron::Modifications;
 
 # Copyright 2012 ByWater Solutions
 # This file is part of Koha.
@@ -18,7 +18,7 @@ package Koha::Borrower::Modifications;
 
 =head1 NAME
 
-C4::Borrowers::Modifications
+Koha::Patron::Modifications
 
 =cut
 
@@ -35,9 +35,9 @@ sub new {
 
 =head2 AddModifications
 
-Koha::Borrower::Modifications->AddModifications( $data );
+Koha::Patron::Modifications->AddModifications( $data );
 
-Adds or updates modifications for a borrower.
+Adds or updates modifications for a patron
 
 Requires either the key borrowernumber, or verification_token
 to be part of the passed in hash.
@@ -67,7 +67,7 @@ sub AddModifications {
 
 =head2 Verify
 
-$verified = Koha::Borrower::Modifications->Verify( $verification_token );
+$verified = Koha::Patron::Modifications->Verify( $verification_token );
 
 Returns true if the passed in token is valid.
 
@@ -96,9 +96,9 @@ sub Verify {
 
 =head2 GetPendingModificationsCount
 
-$count = Koha::Borrower::Modifications->GetPendingModificationsCount();
+$count = Koha::Patron::Modifications->GetPendingModificationsCount();
 
-Returns the number of pending modifications for existing borrowers.
+Returns the number of pending modifications for existing patron.
 
 =cut
 
@@ -128,9 +128,9 @@ sub GetPendingModificationsCount {
 
 =head2 GetPendingModifications
 
-$arrayref = Koha::Borrower::Modifications->GetPendingModifications();
+$arrayref = Koha::Patron::Modifications->GetPendingModifications();
 
-Returns an arrayref of hashrefs for all pending modifications for existing borrowers.
+Returns an arrayref of hashrefs for all pending modifications for existing patrons.
 
 =cut
 
@@ -168,7 +168,7 @@ sub GetPendingModifications {
 
 =head2 ApproveModifications
 
-Koha::Borrower::Modifications->ApproveModifications( $borrowernumber );
+Koha::Patron::Modifications->ApproveModifications( $borrowernumber );
 
 Commits the pending modifications to the borrower record and removes
 them from the modifications table.
@@ -197,10 +197,10 @@ sub ApproveModifications {
 
 =head2 DenyModifications
 
-Koha::Borrower::Modifications->DenyModifications( $borrowernumber );
+Koha::Patron::Modifications->DenyModifications( $borrowernumber );
 
-Removes the modifications from the table for the given borrower,
-without commiting the changes to the borrower record.
+Removes the modifications from the table for the given patron,
+without committing the changes to the patron record.
 
 =cut
 
@@ -217,7 +217,7 @@ sub DenyModifications {
 
 =head2 DelModifications
 
-Koha::Borrower::Modifications->DelModifications({
+Koha::Patron::Modifications->DelModifications({
   [ borrowernumber => $borrowernumber ],
   [ verification_token => $verification_token ]
 });
@@ -258,7 +258,7 @@ sub DelModifications {
 
 =head2 GetModifications
 
-$hashref = Koha::Borrower::Modifications->GetModifications({
+$hashref = Koha::Patron::Modifications->GetModifications({
   [ borrowernumber => $borrowernumber ],
   [ verification_token => $verification_token ]
 });

@@ -26,7 +26,7 @@ use C4::Context;
 use C4::Members;
 use C4::Branch;
 use C4::Category;
-use Koha::Borrower::Modifications;
+use Koha::Patron::Modifications;
 
 my $query = new CGI;
 
@@ -50,10 +50,10 @@ foreach my $param (@params) {
         my $action = $query->param($param);
 
         if ( $action eq 'approve' ) {
-            Koha::Borrower::Modifications->ApproveModifications( $borrowernumber );
+            Koha::Patron::Modifications->ApproveModifications( $borrowernumber );
         }
         elsif ( $action eq 'deny' ) {
-            Koha::Borrower::Modifications->DenyModifications( $borrowernumber );
+            Koha::Patron::Modifications->DenyModifications( $borrowernumber );
         }
         elsif ( $action eq 'ignore' ) {
 

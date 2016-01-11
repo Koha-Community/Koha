@@ -35,7 +35,7 @@ use C4::Items;
 use C4::Letters;
 use C4::Branch; # GetBranches
 use Koha::DateUtils;
-use Koha::Borrower::Debarments qw(IsDebarred);
+use Koha::Patron::Debarments qw(IsDebarred);
 use Koha::Holds;
 use Koha::Database;
 use Koha::Patron::Messages;

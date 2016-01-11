@@ -1,4 +1,4 @@
-package Koha::Borrower::Debarments;
+package Koha::Patron::Debarments;
 
 # This file is part of Koha.
 #
@@ -36,9 +36,9 @@ our @EXPORT = qw(
   IsDebarred
 );
 
-=head1 Koha::Borrower::Debarments
+=head1 Koha::Patron::Debarments
 
-Koha::Borrower::Debarments - Module for managing borrower debarments
+Koha::Patron::Debarments - Module for managing patron debarments
 
 =cut
 
@@ -174,7 +174,7 @@ sub ModDebarment {
 my $debarment_expiration = IsDebarred( $borrowernumber );
 
 Returns the date a borrowers debarment will expire, or
-undef if the borrower is not debarred
+undef if the patron is not debarred
 
 =cut
 

@@ -1,4 +1,4 @@
-package Koha::Borrower;
+package Koha::Patron;
 
 # Copyright ByWater Solutions 2014
 #
@@ -27,7 +27,7 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Borrower - Koha Borrower Object class
+Koha::Patron - Koha Patron Object class
 
 =head1 API
 
@@ -37,14 +37,14 @@ Koha::Borrower - Koha Borrower Object class
 
 =head3 guarantor
 
-Returns a Koha::Borrower object for this borrower's guarantor
+Returns a Koha::Patron object for this patron's guarantor
 
 =cut
 
 sub guarantor {
     my ( $self ) = @_;
 
-    return Koha::Borrowers->find( $self->guarantorid() );
+    return Koha::Patrons->find( $self->guarantorid() );
 }
 
 =head3 type

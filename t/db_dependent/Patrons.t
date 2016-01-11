@@ -25,7 +25,7 @@ use Koha::Database;
 
 BEGIN {
     use_ok('Koha::Objects');
-    use_ok('Koha::Borrowers');
+    use_ok('Koha::Patrons');
 }
 
 # Start transaction
@@ -41,7 +41,7 @@ my $categorycode =
 my $branchcode =
   Koha::Database->new()->schema()->resultset('Branch')->first()->branchcode();
 
-my $b1 = Koha::Borrower->new(
+my $b1 = Koha::Patron->new(
     {
         surname      => 'Test 1',
         branchcode   => $branchcode,
@@ -49,7 +49,7 @@ my $b1 = Koha::Borrower->new(
     }
 );
 $b1->store();
-my $b2 = Koha::Borrower->new(
+my $b2 = Koha::Patron->new(
     {
         surname      => 'Test 2',
         branchcode   => $branchcode,
@@ -57,7 +57,7 @@ my $b2 = Koha::Borrower->new(
     }
 );
 $b2->store();
-my $b3 = Koha::Borrower->new(
+my $b3 = Koha::Patron->new(
     {
         surname      => 'Test 3',
         branchcode   => $branchcode,
@@ -66,31 +66,31 @@ my $b3 = Koha::Borrower->new(
 );
 $b3->store();
 
-my $b1_new = Koha::Borrowers->find( $b1->borrowernumber() );
-is( $b1->surname(), $b1_new->surname(), "Found matching borrower" );
+my $b1_new = Koha::Patrons->find( $b1->borrowernumber() );
+is( $b1->surname(), $b1_new->surname(), "Found matching patron" );
 
-my @borrowers = Koha::Borrowers->search( { branchcode => $branchcode } );
-is( @borrowers, 3, "Found 3 borrowers with Search" );
+my @patrons = Koha::Patrons->search( { branchcode => $branchcode } );
+is( @patrons, 3, "Found 3 patrons with Search" );
 
-my $unexistent = Koha::Borrowers->find( '1234567890' );
+my $unexistent = Koha::Patrons->find( '1234567890' );
 is( $unexistent, undef, 'Koha::Objects->Find should return undef if the record does not exist' );
 
-my $borrowers = Koha::Borrowers->search( { branchcode => $branchcode } );
-is( $borrowers->count( { branchcode => $branchcode } ), 3, "Counted 3 borrowers with Count" );
+my $patrons = Koha::Patrons->search( { branchcode => $branchcode } );
+is( $patrons->count( { branchcode => $branchcode } ), 3, "Counted 3 patrons with Count" );
 
-my $b = $borrowers->next();
-is( $b->surname(), 'Test 1', "Next returns first borrower" );
-$b = $borrowers->next();
-is( $b->surname(), 'Test 2', "Next returns second borrower" );
-$b = $borrowers->next();
-is( $b->surname(), 'Test 3', "Next returns third borrower" );
-$b = $borrowers->next();
+my $b = $patrons->next();
+is( $b->surname(), 'Test 1', "Next returns first patron" );
+$b = $patrons->next();
+is( $b->surname(), 'Test 2', "Next returns second patron" );
+$b = $patrons->next();
+is( $b->surname(), 'Test 3', "Next returns third patron" );
+$b = $patrons->next();
 is( $b, undef, "Next returns undef" );
 
 # Test Reset and iteration in concert
-$borrowers->reset();
-foreach my $b ( $borrowers->as_list() ) {
-    is( $b->categorycode(), $categorycode, "Iteration returns a borrower object" );
+$patrons->reset();
+foreach my $b ( $patrons->as_list() ) {
+    is( $b->categorycode(), $categorycode, "Iteration returns a patron object" );
 }
 
 1;

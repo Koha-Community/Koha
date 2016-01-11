@@ -43,7 +43,7 @@ use Koha::Holds;
 use C4::Context;
 use CGI::Session;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
-use Koha::Borrower::Debarments qw(GetDebarments IsDebarred);
+use Koha::Patron::Debarments qw(GetDebarments IsDebarred);
 use Koha::DateUtils;
 use Koha::Database;
 use Koha::Patron::Messages;

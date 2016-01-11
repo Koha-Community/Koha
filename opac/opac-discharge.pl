@@ -28,7 +28,7 @@ use C4::Log;
 use C4::Debug;
 use C4::Branch;
 use C4::Members;
-use Koha::Borrower::Discharge;
+use Koha::Patron::Discharge;
 use Koha::DateUtils;
 
 my $input = new CGI;
@@ -44,7 +44,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
 });
 
 if ( $op eq 'request' ) {
-    my $success = Koha::Borrower::Discharge::request({
+    my $success = Koha::Patron::Discharge::request({
         borrowernumber => $loggedinuser,
     });
 
@@ -60,7 +60,7 @@ elsif ( $op eq 'get' ) {
 
         # Getting member data
         my $data = GetMember( borrowernumber => $loggedinuser );
-        my $pdf_path = Koha::Borrower::Discharge::generate_as_pdf({
+        my $pdf_path = Koha::Patron::Discharge::generate_as_pdf({
             borrowernumber => $loggedinuser,
             branchcode => $data->{'branchcode'},
         });
@@ -83,16 +83,16 @@ elsif ( $op eq 'get' ) {
     }
 }
 else {
-    my $pending = Koha::Borrower::Discharge::count({
+    my $pending = Koha::Patron::Discharge::count({
         borrowernumber => $loggedinuser,
         pending        => 1,
     });
-    my $available = Koha::Borrower::Discharge::count({
+    my $available = Koha::Patron::Discharge::count({
         borrowernumber => $loggedinuser,
         validated      => 1,
     });
     $template->param(
-        available => $available && Koha::Borrower::Discharge::is_discharged({borrowernumber => $loggedinuser}),
+        available => $available && Koha::Patron::Discharge::is_discharged({borrowernumber => $loggedinuser}),
         pending   => $pending,
     );
 }

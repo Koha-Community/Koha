@@ -20,7 +20,7 @@ use Mojo::Base 'Mojolicious';
 
 use C4::Auth qw( check_cookie_auth get_session );
 use C4::Context;
-use Koha::Borrowers;
+use Koha::Patrons;
 
 sub startup {
     my $self = shift;
@@ -32,7 +32,7 @@ sub startup {
             my ($status, $sessionID) = check_cookie_auth($c->cookie('CGISESSID'));
             if ($status eq "ok") {
                 my $session = get_session($sessionID);
-                my $user = Koha::Borrowers->find($session->param('number'));
+                my $user = Koha::Patrons->find($session->param('number'));
                 $c->stash('koha.user' => $user);
             }
 

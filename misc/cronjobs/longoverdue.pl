@@ -39,7 +39,7 @@ use C4::Circulation qw/LostItem/;
 use Getopt::Long;
 use C4::Log;
 use Pod::Usage;
-use Koha::Borrowers;
+use Koha::Patrons;
 
 my  $lost;  #  key=lost value,  value=num days.
 my ($charge, $verbose, $confirm, $quiet);
@@ -302,7 +302,7 @@ foreach my $startrange (sort keys %$lost) {
         $count=0;
         ITEM: while (my $row=$sth_items->fetchrow_hashref) {
             if( $filter_borrower_categories ) {
-                my $category = uc Koha::Borrowers->find( $row->{borrowernumber} )->categorycode();
+                my $category = uc Koha::Patrons->find( $row->{borrowernumber} )->categorycode();
                 next ITEM unless ( $category_to_process{ $category } );
             }
             printf ("Due %s: item %5s from borrower %5s to lost: %s\n", $row->{date_due}, $row->{itemnumber}, $row->{borrowernumber}, $lostvalue) if($verbose);

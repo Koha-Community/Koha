@@ -21,7 +21,7 @@ use C4::Context;
 use C4::Biblio qw( AddBiblio );
 use Koha::Database;
 use Koha::Libraries;
-use Koha::Borrowers;
+use Koha::Patrons;
 
 use Test::More tests => 4;
 
@@ -35,7 +35,7 @@ my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 
 my @branches = Koha::Libraries->search();
-my $borrower = Koha::Borrowers->search()->next();
+my $borrower = Koha::Patrons->search()->next();
 
 my $biblio = MARC::Record->new();
 $biblio->append_fields(

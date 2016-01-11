@@ -23,7 +23,7 @@ use Carp;
 
 use Koha::Database;
 
-use Koha::Borrowers;
+use Koha::Patrons;
 use Koha::Libraries;
 
 use base qw(Koha::Object);
@@ -78,7 +78,7 @@ sub holding_branch {
 
 Gets and sets the last borrower to return an item.
 
-Accepts and returns Koha::Borrower objects
+Accepts and returns Koha::Patron objects
 
 $item->last_returned_by( $borrowernumber );
 
@@ -99,7 +99,7 @@ sub last_returned_by {
         unless ( $self->{_last_returned_by} ) {
             my $result = $items_last_returned_by_rs->single( { itemnumber => $self->id } );
             if ($result) {
-                $self->{_last_returned_by} = Koha::Borrowers->find( $result->get_column('borrowernumber') );
+                $self->{_last_returned_by} = Koha::Patrons->find( $result->get_column('borrowernumber') );
             }
         }
 

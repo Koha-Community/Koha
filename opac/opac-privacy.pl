@@ -24,7 +24,7 @@ use C4::Context;
 use C4::Circulation;
 use C4::Members;
 use C4::Output;
-use Koha::Borrowers;
+use Koha::Patrons;
 
 my $query = new CGI;
 
@@ -75,7 +75,7 @@ elsif ( $op eq "delete_record" ) {
 }
 
 # get borrower privacy ....
-my $borrower = Koha::Borrowers->find( $borrowernumber );;
+my $borrower = Koha::Patrons->find( $borrowernumber );;
 
 $template->param(
     'Ask_data'                       => 1,

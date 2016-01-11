@@ -26,7 +26,7 @@ use C4::Auth;
 use C4::Branch;
 use C4::Output;
 use C4::Form::MessagingPreferences;
-use Koha::Borrowers;
+use Koha::Patrons;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Patron::Categories;
@@ -162,7 +162,7 @@ elsif ( $op eq 'add_validate' ) {
 }
 elsif ( $op eq 'delete_confirm' ) {
 
-    my $count = Koha::Borrowers->search({
+    my $count = Koha::Patrons->search({
         categorycode => $categorycode
     })->count;
 

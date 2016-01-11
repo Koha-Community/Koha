@@ -27,7 +27,7 @@ use Time::Piece;
 BEGIN {
     use_ok('C4::Biblio');
     use_ok('C4::Review');
-    use_ok('Koha::Borrower');
+    use_ok('Koha::Patron');
     use_ok('MARC::Record');
 }
 
@@ -59,7 +59,7 @@ my $builder = t::lib::TestBuilder->new;
 my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
 my $branchcode   = $builder->build({ source => 'Branch' })->{ branchcode };
 
-my $b1 = Koha::Borrower->new(
+my $b1 = Koha::Patron->new(
     {   surname      => 'Borrower 1',
         branchcode   => $branchcode,
         categorycode => $categorycode
@@ -67,7 +67,7 @@ my $b1 = Koha::Borrower->new(
 );
 $b1->store();
 
-my $b2 = Koha::Borrower->new(
+my $b2 = Koha::Patron->new(
     {   surname      => 'Borrower 2',
         branchcode   => $branchcode,
         categorycode => $categorycode
@@ -75,7 +75,7 @@ my $b2 = Koha::Borrower->new(
 );
 $b2->store();
 
-my $b3 = Koha::Borrower->new(
+my $b3 = Koha::Patron->new(
     {   surname      => 'Borrower 3',
         branchcode   => $branchcode,
         categorycode => $categorycode

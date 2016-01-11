@@ -203,7 +203,7 @@ subtest 'Test StoreLastBorrower' => sub {
 
     $item_object   = Koha::Items->find( $item->{itemnumber} );
     $patron_object = $item_object->last_returned_by();
-    is( ref($patron_object), 'Koha::Borrower', 'Koha::Item::last_returned_by returned Koha::Borrower' );
+    is( ref($patron_object), 'Koha::Patron', 'Koha::Item::last_returned_by returned Koha::Patron' );
 
     $patron = $builder->build(
         {
@@ -234,7 +234,7 @@ subtest 'Test StoreLastBorrower' => sub {
             value  => { privacy => 1, }
         }
     );
-    $patron_object = Koha::Borrowers->find( $patron->{borrowernumber} );
+    $patron_object = Koha::Patrons->find( $patron->{borrowernumber} );
 
     $item_object->last_returned_by($patron_object);
     $item_object = Koha::Items->find( $item->{itemnumber} );

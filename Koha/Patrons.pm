@@ -1,4 +1,4 @@
-package Koha::Borrowers;
+package Koha::Patrons;
 
 # Copyright ByWater Solutions 2014
 #
@@ -23,13 +23,13 @@ use Carp;
 
 use Koha::Database;
 
-use Koha::Borrower;
+use Koha::Patron;
 
 use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Borrower - Koha Borrower Object class
+Koha::Patron - Koha Patron Object class
 
 =head1 API
 
@@ -46,7 +46,7 @@ sub _type {
 }
 
 sub object_class {
-    return 'Koha::Borrower';
+    return 'Koha::Patron';
 }
 
 =head1 AUTHOR

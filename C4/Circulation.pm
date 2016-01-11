@@ -48,8 +48,8 @@ use Data::Dumper;
 use Koha::DateUtils;
 use Koha::Calendar;
 use Koha::Items;
-use Koha::Borrowers;
-use Koha::Borrower::Debarments;
+use Koha::Patrons;
+use Koha::Patron::Debarments;
 use Koha::Database;
 use Koha::Libraries;
 use Carp;
@@ -2201,7 +2201,7 @@ sub MarkIssueReturned {
 
     if ( C4::Context->preference('StoreLastBorrower') ) {
         my $item = Koha::Items->find( $itemnumber );
-        my $patron = Koha::Borrowers->find( $borrowernumber );
+        my $patron = Koha::Patrons->find( $borrowernumber );
         $item->last_returned_by( $patron );
     }
 }
@@ -2265,13 +2265,13 @@ sub _debar_user_on_return {
             my $new_debar_dt =
               $dt_today->clone()->add_duration( $suspension_days );
 
-            Koha::Borrower::Debarments::AddUniqueDebarment({
+            Koha::Patron::Debarments::AddUniqueDebarment({
                 borrowernumber => $borrower->{borrowernumber},
                 expiration     => $new_debar_dt->ymd(),
                 type           => 'SUSPENSION',
             });
             # if borrower was already debarred but does not get an extra debarment
-            if ( $borrower->{debarred} eq Koha::Borrower::Debarments::IsDebarred($borrower->{borrowernumber}) ) {
+            if ( $borrower->{debarred} eq Koha::Patron::Debarments::IsDebarred($borrower->{borrowernumber}) ) {
                     return ($borrower->{debarred},1);
             }
             return $new_debar_dt->ymd();
@@ -2834,7 +2834,7 @@ sub CanBookBeRenewed {
 
     my $overduesblockrenewing = C4::Context->preference('OverduesBlockRenewing');
     my $restrictionblockrenewing = C4::Context->preference('RestrictionBlockRenewing');
-    my $restricted = Koha::Borrower::Debarments::IsDebarred($borrowernumber);
+    my $restricted = Koha::Patron::Debarments::IsDebarred($borrowernumber);
     my $hasoverdues = C4::Members::HasOverdues($borrowernumber);
 
     if ( $restricted and $restrictionblockrenewing ) {

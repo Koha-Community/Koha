@@ -20,8 +20,8 @@ use Modern::Perl;
 use C4::Context;
 use C4::Biblio qw( AddBiblio );
 use Koha::Database;
-use Koha::Borrowers;
 use Koha::Libraries;
+use Koha::Patrons;
 use Koha::Item;
 use Koha::DateUtils;
 
@@ -36,7 +36,7 @@ my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 
 my @branches = Koha::Libraries->search();
-my $borrower = Koha::Borrowers->search()->next();
+my $borrower = Koha::Patrons->search()->next();
 
 my $biblio = MARC::Record->new();
 my $title  = 'Silence in the library';

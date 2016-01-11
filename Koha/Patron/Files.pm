@@ -1,4 +1,4 @@
-package Koha::Borrower::Files;
+package Koha::Patron::Files;
 
 # Copyright 2012 Kyle M Hall
 #
@@ -33,7 +33,7 @@ BEGIN {
 
 =head1 NAME
 
-Koha::Borrower::Files - Module for managing borrower files
+Koha::Patron::Files - Module for managing patron files
 
 =head1 METHODS
 
@@ -52,7 +52,7 @@ sub new {
 
 =item GetFilesInfo()
 
-    my $bf = Koha::Borrower::Files->new( borrowernumber => $borrowernumber );
+    my $bf = Koha::Patron::Files->new( borrowernumber => $borrowernumber );
     my $files_hashref = $bf->GetFilesInfo
 
 =cut
@@ -79,7 +79,7 @@ sub GetFilesInfo {
 
 =item AddFile()
 
-    my $bf = Koha::Borrower::Files->new( borrowernumber => $borrowernumber );
+    my $bf = Koha::Patron::Files->new( borrowernumber => $borrowernumber );
     $bh->AddFile( name => $filename, type => $mimetype,
                   description => $description, content => $content );
 
@@ -107,7 +107,7 @@ sub AddFile {
 
 =item GetFile()
 
-    my $bf = Koha::Borrower::Files->new( borrowernumber => $borrowernumber );
+    my $bf = Koha::Patron::Files->new( borrowernumber => $borrowernumber );
     my $file = $bh->GetFile( file_id => $file_id );
 
 =cut
@@ -128,7 +128,7 @@ sub GetFile {
 
 =item DelFile()
 
-    my $bf = Koha::Borrower::Files->new( borrowernumber => $borrowernumber );
+    my $bf = Koha::Patron::Files->new( borrowernumber => $borrowernumber );
     $bh->DelFile( file_id => $file_id );
 
 =cut

@@ -44,7 +44,7 @@ use C4::Utils::DataTables::Members;
 use C4::Members;
 use C4::Search;		# enabled_staff_search_views
 use Koha::DateUtils;
-use Koha::Borrower::Debarments qw(IsDebarred);
+use Koha::Patron::Debarments qw(IsDebarred);
 use Koha::Holds;
 use Koha::Libraries;
 

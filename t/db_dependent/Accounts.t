@@ -27,7 +27,7 @@ use t::lib::TestBuilder;
 BEGIN {
     use_ok('C4::Accounts');
     use_ok('Koha::Object');
-    use_ok('Koha::Borrower');
+    use_ok('Koha::Patron');
     use_ok('Data::Dumper');
 }
 
@@ -107,7 +107,7 @@ my @test_data = (
     { amount => -5    , days_ago => $days + 1 , description =>'purge_zero_balance_fees should not delete fees with negative amout owed after threshold day'  , delete => 0 }
 );
 
-my $borrower = Koha::Borrower->new( { firstname => 'Test', surname => 'Patron', categorycode => 'PT', branchcode => 'MPL' } )->store();
+my $borrower = Koha::Patron->new( { firstname => 'Test', surname => 'Patron', categorycode => 'PT', branchcode => 'MPL' } )->store();
 
 for my $data ( @test_data ) {
     $sth->execute($borrower->borrowernumber, $data->{amount}, $data->{days_ago}, $data->{description});
@@ -144,7 +144,7 @@ subtest "recordpayment() tests" => sub {
     my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
     my $branchcode   = $builder->build({ source => 'Branch' })->{ branchcode };
 
-    my $borrower = Koha::Borrower->new( {
+    my $borrower = Koha::Patron->new( {
         cardnumber => '1234567890',
         surname => 'McFly',
         firstname => 'Marty',

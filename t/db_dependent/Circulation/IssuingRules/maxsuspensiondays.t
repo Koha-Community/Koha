@@ -12,7 +12,7 @@ use C4::Items qw( AddItem );
 use C4::Members qw( AddMember GetMember );
 use Koha::Database;
 use Koha::DateUtils;
-use Koha::Borrower::Debarments qw( GetDebarments DelDebarment );
+use Koha::Patron::Debarments qw( GetDebarments DelDebarment );
 
 use t::lib::TestBuilder;
 

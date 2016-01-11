@@ -25,8 +25,8 @@ use C4::Auth;
 use C4::Output;
 use C4::Members;
 use C4::Form::MessagingPreferences;
-use Koha::Borrowers;
-use Koha::Borrower::Modifications;
+use Koha::Patrons;
+use Koha::Patron::Modifications;
 use C4::Branch qw(GetBranchesLoop);
 use C4::Scrubber;
 use Email::Valid;
@@ -126,7 +126,8 @@ if ( $action eq 'create' ) {
 
             my $verification_token = md5_hex( \%borrower );
             $borrower{'password'} = random_string("..........");
-            Koha::Borrower::Modifications->new(
+
+            Koha::Patron::Modifications->new(
                 verification_token => $verification_token )
               ->AddModifications(\%borrower);
 
@@ -207,7 +208,7 @@ elsif ( $action eq 'update' ) {
             );
 
             my $m =
-              Koha::Borrower::Modifications->new(
+              Koha::Patron::Modifications->new(
                 borrowernumber => $borrowernumber );
 
             $m->DelModifications;
@@ -238,7 +239,7 @@ elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
 
     $template->param(
         borrower  => $borrower,
-        guarantor => scalar Koha::Borrowers->find($borrowernumber)->guarantor(),
+        guarantor => scalar Koha::Patrons->find($borrowernumber)->guarantor(),
         hidden => GetHiddenFields( $mandatory, 'modification' ),
     );
 
