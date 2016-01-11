@@ -19,9 +19,6 @@
 #
 #
 # Basic OAuth2/OpenID Connect authentication for google goes like this
-# First:
-# get your clientid, clientsecret from google. At this stage, tell
-# google that your redirect url is /cgi-bin/koha/svc/oauthlogin
 #
 # The first thing that happens when this script is called is
 # that one gets redirected to an authentication url from google
@@ -32,10 +29,6 @@
 # round-trip back to google to decrypt. Finally, we can extract
 # the email address from this.
 #
-# There is some room for improvement here.  In particular, Google
-# recommends verifying and decrypting the id_token locally, which
-# means caching some information and updating it daily. But that
-# would make things a lot faster
 
 use Modern::Perl;
 use CGI qw ( -utf8 escape );
