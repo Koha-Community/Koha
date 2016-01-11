@@ -30,11 +30,11 @@ for my $modules ( @modules ) {
 
                 if ( ref($val_1) eq 'ARRAY') {
                     is_deeply( $val_1, $val_2,
-                        "tables related to $modules->[0] and $modules->[1] differs on $column_name.$column_attribute"
+                        "tables related to $modules->[0] and $modules->[1] should not differ on $column_name.$column_attribute"
                     );
                 } else {
                     is( $val_1, $val_2,
-                        "tables related to $modules->[0] and $modules->[1] differs on $column_name.$column_attribute"
+                        "tables related to $modules->[0] and $modules->[1] should not differ on $column_name.$column_attribute"
                     );
                 }
             }
