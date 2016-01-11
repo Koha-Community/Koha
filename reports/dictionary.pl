@@ -147,29 +147,34 @@ elsif ( $phase eq 'New Term step 5' ) {
             }
             $query_criteria .= " AND $crit='$value'";
         }
-        $value = $input->param( $crit . "_start_value" );
-        if ($value) {
-            my %tmp_hash;
-            $tmp_hash{'name'}  = "$crit Start";
-            $tmp_hash{'value'} = $value;
-            push @criteria_loop, \%tmp_hash;
-            if ( $value =~ C4::Dates->regexp( C4::Context->preference('dateformat') ) ) {
-                my $date = C4::Dates->new($value);
-                $value = $date->output("iso");
+
+        if ( my $date_type_value = $input->param( $crit . "_date_type_value" ) ) {
+            if ( $date_type_value eq 'range' ) {
+                if ( $value = $input->param( $crit . "_start_value" ) ) {
+                    my %tmp_hash;
+                    $tmp_hash{'name'}  = "$crit Start";
+                    $tmp_hash{'value'} = $value;
+                    push @criteria_loop, \%tmp_hash;
+                    if ( $value =~ C4::Dates->regexp( C4::Context->preference('dateformat') ) ) {
+                        my $date = C4::Dates->new($value);
+                        $value = $date->output("iso");
+                    }
+                    $query_criteria .= " AND $crit >= '$value'";
+                }
+
+                if ( $value = $input->param( $crit . "_end_value" ) ) {
+                    my %tmp_hash;
+                    $tmp_hash{'name'}  = "$crit End";
+                    $tmp_hash{'value'} = $value;
+                    push @criteria_loop, \%tmp_hash;
+                    if ( $value =~ C4::Dates->regexp( C4::Context->preference('dateformat') ) ) {
+                        my $date = C4::Dates->new($value);
+                        $value = $date->output("iso");
+                    }
+                    $query_criteria .= " AND $crit <= '$value'";
+                }
             }
-            $query_criteria .= " AND $crit >= '$value'";
-        }
-        $value = $input->param( $crit . "_end_value" );
-        if ($value) {
-            my %tmp_hash;
-            $tmp_hash{'name'}  = "$crit End";
-            $tmp_hash{'value'} = $value;
-            push @criteria_loop, \%tmp_hash;
-            if ( $value =~ C4::Dates->regexp( C4::Context->preference('dateformat') ) ) {
-                my $date = C4::Dates->new($value);
-                $value = $date->output("iso");
-            }
-            $query_criteria .= " AND $crit <= '$value'";
+            # else we want all dates
         }
     }
     $template->param(

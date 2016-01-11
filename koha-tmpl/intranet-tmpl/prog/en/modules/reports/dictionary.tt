@@ -189,28 +189,20 @@
 	</select></li>
 [% END %]
 [% IF ( column.date ) %]
-	<li><span class="label">Choose: </span><table>
-	<tr valign="top">
-	<td><input type="radio" name="[% column.name %]_all" value="all" />All dates</td>
-	<td>OR</td>
-	<td><input type="radio" name="dates" value="range" />Date range<br />
-	<table>
-	<tr>
-	<td>Start of date range</td>
-    <td><input type="text" size="10" id="from" name="[% column.name %]_start_value" value="" class="datepickerfrom" />
-	<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-	</td>
-	</tr>
-	<tr>
-	<td>End of date range</td>
-	<td>
-    <input type="text" size="10" id="to" name="[% column.name %]_end_value" value="" class="datepickerto" />
-	<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-	</td>
-	</tr>
-	</table></td>
-	</tr>
-</table></li>
+    <li class="radio">
+        <label for="all_dates">All dates</label>
+        <input type="radio" id="all_dates" name="[% column.name %]_date_type_value" value="all" checked="checked" />
+        <label for="date_range">Date range</label>
+        <input type="radio" id="date_range" name="[% column.name %]_date_type_value" value="range" />
+    </li>
+    <li class="radio">
+        Start of date range
+        <input type="text" size="10" id="from" name="[% column.name %]_start_value" value="" class="datepickerfrom" />
+        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+        End of date range
+        <input type="text" size="10" id="to" name="[% column.name %]_end_value" value="" class="datepickerto" />
+        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+    </li>
 [% END %]
 [% IF ( column.text ) %]
 	<li><label for="[% column.name %]_value">Search string matches: </label> <input type="text" size="13" name="[% column.name %]_value" /></li>
