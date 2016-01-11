@@ -104,14 +104,11 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     );
 }
 
-my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $data->{streettype} );
-
 $template->param(%$data);
 
 $template->param(
     finesview           => 1,
     borrowernumber      => $borrowernumber,
-    roadtype            => $roadtype,
     branchname          => GetBranchName($data->{'branchcode'}),
     total               => sprintf("%.2f",$total),
     totalcredit         => $totalcredit,

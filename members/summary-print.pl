@@ -55,10 +55,6 @@ foreach my $accountline (@$accts) {
     }
 }
 
-my $roadtype =
-  C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $data->{streettype} );
-$roadtype = '' if ( ! $roadtype );
-
 our $totalprice = 0;
 my $total_format = '';
 $total_format = sprintf( "%.2f", $total ) if ($total);
@@ -67,7 +63,6 @@ $template->param(
     %$data,
 
     borrowernumber => $borrowernumber,
-    address => $data->{'streetnumber'} . " $roadtype " . $data->{'address'},
 
     accounts => $accts,
     totaldue => $total_format,

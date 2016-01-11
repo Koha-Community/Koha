@@ -117,14 +117,12 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
 }
 
 
-my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $data->{streettype} );
 $template->param(%$data);
 
 $template->param(
     readingrecordview => 1,
     borrowernumber    => $borrowernumber,
     categoryname      => $data->{description},
-    roadtype          => $roadtype,
     is_child          => ( $data->{category_type} eq 'C' ),
     branchname        => $branches->{ $data->{branchcode} }->{branchname},
     loop_reading      => $issues,

@@ -101,7 +101,6 @@ if ($borrowernumber) {
 ##################################################################################
 
 
-my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $borrower->{streettype} );
 $template->param(%$borrower);
 
 $template->param(
@@ -111,7 +110,6 @@ $template->param(
     branch            => $branch,
     branchname        => GetBranchName($borrower->{'branchcode'}),
     categoryname      => $borrower->{description},
-    roadtype          => $roadtype,
     RoutingSerials    => C4::Context->preference('RoutingSerials'),
 );
 

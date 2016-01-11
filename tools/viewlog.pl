@@ -84,14 +84,12 @@ if ( $src eq 'circ' ) {
         );
     }
 
-    my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $data->{streettype} );
     $template->param(%$data);
 
     $template->param(
         menu           => 1,
         borrowernumber => $borrowernumber,
         categoryname   => $data->{'description'},
-        roadtype       => $roadtype,
         branchname     => GetBranchName( $data->{'branchcode'} ),
         RoutingSerials => C4::Context->preference('RoutingSerials'),
     );

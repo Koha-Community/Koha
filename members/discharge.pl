@@ -115,6 +115,8 @@ if ( $input->param('borrowernumber') ) {
         category_type     => $data->{'category_type'},
         categoryname      => $data->{'description'},
         address           => $data->{'address'},
+        streetnumber      => $data->{streetnumber},
+        streettype        => $data->{streettype},
         address2          => $data->{'address2'},
         city              => $data->{'city'},
         zipcode           => $data->{'zipcode'},

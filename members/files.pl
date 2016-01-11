@@ -118,16 +118,11 @@ else {
     my ($picture, $dberror) = GetPatronImage($data->{'borrowernumber'});
     $template->param( picture => 1 ) if $picture;
 
-    # Computes full borrower address
-    my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $data->{streettype} );
-    my $address = $data->{'streetnumber'} . " $roadtype " . $data->{'address'};
-
     $template->param(
         files => Koha::Borrower::Files->new( borrowernumber => $borrowernumber )
           ->GetFilesInfo(),
 
         errors => \%errors,
-        address => $address,
     );
     output_html_with_http_headers $cgi, $cookie, $template->output;
 }

@@ -1,6 +1,10 @@
 [% IF ( address or address2 ) %]
     [% IF ( address ) %]
-        <li class="patronaddress1">[% if (streetnumber) %][% streetnumber %][% end %] [% address %][%if (roadtype) %] [% roadtype %][% end %]</li>
+        [% SET roadtype_desc = '' %]
+        [% IF streettype %]
+            [% SET roadtype_desc = AuthorisedValues.GetByCode('ROADTYPE', streettype) %]
+        [% END %]
+        <li class="patronaddress1">[% if (streetnumber) %][% streetnumber %][% end %] [% IF roadtype_desc %][% roadtype_desc %] [% END %][% address %][% end %]</li>
     [% END %]
     [% IF ( address2 ) %]
         <li class="patronaddress2">[% address2 %]</li>
