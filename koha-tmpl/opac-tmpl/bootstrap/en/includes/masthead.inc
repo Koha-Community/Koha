@@ -90,6 +90,8 @@
                                         [% IF Koha.Preference('casAuthentication') %]
                                             [%# CAS authentication is too complicated for modal window %]
                                             <li><a href="/cgi-bin/koha/opac-user.pl">Log in to your account</a></li>
+                                        [% ELSIF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]
+                                            <li><a href="/cgi-bin/koha/svc/auth/googleopenidconnect" role="button" data-toggle="modal">Log in to your account</a></li>
                                         [% ELSE %]
                                             <li><a href="/cgi-bin/koha/opac-user.pl" class="loginModal-trigger" role="button" data-toggle="modal">Log in to your account</a></li>
                                         [% END %]

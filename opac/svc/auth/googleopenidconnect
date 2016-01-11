@@ -1,0 +1,240 @@
+#!/usr/bin/perl
+# Copyright vanoudt@gmail.com 2014
+# Based on persona code from chris@bigballofwax.co.nz 2013
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+#
+#
+# Basic OAuth2/OpenID Connect authentication for google goes like this
+# First:
+# get your clientid, clientsecret from google. At this stage, tell
+# google that your redirect url is /cgi-bin/koha/svc/oauthlogin
+#
+# The first thing that happens when this script is called is
+# that one gets redirected to an authentication url from google
+#
+# If successful, that then redirects back to this script, setting
+# a CODE parameter which we use to look up a json authentication
+# token. This token includes an encrypted json id_token, which we
+# round-trip back to google to decrypt. Finally, we can extract
+# the email address from this.
+#
+# There is some room for improvement here.  In particular, Google
+# recommends verifying and decrypting the id_token locally, which
+# means caching some information and updating it daily. But that
+# would make things a lot faster
+
+use Modern::Perl;
+use CGI qw ( -utf8 escape );
+use C4::Auth qw{ checkauth get_session get_template_and_user };
+use C4::Context;
+use C4::Output;
+
+use LWP::UserAgent;
+use HTTP::Request::Common qw{ POST };
+use JSON;
+use MIME::Base64 qw{ decode_base64url };
+
+my $discoveryDocURL =
+  'https://accounts.google.com/.well-known/openid-configuration';
+my $authendpoint     = '';
+my $tokenendpoint    = '';
+my $scope            = 'openid email profile';
+my $host             = C4::Context->preference('OPACBaseURL') // q{};
+my $restricttodomain = C4::Context->preference('GoogleOpenIDConnectDomain')
+  // q{};
+
+# protocol is assumed in OPACBaseURL see bug 5010.
+my $redirecturl  = $host . '/cgi-bin/koha/svc/auth/googleopenidconnect';
+my $issuer       = 'accounts.google.com';
+my $clientid     = C4::Context->preference('GoogleOAuth2ClientID');
+my $clientsecret = C4::Context->preference('GoogleOAuth2ClientSecret');
+
+my $ua       = LWP::UserAgent->new();
+my $response = $ua->get($discoveryDocURL);
+if ( $response->is_success ) {
+    my $json = decode_json( $response->decoded_content );
+    if ( exists( $json->{'authorization_endpoint'} ) ) {
+        $authendpoint = $json->{'authorization_endpoint'};
+    }
+    if ( exists( $json->{'token_endpoint'} ) ) {
+        $tokenendpoint = $json->{'token_endpoint'};
+    }
+}
+
+my $query = CGI->new;
+
+sub loginfailed {
+    my $cgi_query = shift;
+    my $reason    = shift;
+    $cgi_query->delete('code');
+    $cgi_query->param( 'OpenIDConnectFailed' => $reason );
+    my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+        {
+            template_name   => 'opac-user.tt',
+            query           => $cgi_query,
+            type            => 'opac',
+            authnotrequired => 0,
+        }
+    );
+    $template->param( 'invalidGoogleOpenIDConnectLogin' => $reason );
+    $template->param( 'loginprompt'                     => 1 );
+    output_html_with_http_headers $cgi_query, $cookie, $template->output;
+    return;
+}
+
+if ( defined $query->param('error') ) {
+    loginfailed( $query,
+            'An authentication error occurred. (Error:'
+          . $query->param('error')
+          . ')' );
+}
+elsif ( defined $query->param('code') ) {
+    my $stateclaim = $query->param('state');
+    my $session    = get_session( $query->cookie('CGISESSID') );
+    if ( $session->param('google-openid-state') ne $stateclaim ) {
+        $session->clear( ["google-openid-state"] );
+        $session->flush();
+        loginfailed( $query,
+            'Authentication failed. Your session has an unexpected state.' );
+    }
+    $session->clear( ["google-openid-state"] );
+    $session->flush();
+
+    my $code = $query->param('code');
+    my $ua   = LWP::UserAgent->new();
+    if ( $tokenendpoint eq q{} ) {
+        loginfailed( $query, 'Unable to discover token endpoint.' );
+    }
+    my $request = POST(
+        $tokenendpoint,
+        [
+            code          => $code,
+            client_id     => $clientid,
+            client_secret => $clientsecret,
+            redirect_uri  => $redirecturl,
+            grant_type    => 'authorization_code',
+            $scope        => $scope
+        ]
+    );
+    my $response = $ua->request($request)->decoded_content;
+    my $json     = decode_json($response);
+    if ( exists( $json->{'id_token'} ) ) {
+        if ( lc( $json->{'token_type'} ) ne 'bearer' ) {
+            loginfailed( $query,
+                'Authentication failed. Incorrect token type.' );
+        }
+        my $idtoken = $json->{'id_token'};
+
+# Normally we'd have to validate the token - but google says not to worry here (Avoids another library!)
+# See https://developers.google.com/identity/protocols/OpenIDConnect#obtainuserinfo for rationale
+        my @segments = split( '\.', $idtoken );
+        unless ( scalar(@segments) == 3 ) {
+            loginfailed( $query,
+                'Login token broken: either too many or too few segments.' );
+        }
+        my ( $header, $claims, $validation ) = @segments;
+        $claims = decode_base64url($claims);
+        my $claims_json = decode_json($claims);
+        if (   ( $claims_json->{'iss'} ne ( 'https://' . $issuer ) )
+            && ( $claims_json->{'iss'} ne $issuer ) )
+        {
+            loginfailed( $query,
+                "Authentication failed. Issuer of authentication isn't Google."
+            );
+        }
+        if ( ref( $claims_json->{'aud'} ) eq 'ARRAY' ) {
+            warn "Audience is an array of size: "
+              . scalar( @$claims_json->{'aud'} );
+            if ( scalar( @$claims_json->{'aud'} ) > 1 )
+            {    # We don't want any other audiences
+                loginfailed( $query,
+                    "Authentication failed. Unexpected audience provided." );
+            }
+        }
+        if (   ( $claims_json->{'aud'} ne $clientid )
+            || ( $claims_json->{'azp'} ne $clientid ) )
+        {
+            loginfailed( $query,
+                "Authentication failed. Unexpected audience." );
+        }
+        if ( $claims_json->{'exp'} < time() ) {
+            loginfailed( $query, 'Sorry, your authentication has timed out.' );
+        }
+
+        if ( exists( $claims_json->{'email'} ) ) {
+            my $email = $claims_json->{'email'};
+            if (   ( $restricttodomain ne q{} )
+                && ( index( $email, $restricttodomain ) < 0 ) )
+            {
+                loginfailed( $query,
+'The email you have used is not valid for this library. Email addresses should conclude with '
+                      . $restricttodomain
+                      . ' .' );
+            }
+            else {
+                my ( $userid, $cookie, $session_id ) =
+                  checkauth( $query, 1, {}, 'opac', $email );
+                if ($userid) {    # A user with this email is registered in koha
+                    print $query->redirect(
+                        -uri    => '/cgi-bin/koha/opac-user.pl',
+                        -cookie => $cookie
+                    );
+                }
+                else {
+                    loginfailed( $query,
+'The email address you are trying to use is not associated with a borrower at this library.'
+                    );
+                }
+            }
+        }
+        else {
+            loginfailed( $query,
+'Unexpectedly, no email seems to be associated with that acccount.'
+            );
+        }
+    }
+    else {
+        loginfailed( $query, 'Failed to get proper credentials from Google.' );
+    }
+}
+else {
+    my $session     = get_session( $query->cookie('CGISESSID') );
+    my $openidstate = 'auth_';
+    $openidstate .= sprintf( "%x", rand 16 ) for 1 .. 32;
+    $session->param( 'google-openid-state', $openidstate );
+    $session->flush();
+
+    my $prompt = $query->param('reauthenticate') // q{};
+    if ( $authendpoint eq q{} ) {
+        loginfailed( $query, 'Unable to discover authorisation endpoint.' );
+    }
+    my $authorisationurl =
+        $authendpoint . '?'
+      . 'response_type=code&'
+      . 'redirect_uri='
+      . escape($redirecturl) . q{&}
+      . 'client_id='
+      . escape($clientid) . q{&}
+      . 'scope='
+      . escape($scope) . q{&}
+      . 'state='
+      . escape($openidstate);
+    if ( $prompt || ( defined $prompt && length $prompt > 0 ) ) {
+        $authorisationurl .= '&prompt=' . escape($prompt);
+    }
+    print $query->redirect($authorisationurl);
+}

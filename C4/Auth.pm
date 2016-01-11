@@ -1292,6 +1292,13 @@ sub checkauth {
         );
     }
 
+    if (C4::Context->preference('GoogleOpenIDConnect')) {
+        if ($query->param("OpenIDConnectFailed")) {
+            my $reason = $query->param('OpenIDConnectFailed');
+            $template->param(invalidGoogleOpenIDConnectLogin => $reason);
+        }
+    }
+
     $template->param(
         LibraryName => C4::Context->preference("LibraryName"),
     );

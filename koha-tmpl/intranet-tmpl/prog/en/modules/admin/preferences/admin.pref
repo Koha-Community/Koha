@@ -143,6 +143,24 @@ Administration:
                   Common Name: the Common Name
                   emailAddress: the emailAddress
             - field for SSL client certificate authentication
+    Google OpenID Connect:
+        -
+            - pref: GoogleOpenIDConnect
+              choices:
+                yes: Use
+                no: "Don't Use"
+            - Google OpenID Connect login.
+            - You will need to select OAuth2 when creating an app in the google cloud console, and set the web origin to your_opac_url and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/googleopenidconnect .
+        -
+            - Google OAuth2 Client ID
+            - pref: GoogleOAuth2ClientID
+        -
+            - Google OAuth2 Client Secret
+            - pref: GoogleOAuth2ClientSecret
+        -
+            - Google OpenID Connect Restrict to domain (or subdomain of this domain)
+            - pref: GoogleOpenIDConnectDomain
+            - . Leave blank for all google domains
     Mozilla Persona:
         -
             - pref: Persona
