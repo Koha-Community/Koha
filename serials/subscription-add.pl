@@ -236,6 +236,7 @@ if ($op eq 'addsubscription') {
 
 sub get_letter_loop {
     my ($selected_lettercode) = @_;
+    $selected_lettercode //= '';
     my $letters = GetLetters({ module => 'serial' });
     return [
         map {
