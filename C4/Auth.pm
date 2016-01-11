@@ -1699,7 +1699,7 @@ sub get_session {
     }
     else {
         # catch all defaults to tmp should work on all systems
-        $session = new CGI::Session( "driver:File;serializer:yaml;id:md5", $sessionID, { Directory => '/tmp' } );
+        $session = new CGI::Session( "driver:File;serializer:yaml;id:md5", $sessionID, { Directory => '/tmp/cgisess' } );
     }
     return $session;
 }
