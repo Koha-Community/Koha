@@ -23,7 +23,7 @@ use Modern::Perl;
 use base qw( Template::Plugin );
 
 use Koha::Borrower::Debarments qw();
-use C4::Members qw(HasOverdues);
+use C4::Members qw();
 
 =pod
 
