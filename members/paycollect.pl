@@ -184,9 +184,6 @@ sub borrower_add_additional_fields {
         $b_ref->{extendedattributes} = GetBorrowerAttributes($borrowernumber);
     }
 
-    my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $borrower->{streettype} );
-    $b_ref->{roadtype} = $roadtype;
-
     $b_ref->{branchname} = GetBranchName( $b_ref->{branchcode} );
     return;
 }

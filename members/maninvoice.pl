@@ -117,14 +117,12 @@ if ($add){
         );
     }
 
-    my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $data->{streettype} );
     $template->param(%$data);
     $template->param(
         finesview      => 1,
         borrowernumber => $borrowernumber,
         categoryname   => $data->{'description'},
         branchname     => GetBranchName($data->{'branchcode'}),
-        roadtype       => $roadtype,
         is_child       => ($data->{'category_type'} eq 'C'),
         activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
         RoutingSerials => C4::Context->preference('RoutingSerials'),

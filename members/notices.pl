@@ -60,7 +60,6 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     );
 }
 
-my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $borrower->{'streettype'} );
 $template->param(%$borrower);
 
 $template->param(
@@ -69,7 +68,6 @@ $template->param(
     sentnotices        => 1,
     branchname         => GetBranchName($borrower->{'branchcode'}),
     categoryname       => $borrower->{'description'},
-    roadtype           => $roadtype,
     activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
     RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
