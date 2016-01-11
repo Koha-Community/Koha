@@ -2935,6 +2935,7 @@ CREATE TABLE `aqbasket` ( -- stores data about baskets in acquisitions
   `deliveryplace` varchar(10) default NULL, -- basket delivery place
   `billingplace` varchar(10) default NULL, -- basket billing place
   branch varchar(10) default NULL, -- basket branch
+  is_standing TINYINT(1) NOT NULL DEFAULT 0, -- orders in this basket are standing
   PRIMARY KEY  (`basketno`),
   KEY `booksellerid` (`booksellerid`),
   KEY `basketgroupid` (`basketgroupid`),

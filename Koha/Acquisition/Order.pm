@@ -27,16 +27,20 @@ sub insert {
     my ($self) = @_;
 
     # if these parameters are missing, we can't continue
-    for my $key (qw( basketno quantity biblionumber budget_id )) {
+    for my $key (qw( basketno biblionumber budget_id )) {
         croak "Cannot insert order: Mandatory parameter $key is missing"
           unless $self->{$key};
+    }
+
+    my $schema  = Koha::Database->new->schema;
+    if ( !$self->{quantity} && !$schema->resultset('Aqbasket')->find( $self->{basketno} )->is_standing ) {
+        croak "Cannot insert order: Quantity is mandatory for non-standing orders";
     }
 
     $self->{quantityreceived} ||= 0;
     $self->{entrydate} ||=
       output_pref( { dt => dt_from_string, dateformat => 'iso' } );
 
-    my $schema  = Koha::Database->new->schema;
     my @columns = $schema->source('Aqorder')->columns;
 
     $self->{ordernumber} ||= undef;

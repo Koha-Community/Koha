@@ -366,6 +366,7 @@ elsif ( $op eq 'ediorder' ) {
 
     $template->param(
         basketno             => $basketno,
+        basket               => $basket,
         basketname           => $basket->{'basketname'},
         basketbranchname     => C4::Branch::GetBranchName($basket->{branch}),
         basketnote           => $basket->{note},
@@ -380,6 +381,7 @@ elsif ( $op eq 'ediorder' ) {
         users                => \@basketusers,
         closedate            => $basket->{closedate},
         estimateddeliverydate=> $estimateddeliverydate,
+        is_standing          => $basket->{is_standing},
         deliveryplace        => C4::Branch::GetBranchName( $basket->{deliveryplace} ),
         billingplace         => C4::Branch::GetBranchName( $basket->{billingplace} ),
         active               => $bookseller->{'active'},
@@ -397,7 +399,12 @@ elsif ( $op eq 'ediorder' ) {
         basketgroups         => $basketgroups,
         basketgroup          => $basketgroup,
         grouped              => $basket->{basketgroupid},
-        unclosable           => @orders ? 0 : 1, 
+        # The double negatives and booleans here mean:
+        # "A basket cannot be closed if there are no orders in it or it's a standing order basket."
+        #
+        # (The template has another implicit restriction that the order cannot be closed if there
+        # are any orders with uncertain prices.)
+        unclosable           => @orders ? $basket->{is_standing} : 1,
         has_budgets          => $has_budgets,
         duplinbatch          => $duplinbatch,
     );
@@ -410,10 +417,12 @@ sub get_order_infos {
     if ( !defined $order->{quantityreceived} ) {
         $order->{quantityreceived} = 0;
     }
-    my $budget = GetBudget( $order->{'budget_id'} );
+    my $budget = GetBudget($order->{budget_id});
+    my $basket = GetBasket($order->{basketno});
 
     my %line = %{ $order };
-    $line{order_received} = ( $qty == $order->{'quantityreceived'} );
+    # Don't show unreceived standing orders as received
+    $line{order_received} = ( $qty == $order->{'quantityreceived'} && ( $basket->{is_standing} ? $qty : 1 ) );
     $line{basketno}       = $basketno;
     $line{budget_name}    = $budget->{budget_name};
 
@@ -463,7 +472,6 @@ sub get_order_infos {
     foreach my $key (qw(transferred_from transferred_to)) {
         if ($line{$key}) {
             my $order = GetOrder($line{$key});
-            my $basket = GetBasket($order->{basketno});
             my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $basket->{booksellerid} });
             $line{$key} = {
                 order => $order,

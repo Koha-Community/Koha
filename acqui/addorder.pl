@@ -228,12 +228,15 @@ $orderinfo->{'list_price'}    ||=  0;
 $orderinfo->{'uncertainprice'} ||= 0;
 $orderinfo->{subscriptionid} ||= undef;
 
+my $basketno=$$orderinfo{basketno};
+my $basket = GetBasket($basketno);
+
 my $user = $input->remote_user;
 
 # create, modify or delete biblio
 # create if $quantity>0 and $existing='no'
 # modify if $quantity>0 and $existing='yes'
-if ( $orderinfo->{quantity} ne '0' ) {
+if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
     #TODO:check to see if biblio exists
     unless ( $$orderinfo{biblionumber} ) {
         #if it doesn't create it
@@ -319,7 +322,6 @@ if ( $orderinfo->{quantity} ne '0' ) {
 
 }
 
-my $basketno=$$orderinfo{basketno};
 my $booksellerid=$$orderinfo{booksellerid};
 if (my $import_batch_id=$$orderinfo{import_batch_id}) {
     print $input->redirect("/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=$import_batch_id&basketno=$basketno&booksellerid=$booksellerid");

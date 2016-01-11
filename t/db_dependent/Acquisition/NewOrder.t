@@ -67,6 +67,9 @@ foreach my $mandatoryparams_key (@mandatoryparams_keys) {
     };
     $return_error = $@;
     my $expected_error = "Cannot insert order: Mandatory parameter $mandatoryparams_key is missing";
+    if ( $mandatoryparams_key eq 'quantity' ) {
+        $expected_error = "Cannot insert order: Quantity is mandatory for non-standing orders";
+    }
     ok(
         ( !( defined $order ) )
           && ( index( $return_error, $expected_error ) >= 0 ),

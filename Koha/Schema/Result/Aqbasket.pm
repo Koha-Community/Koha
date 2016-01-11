@@ -106,6 +106,12 @@ __PACKAGE__->table("aqbasket");
   is_nullable: 1
   size: 10
 
+=head2 is_standing
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -142,6 +148,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "branch",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
+  "is_standing",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -289,8 +297,8 @@ Composing rels: L</aqbasketusers> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqbasketusers", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2014-09-02 11:37:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tsMzwP7eofOR27sfZSTqFQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-01-14 16:28:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CuP/8SFJOD4h4XZf7AdeiA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
