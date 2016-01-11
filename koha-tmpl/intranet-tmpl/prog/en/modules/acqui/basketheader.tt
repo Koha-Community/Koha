@@ -115,7 +115,11 @@
                 [% END %]
                 <li>
                     <label for="is_standing">Orders are standing:</label>
-                    <input type="checkbox" id="is_standing" name="is_standing"/>
+                    [% IF is_standing %]
+                        <input type="checkbox" id="is_standing" name="is_standing" checked="checked" />
+                    [% ELSE %]
+                        <input type="checkbox" id="is_standing" name="is_standing"/>
+                    [% END %]
                     <div class="hint">Standing orders do not close when received.</div>
                 </li>
             </ol>

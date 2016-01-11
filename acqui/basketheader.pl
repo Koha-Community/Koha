@@ -123,6 +123,7 @@ if ( $op eq 'add_form' ) {
                     booksellers => \@booksellers,
                     deliveryplace => $basket->{deliveryplace},
                     billingplace => $basket->{billingplace},
+                    is_standing => $basket->{is_standing},
     );
 
     my $billingplace = $basket->{'billingplace'} || C4::Context->userenv->{"branch"};
