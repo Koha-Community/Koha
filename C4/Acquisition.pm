@@ -1410,7 +1410,7 @@ q{SELECT *, aqbasket.is_standing FROM aqorders LEFT JOIN aqbasket USING (basketn
         my $sth = $dbh->prepare($query);
 
         $sth->execute(
-            ( $order->{quantity} < $quantrec ? 0 : ( $order->{quantity} - $quantrec ) ),
+            ( $order->{is_standing} ? 1 : ( $order->{quantity} - $quantrec ) ),
             ( defined $order_internalnote ? $order_internalnote : () ),
             ( defined $order_vendornote ? $order_vendornote : () ),
             $ordernumber

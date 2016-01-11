@@ -43,12 +43,10 @@ function Check(ff) {
         _alertString += "\n- "+ _("You must select a fund");
     }
 
-[% UNLESS basket.is_standing %]
     if (!(isNum(ff.quantity,0)) || ff.quantity.value == 0){
         ok=1;
                     _alertString += "\n- " + _("Quantity must be greater than '0'");
     }
-[% END %]
 
     if (!(isNum(ff.listprice,0))){
         ok=1;
@@ -415,7 +413,7 @@ $(document).ready(function()
         </fieldset>
     [% END %]
 
-    [% UNLESS subscriptionid %][% # it is a suggestion, we have not items %]
+    [% UNLESS subscriptionid || basket.is_standing %][% # it is a suggestion, we have not items %]
       [% IF (AcqCreateItemOrdering) %]
 
       <div id="items_list" style="display:none">
@@ -461,32 +459,30 @@ $(document).ready(function()
     <fieldset class="rows">
         <legend>Accounting details</legend>
         <ol>
-            [% UNLESS basket.is_standing %]
-                <li>
-                    [% IF ( close ) %]
-                        <span class="label required">Quantity: </span>
-                        <input type="hidden" name="quantity" value="[% quantity %]" />[% quantity %]
-                    [% ELSE %]
-                        <label class="required" for="quantity">Quantity: </label>
-                        [% IF (AcqCreateItemOrdering) %]
-                            [% IF subscriptionid %]
-                                <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="1" />
-                            [% ELSE %]
-                                <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="0" />
-                            [% END %]
+            <li>
+                [% IF ( close ) %]
+                    <span class="label required">Quantity: </span>
+                    <input type="hidden" name="quantity" value="[% quantity %]" />[% quantity %]
+                [% ELSE %]
+                    <label class="required" for="quantity">Quantity: </label>
+                    [% IF (AcqCreateItemOrdering) %]
+                        [% IF subscriptionid || basket.is_standing %]
+                            <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="1" />
                         [% ELSE %]
-                            [% IF subscriptionid %]
-                                <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="1" />
-                            [% ELSE %]
-                                <input type="text" size="20" id="quantity" name="quantity" value="[% quantityrec %]" onchange="updateCosts();" />
-                            [% END %]
+                            <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="0" />
                         [% END %]
-                        <span class="required">Required</span>
+                    [% ELSE %]
+                        [% IF subscriptionid || basket.is_standing %]
+                            <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="1" />
+                        [% ELSE %]
+                            <input type="text" size="20" id="quantity" name="quantity" value="[% quantityrec %]" onchange="updateCosts();" />
+                        [% END %]
                     [% END %]
-                    <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, usefull when receiveing an order -->
-                    <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="1" />
-                </li>
-            [% END %]
+                    <span class="required">Required</span>
+                [% END %]
+                <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, usefull when receiveing an order -->
+                <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="1" />
+            </li>
             <li>
                 [% IF ( close ) %]
             <span class="label required">Fund: </span>

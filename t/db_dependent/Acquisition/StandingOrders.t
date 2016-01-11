@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 13;
 use C4::Context;
 use C4::Acquisition;
 use C4::Biblio;
@@ -68,20 +68,6 @@ my $ordernumber = Koha::Acquisition::Order->new(
 
 isnt( $ordernumber, undef, 'standing order successfully created' );
 
-eval {
-    Koha::Acquisition::Order->new(
-        {
-            basketno         => $nonstandingbasketno,
-            biblionumber     => $biblionumber,
-            budget_id        => $budget->{budget_id},
-            currency         => 'USD',
-            quantity         => 0,
-        }
-    )->insert;
-};
-
-like( $@, qr/quantity/im, 'normal orders cannot be created without quantity' );
-
 my $search_orders = SearchOrders( {
     basketno => $basketno,
     pending => 1,
@@ -117,7 +103,7 @@ my $order = Koha::Acquisition::Order->fetch( { ordernumber => $ordernumber } );
 my $neworder = Koha::Acquisition::Order->fetch( { ordernumber => $new_ordernumber } );
 
 is( $order->{orderstatus}, 'partial', 'original order set to partially received' );
-is( $order->{quantity}, 0, 'original order quantity unchanged' );
+is( $order->{quantity}, 1, 'original order quantity unchanged' );
 is( $order->{quantityreceived}, 0, 'original order has no received items' );
 isnt( $order->{unitprice}, 12, 'original order does not get cost' );
 is( $neworder->{orderstatus}, 'complete', 'new order set to complete' );

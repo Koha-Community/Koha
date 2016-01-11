@@ -522,7 +522,7 @@
                         <td class="number gste [% IF books_loo.ecostgste.search(zero_regex) %]error[% END %]">[% books_loo.ecostgste | $Price%]</td>
                         <td class="number gsti [% IF books_loo.rrpgsti.search(zero_regex) %]error[% END %]">[% books_loo.rrpgsti | $Price %]</td>
                         <td class="number gsti [% IF books_loo.ecostgsti.search(zero_regex) %]error[% END %]">[% books_loo.ecostgsti | $Price %]</td>
-                        <td class="number [% IF books_loo.quantity.search(zero_regex) %]error[% END %]">[% IF is_standing and books_loo.quantity == 0 %]N/A[% ELSE %][% books_loo.quantity or 'N/A' %][% END %]</td>
+                        <td class="number [% IF books_loo.quantity.search(zero_regex) %]error[% END %]">[% books_loo.quantity %]</td>
                         <td class="number gste [% IF books_loo.totalgste.search(zero_regex) %]error[% END %]">[% books_loo.totalgste | $Price %]</td>
                         <td class="number gsti [% IF books_loo.totalgsti.search(zero_regex) %]error[% END %]">[% books_loo.totalgsti | $Price %]</td>
                         <td class="number">[% books_loo.gstrate * 100 | $Price %]</td>
