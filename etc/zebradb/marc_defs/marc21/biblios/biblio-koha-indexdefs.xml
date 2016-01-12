@@ -148,7 +148,10 @@
   </index_data_field>
   <!--record.abs line 59: melm 024$a      Identifier-other-->
   <index_subfields tag="024" subfields="a">
-    <target_index>Identifier-other:w</target_index>
+    <target_index>Identifier-other:w Identifier-other:p</target_index>
+  </index_subfields>
+  <index_subfields tag="024" subfields="a" condition="marc:subfield[@code='2' and text()='uri']">
+    <target_index>Identifier-other:u</target_index>
   </index_subfields>
   <!--record.abs line 60: melm 024        Identifier-standard-->
   <index_data_field tag="024">

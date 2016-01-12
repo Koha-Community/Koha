@@ -176,11 +176,20 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='024']">
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('a', @code)">
-        <z:index name="Identifier-other:w">
+        <z:index name="Identifier-other:w Identifier-other:p">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
     </xslo:for-each>
+    <xslo:if test="marc:subfield[@code='2' and text()='uri']">
+      <xslo:for-each select="marc:subfield">
+        <xslo:if test="contains('a', @code)">
+          <z:index name="Identifier-other:u">
+            <xslo:value-of select="."/>
+          </z:index>
+        </xslo:if>
+      </xslo:for-each>
+    </xslo:if>
   </xslo:template>
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='041']">
     <xslo:for-each select="marc:subfield">
