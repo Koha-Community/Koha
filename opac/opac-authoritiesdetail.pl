@@ -47,6 +47,7 @@ use CGI qw ( -utf8 );
 use MARC::Record;
 use C4::Koha;
 
+use Koha::Authorities;
 use Koha::Authority::Types;
 
 my $query = new CGI;
@@ -75,7 +76,8 @@ if ( ! $record ) {
     exit;
 }
 
-my $authtypecode = $record->authtypecode;
+my $authority = Koha::Authorities->find( $authid );
+my $authtypecode = $authority->authtypecode;
 
 if ($display_hierarchy){
     $template->{VARS}->{'displayhierarchy'} = $display_hierarchy;
