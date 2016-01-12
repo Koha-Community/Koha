@@ -144,14 +144,14 @@ if (not defined $format) {
             my $parser = XML::LibXML->new();
             my $record_dom = $parser->parse_string( $marcxml );
             $record_dom = $transformer->transform( $record_dom );
-            $content = $record_dom->toString();
+            $content = $transformer->output_as_chars( $record_dom );
         };
         if ($@) {
             print $cgi->header( -status => '500 internal error ' . $@->code() . ": " . $@->message() );
             exit 0;
         }
 
-        print $cgi->header( -type =>'application/xml' );
+        print $cgi->header( -type =>'application/xml', -charset => 'UTF-8' );
         print $content;
     } else {
         # ID is obviously wrong, so 404
@@ -172,7 +172,7 @@ sub emit_formats {
     if (defined $id) {
         print $cgi->header( -type =>'application/xml', -status => '300 multiple choices' );
     } else {
-        print $cgi->header( -type =>'application/xml' );
+        print $cgi->header( -type =>'application/xml', -status => '200 Ok' );
     }
 
     print "<?xml version='1.0' encoding='utf-8'  ?>\n";
