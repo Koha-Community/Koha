@@ -611,7 +611,7 @@ if ($op eq "add") {
     # build indicator hash.
     my @ind_tag = $input->param('ind_tag');
     my @indicator = $input->param('indicator');
-    my $record = TransformHtmlToMarc($input);
+    my $record = TransformHtmlToMarc($input, 0);
 
     my ($duplicateauthid,$duplicateauthvalue);
      ($duplicateauthid,$duplicateauthvalue) = FindDuplicateAuthority($record,$authtypecode) if ($op eq "add") && (!$is_a_modif);
