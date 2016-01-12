@@ -57,7 +57,7 @@ if ($merge) {
     my $sth;
 
     # Creating a new record from the html code
-    my $record       = TransformHtmlToMarc( $input );
+    my $record       = TransformHtmlToMarc( $input, 1 );
     my $tobiblio     =  $input->param('biblio1');
     my $frombiblio   =  $input->param('biblio2');
 
