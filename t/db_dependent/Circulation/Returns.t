@@ -124,24 +124,30 @@ subtest "AddReturn logging on statistics table (item-level_itypes=1)" => sub {
         MARC::Field->new($tagfield,'','', $tagsubfield => $blevel_itemtype )
     );
     my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, '' );
-    my $item_with_itemtype = $builder->build({
-        source => 'Item',
-        value  => {
-            biblionumber  => $biblionumber,
-            homebranch    => $branch,
-            holdingbranch => $branch,
-            itype         => $ilevel_itemtype
+    my $item_with_itemtype = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                biblionumber     => $biblionumber,
+                biblioitemnumber => $biblioitemnumber,
+                homebranch       => $branch,
+                holdingbranch    => $branch,
+                itype            => $ilevel_itemtype
+            }
         }
-    });
-    my $item_without_itemtype = $builder->build({
-        source => 'Item',
-        value  => {
-            biblionumber  => $biblionumber,
-            homebranch    => $branch,
-            holdingbranch => $branch,
-            itype         => undef
+    );
+    my $item_without_itemtype = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                biblionumber     => $biblionumber,
+                biblioitemnumber => $biblioitemnumber,
+                homebranch       => $branch,
+                holdingbranch    => $branch,
+                itype            => undef
+            }
         }
-    });
+    );
 
     my $borrower = GetMember( borrowernumber => $borrowernumber );
     AddIssue( $borrower, $item_with_itemtype->{ barcode } );
