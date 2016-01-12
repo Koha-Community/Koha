@@ -55,7 +55,7 @@ if ($merge) {
     my $dbh = C4::Context->dbh;
 
     # Creating a new record from the html code
-    my $record       = TransformHtmlToMarc( $input );
+    my $record       = TransformHtmlToMarc( $input, 1 );
     my $ref_biblionumber = $input->param('ref_biblionumber');
     @biblionumbers = grep { $_ != $ref_biblionumber } @biblionumbers;
 

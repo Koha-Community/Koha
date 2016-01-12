@@ -49,7 +49,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 if ($merge) {
 
     # Creating a new record from the html code
-    my $record   = TransformHtmlToMarc($input);
+    my $record   = TransformHtmlToMarc($input, 0);
     my $recordid1   = $input->param('recordid1');
     my $recordid2   = $input->param('recordid2');
     my $typecode = $input->param('frameworkcode');
