@@ -2515,13 +2515,12 @@ sub TransformHtmlToMarc {
 
     # creating a new record
     my $record = MARC::Record->new();
-    my $i      = 0;
     my @fields;
     my ($biblionumbertagfield, $biblionumbertagsubfield) = (-1, -1);
     ($biblionumbertagfield, $biblionumbertagsubfield) =
         &GetMarcFromKohaField( "biblio.biblionumber", '' ) if $isbiblio;
 #FIXME This code assumes that the CGI params will be in the same order as the fields in the template; this is no absolute guarantee!
-    while ( $params[$i] ) {    # browse all CGI params
+    for (my $i = 0; $params[$i]; $i++ ) {    # browse all CGI params
         my $param    = $params[$i];
         my $newfield = 0;
 
@@ -2543,10 +2542,8 @@ sub TransformHtmlToMarc {
 
             if ( $tag < 10 ) {                              # no code for theses fields
                                                             # in MARC editor, 000 contains the leader.
-                if ( $tag == $biblionumbertagfield ) {
-                    # We do nothing and let $i be incremented
-                }
-                elsif ( $tag eq '000' ) {
+                next if $tag == $biblionumbertagfield;
+                if ( $tag eq '000' ) {
                     # Force a fake leader even if not provided to avoid crashing
                     # during decoding MARC record containing UTF-8 characters
                     $record->leader(
@@ -2585,7 +2582,6 @@ sub TransformHtmlToMarc {
             }
             push @fields, $newfield if ($newfield);
         }
-        $i++;
     }
 
     $record->append_fields(@fields);
