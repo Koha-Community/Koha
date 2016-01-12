@@ -834,7 +834,7 @@ if ( $op eq "addbiblio" ) {
     );
     # getting html input
     my @params = $input->param();
-    $record = TransformHtmlToMarc( $input );
+    $record = TransformHtmlToMarc( $input, 1 );
     # check for a duplicate
     my ( $duplicatebiblionumber, $duplicatetitle );
     if ( !$is_a_modif ) {
@@ -948,7 +948,7 @@ elsif ( $op eq "delete" ) {
     }
 
     if($changed_framework eq "changed"){
-        $record = TransformHtmlToMarc( $input );
+        $record = TransformHtmlToMarc( $input, 1 );
     }
     elsif( $record ne -1 ) {
 #FIXME: it's kind of silly to go from MARC::Record to MARC::File::XML and then back again just to fix the encoding
