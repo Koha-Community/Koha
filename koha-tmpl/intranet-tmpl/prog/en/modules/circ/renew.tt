@@ -67,7 +67,7 @@
 
                             [% ELSIF error == "auto_too_soon" %]
 
-                                <p>[% item.biblio.title | $EncodeUTF8 %] [% item.biblioitem.subtitle | $EncodeUTF8 %] ( [% item.barcode %] ) has been scheduled for automatic renewal and cannot be renewed before [% soonestrenewdate | $KohaDates %]. </p>
+                                <p>[% item.biblio.title %] [% item.biblioitem.subtitle %] ( [% item.barcode %] ) has been scheduled for automatic renewal and cannot be renewed before [% soonestrenewdate | $KohaDates %]. </p>
 
                                 [% IF Koha.Preference('AllowRenewalLimitOverride') %]
                                     <form method="post" action="/cgi-bin/koha/circ/renew.pl">
@@ -79,7 +79,7 @@
 
                             [% ELSIF error == "auto_renew" %]
 
-                                <p>[% item.biblio.title | $EncodeUTF8 %] [% item.biblioitem.subtitle | $EncodeUTF8 %] ( [% item.barcode %] ) has been scheduled for automatic renewal. </p>
+                                <p>[% item.biblio.title %] [% item.biblioitem.subtitle %] ( [% item.barcode %] ) has been scheduled for automatic renewal. </p>
 
                                 [% IF Koha.Preference('AllowRenewalLimitOverride') %]
                                     <form method="post" action="/cgi-bin/koha/circ/renew.pl">
