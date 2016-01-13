@@ -185,6 +185,7 @@ $(document).ready(function() {
                 <th>Renewal period</th>
                 <th>No renewal before</th>
                 <th>Automatic renewal</th>
+                <th>No automatic renewal after</th>
                 <th>Holds allowed (count)</th>
                 <th>Holds per record (count)</th>
                 <th>On shelf holds allowed</th>
@@ -265,6 +266,7 @@ $(document).ready(function() {
                                 No
                                 [% END %]
                             </td>
+                            <td>[% rule.no_auto_renewal_after %]</td>
 							<td>[% rule.reservesallowed %]</td>
                                                         <td>[% rule.holds_per_record %]</td>
                                                         <td>
@@ -351,6 +353,7 @@ $(document).ready(function() {
                             <option value="yes">Yes</option>
                         </select>
                     </td>
+                    <td><input type="text" name="no_auto_renewal_after" id="no_auto_renewal_after" size="3" /></td>
                     <td><input type="text" name="reservesallowed" id="reservesallowed" size="2" /></td>
                     <td><input type="text" name="holds_per_record" id="holds_per_record" size="2" /></td>
                     <td>
@@ -403,6 +406,7 @@ $(document).ready(function() {
                       <th>Renewal period</th>
                       <th>No renewal before</th>
                       <th>Automatic renewal</th>
+                      <th>No automatic renewal after</th>
                       <th>Holds allowed (count)</th>
                       <th>Holds per record (count)</th>
                       <th>On shelf holds allowed</th>

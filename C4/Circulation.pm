@@ -2853,6 +2853,22 @@ sub CanBookBeRenewed {
         return ( 0, 'overdue');
     }
 
+    if ( $itemissue->{auto_renew}
+        and defined $issuingrule->{no_auto_renewal_after}
+                and $issuingrule->{no_auto_renewal_after} ne "" ) {
+
+        # Get issue_date and add no_auto_renewal_after
+        # If this is greater than today, it's too late for renewal.
+        my $maximum_renewal_date = dt_from_string($itemissue->{issuedate});
+        $maximum_renewal_date->add(
+            $issuingrule->{lengthunit} => $issuingrule->{no_auto_renewal_after}
+        );
+        my $now = dt_from_string;
+        if ( $now >= $maximum_renewal_date ) {
+            return ( 0, "auto_too_late" );
+        }
+    }
+
     if ( defined $issuingrule->{norenewalbefore}
         and $issuingrule->{norenewalbefore} ne "" )
     {
@@ -2882,7 +2898,7 @@ sub CanBookBeRenewed {
 
     # Fallback for automatic renewals:
     # If norenewalbefore is undef, don't renew before due date.
-    elsif ( $itemissue->{auto_renew} ) {
+    if ( $itemissue->{auto_renew} ) {
         my $now = dt_from_string;
         return ( 0, "auto_renew" )
           if $now >= $itemissue->{date_due};

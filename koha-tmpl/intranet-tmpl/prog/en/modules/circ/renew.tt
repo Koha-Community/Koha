@@ -77,6 +77,18 @@
                                     </form>
                                 [% END %]
 
+                            [% ELSIF error == "auto_too_late" %]
+
+                                <p>[% item.biblio.title %] [% item.biblioitem.subtitle %] ( [% item.barcode %] ) has been scheduled for automatic renewal and cannot be renewed since [% latestrenewdate | $KohaDates %]. </p>
+
+                                [% IF Koha.Preference('AllowRenewalLimitOverride') %]
+                                    <form method="post" action="/cgi-bin/koha/circ/renew.pl">
+                                        <input type="hidden" name="barcode" value="[% item.barcode %]"/>
+                                        <input type="hidden" name="override_limit" value="1" />
+                                        <input type="submit" class="approve" value="Override and renew" />
+                                    </form>
+                                [% END %]
+
                             [% ELSIF error == "auto_renew" %]
 
                                 <p>[% item.biblio.title %] [% item.biblioitem.subtitle %] ( [% item.barcode %] ) has been scheduled for automatic renewal. </p>

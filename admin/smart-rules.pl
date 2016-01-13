@@ -136,6 +136,8 @@ elsif ($op eq 'add') {
     my $norenewalbefore  = $input->param('norenewalbefore');
     $norenewalbefore = undef if $norenewalbefore =~ /^\s*$/;
     my $auto_renew = $input->param('auto_renew') eq 'yes' ? 1 : 0;
+    my $no_auto_renewal_after = $input->param('no_auto_renewal_after');
+    $no_auto_renewal_after = undef if $no_auto_renewal_after =~ /^\s*$/;
     my $reservesallowed  = $input->param('reservesallowed');
     my $holds_per_record  = $input->param('holds_per_record');
     my $onshelfholds     = $input->param('onshelfholds') || 0;
@@ -173,6 +175,7 @@ elsif ($op eq 'add') {
         renewalperiod                 => $renewalperiod,
         norenewalbefore               => $norenewalbefore,
         auto_renew                    => $auto_renew,
+        no_auto_renewal_after         => $no_auto_renewal_after,
         reservesallowed               => $reservesallowed,
         holds_per_record              => $holds_per_record,
         issuelength                   => $issuelength,

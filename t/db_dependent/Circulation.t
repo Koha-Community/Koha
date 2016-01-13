@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 88;
+use Test::More tests => 90;
 
 BEGIN {
     require_ok('C4::Circulation');
@@ -36,7 +36,6 @@ use C4::Reserves;
 use C4::Overdues qw(UpdateFine CalcFine);
 use Koha::DateUtils;
 use Koha::Database;
-
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
@@ -552,6 +551,47 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     is( $error, 'auto_renew',
         'Bug 14101: Cannot renew, renewal is automatic (returned code is auto_renew)'
     );
+
+    subtest "too_late_renewal / no_auto_renewal_after" => sub {
+        plan tests => 8;
+        my $item_to_auto_renew = $builder->build(
+            {   source => 'Item',
+                value  => {
+                    biblionumber  => $biblionumber,
+                    homebranch    => $branch,
+                    holdingbranch => $branch,
+                }
+            }
+        );
+
+        my $ten_days_before = dt_from_string->add( days => -10 );
+        my $ten_days_ahead  = dt_from_string->add( days => 10 );
+        AddIssue( $renewing_borrower, $item_to_auto_renew->{barcode}, $ten_days_ahead, undef, $ten_days_before, undef, { auto_renew => 1 } );
+
+        $dbh->do('UPDATE issuingrules SET norenewalbefore = 7, no_auto_renewal_after = 9');
+        ( $renewokay, $error ) =
+          CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
+        is( $renewokay, 0, 'Do not renew, renewal is automatic' );
+        is( $error, 'auto_too_late', 'Cannot renew, too late(returned code is auto_too_late)' );
+
+        $dbh->do('UPDATE issuingrules SET norenewalbefore = 7, no_auto_renewal_after = 10');
+        ( $renewokay, $error ) =
+          CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
+        is( $renewokay, 0, 'Do not renew, renewal is automatic' );
+        is( $error, 'auto_too_late', 'Cannot auto renew, too late - no_auto_renewal_after is inclusive(returned code is auto_too_late)' );
+
+        $dbh->do('UPDATE issuingrules SET norenewalbefore = 7, no_auto_renewal_after = 11');
+        ( $renewokay, $error ) =
+          CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
+        is( $renewokay, 0, 'Do not renew, renewal is automatic' );
+        is( $error, 'auto_too_soon', 'Cannot auto renew, too soon - no_auto_renewal_after is defined(returned code is auto_too_soon)' );
+
+        $dbh->do('UPDATE issuingrules SET norenewalbefore = 10, no_auto_renewal_after = 11');
+        ( $renewokay, $error ) =
+          CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
+        is( $renewokay, 0,            'Do not renew, renewal is automatic' );
+        is( $error,     'auto_renew', 'Cannot renew, renew is automatic' );
+    };
 
     # Too many renewals
 
