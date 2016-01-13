@@ -47,7 +47,7 @@
 
                     [% IF ( patronupdate ) %]<div class="alert alert-info"><h3>Thank you!</h3><p>Your corrections have been submitted to the library, and a staff member will update your record as soon as possible.</p></div>[% END %]
 
-                    [% IF ( BORROWER_INF.warndeparture ) %]
+                    [% IF ( BORROWER_INFO.warndeparture ) %]
                         <div class="alert" id="warndeparture">
                             <strong>Please note:</strong><span> Your card will expire on <span id="warndeparture_date">[% BORROWER_INFO.warndeparture | $KohaDates %]</span>. Please contact the library for more information.</span>
                                 [% IF ( BORROWER_INFO.returnbeforeexpiry ) %]<span id="warndeparture_returnbeforeexpiry"> Also note that you must return all checked out items before your card expires.</span>[% END %]
@@ -109,7 +109,7 @@
                                 [% IF ( BORROWER_INFO.amountoverzero ) %]<li><a href="#opac-user-fines">Fines ([% BORROWER_INFO.amountoutstanding %])</a></li>[% END %]
                                 [% IF ( BORROWER_INFO.amountlessthanzero ) %]<li><a href="#opac-user-fines">Credits ([% BORROWER_INFO.amountoutstanding %])</a></li>[% END %]
                             [% END %]
-                            [% IF ( waiting_count ) %][% IF ( BORROWER_INF.atdestination ) %]<li><a href="#opac-user-waiting">Waiting ([% waiting_count %])</a></li>[% END %][% END %]
+                            [% IF ( waiting_count ) %][% IF ( BORROWER_INFO.atdestination ) %]<li><a href="#opac-user-waiting">Waiting ([% waiting_count %])</a></li>[% END %][% END %]
                             [% IF ( reserves_count ) %]<li><a href="#opac-user-holds">Holds ([% reserves_count %])</a></li>[% END %]
                         </ul>
 
