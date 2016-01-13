@@ -604,14 +604,17 @@ No patron matched <span class="ex">[% message %]</span>
     [% END %]
     <button type="submit" class="btn">Check out</button>
 
-    <div class="date-select">
-        [% IF NEEDSCONFIRMATION %]
-            <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled" />
-        [% ELSE %]
-            <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" />
-        [% END %]
-        <label for="auto_renew">Automatic renewal</label>
-    </div>
+    [% UNLESS flagged and noissues %]
+        <div class="date-select">
+            [% IF NEEDSCONFIRMATION %]
+                <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled" />
+            [% ELSE %]
+                <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" />
+            [% END %]
+
+            <label for="auto_renew">Automatic renewal</label>
+        </div>
+    [% END %]
 
     [% UNLESS ( noissues && Koha.Preference('OnSiteCheckoutsForce') ) %]
         [% IF ( SpecifyDueDate ) %]
