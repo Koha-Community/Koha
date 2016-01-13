@@ -20,6 +20,7 @@ package C4::Auth;
 use strict;
 use warnings;
 use Digest::MD5 qw(md5_base64);
+use File::Spec;
 use JSON qw/encode_json/;
 use URI::Escape;
 use CGI::Session;
@@ -1699,7 +1700,9 @@ sub get_session {
     }
     else {
         # catch all defaults to tmp should work on all systems
-        $session = new CGI::Session( "driver:File;serializer:yaml;id:md5", $sessionID, { Directory => '/tmp/cgisess' } );
+        my $dir = File::Spec->tmpdir;
+        my $instance = C4::Context->config( 'database' ); #actually for packages not exactly the instance name, but generally safer to leave it as it is
+        $session = new CGI::Session( "driver:File;serializer:yaml;id:md5", $sessionID, { Directory => "$dir/cgisess_$instance" } );
     }
     return $session;
 }
