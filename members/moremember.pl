@@ -253,6 +253,11 @@ $today->truncate(to => 'day');
 my $overdues_exist = 0;
 my $totalprice = 0;
 
+# Calculate and display patron's age
+my $dateofbirth = $data->{ 'dateofbirth' };
+my $age = GetAge($dateofbirth);
+$template->param( age => $age );
+
 ### ###############################################################################
 # BUILD HTML
 # show all reserves of this borrower, and the position of the reservation ....
