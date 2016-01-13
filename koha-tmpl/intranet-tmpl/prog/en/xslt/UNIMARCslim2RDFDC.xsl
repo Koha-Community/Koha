@@ -146,10 +146,6 @@
       <xsl:for-each select="marc:datafield[@tag=995]">
         <dc:identifier>
           <xsl:text>LOC:</xsl:text>
-          <xsl:choose>
-            <xsl:when test="marc:subfield[@code='c']='MAIN'">Main library</xsl:when>
-            <xsl:when test="marc:subfield[@code='c']='BIB2'">Library 2</xsl:when>
-          </xsl:choose>
           <xsl:for-each select="marc:subfield[@code='k']">
             <xsl:text>:</xsl:text>
             <xsl:value-of select="."/>
