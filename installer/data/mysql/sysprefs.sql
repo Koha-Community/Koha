@@ -257,6 +257,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('maxItemsInSearchResults','20',NULL,'Specify the maximum number of items to display for each result on a page of results','free'),
 ('MaxOpenSuggestions','',NULL,'Limit the number of open suggestions a patron can have at once','Integer'),
 ('maxoutstanding','5','','maximum amount withstanding to be able make holds','Integer'),
+('OPACFineNoRenewalsBlockAutoRenew','0','','Block/Allow auto renewals if the patron owe more than OPACFineNoRenewals','YesNo'),
 ('maxRecordsForFacets','20',NULL,NULL,'Integer'),
 ('maxreserves','50','','Define maximum number of holds a patron can place','Integer'),
 ('MaxSearchResultsItemsPerRecordStatusCheck','20','','Max number of items per record for which to check transit and hold status','Integer'),

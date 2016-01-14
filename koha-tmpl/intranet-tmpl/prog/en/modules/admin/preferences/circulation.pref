@@ -452,6 +452,13 @@ Circulation:
                   yes: Block
                   no: Allow
             - renewing of items.
+        -
+            - If patron owe more than the value of OPACFineNoRenewals,
+            - pref: OPACFineNoRenewalsBlockAutoRenew
+              choices:
+                  yes: Block
+                  no: Allow
+            - his/her auto renewals.
     Checkin Policy:
         -
             - pref: BlockReturnOfWithdrawnItems
