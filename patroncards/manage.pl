@@ -70,7 +70,7 @@ my $display_columns = { layout =>   [  # db column       => {col label          
                                         {select          => {label => 'Select',         value           => 'profile_id'}},
                                     ],
                         batch =>    [   {batch_id        => {label => 'Batch ID',       link_field      => 0}},
-                                        {_item_count     => {label => 'Item Count',     link_field      => 0}},
+                                        {_item_count     => {label => 'Patron Count',   link_field      => 0}},
                                         {_action         => {label => 'Actions',        link_field      => 0}},
                                         {select          => {label => 'Select',         value           => 'batch_id'}},
                                     ],
