@@ -87,17 +87,8 @@ sub new {
         return;
     }
 
-    my $record = $params->{ record };
-    my $schema = $params->{ schema };
-    my $format = $params->{ format } // 'MARC';
-    my $id     = $params->{ id };
-
-    my $self = $class->SUPER::new({
-        record => $record,
-        schema => $schema,
-        format => $format,
-        id     => $id
-    });
+    $params->{format} //= 'MARC';
+    my $self = $class->SUPER::new($params);
 
     bless $self, $class;
     return $self;
