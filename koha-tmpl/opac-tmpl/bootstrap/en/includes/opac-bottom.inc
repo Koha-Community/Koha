@@ -134,7 +134,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         var MSG_TAG_ALL_BAD = _("Error! Your tag was entirely markup code.  It was NOT added.  Please try again with plain text.");
         var MSG_ILLEGAL_PARAMETER = _("Error! Illegal parameter");
         var MSG_TAG_SCRUBBED = _("Note: your tag contained markup code that was removed. The tag was added as ");
-        var MSG_ADD_TAG_FAILED = _("Error! The add_tag operation failed on");
+        var MSG_ADD_TAG_FAILED = _("Error! Adding tags failed at");
         var MSG_ADD_TAG_FAILED_NOTE = _("Note: you can only tag an item with a given term once.  Check 'My Tags' to see your current tags.");
         var MSG_DELETE_TAG_FAILED = _("Error! You cannot delete the tag");
         var MSG_DELETE_TAG_FAILED_NOTE = _("Note: you can only delete your own tags.")
