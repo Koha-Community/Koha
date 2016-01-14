@@ -17,18 +17,38 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use C4::Context;
+use C4::Charset;
+use C4::AuthoritiesMarc;
+use Koha::Database;
 use Test::More;
+use File::Basename;
+use MARC::Batch;
+use MARC::File;
+use IO::File;
+use Koha::Authorities;
 
 BEGIN {
-        use_ok('Koha::MetadataRecord::Authority');
+    use_ok('Koha::MetadataRecord::Authority');
+}
+
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+
+# TODO Move this part to a t/lib packages
+my $sourcedir = dirname(__FILE__) . "/data";
+my $input_marc_file = "$sourcedir/marc21/zebraexport/authority/exported_records";
+
+my $fh = IO::File->new($input_marc_file);
+my $batch = MARC::Batch->new( 'USMARC', $fh );
+while ( my $record = $batch->next ) {
+    C4::Charset::MarcToUTF8Record($record, 'MARC21');
+    AddAuthority($record, '', '');
 }
 
 my $record = MARC::Record->new;
-
 $record->add_fields(
         [ '001', '1234' ],
         [ '150', ' ', ' ', a => 'Cooking' ],
@@ -42,28 +62,18 @@ is($authority->authorized_heading(), 'Cooking', 'Authorized heading was correct'
 
 is_deeply($authority->record, $record, 'Saved record');
 
-SKIP:
-{
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT authid FROM auth_header LIMIT 1;");
-    $sth->execute();
+my $authid = Koha::Authorities->search->next->authid;
 
-    my $authid;
-    for my $row ($sth->fetchrow_hashref) {
-        $authid = $row->{'authid'};
-    }
-    skip 'No authorities', 3 unless $authid;
-    $authority = Koha::MetadataRecord::Authority->get_from_authid($authid);
+$authority = Koha::MetadataRecord::Authority->get_from_authid($authid);
 
-    is(ref($authority), 'Koha::MetadataRecord::Authority', 'Retrieved valid Koha::MetadataRecord::Authority object');
+is(ref($authority), 'Koha::MetadataRecord::Authority', 'Retrieved valid Koha::MetadataRecord::Authority object');
 
-    is($authority->authid, $authid, 'Object authid is correct');
+is($authority->authid, $authid, 'Object authid is correct');
 
-    is($authority->record->field('001')->data(), $authid, 'Retrieved correct record');
+is($authority->record->field('001')->data(), $authid, 'Retrieved correct record');
 
-    $authority = Koha::MetadataRecord::Authority->get_from_authid('alphabetsoup');
-    is($authority, undef, 'No invalid record is retrieved');
-}
+$authority = Koha::MetadataRecord::Authority->get_from_authid('alphabetsoup');
+is($authority, undef, 'No invalid record is retrieved');
 
 SKIP:
 {
