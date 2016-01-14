@@ -593,6 +593,40 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         is( $error,     'auto_renew', 'Cannot renew, renew is automatic' );
     };
 
+    subtest "GetLatestAutoRenewDate" => sub {
+        plan tests => 3;
+        my $item_to_auto_renew = $builder->build(
+            {   source => 'Item',
+                value  => {
+                    biblionumber  => $biblionumber,
+                    homebranch    => $branch,
+                    holdingbranch => $branch,
+                }
+            }
+        );
+
+        my $ten_days_before = dt_from_string->add( days => -10 );
+        my $ten_days_ahead  = dt_from_string->add( days => 10 );
+        AddIssue( $renewing_borrower, $item_to_auto_renew->{barcode}, $ten_days_ahead, undef, $ten_days_before, undef, { auto_renew => 1 } );
+        $dbh->do('UPDATE issuingrules SET norenewalbefore = 7, no_auto_renewal_after = ""');
+        my $latest_auto_renew_date = GetLatestAutoRenewDate( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
+        is( $latest_auto_renew_date, undef, 'GetLatestAutoRenewDate should return undef if no_auto_renewal_after is not defined' );
+        my $five_days_before = dt_from_string->add( days => -5 );
+        $dbh->do('UPDATE issuingrules SET norenewalbefore = 10, no_auto_renewal_after = 5');
+        $latest_auto_renew_date = GetLatestAutoRenewDate( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
+        is( $latest_auto_renew_date->truncate( to => 'minute' ),
+            $five_days_before->truncate( to => 'minute' ),
+            'GetLatestAutoRenewDate should return -5 days if no_auto_renewal_after = 5 and date_due is 10 days before'
+        );
+        my $five_days_ahead = dt_from_string->add( days => 5 );
+        $dbh->do('UPDATE issuingrules SET norenewalbefore = 10, no_auto_renewal_after = 15');
+        $latest_auto_renew_date = GetLatestAutoRenewDate( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
+        is( $latest_auto_renew_date->truncate( to => 'minute' ),
+            $five_days_ahead->truncate( to => 'minute' ),
+            'GetLatestAutoRenewDate should return +5 days if no_auto_renewal_after = 15 and date_due is 10 days before'
+        );
+    };
+
     # Too many renewals
 
     # set policy to forbid renewals

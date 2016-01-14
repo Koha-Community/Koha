@@ -47,7 +47,7 @@ my $override_holds = $cgi->param('override_holds');
 
 my ( $item, $issue, $borrower );
 my $error = q{};
-my $soonest_renew_date;
+my ( $soonest_renew_date, $latest_auto_renew_date );
 
 if ($barcode) {
     $item = $schema->resultset("Item")->single( { barcode => $barcode } );
@@ -82,6 +82,12 @@ if ($barcode) {
                         $item->itemnumber(),
                     );
                 }
+                if ( $error && ( $error eq 'auto_too_late' ) ) {
+                    $latest_auto_renew_date = C4::Circulation::GetLatestAutoRenewDate(
+                        $borrower->borrowernumber(),
+                        $item->itemnumber(),
+                    );
+                }
                 if ($can_renew) {
                     my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
                     my $date_due = AddRenewal( undef, $item->itemnumber(), $branchcode );
@@ -106,6 +112,7 @@ if ($barcode) {
         borrower => $borrower,
         error    => $error,
         soonestrenewdate => $soonest_renew_date,
+        latestautorenewdate => $latest_auto_renew_date,
     );
 }
 

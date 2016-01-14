@@ -85,6 +85,7 @@ BEGIN {
 		&AddRenewal
 		&GetRenewCount
         &GetSoonestRenewDate
+        &GetLatestAutoRenewDate
 		&GetItemIssue
 		&GetItemIssues
 		&GetIssuingCharges
@@ -3140,6 +3141,55 @@ sub GetSoonestRenewDate {
     }
     return $now;
 }
+
+=head2 GetLatestAutoRenewDate
+
+  $NoAutoRenewalAfterThisDate = &GetLatestAutoRenewDate($borrowernumber, $itemnumber);
+
+Find out the latest possible auto renew date of a borrowed item.
+
+C<$borrowernumber> is the borrower number of the patron who currently
+has the item on loan.
+
+C<$itemnumber> is the number of the item to renew.
+
+C<$GetLatestAutoRenewDate> returns the DateTime of the latest possible
+auto renew date, based on the value "No auto renewal after" of the applicable
+issuing rule.
+Returns undef if there is no date specify in the circ rules or if the patron, loan,
+or item cannot be found.
+
+=cut
+
+sub GetLatestAutoRenewDate {
+    my ( $borrowernumber, $itemnumber ) = @_;
+
+    my $dbh = C4::Context->dbh;
+
+    my $item      = GetItem($itemnumber)      or return;
+    my $itemissue = GetItemIssue($itemnumber) or return;
+
+    $borrowernumber ||= $itemissue->{borrowernumber};
+    my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber )
+      or return;
+
+    my $branchcode = _GetCircControlBranch( $item, $borrower );
+    my $issuingrule =
+      GetIssuingRule( $borrower->{categorycode}, $item->{itype}, $branchcode );
+
+    my $now = dt_from_string;
+
+    return if not $issuingrule->{no_auto_renewal_after}
+               or $issuingrule->{no_auto_renewal_after} eq '';
+
+    my $maximum_renewal_date = dt_from_string($itemissue->{issuedate});
+    $maximum_renewal_date->add(
+        $issuingrule->{lengthunit} => $issuingrule->{no_auto_renewal_after}
+    );
+
+    return $maximum_renewal_date;
+}
+
 
 =head2 GetIssuingCharges
 
