@@ -90,7 +90,7 @@
                                     </form>
                                 [% END %]
 
-                            [% ELSIF error == "auto_renew" %]
+                            [% ELSIF error == "auto_renew" or error == "auto_too_much_oweing" %]
 
                                 <p>[% item.biblio.title %] [% item.biblioitem.subtitle %] ( [% item.barcode %] ) has been scheduled for automatic renewal. </p>
 

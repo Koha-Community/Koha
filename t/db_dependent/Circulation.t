@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 94;
+use Test::More tests => 95;
 
 use DateTime;
 
@@ -635,6 +635,46 @@ C4::Context->dbh->do("DELETE FROM accountlines");
           CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $renewokay, 0, 'Do not renew, renewal is automatic' );
         is( $error, 'auto_renew', 'Cannot renew, renew is automatic' );
+    };
+
+    subtest "auto_too_much_oweing | OPACFineNoRenewalsBlockAutoRenew" => sub {
+        plan tests => 6;
+        my $item_to_auto_renew = $builder->build({
+            source => 'Item',
+            value => {
+                biblionumber => $biblionumber,
+                homebranch       => $branch,
+                holdingbranch    => $branch,
+            }
+        });
+
+        my $ten_days_before = dt_from_string->add( days => -10 );
+        my $ten_days_ahead = dt_from_string->add( days => 10 );
+        AddIssue( $renewing_borrower, $item_to_auto_renew->{barcode}, $ten_days_ahead, undef, $ten_days_before, undef, { auto_renew => 1 } );
+
+        $dbh->do('UPDATE issuingrules SET norenewalbefore = 10, no_auto_renewal_after = 11');
+        C4::Context->set_preference('OPACFineNoRenewalsBlockAutoRenew','1');
+        C4::Context->set_preference('OPACFineNoRenewals','10');
+        my $fines_amount = 5;
+        C4::Accounts::manualinvoice( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber}, "Some fines", 'F', $fines_amount );
+        ( $renewokay, $error ) =
+          CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
+        is( $renewokay, 0, 'Do not renew, renewal is automatic' );
+        is( $error, 'auto_renew', 'Can auto renew, OPACFineNoRenewals=10, patron has 5' );
+
+        C4::Accounts::manualinvoice( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber}, "Some fines", 'F', $fines_amount );
+        ( $renewokay, $error ) =
+          CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
+        is( $renewokay, 0, 'Do not renew, renewal is automatic' );
+        is( $error, 'auto_renew', 'Can auto renew, OPACFineNoRenewals=10, patron has 10' );
+
+        C4::Accounts::manualinvoice( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber}, "Some fines", 'F', $fines_amount );
+        ( $renewokay, $error ) =
+          CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
+        is( $renewokay, 0, 'Do not renew, renewal is automatic' );
+        is( $error, 'auto_too_much_oweing', 'Cannot auto renew, OPACFineNoRenewals=10, patron has 15' );
+
+        $dbh->do('DELETE FROM accountlines WHERE borrowernumber=?', undef, $renewing_borrowernumber);
     };
 
     subtest "GetLatestAutoRenewDate" => sub {

@@ -2774,6 +2774,14 @@ sub CanBookBeRenewed {
                 return ( 0, "auto_too_late" );
             }
         }
+
+        if ( C4::Context->preference('OPACFineNoRenewalsBlockAutoRenew') ) {
+            my $fine_no_renewals = C4::Context->preference("OPACFineNoRenewals");
+            my ( $amountoutstanding ) = C4::Members::GetMemberAccountRecords($borrower->{borrowernumber});
+            if ( $amountoutstanding and $amountoutstanding > $fine_no_renewals ) {
+                return ( 0, "auto_too_much_oweing" );
+            }
+        }
     }
 
     if ( defined $issuing_rule->norenewalbefore
