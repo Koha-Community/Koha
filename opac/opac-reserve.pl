@@ -314,6 +314,7 @@ if ( $borr->{'amountoutstanding'} && ($borr->{'amountoutstanding'} > $maxoutstan
     $noreserves = 1;
     $template->param( too_much_oweing => $amount );
 }
+
 if ( $borr->{gonenoaddress} && ($borr->{gonenoaddress} == 1) ) {
     $noreserves = 1;
     $template->param(
@@ -321,6 +322,7 @@ if ( $borr->{gonenoaddress} && ($borr->{gonenoaddress} == 1) ) {
         GNA     => 1
     );
 }
+
 if ( $borr->{lost} && ($borr->{lost} == 1) ) {
     $noreserves = 1;
     $template->param(
@@ -328,11 +330,14 @@ if ( $borr->{lost} && ($borr->{lost} == 1) ) {
         lost    => 1
     );
 }
+
 if ( IsDebarred($borrowernumber) ) {
     $noreserves = 1;
     $template->param(
-        message  => 1,
-        debarred => 1
+        message          => 1,
+        debarred         => 1,
+        debarred_comment => $borr->{debarredcomment},
+        debarred_date    => $borr->{debarred},
     );
 }
 

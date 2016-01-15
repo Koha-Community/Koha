@@ -40,8 +40,8 @@
                         [% IF ( debarred ) %]
                             <li id="debarred">
                                 Your account has been frozen.
-                                [% IF ( BORROWER_INF.debarredcomment ) %] Comment: <span id="userdebarred_comment">"[% BORROWER_INF.debarredcomment %]"</span>[% END %]
-                                [% IF ( BORROWER_INF.userdebarreddate ) %] End date: <span id="userdebarred_date">[% BORROWER_INF.userdebarreddate | $KohaDates %]</span>[% END %]
+                                [% IF debarred_comment %] Comment: <span id="userdebarred_comment">"[% debarred_comment %]"</span>[% END %]
+                                [% IF debarred_date && debarred_date != '9999-12-31' %] End date: <span id="userdebarred_date">[% debarred_date | $KohaDates %]</span>[% END %]
                                 <br /><em>Usually the reason for freezing an account is old overdues or damage fees. If shows your account to be clear, please contact the library.</em> <a href="/cgi-bin/koha/opac-account.pl">Go to your account page</a>
                             </li>
                         [% END %]
