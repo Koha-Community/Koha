@@ -28,6 +28,7 @@ use C4::Branch;
 use C4::Letters;
 use C4::Members;
 use C4::Overdues;
+use Koha::Libraries;
 
 our $input = new CGI;
 my $dbh = C4::Context->dbh;
@@ -76,7 +77,7 @@ my $branch = $input->param('branch');
 $branch =
     defined $branch                                                    ? $branch
   : C4::Context->preference('DefaultToLoggedInLibraryOverdueTriggers') ? C4::Branch::mybranch()
-  : GetBranchesCount() == 1                                            ? undef
+  : Koha::Libraries->search->count() == 1                              ? undef
   :                                                                      undef;
 $branch ||= q{};
 $branch = q{} if $branch eq 'NO_LIBRARY_SET';

@@ -30,6 +30,7 @@ use Koha::DateUtils;
 use Koha::Database;
 use Koha::IssuingRule;
 use Koha::IssuingRules;
+use Koha::Libraries;
 
 my $input = CGI->new;
 my $dbh = C4::Context->dbh;
@@ -49,7 +50,7 @@ my $type=$input->param('type');
 
 my $branch;
 if ( C4::Context->preference('DefaultToLoggedInLibraryCircRules') ) {
-    $branch = $input->param('branch') || GetBranchesCount() == 1 ? undef : C4::Branch::mybranch();
+    $branch = $input->param('branch') || Koha::Libraries->search->count() == 1 ? undef : C4::Branch::mybranch();
 }
 else {
     $branch = $input->param('branch') || ( C4::Branch::onlymine() ? ( C4::Branch::mybranch() || '*' ) : '*' );
