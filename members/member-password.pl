@@ -110,7 +110,7 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
 	    categoryname => $bor->{'description'},
         address => $bor->{address},
 	    address2 => $bor->{'address2'},
-        streettype => $$bor->{streettype},
+        streettype => $bor->{streettype},
 	    city => $bor->{'city'},
 	    state => $bor->{'state'},
 	    zipcode => $bor->{'zipcode'},
