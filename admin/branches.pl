@@ -24,7 +24,7 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Koha;
-use Koha::Borrowers;
+use Koha::Patrons;
 use Koha::Items;
 use Koha::Libraries;
 use Koha::LibraryCategories;
@@ -122,7 +122,7 @@ if ( $op eq 'add_form' ) {
             },
         }
     )->count;
-    my $patrons_count = Koha::Borrowers->search( { branchcode => $branchcode, } )->count;
+    my $patrons_count = Koha::Patrons->search( { branchcode => $branchcode, } )->count;
 
     if ( $items_count or $patrons_count ) {
         push @messages,
