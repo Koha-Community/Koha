@@ -22,120 +22,131 @@ use Digest::MD5 qw(md5_base64);
 my $input = new CGI;
 
 my $theme = $input->param('theme') || "default";
-			# only used if allowthemeoverride is set
 
-my ($template, $loggedinuser, $cookie, $staffflags)
-    = get_template_and_user({template_name => "members/member-password.tt",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
+# only used if allowthemeoverride is set
+
+my ( $template, $loggedinuser, $cookie, $staffflags ) = get_template_and_user(
+    {
+        template_name   => "members/member-password.tt",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { borrowers => 1 },
+        debug           => 1,
+    }
+);
 
 my $flagsrequired;
-$flagsrequired->{borrowers}=1;
+$flagsrequired->{borrowers} = 1;
 
-#my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired, 'intranet');
-
-my $member=$input->param('member');
-my $cardnumber = $input->param('cardnumber');
+my $member      = $input->param('member');
+my $cardnumber  = $input->param('cardnumber');
 my $destination = $input->param('destination');
-my @errors;
-my ($bor)=GetMember('borrowernumber' => $member);
-if(( $member ne $loggedinuser ) && ($bor->{'category_type'} eq 'S' ) ) {
-	push(@errors,'NOPERMISSION') unless($staffflags->{'superlibrarian'} || $staffflags->{'staffaccess'} );
-	# need superlibrarian for koha-conf.xml fakeuser.
-}
-my $newpassword = $input->param('newpassword');
+my $newpassword  = $input->param('newpassword');
 my $newpassword2 = $input->param('newpassword2');
 
-push(@errors,'NOMATCH') if ( ( $newpassword && $newpassword2 ) && ($newpassword ne $newpassword2) );
+my @errors;
+
+my ($bor) = GetMember( 'borrowernumber' => $member );
+
+if ( ( $member ne $loggedinuser ) && ( $bor->{'category_type'} eq 'S' ) ) {
+    push( @errors, 'NOPERMISSION' )
+      unless ( $staffflags->{'superlibrarian'} || $staffflags->{'staffaccess'} );
+
+    # need superlibrarian for koha-conf.xml fakeuser.
+}
+
+push( @errors, 'NOMATCH' ) if ( ( $newpassword && $newpassword2 ) && ( $newpassword ne $newpassword2 ) );
 
 my $minpw = C4::Context->preference('minPasswordLength');
-push(@errors,'SHORTPASSWORD') if( $newpassword && $minpw && (length($newpassword) < $minpw ) );
+push( @errors, 'SHORTPASSWORD' ) if ( $newpassword && $minpw && ( length($newpassword) < $minpw ) );
 
-if ( $newpassword  && !scalar(@errors) ) {
-    my $digest=Koha::AuthUtils::hash_password($input->param('newpassword'));
-    my $uid = $input->param('newuserid');
-    my $dbh=C4::Context->dbh;
-    if (changepassword($uid,$member,$digest)) {
-		$template->param(newpassword => $newpassword);
-		if ($destination eq 'circ') {
-		    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$cardnumber");		
-		} else {
-		    print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member");
-		}
-    } else {
-			push(@errors,'BADUSERID');
+if ( $newpassword && !scalar(@errors) ) {
+    my $digest = Koha::AuthUtils::hash_password( $input->param('newpassword') );
+    my $uid    = $input->param('newuserid');
+    my $dbh    = C4::Context->dbh;
+    if ( changepassword( $uid, $member, $digest ) ) {
+        $template->param( newpassword => $newpassword );
+        if ( $destination eq 'circ' ) {
+            print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$cardnumber");
+        }
+        else {
+            print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member");
+        }
     }
-} else {
+    else {
+        push( @errors, 'BADUSERID' );
+    }
+}
+else {
     my $userid = $bor->{'userid'};
 
-    my $chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    my $length=int(rand(2))+C4::Context->preference("minPasswordLength");
-    my $defaultnewpassword='';
-    for (my $i=0; $i<$length; $i++) {
-	$defaultnewpassword.=substr($chars, int(rand(length($chars))),1);
+    my $chars              = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    my $length             = int( rand(2) ) + C4::Context->preference("minPasswordLength");
+    my $defaultnewpassword = '';
+    for ( my $i = 0 ; $i < $length ; $i++ ) {
+        $defaultnewpassword .= substr( $chars, int( rand( length($chars) ) ), 1 );
     }
 
-	$template->param( defaultnewpassword => $defaultnewpassword );
+    $template->param( defaultnewpassword => $defaultnewpassword );
 }
-    if ( $bor->{'category_type'} eq 'C') {
-        my  ( $catcodes, $labels ) =  GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
-        my $cnt = scalar(@$catcodes);
-        $template->param( 'CATCODE_MULTI' => 1) if $cnt > 1;
-        $template->param( 'catcode' =>    $catcodes->[0])  if $cnt == 1;
-    }
-	
+
+if ( $bor->{'category_type'} eq 'C' ) {
+    my ( $catcodes, $labels ) = GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
+    my $cnt = scalar(@$catcodes);
+    $template->param( 'CATCODE_MULTI' => 1 ) if $cnt > 1;
+    $template->param( 'catcode' => $catcodes->[0] ) if $cnt == 1;
+}
+
 $template->param( adultborrower => 1 ) if ( $bor->{'category_type'} eq 'A' );
-my ($picture, $dberror) = GetPatronImage($bor->{'borrowernumber'});
+
+my ( $picture, $dberror ) = GetPatronImage( $bor->{'borrowernumber'} );
 $template->param( picture => 1 ) if $picture;
 
-if (C4::Context->preference('ExtendedPatronAttributes')) {
-    my $attributes = GetBorrowerAttributes($bor->{'borrowernumber'});
+if ( C4::Context->preference('ExtendedPatronAttributes') ) {
+    my $attributes = GetBorrowerAttributes( $bor->{'borrowernumber'} );
     $template->param(
         ExtendedPatronAttributes => 1,
-        extendedattributes => $attributes
+        extendedattributes       => $attributes
     );
 }
 
-    $template->param( othernames => $bor->{'othernames'},
-	    surname     => $bor->{'surname'},
-	    firstname   => $bor->{'firstname'},
-	    borrowernumber => $bor->{'borrowernumber'},
-	    cardnumber => $bor->{'cardnumber'},
-	    categorycode => $bor->{'categorycode'},
-	    category_type => $bor->{'category_type'},
-	    categoryname => $bor->{'description'},
-        address => $bor->{address},
-	    address2 => $bor->{'address2'},
-        streettype => $bor->{streettype},
-	    city => $bor->{'city'},
-	    state => $bor->{'state'},
-	    zipcode => $bor->{'zipcode'},
-	    country => $bor->{'country'},
-	    phone => $bor->{'phone'},
-        phonepro => $bor->{'phonepro'},
-        mobile => $bor->{'mobile'},
-	    email => $bor->{'email'},
-        emailpro => $bor->{'emailpro'},
-	    branchcode => $bor->{'branchcode'},
-	    branchname => GetBranchName($bor->{'branchcode'}),
-	    userid      => $bor->{'userid'},
-	    destination => $destination,
-		is_child        => ($bor->{'category_type'} eq 'C'),
-		activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
-        minPasswordLength => $minpw,
-        RoutingSerials => C4::Context->preference('RoutingSerials'),
-	);
+$template->param(
+    othernames                 => $bor->{'othernames'},
+    surname                    => $bor->{'surname'},
+    firstname                  => $bor->{'firstname'},
+    borrowernumber             => $bor->{'borrowernumber'},
+    cardnumber                 => $bor->{'cardnumber'},
+    categorycode               => $bor->{'categorycode'},
+    category_type              => $bor->{'category_type'},
+    categoryname               => $bor->{'description'},
+    address                    => $bor->{address},
+    address2                   => $bor->{'address2'},
+    streettype                 => $bor->{streettype},
+    city                       => $bor->{'city'},
+    state                      => $bor->{'state'},
+    zipcode                    => $bor->{'zipcode'},
+    country                    => $bor->{'country'},
+    phone                      => $bor->{'phone'},
+    phonepro                   => $bor->{'phonepro'},
+    mobile                     => $bor->{'mobile'},
+    email                      => $bor->{'email'},
+    emailpro                   => $bor->{'emailpro'},
+    branchcode                 => $bor->{'branchcode'},
+    branchname                 => GetBranchName( $bor->{'branchcode'} ),
+    userid                     => $bor->{'userid'},
+    destination                => $destination,
+    is_child                   => ( $bor->{'category_type'} eq 'C' ),
+    activeBorrowerRelationship => ( C4::Context->preference('borrowerRelationship') ne '' ),
+    minPasswordLength          => $minpw,
+    RoutingSerials             => C4::Context->preference('RoutingSerials'),
+);
 
-if( scalar(@errors )){
-	$template->param( errormsg => 1 );
-	foreach my $error (@errors) {
-        $template->param($error) || $template->param( $error => 1);
-	}
-
+if ( scalar(@errors) ) {
+    $template->param( errormsg => 1 );
+    foreach my $error (@errors) {
+        $template->param($error) || $template->param( $error => 1 );
+    }
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;
