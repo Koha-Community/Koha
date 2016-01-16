@@ -352,7 +352,7 @@ check_letsencrypt()
 letsencrypt_instance()
 {
     # Get letsencrypt certificates
-    letsencrypt --agree-tos --renew-by-default --webroot --staging certonly \
+    letsencrypt --agree-tos --renew-by-default --webroot certonly \
         -w /usr/share/koha/opac/htdocs/ -d $opacdomain -w /usr/share/koha/intranet/htdocs/ -d $intradomain
     # enable all ssl settings (apache won't start with these before certs are present)
     sed -i "s:^\s*#\(\s*SSL.*\)$:\1:" "/etc/apache2/sites-available/$name.conf"
