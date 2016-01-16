@@ -20,7 +20,7 @@ use Modern::Perl;
 use C4::Context;
 use C4::Biblio qw( AddBiblio );
 use Koha::Database;
-use Koha::Branches;
+use Koha::Libraries;
 use Koha::Borrowers;
 
 use Test::More tests => 4;
@@ -34,7 +34,7 @@ $schema->storage->txn_begin();
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 
-my @branches = Koha::Branches->search();
+my @branches = Koha::Libraries->search();
 my $borrower = Koha::Borrowers->search()->next();
 
 my $biblio = MARC::Record->new();
