@@ -75,6 +75,10 @@ the date set by the preference.
 Optional parameter to extend the selection with a number of days AFTER
 the date set by the preference.
 
+=item B<-letter>
+
+Optional parameter to use another notice than the default one.
+
 =back
 
 =head1 CONFIGURATION
@@ -134,7 +138,7 @@ my $help    = 0;
 my $man     = 0;
 my $before  = 0;
 my $after   = 0;
-my $branch;
+my ( $branch, $letter_type );
 
 GetOptions(
     'help|?'         => \$help,
@@ -145,6 +149,7 @@ GetOptions(
     'branch:s'       => \$branch,
     'before:i'       => \$before,
     'after:i'        => \$after,
+    'letter:s'       => \$letter_type,
 ) or pod2usage(2);
 
 pod2usage( -verbose => 2 ) if $man;
@@ -167,52 +172,27 @@ warn 'found ' . scalar( @$upcoming_mem_expires ) . ' soon expiring members'
     if $verbose;
 
 # main loop
+$letter_type = 'MEMBERSHIP_EXPIRY' if !$letter_type;
 foreach my $recent ( @$upcoming_mem_expires ) {
     my $from_address = $recent->{'branchemail'} || $admin_adress;
-    my $letter_type = 'MEMBERSHIP_EXPIRY';
-    my $letter = C4::Letters::getletter( 'members', $letter_type,
-        $recent->{'branchcode'} );
-    die "no letter of type '$letter_type' found. Please see sample_notices.sql"
-        unless $letter;
-
-    $letter = parse_letter({
-        letter         => $letter,
-        borrowernumber => $recent->{'borrowernumber'},
-        firstname      => $recent->{'firstname'},
-        categorycode   => $recent->{'categorycode'},
-        branchcode     => $recent->{'branchcode'},
-    });
-    if ($letter) {
-        if ($nomail) {
-            print $letter->{'content'}."\n";
-        } else {
-            C4::Letters::EnqueueLetter({
-                letter                 => $letter,
-                borrowernumber         =>  $recent->{'borrowernumber'},
-                from_address           => $from_address,
-                message_transport_type => 'email',
-            });
-        }
-    }
-}
-
-=head1 SUBROUTINES
-
-=head2 parse_letter
-
-=cut
-
-sub parse_letter {
-    my $params = shift;
-    foreach my $required ( qw( letter borrowernumber ) ) {
-        return unless exists $params->{$required};
-    }
-    my $letter =  C4::Letters::GetPreparedLetter (
-        module => 'members',
-        letter_code => 'MEMBERSHIP_EXPIRY',
-        tables => {
-            'borrowers', $params->{'borrowernumber'},
-            'branches', $params->{'branchcode'}
+    my $letter =  C4::Letters::GetPreparedLetter(
+        module      => 'members',
+        letter_code => $letter_type,
+        branchcode  => $recent->{'branchcode'},
+        tables      => {
+            borrowers => $recent->{'borrowernumber'},
+            branches  => $recent->{'branchcode'},
         },
     );
+    last if !$letter; # Letters.pm already warned, just exit
+    if( $nomail ) {
+        print $letter->{'content'}."\n";
+    } else {
+        C4::Letters::EnqueueLetter({
+            letter                 => $letter,
+            borrowernumber         =>  $recent->{'borrowernumber'},
+            from_address           => $from_address,
+            message_transport_type => 'email',
+        });
+    }
 }
