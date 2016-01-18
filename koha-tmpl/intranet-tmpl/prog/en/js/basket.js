@@ -337,7 +337,7 @@ function sendBasket() {
 
     var loc = CGIBIN + "basket/sendbasket.pl?" + strCookie;
 
-    var optWin="scrollbars=no,resizable=no,height=300,width=450,top=50,left=100";
+    var optWin="scrollbars=no,resizable=no,height=400,width=650,top=50,left=100";
     var win_form = open(loc,"win_form",optWin);
 }
 
