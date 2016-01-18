@@ -204,7 +204,7 @@ sub checkoverdues {
 
 =head2 CalcFine
 
-    ($amount, $chargename,  $daycounttotal) = &CalcFine($item,
+    ($amount, $chargename,  $units_minus_grace, $chargeable_units) = &CalcFine($item,
                                   $categorycode, $branch,
                                   $start_dt, $end_dt );
 
@@ -236,10 +236,10 @@ C<$amount> is the fine owed by the patron (see above).
 C<$chargename> is the chargename field from the applicable record in
 the categoryitem table, whatever that is.
 
-C<$unitcount> is the number of chargeable units (days between start and end dates, Calendar adjusted where needed,
-minus any applicable grace period, or hours)
+C<$units_minus_grace> is the number of chargeable units minus the grace period
 
-FIXME - What is chargename supposed to be ?
+C<$chargeable_units> is the number of chargeable units (days between start and end dates, Calendar adjusted where needed,
+minus any applicable grace period, or hours)
 
 FIXME: previously attempted to return C<$message> as a text message, either "First Notice", "Second Notice",
 or "Final Notice".  But CalcFine never defined any value.
