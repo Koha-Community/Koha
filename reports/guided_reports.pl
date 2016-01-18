@@ -47,7 +47,7 @@ Script to control the guided report creation
 my $input = new CGI;
 my $usecache = C4::Context->ismemcached;
 
-my $phase = $input->param('phase');
+my $phase = $input->param('phase') // '';
 my $flagsrequired;
 if ( $phase eq 'Build new' or $phase eq 'Delete Saved' ) {
     $flagsrequired = 'create_reports';
