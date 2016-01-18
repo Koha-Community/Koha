@@ -189,7 +189,7 @@ tinyMCE.init({
                 <li><label for="branchreplyto">Reply-To (if different to Email): </label> <input type="text" name="branchreplyto" id="branchreplyto" class="email"  size="80" value="[% library.branchreplyto %]" /></li>
                 <li><label for="branchreturnpath">Return-Path (if different to Email): </label> <input type="text" name="branchreturnpath" id="branchreturnpath" class="email"  size="80" value="[% library.branchreturnpath %]" /></li>
                 <li><label for="branchurl">URL: </label><input type="text" name="branchurl" id="branchurl"  size="80" value="[% library.branchurl %]" class="url" /></li>
-                <li><label for="opac_info">OPAC info: </label><textarea name="opac_info" id="opac_info">[% library.opac_info %]</textarea></li>
+                <li><label for="opac_info">OPAC info: </label><textarea name="opac_info" id="opac_info">[% library.opac_info.raw %]</textarea></li>
                 <li><label for="branchip">IP: </label><input type="text" name="branchip" id="branchip"  size="15" maxlength="15" value="[% library.branchip %]" /> <span class="hint">Can be entered as a single IP, or a subnet such as 192.168.1.*</span></li>
                 <li><label for="branchnotes">Notes: </label><input type="text" name="branchnotes" id="branchnotes" size="80" value="[% library.branchnotes %]" /></li>
             </ol>
@@ -259,7 +259,7 @@ tinyMCE.init({
                             [% IF library.branchurl %]
                                 <br /><a href="[% library.branchurl %]">[% library.branchurl %]</a>[% END %]
                             [% IF library.opac_info %]
-                                <br />OPAC Info: <div>[% library.opac_info %]</div>[% END %]
+                                <br />OPAC Info: <div>[% library.opac_info.raw %]</div>[% END %]
                             [% IF library.branchnotes %]
                                 <br />Notes: [% library.branchnotes %][% END %]
                         </td>

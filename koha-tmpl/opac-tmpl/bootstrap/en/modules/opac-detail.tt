@@ -1213,7 +1213,7 @@
                                         <span>[% ITEM_RESULT.branchname %]</span>
                                     [% END %]
                                 </span>
-                                <div class="branch-info-tooltip">[% ITEM_RESULT.holding_branch_opac_info %]</div>
+                                <div class="branch-info-tooltip">[% ITEM_RESULT.holding_branch_opac_info.raw %]</div>
 
                                 [% IF ( OpacLocationBranchToDisplayShelving == 'holding' || OpacLocationBranchToDisplayShelving == 'both' ) %]
                                     <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
@@ -1238,7 +1238,7 @@
                                         <span>[% Branches.GetName( ITEM_RESULT.homebranch ) %]</span>
                                     [% END %]
                                 </span>
-                                <div class="branch-info-tooltip">[% ITEM_RESULT.home_branch_opac_info %]</div>
+                                <div class="branch-info-tooltip">[% ITEM_RESULT.home_branch_opac_info.raw %]</div>
 
                                 [% IF ( OpacLocationBranchToDisplayShelving == 'home' || OpacLocationBranchToDisplayShelving == 'both' ) %]
                                     <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
