@@ -17,8 +17,6 @@
 
 use Modern::Perl;
 
-use DateTime;
-
 use C4::Circulation;
 use Koha::Database;
 use Koha::Borrower;
@@ -26,11 +24,13 @@ use Koha::Biblio;
 use Koha::Item;
 use Koha::Holds;
 use Koha::Hold;
+use t::lib::TestBuilder;
 
 use Test::More tests => 12;
 
 my $dbh    = C4::Context->dbh;
 my $schema = Koha::Database->new()->schema();
+my $builder = t::lib::TestBuilder->new;
 
 # Start transaction
 $dbh->{RaiseError} = 1;
@@ -41,15 +41,18 @@ $dbh->do('DELETE FROM issuingrules');
 $dbh->do('DELETE FROM borrowers');
 $dbh->do('DELETE FROM items');
 
+my $library = $builder->build({source => 'Branch'});
+my $category = $builder->build({source => 'Category'});
+
 # Set userenv
 C4::Context->_new_userenv('xxx');
-C4::Context->set_userenv( 0, 0, 0, 'firstname', 'surname', 'MPL', 'Midway Public Library', '', '', '' );
-is( C4::Context->userenv->{branch}, 'MPL', 'userenv set' );
+C4::Context->set_userenv( 0, 0, 0, 'firstname', 'surname', $library->{branchcode}, 'Midway Public Library', '', '', '' );
+is( C4::Context->userenv->{branch}, $library->{branchcode}, 'userenv set' );
 
 my @patrons;
 for my $i ( 1 .. 20 ) {
     my $patron = Koha::Borrower->new(
-        { cardnumber => $i, firstname => 'Kyle', surname => 'Hall', categorycode => 'S', branchcode => 'MPL' } )
+        { cardnumber => $i, firstname => 'Kyle', surname => 'Hall', categorycode => $category->{categorycode}, branchcode => $library->{branchcode} } )
       ->store();
     push( @patrons, $patron );
 }
@@ -70,14 +73,24 @@ for my $i ( 0 .. 5 ) {
         {
             borrowernumber => $patron->id,
             biblionumber   => $biblio->id,
-            branchcode     => 'MPL',
+            branchcode     => $library->{branchcode},
         }
     )->store();
 }
 
-$schema->resultset('Issuingrule')
-  ->new( { branchcode => '*', categorycode => '*', itemtype => '*', issuelength => '14', lengthunit => 'days', reservesallowed => '99' } )
-  ->insert();
+$builder->build(
+    {
+        source => 'Issuingrule',
+        value => {
+            branchcode => '*',
+            categorycode => '*',
+            itemtype => '*',
+            issuelength => '14',
+            lengthunit => 'days',
+            reservesallowed => '99',
+        }
+    }
+);
 
 my $item   = pop(@items);
 my $patron = pop(@patrons);
@@ -88,8 +101,8 @@ C4::Context->set_preference( 'decreaseLoanHighHoldsValue',          1 );
 C4::Context->set_preference( 'decreaseLoanHighHoldsControl',        'static' );
 C4::Context->set_preference( 'decreaseLoanHighHoldsIgnoreStatuses', 'damaged,itemlost,notforloan,withdrawn' );
 
-my $item_hr = { itemnumber => $item->id, biblionumber => $biblio->id, homebranch => 'MPL', holdingbranch => 'MPL' };
-my $patron_hr = { borrower => $patron->id, branchcode => 'MPL' };
+my $item_hr = { itemnumber => $item->id, biblionumber => $biblio->id, homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode} };
+my $patron_hr = { borrower => $patron->id, branchcode => $library->{branchcode} };
 
 my $data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
 is( $data->{exceeded},        1,          "Static mode should exceed threshold" );
@@ -107,7 +120,7 @@ for my $i ( 5 .. 10 ) {
         {
             borrowernumber => $patron->id,
             biblionumber   => $biblio->id,
-            branchcode     => 'MPL',
+            branchcode     => $library->{branchcode},
         }
     )->store();
 }
