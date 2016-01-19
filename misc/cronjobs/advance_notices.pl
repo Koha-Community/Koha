@@ -101,7 +101,7 @@ statement otherwise.
 
 comma separated list of fields that get substituted into templates in
 places of the E<lt>E<lt>items.contentE<gt>E<gt> placeholder. This
-defaults to due date,title,author,barcode
+defaults to date_due,title,author,barcode
 
 Other possible values come from fields in the biblios, items and
 issues tables.
@@ -144,7 +144,7 @@ are:
 =item E<lt>E<lt>items.contentE<gt>E<gt>
 
 one line for each item, each line containing a tab separated list of
-title, author, barcode, issuedate
+date due, title, author, barcode
 
 =item E<lt>E<lt>borrowers.*E<gt>E<gt>
 
