@@ -402,7 +402,7 @@
 
                                                                         [% IF ( OPACItemsResultsDisplay ) %]
                                                                             [% UNLESS ( singleBranchMode ) %][% available_items_loo.location %][% END %]
-                                                                            [% IF ( available_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/opac-search.pl?q=callnum:[% available_items_loo.itemcallnumber |url %]">[% available_items_loo.itemcallnumber %]</a>][% END %]
+                                                                            [% IF ( available_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/opac-search.pl?q=callnum:%22[% available_items_loo.itemcallnumber |url %]%22">[% available_items_loo.itemcallnumber %]</a>][% END %]
                                                                         [% END %]
                                                                         ([% available_items_loo.count %]),
                                                                         </span>
