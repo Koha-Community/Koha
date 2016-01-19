@@ -13351,7 +13351,7 @@ if ( CheckVersion($DBversion) ) {
      SELECT s.itemnumber, i.itype, b.itemtype FROM
       ( SELECT DISTINCT itemnumber
         FROM statistics
-        WHERE type="return" AND itemtype IS NULL ) s
+        WHERE ( type = "return" OR type = "localuse" ) AND itemtype IS NULL ) s
       LEFT JOIN
       ( SELECT itemnumber,biblionumber, itype
         FROM items ) i
