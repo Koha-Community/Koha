@@ -143,10 +143,10 @@ if ($query->param('WT-itemNumber')){
 	updateWrongTransfer ($query->param('WT-itemNumber'),$query->param('WT-waitingAt'),$query->param('WT-From'));
 }
 
-if ( $query->param('resbarcode') ) {
+if ( $query->param('reserve_id') ) {
     my $item           = $query->param('itemnumber');
     my $borrowernumber = $query->param('borrowernumber');
-    my $resbarcode     = $query->param('resbarcode');
+    my $reserve_id     = $query->param('reserve_id');
     my $diffBranchReturned = $query->param('diffBranch');
     my $iteminfo   = GetBiblioFromItemNumber($item);
     my $cancel_reserve = $query->param('cancel_reserve');
@@ -154,12 +154,12 @@ if ( $query->param('resbarcode') ) {
     $iteminfo->{'itemtype'} = C4::Context->preference('item-level_itypes') ? $iteminfo->{'itype'} : $iteminfo->{'itemtype'};
 
     if ( $cancel_reserve ) {
-        CancelReserve({ borrowernumber => $borrowernumber, itemnumber => $item, charge_cancel_fee => !$forgivemanualholdsexpire });
+        CancelReserve({ reserve_id => $reserve_id, charge_cancel_fee => !$forgivemanualholdsexpire });
     } else {
         my $diffBranchSend = ($userenv_branch ne $diffBranchReturned) ? $diffBranchReturned : undef;
         # diffBranchSend tells ModReserveAffect whether document is expected in this library or not,
         # i.e., whether to apply waiting status
-        ModReserveAffect( $item, $borrowernumber, $diffBranchSend);
+        ModReserveAffect( $item, $borrowernumber, $diffBranchSend, $reserve_id );
     }
 #   check if we have other reserves for this document, if we have a return send the message of transfer
     my ( $messages, $nextreservinfo ) = GetOtherReserves($item);
@@ -440,7 +440,7 @@ if ( $messages->{'ResFound'}) {
             $template->param(
                 intransit    => ($userenv_branch eq $reserve->{'branchcode'} ? 0 : 1 ),
                 transfertodo => ($userenv_branch eq $reserve->{'branchcode'} ? 0 : 1 ),
-                resbarcode   => $barcode,
+                reserve_id   => $reserve->{reserve_id},
                 reserved     => 1,
             );
         }

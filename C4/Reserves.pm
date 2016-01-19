@@ -1324,7 +1324,7 @@ take care of the waiting status
 =cut
 
 sub ModReserveAffect {
-    my ( $itemnumber, $borrowernumber,$transferToDo ) = @_;
+    my ( $itemnumber, $borrowernumber, $transferToDo, $reserve_id ) = @_;
     my $dbh = C4::Context->dbh;
 
     # we want to attach $itemnumber to $borrowernumber, find the biblionumber
@@ -1335,44 +1335,52 @@ sub ModReserveAffect {
 
     # get request - need to find out if item is already
     # waiting in order to not send duplicate hold filled notifications
-    my $reserve_id = GetReserveId({
-        borrowernumber => $borrowernumber,
-        biblionumber   => $biblionumber,
-    });
-    return unless defined $reserve_id;
-    my $request = GetReserveInfo($reserve_id);
-    my $already_on_shelf = ($request && $request->{found} eq 'W') ? 1 : 0;
+
+    my $hold;
+    # Find hold by id if we have it
+    $hold = Koha::Holds->find( $reserve_id ) if $reserve_id;
+    # Find item level hold for this item if there is one
+    $hold ||= Koha::Holds->search( { borrowernumber => $borrowernumber, itemnumber => $itemnumber } )->next();
+    # Find record level hold if there is no item level hold
+    $hold ||= Koha::Holds->search( { borrowernumber => $borrowernumber, biblionumber => $biblionumber } )->next();
+
+    return unless $hold;
+
+    $reserve_id = $hold->id();
+
+    my $already_on_shelf = $hold->found && $hold->found eq 'W';
 
     # If we affect a reserve that has to be transferred, don't set to Waiting
     my $query;
     if ($transferToDo) {
-    $query = "
-        UPDATE reserves
-        SET    priority = 0,
-               itemnumber = ?,
-               found = 'T'
-        WHERE borrowernumber = ?
-          AND biblionumber = ?
-    ";
+        $hold->set(
+            {
+                priority   => 0,
+                itemnumber => $itemnumber,
+                found      => 'T',
+            }
+        );
     }
     else {
-    # affect the reserve to Waiting as well.
-        $query = "
-            UPDATE reserves
-            SET     priority = 0,
-                    found = 'W',
-                    waitingdate = NOW(),
-                    itemnumber = ?
-            WHERE borrowernumber = ?
-              AND biblionumber = ?
-        ";
+        # affect the reserve to Waiting as well.
+        $hold->set(
+            {
+                priority    => 0,
+                itemnumber  => $itemnumber,
+                found       => 'W',
+                waitingdate => dt_from_string(),
+            }
+        );
     }
-    $sth = $dbh->prepare($query);
-    $sth->execute( $itemnumber, $borrowernumber,$biblionumber);
-    _koha_notify_reserve( $itemnumber, $borrowernumber, $biblionumber ) if ( !$transferToDo && !$already_on_shelf );
+    $hold->store();
+
+    _koha_notify_reserve( $itemnumber, $borrowernumber, $biblionumber )
+      if ( !$transferToDo && !$already_on_shelf );
+
     _FixPriority( { biblionumber => $biblionumber } );
+
     if ( C4::Context->preference("ReturnToShelvingCart") ) {
-      CartToShelf( $itemnumber );
+        CartToShelf($itemnumber);
     }
 
     return;
@@ -2342,26 +2350,13 @@ sub GetReserveId {
 
     return unless ( ( $params->{'biblionumber'} || $params->{'itemnumber'} ) && $params->{'borrowernumber'} );
 
-    my $dbh = C4::Context->dbh();
-
-    my $sql = "SELECT reserve_id FROM reserves WHERE ";
-
-    my @params;
-    my @limits;
     foreach my $key ( keys %$params ) {
-        if ( defined( $params->{$key} ) ) {
-            push( @limits, "$key = ?" );
-            push( @params, $params->{$key} );
-        }
+        delete $params->{$key} unless defined( $params->{$key} );
     }
 
-    $sql .= join( " AND ", @limits );
+    my $hold = Koha::Holds->search( $params )->next();
 
-    my $sth = $dbh->prepare( $sql );
-    $sth->execute( @params );
-    my $row = $sth->fetchrow_hashref();
-
-    return $row->{'reserve_id'};
+    return $hold->id();
 }
 
 =head2 ReserveSlip
