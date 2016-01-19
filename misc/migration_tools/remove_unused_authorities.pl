@@ -45,8 +45,11 @@ if ($test) {
     print "testing only, authorities will not be deleted.\n";
 }
 
-if (C4::Context->Zconn("biblioserver",0)->errcode() == 10000) {
+my $errZebraConnection = C4::Context->Zconn("biblioserver",0)->errcode();
+if ( $errZebraConnection == 10000 ) {
     die "Zebra server seems not to be available. This script needs Zebra runs."
+} elsif ( $errZebraConnection ) {
+    die "Error from Zebra: $errZebraConnection";
 }
 
 my $dbh=C4::Context->dbh;
