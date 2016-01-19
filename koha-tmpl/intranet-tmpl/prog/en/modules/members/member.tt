@@ -93,6 +93,10 @@ $(document).ready(function() {
         });
         return true;
     });
+    $(".filterByLetter").on("click",function(e){
+        e.preventDefault();
+        filterByFirstLetterSurname($(this).text());
+    });
 });
 
 var dtMemberResults;
@@ -332,7 +336,7 @@ function filterByFirstLetterSurname(letter) {
           <div class="browse">
             Browse by last name:
             [% FOREACH letter IN alphabet.split(' ') %]
-              <a style="cursor:pointer" onclick="filterByFirstLetterSurname('[% letter %]');">[% letter %]</a>
+                <a href="#" class="filterByLetter">[% letter %]</a>
             [% END %]
           </div>
 
