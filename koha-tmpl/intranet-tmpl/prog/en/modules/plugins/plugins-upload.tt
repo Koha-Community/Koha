@@ -24,7 +24,7 @@
                 [% IF ( ERRORS ) %]
                 <div class="dialog alert">
                     [% FOREACH ERROR IN ERRORS %]
-                        [% IF ( ERROR.NOTKPZ ) %]<li><b>The upload file does not appear to be a kpz file.  The extention is not '.kpz'.</b></li>
+                        [% IF ( ERROR.NOTKPZ ) %]<li><b>The upload file does not appear to be a kpz file.  The extension is not '.kpz'.</b></li>
                         [% ELSIF ( ERROR.NOWRITETEMP ) %]<li><b>This script is not able to create/write to the necessary temporary directory.</b></li>
                         [% ELSIF ( ERROR.EMPTYUPLOAD ) %]<li><b>The upload file appears to be empty.</b></li>
                         [% ELSIF ( ERROR.UZIPFAIL ) %]<li><b>[% ERROR.UZIPFAIL %] failed to unpack.<br />Please verify the integrity of the zip file and retry.</b></li>
