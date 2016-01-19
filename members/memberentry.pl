@@ -701,7 +701,7 @@ $template->param(
   flagloop  => \@flagdata,
   category_type =>$category_type,
   modify          => $modify,
-  nok     => $nok,#flag to konw if an error 
+  nok     => $nok,#flag to know if an error
   NoUpdateLogin =>  $NoUpdateLogin
   );
 
