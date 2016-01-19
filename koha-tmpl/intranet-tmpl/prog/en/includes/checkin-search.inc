@@ -11,9 +11,20 @@
     </form>
 </div>
 [% END %]
+[% IF ( CAN_user_circulate ) %]
+<div id="renew_search" class="residentsearch">
+    <p class="tip">Scan a barcode to renew:</p>
+    <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off">
+        <input class="head-searchbox" name="barcode" id="ren_barcode" size="40" />
+        <input value="Submit" class="submit" type="submit" />
+    </form>
+</div>
+[% END %]
+
 <ul>
     [% IF ( CAN_user_circulate ) %]<li><a onclick="keep_text(0)" href="#circ_search">Check out</a></li>[% END %]
-    [% IF ( CAN_user_catalogue ) %]<li><a onclick="keep_text(1)" href="#catalog_search">Search the catalog</a></li>[% END %]
+    [% IF ( CAN_user_circulate ) %]<li><a onclick="keep_text(1)" href="#renew_search">Renew</a></li>[% END %]
+    [% IF ( CAN_user_catalogue ) %]<li><a onclick="keep_text(2)" href="#catalog_search">Search the catalog</a></li>[% END %]
 </ul>   
 
 </div>

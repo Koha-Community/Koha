@@ -10,7 +10,15 @@
         <input class="head-searchbox" name="barcode" id="ret_barcode" size="40" accesskey="r" />
         <input value="Submit" class="submit" type="submit" />
     </form>
-</div>[% END %]
+</div>
+<div id="renew_search" class="residentsearch">
+    <p class="tip">Scan a barcode to renew:</p>
+    <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off">
+        <input class="head-searchbox" name="barcode" id="ren_barcode" size="40" />
+        <input value="Submit" class="submit" type="submit" />
+    </form>
+</div>
+[% END %]
 [% IF ( CAN_user_catalogue ) %]
 <div id="catalog_search" class="residentsearch">
     <p class="tip">Enter search keywords:</p>
@@ -18,12 +26,14 @@
         <input class="head-searchbox" type="text" name="q" id="search-form" size="40" accesskey="q" />
         <input type="submit" class="submit" value="Submit"/>
     </form>
-</div>[% END %]
+</div>
+[% END %]
 
 <ul>
     [% IF ( CAN_user_circulate ) %]<li><a onclick="keep_text(0)" href="#circ_search">Check out</a></li>[% END %]
     [% IF ( CAN_user_circulate ) %]<li><a onclick="keep_text(1)" href="#checkin_search">Check in</a></li>[% END %]
-    [% IF ( CAN_user_catalogue ) %]<li><a onclick="keep_text(2)" href="#catalog_search">Search the catalog</a></li>[% END %]
+    [% IF ( CAN_user_circulate ) %]<li><a onclick="keep_text(2)" href="#renew_search">Renew</a></li>[% END %]
+    [% IF ( CAN_user_catalogue ) %]<li><a onclick="keep_text(3)" href="#catalog_search">Search the catalog</a></li>[% END %]
 </ul>   
 
 </div><!-- /header_search -->

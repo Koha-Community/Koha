@@ -17,7 +17,8 @@
 				<input type="submit" value="Submit"  class="submit" />
 		</form>
 	</div>[% END %]
-			<ul>
+
+	<ul>
             <li><a onclick="keep_text(0)" href="#patron_category_search">Search patron categories</a></li>
             [% IF ( CAN_user_circulate ) %]<li><a onclick="keep_text(1)" href="#circ_search">Check out</a></li>[% END %]
             [% IF ( CAN_user_catalogue ) %]<li><a onclick="keep_text(2)" href="#catalog_search">Search the catalog</a></li>[% END %]
