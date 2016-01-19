@@ -164,7 +164,7 @@
             </h5>
         </xsl:if>
 
-        <!--#13382 Added Author Statement to seperate Authors and Contributors -->
+        <!--#13382 Added Author Statement to separate Authors and Contributors -->
         <xsl:call-template name="showAuthor">
             <xsl:with-param name="authorfield" select="marc:datafield[(@tag=100 or @tag=110 or @tag=111)]"/>
             <xsl:with-param name="UseAuthoritiesForTracings" select="$UseAuthoritiesForTracings"/>
