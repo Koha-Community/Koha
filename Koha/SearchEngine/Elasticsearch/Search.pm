@@ -268,7 +268,7 @@ sub count_auth_use {
 =head2 simple_search_compat
 
     my ( $error, $marcresults, $total_hits ) =
-      $searcher->simple_search( $query, $offset, $max_results );
+      $searcher->simple_search( $query, $offset, $max_results, %options );
 
 This is a simpler interface to the searching, intended to be similar enough to
 L<C4::Search::SimpleSearch>.
@@ -290,6 +290,10 @@ How many results to skip from the start of the results.
 
 The max number of results to return. The default is 100 (because unlimited
 is a pretty terrible thing to do.)
+
+=item C<%options>
+
+These options are unused by Elasticsearch
 
 =back
 

@@ -649,7 +649,9 @@ sub get_matches {
         my $total_hits;
         if ( $self->{'record_type'} eq 'biblio' ) {
 
-            if ($QParser) {
+            #NOTE: The QueryParser can't handle the CCL syntax of 'qualifier','qualifier', so fallback to non-QueryParser.
+            #NOTE: You can see this in C4::Search::SimpleSearch() as well in a different way.
+            if ($QParser && $matchpoint->{'index'} !~ m/\w,\w/) {
                 $query = join( " || ",
                     map { "$matchpoint->{'index'}:$_" } @source_keys );
             }
@@ -662,7 +664,7 @@ sub get_matches {
 
             my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
             ( $error, $searchresults, $total_hits ) =
-              $searcher->simple_search_compat( $query, 0, $max_matches );
+              $searcher->simple_search_compat( $query, 0, $max_matches, undef, skip_normalize => 1 );
         }
         elsif ( $self->{'record_type'} eq 'authority' ) {
             my $authresults;

@@ -160,7 +160,7 @@ sub FindDuplicate {
 
 =head2 SimpleSearch
 
-( $error, $results, $total_hits ) = SimpleSearch( $query, $offset, $max_results, [@servers] );
+( $error, $results, $total_hits ) = SimpleSearch( $query, $offset, $max_results, [@servers], [%options] );
 
 This function provides a simple search API on the bibliographic catalog
 
@@ -172,6 +172,7 @@ This function provides a simple search API on the bibliographic catalog
     * @servers is optional. Defaults to biblioserver as found in koha-conf.xml
     * $offset - If present, represents the number of records at the beginning to omit. Defaults to 0
     * $max_results - if present, determines the maximum number of records to fetch. undef is All. defaults to undef.
+    * %options is optional. (e.g. "skip_normalize" allows you to skip changing : to = )
 
 
 =item C<Return:>
@@ -221,7 +222,7 @@ $template->param(result=>\@results);
 =cut
 
 sub SimpleSearch {
-    my ( $query, $offset, $max_results, $servers )  = @_;
+    my ( $query, $offset, $max_results, $servers, %options )  = @_;
 
     return ( 'No query entered', undef, undef ) unless $query;
     # FIXME hardcoded value. See catalog/search.pl & opac-search.pl too.
@@ -243,12 +244,12 @@ sub SimpleSearch {
         eval {
             $zconns[$i] = C4::Context->Zconn( $servers[$i], 1 );
             if ($QParser) {
-                $query =~ s/=/:/g;
+                $query =~ s/=/:/g unless $options{skip_normalize};
                 $QParser->parse( $query );
                 $query = $QParser->target_syntax($servers[$i]);
                 $zoom_queries[$i] = new ZOOM::Query::PQF( $query, $zconns[$i]);
             } else {
-                $query =~ s/:/=/g;
+                $query =~ s/:/=/g unless $options{skip_normalize};
                 $zoom_queries[$i] = new ZOOM::Query::CCL2RPN( $query, $zconns[$i]);
             }
             $tmpresults[$i] = $zconns[$i]->search( $zoom_queries[$i] );
