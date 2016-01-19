@@ -23,6 +23,7 @@ use CGI;
 use JSON qw(to_json);
 
 use C4::Context;
+use C4::Output qw(output_with_http_headers);
 use C4::Auth qw(check_cookie_auth);
 use Koha::DateUtils qw(dt_from_string);
 use Koha::Holds;
@@ -30,25 +31,24 @@ use Koha::Holds;
 my $input = new CGI;
 
 my ( $auth_status, $sessionID ) =
-  check_cookie_auth( $input->cookie('CGISESSID'),
-    { circulate => 'circulate_remaining_permissions' } );
+  check_cookie_auth( $input->cookie('CGISESSID'), { circulate => 'circulate_remaining_permissions' } );
 
 if ( $auth_status ne "ok" ) {
+    print $input->header(-type => 'text/plain', -status => '403 Forbidden');
     exit 0;
 }
-
-binmode STDOUT, ":encoding(UTF-8)";
-print $input->header( -type => 'text/json', -charset => 'UTF-8' );
 
 my $reserve_id = $input->param('reserve_id');
 
 my $hold = Koha::Holds->find( $reserve_id );
 
 unless ( $hold ) {
-    print to_json( { success => 0, error => "HOLD_NOT_FOUND" } );
+    my $json = to_json( { success => 0, error => "HOLD_NOT_FOUND" } );
+    output_with_http_headers( $input, undef, $json, "json" );
     exit;
 }
 
 $hold->resume();
 
-print to_json( { success => !$hold->suspend() } );
+my $json = to_json( { success => !$hold->suspend() } );
+output_with_http_headers( $input, undef, $json, "json" );
