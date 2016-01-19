@@ -8,7 +8,7 @@ use t::lib::TestBuilder;
 use C4::Context;
 use C4::Branch;
 
-use Test::More tests => 56;
+use Test::More tests => 60;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
@@ -145,11 +145,30 @@ ok( !$reserve->{'suspend'}, "Test ToggleSuspend(), no date" );
 
 ToggleSuspend( $reserve_id, '2012-01-01' );
 $reserve = GetReserve( $reserve_id );
-ok( $reserve->{'suspend_until'} eq '2012-01-01 00:00:00', "Test ToggleSuspend(), with date" );
+is( $reserve->{'suspend_until'}, '2012-01-01 00:00:00', "Test ToggleSuspend(), with date" );
 
 AutoUnsuspendReserves();
 $reserve = GetReserve( $reserve_id );
 ok( !$reserve->{'suspend'}, "Test AutoUnsuspendReserves()" );
+
+SuspendAll(
+    borrowernumber => $borrowernumber,
+    biblionumber   => $biblionumber,
+    suspend => 1,
+    suspend_until => '2012-01-01',
+);
+$reserve = GetReserve( $reserve_id );
+is( $reserve->{'suspend'}, 1, "Test SuspendAll()" );
+is( $reserve->{'suspend_until'}, '2012-01-01 00:00:00', "Test SuspendAll(), with date" );
+
+SuspendAll(
+    borrowernumber => $borrowernumber,
+    biblionumber   => $biblionumber,
+    suspend => 0,
+);
+$reserve = GetReserve( $reserve_id );
+is( $reserve->{'suspend'}, 0, "Test resuming with SuspendAll()" );
+is( $reserve->{'suspend_until'}, undef, "Test resuming with SuspendAll(), should have no suspend until date" );
 
 # Add a new hold for the borrower whose hold we canceled earlier, this time at the bib level
 AddReserve(

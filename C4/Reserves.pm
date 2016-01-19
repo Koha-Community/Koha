@@ -1034,13 +1034,11 @@ Unsuspends all suspended reserves with a suspend_until date from before today.
 =cut
 
 sub AutoUnsuspendReserves {
+    my $today = dt_from_string();
 
-    my $dbh = C4::Context->dbh;
+    my @holds = Koha::Holds->search( { suspend_until => { '<' => $today->ymd() } } );
 
-    my $query = "UPDATE reserves SET suspend = 0, suspend_until = NULL WHERE DATE( suspend_until ) < DATE( CURDATE() )";
-    my $sth = $dbh->prepare( $query );
-    $sth->execute();
-
+    map { $_->suspend(0)->suspend_until(undef)->store() } @holds;
 }
 
 =head2 CancelReserve
@@ -1161,19 +1159,26 @@ sub ModReserve {
         CancelReserve({ reserve_id => $reserve_id });
     }
     elsif ($rank =~ /^\d+/ and $rank > 0) {
-        my $query = "
-            UPDATE reserves SET priority = ? ,branchcode = ?, itemnumber = ?, found = NULL, waitingdate = NULL
-            WHERE reserve_id = ?
-        ";
-        my $sth = $dbh->prepare($query);
-        $sth->execute( $rank, $branchcode, $itemnumber, $reserve_id );
+        my $hold = Koha::Holds->find($reserve_id);
+
+        $hold->set(
+            {
+                priority    => $rank,
+                branchcode  => $branchcode,
+                itemnumber  => $itemnumber,
+                found       => undef,
+                waitingdate => undef
+            }
+        )->store();
 
         if ( defined( $suspend_until ) ) {
             if ( $suspend_until ) {
-                $suspend_until = eval { output_pref( { dt => dt_from_string( $suspend_until ), dateonly => 1, dateformat => 'iso' }); };
-                $dbh->do("UPDATE reserves SET suspend = 1, suspend_until = ? WHERE reserve_id = ?", undef, ( $suspend_until, $reserve_id ) );
+                $suspend_until = eval { dt_from_string( $suspend_until ) };
+                $hold->suspend_hold( $suspend_until );
             } else {
-                $dbh->do("UPDATE reserves SET suspend_until = NULL WHERE reserve_id = ?", undef, ( $reserve_id ) );
+                # FIXME: Why are we doing this? Should this be resuming the hold,
+                # or maybe suspending it indefinitely?
+                $hold->set( { suspend_until => undef } )->store();
             }
         }
 
@@ -1614,29 +1619,15 @@ be cleared when it is unsuspended.
 sub ToggleSuspend {
     my ( $reserve_id, $suspend_until ) = @_;
 
-    $suspend_until = output_pref(
-        {
-            dt         => dt_from_string($suspend_until),
-            dateformat => 'iso',
-            dateonly   => 1
-        }
-    ) if ($suspend_until);
+    $suspend_until = dt_from_string($suspend_until) if ($suspend_until);
 
-    my $do_until = ( $suspend_until ) ? '?' : 'NULL';
+    my $hold = Koha::Holds->find( $reserve_id );
 
-    my $dbh = C4::Context->dbh;
-
-    my $sth = $dbh->prepare(
-        "UPDATE reserves SET suspend = NOT suspend,
-        suspend_until = CASE WHEN suspend = 0 THEN NULL ELSE $do_until END
-        WHERE reserve_id = ?
-    ");
-
-    my @params;
-    push( @params, $suspend_until ) if ( $suspend_until );
-    push( @params, $reserve_id );
-
-    $sth->execute( @params );
+    if ( $hold->is_suspended ) {
+        $hold->resume()
+    } else {
+        $hold->suspend_hold( $suspend_until );
+    }
 }
 
 =head2 SuspendAll
@@ -1661,38 +1652,26 @@ sub SuspendAll {
     my $borrowernumber = $params{'borrowernumber'} || undef;
     my $biblionumber   = $params{'biblionumber'}   || undef;
     my $suspend_until  = $params{'suspend_until'}  || undef;
-    my $suspend        = defined( $params{'suspend'} ) ? $params{'suspend'} :  1;
+    my $suspend = defined( $params{'suspend'} ) ? $params{'suspend'} : 1;
 
-    $suspend_until = eval { output_pref( { dt => dt_from_string( $suspend_until), dateonly => 1, dateformat => 'iso' } ); }
-                     if ( defined( $suspend_until ) );
+    $suspend_until = eval { dt_from_string($suspend_until) }
+      if ( defined($suspend_until) );
 
     return unless ( $borrowernumber || $biblionumber );
 
-    my ( $query, $sth, $dbh, @query_params );
+    my $params;
+    $params->{found}          = undef;
+    $params->{borrowernumber} = $borrowernumber if $borrowernumber;
+    $params->{biblionumber}   = $biblionumber if $biblionumber;
 
-    $query = "UPDATE reserves SET suspend = ? ";
-    push( @query_params, $suspend );
-    if ( !$suspend ) {
-        $query .= ", suspend_until = NULL ";
-    } elsif ( $suspend_until ) {
-        $query .= ", suspend_until = ? ";
-        push( @query_params, $suspend_until );
-    }
-    $query .= " WHERE ";
-    if ( $borrowernumber ) {
-        $query .= " borrowernumber = ? ";
-        push( @query_params, $borrowernumber );
-    }
-    $query .= " AND " if ( $borrowernumber && $biblionumber );
-    if ( $biblionumber ) {
-        $query .= " biblionumber = ? ";
-        push( @query_params, $biblionumber );
-    }
-    $query .= " AND found IS NULL ";
+    my @holds = Koha::Holds->search($params);
 
-    $dbh = C4::Context->dbh;
-    $sth = $dbh->prepare( $query );
-    $sth->execute( @query_params );
+    if ($suspend) {
+        map { $_->suspend_hold($suspend_until) } @holds;
+    }
+    else {
+        map { $_->resume() } @holds;
+    }
 }
 
 

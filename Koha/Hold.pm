@@ -50,12 +50,12 @@ my $hold = $hold->suspend_hold( $suspend_until_dt );
 sub suspend_hold {
     my ( $self, $dt ) = @_;
 
+    $dt = $dt ? $dt->clone()->truncate( to => 'day' ) : undef;
+
     if ( $self->is_waiting ) {    # We can't suspend waiting holds
         carp "Unable to suspend waiting hold!";
         return $self;
     }
-
-    $dt ||= undef;
 
     $self->suspend(1);
     $self->suspend_until( $dt );
@@ -233,6 +233,18 @@ sub borrower {
     $self->{_borrower} ||= Koha::Borrowers->find( $self->borrowernumber() );
 
     return $self->{_borrower};
+}
+
+=head3 is_suspended
+
+my $bool = $hold->is_suspended();
+
+=cut
+
+sub is_suspended {
+    my ( $self ) = @_;
+
+    return $self->suspend();
 }
 
 =head3 type
