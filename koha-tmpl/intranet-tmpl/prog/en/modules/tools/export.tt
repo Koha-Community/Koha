@@ -210,14 +210,14 @@
     <fieldset class="rows">
     <legend>Output format</legend>
         <ol><li>
-            <label for="output_format">File format: </label>
-            <select id="output_format" name="output_format">
+            <label for="output_format_auth">File format: </label>
+            <select id="output_format_auth" name="output_format_auth">
                 <option value="marc">marc</option>
                 <option value="xml">xml</option>
             </select>
         </li>
         <li>
-        <label for="filename">File name:</label><input id="filename" type="text" name="filename" value="koha.mrc" />
+        <label for="filename_auth">File name:</label><input id="filename_auth" type="text" name="filename_auth" value="koha.mrc" />
         </li></ol>
     </fieldset>
     <input type="hidden" name="op" value="export" />
@@ -315,6 +315,25 @@
             $("#checknone").on("click",function(e){
                 e.preventDefault();
                 $(".branch_select").prop("checked",0);
+            });
+
+            $('#output_format').change(function(){
+                var filename = $('#filename').val();
+                var file_name = filename.split(".");
+                var extension = $(this).val();
+                if (extension == "iso2709") {
+                    extension = "mrc";
+                }
+                $('#filename').val(file_name[0] + "." + extension);
+            });
+            $('#output_format_auth').change(function(){
+                var filename_auth = $('#filename_auth').val();
+                var file_name_auth = filename_auth.split(".");
+                var extension = $(this).val();
+                if (extension == "iso2709") {
+                    extension = "mrc";
+                }
+                $('#filename_auth').val(file_name_auth[0] + "." + extension);
             });
         });
     </script>
