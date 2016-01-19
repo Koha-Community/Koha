@@ -234,26 +234,16 @@
             </td>
             <td>
                 <div class="dropdown">
-
-			 <a class="btn btn-mini dropdown-toggle" id="reportactions[% savedreport.id %]" role="button" data-toggle="dropdown" href="#">
-
-                                   Actions <b class="caret"></b>
-
-                         </a>
-
-                         <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id %]">
-
-                                    <li><a href="[% loo.script_name %]?op=edit&amp;id=[% loo.id %]"><i class="fa fa-pencil"></i> Edit</a></li>
-
-				    <li><a href="[% loo.script_name %]?op=add&amp;id=[% loo.id %]"><i class="fa fa-copy"></i> Copy</a></li>
-
-				    <li><a href="javascript:void(0);" onclick="ConfirmDelete('[% loo.servername | replace("['\"]","") %]','[% loo.id %]');"><i class="fa fa-remove"></i> Delete</a></li>
-
-
-                         </ul>
-
-		 </div>
-	    </td>
+                    <a class="btn btn-mini dropdown-toggle" id="reportactions[% savedreport.id %]" role="button" data-toggle="dropdown" href="#">
+                        Actions <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id %]">
+                        <li><a href="[% loo.script_name %]?op=edit&amp;id=[% loo.id %]"><i class="fa fa-pencil"></i> Edit</a></li>
+                        <li><a href="[% loo.script_name %]?op=add&amp;id=[% loo.id %]"><i class="fa fa-copy"></i> Copy</a></li>
+                        <li><a href="javascript:void(0);" onclick="ConfirmDelete('[% loo.servername | replace("['\"]","") %]','[% loo.id %]');"><i class="fa fa-remove"></i> Delete</a></li>
+                    </ul>
+                </div>
+            </td>
             </tr>
         [% END %]
         </tbody>
