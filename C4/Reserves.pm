@@ -1176,8 +1176,8 @@ sub ModReserve {
                 $suspend_until = eval { dt_from_string( $suspend_until ) };
                 $hold->suspend_hold( $suspend_until );
             } else {
-                # FIXME: Why are we doing this? Should this be resuming the hold,
-                # or maybe suspending it indefinitely?
+                # If the hold is suspended leave the hold suspended, but convert it to an indefinite hold.
+                # If the hold is not suspended, this does nothing.
                 $hold->set( { suspend_until => undef } )->store();
             }
         }
