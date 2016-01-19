@@ -57,7 +57,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AuthorityMergeLimit','50',NULL,'Maximum number of biblio records updated immediately when an authority record has been modified.','integer'),
 ('AuthorityMergeMode','loose','loose|strict','Authority merge mode','Choice'),
 ('AuthoritySeparator','--','10','Used to separate a list of authorities in a display. Usually --','free'),
-('autoBarcode','OFF','incremental|annual|hbyymmincr|EAN13|OFF','Used to autogenerate a barcode: incremental will be of the form 1, 2, 3; annual of the form 2007-0001, 2007-0002; hbyymmincr of the form HB08010001 where HB=Home Branch','Choice'),
+('autoBarcode','OFF','incremental|annual|hbyymmincr|EAN13|OFF|vaarakirjastot','Used to autogenerate a barcode: incremental will be of the form 1, 2, 3; annual of the form 2007-0001, 2007-0002; hbyymmincr of the form HB08010001 where HB=Home Branch','Choice'),
 ('AutoCreateAuthorities','0',NULL,'Automatically create authorities that do not exist when cataloging records.','YesNo'),
 ('AutoEmailOpacUser','0',NULL,'Sends notification emails containing new account details to patrons - when account is created.','YesNo'),
 ('AutoEmailPrimaryAddress','OFF','email|emailpro|B_email|cardnumber|OFF','Defines the default email address where \'Account Details\' emails are sent.','Choice'),

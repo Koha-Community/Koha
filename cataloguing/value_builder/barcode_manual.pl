@@ -55,6 +55,9 @@ my $builder = sub {
     elsif ($autoBarcodeType eq 'incremental') {
         ($nextnum, $scr) = C4::Barcodes::ValueBuilder::incremental::get_barcode(\%args);
     }
+	elsif ($autoBarcodeType eq 'vaarakirjastot') {
+        ($nextnum, $scr) = C4::Barcodes::ValueBuilder::vaarakirjastot::get_barcode(\%args);
+    }
     elsif ($autoBarcodeType eq 'hbyymmincr') {      # Generates a barcode where hb = home branch Code, yymm = year/month catalogued, incr = incremental number, reset yearly -fbcit
         ($nextnum, $scr) = C4::Barcodes::ValueBuilder::hbyymmincr::get_barcode(\%args);
     }

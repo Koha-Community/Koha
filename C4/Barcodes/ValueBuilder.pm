@@ -80,6 +80,78 @@ sub get_barcode {
 }
 
 
+package C4::Barcodes::ValueBuilder::vaarakirjastot;
+use C4::Context;
+my $DEBUG = 0;
+use Koha::Exception::Parse;
+use Koha::Exception::ServiceTemporarilyUnavailable;
+
+sub get_barcode {
+    my ($args) = @_;
+    my ($barcode);
+
+    sub checksum_modulus_10 {
+        my ($idnum) = @_;
+        my @digits = split('', $idnum);
+        my $checksum;
+
+        #calculate the checksum
+        my $sum = 0;
+        for (my $i=0 ; $i<scalar(@digits) ; $i++) {
+
+                my $weight = 0;
+
+                #if a paired index, because indexes start from 0
+                if($i % 2 == 1) {
+                        $weight = 1;
+                }
+                #must be a pairless index
+                else {
+                        $weight = 2;
+                }
+
+                $sum += $weight * $digits[$i];
+        }
+        $checksum = $sum % 10;
+
+        return $checksum;
+    }
+    sub combineBarcode {
+        my ($orgId, $numberLength, $number) = @_;
+        my $checksum = checksum_modulus_10( sprintf("%0${numberLength}d", $number) );
+        return $orgId.sprintf("%0${numberLength}d", $number).$checksum; #eg. VK + 000000 + 1 checksum
+    }
+
+    my $orgId = 'VK';
+    my $runningNumberLength = 6;
+    my $query = "SELECT MAX(barcode) FROM items WHERE barcode LIKE '$orgId%' AND LENGTH(barcode) = ".(length(combineBarcode($orgId, $runningNumberLength, 0))).";";
+    my $sth = C4::Context->dbh->prepare($query);
+    $sth->execute();
+    unless ($barcode = $sth->fetchrow_array) {
+        $barcode = combineBarcode($orgId, $runningNumberLength, 0);
+    }
+    if ($barcode =~ /^$orgId(\d{6})(\d)$/) { #VK + digits + checksum
+        my $runningNumber = $1 + 1;
+        if (length($runningNumber) > $runningNumberLength) {
+            my @cc = caller(0);
+            Koha::Exception::ServiceTemporarilyUnavailable->throw(error => $cc[3]."():> The barcode running numbers have been exhausted, please reconfigure the barcode numbering pattern.");
+        }
+        $barcode = combineBarcode($orgId, $runningNumberLength, $runningNumber);
+    }
+    else {
+        my @cc = caller(0);
+        Koha::Exception::Parse->throw(error => $cc[3]."():> Couldn't parse Vaara-barcode '$barcode'. Barcode must be like (/^$orgId(\\d{$runningNumberLength})(\\d)\$/");
+    }
+
+    my $scr = "
+    if (\$('#' + id).val() == '') {
+        \$('#' + id).val('$barcode');
+    }
+    ";
+    return $barcode, $scr;
+}
+
+
 package C4::Barcodes::ValueBuilder::annual;
 use C4::Context;
 my $DEBUG = 0;
