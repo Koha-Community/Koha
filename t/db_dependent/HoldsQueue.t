@@ -50,8 +50,9 @@ my @other_branches = grep { $_ ne $borrower_branchcode } keys %$branches;
 my $least_cost_branch_code = pop @other_branches
   or BAIL_OUT("No point testing only one branch...");
 my @item_types = C4::ItemType->all;
-my $itemtype = grep { $_->{notforloan} == 1 } @item_types
+my @for_loan = grep { $_->{notforloan} == 0 } @item_types
   or BAIL_OUT("No adequate itemtype");
+my $itemtype = $for_loan[0]->{itemtype};
 
 #Set up the stage
 # Sysprefs and cost matrix
