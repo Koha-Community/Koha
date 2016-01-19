@@ -96,6 +96,10 @@ $(document).ready(function(){
     }));
 
     $("#searchform").on('submit', filter);
+    $(".filterByLetter").on("click",function(e){
+        e.preventDefault();
+        filterByFirstLetterSurname($(this).text());
+    });
 });
 
 function filter() {
@@ -197,7 +201,7 @@ function filterByFirstLetterSurname(letter) {
         <div class="browse">
             Browse by last name:
             [% FOREACH letter IN alphabet.split(' ') %]
-                <a style="cursor:pointer" onclick="filterByFirstLetterSurname('[% letter %]');">[% letter %]</a>
+                <a href="#" class="filterByLetter">[% letter %]</a>
             [% END %]
         </div>
 
