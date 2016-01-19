@@ -336,7 +336,6 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
 $template->param( $data->{'categorycode'} => 1 ); 
 $template->param(
     detailview => 1,
-    AllowRenewalLimitOverride => C4::Context->preference("AllowRenewalLimitOverride"),
     borrowernumber  => $borrowernumber,
     othernames      => $data->{'othernames'},
     categoryname    => $data->{'description'},
