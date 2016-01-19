@@ -107,9 +107,9 @@ if ( 5 >= $borr->{'amountoutstanding'} && $borr->{'amountoutstanding'} > 0 ) {
     $borr->{'amountoverzero'} = 1;
 }
 my $no_renewal_amt = C4::Context->preference( 'OPACFineNoRenewals' );
-$no_renewal_amt ||= 0;
+$no_renewal_amt ||= undef;
 
-if (  C4::Context->preference( 'OpacRenewalAllowed' ) && $borr->{amountoutstanding} > $no_renewal_amt ) {
+if (  C4::Context->preference( 'OpacRenewalAllowed' ) && $no_renewal_amt && $borr->{amountoutstanding} > $no_renewal_amt ) {
     $borr->{'flagged'} = 1;
     $canrenew = 0;
     $template->param(
