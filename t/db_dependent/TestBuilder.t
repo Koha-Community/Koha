@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 42;
+use Test::More tests => 41;
 
 use Koha::Database;
 
@@ -49,8 +49,7 @@ my $my_overduerules_transport_type = {
     message_transport_type => {
         message_transport_type => 'my msg_t_t',
     },
-    letternumber => 1,
-    branchcode   => {
+    overduerules_id => {
         branchcode   => 'codeB',
         categorycode => 'codeC',
     },
@@ -65,11 +64,6 @@ is(
     $overduerules_transport_type->{message_transport_type},
     $my_overduerules_transport_type->{message_transport_type}->{message_transport_type},
     'build stores the message_transport_type correctly'
-);
-is(
-    $overduerules_transport_type->{letternumber},
-    $my_overduerules_transport_type->{letternumber},
-    'build stores the letternumber correctly'
 );
 is(
     $overduerules_transport_type->{branchcode},
@@ -102,7 +96,7 @@ is_deeply(
     'build links the branchcode and the categorycode correctly'
 );
 isnt(
-    $overduerules_transport_type->{_fk}->{branchcode}->{letter2},
+    $overduerules_transport_type->{_fk}->{overduerules_id}->{letter2},
     undef,
     'build generates values if they are not given'
 );
