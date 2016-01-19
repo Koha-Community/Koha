@@ -562,16 +562,16 @@ sub CanItemBeReserved {
     }
 
     my $circ_control_branch =
-      C4::Circulation::_GetCircControlBranch( $item, $borrower );
+      C4::Circulation::_GetCircControlBranch( $item->unblessed(), $borrower );
     my $branchitemrule =
-      C4::Circulation::GetBranchItemRule( $circ_control_branch, $item->{itype} );
+      C4::Circulation::GetBranchItemRule( $circ_control_branch, $item->itype );
 
     if ( $branchitemrule->{holdallowed} == 0 ) {
         return 'notReservable';
     }
 
     if (   $branchitemrule->{holdallowed} == 1
-        && $borrower->{branchcode} ne $item->{homebranch} )
+        && $borrower->{branchcode} ne $item->homebranch )
     {
         return 'cannotReserveFromOtherBranches';
     }

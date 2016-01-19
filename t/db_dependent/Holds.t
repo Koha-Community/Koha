@@ -237,16 +237,16 @@ my ($foreign_item_bibnum, $foreign_item_bibitemnum, $foreign_itemnumber)
   = AddItem({ homebranch => $branch_2, holdingbranch => $branch_2 } , $foreign_bibnum);
 $dbh->do('DELETE FROM issuingrules');
 $dbh->do(
-    q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
-      VALUES (?, ?, ?, ?)},
+    q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed, holds_per_record)
+      VALUES (?, ?, ?, ?, ?)},
     {},
-    '*', '*', '*', 25
+    '*', '*', '*', 25, 99
 );
 $dbh->do(
-    q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
-      VALUES (?, ?, ?, ?)},
+    q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed, holds_per_record)
+      VALUES (?, ?, ?, ?, ?)},
     {},
-    '*', '*', 'CANNOT', 0
+    '*', '*', 'CANNOT', 0, 99
 );
 
 # make sure some basic sysprefs are set
@@ -337,7 +337,7 @@ is( $reserve3->{priority}, 1, "After ModReserve, the 3rd reserve becomes the fir
 
 ModItem({ damaged => 1 }, $item_bibnum, $itemnumber);
 t::lib::Mocks::mock_preference( 'AllowHoldsOnDamagedItems', 1 );
-ok( CanItemBeReserved( $borrowernumbers[0], $itemnumber) eq 'OK', "Patron can reserve damaged item with AllowHoldsOnDamagedItems enabled" );
+is( CanItemBeReserved( $borrowernumbers[0], $itemnumber), 'OK', "Patron can reserve damaged item with AllowHoldsOnDamagedItems enabled" );
 ok( defined( ( CheckReserves($itemnumber) )[1] ), "Hold can be trapped for damaged item with AllowHoldsOnDamagedItems enabled" );
 t::lib::Mocks::mock_preference( 'AllowHoldsOnDamagedItems', 0 );
 ok( CanItemBeReserved( $borrowernumbers[0], $itemnumber) eq 'damaged', "Patron cannot reserve damaged item with AllowHoldsOnDamagedItems disabled" );
@@ -353,8 +353,8 @@ AddReserve(
     '',
     1,
 );
-ok(
-    CanItemBeReserved( $borrowernumbers[0], $itemnumber) eq 'tooManyReserves',
+is(
+    CanItemBeReserved( $borrowernumbers[0], $itemnumber), 'tooManyReserves',
     "cannot request item if policy that matches on item-level item type forbids it"
 );
 ModItem({ itype => 'CAN' }, $item_bibnum, $itemnumber);
@@ -460,10 +460,10 @@ $dbh->do('DELETE FROM biblio');
     = AddItem( { homebranch => $branch_1, holdingbranch => $branch_1 }, $bibnum );
 
 $dbh->do(
-    q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
-      VALUES (?, ?, ?, ?)},
+    q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed, holds_per_record)
+      VALUES (?, ?, ?, ?, ?)},
     {},
-    '*', '*', 'ONLY1', 1
+    '*', '*', 'ONLY1', 1, 99
 );
 is( CanItemBeReserved( $borrowernumbers[0], $itemnumber ),
     'OK', 'Patron can reserve item with hold limit of 1, no holds placed' );
