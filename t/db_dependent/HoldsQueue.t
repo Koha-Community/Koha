@@ -61,8 +61,9 @@ my @branchcodes = ( $library1->{branchcode}, $library2->{branchcode}, $library3-
 my @other_branches = ( $library2->{branchcode}, $library3->{branchcode} );
 my $least_cost_branch_code = pop @other_branches;
 my @item_types = C4::ItemType->all;
-my $itemtype = grep { $_->{notforloan} == 1 } @item_types
+my @for_loan = grep { $_->{notforloan} == 0 } @item_types
   or BAIL_OUT("No adequate itemtype");
+my $itemtype = $for_loan[0]->{itemtype};
 
 #Set up the stage
 # Sysprefs and cost matrix
