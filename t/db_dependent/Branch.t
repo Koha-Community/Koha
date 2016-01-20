@@ -21,7 +21,7 @@ use Modern::Perl;
 use C4::Context;
 use Data::Dumper;
 
-use Test::More tests => 23;
+use Test::More tests => 21;
 
 use C4::Branch;
 use Koha::Libraries;
@@ -41,7 +41,6 @@ can_ok(
       GetBranchDetail
       ModBranch
       GetBranchInfo
-      GetBranchesInCategory
       mybranch
       )
 );
@@ -248,38 +247,6 @@ delete $b2->{CAT2};
 $b2->{issuing}    = undef;
 $b2->{categories} = \@cat;
 is_deeply( @$b2info[0], $b2, 'BRB has the category CAT1 and CAT2' );
-
-#Test GetBranchesInCategory
-my $brCat1 = GetBranchesInCategory( $cat1->{categorycode} );
-my @b      = ( $b2->{branchcode} );
-is_deeply( $brCat1, \@b, 'CAT1 has branch BRB' );
-
-my $b3 = {
-    add            => 1,
-    branchcode     => 'BRC',
-    branchname     => 'BranchC',
-    branchaddress1 => 'adr1C',
-    branchaddress2 => 'adr2C',
-    branchaddress3 => 'adr3C',
-    branchzip      => 'zipC',
-    branchcity     => 'cityC',
-    branchstate    => 'stateC',
-    branchcountry  => 'countryC',
-    branchphone    => 'phoneC',
-    branchfax      => 'faxC',
-    branchemail    => 'emailC',
-    branchurl      => 'urlC',
-    branchip       => 'ipC',
-    branchprinter  => undef,
-    branchnotes    => 'noteC',
-    opac_info      => 'opacC',
-    CAT1           => 1,
-    CAT2           => 1
-};
-ModBranch($b3);
-$brCat1 = GetBranchesInCategory( $cat1->{categorycode} );
-push( @b, $b3->{branchcode} );
-is_deeply( $brCat1, \@b, 'CAT1 has branch BRB and BRC' );
 
 #TODO later: test mybranchine and onlymine
 # Actually we cannot mock C4::Context->userenv in unit tests

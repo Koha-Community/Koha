@@ -36,7 +36,6 @@ BEGIN {
 		&GetBranchDetail
 		&ModBranch
 		&GetBranchInfo
-		&GetBranchesInCategory
 		&mybranch
 	);
     @EXPORT_OK = qw( &onlymine &mybranch );
@@ -308,27 +307,6 @@ sub GetBranchDetail {
     my $sth = C4::Context->dbh->prepare("SELECT * FROM branches WHERE branchcode = ?");
     $sth->execute($branchcode);
     return $sth->fetchrow_hashref();
-}
-
-=head2 GetBranchesInCategory
-
-  my $branches = GetBranchesInCategory($categorycode);
-
-Returns a href:  keys %$branches eq (branchcode,branchname) .
-
-=cut
-
-sub GetBranchesInCategory {
-    my ($categorycode) = @_;
-	my @branches;
-	my $dbh = C4::Context->dbh();
-	my $sth=$dbh->prepare( "SELECT b.branchcode FROM branchrelations r, branches b 
-							where r.branchcode=b.branchcode and r.categorycode=?");
-    $sth->execute($categorycode);
-	while (my $branch = $sth->fetchrow) {
-		push @branches, $branch;
-	}
-	return( \@branches );
 }
 
 =head2 GetBranchInfo
