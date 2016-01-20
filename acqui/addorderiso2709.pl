@@ -210,7 +210,6 @@ if ($op eq ""){
         }
         # 3rd add order
         my $patron = C4::Members::GetMember( borrowernumber => $loggedinuser );
-        my $branch = C4::Branch->GetBranchDetail( $patron->{branchcode} );
         # get quantity in the MARC record (1 if none)
         my $quantity = GetMarcQuantity($marcrecord, C4::Context->preference('marcflavour')) || 1;
         my %orderinfo = (

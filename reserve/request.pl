@@ -46,6 +46,7 @@ use C4::Search;		# enabled_staff_search_views
 use Koha::DateUtils;
 use Koha::Borrower::Debarments qw(IsDebarred);
 use Koha::Holds;
+use Koha::Libraries;
 
 my $dbh = C4::Context->dbh;
 my $input = new CGI;
@@ -562,7 +563,7 @@ foreach my $biblionumber (@biblionumbers) {
         $reserve{'reserve_id'}     = $res->reserve_id();
 
         if ( C4::Context->preference('IndependentBranches') && $flags->{'superlibrarian'} != 1 ) {
-            $reserve{'branchloop'} = [ GetBranchDetail( $res->branchcode() ) ];
+            $reserve{'branchloop'} = [ Koha::Libraries->find( $res->branchcode() ) ];
         }
         else {
             $reserve{'branchloop'} = GetBranchesLoop( $res->branchcode() );

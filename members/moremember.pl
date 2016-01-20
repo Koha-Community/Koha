@@ -52,6 +52,7 @@ use C4::Form::MessagingPreferences;
 use List::MoreUtils qw/uniq/;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Borrower::Debarments qw(GetDebarments IsDebarred);
+use Koha::Libraries;
 use Module::Load;
 if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
     load Koha::NorwegianPatronDB, qw( NLGetSyncDataFromBorrowernumber );
@@ -215,8 +216,8 @@ if ( C4::Context->preference("IndependentBranches") ) {
 else {
     $samebranch = 1;
 }
-my $branchdetail = GetBranchDetail( $data->{'branchcode'});
-@{$data}{keys %$branchdetail} = values %$branchdetail; # merge in all branch columns
+my $library = Koha::Libraries->find( $data->{branchcode})->unblessed;
+@{$data}{keys %$library} = values %$library; # merge in all branch columns
 
 my ( $total, $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
 my $lib1 = &GetSortDetails( "Bsort1", $data->{'sort1'} );

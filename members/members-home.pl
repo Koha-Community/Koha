@@ -27,6 +27,7 @@ use C4::Members;
 use C4::Branch;
 use C4::Category;
 use Koha::Borrower::Modifications;
+use Koha::Libraries;
 use Koha::List::Patron;
 
 my $query = new CGI;
@@ -47,11 +48,11 @@ my $branches = GetBranches;
 my @branchloop;
 if ( C4::Branch::onlymine ) {
     my $userenv = C4::Context->userenv;
-    my $branch = C4::Branch::GetBranchDetail( $userenv->{'branch'} );
+    my $library = Koha::Libraries->find( $userenv->{'branch'} );
     push @branchloop, {
-        value => $branch->{branchcode},
-        branchcode => $branch->{branchcode},
-        branchname => $branch->{branchname},
+        value => $library->branchcode,
+        branchcode => $library->branchcode,
+        branchname => $library->branchname,
         selected => 1
     }
 } else {

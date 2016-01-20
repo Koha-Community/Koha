@@ -8,6 +8,7 @@ use Getopt::Long;
 use C4::Budgets qw( GetBudget );
 use C4::Members qw( GetMember );
 use C4::Suggestions qw( GetUnprocessedSuggestions );
+use Koha::Libraries;
 
 my ( $help, $verbose, $confirm, @days );
 GetOptions(
@@ -47,8 +48,8 @@ for my $number_of_days (@days) {
         my $patron = C4::Members::GetMember( borrowernumber => $budget->{budget_owner_id} );
         my $email_address =
           C4::Members::GetNoticeEmailAddress( $budget->{budget_owner_id} );
-        my $library = C4::Branch::GetBranchDetail( $patron->{branchcode} );
-        my $admin_email_address = $library->{branchemail}
+        my $library = Koha::Libraries->find( $patron->{branchcode} );
+        my $admin_email_address = $library->branchemail
           || C4::Context->preference('KohaAdminEmailAddress');
 
         if ($email_address) {

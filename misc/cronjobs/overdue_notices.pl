@@ -41,6 +41,7 @@ use C4::Log;
 use Koha::Borrower::Debarments qw(AddUniqueDebarment);
 use Koha::DateUtils;
 use Koha::Calendar;
+use Koha::Libraries;
 
 =head1 NAME
 
@@ -438,8 +439,8 @@ foreach my $branchcode (@branches) {
         }
     }
 
-    my $branch_details      = C4::Branch::GetBranchDetail($branchcode);
-    my $admin_email_address = $branch_details->{'branchemail'}
+    my $library             = Koha::Libraries->find($branchcode);
+    my $admin_email_address = $library->branchemail
       || C4::Context->preference('KohaAdminEmailAddress');
     my @output_chunks;    # may be sent to mail or stdout or csv file.
 
@@ -679,7 +680,7 @@ END_SQL
                             branchcode      => $branchcode,
                             items           => \@items,
                             substitute      => {    # this appears to be a hack to overcome incomplete features in this code.
-                                                bib             => $branch_details->{'branchname'}, # maybe 'bib' is a typo for 'lib<rary>'?
+                                                bib             => $library->branchname, # maybe 'bib' is a typo for 'lib<rary>'?
                                                 'items.content' => $titles,
                                                 'count'         => $itemcount,
                                                },
@@ -713,7 +714,7 @@ END_SQL
                               city           => $data->{'city'},
                               phone          => $data->{'phone'},
                               cardnumber     => $data->{'cardnumber'},
-                              branchname     => $branch_details->{'branchname'},
+                              branchname     => $library->branchname,
                               letternumber   => $i,
                               postcode       => $data->{'zipcode'},
                               country        => $data->{'country'},

@@ -57,6 +57,7 @@ use C4::Members::Messaging;
 use C4::Overdues;
 use Koha::DateUtils;
 use C4::Log;
+use Koha::Libraries;
 
 =head1 NAME
 
@@ -507,7 +508,7 @@ sub get_branch_info {
     ## Get branch info for borrowers home library.
     my $borrower_details = C4::Members::GetMember( borrowernumber => $borrowernumber );
     my $borrower_branchcode = $borrower_details->{'branchcode'};
-    my $branch = C4::Branch::GetBranchDetail( $borrower_branchcode );
+    my $branch = Koha::Libraries->find( $borrower_branchcode )->unblessed;
     my %branch_info;
     foreach my $key( keys %$branch ) {
         $branch_info{"branches.$key"} = $branch->{$key};

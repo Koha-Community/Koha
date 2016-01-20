@@ -31,6 +31,7 @@ use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Order;
 use Koha::Acquisition::Bookseller;
 use Koha::Number::Price;
+use Koha::Libraries;
 
 use C4::Koha qw( subfield_is_koha_internal_p );
 
@@ -2949,14 +2950,14 @@ sub NotifyOrderUsers {
     my $order = GetOrder( $ordernumber );
     for my $borrowernumber (@borrowernumbers) {
         my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
-        my $branch = C4::Branch::GetBranchDetail( $borrower->{branchcode} );
+        my $library = Koha::Libraries->find( $borrower->{branchcode} )->unblessed;
         my $biblio = C4::Biblio::GetBiblio( $order->{biblionumber} );
         my $letter = C4::Letters::GetPreparedLetter(
             module      => 'acquisition',
             letter_code => 'ACQ_NOTIF_ON_RECEIV',
-            branchcode  => $branch->{branchcode},
+            branchcode  => $library->branchcode,
             tables      => {
-                'branches'    => $branch,
+                'branches'    => $library,
                 'borrowers'   => $borrower,
                 'biblio'      => $biblio,
                 'aqorders'    => $order,

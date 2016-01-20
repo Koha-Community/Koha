@@ -44,7 +44,6 @@ use C4::Koha;
 use C4::Biblio;
 use C4::Items;
 use C4::Members; # to use GetMember
-use C4::Branch;     # GetBranchDetail
 use C4::Serials;    # CountSubscriptionFromBiblionumber
 use C4::Search;		# enabled_staff_search_views
 use C4::Acquisition qw(GetOrdersByBiblionumber);

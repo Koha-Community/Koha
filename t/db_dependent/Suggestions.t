@@ -24,6 +24,7 @@ use C4::Branch;
 use C4::Budgets qw( AddBudgetPeriod AddBudget );
 
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Libraries;
 
 use DateTime::Duration;
 use Test::More tests => 105;
@@ -62,7 +63,7 @@ $dbh->do(q|DELETE FROM message_queue|);
 $dbh->do(q|INSERT INTO letter(module, code, content) VALUES ('suggestions', 'CHECKED', 'my content')|);
 
 # Add CPL if missing.
-if (not defined GetBranchDetail('CPL')) {
+if (not defined Koha::Libraries->find('CPL')) {
     ModBranch({add => 1, branchcode => 'CPL', branchname => 'Centerville'});
 }
 

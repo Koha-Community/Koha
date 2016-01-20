@@ -28,10 +28,11 @@ use strict;
 use warnings;
 use utf8;
 
-use C4::Branch qw(GetBranchDetail GetBranchName);
+use C4::Branch qw(GetBranchName);
 
 use Koha::Number::Price;
 use Koha::DateUtils;
+use Koha::Libraries;
 
 BEGIN {
          use Exporter   ();
@@ -311,9 +312,8 @@ sub printhead {
 
     # get library name
     my $libraryname = C4::Context->preference("LibraryName");
-    # get branch details
-    my $billingdetails  = GetBranchDetail( $basketgroup->{billingplace} );
-    my $deliverydetails = GetBranchDetail( $basketgroup->{deliveryplace} );
+    my $billing_library  = Koha::Libraries->find( $basketgroup->{billingplace} );
+    my $delivery_library = Koha::Libraries->find( $basketgroup->{deliveryplace} );
     my $freedeliveryplace = $basketgroup->{freedeliveryplace};
     # get the subject
     my $subject;
@@ -345,21 +345,21 @@ sub printhead {
     $text->translate(100/mm,  ($height-86)/mm);
     $text->text($libraryname);
     $text->translate(100/mm,  ($height-97)/mm);
-    $text->text($billingdetails->{branchname});
+    $text->text($billing_library->branchname);
     $text->translate(100/mm,  ($height-108.5)/mm);
-    $text->text($billingdetails->{branchphone});
+    $text->text($billing_library->branchphone);
     $text->translate(100/mm,  ($height-115.5)/mm);
-    $text->text($billingdetails->{branchfax});
+    $text->text($billing_library->branchfax);
     $text->translate(100/mm,  ($height-122.5)/mm);
-    $text->text($billingdetails->{branchaddress1});
+    $text->text($billing_library->branchaddress1);
     $text->translate(100/mm,  ($height-127.5)/mm);
-    $text->text($billingdetails->{branchaddress2});
+    $text->text($billing_library->branchaddress2);
     $text->translate(100/mm,  ($height-132.5)/mm);
-    $text->text($billingdetails->{branchaddress3});
+    $text->text($billing_library->branchaddress3);
     $text->translate(100/mm,  ($height-137.5)/mm);
-    $text->text(join(' ', $billingdetails->{branchzip}, $billingdetails->{branchcity}, $billingdetails->{branchcountry}));
+    $text->text(join(' ', $billing_library->branchzip, $billing_library->branchcity, $billing_library->branchcountry));
     $text->translate(100/mm,  ($height-147.5)/mm);
-    $text->text($billingdetails->{branchemail});
+    $text->text($billing_library->branchemail);
 
     # print subject
     $text->translate(100/mm,  ($height-145.5)/mm);
@@ -391,13 +391,13 @@ sub printhead {
             $start += 5;
         }
     } else {
-        $text->text($deliverydetails->{branchaddress1});
+        $text->text($delivery_library->branchaddress1);
         $text->translate(50/mm,  ($height-242)/mm);
-        $text->text($deliverydetails->{branchaddress2});
+        $text->text($delivery_library->branchaddress2);
         $text->translate(50/mm,  ($height-247)/mm);
-        $text->text($deliverydetails->{branchaddress3});
+        $text->text($delivery_library->branchaddress3);
         $text->translate(50/mm,  ($height-252)/mm);
-        $text->text(join(' ', $deliverydetails->{branchzip}, $deliverydetails->{branchcity}, $deliverydetails->{branchcountry}));
+        $text->text(join(' ', $delivery_library->branchzip, $delivery_library->branchcity, $delivery_library->branchcountry));
     }
     $text->translate(50/mm,  ($height-262)/mm);
     $text->text($basketgroup->{deliverycomment});

@@ -51,6 +51,7 @@ use Koha::Items;
 use Koha::Borrowers;
 use Koha::Borrower::Debarments;
 use Koha::Database;
+use Koha::Libraries;
 use Carp;
 use List::MoreUtils qw( uniq );
 use Date::Calc qw(
@@ -1798,7 +1799,7 @@ patron who last borrowed the book.
 sub AddReturn {
     my ( $barcode, $branch, $exemptfine, $dropbox, $return_date, $dropboxdate ) = @_;
 
-    if ($branch and not GetBranchDetail($branch)) {
+    if ($branch and not Koha::Libraries->find($branch)) {
         warn "AddReturn error: branch '$branch' not found.  Reverting to " . C4::Context->userenv->{'branch'};
         undef $branch;
     }

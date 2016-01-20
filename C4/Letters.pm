@@ -420,7 +420,7 @@ sub SendAlerts {
 
 #                    warn "sending issues...";
             my $userenv = C4::Context->userenv;
-            my $branchdetails = GetBranchDetail($_->{'branchcode'});
+            my $library = Koha::Libraries->find( $_->{branchcode} );
             my $letter = GetPreparedLetter (
                 module => 'serial',
                 letter_code => $letter_code,
@@ -441,9 +441,9 @@ sub SendAlerts {
             my %mail = $message->create_message_headers(
                 {
                     to      => $email,
-                    from    => $branchdetails->{'branchemail'},
-                    replyto => $branchdetails->{'branchreplyto'},
-                    sender  => $branchdetails->{'branchreturnpath'},
+                    from    => $library->branchemail,
+                    replyto => $library->branchreplyto,
+                    sender  => $library->branchreturnpath,
                     subject => Encode::encode( "UTF-8", "" . $letter->{title} ),
                     message => $letter->{'is_html'}
                                 ? _wrap_html( Encode::encode( "UTF-8", $letter->{'content'} ),
@@ -571,13 +571,13 @@ sub SendAlerts {
     }
    # send an "account details" notice to a newly created user
     elsif ( $type eq 'members' ) {
-        my $branchdetails = GetBranchDetail($externalid->{'branchcode'});
+        my $library = Koha::Libraries->find( $externalid->{branchcode} )->unblessed;
         my $letter = GetPreparedLetter (
             module => 'members',
             letter_code => $letter_code,
             branchcode => $externalid->{'branchcode'},
             tables => {
-                'branches'    => $branchdetails,
+                'branches'    => $library,
                 'borrowers' => $externalid->{'borrowernumber'},
             },
             substitute => { 'borrowers.password' => $externalid->{'password'} },
@@ -588,9 +588,9 @@ sub SendAlerts {
         my %mail  = $email->create_message_headers(
             {
                 to      => $externalid->{'emailaddr'},
-                from    => $branchdetails->{'branchemail'},
-                replyto => $branchdetails->{'branchreplyto'},
-                sender  => $branchdetails->{'branchreturnpath'},
+                from    => $library->{branchemail},
+                replyto => $library->{branchreplyto},
+                sender  => $library->{branchreturnpath},
                 subject => Encode::encode( "UTF-8", "" . $letter->{'title'} ),
                 message => $letter->{'is_html'}
                             ? _wrap_html( Encode::encode( "UTF-8", $letter->{'content'} ),
@@ -1206,11 +1206,11 @@ sub _send_message_by_email {
     my $branch_email = undef;
     my $branch_replyto = undef;
     my $branch_returnpath = undef;
-    if ($member){
-        my $branchdetail = GetBranchDetail( $member->{'branchcode'} );
-        $branch_email = $branchdetail->{'branchemail'};
-        $branch_replyto = $branchdetail->{'branchreplyto'};
-        $branch_returnpath = $branchdetail->{'branchreturnpath'};
+    if ($member) {
+        my $library = Koha::Libraries->find( $member->{branchcode} );
+        $branch_email      = $library->branchemail;
+        $branch_replyto    = $library->branchreplyto;
+        $branch_returnpath = $library->branchreturnpath;
     }
     my $email = Koha::Email->new();
     my %sendmail_params = $email->create_message_headers(

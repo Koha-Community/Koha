@@ -202,13 +202,13 @@ subtest 'GetItemsInfo tests' => sub {
                 holdingbranch => $library2->{branchcode},
             }, $biblionumber );
 
-    my $branch = GetBranchDetail( $library1->{branchcode} );
-    $branch->{ opac_info } = "homebranch OPAC info";
-    ModBranch($branch);
+    my $library = Koha::Libraries->find( $library1->{branchcode} )->unblessed;
+    $library->{ opac_info }= "homebranch OPAC info";
+    ModBranch($library);
 
-    $branch = GetBranchDetail( $library2->{branchcode} );
-    $branch->{ opac_info } = "holdingbranch OPAC info";
-    ModBranch($branch);
+    $library = Koha::Libraries->find( $library2->{branchcode} )->unblessed;
+    $library->{ opac_info } = "holdingbranch OPAC info";
+    ModBranch($library);
 
     my @results = GetItemsInfo( $biblionumber );
     ok( @results, 'GetItemsInfo returns results');

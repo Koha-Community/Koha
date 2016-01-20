@@ -21,7 +21,7 @@ use Modern::Perl;
 use C4::Context;
 use Data::Dumper;
 
-use Test::More tests => 21;
+use Test::More tests => 19;
 
 use C4::Branch;
 use Koha::Libraries;
@@ -38,7 +38,6 @@ can_ok(
       GetBranch
       GetBranches
       GetBranchesLoop
-      GetBranchDetail
       ModBranch
       GetBranchInfo
       mybranch
@@ -80,7 +79,8 @@ my $b1 = {
     branchip       => 'ipA',
     branchprinter  => undef,
     branchnotes    => 'noteA',
-    opac_info      => 'opacA'
+    opac_info      => 'opacA',
+    issuing        => undef,
 };
 my $b2 = {
     branchcode     => 'BRB',
@@ -102,6 +102,7 @@ my $b2 = {
     branchprinter  => undef,
     branchnotes    => 'noteB',
     opac_info      => 'opacB',
+    issuing        => undef,
 };
 ModBranch($b1);
 is( ModBranch($b2), undef, 'the field add is missing' );
@@ -116,12 +117,6 @@ is( Koha::Libraries->search->count,             $count + 1, "branch BRB deleted"
 #Test GetBranchName
 is( GetBranchName( $b1->{branchcode} ),
     $b1->{branchname}, "GetBranchName returns the right name" );
-
-#Test GetBranchDetail
-my $branchdetail = GetBranchDetail( $b1->{branchcode} );
-$branchdetail->{add} = 1;
-$b1->{issuing}       = undef;    # Not used in DB
-is_deeply( $branchdetail, $b1, 'branchdetail is right' );
 
 #Test Getbranches
 my $branches = GetBranches();
@@ -149,15 +144,13 @@ $b1 = {
     branchip       => 'ipA modified',
     branchprinter  => undef,
     branchnotes    => 'notesA modified',
-    opac_info      => 'opacA modified'
+    opac_info      => 'opacA modified',
+    issuing        => undef,
 };
 
 ModBranch($b1);
 is( Koha::Libraries->search->count, $count + 1,
     "A branch has been modified, no new branch added" );
-$branchdetail = GetBranchDetail( $b1->{branchcode} );
-$b1->{issuing} = undef;
-is_deeply( $branchdetail, $b1 , "GetBranchDetail gives the details of BRA");
 
 #Test categories
 my $count_cat  = Koha::LibraryCategories->search->count;
@@ -236,6 +229,7 @@ $b2 = {
     branchprinter  => undef,
     branchnotes    => 'noteB',
     opac_info      => 'opacB',
+    issuing        => undef,
     CAT1           => 1,
     CAT2           => 1
 };
@@ -244,7 +238,6 @@ $b2info = GetBranchInfo( $b2->{branchcode} );
 push( @cat, $cat2->{categorycode} );
 delete $b2->{CAT1};
 delete $b2->{CAT2};
-$b2->{issuing}    = undef;
 $b2->{categories} = \@cat;
 is_deeply( @$b2info[0], $b2, 'BRB has the category CAT1 and CAT2' );
 

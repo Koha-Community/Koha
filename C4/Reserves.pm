@@ -34,13 +34,13 @@ use C4::Accounts;
 use C4::Members::Messaging;
 use C4::Members qw();
 use C4::Letters;
-use C4::Branch qw( GetBranchDetail );
 
 use Koha::DateUtils;
 use Koha::Calendar;
 use Koha::Database;
 use Koha::Hold;
 use Koha::Holds;
+use Koha::Libraries;
 
 use List::MoreUtils qw( firstidx any );
 use Carp;
@@ -219,13 +219,13 @@ sub AddReserve {
     # Send e-mail to librarian if syspref is active
     if(C4::Context->preference("emailLibrarianWhenHoldIsPlaced")){
         my $borrower = C4::Members::GetMember(borrowernumber => $borrowernumber);
-        my $branch_details = C4::Branch::GetBranchDetail($borrower->{branchcode});
+        my $library = Koha::Libraries->find($borrower->{branchcode})->unblessed;
         if ( my $letter =  C4::Letters::GetPreparedLetter (
             module => 'reserves',
             letter_code => 'HOLDPLACED',
             branchcode => $branch,
             tables => {
-                'branches'    => $branch_details,
+                'branches'    => $library,
                 'borrowers'   => $borrower,
                 'biblio'      => $biblionumber,
                 'biblioitems' => $biblionumber,
@@ -233,7 +233,7 @@ sub AddReserve {
             },
         ) ) {
 
-            my $admin_email_address =$branch_details->{'branchemail'} || C4::Context->preference('KohaAdminEmailAddress');
+            my $admin_email_address = $library->{'branchemail'} || C4::Context->preference('KohaAdminEmailAddress');
 
             C4::Letters::EnqueueLetter(
                 {   letter                 => $letter,
@@ -1969,15 +1969,15 @@ sub _koha_notify_reserve {
     ");
     $sth->execute( $borrowernumber, $biblionumber );
     my $reserve = $sth->fetchrow_hashref;
-    my $branch_details = GetBranchDetail( $reserve->{'branchcode'} );
+    my $library = Koha::Libraries->find( $reserve->{branchcode} )->unblessed;
 
-    my $admin_email_address = $branch_details->{'branchemail'} || C4::Context->preference('KohaAdminEmailAddress');
+    my $admin_email_address = $library->{branchemail} || C4::Context->preference('KohaAdminEmailAddress');
 
     my %letter_params = (
         module => 'reserves',
         branchcode => $reserve->{branchcode},
         tables => {
-            'branches'       => $branch_details,
+            'branches'       => $library,
             'borrowers'      => $borrower,
             'biblio'         => $biblionumber,
             'biblioitems'    => $biblionumber,

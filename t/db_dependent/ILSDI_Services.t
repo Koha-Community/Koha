@@ -3,7 +3,7 @@
 use Modern::Perl;
 
 use C4::Members qw/AddMember GetMember GetBorrowercategory/;
-use C4::Branch;
+use Koha::Libraries;
 use CGI qw ( -utf8 );
 
 use Test::More tests => 15;
@@ -37,8 +37,8 @@ unless ( GetBorrowercategory('UT') ) {
     ('UT','Unit tester',99,99,0.000000,1,0.000000,'C','default');");
 }
 
-# Create branch
-unless ( GetBranchDetail('UT') ) {
+# Create library
+unless ( Koha::Libraries->find('UT') ) {
     $dbh->do("INSERT INTO branches (branchcode,branchname) VALUES ('UT','Unit test library');");
 }
 

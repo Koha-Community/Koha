@@ -33,7 +33,6 @@ BEGIN {
 		&GetBranch
 		&GetBranches
 		&GetBranchesLoop
-		&GetBranchDetail
 		&ModBranch
 		&GetBranchInfo
 		&mybranch
@@ -291,22 +290,6 @@ sub GetBranch {
     ($branch)                || ($branch = $cookie{'branchname'});
     ( $branches->{$branch} ) || ( $branch = ( keys %$branches )[0] );
     return $branch;
-}
-
-=head2 GetBranchDetail
-
-    $branch = &GetBranchDetail($branchcode);
-
-Given the branch code, the function returns a
-hashref for the corresponding row in the branches table.
-
-=cut
-
-sub GetBranchDetail {
-    my ($branchcode) = shift or return;
-    my $sth = C4::Context->dbh->prepare("SELECT * FROM branches WHERE branchcode = ?");
-    $sth->execute($branchcode);
-    return $sth->fetchrow_hashref();
 }
 
 =head2 GetBranchInfo

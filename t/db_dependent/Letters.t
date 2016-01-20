@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 69;
+use Test::More tests => 68;
 use Test::MockModule;
 use Test::Warn;
 
@@ -36,7 +36,6 @@ $module->mock(
 
 use_ok('C4::Context');
 use_ok('C4::Members');
-use_ok('C4::Branch');
 use_ok('C4::Acquisition');
 use_ok('C4::Biblio');
 use_ok('C4::Bookseller');
@@ -47,6 +46,7 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Order;
 use Koha::Acquisition::Bookseller;
+use Koha::Libraries;
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin();
 
@@ -263,13 +263,13 @@ my $prepared_letter = GetPreparedLetter((
     substitute  => $substitute,
     repeat      => $repeat,
 ));
-my $branch = GetBranchDetail($library->{branchcode});
-my $my_title_letter = qq|$branch->{branchname} - $substitute->{status}|;
+my $retrieved_library = Koha::Libraries->find($library->{branchcode});
+my $my_title_letter = $retrieved_library->branchname . qq| - $substitute->{status}|;
 my $my_content_letter = qq|Dear Jane Smith,
 According to our current records, you have items that are overdue.Your library does not charge late fines, but please return or renew them at the branch below as soon as possible.
 
-$branch->{branchname}
-$branch->{branchaddress1}
+|.$retrieved_library->branchname.qq|
+|.$retrieved_library->branchaddress1.qq|
 URL: http://thisisatest.com
 
 The following item(s) is/are currently $substitute->{status}:
