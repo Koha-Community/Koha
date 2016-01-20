@@ -134,7 +134,11 @@ $(document).ready(function() {
         <td><p>[% reserveloo.itemcallnumber %]</p></td>
         <td><p>[% reserveloo.copyno %]</p></td>
         <td><p>[% reserveloo.enumchron %]</p></td>
-        <td>[% ItemTypes.GetDescription( reserveloo.itype ) %]</td>
+        <td>
+        [% FOREACH itype IN reserveloo.itypes %]
+            [% ItemTypes.GetDescription( itype ) %]
+        [% END %]
+        </td>
         <td>
         [% FOREACH loc IN reserveloo.locations %]
             [% AuthorisedValues.GetByCode('LOC', loc) %]<br>
