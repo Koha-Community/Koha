@@ -16,9 +16,9 @@
                     "[% data.category_description |html %] ([% data.category_type |html %])",
                 "dt_action":
                     [%- IF selection_type == 'select' -%]
-                        "<a style='cursor:pointer' onclick='select_user(\"[% data.borrowernumber %]\", [% To.json(data) | html %] );'>Select</a>"
+                        "<a href=\"#\" style='cursor:pointer' onclick='select_user(\"[% data.borrowernumber %]\", [% To.json(data) | html %] );'>Select</a>"
                     [%- ELSE -%]
-                        "<a style='cursor:pointer' onclick='add_user(\"[% data.borrowernumber %]\", \"[% data.firstname %] [% data.surname %]\");'>Select</a>"
+                        "<a href=\"#\" style='cursor:pointer' onclick='add_user(\"[% data.borrowernumber %]\", \"[% data.firstname %] [% data.surname %]\");'>Select</a>"
                     [%- END -%]
             }[% UNLESS loop.last %],[% END %]
         [% END %]
