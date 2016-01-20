@@ -37,6 +37,8 @@ $(document).ready(function(){
         var type = [% PRIVATE %];
     [% END %]
     var dtListResults = $("#listresultst").dataTable($.extend(true, {}, dataTablesDefaults, {
+
+	"aaSorting": [[ 5, "asc" ]],
         'bServerSide': true,
         'sAjaxSource': "/cgi-bin/koha/svc/virtualshelves/search",
         'fnServerData': function(sSource, aoData, fnCallback) {
