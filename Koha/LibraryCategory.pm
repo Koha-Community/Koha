@@ -41,7 +41,7 @@ sub new {
     return $self->SUPER::new( $params );
 }
 
-sub branchcodes{
+sub libraries{
     my ( $self, $params ) = @_;
     # TODO  This should return Koha::Libraries
     return $self->{_result}->branchcodes( $params );

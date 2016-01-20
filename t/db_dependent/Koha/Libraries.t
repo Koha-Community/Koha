@@ -77,7 +77,7 @@ $retrieved_library_1->update_categories( [ $new_category_2, $new_category_3 ] );
 is( Koha::Libraries->find( $new_library_1->branchcode )->get_categories->count, 2, '2 libraries should have been linked to the category 2' );
 
 my $retrieved_category_2 = Koha::LibraryCategories->find( $new_category_2->categorycode );
-is( $retrieved_category_2->branchcodes->count, 2, '2 libraries should have been linked to the category_2' );
+is( $retrieved_category_2->libraries->count, 2, '2 libraries should have been linked to the category_2' );
 is( $retrieved_category_2->categorycode, uc('my_cc_2'), 'The Koha::LibraryCategory constructor should have upercased the categorycode' );
 
 $retrieved_library_1->delete;
