@@ -169,7 +169,7 @@ subtest "get_login_shib tests" => sub {
     is( $login, "test1234",
         "good config with debug enabled, attribute value returned" );
 
-# bad config - with shib_ok implimented, we should never reach this sub with a bad config
+# bad config - with shib_ok implemented, we should never reach this sub with a bad config
 };
 
 ## checkpw_shib
