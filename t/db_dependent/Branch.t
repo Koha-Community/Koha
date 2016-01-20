@@ -39,7 +39,6 @@ can_ok(
       GetBranches
       GetBranchesLoop
       GetBranchDetail
-      get_branchinfos_of
       ModBranch
       GetBranchInfo
       GetBranchesInCategory
