@@ -40,6 +40,7 @@ use C4::Letters;
 use C4::Branch; # GetBranches
 use C4::Form::MessagingPreferences;
 use Koha::Borrower::Debarments;
+use Koha::Cities;
 use Koha::DateUtils;
 use Email::Valid;
 use Module::Load;
@@ -89,12 +90,10 @@ $nodouble = 1 if ($op eq 'modify' or $op eq 'duplicate');    # FIXME hack to rep
                                      # modifying an existing patron, it ipso facto
                                      # isn't a duplicate.  Marking FIXME because this
                                      # script needs to be refactored.
-my $select_city   = $input->param('select_city');
 my $nok           = $input->param('nok');
 my $guarantorinfo = $input->param('guarantorinfo');
 my $step          = $input->param('step') || 0;
 my @errors;
-my $default_city;
 my $borrower_data;
 my $NoUpdateLogin;
 my $userenv = C4::Context->userenv;
@@ -537,31 +536,14 @@ foreach (qw(C A S P I X)) {
 $template->param('typeloop' => \@typeloop,
         no_categories => $no_categories);
 if($no_categories){ $no_add = 1; }
-# test in city
-if ( $guarantorid ) {
-    $select_city = getidcity($data{city});
-}
-($default_city=$select_city) if ($step eq 0);
-if (!defined($select_city) or $select_city eq '' ){
-	$default_city = &getidcity($data{'city'});
-}
 
-my $city_arrayref = GetCities();
-if (@{$city_arrayref} ) {
-    $template->param( city_cgipopup => 1);
 
-    if ($default_city) { # flag the current or default val
-        for my $city ( @{$city_arrayref} ) {
-            if ($default_city == $city->{cityid}) {
-                $city->{selected} = 1;
-                last;
-            }
-        }
-    }
-}
-  
+my $cities = Koha::Cities->search( {}, { order_by => 'city_name' } );
 my $roadtypes = C4::Koha::GetAuthorisedValues( 'ROADTYPE', $data{streettype} );
-$template->param( roadtypes => $roadtypes);
+$template->param(
+    roadtypes => $roadtypes,
+    cities    => $cities,
+);
 
 my $default_borrowertitle = '';
 unless ( $op eq 'duplicate' ) { $default_borrowertitle=$data{'title'} }
@@ -689,7 +671,6 @@ $template->param(  step  => $step   ) if $step;	# associate with step to know wh
 $template->param(
   BorrowerMandatoryField => C4::Context->preference("BorrowerMandatoryField"),#field to test with javascript
   category_type => $category_type,#to know the category type of the borrower
-  select_city => $select_city,
   "$category_type"  => 1,# associate with step to know where u are
   destination   => $destination,#to know wher u come from and wher u must go in redirect
   check_member    => $check_member,#to know if the borrower already exist(=>1) or not (=>0) 
@@ -701,7 +682,6 @@ $template->param(
   borrowernumber  => $borrowernumber, #register number
   guarantorid => ($borrower_data->{'guarantorid'} || $guarantorid),
   relshiploop => \@relshipdata,
-  city_loop => $city_arrayref,
   borrotitlepopup => $borrotitlepopup,
   guarantorinfo   => $guarantorinfo,
   flagloop  => \@flagdata,

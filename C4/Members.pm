@@ -67,13 +67,10 @@ BEGIN {
         &GetPendingIssues
         &GetAllIssues
 
-        &getidcity
-
         &GetFirstValidEmailAddress
         &GetNoticeEmailAddress
 
         &GetAge
-        &GetCities
         &GetSortDetails
         &GetTitles
 
@@ -1362,21 +1359,6 @@ sub get_cardnumber_length {
     return ( $min, $max );
 }
 
-=head2 getdcity (OUEST-PROVENCE)
-
-recover cityid  with city_name condition
-
-=cut
-
-sub getidcity {
-    my ($city_name) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("select cityid from cities where city_name=? ");
-    $sth->execute($city_name);
-    my $data = $sth->fetchrow;
-    return $data;
-}
-
 =head2 GetFirstValidEmailAddress
 
   $email = GetFirstValidEmailAddress($borrowernumber);
@@ -1682,35 +1664,6 @@ sub SetAge{
 
     return $borrower;
 }    # sub SetAge
-
-=head2 GetCities
-
-  $cityarrayref = GetCities();
-
-  Returns an array_ref of the entries in the cities table
-  If there are entries in the table an empty row is returned
-  This is currently only used to populate a popup in memberentry
-
-=cut
-
-sub GetCities {
-
-    my $dbh   = C4::Context->dbh;
-    my $city_arr = $dbh->selectall_arrayref(
-        q|SELECT cityid,city_zipcode,city_name,city_state,city_country FROM cities ORDER BY city_name|,
-        { Slice => {} });
-    if ( @{$city_arr} ) {
-        unshift @{$city_arr}, {
-            city_zipcode => q{},
-            city_name    => q{},
-            cityid       => q{},
-            city_state   => q{},
-            city_country => q{},
-        };
-    }
-
-    return  $city_arr;
-}
 
 =head2 GetSortDetails (OUEST-PROVENCE)
 

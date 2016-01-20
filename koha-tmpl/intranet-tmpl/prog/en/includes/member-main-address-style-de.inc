@@ -80,17 +80,18 @@
       [% END %]
       City: </label>
         <input type="text" id="city" name="city" size="20" value="[% city %]" />
-        [% IF ( city_cgipopup ) %]or choose
+        [% IF cities.count %]or choose
         <select id="select_city" name="select_city">
-        [% FOREACH city_loo IN city_loop %]
-            [% IF ( city_loo.selected ) %]
-            <option value="[% city_loo.city_zipcode %]|[% city_loo.city_name %]|[% city_loo.city_state %]|[% city_loo.city_country %]" selected="selected">
-            [% ELSE %]
-            <option value="[% city_loo.city_zipcode %]|[% city_loo.city_name %]|[% city_loo.city_state %]|[% city_loo.city_country %]">
+            <option value="|||"></option>
+            [% FOREACH c IN cities %]
+                [% IF c.city_name == city %]
+                <option value="[% c.city_zipcode %]|[% c.city_name %]|[% c.city_state %]|[% c.city_country %]" selected="selected">
+                [% ELSE %]
+                <option value="[% c.city_zipcode %]|[% c.city_name %]|[% c.city_state %]|[% c.city_country %]">
+                [% END %]
+                    [% c.city_name %] [% c.city_state %] [% c.city_zipcode %]
+                </option>
             [% END %]
-                [% city_loo.city_name %] [% city_loo.city_state %] [% city_loo.city_zipcode %]
-            </option>
-        [% END %]
         </select>
         [% END %]
       [% IF ( mandatorycity ) %]<span class="required">Required</span>[% END %]
