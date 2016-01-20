@@ -67,7 +67,6 @@ BEGIN {
         &GetPendingIssues
         &GetAllIssues
 
-        &getzipnamecity
         &getidcity
 
         &GetFirstValidEmailAddress
@@ -1362,25 +1361,6 @@ sub get_cardnumber_length {
     }
     return ( $min, $max );
 }
-
-=head2 getzipnamecity (OUEST-PROVENCE)
-
-take all info from table city for the fields city and  zip
-check for the name and the zip code of the city selected
-
-=cut
-
-sub getzipnamecity {
-    my ($cityid) = @_;
-    my $dbh      = C4::Context->dbh;
-    my $sth      =
-      $dbh->prepare(
-        "select city_name,city_state,city_zipcode,city_country from cities where cityid=? ");
-    $sth->execute($cityid);
-    my @data = $sth->fetchrow;
-    return $data[0], $data[1], $data[2], $data[3];
-}
-
 
 =head2 getdcity (OUEST-PROVENCE)
 
