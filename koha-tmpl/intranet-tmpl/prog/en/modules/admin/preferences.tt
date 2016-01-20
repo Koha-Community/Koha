@@ -60,7 +60,7 @@
 
    <div id="bd">
     <div id="yui-main">
-    <div class="yui-b">
+	    <div class="yui-b">
 
     [% IF ( jump_not_found ) %]
     <h2>System preferences</h2>
@@ -141,6 +141,7 @@
                         [% ELSE %]
                         <a class="expand-textarea" style="display: none" href="#">Click to Edit</a>
                         <textarea name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% CHUNK.class or "short" %]" rows="10" cols="40">[% CHUNK.value %]</textarea>
+                        <a class="collapse-textarea" style="display:none" href="#">Click to collapse</br></a>
                         [% END %]
                     [% ELSIF ( CHUNK.type_languages ) %]
                     <dl>

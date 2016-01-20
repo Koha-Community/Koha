@@ -96,12 +96,22 @@ $( document ).ready( function () {
     } );
 
     $( '.prefs-tab .expand-textarea' ).show().click( function () {
-        $( this ).hide().nextAll( 'textarea, input[type=submit]' )
+        $( this ).hide().nextAll( 'textarea, input[type=submit], a' )
             .animate( { height: 'show', queue: false } )
             .animate( { opacity: 1 } );
 
         return false;
     } ).nextAll( 'textarea, input[type=submit]' ).hide().css( { opacity: 0 } );
+
+    $( '.prefs-tab .collapse-textarea' ).hide().click( function () {
+        $( this ).show().prevAll( 'textarea, input[type=submit]' )
+            .animate( { height: 'hide', queue: false } )
+            .animate( { opacity: 0 } );
+
+        $( this ).hide().prevAll( 'a' ).show();
+        return false;
+    });
+
 
     $("h3").attr("class","expanded").attr("title",MSG_CLICK_TO_EXPAND);
     var collapsible = $(".collapsed,.expanded");
