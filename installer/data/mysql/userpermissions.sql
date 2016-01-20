@@ -28,6 +28,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (11, 'order_receive', 'Manage orders & basket'),
    (11, 'budget_add_del', 'Add and delete budgets (but can''t modify budgets)'),
    (11, 'budget_manage_all', 'Manage all budgets'),
+   (11, 'edi_manage', 'Manage EDIFACT transmissions'),
    (13, 'edit_news', 'Write news for the OPAC and staff interfaces'),
    (13, 'label_creator', 'Create printable labels and barcodes from catalog and patron data'),
    (13, 'edit_calendar', 'Define days when the library is closed'),

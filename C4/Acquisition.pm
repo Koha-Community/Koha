@@ -2476,6 +2476,10 @@ sub GetInvoices {
         push @bind_strs, " borrowers.branchcode = ? ";
         push @bind_args, $args{branchcode};
     }
+    if($args{message_id}) {
+        push @bind_strs, " aqinvoices.message_id = ? ";
+        push @bind_args, $args{message_id};
+    }
 
     $query .= " WHERE " . join(" AND ", @bind_strs) if @bind_strs;
     $query .= " GROUP BY aqinvoices.invoiceid ";
@@ -2600,7 +2604,7 @@ sub AddInvoice {
     return unless(%invoice and $invoice{invoicenumber});
 
     my @columns = qw(invoicenumber booksellerid shipmentdate billingdate
-        closedate shipmentcost shipmentcost_budgetid);
+        closedate shipmentcost shipmentcost_budgetid message_id);
 
     my @set_strs;
     my @set_args;

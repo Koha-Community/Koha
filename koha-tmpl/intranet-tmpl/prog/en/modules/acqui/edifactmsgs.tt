@@ -1,0 +1,90 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Acquisitions</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'datatables.inc' %]
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#edi_msgs').dataTable($.extend(true, {}, dataTablesDefaults, {
+        'aaSorting': [[1, "desc" ]],
+        'sPaginationType': "four_button"
+        }));
+});
+</script>
+
+</head>
+<body id="acq_edifactmsgs" class="acq">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'acquisitions-search.inc' %]
+<div id="breadcrumbs">
+<a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
+&rsaquo; <a href="/cgi-bin/koha/acqui/edifactmsgs.pl">Edifact Messages</a>
+</div>
+
+<div id="doc3" class="yui-t2">
+
+<div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+
+<h1>Edifact Messages</h1>
+<div id="acqui_edifactmsgs">
+
+
+<table id="edi_msgs">
+<thead>
+<th>Type</th>
+<th>Transferred</th>
+<th>Status</th>
+<th>Vendor</th>
+<th>Details</th>
+<th>Filename</th>
+<th> </th>
+<th>Action</th>
+</thead>
+<tbody>
+[% FOREACH msg IN messages %]
+<tr>
+<td>[% msg.message_type %]</td>
+<td>[% msg.transfer_date %]</td>
+<td>[% msg.status %]</td>
+<td>
+<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% msg.vendor_id %]"</a>
+[% msg.vendor.name %]
+</td>
+<td>
+[% IF msg.message_type == 'QUOTE' || msg.message_type == 'ORDERS' %]
+    [% IF msg.basketno %]
+    <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% msg.basketno.basketno %]">
+    Basket: [% msg.basketno.basketno %]
+    </a>
+    [% END %]
+[% ELSE %]
+<!-- Assuming invoices -->
+     <a href="/cgi-bin/koha/acqui/invoices.pl?message_id=[% msg.id %]">
+      Invoices
+     </a>
+[% END %]
+</td>
+</td>
+<td>[% msg.filename %]</td>
+<td><a class="popup" target="_blank" title="View Message" href="/cgi-bin/koha/acqui/edimsg.pl?id=[% msg.id %]"</a>View Message</td>
+<td>
+<a href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=delete&amp;message_id=[% msg.id %]">Delete</a>
+</td>
+</tr>
+[% END %]
+
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'acquisitions-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

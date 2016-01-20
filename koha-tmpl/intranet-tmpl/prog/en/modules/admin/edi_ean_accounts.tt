@@ -1,0 +1,153 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; EDI EANs</title>
+[% IF ean_form %]
+  [% IF ean %]
+     &rsquo; Modify branch EAN
+  [% ELSE %]
+     &rsquo; Add new branch EAN
+  [% END %]
+[% END %]
+[% IF delete_confirm %]
+     &rsquo; Confirm deletion of EAN
+[% END %]
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body id="admin_edi_ean" class="admin">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs">
+<a href="/cgi-bin/koha/mainpage.pl">Home</a>
+ &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+ &rsaquo; <a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">EDI EANs</a>
+[% IF ean_form %]
+  [% IF ean %]
+     &rsaquo; Modify branch EAN
+  [% ELSE %]
+     &rsaquo; Add new branch EAN
+  [% END %]
+[% ELSIF delete_confirm %]
+     &rsaquo; Confirm deletion of Ean
+[% ELSE %]
+     &rsaquo; Branch EANs
+[% END %]
+</div>
+
+<div id="doc3" class="yui-t2">
+
+<div id="bd">
+<div id="yui-main">
+<div class="yui-b">
+[% IF display %]
+    <div id="toolbar" class="btn-toolbar">
+    <a class="btn btn-small" id="newediean" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=ean_form">
+         <i class="icon-plus"></i>
+         New EAN
+    </a>
+    </div>
+[% END %]
+
+[% IF ean_form %]
+<form action="/cgi-bin/koha/admin/edi_ean_accounts.pl" name="Eanform" method="post">
+  <input type="hidden" name="op" value="save" />
+  [% IF ean %]
+  <input type="hidden" name="oldbranchcode" value="[% branchcode %]" />
+  <input type="hidden" name="oldean" value="[% ean %]" />
+  [% END %]
+  <fieldset class="rows">
+  <legend>
+  [% IF ean %]
+     Modify EAN
+  [% ELSE %]
+    New EAN
+  [% END %]
+  </legend>
+
+  <ol>
+  <li>
+     <label for="branchcode">Branchcode: </label>
+     <select name="branchcode" id="branchcode">
+        [% FOREACH branch IN branches %]
+            [% IF branch.branchcode == ean.branch.branchcode %]
+               <option value="[% branch.branchcode %]" selected="selected">[% branch.branchname %]</option>
+            [% ELSE %]
+               <option value="[% branch.branchcode %]">[% branch.branchname %]</option>
+            [% END %]
+        [% END %]
+      </select>
+  </li>
+  <li>
+     <label for="ean">EAN: </label>
+     <input type="text" name="ean" id="ean`" size="20" maxlength="90" value="[% ean.ean %]" />
+  </li>
+  <li>
+     <label for="id_code_qualifier">
+     <select name="id_code_qualifier" id="id_code_qualifier">
+     [% FOREACH qualifier IN code_qualifiers %]
+        [% IF qualifier.code == ean.id_code_qualifier %]
+           <option value="[% qualifier.code %]" selected="selected">
+               [% qualifier.description %]
+           </option>
+        [% ELSE %]
+           <option value="[% qualifier.code %]">
+              [% qualifier.description %]
+           </option>
+        [% END %]
+     [% END %]
+  </li>
+
+  </ol>
+  </fieldset>
+
+  <fieldset class="action">
+    <input type="submit" value="Submit"/>
+    <a href="/cgi-bin/koha/admin/edi_ean_accounts.pl" class="cancel">Cancel</a>
+  </fieldset>
+</form>
+
+[% END %]
+[% IF delete_confirm %]
+<div class="dialog alert">
+<h3>Delete EAN [% ean.ean %] for branch [% ean.branch.branchname %]?</h3>
+<form action="/cgi-bin/koha/admin/edi_ean_accounts.pl" method="post">
+    <input type="hidden" name="op" value="delete_confirmed" />
+    <input type="hidden" name="branchcode" value="[% ean.branch.branchcode %]" />
+    <input type="hidden" name="ean" value="[% ean.ean %]" />
+    <input type="submit" class="approve" value="Yes, Delete" />
+</form>
+<form action="/cgi-bin/koha/admin/edi_ean_accounts.pl" method="get">
+    <input type="submit" class="deny" value="No, do not Delete" />
+</form>
+</div>
+[% END %]
+[% IF display %]
+<h2>Branch EANs</h2>
+   <table>
+   <tr>
+      <th>Branch</th>
+      <th>EAN</th>
+      <th>Code Type</th>
+      <th>Actions</th>
+   </tr>
+   [% FOREACH ean IN eans %]
+   [% IF loop.even %]<tr>
+   [% ELSE %]<tr class="highlight">
+   [% END %]
+      <td>[% ean.branch.branchname %]</td>
+      <td>[% ean.ean %]</td>
+      <td>[% ean.id_code_qualifier %]</td>
+      <td align="center">
+           <a href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=ean_form&branchcode=[% ean.branch.branchcode %]&ean=[% ean.ean %]">Edit</a> | <a href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=delete_confirm&branchcode=[% ean.branch.branchcode %]&ean=[% ean.ean %]">Delete</a></td>
+   </tr>
+   [% END %]
+    </table>
+[% END %]
+
+</div>
+</div>
+<div class="yui-b">
+    [% INCLUDE 'admin-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

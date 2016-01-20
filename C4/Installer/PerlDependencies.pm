@@ -782,6 +782,16 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '0.56',
     },
+    'Net::SFTP::Foreign' => {
+        'usage'    => 'Edifact',
+        'required' => '0',
+        'min_ver'  => '1.73',
+    },
+    'Text::Unidecode' => {
+        'usage'    => 'Edifact',
+        'required' => '0',
+        'min_ver'  => '0.04',
+    },
 };
 
 1;

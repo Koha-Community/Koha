@@ -36,6 +36,8 @@ use C4::Members qw/GetMember/;  #needed for permissions checking for changing ba
 use C4::Items;
 use C4::Suggestions;
 use Date::Calc qw/Add_Delta_Days/;
+use Koha::Database;
+use Koha::EDI qw( create_edi_order get_edifact_ean );
 
 =head1 NAME
 
@@ -67,6 +69,7 @@ the supplier this script have to display the basket.
 
 my $query        = new CGI;
 our $basketno     = $query->param('basketno');
+my $ean          = $query->param('ean');
 my $booksellerid = $query->param('booksellerid');
 my $duplinbatch =  $query->param('duplinbatch');
 
@@ -84,6 +87,10 @@ my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
 my $basket = GetBasket($basketno);
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
 my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
+my $schema = Koha::Database->new()->schema();
+my $rs = $schema->resultset('VendorEdiAccount')->search(
+    { vendor_id => $booksellerid, } );
+$template->param( ediaccount => ($rs->count > 0));
 
 unless (CanUserManageBasket($loggedinuser, $basket, $userflags)) {
     $template->param(
@@ -196,6 +203,9 @@ if ( $op eq 'delete_confirm' ) {
 } elsif ($op eq 'reopen') {
     ReopenBasket($query->param('basketno'));
     print $query->redirect('/cgi-bin/koha/acqui/basket.pl?basketno='.$basket->{'basketno'})
+}
+elsif ( $op eq 'ediorder' ) {
+    edi_close_and_order()
 } elsif ( $op eq 'mod_users' ) {
     my $basketusers_ids = $query->param('users_ids');
     my @basketusers = split( /:/, $basketusers_ids );
@@ -468,3 +478,70 @@ sub get_order_infos {
 }
 
 output_html_with_http_headers $query, $cookie, $template->output;
+
+
+sub edi_close_and_order {
+    my $confirm = $query->param('confirm') || $confirm_pref eq '2';
+    if ($confirm) {
+            my $edi_params = {
+                basketno => $basketno,
+                ean    => $ean,
+            };
+            if ( $basket->{branch} ) {
+                $edi_params->{branchcode} = $basket->{branch};
+            }
+            if ( create_edi_order($edi_params) ) {
+                #$template->param( edifile => 1 );
+            }
+        CloseBasket($basketno);
+
+        # if requested, create basket group, close it and attach the basket
+        if ( $query->param('createbasketgroup') ) {
+            my $branchcode;
+            if (    C4::Context->userenv
+                and C4::Context->userenv->{'branch'}
+                and C4::Context->userenv->{'branch'} ne "NO_LIBRARY_SET" )
+            {
+                $branchcode = C4::Context->userenv->{'branch'};
+            }
+            my $basketgroupid = NewBasketgroup(
+                {
+                    name          => $basket->{basketname},
+                    booksellerid  => $booksellerid,
+                    deliveryplace => $branchcode,
+                    billingplace  => $branchcode,
+                    closed        => 1,
+                }
+            );
+            ModBasket(
+                {
+                    basketno      => $basketno,
+                    basketgroupid => $basketgroupid
+                }
+            );
+            print $query->redirect(
+"/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=$booksellerid&closed=1"
+            );
+        }
+        else {
+            print $query->redirect(
+                "/cgi-bin/koha/acqui/booksellers.pl?booksellerid=$booksellerid"
+            );
+        }
+        exit;
+    }
+    else {
+        $template->param(
+            edi_confirm     => 1,
+            booksellerid    => $booksellerid,
+            basketno        => $basket->{basketno},
+            basketname      => $basket->{basketname},
+            basketgroupname => $basket->{basketname},
+        );
+        if ($ean) {
+            $template->param( ean => $ean );
+        }
+
+    }
+    return;
+}

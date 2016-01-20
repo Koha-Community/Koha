@@ -1,0 +1,35 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Acquisitions &rsaquo; Edifact Message Display</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body id="acq_edifactmsgs" class="acq">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'acquisitions-search.inc' %]
+<div id="breadcrumbs">
+<a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
+&rsaquo; <a href="/cgi-bin/koha/acqui/edifactmsgs.pl">Edifact Messages</a>
+</div>
+
+<div id="doc3" class="yui-t2">
+
+[% IF no_message %]
+  <div class"dialog message">The requested message cannot be displayed</div>
+[% ELSE %]
+  <div id="bd">
+  <div id="yui-main">
+  <div class="yui-b">
+   <ul>
+   [% FOREACH seg IN segments %]
+   <li>[% seg | html %]</li>
+   [% END %]
+   </ul>
+[% END %]
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'acquisitions-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

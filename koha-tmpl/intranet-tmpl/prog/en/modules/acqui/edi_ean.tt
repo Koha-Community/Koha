@@ -1,0 +1,38 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Acquisitions &rsaquo; Basket ([% basketno %])</title>
+[% INCLUDE 'doc-head-close.inc' %]
+
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'acquisitions-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Basket ([% basketno %])</div>
+
+<div id="doc3" class="yui-t2">
+
+<div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+    <h2>Identify the branch account submitting the EDI order</h2>
+    <br />
+    <form action="/cgi-bin/koha/acqui/basket.pl" method="get">
+         <p>Select ordering branch account: </p>
+         <select id="ean" name="ean">
+             [% FOREACH eanacct IN eans %]
+             <option value="[% eanacct.ean %]">[% eanacct.branch.branchname %] ([% eanacct.ean %])</option>
+             [% END %]
+        </select>
+        <br />
+        <input type="hidden" id="basketno" value="[% basketno %]" name="basketno" />
+        <input type="hidden" value="ediorder" name="op" />
+        <input type="submit" value="Send EDI order" />
+    </form>
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'acquisitions-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

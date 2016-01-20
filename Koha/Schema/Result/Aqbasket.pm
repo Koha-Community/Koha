@@ -263,6 +263,21 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 edifact_messages
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::EdifactMessage>
+
+=cut
+
+__PACKAGE__->has_many(
+  "edifact_messages",
+  "Koha::Schema::Result::EdifactMessage",
+  { "foreign.basketno" => "self.basketno" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 borrowernumbers
 
 Type: many_to_many
@@ -274,8 +289,8 @@ Composing rels: L</aqbasketusers> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqbasketusers", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pT+YFf9nfD/dmBuE4RNCFw
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2014-09-02 11:37:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tsMzwP7eofOR27sfZSTqFQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

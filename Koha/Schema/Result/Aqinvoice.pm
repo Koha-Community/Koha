@@ -70,6 +70,12 @@ __PACKAGE__->table("aqinvoices");
   is_foreign_key: 1
   is_nullable: 1
 
+=head2 message_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -88,6 +94,8 @@ __PACKAGE__->add_columns(
   "shipmentcost",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "shipmentcost_budgetid",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "message_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
 
@@ -135,6 +143,26 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+=head2 message
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::EdifactMessage>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "message",
+  "Koha::Schema::Result::EdifactMessage",
+  { id => "message_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "RESTRICT",
+  },
+);
+
 =head2 shipmentcost_budgetid
 
 Type: belongs_to
@@ -156,8 +184,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3se4f767VfvBKaZ8tlXwHQ
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2014-09-18 16:21:46
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FPZXlNt8dkjhgt2Rtc+krQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

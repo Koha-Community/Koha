@@ -54,6 +54,7 @@ use CGI qw ( -utf8 );
 use C4::Acquisition qw/CloseBasketgroup ReOpenBasketgroup GetOrders GetBasketsByBasketgroup GetBasketsByBookseller ModBasketgroup NewBasketgroup DelBasketgroup GetBasketgroups ModBasket GetBasketgroup GetBasket GetBasketGroupAsCSV/;
 use C4::Branch qw/GetBranches/;
 use C4::Members qw/GetMember/;
+use Koha::EDI qw/create_edi_order get_edifact_ean/;
 
 use Koha::Acquisition::Bookseller;
 
@@ -206,12 +207,24 @@ sub printbasketgrouppdf{
 
 }
 
+sub generate_edifact_orders {
+    my $basketgroupid = shift;
+    my $baskets       = GetBasketsByBasketgroup($basketgroupid);
+    my $ean           = get_edifact_ean();
+
+    for my $basket ( @{$baskets} ) {
+        create_edi_order( { ean => $ean, basketno => $basket->{basketno}, } );
+    }
+    return;
+}
+
 my $op = $input->param('op') || 'display';
 # possible values of $op :
 # - add : adds a new basketgroup, or edit an open basketgroup, or display a closed basketgroup
 # - mod_basket : modify an individual basket of the basketgroup
 # - closeandprint : close and print an closed basketgroup in pdf. called by clicking on "Close and print" button in closed basketgroups list
 # - print : print a closed basketgroup. called by clicking on "Print" button in closed basketgroups list
+# - ediprint : generate edi order messages for the baskets in the group
 # - export : export in CSV a closed basketgroup. called by clicking on "Export" button in closed basketgroups list
 # - delete : delete an open basketgroup. called by clicking on "Delete" button in open basketgroups list
 # - reopen : reopen a closed basketgroup. called by clicking on "Reopen" button in closed basketgroup list
@@ -370,6 +383,10 @@ if ( $op eq "add" ) {
     $redirectpath .=  "&amp;listclosed=1" if $closedbg ;
     print $input->redirect($redirectpath );
     
+} elsif ( $op eq 'ediprint') {
+    my $basketgroupid = $input->param('basketgroupid');
+    generate_edifact_orders( $basketgroupid );
+    exit;
 }else{
 # no param : display the list of all basketgroups for a given vendor
     my $basketgroups = &GetBasketgroups($booksellerid);

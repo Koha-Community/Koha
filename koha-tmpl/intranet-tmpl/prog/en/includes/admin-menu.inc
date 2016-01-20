@@ -55,6 +55,8 @@
     <li><a href="/cgi-bin/koha/admin/currency.pl">Currencies and exchange rates</a></li>
     <li><a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a></li>
     <li><a href="/cgi-bin/koha/admin/aqbudgets.pl">Funds</a></li>
+    <li><a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a></li>
+    <li><a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">EDI eans</a></li>
 </ul>
 
 [% IF CAN_user_plugins %]
