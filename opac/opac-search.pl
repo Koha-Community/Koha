@@ -933,7 +933,7 @@ $template->param(
 
 my $content_type = ($format eq 'rss' or $format eq 'atom') ? $format : 'html';
 
-# If GoogleIndicTransliteration system preference is On Set paramter to load Google's javascript in OPAC search screens 
+# If GoogleIndicTransliteration system preference is On Set parameter to load Google's javascript in OPAC search screens
 if (C4::Context->preference('GoogleIndicTransliteration')) {
         $template->param('GoogleIndicTransliteration' => 1);
 }
