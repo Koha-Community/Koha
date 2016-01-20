@@ -3,10 +3,10 @@
 use Modern::Perl;
 use C4::Biblio;
 use C4::Members;
-use C4::Branch;
 use C4::Circulation;
 use C4::Items;
 use C4::Context;
+use Koha::Library;
 
 use Test::More tests => 14;
 
@@ -43,7 +43,6 @@ $dbh->do(q|DELETE FROM default_branch_item_rules|);
 
 #Add branch and category
 my $samplebranch1 = {
-    add            => 1,
     branchcode     => 'SAB1',
     branchname     => 'Sample Branch',
     branchaddress1 => 'sample adr1',
@@ -62,7 +61,6 @@ my $samplebranch1 = {
     opac_info      => 'sample opac',
 };
 my $samplebranch2 = {
-    add            => 1,
     branchcode     => 'SAB2',
     branchname     => 'Sample Branch2',
     branchaddress1 => 'sample adr1_2',
@@ -80,8 +78,8 @@ my $samplebranch2 = {
     branchprinter  => undef,
     opac_info      => 'sample opac2',
 };
-ModBranch($samplebranch1);
-ModBranch($samplebranch2);
+Koha::Library->new($samplebranch1)->store;
+Koha::Library->new($samplebranch2)->store;
 
 my $samplecat = {
     categorycode          => 'CAT1',

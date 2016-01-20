@@ -19,8 +19,8 @@ use Modern::Perl;
 
 use Test::More tests => 52;
 use C4::Context;
-use C4::Branch;
 use C4::Biblio;
+use Koha::Library;
 
 BEGIN {
     use_ok('C4::RotatingCollections');
@@ -173,7 +173,6 @@ is_deeply(
 
 #Test TransferCollection
 my $samplebranch = {
-    add            => 1,
     branchcode     => 'SAB',
     branchname     => 'Sample Branch',
     branchaddress1 => 'sample adr1',
@@ -192,7 +191,7 @@ my $samplebranch = {
     branchnotes    => 'sample note',
     opac_info      => 'sample opac',
 };
-ModBranch($samplebranch);
+Koha::Library->new($samplebranch)->store;
 is( TransferCollection( $collection_id1, $samplebranch->{branchcode} ),
     1, "Collection1 has been transfered in the branch SAB" );
 @collection1 = GetCollection($collection_id1);

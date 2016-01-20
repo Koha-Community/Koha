@@ -21,9 +21,11 @@ use Modern::Perl;
 use C4::Context;
 use Data::Dumper;
 
-use Test::More tests => 19;
+use Test::More tests => 17;
 
 use C4::Branch;
+use Koha::Database;
+use Koha::Library;
 use Koha::Libraries;
 use Koha::LibraryCategories;
 
@@ -38,17 +40,15 @@ can_ok(
       GetBranch
       GetBranches
       GetBranchesLoop
-      ModBranch
       GetBranchInfo
       mybranch
       )
 );
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
-# Start transaction
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 # clear the slate
 $dbh->do('DELETE FROM branchcategories');
@@ -60,7 +60,6 @@ like( $count, '/^\d+$/', "the count is a number" );
 
 #add 2 branches
 my $b1 = {
-    add            => 1,
     branchcode     => 'BRA',
     branchname     => 'BranchA',
     branchaddress1 => 'adr1A',
@@ -104,11 +103,9 @@ my $b2 = {
     opac_info      => 'opacB',
     issuing        => undef,
 };
-ModBranch($b1);
-is( ModBranch($b2), undef, 'the field add is missing' );
+Koha::Library->new($b1)->store;
+Koha::Library->new($b2)->store;
 
-$b2->{add} = 1;
-ModBranch($b2);
 is( Koha::Libraries->search->count, $count + 2, "two branches added" );
 
 is( Koha::Libraries->find( $b2->{branchcode} )->delete, 1,          "One row affected" );
@@ -123,7 +120,7 @@ my $branches = GetBranches();
 is( scalar( keys %$branches ),
     Koha::Libraries->search->count, "GetBranches returns the right number of branches" );
 
-#Test ModBranch
+#Test modify a library
 
 $b1 = {
     branchcode     => 'BRA',
@@ -148,7 +145,7 @@ $b1 = {
     issuing        => undef,
 };
 
-ModBranch($b1);
+Koha::Libraries->find($b1->{branchcode})->set($b1)->store;
 is( Koha::Libraries->search->count, $count + 1,
     "A branch has been modified, no new branch added" );
 
@@ -190,8 +187,9 @@ is( $del, 1, 'One row affected' );
 
 is( Koha::LibraryCategories->search->count, $count_cat + 2, "Category CAT 2 deleted" );
 
-$b2->{CAT1} = 1;
-ModBranch($b2);
+my $b2_stored = Koha::Library->new($b2)->store;
+my $CAT1 = Koha::LibraryCategories->find('CAT1');
+$b2_stored->add_to_categories([$CAT1]);
 is( Koha::Libraries->search->count, $count + 2, 'BRB added' );
 
 #Test GetBranchInfo
@@ -209,37 +207,6 @@ is_deeply( @$b2info[0], $b2, 'BRB has the category CAT1' );
 
 Koha::LibraryCategory->new($cat2)->store;
 is( Koha::LibraryCategories->search->count, $count_cat + 3, "Two categories added" );
-$b2 = {
-    branchcode     => 'BRB',
-    branchname     => 'BranchB',
-    branchaddress1 => 'adr1B',
-    branchaddress2 => 'adr2B',
-    branchaddress3 => 'adr3B',
-    branchzip      => 'zipB',
-    branchcity     => 'cityB',
-    branchstate    => 'stateB',
-    branchcountry  => 'countryB',
-    branchphone    => 'phoneB',
-    branchfax      => 'faxB',
-    branchemail    => 'emailB',
-    branchreplyto  => 'emailreply',
-    branchreturnpath => 'branchreturn',
-    branchurl      => 'urlB',
-    branchip       => 'ipB',
-    branchprinter  => undef,
-    branchnotes    => 'noteB',
-    opac_info      => 'opacB',
-    issuing        => undef,
-    CAT1           => 1,
-    CAT2           => 1
-};
-ModBranch($b2);
-$b2info = GetBranchInfo( $b2->{branchcode} );
-push( @cat, $cat2->{categorycode} );
-delete $b2->{CAT1};
-delete $b2->{CAT2};
-$b2->{categories} = \@cat;
-is_deeply( @$b2info[0], $b2, 'BRB has the category CAT1 and CAT2' );
 
 #TODO later: test mybranchine and onlymine
 # Actually we cannot mock C4::Context->userenv in unit tests
@@ -248,6 +215,4 @@ is_deeply( @$b2info[0], $b2, 'BRB has the category CAT1 and CAT2' );
 my $loop = GetBranchesLoop;
 is( scalar(@$loop), Koha::Libraries->search->count, 'There is the right number of branches' );
 
-# End transaction
-$dbh->rollback;
-
+$schema->storage->txn_rollback;

@@ -20,11 +20,12 @@ use Modern::Perl;
 use Test::More tests => 19;
 
 use C4::Context;
-use C4::Branch;
 use C4::Members;
 
 use C4::Members::Attributes;
 use C4::Members::AttributeTypes;
+
+use Koha::Library;
 
 use t::lib::Mocks;
 
@@ -42,7 +43,6 @@ my $categorycode = $categories[0]->categorycode;
 # Add a new branch so we control what borrowers it has
 my $branchcode   = "UNC";
 my $branch_data = {
-    add            => 1,
     branchcode     => $branchcode,
     branchname     => 'Universidad Nacional de Cordoba',
     branchaddress1 => 'Haya de la Torre',
@@ -52,7 +52,7 @@ my $branch_data = {
     branchstate    => 'Cordoba',
     branchcountry  => 'Argentina'
 };
-ModBranch( $branch_data );
+Koha::Library->new( $branch_data )->store;
 
 my %john_doe = (
     cardnumber   => '123456',

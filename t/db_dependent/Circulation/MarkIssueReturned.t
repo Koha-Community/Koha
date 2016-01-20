@@ -20,9 +20,9 @@ use Modern::Perl;
 use Test::More tests => 2;
 use Test::Warn;
 
-use C4::Branch;
 use C4::Circulation;
 use C4::Members;
+use Koha::Library;
 use t::lib::Mocks;
 
 my $dbh = C4::Context->dbh;
@@ -32,7 +32,7 @@ $dbh->{RaiseError} = 1;
 t::lib::Mocks::mock_preference('AnonymousPatron', '');
 
 my $branchcode = 'B';
-ModBranch({ add => 1, branchcode => $branchcode, branchname => 'Branch' });
+Koha::Library->new({ branchcode => $branchcode, branchname => 'Branch' })->store;
 
 my $categorycode = 'C';
 $dbh->do("INSERT INTO categories(categorycode) VALUES(?)", undef, $categorycode);

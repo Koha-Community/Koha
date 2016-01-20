@@ -3,7 +3,7 @@ use Modern::Perl;
 use Test::More tests => 5;
 
 use C4::Context;
-use C4::Branch;
+use Koha::Library;
 use Koha::Template::Plugin::Branches;
 
 my $dbh = C4::Context->dbh;
@@ -11,13 +11,12 @@ $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 for my $i ( 1 .. 5 ) {
-    C4::Branch::ModBranch(
+    Koha::Library->new(
 {
         branchcode     => "test_br_$i",
         branchname     => "test_br_$i",
-        add => 1,
 }
-    );
+    )->store;
 
 }
 

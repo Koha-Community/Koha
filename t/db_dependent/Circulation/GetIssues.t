@@ -10,6 +10,7 @@ use C4::Members;
 use C4::Branch;
 use C4::Category;
 use C4::Circulation;
+use Koha::Library;
 use MARC::Record;
 
 my $dbh = C4::Context->dbh;
@@ -25,7 +26,7 @@ if (@branches) {
     $branchcode = $branches[0];
 } else {
     $branchcode = 'B';
-    ModBranch({ add => 1, branchcode => $branchcode, branchname => 'Branch' });
+    Koha::Library->new({ branchcode => $branchcode, branchname => 'Branch' })->store;
     $branch_created = 1;
 }
 

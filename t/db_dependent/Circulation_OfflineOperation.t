@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use C4::Branch;
 use C4::Circulation;
+use Koha::Library;
 
 use Test::More tests => 7;
 
@@ -32,7 +32,6 @@ $dbh->do(q|DELETE FROM pending_offline_operations|);
 
 #Add branch
 my $samplebranch1 = {
-    add            => 1,
     branchcode     => 'SAB1',
     branchname     => 'Sample Branch',
     branchaddress1 => 'sample adr1',
@@ -50,7 +49,7 @@ my $samplebranch1 = {
     branchprinter  => undef,
     opac_info      => 'sample opac',
 };
-ModBranch($samplebranch1);
+Koha::Library->new($samplebranch1)->store;
 
 #Begin Tests
 #Test AddOfflineOperation

@@ -20,8 +20,8 @@ use Modern::Perl;
 
 use MARC::Record;
 use C4::Biblio;
-use C4::Branch;
 use Koha::Database;
+use Koha::Library;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -202,13 +202,13 @@ subtest 'GetItemsInfo tests' => sub {
                 holdingbranch => $library2->{branchcode},
             }, $biblionumber );
 
-    my $library = Koha::Libraries->find( $library1->{branchcode} )->unblessed;
-    $library->{ opac_info }= "homebranch OPAC info";
-    ModBranch($library);
+    my $library = Koha::Libraries->find( $library1->{branchcode} );
+    $library->opac_info("homebranch OPAC info");
+    $library->store;
 
-    $library = Koha::Libraries->find( $library2->{branchcode} )->unblessed;
-    $library->{ opac_info } = "holdingbranch OPAC info";
-    ModBranch($library);
+    $library = Koha::Libraries->find( $library2->{branchcode} );
+    $library->opac_info("holdingbranch OPAC info");
+    $library->store;
 
     my @results = GetItemsInfo( $biblionumber );
     ok( @results, 'GetItemsInfo returns results');

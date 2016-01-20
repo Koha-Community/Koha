@@ -21,11 +21,11 @@ use Koha::DateUtils;
 use DateTime::Duration;
 use C4::Biblio;
 use C4::Members;
-use C4::Branch;
 use C4::Circulation;
 use C4::Items;
 use C4::Context;
 use C4::Reserves;
+use Koha::Library;
 
 use Test::More tests => 32;
 
@@ -76,7 +76,6 @@ my $daysago10 = output_pref({ dt => $dt_today2, dateformat => 'iso', timeformat 
 
 #Add branch and category
 my $samplebranch1 = {
-    add            => 1,
     branchcode     => 'CPL',
     branchname     => 'Sample Branch',
     branchaddress1 => 'sample adr1',
@@ -95,7 +94,6 @@ my $samplebranch1 = {
     opac_info      => 'sample opac',
 };
 my $samplebranch2 = {
-    add            => 1,
     branchcode     => 'MPL',
     branchname     => 'Sample Branch2',
     branchaddress1 => 'sample adr1_2',
@@ -113,8 +111,8 @@ my $samplebranch2 = {
     branchprinter  => undef,
     opac_info      => 'sample opac2',
 };
-ModBranch($samplebranch1);
-ModBranch($samplebranch2);
+Koha::Library->new($samplebranch1)->store;
+Koha::Library->new($samplebranch2)->store;
 
 my $samplecat = {
     categorycode          => 'CAT1',

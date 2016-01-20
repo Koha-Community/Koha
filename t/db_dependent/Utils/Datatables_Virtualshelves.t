@@ -21,9 +21,9 @@ use Test::More tests => 13;
 
 use C4::Biblio;
 use C4::Context;
-use C4::Branch;
 use C4::Members;
 
+use Koha::Library;
 use Koha::Virtualshelf;
 use Koha::Virtualshelves;
 
@@ -42,11 +42,10 @@ my @categories   = C4::Category->all;
 my $categorycode = $categories[0]->categorycode;
 my $branchcode   = "ABC";
 my $branch_data = {
-    add            => 1,
     branchcode     => $branchcode,
     branchname     => 'my branchname',
 };
-ModBranch( $branch_data );
+Koha::Library->new( $branch_data )->store;
 
 my %john_doe = (
     cardnumber   => '123456',

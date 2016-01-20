@@ -23,8 +23,8 @@ use Test::MockModule;
 use C4::Biblio;
 use C4::Items;
 use C4::Members;
-use C4::Branch;
 use C4::Category;
+use Koha::Library;
 use MARC::Record;
 
 BEGIN {
@@ -46,7 +46,7 @@ $dbh->do(q|DELETE FROM categories|);
 
 
 my $branchcode = 'B';
-ModBranch({ add => 1, branchcode => $branchcode, branchname => 'Branch' });
+Koha::Library->new( {branchcode => $branchcode, branchname => 'Branch' } )->store;
 
 my $categorycode = 'C';
 $dbh->do("INSERT INTO categories(categorycode) VALUES(?)", undef, $categorycode);
