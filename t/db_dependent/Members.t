@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 77;
+use Test::More tests => 56;
 use Test::MockModule;
 use Data::Dumper;
 use C4::Context;
@@ -163,50 +163,6 @@ ok(!$member->{is_expired}, "GetMemberDetails() indicates that patron is not expi
 ModMember(borrowernumber => $member->{'borrowernumber'}, dateexpiry => '2001-01-1');
 $member = GetMemberDetails($member->{'borrowernumber'});
 ok($member->{is_expired}, "GetMemberDetails() indicates that patron is expired");
-
-
-my $message_type = 'B';
-my $message = 'my message';
-my $messages_count = GetMessagesCount($member->{borrowernumber}, $message_type, $BRANCHCODE);
-is( $messages_count, 0, 'GetMessagesCount returns the number of messages correclty' );
-
-is( AddMessage(), undef, 'AddMessage without argument returns undef' );
-is( AddMessage(undef, $message_type, $message, $BRANCHCODE), undef,  'AddMessage without the borrower number returns undef' );
-is( AddMessage($member->{borrowernumber}, undef, $message, $BRANCHCODE), undef,  'AddMessage without the message type returns undef' );
-is( AddMessage($member->{borrowernumber}, $message_type, undef, $BRANCHCODE), undef,  'AddMessage without the message returns undef' );
-is( AddMessage($member->{borrowernumber}, $message_type, $message, undef), undef,  'AddMessage without the branch code returns undef' );
-is( AddMessage($member->{borrowernumber}, $message_type, $message, $BRANCHCODE), 1,  'AddMessage functions correctly' );
-
-$messages_count = GetMessagesCount();
-is( $messages_count, 0, 'GetMessagesCount without argument returns 0' );
-$messages_count = GetMessagesCount(undef, $message_type, $BRANCHCODE);
-is( $messages_count, '0', 'GetMessagesCount without the borrower number returns the number of messages' );
-$messages_count = GetMessagesCount($member->{borrowernumber}, undef, $BRANCHCODE);
-is( $messages_count, '1', 'GetMessagesCount without the message type returns the total number of messages' );
-$messages_count = GetMessagesCount($member->{borrowernumber}, $message_type, undef);
-is( $messages_count, '1', 'GetMessagesCount without the branchcode returns the total number of messages' );
-$messages_count = GetMessagesCount($member->{borrowernumber}, $message_type, $BRANCHCODE);
-is( $messages_count, '1', 'GetMessagesCount returns the number of messages correctly' );
-
-my $messages = GetMessages();
-is( @$messages, 0, 'GetMessages without argument returns 0' );
-$messages = GetMessages($member->{borrowernumber}, $message_type, $BRANCHCODE);
-is( @$messages, 1, 'GetMessages returns the correct number of messages' );
-is( $messages->[0]->{borrowernumber}, $member->{borrowernumber}, 'GetMessages returns the borrower number correctly' );
-is( $messages->[0]->{message_type}, $message_type, 'GetMessages returns the message type correclty' );
-is( $messages->[0]->{message}, $message, 'GetMessages returns the message correctly' );
-is( $messages->[0]->{branchcode}, $BRANCHCODE, 'GetMessages returns the branch code correctly' );
-
-$messages_count = GetMessagesCount($member->{borrowernumber}, $message_type, $BRANCHCODE);
-is( $messages_count, 1, 'GetMessagesCount returns the number of messages correclty' );
-
-DeleteMessage();
-$messages = GetMessages($member->{borrowernumber}, $message_type, $BRANCHCODE);
-is( @$messages, 1, 'DeleteMessage without message id does not delete messages' );
-DeleteMessage($messages->[0]->{message_id});
-$messages = GetMessages($member->{borrowernumber}, $message_type, $BRANCHCODE);
-is( @$messages, 0, 'DeleteMessage deletes a message correctly' );
-
 
 # clean up 
 DelMember($member->{borrowernumber});
