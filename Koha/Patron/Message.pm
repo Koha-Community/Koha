@@ -19,6 +19,9 @@ use Modern::Perl;
 
 use Carp;
 
+use C4::Context;
+use C4::Log qw( logaction );
+
 use Koha::Database;
 
 use base qw(Koha::Object);
@@ -32,6 +35,38 @@ Koha::Patron::Message - Koha Message Object class
 =head2 Class Methods
 
 =cut
+
+=head3 store
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    # This should be done at the DB level
+    return unless $self->borrowernumber
+              and $self->message
+              and $self->message_type
+              and $self->branchcode;
+
+    C4::Log::logaction( "MEMBERS", "ADDCIRCMESSAGE", $self->borrowernumber, $self->message )
+        if C4::Context->preference("BorrowersLog");
+
+    return $self->SUPER::store($self);
+}
+
+=head3 delete
+
+=cut
+
+sub delete {
+    my ($self) = @_;
+
+    C4::Log::logaction("MEMBERS", "DELCIRCMESSAGE", $self->borrowernumber, $self->message)
+        if C4::Context->preference("BorrowersLog");
+
+    return $self->SUPER::delete($self);
+}
 
 =head3 type
 
