@@ -104,7 +104,7 @@ if ( $run_report ) {
                     ORDER BY items.itemnumber SEPARATOR ', ') l_branch,
             items.holdingbranch as branch,
             GROUP_CONCAT(DISTINCT items.itype 
-                    ORDER BY items.itemnumber SEPARATOR '<br/>') l_itype,
+                    ORDER BY items.itemnumber SEPARATOR '|') l_itype,
             GROUP_CONCAT(DISTINCT items.location 
                     ORDER BY items.itemnumber SEPARATOR '|') l_location,
             GROUP_CONCAT(DISTINCT items.itemcallnumber 
@@ -177,7 +177,7 @@ if ( $run_report ) {
                 count           => $data->{icount},
                 rcount          => $data->{rcount},
                 pullcount       => $data->{icount} <= $data->{rcount} ? $data->{icount} : $data->{rcount},
-                itype           => $data->{l_itype},
+                itypes          => [split('\|', $data->{l_itype})],
                 locations       => [split('\|', $data->{l_location})],
             }
         );
