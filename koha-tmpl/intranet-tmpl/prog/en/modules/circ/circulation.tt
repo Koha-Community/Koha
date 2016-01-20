@@ -838,35 +838,30 @@ No patron matched <span class="ex">[% message %]</span>
 
     <!-- /If notes -->[% END %]
 
-	<div id="messages" class="circmessage">
-		<h4>Messages:</h4>
-		<ul>
-			[% FOREACH lib_messages_loo IN lib_messages_loop %]
-				<li>
-					<span class="circ-hlt">
-                                                [% lib_messages_loo.message_date_formatted  | $KohaDates %]
-                                                [% Branches.GetName( lib_messages_loo.branchcode ) %]
-						<i>"[% lib_messages_loo.message %]"</i>
-					</span>
-					[% IF ( lib_messages_loo.can_delete ) %]
-						<a href="/cgi-bin/koha/circ/del_message.pl?message_id=[% lib_messages_loo.message_id %]&amp;borrowernumber=[% lib_messages_loo.borrowernumber %]">[Delete]</a>
-					[% ELSE %]
-						[% IF ( all_messages_del ) %]
-							<a href="/cgi-bin/koha/circ/del_message.pl?message_id=[% lib_messages_loo.message_id %]&amp;borrowernumber=[% lib_messages_loo.borrowernumber %]">[Delete]</a>
-						[% END %]
-					[% END %]
-				</li>
-			[% END %]
-			[% FOREACH bor_messages_loo IN bor_messages_loop %]
-                            <li><span class="">[% bor_messages_loo.message_date_formatted  | $KohaDates %] [% Branches.GetName( bor_messages_loo.branchcode ) %] <i>"[% bor_messages_loo.message %]"</i></span> [% IF ( bor_messages_loo.can_delete ) %]<a href="/cgi-bin/koha/circ/del_message.pl?message_id=[% bor_messages_loo.message_id %]&amp;borrowernumber=[% bor_messages_loo.borrowernumber %]">[Delete]</a>
-                [% ELSIF ( all_messages_del ) %]
-                    <a href="/cgi-bin/koha/circ/del_message.pl?message_id=[% bor_messages_loo.message_id %]&amp;borrowernumber=[% bor_messages_loo.borrowernumber %]">[Delete]</a>
+    <div id="messages" class="circmessage">
+        <h4>Messages:</h4>
+        <ul>
+            [% FOREACH message IN librarian_messages %]
+                <li>
+                    <span class="circ-hlt">
+                        [% message.message_date | $KohaDates %]
+                        [% Branches.GetName( lib_messages_loo.branchcode ) %]
+                        <i>"[% message.message.raw %]"</i>
+                    </span>
+                    [% IF message.branchcode == branch OR Koha.Preference('AllowAllMessageDeletion') %]
+                        <a href="/cgi-bin/koha/circ/del_message.pl?message_id=[% message.message_id %]&amp;borrowernumber=[% message.borrowernumber %]">[Delete]</a>
+                    [% END %]
+                </li>
+            [% END %]
+            [% FOREACH message IN patron_messages %]
+                <li><span class="">[% message.message_date | $KohaDates %] [% Branches.GetName( message.branchcode )%] <i>"[% message.message.raw %]"</i></span>
+                [% IF message.branchcode == branch OR Koha.Preference('AllowAllMessageDeletion') %]
+                    <a href="/cgi-bin/koha/circ/del_message.pl?message_id=[% message.message_id %]&amp;borrowernumber=[% message.borrowernumber %]">[Delete]</a>
                 [% END %]</li>
-			[% END %]
+            [% END %]
+        </ul>
+    </div>
 
-		</ul>
-	</div>	
-	
      <!-- /If flagged -->[% END %]
 
 	

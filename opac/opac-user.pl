@@ -346,7 +346,7 @@ if (   C4::Context->preference('AllowPatronToSetCheckoutsVisibilityForGuarantor'
 
 $template->param(
     borrower                 => $borr,
-    bor_messages_loop        => GetMessages( $borrowernumber, 'B', 'NONE' ),
+    patron_messages          => $patron_messages,
     patronupdate             => $patronupdate,
     OpacRenewalAllowed       => C4::Context->preference("OpacRenewalAllowed"),
     userview                 => 1,

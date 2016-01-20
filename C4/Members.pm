@@ -96,8 +96,6 @@ BEGIN {
         &GetExpiryDate
         &GetUpcomingMembershipExpires
 
-        &GetMessages
-
         &IssueSlip
         GetBorrowersWithEmail
 
@@ -2129,48 +2127,6 @@ sub ModPrivacy {
 
     return ModMember( borrowernumber => $borrowernumber,
                       privacy        => $privacy );
-}
-
-=head2 GetMessages
-
-  GetMessages( $borrowernumber, $type );
-
-$type is message type, B for borrower, or L for Librarian.
-Empty type returns all messages of any type.
-
-Returns all messages for the given borrowernumber
-
-=cut
-
-sub GetMessages {
-    my ( $borrowernumber, $type, $branchcode ) = @_;
-
-    if ( ! $type ) {
-      $type = '%';
-    }
-
-    my $dbh  = C4::Context->dbh;
-
-    my $query = "SELECT
-                  branches.branchname,
-                  messages.*,
-                  message_date,
-                  messages.branchcode LIKE '$branchcode' AS can_delete
-                  FROM messages, branches
-                  WHERE borrowernumber = ?
-                  AND message_type LIKE ?
-                  AND messages.branchcode = branches.branchcode
-                  ORDER BY message_date DESC";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $borrowernumber, $type ) ;
-    my @results;
-
-    while ( my $data = $sth->fetchrow_hashref ) {
-        $data->{message_date_formatted} = output_pref( { dt => dt_from_string( $data->{message_date} ), dateonly => 1, dateformat => 'iso' } );
-        push @results, $data;
-    }
-    return \@results;
-
 }
 
 =head2 IssueSlip

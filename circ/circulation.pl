@@ -46,6 +46,7 @@ use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Borrower::Debarments qw(GetDebarments IsDebarred);
 use Koha::DateUtils;
 use Koha::Database;
+use Koha::Patron::Messages;
 
 use Date::Calc qw(
   Today
@@ -546,11 +547,23 @@ if ( $borrowernumber && $borrower->{'category_type'} eq 'C') {
     $template->param( 'catcode' =>    $catcodes->[0])  if $cnt == 1;
 }
 
-my $lib_messages_loop = GetMessages( $borrowernumber, 'L', $branch );
-if($lib_messages_loop){ $template->param(flagged => 1 ); }
+my $librarian_messages = Koha::Patron::Messages->search(
+    {
+        borrowernumber => $borrowernumber,
+        message_type => 'L',
+    }
+);
 
-my $bor_messages_loop = GetMessages( $borrowernumber, 'B', $branch );
-if($bor_messages_loop){ $template->param(flagged => 1 ); }
+my $patron_messages = Koha::Patron::Messages->search(
+    {
+        borrowernumber => $borrowernumber,
+        message_type => 'B',
+    }
+);
+
+if( $librarian_messages->count or $patron_messages->count ) {
+    $template->param(flagged => 1)
+}
 
 my $fast_cataloging = 0;
 if (defined getframeworkinfo('FA')) {
@@ -589,9 +602,8 @@ if ($restoreduedatespec || $stickyduedate) {
 }
 
 $template->param(
-    lib_messages_loop => $lib_messages_loop,
-    bor_messages_loop => $bor_messages_loop,
-    all_messages_del  => C4::Context->preference('AllowAllMessageDeletion'),
+    librarian_messages => $librarian_messages,
+    patron_messages   => $patron_messages,
     findborrower      => $findborrower,
     borrower          => $borrower,
     borrowernumber    => $borrowernumber,
