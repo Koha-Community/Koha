@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#writen 3rd May 2010 by kmkale@anantcorp.com adapted from boraccount.pl by chris@katipo.oc.nz
+#written 3rd May 2010 by kmkale@anantcorp.com adapted from boraccount.pl by chris@katipo.oc.nz
 #script to print fee receipts
 
 # Copyright Koustubha Kale
