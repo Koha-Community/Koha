@@ -96,7 +96,6 @@ BEGIN {
         &GetExpiryDate
         &GetUpcomingMembershipExpires
 
-        &AddMessage
         &DeleteMessage
         &GetMessages
         &GetMessagesCount
@@ -2132,34 +2131,6 @@ sub ModPrivacy {
 
     return ModMember( borrowernumber => $borrowernumber,
                       privacy        => $privacy );
-}
-
-=head2 AddMessage
-
-  AddMessage( $borrowernumber, $message_type, $message, $branchcode );
-
-Adds a message to the messages table for the given borrower.
-
-Returns:
-  True on success
-  False on failure
-
-=cut
-
-sub AddMessage {
-    my ( $borrowernumber, $message_type, $message, $branchcode ) = @_;
-
-    my $dbh  = C4::Context->dbh;
-
-    if ( ! ( $borrowernumber && $message_type && $message && $branchcode ) ) {
-      return;
-    }
-
-    my $query = "INSERT INTO messages ( borrowernumber, branchcode, message_type, message ) VALUES ( ?, ?, ?, ? )";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $borrowernumber, $branchcode, $message_type, $message );
-    logaction("MEMBERS", "ADDCIRCMESSAGE", $borrowernumber, $message) if C4::Context->preference("BorrowersLog");
-    return 1;
 }
 
 =head2 GetMessages
