@@ -34,7 +34,6 @@ BEGIN {
 		&GetBranches
 		&GetBranchesLoop
 		&GetBranchDetail
-		&get_branchinfos_of
 		&ModBranch
 		&CheckBranchCategorycode
 		&GetBranchInfo
