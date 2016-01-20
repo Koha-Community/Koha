@@ -166,7 +166,7 @@ elsif ($op=~/edit/) {
 }  
 elsif ($op eq "change" ) {
     # set accepted/rejected/managed informations if applicable
-    # ie= if the librarian has choosen some action on the suggestions
+    # ie= if the librarian has chosen some action on the suggestions
     if ($suggestion_only->{"STATUS"} eq "ACCEPTED"){
         $suggestion_only->{accepteddate} = dt_from_string;
         $suggestion_only->{"acceptedby"}=C4::Context->userenv->{number};
@@ -232,7 +232,7 @@ if ($op=~/else/) {
             $criteria_has_empty = 1;
         }
     }
-    # agregate null and empty values under empty value
+    # aggregate null and empty values under empty value
     push @criteria_dv, '' if $criteria_has_empty;
 
     my @allsuggestions;
