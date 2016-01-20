@@ -96,7 +96,6 @@ BEGIN {
         &GetExpiryDate
         &GetUpcomingMembershipExpires
 
-        &DeleteMessage
         &GetMessages
         &GetMessagesCount
 
@@ -2204,29 +2203,6 @@ sub GetMessagesCount {
     my $count = $data->{'MsgCount'};
 
     return $count;
-}
-
-
-
-=head2 DeleteMessage
-
-  DeleteMessage( $message_id );
-
-=cut
-
-sub DeleteMessage {
-    my ( $message_id ) = @_;
-
-    my $dbh = C4::Context->dbh;
-    my $query = "SELECT * FROM messages WHERE message_id = ?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $message_id );
-    my $message = $sth->fetchrow_hashref();
-
-    $query = "DELETE FROM messages WHERE message_id = ?";
-    $sth = $dbh->prepare($query);
-    $sth->execute( $message_id );
-    logaction("MEMBERS", "DELCIRCMESSAGE", $message->{'borrowernumber'}, $message->{'message'}) if C4::Context->preference("BorrowersLog");
 }
 
 =head2 IssueSlip

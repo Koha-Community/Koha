@@ -17,20 +17,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Context;
 use C4::Auth;
 use C4::Output;
-use C4::Members;
-use C4::Accounts;
-use C4::Stats;
-use C4::Koha;
-use C4::Overdues;
-use C4::Branch;    # GetBranches
+use Koha::Patron::Messages;
 
 my $input = new CGI;
 
@@ -47,7 +40,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $borrowernumber = $input->param('borrowernumber');
 my $message_id     = $input->param('message_id');
 
-DeleteMessage($message_id);
+my $message = Koha::Patron::Messages->find($message_id);
+$message->delete if $message;
 
 print $input->redirect(
     "/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
