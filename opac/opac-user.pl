@@ -38,6 +38,7 @@ use Koha::DateUtils;
 use Koha::Borrower::Debarments qw(IsDebarred);
 use Koha::Holds;
 use Koha::Database;
+use Koha::Patron::Messages;
 
 use constant ATTRIBUTE_SHOW_BARCODE => 'SHOW_BCODE';
 
@@ -312,7 +313,13 @@ if (C4::Context->preference("OPACAmazonCoverImages") or
         $template->param(JacketImages=>1);
 }
 
-if ( GetMessagesCount( $borrowernumber, 'B' ) ) {
+my $patron_messages = Koha::Patron::Messages->search(
+    {
+        borrowernumber => $borrowernumber,
+        message_type => 'B',
+    }
+);
+if ( $patron_messages->count ) {
     $template->param( bor_messages => 1 );
 }
 

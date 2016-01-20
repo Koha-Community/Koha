@@ -97,7 +97,6 @@ BEGIN {
         &GetUpcomingMembershipExpires
 
         &GetMessages
-        &GetMessagesCount
 
         &IssueSlip
         GetBorrowersWithEmail
@@ -2172,37 +2171,6 @@ sub GetMessages {
     }
     return \@results;
 
-}
-
-=head2 GetMessages
-
-  GetMessagesCount( $borrowernumber, $type );
-
-$type is message type, B for borrower, or L for Librarian.
-Empty type returns all messages of any type.
-
-Returns the number of messages for the given borrowernumber
-
-=cut
-
-sub GetMessagesCount {
-    my ( $borrowernumber, $type, $branchcode ) = @_;
-
-    if ( ! $type ) {
-      $type = '%';
-    }
-
-    my $dbh  = C4::Context->dbh;
-
-    my $query = "SELECT COUNT(*) as MsgCount FROM messages WHERE borrowernumber = ? AND message_type LIKE ?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $borrowernumber, $type ) ;
-    my @results;
-
-    my $data = $sth->fetchrow_hashref;
-    my $count = $data->{'MsgCount'};
-
-    return $count;
 }
 
 =head2 IssueSlip
