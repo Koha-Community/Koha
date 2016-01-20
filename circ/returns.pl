@@ -646,6 +646,7 @@ if ( $itemnumber ) {
         $template->param(
           collectionItemNeedsTransferred => 1,
           collectionBranch => GetBranchName($collectionBranch),
+          itemnumber => $itemnumber,
         );
     }
 }
