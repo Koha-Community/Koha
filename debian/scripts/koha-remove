@@ -83,6 +83,8 @@ eof
         rm "$instancefile"
     [ -f "/etc/koha/sites/$name/koha-conf.xml" ] && \
         rm "/etc/koha/sites/$name/koha-conf.xml"
+    [ -f "/etc/koha/sites/$name/log4perl.conf" ] && \
+        rm "/etc/koha/sites/$name/log4perl.conf"
     [ -f "/etc/koha/sites/$name/zebra-biblios.cfg" ] && \
         rm "/etc/koha/sites/$name/zebra-biblios.cfg"
     [ -f "/etc/koha/sites/$name/zebra-biblios-dom.cfg" ] && \
