@@ -126,12 +126,20 @@ $(document).ready(function() {
             <td>"</td>
             <td>"</td>
         [% END %]
-        <td>[% Branches.GetName ( reserveloo.holdingbranch ) %]</td>
+        <td>
+            [% FOREACH holdingbranch IN reserveloo.holdingbranches %]
+                [% Branches.GetName ( holdingbranch ) %]<br>
+            [% END %]
+        </td>
         <td><p>[% reserveloo.itemcallnumber %]</p></td>
         <td><p>[% reserveloo.copyno %]</p></td>
         <td><p>[% reserveloo.enumchron %]</p></td>
         <td>[% ItemTypes.GetDescription( reserveloo.itype ) %]</td>
-        <td>[% AuthorisedValues.GetByCode('LOC', reserveloo.location) %]</td>
+        <td>
+        [% FOREACH loc IN reserveloo.locations %]
+            [% AuthorisedValues.GetByCode('LOC', loc) %]<br>
+        [% END %]
+        </td>
         <td>
             <span title="[% reserveloo.reservedate %]">[% reserveloo.reservedate | $KohaDates %] in [% Branches.GetName ( reserveloo.branch ) %]</span>
             [% IF ( reserveloo.statusw ) %]<p>Waiting</p>[% END %][% IF ( reserveloo.statusf ) %]<p>Fullfilled</p>[% END %]

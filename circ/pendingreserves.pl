@@ -97,7 +97,7 @@ if ( $run_report ) {
     "SELECT min(reservedate) as l_reservedate,
             reserves.borrowernumber as borrowernumber,
             GROUP_CONCAT(DISTINCT items.holdingbranch 
-                    ORDER BY items.itemnumber SEPARATOR '<br/>') l_holdingbranch,
+                    ORDER BY items.itemnumber SEPARATOR '|') l_holdingbranch,
             reserves.biblionumber,
             reserves.branchcode,
             GROUP_CONCAT(DISTINCT reserves.branchcode 
@@ -106,7 +106,7 @@ if ( $run_report ) {
             GROUP_CONCAT(DISTINCT items.itype 
                     ORDER BY items.itemnumber SEPARATOR '<br/>') l_itype,
             GROUP_CONCAT(DISTINCT items.location 
-                    ORDER BY items.itemnumber SEPARATOR '<br/>') l_location,
+                    ORDER BY items.itemnumber SEPARATOR '|') l_location,
             GROUP_CONCAT(DISTINCT items.itemcallnumber 
                     ORDER BY items.itemnumber SEPARATOR '<br/>') l_itemcallnumber,
             GROUP_CONCAT(DISTINCT items.enumchron
@@ -167,7 +167,7 @@ if ( $run_report ) {
                 biblionumber    => $data->{biblionumber},
                 statusw         => ( $data->{found} eq "W" ),
                 statusf         => ( $data->{found} eq "F" ),
-                holdingbranch   => $data->{l_holdingbranch},
+                holdingbranches => [split('\|', $data->{l_holdingbranch})],,
                 branch          => $data->{l_branch},
                 itemcallnumber  => $data->{l_itemcallnumber},
                 enumchron       => $data->{l_enumchron},
@@ -178,7 +178,7 @@ if ( $run_report ) {
                 rcount          => $data->{rcount},
                 pullcount       => $data->{icount} <= $data->{rcount} ? $data->{icount} : $data->{rcount},
                 itype           => $data->{l_itype},
-                location        => $data->{l_location},
+                locations       => [split('\|', $data->{l_location})],
             }
         );
     }
