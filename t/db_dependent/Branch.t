@@ -40,7 +40,6 @@ can_ok(
       GetBranch
       GetBranches
       GetBranchesLoop
-      GetBranchInfo
       mybranch
       )
 );
@@ -192,18 +191,11 @@ my $CAT1 = Koha::LibraryCategories->find('CAT1');
 $b2_stored->add_to_categories([$CAT1]);
 is( Koha::Libraries->search->count, $count + 2, 'BRB added' );
 
-#Test GetBranchInfo
-my $b1info = GetBranchInfo( $b1->{branchcode} );
-$b1->{categories} = [];
-is_deeply( @$b1info[0], $b1, 'BRA has no categories' );
+my $b1info = Koha::Libraries->find( $b1->{branchcode} );
+is_deeply( $b1info->categories->count, 0, 'BRA has no categories' );
 
-my $b2info = GetBranchInfo( $b2->{branchcode} );
-my @cat    = ( $cat1->{categorycode} );
-delete $b2->{add};
-delete $b2->{CAT1};
-$b2->{issuing}    = undef;
-$b2->{categories} = \@cat;
-is_deeply( @$b2info[0], $b2, 'BRB has the category CAT1' );
+my $b2info = Koha::Libraries->find( $b2->{branchcode} );
+is_deeply( $b2->categories->count, 1, 'BRB has the category CAT1' );
 
 Koha::LibraryCategory->new($cat2)->store;
 is( Koha::LibraryCategories->search->count, $count_cat + 3, "Two categories added" );

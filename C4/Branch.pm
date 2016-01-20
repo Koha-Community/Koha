@@ -33,7 +33,6 @@ BEGIN {
 		&GetBranch
 		&GetBranches
 		&GetBranchesLoop
-		&GetBranchInfo
 		&mybranch
 	);
     @EXPORT_OK = qw( &onlymine &mybranch );
@@ -58,7 +57,6 @@ The functions in this module deal with branches.
   $branches = &GetBranches();
 
 Returns informations about ALL branches, IndependentBranches Insensitive.
-GetBranchInfo() returns the same information.
 
 Create a branch selector with the following code.
 
@@ -183,54 +181,6 @@ sub GetBranch {
     ($branch)                || ($branch = $cookie{'branchname'});
     ( $branches->{$branch} ) || ( $branch = ( keys %$branches )[0] );
     return $branch;
-}
-
-=head2 GetBranchInfo
-
-$results = GetBranchInfo($branchcode);
-
-returns C<$results>, a reference to an array of hashes containing branches.
-if $branchcode, just this branch, with associated categories.
-if ! $branchcode && $categorytype, all branches in the category.
-
-=cut
-
-sub GetBranchInfo {
-    my ($branchcode,$categorytype) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth;
-
-
-	if ($branchcode) {
-        $sth =
-          $dbh->prepare(
-            "Select * from branches where branchcode = ? order by branchcode");
-        $sth->execute($branchcode);
-    }
-    else {
-        $sth = $dbh->prepare("Select * from branches order by branchcode");
-        $sth->execute();
-    }
-    my @results;
-    while ( my $data = $sth->fetchrow_hashref ) {
-		my @bind = ($data->{'branchcode'});
-        my $query= "select r.categorycode from branchrelations r";
-		$query .= ", branchcategories c " if($categorytype);
-		$query .= " where  branchcode=? ";
-		if($categorytype) { 
-			$query .= " and c.categorytype=? and r.categorycode=c.categorycode";
-			push @bind, $categorytype;
-		}
-        my $nsth=$dbh->prepare($query);
-		$nsth->execute( @bind );
-        my @cats = ();
-        while ( my ($cat) = $nsth->fetchrow_array ) {
-            push( @cats, $cat );
-        }
-        $data->{'categories'} = \@cats;
-        push( @results, $data );
-    }
-    return \@results;
 }
 
 1;

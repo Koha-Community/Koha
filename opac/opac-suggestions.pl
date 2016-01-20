@@ -28,6 +28,7 @@ use C4::Output;
 use C4::Suggestions;
 use C4::Koha;
 use C4::Scrubber;
+use Koha::Libraries;
 
 use Koha::DateUtils qw( dt_from_string );
 
@@ -149,7 +150,7 @@ if ( $op eq "delete_confirm" ) {
     print $input->redirect("/cgi-bin/koha/opac-suggestions.pl?op=else");
     exit;
 }
-map{ $_->{'branchcodesuggestedby'}=GetBranchInfo($_->{'branchcodesuggestedby'})->[0]->{'branchname'}} @$suggestions_loop;
+map{ $_->{'branchcodesuggestedby'} = Koha::Libraries->find($_->{'branchcodesuggestedby'})->branchname} @$suggestions_loop;
 
 foreach my $suggestion(@$suggestions_loop) {
     if($suggestion->{'suggestedby'} == $borrowernumber) {
