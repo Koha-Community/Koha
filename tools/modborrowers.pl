@@ -266,7 +266,7 @@ if ( $op eq 'do' ) {
     }
 
     for my $field ( qw( dateenrolled dateexpiry ) ) {
-        $infos->{$field} = dt_from_string($infos->{$field});
+        $infos->{$field} = dt_from_string($infos->{$field}) if $infos->{$field};
     }
 
     my @attributes = $input->param('patron_attributes');
