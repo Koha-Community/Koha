@@ -480,7 +480,9 @@ if (@searchCategories > 0) {
 @limits = map { uri_unescape($_) } @limits;
 
 if($params->{'multibranchlimit'}) {
-    my $multibranch = '('.join( " or ", map { "branch: $_ " } @{ GetBranchesInCategory( $params->{'multibranchlimit'} ) } ).')';
+    my $library_category = Koha::LibraryCategories->find( $params->{multibranchlimit} );
+    my @libraries = $library_category->libraries;
+    my $multibranch = '('.join( " or ", map { 'branch: ' . $_->branchcode } @libraries ) .')';
     push @limits, $multibranch if ($multibranch ne  '()');
 }
 

@@ -423,7 +423,9 @@ my %is_nolimit = map { $_ => 1 } @nolimits;
 @limits = grep { not $is_nolimit{$_} } @limits;
 
 if($params->{'multibranchlimit'}) {
-    my $multibranch = '('.join( " or ", map { "branch: $_ " } @{ GetBranchesInCategory( $params->{'multibranchlimit'} ) } ).')';
+    my $library_category = Koha::LibraryCategories->find( $params->{multibranchlimit} );
+    my @libraries = $library_category->libraries;
+    my $multibranch = '('.join( " or ", map { 'branch: ' . $_->branchcode } @libraries ) .')';
     push @limits, $multibranch if ($multibranch ne  '()');
 }
 
