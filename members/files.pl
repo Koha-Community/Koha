@@ -31,6 +31,7 @@ use C4::Debug;
 
 use Koha::DateUtils;
 use Koha::Patron::Files;
+use Koha::Patron::Images;
 
 my $cgi = CGI->new;
 
@@ -115,8 +116,8 @@ else {
         );
     }
 
-    my ($picture, $dberror) = GetPatronImage($data->{'borrowernumber'});
-    $template->param( picture => 1 ) if $picture;
+    my $patron_image = Koha::Patron::Images->find($data->{borrowernumber});
+    $template->param( picture => 1 ) if $patron_image;
 
     $template->param(
         files => Koha::Patron::Files->new( borrowernumber => $borrowernumber )

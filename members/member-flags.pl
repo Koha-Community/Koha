@@ -17,6 +17,7 @@ use C4::Members::Attributes qw(GetBorrowerAttributes);
 #use C4::Acquisitions;
 
 use C4::Output;
+use Koha::Patron::Images;
 
 my $input = new CGI;
 
@@ -157,8 +158,8 @@ if ($input->param('newflags')) {
     }
 	
 $template->param( adultborrower => 1 ) if ( $bor->{'category_type'} eq 'A' );
-    my ($picture, $dberror) = GetPatronImage($bor->{'borrowernumber'});
-    $template->param( picture => 1 ) if $picture;
+    my $patron_image = Koha::Patron::Images->find($bor->{borrowernumber});
+    $template->param( picture => 1 ) if $patron_image;
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
     my $attributes = GetBorrowerAttributes($bor->{'borrowernumber'});

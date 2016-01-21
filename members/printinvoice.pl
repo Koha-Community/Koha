@@ -30,6 +30,7 @@ use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Branch;
 use C4::Accounts;
+use Koha::Patron::Images;
 
 my $input = new CGI;
 
@@ -112,8 +113,8 @@ for ( my $i = 0 ; $i < $numaccts ; $i++ ) {
 
 $template->param( adultborrower => 1 ) if ( $data->{'category_type'} eq 'A' );
 
-my ( $picture, $dberror ) = GetPatronImage( $data->{'borrowernumber'} );
-$template->param( picture => 1 ) if $picture;
+my $patron_image = Koha::Patron::Images->find($data->{borrowernumber});
+$template->param( picture => 1 ) if $patron_image;
 
 $template->param(
     finesview      => 1,

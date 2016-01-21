@@ -31,6 +31,7 @@ use C4::Branch qw(GetBranchesLoop);
 use C4::Scrubber;
 use Email::Valid;
 use Koha::DateUtils;
+use Koha::Patron::Images;
 
 my $cgi = new CGI;
 my $dbh = C4::Context->dbh;
@@ -244,12 +245,8 @@ elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
     );
 
     if (C4::Context->preference('OPACpatronimages')) {
-        my ($image, $dberror) = GetPatronImage($borrower->{borrowernumber});
-        if ($image) {
-            $template->param(
-                display_patron_image => 1
-            );
-        }
+        my $patron_image = Koha::Patron::Images->find($borrower->{borrowernumber});
+        $template->param( display_patron_image => 1 ) if $patron_image;
     }
 
 }

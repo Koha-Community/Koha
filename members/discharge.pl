@@ -37,6 +37,7 @@ use C4::Members;
 use C4::Reserves;
 use C4::Letters;
 use Koha::Patron::Discharge;
+use Koha::Patron::Images;
 
 use Koha::DateUtils;
 
@@ -102,8 +103,8 @@ if ( $input->param('borrowernumber') ) {
         borrowernumber => $borrowernumber,
     });
 
-    my ($picture, $dberror) = GetPatronImage($borrowernumber);
-    $template->param( picture => 1 ) if $picture;
+    my $patron_image = Koha::Patron::Images->find($borrowernumber);
+    $template->param( picture => 1 ) if $patron_image;
 
     $template->param(
         borrowernumber    => $borrowernumber,

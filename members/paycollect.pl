@@ -29,6 +29,7 @@ use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Accounts;
 use C4::Koha;
 use C4::Branch;
+use Koha::Patron::Images;
 
 my $input = CGI->new();
 
@@ -175,8 +176,8 @@ sub borrower_add_additional_fields {
         $b_ref->{adultborrower} = 1;
     }
 
-    my ($picture, $dberror) = GetPatronImage($borrower->{'borrowernumber'});
-    $template->param( picture => 1 ) if $picture;
+    my $patron_image = Koha::Patron::Images->find($borrower->{borrowernumber});
+    $template->param( picture => 1 ) if $patron_image;
 
     if (C4::Context->preference('ExtendedPatronAttributes')) {
         $b_ref->{extendedattributes} = GetBorrowerAttributes($borrowernumber);

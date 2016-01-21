@@ -74,8 +74,6 @@ BEGIN {
         &GetSortDetails
         &GetTitles
 
-        &GetPatronImage
-
         &GetHideLostItemsPreference
 
         &IsMemberBlocked
@@ -998,6 +996,7 @@ sub UpdateGuarantees {
         $sth->execute($data{'address'},$data{'fax'},$data{'B_city'},$data{'mobile'},$data{'city'},$data{'phone'},$guarantee->{'borrowernumber'});
     }
 }
+
 =head2 GetPendingIssues
 
   my $issues = &GetPendingIssues(@borrowernumber);
@@ -1011,7 +1010,6 @@ The keys include C<biblioitems> fields except marc and marcxml.
 
 =cut
 
-#'
 sub GetPendingIssues {
     my @borrowernumbers = @_;
 
@@ -1826,26 +1824,6 @@ sub GetTitles {
     else {
         return ( \@borrowerTitle);
     }
-}
-
-=head2 GetPatronImage
-
-    my ($imagedata, $dberror) = GetPatronImage($borrowernumber);
-
-Returns the mimetype and binary image data of the image for the patron with the supplied borrowernumber.
-
-=cut
-
-sub GetPatronImage {
-    my ($borrowernumber) = @_;
-    warn "Borrowernumber passed to GetPatronImage is $borrowernumber" if $debug;
-    my $dbh = C4::Context->dbh;
-    my $query = 'SELECT mimetype, imagefile FROM patronimage WHERE borrowernumber = ?';
-    my $sth = $dbh->prepare($query);
-    $sth->execute($borrowernumber);
-    my $imagedata = $sth->fetchrow_hashref;
-    warn "Database error!" if $sth->errstr;
-    return $imagedata, $sth->errstr;
 }
 
 =head2 GetHideLostItemsPreference

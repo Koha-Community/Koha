@@ -31,6 +31,7 @@ use C4::Items;
 use C4::Branch;
 use C4::Debug;
 use C4::Search;    # enabled_staff_search_views
+use Koha::Patron::Images;
 
 use vars qw($debug $cgi_debug);
 
@@ -73,8 +74,8 @@ if ( $src eq 'circ' ) {
     use C4::Members::Attributes qw(GetBorrowerAttributes);
     my $borrowernumber = $object;
     my $data = GetMember( 'borrowernumber' => $borrowernumber );
-    my ( $picture, $dberror ) = GetPatronImage( $data->{'borrowernumber'} );
-    $template->param( picture => 1 ) if $picture;
+    my $patron_image = Koha::Patron::Images->find($data->{borrowernumber});
+    $template->param( picture => 1 ) if $patron_image;
 
     if ( C4::Context->preference('ExtendedPatronAttributes') ) {
         my $attributes = GetBorrowerAttributes( $data->{'borrowernumber'} );

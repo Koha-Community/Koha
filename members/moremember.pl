@@ -52,6 +52,7 @@ use C4::Form::MessagingPreferences;
 use List::MoreUtils qw/uniq/;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Patron::Debarments qw(GetDebarments IsDebarred);
+use Koha::Patron::Images;
 use Module::Load;
 if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
     load Koha::NorwegianPatronDB, qw( NLGetSyncDataFromBorrowernumber );
@@ -287,8 +288,8 @@ if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preferen
 # check to see if patron's image exists in the database
 # basically this gives us a template var to condition the display of
 # patronimage related interface on
-my ($picture, $dberror) = GetPatronImage($data->{'borrowernumber'});
-$template->param( picture => 1 ) if $picture;
+my $patron_image = Koha::Patron::Images->find($data->{borrowernumber});
+$template->param( picture => 1 ) if $patron_image;
 
 my $branch=C4::Context->userenv->{'branch'};
 

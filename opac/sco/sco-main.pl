@@ -46,6 +46,7 @@ use C4::Members;
 use C4::Biblio;
 use C4::Items;
 use Koha::Acquisition::Currencies;
+use Koha::Patron::Images;
 
 my $query = new CGI;
 
@@ -254,13 +255,11 @@ if ($borrower->{cardnumber}) {
 
     );
     if (C4::Context->preference('ShowPatronImageInWebBasedSelfCheck')) {
-        my ($image, $dberror) = GetPatronImage($borrower->{borrowernumber});
-        if ($image) {
-            $template->param(
-                display_patron_image => 1,
-                cardnumber           => $borrower->{cardnumber},
-            );
-        }
+        my $patron_image = Koha::Patron::Images->find($borrower->{borrowernumber});
+        $template->param(
+            display_patron_image => 1,
+            cardnumber           => $borrower->{cardnumber},
+        ) if $patron_image;
     }
 } else {
     $template->param(

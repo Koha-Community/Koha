@@ -47,6 +47,7 @@ use Koha::Patron::Debarments qw(GetDebarments IsDebarred);
 use Koha::DateUtils;
 use Koha::Database;
 use Koha::Patron::Messages;
+use Koha::Patron::Images;
 
 use Date::Calc qw(
   Today
@@ -637,8 +638,8 @@ $template->param(
     relatives_borrowernumbers => \@relatives,
 );
 
-my ($picture, $dberror) = GetPatronImage($borrower->{'borrowernumber'});
-$template->param( picture => 1 ) if $picture;
+my $patron_image = Koha::Patron::Images->find($borrower->{borrowernumber});
+$template->param( picture => 1 ) if $patron_image;
 
 # get authorised values with type of BOR_NOTES
 

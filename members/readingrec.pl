@@ -32,6 +32,7 @@ use C4::Branch qw(GetBranches);
 use List::MoreUtils qw/any uniq/;
 use Koha::DateUtils;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
+use Koha::Patron::Images;
 
 my $input = CGI->new;
 
@@ -107,9 +108,8 @@ if (! $limit){
 	$limit = 'full';
 }
 
-
-my ($picture, $dberror) = GetPatronImage($data->{'borrowernumber'});
-$template->param( picture => 1 ) if $picture;
+my $patron_image = Koha::Patron::Images->find($data->{borrowernumber});
+$template->param( picture => 1 ) if $patron_image;
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
     my $attributes = GetBorrowerAttributes($borrowernumber);

@@ -31,6 +31,7 @@ use C4::Auth;
 use C4::Members;
 use C4::Branch; # GetBranches
 use Module::Load;
+use Koha::Patron::Images;
 if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
     load Koha::NorwegianPatronDB, qw( NLMarkForDeletion NLSync );
 }
@@ -107,8 +108,8 @@ my $data=$sth->fetchrow_hashref;
 if ($countissues > 0 or $flags->{'CHARGES'}  or $data->{'borrowernumber'} or $deletelocal == 0){
     #   print $input->header;
 
-    my ($picture, $dberror) = GetPatronImage($bor->{'borrowernumber'});
-    $template->param( picture => 1 ) if $picture;
+    my $patron_image = Koha::Patron::Images->find($bor->{borrowernumber});
+    $template->param( picture => 1 ) if $patron_image;
 
     $template->param(borrowernumber => $member,
         surname => $bor->{'surname'},

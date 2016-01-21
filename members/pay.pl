@@ -41,6 +41,7 @@ use C4::Koha;
 use C4::Overdues;
 use C4::Branch;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
+use Koha::Patron::Images;
 
 our $input = CGI->new;
 
@@ -135,8 +136,8 @@ sub add_accounts_to_template {
 
     $template->param(%$borrower);
 
-    my ($picture, $dberror) = GetPatronImage($borrower->{'borrowernumber'});
-    $template->param( picture => 1 ) if $picture;
+    my $patron_image = Koha::Patron::Images->find($borrower->{borrowernumber});
+    $template->param( picture => 1 ) if $patron_image;
     $template->param(
         accounts => $accounts,
         borrower => $borrower,
@@ -224,11 +225,6 @@ sub borrower_add_additional_fields {
         }
     } elsif ( $b_ref->{category_type} eq 'A' ) {
         $b_ref->{adultborrower} = 1;
-    }
-
-    my ( $picture, $dberror ) = GetPatronImage( $b_ref->{borrowernumber} );
-    if ($picture) {
-        $b_ref->{has_picture} = 1;
     }
 
     if (C4::Context->preference('ExtendedPatronAttributes')) {

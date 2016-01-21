@@ -27,6 +27,7 @@ use C4::Members;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Context;
 use C4::Serials;
+use Koha::Patron::Images;
 use CGI::Session;
 
 my $query = new CGI;
@@ -121,7 +122,7 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     );
 }
 
-my ($picture, $dberror) = GetPatronImage($borrower->{'borrowernumber'});
-$template->param( picture => 1 ) if $picture;
+my $patron_image = Koha::Patron::Images->find($borrower->{borrowernumber});
+$template->param( picture => 1 ) if $patron_image;
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -26,6 +26,7 @@ use CGI qw ( -utf8 );
 use C4::Auth qw( check_api_auth );
 use C4::Context;
 use C4::Members;
+use Koha::Patron::Images;
 
 $|=1;
 
@@ -65,18 +66,13 @@ if ($query->param('borrowernumber')) {
 
 warn "Borrowernumber passed in: $borrowernumber" if $DEBUG;
 
-my ($imagedata, $dberror) = GetPatronImage($borrowernumber);
-
-if ($dberror) {
-    warn "Database Error!";
-    exit;
-}
+my $patron_image = Koha::Patron::Images->find($borrowernumber);
 
 # NOTE: Never dump the contents of $imagedata->{'patronimage'} via a warn to a log or nasty
 # things will result... you have been warned!
 
-if ($imagedata) {
-    print $query->header (-type => $imagedata->{'mimetype'}, -'Cache-Control' => 'no-store', -Content_Length => length ($imagedata->{'imagefile'})), $imagedata->{'imagefile'};
+if ($patron_image) {
+    print $query->header (-type => $patron_image->mimetype, -'Cache-Control' => 'no-store', -Content_Length => length ($patron_image->imagefile)), $patron_image->imagefile;
     exit;
 } else {
     warn "No image exists for $borrowernumber";

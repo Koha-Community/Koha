@@ -34,6 +34,7 @@ use C4::Branch;
 use C4::Accounts;
 use C4::Items;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
+use Koha::Patron::Images;
 
 my $input=new CGI;
 my $flagsrequired = { borrowers => 1, updatecharges => 1 };
@@ -80,8 +81,8 @@ if ($add){
     }
 
     $template->param( adultborrower => 1 ) if ( $data->{category_type} eq 'A' );
-    my ($picture, $dberror) = GetPatronImage($data->{'borrowernumber'});
-    $template->param( picture => 1 ) if $picture;
+    my $patron_image = Koha::Patron::Images->find($data->{borrowernumber});
+    $template->param( picture => 1 ) if $patron_image;
 
     if (C4::Context->preference('ExtendedPatronAttributes')) {
         my $attributes = GetBorrowerAttributes($borrowernumber);

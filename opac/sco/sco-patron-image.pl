@@ -21,6 +21,7 @@ use strict;
 use warnings;
 use C4::Service;
 use C4::Members;
+use Koha::Patron::Images;
 
 my ($query, $response) = C4::Service->init(circulate => 'self_checkout');
 
@@ -35,16 +36,14 @@ unless (C4::Context->preference('ShowPatronImageInWebBasedSelfCheck')) {
 
 my ($borrowernumber) = C4::Service->require_params('borrowernumber');
 
-my ($imagedata, $dberror) = GetPatronImage($borrowernumber);
+my $patron_image = Koha::Patron::Images->find($borrowernumber);
 
-if ($dberror) {
-    print $query->header(status => '500 internal error');
-}
-
-if ($imagedata) {
-    print $query->header(-type => $imagedata->{'mimetype'}, 
-                         -Content_Length => length ($imagedata->{'imagefile'})), 
-          $imagedata->{'imagefile'};
+if ($patron_image) {
+    print $query->header(
+        -type           => $patron_image->mimetype,
+        -Content_Length => length( $patron_image->imagefile )
+      ),
+      $patron_image->imagefile;
 } else {
     print $query->header(status => '404 patron image not found');
 }

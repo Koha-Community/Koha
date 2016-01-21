@@ -16,6 +16,7 @@ use C4::Branch;
 use C4::Circulation;
 use CGI qw ( -utf8 );
 use C4::Members::Attributes qw(GetBorrowerAttributes);
+use Koha::Patron::Images;
 
 use Digest::MD5 qw(md5_base64);
 
@@ -100,8 +101,8 @@ if ( $bor->{'category_type'} eq 'C' ) {
 
 $template->param( adultborrower => 1 ) if ( $bor->{'category_type'} eq 'A' );
 
-my ( $picture, $dberror ) = GetPatronImage( $bor->{'borrowernumber'} );
-$template->param( picture => 1 ) if $picture;
+my $patron_image = Koha::Patron::Images->find($bor->{borrowernumber});
+$template->param( picture => 1 ) if $patron_image;
 
 if ( C4::Context->preference('ExtendedPatronAttributes') ) {
     my $attributes = GetBorrowerAttributes( $bor->{'borrowernumber'} );

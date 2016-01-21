@@ -33,6 +33,7 @@ use C4::Debug;
 
 use Koha::Patrons;
 use Koha::Patron::Image;
+use Koha::Patron::Images;
 
 my $input = new CGI;
 

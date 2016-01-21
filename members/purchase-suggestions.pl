@@ -27,6 +27,7 @@ use C4::Branch;
 use C4::Members;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Suggestions;
+use Koha::Patron::Images;
 
 my $input = new CGI;
 
@@ -62,8 +63,8 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     );
 }
 
-my ($picture, $dberror) = GetPatronImage($borrowernumber);
-$template->param( picture => 1 ) if $picture;
+my $patron_image = Koha::Patron::Images->find($borrowernumber);
+$template->param( picture => 1 ) if $patron_image;
 
 my $suggestions = SearchSuggestion( { suggestedby => $borrowernumber } );
 

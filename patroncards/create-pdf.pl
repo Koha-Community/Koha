@@ -29,10 +29,11 @@ use autouse 'Data::Dumper' => qw(Dumper);
 
 use C4::Debug;
 use C4::Context;
-use autouse 'C4::Members' => qw(GetPatronImage GetMember);
+use autouse 'C4::Members' => qw(GetMember);
 use C4::Creators;
 use C4::Patroncards;
 use Koha::List::Patron;
+use Koha::Patron::Images;
 
 my $cgi = new CGI;
 
@@ -156,9 +157,9 @@ foreach my $item (@{$items}) {
                     next PROCESS_IMAGES;
                 }
                 elsif ($images->{$_}->{'data_source'}->[0]->{'image_source'} eq 'patronimages') {
-                    ($image_data, $error) = GetPatronImage($borrower_number);
-                    warn sprintf('No image exists for borrower number %s.', $borrower_number) if !$image_data;
-                    next PROCESS_IMAGES if !$image_data;
+                    my $patron_image = Koha::Patron::Images->find($borrower_number);
+                    warn sprintf('No image exists for borrower number %s.', $borrower_number) unless $patron_image;
+                    next PROCESS_IMAGES unless $patron_image;
                 }
                 elsif ($images->{$_}->{'data_source'}->[0]->{'image_source'} eq 'creator_images') {
                     my $dbh = C4::Context->dbh();

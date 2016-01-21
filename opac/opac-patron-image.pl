@@ -24,6 +24,7 @@ use C4::Members;
 use CGI qw ( -utf8 );
 use CGI::Cookie;  # need to check cookies before having CGI parse the POST request
 use C4::Auth qw(:DEFAULT check_cookie_auth);
+use Koha::Patron::Images;
 
 my $query = new CGI;
 
@@ -38,16 +39,14 @@ my $sessid = $cookies{'CGISESSID'}->value;
 my ($auth_status, $auth_sessid) = check_cookie_auth($sessid, $needed_flags);
 my $borrowernumber = C4::Context->userenv->{'number'};
 
-my ($imagedata, $dberror) = GetPatronImage($borrowernumber);
+my $patron_image = Koha::Patron::Images->find($borrowernumber);
 
-if ($dberror) {
-    print $query->header(status => '500 internal error');
-}
-
-if ($imagedata) {
-    print $query->header(-type => $imagedata->{'mimetype'},
-                         -Content_Length => length ($imagedata->{'imagefile'})),
-          $imagedata->{'imagefile'};
+if ($patron_image) {
+    print $query->header(
+        -type           => $patron_image->mimetype,
+        -Content_Length => length( $patron_image->imagefile )
+      ),
+      $patron_image->imagefile;
 } else {
     print $query->header(status => '404 patron image not found');
 }
