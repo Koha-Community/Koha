@@ -75,7 +75,6 @@ BEGIN {
         &GetTitles
 
         &GetPatronImage
-        &PutPatronImage
         &RmPatronImage
 
         &GetHideLostItemsPreference
@@ -1848,26 +1847,6 @@ sub GetPatronImage {
     my $imagedata = $sth->fetchrow_hashref;
     warn "Database error!" if $sth->errstr;
     return $imagedata, $sth->errstr;
-}
-
-=head2 PutPatronImage
-
-    PutPatronImage($cardnumber, $mimetype, $imgfile);
-
-Stores patron binary image data and mimetype in database.
-NOTE: This function is good for updating images as well as inserting new images in the database.
-
-=cut
-
-sub PutPatronImage {
-    my ($cardnumber, $mimetype, $imgfile) = @_;
-    warn "Parameters passed in: Cardnumber=$cardnumber, Mimetype=$mimetype, " . ($imgfile ? "Imagefile" : "No Imagefile") if $debug;
-    my $dbh = C4::Context->dbh;
-    my $query = "INSERT INTO patronimage (borrowernumber, mimetype, imagefile) VALUES ( ( SELECT borrowernumber from borrowers WHERE cardnumber = ? ),?,?) ON DUPLICATE KEY UPDATE imagefile = ?;";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($cardnumber,$mimetype,$imgfile,$imgfile);
-    warn "Error returned inserting $cardnumber.$mimetype." if $sth->errstr;
-    return $sth->errstr;
 }
 
 =head2 RmPatronImage

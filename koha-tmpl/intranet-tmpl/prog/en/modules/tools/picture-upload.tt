@@ -79,6 +79,7 @@
                                         [% ELSIF ( filerror.OPNERR ) %]<b>ERROR:</b> Image not imported because Koha was unable to open the image for reading.
                                         [% ELSIF ( filerror.OVRSIZ ) %]<b>ERROR:</b> Image not imported because the image file is too big (see online help for maximum size).
                                         [% ELSIF ( filerror.CRDFIL ) %]<b>ERROR:</b> Image not imported ([% filerror.CRDFIL %] missing).
+                                        [% ELSIF ( filerror.CARDNUMBER_DOES_NOT_EXIST ) %]<b>ERROR:</b> Image not imported because this patron does not exist in the database.
                                         [% ELSE %]<b>ERROR:</b> Image not imported because of an unknown error. Please refer to the error log for more details.
                                         [% END %]
                                     [% END %]

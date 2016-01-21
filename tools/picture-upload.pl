@@ -313,31 +313,47 @@ sub handle_file {
                 $debug and warn "Image is of mimetype $mimetype";
                 my $dberror;
                 if ($mimetype) {
-                    $dberror =
-                      PutPatronImage( $cardnumber, $mimetype, $imgfile );
+                    my $patron = Koha::Patrons->find({ cardnumber => $cardnumber });
+                    if ( $patron ) {
+                        my $image = $patron->image;
+                        $image ||= Koha::Patron::Image->new({ borrowernumber => $patron->borrowernumber });
+                        $image->set({
+                            mimetype => $mimetype,
+                            imagefile => $imgfile,
+                        });
+                        eval { $image->store };
+                        if ( $@ ) {
+                            # Errors from here on are fatal only to the import of a particular image
+                            #so don't bail, just note the error and keep going
+                            warn "Database returned error: $@";
+                            $filerrors{'DBERR'} = 1;
+                            push my @filerrors, \%filerrors;
+                            push @{ $count{filenames} },
+                              {
+                                filerrors  => \@filerrors,
+                                source     => $filename,
+                                cardnumber => $cardnumber
+                              };
+                            $template->param( ERRORS => 1 );
+                        } else {
+                            $count{count}++;
+                            push @{ $count{filenames} },
+                              { source => $filename, cardnumber => $cardnumber };
+                        }
+                    } else {
+                        warn "Patron with the cardnumber '$cardnumber' does not exist";
+                        $filerrors{'CARDNUMBER_DOES_NOT_EXIST'} = 1;
+                        push my @filerrors, \%filerrors;
+                        push @{ $count{filenames} },
+                          {
+                            filerrors  => \@filerrors,
+                            source     => $filename,
+                            cardnumber => $cardnumber
+                          };
+                        $template->param( ERRORS => 1 );
+                    }
                 }
-                if ( !$dberror && $mimetype ) {
-                    # Errors from here on are fatal only to the import of a particular image
-                    #so don't bail, just note the error and keep going
-                    $count{count}++;
-                    push @{ $count{filenames} },
-                      { source => $filename, cardnumber => $cardnumber };
-                }
-                elsif ($dberror) {
-                    warn "Database returned error: $dberror";
-                    ( $dberror =~ /patronimage_fk1/ )
-                      ? $filerrors{'IMGEXISTS'} = 1
-                      : $filerrors{'DBERR'} = 1;
-                    push my @filerrors, \%filerrors;
-                    push @{ $count{filenames} },
-                      {
-                        filerrors  => \@filerrors,
-                        source     => $filename,
-                        cardnumber => $cardnumber
-                      };
-                    $template->param( ERRORS => 1 );
-                }
-                elsif ( !$mimetype ) {
+                else {
                     warn "Unable to determine mime type of $filename. Please verify mimetype.";
                     $filerrors{'MIMERR'} = 1;
                     push my @filerrors, \%filerrors;
