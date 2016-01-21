@@ -180,6 +180,13 @@ sub _ci_cardnumber_cmp {
     return ( uc($s1) eq uc($s2) );
 }
 
+# wrapper which allows above to be called for testing
+
+sub test_cardnumber_compare {
+    my ($self, $str1, $str2) = @_;
+    return _ci_cardnumber_cmp($str1, $str2);
+}
+
 sub checkin {
     my ( $self, $item_id, $trans_date, $return_date, $current_loc, $item_props, $cancel, $checked_in_ok ) = @_;
     my ( $patron, $item, $circ );
