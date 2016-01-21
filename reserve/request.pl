@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 
-#writen 2/1/00 by chris@katipo.oc.nz
+#written 2/1/00 by chris@katipo.oc.nz
 # Copyright 2000-2002 Katipo Communications
 # Parts Copyright 2011 Catalyst IT
 #
