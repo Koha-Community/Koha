@@ -56,11 +56,11 @@ if ( $op eq 'add_form' ) {
         my $patron = GetMember( 'borrowernumber' => $shelf->owner );
         $template->param( owner => $patron, );
         unless ( $shelf->can_be_managed( $loggedinuser ) ) {
-            push @messages, { type => 'error', code => 'unauthorized_on_update' };
+            push @messages, { type => 'alert', code => 'unauthorized_on_update' };
             $op = 'list';
         }
     } else {
-        push @messages, { type => 'error', code => 'does_not_exist' };
+        push @messages, { type => 'alert', code => 'does_not_exist' };
     }
 } elsif ( $op eq 'add' ) {
     eval {
@@ -78,9 +78,10 @@ if ( $op eq 'add_form' ) {
         $shelfnumber = $shelf->shelfnumber;
     };
     if ($@) {
-        push @messages, { type => 'error', code => ref($@), msg => $@ };
+        push @messages, { type => 'alert', code => ref($@), msg => $@ };
     } elsif ( not $shelf ) {
-        push @messages, { type => 'error', code => 'error_on_insert' };
+        push @messages, { type => 'alert', code => 'error_on_insert' };
+
     } else {
         push @messages, { type => 'message', code => 'success_on_insert' };
         $op = 'view';
@@ -103,16 +104,16 @@ if ( $op eq 'add_form' ) {
             eval { $shelf->store };
 
             if ($@) {
-                push @messages, { type => 'error', code => 'error_on_update' };
+                push @messages, { type => 'alert', code => 'error_on_update' };
                 $op = 'edit_form';
             } else {
                 push @messages, { type => 'message', code => 'success_on_update' };
             }
         } else {
-            push @messages, { type => 'error', code => 'unauthorized_on_update' };
+            push @messages, { type => 'alert', code => 'unauthorized_on_update' };
         }
     } else {
-        push @messages, { type => 'error', code => 'does_not_exist' };
+        push @messages, { type => 'alert', code => 'does_not_exist' };
     }
 } elsif ( $op eq 'delete' ) {
     $shelfnumber = $query->param('shelfnumber');
@@ -121,15 +122,15 @@ if ( $op eq 'add_form' ) {
         if ( $shelf->can_be_deleted( $loggedinuser ) ) {
             eval { $shelf->delete; };
             if ($@) {
-                push @messages, { type => 'error', code => ref($@), msg => $@ };
+                push @messages, { type => 'alert', code => ref($@), msg => $@ };
             } else {
                 push @messages, { type => 'message', code => 'success_on_delete' };
             }
         } else {
-            push @messages, { type => 'error', code => 'unauthorized_on_delete' };
+            push @messages, { type => 'alert', code => 'unauthorized_on_delete' };
         }
     } else {
-        push @messages, { type => 'error', code => 'does_not_exist' };
+        push @messages, { type => 'alert', code => 'does_not_exist' };
     }
     $op = 'list';
 } elsif ( $op eq 'add_biblio' ) {
@@ -143,21 +144,21 @@ if ( $op eq 'add_form' ) {
                 if ( $shelf->can_biblios_be_added( $loggedinuser ) ) {
                     my $added = eval { $shelf->add_biblio( $biblio->{biblionumber}, $loggedinuser ); };
                     if ($@) {
-                        push @messages, { type => 'error', code => ref($@), msg => $@ };
+                        push @messages, { type => 'alert', code => ref($@), msg => $@ };
                     } elsif ( $added ) {
                         push @messages, { type => 'message', code => 'success_on_add_biblio' };
                     } else {
                         push @messages, { type => 'message', code => 'error_on_add_biblio' };
                     }
                 } else {
-                    push @messages, { type => 'error', code => 'unauthorized_on_add_biblio' };
+                    push @messages, { type => 'alert', code => 'unauthorized_on_add_biblio' };
                 }
             } else {
-                push @messages, { type => 'error', code => 'item_does_not_exist' };
+                push @messages, { type => 'alert', code => 'item_does_not_exist' };
             }
         }
     } else {
-        push @messages, { type => 'error', code => 'does_not_exist' };
+        push @messages, { type => 'alert', code => 'does_not_exist' };
     }
     $op = $referer;
 } elsif ( $op eq 'remove_biblios' ) {
@@ -175,17 +176,17 @@ if ( $op eq 'add_form' ) {
                 );
             };
             if ($@) {
-                push @messages, { type => 'error', code => ref($@), msg => $@ };
+                push @messages, { type => 'alert', code => ref($@), msg => $@ };
             } elsif ( $number_of_biblios_removed ) {
                 push @messages, { type => 'message', code => 'success_on_remove_biblios' };
             } else {
-                push @messages, { type => 'error', code => 'no_biblio_removed' };
+                push @messages, { type => 'alert', code => 'no_biblio_removed' };
             }
         } else {
-            push @messages, { type => 'error', code => 'unauthorized_on_remove_biblios' };
+            push @messages, { type => 'alert', code => 'unauthorized_on_remove_biblios' };
         }
     } else {
-        push @messages, { type => 'error', code => 'does_not_exist' };
+        push @messages, { type => 'alert', code => 'does_not_exist' };
     }
     $op = $referer;
 }
@@ -302,7 +303,7 @@ if ( $op eq 'view' ) {
             undef $shelf;
         }
     } else {
-        push @messages, { type => 'error', code => 'does_not_exist' };
+        push @messages, { type => 'alert', code => 'does_not_exist' };
     }
 }
 
