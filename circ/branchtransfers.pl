@@ -108,8 +108,8 @@ elsif ( $request eq 'KillReserved' ) {
 my @trsfitemloop;
 my $transfered;
 my $barcode = $query->param('barcode');
-# strip whitespace
-defined $barcode and $barcode =~ s/\s*//g;  # FIXME: barcodeInputFilter
+# remove leading/trailing whitespace
+defined $barcode and $barcode =~ s/^\s*|\s*$//g;  # FIXME: barcodeInputFilter
 # warn "barcode : $barcode";
 if ($barcode) {
 
