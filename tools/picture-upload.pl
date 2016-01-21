@@ -160,9 +160,12 @@ elsif ( ( $op eq 'Upload' ) && !$uploadfile ) {
     $template->param( filetype   => $filetype );
 }
 elsif ( $op eq 'Delete' ) {
-    my $dberror = RmPatronImage($borrowernumber);
-    $debug and warn "Patron image deleted for $borrowernumber";
-    warn "Database returned $dberror" if $dberror;
+    my $deleted = eval {
+        Koha::Patron::Images->find( $borrowernumber )->delete;
+    };
+    if ( $@ or not $deleted ) {
+        warn "Image for patron '$borrowernumber' has not been deleted";
+    }
 }
 if ( $borrowernumber && !%errors && !$template->param('ERRORS') ) {
     print $input->redirect(

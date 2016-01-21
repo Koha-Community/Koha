@@ -75,7 +75,6 @@ BEGIN {
         &GetTitles
 
         &GetPatronImage
-        &RmPatronImage
 
         &GetHideLostItemsPreference
 
@@ -1847,26 +1846,6 @@ sub GetPatronImage {
     my $imagedata = $sth->fetchrow_hashref;
     warn "Database error!" if $sth->errstr;
     return $imagedata, $sth->errstr;
-}
-
-=head2 RmPatronImage
-
-    my ($dberror) = RmPatronImage($borrowernumber);
-
-Removes the image for the patron with the supplied borrowernumber.
-
-=cut
-
-sub RmPatronImage {
-    my ($borrowernumber) = @_;
-    warn "Borrowernumber passed to GetPatronImage is $borrowernumber" if $debug;
-    my $dbh = C4::Context->dbh;
-    my $query = "DELETE FROM patronimage WHERE borrowernumber = ?;";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($borrowernumber);
-    my $dberror = $sth->errstr;
-    warn "Database error!" if $sth->errstr;
-    return $dberror;
 }
 
 =head2 GetHideLostItemsPreference
