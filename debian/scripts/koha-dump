@@ -81,16 +81,17 @@ dump_instance()
     metadump="$backupdir/$name-$date.tar.gz"
     [ "$quiet" = "no" ] && echo "* configs, logs to $metadump"
 
-    zebra_files=""
-    if [ "$exclude_indexes" = "no" ]; then
-        zebra_files="var/lib/koha/$name"
+    if [ "$exclude_indexes" = "yes" ]; then
+        excludes="--exclude=var/lib/koha/$name/biblios \
+                  --exclude=var/lib/koha/$name/authorities"
     fi
 
-    tar -C / -czf "$metadump" \
+    tar -czf "$metadump" -C / $excludes \
         "etc/koha/sites/$name" \
         "etc/apache2/sites-available/$instancefile" \
         "etc/apache2/sites-enabled/$instancefile" \
-        "var/log/koha/$name" ${zebra_files:+"$zebra_files"}
+        "var/lib/koha/$name" \
+        "var/log/koha/$name"
 
     [ "$quiet" = "no" ] && echo "Done."
 }
