@@ -31,6 +31,9 @@ use C4::Output;
 use C4::Members;
 use C4::Debug;
 
+use Koha::Patrons;
+use Koha::Patron::Image;
+
 my $input = new CGI;
 
 my ($template, $loggedinuser, $cookie)
