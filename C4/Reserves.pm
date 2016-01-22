@@ -40,6 +40,7 @@ use Koha::DateUtils;
 use Koha::Calendar;
 use Koha::Database;
 use Koha::Hold;
+use Koha::Old::Hold;
 use Koha::Holds;
 use Koha::Libraries;
 use Koha::Items;
@@ -1228,56 +1229,31 @@ whose keys are fields from the reserves table in the Koha database.
 
 sub ModReserveFill {
     my ($res) = @_;
-    my $dbh = C4::Context->dbh;
-    # fill in a reserve record....
     my $reserve_id = $res->{'reserve_id'};
-    my $biblionumber = $res->{'biblionumber'};
-    my $borrowernumber    = $res->{'borrowernumber'};
-    my $resdate = $res->{'reservedate'};
+
+    my $dbh = C4::Context->dbh;
+
+    my $hold = Koha::Holds->find($reserve_id);
 
     # get the priority on this record....
-    my $priority;
-    my $query = "SELECT priority
-                 FROM   reserves
-                 WHERE  biblionumber   = ?
-                  AND   borrowernumber = ?
-                  AND   reservedate    = ?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $biblionumber, $borrowernumber, $resdate );
-    ($priority) = $sth->fetchrow_array;
+    my $priority = $hold->priority;
 
-    # update the database...
-    $query = "UPDATE reserves
-                  SET    found            = 'F',
-                         priority         = 0
-                 WHERE  biblionumber     = ?
-                    AND reservedate      = ?
-                    AND borrowernumber   = ?
-                ";
-    $sth = $dbh->prepare($query);
-    $sth->execute( $biblionumber, $resdate, $borrowernumber );
+    # update the hold statuses, no need to store it though, we will be deleting it anyway
+    $hold->set(
+        {
+            found    => 'F',
+            priority => 0,
+        }
+    );
 
-    # move to old_reserves
-    $query = "INSERT INTO old_reserves
-                 SELECT * FROM reserves
-                 WHERE  biblionumber     = ?
-                    AND reservedate      = ?
-                    AND borrowernumber   = ?
-                ";
-    $sth = $dbh->prepare($query);
-    $sth->execute( $biblionumber, $resdate, $borrowernumber );
-    $query = "DELETE FROM reserves
-                 WHERE  biblionumber     = ?
-                    AND reservedate      = ?
-                    AND borrowernumber   = ?
-                ";
-    $sth = $dbh->prepare($query);
-    $sth->execute( $biblionumber, $resdate, $borrowernumber );
+    my $old_hold = Koha::Old::Hold->new( $hold->unblessed() )->store();
+
+    $hold->delete();
 
     # now fix the priority on the others (if the priority wasn't
     # already sorted!)....
     unless ( $priority == 0 ) {
-        _FixPriority({ reserve_id => $reserve_id, biblionumber => $biblionumber });
+        _FixPriority( { reserve_id => $reserve_id, biblionumber => $hold->biblionumber } );
     }
 }
 
