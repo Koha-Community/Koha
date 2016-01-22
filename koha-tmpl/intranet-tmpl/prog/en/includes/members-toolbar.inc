@@ -157,9 +157,9 @@ function searchToHold(){
             </ul>
     </div>
 
-	[% IF ( CAN_user_reserveforothers ) %]
-	<a id="searchtohold" class="btn btn-small" href="#"><i class="fa fa-search"></i> Search to hold</a>
-	[% END %]
+    [% IF ( CAN_user_reserveforothers ) %]
+        <a id="searchtohold" class="btn btn-small" href="#"><i class="fa fa-search"></i> Search to hold</a>
+    [% END %]
 
          <div class="btn-group">
         <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></button>
