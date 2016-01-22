@@ -164,7 +164,7 @@ sub SendPasswordRecoveryEmail {
 
 =head2 CompletePasswordRecovery
 
-    $bool = CompletePasswordRevovery($uuid);
+    $bool = CompletePasswordRecovery($uuid);
 
     Deletes a password recovery entry.
 

@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-use strict;
 use Modern::Perl;
 use CGI;
 

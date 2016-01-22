@@ -365,8 +365,9 @@ CREATE TABLE IF NOT EXISTS `borrower_password_recovery` ( -- holds information a
   `borrowernumber` int(11) NOT NULL, -- the user asking a password recovery
   `uuid` varchar(128) NOT NULL, -- a unique string to identify a password recovery attempt
   `valid_until` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, -- a time limit on the password recovery attempt
+  PRIMARY KEY (`borrowernumber`),
   KEY borrowernumber (borrowernumber)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table borrower_sync
