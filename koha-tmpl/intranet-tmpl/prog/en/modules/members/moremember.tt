@@ -231,14 +231,20 @@ function validate1(date) {
     [% IF ( sex ) %]<li><span class="label">Gender:</span>
     [% IF ( sex == 'F' ) %]Female[% ELSIF ( sex == 'M' ) %]Male[% ELSE %][% sex %][% END %]
     </li>[% END %][% END %]
-    [% IF ( isguarantee ) %]
-        [% IF ( guaranteeloop ) %]
-            <li><span class="label">Guarantees:</span><ul>[% FOREACH guaranteeloo IN guaranteeloop %]<li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guaranteeloo.borrowernumber %]">[% guaranteeloo.name %]  </a></li>[% END %]</ul></li>
-        [% END %]
-    [% ELSE %]
-        [% IF ( guarantorborrowernumber ) %]
-            <li><span class="label">Guarantor:</span><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantorborrowernumber %]">[% guarantorsurname %][%IF ( guarantorfirstname ) %], [% guarantorfirstname %] [% END %]</a></li>
-        [% END %]
+    [% IF guarantees %]
+        <li>
+            <span class="label">Guarantees:</span>
+            <ul>
+                [% FOREACH guarantee IN guarantees %]
+                    <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantee.borrowernumber %]">[% guarantee.firstname %] [% guarantee.surname %]</a></li>
+                [% END %]
+            </ul>
+        </li>
+    [% ELSIF guarantor %]
+        <li>
+            <span class="label">Guarantor:</span>
+            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber %]">[% guarantor.firstname %] [% guarantor.surname %]</a>
+        </li>
     [% END %]
 </ol>
 </div>

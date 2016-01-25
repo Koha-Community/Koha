@@ -61,8 +61,6 @@ BEGIN {
         &GetMemberRelatives
         &GetMember
 
-        &GetGuarantees
-
         &GetMemberIssuesAndFines
         &GetPendingIssues
         &GetAllIssues
@@ -929,37 +927,6 @@ sub fixup_cardnumber {
         return $result + 1;
     }
     return $cardnumber;     # just here as a fallback/reminder 
-}
-
-=head2 GetGuarantees
-
-  ($num_children, $children_arrayref) = &GetGuarantees($parent_borrno);
-  $child0_cardno = $children_arrayref->[0]{"cardnumber"};
-  $child0_borrno = $children_arrayref->[0]{"borrowernumber"};
-
-C<&GetGuarantees> takes a borrower number (e.g., that of a patron
-with children) and looks up the borrowers who are guaranteed by that
-borrower (i.e., the patron's children).
-
-C<&GetGuarantees> returns two values: an integer giving the number of
-borrowers guaranteed by C<$parent_borrno>, and a reference to an array
-of references to hash, which gives the actual results.
-
-=cut
-
-#'
-sub GetGuarantees {
-    my ($borrowernumber) = @_;
-    my $dbh              = C4::Context->dbh;
-    my $sth              =
-      $dbh->prepare(
-"select cardnumber,borrowernumber, firstname, surname from borrowers where guarantorid=?"
-      );
-    $sth->execute($borrowernumber);
-
-    my @dat;
-    my $data = $sth->fetchall_arrayref({}); 
-    return ( scalar(@$data), $data );
 }
 
 =head2 GetPendingIssues

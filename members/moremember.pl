@@ -163,38 +163,13 @@ if ( $category_type eq 'C') {
    $template->param( 'catcode' =>    $catcodes->[0])  if $cnt == 1;
 }
 
-my ( $count, $guarantees ) = GetGuarantees( $data->{'borrowernumber'} );
-if ( $count ) {
-    $template->param( isguarantee => 1 );
-
-    # FIXME
-    # It looks like the $i is only being returned to handle walking through
-    # the array, which is probably better done as a foreach loop.
-    #
-    my @guaranteedata;
-    for ( my $i = 0 ; $i < $count ; $i++ ) {
-        push(@guaranteedata,
-            {
-                borrowernumber => $guarantees->[$i]->{'borrowernumber'},
-                cardnumber     => $guarantees->[$i]->{'cardnumber'},
-                name           => $guarantees->[$i]->{'firstname'} . " "
-                                . $guarantees->[$i]->{'surname'}
-            }
-        );
-    }
-    $template->param( guaranteeloop => \@guaranteedata );
+my $patron = Koha::Patrons->find($data->{borrowernumber});
+my @guarantees = $patron->guarantees;
+if ( @guarantees ) {
+    $template->param( guarantees => \@guarantees );
 }
-else {
-    if ($data->{'guarantorid'}){
-	    my ($guarantor) = GetMember( 'borrowernumber' =>$data->{'guarantorid'});
-		$template->param(guarantor => 1);
-		foreach (qw(borrowernumber cardnumber firstname surname)) {        
-			  $template->param("guarantor$_" => $guarantor->{$_});
-        }
-    }
-	if ($category_type eq 'C'){
-		$template->param('C' => 1);
-	}
+elsif ( $patron->guarantorid ) {
+    $template->param( guarantor => $patron->guarantor );
 }
 
 $template->param( adultborrower => 1 ) if ( $category_type eq 'A' || $category_type eq 'I' );

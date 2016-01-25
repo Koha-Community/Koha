@@ -54,6 +54,18 @@ sub image {
     return Koha::Patron::Images->find( $self->borrowernumber )
 }
 
+=head3 guarantees
+
+Returns the guarantees (list of Koha::Patron) of this patron
+
+=cut
+
+sub guarantees {
+    my ( $self ) = @_;
+
+    return Koha::Patrons->search({ guarantorid => $self->borrowernumber });
+}
+
 =head3 type
 
 =cut
