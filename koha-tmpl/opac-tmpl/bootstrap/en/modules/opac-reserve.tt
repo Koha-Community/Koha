@@ -626,7 +626,7 @@
             [% IF ( bibitemloo.holdable ) %]
                 // http://jqueryui.com/demos/datepicker/#date-range
                 var dates[% bibitemloo.biblionumber %] = $( "#from[% bibitemloo.biblionumber %], #to[% bibitemloo.biblionumber %]" ).datepicker({
-                    minDate: 1,
+                    minDate: 0,
                     changeMonth: true,
                     numberOfMonths: 1,
                     onSelect: function( selectedDate ) {
