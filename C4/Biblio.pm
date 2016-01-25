@@ -2515,10 +2515,11 @@ sub TransformHtmlToMarc {
 
     # creating a new record
     my $record = MARC::Record->new();
+    my $i      = 0;
     my @fields;
     my ( $biblionumbertagfield, $biblionumbertagsubfield ) = &GetMarcFromKohaField( "biblio.biblionumber", '' );
 #FIXME This code assumes that the CGI params will be in the same order as the fields in the template; this is no absolute guarantee!
-    for (my $i = 0; $params[$i]; $i++ ) {    # browse all CGI params
+    while ( $params[$i] ) {    # browse all CGI params
         my $param    = $params[$i];
         my $newfield = 0;
 
@@ -2578,6 +2579,7 @@ sub TransformHtmlToMarc {
             }
             push @fields, $newfield if ($newfield);
         }
+        $i++;
     }
 
     $record->append_fields(@fields);
