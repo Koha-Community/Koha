@@ -97,7 +97,7 @@
                                         <option value="">All</option>
                                     [% END %]
 
-                                    [% FOREACH actx IN [ 'ADD' 'DELETE' 'MODIFY' 'ISSUE' 'RETURN' 'CREATE' ] %]
+                                    [% FOREACH actx IN [ 'ADD' 'DELETE' 'MODIFY' 'ISSUE' 'RETURN' 'RENEW' 'CREATE' 'ADDCIRCMESSAGE' 'DELCIRCMESSAGE' 'CHANGE PASS' 'Run' ] %]
                                         [% IF actions.grep(actx).size %]
                                             <option value="[% actx %]" selected="selected">[% PROCESS translate_log_action action=actx %]</option>
                                         [% ELSE %]
