@@ -2496,7 +2496,7 @@ sub _default_ind_to_space {
 =cut
 
 sub TransformHtmlToMarc {
-    my ($cgi, $isbiblio) = @_;
+    my $cgi    = shift;
 
     my @params = $cgi->param();
 
@@ -2516,9 +2516,7 @@ sub TransformHtmlToMarc {
     # creating a new record
     my $record = MARC::Record->new();
     my @fields;
-    my ($biblionumbertagfield, $biblionumbertagsubfield) = (-1, -1);
-    ($biblionumbertagfield, $biblionumbertagsubfield) =
-        &GetMarcFromKohaField( "biblio.biblionumber", '' ) if $isbiblio;
+    my ( $biblionumbertagfield, $biblionumbertagsubfield ) = &GetMarcFromKohaField( "biblio.biblionumber", '' );
 #FIXME This code assumes that the CGI params will be in the same order as the fields in the template; this is no absolute guarantee!
     for (my $i = 0; $params[$i]; $i++ ) {    # browse all CGI params
         my $param    = $params[$i];
@@ -2542,10 +2540,8 @@ sub TransformHtmlToMarc {
 
             if ( $tag < 10 ) {                              # no code for theses fields
                                                             # in MARC editor, 000 contains the leader.
-                if ( $tag == $biblionumbertagfield ) {
-                    # We do nothing and let $i be incremented
-                }
-                elsif ( $tag eq '000' ) {
+                next if $tag == $biblionumbertagfield;
+                if ( $tag eq '000' ) {
                     # Force a fake leader even if not provided to avoid crashing
                     # during decoding MARC record containing UTF-8 characters
                     $record->leader(
@@ -2564,9 +2560,7 @@ sub TransformHtmlToMarc {
                 # browse subfields for this tag (reason for _code_ match)
                 while(defined $params[$j] && $params[$j] =~ /_code_/) {
                     last unless defined $params[$j+1];
-                    $j += 2 and next
-                        if $tag == $biblionumbertagfield and
-                           $cgi->param($params[$j]) eq $biblionumbertagsubfield;
+                    $j += 2 and next if $tag == $biblionumbertagfield and $cgi->param($params[$j]) eq $biblionumbertagsubfield;
                     #if next param ne subfield, then it was probably empty
                     #try next param by incrementing j
                     if($params[$j+1]!~/_subfield_/) {$j++; next; }
