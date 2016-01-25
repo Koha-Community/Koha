@@ -198,7 +198,7 @@ sub getLanguages {
     if ($lang) {
         $current_language = regex_lang_subtags($lang)->{'language'};
     }
-    my $sth = $dbh->prepare('SELECT * FROM language_subtag_registry WHERE type=\'language\'');
+    my $sth = $dbh->prepare('SELECT * FROM language_subtag_registry WHERE type=\'language\' ORDER BY description');
     $sth->execute();
     while (my $language_subtag_registry = $sth->fetchrow_hashref) {
         my $desc;
