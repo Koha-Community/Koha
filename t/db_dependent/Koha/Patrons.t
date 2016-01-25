@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use Koha::Patron;
 use Koha::Patrons;
@@ -77,6 +77,26 @@ subtest 'guarantees' => sub {
     $_->delete for @guarantees;
 };
 
+subtest 'siblings' => sub {
+    plan tests => 7;
+    my $siblings = $new_patron_1->siblings;
+    is( ref($siblings), 'Koha::Patrons', 'Koha::Patron->siblings should not crashed if the patron has not guarantor' );
+    my $guarantee_1 = $builder->build( { source => 'Borrower', value => { guarantorid => $new_patron_1->borrowernumber } } );
+    my $retrieved_guarantee_1 = Koha::Patrons->find($guarantee_1);
+    $siblings = $retrieved_guarantee_1->siblings;
+    is( ref($siblings), 'Koha::Patrons', 'Koha::Patron->siblings should return a Koha::Patrons result set in a scalar context' );
+    my @siblings = $retrieved_guarantee_1->siblings;
+    is( ref( \@siblings ), 'ARRAY', 'Koha::Patron->siblings should return an array in a list context' );
+    is( $siblings->count,  0,       'guarantee_1 should not have siblings yet' );
+    my $guarantee_2 = $builder->build( { source => 'Borrower', value => { guarantorid => $new_patron_1->borrowernumber } } );
+    my $guarantee_3 = $builder->build( { source => 'Borrower', value => { guarantorid => $new_patron_1->borrowernumber } } );
+    $siblings = $retrieved_guarantee_1->siblings;
+    is( $siblings->count,               2,                               'guarantee_1 should have 2 siblings' );
+    is( $guarantee_2->{borrowernumber}, $siblings->next->borrowernumber, 'guarantee_2 should exist in the guarantees' );
+    is( $guarantee_3->{borrowernumber}, $siblings->next->borrowernumber, 'guarantee_3 should exist in the guarantees' );
+    $_->delete for $retrieved_guarantee_1->siblings;
+    $retrieved_guarantee_1->delete;
+};
 
 $retrieved_patron_1->delete;
 is( Koha::Patrons->search->count, $nb_of_patrons + 1, 'Delete should have deleted the patron' );

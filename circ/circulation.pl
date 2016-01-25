@@ -43,6 +43,7 @@ use Koha::Holds;
 use C4::Context;
 use CGI::Session;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
+use Koha::Patron;
 use Koha::Patron::Debarments qw(GetDebarments IsDebarred);
 use Koha::DateUtils;
 use Koha::Database;
@@ -582,7 +583,14 @@ my $view = $batch
     ?'batch_checkout_view'
     : 'circview';
 
-my @relatives = GetMemberRelatives( $borrower->{'borrowernumber'} );
+my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
+my @relatives;
+if ( my $guarantor = $patron->guarantor ) {
+    push @relatives, $guarantor->borrowernumber;
+    push @relatives, $_->borrowernumber for $patron->siblings;
+} else {
+    push @relatives, $_->borrowernumber for $patron->guarantees;
+}
 my $relatives_issues_count =
   Koha::Database->new()->schema()->resultset('Issue')
   ->count( { borrowernumber => \@relatives } );

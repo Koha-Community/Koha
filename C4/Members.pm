@@ -444,48 +444,6 @@ sub GetMember {
     return;
 }
 
-=head2 GetMemberRelatives
-
- @borrowernumbers = GetMemberRelatives($borrowernumber);
-
- C<GetMemberRelatives> returns a borrowersnumber's list of guarantor/guarantees of the member given in parameter
-
-=cut
-
-sub GetMemberRelatives {
-    my $borrowernumber = shift;
-    my $dbh = C4::Context->dbh;
-    my @glist;
-
-    # Getting guarantor
-    my $query = "SELECT guarantorid FROM borrowers WHERE borrowernumber=?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($borrowernumber);
-    my $data = $sth->fetchrow_arrayref();
-    push @glist, $data->[0] if $data->[0];
-    my $guarantor = $data->[0] ? $data->[0] : undef;
-
-    # Getting guarantees
-    $query = "SELECT borrowernumber FROM borrowers WHERE guarantorid=?";
-    $sth = $dbh->prepare($query);
-    $sth->execute($borrowernumber);
-    while ($data = $sth->fetchrow_arrayref()) {
-       push @glist, $data->[0];
-    }
-
-    # Getting sibling guarantees
-    if ($guarantor) {
-        $query = "SELECT borrowernumber FROM borrowers WHERE guarantorid=?";
-        $sth = $dbh->prepare($query);
-        $sth->execute($guarantor);
-        while ($data = $sth->fetchrow_arrayref()) {
-           push @glist, $data->[0] if ($data->[0] != $borrowernumber);
-        }
-    }
-
-    return @glist;
-}
-
 =head2 IsMemberBlocked
 
   my ($block_status, $count) = IsMemberBlocked( $borrowernumber );

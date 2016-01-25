@@ -164,13 +164,20 @@ if ( $category_type eq 'C') {
 }
 
 my $patron = Koha::Patrons->find($data->{borrowernumber});
-my @guarantees = $patron->guarantees;
-if ( @guarantees ) {
+my @relatives;
+if ( my $guarantor = $patron->guarantor ) {
+    $template->param( guarantor => $guarantor );
+    push @relatives, $guarantor->borrowernumber;
+    push @relatives, $_->borrowernumber for $patron->siblings;
+} else {
+    my @guarantees = $patron->guarantees;
     $template->param( guarantees => \@guarantees );
+    push @relatives, $_->borrowernumber for @guarantees;
 }
-elsif ( $patron->guarantorid ) {
-    $template->param( guarantor => $patron->guarantor );
-}
+
+my $relatives_issues_count =
+  Koha::Database->new()->schema()->resultset('Issue')
+  ->count( { borrowernumber => \@relatives } );
 
 $template->param( adultborrower => 1 ) if ( $category_type eq 'A' || $category_type eq 'I' );
 
@@ -218,11 +225,6 @@ if ( C4::Context->preference('OPACPrivacy') ) {
     $template->param( OPACPrivacy => 1);
     $template->param( "privacy".$data->{'privacy'} => 1);
 }
-
-my @relatives = GetMemberRelatives($borrowernumber);
-my $relatives_issues_count =
-  Koha::Database->new()->schema()->resultset('Issue')
-  ->count( { borrowernumber => \@relatives } );
 
 my $today       = DateTime->now( time_zone => C4::Context->tz);
 $today->truncate(to => 'day');

@@ -66,6 +66,31 @@ sub guarantees {
     return Koha::Patrons->search({ guarantorid => $self->borrowernumber });
 }
 
+=head3 siblings
+
+Returns the siblings of this patron.
+
+=cut
+
+sub siblings {
+    my ( $self ) = @_;
+
+    my $guarantor = $self->guarantor;
+    my $guarantorid = $guarantor ? $guarantor->borrowernumber : undef;
+
+    return Koha::Patrons->search(
+        {
+            guarantorid => {
+                '!=' => undef,
+                '=' => $guarantorid,
+            },
+            borrowernumber => {
+                '!=' => $self->borrowernumber,
+            }
+        }
+    );
+}
+
 =head3 type
 
 =cut
