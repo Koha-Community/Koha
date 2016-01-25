@@ -654,16 +654,6 @@ sub ModMember {
 
     my $execute_success = $rs->update($new_borrower);
     if ($execute_success ne '0E0') { # only proceed if the update was a success
-
-        # ok if its an adult (type) it may have borrowers that depend on it as a guarantor
-        # so when we update information for an adult we should check for guarantees and update the relevant part
-        # of their records, ie addresses and phone numbers
-        my $borrowercategory= GetBorrowercategory( $data{'category_type'} );
-        if ( exists  $borrowercategory->{'category_type'} && $borrowercategory->{'category_type'} eq ('A' || 'S') ) {
-            # is adult check guarantees;
-            UpdateGuarantees(%data);
-        }
-
         # If the patron changes to a category with enrollment fee, we add a fee
         if ( $data{categorycode} and $data{categorycode} ne $old_categorycode ) {
             if ( C4::Context->preference('FeeOnChangePatronCategory') ) {
@@ -970,31 +960,6 @@ sub GetGuarantees {
     my @dat;
     my $data = $sth->fetchall_arrayref({}); 
     return ( scalar(@$data), $data );
-}
-
-=head2 UpdateGuarantees
-
-  &UpdateGuarantees($parent_borrno);
-  
-
-C<&UpdateGuarantees> borrower data for an adult and updates all the guarantees
-with the modified information
-
-=cut
-
-#'
-sub UpdateGuarantees {
-    my %data = shift;
-    my $dbh = C4::Context->dbh;
-    my ( $count, $guarantees ) = GetGuarantees( $data{'borrowernumber'} );
-    foreach my $guarantee (@$guarantees){
-        my $guaquery = qq|UPDATE borrowers 
-              SET address=?,fax=?,B_city=?,mobile=?,city=?,phone=?
-              WHERE borrowernumber=?
-        |;
-        my $sth = $dbh->prepare($guaquery);
-        $sth->execute($data{'address'},$data{'fax'},$data{'B_city'},$data{'mobile'},$data{'city'},$data{'phone'},$guarantee->{'borrowernumber'});
-    }
 }
 
 =head2 GetPendingIssues
