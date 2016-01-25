@@ -17,7 +17,7 @@ var globalnumpatterndata;
 var globalfreqdata;
 var advancedpatternlocked;
 var patternneedtobetested = 0;
-[% IF ( irregularity ) %]patternneedtobetested=1[% END %]
+[% IF ( irregularity ) %]patternneedtobetested = 1;[% END %]
 
 function check_issues(){
     if (globalfreqdata.unit.length >0) {
