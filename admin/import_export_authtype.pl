@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2010-2011 MASmedios.com y Ministerio de Cultura
+# Copyright 2016 Aleisha Amohia <aleisha@catalyst.net.nz>
 #
 # This file is part of Koha.
 #
@@ -18,45 +18,46 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 
-use Modern::Perl;
+use strict;
+use warnings;
 use CGI qw ( -utf8 );
 use CGI::Cookie;
 use C4::Context;
-use C4::Auth qw( check_cookie_auth );
-use C4::ImportExportFramework qw( createODS ExportFramework ImportFramework );
+use C4::Auth qw/check_cookie_auth/;
+use C4::ImportExportFramework;
 
 my %cookies = CGI::Cookie->fetch();
 my $authenticated = 0;
-my ($auth_status);
+my ($auth_status, $sessionID);
 if (exists $cookies{'CGISESSID'}) {
-    ($auth_status, undef) = check_cookie_auth(
+    ($auth_status, $sessionID) = check_cookie_auth(
         $cookies{'CGISESSID'}->value,
-        { parameters => 'manage_marc_frameworks' },
+        { parameters => 'parameters_remaining_permissions' },
     );
 }
 if ($auth_status eq 'ok') {
     $authenticated = 1;
 }
 
-my $input = CGI->new;
+my $input = new CGI;
 
 unless ($authenticated) {
     print $input->header(-type => 'text/plain', -status => '403 Forbidden');
     exit 0;
 }
 
-my $framework_name = $input->param('frameworkcode') || 'default';
-my $frameworkcode = ($framework_name eq 'default') ? q{} : $framework_name;
+my $authtypecode = $input->param('authtypecode') || 'default';
 my $action = $input->param('action') || 'export';
 
 ## Exporting
 if ($action eq 'export' && $input->request_method() eq 'GET') {
     my $strXml = '';
-    my $format = $input->param('type_export_' . $frameworkcode);
-    if ($frameworkcode eq 'default') {
-        ExportFramework('', \$strXml, $format, 'biblio');
+    my $format = $input->param('type_export_' . $authtypecode);
+    if ($authtypecode eq 'default') {
+        $format = $input->param('type_export_');
+        ExportFramework('', \$strXml, $format, 'authority');
     } else {
-        ExportFramework($frameworkcode, \$strXml, $format, 'biblio');
+        ExportFramework($authtypecode, \$strXml, $format, 'authority');
     }
 
     if ($format eq 'csv') {
@@ -64,34 +65,38 @@ if ($action eq 'export' && $input->request_method() eq 'GET') {
 
         # Correctly set the encoding to output plain text in UTF-8
         binmode(STDOUT,':encoding(UTF-8)');
-        print $input->header(-type => 'application/vnd.ms-excel', -attachment => 'export_' . $framework_name . '.csv');
+        print $input->header(-type => 'application/vnd.ms-excel', -attachment => 'export_' . $authtypecode . '.csv');
+        print $strXml;
+    } elsif ($format eq 'excel') {
+        # Excel-xml file
+        print $input->header(-type => 'application/excel', -attachment => 'export_' . $authtypecode . '.xml');
         print $strXml;
     } else {
         # ODS file
         my $strODS = '';
         createODS($strXml, 'en', \$strODS);
-        print $input->header(-type => 'application/vnd.oasis.opendocument.spreadsheet', -attachment => 'export_' . $framework_name . '.ods');
+        print $input->header(-type => 'application/vnd.oasis.opendocument.spreadsheet', -attachment => 'export_' . $authtypecode . '.ods');
         print $strODS;
     }
 ## Importing
 } elsif ($input->request_method() eq 'POST') {
     my $ok = -1;
-    my $fieldname = 'file_import_' . $framework_name;
+    my $fieldname = 'file_import_' . $authtypecode;
     my $filename = $input->param($fieldname);
     # upload the input file
-    if ($filename && $filename =~ /\.(csv|ods)$/i) {
+    if ($filename && $filename =~ /\.(csv|ods|xml)$/i) {
         my $extension = $1;
         my $uploadFd = $input->upload($fieldname);
         if ($uploadFd && !$input->cgi_error) {
-            my $tmpfilename = $input->tmpFileName(scalar $input->param($fieldname));
+            my $tmpfilename = $input->tmpFileName($input->param($fieldname));
             $filename = $tmpfilename . '.' . $extension; # rename the tmp file with the extension
-            $ok = ImportFramework($filename, $frameworkcode, 1, 'biblio') if (rename($tmpfilename, $filename));
+            $ok = ImportFramework($filename, $authtypecode, 1, 'authority') if (rename($tmpfilename, $filename));
         }
     }
-    if ($ok >= 0) { # If everything went ok go to the framework marc structure
-        print $input->redirect( -location => '/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=' . $frameworkcode);
+    if ($ok >= 0) { # If everything went ok go to the authority type marc structure
+        print $input->redirect( -location => '/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=' . $authtypecode);
     } else {
-        # If something failed go to the list of frameworks and show message
-        print $input->redirect( -location => '/cgi-bin/koha/admin/biblio_framework.pl?error_import_export=' . $frameworkcode);
+        # If something failed go to the list of authority types and show message
+        print $input->redirect( -location => '/cgi-bin/koha/admin/authtypes.pl?error_import_export=' . $authtypecode);
     }
 }

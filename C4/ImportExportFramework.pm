@@ -193,7 +193,7 @@ Functions for handling import/export.
 
 =head2 ExportFramework
 
-Export all the information of a Framework to an excel "xml" file or OpenDocument SpreadSheet "ods" file.
+Export all the information of a MARC or Authority Type Framework to an excel "xml" file, comma separated values "csv" file or OpenDocument SpreadSheet "ods" file.
 
 return :
 succes
@@ -202,7 +202,7 @@ succes
 
 sub ExportFramework
 {
-    my ($frameworkcode, $xmlStrRef, $mode) = @_;
+    my ($frameworkcode, $xmlStrRef, $mode, $frameworktype) = @_;
 
     my $dbh = C4::Context->dbh;
     if ($dbh) {
@@ -229,8 +229,15 @@ sub ExportFramework
             }
         }
 
-        if (_export_table('marc_tag_structure', $dbh, ($mode eq 'csv')?$xmlStrRef:$dom, ($mode eq 'ods')?$elementSS:$root, $frameworkcode, $mode)) {
-            if (_export_table('marc_subfield_structure', $dbh, ($mode eq 'csv')?$xmlStrRef:$dom, ($mode eq 'ods')?$elementSS:$root, $frameworkcode, $mode)) {
+        my $table = 'marc_tag_structure';
+        my $subtable = 'marc_subfield_structure';
+        if ($frameworktype eq "authority") {
+            $table = 'auth_tag_structure';
+            $subtable = 'auth_subfield_structure';
+        }
+
+        if (_export_table($table, $dbh, ($mode eq 'csv')?$xmlStrRef:$dom, ($mode eq 'ods')?$elementSS:$root, $frameworkcode, $mode, $frameworktype)) {
+            if (_export_table($subtable, $dbh, ($mode eq 'csv')?$xmlStrRef:$dom, ($mode eq 'ods')?$elementSS:$root, $frameworkcode, $mode, $frameworktype)) {
                 $$xmlStrRef = $dom->toString(1) if ($mode eq 'ods' || $mode eq 'excel');
                 return 1;
             }
@@ -245,20 +252,20 @@ sub ExportFramework
 # Export all the data from a mysql table to an spreadsheet.
 sub _export_table
 {
-    my ($table, $dbh, $dom, $root, $frameworkcode, $mode) = @_;
+    my ($table, $dbh, $dom, $root, $frameworkcode, $mode, $frameworktype) = @_;
     if ($mode eq 'csv') {
-        _export_table_csv($table, $dbh, $dom, $root, $frameworkcode);
+        _export_table_csv($table, $dbh, $dom, $root, $frameworkcode, $frameworktype);
     } elsif ($mode eq 'ods') {
-        _export_table_ods($table, $dbh, $dom, $root, $frameworkcode);
+        _export_table_ods($table, $dbh, $dom, $root, $frameworkcode, $frameworktype);
     } else {
-        _export_table_excel($table, $dbh, $dom, $root, $frameworkcode);
+        _export_table_excel($table, $dbh, $dom, $root, $frameworkcode, $frameworktype);
     }
 }
 
 # Export the mysql table to an csv file
 sub _export_table_csv
 {
-    my ($table, $dbh, $strCSV, $root, $frameworkcode) = @_;
+    my ($table, $dbh, $strCSV, $root, $frameworkcode, $frameworktype) = @_;
 
     eval {
         # First row with the name of the columns
@@ -274,6 +281,9 @@ sub _export_table_csv
         $$strCSV .= chr(10);
         # Populate rows with the data from mysql
         $query = 'SELECT * FROM ' . $table . ' WHERE frameworkcode=?';
+        if ($frameworktype eq "authority") {
+            $query = 'SELECT * FROM ' . $table . ' WHERE authtypecode=?';
+        }
         $sth = $dbh->prepare($query);
         $sth->execute($frameworkcode);
         my $data;
@@ -306,7 +316,7 @@ sub _export_table_csv
 # Export the mysql table to an ods file
 sub _export_table_ods
 {
-    my ($table, $dbh, $dom, $root, $frameworkcode) = @_;
+    my ($table, $dbh, $dom, $root, $frameworkcode, $frameworktype) = @_;
 
     eval {
         my $elementTable = $dom->createElement('table:table');
@@ -335,6 +345,9 @@ sub _export_table_ods
         }
         # Populate rows with the data from mysql
         $query = 'SELECT * FROM ' . $table . ' WHERE frameworkcode=?';
+        if ($frameworktype eq "authority") {
+            $query = 'SELECT * FROM ' . $table . ' WHERE authtypecode=?';
+        }
         $sth = $dbh->prepare($query);
         $sth->execute($frameworkcode);
         my $data;
@@ -372,7 +385,7 @@ sub _export_table_ods
 # Export the mysql table to an excel-xml (openoffice/libreoffice compatible) file
 sub _export_table_excel
 {
-    my ($table, $dbh, $dom, $root, $frameworkcode) = @_;
+    my ($table, $dbh, $dom, $root, $frameworkcode, $frameworktype) = @_;
 
     eval {
         my $elementWS = $dom->createElement('Worksheet');
@@ -402,6 +415,9 @@ sub _export_table_excel
         }
         # Populate rows with the data from mysql
         $query = 'SELECT * FROM ' . $table . ' WHERE frameworkcode=?';
+        if ($frameworktype eq "authority") {
+            $query = 'SELECT * FROM ' . $table . ' WHERE authtypecode=?';
+        }
         $sth = $dbh->prepare($query);
         $sth->execute($frameworkcode);
         my $data;
@@ -432,12 +448,6 @@ sub _export_table_excel
     }
     return 1;
 }#_export_table_excel
-
-
-
-
-
-
 
 # Format chars problematics to a correct format for xml.
 sub _parseContent2Xml
@@ -623,7 +633,7 @@ sub _getMeta
 
 =head2 ImportFramework
 
-Import all the information of a Framework from a excel-xml/ods file.
+Import all the information of a MARC or Authority Type Framework from a excel-xml/ods file.
 
 return :
 success
@@ -632,7 +642,7 @@ success
 
 sub ImportFramework
 {
-    my ($filename, $frameworkcode, $deleteFilename) = @_;
+    my ($filename, $frameworkcode, $deleteFilename, $frameworktype) = @_;
 
     my $tempdir;
     my $ok = -1;
@@ -662,13 +672,21 @@ sub ImportFramework
                     # They are text files, so open it to read
                     open($dom, '<', $filename);
                 }
+
+                my $table = 'marc_tag_structure';
+                my $subtable = 'marc_subfield_structure';
+                if ($frameworktype eq "authority") {
+                    $table = 'auth_tag_structure';
+                    $subtable = 'auth_subfield_structure';
+                }
+
                 if ($dom) {
                     # Process both tables
                     my $numDeleted = 0;
                     my $numDeletedAux = 0;
-                    if (($numDeletedAux = _import_table($dbh, 'marc_tag_structure', $frameworkcode, $dom, ['frameworkcode', 'tagfield'], $extension)) >= 0) {
+                    if (($numDeletedAux = _import_table($dbh, $table, $frameworkcode, $dom, ['frameworkcode', 'tagfield'], $extension, $frameworktype)) >= 0) {
                         $numDeleted += $numDeletedAux if ($numDeletedAux > 0);
-                        if (($numDeletedAux = _import_table($dbh, 'marc_subfield_structure', $frameworkcode, $dom, ['frameworkcode', 'tagfield', 'tagsubfield'], $extension)) >= 0) {
+                        if (($numDeletedAux = _import_table($dbh, $subtable, $frameworkcode, $dom, ['frameworkcode', 'tagfield', 'tagsubfield'], $extension, $frameworktype)) >= 0) {
                             $numDeleted += $numDeletedAux if ($numDeletedAux > 0);
                             $ok = ($numDeleted > 0)?$numDeleted:0;
                         }
@@ -789,7 +807,7 @@ sub _check_validity_worksheet
 # Import the data from an excel-xml/ods to mysql tables.
 sub _import_table
 {
-    my ($dbh, $table, $frameworkcode, $dom, $PKArray, $format) = @_;
+    my ($dbh, $table, $frameworkcode, $dom, $PKArray, $format, $frameworktype) = @_;
     my %fields2Delete;
     my $query;
     my @fields;
@@ -798,6 +816,9 @@ sub _import_table
         @fields = @$PKArray;
         shift @fields;
         $query = 'SELECT ' . join(',', @fields) . ' FROM ' . $table . ' WHERE frameworkcode=?';
+        if ($frameworktype eq "authority") {
+            $query = 'SELECT ' . join(',', @fields) . ' FROM ' . $table . ' WHERE authtypecode=?';
+        }
         my $sth = $dbh->prepare($query);
         $sth->execute($frameworkcode);
         my $field;
