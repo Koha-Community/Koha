@@ -529,15 +529,15 @@ sub UpdateFine {
     # account type has one of several values, but what does this _mean_?
     # Does it look up existing fines for this item?
     # FIXME - What are these various account types? ("FU", "O", "F", "M")
-	#	"L"   is LOST item
-	#   "A"   is Account Management Fee
-	#   "N"   is New Card
-	#   "M"   is Sundry
-	#   "O"   is Overdue ??
-	#   "F"   is Fine ??
-	#   "FU"  is Fine UPDATE??
-	#	"Pay" is Payment
-	#   "REF" is Cash Refund
+    #   "L"   is LOST item
+    #   "A"   is Account Management Fee
+    #   "N"   is New Card
+    #   "M"   is Sundry
+    #   "O"   is Overdue ??
+    #   "F"   is Fine ??
+    #   "FU"  is Fine UPDATE??
+    #   "Pay" is Payment
+    #   "REF" is Cash Refund
     my $sth = $dbh->prepare(
         "SELECT * FROM accountlines
         WHERE borrowernumber=?
@@ -593,13 +593,6 @@ sub UpdateFine {
                     accounttype   => 'FU',
                 }
             )->store();
-
-            # FIXME: BOGUS query cannot ensure uniqueness w/ LIKE %x% !!!
-            # 		LIMIT 1 added to prevent multiple affected lines
-            # FIXME: accountlines table needs unique key!! Possibly a combo of borrowernumber and accountline.
-            # 		But actually, we should just have a regular autoincrementing PK and forget accountline,
-            # 		including the bogus getnextaccountno function (doesn't prevent conflict on simultaneous ops).
-            # FIXME: Why only 2 account types here?
         }
     } else {
         if ( $amount ) { # Don't add new fines with an amount of 0
