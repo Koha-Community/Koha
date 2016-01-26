@@ -469,8 +469,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         $biblionumber
     );
 
-    AddIssue( $renewing_borrower, $barcode4, undef, undef, undef, undef,
-        { auto_renew => 1 } );
+    $issue = AddIssue( $renewing_borrower, $barcode4, undef, undef, undef, undef, { auto_renew => 1 } );
     ( $renewokay, $error ) =
       CanBookBeRenewed( $renewing_borrowernumber, $itemnumber4 );
     is( $renewokay, 0, 'Bug 14101: Cannot renew, renewal is automatic and premature' );
@@ -545,8 +544,16 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     C4::Context->set_preference('WhenLostForgiveFine','1');
     C4::Context->set_preference('WhenLostChargeReplacementFee','1');
 
-    C4::Overdues::UpdateFine( $itemnumber, $renewing_borrower->{borrowernumber},
-        15.00, q{}, Koha::DateUtils::output_pref($datedue) );
+    C4::Overdues::UpdateFine(
+        {
+            issue_id       => $issue->id(),
+            itemnumber     => $itemnumber,
+            borrowernumber => $renewing_borrower->{borrowernumber},
+            amount         => 15.00,
+            type           => q{},
+            due            => Koha::DateUtils::output_pref($datedue)
+        }
+    );
 
     LostItem( $itemnumber, 1 );
 
@@ -565,8 +572,16 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     C4::Context->set_preference('WhenLostForgiveFine','0');
     C4::Context->set_preference('WhenLostChargeReplacementFee','0');
 
-    C4::Overdues::UpdateFine( $itemnumber2, $renewing_borrower->{borrowernumber},
-        15.00, q{}, Koha::DateUtils::output_pref($datedue) );
+    C4::Overdues::UpdateFine(
+        {
+            issue_id       => $issue2->id(),
+            itemnumber     => $itemnumber2,
+            borrowernumber => $renewing_borrower->{borrowernumber},
+            amount         => 15.00,
+            type           => q{},
+            due            => Koha::DateUtils::output_pref($datedue)
+        }
+    );
 
     LostItem( $itemnumber2, 0 );
 
@@ -710,7 +725,15 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 
     my $borrowernumber = AddMember(%a_borrower_data);
 
-    UpdateFine( $itemnumber, $borrowernumber, 0 );
+    my $issue = AddIssue( GetMember( borrowernumber => $borrowernumber ), $barcode );
+    UpdateFine(
+        {
+            issue_id       => $issue->id(),
+            itemnumber     => $itemnumber,
+            borrowernumber => $borrowernumber,
+            amount         => 0
+        }
+    );
 
     my $hr = $dbh->selectrow_hashref(q{SELECT COUNT(*) AS count FROM accountlines WHERE borrowernumber = ? AND itemnumber = ?}, undef, $borrowernumber, $itemnumber );
     my $count = $hr->{count};
