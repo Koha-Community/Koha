@@ -6,131 +6,156 @@
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
 //<![CDATA[
-    $(document).ready(function() {
+$(document).ready(function() {
 
-        [% IF categorycode %]
-            update_category_code( "[% categorycode %]" );
-        [% ELSE %]
-            if ( $("#categorycode_entry").length > 0 ){
-                var category_code = $("#categorycode_entry").find("option:selected").val();
-                update_category_code( category_code );
-            }
-        [% END %]
-        $("#dateofbirth").datepicker({ maxDate: "-1D", yearRange: "c-120:" });
-        dateformat = $("#dateofbirth").siblings(".hint").first().html();
-        CalculateAge();
-        $("#entryform").validate({
-            rules: {
-                email: {
-                    email: true
-                },
-                emailpro: {
-                    email: true
-                },
-                B_email: {
-                    email: true
-                }
-            },
-            submitHandler: function(form) {
-                $("body, form input[type='submit'], form button[type='submit'], form a").addClass('waiting');
-                if (form.beenSubmitted)
-                    return false;
-                else
-                    form.beenSubmitted = true;
-                    form.submit();
-                }
-        });
+	[% IF categorycode %]
+		update_category_code( "[% categorycode %]" );
+	[% ELSE %]
+		if ( $("#categorycode_entry").length > 0 ){
+			var category_code = $("#categorycode_entry").find("option:selected").val();
+			update_category_code( category_code );
+		}
+	[% END %]
+	$("#dateofbirth").datepicker({ maxDate: "-1D", yearRange: "c-120:" });
+	dateformat = $("#dateofbirth").siblings(".hint").first().html();
+	write_age();
+	$("#entryform").validate({
+		rules: {
+			email: {
+				email: true
+			},
+			emailpro: {
+				email: true
+			},
+			B_email: {
+				email: true
+			}
+		},
+		submitHandler: function(form) {
+			$("body, form input[type='submit'], form button[type='submit'], form a").addClass('waiting');
+			if (form.beenSubmitted)
+				return false;
+			else
+				form.beenSubmitted = true;
+				form.submit();
+			}
+	});
 
-        var mrform = $("#manual_restriction_form");
-        var mrlink = $("#add_manual_restriction");
-        mrform.hide();
-        mrlink.on("click",function(e){
-            $(this).hide();
-            mrform.show();
-            e.preventDefault();
-        });
-        $("#cancel_manual_restriction").on("click",function(e){
-            $('#debarred_expiration').val('');
-            $('#add_debarment').val(0);
-            $('#debarred_comment').val('');
-            mrlink.show();
-            mrform.hide();
-            e.preventDefault();
-        });
-    });
+	var mrform = $("#manual_restriction_form");
+	var mrlink = $("#add_manual_restriction");
+	mrform.hide();
+	mrlink.on("click",function(e){
+		$(this).hide();
+		mrform.show();
+		e.preventDefault();
+	});
+	$("#cancel_manual_restriction").on("click",function(e){
+		$('#debarred_expiration').val('');
+		$('#add_debarment').val(0);
+		$('#debarred_comment').val('');
+		mrlink.show();
+		mrform.hide();
+		e.preventDefault();
+	});
+});
 
-    function clear_entry(node) {
-        var original = $(node).parent();
-        $("textarea", original).attr('value', '');
-        $("select", original).attr('value', '');
-    }
+function clear_entry(node) {
+	var original = $(node).parent();
+	$("textarea", original).attr('value', '');
+	$("select", original).attr('value', '');
+}
 
-    function clone_entry(node) {
-        var original = $(node).parent();
-        var clone = original.clone();
+function clone_entry(node) {
+	var original = $(node).parent();
+	var clone = original.clone();
 
-        var newId = 50 + parseInt(Math.random() * 100000);
-        $("input,select,textarea", clone).attr('id', function() {
-            return this.id.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
-        });
-        $("input,select,textarea", clone).attr('name', function() {
-            return this.name.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
-        });
-        $("label", clone).attr('for', function() {
-            return $(this).attr("for").replace(/patron_attr_\d+/, 'patron_attr_' + newId);
-        });
-        $("input#patron_attr_" + newId, clone).attr('value','');
-        $("select#patron_attr_" + newId, clone).attr('value','');
-        $(original).after(clone);
-        return false;
-    }
+	var newId = 50 + parseInt(Math.random() * 100000);
+	$("input,select,textarea", clone).attr('id', function() {
+		return this.id.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
+	});
+	$("input,select,textarea", clone).attr('name', function() {
+		return this.name.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
+	});
+	$("label", clone).attr('for', function() {
+		return $(this).attr("for").replace(/patron_attr_\d+/, 'patron_attr_' + newId);
+	});
+	$("input#patron_attr_" + newId, clone).attr('value','');
+	$("select#patron_attr_" + newId, clone).attr('value','');
+	$(original).after(clone);
+	return false;
+}
 
-    function update_category_code(category_code) {
-        if ( $(category_code).is("select") ) {
-            category_code = $("#categorycode_entry").find("option:selected").val();
+function update_category_code(category_code) {
+	if ( $(category_code).is("select") ) {
+		category_code = $("#categorycode_entry").find("option:selected").val();
+	}
+	var mytables = $(".attributes_table");
+	$(mytables).find("li").hide();
+	$(mytables).find(" li[data-category_code='"+category_code+"']").show();
+	$(mytables).find(" li[data-category_code='']").show();
+}
+
+function select_user(borrowernumber, borrower) {
+	var form = $('#entryform').get(0);
+	if (form.guarantorid.value) {
+		$("#contact-details").find('a').remove();
+		$("#contactname, #contactfirstname").parent().find('span').remove();
+	}
+
+	var id = borrower.borrowernumber;
+	form.guarantorid.value = id;
+	$('#contact-details')
+		.show()
+		.find('span')
+		.after('<a target="blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' + id + '">' + id + '</a>');
+
+	$(form.contactname)
+		.val(borrower.surname)
+		.before('<span>' + borrower.surname + '</span>').get(0).type = 'hidden';
+	$(form.contactfirstname)
+		.val(borrower.firstname)
+		.before('<span>' + borrower.firstname + '</span>').get(0).type = 'hidden';
+
+	form.streetnumber.value = borrower.streetnumber;
+	form.address.value = borrower.address;
+	form.address2.value = borrower.address2;
+	form.city.value = borrower.city;
+	form.state.value = borrower.state;
+	form.zipcode.value = borrower.zipcode;
+	form.country.value = borrower.country;
+	form.branchcode.value = borrower.branchcode;
+
+	form.guarantorsearch.value = _("Change");
+
+	return 0;
+}
+
+    function write_age() {
+        var hint = $("#dateofbirth").siblings(".hint").first();
+        hint.html(dateformat);
+
+        var age = CalculateAge(document.form.dateofbirth.value);
+
+        if (!age.year && !age.month) {
+            return;
         }
-        var mytables = $(".attributes_table");
-        $(mytables).find("li").hide();
-        $(mytables).find(" li[data-category_code='"+category_code+"']").show();
-        $(mytables).find(" li[data-category_code='']").show();
-    }
 
-    function select_user(borrowernumber, borrower) {
-        var form = $('#entryform').get(0);
-        if (form.guarantorid.value) {
-            $("#contact-details").find('a').remove();
-            $("#contactname, #contactfirstname").parent().find('span').remove();
+        var age_string;
+        if (age.year || age.month) {
+            age_string = _('Age: ');
         }
 
-        var id = borrower.borrowernumber;
-        form.guarantorid.value = id;
-        $('#contact-details')
-            .show()
-            .find('span')
-            .after('<a target="blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' + id + '">' + id + '</a>');
+        if (age.year) {
+            age_string += _(age.year > 1 ? '%s years ' : '%s year ').format(age.year);
+        }
 
-        $(form.contactname)
-            .val(borrower.surname)
-            .before('<span>' + borrower.surname + '</span>').get(0).type = 'hidden';
-        $(form.contactfirstname)
-            .val(borrower.firstname)
-            .before('<span>' + borrower.firstname + '</span>').get(0).type = 'hidden';
+        if (age.month) {
+            age_string += _(age.month > 1 ? '%s months ' : '%s month ').format(age.month);
+        }
 
-        form.streetnumber.value = borrower.streetnumber;
-        form.address.value = borrower.address;
-        form.address2.value = borrower.address2;
-        form.city.value = borrower.city;
-        form.state.value = borrower.state;
-        form.zipcode.value = borrower.zipcode;
-        form.country.value = borrower.country;
-        form.branchcode.value = borrower.branchcode;
-
-        form.guarantorsearch.value = _("Change");
-
-        return 0;
+        hint.html(age_string);
     }
 
->>>>>>> Bug 15206 - Show patron's age under date of birth in memberentry.pl
         var MSG_SEPARATOR = _("Separator must be / in field %s");
         var MSG_INCORRECT_DAY = _("Invalid day entered in field %s");
         var MSG_INCORRECT_MONTH = _("Invalid month entered in field %s");
@@ -329,7 +354,7 @@
                 [% END %]
                 Date of birth: </label>
 
-                <input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="CalculateAge();" value="[% UNLESS opduplicate %][% dateofbirth %][% END %]" />
+                <input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="write_age();" value="[% UNLESS opduplicate %][% dateofbirth %][% END %]" />
 
         [% IF ( mandatorydateofbirth ) %]<span class="required">Required</span>[% END %]
         [% IF ( ERROR_dateofbirth ) %]<span class="required">(Error)</span>[% END %]

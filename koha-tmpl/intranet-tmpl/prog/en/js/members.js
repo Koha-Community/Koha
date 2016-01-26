@@ -217,55 +217,25 @@ function select_user(borrowernumber, borrower) {
     return 0;
 }
 
-function CalculateAge() {
-    var hint = $("#dateofbirth").siblings(".hint").first();
-    hint.html(dateformat);
-
-    if (dformat == 'metric' && false === CheckDate(document.form.dateofbirth)) {
-        return;
-    }
-
-    if (!$("#dateofbirth").datepicker( 'getDate' )) {
-        return;
-    }
-
+function CalculateAge(dateofbirth) {
     var today = new Date();
-    var dob = new Date($("#dateofbirth").datepicker( 'getDate' ));
+    var dob = Date_from_syspref(dateofbirth)
+    var age = new Object();
 
-    var nowyear = today.getFullYear();
-    var nowmonth = today.getMonth();
-    var nowday = today.getDate();
-
-    var birthyear = dob.getFullYear();
-    var birthmonth = dob.getMonth();
-    var birthday = dob.getDate();
-
-    var year = nowyear - birthyear;
-    var month = nowmonth - birthmonth;
-    var day = nowday - birthday;
+    age.year = today.getFullYear() - dob.getFullYear();
+    age.month = today.getMonth() - dob.getMonth();
+    var day = today.getDate() - dob.getDate();
 
     if(day < 0) {
-        month = parseInt(month) -1;
+        age.month = parseInt(age.month) -1;
     }
 
-    if(month < 0) {
-        year = parseInt(year) -1;
-        month = 12 + month;
+    if(age.month < 0) {
+        age.year = parseInt(age.year) -1;
+        age.month = 12 + age.month;
     }
 
-    var age_string;
-    if (year || month) {
-        age_string = _('Age: ');
-    }
-    if (year) {
-        age_string += _(year > 1 ? '%s years ' : '%s year ').format(year);
-    }
-
-    if (month) {
-        age_string += _(month > 1 ? '%s months ' : '%s month ').format(month);
-    }
-
-    hint.html(age_string);
+    return age;
 }
 
 $(document).ready(function(){
