@@ -8,6 +8,16 @@
     <script type="text/javascript">
     //<![CDATA[
         var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this?");
+        function DeleteConfirm() {
+            var msg = _("Are you sure you want to delete batch %s?").format("[% batch_id %]");
+            var answer = confirm(msg);
+            if (answer) {
+                window.location = "/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=batch&amp;element_id=[% batch_id %]";
+            }
+            else {
+                return; // abort delete
+            }
+        };
         function dofocus() {    // named function req'd for body onload event by some FF and IE7 security models
             $(".focus:last").select();
         }
@@ -30,13 +40,12 @@
                             item_num.push(i+1);
                         }
                     }
-                    if (items.length < 1) {
-                        alert(_("Please select at least one item to delete."));
-                        return;     // no item selected
-                    }
                     getstr = items.join("&");
                     item_msg = item_num.join(", ");
                     var msg = "Are you sure you want to remove label number(s): " + item_msg + " from this batch?"
+                } else if (document.items.action.checked) {
+		    alert(_("Deletion of label from a batch with only one label will delete the batch.") + "\n\n" + _("If this is what you want, select the 'Delete batch' option from the toolbar"));
+                    return; // no deletion for single item batch
                 }
                 else {
                     alert(_("Please select at least label to delete."));
@@ -211,6 +220,7 @@
                             <div id="batch-manage" class="btn-toolbar">
                                 <a class="btn btn-small" id="additems" href="#"><icon class="fa fa-plus"></icon> Add item(s)</a>[% IF ( table_loop ) %]
                                 <a class="btn btn-small" id="removeitems" href="#"><icon class="fa fa-trash"></icon> Remove selected items</a>
+				<a class="btn btn-small" id="deletebatch" href="#"><icon class="fa fa-minus-square"></icon> Delete batch</a>
                                 <a class="btn btn-small" id="deduplicate" href="#"><icon class="fa fa-minus"></icon> Remove duplicates</a>
                                 <a class="btn btn-small" id="exportitems" href="#"><icon class="fa fa-share-square-o"></icon> Export selected items</a>
                                 <a class="btn btn-small" id="exportbatch" href="#"><icon class="fa fa-share-square-o"></icon> Export full batch</a>[% END %]
