@@ -41,11 +41,7 @@ function setStatus(serialid){
     $("#status"+serialid).val("2").attr("selected","selected");
 }
 function changeDate(elem, adate) {
-    $(elem).closest('tr').find('#expecteddate').val(adate);
-}
-function changeDate2(adate) {
-   var elem = document.getElementById("supexpecteddate");
-    elem.value = adate;
+    $(elem).closest('tr').find('[name=planneddate]').val(adate);
 }
 
 $(document).ready(function() {
@@ -139,7 +135,7 @@ $(document).ready(function() {
             <input type="text" name="publisheddatetext" value="[% serialslis.publisheddatetext %]" size="10" maxlength="100" />
         </td>
         <td>
-            <input type="text" id="expecteddate" name="planneddate" value="[% serialslis.planneddate %]" size="10" maxlength="15" class="datepicker" />
+            <input type="text" name="planneddate" value="[% serialslis.planneddate %]" size="10" maxlength="15" class="datepicker" />
         </td>
         <td>
             [% IF ( serialslis.editdisable ) %]
@@ -296,10 +292,10 @@ $(document).ready(function() {
             <input type="text" name="publisheddatetext" value="[% newserialloo.publisheddatetext %]" size="10" maxlength="100" />
         </td>
         <td>
-            <input type="text" name="planneddate" id="supexpecteddate" value="[% newserialloo.planneddate %]" size="10" maxlength="15" class="datepicker" />
+            <input type="text" name="planneddate" value="[% newserialloo.planneddate %]" size="10" maxlength="15" class="datepicker" />
         </td>
         <td>
-            <select name="status" size="1" id="addstatus[% newserialloo.serialid %]" onchange="if (this.value==2){unHideItems('items'+'[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]','[% newserialloo.serialid %]'); changeDate2('[% newserialloo.arriveddate %]')} else if (this.value==7){changeDate('[% newserialloo.arriveddate %]')} else { HideItems('items'+'[% newserialloo.subscriptionid %]'+[% newserialloo.serialid %],'label[% serialslis.subscriptionid %][% serialslis.serialid %]'); changeDate2('[% serialslis.planneddate %]')}" >
+            <select name="status" size="1" id="addstatus[% newserialloo.serialid %]" onchange="if (this.value==2){unHideItems('items'+'[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]','[% newserialloo.serialid %]'); changeDate(this, '[% newserialloo.arriveddate %]')} else if (this.value==7){changeDate(this, '[% newserialloo.arriveddate %]')} else { HideItems('items'+'[% newserialloo.subscriptionid %]'+[% newserialloo.serialid %],'label[% serialslis.subscriptionid %][% serialslis.serialid %]'); changeDate(this, '[% serialslis.planneddate %]')}" >
 
                     <option value="">----</option>
                   [% IF ( newserialloo.status1 ) %]
