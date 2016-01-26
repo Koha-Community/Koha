@@ -48,7 +48,7 @@
                     return; // no deletion for single item batch
                 }
                 else {
-                    alert(_("Please select at least label to delete."));
+                    alert(_("Please select at least one label to delete."));
                     return;     // no item selected
                 }
                 var answer = confirm(msg);
@@ -188,7 +188,7 @@
                             </div>
                         [% ELSIF ( duplicate_message ) %]
                             <div class="dialog message">
-                                <strong>[% duplicate_count %] duplicate item(s) found</strong> and removed from batch [% batch_id %].
+                                <strong>Duplicate item(s) removed from batch number [% batch_id %]: [% duplicate_count %]</strong>
                             </div>
                         [% END %]
 
