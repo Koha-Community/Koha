@@ -51,7 +51,7 @@
             var filename = $(this).val();
             if ( ! /(?:\.csv|\.ods|\.xml)$/.test(filename)) {
                 $(this).css("background-color","yellow");
-                alert(_("Please select an ods or xml file"));
+                alert(_("Please select a CSV (.csv), ODS (.ods) or XML (.xml) spreadsheet file."));
                 $(this).val("");
                 $(this).css("background-color","white");
             }
@@ -80,7 +80,7 @@
                     return false;
             }
             obj.css("background-color","yellow");
-            alert(_("Please select an spreadsheet (csv, ods, xml) file"));
+            alert(_("Please select a CSV (.csv), ODS (.ods) or XML (.xml) spreadsheet file."));
             obj.val("");
             obj.css("background-color","white");
             return false;
