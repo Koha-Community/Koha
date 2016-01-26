@@ -844,8 +844,8 @@ No patron matched <span class="ex">[% message %]</span>
 			[% FOREACH lib_messages_loo IN lib_messages_loop %]
 				<li>
 					<span class="circ-hlt">
-						[% lib_messages_loo.message_date_formatted %]
-						[% lib_messages_loo.branchcode %]
+                                                [% lib_messages_loo.message_date_formatted  | $KohaDates %]
+                                                [% Branches.GetName( lib_messages_loo.branchcode ) %]
 						<i>"[% lib_messages_loo.message %]"</i>
 					</span>
 					[% IF ( lib_messages_loo.can_delete ) %]
@@ -858,7 +858,7 @@ No patron matched <span class="ex">[% message %]</span>
 				</li>
 			[% END %]
 			[% FOREACH bor_messages_loo IN bor_messages_loop %]
-				<li><span class="">[% bor_messages_loo.message_date_formatted %] [% bor_messages_loo.branchcode %] <i>"[% bor_messages_loo.message %]"</i></span> [% IF ( bor_messages_loo.can_delete ) %]<a href="/cgi-bin/koha/circ/del_message.pl?message_id=[% bor_messages_loo.message_id %]&amp;borrowernumber=[% bor_messages_loo.borrowernumber %]">[Delete]</a>
+                            <li><span class="">[% bor_messages_loo.message_date_formatted  | $KohaDates %] [% Branches.GetName( bor_messages_loo.branchcode ) %] <i>"[% bor_messages_loo.message %]"</i></span> [% IF ( bor_messages_loo.can_delete ) %]<a href="/cgi-bin/koha/circ/del_message.pl?message_id=[% bor_messages_loo.message_id %]&amp;borrowernumber=[% bor_messages_loo.borrowernumber %]">[Delete]</a>
                 [% ELSIF ( all_messages_del ) %]
                     <a href="/cgi-bin/koha/circ/del_message.pl?message_id=[% bor_messages_loo.message_id %]&amp;borrowernumber=[% bor_messages_loo.borrowernumber %]">[Delete]</a>
                 [% END %]</li>
