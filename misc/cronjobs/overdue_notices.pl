@@ -18,8 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 BEGIN {
 
@@ -62,6 +61,7 @@ overdue_notices.pl
  Options:
    -help                          brief help message
    -man                           full documentation
+   -v                             verbose
    -n                             No email will be sent
    -max          <days>           maximum days overdue to deal with
    -library      <branchname>     only deal with overdues from this library (repeatable : several libraries can be given)
@@ -71,6 +71,9 @@ overdue_notices.pl
    -itemscontent <list of fields> item information in templates
    -borcat       <categorycode>   category code that must be included
    -borcatout    <categorycode>   category code that must be excluded
+   -t                             only include triggered overdues
+   -list-all                      list all overdues
+   -date         <yyyy-mm-dd>     emulate overdues run for this date
    -email        <email_type>     type of email that will be used. Can be 'email', 'emailpro' or 'B_email'. Repeatable.
 
 =head1 OPTIONS
@@ -142,11 +145,11 @@ issues tables.
 
 =item B<-borcat>
 
-Repetable field, that permit to select only few of patrons categories.
+Repeatable field, that permits to select only some patron categories.
 
 =item B<-borcatout>
 
-Repetable field, permis to exclude some patrons categories.
+Repeatable field, that permits to exclude some patron categories.
 
 =item B<-t> | B<--triggered>
 
@@ -251,7 +254,7 @@ administrator email address.
 =head1 USAGE EXAMPLES
 
 C<overdue_notices.pl> - In this most basic usage, with no command line
-arguments, all libraries are procesed individually, and notices are
+arguments, all libraries are processed individually, and notices are
 prepared for all patrons with overdue items for whom we have email
 addresses. Messages for those patrons for whom we have no email
 address are sent in a single attachment to the library administrator's
@@ -448,7 +451,7 @@ foreach my $branchcode (@branches) {
     $verbose and warn sprintf "branchcode : '%s' using %s\n", $branchcode, $admin_email_address;
 
     my $sth2 = $dbh->prepare( <<"END_SQL" );
-SELECT biblio.*, items.*, issues.*, biblioitems.itemtype, TO_DAYS($date)-TO_DAYS(date_due) AS days_overdue, branchname
+SELECT biblio.*, items.*, issues.*, biblioitems.itemtype, branchname
   FROM issues,items,biblio, biblioitems, branches b
   WHERE items.itemnumber=issues.itemnumber
     AND biblio.biblionumber   = items.biblionumber
