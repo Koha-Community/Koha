@@ -82,6 +82,7 @@ my $messageborrower;
 my $warnings;
 my $messages;
 my $exceeded_maxreserves;
+my $exceeded_holds_per_record;
 
 my $date = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
 my $action = $input->param('action');
@@ -227,6 +228,10 @@ foreach my $biblionumber (@biblionumbers) {
     elsif ( $canReserve eq 'tooManyReserves' ) {
         $exceeded_maxreserves = 1;
     }
+    elsif ( $canReserve eq 'tooManyHoldsForThisRecord' ) {
+        $exceeded_holds_per_record = 1;
+        $biblioloopiter{$canReserve} = 1;
+    }
     elsif ( $canReserve eq 'ageRestricted' ) {
         $template->param( $canReserve => 1 );
         $biblioloopiter{$canReserve} = 1;
@@ -256,9 +261,10 @@ foreach my $biblionumber (@biblionumbers) {
         # For a librarian to be able to place multiple record holds for a patron for a record,
         # we must find out what the maximum number of holds they can place for the patron is
         my $max_holds_for_record = GetMaxPatronHoldsForRecord( $borrowerinfo->{borrowernumber}, $biblionumber );
-        $max_holds_for_record = $max_holds_for_record - $holds->count();
-        $biblioloopiter{max_holds_for_record} = $max_holds_for_record;
+        my $remaining_holds_for_record = $max_holds_for_record - $holds->count();
+        $biblioloopiter{remaining_holds_for_record} = $max_holds_for_record;
         $template->param( max_holds_for_record => $max_holds_for_record );
+        $template->param( remaining_holds_for_record => $remaining_holds_for_record );
     }
 
     # Check to see if patron is allowed to place holds on records where the
@@ -635,6 +641,7 @@ foreach my $biblionumber (@biblionumbers) {
 $template->param( biblioloop => \@biblioloop );
 $template->param( biblionumbers => $biblionumbers );
 $template->param( exceeded_maxreserves => $exceeded_maxreserves );
+$template->param( exceeded_holds_per_record => $exceeded_holds_per_record );
 
 if ($multihold) {
     $template->param( multi_hold => 1 );

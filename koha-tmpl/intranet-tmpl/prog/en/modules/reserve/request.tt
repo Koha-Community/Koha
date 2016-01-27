@@ -253,7 +253,7 @@ function checkMultiHold() {
     </form>
   [% ELSIF NOT noitems %]
 
-[% IF ( exceeded_maxreserves || alreadyreserved || none_available || alreadypossession || ageRestricted ) %]
+[% IF ( exceeded_maxreserves || exceeded_holds_per_record || alreadyreserved || none_available || alreadypossession || ageRestricted ) %]
     <div class="dialog alert">
 
     [% UNLESS ( multi_hold ) %]
@@ -261,6 +261,8 @@ function checkMultiHold() {
       <ul>
         [% IF ( exceeded_maxreserves ) %]
           <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> can only place a maximum of [% maxreserves %] total holds.</li>
+        [% ELSIF ( exceeded_holds_per_record ) %]
+          <li><strong>Too many holds for this record: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> can only place a maximum of [% max_holds_for_record %] hold(s) on this record.</li>
         [% ELSIF ( alreadypossession ) %]
           <li> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>is already in possession</strong> of one item</lie
         [% ELSIF ( alreadyreserved ) %]
@@ -277,6 +279,12 @@ function checkMultiHold() {
         <h3>Cannot place hold on some items</h3>
         [% IF ( exceeded_maxreserves ) %]
           <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> can place [% new_reserves_allowed %] of the requested [% new_reserves_count %] holds for a maximum of [% maxreserves %] total holds.</li>
+        [% ELSIF ( exceeded_holds_per_record ) %]
+            [% FOREACH biblioloo IN biblioloop %]
+                [% IF (biblioloo.tooManyHoldsForThisRecord) %]
+                    <li><strong>Too many holds for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber %]"> [% biblioloo.title %]</a>: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> can only place a maximum of [% max_holds_for_record %] hold(s) on this record.</li>
+                [% END %]
+            [% END %]
         [% END %]
     [% END %]
 
@@ -406,12 +414,12 @@ function checkMultiHold() {
                <input type="hidden" name="alreadyreserved" value="[% alreadyreserved %]" />
           </li>
 
-          [% IF max_holds_for_record > 1 %]
+          [% IF remaining_holds_for_record > 1 %]
               [% SET count = 1 %]
               <li>
                    <label for="holds_to_place_count">Holds to place (count)</label>
                    <select name="holds_to_place_count" id="holds_to_place_count">
-                   [% WHILE count <= max_holds_for_record %]
+                   [% WHILE count <= remaining_holds_for_record %]
                         <option value="[% count %]">[% count %]</option>
                         [% SET count = count + 1 %]
                    [% END %]
