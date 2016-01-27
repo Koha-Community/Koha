@@ -24,7 +24,7 @@ use Koha::Patrons;
 
 use Test::More tests => 16;
 
-use_ok('C4::Passwordrecovery');
+use_ok('Koha::Patron::Password::Recovery');
 
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
@@ -90,34 +90,34 @@ $schema->resultset('BorrowerPasswordRecovery')->create(
     }
 );
 
-can_ok( "C4::Passwordrecovery", qw(ValidateBorrowernumber GetValidLinkInfo SendPasswordRecoveryEmail CompletePasswordRecovery) );
+can_ok( "Koha::Patron::Password::Recovery", qw(ValidateBorrowernumber GetValidLinkInfo SendPasswordRecoveryEmail CompletePasswordRecovery) );
 
-################################################
-# C4::Passwordrecovery::ValidateBorrowernumber #
-################################################
+############################################################
+# Koha::Patron::Password::Recovery::ValidateBorrowernumber #
+############################################################
 
-ok(   C4::Passwordrecovery::ValidateBorrowernumber($borrowernumber1), "[ValidateBorrowernumber] Borrower has a password recovery entry" );
-ok( ! C4::Passwordrecovery::ValidateBorrowernumber($borrowernumber2), "[ValidateBorrowernumber] Borrower's number is not found; password recovery entry is expired" );
-ok( ! C4::Passwordrecovery::ValidateBorrowernumber(9999), "[ValidateBorrowernumber] Borrower has no password recovery entry" );
+ok(   Koha::Patron::Password::Recovery::ValidateBorrowernumber($borrowernumber1), "[ValidateBorrowernumber] Borrower has a password recovery entry" );
+ok( ! Koha::Patron::Password::Recovery::ValidateBorrowernumber($borrowernumber2), "[ValidateBorrowernumber] Borrower's number is not found; password recovery entry is expired" );
+ok( ! Koha::Patron::Password::Recovery::ValidateBorrowernumber(9999), "[ValidateBorrowernumber] Borrower has no password recovery entry" );
 
-##########################################
-# C4::Passwordrecovery::GetValidLinkInfo #
-##########################################
+######################################################
+# Koha::Patron::Password::Recovery::GetValidLinkInfo #
+######################################################
 
-my ($bnum1, $uname1) = C4::Passwordrecovery::GetValidLinkInfo($uuid1);
-my ($bnum2, $uname2) = C4::Passwordrecovery::GetValidLinkInfo($uuid2);
-my ($bnum3, $uname3) = C4::Passwordrecovery::GetValidLinkInfo("THISISANINVALIDUUID");
+my ($bnum1, $uname1) = Koha::Patron::Password::Recovery::GetValidLinkInfo($uuid1);
+my ($bnum2, $uname2) = Koha::Patron::Password::Recovery::GetValidLinkInfo($uuid2);
+my ($bnum3, $uname3) = Koha::Patron::Password::Recovery::GetValidLinkInfo("THISISANINVALIDUUID");
 
 is( $bnum1, $borrowernumber1, "[GetValidLinkInfo] Borrower has a valid link" );
 is( $uname1, $userid1, "[GetValidLinkInfo] Borrower's username is fetched when a valid link is found" );
 ok( ! defined($bnum2), "[GetValidLinkInfo] Borrower's link is no longer valid; entry is expired" );
 ok( ! defined($bnum3), "[GetValidLinkInfo] Invalid UUID returns no borrowernumber" );
 
-##################################################
-# C4::Passwordrecovery::CompletePasswordRecovery #
-##################################################
+##############################################################
+# Koha::Patron::Password::Recovery::CompletePasswordRecovery #
+##############################################################
 
-ok( C4::Passwordrecovery::CompletePasswordRecovery($uuid1) == 2, "[CompletePasswordRecovery] Completing a password recovery deletes the entry and expired entries" );
+ok( Koha::Patron::Password::Recovery::CompletePasswordRecovery($uuid1) == 2, "[CompletePasswordRecovery] Completing a password recovery deletes the entry and expired entries" );
 
 $schema->resultset('BorrowerPasswordRecovery')->create(
     {
@@ -127,22 +127,22 @@ $schema->resultset('BorrowerPasswordRecovery')->create(
     }
 );
 
-ok( C4::Passwordrecovery::CompletePasswordRecovery($uuid2) == 1, "[CompletePasswordRecovery] An expired or invalid UUID purges expired entries" );
-ok( C4::Passwordrecovery::CompletePasswordRecovery($uuid2) == 0, "[CompletePasswordRecovery] Returns 0 on a clean table" );
+ok( Koha::Patron::Password::Recovery::CompletePasswordRecovery($uuid2) == 1, "[CompletePasswordRecovery] An expired or invalid UUID purges expired entries" );
+ok( Koha::Patron::Password::Recovery::CompletePasswordRecovery($uuid2) == 0, "[CompletePasswordRecovery] Returns 0 on a clean table" );
 
-###################################################
-# C4::Passwordrecovery::SendPasswordRecoveryEmail #
-###################################################
+###############################################################
+# Koha::Patron::Password::Recovery::SendPasswordRecoveryEmail #
+###############################################################
 
 my $borrower = shift [ Koha::Patrons->search( { userid => $userid1 } ) ];
-ok( C4::Passwordrecovery::SendPasswordRecoveryEmail($borrower, $email1, 0) == 1, "[SendPasswordRecoveryEmail] Returns 1 on success" );
+ok( Koha::Patron::Password::Recovery::SendPasswordRecoveryEmail($borrower, $email1, 0) == 1, "[SendPasswordRecoveryEmail] Returns 1 on success" );
 my $letters = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber1, limit => 99 } );
 ok( scalar @$letters == 1, "[SendPasswordRecoveryEmail] There is a letter in the queue for our borrower");
 
 my $bpr = $schema->resultset('BorrowerPasswordRecovery')->search( { borrowernumber => $borrowernumber1 } );
 my $tempuuid1 = $bpr->next->uuid;
 
-C4::Passwordrecovery::SendPasswordRecoveryEmail($borrower, $email1, 1);
+Koha::Patron::Password::Recovery::SendPasswordRecoveryEmail($borrower, $email1, 1);
 
 $bpr = $schema->resultset('BorrowerPasswordRecovery')->search( { borrowernumber => $borrowernumber1 } );
 my $tempuuid2 = $bpr->next->uuid;

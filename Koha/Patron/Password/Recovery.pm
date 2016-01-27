@@ -1,4 +1,4 @@
-package C4::Passwordrecovery;
+package Koha::Patron::Password::Recovery;
 
 # Copyright 2014 Solutions InLibro inc.
 #
@@ -38,11 +38,11 @@ BEGIN {
 
 =head1 NAME
 
-C4::Passwordrecovery - Koha password recovery module
+Koha::Patron::Password::Recovery - Koha password recovery module
 
 =head1 SYNOPSIS
 
-use C4::Passwordrecovery;
+use Koha::Patron::Password::Recovery;
 
 =head1 FUNCTIONS
 
@@ -110,8 +110,10 @@ sub SendPasswordRecoveryEmail {
     my $schema = Koha::Database->new->schema;
 
     # generate UUID
-    my @chars = ( "A" .. "Z", "a" .. "z", "0" .. "9" );
-    my $uuid_str = '$2a$08$'.en_base64(Koha::AuthUtils::generate_salt('weak', 16));
+    my $uuid_str;
+    do {
+        $uuid_str = '$2a$08$'.en_base64(Koha::AuthUtils::generate_salt('weak', 16));
+    } while ( substr ( $uuid_str, -1, 1 ) eq '.' );
 
     # insert into database
     my $expirydate =
@@ -134,7 +136,8 @@ sub SendPasswordRecoveryEmail {
     }
 
     # create link
-    my $uuidLink = C4::Context->preference('OPACBaseURL')
+    my $opacbase = C4::Context->preference('OPACBaseURL') || '';
+    my $uuidLink = $opacbase
       . "/cgi-bin/koha/opac-password-recovery.pl?uniqueKey=$uuid_str";
 
     # prepare the email

@@ -8,7 +8,7 @@ use C4::Koha;
 use C4::Members qw(changepassword);
 use C4::Output;
 use C4::Context;
-use C4::Passwordrecovery
+use Koha::Patron::Password::Recovery
   qw(SendPasswordRecoveryEmail ValidateBorrowernumber GetValidLinkInfo CompletePasswordRecovery);
 use Koha::AuthUtils qw(hash_password);
 use Koha::Patrons;
@@ -71,6 +71,12 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
         $username ||= $borrower->userid;
         my @emails = ( $borrower->email, $borrower->emailpro, $borrower->B_email );
 
+        my $firstNonEmptyEmail = '';
+        foreach my $address ( @emails ) {
+            $firstNonEmptyEmail = $address if length $address;
+            last if $firstNonEmptyEmail;
+        }
+
         # Is the given email one of the borrower's ?
         if ( $email && !( grep { $_ eq $email } @emails ) ) {
             $hasError    = 1;
@@ -78,12 +84,9 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
         }
 
 # If we dont have an email yet. Get one of the borrower's email or raise an error.
-# FIXME: That ugly shift-grep contraption.
-# $email = shift [ grep { length() } @emails ]
-# It's supposed to get a non-empty string from the @emails array. There's surely a simpler way
-        elsif ( !$email && !( $email = shift [ grep { length() } @emails ] ) ) {
+        elsif ( !$email && !( $email = $firstNonEmptyEmail ) ) {
             $hasError           = 1;
-            $errNoBorrowerFound = 1;
+            $errNoBorrowerEmail = 1;
         }
 
 # Check if a password reset already issued for this borrower AND we are not asking for a new email
