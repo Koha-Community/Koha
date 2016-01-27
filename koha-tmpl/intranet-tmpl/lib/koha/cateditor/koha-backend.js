@@ -224,7 +224,7 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
                 var seenSubfields = {};
 
                 $.each( field.subfields(), function( undef, subfield ) {
-                    if ( seenSubfields[ subfield[0] ] != null && nonRepeatableSubfields[ field.tagnumber() ][ subfield[0] ] ) {
+                    if ( seenSubfields[ subfield[0] ] != null && ( nonRepeatableSubfields[ field.tagnumber() ] || {} )[ subfield[0] ] ) {
                         errors.push( { type: 'unrepeatableSubfield', subfield: subfield[0], line: field.sourceLine } );
                     } else {
                         seenSubfields[ subfield[0] ] = subfield[1];
