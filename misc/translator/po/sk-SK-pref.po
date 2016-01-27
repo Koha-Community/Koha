@@ -1,10 +1,9 @@
-# Paul <paul.vilhan@gmail.com>, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: KOHA 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-15 16:43+0000\n"
-"PO-Revision-Date: 2015-12-18 22:04+0200\n"
+"PO-Revision-Date: 2016-01-18 18:41+0200\n"
 "Last-Translator: Paul <paul.vilhan@gmail.com>\n"
 "Language-Team: Paul Vilhan\n"
 "Language: sk\n"
@@ -172,8 +171,8 @@ msgstr "Daňové sadzby sú"
 msgid "admin.pref"
 msgstr "Administrácia"
 
-# Administration > CAS Authentication
-msgid "admin.pref CAS Authentication"
+# Administration > CAS authentication
+msgid "admin.pref CAS authentication"
 msgstr "Overenie CAS"
 
 # Administration > Interface options
@@ -188,28 +187,32 @@ msgstr "Možnosti prihlasovania"
 msgid "admin.pref Mozilla Persona"
 msgstr "Mozilla Persona"
 
+# Administration > SSL client certificate authentication
+msgid "admin.pref SSL client certificate authentication"
+msgstr "Overenie certifikátu klienta SSL"
+
 # Administration > Share anonymous usage statistics
 msgid "admin.pref Share anonymous usage statistics"
 msgstr "Zdieľať štatistiku o anonymnom používaní"
 
-# Administration > CAS Authentication
-msgid "admin.pref#AllowPkiAuth# Use"
+# Administration > SSL client certificate authentication
+msgid "admin.pref#AllowPKIAuth# Use"
 msgstr "Použiť"
 
-# Administration > CAS Authentication
-msgid "admin.pref#AllowPkiAuth# field for SSL client certificate authentication"
-msgstr "Pole pre overenie certifikátu klienta SSL"
+# Administration > SSL client certificate authentication
+msgid "admin.pref#AllowPKIAuth# field for SSL client certificate authentication"
+msgstr "pole pre overenie certifikátu klienta SSL"
 
-# Administration > CAS Authentication
-msgid "admin.pref#AllowPkiAuth# no"
+# Administration > SSL client certificate authentication
+msgid "admin.pref#AllowPKIAuth# no"
 msgstr "nie"
 
-# Administration > CAS Authentication
-msgid "admin.pref#AllowPkiAuth# the Common Name"
+# Administration > SSL client certificate authentication
+msgid "admin.pref#AllowPKIAuth# the Common Name"
 msgstr "Bežné meno"
 
-# Administration > CAS Authentication
-msgid "admin.pref#AllowPkiAuth# the emailAddress"
+# Administration > SSL client certificate authentication
+msgid "admin.pref#AllowPKIAuth# the emailAddress"
 msgstr "E-mail"
 
 # Administration > Login options
@@ -440,31 +443,31 @@ msgstr "URL knižnice"
 msgid "admin.pref#UsageStatsLibraryUrl# will be shown on the <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
 msgstr "Toto sa zobrazí na <a href=\"http://hea.koha-community.org\">webstránke komunity Hea Koha</a>."
 
-# Administration > CAS Authentication
+# Administration > CAS authentication
 msgid "admin.pref#casAuthentication# CAS for login authentication."
 msgstr "CAS pre overenie prihlásenia."
 
-# Administration > CAS Authentication
+# Administration > CAS authentication
 msgid "admin.pref#casAuthentication# Don't use"
 msgstr "Nepoužiť"
 
-# Administration > CAS Authentication
+# Administration > CAS authentication
 msgid "admin.pref#casAuthentication# Use"
 msgstr "Použiť"
 
-# Administration > CAS Authentication
+# Administration > CAS authentication
 msgid "admin.pref#casLogout# Don't Logout"
 msgstr "Neodhlasovať sa"
 
-# Administration > CAS Authentication
+# Administration > CAS authentication
 msgid "admin.pref#casLogout# Logout"
 msgstr "Odhlásenie"
 
-# Administration > CAS Authentication
+# Administration > CAS authentication
 msgid "admin.pref#casLogout# of CAS when logging out of Koha."
 msgstr "z CAS pri odhlasovaní sa z Kohy."
 
-# Administration > CAS Authentication
+# Administration > CAS authentication
 msgid "admin.pref#casServerUrl# The CAS Authentication Server can be found at"
 msgstr "Server overovania CAS možno nájsť na"
 
@@ -3390,12 +3393,12 @@ msgid "i18n_l10n.pref#AddressFormat# Format postal addresses using"
 msgstr "Formátovať čas v"
 
 # I18N/L10N
-msgid "i18n_l10n.pref#AddressFormat# German style ([Address] [Street number] - [Zip/Postal Code] [City] - [Country])"
-msgstr "i18n_l10n.pref#AddressFormat# German style ([Adresa] [Číslo ulice] - [PSČ] [Mesto] - [Krajina])"
+msgid "i18n_l10n.pref#AddressFormat# German style ([Address] [Street number] - [ZIP/Postal Code] [City] - [Country])"
+msgstr "Nemecký štýl ([Adresa] [Číslo ulice] - [PSČ] [Mesto] - [Krajina])"
 
 # I18N/L10N
-msgid "i18n_l10n.pref#AddressFormat# US style ([Street number], [Address] - [City], [Zip/Postal Code], [Country])"
-msgstr "i18n_l10n.pref#AddressFormat# US štýl ([Číslo domu], [Adresa] - [Mesto], [PSČ], [Krajina])"
+msgid "i18n_l10n.pref#AddressFormat# US style ([Street number], [Address] - [City], [ZIP/Postal Code], [Country])"
+msgstr "US štýl ([Číslo domu], [Adresa] - [Mesto], [PSČ], [Krajina])"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Friday"
@@ -5386,6 +5389,22 @@ msgid "searching.pref#IntranetNumbersPreferPhrase# use"
 msgstr "používať"
 
 # Searching > Results Display
+msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>If a record has more than this number of items, they availability statuses may be incorrect in the search results, but will be correct in the record details."
+msgstr "<br/>Ak má záznam viac ako tento počet exemplárov, ich stav dostupnosti nemusí byť vo výsledkoch hľadania správy, ale bude správny v podrobnostiach o záznamoch."
+
+# Searching > Results Display
+msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>Leave empty for no limit on the number of items for which to check the status."
+msgstr "<br/>Nechajte prázdne pre hľadanie bez obmedzenia počtu exemplárov, ktorých stav sa zisťuje."
+
+# Searching > Results Display
+msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# For records with many items, only check the availability status for the first"
+msgstr "Pre záznamy s mnohými exemplármi, zistiť stav dostupnosti len u prvých"
+
+# Searching > Results Display
+msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# items."
+msgstr "exemplárov."
+
+# Searching > Results Display
 msgid "searching.pref#OPACItemsResultsDisplay# Don't show"
 msgstr "Nezobraziť"
 
@@ -6244,3 +6263,4 @@ msgstr "Zobraziť iba"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "riadky výkazu vyžiadaného cez webový servis výkazov."
+

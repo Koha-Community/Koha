@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pt-PT-i-staff-t-prog-v-3000000\n"
-"POT-Creation-Date: 2015-12-17 15:03-0300\n"
+"POT-Creation-Date: 2016-01-18 18:48-0300\n"
 "PO-Revision-Date: 2015-11-25 10:13+0000\n"
 "Last-Translator: vfernandes <vfernandes@keep.pt>\n"
 "Language-Team: <>\n"
@@ -215,9 +215,9 @@ msgid ""
 "items)."
 msgstr "'CCODE' é para códigos de colecção (aparece na edição de um exemplar)."
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:24
-#, c-format
-msgid "'Call Number' is for your item's call number prefix"
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:26
+#, fuzzy, c-format
+msgid "'Call Number' is for your item's call number or call number prefix"
 msgstr "'Cota' é o prefixo da cota do seu documento"
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:21
@@ -379,19 +379,19 @@ msgstr ""
 msgid "'Length' - For use with control fields, 001-009"
 msgstr "'Tamanho' - É usado com os campos de controlo, 001-009"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:10
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:9
 #, c-format
 msgid "'Librarian' field will show the logged in librarian's username"
 msgstr ""
 "'Bibliotecário' vai mostrar o nome do bibliotecário que se encontra "
 "autenticado"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:25
-#, c-format
-msgid "'Library' is the library that owns this subscription. "
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:27
+#, fuzzy, c-format
+msgid "'Library' is the branch that owns this subscription. "
 msgstr "'Biblioteca' é a biblioteca que possui esta assinatura. "
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:23
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:42
 #, c-format
 msgid "'Location' is for the shelving location"
 msgstr "'Localização' é a localização na prateleira"
@@ -434,7 +434,7 @@ msgstr ""
 msgid "'NOT_LOAN' is used to list reasons why a title is not for loan."
 msgstr "'NOT_LOAN' são as razões porque o título não pode ser requisitado."
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:33
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:35
 #, c-format
 msgid ""
 "'Nonpublic Note' should be used for notes that are only visible to the "
@@ -454,11 +454,12 @@ msgstr ""
 "usadas para fornecer mais detalhes do relatório ou dicas como introduzir "
 "valores na execução"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:67
-#, c-format
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:80
+#, fuzzy, c-format
 msgid ""
 "'Numbering pattern' will help you determine how the numbers are printed for "
-"each issue "
+"each issue. Patterns entered here are saved and editable at any time by "
+"visiting 'Manage numbering patterns' "
 msgstr ""
 "'Padrão de numeração' vai determinar como os números são impressos para cada "
 "fascículo "
@@ -652,7 +653,7 @@ msgstr ""
 "'Nome do servidor' deve ser preenchido com o nome que irá ajudar a "
 "identificar a fonte (como o nome da biblioteca)."
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:80
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:79
 #, c-format
 msgid ""
 "'Subscription end date' should only be entered for subscriptions that have "
@@ -661,7 +662,7 @@ msgstr ""
 "'Data de fim da assinatura' deve apenas ser introduzido para assinaturas que "
 "terminaram (se existir um log dos periódicos)"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:79
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:77
 #, c-format
 msgid ""
 "'Subscription length' is the number of issues or months in the subscription. "
@@ -723,7 +724,7 @@ msgstr ""
 "'Nome de utilizador' e 'Palavra-passe' apenas são necessários para "
 "servidores protegidos."
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:11
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:10
 #, c-format
 msgid ""
 "'Vendor' can be found by either searching vendors entered via the "
@@ -771,7 +772,7 @@ msgstr "(! significa 'não visível' ou 'não recolhido' no caso de recolhido)"
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-numberpatterns.tt:11
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-detail.tt:9
 #: intranet-tmpl/prog/en/modules/help/serials/serials-edit.tt:27
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:86
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:105
 #: intranet-tmpl/prog/en/modules/help/serials/serials-home.tt:9
 #: intranet-tmpl/prog/en/modules/help/serials/claims.tt:15
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:21
@@ -815,6 +816,10 @@ msgstr "(! significa 'não visível' ou 'não recolhido' no caso de recolhido)"
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:33
 #: intranet-tmpl/prog/en/modules/help/labels/spinelabel-home.tt:14
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:44
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:17
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:49
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:79
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:103
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-layout.tt:15
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:31
 #: intranet-tmpl/prog/en/modules/help/course_reserves/course-details.tt:9
@@ -1080,42 +1085,42 @@ msgstr "1 = Esperado"
 msgid "1 =&gt; !OPAC Intranet Editor Collapsed"
 msgstr "1 =&gt; !OPAC Intranet Editor Recolhido"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:58
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:69
 #, c-format
 msgid "1/ 2 months (6/year): Bi-monthly"
 msgstr "1/ 2 meses (6/ano): Bimestral"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:55
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:66
 #, c-format
 msgid "1/ 2 weeks: Twice monthly (fortnightly)"
 msgstr "1/ 2 semanas: Duas vezes por mês (quinzenalmente)"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:63
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:74
 #, c-format
 msgid "1/ 2 years: Bi-annual"
 msgstr "02/01 anos: Bi-anual"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:59
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:70
 #, c-format
 msgid "1/ 3 months (1/quarter): Quarterly"
 msgstr "1 / 3 meses (1/quarter): Trimestral"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:56
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:67
 #, c-format
 msgid "1/ 3 weeks: Tri-weekly"
 msgstr "1 / 3 semanas: Tri-semana"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:52
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:63
 #, c-format
 msgid "1/day: Daily"
 msgstr "1/day: Diário"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:57
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:68
 #, c-format
 msgid "1/month: Monthly"
 msgstr "Mensal"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:60
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:71
 #, c-format
 msgid ""
 "1/quarter (seasonal) : Quarterly related to seasons (ie. Summer, Autumn, "
@@ -1124,12 +1129,12 @@ msgstr ""
 "Trimestral (1/trimestre) : Trimestres, estações (ou seja Verão, Outono, "
 "Inverno, Primavera)"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:54
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:65
 #, c-format
 msgid "1/week: Weekly"
 msgstr "Semanal"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:62
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:73
 #, c-format
 msgid "1/year: Annual"
 msgstr "Anual"
@@ -1155,12 +1160,12 @@ msgstr "2 = Catálogo"
 msgid "2 =&gt; !OPAC !Intranet Editor !Collapsed"
 msgstr "2 =&gt; !OPAC !Intranet Editor !Recolhido"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:51
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:62
 #, c-format
 msgid "2/day: Twice daily"
 msgstr "2/dia: Duas vezes por dia"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:61
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:72
 #, c-format
 msgid "2/year: Half yearly"
 msgstr "2/ano: Semestrais"
@@ -1181,7 +1186,7 @@ msgstr "3 = Leitores"
 msgid "3 =&gt; !OPAC !Intranet Editor Collapsed"
 msgstr "3 =&gt; !OPAC !Intranet Editor Recolhido"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:53
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:64
 #, c-format
 msgid "3/week: Three times a week"
 msgstr "3/semana: Três vezes por semana"
@@ -1417,6 +1422,7 @@ msgstr ""
 "onde devem aparecer."
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:38
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:7
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-layout.tt:5
 #, c-format
 msgid ""
@@ -1478,6 +1484,7 @@ msgstr ""
 "máquina a partir da secção de gestão da imagem de leitor "
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:23
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:39
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:19
 #, c-format
 msgid ""
@@ -1511,6 +1518,7 @@ msgstr ""
 "texto para a esquerda, direita, superior ou inferior."
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:32
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:53
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:5
 #, c-format
 msgid ""
@@ -1563,6 +1571,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:5
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:28
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:21
 #, c-format
 msgid ""
 "A template is based on the label/card stock you are using. This might be "
@@ -1847,6 +1856,7 @@ msgid "Add Quote"
 msgstr "Adicionar frase"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:7
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:85
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-batch.tt:7
 #, c-format
 msgid "Add a Batch"
@@ -1863,12 +1873,14 @@ msgstr "Adicionar um contracto"
 msgid "Add a Fund"
 msgstr "Adicionar um fundo"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:9
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-layout.tt:7
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-layout.tt:7
 #, c-format
 msgid "Add a Layout"
 msgstr "Adicionar um Esquema"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:57
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:9
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:9
 #, c-format
@@ -1881,6 +1893,7 @@ msgid "Add a Staff Patron"
 msgstr "Adicionar um leitor Staff"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:7
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:23
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:7
 #, c-format
 msgid "Add a Template"
@@ -2235,7 +2248,16 @@ msgstr ""
 msgid "After filling in all of the fields, click 'Submit'"
 msgstr "Após verificar os registos importados, clicar 'Concluir a importação'"
 
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:98
+#, c-format
+msgid ""
+"After filling in this data click the 'Test prediction pattern' button to see "
+"what issues the system will generate, if there are irregularities you can "
+"choose which issues don't exist from the list presented."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:26
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:42
 #, c-format
 msgid ""
 "After finding any anomalies in the printed document, create a profile and "
@@ -2279,6 +2301,7 @@ msgstr ""
 "Depois de guardar, vai ver o evento listado no resumo abaixo do calendário"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:23
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:101
 #, c-format
 msgid ""
 "After saving your file, simply print to the blank labels you have in your "
@@ -2296,6 +2319,7 @@ msgstr ""
 "Após guardar as preferências aparecerá uma mensagem de confirmação a "
 "identificar quais as preferências que foram guardadas"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:15
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-layout.tt:13
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-layout.tt:32
 #, c-format
@@ -2303,6 +2327,7 @@ msgid "After saving, your layouts will appear on the 'Manage Layouts' page."
 msgstr ""
 "Depois de salvar, os esquemas aparecerem na página de gestão dos esquemas."
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:75
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:27
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:27
 #, c-format
@@ -2310,6 +2335,7 @@ msgid "After saving, your profiles will appear on the 'Manage Profiles' page."
 msgstr "Depois de salvar, os perfis aparecerem na página de gestão dos perfis."
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:31
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:47
 #, c-format
 msgid ""
 "After saving, your templates will appear on the 'Manage Templates' page."
@@ -3021,6 +3047,7 @@ msgstr "Modificar registos em lote"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:3
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:40
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:81
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-batch.tt:3
 #: intranet-tmpl/prog/en/modules/help/patroncards/manage.tt:15
 #, c-format
@@ -3029,6 +3056,7 @@ msgstr "Lotes"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:5
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:42
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:83
 #, c-format
 msgid ""
 "Batches are made up of the barcodes you would like to print. Once in this "
@@ -3040,6 +3068,7 @@ msgstr ""
 "imprimir etiquetas."
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:9
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:87
 #, c-format
 msgid ""
 "Batches can be created in one of two ways. The first is to click the 'Create "
@@ -3097,6 +3126,7 @@ msgstr ""
 "de impressora / modelo."
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:25
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:41
 #, c-format
 msgid ""
 "Before picking a profile try printing some sample labels so that you can "
@@ -3256,9 +3286,11 @@ msgid "Borrower number: "
 msgstr "Número de leitor: "
 
 #: intranet-tmpl/prog/en/modules/help/tools/quotes.tt:21
-#, c-format
-msgid "Both the 'Source' and the 'Text' fields "
-msgstr "Os campos 'Fonte' e 'Texto' "
+#, fuzzy, c-format
+msgid ""
+"Both the 'Source' and the 'Text' fields must be filled in in order to save "
+"the new quote."
+msgstr "preenchidas para guardar a nova frase."
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:491
 #, c-format
@@ -3717,11 +3749,12 @@ msgstr ""
 "no topo do ecrã de 'Empréstimo'. Após selecionar o leitor aparecerá a "
 "informação sincronizada do mesmo, incluindo multas e empréstimos."
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:66
-#, c-format
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:25
+#, fuzzy, c-format
 msgid ""
 "Checking the 'Manual history' box will allow you to enter serials outside "
-"the prediction pattern."
+"the prediction pattern once the subscription is saved by going to the "
+"'Planning' tab on the subscription detail page."
 msgstr ""
 "Ao marcar a caixa 'Histórico manual' permite adicionar periódicos fora do "
 "padrão de previsão."
@@ -4397,7 +4430,7 @@ msgstr "Clicar em 'Seguinte'"
 msgid "Click 'Process images'"
 msgstr "Clicar em 'Processar imagens'"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:84
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:103
 #, c-format
 msgid "Click 'Save Subscription' to save the information you have entered."
 msgstr "Clicar em 'Guardar Assinatura' para salvar a informação introduzida."
@@ -6027,6 +6060,7 @@ msgstr ""
 "Exemplo: Se tiver múltiplos campos 650 este será o carácter que irá aparecer "
 "entrar cada um na coluna"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:70
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:22
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:22
 #, c-format
@@ -6560,6 +6594,14 @@ msgstr ""
 msgid "For example: \"INSTID:12345,BASEBALL:Cubs\""
 msgstr "Por exemplo: \"INSTID:12345,BASEBALL:Cubs\""
 
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:95
+#, c-format
+msgid ""
+"For example: If the first issue to receive is \"vol. 4, no. 1, iss. 796\", "
+"you need to set up \"inner counter = 0\" But if it's \"vol. 4, no. 2, iss. "
+"797\", the inner counter should be \"1\"."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:5
 #, c-format
 msgid ""
@@ -6609,6 +6651,7 @@ msgstr ""
 msgid "For multiple images, choose to upload a zip file"
 msgstr "Para múltiplas imagens, escolha carregar um ficheiro ZIP"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:69
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:21
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:21
 #, c-format
@@ -6639,7 +6682,7 @@ msgstr ""
 "leitor de uma categoria pode efectuar, independentemente do tipo de "
 "documento."
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:36
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:39
 #, c-format
 msgid ""
 "For this option to appear you need to make sure that you have a Routing List "
@@ -7092,6 +7135,7 @@ msgstr ""
 "ou clicar no título da subscrição e por fim clicar no botão 'Receber'."
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:15
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:93
 #, c-format
 msgid ""
 "From the search results, click the check box next to the items you want to "
@@ -7704,7 +7748,7 @@ msgstr ""
 msgid "If left empty, the text for librarian is used instead"
 msgstr "Se vazio, é usado o texto dos técnicos"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:27
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:30
 #, c-format
 msgid ""
 "If more than one library subscribes to this serial you will need to create a "
@@ -7724,7 +7768,7 @@ msgstr ""
 "financeiras' pode ser usado para aplicar valores relacionados com a "
 "contabilidade."
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:42
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:47
 #, c-format
 msgid ""
 "If no values are entered in these fields, they will use the "
@@ -8360,7 +8404,7 @@ msgstr ""
 "itens. Com este método a data de retorno será a última data que a biblioteca "
 "esteve aberta."
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:7
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:5
 #, c-format
 msgid ""
 "If you are entering a new subscription from the Serials module you will be "
@@ -8627,15 +8671,6 @@ msgstr ""
 "Se optar por pesquisar outra biblioteca pelo registo de autoridade aparecerá "
 "uma caixa de pesquisa"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:72
-#, c-format
-msgid ""
-"If you chose the 'Number' Numbering Format you will see 'issues expected' in "
-"which you will enter the total number of issues you expect to receive."
-msgstr ""
-"Se escolher 'Número' como formato de numeração verá os 'números esperados' "
-"onde deverá introduzir o número de fascículos esperados para recepção."
-
 #: intranet-tmpl/prog/en/modules/help/admin/classsources.tt:14
 #, c-format
 msgid ""
@@ -8809,16 +8844,6 @@ msgid ""
 msgstr ""
 "Se adicionou contratos a um fornecedor de onde se encontra a encomendar, "
 "poderá escolher sobre qual contrato está a encomendar os exemplares."
-
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:70
-#, c-format
-msgid ""
-"If you have chosen any 'Numbering Format' other than 'Number' in the "
-"'Rollover at' field, enter the last issue number before the volume number "
-"changes "
-msgstr ""
-"Se escolheu um formato de numeração diferente de 'Número', insira no campo "
-"'Recomeça em' o número do último fascículo antes do número de volume alterar "
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:7
 #, c-format
@@ -9620,6 +9645,7 @@ msgstr ""
 "suplementar."
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:34
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:55
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:7
 #, c-format
 msgid ""
@@ -9906,11 +9932,11 @@ msgstr ""
 "Importante: Se o campo é obrigatório não pode limpar os valores do mesmo."
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:59
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Important: If this field is left blank then Koha will not put a limit on the "
 "fines this item will accrue. A maximum fine amount can be set using the "
-"MaxFinesystem preference."
+"MaxFine system preference."
 msgstr ""
 "Importante: Se este campo é deixado em branco então o sistema não põe um "
 "limite nas multas que o exemplar pode ter. Um montante máximo de multa pode "
@@ -9926,6 +9952,7 @@ msgstr ""
 "multas a correr não verá nenhuns dados neste relatório."
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:20
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:36
 #, c-format
 msgid ""
 "Important: If you do not supply a left text margin in the template, a "
@@ -10306,7 +10333,7 @@ msgstr ""
 msgid "Importing Patrons"
 msgstr "Importar leitores"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:45
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:55
 #, c-format
 msgid ""
 "In 'First issue publication date' you want to enter the date of the issue "
@@ -10406,6 +10433,14 @@ msgid ""
 msgstr ""
 "Para reivindicar edições em falta e tardias você precisa de digitar as "
 "informações do fornecedor"
+
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:24
+#, c-format
+msgid ""
+"In order to determine how to handle irregularities in your subscription "
+"answer 'When there is an irregular issue', if the numbers are always "
+"sequential you'll want to pick 'Keep issue number'"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:60
 #, c-format
@@ -10666,7 +10701,7 @@ msgstr "Inventário/Balanço"
 msgid "Invoices"
 msgstr "Facturas"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:50
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:61
 #, c-format
 msgid ""
 "Irregular: The journal is not \"regular\" but has a periodicity. You know "
@@ -11246,6 +11281,7 @@ msgid "Language=%s "
 msgstr "Idioma=%s "
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:36
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:5
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-layout.tt:3
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-layout.tt:3
 #: intranet-tmpl/prog/en/modules/help/patroncards/manage.tt:3
@@ -11262,11 +11298,6 @@ msgid ""
 msgstr ""
 "Aprenda mais sobre as Sugestões de aquisição no capítulo de Aquisições do "
 "manual."
-
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:37
-#, c-format
-msgid "Learn more about Routing Lists later in this manual"
-msgstr "Aprenda mais sobre as Lista de Circulação neste manual"
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:117
 #, c-format
@@ -11568,6 +11599,11 @@ msgstr "Gerir imagens"
 #, c-format
 msgid "Manage Koha system settings (Administration panel)"
 msgstr "Gerir preferências do sistema (Painel de administração)"
+
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:3
+#, fuzzy, c-format
+msgid "Manage Labels"
+msgstr "Gerir imagens"
 
 #: intranet-tmpl/prog/en/modules/help/tools/manage-marc-import.tt:3
 #, c-format
@@ -12037,10 +12073,11 @@ msgstr ""
 "desde Email, Feed, Telefone (se estiver a usar o serviço Tiva Talking Tech), "
 "Impressão ou SMS (se tiver definido o SMSSendDriver). "
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:22
-#, c-format
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:23
+#, fuzzy, c-format
 msgid ""
-"Next you can choose whether a new item is created when receiving an issue"
+"Next you can choose whether a new item is created when receiving an issue "
+"(if you barcode issues you'll want to create an item at this time)"
 msgstr ""
 "De seguida pode escolhe se um novo exemplar é criado quando um número é "
 "recebeido"
@@ -12166,6 +12203,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/tools/quotes-upload.tt:38
 #, c-format
 msgid "Note:"
+msgstr "Nota:"
+
+#: intranet-tmpl/prog/en/modules/help/tools/quotes.tt:21
+#, fuzzy, c-format
+msgid "Note: "
 msgstr "Nota:"
 
 #: intranet-tmpl/prog/en/modules/help/members/discharge.tt:9
@@ -12322,6 +12364,7 @@ msgstr "Circulação offline"
 msgid "Offline circulation"
 msgstr "Circulação offline"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:67
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:19
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:19
 #, c-format
@@ -12435,6 +12478,11 @@ msgstr ""
 "Neste separador poderá ver e editar as listas de circulação onde o leitor "
 "está."
 
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:88
+#, c-format
+msgid "Once a 'Numbering pattern' is chosen the number formula will appear. "
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tags/review.tt:17
 #, c-format
 msgid ""
@@ -12532,6 +12580,13 @@ msgid ""
 msgstr ""
 "Assim que a selecção de frases está terminada, carregue no botão 'Eliminar "
 "frases'."
+
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:50
+#, c-format
+msgid ""
+"Once that data is filled in you can click 'Next' to enter the prediction "
+"pattern information. "
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/quotes-upload.tt:21
 #, c-format
@@ -12643,6 +12698,7 @@ msgstr ""
 "uma lista dos elementos em atraso."
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:17
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:95
 #, c-format
 msgid ""
 "Once you have added all of the items click the 'Done' button. The resulting "
@@ -12836,6 +12892,7 @@ msgstr ""
 "Assim que tiver guardado as alterações a nova biblioteca aparecerá no topo "
 "direito."
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:77
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:29
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:29
 #, c-format
@@ -13725,6 +13782,7 @@ msgid "Professional patrons can be linked to Organizational patrons"
 msgstr "Leitores profissionais podem ter uma organização como ligação"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:30
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:51
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:3
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:3
 #: intranet-tmpl/prog/en/modules/help/patroncards/manage.tt:7
@@ -14237,7 +14295,7 @@ msgstr "Ver a documentação completa para as estatísticas de aquisição no "
 msgid "See the full documentation for Adding Patrons in the "
 msgstr "Ver a documentação completa para adicionar leitores no "
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:86
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:105
 #, c-format
 msgid "See the full documentation for Adding a Subscription in the "
 msgstr "Ver a documentação completa para adicionar uma assinatura no "
@@ -14502,21 +14560,25 @@ msgid "See the full documentation for Koha to MARC Mapping in the "
 msgstr "Ver a documentação completa para as ligações Koha => MARC no "
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:25
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:103
 #, c-format
 msgid "See the full documentation for Label Batches in the "
 msgstr "Ver a documentação completa para os lotes de etiquetas no "
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:17
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-layout.tt:15
 #, c-format
 msgid "See the full documentation for Label Layouts in the "
 msgstr "Ver a documentação completa para os esquemas de etiquetas no "
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:79
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:31
 #, c-format
 msgid "See the full documentation for Label Profiles in the "
 msgstr "Ver a documentação completa para os perfis das etiquetas no "
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:33
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:49
 #, c-format
 msgid "See the full documentation for Label Templates in the "
 msgstr "Ver a documentação completa para os modelos das etiquetas no "
@@ -15397,7 +15459,7 @@ msgstr ""
 "Começe por adicionar um novo modelo (um modelo pode ser feito para uma ou "
 "mais ações) inserindo o nome e clicando em 'Criar modelo'."
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:69
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:83
 #, c-format
 msgid ""
 "Start with the numbering on the issue you have in hand, the numbering that "
@@ -15539,16 +15601,6 @@ msgstr ""
 msgid "Subscription Detail"
 msgstr "Detalhe da Assinatura"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:5
-#, c-format
-msgid ""
-"Subscriptions can be added by clicking the 'New' button on any bibliographic "
-"record or by visiting the Serials module and clicking 'New Subscription'"
-msgstr ""
-"Assinaturas podem ser adicionadas clicando no botão 'Novo' em qualquer "
-"registo bibliográfico, ou visitando o módulo Periódicos e clicando em 'Nova "
-"assinatura'"
-
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:93
 #, c-format
 msgid "Suggested Authority Z39.50 Targets"
@@ -15681,6 +15733,7 @@ msgid "Tell Koha which type of file this is, bibliographic or authority"
 msgstr "Diz ao Koha qual o tipo do ficheiro, bibliográfica ou de autoridade"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:15
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:31
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:15
 #, c-format
 msgid ""
@@ -15690,6 +15743,7 @@ msgstr ""
 "Código de modelo deve ser algo que ajude na identificação do modelo na lista."
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:14
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:30
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:14
 #, c-format
 msgid ""
@@ -15704,6 +15758,7 @@ msgstr ""
 msgid "Template Toolkit tags"
 msgstr "Ferramenta de etiquetas para modelos"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:65
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:17
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:17
 #, c-format
@@ -15716,6 +15771,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:3
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:26
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:19
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:3
 #: intranet-tmpl/prog/en/modules/help/patroncards/manage.tt:11
 #, c-format
@@ -15748,6 +15804,13 @@ msgid ""
 msgstr ""
 "&lt;&lt; e &gt;&gt; são apenas limitados. Deve colocar &lt;&lt; no início e "
 "&gt;&gt; no fim do parâmetro"
+
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:91
+#, c-format
+msgid ""
+"The 'Begins with' number is the number of the issue you're holding in your "
+"hand."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:16
 #, c-format
@@ -15793,16 +15856,23 @@ msgstr ""
 "O período de multas grátis é o período de tempo que um item pode ser estar "
 "em atraso antes que se comecem a cobrar multas. "
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:31
-#, c-format
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:43
+#, fuzzy, c-format
 msgid ""
-"The 'Grace Period' is the number of days before an issue is automatically "
-"moved from 'expected' status to 'waiting' and how many days before an issue "
-"is automatically moved from 'waiting' status to 'late'"
+"The 'Grace period' is the number of days before an issue is automatically "
+"moved from 'Expected' status to 'Waiting' and how many days before an issue "
+"is automatically moved from 'Waiting' status to 'Late'"
 msgstr ""
 "O período de graça é o número de dias antes que um número passe "
 "automaticamente de 'esperado' para 'em espera' e quantos dias antes um "
 "período é automaticamente movido de 'em espera' to 'atrasado'"
+
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:92
+#, c-format
+msgid ""
+"The 'Inner counter' is used to tell Koha where the \"receiving cycle\" "
+"starts "
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:47
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:13
@@ -15859,6 +15929,14 @@ msgstr ""
 "se a preferência do sistema advancedMARCeditor estiver definida para mostrar "
 "o texto"
 
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:87
+#, c-format
+msgid ""
+"The 'Locale' option is useful when you want to display days, month or "
+"season. For example, if you have a German serial, you can use the German "
+"locale option to display days, etc. in German."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:41
 #, c-format
 msgid ""
@@ -15877,15 +15955,6 @@ msgid ""
 msgstr ""
 "A caixa 'Notícias' permite o uso de HTML para formatar as suas notícias"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:81
-#, c-format
-msgid ""
-"The 'Numbering formula' is editable to match the way you'd like your "
-"numbering to print on the item record and subscription information pages"
-msgstr ""
-"A fórmula de numeração pode ser editada para a forma que deseja que a sua "
-"numeração seja impressa nas páginas de registo e de informação de assinatura"
-
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:57
 #, c-format
 msgid ""
@@ -15893,6 +15962,13 @@ msgid ""
 "combination "
 msgstr ""
 "A 'Multa de atraso' é a multa máxima para combinação do leitor e do exemplar "
+
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:36
+#, c-format
+msgid ""
+"The 'Patron notification' option lets you pick a notice to send to patrons "
+"who subscribe to updates on this serial via the OPAC. "
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:15
 #, c-format
@@ -16183,6 +16259,7 @@ msgstr ""
 msgid "The Patrons module stores the information you add about your patrons."
 msgstr "O módulo de leitores guarda a informação adicionada sobre os leitores."
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:64
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:16
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:16
 #, c-format
@@ -16224,7 +16301,7 @@ msgid "The RenewalSendNotice preference is set to 'Send'"
 msgstr ""
 "A preferência EnhancedMessagingPreferences está definida para 'Permitir'"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:40
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:44
 #, c-format
 msgid ""
 "The Staff and OPAC Display options allow you to control how many issues "
@@ -16279,6 +16356,7 @@ msgstr ""
 "descrição do modelo dado pelo fornecedor."
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:17
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:33
 #, c-format
 msgid ""
 "The Units pull down is used to define what measurement scale you're going to "
@@ -16308,6 +16386,7 @@ msgstr ""
 "O menu Unidades é usado para definir a escala de medição que vai ser usada "
 "no perfil."
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:66
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:18
 #, c-format
 msgid ""
@@ -16874,6 +16953,7 @@ msgstr ""
 "no Web site."
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:18
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:34
 #, c-format
 msgid ""
 "The measurements, number of columns and number of rows can be found on the "
@@ -16967,6 +17047,7 @@ msgstr ""
 "Cartões de Leitor."
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:11
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:89
 #, c-format
 msgid ""
 "The other is to choose to create a new batch from the label creator tool"
@@ -17373,10 +17454,12 @@ msgstr ""
 msgid "There are several messages that can appear when checking items in:"
 msgstr "Existem várias mensagens que podem aparecer quando retornar itens:"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:46
-#, c-format
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:56
+#, fuzzy, c-format
 msgid ""
-"There are several pre-defined options for the 'Frequency' of publication "
+"There are several pre-defined options for the 'Frequency' of publication all "
+"of which are visible alongside your own custom frequencies by visiting "
+"'Manage frequencies' "
 msgstr "Existem opções pré-definidas para a 'Frequência' de publicação "
 
 #: intranet-tmpl/prog/en/modules/help/reserve/request.tt:7
@@ -17513,7 +17596,7 @@ msgstr ""
 "administração das moedas disponíveis. Se nada estiver escondido verá que não "
 "existem seleções e verá todas as colunas quando estiver a ver a tabela."
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:19
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:20
 #, c-format
 msgid ""
 "This can be done by searching for an existing record by clicking on the "
@@ -17525,7 +17608,7 @@ msgstr ""
 "ligação 'Pesquisar por registo' debaixo das caixas ou inserindo o número de "
 "registo na primeira caixa. Apenas pesquisa o campo entre parêntesis."
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:28
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:31
 #, c-format
 msgid ""
 "This can be done easily by using the 'Edit as New (Duplicate)' option found "
@@ -18652,6 +18735,7 @@ msgstr ""
 "Para adicionar um tipo de documento, clique no botão 'Novo tipo de "
 "documento' na parte superior da página."
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:11
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-layout.tt:9
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-layout.tt:9
 #, c-format
@@ -18680,6 +18764,7 @@ msgstr ""
 "Para adicionar uma nova categoria clicar em 'Nova categoria' no topo da "
 "página"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:59
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:11
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:11
 #, c-format
@@ -18691,6 +18776,7 @@ msgstr ""
 "superior da página e escolha 'Novo Perfil'"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:9
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:25
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:9
 #, c-format
 msgid ""
@@ -19286,6 +19372,7 @@ msgstr ""
 "clique em 'De um registo novo (em branco)'. "
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:19
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:97
 #, c-format
 msgid ""
 "To print your labels, click the 'Export Batch' button. To print only some of "
@@ -19440,15 +19527,6 @@ msgid "To set preferences for all libraries, keep the menu set to 'Default'"
 msgstr ""
 "Para definir as preferências para todas as bibliotecas, mantenha o menu "
 "definido para 'Omissão'"
-
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:34
-#, c-format
-msgid ""
-"To set up a routing list for serials, choose 'Routing List' from the 'Patron "
-"notification' field. "
-msgstr ""
-"Para configurar uma lista de circulação para os periódicos, escolha 'Lista "
-"de circulação' do campo \"notificação de leitor'. "
 
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:11
 #, c-format
@@ -19679,7 +19757,7 @@ msgstr "Identificador único"
 msgid "Universal Decimal Classification"
 msgstr "Classificação Decimal Universal"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:49
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:60
 #, c-format
 msgid "Unknown select this if none of the other choices are relevant"
 msgstr ""
@@ -19741,7 +19819,7 @@ msgstr ""
 msgid "Use all tools"
 msgstr "Usar todas as ferramentas"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:32
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:34
 #, c-format
 msgid ""
 "Use the 'Public Note' for any notes you would like to appear in the OPAC for "
@@ -19928,6 +20006,8 @@ msgstr ""
 "Usando o formulário fornecido, escolha qual o valor para aparecer na coluna "
 "e o valor para aparecer na linha."
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:13
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:61
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-layout.tt:11
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:13
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:13
@@ -19941,6 +20021,7 @@ msgstr ""
 "problema com seu modelo."
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:11
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:27
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:11
 #, c-format
 msgid ""
@@ -20717,7 +20798,7 @@ msgstr ""
 "Basta carregar um ficheiro com números de cartão (um por linha) ou "
 "digitalizar esses números na caixa de texto."
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:48
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:59
 #, c-format
 msgid ""
 "Without periodicy: some very specific (usually high level science journals) "
@@ -21033,7 +21114,7 @@ msgstr ""
 "Pode escolher em atribuir este fundo a um bibliotecário. Isto faz com que "
 "apenas esse bibliotecário possas realizar alterações ao Fundo"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:75
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:84
 #, c-format
 msgid ""
 "You can choose to create your own numbering pattern by choosing 'None of the "
@@ -21219,6 +21300,7 @@ msgstr ""
 "momento de criação do relatório escolhendo a opção 'ou criar'. "
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:16
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:32
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:16
 #, c-format
 msgid ""
@@ -21328,6 +21410,7 @@ msgstr ""
 "parte do seu nome para começar o processo de reserva."
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:13
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:91
 #, c-format
 msgid ""
 "You will be brought to an empty batch with an 'Add item(s)' button at the "
@@ -21591,6 +21674,7 @@ msgstr ""
 "sistema"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:21
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:99
 #, c-format
 msgid ""
 "You will then be presented with three download options: PDF, Excel, and CSV."
@@ -21854,11 +21938,6 @@ msgstr "bath.issn"
 #, c-format
 msgid "bath.standardIdentifier"
 msgstr "bath.standardIdentifier"
-
-#: intranet-tmpl/prog/en/modules/help/tools/quotes.tt:21
-#, c-format
-msgid "be filled in in order to save the new quote."
-msgstr "preenchidas para guardar a nova frase."
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:36
 #, c-format
@@ -22535,7 +22614,7 @@ msgstr "management "
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-numberpatterns.tt:11
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-detail.tt:9
 #: intranet-tmpl/prog/en/modules/help/serials/serials-edit.tt:27
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:86
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:105
 #: intranet-tmpl/prog/en/modules/help/serials/serials-home.tt:9
 #: intranet-tmpl/prog/en/modules/help/serials/claims.tt:15
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:21
@@ -22579,6 +22658,10 @@ msgstr "management "
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:33
 #: intranet-tmpl/prog/en/modules/help/labels/spinelabel-home.tt:14
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:44
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:17
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:49
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:79
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:103
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-layout.tt:15
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:31
 #: intranet-tmpl/prog/en/modules/help/course_reserves/course-details.tt:9
@@ -22769,11 +22852,6 @@ msgstr "mus:i Gravação não musical"
 #, c-format
 msgid "mus:j Musical recording"
 msgstr "mus:i Gravação musical"
-
-#: intranet-tmpl/prog/en/modules/help/tools/quotes.tt:21
-#, c-format
-msgid "must"
-msgstr "deve"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:15
 #, c-format
