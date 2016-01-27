@@ -13,7 +13,7 @@
                 "dt_branch":
                     "[% data.branchname |html %]",
                 "dt_action":
-                    "<a href=\"#\" style='cursor:pointer' onclick='add_user(\"[% data.borrowernumber %]\", \"[% data.firstname %] [% data.surname %]\"); return false;'>Add</a>"
+                    "<a href=\"#\" onclick='add_user(\"[% data.borrowernumber %]\", \"[% data.firstname %] [% data.surname %]\"); return false;'>Add</a>"
             }[% UNLESS loop.last %],[% END %]
         [% END %]
     ]
