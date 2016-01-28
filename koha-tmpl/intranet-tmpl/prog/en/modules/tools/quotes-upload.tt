@@ -263,7 +263,7 @@
             contentType : "application/x-www-form-urlencoded", // we must claim this mimetype or CGI will not decode the URL encoding
             dataType    : "json",
             data        : {
-                            "quote"     : JSON.stringify(oTable.fnGetData()),
+                            "quote"     : encodeURI ( JSON.stringify(oTable.fnGetData()) ),
                             "action"    : "add",
                           },
             success     : function(){
