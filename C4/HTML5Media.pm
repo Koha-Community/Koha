@@ -107,7 +107,7 @@ sub gethtml5media {
                             'fmt' => '43' #webm is the only format compatible to all modern browsers. maybe check for available qualities
                         }
                     );
-                    # TODO handle error if format not availabe. Does that ever occur?
+                    # TODO handle error if format not available. Does that ever occur?
                     $isyoutube = 1;
                 }
                else {
