@@ -190,7 +190,7 @@ sub GetBasket {
 =head3 NewBasket
 
   $basket = &NewBasket( $booksellerid, $authorizedby, $basketname,
-      $basketnote, $basketbooksellernote, $basketcontractnumber, $deliveryplace, $billingplace, $is_standing );
+      $basketnote, $basketbooksellernote, $basketcontractnumber, $deliveryplace, $billingplace, $is_standing, $create_items );
 
 Create a new basket in aqbasket table
 
@@ -209,7 +209,7 @@ The other parameters are optional, see ModBasketHeader for more info on them.
 sub NewBasket {
     my ( $booksellerid, $authorisedby, $basketname, $basketnote,
         $basketbooksellernote, $basketcontractnumber, $deliveryplace,
-        $billingplace, $is_standing ) = @_;
+        $billingplace, $is_standing, $create_items ) = @_;
     my $dbh = C4::Context->dbh;
     my $query =
         'INSERT INTO aqbasket (creationdate,booksellerid,authorisedby) '
@@ -221,7 +221,7 @@ sub NewBasket {
     $basketnote           ||= q{};
     $basketbooksellernote ||= q{};
     ModBasketHeader( $basket, $basketname, $basketnote, $basketbooksellernote,
-        $basketcontractnumber, $booksellerid, $deliveryplace, $billingplace, $is_standing );
+        $basketcontractnumber, $booksellerid, $deliveryplace, $billingplace, $is_standing, $create_items );
     return $basket;
 }
 
@@ -598,21 +598,24 @@ Modifies a basket's header.
 
 =item C<$is_standing> is the "is_standing" field in the aqbasket table.
 
+=item C<$create_items> should be set to 'ordering', 'receiving' or 'cataloguing' (or undef, in which
+case the AcqCreateItem syspref takes precedence).
+
 =back
 
 =cut
 
 sub ModBasketHeader {
-    my ($basketno, $basketname, $note, $booksellernote, $contractnumber, $booksellerid, $deliveryplace, $billingplace, $is_standing) = @_;
+    my ($basketno, $basketname, $note, $booksellernote, $contractnumber, $booksellerid, $deliveryplace, $billingplace, $is_standing, $create_items) = @_;
     my $query = qq{
         UPDATE aqbasket
-        SET basketname=?, note=?, booksellernote=?, booksellerid=?, deliveryplace=?, billingplace=?, is_standing=?
+        SET basketname=?, note=?, booksellernote=?, booksellerid=?, deliveryplace=?, billingplace=?, is_standing=?, create_items=?
         WHERE basketno=?
     };
 
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
-    $sth->execute($basketname, $note, $booksellernote, $booksellerid, $deliveryplace, $billingplace, $is_standing, $basketno);
+    $sth->execute($basketname, $note, $booksellernote, $booksellerid, $deliveryplace, $billingplace, $is_standing, $create_items || undef, $basketno);
 
     if ( $contractnumber ) {
         my $query2 ="UPDATE aqbasket SET contractnumber=? WHERE basketno=?";
@@ -1587,6 +1590,7 @@ sub CancelReceipt {
     my $parent_ordernumber = $order->{'parent_ordernumber'};
 
     my @itemnumbers = GetItemnumbersFromOrder( $ordernumber );
+    my $basket = Koha::Acquisition::Order->find( $order->{ordernumber} )->basket;
 
     if($parent_ordernumber == $ordernumber || not $parent_ordernumber) {
         # The order line has no parent, just mark it as not received
@@ -1647,7 +1651,7 @@ sub CancelReceipt {
             WHERE ordernumber = ?
         |, undef, $parent_ordernumber);
 
-        _cancel_items_receipt( $ordernumber, $parent_ordernumber );
+        _cancel_items_receipt( $basket->effective_create_items, $ordernumber, $parent_ordernumber );
         # Delete order line
         $query = qq{
             DELETE FROM aqorders
@@ -1658,7 +1662,7 @@ sub CancelReceipt {
 
     }
 
-    if(C4::Context->preference('AcqCreateItem') eq 'ordering') {
+    if( $basket->effective_create_items eq 'ordering' ) {
         my @affects = split q{\|}, C4::Context->preference("AcqItemSetSubfieldsWhenReceiptIsCancelled");
         if ( @affects ) {
             for my $in ( @itemnumbers ) {
@@ -1681,11 +1685,11 @@ sub CancelReceipt {
 }
 
 sub _cancel_items_receipt {
-    my ( $ordernumber, $parent_ordernumber ) = @_;
+    my ( $effective_create_items, $ordernumber, $parent_ordernumber ) = @_;
     $parent_ordernumber ||= $ordernumber;
 
     my @itemnumbers = GetItemnumbersFromOrder($ordernumber);
-    if(C4::Context->preference('AcqCreateItem') eq 'receiving') {
+    if ( $effective_create_items eq 'receiving' ) {
         # Remove items that were created at receipt
         my $query = qq{
             DELETE FROM items, aqorders_items

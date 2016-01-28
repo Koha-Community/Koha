@@ -54,6 +54,7 @@ use Koha::RecordProcessor;
 use Koha::AuthorisedValues;
 use Koha::Biblios;
 use Koha::ItemTypes;
+use Koha::Acquisition::Order;
 use Koha::Virtualshelves;
 use Koha::Patrons;
 use Koha::Ratings;
@@ -639,7 +640,8 @@ if ( C4::Context->preference('OPACAcquisitionDetails' ) ) {
     });
     my $total_quantity = 0;
     for my $order ( @$orders ) {
-        if ( C4::Context->preference('AcqCreateItem') eq 'ordering' ) {
+        my $basket = Koha::Acquisition::Order->find( $order->{ordernumber} )->basket;
+        if ( $basket->effective_create_items eq 'ordering' ) {
             for my $itemnumber ( C4::Acquisition::GetItemnumbersFromOrder( $order->{ordernumber} ) ) {
                 push @itemnumbers_on_order, $itemnumber;
             }
@@ -700,9 +702,7 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
         $itm->{transfertto}   = $transfertto;
      }
     
-    if (    C4::Context->preference('OPACAcquisitionDetails')
-        and C4::Context->preference('AcqCreateItem') eq 'ordering' )
-    {
+    if ( C4::Context->preference('OPACAcquisitionDetails') ) {
         $itm->{on_order} = 1
           if grep /^$itm->{itemnumber}$/, @itemnumbers_on_order;
     }

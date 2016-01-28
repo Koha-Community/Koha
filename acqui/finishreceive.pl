@@ -60,12 +60,13 @@ my $order            = GetOrder($ordernumber);
 my $new_ordernumber  = $ordernumber;
 
 $unitprice = Koha::Number::Price->new( $unitprice )->unformat();
+my $basket = Koha::Acquisition::Orders->find( $ordernumber )->basket;
 
-#need old receivedate if we update the order, parcel.pl only shows the right parcel this way FIXME
+#need old recievedate if we update the order, parcel.pl only shows the right parcel this way FIXME
 if ($quantityrec > $origquantityrec ) {
     my @received_items = ();
-    if(C4::Context->preference('AcqCreateItem') eq 'ordering') {
-        @received_items = $input->multi_param('items_to_receive');
+    if ($basket->effective_create_items eq 'ordering') {
+        @received_items = $input->param('items_to_receive');
         my @affects = split q{\|}, C4::Context->preference("AcqItemSetSubfieldsWhenReceived");
         if ( @affects ) {
             my $frameworkcode = GetFrameworkCode($biblionumber);
@@ -111,7 +112,7 @@ if ($quantityrec > $origquantityrec ) {
     }
 
     # now, add items if applicable
-    if (C4::Context->preference('AcqCreateItem') eq 'receiving') {
+    if ($basket->effective_create_items eq 'receiving') {
 
         my @tags         = $input->multi_param('tag');
         my @subfields    = $input->multi_param('subfield');

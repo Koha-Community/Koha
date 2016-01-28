@@ -654,7 +654,7 @@
                             <p>This record has many physical items ([% items_count %]). <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]&amp;viewallitems=1">Click here to view them all.</a></p>
                         [% ELSIF ( itemloop.size ) %]
                             [% INCLUDE items_table items=itemloop tab="holdings" %]
-                            [% IF Koha.Preference('OPACAcquisitionDetails') and Koha.Preference('AcqCreateItem') != 'ordering' and acquisition_details.total_quantity > 0 %]
+                            [% IF Koha.Preference('OPACAcquisitionDetails') and acquisition_details.total_quantity > 0 %]
                               [% IF acquisition_details.total_quantity == 1 %]
                                 <span>1 item is on order.</span>
                               [% ELSE %]
@@ -681,7 +681,7 @@
                                     <div id="alternateholdings"><span class="holdings_label">Holdings:</span> [% ALTERNATEHOLDING.holding %]</div>
                                 [% END %]
                             [% ELSE %]
-                                [% IF Koha.Preference('OPACAcquisitionDetails') and Koha.Preference('AcqCreateItem') != 'ordering' and acquisition_details.total_quantity > 0 %]
+                                [% IF Koha.Preference('OPACAcquisitionDetails') and acquisition_details.total_quantity > 0 %]
                                   [% IF acquisition_details.total_quantity == 1 %]
                                     <span>1 item is on order.</span>
                                   [% ELSE %]

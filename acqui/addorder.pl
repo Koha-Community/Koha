@@ -234,6 +234,8 @@ my $basketno=$$orderinfo{basketno};
 my $basket = GetBasket($basketno);
 
 my $user = $input->remote_user;
+my $basketno=$$orderinfo{basketno};
+my $basket = Koha::Acquisition::Baskets->find( $basketno );
 
 # create, modify or delete biblio
 # create if $quantity>0 and $existing='no'
@@ -291,7 +293,7 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
     }
 
     # now, add items if applicable
-    if (C4::Context->preference('AcqCreateItem') eq 'ordering') {
+    if ($basket->effective_create_items eq 'ordering') {
 
         my @tags         = $input->multi_param('tag');
         my @subfields    = $input->multi_param('subfield');

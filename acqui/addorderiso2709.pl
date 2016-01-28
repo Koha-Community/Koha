@@ -44,6 +44,7 @@ use C4::Members;
 
 use Koha::Number::Price;
 use Koha::Libraries;
+use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Currencies;
 use Koha::Acquisition::Orders;
 use Koha::Acquisition::Booksellers;
@@ -78,6 +79,7 @@ if ($cgiparams->{'import_batch_id'} && $op eq ""){
 if (! $cgiparams->{'basketno'}){
     die "Basketnumber required to order from iso2709 file import";
 }
+my $basket = Koha::Acquisition::Baskets->find( $cgiparams->{basketno} );
 
 #
 # 1st step = choose the file to import into acquisition
@@ -102,7 +104,7 @@ if ($op eq ""){
                      );
     import_biblios_list($template, $cgiparams->{'import_batch_id'});
     my $basket = GetBasket($cgiparams->{basketno});
-    if ( C4::Context->preference('AcqCreateItem') eq 'ordering' && !$basket->{is_standing} ) {
+    if ( $basket->effective_create_items eq 'ordering' && !$basket->{is_standing} ) {
         # prepare empty item form
         my $cell = PrepareItemrecordDisplay( '', '', '', 'ACQ' );
 
@@ -381,7 +383,7 @@ if ($op eq ""){
         # parse the item sent by the form, and create an item just for the import_record_id we are dealing with
         # this is not optimised, but it's working !
         my $basket = GetBasket($cgiparams->{basketno});
-        if ( C4::Context->preference('AcqCreateItem') eq 'ordering' && !$basket->{is_standing} ) {
+        if ( $basket->effective_create_items eq 'ordering' && !$basket->{is_standing} ) {
             my @tags         = $input->multi_param('tag');
             my @subfields    = $input->multi_param('subfield');
             my @field_values = $input->multi_param('field_value');

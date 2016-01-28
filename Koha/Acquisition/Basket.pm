@@ -45,6 +45,19 @@ sub bookseller {
     return Koha::Acquisition::Bookseller->_new_from_dbic( $bookseller_rs );
 }
 
+
+=head3 effective_create_items
+
+Returns C<create_items> for this basket, falling back to C<AcqCreateItem> if unset.
+
+=cut
+
+sub effective_create_items {
+    my ( $self ) = @_;
+
+    return $self->create_items || C4::Context->preference('AcqCreateItem');
+}
+
 =head3 type
 
 =cut

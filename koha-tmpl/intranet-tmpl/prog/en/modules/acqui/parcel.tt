@@ -441,7 +441,7 @@
                 <td>[% order.unitprice | $Price %]</td>
                 <td>[% order.total | $Price %]</td>
                 <td>
-                    [% IF loop_receive.cannot_cancel or ( Koha.Preference("AcqCreateItem") == "receiving" and loop_receive.holds > 0 ) %]
+                    [% IF loop_receive.cannot_cancel or ( order.basket.effective_create_items == "receiving" and loop_receive.holds > 0 ) %]
                       [% IF loop_receive.cannot_cancel %]
                         [% span_title = BLOCK %]
                             Cannot cancel receipt of this order line because it

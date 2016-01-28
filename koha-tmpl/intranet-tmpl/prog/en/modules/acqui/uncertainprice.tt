@@ -133,7 +133,7 @@ var MSG_INVALIDPRICE = _("ERROR: Price is not a valid number, please check the p
             <input class="check_uncertain" data-ordernumber="[% uncertainpriceorder.ordernumber %]" type="text" size="10" name="price[% uncertainpriceorder.ordernumber %]" value="[% uncertainpriceorder.listprice %]" />
 	    </td>
 	    <td>
-        [% IF Koha.Preference('AcqCreateItem') == 'ordering' %]
+        [% IF basket.effective_create_items == 'ordering' %]
             [% uncertainpriceorder.quantity %]
             <input type="hidden" name="qty[% uncertainpriceorder.ordernumber %]" value="[% uncertainpriceorder.quantity %]" />
         [% ELSE %]
