@@ -72,6 +72,7 @@ my $found;
 # if we have an item selectionned, and the pickup branch is the same as the holdingbranch
 # of the document, we force the value $rank and $found .
 if (defined $checkitem && $checkitem ne ''){
+    $holds_to_place_count = 1;
     $rank[0] = '0' unless C4::Context->preference('ReservesNeedReturns');
     my $item = $checkitem;
     $item = GetItem($item);
