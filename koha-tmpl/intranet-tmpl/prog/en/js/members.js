@@ -143,8 +143,78 @@ function Dopop(link) {
 }
 
 function Dopopguarantor(link) {
-
     var newin=window.open(link,'popup','width=600,height=400,resizable=no,toolbar=false,scrollbars=yes,top');
+}
+
+function clear_entry(node) {
+    var original = $(node).parent();
+    $("textarea", original).attr('value', '');
+    $("select", original).attr('value', '');
+}
+
+function clone_entry(node) {
+    var original = $(node).parent();
+    var clone = original.clone();
+
+    var newId = 50 + parseInt(Math.random() * 100000);
+    $("input,select,textarea", clone).attr('id', function() {
+        return this.id.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
+    });
+    $("input,select,textarea", clone).attr('name', function() {
+        return this.name.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
+    });
+    $("label", clone).attr('for', function() {
+        return $(this).attr("for").replace(/patron_attr_\d+/, 'patron_attr_' + newId);
+    });
+    $("input#patron_attr_" + newId, clone).attr('value','');
+    $("select#patron_attr_" + newId, clone).attr('value','');
+    $(original).after(clone);
+    return false;
+}
+
+function update_category_code(category_code) {
+    if ( $(category_code).is("select") ) {
+        category_code = $("#categorycode_entry").find("option:selected").val();
+    }
+    var mytables = $(".attributes_table");
+    $(mytables).find("li").hide();
+    $(mytables).find(" li[data-category_code='"+category_code+"']").show();
+    $(mytables).find(" li[data-category_code='']").show();
+}
+
+function select_user(borrowernumber, borrower) {
+    var form = $('#entryform').get(0);
+    if (form.guarantorid.value) {
+        $("#contact-details").find('a').remove();
+        $("#contactname, #contactfirstname").parent().find('span').remove();
+    }
+
+    var id = borrower.borrowernumber;
+    form.guarantorid.value = id;
+    $('#contact-details')
+        .show()
+        .find('span')
+        .after('<a target="blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' + id + '">' + id + '</a>');
+
+    $(form.contactname)
+        .val(borrower.surname)
+        .before('<span>' + borrower.surname + '</span>').get(0).type = 'hidden';
+    $(form.contactfirstname)
+        .val(borrower.firstname)
+        .before('<span>' + borrower.firstname + '</span>').get(0).type = 'hidden';
+
+    form.streetnumber.value = borrower.streetnumber;
+    form.address.value = borrower.address;
+    form.address2.value = borrower.address2;
+    form.city.value = borrower.city;
+    form.state.value = borrower.state;
+    form.zipcode.value = borrower.zipcode;
+    form.country.value = borrower.country;
+    form.branchcode.value = borrower.branchcode;
+
+    form.guarantorsearch.value = LABEL_CHANGE;
+
+    return 0;
 }
 
 $(document).ready(function(){
@@ -165,4 +235,67 @@ $(document).ready(function(){
     $(mandatory_fields).each(function(){
         $("[name='"+this+"']").attr('required', 'required');
     });
+
+    $("fieldset.rows input, fieldset.rows select").addClass("noEnterSubmit");
+
+    $("#guarantordelete").click(function() {
+        $("#contact-details").hide().find('a').remove();
+        $("#guarantorid, #contactname, #contactfirstname").each(function () { this.value = ""; });
+        $("#contactname, #contactfirstname")
+            .each(function () { this.type = 'text'; })
+            .parent().find('span').remove();
+        $("#guarantorsearch").val(LABEL_SET_TO_PATRON);
+    });
+
+    $("#select_city").change(function(){
+        var myRegEx=new RegExp(/(.*)\|(.*)\|(.*)\|(.*)/);
+        document.form.select_city.value.match(myRegEx);
+        document.form.zipcode.value=RegExp.$1;
+        document.form.city.value=RegExp.$2;
+        document.form.state.value=RegExp.$3;
+        document.form.country.value=RegExp.$4;
+    });
+
+    $("#dateofbirth").datepicker({ maxDate: "-1D", yearRange: "c-120:" });
+
+    $("#entryform").validate({
+        rules: {
+            email: {
+                email: true
+            },
+            emailpro: {
+                email: true
+            },
+            B_email: {
+                email: true
+            }
+        },
+        submitHandler: function(form) {
+            $("body, form input[type='submit'], form button[type='submit'], form a").addClass('waiting');
+            if (form.beenSubmitted)
+                return false;
+            else
+                form.beenSubmitted = true;
+                form.submit();
+            }
+    });
+
+    var mrform = $("#manual_restriction_form");
+    var mrlink = $("#add_manual_restriction");
+    mrform.hide();
+    mrlink.on("click",function(e){
+        $(this).hide();
+        mrform.show();
+        e.preventDefault();
+    });
+
+    $("#cancel_manual_restriction").on("click",function(e){
+        $('#debarred_expiration').val('');
+        $('#add_debarment').val(0);
+        $('#debarred_comment').val('');
+        mrlink.show();
+        mrform.hide();
+        e.preventDefault();
+    });
+
 });
