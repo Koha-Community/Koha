@@ -311,7 +311,7 @@ $(document).ready(function () {
         <div id="return1" class="dialog message audio-alert-action">
             <h3>Please return item to: [% Branches.GetName( returnbranch ) %]</h3>
             <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
-            <ul><li><a href="#" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;branchcode=[% returnbranch %]&amp;op=slip'); return true;">Print slip</a> )</li></ul>
+            <ul><li><a href="#" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;branchcode=[% returnbranch %]&amp;op=slip'); return true;">Print slip</a></li></ul>
         </div>
     [% END %]
 
