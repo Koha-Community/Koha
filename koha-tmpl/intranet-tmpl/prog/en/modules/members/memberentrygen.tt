@@ -633,15 +633,22 @@
           [% END %]
           Card number: </label>
           [% IF minlength_cardnumber == maxlength_cardnumber %]
-              <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" minlength="[% minlength_cardnumber %]" maxlength="[% maxlength_cardnumber %]" title="exactly [% minlength_cardnumber %] characters" />
+                <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" minlength="[% minlength_cardnumber %]" maxlength="[% maxlength_cardnumber %]" />
+                [% IF ( mandatorycardnumber ) %]<span class="required">Required</span>[% END %]
+                <div class="hint">Card number must be exactly [% minlength_cardnumber %] characters.</div>
           [% ELSIF minlength_cardnumber && maxlength_cardnumber %]
-              <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" minlength="[% minlength_cardnumber %]" maxlength="[% maxlength_cardnumber %]" title="between [% minlength_cardnumber %] and [% maxlength_cardnumber %] characters" />
+                <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" minlength="[% minlength_cardnumber %]" maxlength="[% maxlength_cardnumber %]" />
+                [% IF ( mandatorycardnumber ) %]<span class="required">Required</span>[% END %]
+                <div class="hint">Card number must be between [% minlength_cardnumber %] and [% maxlength_cardnumber %] characters.</div>
           [% ELSIF maxlength_cardnumber %]
-              <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" maxlength="[% maxlength_cardnumber %]" title="up to [% maxlength_cardnumber %] characters" />
+                <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" maxlength="[% maxlength_cardnumber %]" />
+                [% IF ( mandatorycardnumber ) %]<span class="required">Required</span>[% END %]
+                <div class="hint">Card number can be up to [% maxlength_cardnumber %] characters.</div>
           [% ELSE %]
-               <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" />
+                <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" />
+                [% IF ( mandatorycardnumber ) %]<span class="required">Required</span>[% END %]
+                <div class="hint">There is no minimum or maximum character length.</div>
           [% END %]
-          [% IF ( mandatorycardnumber ) %]<span class="required">Required</span>[% END %]
         </li>
       [% END %]
       [% UNLESS nobranchcode %]
