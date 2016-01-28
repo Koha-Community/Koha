@@ -45,17 +45,23 @@ sub string_negligible_p {
 }
 
 sub token_negligible_p {
-    my($x) = @_;
+    my ($x) = @_;
     my $t = $x->type;
     return !$extract_all_p && (
-	    $t == C4::TmplTokenType::TEXT() ? string_negligible_p( $x->string ) :
-	    $t == C4::TmplTokenType::DIRECTIVE() ? 1 :
-	    $t == C4::TmplTokenType::TEXT_PARAMETRIZED()
-		&& join( '', map { my $t = $_->type;
-			$t == C4::TmplTokenType::DIRECTIVE() ?
-				'1' : $t == C4::TmplTokenType::TAG() ?
-					'' : token_negligible_p( $_ ) ?
-					'' : '1' } @{$x->children} ) eq '' );
+          $t == C4::TmplTokenType::TEXT() ? string_negligible_p( $x->string )
+        : $t == C4::TmplTokenType::DIRECTIVE() ? 1
+        : $t == C4::TmplTokenType::TEXT_PARAMETRIZED()
+        && join(
+            '',
+            map {
+                my $t = $_->type;
+                    $t == C4::TmplTokenType::DIRECTIVE() ? '1'
+                  : $t == C4::TmplTokenType::TAG()       ? ''
+                  : token_negligible_p($_)               ? ''
+                  : '1'
+            } @{ $x->children }
+        ) eq ''
+    );
 }
 
 ###############################################################################
