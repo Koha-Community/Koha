@@ -41,6 +41,7 @@ use Koha::Database;
 
 use constant ATTRIBUTE_SHOW_BARCODE => 'SHOW_BCODE';
 
+use Scalar::Util qw(looks_like_number);
 use Date::Calc qw(
   Today
   Add_Delta_Days
@@ -107,14 +108,18 @@ if ( 5 >= $borr->{'amountoutstanding'} && $borr->{'amountoutstanding'} > 0 ) {
     $borr->{'amountoverzero'} = 1;
 }
 my $no_renewal_amt = C4::Context->preference( 'OPACFineNoRenewals' );
-$no_renewal_amt ||= undef;
+$no_renewal_amt = undef unless looks_like_number( $no_renewal_amt );
 
-if (  C4::Context->preference( 'OpacRenewalAllowed' ) && $no_renewal_amt && $borr->{amountoutstanding} > $no_renewal_amt ) {
+if (   C4::Context->preference('OpacRenewalAllowed')
+    && defined($no_renewal_amt)
+    && $borr->{amountoutstanding} > $no_renewal_amt )
+{
     $borr->{'flagged'} = 1;
     $canrenew = 0;
     $template->param(
         renewal_blocked_fines => sprintf( '%.02f', $no_renewal_amt ),
-        renewal_blocked_fines_amountoutstanding => sprintf( '%.02f', $borr->{amountoutstanding} ),
+        renewal_blocked_fines_amountoutstanding =>
+          sprintf( '%.02f', $borr->{amountoutstanding} ),
     );
 }
 
