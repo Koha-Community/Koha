@@ -22,6 +22,7 @@ use warnings;
 
 use CGI qw ( -utf8 );
 use JSON;
+use URI::Escape;
 use autouse 'Data::Dumper' => qw(Dumper);
 
 use C4::Auth;
@@ -40,8 +41,9 @@ unless ($status eq "ok") {
 }
 
 my $success = 'true';
+my $quotes_tmp = uri_unescape( $cgi->param('quote' ) );
+my $quotes = decode_json( $quotes_tmp );
 
-my $quotes = decode_json($cgi->param('quote'));
 my $action = $cgi->param('action');
 
 my $sth = $dbh->prepare('INSERT INTO quotes (source, text) VALUES (?, ?);');
