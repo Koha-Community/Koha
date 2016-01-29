@@ -43,6 +43,9 @@ use Koha::DateUtils;
 use MARC::Record;
 use MARC::File::XML ( BinaryEncoding => 'utf8' );
 
+use File::Path qw[remove_tree]; # perl core module
+use File::Spec;
+
 # FIXME - The user might be installing a new database, so can't rely
 # on /etc/koha.conf anyway.
 
@@ -11692,6 +11695,22 @@ if ( CheckVersion($DBversion) ) {
 
     print "Upgrade to $DBversion done (Bug 8753 - Add forgot password link to OPAC)\n";
     SetVersion($DBversion);
+}
+
+$DBversion = "3.23.00.017";
+if ( CheckVersion($DBversion) ) {
+
+$dbh->do(q{
+    DELETE FROM uploaded_files
+    WHERE COALESCE(permanent,0)=0 AND dir='koha_upload'
+});
+
+my $tmp= File::Spec->tmpdir.'/koha_upload';
+remove_tree( $tmp ) if -d $tmp;
+
+    print "Upgrade to $DBversion done (Bug 14893 - Separate temporary storage per instance in Upload.pm)\n";
+    SetVersion($DBversion);
+
 }
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
