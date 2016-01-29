@@ -74,6 +74,7 @@ use C4::Context;
 use C4::Serials;
 use C4::Search qw/enabled_staff_search_views/;
 use Koha::DateUtils;
+use Koha::Serial::Items;
 
 use List::MoreUtils qw/uniq/;
 
@@ -256,7 +257,9 @@ if ( $op and $op eq 'serialchangestatus' ) {
             my $previous = GetPreviousSerialid($subscriptionids[$i]);
             if ($previous) {
 
-                if (my $itemnumber = GetItemnumberFromSerialId($previous)) {
+                my $serialitem = Koha::Serial::Items->find( $previous );
+                my $itemnumber = $serialitem ? $serialitem->itemnumber : undef;
+                if ($itemnumber) {
 
                     # Getting the itemtype to set from the database
                     my $subscriptioninfos = GetSubscription($subscriptionids[$i]);

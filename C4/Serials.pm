@@ -66,7 +66,7 @@ BEGIN {
     @EXPORT = qw(
       &NewSubscription    &ModSubscription    &DelSubscription
       &GetSubscription    &CountSubscriptionFromBiblionumber      &GetSubscriptionsFromBiblionumber
-      &SearchSubscriptions &GetItemnumberFromSerialId
+      &SearchSubscriptions
       &GetFullSubscriptionsFromBiblionumber   &GetFullSubscription &ModSubscriptionHistory
       &HasSubscriptionStrictlyExpired &HasSubscriptionExpired &GetExpirationDate &abouttoexpire
       &GetSubscriptionHistoryFromSubscriptionId
@@ -183,32 +183,7 @@ sub GetSerialStatusFromSerialId {
     return $dbh->prepare($query);
 }
 
-=head2 GetItemnumberFromSerialId
-
-$itemnumber = GetSerialInformation($serialid);
-this function returns the itemnumber, given a serialid in parameter
-return : itemnumber
-
-=cut
-
-sub GetItemnumberFromSerialId {
-    my ($serialid) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = qq|
-        SELECT itemnumber
-        FROM   serialitems
-        WHERE  serialid = ?
-    |;
-    my $sth = $dbh->prepare($query);
-    $sth->execute($serialid);
-    my ($result) = $sth->fetchrow;
-    return ($result);
-}
-
-
-
 =head2 GetSerialInformation
-
 
 $data = GetSerialInformation($serialid);
 returns a hash_ref containing :
