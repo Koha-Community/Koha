@@ -45,21 +45,63 @@ use Modern::Perl;
 use C4::Circulation;
 use C4::Context;
 use C4::Log;
+use C4::Letters;
+use Koha::Checkouts;
+use Koha::Libraries;
+use Koha::Patrons;
 
 cronlogaction();
 
-my $dbh = C4::Context->dbh;
-my ( $borrowernumber, $itemnumber, $branch, $ok, $error );
+my $auto_renews = Koha::Checkouts->search({ auto_renew => 1 });
 
-my $query =
-"SELECT borrowernumber, itemnumber, branchcode FROM issues WHERE auto_renew = 1";
-my $sth = $dbh->prepare($query);
-$sth->execute();
+my %report;
+while ( my $auto_renew = $auto_renews->next ) {
 
-while ( ( $borrowernumber, $itemnumber, $branch ) = $sth->fetchrow_array ) {
+    # CanBookBeRenewed returns 'auto_renew' when the renewal should be done by this script
+    my ( $ok, $error ) = CanBookBeRenewed( $auto_renew->borrowernumber, $auto_renew->itemnumber );
+    if ( $error eq 'auto_renew' ) {
+        my $date_due = AddRenewal( $auto_renew->borrowernumber, $auto_renew->itemnumber, $auto_renew->branchcode );
+        push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew;
+    } elsif ( $error eq 'too_many'
+        or $error eq 'on_reserve'
+        or $error eq 'restriction'
+        or $error eq 'overdue'
+        or $error eq 'auto_too_late'
+        or $error eq 'auto_too_much_oweing'
+        or $error eq 'auto_too_soon' ) {
+        if ( not $auto_renew->auto_renew_error or $error ne $auto_renew->auto_renew_error ) {
+            $auto_renew->auto_renew_error($error)->store;
+            push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew
+              if $error ne 'auto_too_soon';    # Do not notify if it's too soon
+        }
+    }
+}
 
-# CanBookBeRenewed returns 'auto_renew' when the renewal should be done by this script
-    ( $ok, $error ) = CanBookBeRenewed( $borrowernumber, $itemnumber );
-    AddRenewal( $borrowernumber, $itemnumber, $branch )
-      if ( $error eq "auto_renew" );
+for my $borrowernumber ( keys %report ) {
+    my $patron = Koha::Patrons->find($borrowernumber);
+    my @issues;
+    for my $issue ( @{ $report{$borrowernumber} } ) {
+        my $item   = Koha::Items->find( $issue->itemnumber );
+        my $letter = C4::Letters::GetPreparedLetter(
+            module      => 'circulation',
+            letter_code => 'AUTO_RENEWALS',
+            tables      => {
+                borrowers => $patron->borrowernumber,
+                issues    => $issue->itemnumber,
+                items     => $issue->itemnumber,
+                biblio    => $item->biblionumber,
+            },
+        );
+
+        my $library = Koha::Libraries->find( $patron->branchcode );
+        my $admin_email_address = $library->branchemail || C4::Context->preference('KohaAdminEmailAddress');
+
+        C4::Letters::EnqueueLetter(
+            {   letter                 => $letter,
+                borrowernumber         => $borrowernumber,
+                message_transport_type => 'email',
+                from_address           => $admin_email_address,
+            }
+        );
+    }
 }
