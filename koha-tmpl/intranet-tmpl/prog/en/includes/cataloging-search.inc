@@ -12,7 +12,7 @@
 
         [% INCLUDE 'patron-search-box.inc' %]
 
-        [% IF ( CAN_user_circulate ) %]
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
         <div id="checkin_search" class="residentsearch">
             <p class="tip">Scan a barcode to check in:</p>
             <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off">
@@ -40,9 +40,9 @@
 
         <ul>
             <li><a onclick="keep_text(0)" href="#addbooks_search">Cataloging search</a></li>
-            [% IF ( CAN_user_circulate ) %]<li><a onclick="keep_text(1)" href="#circ_search">Check out</a></li>[% END %]
-            [% IF ( CAN_user_circulate ) %]<li><a onclick="keep_text(2)" href="#checkin_search">Check in</a></li>[% END %]
-            [% IF ( CAN_user_circulate ) %]<li><a onclick="keep_text(3)" href="#renew_search">Renew</a></li>[% END %]
+            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a onclick="keep_text(1)" href="#circ_search">Check out</a></li>[% END %]
+            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a onclick="keep_text(2)" href="#checkin_search">Check in</a></li>[% END %]
+            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a onclick="keep_text(3)" href="#renew_search">Renew</a></li>[% END %]
             <li><a onclick="keep_text(4)" href="#catalog_search">Search the catalog</a></li>
         </ul>
     </div><!-- /header_search -->

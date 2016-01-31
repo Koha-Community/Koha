@@ -29,7 +29,7 @@
     [% END %]
     <ul>
       <li><a href="#subscription_search">Search subscriptions</a></li>
-      [% IF ( CAN_user_circulate ) %]<li><a onclick="keep_text(0)" href="#circ_search">Check out</a></li>[% END %]
+      [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a onclick="keep_text(0)" href="#circ_search">Check out</a></li>[% END %]
       [% IF ( CAN_user_catalogue ) %]<li><a onclick="keep_text(1)" href="#catalog_search">Search the catalog</a></li>[% END %]
     </ul>
   </div><!-- /header_search -->
