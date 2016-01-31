@@ -1,0 +1,266 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; Library groups</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% interface %]/lib/jquery-treegrid/js/jquery.treegrid.min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery-treegrid/js/jquery.treegrid.bootstrap2.js"></script>
+<link rel="stylesheet" href="[% interface %]/lib/jquery-treegrid/css/jquery.treegrid.css">
+<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        $('#library-groups').treegrid(
+            {
+                'saveState': true
+            }
+        );
+    });
+
+    function add_group( parent_id ) {
+        $('#add-group-modal-parent-id').val( parent_id );
+
+        $('#add-group-modal-description').val("");
+        $('#add-group-modal-title').val("");
+
+        $('#add-group-modal').on('shown', function() {
+            $('#add-group-modal-title').focus();
+        });
+
+        $('#add-group-modal').modal('show');
+    }
+
+    function edit_group( id, title, description ) {
+        $('#edit-group-modal-id').val( id );
+        $('#edit-group-modal-title').val( title );
+        $('#edit-group-modal-description').val( description );
+
+        $('#edit-group-modal').on('shown', function() {
+            $('#edit-group-modal-title').focus();
+        });
+
+        $('#edit-group-modal').modal('show');
+    }
+
+    function remove_library( id ) {
+        $('#remove-library-modal-id').val( id );
+        $('#remove-library-modal').modal('show');
+    }
+
+    function delete_group( id ) {
+        $('#delete-group-modal-id').val( id );
+        $('#delete-group-modal').modal('show');
+    }
+//]]>
+</script>
+</head>
+<body id="admin_library_groups" class="admin">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cities-admin-search.inc' %]
+
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+    &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+    &rsaquo; <a href="/cgi-bin/koha/admin/library_groups.pl">Library groups</a>
+</div>
+
+[% IF added %]
+    <div class="dialog alert group-added">
+        [% IF added.branchcode %]
+            <i>[% added.library.branchname %]</i> added to group.
+        [% ELSE %]
+            Group <i>[% added.title %]</i> created.
+        [% END %]
+    </div>
+[% ELSIF deleted %]
+    <div class="dialog alert group-deleted">
+        [% IF deleted.title %]
+            Group <i>[% deleted.title %]</i> has been deleted.
+        [% ELSE %]
+            <i>[% deleted.library %]</i> has been removed from group.
+        [% END %]
+    </div>
+[% END %]
+
+<div id="doc3" class="yui-t2">
+    <div id="bd">
+        <div id="yui-main">
+            <div class="yui-b">
+                <div class="yui-g">
+                    <div id="toolbar" class="btn-toolbar">
+                        <div class="btn-group">
+                            <a id="add-group-[% group.id %]" class="btn btn-small" href="#" onclick="add_group()">
+                                <i class="fa fa-plus-circle"></i> Add group
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                [% FOREACH root_group IN root_groups %]
+                    <table id="library-groups" class="tree">
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>Description</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                        [% PROCESS tree group=root_group %]
+                    </table>
+                [% END %]
+            </div>
+        </div>
+
+    <div class="yui-b">
+        [% INCLUDE 'admin-menu.inc' %]
+    </div>
+
+    <div id="add-group-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="add-group-modal-label" aria-hidden="true">
+        <form id="add-group-form" action="/cgi-bin/koha/admin/library_groups.pl" class="form-horizontal">
+            <div class="modal-header">
+                <h3 id="add-group-modal-label">Add group</h3>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="add-group-modal-parent-id" name="parent_id" value="" />
+                <input type="hidden" id="add-group-modal-action" name="action" value="add">
+
+                <p>
+                    <label for="title">Title: </label>
+                    <input type="text" name="title" id="add-group-modal-title" required="required" />
+                    <i>required</i>
+                </p>
+
+                <p>
+                    <label for="description">Description: </label>
+                    <input type="text" name="description" id="add-group-modal-description" />
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="edit-group-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="edit-library-modal-label" aria-hidden="true">
+        <form id="edit-group-form" action="/cgi-bin/koha/admin/library_groups.pl" class="form-horizontal">
+            <div class="modal-header">
+                <h3 id="edit-group-modal-label">Edit group</h3>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-group-modal-id" name="id" value="" />
+                <input type="hidden" id="edit-group-modal-action" name="action" value="edit" />
+
+                <p>
+                    <label for="title">Title: </label>
+                    <input type="text" id="edit-group-modal-title" name="title" value="" required="required" />
+                    <i>required</i>
+                </p>
+
+                <p>
+                    <label for="description">Description: </label>
+                    <input type="text" id="edit-group-modal-description" name="description" value="" />
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Update</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="delete-group-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="delete-group-modal-label" aria-hidden="true">
+        <form action="/cgi-bin/koha/admin/library_groups.pl" />
+            <input id="delete-group-modal-action" type="hidden" name="action" value="delete" />
+            <input id="delete-group-modal-id" type="hidden" name="id" value="" />
+            <div class="modal-header">
+                <h3 id="delete-group-modal-label">Delete group or library</h3>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this?
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="remove-library-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="remove-library-modal-label" aria-hidden="true">
+        <form action="/cgi-bin/koha/admin/library_groups.pl" />
+            <input id="remove-library-modal-action" type="hidden" name="action" value="delete" />
+            <input id="remove-library-modal-id" type="hidden" name="id" value="" />
+            <div class="modal-header">
+                <h3 id="remove-library-modal-label">Remove library from group</h3>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to remove this library?
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-danger"><i class="fa fa-minus-circle"></i> Remove</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]
+
+[% BLOCK tree %]
+    <tr class="treegrid-[% group.id %] treegrid-parent-[% group.parent_id %]">
+        <td>
+            [% IF group.branchcode %]
+                <i class="fa fa-home"></i> [% group.branchcode %]
+            [% ELSE %]
+                <i class="fa fa-object-group"></i> [% group.title %]
+            [% END %]
+        </td>
+        <td>
+            [% IF group.branchcode %]
+                [% group.library.branchname %]
+            [% ELSE %]
+                [% group.description %]
+            [% END %]
+        </td>
+        <td>
+            [% IF group.branchcode %]
+                <button class="btn btn-small delete-library" onclick="remove_library([% group.id %])"><i class="fa fa-minus-circle"></i> Remove from group</button>
+            [% ELSE %]
+                <div class="btn-group">
+                    <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i> Actions <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a id="add-group-[% group.id %]" href="#" onclick="add_group([% group.id %])">
+                                <i class="fa fa-plus-circle"></i> Add sub-group
+                            </a>
+                       </li>
+
+                        <li>
+                            <a class="delete-group" id="delete-group-[% group.id %]" href="#" onclick="edit_group([% group.id %], '[% group.title | replace('\'', '\\\'') | html %]', '[% group.description | replace('\'', '\\\'') | html %]')">
+                                <i class="fa fa-edit"></i> Edit
+                            </a>
+                       </li>
+
+                        <li>
+                            <a class="delete-group" id="delete-group-[% group.id %]" href="#" onclick="delete_group([% group.id %])">
+                                <i class="fa fa-trash"></i> Delete
+                            </a>
+                       </li>
+                    </ul>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-home"></i> Add library <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        [% FOREACH library IN group.libraries_not_direct_children %]
+                            <li>
+                                <a class="add-library" id="add-library-[% group.id %]" href="/cgi-bin/koha/admin/library_groups.pl?action=add&parent_id=[% group.id %]&branchcode=[% library.id %]">
+                                    [% library.branchname %]
+                                </a>
+                           </li>
+                        [% END %]
+                    </ul>
+                </div>
+            [% END %]
+        </td>
+    </tr>
+
+    [% FOREACH g IN group.children %]
+        [% PROCESS tree group=g %]
+    [% END %]
+[% END %]
