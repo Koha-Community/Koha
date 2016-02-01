@@ -578,7 +578,11 @@ sub getlanguage {
     my $preference_to_check =
       $interface eq 'intranet' ? 'language' : 'opaclanguages';
     # Get the available/valid languages list
-    my @languages = split /,/, C4::Context->preference($preference_to_check);
+    my @languages;
+    my $preference_value = C4::Context->preference($preference_to_check);
+    if ($preference_value) {
+        @languages = split /,/, $preference_value;
+    }
 
     # Chose language from the URL
     $language = $cgi->param( 'language' );
