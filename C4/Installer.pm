@@ -152,15 +152,15 @@ sub marc_framework_sql_list {
         map {
             my $name = substr( $_, 0, -4 );
             open my $fh, "<:encoding(UTF-8)", "$dir/$requirelevel/$name.txt";
-            my $lines = <$fh>;
-            $lines =~ s/\n|\r/<br \/>/g;
-            $lines = Encode::encode('UTF-8', $lines) unless ( Encode::is_utf8($lines) );
+            my $line = <$fh>;
+            $line = Encode::encode('UTF-8', $line) unless ( Encode::is_utf8($line) );
+            my @lines = split /\n/, $line;
             my $mandatory = ($requirelevel =~ /(mandatory|requi|oblig|necess)/i);
             push @frameworklist,
               {
                 'fwkname'        => $name,
                 'fwkfile'        => "$dir/$requirelevel/$_",
-                'fwkdescription' => $lines,
+                'fwkdescription' => \@lines,
                 'checked'        => ( ( $frameworksloaded{$_} || $mandatory ) ? 1 : 0 ),
                 'mandatory'      => $mandatory,
               };
@@ -229,15 +229,15 @@ sub sample_data_sql_list {
         map {
             my $name = substr( $_, 0, -4 );
             open my $fh , "<:encoding(UTF-8)", "$dir/$requirelevel/$name.txt";
-            my $lines = <$fh>;
-            $lines =~ s/\n|\r/<br \/>/g;
-            $lines = Encode::encode('UTF-8', $lines) unless ( Encode::is_utf8($lines) );
+            my $line = <$fh>;
+            $line = Encode::encode('UTF-8', $line) unless ( Encode::is_utf8($line) );
+            my @lines = split /\n/, $line;
             my $mandatory = ($requirelevel =~ /(mandatory|requi|oblig|necess)/i);
             push @frameworklist,
               {
                 'fwkname'        => $name,
                 'fwkfile'        => "$dir/$requirelevel/$_",
-                'fwkdescription' => $lines,
+                'fwkdescription' => \@lines,
                 'checked'        => ( ( $frameworksloaded{$_} || $mandatory ) ? 1 : 0 ),
                 'mandatory'      => $mandatory,
               };

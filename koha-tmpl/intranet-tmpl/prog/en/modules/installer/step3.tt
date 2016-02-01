@@ -105,7 +105,9 @@
                                                 [% ELSE %]
                                                     <input type="checkbox" name="framework" value="[% framework.fwkfile | html %]" id ="[% framework.fwkname | html %]" />
                                                 [% END %]
-                                                [% framework.fwkdescription | html %]
+                                                [% FOREACH description IN framework.fwkdescription %]
+                                                    [% description | html %]<br />
+                                                [% END %]
                                                 <em>([% framework.fwkname | html %])</em>
                                             </label>
                                         </div>
@@ -140,8 +142,9 @@
                                             [% ELSE %]
                                                 <input type="checkbox" name="framework" value="[% framework.fwkfile | html %]" id="[% framework.fwkname | html %]" />
                                             [% END %]
-                                            [% framework.fwkdescription | html %]
-                                            <em>([% framework.fwkname | html %])</em>
+                                            [% FOREACH description IN framework.fwkdescription %]
+                                                [% description | html %]<br />
+                                            [% END %]
                                         </label>
                                     </div> <!-- /div.checkbox -->
                                 [% END # / FOREACH framework %]
