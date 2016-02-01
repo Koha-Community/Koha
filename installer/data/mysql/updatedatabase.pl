@@ -11426,6 +11426,18 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.22.02.002";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        UPDATE permissions SET description = 'Manage circulation rules' WHERE description = 'manage circulation rules'
+    });
+    $dbh->do(q{
+        UPDATE permissions SET description = 'Manage staged MARC records, including completing and reversing imports' WHERE description = 'Managed staged MARC records, including completing and reversing imports'
+    });
+    print "Upgrade to $DBversion done (Bug 11569 - Typo in userpermissions.sql)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
