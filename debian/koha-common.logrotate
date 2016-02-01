@@ -8,7 +8,11 @@
     delaycompress
     notifempty
     sharedscripts
+    prerotate
+        /usr/sbin/koha-stop-zebra $(koha-list --enabled) > /dev/null
+    endscript
     postrotate
         /etc/init.d/apache2 reload > /dev/null
+        /usr/sbin/koha-start-zebra $(koha-list --enabled) > /dev/null
     endscript
 }
