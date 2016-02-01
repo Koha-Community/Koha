@@ -506,7 +506,6 @@ foreach my $biblionumber (@biblionumbers) {
         }
 
         if ( $res->is_found() ) {
-            $reserve{'wait'}          = 1;
             $reserve{'holdingbranch'} = $res->item()->holdingbranch();
             $reserve{'biblionumber'}  = $res->item()->biblionumber();
             $reserve{'barcodenumber'} = $res->item()->barcode();

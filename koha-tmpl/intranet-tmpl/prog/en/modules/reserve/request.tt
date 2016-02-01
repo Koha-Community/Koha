@@ -689,7 +689,7 @@ function checkMultiHold() {
           <input type="hidden" name="borrowernumber" value="[% reserveloo.borrowernumber %]" />
           <input type="hidden" name="biblionumber" value="[% reserveloo.biblionumber %]" />
           <select name="rank-request">
-              [% IF ( reserveloo.wait ) %]
+              [% IF ( reserveloo.found ) %]
                   [% IF ( reserveloo.intransit ) %]
                       <option value="T" selected="selected">In transit</option>
                   [% ELSE %]
@@ -705,7 +705,7 @@ function checkMultiHold() {
                           <option value="[% optionloo.num %]">[% optionloo.num %]</option>
                       [% END %]
                   [% END %]
-              [% ELSIF !reserveloo.wait %]
+              [% ELSIF !reserveloo.found %]
                   <option value="[% reserveloo.priority %]" selected="selected">[% reserveloo.priority %]</option>
               [% END %]
               <option value="del">del</option>
@@ -751,7 +751,7 @@ function checkMultiHold() {
             [% END %]
         </td>
         <td>
-    [% IF ( reserveloo.wait ) %]
+    [% IF ( reserveloo.found ) %]
     	[% IF ( reserveloo.atdestination ) %]
             [% IF ( reserveloo.found ) %]
                 Item waiting at <b> [% reserveloo.wbrname %]</b> <input type="hidden" name="pickup" value="[% reserveloo.wbrcode %]" /> since [% reserveloo.waiting_date | $KohaDates %]
@@ -776,7 +776,7 @@ function checkMultiHold() {
     [% END %]
         </td>
         <td>
-    [% IF ( reserveloo.wait ) %]
+    [% IF ( reserveloo.found ) %]
           <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% reserveloo.biblionumber %]">
                 [% IF ( reserveloo.barcodenumber ) %]
                     [% reserveloo.barcodenumber %]
@@ -824,7 +824,7 @@ function checkMultiHold() {
 
         [% IF SuspendHoldsIntranet %]
 	<td>
-	[% UNLESS ( reserveloo.wait ) %]
+        [% UNLESS ( reserveloo.found ) %]
             <input type="button" value="[% IF ( reserveloo.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]" onclick="window.location.href='request.pl?action=toggleSuspend&amp;reserve_id=[% reserveloo.reserve_id %]&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]&amp;suspend_until=' + $('#suspend_until_[% reserveloo.reserve_id %]').val()" />
 
             [% IF AutoResumeSuspendedHolds %]
