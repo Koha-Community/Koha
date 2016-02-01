@@ -1,5 +1,5 @@
 [% USE Branches %]
-[% IF ( CAN_user_circulate ) %][% IF ( CircAutocompl ) %]<script type="text/javascript">
+[% IF ( CAN_user_circulate_circulate_remaining_permissions ) %][% IF ( CircAutocompl ) %]<script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
     $( "#findborrower" ).autocomplete({
