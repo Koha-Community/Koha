@@ -159,3 +159,15 @@ get_instances()
     find /etc/koha/sites -mindepth 1 -maxdepth 1\
                          -type d -printf '%f\n' | sort
 }
+
+get_loglevels()
+{
+    local instancename=$1
+    local retval=$(xmlstarlet sel -t -v 'yazgfs/config/zebra_loglevels' /etc/koha/sites/$instancename/koha-conf.xml)
+    if [ "$retval" != "" ]; then
+        echo "$retval"
+    else
+        echo "none,fatal,warn"
+    fi
+
+}
