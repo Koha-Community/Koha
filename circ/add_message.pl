@@ -49,7 +49,7 @@ Koha::Patron::Message->new(
         message_type   => $message_type,
         message        => $borrower_message,
     }
-);
+)->store;
 
 print $input->redirect(
     "/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
