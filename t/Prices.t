@@ -120,7 +120,6 @@ for my $currency_format ( qw( US FR ) ) {
             }
         );
 
-        #
         $order_0_0 = C4::Acquisition::populate_order_with_prices(
             {
                 order        => $order_0_0,
