@@ -18,7 +18,7 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::MockModule;
 use CGI qw ( -utf8 );
 
@@ -28,13 +28,16 @@ BEGIN {
 
 my @languages = (); # stores the list of active languages
                     # for the syspref mock
+my $return_undef = 0;
 
 my $module_context = new Test::MockModule('C4::Context');
 
 $module_context->mock(
     preference => sub {
         my ($self, $pref) = @_;
-        if ($pref =~ /language/) {
+        if ($return_undef) {
+            return undef;
+        } elsif ($pref =~ /language/) {
             return join ',', @languages;
         } else {
             return 'XXX';
@@ -50,3 +53,6 @@ is(C4::Languages::getlanguage($query), 'de-DE', 'default to first language speci
 
 @languages = ();
 is(C4::Languages::getlanguage($query), 'en', 'default to English if no language specified in syspref (bug 10560)');
+
+$return_undef = 1;
+is(C4::Languages::getlanguage($query), 'en', 'default to English if no database');
