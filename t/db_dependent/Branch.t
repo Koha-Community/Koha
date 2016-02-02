@@ -192,10 +192,10 @@ $b2_stored->add_to_categories([$CAT1]);
 is( Koha::Libraries->search->count, $count + 2, 'BRB added' );
 
 my $b1info = Koha::Libraries->find( $b1->{branchcode} );
-is_deeply( $b1info->categories->count, 0, 'BRA has no categories' );
+is_deeply( $b1info->get_categories->count, 0, 'BRA has no categories' );
 
 my $b2info = Koha::Libraries->find( $b2->{branchcode} );
-is_deeply( $b2->categories->count, 1, 'BRB has the category CAT1' );
+is_deeply( $b2info->get_categories->count, 1, 'BRB has the category CAT1' );
 
 Koha::LibraryCategory->new($cat2)->store;
 is( Koha::LibraryCategories->search->count, $count_cat + 3, "Two categories added" );
