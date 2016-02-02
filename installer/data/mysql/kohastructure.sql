@@ -1983,21 +1983,17 @@ CREATE TABLE `statistics` ( -- information related to transactions (circulation 
   `value` double(16,4) default NULL, -- monetary value associated with the transaction
   `type` varchar(16) default NULL, -- transaction type (localuse, issue, return, renew, writeoff, payment)
   `other` LONGTEXT, -- used by SIP
-  `usercode` varchar(10) default NULL, -- unused in Koha
   `itemnumber` int(11) default NULL, -- foreign key from the items table, links transaction to a specific item
   `itemtype` varchar(10) default NULL, -- foreign key from the itemtypes table, links transaction to a specific item type
   `location` varchar(80) default NULL, -- authorized value for the shelving location for this item (MARC21 952$c)
   `borrowernumber` int(11) default NULL, -- foreign key from the borrowers table, links transaction to a specific borrower
-  `associatedborrower` int(11) default NULL, -- unused in Koha
   `ccode` varchar(80) default NULL, -- foreign key from the items table, links transaction to a specific collection code
   KEY `timeidx` (`datetime`),
   KEY `branch_idx` (`branch`),
   KEY `type_idx` (`type`),
-  KEY `usercode_idx` (`usercode`),
   KEY `itemnumber_idx` (`itemnumber`),
   KEY `itemtype_idx` (`itemtype`),
   KEY `borrowernumber_idx` (`borrowernumber`),
-  KEY `associatedborrower_idx` (`associatedborrower`),
   KEY `ccode_idx` (`ccode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
