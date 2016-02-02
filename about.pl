@@ -51,18 +51,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $kohaVersion   = Koha::version();
-my $osVersion     = `uname -a`;
 my $perl_path = $^X;
 if ($^O ne 'VMS') {
     $perl_path .= $Config{_exe} unless $perl_path =~ m/$Config{_exe}$/i;
 }
-my $perlVersion   = $];
-my $mysqlVersion  = `mysql -V`;
-# Get Apache version
-my $apacheVersion = (`apache2ctl -v`)[0];
-$apacheVersion    = `httpd2 -v 2> /dev/null` unless $apacheVersion;
-$apacheVersion    = `httpd -v 2> /dev/null` unless $apacheVersion;
+
 my $zebraVersion = `zebraidx -V`;
 
 # Check running PSGI env
@@ -255,14 +248,16 @@ if (  C4::Context->preference('WebBasedSelfCheck')
 
 }
 
+my %versions = C4::Context::get_versions();
+
 $template->param(
-    kohaVersion   => $kohaVersion,
-    osVersion     => $osVersion,
+    kohaVersion   => $versions{'kohaVersion'},
+    osVersion     => $versions{'osVersion'},
     perlPath      => $perl_path,
-    perlVersion   => $perlVersion,
+    perlVersion   => $versions{'perlVersion'},
     perlIncPath   => [ map { perlinc => $_ }, @INC ],
-    mysqlVersion  => $mysqlVersion,
-    apacheVersion => $apacheVersion,
+    mysqlVersion  => $versions{'mysqlVersion'},
+    apacheVersion => $versions{'apacheVersion'},
     zebraVersion  => $zebraVersion,
     prefBiblioAddsAuthorities => $prefBiblioAddsAuthorities,
     prefAutoCreateAuthorities => $prefAutoCreateAuthorities,
