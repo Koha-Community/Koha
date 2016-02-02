@@ -178,8 +178,6 @@ foreach my $item (@items){
                 $item->{'nomod'}=1;
         }
     }
-    $item->{'homebranchname'} = GetBranchName($item->{'homebranch'});
-    $item->{'holdingbranchname'} = GetBranchName($item->{'holdingbranch'});
     if ($item->{'datedue'}) {
         $item->{'issue'}= 1;
     } else {

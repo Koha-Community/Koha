@@ -348,8 +348,6 @@ elsif ( $op eq 'ediorder' ) {
 
     if ($basket->{basketgroupid}){
         $basketgroup = GetBasketgroup($basket->{basketgroupid});
-        $basketgroup->{deliveryplacename} = C4::Branch::GetBranchName( $basketgroup->{deliveryplace} );
-        $basketgroup->{billingplacename} = C4::Branch::GetBranchName( $basketgroup->{billingplace} );
     }
     my $borrower= GetMember('borrowernumber' => $loggedinuser);
     my $budgets = GetBudgetHierarchy;
@@ -368,7 +366,7 @@ elsif ( $op eq 'ediorder' ) {
         basketno             => $basketno,
         basket               => $basket,
         basketname           => $basket->{'basketname'},
-        basketbranchname     => C4::Branch::GetBranchName($basket->{branch}),
+        basketbranchcode     => $basket->{branch},
         basketnote           => $basket->{note},
         basketbooksellernote => $basket->{booksellernote},
         basketcontractno     => $basket->{contractnumber},
@@ -382,8 +380,8 @@ elsif ( $op eq 'ediorder' ) {
         closedate            => $basket->{closedate},
         estimateddeliverydate=> $estimateddeliverydate,
         is_standing          => $basket->{is_standing},
-        deliveryplace        => C4::Branch::GetBranchName( $basket->{deliveryplace} ),
-        billingplace         => C4::Branch::GetBranchName( $basket->{billingplace} ),
+        deliveryplace        => $basket->{deliveryplace},
+        billingplace         => $basket->{billingplace},
         active               => $bookseller->{'active'},
         booksellerid         => $bookseller->{'id'},
         name                 => $bookseller->{'name'},

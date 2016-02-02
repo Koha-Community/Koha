@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% USE ItemTypes %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Catalog by item types</title>
@@ -31,7 +32,7 @@ $(document).ready(function(){
 
 [% IF ( do_it ) %]
 [% FOREACH mainloo IN mainloop %]
-	<h1>Reports on item types [% IF ( mainloo.branchname ) %] held at [% mainloo.branchname %][% END %]</h1>
+    <h1>Reports on item types [% IF branch %] held at [% Branches.GetName( branch ) %][% END %]</h1>
 	<table id="itemtypest">
 		<thead>
 		<tr>

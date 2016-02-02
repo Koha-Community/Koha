@@ -23,10 +23,10 @@ use JSON;
 
 use C4::Auth;
 use C4::Biblio;
-use C4::Branch;
 use C4::Items;
 use C4::Koha;
 use C4::Output;
+use Koha::Libraries;
 
 my $cgi = new CGI;
 
@@ -46,11 +46,11 @@ if($itemnumber) {
     $item = GetItem($itemnumber);
 
     if($item->{homebranch}) {
-        $item->{homebranchname} = GetBranchName($item->{homebranch});
+        $item->{homebranchname} = Koha::Libraries->find($item->{homebranch})->branchname;
     }
 
     if($item->{holdingbranch}) {
-        $item->{holdingbranchname} = GetBranchName($item->{holdingbranch});
+        $item->{holdingbranchname} = Koha::Libraries->find($item->{holdingbranch})->branchname;
     }
 
     if(my $code = GetAuthValCode("items.notforloan", $fw)) {

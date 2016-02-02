@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo; Item details for [% title %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -62,7 +63,7 @@
          [% END %]
          [% END %][% END %]</h4>
             <ol class="bibliodetails">
-            <li><span class="label">Home library:</span> [% ITEM_DAT.homebranchname %]&nbsp;</li>
+            <li><span class="label">Home library:</span> [% Branches.GetName( ITEM_DAT.homebranch ) %]&nbsp;</li>
 	    [% IF ( item_level_itypes ) %]
             <li><span class="label">Item type:</span> [% ITEM_DAT.itype %]&nbsp;</li>
 	    [% END %]
@@ -80,7 +81,7 @@
             )[% END %]</h4>
 
             <ol class="bibliodetails">
-            <li><span class="label">Current location:</span> [% ITEM_DAT.holdingbranchname %]&nbsp;</li>
+            <li><span class="label">Current location:</span> [% Branches.GetName( ITEM_DAT.holdingbranch ) %]&nbsp;</li>
             <li><span class="label">Checkout status:</span>
             [% IF ( ITEM_DAT.issue ) %]Checked out to
                 [% IF ( hidepatronname ) %]

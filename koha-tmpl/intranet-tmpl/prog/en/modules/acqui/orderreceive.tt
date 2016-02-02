@@ -1,4 +1,5 @@
 [% USE KohaDates %]
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Receipt summary for : [% name %] [% IF ( invoice ) %]invoice, [% invoice %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -238,8 +239,8 @@
                                 <td style="text-align:center"><input type="checkbox" name="items_to_receive" value="[% item.itemnumber %]" /></td>
                                 <td><a style="cursor:pointer" onclick="PopupEditPage([% item.biblionumber %],[% item.itemnumber %]);">Edit</a></td>
                                 <td>[% item.barcode %]</td>
-                                <td>[% item.homebranchname %]</td>
-                                <td>[% item.holdingbranchname %]</td>
+                                <td>[% Branches.GetName( item.homebranch )%]</td>
+                                <td>[% Branches.GetName( item.holdingbranch ) %]</td>
                                 <td>[% item.notforloan %]</td>
                                 <td>[% item.restricted %]</td>
                                 <td>[% item.location %]</td>

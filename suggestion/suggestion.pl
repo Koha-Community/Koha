@@ -33,6 +33,7 @@ use C4::Debug;
 
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::Currencies;
+use Koha::Libraries;
 
 use URI::Escape;
 
@@ -60,7 +61,8 @@ sub GetCriteriumDesc{
         }
         return ($criteriumvalue eq 'ASKED'?"Pending":ucfirst(lc( $criteriumvalue))) if ($displayby =~/status/i);
     }
-    return (GetBranchName($criteriumvalue)) if ($displayby =~/branchcode/);
+    return Koha::Libraries->find($criteriumvalue)->branchname;
+        if $displayby =~ /branchcode/;
     return GetAuthorisedValueByCode('SUGGEST_FORMAT', $criteriumvalue) || "Unknown" if ($displayby =~/itemtype/);
     if ($displayby =~/suggestedby/||$displayby =~/managedby/||$displayby =~/acceptedby/){
         my $borr=C4::Members::GetMember(borrowernumber=>$criteriumvalue);
@@ -213,7 +215,6 @@ elsif ($op eq "change" ) {
 }
 elsif ( $op eq 'show' ) {
     $suggestion_ref=&GetSuggestion($$suggestion_ref{'suggestionid'});
-    $$suggestion_ref{branchname} = GetBranchName $$suggestion_ref{branchcode};
     my $budget = GetBudget $$suggestion_ref{budgetid};
     $$suggestion_ref{budgetname} = $$budget{budget_name};
     Init($suggestion_ref);

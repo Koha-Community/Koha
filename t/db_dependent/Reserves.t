@@ -33,6 +33,7 @@ use Koha::Holds;
 use t::lib::Mocks;
 
 use Koha::DateUtils;
+use Koha::Libraries;
 use Koha::Patron::Categories;
 
 use Data::Dumper;
@@ -59,7 +60,7 @@ $dbh->do("update marc_subfield_structure set kohafield='biblioitems.agerestricti
 
 # Add branches if not existing
 foreach my $addbra ('CPL', 'FPL', 'RPL') {
-    $dbh->do("INSERT INTO branches (branchcode,branchname) VALUES (?,?)", undef, ($addbra,"$addbra branch")) unless GetBranchName($addbra);
+    $dbh->do("INSERT INTO branches (branchcode,branchname) VALUES (?,?)", undef, ($addbra,"$addbra branch")) unless Koha::Libraries->find($addbra);
 }
 
 # Add categories if not existing

@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Circulation and fine rules &rsaquo; Clone circulation and fine rules</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -14,10 +15,8 @@
     <div id="yui-main">
     <div class="yui-b">
     <h2>Cloning circulation and fine rules
-        [% IF ( frombranchname || tobranchname ) %]
-            [% IF ( frombranchname ) %] from "[% frombranchname %]"[% END %]
-	    [% IF ( tobranchname ) %] to "[% tobranchname %]"[% END %]
-	[% END %]
+        [% IF frombranch %] from "[% Branches.GetName( frombranch ) %]"[% END %]
+        [% IF tobranch %] to "[% Branches.GetName( tobranch ) %]"[% END %]
     </h2>
 
     [% IF ( result ) %]

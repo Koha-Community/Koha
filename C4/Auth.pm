@@ -34,6 +34,7 @@ use C4::Search::History;
 use Koha;
 use Koha::Caches;
 use Koha::AuthUtils qw(get_script_name hash_password);
+use Koha::Libraries;
 use Koha::LibraryCategories;
 use Koha::Libraries;
 use POSIX qw/strftime/;
@@ -1077,7 +1078,7 @@ sub checkauth {
                     # if they specify at login, use that
                     if ( $query->param('branch') ) {
                         $branchcode = $query->param('branch');
-                        $branchname = GetBranchName($branchcode);
+                        $branchname = Koha::Libraries->find($branchcode)->branchname;
                     }
                     my $branches = GetBranches();
                     if ( C4::Context->boolean_preference('IndependentBranches') && C4::Context->boolean_preference('Autolocation') ) {
@@ -1529,7 +1530,7 @@ sub check_api_auth {
                 # if they specify at login, use that
                 if ( $query->param('branch') ) {
                     $branchcode = $query->param('branch');
-                    $branchname = GetBranchName($branchcode);
+                    $branchname = Koha::Libraries->find($branchcode)->branchname;
                 }
                 my $branches = GetBranches();
                 my @branchesloop;

@@ -144,7 +144,6 @@ $template->param(
     email                      => $bor->{'email'},
     emailpro                   => $bor->{'emailpro'},
     branchcode                 => $bor->{'branchcode'},
-    branchname                 => GetBranchName( $bor->{'branchcode'} ),
     userid                     => $bor->{'userid'},
     destination                => $destination,
     is_child                   => ( $bor->{'category_type'} eq 'C' ),

@@ -29,8 +29,6 @@ use strict;
 use warnings;
 use utf8;
 
-use C4::Branch qw(GetBranchName);
-
 use Koha::Number::Price;
 use Koha::DateUtils;
 use Koha::Libraries;
@@ -63,7 +61,9 @@ sub printorders {
     my $number = 3;
     for my $basket (@$baskets){
         my $page = $pdf->page();
-        
+        my $billing_library = Koha::Libraries->find( $basket->{billingplace} );
+        my $delivery_library = Koha::Libraries->find( $basket->{deliveryplace} );
+
         # print basket header (box)
         my $box = $page->gfx;
         $box->rectxy(($width - 10)/mm, ($height - 5)/mm, 10/mm, ($height - 25)/mm);
@@ -78,9 +78,9 @@ sub printorders {
         $text->text("Order no. ".$basketgroup->{'id'}.". Basket no. ".$basket->{basketno}.". ".$basket->{booksellernote});
         $text->translate(20/mm,  ($height-20)/mm);
         $text->font( $pdf->corefont("Times", -encoding => "utf8"), 4/mm );
-        $text->text( ( $basket->{billingplace} ? "Billing at " . C4::Branch::GetBranchName( $basket->{billingplace} ) : "" )
-            . ( $basket->{billingplace} and $basket->{deliveryplace} ? " and " : "" )
-            . ( $basket->{deliveryplace} ? "delivery at " . C4::Branch::GetBranchName( $basket->{deliveryplace}) : "" )
+        $text->text( ( $billing_library ? "Billing at " . $billing_library->branchname : "" )
+            . ( $billing_library and $delivery_library ? " and " : "" )
+            . ( $delivery_library ? "delivery at " . $delivery_library->branchname : "" )
         );
 
         my $pdftable = new PDF::Table();

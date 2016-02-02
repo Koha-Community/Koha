@@ -32,6 +32,7 @@ use C4::Output;
 use C4::Reports;
 use C4::Members;
 use Koha::DateUtils;
+use Koha::Libraries;
 use Koha::Patron::Categories;
 use List::MoreUtils qw/any/;
 use YAML;
@@ -338,7 +339,7 @@ sub display_value {
         ( $crit =~ /ccode/ )         ? $ccodes->{$value}
       : ( $crit =~ /location/ )      ? $locations->{$value}
       : ( $crit =~ /itemtype/ )      ? $itemtypes->{$value}->{description}
-      : ( $crit =~ /branch/ )        ? GetBranchName($value)
+      : ( $crit =~ /branch/ )        ? Koha::Libraries->find($value)->branchname
       : ( $crit =~ /reservestatus/ ) ? reservestatushuman($value)
       :                                $value;    # default fallback
     if ($crit =~ /sort1/) {

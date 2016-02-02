@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use C4::Branch qw(GetBranchName);
 use Koha::DateUtils;
+use Koha::Libraries;
 
 use Test::More tests => 14;
 
@@ -18,7 +18,7 @@ $dbh->{RaiseError} = 1;
 
 # Add LIB1, if it doesn't exist.
 my $addbra = 'LIB1';
-if ( !GetBranchName($addbra) ) {
+unless ( Koha::Libraries->find($addbra) ) {
     $dbh->do( q{ INSERT INTO branches (branchcode,branchname) VALUES (?,?) },
         undef, ( $addbra, "$addbra branch" ) );
 }

@@ -28,6 +28,8 @@ use C4::Print;  # GetPrinters
 use C4::Koha;
 use C4::Branch; # GetBranches GetBranchesLoop
 
+use Koha::Libraries;
+
 # this will be the script that chooses branch and printer settings....
 
 my $query = CGI->new();
@@ -58,7 +60,7 @@ my @updated;
 # $session lddines here are doing the updating
 if ($branch and $branches->{$branch}) {
     if (! $userenv_branch or $userenv_branch ne $branch ) {
-        my $branchname = GetBranchName($branch);
+        my $branchname = Koha::Libraries->find($branch)->branchname;
         $template->param(LoginBranchname => $branchname);   # update template for new branch
         $template->param(LoginBranchcode => $branch);       # update template for new branch
         $session->param('branchname', $branchname);         # update sesssion in DB

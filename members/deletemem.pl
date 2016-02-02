@@ -127,7 +127,6 @@ if ( $op eq 'delete_confirm' or $countissues > 0 or $flags->{'CHARGES'}  or $is_
         phone => $bor->{'phone'},
         email => $bor->{'email'},
         branchcode => $bor->{'branchcode'},
-        branchname => GetBranchName($bor->{'branchcode'}),
 		activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
         RoutingSerials => C4::Context->preference('RoutingSerials'),
     );

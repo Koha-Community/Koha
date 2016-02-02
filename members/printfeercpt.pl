@@ -135,7 +135,6 @@ $template->param(
     phone               => $data->{'phone'},
     email               => $data->{'email'},
     branchcode          => $data->{'branchcode'},
-	branchname			=> GetBranchName($data->{'branchcode'}),
     total               => sprintf("%.2f",$total),
     totalcredit         => $totalcredit,
 	is_child        => ($data->{'category_type'} eq 'C'),

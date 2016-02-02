@@ -97,9 +97,10 @@ sub _get_label_item {
     $data->{'itype'} = $data1->{'description'};
     # add *_description fields
     if ($data->{'homebranch'} || $data->{'holdingbranch'}){
-        require C4::Branch;
-        $data->{'homebranch_description'} = C4::Branch::GetBranchName($data->{'homebranch'}) if $data->{'homebranch'};
-        $data->{'holdingbranch_description'} = C4::Branch::GetBranchName($data->{'holdingbranch'}) if $data->{'holdingbranch'};
+        require Koha::Libraries;
+        # FIXME Is this used??
+        $data->{'homebranch_description'} = Koha::Libraries->find($data->{'homebranch'})->branchname if $data->{'homebranch'};
+        $data->{'holdingbranch_description'} = Koha::Libraries->find($data->{'holdingbranch'})->branchname if $data->{'holdingbranch'};
     }
     $data->{'ccode_description'} = C4::Biblio::GetAuthorisedValueDesc('','', $data->{'ccode'} ,'','','CCODE', 1) if $data->{'ccode'};
     $data->{'location_description'} = C4::Biblio::GetAuthorisedValueDesc('','', $data->{'location'} ,'','','LOC', 1) if $data->{'location'};

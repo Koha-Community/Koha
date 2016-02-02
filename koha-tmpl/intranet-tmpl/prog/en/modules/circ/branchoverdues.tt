@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Overdues at [% LoginBranchname %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -54,7 +55,7 @@
                     [% IF ( overduesloo.borroweremail ) %]<a href="mailto:[% overduesloo.borroweremail %]?subject=Overdue: [% overduesloo.title |html %]">
                     [% overduesloo.borroweremail %]</a>[% END %]
                     </td>
-                    <td>[% overduesloo.homebranch %] [% overduesloo.itemcallnumber %]
+                    <td>[% Branches.GetName( overduesloo.homebranch ) %] [% overduesloo.itemcallnumber %]
                     </td>
                     <td align="center">
                     <b>
@@ -132,7 +133,7 @@
                         [% todayoverduesloo.borroweremail %]</a>[% END %]
                             </p>
                         </td>
-                        <td><p>[% todayoverduesloo.homebranch %] [% todayoverduesloo.itemcallnumber %]</p>
+                        <td><p>[% Branches.GetName( todayoverduesloo.homebranch ) %] [% todayoverduesloo.itemcallnumber %]</p>
                         </td>
                         <td align="center">
                             <b>

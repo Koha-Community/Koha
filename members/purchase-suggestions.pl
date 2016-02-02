@@ -51,7 +51,6 @@ foreach my $key ( keys %$borrower ) {
 $template->param(
     suggestionsview  => 1,
     categoryname => $borrower->{'description'},
-    branchname   => GetBranchName( $borrower->{'branchcode'} ),
     RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 

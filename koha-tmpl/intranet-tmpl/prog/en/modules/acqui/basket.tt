@@ -1,4 +1,5 @@
 [% USE KohaDates %]
+[% USE Branches %]
 [% USE Price %]
 [% USE AuthorisedValues %]
 
@@ -301,8 +302,8 @@
                 [% IF ( basketcontractno ) %]
                     <li><span class="label">Contract name:</span> <a href="../admin/aqcontract.pl?op=add_form&amp;contractnumber=[% basketcontractno %]&amp;booksellerid=[% booksellerid %]">[% basketcontractname %]</a></li>
                 [% END %]
-                [% IF ( deliveryplace ) %]<li><span class="label">Delivery place:</span> [% deliveryplace %]</li>[% END %]
-                [% IF ( billingplace ) %]<li><span class="label">Billing place:</span> [% billingplace %]</li>[% END %]
+                [% IF deliveryplace %]<li><span class="label">Delivery place:</span> [% Branches.GetName( deliveryplace ) %]</li>[% END %]
+                [% IF billingplace %]<li><span class="label">Billing place:</span> [% Branches.GetName( billingplace ) %]</li>[% END %]
                 [% IF ( authorisedbyname ) %]<li><span class="label">Created by:</span>  [% authorisedbyname %]</li>[% END %]
                 <li id="managedby">
                     <form action="" method="post">
@@ -326,8 +327,8 @@
                 </li>
                 <li id="branch">
                     <span class="label">Library:</span>
-                    [% IF basketbranchname %]
-                        [% basketbranchname %]
+                    [% IF basketbranchcode %]
+                        [% Branches.GetName( basketbranchcode ) %]
                     [% ELSE %]
                         No library
                     [% END %]
@@ -403,8 +404,8 @@
                             <input type="submit" value="Change basket group" />
                           [% END %]
                         </li>
-                    [% IF ( basketgroup.deliveryplacename ) %]<li><span class="label">Basket group delivery placename:</span> [% basketgroup.deliveryplacename %]</li>[% END %]
-                    [% IF ( basketgroup.billingplacename ) %]<li><span class="label">Basket group billing place:</span> [% basketgroup.billingplacename %]</li>[% END %]
+                    [% IF basketgroup.deliveryplace %]<li><span class="label">Basket group delivery placename:</span> [% Branches.GetName( basketgroup.deliveryplace ) %]</li>[% END %]
+                    [% IF basketgroup.billingplace %]<li><span class="label">Basket group billing place:</span> [% Branches.GetName( basketgroup.billingplace ) %]</li>[% END %]
                         </ol>
                     [% IF ( CAN_user_acquisition_group_manage ) %]
                     </form>

@@ -60,7 +60,6 @@ my $onlymine =
 if ( $onlymine ) { 
     $branch = C4::Context->userenv->{'branch'};
 }
-my $branchname = GetBranchName($branch);
 my $branches   = GetBranches($onlymine);
 my @branchloop;
 for my $thisbranch (
@@ -153,8 +152,6 @@ $template->param(
     calendardate             => $calendardate,
     keydate                  => $keydate,
     branchcodes              => $branchcodes,
-    branch                   => $branch,
-    branchname               => $branchname,
     branch                   => $branch,
 );
 

@@ -40,7 +40,7 @@ use warnings;
 use C4::Auth;
 use C4::Output;
 use C4::Context;
-use C4::Branch qw/GetBranchesLoop GetBranchName/;
+use C4::Branch qw/GetBranchesLoop/;
 use C4::Members;
 use C4::Members::Attributes qw(:all);
 use C4::Members::AttributeTypes;
@@ -51,6 +51,7 @@ use Koha::Patron::Debarments;
 use Koha::Patrons;
 use Koha::DateUtils;
 use Koha::Token;
+use Koha::Libraries;
 use Koha::Patron::Categories;
 
 use Text::CSV;
@@ -195,7 +196,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
         }
         if ($borrower{branchcode}) {
             push @missing_criticals, {key=>'branchcode', line=>$. , lineraw=>$borrowerline, value=>$borrower{branchcode}, branch_map=>1}
-                unless GetBranchName($borrower{branchcode});
+                unless Koha::Libraries->find($borrower{branchcode});
         } else {
             push @missing_criticals, {key=>'branchcode', line=>$. , lineraw=>$borrowerline};
         }

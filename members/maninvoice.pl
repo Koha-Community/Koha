@@ -124,7 +124,6 @@ if ($add){
         finesview      => 1,
         borrowernumber => $borrowernumber,
         categoryname   => $data->{'description'},
-        branchname     => GetBranchName($data->{'branchcode'}),
         is_child       => ($data->{'category_type'} eq 'C'),
         activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
         RoutingSerials => C4::Context->preference('RoutingSerials'),

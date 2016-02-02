@@ -903,7 +903,7 @@ sub CanBookBeIssued {
                 $issuingimpossible{ITEMNOTSAMEBRANCH} = 1;
                 $issuingimpossible{'itemhomebranch'} = $item->{C4::Context->preference("HomeOrHoldingBranch")};
             }
-            $needsconfirmation{BORRNOTSAMEBRANCH} = GetBranchName( $borrower->{'branchcode'} )
+            $needsconfirmation{BORRNOTSAMEBRANCH} = $borrower->{'branchcode'}
               if ( $borrower->{'branchcode'} ne $userenv->{branch} );
         }
     }
@@ -970,7 +970,6 @@ sub CanBookBeIssued {
             my $resbor = $res->{'borrowernumber'};
             if ( $resbor ne $borrower->{'borrowernumber'} ) {
                 my ( $resborrower ) = C4::Members::GetMember( borrowernumber => $resbor );
-                my $branchname = GetBranchName( $res->{'branchcode'} );
                 if ( $restype eq "Waiting" )
                 {
                     # The item is on reserve and waiting, but has been
@@ -980,7 +979,7 @@ sub CanBookBeIssued {
                     $needsconfirmation{'ressurname'} = $resborrower->{'surname'};
                     $needsconfirmation{'rescardnumber'} = $resborrower->{'cardnumber'};
                     $needsconfirmation{'resborrowernumber'} = $resborrower->{'borrowernumber'};
-                    $needsconfirmation{'resbranchname'} = $branchname;
+                    $needsconfirmation{'resbranchcode'} = $res->{branchcode};
                     $needsconfirmation{'reswaitingdate'} = $res->{'waitingdate'};
                 }
                 elsif ( $restype eq "Reserved" ) {
@@ -990,7 +989,7 @@ sub CanBookBeIssued {
                     $needsconfirmation{'ressurname'} = $resborrower->{'surname'};
                     $needsconfirmation{'rescardnumber'} = $resborrower->{'cardnumber'};
                     $needsconfirmation{'resborrowernumber'} = $resborrower->{'borrowernumber'};
-                    $needsconfirmation{'resbranchname'} = $branchname;
+                    $needsconfirmation{'resbranchcode'} = $res->{branchcode};
                     $needsconfirmation{'resreservedate'} = $res->{'reservedate'};
                 }
             }

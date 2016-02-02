@@ -27,7 +27,6 @@ use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 BEGIN {
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
-		&GetBranchName
 		&GetBranch
 		&GetBranches
 		&GetBranchesLoop
@@ -150,20 +149,6 @@ sub GetBranchesLoop {  # since this is what most pages want anyway
         };
     }
     return \@loop;
-}
-
-=head2 GetBranchName
-
-=cut
-
-sub GetBranchName {
-    my ($branchcode) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth;
-    $sth = $dbh->prepare("Select branchname from branches where branchcode=?");
-    $sth->execute($branchcode);
-    my $branchname = $sth->fetchrow_array;
-    return ($branchname);
 }
 
 =head2 GetBranch

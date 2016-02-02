@@ -794,8 +794,8 @@
                             <h2>This is a serial</h2>
                             <p>There are [% subscriptionsnumber %] subscription(s) associated with this title.</p>
                             [% FOREACH subscription IN subscriptions %]
-                                [% IF ( subscription.branchname ) %]
-                                    <h3>At library: [% subscription.branchname %]</h3>
+                                [% IF ( subscription.branchcode ) %]
+                                    <h3>At library: [% Branches.GetName( subscription.branchname ) %]</h3>
                                 [% ELSE %]
                                     [% IF ( subscription.branchcode ) %]
                                         <h3>At library: [% subscription.branchcode %]</h3>

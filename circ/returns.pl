@@ -45,7 +45,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::Members;
 use C4::Members::Messaging;
-use C4::Branch; # GetBranches GetBranchName
+use C4::Branch; # GetBranches
 use C4::Koha;   # FIXME : is it still useful ?
 use C4::RotatingCollections;
 use Koha::DateUtils;
@@ -172,7 +172,6 @@ if ( $query->param('reserve_id') ) {
             itemnumber     => $iteminfo->{'itemnumber'},
             itembiblionumber => $iteminfo->{'biblionumber'},
             iteminfo       => $iteminfo->{'author'},
-            tobranchname   => GetBranchName($messages->{'transfert'}),
             name           => $name,
             borrowernumber => $borrowernumber,
             borcnum        => $borr->{'cardnumber'},
@@ -650,7 +649,6 @@ if ( $itemnumber ) {
         if ( ! ( $holdingBranch eq $collectionBranch ) ) {
             $template->param(
               collectionItemNeedsTransferred => 1,
-              collectionBranchName => GetBranchName($collectionBranch),
               collectionBranch => $collectionBranch,
               itemnumber => $itemnumber,
             );

@@ -95,7 +95,6 @@ $template->param(
     borrower          => $borrower,
     borrowernumber    => $borrowernumber,
     branch            => $branch,
-    branchname        => GetBranchName($borrower->{'branchcode'}),
     categoryname      => $borrower->{description},
     RoutingSerials    => C4::Context->preference('RoutingSerials'),
 );

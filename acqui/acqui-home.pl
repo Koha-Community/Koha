@@ -51,9 +51,6 @@ my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     }
 );
 
-my $user = GetMember( 'borrowernumber' => $loggedinuser );
-my $branchname = GetBranchName($user->{branchcode});
-
 my $status           = $query->param('status') || "ASKED";
 my $suggestions_count       = CountSuggestion($status);
 
@@ -73,9 +70,6 @@ my $totavail_active     = 0;
 my @budget_loop;
 foreach my $budget ( @{$budget_arr} ) {
     next unless (CanUserUseBudget($loggedinuser, $budget, $userflags));
-
-    $budget->{'budget_branchname'} =
-      GetBranchName( $budget->{'budget_branchcode'} );
 
     my $member = GetMember( borrowernumber => $budget->{budget_owner_id} );
     if ($member) {
@@ -117,7 +111,6 @@ foreach my $budget ( @{$budget_arr} ) {
 $template->param(
     type          => 'intranet',
     loop_budget   => \@budget_loop,
-    branchname    => $branchname,
     total         => $total,
     totspent      => $totspent,
     totordered    => $totordered,

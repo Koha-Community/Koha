@@ -129,12 +129,6 @@ if ($AcqCreateItem eq 'receiving') {
     my @items;
     foreach (@itemnumbers) {
         my $item = GetItem($_);
-        if($item->{homebranch}) {
-            $item->{homebranchname} = GetBranchName($item->{homebranch});
-        }
-        if($item->{holdingbranch}) {
-            $item->{holdingbranchname} = GetBranchName($item->{holdingbranch});
-        }
         if(my $code = GetAuthValCode("items.notforloan", $fw)) {
             $item->{notforloan} = GetKohaAuthorisedValueLib($code, $item->{notforloan});
         }

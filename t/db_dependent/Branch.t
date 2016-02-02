@@ -21,7 +21,7 @@ use Modern::Perl;
 use C4::Context;
 use Data::Dumper;
 
-use Test::More tests => 17;
+use Test::More tests => 16;
 
 use C4::Branch;
 use Koha::Database;
@@ -36,7 +36,6 @@ BEGIN {
 }
 can_ok(
     'C4::Branch', qw(
-      GetBranchName
       GetBranch
       GetBranches
       GetBranchesLoop
@@ -109,10 +108,6 @@ is( Koha::Libraries->search->count, $count + 2, "two branches added" );
 
 is( Koha::Libraries->find( $b2->{branchcode} )->delete, 1,          "One row affected" );
 is( Koha::Libraries->search->count,             $count + 1, "branch BRB deleted" );
-
-#Test GetBranchName
-is( GetBranchName( $b1->{branchcode} ),
-    $b1->{branchname}, "GetBranchName returns the right name" );
 
 #Test Getbranches
 my $branches = GetBranches();

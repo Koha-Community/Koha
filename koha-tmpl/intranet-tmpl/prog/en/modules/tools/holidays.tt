@@ -1,5 +1,6 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; [% branchname %] calendar</title>
+<title>Koha &rsaquo; Tools &rsaquo; [% Branches.GetName( branch ) %] calendar</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
@@ -226,14 +227,14 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% branchname %] calendar</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% Branches.GetName( branch ) %] calendar</div>
 
 <div id="doc3" class="yui-t1">
    
    <div id="bd">
     <div id="yui-main">
     <div class="yui-b">
-    <h2>[% branchname %] calendar</h2>
+    <h2>[% Branches.GetName( branch ) %] calendar</h2>
     <div class="yui-g">
     <div class="yui-u first">
         <label for="branch">Define the holidays for:</label>

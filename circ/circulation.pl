@@ -628,7 +628,6 @@ $template->param(
     borrowernumber    => $borrowernumber,
     categoryname      => $borrower->{'description'},
     branch            => $branch,
-    branchname        => GetBranchName($borrower->{'branchcode'}),
     was_renewed       => scalar $query->param('was_renewed') ? 1 : 0,
     expiry            => $borrower->{'dateexpiry'},
     roadtype          => $roadtype,

@@ -368,7 +368,6 @@ sub GetBorrowerInfos {
     my ( %info ) = @_;
     my $borrower = GetMember( %info );
     if ( $borrower ) {
-        $borrower->{branchname} = GetBranchName( $borrower->{branchcode} );
         for ( qw(dateenrolled dateexpiry) ) {
             my $userdate = $borrower->{$_};
             unless ($userdate && $userdate ne "0000-00-00" and $userdate ne "9999-12-31") {

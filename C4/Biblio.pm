@@ -42,6 +42,7 @@ use Koha::Caches;
 use Koha::Authority::Types;
 use Koha::Acquisition::Currencies;
 use Koha::SearchEngine;
+use Koha::Libraries;
 
 use vars qw(@ISA @EXPORT);
 use vars qw($debug $cgi_debug);
@@ -1698,7 +1699,7 @@ sub GetAuthorisedValueDesc {
 
         #---- branch
         if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-            return C4::Branch::GetBranchName($value);
+            return Koha::Libraries->find($value)->branchname;
         }
 
         #---- itemtypes

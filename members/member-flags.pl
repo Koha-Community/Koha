@@ -192,7 +192,6 @@ $template->param(
 		email => $bor->{'email'},
         emailpro => $bor->{'emailpro'},
 		branchcode => $bor->{'branchcode'},
-		branchname => GetBranchName($bor->{'branchcode'}),
 		loop => \@loop,
 		is_child        => ($bor->{'category_type'} eq 'C'),
 		activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),

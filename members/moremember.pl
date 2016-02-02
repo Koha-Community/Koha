@@ -47,7 +47,6 @@ use C4::Circulation;
 use C4::Koha;
 use C4::Letters;
 use C4::Biblio;
-use C4::Branch; # GetBranchName
 use C4::Form::MessagingPreferences;
 use List::MoreUtils qw/uniq/;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
@@ -325,6 +324,7 @@ $template->param(
     categoryname    => $data->{'description'},
     was_renewed     => scalar $input->param('was_renewed') ? 1 : 0,
     branch          => $branch,
+    branchcode      => $branch,
     todaysdate      => output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }),
     totalprice      => sprintf("%.2f", $totalprice),
     totaldue        => sprintf("%.2f", $total),

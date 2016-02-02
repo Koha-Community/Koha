@@ -647,7 +647,7 @@ function verify_images() {
                             [% item.translated_description %]
                         </td>
                     [% END %]
-                    <td class="location">[% UNLESS ( singlebranchmode ) %][% item.branchname %] [% END %]</td>
+                    <td class="location">[% UNLESS ( singlebranchmode ) %][% Branches.GetName( item.branchcode ) %] [% END %]</td>
                     <td class="homebranch">[% Branches.GetName(item.homebranch) %]<span class="shelvingloc">[% item.location %]</span> </td>
                     [% IF ( itemdata_ccode ) %]<td>[% item.ccode %]</td>[% END %]
                     <td class="itemcallnumber">[% IF ( item.itemcallnumber ) %] [% item.itemcallnumber %][% END %]</td>
@@ -910,8 +910,9 @@ function verify_images() {
     <h2>This is a serial subscription</h2>
     <p> (There are [% subscriptionsnumber %] subscriptions associated with this title).</p> 
     [% FOREACH subscription IN subscriptions %]
-	    [% IF ( subscription.branchname ) %]<h3>At library: [% subscription.branchname %]</h3>[% ELSE %]
-	    [% IF ( subscription.branchcode ) %]<h3>At library: [% subscription.branchcode %]</h3>[% END %][% END %]
+            [% IF subscription.branchcode %]
+                <h3>At library: [% Branches.GetName(subscription.branchcode) || subscription.branchcode %]</h3>
+            [% END %]
             [% IF ( subscription.closed ) %]<p>This subscription is closed.</p>[% END %]
             [% IF ( subscription.callnumber ) %]<p>Callnumber: [% subscription.callnumber %] </p>[% END %]
             [% IF ( subscription.subscriptionnotes ) %]<p>[% subscription.subscriptionnotes FILTER html_line_break %] </p>[% END %]

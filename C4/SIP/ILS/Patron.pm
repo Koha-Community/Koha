@@ -20,10 +20,10 @@ use C4::Context;
 use C4::Koha;
 use C4::Members;
 use C4::Reserves;
-use C4::Branch qw(GetBranchName);
 use C4::Items qw( GetBarcodeFromItemnumber GetItemnumbersForBiblio);
 use C4::Auth qw(checkpw);
 
+use Koha::Libraries;
 
 our $kp;    # koha patron
 
@@ -392,7 +392,8 @@ sub holds_blocked_by_excessive_fees {
 sub library_name {
     my $self = shift;
     unless ($self->{library_name}) {
-        $self->{library_name} = GetBranchName($self->{branchcode});
+        my $library = Koha::Libraries->find( $self->{branchcode} );
+        $self->{library_name} = $library ? $library->branchname : '';
     }
     return $self->{library_name};
 }

@@ -213,11 +213,11 @@ $(document).ready(function() {
 [% END %]
 
 [% IF ( RESERVE_WAITING ) %]
-    <li>Item <i>[% getTitleMessageIteminfo %]</i> ([% getBarcodeMessageIteminfo %]) has been waiting for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber %]">[% resfirstname %] [% ressurname %]</a> ([% rescardnumber %]) at [% resbranchname %] since [% reswaitingdate | $KohaDates %]</li>
+    <li>Item <i>[% getTitleMessageIteminfo %]</i> ([% getBarcodeMessageIteminfo %]) has been waiting for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber %]">[% resfirstname %] [% ressurname %]</a> ([% rescardnumber %]) at [% Branches.GetName( resbranchcode ) %] since [% reswaitingdate | $KohaDates %]</li>
 [% END %]
 
 [% IF ( RESERVED ) %]
-    <li>Item <i>[% getTitleMessageIteminfo %]</i> ([% getBarcodeMessageIteminfo %]) has been on hold for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber %]">[% resfirstname %] [% ressurname %]</a> ([% rescardnumber %]) at [% resbranchname %] since [% resreservedate | $KohaDates %]</li>
+    <li>Item <i>[% getTitleMessageIteminfo %]</i> ([% getBarcodeMessageIteminfo %]) has been on hold for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber %]">[% resfirstname %] [% ressurname %]</a> ([% rescardnumber %]) at [% Branches.GetName( resbranchcode ) %] since [% resreservedate | $KohaDates %]</li>
 [% END %]
 
 [% IF ( ISSUED_TO_ANOTHER ) %]
@@ -237,7 +237,7 @@ $(document).ready(function() {
 [% END %]
 
 [% IF ( BORRNOTSAMEBRANCH ) %]
-    <li>This patron is from a different library ([% BORRNOTSAMEBRANCH %])</li>
+    <li>This patron is from a different library ([% Branches.GetName( BORRNOTSAMEBRANCH ) %])</li>
 [% END %]
 
 [% IF ( PATRON_CANT ) %]

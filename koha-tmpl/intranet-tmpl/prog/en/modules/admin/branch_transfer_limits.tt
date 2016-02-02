@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Library checkin and transfer policy</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -54,7 +55,7 @@
      <div id="yui-main">
     <div class="yui-b">
 
-<h1>Library [% branchcode %] - [% branchname %] Checkin and transfer policy</h1>
+<h1>Library [% branchcode %] - [% Branches.GetName( branchcode ) %] Checkin and transfer policy</h1>
     <form method="get" action="/cgi-bin/koha/admin/branch_transfer_limits.pl" id="selectlibrary">
         <label for="branchselect">Select a library :</label>
             <select name="branchcode" id="branchselect">
@@ -95,7 +96,7 @@
 			<tbody>
 					[% FOREACH to_branch_loo IN codes_loo.to_branch_loop %]
                         <tr>
-							<td><label style="min-width:400px;" for="[% to_branch_loo.code %][% to_branch_loo.toBranch %]row">[% to_branch_loo.toBranch %] - [% to_branch_loo.toBranchname %]</label></td>
+                            <td><label style="min-width:400px;" for="[% to_branch_loo.code %][% to_branch_loo.toBranch %]row">[% to_branch_loo.toBranch %] - [% Branches.GetName( to_branch_loo.toBranch ) %]</label></td>
 							<td>
 							[% IF ( to_branch_loo.isChecked ) %]
 								<input type="checkbox" id="[% to_branch_loo.code %][% to_branch_loo.toBranch %]row" name="[% to_branch_loo.code %]_[% to_branch_loo.toBranch %]" checked="checked" />

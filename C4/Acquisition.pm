@@ -301,9 +301,12 @@ sub GetBasketAsCSV {
             notes => $order->{'order_vendornote'},
             quantity => $order->{'quantity'},
             rrp => $order->{'rrp'},
-            deliveryplace => C4::Branch::GetBranchName( $basket->{'deliveryplace'} ),
-            billingplace => C4::Branch::GetBranchName( $basket->{'billingplace'} ),
         };
+        for my $place ( qw( deliveryplace billingplace ) ) {
+            if ( my $library = Koha::Libraries->find( $row->{deliveryplace} ) ) {
+                $row->{$place} = $library->branchname
+            }
+        }
         foreach(qw(
             contractname author title publishercode collectiontitle notes
             deliveryplace billingplace
@@ -374,11 +377,16 @@ sub GetBasketGroupAsCSV {
                 booksellerpostal => $bookseller->{postal},
                 contractnumber => $contract->{contractnumber},
                 contractname => $contract->{contractname},
-                basketgroupdeliveryplace => C4::Branch::GetBranchName( $basketgroup->{deliveryplace} ),
-                basketgroupbillingplace => C4::Branch::GetBranchName( $basketgroup->{billingplace} ),
-                basketdeliveryplace => C4::Branch::GetBranchName( $basket->{deliveryplace} ),
-                basketbillingplace => C4::Branch::GetBranchName( $basket->{billingplace} ),
+                basketgroupdeliveryplace => $basketgroup->{deliveryplace},
+                basketgroupbillingplace  => $basketgroup->{billingplace},
+                basketdeliveryplace      => $basket->{deliveryplace},
+                basketbillingplace       => $basket->{billingplace},
             };
+            for my $place (qw( basketgroupdeliveryplace basketgroupbillingplace basketdeliveryplace basketbillingplace )) {
+                if ( my $library = Koha::Libraries->find( $row->{deliveryplace} ) ) {
+                    $row->{$place} = $library->branchname;
+                }
+            }
             foreach(qw(
                 basketname author title publishercode collectiontitle notes
                 booksellername bookselleraddress booksellerpostal contractname

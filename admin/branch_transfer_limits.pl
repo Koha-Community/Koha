@@ -50,8 +50,6 @@ else
 	$branchcode = $input->param('branchcode');
 }
 
-my $branchname = GetBranchName($branchcode);
-
 # Getting the branches for user selection
 my $branches = GetBranches();
 my @branch_loop;
@@ -124,7 +122,6 @@ foreach my $code ( @codes ) {
 		$row_data{ code }         = $code;
 		$row_data{ toBranch }     = $toBranch;
 		$row_data{ isChecked }    = $isChecked;	
-		$row_data{ toBranchname } = GetBranchName($toBranch);	
 		push( @to_branch_loop, \%row_data );
 	}
 
@@ -138,7 +135,6 @@ $template->param(
 		branch_loop => \@branch_loop,
 		branchcode_loop => \@branchcode_loop,
 		branchcode => $branchcode,
-		branchname => $branchname,
         limitType => $limitType,
 		);
 

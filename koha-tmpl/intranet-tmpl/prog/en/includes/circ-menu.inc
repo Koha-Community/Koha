@@ -59,7 +59,7 @@
         [% END %]
     [% END %][% END %]
     <li class="patroncategory">Category: [% categoryname %] ([% categorycode %])</li>
-    <li class="patronlibrary">Home library: [% IF ( branchname ) %][% branchname %][% ELSE %][% branch %][% END %]</li>
+    <li class="patronlibrary">Home library: [% Branches.GetName( branchcode ) %]</li>
 </ul></div>
 <div id="menu">
 <ul>

@@ -61,7 +61,6 @@ foreach my $key ( keys %$borrower ) {
 }
 $template->param(
     categoryname    => $borrower->{'description'},
-    branchname      => GetBranchName($borrower->{'branchcode'}),
 );
 # Construct column names
 my $fields = C4::Members::Statistics::get_fields();

@@ -22,6 +22,7 @@ use C4::Context;
 use C4::Biblio;    # GetMarcFromKohaField, GetBiblioData
 use C4::Koha;      # getFacets
 use Koha::DateUtils;
+use Koha::Libraries;
 use Lingua::Stem;
 use C4::Search::PazPar2;
 use XML::Simple;
@@ -1712,9 +1713,9 @@ sub buildQuery {
             $limit_cgi  .= "&limit=" . uri_escape_utf8($this_limit);
             if ($this_limit =~ /^branch:(.+)/) {
                 my $branchcode = $1;
-                my $branchname = GetBranchName($branchcode);
-                if (defined $branchname) {
-                    $limit_desc .= " branch:$branchname";
+                my $library = Koha::Libraries->find( $branchcode );
+                if (defined $library) {
+                    $limit_desc .= " branch:" . $library->branchname;
                 } else {
                     $limit_desc .= " $this_limit";
                 }

@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc'%]
 <title>Koha &rsaquo; Tools &rsaquo; Batch patron modification</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -267,7 +268,7 @@
                                                     <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber %]">[% borrower.cardnumber %]</a></td>
                                                     <td>[% borrower.surname %]</td>
                                                     <td>[% borrower.firstname %]</td>
-                                                    <td>[% borrower.branchname %]</td>
+                                                    <td>[% Branches.GetName( borrower.branchcode ) %]</td>
                                                     <td>[% borrower.categorycode %]</td>
                                                     <td>[% borrower.city %]</td>
                                                     <td>[% borrower.state %]</td>

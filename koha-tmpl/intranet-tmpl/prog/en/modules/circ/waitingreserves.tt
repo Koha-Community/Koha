@@ -47,7 +47,7 @@
         [% FOREACH cancel_result %]
             [% IF ( messagetransfert ) %]
                 <div class="dialog message">
-                    <h2>This item is on hold for pick-up at [% branchname %]</h2>
+                    <h2>This item is on hold for pick-up at [% Branches.GetName( branchname ) %]</h2>
                     <p><strong>[% nextreservtitle %]</strong> is on hold for <strong> [% nextreservsurname %], [% nextreservfirstname %]</strong>.
                     Please retain this item and check it in to process the hold.
                     </p>
@@ -115,7 +115,7 @@
                             <input type="hidden" name="tbr" value="[% reserveloo.homebranch %]" />
                             <input type="hidden" name="tab" value="holdswaiting">
                             [% IF ( reserveloo.dotransfer ) %]
-                            <input type="submit" value="Cancel hold and return to : [% reserveloo.branchname %]" /> 
+                            <input type="submit" value="Cancel hold and return to : [% Branches.GetName( reserveloo.homebranch ) %]" />
                             [% ELSE %]
                             <input type="submit" value="Cancel hold" />
                             [% END %]
@@ -175,7 +175,7 @@
                             <input type="hidden" name="tbr" value="[% overloo.homebranch %]" />
                             <input type="hidden" name="tab" value="holdsover">
                             [% IF ( overloo.dotransfer ) %]
-                            <input type="submit" value="Cancel hold and return to : [% overloo.branchname %]" />
+                            <input type="submit" value="Cancel hold and return to : [% Branches.GetName( overloo.homebranch ) %]" />
                             [% ELSE %]
                             <input type="submit" value="Cancel hold" />
                             [% END %]

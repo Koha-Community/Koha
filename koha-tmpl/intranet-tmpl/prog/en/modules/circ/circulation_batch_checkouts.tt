@@ -164,7 +164,7 @@ $(document).ready(function() {
                       <li><i class="fa fa-li fa-warning"></i>Too many checked out.</li>
                   [% END %]
                   [% IF checkout_info.BORRNOTSAMEBRANCH %]
-                      <li><i class="fa fa-li fa-warning"></i>This patron is from a different library ([% checkout_info.BORRNOTSAMEBRANCH %]).</li>
+                      <li><i class="fa fa-li fa-warning"></i>This patron is from a different library ([% Branches.GetName( checkout_info.BORRNOTSAMEBRANCH ) %]).</li>
                   [% END %]
                   [% IF checkout_ino.PATRON_CANT %]
                       <li><i class="fa fa-li fa-warning"></i>This patron can't check out this item per library circulation policy.</li>

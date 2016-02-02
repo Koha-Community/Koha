@@ -41,6 +41,7 @@ use Koha::Biblioitems;
 use Koha::Items;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
+use Koha::Libraries;
 
 use vars qw(@ISA @EXPORT);
 
@@ -755,20 +756,16 @@ sub CheckItemPreSave {
 
     # check for valid home branch
     if (exists $item_ref->{'homebranch'} and defined $item_ref->{'homebranch'}) {
-        my $branch_name = C4::Branch::GetBranchName($item_ref->{'homebranch'});
-        unless (defined $branch_name) {
-            # relies on fact that branches.branchname is a non-NULL column,
-            # so GetBranchName returns undef only if branch does not exist
+        my $home_library = Koha::Libraries->find( $item_ref->{homebranch} );
+        unless (defined $home_library) {
             $errors{'invalid_homebranch'} = $item_ref->{'homebranch'};
         }
     }
 
     # check for valid holding branch
     if (exists $item_ref->{'holdingbranch'} and defined $item_ref->{'holdingbranch'}) {
-        my $branch_name = C4::Branch::GetBranchName($item_ref->{'holdingbranch'});
-        unless (defined $branch_name) {
-            # relies on fact that branches.branchname is a non-NULL column,
-            # so GetBranchName returns undef only if branch does not exist
+        my $holding_library = Koha::Libraries->find( $item_ref->{holdingbranch} );
+        unless (defined $holding_library) {
             $errors{'invalid_holdingbranch'} = $item_ref->{'holdingbranch'};
         }
     }

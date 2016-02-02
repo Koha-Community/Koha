@@ -161,7 +161,6 @@ foreach my $subscription (@subscriptions) {
     $cell{missinglist}       = $subscription->{missinglist};
     $cell{librariannote}     = $subscription->{librariannote};
     $cell{branchcode}        = $subscription->{branchcode};
-    $cell{branchname}        = GetBranchName($subscription->{branchcode});
     $cell{hasalert}          = $subscription->{hasalert};
     $cell{callnumber}        = $subscription->{callnumber};
     $cell{closed}            = $subscription->{closed};

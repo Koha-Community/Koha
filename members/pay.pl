@@ -231,7 +231,6 @@ sub borrower_add_additional_fields {
         );
     }
 
-    $b_ref->{branchname} = GetBranchName( $b_ref->{branchcode} );
     return;
 }
 
