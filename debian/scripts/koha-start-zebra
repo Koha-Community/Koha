@@ -30,19 +30,19 @@ start_zebra_instance()
 {
     local instancename=$1
 
+    # get zebra log levels from koha-conf.xml
+    local loglevels=$(get_loglevels $instancename)
+
     echo "Starting Zebra server for $instancename"
     touch "/var/log/koha/$instancename/zebra-error.log" \
-        "/var/log/koha/$instancename/zebra.log" \
         "/var/log/koha/$instancename/zebra-output.log"
     chown "$instancename-koha:$instancename-koha" \
         "/var/log/koha/$instancename/zebra-error.log" \
-        "/var/log/koha/$instancename/zebra.log" \
         "/var/log/koha/$instancename/zebra-output.log"
     daemon \
         --name="$instancename-koha-zebra" \
         --pidfiles="/var/run/koha/$instancename/" \
         --errlog="/var/log/koha/$instancename/zebra-error.log" \
-        --stdout="/var/log/koha/$instancename/zebra.log" \
         --output="/var/log/koha/$instancename/zebra-output.log" \
         --verbose=1 \
         --respawn \
@@ -50,7 +50,7 @@ start_zebra_instance()
         --user="$instancename-koha.$instancename-koha" \
         -- \
         zebrasrv \
-        -v none,fatal,warn \
+        -v $loglevels \
         -f "/etc/koha/sites/$instancename/koha-conf.xml" && \
         return 0 || \
         return 1
