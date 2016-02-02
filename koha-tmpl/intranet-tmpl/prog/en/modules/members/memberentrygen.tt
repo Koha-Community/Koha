@@ -146,11 +146,11 @@ function select_user(borrowernumber, borrower) {
         }
 
         if (age.year) {
-            age_string += _(age.year > 1 ? '%s years ' : '%s year ').format(age.year);
+            age_string += age.year > 1 ? _('%s years ').format(age.year) : _('%s year ').format(age.year);
         }
 
         if (age.month) {
-            age_string += _(age.month > 1 ? '%s months ' : '%s month ').format(age.month);
+            age_string += age.month > 1 ? _('%s months ').format(age.month) : _('%s month ').format(age.month);
         }
 
         hint.html(age_string);
