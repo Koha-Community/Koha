@@ -24,7 +24,7 @@
     [% SET protocol = "http://" %]
 [% END %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Details for: [% title |html %][% FOREACH subtitl IN subtitle %][% UNLESS Koha.Preference('marcflavour')=='MARC21' %],[% END %] [% subtitl.subfield |html %][% END %]</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Details for: [% title |html %][% FOREACH subtitl IN subtitle %][% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %] [% subtitl.subfield |html %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( bidi ) %]
   [% BLOCK cssinclude %]<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/right-to-left.css" />[% END %]
@@ -40,7 +40,7 @@
 <div class="main">
     <ul class="breadcrumb">
         <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="#">Details for: [% title %][% FOREACH subtitl IN subtitle %][% UNLESS Koha.Preference('marcflavour')=='MARC21' %],[% END %] [% subtitl.subfield |html %][% END %]</a></li>
+        <li><a href="#">Details for: [% title |html %][% FOREACH subtitl IN subtitle %][% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %] [% subtitl.subfield |html %][% END %]</a></li>
     </ul>
 
     <div class="container-fluid">
