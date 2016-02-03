@@ -44,7 +44,7 @@ BEGIN {
       save_report get_saved_reports execute_query get_saved_report create_compound run_compound
       get_column_type get_distinct_values save_dictionary get_from_dictionary
       delete_definition delete_report format_results get_sql
-      nb_rows update_sql build_authorised_value_list
+      nb_rows update_sql
       GetReservedAuthorisedValues
       GetParametersFromSQL
       IsAuthorisedValueValid
@@ -894,71 +894,6 @@ sub _get_column_defs {
     }
     close $fh;
     return \%columns;
-}
-
-=head2 build_authorised_value_list($authorised_value)
-
-Returns an arrayref - hashref pair. The hashref consists of
-various code => name lists depending on the $authorised_value.
-The arrayref is the hashref keys, in appropriate order
-
-=cut
-
-sub build_authorised_value_list {
-    my ( $authorised_value ) = @_;
-
-    my $dbh = C4::Context->dbh;
-    my @authorised_values;
-    my %authorised_lib;
-
-    # builds list, depending on authorised value...
-    if ( $authorised_value eq "branches" ) {
-        my $branches = GetBranchesLoop();
-        foreach my $thisbranch (@$branches) {
-            push @authorised_values, $thisbranch->{value};
-            $authorised_lib{ $thisbranch->{value} } = $thisbranch->{branchname};
-        }
-    } elsif ( $authorised_value eq "itemtypes" ) {
-        my $sth = $dbh->prepare("SELECT itemtype,description FROM itemtypes ORDER BY description");
-        $sth->execute;
-        while ( my ( $itemtype, $description ) = $sth->fetchrow_array ) {
-            push @authorised_values, $itemtype;
-            $authorised_lib{$itemtype} = $description;
-        }
-    } elsif ( $authorised_value eq "cn_source" ) {
-        my $class_sources  = GetClassSources();
-        my $default_source = C4::Context->preference("DefaultClassificationSource");
-        foreach my $class_source ( sort keys %$class_sources ) {
-            next
-              unless $class_sources->{$class_source}->{'used'}
-                  or ( $class_source eq $default_source );
-            push @authorised_values, $class_source;
-            $authorised_lib{$class_source} = $class_sources->{$class_source}->{'description'};
-        }
-    } elsif ( $authorised_value eq "categorycode" ) {
-        my $sth = $dbh->prepare("SELECT categorycode, description FROM categories ORDER BY description");
-        $sth->execute;
-        while ( my ( $categorycode, $description ) = $sth->fetchrow_array ) {
-            push @authorised_values, $categorycode;
-            $authorised_lib{$categorycode} = $description;
-        }
-
-        #---- "true" authorised value
-    } else {
-        my $authorised_values_sth = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category=? ORDER BY lib");
-
-        $authorised_values_sth->execute($authorised_value);
-
-        while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
-            push @authorised_values, $value;
-            $authorised_lib{$value} = $lib;
-
-            # For item location, we show the code and the libelle
-            $authorised_lib{$value} = $lib;
-        }
-    }
-
-    return (\@authorised_values, \%authorised_lib);
 }
 
 =head2 GetReservedAuthorisedValues
