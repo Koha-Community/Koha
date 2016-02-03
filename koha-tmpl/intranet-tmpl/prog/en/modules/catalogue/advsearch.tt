@@ -252,13 +252,7 @@
 <fieldset id="select-libs">
         <p><label for="branchloop">Individual libraries:</label><select name="limit" id="branchloop" onchange='if(this.value != ""){document.getElementById("categoryloop").disabled=true;} else {document.getElementById("categoryloop").disabled=false;}'>
         <option value="">All libraries</option>
-        [% FOREACH branchloo IN branchloop %]
-        [% IF ( branchloo.selected ) %]
-        <option value="branch:[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
-        [% ELSE %]
-        <option value="branch:[% branchloo.value %]">[% branchloo.branchname %]</option>
-        [% END %]
-        [% END %]
+        [% PROCESS options_for_libraries libraries => Branches.all() %]
         </select></p>
     <!-- <input type="hidden" name="limit" value="branch: MAIN" /> -->
         [% IF ( searchdomainloop ) %]

@@ -24,7 +24,6 @@ use C4::Auth;
 use C4::Output;
 use C4::Context;
 use C4::Members;
-use C4::Branch;
 use Koha::Patron::Modifications;
 use Koha::Libraries;
 use Koha::List::Patron;
@@ -44,37 +43,10 @@ my ($template, $loggedinuser, $cookie)
                  debug => 1,
                  });
 
-my $branches = GetBranches;
-my @branchloop;
-if ( C4::Branch::onlymine ) {
-    my $userenv = C4::Context->userenv;
-    my $library = Koha::Libraries->find( $userenv->{'branch'} );
-    push @branchloop, {
-        value => $library->id,
-        branchcode => $library->branchcode,
-        branchname => $library->branchname,
-        selected => 1
-    }
-} else {
-    foreach (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %{$branches}) {
-        my $selected = 0;
-        $selected = 1 if $branch and $branch eq $_;
-        push @branchloop, {
-            value => $_,
-            branchcode => $_,
-            branchname => $branches->{$_}->{branchname},
-            selected => $selected
-        };
-    }
-}
-
 my $no_add = 0;
-if(scalar(@branchloop) < 1){
+if( Koha::Libraries->search->count < 1){
     $no_add = 1;
     $template->param(no_branches => 1);
-} 
-else {
-    $template->param(branchloop=>\@branchloop);
 }
 
 my @categories = Koha::Patron::Categories->search_limited;

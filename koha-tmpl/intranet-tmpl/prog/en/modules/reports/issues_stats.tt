@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Circulation statistics [% IF ( do_it ) %]&rsaquo; Results[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -155,10 +156,8 @@
             <td><input type="radio" name="Line" value="branch" /></td>
             <td><input type="radio" name="Column" value="branch" /></td>
             <td><select name="Filter" id="branch">
-               <option value=""> </option>
-               [% FOREACH branchloo IN branchloop %]
-[% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
-				[% END %]
+                <option value=""> </option>
+                [% PROCESS options_for_libraries libraries => Branches.all() %]
                </select>
              </td> 
         </tr>
@@ -223,9 +222,7 @@
             <td><input type="radio" name="Column" value="items.homebranch" /></td>
             <td><select name="Filter" id="homebranch">
                     <option value=""> </option>
-                    [% FOREACH branchloo IN branchloop %]
-                        [% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
-				    [% END %]
+                    [% PROCESS options_for_libraries libraries => Branches.all() %]
                 </select>
             </td>
         </tr>
@@ -235,9 +232,7 @@
             <td><input type="radio" name="Column" value="items.holdingbranch" /></td>
             <td><select name="Filter" id="holdingbranch">
                     <option value=""> </option>
-                    [% FOREACH branchloo IN branchloop %]
-                        [% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
-				    [% END %]
+                    [% PROCESS options_for_libraries libraries => Branches.all() %]
                 </select>
             </td>
         </tr>

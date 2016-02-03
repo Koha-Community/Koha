@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Checkouts by patron category</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -68,8 +69,8 @@
                 <label for="branch">Select a library:</label>
                 <select name="value" size="1" id="branch">
                   <option value=""></option>
-                [%- FOREACH branchloo IN branchloop %]
-                  <option value="[% branchloo.branchcode %]">[% branchloo.branchname %]</option>
+                [%- FOREACH l IN Branches.all() %]
+                  <option value="[% l.branchcode %]">[% l.branchname %]</option>
                 [%- END %]
                </select>
               </li>

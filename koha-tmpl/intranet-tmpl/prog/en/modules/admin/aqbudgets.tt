@@ -521,10 +521,8 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
     <li>
     <label for="budget_branchcode">Library: </label>
     <select name="budget_branchcode" id="budget_branchcode">
-    <option value=""></option>
-    [% FOREACH branchloop_selec IN branchloop_select %]
-        [% UNLESS ( branchloop_selec.selected ) %] <option value="[% branchloop_selec.value %]" > [% ELSE %] <option value="[% branchloop_selec.value %]" selected="selected"> [% END %] [% branchloop_selec.value %]-[% branchloop_selec.branchname %]</option>
-    [% END %]
+        <option value=""></option>
+        [% PROCESS options_for_libraries libraries => branchloop_select %]
     </select>
     </li>
 
@@ -655,11 +653,7 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
             <label for="filter_budgetbranch2">Library: </label>
             <select name="filter_budgetbranch" id="filter_budgetbranch2" style="width:10em;">
                 <option value=""></option>
-                [% FOREACH branchloo IN branchloop %]
-                [% UNLESS ( branchloo.selected ) %]<option value="[% branchloo.value %]">
-                [% ELSE %]<option value="[% branchloo.value %]" selected="selected">[% END %]
-                [% branchloo.branchname %]</option>
-                [% END %]
+                [% PROCESS options_for_libraries libraries => branchloop_select %]
             </select>
         </li>
         <li class="radio">

@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE Branches %]
 [% USE ItemTypes %]
 [% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -145,15 +146,7 @@
 			<li>
                 <label for="tobranchcd">Destination library: </label>
                     <select name="tobranchcd" id="tobranchcd">
-                        [% FOREACH branchoptionloo IN branchoptionloop %]
-						[% IF ( branchoptionloo.selected ) %]
-                            <option value="[% branchoptionloo.value %]" selected="selected">
-						[% ELSE %]
-                            <option value="[% branchoptionloo.value %]">
-						[% END %]
-                                [% branchoptionloo.branchname %]
-                            </option>
-                        [% END %]
+                        [% PROCESS options_for_libraries libraries => Branches.all( selected => tobranchcd ) %]
                     </select>
             </li>
             <li>

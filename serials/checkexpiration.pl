@@ -47,7 +47,6 @@ use warnings;
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Serials; # GetExpirationDate
-use C4::Branch;
 use C4::Output;
 use C4::Context;
 use Koha::DateUtils;
@@ -113,18 +112,19 @@ if ($date) {
     );
 }
 
-my $branches_loop;
+my $can_change_library;;
 if (  !C4::Context->preference("IndependentBranches")
     or C4::Context->IsSuperLibrarian()
     or ( ref $flags->{serials}  and $flags->{serials}->{superserials} )
     or ( !ref $flags->{serials} and $flags->{serials} == 1 ) )
 {
-    $branches_loop = C4::Branch::GetBranchesLoop( $branch );
+    $can_change_library = 1;
 }
 
 $template->param (
     (uc(C4::Context->preference("marcflavour"))) => 1,
-    branches_loop   => $branches_loop,
+    can_change_library => $can_change_library,
+    branch => $branch,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

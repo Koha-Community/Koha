@@ -272,24 +272,6 @@ if ($show_barcode) {
 }
 $template->param( show_barcode => 1 ) if $show_barcode;
 
-# load the branches
-my $branches = GetBranches();
-my @branch_loop;
-for my $branch_hash ( sort keys %{$branches} ) {
-    my $selected;
-    if ( C4::Context->preference('SearchMyLibraryFirst') ) {
-        $selected =
-          ( C4::Context->userenv
-              && ( $branch_hash eq C4::Context->userenv->{branch} ) );
-    }
-    push @branch_loop,
-      { value      => "branch: $branch_hash",
-        branchname => $branches->{$branch_hash}->{'branchname'},
-        selected   => $selected,
-      };
-}
-$template->param( branchloop => \@branch_loop );
-
 # now the reserved items....
 my $reserves = Koha::Holds->search( { borrowernumber => $borrowernumber } );
 

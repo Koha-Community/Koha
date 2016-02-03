@@ -23,7 +23,6 @@ use strict;
 use C4::Auth;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Branch; # GetBranches
 use C4::Output;
 use C4::Koha;
 use C4::Reports;
@@ -156,7 +155,6 @@ if ($do_it) {
 
     $template->param(
         itemtypes    => $itemtypes,
-        CGIBranch    => GetBranchesLoop( C4::Context->userenv->{'branch'} ),
         locationloop => \@locations,
         authvals     => \@authvals,
         CGIextChoice => \@mime,

@@ -40,7 +40,6 @@ use warnings;
 use C4::Auth;
 use C4::Output;
 use C4::Context;
-use C4::Branch qw/GetBranchesLoop/;
 use C4::Members;
 use C4::Members::Attributes qw(:all);
 use C4::Members::AttributeTypes;
@@ -85,9 +84,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
         debug           => 1,
 });
 
-# get the branches and pass them to the template
-my $branches = GetBranchesLoop();
-$template->param( branches => $branches ) if ( $branches );
 # get the patron categories and pass them to the template
 my @patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['description']});
 $template->param( categories => \@patron_categories );

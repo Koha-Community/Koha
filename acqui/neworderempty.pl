@@ -210,24 +210,6 @@ $suggestion = GetSuggestionInfo($suggestionid) if $suggestionid;
 my @currencies = Koha::Acquisition::Currencies->search;
 my $active_currency = Koha::Acquisition::Currencies->get_active;
 
-# build branches list
-my $onlymine =
-     C4::Context->preference('IndependentBranches')
-  && C4::Context->userenv
-  && !C4::Context->IsSuperLibrarian()
-  && C4::Context->userenv->{branch};
-my $branches = GetBranches($onlymine);
-my @branchloop;
-foreach my $thisbranch ( sort {$branches->{$a}->{'branchname'} cmp $branches->{$b}->{'branchname'}} keys %$branches ) {
-    my %row = (
-        value      => $thisbranch,
-        branchname => $branches->{$thisbranch}->{'branchname'},
-    );
-    $row{'selected'} = 1 if( $thisbranch && $data->{branchcode} && $thisbranch eq $data->{branchcode}) ;
-    push @branchloop, \%row;
-}
-$template->param( branchloop => \@branchloop );
-
 # build bookfund list
 my $borrower= GetMember('borrowernumber' => $loggedinuser);
 my ( $flags, $homebranch )= ($borrower->{'flags'},$borrower->{'branchcode'});

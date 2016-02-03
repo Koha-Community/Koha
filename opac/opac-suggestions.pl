@@ -22,7 +22,6 @@ use CGI qw ( -utf8 );
 use Encode qw( encode );
 use C4::Auth;    # get_template_and_user
 use C4::Members;
-use C4::Branch;
 use C4::Koha;
 use C4::Output;
 use C4::Suggestions;
@@ -202,9 +201,7 @@ if ( C4::Context->preference("AllowPurchaseSuggestionBranchChoice") ) {
     }
     my $branchcode = $input->param('branchcode') || $borr->{'branchcode'} || $userbranch || '' ;
 
-# make branch selection options...
-    my $branchloop = GetBranchesLoop($branchcode);
-    $template->param( branchloop => $branchloop );
+    $template->param( branchcode => $branchcode );
 }
 
 my $mandatoryfields = '';

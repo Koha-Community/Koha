@@ -29,7 +29,6 @@ use C4::Form::MessagingPreferences;
 use Koha::Patrons;
 use Koha::Patron::Modification;
 use Koha::Patron::Modifications;
-use C4::Branch qw(GetBranchesLoop);
 use C4::Scrubber;
 use Email::Valid;
 use Koha::DateUtils;
@@ -70,7 +69,6 @@ $template->param(
     action            => $action,
     hidden            => GetHiddenFields( $mandatory, 'registration' ),
     mandatory         => $mandatory,
-    branches          => GetBranchesLoop(),
     OPACPatronDetails => C4::Context->preference('OPACPatronDetails'),
 );
 

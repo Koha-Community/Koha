@@ -65,9 +65,6 @@ my $output = $input->param("output");
 my $basename = $input->param("basename");
 our $sep     = $input->param("sep");
 $sep = "\t" if ($sep and $sep eq 'tabulation');
-my $selected_branch; # = $input->param("?");
-
-our $branches = GetBranches;
 
 my ($template, $borrowernumber, $cookie)
 	= get_template_and_user({template_name => $fullreportname,
@@ -121,13 +118,6 @@ if ($do_it) {
 	my $req;
     my $patron_categories = Koha::Patron::Categories->search({}, {order_by => ['description']});
     $template->param( patron_categories => $patron_categories );
-	my @branchloop;
-	foreach (sort {$branches->{$a}->{branchname} cmp $branches->{$b}->{branchname}} keys %$branches) {
-		my $line = {branchcode => $_, branchname => $branches->{$_}->{branchname} || 'UNKNOWN'};
-		$line->{selected} = 'selected' if ($selected_branch and $selected_branch eq $_);
-		push @branchloop, $line;
-	}
-	$template->param(BRANCH_LOOP => \@branchloop);
  	$req = $dbh->prepare("SELECT DISTINCTROW zipcode FROM borrowers WHERE zipcode IS NOT NULL AND zipcode <> '' ORDER BY zipcode");
  	$req->execute;
 	$template->param(   ZIP_LOOP => $req->fetchall_arrayref({}));

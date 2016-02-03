@@ -43,6 +43,7 @@
 <script type="text/javascript" src="[% interface %]/[% theme %]/js/staff-global.js"></script>
 
 [% INCLUDE 'validator-strings.inc' %]
+[% PROCESS 'html_helpers.inc' %]
 [% IF ( IntranetUserJS ) %]
     <script type="text/javascript">
     //<![CDATA[

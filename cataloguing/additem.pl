@@ -29,9 +29,9 @@ use C4::Items;
 use C4::Context;
 use C4::Circulation;
 use C4::Koha;
-use C4::Branch;
 use C4::ClassSource;
 use Koha::DateUtils;
+use Koha::Libraries;
 use List::MoreUtils qw/any/;
 use C4::Search;
 use Storable qw(thaw freeze);
@@ -175,9 +175,9 @@ sub generate_subfield_form {
             # builds list, depending on authorised value...
             if ( $subfieldlib->{authorised_value} eq "branches" ) {
                 foreach my $thisbranch (@$branches) {
-                    push @authorised_values, $thisbranch->{value};
-                    $authorised_lib{$thisbranch->{value}} = $thisbranch->{branchname};
-                    $value = $thisbranch->{value} if $thisbranch->{selected} && !$value;
+                    push @authorised_values, $thisbranch->{branchcode};
+                    $authorised_lib{$thisbranch->{branchcode}} = $thisbranch->{branchname};
+                    $value = $thisbranch->{branchcode} if $thisbranch->{selected} && !$value;
                 }
             }
             elsif ( $subfieldlib->{authorised_value} eq "itemtypes" ) {
@@ -863,13 +863,11 @@ my $i=0;
 
 my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
 
-my $onlymine =
-     C4::Context->preference('IndependentBranches')
-  && C4::Context->userenv
-  && !C4::Context->IsSuperLibrarian()
-  && C4::Context->userenv->{branch};
 my $branch = $input->param('branch') || C4::Context->userenv->{branch};
-my $branches = GetBranchesLoop($branch,$onlymine);  # build once ahead of time, instead of multiple times later.
+my $libraries = Koha::Libraries->search({}, { order_by => ['branchname'] })->unblessed;# build once ahead of time, instead of multiple times later.
+for my $library ( @$libraries ) {
+    $library->{selected} = 1 if $library->{branchcode} eq $branch
+}
 
 # We generate form, from actuel record
 @fields = ();
@@ -884,7 +882,7 @@ if($itemrecord){
 
             next if ($tagslib->{$tag}->{$subfieldtag}->{'tab'} ne "10");
 
-            my $subfield_data = generate_subfield_form($tag, $subfieldtag, $value, $tagslib, $subfieldlib, $branches, $biblionumber, $temp, \@loop_data, $i, $restrictededition);
+            my $subfield_data = generate_subfield_form($tag, $subfieldtag, $value, $tagslib, $subfieldlib, $libraries, $biblionumber, $temp, \@loop_data, $i, $restrictededition);
             push @fields, "$tag$subfieldtag";
             push (@loop_data, $subfield_data);
             $i++;
@@ -908,7 +906,7 @@ foreach my $tag ( keys %{$tagslib}){
         my @values = (undef);
         @values = $itemrecord->field($tag)->subfield($subtag) if ($itemrecord && defined($itemrecord->field($tag)) && defined($itemrecord->field($tag)->subfield($subtag)));
         for my $value (@values){
-            my $subfield_data = generate_subfield_form($tag, $subtag, $value, $tagslib, $tagslib->{$tag}->{$subtag}, $branches, $biblionumber, $temp, \@loop_data, $i, $restrictededition);
+            my $subfield_data = generate_subfield_form($tag, $subtag, $value, $tagslib, $tagslib->{$tag}->{$subtag}, $libraries, $biblionumber, $temp, \@loop_data, $i, $restrictededition);
             push (@loop_data, $subfield_data);
             $i++;
         }

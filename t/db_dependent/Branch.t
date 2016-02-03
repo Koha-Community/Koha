@@ -38,7 +38,6 @@ can_ok(
     'C4::Branch', qw(
       GetBranch
       GetBranches
-      GetBranchesLoop
       mybranch
       )
 );
@@ -197,9 +196,5 @@ is( Koha::LibraryCategories->search->count, $count_cat + 3, "Two categories adde
 
 #TODO later: test mybranchine and onlymine
 # Actually we cannot mock C4::Context->userenv in unit tests
-
-#Test GetBranchesLoop
-my $loop = GetBranchesLoop;
-is( scalar(@$loop), Koha::Libraries->search->count, 'There is the right number of branches' );
 
 $schema->storage->txn_rollback;

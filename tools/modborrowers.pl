@@ -28,7 +28,6 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth;
-use C4::Branch;
 use C4::Koha;
 use C4::Members;
 use C4::Members::Attributes;
@@ -37,6 +36,7 @@ use C4::Output;
 use List::MoreUtils qw /any uniq/;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::List::Patron;
+use Koha::Libraries;
 use Koha::Patron::Categories;
 
 my $input = new CGI;
@@ -145,7 +145,7 @@ if ( $op eq 'show' ) {
         if @notfoundcardnumbers;
 
     # Construct drop-down list values
-    my $branches = GetBranchesLoop;
+    my $branches = Koha::Libraries->search({}, { order_by => ['branchname'] })->unblessed;
     my @branches_option;
     push @branches_option, { value => $_->{value}, lib => $_->{branchname} } for @$branches;
     unshift @branches_option, { value => "", lib => "" };

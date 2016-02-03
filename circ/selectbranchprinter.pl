@@ -26,7 +26,7 @@ use C4::Output;
 use C4::Auth qw/:DEFAULT get_session/;
 use C4::Print;  # GetPrinters
 use C4::Koha;
-use C4::Branch; # GetBranches GetBranchesLoop
+use C4::Branch; # GetBranches
 
 use Koha::Libraries;
 
@@ -136,7 +136,7 @@ if (scalar @updated and not scalar @recycle_loop) {
 $template->param(
     referer     => $referer,
     printerloop => \@printerloop,
-    branchloop  => GetBranchesLoop($branch),
+    branch      => $branch,
     recycle_loop=> \@recycle_loop,
 );
 

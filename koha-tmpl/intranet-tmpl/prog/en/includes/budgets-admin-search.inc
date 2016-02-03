@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE Branches %]
 <div class="gradient">
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin Fund Admin Resident Search Box -->
 
@@ -10,11 +11,11 @@
             <label for="filter_budgetbranch">Library: </label>
             <select name="filter_budgetbranch" id="filter_budgetbranch" style="width:10em;">
                 <option value=""></option>
-                    [% FOREACH branchloo IN branchloop %]
-                        [% IF ( branchloo.selected ) %]
-                        <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
+                    [% FOREACH branchloo IN Branches.all( selected => selected_branchcode ) %]
+                        [% IF branchloo.selected %]
+                        <option value="[% branchloo.branchcode %]" selected="selected">[% branchloo.branchname %]</option>
                         [% ELSE %]
-                        <option value="[% branchloo.value %]" >[% branchloo.branchname %]</option>
+                        <option value="[% branchloo.branchcode %]" >[% branchloo.branchname %]</option>
                         [% END %]
                     [% END %]
             </select>

@@ -38,16 +38,16 @@ $(document).ready(function(){
         <th>No. of times checked out</th>
         <th>Last seen</th>
     </tr>
-    [% FOREACH branchloo IN branchloop %]
-    [% IF ( branchloo.selected ) %]
+    [% FOREACH library IN libraries %]
+    [% IF library.selected %]
         <tr class="mybranch">
     [% ELSE %]
         <tr>
     [% END %]
-            <td>[% branchloo.branchname %]</td>
-            <td>[% branchloo.issues %]</td>
-            <td>[% IF ( branchloo.seen ) %]
-                    [% branchloo.seen | $KohaDates with_hours => 1 %]
+            <td>[% library.branchname %]</td>
+            <td>[% library.issues %]</td>
+            <td>[% IF library.seen %]
+                    [% library.seen | $KohaDates with_hours => 1 %]
                 [% ELSE %]
                     <span>Never</span>
                 [% END %]

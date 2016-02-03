@@ -214,9 +214,6 @@ if (@patron_attr_filter_loop) {
 
 $template->param(
     patron_attr_header_loop => [ map { { header => $_->{description} } } grep { ! $_->{isclone} } @patron_attr_filter_loop ],
-    branchloop   => GetBranchesLoop($branchfilter, $onlymine),
-    homebranchloop => GetBranchesLoop( $homebranchfilter, $onlymine ),
-    holdingbranchloop => GetBranchesLoop( $holdingbranchfilter, $onlymine ),
     branchfilter => $branchfilter,
     homebranchfilter => $homebranchfilter,
     holdingbranchfilter => $homebranchfilter,

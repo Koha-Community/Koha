@@ -100,6 +100,4 @@ $template->param(
     results => \@results,
 );
 
-$template->param(branchloop => GetBranchesLoop($branch));
-
 output_html_with_http_headers $input, $cookie, $template->output;

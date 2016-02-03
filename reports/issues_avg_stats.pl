@@ -154,7 +154,6 @@ if ($do_it) {
     $template->param(
                     patron_categories => $patron_categories,
                     itemtypes    => $itemtypes,
-                    branchloop   => GetBranchesLoop(),
                     hassort1     => $hassort1,
                     hassort2     => $hassort2,
                     HlghtSort2   => $hglghtsort2,

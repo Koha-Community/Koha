@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; [% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron [% IF (firstname) %][% firstname %] [% END %][% IF (surname) %][% surname %] [% END %]([%IF ( categoryname ) %][% categoryname %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -628,15 +629,9 @@ $(document).ready(function() {
     <li>
         <label for="libraries" class="required">Library:</label>
         <select name="branchcode" size="1" id="libraries">
-        [%- FOREACH branchloo IN branchloop %]
-          [% IF ( branchloo.selected ) -%]
-            <option value="[% branchloo.branchcode %]" selected="selected">[% branchloo.branchname %]</option>
-          [%- ELSE -%]
-            <option value="[% branchloo.branchcode %]">[% branchloo.branchname %]</option>
-          [%- END -%]
-        [%- END %]
-      </select>
-      <span class="required">Required</span>
+            [% PROCESS options_for_libraries libraries => Branches.all( selected => userbranch ) %]
+        </select>
+        <span class="required">Required</span>
     </li>
         [% END %]
     <li>

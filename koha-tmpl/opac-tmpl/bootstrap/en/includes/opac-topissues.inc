@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE Branches %]
 
 <div id="search-facets">
     <form method="get" action="/cgi-bin/koha/opac-topissues.pl">
@@ -18,15 +19,7 @@
                 <li><label for="branch">From: </label>
                             <select name="branch" id="branch">
                                 <option value="">All libraries</option>
-                                [% FOREACH branchloo IN branchloop %]
-                                    [% IF ( branchloo.selected ) %]
-                                        <option value="[% branchloo.value %]" selected="selected">
-                                    [% ELSE %]
-                                        <option value="[% branchloo.value %]">
-                                    [% END %]
-                                            [% branchloo.branchname %]
-                                        </option>
-                                [% END %]
+                                [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
                             </select></li>
 
                 [% AdvancedSearchTypes = Koha.Preference('AdvancedSearchTypes').split('\|') %]

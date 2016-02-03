@@ -29,7 +29,6 @@ require Exporter;
 use C4::Context;
 use C4::Templates;    # to get the template
 use C4::Languages;
-use C4::Branch;       # GetBranches
 use C4::Search::History;
 use Koha;
 use Koha::Caches;
@@ -514,7 +513,6 @@ sub get_template_and_user {
         $template->param(
             OpacAdditionalStylesheet                   => C4::Context->preference("OpacAdditionalStylesheet"),
             AnonSuggestions                       => "" . C4::Context->preference("AnonSuggestions"),
-            BranchesLoop                          => GetBranchesLoop($opac_name),
             BranchCategoriesLoop                  => $library_categories,
             opac_name                             => $opac_name,
             LibraryName                           => "" . C4::Context->preference("LibraryName"),
@@ -1080,7 +1078,7 @@ sub checkauth {
                         $branchcode = $query->param('branch');
                         $branchname = Koha::Libraries->find($branchcode)->branchname;
                     }
-                    my $branches = GetBranches();
+                    my $branches = C4::Branch::GetBranches();
                     if ( C4::Context->boolean_preference('IndependentBranches') && C4::Context->boolean_preference('Autolocation') ) {
 
                         # we have to check they are coming from the right ip range
@@ -1091,7 +1089,6 @@ sub checkauth {
                         }
                     }
 
-                    my @branchesloop;
                     foreach my $br ( keys %$branches ) {
 
                         #     now we work with the treatment of ip
@@ -1208,7 +1205,6 @@ sub checkauth {
     my $template_name = ( $type eq 'opac' ) ? 'opac-auth.tt' : 'auth.tt';
     my $template = C4::Templates::gettemplate( $template_name, $type, $query );
     $template->param(
-        branchloop                            => GetBranchesLoop(),
         OpacAdditionalStylesheet                   => C4::Context->preference("OpacAdditionalStylesheet"),
         opaclayoutstylesheet                  => C4::Context->preference("opaclayoutstylesheet"),
         login                                 => 1,
@@ -1532,8 +1528,7 @@ sub check_api_auth {
                     $branchcode = $query->param('branch');
                     $branchname = Koha::Libraries->find($branchcode)->branchname;
                 }
-                my $branches = GetBranches();
-                my @branchesloop;
+                my $branches = C4::Branch::GetBranches();
                 foreach my $br ( keys %$branches ) {
 
                     #     now we work with the treatment of ip

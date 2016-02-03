@@ -26,7 +26,6 @@ use Date::Manip;
 use C4::Auth;
 use C4::Debug;
 use C4::Context;
-use C4::Branch; # GetBranches
 use C4::Koha;
 use C4::Output;
 use C4::Circulation;
@@ -156,7 +155,6 @@ $template->param(
 	itemtypeloop => \@itemtypeloop,
 	locationloop => \@locations,
 	   ccodeloop => \@ccodes,
-	  branchloop => GetBranchesLoop(C4::Context->userenv->{'branch'}),
 	hassort1=> $hassort1,
 	hassort2=> $hassort2,
 	Bsort1 => $Bsort1,

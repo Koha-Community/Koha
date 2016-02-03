@@ -337,6 +337,9 @@ sub getRecords {
     my @results;
     my $results_hashref = ();
 
+    # TODO simplify this structure ( { branchcode => $branchname } is enought) and remove this parameter
+    $branches ||= { map { $_->branchcode => { branchname => $_->branchname } } Koha::Libraries->search };
+
     # Initialize variables for the faceted results objects
     my $facets_counter = {};
     my $facets_info    = {};

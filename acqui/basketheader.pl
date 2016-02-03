@@ -121,20 +121,14 @@ if ( $op eq 'add_form' ) {
                     booksellerid => $booksellerid,
                     basketno => $basketno,
                     booksellers => \@booksellers,
-                    deliveryplace => $basket->{deliveryplace},
-                    billingplace => $basket->{billingplace},
                     is_standing => $basket->{is_standing},
     );
 
     my $billingplace = $basket->{'billingplace'} || C4::Context->userenv->{"branch"};
     my $deliveryplace = $basket->{'deliveryplace'} || C4::Context->userenv->{"branch"};
 
-    # Build the combobox to select the billing place
-
-    my $branches = C4::Branch::GetBranchesLoop( $billingplace );
-    $template->param( billingplaceloop => $branches );
-    $branches = C4::Branch::GetBranchesLoop( $deliveryplace );
-    $template->param( deliveryplaceloop => $branches );
+    $template->param( billingplace => $billingplace );
+    $template->param( deliveryplace => $deliveryplace );
 
 #End Edit
 } elsif ( $op eq 'add_validate' ) {

@@ -96,11 +96,10 @@ my $user_branchcode     = $user->{'branchcode'};
 $template->param(
     show_mine   => $show_mine,
     op  => $op,
+    selected_branchcode => $filter_budgetbranch,
 );
 
 my $budget;
-
-my $branchloop = C4::Branch::GetBranchesLoop($filter_budgetbranch);
 
 $template->param(auth_cats_loop => GetBudgetAuthCats( $budget_period_id ))
     if $budget_period_id;
@@ -153,7 +152,7 @@ if ($op eq 'add_form') {
         $row{selected} = 1 if $budget and $thisbranch eq $budget->{'budget_branchcode'};
         push @branchloop_select, \%row;
     }
-    
+
     # populates the YUI planning button
     my $categories = GetAuthorisedValueCategories();
     my @auth_cats_loop1 = ();
@@ -343,7 +342,6 @@ if ( $op eq 'list' ) {
         spent_total            => $spent_total,
         ordered_total          => $ordered_total,
         available_total        => $available_total,
-        branchloop             => $branchloop,
         filter_budgetname      => $filter_budgetname,
     );
 

@@ -93,13 +93,7 @@
 		    	</label>
 		    	<select name="branchcode"  id="branchcode">
 				<option value="">Any library</option>
-                    [% FOREACH branche IN branches %]
-                        [% IF ( branche.selected ) %]
-                            <option value="[% branche.value %]" selected="selected">[% branche.branchname %]</option>
-                        [% ELSE %]
-                            <option value="[% branche.value %]">[% branche.branchname %]</option>
-                        [% END %]
-					[% END %]
+                [% PROCESS options_for_libraries libraries => Branches.all() %]
 		    	</select>
 
 		    </li>

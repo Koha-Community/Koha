@@ -32,6 +32,7 @@ use C4::Auth;
 use C4::Branch; # GetBranches
 use C4::Biblio; # GetBiblioItemData
 use Koha::DateUtils;
+use Koha::Libraries;
 
 my $input        = new CGI;
 my $itm          = $input->param('itm');
@@ -69,10 +70,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $branchloop = GetBranchesLoop(C4::Context->userenv->{branch});
-foreach (@$branchloop) {
-    $_->{issues}     = issuesat($itm, $_->{value});
-    $_->{seen}       = lastseenat( $itm, $_->{value} ) || undef;
+my $libraries = Koha::Libraries->search({}, { order_by => ['branchname'] })->unblessed;
+for my $library ( @$libraries ) {
+    $library->{selected} = 1 if $library->{branchcode} eq C4::Context->userenv->{branch};
+    $library->{issues}     = issuesat($itm, $library->{branchcode});
+    $library->{seen}       = lastseenat( $itm, $library->{branchcode} ) || undef;
 }
 
 $template->param(
@@ -85,7 +87,7 @@ $template->param(
     holdingbranch           => $holdingbranch,
     lastdate                => $lastdate ? $lastdate : 0,
     count                   => $count,
-    branchloop              => $branchloop,
+    libraries               => $libraries,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

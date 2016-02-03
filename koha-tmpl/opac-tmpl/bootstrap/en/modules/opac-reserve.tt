@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE Branches %]
 [% USE KohaDates %]
 [% USE Price %]
 [% USE ItemTypes %]
@@ -214,23 +215,11 @@
                                                                 <label for="branch_[% bibitemloo.biblionumber %]">Pick up location:</label>
                                                                 [% UNLESS ( bibitemloo.holdable ) %]
                                                                     <select name="branch" id="branch_[% bibitemloo.biblionumber %]" disabled="disabled">
-                                                                        [% FOREACH branchloo IN bibitemloo.branchloop %]
-                                                                            [% IF ( branchloo.selected ) %]
-                                                                                <option value="[% branchloo.branchcode %]" selected="selected">[% branchloo.branchname %]</option>
-                                                                            [% ELSE %]
-                                                                                <option value="[% branchloo.branchcode %]">[% branchloo.branchname %]</option>
-                                                                            [% END %]
-                                                                        [% END %]
+                                                                        [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
                                                                     </select>
                                                                 [% ELSE %]
                                                                     <select name="branch" id="branch_[% bibitemloo.biblionumber %]">
-                                                                        [% FOREACH branchloo IN bibitemloo.branchloop %]
-                                                                            [% IF ( branchloo.selected ) %]
-                                                                                <option value="[% branchloo.branchcode %]" selected="selected">[% branchloo.branchname %]</option>
-                                                                            [% ELSE %]
-                                                                                <option value="[% branchloo.branchcode %]">[% branchloo.branchname %]</option>
-                                                                            [% END %]
-                                                                        [% END %]
+                                                                        [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
                                                                     </select>
                                                                 [% END # / UNLESS bibitemloo.holdable %]
                                                             </li>

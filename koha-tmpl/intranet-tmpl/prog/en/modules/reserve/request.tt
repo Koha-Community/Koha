@@ -374,13 +374,7 @@ function checkMultiHold() {
         <li>
             <label for="pickup">Pickup at:</label>
             <select name="pickup" size="1" id="pickup">
-            [%- FOREACH branchloo IN branchloop %]
-              [% IF ( branchloo.selected ) -%]
-                <option value="[% branchloo.branchcode %]" selected="selected">[% branchloo.branchname %]</option>
-              [%- ELSE -%]
-                <option value="[% branchloo.branchcode %]">[% branchloo.branchname %]</option>
-              [%- END -%]
-            [%- END %]
+                [% PROCESS options_for_libraries libraries => Branches.all() %]
             </select>
         </li>
 
@@ -810,17 +804,9 @@ function checkMultiHold() {
             Item being transferred to <b> [% reserveloo.wbrname %]</b> <input type="hidden" name="pickup" value="[% reserveloo.wbrcode %]" />
          [% END %]
     [% ELSE %]
-          <select name="pickup">
-      [% FOREACH branchloo IN reserveloo.branchloop %]
-        [% IF ( branchloo.selected ) %]
-            <option value="[% branchloo.branchcode %]" selected="selected">
-        [% ELSE %]
-            <option value="[% branchloo.branchcode %]">
-        [% END %]
-              [% branchloo.branchname %]
-            </option>
-      [% END %]
-          </select>
+        <select name="pickup">
+            [% PROCESS options_for_libraries libraries => Branches.all( selected => reserveloo.branchcode ) %]
+        </select>
     [% END %]
         </td>
         <td>

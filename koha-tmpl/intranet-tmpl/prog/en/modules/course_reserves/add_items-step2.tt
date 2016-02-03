@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Course reserves &rsaquo; Add items</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -81,12 +82,11 @@
                         <label class="required" for="holdingbranch">Holding library:</label>
                         <select id="holdingbranch" name="holdingbranch">
                             <option value="">LEAVE UNCHANGED</option>
-
-                            [% FOREACH b IN branches %]
+                            [% FOREACH b IN Branches.all() %]
                                 [% IF course_item.holdingbranch && ( ( course.enabled == 'yes' && b.value == item.holdingbranch ) || ( course.enabled == 'no' && b.value == course_item.holdingbranch ) ) %]
-                                    <option value="[% b.value %]" selected="selected">[% b.branchname %]</option>
+                                    <option value="[% b.branchcode %]" selected="selected">[% b.branchname %]</option>
                                 [% ELSE %]
-                                    <option value="[% b.value %]">[% b.branchname %]</option>
+                                    <option value="[% b.branchcode %]">[% b.branchname %]</option>
                                 [% END %]
                             [% END %]
                         </select>

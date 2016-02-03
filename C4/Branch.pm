@@ -29,7 +29,6 @@ BEGIN {
 	@EXPORT = qw(
 		&GetBranch
 		&GetBranches
-		&GetBranchesLoop
 		&mybranch
 	);
     @EXPORT_OK = qw( &onlymine &mybranch );
@@ -83,8 +82,6 @@ Create a branch selector with the following code.
             [% END %]
     </select>
 
-=head4 Note that you often will want to just use GetBranchesLoop, for exactly the example above.
-
 =cut
 
 sub GetBranches {
@@ -133,22 +130,6 @@ sub onlymine {
 sub mybranch {
     C4::Context->userenv           or return '';
     return C4::Context->userenv->{branch} || '';
-}
-
-sub GetBranchesLoop {  # since this is what most pages want anyway
-    my $branch   = @_ ? shift : mybranch();     # optional first argument is branchcode of "my branch", if preselection is wanted.
-    my $onlymine = @_ ? shift : onlymine();
-    my $branches = GetBranches($onlymine);
-    my @loop;
-    foreach my $branchcode ( sort { uc($branches->{$a}->{branchname}) cmp uc($branches->{$b}->{branchname}) } keys %$branches ) {
-        push @loop, {
-            value      => $branchcode,
-            branchcode => $branchcode,
-            selected   => ($branchcode eq $branch) ? 1 : 0,
-            branchname => $branches->{$branchcode}->{branchname},
-        };
-    }
-    return \@loop;
 }
 
 =head2 GetBranch

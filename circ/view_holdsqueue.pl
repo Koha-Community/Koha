@@ -30,7 +30,6 @@ use C4::Output;
 use C4::Biblio;
 use C4::Items;
 use C4::Koha;   # GetItemTypes
-use C4::Branch; # GetBranches
 use C4::HoldsQueue qw(GetHoldsQueueItems);
 
 my $query = new CGI;
@@ -72,7 +71,6 @@ foreach my $thisitemtype ( sort keys %$itemtypes ) {
 }
 
 $template->param(
-     branchloop => GetBranchesLoop(C4::Context->userenv->{'branch'}),
    itemtypeloop => \@itemtypesloop,
 );
 

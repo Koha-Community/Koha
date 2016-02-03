@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Import patrons [% IF ( uploadborrowers ) %]&rsaquo; Results[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -137,9 +138,9 @@
         <label class="description" for="branchcode">[% borrower_field.description %]: </label>
         <select id="branchcode" name="branchcode">
             <option value="" selected="selected"></option>
-        [% FOREACH branch IN branches %]
-            <option value="[% branch.branchcode %]">
-                [% branch.branchname %]</option>
+        [% FOREACH library IN Branches.all() %]
+            <option value="[% library.branchcode %]">
+                [% library.branchname %]</option>
         [% END %]
         </select><span class="field_hint">[% borrower_field.field %]</span>
     </li>

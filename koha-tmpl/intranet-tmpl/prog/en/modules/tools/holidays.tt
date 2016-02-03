@@ -239,13 +239,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
     <div class="yui-u first">
         <label for="branch">Define the holidays for:</label>
             <select id="branch" name="branch">
-                [% FOREACH branchloo IN branchloop %]
-                    [% IF ( branchloo.selected ) %]
-                        <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
-                    [% ELSE %]
-                        <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
-                    [% END %]
-                [% END %]
+                [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
             </select>
     
     <!-- ******************************** FLAT PANELS ******************************************* -->
@@ -410,8 +404,8 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
   <label for="branchcode">Copy holidays to:</label>
   <select id="branchcode" name="branchcode">
     <option value=""></option>
-    [% FOREACH branchloo IN branchloop %]
-    <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
+    [% FOREACH l IN Branches.all() %]
+    <option value="[% l.branchcode %]">[% l.branchname %]</option>
     [% END %]
   </select>
     <input type="submit" value="Copy" />

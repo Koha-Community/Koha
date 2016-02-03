@@ -67,24 +67,25 @@ sub all {
         SELECT branchcode, branchname
         FROM branches
     |;
-    if (    C4::Branch::onlymine
+    if (    C4::Context->preference('IndependentBranches')
         and C4::Context->userenv
+        && !C4::Context->IsSuperLibrarian()
         and C4::Context->userenv->{branch} )
     {
         $query .= q| WHERE branchcode = ? |;
         push @params, C4::Context->userenv->{branch};
     }
-    $query .= q| ORDER BY branchname|;
-    my $branches = $dbh->selectall_arrayref( $query, { Slice => {} }, @params );
+    my $libraries = $dbh->selectall_arrayref( $query, { Slice => {} }, @params );
 
-    if ( $selected ) {
-        for my $branch ( @$branches ) {
-            if ( $branch->{branchcode} eq $selected ) {
-                $branch->{selected} = 1;
-            }
+    for my $l ( @$libraries ) {
+        if (       $selected and $l->{branchcode} eq $selected
+            or not $selected and C4::Context->userenv and $l->{branchcode} eq C4::Context->userenv->{branch}
+        ) {
+            $l->{selected} = 1;
         }
     }
-    return $branches;
+
+    return $libraries;
 }
 
 1;

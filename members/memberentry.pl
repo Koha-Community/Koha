@@ -42,6 +42,7 @@ use C4::Form::MessagingPreferences;
 use Koha::Patron::Debarments;
 use Koha::Cities;
 use Koha::DateUtils;
+use Koha::Libraries;
 use Koha::Patron::Categories;
 use Koha::Token;
 use Email::Valid;
@@ -595,8 +596,8 @@ foreach (keys(%flags)) {
 }
 
 # get Branch Loop
-# in modify mod: userbranch value for GetBranchesLoop() comes from borrowers table
-# in add    mod: userbranch value come from branches table (ip correspondence)
+# in modify mod: userbranch value comes from borrowers table
+# in add    mod: userbranch value comes from branches table (ip correspondence)
 
 my $userbranch = '';
 if (C4::Context->userenv && C4::Context->userenv->{'branch'}) {
@@ -606,10 +607,9 @@ if (C4::Context->userenv && C4::Context->userenv->{'branch'}) {
 if (defined ($data{'branchcode'}) and ( $op eq 'modify' || $op eq 'duplicate' || ( $op eq 'add' && $category_type eq 'C' ) )) {
     $userbranch = $data{'branchcode'};
 }
+$template->param( userbranch => $userbranch );
 
-my $branchloop = GetBranchesLoop( $userbranch );
-
-if( !$branchloop ){
+if ( Koha::Libraries->search->count < 1 ){
     $no_add = 1;
     $template->param(no_branches => 1);
 }
@@ -681,7 +681,6 @@ $template->param(
   check_member    => $check_member,#to know if the borrower already exist(=>1) or not (=>0) 
   "op$op"   => 1);
 
-$template->param( branchloop => $branchloop ) if ( $branchloop );
 $template->param(
   nodouble  => $nodouble,
   borrowernumber  => $borrowernumber, #register number

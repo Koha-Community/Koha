@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports [% IF ( do_it ) %]&rsaquo; Patrons statistics &rsaquo; Results[% ELSE %]&rsaquo; Patrons statistics[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -139,12 +140,12 @@
 			<td><input type="radio" name="Line"   value="branchcode" /></td>
 			<td><input type="radio" name="Column" value="branchcode" /></td>
 			<td>
-				<select name="Filter"  size="1" id="branch">
-				<option value=""></option>
-				[% FOREACH BRANCH_LOO IN BRANCH_LOOP %]
-					<option value="[% BRANCH_LOO.branchcode %]">[% BRANCH_LOO.branchcode %] - [% BRANCH_LOO.branchname %]</option>
-				[% END %]
-				</select>
+                <select name="Filter"  size="1" id="branch">
+                <option value=""></option>
+                [% FOREACH l IN Branches.all() %]
+                    <option value="[% l.branchcode %]">[% l.branchcode %] - [% l.branchname || 'UNKNOWN' %]</option>
+                [% END %]
+                </select>
 			</td>
 			</tr>
 		    <tr>

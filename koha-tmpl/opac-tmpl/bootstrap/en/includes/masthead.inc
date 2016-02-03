@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE Branches %]
 [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
 <div id="wrap">
     <div id="header-region" class="noprint">
@@ -228,9 +229,12 @@
                                         <select name="branch_group_limit" id="select_library">
                                             <option value="">All libraries</option>
                                             [% IF BranchCategoriesLoop %]<optgroup label="Libraries">[% END %]
-                                                [% FOREACH BranchesLoo IN BranchesLoop %]
-                                                    [% IF ( BranchesLoo.selected ) %]<option selected="selected" value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>
-                                                    [% ELSE %]<option value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>[% END %]
+                                                [% FOREACH BranchesLoo IN Branches.all( selected => opac_name ) %]
+                                                    [% IF BranchesLoo.selected %]
+                                                        <option selected="selected" value="branch:[% BranchesLoo.branchcode %]">[% BranchesLoo.branchname %]</option>
+                                                    [% ELSE %]
+                                                        <option value="branch:[% BranchesLoo.branchcode %]">[% BranchesLoo.branchname %]</option>
+                                                    [% END %]
                                                 [% END %]
                                             [% IF BranchCategoriesLoop %]
                                                 </optgroup>

@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Most-circulated items[% IF ( do_it ) %] &rsaquo; Results[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -111,12 +112,12 @@
         <li><label for="fromRO">Check-in date from</label> <input type="text" size="10" id="fromRO" name="Filter" />
         <label for="toRO" class="inline">To: </label> <input type="text" size="10" id="toRO" name="Filter" value="" />
                     <span class="hint">[% INCLUDE 'date-format.inc' %]</span></li>
-				<li><label for="branch">Library: </label>
-<select name="Filter" id="branch"><option value="" > Any library</option>
-    [% FOREACH branchloo IN branchloop %]
-        <option value="[% branchloo.value %]" >[% branchloo.branchname %] </option>  
-     [% END %] 
-    </select>     </li>
+        <li>
+            <label for="branch">Library: </label>
+            <select name="Filter" id="branch"><option value="" > Any library</option>
+                [% PROCESS options_for_libraries libraries => Branches.all() %]
+            </select>
+        </li>
       <li> 
         <label for="documenttype">Item type: </label><select name="Filter" id="documenttype"><option value="" > Any item type</option>
     [% FOREACH itemtypeloo IN itemtypeloop %]

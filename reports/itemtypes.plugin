@@ -25,18 +25,12 @@ use C4::Context;
 use C4::Search;
 use C4::Output;
 use C4::Koha;
-use C4::Branch; # GetBranches
 =head1
 
 =cut
 
 sub set_parameters {
     my ($template) = @_;
-    my $userbranch = '';
-    if (C4::Context->userenv && C4::Context->userenv->{'branch'}) {
-        $userbranch = C4::Context->userenv->{'branch'};
-    }
-    $template->param( branchloop => GetBranchesLoop($userbranch) );
     return $template;
 }
 

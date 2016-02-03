@@ -51,26 +51,6 @@ my $keydate = output_pref( { dt => $calendarinput_dt, dateonly => 1, dateformat 
 $keydate =~ s/-/\//g;
 
 my $branch= $input->param('branch') || C4::Context->userenv->{'branch'};
-# Set all the branches.
-my $onlymine =
-  (      C4::Context->preference('IndependentBranches')
-      && C4::Context->userenv
-      && !C4::Context->IsSuperLibrarian()
-      && C4::Context->userenv->{branch} ? 1 : 0 );
-if ( $onlymine ) { 
-    $branch = C4::Context->userenv->{'branch'};
-}
-my $branches   = GetBranches($onlymine);
-my @branchloop;
-for my $thisbranch (
-    sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} }
-    keys %{$branches} ) {
-    push @branchloop,
-      { value      => $thisbranch,
-        selected   => $thisbranch eq $branch,
-        branchname => $branches->{$thisbranch}->{'branchname'},
-      };
-}
 
 # branches calculated - put branch codes in a single string so they can be passed in a form
 my $branchcodes = join '|', keys %{$branches};
@@ -145,7 +125,6 @@ foreach my $yearMonthDay (keys %$single_holidays) {
 
 $template->param(
     WEEK_DAYS_LOOP           => \@week_days,
-    branchloop               => \@branchloop,
     HOLIDAYS_LOOP            => \@holidays,
     EXCEPTION_HOLIDAYS_LOOP  => \@exception_holidays,
     DAY_MONTH_HOLIDAYS_LOOP  => \@day_month_holidays,

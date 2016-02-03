@@ -104,7 +104,6 @@ if ($op eq 'copy_form') {
     $template->param(
         oldbranchcode => $oldbranchcode,
         branchcode => $branchcode,
-        branchloop => _branchloop($branchcode),
         copying => 1,
         modify => 0,
     );
@@ -240,7 +239,6 @@ sub add_form {
 
     $template->param(
         module     => $module,
-        branchloop => _branchloop($branchcode),
         SQLfieldnames => $field_selection,
         branchcode => $branchcode,
     );
@@ -379,24 +377,8 @@ sub default_display {
 
     $template->param(
         letter => $loop_data,
-        branchloop => _branchloop($branchcode),
+        branchcode => $branchcode,
     );
-}
-
-sub _branchloop {
-    my ($branchcode) = @_;
-
-    my $branches = GetBranches();
-    my @branchloop;
-    for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
-        push @branchloop, {
-            value      => $thisbranch,
-            selected   => $branchcode && $thisbranch eq $branchcode,
-            branchname => $branches->{$thisbranch}->{'branchname'},
-        };
-    }
-
-    return \@branchloop;
 }
 
 sub add_fields {

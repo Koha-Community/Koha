@@ -236,7 +236,6 @@ $template->param(
     cancelled               => $cancelled,
     setwaiting              => $setwaiting,
     trsfitemloop            => \@trsfitemloop,
-    branchoptionloop        => GetBranchesLoop($tobranchcd),
     errmsgloop              => \@errmsgloop,
     CircAutocompl           => C4::Context->preference("CircAutocompl")
 );

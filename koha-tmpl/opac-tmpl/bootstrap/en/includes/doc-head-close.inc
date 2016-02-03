@@ -55,3 +55,4 @@
 </script>
 <script type="text/javascript" src="[% interface %]/[% theme %]/lib/modernizr.min.js"></script>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/lib/font-awesome/css/font-awesome.min.css" />
+[% PROCESS 'html_helpers.inc' %]

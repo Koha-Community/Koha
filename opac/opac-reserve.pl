@@ -127,9 +127,6 @@ my $branch = $query->param('branch') || $borr->{'branchcode'} || C4::Context->us
 ($branches->{$branch}) or $branch = "";     # Confirm branch is real
 $template->param( branch => $branch );
 
-# make branch selection options...
-my $branchloop = GetBranchesLoop($branch);
-
 # Is the person allowed to choose their branch
 my $OPACChooseBranch = (C4::Context->preference("OPACAllowUserToChooseBranch")) ? 1 : 0;
 
@@ -383,7 +380,7 @@ foreach my $biblioNum (@biblionumbers) {
 
     my $record = GetMarcBiblio($biblioNum);
     # Init the bib item with the choices for branch pickup
-    my %biblioLoopIter = ( branchloop => $branchloop );
+    my %biblioLoopIter;
 
     # Get relevant biblio data.
     my $biblioData = $biblioDataHash{$biblioNum};

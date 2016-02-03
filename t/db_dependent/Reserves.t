@@ -113,10 +113,9 @@ my $notes          = '';
 my $checkitem      = undef;
 my $found          = undef;
 
-my @branches = GetBranchesLoop();
-my $branch = $branches[0][0]{value};
+my $branchcode = Koha::Libraries->search->next->branchcode;
 
-AddReserve($branch,    $borrowernumber, $biblionumber,
+AddReserve($branchcode,    $borrowernumber, $biblionumber,
         $bibitems,  $priority, $resdate, $expdate, $notes,
         $title,      $checkitem, $found);
 

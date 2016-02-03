@@ -29,45 +29,32 @@
     [% ELSE %]
 
     <p class="help">Use carefully! If the destination library already has circulation and fine rules, they will be deleted without warning!</p>
-	<form action="/cgi-bin/koha/admin/clone-rules.pl" method="post">
-	    [% UNLESS ( frombranch ) %]
-	    <fieldset>
-		<legend>Please choose a library to clone rules from:</legend> 
-		<label for="frombranch">Source library:</label>
-		<select name="frombranch" id="frombranch">
-			<option value="">Default</option>
-			[% FOREACH branchloo IN branchloop %]
-				[% IF ( branchloo.selected ) %]
-					<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
-				[% ELSE %]
-					<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
-				[% END %]
-			[% END %]
-		</select>
-		[% IF ( tobranch ) %]<input type="hidden" name="tobranch" value="[% tobranch %]" />[% END %]
-	    </fieldset>
-	    [% END %]
+    <form action="/cgi-bin/koha/admin/clone-rules.pl" method="post">
+        [% UNLESS ( frombranch ) %]
+            <fieldset>
+                <legend>Please choose a library to clone rules from:</legend>
+                <label for="frombranch">Source library:</label>
+                <select name="frombranch" id="frombranch">
+                    <option value="">Default</option>
+                    [% PROCESS options_for_libraries libraries => Branches.all() %]
+                </select>
+                [% IF ( tobranch ) %]<input type="hidden" name="tobranch" value="[% tobranch %]" />[% END %]
+            </fieldset>
+        [% END %]
 
-	    [% UNLESS ( tobranch ) %]
-	    <fieldset>
-		<legend>Please choose the library to clone the rules to:</legend> 
-		<label for="tobranch">Destination library:</label>
-		<select name="tobranch" id="tobranch">
-			<option value="">Default</option>
-			[% FOREACH branchloo IN branchloop %]
-				[% IF ( branchloo.selected ) %]
-					<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
-				[% ELSE %]
-					<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
-				[% END %]
-			[% END %]
-		</select>
-		[% IF ( frombranch ) %]<input type="hidden" name="frombranch" value="[% frombranch %]" />[% END %]
-	    </fieldset>
-	[% END %]
-	<input type="submit" value="Submit" />
-    <a href="/cgi-bin/koha/admin/smart-rules.pl" class="cancel">Cancel</a>
-	</form>
+        [% UNLESS ( tobranch ) %]
+            <fieldset>
+            <legend>Please choose the library to clone the rules to:</legend>
+            <label for="tobranch">Destination library:</label>
+            <select name="tobranch" id="tobranch">
+                <option value="">Default</option>
+                [% PROCESS options_for_libraries libraries => Branches.all() %]
+            </select>
+            [% IF ( frombranch ) %]<input type="hidden" name="frombranch" value="[% frombranch %]" />[% END %]
+            </fieldset>
+        [% END %]
+        <input type="submit" value="Submit" />
+    </form>
 
     [% END %]
     </div>

@@ -102,12 +102,7 @@
 	<li><label for="barcodefilter">Barcode: </label><input type="text" name="barcodefilter" id="barcodefilter" size="6" /></li>
 	<li><label for="branchfilter">Library: </label><select name="branchfilter" id="branchfilter">
                 <option value="">All</option>
-            [% FOREACH branchloo IN branchloop %]
-                [% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
-				[% ELSE %]
-				<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
-				[% END %]
-            [% END %]
+                [% PROCESS options_for_libraries libraries => Branches.all() %]
             </select></li>
     <li><label for="itemtypesfilter">Item type: </label><select name="itemtypesfilter" id="itemtypesfilter">
                 <option value="">All</option>

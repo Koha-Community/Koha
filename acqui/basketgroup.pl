@@ -52,7 +52,6 @@ use C4::Output;
 use CGI qw ( -utf8 );
 
 use C4::Acquisition qw/CloseBasketgroup ReOpenBasketgroup GetOrders GetBasketsByBasketgroup GetBasketsByBookseller ModBasketgroup NewBasketgroup DelBasketgroup GetBasketgroups ModBasket GetBasketgroup GetBasket GetBasketGroupAsCSV/;
-use C4::Branch qw/GetBranches/;
 use C4::Members qw/GetMember/;
 use Koha::EDI qw/create_edi_order get_edifact_ean/;
 
@@ -272,10 +271,8 @@ if ( $op eq "add" ) {
     $billingplace  = $billingplace  || $borrower->{'branchcode'};
     $deliveryplace = $deliveryplace || $borrower->{'branchcode'};
 
-    my $branches = C4::Branch::GetBranchesLoop( $billingplace );
-    $template->param( billingplaceloop => $branches );
-    $branches = C4::Branch::GetBranchesLoop( $deliveryplace );
-    $template->param( deliveryplaceloop => $branches );
+    $template->param( billingplace => $billingplace );
+    $template->param( deliveryplace => $deliveryplace );
     $template->param( booksellerid => $booksellerid );
 
     # the template will display a unique basketgroup

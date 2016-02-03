@@ -34,7 +34,6 @@ use C4::Output;
 use C4::Biblio;
 use C4::Items;
 use C4::Koha;                  # GetItemTypes
-use C4::Branch; # GetBranches
 use Koha::DateUtils;
 
 my $query = new CGI;
@@ -80,10 +79,6 @@ if ( $get_items ) {
                  );
 }
 
-# getting all branches.
-#my $branches = GetBranches;
-#my $branch   = C4::Context->userenv->{"branchname"};
-
 # getting all itemtypes
 my $itemtypes = &GetItemTypes();
 my @itemtypesloop;
@@ -98,7 +93,7 @@ foreach my $thisitemtype ( sort {$itemtypes->{$a}->{translated_description} cmp 
 # get lost statuses
 my $lost_status_loop = C4::Koha::GetAuthorisedValues( 'LOST' );
 
-$template->param( branchloop     => GetBranchesLoop(C4::Context->userenv->{'branch'}),
+$template->param(
                   itemtypeloop   => \@itemtypesloop,
                   loststatusloop => $lost_status_loop,
 );

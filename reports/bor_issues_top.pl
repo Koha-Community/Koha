@@ -23,7 +23,6 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 use C4::Context;
-use C4::Branch; # GetBranches
 use C4::Koha;
 use C4::Circulation;
 use C4::Members;
@@ -110,16 +109,6 @@ my @values;
 # here each element returned by map is a hashref, get it?
 my @mime  = ( map { {type =>$_} } (split /[;:]/, 'CSV') ); # FIXME translation
 my $delims = GetDelimiterChoices;
-my $branches = GetBranches;
-my @branchloop;
-foreach (sort keys %$branches) {
-# 	my $selected = 1 if $thisbranch eq $branch;
-	my %row = ( value => $_,
-#				selected => $selected,
-				branchname => $branches->{$_}->{branchname},
-			);
-	push @branchloop, \%row;
-}
 
 my $itemtypes = GetItemTypes;
 my @itemtypeloop;
@@ -135,7 +124,6 @@ my $patron_categories = Koha::Patron::Categories->search_limited({}, {order_by =
 $template->param(
 	    mimeloop => \@mime,
 	  CGIseplist => $delims,
-	  branchloop => \@branchloop,
 	itemtypeloop => \@itemtypeloop,
 patron_categories => $patron_categories,
 );

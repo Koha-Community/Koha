@@ -63,9 +63,6 @@ foreach ( 1 .. $borrowers_count ) {
 
 my $biblionumber = $bibnum;
 
-my @branches = GetBranchesLoop();
-my $branch   = $branches[0][0]{value};
-
 # Create five item level holds
 my $i = 1;
 foreach my $borrowernumber (@borrowernumbers) {

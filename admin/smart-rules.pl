@@ -461,16 +461,6 @@ $template->param(
     defaultRefundRule     => Koha::RefundLostItemFeeRules->_default_rule
 );
 
-my $branches = GetBranches();
-my @branchloop;
-for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
-    push @branchloop, {
-        value      => $thisbranch,
-        selected   => $thisbranch eq $branch,
-        branchname => $branches->{$thisbranch}->{'branchname'},
-    };
-}
-
 my $patron_categories = Koha::Patron::Categories->search({}, { order_by => ['description'] });
 
 my @row_loop;
@@ -624,8 +614,7 @@ $template->param(
     patron_categories => $patron_categories,
                         itemtypeloop => \@itemtypes,
                         rules => \@sorted_row_loop,
-                        branchloop => \@branchloop,
-                        humanbranch => ($branch ne '*' ? $branches->{$branch}->{branchname} : ''),
+                        humanbranch => ($branch ne '*' ? $branch : ''),
                         current_branch => $branch,
                         definedbranch => scalar(@sorted_row_loop)>0
                         );

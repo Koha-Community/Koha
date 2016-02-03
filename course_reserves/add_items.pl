@@ -26,7 +26,6 @@ use C4::Auth;
 use C4::Output;
 use C4::Koha;
 use C4::Biblio;
-use C4::Branch;
 
 use C4::CourseReserves qw(GetCourse GetCourseItem GetCourseReserve ModCourseItem ModCourseReserve);
 
@@ -73,7 +72,6 @@ if ( $action eq 'lookup' ) {
         ccodes    => GetAuthorisedValues('CCODE'),
         locations => GetAuthorisedValues('LOC'),
         itypes    => GetItemTypes( style => 'array' ),
-        branches  => GetBranchesLoop(),
         return    => $return,
     );
 

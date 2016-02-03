@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Advanced search</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -214,11 +215,11 @@
                                     <label for="branchloop">Library:</label>
                                     <select name="limit" id="branchloop">
                                     <option value="">All libraries</option>
-                                    [% FOREACH BranchesLoo IN BranchesLoop %]
-                                        [% IF ( BranchesLoo.selected ) %]
-                                            <option value="branch:[% BranchesLoo.value %]" selected="selected">[% BranchesLoo.branchname %]</option>
+                                    [% FOREACH BranchesLoo IN Branches.all( selected => opac_name ) %]
+                                        [% IF BranchesLoo.selected %]
+                                            <option value="branch:[% BranchesLoo.branchcode %]" selected="selected">[% BranchesLoo.branchname %]</option>
                                         [% ELSE %]
-                                            <option value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>
+                                            <option value="branch:[% BranchesLoo.branchcode %]">[% BranchesLoo.branchname %]</option>
                                         [% END %]
                                     [% END %]
                                     </select>

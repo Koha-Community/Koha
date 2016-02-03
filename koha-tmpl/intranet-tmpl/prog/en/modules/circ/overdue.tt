@@ -213,33 +213,24 @@
         <label>Item home library:</label>
         <select name="homebranch" id="homebranch">
             <option value="">Any</option>
-            [% FOREACH homebranchloo IN homebranchloop %][% IF ( homebranchloo.selected ) %]
-            <option value="[% homebranchloo.value |html %]" selected="selected">[% homebranchloo.branchname %]</option>[% ELSE %]
-            <option value="[% homebranchloo.value |html %]">[% homebranchloo.branchname %]</option>[% END %]
-            [% END %]
+            [% PROCESS options_for_libraries libraries => Branches.all( selected => homebranchfilter ) %]
         </select>
     </li>
 
     <li>
         <label>Item holding library:</label>
-            <select name="holdingbranch" id="holdingbranch">
+        <select name="holdingbranch" id="holdingbranch">
             <option value="">Any</option>
-            [% FOREACH holdingbranchloo IN holdingbranchloop %][% IF ( holdingbranchloo.selected ) %]
-            <option value="[% holdingbranchloo.value |html %]" selected="selected">[% holdingbranchloo.branchname %]</option>[% ELSE %]
-            <option value="[% holdingbranchloo.value |html %]">[% holdingbranchloo.branchname %]</option>[% END %]
-            [% END %]
+            [% PROCESS options_for_libraries libraries => Branches.all( selected => holdingbranchfilter ) %]
         </select>
     </li>
 
     <li>
-    <label>Library of the patron:</label><select name="branch" id="branch">
-        <option value="">Any</option>
-      [% FOREACH branchloo IN branchloop %]
-        [% IF ( branchloo.selected ) %]
-        <option value="[% branchloo.value |html %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]
-        <option value="[% branchloo.value |html %]">[% branchloo.branchname %]</option>[% END %]
-      [% END %]
-      </select>
+        <label>Library of the patron:</label>
+        <select name="branch" id="branch">
+            <option value="">Any</option>
+            [% PROCESS options_for_libraries libraries => Branches.all( selected => branchfilter ) %]
+        </select>
     </li>
 
     <li><label for="order">Sort by:</label> <select name="order" id="order">

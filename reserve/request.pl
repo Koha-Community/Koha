@@ -67,12 +67,6 @@ my $showallitems = $input->param('showallitems');
 my $branches = GetBranches();
 my $itemtypes = GetItemTypes();
 
-my $userbranch = '';
-if (C4::Context->userenv && C4::Context->userenv->{'branch'}) {
-    $userbranch = C4::Context->userenv->{'branch'};
-}
-
-
 # Select borrowers infos
 my $findborrower = $input->param('findborrower');
 $findborrower = '' unless defined $findborrower;
@@ -588,13 +582,7 @@ foreach my $biblionumber (@biblionumbers) {
         $reserve{'suspend_until'}  = $res->suspend_until();
         $reserve{'reserve_id'}     = $res->reserve_id();
         $reserve{itemtype}         = $res->itemtype();
-
-        if ( C4::Context->preference('IndependentBranches') && $flags->{'superlibrarian'} != 1 ) {
-            $reserve{'branchloop'} = [ Koha::Libraries->find( $res->branchcode() ) ];
-        }
-        else {
-            $reserve{'branchloop'} = GetBranchesLoop( $res->branchcode() );
-        }
+        $reserve{branchcode}       = $res->branchcode();
 
         push( @reserveloop, \%reserve );
     }
@@ -603,7 +591,6 @@ foreach my $biblionumber (@biblionumbers) {
     my $time = time();
 
     $template->param(
-                     branchloop  => GetBranchesLoop($userbranch),
                      time        => $time,
                      fixedRank   => $fixedRank,
                     );

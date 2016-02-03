@@ -202,18 +202,11 @@ function submitForm(form) {
                                                 <label for="billingplace">Billing place:</label>
                                                 <select name="billingplace" id="billingplace" style="width:13em;">
                                                     <option value="">--</option>
-                                                    [% FOREACH billingplaceloo IN billingplaceloop %]
-                                                        [% IF ( billingplaceloo.selected ) %]<option value="[% billingplaceloo.value %]" selected="selected">[% billingplaceloo.branchname %]</option>
-                                                        [% ELSE %]<option value="[% billingplaceloo.value %]">[% billingplaceloo.branchname %]</option>[% END%]
-                                                    [% END %]
+                                                    [% PROCESS options_for_libraries libraries => Branches.all( selected => billingplace ) %]
                                                 </select>
                                             [% ELSE %]
                                                 <span class="label">Billing place:</span>
-                                                [% FOREACH billingplaceloo IN billingplaceloop %]
-                                                    [% IF ( billingplaceloo.selected ) %]
-                                                        <input name="billingplace" id="billingplace" type ="hidden" value="[% billingplaceloo.value %]" />[% billingplaceloo.branchname %]
-                                                    [% END %]
-                                                [% END %]
+                                                <input name="billingplace" id="billingplace" type ="hidden" value="[% billingplace %]" />[% Branches.GetName( billingplace ) %]
                                             [% END %]
                                         </li>
                                         [% UNLESS (closedbg) %]
@@ -221,11 +214,8 @@ function submitForm(form) {
                                                 <label for="deliveryplace">Delivery place:</label>
                                                 <select name="deliveryplace" id="deliveryplace" style="width:13em;">
                                                     <option value="">--</option>
-                                                    [% FOREACH deliveryplaceloo IN deliveryplaceloop %]
-                                                        [% IF ( deliveryplaceloo.selected ) %]<option value="[% deliveryplaceloo.value %]" selected="selected">[% deliveryplaceloo.branchname %]</option>
-                                                        [% ELSE %]<option value="[% deliveryplaceloo.value %]">[% deliveryplaceloo.branchname %]</option>[% END %]
-                                                    [% END %]
-                                                    <select>
+                                                    [% PROCESS options_for_libraries libraries => Branches.all( selected => deliveryplace ) %]
+                                                <select>
                                             </li>
                                             <li><p>or</p></li>
                                             <li>
@@ -239,11 +229,7 @@ function submitForm(form) {
                                                         <input name="freedeliveryplace" id="freedeliveryplace" type ="hidden" value="[% freedeliveryplace %]" />[% freedeliveryplace %]
                                                         <input name="deliveryplace" id="deliveryplace" type ="hidden" value="" />
                                                     [% ELSE %]
-                                                        [% FOREACH deliveryplaceloo IN deliveryplaceloop %]
-                                                            [% IF ( deliveryplaceloo.selected ) %]
-                                                                <input name="deliveryplace" id="deliveryplace" type ="hidden" value="[% deliveryplaceloo.value %]" />[% deliveryplaceloo.branchname %]
-                                                            [% END %]
-                                                        [% END %]
+                                                        <input name="deliveryplace" id="deliveryplace" type ="hidden" value="[% deliveryplace %]" />[% Branches.GetName( deliveryplace ) %]
                                                         <input name="freedeliveryplace" id="freedeliveryplace" type ="hidden" value="" />
                                                     [% END %]
                                                 </li>

@@ -24,7 +24,6 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Context;
 use C4::Debug;
-use C4::Branch;    # GetBranchesLoop
 use C4::Output;
 use C4::Koha;      # GetItemTypes
 # use Date::Manip;  # TODO: add not borrowed since date X criteria
@@ -78,7 +77,6 @@ foreach (
 
 $template->param(
     itemtypeloop => \@itemtypeloop,
-    branchloop   => GetBranchesLoop(),
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 

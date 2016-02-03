@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Check expiration</title>
@@ -53,19 +54,11 @@
 
         <li><label for="issn">ISSN:</label>
         <input id="issn" type="text" name="issn" size="15" value="[% issn | html %]" /></li>
-        [% IF (branches_loop.size) %]
+        [% IF can_change_library %]
         <li><label for="branch">Library:</label>
         <select id="branch" name="branch">
             <option value="">All</option>
-            [% FOREACH branch IN branches_loop %]
-                [% IF branch.selected %]
-                    <option selected="selected" value="[% branch.branchcode %]">
-                [% ELSE %]
-                    <option value="[% branch.branchcode %]">
-                [% END %]
-                    [% branch.branchname %]
-                </option>
-            [% END %]
+            [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
         </select>
         </li>
         [% END %]
@@ -96,7 +89,7 @@
         <tr>
             <th>ISSN</th>
             <th>Title</th>
-            [% IF ( branches_loop.size ) %]<th>Library</th>[% END %]
+            [% IF can_change_library %]<th>Library</th>[% END %]
             <th>OPAC note</th>
             <th>Nonpublic note</th>
             <th>Expiration date</th>
@@ -114,7 +107,7 @@
                 [% END %]
                 </a>
             </td>
-            [% IF ( branches_loop.size ) %]<td>
+            [% IF can_change_library %]<td>
                 [% Branches.GetName( subscriptions_loo.branchcode ) %]
             </td>[% END %]
             <td>

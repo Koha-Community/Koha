@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Average checkout period</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -181,9 +182,7 @@
                 <td>
                     <select name="Filter" size="1" id="branch">
                         <option value=""></option>
-                        [%- FOREACH branchloo IN branchloop %]
-                        <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
-                        [%- END %]
+                        [% PROCESS options_for_libraries libraries => Branches.all() %]
                     </select>
                 </td>
 			</tr>

@@ -66,8 +66,6 @@ the hashes are then translated to hash / arrays to be returned to manager.pl & s
 sub set_parameters {
     my ($template) = @_;
 
-    $template->param( branchloop => GetBranchesLoop() );
-
     my $patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['categorycode']});
     $template->param( patron_categories => $patron_categories );
     return $template;

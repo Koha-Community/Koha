@@ -22,7 +22,6 @@ use warnings;
 use C4::Auth;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Branch; # GetBranches
 use C4::Output;
 use C4::Koha;
 use C4::Reports;
@@ -153,7 +152,7 @@ if($do_it){
 		CGIextChoice => $CGIextChoice,
 		CGIsepChoice => $CGIsepChoice,
         booksellers  => \@booksellers,
-        branches     => GetBranchesLoop(C4::Context->userenv->{'branch'}));
+    );
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;

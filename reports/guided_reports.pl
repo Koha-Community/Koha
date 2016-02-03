@@ -29,13 +29,13 @@ use C4::Auth qw/:DEFAULT get_session/;
 use C4::Output;
 use C4::Debug;
 use C4::Koha qw/GetFrameworksLoop/;
-use C4::Branch;
 use C4::Context;
 use Koha::Caches;
 use C4::Log;
 use Koha::DateUtils qw/dt_from_string output_pref/;
 use Koha::AuthorisedValue;
 use Koha::AuthorisedValues;
+use Koha::Libraries;
 use Koha::Patron::Categories;
 
 =head1 NAME
@@ -664,10 +664,10 @@ elsif ($phase eq 'Run this report'){
                     my %authorised_lib;
                     # builds list, depending on authorised value...
                     if ( $authorised_value eq "branches" ) {
-                        my $branches = GetBranchesLoop();
-                        foreach my $thisbranch (@$branches) {
-                            push @authorised_values, $thisbranch->{value};
-                            $authorised_lib{$thisbranch->{value}} = $thisbranch->{branchname};
+                        my $libraries = Koha::Libraries->search( {}, { order_by => ['branchname'] } );
+                        while ( my $library = $libraries->next ) {
+                            push @authorised_values, $library->branchcode;
+                            $authorised_lib{$library->branchcode} = $library->branchname;
                         }
                     }
                     elsif ( $authorised_value eq "itemtypes" ) {

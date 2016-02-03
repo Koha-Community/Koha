@@ -1,5 +1,6 @@
 [% USE Categories %]
 [% USE Koha %]
+[% USE Branches %]
 [% USE KohaDates %]
 [% SET userupdateview = 1 %]
 
@@ -156,13 +157,7 @@
                                         Home library:</label>
 
                                         <select id="borrower_branchcode" name="borrower_branchcode">
-                                            [% FOREACH b IN branches %]
-                                                [% IF b.value == borrower.branchcode %]
-                                                    <option value="[% b.value %]" selected="selected">[% b.branchname %]</option>
-                                                [% ELSE %]
-                                                    <option value="[% b.value %]">[% b.branchname %]</option>
-                                                [% END %]
-                                            [% END %]
+                                            [% PROCESS options_for_libraries libraries => Branches.all( selected => borrower.branchcode ) %]
                                         </select>
                                     </li>
                                 [% END %]

@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Set library</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -54,13 +55,7 @@ Updated:<ul>
     [% ELSE %]
         <li><label for="branch">Choose library:</label>
         <select name="branch" id="branch">
-        [% FOREACH branchloo IN branchloop %]
-            [% IF ( branchloo.selected ) %]
-            <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
-            [% ELSE %]
-            <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
-            [% END %]
-        [% END %]
+            [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
         </select></li>
     [% END %]
 <!--

@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Circulation and fine rules</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -117,8 +118,8 @@ $(document).ready(function() {
     <div id="yui-main">
     <div class="yui-b">
     <h1 class="parameters">
-        [% IF ( humanbranch ) %]
-            Defining circulation and fine rules for "[% humanbranch %]"
+        [% IF humanbranch %]
+            Defining circulation and fine rules for "[% Branches.GetName( humanbranch ) %]"
         [% ELSE %]
             Defining circulation and fine rules for all libraries
         [% END %]
@@ -142,14 +143,21 @@ $(document).ready(function() {
         Select a library :
             <select name="branch" id="branch" style="width:20em;">
                 <option value="*">All libraries</option>
-            [% FOREACH branchloo IN branchloop %]
-				[% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
-            [% END %]
+                [% PROCESS options_for_libraries libraries => Branches.all( selected => current_branch ) %]
             </select>
         </form>
-[% IF ( definedbranch ) %]<form action="/cgi-bin/koha/admin/clone-rules.pl" method="post"><label 
-for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidden" name="frombranch" value="[% current_branch %]" />
-            <select name="tobranch" id="tobranch">[% FOREACH branchloo IN branchloop %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]</select> <input type="submit" value="Clone" /></form>[% END %]
+        [% IF ( definedbranch ) %]
+            <form action="/cgi-bin/koha/admin/clone-rules.pl" method="post">
+                <label for="tobranch"><strong>Clone these rules to:</strong></label>
+                <input type="hidden" name="frombranch" value="[% current_branch %]" />
+                <select name="tobranch" id="tobranch">
+                    [% FOREACH l IN Branches.all() %]
+                        <option value="[% l.value %]">[% l.branchname %]</option>
+                    [% END %]
+                </select>
+                <input type="submit" value="Clone" />
+            </form>
+        [% END %]
 
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="add" />
@@ -387,7 +395,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
         </form>
     </div>
     <div id="defaults-for-this-library" class="container">
-    <h3>Default checkout, hold and return policy[% IF ( humanbranch ) %] for [% humanbranch %][% END %]</h3>
+    <h3>Default checkout, hold and return policy[% IF humanbranch %] for [% Branches.GetName( humanbranch ) %][% END %]</h3>
         <p>You can set a default maximum number of checkouts, hold policy and return policy that will be used if none is defined below for a particular item type or category.</p>
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="set-branch-defaults" />
@@ -499,7 +507,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
     </div>
     [% IF ( show_branch_cat_rule_form ) %]
     <div id="holds-policy-by-patron-category" class="container">
-    <h3>[% IF humanbranch %]Checkout limit by patron category for [% humanbranch %][% ELSE %]Default checkout limit by patron category[% END %]</h3>
+    <h3>[% IF humanbranch %]Checkout limit by patron category for [% Branches.GetName( humanbranch ) %][% ELSE %]Default checkout limit by patron category[% END %]</h3>
         <p>For this library, you can specify the maximum number of loans that
             a patron of a given category can make, regardless of the item type.
         </p>
@@ -643,7 +651,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
     </div>
 
     <div id="holds-policy-by-item-type" class="container">
-    <h3>[% IF humanbranch %]Holds policy by item type for [% humanbranch %][% ELSE %]Default holds policy by item type[% END %]</h3>
+    <h3>[% IF humanbranch %]Holds policy by item type for [% Branches.GetName( humanbranch ) %][% ELSE %]Default holds policy by item type[% END %]</h3>
         <p>
             For this library, you can edit rules for given itemtypes, regardless
             of the patron's category.

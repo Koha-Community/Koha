@@ -24,7 +24,6 @@ use C4::Context;
 use C4::Output;
 use C4::Auth;
 use C4::Koha;
-use C4::Branch;
 use C4::Letters;
 use C4::Members;
 use C4::Overdues;
@@ -210,7 +209,6 @@ if ($op eq 'save') {
         $input_saved = 1;
     }
 }
-my $branchloop = GetBranchesLoop($branch);
 
 my $letters = C4::Letters::GetLettersAvailableForALibrary(
     {
@@ -310,7 +308,6 @@ my @tabs = (
 
 $template->param(
     table => ( @first or @second or @third ? 1 : 0 ),
-    branchloop => $branchloop,
     branch => $branch,
     tabs => \@tabs,
     message_transport_types => $message_transport_types,

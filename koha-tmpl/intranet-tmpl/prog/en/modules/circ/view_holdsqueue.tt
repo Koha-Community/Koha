@@ -192,15 +192,13 @@ $(document).ready(function() {
 <form name="f" action="/cgi-bin/koha/circ/view_holdsqueue.pl" method="post">
 	<fieldset class="rows">
 	<ol>
-	<li><label for="branchlimit">Library: </label><select name="branchlimit" id="branchlimit">
+        <li>
+            <label for="branchlimit">Library: </label>
+            <select name="branchlimit" id="branchlimit">
                 <option value="">All</option>
-            [% FOREACH branchloo IN branchloop %]
-                [% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
-				[% ELSE %]
-				<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
-				[% END %]
-            [% END %]
-            </select></li>
+                [% PROCESS options_for_libraries libraries => Branches.all() %]
+            </select>
+        </li>
 			<!-- FIXME Not working yet
 			<li><label for="itemtypeslimit">Item Type: </label><select name="itemtypeslimit" id="itemtypeslimit">
                 <option value="">All</option>

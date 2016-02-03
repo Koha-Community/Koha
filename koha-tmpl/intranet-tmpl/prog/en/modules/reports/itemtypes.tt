@@ -65,13 +65,7 @@ $(document).ready(function(){
                 <label for="value">Select a library:</label>
                 <select name="value" size="1" id="value">
                   <option value=""></option>
-                [%- FOREACH branchloo IN branchloop %]
-                 [% IF ( branchloo.selected ) -%]
-                  <option value="[% branchloo.branchcode %]" selected="selected">[% branchloo.branchname %]</option>
-                 [%- ELSE -%]
-                  <option value="[% branchloo.branchcode %]">[% branchloo.branchname %]</option>
-                 [%- END -%]
-                [%- END %]
+                  [% PROCESS options_for_libraries libraries => Branches.all() %]
                 </select>
                 <span class="tip">Select none to see all libraries</span>
               </li>

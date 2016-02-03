@@ -281,14 +281,11 @@ foreach my $result ( @{$results} ) {
     push( @period_inactive_loop, $budgetperiod );
 }
 
-my $branchloop = C4::Branch::GetBranchesLoop();
-
 my $tab = $input->param('tab') ? $input->param('tab') - 1 : 0;
 $template->param(
     period_active_loop      => \@period_active_loop,
     period_inactive_loop    => \@period_inactive_loop,
     tab                     => $tab,
-    branchloop              => $branchloop,
 );
 
 $template->param($op=>1);
