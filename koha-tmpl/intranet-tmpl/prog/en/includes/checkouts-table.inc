@@ -1,3 +1,4 @@
+[% USE Koha %]
 <div id="checkouts">
     [% IF ( issuecount ) %]
         <div id="issues-table-loading-message">
@@ -36,7 +37,7 @@
             <div id="issues-table-actions">
                 <fieldset class="action">
                     [% IF ( CAN_user_circulate_override_renewals ) %]
-                        [% IF ( AllowRenewalLimitOverride ) %]
+                        [% IF CAN_user_circulate_override_renewals && Koha.Preference( 'AllowRenewalLimitOverride' ) %]
                             <label for="override_limit">Override renewal limit:</label>
                             <input type="checkbox" name="override_limit" id="override_limit" value="1" />
                         [% END %]
